@@ -24,7 +24,6 @@ process:
       default_value: 1
   field_news_source_url: source_url
   field_keywords: keywords
-  field_keywords: keywords
   field_news_spatial_coverage:
     plugin: term_reference
     source: country
