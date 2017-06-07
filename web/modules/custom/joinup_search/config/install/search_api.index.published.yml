@@ -31,10 +31,11 @@ dependencies:
   module:
     - rdf_entity
     - search_api
+    - joinup_core
     - node
     - user
 id: published
-name: 'Published content index'
+name: 'Published entities index'
 description: ''
 read_only: false
 field_settings:
@@ -412,6 +413,7 @@ processor_settings:
     weights:
       preprocess_index: -48
       preprocess_query: -48
+  entity_status: {  }
   add_url: {  }
   rendered_item: {  }
   html_filter:
@@ -521,6 +523,8 @@ processor_settings:
     weights:
       preprocess_index: -47
       preprocess_query: -47
+  joinup_entity_status:
+    inverse: false
 tracker_settings:
   default: {  }
 options:
