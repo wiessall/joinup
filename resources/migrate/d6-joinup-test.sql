@@ -2951,7 +2951,7 @@ CREATE TABLE `content_type_news` (
 
 LOCK TABLES `content_type_news` WRITE;
 /*!40000 ALTER TABLE `content_type_news` DISABLE KEYS */;
-INSERT INTO `content_type_news` VALUES (77006,65803,NULL,NULL,''),(500687,27607,NULL,NULL,NULL),(513730,155894,'http://www.mobile-age.eu/newsletters-issues/newsletter-issue-no-2-october-2016.html','Newsletter Issue No.2 - October 2016','a:1:{s:6:\"target\";s:6:\"_blank\";}');
+INSERT INTO `content_type_news` VALUES (77006,65803,'n/A',NULL,''),(500687,27607,'example.com',NULL,NULL),(513730,155894,'http://www.mobile-age.eu/newsletters-issues/newsletter-issue-no-2-october-2016.html','Newsletter Issue No.2 - October 2016','a:1:{s:6:\"target\";s:6:\"_blank\";}');
 /*!40000 ALTER TABLE `content_type_news` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -4085,4 +4085,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-09-29 13:00:36
+-- Dump completed on 2017-09-29 14:26:54
