@@ -9,3 +9,4 @@ label: 'Delete the selected membership(s)'
 type: og_membership
 plugin: joinup_og_membership_delete_action
 configuration: {  }
+weight: -3
