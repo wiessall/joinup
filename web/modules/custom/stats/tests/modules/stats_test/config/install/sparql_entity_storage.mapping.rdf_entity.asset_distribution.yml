@@ -27,4 +27,4 @@ base_fields_mapping:
       format: 'xsd:dateTime'
 graph:
   default: 'http://example.com/asset_distribution/graph'
-entity_id_plugin: joinup_po_namespace
+entity_id_plugin: default
