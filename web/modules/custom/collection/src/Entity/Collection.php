@@ -7,6 +7,7 @@ namespace Drupal\collection\Entity;
 use Drupal\joinup_bundle_class\JoinupBundleClassFieldAccessTrait;
 use Drupal\joinup_bundle_class\ShortIdTrait;
 use Drupal\joinup_group\Entity\GroupTrait;
+use Drupal\joinup_workflow\EntityWorkflowStateTrait;
 use Drupal\rdf_entity\Entity\Rdf;
 
 /**
@@ -14,8 +15,16 @@ use Drupal\rdf_entity\Entity\Rdf;
  */
 class Collection extends Rdf implements CollectionInterface {
 
+  use EntityWorkflowStateTrait;
   use GroupTrait;
   use JoinupBundleClassFieldAccessTrait;
   use ShortIdTrait;
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getWorkflowStateFieldName(): string {
+    return 'field_ar_state';
+  }
 
 }
