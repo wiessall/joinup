@@ -8,9 +8,9 @@ dependencies:
 id: taxonomy_term.eif_recommendations
 entity_type_id: taxonomy_term
 bundle: eif_recommendations
-rdf_type: 'http://data.europa.eu/eif/'
+rdf_type: 'http://data.europa.eu/eif/Recommendation/'
 graph:
-  default: 'http://eif_voc'
+  default: 'http://eif_recommendation_voc'
 base_fields_mapping:
   uuid:
     value:
@@ -42,8 +42,8 @@ base_fields_mapping:
       format: 'xsd:integer'
   parent:
     target_id:
-      predicate: 'http://www.w3.org/2004/02/skos/core#broader'
-      format: resource
+      predicate: ''
+      format: ''
   changed:
     value:
       predicate: ''
