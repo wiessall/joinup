@@ -15,6 +15,7 @@ widget:
   config:
     show_numbers: true
     tabs: 3
+    arbitrary_facet_plugin: _none
 query_operator: or
 use_hierarchy: false
 expand_hierarchy: false
@@ -61,4 +62,4 @@ processor_configs:
     settings: {  }
 empty_behavior:
   behavior: none
-show_title: null
+show_title: false
