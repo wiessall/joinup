@@ -1,4 +1,3 @@
-uuid: 3297733f-d066-4a5d-9430-6f00fc23c9cf
 langcode: en
 status: true
 dependencies:
@@ -7,8 +6,6 @@ dependencies:
 third_party_settings:
   rdf_taxonomy:
     locked: false
-_core:
-  default_config_hash: 6qzY5SnqXf0OMplbdxHsPMuOPWOI8895FkaqqUc7DlE
 name: 'Policy domain'
 vid: policy_domain
 description: ''
