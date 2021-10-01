@@ -217,8 +217,7 @@
             "Joinup\\Composer\\ScriptHandler::createRequiredFiles",
             "Joinup\\Composer\\RemoveWrongPatchedObjects::remove",
             "test ! -f ./vendor/bin/grumphp || ./vendor/bin/grumphp git:deinit",
-            "test ! -f ./vendor/bin/run || ./vendor/bin/run toolkit:build-dev",
-            "npm install -C web/modules/contrib/slim_select"
+            "test ! -f ./vendor/bin/run || ./vendor/bin/run toolkit:build-dev"
         ],
         "post-update-cmd": [
             "Joinup\\Composer\\ScriptHandler::createRequiredFiles",
