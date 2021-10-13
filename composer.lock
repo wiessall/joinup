@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a9aa624ac05867d87540ccd3f57a0d5f",
+    "content-hash": "e53abdfa1326f099e1bc6748535f59a5",
     "packages": [
         {
             "name": "SEMICeu/adms-ap_validator",
@@ -7289,19 +7289,40 @@
         },
         {
             "name": "drupal/slim_select",
-            "version": "dev-3231534-code-review",
+            "version": "1.0.0-alpha1",
             "source": {
                 "type": "git",
-                "url": "https://git.drupalcode.org/issue/slim_select-3231534",
-                "reference": "9aa4ff72c0df8e6a46bbab8eecda049a0e4624a2"
+                "url": "https://git.drupalcode.org/project/slim_select.git",
+                "reference": "1.0.0-alpha1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/slim_select-1.0.0-alpha1.zip",
+                "reference": "1.0.0-alpha1",
+                "shasum": "2ba3f8854a2ad5de7ac0e5f0689768a8e42be1e5"
+            },
+            "require": {
+                "drupal/core": "^8.9 || ^9.1"
             },
             "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "1.0.0-alpha1",
+                    "datestamp": "1634022931",
+                    "security-coverage": {
+                        "status": "not-covered",
+                        "message": "Alpha releases are not covered by Drupal security advisories."
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
             "license": [
                 "GPL-2.0+"
             ],
             "authors": [
                 {
                     "name": "Alexandre Dias",
+                    "homepage": "https://www.drupal.org/user/56348",
                     "email": "alex.jm.dias@gmail.com"
                 },
                 {
@@ -7310,15 +7331,20 @@
                 },
                 {
                     "name": "Ilias Dimopoulos",
+                    "homepage": "https://www.drupal.org/user/382067",
                     "email": "idimopoulos@hotmail.com"
+                },
+                {
+                    "name": "saidatom",
+                    "homepage": "https://www.drupal.org/user/1846674"
                 }
             ],
             "description": "Provides a select element type that integrates with the Slim Select library.",
             "homepage": "https://drupal.org/project/slim_select",
             "support": {
+                "source": "https://git.drupalcode.org/project/slim_select",
                 "issues": "https://drupal.org/project/issues/slim_select"
-            },
-            "time": "2021-09-30T13:46:50+00:00"
+            }
         },
         {
             "name": "drupal/smart_trim",
@@ -9456,7 +9482,7 @@
                 "reference": "master"
             },
             "type": "drupal-theme-library",
-            "time": "2021-06-30T06:04:10+00:00"
+            "time": "2021-05-17T17:56:07+00:00"
         },
         {
             "name": "kub-at/php-simple-html-dom-parser",
@@ -11826,7 +11852,7 @@
                 "reference": "master"
             },
             "type": "library",
-            "time": "2021-07-31T00:07:16+00:00"
+            "time": "2021-05-20T17:05:25+00:00"
         },
         {
             "name": "stack/builder",
@@ -20895,7 +20921,7 @@
         "drupal/schema_digital_document": 20,
         "drupal/schema_social_media_posting": 20,
         "drupal/site_verify": 20,
-        "drupal/slim_select": 20,
+        "drupal/slim_select": 15,
         "drupal/subpathauto": 20,
         "drupal/swiftmailer": 20,
         "drupal/views_block_area": 10,
