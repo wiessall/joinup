@@ -52,7 +52,7 @@ Feature: Global search
     # Since the topics are indented by a whitespace, and the whitespaces are trimmed in the step above, we are testing
     # the full response in order to ensure that the results are indented properly. The &nbsp; character below is the
     # printable space character.
-    # @todo and WARNING. The following   character is supported by the old 3.4 selenium server. Change this in the
+    # @todo and WARNING. The following   character is supported by the old 3.4 selenium server. Change this in the
     # new infrastructure with the &nbsp; encoded character.
     And the response should contain "<option value=\"http://joinup.eu/ontology/topic/category#info\">Info</option>"
     And the response should contain "<option value=\"http://joinup.eu/ontology/topic#statistics-and-analysis\">- Statistics and Analysis</option>"
@@ -648,3 +648,9 @@ Feature: Global search
     And I should see the following facet summary "Collection, News"
     Then I should remove the following facet summary "News"
     And the page should show only the tiles "Radio cooking collection"
+
+    Then I enter "funn" in the search and I should see the suggestions:
+      | funni |
+      | funny |
+
+    Then I enter "bott" in the search and it should see the suggestion "body"
