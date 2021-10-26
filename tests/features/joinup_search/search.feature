@@ -29,22 +29,24 @@ Feature: Global search
       | Dummy news 4          | Dummy body       | Molecular cooking collection | E-inclusion             | Luxembourg       | validated |
 
     Given I am logged in as a user with the "authenticated" role
-    And I am on the homepage
+    # @todo The search page cache should be cleared when new content is added.
+    # @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-3428
+    And the cache has been cleared
     When I visit the search page
     # All content is visible.
     Then I should see the "Molecular cooking collection" tile
     And I should see the "El Celler de Can Roca" tile
     And I should see the "Spherification" tile
     And I should see the "Foam" tile
-
     # Terms are sorted alphabetically
-    And the Slim Select "topic" should contain the following options:
+    And the "topic" select facet form should contain the following options:
+      | Any topic               |
       # Parent term.
-      | Info                      |
+      | Info                    |
       # Child term.
       | - Statistics and Analysis |
       # Parent term.
-      | Social and Political      |
+      | Social and Political    |
       # Child terms.
       | - Demography              |
       | - E-inclusion             |
@@ -67,11 +69,12 @@ Feature: Global search
     # Joinup there were two search fields, but this was confusing users.
     And there should be exactly 1 "search field" on the page
 
-    When I select "Social and Political" option from the "topic" Slim Select
+    When I select "Social and Political" from the "topic" select facet form
     Then I scroll button "Search" into view
     And I press "Search"
-    Then the "Social and Political" option from "topic" Slim Select is selected
-    And the Slim Select "topic" should contain the following options:
+    Then the option with text "Social and Political" from select facet form "topic" is selected
+    And the "topic" select facet form should contain the following options:
+      | Any topic                 |
       | Info                      |
       | - Statistics and Analysis |
       | Social and Political      |
@@ -82,22 +85,15 @@ Feature: Global search
     And I should see the "Dummy news 2" tile
     And I should see the "Dummy news 3" tile
     And I should see the "Dummy news 4" tile
-    Then I unselect "Social and Political" option from the "topic" Slim Select
-
-    #Test multiple topics.
-    When I select "E-inclusion,Demography" options from the "topic" Slim Select
-    Then I scroll button "Search" into view
-    And I press "Search"
-    And the "- Demography,- E-inclusion" options from "topic" Slim Select are selected
-    Then I unselect "E-inclusion,Demography" options from the "topic" Slim Select
 
     # Test the topic facet. The space prefixing "Demography" is due to the hierarchy.
-    When I select "Demography" option from the "topic" Slim Select
+    When I select " Demography" from the "topic" select facet form
     Then I scroll button "Search" into view
     And I press "Search"
-    Then the "- Demography" option from "topic" Slim Select is selected
+    Then the option with text "- Demography" from select facet form "topic" is selected
     # The selected option moves to the last position by default.
-    And the Slim Select "topic" should contain the following options:
+    And the "topic" select facet form should contain the following options:
+      | Any topic                 |
       | Info                      |
       | - Statistics and Analysis |
       | Social and Political      |
@@ -123,8 +119,9 @@ Feature: Global search
       | Any location       |
       | Belgium (1)        |
       | European Union (1) |
-    Then the "- Demography" option from "topic" Slim Select is selected
-    And the Slim Select "topic" should contain the following options:
+    Then the option with text "- Demography" from select facet form "topic" is selected
+    And the "topic" select facet form should contain the following options:
+      | Any topic            |
       | Social and Political |
       | - Demography         |
     And I should see the "Molecular cooking collection" tile
@@ -139,19 +136,20 @@ Feature: Global search
     And I press "Search"
     Then the option with text "News (5)" from select facet form "Content types" is selected
     And the "Content types" select facet form should contain the following options:
-      | Collection (1) |
-      | News (5)       |
-      | Solutions (2)  |
+      | Collection (1)  |
+      | News (5)        |
+      | Solutions (2)   |
 
     When I select "Solutions (2)" option in the "Content types" select facet form
     Then I scroll button "Search" into view
     And I press "Search"
     And I should see the following facet summary "News, Solutions"
     And the "Content types" select facet form should contain the following options:
-      | Collection (1) |
-      | News (5)       |
-      | Solutions (2)  |
-    And the Slim Select "topic" should contain the following options:
+      | Collection (1)  |
+      | News (5)        |
+      | Solutions (2)   |
+    And the "topic" select facet form should contain the following options:
+      | Any topic                 |
       | Info                      |
       | - Statistics and Analysis |
       | Social and Political      |
@@ -196,9 +194,9 @@ Feature: Global search
 
     When I visit the search page
     And the "spatial coverage" select facet form should contain the following options:
-      | Any location   |
-      | Greece (1)     |
-      | Luxembourg (2) |
+      | Any location     |
+      | Greece (1)       |
+      | Luxembourg (2)   |
     When I select "Luxembourg" from the "spatial coverage" select facet form
     Then I scroll button "Search" into view
     And I press "Search"
@@ -206,9 +204,9 @@ Feature: Global search
     And I should see the text "Search Results (2)"
     # The countries are still sorted alphabetically even though the Luxembourg value is selected and has more results.
     And the "spatial coverage" select facet form should contain the following options:
-      | Any location   |
-      | Greece (1)     |
-      | Luxembourg (2) |
+      | Any location     |
+      | Greece (1)       |
+      | Luxembourg (2)   |
 
   Scenario: Content can be found with a full-text search.
     Given the following owner:
@@ -259,16 +257,16 @@ Feature: Global search
 
     When I visit the search page
     And the "Content types" select facet form should contain the following options:
-      | Collections (2) |
-      | Custom page (1) |
-      | Discussion (1)  |
-      | Document (1)    |
-      | Events (2)      |
-      | Licence (1)     |
-      | News (1)        |
-      | Release (1)     |
-      | Solution (1)    |
-      | Video (1)       |
+      | Collections (2)	|
+      | Custom page (1)	|
+      | Discussion (1)	|
+      | Document (1)		|
+      | Events (2)		  |
+      | Licence (1)		  |
+      | News (1)			  |
+      | Release (1)		  |
+      | Solution (1)		|
+      | Video (1)			  |
 
     # "Alpha" is used in all the rdf entities titles.
     When I enter "Alpha" in the search bar and press enter
@@ -621,23 +619,23 @@ Feature: Global search
   @javascript
   Scenario: Anonymous user can find facets summary
     Given the following collection:
-      | title            | Radio cooking collection |
-      | logo             | logo.png                 |
-      | moderation       | no                       |
-      | topic            | Demography               |
-      | spatial coverage | Belgium                  |
-      | state            | validated                |
+      | title            | Radio cooking collection     |
+      | logo             | logo.png                     |
+      | moderation       | no                           |
+      | topic            | Demography                   |
+      | spatial coverage | Belgium                      |
+      | state            | validated                    |
     And the following solutions:
-      | title    | collection               | description                                                                                                                          | topic      | spatial coverage | state     |
-      | Spheres  | Radio cooking collection | Spherification is the culinary process of shaping a liquid into spheres                                                              | Demography | European Union   | validated |
-      | Movistar | Radio cooking collection | "The use of foam in cuisine has been used in many forms in the history of cooking:whipped cream, meringue, and mousse are all foams" |            |                  | validated |
+      | title          | collection                   | description                                                                                                                          | topic      | spatial coverage | state     |
+      | Spheres        | Radio cooking collection     | Spherification is the culinary process of shaping a liquid into spheres                                                              | Demography | European Union   | validated |
+      | Movistar       | Radio cooking collection     | "The use of foam in cuisine has been used in many forms in the history of cooking:whipped cream, meringue, and mousse are all foams" |            |                  | validated |
     And news content:
-      | title           | body             | collection               | topic                   | spatial coverage | state     |
-      | El Cabo da Roca | The best in town | Radio cooking collection | Statistics and Analysis | Luxembourg       | validated |
-      | Funny news 1    | Dummy body       | Radio cooking collection | E-inclusion             | Luxembourg       | validated |
-      | Funny news 2    | Dummy body       | Radio cooking collection | E-inclusion             | Luxembourg       | validated |
-      | Funny news 3    | Dummy body       | Radio cooking collection | E-inclusion             | Luxembourg       | validated |
-      | Funny news 4    | Dummy body       | Radio cooking collection | E-inclusion             | Luxembourg       | validated |
+      | title                 | body             | collection                   | topic                   | spatial coverage | state     |
+      | El Cabo da Roca       | The best in town | Radio cooking collection     | Statistics and Analysis | Luxembourg       | validated |
+      | Funny news 1          | Dummy body       | Radio cooking collection     | E-inclusion             | Luxembourg       | validated |
+      | Funny news 2          | Dummy body       | Radio cooking collection     | E-inclusion             | Luxembourg       | validated |
+      | Funny news 3          | Dummy body       | Radio cooking collection     | E-inclusion             | Luxembourg       | validated |
+      | Funny news 4          | Dummy body       | Radio cooking collection     | E-inclusion             | Luxembourg       | validated |
 
     Given I am logged in as a user with the "authenticated" role
     When I visit the search page
