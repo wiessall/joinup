@@ -486,7 +486,7 @@ class JoinupCommunityContentContext extends RawDrupalContext {
 
       // Check that title links to the canonical page of the article.
       $node = self::getNodeByTitle($actual_title);
-      $xpath = '//h2/a[@href = "' . $node->toUrl()->toString() . '"]';
+      $xpath = '//h2/a[@href = "' . $this->getEntityUri($node) . '"]';
       Assert::assertNotEmpty($actual_data->find('xpath', $xpath), sprintf('Article "%s" does not link to the canonical page.', $actual_title));
 
       // Check that the correct number of topics are present.
@@ -508,7 +508,7 @@ class JoinupCommunityContentContext extends RawDrupalContext {
 
         // Check that each topic links to their canonical page.
         $topic_entity = self::getEntityByLabel('taxonomy_term', $actual_topic_title, 'topic');
-        $xpath = '/a[@href = "' . $topic_entity->toUrl()->toString() . '"]';
+        $xpath = '/a[@href = "' . $this->getEntityUri($topic_entity) . '"]';
         Assert::assertNotEmpty($topic_element->find('xpath', $xpath), sprintf('Topic "%s" for article "%s" does not link to the canonical topic page.', $actual_topic_title, $actual_title));
       }
     }
@@ -548,7 +548,7 @@ class JoinupCommunityContentContext extends RawDrupalContext {
     Assert::assertEquals($content->label(), $actual_title, sprintf('Expected the Highlighted content to have the title "%s" but instead found "%s".', $content->label(), $actual_title));
 
     // Check that title links to the canonical page of the content.
-    $xpath = '//h2/a[@href = "' . $content->toUrl()->toString() . '"]';
+    $xpath = '//h2/a[@href = "' . $this->getEntityUri($content) . '"]';
     Assert::assertNotEmpty($block_element->find('xpath', $xpath), sprintf('%s "%s" does not link to the canonical page.', $content->getType(), $actual_title));
 
     // Retrieve the topics from the content, limiting the result to maximum 2
@@ -568,7 +568,7 @@ class JoinupCommunityContentContext extends RawDrupalContext {
       Assert::assertEquals($topic->label(), $actual_topic_title, sprintf('Expected topic #%d to be "%s" in the "Highlighted content" section but instead found "%s".', $j + 1, $topic->label(), $actual_topic_title));
 
       // Check that each topic links to their canonical page.
-      $xpath = '/a[@href = "' . $topic->toUrl()->toString() . '"]';
+      $xpath = '/a[@href = "' . $this->getEntityUri($topic) . '"]';
       Assert::assertNotEmpty($topic_element->find('xpath', $xpath), sprintf('Topic "%s" in the "Highlighted content" section does not link to the canonical topic page.', $actual_topic_title));
     }
 
