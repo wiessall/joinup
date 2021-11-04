@@ -45,6 +45,7 @@ Feature: Event moderation
 
     # Edit the collection and set it as moderated.
     When I am logged in as a moderator
+    And I accept essential cookies
     And I go to the homepage of the "Wet Lords" collection
     And I open the header local tasks menu
     And I click "Edit" in the "Entity actions" region

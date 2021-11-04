@@ -37,6 +37,7 @@ Feature: Add comments
       | title   | body                                                | <parent>       | state   | author       |
       | <title> | How could this ever happen? Moral panic on its way! | <parent title> | <state> | Salma Coster |
     Given I am logged in as "Miss tell tales"
+    And I accept essential cookies
     When I go to the content page of the type "<content type>" with the title "<title>"
     # The honeypot field that needs to be empty on submission.
     Then the following fields should be present "user_homepage"

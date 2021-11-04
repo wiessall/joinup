@@ -30,6 +30,7 @@ Feature: As a privileged user
     And I should not see the contextual link "Unshare" in the "Solution to be shared" tile
 
     Given I am logged in as a moderator
+    And I accept essential cookies
     And I go to the homepage of the "Collection share original" collection
     Then I should see the "Solution to be shared" tile
     And I should see the contextual link "Share" in the "Solution to be shared" tile

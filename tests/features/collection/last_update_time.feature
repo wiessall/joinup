@@ -25,6 +25,7 @@ Feature: Tests the collection last update time.
       | Roof Hole Cover | Household Wizard | validated | 2010-07-05T23:03  | 2001-01-01    | The Cleaner | Your Cleaning Company | Sean  | Keep your roof in a good shape |
       | Mosquito Killer | Household Wizard | proposed  | 2017-05-03T11:45  | 2001-01-02    | The Cleaner | Your Cleaning Company | Sean  | Quiet nights                   |
     And I am logged in as "The Cleaner"
+    And I accept essential cookies
 
     Given I go to the homepage of the "Household Wizard" collection
     # The newest is 'Mosquito Killer' solution but because is not validated, it

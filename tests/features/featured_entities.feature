@@ -44,6 +44,7 @@ Feature: Featuring content site-wide
     And I should not see the contextual link "Remove from featured" in the "Elementary particles standard model" tile
 
     When I am logged in as an "authenticated user"
+    And I accept essential cookies
     And I go to the homepage of the "Tidy Neutron" collection
     Then I should not see the contextual link "Feature" in the "Ionizing radiation types" tile
     And I should not see the contextual link "Feature" in the "Elementary particles standard model" tile

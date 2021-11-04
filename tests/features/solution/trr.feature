@@ -9,7 +9,7 @@ Feature: Creating a test (solution) in the TRR collection.
     Given users:
       | Username | Roles |
       | Wobbe    |       |
-    Given the following collection:
+    And the following collection:
       | title | Friends of the test repository |
       | state | validated                      |
     And the following collection user memberships:
@@ -18,8 +18,10 @@ Feature: Creating a test (solution) in the TRR collection.
     And the following owner:
       | name | type                         |
       | W3C  | Company, Industry consortium |
-    When I am logged in as "Wobbe"
-    Given I go to the homepage of the "Friends of the test repository" collection
+    And I am logged in as "Wobbe"
+    And I accept essential cookies
+
+    When I go to the homepage of the "Friends of the test repository" collection
     And I open the plus button menu
     And I click "Add solution"
     And I check the "I have read and accept the legal notice and I commit to manage my solution on a regular basis." material checkbox

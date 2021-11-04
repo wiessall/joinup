@@ -211,6 +211,7 @@ Feature: Collection moderation
     # has been replaced with the Content creation radio buttons, but we are
     # keeping the coverage for now.
     Given I am logged in as a user with the "authenticated" role
+    And I accept essential cookies
     # Propose a collection, filling in the required fields.
     When I go to the propose collection form
     Then the "Main fields" tab should be active
@@ -275,6 +276,7 @@ Feature: Collection moderation
     # has been replaced with the Content creation radio buttons, but we are
     # keeping the coverage for now.
     Given I am logged in as a user with the "authenticated" role
+    And I accept essential cookies
     When I go to the propose collection form
     And I fill in the following:
       | Title  | Domestic bovins    |
@@ -317,6 +319,7 @@ Feature: Collection moderation
     # legacy eLibrary slider has been replaced with the Content creation radio
     # buttons, but we are keeping the coverage for now.
     Given I am logged in as a user with the "authenticated" role
+    And I accept essential cookies
     When I go to the propose collection form
     And I fill in the following:
       | Title  | Theft of Body        |
@@ -360,6 +363,7 @@ Feature: Collection moderation
     # Note that the "Closed collection" option no longer exists but we are
     # keeping the coverage for now.
     Given I am logged in as a user with the "authenticated" role
+    And I accept essential cookies
     When I go to the propose collection form
     And I fill in the following:
       | Title  | Silken Emperor    |
@@ -404,6 +408,7 @@ Feature: Collection moderation
     # Note that the "Closed collection" option no longer exists but we are
     # keeping the coverage for now.
     Given I am logged in as a user with the "authenticated" role
+    And I accept essential cookies
     When I go to the propose collection form
     And I fill in the following:
       | Title  | The blue ships          |

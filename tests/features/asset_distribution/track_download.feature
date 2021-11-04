@@ -33,6 +33,7 @@ Feature: Asset distribution editing.
       | Marianne Sherburne | marianne.herburne@example.com |
 
     When I am logged in as "Bradley Emmett"
+    And I accept essential cookies
     And I go to the "Berkeley Software Distributions" collection
     And I click "OpenBSD"
     And I click "Download releases"
@@ -48,6 +49,7 @@ Feature: Asset distribution editing.
 
     When I am an anonymous user
     And I go to the "OpenBSD" solution
+    And I accept essential cookies
     And I click "Download releases"
     Then I should see "Releases for OpenBSD solution"
 
