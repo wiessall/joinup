@@ -47,6 +47,7 @@
   - Drupal\joinup\Context\JoinupSeoContext
   - Drupal\joinup\Context\JoinupSubscriptionContext
   - Drupal\joinup\Context\JoinupUserContext
+  - Drupal\joinup\Context\JoinupWebtoolsContext
   - Drupal\joinup\Context\MinkContext
   - Drupal\joinup\Context\ModerationContext
   - Drupal\joinup\Context\OeNewsroomNewsletterContext

@@ -48,6 +48,7 @@ Feature: Embed of videos into the page.
   @javascript
   Scenario Outline: A video embed button should be shown to community content editors.
     Given I am logged in as a "facilitator" of the "Beer brewing corporation" collection
+    And I accept essential cookies
     And I go to the homepage of the "Beer brewing corporation" collection
     When I open the plus button menu
     And I click "Add news"
