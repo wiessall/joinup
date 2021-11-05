@@ -54,6 +54,7 @@ Feature: Sharing content between collections
     # A member of a single collection or solution which is the one where the content was
     # created can share on social networks only.
     When I am logged in as "Marjolein Rye"
+    And I accept essential cookies
     And I go to the content page of the type "<content type>" with the title "Interesting content"
     And I click "Share"
     Then a modal should open
@@ -110,6 +111,7 @@ Feature: Sharing content between collections
     And I should not see the contextual link "Unshare" in the "Interesting content" tile
 
     When I am logged in as a facilitator of the "Power ballad" <group type>
+    And I accept essential cookies
     And I go to the homepage of the "Classic Rock" <group type>
     Then I should see the "Interesting content" tile
     And I should not see the contextual link "Unshare" in the "Interesting content" tile

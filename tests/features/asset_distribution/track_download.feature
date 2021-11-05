@@ -93,6 +93,7 @@ Feature: Asset distribution editing.
     # Verify that the tracking happens when clicking the Download button in
     # the tile view mode and in the canonical page view of the distribution.
     When I am logged in as "Marianne Sherburne"
+    And I accept essential cookies
     And I go to the "OpenBSD" solution
     # The only download link is the one in the "OpenBSD images" tile.
     Then I click "Download"

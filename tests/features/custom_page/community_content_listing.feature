@@ -244,6 +244,7 @@ Feature:
 
     # Query presets should still apply when available.
     When I am logged in as a moderator
+    And I accept essential cookies
     And I go to the "Chosen content" custom page
     And I open the header local tasks menu
     And I click "Edit" in the "Entity actions" region

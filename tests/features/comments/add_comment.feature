@@ -83,6 +83,7 @@ Feature: Add comments
     And I should see the text "Mr scandal was doing something weird the other day."
 
     When I am logged in as "Salma Coster"
+    And I accept essential cookies
     And I click the comment link from the last email sent to "Salma Coster"
     And I click "Reply"
     And I should see the "Create comment" wysiwyg editor
