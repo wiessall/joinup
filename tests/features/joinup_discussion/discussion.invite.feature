@@ -210,6 +210,7 @@ Feature: Invite members to subscribe to discussions
     # user is already subscribed.
     Given I mark all emails as read
     And I am logged in as "Lynwood Crawford"
+    And I accept essential cookies
     When I go to the "Concerned about dissolved gases?" discussion
     And I click "Invite"
     And I fill in "E-mail" with "gloruskin.hr@example.com"

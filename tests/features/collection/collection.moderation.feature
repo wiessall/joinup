@@ -250,6 +250,7 @@ Feature: Collection moderation
     When I press "Propose"
     Then I should see the heading "Spectres in fog"
     When I am logged in as a user with the "moderator" role
+    And I accept essential cookies
     And I go to the homepage of the "Spectres in fog" collection
     And I open the header local tasks menu
     And I click "Edit" in the "Entity actions" region
