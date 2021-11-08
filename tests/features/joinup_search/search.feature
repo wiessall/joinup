@@ -87,6 +87,7 @@ Feature: Global search
 
     #Test multiple topics.
     When I select "E-inclusion,Demography" options from the "topic" Slim Select
+    Then I scroll button "Search" into view
     And I press "Search"
     And the "- Demography,- E-inclusion" options from "topic" Slim Select are selected
     Then I unselect "E-inclusion,Demography" options from the "topic" Slim Select
