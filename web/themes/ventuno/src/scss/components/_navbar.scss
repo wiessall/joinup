@@ -57,14 +57,14 @@
     background: $primary;
     box-shadow: $box-shadow;
     margin-top: 1px;
-    padding: $spacer; // 16px
+    padding: 0; // Padding should be 0 for smooth collapsing animation
     white-space: nowrap;
     @include media-breakpoint-up(md) {
       max-width: 20*$spacer; // 320px
     }
   }
   .accordion-body {
-    padding: 0; // Accordion resets
+    padding: $spacer; // Padding needs to be on inner element
     color: $white;
   }
   .accordion-item {
