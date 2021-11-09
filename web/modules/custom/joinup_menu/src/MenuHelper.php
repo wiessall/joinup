@@ -4,13 +4,14 @@ declare(strict_types = 1);
 
 namespace Drupal\joinup_menu;
 
-use Drupal\collection\Entity\CollectionInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\Menu\MenuLinkTreeElement;
 use Drupal\Core\Menu\MenuLinkTreeInterface;
 use Drupal\Core\Menu\MenuTreeParameters;
+use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\Url;
+use Drupal\collection\Entity\CollectionInterface;
 use Drupal\joinup_collection\JoinupCollectionHelper;
 use Exception;
 
@@ -18,6 +19,8 @@ use Exception;
  * Helper methods for working with menus.
  */
 class MenuHelper implements MenuHelperInterface {
+
+  use StringTranslationTrait;
 
   /**
    * The logger channel factory.
@@ -90,7 +93,7 @@ class MenuHelper implements MenuHelperInterface {
 
     // Add a link to the homepage, only to be shown in the hamburger menu.
     $anonymous_links[] = [
-      'label' => t('Home'),
+      'label' => $this->t('Home'),
       'link' => Url::fromRoute('<front>'),
       'hide_on_desktop' => TRUE,
     ];
@@ -98,7 +101,7 @@ class MenuHelper implements MenuHelperInterface {
     // Generate a link to EU Login.
     $cas_login_link = Url::fromRoute('cas.login');
     $anonymous_links[] = [
-      'label' => t('Sign in'),
+      'label' => $this->t('Sign in'),
       'link' => $cas_login_link,
     ];
     $variables['anonymous_links'] = $anonymous_links;
@@ -106,22 +109,22 @@ class MenuHelper implements MenuHelperInterface {
     // Generate a link button that opens the "Get started" popover.
     $popover = [
       'cta' => [
-        // Even though the link claims to lead to an account creation form, we are
-        // linking to the EU Login portal. Account creation is not handled inside
-        // the Joinup domain.
+        // Even though the link claims to lead to an account creation form, we
+        // are linking to the EU Login portal. Account creation is not handled
+        // inside the Joinup domain.
         'link' => $cas_login_link,
         'attributes' => 'tabindex="0"',
-        'text' => t('Create an account'),
+        'text' => $this->t('Create an account'),
       ],
-      'description' => t('As a signed-in user you can create content, become a member of a community, receive notifications on your favourite solutions and topics, and access all other features available on the platform.'),
+      'description' => $this->t('As a signed-in user you can create content, become a member of a community, receive notifications on your favourite solutions and topics, and access all other features available on the platform.'),
     ];
     $anonymous_links[] = [
-      'label' => t('Get started'),
+      'label' => $this->t('Get started'),
       'popover' => $popover,
     ];
 
-    // Generate a link to the About page of the Joinup collection, to show as the
-    // "About us" link in the hamburger menu for anonymous users.
+    // Generate a link to the About page of the Joinup collection, to show as
+    // the "About us" link in the hamburger menu for anonymous users.
     $rdf_storage = $this->entityTypeManager->getStorage('rdf_entity');
     try {
       $joinup_collection = $rdf_storage->load(JoinupCollectionHelper::getCollectionId());
@@ -130,7 +133,7 @@ class MenuHelper implements MenuHelperInterface {
       }
       $url = $joinup_collection->toUrl('about-page');
       $anonymous_links[] = [
-        'label' => t('About us'),
+        'label' => $this->t('About us'),
         'link' => $url,
         'hide_on_desktop' => TRUE,
       ];
@@ -138,9 +141,9 @@ class MenuHelper implements MenuHelperInterface {
     catch (Exception $e) {
       // The Joinup collection could not be loaded or the link to the About page
       // could not be generated. This should not crash the page since the
-      // collection is considered to be optional. It is for example possible for a
-      // project to reuse the Joinup open source code without hosting a "Joinup"
-      // collection.
+      // collection is considered to be optional. It is for example possible for
+      // a project to reuse the Joinup open source code without hosting a
+      // "Joinup" collection.
       // However in scope of the Ventuno theme the About Us link is considered
       // to be an important element, so we log a warning to alert the webmaster
       // that corrective action is required.
