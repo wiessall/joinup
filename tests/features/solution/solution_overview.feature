@@ -264,8 +264,3 @@ Feature: Solutions Overview
       | Subdivision Morbid           |
       | Hungry Disappointed Tungsten |
     And the page should be cacheable
-
-  Scenario: Solution overview active trail should persist on urls with arguments.
-    Given I am an anonymous user
-    And I visit "/solutions?a=1"
-    Then "Solutions" should be the active item in the "Header menu" menu
