@@ -46,7 +46,9 @@ Feature: Search inside groups
       | title       | description          | parent    | access url |
       | Zip archive | It has files inside. | Pre-alpha | test.zip   |
 
-  @javascript
+  @javascript @wip
+  # This is disabled because the search bar is currently not shown in the header
+  # but this functionality will probably be restored in the future.
   Scenario: Group filters are shown as chips
     # Pages that do not belong to a collection or solution do not have chips in
     # the search field.
@@ -212,7 +214,9 @@ Feature: Search inside groups
       | Chalet destruction |
     And the page should be cached
 
-  @javascript
+  @javascript @wip
+  # This is disabled because the search bar is currently not shown in the header
+  # but this functionality will probably be restored in the future.
   Scenario: Group filters remain active in the search bar when viewing search results
     When I go to the homepage of the "Chalet construction" collection
     And I open the search bar by clicking on the search icon
@@ -228,7 +232,9 @@ Feature: Search inside groups
     Then the page should not contain any chips
     And the page should show the tiles "Ground plan, Pre-alpha, Natural materials, Presenting DrillMaster X88"
 
-  @javascript
+  @javascript @wip
+  # This is disabled because the search bar is currently not shown in the header
+  # but this functionality will probably be restored in the future.
   Scenario: Group filter chips appear in search bar after selecting them in facets
     When I visit the search page
     Then the option with text "Any Collection or Solution" from select facet "collection/solution" is selected
