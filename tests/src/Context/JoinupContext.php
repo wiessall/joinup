@@ -11,6 +11,7 @@ use Drupal\Component\Utility\UrlHelper;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\DrupalExtension\Hook\Scope\BeforeNodeCreateScope;
+use Drupal\joinup\Traits\BootstrapTrait;
 use Drupal\User\Entity\User;
 use Drupal\comment\CommentInterface;
 use Drupal\comment\Entity\Comment;
@@ -52,6 +53,7 @@ use WebDriver\Exception\StaleElementReference;
  */
 class JoinupContext extends RawDrupalContext {
 
+  use BootstrapTrait;
   use BrowserCapabilityDetectionTrait;
   use ContextualLinksTrait;
   use EntityTrait;
@@ -1549,7 +1551,7 @@ class JoinupContext extends RawDrupalContext {
    * @When I open the account menu
    */
   public function iOpenTheAccountMenu() {
-    $this->openMaterialDesignMenu($this->getSession()->getPage()->find('css', '.login-menu'));
+    $this->openBootstrapAccordion($this->getSession()->getPage()->find('css', '#main-navbar .accordion-item'));
   }
 
   /**
