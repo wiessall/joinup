@@ -4,6 +4,7 @@ declare(strict_types = 1);
 
 namespace Drupal\joinup_menu;
 
+use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\Menu\MenuLinkTreeElement;
@@ -70,10 +71,14 @@ class MenuHelper implements MenuHelperInterface {
     ];
     $tree = $this->menuLinkTree->transform($tree, $manipulators);
     $tree = array_filter($tree, function (MenuLinkTreeElement $element): bool {
-      // Hide inaccessible links, as well as the 'EU Login info' link. This link
-      // is only intended for anonymous users.
+      // Hide inaccessible links, unpublished links, as well as the 'EU Login
+      // info' link. The latter is only intended for anonymous users.
       // @see joinup_eulogin_preprocess_menu()
-      return $element->link->isEnabled() && $element->link->getPluginId() !== 'joinup_eulogin.eu_login_info';
+      return
+        $element->access instanceof AccessResultInterface &&
+        $element->access->isAllowed() &&
+        $element->link->isEnabled() &&
+        $element->link->getPluginId() !== 'joinup_eulogin.eu_login_info';
     });
 
     return array_map(function (MenuLinkTreeElement $element): array {
@@ -104,7 +109,6 @@ class MenuHelper implements MenuHelperInterface {
       'label' => $this->t('Sign in'),
       'link' => $cas_login_link,
     ];
-    $variables['anonymous_links'] = $anonymous_links;
 
     // Generate a link button that opens the "Get started" popover.
     $popover = [
