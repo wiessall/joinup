@@ -6,6 +6,7 @@ dependencies:
     - views.view.search
   module:
     - joinup_core
+    - system
     - views
   theme:
     - ventuno
@@ -27,4 +28,9 @@ visibility:
     routes:
       - view.search.page_1
     negate: false
+    context_mapping: {  }
+  request_path:
+    id: request_path
+    pages: "/search\r\n/search/*"
+    negate: true
     context_mapping: {  }
