@@ -24,12 +24,11 @@
 @import "mixins/full-width-background-colors";
 
 // Components
-@import "components/about-block";
-@import "components/homepage";
-@import "components/in-the-spotlight-block";
-@import "components/latest-news-block";
-@import "components/navbar";
-@import "components/highlighted-solution-block";
-@import "components/highlighted-event-block";
-@import "components/global-search-block";
-@import "components/explore-block";
+@import "components/homepage/about-block";
+@import "components/homepage/homepage";
+@import "components/homepage/in-the-spotlight-block";
+@import "components/homepage/latest-news-block";
+@import "components/homepage/highlighted-solution-block";
+@import "components/homepage/highlighted-event-block";
+@import "components/homepage/global-search-block";
+@import "components/homepage/explore-block";

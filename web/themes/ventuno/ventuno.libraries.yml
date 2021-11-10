@@ -3,6 +3,16 @@ homepage:
     theme:
       assets/css/homepage.css: {}
 
+navbar:
+  css:
+    theme:
+      assets/css/navbar.css: {}
+
+footer:
+  css:
+    theme:
+      assets/css/footer.css: {}
+
 slick:
   js:
     assets/js/slick.js: { minified: true }
