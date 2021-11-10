@@ -1,4 +1,6 @@
-@api @group-g
+@api @group-g @wip
+# This is disabled because the support menu is currently not shown in the header
+# but this functionality will probably be restored in the future.
 Feature:
   As a moderator of the website
   In order to draw the attention of the users for the changes in Joinup
