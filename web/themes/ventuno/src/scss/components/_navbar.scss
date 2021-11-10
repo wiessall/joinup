@@ -40,7 +40,7 @@
     font-weight: $font-weight-medium;
     color: $white;
     @include media-breakpoint-up(sm) {
-      padding: $spacer*.5 $spacer; // 8px 16px
+      padding: $spacer*1.5 $spacer; // 8px 16px
     }
     &:hover {
       color: $gray-200;
