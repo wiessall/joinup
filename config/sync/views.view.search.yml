@@ -388,6 +388,16 @@ display:
           plugin_id: search_api
       title: ''
       header:
+        views_block_area_1:
+          id: views_block_area_1
+          table: views
+          field: views_block_area
+          relationship: none
+          group_type: group
+          admin_label: 'Exposed Search Form'
+          empty: true
+          block_id: 'views_exposed_filter_block:search-page_1'
+          plugin_id: views_block_area
         result:
           id: result
           table: views
@@ -395,7 +405,7 @@ display:
           relationship: none
           group_type: group
           admin_label: ''
-          empty: false
+          empty: true
           content: 'Search Results (@total)'
           plugin_id: result
         views_block_area:
@@ -404,7 +414,7 @@ display:
           field: views_block_area
           relationship: none
           group_type: group
-          admin_label: ''
+          admin_label: 'Facets summary'
           empty: false
           block_id: 'facets_summary_block:search_facets_summary'
           plugin_id: views_block_area

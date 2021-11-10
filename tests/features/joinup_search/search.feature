@@ -202,6 +202,10 @@ Feature: Global search
     Then I scroll button "Search" into view
     And I press "Search"
     Then the option with text "Luxembourg (2)" from select facet form "spatial coverage" is selected
+    And I should see the following search header in the correct order:
+      | Search              |
+      | Search Results (2)  |
+      | Sort by:            |
     And I should see the text "Search Results (2)"
     # The countries are still sorted alphabetically even though the Luxembourg value is selected and has more results.
     And the "spatial coverage" select facet form should contain the following options:
@@ -271,6 +275,10 @@ Feature: Global search
 
     # "Alpha" is used in all the rdf entities titles.
     When I enter "Alpha" in the search bar and press enter
+    And I should see the following search header in the correct order:
+      | Search              |
+      | Search Results (5)  |
+      | Sort by:            |
     Then I should see the text "Search Results (5)"
     And the page should show the tiles "Collection alpha, Solution alpha, Release Alpha, Licence Alpha, Video alpha"
 
