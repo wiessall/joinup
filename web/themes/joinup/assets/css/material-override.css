@@ -1,0 +1,81 @@
+/*
+Override material.min.css and style.min.css rules that conflict with BCL
+Needed while ventuno (Bootstrap-based) and joinup (Material-based) themes coexist.
+Please remove once the switch to ventuno theme is complete.
+*/
+
+
+
+.joinup-navbar.navbar {
+  padding: 0;
+}
+
+.joinup-navbar h1,
+.joinup-navbar h2,
+.joinup-navbar h3,
+.joinup-navbar span,
+.joinup-navbar a,
+.joinup-navbar div {
+  font-family: "Roboto", sans-serif;
+  line-height: 1.5;
+  word-wrap: unset;
+  font-weight: 400;
+  font-size: 16px;
+}
+
+.joinup-navbar h6
+.joinup-navbar p {
+  line-height: 18px;
+}
+
+.joinup-navbar .btn {
+  font-size: 16px;
+}
+
+.joinup-navbar .navbar-expand .navbar-nav .nav-link {
+  padding: 16px 8px;
+}
+
+.joinup-navbar .accordion-button {
+  font-size: 16px;
+}
+
+.joinup-navbar .navbar-brand {
+  font-size: 12px;
+}
+
+.joinup-navbar .navbar-brand .navbar-brand-image {
+  width: 96px;
+}
+@media (min-width: 768px) {
+  .joinup-navbar .navbar-brand .navbar-brand-image {
+    width: 128px;
+  }
+}
+
+.joinup-navbar .accordion .accordion-item .accordion-button {
+  padding: 16px 8px;
+}
+
+.joinup-navbar .accordion .accordion-item .accordion-button .bi {
+  width: 22px;
+  height: 22px;
+}
+
+.joinup-navbar .accordion .accordion-item .accordion-collapse {
+  z-index: 16;
+  padding: 16px;
+}
+
+.joinup-navbar .popover.navbar__popover {
+  margin-top: 1px !important;
+}
+
+.joinup-navbar .navbar__popover .popover-body .popover__cta {
+  font-size: 16px;
+}
+
+.joinup-navbar .navbar__popover .popover-body .popover__description {
+  font-size: 12px;
+  line-height: 18px;
+}
