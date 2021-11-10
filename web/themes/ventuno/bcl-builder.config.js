@@ -45,6 +45,22 @@ module.exports = {
       },
     },
     {
+      entry: path.resolve(outputFolder, "src/scss/navbar.scss"),
+      dest: path.resolve(outputFolder, "assets/css/navbar.css"),
+      options: {
+        includePaths,
+        sourceMap: "file",
+      },
+    },
+    {
+      entry: path.resolve(outputFolder, "src/scss/footer.scss"),
+      dest: path.resolve(outputFolder, "assets/css/footer.css"),
+      options: {
+        includePaths,
+        sourceMap: "file",
+      },
+    },
+    {
       entry: path.resolve(outputFolder, "src/scss/overrides/tour.scss"),
       dest: path.resolve(outputFolder, "assets/css/tour.css"),
       options: {

@@ -38,6 +38,12 @@
     }]
 #}
 
+{# Attach 'ventuno/style' library while this navbar is used on "joinup_theme",
+meaning both "joinup" and "ventuno" themes coexist. When the switch to "ventuno" 
+is completed, please delete the next line since it's redundant. #}
+{{ attach_library('ventuno/style') }}
+{{ attach_library('ventuno/navbar') }}
+
 {% set _breakpoint = breakpoint|default('') %}
 {% set _brand = brand|default({}) %}
 {% set _collapse_id = collapse_id|default('') %}
