@@ -1,0 +1,58 @@
+<?php
+
+/**
+ * @file
+ * Hook implementations for the Interoperable Europe community.
+ */
+
+declare(strict_types = 1);
+
+use Drupal\collection\Entity\CollectionInterface;
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\interoperable_europe\InteroperableEuropeCollectionInterface;
+
+/**
+ * Implements hook_theme_suggestions_HOOK_alter().
+ */
+function interoperable_europe_theme_suggestions_rdf_entity_alter(array &$suggestions, array $variables) {
+  $rdf_entity ??= $variables['elements']['#rdf_entity'];
+  if ($rdf_entity instanceof CollectionInterface && $rdf_entity->id() === InteroperableEuropeCollectionInterface::COLLECTION_ENTITY_ID) {
+    $suggestions[] = 'rdf_entity__collection__interoperable_europe__group_header';
+  }
+}
+
+/**
+ * Implements hook_theme().
+ */
+function interoperable_europe_theme() {
+  return [
+    // Normally theme suggestion templates are only picked up when they are in
+    // themes. We explicitly define a theme suggestion here so that our custom
+    // template will be included.
+    'rdf_entity__collection__interoperable_europe__group_header' => [
+      'render element' => 'elements',
+      'base hook' => 'rdf_entity',
+    ],
+  ];
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ *
+ * Customizes the label text of the join button of the join group form.
+ */
+function interoperable_europe_form_join_group_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  $form['authenticate']['#title'] = t('Subscribe for fresh content');
+}
+
+/**
+ * Implements hook_preprocess_HOOK().
+ *
+ * Provides the path to the Interoperable Europe logo as a Twig variable.
+ */
+function interoperable_europe_preprocess_rdf_entity__collection__interoperable_europe__group_header(&$variables) {
+  /** @var \Drupal\Core\Extension\ModuleHandlerInterface $module_handler */
+  $module_handler = \Drupal::service('module_handler');
+  $module_path = $module_handler->getModule('interoperable_europe')->getPath();
+  $variables['logo'] = base_path() . $module_path . '/assets/interoperable-europe-logo.svg';
+}
