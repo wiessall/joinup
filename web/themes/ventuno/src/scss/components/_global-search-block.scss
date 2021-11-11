@@ -29,4 +29,13 @@
       }
     }
   }
+  .joinup-welcomes {
+    font-size: 1.5rem;
+    @include media-breakpoint-up(md) {
+      font-size: 1.75rem;
+    }
+    @include media-breakpoint-up(lg) {
+      font-size: 2.5rem;
+    }
+  }
 }
