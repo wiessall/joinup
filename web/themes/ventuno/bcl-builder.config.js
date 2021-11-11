@@ -75,16 +75,6 @@ module.exports = {
     {
       from: [
         path.resolve(
-          nodeModules,
-          "@openeuropa/bcl-theme-joinup/icons/bootstrap-icons.svg"
-        ),
-      ],
-      to: path.resolve(outputFolder, "assets/icons"),
-      options: { up: true },
-    },
-    {
-      from: [
-        path.resolve(
           __dirname,
           "src/fonts/joinup-icons/*.woff*"
         ),
