@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "cb30c88cc7af8039f453b965c4e8ffa6",
+    "content-hash": "25fb41a4e3c3472ad07ffa8f5d05bb70",
     "packages": [
         {
             "name": "SEMICeu/adms-ap_validator",
@@ -7648,7 +7648,8 @@
                 },
                 "patches_applied": {
                     "Add spooling for increased performance @see https://www.drupal.org/project/swiftmailer/issues/3000553": "https://git.drupalcode.org/project/swiftmailer/-/merge_requests/2.diff",
-                    "Allow Cc and Bcc headers @see https://www.drupal.org/project/swiftmailer/issues/2892104": "https://www.drupal.org/files/issues/2021-10-11/2892104-38.patch"
+                    "Allow Cc and Bcc headers @see https://www.drupal.org/project/swiftmailer/issues/2892104": "https://www.drupal.org/files/issues/2021-10-11/2892104-38.patch",
+                    "Improve spool error message": "resources/patch/swiftmailer.drush.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -14256,6 +14257,7 @@
                 }
             ],
             "description": "A robust cross-platform utility for normalizing, comparing and modifying file paths.",
+            "abandoned": "symfony/filesystem",
             "time": "2015-12-17T08:42:14+00:00"
         },
         {
