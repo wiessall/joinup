@@ -1147,7 +1147,7 @@ class JoinupContext extends RawDrupalContext {
    * @Then I (should )see the :heading tile
    */
   public function assertTilePresent($heading) {
-    $results = $this->getSession()->getPage()->findAll('css', '.listing__item--tile .listing__title, article.tile h2');
+    $results = $this->getSession()->getPage()->findAll('css', '.listing__item--tile .listing__title, .card .card-title, article.tile h2');
     foreach ($results as $result) {
       /** @var \Behat\Mink\Element\Element $result */
       if ($result->getText() === $heading) {
@@ -1170,7 +1170,7 @@ class JoinupContext extends RawDrupalContext {
    * @Then I (should )see :number tile(s)
    */
   public function assertTileCount($number) {
-    $results = $this->getSession()->getPage()->findAll('css', '.listing__item--tile .listing__title, article.tile h2');
+    $results = $this->getSession()->getPage()->findAll('css', '.listing__item--tile .listing__title, .card .card-title, article.tile h2');
     $nr_found = count($results);
     if ($nr_found != $number) {
       throw new \Exception("Found $nr_found tiles, expected $number");
@@ -1191,7 +1191,7 @@ class JoinupContext extends RawDrupalContext {
   public function assertTileNotPresent($heading) {
     // We target the heading with "h2" instead of ".listing__title" because both
     // unstyled and styled tiles use h2 as element for their titles.
-    $results = $this->getSession()->getPage()->findAll('css', '.listing__item--tile h2, article.tile h2');
+    $results = $this->getSession()->getPage()->findAll('css', '.listing__item--tile h2, .card h5, article.tile h2');
     foreach ($results as $result) {
       /** @var \Behat\Mink\Element\Element $result */
       if ($result->getText() === $heading) {
@@ -2964,24 +2964,61 @@ class JoinupContext extends RawDrupalContext {
   public function scrollButtonIntoView(string $type, string $label): void {
     $page = $this->getSession()->getPage();
     $button = $page->find('named', [$type, str_replace('\\"', '"', $label)]);
-    $button_id = $button->getAttribute("id");
-
+    $id = $button->getAttribute('id');
     $function = <<<JS
-(
-    function(){
-      setTimeout(() => {
-        var elem = document.getElementById('$button_id');
-        elem.scrollIntoView({ behavior: 'instant', block: 'center' });
-      }, 300);
-    }
-)()
-JS;
+  (
+      function(){
+        setTimeout(() => {
+          let elem = document.getElementById("$id");
+          elem.scrollIntoView({ behavior: 'instant', block: 'center' });
+        }, 300);
+      }
+  )()
+  JS;
     try {
       $this->getSession()->executeScript($function);
       sleep(1);
     }
     catch (\Exception $e) {
-      throw new \Exception("Scroll button into view failed");
+      throw new \Exception("Scroll element into view failed");
+    }
+  }
+
+  /**
+   * Shows the button in the middle of the screen.
+   *
+   * In the latest version of Selenium in docker, moving to a button element
+   * might throw this exception while the button is visible.
+   * This might be due to attempting to find the button too fast.
+   *
+   * @param string $label
+   *   The label of the radio button.
+   *
+   * @throws \Exception
+   *    Thrown when an expected scroll in to view failed.
+   *
+   * @Given I scroll the :label chip into view
+   */
+  public function scrollChipIntoView(string $label): void {
+    $css = "div.block-facets-summary-blocksearch-facets-summary li.facet-summary-item--facet a:contains('{$label}')";
+    $element = $this->getSession()->getPage()->find('css', $css);
+    $xpath = $element->getXpath();
+    $function = <<<JS
+  (
+      function(){
+        setTimeout(() => {
+          let elem = document.evaluate("$xpath", document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
+          elem.scrollIntoView({ behavior: 'instant', block: 'center' });
+        }, 300);
+      }
+  )()
+  JS;
+    try {
+      $this->getSession()->executeScript($function);
+      sleep(1);
+    }
+    catch (\Exception $e) {
+      throw new \Exception("Scroll element into view failed");
     }
   }
 
