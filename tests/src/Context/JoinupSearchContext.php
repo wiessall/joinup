@@ -13,7 +13,6 @@ use Drupal\joinup\Traits\MaterialDesignTrait;
 use Drupal\joinup\Traits\TraversingTrait;
 use Drupal\joinup\Traits\UtilityTrait;
 use PHPUnit\Framework\Assert;
-use WebDriver\Exception\MoveTargetOutOfBounds;
 
 /**
  * Behat step definitions for testing searches.
@@ -254,60 +253,6 @@ class JoinupSearchContext extends RawDrupalContext {
    */
   public function iClickAnInlineFacetItemLink(string $link, string $facet): void {
     $this->findFacetByAlias($facet)->clickLink($link);
-  }
-
-  /**
-   * Clicks a facet item in an inline facet.
-   *
-   * @param string $select
-   *   The option to select.
-   * @param string $facet
-   *   The facet alias.
-   *
-   * @throws \Exception
-   *   Thrown when the facet or the link inside the facet is not found.
-   *
-   * @When I select :option from the :facet select facet
-   */
-  public function iSelectAnOptionFromFacet(string $select, string $facet): void {
-    $facet = $this->findFacetByAlias($facet, NULL, 'select');
-    $facet->selectOption($select);
-  }
-
-  /**
-   * Clicks a facet item in an inline facet form.
-   *
-   * @param string $select
-   *   The option to select.
-   * @param string $facet
-   *   The facet alias.
-   *
-   * @throws \Exception
-   *   Thrown when the facet or the link inside the facet is not found.
-   *
-   * @When I select :option from the :facet select facet form
-   */
-  public function iSelectAnOptionFromFacetForm(string $select, string $facet): void {
-    $facet = $this->findFacetByAlias($facet, NULL, 'select', TRUE);
-    $facet->selectOption($select);
-  }
-
-  /**
-   * Clicks in more facet items in an inline facet form.
-   *
-   * @param string $select
-   *   The option to select.
-   * @param string $facet
-   *   The facet alias.
-   *
-   * @throws \Exception
-   *   Thrown when the facet or the link inside the facet is not found.
-   *
-   * @When I select :option option in the :facet select facet form
-   */
-  public function iSelectOtherOptionFromFacetForm(string $select, string $facet): void {
-    $facet = $this->findFacetByAlias($facet, NULL, 'select', TRUE);
-    $facet->selectOption($select, TRUE);
   }
 
   /**
@@ -821,17 +766,6 @@ class JoinupSearchContext extends RawDrupalContext {
       throw new \Exception("The $label facet summary item was not found in the page.");
     }
     $remove = $element->find('css', '.js-facet-deactivate');
-    try {
-      $remove->mouseOver();
-    }
-    catch (MoveTargetOutOfBounds $e) {
-      // In the latest version of Selenium in docker, moving to a button element
-      // might throw this exception while the button is visible.
-      // This might be due to attempting to find the button too fast.
-      // This is why we try to move and sleep for a second before trying to do
-      // that again.
-      sleep(1);
-    }
     $remove->click();
   }
 
