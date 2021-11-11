@@ -256,6 +256,8 @@ Feature: News moderation.
     Then I should not see the heading "Access denied"
     And the following buttons should be present "<available buttons>"
     And the following buttons should not be present "<unavailable buttons>"
+    And I log out
+
     Examples:
       | user     | title                         | available buttons                       | unavailable buttons                                                |
       # Post moderated
@@ -295,7 +297,6 @@ Feature: News moderation.
       | Space cannon fired            |
       | Eagle to join in season 4     |
       | Question joined JL            |
-      | Creating Legion of Doom       |
       | Creating Legion of Doom       |
       | Stealing from Batman          |
       | Learn batman's secret         |
