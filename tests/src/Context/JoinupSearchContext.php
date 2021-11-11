@@ -446,17 +446,32 @@ class JoinupSearchContext extends RawDrupalContext {
   }
 
   /**
-   * Facets form action buttons.
+   * Asserts the autocomplete items from search.
    *
-   * @param string $name
-   *   The label of the input.
+   * This function asserts also the order of the items.
    *
-   * @Given I click :name in facets form
+   * @param \Behat\Gherkin\Node\TableNode $table
+   *   A list of items to be present.
+   *
+   * @throws \Exception
+   *    Thrown when the suggestions are not present in the page.
+   *
+   * @Then I should see the (following )search suggestion(s):
    */
-  public function iClickActionsInFacetsForm(string $name) {
-    $region = $this->getSession()->getPage();
-    $element = $region->find('xpath', "//input[@value='{$name}']");
-    $element->click();
+  public function iShouldSeeTheSuggestions(TableNode $table): void {
+    $session = $this->getSession();
+    $xpath = '//ul[contains(concat(" ", normalize-space(@class), " "), "search-api-autocomplete-search")]//li';
+    $session->getPage()->waitFor(5, function () use ($session, $xpath, $table): bool {
+      $element = $this->getSearchBarElement();
+      $session->getDriver()->keyDown($element->getXpath(), '', NULL);
+      $allResults = $session->getPage()->findAll('xpath', $xpath);
+      $found = array_map(function ($item) {
+        /** @var \Behat\Mink\Element\NodeElement $item */
+        return $item->getText();
+      }, $allResults);
+
+      return $table->getColumn(0) === $found;
+    });
   }
 
   /**
