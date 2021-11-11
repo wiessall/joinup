@@ -48,9 +48,11 @@
   {% if header %}
     <div class="view-header">
       {{ header.views_block_area_1.content|without('sort_by') }}
-      <div class="header-result">
-        {{ header.result }}
-      </div>
+      {% if header.result %}
+        <div class="header-result">
+          {{ header.result }}
+        </div>
+      {% endif %}
       {{ header.views_block_area_1.content|without('keys') }}
       {{ header.views_block_area }}
     </div>

@@ -405,7 +405,7 @@ display:
           relationship: none
           group_type: group
           admin_label: ''
-          empty: true
+          empty: false
           content: 'Search Results (@total)'
           plugin_id: result
         views_block_area:
