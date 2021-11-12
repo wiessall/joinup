@@ -688,6 +688,17 @@ Feature: Global search
 
     Given I am logged in as a user with the "authenticated" role
     When I visit the search page
+    And I enter "funn" in the search bar
+    And I wait for AJAX to finish
+    Then I should see the following search suggestions:
+      | funni |
+      | funny |
+
+    When I enter "bott" in the search bar
+    And I wait for AJAX to finish
+    Then I should see the following search suggestions:
+      | body |
+
     Then I select "Solutions (2)" from "Content types"
     And I additionally select "News (5)" from "Content types"
     Then I scroll button "Search" into view
@@ -712,12 +723,6 @@ Feature: Global search
     Then I scroll the "News" chip into view
     And I should remove the following facet summary "News"
     And the page should show only the tiles "Radio cooking collection"
-
-    Then I enter "funn" in the search and I should see the suggestions:
-      | funni |
-      | funny |
-
-    Then I enter "bott" in the search and it should see the suggestion "body"
 
   @terms @javascript
   Scenario: Show first three search results as featured
