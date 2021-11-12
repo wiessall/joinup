@@ -2,7 +2,7 @@ material-design-lite:
   css:
     theme:
       vendor/material-design-lite/material.min.css: {}
-      assets/css/material-override.css: {}
+      assets/css/material-override.css: { weight: 300 }
   js:
     vendor/material-design-lite/material.min.js: {}
 
