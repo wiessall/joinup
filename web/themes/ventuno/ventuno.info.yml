@@ -28,6 +28,7 @@ libraries-override:
 regions:
   header_bottom: 'Header bottom'
   featured: Featured
+  messages: Messages
   sidebar: Sidebar
   content_top: 'Content top'
   content: Content
