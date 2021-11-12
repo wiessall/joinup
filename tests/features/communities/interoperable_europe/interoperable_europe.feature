@@ -4,7 +4,6 @@ Feature:
   As a content editor
   I want to manage a dedicated collection and landing page
 
-  @a
   Scenario: Page customizations for the Interoperable Europe collection
     Given I am on the homepage
     # A dedicated link in the header should lead to the landing page.
