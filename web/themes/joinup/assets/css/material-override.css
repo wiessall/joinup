@@ -5,7 +5,9 @@ Please remove once the switch to ventuno theme is complete.
 */
 
 
-
+/*
+Navbar
+*/
 .joinup-navbar.navbar {
   padding: 0;
 }
@@ -78,4 +80,91 @@ Please remove once the switch to ventuno theme is complete.
 .joinup-navbar .navbar__popover .popover-body .popover__description {
   font-size: 12px;
   line-height: 18px;
+}
+
+
+/*
+Others
+*/
+body {
+  background: #e9edee;
+}
+
+.bg--blue h1,
+.bg--blue h2,
+.bg--blue h3,
+.bg--blue h4,
+.bg--blue h5,
+.bg--blue h6 {
+  color: #fff;
+}
+
+body h1,
+body h2,
+body h3,
+body h4,
+body h5,
+body h6 {
+  color: #211b38;
+}
+
+body h1,
+body h2,
+body h3 {
+  font-weight: 600;
+}
+
+body h4,
+body h5,
+body h6 {
+  font-weight: 400;
+}
+
+body h1,
+body h2,
+body h3,
+body span,
+body a,
+body div {
+  line-height: normal;
+}
+
+body a,
+body a:hover {
+  color: #ee8917;
+  text-decoration: underline;
+}
+
+body h1 {
+  font-size: 36px;
+  margin: 24px 0;
+}
+
+body h2 {
+  font-size: 24px;
+  margin: 24px 0;
+}
+
+body h3 {
+  font-size: 16px;
+  margin: 24px 0;
+}
+
+body h4 {
+  font-size: 13px;
+  margin: 24px 0 16px;
+}
+
+body h5 {
+  font-size: 11px;
+  margin: 24px 0 16px;
+}
+
+body h6 {
+  font-size: 16px;
+  margin: 24px 0 16px;
+}
+
+.ec__header .bcl-header {
+  background: #fff;
 }
