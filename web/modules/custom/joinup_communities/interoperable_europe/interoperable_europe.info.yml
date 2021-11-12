@@ -4,3 +4,7 @@ description: Custom code for the Interoperable Europe section of the Joinup proj
 package: Joinup
 core: 8.x
 core_version_requirement: ^8 || ^9
+php: 7.4
+
+dependencies:
+  - joinup:collection
