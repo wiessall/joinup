@@ -3,6 +3,7 @@
   margin: 0 auto;
   text-align: center;
   background: unset;
+  @include z-index(highlight + 1);
 }
 
 .featured__top {
