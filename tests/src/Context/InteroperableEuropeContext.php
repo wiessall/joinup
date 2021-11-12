@@ -65,13 +65,6 @@ class InteroperableEuropeContext extends RawDrupalContext {
       'nid' => InteroperableEuropeCollectionInterface::LANDING_PAGE_ENTITY_ID,
       'title' => 'Interoperable Europe',
       'og_audience' => InteroperableEuropeCollectionInterface::COLLECTION_ENTITY_ID,
-      //'field_paragraphs_body' => Paragraph::create([
-      //  'type' => 'simple_paragraph',
-      //  'field_body' => [
-      //    'value' => 'Currently available supporting solutions that can be used as added components that help build interoperability solutions.',
-      //    'format' => 'content_editor',
-      //  ],
-      //]),
     ])->save();
   }
 
