@@ -7,6 +7,7 @@ namespace Joinup\CodingStandards\Sniffs\NamingConventions;
 use Composer\Semver\Comparator;
 use Drupal\Component\Serialization\Yaml;
 use Drupal\Sniffs\NamingConventions\ValidFunctionNameSniff;
+use Gitonomy\Git\Exception\ProcessException;
 use Gitonomy\Git\Repository;
 use PHP_CodeSniffer\Files\File;
 
@@ -59,26 +60,35 @@ class ValidUpdateNameSniff extends ValidFunctionNameSniff {
    *
    * @var string[]
    */
-  protected static $enabledExtensions;
+  protected static array $enabledExtensions;
 
   /**
-   * Static cache for Git describe tag.
+   * Static cache for latest stable Git tag.
    *
    * @var string
    */
-  protected static $gitDescribeTag;
+  protected static string $latestStableTag;
+
+  /**
+   * Static cache for currently checked out Git tag.
+   *
+   * @var string|null
+   *   NULL when not initialized, an empty string when no tag is checked out, or
+   *   a string representing the currently checked out tag.
+   */
+  protected static string $checkedOutTag;
 
   /**
    * Static cache for next version candidates.
    *
    * @var string[]
    */
-  protected static $nextVersionCandidates;
+  protected static array $nextVersionCandidates;
 
   /**
    * {@inheritdoc}
    */
-  protected function processTokenOutsideScope(File $phpcsFile, $stackPtr) {
+  protected function processTokenOutsideScope(File $phpcsFile, $stackPtr): void {
     $functionName = $phpcsFile->getDeclarationName($stackPtr);
 
     if ($functionName === NULL || !preg_match('#_((post_)?update|deploy)_#', $functionName)) {
@@ -113,11 +123,14 @@ class ValidUpdateNameSniff extends ValidFunctionNameSniff {
       $minorVersionTag = "{$majorVersion}.{$minorVersion}";
       $tag = "{$minorVersionTag}.0";
 
-      if (Comparator::lessThan($tag, static::getGitDescribeTag())) {
+      if (Comparator::lessThan($tag, static::getLatestStableTag())) {
         $error = "Remove %s(). Already applied in %s";
         $data = [$functionName, $minorVersionTag];
       }
-      else {
+      // If the release tag is currently checked out we are on a production
+      // build and the updates for the current tag are allowed. If not we show
+      // a helpful message suggesting the right identifier to use.
+      elseif (Comparator::notEqualTo($tag, static::getCheckedOutTag())) {
         $nextVersionCandidates = static::getNextVersionCandidates();
         if (!in_array(substr($name, 0, 5), $nextVersionCandidates)) {
           $error = "Invalid '%s' identifier. The first 5 digits should be '%s' or '%s'";
@@ -132,25 +145,53 @@ class ValidUpdateNameSniff extends ValidFunctionNameSniff {
   }
 
   /**
-   * Returns the Git describe tag.
-   *
-   * The return value is a Git tag, if coincides with the current commit, or the
-   * latest tag followed by a dash and the number of commits since the latest
-   * tag.
+   * Returns the latest semver valid and stable Git tag.
    *
    * @return string
-   *   The Git describe tag with the potential leading 'v' stripped out.
-   *
-   * @see https://git-scm.com/docs/git-describe
+   *   The latest semver valid and stable Git tag with the potential leading 'v'
+   *   stripped out.
    */
-  protected static function getGitDescribeTag(): string {
-    if (!isset(static::$gitDescribeTag)) {
+  protected static function getLatestStableTag(): string {
+    if (!isset(static::$latestStableTag)) {
       $repository = new Repository(getcwd());
-      $tag = trim($repository->run('describe', ['--tags']));
-      // Remove a potential leading 'v'.
-      static::$gitDescribeTag = ltrim($tag, 'v');
+      $tagsString = trim($repository->run('tag', ['--sort=creatordate']));
+      $tags = array_reverse(preg_split('/\s/', $tagsString));
+      foreach ($tags as $tag) {
+        // Only support stable release tags. The regexp is borrowed and adapted
+        // from \Composer\Semver\VersionParser::normalize().
+        if (preg_match('{^v?(\d{1,5})(\.\d++)?(\.\d++)?(\.\d++)?$}i', $tag)) {
+          // Remove a potential leading 'v'.
+          static::$latestStableTag = ltrim($tag, 'v');
+          break;
+        }
+      }
     }
-    return static::$gitDescribeTag;
+
+    return static::$latestStableTag;
+  }
+
+  /**
+   * Returns the currently checked out Git tag.
+   *
+   * @return string
+   *   The currently checked out Git tag with the potential leading 'v' stripped
+   *   out. If no tag is currently checked out an empty string is returned.
+   */
+  protected static function getCheckedOutTag(): string {
+    if (!isset(static::$checkedOutTag)) {
+      $repository = new Repository(getcwd());
+      try {
+        $tag = trim($repository->run('describe', ['--tags', '--exact-match']));
+        // An exact match was found.
+        static::$checkedOutTag = ltrim($tag, 'v');
+      }
+      catch (ProcessException $e) {
+        // There is no exact match.
+        static::$checkedOutTag = '';
+      }
+    }
+
+    return static::$checkedOutTag;
   }
 
   /**
@@ -161,7 +202,7 @@ class ValidUpdateNameSniff extends ValidFunctionNameSniff {
    */
   protected static function getNextVersionCandidates(): array {
     if (!isset(static::$nextVersionCandidates)) {
-      [$majorVersion, $minorVersion] = explode('.', static::getGitDescribeTag());
+      [$majorVersion, $minorVersion] = explode('.', static::getLatestStableTag());
       static::$nextVersionCandidates = [
         // Next minor version.
         sprintf('%02d%03d', $majorVersion, ++$minorVersion),
