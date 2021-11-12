@@ -41,11 +41,11 @@ Feature: Global search
     # Terms are sorted alphabetically
     And the slim select "topic" should contain the following options:
       # Parent term.
-      | Info                    |
+      | Info                      |
       # Child term.
       | - Statistics and Analysis |
       # Parent term.
-      | Social and Political    |
+      | Social and Political      |
       # Child terms.
       | - Demography              |
       | - E-inclusion             |
@@ -134,18 +134,18 @@ Feature: Global search
     And I press "Search"
     Then the option with text "News (5)" from select facet form "Content types" is selected
     And the "Content types" select facet form should contain the following options:
-      | Collection (1)  |
-      | News (5)        |
-      | Solutions (2)   |
+      | Collection (1) |
+      | News (5)       |
+      | Solutions (2)  |
 
     When I additionally select "Solutions (2)" from "Content types"
     Then I scroll button "Search" into view
     And I press "Search"
     And I should see the following facet summary "News, Solutions"
     And the "Content types" select facet form should contain the following options:
-      | Collection (1)  |
-      | News (5)        |
-      | Solutions (2)   |
+      | Collection (1) |
+      | News (5)       |
+      | Solutions (2)  |
     And the slim select "topic" should contain the following options:
       | Info                      |
       | - Statistics and Analysis |
@@ -202,9 +202,9 @@ Feature: Global search
     And I should see the text "Search Results (2)"
     # The countries are still sorted alphabetically even though the Luxembourg value is selected and has more results.
     And the "spatial coverage" select facet form should contain the following options:
-      | Any location     |
-      | Greece (1)       |
-      | Luxembourg (2)   |
+      | Any location   |
+      | Greece (1)     |
+      | Luxembourg (2) |
 
   Scenario: Content can be found with a full-text search.
     Given the following owner:
@@ -255,16 +255,16 @@ Feature: Global search
 
     When I visit the search page
     And the "Content types" select facet form should contain the following options:
-      | Collections (2)	|
-      | Custom page (1)	|
-      | Discussion (1)	|
-      | Document (1)		|
-      | Events (2)		  |
-      | Licence (1)		  |
-      | News (1)			  |
-      | Release (1)		  |
-      | Solution (1)		|
-      | Video (1)			  |
+      | Collections (2) |
+      | Custom page (1) |
+      | Discussion (1)  |
+      | Document (1)    |
+      | Events (2)      |
+      | Licence (1)     |
+      | News (1)        |
+      | Release (1)     |
+      | Solution (1)    |
+      | Video (1)       |
 
     # "Alpha" is used in all the rdf entities titles.
     When I enter "Alpha" in the search bar and press enter
@@ -614,23 +614,23 @@ Feature: Global search
   @javascript
   Scenario: Anonymous user can find facets summary
     Given the following collection:
-      | title            | Radio cooking collection     |
-      | logo             | logo.png                     |
-      | moderation       | no                           |
-      | topic            | Demography                   |
-      | spatial coverage | Belgium                      |
-      | state            | validated                    |
+      | title            | Radio cooking collection |
+      | logo             | logo.png                 |
+      | moderation       | no                       |
+      | topic            | Demography               |
+      | spatial coverage | Belgium                  |
+      | state            | validated                |
     And the following solutions:
-      | title          | collection                   | description                                                                                                                          | topic      | spatial coverage | state     |
-      | Spheres        | Radio cooking collection     | Spherification is the culinary process of shaping a liquid into spheres                                                              | Demography | European Union   | validated |
-      | Movistar       | Radio cooking collection     | "The use of foam in cuisine has been used in many forms in the history of cooking:whipped cream, meringue, and mousse are all foams" |            |                  | validated |
+      | title    | collection               | description                                                                                                                          | topic      | spatial coverage | state     |
+      | Spheres  | Radio cooking collection | Spherification is the culinary process of shaping a liquid into spheres                                                              | Demography | European Union   | validated |
+      | Movistar | Radio cooking collection | "The use of foam in cuisine has been used in many forms in the history of cooking:whipped cream, meringue, and mousse are all foams" |            |                  | validated |
     And news content:
-      | title                 | body             | collection                   | topic                   | spatial coverage | state     |
-      | El Cabo da Roca       | The best in town | Radio cooking collection     | Statistics and Analysis | Luxembourg       | validated |
-      | Funny news 1          | Dummy body       | Radio cooking collection     | E-inclusion             | Luxembourg       | validated |
-      | Funny news 2          | Dummy body       | Radio cooking collection     | E-inclusion             | Luxembourg       | validated |
-      | Funny news 3          | Dummy body       | Radio cooking collection     | E-inclusion             | Luxembourg       | validated |
-      | Funny news 4          | Dummy body       | Radio cooking collection     | E-inclusion             | Luxembourg       | validated |
+      | title           | body             | collection               | topic                   | spatial coverage | state     |
+      | El Cabo da Roca | The best in town | Radio cooking collection | Statistics and Analysis | Luxembourg       | validated |
+      | Funny news 1    | Dummy body       | Radio cooking collection | E-inclusion             | Luxembourg       | validated |
+      | Funny news 2    | Dummy body       | Radio cooking collection | E-inclusion             | Luxembourg       | validated |
+      | Funny news 3    | Dummy body       | Radio cooking collection | E-inclusion             | Luxembourg       | validated |
+      | Funny news 4    | Dummy body       | Radio cooking collection | E-inclusion             | Luxembourg       | validated |
 
     Given I am logged in as a user with the "authenticated" role
     When I visit the search page
@@ -754,3 +754,18 @@ Feature: Global search
 
     Then I go to "/search?sort_by=relevance&page=1"
     And I should see the 0 tiles with image
+
+  Scenario: Max 3 topic terms appear in each search result with a suffix for the rest.
+    Given the following collection:
+      | title      | Max 3 topic collection                                                             |
+      | moderation | no                                                                                 |
+      | topic      | Finance in EU, Supplier exchange, Demography, E-inclusion, Statistics and Analysis |
+      | state      | validated                                                                          |
+    When I visit the search page
+    And I should see the text "Finance in EU" in the "Max 3 topic collection" tile
+    And I should see the text "Supplier exchange" in the "Max 3 topic collection" tile
+    And I should see the text "Demography" in the "Max 3 topic collection" tile
+    And I should see the text "+2 topics" in the "Max 3 topic collection" tile
+    Then I should not see the text "E-inclusion" in the "Max 3 topic collection" tile
+    Then I should not see the text "Statistics and Analysis" in the "Max 3 topic collection" tile
+
