@@ -607,51 +607,32 @@ class JoinupSearchContext extends RawDrupalContext {
   }
 
   /**
-   * Facets form action buttons.
-   *
-   * @param string $name
-   *   The label of the input.
-   *
-   * @Given I click :name in facets form
-   */
-  public function iClickSearchInFacetsForm(string $name) {
-    $region = $this->getSession()->getPage();
-    $xpath = '//div[contains(concat(" ", normalize-space(@class), " "), " block-facets-form ")]//div[@data-drupal-selector="edit-actions"]';
-    $actions = $region->find('xpath', $xpath);
-
-    $element = $actions->find('css', "input[value|='{$name}']");
-    $element->submit();
-  }
-
-  /**
    * Asserts the autocomplete items from search.
    *
    * This function asserts also the order of the items.
    *
-   * @param string $keywords
-   *   A list of words to search.
    * @param \Behat\Gherkin\Node\TableNode $table
    *   A list of items to be present.
    *
    * @throws \Exception
    *    Thrown when the suggestions are not present in the page.
    *
-   * @Then I enter :keywords in the search and I should see the suggestions:
+   * @Then I should see the (following )search suggestion(s):
    */
-  public function iShouldSeeTheSuggestions(string $keywords, TableNode $table): void {
+  public function iShouldSeeTheSuggestions(TableNode $table): void {
     $session = $this->getSession();
-    $element = $this->getSearchBarElement();
-    $element->setValue($keywords);
+    $xpath = '//ul[contains(concat(" ", normalize-space(@class), " "), "search-api-autocomplete-search")]//li';
+    $session->getPage()->waitFor(5, function () use ($session, $xpath, $table): bool {
+      $element = $this->getSearchBarElement();
+      $session->getDriver()->keyDown($element->getXpath(), '', NULL);
+      $allResults = $session->getPage()->findAll('xpath', $xpath);
+      $found = array_map(function ($item) {
+        /** @var \Behat\Mink\Element\NodeElement $item */
+        return $item->getText();
+      }, $allResults);
 
-    $session->getDriver()->keyDown($element->getXpath(), '', NULL);
-    $session->wait(2000);
-    $allResults = $session->getPage()->findAll('css', 'ul.search-api-autocomplete-search li');
-    $found = array_map(function ($item) {
-      /** @var \Behat\Mink\Element\NodeElement $item */
-      return $item->getText();
-    }, $allResults);
-
-    Assert::assertEquals($table->getColumn(0), $found, "The autocomplete values mismatch the expected ones.");
+      return $table->getColumn(0) === $found;
+    });
   }
 
   /**

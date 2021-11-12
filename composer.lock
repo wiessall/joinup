@@ -7066,6 +7066,9 @@
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
                     }
+                },
+                "patches_applied": {
+                    "Missing config schema @see https://www.drupal.org/project/search_api_solr/issues/3236773": "https://git.drupalcode.org/project/search_api_solr/-/merge_requests/8.diff"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
