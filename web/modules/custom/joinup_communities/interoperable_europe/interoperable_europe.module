@@ -10,6 +10,7 @@ declare(strict_types = 1);
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\collection\Entity\CollectionInterface;
 use Drupal\interoperable_europe\InteroperableEuropeCollectionInterface;
+use Drupal\joinup_group\Form\JoinGroupFormInterface;
 
 /**
  * Implements hook_theme_suggestions_HOOK_alter().
@@ -39,10 +40,16 @@ function interoperable_europe_theme() {
 /**
  * Implements hook_form_FORM_ID_alter().
  *
- * Customizes the label text of the join button of the join group form.
+ * Customizes the button label of the join group form.
  */
 function interoperable_europe_form_join_group_form_alter(&$form, FormStateInterface $form_state, $form_id) {
-  $form['authenticate']['#title'] = t('Subscribe for fresh content');
+  $form_object = $form_state->getFormObject();
+  if ($form_object instanceof JoinGroupFormInterface) {
+    $group = $form_object->getGroup();
+    if ($group->id() === InteroperableEuropeCollectionInterface::COLLECTION_ENTITY_ID) {
+      $form['authenticate']['#title'] = t('Subscribe for fresh content');
+    }
+  }
 }
 
 /**
