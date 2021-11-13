@@ -6,17 +6,29 @@
 #}
 {% block content %}
   {{ pattern('card', {
-    'variants': 'horizontal',
-    'title': {
+    horizontal: true,
+    horizontal_grid: {
+      left_col_classes: "col-md-3",
+      right_col_classes: "col-md-9",
+      gutter: 0,
+    },
+    title: {
+      tag: "a",
+      classes: "fs-5 text-decoration-none mb-2",
       attributes: [
         {
           name: "href",
           value: url,
         },
+        {
+          name: "target",
+          value: '_blank',
+        }
       ],
-      'content': label
+      content: label,
     },
-    'content': content,
+    extra_classes_body: "p-0 p-md-3",
+    content: content,
     'image': image,
   }) }}
 {% endblock %}
