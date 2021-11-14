@@ -683,6 +683,22 @@ class JoinupSearchContext extends RawDrupalContext {
   }
 
   /**
+   * Asserts the number of topics in a given card.
+   *
+   * @param int $number
+   *   The expected number of topics.
+   * @param string $heading
+   *   The heading in the card.
+   *
+   * @Given there should be :number topic(s) in the :heading card
+   */
+  public function assertNumberOfTopicsInCards(int $number, string $heading): void {
+    $card = $this->getTileByHeading($heading);
+    $topics = $card->findAll('css', '.field--name-field-topic .field__item');
+    Assert::assertSame(count($topics), $number);
+  }
+
+  /**
    * Opens the dropdown for the given facet element.
    *
    * @param \Behat\Mink\Element\NodeElement $facet
