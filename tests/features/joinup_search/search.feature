@@ -762,10 +762,5 @@ Feature: Global search
       | topic      | Finance in EU, Supplier exchange, Demography, E-inclusion, Statistics and Analysis |
       | state      | validated                                                                          |
     When I visit the search page
-    And I should see the text "Finance in EU" in the "Max 3 topic collection" tile
-    And I should see the text "Supplier exchange" in the "Max 3 topic collection" tile
-    And I should see the text "Demography" in the "Max 3 topic collection" tile
-    And I should see the text "+2 topics" in the "Max 3 topic collection" tile
-    Then I should not see the text "E-inclusion" in the "Max 3 topic collection" tile
-    Then I should not see the text "Statistics and Analysis" in the "Max 3 topic collection" tile
-
+    Then there should be 3 topics in the "Max 3 topic collection" card
+    And I should see the text "+2 topics" in the "Max 3 topic collection" card
