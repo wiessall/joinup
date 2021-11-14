@@ -70,7 +70,7 @@ Feature: Global search
 
     When I select "Social and Political" from the "topic" slim select
     And I scroll button "Search" into view
-    And I click Search in facets form
+    And I press "Search"
     Then the option with text "Social and Political" from slim select "topic" is selected
     And the slim select "topic" should contain the following options:
       | Info                      |
@@ -89,7 +89,7 @@ Feature: Global search
 
     When I select "Demography" from the "topic" slim select
     Then I scroll button "Search" into view
-    And I click Search in facets form
+    And I press "Search"
     Then the option with text "- Demography" from slim select "topic" is selected
     # The selected option moves to the last position by default.
     And the slim select "topic" should contain the following options:
