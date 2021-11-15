@@ -334,7 +334,7 @@ class JoinupContext extends RawDrupalContext {
    *
    * @Then the :select select field options should be sorted alphabetically
    */
-  public function checkSelectOptionsSortedAlphabetically($select, $options) {
+  public function checkSelectOptionsSortedAlphabetically(string $select): void {
     $field = $this->findSelect($select);
     $available_options = $this->getSelectOptions($field);
     $sorted_options = $available_options;
