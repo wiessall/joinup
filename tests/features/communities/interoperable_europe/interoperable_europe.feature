@@ -4,8 +4,9 @@ Feature:
   As a content editor
   I want to manage a dedicated collection and landing page
 
-  Scenario: Page customizations for the Interoperable Europe collection
-    Given I am on the homepage
+  Scenario Outline: Page customizations for the Interoperable Europe collection
+    Given I am <user>
+    And I am on the homepage
     # A dedicated link in the header should lead to the landing page.
     When I click "Interoperable Europe" in the Header region
     Then I should see the heading "Interoperable Europe"
@@ -13,4 +14,9 @@ Feature:
     And I should be on "/collection/interoperable-europe/interoperable-europe"
 
     # The link to join the collection has a customized label.
-    And I should see the link "Subscribe for fresh content"
+    And I should see the <element> "Subscribe for fresh content"
+
+    Examples:
+      | user                                            | element |
+      | not logged in                                   | link    |
+      | logged in as a user with the authenticated role | button  |
