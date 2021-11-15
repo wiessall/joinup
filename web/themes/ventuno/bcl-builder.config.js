@@ -68,6 +68,14 @@ module.exports = {
         sourceMap: "file",
       },
     },
+    {
+      entry: path.resolve(outputFolder, "src/scss/overrides/bootstrap-base.scss"),
+      dest: path.resolve(outputFolder, "assets/css/bootstrap-base.css"),
+      options: {
+        includePaths,
+        sourceMap: "file",
+      },
+    },
   ],
   copy: [
     {
