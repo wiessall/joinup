@@ -13,3 +13,15 @@
  */
 
 declare(strict_types = 1);
+
+/**
+ * Block super-user.
+ */
+function joinup_core_deploy_0107600(): void {
+  /** @var \Drupal\user\UserInterface $account */
+  $account = \Drupal::entityTypeManager()->getStorage('user')->load(1);
+  /** @var \Drupal\externalauth\AuthmapInterface $authmap */
+  $authmap = \Drupal::service('externalauth.authmap');
+  $authmap->delete($account->id(), 'cas');
+  $account->block()->save();
+}
