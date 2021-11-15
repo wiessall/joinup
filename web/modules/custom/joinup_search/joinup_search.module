@@ -12,6 +12,7 @@ use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Datetime\DrupalDateTime;
 use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Field\FieldItemListInterface;
+use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Template\Attribute;
 use Drupal\search_api\IndexInterface;
@@ -400,4 +401,31 @@ function joinup_search_theme_suggestions_joinup_search_global_search(array $vari
   }
 
   return [];
+}
+
+/**
+ * Implements hook_views_post_render().
+ */
+function joinup_search_views_post_render(ViewExecutable $view) {
+  if ($view->id() == "search" && $view->current_display == 'page_1') {
+    $view->exposed_data['results_count'] = $view->header['result']->render()['#markup'];
+    $view->header['views_block_area_1']->view->exposed_raw_input['results_count'] = $view->header['result']->render()['#markup'];
+    $view->header['views_block_area_1']->view->exposed_data['results_count'] = $view->header['result']->render()['#markup'];
+  }
+}
+
+/**
+ * Implements hook_form_alter().
+ */
+function joinup_search_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  if ($form_id == 'views_exposed_form') {
+    $view = $form_state->getStorage('view');
+    if ($view['view']->id() == 'search' && $view['view']->current_display == 'page_1') {
+      $form['results_count'] = [
+        '#type' => 'item',
+        '#weight' => 0,
+        '#markup' => 'alex',
+      ];
+    }
+  }
 }
