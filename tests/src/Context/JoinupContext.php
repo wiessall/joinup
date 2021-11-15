@@ -327,6 +327,23 @@ class JoinupContext extends RawDrupalContext {
   }
 
   /**
+   * Checks that the given select field has the given options.
+   *
+   * @param string $select
+   *   The name of the field element.
+   *
+   * @Then the :select select field options should be sorted alphabetically
+   */
+  public function checkSelectOptionsSortedAlphabetically($select, $options) {
+    $field = $this->findSelect($select);
+    $available_options = $this->getSelectOptions($field);
+    $sorted_options = $available_options;
+    sort($sorted_options);
+
+    Assert::assertSame($available_options, $sorted_options);
+  }
+
+  /**
    * Checks if the given select field does not contain any of the given values.
    *
    * @param string $select
