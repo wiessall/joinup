@@ -12,6 +12,7 @@ upgrade_commands:
     - ./vendor/bin/drush php:eval "if(node_access_needs_rebuild()) { node_access_rebuild(); }"
     - rm disable-config-readonly
     - ./vendor/bin/drush state:set system.maintenance_mode 0 --input-format=integer --yes
+    - test $(./vendor/bin/drush core:requirements --severity=1 --field=title | grep -v "Update notifications" | wc -l) = "0" || (echo "Status Report shows errors & warnings" && ./vendor/bin/drush core:requirements --severity=1 | grep -v "Update notifications" && exit 1)
   append:
     acceptance:
       - touch disable-config-readonly
