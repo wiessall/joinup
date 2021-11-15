@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "4e2c77055e012a474c64b9fc4eb47d82",
+    "content-hash": "9295c0501e53decf9be9a2f44b478fde",
     "packages": [
         {
             "name": "SEMICeu/adms-ap_validator",
@@ -5595,6 +5595,11 @@
                 "slevomat/coding-standard": "~6.0"
             },
             "type": "drupal-module",
+            "extra": {
+                "patches_applied": {
+                    "Pretend is drupal/og:1.0-alpha4": "resources/patch/og.fake_version.patch"
+                }
+            },
             "license": [
                 "GPL-2.0-or-later"
             ],
