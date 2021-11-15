@@ -22,6 +22,14 @@ toolkit:
             # Drupal Finder, and consequently Drush, are still needing
             # composer.json to locate the root dir. Remove only composer.lock.
             - ${toolkit.build.dist.root}/composer.lock
+        # Remove theme development dependencies.
+        - task: exec
+          command: rm
+          options:
+            recursive: null
+            force: null
+          arguments:
+            - ${themes.ventuno.dir}/node_modules/
 
 commands:
 
@@ -38,7 +46,7 @@ commands:
       source: ${joinup.dir}/behat.yml.dist
       destination: ${joinup.dir}/behat.yml
     - task: run
-      command: joinup:compile-scss
+      command: joinup:build-assets
     - task: mkdir
       dir: ${joinup.files_private_dir}
     - task: mkdir
