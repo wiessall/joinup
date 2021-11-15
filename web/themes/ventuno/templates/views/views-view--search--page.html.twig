@@ -47,13 +47,12 @@
   {{ title_suffix }}
   {% if header %}
     <div class="view-header">
-      {{ header.views_block_area_1.content|without('sort_by') }}
+      {{ header.views_block_area_1 }}
       {% if header.result %}
         <div class="header-result">
           {{ header.result }}
         </div>
       {% endif %}
-      {{ header.views_block_area_1.content|without('keys') }}
       {{ header.views_block_area }}
     </div>
   {% endif %}
