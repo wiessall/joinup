@@ -40,14 +40,20 @@ function interoperable_europe_theme() {
 /**
  * Implements hook_form_FORM_ID_alter().
  *
- * Customizes the button label of the join group form.
+ * Customizes the button label of the join group form, both for authenticated
+ * and anonymous users.
  */
 function interoperable_europe_form_join_group_form_alter(&$form, FormStateInterface $form_state, $form_id) {
   $form_object = $form_state->getFormObject();
   if ($form_object instanceof JoinGroupFormInterface) {
     $group = $form_object->getGroup();
     if ($group->id() === InteroperableEuropeCollectionInterface::COLLECTION_ENTITY_ID) {
-      $form['authenticate']['#title'] = t('Subscribe for fresh content');
+      if (isset($form['authenticate']['#title'])) {
+        $form['authenticate']['#title'] = t('Subscribe for fresh content');
+      }
+      if (isset($form['join']['#value'])) {
+        $form['join']['#value'] = t('Subscribe for fresh content');
+      }
     }
   }
 }
