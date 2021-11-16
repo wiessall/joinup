@@ -71,7 +71,7 @@
 
 # Default profile.
 default:
-  suites: [  ]
+  suites: {  }
   extensions:
     Drupal\MinkExtension:
       base_url: ${env.DRUPAL_BASE_URL}
