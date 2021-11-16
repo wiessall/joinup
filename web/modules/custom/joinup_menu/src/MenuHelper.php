@@ -74,8 +74,7 @@ class MenuHelper implements MenuHelperInterface {
       // Hide inaccessible links, unpublished links, as well as the 'EU Login
       // info' link. The latter is only intended for anonymous users.
       // @see joinup_eulogin_preprocess_menu()
-      return
-        $element->access instanceof AccessResultInterface &&
+      return $element->access instanceof AccessResultInterface &&
         $element->access->isAllowed() &&
         $element->link->isEnabled() &&
         $element->link->getPluginId() !== 'joinup_eulogin.eu_login_info';
