@@ -98,8 +98,9 @@
   // @import "@openeuropa/bcl-theme-default/src/scss/inpage-navigation";
 
 
-  font-family: "Roboto", sans-serif !important;
-
+  * {
+    font-family: "Roboto", sans-serif !important;
+  }
   .joinup-navbar {
     height: 52px;
     @include media-breakpoint-up(sm) {
