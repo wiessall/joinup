@@ -95,7 +95,7 @@ $ docker-compose exec web phpdismod blackfire
 Run the following command to install all packages in the vendor folder:
 
 ```bash
-$ docker-compose exec web composer install
+$ docker-compose exec --user www-data web composer install
 ```
 
 ### Known issues
