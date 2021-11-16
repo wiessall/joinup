@@ -281,3 +281,13 @@ function ventuno_preprocess_node__search_result_featured(&$variables) {
   $node = $variables['node'];
   $variables['image'] = $node instanceof LogoInterface ? $node->getLogoAsRenderArray() : NULL;
 }
+
+/**
+ * Implements hook_preprocess().
+ */
+function ventuno_preprocess(&$variables) {
+  /** @var \Drupal\Core\Extension\ThemeHandler $themeHandler */
+  $themeHandler = \Drupal::service('theme_handler');
+  $ventuno = $themeHandler->getTheme('ventuno')->getPath();
+  $variables['icons_path'] = base_path() . $ventuno . '/assets/icons/bootstrap-icons.svg';
+}
