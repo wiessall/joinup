@@ -128,7 +128,7 @@
         "drupal/renderviz": "^1.0",
         "drupal/restui": "^1.18",
         "drupaltest/behat-one-time-login": "^1.0",
-        "ec-europa/toolkit": "^4.4.11",
+        "ec-europa/toolkit": "~4.5.5",
         "foxy/foxy": "^1.1",
         "jcalderonzumba/gastonjs": "^1.2@dev",
         "lovers-of-behat/table-extension": "^1.2.0",
