@@ -167,4 +167,16 @@
   .ec__header.bcl-header {
     background: $white;
   }
+
+  .page__footer{
+    &.bg-primary {
+      background-color: $primary !important;
+    }
+    h3 {
+      font-size: 14px;
+    }
+    a {
+      font-size: 12px;
+    }
+  }
 }
