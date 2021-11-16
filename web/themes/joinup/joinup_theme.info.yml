@@ -9,7 +9,6 @@ php: 7.1
 libraries:
   - joinup_theme/material-design-lite
   - joinup_theme/global-components
-  - ventuno/bootstrap-base
 
 libraries-extend:
   core/drupal.tableselect:
