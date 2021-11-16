@@ -8,7 +8,7 @@ body {
 
 .block-joinup-front-page-explore-block {
   position: relative;
-  @extend .mb-5;
+  margin-bottom: $spacer * 3; // 48px
   @include full-width-color-to-top(
     $gray-200,
     $white,
@@ -20,15 +20,15 @@ body {
   );
   .explore-block-title {
     text-transform: uppercase;
-    @extend .h4;
-    @extend .pb-2;
-    @extend .mb-4;
+    font-size: 1.25rem; // 20px
+    padding-bottom: $spacer * .5; // 8px
+    margin-bottom: $spacer * 1.5; // 24px
     @include font-icon-before("\E802", 1.42rem, $warning);
     border-bottom: 1px solid rgba($primary, .1);
   }
   .nav-tabs {
     border: none;
-    @extend .mb-3;
+    margin-bottom: $spacer; // 16px
     @include media-breakpoint-up(md) {
       position: absolute;
       top: $spacer * 3;
@@ -38,8 +38,10 @@ body {
       border: none;
       background: none;
       padding: 0 0 $btn-padding-y 0;
-      @extend .m-2;
-      @extend .m-lg-4;
+      margin: $spacer * .5; // 8px
+      @include media-breakpoint-up(xl) {
+        margin: $spacer * 1.5;
+      }
       color: $gray-500;
       &.active {
         color: $black;
@@ -49,10 +51,6 @@ body {
     }
   }
   .tab-content {
-    width: 100vw;
-    @include media-breakpoint-up(xl) {
-      width: 90vw;
-    }
     .tab-pane {
       .see-more {
         display: block;
@@ -63,9 +61,8 @@ body {
           flex-flow: column;
           background-color: $white;
           border-radius: $border-radius;
-          @extend .p-4;
-          @extend .me-4;
-          @extend .shadow;
+          padding: $spacer * 1.5; // 24px
+          margin-right: $spacer * 1.5; // 24px
           height: 100%;
           .layout {
             flex-grow: 1;
@@ -77,7 +74,7 @@ body {
           }
           h2 {
             font-size: $h4-font-size;
-            @extend .fw-medium;
+            font-weight: $font-weight-medium;
             line-height: $line-height-base;
             a {
               color: $gray-800;
@@ -86,27 +83,24 @@ body {
           .explore-item__description {
             flex-grow: 1;
             color: $gray-600;
-            @extend .mb-4;
+            margin-bottom: $spacer * 1.5; // 24px
           }
           .date {
             color: $gray-500;
-            @extend .fs-xs;
+            font-size: $font-size-xs;
             .field--name-created, .field--name-published-at {
               padding-top: $btn-padding-y;
             }
           }
-          .block-extra-field-blockrdf-entitysolutionread-more,
-          .block-extra-field-blockrdf-entitycollectionread-more,
-          .block-extra-field-blocknodenewsread-more,
-          .block-extra-field-blocknodeeventread-more {
+          .read-more-wrapper {
             align-self: flex-end;
             margin-top: -1.8rem;
           }
           .read-more {
-            display: inline-block;
             float: right;
-            @extend .btn;
-            @extend .btn-secondary;
+            &:hover {
+              text-decoration: none;
+            }
           }
         }
       }
@@ -142,7 +136,9 @@ body {
     order: 3;
     overflow-y: unset !important;
     overflow-x: clip !important;
-    padding: 6px 0 6px 6px;
+    padding: 0px 0px 6px 6px;
+    margin: 0 -3px;
+    width: calc(100% + 24px);
   }
   .slick-track {
     display: flex !important;
@@ -153,6 +149,11 @@ body {
     margin-right: $spacer*1.5;
     & > div {
       width: 100%;
+    }
+  }
+  .slick-active {
+    article {
+      box-shadow: 0 0.1rem 0.4rem 0.1rem rgba(0, 0, 0, 0.1);
     }
   }
 }
