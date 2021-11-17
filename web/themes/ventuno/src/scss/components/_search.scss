@@ -1,4 +1,8 @@
 // Autocomplete
+.js input.form-autocomplete {
+  background-position: calc(100% - 10px) center;
+}
+
 .ui-widget.search-api-autocomplete-search {
   border: 1px solid $brand;
   border-radius: 0 0 4px 4px;
