@@ -410,9 +410,9 @@ function joinup_theme_preprocess_page(&$variables) {
   // Show links to 'Interoperable Europe' and 'Interoperability Solutions'.
   $links = [];
   foreach ([
-             InteroperableEuropeCollectionInterface::LANDING_PAGE_ENTITY_ID,
-             JoinupCollectionHelper::INTEROPERABILITY_SOLUTIONS_ENTITY_ID,
-           ] as $node_id) {
+    InteroperableEuropeCollectionInterface::LANDING_PAGE_ENTITY_ID,
+    JoinupCollectionHelper::INTEROPERABILITY_SOLUTIONS_ENTITY_ID,
+  ] as $node_id) {
     try {
       $node = Node::load($node_id);
       if (!$node instanceof NodeInterface) {
