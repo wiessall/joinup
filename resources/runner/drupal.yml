@@ -119,6 +119,7 @@ drupal:
         - Custom queue services
         - Mail transport
         - Monolog
+        - Varnish purge
     header: |
       <?php
 
@@ -258,3 +259,19 @@ drupal:
       Custom queue services: |
         $settings['queue_service_joinup_group:group_update'] = 'joinup_group.group_aware_queue';
         $settings['queue_service_joinup_group:group_content_update'] = 'joinup_group.group_aware_queue';
+      Varnish purge: |
+        if (!empty(getenv('DRUPAL_VARNISH_HOSTS'))) {
+          $config['dropsolid_purge.config']['site_name'] = getenv('DRUPAL_SITE_NAME');
+          $config['dropsolid_purge.config']['site_environment'] = getenv('DRUPAL_ENVIRONMENT');
+          $config['dropsolid_purge.config']['site_group'] = getenv('DRUPAL_VARNISH_GROUP');
+          $load_balancers = [];
+          $drupal_flush_cred = getenv('DRUPAL_FLUSH_CREDS');
+          foreach (explode(',', getenv('DRUPAL_VARNISH_HOSTS')) as $ip) {
+            $load_balancers[$ip] = [
+              'ip' => $drupal_flush_cred . '@' . trim($ip),
+              'protocol' => 'http',
+              'port' => '7790',
+            ];
+          }
+          $config['dropsolid_purge.config']['loadbalancers'] = $load_balancers;
+        }
