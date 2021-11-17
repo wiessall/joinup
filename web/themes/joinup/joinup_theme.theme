@@ -20,9 +20,12 @@ use Drupal\Core\Url;
 use Drupal\block\Entity\Block;
 use Drupal\file\Entity\File;
 use Drupal\image\Entity\ImageStyle;
+use Drupal\interoperable_europe\InteroperableEuropeCollectionInterface;
+use Drupal\joinup_collection\JoinupCollectionHelper;
 use Drupal\joinup_core\Controller\IdRedirect;
 use Drupal\joinup_group\JoinupGroupHelper;
 use Drupal\message\MessageInterface;
+use Drupal\node\Entity\Node;
 use Drupal\node\NodeInterface;
 use Drupal\oe_newsroom_newsletter\Form\NewsletterSubscribeForm;
 use Drupal\user\Entity\User;
@@ -402,6 +405,31 @@ function joinup_theme_preprocess_page(&$variables) {
   // Set a variable that identifies the search page.
   if ($route_name == 'view.search.page_1') {
     $variables['is_search_page'] = TRUE;
+  }
+
+  // Show links to 'Interoperable Europe' and 'Interoperability Solutions'.
+  $links = [];
+  foreach ([
+             InteroperableEuropeCollectionInterface::LANDING_PAGE_ENTITY_ID,
+             JoinupCollectionHelper::INTEROPERABILITY_SOLUTIONS_ENTITY_ID,
+           ] as $node_id) {
+    try {
+      $node = Node::load($node_id);
+      if (!$node instanceof NodeInterface) {
+        throw new Exception();
+      }
+      $label = $node->getTitle();
+      $url = $node->toUrl();
+      $links[] = [
+        'label' => $label,
+        'link' => $url,
+      ];
+    }
+    catch (Exception $e) {
+      // The custom pages cannot be loaded. This should not crash the page since
+      // these pages might not exist in projects that reuse the Joinup open
+      // source project.
+    }
   }
 }
 
