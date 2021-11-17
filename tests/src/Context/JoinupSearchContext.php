@@ -817,7 +817,7 @@ class JoinupSearchContext extends RawDrupalContext {
     $regionObj = $this->getSession()->getPage();
 
     $result = [];
-    foreach ($regionObj->findAll('css', '.view-header div.header-result, .view-header div label') as $element) {
+    foreach ($regionObj->findAll('css', '.view-header div.form-item-results-count, .view-header div label') as $element) {
       $title = $element->getText();
       $result[$title] = $element;
     }

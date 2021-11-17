@@ -412,17 +412,6 @@ function joinup_search_views_plugins_row_alter(array &$plugins): void {
 }
 
 /**
- * Implements hook_views_post_render().
- */
-function joinup_search_views_post_render(ViewExecutable $view) {
-  if ($view->id() == "search" && $view->current_display == 'page_1') {
-    $view->exposed_data['results_count'] = $view->header['result']->render()['#markup'];
-    $view->header['views_block_area_1']->view->exposed_raw_input['results_count'] = $view->header['result']->render()['#markup'];
-    $view->header['views_block_area_1']->view->exposed_data['results_count'] = $view->header['result']->render()['#markup'];
-  }
-}
-
-/**
  * Implements hook_form_alter().
  */
 function joinup_search_form_alter(&$form, FormStateInterface $form_state, $form_id) {
@@ -432,7 +421,7 @@ function joinup_search_form_alter(&$form, FormStateInterface $form_state, $form_
       $form['results_count'] = [
         '#type' => 'item',
         '#weight' => 0,
-        '#markup' => 'alex',
+        '#markup' => '',
       ];
     }
   }
