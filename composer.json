@@ -105,7 +105,7 @@
         "masterminds/html5": "^2.7",
         "ml/json-ld": "^1.2",
         "neilime/php-css-lint": "1.1.0 as 2.0.0",
-        "openeuropa/oe_bootstrap_theme": "0.71.0",
+        "openeuropa/oe_bootstrap_theme": "1.0.0-alpha2",
         "openeuropa/oe_webtools": "1.7.0",
         "openeuropa/webtools-geocoding-provider": "~0.1",
         "pear/console_table": "~1.3",
