@@ -29,6 +29,7 @@ module:
   diff: 0
   digital_size_formatter: 0
   dpsi: 0
+  dropsolid_purge: 0
   dynamic_entity_reference: 0
   dynamic_page_cache: 0
   editor: 0
@@ -144,6 +145,11 @@ module:
   path: 0
   path_alias: 0
   pipeline: 0
+  purge: 0
+  purge_drush: 0
+  purge_processor_cron: 0
+  purge_processor_lateruntime: 0
+  purge_queuer_coretags: 0
   rdf_draft: 0
   rdf_entity: 0
   rdf_entity_provenance: 0
