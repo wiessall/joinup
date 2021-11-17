@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "25fb41a4e3c3472ad07ffa8f5d05bb70",
+    "content-hash": "3b285765668dcb9d08e8d397808244bb",
     "packages": [
         {
             "name": "SEMICeu/adms-ap_validator",
@@ -10353,11 +10353,11 @@
         },
         {
             "name": "openeuropa/oe_bootstrap_theme",
-            "version": "0.71.0",
+            "version": "1.0.0-alpha2",
             "dist": {
                 "type": "tar",
-                "url": "https://github.com/openeuropa/oe_bootstrap_theme/releases/download/0.71.0/oe_bootstrap_theme-0.71.0.tar.gz",
-                "reference": "acaf97ddaa159dc827622a2ede554336dc2afe63",
+                "url": "https://github.com/openeuropa/oe_bootstrap_theme/releases/download/1.0.0-alpha2/oe_bootstrap_theme-1.0.0-alpha2.tar.gz",
+                "reference": "9080501e829bc1fda8703d164dba8dc53a4d42e1",
                 "shasum": ""
             },
             "require": {
@@ -10365,7 +10365,7 @@
                 "drupal/core": "^8.9 || ^9.1",
                 "drupal/ui_patterns": "^1.0",
                 "drupal/ui_patterns_settings": "^1.0",
-                "php": ">=7.1"
+                "php": ">=7.3"
             },
             "require-dev": {
                 "composer/installers": "^1.11",
@@ -10374,7 +10374,9 @@
                 "drupal/drupal-extension": "^4.1",
                 "drupal/styleguide": "^1.0@alpha",
                 "drush/drush": "^10.3",
-                "openeuropa/task-runner": "dev-php-7.1 as 1.0.0-beta7",
+                "openeuropa/code-review": "~1.6",
+                "openeuropa/drupal-core-require-dev": "^8.9 || ^9.1",
+                "openeuropa/task-runner-drupal-project-symlink": "^1.0",
                 "phpspec/prophecy-phpunit": "^1 || ^2"
             },
             "type": "drupal-theme",
@@ -10419,7 +10421,7 @@
                 "EUPL-1.2"
             ],
             "description": "OpenEuropa Bootstrap base theme.",
-            "time": "2021-10-22T15:17:24+00:00"
+            "time": "2021-11-08T11:07:16+00:00"
         },
         {
             "name": "openeuropa/oe_webtools",
@@ -11789,7 +11791,7 @@
                 "reference": "master"
             },
             "type": "library",
-            "time": "2020-10-26T14:41:29+00:00"
+            "time": "2021-07-31T00:07:16+00:00"
         },
         {
             "name": "stack/builder",
