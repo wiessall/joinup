@@ -119,6 +119,7 @@ drupal:
         - Custom queue services
         - Mail transport
         - Monolog
+        - Dashboard agent
         - Varnish purge
     header: |
       <?php
@@ -259,6 +260,9 @@ drupal:
       Custom queue services: |
         $settings['queue_service_joinup_group:group_update'] = 'joinup_group.group_aware_queue';
         $settings['queue_service_joinup_group:group_content_update'] = 'joinup_group.group_aware_queue';
+      Dashboard agent: |
+        $settings["oe_dashboard_agent.token"] = getenv('DASHBOARD_TOKEN');
+        $settings["oe_dashboard_agent.allowed_ips"] = explode(',', getenv('DASHBOARD_ALLOWED_IPS'));
       Varnish purge: |
         if (!empty(getenv('DRUPAL_VARNISH_HOSTS'))) {
           $config['dropsolid_purge.config']['site_name'] = getenv('DRUPAL_SITE_NAME');
