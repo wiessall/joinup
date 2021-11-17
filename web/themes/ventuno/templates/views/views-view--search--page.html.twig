@@ -47,12 +47,9 @@
   {{ title_suffix }}
   {% if header %}
     <div class="view-header">
-      {{ header.views_block_area_1 }}
-      {% if header.result %}
-        <div class="header-result">
-          {{ header.result }}
-        </div>
-      {% endif %}
+      {% set results_count = header.views_block_area_1.content.results_count|merge({'value': header.result}) %}
+      {% set search_exposed = header.views_block_area_1.content|merge({'results_count': results_count}) %}
+      {{ search_exposed }}
       {{ header.views_block_area }}
     </div>
   {% endif %}
