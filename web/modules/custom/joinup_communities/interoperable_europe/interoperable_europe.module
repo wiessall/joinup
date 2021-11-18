@@ -15,7 +15,7 @@ use Drupal\joinup_group\Form\JoinGroupFormInterface;
 /**
  * Implements hook_theme_suggestions_HOOK_alter().
  */
-function interoperable_europe_theme_suggestions_rdf_entity_alter(array &$suggestions, array $variables) {
+function interoperable_europe_theme_suggestions_rdf_entity_alter(array &$suggestions, array $variables): void {
   $rdf_entity ??= $variables['elements']['#rdf_entity'];
   $view_mode = $variables['elements']['#view_mode'] ?? '';
   if (
@@ -30,7 +30,7 @@ function interoperable_europe_theme_suggestions_rdf_entity_alter(array &$suggest
 /**
  * Implements hook_theme().
  */
-function interoperable_europe_theme() {
+function interoperable_europe_theme(): array {
   return [
     // Normally theme suggestion templates are only picked up when they are in
     // themes. We explicitly define a theme suggestion here so that our custom
@@ -48,7 +48,7 @@ function interoperable_europe_theme() {
  * Customizes the button label of the join group form, both for authenticated
  * and anonymous users.
  */
-function interoperable_europe_form_join_group_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+function interoperable_europe_form_join_group_form_alter(&$form, FormStateInterface $form_state, $form_id): void {
   $form_object = $form_state->getFormObject();
   if ($form_object instanceof JoinGroupFormInterface) {
     $group = $form_object->getGroup();
@@ -68,7 +68,7 @@ function interoperable_europe_form_join_group_form_alter(&$form, FormStateInterf
  *
  * Provides the path to the Interoperable Europe logo as a Twig variable.
  */
-function interoperable_europe_preprocess_rdf_entity__collection__interoperable_europe__group_header(&$variables) {
+function interoperable_europe_preprocess_rdf_entity__collection__interoperable_europe__group_header(&$variables): void {
   /** @var \Drupal\Core\Extension\ModuleHandlerInterface $module_handler */
   $module_handler = \Drupal::service('module_handler');
   $module_path = $module_handler->getModule('interoperable_europe')->getPath();
