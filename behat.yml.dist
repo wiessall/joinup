@@ -72,47 +72,7 @@
 
 # Default profile.
 default:
-  suites:
-    group_a:
-      contexts: *contexts
-      paths: *paths
-      filters:
-        tags: '~@wip&&@group-a'
-    group_b:
-      contexts: *contexts
-      paths: *paths
-      filters:
-        tags: '~@wip&&@group-b'
-    group_c:
-      contexts: *contexts
-      paths: *paths
-      filters:
-        tags: '~@wip&&@group-c'
-    group_d:
-      contexts: *contexts
-      paths: *paths
-      filters:
-        tags: '~@wip&&@group-d'
-    group_e:
-      contexts: *contexts
-      paths: *paths
-      filters:
-        tags: '~@wip&&@group-e'
-    group_f:
-      contexts: *contexts
-      paths: *paths
-      filters:
-        tags: '~@wip&&@group-f'
-    group_g:
-      contexts: *contexts
-      paths: *paths
-      filters:
-        tags: '~@wip&&@group-g'
-    default:
-      contexts: *contexts
-      paths: *paths
-      filters:
-        tags: '~@wip&&~@group-a&&~@group-b&&~@group-c&&~@group-d&&~@group-e&&~@group-f&&~@group-g'
+  suites: [  ]
   extensions:
     Drupal\MinkExtension:
       base_url: ${env.DRUPAL_BASE_URL}
@@ -188,3 +148,56 @@ default:
         - ${joinup.dir}/vendor/drupaltest/behat-one-time-login/behat.services.yml
   formatters:
     ${behat.formatter.name}: ~
+
+# Suites to run with the site installed without content.
+clean:
+  suites:
+    group_a:
+      contexts: *contexts
+      paths: *paths
+      filters:
+        tags: '~@wip&&@group-a'
+    group_b:
+      contexts: *contexts
+      paths: *paths
+      filters:
+        tags: '~@wip&&@group-b'
+    group_c:
+      contexts: *contexts
+      paths: *paths
+      filters:
+        tags: '~@wip&&@group-c'
+    group_d:
+      contexts: *contexts
+      paths: *paths
+      filters:
+        tags: '~@wip&&@group-d'
+    group_e:
+      contexts: *contexts
+      paths: *paths
+      filters:
+        tags: '~@wip&&@group-e'
+    group_f:
+      contexts: *contexts
+      paths: *paths
+      filters:
+        tags: '~@wip&&@group-f'
+    group_g:
+      contexts: *contexts
+      paths: *paths
+      filters:
+        tags: '~@wip&&@group-g'
+    default:
+      contexts: *contexts
+      paths: *paths
+      filters:
+        tags: '~@wip&&~@group-a&&~@group-b&&~@group-c&&~@group-d&&~@group-e&&~@group-f&&~@group-g&&~@group-clone'
+
+# Suites to run with the site installed with content.
+clone:
+  suites:
+    default:
+      contexts: *contexts
+      paths: *paths
+      filters:
+        tags: '~@wip&&@group-clone'
