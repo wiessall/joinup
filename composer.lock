@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b4a53fd2ac6267a2788738fef83a0aed",
+    "content-hash": "e00fa8f3ebf667e758ec7cc20e10ff8e",
     "packages": [
         {
             "name": "SEMICeu/adms-ap_validator",
@@ -4954,17 +4954,17 @@
         },
         {
             "name": "drupal/matomo",
-            "version": "1.12.0",
+            "version": "1.13.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/matomo.git",
-                "reference": "8.x-1.12"
+                "reference": "8.x-1.13"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/matomo-8.x-1.12.zip",
-                "reference": "8.x-1.12",
-                "shasum": "4c96688a1dad0caa9a767ee0986df8b94cc9aba2"
+                "url": "https://ftp.drupal.org/files/projects/matomo-8.x-1.13.zip",
+                "reference": "8.x-1.13",
+                "shasum": "a3abacb383a349aeb9bfa271dd9294182ef16036"
             },
             "require": {
                 "drupal/core": "^8.8.0 || ^9.0.0"
@@ -4973,14 +4973,15 @@
                 "drupal/csp": "<1.12"
             },
             "require-dev": {
+                "drupal/csp": "~1.12",
                 "drupal/php": "~1.1",
                 "drupal/token": "~1.9"
             },
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "8.x-1.12",
-                    "datestamp": "1634559052",
+                    "version": "8.x-1.13",
+                    "datestamp": "1635192471",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -5017,62 +5018,23 @@
         },
         {
             "name": "drupal/matomo_reporting_api",
-            "version": "2.3.0",
+            "version": "dev-drop-matomo",
             "source": {
                 "type": "git",
-                "url": "https://git.drupalcode.org/project/matomo_reporting_api.git",
-                "reference": "8.x-2.3"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/matomo_reporting_api-8.x-2.3.zip",
-                "reference": "8.x-2.3",
-                "shasum": "50347318cf4aa9ae898c8307707b5ce922e5c72e"
+                "url": "https://git.drupal.org/project/matomo_reporting_api.git",
+                "reference": "69c1b1ef59f4b0d059e7db5c6269f7b54d35948d"
             },
             "require": {
-                "drupal/core": "^8 || ^9",
-                "drupal/matomo": "^1.7",
                 "pfrenssen/matomo-reporting-api": "^2.0"
             },
             "type": "drupal-module",
             "extra": {
-                "drupal": {
-                    "version": "8.x-2.3",
-                    "datestamp": "1633442026",
-                    "security-coverage": {
-                        "status": "covered",
-                        "message": "Covered by Drupal's security advisory policy"
-                    }
-                },
                 "patches_applied": {
                     "Ensure backward compatibility with Piwik @see https://www.drupal.org/project/matomo_reporting_api/issues/3080854": "https://www.drupal.org/files/issues/2019-09-18/3080854-7.patch"
                 }
             },
-            "notification-url": "https://packages.drupal.org/8/downloads",
             "license": [
                 "GPL-2.0+"
-            ],
-            "authors": [
-                {
-                    "name": "claudiu.cristea",
-                    "homepage": "https://www.drupal.org/user/56348"
-                },
-                {
-                    "name": "idimopoulos",
-                    "homepage": "https://www.drupal.org/user/2578708"
-                },
-                {
-                    "name": "pfrenssen",
-                    "homepage": "https://www.drupal.org/user/382067"
-                },
-                {
-                    "name": "sandervd",
-                    "homepage": "https://www.drupal.org/user/346775"
-                },
-                {
-                    "name": "sardara",
-                    "homepage": "https://www.drupal.org/user/2353864"
-                }
             ],
             "description": "Allows to retrieve reports from the Matomo API.",
             "homepage": "https://www.drupal.org/project/matomo_reporting_api",
@@ -5080,9 +5042,10 @@
                 "Drupal"
             ],
             "support": {
-                "source": "http://cgit.drupalcode.org/matomo_reporting_api",
-                "issues": "https://www.drupal.org/project/issues/matomo_reporting_api"
-            }
+                "issues": "https://www.drupal.org/project/issues/matomo_reporting_api",
+                "source": "http://cgit.drupalcode.org/matomo_reporting_api"
+            },
+            "time": "2021-11-16T16:25:32+00:00"
         },
         {
             "name": "drupal/menu_admin_per_menu",
@@ -8296,14 +8259,11 @@
                 "spdx/license-list-data": "master"
             },
             "type": "drupal-module",
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "GPL-2.0-or-later"
             ],
             "description": "Allows to federate and manage the SPDX licences.",
-            "support": {
-                "source": "https://github.com/ec-europa/spdx/tree/1.0.0-alpha10",
-                "issues": "https://github.com/ec-europa/spdx/issues"
-            },
             "time": "2021-11-17T09:47:09+00:00"
         },
         {
@@ -16042,7 +16002,10 @@
             "type": "library",
             "extra": {
                 "enable-patching": true,
-                "composer-exit-on-patch-failure": true
+                "composer-exit-on-patch-failure": true,
+                "patches_applied": {
+                    "Toolkit 4.5.5 bug": "resources/patch/toolkit-4.5.5-bug.diff"
+                }
             },
             "autoload": {
                 "psr-4": {
@@ -20421,6 +20384,7 @@
         "dkarv/mdl-chip-input": 20,
         "drupal/config_ignore": 20,
         "drupal/dropsolid_purge": 10,
+        "drupal/matomo_reporting_api": 20,
         "drupal/menu_link_destination": 20,
         "drupal/og": 20,
         "drupal/schema_digital_document": 20,
