@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b4a53fd2ac6267a2788738fef83a0aed",
+    "content-hash": "d84a925b74413c5fd47721145c4ca9f8",
     "packages": [
         {
             "name": "SEMICeu/adms-ap_validator",
@@ -3573,6 +3573,9 @@
                         "status": "not-covered",
                         "message": "Beta releases are not covered by Drupal security advisories."
                     }
+                },
+                "patches_applied": {
+                    "Don't store sensitive data in the database": "resources/patch/175945-8.x-9.x-2.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -16042,7 +16045,10 @@
             "type": "library",
             "extra": {
                 "enable-patching": true,
-                "composer-exit-on-patch-failure": true
+                "composer-exit-on-patch-failure": true,
+                "patches_applied": {
+                    "Toolkit 4.5.5 bug": "resources/patch/toolkit-4.5.5-bug.diff"
+                }
             },
             "autoload": {
                 "psr-4": {
