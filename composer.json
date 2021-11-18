@@ -392,10 +392,6 @@
         },
         {
             "type": "vcs",
-            "url": "https://github.com/ec-europa/spdx.git"
-        },
-        {
-            "type": "vcs",
             "url": "https://github.com/openeuropa/oe_dashboard_agent.git"
         },
         {
