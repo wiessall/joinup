@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "6b4c11d4800ee28714d68fac5ae85bbf",
+    "content-hash": "9424e884809202af9e2a0a8837c41d69",
     "packages": [
         {
             "name": "SEMICeu/adms-ap_validator",
@@ -10444,29 +10444,40 @@
         },
         {
             "name": "neilime/php-css-lint",
-            "version": "v1.1.0",
+            "version": "v3.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/neilime/php-css-lint.git",
-                "reference": "ac0cb275c7e6f98ba9ca3b94373d7ac0e64225e0"
+                "reference": "5dc9dd1d3238d29a9ff210cd7d934cfee00e5e96"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/neilime/php-css-lint/zipball/ac0cb275c7e6f98ba9ca3b94373d7ac0e64225e0",
-                "reference": "ac0cb275c7e6f98ba9ca3b94373d7ac0e64225e0",
+                "url": "https://api.github.com/repos/neilime/php-css-lint/zipball/5dc9dd1d3238d29a9ff210cd7d934cfee00e5e96",
+                "reference": "5dc9dd1d3238d29a9ff210cd7d934cfee00e5e96",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.3.3"
+                "ext-json": "*",
+                "php": "^7.3 || ^8"
             },
             "require-dev": {
-                "phpunit/phpunit": "4.*.*",
-                "satooshi/php-coveralls": "1.*.*"
+                "pcov/clobber": "^2.0",
+                "phpstan/extension-installer": "^1.0",
+                "phpstan/phpstan": "^0.12",
+                "phpstan/phpstan-phpunit": "^0.12",
+                "phpunit/phpunit": "^9.2.5",
+                "slam/phpstan-laminas-framework": "^0.12",
+                "squizlabs/php_codesniffer": "^3.5"
             },
             "bin": [
                 "scripts/php-css-lint"
             ],
             "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0-dev"
+                }
+            },
             "autoload": {
                 "psr-4": {
                     "CssLint\\": "src/CssLint"
@@ -10483,8 +10494,8 @@
                     "role": "Developer"
                 }
             ],
-            "description": "Powerfull & memory efficiant CSS linter for PHP",
-            "homepage": "http://neilime.github.io/php-css-lint/",
+            "description": "Powerful & memory efficient CSS linter for PHP",
+            "homepage": "https://neilime.github.io/php-css-lint/",
             "keywords": [
                 "css",
                 "lint",
@@ -10492,7 +10503,13 @@
                 "syntax",
                 "validation"
             ],
-            "time": "2018-04-09T13:05:16+00:00"
+            "funding": [
+                {
+                    "url": "https://github.com/neilime",
+                    "type": "github"
+                }
+            ],
+            "time": "2021-03-04T16:36:50+00:00"
         },
         {
             "name": "nikic/php-parser",
@@ -10549,9 +10566,14 @@
         {
             "name": "openeuropa/oe_bootstrap_theme",
             "version": "0.71.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/openeuropa/oe_bootstrap_theme.git",
+                "reference": "acaf97ddaa159dc827622a2ede554336dc2afe63"
+            },
             "dist": {
-                "type": "tar",
-                "url": "https://github.com/openeuropa/oe_bootstrap_theme/releases/download/0.71.0/oe_bootstrap_theme-0.71.0.tar.gz",
+                "type": "zip",
+                "url": "https://api.github.com/repos/openeuropa/oe_bootstrap_theme/zipball/acaf97ddaa159dc827622a2ede554336dc2afe63",
                 "reference": "acaf97ddaa159dc827622a2ede554336dc2afe63",
                 "shasum": ""
             },
@@ -21223,12 +21245,6 @@
             "alias_normalized": "0.9.2.0",
             "version": "1.0.0.0",
             "package": "easyrdf/easyrdf"
-        },
-        {
-            "alias": "2.0.0",
-            "alias_normalized": "2.0.0.0",
-            "version": "1.1.0.0",
-            "package": "neilime/php-css-lint"
         },
         {
             "alias": "1.0.0-beta7",
