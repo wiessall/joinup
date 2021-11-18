@@ -1,0 +1,18 @@
+Index: src/TaskRunner/Commands/ToolCommands.php
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/TaskRunner/Commands/ToolCommands.php b/src/TaskRunner/Commands/ToolCommands.php
+--- a/src/TaskRunner/Commands/ToolCommands.php	
++++ b/src/TaskRunner/Commands/ToolCommands.php	(date 1637221900341)
+@@ -401,7 +401,8 @@
+                     $packageInsecureConfirmation = true;
+                     $msg = "Package " . $insecurePackage['name'] . " have a security update, please update to an safe version.";
+ 
+-                    if (!in_array("insecure", $historyTerms['terms'])) {
++                    $terms = $historyTerms['terms'] ?? [];
++                    if (!in_array("insecure", $terms)) {
+                         $packageInsecureConfirmation = false;
+                         $msg = $msg . " (Confirmation failed, ignored)";
+                     }
