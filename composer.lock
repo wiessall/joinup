@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d84a925b74413c5fd47721145c4ca9f8",
+    "content-hash": "e6955f98f101b90ca851a1b684acd0c2",
     "packages": [
         {
             "name": "SEMICeu/adms-ap_validator",
@@ -16015,16 +16015,16 @@
         },
         {
             "name": "ec-europa/toolkit",
-            "version": "4.5.5",
+            "version": "4.5.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ec-europa/toolkit.git",
-                "reference": "c757c9305ba371c49e5997fa07f0295b4bde0dae"
+                "reference": "ae60b6b2f380cdd383a82e6c285d27dcf01b7f3e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ec-europa/toolkit/zipball/c757c9305ba371c49e5997fa07f0295b4bde0dae",
-                "reference": "c757c9305ba371c49e5997fa07f0295b4bde0dae",
+                "url": "https://api.github.com/repos/ec-europa/toolkit/zipball/ae60b6b2f380cdd383a82e6c285d27dcf01b7f3e",
+                "reference": "ae60b6b2f380cdd383a82e6c285d27dcf01b7f3e",
                 "shasum": ""
             },
             "require": {
@@ -16045,10 +16045,7 @@
             "type": "library",
             "extra": {
                 "enable-patching": true,
-                "composer-exit-on-patch-failure": true,
-                "patches_applied": {
-                    "Toolkit 4.5.5 bug": "resources/patch/toolkit-4.5.5-bug.diff"
-                }
+                "composer-exit-on-patch-failure": true
             },
             "autoload": {
                 "psr-4": {
@@ -16061,7 +16058,7 @@
             ],
             "description": "Toolkit packaged for Drupal 8.",
             "homepage": "https://github.com/ec-europa/toolkit",
-            "time": "2021-11-05T16:18:58+00:00"
+            "time": "2021-11-18T16:07:01+00:00"
         },
         {
             "name": "fabpot/goutte",
