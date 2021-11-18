@@ -23,6 +23,8 @@ upgrade_commands:
       - rm disable-config-readonly
 
 php_version: 7.4
+extra_pkgs:
+  - php-apcu
 
 solr: True
 solr_version: 6
