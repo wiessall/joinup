@@ -347,7 +347,8 @@
                 "The views plugin options are missing schema @see https://www.drupal.org/i/3195213": "https://git.drupalcode.org/project/views_autosubmit/-/merge_requests/2.diff"
             },
             "ec-europa/toolkit": {
-                "Toolkit 4.5.5 bug": "resources/patch/toolkit-4.5.5-bug.diff"
+                "Toolkit 4.5.5 bug": "resources/patch/toolkit-4.5.5-bug.diff",
+                "Temporary whitelist drupal/matomo_reporting_api:dev-drop-matomo": "resources/patch/toolkit.whitelist.matomo_reporting_api.diff"
             },
             "openeuropa/oe_webtools": {
                 "Allow to pass an optional referer. @see https://github.com/openeuropa/oe_webtools/pull/96": "https://patch-diff.githubusercontent.com/raw/openeuropa/oe_webtools/pull/96.diff",

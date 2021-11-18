@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e00fa8f3ebf667e758ec7cc20e10ff8e",
+    "content-hash": "cada2f729bd9558002730c1b3bd31273",
     "packages": [
         {
             "name": "SEMICeu/adms-ap_validator",
@@ -16002,10 +16002,7 @@
             "type": "library",
             "extra": {
                 "enable-patching": true,
-                "composer-exit-on-patch-failure": true,
-                "patches_applied": {
-                    "Toolkit 4.5.5 bug": "resources/patch/toolkit-4.5.5-bug.diff"
-                }
+                "composer-exit-on-patch-failure": true
             },
             "autoload": {
                 "psr-4": {
