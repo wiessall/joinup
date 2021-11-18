@@ -11,6 +11,7 @@ upgrade_commands:
     - ./vendor/bin/drush search-api:reset-tracker --yes
     - ./vendor/bin/drush php:eval "if(node_access_needs_rebuild()) { node_access_rebuild(); }"
     - rm disable-config-readonly
+    - ./vendor/bin/drush site-alert:disable
     - ./vendor/bin/drush state:set system.maintenance_mode 0 --input-format=integer --yes
   append:
     acceptance:
@@ -19,6 +20,8 @@ upgrade_commands:
       - rm disable-config-readonly
 
 php_version: 7.4
+extra_pkgs:
+  - php-apcu
 
 solr: True
 solr_version: 6
