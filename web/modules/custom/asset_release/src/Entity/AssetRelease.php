@@ -4,6 +4,7 @@ declare(strict_types = 1);
 
 namespace Drupal\asset_release\Entity;
 
+use Drupal\joinup_bundle_class\DescriptionTrait;
 use Drupal\joinup_bundle_class\JoinupBundleClassFieldAccessTrait;
 use Drupal\joinup_bundle_class\LogoTrait;
 use Drupal\joinup_group\Entity\GroupInterface;
@@ -23,6 +24,7 @@ class AssetRelease extends Rdf implements AssetReleaseInterface {
   use JoinupBundleClassFieldAccessTrait;
   use LogoTrait;
   use SolutionContentTrait;
+  use DescriptionTrait;
 
   /**
    * {@inheritdoc}
@@ -59,6 +61,13 @@ class AssetRelease extends Rdf implements AssetReleaseInterface {
    */
   public function getLogoFieldName(): string {
     return 'field_isr_logo';
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getDescriptionField(): string {
+    return 'field_isr_description';
   }
 
   /**

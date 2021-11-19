@@ -5,24 +5,26 @@
  */
 #}
 {% block content %}
+  {% set badges = [] %}
+  {% for topic in topics %}
+    {% set badges = badges|merge([{
+      label: topic.name.value,
+      background: 'secondary',
+      rounded_pill: true,
+      attributes: create_attribute().addClass('text-primary')
+    }]) %}
+  {% endfor %}
   {{ pattern('card', {
     attributes: create_attribute().addClass(['border-0', 'mb-4']),
     horizontal: true,
     horizontal_grid: {
-      left_col_classes: '',
-      right_col_classes: 'col-12',
-      gutter: '0',
+      left_col_classes: 'col-4',
+      right_col_classes: 'col-8',
+      gutter: '1',
     },
     extra_classes_header: 'border-0 bg-transparent py-0',
     extra_classes_body: 'py-0',
-    badges: [
-      {
-        label: content.field_topic,
-        background: 'secondary',
-        rounded_pill: true,
-        attributes: create_attribute().addClass('text-primary'),
-      }
-    ],
+    badges: badges,
     title: {
       tag: 'a',
       classes: 'fs-5 text-underline-hover mb-2',
@@ -39,8 +41,8 @@
       content: label
     },
     text: {
-      content: content,
+      content: body,
     },
-    content: '<span class="text-muted text-nowrap me-4-5">NEWS</span><span class="text-muted text-nowrap me-4-5">8 hours ago</span><span class="text-muted text-nowrap">1 comment</span>',
+    content: footer,
   }) }}
 {% endblock %}

@@ -11,6 +11,7 @@ use Drupal\Core\Menu\MenuLinkTreeElement;
 use Drupal\Core\Menu\MenuTreeParameters;
 use Drupal\Core\Url;
 use Drupal\collection\Entity\CollectionInterface;
+use Drupal\joinup_bundle_class\DescriptionInterface;
 use Drupal\joinup_bundle_class\LogoInterface;
 use Drupal\joinup_collection\JoinupCollectionHelper;
 use Drupal\rdf_entity\Entity\Rdf;
@@ -271,6 +272,32 @@ function ventuno_preprocess_rdf_entity__search_result_featured(&$variables) {
   /** @var \Drupal\rdf_entity\RdfInterface $entity */
   $entity = $variables['rdf_entity'];
   $variables['image'] = $entity instanceof LogoInterface ? $entity->getLogoAsRenderArray() : NULL;
+  $variables['body'] = $entity instanceof DescriptionInterface ? $entity->getDescription() : NULL;
+  $variables['topics'] = $entity->hasField('field_topic') ? $entity->getTopics() : NULL;
+  $variables['type'] = $entity->getType();
+  $variables['footer'] = t('@type @label:@created', [
+    '@type' => strtoupper($entity->getType()),
+    '@label' => t('Created'),
+    '@created' => \Drupal::service('date.formatter')->format($entity->getCreatedTime(), 'date_only'),
+  ],
+  );
+}
+
+/**
+ * Implements hook_preprocess_HOOK().
+ */
+function ventuno_preprocess_rdf_entity__search_result(&$variables) {
+  /** @var \Drupal\rdf_entity\RdfInterface $entity */
+  $entity = $variables['rdf_entity'];
+  $variables['body'] = $entity instanceof DescriptionInterface ? $entity->getDescription() : NULL;
+  $variables['topics'] = $entity->hasField('field_topic') ? $entity->getTopics() : NULL;
+  $variables['type'] = $entity->getType();
+  $variables['footer'] = t('@type @label:@created', [
+    '@type' => strtoupper($entity->getType()),
+    '@label' => t('Created'),
+    '@created' => \Drupal::service('date.formatter')->format($entity->getCreatedTime(), 'date_only'),
+  ],
+  );
 }
 
 /**
@@ -280,4 +307,30 @@ function ventuno_preprocess_node__search_result_featured(&$variables) {
   /** @var \Drupal\node\NodeInterface $node */
   $node = $variables['node'];
   $variables['image'] = $node instanceof LogoInterface ? $node->getLogoAsRenderArray() : NULL;
+  $variables['body'] = $node instanceof DescriptionInterface ? $node->getDescription() : NULL;
+  $variables['topics'] = $node->hasField('field_topic') ? $node->getTopics() : NULL;
+  $variables['type'] = $node->getType();
+  $variables['footer'] = t('@type @label:@created', [
+    '@type' => strtoupper($node->getType()),
+    '@label' => t('Created'),
+    '@created' => \Drupal::service('date.formatter')->format($node->getCreatedTime(), 'date_only'),
+  ],
+  );
+}
+
+/**
+ * Implements hook_preprocess_HOOK().
+ */
+function ventuno_preprocess_node__search_result(&$variables) {
+  /** @var \Drupal\node\NodeInterface $node */
+  $node = $variables['node'];
+  $variables['body'] = $node instanceof DescriptionInterface ? $node->getDescription() : NULL;
+  $variables['topics'] = $node->hasField('field_topic') ? $node->getTopics() : NULL;
+  $variables['type'] = $node->getType();
+  $variables['footer'] = t('@type @label:@created', [
+    '@type' => strtoupper($node->getType()),
+    '@label' => t('Created'),
+    '@created' => \Drupal::service('date.formatter')->format($node->getCreatedTime(), 'date_only'),
+  ],
+  );
 }
