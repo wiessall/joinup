@@ -38,6 +38,9 @@ commands:
       file: ${solr.snapshot_dir}/solr.tar
     - task: remove
       file: ${solr.snapshot_dir}/snapshot.joinup
+    # Snapshot dir.
+    - task: mkdir
+      dir: ${solr.snapshot_dir}/snapshot.joinup
     # Download and unpack the archive.
     - task: run
       command: toolkit:download-dump
@@ -46,7 +49,7 @@ commands:
         dumpfile: ${solr.snapshot_dir}/solr.tar
     # Unpack and organize.
     - task: exec
-      command: tar -xvf ${solr.snapshot_dir}/solr.tar -C ${solr.snapshot_dir}
+      command: tar -xvf ${solr.snapshot_dir}/solr.tar -C ${solr.snapshot_dir}/snapshot.joinup --strip-components=1
     # Cleanup.
     - task: remove
       file: ${solr.snapshot_dir}/solr.tar
