@@ -302,6 +302,9 @@
             "drupal/message_digest": {
                 "MessageDigestSubcontext is deprecated @see https://www.drupal.org/project/message_digest/issues/3168495": "https://www.drupal.org/files/issues/2020-09-01/3168495-2.patch"
             },
+            "drupal/og": {
+                "Pretend is drupal/og:1.0-alpha4": "resources/patch/og.fake_version.patch"
+            },
             "drupal/paragraphs_jquery_ui_accordion": {
                 "Formatter settings are missing schema @see https://www.drupal.org/i/3194916": "https://git.drupalcode.org/project/paragraphs_jquery_ui_accordion/-/merge_requests/1.diff"
             },
