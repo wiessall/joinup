@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "cada2f729bd9558002730c1b3bd31273",
+    "content-hash": "79f1edcf4835fcd140b6510944a41f4e",
     "packages": [
         {
             "name": "SEMICeu/adms-ap_validator",
@@ -3573,6 +3573,9 @@
                         "status": "not-covered",
                         "message": "Beta releases are not covered by Drupal security advisories."
                     }
+                },
+                "patches_applied": {
+                    "Don't store sensitive data in the database": "resources/patch/175945-8.x-9.x-2.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -5022,7 +5025,7 @@
             "source": {
                 "type": "git",
                 "url": "https://git.drupal.org/project/matomo_reporting_api.git",
-                "reference": "69c1b1ef59f4b0d059e7db5c6269f7b54d35948d"
+                "reference": "aec2f414b7e44e952ae7f689b2b0aea60889f6c5"
             },
             "require": {
                 "pfrenssen/matomo-reporting-api": "^2.0"
@@ -5045,7 +5048,7 @@
                 "issues": "https://www.drupal.org/project/issues/matomo_reporting_api",
                 "source": "http://cgit.drupalcode.org/matomo_reporting_api"
             },
-            "time": "2021-11-16T16:25:32+00:00"
+            "time": "2021-11-18T16:31:28+00:00"
         },
         {
             "name": "drupal/menu_admin_per_menu",
@@ -8933,7 +8936,7 @@
                 "reference": "master"
             },
             "type": "drupal-theme-library",
-            "time": "2021-06-30T06:04:10+00:00"
+            "time": "2018-10-31T20:10:45+00:00"
         },
         {
             "name": "kub-at/php-simple-html-dom-parser",
@@ -11258,7 +11261,7 @@
                 "reference": "master"
             },
             "type": "library",
-            "time": "2021-07-08T16:47:58+00:00"
+            "time": "2020-08-03T19:59:39+00:00"
         },
         {
             "name": "stack/builder",
@@ -15972,16 +15975,16 @@
         },
         {
             "name": "ec-europa/toolkit",
-            "version": "4.5.5",
+            "version": "4.5.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ec-europa/toolkit.git",
-                "reference": "c757c9305ba371c49e5997fa07f0295b4bde0dae"
+                "reference": "ae60b6b2f380cdd383a82e6c285d27dcf01b7f3e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ec-europa/toolkit/zipball/c757c9305ba371c49e5997fa07f0295b4bde0dae",
-                "reference": "c757c9305ba371c49e5997fa07f0295b4bde0dae",
+                "url": "https://api.github.com/repos/ec-europa/toolkit/zipball/ae60b6b2f380cdd383a82e6c285d27dcf01b7f3e",
+                "reference": "ae60b6b2f380cdd383a82e6c285d27dcf01b7f3e",
                 "shasum": ""
             },
             "require": {
@@ -16015,7 +16018,7 @@
             ],
             "description": "Toolkit packaged for Drupal 8.",
             "homepage": "https://github.com/ec-europa/toolkit",
-            "time": "2021-11-05T16:18:58+00:00"
+            "time": "2021-11-18T16:07:01+00:00"
         },
         {
             "name": "fabpot/goutte",
