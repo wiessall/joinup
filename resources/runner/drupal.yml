@@ -269,6 +269,7 @@ drupal:
         $settings["oe_dashboard_agent.allowed_ips"] = explode(',', getenv('DASHBOARD_ALLOWED_IPS'));
       Varnish purge: |
         if (!empty(getenv('DRUPAL_VARNISH_HOSTS'))) {
+          $config['system.performance']['cache']['page']['max_age'] = 2764800;
           $config['dropsolid_purge.config']['site_name'] = getenv('DRUPAL_SITE_NAME');
           $config['dropsolid_purge.config']['site_environment'] = getenv('DRUPAL_ENVIRONMENT');
           $config['dropsolid_purge.config']['site_group'] = getenv('DRUPAL_VARNISH_GROUP');

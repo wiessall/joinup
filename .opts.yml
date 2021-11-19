@@ -21,6 +21,13 @@ upgrade_commands:
       - touch disable-config-readonly
       - ./vendor/bin/drush pm:enable joinup_acceptance --yes
       - rm disable-config-readonly
+      # Note that the 'Root user access' exception will be removed in ISAICP-6822.
+      # See https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-6822.
+      - test $(./vendor/bin/drush core:requirements --severity=1 --ignore="update status,joinup_core_root_user_blocked" --field=title | wc -l) = "0" || (echo "Status Report shows errors & warnings" && ./vendor/bin/drush core:requirements --severity=1 --ignore="update status,joinup_core_root_user_blocked" && exit 1)
+    production:
+      # Note that the 'Root user access' exception will be removed in ISAICP-6822.
+      # See https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-6822.
+      - test $(./vendor/bin/drush core:requirements --severity=1 --ignore="update status,joinup_core_root_user_blocked" --field=title | wc -l) = "0" || (echo "Status Report shows errors & warnings" && ./vendor/bin/drush core:requirements --severity=1 --ignore="update status,joinup_core_root_user_blocked" && exit 1)
 
 php_version: 7.4
 extra_pkgs:
