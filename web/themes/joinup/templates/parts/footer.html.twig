@@ -10,12 +10,11 @@
           <p class="joinup-version"><a href="{{ version_url }}">{{ version }}</a></p>
         </div>
 
-        {{ page.footer|without('followus', 'socialmedia') }}
+        {{ page.footer|without('joinup_theme_followus', 'joinup_theme_socialmedia') }}
         <div class="col-md-3 col-lg-2 column-follow-us">
-          {{ page.footer.followus }}
-          {{ page.footer.socialmedia }}
+          {{ page.footer.joinup_theme_followus }}
+          {{ page.footer.joinup_theme_socialmedia }}
         </div>
-
       </div>
     </div>
   </footer>
