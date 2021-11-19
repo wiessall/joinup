@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "6b4c11d4800ee28714d68fac5ae85bbf",
+    "content-hash": "e9a50dc45ad547ce3d636cc080ba83c7",
     "packages": [
         {
             "name": "SEMICeu/adms-ap_validator",
@@ -3625,6 +3625,9 @@
                         "status": "not-covered",
                         "message": "Beta releases are not covered by Drupal security advisories."
                     }
+                },
+                "patches_applied": {
+                    "Don't store sensitive data in the database": "resources/patch/175945-8.x-9.x-2.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -8942,14 +8945,11 @@
                 "spdx/license-list-data": "master"
             },
             "type": "drupal-module",
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "GPL-2.0-or-later"
             ],
             "description": "Allows to federate and manage the SPDX licences.",
-            "support": {
-                "source": "https://github.com/ec-europa/spdx/tree/1.0.0-alpha10",
-                "issues": "https://github.com/ec-europa/spdx/issues"
-            },
             "time": "2021-11-17T09:47:09+00:00"
         },
         {
@@ -16523,7 +16523,7 @@
             "extra": {
                 "drupal": {
                     "version": "8.x-1.0",
-                    "datestamp": "1633781924",
+                    "datestamp": "1633781890",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -16780,16 +16780,16 @@
         },
         {
             "name": "ec-europa/toolkit",
-            "version": "4.5.5",
+            "version": "4.5.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ec-europa/toolkit.git",
-                "reference": "c757c9305ba371c49e5997fa07f0295b4bde0dae"
+                "reference": "ae60b6b2f380cdd383a82e6c285d27dcf01b7f3e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ec-europa/toolkit/zipball/c757c9305ba371c49e5997fa07f0295b4bde0dae",
-                "reference": "c757c9305ba371c49e5997fa07f0295b4bde0dae",
+                "url": "https://api.github.com/repos/ec-europa/toolkit/zipball/ae60b6b2f380cdd383a82e6c285d27dcf01b7f3e",
+                "reference": "ae60b6b2f380cdd383a82e6c285d27dcf01b7f3e",
                 "shasum": ""
             },
             "require": {
@@ -16810,10 +16810,7 @@
             "type": "library",
             "extra": {
                 "enable-patching": true,
-                "composer-exit-on-patch-failure": true,
-                "patches_applied": {
-                    "Toolkit 4.5.5 bug": "resources/patch/toolkit-4.5.5-bug.diff"
-                }
+                "composer-exit-on-patch-failure": true
             },
             "autoload": {
                 "psr-4": {
@@ -16826,7 +16823,7 @@
             ],
             "description": "Toolkit packaged for Drupal 8.",
             "homepage": "https://github.com/ec-europa/toolkit",
-            "time": "2021-11-05T16:18:58+00:00"
+            "time": "2021-11-18T16:07:01+00:00"
         },
         {
             "name": "fabpot/goutte",
