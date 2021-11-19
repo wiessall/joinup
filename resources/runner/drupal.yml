@@ -165,6 +165,10 @@ drupal:
         // File system settings.
         $settings['file_private_path'] = getenv('DRUPAL_PRIVATE_FILE_SYSTEM');
         $settings['file_temp_path'] = getenv('DRUPAL_FILE_TEMP_PATH');
+
+        if ($trusted_host_patterns = getenv('DRUPAL_TRUSTED_HOST_PATTERNS')) {
+          $settings['trusted_host_patterns'] = $trusted_host_patterns;
+        }
       Configuration: |
         $settings['config_exclude_modules'] = [
           'admin_toolbar',
