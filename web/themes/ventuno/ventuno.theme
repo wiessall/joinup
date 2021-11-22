@@ -274,9 +274,8 @@ function ventuno_preprocess_rdf_entity__search_result_featured(&$variables) {
   $variables['image'] = $entity instanceof LogoInterface ? $entity->getLogoAsRenderArray() : NULL;
   $variables['body'] = $entity instanceof DescriptionInterface ? $entity->getDescription() : NULL;
   $variables['topics'] = $entity->hasField('field_topic') ? $entity->getTopics() : NULL;
-  $variables['type'] = $entity->getType();
-  $variables['footer'] = t('@type @label:@created', [
-    '@type' => strtoupper($entity->getType()),
+  $variables['type'] = strtoupper($entity->getType());
+  $variables['creation'] = t('@label: @created', [
     '@label' => t('Created'),
     '@created' => \Drupal::service('date.formatter')->format($entity->getCreatedTime(), 'date_only'),
   ],
@@ -291,9 +290,8 @@ function ventuno_preprocess_rdf_entity__search_result(&$variables) {
   $entity = $variables['rdf_entity'];
   $variables['body'] = $entity instanceof DescriptionInterface ? $entity->getDescription() : NULL;
   $variables['topics'] = $entity->hasField('field_topic') ? $entity->getTopics() : NULL;
-  $variables['type'] = $entity->getType();
-  $variables['footer'] = t('@type @label:@created', [
-    '@type' => strtoupper($entity->getType()),
+  $variables['type'] = strtoupper($entity->getType());
+  $variables['creation'] = t('@label: @created', [
     '@label' => t('Created'),
     '@created' => \Drupal::service('date.formatter')->format($entity->getCreatedTime(), 'date_only'),
   ],
@@ -309,9 +307,8 @@ function ventuno_preprocess_node__search_result_featured(&$variables) {
   $variables['image'] = $node instanceof LogoInterface ? $node->getLogoAsRenderArray() : NULL;
   $variables['body'] = $node instanceof DescriptionInterface ? $node->getDescription() : NULL;
   $variables['topics'] = $node->hasField('field_topic') ? $node->getTopics() : NULL;
-  $variables['type'] = $node->getType();
-  $variables['footer'] = t('@type @label:@created', [
-    '@type' => strtoupper($node->getType()),
+  $variables['type'] = strtoupper($node->getType());
+  $variables['creation'] = t('@label:@created', [
     '@label' => t('Created'),
     '@created' => \Drupal::service('date.formatter')->format($node->getCreatedTime(), 'date_only'),
   ],
@@ -326,9 +323,8 @@ function ventuno_preprocess_node__search_result(&$variables) {
   $node = $variables['node'];
   $variables['body'] = $node instanceof DescriptionInterface ? $node->getDescription() : NULL;
   $variables['topics'] = $node->hasField('field_topic') ? $node->getTopics() : NULL;
-  $variables['type'] = $node->getType();
-  $variables['footer'] = t('@type @label:@created', [
-    '@type' => strtoupper($node->getType()),
+  $variables['type'] = strtoupper($node->getType());
+  $variables['creation'] = t('@label:@created', [
     '@label' => t('Created'),
     '@created' => \Drupal::service('date.formatter')->format($node->getCreatedTime(), 'date_only'),
   ],
