@@ -1,0 +1,14 @@
+Index: og.info.yml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/og.info.yml b/og.info.yml
+--- a/og.info.yml	
++++ b/og.info.yml	(date 1636974430157)
+@@ -11,3 +11,5 @@
+   - drupal:text
+   - drupal:field
+   - drupal:user
++
++version: 8.x-1.0-alpha4
