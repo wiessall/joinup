@@ -201,7 +201,7 @@ display:
               moderator: '0'
               administrator: '0'
               rdf_graph_manager: '0'
-            placeholder: ''
+            placeholder: 'Start typing to search…'
           is_grouped: false
           group_info:
             label: ''
