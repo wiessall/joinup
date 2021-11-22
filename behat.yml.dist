@@ -22,6 +22,7 @@
   - Drupal\joinup\Context\DrupalContext
   - Drupal\joinup\Context\EifContext
   - Drupal\joinup\Context\EuplContext
+  - Drupal\joinup\Context\InteroperableEuropeContext
   - Drupal\joinup\Context\Isa2AnalyticsContext
   - Drupal\joinup\Context\JoinupCommunityContentContext
   - Drupal\joinup\Context\JoinupContext
