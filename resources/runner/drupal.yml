@@ -177,6 +177,10 @@ drupal:
         // File system settings.
         $settings['file_private_path'] = getenv('DRUPAL_PRIVATE_FILE_SYSTEM');
         $settings['file_temp_path'] = getenv('DRUPAL_FILE_TEMP_PATH');
+
+        if ($trusted_host_patterns = getenv('DRUPAL_TRUSTED_HOST_PATTERNS')) {
+          $settings['trusted_host_patterns'] = [$trusted_host_patterns];
+        }
       Configuration: |
         $settings['config_exclude_modules'] = [
           'admin_toolbar',
@@ -279,6 +283,7 @@ drupal:
         $settings["oe_dashboard_agent.allowed_ips"] = explode(',', getenv('DASHBOARD_ALLOWED_IPS'));
       Varnish purge: |
         if (!empty(getenv('DRUPAL_VARNISH_HOSTS'))) {
+          $config['system.performance']['cache']['page']['max_age'] = 2764800;
           $config['dropsolid_purge.config']['site_name'] = getenv('DRUPAL_SITE_NAME');
           $config['dropsolid_purge.config']['site_environment'] = getenv('DRUPAL_ENVIRONMENT');
           $config['dropsolid_purge.config']['site_group'] = getenv('DRUPAL_VARNISH_GROUP');
