@@ -119,6 +119,8 @@ drupal:
         - Custom queue services
         - Mail transport
         - Monolog
+        - Dashboard agent
+        - Varnish purge
     header: |
       <?php
 
@@ -163,6 +165,10 @@ drupal:
         // File system settings.
         $settings['file_private_path'] = getenv('DRUPAL_PRIVATE_FILE_SYSTEM');
         $settings['file_temp_path'] = getenv('DRUPAL_FILE_TEMP_PATH');
+
+        if ($trusted_host_patterns = getenv('DRUPAL_TRUSTED_HOST_PATTERNS')) {
+          $settings['trusted_host_patterns'] = [$trusted_host_patterns];
+        }
       Configuration: |
         $settings['config_exclude_modules'] = [
           'admin_toolbar',
@@ -228,11 +234,13 @@ drupal:
         $config['oe_webtools_analytics.settings']['sitePath'] = getenv('OE_WEBTOOLS_ANALYTICS_SITE_PATH');
         $config['oe_webtools_analytics.settings']['instance'] = getenv('OE_WEBTOOLS_ANALYTICS_SITE_INSTANCE');
       Redis: |
-        $settings['redis.connection']['interface'] = 'Predis';
-        $settings['redis.connection']['host'] = getenv('REDIS_HOST');
-        $settings['redis.connection']['port'] = getenv('REDIS_PORT');
-        $settings['cache']['default'] = 'cache.backend.redis';
-        $settings['container_yamls'][] = DRUPAL_ROOT . '/modules/contrib/redis/example.services.yml';
+        if (empty(getenv('REDIS_DISABLED'))) {
+          $settings['redis.connection']['interface'] = 'Predis';
+          $settings['redis.connection']['host'] = getenv('REDIS_HOST');
+          $settings['redis.connection']['port'] = getenv('REDIS_PORT');
+          $settings['cache']['default'] = 'cache.backend.redis';
+          $settings['container_yamls'][] = DRUPAL_ROOT . '/modules/contrib/redis/example.services.yml';
+        }
       Custom error handler: |
         $settings['error_page']['uuid'] = TRUE;
         $settings['error_page']['template_dir'] = DRUPAL_ROOT . '/../resources/error_page';
@@ -256,3 +264,23 @@ drupal:
       Custom queue services: |
         $settings['queue_service_joinup_group:group_update'] = 'joinup_group.group_aware_queue';
         $settings['queue_service_joinup_group:group_content_update'] = 'joinup_group.group_aware_queue';
+      Dashboard agent: |
+        $settings["oe_dashboard_agent.token"] = getenv('DASHBOARD_TOKEN');
+        $settings["oe_dashboard_agent.allowed_ips"] = explode(',', getenv('DASHBOARD_ALLOWED_IPS'));
+      Varnish purge: |
+        if (!empty(getenv('DRUPAL_VARNISH_HOSTS'))) {
+          $config['system.performance']['cache']['page']['max_age'] = 2764800;
+          $config['dropsolid_purge.config']['site_name'] = getenv('DRUPAL_SITE_NAME');
+          $config['dropsolid_purge.config']['site_environment'] = getenv('DRUPAL_ENVIRONMENT');
+          $config['dropsolid_purge.config']['site_group'] = getenv('DRUPAL_VARNISH_GROUP');
+          $load_balancers = [];
+          $drupal_flush_cred = getenv('DRUPAL_FLUSH_CREDS');
+          foreach (explode(',', getenv('DRUPAL_VARNISH_HOSTS')) as $ip) {
+            $load_balancers[$ip] = [
+              'ip' => $drupal_flush_cred . '@' . trim($ip),
+              'protocol' => 'http',
+              'port' => '7790',
+            ];
+          }
+          $config['dropsolid_purge.config']['loadbalancers'] = $load_balancers;
+        }
