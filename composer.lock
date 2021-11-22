@@ -5911,6 +5911,11 @@
                 "slevomat/coding-standard": "~6.0"
             },
             "type": "drupal-module",
+            "extra": {
+                "patches_applied": {
+                    "Pretend is drupal/og:1.0-alpha4": "resources/patch/og.fake_version.patch"
+                }
+            },
             "license": [
                 "GPL-2.0-or-later"
             ],
