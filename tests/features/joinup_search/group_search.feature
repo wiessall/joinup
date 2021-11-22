@@ -190,7 +190,9 @@ Feature: Search inside groups
     Then the page should show the following chip:
       | Inclined foundations |
 
-  @clearStaticCache
+  @clearStaticCache @wip
+  # This is disabled because the search bar is currently not shown in the header
+  # but this functionality will probably be restored in the future.
   Scenario: Group search caching
     # Initially the cache is cold.
     When I go to the homepage of the "Chalet construction" collection
