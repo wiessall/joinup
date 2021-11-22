@@ -11,11 +11,11 @@
       label: topic.name.value,
       background: 'secondary',
       rounded_pill: true,
-      attributes: create_attribute().addClass('text-primary')
+      attributes: create_attribute().addClass(['text-primary', 'me-2-5'])
     }]) %}
   {% endfor %}
   {{ pattern('card', {
-    attributes: create_attribute().addClass(['border-0', 'mb-4']),
+    attributes: create_attribute().addClass(['border-0', 'border-bottom', 'pb-3', 'mb-3']),
     horizontal: true,
     horizontal_grid: {
       left_col_classes: 'col-4',
@@ -26,23 +26,11 @@
     extra_classes_body: 'py-0',
     badges: badges,
     title: {
-      tag: 'a',
-      classes: 'fs-5 text-underline-hover mb-2',
-      attributes: [
-        {
-          name: 'href',
-          value: url,
-        },
-        {
-          name: 'target',
-          value: '_blank',
-        }
-      ],
-      content: label
+      content: '<a class="fs-5 text-underline-hover mb-3" href="url">' ~ label ~ '</a>',
     },
     text: {
       content: body,
     },
-    content: footer,
+    content: '<span class="text-muted text-nowrap me-4-5">' ~ type ~ '</span><span class="text-muted text-nowrap me-4-5">' ~ creation ~ '</span>',
   }) }}
 {% endblock %}
