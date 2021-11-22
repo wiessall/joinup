@@ -13,7 +13,9 @@ use Drupal\Core\Menu\MenuTreeParameters;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\Url;
 use Drupal\collection\Entity\CollectionInterface;
+use Drupal\interoperable_europe\InteroperableEuropeCollectionInterface;
 use Drupal\joinup_collection\JoinupCollectionHelper;
+use Drupal\node\NodeInterface;
 use Exception;
 
 /**
@@ -102,6 +104,9 @@ class MenuHelper implements MenuHelperInterface {
       'hide_on_desktop' => TRUE,
     ];
 
+    // Include the links to the interoperability landing pages.
+    $anonymous_links = array_merge($anonymous_links, $this->getBclLandingPageLinks());
+
     // Generate a link to EU Login.
     $cas_login_link = Url::fromRoute('cas.login');
     $anonymous_links[] = [
@@ -154,6 +159,38 @@ class MenuHelper implements MenuHelperInterface {
     }
 
     return $anonymous_links;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getBclLandingPageLinks(): array {
+    $node_storage = $this->entityTypeManager->getStorage('node');
+    // Include links to 'Interoperable Europe' and 'Interoperability Solutions'.
+    $landing_page_links = [];
+    foreach ([
+      InteroperableEuropeCollectionInterface::LANDING_PAGE_ENTITY_ID,
+      JoinupCollectionHelper::INTEROPERABILITY_SOLUTIONS_ENTITY_ID,
+    ] as $node_id) {
+      try {
+        $node = $node_storage->load($node_id);
+        if (!$node instanceof NodeInterface) {
+          throw new Exception();
+        }
+        $label = $node->getTitle();
+        $url = $node->toUrl();
+        $landing_page_links[] = [
+          'label' => $label,
+          'link' => $url,
+        ];
+      }
+      catch (Exception $e) {
+        // The custom pages cannot be loaded. This should not crash the page
+        // since these pages might not exist in projects that reuse the Joinup
+        // open source project.
+      }
+    }
+    return $landing_page_links;
   }
 
 }

@@ -31,4 +31,19 @@ interface MenuHelperInterface {
    */
   public function getBclAnonymousMenu(): array;
 
+  /**
+   * Returns landing page links in the format used by the BCL header template.
+   *
+   * The landing pages returned are:
+   *   - Interoperable Europe collection landing page.
+   *   - Joinup collection landing page.
+   *
+   * @return array[]
+   *   An array of menu links for the anonymous menu in the BCL header template
+   *   format, which is an array of arrays with the following keys:
+   *   - link: The URL the link points to.
+   *   - label: The link label.
+   */
+  public function getBclLandingPageLinks(): array;
+
 }
