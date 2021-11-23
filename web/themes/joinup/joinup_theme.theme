@@ -417,6 +417,18 @@ function joinup_theme_preprocess_page(&$variables) {
 
   // Populate the links shown to anonymous users.
   $variables['anonymous_links'] = $menu_helper->getBclAnonymousMenu();
+
+  // Add a flag to indicate whether a tour is available for this page.
+  $route_parameters = $route_match->getRawParameters()->all();
+  $tour_storage = \Drupal::entityTypeManager()->getStorage('tour');
+  /** @var \Drupal\tour\TourInterface[] $tours */
+  $tours = $tour_storage->loadByProperties(['status' => TRUE]);
+  foreach ($tours as $tour) {
+    if ($tour->hasMatchingRoute($route_name, $route_parameters)) {
+      $variables['tour_available'] = TRUE;
+      break;
+    }
+  }
 }
 
 /**

@@ -20,9 +20,11 @@
         <div id="block-helpandsupport" class="block block-system block-system-menu-blockfooter-help-and-support col-md-3 col-lg-2 help-and-support-menu">
           <h3>Help and support</h3>
           <ul class="list-unstyled">
-            <li>
-              <a href="" data-drupal-tour-link="" class="js-tour-start-button">Take a tour</a>
-            </li>
+            {% if tour_available %}
+              <li>
+                <a href="" data-drupal-tour-link="" class="js-tour-start-button">Take a tour</a>
+              </li>
+            {% endif %}
             <li>
               <a href="{{ base_path }}contact?destination={{ base_path }}home" data-drupal-link-system-path="contact">Contact Joinup Support</a>
             </li>
