@@ -32,6 +32,7 @@ Feature:
       | Not published news      | Outdated content |                   | -40 years         | draft     |
 
     Given I am logged in as a moderator
+    And I accept essential cookies
     When I click "Outdated content thresholds"
     Then I should see the heading "Outdated content thresholds"
     When I check the material checkbox in the "Discussion (Content)" table row
@@ -79,6 +80,7 @@ Feature:
 
     # Login as moderator to test content that was never published.
     Given I am logged in as a moderator
+    And I accept essential cookies
 
     # Content never published is not prone to be outdated.
     When I go to the "Not published discussion" discussion
