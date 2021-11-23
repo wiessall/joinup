@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "517e490d49568eb42ed8ef87fe2f789c",
+    "content-hash": "6ecb10635c7a28d1f1822094fb235497",
     "packages": [
         {
             "name": "SEMICeu/adms-ap_validator",
@@ -21299,6 +21299,12 @@
         }
     ],
     "aliases": [
+        {
+            "alias": "2.0.0",
+            "alias_normalized": "2.0.0.0",
+            "version": "1.2.1.0",
+            "package": "drupal/layout_builder_component_attributes"
+        },
         {
             "alias": "1.x-dev",
             "alias_normalized": "1.9999999.9999999.9999999-dev",
