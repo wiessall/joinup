@@ -45,6 +45,7 @@ Feature: Document moderation
 
     # Edit the collection and set it as moderated.
     When I am logged in as a moderator
+    And I accept essential cookies
     And I go to the homepage of the "The Naked Ashes" collection
     And I open the header local tasks menu
     And I click "Edit" in the "Entity actions" region
@@ -65,6 +66,7 @@ Feature: Document moderation
     # Edit the collection and set it to allow only members to create new
     # content.
     When I am logged in as a moderator
+    And I accept essential cookies
     And I go to the homepage of the "The Naked Ashes" collection
     And I open the header local tasks menu
     And I click "Edit" in the "Entity actions" region
