@@ -13,6 +13,9 @@
         @include media-breakpoint-up(md) {
           margin-bottom: $spacer * 3 !important;
         }
+        label {
+          display: none;
+        }
       }
       .form-item-results-count {
         color: $primary;
