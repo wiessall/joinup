@@ -22,7 +22,7 @@ class JoinupEntityUrlGenerator extends JoinupUrlGeneratorBase {
    */
   public function alterQuery(QueryInterface $query, string $entity_type_id, string $bundle, array $bundle_settings): void {
     if ($entity_type_id === 'node' && $bundle === 'news') {
-      $two_days_ago = strtotime('2 days ago');
+      $two_days_ago = (new \DateTimeImmutable('2 days ago', new \DateTimeZone('UTC')))->getTimestamp();
       // Recent news entities are indexed in a separate sitemap. Only news items
       // that have been published earlier than two days ago should end up in the
       // general index.
