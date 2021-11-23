@@ -110,7 +110,9 @@
           </div>
           <div class="col-12 col-md-6 my-5 my-md-0 d-flex align-content-between flex-wrap">
             <img src="{{ directory }}/assets/images/iop-eu-logo.svg" class="px-2 ms-md-5 img-fluid">
-            <a href="{{ base_path ~ 'collection/interoperable-europe/interoperable-europe' }}" class="w-100 px-2 mt-4 d-block text-light text-center text-md-end fw-bold fs-5">{{ 'Discover more'|trans }} <span class="iop-gradient">...</span></a>
+            {% if interoperable_europe_url %}
+              <a href="{{ interoperable_europe_url }}" class="w-100 px-2 mt-4 d-block text-light text-center text-md-end fw-bold fs-5">{{ 'Discover more'|trans }} <span class="iop-gradient">...</span></a>
+            {% endif %}
           </div>
         </div>
       </div>

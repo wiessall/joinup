@@ -11,8 +11,11 @@ use Drupal\Core\Menu\MenuLinkTreeElement;
 use Drupal\Core\Menu\MenuTreeParameters;
 use Drupal\Core\Url;
 use Drupal\collection\Entity\CollectionInterface;
+use Drupal\interoperable_europe\InteroperableEuropeCollectionInterface;
 use Drupal\joinup_bundle_class\LogoInterface;
 use Drupal\joinup_collection\JoinupCollectionHelper;
+use Drupal\node\Entity\Node;
+use Drupal\node\NodeInterface;
 use Drupal\rdf_entity\Entity\Rdf;
 use Drupal\smart_trim\Truncate\TruncateHTML;
 
@@ -153,6 +156,12 @@ function ventuno_preprocess_page(&$variables) {
   }
 
   $variables['anonymous_links'] = $anonymous_links;
+
+  // Export the URL of the Interoperable Europe landing page.
+  $landing_page = Node::load(InteroperableEuropeCollectionInterface::LANDING_PAGE_ENTITY_ID);
+  if ($landing_page instanceof NodeInterface) {
+    $variables['interoperable_europe_url'] = $landing_page->toUrl()->toString();
+  }
 }
 
 /**
