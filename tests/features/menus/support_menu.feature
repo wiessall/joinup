@@ -44,7 +44,7 @@ Feature:
     Given I am <role>
 
     When I am on the homepage
-    Then I should not see the link "Guided tour" in the "Footer"
+    Then I should see the link "Take a tour" in the "Footer"
     And I should see the link "Contact Joinup Support"
     Then I click "Contact Joinup Support"
     And I fill in the following:
@@ -61,7 +61,6 @@ Feature:
     Then I should be on the homepage
 
     When I visit the collection overview page
-    # Todo this will be renamed to "Guided tour" in the new theme.
     Then I should not see the link "Take a tour"
     But I should see the link "Contact support"
     Then I click "Contact support"
@@ -79,7 +78,6 @@ Feature:
     Then I should be on "collections"
 
     When I visit the content overview page
-    # Todo this will be renamed to "Guided tour" in the new theme.
     Then I should see the link "Take a tour"
     And I should see the link "Contact support"
     Then I click "Contact support"
@@ -97,12 +95,10 @@ Feature:
     Then I should be on "keep-up-to-date"
 
     When I go to the homepage of the "Hotel California" collection
-    # Todo this will be renamed to "Guided tour" in the new theme.
     Then I should see the link "Take a tour"
     And I should see the link "Contact support"
 
     When I go to "/user"
-    # Todo this will be renamed to "Guided tour" in the new theme.
     Then I should <expectation> the link "Take a tour"
     And I should see the link "Contact support"
 
