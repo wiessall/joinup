@@ -10,6 +10,8 @@ use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\Menu\MenuLinkTreeElement;
 use Drupal\Core\Menu\MenuLinkTreeInterface;
 use Drupal\Core\Menu\MenuTreeParameters;
+use Drupal\Core\Path\PathMatcherInterface;
+use Drupal\Core\Routing\RouteMatch;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\Url;
 use Drupal\collection\Entity\CollectionInterface;
@@ -17,6 +19,7 @@ use Drupal\interoperable_europe\InteroperableEuropeCollectionInterface;
 use Drupal\joinup_collection\JoinupCollectionHelper;
 use Drupal\node\NodeInterface;
 use Exception;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
  * Helper methods for working with menus.
@@ -47,6 +50,20 @@ class MenuHelper implements MenuHelperInterface {
   protected EntityTypeManagerInterface $entityTypeManager;
 
   /**
+   * The request stack.
+   *
+   * @var \Symfony\Component\HttpFoundation\RequestStack
+   */
+  protected RequestStack $requestStack;
+
+  /**
+   * The path matcher.
+   *
+   * @var \Drupal\Core\Path\PathMatcherInterface
+   */
+  protected PathMatcherInterface $pathMatcher;
+
+  /**
    * Constructs an instance of the MenuHelper service.
    *
    * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger
@@ -55,11 +72,17 @@ class MenuHelper implements MenuHelperInterface {
    *   The menu link tree service.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   The entity type manager.
+   * @param \Symfony\Component\HttpFoundation\RequestStack $request_stack
+   *   The request stack.
+   * @param \Drupal\Core\Path\PathMatcherInterface $path_matcher
+   *   The path matcher.
    */
-  public function __construct(LoggerChannelFactoryInterface $logger, MenuLinkTreeInterface $menu_link_tree, EntityTypeManagerInterface $entity_type_manager) {
+  public function __construct(LoggerChannelFactoryInterface $logger, MenuLinkTreeInterface $menu_link_tree, EntityTypeManagerInterface $entity_type_manager, RequestStack $request_stack, PathMatcherInterface $path_matcher) {
     $this->logger = $logger;
     $this->menuLinkTree = $menu_link_tree;
     $this->entityTypeManager = $entity_type_manager;
+    $this->requestStack = $request_stack;
+    $this->pathMatcher = $path_matcher;
   }
 
   /**
@@ -109,6 +132,43 @@ class MenuHelper implements MenuHelperInterface {
 
     // Generate a link to EU Login.
     $cas_login_link = Url::fromRoute('cas.login');
+
+    // Pass the current path (including query arguments) as the 'destination'
+    // query argument so that the CAS service can return the user to the current
+    // path after authenticating.
+    // @todo This has been copied from EuLoginMenuLink::getOptions() but ideally
+    //   we should try to leverage the Menu Link Destination module to generate
+    //   the `destination` argument. However this is not a menu link but a
+    //   normal link so it falls outside the domain of Menu Link Destination.
+    //   However it might be possible to use LinkGenerator::generate() since it
+    //   also fires `hook_link_alter()` which Menu Link Destination implements.
+    $request = $this->requestStack->getCurrentRequest();
+
+    // If a 'destination' query argument exists, then this is what the user
+    // should return to.
+    if ($request->query->has('destination')) {
+      // The path should start with a slash.
+      $destination = '/' . ltrim($request->query->get('destination'), '/');
+      $return_to = Url::fromUserInput($destination)->setAbsolute()->toString();
+    }
+    // If we are on the homepage, set the 'returnto' path to '/' alias.
+    elseif ($this->pathMatcher->isFrontPage()) {
+      $return_to = base_path();
+    }
+    // Return to the current page URL.
+    else {
+      $query_arguments = $request->query->all();
+      $route_match = RouteMatch::createFromRequest($request);
+      $route_name = $route_match->getRouteName();
+      $route_parameters = $route_match->getRawParameters()->all();
+      $route_options = ['query' => $query_arguments];
+      $return_to = (new Url($route_name, $route_parameters, $route_options))->setAbsolute()->toString();
+    }
+
+    $options = [];
+    $options['query']['returnto'] = $return_to;
+    $cas_login_link->setOptions($options);
+
     $anonymous_links[] = [
       'label' => $this->t('Sign in'),
       'link' => $cas_login_link,
