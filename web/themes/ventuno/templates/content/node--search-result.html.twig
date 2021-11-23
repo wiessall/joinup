@@ -5,6 +5,12 @@
  */
 #}
 {% block content %}
+  {% set title %}
+    <a class="fs-5 text-underline-hover mb-3" href="{{ url }}">{{ label|raw }}</a>
+  {% endset %}
+  {% set htmlcontent %}
+    <span class="text-muted text-nowrap me-4-5">{{ type }}</span><span class="text-muted text-nowrap me-4-5">{{ creation }}</span>
+  {% endset %}
   {% set badges = [] %}
   {% for topic in topics %}
     {% set badges = badges|merge([{
@@ -26,11 +32,11 @@
     extra_classes_body: 'py-0',
     badges: badges,
     title: {
-      content: '<a class="fs-5 text-underline-hover mb-3" href="' ~ url ~ '">' ~ label ~ '</a>',
+      content: title,
     },
     text: {
       content: body,
     },
-    content: footer,
+    content: htmlcontent,
   }) }}
 {% endblock %}

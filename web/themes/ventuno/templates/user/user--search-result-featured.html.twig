@@ -5,6 +5,9 @@
  */
 #}
 {% if content %}
+  {% set title %}
+    <a class="fs-5 text-underline-hover mb-3" href="{{ path('entity.user.canonical', {'user': user.id}) }}">{{ full_name }}</a>
+  {% endset %}
   {{ pattern('card', {
     attributes: create_attribute().addClass(['border-0', 'mb-4']),
     horizontal: true,
@@ -17,7 +20,7 @@
     extra_classes_body: 'py-0',
     badges: [],
     title: {
-      content: '<a class="fs-5 text-underline-hover mb-3" href="' ~ path('entity.user.canonical', {'user': user.id}) ~ '">' ~ full_name ~ '</a>'
+      content: title,
     },
     text: {
       content: content|without('field_user_photo'),

@@ -15,7 +15,7 @@ trait DescriptionTrait {
   public function getDescription(): ?string {
     assert(method_exists($this, 'getMainPropertyValue'), __TRAIT__ . ' depends on JoinupBundleClassFieldAccessTrait. Please include it in your class.');
     $value = $this->get($this->getDescriptionField())->view('search_result');
-    return $value ? (string) $value[0]['#markup'] : NULL;
+    return array_key_exists(0, $value) ? (string) $value[0]['#markup'] : NULL;
   }
 
 }
