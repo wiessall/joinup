@@ -17,19 +17,7 @@
     extra_classes_body: 'py-0',
     badges: [],
     title: {
-      tag: 'a',
-      classes: 'fs-5 text-underline-hover mb-2',
-      attributes: [
-        {
-          name: 'href',
-          value: path('entity.user.canonical', {'user': user.id}),
-        },
-        {
-          name: 'target',
-          value: '_blank',
-        }
-      ],
-      content: full_name
+      content: '<a class="fs-5 text-underline-hover mb-3" href="' ~ path('entity.user.canonical', {'user': user.id}) ~ '">' ~ full_name ~ '</a>'
     },
     text: {
       content: content|without('field_user_photo'),
