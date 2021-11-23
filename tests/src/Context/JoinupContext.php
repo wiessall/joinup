@@ -1551,7 +1551,22 @@ class JoinupContext extends RawDrupalContext {
    * @When I open the account menu
    */
   public function iOpenTheAccountMenu() {
-    $this->openBootstrapAccordion($this->getSession()->getPage()->find('css', '#main-navbar .accordion-item'));
+    // Non-JS browsers are directly interacting with the HTML, so we consider
+    // the account menu to be already open.
+    if (!$this->browserSupportsJavaScript()) {
+      return;
+    }
+
+    // Depending on the screen width, a different accordion item may be visible.
+    /** @var \Behat\Mink\Element\NodeElement[] $elements */
+    $elements = $this->getSession()->getPage()->findAll('css', '#main-navbar .accordion-item');
+    foreach ($elements as $element) {
+      if ($element->isVisible()) {
+        $this->openBootstrapAccordion($element);
+        return;
+      }
+    }
+    throw new \RuntimeException('Account menu is not visible and cannot be opened.');
   }
 
   /**
