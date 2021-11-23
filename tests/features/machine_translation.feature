@@ -33,6 +33,7 @@ Feature: Machine translation
       | collection | Brexit        |
 
     When I am logged in as a moderator
+    And I accept essential cookies
     # Inside a collection sidebar, only custom pages, glossary terms (but not
     # the glossary overview) and the about page should be translatable.
     When I go to the edit form of the "Brexit" collection
