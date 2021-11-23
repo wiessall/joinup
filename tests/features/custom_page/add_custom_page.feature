@@ -133,6 +133,7 @@ Feature: "Add custom page" visibility options.
       | Elastic rubber | Also aggressive.     | Aggressive Rubber | ada.png, alan.jpg, blaise.jpg, charles.jpg, leonardo.jpg, linus.jpeg |
 
     When I go to the "Rubber bands" custom page
+    And I accept essential cookies
     Then the "empty.rdf" link in the Content region should be visible
     And the "empty_pdf.pdf" link in the Content region should be visible
     And the "invalid_adms.rdf" link in the Content region should be visible
