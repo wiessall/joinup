@@ -1,37 +1,34 @@
 # Configuration and commands specific for Joinup.
-
 joinup:
   site_dir: ${joinup.dir}/web
-  theme_dir: ${joinup.site_dir}/themes/joinup
   db_dir: ${joinup.dir}/db
   files_private_dir: ${joinup.site_dir}/${env.DRUPAL_PRIVATE_FILE_SYSTEM}
 
-scss:
-  import_dir: ${joinup.theme_dir}/scss
-  input: ${scss.import_dir}/app.scss
-  output_dir: ${joinup.theme_dir}/css
-  output: ${scss.output_dir}/style.min.css
-  style: compressed
+themes:
+  joinup_theme:
+    dir: ${joinup.site_dir}/themes/joinup
+    scss:
+      import_dir: ${themes.joinup_theme.dir}/scss
+      input: ${themes.joinup_theme.scss.import_dir}/app.scss
+      output_dir: ${themes.joinup_theme.dir}/css
+      output: ${themes.joinup_theme.scss.output_dir}/style.min.css
+      style: compressed
+  ventuno:
+    dir: ${joinup.site_dir}/themes/ventuno
 
 commands:
-  # Compiles SCSS to CSS.
-  joinup:compile-scss:
+  joinup:build-assets:
+    # Compile SCSS for the Joinup theme.
     - task: mkdir
-      dir: ${scss.output_dir}
-    # Compile SCSS for the old theme.
+      dir: ${themes.joinup_theme.scss.output_dir}
     - task: run
       command: assets:compile-scss
       arguments:
-        - ${scss.input}
-        - ${scss.output}
+        - ${themes.joinup_theme.scss.input}
+        - ${themes.joinup_theme.scss.output}
       options:
-        style: ${scss.style}
-        import-dir: ${scss.import_dir}
-    # Compile assets for the new base theme (includes SCSS and JS).
-    # TODO Restore when we have moved to the new infrastructure.
-    #- task: run
-    #  command: oe_bootstrap_theme:npm-run
-    #  arguments:
-    #    - dev
-    #  options:
-    #    npm-dir: web/themes/contrib/oe_bootstrap_theme
+        style: ${themes.joinup_theme.scss.style}
+        import-dir: ${themes.joinup_theme.scss.import_dir}
+    # Compile SCSS and build JS assets for the Ventuno theme.
+    - task: exec
+      command: cd "${themes.ventuno.dir}" && npm install
