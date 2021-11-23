@@ -31,6 +31,7 @@ module:
   diff: 0
   digital_size_formatter: 0
   dpsi: 0
+  dropsolid_purge: 0
   dynamic_entity_reference: 0
   dynamic_page_cache: 0
   editor: 0
@@ -67,6 +68,7 @@ module:
   image: 0
   image_library_widget: 0
   inline_entity_form: 0
+  interoperable_europe: 0
   isa2_analytics: 0
   joinup_bundle_class: 0
   joinup_collection: 0
@@ -133,6 +135,7 @@ module:
   nio: 0
   node: 0
   oe_bootstrap_theme_helper: 0
+  oe_dashboard_agent: 0
   oe_newsroom_newsletter: 0
   oe_webtools: 0
   oe_webtools_analytics: 0
@@ -156,6 +159,11 @@ module:
   path: 0
   path_alias: 0
   pipeline: 0
+  purge: 0
+  purge_drush: 0
+  purge_processor_cron: 0
+  purge_processor_lateruntime: 0
+  purge_queuer_coretags: 0
   rdf_draft: 0
   rdf_entity: 0
   rdf_entity_provenance: 0

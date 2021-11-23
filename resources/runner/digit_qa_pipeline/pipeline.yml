@@ -50,9 +50,13 @@
   - task: run
     command: dev:import-sparql-fixtures
 
-behat:
-  commands:
-    before: *before
+# See \EcEuropa\Toolkit\TaskRunner\Commands\TestsCommands::toolkitPhpUnit()
 phpunit:
   commands:
     before: *before
+# See \EcEuropa\Toolkit\TaskRunner\Commands\TestsCommands::toolkitBehat()
+toolkit:
+  test:
+    behat:
+      commands:
+        before: *before

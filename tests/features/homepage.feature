@@ -163,9 +163,9 @@ Feature: Homepage
     And the "<version>" link should point to "<url>"
 
     Examples:
-      | version                    | url                                                                |
-      | v1.57.0                    | https://git.fpfis.eu/digit/digit-joinup-reference/-/tags/v1.57.0   |
-      | v1.57.0-177-g0123456abcdef | https://git.fpfis.eu/digit/digit-joinup-dev/-/commit/0123456abcdef |
+      | version                    | url                                                                  |
+      | v1.57.0                    | https://git.fpfis.eu/ec-europa/digit-joinup-reference/-/tags/v1.57.0 |
+      | v1.57.0-177-g0123456abcdef | https://git.fpfis.eu/digit/digit-joinup-dev/-/commit/0123456abcdef   |
 
   Scenario: Search box is shown in the main content
     Given collection:
