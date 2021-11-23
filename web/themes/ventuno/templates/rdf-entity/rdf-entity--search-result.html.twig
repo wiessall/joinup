@@ -8,7 +8,7 @@
   {% set title %}
     <a class="fs-5 text-underline-hover mb-3" href="{{ url }}">{{ label|raw }}</a>
   {% endset %}
-  {% set htmlcontent %}
+  {% set metadata %}
     <span class="text-muted text-nowrap me-4-5">{{ type }}</span><span class="text-muted text-nowrap me-4-5">{{ creation }}</span>
   {% endset %}
   {% set badges = [] %}
@@ -37,6 +37,6 @@
     text: {
       content: body,
     },
-    content: htmlcontent,
+    content: metadata,
   }) }}
 {% endblock %}
