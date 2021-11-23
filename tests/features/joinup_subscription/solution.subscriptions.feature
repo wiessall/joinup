@@ -140,6 +140,7 @@ Feature: Subscribing to a solution
   @javascript
   Scenario: Subscribe to a solution as a normal user
     When I am logged in as "Cornilius Darcias"
+    And I accept essential cookies
     And I go to the "Some solution to subscribe" solution
     Then I should see the button "Subscribe to this solution"
 

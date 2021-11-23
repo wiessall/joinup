@@ -42,7 +42,8 @@ Feature:
     And the response should contain "http://joinup.eu/spdx/foo.html#licenseText"
     And the response should contain "http://joinup.eu/spdx/bar.html#licenseText"
 
-    When I click "Distribute" in the "Content" region
+    When I accept essential cookies
+    And I click "Distribute" in the "Content" region
     Then I should see the text "1 licences found"
     And I should see the text "Bar Licence"
     But I should not see the text "Foo Licence"
@@ -89,6 +90,7 @@ Feature:
 
     Given I am an anonymous user
     When I visit the "JLA" custom page
+    And I accept essential cookies
     Then the Compare buttons are disabled
 
     When I add the "Apache-2.0" licence to the compare list
@@ -373,6 +375,7 @@ Feature:
 
     Given I am an anonymous user
     When I visit the "JLA" custom page
+    And I accept essential cookies
 
     When I click "Distribute" in the "Content" region
     # The licence was hidden.
