@@ -41,6 +41,7 @@ Feature: As a privileged user
     And the following fields should not be present "Collection share original, Collection share candidate 1, Collection share candidate 2"
 
     Given I am logged in as a member of the "Collection share candidate 1" collection
+    And I accept essential cookies
     And I go to the homepage of the "Collection share original" collection
     Then I should see the "Solution to be shared" tile
     And I should see the contextual link "Share" in the "Solution to be shared" tile
