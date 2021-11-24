@@ -1,7 +1,7 @@
 _meta:
   version: '1.0'
   entity_type: menu_link_content
-  uuid: 3d17368b-533a-4b78-ba16-997d40be6ae5
+  uuid: 77c1dd2b-aafb-4335-9a32-7bf337bb767a
   bundle: menu_link_content
   default_langcode: en
 default:
@@ -10,13 +10,13 @@ default:
       value: true
   title:
     -
-      value: 'Legal notice'
+      value: 'What is Interoperable Europe'
   menu_name:
     -
-      value: footer-european-commission
+      value: footer-about-us
   link:
     -
-      uri: 'internal:/joinup/legal-notice'
+      uri: 'internal:/collection/interoperable-europe/interoperable-europe'
       title: ''
       options:
         menu_link_destination: 0
@@ -28,7 +28,7 @@ default:
       value: true
   weight:
     -
-      value: -47
+      value: -45
   expanded:
     -
       value: false
