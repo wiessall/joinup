@@ -183,6 +183,8 @@ drupal:
           'filecache',
           'joinup_cas_mock_server',
           'og_ui',
+          'update',
+          'upgrade_status',
           'views_ui',
         ];
         // Location of the site configuration files.
