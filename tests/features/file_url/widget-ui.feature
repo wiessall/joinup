@@ -12,6 +12,7 @@ Feature: User interface for the File URL field
       | state | validated                 |
 
     Given I am logged in as a member of the "Caterpillar, use headbutt" collection
+    And I accept essential cookies
     # An example of the File URL field is the "Documentation" field in the
     # solution form.
     And I go to the add solution form of the "Caterpillar, use headbutt" collection

@@ -12,6 +12,7 @@ Feature:
   @javascript
   Scenario: Paragraph sections are multivalue and sort-able.
     Given I am logged in as a facilitator of the "Paragraphs collection" collection
+    And I accept essential cookies
     And I go to the "Paragraphs collection" collection
     And I open the plus button menu
     And I click "Add custom page"
@@ -102,6 +103,7 @@ Feature:
   @javascript
   Scenario Outline: Add an accordion to the custom page.
     Given I am logged in as a <role>
+    And I accept essential cookies
     And I go to the "Paragraphs collection" collection
     And I open the plus button menu
     And I click "Add custom page"
