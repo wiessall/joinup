@@ -322,4 +322,15 @@ class JoinupCoreContext extends RawDrupalContext {
     $collection->deleteAll();
   }
 
+  /**
+   * Tests that the cli timezone is the same as Drupal's.
+   *
+   * @Then /^cli should use the same timezone as Drupal$/
+   */
+  public function cliShouldUseTheSameTimezoneAsDrupal(): void {
+    $cli_timezone = date_default_timezone_get();
+    $drupal_timezone = \Drupal::configFactory()->getEditable('system.date')->get('timezone.default');
+    Assert::assertSame($drupal_timezone, $cli_timezone, "Timezone {$cli_timezone} is the same as {$drupal_timezone}");
+  }
+
 }
