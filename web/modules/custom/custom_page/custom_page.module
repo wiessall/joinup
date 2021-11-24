@@ -18,7 +18,6 @@ use Drupal\custom_page\Entity\CustomPageInterface;
 use Drupal\joinup_group\Exception\MissingGroupException;
 use Drupal\menu_link_content\MenuLinkContentInterface;
 use Drupal\node\NodeInterface;
-use Drupal\search_api\Plugin\search_api\datasource\ContentEntity;
 use Drupal\search_api\Query\QueryInterface;
 
 /**
@@ -75,7 +74,9 @@ function custom_page_node_insert(EntityInterface $entity) {
   // @see \Drupal\custom_page\Plugin\search_api\processor\IncludeCustomPageContent
   $parent = $entity->og_audience->entity;
   if (!empty($parent)) {
-    ContentEntity::indexEntity($entity->og_audience->entity);
+    /** @var \Drupal\search_api\Plugin\search_api\datasource\ContentEntityTrackingManager $content_tracking_manager */
+    $content_tracking_manager = \Drupal::service('search_api.entity_datasource.tracking_manager');
+    $content_tracking_manager->trackEntityChange($entity->og_audience->entity);
   }
 }
 
@@ -124,7 +125,9 @@ function custom_page_node_update(NodeInterface $entity) {
   // @see \Drupal\custom_page\Plugin\search_api\processor\IncludeCustomPageContent
   $parent = $entity->og_audience->entity;
   if (!empty($parent)) {
-    ContentEntity::indexEntity($entity->og_audience->entity);
+    /** @var \Drupal\search_api\Plugin\search_api\datasource\ContentEntityTrackingManager $content_tracking_manager */
+    $content_tracking_manager = \Drupal::service('search_api.entity_datasource.tracking_manager');
+    $content_tracking_manager->trackEntityChange($entity->og_audience->entity);
   }
 }
 
@@ -146,7 +149,9 @@ function custom_page_node_delete(NodeInterface $entity) {
   // @see \Drupal\custom_page\Plugin\search_api\processor\IncludeCustomPageContent
   $parent = $entity->og_audience->entity;
   if (!empty($parent)) {
-    ContentEntity::indexEntity($entity->og_audience->entity);
+    /** @var \Drupal\search_api\Plugin\search_api\datasource\ContentEntityTrackingManager $content_tracking_manager */
+    $content_tracking_manager = \Drupal::service('search_api.entity_datasource.tracking_manager');
+    $content_tracking_manager->trackEntityChange($entity->og_audience->entity);
   }
 }
 
@@ -173,7 +178,9 @@ function custom_page_menu_link_content_update(MenuLinkContentInterface $menu_lin
   if (isset($route_parameters['node'])) {
     $custom_page = \Drupal::entityTypeManager()->getStorage('node')->load($route_parameters['node']);
     if ($custom_page instanceof CustomPageInterface) {
-      ContentEntity::indexEntity($custom_page->get('og_audience')->entity);
+      /** @var \Drupal\search_api\Plugin\search_api\datasource\ContentEntityTrackingManager $content_tracking_manager */
+      $content_tracking_manager = \Drupal::service('search_api.entity_datasource.tracking_manager');
+      $content_tracking_manager->trackEntityChange($custom_page->og_audience->entity);
     }
   }
 }
