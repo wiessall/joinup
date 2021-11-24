@@ -177,7 +177,6 @@ function ventuno_preprocess_block__entityqueue_block__highlighted_content(&$vari
       $options = [
         'query' => [
           'f' => [
-            'type:' . $node->bundle(),
             'topic:' . $topic->id(),
           ],
         ],
