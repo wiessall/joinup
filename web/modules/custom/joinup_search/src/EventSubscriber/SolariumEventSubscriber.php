@@ -5,9 +5,9 @@ declare(strict_types = 1);
 namespace Drupal\joinup_search\EventSubscriber;
 
 use Drupal\Core\State\StateInterface;
+use Drupal\search_api_solr\Solarium\EventDispatcher\EventProxy;
 use Solarium\Core\Client\Client;
 use Solarium\Core\Event\Events;
-use Solarium\Core\Event\PreExecute;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
@@ -20,7 +20,7 @@ class SolariumEventSubscriber implements EventSubscriberInterface {
    *
    * @var \Drupal\Core\State\StateInterface
    */
-  protected $state;
+  protected StateInterface $state;
 
   /**
    * Constructs a SolariumEventSubscriber object.
@@ -35,7 +35,7 @@ class SolariumEventSubscriber implements EventSubscriberInterface {
   /**
    * {@inheritdoc}
    */
-  public static function getSubscribedEvents() {
+  public static function getSubscribedEvents(): array {
     return [
       Events::PRE_EXECUTE => 'commitOnUpdate',
     ];
@@ -44,10 +44,10 @@ class SolariumEventSubscriber implements EventSubscriberInterface {
   /**
    * Makes all update queries soft commit on the index.
    *
-   * @param \Solarium\Core\Event\PreExecute $event
+   * @param \Drupal\search_api_solr\Solarium\EventDispatcher\EventProxy $event
    *   The pre execute event.
    */
-  public function commitOnUpdate(PreExecute $event) {
+  public function commitOnUpdate(EventProxy $event): void {
     $query = $event->getQuery();
 
     if ($this->state->get('joinup_search.skip_solr_commit_on_update', FALSE) === TRUE) {
