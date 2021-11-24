@@ -25,7 +25,7 @@ class BuildCommands extends AbstractCommands {
    * - Uses the `--worktree-attributes` option of `git archive` to filter out
    *   non-production code.
    * - Uses the `drupal:settings` command to build the `settings.php` file.
-   * - Compiles SCSS to CSS.
+   * - Compiles SCSS to CSS for the old `joinup_theme` theme.
    * - The Git tag and commit hash are computed, if not passed.
    *
    * @param array $options
@@ -70,16 +70,17 @@ class BuildCommands extends AbstractCommands {
     $tasks[] = $this->taskFilesystemStack()
       ->mkdir("{$distDir}/web/themes/joinup/css");
 
+    // Compile the SCSS to CSS for the old `joinup_theme` theme.
     $scssMap = [
-      $config->get('scss.input') => "{$distDir}/web/themes/joinup/css/style.min.css",
+      $config->get('themes.joinup_theme.scss.input') => "{$distDir}/web/themes/joinup/css/style.min.css",
     ];
     $tasks[] = $this->taskScss($scssMap)
-      ->setFormatter('ScssPhp\\ScssPhp\\Formatter\\' . ucfirst($config->get('scss.style')))
-      ->addImportPath($config->get('scss.import_dir'));
+      ->setFormatter('ScssPhp\\ScssPhp\\Formatter\\' . ucfirst($config->get('themes.joinup_theme.scss.style')))
+      ->addImportPath($config->get('themes.joinup_theme.scss.import_dir'));
 
     // Prepare sha and tag variables.
-    $tag = $options['tag'] ?? $this->getGitTag();
-    $sha = $options['sha'] ?? $this->getGitCommitHash();
+    $tag = $this->getGitTag();
+    $sha = $this->getGitCommitHash();
 
     // Write version tag in manifest.json and VERSION.txt.
     $tasks[] = $this->taskWriteToFile("{$distDir}/manifest.json")->text(
@@ -103,7 +104,19 @@ class BuildCommands extends AbstractCommands {
    *   Current Git tag.
    */
   protected function getGitTag(): string {
-    return trim(Robo::getContainer()->get('repository')->run('describe', ['--tags']));
+    /** @var \Gitonomy\Git\Repository $repository */
+    $repository = Robo::getContainer()->get('repository');
+
+    // Handle a potential case where the repository has been shallow cloned.
+    // Typically, this happens in GitLab pipelines, where the repos are shallow
+    // cloned for performance reasons. A shallow clone repository prevents us to
+    // get the latest Git tag as no tags are available.
+    $is_shallow_repository = $repository->run('rev-parse', ['--is-shallow-repository']) === 'true';
+    if ($is_shallow_repository) {
+      $repository->run('fetch', ['--unshallow']);
+    }
+
+    return trim($repository->run('describe', ['--tags']));
   }
 
   /**
