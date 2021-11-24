@@ -113,6 +113,7 @@ Feature: Featuring content site-wide
     And I should not see the contextual link "Remove from featured" in the "<unfeatured>" tile
 
     When I am logged in as "Modston Modster"
+    And I accept essential cookies
     And I visit the <content type> overview
     Then I should see the contextual link "Feature" in the "<unfeatured>" tile
     And the "<unfeatured>" <content type> tile should not be marked as featured

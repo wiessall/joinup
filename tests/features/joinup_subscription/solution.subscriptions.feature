@@ -29,6 +29,7 @@ Feature: Subscribing to a solution
       | Legal notice | 1.1   | yes       | I have read and accept the <a href="[entity_legal_document:url]">[entity_legal_document:label]</a> | The information on this site is subject to a disclaimer... |
 
     When I am not logged in
+    And I accept essential cookies
     And I go to the "Some solution to subscribe" solution
     # This is a link which is styled as a button.
     Then I should see the link "Subscribe to this solution"
@@ -84,6 +85,7 @@ Feature: Subscribing to a solution
       | Bergholt Stuttley Johnson | berg@stuttley-johnson.am | berghol7 | Bergholt Stuttley Johnson |
 
     When I am not logged in
+    And I accept essential cookies
     And I go to the "Some solution to subscribe" solution
     # This is a link which is styled as a button.
     Then I should see the link "Subscribe to this solution"

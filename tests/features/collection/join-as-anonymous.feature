@@ -21,6 +21,7 @@ Feature: Joining a collection as an anonymous user
 
     # Anonymous users should be able to join a collection but not leave one.
     Given I am an anonymous user
+    And I accept essential cookies
     When I go to the homepage of the "Reannual plants" collection
     # These are links which are styled as buttons.
     Then I should see the link "Join this collection"
@@ -130,6 +131,7 @@ Feature: Joining a collection as an anonymous user
 
     # Anonymous users should be able to join a collection but not leave one.
     Given I am an anonymous user
+    And I accept essential cookies
     When I go to the homepage of the "Reannual plants" collection
     # These are links which are styled as buttons.
     Then I should see the link "Join this collection"

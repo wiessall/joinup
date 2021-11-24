@@ -38,6 +38,7 @@ Feature: Event moderation
     # users to create content, authenticated users that are not members can
     # create events.
     When I am logged in as "Salvador Thomas"
+    And I accept essential cookies
     And I go to the homepage of the "Wet Lords" collection
     And I click "Add event" in the plus button menu
     # Post moderated collections allow publishing content directly.
