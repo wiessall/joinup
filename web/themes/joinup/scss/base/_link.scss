@@ -8,7 +8,9 @@ a {
   color: #ee8917;
   word-wrap: break-word;
 
-  &[href]:after {
-    content: none !important;
+  @media print {
+    &[href]:after {
+      content: none !important;
+    }
   }
 }
