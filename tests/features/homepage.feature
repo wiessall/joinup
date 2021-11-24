@@ -108,16 +108,15 @@ Feature: Homepage
     And I should see the link "Related content"
     When I click "Related content"
     Then I should be on the advanced search page
-    And the <label> content checkbox item should be selected
     And I should see the "Aliens" tile
     And I should not see the "Microgravity" tile
     And I should not see the "Groundforce" tile
 
     Examples:
-      | type     | label    |
-      | document | Document |
-      | news     | News     |
-      | event    | Event    |
+      | type     |
+      | document |
+      | news     |
+      | event    |
 
   Scenario: An event can be highlighted on the homepage
     Given event content:
