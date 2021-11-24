@@ -139,6 +139,7 @@ Feature: Proposing a collection
       | Organisation example | Company |
 
     Given I am logged in as an "authenticated user"
+    And I accept essential cookies
     When I go to the propose collection form
     Then the following fields should be visible "Title, Description, Topic"
     And the following field widgets should be visible "Owner"
@@ -203,6 +204,7 @@ Feature: Proposing a collection
   # See https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-3057
   Scenario: Browser validation errors should focus the correct field group.
     Given I am logged in as an "authenticated user"
+    And I accept essential cookies
     When I go to the propose collection form
     Then the "Main fields" tab should be active
     # This form has two elements only that have browser-side validation.
