@@ -24,7 +24,7 @@ Feature: Global search
       | Dummy news 4          | Dummy body       | Molecular cooking collection | E-inclusion             | Luxembourg       | validated |
 
     Given I am logged in as a user with the "authenticated" role
-    And I visit the search page
+    Then I visit the search page
     # All content is visible.
     Then I should see the "Molecular cooking collection" tile
     And I should see the "El Celler de Can Roca" tile
@@ -60,9 +60,9 @@ Feature: Global search
     # Joinup there were two search fields, but this was confusing users.
     And there should be exactly 1 "search field" on the page
 
-    When I select "Social and Political" option from the "Topics" Slim Select
-    Then I scroll button "Search" into view
-    And I press "Search"
+    When I scroll button "Search" into view
+    And I select "Social and Political" option from the "Topics" Slim Select
+    Then I press "Search"
     Then the "Social and Political" option from "Topics" Slim Select is selected
     And the "Topics" select should contain the following options:
       | Info                      |
@@ -75,18 +75,20 @@ Feature: Global search
     And I should see the "Dummy news 2" tile
     And I should see the "Dummy news 3" tile
     And I should see the "Dummy news 4" tile
-    Then I unselect "Social and Political" option from the "Topics" Slim Select
+    When I scroll button "Search" into view
+    And I unselect "Social and Political" option from the "Topics" Slim Select
 
     #Test multiple topics.
-    When I select "E-inclusion,Demography" options from the "Topics" Slim Select
-    Then I scroll button "Search" into view
+    When I scroll button "Search" into view
+    And I select "E-inclusion,Demography" options from the "Topics" Slim Select
     And I press "Search"
     And the "- Demography,- E-inclusion" options from "Topics" Slim Select are selected
-    Then I unselect "E-inclusion,Demography" options from the "Topics" Slim Select
+    When I scroll button "Search" into view
+    And I unselect "E-inclusion,Demography" options from the "Topics" Slim Select
 
     # Test the topic facet. The space prefixing "Demography" is due to the hierarchy.
-    When I select "Demography" option from the "Topics" Slim Select
-    Then I scroll button "Search" into view
+    When I scroll button "Search" into view
+    And I select "Demography" option from the "Topics" Slim Select
     And I press "Search"
     Then the "- Demography" option from "Topics" Slim Select is selected
     # The selected option moves to the last position by default.

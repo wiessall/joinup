@@ -270,8 +270,7 @@ class JoinupSearchContext extends RawDrupalContext {
    * @When I select :option option(s) from the :label Slim Select
    */
   public function selectOptionsFromSlimSelect(string $option, string $label): void {
-    $options = $this->explodeCommaSeparatedStepArgument($option);
-    foreach ($options as $option) {
+    foreach ($this->explodeCommaSeparatedStepArgument($option) as $option) {
       $slim_select = $this->findSelect($label);
       $slim_select->click();
 
