@@ -1,19 +1,42 @@
-<header class="section section--header" role="banner">
-  <div class="mdl-layout__header-row">
-    <a href="{{ base_path }}" class="header-logo mdl-layout-title" title="{{ 'Home'|t }}">
-      <img src="{{ base_path ~ directory }}/images/logo.svg" alt="{{ 'Home'|t }}">
-    </a>
-    <div class="mdl-layout-spacer"></div>
-
-    {{ page.header_central_menu.joinup_theme_main_menu }}
-
-    <div class="mdl-layout-spacer"></div>
-
-    {{ page.header }}
-    {{ page.header_profile_menu }}
-
-</div>
-</header>
-<div class="mdl-layout__drawer">
-  {{ page.header_central_menu.joinup_theme_main_menu_mobile }}
+{{ attach_library('ventuno/bootstrap-base') }}
+{{ attach_library('ventuno/navbar') }}
+<div class="bs-wrapper">
+  <div class="ec__header bcl-header">
+    <nav class="w-100 shadow-sm navbar">
+      <div class="container">
+        <a class="navbar-brand" href="https://ec.europa.eu/info/index_en">
+          <img src="https://cdn1.fpfis.tech.ec.europa.eu/ecl/v3.0.2/ec/images/logo/logo-ec--en.svg" alt="European Commission logo"/>
+        </a>
+      </div>
+    </nav>
+  </div>
+  <header role="banner" class="region-header">
+    {% set items = logged_in ? [{
+      breakpoint: "lg",
+      classes: ["order-1"],
+      id: "landing-pages",
+      icon: { name: "justify" },
+      label: "",
+      links: landing_page_links,
+    }] : [] %}
+    {% set items = items|merge([{
+      breakpoint: logged_in ? "" : "lg",
+      id: logged_in ? "account" : "navbar-toggler",
+      icon: {
+        name: logged_in ? "person-circle" : "justify",
+      },
+      label: logged_in ? user_name : "",
+      links: logged_in ? profile_links : anonymous_links,
+    }]) %}
+    {% include directory ~ '/../ventuno/templates/navigation/navbar.html.twig' with {
+      brand: {
+        src: base_path ~ directory ~ "/../ventuno/src/images/logo.svg",
+        alt: "Joinup logo"|t,
+        link: front_page,
+      },
+      collapse_id: "main-navbar",
+      list_id: "main-navbar-list",
+      items: items,
+    } %}
+  </header>
 </div>

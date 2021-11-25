@@ -88,11 +88,11 @@ Feature: Machine translation
     Then I should not see any Webtools eTrans elements
     When I visit the search page
     Then I should not see any Webtools eTrans elements
-    When I click "Collections" in the "Header menu" region
+    When I visit the collection overview
     Then I should not see any Webtools eTrans elements
-    When I click "Solutions" in the "Header menu" region
+    When I visit the solution overview
     Then I should not see any Webtools eTrans elements
-    When I click "Keep up to date" in the "Header menu" region
+    And I visit the content overview
     Then I should not see any Webtools eTrans elements
 
     # Pages that are not content focused should not be translatable.

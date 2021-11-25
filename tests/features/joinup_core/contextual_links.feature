@@ -58,5 +58,5 @@ Feature:
     And I click "About"
     Then I should not see the contextual link "Share"
 
-    When I click "Collections"
+    And I visit the collection overview
     Then I should not see the contextual link "Share"
