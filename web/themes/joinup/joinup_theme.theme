@@ -418,6 +418,9 @@ function joinup_theme_preprocess_page(&$variables) {
   // Populate the links shown to anonymous users.
   $variables['anonymous_links'] = $menu_helper->getBclAnonymousMenu();
 
+  // The "About us" link is only shown if the Joinup collection exists.
+  $variables['#cache']['tags'][] = 'joinup_collection:exists';
+
   // Add a flag to indicate whether a tour is available for this page.
   $route_parameters = $route_match->getRawParameters()->all();
   $tour_storage = \Drupal::entityTypeManager()->getStorage('tour');
@@ -429,6 +432,35 @@ function joinup_theme_preprocess_page(&$variables) {
       break;
     }
   }
+
+  // Generate a link to the contact form with the current path (including query
+  // arguments) as the 'destination' query argument so that the user will return
+  // to the current path after filling in the contact form.
+  // This is a temporary measure to allow us to reuse the footer links from the
+  // new theme without having to render them dynamically. In the new theme this
+  // is handled transparently using the Menu Link Destination module.
+  /** @var \Drupal\Core\Path\PathMatcherInterface $path_matcher */
+  $path_matcher = \Drupal::service('path.matcher');
+
+  if ($request->query->has('destination')) {
+    // The path should start with a slash.
+    $destination = '/' . ltrim($request->query->get('destination'), '/');
+    $destination = Url::fromUserInput($destination)->toString();
+  }
+  // If we are on the homepage, set the destination path to the base path.
+  elseif ($path_matcher->isFrontPage()) {
+    $destination = base_path();
+  }
+  // Return to the current page URL.
+  else {
+    $query_arguments = $request->query->all();
+    $route_options = ['query' => $query_arguments];
+    $destination = (new Url($route_name, $route_parameters, $route_options))->toString();
+  }
+
+  $options = [];
+  $options['query']['destination'] = $destination;
+  $variables['contact_form_link'] = Url::fromRoute('contact_form.contact_page')->setOptions($options)->toString();
 }
 
 /**
