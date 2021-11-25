@@ -4,7 +4,7 @@ Feature: Header
   As a UX designer
   I want to place links that are relevant to the user's status in the header
 
-  @joinup @clearStaticCache
+  @joinup
   Scenario Outline: Header shows basic info and directs anonymous users to log in or create an account
     Given I am not logged in
     And I am on <page>

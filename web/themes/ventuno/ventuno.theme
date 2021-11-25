@@ -11,6 +11,7 @@ use Drupal\Core\Menu\MenuLinkInterface;
 use Drupal\Core\Url;
 use Drupal\interoperable_europe\InteroperableEuropeCollectionInterface;
 use Drupal\joinup_bundle_class\LogoInterface;
+use Drupal\joinup_collection\JoinupCollectionHelper;
 use Drupal\node\Entity\Node;
 use Drupal\node\NodeInterface;
 use Drupal\smart_trim\Truncate\TruncateHTML;
@@ -91,7 +92,7 @@ function ventuno_preprocess_page(&$variables) {
   $variables['anonymous_links'] = $menu_helper->getBclAnonymousMenu();
 
   // The "About us" link is only shown if the Joinup collection exists.
-  $variables['#cache']['contexts'][] = 'joinup_collection_exists';
+  $variables['#cache']['tags'][] = 'joinup_collection:exists';
 
   // Export the URL of the Interoperable Europe landing page.
   $landing_page = Node::load(InteroperableEuropeCollectionInterface::LANDING_PAGE_ENTITY_ID);
