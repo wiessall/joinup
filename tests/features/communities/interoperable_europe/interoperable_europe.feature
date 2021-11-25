@@ -15,3 +15,8 @@ Feature:
       | user                                            | element |
       | not logged in                                   | link    |
       | logged in as a user with the authenticated role | button  |
+
+  Scenario: Discover more link on the homepage leads to the Interoperable Europe landing page
+    Given I am on the homepage
+    When I click "Discover more"
+    Then I should see the heading "Interoperable Europe"

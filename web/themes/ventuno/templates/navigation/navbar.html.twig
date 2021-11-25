@@ -43,7 +43,7 @@
 {% set _list_id = list_id|default('') %}
 {% set _items = items|default([{}]) %}
 
-{% set _nav_classes = ['joinup-navbar', 'navbar', 'navbar-expand'] %}
+{% set _nav_classes = ['joinup-navbar', 'navbar', 'navbar-expand', 'joinup-navbar--sticky'] %}
 {% set _navbar_toggler_classes = ['navbar-toggler'] %}
 {% set _list_id = list_id|default('accordion-1') %}
 {% set _list_classes = ['navbar-nav', 'accordion', 'accordion-flush'] %}
@@ -60,7 +60,11 @@
   {% set list_attributes = create_attribute() %}
 {% endif %}
 
-{% set nav_attributes = nav_attributes.addClass(_nav_classes) %}
+{% if list_item_attributes is empty %}
+  {% set list_item_attributes = create_attribute() %}
+{% endif %}
+
+{% set nav_attributes = nav_attributes.addClass(_nav_classes).setAttribute('id', 'joinup-navbar') %}
 {% set navbar_toggler_attributes = navbar_toggler_attributes.addClass(_navbar_toggler_classes) %}
 {% set navbar_toggler_attributes = navbar_toggler_attributes.setAttribute('type', 'button') %}
 {% set navbar_toggler_attributes = navbar_toggler_attributes.setAttribute('data-bs-toggle', 'collapse') %}
@@ -134,7 +138,7 @@
               >
                 {% if item.icon is not empty %}
                   <svg class="bi icon--s">
-                    <use xlink:href="{{ base_path ~ directory }}/assets/icons/bootstrap-icons.svg#{{ item.icon.name }}"></use>
+                    <use xlink:href="{{ bcl_icon_path }}#{{ item.icon.name }}"></use>
                   </svg>
                 {% endif %}
                 {% if item.label is not empty %}

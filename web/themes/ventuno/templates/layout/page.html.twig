@@ -90,6 +90,12 @@
     </div>
   </div>
 
+  {% if page.messages %}
+    <div class="region-messages">
+      {{ page.messages }}
+    </div>
+  {% endif %}
+
   {{ page.content_top }}
 
   <main role="main">
