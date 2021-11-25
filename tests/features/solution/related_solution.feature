@@ -60,10 +60,11 @@ Feature: Related solution
 
   @javascript
   Scenario: Moderators can reorder the related solutions.
-    When I am logged in as a moderator
+    Given I am logged in as a moderator
+    And I accept essential cookies
 
     # Solutions that have 'Solution related by type' off, should not show solutions related by type.
-    And I visit the "Javascript" solution
+    When I visit the "Javascript" solution
     Then I should see the following tiles in the correct order:
       | Java |
       | PHP  |

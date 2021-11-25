@@ -1884,6 +1884,28 @@ class JoinupContext extends RawDrupalContext {
   }
 
   /**
+   * Waits until the given region becomes visible.
+   *
+   * @param string $region
+   *   The region that should become visible.
+   *
+   * @throws \Exception
+   *   Thrown when the region doesn't become visible within 5 seconds.
+   *
+   * @Then I wait until the :region appears
+   */
+  public function waitForRegionToAppear(string $region): void {
+    $result = $this->getSession()->getPage()->waitFor(5, function () use ($region) {
+      $element = $this->getSession()->getPage()->find('region', $region);
+      return $element && $element->isVisible();
+    });
+
+    if (!$result) {
+      throw new \Exception("The $region region did not appear.");
+    }
+  }
+
+  /**
    * Asserts that the default Drupal modal is opened.
    *
    * @throws \Exception

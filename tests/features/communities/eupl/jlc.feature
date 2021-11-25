@@ -368,6 +368,7 @@ Feature:
       | INCOMPATIBLE | @inbound-licence is not compatible with @outbound-licence.                                                                                                                  |
 
     When I visit the "JLC" custom page
+    And I accept essential cookies
     Then the "Check compatibility" buttons should be disabled
     When I choose "EUPL-1.2" as the "Inbound" licence
     Then the "Check compatibility" buttons should be disabled
@@ -447,6 +448,7 @@ Feature:
     # Authenticated users should also be able to see the licence compatibility
     # checker and compatibility documents.
     Given I am logged in as an "authenticated user"
+    And I accept essential cookies
     When I visit the "JLC" custom page
     Then the "Check compatibility" buttons should be disabled
     When I choose "EUPL-1.2" as the "Inbound" licence
