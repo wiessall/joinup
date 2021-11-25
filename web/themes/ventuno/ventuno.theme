@@ -197,6 +197,12 @@ function ventuno_preprocess_page(&$variables) {
   }
 
   $variables['anonymous_links'] = $anonymous_links;
+
+  // Export the URL of the Interoperable Europe landing page.
+  $landing_page = Node::load(InteroperableEuropeCollectionInterface::LANDING_PAGE_ENTITY_ID);
+  if ($landing_page instanceof NodeInterface) {
+    $variables['interoperable_europe_url'] = $landing_page->toUrl()->toString();
+  }
 }
 
 /**
