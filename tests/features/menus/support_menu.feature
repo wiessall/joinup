@@ -135,6 +135,7 @@ Feature:
     And I click "Edit" in the "Contact Joinup Support" row
     Then I should see the heading "Edit menu link Contact Joinup Support"
 
+    Given the cache has been cleared
     Given I am on the homepage
     Then I should see the link "Contact Joinup Support"
     And I should see "Arbitrary support menu link"
