@@ -419,7 +419,7 @@ function joinup_theme_preprocess_page(&$variables) {
   $variables['anonymous_links'] = $menu_helper->getBclAnonymousMenu();
 
   // The "About us" link is only shown if the Joinup collection exists.
-  $variables['#cache']['contexts'][] = 'joinup_collection_exists';
+  $variables['#cache']['tags'][] = 'joinup_collection:exists';
 
   // Add a flag to indicate whether a tour is available for this page.
   $route_parameters = $route_match->getRawParameters()->all();
