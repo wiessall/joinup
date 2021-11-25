@@ -108,13 +108,29 @@
     {% endif %}
   </div>
 
-  <div class="region-featured mb-5 py-5">
-    <div class="container">
-      <div class="row">
-        {{ page.featured }}
+  {% if page.featured %}
+    <div class="region-featured mb-5 py-md-5">
+      <div class="container">
+        <div class="row pt-5 pb-3">
+          <div class="col-12 col-md-6">
+            {{ page.featured }}
+          </div>
+          <div class="col-12 col-md-6 my-5 my-md-0 d-flex align-content-between flex-wrap">
+            <img src="{{ directory }}/assets/images/iop-eu-logo.svg" class="px-2 ms-md-5 img-fluid">
+            {% if interoperable_europe_url %}
+              <a href="{{ interoperable_europe_url }}" class="w-100 px-2 mt-4 d-block text-light text-center text-md-end fw-bold fs-5">{{ 'Discover more'|trans }} <span class="iop-gradient">...</span></a>
+            {% endif %}
+          </div>
+        </div>
       </div>
     </div>
-  </div>
+  {% endif %}
+
+  {% if page.messages %}
+    <div class="region-messages">
+      {{ page.messages }}
+    </div>
+  {% endif %}
 
   <div class="about-section">
     <div class="container">
@@ -141,25 +157,7 @@
   {{ page.content_bottom }}
 
   {% if page.footer %}
-    {{ attach_library('ventuno/footer') }}
-    <footer role="contentinfo" class="page__footer bg-primary">
-      <div class="container text-light">
-        <div class="row py-4 py-lg-5">
-          <!--Joinup logo-->
-          <div class="col-md-12 col-lg-3 column-logo">
-            <p class="joinup-logo"><a href="/" class="joinup-logo-white mb-3"><span class="visually-hidden">{{ 'Joinup'|t }}</span></a></p>
-            <p class="joinup-version"><a href="{{ version_url }}">{{ version }}</a></p>
-          </div>
-
-          {{ page.footer|without('followus', 'socialmedia') }}
-          <div class="col-md-3 col-lg-2 column-follow-us">
-            {{ page.footer.followus }}
-            {{ page.footer.socialmedia }}
-          </div>
-
-        </div>
-      </div>
-    </footer>
+    {% include directory ~ '/templates/parts/footer.html.twig' %}
   {% endif %}
 
 </div>{# /.layout-container #}

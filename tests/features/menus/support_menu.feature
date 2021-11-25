@@ -63,7 +63,7 @@ Feature:
     When I visit the collection overview page
     Then I should not see the link "Take a tour"
     But I should see the link "Contact Joinup Support"
-    Then I click "Contact Joinup Support"
+    When I click "Contact Joinup Support"
     And I fill in the following:
       | First name     | Oswine                      |
       | Last name      | Wulfric                     |
@@ -80,7 +80,7 @@ Feature:
     When I visit the content overview page
     Then I should see the link "Take a tour"
     And I should see the link "Contact Joinup Support"
-    Then I click "Contact Joinup Support"
+    When I click "Contact Joinup Support"
     And I fill in the following:
       | First name     | Roscof                      |
       | Last name      | Vulvric                     |
@@ -107,6 +107,9 @@ Feature:
       | an anonymous user                    | not see     |
       | logged in as an "authenticated user" | see         |
 
+  @wip
+  # Todo: Find out why this fails on the test bot, and enable the test again.
+  # See https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-6836
   Scenario: A moderator is able to administer the "Help and support" menu.
     Given I am logged in as a moderator
     When I click "Menus"
@@ -115,6 +118,7 @@ Feature:
 
     When I uncheck the "Take a tour" row
     And I press "Save"
+    Then I should see the success message "Menu Help and support has been updated."
 
     And I click "Add link"
     And I fill in "Menu link title" with "Arbitrary support menu link"

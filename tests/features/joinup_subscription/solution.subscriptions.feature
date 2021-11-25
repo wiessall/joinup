@@ -86,8 +86,8 @@ Feature: Subscribing to a solution
       | Bergholt Stuttley Johnson | berg@stuttley-johnson.am | berghol7 | Bergholt Stuttley Johnson |
 
     When I am not logged in
-    And I accept essential cookies
     And I go to the "Some solution to subscribe" solution
+    And I accept essential cookies
     # This is a link which is styled as a button.
     Then I should see the link "Subscribe to this solution"
     And the "Some solution to subscribe" solution should have 0 active members
