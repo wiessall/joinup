@@ -107,6 +107,7 @@ Feature:
       | an anonymous user                    | not see     |
       | logged in as an "authenticated user" | see         |
 
+  @wip
   Scenario: A moderator is able to administer the "Help and support" menu.
     Given I am logged in as a moderator
     When I click "Menus"
