@@ -61,6 +61,7 @@ Feature: Subscribing to a solution
     # as an anonymous user, we should be shown an appropriate message.
     When I am not logged in
     And I go to the "Some solution to subscribe" solution
+    And I accept essential cookies
     And I click "Subscribe to this solution"
     And I press "Sign in / Register" in the "Modal buttons" region
     Then I should see the heading "Sign in to continue"

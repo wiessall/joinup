@@ -81,12 +81,14 @@ Feature: As a privileged user
     And I should not see the contextual link "Unshare" in the "Solution to be shared" tile
 
     When I am logged in as an "authenticated user"
+    And I accept essential cookies
     And I go to the homepage of the "Collection share candidate 1" collection
     Then I should see the "Solution to be shared" tile
     And I should not see the contextual link "Unshare" in the "Solution to be shared" tile
 
     # Facilitators of other collections cannot unshare from the specific collection.
     When I am logged in as a facilitator of the "Collection share candidate 2" collection
+    And I accept essential cookies
     And I go to the homepage of the "Collection share candidate 1" collection
     Then I should see the "Solution to be shared" tile
     And I should not see the contextual link "Unshare" in the "Solution to be shared" tile

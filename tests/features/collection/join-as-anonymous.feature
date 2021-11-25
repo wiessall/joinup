@@ -65,6 +65,7 @@ Feature: Joining a collection as an anonymous user
     # anonymous user, we should be shown an appropriate message.
     Given I am an anonymous user
     When I go to the homepage of the "Reannual plants" collection
+    And I accept essential cookies
     And I click "Join this collection"
     And I press "Sign in / Register" in the "Modal buttons" region
     Then I should see the heading "Sign in to continue"
@@ -80,6 +81,7 @@ Feature: Joining a collection as an anonymous user
     # Now repeat the whole procedure for a closed collection.
     Given I am an anonymous user
     When I go to the homepage of the "Vul nuts" collection
+    And I accept essential cookies
     Then I should see the link "Join this collection"
     But I should not see the link "Leave this collection"
 
@@ -106,6 +108,7 @@ Feature: Joining a collection as an anonymous user
 
     Given I am an anonymous user
     When I go to the homepage of the "Vul nuts" collection
+    And I accept essential cookies
     And I click "Join this collection"
     And I press "Sign in / Register" in the "Modal buttons" region
     Then I should see the heading "Sign in to continue"
@@ -171,6 +174,7 @@ Feature: Joining a collection as an anonymous user
     # Repeat the scenario for a closed collection.
     Given I am an anonymous user
     When I go to the homepage of the "Vul nuts" collection
+    And I accept essential cookies
     Then I should see the link "Join this collection"
     But I should not see the link "Leave this collection"
 
