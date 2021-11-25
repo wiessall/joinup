@@ -8,7 +8,11 @@
 declare(strict_types = 1);
 
 use Drupal\Core\Menu\MenuLinkInterface;
+use Drupal\Core\Url;
+use Drupal\interoperable_europe\InteroperableEuropeCollectionInterface;
 use Drupal\joinup_bundle_class\LogoInterface;
+use Drupal\node\Entity\Node;
+use Drupal\node\NodeInterface;
 use Drupal\smart_trim\Truncate\TruncateHTML;
 use Drupal\topic\Entity\TopicInterface;
 use Drupal\topic\Entity\TopicReferencingEntityInterface;
@@ -85,6 +89,12 @@ function ventuno_preprocess_page(&$variables) {
 
   // Populate the links shown to anonymous users.
   $variables['anonymous_links'] = $menu_helper->getBclAnonymousMenu();
+
+  // Export the URL of the Interoperable Europe landing page.
+  $landing_page = Node::load(InteroperableEuropeCollectionInterface::LANDING_PAGE_ENTITY_ID);
+  if ($landing_page instanceof NodeInterface) {
+    $variables['interoperable_europe_url'] = $landing_page->toUrl()->toString();
+  }
 }
 
 /**
