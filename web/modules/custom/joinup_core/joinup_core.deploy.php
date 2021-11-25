@@ -13,3 +13,18 @@
  */
 
 declare(strict_types = 1);
+
+use Drupal\redirect\Entity\Redirect;
+
+/**
+ * Remove old "News" page alias in Interoperable Europe collection.
+ */
+function joinup_core_deploy_0107600(array &$sandbox = []): void {
+  $path = 'collection/interoperable-europe/news';
+  $ids = \Drupal::entityQuery('redirect')
+    ->condition('status_code', '301')
+    ->condition('redirect_source__path', $path, '=')
+    ->execute();
+  $entities = Redirect::loadMultiple($ids);
+  \Drupal::entityTypeManager()->getStorage('redirect')->delete($entities);
+}
