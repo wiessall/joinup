@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c48ad2e7d98c0ed2676319d104f00093",
+    "content-hash": "3fada69d5f163abb4f0684128a03a67e",
     "packages": [
         {
             "name": "SEMICeu/adms-ap_validator",
@@ -3703,7 +3703,8 @@
                     }
                 },
                 "patches_applied": {
-                    "Don't store sensitive data in the database": "resources/patch/175945-8.x-9.x-2.patch"
+                    "Don't store sensitive data in the database": "resources/patch/175945-8.x-9.x-2.patch",
+                    "Dynamic page cache prevents redirection @see https://www.drupal.org/project/entity_legal/issues/3251128": "https://www.drupal.org/files/issues/2021-11-24/3251128-2.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",

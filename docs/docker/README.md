@@ -95,7 +95,7 @@ $ docker-compose exec web phpdismod blackfire
 Run the following command to install all packages in the vendor folder:
 
 ```bash
-$ docker-compose exec --user www-data web composer install
+$ docker-compose exec web composer install
 ```
 
 ### Known issues
@@ -145,7 +145,7 @@ $ docker-compose down -v
 and then recreate them by running:
 
 ```bash
-$ docker-compose up -d --build -force-recreate
+$ docker-compose up -d --build --force-recreate
 ```
 
 The above workaround will result the user `www-data` having the user ID and
@@ -199,25 +199,25 @@ in `.env` file. The values should be provided by DevOps team.
 #### Download all dumps/snapshots at once
 
 ```bash
-$ docker-compose exec web ./vendor/bin/run ./vendor/bin/run dev:download-databases
+$ docker-compose exec web ./vendor/bin/run dev:download-databases
 ```
 
 #### Download only the MySQL dump
 
 ```bash
-$ docker-compose exec web ./vendor/bin/run ./vendor/bin/run mysql:download-dump
+$ docker-compose exec web ./vendor/bin/run mysql:download-dump
 ```
 
 #### Download only the Virtuoso snapshot
 
 ```bash
-$ docker-compose exec web ./vendor/bin/run ./vendor/bin/run virtuoso:download-snapshot
+$ docker-compose exec web ./vendor/bin/run virtuoso:download-snapshot
 ```
 
 #### Download only the Solr snapshot
 
 ```bash
-$ docker-compose exec web ./vendor/bin/run ./vendor/bin/run solr:download-snapshot
+$ docker-compose exec web ./vendor/bin/run solr:download-snapshot
 ```
 
 **Note:** If you are changing from a clean install to a restored environment,
