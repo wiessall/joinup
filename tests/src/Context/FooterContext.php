@@ -14,7 +14,7 @@ use PHPUnit\Framework\Assert;
 class FooterContext extends RawDrupalContext {
 
   /**
-   * Checks that the Joinup logo is present in the footer
+   * Checks that the Joinup logo is present in the footer.
    *
    * @Then I should see the Joinup logo in the footer
    */
@@ -27,7 +27,7 @@ class FooterContext extends RawDrupalContext {
   }
 
   /**
-   * Checks that the version is present in the footer
+   * Checks that the version is present in the footer.
    *
    * @Then I should see the Joinup version in the footer
    */
