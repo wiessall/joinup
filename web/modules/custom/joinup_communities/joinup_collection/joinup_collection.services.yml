@@ -1,4 +1,9 @@
 services:
+  cache_context.joinup_collection_exists:
+    class: 'Drupal\joinup_collection\Cache\Context\JoinupCollectionExistsCacheContext'
+    arguments: ['@entity_type.manager']
+    tags:
+      - { name: 'cache.context'}
   joinup_collection.route_subscriber:
     class: Drupal\joinup_collection\Routing\RouteSubscriber
     tags:

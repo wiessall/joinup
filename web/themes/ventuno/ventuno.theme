@@ -90,6 +90,9 @@ function ventuno_preprocess_page(&$variables) {
   // Populate the links shown to anonymous users.
   $variables['anonymous_links'] = $menu_helper->getBclAnonymousMenu();
 
+  // The "About us" link is only shown if the Joinup collection exists.
+  $variables['#cache']['contexts'][] = 'joinup_collection_exists';
+
   // Export the URL of the Interoperable Europe landing page.
   $landing_page = Node::load(InteroperableEuropeCollectionInterface::LANDING_PAGE_ENTITY_ID);
   if ($landing_page instanceof NodeInterface) {
