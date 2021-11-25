@@ -125,6 +125,7 @@ Feature: Pinning content entities inside solutions
 
     # Verify that changes in the pinned state are reflected to the tile.
     When I am logged in as a facilitator of the "Blue Wrench" solution
+    And I accept essential cookies
     When I go to the homepage of the "Blue Wrench" solution
     Then the "Lantern FAQ" tile should be marked as pinned
     But the "Lantern TCA" tile should not be marked as pinned
