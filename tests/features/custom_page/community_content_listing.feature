@@ -135,6 +135,7 @@ Feature:
   @javascript
   Scenario: Configure a custom page to show specific tiles.
     Given I am logged in as a facilitator of the "Nintendo64" collection
+    And I accept essential cookies
     When I go to the homepage of the "Nintendo64" collection
     And I click "Add custom page" in the plus button menu
     Then I should see the heading "Add custom page"
@@ -243,6 +244,7 @@ Feature:
 
     # Query presets should still apply when available.
     When I am logged in as a moderator
+    And I accept essential cookies
     And I go to the "Chosen content" custom page
     And I open the header local tasks menu
     And I click "Edit" in the "Entity actions" region
