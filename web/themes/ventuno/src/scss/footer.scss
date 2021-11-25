@@ -1,5 +1,5 @@
-// Navbar CSS
-// Only styles specific to the Navbar
+// Footer CSS
+// Styles specific to the footer.
 
 // Bootstrap functions
 @import "@openeuropa/bcl-bootstrap/scss/functions";
@@ -22,7 +22,6 @@
 // Override with Joinup mixins
 @import "mixins/joinup-icons";
 @import "mixins/full-width-background-colors";
-
 
 // Components
 @import "components/footer";
