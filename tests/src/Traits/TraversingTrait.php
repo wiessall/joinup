@@ -71,6 +71,12 @@ trait TraversingTrait {
       throw new \Exception("Select field '{$select}' not found.");
     }
 
+    if ($element->hasAttribute('data-ssid')) {
+      $xpath = '//*[contains(concat(" ", normalize-space(@class), " "), "' . $element->getAttribute('data-ssid') . '")]';
+      return $region->waitFor(5, function () use ($region, $xpath) {
+        return $region->find('xpath', $xpath);
+      });
+    }
     return $element;
   }
 

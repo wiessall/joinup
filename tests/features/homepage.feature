@@ -202,7 +202,7 @@ Feature: Homepage
     And I should see the link "E-justice" in the "Discover topics block"
     When I click "E-justice"
     Then I should be on the advanced search page
-    And the "E-justice" option from "topic" Slim Select is selected
+    And the "E-justice" option from "Topics" Slim Select is selected
 
     # See more topics modal.
     When I am on the homepage
@@ -230,7 +230,7 @@ Feature: Homepage
       | Social and Political |
     When I click "E-health Dpt." in the "Modal content"
     Then I should be on the advanced search page
-    And the "E-health Dpt." option from "topic" Slim Select is selected
+    And the "E-health Dpt." option from "Topics" Slim Select is selected
     And the page should show the tiles "Internet medicine"
 
     Examples:
