@@ -115,6 +115,7 @@ Feature:
 
     When I uncheck the "Take a tour" row
     And I press "Save"
+    Then I should see the success message "Menu Help and support has been updated."
 
     And I click "Add link"
     And I fill in "Menu link title" with "Arbitrary support menu link"
