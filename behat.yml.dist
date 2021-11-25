@@ -23,6 +23,7 @@
   - Drupal\joinup\Context\EifContext
   - Drupal\joinup\Context\EntityQueueContext
   - Drupal\joinup\Context\EuplContext
+  - Drupal\joinup\Context\FooterContext
   - Drupal\joinup\Context\HeaderContext
   - Drupal\joinup\Context\HomepageContext
   - Drupal\joinup\Context\InteroperableEuropeContext
