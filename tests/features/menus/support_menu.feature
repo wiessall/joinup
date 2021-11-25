@@ -62,8 +62,8 @@ Feature:
 
     When I visit the collection overview page
     Then I should not see the link "Take a tour"
-    But I should see the link "Contact support"
-    Then I click "Contact support"
+    But I should see the link "Contact Joinup Support"
+    Then I click "Contact Joinup Support"
     And I fill in the following:
       | First name     | Oswine                      |
       | Last name      | Wulfric                     |
@@ -79,8 +79,8 @@ Feature:
 
     When I visit the content overview page
     Then I should see the link "Take a tour"
-    And I should see the link "Contact support"
-    Then I click "Contact support"
+    And I should see the link "Contact Joinup Support"
+    Then I click "Contact Joinup Support"
     And I fill in the following:
       | First name     | Roscof                      |
       | Last name      | Vulvric                     |
@@ -96,11 +96,11 @@ Feature:
 
     When I go to the homepage of the "Hotel California" collection
     Then I should see the link "Take a tour"
-    And I should see the link "Contact support"
+    And I should see the link "Contact Joinup Support"
 
     When I go to "/user"
     Then I should <expectation> the link "Take a tour"
-    And I should see the link "Contact support"
+    And I should see the link "Contact Joinup Support"
 
     Examples:
       | role                                 | expectation |
