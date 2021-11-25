@@ -37,9 +37,12 @@ Feature: Header
 
     Examples:
       | page         |
+      # A page with the new Ventuno theme.
       | the homepage |
+      # A page with the old Joinup Theme theme.
+      | the search   |
 
-  @joinup @javascript @wip
+  @joinup @javascript
   Scenario Outline: The 'Get started' button opens a popup with information about EU Login
     Given I am not logged in
     And I am on <page>
@@ -63,4 +66,7 @@ Feature: Header
 
     Examples:
       | page         |
+      # A page with the new Ventuno theme.
       | the homepage |
+      # A page with the old Joinup Theme theme.
+      | the search   |
