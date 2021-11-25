@@ -115,6 +115,7 @@ Feature: Collection membership administration
 
     # Approve a membership.
     Given I am logged in as "Lisa Cuddy"
+    And I accept essential cookies
     And I go to the "Medical diagnosis" collection
 
     And I open the group sidebar menu
