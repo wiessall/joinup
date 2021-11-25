@@ -72,8 +72,24 @@
       </nav>
     </div>
     <header role="banner" class="region-header">
+      {% set items = logged_in ? [{
+        breakpoint: "lg",
+        classes: ["order-1"],
+        id: "landing-pages",
+        icon: { name: "justify" },
+        label: "",
+        links: landing_page_links,
+      }] : [] %}
+      {% set items = items|merge([{
+        breakpoint: logged_in ? "" : "lg",
+        id: logged_in ? "account" : "navbar-toggler",
+        icon: {
+          name: logged_in ? "person-circle" : "justify",
+        },
+        label: logged_in ? user_name : "",
+        links: logged_in ? profile_links : anonymous_links,
+      }]) %}
       {% include directory ~ '/templates/navigation/navbar.html.twig' with {
-        breakpoint: logged_in ? "" : "sm",
         brand: {
           src: base_path ~ directory ~ "/src/images/logo.svg",
           alt: "Joinup logo"|t,
@@ -81,16 +97,7 @@
         },
         collapse_id: "main-navbar",
         list_id: "main-navbar-list",
-        items: [
-          {
-            id: logged_in ? "account" : "navbar-toggler",
-            icon: {
-              name: logged_in ? "person-circle" : "justify",
-            },
-            label: logged_in ? user_name : "",
-            links: logged_in ? profile_links : anonymous_links,
-          },
-        ],
+        items: items,
       } %}
     </header>
 
@@ -101,13 +108,29 @@
     {% endif %}
   </div>
 
-  <div class="region-featured mb-5 py-5">
-    <div class="container">
-      <div class="row">
-        {{ page.featured }}
+  {% if page.featured %}
+    <div class="region-featured mb-5 py-md-5">
+      <div class="container">
+        <div class="row pt-5 pb-3">
+          <div class="col-12 col-md-6">
+            {{ page.featured }}
+          </div>
+          <div class="col-12 col-md-6 my-5 my-md-0 d-flex align-content-between flex-wrap">
+            <img src="{{ directory }}/assets/images/iop-eu-logo.svg" class="px-2 ms-md-5 img-fluid">
+            {% if interoperable_europe_url %}
+              <a href="{{ interoperable_europe_url }}" class="w-100 px-2 mt-4 d-block text-light text-center text-md-end fw-bold fs-5">{{ 'Discover more'|trans }} <span class="iop-gradient">...</span></a>
+            {% endif %}
+          </div>
+        </div>
       </div>
     </div>
-  </div>
+  {% endif %}
+
+  {% if page.messages %}
+    <div class="region-messages">
+      {{ page.messages }}
+    </div>
+  {% endif %}
 
   <div class="about-section">
     <div class="container">
