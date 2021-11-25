@@ -108,6 +108,8 @@ Feature:
       | logged in as an "authenticated user" | see         |
 
   @wip
+  # Todo: Find out why this fails on the test bot, and enable the test again.
+  # See https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-6836
   Scenario: A moderator is able to administer the "Help and support" menu.
     Given I am logged in as a moderator
     When I click "Menus"
@@ -136,7 +138,6 @@ Feature:
     And I click "Edit" in the "Contact Joinup Support" row
     Then I should see the heading "Edit menu link Contact Joinup Support"
 
-    Given the cache has been cleared
     Given I am on the homepage
     Then I should see the link "Contact Joinup Support"
     And I should see "Arbitrary support menu link"
