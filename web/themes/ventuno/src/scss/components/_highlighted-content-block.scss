@@ -1,5 +1,5 @@
-// Highlighted Solution
-.block-entityqueue--highlighted-solution {
+// Highlighted Content
+.block-entityqueue--highlighted-content {
   padding-bottom: $spacer * 3; // 48px
   border-bottom: 1px solid rgba($primary, .1);
   position: relative;
@@ -17,18 +17,13 @@
     @include font-icon-after("\E801", 1rem);
   }
   article {
-    .field--name-field-is-logo {
+    .logo {
       margin-bottom: $spacer * 1.5; // 24px
     }
-    .field--name-field-is-description {
+    .description {
       color: $gray-700;
     }
-    .field--name-field-is-solution-type {
-      color: $gray-500;
-      margin-top: $spacer * .5; // 8px
-      font-size: $font-size-xs;
-    }
-    .field--name-field-topic {
+    .topics {
       a {
         border-radius: $border-radius-pill;
         padding-right: $spacer; // 16px
