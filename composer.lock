@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "9b80f3410e6168103083a93a064e073e",
+    "content-hash": "c48ad2e7d98c0ed2676319d104f00093",
     "packages": [
         {
             "name": "SEMICeu/adms-ap_validator",
@@ -3164,6 +3164,82 @@
             "support": {
                 "source": "https://git.drupalcode.org/project/ctools",
                 "issues": "https://www.drupal.org/project/issues/ctools"
+            }
+        },
+        {
+            "name": "drupal/default_content",
+            "version": "2.0.0-alpha1",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/default_content.git",
+                "reference": "2.0.0-alpha1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/default_content-2.0.0-alpha1.zip",
+                "reference": "2.0.0-alpha1",
+                "shasum": "0d534ab8e44786a352e24c7cec3dc06bef155f66"
+            },
+            "require": {
+                "drupal/core": "^8.7.7 || ^9"
+            },
+            "require-dev": {
+                "drupal/paragraphs": "^1"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "2.0.0-alpha1",
+                    "datestamp": "1595072288",
+                    "security-coverage": {
+                        "status": "not-covered",
+                        "message": "Alpha releases are not covered by Drupal security advisories."
+                    }
+                },
+                "drush": {
+                    "services": {
+                        "drush.services.yml": "^9"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0+"
+            ],
+            "authors": [
+                {
+                    "name": "Berdir",
+                    "homepage": "https://www.drupal.org/user/214652"
+                },
+                {
+                    "name": "Sam152",
+                    "homepage": "https://www.drupal.org/user/1485048"
+                },
+                {
+                    "name": "andypost",
+                    "homepage": "https://www.drupal.org/user/118908"
+                },
+                {
+                    "name": "benjy",
+                    "homepage": "https://www.drupal.org/user/1852732"
+                },
+                {
+                    "name": "dawehner",
+                    "homepage": "https://www.drupal.org/user/99340"
+                },
+                {
+                    "name": "jibran",
+                    "homepage": "https://www.drupal.org/user/1198144"
+                },
+                {
+                    "name": "larowlan",
+                    "homepage": "https://www.drupal.org/user/395439"
+                }
+            ],
+            "description": "Imports default content when a module is enabled",
+            "homepage": "https://www.drupal.org/project/default_content",
+            "support": {
+                "source": "https://git.drupalcode.org/project/default_content"
             }
         },
         {
@@ -10552,6 +10628,50 @@
             "time": "2021-09-20T12:20:58+00:00"
         },
         {
+            "name": "openeuropa/composer-artifacts",
+            "version": "0.1.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/openeuropa/composer-artifacts.git",
+                "reference": "11e0ef32c0340493d3196653e684ae38843b0667"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/openeuropa/composer-artifacts/zipball/11e0ef32c0340493d3196653e684ae38843b0667",
+                "reference": "11e0ef32c0340493d3196653e684ae38843b0667",
+                "shasum": ""
+            },
+            "require": {
+                "composer-plugin-api": "^1.1",
+                "php": ">=5.6"
+            },
+            "require-dev": {
+                "composer/composer": "~1.4",
+                "openeuropa/code-review": "~1.0.0-alpha3",
+                "phpunit/phpunit": "~5.5||~6.0",
+                "symfony/yaml": "~3.4"
+            },
+            "type": "composer-plugin",
+            "extra": {
+                "class": "OpenEuropa\\ComposerArtifacts\\Plugin"
+            },
+            "autoload": {
+                "psr-4": {
+                    "OpenEuropa\\ComposerArtifacts\\": "./src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "EUPL-1.2"
+            ],
+            "description": "Composer plugin that allows to download a specified artifact instead of the default package.",
+            "keywords": [
+                "artifacts",
+                "composer-plugin"
+            ],
+            "time": "2018-10-15T12:13:47+00:00"
+        },
+        {
             "name": "openeuropa/oe_bootstrap_theme",
             "version": "0.71.0",
             "source": {
@@ -17926,50 +18046,6 @@
             "time": "2020-09-02T14:39:16+00:00"
         },
         {
-            "name": "openeuropa/composer-artifacts",
-            "version": "0.1.3",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/openeuropa/composer-artifacts.git",
-                "reference": "11e0ef32c0340493d3196653e684ae38843b0667"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/openeuropa/composer-artifacts/zipball/11e0ef32c0340493d3196653e684ae38843b0667",
-                "reference": "11e0ef32c0340493d3196653e684ae38843b0667",
-                "shasum": ""
-            },
-            "require": {
-                "composer-plugin-api": "^1.1",
-                "php": ">=5.6"
-            },
-            "require-dev": {
-                "composer/composer": "~1.4",
-                "openeuropa/code-review": "~1.0.0-alpha3",
-                "phpunit/phpunit": "~5.5||~6.0",
-                "symfony/yaml": "~3.4"
-            },
-            "type": "composer-plugin",
-            "extra": {
-                "class": "OpenEuropa\\ComposerArtifacts\\Plugin"
-            },
-            "autoload": {
-                "psr-4": {
-                    "OpenEuropa\\ComposerArtifacts\\": "./src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "EUPL-1.2"
-            ],
-            "description": "Composer plugin that allows to download a specified artifact instead of the default package.",
-            "keywords": [
-                "artifacts",
-                "composer-plugin"
-            ],
-            "time": "2018-10-15T12:13:47+00:00"
-        },
-        {
             "name": "openeuropa/task-runner",
             "version": "dev-master",
             "source": {
@@ -20262,6 +20338,7 @@
                     "type": "github"
                 }
             ],
+            "abandoned": true,
             "time": "2020-11-30T07:30:19+00:00"
         },
         {
@@ -21251,6 +21328,7 @@
     "stability-flags": {
         "dkarv/mdl-chip-input": 20,
         "drupal/config_ignore": 20,
+        "drupal/default_content": 15,
         "drupal/dropsolid_purge": 10,
         "drupal/menu_link_destination": 20,
         "drupal/og": 20,
