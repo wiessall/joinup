@@ -14,17 +14,55 @@
 
 declare(strict_types = 1);
 
-use Drupal\redirect\Entity\Redirect;
+use Drupal\interoperable_europe\InteroperableEuropeCollectionInterface;
+use Drupal\node\NodeInterface;
 
 /**
  * Remove old "News" page alias in Interoperable Europe collection.
  */
 function joinup_core_deploy_0107700(array &$sandbox = []): void {
-  $path = 'collection/interoperable-europe/news';
-  $ids = \Drupal::entityQuery('redirect')
-    ->condition('status_code', '301')
-    ->condition('redirect_source__path', $path, '=')
-    ->execute();
-  $entities = Redirect::loadMultiple($ids);
-  \Drupal::entityTypeManager()->getStorage('redirect')->delete($entities);
+  /** @var \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager */
+  $entity_type_manager = \Drupal::entityTypeManager();
+
+  $entities = $entity_type_manager->getStorage('node')
+    ->loadByProperties([
+      'type'  => 'custom_page',
+      'title' => 'News',
+    ]);
+  if ($entities) {
+    /** @var Drupal\node\NodeInterface $node */
+    $node = reset($entities);
+    if ($node instanceof NodeInterface) {
+      \Drupal::service('pathauto.alias_storage_helper')
+        ->deleteEntityPathAll($node);
+      $node->path->first()->get('pathauto')->purge();
+      $node->path = [
+        'alias' => '/collection/interoperable-europe/latest-news',
+        'pathauto' => 0,
+      ];
+      $node->save();
+      \Drupal::entityTypeManager()
+        ->getStorage('node')
+        ->resetCache([$node->id()]);
+    }
+  }
+
+  $news_entities = $entity_type_manager->getStorage('node')
+    ->loadByProperties([
+      'type'  => 'news',
+      'og_audience' => InteroperableEuropeCollectionInterface::COLLECTION_ENTITY_ID,
+    ]);
+
+  /** @var Drupal\node\NodeInterface $news */
+  foreach ($news_entities as $news) {
+    \Drupal::service('pathauto.alias_storage_helper')->deleteEntityPathAll($news);
+    $title = \Drupal::service('pathauto.alias_cleaner')->cleanString($news->getTitle());
+    $news->path->first()->get('pathauto')->purge();
+    $node->path = [
+      'alias' => '/collection/interoperable-europe/latest-news/' . $title,
+      'pathauto' => 1,
+    ];
+    $news->save();
+    \Drupal::entityTypeManager()->getStorage('node')->resetCache([$news->id()]);
+  }
 }
