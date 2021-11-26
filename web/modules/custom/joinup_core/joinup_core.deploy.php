@@ -20,22 +20,14 @@ declare(strict_types = 1);
 function joinup_core_deploy_0107700(array &$sandbox = []): void {
   /** @var \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager */
   $entity_type_manager = \Drupal::entityTypeManager();
-
-  $entities = $entity_type_manager->getStorage('node')
-    ->loadByProperties([
-      'type'  => 'custom_page',
-      'nid' => 704825,
-    ]);
-  if ($entities) {
-    /** @var Drupal\node\NodeInterface $node */
-    $node = reset($entities);
-    \Drupal::service('pathauto.alias_storage_helper')
-      ->deleteEntityPathAll($node);
-    $node->path->first()->get('pathauto')->purge();
-    $node->path = [
-      'alias' => '/collection/interoperable-europe/latest-news',
-      'pathauto' => 0,
-    ];
-    $node->save();
-  }
+  /** @var Drupal\node\NodeInterface $node */
+  $node = $entity_type_manager->getStorage('node')->load(704825);
+  \Drupal::service('pathauto.alias_storage_helper')
+    ->deleteEntityPathAll($node);
+  $node->path->first()->get('pathauto')->purge();
+  $node->path = [
+    'alias' => '/collection/interoperable-europe/latest-news',
+    'pathauto' => 0,
+  ];
+  $node->save();
 }
