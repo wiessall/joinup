@@ -1,20 +1,6 @@
 @api @group-d
 Feature: Collections Overview
 
-  Scenario: Check visibility of "Collections" menu link.
-    Given I am an anonymous user
-    # The homepage no longer has a link to the collections overview. Let's try another page.
-    When I am on the search page
-    Then I should see the link "Collections"
-    When I click "Collections"
-    Then I should see the heading "Collections"
-    And I should see the text "Collections are the main collaborative space where the content items are organised around a common topic or domain and where the users can share their content and engage their community."
-    # Check that all logged in users can see and access the link as well.
-    Given I am logged in as a user with the "authenticated user" role
-    Then I should see the link "Collections"
-    When I click "Collections"
-    Then I should see the heading "Collections"
-
   @terms @uploadFiles:logo.png,banner.jpg
   Scenario: View collection overview as an anonymous user
     Given users:
@@ -114,11 +100,6 @@ Feature: Collections Overview
     Then I should see the "Jira will be down for maintenance" tile
     And I should not see the "Maintenance page" tile
 
-  Scenario: Collection overview active trail should persist on urls with arguments.
-    Given I am an anonymous user
-    And I visit "/collections?a=1"
-    Then "Collections" should be the active item in the "Header menu" menu
-
   Scenario: Users are able to filter collections they have created or that are featured site-wide.
     Given users:
       | Username          |
@@ -140,7 +121,7 @@ Feature: Collections Overview
       | featured | no                 |
 
     When I am logged in as "Yiannis Parios"
-    And I click "Collections"
+    And I visit the collection overview
     Then the "My collections content" inline facet should allow selecting the following values:
       | My collections (3)       |
       | Featured collections (2) |
@@ -167,7 +148,7 @@ Feature: Collections Overview
     And the page should be cacheable
 
     When I am logged in as "Carolina Mercedes"
-    When I click "Collections"
+    And I visit the collection overview
     Then the "My collections content" inline facet should allow selecting the following values:
       | Featured collections (2) |
       | My collections (1)       |
@@ -189,7 +170,7 @@ Feature: Collections Overview
     And the page should be cacheable
 
     When I am an anonymous user
-    And I click "Collections"
+    And I visit the collection overview
     # The anonymous user has no access to the "My collections" facet entry.
     Then the "My collections content" inline facet should allow selecting the following values:
       | Featured collections (2) |
@@ -209,7 +190,7 @@ Feature: Collections Overview
     And the page should be cacheable
 
     When I am logged in as "Carolina Mercedes"
-    And I click "Collections"
+    And I visit the collection overview
     And I click "Featured collections" in the "My collections content" inline facet
     Then I should see the following tiles in the correct order:
       | Enemies of the state |
