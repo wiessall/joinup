@@ -14,7 +14,6 @@
 
 declare(strict_types = 1);
 
-use Drupal\interoperable_europe\InteroperableEuropeCollectionInterface;
 use Drupal\node\NodeInterface;
 
 /**
@@ -45,24 +44,5 @@ function joinup_core_deploy_0107700(array &$sandbox = []): void {
         ->getStorage('node')
         ->resetCache([$node->id()]);
     }
-  }
-
-  $news_entities = $entity_type_manager->getStorage('node')
-    ->loadByProperties([
-      'type'  => 'news',
-      'og_audience' => InteroperableEuropeCollectionInterface::COLLECTION_ENTITY_ID,
-    ]);
-
-  /** @var Drupal\node\NodeInterface $news */
-  foreach ($news_entities as $news) {
-    \Drupal::service('pathauto.alias_storage_helper')->deleteEntityPathAll($news);
-    $title = \Drupal::service('pathauto.alias_cleaner')->cleanString($news->getTitle());
-    $news->path->first()->get('pathauto')->purge();
-    $node->path = [
-      'alias' => '/collection/interoperable-europe/latest-news/' . $title,
-      'pathauto' => 1,
-    ];
-    $news->save();
-    \Drupal::entityTypeManager()->getStorage('node')->resetCache([$news->id()]);
   }
 }
