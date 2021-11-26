@@ -2,8 +2,6 @@ homepage:
   css:
     theme:
       assets/css/homepage.css: {}
-  js:
-    assets/js/sticky-menu.js: { minified: true, attributes: { defer: true } }
 
 bootstrap-base:
   css:
@@ -17,6 +15,8 @@ navbar:
   css:
     theme:
       assets/css/navbar.css: {}
+  js:
+    assets/js/sticky-menu.js: { minified: true, attributes: { defer: true } }
 
 footer:
   css:
