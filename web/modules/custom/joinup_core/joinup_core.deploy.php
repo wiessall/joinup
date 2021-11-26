@@ -14,8 +14,6 @@
 
 declare(strict_types = 1);
 
-use Drupal\node\NodeInterface;
-
 /**
  * Remove old "News" page alias in Interoperable Europe collection.
  */
@@ -26,23 +24,18 @@ function joinup_core_deploy_0107700(array &$sandbox = []): void {
   $entities = $entity_type_manager->getStorage('node')
     ->loadByProperties([
       'type'  => 'custom_page',
-      'title' => 'News',
+      'nid' => 704825,
     ]);
   if ($entities) {
     /** @var Drupal\node\NodeInterface $node */
     $node = reset($entities);
-    if ($node instanceof NodeInterface) {
-      \Drupal::service('pathauto.alias_storage_helper')
-        ->deleteEntityPathAll($node);
-      $node->path->first()->get('pathauto')->purge();
-      $node->path = [
-        'alias' => '/collection/interoperable-europe/latest-news',
-        'pathauto' => 0,
-      ];
-      $node->save();
-      \Drupal::entityTypeManager()
-        ->getStorage('node')
-        ->resetCache([$node->id()]);
-    }
+    \Drupal::service('pathauto.alias_storage_helper')
+      ->deleteEntityPathAll($node);
+    $node->path->first()->get('pathauto')->purge();
+    $node->path = [
+      'alias' => '/collection/interoperable-europe/latest-news',
+      'pathauto' => 0,
+    ];
+    $node->save();
   }
 }
