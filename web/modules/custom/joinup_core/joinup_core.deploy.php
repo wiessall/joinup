@@ -18,10 +18,8 @@ declare(strict_types = 1);
  * Remove old "News" page alias in Interoperable Europe collection.
  */
 function joinup_core_deploy_0107700(array &$sandbox = []): void {
-  /** @var \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager */
-  $entity_type_manager = \Drupal::entityTypeManager();
   /** @var Drupal\node\NodeInterface $node */
-  $node = $entity_type_manager->getStorage('node')->load(704825);
+  $node = \Drupal::entityTypeManager()->getStorage('node')->load(704825);
   \Drupal::service('pathauto.alias_storage_helper')
     ->deleteEntityPathAll($node);
   $node->path->first()->get('pathauto')->purge();
