@@ -10,7 +10,7 @@ default:
       value: true
   title:
     -
-      value: 'Joinup Licencing Assistant'
+      value: 'Joinup Licensing Assistant'
   menu_name:
     -
       value: footer-about-us
