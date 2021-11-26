@@ -350,7 +350,7 @@ function ventuno_preprocess_node__search_result_featured(&$variables) {
   $variables['body'] = $node instanceof DescriptionInterface ? $node->getDescription() : NULL;
   $variables['topics'] = $node->hasField('field_topic') ? $node->getTopics() : NULL;
   $variables['type'] = strtoupper($node->getType());
-  $variables['creation'] = t('@label:@created', [
+  $variables['creation'] = t('@label: @created', [
     '@label' => t('Created'),
     '@created' => \Drupal::service('date.formatter')->format($node->getCreatedTime(), 'date_only'),
   ],
@@ -366,7 +366,7 @@ function ventuno_preprocess_node__search_result(&$variables) {
   $variables['body'] = $node instanceof DescriptionInterface ? $node->getDescription() : NULL;
   $variables['topics'] = $node->hasField('field_topic') ? $node->getTopics() : NULL;
   $variables['type'] = strtoupper($node->getType());
-  $variables['creation'] = t('@label:@created', [
+  $variables['creation'] = t('@label: @created', [
     '@label' => t('Created'),
     '@created' => \Drupal::service('date.formatter')->format($node->getCreatedTime(), 'date_only'),
   ],
