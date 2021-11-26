@@ -16,7 +16,7 @@ default:
       value: footer-about-us
   link:
     -
-      uri: 'mailto:isa2@ec.europa.eu'
+      uri: 'mailto:DIGIT-INTEROPERABILITY@ec.europa.eu'
       title: ''
       options:
         menu_link_destination: 0
