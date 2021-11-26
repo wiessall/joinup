@@ -25,6 +25,7 @@
   - Drupal\joinup\Context\EuplContext
   - Drupal\joinup\Context\HeaderContext
   - Drupal\joinup\Context\HomepageContext
+  - Drupal\joinup\Context\InteroperableEuropeContext
   - Drupal\joinup\Context\Isa2AnalyticsContext
   - Drupal\joinup\Context\JoinupCollectionContext
   - Drupal\joinup\Context\JoinupCommunityContentContext
@@ -47,6 +48,7 @@
   - Drupal\joinup\Context\JoinupSeoContext
   - Drupal\joinup\Context\JoinupSubscriptionContext
   - Drupal\joinup\Context\JoinupUserContext
+  - Drupal\joinup\Context\JoinupWebtoolsContext
   - Drupal\joinup\Context\MinkContext
   - Drupal\joinup\Context\ModerationContext
   - Drupal\joinup\Context\OeNewsroomNewsletterContext
@@ -101,8 +103,8 @@ default:
       region_map:
         Administration toolbar: '#toolbar-administration'
         Comment: '.comments-section'
-        Content listing field filter form: '.field--name-field-content-listing'
         Contact information inline form: '#edit-field-ar-contact-information-wrapper'
+        Content listing field filter form: '.field--name-field-content-listing'
         Content: '.section--content-middle, main .layout-content'
         Cookie consent banner: '#cookie-consent-banner'
         Discover topics block: '.block-views-blockdiscover-topics-block'
@@ -113,14 +115,14 @@ default:
         Hamburger menu: 'nav.joinup-navbar ul.navbar-nav ul.accordion-list'
         Header menu: '#block-joinup-theme-main-menu'
         Header: '.section--featured, .section-header'
+        Highlighted content: '.block-entityqueue--highlighted-content'
         Highlighted event: '.block-entityqueue--highlighted-event'
-        Highlighted solution: '.block-entityqueue--highlighted-solution'
         In the spotlight: '.block-views-blockin-the-spotlight-block'
         Left sidebar: '.section--sidebar-left'
         Main solution vertical tab: '#edit-group-main'
         Management solution vertical tab: '#edit-group-management'
-        Members admin form header: '#edit-header'
         Members admin form actions: '#edit-action'
+        Members admin form header: '#edit-header'
         Modal buttons: '.ui-dialog-buttonpane'
         Modal content: '#drupal-modal'
         Modal title: '.ui-dialog-title'

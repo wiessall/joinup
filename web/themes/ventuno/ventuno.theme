@@ -8,14 +8,20 @@
 declare(strict_types = 1);
 
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Menu\MenuLinkInterface;
 use Drupal\Core\Menu\MenuLinkTreeElement;
 use Drupal\Core\Menu\MenuTreeParameters;
 use Drupal\Core\Url;
 use Drupal\collection\Entity\CollectionInterface;
+use Drupal\interoperable_europe\InteroperableEuropeCollectionInterface;
 use Drupal\joinup_bundle_class\LogoInterface;
 use Drupal\joinup_collection\JoinupCollectionHelper;
+use Drupal\node\Entity\Node;
+use Drupal\node\NodeInterface;
 use Drupal\rdf_entity\Entity\Rdf;
 use Drupal\smart_trim\Truncate\TruncateHTML;
+use Drupal\topic\Entity\TopicInterface;
+use Drupal\topic\Entity\TopicReferencingEntityInterface;
 
 /**
  * Implements hook_theme_suggestions_HOOK_alter().
@@ -24,8 +30,17 @@ use Drupal\smart_trim\Truncate\TruncateHTML;
  * styled in the same way.
  */
 function ventuno_theme_suggestions_menu_alter(array &$suggestions, array $variables) {
-  if (in_array($variables['menu_name'], ['footer', 'support'])) {
+  if (in_array($variables['menu_name'], [
+    'footer',
+    'support',
+    'footer-about-us',
+    'footer-european-commission',
+    'footer-follow-us',
+    'footer-help-and-support',
+    'footer-social-media',
+  ])) {
     $suggestions[] = 'menu__region_footer';
+    $suggestions[] = 'menu__region_footer__' . str_replace('-', '_', $variables['menu_name']);
   }
 }
 
@@ -70,6 +85,32 @@ function ventuno_preprocess_page(&$variables) {
   // Export the user name to display in the header.
   $variables['user_name'] = \Drupal::currentUser()->getDisplayName();
 
+  // Show links to 'Interoperable Europe' and 'Interoperability Solutions'.
+  $landing_page_links = [];
+  foreach ([
+    InteroperableEuropeCollectionInterface::LANDING_PAGE_ENTITY_ID,
+    JoinupCollectionHelper::INTEROPERABILITY_SOLUTIONS_ENTITY_ID,
+  ] as $node_id) {
+    try {
+      $node = Node::load($node_id);
+      if (!$node instanceof NodeInterface) {
+        throw new Exception();
+      }
+      $label = $node->getTitle();
+      $url = $node->toUrl();
+      $landing_page_links[] = [
+        'label' => $label,
+        'link' => $url,
+      ];
+    }
+    catch (Exception $e) {
+      // The custom pages cannot be loaded. This should not crash the page since
+      // these pages might not exist in projects that reuse the Joinup open
+      // source project.
+    }
+  }
+  $variables['landing_page_links'] = $landing_page_links;
+
   // Export the user account menu in the format expected by the header template.
   /** @var \Drupal\Core\Menu\MenuLinkTreeInterface $menu_link_tree */
   $menu_link_tree = \Drupal::service('menu.link_tree');
@@ -101,6 +142,9 @@ function ventuno_preprocess_page(&$variables) {
     'link' => Url::fromRoute('<front>'),
     'hide_on_desktop' => TRUE,
   ];
+
+  // Include the links to the interoperability landing pages.
+  $anonymous_links = array_merge($anonymous_links, $landing_page_links);
 
   // Generate a link to EU Login.
   // Get return URL from current page.
@@ -157,6 +201,48 @@ function ventuno_preprocess_page(&$variables) {
   }
 
   $variables['anonymous_links'] = $anonymous_links;
+
+  // Export the URL of the Interoperable Europe landing page.
+  $landing_page = Node::load(InteroperableEuropeCollectionInterface::LANDING_PAGE_ENTITY_ID);
+  if ($landing_page instanceof NodeInterface) {
+    $variables['interoperable_europe_url'] = $landing_page->toUrl()->toString();
+  }
+}
+
+/**
+ * Implements hook_preprocess_block() for the highlighted content block.
+ *
+ * Add a link to related content in the Highlighted Content block which is shown
+ * on the homepage. This will lead to the search page with the results filtered
+ * by the first referenced topic. If no topics are referenced the link will be
+ * hidden.
+ */
+function ventuno_preprocess_block__entityqueue_block__highlighted_content(&$variables) {
+  /** @var \Drupal\node\NodeInterface $node */
+  $node = $variables['elements']['content']['entities'][0]['#node'] ?? NULL;
+
+  if ($node instanceof TopicReferencingEntityInterface) {
+    $topics = $node->getTopics();
+    $topic = reset($topics);
+
+    if ($topic instanceof TopicInterface) {
+      $options = [
+        'query' => [
+          'f' => [
+            'topic:' . $topic->id(),
+          ],
+        ],
+      ];
+      $variables['related_content'] = [
+        '#type' => 'link',
+        '#title' => t('Related content'),
+        '#url' => Url::fromRoute('view.search.page_1', [], $options),
+        '#attributes' => [
+          'class' => ['more-link'],
+        ],
+      ];
+    }
+  }
 }
 
 /**
@@ -226,6 +312,38 @@ function ventuno_preprocess_rdf_entity__explore_item(&$variables) {
 
   // Trim the label text.
   $variables['label'] = ventuno_smart_trim($entity->label(), 74);
+}
+
+/**
+ * Implements template_preprocess_menu().
+ */
+function ventuno_preprocess_menu(&$variables) {
+  // Set a class on each link in the social media footer menu, so that the link
+  // text can be replaced with an icon.
+  if ($variables['menu_name'] === 'footer-social-media') {
+    _ventuno_preprocess_menu_items($variables['items']);
+  }
+}
+
+/**
+ * Helper function to recursively set a class on each menu item.
+ *
+ * These classes identify the social media links so we can replace them with
+ * icons. Used for the links to Twitter and LinkedIn.
+ */
+function _ventuno_preprocess_menu_items(&$items) {
+  foreach ($items as $item) {
+    /** @var \Drupal\Core\Menu\MenuLinkDefault $menu_link */
+    $menu_link = isset($item['original_link']) ? $item['original_link'] : NULL;
+    if ($menu_link instanceof MenuLinkInterface) {
+      $title = strtolower(trim($menu_link->getTitle()));
+      $machine_name = preg_replace('/[^a-z0-9-]+/', '-', $title);
+      $item['attributes']->setAttribute('class', $machine_name);
+    }
+    if (!empty($item['below'])) {
+      _ventuno_preprocess_menu_items($item['below']);
+    }
+  }
 }
 
 /**

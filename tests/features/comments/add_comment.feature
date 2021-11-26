@@ -37,6 +37,7 @@ Feature: Add comments
       | title   | body                                                | <parent>       | state   | author       |
       | <title> | How could this ever happen? Moral panic on its way! | <parent title> | <state> | Salma Coster |
     Given I am logged in as "Miss tell tales"
+    And I accept essential cookies
     When I go to the content page of the type "<content type>" with the title "<title>"
     # The honeypot field that needs to be empty on submission.
     Then the following fields should be present "user_homepage"
@@ -82,6 +83,7 @@ Feature: Add comments
     And I should see the text "Mr scandal was doing something weird the other day."
 
     When I am logged in as "Salma Coster"
+    And I accept essential cookies
     And I click the comment link from the last email sent to "Salma Coster"
     And I click "Reply"
     And I should see the "Create comment" wysiwyg editor
