@@ -293,7 +293,7 @@ function _joinup_search_apply_global_search_api_solr_settings(SolariumQueryInter
     $sort = sprintf(
       'if(termfreq(%s,%s),%s,%s)',
       $solr_fields[$field],
-      $solarium_query->getHelper()->escapePhrase($plugin_config['target_id']),
+      $solarium_query->getHelper()->escapePhrase((string) $plugin_config['target_id']),
       $delta,
       $sort
     );
