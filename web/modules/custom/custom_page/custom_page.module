@@ -163,6 +163,7 @@ function custom_page_menu_link_content_update(MenuLinkContentInterface $menu_lin
     return;
   }
 
+  // Ignore external links.
   $url_object = $menu_link->getUrlObject();
   if ($url_object->isExternal()) {
     return;
