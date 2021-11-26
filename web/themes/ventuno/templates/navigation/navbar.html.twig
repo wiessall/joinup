@@ -36,6 +36,8 @@
     }]
 #}
 
+{{ attach_library('ventuno/navbar') }}
+
 {% set _brand = brand|default({}) %}
 {% set _collapse_id = collapse_id|default('') %}
 {% set _list_id = list_id|default('') %}
@@ -94,7 +96,8 @@
               {% if not link.hide_on_desktop %}
                 <li class="nav-item d-none d-{{ item.breakpoint }}-inline-block">
                   {% if link.link %}
-                    <a class="nav-link" href="{{ link.link }}" {{ anchor.extra_attributes }}>{{ link.label }}</a>
+                    {% set attributes = create_attribute(link.attributes|default([])) %}
+                    {{ link(link.label, link.link, attributes.addClass('nav-link')) }}
                   {% elseif link.popover %}
                     <button
                       data-bs-toggle="popover"
