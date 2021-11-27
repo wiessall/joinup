@@ -28,8 +28,8 @@ class BootstrapContext extends RawDrupalContext {
     'large' => [1024, 768],
     // 14" laptop.
     'extra large' => [1280, 800],
-    // 19" monitor.
-    'extra extra large' => [1440, 900],
+    // 24" monitor.
+    'extra extra large' => [1920, 1200],
   ];
 
   /**
