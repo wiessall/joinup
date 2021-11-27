@@ -40,6 +40,7 @@ Feature: Tours
   @javascript
   Scenario: A tour can be started from the 'Guided tour' button on the homepage
     Given I am on the homepage
+    And I use a device with an "extra large" display
     And I accept essential cookies
     When I click "Guided tour"
     Then I should see the text "Sign in or out, and manage your user account"
