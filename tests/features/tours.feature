@@ -36,3 +36,10 @@ Feature: Tours
       | /                | should be     |
       | /solutions       | should not be |
       | /keep-up-to-date | should be     |
+
+  @javascript
+  Scenario: A tour can be started from the 'Guided tour' button on the homepage
+    Given I am on the homepage
+    And I accept essential cookies
+    When I click "Guided tour"
+    Then I should see the text "Sign in or out, and manage your user account"
