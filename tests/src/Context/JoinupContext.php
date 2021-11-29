@@ -16,6 +16,7 @@ use Drupal\comment\CommentInterface;
 use Drupal\comment\Entity\Comment;
 use Drupal\file\Entity\File;
 use Drupal\image\Entity\ImageStyle;
+use Drupal\joinup\Traits\BootstrapTrait;
 use Drupal\joinup\Traits\BrowserCapabilityDetectionTrait;
 use Drupal\joinup\Traits\ContextualLinksTrait;
 use Drupal\joinup\Traits\EntityTrait;
@@ -52,6 +53,7 @@ use WebDriver\Exception\StaleElementReference;
  */
 class JoinupContext extends RawDrupalContext {
 
+  use BootstrapTrait;
   use BrowserCapabilityDetectionTrait;
   use ContextualLinksTrait;
   use EntityTrait;
@@ -1549,7 +1551,22 @@ class JoinupContext extends RawDrupalContext {
    * @When I open the account menu
    */
   public function iOpenTheAccountMenu() {
-    $this->openMaterialDesignMenu($this->getSession()->getPage()->find('css', '.login-menu'));
+    // Non-JS browsers are directly interacting with the HTML, so we consider
+    // the account menu to be already open.
+    if (!$this->browserSupportsJavaScript()) {
+      return;
+    }
+
+    // Depending on the screen width, a different accordion item may be visible.
+    /** @var \Behat\Mink\Element\NodeElement[] $elements */
+    $elements = $this->getSession()->getPage()->findAll('css', '#main-navbar .accordion-item');
+    foreach ($elements as $element) {
+      if ($element->isVisible()) {
+        $this->openBootstrapAccordion($element);
+        return;
+      }
+    }
+    throw new \RuntimeException('Account menu is not visible and cannot be opened.');
   }
 
   /**
@@ -1881,6 +1898,28 @@ class JoinupContext extends RawDrupalContext {
     $node = $this->getNodeByTitle($title);
     $uri = $node->toUrl()->toString();
     $this->assertSession()->fieldValueEquals($field, $uri);
+  }
+
+  /**
+   * Waits until the given region becomes visible.
+   *
+   * @param string $region
+   *   The region that should become visible.
+   *
+   * @throws \Exception
+   *   Thrown when the region doesn't become visible within 5 seconds.
+   *
+   * @Then I wait until the :region appears
+   */
+  public function waitForRegionToAppear(string $region): void {
+    $result = $this->getSession()->getPage()->waitFor(5, function () use ($region) {
+      $element = $this->getSession()->getPage()->find('region', $region);
+      return $element && $element->isVisible();
+    });
+
+    if (!$result) {
+      throw new \Exception("The $region region did not appear.");
+    }
   }
 
   /**
