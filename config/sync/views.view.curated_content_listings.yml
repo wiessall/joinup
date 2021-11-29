@@ -23,9 +23,8 @@ display:
         type: views_multiple_permissions
         options:
           permissions:
-            - 'update discover_topics entityqueue'
+            - 'update highlighted_content entityqueue'
             - 'update highlighted_event entityqueue'
-            - 'update highlighted_solution entityqueue'
             - 'update spotlight entityqueue'
           operator: or
       cache:

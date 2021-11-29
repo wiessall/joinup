@@ -28,7 +28,6 @@ Feature:
 
     And I am on the homepage
     And I click "Sign in"
-    When I click "EU Login"
     And I fill in "E-mail address" with "rick@example.com"
     And I fill in "Password" with "secretz"
     And I press "Log in"
@@ -53,7 +52,6 @@ Feature:
     Given I click "Sign out"
     And I go to homepage
     And I click "Sign in"
-    And I click "EU Login"
 
     When I fill in "E-mail address" with "rick@example.com"
     And I fill in "Password" with "secretz"
@@ -84,7 +82,6 @@ Feature:
     And I should see the link "Sign in"
 
     And I click "Sign in"
-    When I click "EU Login"
     And I fill in "E-mail address" with "rick@example.com"
     And I fill in "Password" with "secretz"
 
