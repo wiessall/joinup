@@ -66,7 +66,7 @@ Feature: SEO for document content.
       | og:title       | SEO document                                                                 |
       | og:description | Document test1.zip                                                           |
 
-    When I click "Keep up to date"
+    When I visit the content overview
     Then I should see the "SEO document" tile
     # No metatags are defined for the keep up to date page.
     # No metatags JSON in general means also that the entity metatags of the
