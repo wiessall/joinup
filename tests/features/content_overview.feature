@@ -83,12 +83,6 @@ Feature: Content Overview
     And I should not see the "Night of Shadow" tile
     And the page should be cacheable
 
-  Scenario: Content overview active trail should persist on urls with arguments.
-    Given I am an anonymous user
-    And I visit "/keep-up-to-date?a=1"
-    Then "Keep up to date" should be the active item in the "Header menu" menu
-    And the page should be cacheable
-
   Scenario: Users are able to filter content they have created or that is featured site-wide.
     Given users:
       | Username        | E-mail                       |
@@ -112,7 +106,7 @@ Feature: Content Overview
       | Hideous Dreaded Monkey | Timely Xylophone | validated | michaelanewport | yes      |
 
     When I am logged in as "michaelanewport"
-    And I click "Keep up to date"
+    And I visit the content overview
     Then the "My content" inline facet should allow selecting the following values:
       | Featured content (2) |
       | My content (2)       |
@@ -135,7 +129,7 @@ Feature: Content Overview
     And the page should be cacheable
 
     When I am logged in as "nenaroberts"
-    And I click "Keep up to date"
+    And I visit the content overview
     Then the "My content" inline facet should allow selecting the following values:
       | Featured content (2) |
       | My content (1)       |
@@ -196,7 +190,7 @@ Feature: Content Overview
       | Purple Poseidon | Barbaric Avenue | validated | yesterday |
 
     When I am logged in as claricemitchell
-    And I click "Keep up to date"
+    And I visit the content overview
     Then I should see the following tiles in the correct order:
       | Flying Official Fish |
       | Purple Poseidon      |
@@ -259,7 +253,7 @@ Feature: Content Overview
       | Autumn Boiling       |
 
     When I am logged in as jeffreypayne
-    And I click "Keep up to date"
+    And I visit the content overview
     And I click "Event"
     Then I should see the tiles in the correct order:
       | Autumn Boiling       |

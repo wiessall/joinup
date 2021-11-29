@@ -22,9 +22,7 @@ Feature: Solutions Overview
       | Tortoise   | 2018-10-04 8:34am | validated |
       | Warg       | 2018-10-04 8:39am | validated |
     And I am an anonymous user
-    # The solutions page is still linked in the header of the old theme.
-    And I visit the content overview
-    When I click "Solutions"
+    When I visit the solution overview
     Then I should see the following tiles in the correct order:
       | Muffalo    |
       | Gazelle    |
@@ -77,18 +75,14 @@ Feature: Solutions Overview
 
     # Check that visiting as an anonymous does not create cache for all users.
     Given I am an anonymous user
-    # The solutions page is still linked in the header of the old theme.
-    And I visit the content overview
-    When I click "Solutions"
+    When I visit the solution overview
     Then I should see the heading "Solutions"
     And I should see the text "A solution on Joinup is a framework, tool, or service either hosted directly on Joinup or federated from third-party repositories."
     And the page should be cacheable
 
     # Access the page as a moderator to ensure proper caching.
     Given I am logged in as a "moderator"
-    # The solutions page is still linked in the header of the old theme.
-    And I visit the content overview
-    When I click "Solutions"
+    When I visit the solution overview
     Then I should see the heading "Solutions"
     And I should see the text "A solution on Joinup is a framework, tool, or service either hosted directly on Joinup or federated from third-party repositories."
     And I should see the "Non electronic health" tile
@@ -99,9 +93,7 @@ Feature: Solutions Overview
 
     # Check page for authenticated users.
     Given I am logged in as "Madam Shirley"
-    # The solutions page is still linked in the header of the old theme.
-    And I visit the content overview
-    When I click "Solutions"
+    When I visit the solution overview
     Then I should see the heading "Solutions"
     And I should see the text "A solution on Joinup is a framework, tool, or service either hosted directly on Joinup or federated from third-party repositories."
     Then I should see the "Non electronic health" tile
@@ -112,9 +104,7 @@ Feature: Solutions Overview
 
     # Once more for anonymous.
     Given I am an anonymous user
-    # The solutions page is still linked in the header of the old theme.
-    And I visit the content overview
-    When I click "Solutions"
+    When I visit the solution overview
     Then I should see the heading "Solutions"
     And I should see the text "A solution on Joinup is a framework, tool, or service either hosted directly on Joinup or federated from third-party repositories."
     And I should see the link "Non electronic health"
@@ -152,17 +142,13 @@ Feature: Solutions Overview
     And I visit the "Colonies in Earth" solution
     And I should see the text "Colonies in Earth"
 
-    # The solutions page is still linked in the header of the old theme.
-    When I visit the content overview
-    And I click "Solutions"
+    When I visit the solution overview
     Then I should see the text "Colonies in Earth"
     And the page should be cacheable
 
     # Check the new solution as an anonymous user.
     When I am an anonymous user
-    # The solutions page is still linked in the header of the old theme.
-    And I visit the content overview
-    And I click "Solutions"
+    When I visit the solution overview
     Then I should see the link "Colonies in Earth"
     And the page should be cacheable
 
@@ -194,7 +180,7 @@ Feature: Solutions Overview
       | featured   | no                    |
 
     When I am logged in as "Joann Womack"
-    And I click "Solutions"
+    And I visit the solution overview
     Then the "My solutions content" inline facet should allow selecting the following values:
       | My solutions (3)       |
       | Featured solutions (2) |
@@ -219,7 +205,7 @@ Feature: Solutions Overview
     And the page should be cacheable
 
     When I am logged in as "Ryker Brandon"
-    When I click "Solutions"
+    And I visit the solution overview
     Then the "My solutions content" inline facet should allow selecting the following values:
       | Featured solutions (2) |
       | My solutions (1)       |
@@ -240,7 +226,7 @@ Feature: Solutions Overview
     And the page should be cacheable
 
     When I am an anonymous user
-    And I click "Solutions"
+    And I visit the solution overview
     # The anonymous user has no access to the "My solutions" facet entry.
     Then the "My solutions content" inline facet should allow selecting the following values:
       | Featured solutions (2) |
@@ -258,14 +244,9 @@ Feature: Solutions Overview
     And the page should be cacheable
 
     When I am logged in as "Ryker Brandon"
-    And I click "Solutions"
+    And I visit the solution overview
     And I click "Featured solutions" in the "My solutions content" inline facet
     Then I should see the following tiles in the correct order:
       | Subdivision Morbid           |
       | Hungry Disappointed Tungsten |
     And the page should be cacheable
-
-  Scenario: Solution overview active trail should persist on urls with arguments.
-    Given I am an anonymous user
-    And I visit "/solutions?a=1"
-    Then "Solutions" should be the active item in the "Header menu" menu

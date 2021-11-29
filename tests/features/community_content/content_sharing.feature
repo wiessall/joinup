@@ -37,6 +37,7 @@ Feature: Sharing content between collections
     # Anonymous users can share only in social networks.
     When I am an anonymous user
     And I go to the content page of the type "<content type>" with the title "Interesting content"
+    And I accept essential cookies
     And I click "Share"
     Then a modal should open
     And the following fields should not be present "Classic Rock, Hip-Hop, Power ballad, Drum'n'Bass"
@@ -44,6 +45,7 @@ Feature: Sharing content between collections
     # This "authenticated user" is not member of any collections or solution, so they can
     # share only in social networks.
     When I am logged in as an "authenticated user"
+    And I accept essential cookies
     And I go to the content page of the type "<content type>" with the title "Interesting content"
     And I click "Share"
     Then a modal should open
@@ -52,6 +54,7 @@ Feature: Sharing content between collections
     # A member of a single collection or solution which is the one where the content was
     # created can share on social networks only.
     When I am logged in as "Marjolein Rye"
+    And I accept essential cookies
     And I go to the content page of the type "<content type>" with the title "Interesting content"
     And I click "Share"
     Then a modal should open
@@ -59,6 +62,7 @@ Feature: Sharing content between collections
 
     # A group member should see the link.
     When I am logged in as "Sara Barber"
+    And I accept essential cookies
     And I go to the "Rockabilly is still rocking" discussion
     Then I should see the heading "Rockabilly is still rocking"
     When I click "Share"
@@ -101,16 +105,19 @@ Feature: Sharing content between collections
     And I should not see the contextual link "Unshare" in the "Interesting content" tile
 
     When I am logged in as an "authenticated user"
+    And I accept essential cookies
     And I go to the homepage of the "Classic Rock" <group type>
     Then I should see the "Interesting content" tile
     And I should not see the contextual link "Unshare" in the "Interesting content" tile
 
     When I am logged in as a facilitator of the "Power ballad" <group type>
+    And I accept essential cookies
     And I go to the homepage of the "Classic Rock" <group type>
     Then I should see the "Interesting content" tile
     And I should not see the contextual link "Unshare" in the "Interesting content" tile
 
     When I am logged in as a facilitator of the "Classic Rock" <group type>
+    And I accept essential cookies
     And I go to the homepage of the "Classic Rock" <group type>
     Then I should see the "Interesting content" tile
     And I should see the contextual link "Unshare" in the "Interesting content" tile
@@ -184,12 +191,12 @@ Feature: Sharing content between collections
       | Essos city   | Arya Stark | facilitator |
 
     When I am logged in as "Arya Stark"
-    And I click "Keep up to date"
+    And I visit the content overview
     Then I should see the contextual link "Share" in the "Iron throne" tile
     And I should not see the contextual link "Unshare" in the "Iron throne" tile
 
     When I am logged in as "John Snow"
-    And I click "Keep up to date"
+    And I visit the content overview
     Then I should see the contextual link "Share" in the "Iron throne" tile
     But I should not see the contextual link "Unshare" in the "Iron throne" tile
 
@@ -207,7 +214,7 @@ Feature: Sharing content between collections
     But I should not see the contextual link "Unshare" in the "Iron throne" tile
 
     When I am logged in as "Arya Stark"
-    And I click "Keep up to date"
+    And I visit the content overview
     # Link 'Unshare' vary by user og role since the 2 users up to now have the same permissions outside og.
     Then I should see the contextual links "Share, Unshare" in the "Iron throne" tile
     When I click the contextual link "Unshare" in the "Iron throne" tile
@@ -215,7 +222,7 @@ Feature: Sharing content between collections
     And the following fields should be present "Essos city"
 
     When I am logged in as "Jamie Lanister"
-    And I click "Keep up to date"
+    And I visit the content overview
     Then I should see the contextual link "Share" in the "Iron throne" tile
     # Moderators should be able to unshare from every group the content is shared on.
     And I should see the contextual link "Unshare" in the "Iron throne" tile
@@ -313,6 +320,7 @@ Feature: Sharing content between collections
       | Gossip     | Sanjica Sauvage |
     And I am an anonymous user
     When I go to the content page of the type "<content type>" with the title "An unshareable secret"
+    And I accept essential cookies
     And I click "Share"
     Then a modal should open
     And I should see the following lines of text:
@@ -322,6 +330,7 @@ Feature: Sharing content between collections
 
     # Check that the collection the content is shared on is immediately shown in the "Shared on" tiles.
     Given I am logged in as "Sanjica Sauvage"
+    And I accept essential cookies
     When I go to the content page of the type "<content type>" with the title "An unshareable secret"
     And I click "Share"
     Then a modal should open
