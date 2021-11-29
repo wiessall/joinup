@@ -9,6 +9,7 @@ Feature: Header
     Given I am not logged in
     And I am on <page>
     Then I should see the Joinup logo in the navigation bar
+    And I should see the hamburger icon in the main navigation
 
     # The links "Home" and "About us" are only shown in the hamburger menu since
     # people using mobile devices are always on the move and need to navigate as
@@ -37,9 +38,12 @@ Feature: Header
 
     Examples:
       | page         |
+      # A page with the new Ventuno theme.
       | the homepage |
+      # A page with the old Joinup Theme theme.
+      | the search   |
 
-  @joinup @javascript @wip
+  @joinup @javascript
   Scenario Outline: The 'Get started' button opens a popup with information about EU Login
     Given I am not logged in
     And I am on <page>
@@ -63,4 +67,7 @@ Feature: Header
 
     Examples:
       | page         |
+      # A page with the new Ventuno theme.
       | the homepage |
+      # A page with the old Joinup Theme theme.
+      | the contact form   |
