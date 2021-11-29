@@ -106,7 +106,6 @@
         "jacklmoore/autosize": "dev-master",
         "masterminds/html5": "^2.7",
         "ml/json-ld": "^1.2",
-        "neilime/php-css-lint": "1.1.0 as 2.0.0",
         "openeuropa/composer-artifacts": "^0.1.3",
         "openeuropa/oe_bootstrap_theme": "0.71.0",
         "openeuropa/oe_dashboard_agent": "^0.3.0",
@@ -301,7 +300,8 @@
                 "Missing config schema for EntityQueueDragtableWidget @see Missing config schema for EntityQueueDragtableWidget": "https://git.drupalcode.org/project/entityqueue/-/merge_requests/3.diff"
             },
             "drupal/entity_legal": {
-                "Don't store sensitive data in the database": "resources/patch/175945-8.x-9.x-2.patch"
+                "Don't store sensitive data in the database": "resources/patch/175945-8.x-9.x-2.patch",
+                "Dynamic page cache prevents redirection @see https://www.drupal.org/project/entity_legal/issues/3251128": "https://www.drupal.org/files/issues/2021-11-24/3251128-2.patch"
             },
             "drupal/facets": {
                 "Facet Summary for Facet Items with a set dependency. @see https://www.drupal.org/node/2873480": "resources/patch/facet_summary_for_facet-2873480-18.patch",

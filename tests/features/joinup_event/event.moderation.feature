@@ -38,6 +38,7 @@ Feature: Event moderation
     # users to create content, authenticated users that are not members can
     # create events.
     When I am logged in as "Salvador Thomas"
+    And I accept essential cookies
     And I go to the homepage of the "Wet Lords" collection
     And I click "Add event" in the plus button menu
     # Post moderated collections allow publishing content directly.
@@ -57,6 +58,7 @@ Feature: Event moderation
     # The parent group is now pre-moderated: authenticated non-member users
     # should still be able to create events but not to publish them.
     When I am logged in as "Salvador Thomas"
+    And I accept essential cookies
     And I go to the homepage of the "Wet Lords" collection
     And I click "Add event" in the plus button menu
     Then I should not see the button "Publish"
