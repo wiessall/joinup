@@ -422,16 +422,13 @@ function joinup_theme_preprocess_page(&$variables) {
   $variables['#cache']['tags'][] = 'joinup_collection:exists';
 
   // Add a flag to indicate whether a tour is available for this page.
-  $route_parameters = $route_match->getRawParameters()->all();
-  $tour_storage = \Drupal::entityTypeManager()->getStorage('tour');
-  /** @var \Drupal\tour\TourInterface[] $tours */
-  $tours = $tour_storage->loadByProperties(['status' => TRUE]);
-  foreach ($tours as $tour) {
-    if ($tour->hasMatchingRoute($route_name, $route_parameters)) {
-      $variables['tour_available'] = TRUE;
-      break;
-    }
-  }
+  /** @var \Drupal\joinup_tour\TourHelperInterface $tour_helper */
+  $tour_helper = \Drupal::service('joinup_tour.tour_helper');
+  $variables['tour_available'] = $tour_helper->currentPageHasTour();
+
+  // Make the Bootstrap icons available for theming. They are used in Bootstrap
+  // components such as the hamburger menu.
+  $variables['bcl_icon_path'] = base_path() . drupal_get_path('theme', 'oe_bootstrap_theme') . '/assets/icons/bootstrap-icons.svg';
 
   // Generate a link to the contact form with the current path (including query
   // arguments) as the 'destination' query argument so that the user will return
@@ -455,6 +452,7 @@ function joinup_theme_preprocess_page(&$variables) {
   else {
     $query_arguments = $request->query->all();
     $route_options = ['query' => $query_arguments];
+    $route_parameters = $route_match->getRawParameters()->all();
     $destination = (new Url($route_name, $route_parameters, $route_options))->toString();
   }
 
