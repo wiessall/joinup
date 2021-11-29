@@ -297,8 +297,8 @@ class JoinupSearchContext extends RawDrupalContext {
    */
   public function removeOptionsFromSlimSelect(string $option, string $label): void {
     $options = $this->explodeCommaSeparatedStepArgument($option);
+    $slim_select = $this->findSelect($label);
     foreach ($options as $option) {
-      $slim_select = $this->findSelect($label);
       $slim_select->click();
 
       $element = $slim_select->find('css', ".ss-multi-selected .ss-value:contains('{$option}')");
@@ -313,7 +313,7 @@ class JoinupSearchContext extends RawDrupalContext {
   }
 
   /**
-   * Asserts a selected option in the .
+   * Asserts a selected option in the given facet.
    *
    * @param string $option
    *   Text value of the option to find.
