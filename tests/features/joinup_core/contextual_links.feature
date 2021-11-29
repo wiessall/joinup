@@ -53,9 +53,10 @@ Feature:
       | owner               | Some owner       |
 
     When I am logged in as a user with the "moderator" role
+    And I accept essential cookies
     And I go to the "Share solution" solution
     And I click "About"
     Then I should not see the contextual link "Share"
 
-    When I click "Collections"
+    And I visit the collection overview
     Then I should not see the contextual link "Share"
