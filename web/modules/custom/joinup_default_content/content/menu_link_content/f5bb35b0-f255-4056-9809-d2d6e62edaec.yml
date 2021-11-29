@@ -1,0 +1,40 @@
+_meta:
+  version: '1.0'
+  entity_type: menu_link_content
+  uuid: f5bb35b0-f255-4056-9809-d2d6e62edaec
+  bundle: menu_link_content
+  default_langcode: en
+default:
+  enabled:
+    -
+      value: true
+  title:
+    -
+      value: 'Newsletter archive'
+  menu_name:
+    -
+      value: footer-follow-us
+  link:
+    -
+      uri: 'https://ec.europa.eu/newsroom/joinup/newsletter-archives/view/service/877'
+      title: ''
+      options:
+        menu_link_destination: 0
+  external:
+    -
+      value: false
+  rediscover:
+    -
+      value: false
+  weight:
+    -
+      value: -48
+  expanded:
+    -
+      value: false
+  revision_translation_affected:
+    -
+      value: true
+  live_link:
+    -
+      value: false
