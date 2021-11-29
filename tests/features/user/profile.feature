@@ -97,18 +97,6 @@ Feature: User profile
       | subject   | The Joinup Support Team updated your account for you at Joinup                                            |
       | body      | A moderator has edited your user profile on Joinup. Please check your profile to verify the changes done. |
 
-  # Regression test: the wrong profile picture was showing due to a caching problem.
-  Scenario: The user's profile picture should be shown in the page header.
-    Given users:
-      | Username          | E-mail                | Photo        |
-      | Leonardo Da Vinci | leonardo@example.com  | leonardo.jpg |
-      | Ada Lovelace      | moderator@example.com | ada.png      |
-
-    When I am logged in as "Leonardo Da Vinci"
-    Then my user profile picture should be shown in the page header
-    When I am logged in as "Ada Lovelace"
-    Then my user profile picture should be shown in the page header
-
   Scenario: The user public profile page shows the content he's author of or is member of.
     Given users:
       | Username          | E-mail                        | First name | Family name |

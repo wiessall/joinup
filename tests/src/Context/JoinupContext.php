@@ -16,6 +16,7 @@ use Drupal\comment\CommentInterface;
 use Drupal\comment\Entity\Comment;
 use Drupal\file\Entity\File;
 use Drupal\image\Entity\ImageStyle;
+use Drupal\joinup\Traits\BootstrapTrait;
 use Drupal\joinup\Traits\BrowserCapabilityDetectionTrait;
 use Drupal\joinup\Traits\ContextualLinksTrait;
 use Drupal\joinup\Traits\EntityTrait;
@@ -32,6 +33,7 @@ use Drupal\joinup\Traits\UserTrait;
 use Drupal\joinup\Traits\UtilityTrait;
 use Drupal\joinup\Traits\WorkflowTrait;
 use Drupal\joinup_community_content\CommunityContentHelper;
+use Drupal\joinup_group\Entity\GroupContentInterface;
 use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_group\Entity\PinnableGroupContentInterface;
 use Drupal\meta_entity\Entity\MetaEntity;
@@ -51,6 +53,7 @@ use WebDriver\Exception\StaleElementReference;
  */
 class JoinupContext extends RawDrupalContext {
 
+  use BootstrapTrait;
   use BrowserCapabilityDetectionTrait;
   use ContextualLinksTrait;
   use EntityTrait;
@@ -318,7 +321,9 @@ class JoinupContext extends RawDrupalContext {
    */
   public function checkSelectContainsOptions($select, $options) {
     $field = $this->findSelect($select);
-    $available_options = $this->getSelectOptions($field);
+    $available_options = array_map(function (array $option): string {
+      return $option['text'];
+    }, $this->getSelectOptions($field));
     $options = $this->explodeCommaSeparatedStepArgument($options);
 
     if (array_intersect($options, $available_options) !== $options) {
@@ -358,7 +363,9 @@ class JoinupContext extends RawDrupalContext {
    */
   public function checkSelectDoesNotContainOptions($select, $options) {
     $field = $this->findSelect($select);
-    $available_options = $this->getSelectOptions($field);
+    $available_options = array_map(function (array $option): string {
+      return $option['text'];
+    }, $this->getSelectOptions($field));
     $options = $this->explodeCommaSeparatedStepArgument($options);
 
     $intersection = array_intersect($available_options, $options);
@@ -399,7 +406,9 @@ class JoinupContext extends RawDrupalContext {
    */
   public function assertSelectOptions($select, $options) {
     $field = $this->findSelect($select);
-    $available_options = $this->getSelectOptions($field);
+    $available_options = array_map(function (array $option): string {
+      return $option['text'];
+    }, $this->getSelectOptions($field));
     sort($available_options);
 
     $options = $this->explodeCommaSeparatedStepArgument($options);
@@ -422,7 +431,9 @@ class JoinupContext extends RawDrupalContext {
    */
   public function assertSelectOptionNotAvailable($select, $options) {
     $field = $this->findSelect($select);
-    $available_options = $this->getSelectOptions($field);
+    $available_options = array_map(function (array $option): string {
+      return $option['text'];
+    }, $this->getSelectOptions($field));
     $options = $this->explodeCommaSeparatedStepArgument($options);
 
     Assert::assertEmpty(array_intersect($available_options, $options), "The '{$select}' select options include at least one of the given values.");
@@ -469,6 +480,15 @@ class JoinupContext extends RawDrupalContext {
       $update->addCommit(TRUE, TRUE);
       $connector->update($update);
     }
+  }
+
+  /**
+   * Navigates to the content overview, a.k.a. the "Keep up to date" page.
+   *
+   * @When I visit the content overview( page)
+   */
+  public function visitContentOverviewPage(): void {
+    $this->visitPath('/keep-up-to-date');
   }
 
   /**
@@ -1146,7 +1166,7 @@ class JoinupContext extends RawDrupalContext {
    * @Then I (should )see the :heading tile
    */
   public function assertTilePresent($heading) {
-    $results = $this->getSession()->getPage()->findAll('css', '.listing__item--tile .listing__title');
+    $results = $this->getSession()->getPage()->findAll('css', '.listing__item--tile .listing__title, article.tile h2');
     foreach ($results as $result) {
       /** @var \Behat\Mink\Element\Element $result */
       if ($result->getText() === $heading) {
@@ -1169,7 +1189,7 @@ class JoinupContext extends RawDrupalContext {
    * @Then I (should )see :number tile(s)
    */
   public function assertTileCount($number) {
-    $results = $this->getSession()->getPage()->findAll('css', '.listing__item--tile .listing__title');
+    $results = $this->getSession()->getPage()->findAll('css', '.listing__item--tile .listing__title, article.tile h2');
     $nr_found = count($results);
     if ($nr_found != $number) {
       throw new \Exception("Found $nr_found tiles, expected $number");
@@ -1190,7 +1210,7 @@ class JoinupContext extends RawDrupalContext {
   public function assertTileNotPresent($heading) {
     // We target the heading with "h2" instead of ".listing__title" because both
     // unstyled and styled tiles use h2 as element for their titles.
-    $results = $this->getSession()->getPage()->findAll('css', '.listing__item--tile h2');
+    $results = $this->getSession()->getPage()->findAll('css', '.listing__item--tile h2, article.tile h2');
     foreach ($results as $result) {
       /** @var \Behat\Mink\Element\Element $result */
       if ($result->getText() === $heading) {
@@ -1548,7 +1568,22 @@ class JoinupContext extends RawDrupalContext {
    * @When I open the account menu
    */
   public function iOpenTheAccountMenu() {
-    $this->openMaterialDesignMenu($this->getSession()->getPage()->find('css', '.login-menu'));
+    // Non-JS browsers are directly interacting with the HTML, so we consider
+    // the account menu to be already open.
+    if (!$this->browserSupportsJavaScript()) {
+      return;
+    }
+
+    // Depending on the screen width, a different accordion item may be visible.
+    /** @var \Behat\Mink\Element\NodeElement[] $elements */
+    $elements = $this->getSession()->getPage()->findAll('css', '#main-navbar .accordion-item');
+    foreach ($elements as $element) {
+      if ($element->isVisible()) {
+        $this->openBootstrapAccordion($element);
+        return;
+      }
+    }
+    throw new \RuntimeException('Account menu is not visible and cannot be opened.');
   }
 
   /**
@@ -1827,7 +1862,17 @@ class JoinupContext extends RawDrupalContext {
       // Crete a fake node object to be able to reuse hooks that help with
       // preparing the field values.
       $fake_node = (object) $data;
+
+      // Retain data which is relied on by the node creation hooks.
       $fake_node->type = $bundle;
+      if ($node instanceof GroupContentInterface) {
+        $group = $node->getGroup();
+        $group_bundle = $group->bundle();
+        if (!isset($fake_node->$group_bundle)) {
+          $fake_node->$group_bundle = $group->label();
+        }
+      }
+
       $this->dispatchHooks('BeforeNodeCreateScope', $fake_node);
       $this->parseEntityFields('node', $fake_node);
       // Remove the type property as we cannot change that.
@@ -1870,6 +1915,28 @@ class JoinupContext extends RawDrupalContext {
     $node = $this->getNodeByTitle($title);
     $uri = $node->toUrl()->toString();
     $this->assertSession()->fieldValueEquals($field, $uri);
+  }
+
+  /**
+   * Waits until the given region becomes visible.
+   *
+   * @param string $region
+   *   The region that should become visible.
+   *
+   * @throws \Exception
+   *   Thrown when the region doesn't become visible within 5 seconds.
+   *
+   * @Then I wait until the :region appears
+   */
+  public function waitForRegionToAppear(string $region): void {
+    $result = $this->getSession()->getPage()->waitFor(5, function () use ($region) {
+      $element = $this->getSession()->getPage()->find('region', $region);
+      return $element && $element->isVisible();
+    });
+
+    if (!$result) {
+      throw new \Exception("The $region region did not appear.");
+    }
   }
 
   /**
@@ -1929,62 +1996,6 @@ class JoinupContext extends RawDrupalContext {
 
     if (!$result) {
       throw new \Exception('The modal did not close.');
-    }
-  }
-
-  /**
-   * Checks the numbers in the 'statistics block' on the homepage.
-   *
-   * Table format:
-   * | Solutions | Collections | Content |
-   * | 89        | 41          | 25      |
-   *
-   * @param \Behat\Gherkin\Node\TableNode $statistics_table
-   *   The table containing the expected values for the statistics.
-   *
-   * @throws \UnexpectedValueException
-   *   Thrown when at least one of the expected values is not found.
-   *
-   * @Then I should see the following statistics:
-   */
-  public function assertHomepageStatistics(TableNode $statistics_table) {
-    foreach ($statistics_table->getRowsHash() as $type => $expected_value) {
-      $wrapper_selector = mb_strtolower("stats__wrapper__$type");
-      $xpath = '//div[contains(concat(" ", normalize-space(@class), " "), " ' . $wrapper_selector . ' ")]//div[contains(concat(" ", normalize-space(@class), " "), " stats__text--upper ")]';
-      $element = $this->getSession()->getPage()->find('xpath', $xpath);
-      Assert::assertEquals($expected_value, $element->getText());
-    }
-  }
-
-  /**
-   * Asserts that the small header is present in the page.
-   *
-   * @throws \Exception
-   *   Thrown when the small header is not found.
-   *
-   * @Then I should see the small header
-   */
-  public function assertSmallHeaderIsPresent() {
-    $element = $this->getSession()->getPage()->find('css', '.section--header');
-
-    if (!$element) {
-      throw new \Exception('The small header was not found in the page.');
-    }
-  }
-
-  /**
-   * Asserts that the small header is not present in the page.
-   *
-   * @throws \Exception
-   *   Thrown when the small header is found.
-   *
-   * @Then I should not see the small header
-   */
-  public function assertSmallHeaderIsNotPresent() {
-    $element = $this->getSession()->getPage()->find('css', '.section--header');
-
-    if ($element) {
-      throw new \Exception('The small header was fount in the page, but it should not.');
     }
   }
 

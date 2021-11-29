@@ -29,6 +29,7 @@ Feature: Subscribing to a solution
       | Legal notice | 1.1   | yes       | I have read and accept the <a href="[entity_legal_document:url]">[entity_legal_document:label]</a> | The information on this site is subject to a disclaimer... |
 
     When I am not logged in
+    And I accept essential cookies
     And I go to the "Some solution to subscribe" solution
     # This is a link which is styled as a button.
     Then I should see the link "Subscribe to this solution"
@@ -60,6 +61,7 @@ Feature: Subscribing to a solution
     # as an anonymous user, we should be shown an appropriate message.
     When I am not logged in
     And I go to the "Some solution to subscribe" solution
+    And I accept essential cookies
     And I click "Subscribe to this solution"
     And I press "Sign in / Register" in the "Modal buttons" region
     Then I should see the heading "Sign in to continue"
@@ -85,6 +87,7 @@ Feature: Subscribing to a solution
 
     When I am not logged in
     And I go to the "Some solution to subscribe" solution
+    And I accept essential cookies
     # This is a link which is styled as a button.
     Then I should see the link "Subscribe to this solution"
     And the "Some solution to subscribe" solution should have 0 active members
@@ -140,6 +143,7 @@ Feature: Subscribing to a solution
   @javascript
   Scenario: Subscribe to a solution as a normal user
     When I am logged in as "Cornilius Darcias"
+    And I accept essential cookies
     And I go to the "Some solution to subscribe" solution
     Then I should see the button "Subscribe to this solution"
 

@@ -32,7 +32,8 @@ Feature: Following discussions
     Then I should not see the link "Follow"
     And I should not see the link "Unfollow"
 
-    When I am logged in as an "authenticated user"
+    Given I am logged in as an "authenticated user"
+    And I accept essential cookies
     # The subscribe links should never be shown for a discussion which is not
     # published.
     When I go to the "Rare Whey" discussion
