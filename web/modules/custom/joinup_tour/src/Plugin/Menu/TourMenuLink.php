@@ -5,10 +5,11 @@ declare(strict_types = 1);
 namespace Drupal\joinup_tour\Plugin\Menu;
 
 use Drupal\Core\Cache\Cache;
-use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Menu\MenuLinkDefault;
 use Drupal\Core\Menu\StaticMenuLinkOverridesInterface;
 use Drupal\Core\Routing\ResettableStackedRouteMatchInterface;
+use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\joinup_tour\TourHelperInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -17,18 +18,18 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class TourMenuLink extends MenuLinkDefault {
 
   /**
-   * The entity type manager service.
+   * The tour helper service.
    *
-   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
+   * @var \Drupal\joinup_tour\TourHelperInterface
    */
-  protected $entityTypeManager;
+  protected TourHelperInterface $tourHelper;
 
   /**
    * The current route match.
    *
    * @var \Drupal\Core\Routing\ResettableStackedRouteMatchInterface
    */
-  protected $currentRouteMatch;
+  protected RouteMatchInterface $currentRouteMatch;
 
   /**
    * Creates a new menu link instance.
@@ -41,14 +42,14 @@ class TourMenuLink extends MenuLinkDefault {
    *   The plugin implementation definition.
    * @param \Drupal\Core\Menu\StaticMenuLinkOverridesInterface $static_override
    *   The static override storage.
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
-   *   The entity type manager service.
+   * @param \Drupal\joinup_tour\TourHelperInterface $tour_helper
+   *   The tour helper service.
    * @param \Drupal\Core\Routing\ResettableStackedRouteMatchInterface $current_route_match
    *   The current route match.
    */
-  public function __construct(array $configuration, string $plugin_id, $plugin_definition, StaticMenuLinkOverridesInterface $static_override, EntityTypeManagerInterface $entity_type_manager, ResettableStackedRouteMatchInterface $current_route_match) {
+  public function __construct(array $configuration, string $plugin_id, $plugin_definition, StaticMenuLinkOverridesInterface $static_override, TourHelperInterface $tour_helper, ResettableStackedRouteMatchInterface $current_route_match) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $static_override);
-    $this->entityTypeManager = $entity_type_manager;
+    $this->tourHelper = $tour_helper;
     $this->currentRouteMatch = $current_route_match;
   }
 
@@ -61,7 +62,7 @@ class TourMenuLink extends MenuLinkDefault {
       $plugin_id,
       $plugin_definition,
       $container->get('menu_link.static.overrides'),
-      $container->get('entity_type.manager'),
+      $container->get('joinup_tour.tour_helper'),
       $container->get('current_route_match')
     );
   }
@@ -81,21 +82,7 @@ class TourMenuLink extends MenuLinkDefault {
       return FALSE;
     }
 
-    $route_name = $this->currentRouteMatch->getRouteName();
-    $route_parameters = $this->currentRouteMatch->getRawParameters()->all();
-
-    $tour_storage = $this->entityTypeManager->getStorage('tour');
-    /** @var \Drupal\tour\TourInterface[] $tours */
-    $tours = $tour_storage->loadByProperties(['status' => TRUE]);
-    foreach ($tours as $tour) {
-      // This tour is configured to show up on this route.
-      if ($tour->hasMatchingRoute($route_name, $route_parameters)) {
-        return TRUE;
-      }
-    }
-
-    // No tour has been configured for this route.
-    return FALSE;
+    return $this->tourHelper->currentPageHasTour();
   }
 
   /**
