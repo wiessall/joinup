@@ -70,4 +70,4 @@ Feature: Header
       # A page with the new Ventuno theme.
       | the homepage |
       # A page with the old Joinup Theme theme.
-      | the search   |
+      | the contact form   |
