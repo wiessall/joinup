@@ -89,6 +89,7 @@ Feature: Subscribing to collection newsletters
   @javascript @newsroom_newsletter
   Scenario: Subscribe to a newsletter
     Given I am logged in as "Magdalini Kokinos"
+    And I accept essential cookies
     When I go to the "Volkor X" collection
     And I open the header local tasks menu
     And I click "Edit" in the "Entity actions" region

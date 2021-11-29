@@ -73,3 +73,7 @@ cookie-extend:
     js/cookie-extend.js: {}
   dependencies:
     - core/jquery
+
+bootstrap-jquery-ui-compatibility:
+  js:
+    js/bootstrap-jquery-ui-compatibility.js: {}

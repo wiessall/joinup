@@ -4,15 +4,18 @@ declare(strict_types = 1);
 
 namespace Drupal\joinup\Context;
 
+use Behat\Gherkin\Node\TableNode;
 use Behat\Mink\Element\NodeElement;
 use Behat\Mink\Exception\ElementNotFoundException;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\DrupalExtension\Hook\Scope\AfterNodeCreateScope;
 use Drupal\DrupalExtension\Hook\Scope\BeforeNodeCreateScope;
+use Drupal\joinup\Traits\EntityTrait;
 use Drupal\joinup\Traits\NodeTrait;
 use Drupal\joinup\Traits\TestingEntitiesTrait;
 use Drupal\joinup\Traits\TraversingTrait;
 use Drupal\joinup_community_content\CommunityContentHelper;
+use Drupal\joinup_community_content\Entity\CommunityContentInterface;
 use Drupal\joinup_group\Entity\PinnableGroupContentInterface;
 use Drupal\joinup_group\Exception\MissingGroupException;
 use Drupal\joinup_publication_date\Entity\EntityPublicationTimeInterface;
@@ -26,6 +29,7 @@ use PHPUnit\Framework\ExpectationFailedException;
  */
 class JoinupCommunityContentContext extends RawDrupalContext {
 
+  use EntityTrait;
   use NodeTrait;
   use TestingEntitiesTrait;
   use TraversingTrait;
@@ -447,6 +451,130 @@ class JoinupCommunityContentContext extends RawDrupalContext {
     }
 
     $node->{$alias} = $term->label();
+  }
+
+  /**
+   * Checks the contents of the "In the spotlight" block.
+   *
+   * This is showing a number of community content articles on the homepage.
+   *
+   * This also checks if the content is in the correct order and if the total
+   * number of content items is correct.
+   *
+   * @codingStandardsIgnoreStart
+   * Table format:
+   *  | number | logo     | topics                           | title         | body      |
+   *  | 1      | alan.jpg | Finance in EU, Supplier exchange | Awesome title | Some text |
+   * @codingStandardsIgnoreEnd
+   *
+   * @param \Behat\Gherkin\Node\TableNode $table
+   *   A table containing the expected content of the in the spotlight section.
+   *
+   * @Then the in the spotlight section should contain the following content:
+   */
+  public function assertInTheSpotlight(TableNode $table) {
+    $columns = $table->getColumnsHash();
+    $articles = $this->getSession()->getPage()->findAll('css', '.view-in-the-spotlight .views-row');
+    Assert::assertEquals(count($columns), count($articles), sprintf('Expected %d items in the "In the spotlight" section but found %d items.', count($columns), count($articles)));
+
+    foreach ($columns as $i => $expected_data) {
+      $actual_data = array_shift($articles);
+
+      // Check title text.
+      $actual_title = $actual_data->find('css', 'h2')->getText();
+      Assert::assertEquals($expected_data['title'], $actual_title, sprintf('Expected title "%s" for article %d in the "In the spotlight" section but instead found "%s".', $expected_data['title'], $i + 1, $actual_title));
+
+      // Check that title links to the canonical page of the article.
+      $node = self::getNodeByTitle($actual_title);
+      $xpath = '//h2/a[@href = "' . $this->getEntityUri($node) . '"]';
+      Assert::assertNotEmpty($actual_data->find('xpath', $xpath), sprintf('Article "%s" does not link to the canonical page.', $actual_title));
+
+      // Check that the correct number of topics are present.
+      $expected_topic_titles = array_map('trim', explode(',', $expected_data['topics']));
+      $topic_elements = $actual_data->findAll('css', '.field--name-field-topic .field__item');
+      Assert::assertEquals(count($expected_topic_titles), count($topic_elements), sprintf('Expected %d topics for the "%s" article in the "In the spotlight" section but found %d topics.', count($expected_topic_titles), $expected_data['title'], count($topic_elements)));
+
+      // Check the body text.
+      $actual_body = $actual_data->find('css', '.field--name-body')->getText();
+      Assert::assertEquals($expected_data['body'], $actual_body, sprintf('The body text for the article "%s" in the "In the spotlight" section does not contain the expected text.', $actual_title));
+
+      foreach ($expected_topic_titles as $j => $expected_topic_title) {
+        /** @var \Behat\Mink\Element\NodeElement $topic_element */
+        $topic_element = array_shift($topic_elements);
+
+        // Check the title of each topic.
+        $actual_topic_title = $topic_element->getText();
+        Assert::assertEquals($expected_topic_title, $actual_topic_title, sprintf('Expected topic #%d to be "%s" for the "%s" article in the "In the spotlight" section but instead found "%s".', $j + 1, $expected_topic_title, $actual_title, $actual_topic_title));
+
+        // Check that each topic links to their canonical page.
+        $topic_entity = self::getEntityByLabel('taxonomy_term', $actual_topic_title, 'topic');
+        $xpath = '/a[@href = "' . $this->getEntityUri($topic_entity) . '"]';
+        Assert::assertNotEmpty($topic_element->find('xpath', $xpath), sprintf('Topic "%s" for article "%s" does not link to the canonical topic page.', $actual_topic_title, $actual_title));
+      }
+    }
+  }
+
+  /**
+   * Checks the contents of the "Highlighted content" block.
+   *
+   * This is shown on the homepage.
+   *
+   * @param string $label
+   *   The label of the community content that is highlighted on the homepage.
+   *
+   * @Then I should see :label as the Highlighted content
+   */
+  public function assertHighlightedContent(string $label): void {
+    $content = self::getNodeByTitle($label);
+
+    // Only community content can be highlighted.
+    Assert::assertInstanceOf(CommunityContentInterface::class, $content);
+
+    $block_element = $this->getSession()->getPage()->find('css', '.block-entityqueue--highlighted-content');
+
+    // Check block title.
+    $actual_block_title = $block_element->find('css', 'h2')->getText();
+    Assert::assertEquals('Highlighted content', $actual_block_title, sprintf('Expected the Highlighted content block to have the title "Highlighted content" but instead found "%s".', $actual_block_title));
+
+    // Check that the logo is present.
+    if ($logo = $content->getLogoAsFile()) {
+      $filename = $logo->getFilename();
+      $logo_is_present = self::hasImage($filename, $block_element);
+      Assert::assertTrue($logo_is_present, sprintf('Image with filename "%s" has been found in the Highlighted content block.', $filename));
+    }
+
+    // Check title text.
+    $actual_title = $block_element->find('css', 'article h2')->getText();
+    Assert::assertEquals($content->label(), $actual_title, sprintf('Expected the Highlighted content to have the title "%s" but instead found "%s".', $content->label(), $actual_title));
+
+    // Check that title links to the canonical page of the content.
+    $xpath = '//h2/a[@href = "' . $this->getEntityUri($content) . '"]';
+    Assert::assertNotEmpty($block_element->find('xpath', $xpath), sprintf('%s "%s" does not link to the canonical page.', $content->getType(), $actual_title));
+
+    // Retrieve the topics from the content, limiting the result to maximum 2
+    // topics.
+    $topics = array_slice($content->getTopics(), 0, 2);
+
+    // Check that the correct number of topics are present.
+    $topic_elements = $block_element->findAll('css', '.field--name-field-topic .field__item');
+    Assert::assertEquals(count($topics), count($topic_elements), sprintf('Expected %d topics in the "Highlighted content" section but found %d topics.', count($topics), count($topic_elements)));
+
+    foreach ($topics as $j => $topic) {
+      /** @var \Behat\Mink\Element\NodeElement $topic_element */
+      $topic_element = array_shift($topic_elements);
+
+      // Check the title of each topic.
+      $actual_topic_title = $topic_element->getText();
+      Assert::assertEquals($topic->label(), $actual_topic_title, sprintf('Expected topic #%d to be "%s" in the "Highlighted content" section but instead found "%s".', $j + 1, $topic->label(), $actual_topic_title));
+
+      // Check that each topic links to their canonical page.
+      $xpath = '/a[@href = "' . $this->getEntityUri($topic) . '"]';
+      Assert::assertNotEmpty($topic_element->find('xpath', $xpath), sprintf('Topic "%s" in the "Highlighted content" section does not link to the canonical topic page.', $actual_topic_title));
+    }
+
+    // Check that the description is present.
+    $actual_description = $block_element->find('css', '.field--name-body')->getText();
+    Assert::assertNotEmpty($actual_description);
   }
 
 }

@@ -66,7 +66,7 @@ class EuplContext extends RawDrupalContext {
       'field_is_state' => 'validated',
     ])->save();
 
-    // The 'Joinup Licencing Assistant' standard custom page.
+    // The 'Joinup Licensing Assistant' standard custom page.
     Node::create([
       'nid' => 701805,
       'type' => 'custom_page',
@@ -75,7 +75,7 @@ class EuplContext extends RawDrupalContext {
       'og_audience' => Eupl::JLA_SOLUTION,
     ])->save();
 
-    // The 'Joinup Licencing Compatibility Check' standard custom page.
+    // The 'Joinup Licensing Compatibility Check' standard custom page.
     Node::create([
       'nid' => 703242,
       'type' => 'custom_page',
