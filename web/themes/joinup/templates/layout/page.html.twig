@@ -43,13 +43,9 @@
 <div class="mdl-layout__container">
   <div class="mdl-layout mdl-js-layout" {{ attributes|without('class') }}>
 
-    {% if not is_front or logged_in %}
-      {% include directory ~ '/templates/parts/header.html.twig' %}
-    {% endif %}
+    {% include directory ~ '/templates/parts/header.html.twig' %}
 
-    {% if is_front and not logged_in %}
-      {% include directory ~ '/templates/parts/featured--anonymous.html.twig' %}
-    {% elseif page.featured or is_blue_header %}
+    {% if page.featured or is_blue_header %}
       <div class="section section--featured">
         {% if is_blue_header %}
           {% include directory ~ '/templates/parts/featured--title.html.twig' %}

@@ -34,7 +34,7 @@ class EifContext extends RawDrupalContext {
    * @BeforeScenario @eif_community&&@api
    */
   public function setupEifData(BeforeScenarioScope $scope): void {
-    // Create two topic terms.
+    // Create one topic term.
     Term::create([
       'vid' => 'topic',
       'tid' => 'http://example.com/term/1',

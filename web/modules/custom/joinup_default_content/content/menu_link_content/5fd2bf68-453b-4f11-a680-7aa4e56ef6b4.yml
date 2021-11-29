@@ -1,0 +1,40 @@
+_meta:
+  version: '1.0'
+  entity_type: menu_link_content
+  uuid: 5fd2bf68-453b-4f11-a680-7aa4e56ef6b4
+  bundle: menu_link_content
+  default_langcode: en
+default:
+  enabled:
+    -
+      value: true
+  title:
+    -
+      value: 'Newsletter subscription'
+  menu_name:
+    -
+      value: footer-follow-us
+  link:
+    -
+      uri: 'http://ec.europa.eu/newsroom/joinup/subscription-quick-generic-form-fullpage.cfm?service_id=877'
+      title: ''
+      options:
+        menu_link_destination: 0
+  external:
+    -
+      value: false
+  rediscover:
+    -
+      value: false
+  weight:
+    -
+      value: -49
+  expanded:
+    -
+      value: false
+  revision_translation_affected:
+    -
+      value: true
+  live_link:
+    -
+      value: false
