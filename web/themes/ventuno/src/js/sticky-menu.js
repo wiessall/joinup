@@ -4,7 +4,7 @@
  Drupal.behaviors.stickyMenu = {
   attach: function () {
     // Make sure Webtools is done modifying the DOM.
-    window.addEventListener('wtGlobanReady', function () {
+    window.addEventListener('wtReady', function () {
       const navbar = document.getElementById('joinup-navbar');
       if (navbar === null || navbar === undefined) {
         return
