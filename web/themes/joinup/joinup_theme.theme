@@ -403,6 +403,62 @@ function joinup_theme_preprocess_page(&$variables) {
   if ($route_name == 'view.search.page_1') {
     $variables['is_search_page'] = TRUE;
   }
+
+  // Export the user name to display in the header.
+  $variables['user_name'] = \Drupal::currentUser()->getDisplayName();
+
+  // Show links to 'Interoperable Europe' and 'Interoperability Solutions'.
+  /** @var \Drupal\joinup_menu\MenuHelperInterface $menu_helper */
+  $menu_helper = \Drupal::service('joinup_menu.menu_helper');
+  $variables['landing_page_links'] = $menu_helper->getBclLandingPageLinks();
+
+  // Export the user account menu in the format expected by the header template.
+  $variables['profile_links'] = $menu_helper->getBclAccountMenu();
+
+  // Populate the links shown to anonymous users.
+  $variables['anonymous_links'] = $menu_helper->getBclAnonymousMenu();
+
+  // The "About us" link is only shown if the Joinup collection exists.
+  $variables['#cache']['tags'][] = 'joinup_collection:exists';
+
+  // Add a flag to indicate whether a tour is available for this page.
+  /** @var \Drupal\joinup_tour\TourHelperInterface $tour_helper */
+  $tour_helper = \Drupal::service('joinup_tour.tour_helper');
+  $variables['tour_available'] = $tour_helper->currentPageHasTour();
+
+  // Make the Bootstrap icons available for theming. They are used in Bootstrap
+  // components such as the hamburger menu.
+  $variables['bcl_icon_path'] = base_path() . drupal_get_path('theme', 'oe_bootstrap_theme') . '/assets/icons/bootstrap-icons.svg';
+
+  // Generate a link to the contact form with the current path (including query
+  // arguments) as the 'destination' query argument so that the user will return
+  // to the current path after filling in the contact form.
+  // This is a temporary measure to allow us to reuse the footer links from the
+  // new theme without having to render them dynamically. In the new theme this
+  // is handled transparently using the Menu Link Destination module.
+  /** @var \Drupal\Core\Path\PathMatcherInterface $path_matcher */
+  $path_matcher = \Drupal::service('path.matcher');
+
+  if ($request->query->has('destination')) {
+    // The path should start with a slash.
+    $destination = '/' . ltrim($request->query->get('destination'), '/');
+    $destination = Url::fromUserInput($destination)->toString();
+  }
+  // If we are on the homepage, set the destination path to the base path.
+  elseif ($path_matcher->isFrontPage()) {
+    $destination = base_path();
+  }
+  // Return to the current page URL.
+  else {
+    $query_arguments = $request->query->all();
+    $route_options = ['query' => $query_arguments];
+    $route_parameters = $route_match->getRawParameters()->all();
+    $destination = (new Url($route_name, $route_parameters, $route_options))->toString();
+  }
+
+  $options = [];
+  $options['query']['destination'] = $destination;
+  $variables['contact_form_link'] = Url::fromRoute('contact_form.contact_page')->setOptions($options)->toString();
 }
 
 /**
@@ -2131,4 +2187,19 @@ function joinup_theme_preprocess_social_share(array &$variables) {
 
   $variables['encoded_url'] = urlencode($variables['url']->toString());
   $variables['encoded_title'] = urlencode($entity->label());
+}
+
+/**
+ * Implements hook_library_info_alter().
+ *
+ * Whenever the jQuery UI dialog is used, invoke the Bootstrap compatibility
+ * mode to avoid Bootstrap overwriting the methods used by jQuery UI to render
+ * buttons.
+ */
+function joinup_theme_library_info_alter(&$libraries, $extension) {
+  switch ($extension) {
+    case 'core':
+      $libraries['jquery.ui.dialog']['dependencies'][] = 'joinup_theme/bootstrap-jquery-ui-compatibility';
+      break;
+  }
 }
