@@ -10,7 +10,7 @@ default:
       value: true
   title:
     -
-      value: 'About Joinup'
+      value: 'What is Joinup'
   menu_name:
     -
       value: footer-about-us
@@ -28,7 +28,7 @@ default:
       value: true
   weight:
     -
-      value: 0
+      value: -49
   expanded:
     -
       value: false
