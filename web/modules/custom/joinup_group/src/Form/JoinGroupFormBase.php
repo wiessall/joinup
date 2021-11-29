@@ -15,6 +15,7 @@ use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\Core\Url;
 use Drupal\collection\Entity\CollectionInterface;
+use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\og\MembershipManagerInterface;
 use Drupal\og\OgMembershipInterface;
 use Drupal\og\OgRoleInterface;
@@ -25,56 +26,49 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 /**
  * A simple form with a button to join or leave a collection.
  */
-abstract class JoinGroupFormBase extends FormBase {
+abstract class JoinGroupFormBase extends FormBase implements JoinGroupFormInterface {
 
   /**
    * The entity type manager service.
    *
    * @var \Drupal\Core\Entity\EntityTypeManagerInterface
    */
-  protected $entityTypeManager;
+  protected EntityTypeManagerInterface $entityTypeManager;
 
   /**
    * The membership manager service.
    *
    * @var \Drupal\og\MembershipManagerInterface
    */
-  protected $membershipManager;
+  protected MembershipManagerInterface $membershipManager;
 
   /**
    * The access manager service.
    *
    * @var \Drupal\Core\Access\AccessManagerInterface
    */
-  protected $accessManager;
-
-  /**
-   * The messenger service.
-   *
-   * @var \Drupal\Core\Messenger\MessengerInterface
-   */
-  protected $messenger;
+  protected AccessManagerInterface $accessManager;
 
   /**
    * The form builder.
    *
    * @var \Drupal\Core\Form\FormBuilderInterface
    */
-  protected $formBuilder;
+  protected FormBuilderInterface $formBuilder;
 
   /**
    * The group to join.
    *
-   * @var \Drupal\rdf_entity\RdfInterface
+   * @var \Drupal\joinup_group\Entity\GroupInterface
    */
-  protected $group;
+  protected GroupInterface $group;
 
   /**
    * The current user.
    *
    * @var \Drupal\user\UserInterface
    */
-  protected $user;
+  protected UserInterface $user;
 
   /**
    * {@inheritdoc}
@@ -119,10 +113,7 @@ abstract class JoinGroupFormBase extends FormBase {
   }
 
   /**
-   * Returns the label for the join submit button.
-   *
-   * @return \Drupal\Core\StringTranslation\TranslatableMarkup
-   *   The title of the label.
+   * {@inheritdoc}
    */
   public function getJoinSubmitLabel(): TranslatableMarkup {
     return $this->t('Join this :type', [
@@ -131,10 +122,7 @@ abstract class JoinGroupFormBase extends FormBase {
   }
 
   /**
-   * Returns the label for the leave submit button.
-   *
-   * @return \Drupal\Core\StringTranslation\TranslatableMarkup
-   *   The title of the label.
+   * {@inheritdoc}
    */
   public function getLeaveSubmitLabel(): TranslatableMarkup {
     return $this->t('Leave this :type', [
@@ -145,7 +133,16 @@ abstract class JoinGroupFormBase extends FormBase {
   /**
    * {@inheritdoc}
    */
+  public function getGroup(): GroupInterface {
+    return $this->group;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function buildForm(array $form, FormStateInterface $form_state, ?AccountProxyInterface $user = NULL, ?RdfInterface $group = NULL): array {
+    assert($group instanceof GroupInterface, 'Only groups can be joined.');
+
     $form['#access'] = $this->access();
     $this->group = $group;
     $this->user = $this->loadUser((int) $user->id());
