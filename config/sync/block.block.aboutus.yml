@@ -1,0 +1,25 @@
+uuid: 8f2ad8e0-8d6f-4885-a094-79f176363562
+langcode: en
+status: true
+dependencies:
+  config:
+    - system.menu.footer-about-us
+  module:
+    - system
+  theme:
+    - ventuno
+id: aboutus
+theme: ventuno
+region: footer
+weight: -27
+provider: null
+plugin: 'system_menu_block:footer-about-us'
+settings:
+  id: 'system_menu_block:footer-about-us'
+  label: 'About us'
+  provider: system
+  label_display: visible
+  level: 1
+  depth: 0
+  expand_all_items: false
+visibility: {  }

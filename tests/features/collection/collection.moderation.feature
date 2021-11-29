@@ -184,12 +184,10 @@ Feature: Collection moderation
       | contact information | Partyanimal        |
       | topic               | Supplier exchange  |
       | state               | proposed           |
-    When I am on the homepage
-    And I click "Collections"
+    When I visit the collection overview
     Then I should not see the heading "Some berry pie"
     When I am logged in as a moderator
-    And I am on the homepage
-    And I click "Collections"
+    And I visit the collection overview
     Then I should not see the text "Some berry pie"
 
     When I go to my dashboard
@@ -200,8 +198,7 @@ Feature: Collection moderation
     And I press "Publish"
     Then I should see the heading "No berry pie"
 
-    When I am on the homepage
-    And I click "Collections"
+    When I visit the collection overview
     Then I should see the text "No berry pie"
     And I should not see the text "Some berry pie"
 
@@ -214,6 +211,7 @@ Feature: Collection moderation
     # has been replaced with the Content creation radio buttons, but we are
     # keeping the coverage for now.
     Given I am logged in as a user with the "authenticated" role
+    And I accept essential cookies
     # Propose a collection, filling in the required fields.
     When I go to the propose collection form
     Then the "Main fields" tab should be active
@@ -252,6 +250,7 @@ Feature: Collection moderation
     When I press "Propose"
     Then I should see the heading "Spectres in fog"
     When I am logged in as a user with the "moderator" role
+    And I accept essential cookies
     And I go to the homepage of the "Spectres in fog" collection
     And I open the header local tasks menu
     And I click "Edit" in the "Entity actions" region
@@ -278,6 +277,7 @@ Feature: Collection moderation
     # has been replaced with the Content creation radio buttons, but we are
     # keeping the coverage for now.
     Given I am logged in as a user with the "authenticated" role
+    And I accept essential cookies
     When I go to the propose collection form
     And I fill in the following:
       | Title  | Domestic bovins    |
@@ -320,6 +320,7 @@ Feature: Collection moderation
     # legacy eLibrary slider has been replaced with the Content creation radio
     # buttons, but we are keeping the coverage for now.
     Given I am logged in as a user with the "authenticated" role
+    And I accept essential cookies
     When I go to the propose collection form
     And I fill in the following:
       | Title  | Theft of Body        |
@@ -363,6 +364,7 @@ Feature: Collection moderation
     # Note that the "Closed collection" option no longer exists but we are
     # keeping the coverage for now.
     Given I am logged in as a user with the "authenticated" role
+    And I accept essential cookies
     When I go to the propose collection form
     And I fill in the following:
       | Title  | Silken Emperor    |
@@ -407,6 +409,7 @@ Feature: Collection moderation
     # Note that the "Closed collection" option no longer exists but we are
     # keeping the coverage for now.
     Given I am logged in as a user with the "authenticated" role
+    And I accept essential cookies
     When I go to the propose collection form
     And I fill in the following:
       | Title  | The blue ships          |
