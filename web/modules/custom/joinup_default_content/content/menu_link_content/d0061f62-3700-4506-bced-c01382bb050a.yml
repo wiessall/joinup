@@ -10,7 +10,7 @@ default:
       value: true
   title:
     -
-      value: Contact
+      value: 'Contact European Commission'
   menu_name:
     -
       value: footer-european-commission
