@@ -369,7 +369,6 @@ Feature: Log in through EU Login
 
     Given I am on the homepage
     And I click "Sign in"
-    When I click "EU Login"
     When I fill in "E-mail address" with "joe@example.com"
     When I fill in "Password" with "123"
     And I press the "Log in" button

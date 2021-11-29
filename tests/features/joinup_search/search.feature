@@ -331,6 +331,9 @@ Feature: Global search
      When I enter "Omero+snc" in the search bar and press enter
      Then the page should show the tiles "Ulysses Freeman"
 
+  @wip
+  # This is disabled because the search bar is currently not shown in the header
+  # but this functionality will probably be restored in the future.
   Scenario: Advanced search
     # An advanced search link is shown in the header, except on the search page.
     Given I am on the homepage

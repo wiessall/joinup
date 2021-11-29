@@ -108,6 +108,8 @@ Feature:
       | logged in as an "authenticated user" | see         |
 
   @wip
+  # Todo: Find out why this fails on the test bot, and enable the test again.
+  # See https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-6836
   Scenario: A moderator is able to administer the "Help and support" menu.
     Given I am logged in as a moderator
     When I click "Menus"
@@ -116,6 +118,7 @@ Feature:
 
     When I uncheck the "Take a tour" row
     And I press "Save"
+    Then I should see the success message "Menu Help and support has been updated."
 
     And I click "Add link"
     And I fill in "Menu link title" with "Arbitrary support menu link"
