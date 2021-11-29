@@ -88,7 +88,7 @@ Feature: Creation of news through the UI.
     Then I should see the "Dig do's and don'ts" tile
     And I should see the "Anvil test routines" tile
 
-    When I click "Keep up to date"
+    When I visit the content overview
     Then I should see the image "logo.png" in the "Ytterbium metal of the year" tile
 
   @javascript @generateMedia @uploadFiles:logo.png

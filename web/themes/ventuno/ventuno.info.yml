@@ -11,6 +11,7 @@ libraries:
 
 libraries-override:
   oe_bootstrap_theme/style: false
+  oe_bootstrap_theme/bcl: false
   joinup_layout/twocol_60_40:
     css:
       theme:
@@ -25,9 +26,9 @@ libraries-override:
         css/tour.module.css: assets/css/tour.css
 
 regions:
-  header: Header
   header_bottom: 'Header bottom'
   featured: Featured
+  messages: Messages
   sidebar: Sidebar
   content_top: 'Content top'
   content: Content

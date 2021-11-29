@@ -26,6 +26,14 @@ module.exports = {
         sourceMap: true,
       },
     },
+    {
+      entry: path.resolve(outputFolder, "src/js/sticky-menu.js"),
+      dest: path.resolve(outputFolder, "assets/js/sticky-menu.js"),
+      options: {
+        minify: true,
+        sourceMap: true,
+      },
+    },
   ],
   styles: [
     {
@@ -45,8 +53,32 @@ module.exports = {
       },
     },
     {
+      entry: path.resolve(outputFolder, "src/scss/navbar.scss"),
+      dest: path.resolve(outputFolder, "assets/css/navbar.css"),
+      options: {
+        includePaths,
+        sourceMap: "file",
+      },
+    },
+    {
+      entry: path.resolve(outputFolder, "src/scss/footer.scss"),
+      dest: path.resolve(outputFolder, "assets/css/footer.css"),
+      options: {
+        includePaths,
+        sourceMap: "file",
+      },
+    },
+    {
       entry: path.resolve(outputFolder, "src/scss/overrides/tour.scss"),
       dest: path.resolve(outputFolder, "assets/css/tour.css"),
+      options: {
+        includePaths,
+        sourceMap: "file",
+      },
+    },
+    {
+      entry: path.resolve(outputFolder, "src/scss/overrides/bootstrap-base.scss"),
+      dest: path.resolve(outputFolder, "assets/css/bootstrap-base.css"),
       options: {
         includePaths,
         sourceMap: "file",
@@ -67,16 +99,6 @@ module.exports = {
     {
       from: [
         path.resolve(
-          nodeModules,
-          "@openeuropa/bcl-theme-joinup/icons/bootstrap-icons.svg"
-        ),
-      ],
-      to: path.resolve(outputFolder, "assets/icons"),
-      options: { up: true },
-    },
-    {
-      from: [
-        path.resolve(
           __dirname,
           "src/fonts/joinup-icons/*.woff*"
         ),
@@ -88,7 +110,67 @@ module.exports = {
       from: [
         path.resolve(
           __dirname,
+          "src/images/logo.svg"
+        ),
+      ],
+      to: path.resolve(outputFolder, "assets/images"),
+      options: { up: true },
+    },
+    {
+      from: [
+        path.resolve(
+          __dirname,
           "src/images/highlighted-event.jpg"
+        ),
+      ],
+      to: path.resolve(outputFolder, "assets/images"),
+      options: { up: true },
+    },
+    {
+      from: [
+        path.resolve(
+          __dirname,
+          "src/images/iop-eu-logo.svg"
+        ),
+      ],
+      to: path.resolve(outputFolder, "assets/images"),
+      options: { up: true },
+    },
+    {
+      from: [
+        path.resolve(
+          __dirname,
+          "src/images/homepage-banner.svg"
+        ),
+      ],
+      to: path.resolve(outputFolder, "assets/images"),
+      options: { up: true },
+    },
+    {
+      from: [
+        path.resolve(
+          __dirname,
+          "src/images/homepage-banner/background.svg"
+        ),
+      ],
+      to: path.resolve(outputFolder, "assets/images"),
+      options: { up: true },
+    },
+    {
+      from: [
+        path.resolve(
+          __dirname,
+          "src/images/homepage-banner/wave.svg"
+        ),
+      ],
+      to: path.resolve(outputFolder, "assets/images"),
+      options: { up: true },
+    },
+    {
+      from: [
+        path.resolve(
+          __dirname,
+          "src/images/homepage-banner/banner-md.svg"
         ),
       ],
       to: path.resolve(outputFolder, "assets/images"),

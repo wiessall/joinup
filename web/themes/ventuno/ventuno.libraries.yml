@@ -3,6 +3,26 @@ homepage:
     theme:
       assets/css/homepage.css: {}
 
+bootstrap-base:
+  css:
+    component:
+      assets/css/bootstrap-base.css: {}
+  js:
+    assets/js/oe-bcl-joinup.bundle.min.js: { minified: true }
+    assets/js/popovers.js: { minified: false }
+
+navbar:
+  css:
+    theme:
+      assets/css/navbar.css: {}
+  js:
+    assets/js/sticky-menu.js: { minified: true, attributes: { defer: true } }
+
+footer:
+  css:
+    theme:
+      assets/css/footer.css: {}
+
 slick:
   js:
     assets/js/slick.js: { minified: true }
@@ -14,7 +34,7 @@ slick:
 style:
   version: VERSION
   css:
-    theme:
+    base:
       assets/css/main.css: {}
   js:
     assets/js/oe-bcl-joinup.bundle.min.js: { minified: true }

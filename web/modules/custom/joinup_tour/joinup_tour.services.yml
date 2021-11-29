@@ -1,0 +1,4 @@
+services:
+  joinup_tour.tour_helper:
+    class: Drupal\joinup_tour\TourHelper
+    arguments: ['@entity_type.manager', '@current_route_match']
