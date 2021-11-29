@@ -1,7 +1,7 @@
 _meta:
   version: '1.0'
   entity_type: menu_link_content
-  uuid: 3d17368b-533a-4b78-ba16-997d40be6ae5
+  uuid: f5bb35b0-f255-4056-9809-d2d6e62edaec
   bundle: menu_link_content
   default_langcode: en
 default:
@@ -10,13 +10,13 @@ default:
       value: true
   title:
     -
-      value: 'Legal notice'
+      value: 'Newsletter archive'
   menu_name:
     -
-      value: footer-european-commission
+      value: footer-follow-us
   link:
     -
-      uri: 'internal:/joinup/legal-notice'
+      uri: 'https://ec.europa.eu/newsroom/joinup/newsletter-archives/view/service/877'
       title: ''
       options:
         menu_link_destination: 0
@@ -25,10 +25,10 @@ default:
       value: false
   rediscover:
     -
-      value: true
+      value: false
   weight:
     -
-      value: -47
+      value: -48
   expanded:
     -
       value: false
