@@ -6,6 +6,7 @@ namespace Drupal\joinup\Context;
 
 use Behat\Gherkin\Node\TableNode;
 use Behat\Mink\Element\NodeElement;
+use Behat\Mink\Exception\ElementNotFoundException;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\joinup\Traits\BrowserCapabilityDetectionTrait;
 use Drupal\joinup\Traits\KeyboardInteractionTrait;
@@ -339,7 +340,63 @@ class JoinupSearchContext extends RawDrupalContext {
   }
 
   /**
-   * Asserts a selected option in the .
+   * Clicks a Slim Select item in facet form.
+   *
+   * @param string $option
+   *   The option to select.
+   * @param string $label
+   *   The select label.
+   *
+   * @throws \Exception
+   *   Thrown when the facet or the link inside the facet is not found.
+   *
+   * @When I select :option option(s) from the :label Slim Select
+   */
+  public function selectOptionsFromSlimSelect(string $option, string $label): void {
+    foreach ($this->explodeCommaSeparatedStepArgument($option) as $option) {
+      $slim_select = $this->findSelect($label);
+      $slim_select->click();
+
+      $element = $slim_select->find('css', ".ss-option:contains('{$option}')");
+      if (!$element) {
+        throw new ElementNotFoundException($this->getSession()->getDriver(), "The Slim Select element '$option' was not found in the page.");
+      }
+      $element->click();
+    }
+  }
+
+  /**
+   * Removes a Slim Select item in facet form.
+   *
+   * @param string $option
+   *   The option to select.
+   * @param string $label
+   *   The select label.
+   *
+   * @throws \Exception
+   *   Thrown when the facet or the link inside the facet is not found.
+   *
+   * @When I unselect :option option(s) from the :label Slim Select
+   */
+  public function removeOptionsFromSlimSelect(string $option, string $label): void {
+    $options = $this->explodeCommaSeparatedStepArgument($option);
+    $slim_select = $this->findSelect($label);
+    foreach ($options as $option) {
+      $slim_select->click();
+
+      $element = $slim_select->find('css', ".ss-multi-selected .ss-value:contains('{$option}')");
+      if (!$element) {
+        throw new ElementNotFoundException($this->getSession()->getDriver(), "The Slim Select element '$option' was not found in the page.");
+      }
+      $element->find('css', '.ss-value-delete')->click();
+
+      // Close Slim Select dropdown.
+      $slim_select->click();
+    }
+  }
+
+  /**
+   * Asserts a selected option in the given facet.
    *
    * @param string $option
    *   Text value of the option to find.
@@ -446,6 +503,35 @@ class JoinupSearchContext extends RawDrupalContext {
         Assert::assertSame($option, $text, sprintf('The option "%s" is selected in the "%s" facet, but the option "%s" was expected.', $text, $select, $option));
       }
     }
+  }
+
+  /**
+   * Asserts a Slim Selected option in facets form.
+   *
+   * @param string $option
+   *   Text value of the option to find.
+   * @param string $label
+   *   Title of the select field.
+   *
+   * @throws \Exception
+   *    Throws an exception when the select is not found in page.
+   *
+   * @Then the :option option from :label Slim Select is selected
+   * @Then the :option options from :label Slim Select are selected
+   */
+  public function optionWithTextFromSlimSelectIsSelected(string $option, string $label): void {
+    $slim_select = $this->findSelect($label);
+
+    $xpath = '//*[contains(concat(" ", normalize-space(@class), " "), "ss-option-selected")]';
+    $elements = $slim_select->findAll('xpath', $xpath);
+
+    $actual_options = [];
+    foreach ($elements as $element) {
+      $actual_options[] = strip_tags($element->getHtml());
+    }
+    $expected_options = $this->explodeCommaSeparatedStepArgument($option);
+
+    Assert::assertSame($expected_options, $actual_options);
   }
 
   /**

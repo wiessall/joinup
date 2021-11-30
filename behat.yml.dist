@@ -14,6 +14,7 @@
   - Drupal\joinup\Context\AdmsValidatorContext
   - Drupal\joinup\Context\AssetDistributionContext
   - Drupal\joinup\Context\AssetReleaseContext
+  - Drupal\joinup\Context\BootstrapContext
   - Drupal\joinup\Context\CollectionContext
   - Drupal\joinup\Context\ContactFormContext
   - Drupal\joinup\Context\ContactInformationContext
@@ -23,8 +24,10 @@
   - Drupal\joinup\Context\EifContext
   - Drupal\joinup\Context\EntityQueueContext
   - Drupal\joinup\Context\EuplContext
+  - Drupal\joinup\Context\FooterContext
   - Drupal\joinup\Context\HeaderContext
   - Drupal\joinup\Context\HomepageContext
+  - Drupal\joinup\Context\InteroperableEuropeContext
   - Drupal\joinup\Context\Isa2AnalyticsContext
   - Drupal\joinup\Context\JoinupCollectionContext
   - Drupal\joinup\Context\JoinupCommunityContentContext
@@ -47,6 +50,7 @@
   - Drupal\joinup\Context\JoinupSeoContext
   - Drupal\joinup\Context\JoinupSubscriptionContext
   - Drupal\joinup\Context\JoinupUserContext
+  - Drupal\joinup\Context\JoinupWebtoolsContext
   - Drupal\joinup\Context\MinkContext
   - Drupal\joinup\Context\ModerationContext
   - Drupal\joinup\Context\OeNewsroomNewsletterContext
@@ -74,6 +78,93 @@
 
 # Default profile.
 default:
+  suites: [  ]
+  extensions:
+    Drupal\MinkExtension:
+      base_url: ${env.DRUPAL_BASE_URL}
+      ajax_timeout: 10
+      files_path: ${joinup.dir}/tests/fixtures/files
+      goutte: ~
+      javascript_session: selenium2
+      browser_name: ${behat.browser_name}
+      selenium2:
+        wd_host: ${env.WEBDRIVER_URL}
+        capabilities: {"browserName": "chrome", "browser": "chrome", 'chrome': {'switches':['--no-sandbox']}}
+    LoversOfBehat\TableExtension:
+      table_map:
+        'group menu edit table': '#menu-overview'
+        'eif recommendations': '.eif-recommendations table'
+        'member administration': '.og-members-overview table'
+        'member permissions': 'table.form-table__member-permissions'
+        'licence comparer': 'table[data-drupal-selector="licence-comparer"]'
+        'pipeline log': 'table.joinup-pipeline-log-table'
+        'subscribers report': 'table'
+    Drupal\DrupalExtension:
+      api_driver: 'drupal'
+      blackbox: ~
+      region_map:
+        Administration toolbar: '#toolbar-administration'
+        Comment: '.comments-section'
+        Contact information inline form: '#edit-field-ar-contact-information-wrapper'
+        Content listing field filter form: '.field--name-field-content-listing'
+        Content: '.section--content-middle, main .layout-content'
+        Cookie consent banner: '#cookie-consent-banner'
+        Discover topics block: '.block-views-blockdiscover-topics-block'
+        Entity actions: '.block-joinup-local-tasks-block'
+        Explore block: '.block-joinup-front-page-explore-block'
+        Featured: '.region-featured'
+        Footer: '.section--footer, footer'
+        Hamburger menu: 'nav.joinup-navbar ul.navbar-nav ul.accordion-list'
+        Header menu: '#block-joinup-theme-main-menu'
+        Header: '.section--featured, .section-header'
+        Highlighted content: '.block-entityqueue--highlighted-content'
+        Highlighted event: '.block-entityqueue--highlighted-event'
+        In the spotlight: '.block-views-blockin-the-spotlight-block'
+        Left sidebar: '.section--sidebar-left'
+        Main solution vertical tab: '#edit-group-main'
+        Management solution vertical tab: '#edit-group-management'
+        Members admin form actions: '#edit-action'
+        Members admin form header: '#edit-header'
+        Modal buttons: '.ui-dialog-buttonpane'
+        Modal content: '#drupal-modal'
+        Modal title: '.ui-dialog-title'
+        My unpublished content area: '.block-user-unpublished'
+        Navigation bar: 'nav.joinup-navbar'
+        Navigation menu block: '#block-navigation'
+        Navigation menu: 'div.navigation-menu ul'
+        Page title: 'div.page__title-wrapper'
+        Pager: 'nav.pager'
+        Plus button menu: 'div.add-content-menu'
+        Primary menu: '.region-primary-menu'
+        Related solutions: '.field--name-field-is-related-solutions'
+        SevenHeader: '.region-header'
+        Statistics: '#block-statistics, #block-ventuno-statistics'
+        Table of contents: '#block-table-of-contents'
+        Table of contents outline: '#block-toc-outline'
+        Unpublished content area: '.block-entity-unpublished'
+      drupal:
+        drupal_root: ${joinup.site_dir}
+      selectors:
+        message_selector: '.alert, .messages'
+        error_message_selector: '.alert.alert--error, .messages.messages--error'
+        success_message_selector: '.alert.alert--status, .messages.messages--status'
+        warning_message_selector: '.alert.alert--warning, .messages.messages--warning'
+        login_form_selector: '#user-login-form'
+      subcontexts:
+        autoload: false
+        paths: []
+      text:
+        log_in: 'Sign in'
+        log_out: 'Sign out'
+        username_field: 'Email or username'
+    FriendsOfBehat\ServiceContainerExtension:
+      imports:
+        - ${joinup.dir}/vendor/drupaltest/behat-one-time-login/behat.services.yml
+  formatters:
+    ${behat.formatter.name}: ~
+
+# Suites to run with the site installed without content.
+clean:
   suites:
     group_a:
       contexts: *contexts
@@ -114,87 +205,13 @@ default:
       contexts: *contexts
       paths: *paths
       filters:
-        tags: '~@wip&&~@group-a&&~@group-b&&~@group-c&&~@group-d&&~@group-e&&~@group-f&&~@group-g'
-  extensions:
-    Drupal\MinkExtension:
-      base_url: ${env.DRUPAL_BASE_URL}
-      ajax_timeout: 10
-      files_path: ${joinup.dir}/tests/fixtures/files
-      goutte: ~
-      javascript_session: selenium2
-      browser_name: ${behat.browser_name}
-      selenium2:
-        wd_host: ${env.WEBDRIVER_URL}
-        capabilities: {"browserName": "chrome", "browser": "chrome", 'chrome': {'switches':['--no-sandbox']}}
-    LoversOfBehat\TableExtension:
-      table_map:
-        'group menu edit table': '#menu-overview'
-        'eif recommendations': '.eif-recommendations table'
-        'member administration': '.og-members-overview table'
-        'member permissions': 'table.form-table__member-permissions'
-        'licence comparer': 'table[data-drupal-selector="licence-comparer"]'
-        'pipeline log': 'table.joinup-pipeline-log-table'
-        'subscribers report': 'table'
-    Drupal\DrupalExtension:
-      api_driver: 'drupal'
-      blackbox: ~
-      region_map:
-        Administration toolbar: '#toolbar-administration'
-        Comment: '.comments-section'
-        Content listing field filter form: '.field--name-field-content-listing'
-        Contact information inline form: '#edit-field-ar-contact-information-wrapper'
-        Content: '.section--content-middle, main .layout-content'
-        Cookie consent banner: '#cookie-consent-banner'
-        Discover topics block: '.block-views-blockdiscover-topics-block'
-        Entity actions: '.block-joinup-local-tasks-block'
-        Explore block: '.block-joinup-front-page-explore-block'
-        Featured: '.region-featured'
-        Footer: '.section--footer, footer'
-        Hamburger menu: 'nav.joinup-navbar ul.navbar-nav ul.accordion-list'
-        Header menu: '#block-joinup-theme-main-menu'
-        Header: '.section--featured, .section-header'
-        Highlighted event: '.block-entityqueue--highlighted-event'
-        Highlighted solution: '.block-entityqueue--highlighted-solution'
-        In the spotlight: '.block-views-blockin-the-spotlight-block'
-        Left sidebar: '.section--sidebar-left'
-        Main solution vertical tab: '#edit-group-main'
-        Management solution vertical tab: '#edit-group-management'
-        Members admin form header: '#edit-header'
-        Members admin form actions: '#edit-action'
-        Modal buttons: '.ui-dialog-buttonpane'
-        Modal content: '#drupal-modal'
-        Modal title: '.ui-dialog-title'
-        My unpublished content area: '.block-user-unpublished'
-        Navigation bar: 'nav.joinup-navbar'
-        Navigation menu block: '#block-navigation'
-        Navigation menu: 'div.navigation-menu ul'
-        Page title: 'div.page__title-wrapper'
-        Pager: 'nav.pager'
-        Plus button menu: 'div.add-content-menu'
-        Primary menu: '.region-primary-menu'
-        Related solutions: '.field--name-field-is-related-solutions'
-        SevenHeader: '.region-header'
-        Statistics: '#block-statistics, #block-ventuno-statistics'
-        Table of contents: '#block-table-of-contents'
-        Table of contents outline: '#block-toc-outline'
-        Unpublished content area: '.block-entity-unpublished'
-      drupal:
-        drupal_root: ${joinup.site_dir}
-      selectors:
-        message_selector: '.alert, .messages'
-        error_message_selector: '.alert.alert--error, .messages.messages--error'
-        success_message_selector: '.alert.alert--status, .messages.messages--status'
-        warning_message_selector: '.alert.alert--warning, .messages.messages--warning'
-        login_form_selector: '#user-login-form'
-      subcontexts:
-        autoload: false
-        paths: []
-      text:
-        log_in: 'Sign in'
-        log_out: 'Sign out'
-        username_field: 'Email or username'
-    FriendsOfBehat\ServiceContainerExtension:
-      imports:
-        - ${joinup.dir}/vendor/drupaltest/behat-one-time-login/behat.services.yml
-  formatters:
-    ${behat.formatter.name}: ~
+        tags: '~@wip&&~@group-a&&~@group-b&&~@group-c&&~@group-d&&~@group-e&&~@group-f&&~@group-g&&~@group-clone'
+
+# Suites to run with the site installed with content.
+clone:
+  suites:
+    default:
+      contexts: *contexts
+      paths: *paths
+      filters:
+        tags: '~@wip&&@group-clone'

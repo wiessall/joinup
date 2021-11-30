@@ -28,9 +28,11 @@ module:
   dashboard: 0
   datetime: 0
   datetime_range: 0
+  default_content: 0
   diff: 0
   digital_size_formatter: 0
   dpsi: 0
+  dropsolid_purge: 0
   dynamic_entity_reference: 0
   dynamic_page_cache: 0
   editor: 0
@@ -64,17 +66,20 @@ module:
   geocoder_field: 0
   geocoder_geofield: 0
   geofield: 0
+  hal: 0
   help: 0
   honeypot: 0
   iframe: 0
   image: 0
   image_library_widget: 0
   inline_entity_form: 0
+  interoperable_europe: 0
   isa2_analytics: 0
   joinup_bundle_class: 0
   joinup_collection: 0
   joinup_community_content: 0
   joinup_core: 0
+  joinup_default_content: 0
   joinup_discussion: 0
   joinup_document: 0
   joinup_eulogin: 0
@@ -90,6 +95,7 @@ module:
   joinup_legal: 0
   joinup_licence: 0
   joinup_material_design: 0
+  joinup_menu: 0
   joinup_news: 0
   joinup_newsletter: 0
   joinup_notification: 0
@@ -136,6 +142,7 @@ module:
   nio: 0
   node: 0
   oe_bootstrap_theme_helper: 0
+  oe_dashboard_agent: 0
   oe_newsroom_newsletter: 0
   oe_webtools: 0
   oe_webtools_analytics: 0
@@ -159,6 +166,11 @@ module:
   path: 0
   path_alias: 0
   pipeline: 0
+  purge: 0
+  purge_drush: 0
+  purge_processor_cron: 0
+  purge_processor_lateruntime: 0
+  purge_queuer_coretags: 0
   rdf_draft: 0
   rdf_entity: 0
   rdf_entity_provenance: 0
