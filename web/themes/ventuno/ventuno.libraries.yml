@@ -5,6 +5,24 @@ homepage:
   js:
     assets/js/sticky-menu.js: { minified: true, attributes: { defer: true } }
 
+bootstrap-base:
+  css:
+    component:
+      assets/css/bootstrap-base.css: {}
+  js:
+    assets/js/oe-bcl-joinup.bundle.min.js: { minified: true }
+    assets/js/popovers.js: { minified: false }
+
+navbar:
+  css:
+    theme:
+      assets/css/navbar.css: {}
+
+footer:
+  css:
+    theme:
+      assets/css/footer.css: {}
+
 slick:
   js:
     assets/js/slick.js: { minified: true }

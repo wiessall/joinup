@@ -124,6 +124,7 @@ Feature: Proposing a collection
   # See https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-2589
   Scenario: Content creation options should not vanish after AJAX request.
     Given I am logged in as a user with the "authenticated" role
+    And I accept essential cookies
     When I go to the propose collection form
     And I click the "Additional fields" tab
     And I attach the file "banner.jpg" to "Banner"
