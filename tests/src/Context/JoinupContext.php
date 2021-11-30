@@ -392,9 +392,8 @@ class JoinupContext extends RawDrupalContext {
       };
       $expected_options = array_map($strip_multiple_spaces, $rows);
 
-      Assert::assertSame($expected_options, $actual_options);
+      return Assert::assertSame($expected_options, $actual_options);
     }
-
     $this->assertSelectAvailableOptions($field, $table);
   }
 
