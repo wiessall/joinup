@@ -1,0 +1,40 @@
+_meta:
+  version: '1.0'
+  entity_type: menu_link_content
+  uuid: e920672c-f4b6-4206-875b-9cab70f1dbad
+  bundle: menu_link_content
+  default_langcode: en
+default:
+  enabled:
+    -
+      value: true
+  title:
+    -
+      value: 'Newsletter subscription'
+  menu_name:
+    -
+      value: footer-follow-us
+  link:
+    -
+      uri: 'https://ec.europa.eu/newsroom/informatics/user-subscriptions/1115/create'
+      title: ''
+      options:
+        menu_link_destination: 0
+  external:
+    -
+      value: false
+  rediscover:
+    -
+      value: false
+  weight:
+    -
+      value: -43
+  expanded:
+    -
+      value: false
+  revision_translation_affected:
+    -
+      value: true
+  live_link:
+    -
+      value: false

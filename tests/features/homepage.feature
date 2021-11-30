@@ -90,25 +90,33 @@ Feature: Homepage
       | 3      | alan.jpg    | HR, Statistics and Analysis      | Microgravity    | Conventional studies investigating the effects of reduced gravity on muscle mass and function have used a ground control group that is not directly comparable to the space experimental group. |
 
   @terms
-  Scenario: A solution can be highlighted on the homepage
-    Given solution:
-      | title         | Mercury poisoning                                                          |
-      | state         | validated                                                                  |
-      | description   | Mercury poisoning is a type of metal poisoning due to exposure to mercury. |
-      | logo          | logo.png                                                                   |
-      | solution type | Interoperability Specification, Networking Service                         |
-      | topic         | Demography, EU and European Policies, HR                                   |
-      | state         | validated                                                                  |
-    And the "Highlighted solution" content listing contains:
-      | type     | label             |
-      | solution | Mercury poisoning |
+  Scenario Outline: Community content be highlighted on the homepage
+    Given collection:
+      | title | Clash of documents |
+      | state | validated          |
+    And <type> content:
+      | title        | collection         | topic                              | state     | logo     | body                                                                                                                                                                                            |
+      | Microgravity | Clash of documents | HR, E-justice                      | validated | alan.jpg | Conventional studies investigating the effects of reduced gravity on muscle mass and function have used a ground control group that is not directly comparable to the space experimental group. |
+      | Aliens       | Clash of documents | Statistics and Analysis, E-justice | validated | alan.jpg | Conventional studies investigating the effects of reduced gravity on muscle mass and function have used a ground control group that is not directly comparable to the space experimental group. |
+      | Groundforce  | Clash of documents | Statistics and Analysis, E-justice | proposed  | alan.jpg | Conventional studies investigating the effects of reduced gravity on muscle mass and function have used a ground control group that is not directly comparable to the space experimental group. |
+    And the "Highlighted content" content listing contains:
+      | type   | label  |
+      | <type> | Aliens |
 
     When I am on the homepage
-    Then I should see "Mercury poisoning" as the highlighted solution
-    And I should see the link "More solutions"
-    When I click "More solutions"
+    Then I should see "Aliens" as the Highlighted content
+    And I should see the link "Related content"
+    When I click "Related content"
     Then I should be on the advanced search page
-    And I should see the following facet summary "Solution"
+    And I should see the "Aliens" tile
+    And I should not see the "Microgravity" tile
+    And I should not see the "Groundforce" tile
+
+    Examples:
+      | type     |
+      | document |
+      | news     |
+      | event    |
 
   Scenario: An event can be highlighted on the homepage
     Given event content:
@@ -178,65 +186,6 @@ Feature: Homepage
     And press "Search"
     Then I should be on the search page
     And I should see the "RNA vaccines" tile
-
-  # Todo: This test is disabled because of a persisting failure on CPHP which
-  # cannot be replicated locally. To be enabled again once we have moved to
-  # the new infrastructure.
-  # See https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-6656
-  @terms @javascript @wip
-  Scenario Outline: Discover topics block shows a list of topics.
-    Given collection:
-      | title | Clash of vania's |
-      | state | validated        |
-    And news content:
-      | title             | headline                      | collection       | topic         | state     | publication date     | body                  |
-      | Some title        | Some headline                 | Clash of vania's | E-justice     | validated | 2021-04-26T19:09:00Z | Body                  |
-      | Internet medicine | It cures virtually everything | Clash of vania's | E-health Dpt. | validated | 2014-02-22T19:26:57Z | Electronic healthcare |
-    And the "Discover topics" content listing contains:
-      | type  | label                            |
-      | topic | Employment and Support Allowance |
-      | topic | E-justice                        |
-    When I <logged in>
-    And I am on the homepage
-    Then I should see the link "Employment and Support Allowance" in the "Discover topics block"
-    And I should see the link "E-justice" in the "Discover topics block"
-    When I click "E-justice"
-    Then I should be on the advanced search page
-    And the option with text "E-justice" from select facet form "topic" is selected
-
-    # See more topics modal.
-    When I am on the homepage
-    Then I should see the link "See more topics" in the "Discover topics block"
-    And I should not see the text "Topic categories"
-    And I should not see the following links in the "Discover topics block":
-      | Economy and Welfare  |
-      | eGov                 |
-      | E-health Dpt.        |
-      | HR Dpt.              |
-      | Info                 |
-      | Law and Justice      |
-      | Social and Political |
-
-    When I click "See more topics" in the "Discover topics block"
-    Then a modal should open
-    And I should see the text "Topic categories"
-    And I should see the following links:
-      | Economy and Welfare  |
-      | eGov                 |
-      | E-health Dpt.        |
-      | HR Dpt.              |
-      | Info                 |
-      | Law and Justice      |
-      | Social and Political |
-    When I click "E-health Dpt." in the "Modal content"
-    Then I should be on the advanced search page
-    And the option with text "E-health Dpt." from select facet form "topic" is selected
-    And the page should show the tiles "Internet medicine"
-
-    Examples:
-      | logged in                                          |
-      | am not logged in                                   |
-      | am logged in as a user with the authenticated role |
 
   @terms
   Scenario: Explore block shows a selection of news, events, collections and solutions
