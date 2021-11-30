@@ -7,9 +7,9 @@ Feature: Validate an ADMS-AP file through the UI
   Scenario: Validate a file
     When I am an anonymous user
     And I go to the homepage
-    Then I should see the link "ADMS-AP Validator"
+    Then I should not see the link "ADMS-AP Validator"
 
-    When I click "ADMS-AP Validator"
+    When I go to "/adms-validator"
     Then I should see the heading "ADMS-AP Validator"
 
     When I attach the file "invalid_adms.rdf" to "File"

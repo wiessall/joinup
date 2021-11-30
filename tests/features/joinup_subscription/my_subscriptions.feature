@@ -73,9 +73,9 @@ Feature: My subscriptions
     And I open the account menu
     And I click "My subscriptions"
     Then I should see the heading "My subscriptions"
-    And I should see the link "Collections"
-    And I should see the link "Solutions"
+    And I should see the heading "Collection"
     And I should see the text "No collection memberships yet. Join one or more collections to subscribe to their content!"
+    And I should see the heading "Solution"
     And I should see the text "No solution memberships yet. Join one or more solutions to subscribe to their content!"
     But I should not see the link "Unsubscribe from all"
     And I should not see the text "Alpha Centauri"
@@ -83,6 +83,7 @@ Feature: My subscriptions
     # Log in as a user that is a member of 3 collections. The subscriptions for
     # all 3 collections should be shown.
     Given I am logged in as "Auric Goldfinger"
+    And I accept essential cookies
 
     # This step is actually a shortcut for
     # When I open the account menu
@@ -218,6 +219,7 @@ Feature: My subscriptions
     And the following fields should not be present "Save changes"
 
     Given I am logged in as a moderator
+    And I accept essential cookies
     When I go to the edit form of the "Water supply" discussion
     And I press "Publish"
     # @todo: a caching issue is causing the message to have empty fields when
