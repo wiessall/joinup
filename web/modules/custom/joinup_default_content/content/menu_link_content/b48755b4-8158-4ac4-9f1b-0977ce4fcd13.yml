@@ -10,7 +10,7 @@ default:
       value: true
   title:
     -
-      value: How-to
+      value: 'How-to & video tutorials'
   menu_name:
     -
       value: footer-help-and-support
@@ -28,7 +28,7 @@ default:
       value: true
   weight:
     -
-      value: -50
+      value: -46
   expanded:
     -
       value: false

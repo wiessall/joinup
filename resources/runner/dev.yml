@@ -7,6 +7,7 @@ dev:
   modules:
     - admin_toolbar
     - cas_mock_server
+    - composer_deploy
     - config_devel
     - config_update
     - dblog
@@ -16,6 +17,7 @@ dev:
     - filecache
     - joinup_cas_mock_server
     - page_manager_ui
+    - upgrade_status
     - views_ui
 
 commands:
