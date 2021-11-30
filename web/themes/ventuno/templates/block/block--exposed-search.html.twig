@@ -12,16 +12,27 @@
 {%
   set search_url = path('view.search.page_1')
 %}
-<div class="row mb-4 mb-md-0">
+{%
+  set classes = [
+  'row',
+  'mb-4',
+  'mb-md-0',
+  'block',
+  'block-' ~ configuration.provider|clean_class,
+  'block-' ~ plugin_id|clean_class,
+]
+%}
+<div{{ attributes.addClass(classes) }}>
   <div class="col-8 offset-2 col-md-7 offset-md-0 col-lg-6 mb-4">
     <img src="{{ directory }}/assets/images/logo.svg" class="img-fluid">
   </div>
   <div class="col-12 order-md-2">
-    {% block content %}
-      <div class="search-bar mb-3 px-2 ps-md-0 pe-md-5">
+    <div class="search-bar mb-3 px-2 ps-md-0 pe-md-5">
+      <label for="search-bar__input" style="display: none">{{ 'Search'|trans }}</label>
+      {% block content %}
         {{ content }}
-      </div>
-    {% endblock %}
+      {% endblock %}
+    </div>
     <div class="col-12 col-md-9 col-lg-12">
       <p class="mb-4 mb-md-0 text-center text-md-start text-light">{% trans %}
           <span class="d-block d-md-inline">Need more search options?</span>
@@ -33,4 +44,5 @@
   <div class="col-8 offset-2 col-md-5 offset-md-0 order-md-1">
     <p class="mb-0 text-center text-md-end text-light fw-bold joinup-welcomes">{{ 'welcomes'|trans }}</p>
   </div>
+
 </div>
