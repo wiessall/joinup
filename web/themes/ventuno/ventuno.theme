@@ -298,6 +298,6 @@ function ventuno_preprocess_node__search_result_featured(&$variables) {
 function ventuno_preprocess(&$variables) {
   /** @var \Drupal\Core\Extension\ThemeHandler $themeHandler */
   $themeHandler = \Drupal::service('theme_handler');
-  $ventuno = $themeHandler->getTheme('ventuno')->getPath();
+  $ventuno = $themeHandler->getTheme('oe_bootstrap_theme')->getPath();
   $variables['icons_path'] = base_path() . $ventuno . '/assets/icons/bootstrap-icons.svg';
 }
