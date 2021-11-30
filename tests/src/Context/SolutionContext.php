@@ -29,6 +29,7 @@ use Drupal\language\Entity\ConfigurableLanguage;
 use Drupal\og\OgGroupAudienceHelperInterface;
 use Drupal\og\OgRoleInterface;
 use Drupal\rdf_entity\Entity\Rdf;
+use Drupal\solution\Entity\SolutionInterface;
 use PHPUnit\Framework\Assert;
 
 /**
@@ -56,6 +57,18 @@ class SolutionContext extends RawDrupalContext {
    * @var \Drupal\rdf_entity\RdfInterface[]
    */
   protected $rdfEntities = [];
+
+  /**
+   * Checks that the user is on the solutions overview page.
+   *
+   * The solutions overview page currently doesn't have a title so our common
+   * practice of checking the page title falls short here.
+   *
+   * @Then I should be on the solutions overview page
+   */
+  public function assertSolutionsOverviewPage(): void {
+    $this->assertSession()->addressEquals($this->locatePath('/solutions'));
+  }
 
   /**
    * Navigates to the add solution form.
@@ -391,13 +404,13 @@ class SolutionContext extends RawDrupalContext {
    * @param string $title
    *   The solution name.
    *
-   * @return \Drupal\rdf_entity\Entity\Rdf
+   * @return \Drupal\solution\Entity\SolutionInterface
    *   The solution.
    *
    * @throws \InvalidArgumentException
    *   Thrown when a solution with the given name does not exist.
    */
-  protected function getSolutionByName($title) {
+  protected function getSolutionByName($title): SolutionInterface {
     return $this->getRdfEntityByLabel($title, 'solution');
   }
 
