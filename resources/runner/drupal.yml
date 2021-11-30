@@ -186,6 +186,7 @@ drupal:
           'admin_toolbar',
           'admin_toolbar_tools',
           'cas_mock_server',
+          'composer_deploy',
           'config_devel',
           'config_update',
           'config_update_ui',
@@ -197,6 +198,8 @@ drupal:
           'joinup_cas_mock_server',
           'og_ui',
           'page_manager_ui',
+          'update',
+          'upgrade_status',
           'views_ui',
         ];
         // Location of the site configuration files.
