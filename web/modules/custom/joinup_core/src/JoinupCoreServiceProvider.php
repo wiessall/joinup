@@ -6,19 +6,27 @@ namespace Drupal\joinup_core;
 
 use Drupal\Core\DependencyInjection\ContainerBuilder;
 use Drupal\Core\DependencyInjection\ServiceModifierInterface;
+use Joinup\Traits\DigitQaPipelineAwareTrait;
 
 /**
  * Sets Monolog handler paths from DRUPAL_MONOLOG_PATHS and adds dblog logging.
  */
 class JoinupCoreServiceProvider implements ServiceModifierInterface {
 
+  use DigitQaPipelineAwareTrait;
+
   /**
    * {@inheritdoc}
    */
   public function alter(ContainerBuilder $container): void {
+    // Workaround FPFISSUPP-15044.
+    // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/FPFISSUPP-15044
+    // @todo Remove once FPFISSUPP-15044 is fixed.
+    $paths = !static::isDigitQaPipeline() ? getenv('DRUPAL_MONOLOG_PATHS') : 'default_handler:/tmp/drupal/default.log;php_handler:/tmp/drupal/php.log';
+
     // Sets the Monolog handler paths from DRUPAL_MONOLOG_PATHS env var.
-    if (!empty($_SERVER['DRUPAL_MONOLOG_PATHS'])) {
-      foreach (explode(';', $_SERVER['DRUPAL_MONOLOG_PATHS']) as $item) {
+    if ($paths) {
+      foreach (explode(';', $paths) as $item) {
         $item = str_replace(' ', '', $item);
         if (strpos($item, ':') !== FALSE) {
           [$handler, $path] = explode(':', $item);
