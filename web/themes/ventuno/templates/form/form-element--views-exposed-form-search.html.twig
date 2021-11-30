@@ -70,9 +70,6 @@
 ]
 %}
 <div{{ attributes.addClass(classes) }}>
-  {% if label_display in ['before', 'invisible'] %}
-    {{ label }}
-  {% endif %}
   {% if prefix is not empty %}
     <span class="field-prefix">{{ prefix }}</span>
   {% endif %}
@@ -84,9 +81,6 @@
   {{ children }}
   {% if suffix is not empty %}
     <span class="field-suffix">{{ suffix }}</span>
-  {% endif %}
-  {% if label_display == 'after' %}
-    {{ label }}
   {% endif %}
   {% if errors %}
     <div class="form-item--error-message invalid-feedback d-block">
