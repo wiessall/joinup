@@ -375,10 +375,8 @@ class JoinupContext extends RawDrupalContext {
   public function assertSelectOptionsAsList($select, TableNode $table) {
     $field = $this->findSelect($select);
 
-    if (!$field->hasClass('ss-main')) {
-      $this->assertSelectAvailableOptions($field, $table);
-    }
-    else {
+    // Check if it's Slim Select element.
+    if ($field->hasClass('ss-main')) {
       $xpath = '//*[contains(concat(" ", normalize-space(@class), " "), "ss-option")]';
 
       $actual_options = [];
@@ -396,6 +394,8 @@ class JoinupContext extends RawDrupalContext {
 
       Assert::assertSame($expected_options, $actual_options);
     }
+
+    $this->assertSelectAvailableOptions($field, $table);
   }
 
   /**
