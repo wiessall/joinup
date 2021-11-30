@@ -23,6 +23,14 @@ class HeaderContext extends RawDrupalContext {
   ];
 
   /**
+   * Maps Bootstrap icon identifiers to human readable aliases.
+   */
+  protected const ICON_ALIASES = [
+    'hamburger' => 'justify',
+    'profile' => 'person-circle',
+  ];
+
+  /**
    * Checks that the Joinup logo is present in the navigation bar.
    *
    * @Then I should see the Joinup logo in the navigation bar
@@ -88,6 +96,29 @@ class HeaderContext extends RawDrupalContext {
 
     Assert::assertEmpty($desktop_items);
     Assert::assertEmpty($mobile_items);
+  }
+
+  /**
+   * Checks that the requested menu icon is present in the header.
+   *
+   * @param string $icon
+   *   The icon that should be visible. Can be either 'profile' or 'hamburger'.
+   *
+   * @Then I should see the :icon icon in the main navigation
+   */
+  public function assertHamburgerMenuIconPresent(string $icon): void {
+    assert(array_key_exists($icon, self::ICON_ALIASES), 'Unknown icon ' . $icon);
+
+    $icon_uri = base_path() . drupal_get_path('theme', 'oe_bootstrap_theme') . '/assets/icons/bootstrap-icons.svg#' . self::ICON_ALIASES[$icon];
+    $icon_selector = 'nav.joinup-navbar .nav-item svg > use';
+    foreach ($this->getSession()->getPage()->findAll('css', $icon_selector) as $icon) {
+      if ($icon->getAttribute('xlink:href') === $icon_uri) {
+        // We found the icon.
+        return;
+      }
+    }
+
+    throw new \RuntimeException("The $icon icon was expected to be present in the main navigation on mobile, but it was not.");
   }
 
 }
