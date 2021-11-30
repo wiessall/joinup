@@ -33,6 +33,7 @@ Feature: Machine translation
       | collection | Brexit        |
 
     When I am logged in as a moderator
+    And I accept essential cookies
     # Inside a collection sidebar, only custom pages, glossary terms (but not
     # the glossary overview) and the about page should be translatable.
     When I go to the edit form of the "Brexit" collection
@@ -85,17 +86,13 @@ Feature: Machine translation
     # Pages that primarily list content should not be translatable.
     When I go to the homepage
     Then I should not see any Webtools eTrans elements
-    # The search no longer has a link to the collections, solutions and
-    # keep up to date. Let's try another page.
     When I visit the search page
     Then I should not see any Webtools eTrans elements
-    When I visit "/keep-up-to-date"
+    When I visit the collection overview
     Then I should not see any Webtools eTrans elements
-    When I click "Collections" in the "Header menu" region
+    When I visit the solution overview
     Then I should not see any Webtools eTrans elements
-    When I click "Solutions" in the "Header menu" region
-    Then I should not see any Webtools eTrans elements
-    When I click "Keep up to date" in the "Header menu" region
+    And I visit the content overview
     Then I should not see any Webtools eTrans elements
 
     # Pages that are not content focused should not be translatable.

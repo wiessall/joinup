@@ -30,11 +30,11 @@ Feature: Homepage
       | title | Shaping of nature |
       | state | validated         |
     And news content:
-      | title                       | headline                 | collection        | topic                                      | state     | publication date     | body                                                                                                                                                                                                                                                          |
-      | Current biodiversity crisis | Preserve habitats        | Shaping of nature | Finance in EU, Supplier exchange, E-health | validated | 2021-04-26T19:09:00Z | Here we combine global maps of human populations and land use over the past 12000 y with current biodiversity data to show that nearly <em>three quarters of nature has long been shaped by histories of human habitation</em> and use by indigenous peoples. |
-      | Environmental stewardship   | Transformative practices | Shaping of nature | Employment and Support Allowance           | validated | 2021-01-27T16:12:00Z | With rare exceptions current biodiversity losses are caused not by human conversion or degradation of untouched ecosystems but rather by the appropriation colonization and intensification of use in lands inhabited and used by prior societies.            |
-      | Spatial reconstruction      | Loss of wildlands        | Shaping of nature | HR, Statistics and Analysis, E-justice     | validated | 2021-02-28T13:15:00Z | Global land use history confirms that empowering the environmental stewardship of Indigenous peoples and local communities will be critical to conserving biodiversity across the planet.                                                                     |
-      | Earlier transformations     | Ecosystem management     | Shaping of nature | EU and European Policies                   | validated | 2021-03-29T10:18:00Z | Archaeological evidence shows that by 10000 BCE all societies employed ecologically transformative land use practices including burning hunting species propagation domestication cultivation have left long-term legacies across the biosphere.              |
+      | title                       | headline                 | collection        | topic                                      | state     | publication date     | body                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
+      | Current biodiversity crisis | Preserve habitats        | Shaping of nature | Finance in EU, Supplier exchange, E-health | validated | 2021-04-26T19:09:00Z | Here we combine global maps of human populations and land use over the past 12000 y with current biodiversity data to show that nearly <em>three quarters of nature has long been shaped by histories of human habitation</em> and use by indigenous peoples.                                                                                                                                                                                                                                                                                                                                                       |
+      | Environmental stewardship   | Transformative practices | Shaping of nature | Employment and Support Allowance           | validated | 2021-01-27T16:12:00Z | With rare exceptions current biodiversity losses are caused not by human conversion or degradation of untouched ecosystems but rather by the appropriation colonization and intensification of use in lands inhabited and used by prior societies.                                                                                                                                                                                                                                                                                                                                                                  |
+      | Spatial reconstruction      | Loss of wildlands        | Shaping of nature | HR, Statistics and Analysis, E-justice     | validated | 2021-02-28T13:15:00Z | Global land use history confirms that empowering the environmental stewardship of Indigenous peoples and local communities will be critical to conserving biodiversity across the planet.                                                                                                                                                                                                                                                                                                                                                                                                                           |
+      | Earlier transformations     | Ecosystem management     | Shaping of nature | EU and European Policies                   | validated | 2021-03-29T10:18:00Z | "<p>{""preview_thumbnail"":""/sites/default/files/styles/video_embed_wysiwyg_preview/public/video_thumbnails/dQw4w9WgXcQ.jpg?itok=s9z0clFM"",""video_url"":""https://www.youtube.com/watch?v=dQw4w9WgXcQ"",""settings"":{""responsive"":true,""width"":""854"",""height"":""480"",""autoplay"":false},""settings_summary"":[""Embedded Video (Responsive).""]}Archaeological evidence shows that by 10000 BCE all societies employed ecologically transformative land use practices including burning hunting species propagation domestication cultivation have left long-term legacies across the biosphere.</p>" |
     When I am on the homepage
     Then the latest news section should contain the following news articles:
       | date   | topics                           | title                       | body                                                                                                                                                                                                     |
@@ -90,25 +90,33 @@ Feature: Homepage
       | 3      | alan.jpg    | HR, Statistics and Analysis      | Microgravity    | Conventional studies investigating the effects of reduced gravity on muscle mass and function have used a ground control group that is not directly comparable to the space experimental group. |
 
   @terms
-  Scenario: A solution can be highlighted on the homepage
-    Given solution:
-      | title         | Mercury poisoning                                                          |
-      | state         | validated                                                                  |
-      | description   | Mercury poisoning is a type of metal poisoning due to exposure to mercury. |
-      | logo          | logo.png                                                                   |
-      | solution type | Interoperability Specification, Networking Service                         |
-      | topic         | Demography, EU and European Policies, HR                                   |
-      | state         | validated                                                                  |
-    And the "Highlighted solution" content listing contains:
-      | type     | label             |
-      | solution | Mercury poisoning |
+  Scenario Outline: Community content be highlighted on the homepage
+    Given collection:
+      | title | Clash of documents |
+      | state | validated          |
+    And <type> content:
+      | title        | collection         | topic                              | state     | logo     | body                                                                                                                                                                                            |
+      | Microgravity | Clash of documents | HR, E-justice                      | validated | alan.jpg | Conventional studies investigating the effects of reduced gravity on muscle mass and function have used a ground control group that is not directly comparable to the space experimental group. |
+      | Aliens       | Clash of documents | Statistics and Analysis, E-justice | validated | alan.jpg | Conventional studies investigating the effects of reduced gravity on muscle mass and function have used a ground control group that is not directly comparable to the space experimental group. |
+      | Groundforce  | Clash of documents | Statistics and Analysis, E-justice | proposed  | alan.jpg | Conventional studies investigating the effects of reduced gravity on muscle mass and function have used a ground control group that is not directly comparable to the space experimental group. |
+    And the "Highlighted content" content listing contains:
+      | type   | label  |
+      | <type> | Aliens |
 
     When I am on the homepage
-    Then I should see "Mercury poisoning" as the highlighted solution
-    And I should see the link "More solutions"
-    When I click "More solutions"
+    Then I should see "Aliens" as the Highlighted content
+    And I should see the link "Related content"
+    When I click "Related content"
     Then I should be on the advanced search page
-    And I should see the following facet summary "Solution"
+    And I should see the "Aliens" tile
+    And I should not see the "Microgravity" tile
+    And I should not see the "Groundforce" tile
+
+    Examples:
+      | type     |
+      | document |
+      | news     |
+      | event    |
 
   Scenario: An event can be highlighted on the homepage
     Given event content:
@@ -179,11 +187,7 @@ Feature: Homepage
     Then I should be on the search page
     And I should see the "RNA vaccines" tile
 
-  # Todo: This test is disabled because of a persisting failure on CPHP which
-  # cannot be replicated locally. To be enabled again once we have moved to
-  # the new infrastructure.
-  # See https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-6656
-  @terms @javascript @wip
+  @terms @javascript
   Scenario Outline: Discover topics block shows a list of topics.
     Given collection:
       | title | Clash of vania's |

@@ -18,13 +18,13 @@ Feature: SEO for RDF entities.
       | @language | en         |
       | @value    | SEO entity |
 
-    When I click "<link>"
+    When I visit the <type> overview
     Then the rdf metadata of the "SEO entity" rdf entity should not be attached in the page
 
     Examples:
-      | type       | link        | graph type      |
-      | collection | Collections | AssetRepository |
-      | solution   | Solutions   | Asset           |
+      | type       | graph type      |
+      | collection | AssetRepository |
+      | solution   | Asset           |
 
   Scenario: Basic JSON meta information for releases and distributions.
     Given the following solution:

@@ -2,11 +2,6 @@
 Feature: Global search
   As a user of the site I can find content through the global search.
 
-  # Todo: This test runs with javascript enabled because in a non-javascript
-  # environment, the dropdown facet is simply a list of links. Remove the
-  # `@javascript` tag when the upstream issue in the Facets module is fixed.
-  # Ref. https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-5739
-  # Ref. https://www.drupal.org/project/facets/issues/2937191
   @javascript
   Scenario: Anonymous user can find items
     Given the following collection:
@@ -29,10 +24,7 @@ Feature: Global search
       | Dummy news 4          | Dummy body       | Molecular cooking collection | E-inclusion             | Luxembourg       | validated |
 
     Given I am logged in as a user with the "authenticated" role
-    # @todo The search page cache should be cleared when new content is added.
-    # @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-3428
-    And the cache has been cleared
-    When I visit the search page
+    Then I visit the search page
     # All content is visible.
     Then I should see the "Molecular cooking collection" tile
     And I should see the "El Celler de Can Roca" tile
@@ -59,7 +51,7 @@ Feature: Global search
     And the response should contain "<option value=\"http://joinup.eu/ontology/topic/category#social-and-political\">Social and Political</option>"
     And the response should contain "<option value=\"http://joinup.eu/ontology/topic#demography\">- Demography</option>"
     And the response should contain "<option value=\"http://joinup.eu/ontology/topic#e-inclusion\">- E-inclusion</option></select>"
-    And the "spatial coverage" select facet form should contain the following options:
+    And the "Geographic coverage" select should contain the following options:
       | Any location       |
       | Belgium (1)        |
       | European Union (1) |
@@ -100,7 +92,7 @@ Feature: Global search
       | - E-inclusion             |
 
     #Then the option with text "Any location" from select facet form "spatial coverage" is selected
-    And the "spatial coverage" select facet form should contain the following options:
+    And the "Geographic coverage" select should contain the following options:
       | Any location       |
       | Belgium (1)        |
       | European Union (1) |
@@ -114,7 +106,7 @@ Feature: Global search
     Then I scroll button "Search" into view
     And I press "Search"
     Then the option with text "Belgium (1)" from select facet form "spatial coverage" is selected
-    And the "spatial coverage" select facet form should contain the following options:
+    And the "Geographic coverage" select should contain the following options:
       | Any location       |
       | Belgium (1)        |
       | European Union (1) |
@@ -152,7 +144,7 @@ Feature: Global search
       | Social and Political      |
       | - Demography              |
       | - E-inclusion             |
-    And the "spatial coverage" select facet form should contain the following options:
+    And the "Geographic coverage" select should contain the following options:
       | Any location       |
       | European Union (1) |
       | Luxembourg (5)     |
@@ -190,7 +182,7 @@ Feature: Global search
       | Document omega | Document      | Document short delta | A document consists of epsilon strings. | Luxembourg       | Alphabet | Collection alpha | validated |
 
     When I visit the search page
-    And the "spatial coverage" select facet form should contain the following options:
+    And the "Geographic coverage" select should contain the following options:
       | Any location     |
       | Greece (1)       |
       | Luxembourg (2)   |
@@ -328,6 +320,9 @@ Feature: Global search
      When I enter "Omero+snc" in the search bar and press enter
      Then the page should show the tiles "Ulysses Freeman"
 
+  @wip
+  # This is disabled because the search bar is currently not shown in the header
+  # but this functionality will probably be restored in the future.
   Scenario: Advanced search
     # An advanced search link is shown in the header, except on the search page.
     Given I am on the homepage
