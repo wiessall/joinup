@@ -1,7 +1,7 @@
 _meta:
   version: '1.0'
   entity_type: menu_link_content
-  uuid: 01f49cb4-ac88-469d-bb15-31a08c1beaaf
+  uuid: 9d9a7504-950e-44f4-91f5-8d72ca2d3fcc
   bundle: menu_link_content
   default_langcode: en
 default:
@@ -10,13 +10,13 @@ default:
       value: true
   title:
     -
-      value: 'Satisfaction survey'
+      value: Twitter
   menu_name:
     -
-      value: footer-help-and-support
+      value: footer-follow-us
   link:
     -
-      uri: 'https://ec.europa.eu/eusurvey/runner/Joinup_Satisfaction_Survey'
+      uri: 'https://twitter.com/joinup_eu'
       title: ''
       options:
         menu_link_destination: 0
