@@ -375,7 +375,7 @@ class JoinupContext extends RawDrupalContext {
   public function assertSelectOptionsAsList($select, TableNode $table) {
     $field = $this->findSelect($select);
 
-    // Check if it's Slim Select element.
+    // Check if it's a Slim Select element.
     if ($field->hasClass('ss-main')) {
       $xpath = '//*[contains(concat(" ", normalize-space(@class), " "), "ss-option")]';
 
@@ -391,8 +391,9 @@ class JoinupContext extends RawDrupalContext {
         return preg_replace("/\s{2,}/", " ", $option);
       };
       $expected_options = array_map($strip_multiple_spaces, $rows);
+      Assert::assertSame($expected_options, $actual_options);
 
-      return Assert::assertSame($expected_options, $actual_options);
+      return;
     }
     $this->assertSelectAvailableOptions($field, $table);
   }
