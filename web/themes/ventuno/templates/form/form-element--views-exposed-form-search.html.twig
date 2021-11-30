@@ -69,6 +69,9 @@
   description_display == 'invisible' ? 'visually-hidden',
 ]
 %}
+{% if label_display %}
+  {{ label }}
+{% endif %}
 <div{{ attributes.addClass(classes) }}>
   {% if prefix is not empty %}
     <span class="field-prefix">{{ prefix }}</span>
