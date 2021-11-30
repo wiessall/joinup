@@ -82,7 +82,7 @@ Feature: SEO for discussion forum posts.
       | og:title       | Discussions are now forum posts                                                                     |
       | og:description | This discussion is to ensure that SEO tags are set properly.                                        |
 
-    When I click "Keep up to date"
+    When I visit the content overview
     Then I should see the "Discussions are now forum posts" tile
     # No metatags are defined for the keep up to date page.
     # No metatags JSON in general means also that the entity metatags of the

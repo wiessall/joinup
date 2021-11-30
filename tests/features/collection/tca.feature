@@ -13,13 +13,13 @@ Feature: Collection TCA agreement
 
   Scenario: TCA agreement page is not accessible by anonymous users.
     When I am not logged in
-    And I visit "/collections"
+    And I visit the collection overview
     And I click "Create collection"
     Then I should see the heading "Sign in to continue"
 
   Scenario: Authenticated users can access the TCA agreement page.
     When I am logged in as a user with the "authenticated" role
-    And I visit "/collections"
+    And I visit the collection overview
     And I click "Create collection"
     Then I should see the heading "Why create a Collection?"
     And I should see the text "In order to create the Collection you need first check the field below and then press the Yes button to proceed."
@@ -40,7 +40,7 @@ Feature: Collection TCA agreement
       | Legal notice | 1.1   | yes       | I have read and accept the <a href="[entity_legal_document:url]">[entity_legal_document:label]</a> | The information on this site is subject to a disclaimer... |
 
     When I am logged in as a user with the "authenticated" role
-    And I visit "/collections"
+    And I visit the collection overview
     Then I should see the warning message "You must accept this agreement before continuing."
 
     Given I check "I have read and accept the Legal notice"

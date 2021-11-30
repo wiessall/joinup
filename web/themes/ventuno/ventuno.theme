@@ -8,15 +8,15 @@
 declare(strict_types = 1);
 
 use Drupal\Core\Menu\MenuLinkInterface;
-use Drupal\Core\Menu\MenuLinkTreeElement;
-use Drupal\Core\Menu\MenuTreeParameters;
 use Drupal\Core\Url;
-use Drupal\collection\Entity\CollectionInterface;
+use Drupal\interoperable_europe\InteroperableEuropeCollectionInterface;
 use Drupal\joinup_bundle_class\DescriptionInterface;
 use Drupal\joinup_bundle_class\LogoInterface;
-use Drupal\joinup_collection\JoinupCollectionHelper;
-use Drupal\rdf_entity\Entity\Rdf;
+use Drupal\node\Entity\Node;
+use Drupal\node\NodeInterface;
 use Drupal\smart_trim\Truncate\TruncateHTML;
+use Drupal\topic\Entity\TopicInterface;
+use Drupal\topic\Entity\TopicReferencingEntityInterface;
 
 /**
  * Implements hook_theme_suggestions_HOOK_alter().
@@ -80,93 +80,61 @@ function ventuno_preprocess_page(&$variables) {
   // Export the user name to display in the header.
   $variables['user_name'] = \Drupal::currentUser()->getDisplayName();
 
+  // Show links to 'Interoperable Europe' and 'Interoperability Solutions'.
+  /** @var \Drupal\joinup_menu\MenuHelperInterface $menu_helper */
+  $menu_helper = \Drupal::service('joinup_menu.menu_helper');
+  $variables['landing_page_links'] = $menu_helper->getBclLandingPageLinks();
+
   // Export the user account menu in the format expected by the header template.
-  /** @var \Drupal\Core\Menu\MenuLinkTreeInterface $menu_link_tree */
-  $menu_link_tree = \Drupal::service('menu.link_tree');
-  $tree = $menu_link_tree->load('account', new MenuTreeParameters());
-  $manipulators = [
-    ['callable' => 'menu.default_tree_manipulators:checkAccess'],
-    ['callable' => 'menu.default_tree_manipulators:generateIndexAndSort'],
-  ];
-  $tree = $menu_link_tree->transform($tree, $manipulators);
-  $tree = array_filter($tree, function (MenuLinkTreeElement $element): bool {
-    // Hide inaccessible links, as well as the 'EU Login info' link. This link
-    // is only intended for anonymous users.
-    // @see joinup_eulogin_preprocess_menu()
-    return $element->link->isEnabled() && $element->link->getPluginId() !== 'joinup_eulogin.eu_login_info';
-  });
-  $variables['profile_links'] = array_map(function (MenuLinkTreeElement $element): array {
-    return [
-      'link' => $element->link->getUrlObject(),
-      'label' => $element->link->getTitle(),
-    ];
-  }, $tree);
+  $variables['profile_links'] = $menu_helper->getBclAccountMenu();
 
   // Populate the links shown to anonymous users.
-  $anonymous_links = [];
+  $variables['anonymous_links'] = $menu_helper->getBclAnonymousMenu();
 
-  // Add a link to the homepage, only to be shown in the hamburger menu.
-  $anonymous_links[] = [
-    'label' => t('Home'),
-    'link' => Url::fromRoute('<front>'),
-    'hide_on_desktop' => TRUE,
-  ];
+  // The "About us" link is only shown if the Joinup collection exists.
+  $variables['#cache']['tags'][] = 'joinup_collection:exists';
 
-  // Generate a link to EU Login.
-  // Get return URL from current page.
-  $cas_login_link = Url::fromRoute('cas.login', [], [
-    'query' => \Drupal::destination()->getAsArray(),
-  ]);
-  $anonymous_links[] = [
-    'label' => t('Sign in'),
-    'link' => $cas_login_link,
-  ];
-  $variables['anonymous_links'] = $anonymous_links;
+  // Export the URL of the Interoperable Europe landing page.
+  $landing_page = Node::load(InteroperableEuropeCollectionInterface::LANDING_PAGE_ENTITY_ID);
+  if ($landing_page instanceof NodeInterface) {
+    $variables['interoperable_europe_url'] = $landing_page->toUrl()->toString();
+  }
+}
 
-  // Generate a link button that opens the "Get started" popover.
-  $popover = [
-    'cta' => [
-      // Even though the link claims to lead to an account creation form, we are
-      // linking to the EU Login portal. Account creation is not handled inside
-      // the Joinup domain.
-      'link' => $cas_login_link,
-      'attributes' => 'tabindex="0"',
-      'text' => t('Create an account'),
-    ],
-    'description' => t('As a signed-in user you can create content, become a member of a community, receive notifications on your favourite solutions and topics, and access all other features available on the platform.'),
-  ];
-  $anonymous_links[] = [
-    'label' => t('Get started'),
-    'popover' => $popover,
-  ];
+/**
+ * Implements hook_preprocess_block() for the highlighted content block.
+ *
+ * Add a link to related content in the Highlighted Content block which is shown
+ * on the homepage. This will lead to the search page with the results filtered
+ * by the first referenced topic. If no topics are referenced the link will be
+ * hidden.
+ */
+function ventuno_preprocess_block__entityqueue_block__highlighted_content(&$variables) {
+  /** @var \Drupal\node\NodeInterface $node */
+  $node = $variables['elements']['content']['entities'][0]['#node'] ?? NULL;
 
-  // Generate a link to the About page of the Joinup collection, to show as the
-  // "About us" link in the hamburger menu for anonymous users.
-  try {
-    $joinup_collection = Rdf::load(JoinupCollectionHelper::getCollectionId());
-    if (!$joinup_collection instanceof CollectionInterface) {
-      throw new Exception();
+  if ($node instanceof TopicReferencingEntityInterface) {
+    $topics = $node->getTopics();
+    $topic = reset($topics);
+
+    if ($topic instanceof TopicInterface) {
+      $options = [
+        'query' => [
+          'f' => [
+            'topic:' . $topic->id(),
+          ],
+        ],
+      ];
+      $variables['related_content'] = [
+        '#type' => 'link',
+        '#title' => t('Related content'),
+        '#url' => Url::fromRoute('view.search.page_1', [], $options),
+        '#attributes' => [
+          'class' => ['more-link'],
+        ],
+      ];
     }
-    $url = $joinup_collection->toUrl('about-page');
-    $anonymous_links[] = [
-      'label' => t('About us'),
-      'link' => $url,
-      'hide_on_desktop' => TRUE,
-    ];
   }
-  catch (Exception $e) {
-    // The Joinup collection could not be loaded or the link to the About page
-    // could not be generated. This should not crash the page since the
-    // collection is considered to be optional. It is for example possible for a
-    // project to reuse the Joinup open source code without hosting a "Joinup"
-    // collection.
-    // However in scope of the Ventuno theme the About Us link is considered
-    // to be an important element, so we log a warning to alert the webmaster
-    // that corrective action is required.
-    \Drupal::logger('ventuno')->warning('"About us" link could not be rendered because the Joinup collection is not defined or doesn\'t have an About page.');
-  }
-
-  $variables['anonymous_links'] = $anonymous_links;
 }
 
 /**
@@ -258,7 +226,7 @@ function ventuno_preprocess_menu(&$variables) {
 function _ventuno_preprocess_menu_items(&$items) {
   foreach ($items as $item) {
     /** @var \Drupal\Core\Menu\MenuLinkDefault $menu_link */
-    $menu_link = isset($item['original_link']) ? $item['original_link'] : NULL;
+    $menu_link ??= $item['original_link'];
     if ($menu_link instanceof MenuLinkInterface) {
       $title = strtolower(trim($menu_link->getTitle()));
       $machine_name = preg_replace('/[^a-z0-9-]+/', '-', $title);
