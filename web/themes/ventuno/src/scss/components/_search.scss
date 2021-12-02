@@ -51,8 +51,17 @@
 }
 
 // Autocomplete
-.js input.form-autocomplete {
-  background-position: calc(100% - 10px) center;
+.js .js-form-item {
+  input.form-autocomplete {
+    background-position: calc(100% - 10px) center;
+  }
+  .btn-search {
+    @include font-icon-before("\E805", 1.2rem, $white, inherit, 0);
+    background-color: $primary;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    font-size: 0;
+  }
 }
 
 .ui-widget.search-api-autocomplete-search {
