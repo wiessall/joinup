@@ -8,43 +8,56 @@
     &::before {
       width: 100vw;
       height: 100%;
-      background: $gray-300;
       content: '';
       position: absolute;
       z-index: -10;
       right: 0;
+      @include media-breakpoint-up(lg) {
+        background: $gray-200;
+      }
     }
-    .offcanvas-header {
-      border-bottom: 1px solid $gray-400;
+    .offcanvas-title {
+      font-size: $font-size-lg; // 20px
+      @include media-breakpoint-up(lg) {
+        font-size: $font-size-lg * .9; // 18px
+      }
     }
     .form-label,
-    .fieldset-legend,
     .form-select,
     .form-control {
-      font-size: $font-size-sm;
+      font-size: $font-size-lg * .9; // 18px
+      @include media-breakpoint-up(lg) {
+        font-size: $font-size-base; // 16px
+      }
     }
-    .form-label,
-    fieldset > legend {
-      text-transform: uppercase;
+    .fieldset-legend {
       color: $primary;
-      font-weight: $font-weight-bold;
-      margin-bottom: $spacer;
+      text-transform: uppercase;
+      font-size: $font-size-lg * .9; // 18px
+      @include media-breakpoint-up(lg) {
+        font-size: $font-size-base; // 16px
+      }
     }
     .form-item {
-      margin-top: $spacer * 1.5;
-      padding-bottom: $spacer * 1.5;
-      border-bottom: 1px solid $gray-400;
-      @include media-breakpoint-up(lg) {
-        margin-top: $spacer * 2.5;
-        padding-bottom: $spacer * 2.5;
-
+      margin-bottom: $spacer * 1.125!important; // 18px
+    }
+    .fieldset-wrapper .form-item {
+      margin-bottom: 0!important;
+    }
+    fieldset {
+      .col-form-label {
+        margin-top: $spacer * .75; // 12px
+        margin-bottom: $spacer * .5; // 8px
+        @include media-breakpoint-up(lg) {
+          margin-top: $spacer * .5; // 8px
+        }
       }
     }
     .fieldset-wrapper {
       .form-item {
         margin-top: 0;
         border-bottom: none;
-        padding-bottom: $spacer * .75;
+        padding-bottom: $spacer * .5; // 8px
       }
     }
   }
