@@ -225,7 +225,8 @@ Feature: My subscriptions
     # @todo: a caching issue is causing the message to have empty fields when
     # rendered.
     # @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-5723
-    And the cache has been cleared
+    # And the cache has been cleared
+    Given I run cron
     Then the <frequency> group content subscription digest for "Auric Goldfinger" should match the following message:
       | Water supply |
 
