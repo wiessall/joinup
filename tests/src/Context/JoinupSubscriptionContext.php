@@ -469,8 +469,6 @@ class JoinupSubscriptionContext extends RawDrupalContext {
   public function assertDigestContains(TableNode $table, string $interval, string $username, string $scope, $label = NULL, $entity_type = NULL): void {
     Assert::assertContains($scope, ['match', 'include'], sprintf('Unknown scope %s.', $scope));
 
-    \Drupal::entityTypeManager()->useCaches(FALSE);
-
     // Check that the notifier for the requested interval includes the view
     // mode that contains the message content.
     $notifier = $this->getMessageDigestNotifierForInterval($interval);
