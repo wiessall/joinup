@@ -62,8 +62,8 @@ Feature: Global search
 
     When I scroll the "Topics" select into view
     And I select "Social and Political" option from the "Topics" Slim Select
-    Then I scroll button "Search" into view
-    And I press "Search"
+    Then I scroll button "Apply filters" into view
+    And I press "Apply filters"
     Then the "Social and Political" option from "Topics" Slim Select is selected
     And the "Topics" select should contain the following options:
       | Info                      |
@@ -82,8 +82,8 @@ Feature: Global search
     #Test multiple topics.
     When I scroll the "Topics" select into view
     And I select "E-inclusion,Demography" options from the "Topics" Slim Select
-    Then I scroll button "Search" into view
-    And I press "Search"
+    Then I scroll button "Apply filters" into view
+    And I press "Apply filters"
     And the "- Demography,- E-inclusion" options from "Topics" Slim Select are selected
     Then I scroll the "Topics" select into view
     And I unselect "E-inclusion,Demography" options from the "Topics" Slim Select
@@ -91,8 +91,8 @@ Feature: Global search
     # Test the topic facet. The space prefixing "Demography" is due to the hierarchy.
     When I scroll the "Topics" select into view
     And I select "Demography" option from the "Topics" Slim Select
-    Then I scroll button "Search" into view
-    And I press "Search"
+    Then I scroll button "Apply filters" into view
+    And I press "Apply filters"
     Then the "- Demography" option from "Topics" Slim Select is selected
     # The selected option moves to the last position by default.
     And the "Topics" select should contain the following options:
@@ -114,8 +114,8 @@ Feature: Global search
 
     # Test the spatial coverage facet.
     When I select "Belgium" from "Geographic coverage"
-    Then I scroll button "Search" into view
-    And I press "Search"
+    Then I scroll button "Apply filters" into view
+    And I press "Apply filters"
     Then the option with text "Belgium (1)" from select facet form "spatial coverage" is selected
     And the "Geographic coverage" select should contain the following options:
       | Any location       |
@@ -133,8 +133,8 @@ Feature: Global search
     # Select link in the 'type' facet.
     Given I am on the search page
     When I select "News (5)" from "Content types"
-    Then I scroll button "Search" into view
-    And I press "Search"
+    Then I scroll button "Apply filters" into view
+    And I press "Apply filters"
     Then the option with text "News (5)" from select facet form "Content types" is selected
     And the "Content types" select should contain the following options:
       | Collection (1)  |
@@ -142,8 +142,8 @@ Feature: Global search
       | Solutions (2)   |
 
     When I additionally select "Solutions (2)" from "Content types"
-    Then I scroll button "Search" into view
-    And I press "Search"
+    Then I scroll button "Apply filters" into view
+    And I press "Apply filters"
     And I should see the following facet summary "News, Solutions"
     And the "Content types" select should contain the following options:
       | Collection (1)  |
@@ -199,8 +199,8 @@ Feature: Global search
       | Luxembourg (2)   |
 
     When I select "Luxembourg" from "Geographic coverage"
-    Then I scroll button "Search" into view
-    And I press "Search"
+    And I scroll button "Apply filters" into view
+    And I press "Apply filters"
     Then the option with text "Luxembourg (2)" from select facet form "spatial coverage" is selected
     And I should see the text "Search Results (2)"
     # The countries are still sorted alphabetically even though the Luxembourg value is selected and has more results.
@@ -642,8 +642,8 @@ Feature: Global search
     When I visit the search page
     And I select "Solutions (2)" from "Content types"
     And I additionally select "News (5)" from "Content types"
-    Then I scroll button "Search" into view
-    And I press "Search"
+    Then I scroll button "Apply filters" into view
+    And I press "Apply filters"
     And I should see the following facet summary "News, Solutions"
 
     # Workaround to scroll an element towards the center of the screen to avoid a false out of bounds move exception.
@@ -652,8 +652,8 @@ Feature: Global search
     Then I scroll link "Clear filters" into view
     Then I click "Clear filters"
     And I select "News (5)" from "Content types"
-    Then I scroll button "Search" into view
-    And I press "Search"
+    Then I scroll button "Apply filters" into view
+    And I press "Apply filters"
     And I should see the following facet summary "News"
 
     # Check if facet summary was remove correctly.
@@ -664,8 +664,8 @@ Feature: Global search
     And I click "Clear filters"
     And I select "News (5)" from "Content types"
     And I additionally select "Collection (1)" from "Content types"
-    Then I scroll button "Search" into view
-    And I press "Search"
+    Then I scroll button "Apply filters" into view
+    And I press "Apply filters"
     And I should see the following facet summary "Collection, News"
     When I scroll the "News" chip into view
     And I should remove the following facet summary "News"
@@ -696,15 +696,15 @@ Feature: Global search
     When I visit the search page
     Then I select "Solutions (2)" from "Content types"
     And I additionally select "News (5)" from "Content types"
-    Then I scroll button "Search" into view
-    And I press "Search"
+    Then I scroll button "Apply filters" into view
+    And I press "Apply filters"
     And I should see the following facet summary "News, Solutions"
 
     Then I scroll link "Clear filters" into view
     And I click "Clear filters"
     And I select "News (5)" from "Content types"
-    Then I scroll button "Search" into view
-    And I press "Search"
+    Then I scroll button "Apply filters" into view
+    And I press "Apply filters"
     And I should see the following facet summary "News"
 
     # Check if facet summary was remove correctly.
@@ -712,8 +712,8 @@ Feature: Global search
     And I click "Clear filters"
     Then I select "News (5)" from "Content types"
     And I additionally select "Collection (1)" from "Content types"
-    Then I scroll button "Search" into view
-    And I press "Search"
+    Then I scroll button "Apply filters" into view
+    And I press "Apply filters"
     And I should see the following facet summary "Collection, News"
     Then I scroll the "News" chip into view
     And I should remove the following facet summary "News"
