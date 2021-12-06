@@ -54,6 +54,11 @@ Feature: Asset distribution editing.
     Then I should not see the link "Edit" in the "Entity actions" region
 
   Scenario: Edit a distribution as a solution facilitator.
+    Given the following licences:
+      | title           | description                         | deprecated |
+      | The same LGPL   | The LGPL more permisssive than GPL. | yes        |
+      | Another LGPL    | The LGPL more permisssive than GPL. | yes        |
+      | Some other LGPL | The LGPL more permisssive than GPL. | yes        |
     When I am logged in as a facilitator of the "Solution A" solution
     And I go to the homepage of the "Asset distribution example" asset distribution
     And I click "Edit"
@@ -62,6 +67,7 @@ Feature: Asset distribution editing.
     But the following fields should be present "Description, Access URL, Licence, Format, Status, Representation technique"
     # Ensure that the current licence is available even if it is deprecated but a warning is shown.
     And the "Licence" field should contain the "LGPL" option
+    And the "Licence" select field options should be sorted alphabetically
     And I should see the warning message "The referenced licence LGPL is deprecated. You are advised to chose a different licence."
     When I fill in "Title" with "Asset distribution example revised"
     # Set a non-HTTP protocol remote URL.
