@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "15b86fd3e0fb99cbd8773794f2225cb3",
+    "content-hash": "25d73994a5c604b79a8cade5388b6917",
     "packages": [
         {
             "name": "SEMICeu/adms-ap_validator",
@@ -2198,6 +2198,10 @@
                 {
                     "name": "floretan",
                     "homepage": "https://www.drupal.org/user/66163"
+                },
+                {
+                    "name": "nord102",
+                    "homepage": "https://www.drupal.org/user/3471419"
                 }
             ],
             "description": "Limit which text formats are available for each field instance.",
@@ -7634,6 +7638,65 @@
             "time": "2020-11-16T14:54:55+00:00"
         },
         {
+            "name": "drupal/slim_select",
+            "version": "1.0.0-alpha2",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/slim_select.git",
+                "reference": "1.0.0-alpha2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/slim_select-1.0.0-alpha2.zip",
+                "reference": "1.0.0-alpha2",
+                "shasum": "869749b84d109ddc0ae871b3a1b17d4fcf17905b"
+            },
+            "require": {
+                "drupal/core": "^8.9 || ^9.1"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "1.0.0-alpha2",
+                    "datestamp": "1638708300",
+                    "security-coverage": {
+                        "status": "not-covered",
+                        "message": "Alpha releases are not covered by Drupal security advisories."
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0+"
+            ],
+            "authors": [
+                {
+                    "name": "Alexandre Dias",
+                    "homepage": "https://www.drupal.org/user/56348",
+                    "email": "alex.jm.dias@gmail.com"
+                },
+                {
+                    "name": "Claudiu Cristea",
+                    "homepage": "https://www.drupal.org/u/claudiu.cristea"
+                },
+                {
+                    "name": "Ilias Dimopoulos",
+                    "homepage": "https://www.drupal.org/user/382067",
+                    "email": "idimopoulos@hotmail.com"
+                },
+                {
+                    "name": "saidatom",
+                    "homepage": "https://www.drupal.org/user/1846674"
+                }
+            ],
+            "description": "Provides a select element type that integrates with the Slim Select library.",
+            "homepage": "https://drupal.org/project/slim_select",
+            "support": {
+                "source": "https://git.drupalcode.org/project/slim_select",
+                "issues": "https://drupal.org/project/issues/slim_select"
+            }
+        },
+        {
             "name": "drupal/smart_trim",
             "version": "1.3.0",
             "source": {
@@ -7672,24 +7735,16 @@
                     "role": "Maintainer"
                 },
                 {
-                    "name": "chrisjlee",
-                    "homepage": "https://www.drupal.org/user/760600"
-                },
-                {
-                    "name": "drywall",
-                    "homepage": "https://www.drupal.org/user/192591"
-                },
-                {
-                    "name": "jsenich",
-                    "homepage": "https://www.drupal.org/user/58871"
-                },
-                {
-                    "name": "markie",
-                    "homepage": "https://www.drupal.org/user/206687"
-                },
-                {
                     "name": "newsignature",
                     "homepage": "https://www.drupal.org/user/765518"
+                },
+                {
+                    "name": "ultimike",
+                    "homepage": "https://www.drupal.org/user/51132"
+                },
+                {
+                    "name": "volkswagenchick",
+                    "homepage": "https://www.drupal.org/user/3332522"
                 }
             ],
             "description": "Provides a more robust alternative to 'summary or trimmed' textfield format.",
@@ -9773,7 +9828,7 @@
                 "reference": "master"
             },
             "type": "drupal-theme-library",
-            "time": "2021-06-30T06:04:10+00:00"
+            "time": "2018-10-31T20:10:45+00:00"
         },
         {
             "name": "laminas/laminas-diactoros",
@@ -10743,11 +10798,16 @@
         },
         {
             "name": "openeuropa/oe_bootstrap_theme",
-            "version": "1.0.0-alpha2",
+            "version": "0.71.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/openeuropa/oe_bootstrap_theme.git",
+                "reference": "acaf97ddaa159dc827622a2ede554336dc2afe63"
+            },
             "dist": {
-                "type": "tar",
-                "url": "https://github.com/openeuropa/oe_bootstrap_theme/releases/download/1.0.0-alpha2/oe_bootstrap_theme-1.0.0-alpha2.tar.gz",
-                "reference": "9080501e829bc1fda8703d164dba8dc53a4d42e1",
+                "type": "zip",
+                "url": "https://api.github.com/repos/openeuropa/oe_bootstrap_theme/zipball/acaf97ddaa159dc827622a2ede554336dc2afe63",
+                "reference": "acaf97ddaa159dc827622a2ede554336dc2afe63",
                 "shasum": ""
             },
             "require": {
@@ -12260,7 +12320,7 @@
                 "reference": "master"
             },
             "type": "library",
-            "time": "2021-07-31T00:07:16+00:00"
+            "time": "2020-11-25T21:59:37+00:00"
         },
         {
             "name": "stack/builder",
@@ -16601,7 +16661,7 @@
             "extra": {
                 "drupal": {
                     "version": "4.1.1",
-                    "datestamp": "1609419527",
+                    "datestamp": "1631968537",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -21852,6 +21912,7 @@
         "drupal/schema_digital_document": 20,
         "drupal/schema_social_media_posting": 20,
         "drupal/site_verify": 20,
+        "drupal/slim_select": 15,
         "drupal/subpathauto": 20,
         "drupal/swiftmailer": 20,
         "drupal/views_block_area": 10,

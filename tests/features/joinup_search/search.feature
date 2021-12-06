@@ -2,11 +2,6 @@
 Feature: Global search
   As a user of the site I can find content through the global search.
 
-  # Todo: This test runs with javascript enabled because in a non-javascript
-  # environment, the dropdown facet is simply a list of links. Remove the
-  # `@javascript` tag when the upstream issue in the Facets module is fixed.
-  # Ref. https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-5739
-  # Ref. https://www.drupal.org/project/facets/issues/2937191
   @javascript
   Scenario: Anonymous user can find items
     Given the following collection:
@@ -29,18 +24,14 @@ Feature: Global search
       | Dummy news 4          | Dummy body       | Molecular cooking collection | E-inclusion             | Luxembourg       | validated |
 
     Given I am logged in as a user with the "authenticated" role
-    # @todo The search page cache should be cleared when new content is added.
-    # @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-3428
-    And the cache has been cleared
-    When I visit the search page
+    Then I visit the search page
     # All content is visible.
     Then I should see the "Molecular cooking collection" tile
     And I should see the "El Celler de Can Roca" tile
     And I should see the "Spherification" tile
     And I should see the "Foam" tile
     # Terms are sorted alphabetically
-    And the "topic" select facet form should contain the following options:
-      | Any topic               |
+    And the "Topics" select should contain the following options:
       # Parent term.
       | Info                    |
       # Child term.
@@ -60,7 +51,7 @@ Feature: Global search
     And the response should contain "<option value=\"http://joinup.eu/ontology/topic/category#social-and-political\">Social and Political</option>"
     And the response should contain "<option value=\"http://joinup.eu/ontology/topic#demography\">- Demography</option>"
     And the response should contain "<option value=\"http://joinup.eu/ontology/topic#e-inclusion\">- E-inclusion</option></select>"
-    And the "spatial coverage" select facet form should contain the following options:
+    And the "Geographic coverage" select should contain the following options:
       | Any location       |
       | Belgium (1)        |
       | European Union (1) |
@@ -69,12 +60,12 @@ Feature: Global search
     # Joinup there were two search fields, but this was confusing users.
     And there should be exactly 1 "search field" on the page
 
-    When I select "Social and Political" from "Topics"
+    When I scroll the "Topics" select into view
+    And I select "Social and Political" option from the "Topics" Slim Select
     Then I scroll button "Search" into view
     And I press "Search"
-    Then the option with text "Social and Political" from select facet form "topic" is selected
-    And the "topic" select facet form should contain the following options:
-      | Any topic                 |
+    Then the "Social and Political" option from "Topics" Slim Select is selected
+    And the "Topics" select should contain the following options:
       | Info                      |
       | - Statistics and Analysis |
       | Social and Political      |
@@ -85,15 +76,26 @@ Feature: Global search
     And I should see the "Dummy news 2" tile
     And I should see the "Dummy news 3" tile
     And I should see the "Dummy news 4" tile
+    Then I scroll the "Topics" select into view
+    And I unselect "Social and Political" option from the "Topics" Slim Select
 
-    # Test the topic facet. The space prefixing "Demography" is due to the hierarchy.
-    When I select "- Demography" from "Topics"
+    #Test multiple topics.
+    When I scroll the "Topics" select into view
+    And I select "E-inclusion,Demography" options from the "Topics" Slim Select
     Then I scroll button "Search" into view
     And I press "Search"
-    Then the option with text "- Demography" from select facet form "topic" is selected
+    And the "- Demography,- E-inclusion" options from "Topics" Slim Select are selected
+    Then I scroll the "Topics" select into view
+    And I unselect "E-inclusion,Demography" options from the "Topics" Slim Select
+
+    # Test the topic facet. The space prefixing "Demography" is due to the hierarchy.
+    When I scroll the "Topics" select into view
+    And I select "Demography" option from the "Topics" Slim Select
+    Then I scroll button "Search" into view
+    And I press "Search"
+    Then the "- Demography" option from "Topics" Slim Select is selected
     # The selected option moves to the last position by default.
-    And the "topic" select facet form should contain the following options:
-      | Any topic                 |
+    And the "Topics" select should contain the following options:
       | Info                      |
       | - Statistics and Analysis |
       | Social and Political      |
@@ -101,7 +103,7 @@ Feature: Global search
       | - E-inclusion             |
 
     #Then the option with text "Any location" from select facet form "spatial coverage" is selected
-    And the "spatial coverage" select facet form should contain the following options:
+    And the "Geographic coverage" select should contain the following options:
       | Any location       |
       | Belgium (1)        |
       | European Union (1) |
@@ -115,13 +117,12 @@ Feature: Global search
     Then I scroll button "Search" into view
     And I press "Search"
     Then the option with text "Belgium (1)" from select facet form "spatial coverage" is selected
-    And the "spatial coverage" select facet form should contain the following options:
+    And the "Geographic coverage" select should contain the following options:
       | Any location       |
       | Belgium (1)        |
       | European Union (1) |
-    Then the option with text "- Demography" from select facet form "topic" is selected
-    And the "topic" select facet form should contain the following options:
-      | Any topic            |
+    Then the "- Demography" option from "Topics" Slim Select is selected
+    And the "Topics" select should contain the following options:
       | Social and Political |
       | - Demography         |
     And I should see the "Molecular cooking collection" tile
@@ -135,7 +136,7 @@ Feature: Global search
     Then I scroll button "Search" into view
     And I press "Search"
     Then the option with text "News (5)" from select facet form "Content types" is selected
-    And the "Content types" select facet form should contain the following options:
+    And the "Content types" select should contain the following options:
       | Collection (1)  |
       | News (5)        |
       | Solutions (2)   |
@@ -144,18 +145,17 @@ Feature: Global search
     Then I scroll button "Search" into view
     And I press "Search"
     And I should see the following facet summary "News, Solutions"
-    And the "Content types" select facet form should contain the following options:
+    And the "Content types" select should contain the following options:
       | Collection (1)  |
       | News (5)        |
       | Solutions (2)   |
-    And the "topic" select facet form should contain the following options:
-      | Any topic                 |
+    And the "Topics" select should contain the following options:
       | Info                      |
       | - Statistics and Analysis |
       | Social and Political      |
       | - Demography              |
       | - E-inclusion             |
-    And the "spatial coverage" select facet form should contain the following options:
+    And the "Geographic coverage" select should contain the following options:
       | Any location       |
       | European Union (1) |
       | Luxembourg (5)     |
@@ -193,7 +193,7 @@ Feature: Global search
       | Document omega | Document      | Document short delta | A document consists of epsilon strings. | Luxembourg       | Alphabet | Collection alpha | validated |
 
     When I visit the search page
-    And the "spatial coverage" select facet form should contain the following options:
+    And the "Geographic coverage" select should contain the following options:
       | Any location     |
       | Greece (1)       |
       | Luxembourg (2)   |
@@ -204,7 +204,7 @@ Feature: Global search
     Then the option with text "Luxembourg (2)" from select facet form "spatial coverage" is selected
     And I should see the text "Search Results (2)"
     # The countries are still sorted alphabetically even though the Luxembourg value is selected and has more results.
-    And the "spatial coverage" select facet form should contain the following options:
+    And the "Geographic coverage" select should contain the following options:
       | Any location     |
       | Greece (1)       |
       | Luxembourg (2)   |
@@ -257,7 +257,7 @@ Feature: Global search
       | ulyssesfrees | ulysses.freeman@example.com | Ulysses    | Freeman     | Omero snc    |
 
     When I visit the search page
-    And the "Content types" select facet form should contain the following options:
+    And the "Content types" select should contain the following options:
       | Collections (2)	|
       | Custom page (1)	|
       | Discussion (1)	|
