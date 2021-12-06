@@ -3,7 +3,9 @@
   .offcanvas {
     box-shadow: none;
     @include media-breakpoint-up(lg) {
-      z-index: 500; // Avoid sidebar to overlap toolbar tray when logged in
+      // Avoid sidebar to overlap toolbar tray when logged in.
+      // 99 is 1 below the Cookie Consent banner's z-index.
+      z-index: 99;
     }
     &::before {
       width: 100vw;
