@@ -20,7 +20,7 @@
       attributes: create_attribute().addClass(['text-primary', 'me-2-5', 'mt-2-5'])
     }]) %}
   {% endfor %}
-  {{ pattern('card', {
+  {% include directory ~ '/templates/bcl-card/card.html.twig' with {
     attributes: create_attribute().addClass(['border-0', 'border-bottom', 'pb-3', 'mb-3']),
     horizontal: true,
     horizontal_grid: {
@@ -44,5 +44,6 @@
       position: 'top',
       extra_classes: 'd-none d-md-block',
     },
-  }) }}
+  } %}
+
 {% endblock %}
