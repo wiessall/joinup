@@ -311,14 +311,18 @@ function ventuno_form_alter(&$form, FormStateInterface $form_state, $form_id): v
     return;
   }
 
-  // Here you can define the check for specific view so that
-  // it doesn't apply to all views.
+  $route_name = \Drupal::routeMatch()->getRouteName();
   $view = $form_state->get('view');
   if ($view->id() === 'search') {
     $form['keys']['#theme'] = 'input__search_expose_form';
     $form['keys']['#title_display'] = 'invisible';
     $form['keys']['#attributes']['placeholder'] = t('Start typing to search…');
     $form['keys']['#joinup_parent'] = $form_id . '_' . $view->id();
+  }
+
+  if ($route_name != 'view.search.page_1' && $view->id() === 'search') {
+    // When re-using the exposed search form anywhere other than the search
+    // page, hide the "Sort by" select.
     $form['sort_by']['#type'] = 'hidden';
   }
 }
