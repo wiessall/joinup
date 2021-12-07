@@ -64,7 +64,7 @@
 {% set _extra_classes_header = extra_classes_header|default('') %}
 {% set _extra_classes_footer = extra_classes_footer|default('') %}
 {% set _badges = badges|default([]) %}
-{% set _classes = ['card'] %}
+{% set _classes = ['card', 'contextual-region'] %}
 {% if _text_color is not empty %}
   {% set _classes = _classes|merge(['text-' ~ _text_color]) %}
 {% endif %}
@@ -177,7 +177,7 @@
     </{{ _text_tag }}>
   {%- endif -%}
   {%- if _content is not empty -%}
-    {{- _content -}}
+    {{- _content|raw -}}
   {%- endif -%}
   </div>
 {% if _card_footer is not empty %}
