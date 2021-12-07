@@ -1,38 +1,20 @@
 // Pagination
 .pagination {
-  .page-item {
-    height: 3rem;
+  .page-item .page-link,
+  .page-item.active .page-link {
+    color: $link-color;
+  }
+  .page-item.disabled .page-link {
+    color: $gray-500;
+  }
+  .page-item.active .page-link {
+    font-weight: $font-weight-normal;
+    background: rgba(16, 115, 222, 0.1);
   }
   .page-link {
-    padding: 0.375rem 0.55rem;
+    padding: $spacer * .5 $spacer * .875; // 8px 14px
   }
-  .pager__item--first,
-  .pager__item--previous,
-  .pager__item--last,
-  .pager__item--next {
-    a {
-      color: $link-color;
-      width: 1.2rem;
-      height: 2rem;
-      @include icon-only();
-    }
+  .page-link:hover {
+    background: $gray-300;
   }
-    
-  .pager__item--first a {
-    @include font-icon-before("\E808", inherit, inherit, inherit, -1px 0 0 0);
-  }
-  .pager__item--previous {
-    padding-right: 10px;
-    a {
-      @include font-icon-before("\E812", inherit, inherit, inherit, -1px 8px 0 0);
-    }
-  }
-
-  .pager__item--last a {
-    @include font-icon-before("\E809", inherit, inherit, inherit, -1px 0 0 0);
-  }
-  .pager__item--next a {
-    @include font-icon-before("\E811", inherit, inherit, inherit, -1px 0 0 0);
-  }
-
 }
