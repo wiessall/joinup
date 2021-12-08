@@ -60,7 +60,7 @@
         "drupal/message_notify": "~1.2",
         "drupal/meta_entity": "^1.0-alpha2",
         "drupal/monolog": "^2.0",
-        "drupal/og": "dev-neutral-access-result as 1.x-dev",
+        "drupal/og": "^1.0-alpha7",
         "drupal/og_menu": "^1.0-alpha4",
         "drupal/page_manager": "^4.0@beta",
         "drupal/paragraphs": "^1.12",
@@ -320,9 +320,6 @@
             },
             "drupal/message_digest": {
                 "MessageDigestSubcontext is deprecated @see https://www.drupal.org/project/message_digest/issues/3168495": "https://www.drupal.org/files/issues/2020-09-01/3168495-2.patch"
-            },
-            "drupal/og": {
-                "Pretend is drupal/og:1.0-alpha4": "resources/patch/og.fake_version.patch"
             },
             "drupal/paragraphs_jquery_ui_accordion": {
                 "Formatter settings are missing schema @see https://www.drupal.org/i/3194916": "https://git.drupalcode.org/project/paragraphs_jquery_ui_accordion/-/merge_requests/1.diff"
