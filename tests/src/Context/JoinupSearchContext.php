@@ -485,6 +485,35 @@ class JoinupSearchContext extends RawDrupalContext {
   }
 
   /**
+   * Asserts the autocomplete items from search.
+   *
+   * This function asserts also the order of the items.
+   *
+   * @param \Behat\Gherkin\Node\TableNode $table
+   *   A list of items to be present.
+   *
+   * @throws \Exception
+   *    Thrown when the suggestions are not present in the page.
+   *
+   * @Then I should see the (following )search suggestion(s):
+   */
+  public function iShouldSeeTheSuggestions(TableNode $table): void {
+    $session = $this->getSession();
+    $xpath = '//ul[contains(concat(" ", normalize-space(@class), " "), "search-api-autocomplete-search")]//li';
+    $session->getPage()->waitFor(5, function () use ($session, $xpath, $table): bool {
+      $element = $this->getSearchBarElement();
+      $session->getDriver()->keyDown($element->getXpath(), '', NULL);
+      $allResults = $session->getPage()->findAll('xpath', $xpath);
+      $found = array_map(function ($item) {
+        /** @var \Behat\Mink\Element\NodeElement $item */
+        return $item->getText();
+      }, $allResults);
+
+      return $table->getColumn(0) === $found;
+    });
+  }
+
+  /**
    * Check number of search results as featured.
    *
    * @param int $number

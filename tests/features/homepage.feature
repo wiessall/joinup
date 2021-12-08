@@ -181,9 +181,7 @@ Feature: Homepage
       | state | validated    |
     And I am on the homepage
     Then I should see the "Search" field in the Featured region
-    And I should see the button "Search" in the Featured region
-    When I enter "RNA" in the search bar
-    And press "Search"
+    When I enter "RNA" in the search bar and press enter
     Then I should be on the search page
     And I should see the "RNA vaccines" tile
 
