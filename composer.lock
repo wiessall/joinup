@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "16d4a8989bfb65585919f46c511e23be",
+    "content-hash": "25d73994a5c604b79a8cade5388b6917",
     "packages": [
         {
             "name": "SEMICeu/adms-ap_validator",
@@ -2198,6 +2198,10 @@
                 {
                     "name": "floretan",
                     "homepage": "https://www.drupal.org/user/66163"
+                },
+                {
+                    "name": "nord102",
+                    "homepage": "https://www.drupal.org/user/3471419"
                 }
             ],
             "description": "Limit which text formats are available for each field instance.",
@@ -7413,7 +7417,8 @@
                     }
                 },
                 "patches_applied": {
-                    "Trying to access array offset on value of type int @see https://www.drupal.org/project/search_api_solr/issues/3173950": "resources/patch/search_api_solr-3173950.diff"
+                    "Trying to access array offset on value of type int @see https://www.drupal.org/project/search_api_solr/issues/3173950": "resources/patch/search_api_solr-3173950.diff",
+                    "Missing config schema @see https://www.drupal.org/project/search_api_solr/issues/3236773": "https://git.drupalcode.org/project/search_api_solr/-/merge_requests/8.diff"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -7480,9 +7485,6 @@
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
                     }
-                },
-                "patches_applied": {
-                    "Missing config schema @see https://www.drupal.org/project/search_api_solr/issues/3236773": "https://git.drupalcode.org/project/search_api_solr/-/merge_requests/8.diff"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -7695,17 +7697,17 @@
         },
         {
             "name": "drupal/slim_select",
-            "version": "1.0.0-alpha1",
+            "version": "1.0.0-alpha2",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/slim_select.git",
-                "reference": "1.0.0-alpha1"
+                "reference": "1.0.0-alpha2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/slim_select-1.0.0-alpha1.zip",
-                "reference": "1.0.0-alpha1",
-                "shasum": "2ba3f8854a2ad5de7ac0e5f0689768a8e42be1e5"
+                "url": "https://ftp.drupal.org/files/projects/slim_select-1.0.0-alpha2.zip",
+                "reference": "1.0.0-alpha2",
+                "shasum": "869749b84d109ddc0ae871b3a1b17d4fcf17905b"
             },
             "require": {
                 "drupal/core": "^8.9 || ^9.1"
@@ -7713,8 +7715,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "1.0.0-alpha1",
-                    "datestamp": "1634022931",
+                    "version": "1.0.0-alpha2",
+                    "datestamp": "1638708300",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Alpha releases are not covered by Drupal security advisories."
@@ -7791,24 +7793,16 @@
                     "role": "Maintainer"
                 },
                 {
-                    "name": "chrisjlee",
-                    "homepage": "https://www.drupal.org/user/760600"
-                },
-                {
-                    "name": "drywall",
-                    "homepage": "https://www.drupal.org/user/192591"
-                },
-                {
-                    "name": "jsenich",
-                    "homepage": "https://www.drupal.org/user/58871"
-                },
-                {
-                    "name": "markie",
-                    "homepage": "https://www.drupal.org/user/206687"
-                },
-                {
                     "name": "newsignature",
                     "homepage": "https://www.drupal.org/user/765518"
+                },
+                {
+                    "name": "ultimike",
+                    "homepage": "https://www.drupal.org/user/51132"
+                },
+                {
+                    "name": "volkswagenchick",
+                    "homepage": "https://www.drupal.org/user/3332522"
                 }
             ],
             "description": "Provides a more robust alternative to 'summary or trimmed' textfield format.",
@@ -9892,7 +9886,7 @@
                 "reference": "master"
             },
             "type": "drupal-theme-library",
-            "time": "2021-05-17T17:56:07+00:00"
+            "time": "2018-10-31T20:10:45+00:00"
         },
         {
             "name": "laminas/laminas-diactoros",
@@ -10879,7 +10873,7 @@
                 "drupal/core": "^8.9 || ^9.1",
                 "drupal/ui_patterns": "^1.0",
                 "drupal/ui_patterns_settings": "^1.0",
-                "php": ">=7.1"
+                "php": ">=7.3"
             },
             "require-dev": {
                 "composer/installers": "^1.11",
@@ -10888,7 +10882,9 @@
                 "drupal/drupal-extension": "^4.1",
                 "drupal/styleguide": "^1.0@alpha",
                 "drush/drush": "^10.3",
-                "openeuropa/task-runner": "dev-php-7.1 as 1.0.0-beta7",
+                "openeuropa/code-review": "~1.6",
+                "openeuropa/drupal-core-require-dev": "^8.9 || ^9.1",
+                "openeuropa/task-runner-drupal-project-symlink": "^1.0",
                 "phpspec/prophecy-phpunit": "^1 || ^2"
             },
             "type": "drupal-theme",
@@ -10933,7 +10929,7 @@
                 "EUPL-1.2"
             ],
             "description": "OpenEuropa Bootstrap base theme.",
-            "time": "2021-10-22T15:17:24+00:00"
+            "time": "2021-11-08T11:07:16+00:00"
         },
         {
             "name": "openeuropa/oe_dashboard_agent",
@@ -12382,7 +12378,7 @@
                 "reference": "master"
             },
             "type": "library",
-            "time": "2021-07-31T00:07:16+00:00"
+            "time": "2020-11-25T21:59:37+00:00"
         },
         {
             "name": "stack/builder",
@@ -16723,7 +16719,7 @@
             "extra": {
                 "drupal": {
                     "version": "4.1.1",
-                    "datestamp": "1609419527",
+                    "datestamp": "1631968537",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"

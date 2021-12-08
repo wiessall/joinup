@@ -188,17 +188,20 @@ display:
             description: ''
             use_operator: false
             operator: search_api_fulltext_op
+            operator_limit_selection: false
+            operator_list: {  }
             identifier: keys
             required: false
             remember: false
             multiple: false
             remember_roles:
               authenticated: authenticated
+              licence_manager: '0'
               anonymous: '0'
               moderator: '0'
               administrator: '0'
-            operator_limit_selection: false
-            operator_list: {  }
+              rdf_graph_manager: '0'
+            placeholder: 'Start typing to search…'
           is_grouped: false
           group_info:
             label: ''
@@ -393,6 +396,16 @@ display:
           plugin_id: search_api
       title: ''
       header:
+        views_block_area_1:
+          id: views_block_area_1
+          table: views
+          field: views_block_area
+          relationship: none
+          group_type: group
+          admin_label: 'Exposed Search Form'
+          empty: true
+          block_id: 'views_exposed_filter_block:search-page_1'
+          plugin_id: views_block_area
         result:
           id: result
           table: views
@@ -401,7 +414,7 @@ display:
           group_type: group
           admin_label: ''
           empty: false
-          content: 'Search Results (@total)'
+          content: 'SEARCH RESULTS (@total)'
           plugin_id: result
         views_block_area:
           id: views_block_area
@@ -409,7 +422,7 @@ display:
           field: views_block_area
           relationship: none
           group_type: group
-          admin_label: ''
+          admin_label: 'Facets summary'
           empty: false
           block_id: 'facets_summary_block:search_facets_summary'
           plugin_id: views_block_area

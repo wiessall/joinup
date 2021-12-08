@@ -60,11 +60,12 @@ Feature: Global search
     # Joinup there were two search fields, but this was confusing users.
     And there should be exactly 1 "search field" on the page
 
-    When I select "Social and Political" from the "topic" slim select
-    And I scroll button "Search" into view
-    And I press "Search"
-    Then the option with text "Social and Political" from slim select "topic" is selected
-    And the slim select "topic" should contain the following options:
+    When I scroll the "Topics" select into view
+    And I select "Social and Political" option from the "Topics" Slim Select
+    Then I scroll button "Apply filters" into view
+    And I press "Apply filters"
+    Then the "Social and Political" option from "Topics" Slim Select is selected
+    And the "Topics" select should contain the following options:
       | Info                      |
       | - Statistics and Analysis |
       | Social and Political      |
@@ -75,14 +76,24 @@ Feature: Global search
     And I should see the "Dummy news 2" tile
     And I should see the "Dummy news 3" tile
     And I should see the "Dummy news 4" tile
-    Then I remove "Social and Political" from the "topic" slim select
+    Then I scroll the "Topics" select into view
+    And I unselect "Social and Political" option from the "Topics" Slim Select
+
+    #Test multiple topics.
+    When I scroll the "Topics" select into view
+    And I select "E-inclusion,Demography" options from the "Topics" Slim Select
+    Then I scroll button "Apply filters" into view
+    And I press "Apply filters"
+    And the "- Demography,- E-inclusion" options from "Topics" Slim Select are selected
+    Then I scroll the "Topics" select into view
+    And I unselect "E-inclusion,Demography" options from the "Topics" Slim Select
 
     # Test the topic facet. The space prefixing "Demography" is due to the hierarchy.
-
-    When I select "Demography" from the "topic" slim select
-    Then I scroll button "Search" into view
-    And I press "Search"
-    Then the option with text "- Demography" from slim select "topic" is selected
+    When I scroll the "Topics" select into view
+    And I select "Demography" option from the "Topics" Slim Select
+    Then I scroll button "Apply filters" into view
+    And I press "Apply filters"
+    Then the "- Demography" option from "Topics" Slim Select is selected
     # The selected option moves to the last position by default.
     And the slim select "topic" should contain the following options:
       | Info                      |
@@ -103,8 +114,8 @@ Feature: Global search
 
     # Test the spatial coverage facet.
     When I select "Belgium" from "Geographic coverage"
-    Then I scroll button "Search" into view
-    And I press "Search"
+    Then I scroll button "Apply filters" into view
+    And I press "Apply filters"
     Then the option with text "Belgium (1)" from select facet form "spatial coverage" is selected
     And the "Geographic coverage" select should contain the following options:
       | Any location       |
@@ -122,8 +133,8 @@ Feature: Global search
     # Select link in the 'type' facet.
     Given I am on the search page
     When I select "News (5)" from "Content types"
-    Then I scroll button "Search" into view
-    And I press "Search"
+    Then I scroll button "Apply filters" into view
+    And I press "Apply filters"
     Then the option with text "News (5)" from select facet form "Content types" is selected
     And the "Content types" select facet form should contain the following options:
       | Collection (1) |
@@ -131,8 +142,8 @@ Feature: Global search
       | Solutions (2)  |
 
     When I additionally select "Solutions (2)" from "Content types"
-    Then I scroll button "Search" into view
-    And I press "Search"
+    Then I scroll button "Apply filters" into view
+    And I press "Apply filters"
     And I should see the following facet summary "News, Solutions"
     And the "Content types" select facet form should contain the following options:
       | Collection (1) |
@@ -188,10 +199,13 @@ Feature: Global search
       | Luxembourg (2)   |
 
     When I select "Luxembourg" from "Geographic coverage"
-    Then I scroll button "Search" into view
-    And I press "Search"
+    And I scroll button "Apply filters" into view
+    And I press "Apply filters"
     Then the option with text "Luxembourg (2)" from select facet form "spatial coverage" is selected
-    And I should see the text "Search Results (2)"
+    And I should see the following search header in the correct order:
+      | SEARCH RESULTS (2)  |
+      | Sort by:            |
+    And I should see the text "SEARCH RESULTS (2)"
     # The countries are still sorted alphabetically even though the Luxembourg value is selected and has more results.
     And the "spatial coverage" select facet form should contain the following options:
       | Any location   |
@@ -260,18 +274,21 @@ Feature: Global search
 
     # "Alpha" is used in all the rdf entities titles.
     When I enter "Alpha" in the search bar and press enter
-    Then I should see the text "Search Results (5)"
+    And I should see the following search header in the correct order:
+      | SEARCH RESULTS (5)  |
+      | Sort by:            |
+    Then I should see the text "SEARCH RESULTS (5)"
     And the page should show the tiles "Collection alpha, Solution alpha, Release Alpha, Licence Alpha, Video alpha"
 
     # "Omega" is used in all the node entities titles. Since the content of
     # custom pages is added to their collection, we also match the collection.
     When I enter "omega" in the search bar and press enter
-    Then I should see the text "Search Results (6)"
+    Then I should see the text "SEARCH RESULTS (6)"
     And the page should show the tiles "Collection alpha, News omega, Event Omega, Document omega, Discussion omega, Page omega"
 
     # "Beta" is used in all the rdf entities body fields.
     When I enter "beta" in the search bar and press enter
-    Then I should see the text "Search Results (4)"
+    Then I should see the text "SEARCH RESULTS (4)"
     And the page should show the tiles "Collection alpha, Solution alpha, Release Alpha, Licence Alpha"
 
     # "Epsilon" is used in all the node entities body fields.
@@ -585,7 +602,7 @@ Feature: Global search
     When I am on the homepage
     And I enter "Relativity" in the search bar and press enter
     Then the option "Relevance" should be selected
-    And I should see the text "Search Results (3)"
+    And I should see the text "SEARCH RESULTS (3)"
     And I should see the following tiles in the correct order:
       | Relativity news: Relativity theory |
       | Relativity is the word             |
@@ -631,8 +648,8 @@ Feature: Global search
     When I visit the search page
     And I select "Solutions (2)" from "Content types"
     And I additionally select "News (5)" from "Content types"
-    Then I scroll button "Search" into view
-    And I press "Search"
+    Then I scroll button "Apply filters" into view
+    And I press "Apply filters"
     And I should see the following facet summary "News, Solutions"
 
     # Workaround to scroll an element towards the center of the screen to avoid a false out of bounds move exception.
@@ -641,8 +658,8 @@ Feature: Global search
     Then I scroll link "Clear filters" into view
     Then I click "Clear filters"
     And I select "News (5)" from "Content types"
-    Then I scroll button "Search" into view
-    And I press "Search"
+    Then I scroll button "Apply filters" into view
+    And I press "Apply filters"
     And I should see the following facet summary "News"
 
     # Check if facet summary was remove correctly.
@@ -653,8 +670,8 @@ Feature: Global search
     And I click "Clear filters"
     And I select "News (5)" from "Content types"
     And I additionally select "Collection (1)" from "Content types"
-    Then I scroll button "Search" into view
-    And I press "Search"
+    Then I scroll button "Apply filters" into view
+    And I press "Apply filters"
     And I should see the following facet summary "Collection, News"
     When I scroll the "News" chip into view
     And I should remove the following facet summary "News"
@@ -696,15 +713,15 @@ Feature: Global search
 
     Then I select "Solutions (2)" from "Content types"
     And I additionally select "News (5)" from "Content types"
-    Then I scroll button "Search" into view
-    And I press "Search"
+    Then I scroll button "Apply filters" into view
+    And I press "Apply filters"
     And I should see the following facet summary "News, Solutions"
 
     Then I scroll link "Clear filters" into view
     And I click "Clear filters"
     And I select "News (5)" from "Content types"
-    Then I scroll button "Search" into view
-    And I press "Search"
+    Then I scroll button "Apply filters" into view
+    And I press "Apply filters"
     And I should see the following facet summary "News"
 
     # Check if facet summary was remove correctly.
@@ -712,8 +729,8 @@ Feature: Global search
     And I click "Clear filters"
     Then I select "News (5)" from "Content types"
     And I additionally select "Collection (1)" from "Content types"
-    Then I scroll button "Search" into view
-    And I press "Search"
+    Then I scroll button "Apply filters" into view
+    And I press "Apply filters"
     And I should see the following facet summary "Collection, News"
     Then I scroll the "News" chip into view
     And I should remove the following facet summary "News"
