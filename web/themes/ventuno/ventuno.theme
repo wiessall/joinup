@@ -326,3 +326,13 @@ function ventuno_form_alter(&$form, FormStateInterface $form_state, $form_id): v
     $form['sort_by']['#type'] = 'hidden';
   }
 }
+
+/**
+ * Implements hook_preprocess().
+ */
+function ventuno_preprocess(&$variables) {
+  /** @var \Drupal\Core\Extension\ThemeHandler $themeHandler */
+  $themeHandler = \Drupal::service('theme_handler');
+  $ventuno = $themeHandler->getTheme('oe_bootstrap_theme')->getPath();
+  $variables['icons_path'] = base_path() . $ventuno . '/assets/icons/bootstrap-icons.svg';
+}
