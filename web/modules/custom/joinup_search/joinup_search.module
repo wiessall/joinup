@@ -420,3 +420,19 @@ function joinup_search_form_facets_form_alter(array &$form, FormStateInterface $
 function joinup_search_views_plugins_row_alter(array &$plugins): void {
   $plugins['search_api']['class'] = JoinupSearchApiRow::class;
 }
+
+/**
+ * Implements hook_form_alter().
+ */
+function joinup_search_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  if ($form_id == 'views_exposed_form') {
+    $view = $form_state->getStorage('view');
+    if ($view['view']->id() == 'search' && $view['view']->current_display == 'page_1') {
+      $form['results_count'] = [
+        '#type' => 'item',
+        '#weight' => 0,
+        '#markup' => '',
+      ];
+    }
+  }
+}
