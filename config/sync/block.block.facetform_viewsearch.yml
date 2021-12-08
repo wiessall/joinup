@@ -20,7 +20,7 @@ settings:
   label_display: '0'
   button:
     label:
-      submit: Search
+      submit: Apply filters
       reset: 'Clear filters'
   facets: {  }
 visibility:
