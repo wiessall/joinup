@@ -589,7 +589,7 @@ trait TraversingTrait {
           // The search field on the search result pages.
           [
             'css',
-            'div[data-drupal-selector="views-exposed-form-search-page-1"] input[data-drupal-selector="edit-keys"]',
+            '*[data-drupal-selector="views-exposed-form-search-page-1"] input[data-drupal-selector="edit-keys"]',
           ],
         ],
       ],

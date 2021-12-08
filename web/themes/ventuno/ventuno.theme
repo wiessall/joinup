@@ -7,9 +7,11 @@
 
 declare(strict_types = 1);
 
+use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Menu\MenuLinkInterface;
 use Drupal\Core\Url;
 use Drupal\interoperable_europe\InteroperableEuropeCollectionInterface;
+use Drupal\joinup_bundle_class\DescriptionInterface;
 use Drupal\joinup_bundle_class\LogoInterface;
 use Drupal\node\Entity\Node;
 use Drupal\node\NodeInterface;
@@ -256,6 +258,14 @@ function ventuno_smart_trim(string $string, int $length, bool $ellipsis = TRUE):
 }
 
 /**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function ventuno_form_facets_form_alter(array &$form, FormStateInterface $form_state, string $form_id): void {
+  $form['actions']['submit']['#attributes']['class'] = ['mt-3 w-100'];
+  $form['actions']['reset']['#attributes']['class'][] = 'btn btn-outline-brand my-3 w-100';
+}
+
+/**
  * Implements hook_theme_suggestions_alter().
  */
 function ventuno_theme_suggestions_alter(array &$suggestions, array $variables, $hook) {
@@ -281,6 +291,30 @@ function ventuno_preprocess_rdf_entity__search_result_featured(&$variables) {
   /** @var \Drupal\rdf_entity\RdfInterface $entity */
   $entity = $variables['rdf_entity'];
   $variables['image'] = $entity instanceof LogoInterface ? $entity->getLogoAsRenderArray() : NULL;
+  $variables['body'] = $entity instanceof DescriptionInterface ? $entity->getDescription() : NULL;
+  $variables['topics'] = $entity->hasField('field_topic') ? $entity->getTopics() : NULL;
+  $variables['type'] = strtoupper($entity->getType());
+  $variables['creation'] = t('@label: @created', [
+    '@label' => t('Created'),
+    '@created' => \Drupal::service('date.formatter')->format($entity->getCreatedTime(), 'date_only'),
+  ],
+  );
+}
+
+/**
+ * Implements hook_preprocess_HOOK().
+ */
+function ventuno_preprocess_rdf_entity__search_result(&$variables) {
+  /** @var \Drupal\rdf_entity\RdfInterface $entity */
+  $entity = $variables['rdf_entity'];
+  $variables['body'] = $entity instanceof DescriptionInterface ? $entity->getDescription() : NULL;
+  $variables['topics'] = $entity->hasField('field_topic') ? $entity->getTopics() : NULL;
+  $variables['type'] = strtoupper($entity->getType());
+  $variables['creation'] = t('@label: @created', [
+    '@label' => t('Created'),
+    '@created' => \Drupal::service('date.formatter')->format($entity->getCreatedTime(), 'date_only'),
+  ],
+  );
 }
 
 /**
@@ -290,6 +324,74 @@ function ventuno_preprocess_node__search_result_featured(&$variables) {
   /** @var \Drupal\node\NodeInterface $node */
   $node = $variables['node'];
   $variables['image'] = $node instanceof LogoInterface ? $node->getLogoAsRenderArray() : NULL;
+  $variables['body'] = $node instanceof DescriptionInterface ? $node->getDescription() : NULL;
+  $variables['topics'] = $node->hasField('field_topic') ? $node->getTopics() : NULL;
+  $variables['type'] = strtoupper($node->getType());
+  $variables['creation'] = t('@label: @created', [
+    '@label' => t('Created'),
+    '@created' => \Drupal::service('date.formatter')->format($node->getCreatedTime(), 'date_only'),
+  ],
+  );
+}
+
+/**
+ * Implements hook_preprocess_HOOK().
+ */
+function ventuno_preprocess_node__search_result(&$variables) {
+  /** @var \Drupal\node\NodeInterface $node */
+  $node = $variables['node'];
+  $variables['body'] = $node instanceof DescriptionInterface ? $node->getDescription() : NULL;
+  $variables['topics'] = $node->hasField('field_topic') ? $node->getTopics() : NULL;
+  $variables['type'] = strtoupper($node->getType());
+  $variables['creation'] = t('@label: @created', [
+    '@label' => t('Created'),
+    '@created' => \Drupal::service('date.formatter')->format($node->getCreatedTime(), 'date_only'),
+  ],
+  );
+}
+
+/**
+ * Implements hook_preprocess().
+ */
+function ventuno_preprocess(&$variables) {
+  /** @var \Drupal\Core\Extension\ThemeHandler $themeHandler */
+  $themeHandler = \Drupal::service('theme_handler');
+  $ventuno = $themeHandler->getTheme('oe_bootstrap_theme')->getPath();
+  $variables['icons_path'] = base_path() . $ventuno . '/assets/icons/bootstrap-icons.svg';
+}
+
+/**
+ * Implements hook_theme_suggestions_HOOK_alter() for form-element.html.twig.
+ */
+function ventuno_theme_suggestions_form_element_alter(array &$suggestions, array $variables): void {
+  if (isset($variables['element']['#joinup_parent'])) {
+    $suggestions[] = 'form_element__' . $variables['element']['#joinup_parent'];
+  }
+}
+
+/**
+ * Implements hook_form_alter().
+ */
+function ventuno_form_alter(&$form, FormStateInterface $form_state, $form_id): void {
+  // Check if the form contains exposed filter form element.
+  if ($form_id !== 'views_exposed_form') {
+    return;
+  }
+
+  $route_name = \Drupal::routeMatch()->getRouteName();
+  $view = $form_state->get('view');
+  if ($view->id() === 'search') {
+    $form['keys']['#theme'] = 'input__search_expose_form';
+    $form['keys']['#title_display'] = 'invisible';
+    $form['keys']['#attributes']['placeholder'] = t('Start typing to search…');
+    $form['keys']['#joinup_parent'] = $form_id . '_' . $view->id();
+  }
+
+  if ($route_name != 'view.search.page_1' && $view->id() === 'search') {
+    // When re-using the exposed search form anywhere other than the search
+    // page, hide the "Sort by" select.
+    $form['sort_by']['#type'] = 'hidden';
+  }
 }
 
 /**

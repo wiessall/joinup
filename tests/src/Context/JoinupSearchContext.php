@@ -1052,19 +1052,14 @@ class JoinupSearchContext extends RawDrupalContext {
    * @When I should see the following facet summary :labels
    */
   public function assertFacetSummary(string $labels): void {
-    $labels = $this->explodeCommaSeparatedStepArgument($labels);
+    $present_labels = $this->explodeCommaSeparatedStepArgument($labels);
     $xpath = "//div[contains(concat(' ', normalize-space(@class), ' '), ' block-facets-summary-blocksearch-facets-summary ')]//li[contains(concat(' ', normalize-space(@class), ' '), ' facet-summary-item--facet ')]";
     $elements = $this->getSession()->getPage()->findAll('xpath', $xpath);
-    $present = $present_labels = [];
+    $present = [];
 
     /** @var \Behat\Mink\Element\NodeElement $element */
     foreach ($elements as $element) {
       $present[] = $element->getText();
-    }
-
-    // Add label close in front of label.
-    foreach ($labels as $label) {
-      $present_labels[] = $label . ' close';
     }
 
     $present = array_map('trim', $present);
@@ -1112,6 +1107,28 @@ class JoinupSearchContext extends RawDrupalContext {
     $xpath = "//div[contains(concat(' ', normalize-space(@class), ' '), ' block-facets-summary-blocksearch-facets-summary ')]//li[contains(concat(' ', normalize-space(@class), ' '), ' facet-summary-item--facet ')]";
     $elements = $this->getSession()->getPage()->findAll('xpath', $xpath);
     Assert::assertCount($number, $elements);
+  }
+
+  /**
+   * Checks that the given labels are found in the correct order.
+   *
+   * Table format:
+   * | Search         |
+   * | Search Results |
+   *
+   * @Then I( should) see the( following) search header in the correct order:
+   */
+  public function assertOrderedTilesPresent(TableNode $titles_table) {
+    $regionObj = $this->getSession()->getPage();
+
+    $result = [];
+    foreach ($regionObj->findAll('css', '.view-header div.form-item-results-count, .view-header div label') as $element) {
+      $title = $element->getText();
+      $result[$title] = $element;
+    }
+    $headings_in_page = array_keys($result);
+    $headings_expected = $titles_table->getColumn(0);
+    Assert::assertEquals($headings_expected, $headings_in_page, 'The expected search header were not found or were not in the proper order.');
   }
 
 }

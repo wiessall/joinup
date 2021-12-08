@@ -1,0 +1,15 @@
+uuid: 89c407c6-23e3-4501-be94-349cb7df2dd2
+langcode: en
+status: true
+dependencies: {  }
+name: highlighted_search_result_sm
+label: 'Highlighted search result SM'
+effects:
+  e4bae787-ebce-48d7-9a2c-5393a970d216:
+    uuid: e4bae787-ebce-48d7-9a2c-5393a970d216
+    id: image_scale
+    weight: 1
+    data:
+      width: 516
+      height: 292
+      upscale: false

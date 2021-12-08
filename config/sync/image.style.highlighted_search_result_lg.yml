@@ -1,0 +1,15 @@
+uuid: 69fd56e1-0eba-491b-88bf-95af24def87c
+langcode: en
+status: true
+dependencies: {  }
+name: highlighted_search_result_lg
+label: 'Highlighted search result LG'
+effects:
+  6cd87c0f-e246-4f1e-968b-aff555d05898:
+    uuid: 6cd87c0f-e246-4f1e-968b-aff555d05898
+    id: image_scale
+    weight: 1
+    data:
+      width: 100
+      height: 178
+      upscale: false
