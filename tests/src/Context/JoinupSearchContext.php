@@ -523,7 +523,7 @@ class JoinupSearchContext extends RawDrupalContext {
    */
   public function numberOfTilesWithImage(int $number) {
     $session = $this->getSession()->getPage();
-    $elements = $session->findAll('css', '.card > img');
+    $elements = $session->findAll('css', '.card img');
 
     Assert::assertSame(count($elements), $number);
   }
