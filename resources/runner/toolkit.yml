@@ -26,14 +26,10 @@ toolkit:
         - task: exec
           command: cd "${toolkit.build.dist.root}/web/themes/ventuno" && npm install
         # Remove theme development dependencies.
-        - task: exec
-          command: rm
-          options:
-            recursive: null
-            force: null
-          arguments:
-            - ${toolkit.build.dist.root}/web/themes/ventuno/node_modules/
-            - ${toolkit.build.dist.root}/web/themes/ventuno/package*.json
+        - task: remove
+          file: ${toolkit.build.dist.root}/web/themes/ventuno/node_modules
+        - task: remove
+          file: ${toolkit.build.dist.root}/web/themes/ventuno/package*.json
 
 commands:
 
