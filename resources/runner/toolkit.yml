@@ -29,7 +29,9 @@ toolkit:
         - task: remove
           file: ${toolkit.build.dist.root}/web/themes/ventuno/node_modules
         - task: remove
-          file: ${toolkit.build.dist.root}/web/themes/ventuno/package*.json
+          file: ${toolkit.build.dist.root}/web/themes/ventuno/package.json
+        - task: remove
+          file: ${toolkit.build.dist.root}/web/themes/ventuno/package-lock.json
 
 commands:
 
