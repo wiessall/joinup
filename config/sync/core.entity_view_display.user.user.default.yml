@@ -51,3 +51,4 @@ hidden:
   field_user_professional_domain: true
   langcode: true
   member_for: true
+  search_api_excerpt: true
