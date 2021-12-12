@@ -640,6 +640,8 @@ display:
     cache_metadata:
       max-age: -1
       contexts:
+        - community_content_author
+        - 'community_content_author:event'
         - 'languages:language_content'
         - 'languages:language_interface'
         - url.query_args
@@ -667,6 +669,7 @@ display:
       max-age: -1
       contexts:
         - community_content_author
+        - 'community_content_author:event'
         - 'languages:language_content'
         - 'languages:language_interface'
         - url.query_args
