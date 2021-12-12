@@ -206,3 +206,4 @@ hidden:
   og_audience: true
   published_at: true
   read_more: true
+  search_api_excerpt: true
