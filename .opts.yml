@@ -39,7 +39,7 @@ extra_pkgs:
   - php7.4-apcu
 
 solr: True
-solr_version: 6
+solr_version: 8
 solr_core: custom
 solr_rollback: True
 solr_refresh_acc: True
