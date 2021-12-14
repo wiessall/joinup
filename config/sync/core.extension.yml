@@ -28,7 +28,6 @@ module:
   dashboard: 0
   datetime: 0
   datetime_range: 0
-  default_content: 0
   diff: 0
   digital_size_formatter: 0
   dpsi: 0
@@ -49,8 +48,7 @@ module:
   eu_sic: 0
   eupl: 0
   facets: 0
-  facets_form: 0
-  facets_form_date_range: 0
+  facets_block: 0
   facets_summary: 0
   field: 0
   field_delimiter: 0
@@ -66,7 +64,6 @@ module:
   geocoder_field: 0
   geocoder_geofield: 0
   geofield: 0
-  hal: 0
   help: 0
   honeypot: 0
   iframe: 0
@@ -198,7 +195,6 @@ module:
   simple_sitemap: 0
   site_alert: 0
   site_verify: 0
-  slim_select: 0
   smart_trim: 0
   social_media_links: 0
   social_media_links_field: 0

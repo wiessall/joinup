@@ -51,8 +51,6 @@ commands:
       destination: ${joinup.dir}/behat.yml
     - task: run
       command: joinup:build-assets
-    - task: exec
-      command: npm install -C web/modules/contrib/slim_select
     - task: mkdir
       dir: ${joinup.files_private_dir}
     - task: mkdir
