@@ -60,7 +60,8 @@ Feature: Global search
     And I should not see the "Foam" tile
 
     # Test the spatial coverage facet.
-    When I check the "Belgium (1)" checkbox from the "spatial coverage" facet
+    When I scroll the "spatial coverage" facet into view
+    And I check the "Belgium (1)" checkbox from the "spatial coverage" facet
     Then the "Belgium" content checkbox item should be selected
     And the "spatial coverage" checkbox facet should allow selecting the following values "Belgium (1), European Union (1)"
     Then I check the "Demography" checkbox from the "topic" facet
@@ -117,6 +118,7 @@ Feature: Global search
 
     When I visit the search page
 
+    Then I scroll the "spatial coverage" facet into view
     And the "spatial coverage" checkbox facet should allow selecting the following values "Greece (1), Luxembourg (2)"
     When I check the "Luxembourg (2)" checkbox from the "spatial coverage" facet
     Then the "Luxembourg" content checkbox item should be selected
@@ -551,6 +553,7 @@ Feature: Global search
 
     Given I am logged in as a user with the "authenticated" role
     When I visit the search page
+    Then I scroll the "Content types" facet into view
     And I check the "Solutions (2)" checkbox from the "Content types" facet
     And I check the "News (5)" checkbox from the "Content types" facet
     And I should see the following facet summary "Solutions, News"
@@ -614,6 +617,7 @@ Feature: Global search
     Then I should see the following search suggestions:
       | body |
 
+    When I scroll the "Content types" facet into view
     And I check the "Solutions (2)" checkbox from the "Content types" facet
     And I check the "News (5)" checkbox from the "Content types" facet
     And I should see the following facet summary "Solutions, News"
