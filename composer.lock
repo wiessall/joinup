@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "af534604612c5476718a0a2c33b3dd39",
+    "content-hash": "cb3e95e0ccbdb2999e76706b5b2566c7",
     "packages": [
         {
             "name": "SEMICeu/adms-ap_validator",
@@ -8094,6 +8094,9 @@
                     "services": {
                         "drush.services.yml": "^9 || ^10"
                     }
+                },
+                "patches_applied": {
+                    "token-devel link templates don't work when canonical template has multiple parameters @see https://www.drupal.org/project/token/issues/3254619": "https://www.drupal.org/files/issues/2021-12-15/3254619-2.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
