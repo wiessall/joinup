@@ -3062,7 +3062,7 @@ class JoinupContext extends RawDrupalContext {
   (
       function(){
         setTimeout(() => {
-          let elem = document.attr("$facet_id");
+          let elem = document.querySelector('[data-drupal-facet-id="$facet_id"]');
           elem.scrollIntoView({ behavior: 'instant', block: 'center' });
         }, 300);
       }

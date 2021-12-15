@@ -63,7 +63,7 @@ Feature: Global search
     # Test the spatial coverage facet.
     When I scroll the "spatial coverage" facet into view
     And I check the "Belgium (1)" checkbox from the "spatial coverage" facet
-    Then the "Belgium" content checkbox item should be selected
+    And the "Belgium" content checkbox item should be selected
     And the "spatial coverage" checkbox facet should allow selecting the following values "Belgium (1), European Union (1)"
     Then I check the "Demography" checkbox from the "topic" facet
     And the "topic" checkbox facet should allow selecting the following values "Social and Political, Demography"
