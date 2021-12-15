@@ -16,7 +16,7 @@ tips:
     weight: 1
     location: left
     attributes:
-      data-class: 'joinup-navbar .nav-item:nth-child(2), #heading-account'
+      data-class: 'temporarily-disabled joinup-navbar .nav-item:nth-child(2)'
   search:
     id: search
     plugin: text
