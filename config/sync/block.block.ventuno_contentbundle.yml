@@ -14,7 +14,7 @@ _core:
 id: ventuno_contentbundle
 theme: ventuno
 region: sidebar
-weight: -16
+weight: -18
 provider: null
 plugin: 'facet_block:content_bundle'
 settings:

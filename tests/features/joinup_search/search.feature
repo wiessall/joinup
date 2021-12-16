@@ -559,30 +559,18 @@ Feature: Global search
     And I check the "News (5)" checkbox from the "Content types" facet
     And I should see the following facet summary "Solutions, News"
 
-    # Workaround to scroll an element towards the center of the screen to avoid a false out of bounds move exception.
-    # @todo: Remove this as part of ISAICP-6800.
-    # @see: https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-6800
-    # @todo: Enable test when this ticket is implemented  ISAICP-6884.
-    # @see: https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-6884
-    # Then I scroll link "Clear filters" into view
-    # Then I click "Clear filters"
-    # And I select "News (5)" from "Content types"
-    # And I should see the following facet summary "News"
+    Then I click "Clear filters"
+    And I check the "News (5)" checkbox from the "Content types" facet
+    And I should see the following facet summary "News"
 
     # Check if facet summary was remove correctly.
-    # Workaround to scroll an element towards the center of the screen to avoid a false out of bounds move exception.
-    # @todo: Remove this as part of ISAICP-6800.
-    # @see: https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-6800
-    # @todo: Enable test when this ticket is implemented  ISAICP-6884.
-    # @see: https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-6884
-    # Then I scroll link "Clear filters" into view
-    # And I click "Clear filters"
-    # And I select "News (5)" from "Content types"
-    # And I additionally select "Collection (1)" from "Content types"
-    # And I should see the following facet summary "Collection, News"
-    # When I scroll the "News" chip into view
-    # And I should remove the following facet summary "News"
-    # Then the page should show only the tiles "Radio cooking collection"
+    And I click "Clear filters"
+    And I check the "News (5)" checkbox from the "Content types" facet
+    And I check the "Collection (1)" checkbox from the "Content types" facet
+    And I should see the following facet summary "Collection, News"
+    When I scroll the "News" chip into view
+    And I should remove the following facet summary "News"
+    Then the page should show only the tiles "Radio cooking collection"
 
   @javascript
   Scenario: Anonymous user can find facets summary
@@ -623,22 +611,18 @@ Feature: Global search
     And I check the "News (5)" checkbox from the "Content types" facet
     And I should see the following facet summary "Solutions, News"
 
-    # @todo: Enable test when this ticket is implemented  ISAICP-6884.
-    # @see: https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-6884
-    # Then I scroll link "Clear filters" into view
-    # And I click "Clear filters"
-    # And I check the "News (5)" checkbox from the "Content types" facet
-    # And I should see the following facet summary "News"
+    And I click "Clear filters"
+    And I check the "News (5)" checkbox from the "Content types" facet
+    And I should see the following facet summary "News"
 
     # Check if facet summary was remove correctly.
-    # Then I scroll link "Clear filters" into view
-    # And I click "Clear filters"
-    # And I check the "News (5)" checkbox from the "Content types" facet
-    # And I check the "Collection (1)" checkbox from the "Content types" facet
-    # And I should see the following facet summary "Collection, News"
-    # Then I scroll the "News" chip into view
-    # And I should remove the following facet summary "News"
-    # And the page should show only the tiles "Radio cooking collection"
+    And I click "Clear filters"
+    And I check the "News (5)" checkbox from the "Content types" facet
+    And I check the "Collection (1)" checkbox from the "Content types" facet
+    And I should see the following facet summary "Collection, News"
+    Then I scroll the "News" chip into view
+    And I should remove the following facet summary "News"
+    And the page should show only the tiles "Radio cooking collection"
 
   @terms @javascript
   Scenario: Show first three search results as featured
