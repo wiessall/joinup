@@ -16,12 +16,17 @@ show_only_one_result: false
 field_identifier: entity_bundle
 facet_source_id: 'search_api:views_page__search__page_1'
 widget:
-  type: facets_form_dropdown
+  type: checkbox
   config:
-    default_option_label: Choose
-    child_items_prefix: '-'
-    disabled_on_empty: false
     show_numbers: true
+    soft_limit: 10
+    soft_limit_settings:
+      show_less_label: 'Show less'
+      show_more_label: 'Show more'
+    show_reset_link: false
+    reset_text: 'Show all'
+    hide_reset_when_no_selection: false
+    arbitrary_facet_plugin: _none
 query_operator: or
 use_hierarchy: false
 expand_hierarchy: false
@@ -33,7 +38,7 @@ processor_configs:
   aggregated_entity_bundle_label:
     processor_id: aggregated_entity_bundle_label
     weights:
-      build: 5
+      build: -10
     settings:
       plural_count_label:
         enabled: true
@@ -41,16 +46,10 @@ processor_configs:
   count_limit:
     processor_id: count_limit
     weights:
-      build: -10
+      build: 0
     settings:
       minimum_items: 1
       maximum_items: null
-  display_value_widget_order:
-    processor_id: display_value_widget_order
-    weights:
-      sort: 40
-    settings:
-      sort: ASC
   joinup_search_content_type_fixed_order:
     processor_id: joinup_search_content_type_fixed_order
     weights:

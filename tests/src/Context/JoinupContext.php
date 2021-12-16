@@ -391,27 +391,6 @@ class JoinupContext extends RawDrupalContext {
    */
   public function assertSelectOptionsAsList($select, TableNode $table) {
     $field = $this->findSelect($select);
-
-    // Check if it's a Slim Select element.
-    if ($field->hasClass('ss-main')) {
-      $xpath = '//*[contains(concat(" ", normalize-space(@class), " "), "ss-option")]';
-
-      $actual_options = [];
-      foreach ($field->findAll('xpath', $xpath) as $result) {
-        /** @var \Behat\Mink\Element\NodeElement $result */
-        $actual_options[] = strip_tags($result->getHtml());
-      }
-      $rows = $table->getColumn(0);
-
-      // Ignore duplicated whitespace.
-      $strip_multiple_spaces = function (string $option): string {
-        return preg_replace("/\s{2,}/", " ", $option);
-      };
-      $expected_options = array_map($strip_multiple_spaces, $rows);
-      Assert::assertSame($expected_options, $actual_options);
-
-      return;
-    }
     $this->assertSelectAvailableOptions($field, $table);
   }
 
@@ -3062,7 +3041,7 @@ class JoinupContext extends RawDrupalContext {
   }
 
   /**
-   * Shows the select element in the middle of the screen.
+   * Shows the facet element in the middle of the screen.
    *
    * In the latest version of Selenium in docker, moving to a button element
    * might throw this exception while the button is visible.
@@ -3074,17 +3053,16 @@ class JoinupContext extends RawDrupalContext {
    * @throws \Exception
    *    Thrown when an expected scroll in to view failed.
    *
-   * @Given I scroll the :label select into view
+   * @Given I scroll the :label facet into view
    */
-  public function scrollSelectIntoView(string $label): void {
-    $page = $this->getSession()->getPage();
-    $select = $page->find('xpath', '//label[text()="' . str_replace('\\"', '"', $label) . '"]');
-    $id = $select->getParent()->find('css', 'select')->getAttribute('data-ssid');
+  public function scrollFacetIntoView(string $label): void {
+    $facet = $this->findFacetByAlias($label);
+    $facet_id = $facet->getAttribute('data-drupal-facet-id');
     $function = <<<JS
   (
       function(){
         setTimeout(() => {
-          let elem = document.querySelector(".$id");
+          let elem = document.querySelector('[data-drupal-facet-id="$facet_id"]');
           elem.scrollIntoView({ behavior: 'instant', block: 'center' });
         }, 300);
       }

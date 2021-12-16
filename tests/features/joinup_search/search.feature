@@ -25,140 +25,65 @@ Feature: Global search
 
     Given I am logged in as a user with the "authenticated" role
     Then I visit the search page
+    And I accept essential cookies
     # All content is visible.
     Then I should see the "Molecular cooking collection" tile
     And I should see the "El Celler de Can Roca" tile
     And I should see the "Spherification" tile
     And I should see the "Foam" tile
     # Terms are sorted alphabetically
-    And the "Topics" select should contain the following options:
-      # Parent term.
-      | Info                    |
-      # Child term.
-      | - Statistics and Analysis |
-      # Parent term.
-      | Social and Political    |
-      # Child terms.
-      | - Demography              |
-      | - E-inclusion             |
-    # Since the topics are indented by a whitespace, and the whitespaces are trimmed in the step above, we are testing
-    # the full response in order to ensure that the results are indented properly. The &nbsp; character below is the
-    # printable space character.
-    # @todo and WARNING. The following   character is supported by the old 3.4 selenium server. Change this in the
-    # new infrastructure with the &nbsp; encoded character.
-    And the response should contain "<option value=\"http://joinup.eu/ontology/topic/category#info\">Info</option>"
-    And the response should contain "<option value=\"http://joinup.eu/ontology/topic#statistics-and-analysis\">- Statistics and Analysis</option>"
-    And the response should contain "<option value=\"http://joinup.eu/ontology/topic/category#social-and-political\">Social and Political</option>"
-    And the response should contain "<option value=\"http://joinup.eu/ontology/topic#demography\">- Demography</option>"
-    And the response should contain "<option value=\"http://joinup.eu/ontology/topic#e-inclusion\">- E-inclusion</option></select>"
-    And the "Geographic coverage" select should contain the following options:
-      | Any location       |
-      | Belgium (1)        |
-      | European Union (1) |
-      | Luxembourg (5)     |
+    And the "topic" checkbox facet should allow selecting the following values "Info, Statistics and Analysis, Social and Political, Demography, E-inclusion"
+    And the "spatial coverage" checkbox facet should allow selecting the following values "Belgium (1), European Union (1), Luxembourg (5)"
+
     # Check that only one search field is available. In an earlier version of
     # Joinup there were two search fields, but this was confusing users.
     And there should be exactly 1 "search field" on the page
 
-    When I scroll the "Topics" select into view
-    And I select "Social and Political" option from the "Topics" Slim Select
-    Then I scroll button "Apply filters" into view
-    And I press "Apply filters"
-    Then the "Social and Political" option from "Topics" Slim Select is selected
-    And the "Topics" select should contain the following options:
-      | Info                      |
-      | - Statistics and Analysis |
-      | Social and Political      |
-      | - Demography              |
-      | - E-inclusion             |
+    When I check the "Social and Political" checkbox from the "topic" facet
+    Then the "Social and Political" content checkbox item should be selected
+    And the "topic" checkbox facet should allow selecting the following values "Info, Statistics and Analysis, Social and Political, Demography, E-inclusion"
     # The tiles appear because the parent term is selected even though they do not have a direct reference there.
     And I should see the "Dummy news 1" tile
     And I should see the "Dummy news 2" tile
     And I should see the "Dummy news 3" tile
     And I should see the "Dummy news 4" tile
-    Then I scroll the "Topics" select into view
-    And I unselect "Social and Political" option from the "Topics" Slim Select
-
-    #Test multiple topics.
-    When I scroll the "Topics" select into view
-    And I select "E-inclusion,Demography" options from the "Topics" Slim Select
-    Then I scroll button "Apply filters" into view
-    And I press "Apply filters"
-    And the "- Demography,- E-inclusion" options from "Topics" Slim Select are selected
-    Then I scroll the "Topics" select into view
-    And I unselect "E-inclusion,Demography" options from the "Topics" Slim Select
 
     # Test the topic facet. The space prefixing "Demography" is due to the hierarchy.
-    When I scroll the "Topics" select into view
-    And I select "Demography" option from the "Topics" Slim Select
-    Then I scroll button "Apply filters" into view
-    And I press "Apply filters"
-    Then the "- Demography" option from "Topics" Slim Select is selected
+    When I check the "Demography" checkbox from the "topic" facet
+    Then the "Demography" content checkbox item should be selected
     # The selected option moves to the last position by default.
-    And the "Topics" select should contain the following options:
-      | Info                      |
-      | - Statistics and Analysis |
-      | Social and Political      |
-      | - Demography              |
-      | - E-inclusion             |
+    And the "topic" checkbox facet should allow selecting the following values "Info, Statistics and Analysis, Social and Political, Demography, E-inclusion"
+    And the "spatial coverage" checkbox facet should allow selecting the following values "Belgium (1), European Union (1)"
 
-    #Then the option with text "Any location" from select facet form "spatial coverage" is selected
-    And the "Geographic coverage" select should contain the following options:
-      | Any location       |
-      | Belgium (1)        |
-      | European Union (1) |
     And I should see the "Molecular cooking collection" tile
     And I should see the "Spherification" tile
     But I should not see the "El Celler de Can Roca" tile
     And I should not see the "Foam" tile
 
     # Test the spatial coverage facet.
-    When I select "Belgium" from "Geographic coverage"
-    Then I scroll button "Apply filters" into view
-    And I press "Apply filters"
-    Then the option with text "Belgium (1)" from select facet form "spatial coverage" is selected
-    And the "Geographic coverage" select should contain the following options:
-      | Any location       |
-      | Belgium (1)        |
-      | European Union (1) |
-    Then the "- Demography" option from "Topics" Slim Select is selected
-    And the "Topics" select should contain the following options:
-      | Social and Political |
-      | - Demography         |
+    When I scroll the "spatial coverage" facet into view
+    And I check the "Belgium (1)" checkbox from the "spatial coverage" facet
+    And the "Belgium" content checkbox item should be selected
+    And the "spatial coverage" checkbox facet should allow selecting the following values "Belgium (1), European Union (1)"
+    Then I check the "Demography" checkbox from the "topic" facet
+    And the "topic" checkbox facet should allow selecting the following values "Social and Political, Demography"
     And I should see the "Molecular cooking collection" tile
     But I should not see the "El Celler de Can Roca" tile
     And I should not see the "Spherification" tile
     And I should not see the "Foam" tile
 
-    # Select link in the 'type' facet.
     Given I am on the search page
-    When I select "News (5)" from "Content types"
-    Then I scroll button "Apply filters" into view
-    And I press "Apply filters"
-    Then the option with text "News (5)" from select facet form "Content types" is selected
-    And the "Content types" select should contain the following options:
-      | Collection (1)  |
-      | News (5)        |
-      | Solutions (2)   |
+    When I check the "News (5)" checkbox from the "Content types" facet
+    Then the "News" content checkbox item should be selected
+    And the "Content types" checkbox facet should allow selecting the following values "Collection (1), Solutions (2), News (5)"
 
-    When I additionally select "Solutions (2)" from "Content types"
-    Then I scroll button "Apply filters" into view
-    And I press "Apply filters"
-    And I should see the following facet summary "News, Solutions"
-    And the "Content types" select should contain the following options:
-      | Collection (1)  |
-      | News (5)        |
-      | Solutions (2)   |
-    And the "Topics" select should contain the following options:
-      | Info                      |
-      | - Statistics and Analysis |
-      | Social and Political      |
-      | - Demography              |
-      | - E-inclusion             |
-    And the "Geographic coverage" select should contain the following options:
-      | Any location       |
-      | European Union (1) |
-      | Luxembourg (5)     |
+    When I check the "Solutions (2)" checkbox from the "Content types" facet
+    Then the "Solutions" content checkbox item should be selected
+    And the "News" content checkbox item should be selected
+    And I should see the following facet summary "Solutions, News"
+    Then the "Content types" checkbox facet should allow selecting the following values "Collection (1), Solutions (2), News (5)"
+    And the "topic" checkbox facet should allow selecting the following values "Info, Statistics and Analysis, Social and Political, Demography, E-inclusion"
+    And the "spatial coverage" checkbox facet should allow selecting the following values "European Union (1), Luxembourg (5)"
     And I should not see the "Molecular cooking collection" tile
     And I should see the "El Celler de Can Roca" tile
     But I should see the "Spherification" tile
@@ -193,24 +118,17 @@ Feature: Global search
       | Document omega | Document      | Document short delta | A document consists of epsilon strings. | Luxembourg       | Alphabet | Collection alpha | validated |
 
     When I visit the search page
-    And the "Geographic coverage" select should contain the following options:
-      | Any location     |
-      | Greece (1)       |
-      | Luxembourg (2)   |
 
-    When I select "Luxembourg" from "Geographic coverage"
-    And I scroll button "Apply filters" into view
-    And I press "Apply filters"
-    Then the option with text "Luxembourg (2)" from select facet form "spatial coverage" is selected
+    Then I scroll the "spatial coverage" facet into view
+    And the "spatial coverage" checkbox facet should allow selecting the following values "Greece (1), Luxembourg (2)"
+    When I check the "Luxembourg (2)" checkbox from the "spatial coverage" facet
+    Then the "Luxembourg" content checkbox item should be selected
     And I should see the following search header in the correct order:
       | SEARCH RESULTS (2)  |
       | Sort by:            |
     And I should see the text "SEARCH RESULTS (2)"
     # The countries are still sorted alphabetically even though the Luxembourg value is selected and has more results.
-    And the "Geographic coverage" select should contain the following options:
-      | Any location     |
-      | Greece (1)       |
-      | Luxembourg (2)   |
+    And the "spatial coverage" checkbox facet should allow selecting the following values "Greece (1), Luxembourg (2)"
 
   Scenario: Content can be found with a full-text search.
     Given the following owner:
@@ -260,17 +178,7 @@ Feature: Global search
       | ulyssesfrees | ulysses.freeman@example.com | Ulysses    | Freeman     | Omero snc    |
 
     When I visit the search page
-    And the "Content types" select should contain the following options:
-      | Collections (2)	|
-      | Custom page (1)	|
-      | Discussion (1)	|
-      | Document (1)		|
-      | Events (2)		  |
-      | Licence (1)		  |
-      | News (1)			  |
-      | Release (1)		  |
-      | Solution (1)		|
-      | Video (1)			  |
+    Then the "Content types" checkbox facet should allow selecting the following values "Collections (2), Solution (1), News (1), Events (2), Document (1), Discussion (1), Release (1), Custom page (1), Licence (1), Video (1)"
 
     # "Alpha" is used in all the rdf entities titles.
     When I enter "Alpha" in the search bar and press enter
@@ -328,14 +236,14 @@ Feature: Global search
     Then the page should show the tiles "Solution alpha, Release Alpha"
 
     # Users should be found by first name, family name and organisation.
-     When I enter "Jenessa" in the search bar and press enter
-     Then the page should show the tiles "Jenessa Carlyle"
-     When I enter "freeman" in the search bar and press enter
-     Then the page should show the tiles "Ulysses Freeman"
-     When I enter "clyffco" in the search bar and press enter
-     Then the page should show the tiles "Jenessa Carlyle"
-     When I enter "Omero+snc" in the search bar and press enter
-     Then the page should show the tiles "Ulysses Freeman"
+    When I enter "Jenessa" in the search bar and press enter
+    Then the page should show the tiles "Jenessa Carlyle"
+    When I enter "freeman" in the search bar and press enter
+    Then the page should show the tiles "Ulysses Freeman"
+    When I enter "clyffco" in the search bar and press enter
+    Then the page should show the tiles "Jenessa Carlyle"
+    When I enter "Omero+snc" in the search bar and press enter
+    Then the page should show the tiles "Ulysses Freeman"
 
   @wip
   # This is disabled because the search bar is currently not shown in the header
@@ -609,19 +517,19 @@ Feature: Global search
       | Absolutely nonesense               |
     And I should be on "/search?keys=Relativity&sort_by=relevance"
 
-     When I select "Creation Date" from "Sort by"
-     And I should see the following tiles in the correct order:
-       | Absolutely nonesense               |
-       | Relativity news: Relativity theory |
-       | Relativity is the word             |
-     And I should be on "/search?keys=Relativity&sort_by=creation-date"
+    Given I select "Creation Date" from "Sort by"
+    Then I should see the following tiles in the correct order:
+      | Absolutely nonesense               |
+      | Relativity news: Relativity theory |
+      | Relativity is the word             |
+    And I should be on "/search?keys=Relativity&sort_by=creation-date"
 
-     When I select "Last Updated Date" from "Sort by"
-     And I should see the following tiles in the correct order:
-       | Relativity is the word             |
-       | Relativity news: Relativity theory |
-       | Absolutely nonesense               |
-     And I should be on "/search?keys=Relativity&sort_by=last-updated-date"
+    Given I select "Last Updated Date" from "Sort by"
+    Then I should see the following tiles in the correct order:
+      | Relativity is the word             |
+      | Relativity news: Relativity theory |
+      | Absolutely nonesense               |
+    And I should be on "/search?keys=Relativity&sort_by=last-updated-date"
 
   @javascript
   Scenario: Anonymous user can find facets summary
@@ -646,36 +554,35 @@ Feature: Global search
 
     Given I am logged in as a user with the "authenticated" role
     When I visit the search page
-    And I select "Solutions (2)" from "Content types"
-    And I additionally select "News (5)" from "Content types"
-    Then I scroll button "Apply filters" into view
-    And I press "Apply filters"
-    And I should see the following facet summary "News, Solutions"
+    Then I scroll the "Content types" facet into view
+    And I check the "Solutions (2)" checkbox from the "Content types" facet
+    And I check the "News (5)" checkbox from the "Content types" facet
+    And I should see the following facet summary "Solutions, News"
 
     # Workaround to scroll an element towards the center of the screen to avoid a false out of bounds move exception.
     # @todo: Remove this as part of ISAICP-6800.
     # @see: https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-6800
-    Then I scroll link "Clear filters" into view
-    Then I click "Clear filters"
-    And I select "News (5)" from "Content types"
-    Then I scroll button "Apply filters" into view
-    And I press "Apply filters"
-    And I should see the following facet summary "News"
+    # @todo: Enable test when this ticket is implemented  ISAICP-6884.
+    # @see: https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-6884
+    # Then I scroll link "Clear filters" into view
+    # Then I click "Clear filters"
+    # And I select "News (5)" from "Content types"
+    # And I should see the following facet summary "News"
 
     # Check if facet summary was remove correctly.
     # Workaround to scroll an element towards the center of the screen to avoid a false out of bounds move exception.
     # @todo: Remove this as part of ISAICP-6800.
     # @see: https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-6800
-    Then I scroll link "Clear filters" into view
-    And I click "Clear filters"
-    And I select "News (5)" from "Content types"
-    And I additionally select "Collection (1)" from "Content types"
-    Then I scroll button "Apply filters" into view
-    And I press "Apply filters"
-    And I should see the following facet summary "Collection, News"
-    When I scroll the "News" chip into view
-    And I should remove the following facet summary "News"
-    Then the page should show only the tiles "Radio cooking collection"
+    # @todo: Enable test when this ticket is implemented  ISAICP-6884.
+    # @see: https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-6884
+    # Then I scroll link "Clear filters" into view
+    # And I click "Clear filters"
+    # And I select "News (5)" from "Content types"
+    # And I additionally select "Collection (1)" from "Content types"
+    # And I should see the following facet summary "Collection, News"
+    # When I scroll the "News" chip into view
+    # And I should remove the following facet summary "News"
+    # Then the page should show only the tiles "Radio cooking collection"
 
   @javascript
   Scenario: Anonymous user can find facets summary
@@ -711,30 +618,27 @@ Feature: Global search
     Then I should see the following search suggestions:
       | body |
 
-    Then I select "Solutions (2)" from "Content types"
-    And I additionally select "News (5)" from "Content types"
-    Then I scroll button "Apply filters" into view
-    And I press "Apply filters"
-    And I should see the following facet summary "News, Solutions"
+    When I scroll the "Content types" facet into view
+    And I check the "Solutions (2)" checkbox from the "Content types" facet
+    And I check the "News (5)" checkbox from the "Content types" facet
+    And I should see the following facet summary "Solutions, News"
 
-    Then I scroll link "Clear filters" into view
-    And I click "Clear filters"
-    And I select "News (5)" from "Content types"
-    Then I scroll button "Apply filters" into view
-    And I press "Apply filters"
-    And I should see the following facet summary "News"
+    # @todo: Enable test when this ticket is implemented  ISAICP-6884.
+    # @see: https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-6884
+    # Then I scroll link "Clear filters" into view
+    # And I click "Clear filters"
+    # And I check the "News (5)" checkbox from the "Content types" facet
+    # And I should see the following facet summary "News"
 
     # Check if facet summary was remove correctly.
-    Then I scroll link "Clear filters" into view
-    And I click "Clear filters"
-    Then I select "News (5)" from "Content types"
-    And I additionally select "Collection (1)" from "Content types"
-    Then I scroll button "Apply filters" into view
-    And I press "Apply filters"
-    And I should see the following facet summary "Collection, News"
-    Then I scroll the "News" chip into view
-    And I should remove the following facet summary "News"
-    And the page should show only the tiles "Radio cooking collection"
+    # Then I scroll link "Clear filters" into view
+    # And I click "Clear filters"
+    # And I check the "News (5)" checkbox from the "Content types" facet
+    # And I check the "Collection (1)" checkbox from the "Content types" facet
+    # And I should see the following facet summary "Collection, News"
+    # Then I scroll the "News" chip into view
+    # And I should remove the following facet summary "News"
+    # And the page should show only the tiles "Radio cooking collection"
 
   @terms @javascript
   Scenario: Show first three search results as featured
