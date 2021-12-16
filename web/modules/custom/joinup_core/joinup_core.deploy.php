@@ -29,3 +29,22 @@ function joinup_core_deploy_0107700(array &$sandbox = []): void {
   ];
   $node->save();
 }
+
+/**
+ * Re-import default content and fix weights.
+ */
+function joinup_core_deploy_0107800(array &$sandbox = []): void {
+  \Drupal::getContainer()->get('default_content.importer')->importContent('joinup_default_content');
+  $menu_link_data_storage = \Drupal::entityTypeManager()->getStorage('menu_link_content');
+  $updates = [
+    'b48755b4-8158-4ac4-9f1b-0977ce4fcd13' => -45,
+    'f00e66fc-6bfc-416b-88c2-24caa2af0708' => -44
+  ];
+
+  foreach ($updates as $uuid => $weight) {
+    $links = $menu_link_data_storage->loadByProperties(['uuid' => $uuid]);
+    /** @var \Drupal\menu_link_content\MenuLinkContentInterface $link */
+    $link = reset($links);
+    $link->set('weight', $weight)->save();
+  }
+}
