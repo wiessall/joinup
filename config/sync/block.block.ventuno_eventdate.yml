@@ -12,7 +12,7 @@ dependencies:
 id: ventuno_eventdate
 theme: ventuno
 region: sidebar
-weight: -18
+weight: -20
 provider: null
 plugin: 'facet_block:event_date'
 settings:
