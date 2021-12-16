@@ -46,10 +46,12 @@ dependencies:
     - field.field.rdf_entity.solution.field_status
     - field.field.rdf_entity.solution.field_topic
     - rdf_entity.rdfentity.solution
+    - responsive_image.styles.highlighted_search_result
   module:
     - field_group
     - joinup_html_stripper
     - layout_builder
+    - responsive_image
     - template_suggestion
     - user
 third_party_settings:
@@ -121,6 +123,17 @@ content:
     third_party_settings:
       template_suggestion:
         template_suggestion: ''
+  field_is_logo:
+    type: responsive_image
+    weight: 3
+    region: content
+    label: hidden
+    settings:
+      responsive_image_style: highlighted_search_result
+      image_link: ''
+    third_party_settings:
+      template_suggestion:
+        template_suggestion: ''
   field_topic:
     type: entity_reference_label
     weight: 1
@@ -156,7 +169,6 @@ hidden:
   field_is_issue_tracker: true
   field_is_landing_page: true
   field_is_language: true
-  field_is_logo: true
   field_is_metrics_page: true
   field_is_moderation: true
   field_is_owner: true
