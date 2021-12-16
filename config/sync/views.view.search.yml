@@ -5,9 +5,9 @@ dependencies:
   config:
     - search_api.index.published
   module:
-    - joinup_material_design
     - search_api
     - views_autosubmit
+    - views_block_area
 _core:
   default_config_hash: IZ_1De9xX5-8975-JeHxZJ0f_58o9R3nM9pxnxboN_k
 id: search
@@ -68,32 +68,38 @@ display:
             offset_label: Offset
           quantity: 9
       style:
-        type: tiles
+        type: default
         options:
-          row_class: ''
-          default_row_class: true
+          row_class: tile
+          default_row_class: false
           uses_fields: false
       row:
         type: search_api
         options:
           view_modes:
             'entity:node':
-              custom_page: view_mode_tile
-              discussion: view_mode_tile
-              document: view_mode_tile
-              event: view_mode_tile
-              news: view_mode_tile
-              newsletter: view_mode_tile
-              tallinn_report: view_mode_tile
-              video: view_mode_tile
+              custom_page: search_result
+              discussion: search_result
+              document: search_result
+              event: search_result
+              news: search_result
+              tallinn_report: search_result
+              video: search_result
             'entity:rdf_entity':
-              asset_distribution: view_mode_tile
-              asset_release: view_mode_tile
-              collection: view_mode_tile
-              licence: view_mode_tile
-              solution: view_mode_tile
+              asset_distribution: search_result
+              asset_release: search_result
+              collection: search_result
+              licence: search_result
+              solution: search_result
+              spdx_licence: default
+            'entity:taxonomy_term':
+              eif_conceptual_model: default
+              eif_interoperability_layer: default
+              eif_principle: default
+              eif_recommendation: default
+              topic: default
             'entity:user':
-              user: view_mode_tile
+              user: search_result
       fields:
         id:
           table: search_api_index_published
@@ -182,17 +188,20 @@ display:
             description: ''
             use_operator: false
             operator: search_api_fulltext_op
+            operator_limit_selection: false
+            operator_list: {  }
             identifier: keys
             required: false
             remember: false
             multiple: false
             remember_roles:
               authenticated: authenticated
+              licence_manager: '0'
               anonymous: '0'
               moderator: '0'
               administrator: '0'
-            operator_limit_selection: false
-            operator_list: {  }
+              rdf_graph_manager: '0'
+            placeholder: 'Start typing to search…'
           is_grouped: false
           group_info:
             label: ''
@@ -386,7 +395,37 @@ display:
             identifier: last-updated-date
           plugin_id: search_api
       title: ''
-      header: {  }
+      header:
+        views_block_area_1:
+          id: views_block_area_1
+          table: views
+          field: views_block_area
+          relationship: none
+          group_type: group
+          admin_label: 'Exposed Search Form'
+          empty: true
+          block_id: 'views_exposed_filter_block:search-page_1'
+          plugin_id: views_block_area
+        result:
+          id: result
+          table: views
+          field: result
+          relationship: none
+          group_type: group
+          admin_label: ''
+          empty: false
+          content: 'SEARCH RESULTS (@total)'
+          plugin_id: result
+        views_block_area:
+          id: views_block_area
+          table: views
+          field: views_block_area
+          relationship: none
+          group_type: group
+          admin_label: 'Facets summary'
+          empty: false
+          block_id: 'facets_summary_block:search_facets_summary'
+          plugin_id: views_block_area
       footer: {  }
       empty:
         area_text_custom:

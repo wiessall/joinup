@@ -49,6 +49,8 @@ module:
   eu_sic: 0
   eupl: 0
   facets: 0
+  facets_block: 0
+  facets_summary: 0
   field: 0
   field_delimiter: 0
   field_formatter_range: 0
@@ -185,6 +187,7 @@ module:
   schema_social_media_posting: 0
   search_api: 0
   search_api_arbitrary_facet: 0
+  search_api_autocomplete: 0
   search_api_db: 0
   search_api_field: 0
   search_api_solr: 0
@@ -225,6 +228,7 @@ module:
   video_embed_wysiwyg: 0
   view_unpublished: 0
   views_autosubmit: 0
+  views_block_area: 0
   views_bulk_operations: 0
   views_data_export: 0
   views_multiple_permissions: 0

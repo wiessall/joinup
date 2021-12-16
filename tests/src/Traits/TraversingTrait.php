@@ -248,10 +248,10 @@ trait TraversingTrait {
     $result = [];
     // @todo The `.listing__item--tile` selector is part of the original Joinup
     //   theme and can be removed once we have fully migrated to the new theme.
-    foreach ($regionObj->findAll('css', '.listing__item--tile, article.tile') as $element) {
+    foreach ($regionObj->findAll('css', '.listing__item--tile, .card, article.tile') as $element) {
       // @todo The `.listing__title` selector is part of the original Joinup
       //   theme and can be removed once we migrated to the new theme.
-      $title_element = $element->find('css', ' .listing__title, h2 a');
+      $title_element = $element->find('css', ' .listing__title, .card-title, h2 a');
       // Some tiles don't have a title, like the one to create a new collection
       // in the collections page.
       if ($title_element) {
@@ -305,7 +305,7 @@ trait TraversingTrait {
     // @todo This can be removed once we are fully migrated to the new theme.
     $xpath = '//*[@class and contains(concat(" ", normalize-space(@class), " "), " ' . $type . ' ")]';
     // That have a heading with the specified text.
-    $xpath .= '[.//*[@class and contains(concat(" ", normalize-space(@class), " "), " listing__title ")][normalize-space()="' . $heading . '"]]';
+    $xpath .= '[.//*[@class and contains(concat(" ", normalize-space(@class), " "), " listing__title ") or contains(concat(" ", normalize-space(@class), " "), " card-title ")][normalize-space()="' . $heading . '"]]';
 
     $item = $this->getSession()->getPage()->find('xpath', $xpath);
 
@@ -340,6 +340,8 @@ trait TraversingTrait {
    *   This can be useful in cases where the data drupal facet id is placed in
    *   more than one html tag e.g. the dropdown has the id placed in both the
    *   <li> tag of links as well as the <select> element.
+   * @param bool $facet_form
+   *   (optional) Check if is a facet form element.
    *
    * @return \Behat\Mink\Element\NodeElement
    *   The facet node element.
@@ -347,12 +349,17 @@ trait TraversingTrait {
    * @throws \Exception
    *   Thrown when the facet is not found in the designated area.
    */
-  protected function findFacetByAlias(string $alias, ?NodeElement $region = NULL, string $html_tag = '*'): NodeElement {
+  protected function findFacetByAlias(string $alias, ?NodeElement $region = NULL, string $html_tag = '*', bool $facet_form = FALSE): NodeElement {
     if ($region === NULL) {
       $region = $this->getSession()->getPage();
     }
     $facet_id = self::getFacetIdFromAlias($alias);
-    $element = $region->find('xpath', "//{$html_tag}[@data-drupal-facet-id='{$facet_id}']");
+    if ($facet_form) {
+      $element = $region->find('xpath', "//{$html_tag}[@data-drupal-selector='{$facet_id}']");
+    }
+    else {
+      $element = $region->find('xpath', "//{$html_tag}[@data-drupal-facet-id='{$facet_id}']");
+    }
 
     if (!$element) {
       throw new \Exception("The facet '$alias' was not found in the page.");
@@ -573,7 +580,10 @@ trait TraversingTrait {
           // The site-wide search field in the top right corner.
           ['css', 'input#search-bar__input'],
           // The search field on the search result pages.
-          ['css', '#block-exposed-form-search-page input.form-text'],
+          [
+            'css',
+            '*[data-drupal-selector="views-exposed-form-search-page-1"] input[data-drupal-selector="edit-keys"]',
+          ],
         ],
       ],
     ];
