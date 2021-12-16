@@ -1,0 +1,42 @@
+{#
+/**
+ * @file
+ * Theme override to display a node.
+ */
+#}
+{% block content %}
+  {% set title %}
+    <a class="fs-5 text-underline-hover mb-3" href="{{ url }}">{{ node.field_news_headline.value }}</a>
+  {% endset %}
+  {% set metadata %}
+    <span class="text-muted text-nowrap me-4-5">{{ type }}</span><span class="text-muted text-nowrap me-4-5">{{ creation }}</span>
+  {% endset %}
+  {% set badges = [] %}
+  {% for topic in topics %}
+    {% set badges = badges|merge([{
+      label: topic.name.value,
+      background: 'secondary',
+      rounded_pill: true,
+      attributes: create_attribute().addClass(['text-primary', 'me-2', 'mb-2'])
+    }]) %}
+  {% endfor %}
+  {% include directory ~ '/templates/bcl-card/card.html.twig' with {
+    attributes: create_attribute().addClass(['border-0', 'border-bottom', 'pb-3', 'mb-3']),
+    horizontal: true,
+    horizontal_grid: {
+      left_col_classes: '',
+      right_col_classes: 'col-12',
+      gutter: '',
+    },
+    extra_classes_header: 'border-0 bg-transparent p-0',
+    extra_classes_body: 'p-0',
+    badges: badges,
+    title: {
+      content: title,
+    },
+    text: {
+      content: body,
+    },
+    content: metadata,
+  } %}
+{% endblock %}
