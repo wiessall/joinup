@@ -11,9 +11,11 @@ dependencies:
     - field.field.node.video.field_video_spatial_coverage
     - field.field.node.video.og_audience
     - node.type.video
+    - responsive_image.styles.highlighted_search_result
   module:
     - joinup_html_stripper
     - layout_builder
+    - responsive_image
     - template_suggestion
     - user
 third_party_settings:
@@ -37,6 +39,17 @@ content:
       template_suggestion:
         template_suggestion: ''
     region: content
+  field_video:
+    type: responsive_image
+    weight: 3
+    region: content
+    label: hidden
+    settings:
+      responsive_image_style: highlighted_search_result
+      image_link: ''
+    third_party_settings:
+      template_suggestion:
+        template_suggestion: ''
   published_at:
     type: timestamp
     weight: 1

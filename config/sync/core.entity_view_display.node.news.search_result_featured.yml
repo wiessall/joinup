@@ -19,12 +19,14 @@ dependencies:
     - field.field.node.news.field_topic
     - field.field.node.news.og_audience
     - node.type.news
+    - responsive_image.styles.highlighted_search_result
   module:
     - field_delimiter
     - field_formatter_range
     - field_group
     - joinup_html_stripper
     - layout_builder
+    - responsive_image
     - template_suggestion
     - user
 third_party_settings:
@@ -64,6 +66,17 @@ content:
       template_suggestion:
         template_suggestion: ''
     region: content
+  field_news_logo:
+    type: responsive_image
+    weight: 3
+    region: content
+    label: hidden
+    settings:
+      responsive_image_style: highlighted_search_result
+      image_link: ''
+    third_party_settings:
+      template_suggestion:
+        template_suggestion: ''
   field_topic:
     type: entity_reference_label
     weight: 0
@@ -97,7 +110,6 @@ hidden:
   field_comments: true
   field_keywords: true
   field_news_headline: true
-  field_news_logo: true
   field_news_referenced_solution: true
   field_news_source_url: true
   field_news_spatial_coverage: true
