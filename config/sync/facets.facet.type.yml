@@ -8,9 +8,9 @@ dependencies:
   module:
     - search_api
 id: type
-name: Type
+name: 'Content types'
 url_alias: type
-weight: 0
+weight: -2
 min_count: 1
 show_only_one_result: false
 field_identifier: entity_bundle
@@ -19,7 +19,7 @@ widget:
   type: checkbox
   config:
     show_numbers: true
-    soft_limit: 0
+    soft_limit: 10
     soft_limit_settings:
       show_less_label: 'Show less'
       show_more_label: 'Show more'
@@ -64,4 +64,4 @@ processor_configs:
     settings: {  }
 empty_behavior:
   behavior: none
-show_title: false
+show_title: true

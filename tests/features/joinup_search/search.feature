@@ -2,11 +2,6 @@
 Feature: Global search
   As a user of the site I can find content through the global search.
 
-  # Todo: This test runs with javascript enabled because in a non-javascript
-  # environment, the dropdown facet is simply a list of links. Remove the
-  # `@javascript` tag when the upstream issue in the Facets module is fixed.
-  # Ref. https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-5739
-  # Ref. https://www.drupal.org/project/facets/issues/2937191
   @javascript
   Scenario: Anonymous user can find items
     Given the following collection:
@@ -29,48 +24,24 @@ Feature: Global search
       | Dummy news 4          | Dummy body       | Molecular cooking collection | E-inclusion             | Luxembourg       | validated |
 
     Given I am logged in as a user with the "authenticated" role
-    # @todo The search page cache should be cleared when new content is added.
-    # @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-3428
-    And the cache has been cleared
-    When I visit the search page
+    Then I visit the search page
+    And I accept essential cookies
     # All content is visible.
     Then I should see the "Molecular cooking collection" tile
     And I should see the "El Celler de Can Roca" tile
     And I should see the "Spherification" tile
     And I should see the "Foam" tile
-    # Facets should be in place.
-    And the option with text "Any topic" from select facet "topic" is selected
     # Terms are sorted alphabetically
-    And the "topic" select facet should contain the following options:
-      | Any topic               | 0 |
-      # Parent term.
-      | Info                    | 0 |
-      # Child term.
-      | Statistics and Analysis | 1 |
-      # Parent term.
-      | Social and Political    | 0 |
-      # Child terms.
-      | Demography              | 1 |
-      | E-inclusion             | 1 |
-    And the option with text "Any location" from select facet "spatial coverage" is selected
-    And the "spatial coverage" select facet should contain the following options:
-      | Any location       |
-      | Belgium (1)        |
-      | European Union (1) |
-      | Luxembourg (5)     |
+    And the "topic" checkbox facet should allow selecting the following values "Info, Statistics and Analysis, Social and Political, Demography, E-inclusion"
+    And the "spatial coverage" checkbox facet should allow selecting the following values "Belgium (1), European Union (1), Luxembourg (5)"
+
     # Check that only one search field is available. In an earlier version of
     # Joinup there were two search fields, but this was confusing users.
     And there should be exactly 1 "search field" on the page
 
-    When I select "Social and Political" from the "topic" select facet
-    Then the option with text "Social and Political" from select facet "topic" is selected
-    And the "topic" select facet should contain the following options:
-      | Any topic               |
-      | Info                    |
-      | Statistics and Analysis |
-      | Social and Political    |
-      | Demography              |
-      | E-inclusion             |
+    When I check the "Social and Political" checkbox from the "topic" facet
+    Then the "Social and Political" content checkbox item should be selected
+    And the "topic" checkbox facet should allow selecting the following values "Info, Statistics and Analysis, Social and Political, Demography, E-inclusion"
     # The tiles appear because the parent term is selected even though they do not have a direct reference there.
     And I should see the "Dummy news 1" tile
     And I should see the "Dummy news 2" tile
@@ -78,49 +49,30 @@ Feature: Global search
     And I should see the "Dummy news 4" tile
 
     # Test the topic facet. The space prefixing "Demography" is due to the hierarchy.
-    When I select " Demography" from the "topic" select facet
-    Then the option with text "Demography" from select facet "topic" is selected
+    When I check the "Demography" checkbox from the "topic" facet
+    Then the "Demography" content checkbox item should be selected
     # The selected option moves to the last position by default.
-    And the "topic" select facet should contain the following options:
-      | Any topic               |
-      | Info                    |
-      | Statistics and Analysis |
-      | Social and Political    |
-      | Demography              |
-      | E-inclusion             |
+    And the "topic" checkbox facet should allow selecting the following values "Info, Statistics and Analysis, Social and Political, Demography, E-inclusion"
+    And the "spatial coverage" checkbox facet should allow selecting the following values "Belgium (1), European Union (1)"
 
-    Then the option with text "Any location" from select facet "spatial coverage" is selected
-    And the "spatial coverage" select facet should contain the following options:
-      | Any location       |
-      | Belgium (1)        |
-      | European Union (1) |
     And I should see the "Molecular cooking collection" tile
     And I should see the "Spherification" tile
     But I should not see the "El Celler de Can Roca" tile
     And I should not see the "Foam" tile
 
     # Test the spatial coverage facet.
-    When I select "Belgium" from the "spatial coverage" select facet
-    Then the option with text "Belgium (1)" from select facet "spatial coverage" is selected
-    And the "spatial coverage" select facet should contain the following options:
-      | Any location       |
-      | Belgium (1)        |
-      | European Union (1) |
-    Then the option with text "Demography" from select facet "topic" is selected
-    And the "topic" select facet should contain the following options:
-      | Any topic            |
-      | Social and Political |
-      | Demography           |
+    When I scroll the "spatial coverage" facet into view
+    And I check the "Belgium (1)" checkbox from the "spatial coverage" facet
+    And the "Belgium" content checkbox item should be selected
+    And the "spatial coverage" checkbox facet should allow selecting the following values "Belgium (1), European Union (1)"
+    Then I check the "Demography" checkbox from the "topic" facet
+    And the "topic" checkbox facet should allow selecting the following values "Social and Political, Demography"
     And I should see the "Molecular cooking collection" tile
     But I should not see the "El Celler de Can Roca" tile
     And I should not see the "Spherification" tile
     And I should not see the "Foam" tile
 
-    # Reset the search by visiting again the search page.
     Given I am on the search page
-    Then I should see the text "Content types" in the "Left sidebar" region
-
-    # Select link in the 'type' facet.
     When I check the "News (5)" checkbox from the "Content types" facet
     Then the "News" content checkbox item should be selected
     And the "Content types" checkbox facet should allow selecting the following values "Collection (1), Solutions (2), News (5)"
@@ -128,18 +80,10 @@ Feature: Global search
     When I check the "Solutions (2)" checkbox from the "Content types" facet
     Then the "Solutions" content checkbox item should be selected
     And the "News" content checkbox item should be selected
+    And I should see the following facet summary "Solutions, News"
     Then the "Content types" checkbox facet should allow selecting the following values "Collection (1), Solutions (2), News (5)"
-    And the "topic" select facet should contain the following options:
-      | Any topic               |
-      | Info                    |
-      | Statistics and Analysis |
-      | Social and Political    |
-      | Demography              |
-      | E-inclusion             |
-    And the "spatial coverage" select facet should contain the following options:
-      | Any location       |
-      | European Union (1) |
-      | Luxembourg (5)     |
+    And the "topic" checkbox facet should allow selecting the following values "Info, Statistics and Analysis, Social and Political, Demography, E-inclusion"
+    And the "spatial coverage" checkbox facet should allow selecting the following values "European Union (1), Luxembourg (5)"
     And I should not see the "Molecular cooking collection" tile
     And I should see the "El Celler de Can Roca" tile
     But I should see the "Spherification" tile
@@ -174,17 +118,17 @@ Feature: Global search
       | Document omega | Document      | Document short delta | A document consists of epsilon strings. | Luxembourg       | Alphabet | Collection alpha | validated |
 
     When I visit the search page
-    And the "spatial coverage" select facet should contain the following options:
-      | Any location     |
-      | Greece (1)     |
-      | Luxembourg (2) |
-    When I select "Luxembourg" from the "spatial coverage" select facet
-    Then the option with text "Luxembourg (2)" from select facet "spatial coverage" is selected
+
+    Then I scroll the "spatial coverage" facet into view
+    And the "spatial coverage" checkbox facet should allow selecting the following values "Greece (1), Luxembourg (2)"
+    When I check the "Luxembourg (2)" checkbox from the "spatial coverage" facet
+    Then the "Luxembourg" content checkbox item should be selected
+    And I should see the following search header in the correct order:
+      | SEARCH RESULTS (2)  |
+      | Sort by:            |
+    And I should see the text "SEARCH RESULTS (2)"
     # The countries are still sorted alphabetically even though the Luxembourg value is selected and has more results.
-    And the "spatial coverage" select facet should contain the following options:
-      | Any location     |
-      | Greece (1)     |
-      | Luxembourg (2) |
+    And the "spatial coverage" checkbox facet should allow selecting the following values "Greece (1), Luxembourg (2)"
 
   Scenario: Content can be found with a full-text search.
     Given the following owner:
@@ -238,16 +182,22 @@ Feature: Global search
 
     # "Alpha" is used in all the rdf entities titles.
     When I enter "Alpha" in the search bar and press enter
-    Then the page should show the tiles "Collection alpha, Solution alpha, Release Alpha, Licence Alpha, Video alpha"
+    And I should see the following search header in the correct order:
+      | SEARCH RESULTS (5)  |
+      | Sort by:            |
+    Then I should see the text "SEARCH RESULTS (5)"
+    And the page should show the tiles "Collection alpha, Solution alpha, Release Alpha, Licence Alpha, Video alpha"
 
     # "Omega" is used in all the node entities titles. Since the content of
     # custom pages is added to their collection, we also match the collection.
     When I enter "omega" in the search bar and press enter
-    Then the page should show the tiles "Collection alpha, News omega, Event Omega, Document omega, Discussion omega, Page omega"
+    Then I should see the text "SEARCH RESULTS (6)"
+    And the page should show the tiles "Collection alpha, News omega, Event Omega, Document omega, Discussion omega, Page omega"
 
     # "Beta" is used in all the rdf entities body fields.
     When I enter "beta" in the search bar and press enter
-    Then the page should show the tiles "Collection alpha, Solution alpha, Release Alpha, Licence Alpha"
+    Then I should see the text "SEARCH RESULTS (4)"
+    And the page should show the tiles "Collection alpha, Solution alpha, Release Alpha, Licence Alpha"
 
     # "Epsilon" is used in all the node entities body fields.
     When I enter "epsilon" in the search bar and press enter
@@ -404,7 +354,8 @@ Feature: Global search
     When I enter "ubermensch" in the search bar and press enter
     Then I should see "No content found for your search."
     When I enter "zzolu-distro" in the search bar and press enter
-    Then I should see "No content found for your search."
+    Then I should not see the text "Search Results"
+    And I should see "No content found for your search."
     When I enter "apache" in the search bar and press enter
     Then the page should show only the tiles "Apache-2.0"
     When I enter "HTML" in the search bar and press enter
@@ -559,6 +510,7 @@ Feature: Global search
     When I am on the homepage
     And I enter "Relativity" in the search bar and press enter
     Then the option "Relevance" should be selected
+    And I should see the text "SEARCH RESULTS (3)"
     And I should see the following tiles in the correct order:
       | Relativity news: Relativity theory |
       | Relativity is the word             |
@@ -578,3 +530,143 @@ Feature: Global search
       | Relativity news: Relativity theory |
       | Absolutely nonesense               |
     And I should be on "/search?keys=Relativity&sort_by=last-updated-date"
+
+  @javascript
+  Scenario: Anonymous user can find facets summary
+    Given the following collection:
+      | title            | Radio cooking collection     |
+      | logo             | logo.png                     |
+      | moderation       | no                           |
+      | topic            | Demography                   |
+      | spatial coverage | Belgium                      |
+      | state            | validated                    |
+    And the following solutions:
+      | title          | collection                   | description                                                                                                                          | topic      | spatial coverage | state     |
+      | Spheres        | Radio cooking collection     | Spherification is the culinary process of shaping a liquid into spheres                                                              | Demography | European Union   | validated |
+      | Movistar       | Radio cooking collection     | "The use of foam in cuisine has been used in many forms in the history of cooking:whipped cream, meringue, and mousse are all foams" |            |                  | validated |
+    And news content:
+      | title                 | body             | collection                   | topic                   | spatial coverage | state     |
+      | El Cabo da Roca       | The best in town | Radio cooking collection     | Statistics and Analysis | Luxembourg       | validated |
+      | Funny news 1          | Dummy body       | Radio cooking collection     | E-inclusion             | Luxembourg       | validated |
+      | Funny news 2          | Dummy body       | Radio cooking collection     | E-inclusion             | Luxembourg       | validated |
+      | Funny news 3          | Dummy body       | Radio cooking collection     | E-inclusion             | Luxembourg       | validated |
+      | Funny news 4          | Dummy body       | Radio cooking collection     | E-inclusion             | Luxembourg       | validated |
+
+    Given I am logged in as a user with the "authenticated" role
+    When I visit the search page
+    Then I scroll the "Content types" facet into view
+    And I check the "Solutions (2)" checkbox from the "Content types" facet
+    And I check the "News (5)" checkbox from the "Content types" facet
+    And I should see the following facet summary "Solutions, News"
+
+    # Workaround to scroll an element towards the center of the screen to avoid a false out of bounds move exception.
+    # @todo: Remove this as part of ISAICP-6800.
+    # @see: https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-6800
+    # @todo: Enable test when this ticket is implemented  ISAICP-6884.
+    # @see: https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-6884
+    # Then I scroll link "Clear filters" into view
+    # Then I click "Clear filters"
+    # And I select "News (5)" from "Content types"
+    # And I should see the following facet summary "News"
+
+    # Check if facet summary was remove correctly.
+    # Workaround to scroll an element towards the center of the screen to avoid a false out of bounds move exception.
+    # @todo: Remove this as part of ISAICP-6800.
+    # @see: https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-6800
+    # @todo: Enable test when this ticket is implemented  ISAICP-6884.
+    # @see: https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-6884
+    # Then I scroll link "Clear filters" into view
+    # And I click "Clear filters"
+    # And I select "News (5)" from "Content types"
+    # And I additionally select "Collection (1)" from "Content types"
+    # And I should see the following facet summary "Collection, News"
+    # When I scroll the "News" chip into view
+    # And I should remove the following facet summary "News"
+    # Then the page should show only the tiles "Radio cooking collection"
+
+  @javascript
+  Scenario: Anonymous user can find facets summary
+    Given the following collection:
+      | title            | Radio cooking collection     |
+      | logo             | logo.png                     |
+      | moderation       | no                           |
+      | topic            | Demography                   |
+      | spatial coverage | Belgium                      |
+      | state            | validated                    |
+    And the following solutions:
+      | title          | collection                   | description                                                                                                                          | topic      | spatial coverage | state     |
+      | Spheres        | Radio cooking collection     | Spherification is the culinary process of shaping a liquid into spheres                                                              | Demography | European Union   | validated |
+      | Movistar       | Radio cooking collection     | "The use of foam in cuisine has been used in many forms in the history of cooking:whipped cream, meringue, and mousse are all foams" |            |                  | validated |
+    And news content:
+      | title                 | body             | collection                   | topic                   | spatial coverage | state     |
+      | El Cabo da Roca       | The best in town | Radio cooking collection     | Statistics and Analysis | Luxembourg       | validated |
+      | Funny news 1          | Dummy body       | Radio cooking collection     | E-inclusion             | Luxembourg       | validated |
+      | Funny news 2          | Dummy body       | Radio cooking collection     | E-inclusion             | Luxembourg       | validated |
+      | Funny news 3          | Dummy body       | Radio cooking collection     | E-inclusion             | Luxembourg       | validated |
+      | Funny news 4          | Dummy body       | Radio cooking collection     | E-inclusion             | Luxembourg       | validated |
+
+    Given I am logged in as a user with the "authenticated" role
+    When I visit the search page
+    And I enter "funn" in the search bar
+    And I wait for AJAX to finish
+    Then I should see the following search suggestions:
+      | funni |
+      | funny |
+
+    When I enter "bott" in the search bar
+    And I wait for AJAX to finish
+    Then I should see the following search suggestions:
+      | body |
+
+    When I scroll the "Content types" facet into view
+    And I check the "Solutions (2)" checkbox from the "Content types" facet
+    And I check the "News (5)" checkbox from the "Content types" facet
+    And I should see the following facet summary "Solutions, News"
+
+    # @todo: Enable test when this ticket is implemented  ISAICP-6884.
+    # @see: https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-6884
+    # Then I scroll link "Clear filters" into view
+    # And I click "Clear filters"
+    # And I check the "News (5)" checkbox from the "Content types" facet
+    # And I should see the following facet summary "News"
+
+    # Check if facet summary was remove correctly.
+    # Then I scroll link "Clear filters" into view
+    # And I click "Clear filters"
+    # And I check the "News (5)" checkbox from the "Content types" facet
+    # And I check the "Collection (1)" checkbox from the "Content types" facet
+    # And I should see the following facet summary "Collection, News"
+    # Then I scroll the "News" chip into view
+    # And I should remove the following facet summary "News"
+    # And the page should show only the tiles "Radio cooking collection"
+
+  @terms @javascript
+  Scenario: Show first three search results as featured
+    Given collection:
+      | title | Mice in space |
+      | state | validated     |
+    And document content:
+      | title        | collection    | topic                                  | state     | logo     | body                                                                                                                                                                                            |
+      | Microgravity | Mice in space | HR, Statistics and Analysis, E-justice | validated | alan.jpg | Conventional studies investigating the effects of reduced gravity on muscle mass and function have used a ground control group that is not directly comparable to the space experimental group. |
+    And event content:
+      | title           | collection    | topic                    | state     | logo        | body                                                                                                                                                                                  |
+      | Stay at the ISS | Mice in space | EU and European Policies | validated | charles.jpg | Two groups of mice (six per group) were housed aboard the International Space Station for 35 days. One group was subjected to artificial gravity (1 g) and the other to microgravity. |
+    And news content:
+      | title                 | body                                       | collection     | topic                   | spatial coverage | state     | logo        |
+      | Muscle atrophy        | Researchers from the University of Tsukuba | Mice in space  | Finance in EU           | Luxembourg       | validated | blaise.jpg  |
+      | El Cabo da Roca       | The best in town                           | Mice in space  | Statistics and Analysis | Luxembourg       | validated | charles.jpg |
+      | Funny news 1          | Dummy body                                 | Mice in space  | HR                      | Luxembourg       | validated | ada.png     |
+      | Funny news 2          | Dummy body                                 | Mice in space  | E-inclusion             | Luxembourg       | validated | alan.jpg    |
+      | Funny news 3          | Dummy body                                 | Mice in space  | E-inclusion             | Luxembourg       | validated | charles.jpg |
+      | Funny news 4          | Dummy body                                 | Mice in space  | HR                      | Luxembourg       | validated | ada.png     |
+      | Funny news 5          | Dummy body                                 | Mice in space  | HR                      | Luxembourg       | validated | ada.png     |
+      | Dummy news 1          | Dummy body                                 | Mice in space  | Statistics and Analysis | Luxembourg       | validated | charles.jpg |
+      | Dummy news 2          | Dummy body                                 | Mice in space  | E-inclusion             | Luxembourg       | validated | alan.jpg    |
+      | Dummy news 3          | Dummy body                                 | Mice in space  | Statistics and Analysis | Luxembourg       | validated | ada.png     |
+      | Dummy news 4          | Dummy body                                 | Mice in space  | E-inclusion             | Luxembourg       | validated | charles.jpg |
+
+    When I visit the search page
+    Then I should see the 3 tiles with image
+
+    Then I go to "/search?sort_by=relevance&page=1"
+    And I should see the 0 tiles with image

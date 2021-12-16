@@ -16,10 +16,16 @@ show_only_one_result: true
 field_identifier: entity_groups
 facet_source_id: 'search_api:views_page__search__page_1'
 widget:
-  type: dropdown
+  type: checkbox
   config:
     show_numbers: true
-    default_option_label: 'Any Collection or Solution'
+    soft_limit: 5
+    soft_limit_settings:
+      show_less_label: 'Show less'
+      show_more_label: 'Show more'
+    show_reset_link: false
+    reset_text: 'Show all'
+    hide_reset_when_no_selection: false
     arbitrary_facet_plugin: _none
 query_operator: or
 use_hierarchy: false
