@@ -90,7 +90,8 @@ Feature: Global search
     And I should see the "Foam" tile
 
     # Launch a text search.
-    When I open the search bar by clicking on the search icon
+    When I click "Clear filters"
+    Then I open the search bar by clicking on the search icon
     And I enter "Cooking" in the search bar and press enter
     Then I should see the "Molecular cooking collection" tile
     And I should see the "Foam" tile
@@ -612,11 +613,13 @@ Feature: Global search
     And I should see the following facet summary "Solutions, News"
 
     And I click "Clear filters"
+    Then I scroll the "Content types" facet into view
     And I check the "News (5)" checkbox from the "Content types" facet
     And I should see the following facet summary "News"
 
     # Check if facet summary was remove correctly.
     And I click "Clear filters"
+    Then I scroll the "Content types" facet into view
     And I check the "News (5)" checkbox from the "Content types" facet
     And I check the "Collection (1)" checkbox from the "Content types" facet
     And I should see the following facet summary "Collection, News"
