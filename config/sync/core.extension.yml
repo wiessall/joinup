@@ -49,8 +49,7 @@ module:
   eu_sic: 0
   eupl: 0
   facets: 0
-  facets_form: 0
-  facets_form_date_range: 0
+  facets_block: 0
   facets_summary: 0
   field: 0
   field_delimiter: 0
@@ -198,7 +197,6 @@ module:
   simple_sitemap: 0
   site_alert: 0
   site_verify: 0
-  slim_select: 0
   smart_trim: 0
   social_media_links: 0
   social_media_links_field: 0

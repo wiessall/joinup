@@ -71,13 +71,6 @@ trait TraversingTrait {
       throw new \Exception("Select field '{$select}' not found.");
     }
 
-    // Check if it's a Slim Select element.
-    if ($element->hasAttribute('data-ssid')) {
-      $xpath = '//*[contains(concat(" ", normalize-space(@class), " "), "' . $element->getAttribute('data-ssid') . '")]';
-      return $region->waitFor(5, function () use ($region, $xpath) {
-        return $region->find('xpath', $xpath);
-      });
-    }
     return $element;
   }
 
@@ -393,18 +386,18 @@ trait TraversingTrait {
     $mappings = [
       'collection type' => 'collection_type',
       'collection topic' => 'collection_topic',
-      'collection/solution' => 'edit-group',
-      'topic' => 'edit-topic',
+      'collection/solution' => 'group',
+      'topic' => 'topic',
       'solution topic' => 'solution_topic',
       'solution spatial coverage' => 'solution_spatial_coverage',
-      'spatial coverage' => 'edit-spatial-coverage',
+      'spatial coverage' => 'spatial_coverage',
       'My solutions content' => 'solution_my_content',
       'My collections content' => 'collection_my_content',
       'My content' => 'content_my_content',
       'Event date' => 'event_date',
       'EIF recommendations' => 'category',
       'Collection event date' => 'collection_event_type',
-      'Content types' => 'edit-type',
+      'Content types' => 'type',
       'eif principle' => 'principle',
       'eif interoperability layer' => 'interoperability_layer',
       'eif conceptual model' => 'conceptual_model',
