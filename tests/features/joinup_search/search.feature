@@ -561,11 +561,13 @@ Feature: Global search
     And I should see the following facet summary "Solutions, News"
 
     Then I click "Clear filters"
+    And I scroll the "Content types" facet into view
     And I check the "News (5)" checkbox from the "Content types" facet
     And I should see the following facet summary "News"
 
     # Check if facet summary was remove correctly.
     And I click "Clear filters"
+    Then I scroll the "Content types" facet into view
     And I check the "News (5)" checkbox from the "Content types" facet
     And I check the "Collection (1)" checkbox from the "Content types" facet
     And I should see the following facet summary "Collection, News"
