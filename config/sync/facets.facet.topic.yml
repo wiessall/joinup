@@ -12,47 +12,64 @@ name: Topics
 url_alias: topic
 weight: -3
 min_count: 1
-show_only_one_result: false
+show_only_one_result: true
 field_identifier: topic
 facet_source_id: 'search_api:views_page__search__page_1'
 widget:
-  type: facets_form_dropdown
+  type: checkbox
   config:
-    default_option_label: 'Any topic'
-    child_items_prefix: '-'
-    disabled_on_empty: false
     show_numbers: false
+    soft_limit: 5
+    soft_limit_settings:
+      show_less_label: 'Show less'
+      show_more_label: 'Show more'
+    show_reset_link: false
+    reset_text: 'Show all'
+    hide_reset_when_no_selection: false
+    arbitrary_facet_plugin: _none
 query_operator: or
 use_hierarchy: true
 expand_hierarchy: true
-enable_parent_when_child_gets_disabled: false
+enable_parent_when_child_gets_disabled: true
 hard_limit: 0
 exclude: false
 only_visible_when_facet_source_is_visible: true
 processor_configs:
+  active_widget_order:
+    processor_id: active_widget_order
+    weights:
+      sort: -8
+    settings:
+      sort: DESC
   aggregated_entity_reference_label:
     processor_id: aggregated_entity_reference_label
     weights:
-      build: 5
+      build: -1
     settings: {  }
   count_limit:
     processor_id: count_limit
     weights:
-      build: -10
+      build: 0
     settings:
       minimum_items: 1
       maximum_items: null
+  count_widget_order:
+    processor_id: count_widget_order
+    weights:
+      sort: -9
+    settings:
+      sort: DESC
   display_value_widget_order:
     processor_id: display_value_widget_order
     weights:
-      sort: -8
+      sort: -10
     settings:
       sort: ASC
   url_processor_handler:
     processor_id: url_processor_handler
     weights:
       pre_query: -10
-      build: 5
+      build: -2
     settings: {  }
 empty_behavior:
   behavior: none

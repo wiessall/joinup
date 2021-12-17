@@ -26,14 +26,12 @@ toolkit:
         - task: exec
           command: cd "${toolkit.build.dist.root}/web/themes/ventuno" && npm install
         # Remove theme development dependencies.
-        - task: exec
-          command: rm
-          options:
-            recursive: null
-            force: null
-          arguments:
-            - ${toolkit.build.dist.root}/web/themes/ventuno/node_modules/
-            - ${toolkit.build.dist.root}/web/themes/ventuno/package*.json
+        - task: remove
+          file: ${toolkit.build.dist.root}/web/themes/ventuno/node_modules
+        - task: remove
+          file: ${toolkit.build.dist.root}/web/themes/ventuno/package.json
+        - task: remove
+          file: ${toolkit.build.dist.root}/web/themes/ventuno/package-lock.json
 
 commands:
 
@@ -51,8 +49,6 @@ commands:
       destination: ${joinup.dir}/behat.yml
     - task: run
       command: joinup:build-assets
-    - task: exec
-      command: npm install -C web/modules/contrib/slim_select
     - task: mkdir
       dir: ${joinup.files_private_dir}
     - task: mkdir
