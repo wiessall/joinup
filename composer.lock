@@ -2198,6 +2198,10 @@
                 {
                     "name": "floretan",
                     "homepage": "https://www.drupal.org/user/66163"
+                },
+                {
+                    "name": "nord102",
+                    "homepage": "https://www.drupal.org/user/3471419"
                 }
             ],
             "description": "Limit which text formats are available for each field instance.",
@@ -6200,6 +6204,10 @@
                 {
                     "name": "phenaproxima",
                     "homepage": "https://www.drupal.org/user/205645"
+                },
+                {
+                    "name": "tim.plunkett",
+                    "homepage": "https://www.drupal.org/user/241634"
                 }
             ],
             "description": "Provides a way to place blocks on a custom page.",
@@ -7715,24 +7723,16 @@
                     "role": "Maintainer"
                 },
                 {
-                    "name": "chrisjlee",
-                    "homepage": "https://www.drupal.org/user/760600"
-                },
-                {
-                    "name": "drywall",
-                    "homepage": "https://www.drupal.org/user/192591"
-                },
-                {
-                    "name": "jsenich",
-                    "homepage": "https://www.drupal.org/user/58871"
-                },
-                {
-                    "name": "markie",
-                    "homepage": "https://www.drupal.org/user/206687"
-                },
-                {
                     "name": "newsignature",
                     "homepage": "https://www.drupal.org/user/765518"
+                },
+                {
+                    "name": "ultimike",
+                    "homepage": "https://www.drupal.org/user/51132"
+                },
+                {
+                    "name": "volkswagenchick",
+                    "homepage": "https://www.drupal.org/user/3332522"
                 }
             ],
             "description": "Provides a more robust alternative to 'summary or trimmed' textfield format.",
@@ -9139,11 +9139,14 @@
                 "spdx/license-list-data": "master"
             },
             "type": "drupal-module",
-            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "GPL-2.0-or-later"
             ],
             "description": "Allows to federate and manage the SPDX licences.",
+            "support": {
+                "source": "https://github.com/ec-europa/spdx/tree/1.0.0-alpha10",
+                "issues": "https://github.com/ec-europa/spdx/issues"
+            },
             "time": "2021-11-17T09:47:09+00:00"
         },
         {
@@ -9813,7 +9816,7 @@
                 "reference": "master"
             },
             "type": "drupal-theme-library",
-            "time": "2021-06-30T06:04:10+00:00"
+            "time": "2018-10-31T20:10:45+00:00"
         },
         {
             "name": "laminas/laminas-diactoros",
@@ -10800,7 +10803,7 @@
                 "drupal/core": "^8.9 || ^9.1",
                 "drupal/ui_patterns": "^1.0",
                 "drupal/ui_patterns_settings": "^1.0",
-                "php": ">=7.3"
+                "php": ">=7.1"
             },
             "require-dev": {
                 "composer/installers": "^1.11",
@@ -10809,9 +10812,7 @@
                 "drupal/drupal-extension": "^4.1",
                 "drupal/styleguide": "^1.0@alpha",
                 "drush/drush": "^10.3",
-                "openeuropa/code-review": "~1.6",
-                "openeuropa/drupal-core-require-dev": "^8.9 || ^9.1",
-                "openeuropa/task-runner-drupal-project-symlink": "^1.0",
+                "openeuropa/task-runner": "dev-php-7.1 as 1.0.0-beta7",
                 "phpspec/prophecy-phpunit": "^1 || ^2"
             },
             "type": "drupal-theme",
@@ -10856,7 +10857,7 @@
                 "EUPL-1.2"
             ],
             "description": "OpenEuropa Bootstrap base theme.",
-            "time": "2021-11-08T11:07:16+00:00"
+            "time": "2021-10-22T15:17:24+00:00"
         },
         {
             "name": "openeuropa/oe_dashboard_agent",
@@ -12305,7 +12306,7 @@
                 "reference": "master"
             },
             "type": "library",
-            "time": "2021-11-19T15:07:33+00:00"
+            "time": "2020-11-25T21:59:37+00:00"
         },
         {
             "name": "stack/builder",
@@ -16646,7 +16647,7 @@
             "extra": {
                 "drupal": {
                     "version": "4.1.1",
-                    "datestamp": "1609419527",
+                    "datestamp": "1631968537",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
