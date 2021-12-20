@@ -300,20 +300,24 @@ function ventuno_preprocess_rdf_entity__search_result_featured(&$variables) {
     ]);
   }
   switch ($entity->getType()) {
-  case 'collection':
-    $default_icon = 'folder2-open';
-    break;
-  case 'licence':
-    $default_icon = 'file-earmark-medical';
-    break;
-  case 'asset_release':
-    $default_icon = 'file-earmark-zip';
-    break;
-  case 'solution':
-    $default_icon = 'clipboard-check';
-    break;
-  default:
-    $default_icon = 'lightning-charge';
+    case 'collection':
+      $default_icon = 'folder2-open';
+      break;
+
+    case 'licence':
+      $default_icon = 'file-earmark-medical';
+      break;
+
+    case 'asset_release':
+      $default_icon = 'file-earmark-zip';
+      break;
+
+    case 'solution':
+      $default_icon = 'clipboard-check';
+      break;
+
+    default:
+      $default_icon = 'lightning-charge';
   }
   $variables['def_img'] = [
     '#type' => 'inline_template',
@@ -358,23 +362,28 @@ function ventuno_preprocess_node__search_result_featured(&$variables) {
     ]);
   }
   switch ($node->getType()) {
-  case 'custom_page':
-    $default_icon = 'file-earmark-richtext';
-    break;
-  case 'discussion':
-    $default_icon = 'chat-left-text';
-    break;
-  case 'document':
-    $default_icon = 'file-earmark-text';
-    break;
-  case 'event':
-    $default_icon = 'calendar3';
-    break;
-  case 'video':
-    $default_icon = 'file-earmark-play';
-    break;
-  default:
-    $default_icon = 'lightning-charge';
+    case 'custom_page':
+      $default_icon = 'file-earmark-richtext';
+      break;
+
+    case 'discussion':
+      $default_icon = 'chat-left-text';
+      break;
+
+    case 'document':
+      $default_icon = 'file-earmark-text';
+      break;
+
+    case 'event':
+      $default_icon = 'calendar3';
+      break;
+
+    case 'video':
+      $default_icon = 'file-earmark-play';
+      break;
+
+    default:
+      $default_icon = 'lightning-charge';
   }
   $variables['def_img'] = [
     '#type' => 'inline_template',
