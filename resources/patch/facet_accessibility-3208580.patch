@@ -1,0 +1,22 @@
+diff --git a/js/soft-limit.js b/js/soft-limit.js
+index ece6fea..b3a8daf 100644
+--- a/js/soft-limit.js
++++ b/js/soft-limit.js
+@@ -56,12 +56,13 @@
+       $('<a href="#" class="facets-soft-limit-link"></a>')
+         .text(showMoreLabel)
+         .on('click', function () {
+-          if (facet.find('li:hidden').length > 0) {
+-            facet.find('li:gt(' + zero_based_limit + ')').slideDown();
+-            $(this).addClass('open').text(showLessLabel);
++          if (facet.find('> li:hidden').length > 0) {
++            facet.find('> li:gt(' + zero_based_limit + ')').slideDown();
++            facet.find('> li:lt(' + (zero_based_limit + 2) + ') input').focus();
++            $(this).addClass('open').text(showLessLabel).attr("aria-expanded", "true");
+           }
+           else {
+-            facet.find('li:gt(' + zero_based_limit + ')').slideUp();
++            facet.find('> li:gt(' + zero_based_limit + ')').slideUp();
+             $(this).removeClass('open').text(showMoreLabel);
+           }
+           return false;
