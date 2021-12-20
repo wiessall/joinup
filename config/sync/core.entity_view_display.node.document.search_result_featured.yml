@@ -20,12 +20,14 @@ dependencies:
     - field.field.node.document.field_type
     - field.field.node.document.og_audience
     - node.type.document
+    - responsive_image.styles.highlighted_search_result
   module:
     - field_delimiter
     - field_formatter_range
     - field_group
     - joinup_html_stripper
     - layout_builder
+    - responsive_image
     - template_suggestion
     - user
 third_party_settings:
@@ -85,6 +87,17 @@ content:
       template_suggestion:
         template_suggestion: ''
     region: content
+  field_document_logo:
+    type: responsive_image
+    weight: 3
+    region: content
+    label: hidden
+    settings:
+      responsive_image_style: highlighted_search_result
+      image_link: ''
+    third_party_settings:
+      template_suggestion:
+        template_suggestion: ''
   field_topic:
     type: entity_reference_label
     weight: 0
@@ -115,7 +128,6 @@ content:
         template_suggestion: ''
 hidden:
   field_comments: true
-  field_document_logo: true
   field_document_publication_date: true
   field_document_spatial_coverage: true
   field_file: true

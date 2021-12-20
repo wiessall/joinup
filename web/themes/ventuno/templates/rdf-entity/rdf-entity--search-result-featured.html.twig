@@ -17,7 +17,7 @@
       label: topic.name.value,
       background: 'secondary',
       rounded_pill: true,
-      attributes: create_attribute().addClass(['text-primary', 'me-2-5', 'mt-2-5'])
+      attributes: create_attribute().addClass(['text-primary', 'me-2', 'mb-2'])
     }]) %}
   {% endfor %}
   {% include directory ~ '/templates/bcl-card/card.html.twig' with {
@@ -28,8 +28,8 @@
       right_col_classes: 'col-12 col-md-10',
       gutter: '1',
     },
-    extra_classes_header: 'border-0 bg-transparent py-0',
-    extra_classes_body: 'py-0',
+    extra_classes_header: 'border-0 bg-transparent p-0 px-md-3',
+    extra_classes_body: 'p-0 px-md-3',
     badges: badges,
     title: {
       content: title,
@@ -38,12 +38,7 @@
       content: body,
     },
     content: metadata,
-    image: {
-      path: file_url(image.0['#item'].entity.uri.value),
-      alt: image['#items'].title,
-      position: 'top',
-      extra_classes: 'd-none d-md-block',
-    },
+    image: image,
   } %}
 
 {% endblock %}

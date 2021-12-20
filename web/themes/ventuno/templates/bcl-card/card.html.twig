@@ -122,11 +122,7 @@
   {% if _horizontal %}
   <div class='{{ _horizontal_grid.left_col_classes  }}'>
   {% endif %}
-  <img
-    src='{{ _image.path }}'
-    alt='{{ _image.alt }}'
-    class='{{ _img_class }}'
-  >
+  {{ _image }}
   {% if _horizontal %}
   </div>
   {% endif %}

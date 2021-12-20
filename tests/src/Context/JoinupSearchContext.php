@@ -6,7 +6,6 @@ namespace Drupal\joinup\Context;
 
 use Behat\Gherkin\Node\TableNode;
 use Behat\Mink\Element\NodeElement;
-use Behat\Mink\Exception\ElementNotFoundException;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\joinup\Traits\BrowserCapabilityDetectionTrait;
 use Drupal\joinup\Traits\KeyboardInteractionTrait;
@@ -257,145 +256,6 @@ class JoinupSearchContext extends RawDrupalContext {
   }
 
   /**
-   * Clicks a slim select item in facet form.
-   *
-   * @param string $select
-   *   The option to select.
-   * @param string $label
-   *   The select label.
-   *
-   * @throws \Exception
-   *   Thrown when the facet or the link inside the facet is not found.
-   *
-   * @When I select :option from the :label slim select
-   */
-  public function iSelectAnOptionFromSlimSelect(string $select, string $label): void {
-    $region = $this->getSession()->getPage();
-    $xpath = '//div[contains(concat(" ", normalize-space(@class), " "), " block-facets-form ")]//select[@data-drupal-selector="edit-topic"]';
-    $topic = $region->find('xpath', $xpath);
-    if (!$topic) {
-      throw new \Exception("The slim select '$label' was not found in the page.");
-    }
-
-    $topic_xpath = '//div[contains(concat(" ", normalize-space(@class), " "), " block-facets-form ")]//div[contains(concat(" ", normalize-space(@class), " "), "' . $topic->getAttribute('data-ssid') . '")]';
-    $select_topic = $region->find('xpath', $topic_xpath);
-    $select_topic->click();
-
-    $element = $select_topic->find('css', ".ss-option:contains('{$select}')");
-    if (!$element) {
-      throw new \Exception("The slim select element '$select' was not found in the page.");
-    }
-    $element->click();
-  }
-
-  /**
-   * Remove a slim select item in facet form.
-   *
-   * @param string $select
-   *   The option to select.
-   * @param string $label
-   *   The select label.
-   *
-   * @throws \Exception
-   *   Thrown when the facet or the link inside the facet is not found.
-   *
-   * @When I remove :option from the :label slim select
-   */
-  public function iRemoveAnOptionFromSlimSelect(string $select, string $label): void {
-    $region = $this->getSession()->getPage();
-    $xpath = '//div[contains(concat(" ", normalize-space(@class), " "), " block-facets-form ")]//select[@data-drupal-selector="edit-topic"]';
-    $topic = $region->find('xpath', $xpath);
-    if (!$topic) {
-      throw new \Exception("The slim select '$label' was not found in the page.");
-    }
-
-    $topic_xpath = '//div[contains(concat(" ", normalize-space(@class), " "), " block-facets-form ")]//div[contains(concat(" ", normalize-space(@class), " "), "' . $topic->getAttribute('data-ssid') . '")]';
-    $select_topic = $region->find('xpath', $topic_xpath);
-    $select_topic->click();
-
-    $element = $select_topic->find('css', ".ss-multi-selected .ss-value:contains('{$select}')");
-    if (!$element) {
-      throw new \Exception("The slim select element '$select' was not found in the page.");
-    }
-    $element->find('css', '.ss-value-delete')->click();
-    $select_topic->click();
-  }
-
-  /**
-   * Clicks in more facet items in an inline facet form.
-   *
-   * @param string $select
-   *   The option to select.
-   * @param string $facet
-   *   The facet alias.
-   *
-   * @throws \Exception
-   *   Thrown when the facet or the link inside the facet is not found.
-   *
-   * @When I select :option option in the :facet select facet form
-   */
-  public function iSelectOtherOptionFromFacetForm(string $select, string $facet): void {
-    $facet = $this->findFacetByAlias($facet, NULL, 'select', TRUE);
-    $facet->selectOption($select, TRUE);
-  }
-
-  /**
-   * Clicks a Slim Select item in facet form.
-   *
-   * @param string $option
-   *   The option to select.
-   * @param string $label
-   *   The select label.
-   *
-   * @throws \Exception
-   *   Thrown when the facet or the link inside the facet is not found.
-   *
-   * @When I select :option option(s) from the :label Slim Select
-   */
-  public function selectOptionsFromSlimSelect(string $option, string $label): void {
-    foreach ($this->explodeCommaSeparatedStepArgument($option) as $option) {
-      $slim_select = $this->findSelect($label);
-      $slim_select->click();
-
-      $element = $slim_select->find('css', ".ss-option:contains('{$option}')");
-      if (!$element) {
-        throw new ElementNotFoundException($this->getSession()->getDriver(), "The Slim Select element '$option' was not found in the page.");
-      }
-      $element->click();
-    }
-  }
-
-  /**
-   * Removes a Slim Select item in facet form.
-   *
-   * @param string $option
-   *   The option to select.
-   * @param string $label
-   *   The select label.
-   *
-   * @throws \Exception
-   *   Thrown when the facet or the link inside the facet is not found.
-   *
-   * @When I unselect :option option(s) from the :label Slim Select
-   */
-  public function removeOptionsFromSlimSelect(string $option, string $label): void {
-    $options = $this->explodeCommaSeparatedStepArgument($option);
-    $slim_select = $this->findSelect($label);
-    foreach ($options as $option) {
-      $slim_select->click();
-
-      $element = $slim_select->find('css', ".ss-multi-selected .ss-value:contains('{$option}')");
-      if (!$element) {
-        throw new ElementNotFoundException($this->getSession()->getDriver(), "The Slim Select element '$option' was not found in the page.");
-      }
-      $element->find('css', '.ss-value-delete')->click();
-
-      // Close Slim Select dropdown.
-      $slim_select->click();
-    }
-  }
-
-  /**
    * Asserts a selected option in the given facet.
    *
    * @param string $option
@@ -503,35 +363,6 @@ class JoinupSearchContext extends RawDrupalContext {
         Assert::assertSame($option, $text, sprintf('The option "%s" is selected in the "%s" facet, but the option "%s" was expected.', $text, $select, $option));
       }
     }
-  }
-
-  /**
-   * Asserts a Slim Selected option in facets form.
-   *
-   * @param string $option
-   *   Text value of the option to find.
-   * @param string $label
-   *   Title of the select field.
-   *
-   * @throws \Exception
-   *    Throws an exception when the select is not found in page.
-   *
-   * @Then the :option option from :label Slim Select is selected
-   * @Then the :option options from :label Slim Select are selected
-   */
-  public function optionWithTextFromSlimSelectIsSelected(string $option, string $label): void {
-    $slim_select = $this->findSelect($label);
-
-    $xpath = '//*[contains(concat(" ", normalize-space(@class), " "), "ss-option-selected")]';
-    $elements = $slim_select->findAll('xpath', $xpath);
-
-    $actual_options = [];
-    foreach ($elements as $element) {
-      $actual_options[] = strip_tags($element->getHtml());
-    }
-    $expected_options = $this->explodeCommaSeparatedStepArgument($option);
-
-    Assert::assertSame($expected_options, $actual_options);
   }
 
   /**
@@ -654,7 +485,7 @@ class JoinupSearchContext extends RawDrupalContext {
   public function checkCheckboxFacet(string $option, string $facet_type): void {
     $facet = $this->findFacetByAlias($facet_type);
     /** @var \Behat\Mink\Element\NodeElement[] $node_elements */
-    $node_elements = $facet->findAll('xpath', '//li[@class="facet-item"]');
+    $node_elements = $facet->findAll('css', 'li.facet-item label');
     foreach ($node_elements as $node_element) {
       if ($node_element->getText() === $option) {
         $node_element->click();
@@ -891,12 +722,14 @@ class JoinupSearchContext extends RawDrupalContext {
    */
   public function assertCheckboxFacetItems(string $facet, string $values): void {
     $element = $this->findFacetByAlias($facet);
+
+    $css = $this->browserSupportsJavaScript() ? 'li.facet-item label' : 'li.facet-item';
     $found = array_map(function (NodeElement $item) {
       $text = $item->getText();
       // If a value is selected, it is prefixed with a '(-) ' in the text. Clean
       // that out so that it is more readable.
       return preg_replace('/^\(-\) /', '', $text);
-    }, $element->findAll('css', 'li.facet-item'));
+    }, $element->findAll('css', $css));
 
     $values = $this->explodeCommaSeparatedStepArgument($values);
     Assert::assertEquals($values, $found, "The '{$facet}' values mismatch the expected ones.");

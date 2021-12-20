@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "25d73994a5c604b79a8cade5388b6917",
+    "content-hash": "5a18e466091c75a2efc981b690e73e59",
     "packages": [
         {
             "name": "SEMICeu/adms-ap_validator",
@@ -2198,10 +2198,6 @@
                 {
                     "name": "floretan",
                     "homepage": "https://www.drupal.org/user/66163"
-                },
-                {
-                    "name": "nord102",
-                    "homepage": "https://www.drupal.org/user/3471419"
                 }
             ],
             "description": "Limit which text formats are available for each field instance.",
@@ -4051,8 +4047,7 @@
                 "patches_applied": {
                     "Facet Summary for Facet Items with a set dependency. @see https://www.drupal.org/node/2873480": "resources/patch/facet_summary_for_facet-2873480-18.patch",
                     "Configurable dropdown child prefix. @see https://www.drupal.org/project/facets/issues/3214662": "https://git.drupalcode.org/project/facets/-/merge_requests/20.diff",
-                    "SA-CONTRIB-2021-008. @see https://www.drupal.org/sa-contrib-2021-008": "https://www.drupal.org/files/issues/2021-05-17/3213582-facets-1.6-1.7.patch",
-                    "https://www.drupal.org/project/facets/issues/3223956": "https://git.drupalcode.org/project/facets/-/merge_requests/25.diff"
+                    "SA-CONTRIB-2021-008. @see https://www.drupal.org/sa-contrib-2021-008": "https://www.drupal.org/files/issues/2021-05-17/3213582-facets-1.6-1.7.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -4090,39 +4085,31 @@
             }
         },
         {
-            "name": "drupal/facets_form",
-            "version": "dev-1.x",
+            "name": "drupal/facets_block",
+            "version": "1.4.0",
             "source": {
                 "type": "git",
-                "url": "https://git.drupalcode.org/project/facets_form.git",
-                "reference": "52d624f6b32986941e1df77c6dd0c5eab77f6391"
+                "url": "https://git.drupalcode.org/project/facets_block.git",
+                "reference": "8.x-1.04"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/facets_block-8.x-1.04.zip",
+                "reference": "8.x-1.04",
+                "shasum": "b20806b6174f941313182b4bd339ab7d5d1e6cf3"
             },
             "require": {
-                "cweagans/composer-patches": "^1.7",
-                "drupal/core": "^8.9 || ^9.1",
-                "drupal/facets": "^1.6"
-            },
-            "require-dev": {
-                "drupal/facets_summary": "*",
-                "drupal/search_api": "^1.13"
+                "drupal/core": "^8 || ^9",
+                "drupal/facets": "^1.0 || ^2.0"
             },
             "type": "drupal-module",
             "extra": {
-                "branch-alias": {
-                    "dev-1.x": "1.x-dev"
-                },
                 "drupal": {
-                    "version": "1.x-dev",
-                    "datestamp": "1632837046",
+                    "version": "8.x-1.04",
+                    "datestamp": "1639331249",
                     "security-coverage": {
-                        "status": "not-covered",
-                        "message": "Dev releases are not covered by Drupal security advisories."
-                    }
-                },
-                "enable-patching": true,
-                "patches": {
-                    "drupal/facets": {
-                        "https://www.drupal.org/project/facets/issues/3223956": "https://git.drupalcode.org/project/facets/-/merge_requests/25.diff"
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
                     }
                 }
             },
@@ -4132,21 +4119,19 @@
             ],
             "authors": [
                 {
-                    "name": "Claudiu Cristea",
-                    "homepage": "https://www.drupal.org/u/claudiucristea"
-                },
-                {
-                    "name": "Andras Szilagyi",
-                    "homepage": "https://www.drupal.org/u/andras_szilagyi"
+                    "name": "Goran Nikolovski",
+                    "homepage": "https://gorannikolovski.com",
+                    "email": "goran@gorannikolovski.com",
+                    "role": "Developer"
                 }
             ],
-            "description": "Place the facets of a given facets source in a form",
-            "homepage": "https://www.drupal.org/project/facets_form",
+            "description": "Render Facets in a single block.",
+            "homepage": "https://www.drupal.org/project/facets_block",
             "support": {
-                "source": "https://git.drupalcode.org/project/facets_form",
-                "issues": "https://www.drupal.org/project/issues/facets_form"
-            },
-            "time": "2021-09-30T10:52:24+00:00"
+                "source": "https://git.drupalcode.org/project/facets_block",
+                "issues": "https://www.drupal.org/project/issues/facets_block",
+                "email": "goran@gorannikolovski.com"
+            }
         },
         {
             "name": "drupal/field_delimiter",
@@ -7692,65 +7677,6 @@
             "time": "2020-11-16T14:54:55+00:00"
         },
         {
-            "name": "drupal/slim_select",
-            "version": "1.0.0-alpha2",
-            "source": {
-                "type": "git",
-                "url": "https://git.drupalcode.org/project/slim_select.git",
-                "reference": "1.0.0-alpha2"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/slim_select-1.0.0-alpha2.zip",
-                "reference": "1.0.0-alpha2",
-                "shasum": "869749b84d109ddc0ae871b3a1b17d4fcf17905b"
-            },
-            "require": {
-                "drupal/core": "^8.9 || ^9.1"
-            },
-            "type": "drupal-module",
-            "extra": {
-                "drupal": {
-                    "version": "1.0.0-alpha2",
-                    "datestamp": "1638708300",
-                    "security-coverage": {
-                        "status": "not-covered",
-                        "message": "Alpha releases are not covered by Drupal security advisories."
-                    }
-                }
-            },
-            "notification-url": "https://packages.drupal.org/8/downloads",
-            "license": [
-                "GPL-2.0+"
-            ],
-            "authors": [
-                {
-                    "name": "Alexandre Dias",
-                    "homepage": "https://www.drupal.org/user/56348",
-                    "email": "alex.jm.dias@gmail.com"
-                },
-                {
-                    "name": "Claudiu Cristea",
-                    "homepage": "https://www.drupal.org/u/claudiu.cristea"
-                },
-                {
-                    "name": "Ilias Dimopoulos",
-                    "homepage": "https://www.drupal.org/user/382067",
-                    "email": "idimopoulos@hotmail.com"
-                },
-                {
-                    "name": "saidatom",
-                    "homepage": "https://www.drupal.org/user/1846674"
-                }
-            ],
-            "description": "Provides a select element type that integrates with the Slim Select library.",
-            "homepage": "https://drupal.org/project/slim_select",
-            "support": {
-                "source": "https://git.drupalcode.org/project/slim_select",
-                "issues": "https://drupal.org/project/issues/slim_select"
-            }
-        },
-        {
             "name": "drupal/smart_trim",
             "version": "1.3.0",
             "source": {
@@ -7789,16 +7715,24 @@
                     "role": "Maintainer"
                 },
                 {
+                    "name": "chrisjlee",
+                    "homepage": "https://www.drupal.org/user/760600"
+                },
+                {
+                    "name": "drywall",
+                    "homepage": "https://www.drupal.org/user/192591"
+                },
+                {
+                    "name": "jsenich",
+                    "homepage": "https://www.drupal.org/user/58871"
+                },
+                {
+                    "name": "markie",
+                    "homepage": "https://www.drupal.org/user/206687"
+                },
+                {
                     "name": "newsignature",
                     "homepage": "https://www.drupal.org/user/765518"
-                },
-                {
-                    "name": "ultimike",
-                    "homepage": "https://www.drupal.org/user/51132"
-                },
-                {
-                    "name": "volkswagenchick",
-                    "homepage": "https://www.drupal.org/user/3332522"
                 }
             ],
             "description": "Provides a more robust alternative to 'summary or trimmed' textfield format.",
@@ -9879,7 +9813,7 @@
                 "reference": "master"
             },
             "type": "drupal-theme-library",
-            "time": "2018-10-31T20:10:45+00:00"
+            "time": "2021-06-30T06:04:10+00:00"
         },
         {
             "name": "laminas/laminas-diactoros",
@@ -12371,7 +12305,7 @@
                 "reference": "master"
             },
             "type": "library",
-            "time": "2020-08-03T19:59:39+00:00"
+            "time": "2021-11-19T15:07:33+00:00"
         },
         {
             "name": "stack/builder",
@@ -16712,7 +16646,7 @@
             "extra": {
                 "drupal": {
                     "version": "4.1.1",
-                    "datestamp": "1631968537",
+                    "datestamp": "1609419527",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -21956,14 +21890,12 @@
         "drupal/config_ignore": 20,
         "drupal/default_content": 15,
         "drupal/dropsolid_purge": 10,
-        "drupal/facets_form": 20,
         "drupal/menu_link_destination": 20,
         "drupal/og": 20,
         "drupal/page_manager": 10,
         "drupal/schema_digital_document": 20,
         "drupal/schema_social_media_posting": 20,
         "drupal/site_verify": 20,
-        "drupal/slim_select": 15,
         "drupal/subpathauto": 20,
         "drupal/swiftmailer": 20,
         "drupal/views_block_area": 10,
