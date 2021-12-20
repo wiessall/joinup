@@ -50,12 +50,24 @@
       width: 1em;
       height: 1em;
       content: '';
-      background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%231073de' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e"); // Corresponding BS variable '$form-select-indicator' don't work bc of '<' and '>' characters
+      background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%231073de' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M2 5l6 6 6-6'/%3e%3c/svg%3e"); // Corresponding BS variable '$form-select-indicator' don't work bc of '<' and '>' characters
       background-repeat: no-repeat;
       background-position: right;
       background-size: 1em 1em;
       vertical-align: middle;
       transition: transform .5s;
+    }
+    &:not(.open)::before {
+      content: "";
+      position: relative;
+      display: block;
+      z-index: 1;
+      bottom: 4rem;
+      margin-bottom: -4rem;
+      pointer-events: none;
+      background-image: linear-gradient(to bottom, rgba(255,255,255, 0), $gray-200 90%);
+      width: calc(100% - 20px);
+      height: 4rem;
     }
     &.open::after {
       transform: rotate(180deg);
@@ -65,6 +77,8 @@
     padding-left: 0;
     margin-bottom: 0;
     list-style: none;
+    max-height: 400px;
+    overflow-y: auto;
   }
   .facets-widget- ul {
     padding-left: $spacer; // 16px
