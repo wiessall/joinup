@@ -290,15 +290,39 @@ function ventuno_preprocess_user(&$variables) {
 function ventuno_preprocess_rdf_entity__search_result_featured(&$variables) {
   /** @var \Drupal\rdf_entity\RdfInterface $entity */
   $entity = $variables['rdf_entity'];
-  $variables['image'] = $entity instanceof LogoInterface ? $entity->getLogoAsRenderArray() : NULL;
   $variables['body'] = $entity instanceof DescriptionInterface ? $entity->getDescription() : NULL;
-  $variables['topics'] = $entity->hasField('field_topic') ? $entity->getTopics() : NULL;
+  $variables['topics'] = ($entity instanceof TopicReferencingEntityInterface) ? $entity->getTopics() : NULL;
   $variables['type'] = strtoupper($entity->getType());
-  $variables['creation'] = t('@label: @created', [
-    '@label' => t('Created'),
-    '@created' => \Drupal::service('date.formatter')->format($entity->getCreatedTime(), 'date_only'),
-  ],
-  );
+  if ($created_time = $entity->getCreatedTime()) {
+    $variables['creation'] = t('@label: @created', [
+      '@label' => t('Created'),
+      '@created' => \Drupal::service('date.formatter')->format($created_time, 'date_only'),
+    ]);
+  }
+  switch ($entity->getType()) {
+  case 'collection':
+    $default_icon = 'folder2-open';
+    break;
+  case 'licence':
+    $default_icon = 'file-earmark-medical';
+    break;
+  case 'asset_release':
+    $default_icon = 'file-earmark-zip';
+    break;
+  case 'solution':
+    $default_icon = 'clipboard-check';
+    break;
+  default:
+    $default_icon = 'lightning-charge';
+  }
+  $variables['def_img'] = [
+    '#type' => 'inline_template',
+    '#template' => '<svg class="bi img-fluid w-100 py-3 p-lg-3 text-white bg-secondary"><use xlink:href="' . base_path() . drupal_get_path('theme', 'oe_bootstrap_theme') . '/assets/icons/bootstrap-icons.svg#{{ icon }}"></use></svg>',
+    '#context' => [
+      'icon' => $default_icon,
+    ],
+  ];
+  $variables['image'] = $entity instanceof LogoInterface ? $entity->getLogoAsRenderArray('search_result_featured') : $variables['def_img'];
 }
 
 /**
@@ -308,13 +332,14 @@ function ventuno_preprocess_rdf_entity__search_result(&$variables) {
   /** @var \Drupal\rdf_entity\RdfInterface $entity */
   $entity = $variables['rdf_entity'];
   $variables['body'] = $entity instanceof DescriptionInterface ? $entity->getDescription() : NULL;
-  $variables['topics'] = $entity->hasField('field_topic') ? $entity->getTopics() : NULL;
+  $variables['topics'] = ($entity instanceof TopicReferencingEntityInterface) ? $entity->getTopics() : NULL;
   $variables['type'] = strtoupper($entity->getType());
-  $variables['creation'] = t('@label: @created', [
-    '@label' => t('Created'),
-    '@created' => \Drupal::service('date.formatter')->format($entity->getCreatedTime(), 'date_only'),
-  ],
-  );
+  if ($created_time = $entity->getCreatedTime()) {
+    $variables['creation'] = t('@label: @created', [
+      '@label' => t('Created'),
+      '@created' => \Drupal::service('date.formatter')->format($created_time, 'date_only'),
+    ]);
+  }
 }
 
 /**
@@ -323,15 +348,64 @@ function ventuno_preprocess_rdf_entity__search_result(&$variables) {
 function ventuno_preprocess_node__search_result_featured(&$variables) {
   /** @var \Drupal\node\NodeInterface $node */
   $node = $variables['node'];
-  $variables['image'] = $node instanceof LogoInterface ? $node->getLogoAsRenderArray() : NULL;
   $variables['body'] = $node instanceof DescriptionInterface ? $node->getDescription() : NULL;
-  $variables['topics'] = $node->hasField('field_topic') ? $node->getTopics() : NULL;
+  $variables['topics'] = ($node instanceof TopicReferencingEntityInterface) ? $node->getTopics() : NULL;
   $variables['type'] = strtoupper($node->getType());
-  $variables['creation'] = t('@label: @created', [
-    '@label' => t('Created'),
-    '@created' => \Drupal::service('date.formatter')->format($node->getCreatedTime(), 'date_only'),
-  ],
-  );
+  if ($created_time = $node->getCreatedTime()) {
+    $variables['creation'] = t('@label: @created', [
+      '@label' => t('Created'),
+      '@created' => \Drupal::service('date.formatter')->format($created_time, 'date_only'),
+    ]);
+  }
+  switch ($node->getType()) {
+  case 'custom_page':
+    $default_icon = 'file-earmark-richtext';
+    break;
+  case 'discussion':
+    $default_icon = 'chat-left-text';
+    break;
+  case 'document':
+    $default_icon = 'file-earmark-text';
+    break;
+  case 'event':
+    $default_icon = 'calendar3';
+    break;
+  case 'video':
+    $default_icon = 'file-earmark-play';
+    break;
+  default:
+    $default_icon = 'lightning-charge';
+  }
+  $variables['def_img'] = [
+    '#type' => 'inline_template',
+    '#template' => '<svg class="bi img-fluid w-100 py-3 p-lg-3 text-white bg-secondary"><use xlink:href="' . base_path() . drupal_get_path('theme', 'oe_bootstrap_theme') . '/assets/icons/bootstrap-icons.svg#{{ icon }}"></use></svg>',
+    '#context' => [
+      'icon' => $default_icon,
+    ],
+  ];
+  $variables['image'] = $node instanceof LogoInterface ? $node->getLogoAsRenderArray('search_result_featured') : $variables['def_img'];
+}
+
+/**
+ * Implements hook_preprocess_HOOK().
+ */
+function ventuno_preprocess_node__news__search_result_featured(&$variables) {
+  /** @var \Drupal\node\NodeInterface $node */
+  $node = $variables['node'];
+  $variables['body'] = $node instanceof DescriptionInterface ? $node->getDescription() : NULL;
+  $variables['topics'] = ($node instanceof TopicReferencingEntityInterface) ? $node->getTopics() : NULL;
+  $variables['type'] = strtoupper($node->getType());
+  if ($created_time = $node->getCreatedTime()) {
+    $variables['creation'] = t('@label: @created', [
+      '@label' => t('Created'),
+      '@created' => \Drupal::service('date.formatter')->format($created_time, 'date_only'),
+    ]);
+  }
+  $variables['def_img'] = [
+    '#type' => 'inline_template',
+    '#template' => '<svg class="bi img-fluid w-100 py-5 py-lg-0 text-white bg-secondary"><use xlink:href="' . base_path() . drupal_get_path('theme', 'oe_bootstrap_theme') . '/assets/icons/bootstrap-icons.svg#newspaper"></use></svg>',
+  ];
+  $variables['image'] = $node instanceof LogoInterface ? $node->getLogoAsRenderArray('search_result_featured') : $variables['def_img'];
 }
 
 /**
@@ -341,13 +415,31 @@ function ventuno_preprocess_node__search_result(&$variables) {
   /** @var \Drupal\node\NodeInterface $node */
   $node = $variables['node'];
   $variables['body'] = $node instanceof DescriptionInterface ? $node->getDescription() : NULL;
-  $variables['topics'] = $node->hasField('field_topic') ? $node->getTopics() : NULL;
+  $variables['topics'] = ($node instanceof TopicReferencingEntityInterface) ? $node->getTopics() : NULL;
   $variables['type'] = strtoupper($node->getType());
-  $variables['creation'] = t('@label: @created', [
-    '@label' => t('Created'),
-    '@created' => \Drupal::service('date.formatter')->format($node->getCreatedTime(), 'date_only'),
-  ],
-  );
+  if ($created_time = $node->getCreatedTime()) {
+    $variables['creation'] = t('@label: @created', [
+      '@label' => t('Created'),
+      '@created' => \Drupal::service('date.formatter')->format($created_time, 'date_only'),
+    ]);
+  }
+}
+
+/**
+ * Implements hook_preprocess_HOOK().
+ */
+function ventuno_preprocess_node__news__search_result(&$variables) {
+  /** @var \Drupal\node\NodeInterface $node */
+  $node = $variables['node'];
+  $variables['body'] = $node instanceof DescriptionInterface ? $node->getDescription() : NULL;
+  $variables['topics'] = ($node instanceof TopicReferencingEntityInterface) ? $node->getTopics() : NULL;
+  $variables['type'] = strtoupper($node->getType());
+  if ($created_time = $node->getCreatedTime()) {
+    $variables['creation'] = t('@label: @created', [
+      '@label' => t('Created'),
+      '@created' => \Drupal::service('date.formatter')->format($created_time, 'date_only'),
+    ]);
+  }
 }
 
 /**
