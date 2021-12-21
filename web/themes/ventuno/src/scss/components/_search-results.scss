@@ -46,6 +46,10 @@
     }
     color: $primary;
   }
+  .field--name-field-ar-logo picture {
+    display: flex;
+    justify-content: center;
+  }
 }
 .block-facets-summary {
   margin-top: $spacer * 2;
