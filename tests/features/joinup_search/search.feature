@@ -72,11 +72,13 @@ Feature: Global search
     And I should not see the "Foam" tile
 
     Given I am on the search page
-    When I check the "News (5)" checkbox from the "Content types" facet
+    When I scroll the "Content types" facet into view
+    And I check the "News (5)" checkbox from the "Content types" facet
     Then the "News" content checkbox item should be selected
     And the "Content types" checkbox facet should allow selecting the following values "Collection (1), Solutions (2), News (5)"
 
-    When I check the "Solutions (2)" checkbox from the "Content types" facet
+    When I scroll the "Content types" facet into view
+    And I check the "Solutions (2)" checkbox from the "Content types" facet
     Then the "Solutions" content checkbox item should be selected
     And the "News" content checkbox item should be selected
     And I should see the following facet summary "Solutions, News"
@@ -553,8 +555,9 @@ Feature: Global search
 
     Given I am logged in as a user with the "authenticated" role
     When I visit the search page
-    Then I scroll the "Content types" facet into view
+    When I scroll the "Content types" facet into view
     And I check the "Solutions (2)" checkbox from the "Content types" facet
+    Then I scroll the "Content types" facet into view
     And I check the "News (5)" checkbox from the "Content types" facet
     And I should see the following facet summary "Solutions, News"
 
@@ -619,6 +622,7 @@ Feature: Global search
 
     When I scroll the "Content types" facet into view
     And I check the "Solutions (2)" checkbox from the "Content types" facet
+    When I scroll the "Content types" facet into view
     And I check the "News (5)" checkbox from the "Content types" facet
     And I should see the following facet summary "Solutions, News"
 
