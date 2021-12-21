@@ -289,10 +289,10 @@ Feature: Global search
     # The bird is the word... to search.
     When I enter "Bird" in the search bar and press enter
     Then I should see the following tiles in the correct order:
+      | Chickens are small birds          |
       | Ornithology: the study of birds   |
       | Bird outposts in the wild         |
       | Disturbed birds                   |
-      | Chickens are small birds          |
       | Bird spotting                     |
       | Best place to find an exotic bird |
       | Bird Birdman                      |
