@@ -24,7 +24,7 @@ dependencies:
     - field.field.rdf_entity.collection.field_spatial_coverage
     - field.field.rdf_entity.collection.field_topic
     - rdf_entity.rdfentity.collection
-    - responsive_image.styles.highlighted_search_result
+    - responsive_image.styles.teaser
   module:
     - field_delimiter
     - field_formatter_range
@@ -86,11 +86,11 @@ content:
         template_suggestion: ''
   field_ar_logo:
     type: responsive_image
-    weight: 5
+    weight: 1
     region: content
     label: hidden
     settings:
-      responsive_image_style: highlighted_search_result
+      responsive_image_style: teaser
       image_link: ''
     third_party_settings:
       template_suggestion:
