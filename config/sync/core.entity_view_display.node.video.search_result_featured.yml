@@ -11,7 +11,7 @@ dependencies:
     - field.field.node.video.field_video_spatial_coverage
     - field.field.node.video.og_audience
     - node.type.video
-    - responsive_image.styles.highlighted_search_result
+    - responsive_image.styles.teaser
   module:
     - joinup_html_stripper
     - layout_builder
@@ -45,7 +45,7 @@ content:
     region: content
     label: hidden
     settings:
-      responsive_image_style: highlighted_search_result
+      responsive_image_style: teaser
       image_link: ''
     third_party_settings:
       template_suggestion:
