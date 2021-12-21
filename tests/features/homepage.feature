@@ -57,7 +57,7 @@ Feature: Homepage
     When I click "More news"
     Then I should be on the advanced search page
     And I should see the following facet summary "News"
-    And the page should show the tiles "Current biodiversity crisis, Environmental stewardship, Spatial reconstruction, Earlier transformations"
+    And the page should show the tiles "Preserve habitats, Transformative practices, Loss of wildlands, Ecosystem management"
 
   @terms
   Scenario: Community content can be placed "In the spotlight" on the homepage
