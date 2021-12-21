@@ -46,7 +46,7 @@
     }
     color: $primary;
   }
-  .field--name-field-ar-logo picture {
+  [class$="logo"] {
     display: flex;
     justify-content: center;
   }
