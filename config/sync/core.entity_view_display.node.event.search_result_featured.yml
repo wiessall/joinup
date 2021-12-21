@@ -59,7 +59,7 @@ content:
     type: responsive_image
     weight: 3
     region: content
-    label: above
+    label: hidden
     settings:
       responsive_image_style: teaser
       image_link: ''
