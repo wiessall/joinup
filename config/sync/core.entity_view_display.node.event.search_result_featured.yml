@@ -27,7 +27,7 @@ dependencies:
     - field.field.node.event.field_topic
     - field.field.node.event.og_audience
     - node.type.event
-    - responsive_image.styles.highlighted_search_result
+    - responsive_image.styles.teaser
   module:
     - field_delimiter
     - field_formatter_range
@@ -59,9 +59,9 @@ content:
     type: responsive_image
     weight: 3
     region: content
-    label: hidden
+    label: above
     settings:
-      responsive_image_style: highlighted_search_result
+      responsive_image_style: teaser
       image_link: ''
     third_party_settings:
       template_suggestion:

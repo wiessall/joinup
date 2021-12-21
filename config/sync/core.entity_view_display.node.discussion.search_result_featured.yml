@@ -14,7 +14,7 @@ dependencies:
     - field.field.node.discussion.field_topic
     - field.field.node.discussion.og_audience
     - node.type.discussion
-    - responsive_image.styles.highlighted_search_result
+    - responsive_image.styles.teaser
   module:
     - joinup_html_stripper
     - layout_builder
@@ -44,11 +44,11 @@ content:
     region: content
   field_logo:
     type: responsive_image
-    weight: 3
+    weight: 1
     region: content
     label: hidden
     settings:
-      responsive_image_style: highlighted_search_result
+      responsive_image_style: teaser
       image_link: ''
     third_party_settings:
       template_suggestion:
