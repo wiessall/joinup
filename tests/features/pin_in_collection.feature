@@ -31,9 +31,9 @@ Feature: Pinning entities inside collections
       | title                       | collection    | state     |
       | What is the HEX for orange? | Orange Wrench | validated |
     And <content type> content:
-      | title              | collection    | state     | pinned |
-      | Very important     | Orange Wrench | validated | yes    |
-      | Useful information | Orange Wrench | validated | no     |
+      | title              | headline           | collection    | state     | pinned |
+      | Very important     | Very important     | Orange Wrench | validated | yes    |
+      | Useful information | Useful information | Orange Wrench | validated | no     |
 
     When I am an anonymous user
     And I go to the homepage of the "Orange Wrench" collection
@@ -259,9 +259,9 @@ Feature: Pinning entities inside collections
   @javascript
   Scenario Outline: Pinned content tiles should show a visual cue only in their collection homepage.
     Given <content type> content:
-      | title         | collection    | state     | pinned | shared on   |
-      | Lantern FAQs  | Orange Wrench | validated | yes    | Cloudy Beam |
-      | Lantern terms | Orange Wrench | validated | no     |             |
+      | title         | headline      | collection    | state     | pinned | shared on   |
+      | Lantern FAQs  | Lantern FAQs  | Orange Wrench | validated | yes    | Cloudy Beam |
+      | Lantern terms | Lantern terms | Orange Wrench | validated | no     |             |
 
     When I go to the homepage of the "Orange Wrench" collection
     Then the "Lantern FAQs" tile should be marked as pinned
