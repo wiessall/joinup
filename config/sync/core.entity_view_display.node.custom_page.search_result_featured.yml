@@ -9,7 +9,7 @@ dependencies:
     - field.field.node.custom_page.field_paragraphs_body
     - field.field.node.custom_page.og_audience
     - node.type.custom_page
-    - responsive_image.styles.highlighted_search_result
+    - responsive_image.styles.teaser
   module:
     - entity_reference_revisions
     - field_delimiter
@@ -54,7 +54,7 @@ content:
     region: content
     label: hidden
     settings:
-      responsive_image_style: highlighted_search_result
+      responsive_image_style: teaser
       image_link: ''
     third_party_settings:
       template_suggestion:
