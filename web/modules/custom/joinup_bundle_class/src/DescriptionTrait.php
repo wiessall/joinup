@@ -12,10 +12,9 @@ trait DescriptionTrait {
   /**
    * {@inheritdoc}
    */
-  public function getDescription(): ?string {
+  public function getDescription($view_mode = 'default'): ?array {
     assert(method_exists($this, 'getMainPropertyValue'), __TRAIT__ . ' depends on JoinupBundleClassFieldAccessTrait. Please include it in your class.');
-    $value = $this->get($this->getDescriptionField())->view('search_result');
-    return array_key_exists(0, $value) ? (string) $value[0]['#markup'] : NULL;
+    return $this->get($this->getDescriptionField())->view($view_mode);
   }
 
 }
