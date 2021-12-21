@@ -95,10 +95,10 @@ Feature: Homepage
       | title | Clash of documents |
       | state | validated          |
     And <type> content:
-      | title        | collection         | topic                              | state     | logo     | body                                                                                                                                                                                            |
-      | Microgravity | Clash of documents | HR, E-justice                      | validated | alan.jpg | Conventional studies investigating the effects of reduced gravity on muscle mass and function have used a ground control group that is not directly comparable to the space experimental group. |
-      | Aliens       | Clash of documents | Statistics and Analysis, E-justice | validated | alan.jpg | Conventional studies investigating the effects of reduced gravity on muscle mass and function have used a ground control group that is not directly comparable to the space experimental group. |
-      | Groundforce  | Clash of documents | Statistics and Analysis, E-justice | proposed  | alan.jpg | Conventional studies investigating the effects of reduced gravity on muscle mass and function have used a ground control group that is not directly comparable to the space experimental group. |
+      | title        | headline     | collection         | topic                              | state     | logo     | body                                                                                                                                                                                            |
+      | Microgravity | Microgravity | Clash of documents | HR, E-justice                      | validated | alan.jpg | Conventional studies investigating the effects of reduced gravity on muscle mass and function have used a ground control group that is not directly comparable to the space experimental group. |
+      | Aliens       | Aliens       | Clash of documents | Statistics and Analysis, E-justice | validated | alan.jpg | Conventional studies investigating the effects of reduced gravity on muscle mass and function have used a ground control group that is not directly comparable to the space experimental group. |
+      | Groundforce  | Groundforce  | Clash of documents | Statistics and Analysis, E-justice | proposed  | alan.jpg | Conventional studies investigating the effects of reduced gravity on muscle mass and function have used a ground control group that is not directly comparable to the space experimental group. |
     And the "Highlighted content" content listing contains:
       | type   | label  |
       | <type> | Aliens |
