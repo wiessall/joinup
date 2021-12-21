@@ -1,0 +1,15 @@
+uuid: 6962f981-8ea8-47b8-92ce-98fc210cc49c
+langcode: en
+status: true
+dependencies: {  }
+name: teaser_sm_1x
+label: 'Teaser SM 1x'
+effects:
+  46c50847-f668-4e79-b706-a4b131b6a73e:
+    uuid: 46c50847-f668-4e79-b706-a4b131b6a73e
+    id: image_scale
+    weight: 1
+    data:
+      width: 516
+      height: 292
+      upscale: false

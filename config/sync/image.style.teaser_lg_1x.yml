@@ -1,0 +1,15 @@
+uuid: 72a1a66b-bd3b-4acb-8122-636f49152907
+langcode: en
+status: true
+dependencies: {  }
+name: teaser_lg_1x
+label: 'Teaser LG 1x'
+effects:
+  04fed615-46fd-465a-baae-e3816f453283:
+    uuid: 04fed615-46fd-465a-baae-e3816f453283
+    id: image_scale
+    weight: 1
+    data:
+      width: 100
+      height: 178
+      upscale: false
