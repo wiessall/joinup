@@ -611,7 +611,13 @@ class JoinupSearchContext extends RawDrupalContext {
    */
   public function assertNumberOfTopicsInCards(int $number, string $heading): void {
     $card = $this->getTileByHeading($heading);
-    $topics = $card->findAll('css', '.field--name-field-topic .field__item');
+    $topics = $card->findAll('css', '.badge');
+    foreach ($topics as $index => $topic) {
+      // Remove the badges that explain the extra amount of topics.
+      if (preg_match('/^\+\d{1,2} topics?$/', $topic->getText()) === 1) {
+        unset($topics[$index]);
+      }
+    }
     Assert::assertSame(count($topics), $number);
   }
 
