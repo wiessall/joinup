@@ -38,6 +38,9 @@ class FaviconContext extends RawDrupalContext {
     $base_url = $this->getMinkParameter('base_url');
     $host = parse_url($base_url, PHP_URL_HOST);
     $scheme = parse_url($base_url, PHP_URL_SCHEME);
+    if ($port = parse_url($base_url, PHP_URL_PORT)) {
+      $host = "$host:$port";
+    }
 
     $finfo = new \finfo(FILEINFO_MIME_TYPE);
     foreach ($uris as $uri) {
