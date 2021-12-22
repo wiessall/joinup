@@ -117,6 +117,7 @@
         "zaporylie/composer-drupal-optimizations": "^1.2"
     },
     "require-dev": {
+        "ext-fileinfo": "*",
         "ext-iconv": "*",
         "ext-libxml": "*",
         "aws/aws-sdk-php": "~3.1",
