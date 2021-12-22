@@ -339,6 +339,21 @@ function _ventuno_preproess_search_result(array &$variables, string $entity_type
   $bundle_key = $entity_type_id === 'rdf_entity' ? 'rid' : 'type';
   $variables['body'] = $entity instanceof DescriptionInterface ? $entity->getDescription($variables['view_mode']) : NULL;
   $variables['topics'] = ($entity instanceof TopicReferencingEntityInterface) ? $entity->getTopics() : NULL;
+  $num_of_items = count($variables['topics']);
+  if ($num_of_items > 3) {
+    $extra_items = $num_of_items - 3;
+    $variables['topics'] = array_splice($variables['topics'], 0, 3);
+    // The structure name => value mimics the way topics are accessed in the
+    // template.
+    // @see node--search-result.html.twig.
+    // @see node--search-result-featured.html.twig.
+    // @see rdf-entity--search-result.html.twig.
+    // @see rdf-entity--search-result-featured.html.twig.
+    $variables['topics'][]['name']['value'] = t('+:number topics', [
+      ':number' => $extra_items,
+    ]);
+  }
+
   $variables['type'] = strtoupper($entity->get($bundle_key)->entity->getSingularLabel());
   if ($created_time = $entity->getCreatedTime()) {
     $variables['creation'] = t('@label: @created', [
@@ -435,26 +450,4 @@ function ventuno_form_alter(&$form, FormStateInterface $form_state, $form_id): v
     // page, hide the "Sort by" select.
     $form['sort_by']['#type'] = 'hidden';
   }
-}
-
-/**
- * Implements hook_preprocess_HOOK().
- */
-function ventuno_preprocess_field__field_topic(&$variables) {
-  $element = $variables['element'];
-  $accepted_view_modes = ['search_result', 'search_result_featured'];
-  if (!in_array($element['#view_mode'], $accepted_view_modes)) {
-    return;
-  }
-
-  $num_of_items = count($variables['items']);
-  if ($num_of_items <= 3) {
-    return;
-  }
-
-  $extra_items = $num_of_items - 3;
-  $variables['items'] = array_splice($variables['items'], 0, 3);
-  $variables['extra_items']['#plain_text'] = t('+:number topics', [
-    ':number' => $extra_items,
-  ]);
 }
