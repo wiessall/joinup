@@ -318,3 +318,7 @@ Feature: Homepage
     And I click "See more events"
     Then I should be on the advanced search page
     And the "Events" content checkbox item should be selected
+
+  Scenario: A favicon is shown in the browser tab
+    Given I am on the homepage
+    Then I should see a favicon
