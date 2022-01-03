@@ -328,44 +328,6 @@ class JoinupSearchContext extends RawDrupalContext {
   }
 
   /**
-   * Asserts a slim selected option in facets form.
-   *
-   * @param string $option
-   *   Text value of the option to find.
-   * @param string $select
-   *   Title of the select field.
-   *
-   * @throws \Exception
-   *    Throws an exception when the select is not found in page.
-   *
-   * @Then the option with text :option from slim select :select is selected
-   */
-  public function theOptionWithTextFromSlimSelectIsSelected(string $option, string $select): void {
-    $region = $this->getSession()->getPage();
-    $topic = $region->find('xpath', "//*[@data-drupal-selector='edit-topic']");
-
-    if (!$topic) {
-      throw new \Exception(sprintf('The select "%s" was not found in the page %s', $select, $this->getSession()->getCurrentUrl()));
-    }
-
-    if ($this->browserSupportsJavaScript()) {
-      $element = $region->find('css', ".{$topic->getAttribute('data-ssid')} .ss-option.ss-option-selected");
-      Assert::assertEquals($option, strip_tags($element->getHtml()));
-    }
-    else {
-      $selected_option = $topic->find('css', 'div.ss-option-selected');
-      if ($selected_option instanceof NodeElement) {
-        $text = $selected_option->getText();
-        // Selected facet options are prefixed with '(-) '. Strip this.
-        $text = preg_replace('/^\(-\) /', '', $text);
-        // Ignore duplicate whitespace.
-        $option = preg_replace('/\s{2,}/', ' ', $option);
-        Assert::assertSame($option, $text, sprintf('The option "%s" is selected in the "%s" facet, but the option "%s" was expected.', $text, $select, $option));
-      }
-    }
-  }
-
-  /**
    * Asserts the list of available options in a select facet.
    *
    * @param string $select
@@ -405,68 +367,9 @@ class JoinupSearchContext extends RawDrupalContext {
    *
    * @Then the :select select facet should contain the following options:
    */
-  public function assertSelectOptionsAsList($select, TableNode $table) {
+  public function assertSelectOptionsAsList(string $select, TableNode $table): void {
     $element = $this->findFacetByAlias($select, NULL, 'select');
     $this->assertSelectAvailableOptions($element, $table);
-  }
-
-  /**
-   * Asserts the list of available options in a facet form select box.
-   *
-   * @param string $select
-   *   The name of the field element.
-   * @param \Behat\Gherkin\Node\TableNode $table
-   *   The available list of options.
-   *
-   * @throws \Exception
-   *    Throws an exception when the select is not found or options are not
-   *    identical.
-   *
-   * @Then the :select select facet form should contain the following options:
-   */
-  public function assertSelectFacetFormOptionsAsList($select, TableNode $table) {
-    $element = $this->findFacetByAlias($select, NULL, 'select', TRUE);
-    $this->assertSelectAvailableOptions($element, $table);
-  }
-
-  /**
-   * Asserts the list of available options in a slim select element.
-   *
-   * @param string $select
-   *   The name of the field element.
-   * @param \Behat\Gherkin\Node\TableNode $table
-   *   The available list of options.
-   *
-   * @throws \Exception
-   *    Throws an exception when the select is not found or options are not
-   *    identical.
-   *
-   * @Then the slim select :select should contain the following options:
-   */
-  public function assertSlimSelectOptionsAsList(string $select, TableNode $table) {
-    $region = $this->getSession()->getPage();
-    $topic = $region->find('xpath', "//select[@data-drupal-selector='edit-topic']");
-    $xpath = '//div[contains(concat(" ", normalize-space(@class), " "), "' . $topic->getAttribute('data-ssid') . '")]//div[contains(concat(" ", normalize-space(@class), " "), "ss-option")]';
-    $results = $region->findAll('xpath', $xpath);
-
-    if (!$results) {
-      throw new \Exception("The slim select '$select' was not found in the page.");
-    }
-    $available_options = [];
-    foreach ($results as $result) {
-      $available_options[] = strip_tags($result->getHtml());
-    }
-    $rows = $table->getColumn(0);
-
-    // Ignore duplicated whitespace.
-    $strip_multiple_spaces = function (string $option): string {
-      $option = preg_replace("/\s{2,}/", " ", $option);
-      return $option;
-    };
-    $available_options = array_map($strip_multiple_spaces, $available_options);
-    $rows = array_map($strip_multiple_spaces, $rows);
-
-    Assert::assertEquals($rows, $available_options);
   }
 
   /**
