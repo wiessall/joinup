@@ -337,7 +337,7 @@ function ventuno_preprocess_node__news__search_result(&$variables) {
 function _ventuno_preproess_search_result(array &$variables, string $entity_type_id): void {
   $entity = $variables[$entity_type_id];
   $bundle_key = $entity_type_id === 'rdf_entity' ? 'rid' : 'type';
-  $variables['body'] = $entity instanceof DescriptionInterface ? $entity->getDescription($variables['view_mode']) : NULL;
+  $variables['body'] = $entity instanceof DescriptionInterface ? $variables['content'][$entity->getDescriptionField()] : NULL;
   $variables['topics'] = ($entity instanceof TopicReferencingEntityInterface) ? $entity->getTopics() : NULL;
   if ($variables['topics']) {
     $num_of_items = count($variables['topics']);
