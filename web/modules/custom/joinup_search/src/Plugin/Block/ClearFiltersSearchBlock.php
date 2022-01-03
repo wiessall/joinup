@@ -75,7 +75,7 @@ class ClearFiltersSearchBlock extends BlockBase implements ContainerFactoryPlugi
       '#title' => $this->t('Clear filters'),
       '#url' => Url::fromRoute('view.search.page_1', [], ['query' => $query_params]),
       '#attributes' => [
-        'class' => ['button'],
+        'class' => ['btn', 'btn-outline-brand', 'w-100'],
         'rel' => 'nofollow',
       ],
     ];
