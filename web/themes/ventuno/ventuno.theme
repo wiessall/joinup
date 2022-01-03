@@ -339,19 +339,21 @@ function _ventuno_preproess_search_result(array &$variables, string $entity_type
   $bundle_key = $entity_type_id === 'rdf_entity' ? 'rid' : 'type';
   $variables['body'] = $entity instanceof DescriptionInterface ? $entity->getDescription($variables['view_mode']) : NULL;
   $variables['topics'] = ($entity instanceof TopicReferencingEntityInterface) ? $entity->getTopics() : NULL;
-  $num_of_items = count($variables['topics']);
-  if ($num_of_items > 3) {
-    $extra_items = $num_of_items - 3;
-    $variables['topics'] = array_splice($variables['topics'], 0, 3);
-    // The structure name => value mimics the way topics are accessed in the
-    // template.
-    // @see node--search-result.html.twig.
-    // @see node--search-result-featured.html.twig.
-    // @see rdf-entity--search-result.html.twig.
-    // @see rdf-entity--search-result-featured.html.twig.
-    $variables['topics'][]['name']['value'] = t('+:number topics', [
-      ':number' => $extra_items,
-    ]);
+  if ($variables['topics']) {
+    $num_of_items = count($variables['topics']);
+    if ($num_of_items > 3) {
+      $extra_items = $num_of_items - 3;
+      $variables['topics'] = array_splice($variables['topics'], 0, 3);
+      // The structure name => value mimics the way topics are accessed in the
+      // template.
+      // @see node--search-result.html.twig.
+      // @see node--search-result-featured.html.twig.
+      // @see rdf-entity--search-result.html.twig.
+      // @see rdf-entity--search-result-featured.html.twig.
+      $variables['topics'][]['name']['value'] = t('+:number topics', [
+        ':number' => $extra_items,
+      ]);
+    }
   }
 
   $variables['type'] = strtoupper($entity->get($bundle_key)->entity->getSingularLabel());
