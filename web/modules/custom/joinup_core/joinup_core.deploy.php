@@ -15,22 +15,6 @@
 declare(strict_types = 1);
 
 /**
- * Remove old "News" page alias in Interoperable Europe collection.
- */
-function joinup_core_deploy_0107700(array &$sandbox = []): void {
-  /** @var Drupal\node\NodeInterface $node */
-  $node = \Drupal::entityTypeManager()->getStorage('node')->load(704825);
-  \Drupal::service('pathauto.alias_storage_helper')
-    ->deleteEntityPathAll($node);
-  $node->path->first()->get('pathauto')->purge();
-  $node->path = [
-    'alias' => '/collection/interoperable-europe/latest-news',
-    'pathauto' => 0,
-  ];
-  $node->save();
-}
-
-/**
  * Re-import default content and fix weights.
  */
 function joinup_core_deploy_0107800(array &$sandbox = []): void {
@@ -38,7 +22,7 @@ function joinup_core_deploy_0107800(array &$sandbox = []): void {
   $menu_link_data_storage = \Drupal::entityTypeManager()->getStorage('menu_link_content');
   $updates = [
     'b48755b4-8158-4ac4-9f1b-0977ce4fcd13' => -45,
-    'f00e66fc-6bfc-416b-88c2-24caa2af0708' => -44
+    'f00e66fc-6bfc-416b-88c2-24caa2af0708' => -44,
   ];
 
   foreach ($updates as $uuid => $weight) {
