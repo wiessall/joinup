@@ -1,0 +1,21 @@
+uuid: d54814da-8ff0-4982-8878-1e7b066a747d
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.paragraph.preview
+    - field.field.paragraph.json_map.field_json
+    - paragraphs.paragraphs_type.json_map
+  module:
+    - layout_builder
+third_party_settings:
+  layout_builder:
+    allow_custom: false
+    enabled: false
+id: paragraph.json_map.preview
+targetEntityType: paragraph
+bundle: json_map
+mode: preview
+content: {  }
+hidden:
+  field_json: true
