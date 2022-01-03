@@ -652,21 +652,33 @@ Feature: Global search
       | title           | collection    | topic                    | state     | logo        | body                                                                                                                                                                                  |
       | Stay at the ISS | Mice in space | EU and European Policies | validated | charles.jpg | Two groups of mice (six per group) were housed aboard the International Space Station for 35 days. One group was subjected to artificial gravity (1 g) and the other to microgravity. |
     And news content:
-      | title                 | body                                       | collection     | topic                   | spatial coverage | state     | logo        |
-      | Muscle atrophy        | Researchers from the University of Tsukuba | Mice in space  | Finance in EU           | Luxembourg       | validated | blaise.jpg  |
-      | El Cabo da Roca       | The best in town                           | Mice in space  | Statistics and Analysis | Luxembourg       | validated | charles.jpg |
-      | Funny news 1          | Dummy body                                 | Mice in space  | HR                      | Luxembourg       | validated | ada.png     |
-      | Funny news 2          | Dummy body                                 | Mice in space  | E-inclusion             | Luxembourg       | validated | alan.jpg    |
-      | Funny news 3          | Dummy body                                 | Mice in space  | E-inclusion             | Luxembourg       | validated | charles.jpg |
-      | Funny news 4          | Dummy body                                 | Mice in space  | HR                      | Luxembourg       | validated | ada.png     |
-      | Funny news 5          | Dummy body                                 | Mice in space  | HR                      | Luxembourg       | validated | ada.png     |
-      | Dummy news 1          | Dummy body                                 | Mice in space  | Statistics and Analysis | Luxembourg       | validated | charles.jpg |
-      | Dummy news 2          | Dummy body                                 | Mice in space  | E-inclusion             | Luxembourg       | validated | alan.jpg    |
-      | Dummy news 3          | Dummy body                                 | Mice in space  | Statistics and Analysis | Luxembourg       | validated | ada.png     |
-      | Dummy news 4          | Dummy body                                 | Mice in space  | E-inclusion             | Luxembourg       | validated | charles.jpg |
+      | title                 | body                                       | collection     | topic                   | spatial coverage | state     | logo        | created    |  changed    |
+      | Muscle atrophy        | Researchers from the University of Tsukuba | Mice in space  | Finance in EU           | Luxembourg       | validated | blaise.jpg  | 01/01/2019 |  01/01/2019 |
+      | El Cabo da Roca       | The best in town                           | Mice in space  | Statistics and Analysis | Luxembourg       | validated | charles.jpg | 12/01/2020 |  12/01/2020 |
+      | Funny news 1          | Dummy body                                 | Mice in space  | HR                      | Luxembourg       | validated | ada.png     | 01/05/2019 |  01/05/2019 |
+      | Funny news 2          | Dummy body                                 | Mice in space  | E-inclusion             | Luxembourg       | validated | alan.jpg    | 21/06/2019 |  21/06/2019 |
+      | Funny news 3          | Dummy body                                 | Mice in space  | E-inclusion             | Luxembourg       | validated | charles.jpg | 31/12/2021 |  31/12/2021 |
+      | Funny news 4          | Dummy body                                 | Mice in space  | HR                      | Luxembourg       | validated | ada.png     | 25/06/2020 |  25/06/2020 |
+      | Funny news 5          | Dummy body                                 | Mice in space  | HR                      | Luxembourg       | validated | ada.png     | 01/01/2021 |  01/01/2021 |
+      | Dummy news 1          | Dummy body                                 | Mice in space  | Statistics and Analysis | Luxembourg       | validated | charles.jpg | 24/09/2019 |  24/09/2019 |
+      | Dummy news 2          | Dummy body                                 | Mice in space  | E-inclusion             | Luxembourg       | validated | alan.jpg    | 18/01/2021 |  18/01/2021 |
+      | Dummy news 3          | Dummy body                                 | Mice in space  | Statistics and Analysis | Luxembourg       | validated | ada.png     | 01/08/2019 |  01/08/2019 |
+      | Dummy news 4          | Dummy body                                 | Mice in space  | E-inclusion             | Luxembourg       | validated | charles.jpg | 18/09/2019 |  18/09/2019 |
 
     When I visit the search page
     Then I should see the 3 tiles with image
 
     Then I go to "/search?sort_by=relevance&page=1"
     And I should see the 0 tiles with image
+
+    Then I go to "/search?f[0]=creation_date:(min:1577836800,max:1640995200)"
+    And I should see the text "SEARCH RESULTS (2)"
+
+    Then I go to "/search?f[0]=creation_date:(min:1577836800,max:)"
+    And I should see the text "SEARCH RESULTS (5)"
+
+    Then I go to "/search?f[0]=creation_date:(min:,max:1609113600)"
+    And I should see the text "SEARCH RESULTS (10)"
+
+    Then I go to "/search?f[0]=creation_date:(min:,max:)"
+    And I should see the text "SEARCH RESULTS (14)"
