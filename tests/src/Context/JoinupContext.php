@@ -1363,7 +1363,7 @@ class JoinupContext extends RawDrupalContext {
    * @Then I( should) not see the text :text in the :heading tile
    * @Then I( should) not see the text :text in the :heading card
    */
-  public function assertTileDoesNotContainsText($heading, $text) {
+  public function assertTileDoesNotContainsText(string $heading, string $text): void {
     $element = $this->getTileByHeading($heading);
 
     if (strpos(trim($element->getText()), $text) !== FALSE) {
