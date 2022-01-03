@@ -18,7 +18,7 @@ content:
     weight: 0
     label: above
     settings:
-      trim_length: 300
+      trim_length: 200
       trim_type: chars
       trim_suffix: …
       wrap_class: trimmed
