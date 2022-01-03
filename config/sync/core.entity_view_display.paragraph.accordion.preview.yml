@@ -31,7 +31,7 @@ content:
         delimiter: ''
       field_formatter_range:
         order: 0
-        limit: 0
+        limit: 3
         offset: 0
       template_suggestion:
         template_suggestion: ''
