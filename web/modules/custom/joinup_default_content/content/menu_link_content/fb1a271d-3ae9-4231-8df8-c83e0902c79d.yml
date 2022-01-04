@@ -1,0 +1,42 @@
+_meta:
+  version: '1.0'
+  entity_type: menu_link_content
+  uuid: fb1a271d-3ae9-4231-8df8-c83e0902c79d
+  bundle: menu_link_content
+  default_langcode: en
+  depends:
+    8a04c130-6d37-44b5-ad49-c16fa3a5daa6: node
+default:
+  enabled:
+    -
+      value: true
+  title:
+    -
+      value: 'Privacy statement'
+  menu_name:
+    -
+      value: footer-help-and-support
+  link:
+    -
+      target_uuid: 8a04c130-6d37-44b5-ad49-c16fa3a5daa6
+      title: ''
+      options:
+        menu_link_destination: 0
+  external:
+    -
+      value: false
+  rediscover:
+    -
+      value: false
+  weight:
+    -
+      value: -46
+  expanded:
+    -
+      value: false
+  revision_translation_affected:
+    -
+      value: true
+  live_link:
+    -
+      value: false
