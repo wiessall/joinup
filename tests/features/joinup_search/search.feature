@@ -32,16 +32,16 @@ Feature: Global search
     And I should see the "Spherification" tile
     And I should see the "Foam" tile
     # Terms are sorted alphabetically
-    And the "topic" checkbox facet should allow selecting the following values "Info, Statistics and Analysis, Social and Political, Demography, E-inclusion"
+    And the "topic" checkbox facet should allow selecting the following values "Info (1), Statistics and Analysis (1), Social and Political (6), Demography (2), E-inclusion (4)"
     And the "spatial coverage" checkbox facet should allow selecting the following values "Belgium (1), European Union (1), Luxembourg (5)"
 
     # Check that only one search field is available. In an earlier version of
     # Joinup there were two search fields, but this was confusing users.
     And there should be exactly 1 "search field" on the page
 
-    When I check the "Social and Political" checkbox from the "topic" facet
+    When I check the "Social and Political (6)" checkbox from the "topic" facet
     Then the "Social and Political" content checkbox item should be selected
-    And the "topic" checkbox facet should allow selecting the following values "Info, Statistics and Analysis, Social and Political, Demography, E-inclusion"
+    And the "topic" checkbox facet should allow selecting the following values "Info (1), Statistics and Analysis (1), Social and Political (6), Demography (2), E-inclusion (4)"
     # The tiles appear because the parent term is selected even though they do not have a direct reference there.
     And I should see the "Dummy news 1" tile
     And I should see the "Dummy news 2" tile
@@ -49,10 +49,10 @@ Feature: Global search
     And I should see the "Dummy news 4" tile
 
     # Test the topic facet. The space prefixing "Demography" is due to the hierarchy.
-    When I check the "Demography" checkbox from the "topic" facet
+    When I check the "Demography (2)" checkbox from the "topic" facet
     Then the "Demography" content checkbox item should be selected
     # The selected option moves to the last position by default.
-    And the "topic" checkbox facet should allow selecting the following values "Info, Statistics and Analysis, Social and Political, Demography, E-inclusion"
+    And the "topic" checkbox facet should allow selecting the following values "Info (1), Statistics and Analysis (1), Social and Political (6), Demography (2), E-inclusion (4)"
     And the "spatial coverage" checkbox facet should allow selecting the following values "Belgium (1), European Union (1)"
 
     And I should see the "Molecular cooking collection" tile
@@ -65,24 +65,25 @@ Feature: Global search
     And I check the "Belgium (1)" checkbox from the "spatial coverage" facet
     And the "Belgium" content checkbox item should be selected
     And the "spatial coverage" checkbox facet should allow selecting the following values "Belgium (1), European Union (1)"
-    Then I check the "Demography" checkbox from the "topic" facet
-    And the "topic" checkbox facet should allow selecting the following values "Social and Political, Demography"
+    And the "topic" checkbox facet should allow selecting the following values "Social and Political (1), Demography (1)"
     And I should see the "Molecular cooking collection" tile
     But I should not see the "El Celler de Can Roca" tile
     And I should not see the "Spherification" tile
     And I should not see the "Foam" tile
 
     Given I am on the search page
-    When I check the "News (5)" checkbox from the "Content types" facet
+    When I scroll the "Content types" facet into view
+    And I check the "News (5)" checkbox from the "Content types" facet
     Then the "News" content checkbox item should be selected
     And the "Content types" checkbox facet should allow selecting the following values "Collection (1), Solutions (2), News (5)"
 
-    When I check the "Solutions (2)" checkbox from the "Content types" facet
+    When I scroll the "Content types" facet into view
+    And I check the "Solutions (2)" checkbox from the "Content types" facet
     Then the "Solutions" content checkbox item should be selected
     And the "News" content checkbox item should be selected
     And I should see the following facet summary "Solutions, News"
     Then the "Content types" checkbox facet should allow selecting the following values "Collection (1), Solutions (2), News (5)"
-    And the "topic" checkbox facet should allow selecting the following values "Info, Statistics and Analysis, Social and Political, Demography, E-inclusion"
+    And the "topic" checkbox facet should allow selecting the following values "Info (1), Statistics and Analysis (1), Social and Political (5), Demography (1), E-inclusion (4)"
     And the "spatial coverage" checkbox facet should allow selecting the following values "European Union (1), Luxembourg (5)"
     And I should not see the "Molecular cooking collection" tile
     And I should see the "El Celler de Can Roca" tile
@@ -555,8 +556,9 @@ Feature: Global search
 
     Given I am logged in as a user with the "authenticated" role
     When I visit the search page
-    Then I scroll the "Content types" facet into view
+    When I scroll the "Content types" facet into view
     And I check the "Solutions (2)" checkbox from the "Content types" facet
+    Then I scroll the "Content types" facet into view
     And I check the "News (5)" checkbox from the "Content types" facet
     And I should see the following facet summary "Solutions, News"
 
@@ -611,6 +613,7 @@ Feature: Global search
 
     When I scroll the "Content types" facet into view
     And I check the "Solutions (2)" checkbox from the "Content types" facet
+    When I scroll the "Content types" facet into view
     And I check the "News (5)" checkbox from the "Content types" facet
     And I should see the following facet summary "Solutions, News"
 
