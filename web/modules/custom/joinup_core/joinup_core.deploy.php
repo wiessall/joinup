@@ -14,6 +14,8 @@
 
 declare(strict_types = 1);
 
+use Drupal\menu_link_content\MenuLinkContentInterface;
+
 /**
  * Place a link to the Privacy statement in the footer.
  */
@@ -34,5 +36,17 @@ function joinup_core_deploy_0107800(): void {
     /** @var \Drupal\menu_link_content\MenuLinkContentInterface $link */
     $link = reset($links);
     $link->set('weight', $weight)->save();
+  }
+}
+
+/**
+ * Remove the Contact Interoperable Europe footer link.
+ */
+function joinup_core_deploy_0107801(): void {
+  /** @var \Drupal\menu_link_content\MenuLinkContentStorageInterface $storage */
+  $storage = \Drupal::entityTypeManager()->getStorage('menu_link_content');
+  $link = $storage->load(16007);
+  if ($link instanceof MenuLinkContentInterface) {
+    $link->delete();
   }
 }
