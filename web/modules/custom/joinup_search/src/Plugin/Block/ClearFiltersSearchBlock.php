@@ -70,7 +70,7 @@ class ClearFiltersSearchBlock extends BlockBase implements ContainerFactoryPlugi
       unset($query_params[$key]);
     }
 
-    $build['clear_filters'] = [
+    return [
       '#type' => 'link',
       '#title' => $this->t('Clear filters'),
       '#url' => Url::fromRoute('view.search.page_1', [], ['query' => $query_params]),
@@ -79,8 +79,6 @@ class ClearFiltersSearchBlock extends BlockBase implements ContainerFactoryPlugi
         'rel' => 'nofollow',
       ],
     ];
-
-    return $build;
   }
 
   /**
