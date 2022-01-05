@@ -4,8 +4,6 @@ _meta:
   uuid: fb1a271d-3ae9-4231-8df8-c83e0902c79d
   bundle: menu_link_content
   default_langcode: en
-  depends:
-    8a04c130-6d37-44b5-ad49-c16fa3a5daa6: node
 default:
   enabled:
     -
@@ -18,7 +16,7 @@ default:
       value: footer-help-and-support
   link:
     -
-      target_uuid: 8a04c130-6d37-44b5-ad49-c16fa3a5daa6
+      uri: 'internal:/collection/joinup/specific-privacy-statement'
       title: ''
       options:
         menu_link_destination: 0
@@ -27,7 +25,7 @@ default:
       value: false
   rediscover:
     -
-      value: false
+      value: true
   weight:
     -
       value: -46
