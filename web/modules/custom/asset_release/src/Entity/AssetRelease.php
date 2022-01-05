@@ -7,6 +7,7 @@ namespace Drupal\asset_release\Entity;
 use Drupal\joinup_bundle_class\DescriptionTrait;
 use Drupal\joinup_bundle_class\JoinupBundleClassFieldAccessTrait;
 use Drupal\joinup_bundle_class\LogoTrait;
+use Drupal\joinup_group\Entity\GroupContentTrait;
 use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_group\Exception\MissingGroupException;
 use Drupal\joinup_publication_date\Entity\EntityPublicationTimeFallbackTrait;
@@ -21,6 +22,7 @@ class AssetRelease extends Rdf implements AssetReleaseInterface {
 
   use EntityPublicationTimeFallbackTrait;
   use EntityWorkflowStateTrait;
+  use GroupContentTrait;
   use JoinupBundleClassFieldAccessTrait;
   use LogoTrait;
   use SolutionContentTrait;
