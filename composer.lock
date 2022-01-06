@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "5d15777994a7157d130536694609e90d",
+    "content-hash": "7abe19e7893effd89f422042161b95ac",
     "packages": [
         {
             "name": "SEMICeu/adms-ap_validator",
@@ -2611,11 +2611,17 @@
         },
         {
             "name": "drupal/config_ignore",
-            "version": "dev-3.x",
+            "version": "3.0.0-beta1",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/config_ignore.git",
-                "reference": "f027d8f800b2ac60f78cfec877b0cf1b23148d29"
+                "reference": "8.x-3.0-beta1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/config_ignore-8.x-3.0-beta1.zip",
+                "reference": "8.x-3.0-beta1",
+                "shasum": "fc559ad7c5d0de2172a5b5980943d812f6b3b006"
             },
             "require": {
                 "drupal/core": "^8.8 || ^9",
@@ -2627,15 +2633,12 @@
             },
             "type": "drupal-module",
             "extra": {
-                "branch-alias": {
-                    "dev-3.x": "3.x-dev"
-                },
                 "drupal": {
-                    "version": "8.x-3.x-dev",
-                    "datestamp": "1627975188",
+                    "version": "8.x-3.0-beta1",
+                    "datestamp": "1627977337",
                     "security-coverage": {
                         "status": "not-covered",
-                        "message": "Dev releases are not covered by Drupal security advisories."
+                        "message": "Beta releases are not covered by Drupal security advisories."
                     }
                 }
             },
@@ -2666,8 +2669,7 @@
                 "source": "http://cgit.drupalcode.org/config_ignore",
                 "issues": "http://drupal.org/project/config_ignore",
                 "irc": "irc://irc.freenode.org/drupal-contribute"
-            },
-            "time": "2021-11-20T12:41:21+00:00"
+            }
         },
         {
             "name": "drupal/config_readonly",
@@ -7934,11 +7936,17 @@
         },
         {
             "name": "drupal/swiftmailer",
-            "version": "dev-2.x",
+            "version": "2.2.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/swiftmailer.git",
-                "reference": "8dd88509d6da0adba532269aae0caad929f6a574"
+                "reference": "8.x-2.2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/swiftmailer-8.x-2.2.zip",
+                "reference": "8.x-2.2",
+                "shasum": "54269f7ceb6364e4fb953cf67b52b555d748d09c"
             },
             "require": {
                 "drupal/core": "^8.9.11 || ^9.0.10",
@@ -7951,15 +7959,12 @@
             },
             "type": "drupal-module",
             "extra": {
-                "branch-alias": {
-                    "dev-2.x": "2.x-dev"
-                },
                 "drupal": {
-                    "version": "8.x-2.1+1-dev",
-                    "datestamp": "1639067975",
+                    "version": "8.x-2.2",
+                    "datestamp": "1639141915",
                     "security-coverage": {
-                        "status": "not-covered",
-                        "message": "Dev releases are not covered by Drupal security advisories."
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
                     }
                 },
                 "patches_applied": {
@@ -8002,8 +8007,7 @@
             "homepage": "https://www.drupal.org/project/swiftmailer",
             "support": {
                 "source": "https://git.drupalcode.org/project/swiftmailer"
-            },
-            "time": "2021-12-10T13:30:40+00:00"
+            }
         },
         {
             "name": "drupal/theme_rule",
@@ -8978,14 +8982,11 @@
                 "spdx/license-list-data": "master"
             },
             "type": "drupal-module",
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "GPL-2.0-or-later"
             ],
             "description": "Allows to federate and manage the SPDX licences.",
-            "support": {
-                "source": "https://github.com/ec-europa/spdx/tree/1.0.0-alpha10",
-                "issues": "https://github.com/ec-europa/spdx/issues"
-            },
             "time": "2021-11-17T09:47:09+00:00"
         },
         {
@@ -9652,7 +9653,7 @@
                 "reference": "master"
             },
             "type": "drupal-theme-library",
-            "time": "2021-06-30T06:04:10+00:00"
+            "time": "2018-10-31T20:10:45+00:00"
         },
         {
             "name": "laminas/laminas-diactoros",
@@ -12142,7 +12143,7 @@
                 "reference": "master"
             },
             "type": "library",
-            "time": "2021-11-19T15:07:33+00:00"
+            "time": "2020-08-03T19:59:39+00:00"
         },
         {
             "name": "stack/builder",
@@ -16481,26 +16482,29 @@
         },
         {
             "name": "drupal/config_update",
-            "version": "dev-1.x",
+            "version": "1.7.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/config_update.git",
-                "reference": "d5c90ffe67c88b771a62c2c17353aac3ad0e288b"
+                "reference": "8.x-1.7"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/config_update-8.x-1.7.zip",
+                "reference": "8.x-1.7",
+                "shasum": "8f079abf7c2ea826a27fa5224b0770a26404c968"
             },
             "require": {
                 "drupal/core": "^8 || ^9"
             },
             "type": "drupal-module",
             "extra": {
-                "branch-alias": {
-                    "dev-1.x": "1.x-dev"
-                },
                 "drupal": {
-                    "version": "8.x-1.6+5-dev",
-                    "datestamp": "1586352965",
+                    "version": "8.x-1.7",
+                    "datestamp": "1586355587",
                     "security-coverage": {
-                        "status": "not-covered",
-                        "message": "Dev releases are not covered by Drupal security advisories."
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
                     }
                 }
             },
@@ -16510,20 +16514,19 @@
             ],
             "authors": [
                 {
-                    "name": "jhodgdon",
-                    "homepage": "https://www.drupal.org/user/155601"
+                    "name": "Pasqualle",
+                    "homepage": "https://www.drupal.org/user/80733"
                 },
                 {
-                    "name": "nedjo",
-                    "homepage": "https://www.drupal.org/user/4481"
+                    "name": "codebymikey",
+                    "homepage": "https://www.drupal.org/user/3573206"
                 }
             ],
             "description": "Provides basic revert and update functionality for other modules",
             "homepage": "https://www.drupal.org/project/config_update",
             "support": {
                 "source": "https://git.drupalcode.org/project/config_update"
-            },
-            "time": "2020-11-06T21:01:03+00:00"
+            }
         },
         {
             "name": "drupal/devel",
@@ -21741,7 +21744,6 @@
     "minimum-stability": "dev",
     "stability-flags": {
         "dkarv/mdl-chip-input": 20,
-        "drupal/config_ignore": 20,
         "drupal/default_content": 15,
         "drupal/dropsolid_purge": 10,
         "drupal/menu_link_destination": 20,
@@ -21751,12 +21753,10 @@
         "drupal/schema_social_media_posting": 20,
         "drupal/site_verify": 20,
         "drupal/subpathauto": 20,
-        "drupal/swiftmailer": 20,
         "ec-europa/joinup-tallinn-dashboard": 20,
         "ec-europa/material-design-lite": 20,
         "jacklmoore/autosize": 20,
         "semiceu/adms-ap_validator": 20,
-        "drupal/config_update": 20,
         "jcalderonzumba/gastonjs": 20,
         "openeuropa/task-runner": 20,
         "php-task-runner/composer": 20,
