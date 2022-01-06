@@ -108,7 +108,6 @@
                       data-bs-html="true"
                       data-bs-container=".nav-item"
                       data-bs-offset="-74, 16"
-                      title=""
                       class="btn btn-light popover-trigger popover-getstarted"
                       type="button"
                     >
@@ -135,6 +134,7 @@
                 aria-controls="collapse-{{ item.id }}"
                 aria-expanded="false"
                 type="button"
+                title="{{ 'Toggle menu'|t }}"
               >
                 {% if item.icon is not empty %}
                   <svg class="bi icon--s">
