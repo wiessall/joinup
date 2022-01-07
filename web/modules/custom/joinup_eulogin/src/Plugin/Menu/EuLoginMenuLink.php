@@ -80,4 +80,10 @@ class EuLoginMenuLink extends MenuLinkDefault {
     ];
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  public function deleteLink() {
+  }
+
 }
