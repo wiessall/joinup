@@ -18,7 +18,7 @@
       background: 'secondary',
       rounded_pill: true,
       attributes: create_attribute().addClass(['text-primary', 'me-2', 'mb-2', 'text-underline-hover', 'fs-sm']),
-      url: url,
+      url: path('view.search.page_1', {}, {'query': {'f': { 0: 'topic:' ~ topic.tid.value }}}),
     }]) %}
   {% endfor %}
   {% include directory ~ '/templates/bcl-card/card.html.twig' with {
