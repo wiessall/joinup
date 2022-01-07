@@ -62,7 +62,7 @@ services:
 # 'volumes:' block.
 #    volumes:
 #      - ./db/solr:/solr/snapshot:delegated
-#      - ./web/modules/contrib/search_api_solr/solr-conf/6.x:/solr/conf:cached
+#      - ./resources/solr/conf:/solr/conf:cached
 #      - ./scripts/solr/restore_solr.sh:/opt/solr/bin/restore_solr.sh:cached
 
 # In order to expose this service to the host machine, uncomment the following
