@@ -18,7 +18,7 @@
         "drupal/cas_account_link": "^2.0",
         "drupal/cas_attributes": "^2.0",
         "drupal/changed_fields": "^3.2",
-        "drupal/config_ignore": "dev-3.x",
+        "drupal/config_ignore": "^3.0",
         "drupal/config_readonly": "^1.0",
         "drupal/core": "~8.9",
         "drupal/core-composer-scaffold": "~8.9",
@@ -85,7 +85,7 @@
         "drupal/social_media_links": "^2.7",
         "drupal/state_machine": "^1.0",
         "drupal/subpathauto": "dev-1.x#fcd7c1c4c49d5ee1648630d92eb9da46e6bf25f0",
-        "drupal/swiftmailer": "dev-2.x",
+        "drupal/swiftmailer": "^2.2",
         "drupal/theme_rule": "^1.0",
         "drupal/token": "~1.7",
         "drupal/video_embed_field": "^2",
@@ -133,7 +133,7 @@
         "drupal/config_devel": "~1.7",
         "drupal/config_filter": "^1.8",
         "drupal/config_inspector": "^1.1",
-        "drupal/config_update": "dev-1.x",
+        "drupal/config_update": "^1.7",
         "drupal/devel": "^4.0",
         "drupal/drupal-extension": "^4.1",
         "drupal/filecache": "^1",
@@ -297,7 +297,6 @@
                 "Missing config schema for EntityQueueDragtableWidget @see Missing config schema for EntityQueueDragtableWidget": "https://git.drupalcode.org/project/entityqueue/-/merge_requests/3.diff"
             },
             "drupal/entity_legal": {
-                "Don't store sensitive data in the database": "resources/patch/175945-8.x-9.x-2.patch",
                 "Dynamic page cache prevents redirection @see https://www.drupal.org/project/entity_legal/issues/3251128": "https://www.drupal.org/files/issues/2021-11-24/3251128-2.patch"
             },
             "drupal/facets": {
