@@ -11,7 +11,7 @@ dependencies:
 id: ventuno_mycontentcollection
 theme: ventuno
 region: sidebar
-weight: -14
+weight: -16
 provider: null
 plugin: 'facet_block:collection_my_content'
 settings:
