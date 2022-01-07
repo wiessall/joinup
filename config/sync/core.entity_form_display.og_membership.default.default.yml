@@ -20,4 +20,26 @@ content:
       placeholder: ''
     third_party_settings: {  }
     region: content
+  roles:
+    type: options_buttons
+    weight: 0
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  state:
+    type: options_buttons
+    weight: 0
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  uid:
+    type: og_autocomplete
+    weight: -1
+    settings:
+      match_operator: CONTAINS
+      size: 60
+      match_limit: 10
+      placeholder: ''
+    region: content
+    third_party_settings: {  }
 hidden: {  }
