@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a0ff996d8923f9c885cf18b5164bf277",
+    "content-hash": "ca5a4e5e4dffb6bab2fcdff78048cf94",
     "packages": [
         {
             "name": "SEMICeu/adms-ap_validator",
@@ -7994,7 +7994,8 @@
                 },
                 "patches_applied": {
                     "Bundle classes support @see https://github.com/ec-europa/sparql_entity_storage/pull/11": "https://github.com/ec-europa/sparql_entity_storage/compare/8.x-1.x...12d9194.diff",
-                    "Allow routes to filter by bundle @see https://github.com/ec-europa/sparql_entity_storage/pull/32": "https://github.com/idimopoulos/sparql_entity_storage/compare/8.x-1.x...idimopoulos:e9b6e36.diff"
+                    "Allow routes to filter by bundle @see https://github.com/ec-europa/sparql_entity_storage/pull/32": "https://github.com/idimopoulos/sparql_entity_storage/compare/8.x-1.x...idimopoulos:e9b6e36.diff",
+                    "Fallback to empty string when missing $filterOperatorMap entry @see https://github.com/idimopoulos/sparql_entity_storage/pull/10": "https://patch-diff.githubusercontent.com/raw/idimopoulos/sparql_entity_storage/pull/10.diff"
                 }
             },
             "autoload": {
