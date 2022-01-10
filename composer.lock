@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "4e6807e5a976d83816a0b00900bb279b",
+    "content-hash": "4c0533e124107ab0ffcb4afa38129f6a",
     "packages": [
         {
             "name": "SEMICeu/adms-ap_validator",
@@ -7703,17 +7703,17 @@
         },
         {
             "name": "drupal/sparql_entity_storage",
-            "version": "1.0.0-alpha9",
+            "version": "1.0.0-alpha10",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/sparql_entity_storage.git",
-                "reference": "8.x-1.0-alpha9"
+                "reference": "8.x-1.0-alpha10"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/sparql_entity_storage-8.x-1.0-alpha9.zip",
-                "reference": "8.x-1.0-alpha9",
-                "shasum": "c4228b2957dcfe4ff3f47d57375040f83b2b9f0d"
+                "url": "https://ftp.drupal.org/files/projects/sparql_entity_storage-8.x-1.0-alpha10.zip",
+                "reference": "8.x-1.0-alpha10",
+                "shasum": "671c29f300d84dfb1079efc2c81ad8e36870fdae"
             },
             "require": {
                 "drupal/core": "^8 || ^9",
@@ -7721,6 +7721,7 @@
                 "ml/json-ld": "^1.0"
             },
             "require-dev": {
+                "behat/mink": "~1.9.0",
                 "composer/installers": "^1.7",
                 "drupal/coder": "^8.3",
                 "drupal/core": "^8.9 || ^9.1",
@@ -7737,8 +7738,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "8.x-1.0-alpha9",
-                    "datestamp": "1618382134",
+                    "version": "8.x-1.0-alpha10",
+                    "datestamp": "1641547945",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Project has not opted into security advisory coverage!"
@@ -7762,9 +7763,8 @@
                     }
                 },
                 "patches_applied": {
-                    "Bundle classes support @see https://github.com/ec-europa/sparql_entity_storage/pull/11": "https://patch-diff.githubusercontent.com/raw/ec-europa/sparql_entity_storage/pull/11.diff",
-                    "Allow routes to filter by bundle @see https://github.com/ec-europa/sparql_entity_storage/pull/32": "https://github.com/idimopoulos/sparql_entity_storage/compare/8.x-1.x...idimopoulos:e9b6e36.diff",
-                    "Allow more information shown on a query exception @see https://www.drupal.org/project/sparql_entity_storage/issues/3239395": "https://git.drupalcode.org/project/sparql_entity_storage/-/merge_requests/1.diff"
+                    "Bundle classes support @see https://github.com/ec-europa/sparql_entity_storage/pull/11": "https://github.com/ec-europa/sparql_entity_storage/compare/8.x-1.x...12d9194.diff",
+                    "Allow routes to filter by bundle @see https://github.com/ec-europa/sparql_entity_storage/pull/32": "https://github.com/idimopoulos/sparql_entity_storage/compare/8.x-1.x...idimopoulos:e9b6e36.diff"
                 }
             },
             "autoload": {
@@ -8994,11 +8994,14 @@
                 "spdx/license-list-data": "master"
             },
             "type": "drupal-module",
-            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "GPL-2.0-or-later"
             ],
             "description": "Allows to federate and manage the SPDX licences.",
+            "support": {
+                "source": "https://github.com/ec-europa/spdx/tree/1.0.0-alpha10",
+                "issues": "https://github.com/ec-europa/spdx/issues"
+            },
             "time": "2021-11-17T09:47:09+00:00"
         },
         {
@@ -9665,7 +9668,7 @@
                 "reference": "master"
             },
             "type": "drupal-theme-library",
-            "time": "2018-10-31T20:10:45+00:00"
+            "time": "2021-06-30T06:04:10+00:00"
         },
         {
             "name": "laminas/laminas-diactoros",
@@ -12155,7 +12158,7 @@
                 "reference": "master"
             },
             "type": "library",
-            "time": "2020-08-03T19:59:39+00:00"
+            "time": "2021-11-19T15:07:33+00:00"
         },
         {
             "name": "stack/builder",
