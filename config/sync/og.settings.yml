@@ -15,3 +15,4 @@ group_resolvers:
   - route_group_content
 _core:
   default_config_hash: VagHDx04OxfsR9lV6g6jkOou-tAhZcYENvrJNOrbcEU
+auto_add_group_owner_membership: true
