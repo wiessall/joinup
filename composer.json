@@ -18,7 +18,7 @@
         "drupal/cas_account_link": "^2.0",
         "drupal/cas_attributes": "^2.0",
         "drupal/changed_fields": "^3.2",
-        "drupal/config_ignore": "dev-3.x",
+        "drupal/config_ignore": "^3.0",
         "drupal/config_readonly": "^1.0",
         "drupal/core": "~8.9",
         "drupal/core-composer-scaffold": "~8.9",
@@ -62,7 +62,7 @@
         "drupal/message_notify": "~1.2",
         "drupal/meta_entity": "^1.0-alpha2",
         "drupal/monolog": "^2.0",
-        "drupal/og": "dev-neutral-access-result as 1.x-dev",
+        "drupal/og": "^1.0-alpha7",
         "drupal/og_menu": "^1.0-alpha4",
         "drupal/page_manager": "^4.0@beta",
         "drupal/paragraphs": "^1.12",
@@ -88,7 +88,7 @@
         "drupal/social_media_links": "^2.7",
         "drupal/state_machine": "^1.0",
         "drupal/subpathauto": "dev-1.x#fcd7c1c4c49d5ee1648630d92eb9da46e6bf25f0",
-        "drupal/swiftmailer": "dev-2.x",
+        "drupal/swiftmailer": "^2.2",
         "drupal/theme_rule": "^1.0",
         "drupal/token": "~1.7",
         "drupal/video_embed_field": "^2",
@@ -137,7 +137,7 @@
         "drupal/config_devel": "~1.7",
         "drupal/config_filter": "^1.8",
         "drupal/config_inspector": "^1.1",
-        "drupal/config_update": "dev-1.x",
+        "drupal/config_update": "^1.7",
         "drupal/devel": "^4.0",
         "drupal/drupal-extension": "^4.1",
         "drupal/filecache": "^1",
@@ -301,7 +301,6 @@
                 "Missing config schema for EntityQueueDragtableWidget @see Missing config schema for EntityQueueDragtableWidget": "https://git.drupalcode.org/project/entityqueue/-/merge_requests/3.diff"
             },
             "drupal/entity_legal": {
-                "Don't store sensitive data in the database": "resources/patch/175945-8.x-9.x-2.patch",
                 "Dynamic page cache prevents redirection @see https://www.drupal.org/project/entity_legal/issues/3251128": "https://www.drupal.org/files/issues/2021-11-24/3251128-2.patch"
             },
             "drupal/facets": {
@@ -328,9 +327,6 @@
             },
             "drupal/message_digest": {
                 "MessageDigestSubcontext is deprecated @see https://www.drupal.org/project/message_digest/issues/3168495": "https://www.drupal.org/files/issues/2020-09-01/3168495-2.patch"
-            },
-            "drupal/og": {
-                "Pretend is drupal/og:1.0-alpha4": "resources/patch/og.fake_version.patch"
             },
             "drupal/paragraphs_jquery_ui_accordion": {
                 "Formatter settings are missing schema @see https://www.drupal.org/i/3194916": "https://git.drupalcode.org/project/paragraphs_jquery_ui_accordion/-/merge_requests/1.diff"
@@ -377,6 +373,9 @@
                 "Add spooling for increased performance @see https://www.drupal.org/project/swiftmailer/issues/3000553": "https://git.drupalcode.org/project/swiftmailer/-/merge_requests/2.diff",
                 "Allow Cc and Bcc headers @see https://www.drupal.org/project/swiftmailer/issues/2892104": "https://www.drupal.org/files/issues/2021-10-11/2892104-38.patch",
                 "Improve spool error message": "resources/patch/swiftmailer.drush.patch"
+            },
+            "drupal/token": {
+                "token-devel link templates don't work when canonical template has multiple parameters @see https://www.drupal.org/project/token/issues/3254619": "https://www.drupal.org/files/issues/2021-12-15/3254619-2.patch"
             },
             "drupal/video_embed_field": {
                 "Extend support for embed URLs. Option to force privacy @see https://www.drupal.org/project/video_embed_field/issues/3060201 (originally on https://www.drupal.org/node/2899093)": "https://www.drupal.org/files/issues/2019-06-11/privacy_mode-3060201-D8-6.patch"
