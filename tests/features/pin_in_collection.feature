@@ -32,8 +32,8 @@ Feature: Pinning entities inside collections
       | What is the HEX for orange? | Orange Wrench | validated |
     And <content type> content:
       | title              | headline           | collection    | state     | pinned |
-      | Very important     | Very important     | Orange Wrench | validated | yes    |
-      | Useful information | Useful information | Orange Wrench | validated | no     |
+      | Very important     | Important very     | Orange Wrench | validated | yes    |
+      | Useful information | Information useful | Orange Wrench | validated | no     |
 
     When I am an anonymous user
     And I go to the homepage of the "Orange Wrench" collection
