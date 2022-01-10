@@ -12,9 +12,9 @@ trait DescriptionTrait {
   /**
    * {@inheritdoc}
    */
-  public function getDescription($view_mode = 'default'): ?array {
+  public function getDescriptionAsRenderArray($display_options = []): array {
     assert(method_exists($this, 'getMainPropertyValue'), __TRAIT__ . ' depends on JoinupBundleClassFieldAccessTrait. Please include it in your class.');
-    return $this->get($this->getDescriptionField())->view($view_mode);
+    return $this->get($this->getDescriptionField())->view($display_options);
   }
 
 }
