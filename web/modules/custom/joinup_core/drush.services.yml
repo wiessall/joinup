@@ -1,0 +1,6 @@
+services:
+  joinup_core.sanitize.commands:
+    class: Drupal\joinup_core\Commands\JoinupDataSanitizationCommands
+    arguments: ['@database']
+    tags:
+      -  { name: drush.command }
