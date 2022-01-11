@@ -24,7 +24,7 @@ trait CacheInvalidationTrait {
   protected function invalidateEntityMemoryCache(): void {
     /** @var \Drupal\Core\Cache\MemoryCache\MemoryCacheInterface $entity_memory_cache */
     $entity_memory_cache = \Drupal::service('entity.memory_cache');
-    $entity_memory_cache->invalidateAll();
+    $entity_memory_cache->deleteAll();
   }
 
 }
