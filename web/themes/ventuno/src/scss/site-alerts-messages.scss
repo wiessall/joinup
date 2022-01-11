@@ -1,0 +1,18 @@
+// Navbar CSS
+// Only styles specific to the Navbar
+
+// Bootstrap functions
+@import "@openeuropa/bcl-bootstrap/scss/functions";
+
+// Bootstrap default variables
+@import "@openeuropa/bcl-bootstrap/scss/variables";
+
+// Override with Joinup variables
+@import "@openeuropa/bcl-theme-joinup/src/scss/base/variables";
+
+// Override with Joinup mixins
+@import "mixins/joinup-icons";
+
+
+// Components
+@import "components/site-alerts-messages";
