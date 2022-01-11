@@ -43,6 +43,7 @@ class RefreshCountersTest extends KernelTestBase {
     'meta_entity',
     'node',
     'og',
+    'options',
     'rdf_entity',
     'sparql_entity_storage',
     'system',
