@@ -634,8 +634,8 @@ Feature: Global search
     And I should remove the following facet summary "News"
     And the page should show only the tiles "Radio cooking collection"
 
-  @terms @javascript
-  Scenario: Show first three search results as featured
+  @terms
+  Scenario: Filter on date
     Given collection:
       | title | Mice in space |
       | state | validated     |
