@@ -3,9 +3,9 @@
 solr:
   local:
     version: '8.11.1'
-    bin: ${joinup.dir}/vendor/bin/solr
     vendor_dir: ${joinup.dir}/vendor/apache
     server_dir: ${solr.local.vendor_dir}/solr-${solr.local.version}
+    bin: ${solr.local.server_dir}/bin/solr
     core_dir: ${solr.local.server_dir}/server/solr/${env.SOLR_CORE}
     download_url: http://archive.apache.org/dist/lucene/solr/${solr.local.version}/solr-${solr.local.version}.tgz
   snapshot_dir: ${joinup.db_dir}/solr
@@ -100,11 +100,6 @@ commands:
         - ${toolkit.tmp_folder}/solr-${solr.local.version}.tgz
       options:
         directory: ${solr.local.vendor_dir}
-    - task: remove
-      file: ${solr.local.bin}
-    - task: symlink
-      from: ${solr.local.server_dir}/bin/solr
-      to: ${solr.local.bin}
 
   # Configures the Solr core.
   solr:config:
