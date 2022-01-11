@@ -32,6 +32,7 @@ class UniqueFieldValueInGroupAndBundleTest extends KernelTestBase {
     'field',
     'joinup_group',
     'og',
+    'options',
     'system',
     'unique_field_value_in_group_and_bundle_test',
     'workflow_state_permission',

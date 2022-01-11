@@ -739,10 +739,7 @@ class JoinupContext extends RawDrupalContext {
         // The strtotime() PHP function is using the default timezone when doing
         // the conversion. But we want to stick to UTC in order to avoid
         // timezone and DST issue.
-        $timezone = date_default_timezone_get();
-        date_default_timezone_set('UTC');
-        $node->published_at = strtotime($node->published_at);
-        date_default_timezone_set($timezone);
+        $node->published_at = date_create($node->published_at, new \DateTimeZone('UTC'))->format('U');
       }
     }
 
