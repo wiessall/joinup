@@ -16,12 +16,12 @@ Feature: Global search
       | Spherification | Molecular cooking collection | Spherification is the culinary process of shaping a liquid into spheres                                                              | Demography | European Union   | validated |
       | Foam           | Molecular cooking collection | "The use of foam in cuisine has been used in many forms in the history of cooking:whipped cream, meringue, and mousse are all foams" |            |                  | validated |
     And news content:
-      | title                 | headline              | body             | collection                   | topic                   | spatial coverage | state     |
-      | El Celler de Can Roca | El Celler de Can Roca | The best in town | Molecular cooking collection | Statistics and Analysis | Luxembourg       | validated |
-      | Dummy news 1          | Dummy news 1          | Dummy body       | Molecular cooking collection | E-inclusion             | Luxembourg       | validated |
-      | Dummy news 2          | Dummy news 2          | Dummy body       | Molecular cooking collection | E-inclusion             | Luxembourg       | validated |
-      | Dummy news 3          | Dummy news 3          | Dummy body       | Molecular cooking collection | E-inclusion             | Luxembourg       | validated |
-      | Dummy news 4          | Dummy news 4          | Dummy body       | Molecular cooking collection | E-inclusion             | Luxembourg       | validated |
+      | title                | headline              | body             | collection                   | topic                   | spatial coverage | state     |
+      | El Tuba de Los Lobos | El Celler de Can Roca | The best in town | Molecular cooking collection | Statistics and Analysis | Luxembourg       | validated |
+      | Dummy title 1        | Dummy news 1          | Dummy body       | Molecular cooking collection | E-inclusion             | Luxembourg       | validated |
+      | Dummy title 2        | Dummy news 2          | Dummy body       | Molecular cooking collection | E-inclusion             | Luxembourg       | validated |
+      | Dummy title 3        | Dummy news 3          | Dummy body       | Molecular cooking collection | E-inclusion             | Luxembourg       | validated |
+      | Dummy title 4        | Dummy news 4          | Dummy body       | Molecular cooking collection | E-inclusion             | Luxembourg       | validated |
 
     Given I am logged in as a user with the "authenticated" role
     Then I visit the search page
@@ -274,9 +274,9 @@ Feature: Global search
       | title           | body                                  | collection                      |
       | Disturbed birds | Flocks of trained pigeons flying off. | Ornithology: the study of birds |
     And news content:
-      | title                               | headline                            | body                            | collection                      | state     |
-      | Chickens are small birds            | Chickens are small birds            | Birds domesticated in India.    | Ornithology: the study of birds | validated |
-      | Found a xylophone from 1600 in Asia | Found a xylophone from 1600 in Asia | Oldest instrument of this type. | Husky Flying Xylophone          | validated |
+      | title                  | headline                            | body                            | collection                      | state     |
+      | Breakthrough discovery | Chickens are small birds            | Birds domesticated in India.    | Ornithology: the study of birds | validated |
+      | Horniman Museum        | Found a xylophone from 1600 in Asia | Oldest instrument of this type. | Husky Flying Xylophone          | validated |
     And event content:
       | title         | body                   | collection                      | state     |
       | Bird spotting | Roosters crow at dawn. | Ornithology: the study of birds | validated |
@@ -504,10 +504,10 @@ Feature: Global search
       | title             | description       | state     |
       | Custom collection | Some custom data. | validated |
     And news content:
-      | title                              | headline                           | body                                                              | collection        | state     | created    | changed    |
-      | Relativity is the word             | Relativity is the word             | No one cares about the body.                                      | Custom collection | validated | 01/01/2019 | 03/08/2019 |
-      | Relativity news: Relativity theory | Relativity news: Relativity theory | I do care about the relativity keyword in the body.               | Custom collection | validated | 02/01/2019 | 02/08/2019 |
-      | Absolutely nonesense               | Absolutely nonesense               | Some news are not worth it but I will add relativity here anyway. | Custom collection | validated | 03/01/2019 | 01/08/2019 |
+      | title               | headline                           | body                                                              | collection        | state     | created    | changed    |
+      | Quantum information | Relativity is the word             | No one cares about the body.                                      | Custom collection | validated | 01/01/2019 | 03/08/2019 |
+      | The uneven universe | Relativity news: Relativity theory | I do care about the relativity keyword in the body.               | Custom collection | validated | 02/01/2019 | 02/08/2019 |
+      | The earth is square | Absolutely nonsense                | Some news are not worth it but I will add relativity here anyway. | Custom collection | validated | 03/01/2019 | 01/08/2019 |
 
     When I am on the homepage
     And I enter "Relativity" in the search bar and press enter
@@ -516,12 +516,12 @@ Feature: Global search
     And I should see the following tiles in the correct order:
       | Relativity news: Relativity theory |
       | Relativity is the word             |
-      | Absolutely nonesense               |
+      | Absolutely nonsense                |
     And I should be on "/search?keys=Relativity&sort_by=relevance"
 
     Given I select "Creation Date" from "Sort by"
     Then I should see the following tiles in the correct order:
-      | Absolutely nonesense               |
+      | Absolutely nonsense                |
       | Relativity news: Relativity theory |
       | Relativity is the word             |
     And I should be on "/search?keys=Relativity&sort_by=creation-date"
@@ -530,7 +530,7 @@ Feature: Global search
     Then I should see the following tiles in the correct order:
       | Relativity is the word             |
       | Relativity news: Relativity theory |
-      | Absolutely nonesense               |
+      | Absolutely nonsense                |
     And I should be on "/search?keys=Relativity&sort_by=last-updated-date"
 
   @javascript
