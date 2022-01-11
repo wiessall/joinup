@@ -124,7 +124,7 @@ Feature: Pinning entities inside collections
     And I go to the homepage of the "Green Wrench" collection
     Then I should see the following tiles in the correct order:
       | Very important              |
-      | What is the HEX for orange? |
+      | What is the HEX for green?  |
       | Useful information          |
     Then I should not see the contextual links "Pin, Unpin" in the "Useful information" tile
     And I should not see the contextual links "Pin, Unpin" in the "Very important" tile
@@ -290,6 +290,7 @@ Feature: Pinning entities inside collections
     And I select "Last Updated Date" from "Sort by"
     And I enter "wrench" in the search bar and press enter
     Then I should see the following tiles in the correct order:
+      | Green Wrench                 |
       | Orange Wrench                |
       | What kind of wrench is this? |
       | Drop forged wrenches         |
@@ -302,6 +303,7 @@ Feature: Pinning entities inside collections
     And I select "Last Updated Date" from "Sort by"
     And I enter "wrench" in the search bar and press enter
     Then I should see the following tiles in the correct order:
+      | Green Wrench                 |
       | Orange Wrench                |
       | What kind of wrench is this? |
       | Drop forged wrenches         |
@@ -316,6 +318,7 @@ Feature: Pinning entities inside collections
     And I select "Last Updated Date" from "Sort by"
     And I enter "wrench" in the search bar and press enter
     Then I should see the following tiles in the correct order:
+      | Green Wrench                 |
       | Orange Wrench                |
       | What kind of wrench is this? |
       | Drop forged wrenches         |
