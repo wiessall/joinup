@@ -12,6 +12,13 @@ parameters:
     - referer
     - error_page_error_uuid
 
+  # These two parameters settings are overridden with values stored in
+  # environment variables, in JoinupCoreServiceProvider::alter(), and are here
+  # only to provide sane defaults.
+  # See \Drupal\joinup_core\JoinupCoreServiceProvider::alter()
+  joinup_core.monolog.paths.default_handler: /tmp/drupal/log/default.log
+  joinup_core.monolog.paths.php_handler: /tmp/drupal/log/php.log
+
 services:
 
   monolog.handler.default_handler:

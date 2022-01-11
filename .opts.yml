@@ -20,7 +20,11 @@ upgrade_commands:
       - rm disable-config-readonly
       # Note that the 'Root user access' exception will be removed in ISAICP-6822.
       # See https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-6822.
-      - test $(./vendor/bin/drush core:requirements --severity=1 --ignore="update status,joinup_core_root_user_blocked" --field=title | wc -l) = "0" || (echo "Status Report shows errors & warnings" && ./vendor/bin/drush core:requirements --severity=1 --ignore="update status,joinup_core_root_user_blocked" && exit 1)
+      # Don't run Status Report check on demo environments. This is the only way
+      # we're able to temporary differentiate a demo environment from acceptance
+      # but on a long run this will be fixed in FPFISINFRA-262.
+      # See https://citnet.tech.ec.europa.eu/CITnet/jira/browse/FPFISINFRA-262.
+      -  if [ -z "$KUBERNETES_PORT" ]; then test $(./vendor/bin/drush core:requirements --severity=1 --ignore="update status,joinup_core_root_user_blocked" --field=title | wc -l) = "0" || (echo "Status Report shows errors & warnings" && ./vendor/bin/drush core:requirements --severity=1 --ignore="update status,joinup_core_root_user_blocked" && exit 1); fi
     production:
       # Note that the 'Root user access' exception will be removed in ISAICP-6822.
       # See https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-6822.
