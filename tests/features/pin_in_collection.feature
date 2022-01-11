@@ -9,6 +9,7 @@ Feature: Pinning entities inside collections
       | title         | state     |
       | Orange Wrench | validated |
       | Cloudy Beam   | validated |
+      | Green Wrench  | validated |
     And the following solution:
       | title | Space Silver |
       | state | validated    |
@@ -23,8 +24,10 @@ Feature: Pinning entities inside collections
       | Orange Wrench | Rozanne Minett  | facilitator |
       | Cloudy Beam   | Rozanne Minett  | facilitator |
       | Orange Wrench | Tyron Ingram    |             |
+      | Green Wrench  | Rozanne Minett  | facilitator |
       | Cloudy Beam   | Andy Cross      | facilitator |
       | Cloudy Beam   | Xanthia Gilbert |             |
+      | Green Wrench  | Tyron Ingram    |             |
 
   Scenario Outline: Facilitators can pin and unpin community content inside their collections.
     Given discussion content:
