@@ -77,6 +77,14 @@ module.exports = {
       },
     },
     {
+      entry: path.resolve(outputFolder, "src/scss/site-alerts-messages.scss"),
+      dest: path.resolve(outputFolder, "assets/css/site-alerts-messages.css"),
+      options: {
+        includePaths,
+        sourceMap: "file",
+      },
+    },
+    {
       entry: path.resolve(outputFolder, "src/scss/overrides/tour.scss"),
       dest: path.resolve(outputFolder, "assets/css/tour.css"),
       options: {
