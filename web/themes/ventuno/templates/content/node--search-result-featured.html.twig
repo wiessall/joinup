@@ -6,7 +6,7 @@
 #}
 {% block content %}
   {% set title %}
-    <a class="fs-5 text-underline-hover mb-3" href="{{ url }}">{{ label|raw }}</a>
+    <a class="fs-5 fw-normal text-underline-hover mb-3" href="{{ url }}">{{ label|raw }}</a>
   {% endset %}
   {% set metadata %}
     <span class="text-muted text-nowrap me-4-5">{{ type }}</span><span class="text-muted text-nowrap me-4-5">{{ creation }}</span>
@@ -25,7 +25,8 @@
         label: topic.name.value,
         background: 'secondary',
         rounded_pill: true,
-        attributes: create_attribute().addClass(['text-primary', 'me-2', 'mb-2'])
+        attributes: create_attribute().addClass(['text-primary', 'me-2', 'mb-2', 'text-underline-hover', 'fs-sm']),
+        url: path('view.search.page_1', {}, {'query': {'f': { 0: 'topic:' ~ topic.tid.value }}}),
       }]) %}
     {% endif %}
   {% endfor %}

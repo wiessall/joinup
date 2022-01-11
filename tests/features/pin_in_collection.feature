@@ -9,6 +9,7 @@ Feature: Pinning entities inside collections
       | title         | state     |
       | Orange Wrench | validated |
       | Cloudy Beam   | validated |
+      | Green Wrench  | validated |
     And the following solution:
       | title | Space Silver |
       | state | validated    |
@@ -23,8 +24,10 @@ Feature: Pinning entities inside collections
       | Orange Wrench | Rozanne Minett  | facilitator |
       | Cloudy Beam   | Rozanne Minett  | facilitator |
       | Orange Wrench | Tyron Ingram    |             |
+      | Green Wrench  | Rozanne Minett  | facilitator |
       | Cloudy Beam   | Andy Cross      | facilitator |
       | Cloudy Beam   | Xanthia Gilbert |             |
+      | Green Wrench  | Tyron Ingram    |             |
 
   Scenario Outline: Facilitators can pin and unpin community content inside their collections.
     Given discussion content:
@@ -32,8 +35,8 @@ Feature: Pinning entities inside collections
       | What is the HEX for orange? | Orange Wrench | validated |
     And <content type> content:
       | title              | headline           | collection    | state     | pinned |
-      | Very important     | Very important     | Orange Wrench | validated | yes    |
-      | Useful information | Useful information | Orange Wrench | validated | no     |
+      | Very important     | Important very     | Orange Wrench | validated | yes    |
+      | Useful information | Information useful | Orange Wrench | validated | no     |
 
     When I am an anonymous user
     And I go to the homepage of the "Orange Wrench" collection
@@ -107,7 +110,68 @@ Feature: Pinning entities inside collections
       | event        | Event      |
       | document     | Document   |
       | discussion   | Discussion |
-      | news         | News       |
+
+  Scenario: Facilitators can pin and unpin community news content inside their collections.
+    Given discussion content:
+      | title                       | collection    | state     |
+      | What is the HEX for green?  | Green Wrench  | validated |
+    And news content:
+      | title              | headline           | collection   | state     | pinned |
+      | Very important     | Important very     | Green Wrench | validated | yes    |
+      | Useful information | Information useful | Green Wrench | validated | no     |
+
+    When I am an anonymous user
+    And I go to the homepage of the "Green Wrench" collection
+    Then I should see the following tiles in the correct order:
+      | Very important              |
+      | What is the HEX for orange? |
+      | Useful information          |
+    Then I should not see the contextual links "Pin, Unpin" in the "Useful information" tile
+    And I should not see the contextual links "Pin, Unpin" in the "Very important" tile
+
+    When I am logged in as an "authenticated user"
+    And I go to the homepage of the "Green Wrench" collection
+    Then I should not see the contextual links "Pin, Unpin" in the "Useful information" tile
+    And I should not see the contextual links "Pin, Unpin" in the "Very important" tile
+
+    # Members and facilitators of other collections cannot pin nor unpin.
+    When I am logged in as "Andy Cross"
+    And I go to the homepage of the "Green Wrench" collection
+    Then I should not see the contextual links "Pin, Unpin" in the "Useful information" tile
+    And I should not see the contextual links "Pin, Unpin" in the "Very important" tile
+    When I am logged in as "Xanthia Gilbert"
+    And I go to the homepage of the "Green Wrench" collection
+    Then I should not see the contextual links "Pin, Unpin" in the "Useful information" tile
+    And I should not see the contextual links "Pin, Unpin" in the "Very important" tile
+
+    # Collection members cannot pin nor unpin content.
+    When I am logged in as "Tyron Ingram"
+    And I go to the homepage of the "Green Wrench" collection
+    Then I should not see the contextual links "Pin, Unpin" in the "Useful information" tile
+    And I should not see the contextual links "Pin, Unpin" in the "Very important" tile
+
+    # Facilitators of the collection the content belongs to can pin/unpin.
+    When I am logged in as "Rozanne Minett"
+    And I go to the homepage of the "Green Wrench" collection
+    Then I should see the contextual link "Pin" in the "Useful information" tile
+    And I should see the contextual link "Unpin" in the "Very important" tile
+    But I should not see the contextual link "Unpin" in the "Useful information" tile
+    And I should not see the contextual link "Pin" in the "Very important" tile
+
+    When I click the contextual link "Unpin" in the "Very important" tile
+    Then I should see the success message "News Very important has been unpinned in the collection Green Wrench."
+    And I should see the contextual link "Pin" in the "Very important" tile
+    But I should not see the contextual link "Unpin" in the "Very important" tile
+
+    When I click the contextual link "Pin" in the "Useful information" tile
+    Then I should see the success message "News Useful information has been pinned in the collection Green Wrench."
+    And I should see the contextual link "Unpin" in the "Useful information" tile
+    But I should not see the contextual link "Pin" in the "Useful information" tile
+
+    # When we are not in a collection page, the pin/unpin links should not be visible.
+    When I am at "/search"
+    Then I should not see the contextual links "Pin, Unpin" in the "Important very" tile
+    And I should not see the contextual links "Pin, Unpin" in the "Information useful" tile
 
   Scenario: Facilitators can pin and unpin solutions inside their collections.
     Given discussion content:
