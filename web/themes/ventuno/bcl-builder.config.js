@@ -100,6 +100,26 @@ module.exports = {
       from: [
         path.resolve(
           nodeModules,
+          "@openeuropa/bcl-theme-joinup/fonts/*.css"
+        ),
+      ],
+      to: path.resolve(outputFolder, "assets/css/fonts"),
+      options: { up: true },
+    },
+    {
+      from: [
+        path.resolve(
+          nodeModules,
+          "@openeuropa/bcl-theme-joinup/fonts/files/*.woff*"
+        ),
+      ],
+      to: path.resolve(outputFolder, "assets/css/fonts/files"),
+      options: { up: true },
+    },
+    {
+      from: [
+        path.resolve(
+          nodeModules,
           "@openeuropa/bcl-theme-joinup/js/oe-bcl-joinup.bundle.min.js"
         ),
       ],

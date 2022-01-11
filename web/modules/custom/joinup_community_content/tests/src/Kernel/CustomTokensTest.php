@@ -26,6 +26,7 @@ class CustomTokensTest extends TokenReplaceKernelTestBase {
     'joinup_workflow',
     'node',
     'og',
+    'options',
     'workflow_state_permission',
   ];
 
