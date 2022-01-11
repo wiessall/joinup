@@ -47,6 +47,9 @@ Feature: Tours
     And I use a device with an "extra extra large" display
     And I accept essential cookies
     When I click "Guided tour"
-    Then I should see the text "Sign in or out, and manage your user account"
+    # @todo: Revert to the text of the first balloon when ISAICP-6855 is fixed.
+    # @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-6855
+    #Then I should see the text "Sign in or out, and manage your user account"
+    Then I should see the text "Search through the entire Joinup platform and its supported content items."
     # Switch back to a smaller resolution.
     And I use a device with an "extra large" display

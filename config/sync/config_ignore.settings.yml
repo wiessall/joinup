@@ -1,4 +1,8 @@
 ignored_config_entities:
   - cas_mock_server.settings
+  - composer_deploy.settings
   - core.menu.static_menu_link_overrides
   - joinup_core.outdated_content_threshold
+  - matomo_reporting_api.settings
+  - update.settings
+  - upgrade_status.settings
