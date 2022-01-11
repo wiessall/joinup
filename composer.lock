@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "9024ea0b3f8be485cfbfbb0b233d6425",
+    "content-hash": "8194c6ec7c626fd30e71f7a720fd268c",
     "packages": [
         {
             "name": "SEMICeu/adms-ap_validator",
@@ -2198,6 +2198,10 @@
                 {
                     "name": "floretan",
                     "homepage": "https://www.drupal.org/user/66163"
+                },
+                {
+                    "name": "nord102",
+                    "homepage": "https://www.drupal.org/user/3471419"
                 }
             ],
             "description": "Limit which text formats are available for each field instance.",
@@ -4624,24 +4628,12 @@
                     "role": "Maintainer"
                 },
                 {
-                    "name": "davidseth",
-                    "homepage": "https://www.drupal.org/user/254857"
-                },
-                {
-                    "name": "itamair",
-                    "homepage": "https://www.drupal.org/user/1179076"
-                },
-                {
                     "name": "phayes",
                     "homepage": "https://www.drupal.org/user/47098"
                 },
                 {
                     "name": "plopesc",
                     "homepage": "https://www.drupal.org/user/282415"
-                },
-                {
-                    "name": "zzolo",
-                    "homepage": "https://www.drupal.org/user/147331"
                 }
             ],
             "description": "Stores geographic and location data (points, lines, and polygons).",
@@ -4693,6 +4685,10 @@
                     "name": "Jeff Geerling",
                     "homepage": "https://www.drupal.org/user/213194",
                     "email": "geerlingguy@mac.com"
+                },
+                {
+                    "name": "TR",
+                    "homepage": "https://www.drupal.org/user/202830"
                 },
                 {
                     "name": "geerlingguy",
@@ -5370,23 +5366,64 @@
         },
         {
             "name": "drupal/matomo_reporting_api",
-            "version": "dev-drop-matomo",
+            "version": "2.4.0",
             "source": {
                 "type": "git",
-                "url": "https://git.drupal.org/project/matomo_reporting_api.git",
-                "reference": "c37310a0452c662a78a5fe65069da594b208b19c"
+                "url": "https://git.drupalcode.org/project/matomo_reporting_api.git",
+                "reference": "8.x-2.4"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/matomo_reporting_api-8.x-2.4.zip",
+                "reference": "8.x-2.4",
+                "shasum": "fc888a8041df8a45776a4029db3d255bf1c026ea"
             },
             "require": {
+                "drupal/core": "^8 || ^9",
                 "pfrenssen/matomo-reporting-api": "^2.0"
+            },
+            "suggest": {
+                "drupal/matomo": "Reports site visitor analytics to a Matomo instance."
             },
             "type": "drupal-module",
             "extra": {
+                "drupal": {
+                    "version": "8.x-2.4",
+                    "datestamp": "1641891667",
+                    "security-coverage": {
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
+                    }
+                },
                 "patches_applied": {
                     "Ensure backward compatibility with Piwik @see https://www.drupal.org/project/matomo_reporting_api/issues/3080854": "https://www.drupal.org/files/issues/2019-09-18/3080854-7.patch"
                 }
             },
+            "notification-url": "https://packages.drupal.org/8/downloads",
             "license": [
                 "GPL-2.0+"
+            ],
+            "authors": [
+                {
+                    "name": "claudiu.cristea",
+                    "homepage": "https://www.drupal.org/user/56348"
+                },
+                {
+                    "name": "idimopoulos",
+                    "homepage": "https://www.drupal.org/user/2578708"
+                },
+                {
+                    "name": "pfrenssen",
+                    "homepage": "https://www.drupal.org/user/382067"
+                },
+                {
+                    "name": "sandervd",
+                    "homepage": "https://www.drupal.org/user/346775"
+                },
+                {
+                    "name": "sardara",
+                    "homepage": "https://www.drupal.org/user/2353864"
+                }
             ],
             "description": "Allows to retrieve reports from the Matomo API.",
             "homepage": "https://www.drupal.org/project/matomo_reporting_api",
@@ -5394,10 +5431,9 @@
                 "Drupal"
             ],
             "support": {
-                "issues": "https://www.drupal.org/project/issues/matomo_reporting_api",
-                "source": "http://cgit.drupalcode.org/matomo_reporting_api"
-            },
-            "time": "2021-11-30T12:35:23+00:00"
+                "source": "http://cgit.drupalcode.org/matomo_reporting_api",
+                "issues": "https://www.drupal.org/project/issues/matomo_reporting_api"
+            }
         },
         {
             "name": "drupal/menu_admin_per_menu",
@@ -6113,6 +6149,10 @@
                 {
                     "name": "phenaproxima",
                     "homepage": "https://www.drupal.org/user/205645"
+                },
+                {
+                    "name": "tim.plunkett",
+                    "homepage": "https://www.drupal.org/user/241634"
                 }
             ],
             "description": "Provides a way to place blocks on a custom page.",
@@ -6304,6 +6344,10 @@
                 {
                     "name": "nerdstein",
                     "homepage": "https://www.drupal.org/user/1557710"
+                },
+                {
+                    "name": "paulocs",
+                    "homepage": "https://www.drupal.org/user/3640109"
                 },
                 {
                     "name": "shrop",
@@ -7570,24 +7614,16 @@
                     "role": "Maintainer"
                 },
                 {
-                    "name": "chrisjlee",
-                    "homepage": "https://www.drupal.org/user/760600"
-                },
-                {
-                    "name": "drywall",
-                    "homepage": "https://www.drupal.org/user/192591"
-                },
-                {
-                    "name": "jsenich",
-                    "homepage": "https://www.drupal.org/user/58871"
-                },
-                {
-                    "name": "markie",
-                    "homepage": "https://www.drupal.org/user/206687"
-                },
-                {
                     "name": "newsignature",
                     "homepage": "https://www.drupal.org/user/765518"
+                },
+                {
+                    "name": "ultimike",
+                    "homepage": "https://www.drupal.org/user/51132"
+                },
+                {
+                    "name": "volkswagenchick",
+                    "homepage": "https://www.drupal.org/user/3332522"
                 }
             ],
             "description": "Provides a more robust alternative to 'summary or trimmed' textfield format.",
@@ -8939,11 +8975,14 @@
                 "spdx/license-list-data": "master"
             },
             "type": "drupal-module",
-            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "GPL-2.0-or-later"
             ],
             "description": "Allows to federate and manage the SPDX licences.",
+            "support": {
+                "source": "https://github.com/ec-europa/spdx/tree/1.0.0-alpha10",
+                "issues": "https://github.com/ec-europa/spdx/issues"
+            },
             "time": "2021-11-17T09:47:09+00:00"
         },
         {
@@ -12103,7 +12142,7 @@
                 "reference": "master"
             },
             "type": "library",
-            "time": "2020-08-03T19:59:39+00:00"
+            "time": "2020-11-25T21:59:37+00:00"
         },
         {
             "name": "stack/builder",
@@ -16383,8 +16422,8 @@
                     "dev-1.x": "1.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-1.6+5-dev",
-                    "datestamp": "1586352965",
+                    "version": "8.x-1.7+1-dev",
+                    "datestamp": "1604696484",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Dev releases are not covered by Drupal security advisories."
@@ -16397,12 +16436,12 @@
             ],
             "authors": [
                 {
-                    "name": "jhodgdon",
-                    "homepage": "https://www.drupal.org/user/155601"
+                    "name": "Pasqualle",
+                    "homepage": "https://www.drupal.org/user/80733"
                 },
                 {
-                    "name": "nedjo",
-                    "homepage": "https://www.drupal.org/user/4481"
+                    "name": "codebymikey",
+                    "homepage": "https://www.drupal.org/user/3573206"
                 }
             ],
             "description": "Provides basic revert and update functionality for other modules",
@@ -16444,7 +16483,7 @@
             "extra": {
                 "drupal": {
                     "version": "4.1.1",
-                    "datestamp": "1609419527",
+                    "datestamp": "1631968537",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -21688,7 +21727,6 @@
         "drupal/config_ignore": 20,
         "drupal/default_content": 15,
         "drupal/dropsolid_purge": 10,
-        "drupal/matomo_reporting_api": 20,
         "drupal/menu_link_destination": 20,
         "drupal/og": 20,
         "drupal/page_manager": 10,
