@@ -332,6 +332,23 @@ class JoinupContext extends RawDrupalContext {
   }
 
   /**
+   * Checks that the given select field has the given options.
+   *
+   * @param string $select
+   *   The name of the field element.
+   *
+   * @Then the :select select field options should be sorted alphabetically
+   */
+  public function checkSelectOptionsSortedAlphabetically(string $select): void {
+    $field = $this->findSelect($select);
+    $available_options = $this->getSelectOptions($field);
+    $sorted_options = $available_options;
+    sort($sorted_options);
+
+    Assert::assertSame($available_options, $sorted_options);
+  }
+
+  /**
    * Checks if the given select field does not contain any of the given values.
    *
    * @param string $select
@@ -722,10 +739,7 @@ class JoinupContext extends RawDrupalContext {
         // The strtotime() PHP function is using the default timezone when doing
         // the conversion. But we want to stick to UTC in order to avoid
         // timezone and DST issue.
-        $timezone = date_default_timezone_get();
-        date_default_timezone_set('UTC');
-        $node->published_at = strtotime($node->published_at);
-        date_default_timezone_set($timezone);
+        $node->published_at = date_create($node->published_at, new \DateTimeZone('UTC'))->format('U');
       }
     }
 
