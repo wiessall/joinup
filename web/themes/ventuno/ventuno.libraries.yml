@@ -28,6 +28,11 @@ footer:
     theme:
       assets/css/footer.css: {}
 
+site-alerts-messages:
+  css:
+    theme:
+      assets/css/site-alerts-messages.css: {}
+
 slick:
   js:
     assets/js/slick.js: { minified: true }
