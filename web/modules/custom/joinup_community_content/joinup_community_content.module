@@ -51,7 +51,11 @@ function joinup_community_content_node_view(array &$build, EntityInterface $enti
   if ($display->getComponent('read_more')) {
     $build['read_more'] = $entity->toLink(t('Read more'), 'canonical', [
       'attributes' => [
-        'class' => ['read-more'],
+        'class' => [
+          'read-more',
+          'btn',
+          'btn-secondary',
+        ],
       ],
     ])->toRenderable();
   }
