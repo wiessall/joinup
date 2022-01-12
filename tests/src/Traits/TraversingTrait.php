@@ -340,8 +340,6 @@ trait TraversingTrait {
    *   This can be useful in cases where the data drupal facet id is placed in
    *   more than one html tag e.g. the dropdown has the id placed in both the
    *   <li> tag of links as well as the <select> element.
-   * @param bool $facet_form
-   *   (optional) Check if is a facet form element.
    *
    * @return \Behat\Mink\Element\NodeElement
    *   The facet node element.
@@ -349,17 +347,12 @@ trait TraversingTrait {
    * @throws \Exception
    *   Thrown when the facet is not found in the designated area.
    */
-  protected function findFacetByAlias(string $alias, ?NodeElement $region = NULL, string $html_tag = '*', bool $facet_form = FALSE): NodeElement {
+  protected function findFacetByAlias(string $alias, ?NodeElement $region = NULL, string $html_tag = '*'): NodeElement {
     if ($region === NULL) {
       $region = $this->getSession()->getPage();
     }
     $facet_id = self::getFacetIdFromAlias($alias);
-    if ($facet_form) {
-      $element = $region->find('xpath', "//{$html_tag}[@data-drupal-selector='{$facet_id}']");
-    }
-    else {
-      $element = $region->find('xpath', "//{$html_tag}[@data-drupal-facet-id='{$facet_id}']");
-    }
+    $element = $region->find('xpath', "//{$html_tag}[@data-drupal-facet-id='{$facet_id}']");
 
     if (!$element) {
       throw new \Exception("The facet '$alias' was not found in the page.");

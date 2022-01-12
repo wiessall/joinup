@@ -664,3 +664,13 @@ Feature: Global search
 
     Then I go to "/search?sort_by=relevance&page=1"
     And I should see the 0 tiles with image
+
+  Scenario: Max 3 topic terms appear in each search result with a suffix for the rest.
+    Given the following collection:
+      | title      | Max 3 topic collection                                                             |
+      | moderation | no                                                                                 |
+      | topic      | Finance in EU, Supplier exchange, Demography, E-inclusion, Statistics and Analysis |
+      | state      | validated                                                                          |
+    When I visit the search page
+    Then there should be 3 topics in the "Max 3 topic collection" card
+    And I should see the text "+2 topics" in the "Max 3 topic collection" card
