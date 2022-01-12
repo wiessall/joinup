@@ -70,7 +70,7 @@ content:
     region: content
     label: hidden
     settings:
-      link: false
+      link: true
     third_party_settings:
       field_delimiter:
         delimiter: ''

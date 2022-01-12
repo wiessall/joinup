@@ -113,8 +113,8 @@ Feature: Pinning entities inside collections
 
   Scenario: Facilitators can pin and unpin community news content inside their collections.
     Given discussion content:
-      | title                       | collection    | state     |
-      | What is the HEX for green?  | Green Wrench  | validated |
+      | title                      | collection   | state     |
+      | What is the HEX for green? | Green Wrench | validated |
     And news content:
       | title              | headline           | collection   | state     | pinned |
       | Very important     | Important very     | Green Wrench | validated | yes    |
@@ -123,9 +123,9 @@ Feature: Pinning entities inside collections
     When I am an anonymous user
     And I go to the homepage of the "Green Wrench" collection
     Then I should see the following tiles in the correct order:
-      | Very important              |
-      | What is the HEX for green?  |
-      | Useful information          |
+      | Very important             |
+      | What is the HEX for green? |
+      | Useful information         |
     Then I should not see the contextual links "Pin, Unpin" in the "Useful information" tile
     And I should not see the contextual links "Pin, Unpin" in the "Very important" tile
 

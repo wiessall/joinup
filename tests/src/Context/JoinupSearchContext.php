@@ -345,6 +345,34 @@ class JoinupSearchContext extends RawDrupalContext {
   }
 
   /**
+   * Asserts the list of available options in a facet select box.
+   *
+   * @codingStandardsIgnoreStart
+   * Table format:
+   * | Option 1 | 0 |
+   * | Option 2 | 1 |
+   * @codingStandardsIgnoreEnd
+   *
+   * The first column in the table is required and lists the options that should
+   * be available. The second, optional, column lists the expected indentation.
+   *
+   * @param string $select
+   *   The name of the field element.
+   * @param \Behat\Gherkin\Node\TableNode $table
+   *   The available list of options.
+   *
+   * @throws \Exception
+   *    Throws an exception when the select is not found or options are not
+   *    identical.
+   *
+   * @Then the :select select facet should contain the following options:
+   */
+  public function assertSelectOptionsAsList(string $select, TableNode $table): void {
+    $element = $this->findFacetByAlias($select, NULL, 'select');
+    $this->assertSelectAvailableOptions($element, $table);
+  }
+
+  /**
    * Checks a checkbox link in a facet.
    *
    * @param string $option
@@ -428,6 +456,38 @@ class JoinupSearchContext extends RawDrupalContext {
   }
 
   /**
+   * Asserts the autocomplete single item from search.
+   *
+   * This function asserts also the order of the items.
+   *
+   * @param string $keywords
+   *   A list of words to search.
+   * @param string $suggestion
+   *   The word we need to see in suggestion.
+   *
+   * @throws \Exception
+   *   Thrown when the suggestion is not present in the page.
+   *
+   * @Then I enter :keywords in the search and it should see the suggestion :suggestion
+   */
+  public function iShouldSeeTheSuggestion(string $keywords, string $suggestion): void {
+    $session = $this->getSession();
+    $element = $this->getSearchBarElement();
+    $element->setValue($keywords);
+
+    $session->getDriver()->keyDown($element->getXpath(), '', NULL);
+    $session->wait(500);
+    $allResults = $session->getPage()->findAll('css', '.ui-autocomplete a');
+
+    $found = array_map(function ($item) {
+      /** @var \Behat\Mink\Element\NodeElement $item */
+      return $item->getText();
+    }, $allResults);
+
+    Assert::assertEquals([$suggestion], $found, "The autocomplete values mismatch the expected ones.");
+  }
+
+  /**
    * Check number of search results as featured.
    *
    * @param int $number
@@ -440,6 +500,28 @@ class JoinupSearchContext extends RawDrupalContext {
     $elements = $session->findAll('css', '.card img');
 
     Assert::assertSame(count($elements), $number);
+  }
+
+  /**
+   * Asserts the number of topics in a given card.
+   *
+   * @param int $number
+   *   The expected number of topics.
+   * @param string $heading
+   *   The heading in the card.
+   *
+   * @Given there should be :number topic(s) in the :heading card
+   */
+  public function assertNumberOfTopicsInCards(int $number, string $heading): void {
+    $card = $this->getTileByHeading($heading);
+    $topics = $card->findAll('css', '.badge');
+    foreach ($topics as $index => $topic) {
+      // Remove the badges that explain the extra amount of topics.
+      if (preg_match('/^\+\d{1,2} topics?$/', $topic->getText()) === 1) {
+        unset($topics[$index]);
+      }
+    }
+    Assert::assertSame(count($topics), $number);
   }
 
   /**
