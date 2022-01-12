@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "19b896f8a8000b65f12a423b316df7fe",
+    "content-hash": "1c1c3d1f1c9246147c5899661d111a8a",
     "packages": [
         {
             "name": "SEMICeu/adms-ap_validator",
@@ -2198,6 +2198,10 @@
                 {
                     "name": "floretan",
                     "homepage": "https://www.drupal.org/user/66163"
+                },
+                {
+                    "name": "nord102",
+                    "homepage": "https://www.drupal.org/user/3471419"
                 }
             ],
             "description": "Limit which text formats are available for each field instance.",
@@ -4137,31 +4141,32 @@
         },
         {
             "name": "drupal/facets_date_range",
-            "version": "dev-1.x",
+            "version": "1.0.0-beta1",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/facets_date_range.git",
-                "reference": "795fbaf3bd162a4255224e07b95287dfa3686189"
+                "reference": "1.0.0-beta1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/facets_date_range-1.0.0-beta1.zip",
+                "reference": "1.0.0-beta1",
+                "shasum": "77e41acb312616da409ca20a15a4447e989fedc5"
             },
             "require": {
                 "drupal/core": "^8.9 || ^9.2 || ^10",
-                "drupal/facets": "^1.6 || ^2"
+                "drupal/facets": "^1.6 || ^2",
+                "php": "^7.4 || ^8"
             },
             "type": "drupal-module",
             "extra": {
-                "branch-alias": {
-                    "dev-1.x": "1.x-dev"
-                },
                 "drupal": {
-                    "version": "1.x-dev",
-                    "datestamp": "1641230671",
+                    "version": "1.0.0-beta1",
+                    "datestamp": "1641988086",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Project has not opted into security advisory coverage!"
                     }
-                },
-                "patches_applied": {
-                    "Initial QA. @see https://www.drupal.org/project/facets_date_range/issues/3257217": "https://git.drupalcode.org/project/facets_date_range/-/merge_requests/1.diff"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -4191,8 +4196,7 @@
             "support": {
                 "source": "https://git.drupalcode.org/project/facets_date_range",
                 "issues": "https://drupal.org/project/issues/facets_date_range"
-            },
-            "time": "2022-01-03T17:21:55+00:00"
+            }
         },
         {
             "name": "drupal/field_delimiter",
@@ -7787,24 +7791,16 @@
                     "role": "Maintainer"
                 },
                 {
-                    "name": "chrisjlee",
-                    "homepage": "https://www.drupal.org/user/760600"
-                },
-                {
-                    "name": "drywall",
-                    "homepage": "https://www.drupal.org/user/192591"
-                },
-                {
-                    "name": "jsenich",
-                    "homepage": "https://www.drupal.org/user/58871"
-                },
-                {
-                    "name": "markie",
-                    "homepage": "https://www.drupal.org/user/206687"
-                },
-                {
                     "name": "newsignature",
                     "homepage": "https://www.drupal.org/user/765518"
+                },
+                {
+                    "name": "ultimike",
+                    "homepage": "https://www.drupal.org/user/51132"
+                },
+                {
+                    "name": "volkswagenchick",
+                    "homepage": "https://www.drupal.org/user/3332522"
                 }
             ],
             "description": "Provides a more robust alternative to 'summary or trimmed' textfield format.",
@@ -9216,11 +9212,14 @@
                 "spdx/license-list-data": "master"
             },
             "type": "drupal-module",
-            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "GPL-2.0-or-later"
             ],
             "description": "Allows to federate and manage the SPDX licences.",
+            "support": {
+                "source": "https://github.com/ec-europa/spdx/tree/1.0.0-alpha10",
+                "issues": "https://github.com/ec-europa/spdx/issues"
+            },
             "time": "2021-11-17T09:47:09+00:00"
         },
         {
@@ -12377,7 +12376,7 @@
                 "reference": "master"
             },
             "type": "library",
-            "time": "2020-08-03T19:59:39+00:00"
+            "time": "2020-11-25T21:59:37+00:00"
         },
         {
             "name": "stack/builder",
@@ -21974,7 +21973,7 @@
         "dkarv/mdl-chip-input": 20,
         "drupal/default_content": 15,
         "drupal/dropsolid_purge": 10,
-        "drupal/facets_date_range": 20,
+        "drupal/facets_date_range": 10,
         "drupal/menu_link_destination": 20,
         "drupal/page_manager": 10,
         "drupal/schema_digital_document": 20,
