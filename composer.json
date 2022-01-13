@@ -8,6 +8,7 @@
         "ext-dom": "*",
         "ext-json": "*",
         "ext-pdo": "*",
+        "ext-redis": "*",
         "composer/installers": "^1.9",
         "cweagans/composer-patches": "^1.7",
         "dkarv/mdl-chip-input": "dev-master",
