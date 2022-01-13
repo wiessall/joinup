@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "7404b2d74da7580b7367e84ce2239022",
+    "content-hash": "0058bd845e484fc28a98b533df3e6e01",
     "packages": [
         {
             "name": "SEMICeu/adms-ap_validator",
@@ -3726,7 +3726,8 @@
                     }
                 },
                 "patches_applied": {
-                    "Dynamic page cache prevents redirection @see https://www.drupal.org/project/entity_legal/issues/3251128": "https://www.drupal.org/files/issues/2021-11-24/3251128-2.patch"
+                    "Dynamic page cache prevents redirection @see https://www.drupal.org/project/entity_legal/issues/3251128": "https://www.drupal.org/files/issues/2021-11-24/3251128-2.patch",
+                    "Delete Entity Legal version @see https://www.drupal.org/project/entity_legal/issues/3258368": "https://git.drupalcode.org/project/entity_legal/-/merge_requests/3.diff"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -12160,7 +12161,7 @@
                 "reference": "master"
             },
             "type": "library",
-            "time": "2021-07-08T16:47:58+00:00"
+            "time": "2021-11-19T15:07:33+00:00"
         },
         {
             "name": "stack/builder",
