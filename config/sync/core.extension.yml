@@ -123,7 +123,6 @@ module:
   link: 0
   linkit: 0
   mailsystem: 0
-  matomo: 0
   matomo_reporting_api: 0
   media: 0
   menu_link_destination: 0

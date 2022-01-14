@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "4c0533e124107ab0ffcb4afa38129f6a",
+    "content-hash": "7404b2d74da7580b7367e84ce2239022",
     "packages": [
         {
             "name": "SEMICeu/adms-ap_validator",
@@ -5363,28 +5363,30 @@
         },
         {
             "name": "drupal/matomo_reporting_api",
-            "version": "2.3.0",
+            "version": "2.4.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/matomo_reporting_api.git",
-                "reference": "8.x-2.3"
+                "reference": "8.x-2.4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/matomo_reporting_api-8.x-2.3.zip",
-                "reference": "8.x-2.3",
-                "shasum": "50347318cf4aa9ae898c8307707b5ce922e5c72e"
+                "url": "https://ftp.drupal.org/files/projects/matomo_reporting_api-8.x-2.4.zip",
+                "reference": "8.x-2.4",
+                "shasum": "fc888a8041df8a45776a4029db3d255bf1c026ea"
             },
             "require": {
                 "drupal/core": "^8 || ^9",
-                "drupal/matomo": "^1.7",
                 "pfrenssen/matomo-reporting-api": "^2.0"
+            },
+            "suggest": {
+                "drupal/matomo": "Reports site visitor analytics to a Matomo instance."
             },
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "8.x-2.3",
-                    "datestamp": "1633442026",
+                    "version": "8.x-2.4",
+                    "datestamp": "1641891667",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -12158,7 +12160,7 @@
                 "reference": "master"
             },
             "type": "library",
-            "time": "2021-11-19T15:07:33+00:00"
+            "time": "2021-07-08T16:47:58+00:00"
         },
         {
             "name": "stack/builder",
