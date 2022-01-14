@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "7404b2d74da7580b7367e84ce2239022",
+    "content-hash": "5e93d6066f7eee79701108d6222bb7da",
     "packages": [
         {
             "name": "SEMICeu/adms-ap_validator",
@@ -2198,6 +2198,10 @@
                 {
                     "name": "floretan",
                     "homepage": "https://www.drupal.org/user/66163"
+                },
+                {
+                    "name": "nord102",
+                    "homepage": "https://www.drupal.org/user/3471419"
                 }
             ],
             "description": "Limit which text formats are available for each field instance.",
@@ -6328,7 +6332,8 @@
                     }
                 },
                 "patches_applied": {
-                    "'Field field_last_password_reset is unknown' while importing configuration on site without password_policy activated @see https://www.drupal.org/project/password_policy/issues/2771129": "https://www.drupal.org/files/issues/2021-07-05/password_policy_field_last_password_reset_unknown_error_2771129-130.patch"
+                    "'Field field_last_password_reset is unknown' while importing configuration on site without password_policy activated @see https://www.drupal.org/project/password_policy/issues/2771129": "https://www.drupal.org/files/issues/2021-07-05/password_policy_field_last_password_reset_unknown_error_2771129-130.patch",
+                    "password_policy_update_8302 takes too long for a large amount of users @see https://www.drupal.org/project/password_policy/issues/3258563": "https://git.drupalcode.org/project/password_policy/-/merge_requests/22.diff"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -7622,24 +7627,16 @@
                     "role": "Maintainer"
                 },
                 {
-                    "name": "chrisjlee",
-                    "homepage": "https://www.drupal.org/user/760600"
-                },
-                {
-                    "name": "drywall",
-                    "homepage": "https://www.drupal.org/user/192591"
-                },
-                {
-                    "name": "jsenich",
-                    "homepage": "https://www.drupal.org/user/58871"
-                },
-                {
-                    "name": "markie",
-                    "homepage": "https://www.drupal.org/user/206687"
-                },
-                {
                     "name": "newsignature",
                     "homepage": "https://www.drupal.org/user/765518"
+                },
+                {
+                    "name": "ultimike",
+                    "homepage": "https://www.drupal.org/user/51132"
+                },
+                {
+                    "name": "volkswagenchick",
+                    "homepage": "https://www.drupal.org/user/3332522"
                 }
             ],
             "description": "Provides a more robust alternative to 'summary or trimmed' textfield format.",
@@ -9670,7 +9667,7 @@
                 "reference": "master"
             },
             "type": "drupal-theme-library",
-            "time": "2021-06-30T06:04:10+00:00"
+            "time": "2018-10-31T20:10:45+00:00"
         },
         {
             "name": "laminas/laminas-diactoros",
@@ -12160,7 +12157,7 @@
                 "reference": "master"
             },
             "type": "library",
-            "time": "2021-07-08T16:47:58+00:00"
+            "time": "2020-11-25T21:59:37+00:00"
         },
         {
             "name": "stack/builder",
