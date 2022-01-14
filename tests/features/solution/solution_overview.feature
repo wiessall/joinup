@@ -23,6 +23,10 @@ Feature: Solutions Overview
       | Warg       | 2018-10-04 8:39am | validated |
     And I am an anonymous user
     When I visit the solution overview
+    When I enter "Muff" in the search bar
+    And I wait for AJAX to finish
+    Then I should see the following search suggestions:
+      | Muffalo |
     Then I should see the following tiles in the correct order:
       | Muffalo    |
       | Gazelle    |

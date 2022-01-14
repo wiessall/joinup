@@ -1,3 +1,17 @@
+{#
+/**
+ * @file
+ * Theme override to display a region.
+ *
+ * Available variables:
+ * - content: The content for this region, typically blocks.
+ * - attributes: HTML attributes for the region div.
+ * - region: The name of the region variable as defined in the theme's
+ *   .info.yml file.
+ *
+ * @see template_preprocess_region()
+ */
+#}
 {{ attach_library('ventuno/bootstrap-base') }}
 {{ attach_library('ventuno/navbar') }}
 <div class="bs-wrapper">
@@ -30,13 +44,14 @@
     }]) %}
     {% include directory ~ '/../ventuno/templates/navigation/navbar.html.twig' with {
       brand: {
-        src: base_path ~ "themes/ventuno/assets/images/logo.svg",
+        src: url('<front>')|render ~ "themes/ventuno/assets/images/logo.svg",
         alt: "Joinup logo"|t,
-        link: front_page,
+        link: url('<front>'),
       },
       collapse_id: "main-navbar",
       list_id: "main-navbar-list",
       items: items,
+      search: content,
     } %}
   </header>
 </div>

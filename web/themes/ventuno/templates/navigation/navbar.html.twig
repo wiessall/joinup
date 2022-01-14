@@ -85,7 +85,11 @@
     {% if _brand.motto is not empty %}
       <span class="navbar-motto d-none d-md-block">{{ _brand.motto }}</span>
     {% endif %}
-
+    {% if search %}
+      <div class="search-bar">
+        {{ search }}
+      </div>
+    {% endif %}
     <div class="" id="{{ _collapse_id }}">
       <ul
         {{ list_attributes }}
