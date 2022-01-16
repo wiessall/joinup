@@ -44,9 +44,9 @@
     }]) %}
     {% include directory ~ '/../ventuno/templates/navigation/navbar.html.twig' with {
       brand: {
-        src: base_path ~ "themes/ventuno/assets/images/logo.svg",
+        src: path('<front>') ~ "themes/ventuno/assets/images/logo.svg",
         alt: "Joinup logo"|t,
-        link: front_page,
+        link: path('<front>'),
       },
       collapse_id: "main-navbar",
       list_id: "main-navbar-list",
