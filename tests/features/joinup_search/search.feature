@@ -634,6 +634,15 @@ Feature: Global search
     And I should remove the following facet summary "News"
     And the page should show only the tiles "Radio cooking collection"
 
+    # Check if search autocomplete works in header.
+    When I visit the collection overview
+    Then I break
+    And I enter "funn" in the search bar
+    And I wait for AJAX to finish
+    Then I should see the following search suggestions:
+      | funni |
+      | funny |
+
   @terms @javascript
   Scenario: Show first three search results as featured
     Given collection:
