@@ -140,6 +140,16 @@ module.exports = {
       from: [
         path.resolve(
           __dirname,
+          "src/icons/bootstrap-icons.svg"
+        ),
+      ],
+      to: path.resolve(outputFolder, "assets/icons"),
+      options: { up: true },
+    },
+    {
+      from: [
+        path.resolve(
+          __dirname,
           "src/images/logo.svg"
         ),
       ],
