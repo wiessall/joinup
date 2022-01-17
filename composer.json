@@ -435,10 +435,6 @@
             "url": "https://github.com/ec-europa/TableExtension.git"
         },
         {
-            "type": "vcs",
-            "url": "https://github.com/gizra/og.git"
-        },
-        {
             "type": "composer",
             "url": "https://packages.drupal.org/8"
         },

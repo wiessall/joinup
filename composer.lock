@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "5e93d6066f7eee79701108d6222bb7da",
+    "content-hash": "097f98fe1ac45c4782077239148518bf",
     "packages": [
         {
             "name": "SEMICeu/adms-ap_validator",
@@ -5991,8 +5991,8 @@
             "version": "1.0-alpha7",
             "source": {
                 "type": "git",
-                "url": "https://github.com/Gizra/og.git",
-                "reference": "f41da3ffd8c81d2dcb4d5462c73053135246e6a1"
+                "url": "https://git.drupalcode.org/project/og.git",
+                "reference": "8.x-1.0-alpha7"
             },
             "dist": {
                 "type": "zip",
