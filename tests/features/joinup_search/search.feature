@@ -665,14 +665,16 @@ Feature: Global search
     Then I go to "/search?sort_by=relevance&page=1"
     And I should see the 0 tiles with image
 
-    Then I go to "/search?f[0]=creation_date:(min:1577836800,max:1640995200)"
+    # Filter content from 01-01-2020 to 30-06-2020.
+    # Only "El Cabo da Roca" and "Funny news 4" should appear.
+    Then I go to "/search?f[0]=creation_date:(min:1577880000,max:1593518400)"
     And I should see the text "SEARCH RESULTS (2)"
 
     Then I go to "/search?f[0]=creation_date:(min:1577836800,max:)"
-    And I should see the text "SEARCH RESULTS (5)"
+    And I should see the text "SEARCH RESULTS (8)"
 
     Then I go to "/search?f[0]=creation_date:(min:,max:1609113600)"
-    And I should see the text "SEARCH RESULTS (10)"
+    And I should see the text "SEARCH RESULTS (8)"
 
     Then I go to "/search?f[0]=creation_date:(min:,max:)"
     And I should see the text "SEARCH RESULTS (14)"
