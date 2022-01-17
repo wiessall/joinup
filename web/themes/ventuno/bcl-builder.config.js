@@ -89,6 +89,16 @@ module.exports = {
     {
       from: [
         path.resolve(
+          __dirname,
+          "src/images/favicon/*"
+        ),
+      ],
+      to: path.resolve(outputFolder, "assets/images/favicon"),
+      options: { up: true },
+    },
+    {
+      from: [
+        path.resolve(
           nodeModules,
           "@openeuropa/bcl-theme-joinup/fonts/*.css"
         ),
