@@ -195,10 +195,8 @@ drupal:
           'config_update',
           'config_update_ui',
           'dblog',
-          'default_content',
           'devel',
           'filecache',
-          'hal',
           'joinup_cas_mock_server',
           'og_ui',
           'page_manager_ui',
@@ -247,9 +245,9 @@ drupal:
         $config['search_api.server.joinup']['backend_config']['connector_config'] = parse_url(getenv('SOLR_URL'));
         $config['search_api.server.joinup']['backend_config']['connector_config']['core'] = getenv('SOLR_CORE');
       Matomo & OpenEuropa Webtools Analytics: |
-        $config['matomo.settings']['site_id'] = getenv('MATOMO_SITE_ID');
-        $config['matomo.settings']['url_http'] = getenv('MATOMO_SITE_URL_HTTP');
-        $config['matomo.settings']['url_https'] = getenv('MATOMO_SITE_URL_HTTPS');
+        $config['matomo_reporting_api.settings']['site_id'] = getenv('MATOMO_SITE_ID');
+        $config['matomo_reporting_api.settings']['url_http'] = getenv('MATOMO_SITE_URL_HTTP');
+        $config['matomo_reporting_api.settings']['url_https'] = getenv('MATOMO_SITE_URL_HTTPS');
         $config['matomo_reporting_api.settings']['token_auth'] = getenv('MATOMO_REPORTING_API_AUTH_TOKEN');
         $config['oe_webtools_analytics.settings']['siteID'] = getenv('MATOMO_SITE_ID');
         $config['oe_webtools_analytics.settings']['sitePath'] = getenv('OE_WEBTOOLS_ANALYTICS_SITE_PATH');
