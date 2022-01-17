@@ -21,7 +21,7 @@ body {
   .explore-block-title {
     text-transform: uppercase;
     font-size: 1.25rem; // 20px
-    padding-bottom: $spacer * .5; // 8px
+    padding-bottom: $spacer * 1.5; // 24px
     margin-bottom: $spacer * 1.5; // 24px
     @include font-icon-before("\E802", 1.42rem, $warning);
     border-bottom: 1px solid rgba($primary, .1);
@@ -31,7 +31,7 @@ body {
     margin-bottom: $spacer; // 16px
     @include media-breakpoint-up(md) {
       position: absolute;
-      top: $spacer * 3;
+      top: $spacer * 2.5;
       right: 0;
     }
     .nav-link {
