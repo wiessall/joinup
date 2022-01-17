@@ -21,8 +21,8 @@
         "drupal/changed_fields": "^3.2",
         "drupal/config_ignore": "^3.0",
         "drupal/config_readonly": "^1.0",
-        "drupal/core": "~8.9",
-        "drupal/core-composer-scaffold": "~8.9",
+        "drupal/core": "^9.3",
+        "drupal/core-composer-scaffold": "^9.3",
         "drupal/default_content": "^2.0@alpha",
         "drupal/diff": "~1.0",
         "drupal/digital_size_formatter": "~2.0",
@@ -109,7 +109,7 @@
         "jacklmoore/autosize": "dev-master",
         "masterminds/html5": "^2.7",
         "ml/json-ld": "^1.2",
-        "openeuropa/composer-artifacts": "^0.1.3",
+        "openeuropa/composer-artifacts": "dev-master",
         "openeuropa/oe_bootstrap_theme": "0.71.0",
         "openeuropa/oe_dashboard_agent": "^0.3.0",
         "openeuropa/oe_webtools": "^1.14",
@@ -118,8 +118,7 @@
         "predis/predis": "^1.1.6",
         "semiceu/adms-ap_validator": "dev-master",
         "webflo/drupal-finder": "~1.2",
-        "webmozart/path-util": "~2.3",
-        "zaporylie/composer-drupal-optimizations": "^1.2"
+        "webmozart/path-util": "~2.3"
     },
     "require-dev": {
         "ext-fileinfo": "*",
@@ -132,7 +131,7 @@
         "behat/mink-goutte-driver": "~1.2",
         "behat/mink-selenium2-driver": "1.4.0",
         "boedah/robo-drush": "^4.2",
-        "composer/composer": "^1.10.22",
+        "composer/composer": "^1.10.22|^2",
         "drupal/admin_toolbar": "~2.4",
         "drupal/cas_mock_server": "^1.3",
         "drupal/coder": "^8.3.11",
@@ -148,7 +147,7 @@
         "drupal/restui": "^1.18",
         "drupal/upgrade_status": "^3.12",
         "drupaltest/behat-one-time-login": "^1.0",
-        "ec-europa/toolkit": "~4.5.6",
+        "ec-europa/toolkit": "^4.5.6|^8",
         "foxy/foxy": "^1.1",
         "jcalderonzumba/gastonjs": "^1.2@dev",
         "lovers-of-behat/table-extension": "^1.2.0",
@@ -179,6 +178,15 @@
         "sort-packages": true,
         "platform": {
             "php": "7.4.0"
+        },
+        "allow-plugins": {
+            "dealerdirect/phpcodesniffer-composer-installer": true,
+            "cweagans/composer-patches": true,
+            "composer/installers": true,
+            "phpro/grumphp": true,
+            "drupal/core-composer-scaffold": true,
+            "foxy/foxy": true,
+            "openeuropa/composer-artifacts": true
         }
     },
     "autoload": {
@@ -229,7 +237,7 @@
             "Joinup\\Composer\\RemoveWrongPatchedObjects::remove",
             "test ! -f ./vendor/bin/grumphp || ./vendor/bin/grumphp git:deinit",
             "test ! -f ./vendor/bin/run || ./vendor/bin/run toolkit:build-dev",
-            "rm -rf ./resources/solr/conf && cp -r ./web/modules/contrib/search_api_solr/solr-conf/6.x ./resources/solr/conf"
+            "rm -rf ./resources/solr/conf && cp -r ./web/modules/contrib/search_api_solr/solr-conf-templates/6.x ./resources/solr/conf"
         ]
     },
     "extra": {
@@ -268,37 +276,28 @@
                 "Add a Drush command for manipulating module info files @see https://www.drupal.org/project/config_devel/issues/2392929": "https://git.drupalcode.org/project/config_devel/-/merge_requests/4.diff"
             },
             "drupal/core": {
-                "Use email verification when changing user email addresses @see https://www.drupal.org/project/drupal/issues/85494": "https://www.drupal.org/files/issues/2020-06-18/email-change.85494-312.patch",
-                "Use READ COMMITTED by default for MySQL transactions @see https://www.drupal.org/project/drupal/issues/1650930": "https://www.drupal.org/files/issues/2020-05-04/1650930-default-mysql-transactions-84-D9.patch",
-                "Allow image style to be selected in text editor @see https://www.drupal.org/node/2061377": "https://www.drupal.org/files/issues/2020-11-21/2061377-395-unofficial-8.9.x.patch",
-                "Allow making the file description a required field @see https://www.drupal.org/node/2320877": "https://www.drupal.org/files/issues/2021-02-19/2320877-61-unofficial-8.9.x.patch",
-                "Allow sorting of actions @see https://www.drupal.org/project/drupal/issues/2381293": "https://www.drupal.org/files/issues/2019-12-04/2381293-134.patch",
-                "Regression: Do not bypass route access with 'link to any page' permissions for menu links @see https://www.drupal.org/project/drupal/issues/2463753": "https://www.drupal.org/files/issues/2020-07-09/2463753-81.patch",
-                "Upcast named arguments/named parameters in views @see https://www.drupal.org/project/drupal/issues/2528166": "https://www.drupal.org/files/issues/2020-07-06/2528166-47.patch",
-                "Caption element throws TypeError: Cannot read property 'tagName' of null in Drupal.behaviors.filterFilterHtmlUpdating @see https://www.drupal.org/node/2556069": "https://www.drupal.org/files/issues/2020-01-29/2556069-56.patch",
+                "Use email verification when changing user email addresses @see https://www.drupal.org/project/drupal/issues/85494": "https://www.drupal.org/files/issues/2022-01-17/85494-376-9.3.x.patch",
+                "Use READ COMMITTED by default for MySQL transactions @see https://www.drupal.org/project/drupal/issues/1650930": "https://www.drupal.org/files/issues/2021-10-13/1650930-144.patch",
+                "Allow image style to be selected in text editor @see https://www.drupal.org/node/2061377": "https://git.drupalcode.org/project/drupal/-/merge_requests/48.diff",
+                "Allow making the file description a required field @see https://www.drupal.org/node/2320877": "https://git.drupalcode.org/project/drupal/-/merge_requests/975.diff",
+                "Regression: Do not bypass route access with 'link to any page' permissions for menu links @see https://www.drupal.org/project/drupal/issues/2463753": "https://www.drupal.org/files/issues/2021-09-15/2463753-87_0.patch",
+                "Upcast named arguments/named parameters in views @see https://www.drupal.org/project/drupal/issues/2528166": "https://git.drupalcode.org/project/drupal/-/merge_requests/1323.diff",
                 "Confirmation cancel links are incorrect if installed in a subdirectory @see https://www.drupal.org/project/drupal/issues/2582295": "https://www.drupal.org/files/issues/confirmation_cancel_subdirectory-2582295-26.patch",
-                "Combined @see https://www.drupal.org/project/drupal/issues/2570593 @see https://www.drupal.org/node/2765065": "resources/patch/2570593_and_2765065_combined.patch",
+                "Allow plurals on bundle labels @see https://www.drupal.org/node/2765065": "https://www.drupal.org/files/issues/2022-01-14/2765065-9.3.x.patch",
                 "Enlarge file_usage entity ID length. @see https://www.drupal.org/node/2675600": "https://www.drupal.org/files/issues/2675600-30.patch",
                 "Menu link plugins should provide a way for the link to be conditionally hidden @see https://www.drupal.org/project/drupal/issues/2719609": "https://www.drupal.org/files/issues/2719609-2.patch",
                 "New option for Views page displays to use the admin theme @see https://www.drupal.org/node/2719797": "https://www.drupal.org/files/issues/2719797-65.patch",
-                "Node revision routes don't convert {node} param @see https://www.drupal.org/project/drupal/issues/2730631": "https://www.drupal.org/files/issues/2019-04-04/2730631_85_0.patch",
-                "Make the tab active when the fragment is present in URL @see https://www.drupal.org/project/drupal/issues/2752511": "https://www.drupal.org/files/issues/2021-08-04/vertical-tabs-2752511-94-D8.patch",
-                "Use comment access handler instead of hardcoding permissions @see https://www.drupal.org/project/drupal/issues/2879087": "https://www.drupal.org/files/issues/2020-11-08/2879087-106.patch",
-                "Add thread depth configuration to comments @see https://www.drupal.org/project/drupal/issues/2786587": "https://www.drupal.org/files/issues/2020-11-10/2786587-47-unofficial-8.9.x.patch",
-                "Views with a different query plugin created via the UI do not have the correct query plugin ID in the view config @see https://www.drupal.org/project/drupal/issues/2836237": "https://www.drupal.org/files/issues/2021-01-28/2836237-38.patch",
-                "Disable tableselect element options @see https://www.drupal.org/project/drupal/issues/2895352": "https://www.drupal.org/files/issues/2019-12-03/2895352-42-8.8.x.patch",
-                "Views exposed sort identifiers are not configurable @see https://www.drupal.org/project/drupal/issues/2897638": "https://www.drupal.org/files/issues/2020-09-06/2897638-33-8.9.x.patch",
-                "Pass current route parameters to the confirmation form route @see https://www.drupal.org/project/drupal/issues/2901412": "https://www.drupal.org/files/issues/2020-02-25/2901412-13.patch",
+                "Make the tab active when the fragment is present in URL @see https://www.drupal.org/project/drupal/issues/2752511": "https://www.drupal.org/files/issues/2022-01-03/vertical-tabs-2752511-109.patch",
+                "Add thread depth configuration to comments. Includes patch for parent issue #2879087. @see https://www.drupal.org/project/drupal/issues/2786587 @see https://www.drupal.org/project/drupal/issues/2879087": "https://www.drupal.org/files/issues/2022-01-17/2786587-58-9.3.x.patch",
+                "Views with a different query plugin created via the UI do not have the correct query plugin ID in the view config @see https://www.drupal.org/project/drupal/issues/2836237": "https://www.drupal.org/files/issues/2022-01-17/2836237-49-9.3.x.patch",
+                "Disable tableselect element options @see https://www.drupal.org/project/drupal/issues/2895352": "https://www.drupal.org/files/issues/2021-12-04/2895352-53.patch",
+                "Pass current route parameters to the confirmation form route @see https://www.drupal.org/project/drupal/issues/2901412": "https://git.drupalcode.org/project/drupal/-/merge_requests/1666.diff",
                 "Lazy services: support PHP7 return types in generate-proxy-class @see https://www.drupal.org/node/2919243": "https://www.drupal.org/files/issues/2919243-2.patch",
-                "CSS aggregation fails on many variations of @import @see https://www.drupal.org/project/drupal/issues/2936067": "https://www.drupal.org/files/issues/2021-10-06/2936067-73-backport.patch",
                 "Cache tags are not invalidated on revision delete @see https://www.drupal.org/project/drupal/issues/2945928": "https://www.drupal.org/files/issues/entity-cache_revision_deletion-2945928-2.patch",
-                "Users w/o access to content should still have configurable access to the content URL @see https://www.drupal.org/project/drupal/issues/3008254": "https://www.drupal.org/files/issues/2019-12-03/3008254-19-8.8.x.patch",
-                "Make it easier to trigger a tour @see https://www.drupal.org/project/drupal/issues/3012027": "https://www.drupal.org/files/issues/2018-11-07/3012027-2.patch",
-                "Contextual links of reusable content blocks are not displayed when rendering entities built via Layout Builder @see https://www.drupal.org/project/drupal/issues/3020876": "https://git.drupalcode.org/project/drupal/-/merge_requests/501.diff",
+                "Users w/o access to content should still have configurable access to the content URL @see https://www.drupal.org/project/drupal/issues/3008254": "https://www.drupal.org/files/issues/2022-01-17/3008254-26-9.3.x.patch",
+                "Make it easier to trigger a tour @see https://www.drupal.org/project/drupal/issues/3012027": "https://www.drupal.org/files/issues/2022-01-17/3012027-52-9.3.x.patch",
                 "EntityConstraintValidationList::findByCode is inconsistent @see https://www.drupal.org/project/drupal/issues/3126654": "https://www.drupal.org/files/issues/2020-04-10/find_by_code_override-3126654-D8-4.patch",
-                "Cannot implement a custom user cancellation method @see https://www.drupal.org/project/drupal/issues/3135592": "https://www.drupal.org/files/issues/2020-05-11/3135592-3.patch",
-                "Allow to refine by bundle in EntityConverter @see https://www.drupal.org/project/drupal/issues/3155568": "https://www.drupal.org/files/issues/2020-06-30/3155568-4.patch",
-                "Toolbar menu theme override omits the 'menu_name' variable @see https://www.drupal.org/project/drupal/issues/3227370": "https://www.drupal.org/files/issues/2021-08-09/3227370-3.patch"
+                "Cannot implement a custom user cancellation method @see https://www.drupal.org/project/drupal/issues/3135592": "https://www.drupal.org/files/issues/2020-05-11/3135592-3.patch"
             },
             "drupal/entityqueue": {
                 "Missing config schema for EntityQueueDragtableWidget @see Missing config schema for EntityQueueDragtableWidget": "https://git.drupalcode.org/project/entityqueue/-/merge_requests/3.diff"
@@ -308,8 +307,7 @@
             },
             "drupal/facets": {
                 "Facet Summary for Facet Items with a set dependency. @see https://www.drupal.org/node/2873480": "resources/patch/facet_summary_for_facet-2873480-18.patch",
-                "SA-CONTRIB-2021-008. @see https://www.drupal.org/sa-contrib-2021-008": "https://www.drupal.org/files/issues/2021-05-17/3213582-facets-1.6-1.7.patch",
-                "Possible accessibility issue": "resources/patch/facet_accessibility-3208580.patch"
+                "Apply soft limit to facet root li tags. @see https://www.drupal.org/i/3208580": "https://git.drupalcode.org/project/facets/-/commit/6b404ed09e824a08c67a8e6f41cf0d78776762f8.diff"
             },
             "drupal/honeypot": {
                 "Behat integration. @see https://www.drupal.org/project/honeypot/issues/3059040": "https://www.drupal.org/files/issues/2020-09-09/3059040-31.patch",
@@ -341,16 +339,7 @@
                 "Allow bundle label plural variants @see https://github.com/ec-europa/rdf_entity/pull/12": "https://github.com/ec-europa/rdf_entity/compare/8.x-1.x...ea8f6af001fca732e89a4be0e29643953f49a88f.diff"
             },
             "drupal/search_api": {
-                "Views cached results are not taking into account the access check. @see https://www.drupal.org/node/2824640": "resources/patch/search-api-2824640-103-3136277-18-8.x-1.13.patch",
-                "item_id column is too short. @see https://www.drupal.org/node/2829696": "https://www.drupal.org/files/issues/item_id_column_is_too_short-2829696-10-D8.patch",
-                "Add a static method that knows to index a given entity @see https://www.drupal.org/project/search_api/issues/3106342": "https://www.drupal.org/files/issues/2020-01-14/3106342-6.patch",
-                "Bulk Form field for SAPI @see https://www.drupal.org/project/search_api/issues/3117171": "https://www.drupal.org/files/issues/2020-04-01/3117171-13.patch",
-                "Some bulk form field options are missing schema @see https://www.drupal.org/project/search_api/issues/3195199": "https://git.drupalcode.org/project/search_api/-/merge_requests/6.diff",
-                "Duplicate dependencies @see https://www.drupal.org/project/search_api/issues/3111635": "https://www.drupal.org/files/issues/2020-02-08/3111635-8--fix_duplicate_dependencies.patch"
-            },
-            "drupal/search_api_solr": {
-                "Trying to access array offset on value of type int @see https://www.drupal.org/project/search_api_solr/issues/3173950": "resources/patch/search_api_solr-3173950.diff",
-                "Missing config schema @see https://www.drupal.org/project/search_api_solr/issues/3236773": "https://git.drupalcode.org/project/search_api_solr/-/merge_requests/8.diff"
+                "item_id column is too short. @see https://www.drupal.org/node/2829696": "https://www.drupal.org/files/issues/2021-11-02/2829696-12.patch"
             },
             "drupal/search_api_autocomplete": {
                 "Clear timeout autosubmit used in views_autosubmit.": "resources/patch/search_api_autocomplete_override_views_autosubmit.patch"
@@ -360,10 +349,6 @@
             },
             "drupal/social_media_links": {
                 "Missing config schema for field, widget and formatter @see https://www.drupal.org/node/2898680": "https://www.drupal.org/files/issues/2898680-6.patch"
-            },
-            "drupal/sparql_entity_storage": {
-                "Allow routes to filter by bundle @see https://github.com/ec-europa/sparql_entity_storage/pull/32": "https://github.com/idimopoulos/sparql_entity_storage/compare/8.x-1.x...idimopoulos:e9b6e36.diff",
-                "Drupal 9.3 compatibility @see https://github.com/idimopoulos/sparql_entity_storage/pull/9": "https://patch-diff.githubusercontent.com/raw/idimopoulos/sparql_entity_storage/pull/9.patch"
             },
             "drupal/subpathauto": {
                 "Subpaths with redirect not resolved @see https://www.drupal.org/project/subpathauto/issues/3175637": "https://git.drupalcode.org/project/subpathauto/-/merge_requests/1/diffs.diff"
@@ -393,9 +378,6 @@
             },
             "openeuropa/oe_bootstrap_theme": {
                 "Preserve link attributes in navigation menus @see https://github.com/openeuropa/oe_bootstrap_theme/pull/38": "https://patch-diff.githubusercontent.com/raw/openeuropa/oe_bootstrap_theme/pull/38.diff"
-            },
-            "solarium/solarium": {
-                "implode() deprecated usage": "resources/patch/solarium.diff"
             }
         },
         "patches-ignore": {
@@ -420,10 +402,6 @@
     },
     "repositories": [
         {
-            "type": "vcs",
-            "url": "https://git.drupal.org/project/matomo_reporting_api.git"
-        },
-        {
             "type": "package",
             "package": {
                 "name": "spdx/license-list-data",
@@ -442,10 +420,6 @@
         {
             "type": "vcs",
             "url": "https://github.com/openeuropa/oe_dashboard_agent.git"
-        },
-        {
-            "type": "vcs",
-            "url": "https://github.com/ec-europa/TableExtension.git"
         },
         {
             "type": "composer",
@@ -506,7 +480,7 @@
         {
             "type": "package",
             "package": {
-                "name": "SEMICeu/adms-ap_validator",
+                "name": "semiceu/adms-ap_validator",
                 "version": "dev-master",
                 "source": {
                     "url": "git@github.com:SEMICeu/adms-ap_validator.git",
