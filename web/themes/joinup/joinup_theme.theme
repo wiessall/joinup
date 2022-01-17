@@ -428,7 +428,7 @@ function joinup_theme_preprocess_page(&$variables) {
 
   // Make the Bootstrap icons available for theming. They are used in Bootstrap
   // components such as the hamburger menu.
-  $variables['bcl_icon_path'] = base_path() . drupal_get_path('theme', 'oe_bootstrap_theme') . '/assets/icons/bootstrap-icons.svg';
+  $variables['ventuno_icon_path'] = base_path() . drupal_get_path('theme', 'ventuno') . '/assets/icons/bootstrap-icons.svg';
 
   // Generate a link to the contact form with the current path (including query
   // arguments) as the 'destination' query argument so that the user will return

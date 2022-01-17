@@ -37,3 +37,20 @@ Feature:
 
     When I am on the homepage
     Then I should not see the link "Some random link" in the "Footer"
+
+  Scenario Outline: A moderator can edit footer menus
+    Given I am logged in as a moderator
+    When I click "Menus" in the "Administration toolbar"
+    And I click "List links" in the "<menu>" row
+    Then I should see the heading "Edit menu <menu>"
+    But I should not see the text "This form will not be saved because the configuration active store is read-only."
+    When I press "Save"
+    Then I should see the success message "Menu <menu> has been updated."
+
+    Examples:
+      | menu                |
+      | About us            |
+      | European Commission |
+      | Follow us           |
+      | Help and support    |
+      | Social media        |

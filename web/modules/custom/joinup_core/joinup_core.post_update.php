@@ -14,3 +14,10 @@
  */
 
 declare(strict_types = 1);
+
+/**
+ * Skips warning for the swiftmailer library.
+ */
+function joinup_core_post_update_0107800(&$sandbox) {
+  \Drupal::state()->set('swiftmailer.skip_warning', 1);
+}

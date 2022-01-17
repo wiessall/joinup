@@ -4,7 +4,7 @@ Feature:
   - As a user, I should see the the 'Take a tour' menu item only on pages that are implementing tours.
   - As a moderator I can add custom menu items and disable default menu items.
 
-  Scenario Outline: Moderators are not able to admin menus except support menu.
+  Scenario Outline: Moderators are not able to admin menus except the support and footer menus.
 
     Given I am an anonymous user
     When I go to "/admin/structure/menu/manage/<menu>"

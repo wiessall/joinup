@@ -5476,28 +5476,30 @@
         },
         {
             "name": "drupal/matomo_reporting_api",
-            "version": "2.3.0",
+            "version": "2.4.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/matomo_reporting_api.git",
-                "reference": "8.x-2.3"
+                "reference": "8.x-2.4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/matomo_reporting_api-8.x-2.3.zip",
-                "reference": "8.x-2.3",
-                "shasum": "50347318cf4aa9ae898c8307707b5ce922e5c72e"
+                "url": "https://ftp.drupal.org/files/projects/matomo_reporting_api-8.x-2.4.zip",
+                "reference": "8.x-2.4",
+                "shasum": "fc888a8041df8a45776a4029db3d255bf1c026ea"
             },
             "require": {
                 "drupal/core": "^8 || ^9",
-                "drupal/matomo": "^1.7",
                 "pfrenssen/matomo-reporting-api": "^2.0"
+            },
+            "suggest": {
+                "drupal/matomo": "Reports site visitor analytics to a Matomo instance."
             },
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "8.x-2.3",
-                    "datestamp": "1633442026",
+                    "version": "8.x-2.4",
+                    "datestamp": "1641891667",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -6098,8 +6100,8 @@
             "version": "1.0-alpha7",
             "source": {
                 "type": "git",
-                "url": "https://github.com/Gizra/og.git",
-                "reference": "f41da3ffd8c81d2dcb4d5462c73053135246e6a1"
+                "url": "https://git.drupalcode.org/project/og.git",
+                "reference": "8.x-1.0-alpha7"
             },
             "dist": {
                 "type": "zip",
@@ -7866,17 +7868,17 @@
         },
         {
             "name": "drupal/sparql_entity_storage",
-            "version": "1.0.0-alpha9",
+            "version": "1.0.0-alpha10",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/sparql_entity_storage.git",
-                "reference": "8.x-1.0-alpha9"
+                "reference": "8.x-1.0-alpha10"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/sparql_entity_storage-8.x-1.0-alpha9.zip",
-                "reference": "8.x-1.0-alpha9",
-                "shasum": "c4228b2957dcfe4ff3f47d57375040f83b2b9f0d"
+                "url": "https://ftp.drupal.org/files/projects/sparql_entity_storage-8.x-1.0-alpha10.zip",
+                "reference": "8.x-1.0-alpha10",
+                "shasum": "671c29f300d84dfb1079efc2c81ad8e36870fdae"
             },
             "require": {
                 "drupal/core": "^8 || ^9",
@@ -7884,6 +7886,7 @@
                 "ml/json-ld": "^1.0"
             },
             "require-dev": {
+                "behat/mink": "~1.9.0",
                 "composer/installers": "^1.7",
                 "drupal/coder": "^8.3",
                 "drupal/core": "^8.9 || ^9.1",
@@ -7900,8 +7903,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "8.x-1.0-alpha9",
-                    "datestamp": "1618382134",
+                    "version": "8.x-1.0-alpha10",
+                    "datestamp": "1641547945",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Project has not opted into security advisory coverage!"
@@ -7925,9 +7928,8 @@
                     }
                 },
                 "patches_applied": {
-                    "Bundle classes support @see https://github.com/ec-europa/sparql_entity_storage/pull/11": "https://patch-diff.githubusercontent.com/raw/ec-europa/sparql_entity_storage/pull/11.diff",
-                    "Allow routes to filter by bundle @see https://github.com/ec-europa/sparql_entity_storage/pull/32": "https://github.com/idimopoulos/sparql_entity_storage/compare/8.x-1.x...idimopoulos:e9b6e36.diff",
-                    "Allow more information shown on a query exception @see https://www.drupal.org/project/sparql_entity_storage/issues/3239395": "https://git.drupalcode.org/project/sparql_entity_storage/-/merge_requests/1.diff"
+                    "Bundle classes support @see https://github.com/ec-europa/sparql_entity_storage/pull/11": "https://github.com/ec-europa/sparql_entity_storage/compare/8.x-1.x...12d9194.diff",
+                    "Allow routes to filter by bundle @see https://github.com/ec-europa/sparql_entity_storage/pull/32": "https://github.com/idimopoulos/sparql_entity_storage/compare/8.x-1.x...idimopoulos:e9b6e36.diff"
                 }
             },
             "autoload": {
