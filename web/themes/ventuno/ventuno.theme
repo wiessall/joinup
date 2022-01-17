@@ -19,13 +19,6 @@ use Drupal\topic\Entity\TopicInterface;
 use Drupal\topic\Entity\TopicReferencingEntityInterface;
 
 /**
- * Implements hook_preprocess().
- */
-function ventuno_preprocess(&$variables) {
-  $variables['ventuno_icon_path'] = base_path() . drupal_get_path('theme', 'ventuno') . '/assets/icons/bootstrap-icons.svg';
-}
-
-/**
  * Implements hook_theme_suggestions_HOOK_alter().
  *
  * Adds a theme suggestion for the menus rendered in the footer, so they can be
@@ -338,7 +331,7 @@ function ventuno_preprocess(&$variables) {
   /** @var \Drupal\Core\Extension\ThemeHandler $themeHandler */
   $themeHandler = \Drupal::service('theme_handler');
   $ventuno = $themeHandler->getTheme('oe_bootstrap_theme')->getPath();
-  $variables['icons_path'] = base_path() . $ventuno . '/assets/icons/bootstrap-icons.svg';
+  $variables['ventuno_icon_path'] = base_path() . $ventuno . '/assets/icons/bootstrap-icons.svg';
 }
 
 /**
