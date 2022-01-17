@@ -601,6 +601,7 @@ Feature: Global search
 
     Given I am logged in as a user with the "authenticated" role
     When I visit the search page
+    And I should not see search bar in header
     And I enter "funn" in the search bar
     And I wait for AJAX to finish
     Then I should see the following search suggestions:
@@ -636,7 +637,6 @@ Feature: Global search
 
     # Check if search autocomplete works in header.
     When I visit the collection overview
-    Then I break
     And I enter "funn" in the search bar
     And I wait for AJAX to finish
     Then I should see the following search suggestions:
