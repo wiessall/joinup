@@ -42,7 +42,7 @@ body {
       @include media-breakpoint-up(xl) {
         margin: $spacer * 1.5;
       }
-      color: $gray-500;
+      color: $gray-600;
       &.active {
         color: $black;
         border-bottom: 4px solid $black;
@@ -86,7 +86,7 @@ body {
             margin-bottom: $spacer * 1.5; // 24px
           }
           .date {
-            color: $gray-500;
+            color: $gray-600;
             font-size: $font-size-xs;
             .field--name-created, .field--name-published-at {
               padding-top: $btn-padding-y;
