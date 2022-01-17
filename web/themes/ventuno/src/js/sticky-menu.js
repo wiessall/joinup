@@ -4,24 +4,13 @@
  Drupal.behaviors.stickyMenu = {
   attach: function () {
     // Make sure Webtools is done modifying the DOM.
-    window.addEventListener('wtReady', function () {
+    window.addEventListener('wtGlobanReady', function () {
       const navbar = document.getElementById('joinup-navbar');
       if (navbar === null || navbar === undefined) {
         return
       }
       if (navbar && navbar.classList.contains('joinup-navbar--sticky')) {
-        let navbarOffsetTop = navbar.offsetTop;
-        function recalculateOffset() {
-          navbarOffsetTop = navbar.offsetTop;
-          // Remove events related to cookie banner interaction.
-          window.removeEventListener('cck_all_accepted', recalculateOffset)
-          window.removeEventListener('cck_technical_accepted', recalculateOffset)
-          window.removeEventListener('cck_banner_hidden', recalculateOffset)
-        }
-        // Add events related to cookie banner interaction.
-        window.addEventListener('cck_all_accepted', recalculateOffset)
-        window.addEventListener('cck_technical_accepted', recalculateOffset)
-        window.addEventListener('cck_banner_hidden', recalculateOffset)
+        let navbarOffsetTop = navbar.getBoundingClientRect().top;
         // Run function on user scroll.
         window.addEventListener('scroll', function() {
           if (window.pageYOffset > navbarOffsetTop) {
