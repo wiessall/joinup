@@ -180,7 +180,7 @@ Feature: My subscriptions
       | Barnard's Star |  |
       | Wolf 359       |  |
 
-  @javascript
+  @javascript @clearEntityMemoryCache
   Scenario Outline: Change the notification frequency of my digests
     Given collection:
       | title | Malicious plans |
@@ -222,10 +222,6 @@ Feature: My subscriptions
     And I accept essential cookies
     When I go to the edit form of the "Water supply" discussion
     And I press "Publish"
-    # @todo: a caching issue is causing the message to have empty fields when
-    # rendered.
-    # @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-5723
-    And the cache has been cleared
     Then the <frequency> group content subscription digest for "Auric Goldfinger" should match the following message:
       | Water supply |
 
