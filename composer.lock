@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "1c1c3d1f1c9246147c5899661d111a8a",
+    "content-hash": "85c617a7b719a10e1498a2ea4487a954",
     "packages": [
         {
             "name": "SEMICeu/adms-ap_validator",
@@ -2198,10 +2198,6 @@
                 {
                     "name": "floretan",
                     "homepage": "https://www.drupal.org/user/66163"
-                },
-                {
-                    "name": "nord102",
-                    "homepage": "https://www.drupal.org/user/3471419"
                 }
             ],
             "description": "Limit which text formats are available for each field instance.",
@@ -4051,7 +4047,6 @@
                 },
                 "patches_applied": {
                     "Facet Summary for Facet Items with a set dependency. @see https://www.drupal.org/node/2873480": "resources/patch/facet_summary_for_facet-2873480-18.patch",
-                    "Configurable dropdown child prefix. @see https://www.drupal.org/project/facets/issues/3214662": "https://git.drupalcode.org/project/facets/-/merge_requests/20.diff",
                     "SA-CONTRIB-2021-008. @see https://www.drupal.org/sa-contrib-2021-008": "https://www.drupal.org/files/issues/2021-05-17/3213582-facets-1.6-1.7.patch",
                     "Possible accessibility issue": "resources/patch/facet_accessibility-3208580.patch"
                 }
@@ -6101,7 +6096,7 @@
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/og.git",
-                "reference": "8.x-1.0-alpha7"
+                "reference": "f41da3ffd8c81d2dcb4d5462c73053135246e6a1"
             },
             "dist": {
                 "type": "zip",
@@ -7794,16 +7789,24 @@
                     "role": "Maintainer"
                 },
                 {
+                    "name": "chrisjlee",
+                    "homepage": "https://www.drupal.org/user/760600"
+                },
+                {
+                    "name": "drywall",
+                    "homepage": "https://www.drupal.org/user/192591"
+                },
+                {
+                    "name": "jsenich",
+                    "homepage": "https://www.drupal.org/user/58871"
+                },
+                {
+                    "name": "markie",
+                    "homepage": "https://www.drupal.org/user/206687"
+                },
+                {
                     "name": "newsignature",
                     "homepage": "https://www.drupal.org/user/765518"
-                },
-                {
-                    "name": "ultimike",
-                    "homepage": "https://www.drupal.org/user/51132"
-                },
-                {
-                    "name": "volkswagenchick",
-                    "homepage": "https://www.drupal.org/user/3332522"
                 }
             ],
             "description": "Provides a more robust alternative to 'summary or trimmed' textfield format.",
@@ -9889,7 +9892,7 @@
                 "reference": "master"
             },
             "type": "drupal-theme-library",
-            "time": "2018-10-31T20:10:45+00:00"
+            "time": "2021-06-30T06:04:10+00:00"
         },
         {
             "name": "laminas/laminas-diactoros",
@@ -12379,7 +12382,7 @@
                 "reference": "master"
             },
             "type": "library",
-            "time": "2020-11-25T21:59:37+00:00"
+            "time": "2021-11-19T15:07:33+00:00"
         },
         {
             "name": "stack/builder",
@@ -22003,6 +22006,7 @@
         "ext-pdo": "*"
     },
     "platform-dev": {
+        "ext-fileinfo": "*",
         "ext-iconv": "*",
         "ext-libxml": "*"
     },
