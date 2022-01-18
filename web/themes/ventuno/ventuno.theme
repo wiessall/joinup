@@ -68,6 +68,14 @@ function ventuno_preprocess_rdf_entity(&$variables) {
 }
 
 /**
+ * Implements hook_preprocess_HOOK() for html.html.twig.
+ */
+function ventuno_preprocess_html(&$variables) {
+  // Expose the base path so we can use it to generate favicon URIs.
+  $variables['base_path'] = base_path();
+}
+
+/**
  * Implements hook_preprocess_page().
  */
 function ventuno_preprocess_page(&$variables) {
@@ -417,8 +425,8 @@ function _ventuno_get_default_icon_render_array(string $entity_type_id, string $
 function ventuno_preprocess(&$variables) {
   /** @var \Drupal\Core\Extension\ThemeHandler $themeHandler */
   $themeHandler = \Drupal::service('theme_handler');
-  $ventuno = $themeHandler->getTheme('oe_bootstrap_theme')->getPath();
-  $variables['icons_path'] = base_path() . $ventuno . '/assets/icons/bootstrap-icons.svg';
+  $ventuno = $themeHandler->getTheme('ventuno')->getPath();
+  $variables['ventuno_icon_path'] = base_path() . $ventuno . '/assets/icons/bootstrap-icons.svg';
 }
 
 /**

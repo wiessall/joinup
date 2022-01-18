@@ -10,6 +10,7 @@ use Drupal\Core\Url;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\DrupalExtension\TagTrait;
 use Drupal\joinup\Traits\BrowserCapabilityDetectionTrait;
+use Drupal\joinup\Traits\CacheInvalidationTrait;
 use Drupal\joinup\Traits\EntityTrait;
 use Drupal\joinup\Traits\MailCollectorTrait;
 use Drupal\joinup\Traits\MaterialDesignTrait;
@@ -33,6 +34,7 @@ use PHPUnit\Framework\Assert;
 class JoinupSubscriptionContext extends RawDrupalContext {
 
   use BrowserCapabilityDetectionTrait;
+  use CacheInvalidationTrait;
   use EntityTrait;
   use MaterialDesignTrait;
   use MailCollectorTrait;
@@ -439,6 +441,10 @@ class JoinupSubscriptionContext extends RawDrupalContext {
    * This is based on \MessageDigestSubContext::assertDigestContains() and
    * adapted for the group content subscription digest.
    *
+   * If a scenario shows content in digests which has been created by Behat but
+   * subsequently been manipulated in the browser by a logged in user, then tag
+   * the scenario with `@clearEntityMemoryCache`.
+   *
    * Example table:
    * @codingStandardsIgnoreStart
    *   | The content titled "My content" has been deleted       |
@@ -468,6 +474,13 @@ class JoinupSubscriptionContext extends RawDrupalContext {
    */
   public function assertDigestContains(TableNode $table, string $interval, string $username, string $scope, $label = NULL, $entity_type = NULL): void {
     Assert::assertContains($scope, ['match', 'include'], sprintf('Unknown scope %s.', $scope));
+
+    // If a scenario shows content in digests which has been created by Behat
+    // but subsequently been manipulated by a logged in user in the browser,
+    // then the memory cache will be out of sync.
+    if ($this->hasTag('clearEntityMemoryCache')) {
+      $this->invalidateEntityMemoryCache();
+    }
 
     // Check that the notifier for the requested interval includes the view
     // mode that contains the message content.

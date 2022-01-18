@@ -17,13 +17,6 @@ Feature: Homepage
       | Guided tour  |
       | FAQ          |
 
-  Scenario: Only specific social network links are available in the footer.
-    When I am on the homepage
-    Then I should see the link "LinkedIn" in the Footer region
-    And the "LinkedIn" link should point to "https://www.linkedin.com/groups/2600644/"
-    And I should see the link "Twitter" in the Footer region
-    But I should not see the link "Facebook" in the Footer region
-
   @terms
   Scenario: Latest news is shown on the homepage
     Given collection:
@@ -316,3 +309,7 @@ Feature: Homepage
     And I click "See more events"
     Then I should be on the advanced search page
     And I should see the following facet summary "Events"
+
+  Scenario: A favicon is shown in the browser tab
+    Given I am on the homepage
+    Then I should see a favicon
