@@ -23,6 +23,11 @@ navbar:
   js:
     assets/js/sticky-menu.js: { minified: true, attributes: { defer: true } }
 
+header-search-bar:
+  css:
+    theme:
+      assets/css/header-search-bar.css: {}
+
 footer:
   css:
     theme:
