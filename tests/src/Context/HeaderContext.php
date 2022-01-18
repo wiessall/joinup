@@ -109,7 +109,7 @@ class HeaderContext extends RawDrupalContext {
   public function assertHamburgerMenuIconPresent(string $icon): void {
     assert(array_key_exists($icon, self::ICON_ALIASES), 'Unknown icon ' . $icon);
 
-    $icon_uri = base_path() . drupal_get_path('theme', 'oe_bootstrap_theme') . '/assets/icons/bootstrap-icons.svg#' . self::ICON_ALIASES[$icon];
+    $icon_uri = base_path() . drupal_get_path('theme', 'ventuno') . '/assets/icons/bootstrap-icons.svg#' . self::ICON_ALIASES[$icon];
     $icon_selector = 'nav.joinup-navbar .nav-item svg > use';
     foreach ($this->getSession()->getPage()->findAll('css', $icon_selector) as $icon) {
       if ($icon->getAttribute('xlink:href') === $icon_uri) {
