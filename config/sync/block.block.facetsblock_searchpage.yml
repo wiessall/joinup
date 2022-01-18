@@ -26,6 +26,7 @@ settings:
     'facet_block:type': 'facet_block:type'
     'facet_block:spatial_coverage': 'facet_block:spatial_coverage'
     'facet_block:group': 'facet_block:group'
+    'facet_block:creation_date': 'facet_block:creation_date'
     'facets_summary_block:summary': '0'
     'facet_block:collection_topic': '0'
     'facet_block:collection_type': '0'
