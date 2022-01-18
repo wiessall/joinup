@@ -7,6 +7,9 @@
       flex-wrap: wrap;
       align-items: center;
       justify-content: space-between;
+      @include media-breakpoint-up(lg) {
+        margin-top: $spacer * 2; // 32px
+      }
       .form-item-keys {
         flex-basis: 100%;
         margin-bottom: $spacer !important;

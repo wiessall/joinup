@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c46befc574ddfb61485b44fc701e4fce",
+    "content-hash": "d2f51ffafd9f12aa6a6720492a903a76",
     "packages": [
         {
             "name": "SEMICeu/adms-ap_validator",
@@ -2198,10 +2198,6 @@
                 {
                     "name": "floretan",
                     "homepage": "https://www.drupal.org/user/66163"
-                },
-                {
-                    "name": "nord102",
-                    "homepage": "https://www.drupal.org/user/3471419"
                 }
             ],
             "description": "Limit which text formats are available for each field instance.",
@@ -4140,6 +4136,65 @@
             }
         },
         {
+            "name": "drupal/facets_date_range",
+            "version": "1.0.0-beta1",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/facets_date_range.git",
+                "reference": "1.0.0-beta1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/facets_date_range-1.0.0-beta1.zip",
+                "reference": "1.0.0-beta1",
+                "shasum": "77e41acb312616da409ca20a15a4447e989fedc5"
+            },
+            "require": {
+                "drupal/core": "^8.9 || ^9.2 || ^10",
+                "drupal/facets": "^1.6 || ^2",
+                "php": "^7.4 || ^8"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "1.0.0-beta1",
+                    "datestamp": "1641988086",
+                    "security-coverage": {
+                        "status": "not-covered",
+                        "message": "Project has not opted into security advisory coverage!"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0+"
+            ],
+            "authors": [
+                {
+                    "name": "Alexandre Dias",
+                    "homepage": "https://www.drupal.org/u/saidatom"
+                },
+                {
+                    "name": "Claudiu Cristea",
+                    "homepage": "https://www.drupal.org/u/claudiu.cristea"
+                },
+                {
+                    "name": "Ilias Dimopoulos",
+                    "homepage": "https://www.drupal.org/u/idimopoulos-0"
+                },
+                {
+                    "name": "Pieter Frenssen",
+                    "homepage": "https://www.drupal.org/u/pfrenssen"
+                }
+            ],
+            "description": "Provides a Date Range widget in facets.",
+            "homepage": "https://drupal.org/project/facets_date_range",
+            "support": {
+                "source": "https://git.drupalcode.org/project/facets_date_range",
+                "issues": "https://drupal.org/project/issues/facets_date_range"
+            }
+        },
+        {
             "name": "drupal/field_delimiter",
             "version": "1.1.0",
             "source": {
@@ -6038,7 +6093,7 @@
         },
         {
             "name": "drupal/og",
-            "version": "1.0-alpha7",
+            "version": "1.0.0-alpha7",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/og.git",
@@ -6046,9 +6101,9 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Gizra/og/zipball/f41da3ffd8c81d2dcb4d5462c73053135246e6a1",
-                "reference": "f41da3ffd8c81d2dcb4d5462c73053135246e6a1",
-                "shasum": ""
+                "url": "https://ftp.drupal.org/files/projects/og-8.x-1.0-alpha7.zip",
+                "reference": "8.x-1.0-alpha7",
+                "shasum": "7c2036884946afa376e8fd848829a0f8ff59a653"
             },
             "require": {
                 "drupal/core": "^8.8 || ^9.0",
@@ -6060,6 +6115,17 @@
                 "slevomat/coding-standard": "~6.0"
             },
             "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "8.x-1.0-alpha7",
+                    "datestamp": "1633634599",
+                    "security-coverage": {
+                        "status": "not-covered",
+                        "message": "Alpha releases are not covered by Drupal security advisories."
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
             "license": [
                 "GPL-2.0-or-later"
             ],
@@ -6075,17 +6141,56 @@
                 {
                     "name": "pfrenssen",
                     "homepage": "https://www.drupal.org/u/pfrenssen"
+                },
+                {
+                    "name": "Zen",
+                    "homepage": "https://www.drupal.org/user/21209"
+                },
+                {
+                    "name": "alesr",
+                    "homepage": "https://www.drupal.org/user/150704"
+                },
+                {
+                    "name": "amitaibu",
+                    "homepage": "https://www.drupal.org/user/57511"
+                },
+                {
+                    "name": "dww",
+                    "homepage": "https://www.drupal.org/user/46549"
+                },
+                {
+                    "name": "joelpittet",
+                    "homepage": "https://www.drupal.org/user/160302"
+                },
+                {
+                    "name": "merlinofchaos",
+                    "homepage": "https://www.drupal.org/user/26979"
+                },
+                {
+                    "name": "moshe weitzman",
+                    "homepage": "https://www.drupal.org/user/23"
+                },
+                {
+                    "name": "mpp",
+                    "homepage": "https://www.drupal.org/user/359881"
+                },
+                {
+                    "name": "pfrenssen",
+                    "homepage": "https://www.drupal.org/user/382067"
+                },
+                {
+                    "name": "sethcohn",
+                    "homepage": "https://www.drupal.org/user/14944"
                 }
             ],
             "description": "API to allow associating content with groups.",
             "homepage": "https://drupal.org/project/og",
             "support": {
+                "source": "https://git.drupalcode.org/project/og",
                 "issues": "https://drupal.org/project/issues/og",
                 "irc": "irc://irc.freenode.org/drupal-og",
-                "slack": "https://drupal.slack.com/messages/CELR48EA0",
-                "source": "https://git.drupalcode.org/project/og"
-            },
-            "time": "2021-09-30T16:34:49+00:00"
+                "slack": "https://drupal.slack.com/messages/CELR48EA0"
+            }
         },
         {
             "name": "drupal/og_menu",
@@ -7734,16 +7839,24 @@
                     "role": "Maintainer"
                 },
                 {
+                    "name": "chrisjlee",
+                    "homepage": "https://www.drupal.org/user/760600"
+                },
+                {
+                    "name": "drywall",
+                    "homepage": "https://www.drupal.org/user/192591"
+                },
+                {
+                    "name": "jsenich",
+                    "homepage": "https://www.drupal.org/user/58871"
+                },
+                {
+                    "name": "markie",
+                    "homepage": "https://www.drupal.org/user/206687"
+                },
+                {
                     "name": "newsignature",
                     "homepage": "https://www.drupal.org/user/765518"
-                },
-                {
-                    "name": "ultimike",
-                    "homepage": "https://www.drupal.org/user/51132"
-                },
-                {
-                    "name": "volkswagenchick",
-                    "homepage": "https://www.drupal.org/user/3332522"
                 }
             ],
             "description": "Provides a more robust alternative to 'summary or trimmed' textfield format.",
@@ -9829,7 +9942,7 @@
                 "reference": "master"
             },
             "type": "drupal-theme-library",
-            "time": "2018-10-31T20:10:45+00:00"
+            "time": "2021-06-30T06:04:10+00:00"
         },
         {
             "name": "laminas/laminas-diactoros",
@@ -12319,7 +12432,7 @@
                 "reference": "master"
             },
             "type": "library",
-            "time": "2020-11-25T21:59:37+00:00"
+            "time": "2021-07-08T16:47:58+00:00"
         },
         {
             "name": "stack/builder",
@@ -21916,6 +22029,7 @@
         "dkarv/mdl-chip-input": 20,
         "drupal/default_content": 15,
         "drupal/dropsolid_purge": 10,
+        "drupal/facets_date_range": 10,
         "drupal/menu_link_destination": 20,
         "drupal/page_manager": 10,
         "drupal/schema_digital_document": 20,
@@ -21942,6 +22056,7 @@
         "ext-pdo": "*"
     },
     "platform-dev": {
+        "ext-fileinfo": "*",
         "ext-iconv": "*",
         "ext-libxml": "*"
     },
