@@ -305,6 +305,7 @@
                 "Dynamic page cache prevents redirection @see https://www.drupal.org/project/entity_legal/issues/3251128": "https://www.drupal.org/files/issues/2021-11-24/3251128-2.patch"
             },
             "drupal/facets": {
+                "Facet Summary for Facet Items with a set dependency. @see https://www.drupal.org/node/2873480": "resources/patch/facet_summary_for_facet-2873480-18.patch",
                 "SA-CONTRIB-2021-008. @see https://www.drupal.org/sa-contrib-2021-008": "https://www.drupal.org/files/issues/2021-05-17/3213582-facets-1.6-1.7.patch",
                 "Possible accessibility issue": "resources/patch/facet_accessibility-3208580.patch"
             },
