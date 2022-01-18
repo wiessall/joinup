@@ -126,8 +126,8 @@ Feature: Global search
     When I check the "Luxembourg (2)" checkbox from the "spatial coverage" facet
     Then the "Luxembourg" content checkbox item should be selected
     And I should see the following search header in the correct order:
-      | SEARCH RESULTS (2)  |
-      | Sort by:            |
+      | SEARCH RESULTS (2) |
+      | Sort by:           |
     And I should see the text "SEARCH RESULTS (2)"
     # The countries are still sorted alphabetically even though the Luxembourg value is selected and has more results.
     And the "spatial coverage" checkbox facet should allow selecting the following values "Greece (1), Luxembourg (2)"
@@ -185,8 +185,8 @@ Feature: Global search
     # "Alpha" is used in all the rdf entities titles.
     When I enter "Alpha" in the search bar and press enter
     And I should see the following search header in the correct order:
-      | SEARCH RESULTS (5)  |
-      | Sort by:            |
+      | SEARCH RESULTS (5) |
+      | Sort by:           |
     Then I should see the text "SEARCH RESULTS (5)"
     And the page should show the tiles "Collection alpha, Solution alpha, Release Alpha, Licence Alpha, Video alpha"
 
@@ -536,23 +536,23 @@ Feature: Global search
   @javascript
   Scenario: Anonymous user can find facets summary
     Given the following collection:
-      | title            | Radio cooking collection     |
-      | logo             | logo.png                     |
-      | moderation       | no                           |
-      | topic            | Demography                   |
-      | spatial coverage | Belgium                      |
-      | state            | validated                    |
+      | title            | Radio cooking collection |
+      | logo             | logo.png                 |
+      | moderation       | no                       |
+      | topic            | Demography               |
+      | spatial coverage | Belgium                  |
+      | state            | validated                |
     And the following solutions:
-      | title          | collection                   | description                                                                                                                          | topic      | spatial coverage | state     |
-      | Spheres        | Radio cooking collection     | Spherification is the culinary process of shaping a liquid into spheres                                                              | Demography | European Union   | validated |
-      | Movistar       | Radio cooking collection     | "The use of foam in cuisine has been used in many forms in the history of cooking:whipped cream, meringue, and mousse are all foams" |            |                  | validated |
+      | title    | collection               | description                                                                                                                          | topic      | spatial coverage | state     |
+      | Spheres  | Radio cooking collection | Spherification is the culinary process of shaping a liquid into spheres                                                              | Demography | European Union   | validated |
+      | Movistar | Radio cooking collection | "The use of foam in cuisine has been used in many forms in the history of cooking:whipped cream, meringue, and mousse are all foams" |            |                  | validated |
     And news content:
-      | title                 | body             | collection                   | topic                   | spatial coverage | state     |
-      | El Cabo da Roca       | The best in town | Radio cooking collection     | Statistics and Analysis | Luxembourg       | validated |
-      | Funny news 1          | Dummy body       | Radio cooking collection     | E-inclusion             | Luxembourg       | validated |
-      | Funny news 2          | Dummy body       | Radio cooking collection     | E-inclusion             | Luxembourg       | validated |
-      | Funny news 3          | Dummy body       | Radio cooking collection     | E-inclusion             | Luxembourg       | validated |
-      | Funny news 4          | Dummy body       | Radio cooking collection     | E-inclusion             | Luxembourg       | validated |
+      | title           | body             | collection               | topic                   | spatial coverage | state     |
+      | El Cabo da Roca | The best in town | Radio cooking collection | Statistics and Analysis | Luxembourg       | validated |
+      | Funny news 1    | Dummy body       | Radio cooking collection | E-inclusion             | Luxembourg       | validated |
+      | Funny news 2    | Dummy body       | Radio cooking collection | E-inclusion             | Luxembourg       | validated |
+      | Funny news 3    | Dummy body       | Radio cooking collection | E-inclusion             | Luxembourg       | validated |
+      | Funny news 4    | Dummy body       | Radio cooking collection | E-inclusion             | Luxembourg       | validated |
 
     Given I am logged in as a user with the "authenticated" role
     When I visit the search page
@@ -581,23 +581,23 @@ Feature: Global search
   @javascript
   Scenario: Anonymous user can find facets summary
     Given the following collection:
-      | title            | Radio cooking collection     |
-      | logo             | logo.png                     |
-      | moderation       | no                           |
-      | topic            | Demography                   |
-      | spatial coverage | Belgium                      |
-      | state            | validated                    |
+      | title            | Radio cooking collection |
+      | logo             | logo.png                 |
+      | moderation       | no                       |
+      | topic            | Demography               |
+      | spatial coverage | Belgium                  |
+      | state            | validated                |
     And the following solutions:
-      | title          | collection                   | description                                                                                                                          | topic      | spatial coverage | state     |
-      | Spheres        | Radio cooking collection     | Spherification is the culinary process of shaping a liquid into spheres                                                              | Demography | European Union   | validated |
-      | Movistar       | Radio cooking collection     | "The use of foam in cuisine has been used in many forms in the history of cooking:whipped cream, meringue, and mousse are all foams" |            |                  | validated |
+      | title    | collection               | description                                                                                                                          | topic      | spatial coverage | state     |
+      | Spheres  | Radio cooking collection | Spherification is the culinary process of shaping a liquid into spheres                                                              | Demography | European Union   | validated |
+      | Movistar | Radio cooking collection | "The use of foam in cuisine has been used in many forms in the history of cooking:whipped cream, meringue, and mousse are all foams" |            |                  | validated |
     And news content:
-      | title                 | body             | collection                   | topic                   | spatial coverage | state     |
-      | El Cabo da Roca       | The best in town | Radio cooking collection     | Statistics and Analysis | Luxembourg       | validated |
-      | Funny news 1          | Dummy body       | Radio cooking collection     | E-inclusion             | Luxembourg       | validated |
-      | Funny news 2          | Dummy body       | Radio cooking collection     | E-inclusion             | Luxembourg       | validated |
-      | Funny news 3          | Dummy body       | Radio cooking collection     | E-inclusion             | Luxembourg       | validated |
-      | Funny news 4          | Dummy body       | Radio cooking collection     | E-inclusion             | Luxembourg       | validated |
+      | title           | body             | collection               | topic                   | spatial coverage | state     |
+      | El Cabo da Roca | The best in town | Radio cooking collection | Statistics and Analysis | Luxembourg       | validated |
+      | Funny news 1    | Dummy body       | Radio cooking collection | E-inclusion             | Luxembourg       | validated |
+      | Funny news 2    | Dummy body       | Radio cooking collection | E-inclusion             | Luxembourg       | validated |
+      | Funny news 3    | Dummy body       | Radio cooking collection | E-inclusion             | Luxembourg       | validated |
+      | Funny news 4    | Dummy body       | Radio cooking collection | E-inclusion             | Luxembourg       | validated |
 
     Given I am logged in as a user with the "authenticated" role
     When I visit the search page
@@ -643,8 +643,8 @@ Feature: Global search
       | funni |
       | funny |
 
-  @terms @javascript
-  Scenario: Show first three search results as featured
+  @terms
+  Scenario: Filter on date
     Given collection:
       | title | Mice in space |
       | state | validated     |
@@ -655,21 +655,35 @@ Feature: Global search
       | title           | collection    | topic                    | state     | logo        | body                                                                                                                                                                                  |
       | Stay at the ISS | Mice in space | EU and European Policies | validated | charles.jpg | Two groups of mice (six per group) were housed aboard the International Space Station for 35 days. One group was subjected to artificial gravity (1 g) and the other to microgravity. |
     And news content:
-      | title                 | body                                       | collection     | topic                   | spatial coverage | state     | logo        |
-      | Muscle atrophy        | Researchers from the University of Tsukuba | Mice in space  | Finance in EU           | Luxembourg       | validated | blaise.jpg  |
-      | El Cabo da Roca       | The best in town                           | Mice in space  | Statistics and Analysis | Luxembourg       | validated | charles.jpg |
-      | Funny news 1          | Dummy body                                 | Mice in space  | HR                      | Luxembourg       | validated | ada.png     |
-      | Funny news 2          | Dummy body                                 | Mice in space  | E-inclusion             | Luxembourg       | validated | alan.jpg    |
-      | Funny news 3          | Dummy body                                 | Mice in space  | E-inclusion             | Luxembourg       | validated | charles.jpg |
-      | Funny news 4          | Dummy body                                 | Mice in space  | HR                      | Luxembourg       | validated | ada.png     |
-      | Funny news 5          | Dummy body                                 | Mice in space  | HR                      | Luxembourg       | validated | ada.png     |
-      | Dummy news 1          | Dummy body                                 | Mice in space  | Statistics and Analysis | Luxembourg       | validated | charles.jpg |
-      | Dummy news 2          | Dummy body                                 | Mice in space  | E-inclusion             | Luxembourg       | validated | alan.jpg    |
-      | Dummy news 3          | Dummy body                                 | Mice in space  | Statistics and Analysis | Luxembourg       | validated | ada.png     |
-      | Dummy news 4          | Dummy body                                 | Mice in space  | E-inclusion             | Luxembourg       | validated | charles.jpg |
+      | title           | body                                       | collection    | topic                   | spatial coverage | state     | logo        | created    | changed    |
+      | Muscle atrophy  | Researchers from the University of Tsukuba | Mice in space | Finance in EU           | Luxembourg       | validated | blaise.jpg  | 01/01/2019 | 01/01/2019 |
+      | El Cabo da Roca | The best in town                           | Mice in space | Statistics and Analysis | Luxembourg       | validated | charles.jpg | 01/12/2020 | 01/12/2020 |
+      | Funny news 1    | Dummy body                                 | Mice in space | HR                      | Luxembourg       | validated | ada.png     | 05/01/2019 | 05/01/2019 |
+      | Funny news 2    | Dummy body                                 | Mice in space | E-inclusion             | Luxembourg       | validated | alan.jpg    | 06/21/2019 | 06/21/2019 |
+      | Funny news 3    | Dummy body                                 | Mice in space | E-inclusion             | Luxembourg       | validated | charles.jpg | 12/31/2021 | 12/31/2021 |
+      | Funny news 4    | Dummy body                                 | Mice in space | HR                      | Luxembourg       | validated | ada.png     | 06/25/2020 | 06/25/2020 |
+      | Funny news 5    | Dummy body                                 | Mice in space | HR                      | Luxembourg       | validated | ada.png     | 01/01/2021 | 01/01/2021 |
+      | Dummy news 1    | Dummy body                                 | Mice in space | Statistics and Analysis | Luxembourg       | validated | charles.jpg | 09/24/2019 | 09/24/2019 |
+      | Dummy news 2    | Dummy body                                 | Mice in space | E-inclusion             | Luxembourg       | validated | alan.jpg    | 01/18/2021 | 01/18/2021 |
+      | Dummy news 3    | Dummy body                                 | Mice in space | Statistics and Analysis | Luxembourg       | validated | ada.png     | 08/01/2019 | 08/01/2019 |
+      | Dummy news 4    | Dummy body                                 | Mice in space | E-inclusion             | Luxembourg       | validated | charles.jpg | 09/18/2019 | 09/18/2019 |
 
     When I visit the search page
     Then I should see the 3 tiles with image
 
     Then I go to "/search?sort_by=relevance&page=1"
     And I should see the 0 tiles with image
+
+    # Filter content from 01-01-2020 to 30-06-2020.
+    # Only "El Cabo da Roca" and "Funny news 4" should appear.
+    Then I go to "/search?f[0]=creation_date:(min:1577880000,max:1593518400)"
+    And I should see the text "SEARCH RESULTS (2)"
+
+    Then I go to "/search?f[0]=creation_date:(min:1577836800,max:)"
+    And I should see the text "SEARCH RESULTS (8)"
+
+    Then I go to "/search?f[0]=creation_date:(min:,max:1609113600)"
+    And I should see the text "SEARCH RESULTS (8)"
+
+    Then I go to "/search?f[0]=creation_date:(min:,max:)"
+    And I should see the text "SEARCH RESULTS (14)"

@@ -19,6 +19,7 @@
       }
     }
     .offcanvas-title {
+      font-weight: $font-weight-normal;
       font-size: $font-size-lg; // 20px
       @include media-breakpoint-up(lg) {
         font-size: $font-size-lg * .9; // 18px
@@ -62,7 +63,8 @@
       transform: rotate(180deg);
     }
   }
-  .item-list__checkbox {
+  .item-list__checkbox,
+  .item-list__date_range {
     padding-left: 0;
     margin-bottom: 0;
     list-style: none;
@@ -101,5 +103,16 @@
   }
   .facet-item label {
     display: inline;
+  }
+  .facets-widget-date_range {
+    h3 {
+      font-size: $font-size-base; // 16px
+      font-weight: $font-weight-normal;
+      text-transform: uppercase;
+      margin-bottom: 1rem;
+    }
+    li {
+      margin-bottom: $spacer * 1.5; // 24px
+    }
   }
 }
