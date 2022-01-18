@@ -24,6 +24,7 @@ Feature: Submit the contact form
       | Legal issue                    |
       | Inappropriate content          |
       | EU Login question              |
+      | Interoperable Europe question  |
       | Other                          |
     # The honeypot field that needs to be empty on submission.
     Then the following fields should be present "user_homepage"
