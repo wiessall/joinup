@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "0eb5059377fbb46e47df7d1575c92d42",
+    "content-hash": "2f2a7c9f82a29be9c93faf95ce039b42",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -7249,7 +7249,7 @@
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/sparql_entity_storage.git",
-                "reference": "39e6fb0d20286d82f0444dc6c3b944c8fd98b000"
+                "reference": "827695812205b30fbf3ebe538956dd03f567b556"
             },
             "require": {
                 "drupal/core": "^9.3 || ^10",
