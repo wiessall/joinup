@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "2f2a7c9f82a29be9c93faf95ce039b42",
+    "content-hash": "f2447ad753400d102a7b8a1ad3d2a160",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -7245,11 +7245,17 @@
         },
         {
             "name": "drupal/sparql_entity_storage",
-            "version": "dev-2.x",
+            "version": "2.0.0-alpha1",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/sparql_entity_storage.git",
-                "reference": "827695812205b30fbf3ebe538956dd03f567b556"
+                "reference": "2.0.0-alpha1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/sparql_entity_storage-2.0.0-alpha1.zip",
+                "reference": "2.0.0-alpha1",
+                "shasum": "9286d6147d55099bf6594c8241d2418906ea704b"
             },
             "require": {
                 "drupal/core": "^9.3 || ^10",
@@ -7262,12 +7268,9 @@
             },
             "type": "drupal-module",
             "extra": {
-                "branch-alias": {
-                    "dev-2.x": "2.x-dev"
-                },
                 "drupal": {
-                    "version": "2.x-dev",
-                    "datestamp": "1642511589",
+                    "version": "2.0.0-alpha1",
+                    "datestamp": "1642512501",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Project has not opted into security advisory coverage!"
@@ -22466,7 +22469,7 @@
     "aliases": [
         {
             "package": "drupal/sparql_entity_storage",
-            "version": "dev-2.x",
+            "version": "2.0.0.0-alpha1",
             "alias": "1.0-alpha11",
             "alias_normalized": "1.0.0.0-alpha11"
         },
@@ -22494,7 +22497,6 @@
         "drupal/schema_digital_document": 20,
         "drupal/schema_social_media_posting": 20,
         "drupal/site_verify": 20,
-        "drupal/sparql_entity_storage": 20,
         "drupal/subpathauto": 20,
         "drupal/views_block_area": 10,
         "ec-europa/joinup-tallinn-dashboard": 20,
