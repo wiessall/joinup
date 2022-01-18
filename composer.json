@@ -340,7 +340,8 @@
                 "Provide computed properties that return the publication date or the created/updated date @see https://www.drupal.org/project/publication_date/issues/3066317": "https://www.drupal.org/files/issues/2019-07-07/3066317-3.patch"
             },
             "drupal/rdf_entity": {
-                "Allow bundle label plural variants @see https://github.com/ec-europa/rdf_entity/pull/12": "https://github.com/ec-europa/rdf_entity/compare/8.x-1.x...ea8f6af001fca732e89a4be0e29643953f49a88f.diff"
+                "Allow bundle label plural variants @see https://github.com/ec-europa/rdf_entity/pull/12": "https://github.com/ec-europa/rdf_entity/compare/8.x-1.x...ea8f6af001fca732e89a4be0e29643953f49a88f.diff",
+                "Support Sparql Entity Storage 2.x @see https://www.drupal.org/project/rdf_entity/issues/3259145": "https://git.drupalcode.org/project/rdf_entity/-/merge_requests/1.diff"
             },
             "drupal/search_api": {
                 "item_id column is too short. @see https://www.drupal.org/node/2829696": "https://www.drupal.org/files/issues/2021-11-02/2829696-12.patch"
@@ -353,6 +354,9 @@
             },
             "drupal/social_media_links": {
                 "Missing config schema for field, widget and formatter @see https://www.drupal.org/node/2898680": "https://git.drupalcode.org/project/social_media_links/-/merge_requests/4.diff"
+            },
+            "drupal/sparql_entity_storage": {
+                "Error due to nullable $entity_id_plugin @see https://www.drupal.org/project/sparql_entity_storage/issues/3259160": "https://www.drupal.org/files/issues/2022-01-18/3259160-2.patch"
             },
             "drupal/subpathauto": {
                 "Subpaths with redirect not resolved @see https://www.drupal.org/project/subpathauto/issues/3175637": "https://git.drupalcode.org/project/subpathauto/-/merge_requests/1/diffs.diff"
