@@ -9,9 +9,14 @@ dependencies:
     - field.field.node.custom_page.field_paragraphs_body
     - field.field.node.custom_page.og_audience
     - node.type.custom_page
+    - responsive_image.styles.teaser
   module:
+    - entity_reference_revisions
+    - field_delimiter
+    - field_formatter_range
     - field_group
     - layout_builder
+    - responsive_image
     - template_suggestion
     - user
 third_party_settings:
@@ -43,9 +48,37 @@ targetEntityType: node
 bundle: custom_page
 mode: search_result_featured
 content:
+  field_custom_page_logo:
+    type: responsive_image
+    weight: 2
+    region: content
+    label: hidden
+    settings:
+      responsive_image_style: teaser
+      image_link: ''
+    third_party_settings:
+      template_suggestion:
+        template_suggestion: ''
+  field_paragraphs_body:
+    type: entity_reference_revisions_entity_view
+    weight: 0
+    region: content
+    label: hidden
+    settings:
+      view_mode: preview
+      link: ''
+    third_party_settings:
+      field_delimiter:
+        delimiter: ''
+      field_formatter_range:
+        order: 0
+        limit: 1
+        offset: 0
+      template_suggestion:
+        template_suggestion: ''
   published_at:
     type: timestamp
-    weight: 0
+    weight: 1
     region: content
     label: hidden
     settings:
@@ -57,8 +90,6 @@ content:
         template_suggestion: ''
 hidden:
   field_attachment: true
-  field_custom_page_logo: true
-  field_paragraphs_body: true
   langcode: true
   links: true
   og_audience: true

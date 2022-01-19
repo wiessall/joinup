@@ -25,11 +25,13 @@ dependencies:
     - field.field.rdf_entity.asset_release.field_status
     - field.field.rdf_entity.asset_release.field_topic
     - rdf_entity.rdfentity.asset_release
+    - responsive_image.styles.teaser
   module:
     - field_delimiter
     - field_formatter_range
     - joinup_html_stripper
     - layout_builder
+    - responsive_image
     - template_suggestion
     - user
 third_party_settings:
@@ -115,6 +117,17 @@ content:
     third_party_settings: {  }
     type: link
     region: content
+  field_isr_logo:
+    type: responsive_image
+    weight: 1
+    region: content
+    label: hidden
+    settings:
+      responsive_image_style: teaser
+      image_link: ''
+    third_party_settings:
+      template_suggestion:
+        template_suggestion: ''
   field_isr_metrics_page:
     weight: 18
     label: above
@@ -207,7 +220,7 @@ content:
     region: content
     label: hidden
     settings:
-      link: false
+      link: true
     third_party_settings:
       field_delimiter:
         delimiter: ''
@@ -236,7 +249,6 @@ hidden:
   field_isr_included_asset: true
   field_isr_is_version_of: true
   field_isr_language: true
-  field_isr_logo: true
   field_isr_owner: true
   field_isr_related_solutions: true
   field_isr_release_number: true
