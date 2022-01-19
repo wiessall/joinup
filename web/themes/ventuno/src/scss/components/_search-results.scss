@@ -49,6 +49,10 @@
     }
     color: $primary;
   }
+  [class$="logo"] {
+    display: flex;
+    justify-content: center;
+  }
 }
 .block-facets-summary {
   margin-top: $spacer * 2;

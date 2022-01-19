@@ -14,9 +14,11 @@ dependencies:
     - field.field.node.discussion.field_topic
     - field.field.node.discussion.og_audience
     - node.type.discussion
+    - responsive_image.styles.teaser
   module:
     - joinup_html_stripper
     - layout_builder
+    - responsive_image
     - template_suggestion
     - user
 third_party_settings:
@@ -40,6 +42,17 @@ content:
         template_suggestion: ''
     type: joinup_html_stripper_stripped
     region: content
+  field_logo:
+    type: responsive_image
+    weight: 1
+    region: content
+    label: hidden
+    settings:
+      responsive_image_style: teaser
+      image_link: ''
+    third_party_settings:
+      template_suggestion:
+        template_suggestion: ''
   field_topic:
     weight: 0
     label: hidden

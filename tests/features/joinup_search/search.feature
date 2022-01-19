@@ -16,12 +16,12 @@ Feature: Global search
       | Spherification | Molecular cooking collection | Spherification is the culinary process of shaping a liquid into spheres                                                              | Demography | European Union   | validated |
       | Foam           | Molecular cooking collection | "The use of foam in cuisine has been used in many forms in the history of cooking:whipped cream, meringue, and mousse are all foams" |            |                  | validated |
     And news content:
-      | title                 | body             | collection                   | topic                   | spatial coverage | state     |
-      | El Celler de Can Roca | The best in town | Molecular cooking collection | Statistics and Analysis | Luxembourg       | validated |
-      | Dummy news 1          | Dummy body       | Molecular cooking collection | E-inclusion             | Luxembourg       | validated |
-      | Dummy news 2          | Dummy body       | Molecular cooking collection | E-inclusion             | Luxembourg       | validated |
-      | Dummy news 3          | Dummy body       | Molecular cooking collection | E-inclusion             | Luxembourg       | validated |
-      | Dummy news 4          | Dummy body       | Molecular cooking collection | E-inclusion             | Luxembourg       | validated |
+      | title                | headline              | body             | collection                   | topic                   | spatial coverage | state     |
+      | El Tuba de Los Lobos | El Celler de Can Roca | The best in town | Molecular cooking collection | Statistics and Analysis | Luxembourg       | validated |
+      | Dummy title 1        | Dummy news 1          | Dummy body       | Molecular cooking collection | E-inclusion             | Luxembourg       | validated |
+      | Dummy title 2        | Dummy news 2          | Dummy body       | Molecular cooking collection | E-inclusion             | Luxembourg       | validated |
+      | Dummy title 3        | Dummy news 3          | Dummy body       | Molecular cooking collection | E-inclusion             | Luxembourg       | validated |
+      | Dummy title 4        | Dummy news 4          | Dummy body       | Molecular cooking collection | E-inclusion             | Luxembourg       | validated |
 
     Given I am logged in as a user with the "authenticated" role
     Then I visit the search page
@@ -194,7 +194,7 @@ Feature: Global search
     # custom pages is added to their collection, we also match the collection.
     When I enter "omega" in the search bar and press enter
     Then I should see the text "SEARCH RESULTS (6)"
-    And the page should show the tiles "Collection alpha, News omega, Event Omega, Document omega, Discussion omega, Page omega"
+    And the page should show the tiles "Collection alpha, News headline delta, Event Omega, Document omega, Discussion omega, Page omega"
 
     # "Beta" is used in all the rdf entities body fields.
     When I enter "beta" in the search bar and press enter
@@ -203,11 +203,11 @@ Feature: Global search
 
     # "Epsilon" is used in all the node entities body fields.
     When I enter "epsilon" in the search bar and press enter
-    Then the page should show the tiles "Collection alpha, News omega, Event Omega, Document omega, Discussion omega, Page omega"
+    Then the page should show the tiles "Collection alpha, News headline delta, Event Omega, Document omega, Discussion omega, Page omega"
 
     # "Alphabet" is used in all the keywords fields.
     When I enter "Alphabet" in the search bar and press enter
-    Then the page should show the tiles "Solution alpha, Release Alpha, News omega, Event Omega, Document omega"
+    Then the page should show the tiles "Solution alpha, Release Alpha, News headline delta, Event Omega, Document omega"
 
     # "Gamma" is used in the collection abstract.
     When I enter "gamma" in the search bar and press enter
@@ -215,7 +215,7 @@ Feature: Global search
 
     # "Delta" is used in headline and short titles.
     When I enter "delta" in the search bar and press enter
-    Then the page should show the tiles "News omega, Event Omega, Document omega"
+    Then the page should show the tiles "News headline delta, Event Omega, Document omega"
 
     # Search for the event fields: agenda, location, address, organisation, scope.
     When I enter "agenda" in the search bar and press enter
@@ -274,9 +274,9 @@ Feature: Global search
       | title           | body                                  | collection                      |
       | Disturbed birds | Flocks of trained pigeons flying off. | Ornithology: the study of birds |
     And news content:
-      | title                               | body                            | collection                      | state     |
-      | Chickens are small birds            | Birds domesticated in India.    | Ornithology: the study of birds | validated |
-      | Found a xylophone from 1600 in Asia | Oldest instrument of this type. | Husky Flying Xylophone          | validated |
+      | title                               | headline                            | body                            | collection                      | state     |
+      | Chickens are small birds            | Chickens are small birds            | Birds domesticated in India.    | Ornithology: the study of birds | validated |
+      | Found a xylophone from 1600 in Asia | Found a xylophone from 1600 in Asia | Oldest instrument of this type. | Husky Flying Xylophone          | validated |
     And event content:
       | title         | body                   | collection                      | state     |
       | Bird spotting | Roosters crow at dawn. | Ornithology: the study of birds | validated |
@@ -291,10 +291,10 @@ Feature: Global search
     # The bird is the word... to search.
     When I enter "Bird" in the search bar and press enter
     Then I should see the following tiles in the correct order:
+      | Chickens are small birds          |
       | Ornithology: the study of birds   |
       | Bird outposts in the wild         |
       | Disturbed birds                   |
-      | Chickens are small birds          |
       | Bird spotting                     |
       | Best place to find an exotic bird |
       | Bird Birdman                      |
@@ -504,10 +504,10 @@ Feature: Global search
       | title             | description       | state     |
       | Custom collection | Some custom data. | validated |
     And news content:
-      | title                              | body                                                              | collection        | state     | created    | changed    |
-      | Relativity is the word             | No one cares about the body.                                      | Custom collection | validated | 01/01/2019 | 03/08/2019 |
-      | Relativity news: Relativity theory | I do care about the relativity keyword in the body.               | Custom collection | validated | 02/01/2019 | 02/08/2019 |
-      | Absolutely nonesense               | Some news are not worth it but I will add relativity here anyway. | Custom collection | validated | 03/01/2019 | 01/08/2019 |
+      | title               | headline                           | body                                                              | collection        | state     | created    | changed    |
+      | Quantum information | Relativity is the word             | No one cares about the body.                                      | Custom collection | validated | 01/01/2019 | 03/08/2019 |
+      | The uneven universe | Relativity news: Relativity theory | I do care about the relativity keyword in the body.               | Custom collection | validated | 02/01/2019 | 02/08/2019 |
+      | The earth is square | Absolutely nonsense                | Some news are not worth it but I will add relativity here anyway. | Custom collection | validated | 03/01/2019 | 01/08/2019 |
 
     When I am on the homepage
     And I enter "Relativity" in the search bar and press enter
@@ -516,12 +516,12 @@ Feature: Global search
     And I should see the following tiles in the correct order:
       | Relativity news: Relativity theory |
       | Relativity is the word             |
-      | Absolutely nonesense               |
+      | Absolutely nonsense                |
     And I should be on "/search?keys=Relativity&sort_by=relevance"
 
     Given I select "Creation Date" from "Sort by"
     Then I should see the following tiles in the correct order:
-      | Absolutely nonesense               |
+      | Absolutely nonsense                |
       | Relativity news: Relativity theory |
       | Relativity is the word             |
     And I should be on "/search?keys=Relativity&sort_by=creation-date"
@@ -530,7 +530,7 @@ Feature: Global search
     Then I should see the following tiles in the correct order:
       | Relativity is the word             |
       | Relativity news: Relativity theory |
-      | Absolutely nonesense               |
+      | Absolutely nonsense                |
     And I should be on "/search?keys=Relativity&sort_by=last-updated-date"
 
   @javascript
@@ -678,3 +678,13 @@ Feature: Global search
 
     Then I go to "/search?f[0]=creation_date:(min:,max:)"
     And I should see the text "SEARCH RESULTS (14)"
+
+  Scenario: Max 3 topic terms appear in each search result with a suffix for the rest.
+    Given the following collection:
+      | title      | Max 3 topic collection                                                             |
+      | moderation | no                                                                                 |
+      | topic      | Finance in EU, Supplier exchange, Demography, E-inclusion, Statistics and Analysis |
+      | state      | validated                                                                          |
+    When I visit the search page
+    Then there should be 3 topics in the "Max 3 topic collection" card
+    And I should see the text "+2 topics" in the "Max 3 topic collection" card

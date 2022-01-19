@@ -10,6 +10,7 @@ use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\asset_release\Entity\AssetReleaseInterface;
 use Drupal\collection\Entity\CollectionInterface;
 use Drupal\collection\Exception\MissingCollectionException;
+use Drupal\joinup_bundle_class\DescriptionTrait;
 use Drupal\joinup_bundle_class\JoinupBundleClassFieldAccessTrait;
 use Drupal\joinup_bundle_class\JoinupBundleClassMetaEntityTrait;
 use Drupal\joinup_bundle_class\LogoTrait;
@@ -41,6 +42,7 @@ class Solution extends Rdf implements SolutionInterface {
   use ShortIdTrait;
   use StringTranslationTrait;
   use TopicReferencingEntityTrait;
+  use DescriptionTrait;
 
   /**
    * {@inheritdoc}
@@ -164,6 +166,13 @@ class Solution extends Rdf implements SolutionInterface {
    */
   public function getLogoFieldName(): string {
     return 'field_is_logo';
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getDescriptionField(): string {
+    return 'field_is_description';
   }
 
   /**
