@@ -44,5 +44,7 @@ virtuoso_image: registry.fpfis.eu/ec-europa/digit-joinup-reference:virtuoso
 virtuoso_rollback: True
 virtuoso_refresh_acc: True
 
+composer_version: 2
+
 install_clean: Yes
 install_clone: False
