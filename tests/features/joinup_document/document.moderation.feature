@@ -38,6 +38,7 @@ Feature: Document moderation
     # users to create content, authenticated users that are not members can
     # create documents.
     When I am logged in as "Crab y Patties"
+    And I accept essential cookies
     And I go to the homepage of the "The Naked Ashes" collection
     And I click "Add document" in the plus button menu
     # Post moderated collections allow publishing content directly.
@@ -57,6 +58,7 @@ Feature: Document moderation
     # The parent group is now pre-moderated: authenticated non-member users
     # should still be able to create documents but not to publish them.
     When I am logged in as "Crab y Patties"
+    And I accept essential cookies
     And I go to the homepage of the "The Naked Ashes" collection
     And I click "Add document" in the plus button menu
     Then I should not see the button "Publish"
