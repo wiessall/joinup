@@ -1,0 +1,15 @@
+uuid: 53526569-c66a-41bb-b077-8ccdad4d7586
+langcode: en
+status: true
+dependencies: {  }
+name: teaser_xl_1_5x
+label: 'Teaser XL 1.5x'
+effects:
+  b64138ff-e11c-4d73-a545-cd6272b3d40d:
+    uuid: b64138ff-e11c-4d73-a545-cd6272b3d40d
+    id: image_scale
+    weight: 1
+    data:
+      width: 180
+      height: 321
+      upscale: false

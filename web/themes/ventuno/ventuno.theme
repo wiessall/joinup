@@ -11,6 +11,7 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Menu\MenuLinkInterface;
 use Drupal\Core\Url;
 use Drupal\interoperable_europe\InteroperableEuropeCollectionInterface;
+use Drupal\joinup_bundle_class\DescriptionInterface;
 use Drupal\joinup_bundle_class\LogoInterface;
 use Drupal\node\Entity\Node;
 use Drupal\node\NodeInterface;
@@ -310,18 +311,112 @@ function ventuno_preprocess_user(&$variables) {
  * Implements hook_preprocess_HOOK().
  */
 function ventuno_preprocess_rdf_entity__search_result_featured(&$variables) {
-  /** @var \Drupal\rdf_entity\RdfInterface $entity */
-  $entity = $variables['rdf_entity'];
-  $variables['image'] = $entity instanceof LogoInterface ? $entity->getLogoAsRenderArray() : NULL;
+  _ventuno_preprocess_search_result($variables, 'rdf_entity');
+}
+
+/**
+ * Implements hook_preprocess_HOOK().
+ */
+function ventuno_preprocess_rdf_entity__search_result(&$variables) {
+  _ventuno_preprocess_search_result($variables, 'rdf_entity');
 }
 
 /**
  * Implements hook_preprocess_HOOK().
  */
 function ventuno_preprocess_node__search_result_featured(&$variables) {
-  /** @var \Drupal\node\NodeInterface $node */
-  $node = $variables['node'];
-  $variables['image'] = $node instanceof LogoInterface ? $node->getLogoAsRenderArray() : NULL;
+  _ventuno_preprocess_search_result($variables, 'node');
+}
+
+/**
+ * Implements hook_preprocess_HOOK().
+ */
+function ventuno_preprocess_node__search_result(&$variables) {
+  _ventuno_preprocess_search_result($variables, 'node');
+}
+
+/**
+ * Prepares some variables for all search result view modes.
+ *
+ * @param array $variables
+ *   The variables array.
+ * @param string $entity_type_id
+ *   The entity type ID.
+ */
+function _ventuno_preprocess_search_result(array &$variables, string $entity_type_id): void {
+  $entity = $variables[$entity_type_id];
+  $bundle_key = \Drupal::entityTypeManager()->getDefinition($entity_type_id)->getKey('bundle');
+  $variables['body'] = $entity instanceof DescriptionInterface ? $variables['content'][$entity->getDescriptionField()] : NULL;
+  $variables['topics'] = ($entity instanceof TopicReferencingEntityInterface) ? $entity->getTopics() : NULL;
+  if ($variables['topics']) {
+    $num_of_items = count($variables['topics']);
+    if ($num_of_items > 3) {
+      $extra_items = $num_of_items - 3;
+      $variables['topics'] = array_splice($variables['topics'], 0, 3);
+      // The structure name => value mimics the way topics are accessed in the
+      // template.
+      // @see node--search-result.html.twig.
+      // @see node--search-result-featured.html.twig.
+      // @see rdf-entity--search-result.html.twig.
+      // @see rdf-entity--search-result-featured.html.twig.
+      $variables['topics'][]['name']['value'] = t('+:number topics', [
+        ':number' => $extra_items,
+      ]);
+    }
+  }
+
+  $variables['type'] = strtoupper($entity->get($bundle_key)->entity->getSingularLabel());
+  if ($created_time = $entity->getCreatedTime()) {
+    $variables['creation'] = t('@label: @created', [
+      '@label' => t('Created'),
+      '@created' => \Drupal::service('date.formatter')->format($created_time, 'date_only'),
+    ]);
+  }
+
+  if ($variables['view_mode'] === 'search_result_featured') {
+    $variables['image'] = ($entity instanceof LogoInterface) && $entity->getLogoAsFile()
+      ? $entity->getLogoAsRenderArray($variables['view_mode'])
+      : _ventuno_get_default_icon_render_array($entity->getEntityTypeId(), $entity->bundle());
+  }
+}
+
+/**
+ * Returns the default icon for the given bundle or the generic entity icon.
+ *
+ * @param string $entity_type_id
+ *   The entity type ID.
+ * @param string $bundle
+ *   The bundle.
+ *
+ * @return array
+ *   The icon class render array.
+ */
+function _ventuno_get_default_icon_render_array(string $entity_type_id, string $bundle): array {
+  $mapping = [
+    'node' => [
+      'custom_page' => 'file-earmark-richtext',
+      'discussion' => 'chat-left-text',
+      'document' => 'file-earmark-text',
+      'event' => 'calendar3',
+      'news' => 'newspaper',
+      'video' => 'file-earmark-play',
+    ],
+    'rdf_entity' => [
+      'collection' => 'folder2-open',
+      'licence' => 'file-earmark-medical',
+      'asset_release' => 'file-earmark-zip',
+      'solution' => 'clipboard-check',
+    ],
+  ];
+
+  $class = $mapping[$entity_type_id][$bundle] ?? 'lightning-charge';
+  return [
+    '#type' => 'inline_template',
+    '#template' => '<svg class="bi img-fluid w-100 py-3 p-lg-3 text-white bg-secondary"><use xlink:href="' . base_path() . drupal_get_path('theme', 'oe_bootstrap_theme') . '/assets/icons/bootstrap-icons.svg#{{ icon }}"></use></svg>',
+    '#context' => [
+      'icon' => $class,
+    ],
+  ];
 }
 
 /**
