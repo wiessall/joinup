@@ -1,0 +1,20 @@
+// Pagination
+.pagination {
+  .page-item .page-link,
+  .page-item.active .page-link {
+    color: $link-color;
+  }
+  .page-item.disabled .page-link {
+    color: $gray-500;
+  }
+  .page-item.active .page-link {
+    font-weight: $font-weight-normal;
+    background: rgba(16, 115, 222, 0.1);
+  }
+  .page-link {
+    padding: $spacer * .5 $spacer * .875; // 8px 14px
+  }
+  .page-link:hover {
+    background: $gray-300;
+  }
+}

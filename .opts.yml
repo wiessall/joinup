@@ -32,7 +32,7 @@ upgrade_commands:
 
 php_version: 7.4
 extra_pkgs:
-  - php-apcu
+  - php7.4-apcu
 
 solr: True
 solr_version: 6

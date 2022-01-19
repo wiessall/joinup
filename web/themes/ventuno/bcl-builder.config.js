@@ -53,6 +53,14 @@ module.exports = {
       },
     },
     {
+      entry: path.resolve(outputFolder, "src/scss/searchpage.scss"),
+      dest: path.resolve(outputFolder, "assets/css/searchpage.css"),
+      options: {
+        includePaths,
+        sourceMap: "file",
+      },
+    },
+    {
       entry: path.resolve(outputFolder, "src/scss/navbar.scss"),
       dest: path.resolve(outputFolder, "assets/css/navbar.css"),
       options: {

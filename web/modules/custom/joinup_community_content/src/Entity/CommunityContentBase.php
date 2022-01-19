@@ -5,6 +5,7 @@ declare(strict_types = 1);
 namespace Drupal\joinup_community_content\Entity;
 
 use Drupal\collection\Entity\NodeCollectionContentTrait;
+use Drupal\joinup_bundle_class\DescriptionTrait;
 use Drupal\joinup_bundle_class\JoinupBundleClassMetaEntityTrait;
 use Drupal\joinup_core\Entity\OutdatedContentTrait;
 use Drupal\joinup_featured\FeaturedContentTrait;
@@ -34,6 +35,7 @@ abstract class CommunityContentBase extends Node implements CommunityContentInte
   use PinnableGroupContentTrait;
   use TopicReferencingEntityTrait;
   use VisitCountAwareTrait;
+  use DescriptionTrait;
 
   /**
    * Fields populated with statistical information by the joinup_stats module.
@@ -73,6 +75,13 @@ abstract class CommunityContentBase extends Node implements CommunityContentInte
       return [];
     }
     return [$id];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getDescriptionField(): string {
+    return 'body';
   }
 
 }
