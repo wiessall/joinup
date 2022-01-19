@@ -37,6 +37,9 @@ commands:
 
   # Overrides the toolkit:build-dev command.
   toolkit:build-dev:
+    - task: mkdir
+      dir: ${joinup.files_public_dir}
+      mode: 0775
     - task: copy
       from: ${joinup.site_dir}/sites/default/default.services.yml
       to: ${joinup.site_dir}/sites/default/services.yml
