@@ -4,6 +4,7 @@ declare(strict_types = 1);
 
 namespace Drupal\collection\Entity;
 
+use Drupal\joinup_bundle_class\DescriptionInterface;
 use Drupal\joinup_featured\FeaturedContentInterface;
 use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_publication_date\Entity\EntityPublicationTimeInterface;
@@ -14,7 +15,7 @@ use Drupal\rdf_entity\RdfInterface;
 /**
  * Interface for collection entities in Joinup.
  */
-interface CollectionInterface extends RdfInterface, EntityPublicationTimeInterface, EntityWorkflowStateInterface, GroupInterface, FeaturedContentInterface, ArchivableEntityInterface {
+interface CollectionInterface extends RdfInterface, EntityPublicationTimeInterface, EntityWorkflowStateInterface, GroupInterface, FeaturedContentInterface, ArchivableEntityInterface, DescriptionInterface {
 
   /**
    * Returns the solutions that are affiliated with this collection.
