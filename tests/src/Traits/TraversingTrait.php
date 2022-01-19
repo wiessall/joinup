@@ -617,7 +617,11 @@ trait TraversingTrait {
       $elements = array_merge($elements, $this->getSession()->getPage()->findAll($selector, $locator));
     }
 
-    return $elements;
+    // Do not include hidden elements (e.g. elements that exist in the page but
+    // are hidden in certain screen sizes).
+    return array_filter($elements, function (TraversableElement $element) {
+      return $element->isVisible();
+    });
   }
 
   /**
