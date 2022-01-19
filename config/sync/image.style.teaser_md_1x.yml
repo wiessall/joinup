@@ -1,0 +1,15 @@
+uuid: 3747051a-1d79-4441-9dc1-bc978ec38a1e
+langcode: en
+status: true
+dependencies: {  }
+name: teaser_md_1x
+label: 'Teaser MD 1x'
+effects:
+  cb2f07b4-8bdf-405c-aad8-e1bc1c23dffa:
+    uuid: cb2f07b4-8bdf-405c-aad8-e1bc1c23dffa
+    id: image_scale
+    weight: 1
+    data:
+      width: 114
+      height: 204
+      upscale: false

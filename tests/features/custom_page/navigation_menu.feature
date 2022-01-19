@@ -144,6 +144,7 @@ Feature: Navigation menu for custom pages
       | title           | body                   | <group>      |
       | Mists of dreams | This is a sample body. | Prism Gazers |
     When I am logged in as a facilitator of the "Prism Gazers" <group>
+    And I accept essential cookies
     And I go to the homepage of the "Prism Gazers" <group>
     Then I should see the contextual links button in the "Navigation menu block"
     # The links to manage the navigation menu should only appear after clicking on the button.
@@ -307,6 +308,7 @@ Feature: Navigation menu for custom pages
       # Force a reserved page to be nested. This is not possible through the UI.
       | About              | Bodypack           | 7      |
     When I am logged in as a facilitator of the "Ergonomic backpacks" <group>
+    And I accept essential cookies
     And I go to the "Ergonomic backpacks" <group>
     And I click the contextual link "Edit menu" in the "Left sidebar" region
     # The "About" page has been moved back to first level.
@@ -528,6 +530,7 @@ Feature: Navigation menu for custom pages
     Then I should see the link "Up" in the "Table of contents outline"
 
     When I am logged in as a facilitator of the "Table of contents outline cached" <group>
+    And I accept essential cookies
     And I go to the "Table of contents outline cached" <group>
     And I click the contextual link "Edit menu" in the "Left sidebar" region
     When I drag the "TOCO cached 1-1" table row to the left

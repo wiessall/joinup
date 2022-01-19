@@ -5,6 +5,7 @@ declare(strict_types = 1);
 namespace Drupal\joinup_licence\Entity;
 
 use Drupal\Core\Entity\EntityStorageInterface;
+use Drupal\joinup_bundle_class\DescriptionTrait;
 use Drupal\joinup_bundle_class\JoinupBundleClassFieldAccessTrait;
 use Drupal\rdf_entity\Entity\Rdf;
 
@@ -13,6 +14,7 @@ use Drupal\rdf_entity\Entity\Rdf;
  */
 class Licence extends Rdf implements LicenceInterface {
 
+  use DescriptionTrait;
   use JoinupBundleClassFieldAccessTrait;
 
   /**
@@ -137,6 +139,13 @@ class Licence extends Rdf implements LicenceInterface {
     }
 
     return $licence;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getDescriptionField(): string {
+    return 'field_licence_description';
   }
 
 }
