@@ -165,6 +165,7 @@ function search_api_field_theme() {
         'bundle' => NULL,
         'field_name' => NULL,
         'entity' => NULL,
+        'view_mode' => NULL,
       ],
     ],
     'search_api_field_result' => [

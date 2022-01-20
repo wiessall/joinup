@@ -7,6 +7,7 @@ namespace Drupal\collection\Entity;
 use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
+use Drupal\joinup_bundle_class\DescriptionTrait;
 use Drupal\joinup_bundle_class\JoinupBundleClassFieldAccessTrait;
 use Drupal\joinup_bundle_class\JoinupBundleClassMetaEntityTrait;
 use Drupal\joinup_bundle_class\LogoTrait;
@@ -38,6 +39,7 @@ class Collection extends Rdf implements CollectionInterface {
   use ShortIdTrait;
   use StringTranslationTrait;
   use TopicReferencingEntityTrait;
+  use DescriptionTrait;
 
   /**
    * {@inheritdoc}
@@ -97,6 +99,13 @@ class Collection extends Rdf implements CollectionInterface {
    */
   public function getLogoFieldName(): string {
     return 'field_ar_logo';
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getDescriptionField(): string {
+    return 'field_ar_description';
   }
 
   /**

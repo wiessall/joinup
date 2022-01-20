@@ -11,7 +11,7 @@ use Drupal\Core\Menu\MenuLinkTreeElement;
 use Drupal\Core\Menu\MenuLinkTreeInterface;
 use Drupal\Core\Menu\MenuTreeParameters;
 use Drupal\Core\Path\PathMatcherInterface;
-use Drupal\Core\Routing\RouteMatch;
+use Drupal\Core\Routing\RedirectDestinationTrait;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\Url;
 use Drupal\collection\Entity\CollectionInterface;
@@ -27,6 +27,7 @@ use Symfony\Component\HttpFoundation\RequestStack;
 class MenuHelper implements MenuHelperInterface {
 
   use StringTranslationTrait;
+  use RedirectDestinationTrait;
 
   /**
    * The logger channel factory.
@@ -131,43 +132,10 @@ class MenuHelper implements MenuHelperInterface {
     $anonymous_links = array_merge($anonymous_links, $this->getBclLandingPageLinks());
 
     // Generate a link to EU Login.
-    $cas_login_link = Url::fromRoute('cas.login');
-
-    // Pass the current path (including query arguments) as the 'destination'
-    // query argument so that the CAS service can return the user to the current
-    // path after authenticating.
-    // @todo This has been copied from EuLoginMenuLink::getOptions() but ideally
-    //   we should try to leverage the Menu Link Destination module to generate
-    //   the `destination` argument. However this is not a menu link but a
-    //   normal link so it falls outside the domain of Menu Link Destination.
-    //   However it might be possible to use LinkGenerator::generate() since it
-    //   also fires `hook_link_alter()` which Menu Link Destination implements.
-    $request = $this->requestStack->getCurrentRequest();
-
-    // If a 'destination' query argument exists, then this is what the user
-    // should return to.
-    if ($request->query->has('destination')) {
-      // The path should start with a slash.
-      $destination = '/' . ltrim($request->query->get('destination'), '/');
-      $return_to = Url::fromUserInput($destination)->setAbsolute()->toString();
-    }
-    // If we are on the homepage, set the 'returnto' path to '/' alias.
-    elseif ($this->pathMatcher->isFrontPage()) {
-      $return_to = base_path();
-    }
-    // Return to the current page URL.
-    else {
-      $query_arguments = $request->query->all();
-      $route_match = RouteMatch::createFromRequest($request);
-      $route_name = $route_match->getRouteName();
-      $route_parameters = $route_match->getRawParameters()->all();
-      $route_options = ['query' => $query_arguments];
-      $return_to = (new Url($route_name, $route_parameters, $route_options))->setAbsolute()->toString();
-    }
-
-    $options = [];
-    $options['query']['returnto'] = $return_to;
-    $cas_login_link->setOptions($options);
+    // Get return URL from current page.
+    $cas_login_link = Url::fromRoute('cas.login', [], [
+      'query' => $this->getDestinationArray(),
+    ]);
 
     $anonymous_links[] = [
       'label' => $this->t('Sign in'),

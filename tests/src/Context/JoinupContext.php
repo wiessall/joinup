@@ -1163,7 +1163,7 @@ class JoinupContext extends RawDrupalContext {
    * @Then I (should )see the :heading tile
    */
   public function assertTilePresent($heading) {
-    $results = $this->getSession()->getPage()->findAll('css', '.listing__item--tile .listing__title, article.tile h2');
+    $results = $this->getSession()->getPage()->findAll('css', '.listing__item--tile .listing__title, .card .card-title, article.tile h2');
     foreach ($results as $result) {
       /** @var \Behat\Mink\Element\Element $result */
       if ($result->getText() === $heading) {
@@ -1186,7 +1186,7 @@ class JoinupContext extends RawDrupalContext {
    * @Then I (should )see :number tile(s)
    */
   public function assertTileCount($number) {
-    $results = $this->getSession()->getPage()->findAll('css', '.listing__item--tile .listing__title, article.tile h2');
+    $results = $this->getSession()->getPage()->findAll('css', '.listing__item--tile .listing__title, .card .card-title, article.tile h2');
     $nr_found = count($results);
     if ($nr_found != $number) {
       throw new \Exception("Found $nr_found tiles, expected $number");
@@ -1207,7 +1207,7 @@ class JoinupContext extends RawDrupalContext {
   public function assertTileNotPresent($heading) {
     // We target the heading with "h2" instead of ".listing__title" because both
     // unstyled and styled tiles use h2 as element for their titles.
-    $results = $this->getSession()->getPage()->findAll('css', '.listing__item--tile h2, article.tile h2');
+    $results = $this->getSession()->getPage()->findAll('css', '.listing__item--tile h2, .card h5, article.tile h2');
     foreach ($results as $result) {
       /** @var \Behat\Mink\Element\Element $result */
       if ($result->getText() === $heading) {
@@ -1336,8 +1336,9 @@ class JoinupContext extends RawDrupalContext {
    *   Thrown when the tile is not found or the text is not found in the tile.
    *
    * @Then I( should) see the text :text in the :heading tile
+   * @Then I( should) see the text :text in the :heading card
    */
-  public function assertTileContainsText($heading, $text) {
+  public function assertTileContainsText(string $heading, string $text): void {
     $element = $this->getTileByHeading($heading);
 
     if (strpos(trim($element->getText()), $text) === FALSE) {
@@ -1357,8 +1358,9 @@ class JoinupContext extends RawDrupalContext {
    *   Thrown when the tile is not found or the text is found in the tile.
    *
    * @Then I( should) not see the text :text in the :heading tile
+   * @Then I( should) not see the text :text in the :heading card
    */
-  public function assertTileDoesNotContainsText($heading, $text) {
+  public function assertTileDoesNotContainsText(string $heading, string $text): void {
     $element = $this->getTileByHeading($heading);
 
     if (strpos(trim($element->getText()), $text) !== FALSE) {
@@ -2812,72 +2814,6 @@ class JoinupContext extends RawDrupalContext {
   }
 
   /**
-   * Returns selectors used to find elements with a human readable identifier.
-   *
-   * @param string $alias
-   *   A human readable element identifier.
-   *
-   * @return array[]
-   *   An indexed array of selectors intended to be used with Mink's `find()`
-   *   methods. Each value is a tuple containing two strings:
-   *   - 0: the selector, e.g. 'css' or 'xpath'.
-   *   - 1: the locator.
-   *
-   * @throws \InvalidArgumentException
-   *   Thrown when the element name is not defined.
-   */
-  protected function getSelectorsMatchingElementAlias(string $alias): array {
-    $elements = [
-      // The various search input fields.
-      [
-        'names' => [
-          'search bar',
-          'search bars',
-          'search field',
-          'search fields',
-        ],
-        'selectors' => [
-          // The site-wide search field in the top right corner.
-          ['css', 'input#search-bar__input'],
-          // The search field on the search result pages.
-          ['css', '#block-exposed-form-search-page input.form-text'],
-        ],
-      ],
-    ];
-
-    foreach ($elements as $element) {
-      if (in_array($alias, $element['names'])) {
-        return $element['selectors'];
-      }
-    }
-
-    throw new \InvalidArgumentException("No selectors are defined for the element named '$alias'.");
-  }
-
-  /**
-   * Returns elements that match the given human readable identifier.
-   *
-   * @param string $alias
-   *   A human readable element identifier.
-   *
-   * @return \Behat\Mink\Element\NodeElement[]
-   *   The elements matching the identifier.
-   *
-   * @throws \InvalidArgumentException
-   *   Thrown when the element name is not defined.
-   */
-  protected function getElementsMatchingElementAlias(string $alias): array {
-    $elements = [];
-
-    foreach ($this->getSelectorsMatchingElementAlias($alias) as $selector_tuple) {
-      [$selector, $locator] = $selector_tuple;
-      $elements = array_merge($elements, $this->getSession()->getPage()->findAll($selector, $locator));
-    }
-
-    return $elements;
-  }
-
-  /**
    * Asserts that a paragraph containing the given text is present in the page.
    *
    * @param string $text
@@ -3060,6 +2996,121 @@ class JoinupContext extends RawDrupalContext {
     $xpath = "//ul/li[contains(concat(' ', @class, ' '), ' menu-item--active-trail ')]/descendant::a/descendant-or-self::*[text()='{$link_label}']";
     if (!$page->find('xpath', $xpath)) {
       throw new ExpectationFailedException("The '{$link_label}' link is not in the active trail but it should.");
+    }
+  }
+
+  /**
+   * Shows the button in the middle of the screen.
+   *
+   * In the latest version of Selenium in docker, moving to a button element
+   * might throw this exception while the button is visible.
+   * This might be due to attempting to find the button too fast.
+   *
+   * @param string $type
+   *   Type of element link/button.
+   * @param string $label
+   *   The label of the radio button.
+   *
+   * @throws \Exception
+   *    Thrown when an expected scroll in to view failed.
+   *
+   * @Given I scroll :type :label into view
+   */
+  public function scrollButtonIntoView(string $type, string $label): void {
+    $page = $this->getSession()->getPage();
+    $button = $page->find('named', [$type, str_replace('\\"', '"', $label)]);
+    $id = $button->getAttribute('id');
+    $function = <<<JS
+  (
+      function(){
+        setTimeout(() => {
+          let elem = document.getElementById("$id");
+          elem.scrollIntoView({ behavior: 'instant', block: 'center' });
+        }, 300);
+      }
+  )()
+  JS;
+    try {
+      $this->getSession()->executeScript($function);
+      sleep(1);
+    }
+    catch (\Exception $e) {
+      throw new \Exception("Scroll element into view failed");
+    }
+  }
+
+  /**
+   * Shows the facet element in the middle of the screen.
+   *
+   * In the latest version of Selenium in docker, moving to a button element
+   * might throw this exception while the button is visible.
+   * This might be due to attempting to find the button too fast.
+   *
+   * @param string $label
+   *   The label of the radio button.
+   *
+   * @throws \Exception
+   *    Thrown when an expected scroll in to view failed.
+   *
+   * @Given I scroll the :label facet into view
+   */
+  public function scrollFacetIntoView(string $label): void {
+    $facet = $this->findFacetByAlias($label);
+    $facet_id = $facet->getAttribute('data-drupal-facet-id');
+    $function = <<<JS
+  (
+      function(){
+        setTimeout(() => {
+          let elem = document.querySelector('[data-drupal-facet-id="$facet_id"]');
+          elem.scrollIntoView({ behavior: 'instant', block: 'center' });
+        }, 300);
+      }
+  )()
+  JS;
+    try {
+      $this->getSession()->executeScript($function);
+      sleep(1);
+    }
+    catch (\Exception $e) {
+      throw new \Exception("Scroll element into view failed");
+    }
+  }
+
+  /**
+   * Shows the button in the middle of the screen.
+   *
+   * In the latest version of Selenium in docker, moving to a button element
+   * might throw this exception while the button is visible.
+   * This might be due to attempting to find the button too fast.
+   *
+   * @param string $label
+   *   The label of the radio button.
+   *
+   * @throws \Exception
+   *    Thrown when an expected scroll in to view failed.
+   *
+   * @Given I scroll the :label chip into view
+   */
+  public function scrollChipIntoView(string $label): void {
+    $css = "div.block-facets-summary-blocksearch-facets-summary li.facet-summary-item--facet a:contains('{$label}')";
+    $element = $this->getSession()->getPage()->find('css', $css);
+    $xpath = $element->getXpath();
+    $function = <<<JS
+  (
+      function(){
+        setTimeout(() => {
+          let elem = document.evaluate("$xpath", document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
+          elem.scrollIntoView({ behavior: 'instant', block: 'center' });
+        }, 300);
+      }
+  )()
+  JS;
+    try {
+      $this->getSession()->executeScript($function);
+      sleep(1);
+    }
+    catch (\Exception $e) {
+      throw new \Exception("Scroll element into view failed");
     }
   }
 

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "097f98fe1ac45c4782077239148518bf",
+    "content-hash": "85c617a7b719a10e1498a2ea4487a954",
     "packages": [
         {
             "name": "SEMICeu/adms-ap_validator",
@@ -2198,10 +2198,6 @@
                 {
                     "name": "floretan",
                     "homepage": "https://www.drupal.org/user/66163"
-                },
-                {
-                    "name": "nord102",
-                    "homepage": "https://www.drupal.org/user/3471419"
                 }
             ],
             "description": "Limit which text formats are available for each field instance.",
@@ -3495,7 +3491,7 @@
             "extra": {
                 "drupal": {
                     "version": "8.x-2.0-alpha15",
-                    "datestamp": "1620309100",
+                    "datestamp": "1620862956",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Alpha releases are not covered by Drupal security advisories."
@@ -3925,7 +3921,7 @@
                     "datestamp": "1604046728",
                     "security-coverage": {
                         "status": "not-covered",
-                        "message": "Project has not opted into security advisory coverage!"
+                        "message": "Alpha releases are not covered by Drupal security advisories."
                     }
                 }
             },
@@ -4052,8 +4048,8 @@
                 },
                 "patches_applied": {
                     "Facet Summary for Facet Items with a set dependency. @see https://www.drupal.org/node/2873480": "resources/patch/facet_summary_for_facet-2873480-18.patch",
-                    "Configurable dropdown child prefix. @see https://www.drupal.org/project/facets/issues/3214662": "https://git.drupalcode.org/project/facets/-/merge_requests/20.diff",
-                    "SA-CONTRIB-2021-008. @see https://www.drupal.org/sa-contrib-2021-008": "https://www.drupal.org/files/issues/2021-05-17/3213582-facets-1.6-1.7.patch"
+                    "SA-CONTRIB-2021-008. @see https://www.drupal.org/sa-contrib-2021-008": "https://www.drupal.org/files/issues/2021-05-17/3213582-facets-1.6-1.7.patch",
+                    "Possible accessibility issue": "resources/patch/facet_accessibility-3208580.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -4088,6 +4084,114 @@
                 "source": "git://git.drupal.org/project/facets.git",
                 "issues": "https://www.drupal.org/project/issues/facets",
                 "irc": "irc://irc.freenode.org/drupal-search-api"
+            }
+        },
+        {
+            "name": "drupal/facets_block",
+            "version": "1.4.0",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/facets_block.git",
+                "reference": "8.x-1.04"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/facets_block-8.x-1.04.zip",
+                "reference": "8.x-1.04",
+                "shasum": "b20806b6174f941313182b4bd339ab7d5d1e6cf3"
+            },
+            "require": {
+                "drupal/core": "^8 || ^9",
+                "drupal/facets": "^1.0 || ^2.0"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "8.x-1.04",
+                    "datestamp": "1639331249",
+                    "security-coverage": {
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0+"
+            ],
+            "authors": [
+                {
+                    "name": "Goran Nikolovski",
+                    "homepage": "https://gorannikolovski.com",
+                    "email": "goran@gorannikolovski.com",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Render Facets in a single block.",
+            "homepage": "https://www.drupal.org/project/facets_block",
+            "support": {
+                "source": "https://git.drupalcode.org/project/facets_block",
+                "issues": "https://www.drupal.org/project/issues/facets_block",
+                "email": "goran@gorannikolovski.com"
+            }
+        },
+        {
+            "name": "drupal/facets_date_range",
+            "version": "1.0.0-beta1",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/facets_date_range.git",
+                "reference": "1.0.0-beta1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/facets_date_range-1.0.0-beta1.zip",
+                "reference": "1.0.0-beta1",
+                "shasum": "77e41acb312616da409ca20a15a4447e989fedc5"
+            },
+            "require": {
+                "drupal/core": "^8.9 || ^9.2 || ^10",
+                "drupal/facets": "^1.6 || ^2",
+                "php": "^7.4 || ^8"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "1.0.0-beta1",
+                    "datestamp": "1641988086",
+                    "security-coverage": {
+                        "status": "not-covered",
+                        "message": "Project has not opted into security advisory coverage!"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0+"
+            ],
+            "authors": [
+                {
+                    "name": "Alexandre Dias",
+                    "homepage": "https://www.drupal.org/u/saidatom"
+                },
+                {
+                    "name": "Claudiu Cristea",
+                    "homepage": "https://www.drupal.org/u/claudiu.cristea"
+                },
+                {
+                    "name": "Ilias Dimopoulos",
+                    "homepage": "https://www.drupal.org/u/idimopoulos-0"
+                },
+                {
+                    "name": "Pieter Frenssen",
+                    "homepage": "https://www.drupal.org/u/pfrenssen"
+                }
+            ],
+            "description": "Provides a Date Range widget in facets.",
+            "homepage": "https://drupal.org/project/facets_date_range",
+            "support": {
+                "source": "https://git.drupalcode.org/project/facets_date_range",
+                "issues": "https://drupal.org/project/issues/facets_date_range"
             }
         },
         {
@@ -5989,7 +6093,7 @@
         },
         {
             "name": "drupal/og",
-            "version": "1.0-alpha7",
+            "version": "1.0.0-alpha7",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/og.git",
@@ -5997,9 +6101,9 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Gizra/og/zipball/f41da3ffd8c81d2dcb4d5462c73053135246e6a1",
-                "reference": "f41da3ffd8c81d2dcb4d5462c73053135246e6a1",
-                "shasum": ""
+                "url": "https://ftp.drupal.org/files/projects/og-8.x-1.0-alpha7.zip",
+                "reference": "8.x-1.0-alpha7",
+                "shasum": "7c2036884946afa376e8fd848829a0f8ff59a653"
             },
             "require": {
                 "drupal/core": "^8.8 || ^9.0",
@@ -6011,6 +6115,17 @@
                 "slevomat/coding-standard": "~6.0"
             },
             "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "8.x-1.0-alpha7",
+                    "datestamp": "1633634599",
+                    "security-coverage": {
+                        "status": "not-covered",
+                        "message": "Alpha releases are not covered by Drupal security advisories."
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
             "license": [
                 "GPL-2.0-or-later"
             ],
@@ -6026,17 +6141,56 @@
                 {
                     "name": "pfrenssen",
                     "homepage": "https://www.drupal.org/u/pfrenssen"
+                },
+                {
+                    "name": "Zen",
+                    "homepage": "https://www.drupal.org/user/21209"
+                },
+                {
+                    "name": "alesr",
+                    "homepage": "https://www.drupal.org/user/150704"
+                },
+                {
+                    "name": "amitaibu",
+                    "homepage": "https://www.drupal.org/user/57511"
+                },
+                {
+                    "name": "dww",
+                    "homepage": "https://www.drupal.org/user/46549"
+                },
+                {
+                    "name": "joelpittet",
+                    "homepage": "https://www.drupal.org/user/160302"
+                },
+                {
+                    "name": "merlinofchaos",
+                    "homepage": "https://www.drupal.org/user/26979"
+                },
+                {
+                    "name": "moshe weitzman",
+                    "homepage": "https://www.drupal.org/user/23"
+                },
+                {
+                    "name": "mpp",
+                    "homepage": "https://www.drupal.org/user/359881"
+                },
+                {
+                    "name": "pfrenssen",
+                    "homepage": "https://www.drupal.org/user/382067"
+                },
+                {
+                    "name": "sethcohn",
+                    "homepage": "https://www.drupal.org/user/14944"
                 }
             ],
             "description": "API to allow associating content with groups.",
             "homepage": "https://drupal.org/project/og",
             "support": {
+                "source": "https://git.drupalcode.org/project/og",
                 "issues": "https://drupal.org/project/issues/og",
                 "irc": "irc://irc.freenode.org/drupal-og",
-                "slack": "https://drupal.slack.com/messages/CELR48EA0",
-                "source": "https://git.drupalcode.org/project/og"
-            },
-            "time": "2021-09-30T16:34:49+00:00"
+                "slack": "https://drupal.slack.com/messages/CELR48EA0"
+            }
         },
         {
             "name": "drupal/og_menu",
@@ -7264,6 +7418,63 @@
             }
         },
         {
+            "name": "drupal/search_api_autocomplete",
+            "version": "1.5.0",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/search_api_autocomplete.git",
+                "reference": "8.x-1.5"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/search_api_autocomplete-8.x-1.5.zip",
+                "reference": "8.x-1.5",
+                "shasum": "b9ae7e69e95da0910a65b23f2810da4be579ecdd"
+            },
+            "require": {
+                "drupal/core": "^8 || ^9",
+                "drupal/search_api": "1.x"
+            },
+            "require-dev": {
+                "drupal/search_api_page": "1.x-dev"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "8.x-1.5",
+                    "datestamp": "1626685059",
+                    "security-coverage": {
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
+                    }
+                },
+                "patches_applied": {
+                    "Clear timeout autosubmit used in views_autosubmit.": "resources/patch/search_api_autocomplete_override_views_autosubmit.patch"
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "Thomas Seidl",
+                    "homepage": "https://www.drupal.org/u/drunken-monkey"
+                },
+                {
+                    "name": "See other contributors",
+                    "homepage": "https://www.drupal.org/node/1142202/committers"
+                }
+            ],
+            "description": "Adds autocomplete functionality to searches.",
+            "homepage": "https://www.drupal.org/project/search_api_autocomplete",
+            "support": {
+                "source": "http://git.drupal.org/project/search_api_autocomplete.git",
+                "issues": "https://www.drupal.org/project/issues/search_api_autocomplete",
+                "irc": "irc://irc.freenode.org/drupal-search-api"
+            }
+        },
+        {
             "name": "drupal/search_api_solr",
             "version": "2.2.0",
             "source": {
@@ -7312,7 +7523,8 @@
                     }
                 },
                 "patches_applied": {
-                    "Trying to access array offset on value of type int @see https://www.drupal.org/project/search_api_solr/issues/3173950": "resources/patch/search_api_solr-3173950.diff"
+                    "Trying to access array offset on value of type int @see https://www.drupal.org/project/search_api_solr/issues/3173950": "resources/patch/search_api_solr-3173950.diff",
+                    "Missing config schema @see https://www.drupal.org/project/search_api_solr/issues/3236773": "https://git.drupalcode.org/project/search_api_solr/-/merge_requests/8.diff"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -7628,16 +7840,24 @@
                     "role": "Maintainer"
                 },
                 {
+                    "name": "chrisjlee",
+                    "homepage": "https://www.drupal.org/user/760600"
+                },
+                {
+                    "name": "drywall",
+                    "homepage": "https://www.drupal.org/user/192591"
+                },
+                {
+                    "name": "jsenich",
+                    "homepage": "https://www.drupal.org/user/58871"
+                },
+                {
+                    "name": "markie",
+                    "homepage": "https://www.drupal.org/user/206687"
+                },
+                {
                     "name": "newsignature",
                     "homepage": "https://www.drupal.org/user/765518"
-                },
-                {
-                    "name": "ultimike",
-                    "homepage": "https://www.drupal.org/user/51132"
-                },
-                {
-                    "name": "volkswagenchick",
-                    "homepage": "https://www.drupal.org/user/3332522"
                 }
             ],
             "description": "Provides a more robust alternative to 'summary or trimmed' textfield format.",
@@ -7668,7 +7888,7 @@
             "extra": {
                 "drupal": {
                     "version": "8.x-2.8",
-                    "datestamp": "1615222638",
+                    "datestamp": "1615222684",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -7911,8 +8131,8 @@
                     "dev-1.x": "1.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-1.1+4-dev",
-                    "datestamp": "1590090136",
+                    "version": "8.x-1.1+6-dev",
+                    "datestamp": "1637312985",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Dev releases are not covered by Drupal security advisories."
@@ -8506,7 +8726,7 @@
                     }
                 },
                 "patches_applied": {
-                    "The views plugin options are missing schema @see https://www.drupal.org/i/3195213": "https://git.drupalcode.org/project/views_autosubmit/-/merge_requests/2.diff"
+                    "Stop auto submitting first character entered in an Autocomplete Filter field. @see https://www.drupal.org/project/views_autosubmit/issues/3160600": "https://www.drupal.org/files/issues/2021-09-06/3160600_views_autosubmit_16.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -8537,6 +8757,61 @@
             "support": {
                 "source": "https://git.drupalcode.org/project/views_autosubmit",
                 "issues": "https://www.drupal.org/project/issues/views_autosubmit"
+            }
+        },
+        {
+            "name": "drupal/views_block_area",
+            "version": "1.0.0-beta3",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/views_block_area.git",
+                "reference": "8.x-1.0-beta3"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/views_block_area-8.x-1.0-beta3.zip",
+                "reference": "8.x-1.0-beta3",
+                "shasum": "bfc4a4b2c85545ef53f91f5f6633f7465c655494"
+            },
+            "require": {
+                "drupal/core": "^8 || ^9"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "8.x-1.0-beta3",
+                    "datestamp": "1592206687",
+                    "security-coverage": {
+                        "status": "not-covered",
+                        "message": "Beta releases are not covered by Drupal security advisories."
+                    }
+                },
+                "patches_applied": {
+                    "Views block area missing schema @see https://www.drupal.org/project/views_block_area/issues/3157188": "https://www.drupal.org/files/issues/2020-07-06/views_block_area-missing_schema-3157188-2.patch"
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "Leon Kessler",
+                    "homepage": "https://www.drupal.org/user/595374"
+                },
+                {
+                    "name": "cafuego",
+                    "homepage": "https://www.drupal.org/user/218525"
+                },
+                {
+                    "name": "nils.destoop",
+                    "homepage": "https://www.drupal.org/user/361625"
+                }
+            ],
+            "description": "Exposes all blocks as a views area.",
+            "homepage": "https://www.drupal.org/project/views_block_area",
+            "support": {
+                "source": "https://git.drupalcode.org/project/views_block_area"
             }
         },
         {
@@ -9668,7 +9943,7 @@
                 "reference": "master"
             },
             "type": "drupal-theme-library",
-            "time": "2018-10-31T20:10:45+00:00"
+            "time": "2021-06-30T06:04:10+00:00"
         },
         {
             "name": "laminas/laminas-diactoros",
@@ -10709,6 +10984,10 @@
                 "EUPL-1.2"
             ],
             "description": "OpenEuropa Bootstrap base theme.",
+            "support": {
+                "issues": "https://github.com/openeuropa/oe_bootstrap_theme/issues",
+                "source": "https://github.com/openeuropa/oe_bootstrap_theme/tree/0.71.0"
+            },
             "time": "2021-10-22T15:17:24+00:00"
         },
         {
@@ -12158,7 +12437,7 @@
                 "reference": "master"
             },
             "type": "library",
-            "time": "2020-11-25T21:59:37+00:00"
+            "time": "2021-07-08T16:47:58+00:00"
         },
         {
             "name": "stack/builder",
@@ -15867,6 +16146,11 @@
                 "Xdebug",
                 "performance"
             ],
+            "support": {
+                "irc": "irc://irc.freenode.org/composer",
+                "issues": "https://github.com/composer/xdebug-handler/issues",
+                "source": "https://github.com/composer/xdebug-handler/tree/1.4.6"
+            },
             "funding": [
                 {
                     "url": "https://packagist.com",
@@ -17534,6 +17818,10 @@
                 "yaml",
                 "yml"
             ],
+            "support": {
+                "issues": "https://github.com/j13k/yaml-lint/issues",
+                "source": "https://github.com/j13k/yaml-lint/tree/1.1.4"
+            },
             "time": "2021-03-11T08:48:25+00:00"
         },
         {
@@ -18404,12 +18692,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/openeuropa/task-runner.git",
-                "reference": "f7d91155e9f84be4aa46af0343fa3d8b97aa9140"
+                "reference": "ca799478f26693f60a6fb27414426bf365907fe3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/openeuropa/task-runner/zipball/f7d91155e9f84be4aa46af0343fa3d8b97aa9140",
-                "reference": "f7d91155e9f84be4aa46af0343fa3d8b97aa9140",
+                "url": "https://api.github.com/repos/openeuropa/task-runner/zipball/ca799478f26693f60a6fb27414426bf365907fe3",
+                "reference": "ca799478f26693f60a6fb27414426bf365907fe3",
                 "shasum": ""
             },
             "require": {
@@ -18449,7 +18737,7 @@
                 "task-runner",
                 "yaml"
             ],
-            "time": "2021-09-14T08:26:33+00:00"
+            "time": "2022-01-17T15:25:27+00:00"
         },
         {
             "name": "pdepend/pdepend",
@@ -18496,6 +18784,10 @@
                 "BSD-3-Clause"
             ],
             "description": "Official version of pdepend to be handled with Composer",
+            "support": {
+                "issues": "https://github.com/pdepend/pdepend/issues",
+                "source": "https://github.com/pdepend/pdepend/tree/2.10.2"
+            },
             "funding": [
                 {
                     "url": "https://tidelift.com/funding/github/packagist/pdepend/pdepend",
@@ -18785,6 +19077,10 @@
             ],
             "description": "This tool check syntax of PHP files about 20x faster than serial check.",
             "homepage": "https://github.com/php-parallel-lint/PHP-Parallel-Lint",
+            "support": {
+                "issues": "https://github.com/php-parallel-lint/PHP-Parallel-Lint/issues",
+                "source": "https://github.com/php-parallel-lint/PHP-Parallel-Lint/tree/v1.3.1"
+            },
             "time": "2021-08-13T05:35:13+00:00"
         },
         {
@@ -19077,6 +19373,10 @@
                 "phpcs",
                 "standards"
             ],
+            "support": {
+                "issues": "https://github.com/PHPCompatibility/PHPCompatibility/issues",
+                "source": "https://github.com/PHPCompatibility/PHPCompatibility"
+            },
             "time": "2019-12-27T09:44:58+00:00"
         },
         {
@@ -19297,6 +19597,11 @@
                 "phpmd",
                 "pmd"
             ],
+            "support": {
+                "irc": "irc://irc.freenode.org/phpmd",
+                "issues": "https://github.com/phpmd/phpmd/issues",
+                "source": "https://github.com/phpmd/phpmd/tree/2.11.1"
+            },
             "funding": [
                 {
                     "url": "https://tidelift.com/funding/github/packagist/phpmd/phpmd",
@@ -20783,6 +21088,10 @@
                 "parser",
                 "validator"
             ],
+            "support": {
+                "issues": "https://github.com/Seldaek/jsonlint/issues",
+                "source": "https://github.com/Seldaek/jsonlint/tree/1.8.3"
+            },
             "funding": [
                 {
                     "url": "https://github.com/Seldaek",
@@ -21260,6 +21569,9 @@
                 "configuration",
                 "options"
             ],
+            "support": {
+                "source": "https://github.com/symfony/options-resolver/tree/v5.4.0"
+            },
             "funding": [
                 {
                     "url": "https://symfony.com/sponsor",
@@ -21755,12 +22067,14 @@
         "dkarv/mdl-chip-input": 20,
         "drupal/default_content": 15,
         "drupal/dropsolid_purge": 10,
+        "drupal/facets_date_range": 10,
         "drupal/menu_link_destination": 20,
         "drupal/page_manager": 10,
         "drupal/schema_digital_document": 20,
         "drupal/schema_social_media_posting": 20,
         "drupal/site_verify": 20,
         "drupal/subpathauto": 20,
+        "drupal/views_block_area": 10,
         "ec-europa/joinup-tallinn-dashboard": 20,
         "ec-europa/material-design-lite": 20,
         "jacklmoore/autosize": 20,
@@ -21780,6 +22094,7 @@
         "ext-pdo": "*"
     },
     "platform-dev": {
+        "ext-fileinfo": "*",
         "ext-iconv": "*",
         "ext-libxml": "*"
     },
