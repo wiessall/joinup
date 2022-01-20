@@ -80,15 +80,13 @@ class JoinupLegalVersionsForm extends FormBase {
         ],
       ];
 
-      $delete_url = Url::fromRoute('entity.entity_legal_document_version.delete_form', [
-        'entity_legal_document_version' => $version->id(),
-      ])->mergeOptions($destination);
-      if ($delete_url->access()) {
-        $operations['#links']['delete'] = [
-          'title' => $this->t('Delete'),
-          'url' => $delete_url,
-        ];
-      }
+      $operations['#links']['delete'] = [
+        'title' => $this->t('Delete'),
+        'url' => Url::fromRoute('entity.entity_legal_document_version.delete_form', [
+          'entity_legal_document_version' => $version->id(),
+        ])->mergeOptions($destination),
+      ];
+
       $options[$version->id()] = [
         'title' => $version->label(),
         'created' => $version->getFormattedDate('created'),
