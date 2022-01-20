@@ -7,6 +7,7 @@ namespace Drupal\solution\Entity;
 use Drupal\asset_distribution\Entity\DistributionsParentInterface;
 use Drupal\asset_release\Entity\AssetReleaseInterface;
 use Drupal\collection\Entity\CollectionContentInterface;
+use Drupal\joinup_bundle_class\DescriptionInterface;
 use Drupal\joinup_featured\FeaturedContentInterface;
 use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_group\Entity\PinnableGroupContentInterface;
@@ -17,7 +18,7 @@ use Drupal\rdf_entity\RdfInterface;
 /**
  * Interface for solution entities in Joinup.
  */
-interface SolutionInterface extends RdfInterface, CollectionContentInterface, EntityPublicationTimeInterface, EntityWorkflowStateInterface, FeaturedContentInterface, PinnableGroupContentInterface, GroupInterface, DistributionsParentInterface {
+interface SolutionInterface extends RdfInterface, CollectionContentInterface, EntityPublicationTimeInterface, EntityWorkflowStateInterface, FeaturedContentInterface, PinnableGroupContentInterface, GroupInterface, DistributionsParentInterface, DescriptionInterface {
 
   /**
    * Returns teh child releases.

@@ -12,8 +12,10 @@ use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Datetime\DrupalDateTime;
 use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Field\FieldItemListInterface;
+use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Template\Attribute;
+use Drupal\joinup_search\Plugin\views\row\JoinupSearchApiRow;
 use Drupal\search_api\IndexInterface;
 use Drupal\search_api\Query\ConditionGroupInterface;
 use Drupal\search_api\Query\QueryInterface;
@@ -400,4 +402,27 @@ function joinup_search_theme_suggestions_joinup_search_global_search(array $vari
   }
 
   return [];
+}
+
+/**
+ * Implements hook_views_plugins_row_alter().
+ */
+function joinup_search_views_plugins_row_alter(array &$plugins): void {
+  $plugins['search_api']['class'] = JoinupSearchApiRow::class;
+}
+
+/**
+ * Implements hook_form_alter().
+ */
+function joinup_search_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  if ($form_id == 'views_exposed_form') {
+    $view = $form_state->getStorage('view');
+    if ($view['view']->id() == 'search' && $view['view']->current_display == 'page_1') {
+      $form['results_count'] = [
+        '#type' => 'item',
+        '#weight' => 0,
+        '#markup' => '',
+      ];
+    }
+  }
 }

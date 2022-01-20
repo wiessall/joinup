@@ -41,7 +41,7 @@ Feature: Header
       # A page with the new Ventuno theme.
       | the homepage |
       # A page with the old Joinup Theme theme.
-      | the search   |
+      | the contact form   |
 
   @joinup @javascript
   Scenario Outline: The 'Get started' button opens a popup with information about EU Login
@@ -70,4 +70,4 @@ Feature: Header
       # A page with the new Ventuno theme.
       | the homepage |
       # A page with the old Joinup Theme theme.
-      | the search   |
+      | the contact form   |
