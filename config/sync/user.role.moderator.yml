@@ -72,7 +72,6 @@ permissions:
   - 'delete any solution_logo media'
   - 'delete asset_release rdf entity'
   - 'delete contact_information rdf entity'
-  - 'delete legal_notice entity_legal_document'
   - 'delete licence rdf entity'
   - 'delete owner rdf entity'
   - 'delete paragraph content iframe'
