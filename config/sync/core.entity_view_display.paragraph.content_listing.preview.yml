@@ -1,0 +1,22 @@
+uuid: 3e5e8d6f-8ada-4113-bb8b-cf909ab4e9a6
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.paragraph.preview
+    - field.field.paragraph.content_listing.field_content_listing
+    - paragraphs.paragraphs_type.content_listing
+  module:
+    - layout_builder
+third_party_settings:
+  layout_builder:
+    allow_custom: false
+    enabled: false
+id: paragraph.content_listing.preview
+targetEntityType: paragraph
+bundle: content_listing
+mode: preview
+content: {  }
+hidden:
+  field_content_listing: true
+  paragraph_field_content_listing_top: true

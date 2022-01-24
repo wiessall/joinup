@@ -39,9 +39,10 @@ To run Joinup locally, below is a list of requirements and instructions.
 To start on macOS without Docker, please, check the separated [README file](resources/mac/README.md).
 
 #### Requirements
-* A regular LAMP stack running PHP 7.1.0 or higher
+* A regular LAMP stack running PHP 7.4.0 or higher
 * Virtuoso 7 (Triplestore database)
 * Apache Solr
+* NPM 8 or higher
 
 #### Dependency management and builds
 

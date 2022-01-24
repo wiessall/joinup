@@ -1,0 +1,65 @@
+// Search results
+
+.view-search {
+  .view-header {
+    .views-exposed-form {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      @include media-breakpoint-up(lg) {
+        margin-top: $spacer * 2; // 32px
+      }
+      .form-item-keys {
+        flex-basis: 100%;
+        margin-bottom: $spacer !important;
+        @include media-breakpoint-up(md) {
+          margin-bottom: $spacer * 3 !important;
+        }
+        label {
+          position: absolute !important;
+          overflow: hidden;
+          clip: rect(1px, 1px, 1px, 1px);
+          width: 1px;
+          height: 1px;
+          word-wrap: normal;
+        }
+      }
+      .form-item-results-count {
+        color: $primary;
+        text-transform: uppercase;
+        @include media-breakpoint-up(md) {
+          flex-basis: 60%;
+        }
+      }
+      .form-item-sort-by {
+        @include media-breakpoint-up(md) {
+          flex-basis: 40%;
+          justify-content: end;
+        }
+        display: flex;
+        align-items: baseline;
+        .form-label {
+          margin-right: 8px;
+        }
+        .form-select {
+          width: auto;
+        }
+      }
+    }
+    color: $primary;
+  }
+  [class$="logo"] {
+    display: flex;
+    justify-content: center;
+  }
+}
+.block-facets-summary {
+  margin-top: $spacer * 2;
+  ul {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    padding-left: 0;
+  }
+}

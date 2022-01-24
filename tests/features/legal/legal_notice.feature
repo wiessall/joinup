@@ -15,12 +15,6 @@ Feature:
       | Document     | Label | Published | Acceptance label                                                                                   | Content                                                    |
       | Legal notice | 1.1   | yes       | I have read and accept the <a href="[entity_legal_document:url]">[entity_legal_document:label]</a> | The information on this site is subject to a disclaimer... |
 
-  Scenario: Anonymous user can read the Legal notice.
-    Given I am on the homepage
-    When I click "Legal notice" in the Footer region
-    Then I should see the heading "Legal notice"
-    And I should see "The information on this site is subject to a disclaimer..."
-
   Scenario: User login when a new 'Legal notice' version is released.
     Given CAS users:
       | Username | E-mail           | Password |
@@ -28,7 +22,6 @@ Feature:
 
     And I am on the homepage
     And I click "Sign in"
-    When I click "EU Login"
     And I fill in "E-mail address" with "rick@example.com"
     And I fill in "Password" with "secretz"
     And I press "Log in"
@@ -53,7 +46,6 @@ Feature:
     Given I click "Sign out"
     And I go to homepage
     And I click "Sign in"
-    And I click "EU Login"
 
     When I fill in "E-mail address" with "rick@example.com"
     And I fill in "Password" with "secretz"
@@ -84,7 +76,6 @@ Feature:
     And I should see the link "Sign in"
 
     And I click "Sign in"
-    When I click "EU Login"
     And I fill in "E-mail address" with "rick@example.com"
     And I fill in "Password" with "secretz"
 

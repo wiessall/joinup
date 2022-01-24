@@ -1,0 +1,15 @@
+uuid: c8883b1f-542d-4138-818c-9a4f6b20b09f
+langcode: en
+status: true
+dependencies: {  }
+name: teaser_sm_2x
+label: 'Teaser SM 2x'
+effects:
+  817ae776-51d5-42c5-935a-dfa9c0b8d2fc:
+    uuid: 817ae776-51d5-42c5-935a-dfa9c0b8d2fc
+    id: image_scale
+    weight: 1
+    data:
+      width: 1032
+      height: 584
+      upscale: false

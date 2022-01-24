@@ -28,9 +28,9 @@ Feature: Pinning content entities inside solutions
       | title                      | solution    | state     | created    |
       | What is the HEX for lemon? | Blue Wrench | validated | 2018-12-13 |
     And <content type> content:
-      | title              | solution    | state     | pinned | created    |
-      | Very important     | Blue Wrench | validated | yes    | 2018-11-03 |
-      | Useful information | Blue Wrench | validated | no     | 2018-12-03 |
+      | title              | headline           | solution    | state     | pinned | created    |
+      | Very important     | Very important     | Blue Wrench | validated | yes    | 2018-11-03 |
+      | Useful information | Useful information | Blue Wrench | validated | no     | 2018-12-03 |
 
     When I am an anonymous user
     And I go to the homepage of the "Blue Wrench" solution
@@ -112,9 +112,9 @@ Feature: Pinning content entities inside solutions
   @javascript
   Scenario Outline: Pinned content tiles should show a visual cue only in their solution homepage.
     Given <content type> content:
-      | title       | solution    | state     | pinned |
-      | Lantern FAQ | Blue Wrench | validated | yes    |
-      | Lantern TCA | Blue Wrench | validated | no     |
+      | title       | headline | solution    | state     | pinned |
+      | Lantern FAQ | Lantern FAQ |Blue Wrench | validated | yes    |
+      | Lantern TCA | Lantern TCA |Blue Wrench | validated | no     |
 
     When I go to the homepage of the "Blue Wrench" solution
     Then the "Lantern FAQ" tile should be marked as pinned
@@ -125,6 +125,7 @@ Feature: Pinning content entities inside solutions
 
     # Verify that changes in the pinned state are reflected to the tile.
     When I am logged in as a facilitator of the "Blue Wrench" solution
+    And I accept essential cookies
     When I go to the homepage of the "Blue Wrench" solution
     Then the "Lantern FAQ" tile should be marked as pinned
     But the "Lantern TCA" tile should not be marked as pinned

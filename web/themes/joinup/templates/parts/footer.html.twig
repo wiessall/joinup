@@ -1,87 +1,129 @@
-<footer class="section section--footer">
-  <div class="footer__first">
-    <div class="main-container">
-      <div class="row">
-        <div class="mdl-grid mdl-grid--center">
-          <div class="mdl-cell mdl-cell--8-col">
-            <div class="row">
-              <div class="mdl-grid">
-                <div class="mdl-cell mdl-cell--4-col">
-                  <h3 class="footer__site-name">
-                    <a href="{{ base_path }}" title="{{ 'Home'|t }}">
-                      <img src="{{ base_path ~ directory }}/images/logo.svg" alt="{{ 'Home'|t }}">
-                    </a>
-                  </h3>
-                  <p class="footer__version"><a href="{{ version_url }}">{{ version }}</a></p>
-                </div>
-                <div class="mdl-cell mdl-cell--4-col">
-
-                  <div class="social-media">
-
-                    <h3 class="social-media__label">{{ 'Follow us'|t }}:</h3>
-
-
-                    <ul class="social-media__menu">
-                      <li class="social-media__item">
-                        <a href="https://www.linkedin.com/groups/2600644/" class="social-media__link" target="_blank">
-                          <span class="icon icon--linkedin"></span>
-                          <span class="text">{{ 'LinkedIn'|t }}</span>
-                        </a>
-                      </li>
-                      <li class="social-media__item">
-                        <a href="http://twitter.com/Joinup_eu" class="social-media__link" target="_blank">
-                          <span class="icon icon--twitter"></span>
-                          <span class="text">{{ 'Twitter'|t }}</span>
-                        </a>
-                      </li>
-                      <li class="social-media__item">
-                        <a href="https://ec.europa.eu/newsroom/joinup/newsletter-archives/view/service/877" class="social-media__link" target="_blank">
-                          <span class="icon icon--footer-newsletter"></span>
-                          <span class="text">{{ 'Joinup Newsletter'|t }}</span>
-                        </a>
-                      </li>
-                    </ul>
-
-                  </div>
-                </div>
-                <div class="mdl-cell mdl-cell--4-col">
-                  {{ page.footer }}
-                </div>
-              </div>
-            </div>
-          </div>
+{{ attach_library('ventuno/bootstrap-base') }}
+{{ attach_library('ventuno/footer') }}
+<div class="bs-wrapper">
+  <footer role="contentinfo" class="page__footer bg-primary">
+    <div class="container text-light">
+      <div class="row py-4 py-lg-5">
+        <!--Joinup logo-->
+        <div class="col-md-12 col-lg-3 column-logo">
+          <p class="joinup-logo"><a href="{{ base_path }}" class="joinup-logo-white mb-3"><span class="visually-hidden">Joinup</span></a></p>
+          <p class="joinup-version"><a href="{{ version_url }}">{{ version }}</a></p>
         </div>
-      </div>
-    </div>
-  </div>
-  <div class="footer__second">
-    <div class="main-container">
-      <div class="row">
-        <div class="mdl-grid mdl-grid--center">
-          <div class="mdl-cell mdl-cell--8-col">
-            <ul class="ec-menu">
-              <li class="ec-menu__item">
-                <a href="http://ec.europa.eu/info/about-commissions-new-web-presence_en" class="ec-menu__link" target="_blank">{{ 'About the Commission\'s new web presence'|t }}</a>
+
+        <div id="block-aboutus" class="block block-system block-system-menu-blockfooter-about-us col-md-3 col-lg-2 about-us-menu">
+          <h3>About us</h3>
+          <ul class="list-unstyled">
+            <li>
+              <span>Joinup</span>
+            </li>
+            <li>
+              <a href="{{ base_path }}collection/joinup/about">What is Joinup</a>
+            </li>
+            <li>
+              <a href="{{ base_path }}collection/eupl/solution/joinup-licensing-assistant/jla-find-and-compare-software-licenses">Joinup Licensing Assistant</a>
+            </li>
+            <li>
+              <a href="{{ base_path }}collection/nifo-national-interoperability-framework-observatory/solution/eif-toolbox/eif-toolbox">EIF Toolbox</a>
+            </li>
+            <li>
+              <span>Interoperable Europe</span>
+            </li>
+            <li>
+              <a href="{{ base_path }}collection/interoperable-europe/interoperable-europe">What is Interoperable Europe</a>
+            </li>
+          </ul>
+        </div>
+
+        <div id="block-helpandsupport" class="block block-system block-system-menu-blockfooter-help-and-support col-md-3 col-lg-2 help-and-support-menu">
+          <h3>Help and support</h3>
+          <ul class="list-unstyled">
+            {% if tour_available %}
+              <li>
+                <a href="" data-drupal-tour-link="" class="js-tour-start-button">Take a tour</a>
               </li>
-              <li class="ec-menu__item">
-                <a href="http://ec.europa.eu/info/resources-partners_en" class="ec-menu__link" target="_blank">{{ 'Resources for partners'|t }}</a>
+            {% endif %}
+            <li>
+              <a href="{{ contact_form_link }}" data-drupal-link-system-path="contact">Contact Joinup Support</a>
+            </li>
+            <li>
+              <a href="{{ base_path }}collection/joinup/federation-solutions">Federation of solutions</a>
+            </li>
+            <li>
+              <a href="{{ base_path }}joinup/legal-notice" data-drupal-link-system-path="legal/document/legal_notice">Legal notice</a>
+            </li>
+            <li>
+              <a href="{{ base_path }}collection/joinup/specific-privacy-statement">Privacy statement</a>
+            </li>
+            <li>
+              <a href="{{ base_path }}collection/joinup/how-video-tutorials">How-to &amp; video tutorials</a></li>
+            <li>
+              <a href="{{ base_path }}collection/joinup/faq">FAQ</a>
+            </li>
+          </ul>
+        </div>
+
+        <div id="block-europeancommission" class="block block-system block-system-menu-blockfooter-european-commission col-md-3 col-lg-3 european-commission-menu">
+          <h3>European Commission</h3>
+          <ul class="list-unstyled">
+            <li>
+              <a href="https://ec.europa.eu/info/about-commissions-new-web-presence_en">About the Commission&#039;s new web presence</a>
+            </li>
+            <li>
+              <a href="https://ec.europa.eu/info/resources-partners_en">Resources for partners</a>
+            </li>
+            <li>
+              <a href="https://ec.europa.eu/info/cookies_en">Cookies</a>
+            </li>
+            <li>
+              <a href="https://ec.europa.eu/info/contact_en">Contact European Commission</a>
+            </li>
+            <li>
+              <a href="https://ec.europa.eu/info/europa-analytics_en">Europa Analytics</a>
+            </li>
+          </ul>
+        </div>
+
+        <div class="col-md-3 col-lg-2 column-follow-us">
+          <div id="block-followus" class="block block-system block-system-menu-blockfooter-follow-us follow-us-menu">
+            <h3>Follow us</h3>
+            <ul class="list-unstyled">
+              <li>
+                <span>Joinup</span>
               </li>
-              <li class="ec-menu__item">
-                <a href="http://ec.europa.eu/info/cookies_en" class="ec-menu__link" target="_blank">{{ 'Cookies'|t }}</a>
+              <li>
+                <a href="http://ec.europa.eu/newsroom/joinup/subscription-quick-generic-form-fullpage.cfm?service_id=877">Newsletter subscription</a>
               </li>
-              <li class="ec-menu__item">
-                <a href="{{ base_path }}joinup/legal-notice" class="ec-menu__link" target="_blank">{{ 'Legal notice'|t }}</a>
+              <li>
+                <a href="https://ec.europa.eu/newsroom/joinup/newsletter-archives/view/service/877">Newsletter archive</a>
               </li>
-              <li class="ec-menu__item">
-                <a href="http://ec.europa.eu/info/contact_en" class="ec-menu__link" target="_blank">{{ 'Contact'|t }}</a>
+              <li>
+                <a href="https://twitter.com/joinup_eu">Twitter</a>
               </li>
-              <li class="ec-menu__item">
-                <a href="http://ec.europa.eu/info/europa-analytics_en" class="ec-menu__link" target="_blank">{{ 'Europa Analytics' }}</a>
+              <li>
+                <a href="https://www.linkedin.com/groups/2600644/">LinkedIn</a>
+              </li>
+              <li>
+                <span>Interoperable Europe</span>
+              </li>
+              <li>
+                <a href="https://ec.europa.eu/newsroom/informatics/newsletter-archives/view/service/1115">Newsletter archive</a>
+              </li>
+              <li>
+                <a href="https://ec.europa.eu/newsroom/informatics/user-subscriptions/1115/create">Newsletter subscription</a>
+              </li>
+              <li>
+                <a href="https://www.linkedin.com/in/interoperableeurope/">LinkedIn</a>
+              </li>
+              <li>
+                <a href="https://twitter.com/InteroperableEU">Twitter</a>
+              </li>
+              <li>
+                <a href="https://www.youtube.com/c/interoperableeurope">Youtube</a>
               </li>
             </ul>
           </div>
         </div>
       </div>
     </div>
-  </div>
-</footer>
+  </footer>
+</div>

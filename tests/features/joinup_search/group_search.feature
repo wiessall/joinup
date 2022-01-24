@@ -46,7 +46,9 @@ Feature: Search inside groups
       | title       | description          | parent    | access url |
       | Zip archive | It has files inside. | Pre-alpha | test.zip   |
 
-  @javascript
+  @javascript @wip
+  # This is disabled because the search bar is currently not shown in the header
+  # but this functionality will probably be restored in the future.
   Scenario: Group filters are shown as chips
     # Pages that do not belong to a collection or solution do not have chips in
     # the search field.
@@ -188,7 +190,9 @@ Feature: Search inside groups
     Then the page should show the following chip:
       | Inclined foundations |
 
-  @clearStaticCache
+  @clearStaticCache @wip
+  # This is disabled because the search bar is currently not shown in the header
+  # but this functionality will probably be restored in the future.
   Scenario: Group search caching
     # Initially the cache is cold.
     When I go to the homepage of the "Chalet construction" collection
@@ -212,7 +216,9 @@ Feature: Search inside groups
       | Chalet destruction |
     And the page should be cached
 
-  @javascript
+  @javascript @wip
+  # This is disabled because the search bar is currently not shown in the header
+  # but this functionality will probably be restored in the future.
   Scenario: Group filters remain active in the search bar when viewing search results
     When I go to the homepage of the "Chalet construction" collection
     And I open the search bar by clicking on the search icon
@@ -228,7 +234,9 @@ Feature: Search inside groups
     Then the page should not contain any chips
     And the page should show the tiles "Ground plan, Pre-alpha, Natural materials, Presenting DrillMaster X88"
 
-  @javascript
+  @javascript @wip
+  # This is disabled because the search bar is currently not shown in the header
+  # but this functionality will probably be restored in the future.
   Scenario: Group filter chips appear in search bar after selecting them in facets
     When I visit the search page
     Then the option with text "Any Collection or Solution" from select facet "collection/solution" is selected
@@ -237,8 +245,10 @@ Feature: Search inside groups
     When I open the search bar by clicking on the search icon
     Then the page should not contain any chips
 
-    When I select "Inclined foundations" from the "collection/solution" select facet
-    Then the option with text "Inclined foundations (6)" from select facet "collection/solution" is selected
+    When I select "Inclined foundations" from "Collection/Solution"
+    Then I scroll button "Search" into view
+    And I press "Search"
+    Then the option with text "Inclined foundations (6)" from select facet form "collection/solution" is selected
     And I should see 6 tiles
 
     When I open the search bar by clicking on the search icon
@@ -247,7 +257,10 @@ Feature: Search inside groups
 
     # The filter chip should remain active when doing another search.
     When I enter "ground" in the search bar and press enter
-    Then the option with text "Inclined foundations (2)" from select facet "collection/solution" is selected
+    Then I select "Inclined foundations" from "Collection/Solution"
+    Then I scroll button "Search" into view
+    And I press "Search"
+    Then the option with text "Inclined foundations (2)" from select facet form "collection/solution" is selected
     And I should see 2 tiles
     When I open the search bar by clicking on the search icon
     Then the page should show the following chip:

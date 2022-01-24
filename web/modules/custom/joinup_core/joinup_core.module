@@ -213,9 +213,13 @@ function joinup_core_ckeditor_css_alter(array &$css) {
  */
 function joinup_core_config_readonly_whitelist_patterns() {
   return [
-    // The 'support' menu is editable by moderators. This includes the menu
-    // links static overrides config.
-    'system.menu.front-page',
+    // The 'support' and footer menus are editable by moderators. This includes
+    // the menu links static overrides config.
+    'system.menu.footer-about-us',
+    'system.menu.footer-european-commission',
+    'system.menu.footer-follow-us',
+    'system.menu.footer-help-and-support',
+    'system.menu.footer-social-media',
     'system.menu.support',
     // The outdated content threshold is editable by moderators.
     'joinup_core.outdated_content_threshold',
