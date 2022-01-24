@@ -1,21 +1,6 @@
 @api @group-d
 Feature: Content Overview
 
-  Scenario: Ensure access to content overview landing page, called "Keep up to date".
-    Given I am an anonymous user
-    And I am on the homepage
-    Then I should see the link "Events, discussions, news ..."
-    When I click "Events, discussions, news ..."
-    # Visually hidden heading.
-    Then I should see the heading "Keep up to date"
-    # Check that all logged in users can see and access the overview page as well.
-    # However, authenticated users land on their profile, so they need to use the menu.
-    Given I am logged in as a user with the "authenticated user" role
-    Then I should see the link "Keep up to date"
-    When I click "Keep up to date"
-    # Visually hidden heading.
-    Then I should see the heading "Keep up to date"
-
   @terms
   Scenario: View content overview as an anonymous user
     Given users:
@@ -43,8 +28,7 @@ Feature: Content Overview
 
     # Check that visiting as a moderator does not create cache for all users.
     When I am logged in as a user with the "moderator" role
-    And I am on the homepage
-    And I click "Keep up to date"
+    And I visit the content overview
     Then a tour should be available
     And the page should be cacheable
     And I should see the following facet items "Discussion, Document, News, Events" in this order
@@ -77,8 +61,7 @@ Feature: Content Overview
 
     # Check page for authenticated users.
     When I am logged in as a user with the "authenticated" role
-    And I am on the homepage
-    And I click "Keep up to date"
+    And I visit the content overview
     Then I should see the "Seventh Windows" tile
     And I should see the "The Playful Tale" tile
     And I should see the "History of Flight" tile
@@ -90,9 +73,7 @@ Feature: Content Overview
 
     # Check the page for anonymous users.
     When I am an anonymous user
-    And I am on the homepage
-    Then I should see the link "Events, discussions, news ..."
-    When I click "Events, discussions, news ..."
+    And I visit the content overview
     Then I should see the "Seventh Windows" tile
     And I should see the "The Playful Tale" tile
     And I should see the "History of Flight" tile
@@ -100,12 +81,6 @@ Feature: Content Overview
     And I should see the "A Night at the Opera" tile
     But I should not see the "Rumble collection" tile
     And I should not see the "Night of Shadow" tile
-    And the page should be cacheable
-
-  Scenario: Content overview active trail should persist on urls with arguments.
-    Given I am an anonymous user
-    And I visit "/keep-up-to-date?a=1"
-    Then "Keep up to date" should be the active item in the "Header menu" menu
     And the page should be cacheable
 
   Scenario: Users are able to filter content they have created or that is featured site-wide.
@@ -131,7 +106,7 @@ Feature: Content Overview
       | Hideous Dreaded Monkey | Timely Xylophone | validated | michaelanewport | yes      |
 
     When I am logged in as "michaelanewport"
-    And I click "Keep up to date"
+    And I visit the content overview
     Then the "My content" inline facet should allow selecting the following values:
       | Featured content (2) |
       | My content (2)       |
@@ -154,7 +129,7 @@ Feature: Content Overview
     And the page should be cacheable
 
     When I am logged in as "nenaroberts"
-    And I click "Keep up to date"
+    And I visit the content overview
     Then the "My content" inline facet should allow selecting the following values:
       | Featured content (2) |
       | My content (1)       |
@@ -176,8 +151,7 @@ Feature: Content Overview
     And the page should be cacheable
 
     When I am an anonymous user
-    And I am on the homepage
-    And I click "Events, discussions, news ..."
+    And I visit the content overview
     Then I should see the following tiles in the correct order:
       | Sticky Vegetable       |
       | Early Avenue           |
@@ -216,8 +190,7 @@ Feature: Content Overview
       | Purple Poseidon | Barbaric Avenue | validated | yesterday |
 
     When I am logged in as claricemitchell
-    And I am on the homepage
-    And I click "Keep up to date"
+    And I visit the content overview
     Then I should see the following tiles in the correct order:
       | Flying Official Fish |
       | Purple Poseidon      |
@@ -280,8 +253,7 @@ Feature: Content Overview
       | Autumn Boiling       |
 
     When I am logged in as jeffreypayne
-    And I am on the homepage
-    And I click "Keep up to date"
+    And I visit the content overview
     And I click "Event"
     Then I should see the tiles in the correct order:
       | Autumn Boiling       |
@@ -323,8 +295,7 @@ Feature: Content Overview
       | All events          |
 
     When I am an anonymous user
-    And I am on the homepage
-    And I click "Events, discussions, news ..."
+    And I visit the content overview
     And I click "Event"
     Then the "Event date" inline facet should allow selecting the following values:
       | Upcoming events (3) |

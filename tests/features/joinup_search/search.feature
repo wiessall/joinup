@@ -2,11 +2,6 @@
 Feature: Global search
   As a user of the site I can find content through the global search.
 
-  # Todo: This test runs with javascript enabled because in a non-javascript
-  # environment, the dropdown facet is simply a list of links. Remove the
-  # `@javascript` tag when the upstream issue in the Facets module is fixed.
-  # Ref. https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-5739
-  # Ref. https://www.drupal.org/project/facets/issues/2937191
   @javascript
   Scenario: Anonymous user can find items
     Given the following collection:
@@ -21,97 +16,83 @@ Feature: Global search
       | Spherification | Molecular cooking collection | Spherification is the culinary process of shaping a liquid into spheres                                                              | Demography | European Union   | validated |
       | Foam           | Molecular cooking collection | "The use of foam in cuisine has been used in many forms in the history of cooking:whipped cream, meringue, and mousse are all foams" |            |                  | validated |
     And news content:
-      | title                 | body             | collection                   | topic                   | spatial coverage | state     |
-      | El Celler de Can Roca | The best in town | Molecular cooking collection | Statistics and Analysis | Luxembourg       | validated |
+      | title                | headline              | body             | collection                   | topic                   | spatial coverage | state     |
+      | El Tuba de Los Lobos | El Celler de Can Roca | The best in town | Molecular cooking collection | Statistics and Analysis | Luxembourg       | validated |
+      | Dummy title 1        | Dummy news 1          | Dummy body       | Molecular cooking collection | E-inclusion             | Luxembourg       | validated |
+      | Dummy title 2        | Dummy news 2          | Dummy body       | Molecular cooking collection | E-inclusion             | Luxembourg       | validated |
+      | Dummy title 3        | Dummy news 3          | Dummy body       | Molecular cooking collection | E-inclusion             | Luxembourg       | validated |
+      | Dummy title 4        | Dummy news 4          | Dummy body       | Molecular cooking collection | E-inclusion             | Luxembourg       | validated |
 
     Given I am logged in as a user with the "authenticated" role
-    # @todo The search page cache should be cleared when new content is added.
-    # @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-3428
-    And the cache has been cleared
-    When I visit the search page
+    Then I visit the search page
+    And I accept essential cookies
     # All content is visible.
     Then I should see the "Molecular cooking collection" tile
     And I should see the "El Celler de Can Roca" tile
     And I should see the "Spherification" tile
     And I should see the "Foam" tile
-    # Facets should be in place.
-    And the option with text "Any topic" from select facet "topic" is selected
-    And the "topic" select facet should contain the following options:
-      | Any topic                     |
-      | Demography (2)              |
-      | Statistics and Analysis (1) |
-    And the option with text "Any location" from select facet "spatial coverage" is selected
-    And the "spatial coverage" select facet should contain the following options:
-      | Any location         |
-      | Belgium (1)        |
-      | European Union (1) |
-      | Luxembourg (1)     |
+    # Terms are sorted alphabetically
+    And the "topic" checkbox facet should allow selecting the following values "Info (1), Statistics and Analysis (1), Social and Political (6), Demography (2), E-inclusion (4)"
+    And the "spatial coverage" checkbox facet should allow selecting the following values "Belgium (1), European Union (1), Luxembourg (5)"
+
     # Check that only one search field is available. In an earlier version of
     # Joinup there were two search fields, but this was confusing users.
     And there should be exactly 1 "search field" on the page
 
-    # Test the topic facet.
-    When I select "Demography" from the "topic" select facet
-    Then the option with text "Demography (2)" from select facet "topic" is selected
+    When I check the "Social and Political (6)" checkbox from the "topic" facet
+    Then the "Social and Political" content checkbox item should be selected
+    And the "topic" checkbox facet should allow selecting the following values "Info (1), Statistics and Analysis (1), Social and Political (6), Demography (2), E-inclusion (4)"
+    # The tiles appear because the parent term is selected even though they do not have a direct reference there.
+    And I should see the "Dummy news 1" tile
+    And I should see the "Dummy news 2" tile
+    And I should see the "Dummy news 3" tile
+    And I should see the "Dummy news 4" tile
+
+    # Test the topic facet. The space prefixing "Demography" is due to the hierarchy.
+    When I check the "Demography (2)" checkbox from the "topic" facet
+    Then the "Demography" content checkbox item should be selected
     # The selected option moves to the last position by default.
-    And the "topic" select facet should contain the following options:
-      | Any topic                     |
-      | Statistics and Analysis (1) |
-      | Demography (2)              |
-    Then the option with text "Any location" from select facet "spatial coverage" is selected
-    And the "spatial coverage" select facet should contain the following options:
-      | Any location         |
-      | Belgium (1)        |
-      | European Union (1) |
+    And the "topic" checkbox facet should allow selecting the following values "Info (1), Statistics and Analysis (1), Social and Political (6), Demography (2), E-inclusion (4)"
+    And the "spatial coverage" checkbox facet should allow selecting the following values "Belgium (1), European Union (1)"
+
     And I should see the "Molecular cooking collection" tile
     And I should see the "Spherification" tile
     But I should not see the "El Celler de Can Roca" tile
     And I should not see the "Foam" tile
 
     # Test the spatial coverage facet.
-    When I select "Belgium" from the "spatial coverage" select facet
-    Then the option with text "Belgium (1)" from select facet "spatial coverage" is selected
-    And the "spatial coverage" select facet should contain the following options:
-      | Any location         |
-      | Belgium (1)        |
-      | European Union (1) |
-    Then the option with text "Demography (1)" from select facet "topic" is selected
-    And the "topic" select facet should contain the following options:
-      | Any topic        |
-      | Demography (1) |
+    When I scroll the "spatial coverage" facet into view
+    And I check the "Belgium (1)" checkbox from the "spatial coverage" facet
+    And the "Belgium" content checkbox item should be selected
+    And the "spatial coverage" checkbox facet should allow selecting the following values "Belgium (1), European Union (1)"
+    And the "topic" checkbox facet should allow selecting the following values "Social and Political (1), Demography (1)"
     And I should see the "Molecular cooking collection" tile
     But I should not see the "El Celler de Can Roca" tile
     And I should not see the "Spherification" tile
     And I should not see the "Foam" tile
 
-    # Reset the search by visiting again the search page.
     Given I am on the search page
-    Then I should see the text "Content types" in the "Left sidebar" region
-
-    # Select link in the 'type' facet.
-    When I check the "News (1)" checkbox from the "Content types" facet
+    When I scroll the "Content types" facet into view
+    And I check the "News (5)" checkbox from the "Content types" facet
     Then the "News" content checkbox item should be selected
-    And the "Content types" checkbox facet should allow selecting the following values "Collection (1), Solutions (2), News (1)"
+    And the "Content types" checkbox facet should allow selecting the following values "Collection (1), Solutions (2), News (5)"
 
-    When I check the "Solutions (2)" checkbox from the "Content types" facet
+    When I scroll the "Content types" facet into view
+    And I check the "Solutions (2)" checkbox from the "Content types" facet
     Then the "Solutions" content checkbox item should be selected
     And the "News" content checkbox item should be selected
-    Then the "Content types" checkbox facet should allow selecting the following values "Collection (1), Solutions (2), News (1)"
-    And the "topic" select facet should contain the following options:
-      | Any topic                     |
-      | Demography (1)              |
-      | Statistics and Analysis (1) |
-    And the "spatial coverage" select facet should contain the following options:
-      | Any location         |
-      | European Union (1) |
-      | Luxembourg (1)     |
+    And I should see the following facet summary "Solutions, News"
+    Then the "Content types" checkbox facet should allow selecting the following values "Collection (1), Solutions (2), News (5)"
+    And the "topic" checkbox facet should allow selecting the following values "Info (1), Statistics and Analysis (1), Social and Political (5), Demography (1), E-inclusion (4)"
+    And the "spatial coverage" checkbox facet should allow selecting the following values "European Union (1), Luxembourg (5)"
     And I should not see the "Molecular cooking collection" tile
     And I should see the "El Celler de Can Roca" tile
     But I should see the "Spherification" tile
     And I should see the "Foam" tile
 
     # Launch a text search.
-    When I open the search bar by clicking on the search icon
+    When I click "Clear filters"
+    Then I open the search bar by clicking on the search icon
     And I enter "Cooking" in the search bar and press enter
     Then I should see the "Molecular cooking collection" tile
     And I should see the "Foam" tile
@@ -139,17 +120,17 @@ Feature: Global search
       | Document omega | Document      | Document short delta | A document consists of epsilon strings. | Luxembourg       | Alphabet | Collection alpha | validated |
 
     When I visit the search page
-    And the "spatial coverage" select facet should contain the following options:
-      | Any location     |
-      | Greece (1)     |
-      | Luxembourg (2) |
-    When I select "Luxembourg" from the "spatial coverage" select facet
-    Then the option with text "Luxembourg (2)" from select facet "spatial coverage" is selected
+
+    Then I scroll the "spatial coverage" facet into view
+    And the "spatial coverage" checkbox facet should allow selecting the following values "Greece (1), Luxembourg (2)"
+    When I check the "Luxembourg (2)" checkbox from the "spatial coverage" facet
+    Then the "Luxembourg" content checkbox item should be selected
+    And I should see the following search header in the correct order:
+      | SEARCH RESULTS (2) |
+      | Sort by:           |
+    And I should see the text "SEARCH RESULTS (2)"
     # The countries are still sorted alphabetically even though the Luxembourg value is selected and has more results.
-    And the "spatial coverage" select facet should contain the following options:
-      | Any location     |
-      | Greece (1)     |
-      | Luxembourg (2) |
+    And the "spatial coverage" checkbox facet should allow selecting the following values "Greece (1), Luxembourg (2)"
 
   Scenario: Content can be found with a full-text search.
     Given the following owner:
@@ -203,24 +184,30 @@ Feature: Global search
 
     # "Alpha" is used in all the rdf entities titles.
     When I enter "Alpha" in the search bar and press enter
-    Then the page should show the tiles "Collection alpha, Solution alpha, Release Alpha, Licence Alpha, Video alpha"
+    And I should see the following search header in the correct order:
+      | SEARCH RESULTS (5) |
+      | Sort by:           |
+    Then I should see the text "SEARCH RESULTS (5)"
+    And the page should show the tiles "Collection alpha, Solution alpha, Release Alpha, Licence Alpha, Video alpha"
 
     # "Omega" is used in all the node entities titles. Since the content of
     # custom pages is added to their collection, we also match the collection.
     When I enter "omega" in the search bar and press enter
-    Then the page should show the tiles "Collection alpha, News omega, Event Omega, Document omega, Discussion omega, Page omega"
+    Then I should see the text "SEARCH RESULTS (6)"
+    And the page should show the tiles "Collection alpha, News headline delta, Event Omega, Document omega, Discussion omega, Page omega"
 
     # "Beta" is used in all the rdf entities body fields.
     When I enter "beta" in the search bar and press enter
-    Then the page should show the tiles "Collection alpha, Solution alpha, Release Alpha, Licence Alpha"
+    Then I should see the text "SEARCH RESULTS (4)"
+    And the page should show the tiles "Collection alpha, Solution alpha, Release Alpha, Licence Alpha"
 
     # "Epsilon" is used in all the node entities body fields.
     When I enter "epsilon" in the search bar and press enter
-    Then the page should show the tiles "Collection alpha, News omega, Event Omega, Document omega, Discussion omega, Page omega"
+    Then the page should show the tiles "Collection alpha, News headline delta, Event Omega, Document omega, Discussion omega, Page omega"
 
     # "Alphabet" is used in all the keywords fields.
     When I enter "Alphabet" in the search bar and press enter
-    Then the page should show the tiles "Solution alpha, Release Alpha, News omega, Event Omega, Document omega"
+    Then the page should show the tiles "Solution alpha, Release Alpha, News headline delta, Event Omega, Document omega"
 
     # "Gamma" is used in the collection abstract.
     When I enter "gamma" in the search bar and press enter
@@ -228,7 +215,7 @@ Feature: Global search
 
     # "Delta" is used in headline and short titles.
     When I enter "delta" in the search bar and press enter
-    Then the page should show the tiles "News omega, Event Omega, Document omega"
+    Then the page should show the tiles "News headline delta, Event Omega, Document omega"
 
     # Search for the event fields: agenda, location, address, organisation, scope.
     When I enter "agenda" in the search bar and press enter
@@ -260,11 +247,13 @@ Feature: Global search
     When I enter "Omero+snc" in the search bar and press enter
     Then the page should show the tiles "Ulysses Freeman"
 
+  @wip
+  # This is disabled because the search bar is currently not shown in the header
+  # but this functionality will probably be restored in the future.
   Scenario: Advanced search
-    # An advanced search link is shown in the header, except on the home page
-    # and the search page.
+    # An advanced search link is shown in the header, except on the search page.
     Given I am on the homepage
-    Then I should not see the link "Advanced search"
+    Then I should see the link "advanced search"
     Given I visit the collection overview
     Then I should see the link "Advanced search"
     When I click "Advanced search"
@@ -285,9 +274,9 @@ Feature: Global search
       | title           | body                                  | collection                      |
       | Disturbed birds | Flocks of trained pigeons flying off. | Ornithology: the study of birds |
     And news content:
-      | title                               | body                            | collection                      | state     |
-      | Chickens are small birds            | Birds domesticated in India.    | Ornithology: the study of birds | validated |
-      | Found a xylophone from 1600 in Asia | Oldest instrument of this type. | Husky Flying Xylophone          | validated |
+      | title                               | headline                            | body                            | collection                      | state     |
+      | Chickens are small birds            | Chickens are small birds            | Birds domesticated in India.    | Ornithology: the study of birds | validated |
+      | Found a xylophone from 1600 in Asia | Found a xylophone from 1600 in Asia | Oldest instrument of this type. | Husky Flying Xylophone          | validated |
     And event content:
       | title         | body                   | collection                      | state     |
       | Bird spotting | Roosters crow at dawn. | Ornithology: the study of birds | validated |
@@ -302,10 +291,10 @@ Feature: Global search
     # The bird is the word... to search.
     When I enter "Bird" in the search bar and press enter
     Then I should see the following tiles in the correct order:
+      | Chickens are small birds          |
       | Ornithology: the study of birds   |
       | Bird outposts in the wild         |
       | Disturbed birds                   |
-      | Chickens are small birds          |
       | Bird spotting                     |
       | Best place to find an exotic bird |
       | Bird Birdman                      |
@@ -367,7 +356,8 @@ Feature: Global search
     When I enter "ubermensch" in the search bar and press enter
     Then I should see "No content found for your search."
     When I enter "zzolu-distro" in the search bar and press enter
-    Then I should see "No content found for your search."
+    Then I should not see the text "Search Results"
+    And I should see "No content found for your search."
     When I enter "apache" in the search bar and press enter
     Then the page should show only the tiles "Apache-2.0"
     When I enter "HTML" in the search bar and press enter
@@ -514,23 +504,24 @@ Feature: Global search
       | title             | description       | state     |
       | Custom collection | Some custom data. | validated |
     And news content:
-      | title                              | body                                                              | collection        | state     | created    | changed    |
-      | Relativity is the word             | No one cares about the body.                                      | Custom collection | validated | 01/01/2019 | 03/08/2019 |
-      | Relativity news: Relativity theory | I do care about the relativity keyword in the body.               | Custom collection | validated | 02/01/2019 | 02/08/2019 |
-      | Absolutely nonesense               | Some news are not worth it but I will add relativity here anyway. | Custom collection | validated | 03/01/2019 | 01/08/2019 |
+      | title               | headline                           | body                                                              | collection        | state     | created    | changed    |
+      | Quantum information | Relativity is the word             | No one cares about the body.                                      | Custom collection | validated | 01/01/2019 | 03/08/2019 |
+      | The uneven universe | Relativity news: Relativity theory | I do care about the relativity keyword in the body.               | Custom collection | validated | 02/01/2019 | 02/08/2019 |
+      | The earth is square | Absolutely nonsense                | Some news are not worth it but I will add relativity here anyway. | Custom collection | validated | 03/01/2019 | 01/08/2019 |
 
     When I am on the homepage
     And I enter "Relativity" in the search bar and press enter
     Then the option "Relevance" should be selected
+    And I should see the text "SEARCH RESULTS (3)"
     And I should see the following tiles in the correct order:
       | Relativity news: Relativity theory |
       | Relativity is the word             |
-      | Absolutely nonesense               |
+      | Absolutely nonsense                |
     And I should be on "/search?keys=Relativity&sort_by=relevance"
 
     Given I select "Creation Date" from "Sort by"
     Then I should see the following tiles in the correct order:
-      | Absolutely nonesense               |
+      | Absolutely nonsense                |
       | Relativity news: Relativity theory |
       | Relativity is the word             |
     And I should be on "/search?keys=Relativity&sort_by=creation-date"
@@ -539,5 +530,161 @@ Feature: Global search
     Then I should see the following tiles in the correct order:
       | Relativity is the word             |
       | Relativity news: Relativity theory |
-      | Absolutely nonesense               |
+      | Absolutely nonsense                |
     And I should be on "/search?keys=Relativity&sort_by=last-updated-date"
+
+  @javascript
+  Scenario: Anonymous user can find facets summary
+    Given the following collection:
+      | title            | Radio cooking collection |
+      | logo             | logo.png                 |
+      | moderation       | no                       |
+      | topic            | Demography               |
+      | spatial coverage | Belgium                  |
+      | state            | validated                |
+    And the following solutions:
+      | title    | collection               | description                                                                                                                          | topic      | spatial coverage | state     |
+      | Spheres  | Radio cooking collection | Spherification is the culinary process of shaping a liquid into spheres                                                              | Demography | European Union   | validated |
+      | Movistar | Radio cooking collection | "The use of foam in cuisine has been used in many forms in the history of cooking:whipped cream, meringue, and mousse are all foams" |            |                  | validated |
+    And news content:
+      | title           | body             | collection               | topic                   | spatial coverage | state     |
+      | El Cabo da Roca | The best in town | Radio cooking collection | Statistics and Analysis | Luxembourg       | validated |
+      | Funny news 1    | Dummy body       | Radio cooking collection | E-inclusion             | Luxembourg       | validated |
+      | Funny news 2    | Dummy body       | Radio cooking collection | E-inclusion             | Luxembourg       | validated |
+      | Funny news 3    | Dummy body       | Radio cooking collection | E-inclusion             | Luxembourg       | validated |
+      | Funny news 4    | Dummy body       | Radio cooking collection | E-inclusion             | Luxembourg       | validated |
+
+    Given I am logged in as a user with the "authenticated" role
+    When I visit the search page
+    When I scroll the "Content types" facet into view
+    And I check the "Solutions (2)" checkbox from the "Content types" facet
+    Then I scroll the "Content types" facet into view
+    And I check the "News (5)" checkbox from the "Content types" facet
+    And I should see the following facet summary "Solutions, News"
+
+    Then I click "Clear filters"
+    And I scroll the "Content types" facet into view
+    And I check the "News (5)" checkbox from the "Content types" facet
+    And I should see the following facet summary "News"
+
+    # Check if facet summary was remove correctly.
+    And I click "Clear filters"
+    Then I scroll the "Content types" facet into view
+    And I check the "News (5)" checkbox from the "Content types" facet
+    And I scroll the "Content types" facet into view
+    And I check the "Collection (1)" checkbox from the "Content types" facet
+    And I should see the following facet summary "Collection, News"
+    When I scroll the "News" chip into view
+    And I should remove the following facet summary "News"
+    Then the page should show only the tiles "Radio cooking collection"
+
+  @javascript
+  Scenario: Anonymous user can find facets summary
+    Given the following collection:
+      | title            | Radio cooking collection |
+      | logo             | logo.png                 |
+      | moderation       | no                       |
+      | topic            | Demography               |
+      | spatial coverage | Belgium                  |
+      | state            | validated                |
+    And the following solutions:
+      | title    | collection               | description                                                                                                                          | topic      | spatial coverage | state     |
+      | Spheres  | Radio cooking collection | Spherification is the culinary process of shaping a liquid into spheres                                                              | Demography | European Union   | validated |
+      | Movistar | Radio cooking collection | "The use of foam in cuisine has been used in many forms in the history of cooking:whipped cream, meringue, and mousse are all foams" |            |                  | validated |
+    And news content:
+      | title           | body             | collection               | topic                   | spatial coverage | state     |
+      | El Cabo da Roca | The best in town | Radio cooking collection | Statistics and Analysis | Luxembourg       | validated |
+      | Funny news 1    | Dummy body       | Radio cooking collection | E-inclusion             | Luxembourg       | validated |
+      | Funny news 2    | Dummy body       | Radio cooking collection | E-inclusion             | Luxembourg       | validated |
+      | Funny news 3    | Dummy body       | Radio cooking collection | E-inclusion             | Luxembourg       | validated |
+      | Funny news 4    | Dummy body       | Radio cooking collection | E-inclusion             | Luxembourg       | validated |
+
+    Given I am logged in as a user with the "authenticated" role
+    When I visit the search page
+    And I enter "funn" in the search bar
+    And I wait for AJAX to finish
+    Then I should see the following search suggestions:
+      | funni |
+      | funny |
+
+    When I enter "bott" in the search bar
+    And I wait for AJAX to finish
+    Then I should see the following search suggestions:
+      | body |
+
+    When I scroll the "Content types" facet into view
+    And I check the "Solutions (2)" checkbox from the "Content types" facet
+    When I scroll the "Content types" facet into view
+    And I check the "News (5)" checkbox from the "Content types" facet
+    And I should see the following facet summary "Solutions, News"
+
+    And I click "Clear filters"
+    Then I scroll the "Content types" facet into view
+    And I check the "News (5)" checkbox from the "Content types" facet
+    And I should see the following facet summary "News"
+
+    # Check if facet summary was remove correctly.
+    And I click "Clear filters"
+    Then I scroll the "Content types" facet into view
+    And I check the "News (5)" checkbox from the "Content types" facet
+    And I scroll the "Content types" facet into view
+    And I check the "Collection (1)" checkbox from the "Content types" facet
+    And I should see the following facet summary "Collection, News"
+    Then I scroll the "News" chip into view
+    And I should remove the following facet summary "News"
+    And the page should show only the tiles "Radio cooking collection"
+
+  @terms
+  Scenario: Filter on date
+    Given collection:
+      | title | Mice in space |
+      | state | validated     |
+    And document content:
+      | title        | collection    | topic                                  | state     | logo     | body                                                                                                                                                                                            |
+      | Microgravity | Mice in space | HR, Statistics and Analysis, E-justice | validated | alan.jpg | Conventional studies investigating the effects of reduced gravity on muscle mass and function have used a ground control group that is not directly comparable to the space experimental group. |
+    And event content:
+      | title           | collection    | topic                    | state     | logo        | body                                                                                                                                                                                  |
+      | Stay at the ISS | Mice in space | EU and European Policies | validated | charles.jpg | Two groups of mice (six per group) were housed aboard the International Space Station for 35 days. One group was subjected to artificial gravity (1 g) and the other to microgravity. |
+    And news content:
+      | title           | body                                       | collection    | topic                   | spatial coverage | state     | logo        | created    | changed    |
+      | Muscle atrophy  | Researchers from the University of Tsukuba | Mice in space | Finance in EU           | Luxembourg       | validated | blaise.jpg  | 01/01/2019 | 01/01/2019 |
+      | El Cabo da Roca | The best in town                           | Mice in space | Statistics and Analysis | Luxembourg       | validated | charles.jpg | 01/12/2020 | 01/12/2020 |
+      | Funny news 1    | Dummy body                                 | Mice in space | HR                      | Luxembourg       | validated | ada.png     | 05/01/2019 | 05/01/2019 |
+      | Funny news 2    | Dummy body                                 | Mice in space | E-inclusion             | Luxembourg       | validated | alan.jpg    | 06/21/2019 | 06/21/2019 |
+      | Funny news 3    | Dummy body                                 | Mice in space | E-inclusion             | Luxembourg       | validated | charles.jpg | 12/31/2021 | 12/31/2021 |
+      | Funny news 4    | Dummy body                                 | Mice in space | HR                      | Luxembourg       | validated | ada.png     | 06/25/2020 | 06/25/2020 |
+      | Funny news 5    | Dummy body                                 | Mice in space | HR                      | Luxembourg       | validated | ada.png     | 01/01/2021 | 01/01/2021 |
+      | Dummy news 1    | Dummy body                                 | Mice in space | Statistics and Analysis | Luxembourg       | validated | charles.jpg | 09/24/2019 | 09/24/2019 |
+      | Dummy news 2    | Dummy body                                 | Mice in space | E-inclusion             | Luxembourg       | validated | alan.jpg    | 01/18/2021 | 01/18/2021 |
+      | Dummy news 3    | Dummy body                                 | Mice in space | Statistics and Analysis | Luxembourg       | validated | ada.png     | 08/01/2019 | 08/01/2019 |
+      | Dummy news 4    | Dummy body                                 | Mice in space | E-inclusion             | Luxembourg       | validated | charles.jpg | 09/18/2019 | 09/18/2019 |
+
+    When I visit the search page
+    Then I should see the 3 tiles with image
+
+    Then I go to "/search?sort_by=relevance&page=1"
+    And I should see the 0 tiles with image
+
+    # Filter content from 01-01-2020 to 30-06-2020.
+    # Only "El Cabo da Roca" and "Funny news 4" should appear.
+    Then I go to "/search?f[0]=creation_date:(min:1577880000,max:1593518400)"
+    And I should see the text "SEARCH RESULTS (2)"
+
+    Then I go to "/search?f[0]=creation_date:(min:1577836800,max:)"
+    And I should see the text "SEARCH RESULTS (8)"
+
+    Then I go to "/search?f[0]=creation_date:(min:,max:1609113600)"
+    And I should see the text "SEARCH RESULTS (8)"
+
+    Then I go to "/search?f[0]=creation_date:(min:,max:)"
+    And I should see the text "SEARCH RESULTS (14)"
+
+  Scenario: Max 3 topic terms appear in each search result with a suffix for the rest.
+    Given the following collection:
+      | title      | Max 3 topic collection                                                             |
+      | moderation | no                                                                                 |
+      | topic      | Finance in EU, Supplier exchange, Demography, E-inclusion, Statistics and Analysis |
+      | state      | validated                                                                          |
+    When I visit the search page
+    Then there should be 3 topics in the "Max 3 topic collection" card
+    And I should see the text "+2 topics" in the "Max 3 topic collection" card

@@ -1,0 +1,68 @@
+// Homepage Common styles
+.joinup-layout {
+  .block {
+    & > h2 {
+      text-transform: uppercase;
+      font-size: 1.25rem; // 20px
+      padding-top: .75em;
+      margin-bottom: 1em;
+    }
+  }
+  .field--name-field-topic {
+    margin-bottom: $spacer; // 16px
+    .field__item {
+      display: inline-block;
+    }
+    a {
+      // Badge classes
+      display: inline-block;
+      padding: 0.35em 0.65em;
+      font-size: 0.75em;
+      font-weight: 700;
+      line-height: 1;
+      color: #fff;
+      text-align: center;
+      white-space: nowrap;
+      vertical-align: baseline;
+      border-radius: 0.25rem;
+      // End badge classes
+      background-color: $secondary;
+      font-size: $font-size-sm;
+      color: $brand-darker;
+      font-weight: normal;
+    }
+  }
+}
+.view-in-the-spotlight,
+.block-entityqueue--highlighted-content,
+.view-latest-news {
+  .views-row {
+    margin-bottom: $spacer * 1.5; // 24px
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+  .field--name-body {
+    color: $gray-700;
+  }
+  article {
+    h2 {
+      font-size: $font-size-base;
+      font-weight: $font-weight-medium;
+      line-height: $line-height-base;
+      a {
+        color: $gray-900;
+      }
+    }
+    img {
+      border-radius: $border-radius; // .5rem;
+    }
+  }
+}
+
+.iop-gradient {
+	// background: linear-gradient(to right, #278ebf 0%, #44bfb8 32%, #50c1b0 37%, #70c89a 45%, #a4d377 56%, #c2d962 62%, #f6921e 100%); // Full IOP gradient
+	background: linear-gradient(to right, #c2d962 0%, #f6921e 100%); // Only last 2 colors
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+}

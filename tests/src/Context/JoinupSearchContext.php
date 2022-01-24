@@ -256,25 +256,7 @@ class JoinupSearchContext extends RawDrupalContext {
   }
 
   /**
-   * Clicks a facet item in an inline facet.
-   *
-   * @param string $select
-   *   The option to select.
-   * @param string $facet
-   *   The facet alias.
-   *
-   * @throws \Exception
-   *   Thrown when the facet or the link inside the facet is not found.
-   *
-   * @When I select :option from the :facet select facet
-   */
-  public function iSelectAnOptionFromFacet(string $select, string $facet): void {
-    $facet = $this->findFacetByAlias($facet, NULL, 'select');
-    $facet->selectOption($select);
-  }
-
-  /**
-   * Asserts a selected option in the .
+   * Asserts a selected option in the given facet.
    *
    * @param string $option
    *   Text value of the option to find.
@@ -285,12 +267,64 @@ class JoinupSearchContext extends RawDrupalContext {
    *
    * @Then the option with text :option from select facet :select is selected
    */
-  public function assertSelectFacetOptionSelected($option, $select) {
-    $element = $this->findFacetByAlias($select, NULL, 'select');
+  public function assertSelectFacetOptionSelected(string $option, string $select): void {
+    // What appears as a select list in the frontend is actually output as a
+    // list of links by the Facets module which is ultimately converted into a
+    // select list using JavaScript.
+    // @see https://www.drupal.org/project/facets/issues/2937191
+    $html_tag = $this->browserSupportsJavaScript() ? 'select' : 'ul';
+    $element = $this->findFacetByAlias($select, NULL, $html_tag);
     if (!$element) {
       throw new \Exception(sprintf('The select "%s" was not found in the page %s', $select, $this->getSession()->getCurrentUrl()));
     }
-    $this->assertSelectedOption($element, $option);
+    if ($this->browserSupportsJavaScript()) {
+      $this->assertSelectedOption($element, $option);
+    }
+    else {
+      $selected_option = $element->find('css', 'a.is-active');
+      if ($selected_option instanceof NodeElement) {
+        $text = $selected_option->getText();
+        // Selected facet options are prefixed with '(-) '. Strip this.
+        $text = preg_replace('/^\(-\) /', '', $text);
+        // Ignore duplicate whitespace.
+        $option = preg_replace('/\s{2,}/', ' ', $option);
+        Assert::assertEquals($option, $text, sprintf('The option "%s" is selected in the "%s" facet, but the option "%s" was expected.', $text, $select, $option));
+      }
+    }
+  }
+
+  /**
+   * Asserts a selected option in the select facets form.
+   *
+   * @param string $option
+   *   Text value of the option to find.
+   * @param string $select
+   *   Title of the select field.
+   *
+   * @throws \Exception
+   *    Throws an exception when the select is not found in page.
+   *
+   * @Then the option with text :option from select facet form :select is selected
+   */
+  public function assertSelectFacetFormOptionSelected(string $option, string $select): void {
+    $element = $this->findFacetByAlias($select, NULL, 'select', TRUE);
+    if (!$element) {
+      throw new \Exception(sprintf('The select "%s" was not found in the page %s', $select, $this->getSession()->getCurrentUrl()));
+    }
+    if ($this->browserSupportsJavaScript()) {
+      $this->assertSelectedOption($element, $option);
+    }
+    else {
+      $selected_option = $element->find('css', 'a.is-active');
+      if ($selected_option instanceof NodeElement) {
+        $text = $selected_option->getText();
+        // Selected facet options are prefixed with '(-) '. Strip this.
+        $text = preg_replace('/^\(-\) /', '', $text);
+        // Ignore duplicate whitespace.
+        $option = preg_replace('/\s{2,}/', ' ', $option);
+        Assert::assertSame($option, $text, sprintf('The option "%s" is selected in the "%s" facet, but the option "%s" was expected.', $text, $select, $option));
+      }
+    }
   }
 
   /**
@@ -313,6 +347,15 @@ class JoinupSearchContext extends RawDrupalContext {
   /**
    * Asserts the list of available options in a facet select box.
    *
+   * @codingStandardsIgnoreStart
+   * Table format:
+   * | Option 1 | 0 |
+   * | Option 2 | 1 |
+   * @codingStandardsIgnoreEnd
+   *
+   * The first column in the table is required and lists the options that should
+   * be available. The second, optional, column lists the expected indentation.
+   *
    * @param string $select
    *   The name of the field element.
    * @param \Behat\Gherkin\Node\TableNode $table
@@ -324,7 +367,7 @@ class JoinupSearchContext extends RawDrupalContext {
    *
    * @Then the :select select facet should contain the following options:
    */
-  public function assertSelectOptionsAsList($select, TableNode $table) {
+  public function assertSelectOptionsAsList(string $select, TableNode $table): void {
     $element = $this->findFacetByAlias($select, NULL, 'select');
     $this->assertSelectAvailableOptions($element, $table);
   }
@@ -345,7 +388,7 @@ class JoinupSearchContext extends RawDrupalContext {
   public function checkCheckboxFacet(string $option, string $facet_type): void {
     $facet = $this->findFacetByAlias($facet_type);
     /** @var \Behat\Mink\Element\NodeElement[] $node_elements */
-    $node_elements = $facet->findAll('xpath', '//li[@class="facet-item"]');
+    $node_elements = $facet->findAll('css', 'li.facet-item label');
     foreach ($node_elements as $node_element) {
       if ($node_element->getText() === $option) {
         $node_element->click();
@@ -354,6 +397,131 @@ class JoinupSearchContext extends RawDrupalContext {
     }
 
     throw new \Exception("The option '{$option}' was not found in the '{$facet_type}' facet.");
+  }
+
+  /**
+   * Checks a checkbox in a facet form.
+   *
+   * @param string $option
+   *   The label of the checkbox.
+   * @param string $facet_type
+   *   The label of the facet.
+   *
+   * @throws \Exception
+   *   Thrown when the checkbox is not found.
+   *
+   * @Given I check the :option checkbox from the :facet_type facet form
+   */
+  public function checkCheckboxFacetForm(string $option, string $facet_type): void {
+    $facet = $this->findFacetByAlias($facet_type, NULL, '*', TRUE);
+    /** @var \Behat\Mink\Element\NodeElement[] $node_elements */
+    $node_elements = $facet->findAll('xpath', '//option');
+    foreach ($node_elements as $node_element) {
+      if ($node_element->getText() === $option) {
+        $node_element->click();
+        return;
+      }
+    }
+
+    throw new \Exception("The option '{$option}' was not found in the '{$facet_type}' facet.");
+  }
+
+  /**
+   * Asserts the autocomplete items from search.
+   *
+   * This function asserts also the order of the items.
+   *
+   * @param \Behat\Gherkin\Node\TableNode $table
+   *   A list of items to be present.
+   *
+   * @throws \Exception
+   *    Thrown when the suggestions are not present in the page.
+   *
+   * @Then I should see the (following )search suggestion(s):
+   */
+  public function iShouldSeeTheSuggestions(TableNode $table): void {
+    $session = $this->getSession();
+    $xpath = '//ul[contains(concat(" ", normalize-space(@class), " "), "search-api-autocomplete-search")]//li';
+    $session->getPage()->waitFor(5, function () use ($session, $xpath, $table): bool {
+      $element = $this->getSearchBarElement();
+      $session->getDriver()->keyDown($element->getXpath(), '', NULL);
+      $allResults = $session->getPage()->findAll('xpath', $xpath);
+      $found = array_map(function ($item) {
+        /** @var \Behat\Mink\Element\NodeElement $item */
+        return $item->getText();
+      }, $allResults);
+
+      return $table->getColumn(0) === $found;
+    });
+  }
+
+  /**
+   * Asserts the autocomplete single item from search.
+   *
+   * This function asserts also the order of the items.
+   *
+   * @param string $keywords
+   *   A list of words to search.
+   * @param string $suggestion
+   *   The word we need to see in suggestion.
+   *
+   * @throws \Exception
+   *   Thrown when the suggestion is not present in the page.
+   *
+   * @Then I enter :keywords in the search and it should see the suggestion :suggestion
+   */
+  public function iShouldSeeTheSuggestion(string $keywords, string $suggestion): void {
+    $session = $this->getSession();
+    $element = $this->getSearchBarElement();
+    $element->setValue($keywords);
+
+    $session->getDriver()->keyDown($element->getXpath(), '', NULL);
+    $session->wait(500);
+    $allResults = $session->getPage()->findAll('css', '.ui-autocomplete a');
+
+    $found = array_map(function ($item) {
+      /** @var \Behat\Mink\Element\NodeElement $item */
+      return $item->getText();
+    }, $allResults);
+
+    Assert::assertEquals([$suggestion], $found, "The autocomplete values mismatch the expected ones.");
+  }
+
+  /**
+   * Check number of search results as featured.
+   *
+   * @param int $number
+   *   Number of tiles with image.
+   *
+   * @Given I should see the :number tiles with image
+   */
+  public function numberOfTilesWithImage(int $number) {
+    $session = $this->getSession()->getPage();
+    $elements = $session->findAll('css', '.card img');
+
+    Assert::assertSame(count($elements), $number);
+  }
+
+  /**
+   * Asserts the number of topics in a given card.
+   *
+   * @param int $number
+   *   The expected number of topics.
+   * @param string $heading
+   *   The heading in the card.
+   *
+   * @Given there should be :number topic(s) in the :heading card
+   */
+  public function assertNumberOfTopicsInCards(int $number, string $heading): void {
+    $card = $this->getTileByHeading($heading);
+    $topics = $card->findAll('css', '.badge');
+    foreach ($topics as $index => $topic) {
+      // Remove the badges that explain the extra amount of topics.
+      if (preg_match('/^\+\d{1,2} topics?$/', $topic->getText()) === 1) {
+        unset($topics[$index]);
+      }
+    }
+    Assert::assertSame(count($topics), $number);
   }
 
   /**
@@ -463,12 +631,14 @@ class JoinupSearchContext extends RawDrupalContext {
    */
   public function assertCheckboxFacetItems(string $facet, string $values): void {
     $element = $this->findFacetByAlias($facet);
+
+    $css = $this->browserSupportsJavaScript() ? 'li.facet-item label' : 'li.facet-item';
     $found = array_map(function (NodeElement $item) {
       $text = $item->getText();
       // If a value is selected, it is prefixed with a '(-) ' in the text. Clean
       // that out so that it is more readable.
       return preg_replace('/^\(-\) /', '', $text);
-    }, $element->findAll('css', 'li.facet-item'));
+    }, $element->findAll('css', $css));
 
     $values = $this->explodeCommaSeparatedStepArgument($values);
     Assert::assertEquals($values, $found, "The '{$facet}' values mismatch the expected ones.");
@@ -610,6 +780,97 @@ class JoinupSearchContext extends RawDrupalContext {
     Assert::assertCount(1, $elements, 'There are multiple search fields on the page.');
 
     return reset($elements);
+  }
+
+  /**
+   * Asserts that certain facet summary items are shown on the page.
+   *
+   * @param string $labels
+   *   A comma-separated list of facet item labels.
+   *
+   * @throws \Exception
+   *   Thrown when a wanted facet item is not shown in the page.
+   *
+   * @When I should see the following facet summary :labels
+   */
+  public function assertFacetSummary(string $labels): void {
+    $present_labels = $this->explodeCommaSeparatedStepArgument($labels);
+    $xpath = "//div[contains(concat(' ', normalize-space(@class), ' '), ' block-facets-summary-blocksearch-facets-summary ')]//li[contains(concat(' ', normalize-space(@class), ' '), ' facet-summary-item--facet ')]";
+    $elements = $this->getSession()->getPage()->findAll('xpath', $xpath);
+    $present = [];
+
+    /** @var \Behat\Mink\Element\NodeElement $element */
+    foreach ($elements as $element) {
+      $present[] = $element->getText();
+    }
+
+    $present = array_map('trim', $present);
+    $present_labels = array_map('trim', $present_labels);
+    Assert::assertEquals($present_labels, $present);
+  }
+
+  /**
+   * Remove facet summary item that are on the page.
+   *
+   * @param string $label
+   *   A facet summary item label.
+   *
+   * @throws \Exception
+   *   Thrown when a wanted facet item is not shown in the page.
+   *
+   * @When I should remove the following facet summary :label
+   */
+  public function removeFacetSummary(string $label): void {
+    $css = "div.block-facets-summary-blocksearch-facets-summary li.facet-summary-item--facet a:contains('{$label}')";
+    $element = $this->getSession()->getPage()->find('css', $css);
+
+    if (empty($element)) {
+      throw new \Exception("The $label facet summary item was not found in the page.");
+    }
+    $remove = $element->find('css', '.js-facet-deactivate');
+    $remove->click();
+  }
+
+  /**
+   * Asserts that the expected number of summaries are shown.
+   *
+   * @param string|null $number
+   *   The expected number of summaries. This is a string rather than an integer
+   *   because step definitions are represented in text.
+   *
+   * @throws \Exception
+   *    Thrown when the region is not found.
+   *
+   * @Then the page should contain :number facet(s) summary/summaries
+   * @Then the page should not contain any facet summary
+   */
+  public function assertFacetsSummaryCount(?string $number = NULL): void {
+    $number = $number === 'one' ? 1 : (int) $number;
+    $xpath = "//div[contains(concat(' ', normalize-space(@class), ' '), ' block-facets-summary-blocksearch-facets-summary ')]//li[contains(concat(' ', normalize-space(@class), ' '), ' facet-summary-item--facet ')]";
+    $elements = $this->getSession()->getPage()->findAll('xpath', $xpath);
+    Assert::assertCount($number, $elements);
+  }
+
+  /**
+   * Checks that the given labels are found in the correct order.
+   *
+   * Table format:
+   * | Search         |
+   * | Search Results |
+   *
+   * @Then I( should) see the( following) search header in the correct order:
+   */
+  public function assertOrderedTilesPresent(TableNode $titles_table) {
+    $regionObj = $this->getSession()->getPage();
+
+    $result = [];
+    foreach ($regionObj->findAll('css', '.view-header div.form-item-results-count, .view-header div label') as $element) {
+      $title = $element->getText();
+      $result[$title] = $element;
+    }
+    $headings_in_page = array_keys($result);
+    $headings_expected = $titles_table->getColumn(0);
+    Assert::assertEquals($headings_expected, $headings_in_page, 'The expected search header were not found or were not in the proper order.');
   }
 
 }

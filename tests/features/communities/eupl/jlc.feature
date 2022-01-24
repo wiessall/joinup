@@ -368,6 +368,7 @@ Feature:
       | INCOMPATIBLE | @inbound-licence is not compatible with @outbound-licence.                                                                                                                  |
 
     When I visit the "JLC" custom page
+    And I accept essential cookies
     Then the "Check compatibility" buttons should be disabled
     When I choose "EUPL-1.2" as the "Inbound" licence
     Then the "Check compatibility" buttons should be disabled
@@ -428,9 +429,9 @@ Feature:
     And I should see the heading "Compatibility between the GNU Lesser General Public License 2.1 (inbound licence) and the CeCILL-C (outbound licence)."
     And I should see the text "LGPL-2.1 is not compatible with CECILL-C"
 
-    When I visit the "JLC" custom page
-    When I choose "LGPL-2.1" as the "Inbound" licence
-    When I choose "CECILL-C" as the "Outbound" licence
+    Given I visit the "JLC" custom page
+    And I choose "CECILL-C" as the "Outbound" licence
+    And I choose "LGPL-2.1" as the "Inbound" licence
     When I click "Check compatibility"
     Then the url should match "licence/compatibility-check/LGPL-2.1/CECILL-C"
     And I should see the heading "Compatibility between the GNU Lesser General Public License 2.1 (inbound licence) and the CeCILL-C (outbound licence)."
@@ -447,6 +448,7 @@ Feature:
     # Authenticated users should also be able to see the licence compatibility
     # checker and compatibility documents.
     Given I am logged in as an "authenticated user"
+    And I accept essential cookies
     When I visit the "JLC" custom page
     Then the "Check compatibility" buttons should be disabled
     When I choose "EUPL-1.2" as the "Inbound" licence
