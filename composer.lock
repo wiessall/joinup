@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "187dc5b4e1c0a1b2223cb373836bd602",
+    "content-hash": "37fe2c576b2133cc4de77ab6e3a202f3",
     "packages": [
         {
             "name": "SEMICeu/adms-ap_validator",
@@ -7535,6 +7535,9 @@
                     "services": {
                         "drush.services.yml": "^9"
                     }
+                },
+                "patches_applied": {
+                    "Missing config schema @see https://www.drupal.org/project/search_api_solr/issues/3236773": "https://git.drupalcode.org/project/search_api_solr/-/merge_requests/8.diff"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
