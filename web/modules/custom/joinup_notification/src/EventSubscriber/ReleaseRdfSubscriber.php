@@ -12,6 +12,7 @@ use Drupal\joinup_notification\Event\NotificationEvent;
 use Drupal\joinup_notification\MessageArgumentGenerator;
 use Drupal\joinup_notification\NotificationEvents;
 use Drupal\og\OgRoleInterface;
+use Drupal\state_machine\Plugin\Workflow\WorkflowInterface;
 use Drupal\state_machine\Plugin\Workflow\WorkflowTransition;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
@@ -51,49 +52,49 @@ class ReleaseRdfSubscriber extends NotificationSubscriberBase implements EventSu
   /**
    * The transition object.
    *
-   * @var \Drupal\state_machine\Plugin\Workflow\WorkflowTransition
+   * @var \Drupal\state_machine\Plugin\Workflow\WorkflowTransition|null
    */
-  protected $transition;
+  protected ?WorkflowTransition $transition;
 
   /**
    * The workflow object.
    *
-   * @var \Drupal\state_machine\Plugin\Workflow\Workflow
+   * @var \Drupal\state_machine\Plugin\Workflow\WorkflowInterface
    */
-  protected $workflow;
+  protected WorkflowInterface $workflow;
 
   /**
    * The motivation text passed in the entity.
    *
    * @var string
    */
-  protected $motivation;
+  protected string $motivation;
 
   /**
    * The notification event.
    *
    * @var \Drupal\joinup_notification\Event\NotificationEvent
    */
-  protected $event;
+  protected NotificationEvent $event;
 
   /**
    * The source state of the solution.
    *
    * @var string
    */
-  protected $fromState;
+  protected string $fromState;
 
   /**
    * The new state of the solution.
    *
    * @var string
    */
-  protected $toState;
+  protected string $toState;
 
   /**
    * {@inheritdoc}
    */
-  public static function getSubscribedEvents() {
+  public static function getSubscribedEvents(): array {
     $events[NotificationEvents::RDF_ENTITY_CRUD] = [
       ['onUpdate'],
       ['onDelete'],
