@@ -19,3 +19,4 @@ mode: preview
 content: {  }
 hidden:
   field_iframe: true
+  search_api_excerpt: true
