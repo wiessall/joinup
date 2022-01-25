@@ -1,0 +1,57 @@
+uuid: 4603b000-106d-4484-936c-0587f0d9087d
+langcode: en
+status: true
+dependencies:
+  module:
+    - facets_block
+    - joinup_core
+  theme:
+    - ventuno
+id: facetsblock_searchpage
+theme: ventuno
+region: sidebar
+weight: -13
+provider: null
+plugin: facets_block
+settings:
+  id: facets_block
+  label: 'Facets block: View Search, display Page'
+  provider: facets_block
+  label_display: '0'
+  show_title: false
+  exclude_empty_facets: true
+  hide_empty_block: false
+  facets_to_include:
+    'facet_block:topic': 'facet_block:topic'
+    'facet_block:type': 'facet_block:type'
+    'facet_block:spatial_coverage': 'facet_block:spatial_coverage'
+    'facet_block:group': 'facet_block:group'
+    'facet_block:creation_date': 'facet_block:creation_date'
+    'facets_summary_block:summary': '0'
+    'facet_block:collection_topic': '0'
+    'facet_block:collection_type': '0'
+    'facet_block:aggregated_changed': '0'
+    'facet_block:solution_type': '0'
+    'facet_block:solution_topic': '0'
+    'facet_block:solution_spatial_coverage': '0'
+    'facet_block:solution_my_content': '0'
+    'facet_block:solution_content_bundle': '0'
+    'facet_block:event_date': '0'
+    'facet_block:field_content_listing_type': '0'
+    'facet_block:authoredon': '0'
+    'facet_block:csv_solution_type': '0'
+    'facet_block:csv_changed': '0'
+    'facet_block:csv_authoredon': '0'
+    'facet_block:content_my_content': '0'
+    'facet_block:content_bundle': '0'
+    'facet_block:collection_my_content': '0'
+    'facet_block:collection_event_type': '0'
+    'facet_block:user_content_bundle': '0'
+  add_js_classes: true
+visibility:
+  request_route:
+    id: request_route
+    routes:
+      - view.search.page_1
+    negate: false
+    context_mapping: {  }

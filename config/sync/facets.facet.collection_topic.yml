@@ -5,7 +5,7 @@ dependencies: {  }
 id: collection_topic
 name: Topic
 url_alias: collection_topic
-weight: -1
+weight: -2
 min_count: 1
 show_only_one_result: true
 field_identifier: topic

@@ -32,16 +32,17 @@ upgrade_commands:
 
 php_version: 7.4
 extra_pkgs:
-  - php-apcu
+  - php7.4-apcu
 
 solr: True
 solr_version: 6
 solr_core: custom
+solr_rollback: True
+solr_refresh_acc: True
 
 virtuoso_image: registry.fpfis.eu/ec-europa/digit-joinup-reference:virtuoso
+virtuoso_rollback: True
+virtuoso_refresh_acc: True
 
 install_clean: Yes
 install_clone: False
-
-solr_refresh_acc: True
-virtuoso_refresh_acc: True
