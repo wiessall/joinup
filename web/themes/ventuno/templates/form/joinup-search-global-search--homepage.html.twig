@@ -18,7 +18,6 @@
   </div>
   <div class="col-12 order-md-2">
     <div class="search-bar mb-3 px-2 ps-md-0 pe-md-5">
-      <label for="search-bar__input" style="display: none">{{ 'Search'|trans }}</label>
       <form action="{{ search_url }}">
         {% for id, filter in filters %}
           <input type="hidden" class="search-bar__chip" name="f[]" value="{{ id }}" data-description="{{ filter }}">

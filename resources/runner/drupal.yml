@@ -44,7 +44,7 @@ drupal:
         - Matomo & OpenEuropa Webtools Analytics
         - Custom error handler
         - Permissions
-        - Error logging
+        - Verbose error logging
         - Development mail collector
         - Redis
         - Custom queue services
@@ -60,7 +60,7 @@ drupal:
         - Development
         - OpenEuropa Newsroom Newsletter
         - OpenEuropa Webtools Geocoding Cache
-        - Error logging
+        - Verbose error logging
         - Development mail collector
         - Redis
         - Custom queue services
@@ -91,7 +91,6 @@ drupal:
         - Development
         - OpenEuropa Newsroom Newsletter
         - OpenEuropa Webtools Geocoding Cache
-        - Error logging
         - Redis
         - Pipe errors to a temporary file
         - Custom queue services
@@ -108,7 +107,7 @@ drupal:
         - Development
         - OpenEuropa Newsroom Newsletter
         - OpenEuropa Webtools Geocoding Cache
-        - Error logging
+        - Verbose error logging
         - Custom queue services
         - Test mail collector
       prod:
@@ -195,10 +194,8 @@ drupal:
           'config_update',
           'config_update_ui',
           'dblog',
-          'default_content',
           'devel',
           'filecache',
-          'hal',
           'joinup_cas_mock_server',
           'og_ui',
           'page_manager_ui',
@@ -247,9 +244,9 @@ drupal:
         $config['search_api.server.joinup']['backend_config']['connector_config'] = parse_url(getenv('SOLR_URL'));
         $config['search_api.server.joinup']['backend_config']['connector_config']['core'] = getenv('SOLR_CORE');
       Matomo & OpenEuropa Webtools Analytics: |
-        $config['matomo.settings']['site_id'] = getenv('MATOMO_SITE_ID');
-        $config['matomo.settings']['url_http'] = getenv('MATOMO_SITE_URL_HTTP');
-        $config['matomo.settings']['url_https'] = getenv('MATOMO_SITE_URL_HTTPS');
+        $config['matomo_reporting_api.settings']['site_id'] = getenv('MATOMO_SITE_ID');
+        $config['matomo_reporting_api.settings']['url_http'] = getenv('MATOMO_SITE_URL_HTTP');
+        $config['matomo_reporting_api.settings']['url_https'] = getenv('MATOMO_SITE_URL_HTTPS');
         $config['matomo_reporting_api.settings']['token_auth'] = getenv('MATOMO_REPORTING_API_AUTH_TOKEN');
         $config['oe_webtools_analytics.settings']['siteID'] = getenv('MATOMO_SITE_ID');
         $config['oe_webtools_analytics.settings']['sitePath'] = getenv('OE_WEBTOOLS_ANALYTICS_SITE_PATH');
@@ -278,7 +275,7 @@ drupal:
         $settings['filecache']['strategy']['bins']['geocoder'] = 'persist';
       Development: |
         $settings['extension_discovery_scan_tests'] = TRUE;
-      Error logging: |
+      Verbose error logging: |
         $config['system.logging']['error_level'] = 'verbose';
       Monolog: |
         $settings['container_yamls'][] = 'modules/custom/joinup_core/joinup_core.monolog.services.yml';
