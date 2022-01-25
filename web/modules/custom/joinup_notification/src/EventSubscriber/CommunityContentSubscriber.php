@@ -19,6 +19,8 @@ use Drupal\joinup_workflow\EntityWorkflowStateInterface;
 use Drupal\joinup_workflow\WorkflowHelperInterface;
 use Drupal\og\MembershipManager;
 use Drupal\og\OgRoleInterface;
+use Drupal\state_machine\Plugin\Workflow\WorkflowInterface;
+use Drupal\state_machine\Plugin\Workflow\WorkflowTransition;
 use Drupal\state_machine_revisions\RevisionManagerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
@@ -32,37 +34,37 @@ class CommunityContentSubscriber extends NotificationSubscriberBase implements E
   /**
    * The transition object.
    *
-   * @var \Drupal\state_machine\Plugin\Workflow\WorkflowTransition
+   * @var \Drupal\state_machine\Plugin\Workflow\WorkflowTransition|null
    */
-  protected $transition;
+  protected ?WorkflowTransition $transition;
 
   /**
    * The workflow object.
    *
    * @var \Drupal\state_machine\Plugin\Workflow\Workflow
    */
-  protected $workflow;
+  protected WorkflowInterface $workflow;
 
   /**
    * The motivation text passed in the entity.
    *
    * @var string
    */
-  protected $motivation;
+  protected string $motivation;
 
   /**
    * Whether the community content has a published version.
    *
    * @var bool
    */
-  protected $hasPublished;
+  protected bool $hasPublished;
 
   /**
    * The revision manager service.
    *
    * @var \Drupal\state_machine_revisions\RevisionManagerInterface
    */
-  protected $revisionManager;
+  protected RevisionManagerInterface $revisionManager;
 
   /**
    * Constructs a new CommunityContentSubscriber object.
@@ -90,7 +92,7 @@ class CommunityContentSubscriber extends NotificationSubscriberBase implements E
   /**
    * {@inheritdoc}
    */
-  public static function getSubscribedEvents() {
+  public static function getSubscribedEvents(): array {
     return [
       NotificationEvents::COMMUNITY_CONTENT_CREATE => ['onCreate'],
       NotificationEvents::COMMUNITY_CONTENT_UPDATE => ['onUpdate'],
@@ -107,16 +109,11 @@ class CommunityContentSubscriber extends NotificationSubscriberBase implements E
     // Only initialize the workflow if it is available. It is unavailable when
     // the entity is being deleted during cleanup of orphaned group content.
     if ($this->entity instanceof EntityWorkflowStateInterface && $this->entity->hasWorkflow()) {
-      $from_state = isset($this->entity->field_state_initial_value) ? $this->entity->field_state_initial_value : 'draft';
+      $from_state = $this->entity->field_state_initial_value ?? 'draft';
       $to_state = $this->entity->getWorkflowState();
 
       $this->workflow = $this->entity->getWorkflow();
-      // In some cases the workflow cannot be determined, for example when
-      // deleting orphaned group content that has a workflow that depends on the
-      // parent entity's content moderation status.
-      if ($this->workflow) {
-        $this->transition = $this->workflow->findTransition($from_state, $to_state);
-      }
+      $this->transition = $this->workflow->findTransition($from_state, $to_state);
     }
     $this->motivation = empty($this->entity->motivation) ? '' : $this->entity->motivation;
     $this->hasPublished = $this->hasPublishedVersion($this->entity);
@@ -295,7 +292,7 @@ class CommunityContentSubscriber extends NotificationSubscriberBase implements E
     $arguments = parent::generateArguments($entity);
     /** @var \Drupal\user\UserInterface $actor */
     $actor = $this->entityTypeManager->getStorage('user')->load($this->currentUser->id());
-    $motivation = isset($this->entity->motivation) ? $this->entity->motivation : '';
+    $motivation = $this->entity->motivation ?? '';
 
     $arguments['@actor:full_name'] = $actor->getDisplayName();
     $arguments['@transition:motivation'] = $motivation;
@@ -336,7 +333,7 @@ class CommunityContentSubscriber extends NotificationSubscriberBase implements E
    * @return bool
    *   Whether the entity has a published version.
    */
-  protected function hasPublishedVersion(EntityInterface $entity) {
+  protected function hasPublishedVersion(EntityInterface $entity): bool {
     if ($entity->isNew()) {
       return FALSE;
     }
