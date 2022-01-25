@@ -3,6 +3,7 @@ joinup_eulogin.eulogin:
   menu_name: account
   route_name: cas.login
   class: Drupal\joinup_eulogin\Plugin\Menu\EuLoginMenuLink
+  destination: true
   weight: -21
 
 joinup_eulogin.eu_login_info:
