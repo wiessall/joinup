@@ -89,13 +89,15 @@
     {% endif %}
   </div>
 
-  <div class="region-featured mb-5 py-5">
-    <div class="container">
-      <div class="row">
-        {{ page.featured }}
+  {% if page.featured %}
+    <div class="region-featured mb-5 py-5">
+      <div class="container">
+        <div class="row">
+          {{ page.featured }}
+        </div>
       </div>
     </div>
-  </div>
+  {% endif %}
 
   {% if page.messages %}
     <div class="region-messages">
@@ -105,7 +107,7 @@
 
   {{ page.content_top }}
 
-  <main role="main">
+  <main role="main" class="my-3 my-md-4">
     <a id="main-content" tabindex="-1"></a>{# link is in html.html.twig #}
 
     <div class="container layout-content">
