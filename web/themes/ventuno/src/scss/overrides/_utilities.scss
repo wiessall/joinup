@@ -120,13 +120,13 @@ $utilities: map-merge(
     //     0: 0,
     //   )
     // ),
-    // "border-bottom": (
-    //   property: border-bottom,
-    //   values: (
-    //     null: $border-width solid $border-color,
-    //     0: 0,
-    //   )
-    // ),
+    "border-bottom": (
+      property: border-bottom,
+      values: (
+        null: $border-width solid $border-color,
+        0: 0,
+      )
+    ),
     // "border-start": (
     //   property: border-left,
     //   class: border-start,
@@ -174,17 +174,17 @@ $utilities: map-merge(
     //   class: min-vw,
     //   values: (100: 100vw)
     // ),
-    // "height": (
-    //   property: height,
-    //   class: h,
-    //   values: (
-    //     25: 25%,
-    //     50: 50%,
-    //     75: 75%,
-    //     100: 100%,
-    //     auto: auto
-    //   )
-    // ),
+    "height": (
+      property: height,
+      class: h,
+      values: (
+        25: 25%,
+        50: 50%,
+        75: 75%,
+        100: 100%,
+        auto: auto
+      )
+    ),
     // "max-height": (
     //   property: max-height,
     //   class: mh,
@@ -244,18 +244,18 @@ $utilities: map-merge(
     //   class: gap,
     //   values: $spacers
     // ),
-    // "justify-content": (
-    //   responsive: true,
-    //   property: justify-content,
-    //   values: (
-    //     start: flex-start,
-    //     end: flex-end,
-    //     center: center,
-    //     between: space-between,
-    //     around: space-around,
-    //     evenly: space-evenly,
-    //   )
-    // ),
+    "justify-content": (
+      responsive: true,
+      property: justify-content,
+      values: (
+        start: flex-start,
+        end: flex-end,
+        center: center,
+        between: space-between,
+        around: space-around,
+        evenly: space-evenly,
+      )
+    ),
     // "align-items": (
     //   responsive: true,
     //   property: align-items,
