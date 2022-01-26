@@ -24,6 +24,7 @@
   - Drupal\joinup\Context\EifContext
   - Drupal\joinup\Context\EntityQueueContext
   - Drupal\joinup\Context\EuplContext
+  - Drupal\joinup\Context\FaviconContext
   - Drupal\joinup\Context\FooterContext
   - Drupal\joinup\Context\HeaderContext
   - Drupal\joinup\Context\HomepageContext
@@ -78,7 +79,7 @@
 
 # Default profile.
 default:
-  suites: [  ]
+  suites: {  }
   extensions:
     Drupal\MinkExtension:
       base_url: ${env.DRUPAL_BASE_URL}
@@ -109,7 +110,6 @@ default:
         Content listing field filter form: '.field--name-field-content-listing'
         Content: '.section--content-middle, main .layout-content'
         Cookie consent banner: '#cookie-consent-banner'
-        Discover topics block: '.block-views-blockdiscover-topics-block'
         Entity actions: '.block-joinup-local-tasks-block'
         Explore block: '.block-joinup-front-page-explore-block'
         Featured: '.region-featured'

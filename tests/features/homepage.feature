@@ -17,13 +17,6 @@ Feature: Homepage
       | Guided tour  |
       | FAQ          |
 
-  Scenario: Only specific social network links are available in the footer.
-    When I am on the homepage
-    Then I should see the link "LinkedIn" in the Footer region
-    And the "LinkedIn" link should point to "https://www.linkedin.com/groups/2600644/"
-    And I should see the link "Twitter" in the Footer region
-    But I should not see the link "Facebook" in the Footer region
-
   @terms
   Scenario: Latest news is shown on the homepage
     Given collection:
@@ -48,7 +41,7 @@ Feature: Homepage
     #   page instead.
     When I click "Finance in EU"
     Then I should be on the advanced search page
-    And the option with text "Finance in EU" from select facet "topic" is selected
+    And the "Finance in EU" content checkbox item should be selected
 
     # There is a "More news" link that for the moment leads to the search page
     # pre-filtered on news articles. In the future this will become a dedicated
@@ -56,8 +49,8 @@ Feature: Homepage
     Given I am on the homepage
     When I click "More news"
     Then I should be on the advanced search page
-    And the "News" content checkbox item should be selected
-    And the page should show the tiles "Current biodiversity crisis, Environmental stewardship, Spatial reconstruction, Earlier transformations"
+    And I should see the following facet summary "News"
+    And the page should show the tiles "Preserve habitats, Transformative practices, Loss of wildlands, Ecosystem management"
 
   @terms
   Scenario: Community content can be placed "In the spotlight" on the homepage
@@ -95,10 +88,10 @@ Feature: Homepage
       | title | Clash of documents |
       | state | validated          |
     And <type> content:
-      | title        | collection         | topic                              | state     | logo     | body                                                                                                                                                                                            |
-      | Microgravity | Clash of documents | HR, E-justice                      | validated | alan.jpg | Conventional studies investigating the effects of reduced gravity on muscle mass and function have used a ground control group that is not directly comparable to the space experimental group. |
-      | Aliens       | Clash of documents | Statistics and Analysis, E-justice | validated | alan.jpg | Conventional studies investigating the effects of reduced gravity on muscle mass and function have used a ground control group that is not directly comparable to the space experimental group. |
-      | Groundforce  | Clash of documents | Statistics and Analysis, E-justice | proposed  | alan.jpg | Conventional studies investigating the effects of reduced gravity on muscle mass and function have used a ground control group that is not directly comparable to the space experimental group. |
+      | title        | headline     | collection         | topic                              | state     | logo     | body                                                                                                                                                                                            |
+      | Microgravity | Microgravity | Clash of documents | HR, E-justice                      | validated | alan.jpg | Conventional studies investigating the effects of reduced gravity on muscle mass and function have used a ground control group that is not directly comparable to the space experimental group. |
+      | Aliens       | Aliens       | Clash of documents | Statistics and Analysis, E-justice | validated | alan.jpg | Conventional studies investigating the effects of reduced gravity on muscle mass and function have used a ground control group that is not directly comparable to the space experimental group. |
+      | Groundforce  | Groundforce  | Clash of documents | Statistics and Analysis, E-justice | proposed  | alan.jpg | Conventional studies investigating the effects of reduced gravity on muscle mass and function have used a ground control group that is not directly comparable to the space experimental group. |
     And the "Highlighted content" content listing contains:
       | type   | label  |
       | <type> | Aliens |
@@ -160,7 +153,7 @@ Feature: Homepage
     Given I am on the homepage
     When I click "More events"
     Then I should be on the advanced search page
-    And the "Event" content checkbox item should be selected
+    And I should see the following facet summary "Event"
     And I should see the "Florentine steak festival" tile
 
   @version
@@ -181,9 +174,7 @@ Feature: Homepage
       | state | validated    |
     And I am on the homepage
     Then I should see the "Search" field in the Featured region
-    And I should see the button "Search" in the Featured region
-    When I enter "RNA" in the search bar
-    And press "Search"
+    When I enter "RNA" in the search bar and press enter
     Then I should be on the search page
     And I should see the "RNA vaccines" tile
 
@@ -302,19 +293,23 @@ Feature: Homepage
 
     When I click "See more solutions"
     Then I should be on the advanced search page
-    And the "Solutions" content checkbox item should be selected
+    And I should see the following facet summary "Solutions"
 
     When I am on the homepage
     And I click "See more collections"
     Then I should be on the advanced search page
-    And the "Collections" content checkbox item should be selected
+    And I should see the following facet summary "Collections"
 
     When I am on the homepage
     And I click "See more news"
     Then I should be on the advanced search page
-    And the "News" content checkbox item should be selected
+    And I should see the following facet summary "News"
 
     When I am on the homepage
     And I click "See more events"
     Then I should be on the advanced search page
-    And the "Events" content checkbox item should be selected
+    And I should see the following facet summary "Events"
+
+  Scenario: A favicon is shown in the browser tab
+    Given I am on the homepage
+    Then I should see a favicon
