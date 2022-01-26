@@ -93,7 +93,7 @@ module.exports = {
       },
     },
     {
-      entry: path.resolve(outputFolder, "src/scss/overrides/tour.scss"),
+      entry: path.resolve(outputFolder, "src/scss/tour.scss"),
       dest: path.resolve(outputFolder, "assets/css/tour.css"),
       options: {
         includePaths,
