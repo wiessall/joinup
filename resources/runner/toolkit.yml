@@ -59,6 +59,8 @@ commands:
   # Overrides toolkit:install-clean.
   toolkit:install-clean:
     - task: run
+      command: joinup:environment
+    - task: run
       command: sparql:empty
     - task: run
       command: solr:empty
