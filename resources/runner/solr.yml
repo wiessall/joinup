@@ -106,7 +106,7 @@ commands:
     - task: run
       command: solr:start
     - task: exec
-      command: test -d ${solr.local.core_dir} || ${solr.local.bin} create_core -c ${env.SOLR_CORE} -d ${solr.config_dir}
+      command: test -f ${solr.local.core_dir}/core.properties || ${solr.local.bin} create_core -c ${env.SOLR_CORE} -d ${solr.config_dir}
 
   # Builds the Solr core configuration.
   solr:build-core-config:
