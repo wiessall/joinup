@@ -90,7 +90,7 @@ class SolrCommands extends AbstractCommands {
    *   When the server response is invalid.
    */
   protected function executeReplicationCommand(string $core, string $operation): void {
-    $this->httpGet($this->getReplicationUrl($core, $operation));
+    $this->httpGet($this->getUrl($core, $operation));
 
     // Solr core backup and restore are asynchronous processes. In order to
     // consider the backup/restore done, we need to check the status of the last
