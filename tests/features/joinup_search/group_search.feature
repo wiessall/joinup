@@ -245,8 +245,10 @@ Feature: Search inside groups
     When I open the search bar by clicking on the search icon
     Then the page should not contain any chips
 
-    When I select "Inclined foundations" from the "collection/solution" select facet
-    Then the option with text "Inclined foundations (6)" from select facet "collection/solution" is selected
+    When I select "Inclined foundations" from "Collection/Solution"
+    Then I scroll button "Search" into view
+    And I press "Search"
+    Then the option with text "Inclined foundations (6)" from select facet form "collection/solution" is selected
     And I should see 6 tiles
 
     When I open the search bar by clicking on the search icon
@@ -255,7 +257,10 @@ Feature: Search inside groups
 
     # The filter chip should remain active when doing another search.
     When I enter "ground" in the search bar and press enter
-    Then the option with text "Inclined foundations (2)" from select facet "collection/solution" is selected
+    Then I select "Inclined foundations" from "Collection/Solution"
+    Then I scroll button "Search" into view
+    And I press "Search"
+    Then the option with text "Inclined foundations (2)" from select facet form "collection/solution" is selected
     And I should see 2 tiles
     When I open the search bar by clicking on the search icon
     Then the page should show the following chip:

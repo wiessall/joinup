@@ -53,6 +53,14 @@ module.exports = {
       },
     },
     {
+      entry: path.resolve(outputFolder, "src/scss/searchpage.scss"),
+      dest: path.resolve(outputFolder, "assets/css/searchpage.css"),
+      options: {
+        includePaths,
+        sourceMap: "file",
+      },
+    },
+    {
       entry: path.resolve(outputFolder, "src/scss/navbar.scss"),
       dest: path.resolve(outputFolder, "assets/css/navbar.css"),
       options: {
@@ -97,6 +105,16 @@ module.exports = {
     {
       from: [
         path.resolve(
+          __dirname,
+          "src/images/favicon/*"
+        ),
+      ],
+      to: path.resolve(outputFolder, "assets/images/favicon"),
+      options: { up: true },
+    },
+    {
+      from: [
+        path.resolve(
           nodeModules,
           "@openeuropa/bcl-theme-joinup/fonts/*.css"
         ),
@@ -132,6 +150,16 @@ module.exports = {
         ),
       ],
       to: path.resolve(outputFolder, "assets/fonts/joinup-icons"),
+      options: { up: true },
+    },
+    {
+      from: [
+        path.resolve(
+          __dirname,
+          "src/icons/bootstrap-icons.svg"
+        ),
+      ],
+      to: path.resolve(outputFolder, "assets/icons"),
       options: { up: true },
     },
     {

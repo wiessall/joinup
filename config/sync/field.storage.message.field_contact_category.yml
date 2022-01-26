@@ -32,6 +32,9 @@ settings:
       value: eu_login
       label: 'EU Login question'
     -
+      value: interoperable_europe
+      label: 'Interoperable Europe question'
+    -
       value: other
       label: Other
   allowed_values_function: ''
