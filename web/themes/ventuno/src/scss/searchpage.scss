@@ -1,12 +1,15 @@
 // Searchpage CSS
-// Only styles specific to the Searchpage
-
-// Joinup variables
-@import "@openeuropa/bcl-theme-joinup/src/scss/oe-bcl-joinup.scss";
-
-// Custom Joinup mixins
+@import "components/component-base";
+@import "@openeuropa/bcl-bootstrap/scss/card";
+@import "@openeuropa/bcl-bootstrap/scss/badge";
+@import "@openeuropa/bcl-bootstrap/scss/offcanvas";
+@import "@openeuropa/bcl-bootstrap/scss/mixins";
+@import "@openeuropa/bcl-theme-default/src/scss/icon";
+@import "@openeuropa/bcl-theme-default/src/scss/search-form";
+@import "@openeuropa/bcl-theme-default/src/scss/input";
+@import "@openeuropa/bcl-theme-default/src/scss/badge";
+@import "@openeuropa/bcl-theme-default/src/scss/multiselect";
+@import "@openeuropa/bcl-theme-default/src/scss/bcl-offcanvas";
+@import "@openeuropa/bcl-theme-joinup/src/scss/form";
 @import "mixins/joinup-icons";
-@import "mixins/full-width-background-colors";
-
-// Components
 @import "components/searchpage";
