@@ -25,7 +25,7 @@ display:
         type: none
         options: {  }
       cache:
-        type: tag
+        type: search_api_tag
         options: {  }
       query:
         type: search_api_query
@@ -301,7 +301,6 @@ display:
         - 'user.node_grants:view'
       tags:
         - 'config:search_api.index.published'
-        - 'search_api_list:published'
   all:
     display_plugin: block
     id: all
@@ -321,7 +320,6 @@ display:
         - 'user.node_grants:view'
       tags:
         - 'config:search_api.index.published'
-        - 'search_api_list:published'
   block:
     display_plugin: block
     id: block
@@ -339,4 +337,3 @@ display:
         - 'user.node_grants:view'
       tags:
         - 'config:search_api.index.published'
-        - 'search_api_list:published'

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f56cbcf5430a037723eba600ca959285",
+    "content-hash": "463a59bb3f947b780a175ccb254bfd7e",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -5596,7 +5596,8 @@
             "support": {
                 "source": "https://git.drupalcode.org/project/og_menu",
                 "issues": "https://drupal.org/project/issues/og_menu"
-            }
+            },
+            "time": "2021-05-27T19:32:42+00:00"
         },
         {
             "name": "drupal/page_manager",
@@ -6700,7 +6701,7 @@
             "extra": {
                 "drupal": {
                     "version": "8.x-1.22",
-                    "datestamp": "1641999545",
+                    "datestamp": "1642935792",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -23262,6 +23263,7 @@
         "drupal/dropsolid_purge": 10,
         "drupal/facets_date_range": 10,
         "drupal/menu_link_destination": 20,
+        "drupal/og_menu": 20,
         "drupal/page_manager": 10,
         "drupal/schema_digital_document": 20,
         "drupal/schema_social_media_posting": 20,

@@ -315,10 +315,8 @@ display:
           relationship: none
           group_type: group
           admin_label: ''
-          operator: '='
+          operator: or
           value:
-            min: ''
-            max: ''
             value: eif_principle
           group: 1
           exposed: false
@@ -403,10 +401,8 @@ display:
           relationship: none
           group_type: group
           admin_label: ''
-          operator: '='
+          operator: or
           value:
-            min: ''
-            max: ''
             value: eif_interoperability_layer
           group: 1
           exposed: false
@@ -447,10 +443,8 @@ display:
           relationship: none
           group_type: group
           admin_label: ''
-          operator: '='
+          operator: or
           value:
-            min: ''
-            max: ''
             value: eif_conceptual_model
           group: 1
           exposed: false
@@ -673,10 +667,8 @@ display:
           relationship: none
           group_type: group
           admin_label: ''
-          operator: '='
+          operator: or
           value:
-            min: ''
-            max: ''
             value: eif_conceptual_model
           group: 1
           exposed: false
@@ -800,10 +792,8 @@ display:
           relationship: none
           group_type: group
           admin_label: ''
-          operator: '='
+          operator: or
           value:
-            min: ''
-            max: ''
             value: eif_interoperability_layer
           group: 1
           exposed: false
@@ -883,10 +873,8 @@ display:
           relationship: none
           group_type: group
           admin_label: ''
-          operator: '='
+          operator: or
           value:
-            min: ''
-            max: ''
             value: eif_principle
           group: 1
           exposed: false

@@ -17,7 +17,6 @@ use Drupal\asset_distribution\Entity\AssetDistributionInterface;
 use Drupal\file_url\FileUrlHandler;
 use Drupal\rdf_entity\Entity\Rdf;
 use Drupal\rdf_entity\RdfInterface;
-use Drupal\search_api\Plugin\search_api\datasource\ContentEntity;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 /**
@@ -155,7 +154,9 @@ function asset_distribution_rdf_entity_update(RdfInterface $distribution): void 
   // @see \Drupal\asset_distribution\DistributionParentFieldItemList::postSave()
   /** @var \Drupal\rdf_entity\RdfInterface $parent */
   if (!$distribution->get('parent')->isEmpty() && ($parent = $distribution->get('parent')->entity)) {
-    ContentEntity::indexEntity($parent);
+    /** @var \Drupal\search_api\Plugin\search_api\datasource\ContentEntityTrackingManager $content_tracking_manager */
+    $content_tracking_manager = \Drupal::service('search_api.entity_datasource.tracking_manager');
+    $content_tracking_manager->trackEntityChange($parent);
   }
 }
 
