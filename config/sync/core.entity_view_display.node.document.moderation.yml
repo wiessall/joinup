@@ -34,31 +34,31 @@ mode: moderation
 content:
   body:
     type: smart_trim
-    weight: 2
-    region: content
     label: hidden
     settings:
       trim_length: 600
       trim_type: chars
       trim_suffix: …
+      wrap_output: false
+      wrap_class: trimmed
       more_link: false
+      more_class: more-link
       more_text: More
       summary_handler: trim
       trim_options:
         text: false
-      more_class: more-link
-      wrap_output: false
-      wrap_class: trimmed
     third_party_settings:
       template_suggestion:
         template_suggestion: ''
+    weight: 2
+    region: content
   field_state:
     type: list_default
-    weight: 1
-    region: content
     label: inline
     settings: {  }
     third_party_settings: {  }
+    weight: 1
+    region: content
 hidden:
   field_comments: true
   field_document_logo: true

@@ -28,36 +28,36 @@ mode: view_mode_featured
 content:
   field_user_business_title:
     type: string
-    weight: 3
     label: hidden
     settings:
       link_to_entity: false
     third_party_settings: {  }
+    weight: 3
     region: content
   field_user_family_name:
-    weight: 1
+    type: string
     label: hidden
     settings:
       link_to_entity: false
     third_party_settings: {  }
-    type: string
+    weight: 1
     region: content
   field_user_first_name:
-    weight: 2
+    type: string
     label: hidden
     settings:
       link_to_entity: false
     third_party_settings: {  }
-    type: string
+    weight: 2
     region: content
   field_user_photo:
-    weight: 0
+    type: image
     label: hidden
     settings:
-      image_style: vertical_medium_image
       image_link: content
+      image_style: vertical_medium_image
     third_party_settings: {  }
-    type: image
+    weight: 0
     region: content
 hidden:
   field_last_password_reset: true

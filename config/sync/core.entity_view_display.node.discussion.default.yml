@@ -30,35 +30,33 @@ bundle: discussion
 mode: default
 content:
   body:
-    weight: 1
+    type: text_default
     label: hidden
     settings: {  }
     third_party_settings: {  }
-    type: text_default
+    weight: 1
     region: content
   field_attachment:
     type: file_table
-    weight: 9
-    region: content
     label: above
     settings:
       use_description_as_link_text: true
     third_party_settings:
       template_suggestion:
         template_suggestion: with_label
+    weight: 9
+    region: content
   field_replies:
-    weight: 4
+    type: comment_default
     label: above
     settings:
       view_mode: default
       pager_id: 0
     third_party_settings: {  }
-    type: comment_default
+    weight: 4
     region: content
   field_shared_in:
     type: entity_reference_entity_view
-    weight: 8
-    region: content
     label: above
     settings:
       view_mode: view_mode_tile
@@ -66,50 +64,51 @@ content:
     third_party_settings:
       template_suggestion:
         template_suggestion: entity_reference__listing_tile
+    weight: 8
+    region: content
   field_state:
-    weight: 5
+    type: list_default
     label: above
     settings: {  }
     third_party_settings: {  }
-    type: list_default
+    weight: 5
     region: content
   field_topic:
-    weight: 0
+    type: entity_reference_label
     label: hidden
     settings:
       link: true
     third_party_settings:
       template_suggestion:
         template_suggestion: comma_separated
-    type: entity_reference_label
+    weight: 0
     region: content
   flag_subscribe_discussions:
+    settings: {  }
+    third_party_settings: {  }
     weight: 10
     region: content
+  invite_link:
     settings: {  }
     third_party_settings: {  }
-  invite_link:
     weight: 7
     region: content
+  links:
     settings: {  }
     third_party_settings: {  }
-  links:
     weight: 3
     region: content
-    settings: {  }
-    third_party_settings: {  }
   og_audience:
-    label: hidden
     type: entity_reference_label
+    label: hidden
     settings:
       link: true
-    weight: 2
     third_party_settings: {  }
+    weight: 2
     region: content
   report:
+    type: link
     label: hidden
-    weight: 6
-    region: content
     settings:
       trim_length: 80
       url_only: false
@@ -119,12 +118,13 @@ content:
     third_party_settings:
       template_suggestion:
         template_suggestion: no_wrappers
-    type: link
-  share_link:
-    weight: 8
+    weight: 6
     region: content
+  share_link:
     settings: {  }
     third_party_settings: {  }
+    weight: 8
+    region: content
 hidden:
   field_keywords: true
   field_site_featured: true

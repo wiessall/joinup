@@ -58,61 +58,61 @@ bundle: solution
 mode: rdf_draft
 content:
   field_is_actor:
-    weight: 23
+    type: entity_reference_label
     label: above
     settings:
       link: true
     third_party_settings: {  }
-    type: entity_reference_label
+    weight: 23
     region: content
   field_is_business_process:
-    weight: 24
+    type: entity_reference_label
     label: above
     settings:
       link: true
     third_party_settings: {  }
-    type: entity_reference_label
+    weight: 24
     region: content
   field_is_contact_information:
-    weight: 2
+    type: entity_reference_label
     label: above
     settings:
       link: true
     third_party_settings: {  }
-    type: entity_reference_label
+    weight: 2
     region: content
   field_is_content_creation:
     type: list_default
-    weight: 11
-    region: content
     label: above
     settings: {  }
     third_party_settings: {  }
+    weight: 11
+    region: content
   field_is_description:
-    weight: 1
+    type: text_default
     label: hidden
     settings: {  }
     third_party_settings: {  }
-    type: text_default
+    weight: 1
     region: content
   field_is_documentation:
-    weight: 27
+    type: file_url_default
     label: above
     settings:
       mode: link
     third_party_settings: {  }
-    type: file_url_default
+    weight: 27
     region: content
   field_is_included_asset:
-    weight: 6
+    type: entity_reference_label
     label: above
     settings:
       link: true
     third_party_settings: {  }
-    type: entity_reference_label
+    weight: 6
     region: content
   field_is_issue_tracker:
-    weight: 17
+    type: link
     label: above
     settings:
       trim_length: 80
@@ -121,10 +121,10 @@ content:
       rel: ''
       target: ''
     third_party_settings: {  }
-    type: link
+    weight: 17
     region: content
   field_is_landing_page:
-    weight: 15
+    type: link
     label: above
     settings:
       trim_length: 80
@@ -133,18 +133,18 @@ content:
       rel: ''
       target: ''
     third_party_settings: {  }
-    type: link
+    weight: 15
     region: content
   field_is_language:
-    weight: 10
+    type: entity_reference_label
     label: above
     settings:
       link: true
     third_party_settings: {  }
-    type: entity_reference_label
+    weight: 10
     region: content
   field_is_metrics_page:
-    weight: 16
+    type: link
     label: above
     settings:
       trim_length: 80
@@ -153,44 +153,44 @@ content:
       rel: ''
       target: ''
     third_party_settings: {  }
-    type: link
+    weight: 16
     region: content
   field_is_moderation:
-    weight: 12
+    type: boolean
     label: above
     settings:
       format: default
       format_custom_false: ''
       format_custom_true: ''
     third_party_settings: {  }
-    type: boolean
+    weight: 12
     region: content
   field_is_owner:
-    weight: 3
+    type: entity_reference_label
     label: above
     settings:
       link: true
     third_party_settings: {  }
-    type: entity_reference_label
+    weight: 3
     region: content
   field_is_product_type:
-    weight: 25
+    type: entity_reference_label
     label: above
     settings:
       link: true
     third_party_settings: {  }
-    type: entity_reference_label
+    weight: 25
     region: content
   field_is_solution_type:
-    weight: 5
+    type: entity_reference_label
     label: above
     settings:
       link: true
     third_party_settings: {  }
-    type: entity_reference_label
+    weight: 5
     region: content
   field_is_source_code_repository:
-    weight: 19
+    type: link
     label: above
     settings:
       trim_length: 80
@@ -199,52 +199,52 @@ content:
       rel: ''
       target: ''
     third_party_settings: {  }
-    type: link
+    weight: 19
     region: content
   field_is_standardization_level:
-    weight: 26
+    type: entity_reference_label
     label: above
     settings:
       link: true
     third_party_settings: {  }
-    type: entity_reference_label
+    weight: 26
     region: content
   field_is_test_resource_type:
-    weight: 22
+    type: entity_reference_label
     label: above
     settings:
       link: true
     third_party_settings: {  }
-    type: entity_reference_label
+    weight: 22
     region: content
   field_is_translation:
-    weight: 7
+    type: entity_reference_label
     label: above
     settings:
       link: true
     third_party_settings: {  }
-    type: entity_reference_label
+    weight: 7
     region: content
   field_is_version:
-    weight: 21
+    type: string
     label: above
     settings:
       link_to_entity: false
     third_party_settings: {  }
-    type: string
+    weight: 21
     region: content
   field_is_webdav_creation:
-    weight: 13
+    type: boolean
     label: above
     settings:
       format: default
       format_custom_false: ''
       format_custom_true: ''
     third_party_settings: {  }
-    type: boolean
+    weight: 13
     region: content
   field_is_webdav_url:
-    weight: 14
+    type: link
     label: above
     settings:
       trim_length: 80
@@ -253,10 +253,10 @@ content:
       rel: ''
       target: ''
     third_party_settings: {  }
-    type: link
+    weight: 14
     region: content
   field_is_wiki:
-    weight: 18
+    type: link
     label: above
     settings:
       trim_length: 80
@@ -265,47 +265,47 @@ content:
       rel: ''
       target: ''
     third_party_settings: {  }
-    type: link
+    weight: 18
     region: content
   field_keywords:
-    weight: 8
+    type: string
     label: above
     settings:
       link_to_entity: false
     third_party_settings: {  }
-    type: string
+    weight: 8
     region: content
   field_spatial_coverage:
-    weight: 4
+    type: entity_reference_label
     label: above
     settings:
       link: true
     third_party_settings: {  }
-    type: entity_reference_label
+    weight: 4
     region: content
   field_status:
-    weight: 9
+    type: entity_reference_label
     label: above
     settings:
       link: true
     third_party_settings: {  }
-    type: entity_reference_label
+    weight: 9
     region: content
   field_topic:
-    weight: 20
+    type: entity_reference_label
     label: above
     settings:
       link: true
     third_party_settings: {  }
-    type: entity_reference_label
+    weight: 20
     region: content
   label:
-    label: hidden
     type: string
-    weight: 0
+    label: hidden
     settings:
       link_to_entity: false
     third_party_settings: {  }
+    weight: 0
     region: content
 hidden:
   changed: true

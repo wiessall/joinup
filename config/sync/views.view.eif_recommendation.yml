@@ -18,70 +18,12 @@ base_table: search_api_index_published
 base_field: search_api_id
 display:
   default:
-    display_plugin: default
     id: default
     display_title: Master
+    display_plugin: default
     position: 0
     display_options:
-      access:
-        type: none
-        options: {  }
-      cache:
-        type: tag
-        options: {  }
-      query:
-        type: search_api_query
-        options:
-          bypass_access: false
-          skip_access: false
-          preserve_facet_query_args: false
-      exposed_form:
-        type: basic
-        options:
-          submit_button: Apply
-          reset_button: false
-          reset_button_label: Reset
-          exposed_sorts_label: 'Sort by'
-          expose_sort_order: true
-          sort_asc_label: Asc
-          sort_desc_label: Desc
-      pager:
-        type: none
-        options:
-          offset: 0
-      style:
-        type: table
-        options:
-          grouping:
-            -
-              field: parent
-              rendered: true
-              rendered_strip: false
-          row_class: ''
-          default_row_class: true
-          override: true
-          sticky: false
-          caption: ''
-          summary: ''
-          description: ''
-          columns:
-            name: name
-            parent: parent
-          info:
-            name:
-              align: ''
-              separator: ''
-              empty_column: false
-              responsive: ''
-            parent:
-              align: ''
-              separator: ''
-              empty_column: false
-              responsive: ''
-          default: '-1'
-          empty_table: false
-      row:
-        type: fields
+      title: 'EIF recommendations'
       fields:
         name_1:
           id: name_1
@@ -90,6 +32,8 @@ display:
           relationship: none
           group_type: group
           admin_label: 'Recommendation topics'
+          entity_type: taxonomy_term
+          plugin_id: search_api_field
           label: 'Recommendation topics'
           exclude: false
           alter:
@@ -152,8 +96,6 @@ display:
             use_highlighting: false
             multi_type: separator
             multi_separator: ', '
-          entity_type: taxonomy_term
-          plugin_id: search_api_field
         name:
           id: name
           table: search_api_datasource_published_entity_taxonomy_term
@@ -161,6 +103,8 @@ display:
           relationship: none
           group_type: group
           admin_label: 'EIF Pillars'
+          entity_type: taxonomy_term
+          plugin_id: search_api_field
           label: 'EIF Pillars'
           exclude: false
           alter:
@@ -223,8 +167,6 @@ display:
             use_highlighting: false
             multi_type: separator
             multi_separator: ', '
-          entity_type: taxonomy_term
-          plugin_id: search_api_field
         reverse_field_eif_identifier:
           id: reverse_field_eif_identifier
           table: search_api_index_published
@@ -232,6 +174,7 @@ display:
           relationship: none
           group_type: group
           admin_label: ''
+          plugin_id: search_api_field
           label: Recommendations
           exclude: false
           alter:
@@ -306,178 +249,27 @@ display:
             format_plural_values:
               - '1'
               - '@count'
-          plugin_id: search_api_field
-      filters:
-        vid_1:
-          id: vid_1
-          table: search_api_index_published
-          field: vid
-          relationship: none
-          group_type: group
-          admin_label: ''
-          operator: or
-          value:
-            value: eif_principle
-          group: 1
-          exposed: false
-          expose:
-            operator_id: ''
-            label: ''
-            description: ''
-            use_operator: false
-            operator: ''
-            operator_limit_selection: false
-            operator_list: {  }
-            identifier: ''
-            required: false
-            remember: false
-            multiple: false
-            remember_roles:
-              authenticated: authenticated
-            placeholder: ''
-            min_placeholder: ''
-            max_placeholder: ''
-          is_grouped: false
-          group_info:
-            label: ''
-            description: ''
-            identifier: ''
-            optional: true
-            widget: select
-            multiple: false
-            remember: false
-            default_group: All
-            default_group_multiple: {  }
-            group_items: {  }
-          plugin_id: search_api_string
-        reverse_eif_related_term_tid:
-          id: reverse_eif_related_term_tid
-          table: search_api_index_published
-          field: reverse_eif_related_term_tid
-          relationship: none
-          group_type: group
-          admin_label: ''
-          operator: 'not empty'
-          value:
-            min: ''
-            max: ''
-            value: ''
-          group: 2
-          exposed: false
-          expose:
-            operator_id: ''
-            label: ''
-            description: ''
-            use_operator: false
-            operator: ''
-            operator_limit_selection: false
-            operator_list: {  }
-            identifier: ''
-            required: false
-            remember: false
-            multiple: false
-            remember_roles:
-              authenticated: authenticated
-            placeholder: ''
-            min_placeholder: ''
-            max_placeholder: ''
-          is_grouped: false
-          group_info:
-            label: ''
-            description: ''
-            identifier: ''
-            optional: true
-            widget: select
-            multiple: false
-            remember: false
-            default_group: All
-            default_group_multiple: {  }
-            group_items: {  }
-          plugin_id: search_api_text
-        vid:
-          id: vid
-          table: search_api_index_published
-          field: vid
-          relationship: none
-          group_type: group
-          admin_label: ''
-          operator: or
-          value:
-            value: eif_interoperability_layer
-          group: 1
-          exposed: false
-          expose:
-            operator_id: ''
-            label: ''
-            description: ''
-            use_operator: false
-            operator: ''
-            operator_limit_selection: false
-            operator_list: {  }
-            identifier: ''
-            required: false
-            remember: false
-            multiple: false
-            remember_roles:
-              authenticated: authenticated
-            placeholder: ''
-            min_placeholder: ''
-            max_placeholder: ''
-          is_grouped: false
-          group_info:
-            label: ''
-            description: ''
-            identifier: ''
-            optional: true
-            widget: select
-            multiple: false
-            remember: false
-            default_group: All
-            default_group_multiple: {  }
-            group_items: {  }
-          plugin_id: search_api_string
-        vid_2:
-          id: vid_2
-          table: search_api_index_published
-          field: vid
-          relationship: none
-          group_type: group
-          admin_label: ''
-          operator: or
-          value:
-            value: eif_conceptual_model
-          group: 1
-          exposed: false
-          expose:
-            operator_id: ''
-            label: ''
-            description: ''
-            use_operator: false
-            operator: ''
-            operator_limit_selection: false
-            operator_list: {  }
-            identifier: ''
-            required: false
-            remember: false
-            multiple: false
-            remember_roles:
-              authenticated: authenticated
-            placeholder: ''
-            min_placeholder: ''
-            max_placeholder: ''
-          is_grouped: false
-          group_info:
-            label: ''
-            description: ''
-            identifier: ''
-            optional: true
-            widget: select
-            multiple: false
-            remember: false
-            default_group: All
-            default_group_multiple: {  }
-            group_items: {  }
-          plugin_id: search_api_string
+      pager:
+        type: none
+        options:
+          offset: 0
+      exposed_form:
+        type: basic
+        options:
+          submit_button: Apply
+          reset_button: false
+          reset_button_label: Reset
+          exposed_sorts_label: 'Sort by'
+          expose_sort_order: true
+          sort_asc_label: Asc
+          sort_desc_label: Desc
+      access:
+        type: none
+        options: {  }
+      cache:
+        type: tag
+        options: {  }
+      empty: {  }
       sorts:
         weight:
           id: weight
@@ -486,12 +278,12 @@ display:
           relationship: none
           group_type: group
           admin_label: ''
+          plugin_id: search_api
           order: ASC
-          exposed: false
           expose:
             label: ''
             identifier: weight
-          plugin_id: search_api
+          exposed: false
         name:
           id: name
           table: search_api_index_published
@@ -499,17 +291,12 @@ display:
           relationship: none
           group_type: group
           admin_label: ''
+          plugin_id: search_api
           order: ASC
-          exposed: false
           expose:
             label: ''
             identifier: name
-          plugin_id: search_api
-      title: 'EIF recommendations'
-      header: {  }
-      footer: {  }
-      empty: {  }
-      relationships: {  }
+          exposed: false
       arguments:
         entity_groups:
           id: entity_groups
@@ -518,6 +305,7 @@ display:
           relationship: none
           group_type: group
           admin_label: ''
+          plugin_id: search_api_group
           default_action: ignore
           exception:
             value: all
@@ -546,325 +334,6 @@ display:
             multiple: 0
           break_phrase: false
           not: false
-          plugin_id: search_api_group
-      display_extenders: {  }
-      filter_groups:
-        operator: AND
-        groups:
-          1: OR
-          2: AND
-      css_class: eif-recommendations
-    cache_metadata:
-      max-age: -1
-      contexts:
-        - 'languages:language_content'
-        - 'languages:language_interface'
-        - url
-        - 'user.node_grants:view'
-      tags:
-        - 'config:field.storage.taxonomy_term.field_eif_identifier'
-        - 'config:search_api.index.published'
-        - 'search_api_list:published'
-  all:
-    display_plugin: page
-    id: all
-    display_title: All
-    position: 1
-    display_options:
-      display_extenders: {  }
-      path: rdf_entity/%rdf_entity/recommendations
-      always_use_admin_theme: false
-      defaults:
-        empty: true
-        cache: false
-      cache:
-        type: none
-      menu:
-        type: 'default tab'
-        title: All
-        description: ''
-        expanded: false
-        parent: ''
-        weight: 0
-        context: '0'
-        menu_name: main
-      tab_options:
-        type: none
-        title: All
-        description: ''
-        weight: 0
-      display_description: ''
-    cache_metadata:
-      max-age: -1
-      contexts:
-        - 'languages:language_content'
-        - 'languages:language_interface'
-        - url
-        - 'user.node_grants:view'
-      tags:
-        - 'config:field.storage.taxonomy_term.field_eif_identifier'
-        - 'config:search_api.index.published'
-        - 'search_api_list:published'
-  conceptual_model:
-    display_plugin: page
-    id: conceptual_model
-    display_title: 'Conceptual model'
-    position: 3
-    display_options:
-      display_extenders: {  }
-      display_description: ''
-      path: rdf_entity/%rdf_entity/recommendations/conceptual-model
-      always_use_admin_theme: false
-      filters:
-        reverse_eif_related_term_tid:
-          id: reverse_eif_related_term_tid
-          table: search_api_index_published
-          field: reverse_eif_related_term_tid
-          relationship: none
-          group_type: group
-          admin_label: ''
-          operator: 'not empty'
-          value:
-            min: ''
-            max: ''
-            value: ''
-          group: 2
-          exposed: false
-          expose:
-            operator_id: ''
-            label: ''
-            description: ''
-            use_operator: false
-            operator: ''
-            operator_limit_selection: false
-            operator_list: {  }
-            identifier: ''
-            required: false
-            remember: false
-            multiple: false
-            remember_roles:
-              authenticated: authenticated
-            placeholder: ''
-            min_placeholder: ''
-            max_placeholder: ''
-          is_grouped: false
-          group_info:
-            label: ''
-            description: ''
-            identifier: ''
-            optional: true
-            widget: select
-            multiple: false
-            remember: false
-            default_group: All
-            default_group_multiple: {  }
-            group_items: {  }
-          plugin_id: search_api_text
-        vid:
-          id: vid
-          table: search_api_index_published
-          field: vid
-          relationship: none
-          group_type: group
-          admin_label: ''
-          operator: or
-          value:
-            value: eif_conceptual_model
-          group: 1
-          exposed: false
-          expose:
-            operator_id: ''
-            label: ''
-            description: ''
-            use_operator: false
-            operator: ''
-            operator_limit_selection: false
-            operator_list: {  }
-            identifier: ''
-            required: false
-            remember: false
-            multiple: false
-            remember_roles:
-              authenticated: authenticated
-            placeholder: ''
-            min_placeholder: ''
-            max_placeholder: ''
-          is_grouped: false
-          group_info:
-            label: ''
-            description: ''
-            identifier: ''
-            optional: true
-            widget: select
-            multiple: false
-            remember: false
-            default_group: All
-            default_group_multiple: {  }
-            group_items: {  }
-          plugin_id: search_api_string
-      defaults:
-        filters: false
-        filter_groups: false
-      filter_groups:
-        operator: AND
-        groups:
-          1: OR
-          2: AND
-      menu:
-        type: tab
-        title: 'Conceptual model'
-        description: ''
-        expanded: false
-        parent: ''
-        weight: 30
-        context: '0'
-        menu_name: main
-    cache_metadata:
-      max-age: -1
-      contexts:
-        - 'languages:language_content'
-        - 'languages:language_interface'
-        - url
-        - 'user.node_grants:view'
-      tags:
-        - 'config:field.storage.taxonomy_term.field_eif_identifier'
-        - 'config:search_api.index.published'
-        - 'search_api_list:published'
-  interoperability_layer:
-    display_plugin: page
-    id: interoperability_layer
-    display_title: 'Interoperability layer'
-    position: 3
-    display_options:
-      display_extenders: {  }
-      display_description: ''
-      path: rdf_entity/%rdf_entity/recommendations/interoperability-layer
-      always_use_admin_theme: false
-      filters:
-        reverse_eif_related_term_tid:
-          id: reverse_eif_related_term_tid
-          table: search_api_index_published
-          field: reverse_eif_related_term_tid
-          relationship: none
-          group_type: group
-          admin_label: ''
-          operator: 'not empty'
-          value:
-            min: ''
-            max: ''
-            value: ''
-          group: 2
-          exposed: false
-          expose:
-            operator_id: ''
-            label: ''
-            description: ''
-            use_operator: false
-            operator: ''
-            operator_limit_selection: false
-            operator_list: {  }
-            identifier: ''
-            required: false
-            remember: false
-            multiple: false
-            remember_roles:
-              authenticated: authenticated
-            placeholder: ''
-            min_placeholder: ''
-            max_placeholder: ''
-          is_grouped: false
-          group_info:
-            label: ''
-            description: ''
-            identifier: ''
-            optional: true
-            widget: select
-            multiple: false
-            remember: false
-            default_group: All
-            default_group_multiple: {  }
-            group_items: {  }
-          plugin_id: search_api_text
-        vid:
-          id: vid
-          table: search_api_index_published
-          field: vid
-          relationship: none
-          group_type: group
-          admin_label: ''
-          operator: or
-          value:
-            value: eif_interoperability_layer
-          group: 1
-          exposed: false
-          expose:
-            operator_id: ''
-            label: ''
-            description: ''
-            use_operator: false
-            operator: ''
-            operator_limit_selection: false
-            operator_list: {  }
-            identifier: ''
-            required: false
-            remember: false
-            multiple: false
-            remember_roles:
-              authenticated: authenticated
-            placeholder: ''
-            min_placeholder: ''
-            max_placeholder: ''
-          is_grouped: false
-          group_info:
-            label: ''
-            description: ''
-            identifier: ''
-            optional: true
-            widget: select
-            multiple: false
-            remember: false
-            default_group: All
-            default_group_multiple: {  }
-            group_items: {  }
-          plugin_id: search_api_string
-      defaults:
-        filters: false
-        filter_groups: false
-      filter_groups:
-        operator: AND
-        groups:
-          1: OR
-          2: AND
-      menu:
-        type: tab
-        title: 'Interoperability layer'
-        description: ''
-        expanded: false
-        parent: ''
-        weight: 20
-        context: '0'
-        menu_name: main
-    cache_metadata:
-      max-age: -1
-      contexts:
-        - 'languages:language_content'
-        - 'languages:language_interface'
-        - url
-        - 'user.node_grants:view'
-      tags:
-        - 'config:field.storage.taxonomy_term.field_eif_identifier'
-        - 'config:search_api.index.published'
-        - 'search_api_list:published'
-  principle:
-    display_plugin: page
-    id: principle
-    display_title: 'Underlying principle'
-    position: 2
-    display_options:
-      display_extenders: {  }
-      display_description: ''
-      path: rdf_entity/%rdf_entity/recommendations/principle
-      always_use_admin_theme: false
       filters:
         vid_1:
           id: vid_1
@@ -873,6 +342,7 @@ display:
           relationship: none
           group_type: group
           admin_label: ''
+          plugin_id: search_api_string
           operator: or
           value:
             value: eif_principle
@@ -892,9 +362,9 @@ display:
             multiple: false
             remember_roles:
               authenticated: authenticated
-            placeholder: ''
             min_placeholder: ''
             max_placeholder: ''
+            placeholder: ''
           is_grouped: false
           group_info:
             label: ''
@@ -907,7 +377,6 @@ display:
             default_group: All
             default_group_multiple: {  }
             group_items: {  }
-          plugin_id: search_api_string
         reverse_eif_related_term_tid:
           id: reverse_eif_related_term_tid
           table: search_api_index_published
@@ -915,6 +384,7 @@ display:
           relationship: none
           group_type: group
           admin_label: ''
+          plugin_id: search_api_text
           operator: 'not empty'
           value:
             min: ''
@@ -936,9 +406,9 @@ display:
             multiple: false
             remember_roles:
               authenticated: authenticated
-            placeholder: ''
             min_placeholder: ''
             max_placeholder: ''
+            placeholder: ''
           is_grouped: false
           group_info:
             label: ''
@@ -951,24 +421,554 @@ display:
             default_group: All
             default_group_multiple: {  }
             group_items: {  }
-          plugin_id: search_api_text
-      defaults:
-        filters: false
-        filter_groups: false
+        vid:
+          id: vid
+          table: search_api_index_published
+          field: vid
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: search_api_string
+          operator: or
+          value:
+            value: eif_interoperability_layer
+          group: 1
+          exposed: false
+          expose:
+            operator_id: ''
+            label: ''
+            description: ''
+            use_operator: false
+            operator: ''
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: ''
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+            min_placeholder: ''
+            max_placeholder: ''
+            placeholder: ''
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+        vid_2:
+          id: vid_2
+          table: search_api_index_published
+          field: vid
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: search_api_string
+          operator: or
+          value:
+            value: eif_conceptual_model
+          group: 1
+          exposed: false
+          expose:
+            operator_id: ''
+            label: ''
+            description: ''
+            use_operator: false
+            operator: ''
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: ''
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+            min_placeholder: ''
+            max_placeholder: ''
+            placeholder: ''
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
       filter_groups:
         operator: AND
         groups:
           1: OR
           2: AND
+      style:
+        type: table
+        options:
+          grouping:
+            -
+              field: parent
+              rendered: true
+              rendered_strip: false
+          row_class: ''
+          default_row_class: true
+          columns:
+            name: name
+            parent: parent
+          default: '-1'
+          info:
+            name:
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
+            parent:
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
+          override: true
+          sticky: false
+          summary: ''
+          empty_table: false
+          caption: ''
+          description: ''
+      row:
+        type: fields
+      query:
+        type: search_api_query
+        options:
+          bypass_access: false
+          skip_access: false
+          preserve_facet_query_args: false
+      relationships: {  }
+      css_class: eif-recommendations
+      header: {  }
+      footer: {  }
+      display_extenders: {  }
+    cache_metadata:
+      max-age: -1
+      contexts:
+        - 'languages:language_content'
+        - 'languages:language_interface'
+        - url
+        - 'user.node_grants:view'
+      tags:
+        - 'config:field.storage.taxonomy_term.field_eif_identifier'
+        - 'config:search_api.index.published'
+        - 'search_api_list:published'
+  all:
+    id: all
+    display_title: All
+    display_plugin: page
+    position: 1
+    display_options:
+      cache:
+        type: none
+      defaults:
+        empty: true
+        cache: false
+      display_description: ''
+      display_extenders: {  }
+      path: rdf_entity/%rdf_entity/recommendations
+      menu:
+        type: 'default tab'
+        title: All
+        description: ''
+        weight: 0
+        expanded: false
+        menu_name: main
+        parent: ''
+        context: '0'
+      tab_options:
+        type: none
+        title: All
+        description: ''
+        weight: 0
+      always_use_admin_theme: false
+    cache_metadata:
+      max-age: -1
+      contexts:
+        - 'languages:language_content'
+        - 'languages:language_interface'
+        - url
+        - 'user.node_grants:view'
+      tags:
+        - 'config:field.storage.taxonomy_term.field_eif_identifier'
+        - 'config:search_api.index.published'
+        - 'search_api_list:published'
+  conceptual_model:
+    id: conceptual_model
+    display_title: 'Conceptual model'
+    display_plugin: page
+    position: 3
+    display_options:
+      filters:
+        reverse_eif_related_term_tid:
+          id: reverse_eif_related_term_tid
+          table: search_api_index_published
+          field: reverse_eif_related_term_tid
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: search_api_text
+          operator: 'not empty'
+          value:
+            min: ''
+            max: ''
+            value: ''
+          group: 2
+          exposed: false
+          expose:
+            operator_id: ''
+            label: ''
+            description: ''
+            use_operator: false
+            operator: ''
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: ''
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+            min_placeholder: ''
+            max_placeholder: ''
+            placeholder: ''
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+        vid:
+          id: vid
+          table: search_api_index_published
+          field: vid
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: search_api_string
+          operator: or
+          value:
+            value: eif_conceptual_model
+          group: 1
+          exposed: false
+          expose:
+            operator_id: ''
+            label: ''
+            description: ''
+            use_operator: false
+            operator: ''
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: ''
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+            min_placeholder: ''
+            max_placeholder: ''
+            placeholder: ''
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+      filter_groups:
+        operator: AND
+        groups:
+          1: OR
+          2: AND
+      defaults:
+        filters: false
+        filter_groups: false
+      display_description: ''
+      display_extenders: {  }
+      path: rdf_entity/%rdf_entity/recommendations/conceptual-model
+      menu:
+        type: tab
+        title: 'Conceptual model'
+        description: ''
+        weight: 30
+        expanded: false
+        menu_name: main
+        parent: ''
+        context: '0'
+      always_use_admin_theme: false
+    cache_metadata:
+      max-age: -1
+      contexts:
+        - 'languages:language_content'
+        - 'languages:language_interface'
+        - url
+        - 'user.node_grants:view'
+      tags:
+        - 'config:field.storage.taxonomy_term.field_eif_identifier'
+        - 'config:search_api.index.published'
+        - 'search_api_list:published'
+  interoperability_layer:
+    id: interoperability_layer
+    display_title: 'Interoperability layer'
+    display_plugin: page
+    position: 3
+    display_options:
+      filters:
+        reverse_eif_related_term_tid:
+          id: reverse_eif_related_term_tid
+          table: search_api_index_published
+          field: reverse_eif_related_term_tid
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: search_api_text
+          operator: 'not empty'
+          value:
+            min: ''
+            max: ''
+            value: ''
+          group: 2
+          exposed: false
+          expose:
+            operator_id: ''
+            label: ''
+            description: ''
+            use_operator: false
+            operator: ''
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: ''
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+            min_placeholder: ''
+            max_placeholder: ''
+            placeholder: ''
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+        vid:
+          id: vid
+          table: search_api_index_published
+          field: vid
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: search_api_string
+          operator: or
+          value:
+            value: eif_interoperability_layer
+          group: 1
+          exposed: false
+          expose:
+            operator_id: ''
+            label: ''
+            description: ''
+            use_operator: false
+            operator: ''
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: ''
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+            min_placeholder: ''
+            max_placeholder: ''
+            placeholder: ''
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+      filter_groups:
+        operator: AND
+        groups:
+          1: OR
+          2: AND
+      defaults:
+        filters: false
+        filter_groups: false
+      display_description: ''
+      display_extenders: {  }
+      path: rdf_entity/%rdf_entity/recommendations/interoperability-layer
+      menu:
+        type: tab
+        title: 'Interoperability layer'
+        description: ''
+        weight: 20
+        expanded: false
+        menu_name: main
+        parent: ''
+        context: '0'
+      always_use_admin_theme: false
+    cache_metadata:
+      max-age: -1
+      contexts:
+        - 'languages:language_content'
+        - 'languages:language_interface'
+        - url
+        - 'user.node_grants:view'
+      tags:
+        - 'config:field.storage.taxonomy_term.field_eif_identifier'
+        - 'config:search_api.index.published'
+        - 'search_api_list:published'
+  principle:
+    id: principle
+    display_title: 'Underlying principle'
+    display_plugin: page
+    position: 2
+    display_options:
+      filters:
+        vid_1:
+          id: vid_1
+          table: search_api_index_published
+          field: vid
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: search_api_string
+          operator: or
+          value:
+            value: eif_principle
+          group: 1
+          exposed: false
+          expose:
+            operator_id: ''
+            label: ''
+            description: ''
+            use_operator: false
+            operator: ''
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: ''
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+            min_placeholder: ''
+            max_placeholder: ''
+            placeholder: ''
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+        reverse_eif_related_term_tid:
+          id: reverse_eif_related_term_tid
+          table: search_api_index_published
+          field: reverse_eif_related_term_tid
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: search_api_text
+          operator: 'not empty'
+          value:
+            min: ''
+            max: ''
+            value: ''
+          group: 2
+          exposed: false
+          expose:
+            operator_id: ''
+            label: ''
+            description: ''
+            use_operator: false
+            operator: ''
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: ''
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+            min_placeholder: ''
+            max_placeholder: ''
+            placeholder: ''
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+      filter_groups:
+        operator: AND
+        groups:
+          1: OR
+          2: AND
+      defaults:
+        filters: false
+        filter_groups: false
+      display_description: ''
+      display_extenders: {  }
+      path: rdf_entity/%rdf_entity/recommendations/principle
       menu:
         type: tab
         title: 'Underlying principle'
         description: ''
-        expanded: false
-        parent: ''
         weight: 10
-        context: '0'
+        expanded: false
         menu_name: main
+        parent: ''
+        context: '0'
+      always_use_admin_theme: false
     cache_metadata:
       max-age: -1
       contexts:

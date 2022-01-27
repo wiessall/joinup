@@ -2,12 +2,12 @@ uuid: 9b2f9c96-738f-4099-9981-afc34deb6359
 langcode: en
 status: true
 dependencies:
-  module:
-    - search_api_solr
-    - language
   config:
     - language.entity.fr
     - search_api_solr.solr_field_type.text_fr_7_0_0
+  module:
+    - search_api_solr
+    - language
 id: text_phonetic_fr_7_0_0
 label: 'Fulltext Phonetic French'
 minimum_solr_version: 7.0.0

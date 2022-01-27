@@ -33,14 +33,14 @@ bundle: collection
 mode: digest_message_header
 content:
   label:
-    label: inline
     type: string
-    weight: 0
+    label: inline
     settings:
       link_to_entity: true
     third_party_settings:
       template_suggestion:
         template_suggestion: ''
+    weight: 0
     region: content
 hidden:
   changed: true

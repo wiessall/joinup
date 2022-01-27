@@ -27,31 +27,31 @@ bundle: discussion
 mode: moderation
 content:
   body:
-    weight: 1
+    type: smart_trim
     label: hidden
     settings:
       trim_length: 600
       trim_type: chars
       trim_suffix: …
+      wrap_output: false
+      wrap_class: trimmed
       more_link: false
+      more_class: more-link
       more_text: More
       summary_handler: trim
       trim_options:
         text: false
-      more_class: more-link
-      wrap_output: false
-      wrap_class: trimmed
     third_party_settings:
       template_suggestion:
         template_suggestion: ''
-    type: smart_trim
+    weight: 1
     region: content
   field_state:
-    weight: 0
+    type: list_default
     label: inline
     settings: {  }
     third_party_settings: {  }
-    type: list_default
+    weight: 0
     region: content
 hidden:
   field_attachment: true

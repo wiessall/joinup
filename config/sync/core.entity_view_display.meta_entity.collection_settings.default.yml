@@ -11,43 +11,43 @@ bundle: collection_settings
 mode: default
 content:
   changed:
-    label: inline
     type: timestamp
+    label: inline
+    settings:
+      date_format: medium
+      custom_date_format: ''
+      timezone: ''
+    third_party_settings: {  }
     weight: 22
     region: content
+  created:
+    type: timestamp
+    label: inline
     settings:
       date_format: medium
       custom_date_format: ''
       timezone: ''
     third_party_settings: {  }
-  created:
-    label: inline
-    type: timestamp
     weight: 20
     region: content
-    settings:
-      date_format: medium
-      custom_date_format: ''
-      timezone: ''
-    third_party_settings: {  }
   glossary_link_only_first:
-    weight: 23
+    type: boolean
     label: above
     settings:
       format: default
       format_custom_false: ''
       format_custom_true: ''
     third_party_settings: {  }
-    type: boolean
+    weight: 23
     region: content
   label:
-    label: hidden
     type: string
-    weight: -5
-    region: content
+    label: hidden
     settings:
       link_to_entity: false
     third_party_settings: {  }
+    weight: -5
+    region: content
 hidden:
   search_api_excerpt: true
   target: true

@@ -28,38 +28,38 @@ mode: compact
 content:
   field_ad_access_url:
     type: tracked_hosted_file_download
-    weight: 1
-    region: content
     label: hidden
     settings:
       hosted_files_title: Download
-      show_remote_files: true
       remote_files_title: External
+      show_remote_files: true
     third_party_settings:
       template_suggestion:
         template_suggestion: no_wrappers
+    weight: 1
+    region: content
   field_ad_file_size:
     type: digital_size
-    weight: 2
     label: hidden
     settings: {  }
     third_party_settings: {  }
+    weight: 2
     region: content
   field_ad_licence:
     type: entity_reference_label
-    weight: 3
     label: hidden
     settings:
       link: true
     third_party_settings: {  }
+    weight: 3
     region: content
   label:
     type: string
-    weight: 0
     label: hidden
     settings:
       link_to_entity: true
     third_party_settings: {  }
+    weight: 0
     region: content
 hidden:
   changed: true

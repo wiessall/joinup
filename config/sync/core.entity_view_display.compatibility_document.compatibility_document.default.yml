@@ -13,9 +13,9 @@ content:
   description:
     type: text_default
     label: hidden
-    weight: 10
-    region: content
     settings: {  }
     third_party_settings: {  }
+    weight: 10
+    region: content
 hidden:
   search_api_excerpt: true
