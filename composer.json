@@ -341,7 +341,7 @@
                 "Some bulk form field options are missing schema @see https://www.drupal.org/project/search_api/issues/3195199": "https://git.drupalcode.org/project/search_api/-/merge_requests/6.diff"
             },
             "drupal/search_api_solr": {
-                "Missing config schema @see https://www.drupal.org/project/search_api_solr/issues/3236773": "https://git.drupalcode.org/project/search_api_solr/-/merge_requests/8.diff"
+                "Missing config schema @see https://www.drupal.org/project/search_api_solr/issues/3236773": "resources/patch/search_api_solr-3236773.diff"
             },
             "drupal/search_api_autocomplete": {
                 "Clear timeout autosubmit used in views_autosubmit.": "resources/patch/search_api_autocomplete_override_views_autosubmit.patch"
