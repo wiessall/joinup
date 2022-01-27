@@ -17,14 +17,15 @@ upgrade_commands:
     acceptance:
       - touch disable-config-readonly
       - ./vendor/bin/drush pm:enable joinup_acceptance --yes
-      - rm disable-config-readonly
       # Note that the 'Root user access' exception will be removed in ISAICP-6822.
       # See https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-6822.
-      # Don't run Status Report check on demo environments. This is the only way
-      # we're able to temporary differentiate a demo environment from acceptance
-      # but on a long run this will be fixed in FPFISINFRA-262.
+      # Don't run Status Report check and keep config editable on demo
+      # environments. Currently, the `KUBERNETES_PORT` environment variable
+      # exists on ephemeral/demo environments. Temporary, this is the only way
+      # we're able to differentiate a demo environment from acceptance but on a
+      # long run this will be fixed in FPFISINFRA-262.
       # See https://citnet.tech.ec.europa.eu/CITnet/jira/browse/FPFISINFRA-262.
-      -  if [ -z "$KUBERNETES_PORT" ]; then test $(./vendor/bin/drush core:requirements --severity=1 --ignore="update status,joinup_core_root_user_blocked" --field=title | wc -l) = "0" || (echo "Status Report shows errors & warnings" && ./vendor/bin/drush core:requirements --severity=1 --ignore="update status,joinup_core_root_user_blocked" && exit 1); fi
+      - if [ -z "$KUBERNETES_PORT" ]; then rm disable-config-readonly; test $(./vendor/bin/drush core:requirements --severity=1 --ignore="update status,joinup_core_root_user_blocked" --field=title | wc -l) = "0" || (echo "Status Report shows errors & warnings" && ./vendor/bin/drush core:requirements --severity=1 --ignore="update status,joinup_core_root_user_blocked" && exit 1); fi
     production:
       # Note that the 'Root user access' exception will be removed in ISAICP-6822.
       # See https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-6822.
