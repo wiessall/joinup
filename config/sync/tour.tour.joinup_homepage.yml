@@ -1,9 +1,7 @@
 uuid: 422ca239-278b-4488-8267-d5f66e22997a
 langcode: en
 status: true
-dependencies:
-  module:
-    - null
+dependencies: {  }
 id: joinup_homepage
 label: 'Joinup homepage tour.'
 module: null
