@@ -32,4 +32,5 @@ content:
         template_suggestion: ''
 hidden:
   langcode: true
+  search_api_excerpt: true
   title: true

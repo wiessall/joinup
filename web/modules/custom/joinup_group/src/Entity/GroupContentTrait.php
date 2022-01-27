@@ -18,6 +18,19 @@ trait GroupContentTrait {
   /**
    * {@inheritdoc}
    */
+  public function hasGroup(): bool {
+    try {
+      $this->getGroup();
+    }
+    catch (MissingGroupException $e) {
+      return FALSE;
+    }
+    return TRUE;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function getGroup(): GroupInterface {
     $group = $this->getFirstReferencedEntity(OgGroupAudienceHelperInterface::DEFAULT_FIELD);
     if (empty($group) || !$group instanceof GroupInterface) {

@@ -32,16 +32,14 @@ function search_api_arbitrary_facet_search_api_solr_query_alter(SolariumQueryInt
     $definition = $plugin->getFacetDefinition();
     $solr_field_names = joinup_search_fieldnames_from_index($query->getIndex());
 
+    // For "OR" facets, add the expected tag for exclusion.
+    $excludes = isset($options['operator']) && strtolower($options['operator']) === 'or' ? ["arbitrary:$facet_name"] : [];
+
     foreach ($definition as $facet_identifier => $facet_attribute) {
       // Translate the field name to the index field name.
       $solr_field_name = $solr_field_names[$facet_attribute['field_name']];
       $filter = search_api_arbitrary_facet_create_filter_query($solr_field_name, $facet_attribute['field_condition'], isset($facet_attribute['field_operator']) ? $facet_attribute['field_operator'] : NULL);
-      $facet->createQuery($facet_identifier, $filter);
-    }
-
-    // For "OR" facets, add the expected tag for exclusion.
-    if (isset($options['operator']) && strtolower($options['operator']) === 'or') {
-      $facet->setExcludes(['arbitrary:' . $facet_name]);
+      $facet->createQuery($facet_identifier, $filter, $excludes);
     }
   }
 }
