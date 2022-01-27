@@ -4,10 +4,10 @@ status: true
 dependencies: {  }
 _core:
   default_config_hash: BOv1f-WKZ1HHwzPIRYIMVPpwDHJ2L3GOWwTm1YzMVok
-name: 'Contact information'
-rid: contact_information
-description: ''
 label_singular: 'contact information entry'
 label_plural: 'contact information entries'
 label_count:
   no_count_capitalize: !!binary Q29udGFjdCBpbmZvcm1hdGlvbiBlbnRyeQNDb250YWN0IGluZm9ybWF0aW9uIGVudHJpZXM=
+name: 'Contact information'
+rid: contact_information
+description: ''

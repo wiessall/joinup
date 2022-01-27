@@ -21,37 +21,37 @@ bundle: contact_information
 mode: about
 content:
   field_ci_email:
-    weight: 1
+    type: email_mailto
     label: above
     settings: {  }
     third_party_settings:
       template_suggestion:
         template_suggestion: fieldset
-    type: email_mailto
+    weight: 1
     region: content
   field_ci_name:
     type: string
-    weight: 0
     label: above
     settings:
       link_to_entity: false
     third_party_settings:
       template_suggestion:
         template_suggestion: fieldset
+    weight: 0
     region: content
   field_ci_webpage:
-    weight: 2
+    type: link
     label: above
     settings:
       trim_length: 80
-      target: _blank
       url_only: false
       url_plain: false
       rel: '0'
+      target: _blank
     third_party_settings:
       template_suggestion:
         template_suggestion: fieldset
-    type: link
+    weight: 2
     region: content
 hidden:
   changed: true

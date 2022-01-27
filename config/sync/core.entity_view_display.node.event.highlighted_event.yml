@@ -34,15 +34,15 @@ dependencies:
     - user
 third_party_settings:
   layout_builder:
-    allow_custom: false
     enabled: false
+    allow_custom: false
 id: node.event.highlighted_event
 targetEntityType: node
 bundle: event
 mode: highlighted_event
 content:
   field_event_date:
-    weight: 0
+    type: daterange_condensed
     label: hidden
     settings:
       timezone_override: ''
@@ -54,7 +54,7 @@ content:
     third_party_settings:
       template_suggestion:
         template_suggestion: ''
-    type: daterange_condensed
+    weight: 0
     region: content
 hidden:
   body: true

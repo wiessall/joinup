@@ -16,12 +16,12 @@ plugin: eira_deprecated_term_block
 settings:
   id: eira_deprecated_term_block
   label: 'Eira deprecated term message'
-  provider: eira
   label_display: '0'
+  provider: eira
 visibility:
   request_route:
     id: request_route
-    routes:
-      - entity.taxonomy_term.canonical
     negate: false
     context_mapping: {  }
+    routes:
+      - entity.taxonomy_term.canonical

@@ -14,21 +14,21 @@ bundle: rdf_graph
 mode: default
 content:
   field_rdf_file:
-    weight: 1
+    type: file_default
     label: inline
     settings:
       use_description_as_link_text: true
     third_party_settings: {  }
-    type: file_default
+    weight: 1
     region: content
   label:
-    label: hidden
     type: string
-    weight: -5
-    region: content
+    label: hidden
     settings:
       link_to_entity: false
     third_party_settings: {  }
+    weight: -5
+    region: content
 hidden:
   changed: true
   created: true

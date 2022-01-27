@@ -1,7 +1,33 @@
 uuid: 982c8b12-1041-4ea6-8e05-c7e4a0863b97
 langcode: en
 status: true
-dependencies: {  }
+dependencies:
+  config:
+    - filter.format.basic_html
+    - filter.format.content_editor
+    - filter.format.essential_html
+    - filter.format.glossary_html
+    - filter.format.simple_html
+    - node.type.document
+    - node.type.tallinn_report
+  module:
+    - comment
+    - contextual
+    - entity_legal
+    - filter
+    - flag
+    - joinup
+    - joinup_licence
+    - media
+    - node
+    - paragraphs_type_permissions
+    - rdf_entity
+    - rdf_export
+    - search_api_autocomplete
+    - state_machine_permissions
+    - system
+    - tour
+    - video_embed_field
 id: authenticated
 label: 'Authenticated user'
 weight: 1
@@ -20,7 +46,6 @@ permissions:
   - 'create paragraph content accordion_item'
   - 'create paragraph content content_listing'
   - 'create paragraph content simple_paragraph'
-  - 'delete own comments'
   - 'delete own document content'
   - 'delete paragraph content accordion'
   - 'delete paragraph content accordion_item'
@@ -35,76 +60,43 @@ permissions:
   - 'legal re-accept legal_notice'
   - 'legal view legal_notice'
   - 'never autoplay videos'
-  - 'opt-in or out of matomo tracking'
   - 'post comments'
   - 'propose collection rdf entity'
   - 'revert all revisions'
   - 'skip comment approval'
-  - 'solution - solution_workflow - transition from __new__ to draft'
-  - 'solution - solution_workflow - transition from __new__ to proposed'
-  - 'subscribe to newsletters'
-  - 'transition group from __new__ to draft using the collection - collection_workflow workflow'
-  - 'transition group from __new__ to draft using the solution - solution_workflow workflow'
-  - 'transition group from __new__ to proposed using the collection - collection_workflow workflow'
-  - 'transition group from __new__ to proposed using the solution - solution_workflow workflow'
-  - 'transition own node discussion from draft to draft using the community_content - node:post_moderated workflow'
-  - 'transition own node discussion from draft to draft using the community_content - node:pre_moderated workflow'
   - 'transition own node discussion from draft to proposed using the community_content - node:pre_moderated workflow'
   - 'transition own node discussion from draft to validated using the community_content - node:post_moderated workflow'
   - 'transition own node discussion from needs_update to proposed using the community_content - node:post_moderated workflow'
   - 'transition own node discussion from needs_update to proposed using the community_content - node:pre_moderated workflow'
-  - 'transition own node discussion from proposed to proposed using the community_content - node:post_moderated workflow'
-  - 'transition own node discussion from proposed to proposed using the community_content - node:pre_moderated workflow'
-  - 'transition own node discussion from validated to deletion_request using the community_content - node:post_moderated workflow'
   - 'transition own node discussion from validated to deletion_request using the community_content - node:pre_moderated workflow'
   - 'transition own node discussion from validated to draft using the community_content - node:post_moderated workflow'
   - 'transition own node discussion from validated to draft using the community_content - node:pre_moderated workflow'
   - 'transition own node discussion from validated to proposed using the community_content - node:pre_moderated workflow'
-  - 'transition own node discussion from validated to validated using the community_content - node:post_moderated workflow'
-  - 'transition own node document from draft to draft using the community_content - node:post_moderated workflow'
-  - 'transition own node document from draft to draft using the community_content - node:pre_moderated workflow'
   - 'transition own node document from draft to proposed using the community_content - node:pre_moderated workflow'
   - 'transition own node document from draft to validated using the community_content - node:post_moderated workflow'
   - 'transition own node document from needs_update to proposed using the community_content - node:post_moderated workflow'
   - 'transition own node document from needs_update to proposed using the community_content - node:pre_moderated workflow'
-  - 'transition own node document from proposed to proposed using the community_content - node:post_moderated workflow'
-  - 'transition own node document from proposed to proposed using the community_content - node:pre_moderated workflow'
-  - 'transition own node document from validated to deletion_request using the community_content - node:post_moderated workflow'
   - 'transition own node document from validated to deletion_request using the community_content - node:pre_moderated workflow'
   - 'transition own node document from validated to draft using the community_content - node:post_moderated workflow'
   - 'transition own node document from validated to draft using the community_content - node:pre_moderated workflow'
   - 'transition own node document from validated to proposed using the community_content - node:pre_moderated workflow'
-  - 'transition own node document from validated to validated using the community_content - node:post_moderated workflow'
-  - 'transition own node event from draft to draft using the community_content - node:post_moderated workflow'
-  - 'transition own node event from draft to draft using the community_content - node:pre_moderated workflow'
   - 'transition own node event from draft to proposed using the community_content - node:pre_moderated workflow'
   - 'transition own node event from draft to validated using the community_content - node:post_moderated workflow'
   - 'transition own node event from needs_update to proposed using the community_content - node:post_moderated workflow'
   - 'transition own node event from needs_update to proposed using the community_content - node:pre_moderated workflow'
-  - 'transition own node event from proposed to proposed using the community_content - node:post_moderated workflow'
-  - 'transition own node event from proposed to proposed using the community_content - node:pre_moderated workflow'
-  - 'transition own node event from validated to deletion_request using the community_content - node:post_moderated workflow'
   - 'transition own node event from validated to deletion_request using the community_content - node:pre_moderated workflow'
   - 'transition own node event from validated to draft using the community_content - node:post_moderated workflow'
   - 'transition own node event from validated to draft using the community_content - node:pre_moderated workflow'
   - 'transition own node event from validated to proposed using the community_content - node:pre_moderated workflow'
-  - 'transition own node event from validated to validated using the community_content - node:post_moderated workflow'
-  - 'transition own node news from draft to draft using the community_content - node:post_moderated workflow'
-  - 'transition own node news from draft to draft using the community_content - node:pre_moderated workflow'
   - 'transition own node news from draft to proposed using the community_content - node:pre_moderated workflow'
   - 'transition own node news from draft to validated using the community_content - node:post_moderated workflow'
   - 'transition own node news from needs_update to proposed using the community_content - node:post_moderated workflow'
   - 'transition own node news from needs_update to proposed using the community_content - node:pre_moderated workflow'
-  - 'transition own node news from proposed to proposed using the community_content - node:post_moderated workflow'
-  - 'transition own node news from proposed to proposed using the community_content - node:pre_moderated workflow'
-  - 'transition own node news from validated to deletion_request using the community_content - node:post_moderated workflow'
   - 'transition own node news from validated to deletion_request using the community_content - node:pre_moderated workflow'
   - 'transition own node news from validated to draft using the community_content - node:post_moderated workflow'
   - 'transition own node news from validated to draft using the community_content - node:pre_moderated workflow'
   - 'transition own node news from validated to proposed using the community_content - node:pre_moderated workflow'
-  - 'transition own node news from validated to validated using the community_content - node:post_moderated workflow'
   - 'unflag subscribe_discussions'
-  - 'update own document content'
   - 'update paragraph content accordion'
   - 'update paragraph content accordion_item'
   - 'update paragraph content content_listing'
@@ -124,5 +116,4 @@ permissions:
   - 'view paragraph content iframe'
   - 'view paragraph content json_map'
   - 'view paragraph content simple_paragraph'
-  - 'view published og menu instance entities'
   - 'view rdf entity'

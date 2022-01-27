@@ -22,8 +22,6 @@ mode: view_mode_featured
 content:
   field_paragraphs_body:
     type: entity_reference_revisions_entity_view
-    weight: 0
-    region: content
     label: hidden
     settings:
       view_mode: preview
@@ -31,6 +29,8 @@ content:
     third_party_settings:
       template_suggestion:
         template_suggestion: ''
+    weight: 0
+    region: content
 hidden:
   field_attachment: true
   field_custom_page_logo: true

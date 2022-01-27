@@ -1,7 +1,52 @@
 uuid: 4ebf959f-384f-426d-9a29-5116eff253e5
 langcode: en
 status: true
-dependencies: {  }
+dependencies:
+  config:
+    - media.type.collection_banner
+    - media.type.collection_logo
+    - media.type.event_logo
+    - media.type.news_logo
+    - media.type.solution_banner
+    - media.type.solution_logo
+    - node.type.custom_page
+    - node.type.discussion
+    - node.type.document
+    - node.type.glossary
+  module:
+    - asset_distribution
+    - comment
+    - contact_form
+    - dashboard
+    - entity_legal
+    - entityqueue
+    - field_permissions
+    - joinup
+    - joinup_core
+    - joinup_featured
+    - joinup_group
+    - joinup_licence
+    - joinup_news
+    - joinup_newsletter
+    - joinup_pipeline_log
+    - joinup_search
+    - joinup_subscription
+    - media
+    - menu_admin_per_menu
+    - meta_entity
+    - moderation
+    - node
+    - og
+    - paragraphs_type_permissions
+    - pipeline
+    - rdf_draft
+    - rdf_entity
+    - site_alert
+    - solution
+    - state_machine_permissions
+    - tallinn
+    - toolbar
+    - view_unpublished
 id: moderator
 label: Moderator
 weight: 3
@@ -16,7 +61,6 @@ permissions:
   - 'access group reports'
   - 'access joinup reports'
   - 'access media overview'
-  - 'access messages overview'
   - 'access pipeline report'
   - 'access pipeline selector'
   - 'access toolbar'
@@ -35,7 +79,6 @@ permissions:
   - 'administer organic groups'
   - 'administer outdated content threshold'
   - 'administer search fields'
-  - 'administer shared entities'
   - 'administer site alert'
   - 'administer solution ownership'
   - 'administer support menu items'
@@ -47,26 +90,21 @@ permissions:
   - 'create collection_banner media'
   - 'create collection_logo media'
   - 'create discussion content'
-  - 'create event_banner media'
   - 'create event_logo media'
   - 'create field_is_eif_category'
   - 'create field_is_eif_recommendation'
   - 'create licence rdf entity'
   - 'create licence rdf entity'
-  - 'create news_banner media'
   - 'create news_logo media'
   - 'create paragraph content iframe'
   - 'create paragraph content json_map'
   - 'create rdf entity news'
-  - 'create solution releases'
   - 'create solution_banner media'
   - 'create solution_logo media'
   - 'delete any collection_banner media'
   - 'delete any collection_logo media'
   - 'delete any document content'
-  - 'delete any event_banner media'
   - 'delete any event_logo media'
-  - 'delete any news_banner media'
   - 'delete any news_logo media'
   - 'delete any solution_banner media'
   - 'delete any solution_logo media'
@@ -82,10 +120,8 @@ permissions:
   - 'edit any collection_logo media'
   - 'edit any custom_page content'
   - 'edit any discussion content'
-  - 'edit any event_banner media'
   - 'edit any event_logo media'
   - 'edit any glossary content'
-  - 'edit any news_banner media'
   - 'edit any news_logo media'
   - 'edit any solution_banner media'
   - 'edit any solution_logo media'
@@ -108,21 +144,15 @@ permissions:
   - 'manage newsroom newsletter subscriptions'
   - 'manage solutions'
   - 'moderate entity parents'
-  - 'perform acceptance tasks'
   - 'reset joinup_collection pipeline'
   - 'reset nio pipeline'
   - 'reset spain pipeline'
-  - 'transition any node discussion from deletion_request to validated using the community_content - node:post_moderated workflow'
   - 'transition any node discussion from deletion_request to validated using the community_content - node:pre_moderated workflow'
-  - 'transition any node discussion from draft to draft using the community_content - node:post_moderated workflow'
-  - 'transition any node discussion from draft to draft using the community_content - node:pre_moderated workflow'
   - 'transition any node discussion from draft to proposed using the community_content - node:pre_moderated workflow'
   - 'transition any node discussion from draft to validated using the community_content - node:post_moderated workflow'
   - 'transition any node discussion from draft to validated using the community_content - node:pre_moderated workflow'
   - 'transition any node discussion from needs_update to proposed using the community_content - node:post_moderated workflow'
   - 'transition any node discussion from needs_update to proposed using the community_content - node:pre_moderated workflow'
-  - 'transition any node discussion from proposed to proposed using the community_content - node:post_moderated workflow'
-  - 'transition any node discussion from proposed to proposed using the community_content - node:pre_moderated workflow'
   - 'transition any node discussion from proposed to validated using the community_content - node:post_moderated workflow'
   - 'transition any node discussion from proposed to validated using the community_content - node:pre_moderated workflow'
   - 'transition any node discussion from validated to archived using the community_content - node:post_moderated workflow'
@@ -133,19 +163,12 @@ permissions:
   - 'transition any node discussion from validated to needs_update using the community_content - node:pre_moderated workflow'
   - 'transition any node discussion from validated to proposed using the community_content - node:post_moderated workflow'
   - 'transition any node discussion from validated to proposed using the community_content - node:pre_moderated workflow'
-  - 'transition any node discussion from validated to validated using the community_content - node:post_moderated workflow'
-  - 'transition any node discussion from validated to validated using the community_content - node:pre_moderated workflow'
-  - 'transition any node document from deletion_request to validated using the community_content - node:post_moderated workflow'
   - 'transition any node document from deletion_request to validated using the community_content - node:pre_moderated workflow'
-  - 'transition any node document from draft to draft using the community_content - node:post_moderated workflow'
-  - 'transition any node document from draft to draft using the community_content - node:pre_moderated workflow'
   - 'transition any node document from draft to proposed using the community_content - node:pre_moderated workflow'
   - 'transition any node document from draft to validated using the community_content - node:post_moderated workflow'
   - 'transition any node document from draft to validated using the community_content - node:pre_moderated workflow'
   - 'transition any node document from needs_update to proposed using the community_content - node:post_moderated workflow'
   - 'transition any node document from needs_update to proposed using the community_content - node:pre_moderated workflow'
-  - 'transition any node document from proposed to proposed using the community_content - node:post_moderated workflow'
-  - 'transition any node document from proposed to proposed using the community_content - node:pre_moderated workflow'
   - 'transition any node document from proposed to validated using the community_content - node:post_moderated workflow'
   - 'transition any node document from proposed to validated using the community_content - node:pre_moderated workflow'
   - 'transition any node document from validated to draft using the community_content - node:post_moderated workflow'
@@ -154,19 +177,12 @@ permissions:
   - 'transition any node document from validated to needs_update using the community_content - node:pre_moderated workflow'
   - 'transition any node document from validated to proposed using the community_content - node:post_moderated workflow'
   - 'transition any node document from validated to proposed using the community_content - node:pre_moderated workflow'
-  - 'transition any node document from validated to validated using the community_content - node:post_moderated workflow'
-  - 'transition any node document from validated to validated using the community_content - node:pre_moderated workflow'
-  - 'transition any node event from deletion_request to validated using the community_content - node:post_moderated workflow'
   - 'transition any node event from deletion_request to validated using the community_content - node:pre_moderated workflow'
-  - 'transition any node event from draft to draft using the community_content - node:post_moderated workflow'
-  - 'transition any node event from draft to draft using the community_content - node:pre_moderated workflow'
   - 'transition any node event from draft to proposed using the community_content - node:pre_moderated workflow'
   - 'transition any node event from draft to validated using the community_content - node:post_moderated workflow'
   - 'transition any node event from draft to validated using the community_content - node:pre_moderated workflow'
   - 'transition any node event from needs_update to proposed using the community_content - node:post_moderated workflow'
   - 'transition any node event from needs_update to proposed using the community_content - node:pre_moderated workflow'
-  - 'transition any node event from proposed to proposed using the community_content - node:post_moderated workflow'
-  - 'transition any node event from proposed to proposed using the community_content - node:pre_moderated workflow'
   - 'transition any node event from proposed to validated using the community_content - node:post_moderated workflow'
   - 'transition any node event from proposed to validated using the community_content - node:pre_moderated workflow'
   - 'transition any node event from validated to draft using the community_content - node:post_moderated workflow'
@@ -175,19 +191,12 @@ permissions:
   - 'transition any node event from validated to needs_update using the community_content - node:pre_moderated workflow'
   - 'transition any node event from validated to proposed using the community_content - node:post_moderated workflow'
   - 'transition any node event from validated to proposed using the community_content - node:pre_moderated workflow'
-  - 'transition any node event from validated to validated using the community_content - node:post_moderated workflow'
-  - 'transition any node event from validated to validated using the community_content - node:pre_moderated workflow'
-  - 'transition any node news from deletion_request to validated using the community_content - node:post_moderated workflow'
   - 'transition any node news from deletion_request to validated using the community_content - node:pre_moderated workflow'
-  - 'transition any node news from draft to draft using the community_content - node:post_moderated workflow'
-  - 'transition any node news from draft to draft using the community_content - node:pre_moderated workflow'
   - 'transition any node news from draft to proposed using the community_content - node:pre_moderated workflow'
   - 'transition any node news from draft to validated using the community_content - node:post_moderated workflow'
   - 'transition any node news from draft to validated using the community_content - node:pre_moderated workflow'
   - 'transition any node news from needs_update to proposed using the community_content - node:post_moderated workflow'
   - 'transition any node news from needs_update to proposed using the community_content - node:pre_moderated workflow'
-  - 'transition any node news from proposed to proposed using the community_content - node:post_moderated workflow'
-  - 'transition any node news from proposed to proposed using the community_content - node:pre_moderated workflow'
   - 'transition any node news from proposed to validated using the community_content - node:post_moderated workflow'
   - 'transition any node news from proposed to validated using the community_content - node:pre_moderated workflow'
   - 'transition any node news from validated to draft using the community_content - node:post_moderated workflow'
@@ -196,45 +205,7 @@ permissions:
   - 'transition any node news from validated to needs_update using the community_content - node:pre_moderated workflow'
   - 'transition any node news from validated to proposed using the community_content - node:post_moderated workflow'
   - 'transition any node news from validated to proposed using the community_content - node:pre_moderated workflow'
-  - 'transition any node news from validated to validated using the community_content - node:post_moderated workflow'
-  - 'transition any node news from validated to validated using the community_content - node:pre_moderated workflow'
-  - 'transition group from __new__ to draft using the collection - collection_workflow workflow'
-  - 'transition group from __new__ to draft using the solution - solution_workflow workflow'
-  - 'transition group from __new__ to proposed using the collection - collection_workflow workflow'
-  - 'transition group from __new__ to proposed using the solution - solution_workflow workflow'
-  - 'transition group from __new__ to validated using the collection - collection_workflow workflow'
-  - 'transition group from __new__ to validated using the solution - solution_workflow workflow'
-  - 'transition group from archival_request to archived using the collection - collection_workflow workflow'
-  - 'transition group from archival_request to validated using the collection - collection_workflow workflow'
-  - 'transition group from blacklisted to draft using the solution - solution_workflow workflow'
-  - 'transition group from blacklisted to proposed using the solution - solution_workflow workflow'
-  - 'transition group from blacklisted to validated using the solution - solution_workflow workflow'
-  - 'transition group from draft to draft using the collection - collection_workflow workflow'
-  - 'transition group from draft to draft using the solution - solution_workflow workflow'
-  - 'transition group from draft to proposed using the collection - collection_workflow workflow'
-  - 'transition group from draft to proposed using the solution - solution_workflow workflow'
-  - 'transition group from draft to validated using the collection - collection_workflow workflow'
-  - 'transition group from draft to validated using the solution - solution_workflow workflow'
-  - 'transition group from needs_update to draft using the solution - solution_workflow workflow'
-  - 'transition group from needs_update to proposed using the solution - solution_workflow workflow'
-  - 'transition group from needs_update to validated using the solution - solution_workflow workflow'
-  - 'transition group from proposed to draft using the collection - collection_workflow workflow'
-  - 'transition group from proposed to draft using the solution - solution_workflow workflow'
-  - 'transition group from proposed to needs_update using the solution - solution_workflow workflow'
-  - 'transition group from proposed to proposed using the collection - collection_workflow workflow'
-  - 'transition group from proposed to proposed using the solution - solution_workflow workflow'
-  - 'transition group from proposed to validated using the collection - collection_workflow workflow'
-  - 'transition group from proposed to validated using the solution - solution_workflow workflow'
-  - 'transition group from validated to blacklisted using the solution - solution_workflow workflow'
-  - 'transition group from validated to draft using the collection - collection_workflow workflow'
-  - 'transition group from validated to draft using the solution - solution_workflow workflow'
-  - 'transition group from validated to needs_update using the solution - solution_workflow workflow'
-  - 'transition group from validated to proposed using the collection - collection_workflow workflow'
-  - 'transition group from validated to proposed using the solution - solution_workflow workflow'
-  - 'transition group from validated to validated using the collection - collection_workflow workflow'
-  - 'transition group from validated to validated using the solution - solution_workflow workflow'
   - 'unfeature entity'
-  - 'update any simple_block block content'
   - 'update collection_settings meta-entity'
   - 'update highlighted_content entityqueue'
   - 'update highlighted_event entityqueue'

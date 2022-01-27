@@ -15,80 +15,23 @@ base_table: search_api_index_published
 base_field: search_api_id
 display:
   default:
-    display_plugin: default
     id: default
     display_title: Master
+    display_plugin: default
     position: 0
     display_options:
-      access:
-        type: none
-        options: {  }
-      cache:
-        type: search_api_tag
-        options: {  }
-      query:
-        type: search_api_query
-        options:
-          bypass_access: false
-          skip_access: false
-      exposed_form:
-        type: basic
-        options:
-          submit_button: Apply
-          reset_button: false
-          reset_button_label: Reset
-          exposed_sorts_label: 'Sort by'
-          expose_sort_order: true
-          sort_asc_label: Asc
-          sort_desc_label: Desc
-      pager:
-        type: none
-        options:
-          offset: 0
-      style:
-        type: default
-        options:
-          row_class: ''
-          default_row_class: false
-          uses_fields: false
-      row:
-        type: search_api
-        options:
-          view_modes:
-            'entity:node':
-              custom_page: default
-              discussion: default
-              document: default
-              event: default
-              news: default
-              newsletter: default
-              tallinn_report: default
-              video: default
-            'entity:rdf_entity':
-              asset_distribution: default
-              asset_release: default
-              collection: default
-              licence: view_mode_search_list_item
-              solution: default
-              spdx_licence: default
-            'entity:taxonomy_term':
-              eif_conceptual_model: default
-              eif_interoperability_layer: default
-              eif_principle: default
-              eif_recommendation: default
-            'entity:user':
-              user: default
+      title: 'Licence list'
       fields:
         body:
+          id: body
           table: search_api_index_published
           field: body
-          id: body
-          entity_type: null
-          entity_field: null
-          plugin_id: search_api
           relationship: none
           group_type: group
           admin_label: ''
+          entity_type: null
+          entity_field: null
+          plugin_id: search_api
           label: ''
           exclude: false
           alter:
@@ -134,6 +77,42 @@ display:
           use_highlighting: false
           multi_type: separator
           multi_separator: ', '
+      pager:
+        type: none
+        options:
+          offset: 0
+      exposed_form:
+        type: basic
+        options:
+          submit_button: Apply
+          reset_button: false
+          reset_button_label: Reset
+          exposed_sorts_label: 'Sort by'
+          expose_sort_order: true
+          sort_asc_label: Asc
+          sort_desc_label: Desc
+      access:
+        type: none
+        options: {  }
+      cache:
+        type: search_api_tag
+        options: {  }
+      empty: {  }
+      sorts:
+        label:
+          id: label
+          table: search_api_index_published
+          field: label
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: search_api
+          order: ASC
+          expose:
+            label: ''
+            identifier: label
+          exposed: false
+      arguments: {  }
       filters:
         entity_bundle:
           id: entity_bundle
@@ -142,6 +121,7 @@ display:
           relationship: none
           group_type: group
           admin_label: ''
+          plugin_id: search_api_string
           operator: '='
           value:
             min: ''
@@ -155,17 +135,17 @@ display:
             description: ''
             use_operator: false
             operator: ''
+            operator_limit_selection: false
+            operator_list: {  }
             identifier: ''
             required: false
             remember: false
             multiple: false
             remember_roles:
               authenticated: authenticated
-            placeholder: ''
             min_placeholder: ''
             max_placeholder: ''
-            operator_limit_selection: false
-            operator_list: {  }
+            placeholder: ''
           is_grouped: false
           group_info:
             label: ''
@@ -178,7 +158,6 @@ display:
             default_group: All
             default_group_multiple: {  }
             group_items: {  }
-          plugin_id: search_api_string
         field_licence_spdx_licence:
           id: field_licence_spdx_licence
           table: search_api_index_published
@@ -186,6 +165,7 @@ display:
           relationship: none
           group_type: group
           admin_label: ''
+          plugin_id: search_api_string
           operator: 'not empty'
           value:
             min: ''
@@ -199,17 +179,17 @@ display:
             description: ''
             use_operator: false
             operator: ''
+            operator_limit_selection: false
+            operator_list: {  }
             identifier: ''
             required: false
             remember: false
             multiple: false
             remember_roles:
               authenticated: authenticated
-            placeholder: ''
             min_placeholder: ''
             max_placeholder: ''
-            operator_limit_selection: false
-            operator_list: {  }
+            placeholder: ''
           is_grouped: false
           group_info:
             label: ''
@@ -222,22 +202,45 @@ display:
             default_group: All
             default_group_multiple: {  }
             group_items: {  }
-          plugin_id: search_api_string
-      sorts:
-        label:
-          id: label
-          table: search_api_index_published
-          field: label
-          relationship: none
-          group_type: group
-          admin_label: ''
-          order: ASC
-          exposed: false
-          expose:
-            label: ''
-            identifier: label
-          plugin_id: search_api
-      title: 'Licence list'
+      style:
+        type: default
+        options:
+          row_class: ''
+          default_row_class: false
+          uses_fields: false
+      row:
+        type: search_api
+        options:
+          view_modes:
+            'entity:node':
+              custom_page: default
+              discussion: default
+              document: default
+              event: default
+              news: default
+              newsletter: default
+              tallinn_report: default
+              video: default
+            'entity:rdf_entity':
+              asset_distribution: default
+              asset_release: default
+              collection: default
+              licence: view_mode_search_list_item
+              solution: default
+              spdx_licence: default
+            'entity:taxonomy_term':
+              eif_conceptual_model: default
+              eif_interoperability_layer: default
+              eif_principle: default
+              eif_recommendation: default
+            'entity:user':
+              user: default
+      query:
+        type: search_api_query
+        options:
+          bypass_access: false
+          skip_access: false
+      relationships: {  }
       header:
         result:
           id: result
@@ -246,13 +249,10 @@ display:
           relationship: none
           group_type: group
           admin_label: ''
+          plugin_id: result
           empty: false
           content: "<div class=\"licence-counter\">\r\n  <span class=\"licence-counter__number\">\r\n    @total\r\n  </span>\r\n  <span class=\"licence-counter__text\">\r\n    licences found\r\n  </span>\r\n</div>"
-          plugin_id: result
       footer: {  }
-      empty: {  }
-      relationships: {  }
-      arguments: {  }
       display_extenders: {  }
     cache_metadata:
       max-age: -1
@@ -263,13 +263,13 @@ display:
         - 'config:search_api.index.published'
         - 'search_api_list:published'
   licence_list_block:
-    display_plugin: block
     id: licence_list_block
     display_title: 'Block (JLA)'
+    display_plugin: block
     position: 1
     display_options:
-      display_extenders: {  }
       display_description: ''
+      display_extenders: {  }
     cache_metadata:
       max-age: -1
       contexts:
@@ -279,22 +279,17 @@ display:
         - 'config:search_api.index.published'
         - 'search_api_list:published'
   licence_list_block_jlc:
-    display_plugin: block
     id: licence_list_block_jlc
     display_title: 'Block (JLC)'
+    display_plugin: block
     position: 1
     display_options:
-      display_extenders: {  }
-      display_description: ''
       style:
         type: default
         options:
           row_class: ''
           default_row_class: false
           uses_fields: false
-      defaults:
-        style: false
-        row: false
       row:
         type: search_api
         options:
@@ -322,6 +317,11 @@ display:
               eif_recommendation: default
             'entity:user':
               user: default
+      defaults:
+        style: false
+        row: false
+      display_description: ''
+      display_extenders: {  }
     cache_metadata:
       max-age: -1
       contexts:

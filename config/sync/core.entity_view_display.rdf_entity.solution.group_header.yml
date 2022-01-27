@@ -59,38 +59,36 @@ bundle: solution
 mode: group_header
 content:
   collections:
+    settings: {  }
+    third_party_settings: {  }
     weight: 6
     region: content
+  download_total:
     settings: {  }
     third_party_settings: {  }
-  download_total:
     weight: 3
     region: content
-    settings: {  }
-    third_party_settings: {  }
   field_is_banner:
     type: image_url_formatter
-    weight: 0
     label: hidden
     settings:
       image_style: banner
     third_party_settings: {  }
+    weight: 0
     region: content
   field_is_logo:
     type: image
-    weight: 1
     label: hidden
     settings:
-      image_style: logo
       image_link: ''
+      image_style: logo
     third_party_settings:
       template_suggestion:
         template_suggestion: ''
+    weight: 1
     region: content
   field_topic:
     type: entity_reference_custom_link
-    weight: 4
-    region: content
     label: inline
     settings:
       path: 'internal:/search'
@@ -100,26 +98,28 @@ content:
     third_party_settings:
       template_suggestion:
         template_suggestion: solution_header_topic
+    weight: 4
+    region: content
   label:
-    label: hidden
     type: string
-    weight: 2
+    label: hidden
     settings:
       link_to_entity: false
     third_party_settings:
       template_suggestion:
         template_suggestion: ''
+    weight: 2
     region: content
   releases_overview:
+    settings: {  }
+    third_party_settings: {  }
     weight: 5
     region: content
+  solution_subscribe:
     settings: {  }
     third_party_settings: {  }
-  solution_subscribe:
     weight: 7
     region: content
-    settings: {  }
-    third_party_settings: {  }
 hidden:
   changed: true
   created: true

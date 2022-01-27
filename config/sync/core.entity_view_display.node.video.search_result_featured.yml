@@ -20,8 +20,8 @@ dependencies:
     - user
 third_party_settings:
   layout_builder:
-    allow_custom: false
     enabled: false
+    allow_custom: false
 _core:
   default_config_hash: xzNt7hZhWznm3WI85j5QUiqV3UiicNTPcB6Y0nm5icM
 id: node.video.search_result_featured
@@ -30,19 +30,17 @@ bundle: video
 mode: search_result_featured
 content:
   body:
-    label: hidden
     type: joinup_html_stripper_stripped
-    weight: 0
+    label: hidden
     settings:
       trim_length: 200
     third_party_settings:
       template_suggestion:
         template_suggestion: ''
+    weight: 0
     region: content
   field_video:
     type: responsive_image
-    weight: 3
-    region: content
     label: hidden
     settings:
       responsive_image_style: teaser
@@ -50,10 +48,10 @@ content:
     third_party_settings:
       template_suggestion:
         template_suggestion: ''
+    weight: 3
+    region: content
   published_at:
     type: timestamp
-    weight: 1
-    region: content
     label: hidden
     settings:
       date_format: date_only
@@ -62,6 +60,8 @@ content:
     third_party_settings:
       template_suggestion:
         template_suggestion: ''
+    weight: 1
+    region: content
 hidden:
   field_comments: true
   field_keywords: true

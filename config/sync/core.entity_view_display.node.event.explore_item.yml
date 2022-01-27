@@ -35,13 +35,14 @@ dependencies:
     - user
 third_party_settings:
   layout_builder:
-    allow_custom: false
     enabled: true
+    allow_custom: false
     sections:
       -
         layout_id: layout_onecol
         layout_settings:
           label: ''
+          context_mapping: {  }
         components:
           f2446b89-b2e1-46df-a892-917a49160795:
             uuid: f2446b89-b2e1-46df-a892-917a49160795
@@ -49,19 +50,20 @@ third_party_settings:
             configuration:
               id: 'field_block:node:event:body'
               label: Description
-              provider: layout_builder
               label_display: '0'
+              provider: layout_builder
+              context_mapping:
+                entity: layout_builder.entity
+                view_mode: view_mode
               formatter:
-                label: hidden
                 type: joinup_html_stripper_stripped
+                label: hidden
                 settings:
                   trim_length: 230
                 third_party_settings:
                   template_suggestion:
                     template_suggestion: ''
-              context_mapping:
-                entity: layout_builder.entity
-                view_mode: view_mode
+            weight: -9
             additional:
               component_attributes:
                 block_attributes:
@@ -79,15 +81,14 @@ third_party_settings:
                   class: ''
                   style: ''
                   data: ''
-            weight: -9
           acce4cf6-0d1d-462d-a6f6-445fc1e8113f:
             uuid: acce4cf6-0d1d-462d-a6f6-445fc1e8113f
             region: content
             configuration:
+              id: 'field_block:node:event:published_at'
               label_display: '0'
               context_mapping:
                 entity: layout_builder.entity
-              id: 'field_block:node:event:published_at'
               formatter:
                 type: timestamp
                 label: hidden
@@ -98,6 +99,7 @@ third_party_settings:
                 third_party_settings:
                   template_suggestion:
                     template_suggestion: ''
+            weight: -8
             additional:
               component_attributes:
                 block_attributes:
@@ -115,19 +117,18 @@ third_party_settings:
                   class: ''
                   style: ''
                   data: ''
-            weight: -8
           5bae9701-073f-4f80-93b0-736bf37b025a:
             uuid: 5bae9701-073f-4f80-93b0-736bf37b025a
             region: content
             configuration:
               id: 'extra_field_block:node:event:read_more'
               label: 'Read more'
-              provider: layout_builder
               label_display: '0'
+              provider: layout_builder
               context_mapping:
                 entity: layout_builder.entity
-            additional: {  }
             weight: -7
+            additional: {  }
         third_party_settings: {  }
 id: node.event.explore_item
 targetEntityType: node
@@ -135,21 +136,19 @@ bundle: event
 mode: explore_item
 content:
   body:
-    label: hidden
     type: text_default
-    weight: 1
+    label: hidden
     settings: {  }
     third_party_settings: {  }
+    weight: 1
     region: content
   links:
-    weight: 0
-    region: content
     settings: {  }
     third_party_settings: {  }
+    weight: 0
+    region: content
   published_at:
     type: timestamp
-    weight: 2
-    region: content
     label: hidden
     settings:
       date_format: custom
@@ -158,11 +157,13 @@ content:
     third_party_settings:
       template_suggestion:
         template_suggestion: ''
-  read_more:
     weight: 2
     region: content
+  read_more:
     settings: {  }
     third_party_settings: {  }
+    weight: 2
+    region: content
 hidden:
   field_attachment: true
   field_comments: true

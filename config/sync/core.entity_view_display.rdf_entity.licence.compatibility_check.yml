@@ -20,32 +20,32 @@ bundle: licence
 mode: compatibility_check
 content:
   field_licence_description:
-    weight: 1
+    type: text_default
     label: hidden
     settings: {  }
     third_party_settings: {  }
-    type: text_default
+    weight: 1
     region: content
   label:
-    label: hidden
     type: string
-    weight: 0
+    label: hidden
     settings:
       link_to_entity: false
     third_party_settings:
       template_suggestion:
         template_suggestion: no_wrappers
+    weight: 0
     region: content
   spdx_licence_external_url:
+    settings: {  }
+    third_party_settings: {  }
     weight: 3
     region: content
+  spdx_licence_id:
     settings: {  }
     third_party_settings: {  }
-  spdx_licence_id:
     weight: 2
     region: content
-    settings: {  }
-    third_party_settings: {  }
 hidden:
   changed: true
   created: true

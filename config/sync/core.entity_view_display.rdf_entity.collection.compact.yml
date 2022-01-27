@@ -36,25 +36,25 @@ mode: compact
 content:
   field_ar_logo:
     type: image
-    weight: 0
-    region: content
     label: hidden
     settings:
-      image_style: logo
       image_link: ''
+      image_style: logo
     third_party_settings:
       template_suggestion:
         template_suggestion: no_wrappers
+    weight: 0
+    region: content
   label:
     type: string
-    weight: 1
-    region: content
     label: hidden
     settings:
       link_to_entity: false
     third_party_settings:
       template_suggestion:
         template_suggestion: no_wrappers
+    weight: 1
+    region: content
 hidden:
   changed: true
   created: true
