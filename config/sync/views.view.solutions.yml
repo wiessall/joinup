@@ -437,10 +437,8 @@ display:
           relationship: none
           group_type: group
           admin_label: ''
-          operator: '='
+          operator: or
           value:
-            min: ''
-            max: ''
             value: solution
           group: 1
           exposed: false
@@ -450,6 +448,8 @@ display:
             description: ''
             use_operator: false
             operator: rid_op
+            operator_limit_selection: false
+            operator_list: {  }
             identifier: rid
             required: false
             remember: false
@@ -459,8 +459,6 @@ display:
               anonymous: '0'
               moderator: '0'
               administrator: '0'
-            operator_limit_selection: false
-            operator_list: {  }
           is_grouped: false
           group_info:
             label: ''
@@ -501,6 +499,7 @@ display:
       contexts:
         - 'languages:language_content'
         - 'languages:language_interface'
+        - solution_owner
         - url.query_args
         - 'user.node_grants:view'
       tags:

@@ -94,12 +94,12 @@ services:
       - 'chmod +x /entrypoint.sh && /entrypoint.sh'
 
   solr:
-    image: solr:6
+    image: solr:8
     # macOS users should override 'volumes:' in docker-compose.override.yml.
     # See docker-compose.override.yml.dist.
     volumes:
       - ./db/solr:/solr/snapshot
-      - ./web/modules/contrib/search_api_solr/solr-conf/6.x:/solr/conf
+      - ./resources/solr/conf:/solr/conf
       - ./scripts/solr/restore_solr.sh:/opt/solr/bin/restore_solr.sh
       - ./scripts/docker/solr/precreate.sh:/docker-entrypoint-initdb.d/precreate.sh
     environment:

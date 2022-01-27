@@ -5,7 +5,8 @@ dependencies:
   config:
     - search_api.index.published
   module:
-    - joinup_core
+    - joinup_group
+    - joinup_material_design
     - search_api
 _core:
   default_config_hash: jgzVZMiTkzndw2OXTvFznC8I0CqkWdxVOOUwUBZxYWo
@@ -206,4 +207,6 @@ display:
         - 'languages:language_interface'
         - url
         - url.query_args
-      tags: {  }
+        - 'user.node_grants:view'
+      tags:
+        - 'config:search_api.index.published'
