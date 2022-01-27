@@ -5,7 +5,7 @@ dependencies:
   config:
     - search_api.index.published
   module:
-    - joinup_core
+    - joinup_material_design
     - search_api
     - taxonomy
 id: eif_related_entities

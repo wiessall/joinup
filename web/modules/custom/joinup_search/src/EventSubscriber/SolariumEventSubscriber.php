@@ -20,7 +20,7 @@ class SolariumEventSubscriber implements EventSubscriberInterface {
    *
    * @var \Drupal\Core\State\StateInterface
    */
-  protected $state;
+  protected StateInterface $state;
 
   /**
    * Constructs a SolariumEventSubscriber object.
@@ -35,7 +35,7 @@ class SolariumEventSubscriber implements EventSubscriberInterface {
   /**
    * {@inheritdoc}
    */
-  public static function getSubscribedEvents() {
+  public static function getSubscribedEvents(): array {
     return [
       Events::PRE_EXECUTE => 'commitOnUpdate',
     ];

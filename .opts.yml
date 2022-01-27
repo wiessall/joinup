@@ -12,6 +12,10 @@ upgrade_commands:
     - ./vendor/bin/drush php:eval "if(node_access_needs_rebuild()) { node_access_rebuild(); }"
     - rm disable-config-readonly
     - ./vendor/bin/drush site-alert:disable
+    # Begin: One time tasks when upgrading Search API suite.
+    - ./vendor/bin/drush search-api:clear --yes
+    - ./vendor/bin/drush search-api:index --yes
+    # End: One time tasks when upgrading Search API suite.
     - ./vendor/bin/drush state:set system.maintenance_mode 0 --input-format=integer --yes
   append:
     acceptance:
@@ -35,10 +39,15 @@ extra_pkgs:
   - php7.4-apcu
 
 solr: True
-solr_version: 6
+solr_version: 8
 solr_core: custom
 solr_rollback: True
-solr_refresh_acc: True
+# Solr 8 is not able to restore from a snapshot created with Solr 6. We prevent
+# the error bypassing the Solr restore. Then, on the update phase, we reindex
+# the whole site content. This setting will be reverted once the new Solr 8 is
+# deployed on PROD.
+# Original setting `solr_refresh_acc: True`
+solr_refresh_acc: False
 
 virtuoso_image: registry.fpfis.eu/ec-europa/digit-joinup-reference:virtuoso
 virtuoso_rollback: True

@@ -131,4 +131,5 @@ hidden:
   og_audience: true
   read_more: true
   report: true
+  search_api_excerpt: true
   share_link: true
