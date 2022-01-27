@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "7d2e3a0c188548971319793256997005",
+    "content-hash": "5999093634ff4f9fb6f7f9c1dd111a86",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -6795,30 +6795,30 @@
         },
         {
             "name": "drupal/search_api_solr",
-            "version": "4.2.1",
+            "version": "4.2.4",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/search_api_solr.git",
-                "reference": "4.2.1"
+                "reference": "4.2.4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/search_api_solr-4.2.1.zip",
-                "reference": "4.2.1",
-                "shasum": "54e40c7ce41cef8edfb92807f87db06b0b13e9c8"
+                "url": "https://ftp.drupal.org/files/projects/search_api_solr-4.2.4.zip",
+                "reference": "4.2.4",
+                "shasum": "5766d7aa3683cfcf7a91b79da372bafc3f8d2beb"
             },
             "require": {
                 "composer/semver": "^1.0|^3.0",
                 "consolidation/annotated-command": "^2.12|^4.1",
-                "drupal/core": "^8.8 || ^9",
-                "drupal/search_api": "~1.17",
+                "drupal/core": "^9.2 || ^10.0",
+                "drupal/search_api": "~1.21",
                 "ext-dom": "*",
                 "ext-json": "*",
                 "ext-simplexml": "*",
                 "laminas/laminas-stdlib": "^3.2",
                 "maennchen/zipstream-php": "^1.2|^2.0",
                 "php": "^7.3|^8.0",
-                "solarium/solarium": "^6.1.5"
+                "solarium/solarium": "^6.2.1"
             },
             "conflict": {
                 "drupal/acquia_search_solr": "<1.0.0-beta8",
@@ -6828,7 +6828,7 @@
                 "drupal/devel": "^4.0",
                 "drupal/facets": "1.x-dev",
                 "drupal/geofield": "1.x-dev",
-                "drupal/search_api_autocomplete": "1.x-dev",
+                "drupal/search_api_autocomplete": "*",
                 "drupal/search_api_location": "1.x-dev",
                 "drupal/search_api_spellcheck": "3.x-dev",
                 "monolog/monolog": "^1.25",
@@ -6844,8 +6844,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "4.2.1",
-                    "datestamp": "1628871708",
+                    "version": "4.2.4",
+                    "datestamp": "1640880154",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -6853,7 +6853,7 @@
                 },
                 "drush": {
                     "services": {
-                        "drush.services.yml": "^9"
+                        "drush.services.yml": "^9 || ^10"
                     }
                 }
             },
@@ -11925,16 +11925,16 @@
         },
         {
             "name": "solarium/solarium",
-            "version": "6.1.6",
+            "version": "6.2.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/solariumphp/solarium.git",
-                "reference": "65f3e338d1d76d94dee1bdc1dbb199d0262f4822"
+                "reference": "0f5c81eee5529556f349eaacfbf5ce3cfbb2be47"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/solariumphp/solarium/zipball/65f3e338d1d76d94dee1bdc1dbb199d0262f4822",
-                "reference": "65f3e338d1d76d94dee1bdc1dbb199d0262f4822",
+                "url": "https://api.github.com/repos/solariumphp/solarium/zipball/0f5c81eee5529556f349eaacfbf5ce3cfbb2be47",
+                "reference": "0f5c81eee5529556f349eaacfbf5ce3cfbb2be47",
                 "shasum": ""
             },
             "require": {
@@ -11982,9 +11982,9 @@
             ],
             "support": {
                 "issues": "https://github.com/solariumphp/solarium/issues",
-                "source": "https://github.com/solariumphp/solarium/tree/6.1.6"
+                "source": "https://github.com/solariumphp/solarium/tree/6.2.2"
             },
-            "time": "2021-11-08T13:17:20+00:00"
+            "time": "2022-01-20T17:45:10+00:00"
         },
         {
             "name": "spdx/license-list-data",
