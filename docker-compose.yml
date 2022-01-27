@@ -108,6 +108,8 @@ services:
 
   redis:
     image: redis
+    # Disable disk persistence
+    command: redis-server --save ""
 
   mail:
     image: mailhog/mailhog
