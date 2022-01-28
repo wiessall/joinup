@@ -46,7 +46,7 @@ class RdfSchemaFieldValidationTest extends JoinupKernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = [
+  public static $modules = [
     'rdf_entity',
     'rdf_entity_test',
     'rdf_schema_field_validation',
