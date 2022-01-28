@@ -271,19 +271,19 @@ Feature: Collection membership administration
     When I fill in "E-mail" with "j.belanger@example.com"
     And I press "Add"
     Then the page should show the following chips in the Content region:
-      | Jeannette Belanger |
       | Gregory House      |
+      | Jeannette Belanger |
     When I fill in "E-mail" with "donald_duck@example.com"
     And I press "Add"
     Then the page should show the following chips in the Content region:
-      | Jeannette Belanger |
       | Gregory House      |
+      | Jeannette Belanger |
       | Donald Duck        |
     # Remove a user.
     When I press the remove button on the chip "Donald Duck"
     Then the page should show the following chips in the Content region:
-      | Jeannette Belanger |
       | Gregory House      |
+      | Jeannette Belanger |
     And I should not see the text "Donald Duck"
 
     # Add the users as members.
