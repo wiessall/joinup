@@ -66,7 +66,7 @@ class JoinupSubscriberServiceTest extends KernelTestBase {
   /**
    * {@inheritdoc}
    */
-  public static $modules = [
+  protected static $modules = [
     'entity_test',
     'flag',
     'joinup_notification',
@@ -84,7 +84,7 @@ class JoinupSubscriberServiceTest extends KernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
 
     $this->installSchema('system', ['sequences']);
