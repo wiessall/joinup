@@ -11,6 +11,8 @@ use Behat\Mink\Element\TraversableElement;
  */
 trait MaterialDesignTrait {
 
+  use BrowserWindowTrait;
+
   /**
    * Checks the materially designed checkbox with the given label.
    *
@@ -33,6 +35,9 @@ trait MaterialDesignTrait {
     if ($this->browserSupportsJavaScript()) {
       // Check if the checkbox has already been checked.
       if (!$this->findMaterialDesignCheckbox($label, $element)->isChecked()) {
+        // First scroll to the top of the page before attempting to check the
+        // checkbox, it might be obscured by the floating header.
+        $this->scrollToTop();
         $this->toggleMaterialDesignCheckbox($element, $label);
       }
     }
@@ -64,6 +69,9 @@ trait MaterialDesignTrait {
     if ($this->browserSupportsJavaScript()) {
       // Only check if the checkbox is unchecked.
       if ($this->findMaterialDesignCheckbox($label, $element)->isChecked()) {
+        // First scroll to the top of the page before attempting to uncheck the
+        // checkbox, it might be obscured by the floating header.
+        $this->scrollToTop();
         $this->toggleMaterialDesignCheckbox($element, $label);
       }
     }

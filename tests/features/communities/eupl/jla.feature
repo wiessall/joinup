@@ -125,7 +125,7 @@ Feature:
     And I add the "BSL-1.0" licence to the compare list
     And I add the "0BSD" licence to the compare list
     And I add the "LGPL-2.1" licence to the compare list
-    And I click "Compare"
+    And I click "Compare" in the "LGPL-2.1" licence tile
     And the url should match "/licence/compare/Apache-2.0;GPL-2.0\+;BSL-1.0;0BSD;LGPL-2.1"
 
   Scenario: Test the licence comparer.
