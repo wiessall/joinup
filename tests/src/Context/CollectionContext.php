@@ -6,6 +6,7 @@ namespace Drupal\joinup\Context;
 
 use Behat\Gherkin\Node\TableNode;
 use Behat\Mink\Exception\ElementNotFoundException;
+use Drupal\Core\Session\AccountInterface;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\DrupalExtension\Hook\Scope\BeforeNodeCreateScope;
 use Drupal\collection\Entity\CollectionInterface;
@@ -79,7 +80,7 @@ class CollectionContext extends RawDrupalContext {
    *
    * @var \Drupal\rdf_entity\Entity\Rdf[]
    */
-  protected $collections = [];
+  protected array $collections = [];
 
   /**
    * Navigates to the propose collection form.
@@ -481,7 +482,7 @@ class CollectionContext extends RawDrupalContext {
    */
   public function assertCollectionOwnership(string $username, string $rdf_entity): void {
     $user = user_load_by_name($username);
-    if (empty($user)) {
+    if (!$user instanceof AccountInterface) {
       throw new \Exception("User {$username} could not be found.");
     }
 
@@ -746,7 +747,7 @@ class CollectionContext extends RawDrupalContext {
    *
    * @BeforeNodeCreate
    */
-  public function provideCollection(BeforeNodeCreateScope $scope) {
+  public function provideCollection(BeforeNodeCreateScope $scope): void {
     $node = $scope->getEntity();
 
     // Only deal with collection content.
