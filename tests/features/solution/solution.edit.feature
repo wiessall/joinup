@@ -118,8 +118,10 @@ Feature: Solution editing.
     And I press "Yes"
     Then I should see the heading "Add Solution"
     And the "Main fields" tab should be active
-    And the "Main fields" tab summary should be "Contains all the fields to be mandatorily filled to create a solution"
-    And the "Additional fields" tab summary should be "Contains all optional fields providing additional information on the solution"
+    # @todo The summaries are no longer visible since we migrated to Drupal 9.
+    #   Restore these when ISAICP-6963 is fixed.
+    # And the "Main fields" tab summary should be "Contains all the fields to be mandatorily filled to create a solution"
+    # And the "Additional fields" tab summary should be "Contains all optional fields providing additional information on the solution"
     And I click the "Additional fields" tab
     Then the "Additional fields" tab should be active
     And the url should match "/collection/collection-example/solution/add#edit-group-management"
