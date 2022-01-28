@@ -417,6 +417,7 @@ display:
           order: DESC
           expose:
             label: ''
+            field_identifier: entity_created
             identifier: entity_created
           exposed: false
       arguments: {  }

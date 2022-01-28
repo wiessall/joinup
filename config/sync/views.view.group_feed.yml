@@ -1375,6 +1375,7 @@ display:
           order: DESC
           expose:
             label: ''
+            field_identifier: entity_created
             identifier: entity_created
           exposed: false
         entity_changed:
@@ -1388,6 +1389,7 @@ display:
           order: DESC
           expose:
             label: ''
+            field_identifier: entity_changed
             identifier: entity_changed
           exposed: false
       arguments:

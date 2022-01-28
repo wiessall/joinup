@@ -282,6 +282,7 @@ display:
           order: ASC
           expose:
             label: ''
+            field_identifier: weight
             identifier: weight
           exposed: false
         name:
@@ -295,6 +296,7 @@ display:
           order: ASC
           expose:
             label: ''
+            field_identifier: name
             identifier: name
           exposed: false
       arguments:
