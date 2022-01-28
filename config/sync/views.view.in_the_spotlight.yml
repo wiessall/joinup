@@ -112,6 +112,7 @@ display:
           order: ASC
           expose:
             label: ''
+            field_identifier: entityqueue_relationship
             identifier: ''
           exposed: false
       arguments: {  }
