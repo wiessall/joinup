@@ -15,27 +15,27 @@ tips:
     id: content
     plugin: text
     weight: 1
-    body: 'In the "My account" page, the content area displays items that have been created by you, as well as content that belongs to the collections and solutions you are a member of.'
-    selector: '.listing .listing__item'
     position: left-start
+    selector: '.listing .listing__item'
+    body: 'In the "My account" page, the content area displays items that have been created by you, as well as content that belongs to the collections and solutions you are a member of.'
   filter_icons:
     id: filter_icons
     plugin: text
     weight: 2
-    body: 'By clicking on these icons, you can view specific content types in the content area.'
-    selector: '.facet-region .tab__container a'
     position: bottom-start
+    selector: '.facet-region .tab__container a'
+    body: 'By clicking on these icons, you can view specific content types in the content area.'
   search:
     id: search
     plugin: text
     weight: 3
-    body: 'Search through the entire Joinup platform and its supported content items.'
-    selector: .search-bar
     position: left-start
+    selector: .search-bar
+    body: 'Search through the entire Joinup platform and its supported content items.'
   local_tasks:
     id: local_tasks
     plugin: text
     weight: 4
-    body: 'The "three dots" menu allows you to edit your user account.'
-    selector: '#local-tasks-primary'
     position: left-start
+    selector: '#local-tasks-primary'
+    body: 'The "three dots" menu allows you to edit your user account.'

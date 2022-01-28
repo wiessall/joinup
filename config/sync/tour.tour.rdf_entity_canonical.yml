@@ -15,55 +15,55 @@ tips:
     id: collection_content
     plugin: text
     weight: 1
-    body: 'The content area displays items that have been created or shared within a collection. This is the default view when entering a collection.'
-    selector: '.canonical-entity-page--rdf-entity--collection .listing .listing__item'
     position: left-start
+    selector: '.canonical-entity-page--rdf-entity--collection .listing .listing__item'
+    body: 'The content area displays items that have been created or shared within a collection. This is the default view when entering a collection.'
   solution_content:
     id: solution_content
     plugin: text
     weight: 2
-    body: 'The content area displays items that have been created or shared within a solution. This is the default view when entering a solution.'
-    selector: '.canonical-entity-page--rdf-entity--solution .listing .listing__item'
     position: left-start
+    selector: '.canonical-entity-page--rdf-entity--solution .listing .listing__item'
+    body: 'The content area displays items that have been created or shared within a solution. This is the default view when entering a solution.'
   collection_menu:
     id: collection_menu
     plugin: text
     weight: 3
-    body: 'The navigation menu provides access to a collection''s main sections, such as the members list, its description, etc.'
-    selector: '.canonical-entity-page--rdf-entity--collection .sidebar-menu .menu:first-child'
     position: right-start
+    selector: '.canonical-entity-page--rdf-entity--collection .sidebar-menu .menu:first-child'
+    body: 'The navigation menu provides access to a collection''s main sections, such as the members list, its description, etc.'
   solution_menu:
     id: solution_menu
     plugin: text
     weight: 4
-    body: 'The navigation menu provides access to a solution''s main sections, such as the members list, its description, etc.'
-    selector: '.canonical-entity-page--rdf-entity--solution .sidebar-menu .menu:first-child'
     position: right-start
+    selector: '.canonical-entity-page--rdf-entity--solution .sidebar-menu .menu:first-child'
+    body: 'The navigation menu provides access to a solution''s main sections, such as the members list, its description, etc.'
   filters:
     id: filters
     plugin: text
     weight: 5
-    body: 'By clicking on these icons, you can view specific content types in the content area.'
-    selector: '.facet-region .tab__container a:first-of-type'
     position: bottom-start
+    selector: '.facet-region .tab__container a:first-of-type'
+    body: 'By clicking on these icons, you can view specific content types in the content area.'
   join:
     id: join
     plugin: text
     weight: 6
-    body: 'By joining a collection you become a member, with the ability to create content for it.'
-    selector: '.join-group-form input.button'
     position: right-start
+    selector: '.join-group-form input.button'
+    body: 'By joining a collection you become a member, with the ability to create content for it.'
   download:
     id: download
     plugin: text
     weight: 7
-    body: 'Download a solution''s release content, such as a standard, specification or software.'
-    selector: '.canonical-entity-page--rdf-entity--solution .block-group-header-block a.button'
     position: right-start
+    selector: '.canonical-entity-page--rdf-entity--solution .block-group-header-block a.button'
+    body: 'Download a solution''s release content, such as a standard, specification or software.'
   search:
     id: search
     plugin: text
     weight: 8
-    body: 'Search through the entire Joinup platform and its supported content items.'
-    selector: .search-bar
     position: left-start
+    selector: .search-bar
+    body: 'Search through the entire Joinup platform and its supported content items.'
