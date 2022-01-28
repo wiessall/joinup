@@ -11,6 +11,7 @@ use Behat\Mink\Element\TraversableElement;
  */
 trait MaterialDesignTrait {
 
+  use BrowserCapabilityDetectionTrait;
   use BrowserWindowTrait;
 
   /**
@@ -31,7 +32,6 @@ trait MaterialDesignTrait {
    *   given label is not found.
    */
   protected function checkMaterialDesignField($label, TraversableElement $element) {
-    \assert(method_exists($this, 'browserSupportsJavaScript'), __METHOD__ . ' depends on BrowserCapabilityDetectionTrait. Please include it in your class.');
     if ($this->browserSupportsJavaScript()) {
       // Check if the checkbox has already been checked.
       if (!$this->findMaterialDesignCheckbox($label, $element)->isChecked()) {
@@ -65,7 +65,6 @@ trait MaterialDesignTrait {
    *   given label is not found.
    */
   protected function uncheckMaterialDesignField($label, TraversableElement $element) {
-    \assert(method_exists($this, 'browserSupportsJavaScript'), __METHOD__ . ' depends on BrowserCapabilityDetectionTrait. Please include it in your class.');
     if ($this->browserSupportsJavaScript()) {
       // Only check if the checkbox is unchecked.
       if ($this->findMaterialDesignCheckbox($label, $element)->isChecked()) {
@@ -97,7 +96,6 @@ trait MaterialDesignTrait {
    *   checkbox with the given label is not found.
    */
   protected function toggleMaterialDesignCheckbox(TraversableElement $element, ?string $label = NULL): void {
-    \assert(method_exists($this, 'browserSupportsJavaScript'), __METHOD__ . ' depends on BrowserCapabilityDetectionTrait. Please include it in your class.');
     if (!$this->browserSupportsJavaScript()) {
       throw new \Exception("The animated checkbox with label $label cannot be toggled in a browser that doesn't support JavaScript.");
     }
@@ -135,7 +133,6 @@ trait MaterialDesignTrait {
    *   checkbox with the given label is not found.
    */
   protected function findMaterialDesignCheckbox($label, TraversableElement $element) {
-    \assert(method_exists($this, 'browserSupportsJavaScript'), __METHOD__ . ' depends on BrowserCapabilityDetectionTrait. Please include it in your class.');
     if (!$this->browserSupportsJavaScript()) {
       throw new \Exception("The hidden input field for the $label checkbox cannot be found in a browser that doesn't support JavaScript.");
     }
@@ -160,7 +157,6 @@ trait MaterialDesignTrait {
    *   and when the menu doesn't become visible within the allowed time frame.
    */
   protected function openMaterialDesignMenu($wrapper) {
-    \assert(method_exists($this, 'browserSupportsJavaScript'), __METHOD__ . ' depends on BrowserCapabilityDetectionTrait. Please include it in your class.');
     if ($this->browserSupportsJavaScript()) {
       if (!$wrapper) {
         throw new \Exception('The MDL menu wrapper was not found in the page.');
@@ -218,7 +214,6 @@ trait MaterialDesignTrait {
    *   Thrown when the radio button is not found.
    */
   protected function selectMaterialDesignRadioButton(string $label, TraversableElement $parent_element): void {
-    \assert(method_exists($this, 'browserSupportsJavaScript'), __METHOD__ . ' depends on BrowserCapabilityDetectionTrait. Please include it in your class.');
     \assert($this->browserSupportsJavaScript(), 'A fallback method to select a material design radio button has not yet been implemented for non-JS browsers.');
 
     $xpath = '//label[text()="' . $label . '"]/../../span[contains(concat(" ", normalize-space(@class), " "), " mdl-radio__ripple-container ")]';
