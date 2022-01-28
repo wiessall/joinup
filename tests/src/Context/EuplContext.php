@@ -9,7 +9,6 @@ use Behat\Mink\Element\NodeElement;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\eupl\Eupl;
 use Drupal\joinup\HtmlManipulator;
-use Drupal\joinup\Traits\BrowserCapabilityDetectionTrait;
 use Drupal\joinup\Traits\ConfigReadOnlyTrait;
 use Drupal\joinup\Traits\EntityTrait;
 use Drupal\joinup\Traits\MaterialDesignTrait;
@@ -26,7 +25,6 @@ use PHPUnit\Framework\Assert;
  */
 class EuplContext extends RawDrupalContext {
 
-  use BrowserCapabilityDetectionTrait;
   use ConfigReadOnlyTrait;
   use EntityTrait;
   use MaterialDesignTrait;
