@@ -61,7 +61,7 @@ class CustomPageOgMenuLinksManagerTest extends KernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
 
     $this->installConfig([
@@ -215,7 +215,7 @@ class CustomPageOgMenuLinksManagerTest extends KernelTestBase {
   /**
    * {@inheritdoc}
    */
-  public function tearDown() {
+  public function tearDown(): void {
     // Clean up the RDF entities that were created during the test. We clean
     // them up here instead of at the end of the test so that this always
     // happens, even if the test fails.

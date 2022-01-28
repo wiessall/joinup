@@ -49,7 +49,7 @@ class SolutionAffiliationTest extends KernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
 
     RdfEntityType::create(['rid' => 'collection'])->save();
@@ -227,7 +227,7 @@ QUERY;
   /**
    * {@inheritdoc}
    */
-  public function tearDown() {
+  public function tearDown(): void {
     $rdf_entity_keys = [
       'collection/1',
       'collection/2',
