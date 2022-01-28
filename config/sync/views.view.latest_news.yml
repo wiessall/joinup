@@ -125,7 +125,6 @@ display:
           expose:
             label: ''
             field_identifier: created
-            identifier: ''
           exposed: false
           granularity: second
         published_at:
@@ -142,7 +141,6 @@ display:
           expose:
             label: ''
             field_identifier: published_at
-            identifier: ''
           exposed: false
           granularity: second
       arguments: {  }

@@ -364,7 +364,6 @@ display:
           expose:
             label: ''
             field_identifier: label
-            identifier: label
           exposed: false
       arguments:
         entity_groups:

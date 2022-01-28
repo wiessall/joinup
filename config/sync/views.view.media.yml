@@ -572,7 +572,6 @@ display:
           expose:
             label: ''
             field_identifier: created
-            identifier: created
           exposed: false
           granularity: second
       arguments: {  }
