@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "37fe2c576b2133cc4de77ab6e3a202f3",
+    "content-hash": "e0729c1a346d4e9f7b4e013ffdf2fd34",
     "packages": [
         {
             "name": "SEMICeu/adms-ap_validator",
@@ -7537,7 +7537,7 @@
                     }
                 },
                 "patches_applied": {
-                    "Missing config schema @see https://www.drupal.org/project/search_api_solr/issues/3236773": "https://git.drupalcode.org/project/search_api_solr/-/merge_requests/8.diff"
+                    "Missing config schema @see https://www.drupal.org/project/search_api_solr/issues/3236773": "resources/patch/search_api_solr-3236773.diff"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -22349,7 +22349,8 @@
         "php": ">=7.4",
         "ext-dom": "*",
         "ext-json": "*",
-        "ext-pdo": "*"
+        "ext-pdo": "*",
+        "ext-redis": "*"
     },
     "platform-dev": {
         "ext-fileinfo": "*",
