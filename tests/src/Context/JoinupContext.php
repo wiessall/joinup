@@ -1761,7 +1761,7 @@ class JoinupContext extends RawDrupalContext {
     }
     foreach ($elements as $element) {
       try {
-        Assert::assertContains($description, $element->getText());
+        Assert::assertStringContainsString($description, $element->getText());
         // The description was found, stop searching.
         return;
       }
@@ -2033,7 +2033,7 @@ class JoinupContext extends RawDrupalContext {
     ])->setAbsolute()->toString();
     $href = $link_element->getAttribute('href');
 
-    Assert::assertContains(urlencode($entity_url), $href);
+    Assert::assertStringContainsString(urlencode($entity_url), $href);
   }
 
   /**
@@ -2110,7 +2110,7 @@ class JoinupContext extends RawDrupalContext {
   public function thePersistentUrlShouldContain($pattern) {
     $field_selector = $this->getSession()->getPage()->find('css', '.permalink');
     $href = $field_selector->getAttribute('href');
-    Assert::assertContains($pattern, $href);
+    Assert::assertStringContainsString($pattern, $href);
   }
 
   /**
