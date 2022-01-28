@@ -10,6 +10,7 @@ declare(strict_types = 1);
 use Drupal\search_api\IndexInterface;
 use Drupal\search_api\Query\QueryInterface as SearchApiQueryInterface;
 use Drupal\search_api\Query\ResultSetInterface;
+use Solarium\Component\Facet\FacetInterface;
 use Solarium\Core\Query\QueryInterface as SolariumQueryInterface;
 use Solarium\QueryType\Select\Result\Result;
 
@@ -25,6 +26,14 @@ function search_api_arbitrary_facet_search_api_solr_query_alter(SolariumQueryInt
   $facet_set = $solarium_query->getFacetSet();
 
   foreach ($query->getOption('search_api_arbitrary_facet', []) as $facet_name => $options) {
+    // Don't overwrite facets that already exist. The latest version of Solarium
+    // throws an exception if we do this.
+    // @todo This hook is being called twice by SearchApiSolrBackend::search().
+    //   Replace it by either PreQueryEvent or PostConvertedQueryEvent. Then we
+    //   no longer need this workaround.
+    if ($facet_set->getFacet($facet_name) instanceof FacetInterface) {
+      continue;
+    }
     $facet = $facet_set->createFacetMultiQuery($facet_name);
 
     /** @var \Drupal\search_api_arbitrary_facet\Plugin\ArbitraryFacetInterface $plugin_id */
