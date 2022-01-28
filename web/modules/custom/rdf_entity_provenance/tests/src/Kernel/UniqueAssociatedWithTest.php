@@ -22,7 +22,7 @@ class UniqueAssociatedWithTest extends RdfKernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = [
+  public static $modules = [
     'rdf_entity_provenance',
   ];
 
