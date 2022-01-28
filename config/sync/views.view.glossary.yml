@@ -320,7 +320,6 @@ display:
           expose:
             label: ''
             field_identifier: title
-            identifier: title
           exposed: false
       arguments:
         og_audience_target_id:

@@ -283,7 +283,6 @@ display:
           expose:
             label: ''
             field_identifier: weight
-            identifier: weight
           exposed: false
         name:
           id: name
@@ -297,7 +296,6 @@ display:
           expose:
             label: ''
             field_identifier: name
-            identifier: name
           exposed: false
       arguments:
         entity_groups:
@@ -566,7 +564,6 @@ display:
       tags:
         - 'config:field.storage.taxonomy_term.field_eif_identifier'
         - 'config:search_api.index.published'
-        - 'search_api_list:published'
   all:
     id: all
     display_title: All
@@ -606,7 +603,6 @@ display:
       tags:
         - 'config:field.storage.taxonomy_term.field_eif_identifier'
         - 'config:search_api.index.published'
-        - 'search_api_list:published'
   conceptual_model:
     id: conceptual_model
     display_title: 'Conceptual model'
@@ -731,7 +727,6 @@ display:
       tags:
         - 'config:field.storage.taxonomy_term.field_eif_identifier'
         - 'config:search_api.index.published'
-        - 'search_api_list:published'
   interoperability_layer:
     id: interoperability_layer
     display_title: 'Interoperability layer'
@@ -856,7 +851,6 @@ display:
       tags:
         - 'config:field.storage.taxonomy_term.field_eif_identifier'
         - 'config:search_api.index.published'
-        - 'search_api_list:published'
   principle:
     id: principle
     display_title: 'Underlying principle'
@@ -981,4 +975,3 @@ display:
       tags:
         - 'config:field.storage.taxonomy_term.field_eif_identifier'
         - 'config:search_api.index.published'
-        - 'search_api_list:published'
