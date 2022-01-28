@@ -58,10 +58,10 @@ backend_config:
     port: 8983
     path: /
     core: digit-joinup
-    timeout: 5
-    index_timeout: 5
-    optimize_timeout: 10
-    finalize_timeout: 30
+    timeout: 15
+    index_timeout: 15
+    optimize_timeout: 30
+    finalize_timeout: 60
     skip_schema_check: false
     solr_version: ''
     http_method: AUTO
