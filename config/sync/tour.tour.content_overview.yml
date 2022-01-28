@@ -15,20 +15,20 @@ tips:
     id: content
     plugin: text
     weight: 1
-    body: 'The content area displays Joinup events, documents, news, and discussions that have been created or updated recently.'
-    selector: '.listing .listing__item:first-of-type'
     position: left-start
+    selector: '.listing .listing__item:first-of-type'
+    body: 'The content area displays Joinup events, documents, news, and discussions that have been created or updated recently.'
   filters:
     id: filters
     plugin: text
     weight: 2
-    body: 'By clicking on these icons, you can view specific content types in the content area.'
-    selector: '.facet-region .tab__container a:first-of-type'
     position: bottom-start
+    selector: '.facet-region .tab__container a:first-of-type'
+    body: 'By clicking on these icons, you can view specific content types in the content area.'
   search:
     id: search
     plugin: text
     weight: 3
-    body: 'Search through the entire Joinup platform and its supported content items.'
-    selector: .search-bar
     position: left-start
+    selector: .search-bar
+    body: 'Search through the entire Joinup platform and its supported content items.'

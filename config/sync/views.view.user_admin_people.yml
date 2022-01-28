@@ -541,6 +541,7 @@ display:
           order: DESC
           expose:
             label: ''
+            field_identifier: created
             identifier: created
           exposed: false
           granularity: second

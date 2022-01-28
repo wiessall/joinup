@@ -319,6 +319,7 @@ display:
           order: ASC
           expose:
             label: ''
+            field_identifier: title
             identifier: title
           exposed: false
       arguments:
