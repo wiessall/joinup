@@ -2946,10 +2946,10 @@ class JoinupContext extends RawDrupalContext {
     $expected = '<loc>' . $link_text . '</loc>';
     $response = $this->getSession()->getPage()->getContent();
     if ($exists) {
-      Assert::assertContains($expected, $response);
+      Assert::assertStringContainsString($expected, $response);
     }
     else {
-      Assert::assertNotContains($expected, $response);
+      Assert::assertStringNotContainsString($expected, $response);
     }
   }
 
