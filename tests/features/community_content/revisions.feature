@@ -51,11 +51,12 @@ Feature:
     When I visit the revisions page for "Goodbi world"
     Then I should see the heading "Access denied"
 
+    # Moderators always can access the revisions.
     Given I am logged in as "Fuzzy Moderator"
     When I visit the "Goodbi world" <content type>
-    Then I should not see the link "Revisions" in the "Entity actions" region
+    Then I should see the link "Revisions" in the "Entity actions" region
     When I visit the revisions page for "Goodbi world"
-    Then I should see the heading "Access denied"
+    Then I should see the heading "Revisions for Goodbi world"
 
     Given I am logged in as "Jelly Facilitator"
     When I visit the "Goodbi world" <content type>
