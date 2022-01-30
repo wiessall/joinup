@@ -6,14 +6,17 @@ namespace Drupal\joinup_community_content\EventSubscriber;
 
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Entity\EntityTypeBundleInfoInterface;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\joinup_community_content\Entity\CommunityContentInterface;
 use Drupal\joinup_workflow\Event\StateMachineButtonLabelsEventInterface;
 use Drupal\joinup_workflow\Event\UnchangedWorkflowStateUpdateEvent;
+use Drupal\og\Event\GroupContentEntityOperationAccessEventInterface;
 use Drupal\og\Event\PermissionEventInterface as OgPermissionEventInterface;
 use Drupal\og\GroupContentOperationPermission;
 use Drupal\og\GroupPermission;
+use Drupal\og\OgAccessInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
@@ -28,37 +31,142 @@ class EventSubscriber implements EventSubscriberInterface {
    *
    * @var \Drupal\Core\Entity\EntityTypeBundleInfoInterface
    */
-  protected $entityTypeBundleInfo;
+  protected EntityTypeBundleInfoInterface $entityTypeBundleInfo;
 
   /**
    * The currently logged in user.
    *
    * @var \Drupal\Core\Session\AccountInterface
    */
-  protected $currentUser;
+  protected AccountInterface $currentUser;
+
+  /**
+   * The entity type manager service.
+   *
+   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
+   */
+  protected EntityTypeManagerInterface $entityTypeManager;
+
+  /**
+   * The OG access handler.
+   *
+   * @var \Drupal\og\OgAccessInterface
+   */
+  protected OgAccessInterface $ogAccess;
 
   /**
    * Constructs an EventSubscriber object.
    *
    * @param \Drupal\Core\Entity\EntityTypeBundleInfoInterface $entity_type_bundle_info
    *   The service providing information about bundles.
-   * @param \Drupal\Core\Session\AccountInterface $currentUser
+   * @param \Drupal\Core\Session\AccountInterface $current_user
    *   The current logged in user.
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
+   *   The entity type manager service.
+   * @param \Drupal\og\OgAccessInterface $og_access
+   *   The OG access handler.
    */
-  public function __construct(EntityTypeBundleInfoInterface $entity_type_bundle_info, AccountInterface $currentUser) {
+  public function __construct(
+    EntityTypeBundleInfoInterface $entity_type_bundle_info,
+    AccountInterface $current_user,
+    EntityTypeManagerInterface $entity_type_manager,
+    OgAccessInterface $og_access
+  ) {
     $this->entityTypeBundleInfo = $entity_type_bundle_info;
-    $this->currentUser = $currentUser;
+    $this->currentUser = $current_user;
+    $this->entityTypeManager = $entity_type_manager;
+    $this->ogAccess = $og_access;
   }
 
   /**
    * {@inheritdoc}
    */
-  public static function getSubscribedEvents() {
+  public static function getSubscribedEvents(): array {
     return [
+      // Use a priority higher than the default subscriber from OG so that we
+      // can have full control.
+      GroupContentEntityOperationAccessEventInterface::EVENT_NAME => ['checkEntityRevisionAccess', 10],
       OgPermissionEventInterface::EVENT_NAME => [['provideOgRevisionPermissions']],
       StateMachineButtonLabelsEventInterface::EVENT_NAME => 'provideStateMachineButtonLabels',
       'joinup_workflow.unchanged_workflow_state_update' => 'onUnchangedWorkflowStateUpdate',
     ];
+  }
+
+  /**
+   * Determines access to entity revisions for community content.
+   *
+   * @param \Drupal\og\Event\GroupContentEntityOperationAccessEventInterface $event
+   *   The event fired when a group content entity operation is performed.
+   */
+  public function checkEntityRevisionAccess(GroupContentEntityOperationAccessEventInterface $event): void {
+    $content = $event->getGroupContent();
+
+    // Only act on community content.
+    if (!$content instanceof CommunityContentInterface) {
+      return;
+    }
+
+    $event->addCacheableDependency($content);
+
+    // Do a quick exit if the event is not for the entity operations we handle.
+    $operation = $event->getOperation();
+    if (!in_array($operation, ['view all revisions', 'revert revision'])) {
+      return;
+    }
+
+    $bundle = $content->bundle();
+    $bundle_permission = "view $bundle revisions";
+
+    // There should be at least two revisions. If the vid of the given node
+    // and the vid of the default revision differ, then we already have two
+    // different revisions so there is no need for a separate database check.
+    // @todo This used to be the default behaviour in Drupal but this has since
+    //   been changed. We might reconsider to show the revisions overview even
+    //   if there is only 1 revision. This would be a function change that needs
+    //   prior approval by the functional team.
+    // @see https://www.drupal.org/node/3001224
+    $node_storage = $this->entityTypeManager->getStorage('node');
+    if ($content->isDefaultRevision() && ($node_storage->countDefaultLanguageRevisions($content) == 1)) {
+      $event->denyAccess();
+      return;
+    }
+
+    // The global "administer nodes" permissions gives full access to revisions.
+    // @see parent::checkAccess()
+    $account = $event->getUser();
+    if ($account->hasPermission('administer nodes')) {
+      $event->grantAccess();
+      $event->stopPropagation();
+      return;
+    }
+
+    // Check if the user has group level permission to view all revisions, or
+    // view revisions for the bundle of the group content.
+    $group = $event->getGroup();
+    $result = $this->ogAccess->userAccess($group, 'view all revisions', $account)
+      ->orIf($this->ogAccess->userAccess($group, $bundle_permission, $account));
+
+    // If the user owns the entity, check if they can 'view own revisions'.
+    if (!$result->isAllowed() && (int) $content->getOwnerId() === (int) $account->id()) {
+      $result = $result->orIf($this->ogAccess->userAccess($group, 'view own revisions', $account));
+    }
+
+    // If neither of the access checks are allowed, we have no opinion.
+    if (!$result->isAllowed()) {
+      return;
+    }
+
+    // Check if the access to the default revision and finally, if the
+    // node passed in is not the default revision then access to that, too.
+    $node_access = $this->entityTypeManager->getAccessControlHandler('node');
+    $result = $result->andIf($node_access->access($node_storage->load($content->id()), 'view', $account, TRUE));
+    if (!$content->isDefaultRevision()) {
+      $result = $result->andIf($node_access->access($content, 'view', $account, TRUE));
+    }
+
+    if ($result->isAllowed()) {
+      $event->grantAccess();
+    }
   }
 
   /**
