@@ -6,6 +6,7 @@ namespace Drupal\joinup\Context;
 
 use Behat\Behat\Hook\Scope\AfterScenarioScope;
 use Behat\Gherkin\Node\TableNode;
+use Behat\Mink\Element\NodeElement;
 use Behat\Mink\Exception\ElementNotFoundException;
 use Drupal\Component\Utility\UrlHelper;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
@@ -2179,7 +2180,7 @@ class JoinupContext extends RawDrupalContext {
    *
    * @param string $value
    *   The value to select from suggestions.
-   * @param string $field
+   * @param string|null $field
    *   The field name.
    *
    * @throws \Exception
@@ -2188,46 +2189,57 @@ class JoinupContext extends RawDrupalContext {
    *   or if the wanted suggestion is not found.
    *
    * @When I pick :value from the :field autocomplete suggestions
+   * @When I pick :value from the autocomplete suggestions
    */
-  public function fillFieldWithNormalisedEntityReference($value, $field) {
-    $element = $this->getSession()->getPage()->findField($field);
-    if (!$element) {
-      throw new \Exception("The field '$field' not found in the page.");
-    }
-
-    if (!$element->hasAttribute('data-autocomplete-path')) {
-      throw new \Exception("The field '$field' is not an entity reference autocomplete field.");
-    }
-
-    // Use the Mink base uri.
-    // @see ::locatePath()
-    $client = new Client(['base_uri' => $this->getMinkParameter('base_url')]);
-    $uri = $element->getAttribute('data-autocomplete-path') . '?' . UrlHelper::buildQuery([
-      'q' => $value,
-    ]);
-    $response = $client->get($uri);
-
-    if ($response->getStatusCode() !== 200) {
-      throw new \Exception("Failed to obtain suggestions for field '$field'.");
-    }
-
-    $suggestions = json_decode($response->getBody()->getContents());
-    if ($suggestions === NULL) {
-      throw new \Exception("Failed to decode suggestions for field '$field'.");
-    }
-
-    if (!count($suggestions)) {
-      throw new \Exception("No suggestions for value '$value' found in field '$field'.");
-    }
-
-    foreach ($suggestions as $suggestion) {
-      if ($suggestion->label === $value) {
-        $element->setValue($suggestion->value);
-        return;
+  public function fillFieldWithNormalisedEntityReference(string $value, ?string $field = NULL): void {
+    if ($this->browserSupportsJavaScript()) {
+      $xpath = '//ul[contains(concat(" ", normalize-space(@class), " "), " ui-autocomplete ")]//a[text() = "' . $value . '"]';
+      $element = $this->getSession()->getPage()->find('xpath', $xpath);
+      if (!$element instanceof NodeElement) {
+        throw new \Exception("The value '$value' was not found in the autocomplete suggestions.");
       }
+      $element->click();
     }
+    else {
+      $element = $this->getSession()->getPage()->findField($field);
+      if (!$element) {
+        throw new \Exception("The field '$field' not found in the page.");
+      }
 
-    throw new \Exception("The value '$value' was not found in the autocomplete suggestions.");
+      if (!$element->hasAttribute('data-autocomplete-path')) {
+        throw new \Exception("The field '$field' is not an entity reference autocomplete field.");
+      }
+
+      // Use the Mink base uri.
+      // @see ::locatePath()
+      $client = new Client(['base_uri' => $this->getMinkParameter('base_url')]);
+      $uri = $element->getAttribute('data-autocomplete-path') . '?' . UrlHelper::buildQuery([
+          'q' => $value,
+        ]);
+      $response = $client->get($uri);
+
+      if ($response->getStatusCode() !== 200) {
+        throw new \Exception("Failed to obtain suggestions for field '$field'.");
+      }
+
+      $suggestions = json_decode($response->getBody()->getContents());
+      if ($suggestions === NULL) {
+        throw new \Exception("Failed to decode suggestions for field '$field'.");
+      }
+
+      if (!count($suggestions)) {
+        throw new \Exception("No suggestions for value '$value' found in field '$field'.");
+      }
+
+      foreach ($suggestions as $suggestion) {
+        if ($suggestion->label === $value) {
+          $element->setValue($suggestion->value);
+          return;
+        }
+      }
+
+      throw new \Exception("The value '$value' was not found in the autocomplete suggestions.");
+    }
   }
 
   /**
