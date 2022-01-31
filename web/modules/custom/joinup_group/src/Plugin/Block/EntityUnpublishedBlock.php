@@ -209,12 +209,14 @@ class EntityUnpublishedBlock extends BlockBase implements ContainerFactoryPlugin
         continue;
       }
 
-      if ($entity->isDefaultRevision()) {
+      // @todo The revision access check is replaced with an event subscriber.
+      //   Disable this call for now. If tests are green this workaround can be
+      //   removed.
+      // @see \Drupal\joinup_community_content\EventSubscriber\Eventsubscriber::checkEntityRevisionAccess()
+      if (TRUE || $entity->isDefaultRevision()) {
         $view_access = $entity->access('view', $this->currentUser, TRUE);
       }
       else {
-        // @todo The revision access check is replaced with an event subscriber.
-        // @see \Drupal\joinup_community_content\EventSubscriber\Eventsubscriber::checkEntityRevisionAccess()
         $view_access = $this->revisionAccessCheck->checkOgAccess($entity, $this->currentUser, 'view');
       }
 
