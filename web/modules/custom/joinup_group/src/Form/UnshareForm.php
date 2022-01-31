@@ -4,7 +4,11 @@ declare(strict_types = 1);
 
 namespace Drupal\joinup_group\Form;
 
+use Drupal\Core\Ajax\AjaxResponse;
+use Drupal\Core\Ajax\RedirectCommand;
 use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\EventSubscriber\MainContentViewSubscriber;
+use Drupal\Core\Form\FormBuilderInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\joinup_group\Entity\GroupInterface;
 
@@ -54,6 +58,12 @@ abstract class UnshareForm extends ShareFormBase {
       '#value' => $this->t('Submit'),
     ];
 
+    if ($this->isModal() || $this->isAjaxForm()) {
+      $form['actions']['submit']['#ajax'] = [
+        'callback' => '::ajaxSubmit',
+      ];
+    }
+
     return $form;
   }
 
@@ -75,7 +85,28 @@ abstract class UnshareForm extends ShareFormBase {
     if (!empty($groups)) {
       $this->messenger->addStatus('Item was unshared from the following groups: ' . implode(', ', $groups) . '.');
     }
+
     $form_state->setRedirectUrl($this->entity->toUrl());
+  }
+
+  /**
+   * Ajax callback to close the modal.
+   *
+   * @param array $form
+   *   An associative array containing the structure of the form.
+   * @param \Drupal\Core\Form\FormStateInterface $form_state
+   *   The current state of the form.
+   *
+   * @return \Drupal\Core\Ajax\AjaxResponse
+   *   An ajax response that will close the modal.
+   *
+   * @throws \Drupal\Core\Entity\EntityMalformedException
+   *   Thrown when the canonical URL cannot be generated for the shared entity.
+   */
+  public function ajaxSubmit(array &$form, FormStateInterface $form_state): AjaxResponse {
+    $response = new AjaxResponse();
+    $response->addCommand(new RedirectCommand((string) $this->getRequest()->headers->get('referer')));
+    return $response;
   }
 
   /**
@@ -115,6 +146,31 @@ abstract class UnshareForm extends ShareFormBase {
     unset($current_ids[$group->id()]);
     $this->entity->get($this->getSharedOnFieldName())->setValue(array_flip($current_ids));
     $this->entity->save();
+    \Drupal::entityTypeManager()->getStorage($group->getEntityTypeId())->resetCache([$group->id()]);
+  }
+
+  /**
+   * Returns whether the form is displayed in a modal.
+   *
+   * @return bool
+   *   TRUE if the form is displayed in a modal.
+   *
+   * @todo Remove when issue #2661046 is in.
+   *
+   * @see https://www.drupal.org/node/2661046
+   */
+  protected function isModal(): bool {
+    return $this->getRequest()->query->get(MainContentViewSubscriber::WRAPPER_FORMAT) === 'drupal_modal';
+  }
+
+  /**
+   * Returns whether the form is being handled with an ajax request.
+   *
+   * @return bool
+   *   TRUE if the form is being handled through an AJAX request.
+   */
+  protected function isAjaxForm(): bool {
+    return $this->getRequest()->query->has(FormBuilderInterface::AJAX_FORM_REQUEST);
   }
 
 }
