@@ -85,7 +85,9 @@ class EventSubscriber implements EventSubscriberInterface {
     return [
       // Use a priority higher than the default subscriber from OG so that we
       // can have full control.
-      GroupContentEntityOperationAccessEventInterface::EVENT_NAME => ['checkEntityRevisionAccess', 10],
+      GroupContentEntityOperationAccessEventInterface::EVENT_NAME => [
+        'checkEntityRevisionAccess', 10,
+      ],
       OgPermissionEventInterface::EVENT_NAME => [['provideOgRevisionPermissions']],
       StateMachineButtonLabelsEventInterface::EVENT_NAME => 'provideStateMachineButtonLabels',
       'joinup_workflow.unchanged_workflow_state_update' => 'onUnchangedWorkflowStateUpdate',
