@@ -2193,8 +2193,10 @@ class JoinupContext extends RawDrupalContext {
    */
   public function fillFieldWithNormalisedEntityReference(string $value, ?string $field = NULL): void {
     if ($this->browserSupportsJavaScript()) {
+      $session = $this->getSession();
       $xpath = '//ul[contains(concat(" ", normalize-space(@class), " "), " ui-autocomplete ")]//a[text() = "' . $value . '"]';
-      $element = $this->getSession()->getPage()->find('xpath', $xpath);
+      $element = $session->getPage()->find('xpath', $xpath);
+      $session->wait(500);
       if (!$element instanceof NodeElement) {
         throw new \Exception("The value '$value' was not found in the autocomplete suggestions.");
       }
