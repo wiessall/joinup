@@ -2214,8 +2214,8 @@ class JoinupContext extends RawDrupalContext {
       // @see ::locatePath()
       $client = new Client(['base_uri' => $this->getMinkParameter('base_url')]);
       $uri = $element->getAttribute('data-autocomplete-path') . '?' . UrlHelper::buildQuery([
-          'q' => $value,
-        ]);
+        'q' => $value,
+      ]);
       $response = $client->get($uri);
 
       if ($response->getStatusCode() !== 200) {

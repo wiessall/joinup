@@ -4,12 +4,14 @@ declare(strict_types = 1);
 
 namespace Joinup\TaskRunner\Commands;
 
-use Consolidation\OutputFormatters\StructuredData\RowsOfFields;
 use Drupal\Core\Database\Database;
 use EasyRdf\Http;
 use Joinup\TaskRunner\Traits\SolrTrait;
 use OpenEuropa\TaskRunner\Commands\AbstractCommands;
 
+/**
+ * Joinup Environment Commands.
+ */
 class JoinupEnvironmentCommands extends AbstractCommands {
 
   use SolrTrait;
@@ -24,6 +26,7 @@ class JoinupEnvironmentCommands extends AbstractCommands {
    */
   public function joinupEnvironment(): string {
     $php_version = phpversion();
+    // phpcs:disable
     return "Environment:\n" .
       " PHP      {$php_version}\n" .
       " MySQL    {$this->mysqlVersion()} (or MariaDB, Percona Server, or equivalent)\n" .
@@ -71,7 +74,7 @@ class JoinupEnvironmentCommands extends AbstractCommands {
   }
 
   /**
-   * Returns the Solr server version
+   * Returns the Solr server version.
    *
    * @return string
    *   The Solr server version
@@ -84,7 +87,7 @@ class JoinupEnvironmentCommands extends AbstractCommands {
       // Some Solr distributions or docker images append additional info to the
       // version number, for example the build date: 3.6.2.2012.12.18.19.52.27.
       if (preg_match('/^(\d+\.\d+\.\d+)/', $info['lucene']['solr-spec-version'], $matches)) {
-        $version =  $matches[1];
+        $version = $matches[1];
       }
     }
     return $version;
