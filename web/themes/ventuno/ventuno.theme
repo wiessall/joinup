@@ -204,6 +204,15 @@ function ventuno_preprocess_node__numbered_listing(&$variables) {
 
 /**
  * Implements hook_preprocess_HOOK().
+ */
+function ventuno_preprocess_responsive_image_formatter(&$variables) {
+  /** @var \Drupal\node\NodeInterface $node */
+  $article_title = 'The title of the article';
+  $variables['aria_label'] = 'Visit article "' . $article_title . '".';
+}
+
+/**
+ * Implements hook_preprocess_HOOK().
  *
  * Trim the labels of the items in the Explore block on the homepage down to a
  * manageable size.

@@ -361,6 +361,7 @@ function solution_rdf_entity_view(array &$build, RdfInterface $solution, EntityV
             'btn',
             'btn-secondary',
           ],
+          'aria-label' => 'Read more about ',
         ],
       ]);
       $build['read_more'] = $link->toRenderable();

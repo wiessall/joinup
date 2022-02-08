@@ -56,6 +56,7 @@ function joinup_community_content_node_view(array &$build, EntityInterface $enti
           'btn',
           'btn-secondary',
         ],
+        'aria-label' => 'Read more about ',
       ],
     ])->toRenderable();
   }
