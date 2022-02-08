@@ -2195,9 +2195,9 @@ class JoinupContext extends RawDrupalContext {
     if ($this->browserSupportsJavaScript()) {
       $session = $this->getSession();
       $xpath = '//ul[contains(concat(" ", normalize-space(@class), " "), " ui-autocomplete ")]//a[text() = "' . $value . '"]';
-      $element = $session->getPage()->waitFor(5000, function () use ($session, $xpath) {
-        return $session->getPage()->find('xpath', $xpath);
-      });
+      $element = $session->getPage()->find('xpath', $xpath);
+      $session->wait(500, 'document.querySelector(".ui-autocomplete").style.display !== "none"');
+
       if (!$element instanceof NodeElement) {
         throw new \Exception("The value '$value' was not found in the autocomplete suggestions.");
       }
