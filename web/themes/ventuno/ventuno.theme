@@ -209,7 +209,7 @@ function ventuno_preprocess_responsive_image_formatter(&$variables) {
   $options = $variables['url']->getOptions();
   /** @var \Drupal\node\NodeInterface $node */
   $node = $options['entity'];
-  $variables['aria_label'] = 'Visit article "' . $node->getTitle() . '".';
+  $variables['aria_label'] = 'Read more about \'' . $node->getTitle() . '\'.';
 }
 
 /**
