@@ -104,21 +104,22 @@
   {% endif %}
 
   {{ page.content_top }}
+  <div class="container">
+    <div class="row">
+      <main role="main" class="col-12{% if page.sidebar %} col-lg-8 offset-lg-1 order-1{% endif %}">
+        <div id="main-content" tabindex="-1"></div>{# link is in html.html.twig #}
+        <div class="layout-content{% if page.sidebar %} order-1{% endif %}">
+          {{ page.content }}
+        </div>{# /.layout-content #}
+      </main>
 
-  <main role="main">
-    <div id="main-content" tabindex="-1"></div>{# link is in html.html.twig #}
-
-    <div class="container layout-content">
-      {{ page.content }}
-    </div>{# /.layout-content #}
-
-    {% if page.sidebar %}
-      <aside class="layout-sidebar" role="complementary">
-        {{ page.sidebar }}
-      </aside>
-    {% endif %}
-  </main>
-
+      {% if page.sidebar %}
+        <aside class="layout-sidebar col-lg-3">
+          {{ page.sidebar }}
+        </aside>
+      {% endif %}
+    </div>
+  </div>
   {{ page.content_bottom }}
 
   {% if page.footer %}
