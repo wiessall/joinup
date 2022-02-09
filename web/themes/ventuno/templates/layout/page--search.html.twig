@@ -120,35 +120,33 @@
 
   {{ page.content_top }}
 
-  <main role="main">
-
+  <main role="main" class="container">
     <div id="main-content" tabindex="-1"></div>{# link is in html.html.twig #}
-    <div class="container">
-      <div class="row align-items-stretch">
-        {% if page.sidebar %}
-          <aside class="layout-sidebar col-lg-3 joinup-search-filters" role="complementary">
-            {{ page.sidebar }}
-          </aside>
-        {% endif %}
-        <div class="layout-content col-12{% if page.sidebar %} col-lg-8 offset-lg-1{% endif %}">
-          {{ pattern('button', {
-            label: 'Filter options',
-            variant: 'primary',
-            outline: false,
-            size: 'md',
-            show_spinner: false,
-            icon_position: 'after',
-            icon: {
-              name: 'filter',
-              attributes: create_attribute().addClass(["ms-2"]),
-            },
-            attributes: create_attribute().addClass(["d-lg-none", "my-4-5", "rounded-0", "w-100"]).setAttribute("data-bs-toggle", "offcanvas").setAttribute("data-bs-target", "#search-offcanvas").setAttribute("aria-controls", "search-offcanvas"),
-          }) }}
+    <div class="row align-items-stretch">
+      <div class="layout-content col-12{% if page.sidebar %} col-lg-8 offset-lg-1 order-1{% endif %}">
+        {{ pattern('button', {
+          label: 'Filter options',
+          variant: 'primary',
+          outline: false,
+          size: 'md',
+          show_spinner: false,
+          icon_position: 'after',
+          icon: {
+            name: 'filter',
+            attributes: create_attribute().addClass(["ms-2"]),
+          },
+          attributes: create_attribute().addClass(["d-lg-none", "my-4-5", "rounded-0", "w-100"]).setAttribute("data-bs-toggle", "offcanvas").setAttribute("data-bs-target", "#search-offcanvas").setAttribute("aria-controls", "search-offcanvas"),
+        }) }}
+        {{ page.content }}
 
-          {{ page.content }}
-        </div>{# /.layout-content #}
+      </div>{# /.layout-content #}
 
-      </div>
+      {% if page.sidebar %}
+        <div class="layout-sidebar col-lg-3 joinup-search-filters">
+          {{ page.sidebar }}
+        </div>
+      {% endif %}
+
     </div>
   </main>
 
