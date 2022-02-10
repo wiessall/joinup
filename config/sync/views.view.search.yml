@@ -395,7 +395,7 @@ display:
             label: 'Last Updated Date'
             identifier: last-updated-date
           plugin_id: search_api
-      title: ''
+      title: 'Advanced search'
       header:
         views_block_area_1:
           id: views_block_area_1
