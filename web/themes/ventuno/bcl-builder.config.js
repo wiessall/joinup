@@ -69,6 +69,22 @@ module.exports = {
       },
     },
     {
+      entry: path.resolve(outputFolder, "src/scss/header-search-bar.scss"),
+      dest: path.resolve(outputFolder, "assets/css/header-search-bar.css"),
+      options: {
+        includePaths,
+        sourceMap: "file",
+      },
+    },
+    {
+      entry: path.resolve(outputFolder, "src/scss/pager.scss"),
+      dest: path.resolve(outputFolder, "assets/css/pager.css"),
+      options: {
+        includePaths,
+        sourceMap: "file",
+      },
+    },
+    {
       entry: path.resolve(outputFolder, "src/scss/footer.scss"),
       dest: path.resolve(outputFolder, "assets/css/footer.css"),
       options: {
@@ -77,7 +93,15 @@ module.exports = {
       },
     },
     {
-      entry: path.resolve(outputFolder, "src/scss/overrides/tour.scss"),
+      entry: path.resolve(outputFolder, "src/scss/site-alerts-messages.scss"),
+      dest: path.resolve(outputFolder, "assets/css/site-alerts-messages.css"),
+      options: {
+        includePaths,
+        sourceMap: "file",
+      },
+    },
+    {
+      entry: path.resolve(outputFolder, "src/scss/tour.scss"),
       dest: path.resolve(outputFolder, "assets/css/tour.css"),
       options: {
         includePaths,
