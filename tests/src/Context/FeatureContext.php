@@ -1394,6 +1394,41 @@ class FeatureContext extends RawDrupalContext implements SnippetAcceptingContext
   }
 
   /**
+   * Asserts that a table row contains a link.
+   *
+   * @param string $link_text
+   *   The link to search for.
+   * @param string $row_text
+   *   Text contained in a row. Must be unique.
+   *
+   * @return \Behat\Mink\Element\NodeElement
+   *   The found link.
+   *
+   * @Given I should see the :link_text link in the :row_text row
+   */
+  public function tableRowContainsLink(string $link_text, string $row_text): NodeElement {
+    $element = $this->getRowByRowText($row_text);
+    $link = $element->findLink($link_text);
+    Assert::assertNotEmpty($link);
+    return $link;
+  }
+
+  /**
+   * Clicks a link to a given row.
+   *
+   * @param string $link_text
+   *   The link to search for.
+   * @param string $row_text
+   *   Text contained in a row. Must be unique.
+   *
+   * @Given I click the :link_text link in the :row_text row
+   */
+  public function clickLinkInRow(string $link_text, string $row_text): void {
+    $link = $this->tableRowContainsLink($link_text, $row_text);
+    $link->click();
+  }
+
+  /**
    * Checks a material design checkbox.
    *
    * To be used for Javascript based tests.
