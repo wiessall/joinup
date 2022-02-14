@@ -208,3 +208,11 @@ Feature:
     # workflow is described in "join-as-anonymous.feature".
     And I should see the success message "You have been logged in."
     And I should see the success message "You are now a member of Land of submarines."
+
+  Scenario: Moderators can delete legal document versions.
+    Given I am logged in as a moderator
+    When I click "Legal"
+    Then I should see the text "1.1"
+    When I click the "Delete" link in the "1.1" row
+    And I press "Delete"
+    Then I should see the success message "1.1 document version has been deleted from legal_notice."
