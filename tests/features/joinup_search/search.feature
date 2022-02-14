@@ -247,18 +247,16 @@ Feature: Global search
     When I enter "Omero+snc" in the search bar and press enter
     Then the page should show the tiles "Ulysses Freeman"
 
-  @wip
-  # This is disabled because the search bar is currently not shown in the header
-  # but this functionality will probably be restored in the future.
   Scenario: Advanced search
     # An advanced search link is shown in the header, except on the search page.
     Given I am on the homepage
     Then I should see the link "advanced search"
-    Given I visit the collection overview
-    Then I should see the link "Advanced search"
-    When I click "Advanced search"
+    When I click "advanced search"
     Then I should be on the advanced search page
-    But I should not see the link "Advanced search"
+    But I should not see the link "advanced search"
+    Given I visit the collection overview
+    Then I should not see the link "advanced search"
+    And I should see search bar in header
 
   Scenario: Collections and solutions are shown first in search results with the same relevance.
     Given collections:
@@ -601,6 +599,7 @@ Feature: Global search
 
     Given I am logged in as a user with the "authenticated" role
     When I visit the search page
+    And I should not see search bar in header
     And I enter "funn" in the search bar
     And I wait for AJAX to finish
     Then I should see the following search suggestions:
@@ -633,6 +632,14 @@ Feature: Global search
     Then I scroll the "News" chip into view
     And I should remove the following facet summary "News"
     And the page should show only the tiles "Radio cooking collection"
+
+    # Check if search autocomplete works in header.
+    When I visit the collection overview
+    And I enter "funn" in the search bar
+    And I wait for AJAX to finish
+    Then I should see the following search suggestions:
+      | funni |
+      | funny |
 
   @terms
   Scenario: Filter on date
