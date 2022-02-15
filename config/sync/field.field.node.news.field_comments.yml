@@ -27,7 +27,7 @@ default_value:
     comment_count: 0
 default_value_callback: ''
 settings:
-  default_mode: 2
+  default_mode: 1
   thread_limit:
     depth: 2
     mode: 0
