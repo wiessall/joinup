@@ -14,8 +14,8 @@ Feature: Homepage
       | Joinup offers several services that aim to help e-Government professionals share their experience with each other. Joinup supports them to find, choose, re-use, develop and implement interoperability solutions.                                             |
     And I should see the following links:
       | How to video |
-      | Guided tour  |
       | FAQ          |
+    And I should see the button "Guided tour"
 
   @terms
   Scenario: Latest news is shown on the homepage
