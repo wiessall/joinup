@@ -8,6 +8,9 @@ use GuzzleHttp\Client;
 use Psr\Http\Message\ResponseInterface;
 use Robo\Exception\AbortTasksException;
 
+/**
+ * A trait with helper methods related to Solr instance.
+ */
 trait SolrTrait {
 
   /**
