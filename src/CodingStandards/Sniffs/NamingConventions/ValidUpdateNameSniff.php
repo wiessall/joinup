@@ -136,7 +136,12 @@ class ValidUpdateNameSniff extends ValidFunctionNameSniff {
         if (!in_array(substr($zero_padded_name, 0, 5), $nextVersionCandidates)) {
           $digits_count = strlen($name) === 7 ? 5 : 4;
           $error = "Invalid '%s' identifier. The first %s digits should be '%s' or '%s'";
-          $data = [$name, $digits_count, $nextVersionCandidates[0], $nextVersionCandidates[1]];
+          $data = [
+            $name,
+            $digits_count,
+            $nextVersionCandidates[0],
+            $nextVersionCandidates[1],
+          ];
         }
       }
     }
