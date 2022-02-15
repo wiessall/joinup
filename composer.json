@@ -146,7 +146,7 @@
         "drupal/restui": "^1.18",
         "drupal/upgrade_status": "^3.12",
         "drupaltest/behat-one-time-login": "^1.0",
-        "ec-europa/toolkit": "^8.4.3",
+        "ec-europa/toolkit": "8.4.3",
         "foxy/foxy": "^1.1",
         "jcalderonzumba/gastonjs": "^1.2@dev",
         "lovers-of-behat/table-extension": "^1.2.0",

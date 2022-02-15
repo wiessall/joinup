@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e2f75b68c80f224fc5cc6cfedd0ac6f5",
+    "content-hash": "76a227e4336e2081355be4f8d189c8eb",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -18393,30 +18393,28 @@
         },
         {
             "name": "ec-europa/toolkit",
-            "version": "8.5.0",
+            "version": "8.4.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ec-europa/toolkit.git",
-                "reference": "a790fd634a718eec144e5b78d1ea6088a0b6dcae"
+                "reference": "623eb680c6c7bd0e69e62a1f0bb10b597cba382c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ec-europa/toolkit/zipball/a790fd634a718eec144e5b78d1ea6088a0b6dcae",
-                "reference": "a790fd634a718eec144e5b78d1ea6088a0b6dcae",
+                "url": "https://api.github.com/repos/ec-europa/toolkit/zipball/623eb680c6c7bd0e69e62a1f0bb10b597cba382c",
+                "reference": "623eb680c6c7bd0e69e62a1f0bb10b597cba382c",
                 "shasum": ""
             },
             "require": {
                 "behat/behat": "^3.7 || ^3.8",
                 "cweagans/composer-patches": "^1.4 || ^1.7",
-                "drush/drush": "^9.7.1 || ^10.0.0 || ^11.0.4",
-                "ec-europa/qa-automation": "^8.1.2",
-                "ext-curl": "*",
+                "drush/drush": "^9.7.1 || ^10.0.0",
+                "ec-europa/qa-automation": "^8.1",
                 "ext-json": "*",
-                "ext-simplexml": "*",
                 "guzzlehttp/guzzle": "^6.3",
                 "j13k/yaml-lint": "^1.1",
                 "openeuropa/task-runner": "dev-master as 1.0.0",
-                "php": "^7.3 || ^8.0",
+                "php": "^7.3",
                 "php-parallel-lint/php-parallel-lint": "^1.3",
                 "phpunit/phpunit": "^7.5 || ^9.5"
             },
@@ -18426,15 +18424,7 @@
             "type": "library",
             "extra": {
                 "enable-patching": true,
-                "composer-exit-on-patch-failure": true,
-                "patches": {
-                    "openeuropa/task-runner": {
-                        "PHP8.0 Compatibility, @todo Update to version 2.0.0-alpha1": "https://raw.githubusercontent.com/ec-europa/toolkit/feature/DQA-3316/resources/patches/oe-task-runner-php8.patch"
-                    },
-                    "phpro/grumphp": {
-                        "PHP8.0 Compatibility, @todo Update to version 1.7.1": "https://raw.githubusercontent.com/ec-europa/toolkit/feature/DQA-3316/resources/patches/grumphp-php8.patch"
-                    }
-                }
+                "composer-exit-on-patch-failure": true
             },
             "autoload": {
                 "psr-4": {
@@ -18445,13 +18435,13 @@
             "license": [
                 "EUPL-1.2"
             ],
-            "description": "Toolkit packaged for Drupal 9.",
+            "description": "Toolkit packaged for Drupal 8.",
             "homepage": "https://github.com/ec-europa/toolkit",
             "support": {
                 "email": "europamanagement@ec.europa.eu",
                 "source": "https://github.com/ec-europa/toolkit"
             },
-            "time": "2022-02-10T19:30:18+00:00"
+            "time": "2021-12-07T13:11:59+00:00"
         },
         {
             "name": "fabpot/goutte",
