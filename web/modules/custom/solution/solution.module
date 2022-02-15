@@ -19,7 +19,6 @@ use Drupal\Core\Form\FormBuilderInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Url;
-use Drupal\joinup_subscription\JoinupSubscriptionsHelper;
 use Drupal\meta_entity\Entity\MetaEntity;
 use Drupal\og\Entity\OgRole;
 use Drupal\og\Og;
@@ -145,20 +144,9 @@ function solution_rdf_entity_insert(EntityInterface $entity) {
       'rdf_entity-solution-facilitator',
     ];
 
-    $subscription_bundles = [];
-    foreach (JoinupSubscriptionsHelper::SUBSCRIPTION_BUNDLES['solution'] as $entity_type => $bundles) {
-      foreach ($bundles as $bundle) {
-        $subscription_bundles[] = [
-          'entity_type' => $entity_type,
-          'bundle' => $bundle,
-        ];
-      }
-    }
-
     /** @var \Drupal\og\OgMembershipInterface $membership */
     $membership = Og::createMembership($entity, $entity->getOwner());
     $membership->setRoles(array_values(OgRole::loadMultiple($roles)));
-    $membership->set('subscription_bundles', $subscription_bundles);
     $membership->save();
   }
   solution_invalidate_collection($entity);
