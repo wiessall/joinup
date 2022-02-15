@@ -51,6 +51,11 @@ slick:
     theme:
       assets/css/slick.css: { minified: true }
 
+tables:
+  css:
+    component:
+      assets/css/tables.css: {}
+
 style:
   version: VERSION
   css:
