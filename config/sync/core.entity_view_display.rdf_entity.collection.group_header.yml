@@ -38,42 +38,41 @@ mode: group_header
 content:
   field_ar_banner:
     type: image_url_formatter
-    weight: 0
     label: hidden
     settings:
       image_style: banner
     third_party_settings: {  }
+    weight: 0
     region: content
   field_ar_logo:
     type: image
-    weight: 1
     label: hidden
     settings:
-      image_style: logo
       image_link: ''
+      image_style: logo
     third_party_settings:
       template_suggestion:
         template_suggestion: ''
+    weight: 1
     region: content
   join_collection:
-    weight: 3
-    region: content
     settings: {  }
     third_party_settings: {  }
+    weight: 3
+    region: content
   label:
-    label: hidden
     type: string
-    weight: 2
+    label: hidden
     settings:
       link_to_entity: false
     third_party_settings:
       template_suggestion:
         template_suggestion: ''
+    weight: 2
     region: content
   last_update:
-    label: hidden
     type: joinup_timestamp_timeago
-    weight: 4
+    label: hidden
     settings:
       date_format: medium
       custom_date_format: ''
@@ -84,17 +83,18 @@ content:
         strings:
           seconds: 'few seconds'
     third_party_settings: {  }
+    weight: 4
     region: content
   members:
+    settings: {  }
+    third_party_settings: {  }
     weight: 6
     region: content
+  solutions:
     settings: {  }
     third_party_settings: {  }
-  solutions:
     weight: 5
     region: content
-    settings: {  }
-    third_party_settings: {  }
 hidden:
   changed: true
   created: true

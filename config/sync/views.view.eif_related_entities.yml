@@ -17,93 +17,23 @@ base_table: search_api_index_published
 base_field: search_api_id
 display:
   default:
-    display_plugin: default
     id: default
     display_title: Master
+    display_plugin: default
     position: 0
     display_options:
-      access:
-        type: none
-        options: {  }
-      cache:
-        type: tag
-        options: {  }
-      query:
-        type: search_api_query
-        options:
-          bypass_access: false
-          skip_access: false
-          preserve_facet_query_args: false
-      exposed_form:
-        type: basic
-        options:
-          submit_button: Apply
-          reset_button: false
-          reset_button_label: Reset
-          exposed_sorts_label: 'Sort by'
-          expose_sort_order: true
-          sort_asc_label: Asc
-          sort_desc_label: Desc
-      pager:
-        type: full
-        options:
-          items_per_page: 15
-          offset: 0
-          id: 0
-          total_pages: null
-          expose:
-            items_per_page: false
-            items_per_page_label: 'Items per page'
-            items_per_page_options: '5, 10, 25, 50'
-            items_per_page_options_all: false
-            items_per_page_options_all_label: '- All -'
-            offset: false
-            offset_label: Offset
-          tags:
-            previous: '‹ Previous'
-            next: 'Next ›'
-            first: '« First'
-            last: 'Last »'
-          quantity: 9
-      style:
-        type: tiles
-        options:
-          row_class: ''
-          default_row_class: true
-          uses_fields: false
-      row:
-        type: search_api
-        options:
-          view_modes:
-            'entity:node':
-              custom_page: default
-              discussion: default
-              document: default
-              event: default
-              news: default
-              newsletter: default
-              tallinn_report: default
-              video: default
-            'entity:rdf_entity':
-              asset_distribution: default
-              asset_release: default
-              collection: default
-              licence: default
-              solution: view_mode_tile
-              spdx_licence: default
-            'entity:user':
-              user: default
+      title: 'Taxonomy related entities'
       fields:
         body:
+          id: body
           table: search_api_index_published
           field: body
-          id: body
-          entity_type: null
-          entity_field: null
-          plugin_id: search_api
           relationship: none
           group_type: group
           admin_label: ''
+          entity_type: null
+          entity_field: null
+          plugin_id: search_api
           label: ''
           exclude: false
           alter:
@@ -149,24 +79,45 @@ display:
           use_highlighting: false
           multi_type: separator
           multi_separator: ', '
-      filters: {  }
-      sorts: {  }
-      title: 'Taxonomy related entities'
-      header: {  }
-      footer: {  }
+      pager:
+        type: full
+        options:
+          offset: 0
+          items_per_page: 15
+          total_pages: null
+          id: 0
+          tags:
+            next: 'Next ›'
+            previous: '‹ Previous'
+            first: '« First'
+            last: 'Last »'
+          expose:
+            items_per_page: false
+            items_per_page_label: 'Items per page'
+            items_per_page_options: '5, 10, 25, 50'
+            items_per_page_options_all: false
+            items_per_page_options_all_label: '- All -'
+            offset: false
+            offset_label: Offset
+          quantity: 9
+      exposed_form:
+        type: basic
+        options:
+          submit_button: Apply
+          reset_button: false
+          reset_button_label: Reset
+          exposed_sorts_label: 'Sort by'
+          expose_sort_order: true
+          sort_asc_label: Asc
+          sort_desc_label: Desc
+      access:
+        type: none
+        options: {  }
+      cache:
+        type: tag
+        options: {  }
       empty: {  }
-      relationships:
-        field_is_eif_recommendation:
-          id: field_is_eif_recommendation
-          table: search_api_datasource_published_entity_rdf_entity
-          field: field_is_eif_recommendation
-          relationship: none
-          group_type: group
-          admin_label: 'EIF Reference: Taxonomy term'
-          required: false
-          skip_access: false
-          entity_type: rdf_entity
-          plugin_id: search_api
+      sorts: {  }
       arguments:
         field_is_eif_recommendation:
           id: field_is_eif_recommendation
@@ -175,6 +126,7 @@ display:
           relationship: none
           group_type: group
           admin_label: ''
+          plugin_id: search_api_term
           default_action: default
           exception:
             value: all
@@ -185,10 +137,10 @@ display:
           default_argument_type: taxonomy_tid
           default_argument_options:
             term_page: '1'
-            anyall: ','
             node: false
             limit: false
             vids: {  }
+            anyall: ','
           default_argument_skip_url: false
           summary_options: {  }
           summary:
@@ -202,7 +154,55 @@ display:
           validate_options: {  }
           break_phrase: false
           not: false
-          plugin_id: search_api_term
+      filters: {  }
+      style:
+        type: tiles
+        options:
+          row_class: ''
+          default_row_class: true
+          uses_fields: false
+      row:
+        type: search_api
+        options:
+          view_modes:
+            'entity:node':
+              custom_page: default
+              discussion: default
+              document: default
+              event: default
+              news: default
+              newsletter: default
+              tallinn_report: default
+              video: default
+            'entity:rdf_entity':
+              asset_distribution: default
+              asset_release: default
+              collection: default
+              licence: default
+              solution: view_mode_tile
+              spdx_licence: default
+            'entity:user':
+              user: default
+      query:
+        type: search_api_query
+        options:
+          bypass_access: false
+          skip_access: false
+          preserve_facet_query_args: false
+      relationships:
+        field_is_eif_recommendation:
+          id: field_is_eif_recommendation
+          table: search_api_datasource_published_entity_rdf_entity
+          field: field_is_eif_recommendation
+          relationship: none
+          group_type: group
+          admin_label: 'EIF Reference: Taxonomy term'
+          entity_type: rdf_entity
+          plugin_id: search_api
+          required: false
+          skip_access: false
+      header: {  }
+      footer: {  }
       display_extenders: {  }
     cache_metadata:
       max-age: -1
@@ -215,9 +215,9 @@ display:
         - 'config:search_api.index.published'
         - 'search_api_list:published'
   block_1:
-    display_plugin: block
     id: block_1
     display_title: Block
+    display_plugin: block
     position: 1
     display_options:
       display_extenders: {  }

@@ -22,87 +22,87 @@ third_party_settings:
         - spdx_licence_id
         - spdx_see_also
         - spdx_licence_text
+      label: 'Licence wrapper'
       parent_name: ''
+      region: content
       weight: 4
       format_type: html_element
       format_settings:
-        id: ''
         classes: ''
+        id: ''
         element: div
         show_label: false
         label_element: h3
         attributes: ''
         effect: none
         speed: fast
-      label: 'Licence wrapper'
-      region: content
 id: rdf_entity.licence.default
 targetEntityType: rdf_entity
 bundle: licence
 mode: default
 content:
   field_licence_description:
-    weight: 1
+    type: text_default
     label: hidden
     settings: {  }
     third_party_settings: {  }
-    type: text_default
+    weight: 1
     region: content
   field_licence_legal_type:
     type: entity_reference_label
+    label: above
+    settings:
+      link: false
+    third_party_settings:
+      template_suggestion:
+        template_suggestion: fieldset
     weight: 3
     region: content
-    label: above
-    settings:
-      link: false
-    third_party_settings:
-      template_suggestion:
-        template_suggestion: fieldset
   field_licence_spdx_licence:
-    weight: 5
+    type: entity_reference_label
     label: above
     settings:
       link: false
     third_party_settings:
       template_suggestion:
         template_suggestion: fieldset
-    type: entity_reference_label
+    weight: 5
     region: content
   field_licence_type:
-    weight: 2
+    type: entity_reference_label
     label: above
     settings:
       link: false
     third_party_settings:
       template_suggestion:
         template_suggestion: fieldset
-    type: entity_reference_label
+    weight: 2
     region: content
   label:
-    label: hidden
     type: string
-    weight: 0
+    label: hidden
     settings:
       link_to_entity: false
     third_party_settings:
       template_suggestion:
         template_suggestion: no_wrappers
+    weight: 0
     region: content
   spdx_licence_id:
+    settings: {  }
+    third_party_settings: {  }
     weight: 6
     region: content
+  spdx_licence_text:
     settings: {  }
     third_party_settings: {  }
-  spdx_licence_text:
     weight: 8
     region: content
+  spdx_see_also:
     settings: {  }
     third_party_settings: {  }
-  spdx_see_also:
     weight: 7
     region: content
-    settings: {  }
-    third_party_settings: {  }
 hidden:
   changed: true
   created: true

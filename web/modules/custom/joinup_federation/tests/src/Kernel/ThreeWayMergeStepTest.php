@@ -52,7 +52,7 @@ class ThreeWayMergeStepTest extends StepTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
 
     // Create the language vocabulary. and mapping.
@@ -191,7 +191,7 @@ class ThreeWayMergeStepTest extends StepTestBase {
   /**
    * {@inheritdoc}
    */
-  public function tearDown() {
+  public function tearDown(): void {
     $storage = $this->container->get('entity_type.manager')->getStorage('rdf_entity');
     $storage->delete($storage->loadMultiple([
       'http://asset',

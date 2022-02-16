@@ -17,8 +17,8 @@ plugin: 'system_menu_block:footer-follow-us'
 settings:
   id: 'system_menu_block:footer-follow-us'
   label: 'Follow us'
-  provider: system
   label_display: visible
+  provider: system
   level: 1
   depth: 0
   expand_all_items: false

@@ -26,54 +26,54 @@ bundle: video
 mode: default
 content:
   body:
-    label: hidden
     type: text_default
-    weight: 1
+    label: hidden
     settings: {  }
     third_party_settings: {  }
+    weight: 1
     region: content
   field_comments:
-    weight: 4
+    type: comment_default
     label: above
     settings:
       view_mode: default
       pager_id: 0
     third_party_settings: {  }
-    type: comment_default
+    weight: 4
     region: content
   field_video:
-    weight: 0
+    type: video_embed_field_video
     label: hidden
     settings:
+      autoplay: false
       responsive: true
       width: 854
       height: 480
-      autoplay: false
     third_party_settings:
       template_suggestion:
         template_suggestion: fieldset_wrapper
-    type: video_embed_field_video
+    weight: 0
     region: content
   field_video_spatial_coverage:
-    weight: 2
+    type: entity_reference_label
     label: hidden
     settings:
       link: true
     third_party_settings: {  }
-    type: entity_reference_label
+    weight: 2
     region: content
   report:
+    type: link
     label: hidden
-    weight: 3
     settings:
       trim_length: 80
       url_only: false
       url_plain: false
       rel: ''
       target: ''
-    region: content
     third_party_settings: {  }
-    type: link
+    weight: 3
+    region: content
 hidden:
   field_keywords: true
   langcode: true

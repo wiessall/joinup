@@ -13,12 +13,12 @@ bundle: rdf_graph
 mode: default
 content:
   field_rdf_file:
+    type: file_generic
     weight: 1
+    region: content
     settings:
       progress_indicator: throbber
     third_party_settings: {  }
-    type: file_generic
-    region: content
   label:
     type: string_textfield
     weight: 0
