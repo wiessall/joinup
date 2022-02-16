@@ -304,7 +304,7 @@ class ReleaseRdfSubscriber extends NotificationSubscriberBase implements EventSu
     $arguments = parent::generateArguments($entity);
     /** @var \Drupal\user\UserInterface $actor */
     $actor = $this->entityTypeManager->getStorage('user')->load($this->currentUser->id());
-    $motivation = isset($this->entity->motivation) ? $this->entity->motivation : '';
+    $motivation = $this->entity->motivation ?? '';
     $arguments['@transition:motivation'] = $motivation;
     $arguments['@entity:field_isr_release_number'] = $entity->getVersion();
 

@@ -47,7 +47,7 @@ function search_api_arbitrary_facet_search_api_solr_query_alter(SolariumQueryInt
     foreach ($definition as $facet_identifier => $facet_attribute) {
       // Translate the field name to the index field name.
       $solr_field_name = $solr_field_names[$facet_attribute['field_name']];
-      $filter = search_api_arbitrary_facet_create_filter_query($solr_field_name, $facet_attribute['field_condition'], isset($facet_attribute['field_operator']) ? $facet_attribute['field_operator'] : NULL);
+      $filter = search_api_arbitrary_facet_create_filter_query($solr_field_name, $facet_attribute['field_condition'], $facet_attribute['field_operator'] ?? NULL);
       $facet->createQuery($facet_identifier, $filter, $excludes);
     }
   }
