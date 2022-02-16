@@ -56,6 +56,12 @@ commands:
       dir: ${joinup.files_private_dir}
     - task: mkdir
       dir: ${env.DRUPAL_FILE_TEMP_PATH}
+    # Handle a potential case where the repo has been shallow cloned. Typically,
+    # this happens in GitLab pipelines, where the repos are shallow cloned for
+    # performance reasons. A shallow clone repository prevents us to get the
+    # latest Git tag as no tags are available.
+    - task: exec
+      command: test "$(git rev-parse --is-shallow-repository)" = "false" || git fetch --unshallow
     - task: exec
       command: test "$(git tag)" = "" || git describe --tags | tr -d '\n' > ${joinup.site_dir}/VERSION.txt
 
