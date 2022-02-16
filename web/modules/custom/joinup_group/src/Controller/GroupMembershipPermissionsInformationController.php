@@ -6,6 +6,7 @@ namespace Drupal\joinup_group\Controller;
 
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Url;
+use Drupal\Core\Link;
 use Drupal\joinup_group\ContentCreationOptions;
 use Drupal\joinup_group\Entity\GroupInterface;
 
@@ -202,7 +203,6 @@ class GroupMembershipPermissionsInformationController extends ControllerBase {
         $this->t('Facilitator'),
         $this->t('Owner'),
       ],
-      '#attributes' => ['class' => ['form-table__member-permissions']],
     ];
 
     foreach ($permissions_info as $permission_info) {
@@ -210,36 +210,37 @@ class GroupMembershipPermissionsInformationController extends ControllerBase {
         $build['permissions'][] = [
           [
             '#plain_text' => $permission_info['description'],
-            '#wrapper_attributes' => [
-              'class' => ['form-table__cell__description'],
-            ],
           ],
           [
             '#plain_text' => $permission_info['permitted']['member'] ? '✓' : '',
-            '#wrapper_attributes' => ['class' => ['form-table__cell__data']],
           ],
           [
             '#plain_text' => $permission_info['permitted']['author'] ? '✓' : '',
-            '#wrapper_attributes' => ['class' => ['form-table__cell__data']],
           ],
           [
             '#plain_text' => $permission_info['permitted']['facilitator'] ? '✓' : '',
-            '#wrapper_attributes' => ['class' => ['form-table__cell__data']],
           ],
           [
             '#plain_text' => $permission_info['permitted']['owner'] ? '✓' : '',
-            '#wrapper_attributes' => ['class' => ['form-table__cell__data']],
           ],
         ];
       }
     }
 
-    $build['close'] = [
-      '#theme' => 'joinup_modal_close_button',
-      '#url' => Url::fromRoute('entity.rdf_entity.member_overview', [
-        'rdf_entity' => $rdf_entity->id(),
-      ]),
+    $options = [
+      'attributes' => [
+        'class' => [
+          'btn',
+          'btn-md',
+          'btn-outline-brand',
+        ],
+      ],
     ];
+    $url = Url::fromRoute('entity.rdf_entity.member_overview', [
+      'rdf_entity' => $rdf_entity->id()],
+       $options);
+    $link = Link::fromTextAndUrl($this->t('Got it'), $url);
+    $build['close'] = $link->toRenderable();
 
     return $build;
   }
