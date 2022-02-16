@@ -31,7 +31,8 @@ class JoinupEnvironmentCommands extends AbstractCommands {
       " PHP      {$php_version}\n" .
       " MySQL    {$this->mysqlVersion()} (or MariaDB, Percona Server, or equivalent)\n" .
       " Virtuoso {$this->virtuosoVersion()}\n" .
-      " Solr     {$this->solrVersion()}\n";
+      " Solr     {$this->solrVersion()}\n" .
+      " Joinup   {$this->joinupVersion()}\n";
   }
 
   /**
@@ -91,6 +92,15 @@ class JoinupEnvironmentCommands extends AbstractCommands {
       }
     }
     return $version;
+  }
+
+  protected function joinupVersion(): string {
+    $config = $this->getConfig();
+    $file = "{$config->get('joinup.site_dir')}/VERSION.txt";
+    if ($version = @file_get_contents($file)) {
+      return $version;
+    }
+    return '(version unknown)';
   }
 
 }
