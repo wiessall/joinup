@@ -1,9 +1,12 @@
+_core:
+  default_config_hash: 52CWcEcMD0WxvDTjONwtNpMR2DILJ9UUPn30tGa23co
 max_links: 2000
 cron_generate: true
 cron_generate_interval: 0
 generate_duration: 20000
 remove_duplicates: true
 skip_untranslated: true
+disable_language_hreflang: false
 xsl: false
 base_url: ''
 default_variant: default
@@ -22,6 +25,3 @@ excluded_languages:
 enabled_entity_types:
   - node
   - rdf_entity
-_core:
-  default_config_hash: 52CWcEcMD0WxvDTjONwtNpMR2DILJ9UUPn30tGa23co
-disable_language_hreflang: false

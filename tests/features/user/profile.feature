@@ -260,8 +260,8 @@ Feature: User profile
     And I fill in "Email" with "she@example.com"
     When I press "Save"
     Then I should see the following warning messages:
-      | warning messages                                                                                                 |
-      | Your updated email address needs to be validated. Further instructions have been sent to your new email address. |
+      | warning messages                                                                                    |
+      | You must confirm your email address. Further instructions have been sent to your new email address. |
     And the following email should have been sent:
       | recipient_mail | he@example.com                                                                                                          |
       | subject        | Joinup: Email change information for Caitlyn Jenner                                                                     |

@@ -18,13 +18,13 @@ plugin: 'views_block:eif_solutions-all'
 settings:
   id: 'views_block:eif_solutions-all'
   label: ''
-  provider: views
   label_display: '0'
+  provider: views
   views_label: ''
   items_per_page: none
 visibility:
   request_path:
     id: request_path
-    pages: /node/703013
     negate: false
     context_mapping: {  }
+    pages: /node/703013

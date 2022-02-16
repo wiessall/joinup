@@ -41,28 +41,26 @@ mode: view_mode_tile
 content:
   body:
     type: smart_trim
-    weight: 2
     label: hidden
     settings:
       trim_length: 50
       trim_type: chars
       trim_suffix: …
+      wrap_output: false
+      wrap_class: trimmed
       more_link: false
+      more_class: more-link
       more_text: More
       summary_handler: trim
       trim_options:
         text: false
-      more_class: more-link
-      wrap_output: false
-      wrap_class: trimmed
     third_party_settings:
       template_suggestion:
         template_suggestion: ''
+    weight: 2
     region: content
   field_event_date:
     type: daterange_default
-    weight: 3
-    region: content
     label: hidden
     settings:
       timezone_override: ''
@@ -71,23 +69,25 @@ content:
     third_party_settings:
       template_suggestion:
         template_suggestion: ''
+    weight: 3
+    region: content
   field_event_logo:
-    weight: 1
+    type: image
     label: hidden
     settings:
-      image_style: horizontal_medium_image
       image_link: content
+      image_style: horizontal_medium_image
     third_party_settings: {  }
-    type: image
+    weight: 1
     region: content
   field_short_title:
     type: string
-    weight: 0
-    region: content
     label: hidden
     settings:
       link_to_entity: false
     third_party_settings: {  }
+    weight: 0
+    region: content
 hidden:
   field_attachment: true
   field_comments: true

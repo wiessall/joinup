@@ -17,89 +17,23 @@ base_table: search_api_index_published
 base_field: search_api_id
 display:
   default:
-    display_plugin: default
     id: default
     display_title: Master
+    display_plugin: default
     position: 0
     display_options:
-      access:
-        type: none
-        options: {  }
-      cache:
-        type: search_api_tag
-        options: {  }
-      query:
-        type: search_api_query
-        options:
-          bypass_access: false
-          skip_access: false
-      exposed_form:
-        type: basic
-        options:
-          submit_button: Apply
-          reset_button: false
-          reset_button_label: Reset
-          exposed_sorts_label: 'Sort by'
-          expose_sort_order: true
-          sort_asc_label: Asc
-          sort_desc_label: Desc
-      pager:
-        type: full
-        options:
-          items_per_page: 12
-          offset: 0
-          id: 0
-          total_pages: null
-          expose:
-            items_per_page: false
-            items_per_page_label: 'Items per page'
-            items_per_page_options: '5, 10, 25, 50'
-            items_per_page_options_all: false
-            items_per_page_options_all_label: '- All -'
-            offset: false
-            offset_label: Offset
-          tags:
-            previous: '‹ Previous'
-            next: 'Next ›'
-            first: '« First'
-            last: 'Last »'
-          quantity: 9
-      style:
-        type: tiles
-        options:
-          row_class: ''
-          default_row_class: true
-          uses_fields: false
-      row:
-        type: search_api
-        options:
-          view_modes:
-            'entity:node':
-              custom_page: view_mode_tile
-              discussion: view_mode_tile
-              document: view_mode_tile
-              event: view_mode_tile
-              news: view_mode_tile
-              video: view_mode_tile
-            'entity:rdf_entity':
-              asset_distribution: default
-              asset_release: default
-              collection: view_mode_tile
-              contact_information: default
-              licence: default
-              owner: ''
-              solution: view_mode_tile
+      title: 'Keep up to date'
       fields:
         search_api_language:
+          id: search_api_language
           table: search_api_index_published
           field: search_api_language
-          id: search_api_language
-          entity_type: null
-          entity_field: null
-          plugin_id: search_api
           relationship: none
           group_type: group
           admin_label: ''
+          entity_type: null
+          entity_field: null
+          plugin_id: search_api
           label: ''
           exclude: false
           alter:
@@ -151,6 +85,7 @@ display:
           relationship: none
           group_type: group
           admin_label: ''
+          plugin_id: numeric
           label: ''
           exclude: true
           alter:
@@ -200,7 +135,6 @@ display:
           format_plural_string: !!binary MQNAY291bnQ=
           prefix: ''
           suffix: ''
-          plugin_id: numeric
         label:
           id: label
           table: search_api_datasource_published_entity_rdf_entity
@@ -208,6 +142,8 @@ display:
           relationship: none
           group_type: group
           admin_label: ''
+          entity_type: rdf_entity
+          plugin_id: search_api_field
           label: ''
           exclude: false
           alter:
@@ -316,8 +252,6 @@ display:
             link_to_item: false
             multi_type: separator
             multi_separator: ', '
-          entity_type: rdf_entity
-          plugin_id: search_api_field
         field_ar_description:
           id: field_ar_description
           table: search_api_index_published
@@ -325,6 +259,7 @@ display:
           relationship: none
           group_type: group
           admin_label: ''
+          plugin_id: search_api_field
           label: ''
           exclude: false
           alter:
@@ -432,7 +367,72 @@ display:
             link_to_item: false
             multi_type: separator
             multi_separator: ', '
-          plugin_id: search_api_field
+      pager:
+        type: full
+        options:
+          offset: 0
+          items_per_page: 12
+          total_pages: null
+          id: 0
+          tags:
+            next: 'Next ›'
+            previous: '‹ Previous'
+            first: '« First'
+            last: 'Last »'
+          expose:
+            items_per_page: false
+            items_per_page_label: 'Items per page'
+            items_per_page_options: '5, 10, 25, 50'
+            items_per_page_options_all: false
+            items_per_page_options_all_label: '- All -'
+            offset: false
+            offset_label: Offset
+          quantity: 9
+      exposed_form:
+        type: basic
+        options:
+          submit_button: Apply
+          reset_button: false
+          reset_button_label: Reset
+          exposed_sorts_label: 'Sort by'
+          expose_sort_order: true
+          sort_asc_label: Asc
+          sort_desc_label: Desc
+      access:
+        type: none
+        options: {  }
+      cache:
+        type: search_api_tag
+        options: {  }
+      empty: {  }
+      sorts:
+        published_at:
+          id: published_at
+          table: search_api_index_published
+          field: published_at
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: search_api
+          order: DESC
+          expose:
+            label: ''
+            field_identifier: published_at
+          exposed: false
+        entity_created:
+          id: entity_created
+          table: search_api_index_published
+          field: entity_created
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: search_api
+          order: DESC
+          expose:
+            label: ''
+            field_identifier: entity_created
+          exposed: false
+      arguments: {  }
       filters:
         entity_bundle:
           id: entity_bundle
@@ -441,6 +441,7 @@ display:
           relationship: none
           group_type: group
           admin_label: ''
+          plugin_id: search_api_string
           operator: '='
           value:
             min: ''
@@ -454,14 +455,14 @@ display:
             description: ''
             use_operator: false
             operator: ''
+            operator_limit_selection: false
+            operator_list: {  }
             identifier: ''
             required: false
             remember: false
             multiple: false
             remember_roles:
               authenticated: authenticated
-            operator_limit_selection: false
-            operator_list: {  }
           is_grouped: false
           group_info:
             label: ''
@@ -474,7 +475,6 @@ display:
             default_group: All
             default_group_multiple: {  }
             group_items: {  }
-          plugin_id: search_api_string
         entity_bundle_1:
           id: entity_bundle_1
           table: search_api_index_published
@@ -482,6 +482,7 @@ display:
           relationship: none
           group_type: group
           admin_label: ''
+          plugin_id: search_api_string
           operator: '='
           value:
             min: ''
@@ -495,14 +496,14 @@ display:
             description: ''
             use_operator: false
             operator: ''
+            operator_limit_selection: false
+            operator_list: {  }
             identifier: ''
             required: false
             remember: false
             multiple: false
             remember_roles:
               authenticated: authenticated
-            operator_limit_selection: false
-            operator_list: {  }
           is_grouped: false
           group_info:
             label: ''
@@ -515,7 +516,6 @@ display:
             default_group: All
             default_group_multiple: {  }
             group_items: {  }
-          plugin_id: search_api_string
         entity_bundle_2:
           id: entity_bundle_2
           table: search_api_index_published
@@ -523,6 +523,7 @@ display:
           relationship: none
           group_type: group
           admin_label: ''
+          plugin_id: search_api_string
           operator: '='
           value:
             min: ''
@@ -536,14 +537,14 @@ display:
             description: ''
             use_operator: false
             operator: ''
+            operator_limit_selection: false
+            operator_list: {  }
             identifier: ''
             required: false
             remember: false
             multiple: false
             remember_roles:
               authenticated: authenticated
-            operator_limit_selection: false
-            operator_list: {  }
           is_grouped: false
           group_info:
             label: ''
@@ -556,7 +557,6 @@ display:
             default_group: All
             default_group_multiple: {  }
             group_items: {  }
-          plugin_id: search_api_string
         entity_bundle_3:
           id: entity_bundle_3
           table: search_api_index_published
@@ -564,6 +564,7 @@ display:
           relationship: none
           group_type: group
           admin_label: ''
+          plugin_id: search_api_string
           operator: '='
           value:
             min: ''
@@ -577,14 +578,14 @@ display:
             description: ''
             use_operator: false
             operator: ''
+            operator_limit_selection: false
+            operator_list: {  }
             identifier: ''
             required: false
             remember: false
             multiple: false
             remember_roles:
               authenticated: authenticated
-            operator_limit_selection: false
-            operator_list: {  }
           is_grouped: false
           group_info:
             label: ''
@@ -597,46 +598,45 @@ display:
             default_group: All
             default_group_multiple: {  }
             group_items: {  }
-          plugin_id: search_api_string
-      sorts:
-        published_at:
-          id: published_at
-          table: search_api_index_published
-          field: published_at
-          relationship: none
-          group_type: group
-          admin_label: ''
-          order: DESC
-          exposed: false
-          expose:
-            label: ''
-            identifier: published_at
-          plugin_id: search_api
-        entity_created:
-          id: entity_created
-          table: search_api_index_published
-          field: entity_created
-          relationship: none
-          group_type: group
-          admin_label: ''
-          order: DESC
-          exposed: false
-          expose:
-            label: ''
-            identifier: entity_created
-          plugin_id: search_api
-      title: 'Keep up to date'
-      header: {  }
-      footer: {  }
-      empty: {  }
-      relationships: {  }
-      arguments: {  }
-      display_extenders: {  }
-      show_admin_links: false
       filter_groups:
         operator: AND
         groups:
           1: OR
+      style:
+        type: tiles
+        options:
+          row_class: ''
+          default_row_class: true
+          uses_fields: false
+      row:
+        type: search_api
+        options:
+          view_modes:
+            'entity:node':
+              custom_page: view_mode_tile
+              discussion: view_mode_tile
+              document: view_mode_tile
+              event: view_mode_tile
+              news: view_mode_tile
+              video: view_mode_tile
+            'entity:rdf_entity':
+              asset_distribution: default
+              asset_release: default
+              collection: view_mode_tile
+              contact_information: default
+              licence: default
+              owner: ''
+              solution: view_mode_tile
+      query:
+        type: search_api_query
+        options:
+          bypass_access: false
+          skip_access: false
+      relationships: {  }
+      show_admin_links: false
+      header: {  }
+      footer: {  }
+      display_extenders: {  }
     cache_metadata:
       max-age: -1
       contexts:
@@ -649,9 +649,9 @@ display:
       tags:
         - 'config:search_api.index.published'
   page_1:
-    display_plugin: page
     id: page_1
     display_title: Page
+    display_plugin: page
     position: 1
     display_options:
       display_extenders: {  }
@@ -660,11 +660,11 @@ display:
         type: normal
         title: 'Keep up to date'
         description: 'KEEP UP TO DATE items, like news, events, discussions and documents can be included in both Collections and Solutions.'
-        expanded: false
-        parent: ''
         weight: -47
-        context: '0'
+        expanded: false
         menu_name: main
+        parent: ''
+        context: '0'
     cache_metadata:
       max-age: -1
       contexts:

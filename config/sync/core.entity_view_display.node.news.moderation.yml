@@ -32,31 +32,31 @@ bundle: news
 mode: moderation
 content:
   body:
-    label: hidden
     type: smart_trim
-    weight: 2
+    label: hidden
     settings:
       trim_length: 600
       trim_type: chars
       trim_suffix: …
+      wrap_output: false
+      wrap_class: trimmed
       more_link: false
+      more_class: more-link
       more_text: More
       summary_handler: trim
       trim_options:
         text: false
-      more_class: more-link
-      wrap_output: false
-      wrap_class: trimmed
     third_party_settings:
       template_suggestion:
         template_suggestion: ''
+    weight: 2
     region: content
   field_state:
-    weight: 1
+    type: list_default
     label: inline
     settings: {  }
     third_party_settings: {  }
-    type: list_default
+    weight: 1
     region: content
 hidden:
   field_attachment: true

@@ -4,10 +4,10 @@ status: true
 dependencies: {  }
 _core:
   default_config_hash: '-nIkYxWUo-HG9QjCVS8YzhERsBGez933v1JCbiKxIgA'
-name: Distribution
-rid: asset_distribution
-description: ''
 label_singular: distribution
 label_plural: distributions
 label_count:
   no_count_capitalize: !!binary RGlzdHJpYnV0aW9uA0Rpc3RyaWJ1dGlvbnM=
+name: Distribution
+rid: asset_distribution
+description: ''

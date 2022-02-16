@@ -13,12 +13,12 @@ bundle: content_listing
 mode: default
 content:
   field_content_listing:
+    type: search_api_field_custom_page
     weight: 0
+    region: content
     settings:
       query_builder: true
     third_party_settings: {  }
-    type: search_api_field_custom_page
-    region: content
 hidden:
   created: true
   status: true

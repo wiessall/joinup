@@ -19,19 +19,19 @@ plugin: proposed_entities
 settings:
   id: proposed_entities
   label: 'Rdf entities in proposed state'
-  provider: joinup_core
   label_display: visible
+  provider: joinup_core
 visibility:
   request_route:
     id: request_route
-    routes:
-      - dashboard.page
     negate: false
     context_mapping: {  }
+    routes:
+      - dashboard.page
   user_role:
     id: user_role
-    roles:
-      moderator: moderator
     negate: false
     context_mapping:
       user: '@user.current_user_context:current_user'
+    roles:
+      moderator: moderator

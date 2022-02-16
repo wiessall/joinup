@@ -428,7 +428,7 @@ function joinup_group_form_views_exposed_form_alter(&$form, FormStateInterface $
     $view->executeDisplay($display_id, $arguments);
     // Apparently it is not guaranteed that the `total_rows` will be populated.
     // @see \Drupal\views\Plugin\views\area\Result::render()
-    return isset($view->total_rows) ? $view->total_rows : count($view->result);
+    return $view->total_rows ?? count($view->result);
   };
 
   /** @var \Drupal\views\Plugin\views\filter\StringFilter $filter */

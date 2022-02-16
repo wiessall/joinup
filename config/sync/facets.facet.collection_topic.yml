@@ -4,12 +4,18 @@ status: true
 dependencies: {  }
 id: collection_topic
 name: Topic
-url_alias: collection_topic
 weight: -2
 min_count: 1
-show_only_one_result: true
-field_identifier: topic
+url_alias: collection_topic
 facet_source_id: 'search_api_field:rdf_entity.field_collection_content'
+field_identifier: topic
+query_operator: or
+hard_limit: 0
+exclude: false
+use_hierarchy: false
+keep_hierarchy_parents_active: false
+expand_hierarchy: false
+enable_parent_when_child_gets_disabled: true
 widget:
   type: links_inline
   config:
@@ -17,14 +23,11 @@ widget:
     all_text: 'all topics'
     prefix_text: 'About:'
     suffix_text: ''
-query_operator: or
-use_hierarchy: false
-keep_hierarchy_parents_active: false
-expand_hierarchy: false
-enable_parent_when_child_gets_disabled: true
-hard_limit: 0
-exclude: false
+empty_behavior:
+  behavior: none
 only_visible_when_facet_source_is_visible: true
+show_only_one_result: true
+show_title: null
 processor_configs:
   active_widget_order:
     processor_id: active_widget_order
@@ -62,6 +65,3 @@ processor_configs:
       pre_query: -10
       build: -1
     settings: {  }
-empty_behavior:
-  behavior: none
-show_title: null
