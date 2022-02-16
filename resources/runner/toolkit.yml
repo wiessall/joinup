@@ -64,6 +64,8 @@ commands:
       command: test "$(git rev-parse --is-shallow-repository)" = "false" || git fetch --unshallow
     - task: exec
       command: test "$(git tag)" = "" || git describe --tags | tr -d '\n' > ${joinup.site_dir}/VERSION.txt
+    - task: exec
+      command: 'echo "Detected Joinup version: $(<${joinup.site_dir}/VERSION.txt)"'
 
   # Overrides toolkit:install-clean.
   toolkit:install-clean:
