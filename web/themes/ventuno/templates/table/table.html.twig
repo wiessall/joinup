@@ -111,9 +111,9 @@
 {%- endif -%}
 {% if _table_head is not empty %}
   <thead>
-  {% if _table_head.cells is not empty and _table_head.cells is iterable %}
+  {% if _table_head is not empty and _table_head is iterable %}
     <tr>
-    {% for _cell in _table_head.cells %}
+    {% for _cell in _table_head %}
       <td
       {% if _cell.col_span is not empty %}
         colspan={{ _cell.col_span }}
