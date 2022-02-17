@@ -81,3 +81,5 @@ backend_config:
     - request_dispatcher_httpcaching_default_7_0_0
   rows: 2147483630
   index_single_documents_fallback_count: 10
+  index_empty_text_fields: false
+  suppress_missing_languages: true
