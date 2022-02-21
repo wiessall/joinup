@@ -19,18 +19,18 @@ plugin: 'views_exposed_filter_block:search-page_1'
 settings:
   id: 'views_exposed_filter_block:search-page_1'
   label: ''
-  provider: views
   label_display: '0'
+  provider: views
   views_label: ''
 visibility:
   request_route:
     id: request_route
+    negate: true
+    context_mapping: {  }
     routes:
       - view.search.page_1
-    negate: true
-    context_mapping: {  }
   request_path:
     id: request_path
-    pages: '<front>'
     negate: true
     context_mapping: {  }
+    pages: '<front>'
