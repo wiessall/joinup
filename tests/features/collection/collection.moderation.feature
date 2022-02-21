@@ -215,8 +215,10 @@ Feature: Collection moderation
     # Propose a collection, filling in the required fields.
     When I go to the propose collection form
     Then the "Main fields" tab should be active
-    And the "Main fields" tab summary should be "Contains all the fields to be mandatorily filled to create a collection"
-    And the "Additional fields" tab summary should be "Contains all optional fields providing additional information on the collection"
+    # @todo The summaries are no longer visible since we migrated to Drupal 9.
+    #   Restore these when ISAICP-6963 is fixed.
+    # And the "Main fields" tab summary should be "Contains all the fields to be mandatorily filled to create a collection"
+    # And the "Additional fields" tab summary should be "Contains all optional fields providing additional information on the collection"
     And I fill in the following:
       | Title  | Spectres in fog        |
       # Contact information data.

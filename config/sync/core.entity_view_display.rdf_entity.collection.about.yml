@@ -38,70 +38,68 @@ third_party_settings:
         - field_ar_closed
         - field_ar_content_creation
         - field_ar_moderation
+      label: Moderation
       parent_name: ''
+      region: content
       weight: 4
       format_type: html_element
       format_settings:
-        id: ''
         classes: ''
+        id: ''
         element: div
         show_label: true
         label_element: h3
         attributes: ''
         effect: none
         speed: fast
-      label: Moderation
-      region: content
     group_owner_contact_information:
       children:
         - field_ar_owner
         - field_ar_contact_information
+      label: 'Owner/Contact Information'
       parent_name: ''
+      region: content
       weight: 3
       format_type: html_element
       format_settings:
-        id: ''
         classes: ''
+        id: ''
         element: div
         show_label: true
         label_element: h3
         attributes: ''
         effect: none
         speed: fast
-      label: 'Owner/Contact Information'
-      region: content
 id: rdf_entity.collection.about
 targetEntityType: rdf_entity
 bundle: collection
 mode: about
 content:
   field_ar_abstract:
-    weight: 0
+    type: text_default
     label: hidden
     settings: {  }
     third_party_settings:
       template_suggestion:
         template_suggestion: full_border
-    type: text_default
+    weight: 0
     region: content
   field_ar_access_url:
-    weight: 2
+    type: link
     label: above
     settings:
       trim_length: 80
-      target: _blank
       url_only: false
       url_plain: false
       rel: '0'
+      target: _blank
     third_party_settings:
       template_suggestion:
         template_suggestion: fieldset
-    type: link
+    weight: 2
     region: content
   field_ar_closed:
     type: boolean
-    weight: 0
-    region: content
     label: hidden
     settings:
       format: default
@@ -110,8 +108,10 @@ content:
     third_party_settings:
       template_suggestion:
         template_suggestion: fieldset
+    weight: 0
+    region: content
   field_ar_contact_information:
-    weight: 5
+    type: entity_reference_entity_view
     label: above
     settings:
       view_mode: about
@@ -119,36 +119,36 @@ content:
     third_party_settings:
       template_suggestion:
         template_suggestion: two_columns
-    type: entity_reference_entity_view
+    weight: 5
     region: content
   field_ar_content_creation:
     type: list_default
-    weight: 1
-    region: content
     label: hidden
     settings: {  }
     third_party_settings:
       template_suggestion:
         template_suggestion: fieldset
-  field_ar_description:
     weight: 1
+    region: content
+  field_ar_description:
+    type: text_default
     label: hidden
     settings: {  }
     third_party_settings: {  }
-    type: text_default
+    weight: 1
     region: content
   field_ar_moderation:
     type: boolean
-    weight: 2
-    region: content
     label: hidden
     settings:
       format: default
       format_custom_false: ''
       format_custom_true: ''
     third_party_settings: {  }
+    weight: 2
+    region: content
   field_ar_owner:
-    weight: 4
+    type: entity_reference_entity_view
     label: above
     settings:
       view_mode: about
@@ -156,7 +156,7 @@ content:
     third_party_settings:
       template_suggestion:
         template_suggestion: two_columns
-    type: entity_reference_entity_view
+    weight: 4
     region: content
 hidden:
   changed: true
@@ -181,4 +181,5 @@ hidden:
   rdf_entity_field_collection_content_inline_facets: true
   rdf_entity_field_collection_content_top: true
   read_more: true
+  search_api_excerpt: true
   solutions: true

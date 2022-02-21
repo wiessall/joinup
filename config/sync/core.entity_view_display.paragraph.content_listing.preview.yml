@@ -10,8 +10,8 @@ dependencies:
     - layout_builder
 third_party_settings:
   layout_builder:
-    allow_custom: false
     enabled: false
+    allow_custom: false
 id: paragraph.content_listing.preview
 targetEntityType: paragraph
 bundle: content_listing
@@ -20,3 +20,4 @@ content: {  }
 hidden:
   field_content_listing: true
   paragraph_field_content_listing_top: true
+  search_api_excerpt: true

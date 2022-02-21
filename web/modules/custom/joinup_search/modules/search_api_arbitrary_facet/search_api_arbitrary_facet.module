@@ -10,6 +10,7 @@ declare(strict_types = 1);
 use Drupal\search_api\IndexInterface;
 use Drupal\search_api\Query\QueryInterface as SearchApiQueryInterface;
 use Drupal\search_api\Query\ResultSetInterface;
+use Solarium\Component\Facet\FacetInterface;
 use Solarium\Core\Query\QueryInterface as SolariumQueryInterface;
 use Solarium\QueryType\Select\Result\Result;
 
@@ -25,6 +26,14 @@ function search_api_arbitrary_facet_search_api_solr_query_alter(SolariumQueryInt
   $facet_set = $solarium_query->getFacetSet();
 
   foreach ($query->getOption('search_api_arbitrary_facet', []) as $facet_name => $options) {
+    // Don't overwrite facets that already exist. The latest version of Solarium
+    // throws an exception if we do this.
+    // @todo This hook is being called twice by SearchApiSolrBackend::search().
+    //   Replace it by either PreQueryEvent or PostConvertedQueryEvent. Then we
+    //   no longer need this workaround.
+    if ($facet_set->getFacet($facet_name) instanceof FacetInterface) {
+      continue;
+    }
     $facet = $facet_set->createFacetMultiQuery($facet_name);
 
     /** @var \Drupal\search_api_arbitrary_facet\Plugin\ArbitraryFacetInterface $plugin_id */
@@ -32,16 +41,14 @@ function search_api_arbitrary_facet_search_api_solr_query_alter(SolariumQueryInt
     $definition = $plugin->getFacetDefinition();
     $solr_field_names = joinup_search_fieldnames_from_index($query->getIndex());
 
+    // For "OR" facets, add the expected tag for exclusion.
+    $excludes = isset($options['operator']) && strtolower($options['operator']) === 'or' ? ["arbitrary:$facet_name"] : [];
+
     foreach ($definition as $facet_identifier => $facet_attribute) {
       // Translate the field name to the index field name.
       $solr_field_name = $solr_field_names[$facet_attribute['field_name']];
-      $filter = search_api_arbitrary_facet_create_filter_query($solr_field_name, $facet_attribute['field_condition'], isset($facet_attribute['field_operator']) ? $facet_attribute['field_operator'] : NULL);
-      $facet->createQuery($facet_identifier, $filter);
-    }
-
-    // For "OR" facets, add the expected tag for exclusion.
-    if (isset($options['operator']) && strtolower($options['operator']) === 'or') {
-      $facet->setExcludes(['arbitrary:' . $facet_name]);
+      $filter = search_api_arbitrary_facet_create_filter_query($solr_field_name, $facet_attribute['field_condition'], $facet_attribute['field_operator'] ?? NULL);
+      $facet->createQuery($facet_identifier, $filter, $excludes);
     }
   }
 }

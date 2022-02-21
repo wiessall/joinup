@@ -23,6 +23,7 @@ use Drupal\image\Plugin\Field\FieldType\ImageItem;
 use Drupal\joinup\HtmlManipulator;
 use Drupal\joinup\Traits\AntibotTrait;
 use Drupal\joinup\Traits\BrowserCapabilityDetectionTrait;
+use Drupal\joinup\Traits\BrowserWindowTrait;
 use Drupal\joinup\Traits\ContextualLinksTrait;
 use Drupal\joinup\Traits\EntityTrait;
 use Drupal\joinup\Traits\MaterialDesignTrait;
@@ -48,6 +49,7 @@ class FeatureContext extends RawDrupalContext implements SnippetAcceptingContext
 
   use AntibotTrait;
   use BrowserCapabilityDetectionTrait;
+  use BrowserWindowTrait;
   use ContextualLinksTrait;
   use EntityTrait;
   use MaterialDesignTrait;
@@ -898,6 +900,7 @@ class FeatureContext extends RawDrupalContext implements SnippetAcceptingContext
       return;
     }
 
+    $this->scrollToTop();
     $this->findVerticalTab($tab)->clickLink($tab);
   }
 

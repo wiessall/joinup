@@ -12,17 +12,17 @@ third_party_settings:
   geocoder_field:
     method: geocode
     weight: 0
-    hidden: false
+    field: field_location
     disabled: false
+    hidden: false
     providers:
       - webtools_geocoding
     dumper: wkt
+    delta_handling: default
     failure:
       handling: preserve
       status_message: true
       log: true
-    field: field_location
-    delta_handling: default
 id: node.event.field_event_coordinates
 field_name: field_event_coordinates
 entity_type: node

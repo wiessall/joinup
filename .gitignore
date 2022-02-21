@@ -35,6 +35,7 @@
 /phpcs.xml
 /runner.yml
 /web/sites/default/services.yml
+/.phpunit.result.cache
 
 # Ignore compiled CSS.
 /web/themes/joinup/css

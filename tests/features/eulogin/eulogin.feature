@@ -226,7 +226,7 @@ Feature: Log in through EU Login
     And I fill in "Email" with "jcvd@gmail.com"
     And I wait for the spam protection time limit to pass
     And I press the "Submit" button
-    Then I should see the success message "Further instructions have been sent to your email address."
+    Then I should see the success message "If jcvd@gmail.com is a valid account, an email will be sent with instructions to reset your password."
 
     When I go to the one time sign in page of the user "jclocal"
     And I fill in "Password" with "Cœur-de-lion-123!"

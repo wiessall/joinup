@@ -56,20 +56,20 @@ third_party_settings:
   field_group:
     group_solution_abstract_wrapper:
       children: {  }
+      label: 'Abstract wrapper'
       parent_name: ''
+      region: hidden
       weight: 5
       format_type: html_element
       format_settings:
-        id: ''
         classes: ''
+        id: ''
         element: div
         show_label: false
         label_element: h3
         attributes: ''
         effect: none
         speed: fast
-      label: 'Abstract wrapper'
-      region: hidden
 id: rdf_entity.solution.compact
 targetEntityType: rdf_entity
 bundle: solution
@@ -77,23 +77,23 @@ mode: compact
 content:
   field_is_logo:
     type: image
-    weight: 0
-    region: content
     label: hidden
     settings:
-      image_style: logo
       image_link: ''
+      image_style: logo
     third_party_settings:
       template_suggestion:
         template_suggestion: no_wrappers
+    weight: 0
+    region: content
   label:
     type: string
-    weight: 1
-    region: content
     label: hidden
     settings:
       link_to_entity: false
     third_party_settings: {  }
+    weight: 1
+    region: content
 hidden:
   changed: true
   collections: true
@@ -146,5 +146,6 @@ hidden:
   read_more: true
   related_solutions: true
   releases_overview: true
+  search_api_excerpt: true
   share_link: true
   solution_subscribe: true
