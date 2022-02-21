@@ -36,20 +36,20 @@ third_party_settings:
         - field_ar_abstract
         - field_ar_description
         - read_more
+      label: 'Abstract wrapper'
       parent_name: ''
+      region: content
       weight: 1
       format_type: html_element
       format_settings:
+        classes: ''
+        id: ''
         element: div
         show_label: false
         label_element: h3
         attributes: ''
         effect: none
         speed: fast
-        id: ''
-        classes: ''
-      label: 'Abstract wrapper'
-      region: content
 id: rdf_entity.collection.default
 targetEntityType: rdf_entity
 bundle: collection
@@ -57,76 +57,76 @@ mode: default
 content:
   field_ar_abstract:
     type: smart_trim
-    weight: 2
-    region: content
     label: hidden
     settings:
       trim_length: 500
       trim_type: chars
       trim_suffix: …
-      wrap_class: trimmed
-      more_text: More
-      more_class: more-link
       wrap_output: false
+      wrap_class: trimmed
       more_link: false
+      more_class: more-link
+      more_text: More
+      summary_handler: full
       trim_options:
         text: false
         trim_zero: false
-      summary_handler: full
     third_party_settings:
       template_suggestion:
         template_suggestion: p_wrapper
+    weight: 2
+    region: content
   field_ar_description:
     type: smart_trim
-    weight: 3
-    region: content
     label: hidden
     settings:
       trim_length: 500
       trim_type: chars
       trim_suffix: …
+      wrap_output: false
       wrap_class: trimmed
-      more_text: More
+      more_link: false
       more_class: more-link
+      more_text: More
+      summary_handler: full
       trim_options:
         text: true
         trim_zero: false
-      wrap_output: false
-      more_link: false
-      summary_handler: full
     third_party_settings:
       template_suggestion:
         template_suggestion: p_wrapper
+    weight: 3
+    region: content
   field_collection_content:
-    weight: 4
+    type: search_api_field
     label: above
     settings: {  }
     third_party_settings: {  }
-    type: search_api_field
+    weight: 4
     region: content
   label:
-    label: hidden
     type: string
-    weight: 0
+    label: hidden
     settings:
       link_to_entity: false
     third_party_settings: {  }
+    weight: 0
     region: content
   rdf_entity_field_collection_content_inline_facets:
+    settings: {  }
+    third_party_settings: {  }
     weight: 3
     region: content
+  rdf_entity_field_collection_content_top:
     settings: {  }
     third_party_settings: {  }
-  rdf_entity_field_collection_content_top:
     weight: 2
     region: content
+  read_more:
     settings: {  }
     third_party_settings: {  }
-  read_more:
     weight: 4
     region: content
-    settings: {  }
-    third_party_settings: {  }
 hidden:
   changed: true
   created: true
@@ -151,4 +151,5 @@ hidden:
   last_update: true
   members: true
   og_group: true
+  search_api_excerpt: true
   solutions: true

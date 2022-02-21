@@ -11,27 +11,34 @@ _core:
   default_config_hash: D3zhtiNWoA8enWLhp1GS-yzOg7XkfCnnY0KNTOg1ZN4
 id: solution_my_content
 name: 'My content (Solution)'
-url_alias: solution_my_content
 weight: 0
 min_count: 1
-show_only_one_result: true
-field_identifier: id
+url_alias: solution_my_content
 facet_source_id: 'search_api:views_page__solutions__page_1'
+field_identifier: id
+query_operator: or
+hard_limit: 5
+exclude: false
+use_hierarchy: false
+keep_hierarchy_parents_active: false
+hierarchy:
+  type: taxonomy
+  config: {  }
+expand_hierarchy: false
+enable_parent_when_child_gets_disabled: true
 widget:
   type: links_inline
   config:
     show_numbers: true
+    arbitrary_facet_plugin: my_solutions
     all_text: 'All solutions'
     prefix_text: ''
     suffix_text: ''
-    arbitrary_facet_plugin: my_solutions
-query_operator: or
-use_hierarchy: false
-expand_hierarchy: false
-enable_parent_when_child_gets_disabled: true
-hard_limit: 5
-exclude: false
+empty_behavior:
+  behavior: none
 only_visible_when_facet_source_is_visible: true
+show_only_one_result: true
+show_title: false
 processor_configs:
   active_widget_order:
     processor_id: active_widget_order
@@ -57,6 +64,3 @@ processor_configs:
       pre_query: -10
       build: -10
     settings: {  }
-empty_behavior:
-  behavior: none
-show_title: false

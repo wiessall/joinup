@@ -31,37 +31,38 @@ third_party_settings:
     group_references:
       children:
         - field_news_source_url
+      label: References
       parent_name: ''
+      region: hidden
       weight: 4
       format_type: html_element
       format_settings:
-        id: ''
         classes: ''
+        id: ''
         element: div
         show_label: true
         label_element: h3
         attributes: ''
         effect: none
         speed: fast
-      label: References
-      region: hidden
   layout_builder:
-    allow_custom: false
     enabled: true
+    allow_custom: false
     sections:
       -
         layout_id: layout_onecol
         layout_settings:
           label: ''
+          context_mapping: {  }
         components:
           853719f6-62e6-4f7c-bbb0-88721c6ebba5:
             uuid: 853719f6-62e6-4f7c-bbb0-88721c6ebba5
             region: content
             configuration:
+              id: 'field_block:node:news:published_at'
               label_display: '0'
               context_mapping:
                 entity: layout_builder.entity
-              id: 'field_block:node:news:published_at'
               formatter:
                 type: timestamp
                 label: hidden
@@ -72,6 +73,7 @@ third_party_settings:
                 third_party_settings:
                   template_suggestion:
                     template_suggestion: ''
+            weight: -8
             additional:
               component_attributes:
                 block_attributes:
@@ -89,26 +91,26 @@ third_party_settings:
                   class: ''
                   style: ''
                   data: ''
-            weight: -8
           10c28c1a-03f9-4ac8-a5b8-ed68b2dd4c58:
             uuid: 10c28c1a-03f9-4ac8-a5b8-ed68b2dd4c58
             region: content
             configuration:
               id: 'field_block:node:news:body'
               label: Content
-              provider: layout_builder
               label_display: '0'
+              provider: layout_builder
+              context_mapping:
+                entity: layout_builder.entity
+                view_mode: view_mode
               formatter:
-                label: hidden
                 type: joinup_html_stripper_stripped
+                label: hidden
                 settings:
                   trim_length: 230
                 third_party_settings:
                   template_suggestion:
                     template_suggestion: ''
-              context_mapping:
-                entity: layout_builder.entity
-                view_mode: view_mode
+            weight: -9
             additional:
               component_attributes:
                 block_attributes:
@@ -126,19 +128,18 @@ third_party_settings:
                   class: ''
                   style: ''
                   data: ''
-            weight: -9
           e9a340ab-04be-4e59-9b31-6bc58f3b1473:
             uuid: e9a340ab-04be-4e59-9b31-6bc58f3b1473
             region: content
             configuration:
               id: 'extra_field_block:node:news:read_more'
               label: 'Read more'
-              provider: layout_builder
               label_display: '0'
+              provider: layout_builder
               context_mapping:
                 entity: layout_builder.entity
-            additional: {  }
             weight: -7
+            additional: {  }
         third_party_settings: {  }
 id: node.news.explore_item
 targetEntityType: node
@@ -146,16 +147,14 @@ bundle: news
 mode: explore_item
 content:
   body:
-    label: hidden
     type: text_default
-    weight: 0
+    label: hidden
     settings: {  }
     third_party_settings: {  }
+    weight: 0
     region: content
   published_at:
     type: timestamp
-    weight: 1
-    region: content
     label: hidden
     settings:
       date_format: custom
@@ -164,11 +163,13 @@ content:
     third_party_settings:
       template_suggestion:
         template_suggestion: ''
-  read_more:
-    weight: 2
+    weight: 1
     region: content
+  read_more:
     settings: {  }
     third_party_settings: {  }
+    weight: 2
+    region: content
 hidden:
   field_attachment: true
   field_comments: true
@@ -186,4 +187,5 @@ hidden:
   links: true
   og_audience: true
   report: true
+  search_api_excerpt: true
   share_link: true

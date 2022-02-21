@@ -1,7 +1,52 @@
 uuid: 4ebf959f-384f-426d-9a29-5116eff253e5
 langcode: en
 status: true
-dependencies: {  }
+dependencies:
+  config:
+    - media.type.collection_banner
+    - media.type.collection_logo
+    - media.type.event_logo
+    - media.type.news_logo
+    - media.type.solution_banner
+    - media.type.solution_logo
+    - node.type.custom_page
+    - node.type.discussion
+    - node.type.document
+    - node.type.glossary
+  module:
+    - asset_distribution
+    - comment
+    - contact_form
+    - dashboard
+    - entity_legal
+    - entityqueue
+    - field_permissions
+    - joinup
+    - joinup_core
+    - joinup_featured
+    - joinup_group
+    - joinup_licence
+    - joinup_news
+    - joinup_newsletter
+    - joinup_pipeline_log
+    - joinup_search
+    - joinup_subscription
+    - media
+    - menu_admin_per_menu
+    - meta_entity
+    - moderation
+    - node
+    - og
+    - paragraphs_type_permissions
+    - pipeline
+    - rdf_draft
+    - rdf_entity
+    - site_alert
+    - solution
+    - state_machine_permissions
+    - tallinn
+    - toolbar
+    - view_unpublished
 id: moderator
 label: Moderator
 weight: 3

@@ -6,8 +6,8 @@ namespace Drupal\asset_release\ContextProvider;
 
 use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Plugin\Context\Context;
-use Drupal\Core\Plugin\Context\ContextDefinition;
 use Drupal\Core\Plugin\Context\ContextProviderInterface;
+use Drupal\Core\Plugin\Context\EntityContextDefinition;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 
@@ -40,7 +40,7 @@ class AssetReleaseRouteContext implements ContextProviderInterface {
    */
   public function getRuntimeContexts(array $unqualified_context_ids) {
     $result = [];
-    $context_definition = new ContextDefinition('entity:rdf_entity:asset_release', NULL, FALSE);
+    $context_definition = new EntityContextDefinition('entity:rdf_entity', NULL, FALSE);
     $value = NULL;
     if (($route_object = $this->routeMatch->getRouteObject()) && ($route_contexts = $route_object->getOption('parameters')) && isset($route_contexts['rdf_entity'])) {
       /** @var \Drupal\rdf_entity\RdfInterface $asset_release */
@@ -66,7 +66,7 @@ class AssetReleaseRouteContext implements ContextProviderInterface {
    * {@inheritdoc}
    */
   public function getAvailableContexts() {
-    $context = new Context(new ContextDefinition('entity:rdf_entity:asset_release', $this->t('AssetRelease from URL')));
+    $context = new Context(new EntityContextDefinition('entity:rdf_entity', $this->t('AssetRelease from URL')));
     return ['asset_release' => $context];
   }
 

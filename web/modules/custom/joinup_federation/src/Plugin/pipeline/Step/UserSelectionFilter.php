@@ -9,6 +9,7 @@ use Drupal\Core\Datetime\DateFormatterInterface;
 use Drupal\Core\Entity\EntityFieldManagerInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Security\TrustedCallbackInterface;
 use Drupal\joinup_federation\JoinupFederationStepPluginBase;
 use Drupal\pipeline\Exception\PipelineStepExecutionLogicException;
 use Drupal\pipeline\Plugin\PipelineStepInterface;
@@ -31,7 +32,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *   label = @Translation("User selection"),
  * )
  */
-class UserSelectionFilter extends JoinupFederationStepPluginBase implements PipelineStepWithFormInterface, PipelineStepWithResponseInterface {
+class UserSelectionFilter extends JoinupFederationStepPluginBase implements PipelineStepWithFormInterface, PipelineStepWithResponseInterface, TrustedCallbackInterface {
 
   use AdmsSchemaEntityReferenceFieldsTrait;
   use PipelineStepWithClientRedirectResponseTrait;
@@ -354,6 +355,13 @@ class UserSelectionFilter extends JoinupFederationStepPluginBase implements Pipe
     $element['#rows'] = $new_rows;
 
     return $element;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function trustedCallbacks() {
+    return ['insertRowCategories'];
   }
 
 }

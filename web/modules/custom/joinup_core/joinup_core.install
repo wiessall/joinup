@@ -8,6 +8,7 @@
 declare(strict_types = 1);
 
 use Drupal\Core\Site\Settings;
+use Drupal\sparql_entity_storage\SparqlEntityStorage;
 use Drupal\user\Entity\User;
 
 /**
@@ -90,4 +91,22 @@ function joinup_core_requirements($phase): array {
   }
 
   return $requirements;
+}
+
+/**
+ * Install the 'field_pending_expire_sent' field storage definition.
+ */
+function joinup_core_update_107900(): void {
+  $field_storage_definition = \Drupal::service('entity_field.manager')->getFieldStorageDefinitions('user')['field_pending_expire_sent'];
+  \Drupal::entityDefinitionUpdateManager()->installFieldStorageDefinition('field_pending_expire_sent', 'user', 'password_policy', $field_storage_definition);
+}
+
+/**
+ * Fix the 'rdf_entity' entity type storage definition.
+ */
+function joinup_core_update_107901(): void {
+  $entity_definition_update_manager = \Drupal::entityDefinitionUpdateManager();
+  $entity_type = $entity_definition_update_manager->getEntityType('rdf_entity');
+  $entity_type->setHandlerClass('storage', SparqlEntityStorage::class);
+  $entity_definition_update_manager->updateEntityType($entity_type);
 }

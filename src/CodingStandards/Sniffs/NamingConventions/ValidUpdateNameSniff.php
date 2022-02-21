@@ -112,13 +112,14 @@ class ValidUpdateNameSniff extends ValidFunctionNameSniff {
     }
 
     $error = NULL;
-    if (!ctype_digit($name) || strlen($name) !== 7) {
-      $error = "Invalid '%s' identifier. Expected 7 digits:\n- 2 digits: Joinup major version\n- 3 digits: Joinup minor version\n- 2 digits: The %s weight";
+    if (!ctype_digit($name) || !in_array(strlen($name), [6, 7])) {
+      $error = "Invalid '%s' identifier. Expected 6 or 7 digits:\n- 1-2 digits: Joinup major version\n- 3 digits: Joinup minor version\n- 2 digits: The %s weight";
       $data = [$name, $updateType];
     }
     else {
-      $majorVersion = (int) substr($name, 0, 2);
-      $minorVersion = (int) substr($name, 2, 3);
+      $zero_padded_name = sprintf('%07d', (int) $name);
+      $majorVersion = (int) substr($zero_padded_name, 0, 2);
+      $minorVersion = (int) substr($zero_padded_name, 2, 3);
 
       $minorVersionTag = "{$majorVersion}.{$minorVersion}";
       $tag = "{$minorVersionTag}.0";
@@ -132,9 +133,15 @@ class ValidUpdateNameSniff extends ValidFunctionNameSniff {
       // a helpful message suggesting the right identifier to use.
       elseif (Comparator::notEqualTo($tag, static::getCheckedOutTag())) {
         $nextVersionCandidates = static::getNextVersionCandidates();
-        if (!in_array(substr($name, 0, 5), $nextVersionCandidates)) {
-          $error = "Invalid '%s' identifier. The first 5 digits should be '%s' or '%s'";
-          $data = [$name, $nextVersionCandidates[0], $nextVersionCandidates[1]];
+        if (!in_array(substr($zero_padded_name, 0, 5), $nextVersionCandidates)) {
+          $digits_count = strlen($name) === 7 ? 5 : 4;
+          $error = "Invalid '%s' identifier. The first %s digits should be '%s' or '%s'";
+          $data = [
+            $name,
+            $digits_count,
+            $nextVersionCandidates[0],
+            $nextVersionCandidates[1],
+          ];
         }
       }
     }
@@ -205,9 +212,9 @@ class ValidUpdateNameSniff extends ValidFunctionNameSniff {
       [$majorVersion, $minorVersion] = explode('.', static::getLatestStableTag());
       static::$nextVersionCandidates = [
         // Next minor version.
-        sprintf('%02d%03d', $majorVersion, ++$minorVersion),
+        sprintf('%d%03d', $majorVersion, ++$minorVersion),
         // Next major version.
-        sprintf('%02d%03d', ++$majorVersion, 0),
+        sprintf('%d%03d', ++$majorVersion, 0),
       ];
     }
     return self::$nextVersionCandidates;

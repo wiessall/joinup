@@ -11,12 +11,12 @@ pattern: '[node:og_audience:entity:url:path]/[node:title]'
 selection_criteria:
   52c869c9-1196-4960-84d9-063aaec721dd:
     id: node_type
-    bundles:
-      custom_page: custom_page
     negate: false
+    uuid: 52c869c9-1196-4960-84d9-063aaec721dd
     context_mapping:
       node: node
-    uuid: 52c869c9-1196-4960-84d9-063aaec721dd
+    bundles:
+      custom_page: custom_page
 selection_logic: and
 weight: -5
 relationships: {  }

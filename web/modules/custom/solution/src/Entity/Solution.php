@@ -16,6 +16,7 @@ use Drupal\joinup_bundle_class\JoinupBundleClassMetaEntityTrait;
 use Drupal\joinup_bundle_class\LogoTrait;
 use Drupal\joinup_bundle_class\ShortIdTrait;
 use Drupal\joinup_featured\FeaturedContentTrait;
+use Drupal\joinup_group\Entity\GroupContentTrait;
 use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_group\Entity\GroupTrait;
 use Drupal\joinup_group\Entity\PinnableGroupContentTrait;
@@ -34,6 +35,7 @@ class Solution extends Rdf implements SolutionInterface {
   use EntityPublicationTimeFallbackTrait;
   use EntityWorkflowStateTrait;
   use FeaturedContentTrait;
+  use GroupContentTrait;
   use GroupTrait;
   use JoinupBundleClassFieldAccessTrait;
   use JoinupBundleClassMetaEntityTrait;
