@@ -19,29 +19,29 @@ bundle: contact_information
 mode: inline
 content:
   field_ci_email:
-    weight: 1
-    settings:
-      size: 60
-      placeholder: ''
-    third_party_settings: {  }
     type: email_legacy_multicardinality
+    weight: 1
     region: content
+    settings:
+      placeholder: ''
+      size: 60
+    third_party_settings: {  }
   field_ci_name:
     type: string_textfield_legacy_multicardinality
     weight: 0
+    region: content
     settings:
       size: 60
       placeholder: ''
     third_party_settings: {  }
-    region: content
   field_ci_webpage:
+    type: link_legacy_multicardinality
     weight: 2
+    region: content
     settings:
       placeholder_url: ''
       placeholder_title: ''
     third_party_settings: {  }
-    type: link_legacy_multicardinality
-    region: content
 hidden:
   created: true
   current_workflow_state: true

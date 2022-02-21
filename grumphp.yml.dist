@@ -1,8 +1,6 @@
 imports:
   - { resource: vendor/ec-europa/qa-automation/dist/qa-conventions.yml }
 
-parameters:
+grumphp:
     ascii: ~
-    git_dir: .
-    bin_dir: vendor/bin
     tasks: {  }

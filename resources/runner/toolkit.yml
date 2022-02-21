@@ -37,6 +37,9 @@ commands:
 
   # Overrides the toolkit:build-dev command.
   toolkit:build-dev:
+    - task: mkdir
+      dir: ${joinup.files_public_dir}
+      mode: 0775
     - task: copy
       from: ${joinup.site_dir}/sites/default/default.services.yml
       to: ${joinup.site_dir}/sites/default/services.yml
@@ -53,11 +56,21 @@ commands:
       dir: ${joinup.files_private_dir}
     - task: mkdir
       dir: ${env.DRUPAL_FILE_TEMP_PATH}
+    # Handle a potential case where the repo has been shallow cloned. Typically,
+    # this happens in GitLab pipelines, where the repos are shallow cloned for
+    # performance reasons. A shallow clone repository prevents us to get the
+    # latest Git tag as no tags are available.
+    - task: exec
+      command: test "$(git rev-parse --is-shallow-repository)" = "false" || git fetch --unshallow
     - task: exec
       command: test "$(git tag)" = "" || git describe --tags | tr -d '\n' > ${joinup.site_dir}/VERSION.txt
+    - task: exec
+      command: 'echo "Detected Joinup version: $(<${joinup.site_dir}/VERSION.txt)"'
 
   # Overrides toolkit:install-clean.
   toolkit:install-clean:
+    - task: run
+      command: joinup:environment
     - task: run
       command: sparql:empty
     - task: run
@@ -74,17 +87,6 @@ commands:
       command: drupal:site-install
     - task: run
       command: dev:import-sparql-fixtures
-    # TODO: Remove this in ISAICP-5271. Newer versions of Search API module are
-    # storing the site hash into a state variable, rather than a config.
-    # See https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-5271.
-    - task: exec
-      command: ${drush.bin}
-      arguments:
-        - php:eval
-        - \Drupal\search_api_solr\Utility\Utility::getSiteHash();
-      options:
-        root: ${joinup.site_dir}
-        yes: null
     - task: run
       command: dev:install-modules
     - task: run

@@ -9,7 +9,6 @@ use Behat\Mink\Element\NodeElement;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\eupl\Eupl;
 use Drupal\joinup\HtmlManipulator;
-use Drupal\joinup\Traits\BrowserCapabilityDetectionTrait;
 use Drupal\joinup\Traits\ConfigReadOnlyTrait;
 use Drupal\joinup\Traits\EntityTrait;
 use Drupal\joinup\Traits\MaterialDesignTrait;
@@ -26,7 +25,6 @@ use PHPUnit\Framework\Assert;
  */
 class EuplContext extends RawDrupalContext {
 
-  use BrowserCapabilityDetectionTrait;
   use ConfigReadOnlyTrait;
   use EntityTrait;
   use MaterialDesignTrait;
@@ -239,6 +237,31 @@ class EuplContext extends RawDrupalContext {
     assert(in_array($label, ['Inbound', 'Outbound']), 'The purpose should be either "Use" or "Distribute".');
     $licence = $this->findLicenceTile($spdx_id);
     $this->selectMaterialDesignRadioButton($label, $licence);
+  }
+
+  /**
+   * Clicks a link in a licence tile.
+   *
+   * @param string $link
+   *   The title of the link to click.
+   * @param string $spdx_id
+   *   The SPDX ID of the licence tile.
+   *
+   * @throws \Exception
+   *   Thrown when the licence tile or link is not found in the page.
+   *
+   * @When I click :link in the :spdx_id licence tile
+   */
+  public function clickLicenceTileLink(string $link, string $spdx_id): void {
+    $licence = $this->findLicenceTile($spdx_id);
+
+    if ($this->browserSupportsJavaScript()) {
+      // On JS enabled browsers, scroll to the top before clicking the link
+      // since it might be obscured by the floating header.
+      $this->scrollToTop();
+    }
+
+    $licence->clickLink($link);
   }
 
   /**

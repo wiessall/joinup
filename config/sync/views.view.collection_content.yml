@@ -5,7 +5,8 @@ dependencies:
   config:
     - search_api.index.published
   module:
-    - joinup_core
+    - joinup_group
+    - joinup_material_design
     - search_api
 _core:
   default_config_hash: jgzVZMiTkzndw2OXTvFznC8I0CqkWdxVOOUwUBZxYWo
@@ -18,88 +19,22 @@ base_table: search_api_index_published
 base_field: search_api_id
 display:
   default:
-    display_plugin: default
     id: default
     display_title: Master
+    display_plugin: default
     position: 0
     display_options:
-      access:
-        type: none
-        options: {  }
-      cache:
-        type: none
-        options: {  }
-      query:
-        type: search_api_query
-        options:
-          bypass_access: false
-          skip_access: false
-      exposed_form:
-        type: basic
-        options:
-          submit_button: Apply
-          reset_button: false
-          reset_button_label: Reset
-          exposed_sorts_label: 'Sort by'
-          expose_sort_order: true
-          sort_asc_label: Asc
-          sort_desc_label: Desc
-      pager:
-        type: full
-        options:
-          items_per_page: 12
-          offset: 0
-          id: 0
-          total_pages: null
-          tags:
-            previous: ‹‹
-            next: ››
-            first: '« First'
-            last: 'Last »'
-          expose:
-            items_per_page: false
-            items_per_page_label: 'Items per page'
-            items_per_page_options: '5, 10, 25, 50'
-            items_per_page_options_all: false
-            items_per_page_options_all_label: '- All -'
-            offset: false
-            offset_label: Offset
-          quantity: 9
-      style:
-        type: tiles
-        options:
-          row_class: ''
-          default_row_class: true
-          uses_fields: false
-      row:
-        type: search_api
-        options:
-          view_modes:
-            'entity:node':
-              custom_page: view_mode_tile
-              discussion: view_mode_tile
-              document: view_mode_tile
-              event: view_mode_tile
-              news: view_mode_tile
-              newsletter: view_mode_tile
-              video: view_mode_tile
-            'entity:rdf_entity':
-              asset_distribution: default
-              asset_release: default
-              collection: view_mode_tile
-              licence: default
-              solution: view_mode_tile
       fields:
         id:
+          id: id
           table: search_api_index_published
           field: id
-          id: id
-          entity_type: null
-          entity_field: null
-          plugin_id: search_api_field
           relationship: none
           group_type: group
           admin_label: ''
+          entity_type: null
+          entity_field: null
+          plugin_id: search_api_field
           label: ''
           exclude: false
           alter:
@@ -159,12 +94,45 @@ display:
           fallback_options:
             link_to_item: false
             multi_separator: ', '
-      filters: {  }
-      sorts: {  }
-      header: {  }
-      footer: {  }
+      pager:
+        type: full
+        options:
+          offset: 0
+          items_per_page: 12
+          total_pages: null
+          id: 0
+          tags:
+            next: ››
+            previous: ‹‹
+            first: '« First'
+            last: 'Last »'
+          expose:
+            items_per_page: false
+            items_per_page_label: 'Items per page'
+            items_per_page_options: '5, 10, 25, 50'
+            items_per_page_options_all: false
+            items_per_page_options_all_label: '- All -'
+            offset: false
+            offset_label: Offset
+          quantity: 9
+      exposed_form:
+        type: basic
+        options:
+          submit_button: Apply
+          reset_button: false
+          reset_button_label: Reset
+          exposed_sorts_label: 'Sort by'
+          expose_sort_order: true
+          sort_asc_label: Asc
+          sort_desc_label: Desc
+      access:
+        type: none
+        options: {  }
+      cache:
+        type: none
+        options: {  }
       empty: {  }
-      relationships: {  }
+      sorts: {  }
       arguments:
         entity_groups:
           id: entity_groups
@@ -173,6 +141,7 @@ display:
           relationship: none
           group_type: group
           admin_label: ''
+          plugin_id: search_api
           default_action: default
           exception:
             value: all
@@ -196,9 +165,41 @@ display:
           validate_options: {  }
           break_phrase: false
           not: false
-          plugin_id: search_api
-      display_extenders: {  }
+      filters: {  }
+      style:
+        type: tiles
+        options:
+          row_class: ''
+          default_row_class: true
+          uses_fields: false
+      row:
+        type: search_api
+        options:
+          view_modes:
+            'entity:node':
+              custom_page: view_mode_tile
+              discussion: view_mode_tile
+              document: view_mode_tile
+              event: view_mode_tile
+              news: view_mode_tile
+              newsletter: view_mode_tile
+              video: view_mode_tile
+            'entity:rdf_entity':
+              asset_distribution: default
+              asset_release: default
+              collection: view_mode_tile
+              licence: default
+              solution: view_mode_tile
+      query:
+        type: search_api_query
+        options:
+          bypass_access: false
+          skip_access: false
+      relationships: {  }
+      header: {  }
+      footer: {  }
       display_comment: 'The collection content as displayed on the collection overview. This is displayed as an extra field on the Collection entity. See collection_entity_extra_field_info() and collection_rdf_entity_view().'
+      display_extenders: {  }
     cache_metadata:
       max-age: -1
       contexts:
@@ -206,4 +207,6 @@ display:
         - 'languages:language_interface'
         - url
         - url.query_args
-      tags: {  }
+        - 'user.node_grants:view'
+      tags:
+        - 'config:search_api.index.published'
