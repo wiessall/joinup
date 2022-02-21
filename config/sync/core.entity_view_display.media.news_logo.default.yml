@@ -14,17 +14,18 @@ bundle: news_logo
 mode: default
 content:
   image_library_widget_image:
-    label: visually_hidden
-    weight: 0
-    settings:
-      image_style: large
-      image_link: ''
-    third_party_settings: {  }
     type: image
+    label: visually_hidden
+    settings:
+      image_link: ''
+      image_style: large
+    third_party_settings: {  }
+    weight: 0
     region: content
 hidden:
   created: true
   langcode: true
   name: true
+  search_api_excerpt: true
   thumbnail: true
   uid: true

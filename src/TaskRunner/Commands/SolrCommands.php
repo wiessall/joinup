@@ -5,15 +5,16 @@ declare(strict_types = 1);
 namespace Joinup\TaskRunner\Commands;
 
 use Drupal\Component\Serialization\Json;
-use GuzzleHttp\Client;
+use Joinup\TaskRunner\Traits\SolrTrait;
 use OpenEuropa\TaskRunner\Commands\AbstractCommands;
-use Psr\Http\Message\ResponseInterface;
 use Robo\Exception\AbortTasksException;
 
 /**
  * Provides commands for ApacheSolr admin.
  */
 class SolrCommands extends AbstractCommands {
+
+  use SolrTrait;
 
   /**
    * Maximum status execution time in seconds.
@@ -42,13 +43,6 @@ class SolrCommands extends AbstractCommands {
       TRUE => 'restorestatus',
     ],
   ];
-
-  /**
-   * The cached HTTP client.
-   *
-   * @var \GuzzleHttp\Client
-   */
-  protected $httpClient;
 
   /**
    * Takes a snapshot from the Solr server index.
@@ -180,36 +174,6 @@ class SolrCommands extends AbstractCommands {
     $config = $this->getConfig();
     $command = static::COMMAND_MAP[$operation][$checkStatus];
     return "{$config->get("env.SOLR_URL")}/{$config->get("env.SOLR_CORE")}/replication?command={$command}&name={$core}&location={$config->get('solr.snapshot_dir')}&wt=json&json.nl=map";
-  }
-
-  /**
-   * Performs an HTTP get request.
-   *
-   * @param string $url
-   *   The HTTP get request URL.
-   *
-   * @return \Psr\Http\Message\ResponseInterface
-   *   The HTTP response
-   *
-   * @throws \Robo\Exception\AbortTasksException
-   *   When the Solr server response is invalid.
-   */
-  protected function httpGet(string $url): ResponseInterface {
-    if (!isset($this->httpClient)) {
-      $this->httpClient = new Client();
-    }
-
-    try {
-      $response = $this->httpClient->get($url);
-    }
-    catch (\Exception $exception) {
-      throw new AbortTasksException($exception->getMessage(), 0, $exception);
-    }
-    if ($response->getStatusCode() != 200) {
-      throw new AbortTasksException("Solr server returned HTTP code {$response->getStatusCode()}, while querying {$url}.");
-    }
-
-    return $response;
   }
 
 }

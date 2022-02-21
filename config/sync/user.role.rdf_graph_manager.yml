@@ -1,7 +1,10 @@
 uuid: 765c6c80-4aad-4deb-a754-5b4af12b7f01
 langcode: en
 status: true
-dependencies: {  }
+dependencies:
+  module:
+    - rdf_entity
+    - toolbar
 id: rdf_graph_manager
 label: 'RDF graph manager'
 weight: 5

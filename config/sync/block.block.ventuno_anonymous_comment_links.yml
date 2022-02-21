@@ -19,24 +19,24 @@ plugin: 'simple_block:anonymous_comment_links'
 settings:
   id: 'simple_block:anonymous_comment_links'
   label: 'Anonymous comment links'
-  provider: simple_block
   label_display: '0'
+  provider: simple_block
 visibility:
   user_role:
     id: user_role
-    roles:
-      anonymous: anonymous
     negate: false
     context_mapping:
       user: '@user.current_user_context:current_user'
+    roles:
+      anonymous: anonymous
   'entity_bundle:node':
     id: 'entity_bundle:node'
+    negate: false
+    context_mapping:
+      node: '@node.node_route_context:node'
     bundles:
       discussion: discussion
       document: document
       event: event
       news: news
       video: video
-    negate: false
-    context_mapping:
-      node: '@node.node_route_context:node'

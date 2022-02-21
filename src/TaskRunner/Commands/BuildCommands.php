@@ -56,7 +56,7 @@ class BuildCommands extends AbstractCommands {
       ->stopOnFail()
       ->exec('git archive HEAD --worktree-attributes | tar -x -C ' . $options['dist-root']);
 
-    $tasks[] = $this->taskComposerInstall($config->get('composer.bin'))
+    $tasks[] = $this->taskComposerInstall()
       ->env('COMPOSER_MIRROR_PATH_REPOS', 1)
       ->workingDir($options['dist-root'])
       ->optimizeAutoloader()

@@ -6,7 +6,6 @@ namespace Drupal\joinup\Context;
 
 use Behat\Gherkin\Node\TableNode;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
-use Drupal\joinup\Traits\BrowserCapabilityDetectionTrait;
 use Drupal\joinup\Traits\MaterialDesignTrait;
 use Drupal\joinup\Traits\RdfEntityTrait;
 use Drupal\joinup\Traits\SearchTrait;
@@ -20,7 +19,6 @@ use Drupal\taxonomy\TermInterface;
  */
 class OwnerContext extends RawDrupalContext {
 
-  use BrowserCapabilityDetectionTrait;
   use MaterialDesignTrait;
   use RdfEntityTrait;
   use SearchTrait;

@@ -16,6 +16,14 @@ use Drupal\Core\Entity\ContentEntityInterface;
 interface GroupContentInterface extends ContentEntityInterface {
 
   /**
+   * Returns whether or not the entity is associated with a group.
+   *
+   * @return bool
+   *   TRUE if the entity is associated with a group.
+   */
+  public function hasGroup(): bool;
+
+  /**
    * Returns the group to which this entity belongs.
    *
    * @return \Drupal\joinup_group\Entity\GroupInterface

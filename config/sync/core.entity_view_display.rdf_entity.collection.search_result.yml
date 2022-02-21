@@ -38,23 +38,23 @@ third_party_settings:
       children:
         - field_ar_abstract
         - read_more
+      label: 'Abstract wrapper'
       parent_name: ''
+      region: hidden
       weight: 29
       format_type: html_element
       format_settings:
+        classes: ''
+        id: ''
         element: div
         show_label: false
         label_element: h3
         attributes: ''
         effect: none
         speed: fast
-        id: ''
-        classes: ''
-      label: 'Abstract wrapper'
-      region: hidden
   layout_builder:
-    allow_custom: false
     enabled: false
+    allow_custom: false
 id: rdf_entity.collection.search_result
 targetEntityType: rdf_entity
 bundle: collection
@@ -62,8 +62,6 @@ mode: search_result
 content:
   created:
     type: timestamp
-    weight: 3
-    region: content
     label: hidden
     settings:
       date_format: date_only
@@ -72,20 +70,20 @@ content:
     third_party_settings:
       template_suggestion:
         template_suggestion: ''
+    weight: 3
+    region: content
   field_ar_description:
     type: joinup_html_stripper_stripped
-    weight: 2
-    region: content
     label: hidden
     settings:
       trim_length: 200
     third_party_settings:
       template_suggestion:
         template_suggestion: ''
+    weight: 2
+    region: content
   field_topic:
     type: entity_reference_label
-    weight: 1
-    region: content
     label: hidden
     settings:
       link: true
@@ -98,18 +96,18 @@ content:
         offset: 0
       template_suggestion:
         template_suggestion: ''
+    weight: 1
+    region: content
   label:
-    label: hidden
     type: string
-    weight: 0
+    label: hidden
     settings:
       link_to_entity: false
     third_party_settings: {  }
+    weight: 0
     region: content
   last_update:
     type: timestamp
-    weight: 4
-    region: content
     label: hidden
     settings:
       date_format: date_only
@@ -118,6 +116,8 @@ content:
     third_party_settings:
       template_suggestion:
         template_suggestion: ''
+    weight: 4
+    region: content
 hidden:
   changed: true
   field_ar_abstract: true
@@ -144,4 +144,5 @@ hidden:
   rdf_entity_field_collection_content_inline_facets: true
   rdf_entity_field_collection_content_top: true
   read_more: true
+  search_api_excerpt: true
   solutions: true

@@ -154,7 +154,7 @@ class JoinupNotificationContext extends RawDrupalContext {
       }
 
       if (isset($bcc)) {
-        Assert::assertContains($bcc, $mail['headers']['Bcc'] ?? "", 'Bcc is properly set to the email.');
+        Assert::assertStringContainsString($bcc, $mail['headers']['Bcc'] ?? "", 'Bcc is properly set to the email.');
       }
 
       // We found a match. Stop searching.

@@ -47,10 +47,10 @@ class EntityAuthorshipHelper implements EntityAuthorshipHelperInterface {
 
       foreach ($results->getResultItems() as $result) {
         // Prune out the entity type and ID from the Search API combined ID.
-        list($datasource_id, $raw_id) = Utility::splitCombinedId($result->getId());
+        [$datasource_id, $raw_id] = Utility::splitCombinedId($result->getId());
         $datasource = $index->getDatasource($datasource_id);
         $entity_type_id = $datasource->getEntityTypeId();
-        list($entity_id,) = explode(':', $raw_id);
+        [$entity_id] = explode(':', $raw_id);
         $entity_ids[$entity_type_id][$entity_id] = $entity_id;
       }
     }

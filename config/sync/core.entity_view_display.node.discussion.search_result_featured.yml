@@ -23,8 +23,8 @@ dependencies:
     - user
 third_party_settings:
   layout_builder:
-    allow_custom: false
     enabled: false
+    allow_custom: false
 _core:
   default_config_hash: MH5IsqzkjyHQwMAIhBMkvdrrpJeonD3UC7kQpOvXJX0
 id: node.discussion.search_result_featured
@@ -33,19 +33,17 @@ bundle: discussion
 mode: search_result_featured
 content:
   body:
-    weight: 1
+    type: joinup_html_stripper_stripped
     label: hidden
     settings:
       trim_length: 300
     third_party_settings:
       template_suggestion:
         template_suggestion: ''
-    type: joinup_html_stripper_stripped
+    weight: 1
     region: content
   field_logo:
     type: responsive_image
-    weight: 1
-    region: content
     label: hidden
     settings:
       responsive_image_style: teaser
@@ -53,20 +51,20 @@ content:
     third_party_settings:
       template_suggestion:
         template_suggestion: ''
+    weight: 1
+    region: content
   field_topic:
-    weight: 0
+    type: entity_reference_label
     label: hidden
     settings:
       link: true
     third_party_settings:
       template_suggestion:
         template_suggestion: comma_separated
-    type: entity_reference_label
+    weight: 0
     region: content
   published_at:
     type: timestamp
-    weight: 2
-    region: content
     label: hidden
     settings:
       date_format: date_only
@@ -75,6 +73,8 @@ content:
     third_party_settings:
       template_suggestion:
         template_suggestion: ''
+    weight: 2
+    region: content
 hidden:
   field_attachment: true
   field_keywords: true
@@ -89,4 +89,5 @@ hidden:
   og_audience: true
   read_more: true
   report: true
+  search_api_excerpt: true
   share_link: true

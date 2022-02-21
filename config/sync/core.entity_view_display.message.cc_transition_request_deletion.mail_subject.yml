@@ -11,9 +11,10 @@ bundle: cc_transition_request_deletion
 mode: mail_subject
 content:
   partial_0:
-    weight: 0
-    region: content
     settings: {  }
     third_party_settings: {  }
+    weight: 0
+    region: content
 hidden:
   partial_1: true
+  search_api_excerpt: true

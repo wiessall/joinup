@@ -23,24 +23,24 @@ bundle: video
 mode: view_mode_tile
 content:
   body:
-    label: hidden
     type: smart_trim
-    weight: 0
+    label: hidden
     settings:
       trim_length: 200
       trim_type: chars
       trim_suffix: …
+      wrap_output: false
+      wrap_class: trimmed
       more_link: false
+      more_class: more-link
       more_text: More
       summary_handler: trim
       trim_options:
         text: false
-      more_class: more-link
-      wrap_output: false
-      wrap_class: trimmed
     third_party_settings:
       template_suggestion:
         template_suggestion: ''
+    weight: 0
     region: content
 hidden:
   field_comments: true
@@ -52,3 +52,4 @@ hidden:
   og_audience: true
   published_at: true
   report: true
+  search_api_excerpt: true

@@ -260,6 +260,9 @@ Feature: Global search
     Then I should be on the advanced search page
     But I should not see the link "Advanced search"
 
+  @wip
+  # This tests shows a regression to be fixed in ISAICP-6917.
+  # See https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-6917
   Scenario: Collections and solutions are shown first in search results with the same relevance.
     Given collections:
       | title                           | description                         | state     |

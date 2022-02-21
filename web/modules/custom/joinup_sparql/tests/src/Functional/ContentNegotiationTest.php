@@ -72,7 +72,7 @@ class ContentNegotiationTest extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
     user_role_grant_permissions(AccountInterface::ANONYMOUS_ROLE, ['view rdf entity']);
   }
@@ -248,7 +248,7 @@ class ContentNegotiationTest extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  public function tearDown() {
+  public function tearDown(): void {
     Rdf::load('http://example.com/apple')->delete();
     RdfTerm::load('http://example.com/citrus-fruits')->delete();
     parent::tearDown();

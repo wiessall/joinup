@@ -16,13 +16,13 @@ plugin: joinup_search_global_search
 settings:
   id: joinup_search_global_search
   label: 'Global search'
-  provider: joinup_search
   label_display: '0'
+  provider: joinup_search
   template_suggestion: header
 visibility:
   request_route:
     id: request_route
-    routes:
-      - view.search.page_1
     negate: true
     context_mapping: {  }
+    routes:
+      - view.search.page_1

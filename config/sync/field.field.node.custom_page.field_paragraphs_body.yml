@@ -25,30 +25,30 @@ default_value_callback: ''
 settings:
   handler: 'default:paragraph'
   handler_settings:
-    negate: 0
     target_bundles:
       simple_paragraph: simple_paragraph
       json_map: json_map
       accordion: accordion
       content_listing: content_listing
       iframe: iframe
+    negate: 0
     target_bundles_drag_drop:
       accordion:
-        enabled: true
         weight: 5
+        enabled: true
       accordion_item:
         weight: 7
         enabled: false
       content_listing:
-        enabled: true
         weight: 8
+        enabled: true
       iframe:
-        enabled: true
         weight: 8
+        enabled: true
       json_map:
-        enabled: true
         weight: 4
-      simple_paragraph:
         enabled: true
+      simple_paragraph:
         weight: 2
+        enabled: true
 field_type: entity_reference_revisions
