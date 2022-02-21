@@ -25,8 +25,8 @@ variant_settings:
           configuration:
             id: layout_builder_block
             label: 'What''s Joinup about?'
-            provider: layout_builder_block
             label_display: '0'
+            provider: layout_builder_block
             text: "<p class=\"about-what__title\">What's Joinup about?</p>\r\n<h1 class=\"h1--disguised\">Joinup is a collaborative platform to help e-Government professionals.</h1>\r\n<p>The European Commission created Joinup to provide a common venue that enables public administrations, businesses and citizens to share and reuse IT solutions and good practices, and facilitate communication and collaboration on IT projects across Europe.</p>\r\n"
             format: full_html
           weight: 0
