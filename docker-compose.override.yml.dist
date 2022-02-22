@@ -5,6 +5,29 @@ version: '3.8'
 services:
 
   web:
+# In order to be able to actively work on the files shared with the docker
+# instance, all files need to share permissions between host and container.
+# The only way to do this right now is by altering the uid and gid of the
+# www-data user - that owns the files within the container - to share the
+# same uid and gid with the user that owns the files in the host machine.
+#
+# To find your uid and gid, run `id username` in your terminal, where
+# `username` is the owner of the files in the host. By default, we use
+# 1000 as both the uid and gid since these are the default numbers given
+# by most UNIX distributions for the first real user. If your user has
+# different identifiers that those below, uncomment and update with your
+# identifiers.
+#
+# Disclaimer: If your identifiers are those of a system reserved user -
+# or a user that already exists in the host machine (usually numbers
+# below 1000 like `ftp`), you will not be able to alter the identifiers
+# of www-data user.
+#
+# build:
+#   args:
+#     USER_ID: 1000
+#     GROUP_ID: 1000
+
 # macOS users should override this value by uncommenting the following
 # 'volumes:' block.
 #    volumes:
