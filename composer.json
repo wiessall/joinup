@@ -412,6 +412,10 @@
         },
         {
             "type": "vcs",
+            "url": "https://github.com/alexpott/easyrdf.git"
+        },
+        {
+            "type": "vcs",
             "url": "https://github.com/openeuropa/oe_dashboard_agent.git"
         },
         {
