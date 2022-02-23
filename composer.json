@@ -34,7 +34,7 @@
         "drupal/embed_block": "^1.0",
         "drupal/entity_legal": "^3.0.0",
         "drupal/entityqueue": "^1.2",
-        "drupal/error_page": "^1.0 || ^2.0",
+        "drupal/error_page": "^2.0",
         "drupal/facets": "2.0.1",
         "drupal/facets_block": "^1.4",
         "drupal/facets_date_range": "^1.0@beta",
