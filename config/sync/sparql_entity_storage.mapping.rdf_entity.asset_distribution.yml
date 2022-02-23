@@ -7,10 +7,10 @@ dependencies:
     - rdf_entity.rdfentity.asset_distribution
 third_party_settings:
   rdf_schema_field_validation:
-    graph: 'http://adms-definition'
-    class: 'http://www.w3.org/2000/01/rdf-schema#Class'
     property_predicates:
       - 'http://www.w3.org/2000/01/rdf-schema#domain'
+    graph: 'http://adms-definition'
+    class: 'http://www.w3.org/2000/01/rdf-schema#Class'
 id: rdf_entity.asset_distribution
 entity_type_id: rdf_entity
 bundle: asset_distribution

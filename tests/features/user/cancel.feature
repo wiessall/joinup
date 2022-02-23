@@ -18,7 +18,7 @@ Feature:
     And I click "Edit" in the "Header" region
     And I press "Cancel account"
     Then I should see the link "Go back"
-    When I press "Cancel account"
+    When I press "Confirm"
     And I wait for the batch process to finish
     And the following email should have been sent:
       | recipient_mail | AliciaPotter@example.com                                                                                                                                                                                                                                            |
@@ -50,9 +50,8 @@ Feature:
 
     Then I should see the heading "Are you sure you want to cancel these user accounts?"
     And I should see "Alicia Potter"
-    And I should see "This action cannot be undone."
 
-    When I press "Cancel accounts"
+    When I press "Confirm"
     And I wait for the batch process to finish
     Then I should see the success message "Alicia Potter has been deleted."
     And I should not see the link "Alicia Potter"
@@ -105,7 +104,7 @@ Feature:
     And I open the header local tasks menu
     And I click "Edit" in the "Header" region
     And I press "Cancel account"
-    And I press "Cancel account"
+    And I press "Confirm"
     Then the following email should have been sent:
       | recipient_mail | AliciaPotter@example.com                                           |
       | subject        | Account cancellation request for alicia__1997 at Joinup            |

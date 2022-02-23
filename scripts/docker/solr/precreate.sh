@@ -1,9 +1,6 @@
 #!/bin/bash
 
-mkdir -p /opt/docker-solr/drupal/conf
-cp -r /solr/conf/* /opt/docker-solr/drupal/conf/
-sed -i "/solr.install.dir=/c\solr.install.dir=/opt/solr" /opt/docker-solr/drupal/conf/solrcore.properties
-precreate-core ${SOLR_CORE} /opt/docker-solr/drupal
+precreate-core ${SOLR_CORE} /solr
 if [ "${DOCKER_RESTORE_PRODUCTION}" = "yes" ]; then
   /opt/solr/bin/solr start
   sleep 5

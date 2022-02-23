@@ -6,6 +6,7 @@ namespace Drupal\joinup\Context;
 
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\joinup\Traits\BrowserCapabilityDetectionTrait;
+use Drupal\joinup\Traits\BrowserWindowTrait;
 use Drupal\joinup\Traits\UtilityTrait;
 use Drupal\joinup\Traits\WysiwygTrait;
 use PHPUnit\Framework\Assert;
@@ -16,6 +17,7 @@ use PHPUnit\Framework\Assert;
 class WysiwygContext extends RawDrupalContext {
 
   use BrowserCapabilityDetectionTrait;
+  use BrowserWindowTrait;
   use UtilityTrait;
   use WysiwygTrait;
 
@@ -37,6 +39,9 @@ class WysiwygContext extends RawDrupalContext {
     // 'Source' button so we can enter the text as HTML and get the same result
     // as in a non-JS browser.
     if ($this->browserSupportsJavaScript()) {
+      // Scroll to the top because the button might be obscured by the floating
+      // header.
+      $this->scrollToTop();
       $this->pressWysiwygButton($label, 'Source');
       $this->setWysiwygText($label, $text);
     }

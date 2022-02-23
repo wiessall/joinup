@@ -37,7 +37,7 @@ class StateMachineButtons extends OptionsSelectWidget implements ContainerFactor
    *
    * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
    */
-  protected $eventDispatcher;
+  protected EventDispatcherInterface $eventDispatcher;
 
   /**
    * Constructs a StateMachineButtons widget.
@@ -77,7 +77,7 @@ class StateMachineButtons extends OptionsSelectWidget implements ContainerFactor
   /**
    * {@inheritdoc}
    */
-  public static function defaultSettings() {
+  public static function defaultSettings(): array {
     return [
       'use_transition_label' => FALSE,
     ] + parent::defaultSettings();
@@ -86,7 +86,7 @@ class StateMachineButtons extends OptionsSelectWidget implements ContainerFactor
   /**
    * {@inheritdoc}
    */
-  public function settingsForm(array $form, FormStateInterface $form_state) {
+  public function settingsForm(array $form, FormStateInterface $form_state): array {
     $element = [];
 
     $element['use_transition_label'] = [
@@ -102,7 +102,7 @@ class StateMachineButtons extends OptionsSelectWidget implements ContainerFactor
   /**
    * {@inheritdoc}
    */
-  public function settingsSummary() {
+  public function settingsSummary(): array {
     $summary = [];
 
     $use_transition_label = $this->getSetting('use_transition_label');
@@ -116,7 +116,7 @@ class StateMachineButtons extends OptionsSelectWidget implements ContainerFactor
   /**
    * {@inheritdoc}
    */
-  public function formElement(FieldItemListInterface $items, $delta, array $element, array &$form, FormStateInterface $form_state) {
+  public function formElement(FieldItemListInterface $items, $delta, array $element, array &$form, FormStateInterface $form_state): array {
     $element = parent::formElement($items, $delta, $element, $form, $form_state);
 
     if ($this->getSetting('use_transition_label')) {
@@ -171,7 +171,7 @@ class StateMachineButtons extends OptionsSelectWidget implements ContainerFactor
    *
    * @see \Drupal\content_moderation\Plugin\Field\FieldWidget\ModerationStateWidget::processActions()
    */
-  public static function processActions($element, FormStateInterface $form_state, array &$form) {
+  public static function processActions($element, FormStateInterface $form_state, array &$form): array {
     // We'll steal most of the button configuration from the default submit
     // button. However, NodeForm also hides that button for admins (as it adds
     // its own, too), so we have to restore it.
@@ -224,7 +224,7 @@ class StateMachineButtons extends OptionsSelectWidget implements ContainerFactor
    * @param array $complete_form
    *   The complete form render array.
    */
-  public static function setToState(array &$element, FormStateInterface $form_state, array &$complete_form) {
+  public static function setToState(array &$element, FormStateInterface $form_state, array &$complete_form): void {
     $triggering_element = $form_state->getTriggeringElement();
     // This is a transition button, set the state field value.
     if (!empty($triggering_element['#state_id'])) {
@@ -243,7 +243,7 @@ class StateMachineButtons extends OptionsSelectWidget implements ContainerFactor
    * @return array
    *   The update options array.
    */
-  protected function replaceStateLabelsWithTransitionLabels(array $options, FieldItemListInterface $items) {
+  protected function replaceStateLabelsWithTransitionLabels(array $options, FieldItemListInterface $items): array {
     $entity = $items->getEntity();
     if ($entity instanceof EntityWorkflowStateInterface) {
       $workflow = $entity->getWorkflow();

@@ -61,7 +61,7 @@ class WorkflowTransitionEventSubscriber implements EventSubscriberInterface {
     // Verify if the new state is marked as published state.
     $is_published_state = $this->isPublishedState($event->getTransition()->getToState(), $event->getWorkflow());
     if ($entity instanceof EntityPublishedInterface) {
-      $entity->setPublished($is_published_state);
+      $is_published_state ? $entity->setPublished() : $entity->setUnpublished();
     }
 
     // Add support for the Publication Date module.

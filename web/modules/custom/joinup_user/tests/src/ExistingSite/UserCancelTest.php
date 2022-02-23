@@ -140,7 +140,7 @@ class UserCancelTest extends JoinupExistingSiteTestBase {
     $this->assertNull($account->get('field_user_frequency')->value);
     $this->assertNull($account->get('field_user_nationality')->value);
     $this->assertNull($account->get('field_user_organisation')->value);
-    $this->assertFileNotExists($photo_file->getFileUri());
+    $this->assertFileDoesNotExist($photo_file->getFileUri());
     $this->assertNull($account->get('field_user_photo')->value);
     $this->assertNull($account->get('field_user_professional_domain')->value);
     $this->assertFalse($authmap->get($account->id(), 'cas'));
