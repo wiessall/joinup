@@ -14,47 +14,47 @@ tips:
     plugin: text
     weight: 1
     position: left-start
-    selector: .joinup-navbar .nav-item:nth-child(3)
+    selector: '.joinup-navbar .nav-item:nth-child(3)'
     body: 'Sign in or out, and manage your user account.'
   search:
     id: search
     plugin: text
     weight: 2
     position: left-start
-    selector: .btn.btn-search
+    selector: '.input-group.js-form-type-search-api-autocomplete'
     body: 'Search through the entire Joinup platform and its supported content items.'
   spotlight:
     id: spotlight
     plugin: text
     weight: 4
     position: left-start
-    selector: .block-views-blockin-the-spotlight-block
+    selector: '.block-views-blockin-the-spotlight-block'
     body: 'View a list of curated content items published on the platform.'
   news:
     id: news
     plugin: text
     weight: 5
     position: left-start
-    selector: .block-views-blocklatest-news-block
+    selector: '.block-views-blocklatest-news-block'
     body: 'View the latest news and events published on the platform.'
   explore:
     id: explore
     plugin: text
     weight: 6
     position: left-start
-    selector: #myTab
+    selector: '#myTab'
     body: 'Explore the platform''s published content items per type.'
   about:
     id: about
     plugin: text
     weight: 7
     position: left-start
-    selector: .about-what
+    selector: '.about-what'
     body: 'Learn more about the platform.'
   contact:
     id: contact
     plugin: text
     weight: 8
     position: bottom-start
-    selector: li a[data-drupal-link-system-path="contact"]
+    selector: 'li a[data-drupal-link-system-path="contact"]'
     body: 'If you have any questions or suggestions regarding the Joinup platform, you can contact us through this link.'
