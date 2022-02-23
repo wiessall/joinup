@@ -413,7 +413,13 @@ class SearchFormatter extends FormatterBase implements ContainerFactoryPluginInt
   protected function mergeQueryCacheMetadata(array &$build, QueryInterface $query): void {
     if ($query instanceof CacheableDependencyInterface) {
       $build['#cache'] = [
-        'tags' => Cache::mergeTags($build['#cache']['tags'], $query->getCacheTags()),
+        'tags' => Cache::mergeTags(
+          Cache::mergeTags(
+            $build['#cache']['tags'],
+            ["search_api_list:{$query->getIndex()->id()}"]
+          ),
+          $query->getCacheTags()
+        ),
         'max-age' => Cache::mergeMaxAges($build['#cache']['max-age'], $query->getCacheMaxAge()),
         'contexts' => Cache::mergeContexts($build['#cache']['contexts'], $query->getCacheContexts()),
       ];

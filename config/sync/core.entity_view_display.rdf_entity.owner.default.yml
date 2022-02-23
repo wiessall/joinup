@@ -18,30 +18,31 @@ mode: default
 content:
   field_owner_name:
     type: string
-    weight: 1
-    region: content
     label: above
     settings:
       link_to_entity: false
     third_party_settings: {  }
+    weight: 1
+    region: content
   field_owner_type:
     type: entity_reference_label
-    weight: 2
-    region: content
     label: above
     settings:
       link: true
     third_party_settings: {  }
-  label:
-    label: hidden
-    type: string
-    weight: 0
+    weight: 2
     region: content
+  label:
+    type: string
+    label: hidden
     settings:
       link_to_entity: false
     third_party_settings: {  }
+    weight: 0
+    region: content
 hidden:
   changed: true
   created: true
   field_owner_state: true
   langcode: true
+  search_api_excerpt: true

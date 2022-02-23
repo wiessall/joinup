@@ -15,11 +15,11 @@ plugin: eif_recommendation_selector
 settings:
   id: eif_recommendation_selector
   label: 'EIF recomendations selector'
-  provider: eif
   label_display: '0'
+  provider: eif
 visibility:
   eif_solutions_page:
     id: eif_solutions_page
-    eif_solutions: true
     negate: false
     context_mapping: {  }
+    eif_solutions: true

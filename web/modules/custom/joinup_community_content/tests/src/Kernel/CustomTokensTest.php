@@ -20,7 +20,7 @@ class CustomTokensTest extends TokenReplaceKernelTestBase {
   /**
    * {@inheritdoc}
    */
-  public static $modules = [
+  protected static $modules = [
     'diff',
     'joinup_community_content',
     'joinup_workflow',
@@ -51,7 +51,7 @@ class CustomTokensTest extends TokenReplaceKernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
 
     $this->installConfig(['node', 'diff']);

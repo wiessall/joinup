@@ -6,34 +6,35 @@ namespace Drupal\solution;
 
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormBuilderInterface;
+use Drupal\Core\Security\TrustedCallbackInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\solution\Form\JoinSolutionForm;
 
 /**
  * Defines a service for #lazy_builder callbacks for the Collection module.
  */
-class SolutionLazyBuilders {
+class SolutionLazyBuilders implements TrustedCallbackInterface {
 
   /**
    * The entity type manager service.
    *
    * @var \Drupal\Core\Entity\EntityTypeManagerInterface
    */
-  protected $entityTypeManager;
+  protected EntityTypeManagerInterface $entityTypeManager;
 
   /**
    * The form builder service.
    *
    * @var \Drupal\Core\Form\FormBuilderInterface
    */
-  protected $formBuilder;
+  protected FormBuilderInterface $formBuilder;
 
   /**
    * Current logged in user.
    *
    * @var \Drupal\Core\Session\AccountInterface
    */
-  protected $currentUser;
+  protected AccountInterface $currentUser;
 
   /**
    * Constructs a new CollectionLazyBuilders object.
@@ -60,9 +61,16 @@ class SolutionLazyBuilders {
    * @return array
    *   A renderable array containing the comment form.
    */
-  public function renderJoinSolutionForm($solution_id) {
+  public function renderJoinSolutionForm(string $solution_id): array {
     $solution = $this->entityTypeManager->getStorage('rdf_entity')->load($solution_id);
     return $this->formBuilder->getForm(JoinSolutionForm::class, $this->currentUser, $solution);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function trustedCallbacks(): array {
+    return ['renderJoinSolutionForm'];
   }
 
 }

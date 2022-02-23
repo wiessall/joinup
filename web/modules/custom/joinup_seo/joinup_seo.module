@@ -46,7 +46,10 @@ function joinup_seo_metatags_alter(array &$metatags, array &$context) {
     return;
   }
 
-  $tags = unserialize($metatags['schema_social_media_posting_shared_content']);
+  $tags = unserialize($metatags['schema_social_media_posting_shared_content'], [
+    'allowed_classes' => FALSE,
+  ]);
+
   $tag_list = [
     '@id' => 'entity:url',
     'name' => 'entity:name',

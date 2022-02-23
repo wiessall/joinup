@@ -12,12 +12,12 @@ pattern: 'rdf-graph/[rdf_entity:label]'
 selection_criteria:
   1d496de2-bc06-4747-8fc3-258f4144a767:
     id: 'entity_bundle:rdf_entity'
-    bundles:
-      rdf_graph: rdf_graph
     negate: false
+    uuid: 1d496de2-bc06-4747-8fc3-258f4144a767
     context_mapping:
       rdf_entity: rdf_entity
-    uuid: 1d496de2-bc06-4747-8fc3-258f4144a767
+    bundles:
+      rdf_graph: rdf_graph
 selection_logic: and
 weight: -2
 relationships: {  }

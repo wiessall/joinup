@@ -17,8 +17,8 @@ plugin: user_header_block
 settings:
   id: user_header_block
   label: 'User header'
-  provider: joinup_user
   label_display: '0'
+  provider: joinup_user
   context_mapping:
     user_route: '@joinup_user.user_route_context:user_route'
 visibility: {  }

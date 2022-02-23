@@ -17,8 +17,8 @@ required: false
 translatable: false
 default_value:
   -
-    value: false
     expire: null
+    value: false
 default_value_callback: ''
 settings:
   on_label: Featured

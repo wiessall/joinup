@@ -31,7 +31,6 @@ use Drupal\og\OgGroupAudienceHelperInterface;
 use Drupal\og\OgMembershipInterface;
 use Drupal\og_menu\Entity\OgMenuInstance;
 use Drupal\rdf_entity\RdfInterface;
-use Drupal\search_api\Plugin\search_api\datasource\ContentEntity;
 use Drupal\user\UserInterface;
 use Drupal\views\Plugin\views\query\QueryPluginBase;
 use Drupal\views\Plugin\views\query\Sql;
@@ -285,9 +284,11 @@ function joinup_group_rdf_entity_update(EntityInterface $entity) {
     $membership_manager = \Drupal::service('og.membership_manager');
     $content_ids = $membership_manager->getGroupContentIds($entity, ['node']);
     $nodes = \Drupal::entityTypeManager()->getStorage('node')->loadMultiple($content_ids['node']);
+    /** @var \Drupal\search_api\Plugin\search_api\datasource\ContentEntityTrackingManager $content_tracking_manager */
+    $content_tracking_manager = \Drupal::service('search_api.entity_datasource.tracking_manager');
     /** @var \Drupal\node\NodeInterface $node */
     foreach ($nodes as $node) {
-      ContentEntity::indexEntity($node);
+      $content_tracking_manager->trackEntityChange($node);
     }
   }
 }
@@ -322,7 +323,9 @@ function joinup_group_meta_entity_update(MetaEntityInterface $entity): void {
 
     // Reindex the parent entity since the pinned status affects the ordering of
     // search results: pinned entities are shown at the top.
-    ContentEntity::indexEntity($parent_entity);
+    /** @var \Drupal\search_api\Plugin\search_api\datasource\ContentEntityTrackingManager $content_tracking_manager */
+    $content_tracking_manager = \Drupal::service('search_api.entity_datasource.tracking_manager');
+    $content_tracking_manager->trackEntityChange($parent_entity);
 
     // Invalidate caches of the parent entity so that the pin icon will be shown
     // or hidden according to the new pinned status.
@@ -425,7 +428,7 @@ function joinup_group_form_views_exposed_form_alter(&$form, FormStateInterface $
     $view->executeDisplay($display_id, $arguments);
     // Apparently it is not guaranteed that the `total_rows` will be populated.
     // @see \Drupal\views\Plugin\views\area\Result::render()
-    return isset($view->total_rows) ? $view->total_rows : count($view->result);
+    return $view->total_rows ?? count($view->result);
   };
 
   /** @var \Drupal\views\Plugin\views\filter\StringFilter $filter */
