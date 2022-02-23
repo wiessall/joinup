@@ -14,14 +14,14 @@ tips:
     plugin: text
     weight: 1
     position: left-start
-    selector: '.temporarily-disabled joinup-navbar .nav-item:nth-child(2)'
+    selector: .joinup-navbar .nav-item:nth-child(3)
     body: 'Sign in or out, and manage your user account.'
   search:
     id: search
     plugin: text
     weight: 2
     position: left-start
-    selector: .search-bar
+    selector: .btn.btn-search
     body: 'Search through the entire Joinup platform and its supported content items.'
   spotlight:
     id: spotlight
@@ -42,7 +42,7 @@ tips:
     plugin: text
     weight: 6
     position: left-start
-    selector: '.block-joinup-front-page-explore-block .explore-block-title'
+    selector: #myTab
     body: 'Explore the platform''s published content items per type.'
   about:
     id: about
@@ -56,5 +56,5 @@ tips:
     plugin: text
     weight: 8
     position: bottom-start
-    selector: '.about-us-menu li:nth-child(2)'
+    selector: li a[data-drupal-link-system-path="contact"]
     body: 'If you have any questions or suggestions regarding the Joinup platform, you can contact us through this link.'
