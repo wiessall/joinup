@@ -180,7 +180,7 @@ override the parent entry and will not merge with it.
 From the project root, run:
 
 ```bash
-$ docker-compose exec web ./vendor/bin/run toolkit:install-clean
+$ docker-compose exec --user www-data web ./vendor/bin/run toolkit:install-clean
 ```
 You can now access the website at `http://localhost/web` on the host machine, if
 the port mapping is `80:8080`. If you define a different port mapping, such as
@@ -199,25 +199,25 @@ in `.env` file. The values should be provided by DevOps team.
 #### Download all dumps/snapshots at once
 
 ```bash
-$ docker-compose exec web ./vendor/bin/run dev:download-databases
+$ docker-compose exec --user www-data web ./vendor/bin/run dev:download-databases
 ```
 
 #### Download only the MySQL dump
 
 ```bash
-$ docker-compose exec web ./vendor/bin/run mysql:download-dump
+$ docker-compose exec --user www-data web ./vendor/bin/run mysql:download-dump
 ```
 
 #### Download only the Virtuoso snapshot
 
 ```bash
-$ docker-compose exec web ./vendor/bin/run virtuoso:download-snapshot
+$ docker-compose exec --user www-data web ./vendor/bin/run virtuoso:download-snapshot
 ```
 
 #### Download only the Solr snapshot
 
 ```bash
-$ docker-compose exec web ./vendor/bin/run solr:download-snapshot
+$ docker-compose exec --user www-data web ./vendor/bin/run solr:download-snapshot
 ```
 
 **Note:** If you are changing from a clean install to a restored environment,
@@ -246,9 +246,9 @@ After containers are up and got the chance to import from dump/snapshots, run
 this sequence of commands:
 
 ```bash
-$ docker-compose exec web ./vendor/bin/run dev:rebuild-environment
+$ docker-compose exec --user www-data web ./vendor/bin/run dev:rebuild-environment
 # Installs the development modules, such as `devel`.
-$ docker-compose exec web ./vendor/bin/run dev:install-modules
+$ docker-compose exec --user www-data web ./vendor/bin/run dev:install-modules
 ```
 
 But you can create your own Task Runner command, to include all steps, in the
@@ -270,7 +270,7 @@ commands:
 Then simply run this script from the host machine:
 
 ```bash
-$ docker-compose exec web ./vendor/bin/run restore
+$ docker-compose exec --user www-data web ./vendor/bin/run restore
 ```
 
 ## Accessing the containers
@@ -284,6 +284,7 @@ $ docker-compose exec my_container_name "/bin/bash"
 Depending on the container (and its base image), it might be that `/bin/bash` is
 not available. In that case, `/bin/sh` and `sh` are good substitutes.
 
+Depending on the user you want to use, you might need to add `--user {username}` option before the container name, for instance to access the `web` container as user `www-data`, add `--user www-data`.
 ## Accessing the volumes
 
 Some containers, like `solr`, define volumes that allow the container to
