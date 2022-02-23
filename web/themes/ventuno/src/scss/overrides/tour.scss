@@ -17,20 +17,17 @@
 
 // Shepherd.js styles (Guided tour as from Drupal 9, replacing Joyride)
 .shepherd-button {
-  background: $primary;
-  font-weight: $font-weight-bold;
-  border: 1px solid transparent;;
-  border-radius: $btn-border-radius;
-  color: $white;
+  background: $white;
+  border: 1px solid transparent;
+  color: $brand;
   cursor: pointer;
   margin-right: .5rem;
   padding: .5rem 1.5rem;
   transition: $transition-base;
-  box-shadow: $box-shadow-inset;
 }
 
 .shepherd-button:not(:disabled):hover {
-  background: lighten(desaturate($primary, 23.76), 8.63);
+  background: $gray-100;
   box-shadow: $box-shadow;
 }
 
@@ -53,7 +50,7 @@
   border-bottom-right-radius: $border-radius;
   display: flex;
   justify-content: flex-end;
-  padding: 0 $spacer * .75 $spacer * .75; // 0 12px 12px
+  padding: 0 $spacer $spacer; // 0 16px 16px
 }
 
 .shepherd-footer .shepherd-button:last-child {
@@ -66,6 +63,7 @@
   color: $gray-500;
   cursor: pointer;
   font-size: 2rem;
+  line-height: .5;
   font-weight: $font-weight-base;
   margin: 0;
   padding: 0;
@@ -101,7 +99,7 @@
   display: flex;
   justify-content: flex-end;
   line-height: 2em;
-  padding: $spacer * .75 $spacer * .75 0; // 12px 12px 0
+  padding: $spacer $spacer 0; // 16px 16px 0
 }
 
 .shepherd-has-title .shepherd-content .shepherd-header {
@@ -113,7 +111,8 @@
   color: $gray-900;
   font-size: 1rem;
   line-height: 1.3em;
-  padding: $spacer * .75; // 12px
+  padding: 0 $spacer * 2.5 0 $spacer; // 0 40px 0 16px
+  margin: $spacer * -1 0 0; // -16px 0 0
 }
 
 .shepherd-text p {
@@ -226,3 +225,9 @@
 // .shepherd-modal-overlay-container.shepherd-modal-is-visible path {
 //   pointer-events: all;
 // }
+
+.tour-progress {
+  position: absolute;
+  bottom: $spacer * 1.5; // 24px
+  color: $gray-500;
+}
