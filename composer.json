@@ -323,6 +323,9 @@
             "drupal/publication_date": {
                 "Provide computed properties that return the publication date or the created/updated date @see https://www.drupal.org/project/publication_date/issues/3066317": "https://www.drupal.org/files/issues/2019-07-07/3066317-3.patch"
             },
+            "drupal/purge": {
+                "https://www.drupal.org/project/purge/issues/3259320": "https://git.drupalcode.org/project/purge/-/merge_requests/10.diff"
+            },
             "drupal/rdf_entity": {
                 "Allow bundle label plural variants @see https://github.com/ec-europa/rdf_entity/pull/12": "https://github.com/ec-europa/rdf_entity/compare/8.x-1.x...ea8f6af001fca732e89a4be0e29643953f49a88f.diff"
             },
