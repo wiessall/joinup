@@ -12,6 +12,7 @@ tips:
   account:
     id: account
     plugin: text
+    label: Your account
     weight: 1
     position: left-start
     selector: '.joinup-navbar .nav-item:nth-child(3)'
@@ -19,6 +20,7 @@ tips:
   search:
     id: search
     plugin: text
+    label: Search
     weight: 2
     position: left-start
     selector: '.input-group.js-form-type-search-api-autocomplete'
@@ -26,6 +28,7 @@ tips:
   spotlight:
     id: spotlight
     plugin: text
+    label: Curated content
     weight: 4
     position: left-start
     selector: '.block-views-blockin-the-spotlight-block'
@@ -33,6 +36,7 @@ tips:
   news:
     id: news
     plugin: text
+    label: News
     weight: 5
     position: left-start
     selector: '.block-views-blocklatest-news-block'
@@ -40,6 +44,7 @@ tips:
   explore:
     id: explore
     plugin: text
+    label: Explore
     weight: 6
     position: left-start
     selector: '#myTab'
@@ -47,6 +52,7 @@ tips:
   about:
     id: about
     plugin: text
+    label: About Joinup
     weight: 7
     position: left-start
     selector: '.about-what'
@@ -54,6 +60,7 @@ tips:
   contact:
     id: contact
     plugin: text
+    label: Contact us
     weight: 8
     position: bottom-start
     selector: 'li a[data-drupal-link-system-path="contact"]'
