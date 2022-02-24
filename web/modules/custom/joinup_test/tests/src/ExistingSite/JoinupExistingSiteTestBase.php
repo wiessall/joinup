@@ -5,6 +5,8 @@ declare(strict_types = 1);
 namespace Drupal\Tests\joinup_test\ExistingSite;
 
 use Drupal\joinup\Traits\AntibotTrait;
+use Drupal\rdf_entity\RdfInterface;
+use Drupal\Tests\rdf_entity\Traits\DrupalTestTraits\RdfEntityCreationTrait;
 use weitzman\DrupalTestTraits\ExistingSiteBase;
 
 /**
@@ -13,6 +15,9 @@ use weitzman\DrupalTestTraits\ExistingSiteBase;
 abstract class JoinupExistingSiteTestBase extends ExistingSiteBase {
 
   use AntibotTrait;
+  use RdfEntityCreationTrait {
+    createRdfEntity as contribCreateRdfEntity;
+  }
 
   /**
    * The list of Honeypot forms.
@@ -119,6 +124,17 @@ abstract class JoinupExistingSiteTestBase extends ExistingSiteBase {
       ->set('form_settings', $this->honeypotForms)
       ->save();
     static::restoreReadOnlyConfig();
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function createRdfEntity(array $values = []): RdfInterface {
+    $values += [
+      // Prevent notifications for test entities creation.
+      'skip_notification' => TRUE,
+    ];
+    return $this->contribCreateRdfEntity($values);
   }
 
 }
