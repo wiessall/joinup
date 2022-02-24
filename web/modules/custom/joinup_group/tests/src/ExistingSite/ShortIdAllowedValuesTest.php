@@ -60,7 +60,7 @@ class ShortIdAllowedValuesTest extends JoinupExistingSiteTestBase {
       'ends with dash contains uppercase' => ['EndWithDash-', TRUE],
       'contains space' => ['contains space', TRUE],
       'contains space and uppercase' => ['Contains Space', TRUE],
-      'contains special character' => ['specialcharacter!', TRUE],
+      'contains special character' => ['specialcharacter"\'_%\!', TRUE],
       'contains special character and uppercase' => ['SpecialCharacter!', TRUE],
       'too short 1 character' => ['a', TRUE],
       'too short 2 characters' => ['aa', TRUE],
