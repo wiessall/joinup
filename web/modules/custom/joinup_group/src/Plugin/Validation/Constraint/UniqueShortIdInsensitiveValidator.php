@@ -4,7 +4,6 @@ declare(strict_types = 1);
 
 namespace Drupal\joinup_group\Plugin\Validation\Constraint;
 
-use Drupal\Core\Database\Database;
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
 use Drupal\sparql_entity_storage\Driver\Database\sparql\ConnectionInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -72,7 +71,8 @@ class UniqueShortIdInsensitiveValidator extends ConstraintValidator implements C
       ],
     ];
 
-    $item_value = Database::getConnection()->escapeLike($item->value);
+    // Only \ and double quotes need to be escaped in a string.
+    $item_value = addcslashes($item->value, '\\"');
     $entity_id_where = $entity->isNew() ? '' : "FILTER (?entity_id NOT IN (<{$entity->id()}>))";
     $query = <<<QUERY
 SELECT DISTINCT(?entity_id)
