@@ -5,14 +5,18 @@ Feature:
   I want to be able to see if a term is deprecated.
 
   Scenario: Show deprecated terms without replacement.
+    Given eira terms:
+      | tid                                        | name       | description        | field_taxonomy_deprecated |
+      | http://joinup.eu/eira/term/only-deprecated | Deprecated | This is deprecated | 1                         |
+
     When I am logged in as a moderator
     And I am on the homepage
     And I click "RDF ID converter"
     Then I should see the heading "Convert an RDF entity ID"
 
-    When I fill in "RDF entity ID or a URL" with "http://data.europa.eu/dr8/ConfigurationManagement"
+    When I fill in "RDF entity ID or a URL" with "http://joinup.eu/eira/term/only-deprecated"
     And I press "Go!"
-    Then I should see the heading "Configuration Management"
+    Then I should see the heading "Deprecated"
     And I should see the warning message "This building block is deprecated, and should not be used in new development."
     But I should not see the warning message containing "Consider using"
     # Ensure caching.
@@ -21,13 +25,17 @@ Feature:
     But I should not see the warning message containing "Consider using"
 
   Scenario: Show deprecated terms with a replacement.
+    Given eira terms:
+      | tid                                                 | name        | description           | field_taxonomy_deprecated | field_taxonomy_replaces |
+      | http://joinup.eu/eira/term/deprecated-w-replacement | Deprecated  | This is deprecated    | 1                         |                         |
+      | http://joinup.eu/eira/term/replacement              | Replacement | This is a replacement | 0                         | Deprecated              |
     When I am logged in as a moderator
     And I am on the homepage
     And I click "RDF ID converter"
-    And I fill in "RDF entity ID or a URL" with "http://data.europa.eu/dr8/ReferenceData"
+    And I fill in "RDF entity ID or a URL" with "http://joinup.eu/eira/term/deprecated-w-replacement"
     And I press "Go!"
-    Then I should see the heading "Reference Data"
-    And I should see the warning message "This building block is deprecated, and should not be used in new development. Consider using Data (http://data.europa.eu/dr8/Data) instead."
+    Then I should see the heading "Deprecated"
+    And I should see the warning message "This building block is deprecated, and should not be used in new development. Consider using Replacement (http://joinup.eu/eira/term/replacement) instead."
     # Ensure caching.
     When I reload the page
-    Then I should see the warning message "This building block is deprecated, and should not be used in new development. Consider using Data (http://data.europa.eu/dr8/Data) instead."
+    Then I should see the warning message "This building block is deprecated, and should not be used in new development. Consider using Replacement (http://joinup.eu/eira/term/replacement) instead."
