@@ -14,42 +14,46 @@
 
 declare(strict_types = 1);
 
-use Drupal\Core\Database\Database;
-use Drupal\sparql_entity_storage\SparqlGraphStoreTrait;
-use EasyRdf\Graph;
+use Drupal\sparql_entity_storage\Entity\Query\Sparql\SparqlArg;
 
 /**
- * Update the EIRA vocabulary.
+ * Cleans up terms referenced that are removed.
  */
-function joinup_core_deploy_0107400(array &$sandbox): void {
-  // Clean up the existing graph.
-  $sparql_connection = Database::getConnection('default', 'sparql_default');
-  $sparql_connection->query('WITH <http://eira_skos> DELETE { ?s ?p ?o } WHERE { ?s ?p ?o } ');
-
-  $filepath = __DIR__ . '/../../../../resources/fixtures/EIRA_SKOS.rdf';
-  $graph_store = SparqlGraphStoreTrait::createGraphStore();
-  $graph = new Graph('http://eira_skos');
-  $graph->parse(file_get_contents($filepath));
-  $graph_store->insert($graph);
-
-  // Repeat steps taken after importing the fixtures that target eira terms.
-  $sparql_connection->query('WITH <http://eira_skos> INSERT { ?subject a skos:Concept } WHERE { ?subject a skos:Collection . };');
-  $sparql_connection->query('WITH <http://eira_skos> INSERT INTO <http://eira_skos> { ?subject skos:topConceptOf <http://data.europa.eu/dr8> } WHERE { ?subject a skos:Concept .};');
-  $sparql_connection->query('WITH <http://eira_skos> INSERT { ?member skos:broaderTransitive ?collection } WHERE { ?collection a skos:Collection . ?collection skos:member ?member };');
-
-  // There is one term removed and replaced. Update database records.
+function joinup_core_deploy_0108000(&$sandbox) {
+  $sparql = \Drupal::getContainer()->get('sparql.endpoint');
   $graphs = [
     'http://joinup.eu/solution/published',
     'http://joinup.eu/solution/draft',
+    'http://joinup.eu/asset_release/published',
+    'http://joinup.eu/asset_release/draft',
   ];
 
+  $terms_to_remove = [
+    'http://data.europa.eu/dr8/HostingService',
+    'http://data.europa.eu/dr8/PublicServiceCatalogue',
+    'http://data.europa.eu/dr8/ServiceRegistrationService',
+    'http://data.europa.eu/dr8/HostingAndNetworkingInfrastructure',
+    'http://data.europa.eu/dr8/LegalAgreements/InternationalTreaties',
+  ];
+  $terms_to_remove_string = SparqlArg::serializeUris($terms_to_remove, ' ');
+
   foreach ($graphs as $graph) {
-    $query = <<<QUERY
-WITH <$graph>
-DELETE { ?entity_id <http://purl.org/dc/terms/type> <http://data.europa.eu/dr8/PublicPolicyImplementationApproach> }
-INSERT { ?entity_id <http://purl.org/dc/terms/type> <http://data.europa.eu/dr8/InteroperableDigitalPublicServicesImplementationOrientation> }
-WHERE { ?entity_id <http://purl.org/dc/terms/type> <http://data.europa.eu/dr8/PublicPolicyImplementationApproach> }
+    $remove_query = <<<QUERY
+WITH <{$graph}>
+DELETE { ?s <http://purl.org/dc/terms/type> ?solution_type }
+WHERE {
+  ?s <http://purl.org/dc/terms/type> ?solution_type .
+  VALUES ?solution_type { {$terms_to_remove_string} }
+}
 QUERY;
-    $sparql_connection->query($query);
+    $sparql->query($remove_query);
+
+    $replace_query = <<<QUERY
+WITH <{$graph}>
+DELETE { ?s <http://purl.org/dc/terms/type> <http://data.europa.eu/dr8/PublicService> }
+INSERT { ?s <http://purl.org/dc/terms/type> <http://data.europa.eu/dr8/InteroperableDigitalPublicService> }
+WHERE { ?s <http://purl.org/dc/terms/type> <http://data.europa.eu/dr8/PublicService> }
+QUERY;
+    $sparql->query($replace_query);
   }
 }
