@@ -86,7 +86,7 @@
   color: $gray-700;
   display: flex;
   flex: 1 0 auto;
-  font-size: 1rem;
+  font-size: 0;
   font-weight: $font-weight-base;
   margin: 0;
   padding: 0;
@@ -102,10 +102,10 @@
   padding: $spacer $spacer 0; // 16px 16px 0
 }
 
-.shepherd-has-title .shepherd-content .shepherd-header {
-  background: $gray-100;
-  padding: $spacer; // 16px
-}
+// .shepherd-has-title .shepherd-content .shepherd-header {
+  // background: $gray-100;
+  // padding: $spacer; // 16px
+// }
 
 .shepherd-text {
   color: $gray-900;
