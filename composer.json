@@ -243,6 +243,9 @@
             "drupal/core": "-p2"
         },
         "patches": {
+            "behat/mink-extension": {
+                "https://github.com/Behat/MinkExtension/pull/373": "https://patch-diff.githubusercontent.com/raw/Behat/MinkExtension/pull/373.diff"
+            },
             "drupal/coder": {
                 "PHPCS hangs indefinetly with standard Drupal @see https://www.drupal.org/project/coder/issues/3306999": "https://git.drupalcode.org/project/coder/-/commit/446dea2.diff"
             },
