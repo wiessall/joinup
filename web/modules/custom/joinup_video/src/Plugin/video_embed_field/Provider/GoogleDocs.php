@@ -74,7 +74,7 @@ class GoogleDocs extends ProviderPluginBase {
    */
   public static function getIdFromInput($input) {
     $matches = static::getDataFromInput($input);
-    return isset($matches['id']) ? $matches['id'] : FALSE;
+    return $matches['id'] ?? FALSE;
   }
 
   /**
@@ -89,7 +89,7 @@ class GoogleDocs extends ProviderPluginBase {
    */
   public static function getTypeFromInput($input) {
     $matches = static::getDataFromInput($input);
-    return isset($matches['type']) ? $matches['type'] : FALSE;
+    return $matches['type'] ?? FALSE;
   }
 
   /**

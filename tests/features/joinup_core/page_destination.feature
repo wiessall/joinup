@@ -29,7 +29,7 @@ Feature:
     And I fill in "Password" with "Mr Redirect"
     And I press "Log in"
     Then I should not see the heading "Mr Redirect"
-    And the relative url should be "/search?keys=how%20to%20redirect"
+    And the relative url should be "/search?keys=how%20to%20redirect&check_logged_in=1"
 
   Scenario: Only the destination parameter should be carried over if one exists outside the user pages.
     When I am on "/search?keys=how+to+redirect&destination=contact"
@@ -38,4 +38,4 @@ Feature:
     And I fill in "Password" with "Mr Redirect"
     And I press "Log in"
     Then I should not see the heading "Mr Redirect"
-    And the relative url should be "/contact"
+    And the relative url should be "/contact?check_logged_in=1"

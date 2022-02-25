@@ -1,33 +1,33 @@
 # Solr configs and commands.
 
 solr:
-  version: '6.6.6'
-  vendor_dir: ${joinup.dir}/vendor/apache
-  dir: ${solr.vendor_dir}/solr-${solr.version}
-  bin: ${joinup.dir}/vendor/bin/solr
-  download_url: http://archive.apache.org/dist/lucene/solr/${solr.version}/solr-${solr.version}.tgz
-  config_dir: ${joinup.site_dir}/modules/contrib/search_api_solr/solr-conf/6.x
-  core:
-    joinup:
-      dir: ${solr.dir}/server/solr/${env.SOLR_CORE}
+  local:
+    version: '8.11.1'
+    vendor_dir: ${joinup.dir}/vendor/apache
+    server_dir: ${solr.local.vendor_dir}/solr-${solr.local.version}
+    bin: ${solr.local.server_dir}/bin/solr
+    core_dir: ${solr.local.server_dir}/server/solr/${env.SOLR_CORE}
+    download_url: http://archive.apache.org/dist/lucene/solr/${solr.local.version}/solr-${solr.local.version}.tgz
   snapshot_dir: ${joinup.db_dir}/solr
+  config_tmp: ${toolkit.tmp_folder}/solr_config
+  config_dir: ${joinup.dir}/resources/solr/conf
 
 commands:
 
   # Starts Solr.
   solr:start:
     - task: exec
-      command: ${solr.bin} status ; test $? -eq 0 || ${solr.bin} start
+      command: ${solr.local.bin} status ; test $? -eq 0 || ${solr.local.bin} start -Dsolr.allowPaths=${solr.snapshot_dir}
 
   # Stops Solr.
   solr:stop:
     - task: exec
-      command: ${solr.bin} status ; test $? -ne 0 || ${solr.bin} stop
+      command: ${solr.local.bin} status ; test $? -ne 0 || ${solr.local.bin} stop
 
   # Restarts Solr.
   solr:restart:
     - task: exec
-      command: ${solr.bin} restart
+      command: ${solr.local.bin} restart
 
   # Downloads and unpacks the Solr snapshot.
   solr:download-snapshot:
@@ -37,10 +37,10 @@ commands:
     - task: remove
       file: ${solr.snapshot_dir}/solr.tar
     - task: remove
-      file: ${solr.snapshot_dir}/snapshot.joinup
+      file: ${solr.snapshot_dir}/snapshot.${env.SOLR_CORE}
     # Snapshot dir.
     - task: mkdir
-      dir: ${solr.snapshot_dir}/snapshot.joinup
+      dir: ${solr.snapshot_dir}/snapshot.${env.SOLR_CORE}
     # Download and unpack the archive.
     - task: run
       command: toolkit:download-dump
@@ -49,66 +49,62 @@ commands:
         dumpfile: ${solr.snapshot_dir}/solr.tar
     # Unpack and organize.
     - task: exec
-      command: tar -xvf ${solr.snapshot_dir}/solr.tar -C ${solr.snapshot_dir}/snapshot.joinup --strip-components=1
+      command: tar -xvf ${solr.snapshot_dir}/solr.tar -C ${solr.snapshot_dir}/snapshot.${env.SOLR_CORE} --strip-components=1
     # Cleanup.
     - task: remove
       file: ${solr.snapshot_dir}/solr.tar
-
-  # Empties the Solr backed.
-  solr:empty:
-    - task: exec
-      command: curl
-      arguments:
-        - ${env.SOLR_URL}/${env.SOLR_CORE}/update?commit=true&wt=json
-      options:
-        request: POST
-        header: 'Content-Type: application/xml'
-        data: '<delete><query>*:*</query></delete>'
-
-  # Restores the Solr index from a snapshot.
-  solr:restore:
-    - task: run
-      command: solr:empty
-    - task: run
-      command: solr:restore-core
-      arguments:
-        - joinup
-
-  # Takes a snapshot of the Solr index.
-  solr:backup:
-    - task: run
-      command: solr:backup-core
-      arguments:
-        - joinup
 
   # Downloads and installs the Solr binary.
   solr:download-bin:
     - task: exec
       command: wget
       arguments:
-        - ${solr.download_url}
+        - ${solr.local.download_url}
       options:
         no-host-directories: null
         directory-prefix: ${toolkit.tmp_folder}
         timestamping: null
     - task: mkdir
-      dir: ${solr.dir}
+      dir: ${solr.local.server_dir}
     - task: exec
       command: tar
       arguments:
         - xzf
-        - ${toolkit.tmp_folder}/solr-${solr.version}.tgz
+        - ${toolkit.tmp_folder}/solr-${solr.local.version}.tgz
       options:
-        directory: ${solr.vendor_dir}
-    - task: remove
-      file: ${solr.bin}
-    - task: symlink
-      from: ${solr.dir}/bin/solr
-      to: ${solr.bin}
+        directory: ${solr.local.vendor_dir}
 
   # Configures the Solr core.
   solr:config:
     - task: run
       command: solr:start
     - task: exec
-      command: test -d ${solr.core.joinup.dir} || ${solr.bin} create_core -c ${env.SOLR_CORE} -d ${solr.config_dir}
+      command: test -f ${solr.local.core_dir}/core.properties || ${solr.local.bin} create_core -c ${env.SOLR_CORE} -d ${solr.config_dir}
+
+  # Builds the Solr core configuration.
+  solr:build-core-config:
+    - task: remove
+      file: ${solr.config_tmp}.zip
+    - task: remove
+      file: ${solr.config_tmp}
+    - task: exec
+      command: ${drush.bin}
+      arguments:
+        - search-api-solr:get-server-config
+        - joinup
+        - ${solr.config_tmp}.zip
+        # See \Joinup\TaskRunner\ConfigProviders\JoinupConfigProvider::provide().
+        - ${solr.version.major}
+    - task: exec
+      command: unzip -q ${solr.config_tmp}.zip
+      options:
+        '-d': ${solr.config_tmp}
+    - task: remove
+      file: ${solr.config_dir}
+    - task: rename
+      from: ${solr.config_tmp}
+      to: resources/solr/conf
+    - task: remove
+      file: ${solr.config_tmp}.zip
+    - task: exec
+      command: test $(git status --porcelain -- ${solr.config_dir} | wc -l) = "0" || (echo "\033[0;31mChanges to Solr config need your attention:\033[0m" && git status ${solr.config_dir})

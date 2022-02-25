@@ -1,7 +1,33 @@
 uuid: 982c8b12-1041-4ea6-8e05-c7e4a0863b97
 langcode: en
 status: true
-dependencies: {  }
+dependencies:
+  config:
+    - filter.format.basic_html
+    - filter.format.content_editor
+    - filter.format.essential_html
+    - filter.format.glossary_html
+    - filter.format.simple_html
+    - node.type.document
+    - node.type.tallinn_report
+  module:
+    - comment
+    - contextual
+    - entity_legal
+    - filter
+    - flag
+    - joinup
+    - joinup_licence
+    - media
+    - node
+    - paragraphs_type_permissions
+    - rdf_entity
+    - rdf_export
+    - search_api_autocomplete
+    - state_machine_permissions
+    - system
+    - tour
+    - video_embed_field
 id: authenticated
 label: 'Authenticated user'
 weight: 1
@@ -35,14 +61,12 @@ permissions:
   - 'legal re-accept legal_notice'
   - 'legal view legal_notice'
   - 'never autoplay videos'
-  - 'opt-in or out of matomo tracking'
   - 'post comments'
   - 'propose collection rdf entity'
   - 'revert all revisions'
   - 'skip comment approval'
   - 'solution - solution_workflow - transition from __new__ to draft'
   - 'solution - solution_workflow - transition from __new__ to proposed'
-  - 'subscribe to newsletters'
   - 'transition group from __new__ to draft using the collection - collection_workflow workflow'
   - 'transition group from __new__ to draft using the solution - solution_workflow workflow'
   - 'transition group from __new__ to proposed using the collection - collection_workflow workflow'

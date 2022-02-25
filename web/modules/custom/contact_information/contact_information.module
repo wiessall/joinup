@@ -33,7 +33,10 @@ function contact_information_entity_bundle_field_info_alter(&$fields, EntityType
   // use a bespoke regex instead of \Drupal\Component\Utility\EmailValidator.
   // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-2404
   if ($entity_type->id() == 'rdf_entity' && $bundle == 'contact_information' && !empty($fields['field_ci_email'])) {
-    $fields['field_ci_email']->addConstraint('JoinupEmail');
+    // @todo Consider either restoring the custom email validation or dead code
+    // removal in ISAICP-6965.
+    // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-6965
+    // $fields['field_ci_email']->addConstraint('JoinupEmail');
   }
 }
 

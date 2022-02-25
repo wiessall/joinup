@@ -29,68 +29,66 @@ mode: mail_body
 content:
   field_contact_attachment:
     type: file_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
     weight: 8
     region: content
-    label: above
-    settings: {  }
-    third_party_settings: {  }
   field_contact_category:
     type: list_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
     weight: 4
     region: content
-    label: above
-    settings: {  }
-    third_party_settings: {  }
   field_contact_email:
     type: basic_string
+    label: above
+    settings: {  }
+    third_party_settings: {  }
     weight: 3
     region: content
-    label: above
-    settings: {  }
-    third_party_settings: {  }
   field_contact_first_name:
     type: string
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
     weight: 0
     region: content
-    label: above
-    settings:
-      link_to_entity: false
-    third_party_settings: {  }
   field_contact_last_name:
     type: string
-    weight: 1
-    region: content
     label: above
     settings:
       link_to_entity: false
     third_party_settings: {  }
+    weight: 1
+    region: content
   field_contact_message:
     type: text_default
-    weight: 7
-    region: content
     label: above
     settings: {  }
     third_party_settings: {  }
+    weight: 7
+    region: content
   field_contact_organisation:
     type: string
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
     weight: 2
     region: content
-    label: above
-    settings:
-      link_to_entity: false
-    third_party_settings: {  }
   field_contact_subject:
     type: string
-    weight: 6
-    region: content
     label: above
     settings:
       link_to_entity: false
     third_party_settings: {  }
+    weight: 6
+    region: content
   field_contact_url:
     type: link
-    weight: 5
-    region: content
     label: above
     settings:
       trim_length: 80
@@ -99,9 +97,12 @@ content:
       rel: ''
       target: ''
     third_party_settings: {  }
+    weight: 5
+    region: content
   partial_1:
     weight: 0
     region: content
 hidden:
   field_contact_copy: true
   partial_0: true
+  search_api_excerpt: true

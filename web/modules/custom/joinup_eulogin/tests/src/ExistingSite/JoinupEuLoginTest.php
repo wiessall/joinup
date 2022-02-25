@@ -91,7 +91,7 @@ class JoinupEuLoginTest extends JoinupExistingSiteTestBase {
     $this->drupalGet('/user/password');
 
     $this->drupalPostForm(NULL, ['name' => $this->account->getEmail()], 'Submit');
-    $assert->pageTextContains('Further instructions have been sent to your email address.');
+    $assert->pageTextContains("If {$this->account->getEmail()} is a valid account, an email will be sent with instructions to reset your password.");
 
     $this->assertMailString('id', 'user_password_reset', 1);
     $this->assertMailString('subject', 'Please confirm the request of a new password.', 1);

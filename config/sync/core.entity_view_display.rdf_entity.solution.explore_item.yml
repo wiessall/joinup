@@ -57,28 +57,29 @@ third_party_settings:
   field_group:
     group_solution_abstract_wrapper:
       children: {  }
+      label: 'Abstract wrapper'
       parent_name: ''
+      region: hidden
       weight: 55
       format_type: html_element
       format_settings:
-        id: ''
         classes: ''
+        id: ''
         element: div
         show_label: false
         label_element: h3
         attributes: ''
         effect: none
         speed: fast
-      label: 'Abstract wrapper'
-      region: hidden
   layout_builder:
-    allow_custom: false
     enabled: true
+    allow_custom: false
     sections:
       -
         layout_id: layout_onecol
         layout_settings:
           label: ''
+          context_mapping: {  }
         components:
           6de3b21b-ee1e-43e3-a0b3-530114e5c157:
             uuid: 6de3b21b-ee1e-43e3-a0b3-530114e5c157
@@ -86,19 +87,20 @@ third_party_settings:
             configuration:
               id: 'field_block:rdf_entity:solution:field_is_description'
               label: Description
-              provider: layout_builder
               label_display: '0'
+              provider: layout_builder
+              context_mapping:
+                entity: layout_builder.entity
+                view_mode: view_mode
               formatter:
-                label: hidden
                 type: joinup_html_stripper_stripped
+                label: hidden
                 settings:
                   trim_length: 230
                 third_party_settings:
                   template_suggestion:
                     template_suggestion: ''
-              context_mapping:
-                entity: layout_builder.entity
-                view_mode: view_mode
+            weight: 1
             additional:
               component_attributes:
                 block_attributes:
@@ -116,18 +118,20 @@ third_party_settings:
                   class: ''
                   style: ''
                   data: ''
-            weight: 1
           4044431f-0d0a-46f8-af2f-aa11270f596a:
             uuid: 4044431f-0d0a-46f8-af2f-aa11270f596a
             region: content
             configuration:
               id: 'field_block:rdf_entity:solution:created'
               label: 'Authored on'
-              provider: layout_builder
               label_display: '0'
+              provider: layout_builder
+              context_mapping:
+                entity: layout_builder.entity
+                view_mode: view_mode
               formatter:
-                label: hidden
                 type: timestamp
+                label: hidden
                 settings:
                   date_format: custom
                   custom_date_format: d/m/Y
@@ -135,9 +139,7 @@ third_party_settings:
                 third_party_settings:
                   template_suggestion:
                     template_suggestion: ''
-              context_mapping:
-                entity: layout_builder.entity
-                view_mode: view_mode
+            weight: 2
             additional:
               component_attributes:
                 block_attributes:
@@ -155,17 +157,16 @@ third_party_settings:
                   class: ''
                   style: ''
                   data: ''
-            weight: 2
           0e4a6d85-b472-49b2-adb9-c6ff451c9e1b:
             uuid: 0e4a6d85-b472-49b2-adb9-c6ff451c9e1b
             region: content
             configuration:
+              id: 'extra_field_block:rdf_entity:solution:read_more'
               label_display: '0'
               context_mapping:
                 entity: layout_builder.entity
-              id: 'extra_field_block:rdf_entity:solution:read_more'
-            additional: {  }
             weight: 3
+            additional: {  }
         third_party_settings: {  }
 id: rdf_entity.solution.explore_item
 targetEntityType: rdf_entity
@@ -174,8 +175,6 @@ mode: explore_item
 content:
   created:
     type: timestamp
-    weight: 2
-    region: content
     label: hidden
     settings:
       date_format: custom
@@ -184,40 +183,42 @@ content:
     third_party_settings:
       template_suggestion:
         template_suggestion: ''
+    weight: 2
+    region: content
   field_is_description:
     type: smart_trim
-    weight: 1
-    region: content
     label: hidden
     settings:
       trim_length: 500
       trim_type: chars
       trim_suffix: …
+      wrap_output: false
       wrap_class: trimmed
-      more_text: More
+      more_link: false
       more_class: more-link
+      more_text: More
+      summary_handler: full
       trim_options:
         text: true
         trim_zero: false
-      wrap_output: false
-      more_link: false
-      summary_handler: full
     third_party_settings:
       template_suggestion:
         template_suggestion: p_wrapper
+    weight: 1
+    region: content
   label:
     type: string
-    weight: 0
-    region: content
     label: hidden
     settings:
       link_to_entity: false
     third_party_settings: {  }
-  read_more:
-    weight: 3
+    weight: 0
     region: content
+  read_more:
     settings: {  }
     third_party_settings: {  }
+    weight: 3
+    region: content
 hidden:
   changed: true
   collections: true
@@ -269,5 +270,6 @@ hidden:
   rdf_entity_field_is_content_top: true
   related_solutions: true
   releases_overview: true
+  search_api_excerpt: true
   share_link: true
   solution_subscribe: true
