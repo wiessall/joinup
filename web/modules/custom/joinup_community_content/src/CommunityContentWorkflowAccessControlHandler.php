@@ -36,35 +36,35 @@ class CommunityContentWorkflowAccessControlHandler {
    *
    * @var \Drupal\Core\Entity\EntityTypeManagerInterface
    */
-  protected $entityTypeManager;
+  protected EntityTypeManagerInterface $entityTypeManager;
 
   /**
    * The membership manager.
    *
    * @var \Drupal\og\MembershipManagerInterface
    */
-  protected $membershipManager;
+  protected MembershipManagerInterface $membershipManager;
 
   /**
    * The current logged in user.
    *
    * @var \Drupal\Core\Session\AccountInterface
    */
-  protected $currentUser;
+  protected AccountInterface $currentUser;
 
   /**
    * The configuration factory.
    *
    * @var \Drupal\Core\Config\ConfigFactoryInterface
    */
-  protected $configFactory;
+  protected ConfigFactoryInterface $configFactory;
 
   /**
    * The workflow helper class.
    *
    * @var \Drupal\joinup_workflow\WorkflowHelperInterface
    */
-  protected $workflowHelper;
+  protected WorkflowHelperInterface $workflowHelper;
 
   /**
    * Constructs a new CommunityContentWorkflowAccessControlHandler.

@@ -35,7 +35,7 @@ function joinup_workflow_entity_base_field_info(EntityTypeInterface $entity_type
   if ($entity_type->id() === 'rdf_entity' || $entity_type->id() === 'node') {
     $fields['current_workflow_state'] = BaseFieldDefinition::create('current_workflow_state')
       ->setLabel(new TranslatableMarkup('Current workflow state'))
-      ->setDisplayOptions('form', ['type' => 'hidden'])
+      ->setDisplayOptions('form', ['region' => 'hidden'])
       ->setDisplayConfigurable('form', TRUE)
       ->setComputed(TRUE);
   }

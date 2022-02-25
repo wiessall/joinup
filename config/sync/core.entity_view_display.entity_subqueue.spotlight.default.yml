@@ -14,10 +14,8 @@ bundle: spotlight
 mode: default
 content:
   items:
-    label: hidden
     type: entity_reference_entity_view
-    weight: 0
-    region: content
+    label: hidden
     settings:
       view_mode: numbered_listing
       link: false
@@ -25,11 +23,14 @@ content:
       field_delimiter:
         delimiter: ''
       field_formatter_range:
+        order: 0
         limit: 0
         offset: 0
-        order: 0
       template_suggestion:
         template_suggestion: ''
+    weight: 0
+    region: content
 hidden:
   langcode: true
+  search_api_excerpt: true
   title: true

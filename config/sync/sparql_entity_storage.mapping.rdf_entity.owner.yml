@@ -7,10 +7,10 @@ dependencies:
     - rdf_entity.rdfentity.owner
 third_party_settings:
   rdf_schema_field_validation:
-    graph: 'http://adms-definition'
-    class: 'http://www.w3.org/2000/01/rdf-schema#Class'
     property_predicates:
       - 'http://www.w3.org/2000/01/rdf-schema#domain'
+    graph: 'http://adms-definition'
+    class: 'http://www.w3.org/2000/01/rdf-schema#Class'
 id: rdf_entity.owner
 entity_type_id: rdf_entity
 bundle: owner

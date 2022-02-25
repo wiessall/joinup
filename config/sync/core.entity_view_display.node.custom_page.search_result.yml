@@ -22,23 +22,23 @@ third_party_settings:
     group_attachment:
       children:
         - field_attachment
+      label: Attachments
       parent_name: ''
+      region: hidden
       weight: 7
       format_type: html_element
       format_settings:
+        classes: ''
+        id: ''
         element: div
         show_label: true
         label_element: h3
         attributes: ''
         effect: none
         speed: fast
-        id: ''
-        classes: ''
-      label: Attachments
-      region: hidden
   layout_builder:
-    allow_custom: false
     enabled: false
+    allow_custom: false
 _core:
   default_config_hash: ZZ0APhON-5FpA-vKXTwx_A1Bz6FHZzw2XG7t7MvvXO8
 id: node.custom_page.search_result
@@ -48,8 +48,6 @@ mode: search_result
 content:
   field_paragraphs_body:
     type: entity_reference_revisions_entity_view
-    weight: 1
-    region: content
     label: hidden
     settings:
       view_mode: preview
@@ -63,10 +61,10 @@ content:
         offset: 0
       template_suggestion:
         template_suggestion: ''
+    weight: 1
+    region: content
   published_at:
     type: timestamp
-    weight: 0
-    region: content
     label: hidden
     settings:
       date_format: date_only
@@ -75,6 +73,8 @@ content:
     third_party_settings:
       template_suggestion:
         template_suggestion: ''
+    weight: 0
+    region: content
 hidden:
   field_attachment: true
   field_custom_page_logo: true
@@ -82,3 +82,4 @@ hidden:
   links: true
   og_audience: true
   report: true
+  search_api_excerpt: true

@@ -18,14 +18,14 @@ plugin: 'views_block:eif_related_entities-block_1'
 settings:
   id: 'views_block:eif_related_entities-block_1'
   label: ''
-  provider: views
   label_display: '0'
+  provider: views
   views_label: ''
   items_per_page: none
 visibility:
   request_route:
     id: request_route
-    routes:
-      - entity.taxonomy_term.canonical
     negate: false
     context_mapping: {  }
+    routes:
+      - entity.taxonomy_term.canonical

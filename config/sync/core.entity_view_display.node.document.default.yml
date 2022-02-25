@@ -36,37 +36,37 @@ third_party_settings:
       children:
         - field_type
         - field_licence
+      label: Categorisation
       parent_name: ''
+      region: content
       weight: 3
       format_type: html_element
       format_settings:
-        id: ''
         classes: ''
+        id: ''
         element: div
         show_label: true
         label_element: h3
         attributes: ''
         effect: none
         speed: fast
-      label: Categorisation
-      region: content
     group_attachment:
       children:
         - field_file
+      label: Attachment
       parent_name: ''
+      region: content
       weight: 4
       format_type: html_element
       format_settings:
-        id: ''
         classes: ''
+        id: ''
         element: div
         show_label: true
         label_element: h3
         attributes: ''
         effect: none
         speed: fast
-      label: Attachment
-      region: content
 _core:
   default_config_hash: IBVftmfYLkfapLokxuyLrv1me4toJj5yidZu0ixGxQM
 id: node.document.default
@@ -75,23 +75,23 @@ bundle: document
 mode: default
 content:
   body:
-    label: hidden
     type: text_default
-    weight: 1
+    label: hidden
     settings: {  }
     third_party_settings: {  }
+    weight: 1
     region: content
   field_comments:
-    weight: 7
+    type: comment_default
     label: above
     settings:
-      pager_id: 0
       view_mode: default
+      pager_id: 0
     third_party_settings: {  }
-    type: comment_default
+    weight: 7
     region: content
   field_document_publication_date:
-    weight: 2
+    type: datetime_default
     label: hidden
     settings:
       timezone_override: ''
@@ -99,32 +99,30 @@ content:
     third_party_settings:
       template_suggestion:
         template_suggestion: no_wrappers
-    type: datetime_default
+    weight: 2
     region: content
   field_file:
-    weight: 5
+    type: file_url_default
     label: hidden
     settings:
       mode: link
     third_party_settings:
       template_suggestion:
         template_suggestion: fieldset
-    type: file_url_default
+    weight: 5
     region: content
   field_licence:
     type: entity_reference_label
-    weight: 11
-    region: content
     label: above
     settings:
       link: false
     third_party_settings:
       template_suggestion:
         template_suggestion: fieldset
+    weight: 11
+    region: content
   field_shared_in:
     type: entity_reference_entity_view
-    weight: 8
-    region: content
     label: above
     settings:
       view_mode: view_mode_tile
@@ -132,29 +130,30 @@ content:
     third_party_settings:
       template_suggestion:
         template_suggestion: entity_reference__listing_tile
+    weight: 8
+    region: content
   field_short_title:
-    weight: 0
+    type: string
     label: hidden
     settings:
       link_to_entity: false
     third_party_settings:
       template_suggestion:
         template_suggestion: no_wrappers
-    type: string
+    weight: 0
     region: content
   field_type:
     type: list_default
-    weight: 10
-    region: content
     label: above
     settings: {  }
     third_party_settings:
       template_suggestion:
         template_suggestion: fieldset
-  report:
-    label: hidden
-    weight: 6
+    weight: 10
     region: content
+  report:
+    type: link
+    label: hidden
     settings:
       trim_length: 80
       url_only: false
@@ -164,12 +163,13 @@ content:
     third_party_settings:
       template_suggestion:
         template_suggestion: no_wrappers
-    type: link
-  share_link:
-    weight: 5
+    weight: 6
     region: content
+  share_link:
     settings: {  }
     third_party_settings: {  }
+    weight: 5
+    region: content
 hidden:
   field_document_logo: true
   field_document_spatial_coverage: true
@@ -182,3 +182,4 @@ hidden:
   og_audience: true
   published_at: true
   read_more: true
+  search_api_excerpt: true

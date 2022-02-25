@@ -8,7 +8,6 @@ use Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException;
 use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\menu_link_content\MenuLinkContentInterface;
-use Drupal\search_api\Plugin\search_api\datasource\ContentEntity;
 
 /**
  * Helper methods to deal with entities.
@@ -200,7 +199,9 @@ trait EntityTrait {
     // Invalidate any static cache, so that all computed fields are calculated
     // with updated values (e.g. the "collection" computed field of solutions).
     \Drupal::entityTypeManager()->getStorage($entity->getEntityTypeId())->resetCache([$entity->id()]);
-    ContentEntity::indexEntity($entity);
+    /** @var \Drupal\search_api\Plugin\search_api\datasource\ContentEntityTrackingManager $content_tracking_manager */
+    $content_tracking_manager = \Drupal::service('search_api.entity_datasource.tracking_manager');
+    $content_tracking_manager->trackEntityChange($entity);
   }
 
   /**
