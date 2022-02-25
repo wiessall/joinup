@@ -5,7 +5,6 @@ declare(strict_types = 1);
 namespace Drupal\Tests\joinup_group\ExistingSite;
 
 use Drupal\Tests\joinup_test\ExistingSite\JoinupExistingSiteTestBase;
-use Drupal\Tests\rdf_entity\Traits\DrupalTestTraits\RdfEntityCreationTrait;
 use Drupal\Tests\token\Functional\TokenTestTrait;
 
 /**
@@ -13,7 +12,6 @@ use Drupal\Tests\token\Functional\TokenTestTrait;
  */
 class GroupTokensTest extends JoinupExistingSiteTestBase {
 
-  use RdfEntityCreationTrait;
   use TokenTestTrait;
 
   /**

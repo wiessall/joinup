@@ -6,7 +6,6 @@ namespace Drupal\Tests\joinup_user\ExistingSite;
 
 use Drupal\Core\Language\LanguageInterface;
 use Drupal\Tests\joinup_test\ExistingSite\JoinupExistingSiteTestBase;
-use Drupal\Tests\rdf_entity\Traits\DrupalTestTraits\RdfEntityCreationTrait;
 use Drupal\file\Entity\File;
 use Drupal\image\Plugin\Field\FieldType\ImageItem;
 use Drupal\og\OgMembershipInterface;
@@ -21,7 +20,6 @@ use weitzman\LoginTrait\LoginTrait;
 class UserCancelTest extends JoinupExistingSiteTestBase {
 
   use LoginTrait;
-  use RdfEntityCreationTrait;
 
   /**
    * Tests user cancellation.

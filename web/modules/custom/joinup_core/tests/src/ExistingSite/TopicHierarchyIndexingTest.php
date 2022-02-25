@@ -5,7 +5,6 @@ declare(strict_types = 1);
 namespace Drupal\Tests\joinup_core\ExistingSite;
 
 use Drupal\Tests\joinup_test\ExistingSite\JoinupExistingSiteTestBase;
-use Drupal\Tests\rdf_entity\Traits\DrupalTestTraits\RdfEntityCreationTrait;
 use Drupal\search_api\Entity\Index;
 use Drupal\taxonomy\Entity\Vocabulary;
 use weitzman\DrupalTestTraits\Entity\TaxonomyCreationTrait;
@@ -17,7 +16,6 @@ use weitzman\DrupalTestTraits\Entity\TaxonomyCreationTrait;
  */
 class TopicHierarchyIndexingTest extends JoinupExistingSiteTestBase {
 
-  use RdfEntityCreationTrait;
   use TaxonomyCreationTrait;
 
   /**

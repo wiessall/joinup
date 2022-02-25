@@ -4,9 +4,10 @@ declare(strict_types = 1);
 
 namespace Drupal\Tests\joinup_test\ExistingSite;
 
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\State\StateInterface;
 use Drupal\joinup\Traits\AntibotTrait;
-use Drupal\rdf_entity\RdfInterface;
-use Drupal\Tests\rdf_entity\Traits\DrupalTestTraits\RdfEntityCreationTrait;
+use Drupal\Tests\joinup_test\Traits\RdfEntityCreationTrait;
 use weitzman\DrupalTestTraits\ExistingSiteBase;
 
 /**
@@ -15,30 +16,28 @@ use weitzman\DrupalTestTraits\ExistingSiteBase;
 abstract class JoinupExistingSiteTestBase extends ExistingSiteBase {
 
   use AntibotTrait;
-  use RdfEntityCreationTrait {
-    createRdfEntity as contribCreateRdfEntity;
-  }
+  use RdfEntityCreationTrait;
 
   /**
    * The list of Honeypot forms.
    *
    * @var bool[]
    */
-  protected $honeypotForms;
+  protected array $honeypotForms;
 
   /**
    * Whether the current test should run without Antibot & Honeypot features.
    *
    * @var bool
    */
-  protected $disableSpamProtection = TRUE;
+  protected bool $disableSpamProtection = TRUE;
 
   /**
    * The state service.
    *
    * @var \Drupal\Core\State\StateInterface
    */
-  protected $state;
+  protected StateInterface $state;
 
   /**
    * {@inheritdoc}
@@ -76,7 +75,20 @@ abstract class JoinupExistingSiteTestBase extends ExistingSiteBase {
       $this->restoreHoneypot();
     }
 
-    // Make sure we don't send any notifications during test entities cleanup.
+    // Avoid sending notifications during test entities cleanup. First, sort the
+    // entities by moving the 'user' entities at the end, as deleting a user
+    // might trigger deletion of entities authored by that user. Such entities
+    // are subsequently reloaded, losing the 'skip_notification' flag.
+    // @see node_user_predelete()
+    usort($this->cleanupEntities, function (EntityInterface $left, EntityInterface $right): int {
+      if ($left->getEntityTypeId() !== 'user' && $right->getEntityTypeId() === 'user') {
+        return -1;
+      }
+      elseif ($left->getEntityTypeId() === 'user' && $right->getEntityTypeId() !== 'user') {
+        return 1;
+      }
+      return 0;
+    });
     foreach ($this->cleanupEntities as $entity) {
       $entity->skip_notification = TRUE;
     }
@@ -124,17 +136,6 @@ abstract class JoinupExistingSiteTestBase extends ExistingSiteBase {
       ->set('form_settings', $this->honeypotForms)
       ->save();
     static::restoreReadOnlyConfig();
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  protected function createRdfEntity(array $values = []): RdfInterface {
-    $values += [
-      // Prevent notifications for test entities creation.
-      'skip_notification' => TRUE,
-    ];
-    return $this->contribCreateRdfEntity($values);
   }
 
 }
