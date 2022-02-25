@@ -13,7 +13,7 @@ use Drupal\og\Entity\OgRole;
 use Drupal\og\OgGroupAudienceHelper;
 use Drupal\og\OgMembershipInterface;
 use Drupal\rdf_entity\RdfInterface;
-use weitzman\DrupalTestTraits\Entity\NodeCreationTrait;
+use Drupal\Tests\joinup_test\Traits\NodeCreationTrait;
 
 /**
  * Base setup for a Joinup workflow test for community content.
