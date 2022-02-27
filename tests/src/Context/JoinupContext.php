@@ -73,6 +73,52 @@ class JoinupContext extends RawDrupalContext {
   use WorkflowTrait;
 
   /**
+   * Remove the Youtube video from the homepage.
+   *
+   * @BeforeSuite
+   */
+  public static function cleanUpBeforeTests(): void {
+    /** @var \Drupal\page_manager\PageVariantInterface $page_variant */
+    $page_variant = \Drupal::entityTypeManager()->getStorage('page_variant')->load('homepage-layout_builder-1');
+    /** @var \Drupal\layout_builder\Section $section */
+    $section = $page_variant->get('variant_settings')['sections'][0];
+    /** @var \Drupal\layout_builder\SectionComponent $section_component */
+    $section_component = $section->getComponent('6ab0ceea-4541-4153-8b64-227e02369d30');
+    $configuration = $section_component->get('configuration');
+
+    \Drupal::getContainer()->get('state')->set('behat_homepage_video_text', $configuration['text']);
+    $configuration['text'] = 'No video here :)';
+    $section_component->setConfiguration($configuration);
+    $section->removeComponent('6ab0ceea-4541-4153-8b64-227e02369d30');
+    $section->appendComponent($section_component);
+    $page_variant->set('sections', [$section]);
+    $page_variant->save();
+  }
+
+  /**
+   * Revert the changes with the Youtube video in the homepage.
+   *
+   * @AfterSuite
+   */
+  public static function revertAfterTests(): void {
+    /** @var \Drupal\page_manager\PageVariantInterface $page_variant */
+    $page_variant = \Drupal::entityTypeManager()->getStorage('page_variant')->load('homepage-layout_builder-1');
+    /** @var \Drupal\layout_builder\Section $section */
+    $section = $page_variant->get('variant_settings')['sections'][0];
+    /** @var \Drupal\layout_builder\SectionComponent $section_component */
+    $section_component = $section->getComponent('6ab0ceea-4541-4153-8b64-227e02369d30');
+    $configuration = $section_component->get('configuration');
+
+    \Drupal::getContainer()->get('state')->set('behat_homepage_video_text', $configuration['text']);
+    $configuration['text'] = \Drupal::getContainer()->get('state')->get('behat_homepage_video_text');
+    $section_component->setConfiguration($configuration);
+    $section->removeComponent('6ab0ceea-4541-4153-8b64-227e02369d30');
+    $section->appendComponent($section_component);
+    $page_variant->set('sections', [$section]);
+    $page_variant->save();
+  }
+
+  /**
    * Creates a user with data provided in a table.
    *
    * Table format:
