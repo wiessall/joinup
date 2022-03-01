@@ -496,3 +496,18 @@ function ventuno_preprocess_responsive_image(&$variables) {
     $variables['img_element']['#attributes']['width'] = 516;
   }
 }
+
+/**
+ * Implements hook_preprocess_image().
+ *
+ * Adds lazyloading target attributes to selectively enable lazyloading only
+ * on the images below the fold (not visible on first paint).
+ *
+ */
+function ventuno_preprocess_image(&$variables) {
+  $route_name = \Drupal::routeMatch()->getRouteName();
+  // Exclude search page since all images are above the fold
+  if (!($route_name == 'view.search.page_1')) {
+    $variables['attributes']['loading'] = 'lazy';
+  }
+}
