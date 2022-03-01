@@ -474,26 +474,22 @@ function ventuno_form_alter(&$form, FormStateInterface $form_state, $form_id): v
  */
 function ventuno_preprocess_responsive_image(&$variables) {
   $style_id = $variables['responsive_image_style_id'];
-  // 'In the spotlight' section on homepage
-  if ($style_id === 'spotlight') {
-    // Set the height + width to the aspect ratio for all images.
-    // Use the largest possible height + width that may be displayed.
-    $variables['img_element']['#attributes']['height'] = 290;
-    $variables['img_element']['#attributes']['width'] = 516;
-  }
-  // 'Highlighted content' section on homepage
-  if ($style_id === 'highlighted_content') {
-    // Set the height + width to the aspect ratio for all images.
-    // Use the largest possible height + width that may be displayed.
-    $variables['img_element']['#attributes']['height'] = 392;
-    $variables['img_element']['#attributes']['width'] = 696;
-  }
-  // Highlighted results on search page (3 first results)
-  if ($style_id === 'teaser') {
-    // Set the height + width to the aspect ratio for all images.
-    // Use the largest possible height + width that may be displayed.
-    $variables['img_element']['#attributes']['height'] = 290;
-    $variables['img_element']['#attributes']['width'] = 516;
+  switch ($style_id) {
+    // 'In the spotlight' section on homepage
+    case 'spotlight':
+      $variables['img_element']['#attributes']['height'] = 290;
+      $variables['img_element']['#attributes']['width'] = 516;
+      break;
+    // 'Highlighted content' section on homepage
+    case 'highlighted_content':
+      $variables['img_element']['#attributes']['height'] = 392;
+      $variables['img_element']['#attributes']['width'] = 696;
+      break;
+    // Highlighted results on search page (3 first results)
+    case 'teaser':
+      $variables['img_element']['#attributes']['height'] = 290;
+      $variables['img_element']['#attributes']['width'] = 516;
+      break;
   }
 }
 
