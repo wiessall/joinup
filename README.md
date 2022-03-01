@@ -145,7 +145,7 @@ DRUPAL_DATABASE_NAME=joinup
 DRUPAL_DATABASE_HOST=localhost
 DRUPAL_HASH_SALT=some-unique-random-string-like-37h+2BQEQx83YLa/uFdsfG55
 
-SOLR_URL=http://localhost:8983/solr
+SEARCH_API_SERVER_SS_SOLR_HOST=localhost
 
 DRUPAL_SPARQL_HOSTNAME=localhost
 REDIS_HOST=localhost

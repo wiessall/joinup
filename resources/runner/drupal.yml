@@ -241,16 +241,9 @@ drupal:
         $config['swiftmailer.transport']['sendmail_mode'] = getenv('DRUPAL_MAIL_SENDMAIL_MODE');
         $config['swiftmailer.transport']['spool_directory'] = getenv('DRUPAL_MAIL_SPOOL_DIR');
       Search API: |
-        $config['search_api.server.joinup']['backend_config']['connector_config'] = parse_url(getenv('SOLR_URL'));
-        $config['search_api.server.joinup']['backend_config']['connector_config']['core'] = getenv('SOLR_CORE');
-        // Since Search API Solr 3.x, the Solr endpoint '/solr' (V1 API) has been
-        // dropped in favour of '/'. The Solarium library automatically appends the
-        // 'solr' part in Endpoint::getCoreBaseUri(). We keep SOLR_URL with the full
-        // path as is used in SolrCommands::getUrl() but also to prevent changes of
-        // environment variables of deployment servers and pipelines.
-        // @see search_api_solr_update_8309()
-        // @see \Solarium\Core\Client\Endpoint::getCoreBaseUri()
-        // @see \Joinup\TaskRunner\Commands\SolrCommands::getUrl()
+        $url = getenv('SEARCH_API_SERVER_SS_SOLR_HOST') . ":" . getenv('SEARCH_API_SERVER_SS_SOLR_PORT') . "/" . getenv('SEARCH_API_SERVER_SS_SOLR_PATH');
+        $config['search_api.server.joinup']['backend_config']['connector_config'] = parse_url($url);
+        $config['search_api.server.joinup']['backend_config']['connector_config']['core'] = getenv('SEARCH_API_SERVER_SS_SOLR_CORE');
         $config['search_api.server.joinup']['backend_config']['connector_config']['path'] = '/';
       Matomo & OpenEuropa Webtools Analytics: |
         $config['matomo_reporting_api.settings']['site_id'] = getenv('MATOMO_SITE_ID');
