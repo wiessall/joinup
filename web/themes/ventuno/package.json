@@ -1,9 +1,10 @@
 {
-  "name": "Ventuno",
+  "name": "ventuno",
   "author": "European Commission",
   "license": "EUPL-1.2",
-  "version": "0.4.0",
-  "description": "Ventuno theme for Joinup",
+  "version": "1.0.0",
+  "description": "Ventuno is a Drupal theme for Joinup.",
+  "private": true,
   "scripts": {
     "watch": "watch 'npm run build' src",
     "clean:assets": "del-cli assets/*",
@@ -22,15 +23,11 @@
     "del-cli": "^4.0.1",
     "glob": "7.1.7",
     "npm-run-all": "4.1.5",
-    "slim-select": "1.27.0",
-    "watch": "^1.0.1"
-  },
-  "publishConfig": {
-    "access": "public"
+    "slim-select": "^1.27.1",
+    "watch": "^0.13.0"
   },
   "dependencies": {
     "@popperjs/core": "^2.9.1",
-    "bootstrap": "^5.1.2",
     "slick-carousel": "^1.8.1"
   }
 }
