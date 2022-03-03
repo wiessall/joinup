@@ -25,7 +25,7 @@ services:
     # macOS users should override 'volumes:' in docker-compose.override.yml.
     # See docker-compose.override.yml.dist.
     volumes:
-      - ${PWD}:/var/www/html
+      - .:/var/www/html
     env_file:
       - .env.dist
     environment:
