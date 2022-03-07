@@ -1,3 +1,11 @@
+.bcl-header {
+  .navbar-brand {
+    img {
+      height: auto;
+    }
+  }
+}
+
 .joinup-navbar {
   z-index: 100;
   background-color: $primary;
@@ -13,6 +21,7 @@
   }
   .navbar-brand-image {
     width: 6rem; // 96px
+    height: auto;
     @include media-breakpoint-up(md) {
       width: 8rem; // 128px
     }
