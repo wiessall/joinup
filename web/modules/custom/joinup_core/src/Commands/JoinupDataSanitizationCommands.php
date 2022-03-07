@@ -69,6 +69,7 @@ class JoinupDataSanitizationCommands extends DrushCommands implements SanitizePl
   protected function sanitizeAuthMapTable(): void {
     $this->db->update('authmap')
       ->expression('authname', 'CONCAT(SUBSTRING(authname, 1, 1), LEFT(SHA1(UUID()), 7))')
+      ->condition('uid', 1, '<>')
       ->execute();
     $this->logger()->success(dt('authmap table sanitized.'));
   }
