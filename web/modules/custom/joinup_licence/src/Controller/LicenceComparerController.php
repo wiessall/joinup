@@ -4,6 +4,8 @@ declare(strict_types = 1);
 
 namespace Drupal\joinup_licence\Controller;
 
+use Drupal\Core\Url;
+use Drupal\Core\Render\Markup;
 use Drupal\Component\Serialization\Json;
 use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Controller\ControllerBase;
@@ -72,22 +74,23 @@ class LicenceComparerController extends ControllerBase {
         ],
       ],
       '#attached' => [
-        'html_head' => [
-          [
-            [
-              '#type' => 'html_tag',
-              '#tag' => 'script',
-              '#value' => Json::encode($data),
-              '#attributes' => [
-                'type' => 'application/json',
-                'data-drupal-selector' => 'licence-comparer-data',
-              ],
-            ],
-            'licence_comparer_data',
-          ],
-        ],
+        // 'html_head' => [
+        //   [
+        //     [
+        //       '#type' => 'html_tag',
+        //       '#tag' => 'script',
+        //       '#value' => Json::encode($data),
+        //       '#attributes' => [
+        //         'type' => 'application/json',
+        //         'data-drupal-selector' => 'licence-comparer-data',
+        //       ],
+        //     ],
+        //     'licence_comparer_data',
+        //   ],
+        // ],
         'library' => [
           'joinup_licence/licence-compare',
+          'ventuno/licence-comparer',
         ],
       ],
     ];
@@ -198,6 +201,7 @@ class LicenceComparerController extends ControllerBase {
    *   A row array suitable to be used with the 'table' theme.
    */
   protected function buildHeader(string $category): array {
+    $base_path = Url::fromRoute('<front>')->toString();
     $row = [
       [
         'data' => $category,
@@ -207,11 +211,52 @@ class LicenceComparerController extends ControllerBase {
         ],
       ],
     ];
-
     foreach (array_keys($this->licences) as $spdx_id) {
+      $licence_title = [
+        '#type' => 'html_tag',
+        '#tag' => 'p',
+        '#value' => 'TODO The licence name here' . $spdx_id,
+        '#attributes' => [
+          'class' => [
+            'h3',
+          ],
+        ],
+      ];
+      $licence_description = [
+        '#type' => 'html_tag',
+        '#tag' => 'p',
+        '#value' => 'TODO Licence description here',
+        '#attributes' => [
+          'class' => [
+            'text-primary',
+          ],
+        ],
+      ];
+      $licence_button = [
+        '#type' => 'html_tag',
+        '#tag' => 'a',
+        '#value' => 'Visit licence text',
+        '#attributes' => [
+          'class' => [
+            'btn',
+            'btn-md',
+            'btn-link',
+          ],
+          'target' => [
+            '_blank',
+          ],
+          'href' => [
+            'TODO link here',
+          ],
+          'rel' => [
+            'noopener',
+            'nofollow',
+          ],
+        ],
+      ];
       $row[] = [
         'data' => [
-          '#markup' => '<span>' . $spdx_id . '</span><span class="icon icon--info"></span>',
+          '#markup' => Markup::create('<button type="button" class="btn btn-sm btn-link text-dark p-0" data-bs-toggle="popover" data-bs-placement="top" data-bs-trigger="focus" data-bs-content="' . $licence_title . $licence_description . $licence_button . '">' . $spdx_id . '<svg class="icon--xs ms-1 mb-1"><use xlink:href="' . $base_path . drupal_get_path('theme', 'ventuno') . '/assets/icons/bootstrap-icons.svg#info-circle"></use></svg></button>'),
         ],
         'class' => [
           'licence-comparer__header',
@@ -243,6 +288,7 @@ class LicenceComparerController extends ControllerBase {
    *   A row array suitable to be used with the 'table' theme.
    */
   protected function buildRow(string $category, string $label, array $items): array {
+    $base_path = Url::fromRoute('<front>')->toString();
     $row = [
       [
         'data' => $label,
@@ -253,7 +299,7 @@ class LicenceComparerController extends ControllerBase {
       ],
     ];
 
-    $checked_markup = '<span class="icon icon--check-2"></span>';
+    $checked_markup = Markup::create('<svg class="bi icon--s text-success"><use xlink:href="' . $base_path . drupal_get_path('theme', 'ventuno') . '/assets/icons/bootstrap-icons.svg#check-circle-fill"></use></svg>');
     foreach ($items as $enabled) {
       $row[] = [
         'data' => $enabled ? ['#markup' => $checked_markup] : '',
