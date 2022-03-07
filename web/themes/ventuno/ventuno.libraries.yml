@@ -45,6 +45,16 @@ glide:
     theme:
       assets/css/glide.core.min.css: { minified: true }
 
+tables:
+  css:
+    theme:
+      assets/css/tables.css: {}
+
+licence-comparer:
+  css:
+    theme:
+      assets/css/licence-comparer.css: {}
+
 style:
   version: VERSION
   css:

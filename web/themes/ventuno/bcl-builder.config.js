@@ -75,6 +75,22 @@ module.exports = {
         includePaths,
         sourceMap: "file",
       },
+    },    
+    {
+      entry: path.resolve(outputFolder, "src/scss/tables.scss"),
+      dest: path.resolve(outputFolder, "assets/css/tables.css"),
+      options: {
+        includePaths,
+        sourceMap: "file",
+      },
+    },
+    {
+      entry: path.resolve(outputFolder, "src/scss/licence-comparer.scss"),
+      dest: path.resolve(outputFolder, "assets/css/licence-comparer.css"),
+      options: {
+        includePaths,
+        sourceMap: "file",
+      },
     },
     {
       entry: path.resolve(outputFolder, "src/scss/footer.scss"),
