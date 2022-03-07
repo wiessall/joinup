@@ -6,9 +6,5 @@ licence-filter:
     - core/drupal
 
 licence-compare:
-  js:
-    js/licence_compare.js: {}
   dependencies:
-    - core/jquery
-    - core/jquery.ui.dialog
     - core/drupal
