@@ -13,6 +13,7 @@ use Drupal\Core\Url;
 use Drupal\interoperable_europe\InteroperableEuropeCollectionInterface;
 use Drupal\joinup_bundle_class\DescriptionInterface;
 use Drupal\joinup_bundle_class\LogoInterface;
+use Drupal\joinup_community_content\Entity\CommunityContentInterface;
 use Drupal\node\Entity\Node;
 use Drupal\node\NodeInterface;
 use Drupal\smart_trim\Truncate\TruncateHTML;
@@ -200,6 +201,22 @@ function ventuno_preprocess_node__numbered_listing(&$variables) {
 
   // Provide the content type.
   $variables['type'] = $node->type->entity->label();
+}
+
+/**
+ * Implements hook_preprocess_HOOK().
+ */
+function ventuno_preprocess_responsive_image_formatter(&$variables) {
+  if ($variables['url']) {
+    $options = $variables['url']->getOptions();
+    if ($options['entity'] instanceof CommunityContentInterface) {
+      $title = $options['entity']->getTitle();
+    }
+    else {
+      $title = $options['entity']->label();
+    }
+    $variables['aria_label'] = 'Read more about \'' . $title . '\'.';
+  }
 }
 
 /**
