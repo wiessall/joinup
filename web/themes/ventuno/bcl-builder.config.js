@@ -18,10 +18,10 @@ module.exports = {
       },
     },
     {
-      entry: path.resolve(outputFolder, "src/js/slick-config.js"),
-      dest: path.resolve(outputFolder, "assets/js/slick-config.js"),
+      entry: path.resolve(outputFolder, "src/js/glide.js"),
+      dest: path.resolve(outputFolder, "assets/js/glide.js"),
       options: {
-        name: "slick",
+        name: "glide",
         minify: false,
         sourceMap: true,
       },
@@ -244,20 +244,10 @@ module.exports = {
       from: [
         path.resolve(
           nodeModules,
-          "slick-carousel/slick/slick.css"
+          "@glidejs/glide/dist/css/glide.core.min.css"
         ),
       ],
       to: path.resolve(outputFolder, "assets/css"),
-      options: { up: true },
-    },
-    {
-      from: [
-        path.resolve(
-          nodeModules,
-          "slick-carousel/slick/slick.js"
-        ),
-      ],
-      to: path.resolve(outputFolder, "assets/js"),
       options: { up: true },
     },
   ],
