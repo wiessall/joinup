@@ -468,9 +468,8 @@ function ventuno_form_alter(&$form, FormStateInterface $form_state, $form_id): v
  *
  * Explicitly sets dimensions to images using responsive image styles to avoid
  * Cumulative Layout Shift.
- * We use the 16:9 ratio as a premise: ratios are not fixed since we allow users
- * to upload images without restrictions, so it's impossible to match them exaclty.
- *
+ * We use the 16:9 ratio as a premise: ratios are not fixed, we allow users to
+ * upload images without restrictions. It's not possible to match them exaclty.
  */
 function ventuno_preprocess_responsive_image(&$variables) {
   $style_id = $variables['responsive_image_style_id'];
@@ -480,11 +479,13 @@ function ventuno_preprocess_responsive_image(&$variables) {
       $variables['img_element']['#attributes']['height'] = 290;
       $variables['img_element']['#attributes']['width'] = 516;
       break;
+
     // 'Highlighted content' section on homepage
     case 'highlighted_content':
       $variables['img_element']['#attributes']['height'] = 392;
       $variables['img_element']['#attributes']['width'] = 696;
       break;
+
     // Highlighted results on search page (3 first results)
     case 'teaser':
       $variables['img_element']['#attributes']['height'] = 290;
