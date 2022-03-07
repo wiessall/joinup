@@ -23,10 +23,20 @@ navbar:
   js:
     assets/js/sticky-menu.js: { minified: true, attributes: { defer: true } }
 
+pager:
+  css:
+    theme:
+      assets/css/pager.css: {}
+
 footer:
   css:
     theme:
       assets/css/footer.css: {}
+
+site-alerts-messages:
+  css:
+    theme:
+      assets/css/site-alerts-messages.css: {}
 
 slick:
   js:
