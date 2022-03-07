@@ -429,7 +429,7 @@ function _ventuno_get_default_icon_render_array(string $entity_type_id, string $
   $class = $mapping[$entity_type_id][$bundle] ?? 'lightning-charge';
   return [
     '#type' => 'inline_template',
-    '#template' => '<svg class="bi img-fluid w-100 py-3 p-lg-3 text-white bg-secondary"><use xlink:href="' . base_path() . drupal_get_path('theme', 'oe_bootstrap_theme') . '/assets/icons/bootstrap-icons.svg#{{ icon }}"></use></svg>',
+    '#template' => '<svg class="bi img-fluid w-100 py-3 p-lg-3 text-white bg-secondary"><use xlink:href="' . base_path() . drupal_get_path('theme', 'ventuno') . '/assets/icons/bootstrap-icons.svg#{{ icon }}"></use></svg>',
     '#context' => [
       'icon' => $class,
     ],
@@ -443,7 +443,7 @@ function ventuno_preprocess(&$variables) {
   /** @var \Drupal\Core\Extension\ThemeHandler $themeHandler */
   $themeHandler = \Drupal::service('theme_handler');
   $ventuno = $themeHandler->getTheme('ventuno')->getPath();
-  $variables['ventuno_icon_path'] = base_path() . $ventuno . '/assets/icons/bootstrap-icons.svg';
+  $variables['bcl_icon_path'] = base_path() . $ventuno . '/assets/icons/bootstrap-icons.svg';
 }
 
 /**
@@ -478,4 +478,42 @@ function ventuno_form_alter(&$form, FormStateInterface $form_state, $form_id): v
     // page, hide the "Sort by" select.
     $form['sort_by']['#type'] = 'hidden';
   }
+}
+
+/**
+ * Implements hook_preprocess_responsive_image().
+ *
+ * Explicitly sets dimensions to images using responsive image styles to avoid
+ * Cumulative Layout Shift.
+ * We use the 16:9 ratio as a premise: ratios are not fixed, we allow users to
+ * upload images without restrictions. It's not possible to match them exaclty.
+ */
+function ventuno_preprocess_responsive_image(&$variables) {
+  $style_id = $variables['responsive_image_style_id'];
+  switch ($style_id) {
+    // 'In the spotlight' section on homepage
+    case 'spotlight':
+      $variables['img_element']['#attributes']['height'] = 290;
+      $variables['img_element']['#attributes']['width'] = 516;
+      break;
+
+    // 'Highlighted content' section on homepage
+    case 'highlighted_content':
+      $variables['img_element']['#attributes']['height'] = 392;
+      $variables['img_element']['#attributes']['width'] = 696;
+      break;
+
+    // Highlighted results on search page (3 first results)
+    case 'teaser':
+      $variables['img_element']['#attributes']['height'] = 290;
+      $variables['img_element']['#attributes']['width'] = 516;
+      break;
+  }
+}
+
+/**
+ * Implements hook_preprocess_image().
+ */
+function ventuno_preprocess_image(&$variables) {
+  $variables['attributes']['loading'] = 'lazy';
 }
