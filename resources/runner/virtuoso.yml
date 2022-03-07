@@ -4,7 +4,7 @@ virtuoso:
   bin: /opt/virtuoso-7/bin/virtuoso-t
   root: ${runner.working_dir}/vendor/ec-europa/virtuoso
   db: ${virtuoso.root}/db
-  backup_prefix: JOINUP_FULL_DUMP_
+  backup_prefix: VIRTUOSO_DUMP_
   backup_dir: ${joinup.db_dir}/virtuoso
   snapshot_dir: ${virtuoso.backup_dir}/snapshot
 
@@ -26,8 +26,8 @@ commands:
       file: ${virtuoso.backup_dir}/virtuoso.tar.gz
     - task: remove
       file: ${virtuoso.backup_dir}/virtuoso.tar
-    - task: remove
-      file: ${virtuoso.backup_dir}/virtuoso_dump
+    - task: exec
+      command: rm -rf ${virtuoso.backup_dir}/digit-joinup-reference_*
     - task: remove
       file: ${virtuoso.snapshot_dir}
     # Download and unpack the archive.
@@ -44,14 +44,11 @@ commands:
         - ${virtuoso.backup_dir}/virtuoso.tar
       options:
         directory: ${virtuoso.backup_dir}
-    - task: rename
-      from: ${virtuoso.backup_dir}/virtuoso_dump
-      to: ${virtuoso.snapshot_dir}
+    - task: exec
+      command: mv $(find ${virtuoso.backup_dir} -type d -name 'digit-joinup-reference_*') ${virtuoso.snapshot_dir}
     # Cleanup.
     - task: remove
       file: ${virtuoso.backup_dir}/virtuoso.tar
-    - task: remove
-      file: ${virtuoso.backup_dir}/virtuoso_dump
 
   # Restores the Virtuoso database from a snapshot.
   virtuoso:restore:
