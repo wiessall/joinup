@@ -18,9 +18,6 @@ services:
   web:
     build:
       context: './resources/docker/web'
-      args:
-        USER_ID: 1000
-        GROUP_ID: 1000
     working_dir: /var/www/html
     # macOS users should override 'volumes:' in docker-compose.override.yml.
     # See docker-compose.override.yml.dist.
