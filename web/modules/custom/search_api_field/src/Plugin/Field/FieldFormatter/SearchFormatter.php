@@ -167,7 +167,7 @@ class SearchFormatter extends FormatterBase implements ContainerFactoryPluginInt
       $result = $query->execute();
       // Extract the limit value from the query as it might have been altered
       // doing execution.
-      $render = $this->renderSearchResults($result, $query->getOption('limit'));
+      $render = $this->renderSearchResults($result, (int) $query->getOption('limit'));
     }
     catch (SearchApiException $exception) {
       $this->logger->log(RfcLogLevel::ERROR, 'Failed to execute query with error "@message".', Error::decodeException($exception));
@@ -251,7 +251,7 @@ class SearchFormatter extends FormatterBase implements ContainerFactoryPluginInt
    * @return array
    *   The render array for the search results.
    */
-  protected function renderSearchResults(ResultSetInterface $result, $limit): array {
+  protected function renderSearchResults(ResultSetInterface $result, int $limit): array {
     $view_mode_settings = $this->fieldDefinition->getSetting('view_modes');
 
     $results = [];
@@ -320,7 +320,7 @@ class SearchFormatter extends FormatterBase implements ContainerFactoryPluginInt
         '#type' => 'pager',
         '#element' => $element,
       ];
-      $this->pagerManager->createPager($result->getResultCount(), $limit, $element++);
+      $this->pagerManager->createPager($result->getResultCount(), $limit, $element);
     }
     else {
       $build['#no_results_found'] = [
