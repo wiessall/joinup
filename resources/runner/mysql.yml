@@ -14,7 +14,7 @@ commands:
     - task: run
       command: toolkit:download-dump
       options:
-        asda-url: ${env.ASDA_URL}/dumps
+        asda-url: ${env.ASDA_URL}
         dumpfile: ${toolkit.clone.dumpfile}
     # Remove the MySQL trigger definer.
     - task: exec
