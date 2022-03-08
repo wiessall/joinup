@@ -4,6 +4,7 @@ toolkit:
   project_id: joinup
   tmp_folder: ${joinup.dir}/tmp
   clone:
+    asda_url: ${env.ASDA_URL}
     dumpfile: ${mysql.dump_dir}/mysql.sql
 
   build:
