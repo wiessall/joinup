@@ -44,6 +44,10 @@ services:
 # 'environment:' block.
 #    environment:
 #      XDEBUG_CONFIG: client_host=host.docker.internal
+# Variables to handle additional services. By default, xdebug and blackfire
+# are enabled.
+#      DISABLE_XDEBUG: "True"
+#      DISABLE_BLACKFIRE: "True"
 # Optional variables to alter the user/group that runs Apache.
 # Defaults to `www-data`.
 #      DAEMON_USER: www-data
