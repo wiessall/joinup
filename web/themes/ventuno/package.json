@@ -27,7 +27,7 @@
     "watch": "^0.13.0"
   },
   "dependencies": {
-    "@popperjs/core": "^2.9.1",
-    "slick-carousel": "^1.8.1"
+    "@glidejs/glide": "^3.5.2",
+    "@popperjs/core": "^2.9.1"
   }
 }
