@@ -467,7 +467,9 @@ function joinup_theme_preprocess_region__header(&$variables) {
 
   // Make the Bootstrap icons available for theming. They are used in Bootstrap
   // components such as the hamburger menu.
+  // @todo remove 'ventuno_icon_path' when ticket ISAICP-6936 is merged.
   $variables['ventuno_icon_path'] = base_path() . drupal_get_path('theme', 'ventuno') . '/assets/icons/bootstrap-icons.svg';
+  $variables['bcl_icon_path'] = base_path() . drupal_get_path('theme', 'ventuno') . '/assets/icons/bootstrap-icons.svg';
 }
 
 /**

@@ -1,7 +1,16 @@
 // Homepage Common styles
+.h1--disguised {
+  font-weight: 400;
+  font-size: $font-size-base;
+  color: $gray-700;
+  line-height: 1.5;
+}
 .joinup-layout {
   .block {
-    & > h2 {
+    & > h2,
+    & > .about-what__title {
+      color: $primary;
+      font-weight: $font-weight-bold;
       text-transform: uppercase;
       font-size: 1.25rem; // 20px
       padding-top: .75em;
@@ -9,7 +18,8 @@
     }
   }
   .field--name-field-topic {
-    margin-bottom: $spacer; // 16px
+    margin-bottom: $spacer * .5; // 8px
+    line-height: 1.2;
     .field__item {
       display: inline-block;
     }
@@ -131,6 +141,8 @@
       border-radius: $border-radius-pill;
       padding-right: $spacer; // 16px
       padding-left: $spacer; // 16px
+      margin-right: $spacer * .5; // 8px
+      margin-bottom: $spacer * .5; // 8px
     }
   }
 }
@@ -167,7 +179,7 @@
       display: inline-block;
       font-size: $h3-font-size;
       font-weight: 700;
-      color: rgba($primary, .3);
+      color: rgba($primary, .6);
       padding-right: $spacer; // 16px
       margin-bottom: $spacer * .5; // 8px
       line-height: 1;
@@ -231,7 +243,7 @@
       display: flex;
       flex-direction: row;
       .dated-listing--date {
-        color: rgba($primary, .3);
+        color: rgba($primary, .6);
         text-align: center;
         display: flex;
         flex-flow: column;
@@ -264,6 +276,8 @@
       border-radius: $border-radius-pill;
       padding-right: $spacer; // 16px
       padding-left: $spacer; // 16px
+      margin-right: $spacer * .5; // 8px
+      margin-bottom: $spacer * .5; // 8px
     }
   }
 }
@@ -428,53 +442,45 @@
     }
   }
 }
-.append-buttons {
+
+.glide__outer {// Visual workarounds to avoid slides' shadow being cut
+  width: calc(100% + 2rem);
+  margin-left: -1rem;
+  overflow: hidden;
+  padding: 1rem;
+}
+.glide__track { // Visual workarounds to avoid slides' shadow being cut
+  overflow: visible;
+}
+.glide__slides { // Visual workarounds to avoid slides' shadow being cut
+  overflow: visible;
+}
+.glide__slide {
+  display: flex !important;
+  height: auto !important;
+  box-shadow: $box-shadow;
+}
+.glide__arrows {
   display: flex;
   float: left;
 }
-.slick-controls {
-  width: 40px;
-  height: 40px;
+.glide__arrow {
   background-color: $white;
   border: none;
-}
-.slick-prev {
-  margin-right: 1rem;
-  span.icon {
-    @include font-icon-before("\F104", 1.2rem, $primary, inherit, 0);
+  width: 40px;
+  height: 40px;
+  &:hover {
+    box-shadow: $box-shadow;
   }
-}
-.slick-next {
-  span.icon {
-    @include font-icon-before("\F105", 1.2rem, $primary, inherit, 0 0 0 6px);
-  }
-}
-
-.slick-slider {
-  display: flex;
-  flex-flow: column;
-  .slick-list {
-    order: 3;
-    overflow-y: unset !important;
-    overflow-x: clip !important;
-    padding: 0px 0px 6px 6px;
-    margin: 0 -3px;
-    width: calc(100% + 24px);
-  }
-  .slick-track {
-    display: flex !important;
-  }
-  .slick-slide {
-    display: flex !important;
-    height: auto !important;
-    margin-right: $spacer*1.5;
-    & > div {
-      width: 100%;
+  &--left {
+    margin-right: 1rem;
+    span.icon {
+      @include font-icon-before("\F104", 1.2rem, $primary, inherit, 0);
     }
   }
-  .slick-active {
-    article {
-      box-shadow: 0 0.1rem 0.4rem 0.1rem rgba(0, 0, 0, 0.1);
+  &--right {
+    span.icon {
+      @include font-icon-before("\F105", 1.2rem, $primary, inherit, 0 0 0 6px);
     }
   }
 }
