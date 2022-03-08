@@ -38,13 +38,12 @@ site-alerts-messages:
     theme:
       assets/css/site-alerts-messages.css: {}
 
-slick:
+glide:
   js:
-    assets/js/slick.js: { minified: true }
-    assets/js/slick-config.js: { minified: false }
+    assets/js/glide.js: { minified: false }
   css:
     theme:
-      assets/css/slick.css: { minified: true }
+      assets/css/glide.core.min.css: { minified: true }
 
 style:
   version: VERSION

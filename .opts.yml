@@ -40,10 +40,12 @@ solr_version: 8
 solr_core: custom
 solr_rollback: True
 solr_refresh_acc: True
+solr_asda: True
 
 virtuoso_image: registry.fpfis.eu/ec-europa/digit-joinup-reference:virtuoso
 virtuoso_rollback: True
 virtuoso_refresh_acc: True
+virtuoso_asda: True
 
 composer_version: 2
 
