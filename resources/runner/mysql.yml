@@ -1,7 +1,7 @@
 # MySQL configs and commands.
 
 mysql:
-  dump_dir: ${joinup.db_dir}/mysql/dump
+  dump_dir: ${joinup.db_dir}/mysql
 
 commands:
 
@@ -9,9 +9,7 @@ commands:
   mysql:download-dump:
     # Cleanup any stale data.
     - task: remove
-      file: ${mysql.dump_dir}
-    - task: mkdir
-      dir: ${mysql.dump_dir}
+      file: ${toolkit.clone.dumpfile}
     # Download and unpack the archive.
     - task: run
       command: toolkit:download-dump
