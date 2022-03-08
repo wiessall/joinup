@@ -4,7 +4,3 @@ licence-filter:
   dependencies:
     - core/jquery
     - core/drupal
-
-licence-compare:
-  dependencies:
-    - core/drupal
