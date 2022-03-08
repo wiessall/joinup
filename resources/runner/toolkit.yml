@@ -113,6 +113,21 @@ commands:
     - task: run
       command: config-readonly:enable
 
+  # Overrides the toolkit:install-clone command.
+  toolkit:install-clone:
+    - task: run
+      command: joinup:environment
+    - task: run
+      command: redis:flush-all
+    - task: run
+      command: drupal:settings
+      arguments:
+        - site-clone
+    - task: run
+      command: toolkit:install-dump
+    - task: run
+      command: toolkit:run-deploy
+
   # Overrides the toolkit:test-phpcs command.
   toolkit:test-phpcs:
     # Handle a potential case where the repo has been shallow cloned. Typically,
