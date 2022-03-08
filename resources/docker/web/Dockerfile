@@ -4,10 +4,16 @@ FROM fpfis/httpd-php-dev:7.4
 ARG USER_ID
 ARG GROUP_ID
 
-RUN if [ ! -z ${USER_ID} ] ; then usermod -u ${USER_ID} www-data; fi;
+RUN if [ ! -z "${USER_ID}" ] && [ -z "$(grep -E \"[^:]*:x:${USER_ID}:\" /etc/passwd)" ] ; then \
+      usermod -u ${USER_ID} www-data; \
+    elif [ ! -z "${USER_ID}" ] ; then \
+      echo "User with ID ${USER_ID} already exists. Assign '$(grep -E "[^:]*:x:${USER_ID}:" /etc/passwd | awk -F: '{ print $1 }')' to the environment variable DAEMON_USER instead."; \
+      exit 2; \
+  fi;
 
-RUN if [ -z $(grep -E "[^:]*:x:${GROUP_ID}:" /etc/group | awk -F: '{ print $1 }') ] ; then \
+RUN if [ ! -z "${GROUP_ID}" ] && [ -z "$(grep -E \"[^:]*:x:${GROUP_ID}:\" /etc/group)" ] ; then \
       groupmod -g ${GROUP_ID} www-data; \
-    else \
-      usermod -a -G $(grep -E "[^:]*:x:${GROUP_ID}:" /etc/group | awk -F: '{ print $1 }') www-data; \
+    elif [ ! -z "${GROUP_ID}" ] ; then \
+      echo "Group with ID ${GROUP_ID} already exists. Assign '$(grep -E "[^:]*:x:${GROUP_ID}:" /etc/group | awk -F: '{ print $1 }')' to the environment variable DAEMON_GROUP instead."; \
+      exit 2; \
   fi;
