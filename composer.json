@@ -147,7 +147,6 @@
         "drupal/upgrade_status": "^3.12",
         "drupaltest/behat-one-time-login": "^1.0",
         "ec-europa/toolkit": "8.4.3",
-        "foxy/foxy": "^1.1",
         "jcalderonzumba/gastonjs": "^1.2@dev",
         "lovers-of-behat/table-extension": "^1.2.0",
         "mikey179/vfsstream": "~1.6",
@@ -224,11 +223,15 @@
     "scripts": {
         "post-install-cmd": [
             "test ! -f ./vendor/bin/grumphp || ./vendor/bin/grumphp git:deinit",
-            "test ! -f ./vendor/bin/run || ./vendor/bin/run toolkit:build-dev"
+            "test ! -f ./vendor/bin/run || ./vendor/bin/run toolkit:build-dev",
+            "cd web/themes/ventuno && npm ci",
+            "npm ci"
         ],
         "post-update-cmd": [
             "test ! -f ./vendor/bin/grumphp || ./vendor/bin/grumphp git:deinit",
-            "test ! -f ./vendor/bin/run || ./vendor/bin/run toolkit:build-dev"
+            "test ! -f ./vendor/bin/run || ./vendor/bin/run toolkit:build-dev",
+            "cd web/themes/ventuno && npm ci",
+            "npm install"
         ]
     },
     "extra": {
@@ -298,7 +301,8 @@
             },
             "drupal/entity_legal": {
                 "core_version_requirement error when updating @see https://www.drupal.org/project/entity_legal/issues/3215912": "https://git.drupalcode.org/project/entity_legal/-/merge_requests/2.diff",
-                "Dynamic page cache prevents redirection @see https://www.drupal.org/project/entity_legal/issues/3251128": "https://www.drupal.org/files/issues/2021-11-24/3251128-2.patch"
+                "Dynamic page cache prevents redirection @see https://www.drupal.org/project/entity_legal/issues/3251128": "https://www.drupal.org/files/issues/2021-11-24/3251128-2.patch",
+                "Delete Entity Legal version @see https://www.drupal.org/project/entity_legal/issues/3258368": "https://git.drupalcode.org/project/entity_legal/-/merge_requests/3.diff"
             },
             "drupal/facets": {
                 "Facet Summary for Facet Items with a set dependency. @see https://www.drupal.org/node/2873480": "https://www.drupal.org/files/issues/2020-07-30/2873480-33-8.x-1.5.patch",
