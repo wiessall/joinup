@@ -11,7 +11,7 @@
  * @ingroup themeable
  */
 #}
-{{ attach_library('ventuno/slick') }}
+{{ attach_library('ventuno/glide') }}
 
 <div class="explore-block wrapper-class">
   <ul class="nav nav-tabs" id="myTab" role="tablist">
@@ -26,11 +26,18 @@
     {% for key, tab in data %}
       <div class="tab-pane{% if loop.first %} active{% endif %}" id="{{ key }}" role="tabpanel" aria-labelledby="{{ key }}-tab">
         {% if tab.data is not empty %}
-          <div class="tab-data">
-            <span class="append-buttons me-4"></span>
-            <a href="{{ tab.url }}" class="btn btn-secondary mb-2 explore-see-more">{{ 'See more @plural_type'|t({'@plural_type': tab.plural_type}) }}</a>
-            <div class="explore-slider explore-slider-{{ key }} mt-3">
-            {{ tab.data }}
+          <div class="tab-data glide__outer">
+            <div class="glide">
+              <div class="glide__arrows me-4" data-glide-el="controls">
+                <button class="glide__arrow glide__arrow--left rounded-circle" data-glide-dir="<" title="{{ 'Previous item'|t }}"><span class="icon"></span></button>
+                <button class="glide__arrow glide__arrow--right rounded-circle" data-glide-dir=">" title="{{ 'Next item'|t }}"><span class="icon"></span></button>
+              </div>
+              <a href="{{ tab.url }}" class="btn btn-secondary mb-2 explore-see-more">{{ 'See more @plural_type'|t({'@plural_type': tab.plural_type}) }}</a>
+              <div class="explore-slider explore-slider-{{ key }} mt-3 glide__track" data-glide-el="track">
+                <div class="glide__slides">
+                  {{ tab.data }}
+                </div>
+              </div>
             </div>
           </div>
         {% endif %}

@@ -22,7 +22,7 @@ class JoinupDataSanitizationCommands extends DrushCommands implements SanitizePl
    *
    * @var \Drupal\Core\Database\Connection
    */
-  protected $db;
+  protected Connection $db;
 
   /**
    * Constructs a new Drush commands class instance.
@@ -42,7 +42,6 @@ class JoinupDataSanitizationCommands extends DrushCommands implements SanitizePl
    */
   public function sanitize($result, CommandData $commandData): void {
     $this->sanitizeUserSocialMedia();
-    $this->sanitizeAuthMapTable();
   }
 
   /**
@@ -52,7 +51,6 @@ class JoinupDataSanitizationCommands extends DrushCommands implements SanitizePl
    */
   public function messages(&$messages, InputInterface $input): void {
     $messages[] = dt('Sanitize user social media data.');
-    $messages[] = dt('Sanitize EU Login account mappings.');
   }
 
   /**
@@ -61,16 +59,6 @@ class JoinupDataSanitizationCommands extends DrushCommands implements SanitizePl
   protected function sanitizeUserSocialMedia(): void {
     $this->db->truncate('user__field_social_media')->execute();
     $this->logger()->success(dt('user__field_social_media table sanitized.'));
-  }
-
-  /**
-   * Sanitizes the {authmap} table.
-   */
-  protected function sanitizeAuthMapTable(): void {
-    $this->db->update('authmap')
-      ->expression('authname', 'CONCAT(SUBSTRING(authname, 1, 1), LEFT(SHA1(UUID()), 7))')
-      ->execute();
-    $this->logger()->success(dt('authmap table sanitized.'));
   }
 
 }
