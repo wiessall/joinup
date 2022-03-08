@@ -45,7 +45,6 @@ class LicenceComparerController extends ControllerBase {
       }
     }
 
-
     $build = [
       '#theme' => 'table',
       '#rows' => $rows,
