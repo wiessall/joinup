@@ -107,35 +107,16 @@ order for the permissions to work properly, the user owning the files in the
 host machine, the user executing commands in the container, the user running
 Apache in the container and the user running the IDE, must all be able to
 perform all necessary actions in the files. To workaround this, the user ID and
-the group ID of the user that runs apache must be updated. To do this, before
-building the containers, in the `docker-compose.override.yml` file, copy over
-the web service, and replace the `image` entry with the following `build`
-
-```yaml
-services:
-  web:
-    build:
-      context: './local'
-      args:
-        USER_ID: 1000
-        GROUP_ID: 1000
+the group ID of the user that runs apache must be updated.
+In order to identify your UID and GID, use the command
+```bash
+$ id
 ```
+Configure the options in the `docker-compose.override.yml` according to the
+instructions in the file by setting the arguments `USER_ID` and `GROUP_ID` under
+`web > build > args`.
 
-where `./local` is a untracked directory (the name can be different) somewhere
-on your system (this one is on the project root). Then, in the directory
-declared above, create the following `Dockerfile` file.
-
-```dockerfile
-FROM fpfis/httpd-php-dev:7.4
-
-ARG USER_ID=1000
-ARG GROUP_ID=1000
-RUN usermod -u ${USER_ID} www-data && \
-    groupmod -g ${GROUP_ID} www-data
-```
-
-Change the user ID and group ID according to your needs. The value 1000 is the
-value of the default login user of the Linux OS. To rebuild the containers,
+To rebuild the containers,
 first stop them by running from the host machine:
 
 ```bash
