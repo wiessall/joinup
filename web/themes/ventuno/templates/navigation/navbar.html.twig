@@ -85,7 +85,7 @@
   <div class="container">
     <div class="d-flex">
       <a class="navbar-brand" href="{{ _brand.link }}">
-        <img class="navbar-brand-image" src="{{ _brand.src }}" alt="{{ _brand.alt }}" />
+        <img class="navbar-brand-image" src="{{ _brand.src }}" alt="{{ _brand.alt }}" width="96" height="25"/>
       </a>
       {% if _brand.motto is not empty %}
         <span class="navbar-motto d-none d-md-block">{{ _brand.motto }}</span>
@@ -148,7 +148,7 @@
               >
                 {% if item.icon is not empty %}
                   <svg class="bi icon--s">
-                    <use xlink:href="{{ ventuno_icon_path }}#{{ item.icon.name }}"></use>
+                    <use xlink:href="{{ bcl_icon_path }}#{{ item.icon.name }}"></use>
                   </svg>
                 {% endif %}
                 {% if item.label is not empty %}

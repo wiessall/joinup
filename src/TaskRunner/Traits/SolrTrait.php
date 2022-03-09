@@ -18,7 +18,7 @@ trait SolrTrait {
    *
    * @var \GuzzleHttp\Client
    */
-  protected $httpClient;
+  protected Client $httpClient;
 
   /**
    * Performs an HTTP get request.
@@ -33,12 +33,8 @@ trait SolrTrait {
    *   When the Solr server response is invalid.
    */
   protected function httpGet(string $url): ResponseInterface {
-    if (!isset($this->httpClient)) {
-      $this->httpClient = new Client();
-    }
-
     try {
-      $response = $this->httpClient->get($url);
+      $response = $this->getHttpClient()->get($url);
     }
     catch (\Exception $exception) {
       throw new AbortTasksException($exception->getMessage(), 0, $exception);
@@ -48,6 +44,52 @@ trait SolrTrait {
     }
 
     return $response;
+  }
+
+  /**
+   * Performs an HTTP post request.
+   *
+   * @param string $url
+   *   The HTTP request URL.
+   * @param string $body
+   *   The POST body.
+   * @param array $headers
+   *   (optional) A list of headers.
+   *
+   * @return \Psr\Http\Message\ResponseInterface
+   *   The HTTP response
+   *
+   * @throws \Robo\Exception\AbortTasksException
+   *   When the Solr server response is invalid.
+   */
+  protected function httpPost(string $url, string $body, array $headers = []): ResponseInterface {
+    try {
+      $response = $this->getHttpClient()->post($url, [
+        'body' => $body,
+        'headers' => $headers,
+      ]);
+    }
+    catch (\Exception $exception) {
+      throw new AbortTasksException($exception->getMessage(), 0, $exception);
+    }
+    if ($response->getStatusCode() != 200) {
+      throw new AbortTasksException("Solr server returned HTTP code {$response->getStatusCode()}, while querying {$url}.");
+    }
+
+    return $response;
+  }
+
+  /**
+   * Returns the HTTP client.
+   *
+   * @return \GuzzleHttp\Client
+   *   The HTTP client.
+   */
+  protected function getHttpClient(): Client {
+    if (!isset($this->httpClient)) {
+      $this->httpClient = new Client();
+    }
+    return $this->httpClient;
   }
 
 }
