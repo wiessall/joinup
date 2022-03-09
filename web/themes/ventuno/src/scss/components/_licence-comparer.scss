@@ -1,6 +1,13 @@
 .licence-comparer {
   text-align: center;
-  table-layout: fixed;
+  margin-bottom: $spacer * .5;
+  @include media-breakpoint-up(md) {
+    table-layout: fixed;
+  }
+  &__wrapper {
+    overflow-x: auto;
+    margin-bottom: $spacer;
+  }
   &__sidebar-header,
   &__header > .btn {
     font-weight: $font-weight-bold;
@@ -60,4 +67,7 @@
   &__header {
     background-color: $gray-200 !important;
   }
+}
+.modal-body {
+  text-align: left;
 }

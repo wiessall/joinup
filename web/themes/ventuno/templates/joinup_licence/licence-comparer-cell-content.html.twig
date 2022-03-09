@@ -1,0 +1,19 @@
+{#
+/**
+ * @file
+ * Default implementation of displaying a licence comparer cell content.
+ *
+ * Available variables:
+ * - spdx_id: The SPDX ID.
+ * - legal_category: The legal category
+ * - legal_type: The legal type.
+ * - checked: Whether the rule is applied.
+ */
+#}
+{% if checked %}
+  <span title="{{ legal_category }} {{ legal_type }} ({{ spdx_id }})">
+    <svg class="bi icon--s text-success">
+      <use xlink:href="{{ bcl_icon_path }}#check-circle-fill"></use>
+    </svg>
+  </span>
+{% endif %}
