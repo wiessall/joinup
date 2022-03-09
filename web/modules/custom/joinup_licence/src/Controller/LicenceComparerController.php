@@ -21,6 +21,13 @@ class LicenceComparerController extends ControllerBase {
   protected $licences = [];
 
   /**
+   * First header's flag.
+   *
+   * @var bool[]
+   */
+  protected array $firstHeader = [];
+
+  /**
    * Responds to a request made to 'joinup_licence.comparer' route.
    *
    * @param \Drupal\joinup_licence\Entity\LicenceInterface[] $licences
@@ -46,11 +53,19 @@ class LicenceComparerController extends ControllerBase {
     }
 
     $build = [
-      '#theme' => 'table',
-      '#rows' => $rows,
+      '#type' => 'container',
       '#attributes' => [
-        'data-drupal-selector' => 'licence-comparer',
-        'class' => ['licence-comparer'],
+        'class' => [
+          'licence-comparer__wrapper',
+        ],
+      ],
+      'table' => [
+        '#type' => 'table',
+        '#rows' => $rows,
+        '#attributes' => [
+          'data-drupal-selector' => 'licence-comparer',
+          'class' => ['licence-comparer'],
+        ],
       ],
     ];
 
@@ -110,6 +125,9 @@ class LicenceComparerController extends ControllerBase {
         $data[$parent_label][$label] = [];
         foreach ($this->licences as $spdx_id => $licence) {
           $data[$parent_label][$label][$spdx_id] = $licence->hasLegalType($parent_label, $label);
+          if (!isset($this->firstHeader[$spdx_id])) {
+            $this->firstHeader[$spdx_id] = TRUE;
+          }
         }
       }
     }
@@ -187,11 +205,13 @@ class LicenceComparerController extends ControllerBase {
           '#title' => $licence->label(),
           '#description' => check_markup($licence->field_licence_description->value, 'content_editor'),
           '#url' => $licence->getSpdxLicenceRdfId(),
+          '#first_header' => $this->firstHeader[$spdx_id],
         ],
         'class' => [
           'licence-comparer__header',
         ],
       ];
+      $this->firstHeader[$spdx_id] = FALSE;
     }
 
     $this->padWithEmptyCells($row, [
