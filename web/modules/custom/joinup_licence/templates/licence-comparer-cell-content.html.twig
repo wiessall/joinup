@@ -7,6 +7,9 @@
  * - spdx_id: The SPDX ID.
  * - legal_category: The legal category
  * - legal_type: The legal type.
+ * - checked: Whether the rule is applied.
  */
 #}
+{% if checked %}
 <span title="{{ legal_category }} {{ legal_type }} ({{ spdx_id }})">✔︎</span>
+{% endif %}
