@@ -8,7 +8,7 @@ Feature:
     Given I am an anonymous user
     When I go to the "Public Service Provider" term page
     Then I should see the heading "Public Service Provider"
-    And I should not see the following links:
+    And I should see the following links:
       | Citizen                              |
       | Public Service Consumer              |
       | Public Service Delivery Agent        |
