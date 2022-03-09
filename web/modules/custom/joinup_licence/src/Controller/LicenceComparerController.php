@@ -227,17 +227,18 @@ class LicenceComparerController extends ControllerBase {
       ],
     ];
 
-    foreach ($items as $id => $enabled) {
+    foreach ($items as $id => $checked) {
       $row[] = [
-        'data' => $enabled ? [
+        'data' => [
           '#theme' => 'licence_comparer_cell_content',
           '#spdx_id' => $id,
           '#legal_category' => $category,
           '#legal_type' => $label,
-        ] : '',
+          '#checked' => $checked,
+        ],
         'class' => [
           'licence-comparer__cell',
-          'licence-comparer__cell-' . ($enabled ? 'on' : 'off'),
+          'licence-comparer__cell-' . ($checked ? 'on' : 'off'),
         ],
       ];
     }
