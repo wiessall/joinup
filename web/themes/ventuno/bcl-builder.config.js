@@ -69,6 +69,22 @@ module.exports = {
       },
     },
     {
+      entry: path.resolve(outputFolder, "src/scss/modals.scss"),
+      dest: path.resolve(outputFolder, "assets/css/modals.css"),
+      options: {
+        includePaths,
+        sourceMap: "file",
+      },
+    },    
+    {
+      entry: path.resolve(outputFolder, "src/scss/close.scss"),
+      dest: path.resolve(outputFolder, "assets/css/close.css"),
+      options: {
+        includePaths,
+        sourceMap: "file",
+      },
+    },    
+    {
       entry: path.resolve(outputFolder, "src/scss/pager.scss"),
       dest: path.resolve(outputFolder, "assets/css/pager.css"),
       options: {

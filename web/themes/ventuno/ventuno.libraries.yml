@@ -2,6 +2,8 @@ searchpage:
   css:
     theme:
       assets/css/searchpage.css: {}
+  dependencies:
+    - ventuno/close
 
 homepage:
   css:
@@ -27,6 +29,18 @@ pager:
   css:
     theme:
       assets/css/pager.css: {}
+
+close:
+  css:
+    theme:
+      assets/css/close.css: {}
+
+modals:
+  css:
+    theme:
+      assets/css/modals.css: {}
+  dependencies:
+    - ventuno/close
 
 footer:
   css:
@@ -63,3 +77,5 @@ style:
   js:
     assets/js/oe-bcl-joinup.bundle.min.js: { minified: true }
     assets/js/popovers.js: { minified: false }
+  dependencies:
+    - core/drupal
