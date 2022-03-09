@@ -344,9 +344,9 @@ Feature:
     When I reload the page
     Then the page should be cached
 
-  @eupl @javascript
   # This scenario and the previous are checking the same things, but this one
   # runs with JS so that we can check the frontend implementation.
+  @eupl @javascript
   Scenario: Get information about how a project can be redistributed under another licence
     Given SPDX licences:
       | uri                            | title    | ID       |
@@ -375,6 +375,7 @@ Feature:
     When I choose "EUPL-1.2" as the "Outbound" licence
     Then the "Check compatibility" buttons should be enabled
     # Check that the user can disable the buttons by pressing "Reset"
+    When I scroll button "Reset" into view
     When I press "Reset"
     Then the "Check compatibility" buttons should be disabled
 
