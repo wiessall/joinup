@@ -28,18 +28,27 @@ header-search-bar:
     theme:
       assets/css/header-search-bar.css: {}
 
+pager:
+  css:
+    theme:
+      assets/css/pager.css: {}
+
 footer:
   css:
     theme:
       assets/css/footer.css: {}
 
-slick:
-  js:
-    assets/js/slick.js: { minified: true }
-    assets/js/slick-config.js: { minified: false }
+site-alerts-messages:
   css:
     theme:
-      assets/css/slick.css: { minified: true }
+      assets/css/site-alerts-messages.css: {}
+
+glide:
+  js:
+    assets/js/glide.js: { minified: false }
+  css:
+    theme:
+      assets/css/glide.core.min.css: { minified: true }
 
 style:
   version: VERSION
