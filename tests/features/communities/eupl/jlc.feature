@@ -425,6 +425,7 @@ Feature:
     Then the "Check compatibility" buttons should be disabled
     When I choose "LGPL-2.1" as the "Inbound" licence
     Then the "Check compatibility" buttons should be disabled
+    And I scroll link "Check compatibility" into view
     When I choose "CECILL-C" as the "Outbound" licence
     Then the "Check compatibility" buttons should be enabled
     When I click "Check compatibility"
@@ -458,7 +459,8 @@ Feature:
     Then the "Check compatibility" buttons should be disabled
     When I choose "EUPL-1.2" as the "Outbound" licence
     Then the "Check compatibility" buttons should be enabled
-    When I press "Reset"
+    When I scroll button "Reset" into view
+    And I press "Reset"
     Then the "Check compatibility" buttons should be disabled
     When I choose "EUPL-1.2" as the "Inbound" licence
     And I choose "EUPL-1.2" as the "Outbound" licence
