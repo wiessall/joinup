@@ -3035,6 +3035,9 @@ class JoinupContext extends RawDrupalContext {
     $page = $this->getSession()->getPage();
     $button = $page->find('named', [$type, str_replace('\\"', '"', $label)]);
     $id = $button->getAttribute('id');
+    if (empty($id)) {
+      throw new \RuntimeException('Cannot scroll to an element without an ID.');
+    }
     $function = <<<JS
   (
       function(){
