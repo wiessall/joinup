@@ -6,7 +6,6 @@ phpstan:
 dev:
   modules:
     - admin_toolbar
-    - config_devel
     - config_update
     - field_ui
     - page_manager_ui
