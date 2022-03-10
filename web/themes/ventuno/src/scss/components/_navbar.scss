@@ -11,10 +11,10 @@
   background-color: $primary;
   box-shadow: $box-shadow;
   padding: 0;
-  min-height: 54px;
+  height: 54px;
   border-bottom: 1px solid rgba(255, 255, 255, .5);
-  @include media-breakpoint-up(md) {
-    min-height: 72px;
+  @include media-breakpoint-up(lg) {
+    height: 72px;
   }
   .navbar-brand {
     font-size: $font-size-xs; // 12px
@@ -22,17 +22,17 @@
   .navbar-brand-image {
     width: 6rem; // 96px
     height: auto;
-    @include media-breakpoint-up(md) {
+    @include media-breakpoint-up(lg) {
       width: 8rem; // 128px
     }
   }
-  .navbar-motto {
-    @include media-breakpoint-up(md) {
-      font-size: $font-size-sm; // 14px
-      color: $white;
-      letter-spacing: $font-size-base*.1; // 1.6px
-    }
-  }
+  // .navbar-motto {
+  //   @include media-breakpoint-up(md) {
+  //     font-size: $font-size-sm; // 14px
+  //     color: $white;
+  //     letter-spacing: $font-size-base*.1; // 1.6px
+  //   }
+  // }
   .navbar-nav {
     justify-content: flex-end;
     width: 100%;
@@ -41,7 +41,7 @@
   .nav-item {
     list-style: none;
     position: relative;
-    @include media-breakpoint-up(md) {
+    @include media-breakpoint-up(lg) {
       padding: 0 $spacer*.5; // 0 8px
       &:last-of-type {
         padding-right: 0;
@@ -71,7 +71,7 @@
     padding: 0; // Padding should be 0 for smooth collapsing animation
     white-space: nowrap;
     @include media-breakpoint-up(md) {
-      max-width: 20*$spacer; // 320px
+      // max-width: 20*$spacer; // 320px
     }
   }
   .accordion-body {
@@ -149,7 +149,7 @@
     box-shadow: none;
     padding-top: $spacer; // 16px
     padding-bottom: $spacer; // 16px
-    @include media-breakpoint-up(md) {
+    @include media-breakpoint-up(lg) {
       padding-top: $spacer * 1.5; // 24px
       padding-bottom: $spacer * 1.5; // 24px
     }
@@ -248,12 +248,6 @@
       color: $brand;
     }
   }
-
-  // Temporary fix. This won't be required as from BCL v0.9.0 update
-  .btn-light,
-  .btn-light:hover {
-    color: $primary;
-  }
   
   &.js-is--sticky {
     position: fixed;
@@ -262,3 +256,23 @@
   }
 }
 
+// Particular styles for every-page search-box only on smaller screens
+#collapse-search-trigger {
+  @include media-breakpoint-between(xs, sm) {
+    right: -50px;
+  }
+  @include media-breakpoint-between(sm, lg) {
+    right: -38px;
+  }
+  .header-search-bar {
+    @include media-breakpoint-between(xs, sm) {
+      width: calc(100vw - 2rem);
+    }
+    @include media-breakpoint-between(sm, md) {
+      width: calc(map-get($container-max-widths, sm) - 3.5rem);
+    }
+    @include media-breakpoint-between(md, lg) {
+      width: calc(map-get($container-max-widths, md) - 3.5rem);
+    }
+  }
+}

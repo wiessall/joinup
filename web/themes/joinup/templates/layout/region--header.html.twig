@@ -34,6 +34,15 @@
       links: landing_page_links,
     }] : [] %}
     {% set items = items|merge([{
+      type: "search",
+      breakpoint: "lg",
+      id: "search-trigger",
+      icon: {
+        name: "search",
+      },
+      label: "",
+      links: search,
+    },{
       breakpoint: logged_in ? "" : "lg",
       id: logged_in ? "account" : "navbar-toggler",
       icon: {
