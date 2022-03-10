@@ -44,6 +44,8 @@ drupal:
         - OpenEuropa Webtools Analytics
         - Custom error handler
         - Permissions
+        - OpenEuropa Newsroom Newsletter
+        - OpenEuropa Webtools Geocoding Cache
         - Verbose error logging
         - Development mail collector
         - Redis
