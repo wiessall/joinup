@@ -15,11 +15,13 @@ test ! -f ./vendor/bin/run || ./vendor/bin/run toolkit:build-dev
 # Bring theme dependencies.
 cd web/themes/ventuno && npm ci
 
+cd ../../..
+
 if [ "$1" == "install" ]; then
-  npm ci
+  npm ci;
 elif [ "$1" == "update" ]; then
-  npm install
+  npm install;
 else
-  echo "Wrong parameter!"
-  exit 1
+  echo "Wrong parameter!";
+  exit 1;
 fi
