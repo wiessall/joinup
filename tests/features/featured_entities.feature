@@ -95,6 +95,7 @@ Feature: Featuring content site-wide
   Scenario Outline: Moderators can feature and unfeature collections and solutions site-wide.
     When I am an anonymous user
     And I visit the <content type> overview
+    And I accept "essential" cookies
     Then I should see the following tiles in the correct order:
       | <featured>   |
       | <unfeatured> |
@@ -103,18 +104,20 @@ Feature: Featuring content site-wide
 
     When I am logged in as an "authenticated user"
     And I visit the <content type> overview
+    And I accept "essential" cookies
     Then I should not see the contextual link "Feature" in the "<featured>" tile
     And I should not see the contextual link "Remove from featured" in the "<unfeatured>" tile
 
     # Facilitators cannot use the global featured functionality.
     When I am logged in as "Niles Turner"
     And I visit the <content type> overview
+    And I accept "essential" cookies
     Then I should not see the contextual link "Feature" in the "<featured>" tile
     And I should not see the contextual link "Remove from featured" in the "<unfeatured>" tile
 
     When I am logged in as "Modston Modster"
-    And I accept essential cookies
     And I visit the <content type> overview
+    And I accept essential cookies
     Then I should see the contextual link "Feature" in the "<unfeatured>" tile
     And the "<unfeatured>" <content type> tile should not be marked as featured
     And I should see the contextual link "Remove from featured" in the "<featured>" tile
@@ -134,6 +137,7 @@ Feature: Featuring content site-wide
     When I log out
     And I am logged in as "Modston Modster"
     And I visit the <content type> overview
+    And I accept "essential" cookies
     And I click the contextual link "Feature" in the "<unfeatured>" tile
     Then I should see the success message "<label> <unfeatured> has been set as featured content."
 
