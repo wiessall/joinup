@@ -78,14 +78,19 @@ commands:
       command: drupal:site-install
     - task: run
       command: dev:import-sparql-fixtures
+    # This is a safety net for the eventuality a developer lacks a mail catcher
+    # tool on their local environment. See the 'Development mail collector'
+    # `settings.php` section from `resources/runner/drupal.yml` for details.
     - task: run
-      command: dev:install-modules
+      command: drush:module-install
+      arguments:
+        - devel
+    - task: run
+      command: testing:install-modules
     - task: run
       command: drupal:settings
       arguments:
         - site-clean
-    - task: run
-      command: dev:demo-users
     - task: exec
       command: ${drush.bin}
       arguments:
@@ -110,11 +115,41 @@ commands:
     - task: run
       command: drupal:settings
       arguments:
-        - site-clone
+        - install
     - task: run
       command: toolkit:install-dump
     - task: run
       command: toolkit:run-deploy
+    # The `toolkit:run-deploy` command has enabled config read-only.
+    - task: run
+      command: config-readonly:disable
+    # This is a safety net for the eventuality a developer lacks a mail catcher
+    # tool on their local environment. See the 'Development mail collector'
+    # `settings.php` section from `resources/runner/drupal.yml` for details.
+    - task: run
+      command: drush:module-install
+      arguments:
+        - devel
+    - task: run
+      command: testing:install-modules
+    - task: exec
+      command: ${drush.bin}
+      arguments:
+        - cas-mock-server:start
+      options:
+        yes: null
+        root: ${joinup.site_dir}
+    - task: exec
+      command: ${drush.bin}
+      arguments:
+        - php:eval
+        - if (node_access_needs_rebuild()) { node_access_rebuild(); }
+    - task: run
+      command: drupal:settings
+      arguments:
+        - site-clone
+    - task: run
+      command: config-readonly:enable
 
   # Overrides the toolkit:test-phpcs command.
   toolkit:test-phpcs:
