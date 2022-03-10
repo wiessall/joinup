@@ -104,7 +104,7 @@
   }
   .joinup-navbar {
     height: 52px;
-    @include media-breakpoint-up(sm) {
+    @include media-breakpoint-up(lg) {
       height: 72px;
     }
     // Resets/Reboots
@@ -136,7 +136,7 @@
     }
     .navbar-brand .navbar-brand-image {
       width: 96px;
-      @include media-breakpoint-up(md) {
+      @include media-breakpoint-up(lg) {
         width: 128px;
       }
     }
@@ -144,7 +144,11 @@
       padding: 16px 8px;
     }
     .accordion .accordion-item .accordion-button {
-      padding: 16px 8px;
+      padding: 14px 8px;
+      @include media-breakpoint-up(lg) {
+        padding-top: 24px;
+        padding-bottom: 24px;
+      }
     }
     .accordion .accordion-item .accordion-button .bi {
       width: 22px;
@@ -152,7 +156,7 @@
     }
     .accordion .accordion-item .accordion-collapse {
       z-index: 16;
-      padding: 16px;
+      // padding: 16px;
     }
     .popover.navbar__popover {
       margin-top: 1px !important;

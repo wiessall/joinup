@@ -1,6 +1,7 @@
 .header-search-bar {
-  padding: $spacer * .5 0; // 8px 0
+  // padding: $spacer * .5 0; // 8px 0
   align-self: center;
+  min-width: 15.25rem; // 244px (arbitrary value)
   background: $white;
   @include media-breakpoint-up(md) {
     padding: 0;
@@ -8,6 +9,7 @@
   }
   @include media-breakpoint-between(lg, xl) {
     max-width: 12rem;
+    min-width: 12rem; // 244px (arbitrary value)
   }
   .search-bar__input-container {
     background: $white;

@@ -87,16 +87,13 @@
       <a class="navbar-brand" href="{{ _brand.link }}">
         <img class="navbar-brand-image" src="{{ _brand.src }}" alt="{{ _brand.alt }}" width="96" height="25"/>
       </a>
-      {% if _brand.motto is not empty %}
-        <span class="navbar-motto d-none d-md-block">{{ _brand.motto }}</span>
-      {% endif %}
       {% if search %}
-        <div class="header-search-bar d-none d-md-block">
+        <div class="header-search-bar d-none d-lg-block">
           {{ search }}
         </div>
       {% endif %}
     </div>
-    <div class="" id="{{ _collapse_id }}">
+    <div id="{{ _collapse_id }}">
       <ul
         {{ list_attributes }}
       >
@@ -110,13 +107,14 @@
                     {{ link(link.label, link.link, attributes.addClass('nav-link')) }}
                   {% elseif link.popover %}
                     <button
+                      id="popover-trigger"
                       data-bs-toggle="popover"
                       autocomplete="off"
                       data-bs-placement="bottom"
                       data-bs-content="<a class='popover__cta' href='{{ link.popover.cta.link }}' {{ link.popover.cta.attributes }}>{{ link.popover.cta.text }}</a><p class='popover__description'>{{ link.popover.description }}</p>"
                       data-bs-custom-class="navbar__popover"
                       data-bs-html="true"
-                      data-bs-container=".nav-item"
+                      data-bs-container="#popover-trigger"
                       data-bs-offset="-74, 16"
                       class="btn btn-light popover-trigger popover-getstarted"
                       type="button"
@@ -144,7 +142,7 @@
                 aria-controls="collapse-{{ item.id }}"
                 aria-expanded="false"
                 type="button"
-                title="{{ 'Toggle menu'|t }}"
+                title="{% if item.type == 'search' %}{{ 'Open search'|t }}{% else %}{{ 'Toggle menu'|t }}{% endif %}"
               >
                 {% if item.icon is not empty %}
                   <svg class="bi icon--s">
@@ -163,17 +161,23 @@
               data-bs-parent="#{{ _list_id }}"
             >
               <div class="accordion-body">
-                <ul class="accordion-list">
-                  {% for link in item.links %}
-                    {% if link.link %}
-                      <li class="accordion-list-item">
-                        <a href="{{ link.link }}" class="accordion-list-link">
-                          {{ link.label }}
-                        </a>
-                      </li>
-                    {% endif %}
-                  {% endfor %}
-                </ul>
+                {% if item.type is same as 'search' and search %}
+                  <div class="header-search-bar">
+                    {{ search }}
+                  </div>
+                {% else %}
+                  <ul class="accordion-list">
+                    {% for link in item.links %}
+                      {% if link.link %}
+                        <li class="accordion-list-item">
+                          <a href="{{ link.link }}" class="accordion-list-link">
+                            {{ link.label }}
+                          </a>
+                        </li>
+                      {% endif %}
+                    {% endfor %}
+                  </ul>
+                {% endif %}
               </div>
             </div>
           </li>
@@ -182,12 +186,5 @@
     </div>
   </div>
 </nav>
-{% if search %}
-  <div class="header-search-bar d-md-none">
-    <div class="container">
-      {{ search }}
-    </div>
-  </div>
-{% endif %}
 
 {% endspaceless %}
