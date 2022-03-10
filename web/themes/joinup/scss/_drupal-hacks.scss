@@ -519,7 +519,7 @@ article {
 }
 
 .joyride-content-wrapper {
-  padding: 20px 25px 70px 20px;
+  padding: 20px 35px 70px 20px;
 
   .button {
     position: absolute;
@@ -550,12 +550,8 @@ article {
   }
 
   .tour-tip-label {
-    margin: 0 0 10px 0;
-    font-size: $font-size-h3;
-
-    &:empty {
-      margin-bottom: 0;
-    }
+    display: none;
+    margin-bottom: 0;
   }
 
   .tour-tip-body {
