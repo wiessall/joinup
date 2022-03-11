@@ -873,4 +873,36 @@ class JoinupSearchContext extends RawDrupalContext {
     Assert::assertEquals($headings_expected, $headings_in_page, 'The expected search header were not found or were not in the proper order.');
   }
 
+  /**
+   * Checks if search bar appears in header.
+   *
+   * @throws \Exception
+   *   Thrown when search bar item do not appear in header.
+   *
+   * @Then I should see search bar in header
+   */
+  public function assertSearchExposedFilterHeader(): void {
+    $getAllInput = $this->getSession()->getPage()->findAll('css', 'nav.joinup-navbar .header-search-bar input#edit-keys');
+
+    if (count($getAllInput) < 1) {
+      throw new \Exception('Search bar not found in header.');
+    }
+  }
+
+  /**
+   * Checks if search bar do not appear in header.
+   *
+   * @throws \Exception
+   *   Thrown when search bar appears in header.
+   *
+   * @Then I should not see search bar in header
+   */
+  public function failSearchExposedFilterHeader(): void {
+    $getAllInput = $this->getSession()->getPage()->findAll('css', 'nav.joinup-navbar .header-search-bar input#edit-keys');
+
+    if (count($getAllInput) > 0) {
+      throw new \Exception('Search bar found in header.');
+    }
+  }
+
 }
