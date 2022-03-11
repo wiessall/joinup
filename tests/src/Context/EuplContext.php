@@ -98,12 +98,12 @@ class EuplContext extends RawDrupalContext {
    * @Given I click the info icon of the :spdx licence( table cell)
    */
   public function clickLicenceInfoIcon(string $spdx): void {
-    $xpath = '//td[@class and contains(concat(" ", normalize-space(@class), " "), " licence-comparer__header ") and contains(., "' . $spdx . '")]//span[@class and contains(concat(" ", normalize-space(@class), " "), " icon--info ")]';
-    $icon = $this->getSession()->getPage()->find('xpath', $xpath);
-    if (empty($icon)) {
-      throw new \Exception("Could not locate a table cell with the text {$spdx}.");
+    $xpath = '//td[@class and contains(concat(" ", normalize-space(@class), " "), " licence-comparer__header ")]/button';
+    $button = $this->getSession()->getPage()->find('xpath', $xpath);
+    if (empty($button)) {
+      throw new \Exception("Could not locate a table cell with the button {$spdx}.");
     }
-    $icon->click();
+    $button->press();
   }
 
   /**
@@ -115,12 +115,12 @@ class EuplContext extends RawDrupalContext {
    * @Given I close the licence modal dialog
    */
   public function closeLicenceModalDialog(): void {
-    $xpath = '//div[@class and contains(concat(" ", normalize-space(@class), " "), " licence-comparer__dialog ")]//button[@title="Close"]';
-    $icon = $this->getSession()->getPage()->find('xpath', $xpath);
-    if (empty($icon)) {
+    $xpath = '//div[@class and contains(concat(" ", normalize-space(@class), " "), " modal-dialog ")]//button[@aria-label="Close"]';
+    $button = $this->getSession()->getPage()->find('xpath', $xpath);
+    if (empty($button)) {
       throw new \Exception("Either the dialog is not available or the 'Close' button could not be located.");
     }
-    $icon->click();
+    $button->press();
   }
 
   /**

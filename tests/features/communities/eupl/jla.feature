@@ -184,7 +184,6 @@ Feature:
 
     When I visit "/licence/compare/Apache-2.0;GPL-2.0+"
     Then I should see the "licence comparer" table
-    And the response should contain "<script type=\"application/json\" data-drupal-selector=\"licence-comparer-data\">{\"Apache-2.0\":{\"title\":\"Apache License, Version 2.0\",\"description\":\"Apache-2.0 descr\",\"spdxUrl\":\"http:\/\/joinup.eu\/spdx\/Apache-2.0\"},\"GPL-2.0+\":{\"title\":\"GNU General Public License v2.0 or later\",\"description\":\"GPL-2.0+ descr\",\"spdxUrl\":\"http:\/\/joinup.eu\/spdx\/GPL-2.0+\"}}</script>"
     And the "licence comparer" table should be:
       | Can               | Apache-2.0 | GPL-2.0+ |  |  |  |
       | Use/reproduce     | x          |          |  |  |  |
