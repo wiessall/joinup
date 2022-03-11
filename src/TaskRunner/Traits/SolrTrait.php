@@ -92,4 +92,19 @@ trait SolrTrait {
     return $this->httpClient;
   }
 
+  /**
+   * Returns the SOLR URL including the path.
+   *
+   * @return string
+   *   The URL of SOLR endpoint, including the path.
+   */
+  public static function getSolrUrl(): string {
+    return http_build_url([
+      'scheme' => getenv('SEARCH_API_SERVER_SS_SOLR_SCHEME'),
+      'host' => getenv('SEARCH_API_SERVER_SS_SOLR_HOST'),
+      'port' => getenv('SEARCH_API_SERVER_SS_SOLR_PORT'),
+      'core' => getenv('SEARCH_API_SERVER_SS_SOLR_CORE'),
+    ]);
+  }
+
 }

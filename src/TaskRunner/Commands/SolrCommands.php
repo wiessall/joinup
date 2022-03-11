@@ -217,16 +217,4 @@ class SolrCommands extends AbstractCommands {
     return self::getSolrUrl() . "/{$config->get("env.SEARCH_API_SERVER_SS_SOLR_CORE")}/replication?command={$command}";
   }
 
-  /**
-   * Returns the SOLR URL including the path.
-   *
-   * @return string
-   */
-  public static function getSolrUrl(): string {
-    $url = getenv('SEARCH_API_SERVER_SS_SOLR_HOST')
-      . ":" . getenv('SEARCH_API_SERVER_SS_SOLR_PORT')
-      . "/" . trim(getenv('SEARCH_API_SERVER_SS_SOLR_PATH'), '/');
-    return rtrim($url, '/');
-  }
-
 }
