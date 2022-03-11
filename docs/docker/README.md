@@ -227,7 +227,7 @@ After containers are up and got the chance to import from dump/snapshots, run
 this sequence of commands:
 
 ```bash
-$ docker-compose exec --user www-data web ./vendor/bin/run dev:rebuild-environment
+$ docker-compose exec --user www-data web ./vendor/bin/run toolkit:run-deploy
 # Installs the development modules, such as `devel`.
 $ docker-compose exec --user www-data web ./vendor/bin/run dev:install-modules
 ```
