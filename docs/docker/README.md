@@ -243,7 +243,7 @@ commands:
       arguments:
         - 60
     - task: run
-      command: dev:rebuild-environment
+      command: toolkit:run-deploy
     - task: run
       command: dev:install-modules
 ```
