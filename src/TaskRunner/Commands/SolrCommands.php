@@ -8,6 +8,7 @@ use Drupal\Component\Serialization\Json;
 use Joinup\TaskRunner\Traits\SolrTrait;
 use OpenEuropa\TaskRunner\Commands\AbstractCommands;
 use Robo\Exception\AbortTasksException;
+use Symfony\Component\Filesystem\Filesystem;
 
 /**
  * Provides commands for ApacheSolr admin.
@@ -45,35 +46,67 @@ class SolrCommands extends AbstractCommands {
   ];
 
   /**
-   * Takes a snapshot from the Solr server index.
+   * Empties the Solr server core index.
    *
-   * @param string $core
-   *   The core name.
-   *
-   * @command solr:backup-core
+   * @command solr:empty
    *
    * @throws \Robo\Exception\AbortTasksException
    *   When the server response is invalid.
    */
-  public function backupSolr(string $core): void {
+  public function empty(): void {
+    $config = $this->getConfig();
+    // Temporary fix because of FPFISSUPP-16373.
+    // $core = $config->get('env.SOLR_CORE');
+    // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/FPFISSUPP-16373
+    $core = 'digit-joinup';
+    $this->say("Empty Solr '{$core}' core.");
+    $this->httpPost(
+      "{$config->get('env.SOLR_URL')}/$core/update?commit=true&wt=json",
+      '<delete><query>*:*</query></delete>',
+      ['Content-Type' => 'application/xml'],
+    );
+    $this->say("Successfully emptied Solr '{$core}' core.");
+  }
+
+  /**
+   * Takes a snapshot from the Solr server core index.
+   *
+   * @command solr:backup
+   *
+   * @throws \Robo\Exception\AbortTasksException
+   *   When the server response is invalid.
+   */
+  public function backup(): void {
+    $config = $this->getConfig();
+    $core = $config->get('env.SOLR_CORE');
+
     $this->say("Backup Solr '{$core}' core.");
+
+    // Ensure there's no existing backup.
+    $file_system = new Filesystem();
+    $file_system->remove($config->get('solr.snapshot_dir') . "/snapshot.$core");
+
     $this->executeReplicationCommand($core, 'backup');
     $this->say("Successfully backed-up Solr '{$core}' core.");
   }
 
   /**
-   * Restores the Solr server index from a snapshot.
+   * Restores the Solr server core index from a snapshot.
    *
-   * @param string $core
-   *   The core name.
-   *
-   * @command solr:restore-core
+   * @command solr:restore
    *
    * @throws \Robo\Exception\AbortTasksException
    *   When the server response is invalid.
    */
-  public function restoreSolr(string $core): void {
+  public function restore(): void {
+    $config = $this->getConfig();
+    $core = $config->get('env.SOLR_CORE');
+
     $this->say("Restoring Solr '{$core}' core.");
+
+    // Ensure an empty core before proceeding.
+    $this->empty();
+
     $this->executeReplicationCommand($core, 'restore');
     $this->say("Successfully restored Solr '{$core}' core.");
   }
@@ -90,7 +123,7 @@ class SolrCommands extends AbstractCommands {
    *   When the server response is invalid.
    */
   protected function executeReplicationCommand(string $core, string $operation): void {
-    $this->httpGet($this->getUrl($core, $operation));
+    $this->httpGet($this->getUrl($operation));
 
     // Solr core backup and restore are asynchronous processes. In order to
     // consider the backup/restore done, we need to check the status of the last
@@ -132,14 +165,15 @@ class SolrCommands extends AbstractCommands {
     $attempt++;
     $this->say("Check if {$operation} is complete (attempt: #{$attempt})");
 
-    $response = $this->httpGet($this->getUrl($core, $operation, TRUE));
+    $response = $this->httpGet($this->getOperationStatusUrl($operation));
 
     if (($content = Json::decode($response->getBody()->getContents())) === NULL) {
       throw new AbortTasksException("Invalid response from Solr server, while trying to get the {$operation} status of Solr '{$core}' core.");
     }
 
     if ($operation === 'backup') {
-      $status = $content['details']['backup']['status'] ?? 'in progress';
+      $status_index = array_search('status', $content['details']['backup'] ?? [], TRUE);
+      $status = $status_index !== FALSE ? $content['details']['backup'][$status_index + 1] : 'in progress';
     }
     elseif ($operation === 'restore') {
       $status = $content['restorestatus']['status'];
@@ -157,23 +191,33 @@ class SolrCommands extends AbstractCommands {
   /**
    * Builds the Solr replicate URL.
    *
-   * @param string $core
-   *   The core name for which to build the URL.
    * @param string $operation
    *   The operation to be performed: 'restore' or 'backup'.
-   * @param bool $checkStatus
-   *   (optional) If the command is checking the status of the operation.
-   *   Defaults to FALSE.
    *
    * @return string
    *   The URL.
    *
-   * @see https://lucene.apache.org/solr/guide/6_6/making-and-restoring-backups.html
+   * @see https://solr.apache.org/guide/8_11/making-and-restoring-backups.html
    */
-  protected function getUrl(string $core, string $operation, bool $checkStatus = FALSE): string {
+  protected function getUrl(string $operation): string {
     $config = $this->getConfig();
-    $command = static::COMMAND_MAP[$operation][$checkStatus];
-    return "{$config->get("env.SOLR_URL")}/{$config->get("env.SOLR_CORE")}/replication?command={$command}&name={$core}&location={$config->get('solr.snapshot_dir')}&wt=json&json.nl=map";
+    $command = static::COMMAND_MAP[$operation][FALSE];
+    return "{$config->get("env.SOLR_URL")}/{$config->get("env.SOLR_CORE")}/replication?command={$command}&name={$config->get("env.SOLR_CORE")}&location={$config->get('solr.snapshot_dir')}";
+  }
+
+  /**
+   * Builds the operation status URL.
+   *
+   * @param string $operation
+   *   The operation to be performed: 'restore' or 'backup'.
+   *
+   * @return string
+   *   The URL.
+   */
+  protected function getOperationStatusUrl(string $operation): string {
+    $config = $this->getConfig();
+    $command = static::COMMAND_MAP[$operation][TRUE];
+    return "{$config->get("env.SOLR_URL")}/{$config->get("env.SOLR_CORE")}/replication?command={$command}";
   }
 
 }
