@@ -11,9 +11,26 @@
  */
 #}
 {% if checked %}
-  <span title="{{ legal_category }} {{ legal_type }} ({{ spdx_id }})">
-    <svg class="bi icon--s text-success">
-      <use xlink:href="{{ bcl_icon_path }}#check-circle-fill"></use>
-    </svg>
+  <span class="visually-hidden">
+    {% if (legal_category == 'Can' or legal_category == 'Must' or legal_category == 'Cannot') %}
+      {{ spdx_id }} {{ legal_category|lower }} {{ legal_type|lower }}.
+    {% elseif legal_category == 'Compatible' %}
+      {{ spdx_id }} is {{ legal_category|lower }} with {{ legal_type|lower }}.
+    {% elseif (legal_category == 'Law' or legal_category == 'Support') %}
+      {{ spdx_id }}'s {{ legal_category|lower }} is {{ legal_type }}.
+    {% endif %}
+  </span>
+  <svg class="bi icon--s text-success">
+    <use xlink:href="{{ bcl_icon_path }}#check-circle-fill"></use>
+  </svg>
+{% else %}
+  <span class="visually-hidden">
+    {% if (legal_category == 'Can' or legal_category == 'Must' or legal_category == 'Cannot') %}
+      {{ spdx_id }} {{ legal_category|lower }} not {{ legal_type|lower }}.
+    {% elseif legal_category == 'Compatible' %}
+      {{ spdx_id }} is not {{ legal_category|lower }} with {{ legal_type|lower }}.
+    {% elseif (legal_category == 'Law' or legal_category == 'Support') %}
+      {{ spdx_id }}'s {{ legal_category|lower }} is not {{ legal_type }}.
+    {% endif %}
   </span>
 {% endif %}
