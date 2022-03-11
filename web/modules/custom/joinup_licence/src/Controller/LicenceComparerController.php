@@ -60,7 +60,7 @@ class LicenceComparerController extends ControllerBase {
         ],
       ],
       'table' => [
-        '#type' => 'table',
+        '#theme' => 'table',
         '#rows' => $rows,
         '#attributes' => [
           'data-drupal-selector' => 'licence-comparer',
