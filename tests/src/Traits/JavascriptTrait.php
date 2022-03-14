@@ -51,15 +51,17 @@ trait JavascriptTrait {
    *    Thrown when an expected scroll in to view failed.
    */
   protected function scrollElementIntoView(string $css_selector): void {
-    $this->getSession()->executeScript("(
-      function() {
-        setTimeout(() => {
-          let elem = document.querySelector('$css_selector');
-          elem.scrollIntoView({ behavior: 'instant', block: 'center' });
-        }, 300);
-      }
-    )();");
-    sleep(1);
+    if ($this->browserSupportsJavaScript()) {
+      $this->getSession()->executeScript("(
+        function() {
+          setTimeout(() => {
+            let elem = document.querySelector('$css_selector');
+            elem.scrollIntoView({ behavior: 'instant', block: 'center' });
+          }, 300);
+        }
+      )();");
+      sleep(1);
+    }
   }
 
 }
