@@ -17,7 +17,7 @@ commands:
   # Starts Solr.
   solr:start:
     - task: exec
-      command: ${solr.local.bin} status ; test $? -eq 0 || ${solr.local.bin} start
+      command: ${solr.local.bin} status ; test $? -eq 0 || ${solr.local.bin} start -Dsolr.allowPaths=${solr.snapshot_dir}
 
   # Stops Solr.
   solr:stop:
@@ -37,49 +37,22 @@ commands:
     - task: remove
       file: ${solr.snapshot_dir}/solr.tar
     - task: remove
-      file: ${solr.snapshot_dir}/snapshot.joinup
+      file: ${solr.snapshot_dir}/snapshot.${env.SOLR_CORE}
     # Snapshot dir.
     - task: mkdir
-      dir: ${solr.snapshot_dir}/snapshot.joinup
+      dir: ${solr.snapshot_dir}/snapshot.${env.SOLR_CORE}
     # Download and unpack the archive.
     - task: run
       command: toolkit:download-dump
       options:
-        asda-url: ${env.ASDA_URL}/solr
+        asda-url: ${env.ASDA_URL}/../solr
         dumpfile: ${solr.snapshot_dir}/solr.tar
     # Unpack and organize.
     - task: exec
-      command: tar -xvf ${solr.snapshot_dir}/solr.tar -C ${solr.snapshot_dir}/snapshot.joinup --strip-components=1
+      command: tar -xvf ${solr.snapshot_dir}/solr.tar -C ${solr.snapshot_dir}/snapshot.${env.SOLR_CORE} --strip-components=1
     # Cleanup.
     - task: remove
       file: ${solr.snapshot_dir}/solr.tar
-
-  # Empties the Solr backed.
-  solr:empty:
-    - task: exec
-      command: curl
-      arguments:
-        - ${env.SOLR_URL}/${env.SOLR_CORE}/update?commit=true&wt=json
-      options:
-        request: POST
-        header: 'Content-Type: application/xml'
-        data: '<delete><query>*:*</query></delete>'
-
-  # Restores the Solr index from a snapshot.
-  solr:restore:
-    - task: run
-      command: solr:empty
-    - task: run
-      command: solr:restore-core
-      arguments:
-        - joinup
-
-  # Takes a snapshot of the Solr index.
-  solr:backup:
-    - task: run
-      command: solr:backup-core
-      arguments:
-        - joinup
 
   # Downloads and installs the Solr binary.
   solr:download-bin:
