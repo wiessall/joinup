@@ -44,10 +44,8 @@ trait JavascriptTrait {
    * might throw this exception while the button is visible. This might be due
    * to attempting to find the button too fast.
    *
-   * @param string $type
-   *   Type of element link/button.
-   * @param string $label
-   *   The label of the radio button.
+   * @param string $css_selector
+   *   The element CSS selector.
    *
    * @throws \Exception
    *    Thrown when an expected scroll in to view failed.
