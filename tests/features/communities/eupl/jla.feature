@@ -42,7 +42,6 @@ Feature:
     And the response should contain "http://joinup.eu/spdx/foo.html#licenseText"
     And the response should contain "http://joinup.eu/spdx/bar.html#licenseText"
 
-    When I accept essential cookies
     And I click "Distribute" in the "Content" region
     Then I should see the text "1 licences found"
     And I should see the text "Bar Licence"

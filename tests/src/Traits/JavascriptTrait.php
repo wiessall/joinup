@@ -29,10 +29,11 @@ trait JavascriptTrait {
   protected function scrollLinkOrButtonIntoView(string $type, string $label): void {
     if ($this->browserSupportsJavaScript()) {
       $page = $this->getSession()->getPage();
-      $button = $page->find('named', [$type, str_replace('\\"', '"', $label)]);
-      if ($id = $button->getAttribute('id')) {
-        // This method only works for links and buttons having an ID.
-        $this->scrollElementIntoView("#$id");
+      if ($button = $page->find('named', [$type, str_replace('\\"', '"', $label)])) {
+        if ($id = $button->getAttribute('id')) {
+          // This method only works for links and buttons having an ID.
+          $this->scrollElementIntoView("#$id");
+        }
       }
     }
   }
