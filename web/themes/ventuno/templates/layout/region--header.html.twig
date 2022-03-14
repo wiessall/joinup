@@ -1,0 +1,65 @@
+{#
+/**
+ * @file
+ * Theme override to display a region.
+ *
+ * Available variables:
+ * - content: The content for this region, typically blocks.
+ * - attributes: HTML attributes for the region div.
+ * - region: The name of the region variable as defined in the theme's
+ *   .info.yml file.
+ *
+ * @see template_preprocess_region()
+ */
+#}
+{# Temporary EC header, until this pattern is included in oe_bootstrap. #}
+<div class="bs-wrapper">
+  <div class="ec__header bcl-header">
+    <nav class="w-100 shadow-sm navbar">
+      <div class="container">
+        <a class="navbar-brand" href="https://ec.europa.eu/info/index_en">
+          <img src="https://cdn1.fpfis.tech.ec.europa.eu/ecl/v3.0.2/ec/images/logo/logo-ec--en.svg" alt="European Commission logo"/>
+        </a>
+      </div>
+    </nav>
+  </div>
+  <header role="banner" class="region-header">
+    {% set items = logged_in ? [{
+      breakpoint: "lg",
+      classes: ["order-1"],
+      id: "landing-pages",
+      icon: { name: "justify" },
+      label: "",
+      links: landing_page_links,
+    }] : [] %}
+    {% set items = items|merge([{
+      type: "search",
+      breakpoint: "lg",
+      id: "search-trigger",
+      icon: {
+        name: "search",
+      },
+      label: "",
+      links: search,
+    },{
+      breakpoint: logged_in ? "" : "lg",
+      id: logged_in ? "account" : "navbar-toggler",
+      icon: {
+        name: logged_in ? "person-circle" : "justify",
+      },
+      label: logged_in ? user_name : "",
+      links: logged_in ? profile_links : anonymous_links,
+    }]) %}
+    {% include directory ~ '/templates/navigation/navbar.html.twig' with {
+      brand: {
+        src: base_path ~ directory ~ "/src/images/logo.svg",
+        alt: "Joinup logo"|t,
+        link: front_page,
+      },
+      collapse_id: "main-navbar",
+      list_id: "main-navbar-list",
+      items: items,
+      search: hide_searchbar ? '' : content,
+    } %}
+  </header>
+</div>

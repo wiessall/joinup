@@ -61,45 +61,7 @@
 
 <div class="layout-container">
   <div class="section-header">
-    {# Temporary EC header, until this pattern is included in oe_bootstrap. #}
-    <div class="ec__header bcl-header">
-      <nav class="w-100 shadow-sm navbar">
-        <div class="container">
-          <a class="navbar-brand" href="https://ec.europa.eu/info/index_en">
-            <img src="https://cdn1.fpfis.tech.ec.europa.eu/ecl/v3.0.2/ec/images/logo/logo-ec--en.svg" alt="European Commission logo" width="100" height="25"/>
-          </a>
-        </div>
-      </nav>
-    </div>
-    <header role="banner" class="region-header">
-      {% set items = logged_in ? [{
-        breakpoint: "lg",
-        classes: ["order-1"],
-        id: "landing-pages",
-        icon: { name: "justify" },
-        label: "",
-        links: landing_page_links,
-      }] : [] %}
-      {% set items = items|merge([{
-        breakpoint: logged_in ? "" : "lg",
-        id: logged_in ? "account" : "navbar-toggler",
-        icon: {
-          name: logged_in ? "person-circle" : "justify",
-        },
-        label: logged_in ? user_name : "",
-        links: logged_in ? profile_links : anonymous_links,
-      }]) %}
-      {% include directory ~ '/templates/navigation/navbar.html.twig' with {
-        brand: {
-          src: base_path ~ directory ~ "/assets/images/logo.svg",
-          alt: "Joinup logo"|t,
-          link: front_page,
-        },
-        collapse_id: "main-navbar",
-        list_id: "main-navbar-list",
-        items: items,
-      } %}
-    </header>
+    {{ page.header }}
 
     {% if page.header_bottom %}
       <div class="region-header-bottom">
