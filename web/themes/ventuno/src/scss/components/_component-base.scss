@@ -1,6 +1,12 @@
 // Component's common base
 // Functions, variables, utilities and mixins required
 
+// Base theme colors
+@import "@openeuropa/bcl-theme-default/src/scss/base/colors";
+
+// Custom theme colors
+@import "@openeuropa/bcl-theme-joinup/src/scss/base/colors";
+
 // Bootstrap default functions
 @import "@openeuropa/bcl-bootstrap/scss/functions";
 
