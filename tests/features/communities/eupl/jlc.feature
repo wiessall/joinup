@@ -374,13 +374,11 @@ Feature:
     When I choose "EUPL-1.2" as the "Outbound" licence
     Then the "Check compatibility" buttons should be enabled
     # Check that the user can disable the buttons by pressing "Reset"
-    When I scroll button "Reset" into view
     When I press "Reset"
     Then the "Check compatibility" buttons should be disabled
 
     When I choose "EUPL-1.2" as the "Inbound" licence
     And I choose "EUPL-1.2" as the "Outbound" licence
-    And I scroll link "Check compatibility" into view
     And I click "Check compatibility"
     Then the url should match "licence/compatibility-check/EUPL-1.2/EUPL-1.2"
     And I should see the heading "Compatibility between the European Union Public Licence 1.2 (inbound licence) and the European Union Public Licence 1.2 (outbound licence)."
@@ -392,8 +390,7 @@ Feature:
     Then the "Check compatibility" buttons should be disabled
     When I choose "LGPL-2.1" as the "Outbound" licence
     Then the "Check compatibility" buttons should be enabled
-    When I scroll link "Check compatibility" into view
-    And I click "Check compatibility"
+    When I click "Check compatibility"
     Then the url should match "licence/compatibility-check/LGPL-2.1/LGPL-2.1"
     And I should see the heading "Compatibility between the GNU Lesser General Public License 2.1 (inbound licence) and the GNU Lesser General Public License 2.1 (outbound licence)."
     And I should see the text "Freedom for using and re-distributing is a basic common characteristic of all open licences."
@@ -424,7 +421,6 @@ Feature:
     Then the "Check compatibility" buttons should be disabled
     When I choose "LGPL-2.1" as the "Inbound" licence
     Then the "Check compatibility" buttons should be disabled
-    And I scroll link "Check compatibility" into view
     When I choose "CECILL-C" as the "Outbound" licence
     Then the "Check compatibility" buttons should be enabled
     When I click "Check compatibility"
@@ -457,8 +453,7 @@ Feature:
     Then the "Check compatibility" buttons should be disabled
     When I choose "EUPL-1.2" as the "Outbound" licence
     Then the "Check compatibility" buttons should be enabled
-    When I scroll button "Reset" into view
-    And I press "Reset"
+    When I press "Reset"
     Then the "Check compatibility" buttons should be disabled
     When I choose "EUPL-1.2" as the "Inbound" licence
     And I choose "EUPL-1.2" as the "Outbound" licence
