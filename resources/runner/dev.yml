@@ -48,12 +48,6 @@ commands:
     - task: run
       command: virtuoso:restore
     - task: run
-      command: redis:flush-all
-    - task: run
-      command: drupal:settings
-      arguments:
-        - site-clone
-    - task: run
       command: toolkit:install-clone
 
   dev:install-modules:

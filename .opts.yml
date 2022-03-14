@@ -49,5 +49,5 @@ virtuoso_asda: True
 
 composer_version: 2
 
-install_clean: Yes
-install_clone: False
+install_clean: True
+install_clone: True
