@@ -241,7 +241,9 @@ drupal:
         $config['swiftmailer.transport']['sendmail_mode'] = getenv('DRUPAL_MAIL_SENDMAIL_MODE');
         $config['swiftmailer.transport']['spool_directory'] = getenv('DRUPAL_MAIL_SPOOL_DIR');
       Search API: |
-        $config['search_api.server.joinup']['backend_config']['connector_config']['scheme'] = getenv('SEARCH_API_SERVER_SS_SOLR_SCHEME');
+        // Adding a fallback for the scheme in case it is not properly
+        // consumed by the production environment.
+        $config['search_api.server.joinup']['backend_config']['connector_config']['scheme'] = getenv('SEARCH_API_SERVER_SS_SOLR_SCHEME') ?: 'http';
         $config['search_api.server.joinup']['backend_config']['connector_config']['host'] = getenv('SEARCH_API_SERVER_SS_SOLR_HOST');
         $config['search_api.server.joinup']['backend_config']['connector_config']['port'] = getenv('SEARCH_API_SERVER_SS_SOLR_PORT');
         $config['search_api.server.joinup']['backend_config']['connector_config']['core'] = getenv('SEARCH_API_SERVER_SS_SOLR_CORE');
