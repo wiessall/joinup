@@ -90,7 +90,6 @@ Feature:
 
     Given I am an anonymous user
     When I visit the "JLA" custom page
-    And I accept essential cookies
     Then the Compare buttons are disabled
 
     When I add the "Apache-2.0" licence to the compare list
@@ -374,7 +373,6 @@ Feature:
 
     Given I am an anonymous user
     When I visit the "JLA" custom page
-    And I accept essential cookies
 
     When I click "Distribute" in the "Content" region
     # The licence was hidden.

@@ -25,7 +25,6 @@ Feature: Global search
 
     Given I am logged in as a user with the "authenticated" role
     Then I visit the search page
-    And I accept essential cookies
     # All content is visible.
     Then I should see the "Molecular cooking collection" tile
     And I should see the "El Celler de Can Roca" tile
