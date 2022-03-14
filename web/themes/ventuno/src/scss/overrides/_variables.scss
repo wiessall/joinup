@@ -1,6 +1,17 @@
 // $enable-negative-margins: true;
 // $negative-spacers: negativify-map($spacers);
 
+// EC/EU color variables
+$ec-blue: #17458f;
+$eu-background-color: #034da1;
+$eu-cta-color: #0e47cb;
+$eu-blue: #1b4ac3;
+$eu-light-blue: #f3f6fc;
+$eu-footer-link: $eu-cta-color;
+$eu-selected-background: #ffcc00;
+$btn-close-eu-filter: invert(20%) sepia(70%) saturate(2876%) hue-rotate(216deg)
+  brightness(94%) contrast(105%);
+
 // Colors variables
 $light: #f0f0f0;
 $lighter: $gray-100;
