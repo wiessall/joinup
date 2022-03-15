@@ -19,7 +19,6 @@ Feature: Creating a test (solution) in the TRR collection.
       | name | type                         |
       | W3C  | Company, Industry consortium |
     And I am logged in as "Wobbe"
-    And I accept essential cookies
 
     When I go to the homepage of the "Friends of the test repository" collection
     And I open the plus button menu

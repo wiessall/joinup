@@ -298,7 +298,6 @@ Feature: "Add solution" visibility options.
       | contact information | Invisible Man                                     |
 
     Given I am logged in as a moderator
-    And I accept essential cookies
     When I go to the edit form of the "Cleaning solution" solution
     When I click "Additional fields" tab
     And  I remove the first file from "Logo"

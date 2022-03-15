@@ -87,7 +87,6 @@ Feature:
   @javascript
   Scenario: Manual selecting of the content also works with flagging.
     When I am logged in as a moderator
-    And I accept essential cookies
     And I go to "/admin/structure/menu/manage/support"
 
     When I click "Add link"
