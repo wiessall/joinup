@@ -1,0 +1,65 @@
+.search-bar {
+  &__input-container {
+    background: $white;
+    display: flex;
+    border: 1px solid $gray-300;
+    border-radius: $border-radius-sm; // .2rem
+    padding: 0;
+  }
+  .form-item {
+    width: 100%;
+    align-self: center;
+  }
+  .form-autocomplete {
+    width: 100%;
+    border-style: none;
+    padding: .5rem;
+    font-size: $font-size-sm;
+  }
+  &__submit {
+    @include font-icon-before("\E805", 1.2rem, $primary, inherit, 0);
+    border-style: none;
+    color: $dark;
+    background: transparent;
+    color: $primary;
+    font-size: 0!important;
+    margin-left: .125rem;
+  }
+  .form-autocomplete,
+  &__submit {
+    &:focus-visible {
+      outline: $brand solid 2px;
+      outline-offset: 0px;
+    }
+  }
+}
+
+#collapse-search {
+  @include media-breakpoint-between(xs, sm) {
+    right: -10.5px;
+  }
+  .search-bar {
+    // Adjust position to right side of container
+    @include media-breakpoint-between(xs, sm) {
+      width: calc(100vw - 1rem);
+    }
+    @include media-breakpoint-between(sm, md) {
+      width: calc(map-get($container-max-widths, sm) - 2.5rem);
+    }
+    @include media-breakpoint-between(md, lg) {
+      width: calc(map-get($container-max-widths, md) - 2.5rem);
+    }
+    @include media-breakpoint-between(lg, xl) {
+      width: calc(map-get($container-max-widths, lg) - 2.5rem);
+    }
+    @include media-breakpoint-between(xl, xxl) {
+      width: calc(map-get($container-max-widths, xl) - 2.5rem);
+    }
+    @include media-breakpoint-up(xxl) {
+      width: calc(map-get($container-max-widths, xxl) - 2.5rem);
+    }
+  }
+  .accordion-body {
+    padding: $spacer * .5;
+  }
+}
