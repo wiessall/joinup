@@ -39,7 +39,7 @@ Feature: Collection membership administration
   Scenario: Request a membership
     When I am logged in as "Donald Duck"
     And I go to the "Medical diagnosis" collection
-    And I press the "Join this collection" button
+    And I press "Join this collection"
     Then I should see the success message "Your membership to the Medical diagnosis collection is under approval."
     And the email sent to "Lisa Cuddy" with subject "Joinup: A user has requested to join your collection" contains the following lines of text:
       | text                                                                               |
@@ -81,7 +81,7 @@ Feature: Collection membership administration
     Then I should not see the link "Group"
     And I check the box "Update the member Kathie Cumbershot"
     Then I select "Approve the pending membership(s)" from "Action"
-    And I press the "Apply to selected items" button
+    And I press "Apply to selected items"
     Then I should see the following success messages:
       | success messages                                         |
       | Approve the pending membership(s) was applied to 1 item. |
@@ -105,7 +105,7 @@ Feature: Collection membership administration
   Scenario: Request a membership with subscription and approve it
     When I am logged in as "Cam Bridge"
     And I go to the "Medical diagnosis" collection
-    And I press the "Join this collection" button
+    And I press "Join this collection"
     Then a modal should open
     And I should see the text "Want to receive notifications, too?"
 
@@ -115,14 +115,13 @@ Feature: Collection membership administration
 
     # Approve a membership.
     Given I am logged in as "Lisa Cuddy"
-    And I accept essential cookies
     And I go to the "Medical diagnosis" collection
 
     And I open the group sidebar menu
     And I click "Members" in the "Left sidebar"
     And I check the box "Update the member Cam Bridge"
     Then I select "Approve the pending membership(s)" from "Action"
-    And I press the "Apply to selected items" button
+    And I press "Apply to selected items"
     Then I should see the following success messages:
       | success messages                                         |
       | Approve the pending membership(s) was applied to 1 item. |
@@ -145,7 +144,7 @@ Feature: Collection membership administration
     And I check the box "Update the member Kathie Cumbershot"
     Then I select "Delete the selected membership(s)" from "Action"
 
-    When I press the "Apply to selected items" button
+    When I press "Apply to selected items"
     Then I should see the heading "Are you sure you want to delete the selected membership from the 'Medical diagnosis' collection?"
     And I should see "The member Kathie Cumbershot will be deleted from the 'Medical diagnosis' collection."
     And I should see "This action cannot be undone."
@@ -156,7 +155,7 @@ Feature: Collection membership administration
     Given I check the box "Update the member Kathie Cumbershot"
     Then I select "Delete the selected membership(s)" from "Action"
 
-    When I press the "Apply to selected items" button
+    When I press "Apply to selected items"
     Then I should see the heading "Are you sure you want to delete the selected membership from the 'Medical diagnosis' collection?"
 
     When I press "Confirm"
@@ -173,7 +172,7 @@ Feature: Collection membership administration
     And I check the box "Update the member Turkey Ham"
 
     When I select "Delete the selected membership(s)" from "Action"
-    And I press the "Apply to selected items" button
+    And I press "Apply to selected items"
     Then I should see the heading "Are you sure you want to delete the selected memberships from the 'Medical diagnosis' collection?"
     And I should see "The following members:"
     And I should see "Gregory House"
@@ -207,7 +206,7 @@ Feature: Collection membership administration
     Then I should not see the link "Group"
     Then I check the box "Update the member Gregory House"
     Then I select "Add the facilitator role to the selected members" from "Action"
-    And I press the "Apply to selected items" button
+    And I press "Apply to selected items"
     Then I should see the following success messages:
       | success messages                                                        |
       | Add the facilitator role to the selected members was applied to 1 item. |
@@ -415,7 +414,7 @@ Feature: Collection membership administration
     # Join the collection manually and trigger the invitation.
     When I am logged in as "jbelanger"
     And I go to the "Medical diagnosis" collection
-    And I press the "Join this collection" button
+    And I press "Join this collection"
     And I go to the "Medical diagnosis" collection
     And I click "Members" in the "Left sidebar"
     # The Medical diagnosis collection is closed so normally the membership should be pending.

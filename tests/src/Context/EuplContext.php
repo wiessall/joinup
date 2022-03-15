@@ -12,6 +12,7 @@ use Drupal\eupl\Eupl;
 use Drupal\joinup\HtmlManipulator;
 use Drupal\joinup\Traits\ConfigReadOnlyTrait;
 use Drupal\joinup\Traits\EntityTrait;
+use Drupal\joinup\Traits\JavascriptTrait;
 use Drupal\joinup\Traits\MaterialDesignTrait;
 use Drupal\joinup\Traits\RdfEntityTrait;
 use Drupal\joinup_licence\Entity\CompatibilityDocument;
@@ -28,6 +29,7 @@ class EuplContext extends RawDrupalContext {
 
   use ConfigReadOnlyTrait;
   use EntityTrait;
+  use JavascriptTrait;
   use MaterialDesignTrait;
   use RdfEntityTrait;
 
@@ -456,6 +458,7 @@ class EuplContext extends RawDrupalContext {
    *   When the licence tile is not found on the page.
    */
   protected function findLicenceTile(string $spdx_id): NodeElement {
+    $this->scrollLinkOrButtonIntoView('link', 'Check compatibility');
     if ($licence = $this->getSession()->getPage()->find('css', 'div[data-spdx="' . $spdx_id . '"]')) {
       return $licence;
     }
