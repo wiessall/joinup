@@ -14,7 +14,7 @@ tips:
   content:
     id: content
     plugin: text
-    label: My account
+    label: 'My account'
     weight: 1
     position: left-start
     selector: '.listing .listing__item'
@@ -38,7 +38,7 @@ tips:
   local_tasks:
     id: local_tasks
     plugin: text
-    label: Edit your account
+    label: 'Edit your account'
     weight: 4
     position: left-start
     selector: '#local-tasks-primary'
