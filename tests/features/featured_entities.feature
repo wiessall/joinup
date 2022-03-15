@@ -44,7 +44,6 @@ Feature: Featuring content site-wide
     And I should not see the contextual link "Remove from featured" in the "Elementary particles standard model" tile
 
     When I am logged in as an "authenticated user"
-    And I accept essential cookies
     And I go to the homepage of the "Tidy Neutron" collection
     Then I should not see the contextual link "Feature" in the "Ionizing radiation types" tile
     And I should not see the contextual link "Feature" in the "Elementary particles standard model" tile
@@ -53,7 +52,6 @@ Feature: Featuring content site-wide
 
     # Facilitators cannot use the global featured functionality.
     When I am logged in as "Niles Turner"
-    And I accept essential cookies
     And I go to the homepage of the "Tidy Neutron" collection
     Then I should not see the contextual link "Feature" in the "Ionizing radiation types" tile
     And I should not see the contextual link "Feature" in the "Elementary particles standard model" tile
@@ -61,7 +59,6 @@ Feature: Featuring content site-wide
     And I should not see the contextual link "Remove from featured" in the "Elementary particles standard model" tile
 
     When I am logged in as "Modston Modster"
-    And I accept essential cookies
     # Wait for contextual links to be generated. There is a session race condition that happens when a contextual link
     # has a CSRF token. The session will store the seed if not yet present, but if a new request is made before the
     # session is persisted, the seed won't be found and regenerated. For this reason, the already generated contextual
@@ -113,7 +110,6 @@ Feature: Featuring content site-wide
     And I should not see the contextual link "Remove from featured" in the "<unfeatured>" tile
 
     When I am logged in as "Modston Modster"
-    And I accept essential cookies
     And I visit the <content type> overview
     Then I should see the contextual link "Feature" in the "<unfeatured>" tile
     And the "<unfeatured>" <content type> tile should not be marked as featured

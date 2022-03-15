@@ -32,6 +32,6 @@ Feature: Editing collections
 
     # Quick check to see that we can edit a field.
     When I fill in "Title" with "Überwaldean Sea Eels"
-    And I press the "Save as draft" button
+    And I press "Save as draft"
     Then I should see the heading "Überwaldean Sea Eels"
 
