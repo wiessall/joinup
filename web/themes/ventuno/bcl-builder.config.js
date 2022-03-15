@@ -222,6 +222,16 @@ module.exports = {
       from: [
         path.resolve(
           __dirname,
+          "src/images/logo-ec--en.svg"
+        ),
+      ],
+      to: path.resolve(outputFolder, "assets/images"),
+      options: { up: true },
+    },
+    {
+      from: [
+        path.resolve(
+          __dirname,
           "src/images/logo.svg"
         ),
       ],
