@@ -24,31 +24,40 @@
     </nav>
   </div>
   <header role="banner" class="region-header">
+    {% set items = [{
+      breakpoint: "lg",
+      classes: ["order-1"],
+      id: "landing-pages",
+      icon: { name: "justify" },
+      label: "Toggle menu"|t,
+      links: landing_page_links,
+    }] %}
     {% set items = logged_in ? [{
       breakpoint: "lg",
       classes: ["order-1"],
       id: "landing-pages",
       icon: { name: "justify" },
-      label: "",
+      label: "Toggle menu"|t,
       links: landing_page_links,
     }] : [] %}
     {% set items = items|merge([{
-      type: "search",
-      breakpoint: "lg",
-      id: "search-trigger",
-      icon: {
-        name: "search",
-      },
-      label: "",
-      links: search,
-    },{
       breakpoint: logged_in ? "" : "lg",
       id: logged_in ? "account" : "navbar-toggler",
       icon: {
         name: logged_in ? "person-circle" : "justify",
       },
-      label: logged_in ? user_name : "",
+      label: logged_in ? user_name : "Toggle menu"|t,
       links: logged_in ? profile_links : anonymous_links,
+    },{
+      type: "search",
+      breakpoint: "",
+      classes: ["order-1"],
+      id: "search",
+      icon: {
+        name: "search",
+      },
+      label: "Toggle search box"|t,
+      links: search,
     }]) %}
     {% include directory ~ '/templates/navigation/navbar.html.twig' with {
       brand: {
