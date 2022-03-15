@@ -15,11 +15,11 @@
       font-size: 1.25rem; // 20px
       padding-top: .75em;
       margin-bottom: 1em;
-      line-height: 1.2;
     }
   }
   .field--name-field-topic {
     margin-bottom: $spacer * .5; // 8px
+    line-height: 1.2;
     .field__item {
       display: inline-block;
     }
@@ -256,6 +256,7 @@
         }
         .date--month {
           line-height: 1.4;
+          font-size: $h5-font-size; 
         }
       }
       .dated-listing--content {
