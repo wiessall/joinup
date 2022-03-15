@@ -5,7 +5,7 @@ declare(strict_types = 1);
 namespace Drupal\joinup\Context;
 
 use Drupal\DrupalExtension\Context\MinkContext as DrupalExtensionMinkContext;
-use Drupal\joinup\Traits\BrowserCapabilityDetectionTrait;
+use Drupal\joinup\Traits\JavascriptTrait;
 use Drupal\joinup\Traits\MaterialDesignTrait;
 use PHPUnit\Framework\ExpectationFailedException;
 
@@ -14,7 +14,7 @@ use PHPUnit\Framework\ExpectationFailedException;
  */
 class MinkContext extends DrupalExtensionMinkContext {
 
-  use BrowserCapabilityDetectionTrait;
+  use JavascriptTrait;
   use MaterialDesignTrait;
 
   /**
@@ -86,6 +86,24 @@ class MinkContext extends DrupalExtensionMinkContext {
     // @codingStandardsIgnoreLine
     $tricksy = TRUE;
     parent::iWaitForAjaxToFinish($event);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function assertClick($link): void {
+    // Overriding the base method for Javascript tests.
+    $this->scrollLinkOrButtonIntoView('link', $link);
+    parent::clickLink($link);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function pressButton($button): void {
+    // Overriding the base method for Javascript tests.
+    $this->scrollLinkOrButtonIntoView('button', $button);
+    parent::pressButton($button);
   }
 
 }

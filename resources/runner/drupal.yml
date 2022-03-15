@@ -69,6 +69,7 @@ drupal:
         - Main settings
         - Databases
         - Configuration
+        - Testing configuration alters
         - Search API
         - OpenEuropa Webtools Analytics
         - Custom error handler
@@ -210,6 +211,13 @@ drupal:
         // Location of the site configuration files.
         $settings['config_sync_directory'] = '../config/sync';
         $settings['config_readonly'] = !file_exists(getcwd() . '/../disable-config-readonly');
+      Testing configuration alters: |
+        // The video from the home page interracts with Selenium tests.
+        $config['page_manager.page_variant.homepage-layout_builder-1']['variant_settings']['sections'][0]['components']['6ab0ceea-4541-4153-8b64-227e02369d30']['configuration']['text'] = 'Some joinup video';
+        // Almost all tests should run without the cookie consent widget.
+        $oe_webtools_cck_enabled = !file_exists(getcwd() . '/../disable-cookie-consent');
+        $config['oe_webtools_cookie_consent.settings']['banner_popup'] = $oe_webtools_cck_enabled;
+        $config['oe_webtools_cookie_consent.settings']['video_popup'] = $oe_webtools_cck_enabled;
       Databases: |
         $databases['default']['default'] = [
           'database' => getenv('DRUPAL_DATABASE_NAME'),
