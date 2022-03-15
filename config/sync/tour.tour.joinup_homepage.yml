@@ -12,7 +12,7 @@ tips:
   account:
     id: account
     plugin: text
-    label: Your account
+    label: 'Your account'
     weight: 1
     position: left-start
     selector: '.temporarily-disabled joinup-navbar .nav-item:nth-last-child(3)'
@@ -23,15 +23,15 @@ tips:
     label: Search
     weight: 2
     position: left-start
-    selector: '.input-group.js-form-type-search-api-autocomplete'
+    selector: .input-group.js-form-type-search-api-autocomplete
     body: 'Search through the entire Joinup platform and its supported content items.'
   spotlight:
     id: spotlight
     plugin: text
-    label: Curated content
+    label: 'Curated content'
     weight: 4
     position: left-start
-    selector: '.block-views-blockin-the-spotlight-block'
+    selector: .block-views-blockin-the-spotlight-block
     body: 'View a list of curated content items published on the platform.'
   news:
     id: news
@@ -39,7 +39,7 @@ tips:
     label: News
     weight: 5
     position: left-start
-    selector: '.block-views-blocklatest-news-block'
+    selector: .block-views-blocklatest-news-block
     body: 'View the latest news and events published on the platform.'
   explore:
     id: explore
@@ -52,15 +52,15 @@ tips:
   about:
     id: about
     plugin: text
-    label: About Joinup
+    label: 'About Joinup'
     weight: 7
     position: left-start
-    selector: '.about-what'
+    selector: .about-what
     body: 'Learn more about the platform.'
   contact:
     id: contact
     plugin: text
-    label: Contact us
+    label: 'Contact us'
     weight: 8
     position: bottom-start
     selector: 'li a[data-drupal-link-system-path="contact"]'

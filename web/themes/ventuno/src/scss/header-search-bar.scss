@@ -1,0 +1,28 @@
+// Header search bar CSS
+// Only styles specific to the Header search bar
+
+// Bootstrap functions
+@import "@openeuropa/bcl-bootstrap/scss/functions";
+
+// Bootstrap default variables
+@import "@openeuropa/bcl-bootstrap/scss/variables";
+
+// Override with Joinup variables
+@import "@openeuropa/bcl-theme-joinup/src/scss/base/variables";
+
+// Bootstrap utilities
+@import "@openeuropa/bcl-bootstrap/scss/utilities";
+
+// Override with Joinup utilities
+@import "@openeuropa/bcl-theme-joinup/src/scss/base/utilities";
+
+// Bootstrap mixins
+@import "@openeuropa/bcl-bootstrap/scss/mixins";
+
+// Override with Joinup mixins
+@import "mixins/joinup-icons";
+@import "mixins/full-width-background-colors";
+
+
+// Components
+@import "components/header-search-bar";

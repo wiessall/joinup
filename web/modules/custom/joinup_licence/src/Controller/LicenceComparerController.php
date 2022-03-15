@@ -4,7 +4,6 @@ declare(strict_types = 1);
 
 namespace Drupal\joinup_licence\Controller;
 
-use Drupal\Component\Serialization\Json;
 use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\joinup_licence\LicenceComparerHelper;
@@ -20,6 +19,13 @@ class LicenceComparerController extends ControllerBase {
    * @var \Drupal\joinup_licence\Entity\LicenceInterface[]
    */
   protected $licences = [];
+
+  /**
+   * First header's flag.
+   *
+   * @var bool[]
+   */
+  protected array $firstHeader = [];
 
   /**
    * Responds to a request made to 'joinup_licence.comparer' route.
@@ -46,24 +52,14 @@ class LicenceComparerController extends ControllerBase {
       }
     }
 
-    $cache_metadata = new CacheableMetadata();
-    $data = [];
-    foreach ($this->licences as $spdx_id => $licence) {
-      // Collect cache metadata from dependencies.
-      $cache_metadata
-        ->addCacheableDependency($licence)
-        ->addCacheableDependency($licence->getSpdxLicenceEntity());
-
-      // Build licence data to be attached as Json to the page.
-      $data[$spdx_id] = [
-        'title' => $licence->label(),
-        'description' => check_markup($licence->field_licence_description->value, 'content_editor'),
-        'spdxUrl' => $licence->getSpdxLicenceRdfId(),
-      ];
-    }
-
     $build = [
-      [
+      '#type' => 'container',
+      '#attributes' => [
+        'class' => [
+          'licence-comparer__wrapper',
+        ],
+      ],
+      'table' => [
         '#theme' => 'table',
         '#rows' => $rows,
         '#attributes' => [
@@ -71,26 +67,16 @@ class LicenceComparerController extends ControllerBase {
           'class' => ['licence-comparer'],
         ],
       ],
-      '#attached' => [
-        'html_head' => [
-          [
-            [
-              '#type' => 'html_tag',
-              '#tag' => 'script',
-              '#value' => Json::encode($data),
-              '#attributes' => [
-                'type' => 'application/json',
-                'data-drupal-selector' => 'licence-comparer-data',
-              ],
-            ],
-            'licence_comparer_data',
-          ],
-        ],
-        'library' => [
-          'joinup_licence/licence-compare',
-        ],
-      ],
     ];
+
+    $cache_metadata = new CacheableMetadata();
+    foreach ($this->licences as $licence) {
+      // Collect cache metadata from dependencies.
+      $cache_metadata
+        ->addCacheableDependency($licence)
+        ->addCacheableDependency($licence->getSpdxLicenceEntity());
+
+    }
 
     $cache_metadata
       // This page cache is properly tagged with cache tags and will be
@@ -139,6 +125,9 @@ class LicenceComparerController extends ControllerBase {
         $data[$parent_label][$label] = [];
         foreach ($this->licences as $spdx_id => $licence) {
           $data[$parent_label][$label][$spdx_id] = $licence->hasLegalType($parent_label, $label);
+          if (!isset($this->firstHeader[$spdx_id])) {
+            $this->firstHeader[$spdx_id] = TRUE;
+          }
         }
       }
     }
@@ -208,16 +197,21 @@ class LicenceComparerController extends ControllerBase {
       ],
     ];
 
-    foreach (array_keys($this->licences) as $spdx_id) {
+    foreach ($this->licences as $spdx_id => $licence) {
       $row[] = [
         'data' => [
-          '#markup' => '<span>' . $spdx_id . '</span><span class="icon icon--info"></span>',
+          '#theme' => 'licence_comparer_header_content',
+          '#spdx_id' => $spdx_id,
+          '#title' => $licence->label(),
+          '#description' => check_markup($licence->field_licence_description->value, 'content_editor'),
+          '#url' => $licence->getSpdxLicenceRdfId(),
+          '#first_header' => $this->firstHeader[$spdx_id],
         ],
         'class' => [
           'licence-comparer__header',
         ],
-        'data-licence-id' => $spdx_id,
       ];
+      $this->firstHeader[$spdx_id] = FALSE;
     }
 
     $this->padWithEmptyCells($row, [
@@ -253,13 +247,18 @@ class LicenceComparerController extends ControllerBase {
       ],
     ];
 
-    $checked_markup = '<span class="icon icon--check-2"></span>';
-    foreach ($items as $enabled) {
+    foreach ($items as $id => $checked) {
       $row[] = [
-        'data' => $enabled ? ['#markup' => $checked_markup] : '',
+        'data' => [
+          '#theme' => 'licence_comparer_cell_content',
+          '#spdx_id' => $id,
+          '#legal_category' => $category,
+          '#legal_type' => $label,
+          '#checked' => $checked,
+        ],
         'class' => [
           'licence-comparer__cell',
-          'licence-comparer__cell-' . ($enabled ? 'on' : 'off'),
+          'licence-comparer__cell-' . ($checked ? 'on' : 'off'),
         ],
       ];
     }

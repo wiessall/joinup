@@ -14,3 +14,14 @@
  */
 
 declare(strict_types = 1);
+
+/**
+ * Uninstall Matomo Reporting API module.
+ */
+function joinup_core_post_update_108000(): void {
+  // This cannot be handled as part of config sync because of the sequence of
+  // configuration import operations.
+  \Drupal::configFactory()
+    ->getEditable('matomo_reporting_api.settings')
+    ->delete();
+}
