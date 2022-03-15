@@ -143,8 +143,7 @@ Feature:
 
     # The "List additional actions" is the button arrow that shows the full list of paragraphs to add.
     Given I press "List additional actions"
-    And I press "Add Content listing"
-    And I wait for AJAX to finish
+    Then I press "Add Content listing" in the "Custom page body" paragraphs field
     And I select "Discussion" from "Available filters"
     And I press "Add and configure filter"
     And I fill in "Discussion" with "Searching for green pad."
