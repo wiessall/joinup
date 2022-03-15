@@ -56,7 +56,6 @@ class SolrCommands extends AbstractCommands {
   public function empty(): void {
     $config = $this->getConfig();
     // Temporary fix because of FPFISSUPP-16373.
-    // $core = $config->get('env.SOLR_CORE');
     // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/FPFISSUPP-16373
     $core = 'digit-joinup';
     $this->say("Empty Solr '{$core}' core.");

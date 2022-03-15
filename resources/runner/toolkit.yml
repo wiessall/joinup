@@ -4,6 +4,7 @@ toolkit:
   project_id: joinup
   tmp_folder: ${joinup.dir}/tmp
   clone:
+    asda_url: ${env.ASDA_URL}
     dumpfile: ${mysql.dump_dir}/mysql.sql
 
   build:
@@ -111,6 +112,21 @@ commands:
         - if (node_access_needs_rebuild()) { node_access_rebuild(); }
     - task: run
       command: config-readonly:enable
+
+  # Overrides the toolkit:install-clone command.
+  toolkit:install-clone:
+    - task: run
+      command: joinup:environment
+    - task: run
+      command: redis:flush-all
+    - task: run
+      command: drupal:settings
+      arguments:
+        - site-clone
+    - task: run
+      command: toolkit:install-dump
+    - task: run
+      command: toolkit:run-deploy
 
   # Overrides the toolkit:test-phpcs command.
   toolkit:test-phpcs:

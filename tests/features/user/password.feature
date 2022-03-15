@@ -17,7 +17,7 @@ Feature: Password management
     And I fill in "Current password" with "changeme"
     And I fill in "Password" with "<password>"
     And I fill in "Confirm password" with "<password>"
-    And I press the "Save" button
+    And I press "Save"
     Then I should see the error message "The password does not satisfy the password policies"
     Examples:
       | password   |
@@ -42,7 +42,7 @@ Feature: Password management
     And I fill in "Current password" with "changeme"
     And I fill in "Password" with "Cr4bbyP4tties"
     And I fill in "Confirm password" with "Cr4bbyP4tties"
-    And I press the "Save" button
+    And I press "Save"
     Then I should see the success message "The changes have been saved."
 
   # Todo: Re-enable this in ISAICP-6662, or move this inside header.feature.

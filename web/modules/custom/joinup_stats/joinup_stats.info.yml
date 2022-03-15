@@ -8,7 +8,6 @@ php: 7.1
 dependencies:
   - 'cached_computed_field:cached_computed_field'
   - 'joinup:joinup_bundle_class'
-  - 'matomo_reporting_api:matomo_reporting_api'
   - 'meta_entity:meta_entity'
 
 config_devel:

@@ -74,6 +74,10 @@ function ventuno_preprocess_rdf_entity(&$variables) {
 function ventuno_preprocess_html(&$variables) {
   // Expose the base path so we can use it to generate favicon URIs.
   $variables['base_path'] = base_path();
+  // Licence comparer specific styling.
+  if (\Drupal::routeMatch()->getRouteName() === 'joinup_licence.comparer') {
+    $variables['#attached']['library'][] = 'ventuno/licence-comparer';
+  }
 }
 
 /**
