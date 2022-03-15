@@ -69,6 +69,14 @@ module.exports = {
       },
     },
     {
+      entry: path.resolve(outputFolder, "src/scss/header-search-bar.scss"),
+      dest: path.resolve(outputFolder, "assets/css/header-search-bar.css"),
+      options: {
+        includePaths,
+        sourceMap: "file",
+      },
+    },
+    {
       entry: path.resolve(outputFolder, "src/scss/pager.scss"),
       dest: path.resolve(outputFolder, "assets/css/pager.css"),
       options: {
