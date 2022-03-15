@@ -24,13 +24,30 @@
     </nav>
   </div>
   <header role="banner" class="region-header">
-    {% set items = [{
+    {% set items = hide_searchbar ? [{
       breakpoint: "lg",
       classes: ["order-1"],
       id: "landing-pages",
       icon: { name: "justify" },
       label: "Toggle menu"|t,
       links: landing_page_links,
+    }] : [{
+      breakpoint: "lg",
+      classes: ["order-1"],
+      id: "landing-pages",
+      icon: { name: "justify" },
+      label: "Toggle menu"|t,
+      links: landing_page_links,
+    },{
+      type: "search",
+      breakpoint: "",
+      classes: ["order-1"],
+      id: "search",
+      icon: {
+        name: "search",
+      },
+      label: "Toggle search box"|t,
+      links: search,
     }] %}
     {% set items = logged_in ? [{
       breakpoint: "lg",
@@ -48,16 +65,6 @@
       },
       label: logged_in ? user_name : "Toggle menu"|t,
       links: logged_in ? profile_links : anonymous_links,
-    },{
-      type: "search",
-      breakpoint: "",
-      classes: ["order-1"],
-      id: "search",
-      icon: {
-        name: "search",
-      },
-      label: "Toggle search box"|t,
-      links: search,
     }]) %}
     {% include directory ~ '/templates/navigation/navbar.html.twig' with {
       brand: {
