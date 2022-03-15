@@ -100,7 +100,7 @@ class LicenceFilterBlock extends BlockBase implements ContainerFactoryPluginInte
     $build['#cache']['max-age'] = 0;
 
     $build['#attached']['drupalSettings']['licenceComparer'] = [
-      'path' => '/licence/compare',
+      'path' => base_path() . 'licence/compare',
       'maxLicenceCount' => LicenceComparerHelper::MAX_LICENCE_COUNT,
     ];
     $build['#attached']['library'][] = 'joinup_licence/licence-filter';

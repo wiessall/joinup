@@ -2,6 +2,8 @@ searchpage:
   css:
     theme:
       assets/css/searchpage.css: {}
+  dependencies:
+    - ventuno/close
 
 homepage:
   css:
@@ -35,6 +37,18 @@ pager:
     theme:
       assets/css/pager.css: {}
 
+close:
+  css:
+    theme:
+      assets/css/close.css: {}
+
+modals:
+  css:
+    theme:
+      assets/css/modals.css: {}
+  dependencies:
+    - ventuno/close
+
 footer:
   css:
     theme:
@@ -52,6 +66,16 @@ glide:
     theme:
       assets/css/glide.core.min.css: { minified: true }
 
+tables:
+  css:
+    theme:
+      assets/css/tables.css: {}
+
+licence-comparer:
+  css:
+    theme:
+      assets/css/licence-comparer.css: {}
+
 style:
   version: VERSION
   css:
@@ -60,3 +84,5 @@ style:
   js:
     assets/js/oe-bcl-joinup.bundle.min.js: { minified: true }
     assets/js/popovers.js: { minified: false }
+  dependencies:
+    - core/drupal
