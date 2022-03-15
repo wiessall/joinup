@@ -34,6 +34,14 @@ module.exports = {
         sourceMap: true,
       },
     },
+    {
+      entry: path.resolve(outputFolder, "src/js/searchbox-focus.js"),
+      dest: path.resolve(outputFolder, "assets/js/searchbox-focus.js"),
+      options: {
+        minify: true,
+        sourceMap: true,
+      },
+    },
   ],
   styles: [
     {
@@ -69,8 +77,8 @@ module.exports = {
       },
     },
     {
-      entry: path.resolve(outputFolder, "src/scss/header-search-bar.scss"),
-      dest: path.resolve(outputFolder, "assets/css/header-search-bar.css"),
+      entry: path.resolve(outputFolder, "src/scss/search-bar.scss"),
+      dest: path.resolve(outputFolder, "assets/css/search-bar.css"),
       options: {
         includePaths,
         sourceMap: "file",
