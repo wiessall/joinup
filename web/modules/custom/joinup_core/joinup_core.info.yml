@@ -8,7 +8,6 @@ dependencies:
   - 'drupal:comment'
   - 'drupal:image'
   - 'drupal:link'
-  - 'matomo_reporting_api:matomo_reporting_api'
   - 'message:message'
   - 'message_notify:message_notify'
   - 'monolog:monolog'
