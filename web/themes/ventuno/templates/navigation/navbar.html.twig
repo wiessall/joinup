@@ -39,7 +39,7 @@
 {{ attach_library('ventuno/navbar') }}
 
 {% if search %}
-  {{ attach_library('ventuno/header-search-bar') }}
+  {{ attach_library('ventuno/search-bar') }}
 {% endif %}
 
 {% set _brand = brand|default({}) %}
@@ -87,11 +87,6 @@
       <a class="navbar-brand" href="{{ _brand.link }}">
         <img class="navbar-brand-image" src="{{ _brand.src }}" alt="{{ _brand.alt }}" width="96" height="25"/>
       </a>
-      {% if search %}
-        <div class="header-search-bar d-none d-lg-block">
-          {{ search }}
-        </div>
-      {% endif %}
     </div>
     <div id="{{ _collapse_id }}">
       <ul
@@ -142,15 +137,12 @@
                 aria-controls="collapse-{{ item.id }}"
                 aria-expanded="false"
                 type="button"
-                title="{% if item.type == 'search' %}{{ 'Open search'|t }}{% else %}{{ 'Toggle menu'|t }}{% endif %}"
+                title="{{ item.label }}"
               >
                 {% if item.icon is not empty %}
                   <svg class="bi icon--s">
                     <use xlink:href="{{ bcl_icon_path }}#{{ item.icon.name }}"></use>
                   </svg>
-                {% endif %}
-                {% if item.label is not empty %}
-                  <span class="accordion-button-label">{{ item.label }}</span>
                 {% endif %}
               </button>
             </span>
@@ -162,7 +154,7 @@
             >
               <div class="accordion-body">
                 {% if item.type is same as 'search' and search %}
-                  <div class="header-search-bar">
+                  <div class="search-bar">
                     {{ search }}
                   </div>
                 {% else %}
