@@ -16,12 +16,13 @@
 version: '3.8'
 services:
   web:
-    image: fpfis/httpd-php-dev:7.4
+    build:
+      context: './resources/docker/web'
     working_dir: /var/www/html
     # macOS users should override 'volumes:' in docker-compose.override.yml.
     # See docker-compose.override.yml.dist.
     volumes:
-      - ${PWD}:/var/www/html
+      - .:/var/www/html
     env_file:
       - .env.dist
     environment:
