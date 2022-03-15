@@ -138,7 +138,7 @@ Feature:
 
     # After leaving the group the user is no longer able to see revisions.
     When I click "<leave link>"
-    And I press the "Confirm" button
+    And I press "Confirm"
     Then I should see the success message "You are no longer a member of Hellow world."
 
     When I visit the "<final title>" <content type>
@@ -166,7 +166,7 @@ Feature:
     And I click "Members" in the "Left sidebar"
     And I check the box "Update the member Clumsy Bounce"
     And I select "Block the selected membership(s)" from "Action"
-    And I press the "Apply to selected items" button
+    And I press "Apply to selected items"
     Then I should see the following success messages:
       | success messages                                        |
       | Block the selected membership(s) was applied to 1 item. |
