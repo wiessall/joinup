@@ -1,5 +1,5 @@
 /**
- * Glide slider configuration.
+ * @file Glide slider configuration.
  */
 
 import Glide, { Controls, Breakpoints, Swipe } from '@glidejs/glide/dist/glide.modular.esm'
@@ -22,7 +22,7 @@ Drupal.behaviors.glide = {
       }).mount({ Controls, Breakpoints, Swipe });
 
       glide.update({ wrapperWidth: 300 })
-      
+
     }
     // when switching tabs, mount visible slide again (otherwise slides are buggy)
     var tabs = document.querySelectorAll('.explore-block button.nav-link');

@@ -26,13 +26,6 @@
       width: 8rem; // 128px
     }
   }
-  // .navbar-motto {
-  //   @include media-breakpoint-up(md) {
-  //     font-size: $font-size-sm; // 14px
-  //     color: $white;
-  //     letter-spacing: $font-size-base*.1; // 1.6px
-  //   }
-  // }
   .navbar-nav {
     justify-content: flex-end;
     width: 100%;
@@ -70,9 +63,6 @@
     margin-top: 1px;
     padding: 0; // Padding should be 0 for smooth collapsing animation
     white-space: nowrap;
-    @include media-breakpoint-up(md) {
-      // max-width: 20*$spacer; // 320px
-    }
   }
   .accordion-body {
     padding: $spacer; // Padding needs to be on inner element

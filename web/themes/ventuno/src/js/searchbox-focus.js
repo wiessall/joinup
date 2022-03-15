@@ -1,12 +1,11 @@
 /**
- * Listen to a 'click' on the searchbox trigger focus accordingly.
+ * @file Listen to a 'click' on the searchbox trigger and focus accordingly.
  */
  Drupal.behaviors.searchboxFocus = {
   attach: function () {
-    const
-      trigger = document.querySelector('#heading-search .accordion-button'),
-      box = document.querySelector('#collapse-search'),
-      input = document.querySelector('#collapse-search #edit-keys');
+    const trigger = document.querySelector('#heading-search .accordion-button');
+    const box = document.querySelector('#collapse-search');
+    const input = document.querySelector('#collapse-search #edit-keys');
     if (trigger === null
       || trigger === undefined
       || input === null
@@ -19,7 +18,8 @@
       if (box.classList.contains('show')) {
         input.blur();
       // If click was for opening, focus.
-      } else {
+      }
+      else {
         input.focus();
       }
     });
@@ -30,7 +30,8 @@
         if (box.classList.contains('show')) {
           input.blur();
         // If click was for opening, blur.
-        } else {
+        }
+        else {
           input.focus();
         }
       }
