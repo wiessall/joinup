@@ -12,12 +12,12 @@ Feature: Block users
     Given I am on the homepage
     When I click "People"
     And I fill in "Name or email contains" with "Liam Lego"
-    And I press the "Filter" button
+    And I press "Filter"
 
     # Block the user
     Then I check "Liam Lego"
     And I select "Block the selected user(s)" from "Action"
-    And I press the "Apply to selected items" button
+    And I press "Apply to selected items"
     Then I should see the success message "Block the selected user(s) was applied to 1 item."
     And the following email should have been sent:
       | recipient | Liam Lego                                                                                                                 |
@@ -27,7 +27,7 @@ Feature: Block users
     # Unblock the user
     When I check "Liam Lego"
     Then I select "Unblock the selected user(s)" from "Action"
-    And I press the "Apply to selected items" button
+    And I press "Apply to selected items"
     Then I should see the success message "Unblock the selected user(s) was applied to 1 item."
     And the following email should have been sent:
       | recipient | Liam Lego                                                                                                                       |

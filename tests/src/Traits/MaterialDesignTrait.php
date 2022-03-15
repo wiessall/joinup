@@ -219,7 +219,7 @@ trait MaterialDesignTrait {
     $xpath = '//label[text()="' . $label . '"]/../../span[contains(concat(" ", normalize-space(@class), " "), " mdl-radio__ripple-container ")]';
 
     // Locate the "fancy" radio button and click it.
-    $fancy_button = $parent_element->find('xpath', $xpath);
+    $fancy_button = $parent_element->find('xpath', $xpath)->getParent();
     if (empty($fancy_button)) {
       throw new \Exception("The radio button labelled $label was not found.");
     }

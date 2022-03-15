@@ -22,22 +22,22 @@ Feature: User management
     # Filter on date
     Then I fill in "Min" with "1-1-2014"
     And I fill in "Max" with "10-1-2014"
-    And I press the "Filter" button
+    And I press "Filter"
     Then I should see the text "Trusty user"
     Then I should not see the text "Newkid"
-    Then I press the "Reset" button
+    Then I press "Reset"
 
     # Filter on blocked
     Then I select "Active" from "Status"
-    And I press the "Filter" button
+    And I press "Filter"
     Then I should see the text "Newkid"
     Then I should not see the text "Trusty user"
-    Then I press the "Reset" button
+    Then I press "Reset"
 
     # Filter by role
     Then I select "Administrator" from "Role"
-    And I press the "Filter" button
+    And I press "Filter"
     Then I should see the text "Old guy"
     But I should not see the text "Trusty user"
     And I should not see the text "Newkid"
-    Then I press the "Reset" button
+    Then I press "Reset"

@@ -23,11 +23,11 @@ Feature: User role management
     And I click "People"
 
     When I fill in "Name or email contains" with "Nibby Noob"
-    And I press the "Filter" button
+    And I press "Filter"
     # Select user and assign role
     And I check "Nibby Noob"
     And I select "Add the Moderator role to the selected user(s)" from "Action"
-    And I press the "Apply to selected items" button
+    And I press "Apply to selected items"
     Then I should see the success message "Add the Moderator role to the selected user(s) was applied to 1 item."
     And I should see the success message "The user has been notified that their account has been updated."
     And the following email should have been sent:
@@ -58,11 +58,11 @@ Feature: User role management
     And I click "People"
 
     When I fill in "Name or email contains" with "Nibby Noob"
-    And I press the "Filter" button
+    And I press "Filter"
     # Select user and assign role
     And I check "Nibby Noob"
     And I select "Add the Licence manager role to the selected user(s)" from "Action"
-    And I press the "Apply to selected items" button
+    And I press "Apply to selected items"
     Then I should see the success message "Add the Licence manager role to the selected user(s) was applied to 1 item."
     And I should see the success message "The user has been notified that their account has been updated."
     And the following email should have been sent:
@@ -86,12 +86,12 @@ Feature: User role management
 
     When I check "Nibby Noob"
     And I select "Add the RDF graph manager role to the selected user(s)" from "Action"
-    And I press the "Apply to selected items" button
+    And I press "Apply to selected items"
     Then I should see the success message "Add the RDF graph manager role to the selected user(s) was applied to 1 item."
     And I should see the text "RDF graph manager" in the "Nibby Noob" row
 
     When I check "Nibby Noob"
     And I select "Remove the RDF graph manager role from the selected user(s)" from "Action"
-    And I press the "Apply to selected items" button
+    And I press "Apply to selected items"
     Then I should see the success message "Remove the RDF graph manager role from the selected user(s) was applied to 1 item."
     And I should not see the text "RDF graph manager" in the "Nibby Noob" row

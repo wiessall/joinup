@@ -54,10 +54,10 @@
               <label> tag in ISAICP-5687.
               See https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-5687.
               #}
-              <label for="{{ url|clean_id }}">{{ 'Inbound'|t }}</label>
+              <label for="{{ url|clean_id }}-inbound">{{ 'Inbound'|t }}</label>
             </span>
           {% endspaceless %}
-          <input type="radio" id="{{ url|clean_id }}" class="mdl-radio__button" name="inbound-licence" data-licence-name="{{ spdx_licence_id_plain }}">
+          <input type="radio" id="{{ url|clean_id }}-inbound" class="mdl-radio__button" name="inbound-licence" data-licence-name="{{ spdx_licence_id_plain }}">
         </label>
         <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect">
           {% spaceless %}
@@ -68,14 +68,14 @@
               <label> tag in ISAICP-5687.
               See https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-5687.
               #}
-              <label for="{{ url|clean_id }}">{{ 'Outbound'|t }}</label>
+              <label for="{{ url|clean_id }}-outbound">{{ 'Outbound'|t }}</label>
             </span>
           {% endspaceless %}
-          <input type="radio" id="{{ url|clean_id }}" class="mdl-radio__button" name="outbound-licence" data-licence-name="{{ spdx_licence_id_plain }}">
+          <input type="radio" id="{{ url|clean_id }}-outbound" class="mdl-radio__button" name="outbound-licence" data-licence-name="{{ spdx_licence_id_plain }}">
         </label>
       </div>
       <div class="licence-tile__actions-item">
-        <a class="licence-tile__button licence-tile__button--compatible licence-tile__button--disabled" href="#">{{ 'Check compatibility'|t }}</a>
+        <a id="licence-tile__button--check-compatibility" class="licence-tile__button licence-tile__button--compatible licence-tile__button--disabled" href="#">{{ 'Check compatibility'|t }}</a>
       </div>
       {% if content.spdx_licence_external_url %}
         <div class="licence-tile__actions-item">
