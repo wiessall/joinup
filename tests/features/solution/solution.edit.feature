@@ -111,7 +111,6 @@ Feature: Solution editing.
   @javascript
   Scenario: Test solution edit form vertical tabs.
     When I am logged in as "Yancy Burton"
-    And I accept essential cookies
     And I go to the homepage of the "Collection example" collection
     And I click "Add solution" in the plus button menu
     And I check the "I have read and accept the legal notice and I commit to manage my solution on a regular basis." material checkbox

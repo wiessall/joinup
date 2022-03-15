@@ -5,12 +5,14 @@ declare(strict_types = 1);
 namespace Drupal\joinup\Context;
 
 use Behat\Gherkin\Node\TableNode;
+use Behat\Mink\Element\DocumentElement;
 use Behat\Mink\Element\NodeElement;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\eupl\Eupl;
 use Drupal\joinup\HtmlManipulator;
 use Drupal\joinup\Traits\ConfigReadOnlyTrait;
 use Drupal\joinup\Traits\EntityTrait;
+use Drupal\joinup\Traits\JavascriptTrait;
 use Drupal\joinup\Traits\MaterialDesignTrait;
 use Drupal\joinup\Traits\RdfEntityTrait;
 use Drupal\joinup_licence\Entity\CompatibilityDocument;
@@ -27,6 +29,7 @@ class EuplContext extends RawDrupalContext {
 
   use ConfigReadOnlyTrait;
   use EntityTrait;
+  use JavascriptTrait;
   use MaterialDesignTrait;
   use RdfEntityTrait;
 
@@ -98,12 +101,19 @@ class EuplContext extends RawDrupalContext {
    * @Given I click the info icon of the :spdx licence( table cell)
    */
   public function clickLicenceInfoIcon(string $spdx): void {
-    $xpath = '//td[@class and contains(concat(" ", normalize-space(@class), " "), " licence-comparer__header ") and contains(., "' . $spdx . '")]//span[@class and contains(concat(" ", normalize-space(@class), " "), " icon--info ")]';
-    $icon = $this->getSession()->getPage()->find('xpath', $xpath);
-    if (empty($icon)) {
-      throw new \Exception("Could not locate a table cell with the text {$spdx}.");
+    $xpath = '//td[@class and contains(concat(" ", normalize-space(@class), " "), " licence-comparer__header ")]/button[contains(., "' . $spdx . '")]';
+    $page = $this->getSession()->getPage();
+    $button = $page->find('xpath', $xpath);
+    if (empty($button)) {
+      throw new \Exception("Could not locate a table cell with the button {$spdx}.");
     }
-    $icon->click();
+    $button->press();
+
+    // Wait for modal dialog to be ready.
+    $page->waitFor(5, function (DocumentElement $page): ?NodeElement {
+      // Open modal dialog has `style="display:block"`.
+      return $page->find('xpath', '//div[@style and contains(concat(" ", normalize-space(@class), " "), " modal-content ")]//button[@aria-label="Close"]');
+    });
   }
 
   /**
@@ -115,12 +125,12 @@ class EuplContext extends RawDrupalContext {
    * @Given I close the licence modal dialog
    */
   public function closeLicenceModalDialog(): void {
-    $xpath = '//div[@class and contains(concat(" ", normalize-space(@class), " "), " licence-comparer__dialog ")]//button[@title="Close"]';
-    $icon = $this->getSession()->getPage()->find('xpath', $xpath);
-    if (empty($icon)) {
+    $xpath = '//div[@class and contains(concat(" ", normalize-space(@class), " "), " modal-content ")]//button[@aria-label="Close"]';
+    $button = $this->getSession()->getPage()->find('xpath', $xpath);
+    if (empty($button)) {
       throw new \Exception("Either the dialog is not available or the 'Close' button could not be located.");
     }
-    $icon->click();
+    $button->press();
   }
 
   /**
@@ -448,6 +458,7 @@ class EuplContext extends RawDrupalContext {
    *   When the licence tile is not found on the page.
    */
   protected function findLicenceTile(string $spdx_id): NodeElement {
+    $this->scrollLinkOrButtonIntoView('link', 'Check compatibility');
     if ($licence = $this->getSession()->getPage()->find('css', 'div[data-spdx="' . $spdx_id . '"]')) {
       return $licence;
     }
@@ -496,12 +507,16 @@ class EuplContext extends RawDrupalContext {
   }
 
   /**
-   * Inserts an 'x' character in the licence comparer checked cells.
+   * Simplifies the table to make the Behat assert easier.
    *
-   * There's no way to identify the checked cells in tests as the licence
-   * comparer table cells are all empty. Visually, a human is able to identify
-   * them as they are CSS styled. For the purpose of the test we insert an 'x'
-   * character so that the test is able to identify the checked cells.
+   * Table alters:
+   * - Header cells contain nested markup. We're only interested in the header
+   *   cell label for the purpose of comparison.
+   * - There's no way to identify the checked cells in tests as the licence
+   *   comparer table cells contain hidden text. Visually, a human is able to
+   *   identify them as they are CSS styled. For the purpose of the test we
+   *   insert an 'x' character so that the test is able to identify those cells.
+   * - Visually empty cells still contain hidden text. Fully empty those cells.
    *
    * @param \LoversOfBehat\TableExtension\Hook\Scope\AfterTableFetchScope $scope
    *   The "after table fetch" scope object.
@@ -516,13 +531,28 @@ class EuplContext extends RawDrupalContext {
       return;
     }
 
-    /** @var \DOMNode $node */
-    foreach ($html_manipulator->filter('.icon--check-2') as $node) {
+    /** @var \DOMNode $td */
+    foreach ($html_manipulator->filter('td.licence-comparer__header') as $td) {
+      // Reduce header cell content to SPDX ID for easy comparison.
+      if ($td->textContent) {
+        /** @var \DOMElement $button */
+        $button = $td->getElementsByTagName('button')[0];
+        $label = trim($button->nodeValue);
+        $td->textContent = $label;
+      }
+    }
+
+    foreach ($html_manipulator->filter('td.licence-comparer__cell-on') as $td) {
       // Insert an 'x' character the licence comparer table checked cells so
       // that the tests are able to identify them.
       // @see tests/features/communities/eupl/jla.feature
-      $node->textContent = 'x';
+      $td->textContent = 'x';
     }
+    foreach ($html_manipulator->filter('td.licence-comparer__cell-off') as $td) {
+      // Remove hidden markup from empty cells.
+      $td->textContent = '';
+    }
+
     $scope->setHtml($html_manipulator->html());
   }
 

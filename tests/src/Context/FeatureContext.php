@@ -2443,4 +2443,40 @@ class FeatureContext extends RawDrupalContext implements SnippetAcceptingContext
     $field->findButton('Remove')->press();
   }
 
+  /**
+   * Disables cookie consent banner for all tests.
+   *
+   * @BeforeSuite
+   */
+  public static function suiteDisableCookieConsent(): void {
+    touch(__DIR__ . '/../../../disable-cookie-consent');
+  }
+
+  /**
+   * Re-enables cookie consent banner after testing.
+   *
+   * @AfterSuite
+   */
+  public static function suiteEnableCookieConsent(): void {
+    @unlink(__DIR__ . '/../../../disable-cookie-consent');
+  }
+
+  /**
+   * Enables cookie consent banner for @cookieConsent test.
+   *
+   * @BeforeScenario @cookieConsent&&@api
+   */
+  public function scenarioEnableCookieConsent(): void {
+    @unlink(__DIR__ . '/../../../disable-cookie-consent');
+  }
+
+  /**
+   * Disables cookie consent banner after @cookieConsent test.
+   *
+   * @AfterScenario @cookieConsent&&@api
+   */
+  public function scenarioDisableCookieConsent(): void {
+    touch(__DIR__ . '/../../../disable-cookie-consent');
+  }
+
 }
