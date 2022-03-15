@@ -1,5 +1,6 @@
 /**
- * Sticky menu.
+ * @file Listen to DOM readiness, look for navbar element and if present,
+ * listen to user scroll to toggle sticky classes.
  */
  Drupal.behaviors.stickyMenu = {
   attach: function () {
@@ -17,7 +18,8 @@
             navbar.classList.add('js-is--sticky');
             // Add the required padding top to show content behind navbar.
             document.body.style.paddingTop = navbar.offsetHeight + 'px';
-          } else {
+          }
+          else {
             navbar.classList.remove('js-is--sticky');
             // Remove padding top from body.
             document.body.style.paddingTop = '0';
