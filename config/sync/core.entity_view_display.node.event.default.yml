@@ -44,51 +44,51 @@ bundle: event
 mode: default
 content:
   body:
-    label: hidden
     type: text_default
-    weight: 1
+    label: hidden
     settings: {  }
     third_party_settings: {  }
+    weight: 1
     region: content
   field_attachment:
     type: file_table
-    weight: 13
-    region: content
     label: hidden
     settings:
       use_description_as_link_text: true
     third_party_settings:
       template_suggestion:
         template_suggestion: with_label
+    weight: 13
+    region: content
   field_comments:
-    weight: 9
+    type: comment_default
     label: above
     settings:
-      pager_id: 0
       view_mode: default
+      pager_id: 0
     third_party_settings: {  }
-    type: comment_default
+    weight: 9
     region: content
   field_event_agenda:
-    weight: 2
+    type: text_default
     label: above
     settings: {  }
     third_party_settings:
       template_suggestion:
         template_suggestion: fieldset
-    type: text_default
+    weight: 2
     region: content
   field_event_contact_email:
-    weight: 5
+    type: basic_string
     label: above
     settings: {  }
     third_party_settings:
       template_suggestion:
         template_suggestion: fieldset
-    type: basic_string
+    weight: 5
     region: content
   field_event_coordinates:
-    weight: 14
+    type: oe_webtools_maps_map
     label: hidden
     settings:
       show_marker: true
@@ -96,10 +96,10 @@ content:
     third_party_settings:
       template_suggestion:
         template_suggestion: ''
-    type: oe_webtools_maps_map
+    weight: 14
     region: content
   field_event_date:
-    weight: 12
+    type: daterange_condensed
     label: hidden
     settings:
       timezone_override: ''
@@ -111,19 +111,19 @@ content:
     third_party_settings:
       template_suggestion:
         template_suggestion: ''
-    type: daterange_condensed
+    weight: 12
     region: content
   field_event_logo:
-    weight: 3
+    type: image
     label: hidden
     settings:
-      image_style: logo
       image_link: content
+      image_style: logo
     third_party_settings: {  }
-    type: image
+    weight: 3
     region: content
   field_event_online_location:
-    weight: 15
+    type: link
     label: hidden
     settings:
       trim_length: 80
@@ -132,10 +132,10 @@ content:
       rel: ''
       target: ''
     third_party_settings: {  }
-    type: link
+    weight: 15
     region: content
   field_event_web_url:
-    weight: 6
+    type: link
     label: above
     settings:
       trim_length: 80
@@ -146,21 +146,19 @@ content:
     third_party_settings:
       template_suggestion:
         template_suggestion: fieldset
-    type: link
+    weight: 6
     region: content
   field_location:
-    weight: 7
+    type: basic_string
     label: above
     settings: {  }
     third_party_settings:
       template_suggestion:
         template_suggestion: fieldset
-    type: basic_string
+    weight: 7
     region: content
   field_shared_in:
     type: entity_reference_entity_view
-    weight: 8
-    region: content
     label: above
     settings:
       view_mode: view_mode_tile
@@ -168,15 +166,16 @@ content:
     third_party_settings:
       template_suggestion:
         template_suggestion: entity_reference__listing_tile
-  links:
-    weight: 0
+    weight: 8
     region: content
+  links:
     settings: {  }
     third_party_settings: {  }
-  report:
-    label: hidden
-    weight: 11
+    weight: 0
     region: content
+  report:
+    type: link
+    label: hidden
     settings:
       trim_length: 80
       url_only: false
@@ -186,12 +185,13 @@ content:
     third_party_settings:
       template_suggestion:
         template_suggestion: no_wrappers
-    type: link
-  share_link:
-    weight: 10
+    weight: 11
     region: content
+  share_link:
     settings: {  }
     third_party_settings: {  }
+    weight: 10
+    region: content
 hidden:
   field_event_spatial_coverage: true
   field_keywords: true
@@ -206,3 +206,4 @@ hidden:
   og_audience: true
   published_at: true
   read_more: true
+  search_api_excerpt: true

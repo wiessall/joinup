@@ -173,6 +173,9 @@ Feature: Pinning entities inside collections
     Then I should not see the contextual links "Pin, Unpin" in the "Important very" tile
     And I should not see the contextual links "Pin, Unpin" in the "Information useful" tile
 
+  # This scenario will be re-enabled in ISAICP-6771.
+  # See https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-6771
+  @wip
   Scenario: Facilitators can pin and unpin solutions inside their collections.
     Given discussion content:
       | title                         | collection    | state     | pinned | created    |
@@ -281,7 +284,6 @@ Feature: Pinning entities inside collections
       | title                | collection    | state     | pinned in     | creation date |
       | Drop forged wrenches | Orange Wrench | validated | Orange Wrench | 2017-10-12    |
     And I am logged in as "Rozanne Minett"
-    And I accept essential cookies
 
     # Pinning and unpinning items should not affect the "last update" timestamp.
     # Before changing the pinned status, let's check that the solution is in the
@@ -343,7 +345,6 @@ Feature: Pinning entities inside collections
 
     # Verify that changes in the pinned state are reflected to the tile.
     When I am logged in as a facilitator of the "Orange Wrench" collection
-    And I accept essential cookies
     When I go to the homepage of the "Orange Wrench" collection
     Then the "Lantern FAQs" tile should be marked as pinned
     But the "Lantern terms" tile should not be marked as pinned
@@ -384,7 +385,6 @@ Feature: Pinning entities inside collections
 
     # Verify that changes in the pinned state are reflected to the tile.
     When I am logged in as "Rozanne Minett"
-    And I accept essential cookies
     And I go to the homepage of the "Orange Wrench" collection
     And I click the contextual link "Pin" in the "Fast lightning" tile
     Then the "Fast lightning" tile should be marked as pinned

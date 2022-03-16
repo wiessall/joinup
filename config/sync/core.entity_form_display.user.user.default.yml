@@ -34,11 +34,11 @@ content:
     settings: {  }
     third_party_settings: {  }
   field_social_media:
+    type: social_media_links_field_default
     weight: 10
+    region: content
     settings: {  }
     third_party_settings: {  }
-    type: social_media_links_field_default
-    region: content
   field_user_business_title:
     type: string_textfield
     weight: 6
@@ -76,9 +76,9 @@ content:
     region: content
     settings:
       match_operator: CONTAINS
+      match_limit: 10
       size: 60
       placeholder: ''
-      match_limit: 10
     third_party_settings: {  }
   field_user_organisation:
     type: string_textfield
@@ -104,9 +104,9 @@ content:
     third_party_settings: {  }
   legal_legal_notice:
     weight: -4
+    region: content
     settings: {  }
     third_party_settings: {  }
-    region: content
   path:
     type: path
     weight: 9

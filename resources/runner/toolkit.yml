@@ -4,6 +4,7 @@ toolkit:
   project_id: joinup
   tmp_folder: ${joinup.dir}/tmp
   clone:
+    asda_url: ${env.ASDA_URL}
     dumpfile: ${mysql.dump_dir}/mysql.sql
 
   build:
@@ -24,7 +25,7 @@ toolkit:
             - ${toolkit.build.dist.root}/composer.lock
         # Build theme assets.
         - task: exec
-          command: cd "${toolkit.build.dist.root}/web/themes/ventuno" && npm install
+          command: cd ${toolkit.build.dist.root}/web/themes/ventuno && npm ci
         # Remove theme development dependencies.
         - task: remove
           file: ${toolkit.build.dist.root}/web/themes/ventuno/node_modules
@@ -37,6 +38,9 @@ commands:
 
   # Overrides the toolkit:build-dev command.
   toolkit:build-dev:
+    - task: mkdir
+      dir: ${joinup.files_public_dir}
+      mode: 0775
     - task: copy
       from: ${joinup.site_dir}/sites/default/default.services.yml
       to: ${joinup.site_dir}/sites/default/services.yml
@@ -47,17 +51,29 @@ commands:
     - task: process
       source: ${joinup.dir}/behat.yml.dist
       destination: ${joinup.dir}/behat.yml
-    - task: run
-      command: joinup:build-assets
     - task: mkdir
       dir: ${joinup.files_private_dir}
     - task: mkdir
       dir: ${env.DRUPAL_FILE_TEMP_PATH}
+    # Handle a potential case where the repo has been shallow cloned. Typically,
+    # this happens in GitLab pipelines, where the repos are shallow cloned for
+    # performance reasons. A shallow clone repository prevents us to get the
+    # latest Git tag as no tags are available.
+    - task: exec
+      command: test "$(git rev-parse --is-shallow-repository)" = "false" || git fetch --unshallow
+    - task: exec
+      command: test ! -f ./vendor/bin/grumphp || ./vendor/bin/grumphp git:deinit
     - task: exec
       command: test "$(git tag)" = "" || git describe --tags | tr -d '\n' > ${joinup.site_dir}/VERSION.txt
+    - task: exec
+      command: 'echo "Detected Joinup version: $(<${joinup.site_dir}/VERSION.txt)"'
+    - task: run
+      command: joinup:build-assets
 
   # Overrides toolkit:install-clean.
   toolkit:install-clean:
+    - task: run
+      command: joinup:environment
     - task: run
       command: sparql:empty
     - task: run
@@ -74,17 +90,6 @@ commands:
       command: drupal:site-install
     - task: run
       command: dev:import-sparql-fixtures
-    # TODO: Remove this in ISAICP-5271. Newer versions of Search API module are
-    # storing the site hash into a state variable, rather than a config.
-    # See https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-5271.
-    - task: exec
-      command: ${drush.bin}
-      arguments:
-        - php:eval
-        - \Drupal\search_api_solr\Utility\Utility::getSiteHash();
-      options:
-        root: ${joinup.site_dir}
-        yes: null
     - task: run
       command: dev:install-modules
     - task: run
@@ -107,6 +112,21 @@ commands:
         - if (node_access_needs_rebuild()) { node_access_rebuild(); }
     - task: run
       command: config-readonly:enable
+
+  # Overrides the toolkit:install-clone command.
+  toolkit:install-clone:
+    - task: run
+      command: joinup:environment
+    - task: run
+      command: redis:flush-all
+    - task: run
+      command: drupal:settings
+      arguments:
+        - site-clone
+    - task: run
+      command: toolkit:install-dump
+    - task: run
+      command: toolkit:run-deploy
 
   # Overrides the toolkit:test-phpcs command.
   toolkit:test-phpcs:

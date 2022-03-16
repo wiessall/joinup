@@ -20,7 +20,7 @@ class SolariumEventSubscriber implements EventSubscriberInterface {
    *
    * @var \Drupal\Core\State\StateInterface
    */
-  protected $state;
+  protected StateInterface $state;
 
   /**
    * Constructs a SolariumEventSubscriber object.
@@ -35,7 +35,7 @@ class SolariumEventSubscriber implements EventSubscriberInterface {
   /**
    * {@inheritdoc}
    */
-  public static function getSubscribedEvents() {
+  public static function getSubscribedEvents(): array {
     return [
       Events::PRE_EXECUTE => 'commitOnUpdate',
     ];
@@ -47,7 +47,7 @@ class SolariumEventSubscriber implements EventSubscriberInterface {
    * @param \Solarium\Core\Event\PreExecute $event
    *   The pre execute event.
    */
-  public function commitOnUpdate(PreExecute $event) {
+  public function commitOnUpdate(PreExecute $event): void {
     $query = $event->getQuery();
 
     if ($this->state->get('joinup_search.skip_solr_commit_on_update', FALSE) === TRUE) {

@@ -25,17 +25,17 @@ bundle: user
 mode: default
 content:
   field_user_content:
-    weight: 1
+    type: search_api_field
     label: hidden
     settings: {  }
     third_party_settings: {  }
-    type: search_api_field
+    weight: 1
     region: content
   user_field_user_content_top:
-    weight: 0
-    region: content
     settings: {  }
     third_party_settings: {  }
+    weight: 0
+    region: content
 hidden:
   field_last_password_reset: true
   field_password_expiration: true
@@ -51,3 +51,4 @@ hidden:
   field_user_professional_domain: true
   langcode: true
   member_for: true
+  search_api_excerpt: true

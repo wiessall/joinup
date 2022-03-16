@@ -10,11 +10,12 @@ dependencies:
     - text
 third_party_settings:
   allowed_formats:
-    content_editor: content_editor
-    basic_html: '0'
-    simple_html: '0'
-    simple_text: '0'
-    plain_text: '0'
+    allowed_formats:
+      content_editor: content_editor
+      basic_html: '0'
+      simple_html: '0'
+      simple_text: '0'
+      plain_text: '0'
 _core:
   default_config_hash: T6qs0hr-3TjEDYDWEalU2xGftu3yZL8sd9i1hOCHNrk
 id: rdf_entity.asset_distribution.field_ad_description

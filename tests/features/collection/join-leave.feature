@@ -27,7 +27,7 @@ Feature: Joining and leaving collections through the web interface
     Given I am logged in as "Madame Sharn"
     When I go to the homepage of the "Überwaldean Land Eels" collection
     Then I should see the "Join this collection" button
-    When I press the "Join this collection" button
+    When I press "Join this collection"
     Then I should see the success message "You are now a member of Überwaldean Land Eels."
     And the "Überwaldean Land Eels" collection should have 1 active member
     When I go to the homepage of the "Überwaldean Land Eels" collection
@@ -38,7 +38,7 @@ Feature: Joining and leaving collections through the web interface
     # Check that it is possible to join a closed collection.
     When I go to the homepage of the "Folk Dance and Song Society" collection
     Then I should see the "Join this collection" button
-    When I press the "Join this collection" button
+    When I press "Join this collection"
     Then I should see the success message "Your membership to the Folk Dance and Song Society collection is under approval."
     And the "Folk Dance and Song Society" collection should have 0 active members
     And the "Folk Dance and Song Society" collection should have 1 pending member
@@ -51,7 +51,7 @@ Feature: Joining and leaving collections through the web interface
     # cached.
     Given I am logged in as "Goodie Whemper"
     When I go to the homepage of the "Überwaldean Land Eels" collection
-    And I press the "Join this collection" button
+    And I press "Join this collection"
     Then I should see the success message "You are now a member of Überwaldean Land Eels."
     And the "Überwaldean Land Eels" collection should have 2 active members
 
@@ -62,7 +62,7 @@ Feature: Joining and leaving collections through the web interface
     And I should see the link "Cancel"
     But I should not see the link "Leave this collection"
 
-    When I press the "Confirm" button
+    When I press "Confirm"
     Then I should see the success message "You are no longer a member of Überwaldean Land Eels."
     And I should see the "Join this collection" button
     And the "Überwaldean Land Eels" collection should have 1 active member
@@ -71,7 +71,7 @@ Feature: Joining and leaving collections through the web interface
     And I go to the homepage of the "Überwaldean Land Eels" collection
     And I click "Leave this collection"
     Then I should see the text "Are you sure you want to leave the Überwaldean Land Eels collection?"
-    When I press the "Confirm" button
+    When I press "Confirm"
     Then I should see the success message "You are no longer a member of Überwaldean Land Eels."
     And I should see the "Join this collection" button
     And the "Überwaldean Land Eels" collection should have 0 active members
@@ -85,7 +85,7 @@ Feature: Joining and leaving collections through the web interface
     And I go to the homepage of the "Folk Dance and Song Society" collection
     And I click "Leave this collection"
     Then I should see the text "Are you sure you want to leave the Folk Dance and Song Society collection?"
-    When I press the "Confirm" button
+    When I press "Confirm"
     Then I should see the success message "You are no longer a member of Folk Dance and Song Society."
     And I should see the "Join this collection" button
     And the "Folk Dance and Song Society" collection should have 0 active members

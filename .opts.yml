@@ -25,25 +25,29 @@ upgrade_commands:
       # we're able to differentiate a demo environment from acceptance but on a
       # long run this will be fixed in FPFISINFRA-262.
       # See https://citnet.tech.ec.europa.eu/CITnet/jira/browse/FPFISINFRA-262.
-      - if [ -z "$KUBERNETES_PORT" ]; then rm disable-config-readonly; test $(./vendor/bin/drush core:requirements --severity=1 --ignore="update status,joinup_core_root_user_blocked" --field=title | wc -l) = "0" || (echo "Status Report shows errors & warnings" && ./vendor/bin/drush core:requirements --severity=1 --ignore="update status,joinup_core_root_user_blocked" && exit 1); fi
+      - if [ -z "$KUBERNETES_PORT" ]; then rm disable-config-readonly; test $(./vendor/bin/drush core:requirements --severity=1 --ignore="update status,joinup_core_root_user_blocked,search_api_solr_schema_joinup_modifications" --field=title | wc -l) = "0" || (echo "Status Report shows errors & warnings" && ./vendor/bin/drush core:requirements --severity=1 --ignore="update status,joinup_core_root_user_blocked,search_api_solr_schema_joinup_modifications" && exit 1); fi
     production:
       # Note that the 'Root user access' exception will be removed in ISAICP-6822.
       # See https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-6822.
-      - test $(./vendor/bin/drush core:requirements --severity=1 --ignore="update status,joinup_core_root_user_blocked" --field=title | wc -l) = "0" || (echo "Status Report shows errors & warnings" && ./vendor/bin/drush core:requirements --severity=1 --ignore="update status,joinup_core_root_user_blocked" && exit 1)
+      - test $(./vendor/bin/drush core:requirements --severity=1 --ignore="update status,joinup_core_root_user_blocked,search_api_solr_schema_joinup_modifications" --field=title | wc -l) = "0" || (echo "Status Report shows errors & warnings" && ./vendor/bin/drush core:requirements --severity=1 --ignore="update status,joinup_core_root_user_blocked,search_api_solr_schema_joinup_modifications" && exit 1)
 
 php_version: 7.4
 extra_pkgs:
   - php7.4-apcu
 
 solr: True
-solr_version: 6
+solr_version: 8
 solr_core: custom
 solr_rollback: True
 solr_refresh_acc: True
+solr_asda: True
 
 virtuoso_image: registry.fpfis.eu/ec-europa/digit-joinup-reference:virtuoso
 virtuoso_rollback: True
 virtuoso_refresh_acc: True
+virtuoso_asda: True
 
-install_clean: Yes
-install_clone: False
+composer_version: 2
+
+install_clean: True
+install_clone: True

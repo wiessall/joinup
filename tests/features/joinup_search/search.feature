@@ -25,7 +25,6 @@ Feature: Global search
 
     Given I am logged in as a user with the "authenticated" role
     Then I visit the search page
-    And I accept essential cookies
     # All content is visible.
     Then I should see the "Molecular cooking collection" tile
     And I should see the "El Celler de Can Roca" tile
@@ -61,8 +60,7 @@ Feature: Global search
     And I should not see the "Foam" tile
 
     # Test the spatial coverage facet.
-    When I scroll the "spatial coverage" facet into view
-    And I check the "Belgium (1)" checkbox from the "spatial coverage" facet
+    When I check the "Belgium (1)" checkbox from the "spatial coverage" facet
     And the "Belgium" content checkbox item should be selected
     And the "spatial coverage" checkbox facet should allow selecting the following values "Belgium (1), European Union (1)"
     And the "topic" checkbox facet should allow selecting the following values "Social and Political (1), Demography (1)"
@@ -72,13 +70,11 @@ Feature: Global search
     And I should not see the "Foam" tile
 
     Given I am on the search page
-    When I scroll the "Content types" facet into view
-    And I check the "News (5)" checkbox from the "Content types" facet
+    When I check the "News (5)" checkbox from the "Content types" facet
     Then the "News" content checkbox item should be selected
     And the "Content types" checkbox facet should allow selecting the following values "Collection (1), Solutions (2), News (5)"
 
-    When I scroll the "Content types" facet into view
-    And I check the "Solutions (2)" checkbox from the "Content types" facet
+    When I check the "Solutions (2)" checkbox from the "Content types" facet
     Then the "Solutions" content checkbox item should be selected
     And the "News" content checkbox item should be selected
     And I should see the following facet summary "Solutions, News"
@@ -121,8 +117,7 @@ Feature: Global search
 
     When I visit the search page
 
-    Then I scroll the "spatial coverage" facet into view
-    And the "spatial coverage" checkbox facet should allow selecting the following values "Greece (1), Luxembourg (2)"
+    Then the "spatial coverage" checkbox facet should allow selecting the following values "Greece (1), Luxembourg (2)"
     When I check the "Luxembourg (2)" checkbox from the "spatial coverage" facet
     Then the "Luxembourg" content checkbox item should be selected
     And I should see the following search header in the correct order:
@@ -247,19 +242,20 @@ Feature: Global search
     When I enter "Omero+snc" in the search bar and press enter
     Then the page should show the tiles "Ulysses Freeman"
 
-  @wip
-  # This is disabled because the search bar is currently not shown in the header
-  # but this functionality will probably be restored in the future.
   Scenario: Advanced search
     # An advanced search link is shown in the header, except on the search page.
     Given I am on the homepage
     Then I should see the link "advanced search"
-    Given I visit the collection overview
-    Then I should see the link "Advanced search"
-    When I click "Advanced search"
+    When I click "advanced search"
     Then I should be on the advanced search page
-    But I should not see the link "Advanced search"
+    But I should not see the link "advanced search"
+    Given I visit the collection overview
+    Then I should not see the link "advanced search"
+    And I should see search bar in header
 
+  @wip
+  # This tests shows a regression to be fixed in ISAICP-6917.
+  # See https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-6917
   Scenario: Collections and solutions are shown first in search results with the same relevance.
     Given collections:
       | title                           | description                         | state     |
@@ -340,7 +336,7 @@ Feature: Global search
     When I go to the edit form of the "ZzoluDistro" distribution
     And I fill in "Title" with "DistroZzolu"
     And I fill in "Description" with "Nietzsche's"
-    And I press the "Remove" button
+    And I press "Remove"
     And I set a remote URL "http://example.com/guzzle" to "Access URL"
     And I select "LGPL" from "Licence"
     And I select "CSV" from "Format"
@@ -432,7 +428,7 @@ Feature: Global search
     When I go to the edit form of the "ReleazzDistro" distribution
     And I fill in "Title" with "DistroReleazz"
     And I fill in "Description" with "Zorro"
-    And I press the "Remove" button
+    And I press "Remove"
     And I set a remote URL "http://example.com/mishmash" to "Access URL"
     And I select "LGPL" from "Licence"
     And I select "CSV" from "Format"
@@ -556,26 +552,20 @@ Feature: Global search
 
     Given I am logged in as a user with the "authenticated" role
     When I visit the search page
-    When I scroll the "Content types" facet into view
     And I check the "Solutions (2)" checkbox from the "Content types" facet
-    Then I scroll the "Content types" facet into view
     And I check the "News (5)" checkbox from the "Content types" facet
     And I should see the following facet summary "Solutions, News"
 
-    Then I click "Clear filters"
-    And I scroll the "Content types" facet into view
+    When I click "Clear filters"
     And I check the "News (5)" checkbox from the "Content types" facet
     And I should see the following facet summary "News"
 
     # Check if facet summary was remove correctly.
-    And I click "Clear filters"
-    Then I scroll the "Content types" facet into view
+    When I click "Clear filters"
     And I check the "News (5)" checkbox from the "Content types" facet
-    And I scroll the "Content types" facet into view
     And I check the "Collection (1)" checkbox from the "Content types" facet
-    And I should see the following facet summary "Collection, News"
-    When I scroll the "News" chip into view
-    And I should remove the following facet summary "News"
+    Then I should see the following facet summary "Collection, News"
+    When I remove the following facet summary "News"
     Then the page should show only the tiles "Radio cooking collection"
 
   @javascript
@@ -601,6 +591,7 @@ Feature: Global search
 
     Given I am logged in as a user with the "authenticated" role
     When I visit the search page
+    And I should not see search bar in header
     And I enter "funn" in the search bar
     And I wait for AJAX to finish
     Then I should see the following search suggestions:
@@ -612,27 +603,29 @@ Feature: Global search
     Then I should see the following search suggestions:
       | body |
 
-    When I scroll the "Content types" facet into view
-    And I check the "Solutions (2)" checkbox from the "Content types" facet
-    When I scroll the "Content types" facet into view
+    When I check the "Solutions (2)" checkbox from the "Content types" facet
     And I check the "News (5)" checkbox from the "Content types" facet
-    And I should see the following facet summary "Solutions, News"
+    Then I should see the following facet summary "Solutions, News"
 
-    And I click "Clear filters"
-    Then I scroll the "Content types" facet into view
+    When I click "Clear filters"
     And I check the "News (5)" checkbox from the "Content types" facet
-    And I should see the following facet summary "News"
+    Then I should see the following facet summary "News"
 
     # Check if facet summary was remove correctly.
-    And I click "Clear filters"
-    Then I scroll the "Content types" facet into view
+    When I click "Clear filters"
     And I check the "News (5)" checkbox from the "Content types" facet
-    And I scroll the "Content types" facet into view
     And I check the "Collection (1)" checkbox from the "Content types" facet
-    And I should see the following facet summary "Collection, News"
-    Then I scroll the "News" chip into view
-    And I should remove the following facet summary "News"
-    And the page should show only the tiles "Radio cooking collection"
+    Then I should see the following facet summary "Collection, News"
+    When I remove the following facet summary "News"
+    Then the page should show only the tiles "Radio cooking collection"
+
+    # Check if search autocomplete works in header.
+    When I visit the collection overview
+    And I enter "funn" in the search bar
+    And I wait for AJAX to finish
+    Then I should see the following search suggestions:
+      | funni |
+      | funny |
 
   @terms
   Scenario: Filter on date
