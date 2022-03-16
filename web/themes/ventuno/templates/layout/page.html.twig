@@ -83,7 +83,7 @@
     </header>
 
     {% if page.header_bottom %}
-      <div class="region-header-bottom">
+      <div class="region-header-bottom container">
         {{ page.header_bottom }}
       </div>
     {% endif %}
@@ -105,7 +105,11 @@
     </div>
   {% endif %}
 
-  {{ page.content_top }}
+  {% if page.content_top %}
+    <div class="container">
+      {{ page.content_top }}
+    </div>
+  {% endif %}
 
   <main role="main" class="my-3 my-md-4">
     <a id="main-content" tabindex="-1"></a>{# link is in html.html.twig #}
