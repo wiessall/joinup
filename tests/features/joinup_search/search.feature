@@ -251,6 +251,8 @@ Feature: Global search
     But I should not see the link "advanced search"
     Given I visit the collection overview
     Then I should not see the link "advanced search"
+    And I should see search bar icon in header
+    Then I should toggle search bar in header
     And I should see search bar in header
 
   @wip
@@ -591,7 +593,7 @@ Feature: Global search
 
     Given I am logged in as a user with the "authenticated" role
     When I visit the search page
-    And I should not see search bar in header
+    And I should not see search bar icon in header
     And I enter "funn" in the search bar
     And I wait for AJAX to finish
     Then I should see the following search suggestions:
@@ -621,6 +623,8 @@ Feature: Global search
 
     # Check if search autocomplete works in header.
     When I visit the collection overview
+    And I should see search bar icon in header
+    Then I should toggle search bar in header
     And I enter "funn" in the search bar
     And I wait for AJAX to finish
     Then I should see the following search suggestions:
