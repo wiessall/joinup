@@ -131,6 +131,11 @@
           </aside>
         {% endif %}
         <div class="layout-content col-12{% if page.sidebar %} col-lg-8 offset-lg-1{% endif %}">
+
+          {% if page.messages %}
+            {{ page.messages }}
+          {% endif %}
+
           {{ pattern('button', {
             label: 'Filter options',
             variant: 'primary',
