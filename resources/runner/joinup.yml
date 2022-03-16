@@ -30,6 +30,3 @@ commands:
       options:
         style: ${themes.joinup_theme.scss.style}
         import-dir: ${themes.joinup_theme.scss.import_dir}
-    # Compile SCSS and build JS assets for the Ventuno theme.
-    - task: exec
-      command: cd "${themes.ventuno.dir}" && npm install

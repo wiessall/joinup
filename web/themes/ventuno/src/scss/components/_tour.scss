@@ -1,0 +1,226 @@
+/* Tab appearance. */
+.toolbar .toolbar-bar .tour-toolbar-tab.toolbar-tab {
+  float: right;
+}
+
+[dir="rtl"] .toolbar .toolbar-bar .tour-toolbar-tab.toolbar-tab {
+  float: left;
+}
+
+
+// Shepherd.js styles (Guided tour as from Drupal 9, replacing Joyride)
+.shepherd-button {
+  background: $white;
+  border: 1px solid transparent;
+  color: $brand;
+  cursor: pointer;
+  margin-right: .5rem;
+  padding: .5rem 1.5rem;
+  transition: $transition-base;
+}
+
+.shepherd-button:not(:disabled):hover {
+  background: $gray-100;
+  box-shadow: $box-shadow;
+}
+
+// .shepherd-button.shepherd-button-secondary {
+//   background: #f1f2f3;
+//   color: rgba(0, 0, 0, .75)
+// }
+
+// .shepherd-button.shepherd-button-secondary:not(:disabled):hover {
+//   background: #d6d9db;
+//   color: rgba(0, 0, 0, .75)
+// }
+
+.shepherd-button:disabled {
+  cursor: not-allowed
+}
+
+.shepherd-footer {
+  border-bottom-left-radius: $border-radius;
+  border-bottom-right-radius: $border-radius;
+  display: flex;
+  justify-content: flex-end;
+  padding: 0 $spacer $spacer; // 0 16px 16px
+}
+
+.shepherd-footer .shepherd-button:last-child {
+  margin-right: 0
+}
+
+.shepherd-cancel-icon {
+  background: transparent;
+  border: none;
+  color: $gray-500;
+  cursor: pointer;
+  font-size: 2rem;
+  line-height: .5;
+  font-weight: $font-weight-base;
+  margin: 0;
+  padding: 0;
+  transition: $transition-base;
+}
+
+.shepherd-cancel-icon:hover {
+  color: $gray-700;
+}
+
+.shepherd-has-title .shepherd-content .shepherd-cancel-icon {
+  color: $gray-700;
+}
+
+.shepherd-has-title .shepherd-content .shepherd-cancel-icon:hover {
+  color: $gray-900;
+}
+
+.shepherd-title {
+  color: $gray-700;
+  display: flex;
+  flex: 1 0 auto;
+  font-size: 0;
+  font-weight: $font-weight-base;
+  margin: 0;
+  padding: 0;
+}
+
+.shepherd-header {
+  align-items: center;
+  border-top-left-radius: $border-radius;
+  border-top-right-radius: $border-radius;
+  display: flex;
+  justify-content: flex-end;
+  line-height: 2em;
+  padding: $spacer $spacer 0; // 16px 16px 0
+}
+
+// .shepherd-has-title .shepherd-content .shepherd-header {
+  // background: $gray-100;
+  // padding: $spacer; // 16px
+// }
+
+.shepherd-text {
+  color: $gray-900;
+  font-size: 1rem;
+  line-height: 1.3em;
+  padding: 0 $spacer * 2.5 0 $spacer; // 0 40px 0 16px
+  margin: $spacer * -1 0 0; // -16px 0 0
+}
+
+.shepherd-text p {
+  margin-top: 0;
+}
+
+.shepherd-text p:last-child {
+  margin-bottom: 0;
+}
+
+.shepherd-content {
+  border-radius: $border-radius;
+  outline: none;
+  padding: 0;
+}
+
+.shepherd-element {
+  background: $white;
+  border-radius: $border-radius;
+  box-shadow: $box-shadow-lg;
+  max-width: 400px;
+  opacity: 0;
+  outline: none;
+  transition: $transition-fade;
+  visibility: hidden;
+  width: 100%;
+  z-index: 9999;
+}
+
+.shepherd-enabled.shepherd-element {
+  opacity: 1;
+  visibility: visible;
+}
+
+.shepherd-element[data-popper-reference-hidden]:not(.shepherd-centered) {
+  opacity: 0;
+  pointer-events: none;
+  visibility: hidden;
+}
+
+.shepherd-element,
+.shepherd-element *,
+.shepherd-element :after,
+.shepherd-element :before {
+  box-sizing: border-box;
+}
+
+.shepherd-arrow,
+.shepherd-arrow:before {
+  height: 1rem;
+  position: absolute;
+  width: 1rem;
+  z-index: -1;
+}
+
+.shepherd-arrow:before {
+  background: $white;
+  content: "";
+  transform: rotate(45deg);
+}
+
+.shepherd-element[data-popper-placement^=top]>.shepherd-arrow {
+  bottom: $spacer * -.5;
+}
+
+.shepherd-element[data-popper-placement^=bottom]>.shepherd-arrow {
+  top: $spacer * -.5
+}
+
+.shepherd-element[data-popper-placement^=left]>.shepherd-arrow {
+  right: $spacer * -.5
+}
+
+.shepherd-element[data-popper-placement^=right]>.shepherd-arrow {
+  left: $spacer * -.5
+}
+
+.shepherd-element.shepherd-centered>.shepherd-arrow {
+  opacity: 0;
+}
+
+.shepherd-element.shepherd-has-title[data-popper-placement^=bottom]>.shepherd-arrow:before {
+  background-color: $gray-100;
+}
+
+.shepherd-target-click-disabled.shepherd-enabled.shepherd-target,
+.shepherd-target-click-disabled.shepherd-enabled.shepherd-target * {
+  pointer-events: none;
+}
+
+.shepherd-modal-overlay-container {
+  height: 0;
+  left: 0;
+  opacity: 0;
+  overflow: hidden;
+  pointer-events: none;
+  position: fixed;
+  top: 0;
+  // transition: $transition-base;
+  width: 100vw;
+  // z-index: 9997;
+}
+
+// .shepherd-modal-overlay-container.shepherd-modal-is-visible {
+//   height: 100vh;
+//   opacity: .5;
+//   transition: $transition-base;
+// }
+
+// .shepherd-modal-overlay-container.shepherd-modal-is-visible path {
+//   pointer-events: all;
+// }
+
+.tour-progress {
+  position: absolute;
+  bottom: $spacer * 1.5; // 24px
+  color: $gray-500;
+}
