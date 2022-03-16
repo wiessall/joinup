@@ -1,0 +1,18 @@
+uuid: 402cef65-285f-4a2c-87ef-f0e51240e9de
+langcode: en
+status: true
+dependencies:
+  module:
+    - joinup_core
+  theme:
+    - ventuno
+id: solution_and_collection_edit_forms
+label: 'Solution and Collection edit forms'
+theme: ventuno
+weight: 0
+conditions:
+  request_route:
+    id: request_route
+    negate: false
+    routes:
+      - entity.rdf_entity.edit_form
