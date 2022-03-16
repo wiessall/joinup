@@ -4,6 +4,7 @@ toolkit:
   project_id: joinup
   tmp_folder: ${joinup.dir}/tmp
   clone:
+    asda_url: ${env.ASDA_URL}
     dumpfile: ${mysql.dump_dir}/mysql.sql
 
   build:
@@ -24,7 +25,7 @@ toolkit:
             - ${toolkit.build.dist.root}/composer.lock
         # Build theme assets.
         - task: exec
-          command: cd "${toolkit.build.dist.root}/web/themes/ventuno" && npm install
+          command: cd ${toolkit.build.dist.root}/web/themes/ventuno && npm ci
         # Remove theme development dependencies.
         - task: remove
           file: ${toolkit.build.dist.root}/web/themes/ventuno/node_modules
@@ -50,8 +51,6 @@ commands:
     - task: process
       source: ${joinup.dir}/behat.yml.dist
       destination: ${joinup.dir}/behat.yml
-    - task: run
-      command: joinup:build-assets
     - task: mkdir
       dir: ${joinup.files_private_dir}
     - task: mkdir
@@ -63,9 +62,13 @@ commands:
     - task: exec
       command: test "$(git rev-parse --is-shallow-repository)" = "false" || git fetch --unshallow
     - task: exec
+      command: test ! -f ./vendor/bin/grumphp || ./vendor/bin/grumphp git:deinit
+    - task: exec
       command: test "$(git tag)" = "" || git describe --tags | tr -d '\n' > ${joinup.site_dir}/VERSION.txt
     - task: exec
       command: 'echo "Detected Joinup version: $(<${joinup.site_dir}/VERSION.txt)"'
+    - task: run
+      command: joinup:build-assets
 
   # Overrides toolkit:install-clean.
   toolkit:install-clean:
@@ -109,6 +112,21 @@ commands:
         - if (node_access_needs_rebuild()) { node_access_rebuild(); }
     - task: run
       command: config-readonly:enable
+
+  # Overrides the toolkit:install-clone command.
+  toolkit:install-clone:
+    - task: run
+      command: joinup:environment
+    - task: run
+      command: redis:flush-all
+    - task: run
+      command: drupal:settings
+      arguments:
+        - site-clone
+    - task: run
+      command: toolkit:install-dump
+    - task: run
+      command: toolkit:run-deploy
 
   # Overrides the toolkit:test-phpcs command.
   toolkit:test-phpcs:

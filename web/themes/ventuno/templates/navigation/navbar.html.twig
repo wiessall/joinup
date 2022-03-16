@@ -38,6 +38,10 @@
 
 {{ attach_library('ventuno/navbar') }}
 
+{% if search %}
+  {{ attach_library('ventuno/header-search-bar') }}
+{% endif %}
+
 {% set _brand = brand|default({}) %}
 {% set _collapse_id = collapse_id|default('') %}
 {% set _list_id = list_id|default('') %}
@@ -79,13 +83,19 @@
   {{ nav_attributes }}
 >
   <div class="container">
-    <a class="navbar-brand" href="{{ _brand.link }}">
-      <img class="navbar-brand-image" src="{{ _brand.src }}" alt="{{ _brand.alt }}" />
-    </a>
-    {% if _brand.motto is not empty %}
-      <span class="navbar-motto d-none d-md-block">{{ _brand.motto }}</span>
-    {% endif %}
-
+    <div class="d-flex">
+      <a class="navbar-brand" href="{{ _brand.link }}">
+        <img class="navbar-brand-image" src="{{ _brand.src }}" alt="{{ _brand.alt }}" width="96" height="25"/>
+      </a>
+      {% if _brand.motto is not empty %}
+        <span class="navbar-motto d-none d-md-block">{{ _brand.motto }}</span>
+      {% endif %}
+      {% if search %}
+        <div class="header-search-bar d-none d-md-block">
+          {{ search }}
+        </div>
+      {% endif %}
+    </div>
     <div class="" id="{{ _collapse_id }}">
       <ul
         {{ list_attributes }}
@@ -138,7 +148,7 @@
               >
                 {% if item.icon is not empty %}
                   <svg class="bi icon--s">
-                    <use xlink:href="{{ ventuno_icon_path }}#{{ item.icon.name }}"></use>
+                    <use xlink:href="{{ bcl_icon_path }}#{{ item.icon.name }}"></use>
                   </svg>
                 {% endif %}
                 {% if item.label is not empty %}
@@ -172,5 +182,12 @@
     </div>
   </div>
 </nav>
+{% if search %}
+  <div class="header-search-bar d-md-none">
+    <div class="container">
+      {{ search }}
+    </div>
+  </div>
+{% endif %}
 
 {% endspaceless %}

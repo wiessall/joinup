@@ -344,9 +344,9 @@ Feature:
     When I reload the page
     Then the page should be cached
 
-  @eupl @javascript
   # This scenario and the previous are checking the same things, but this one
   # runs with JS so that we can check the frontend implementation.
+  @eupl @javascript
   Scenario: Get information about how a project can be redistributed under another licence
     Given SPDX licences:
       | uri                            | title    | ID       |
@@ -368,7 +368,6 @@ Feature:
       | INCOMPATIBLE | @inbound-licence is not compatible with @outbound-licence.                                                                                                                  |
 
     When I visit the "JLC" custom page
-    And I accept essential cookies
     Then the "Check compatibility" buttons should be disabled
     When I choose "EUPL-1.2" as the "Inbound" licence
     Then the "Check compatibility" buttons should be disabled
@@ -448,7 +447,6 @@ Feature:
     # Authenticated users should also be able to see the licence compatibility
     # checker and compatibility documents.
     Given I am logged in as an "authenticated user"
-    And I accept essential cookies
     When I visit the "JLC" custom page
     Then the "Check compatibility" buttons should be disabled
     When I choose "EUPL-1.2" as the "Inbound" licence

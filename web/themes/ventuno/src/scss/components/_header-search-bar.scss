@@ -1,0 +1,45 @@
+.header-search-bar {
+  padding: $spacer * .5 0; // 8px 0
+  align-self: center;
+  background: $white;
+  @include media-breakpoint-up(md) {
+    padding: 0;
+    background: none;
+  }
+  @include media-breakpoint-between(lg, xl) {
+    max-width: 12rem;
+  }
+  .search-bar__input-container {
+    background: $white;
+    display: flex;
+    border: 1px solid $gray-300;
+    border-radius: $border-radius-sm; // .2rem
+    padding: 0;
+  }
+  .form-item {
+    width: 100%;
+    align-self: center;
+  }
+  .form-autocomplete {
+    width: 100%;
+    border-style: none;
+    padding: .5rem;
+    font-size: $font-size-sm;
+  }
+  .search-bar__submit {
+    @include font-icon-before("\E805", 1.2rem, $primary, inherit, 0);
+    border-style: none;
+    color: $dark;
+    background: transparent;
+    color: $primary;
+    font-size: 0;
+    margin-left: .125rem;
+  }
+  .form-autocomplete,
+  .search-bar__submit {
+    &:focus-visible {
+      outline: $brand solid 2px;
+      outline-offset: 0px;
+    }
+  }
+}
