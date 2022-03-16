@@ -101,7 +101,6 @@ Feature: Creation of news through the UI.
       | The Great Opening | Stream of Dreams | Here we go... | It opens! | validated |
 
     Given I am logged in as a moderator
-    And I accept essential cookies
 
     # Upload works.
     When I go to the edit form of the "The Great Opening" news

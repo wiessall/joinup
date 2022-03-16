@@ -44,7 +44,7 @@ Feature:
       | uri   | http://data.europa.eu/unsupp/30aea866-fc89-4e45-b909-3d130acf49bf |
 
     And "eira" terms:
-      | tid                                   | name         | description                                |
+      | tid                                    | name         | description                                |
       | http://data.europa.eu/dr8/Dream/Domain | Dream Domain | You're safe from pain in the dream domain. |
 
     And discussion content:

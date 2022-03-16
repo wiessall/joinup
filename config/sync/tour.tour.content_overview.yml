@@ -14,6 +14,7 @@ tips:
   content:
     id: content
     plugin: text
+    label: Content
     weight: 1
     position: left-start
     selector: '.listing .listing__item:first-of-type'
@@ -21,6 +22,7 @@ tips:
   filters:
     id: filters
     plugin: text
+    label: Categories
     weight: 2
     position: bottom-start
     selector: '.facet-region .tab__container a:first-of-type'
@@ -28,6 +30,7 @@ tips:
   search:
     id: search
     plugin: text
+    label: Search
     weight: 3
     position: left-start
     selector: .search-bar
