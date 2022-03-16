@@ -7,6 +7,7 @@ namespace Drupal\joinup\Context;
 use Behat\Gherkin\Node\TableNode;
 use Behat\Mink\Element\NodeElement;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
+use Drupal\joinup\Traits\BootstrapTrait;
 use Drupal\joinup\Traits\JavascriptTrait;
 use Drupal\joinup\Traits\KeyboardInteractionTrait;
 use Drupal\joinup\Traits\MaterialDesignTrait;
@@ -19,6 +20,7 @@ use PHPUnit\Framework\Assert;
  */
 class JoinupSearchContext extends RawDrupalContext {
 
+  use BootstrapTrait;
   use JavascriptTrait;
   use KeyboardInteractionTrait;
   use MaterialDesignTrait;
@@ -884,7 +886,7 @@ class JoinupSearchContext extends RawDrupalContext {
    * @Then I should see search bar in header
    */
   public function assertSearchExposedFilterHeader(): void {
-    $getAllInput = $this->getSession()->getPage()->findAll('css', 'nav.joinup-navbar .header-search-bar input#edit-keys');
+    $getAllInput = $this->getSession()->getPage()->findAll('css', 'nav.joinup-navbar .search-bar input#edit-keys');
 
     if (count($getAllInput) < 1) {
       throw new \Exception('Search bar not found in header.');
@@ -900,11 +902,70 @@ class JoinupSearchContext extends RawDrupalContext {
    * @Then I should not see search bar in header
    */
   public function failSearchExposedFilterHeader(): void {
-    $getAllInput = $this->getSession()->getPage()->findAll('css', 'nav.joinup-navbar .header-search-bar input#edit-keys');
+    $getAllInput = $this->getSession()->getPage()->findAll('css', 'nav.joinup-navbar .search-bar input#edit-keys');
 
     if (count($getAllInput) > 0) {
       throw new \Exception('Search bar found in header.');
     }
+  }
+
+  /**
+   * Checks if search bar icon appears in header.
+   *
+   * @throws \Exception
+   *   Thrown when search bar icon do not appear in header.
+   *
+   * @Then I should see search bar icon in header
+   */
+  public function assertSearchIconHeader(): void {
+    $getAllInput = $this->getSession()->getPage()->findAll('css', 'nav.joinup-navbar span#heading-search button.accordion-button');
+
+    if (count($getAllInput) < 1) {
+      throw new \Exception('Search bar icon not found in header.');
+    }
+  }
+
+  /**
+   * Checks if search bar icon do not appear in header.
+   *
+   * @throws \Exception
+   *   Thrown when search bar icon appears in header.
+   *
+   * @Then I should not see search bar icon in header
+   */
+  public function failSearchIconHeader(): void {
+    $getAllInput = $this->getSession()->getPage()->findAll('css', 'nav.joinup-navbar span#heading-search button.accordion-button');
+
+    if (count($getAllInput) > 0) {
+      throw new \Exception('Search bar icon found in header.');
+    }
+  }
+
+  /**
+   * Checks if search bar appears in header.
+   *
+   * @throws \Exception
+   *   Thrown when search bar item do not appear in header.
+   *
+   * @Then I should toggle search bar in header
+   */
+  public function assertSearchToggleIconHeader(): void {
+    // Non-JS browsers are directly interacting with the HTML, so we consider
+    // the account menu to be already open.
+    if (!$this->browserSupportsJavaScript()) {
+      return;
+    }
+
+    // Depending on the screen width, a different accordion item may be visible.
+    /** @var \Behat\Mink\Element\NodeElement[] $elements */
+    $elements = $this->getSession()->getPage()->findAll('css', '#main-navbar .accordion-search');
+    foreach ($elements as $element) {
+      if ($element->isVisible()) {
+        $this->openBootstrapAccordion($element);
+        return;
+      }
+    }
+    throw new \RuntimeException("'Toggle search box' is not visible and cannot be opened.");
   }
 
 }

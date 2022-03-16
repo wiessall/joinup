@@ -18,37 +18,12 @@
     <nav class="w-100 shadow-sm navbar">
       <div class="container">
         <a class="navbar-brand" href="https://ec.europa.eu/info/index_en">
-          <img src="{{ base_path ~ directory }}/assets/images/logo-ec--en.svg" alt="European Commission logo"/>
+          <img src="{{ path('<front>') }}themes/ventuno/assets/images/logo-ec--en.svg" alt="European Commission logo"/>
         </a>
       </div>
     </nav>
   </div>
   <header role="banner" class="region-header">
-    {% set items = hide_searchbar ? [{
-      breakpoint: "lg",
-      classes: ["order-1"],
-      id: "landing-pages",
-      icon: { name: "justify" },
-      label: "Toggle menu"|t,
-      links: landing_page_links,
-    }] : [{
-      breakpoint: "lg",
-      classes: ["order-1"],
-      id: "landing-pages",
-      icon: { name: "justify" },
-      label: "Toggle menu"|t,
-      links: landing_page_links,
-    },{
-      type: "search",
-      breakpoint: "",
-      classes: ["order-1"],
-      id: "search",
-      icon: {
-        name: "search",
-      },
-      label: "Toggle search box"|t,
-      links: search,
-    }] %}
     {% set items = logged_in ? [{
       breakpoint: "lg",
       classes: ["order-1"],
@@ -66,9 +41,22 @@
       label: logged_in ? user_name : "Toggle menu"|t,
       links: logged_in ? profile_links : anonymous_links,
     }]) %}
+    {% if not hide_searchbar %}
+      {% set items = items|merge([{
+        type: "search",
+        breakpoint: "",
+        classes: ["order-1 accordion-search"],
+        id: "search",
+        icon: {
+          name: "search",
+        },
+        label: "Toggle search box"|t,
+        links: search,
+      }]) %}
+    {% endif %}
     {% include directory ~ '/templates/navigation/navbar.html.twig' with {
       brand: {
-        src: base_path ~ directory ~ "/assets/images/logo.svg",
+        src: path('<front>') ~ "themes/ventuno/assets/images/logo.svg",
         alt: "Joinup logo"|t,
         link: path('<front>'),
       },
