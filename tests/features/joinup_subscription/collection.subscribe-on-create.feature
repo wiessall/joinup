@@ -4,21 +4,9 @@ Feature: Subscribing to a collection after creating
 
   @terms
   Scenario: Check my subscription after create a new collection.
-    Given the following owner:
-      | name       | type                    |
-      | RB for all | Non-Profit Organisation |
-    And users:
-      | Username       | Roles     | E-mail                  | First name | Family name |
-      | RB moderator   | moderator | rb_moderator@test.com   | RB         | Moderator   |
-      | Richy Black    |           | rb_user@test.com        | RU         | User        |
-    And the following contact:
-      | name  | Notificationous         |
-      | email | abs.notific@example.com |
-    And collections:
-      | title                  | state            | abstract     | description   | topic             | owner      | contact information |
-      | RT to propose          | draft            | No one cares | No one cares. | Supplier exchange | RB for all | Notificationous     |
-      | RT to validate         | proposed         | No two cares | No two cares. | Supplier exchange | RB for all | Notificationous     |
-      | Rollerblade twister    | validated        | No ten cares | No ten cares. | Supplier exchange | RB for all | Notificationous     |
+    Given users:
+      | Username    | E-mail           | First name | Family name |
+      | Richy Black | rb_user@test.com | RU         | User        |
 
     Given I am logged in as "Richy Black"
     When I go to the propose collection form
@@ -35,14 +23,11 @@ Feature: Subscribing to a collection after creating
     When I set the Owner type to "Company"
     And I fill in "Name" with "Acme"
     And I press "Create owner"
-    Then I should see "Acme"
-    And I should see the link "Company"
 
     When I press "Save"
     Then I should see the heading "Rollerblade and Ancient Mythology"
 
-    Given I am logged in as "RB moderator"
-    And I visit the collection overview
+    Given I am logged in as a moderator
     And I go to the homepage of the "Rollerblade and Ancient Mythology" collection
     And I click "Edit" in the "Entity actions" region
     And I press "Publish"
