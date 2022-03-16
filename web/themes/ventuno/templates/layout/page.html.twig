@@ -47,7 +47,7 @@
       <nav class="w-100 shadow-sm navbar">
         <div class="container">
           <a class="navbar-brand" href="https://ec.europa.eu/info/index_en">
-            <img src="https://cdn1.fpfis.tech.ec.europa.eu/ecl/v3.0.2/ec/images/logo/logo-ec--en.svg" alt="European Commission logo"/>
+            <img src="https://cdn1.fpfis.tech.ec.europa.eu/ecl/v3.0.2/ec/images/logo/logo-ec--en.svg" alt="European Commission logo" width="100" height="25"/>
           </a>
         </div>
       </nav>
@@ -89,13 +89,15 @@
     {% endif %}
   </div>
 
-  <div class="region-featured mb-5 py-5">
-    <div class="container">
-      <div class="row">
-        {{ page.featured }}
+  {% if page.featured %}
+    <div class="region-featured mb-5 py-5">
+      <div class="container">
+        <div class="row">
+          {{ page.featured }}
+        </div>
       </div>
     </div>
-  </div>
+  {% endif %}
 
   {% if page.messages %}
     <div class="region-messages">
@@ -105,18 +107,28 @@
 
   {{ page.content_top }}
 
-  <main role="main">
+  <main role="main" class="my-3 my-md-4">
     <a id="main-content" tabindex="-1"></a>{# link is in html.html.twig #}
-
-    <div class="container layout-content">
-      {{ page.content }}
-    </div>{# /.layout-content #}
-
-    {% if page.sidebar %}
-      <aside class="layout-sidebar" role="complementary">
-        {{ page.sidebar }}
-      </aside>
-    {% endif %}
+    <div class="container">
+      <div class="row">
+          {% if page.sidebar|render|striptags|trim is not empty %}
+            <aside class="layout-sidebar col-12 col-lg-3" role="complementary">
+              {{  page.sidebar }}
+            </aside>
+            <div class="layout-content col-12 col-lg-9 col-xxl-8">
+              {{ page.content }}
+            </div>{# /.layout-content #}
+          {% else %}
+            <div class="layout-content">
+              <div class="row">
+                <div class="col-12 col-lg-10 col-xl-9 col-xxl-8">
+                  {{ page.content }}
+                </div>
+              </div>
+            </div>
+          {% endif %}
+      </div>
+    </div>
   </main>
 
   {{ page.content_bottom }}

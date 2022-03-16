@@ -35,7 +35,7 @@ Feature: Collection homepage
     Then I see the text "3 Members" in the "Header" region
     When I am logged in as "Some goblin"
     And I go to the homepage of the "Under the mountain" collection
-    And I press the "Join this collection" button
+    And I press "Join this collection"
     And I go to the homepage of the "Under the mountain" collection
     Then I see the text "4 Members" in the "Header" region
     And I click "Members" in the "Left sidebar"
@@ -43,7 +43,7 @@ Feature: Collection homepage
 
     # Ensure that leaving a collection, updates the counters.
     When I click "Leave this collection"
-    When I press the "Confirm" button
+    When I press "Confirm"
     Then I should see the success message "You are no longer a member of Under the mountain."
     Then I see the text "3 Members" in the "Header" region
     And I click "Members" in the "Left sidebar"
@@ -54,7 +54,7 @@ Feature: Collection homepage
     Then I see the text "3 Members" in the "Header" region
     When I am logged in as "Some goblin"
     And I go to the homepage of the "Exactly the same collection, but closed" collection
-    And I press the "Join this collection" button
+    And I press "Join this collection"
     And I go to the homepage of the "Exactly the same collection, but closed" collection
     Then I see the text "3 Members" in the "Header" region
     And I click "Members" in the "Left sidebar"
@@ -67,7 +67,7 @@ Feature: Collection homepage
     Then I should not see the link "Group"
     And I check the box "Update the member Some goblin"
     Then I select "Approve the pending membership(s)" from "Action"
-    And I press the "Apply to selected items" button
+    And I press "Apply to selected items"
 
     When I am an anonymous user
     And I go to the homepage of the "Exactly the same collection, but closed" collection
@@ -86,10 +86,10 @@ Feature: Collection homepage
     And I am on the homepage
     When I click "People"
     And I fill in "Name or email contains" with "Bilbo"
-    And I press the "Filter" button
+    And I press "Filter"
     Then I check "Bilbo"
     Then I select "Unblock the selected user(s)" from "Action"
-    And I press the "Apply to selected items" button
+    And I press "Apply to selected items"
     Then I should see the success message "Unblock the selected user(s) was applied to 1 item."
     When I am not logged in
     When I go to the homepage of the "Under the mountain" collection
@@ -106,10 +106,10 @@ Feature: Collection homepage
     And I am on the homepage
     When I click "People"
     And I fill in "Name or email contains" with "Bilbo"
-    And I press the "Filter" button
+    And I press "Filter"
     Then I check "Bilbo"
     Then I select "Block the selected user(s)" from "Action"
-    And I press the "Apply to selected items" button
+    And I press "Apply to selected items"
     Then I should see the success message "Block the selected user(s) was applied to 1 item."
     When I am not logged in
     When I go to the homepage of the "Under the mountain" collection
