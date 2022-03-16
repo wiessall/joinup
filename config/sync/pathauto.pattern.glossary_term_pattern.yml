@@ -11,12 +11,12 @@ pattern: '[node:og_audience:entity:url:path]/glossary/term/[node:title]'
 selection_criteria:
   abbe74da-97dd-4ff3-98a1-0fe633b618a2:
     id: node_type
-    bundles:
-      glossary: glossary
     negate: false
+    uuid: abbe74da-97dd-4ff3-98a1-0fe633b618a2
     context_mapping:
       node: node
-    uuid: abbe74da-97dd-4ff3-98a1-0fe633b618a2
+    bundles:
+      glossary: glossary
 selection_logic: and
 weight: -5
 relationships: {  }

@@ -3,11 +3,11 @@
 .before: &before
   # Ensure writable public file directory.
   - task: chgrp
-    file: ${joinup.site_dir}/sites/default/files
+    file: ${joinup.files_public_dir}
     group: ${env.DAEMON_GROUP}
     recursive: true
   - task: chmod
-    file: ${joinup.site_dir}/sites/default/files
+    file: ${joinup.files_public_dir}
     # Octal 0775.
     permissions: 509
     umask: 0

@@ -205,7 +205,7 @@ class ExportUserListForm extends FormBase {
     foreach ($this->getUserStorage()->loadMultiple($user_ids) as $user) {
       foreach (self::EXPORTED_FIELDS as $id => $field) {
         // Get the data from the input processor.
-        list($method, $arguments) = $field['input'];
+        [$method, $arguments] = $field['input'];
         array_unshift($arguments, $user);
         $results[$user->id()][$id] = $this->$method(...$arguments);
       }

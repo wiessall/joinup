@@ -66,8 +66,8 @@ function joinup_user_mail($key, &$message, $params) {
 
   $variables = [
     'user' => $params['account'],
-    'original' => isset($params['original']) ? $params['original'] : NULL,
-    'membership' => isset($params['membership']) ? $params['membership'] : NULL,
+    'original' => $params['original'] ?? NULL,
+    'membership' => $params['membership'] ?? NULL,
   ];
 
   $language = \Drupal::languageManager()

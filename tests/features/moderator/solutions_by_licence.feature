@@ -12,7 +12,7 @@ Feature: Solutions by licence report
     When I am logged in as a moderator
     And I am on the homepage
     And I click "Reporting" in the "Administration toolbar" region
-    And I click "Solutions by licence"
+    And I click "Solutions by licences"
     Then the response status code should be 200
 
   Scenario: List licences and their solutions.
@@ -44,7 +44,7 @@ Feature: Solutions by licence report
 
     When I am logged in as a moderator
     And I click "Reporting" in the "Administration toolbar" region
-    And I click "Solutions by licence"
+    And I click "Solutions by licences"
     Then I should see the following links:
       | Open source           |
       | Free for all          |

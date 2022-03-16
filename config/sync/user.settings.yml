@@ -1,3 +1,4 @@
+langcode: en
 anonymous: Anonymous
 verify_mail: true
 notify:
@@ -16,4 +17,3 @@ cancel_method: user_cancel_delete
 password_reset_timeout: 86400
 mail_change_timeout: 86400
 password_strength: false
-langcode: en

@@ -16,12 +16,13 @@
 version: '3.8'
 services:
   web:
-    image: fpfis/httpd-php-dev:7.4
+    build:
+      context: './resources/docker/web'
     working_dir: /var/www/html
     # macOS users should override 'volumes:' in docker-compose.override.yml.
     # See docker-compose.override.yml.dist.
     volumes:
-      - ${PWD}:/var/www/html
+      - .:/var/www/html
     env_file:
       - .env.dist
     environment:
@@ -94,12 +95,12 @@ services:
       - 'chmod +x /entrypoint.sh && /entrypoint.sh'
 
   solr:
-    image: solr:6
+    image: solr:8
     # macOS users should override 'volumes:' in docker-compose.override.yml.
     # See docker-compose.override.yml.dist.
     volumes:
       - ./db/solr:/solr/snapshot
-      - ./web/modules/contrib/search_api_solr/solr-conf/6.x:/solr/conf
+      - ./resources/solr/conf:/solr/conf
       - ./scripts/solr/restore_solr.sh:/opt/solr/bin/restore_solr.sh
       - ./scripts/docker/solr/precreate.sh:/docker-entrypoint-initdb.d/precreate.sh
     environment:

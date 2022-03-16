@@ -132,7 +132,7 @@ function asset_release_preprocess_rdf_entity(array &$variables): void {
   // Invalidate the rendered template cache of the latest release in that case,
   // so the latest release flag gets updated.
   if ($solution && $variables['is_latest_release']) {
-    $cache_tags = isset($variables['#cache']['tags']) ? $variables['#cache']['tags'] : [];
+    $cache_tags = $variables['#cache']['tags'] ?? [];
     $cache_tags = Cache::mergeTags($cache_tags, $solution->getCacheTags());
 
     // Add the group content tag belonging to the parent too. We need to

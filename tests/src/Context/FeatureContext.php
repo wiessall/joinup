@@ -23,6 +23,7 @@ use Drupal\image\Plugin\Field\FieldType\ImageItem;
 use Drupal\joinup\HtmlManipulator;
 use Drupal\joinup\Traits\AntibotTrait;
 use Drupal\joinup\Traits\BrowserCapabilityDetectionTrait;
+use Drupal\joinup\Traits\BrowserWindowTrait;
 use Drupal\joinup\Traits\ContextualLinksTrait;
 use Drupal\joinup\Traits\EntityTrait;
 use Drupal\joinup\Traits\MaterialDesignTrait;
@@ -48,6 +49,7 @@ class FeatureContext extends RawDrupalContext implements SnippetAcceptingContext
 
   use AntibotTrait;
   use BrowserCapabilityDetectionTrait;
+  use BrowserWindowTrait;
   use ContextualLinksTrait;
   use EntityTrait;
   use MaterialDesignTrait;
@@ -898,6 +900,7 @@ class FeatureContext extends RawDrupalContext implements SnippetAcceptingContext
       return;
     }
 
+    $this->scrollToTop();
     $this->findVerticalTab($tab)->clickLink($tab);
   }
 
@@ -2438,6 +2441,42 @@ class FeatureContext extends RawDrupalContext implements SnippetAcceptingContext
     // Get the field wrapper.
     $field = $label->find('xpath', './ancestor::*[contains(concat(" ", @class, " "), " form-item ")][1]');
     $field->findButton('Remove')->press();
+  }
+
+  /**
+   * Disables cookie consent banner for all tests.
+   *
+   * @BeforeSuite
+   */
+  public static function suiteDisableCookieConsent(): void {
+    touch(__DIR__ . '/../../../disable-cookie-consent');
+  }
+
+  /**
+   * Re-enables cookie consent banner after testing.
+   *
+   * @AfterSuite
+   */
+  public static function suiteEnableCookieConsent(): void {
+    @unlink(__DIR__ . '/../../../disable-cookie-consent');
+  }
+
+  /**
+   * Enables cookie consent banner for @cookieConsent test.
+   *
+   * @BeforeScenario @cookieConsent&&@api
+   */
+  public function scenarioEnableCookieConsent(): void {
+    @unlink(__DIR__ . '/../../../disable-cookie-consent');
+  }
+
+  /**
+   * Disables cookie consent banner after @cookieConsent test.
+   *
+   * @AfterScenario @cookieConsent&&@api
+   */
+  public function scenarioDisableCookieConsent(): void {
+    touch(__DIR__ . '/../../../disable-cookie-consent');
   }
 
 }

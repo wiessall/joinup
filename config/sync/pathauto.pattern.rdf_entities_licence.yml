@@ -14,12 +14,12 @@ pattern: '[rdf_entity:rid:target_id]/[rdf_entity:label]'
 selection_criteria:
   4c81222f-ee57-451d-8a48-10d11d813719:
     id: 'entity_bundle:rdf_entity'
-    bundles:
-      licence: licence
     negate: false
+    uuid: 4c81222f-ee57-451d-8a48-10d11d813719
     context_mapping:
       rdf_entity: rdf_entity
-    uuid: 4c81222f-ee57-451d-8a48-10d11d813719
+    bundles:
+      licence: licence
 selection_logic: and
 weight: -5
 relationships: {  }

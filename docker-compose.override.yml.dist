@@ -5,10 +5,34 @@ version: '3.8'
 services:
 
   web:
+# In order to be able to actively work on the files shared with the docker
+# instance, all files need to share permissions between host and container.
+# The only way to do this right now is by altering the uid and gid of the
+# www-data user - that owns the files within the container - to share the
+# same uid and gid with the user that owns the files in the host machine.
+#
+# Disclaimer: If your identifiers are those of a system reserved user -
+# or a user that already exists in the host machine (usually numbers
+# below 1000 like `ftp`), you will not be able to alter the identifiers
+# of www-data user. In that case, containers build will fail instructing
+# you to use one of environment variables, `DAEMON_USER` or `DAEMON_GROUP`.
+#
+# build:
+#   args:
+#     USER_ID: 1000
+#     GROUP_ID: 1000
+
 # macOS users should override this value by uncommenting the following
 # 'volumes:' block.
 #    volumes:
 #    - nfsmount:/var/www/html
+# Docker destroys the data when the container is shut down. This can cause a
+# large delay in development and installation given that everytime, tokens and
+# credentials have to be installed in the system. It is recommended to map the
+# following volumes in order to retain any installation details and cache files.
+#    - ~/.composer:/www/html/composer
+#    - ~/.ssh:/www/html/.ssh
+#    - ~/.npm:/www/html/.npm
 
 # In order to expose this service to the host machine, uncomment the following
 # 'ports:' block. If the host machine is already running a webserver instance on
@@ -20,6 +44,14 @@ services:
 # 'environment:' block.
 #    environment:
 #      XDEBUG_CONFIG: client_host=host.docker.internal
+# Variables to handle additional services. By default, xdebug and blackfire
+# are enabled.
+#      DISABLE_XDEBUG: "True"
+#      DISABLE_BLACKFIRE: "True"
+# Optional variables to alter the user/group that runs Apache.
+# Defaults to `www-data`.
+#      DAEMON_USER: www-data
+#      DAEMON_GROUP: www-data
 
 # Create an .env.local file, in the project root directory, and uncomment the
 # 'env_file:' block in order override values provided in .env.dist file.
@@ -62,7 +94,7 @@ services:
 # 'volumes:' block.
 #    volumes:
 #      - ./db/solr:/solr/snapshot:delegated
-#      - ./web/modules/contrib/search_api_solr/solr-conf/6.x:/solr/conf:cached
+#      - ./resources/solr/conf:/solr/conf:cached
 #      - ./scripts/solr/restore_solr.sh:/opt/solr/bin/restore_solr.sh:cached
 
 # In order to expose this service to the host machine, uncomment the following

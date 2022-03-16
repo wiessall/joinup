@@ -4,10 +4,10 @@ status: true
 dependencies: {  }
 _core:
   default_config_hash: DKpsQQSUCB0n2Ss1i7AFyeI_fmzMEczttH2Q_XX-1bU
-name: Licence
-rid: licence
-description: ''
 label_singular: licence
 label_plural: licences
 label_count:
   no_count_capitalize: !!binary TGljZW5jZQNMaWNlbmNlcw==
+name: Licence
+rid: licence
+description: ''

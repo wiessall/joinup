@@ -13,13 +13,13 @@ bundle: json_map
 mode: default
 content:
   field_json:
+    type: json_textarea
     weight: 0
+    region: content
     settings:
       rows: 7
       placeholder: ''
     third_party_settings: {  }
-    type: json_textarea
-    region: content
 hidden:
   created: true
   status: true

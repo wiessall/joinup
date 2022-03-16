@@ -35,6 +35,7 @@
 /phpcs.xml
 /runner.yml
 /web/sites/default/services.yml
+/.phpunit.result.cache
 
 # Ignore compiled CSS.
 /web/themes/joinup/css
@@ -47,6 +48,8 @@
 
 # Ignore the config_readonly killswitch.
 /disable-config-readonly
+# Ignore the cookie consent killswitch.
+/disable-cookie-consent
 
 # Ignore temporary and auto-generated files.
 /tmp/

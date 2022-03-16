@@ -18,14 +18,14 @@ plugin: user_unpublished
 settings:
   id: user_unpublished
   label: 'My unpublished content'
-  provider: joinup_user
   label_display: visible
+  provider: joinup_user
   context_mapping:
     user_route: '@joinup_user.user_route_context:user_route'
 visibility:
   request_route:
     id: request_route
-    routes:
-      - entity.user.canonical
     negate: false
     context_mapping: {  }
+    routes:
+      - entity.user.canonical

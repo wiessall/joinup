@@ -19,7 +19,7 @@ plugin: 'facet_block:solution_my_content'
 settings:
   id: 'facet_block:solution_my_content'
   label: 'Solutions - My content'
-  provider: facets
   label_display: '0'
+  provider: facets
   block_id: mycontentsolution
 visibility: {  }

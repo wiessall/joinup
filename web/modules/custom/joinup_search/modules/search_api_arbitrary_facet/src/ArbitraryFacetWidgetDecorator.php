@@ -125,7 +125,7 @@ class ArbitraryFacetWidgetDecorator implements WidgetPluginInterface, ContainerF
       '#title' => $this->t("Arbitrary facet plugin"),
       '#type' => 'select',
       '#options' => $options,
-      '#default_value' => isset($config['arbitrary_facet_plugin']) ? $config['arbitrary_facet_plugin'] : $default_config['arbitrary_facet_plugin'],
+      '#default_value' => $config['arbitrary_facet_plugin'] ?? $default_config['arbitrary_facet_plugin'],
       '#description' => $this->t("Implement a 'ArbitraryFacet' plugin to define your own arbitrary facet."),
     ];
 

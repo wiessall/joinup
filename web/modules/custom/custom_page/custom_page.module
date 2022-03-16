@@ -18,7 +18,6 @@ use Drupal\custom_page\Entity\CustomPageInterface;
 use Drupal\joinup_group\Exception\MissingGroupException;
 use Drupal\menu_link_content\MenuLinkContentInterface;
 use Drupal\node\NodeInterface;
-use Drupal\search_api\Plugin\search_api\datasource\ContentEntity;
 use Drupal\search_api\Query\QueryInterface;
 
 /**
@@ -64,7 +63,7 @@ function custom_page_entity_bundle_field_info_alter(&$fields, EntityTypeInterfac
  *   the content of the new custom page.
  */
 function custom_page_node_insert(EntityInterface $entity) {
-  if ($entity->bundle() === 'custom_page') {
+  if ($entity instanceof CustomPageInterface) {
     \Drupal::service('custom_page.og_menu_links_manager')->addLink($entity);
   }
 
@@ -73,9 +72,12 @@ function custom_page_node_insert(EntityInterface $entity) {
   // searching for keywords contained in their custom pages. Make sure to
   // reindex the parent group so that the new custom page is included.
   // @see \Drupal\custom_page\Plugin\search_api\processor\IncludeCustomPageContent
+  // @todo This is mistakenly acting on all content, not just on custom pages.
   $parent = $entity->og_audience->entity;
   if (!empty($parent)) {
-    ContentEntity::indexEntity($entity->og_audience->entity);
+    /** @var \Drupal\search_api\Plugin\search_api\datasource\ContentEntityTrackingManager $content_tracking_manager */
+    $content_tracking_manager = \Drupal::service('search_api.entity_datasource.tracking_manager');
+    $content_tracking_manager->trackEntityChange($entity->og_audience->entity);
   }
 }
 
@@ -90,11 +92,11 @@ function custom_page_node_insert(EntityInterface $entity) {
  *   the content of the new custom page.
  */
 function custom_page_node_update(NodeInterface $entity) {
-  if ($entity->bundle() !== 'custom_page') {
+  if (!$entity instanceof CustomPageInterface) {
     return;
   }
 
-  /** @var \Drupal\node\NodeInterface $original */
+  /** @var \Drupal\custom_page\Entity\CustomPageInterface $original */
   $original = $entity->original;
 
   // Update all links that point to this custom page if the title has changed,
@@ -124,7 +126,9 @@ function custom_page_node_update(NodeInterface $entity) {
   // @see \Drupal\custom_page\Plugin\search_api\processor\IncludeCustomPageContent
   $parent = $entity->og_audience->entity;
   if (!empty($parent)) {
-    ContentEntity::indexEntity($entity->og_audience->entity);
+    /** @var \Drupal\search_api\Plugin\search_api\datasource\ContentEntityTrackingManager $content_tracking_manager */
+    $content_tracking_manager = \Drupal::service('search_api.entity_datasource.tracking_manager');
+    $content_tracking_manager->trackEntityChange($entity->og_audience->entity);
   }
 }
 
@@ -135,7 +139,7 @@ function custom_page_node_update(NodeInterface $entity) {
  *   custom page no longer shows up in the search results for the parent group.
  */
 function custom_page_node_delete(NodeInterface $entity) {
-  if ($entity->bundle() !== 'custom_page') {
+  if (!$entity instanceof CustomPageInterface) {
     return;
   }
 
@@ -144,9 +148,10 @@ function custom_page_node_delete(NodeInterface $entity) {
   // searching for keywords contained in their custom pages. Make sure to
   // reindex the parent group so that the deleted content is no longer included.
   // @see \Drupal\custom_page\Plugin\search_api\processor\IncludeCustomPageContent
-  $parent = $entity->og_audience->entity;
-  if (!empty($parent)) {
-    ContentEntity::indexEntity($entity->og_audience->entity);
+  if ($entity->hasGroup()) {
+    /** @var \Drupal\search_api\Plugin\search_api\datasource\ContentEntityTrackingManager $content_tracking_manager */
+    $content_tracking_manager = \Drupal::service('search_api.entity_datasource.tracking_manager');
+    $content_tracking_manager->trackEntityChange($entity->getGroup());
   }
 }
 
@@ -173,7 +178,11 @@ function custom_page_menu_link_content_update(MenuLinkContentInterface $menu_lin
   if (isset($route_parameters['node'])) {
     $custom_page = \Drupal::entityTypeManager()->getStorage('node')->load($route_parameters['node']);
     if ($custom_page instanceof CustomPageInterface) {
-      ContentEntity::indexEntity($custom_page->get('og_audience')->entity);
+      if ($custom_page->hasGroup()) {
+        /** @var \Drupal\search_api\Plugin\search_api\datasource\ContentEntityTrackingManager $content_tracking_manager */
+        $content_tracking_manager = \Drupal::service('search_api.entity_datasource.tracking_manager');
+        $content_tracking_manager->trackEntityChange($custom_page->getGroup());
+      }
     }
   }
 }

@@ -18,18 +18,18 @@ plugin: 'group_menu_block:navigation'
 settings:
   id: 'group_menu_block:navigation'
   label: 'Collection | Solution menu'
-  provider: joinup_core
   label_display: '0'
-  level: 1
-  depth: 1
+  provider: joinup_core
   context_mapping:
     og: '@og.context:og'
+  level: 1
+  depth: 1
 visibility:
   og_group_type:
     id: og_group_type
-    group_types:
-      rdf_entity-collection: rdf_entity-collection
-      rdf_entity-solution: rdf_entity-solution
     negate: false
     context_mapping:
       og: '@og.context:og'
+    group_types:
+      rdf_entity-collection: rdf_entity-collection
+      rdf_entity-solution: rdf_entity-solution

@@ -9,7 +9,6 @@ use Behat\Mink\Element\NodeElement;
 use Drupal\Core\Url;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\DrupalExtension\TagTrait;
-use Drupal\joinup\Traits\BrowserCapabilityDetectionTrait;
 use Drupal\joinup\Traits\CacheInvalidationTrait;
 use Drupal\joinup\Traits\EntityTrait;
 use Drupal\joinup\Traits\MailCollectorTrait;
@@ -33,7 +32,6 @@ use PHPUnit\Framework\Assert;
  */
 class JoinupSubscriptionContext extends RawDrupalContext {
 
-  use BrowserCapabilityDetectionTrait;
   use CacheInvalidationTrait;
   use EntityTrait;
   use MaterialDesignTrait;

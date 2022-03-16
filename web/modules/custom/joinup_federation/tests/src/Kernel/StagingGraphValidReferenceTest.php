@@ -133,7 +133,7 @@ class StagingGraphValidReferenceTest extends KernelTestBase {
   /**
    * {@inheritdoc}
    */
-  public function tearDown() {
+  public function tearDown(): void {
     $graph_ids = $this->container->get('sparql.graph_handler')->getEntityTypeGraphIds('rdf_entity');
     foreach (['apple', 'plum', 'cherry', 'melon'] as $fruit) {
       if ($entity = Rdf::load("http://example.com/$fruit", $graph_ids)) {

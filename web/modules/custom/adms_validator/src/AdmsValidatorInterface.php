@@ -23,7 +23,7 @@ interface AdmsValidatorInterface {
    *
    * @var string
    */
-  const SEMIC_VALIDATION_QUERY_PATH = 'SEMICeu/adms-ap_validator/pages/adms-ap.txt';
+  const SEMIC_VALIDATION_QUERY_PATH = 'semiceu/adms-ap_validator/pages/adms-ap.txt';
 
   /**
    * Validates the triples stored in a graph, given the graph URI.

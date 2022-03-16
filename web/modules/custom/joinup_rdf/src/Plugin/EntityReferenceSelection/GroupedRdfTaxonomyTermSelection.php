@@ -25,7 +25,7 @@ class GroupedRdfTaxonomyTermSelection extends TermSelection {
   /**
    * {@inheritdoc}
    */
-  public function getReferenceableEntities($match = NULL, $match_operator = 'CONTAINS', $limit = 0) {
+  public function getReferenceableEntities($match = NULL, $match_operator = 'CONTAINS', $limit = 0): array {
     if ($match || $limit) {
       return parent::getReferenceableEntities($match, $match_operator, $limit);
     }
@@ -33,8 +33,7 @@ class GroupedRdfTaxonomyTermSelection extends TermSelection {
     $options = [];
 
     $bundles = $this->entityTypeBundleInfo->getBundleInfo('taxonomy_term');
-    $handler_settings = $this->configuration['handler_settings'];
-    $bundle_names = !empty($handler_settings['target_bundles']) ? $handler_settings['target_bundles'] : array_keys($bundles);
+    $bundle_names = $this->configuration['target_bundles'] ?? array_keys($bundles);
 
     foreach ($bundle_names as $bundle) {
       $terms = $this->entityTypeManager

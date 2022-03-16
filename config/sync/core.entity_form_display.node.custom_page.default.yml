@@ -19,20 +19,20 @@ bundle: custom_page
 mode: default
 content:
   field_attachment:
+    type: file_generic
     weight: 4
+    region: content
     settings:
       progress_indicator: throbber
     third_party_settings: {  }
-    type: file_generic
-    region: content
   field_custom_page_logo:
+    type: image_image
     weight: 3
+    region: content
     settings:
       progress_indicator: throbber
       preview_image_style: thumbnail
     third_party_settings: {  }
-    type: image_image
-    region: content
   field_paragraphs_body:
     type: paragraphs
     weight: 2
@@ -61,19 +61,19 @@ content:
     third_party_settings: {  }
   status:
     type: boolean_checkbox
-    settings:
-      display_label: true
     weight: 6
     region: content
+    settings:
+      display_label: true
     third_party_settings: {  }
   title:
     type: string_textfield
     weight: 0
+    region: content
     settings:
       size: 60
       placeholder: ''
     third_party_settings: {  }
-    region: content
   url_redirects:
     weight: 5
     region: content

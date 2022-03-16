@@ -18,14 +18,14 @@ plugin: 'views_block:eif_solutions-block'
 settings:
   id: 'views_block:eif_solutions-block'
   label: ''
-  provider: views
   label_display: '0'
+  provider: views
   views_label: ''
   items_per_page: none
 visibility:
   request_route:
     id: request_route
-    routes:
-      - eif.solutions
     negate: false
     context_mapping: {  }
+    routes:
+      - eif.solutions

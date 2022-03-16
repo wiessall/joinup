@@ -39,25 +39,25 @@ settings:
   iconset: 'joinup:default'
   platforms:
     behance:
+      enabled: false
       description: ''
       weight: -10
-      enabled: false
     bitbucket:
+      enabled: false
       description: ''
       weight: -9
-      enabled: false
     contact:
+      enabled: false
       description: ''
       weight: -8
-      enabled: false
     drupal:
+      enabled: false
       description: ''
       weight: -7
-      enabled: false
     email:
+      enabled: false
       description: ''
       weight: -6
-      enabled: false
     facebook:
       enabled: true
       description: ''
@@ -67,29 +67,29 @@ settings:
       description: ''
       weight: -4
     instagram:
+      enabled: false
       description: ''
       weight: -2
-      enabled: false
     linkedin:
       enabled: true
       description: ''
       weight: -1
     pinterest:
+      enabled: false
       description: ''
       weight: 0
-      enabled: false
     rss:
+      enabled: false
       description: ''
       weight: 1
-      enabled: false
     slideshare:
       enabled: true
       description: ''
       weight: 2
     tumblr:
+      enabled: false
       description: ''
       weight: 3
-      enabled: false
     twitter:
       enabled: true
       description: ''
@@ -103,7 +103,7 @@ settings:
       description: ''
       weight: 6
     youtube_channel:
+      enabled: false
       description: ''
       weight: 7
-      enabled: false
 field_type: social_media_links_field

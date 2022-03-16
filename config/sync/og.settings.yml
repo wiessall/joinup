@@ -1,8 +1,10 @@
-group_manager_full_access: true
+_core:
+  default_config_hash: VagHDx04OxfsR9lV6g6jkOou-tAhZcYENvrJNOrbcEU
 groups:
   rdf_entity:
     - collection
     - solution
+group_manager_full_access: true
 node_access_strict: true
 delete_orphans: true
 delete_orphans_plugin_id: simple
@@ -13,6 +15,4 @@ group_resolvers:
   - joinup_subscription_routes
   - route_group
   - route_group_content
-_core:
-  default_config_hash: VagHDx04OxfsR9lV6g6jkOou-tAhZcYENvrJNOrbcEU
 auto_add_group_owner_membership: true

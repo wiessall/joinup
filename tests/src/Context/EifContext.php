@@ -16,7 +16,6 @@ use Drupal\node\Entity\Node;
 use Drupal\og\OgGroupAudienceHelperInterface;
 use Drupal\paragraphs\Entity\Paragraph;
 use Drupal\rdf_entity\Entity\Rdf;
-use Drupal\search_api\Plugin\search_api\datasource\ContentEntity;
 use Drupal\sparql_entity_storage\UriEncoder;
 use Drupal\taxonomy\Entity\Term;
 
@@ -121,12 +120,13 @@ class EifContext extends RawDrupalContext {
     $entity_type_manager = \Drupal::entityTypeManager();
     $storage = $entity_type_manager->getStorage('taxonomy_term');
     $tids = $storage->getQuery()->condition('vid', $vids, 'IN')->execute();
+    /** @var \Drupal\search_api\Plugin\search_api\datasource\ContentEntityTrackingManager $content_tracking_manager */
+    $content_tracking_manager = \Drupal::service('search_api.entity_datasource.tracking_manager');
     foreach ($storage->loadMultiple($tids) as $term) {
-      ContentEntity::indexEntity($term);
+      $content_tracking_manager->trackEntityChange($term);
     }
 
-    $index = \Drupal::entityTypeManager()->getStorage('search_api_index')->load('published');
-    $index->indexItems(-1, 'entity:taxonomy_term');
+    \Drupal::getContainer()->get('search_api.post_request_indexing')->destruct();
   }
 
   /**

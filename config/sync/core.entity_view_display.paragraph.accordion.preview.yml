@@ -14,8 +14,8 @@ dependencies:
     - template_suggestion
 third_party_settings:
   layout_builder:
-    allow_custom: false
     enabled: false
+    allow_custom: false
 id: paragraph.accordion.preview
 targetEntityType: paragraph
 bundle: accordion
@@ -23,7 +23,6 @@ mode: preview
 content:
   field_accordion_item:
     type: paragraph_summary
-    weight: 0
     label: hidden
     settings: {  }
     third_party_settings:
@@ -35,5 +34,7 @@ content:
         offset: 0
       template_suggestion:
         template_suggestion: ''
+    weight: 0
     region: content
-hidden: {  }
+hidden:
+  search_api_excerpt: true
