@@ -532,3 +532,10 @@ function ventuno_preprocess_responsive_image(&$variables) {
 function ventuno_preprocess_image(&$variables) {
   $variables['attributes']['loading'] = 'lazy';
 }
+
+/**
+ * Implements hook_preprocess_HOOK() for input--search-expose-form.html.twig.
+ */
+function ventuno_preprocess_input__search_expose_form(&$variables) {
+  $variables['is_front'] = \Drupal::service('path.matcher')->isFrontPage();
+}

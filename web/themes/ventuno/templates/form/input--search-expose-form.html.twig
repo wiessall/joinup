@@ -10,15 +10,18 @@
  * @see template_preprocess_input()
  */
 #}
-{%
-  set classes = [
+{% set classes = is_front ? [
   'search-bar__input',
   'form-control',
+  attributes.hasClass('error') ? 'is-invalid',
   'px-4',
   'py-3',
-  'py-md-0',
+  'py-md-0'
+  ] : [
+  'search-bar__input',
+  'form-control',
   attributes.hasClass('error') ? 'is-invalid',
-]
+  ]
 %}
 
 <input{{ attributes.addClass(classes).removeClass('form-text') }} />{{ children }}
