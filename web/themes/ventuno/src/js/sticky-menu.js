@@ -1,6 +1,7 @@
 /**
- * @file Listen to DOM readiness, look for navbar element and if present,
- * listen to user scroll to toggle sticky classes.
+ * @file
+ * Listen to DOM readiness, look for navbar element and if present, listen to
+ * user scroll to toggle sticky classes.
  */
  Drupal.behaviors.stickyMenu = {
   attach: function () {

@@ -1,5 +1,6 @@
 /**
- * @file Glide slider configuration.
+ * @file
+ * Glide slider configuration.
  */
 
 import Glide, { Controls, Breakpoints, Swipe } from '@glidejs/glide/dist/glide.modular.esm'
