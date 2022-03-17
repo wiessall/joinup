@@ -17,24 +17,11 @@
       // If click was for closing, blur.
       if (box.classList.contains('show')) {
         input.blur();
-      // If click was for opening, focus.
       }
+      // If click was for opening, focus.
       else {
         input.focus();
-      }
-    });
-    // Listen for enter key (keyboard navigation)
-    trigger.addEventListener('keypress', (event)=> {
-      if (event.keyCode === 13) {
-        // If click was for closing, blur.
-        if (box.classList.contains('show')) {
-          input.blur();
-        // If click was for opening, blur.
-        }
-        else {
-          input.focus();
-        }
-      }
+      };
     });
   }
 };
