@@ -1,5 +1,6 @@
 /**
- * @file Listen to a 'click' on the searchbox trigger and focus accordingly.
+ * @file
+ * Listen to a 'click' on the searchbox trigger and focus accordingly.
  */
  Drupal.behaviors.searchboxFocus = {
   attach: function () {

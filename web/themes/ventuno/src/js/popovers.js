@@ -1,5 +1,6 @@
 /**
- * @file Popovers.
+ * @file
+ * Popovers.
  */
 Drupal.behaviors.popover = {
   attach: function () {
