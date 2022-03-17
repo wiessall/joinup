@@ -107,6 +107,10 @@
         color: $dark;
         background-color: $white;
         font-size: 0;
+        padding: $spacer * .425 $spacer;
+        &:hover {
+          box-shadow: none;
+        }
       }
     }
   }
@@ -256,7 +260,7 @@
         }
         .date--month {
           line-height: 1.4;
-          font-size: $h5-font-size; 
+          font-size: $h5-font-size;
         }
       }
       .dated-listing--content {
