@@ -103,7 +103,7 @@ trait SolrTrait {
       'scheme' => getenv('SEARCH_API_SERVER_SS_SOLR_SCHEME') ?: 'http',
       'host' => getenv('SEARCH_API_SERVER_SS_SOLR_HOST'),
       'port' => getenv('SEARCH_API_SERVER_SS_SOLR_PORT'),
-      'core' => getenv('SEARCH_API_SERVER_SS_SOLR_CORE'),
+      'path' => 'solr',
     ]);
   }
 
