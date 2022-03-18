@@ -120,7 +120,8 @@ trait SolrTrait {
     if (!getenv('SEARCH_API_SERVER_SS_SOLR_HOST')) {
       $url = parse_url(getenv('SOLR_URL'));
       foreach (['scheme', 'host', 'port', 'path'] as $part) {
-        putenv('SEARCH_API_SERVER_SS_SOLR_' . strtoupper($part) . '=' . $url[$part]);
+        $value = $url[$part] ?? '';
+        putenv('SEARCH_API_SERVER_SS_SOLR_' . strtoupper($part) . "=$value");
       }
       putenv('SEARCH_API_SERVER_SS_SOLR_CORE=' . getenv('SOLR_CORE'));
     }
