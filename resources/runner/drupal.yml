@@ -253,17 +253,23 @@ drupal:
         $config['swiftmailer.transport']['sendmail_mode'] = getenv('DRUPAL_MAIL_SENDMAIL_MODE');
         $config['swiftmailer.transport']['spool_directory'] = getenv('DRUPAL_MAIL_SPOOL_DIR');
       Search API: |
-        $config['search_api.server.joinup']['backend_config']['connector_config'] = parse_url(getenv('SOLR_URL'));
-        $config['search_api.server.joinup']['backend_config']['connector_config']['core'] = getenv('SOLR_CORE');
+        // Backards compatibility layer for SOLR_* environment variables.
+        \Joinup\TaskRunner\Traits\SolrTrait::solrEnvVarsBackwardsCompatibility();
+        // Adding a fallback for the scheme in case it is not properly
+        // consumed by the production environment.
+        $config['search_api.server.joinup']['backend_config']['connector_config']['scheme'] = getenv('SEARCH_API_SERVER_SS_SOLR_SCHEME') ?: 'http';
+        $config['search_api.server.joinup']['backend_config']['connector_config']['host'] = getenv('SEARCH_API_SERVER_SS_SOLR_HOST');
+        $config['search_api.server.joinup']['backend_config']['connector_config']['port'] = getenv('SEARCH_API_SERVER_SS_SOLR_PORT');
         // Since Search API Solr 3.x, the Solr endpoint '/solr' (V1 API) has been
         // dropped in favour of '/'. The Solarium library automatically appends the
-        // 'solr' part in Endpoint::getCoreBaseUri(). We keep SOLR_URL with the full
-        // path as is used in SolrCommands::getUrl() but also to prevent changes of
-        // environment variables of deployment servers and pipelines.
+        // 'solr' part in Endpoint::getCoreBaseUri(). We  prevent changes of
+        // environment variables of deployment servers and pipelines by hardcodeing
+        // the value.
         // @see search_api_solr_update_8309()
         // @see \Solarium\Core\Client\Endpoint::getCoreBaseUri()
         // @see \Joinup\TaskRunner\Commands\SolrCommands::getUrl()
         $config['search_api.server.joinup']['backend_config']['connector_config']['path'] = '/';
+        $config['search_api.server.joinup']['backend_config']['connector_config']['core'] = getenv('SEARCH_API_SERVER_SS_SOLR_CORE');
       OpenEuropa Webtools Analytics: |
         $config['oe_webtools_analytics.settings']['siteID'] = getenv('OE_WEBTOOLS_ANALYTICS_SITE_ID');
         $config['oe_webtools_analytics.settings']['sitePath'] = getenv('OE_WEBTOOLS_ANALYTICS_SITE_PATH');

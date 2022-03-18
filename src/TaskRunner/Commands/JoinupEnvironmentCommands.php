@@ -81,8 +81,7 @@ class JoinupEnvironmentCommands extends AbstractCommands {
    *   The Solr server version
    */
   protected function solrVersion(): string {
-    $config = $this->getConfig();
-    $info = json_decode($this->httpGet("{$config->get("env.SOLR_URL")}/admin/info/system?wt=json")->getBody()->getContents(), TRUE);
+    $info = json_decode($this->httpGet(SolrCommands::getSolrUrl() . "/admin/info/system?wt=json")->getBody()->getContents(), TRUE);
     $version = '0.0.0';
     if (isset($info['lucene']['solr-spec-version'])) {
       // Some Solr distributions or docker images append additional info to the
