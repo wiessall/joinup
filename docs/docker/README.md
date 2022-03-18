@@ -107,35 +107,16 @@ order for the permissions to work properly, the user owning the files in the
 host machine, the user executing commands in the container, the user running
 Apache in the container and the user running the IDE, must all be able to
 perform all necessary actions in the files. To workaround this, the user ID and
-the group ID of the user that runs apache must be updated. To do this, before
-building the containers, in the `docker-compose.override.yml` file, copy over
-the web service, and replace the `image` entry with the following `build`
-
-```yaml
-services:
-  web:
-    build:
-      context: './local'
-      args:
-        USER_ID: 1000
-        GROUP_ID: 1000
+the group ID of the user that runs apache must be updated.
+In order to identify your UID and GID, use the command
+```bash
+$ id
 ```
+Configure the options in the `docker-compose.override.yml` according to the
+instructions in the file by setting the arguments `USER_ID` and `GROUP_ID` under
+`web > build > args`.
 
-where `./local` is a untracked directory (the name can be different) somewhere
-on your system (this one is on the project root). Then, in the directory
-declared above, create the following `Dockerfile` file.
-
-```dockerfile
-FROM fpfis/httpd-php-dev:7.4
-
-ARG USER_ID=1000
-ARG GROUP_ID=1000
-RUN usermod -u ${USER_ID} www-data && \
-    groupmod -g ${GROUP_ID} www-data
-```
-
-Change the user ID and group ID according to your needs. The value 1000 is the
-value of the default login user of the Linux OS. To rebuild the containers,
+To rebuild the containers,
 first stop them by running from the host machine:
 
 ```bash
@@ -180,7 +161,7 @@ override the parent entry and will not merge with it.
 From the project root, run:
 
 ```bash
-$ docker-compose exec web ./vendor/bin/run toolkit:install-clean
+$ docker-compose exec --user www-data web ./vendor/bin/run toolkit:install-clean
 ```
 You can now access the website at `http://localhost/web` on the host machine, if
 the port mapping is `80:8080`. If you define a different port mapping, such as
@@ -199,25 +180,25 @@ in `.env` file. The values should be provided by DevOps team.
 #### Download all dumps/snapshots at once
 
 ```bash
-$ docker-compose exec web ./vendor/bin/run dev:download-databases
+$ docker-compose exec --user www-data web ./vendor/bin/run dev:download-databases
 ```
 
 #### Download only the MySQL dump
 
 ```bash
-$ docker-compose exec web ./vendor/bin/run mysql:download-dump
+$ docker-compose exec --user www-data web ./vendor/bin/run mysql:download-dump
 ```
 
 #### Download only the Virtuoso snapshot
 
 ```bash
-$ docker-compose exec web ./vendor/bin/run virtuoso:download-snapshot
+$ docker-compose exec --user www-data web ./vendor/bin/run virtuoso:download-snapshot
 ```
 
 #### Download only the Solr snapshot
 
 ```bash
-$ docker-compose exec web ./vendor/bin/run solr:download-snapshot
+$ docker-compose exec --user www-data web ./vendor/bin/run solr:download-snapshot
 ```
 
 **Note:** If you are changing from a clean install to a restored environment,
@@ -246,9 +227,9 @@ After containers are up and got the chance to import from dump/snapshots, run
 this sequence of commands:
 
 ```bash
-$ docker-compose exec web ./vendor/bin/run dev:rebuild-environment
+$ docker-compose exec --user www-data web ./vendor/bin/run toolkit:run-deploy
 # Installs the development modules, such as `devel`.
-$ docker-compose exec web ./vendor/bin/run dev:install-modules
+$ docker-compose exec --user www-data web ./vendor/bin/run dev:install-modules
 ```
 
 But you can create your own Task Runner command, to include all steps, in the
@@ -262,7 +243,7 @@ commands:
       arguments:
         - 60
     - task: run
-      command: dev:rebuild-environment
+      command: toolkit:run-deploy
     - task: run
       command: dev:install-modules
 ```
@@ -270,7 +251,7 @@ commands:
 Then simply run this script from the host machine:
 
 ```bash
-$ docker-compose exec web ./vendor/bin/run restore
+$ docker-compose exec --user www-data web ./vendor/bin/run restore
 ```
 
 ## Accessing the containers
@@ -284,6 +265,7 @@ $ docker-compose exec my_container_name "/bin/bash"
 Depending on the container (and its base image), it might be that `/bin/bash` is
 not available. In that case, `/bin/sh` and `sh` are good substitutes.
 
+Depending on the user you want to use, you might need to add `--user {username}` option before the container name, for instance to access the `web` container as user `www-data`, add `--user www-data`.
 ## Accessing the volumes
 
 Some containers, like `solr`, define volumes that allow the container to

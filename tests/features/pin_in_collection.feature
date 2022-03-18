@@ -284,7 +284,6 @@ Feature: Pinning entities inside collections
       | title                | collection    | state     | pinned in     | creation date |
       | Drop forged wrenches | Orange Wrench | validated | Orange Wrench | 2017-10-12    |
     And I am logged in as "Rozanne Minett"
-    And I accept essential cookies
 
     # Pinning and unpinning items should not affect the "last update" timestamp.
     # Before changing the pinned status, let's check that the solution is in the
@@ -346,7 +345,6 @@ Feature: Pinning entities inside collections
 
     # Verify that changes in the pinned state are reflected to the tile.
     When I am logged in as a facilitator of the "Orange Wrench" collection
-    And I accept essential cookies
     When I go to the homepage of the "Orange Wrench" collection
     Then the "Lantern FAQs" tile should be marked as pinned
     But the "Lantern terms" tile should not be marked as pinned
@@ -387,7 +385,6 @@ Feature: Pinning entities inside collections
 
     # Verify that changes in the pinned state are reflected to the tile.
     When I am logged in as "Rozanne Minett"
-    And I accept essential cookies
     And I go to the homepage of the "Orange Wrench" collection
     And I click the contextual link "Pin" in the "Fast lightning" tile
     Then the "Fast lightning" tile should be marked as pinned

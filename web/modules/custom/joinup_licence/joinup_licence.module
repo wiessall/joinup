@@ -204,5 +204,22 @@ function joinup_licence_theme($existing, $type, $theme, $path) {
       'variables' => [],
       'path' => $path . '/templates/parts',
     ],
+    'licence_comparer_header_content' => [
+      'variables' => [
+        'spdx_id' => NULL,
+        'title' => NULL,
+        'description' => NULL,
+        'url' => NULL,
+        'first_header' => TRUE,
+      ],
+    ],
+    'licence_comparer_cell_content' => [
+      'variables' => [
+        'spdx_id' => NULL,
+        'legal_category' => NULL,
+        'legal_type' => NULL,
+        'checked' => FALSE,
+      ],
+    ],
   ];
 }

@@ -86,7 +86,6 @@ Feature: Invite members to subscribe to discussions
     # The discussion owner can invite users, except when the discussion is in
     # draft state.
     Given I am logged in as "Lynwood Crawford"
-    And I accept essential cookies
     When I go to the "The flying droplet siphon" discussion
     Then I should not see the link "Invite"
     When I go to the "For your lifetime" discussion
@@ -217,7 +216,6 @@ Feature: Invite members to subscribe to discussions
     # user is already subscribed.
     Given I mark all emails as read
     And I am logged in as "Lynwood Crawford"
-    And I accept essential cookies
     When I go to the "Concerned about dissolved gases?" discussion
     And I click "Invite"
     When I type "gloruskin.hr@example.com" in the "E-mail" autocomplete field

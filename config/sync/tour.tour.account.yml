@@ -14,6 +14,7 @@ tips:
   content:
     id: content
     plugin: text
+    label: 'My account'
     weight: 1
     position: left-start
     selector: '.listing .listing__item'
@@ -21,6 +22,7 @@ tips:
   filter_icons:
     id: filter_icons
     plugin: text
+    label: Categories
     weight: 2
     position: bottom-start
     selector: '.facet-region .tab__container a'
@@ -28,6 +30,7 @@ tips:
   search:
     id: search
     plugin: text
+    label: Search
     weight: 3
     position: left-start
     selector: .search-bar
@@ -35,6 +38,7 @@ tips:
   local_tasks:
     id: local_tasks
     plugin: text
+    label: 'Edit your account'
     weight: 4
     position: left-start
     selector: '#local-tasks-primary'

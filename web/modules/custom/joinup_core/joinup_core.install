@@ -91,3 +91,10 @@ function joinup_core_requirements($phase): array {
 
   return $requirements;
 }
+
+/**
+ * Temporary UAT fix.
+ */
+function joinup_core_update_108000(): void {
+  // Fix already applied in v1.79.1.
+}

@@ -36,7 +36,7 @@
 <div class="mdl-layout__container page--distribution-downloads">
   <div class="mdl-layout mdl-js-layout" {{ attributes|without('class') }}>
 
-    {% include directory ~ '/templates/parts/header.html.twig' %}
+    {{ page.header }}
     {{ page.featured }}
     <main class="section section--content" role="main">
       <div class="main-container">
