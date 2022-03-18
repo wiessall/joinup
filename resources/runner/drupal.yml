@@ -258,8 +258,6 @@ drupal:
         $config['search_api.server.joinup']['backend_config']['connector_config']['scheme'] = getenv('SEARCH_API_SERVER_SS_SOLR_SCHEME') ?: 'http';
         $config['search_api.server.joinup']['backend_config']['connector_config']['host'] = getenv('SEARCH_API_SERVER_SS_SOLR_HOST');
         $config['search_api.server.joinup']['backend_config']['connector_config']['port'] = getenv('SEARCH_API_SERVER_SS_SOLR_PORT');
-        $config['search_api.server.joinup']['backend_config']['connector_config']['core'] = getenv('SEARCH_API_SERVER_SS_SOLR_CORE');
-
         // Since Search API Solr 3.x, the Solr endpoint '/solr' (V1 API) has been
         // dropped in favour of '/'. The Solarium library automatically appends the
         // 'solr' part in Endpoint::getCoreBaseUri(). We  prevent changes of
@@ -269,6 +267,7 @@ drupal:
         // @see \Solarium\Core\Client\Endpoint::getCoreBaseUri()
         // @see \Joinup\TaskRunner\Commands\SolrCommands::getUrl()
         $config['search_api.server.joinup']['backend_config']['connector_config']['path'] = '/';
+        $config['search_api.server.joinup']['backend_config']['connector_config']['core'] = getenv('SEARCH_API_SERVER_SS_SOLR_CORE');
       OpenEuropa Webtools Analytics: |
         $config['oe_webtools_analytics.settings']['siteID'] = getenv('OE_WEBTOOLS_ANALYTICS_SITE_ID');
         $config['oe_webtools_analytics.settings']['sitePath'] = getenv('OE_WEBTOOLS_ANALYTICS_SITE_PATH');
