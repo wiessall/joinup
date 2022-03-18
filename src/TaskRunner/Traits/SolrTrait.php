@@ -100,7 +100,7 @@ trait SolrTrait {
    */
   public static function getSolrUrl(): string {
     return http_build_url([
-      'scheme' => getenv('SEARCH_API_SERVER_SS_SOLR_SCHEME'),
+      'scheme' => getenv('SEARCH_API_SERVER_SS_SOLR_SCHEME') ?: 'http',
       'host' => getenv('SEARCH_API_SERVER_SS_SOLR_HOST'),
       'port' => getenv('SEARCH_API_SERVER_SS_SOLR_PORT'),
       'core' => getenv('SEARCH_API_SERVER_SS_SOLR_CORE'),
