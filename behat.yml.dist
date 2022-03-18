@@ -51,7 +51,6 @@
   - Drupal\joinup\Context\JoinupSeoContext
   - Drupal\joinup\Context\JoinupSubscriptionContext
   - Drupal\joinup\Context\JoinupUserContext
-  - Drupal\joinup\Context\JoinupWebtoolsContext
   - Drupal\joinup\Context\MinkContext
   - Drupal\joinup\Context\ModerationContext
   - Drupal\joinup\Context\OeNewsroomNewsletterContext
@@ -90,7 +89,10 @@ default:
       browser_name: ${behat.browser_name}
       selenium2:
         wd_host: ${env.WEBDRIVER_URL}
-        capabilities: {"browserName": "chrome", "browser": "chrome", 'chrome': {'switches':['--no-sandbox']}}
+        capabilities: {"browserName": "chrome", "browser": "chrome", 'chrome': {'switches':[
+          '--no-sandbox',
+          '--window-size=1024,768'
+        ]}}
     LoversOfBehat\TableExtension:
       table_map:
         'group menu edit table': '#menu-overview'

@@ -45,7 +45,7 @@ commands:
     - task: run
       command: toolkit:download-dump
       options:
-        asda-url: ${env.ASDA_URL}/solr
+        asda-url: ${env.ASDA_URL}/../solr
         dumpfile: ${solr.snapshot_dir}/solr.tar
     # Unpack and organize.
     - task: exec

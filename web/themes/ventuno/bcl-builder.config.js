@@ -18,10 +18,10 @@ module.exports = {
       },
     },
     {
-      entry: path.resolve(outputFolder, "src/js/slick-config.js"),
-      dest: path.resolve(outputFolder, "assets/js/slick-config.js"),
+      entry: path.resolve(outputFolder, "src/js/glide.js"),
+      dest: path.resolve(outputFolder, "assets/js/glide.js"),
       options: {
-        name: "slick",
+        name: "glide",
         minify: false,
         sourceMap: true,
       },
@@ -69,6 +69,54 @@ module.exports = {
       },
     },
     {
+      entry: path.resolve(outputFolder, "src/scss/modals.scss"),
+      dest: path.resolve(outputFolder, "assets/css/modals.css"),
+      options: {
+        includePaths,
+        sourceMap: "file",
+      },
+    },
+    {
+      entry: path.resolve(outputFolder, "src/scss/header-search-bar.scss"),
+      dest: path.resolve(outputFolder, "assets/css/header-search-bar.css"),
+      options: {
+        includePaths,
+        sourceMap: "file",
+      },
+    },    
+    {
+      entry: path.resolve(outputFolder, "src/scss/close.scss"),
+      dest: path.resolve(outputFolder, "assets/css/close.css"),
+      options: {
+        includePaths,
+        sourceMap: "file",
+      },
+    },    
+    {
+      entry: path.resolve(outputFolder, "src/scss/pager.scss"),
+      dest: path.resolve(outputFolder, "assets/css/pager.css"),
+      options: {
+        includePaths,
+        sourceMap: "file",
+      },
+    },    
+    {
+      entry: path.resolve(outputFolder, "src/scss/tables.scss"),
+      dest: path.resolve(outputFolder, "assets/css/tables.css"),
+      options: {
+        includePaths,
+        sourceMap: "file",
+      },
+    },
+    {
+      entry: path.resolve(outputFolder, "src/scss/licence-comparer.scss"),
+      dest: path.resolve(outputFolder, "assets/css/licence-comparer.css"),
+      options: {
+        includePaths,
+        sourceMap: "file",
+      },
+    },
+    {
       entry: path.resolve(outputFolder, "src/scss/footer.scss"),
       dest: path.resolve(outputFolder, "assets/css/footer.css"),
       options: {
@@ -77,7 +125,15 @@ module.exports = {
       },
     },
     {
-      entry: path.resolve(outputFolder, "src/scss/overrides/tour.scss"),
+      entry: path.resolve(outputFolder, "src/scss/site-alerts-messages.scss"),
+      dest: path.resolve(outputFolder, "assets/css/site-alerts-messages.css"),
+      options: {
+        includePaths,
+        sourceMap: "file",
+      },
+    },
+    {
+      entry: path.resolve(outputFolder, "src/scss/tour.scss"),
       dest: path.resolve(outputFolder, "assets/css/tour.css"),
       options: {
         includePaths,
@@ -228,20 +284,10 @@ module.exports = {
       from: [
         path.resolve(
           nodeModules,
-          "slick-carousel/slick/slick.css"
+          "@glidejs/glide/dist/css/glide.core.min.css"
         ),
       ],
       to: path.resolve(outputFolder, "assets/css"),
-      options: { up: true },
-    },
-    {
-      from: [
-        path.resolve(
-          nodeModules,
-          "slick-carousel/slick/slick.js"
-        ),
-      ],
-      to: path.resolve(outputFolder, "assets/js"),
       options: { up: true },
     },
   ],

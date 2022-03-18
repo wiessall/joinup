@@ -32,7 +32,7 @@ drupal:
         - Databases
         - Configuration
         - Search API
-        - Matomo & OpenEuropa Webtools Analytics
+        - OpenEuropa Webtools Analytics
         - Custom error handler
         - Permissions
         - Null mail collector
@@ -41,7 +41,7 @@ drupal:
         - Databases
         - Configuration
         - Search API
-        - Matomo & OpenEuropa Webtools Analytics
+        - OpenEuropa Webtools Analytics
         - Custom error handler
         - Permissions
         - Verbose error logging
@@ -54,7 +54,7 @@ drupal:
         - Databases
         - Configuration
         - Search API
-        - Matomo & OpenEuropa Webtools Analytics
+        - OpenEuropa Webtools Analytics
         - Custom error handler
         - Permissions
         - Development
@@ -69,8 +69,9 @@ drupal:
         - Main settings
         - Databases
         - Configuration
+        - Testing configuration alters
         - Search API
-        - Matomo & OpenEuropa Webtools Analytics
+        - OpenEuropa Webtools Analytics
         - Custom error handler
         - Permissions
         - Development
@@ -85,7 +86,7 @@ drupal:
         - Databases
         - Configuration
         - Search API
-        - Matomo & OpenEuropa Webtools Analytics
+        - OpenEuropa Webtools Analytics
         - Custom error handler
         - Permissions
         - Development
@@ -101,7 +102,7 @@ drupal:
         - Databases
         - Configuration
         - Search API
-        - Matomo & OpenEuropa Webtools Analytics
+        - OpenEuropa Webtools Analytics
         - Custom error handler
         - Permissions
         - Development
@@ -116,7 +117,7 @@ drupal:
         - Databases
         - Configuration
         - Search API
-        - Matomo & OpenEuropa Webtools Analytics
+        - OpenEuropa Webtools Analytics
         - Custom error handler
         - Redis
         - Custom queue services
@@ -184,6 +185,10 @@ drupal:
         if ($trusted_host_patterns = getenv('DRUPAL_TRUSTED_HOST_PATTERNS')) {
           $settings['trusted_host_patterns'] = [$trusted_host_patterns];
         }
+
+        // Disable Piwik API calls until ISAICP-6944.
+        // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-6944
+        $settings['joinup.parse_cached_computed_field'] = FALSE;
       Configuration: |
         $settings['config_exclude_modules'] = [
           'admin_toolbar',
@@ -206,6 +211,13 @@ drupal:
         // Location of the site configuration files.
         $settings['config_sync_directory'] = '../config/sync';
         $settings['config_readonly'] = !file_exists(getcwd() . '/../disable-config-readonly');
+      Testing configuration alters: |
+        // The video from the home page interracts with Selenium tests.
+        $config['page_manager.page_variant.homepage-layout_builder-1']['variant_settings']['sections'][0]['components']['6ab0ceea-4541-4153-8b64-227e02369d30']['configuration']['text'] = 'Some joinup video';
+        // Almost all tests should run without the cookie consent widget.
+        $oe_webtools_cck_enabled = !file_exists(getcwd() . '/../disable-cookie-consent');
+        $config['oe_webtools_cookie_consent.settings']['banner_popup'] = $oe_webtools_cck_enabled;
+        $config['oe_webtools_cookie_consent.settings']['video_popup'] = $oe_webtools_cck_enabled;
       Databases: |
         $databases['default']['default'] = [
           'database' => getenv('DRUPAL_DATABASE_NAME'),
@@ -257,12 +269,8 @@ drupal:
         // @see \Solarium\Core\Client\Endpoint::getCoreBaseUri()
         // @see \Joinup\TaskRunner\Commands\SolrCommands::getUrl()
         $config['search_api.server.joinup']['backend_config']['connector_config']['path'] = '/';
-      Matomo & OpenEuropa Webtools Analytics: |
-        $config['matomo_reporting_api.settings']['site_id'] = getenv('MATOMO_SITE_ID');
-        $config['matomo_reporting_api.settings']['url_http'] = getenv('MATOMO_SITE_URL_HTTP');
-        $config['matomo_reporting_api.settings']['url_https'] = getenv('MATOMO_SITE_URL_HTTPS');
-        $config['matomo_reporting_api.settings']['token_auth'] = getenv('MATOMO_REPORTING_API_AUTH_TOKEN');
-        $config['oe_webtools_analytics.settings']['siteID'] = getenv('MATOMO_SITE_ID');
+      OpenEuropa Webtools Analytics: |
+        $config['oe_webtools_analytics.settings']['siteID'] = getenv('OE_WEBTOOLS_ANALYTICS_SITE_ID');
         $config['oe_webtools_analytics.settings']['sitePath'] = getenv('OE_WEBTOOLS_ANALYTICS_SITE_PATH');
         $config['oe_webtools_analytics.settings']['instance'] = getenv('OE_WEBTOOLS_ANALYTICS_SITE_INSTANCE');
       Redis: |

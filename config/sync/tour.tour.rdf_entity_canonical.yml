@@ -14,6 +14,7 @@ tips:
   collection_content:
     id: collection_content
     plugin: text
+    label: 'Collection content'
     weight: 1
     position: left-start
     selector: '.canonical-entity-page--rdf-entity--collection .listing .listing__item'
@@ -21,6 +22,7 @@ tips:
   solution_content:
     id: solution_content
     plugin: text
+    label: 'Solution content'
     weight: 2
     position: left-start
     selector: '.canonical-entity-page--rdf-entity--solution .listing .listing__item'
@@ -28,6 +30,7 @@ tips:
   collection_menu:
     id: collection_menu
     plugin: text
+    label: 'Collection menu'
     weight: 3
     position: right-start
     selector: '.canonical-entity-page--rdf-entity--collection .sidebar-menu .menu:first-child'
@@ -35,6 +38,7 @@ tips:
   solution_menu:
     id: solution_menu
     plugin: text
+    label: 'Solution menu'
     weight: 4
     position: right-start
     selector: '.canonical-entity-page--rdf-entity--solution .sidebar-menu .menu:first-child'
@@ -42,6 +46,7 @@ tips:
   filters:
     id: filters
     plugin: text
+    label: Filter
     weight: 5
     position: bottom-start
     selector: '.facet-region .tab__container a:first-of-type'
@@ -49,6 +54,7 @@ tips:
   join:
     id: join
     plugin: text
+    label: Join
     weight: 6
     position: right-start
     selector: '.join-group-form input.button'
@@ -56,6 +62,7 @@ tips:
   download:
     id: download
     plugin: text
+    label: Download
     weight: 7
     position: right-start
     selector: '.canonical-entity-page--rdf-entity--solution .block-group-header-block a.button'
@@ -63,6 +70,7 @@ tips:
   search:
     id: search
     plugin: text
+    label: Search
     weight: 8
     position: left-start
     selector: .search-bar

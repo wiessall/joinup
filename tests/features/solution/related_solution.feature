@@ -61,7 +61,6 @@ Feature: Related solution
   @javascript
   Scenario: Moderators can reorder the related solutions.
     Given I am logged in as a moderator
-    And I accept essential cookies
 
     # Solutions that have 'Solution related by type' off, should not show solutions related by type.
     When I visit the "Javascript" solution
