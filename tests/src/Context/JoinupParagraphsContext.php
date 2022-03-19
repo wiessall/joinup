@@ -9,17 +9,18 @@ use Behat\Mink\Element\TraversableElement;
 use Behat\Mink\Exception\ElementNotFoundException;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\joinup\Exception\WysiwygEditorNotFoundException;
-use Drupal\joinup\Traits\BrowserCapabilityDetectionTrait;
+use Drupal\joinup\Traits\JavascriptTrait;
 use Drupal\joinup\Traits\UtilityTrait;
 use Drupal\joinup\Traits\WysiwygTrait;
 use PHPUnit\Framework\Assert;
+use PHPUnit\Framework\ExpectationFailedException;
 
 /**
  * Behat step definitions for testing searches.
  */
 class JoinupParagraphsContext extends RawDrupalContext {
 
-  use BrowserCapabilityDetectionTrait;
+  use JavascriptTrait;
   use WysiwygTrait;
   use UtilityTrait;
 
@@ -252,6 +253,39 @@ class JoinupParagraphsContext extends RawDrupalContext {
   }
 
   /**
+   * Asserts the value of a filter from a given content listing paragraph.
+   *
+   * @param string $paragraph
+   *   The "1-based" delta of the content listing paragraph.
+   * @param string $filter
+   *   The "1-based" delta of the filter within content listing paragraph.
+   * @param string|null $expected_value
+   *   (optional) The expected value. If omitted, the step definition asserts an
+   *   empty value.
+   *
+   * @throws \Behat\Mink\Exception\ElementNotFoundException
+   *   When content listing paragraph is not found in the page.
+   *
+   * @Then the :filter filter of the :paragraph content listing paragraph value is :expected_value
+   * @Then the :filter filter of the :paragraph content listing paragraph is empty
+   */
+  public function assertFilterFromParagraphHasValue(string $paragraph, string $filter, ?string $expected_value = NULL): void {
+    $paragraph_0_based_delta = $this->convertOrdinalToNumber($paragraph) - 1;
+    $field = $this->getParagraphsElement('Custom content listing', $paragraph_0_based_delta);
+    $filter_1_based_delta = $this->convertOrdinalToNumber($filter);
+    $input = $field->find('xpath', "(//input[@type='text'])[$filter_1_based_delta]");
+    if (!$input) {
+      throw new ExpectationFailedException("The $filter filter from $paragraph paragraph doesn't contain '$expected_value'");
+    }
+    if ($expected_value) {
+      Assert::assertSame($expected_value, $input->getAttribute('value'));
+    }
+    else {
+      Assert::assertEmpty($input->getAttribute('value'));
+    }
+  }
+
+  /**
    * Returns the paragraph field element.
    *
    * @param string $field
@@ -262,6 +296,9 @@ class JoinupParagraphsContext extends RawDrupalContext {
    *
    * @return \Behat\Mink\Element\TraversableElement
    *   The field element.
+   *
+   * @throws \Behat\Mink\Exception\ElementNotFoundException
+   *   When content listing paragraph is not found in the page.
    */
   protected function getParagraphsElement(string $field, int $position = 0): TraversableElement {
     assert(isset(self::FIELD_MAP[$field]));
