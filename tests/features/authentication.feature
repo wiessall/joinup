@@ -107,6 +107,7 @@ Feature: User authentication
       | admin/config                                        |
       | admin/content                                       |
       | admin/content/media                                 |
+      | admin/content/messages                              |
       | admin/content/rdf                                   |
       | admin/legal-notice                                  |
       | admin/legal-notice/add                              |
@@ -178,6 +179,7 @@ Feature: User authentication
       | admin/reporting/distribution-downloads/csv  |
       | admin/reporting/export-user-list            |
       | admin/reporting/group-administrators/export |
+      | admin/reporting/messages-overview           |
       | admin/reporting/solutions-by-licences       |
       | admin/reporting/solutions-by-type           |
       | admin/reporting/subscribers-report          |
