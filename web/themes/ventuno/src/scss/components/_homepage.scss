@@ -15,6 +15,7 @@
       font-size: 1.25rem; // 20px
       padding-top: .75em;
       margin-bottom: 1em;
+      line-height: 1.2;
     }
   }
   .field--name-field-topic {
@@ -256,7 +257,7 @@
         }
         .date--month {
           line-height: 1.4;
-          font-size: $h5-font-size; 
+          font-size: $h5-font-size;
         }
       }
       .dated-listing--content {
