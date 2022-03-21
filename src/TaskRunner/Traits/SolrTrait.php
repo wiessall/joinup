@@ -92,4 +92,39 @@ trait SolrTrait {
     return $this->httpClient;
   }
 
+  /**
+   * Returns the SOLR URL including the path.
+   *
+   * @return string
+   *   The URL of SOLR endpoint, including the path.
+   */
+  public static function getSolrUrl(): string {
+    return http_build_url([
+      'scheme' => getenv('SEARCH_API_SERVER_SS_SOLR_SCHEME') ?: 'http',
+      'host' => getenv('SEARCH_API_SERVER_SS_SOLR_HOST'),
+      'port' => getenv('SEARCH_API_SERVER_SS_SOLR_PORT'),
+      'path' => 'solr',
+    ]);
+  }
+
+  /**
+   * Ensures transition from SOLR_* to SEARCH_API_SERVER_SS_SOLR_* variables.
+   *
+   * This is a backwards compatibility layer for Solr environment variables, and
+   * it will be removed in ISAICP-7063.
+   *
+   * @todo Remove this method in ISAICP-7063.
+   * @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7063
+   */
+  public static function solrEnvVarsBackwardsCompatibility(): void {
+    if (!getenv('SEARCH_API_SERVER_SS_SOLR_HOST')) {
+      $url = parse_url(getenv('SOLR_URL'));
+      foreach (['scheme', 'host', 'port', 'path'] as $part) {
+        $value = $url[$part] ?? '';
+        putenv('SEARCH_API_SERVER_SS_SOLR_' . strtoupper($part) . "=$value");
+      }
+      putenv('SEARCH_API_SERVER_SS_SOLR_CORE=' . getenv('SOLR_CORE'));
+    }
+  }
+
 }
