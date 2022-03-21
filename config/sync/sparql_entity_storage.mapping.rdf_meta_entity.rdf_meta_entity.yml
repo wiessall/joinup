@@ -1,16 +1,21 @@
+uuid: cdb76564-3d18-48dd-926c-ed5206dafb89
 langcode: en
 status: true
 dependencies:
   config:
     - sparql_entity_storage.graph.default
-    - rdf_meta_entity.rid.eif_settings
+    - sparql_entity_storage.graph.draft
+  module:
+    - rdf_schema_field_validation
 third_party_settings:
   rdf_schema_field_validation:
     property_predicates:
       - 'http://www.w3.org/2000/01/rdf-schema#domain'
     graph: 'http://adms-definition'
     class: 'http://www.w3.org/2000/01/rdf-schema#Class'
-id: eif_settings
+_core:
+  default_config_hash: RRKMp6pOX7i_n6VzOCGpqRIJ5WYU0t9ikl8Ej_J4v0M
+id: rdf_meta_entity.eif_settings
 entity_type_id: rdf_meta_entity
 bundle: eif_settings
 rdf_type: 'http://joinup.eu/rdf_meta_entity/eif_settings'
