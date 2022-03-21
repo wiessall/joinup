@@ -1,0 +1,8 @@
+<?php
+
+/**
+ * @file
+ * Meta entity module main functionality.
+ */
+
+declare(strict_types = 1);
