@@ -24,7 +24,7 @@
 
 {% if items %}
   <nav class="{{ utility_classes|join(' ') }}" role="navigation" aria-labelledby="pagination-heading">
-    <h4 id="pagination-heading" class="visually-hidden">{{ 'Pagination'|t }}</h4>
+    <p id="pagination-heading" class="visually-hidden">{{ 'Pagination'|t }}</p>
     <ul class="pagination pager__items js-pager__items {{ size ? 'pagination-' ~ size }} {{ alignment }}">
       {# Print first item if we are not on the first page. #}
       {% if items.first %}
