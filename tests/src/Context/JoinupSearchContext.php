@@ -7,7 +7,7 @@ namespace Drupal\joinup\Context;
 use Behat\Gherkin\Node\TableNode;
 use Behat\Mink\Element\NodeElement;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
-use Drupal\joinup\Traits\BrowserCapabilityDetectionTrait;
+use Drupal\joinup\Traits\JavascriptTrait;
 use Drupal\joinup\Traits\KeyboardInteractionTrait;
 use Drupal\joinup\Traits\MaterialDesignTrait;
 use Drupal\joinup\Traits\TraversingTrait;
@@ -19,7 +19,7 @@ use PHPUnit\Framework\Assert;
  */
 class JoinupSearchContext extends RawDrupalContext {
 
-  use BrowserCapabilityDetectionTrait;
+  use JavascriptTrait;
   use KeyboardInteractionTrait;
   use MaterialDesignTrait;
   use TraversingTrait;
@@ -391,6 +391,8 @@ class JoinupSearchContext extends RawDrupalContext {
     $node_elements = $facet->findAll('css', 'li.facet-item label');
     foreach ($node_elements as $node_element) {
       if ($node_element->getText() === $option) {
+        $facet_id = $facet->getAttribute('data-drupal-facet-id');
+        $this->scrollElementIntoView('[data-drupal-facet-id="' . $facet_id . '"]');
         $node_element->click();
         return;
       }
@@ -810,7 +812,7 @@ class JoinupSearchContext extends RawDrupalContext {
   }
 
   /**
-   * Remove facet summary item that are on the page.
+   * Removes facet summary item that are on the page.
    *
    * @param string $label
    *   A facet summary item label.
@@ -818,7 +820,7 @@ class JoinupSearchContext extends RawDrupalContext {
    * @throws \Exception
    *   Thrown when a wanted facet item is not shown in the page.
    *
-   * @When I should remove the following facet summary :label
+   * @When I remove the following facet summary :label
    */
   public function removeFacetSummary(string $label): void {
     $css = "div.block-facets-summary-blocksearch-facets-summary li.facet-summary-item--facet a:contains('{$label}')";

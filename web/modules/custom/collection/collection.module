@@ -20,6 +20,7 @@ use Drupal\collection\Entity\Collection;
 use Drupal\collection\Entity\CollectionInterface;
 use Drupal\collection\Entity\GlossaryTerm;
 use Drupal\collection\Plugin\Field\FieldType\LastUpdatedFieldItemList;
+use Drupal\joinup_subscription\JoinupSubscriptionsHelper;
 use Drupal\node\NodeInterface;
 use Drupal\og\Entity\OgRole;
 use Drupal\og\Og;
@@ -128,9 +129,20 @@ function collection_rdf_entity_insert(EntityInterface $entity) {
       'rdf_entity-collection-facilitator',
     ];
 
+    $subscription_bundles = [];
+    foreach (JoinupSubscriptionsHelper::SUBSCRIPTION_BUNDLES['collection'] as $entity_type => $bundles) {
+      foreach ($bundles as $bundle) {
+        $subscription_bundles[] = [
+          'entity_type' => $entity_type,
+          'bundle' => $bundle,
+        ];
+      }
+    }
+
     /** @var \Drupal\og\OgMembershipInterface $membership */
     $membership = Og::createMembership($entity, $entity->getOwner());
     $membership->setRoles(array_values(OgRole::loadMultiple($roles)));
+    $membership->set('subscription_bundles', $subscription_bundles);
     $membership->save();
   }
 }

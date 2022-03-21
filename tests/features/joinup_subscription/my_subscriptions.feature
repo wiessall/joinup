@@ -83,7 +83,6 @@ Feature: My subscriptions
     # Log in as a user that is a member of 3 collections. The subscriptions for
     # all 3 collections should be shown.
     Given I am logged in as "Auric Goldfinger"
-    And I accept essential cookies
 
     # This step is actually a shortcut for
     # When I open the account menu
@@ -219,7 +218,6 @@ Feature: My subscriptions
     And the following fields should not be present "Save changes"
 
     Given I am logged in as a moderator
-    And I accept essential cookies
     When I go to the edit form of the "Water supply" discussion
     And I press "Publish"
     Then the <frequency> group content subscription digest for "Auric Goldfinger" should match the following message:
