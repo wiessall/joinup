@@ -1,0 +1,15 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - rdf_entity.rdfentity.solution
+  module:
+    - rdf_entity
+rid: eif_settings
+name: 'Eif settings'
+description: 'Holds settings related to the EIF toolbox.'
+mapping:
+  rdf_entity:
+    solution:
+      field_name: eif_settings
+      auto_create: false
