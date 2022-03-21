@@ -1,0 +1,41 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - sparql_entity_storage.graph.default
+    - rdf_meta_entity.rid.eif_settings
+third_party_settings:
+  rdf_schema_field_validation:
+    property_predicates:
+      - 'http://www.w3.org/2000/01/rdf-schema#domain'
+    graph: 'http://adms-definition'
+    class: 'http://www.w3.org/2000/01/rdf-schema#Class'
+id: eif_settings
+entity_type_id: rdf_meta_entity
+bundle: eif_settings
+rdf_type: 'http://joinup.eu/rdf_meta_entity/eif_settings'
+graph:
+  default: 'http://joinup.eu/rdf_meta_entity/eif_settings/graph/published'
+  draft: 'http://joinup.eu/rdf_meta_entity/eif_settings/graph/published'
+base_fields_mapping:
+  rid:
+    target_id:
+      predicate: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type'
+      format: resource
+  label:
+    value:
+      predicate: 'http://purl.org/dc/terms/title'
+      format: t_literal
+  created:
+    value:
+      predicate: 'http://purl.org/dc/terms/issued'
+      format: 'xsd:dateTime'
+  changed:
+    value:
+      predicate: 'http://purl.org/dc/terms/modified'
+      format: 'xsd:dateTime'
+  uuid:
+    value:
+      predicate: 'http://joinup.eu/rdf_meta_entity/eif_settings/base/uuid'
+      format: t_literal
+entity_id_plugin: default

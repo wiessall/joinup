@@ -1,0 +1,9 @@
+type: module
+name: 'Rdf Meta Entity'
+description: 'Allows to store metadata about an RDF entity outside its storage.'
+core_version_requirement: ^8 || ^9
+php: 7.1
+
+dependencies:
+  - dynamic_entity_reference:dynamic_entity_reference (>=8.x-2.x)
+  - rdf_entity:rdf_entity (>=8.x-2.x)

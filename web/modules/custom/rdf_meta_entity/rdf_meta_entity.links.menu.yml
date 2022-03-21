@@ -1,0 +1,5 @@
+meta_entity.type.admin:
+  title: 'RDF meta entity types'
+  parent: system.admin_structure
+  description: 'Manage RDF meta entity types.'
+  route_name: rdf_meta_entity.type.admin
