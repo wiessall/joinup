@@ -55,12 +55,10 @@ class SolrCommands extends AbstractCommands {
    */
   public function empty(): void {
     $config = $this->getConfig();
-    // Temporary fix because of FPFISSUPP-16373.
-    // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/FPFISSUPP-16373
-    $core = 'digit-joinup';
+    $core = $config->get('env.SEARCH_API_SERVER_SS_SOLR_CORE');
     $this->say("Empty Solr '{$core}' core.");
     $this->httpPost(
-      "{$config->get('env.SOLR_URL')}/$core/update?commit=true&wt=json",
+      self::getSolrUrl() . "/$core/update?commit=true&wt=json",
       '<delete><query>*:*</query></delete>',
       ['Content-Type' => 'application/xml'],
     );
@@ -77,7 +75,7 @@ class SolrCommands extends AbstractCommands {
    */
   public function backup(): void {
     $config = $this->getConfig();
-    $core = $config->get('env.SOLR_CORE');
+    $core = $config->get('env.SEARCH_API_SERVER_SS_SOLR_CORE');
 
     $this->say("Backup Solr '{$core}' core.");
 
@@ -99,7 +97,7 @@ class SolrCommands extends AbstractCommands {
    */
   public function restore(): void {
     $config = $this->getConfig();
-    $core = $config->get('env.SOLR_CORE');
+    $core = $config->get('env.SEARCH_API_SERVER_SS_SOLR_CORE');
 
     $this->say("Restoring Solr '{$core}' core.");
 
@@ -201,7 +199,7 @@ class SolrCommands extends AbstractCommands {
   protected function getUrl(string $operation): string {
     $config = $this->getConfig();
     $command = static::COMMAND_MAP[$operation][FALSE];
-    return "{$config->get("env.SOLR_URL")}/{$config->get("env.SOLR_CORE")}/replication?command={$command}&name={$config->get("env.SOLR_CORE")}&location={$config->get('solr.snapshot_dir')}";
+    return self::getSolrUrl() . "/{$config->get("env.SEARCH_API_SERVER_SS_SOLR_CORE")}/replication?command={$command}&name={$config->get("env.SEARCH_API_SERVER_SS_SOLR_CORE")}&location={$config->get('solr.snapshot_dir')}";
   }
 
   /**
@@ -216,7 +214,7 @@ class SolrCommands extends AbstractCommands {
   protected function getOperationStatusUrl(string $operation): string {
     $config = $this->getConfig();
     $command = static::COMMAND_MAP[$operation][TRUE];
-    return "{$config->get("env.SOLR_URL")}/{$config->get("env.SOLR_CORE")}/replication?command={$command}";
+    return self::getSolrUrl() . "/{$config->get("env.SEARCH_API_SERVER_SS_SOLR_CORE")}/replication?command={$command}";
   }
 
 }
