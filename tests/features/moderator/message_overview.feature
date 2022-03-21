@@ -37,7 +37,10 @@ Feature: Solutions message overview
 
   @terms
   Scenario: Workflow messages are available in the message overview.
-    Given owner:
+    Given users:
+      | Username   | Roles     |
+      | Weinberger | moderator |
+    And owner:
       | name                 | type    |
       | Organisation example | Company |
     And I am logged in as an "authenticated user"
@@ -57,7 +60,7 @@ Feature: Solutions message overview
     And I should see the heading "Message overview proposal"
 
     # Verify the message as a moderator.
-    When I am logged in as a moderator
+    When I am logged in as Weinberger
     And I click "Reporting" in the "Administration toolbar" region
     And I click "Messages overview"
     Then I should see the following lines of text:
@@ -69,4 +72,5 @@ Feature: Solutions message overview
       | If you think this action is not clear or not due, please contact Joinup Support at |
 
     # Clean up the collection that was created.
-    Then I delete the "Message overview proposal" collection
+    And I delete the "Message overview proposal" collection
+    And I delete the "Invisible Man" contact information
