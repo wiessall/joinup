@@ -42,7 +42,6 @@ Feature: User authentication
       | admin/structure/compatibility-document/display      |
       | admin/structure/compatibility-document/form-display |
       | admin/structure/media                               |
-      | admin/structure/views                               |
       | dashboard                                           |
       | licence                                             |
       | licence/add                                         |
@@ -123,7 +122,6 @@ Feature: User authentication
       | admin/structure/compatibility-document/display      |
       | admin/structure/compatibility-document/form-display |
       | admin/structure/media                               |
-      | admin/structure/views                               |
       | dashboard                                           |
       | licence                                             |
       | licence/add                                         |
@@ -212,7 +210,6 @@ Feature: User authentication
       | admin/structure/compatibility-document/display      |
       | admin/structure/compatibility-document/form-display |
       | admin/structure/media                               |
-      | admin/structure/views                               |
       | node/add                                            |
       | node/add/custom_page                                |
       | node/add/discussion                                 |
