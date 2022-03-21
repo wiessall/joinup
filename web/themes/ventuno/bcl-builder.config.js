@@ -69,8 +69,48 @@ module.exports = {
       },
     },
     {
+      entry: path.resolve(outputFolder, "src/scss/modals.scss"),
+      dest: path.resolve(outputFolder, "assets/css/modals.css"),
+      options: {
+        includePaths,
+        sourceMap: "file",
+      },
+    },
+    {
+      entry: path.resolve(outputFolder, "src/scss/header-search-bar.scss"),
+      dest: path.resolve(outputFolder, "assets/css/header-search-bar.css"),
+      options: {
+        includePaths,
+        sourceMap: "file",
+      },
+    },    
+    {
+      entry: path.resolve(outputFolder, "src/scss/close.scss"),
+      dest: path.resolve(outputFolder, "assets/css/close.css"),
+      options: {
+        includePaths,
+        sourceMap: "file",
+      },
+    },    
+    {
       entry: path.resolve(outputFolder, "src/scss/pager.scss"),
       dest: path.resolve(outputFolder, "assets/css/pager.css"),
+      options: {
+        includePaths,
+        sourceMap: "file",
+      },
+    },    
+    {
+      entry: path.resolve(outputFolder, "src/scss/tables.scss"),
+      dest: path.resolve(outputFolder, "assets/css/tables.css"),
+      options: {
+        includePaths,
+        sourceMap: "file",
+      },
+    },
+    {
+      entry: path.resolve(outputFolder, "src/scss/licence-comparer.scss"),
+      dest: path.resolve(outputFolder, "assets/css/licence-comparer.css"),
       options: {
         includePaths,
         sourceMap: "file",

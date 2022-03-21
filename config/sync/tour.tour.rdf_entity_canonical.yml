@@ -14,7 +14,7 @@ tips:
   collection_content:
     id: collection_content
     plugin: text
-    label: Collection content
+    label: 'Collection content'
     weight: 1
     position: left-start
     selector: '.canonical-entity-page--rdf-entity--collection .listing .listing__item'
@@ -22,7 +22,7 @@ tips:
   solution_content:
     id: solution_content
     plugin: text
-    label: Solution content
+    label: 'Solution content'
     weight: 2
     position: left-start
     selector: '.canonical-entity-page--rdf-entity--solution .listing .listing__item'
@@ -30,7 +30,7 @@ tips:
   collection_menu:
     id: collection_menu
     plugin: text
-    label: Collection menu
+    label: 'Collection menu'
     weight: 3
     position: right-start
     selector: '.canonical-entity-page--rdf-entity--collection .sidebar-menu .menu:first-child'
@@ -38,7 +38,7 @@ tips:
   solution_menu:
     id: solution_menu
     plugin: text
-    label: Solution menu
+    label: 'Solution menu'
     weight: 4
     position: right-start
     selector: '.canonical-entity-page--rdf-entity--solution .sidebar-menu .menu:first-child'

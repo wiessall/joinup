@@ -30,7 +30,6 @@ Feature: As a visitor or logged-in user, when I want to post content, the form
       | Got married | Family photos | validated |
 
     Given I am logged in as "Günther"
-    And I accept essential cookies
     And I go to the homepage of the "Family photos" collection
     Then the form is protected by Antibot
 
