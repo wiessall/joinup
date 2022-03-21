@@ -4,17 +4,6 @@ Feature: Solutions message overview
   In order to be able to manage incoming requests
   I need to be able to list messages that are sent throughout the website.
 
-  Scenario: Only privileged users can access the report.
-    When I am logged in as a user with the "authenticated" role
-    And I go to "/admin/content/messages"
-    Then the response status code should be 403
-
-    When I am logged in as a moderator
-    And I am on the homepage
-    And I click "Reporting" in the "Administration toolbar" region
-    And I click "Messages overview"
-    Then the response status code should be 200
-
   Scenario: Contact form messages are available in the message overview.
     And I am not logged in
     When I am on the homepage
