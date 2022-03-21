@@ -31,7 +31,7 @@ use Drupal\sparql_entity_storage\SparqlGraphInterface;
  *   field_ui_base_route = "entity.rdf_meta_entity_type.edit_form",
  *   entity_keys = {
  *     "id" = "id",
- *     "type" = "rid",
+ *     "bundle" = "rid",
  *     "label" = "label",
  *     "uuid" = "uuid",
  *   },
