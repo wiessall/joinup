@@ -1,10 +1,9 @@
+uuid: ffd106d5-3b01-4485-9460-c19df459fde8
 langcode: en
 status: true
-dependencies:
-  config:
-    - rdf_entity.rdfentity.solution
-  module:
-    - rdf_entity
+dependencies: {  }
+_core:
+  default_config_hash: hVv6uOKGMcWjYreZwL7Nbg41Ina-v-54lq1jqcsTlgE
 rid: eif_settings
 name: 'Eif settings'
 description: 'Holds settings related to the EIF toolbox.'
