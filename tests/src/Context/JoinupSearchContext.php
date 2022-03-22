@@ -878,78 +878,78 @@ class JoinupSearchContext extends RawDrupalContext {
   }
 
   /**
-   * Checks if search bar appears in header.
+   * Checks if search bar appears in navbar.
    *
    * @throws \Exception
-   *   Thrown when search bar item do not appear in header.
+   *   Thrown when search bar item do not appear in navbar.
    *
-   * @Then I should see search bar in header
+   * @Then I should see search bar in navbar
    */
-  public function assertSearchExposedFilterHeader(): void {
+  public function assertSearchExposedFilterNavbar(): void {
     $getAllInput = $this->getSession()->getPage()->findAll('css', 'nav.joinup-navbar .navbar-search input#edit-keys');
 
     if (count($getAllInput) < 1) {
-      throw new \Exception('Search bar not found in header.');
+      throw new \Exception('Search bar not found in navbar.');
     }
   }
 
   /**
-   * Checks if search bar do not appear in header.
+   * Checks if search bar does not appear in navbar.
    *
    * @throws \Exception
-   *   Thrown when search bar appears in header.
+   *   Thrown when search bar appears in navbar.
    *
-   * @Then I should not see search bar in header
+   * @Then I should not see search bar in navbar
    */
-  public function failSearchExposedFilterHeader(): void {
+  public function failSearchExposedFilterNavbar(): void {
     $getAllInput = $this->getSession()->getPage()->findAll('css', 'nav.joinup-navbar .navbar-search input#edit-keys');
 
     if (count($getAllInput) > 0) {
-      throw new \Exception('Search bar found in header.');
+      throw new \Exception('Search bar found in navbar.');
     }
   }
 
   /**
-   * Checks if search bar icon appears in header.
+   * Checks if search bar icon appears in navbar.
    *
    * @throws \Exception
-   *   Thrown when search bar icon do not appear in header.
+   *   Thrown when search bar icon do not appear in navbar.
    *
-   * @Then I should see search bar icon in header
+   * @Then I should see search bar icon in navbar
    */
-  public function assertSearchIconHeader(): void {
+  public function assertSearchIconNavbar(): void {
     $getAllInput = $this->getSession()->getPage()->findAll('css', 'nav.joinup-navbar span#heading-search button.accordion-button');
 
     if (count($getAllInput) < 1) {
-      throw new \Exception('Search bar icon not found in header.');
+      throw new \Exception('Search bar icon not found in navbar.');
     }
   }
 
   /**
-   * Checks if search bar icon do not appear in header.
+   * Checks if search bar icon does not appear in navbar.
    *
    * @throws \Exception
-   *   Thrown when search bar icon appears in header.
+   *   Thrown when search bar icon appears in navbar.
    *
-   * @Then I should not see search bar icon in header
+   * @Then I should not see search bar icon in navbar
    */
-  public function failSearchIconHeader(): void {
+  public function failSearchIconNavbar(): void {
     $getAllInput = $this->getSession()->getPage()->findAll('css', 'nav.joinup-navbar span#heading-search button.accordion-button');
 
     if (count($getAllInput) > 0) {
-      throw new \Exception('Search bar icon found in header.');
+      throw new \Exception('Search bar icon found in navbar.');
     }
   }
 
   /**
-   * Checks if search bar appears in header.
+   * Checks if search bar appears in navbar.
    *
    * @throws \Exception
-   *   Thrown when search bar item do not appear in header.
+   *   Thrown when search bar item do not appear in navbar.
    *
-   * @Then I should toggle search bar in header
+   * @Then I should toggle search bar in navbar
    */
-  public function assertSearchToggleIconHeader(): void {
+  public function assertSearchToggleIconNavbar(): void {
     // Non-JS browsers are directly interacting with the HTML, so we consider
     // the account menu to be already open.
     if (!$this->browserSupportsJavaScript()) {
