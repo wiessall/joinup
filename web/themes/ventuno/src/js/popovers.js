@@ -1,4 +1,5 @@
 /**
+ * @file
  * Popovers.
  */
 Drupal.behaviors.popover = {
