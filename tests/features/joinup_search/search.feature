@@ -256,11 +256,6 @@ Feature: Global search
     Then I should toggle search bar in navbar
     And I should see search bar in navbar
 
-  Scenario: Homepage
-    # A search bar is shown on homepage's header.
-    Given I am on the homepage
-    Then I should see the search bar in homepage's header
-
   @wip
   # This tests shows a regression to be fixed in ISAICP-6917.
   # See https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-6917
