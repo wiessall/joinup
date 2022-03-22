@@ -23,7 +23,7 @@ tips:
     label: Search
     weight: 2
     position: left-start
-    selector: .input-group.js-form-type-search-api-autocomplete
+    selector: '#block-exposed-search .input-group.js-form-type-search-api-autocomplete'
     body: 'Search through the entire Joinup platform and its supported content items.'
   spotlight:
     id: spotlight
