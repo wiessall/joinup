@@ -39,7 +39,7 @@
 {{ attach_library('ventuno/navbar') }}
 
 {% if search %}
-  {{ attach_library('ventuno/search-bar') }}
+  {{ attach_library('ventuno/navbar-search') }}
 {% endif %}
 
 {% set _brand = brand|default({}) %}
@@ -154,7 +154,7 @@
             >
               <div class="accordion-body">
                 {% if item.type is same as 'search' and search %}
-                  <div class="search-bar">
+                  <div class="navbar-search">
                     {{ search }}
                   </div>
                 {% else %}

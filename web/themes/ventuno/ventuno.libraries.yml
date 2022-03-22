@@ -25,10 +25,10 @@ navbar:
   js:
     assets/js/sticky-menu.js: { minified: true, attributes: { defer: true } }
 
-search-bar:
+navbar-search:
   css:
     theme:
-      assets/css/search-bar.css: {}
+      assets/css/navbar-search.css: {}
   js:
     assets/js/searchbox-focus.js: { minified: true, attributes: { defer: true } }
 
