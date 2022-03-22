@@ -2,7 +2,122 @@
 
 /**
  * @file
- * Meta entity module main functionality.
+ * Rdf meta entity module main functionality.
  */
 
 declare(strict_types = 1);
+
+use Drupal\Core\Entity\ContentEntityInterface;
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Entity\EntityTypeInterface;
+use Drupal\Core\Field\BaseFieldDefinition;
+use Drupal\rdf_meta_entity\Entity\RdfMetaEntityInterface;
+use Drupal\rdf_meta_entity\RdfMetaEntityReverseReferenceItemList;
+
+/**
+ * Implements hook_entity_delete().
+ *
+ * Deletes all related rdf meta entities when a content entity is deleted.
+ */
+function rdf_meta_entity_entity_delete(EntityInterface $entity): void {
+  if (!$entity instanceof ContentEntityInterface) {
+    return;
+  }
+
+  /** @var \Drupal\rdf_meta_entity\RdfMetaEntityRepository $repository */
+  $repository = \Drupal::service('rdf_meta_entity.repository');
+  if ($rdf_meta_entities = $repository->getMetaEntitiesForEntity($entity)) {
+    \Drupal::entityTypeManager()
+      ->getStorage('rdf_meta_entity')
+      ->delete($rdf_meta_entities);
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_presave().
+ *
+ * Sets a standard label if there's no current label.
+ */
+function rdf_meta_entity_rdf_meta_entity_presave(RdfMetaEntityInterface $rdf_meta_entity): void {
+  // If the meta entity has already a label we'll not overwrite it. Also, don't
+  // compute a label if the target entity is not set.
+  if (!empty($rdf_meta_entity->label()) || $rdf_meta_entity->get('target')->isEmpty()) {
+    return;
+  }
+
+  /** @var \Drupal\Core\Entity\ContentEntityInterface $target_entity */
+  if ($target_entity = $rdf_meta_entity->get('target')->entity) {
+    $target_entity_singular_label = $target_entity->getEntityType()
+      ->getSingularLabel();
+    $bundle_label = $rdf_meta_entity->get('rid')->entity->label();
+    $rdf_meta_entity->label->value = (string) t('@entity @type (@bundle)', [
+      '@bundle' => $bundle_label,
+      '@entity' => $target_entity->label(),
+      '@type' => $target_entity_singular_label,
+    ]);
+  }
+}
+
+/**
+ * Implements hook_entity_bundle_field_info().
+ *
+ * If configured, all content entities with metadata will expose a computed
+ * entity reference field, linking back to metadata entity. The name of the
+ * field is configurable in the meta entity type level.
+ */
+function rdf_meta_entity_entity_bundle_field_info(EntityTypeInterface $entity_type, string $bundle, array $base_field_definitions): array {
+  /** @var \Drupal\meta_entity\MetaEntityRepositoryInterface $repository */
+  $repository = \Drupal::service('rdf_meta_entity.repository');
+  /** @var \Drupal\Core\Entity\EntityTypeBundleInfoInterface $bundle_info */
+  $bundle_info = \Drupal::service('entity_type.bundle.info');
+  $entity_type_id = $entity_type->id();
+
+  $fields = [];
+  foreach ($repository->getReverseReferenceFieldNames($entity_type_id, $bundle) as $meta_entity_type_id => $field_name) {
+    /** @var \Drupal\Core\Field\BaseFieldDefinition $definition */
+    $bundle_label = $bundle_info->getBundleInfo($entity_type_id)[$bundle]['label'];
+    $fields[$field_name] = BaseFieldDefinition::create('entity_reference')
+      ->setName($field_name)
+      ->setTargetEntityTypeId($entity_type_id)
+      ->setTargetBundle($bundle)
+      ->setLabel(t('@label reference', ['@label' => $bundle_label]))
+      ->setDescription(t('@label attached metadata.'))
+      ->setSetting('target_type', 'rdf_meta_entity')
+      ->setSetting('rdf_meta_entity_type_id', $meta_entity_type_id)
+      ->setCardinality(1)
+      ->setComputed(TRUE)
+      ->setClass(RdfMetaEntityReverseReferenceItemList::class);
+  }
+
+  return $fields;
+}
+
+/**
+ * Implements hook_entity_insert().
+ */
+function rdf_meta_entity_entity_insert(EntityInterface $entity) {
+  if (!$entity instanceof ContentEntityInterface) {
+    return;
+  }
+
+  $rdf_meta_entity_type_ids = \Drupal::service('rdf_meta_entity.repository')
+    ->getTypesWithAutoCreation($entity);
+  if ($rdf_meta_entity_type_ids) {
+    $storage = \Drupal::entityTypeManager()->getStorage('rdf_meta_entity');
+    foreach ($rdf_meta_entity_type_ids as $rdf_meta_entity_type_id) {
+      $rdf_meta_entity = $storage->create([
+        'type' => $rdf_meta_entity_type_id,
+        'target' => $entity,
+      ]);
+      $rdf_meta_entity->save();
+      \Drupal::logger('rdf_meta_entity')
+        ->debug("Auto-created %rdf_meta_entity_type_id meta-entity with ID @meta_entity_id for the %bundle %entity_type entity with ID @entity_id.", [
+          '%rdf_meta_entity_type_id' => $rdf_meta_entity_type_id,
+          '@meta_entity_id' => $rdf_meta_entity->id(),
+          '%bundle' => $entity->bundle(),
+          '%entity_type' => $entity->getEntityTypeId(),
+          '@entity_id' => $entity->id(),
+        ]);
+    }
+  }
+}
