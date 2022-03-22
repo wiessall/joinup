@@ -902,7 +902,7 @@ class JoinupSearchContext extends RawDrupalContext {
    * @Then I should not see search bar in header
    */
   public function failSearchExposedFilterHeader(): void {
-    $getAllInput = $this->getSession()->getPage()->findAll('css', 'nav.joinup-navbar .search-bar input#edit-keys');
+    $getAllInput = $this->getSession()->getPage()->findAll('css', 'nav.joinup-navbar .navbar-search input#edit-keys');
 
     if (count($getAllInput) > 0) {
       throw new \Exception('Search bar found in header.');
