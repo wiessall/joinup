@@ -942,6 +942,22 @@ class JoinupSearchContext extends RawDrupalContext {
   }
 
   /**
+   * Checks if search bar appears in homepage's header.
+   *
+   * @throws \Exception
+   *   Thrown when search bar does not appear in homepage's header.
+   *
+   * @Then I should see the search bar in homepage's header
+   */
+  public function assertSearchBarHeader(): void {
+    $getAllInput = $this->getSession()->getPage()->findAll('css', '.region-featured .search-bar .search-bar__input');
+
+    if (count($getAllInput) < 1) {
+      throw new \Exception('Search bar not found in homepage header.');
+    }
+  }
+
+  /**
    * Checks if search bar appears in navbar.
    *
    * @throws \Exception

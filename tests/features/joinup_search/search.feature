@@ -249,11 +249,17 @@ Feature: Global search
     When I click "advanced search"
     Then I should be on the advanced search page
     But I should not see the link "advanced search"
+    And I should not see search bar icon in navbar
     Given I visit the collection overview
     Then I should not see the link "advanced search"
     And I should see search bar icon in navbar
     Then I should toggle search bar in navbar
     And I should see search bar in navbar
+
+  Scenario: Homepage
+    # A search bar is shown on homepage's header.
+    Given I am on the homepage
+    Then I should see the search bar in homepage's header
 
   @wip
   # This tests shows a regression to be fixed in ISAICP-6917.
@@ -625,6 +631,15 @@ Feature: Global search
     When I visit the collection overview
     And I should see search bar icon in navbar
     Then I should toggle search bar in navbar
+    And I enter "funn" in the search bar
+    And I wait for AJAX to finish
+    Then I should see the following search suggestions:
+      | funni |
+      | funny |
+
+    # Check if search autocomplete works in homepage's header search bar.
+    Given I am on the homepage
+    Then I should see the search bar in homepage's header
     And I enter "funn" in the search bar
     And I wait for AJAX to finish
     Then I should see the following search suggestions:
