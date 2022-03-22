@@ -121,7 +121,7 @@ function ventuno_preprocess_region__header(&$variables) {
 
   $variables['hide_searchbar'] = FALSE;
   $route_name = \Drupal::routeMatch()->getRouteName();
-  if ($route_name == 'view.search.page_1' || \Drupal::service('path.matcher')->isFrontPage()) {
+  if ($route_name == 'view.search.page_1') {
     $variables['hide_searchbar'] = TRUE;
   }
 }
