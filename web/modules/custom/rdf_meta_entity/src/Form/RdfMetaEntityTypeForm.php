@@ -16,7 +16,7 @@ class RdfMetaEntityTypeForm extends BundleEntityFormBase {
    * {@inheritdoc}
    */
   public function form(array $form, FormStateInterface $form_state): array {
-    $form['description'] = $this->t('UI not supported yet. The form is added so that the field_ui routes work properly.');
+    $this->messenger()->addError($this->t('UI not supported yet. SPARQL Storage settings can still be set.'));
     return $form;
   }
 
