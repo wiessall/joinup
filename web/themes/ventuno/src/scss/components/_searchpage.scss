@@ -214,7 +214,7 @@
       justify-content: space-between;
       color: $primary;
       @include media-breakpoint-up(lg) {
-        margin-top: $spacer * 2; // 32px
+        margin-top: $spacer * 1.5; // 24px
       }
       .form-item-keys {
         flex-basis: 100%;

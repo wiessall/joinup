@@ -20,6 +20,9 @@ Feature: Site alerts
     Given I am not logged in
     And I am on the homepage
     Then I should see the text "Between 18:00 and 20:00 the site will be temporarily unavailable due to scheduled maintenance"
+    Then I click "advanced search"
+    Then I should be on the advanced search page
+    Then I should see the text "Between 18:00 and 20:00 the site will be temporarily unavailable due to scheduled maintenance"
 
     # Deactivate the alert without deleting it, so it can be used again later.
     Given I am logged in as a moderator

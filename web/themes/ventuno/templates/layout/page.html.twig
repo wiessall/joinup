@@ -42,45 +42,7 @@
 #}
 <div class="layout-container">
   <div class="section-header">
-    {# Temporary EC header, until this pattern is included in oe_bootstrap. #}
-    <div class="ec__header bcl-header">
-      <nav class="w-100 shadow-sm navbar">
-        <div class="container">
-          <a class="navbar-brand" href="https://ec.europa.eu/info/index_en">
-            <img src="https://cdn1.fpfis.tech.ec.europa.eu/ecl/v3.0.2/ec/images/logo/logo-ec--en.svg" alt="European Commission logo" width="100" height="25"/>
-          </a>
-        </div>
-      </nav>
-    </div>
-    <header role="banner" class="region-header">
-      {% set items = logged_in ? [{
-        breakpoint: "lg",
-        classes: ["order-1"],
-        id: "landing-pages",
-        icon: { name: "justify" },
-        label: "",
-        links: landing_page_links,
-      }] : [] %}
-      {% set items = items|merge([{
-        breakpoint: logged_in ? "" : "lg",
-        id: logged_in ? "account" : "navbar-toggler",
-        icon: {
-          name: logged_in ? "person-circle" : "justify",
-        },
-        label: logged_in ? user_name : "",
-        links: logged_in ? profile_links : anonymous_links,
-      }]) %}
-      {% include directory ~ '/templates/navigation/navbar.html.twig' with {
-        brand: {
-          src: base_path ~ directory ~ "/assets/images/logo.svg",
-          alt: "Joinup logo"|t,
-          link: front_page,
-        },
-        collapse_id: "main-navbar",
-        list_id: "main-navbar-list",
-        items: items,
-      } %}
-    </header>
+    {{ page.header }}
 
     {% if page.header_bottom %}
       <div class="region-header-bottom">
@@ -100,37 +62,28 @@
   {% endif %}
 
   {% if page.messages %}
-    <div class="region-messages">
+    <div class="container">
       {{ page.messages }}
     </div>
   {% endif %}
 
   {{ page.content_top }}
+  <div class="container">
+    <div class="row">
+      <main role="main" class="col-12{% if page.sidebar %} col-lg-8 offset-lg-1 order-1{% endif %}">
+        <div id="main-content" tabindex="-1"></div>{# link is in html.html.twig #}
+        <div class="layout-content">
+          {{ page.content }}
+        </div>{# /.layout-content #}
+      </main>
 
-  <main role="main" class="my-3 my-md-4">
-    <a id="main-content" tabindex="-1"></a>{# link is in html.html.twig #}
-    <div class="container">
-      <div class="row">
-          {% if page.sidebar|render|striptags|trim is not empty %}
-            <aside class="layout-sidebar col-12 col-lg-3" role="complementary">
-              {{  page.sidebar }}
-            </aside>
-            <div class="layout-content col-12 col-lg-9 col-xxl-8">
-              {{ page.content }}
-            </div>{# /.layout-content #}
-          {% else %}
-            <div class="layout-content">
-              <div class="row">
-                <div class="col-12 col-lg-10 col-xl-9 col-xxl-8">
-                  {{ page.content }}
-                </div>
-              </div>
-            </div>
-          {% endif %}
-      </div>
+      {% if page.sidebar|render|striptags|trim is not empty %}
+        <aside class="layout-sidebar col-12 col-lg-3">
+          {{ page.sidebar }}
+        </aside>
+      {% endif %}
     </div>
-  </main>
-
+  </div>
   {{ page.content_bottom }}
 
   {% if page.footer %}
