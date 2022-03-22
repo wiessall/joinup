@@ -3,6 +3,7 @@ langcode: en
 status: true
 dependencies:
   config:
+    - rdf_meta_entity.rid.eif_settings
     - sparql_entity_storage.graph.default
     - sparql_entity_storage.graph.draft
   module:
@@ -23,6 +24,10 @@ graph:
   default: 'http://joinup.eu/rdf_meta_entity/eif_settings/graph/published'
   draft: 'http://joinup.eu/rdf_meta_entity/eif_settings/graph/published'
 base_fields_mapping:
+  uuid:
+    value:
+      predicate: 'http://joinup.eu/rdf_meta_entity/eif_settings/base/uuid'
+      format: t_literal
   rid:
     target_id:
       predicate: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type'
@@ -31,6 +36,13 @@ base_fields_mapping:
     value:
       predicate: 'http://purl.org/dc/terms/title'
       format: t_literal
+  target:
+    target_id:
+      predicate: 'http://joinup.eu/rdf_meta_entity/fields/target_id'
+      format: resource
+    target_type:
+      predicate: 'http://joinup.eu/rdf_meta_entity/fields/target_type'
+      format: literal
   created:
     value:
       predicate: 'http://purl.org/dc/terms/issued'
@@ -39,16 +51,8 @@ base_fields_mapping:
     value:
       predicate: 'http://purl.org/dc/terms/modified'
       format: 'xsd:dateTime'
-  target:
+  graph:
     target_id:
-      predicate: 'http://joinup.eu/rdf_meta_entity/fields/target_id'
+      predicate: 'http://joinup.eu/rdf_meta_entity/fields/graph'
       format: resource
-    target_type:
-      predicate: 'http://joinup.eu/rdf_meta_entity/fields/target_type'
-      format: literal
-
-  uuid:
-    value:
-      predicate: 'http://joinup.eu/rdf_meta_entity/eif_settings/base/uuid'
-      format: t_literal
 entity_id_plugin: default
