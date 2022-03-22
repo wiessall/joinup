@@ -85,8 +85,8 @@ module.exports = {
       },
     },
     {
-      entry: path.resolve(outputFolder, "src/scss/search-bar.scss"),
-      dest: path.resolve(outputFolder, "assets/css/search-bar.css"),
+      entry: path.resolve(outputFolder, "src/scss/navbar-search.scss"),
+      dest: path.resolve(outputFolder, "assets/css/navbar-search.css"),
       options: {
         includePaths,
         sourceMap: "file",

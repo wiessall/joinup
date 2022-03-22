@@ -19,10 +19,10 @@ libraries-extend:
     - joinup_theme/cookie-extend
 
 libraries-override:
-  ventuno/search-bar:
+  ventuno/navbar-search:
     css:
       theme:
-        assets/css/search-bar.css: false
+        assets/css/navbar-search.css: false
 
 stylesheets-remove:
   - core/themes/stable/css/core/vertical-tabs.css

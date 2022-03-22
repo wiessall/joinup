@@ -1,7 +1,7 @@
 @import "../variables/variables--revamp";
 
-.search-bar {
-  &__input-container {
+.navbar-search {
+  .search-bar__input-container {
     background: $white;
     display: flex;
     border: 1px solid $gray-300;
@@ -18,7 +18,7 @@
     padding: .5rem;
     font-size: $font-size-sm;
   }
-  &__submit {
+  .search-bar__submit {
     border-style: none;
     color: $dark;
     background: transparent;
@@ -39,7 +39,7 @@
     }
   }
   .form-autocomplete,
-  &__submit {
+  .search-bar__submit {
     &:focus-visible {
       outline: $brand solid 2px;
       outline-offset: 0px;
@@ -52,7 +52,7 @@
   @media screen and (min-width: 576px) {
     right: 0;
   }
-  .search-bar {
+  .navbar-search {
     // On sm-mobile, full-width
     width: calc(100vw - 1rem);
     // On bigger screens, adjust position to right side of container

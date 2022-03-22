@@ -1,4 +1,4 @@
-.search-bar {
+.navbar-search {
   // Adjust position to right side of container
   @include media-breakpoint-between(xs, sm) {
     width: calc(100vw - 1rem);
