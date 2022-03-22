@@ -1,0 +1,4 @@
+services:
+ rdf_meta_entity.repository:
+    class: Drupal\rdf_meta_entity\RdfMetaEntityRepository
+    arguments: ['@entity_type.manager', '@meta_entity.cache']
