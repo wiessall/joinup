@@ -39,6 +39,14 @@ base_fields_mapping:
     value:
       predicate: 'http://purl.org/dc/terms/modified'
       format: 'xsd:dateTime'
+  target:
+    target_id:
+      predicate: 'http://joinup.eu/rdf_meta_entity/fields/target_id'
+      format: resource
+    target_type:
+      predicate: 'http://joinup.eu/rdf_meta_entity/fields/target_type'
+      format: literal
+
   uuid:
     value:
       predicate: 'http://joinup.eu/rdf_meta_entity/eif_settings/base/uuid'
