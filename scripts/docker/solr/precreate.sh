@@ -2,14 +2,14 @@
 
 set -x
 
-precreate-core ${SOLR_CORE} /solr
+precreate-core ${SEARCH_API_SERVER_SS_SOLR_CORE} /solr
 if [ "${DOCKER_RESTORE_PRODUCTION}" = "yes" ]
 then
   echo "Restoring Solr core from production snapshot."
   /opt/solr/bin/solr start -Dsolr.allowPaths=/solr/snapshot
   sleep 5
   RESTORE_COMMAND="http://localhost:8983/solr/$SOLR_CORE/replication?command="
-  /usr/bin/curl -sS "${RESTORE_COMMAND}restore&name=${SOLR_CORE}&location=/solr/snapshot"
+  /usr/bin/curl -sS "${RESTORE_COMMAND}restore&name=${SEARCH_API_SERVER_SS_SOLR_CORE}&location=/solr/snapshot"
 #  RESTORE_STATUS_OUTPUT=""
   until [[ "${RESTORE_STATUS_OUTPUT}" =~ '"status":"success"' ]]
   do
