@@ -111,9 +111,9 @@ function rdf_meta_entity_entity_insert(EntityInterface $entity) {
       ]);
       $rdf_meta_entity->save();
       \Drupal::logger('rdf_meta_entity')
-        ->debug("Auto-created %rdf_meta_entity_type_id meta-entity with ID @meta_entity_id for the %bundle %entity_type entity with ID @entity_id.", [
+        ->debug("Auto-created %rdf_meta_entity_type_id meta-entity with ID @rdf_meta_entity_id for the %bundle %entity_type entity with ID @entity_id.", [
           '%rdf_meta_entity_type_id' => $rdf_meta_entity_type_id,
-          '@meta_entity_id' => $rdf_meta_entity->id(),
+          '@rdf_meta_entity_id' => $rdf_meta_entity->id(),
           '%bundle' => $entity->bundle(),
           '%entity_type' => $entity->getEntityTypeId(),
           '@entity_id' => $entity->id(),
