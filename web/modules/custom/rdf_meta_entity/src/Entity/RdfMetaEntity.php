@@ -69,32 +69,10 @@ class RdfMetaEntity extends MetaEntity implements MetaEntityInterface {
 
   /**
    * {@inheritdoc}
-   *
-   * @todo Use interface.
    */
-  public function setName(string $name): RdfMetaEntity {
+  public function setName(string $name): RdfMetaEntityInterface {
     $this->set('label', $name);
     return $this;
-  }
-
-  /**
-   * Get weight.
-   *
-   * @todo This should be removed rdf terms have their own
-   * proper implementation.
-   */
-  public function getWeight() {
-    return 0;
-  }
-
-  /**
-   * Returns whether the bundle of the entity has a mapping for the uid key.
-   *
-   * @return bool
-   *   Whether the entity bundle has a value for the uid key mapping.
-   */
-  protected function hasUidMapping() {
-    return $this->hasFieldMapping('uid', 'target_id');
   }
 
   /**

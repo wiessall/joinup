@@ -5,7 +5,6 @@ declare(strict_types = 1);
 namespace Drupal\rdf_meta_entity\Entity;
 
 use Drupal\Core\Config\Entity\ConfigEntityBundleBase;
-use Drupal\meta_entity\Entity\MetaEntityTypeInterface;
 
 /**
  * Defines the Meta Entity Type configuration entity.
@@ -15,7 +14,7 @@ use Drupal\meta_entity\Entity\MetaEntityTypeInterface;
  *   label = @Translation("Rdf meta entity type"),
  *   handlers = {
  *     "form" = {
- *       "default" = "Drupal\Core\Entity\ContentEntityForm",
+ *       "default" = "Drupal\rdf_meta_entity\Form\RdfMetaEntityTypeForm",
  *     },
  *     "route_provider" = {
  *       "html" = "Drupal\Core\Entity\Routing\AdminHtmlRouteProvider",
@@ -41,7 +40,7 @@ use Drupal\meta_entity\Entity\MetaEntityTypeInterface;
  *   },
  * )
  */
-class RdfMetaEntityType extends ConfigEntityBundleBase implements MetaEntityTypeInterface {
+class RdfMetaEntityType extends ConfigEntityBundleBase implements RdfMetaEntityTypeInterface {
 
   /**
    * The entity ID.
