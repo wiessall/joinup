@@ -1871,8 +1871,7 @@ text_files:
     tegema
     tulema
     võima
-  protwords: |
-
+  protwords: ''
   accents: |
     # À => A
     "\u00C0" => "A"

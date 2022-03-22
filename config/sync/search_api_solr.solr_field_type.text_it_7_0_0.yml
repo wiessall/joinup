@@ -510,8 +510,7 @@ text_files:
     stessimo
     stessero
     stando
-  protwords: |
-
+  protwords: ''
   accents: |
     # À => A
     "\u00C0" => "A"
