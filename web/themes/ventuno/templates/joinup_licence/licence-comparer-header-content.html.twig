@@ -15,15 +15,12 @@
 {{ attach_library('ventuno/modals') }}
 
 {% set _modal_id = spdx_id|lower|replace({'.': '-'}) %}
-<button class="btn btn-link btn-md text-dark p-0" type="button" data-bs-toggle="modal" data-bs-target="#modal_{{ _modal_id }}">
+<button class="btn btn-link btn-md text-dark p-0" type="button" data-bs-toggle="modal" data-bs-target="#{{ _modal_id }}">
   {{ spdx_id }}
   <svg class="bi icon--fluid">
     <use xlink:href="{{ bcl_icon_path }}#info-circle"></use>
   </svg>
 </button>
-{% set _header %}
-  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{{ header.label|default('Close'|t) }}"></button>
-{% endset %}
 {% set _body %}
   <p class="h4">{{ title }}</p>
   <p>{{ description|striptags }}</p>
@@ -33,9 +30,11 @@
 {% endset %}
 {% if first_header %}
   {{ pattern('modal', {
-    modal_id: _modal_id,
+    attributes: {
+      id: _modal_id,
+    },
     size: 'lg',
-    header: _header,
+    show_close_button: true,
     body: _body,
     footer: _footer,
   }) }}
