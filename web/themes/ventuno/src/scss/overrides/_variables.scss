@@ -60,14 +60,14 @@ $eu-blue: #1b4ac3;
 $eu-light-blue: #f4f6fb;
 
 // Spacers
-// $spacers-extended: (
+$spacers-extended: (
 //   "1-5": $spacer * 0.375,
-//   "2-5": $spacer * 0.75,
+  "2-5": $spacer * 0.75,
 //   "3-5": $spacer * 1.25,
 //   "4-25": $spacer * 1.75,
 //   "4-5": $spacer * 2,
 //   "4-75": $spacer * 2.5,
-// );
+);
 
 // $spacers: map-merge($spacers, $spacers-extended);
 $gutters: $spacers;
