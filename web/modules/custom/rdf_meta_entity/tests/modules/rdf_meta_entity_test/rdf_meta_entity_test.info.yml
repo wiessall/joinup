@@ -1,0 +1,10 @@
+type: module
+name: 'RDF Meta Entity Test'
+description: 'Testing module for meta_entity module.'
+core_version_requirement: ^8 || ^9
+php: 7.1
+
+dependencies:
+  - meta_entity:meta_entity
+  - rdf_meta_entity:rdf_meta_entity
+  - sparql:entity_storagesparql_entity_storage
