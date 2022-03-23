@@ -243,15 +243,18 @@ Feature: Global search
     Then the page should show the tiles "Ulysses Freeman"
 
   Scenario: Advanced search
-    # An advanced search link is shown in the header, except on the search page.
+    # A search icon is shown in the navbar, except on the search page.
     Given I am on the homepage
     Then I should see the link "advanced search"
     When I click "advanced search"
     Then I should be on the advanced search page
     But I should not see the link "advanced search"
+    And I should not see search bar icon in navbar
     Given I visit the collection overview
     Then I should not see the link "advanced search"
-    And I should see search bar in header
+    And I should see search bar icon in navbar
+    Then I should toggle search bar in navbar
+    And I should see search bar in navbar
 
   @wip
   # This tests shows a regression to be fixed in ISAICP-6917.
@@ -591,7 +594,7 @@ Feature: Global search
 
     Given I am logged in as a user with the "authenticated" role
     When I visit the search page
-    And I should not see search bar in header
+    And I should not see search bar icon in navbar
     And I enter "funn" in the search bar
     And I wait for AJAX to finish
     Then I should see the following search suggestions:
@@ -619,8 +622,19 @@ Feature: Global search
     When I remove the following facet summary "News"
     Then the page should show only the tiles "Radio cooking collection"
 
-    # Check if search autocomplete works in header.
+    # Check if search autocomplete works in navbar.
     When I visit the collection overview
+    And I should see search bar icon in navbar
+    Then I should toggle search bar in navbar
+    And I enter "funn" in the search bar
+    And I wait for AJAX to finish
+    Then I should see the following search suggestions:
+      | funni |
+      | funny |
+
+    # Check if search autocomplete works in homepage's header search bar.
+    Given I am on the homepage
+    Then I should see the search bar in homepage's header
     And I enter "funn" in the search bar
     And I wait for AJAX to finish
     Then I should see the following search suggestions:
