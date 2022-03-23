@@ -8,8 +8,6 @@ use Drupal\KernelTests\KernelTestBase;
 use Drupal\Tests\sparql_entity_storage\Traits\SparqlConnectionTrait;
 use Drupal\entity_test\Entity\EntityTest;
 use Drupal\rdf_meta_entity\Entity\RdfMetaEntityType;
-use Drupal\rdf_meta_entity\Entity\RdfMetaEntityTypeInterface;
-use Drupal\rdf_meta_entity\RdfMetaEntityRepository;
 
 /**
  * Tests rdf meta entity.
@@ -51,7 +49,7 @@ class RdfMetaEntityTest extends KernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
     $this->setUpSparql();
 
