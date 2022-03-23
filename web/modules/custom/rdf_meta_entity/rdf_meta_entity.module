@@ -100,13 +100,12 @@ function rdf_meta_entity_entity_insert(EntityInterface $entity) {
     return;
   }
 
-  $rdf_meta_entity_type_ids = \Drupal::service('rdf_meta_entity.repository')
-    ->getTypesWithAutoCreation($entity);
+  $rdf_meta_entity_type_ids = \Drupal::service('rdf_meta_entity.repository')->getTypesWithAutoCreation($entity);
   if ($rdf_meta_entity_type_ids) {
     $storage = \Drupal::entityTypeManager()->getStorage('rdf_meta_entity');
     foreach ($rdf_meta_entity_type_ids as $rdf_meta_entity_type_id) {
       $rdf_meta_entity = $storage->create([
-        'type' => $rdf_meta_entity_type_id,
+        'rid' => $rdf_meta_entity_type_id,
         'target' => $entity,
       ]);
       $rdf_meta_entity->save();

@@ -37,7 +37,7 @@ use Drupal\sparql_entity_storage\SparqlGraphInterface;
  *   },
  * )
  */
-class RdfMetaEntity extends MetaEntity implements MetaEntityInterface {
+class RdfMetaEntity extends MetaEntity implements MetaEntityInterface, RdfMetaEntityInterface {
 
   /**
    * Entity bundle.
@@ -115,7 +115,7 @@ class RdfMetaEntity extends MetaEntity implements MetaEntityInterface {
     $fields['rid'] = BaseFieldDefinition::create('entity_reference')
       ->setLabel(t('Rdf Type'))
       ->setDescription(t('The Rdf type of this entity.'))
-      ->setSetting('target_type', 'rdf_type');
+      ->setSetting('target_type', 'rdf_meta_entity_type');
 
     return $fields;
   }
@@ -123,7 +123,7 @@ class RdfMetaEntity extends MetaEntity implements MetaEntityInterface {
   /**
    * {@inheritdoc}
    */
-  public static function loadOrCreate(string $rdf_meta_entity_type, ContentEntityInterface $target_entity): MetaEntityInterface {
+  public static function loadOrCreate(string $rdf_meta_entity_type, ContentEntityInterface $target_entity): RdfMetaEntityInterface {
     $storage = \Drupal::entityTypeManager()->getStorage('rdf_meta_entity');
     $ids = $storage->getQuery()
       ->condition('rid', $rdf_meta_entity_type)
@@ -142,7 +142,7 @@ class RdfMetaEntity extends MetaEntity implements MetaEntityInterface {
       ]);
     }
 
-    /** @var \Drupal\rdf_meta_entity\Entity\RdfMetaEntity $rdf_meta_entity */
+    /** @var \Drupal\rdf_meta_entity\Entity\RdfMetaEntityInterface $rdf_meta_entity */
     return $rdf_meta_entity;
   }
 
