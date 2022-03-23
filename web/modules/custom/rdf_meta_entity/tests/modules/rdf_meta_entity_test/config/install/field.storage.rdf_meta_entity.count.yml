@@ -1,0 +1,25 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - rdf_meta_entity
+id: rdf_meta_entity.count
+third_party_settings:
+  sparql_entity_storage:
+    mapping:
+      value:
+        predicate: 'http://joinup.eu/rdf_meta_entity/fields'
+        format: 'xsd:integer'
+field_name: count
+entity_type: rdf_meta_entity
+type: integer
+settings:
+  unsigned: false
+  size: normal
+module: core
+locked: false
+cardinality: 1
+translatable: false
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false
