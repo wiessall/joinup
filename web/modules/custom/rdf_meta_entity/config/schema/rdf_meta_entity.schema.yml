@@ -4,7 +4,7 @@ rdf_meta_entity.rid.*:
   type: bundle_entity_with_plural_labels
   label: 'Rdf type'
   mapping:
-    label:
+    name:
       type: label
       label: 'Label'
     rid:
