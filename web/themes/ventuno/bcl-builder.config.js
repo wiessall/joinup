@@ -34,6 +34,14 @@ module.exports = {
         sourceMap: true,
       },
     },
+    {
+      entry: path.resolve(outputFolder, "src/js/searchbox-focus.js"),
+      dest: path.resolve(outputFolder, "assets/js/searchbox-focus.js"),
+      options: {
+        minify: true,
+        sourceMap: true,
+      },
+    },
   ],
   styles: [
     {
@@ -77,13 +85,13 @@ module.exports = {
       },
     },
     {
-      entry: path.resolve(outputFolder, "src/scss/header-search-bar.scss"),
-      dest: path.resolve(outputFolder, "assets/css/header-search-bar.css"),
+      entry: path.resolve(outputFolder, "src/scss/navbar-search.scss"),
+      dest: path.resolve(outputFolder, "assets/css/navbar-search.css"),
       options: {
         includePaths,
         sourceMap: "file",
       },
-    },    
+    },
     {
       entry: path.resolve(outputFolder, "src/scss/close.scss"),
       dest: path.resolve(outputFolder, "assets/css/close.css"),
@@ -91,7 +99,7 @@ module.exports = {
         includePaths,
         sourceMap: "file",
       },
-    },    
+    },
     {
       entry: path.resolve(outputFolder, "src/scss/pager.scss"),
       dest: path.resolve(outputFolder, "assets/css/pager.css"),
@@ -99,7 +107,7 @@ module.exports = {
         includePaths,
         sourceMap: "file",
       },
-    },    
+    },
     {
       entry: path.resolve(outputFolder, "src/scss/tables.scss"),
       dest: path.resolve(outputFolder, "assets/css/tables.css"),
@@ -208,6 +216,16 @@ module.exports = {
         ),
       ],
       to: path.resolve(outputFolder, "assets/icons"),
+      options: { up: true },
+    },
+    {
+      from: [
+        path.resolve(
+          __dirname,
+          "src/images/logo-ec--en.svg"
+        ),
+      ],
+      to: path.resolve(outputFolder, "assets/images"),
       options: { up: true },
     },
     {

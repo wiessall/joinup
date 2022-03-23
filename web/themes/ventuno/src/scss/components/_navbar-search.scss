@@ -1,0 +1,68 @@
+.navbar-search {
+  // Adjust position to right side of container
+  @include media-breakpoint-between(xs, sm) {
+    width: calc(100vw - 1rem);
+  }
+  @include media-breakpoint-between(sm, md) {
+    width: calc(map-get($container-max-widths, sm) - 2.5rem);
+  }
+  @include media-breakpoint-between(md, lg) {
+    width: calc(map-get($container-max-widths, md) - 2.5rem);
+  }
+  @include media-breakpoint-between(lg, xl) {
+    width: calc(map-get($container-max-widths, lg) - 2.5rem);
+  }
+  @include media-breakpoint-between(xl, xxl) {
+    width: calc(map-get($container-max-widths, xl) - 2.5rem);
+  }
+  @include media-breakpoint-up(xxl) {
+    width: calc(map-get($container-max-widths, xxl) - 2.5rem);
+  }
+  .form-item {
+    width: 100%;
+    align-self: center;
+  }
+  .form-autocomplete {
+    border-style: none;
+    box-shadow: none;
+    padding: .25rem;
+    font-size: $font-size-sm;
+  }
+  .btn.btn-search {
+    @include font-icon-before("\E805", 1.2rem, $primary, inherit, 0);
+    width: 2.5rem;
+    border-style: none;
+    padding-left: $spacer * .5;
+    padding-right: $spacer * .25;
+    color: $dark;
+    background: transparent;
+    color: $primary;
+    font-size: 0!important;
+    margin-left: .125rem;
+    &:hover {
+      box-shadow: none;
+    }
+  }
+  .input-group {
+    border: 1px solid $gray-300;
+    border-radius: $border-radius-sm; // .2rem
+  }
+  .form-autocomplete,
+  &__submit {
+    &:focus-visible {
+      outline: $brand solid 2px;
+      outline-offset: 0px;
+    }
+  }
+  .form-item-results-count {
+    display: none;
+  }
+}
+#collapse-search {
+  @include media-breakpoint-between(xs, sm) {
+    right: -10.5px;
+  }
+  .accordion-body {
+    padding: $spacer * .5 $spacer * .5 0 $spacer * .5; // 8px 8px 0 8px
+  }
+}
