@@ -39,14 +39,14 @@ class RdfMetaEntityTest extends KernelTestBase {
    *
    * @var \Drupal\rdf_meta_entity\RdfMetaEntityRepository
    */
-  protected RdfMetaEntityRepository $repository;
+  protected $repository;
 
   /**
    * The RDF meta entity type entity.
    *
    * @var \Drupal\rdf_meta_entity\Entity\RdfMetaEntityTypeInterface
    */
-  protected RdfMetaEntityTypeInterface $rdfMetaEntityType;
+  protected $rdfMetaEntityType;
 
   /**
    * {@inheritdoc}
