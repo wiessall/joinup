@@ -21,7 +21,7 @@ class RdfMetaEntityReverseReferenceItemList extends MetaEntityReverseReferenceIt
     $entity = $this->getEntity();
     /** @var \Drupal\meta_entity\MetaEntityRepositoryInterface $repository */
     $repository = \Drupal::service('rdf_meta_entity.repository');
-    if ($rdf_meta_entity = $repository->getMetaEntityForEntity($entity, $this->getSetting('rdf_meta_entity_type_id'))) {
+    if (!$entity->isNew() && $rdf_meta_entity = $repository->getMetaEntityForEntity($entity, $this->getSetting('rdf_meta_entity_type_id'))) {
       $this->list[0] = $this->createItem(0, $rdf_meta_entity);
     }
   }
