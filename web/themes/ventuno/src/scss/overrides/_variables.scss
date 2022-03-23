@@ -69,7 +69,7 @@ $spacers-extended: (
 //   "4-75": $spacer * 2.5,
 );
 
-// $spacers: map-merge($spacers, $spacers-extended);
+$spacers: map-merge($spacers, $spacers-extended);
 $gutters: $spacers;
 
 // accordion
