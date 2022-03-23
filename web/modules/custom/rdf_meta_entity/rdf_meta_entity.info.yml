@@ -6,4 +6,5 @@ php: 7.1
 
 dependencies:
   - dynamic_entity_reference:dynamic_entity_reference (>=8.x-2.x)
-  - rdf_entity:rdf_entity (>=8.x-2.x)
+  - meta_entity:meta_entity (>=8.x-2.x)
+  - sparql_entity_storage:sparql_entity_storage
