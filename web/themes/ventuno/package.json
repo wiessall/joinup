@@ -12,6 +12,7 @@
     "build:scripts": "cross-env bcl-builder scripts",
     "build:styles": "cross-env bcl-builder styles",
     "build:copy": "cross-env bcl-builder copy",
+    "build:sprite": "cross-env bcl-builder sprite",
     "postinstall": "npm run build"
   },
   "devDependencies": {
