@@ -2,7 +2,7 @@
 
 declare(strict_types = 1);
 
-namespace Drupal\meta_entity;
+namespace Drupal\rdf_meta_entity;
 
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
@@ -10,7 +10,7 @@ use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Provides permissions for meta entities.
+ * Provides permissions for RDF meta entities.
  */
 class RdfMetaEntityPermissionProvider implements ContainerInjectionInterface {
 
