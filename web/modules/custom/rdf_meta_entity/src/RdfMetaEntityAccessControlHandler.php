@@ -2,7 +2,7 @@
 
 declare(strict_types = 1);
 
-namespace Drupal\meta_entity;
+namespace Drupal\rdf_meta_entity;
 
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
@@ -11,7 +11,7 @@ use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Session\AccountInterface;
 
 /**
- * Provides an access control handler for meta entity.
+ * Provides an access control handler for RDF meta entity.
  */
 class RdfMetaEntityAccessControlHandler extends EntityAccessControlHandler {
 

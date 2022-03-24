@@ -4,4 +4,4 @@ administer rdf meta entity:
   restrict access: true
 
 permission_callbacks:
-  - Drupal\meta_entity\MetaEntityPermissionProvider::getPermissions
+  - Drupal\rdf_meta_entity\RdfMetaEntityPermissionProvider::getPermissions
