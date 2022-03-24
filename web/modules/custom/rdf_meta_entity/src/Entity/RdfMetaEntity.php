@@ -25,6 +25,7 @@ use Drupal\sparql_entity_storage\SparqlGraphInterface;
  *     "route_provider" = {
  *       "html" = "Drupal\Core\Entity\Routing\AdminHtmlRouteProvider",
  *     },
+ *     "access" = "Drupal\rdf_meta_entity\RdfMetaEntityAccessControlHandler",
  *   },
  *   bundle_entity_type = "rdf_meta_entity_type",
  *   admin_permission = "administer rdf meta entity",
