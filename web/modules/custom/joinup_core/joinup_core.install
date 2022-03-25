@@ -93,8 +93,11 @@ function joinup_core_requirements($phase): array {
 }
 
 /**
- * Temporary UAT fix.
+ * Temporary ACC fix.
  */
 function joinup_core_update_108000(): void {
-  // Fix already applied in v1.79.1.
+  \Drupal::database()->update('authmap')
+    ->fields(['authname' => 'n0087n83'])
+    ->condition('uid', 1)
+    ->execute();
 }
