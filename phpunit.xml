@@ -6,6 +6,7 @@
          beStrictAboutOutputDuringTests="true"
          beStrictAboutChangesToGlobalState="true"
          printerClass="\Drupal\Tests\Listeners\HtmlOutputPrinter"
+         testdox="true"
          verbose="true">
   <php>
     <!-- Set error reporting to E_ALL. -->
