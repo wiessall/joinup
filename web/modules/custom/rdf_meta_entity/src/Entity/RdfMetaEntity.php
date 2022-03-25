@@ -32,7 +32,7 @@ use Drupal\sparql_entity_storage\SparqlGraphInterface;
  *   field_ui_base_route = "entity.rdf_meta_entity_type.edit_form",
  *   entity_keys = {
  *     "id" = "id",
- *     "bundle" = "rid",
+ *     "bundle" = "type",
  *     "label" = "label",
  *     "uuid" = "uuid",
  *   },
@@ -41,40 +41,11 @@ use Drupal\sparql_entity_storage\SparqlGraphInterface;
 class RdfMetaEntity extends MetaEntity implements MetaEntityInterface, RdfMetaEntityInterface {
 
   /**
-   * Entity bundle.
-   *
-   * @var string
-   */
-  protected $rid;
-
-  /**
-   * Get the bundle of the entity.
-   */
-  public function getRid() {
-    return $this->get('rid')->value;
-  }
-
-  /**
    * Get the bundle from the entity.
    */
-  public function getType() {
-    return $this->bundle();
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getName() {
-    return $this->label();
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function setName(string $name): RdfMetaEntityInterface {
-    $this->set('label', $name);
-    return $this;
-  }
+//  public function getType() {
+//    return $this->bundle();
+//  }
 
   /**
    * Returns whether the entity bundle has mapping for a certain field column.
@@ -87,10 +58,10 @@ class RdfMetaEntity extends MetaEntity implements MetaEntityInterface, RdfMetaEn
    * @return bool
    *   TRUE if the mapping is set, FALSE otherwise.
    */
-  protected function hasFieldMapping($field_name, $column = 'value') {
-    $mapping = SparqlMapping::loadByName($this->getEntityTypeId(), $this->bundle());
-    return $mapping && !empty($mapping->getMapping($field_name, $column)['predicate']);
-  }
+//  protected function hasFieldMapping($field_name, $column = 'value') {
+//    $mapping = SparqlMapping::loadByName($this->getEntityTypeId(), $this->bundle());
+//    return $mapping && !empty($mapping->getMapping($field_name, $column)['predicate']);
+//  }
 
   /**
    * {@inheritdoc}
@@ -113,7 +84,7 @@ class RdfMetaEntity extends MetaEntity implements MetaEntityInterface, RdfMetaEn
    */
   public static function baseFieldDefinitions(EntityTypeInterface $entity_type): array {
     $fields = parent::baseFieldDefinitions($entity_type);
-    $fields['rid'] = BaseFieldDefinition::create('entity_reference')
+    $fields['type'] = BaseFieldDefinition::create('entity_reference')
       ->setLabel(t('Rdf Type'))
       ->setDescription(t('The Rdf type of this entity.'))
       ->setSetting('target_type', 'rdf_meta_entity_type');
@@ -127,7 +98,7 @@ class RdfMetaEntity extends MetaEntity implements MetaEntityInterface, RdfMetaEn
   public static function loadOrCreate(string $rdf_meta_entity_type, ContentEntityInterface $target_entity): RdfMetaEntityInterface {
     $storage = \Drupal::entityTypeManager()->getStorage('rdf_meta_entity');
     $ids = $storage->getQuery()
-      ->condition('rid', $rdf_meta_entity_type)
+      ->condition('type', $rdf_meta_entity_type)
       ->condition('target.target_type', $target_entity->getEntityTypeId())
       ->condition('target.target_id', $target_entity->id())
       ->execute();
@@ -138,7 +109,7 @@ class RdfMetaEntity extends MetaEntity implements MetaEntityInterface, RdfMetaEn
     }
     else {
       $rdf_meta_entity = $storage->create([
-        'rid' => $rdf_meta_entity_type,
+        'type' => $rdf_meta_entity_type,
         'target' => $target_entity,
       ]);
     }
