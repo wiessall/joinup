@@ -3,7 +3,7 @@ status: true
 dependencies:
   - rdf_meta_entity
   - sparql_entity_storage
-rid: visit_count
-name: 'Visit count'
+id: visit_count
+label: 'Visit count'
 description: 'Holds information about the visit count.'
 mapping: {  }
