@@ -17,7 +17,7 @@ use Drupal\sparql_entity_storage\SparqlGraphInterface;
  *
  * @ContentEntityType(
  *   id = "rdf_meta_entity",
- *   label = @Translation("Rdf meta entity"),
+ *   label = @Translation("RDF meta entity"),
  *   label_collection = @Translation("Meta entities"),
  *   bundle_label = @Translation("Meta entity type"),
  *   handlers = {

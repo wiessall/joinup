@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Rdf meta entity module main functionality.
+ * RDF meta entity module main functionality.
  */
 
 declare(strict_types = 1);
