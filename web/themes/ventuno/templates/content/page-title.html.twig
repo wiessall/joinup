@@ -4,11 +4,8 @@
  * Template for the page title.
  */
 #}
-{%
-  set classes = ['page-title']
-%}
 {{ title_prefix }}
 {% if title %}
-  <h1{{ title_attributes.addClass(classes) }}>{{ title }}</h1>
+  <h1{{ title_attributes.addClass('fs-3 mt-4') }}>{{ title }}</h1>
 {% endif %}
 {{ title_suffix }}

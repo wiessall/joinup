@@ -18,6 +18,12 @@ libraries-extend:
   oe_webtools_cookie_consent/oe_webtools_cookie_consent.cck:
     - joinup_theme/cookie-extend
 
+libraries-override:
+  ventuno/navbar-search:
+    css:
+      theme:
+        assets/css/navbar-search.css: false
+
 stylesheets-remove:
   - core/themes/stable/css/core/vertical-tabs.css
 

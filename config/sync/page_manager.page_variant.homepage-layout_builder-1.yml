@@ -85,7 +85,7 @@ variant_settings:
             label_display: '0'
             provider: layout_builder_block
             context_mapping: {  }
-            text: "<p><a class=\"btn btn-secondary\" href=\"/collection/joinup/help-videos\">How to video</a>&nbsp;<a class=\"btn btn-secondary js-tour-start-button\" href=\"\" data-drupal-tour-link=\"\">Guided tour</a>&nbsp;<a class=\"btn btn-secondary\" href=\"/collection/joinup/faq\">FAQ</a></p>\r\n"
+            text: "<p><a class=\"btn btn-secondary\" href=\"/collection/joinup/help-videos\">How to video</a>&nbsp;<button class=\"btn btn-secondary js-tour-start-button\" type=\"button\" data-drupal-tour-link=\"\">Guided tour</button>&nbsp;<a class=\"btn btn-secondary\" href=\"/collection/joinup/faq\">FAQ</a></p>\r\n"
             format: full_html
           weight: 0
           additional:

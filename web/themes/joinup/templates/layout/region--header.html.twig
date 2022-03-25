@@ -19,7 +19,7 @@
     <nav class="w-100 shadow-sm navbar">
       <div class="container">
         <a class="navbar-brand" href="https://ec.europa.eu/info/index_en">
-          <img src="https://cdn1.fpfis.tech.ec.europa.eu/ecl/v3.0.2/ec/images/logo/logo-ec--en.svg" alt="European Commission logo"/>
+          <img src="{{ path('<front>') }}themes/ventuno/assets/images/logo-ec--en.svg" alt="European Commission logo"/>
         </a>
       </div>
     </nav>
@@ -30,7 +30,7 @@
       classes: ["order-1"],
       id: "landing-pages",
       icon: { name: "justify" },
-      label: "",
+      label: "Toggle menu"|t,
       links: landing_page_links,
     }] : [] %}
     {% set items = items|merge([{
@@ -39,8 +39,18 @@
       icon: {
         name: logged_in ? "person-circle" : "justify",
       },
-      label: logged_in ? user_name : "",
+      label: logged_in ? user_name : "Toggle menu"|t,
       links: logged_in ? profile_links : anonymous_links,
+    },{
+      type: "search",
+      breakpoint: "",
+      classes: ["order-1 accordion-search"],
+      id: "search",
+      icon: {
+        name: "search",
+      },
+      label: "Toggle search box"|t,
+      links: search,
     }]) %}
     {% include directory ~ '/../ventuno/templates/navigation/navbar.html.twig' with {
       brand: {
