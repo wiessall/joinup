@@ -1,5 +1,5 @@
 type: module
-name: 'Rdf Meta Entity'
+name: 'RDF Meta Entity'
 description: 'Allows to store metadata about an RDF entity outside its storage.'
 core_version_requirement: ^8 || ^9
 php: 7.1

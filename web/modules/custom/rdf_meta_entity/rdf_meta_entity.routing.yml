@@ -2,6 +2,6 @@ rdf_meta_entity.type.admin:
   path: '/admin/structure/rdf-meta-entity'
   defaults:
     _controller: '\Drupal\system\Controller\SystemController::systemAdminMenuBlockPage'
-    _title: 'Rdf Meta Entity'
+    _title: 'RDF Meta Entity'
   requirements:
     _permission: 'administer rdf meta entity'
