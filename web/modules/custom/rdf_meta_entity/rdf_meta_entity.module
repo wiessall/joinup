@@ -24,7 +24,7 @@ function rdf_meta_entity_entity_delete(EntityInterface $entity): void {
     return;
   }
 
-  /** @var \Drupal\rdf_meta_entity\RdfMetaEntityRepository $repository */
+  /** @var \Drupal\meta_entity\MetaEntityRepositoryInterface $repository */
   $repository = \Drupal::service('rdf_meta_entity.repository');
   if ($rdf_meta_entities = $repository->getMetaEntitiesForEntity($entity)) {
     \Drupal::entityTypeManager()

@@ -5,12 +5,7 @@ declare(strict_types = 1);
 namespace Drupal\rdf_meta_entity\Entity;
 
 use Drupal\Core\Entity\ContentEntityInterface;
-use Drupal\Core\Entity\EntityTypeInterface;
-use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\meta_entity\Entity\MetaEntity;
-use Drupal\meta_entity\Entity\MetaEntityInterface;
-use Drupal\sparql_entity_storage\Entity\SparqlMapping;
-use Drupal\sparql_entity_storage\SparqlGraphInterface;
 
 /**
  * Defines the meta entity content entity class with SPARQL storage backend.
@@ -38,59 +33,7 @@ use Drupal\sparql_entity_storage\SparqlGraphInterface;
  *   },
  * )
  */
-class RdfMetaEntity extends MetaEntity implements MetaEntityInterface, RdfMetaEntityInterface {
-
-  /**
-   * Get the bundle from the entity.
-   */
-//  public function getType() {
-//    return $this->bundle();
-//  }
-
-  /**
-   * Returns whether the entity bundle has mapping for a certain field column.
-   *
-   * @param string $field_name
-   *   The field name.
-   * @param string $column
-   *   The field column. Defaults to 'value'.
-   *
-   * @return bool
-   *   TRUE if the mapping is set, FALSE otherwise.
-   */
-//  protected function hasFieldMapping($field_name, $column = 'value') {
-//    $mapping = SparqlMapping::loadByName($this->getEntityTypeId(), $this->bundle());
-//    return $mapping && !empty($mapping->getMapping($field_name, $column)['predicate']);
-//  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function isPublished() {
-    /** @var \Drupal\sparql_entity_storage\SparqlEntityStorageInterface $storage */
-    $storage = $this->entityTypeManager()->getStorage($this->getEntityTypeId());
-    $published_graph = $storage->getGraphHandler()->getBundleGraphUri($this->getEntityTypeId(), $this->bundle(), SparqlGraphInterface::DEFAULT);
-    $entity_graph_name = $this->get('graph')->target_id;
-    // If no graph is yet set, get the default graph for the entity.
-    if (empty($entity_graph_name)) {
-      $entity_graph_name = $storage->getGraphHandler()->getDefaultGraphId($this->getEntityTypeId());
-    }
-    $entity_graph = $storage->getGraphHandler()->getBundleGraphUri($this->getEntityTypeId(), $this->bundle(), $entity_graph_name);
-    return ($entity_graph === $published_graph);
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public static function baseFieldDefinitions(EntityTypeInterface $entity_type): array {
-    $fields = parent::baseFieldDefinitions($entity_type);
-    $fields['type'] = BaseFieldDefinition::create('entity_reference')
-      ->setLabel(t('Rdf Type'))
-      ->setDescription(t('The Rdf type of this entity.'))
-      ->setSetting('target_type', 'rdf_meta_entity_type');
-
-    return $fields;
-  }
+class RdfMetaEntity extends MetaEntity implements RdfMetaEntityInterface {
 
   /**
    * {@inheritdoc}
