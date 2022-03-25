@@ -5,11 +5,11 @@ declare(strict_types = 1);
 namespace Drupal\Tests\rdf_meta_entity\Kernel;
 
 use Drupal\KernelTests\KernelTestBase;
-use Drupal\rdf_meta_entity\Entity\RdfMetaEntity;
 use Drupal\Tests\sparql_entity_storage\Traits\SparqlConnectionTrait;
-use Drupal\entity_test\Entity\EntityTest;
-use Drupal\rdf_meta_entity\Entity\RdfMetaEntityType;
 use Drupal\Tests\user\Traits\UserCreationTrait;
+use Drupal\entity_test\Entity\EntityTest;
+use Drupal\rdf_meta_entity\Entity\RdfMetaEntity;
+use Drupal\rdf_meta_entity\Entity\RdfMetaEntityType;
 use Drupal\user\Entity\Role;
 
 /**
@@ -47,7 +47,7 @@ class RdfMetaEntityTest extends KernelTestBase {
   /**
    * The RDF meta entity type entity.
    *
-   * @var \Drupal\rdf_meta_entity\Entity\RdfMetaEntityTypeInterface
+   * @var \Drupal\meta_entity\Entity\MetaEntityTypeInterface
    */
   protected $rdfMetaEntityType;
 
