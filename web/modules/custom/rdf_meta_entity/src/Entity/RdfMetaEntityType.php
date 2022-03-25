@@ -12,7 +12,7 @@ use Drupal\meta_entity\Entity\MetaEntityType;
  *
  * @ConfigEntityType(
  *   id = "rdf_meta_entity_type",
- *   label = @Translation("Rdf meta entity type"),
+ *   label = @Translation("RDF meta entity type"),
  *   handlers = {
  *     "form" = {
  *       "default" = "Drupal\rdf_meta_entity\Form\RdfMetaEntityTypeForm",
