@@ -3,7 +3,7 @@ status: true
 dependencies:
   config:
     - field.storage.rdf_meta_entity.count
-    - rdf_meta_entity.rid.visit_count
+    - rdf_meta_entity.type.visit_count
 id: rdf_meta_entity.visit_count.count
 field_name: count
 entity_type: rdf_meta_entity

@@ -1,32 +1,3 @@
-# Schema for the configuration files of the rdf_entity module.
-
-rdf_meta_entity.rid.*:
-  type: bundle_entity_with_plural_labels
-  label: 'Rdf type'
-  mapping:
-    name:
-      type: label
-      label: 'Label'
-    rid:
-      type: string
-      label: 'Machine readable name'
-    description:
-      type: text
-      label: 'Description'
-    mapping:
-      type: sequence
-      label: 'Target entity types'
-      sequence:
-        type: sequence
-        label: 'Target entity type bundles'
-        sequence:
-          type: mapping
-          label: 'Target bundle settings'
-          mapping:
-            field_name:
-              type: string
-              label: 'Reverse reference field name'
-              nullable: true
-            auto_create:
-              type: boolean
-              label: 'Auto-create meta entity'
+rdf_meta_entity.type.*:
+  type: meta_entity.type.*
+  label: 'Rdf meta entity type'

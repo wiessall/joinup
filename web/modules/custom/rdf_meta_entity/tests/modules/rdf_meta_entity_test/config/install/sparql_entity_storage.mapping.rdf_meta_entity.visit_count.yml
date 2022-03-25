@@ -2,7 +2,7 @@ langcode: en
 status: true
 dependencies:
   config:
-    - rdf_meta_entity.rid.visit_count
+    - rdf_meta_entity.type.visit_count
     - sparql_entity_storage.graph.default
 id: rdf_meta_entity.visit_count
 entity_type_id: rdf_meta_entity
@@ -15,7 +15,7 @@ base_fields_mapping:
     value:
       predicate: 'http://joinup.eu/rdf_meta_entity/visit_count/base/uuid'
       format: t_literal
-  rid:
+  type:
     target_id:
       predicate: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type'
       format: resource
