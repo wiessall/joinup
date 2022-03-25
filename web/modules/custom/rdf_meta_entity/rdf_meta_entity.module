@@ -49,7 +49,7 @@ function rdf_meta_entity_rdf_meta_entity_presave(RdfMetaEntityInterface $rdf_met
   if ($target_entity = $rdf_meta_entity->get('target')->entity) {
     $target_entity_singular_label = $target_entity->getEntityType()
       ->getSingularLabel();
-    $bundle_label = $rdf_meta_entity->get('rid')->entity->label();
+    $bundle_label = $rdf_meta_entity->get('type')->entity->label();
     $rdf_meta_entity->label->value = (string) t('@entity @type (@bundle)', [
       '@bundle' => $bundle_label,
       '@entity' => $target_entity->label(),
@@ -105,12 +105,12 @@ function rdf_meta_entity_entity_insert(EntityInterface $entity) {
     $storage = \Drupal::entityTypeManager()->getStorage('rdf_meta_entity');
     foreach ($rdf_meta_entity_type_ids as $rdf_meta_entity_type_id) {
       $rdf_meta_entity = $storage->create([
-        'rid' => $rdf_meta_entity_type_id,
+        'type' => $rdf_meta_entity_type_id,
         'target' => $entity,
       ]);
       $rdf_meta_entity->save();
       \Drupal::logger('rdf_meta_entity')
-        ->debug("Auto-created %rdf_meta_entity_type_id meta-entity with ID @rdf_meta_entity_id for the %bundle %entity_type entity with ID @entity_id.", [
+        ->debug("Auto-created %rdf_meta_entity_type_id rdf-meta-entity with ID @rdf_meta_entity_id for the %bundle %entity_type entity with ID @entity_id.", [
           '%rdf_meta_entity_type_id' => $rdf_meta_entity_type_id,
           '@rdf_meta_entity_id' => $rdf_meta_entity->id(),
           '%bundle' => $entity->bundle(),

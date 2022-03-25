@@ -5,6 +5,7 @@ declare(strict_types = 1);
 namespace Drupal\rdf_meta_entity\Entity;
 
 use Drupal\Core\Config\Entity\ConfigEntityBundleBase;
+use Drupal\meta_entity\Entity\MetaEntityType;
 
 /**
  * Defines the Meta Entity Type configuration entity.
@@ -23,58 +24,21 @@ use Drupal\Core\Config\Entity\ConfigEntityBundleBase;
  *   },
  *   admin_permission = "administer rdf meta entity",
  *   bundle_of = "rdf_meta_entity",
- *   config_prefix = "rid",
+ *   config_prefix = "type",
  *   entity_keys = {
- *     "id" = "rid",
- *     "label" = "name",
+ *     "id" = "id",
+ *     "label" = "label",
  *   },
  *   links = {
  *     "collection" = "/admin/structure/rdf-meta-entity",
  *     "edit-form" = "/admin/structure/rdf-meta-entity/manage/{rdf_meta_entity_type}",
  *   },
  *   config_export = {
- *     "rid",
- *     "name",
+ *     "id",
+ *     "label",
  *     "description",
  *     "mapping",
  *   },
  * )
  */
-class RdfMetaEntityType extends ConfigEntityBundleBase implements RdfMetaEntityTypeInterface {
-
-  /**
-   * The entity ID.
-   *
-   * @var string
-   */
-  protected $rid;
-
-  /**
-   * The human-readable name of the meta entity type.
-   *
-   * @var string
-   */
-  protected $label;
-
-  /**
-   * The description of the meta entity type.
-   *
-   * @var string
-   */
-  protected $description;
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getDescription(): ?string {
-    return $this->description;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function id() {
-    return $this->rid;
-  }
-
-}
+class RdfMetaEntityType extends MetaEntityType implements RdfMetaEntityTypeInterface { }

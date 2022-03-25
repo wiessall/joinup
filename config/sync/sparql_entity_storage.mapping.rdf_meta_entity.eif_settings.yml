@@ -3,7 +3,7 @@ langcode: en
 status: true
 dependencies:
   config:
-    - rdf_meta_entity.rid.eif_settings
+    - rdf_meta_entity.type.eif_settings
     - sparql_entity_storage.graph.default
     - sparql_entity_storage.graph.draft
   module:
