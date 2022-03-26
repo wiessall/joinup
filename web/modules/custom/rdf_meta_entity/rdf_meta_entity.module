@@ -11,7 +11,6 @@ use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Field\BaseFieldDefinition;
-use Drupal\rdf_meta_entity\Entity\RdfMetaEntityInterface;
 use Drupal\rdf_meta_entity\RdfMetaEntityReverseReferenceItemList;
 
 /**
@@ -30,31 +29,6 @@ function rdf_meta_entity_entity_delete(EntityInterface $entity): void {
     \Drupal::entityTypeManager()
       ->getStorage('rdf_meta_entity')
       ->delete($rdf_meta_entities);
-  }
-}
-
-/**
- * Implements hook_ENTITY_TYPE_presave().
- *
- * Sets a standard label if there's no current label.
- */
-function rdf_meta_entity_rdf_meta_entity_presave(RdfMetaEntityInterface $rdf_meta_entity): void {
-  // If the meta entity has already a label we'll not overwrite it. Also, don't
-  // compute a label if the target entity is not set.
-  if (!empty($rdf_meta_entity->label()) || $rdf_meta_entity->get('target')->isEmpty()) {
-    return;
-  }
-
-  /** @var \Drupal\Core\Entity\ContentEntityInterface $target_entity */
-  if ($target_entity = $rdf_meta_entity->get('target')->entity) {
-    $target_entity_singular_label = $target_entity->getEntityType()
-      ->getSingularLabel();
-    $bundle_label = $rdf_meta_entity->get('type')->entity->label();
-    $rdf_meta_entity->label->value = (string) t('@entity @type (@bundle)', [
-      '@bundle' => $bundle_label,
-      '@entity' => $target_entity->label(),
-      '@type' => $target_entity_singular_label,
-    ]);
   }
 }
 
