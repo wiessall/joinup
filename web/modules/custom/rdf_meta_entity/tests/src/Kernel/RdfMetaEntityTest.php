@@ -178,6 +178,9 @@ class RdfMetaEntityTest extends KernelTestBase {
     $this->assertTrue($rdf_meta_entity->access('view', $account));
     $this->assertTrue($rdf_meta_entity->access('update', $account));
     $this->assertTrue($rdf_meta_entity->access('delete', $account));
+
+    // Clean up the entity.
+    $rdf_meta_entity->delete();
   }
 
 }
