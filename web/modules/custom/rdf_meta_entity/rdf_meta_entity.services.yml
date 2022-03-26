@@ -2,7 +2,7 @@ services:
 
   rdf_meta_entity.repository:
     class: Drupal\meta_entity\MetaEntityRepository
-    arguments: ['@entity_type.manager', '@meta_entity.cache']
+    arguments: ['@entity_type.manager', '@rdf_meta_entity.cache', 'rdf_meta_entity']
 
   rdf_meta_entity.cache:
     class: Drupal\Core\Cache\BackendChain
