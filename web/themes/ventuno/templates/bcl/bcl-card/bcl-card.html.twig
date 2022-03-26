@@ -138,7 +138,7 @@
     {{- _card_header -}}
     {%- if _badges is not empty and _badges is iterable -%}
       {% for _badge in _badges %}
-        {% include '@oe-bcl/bcl-badge/badge.html.twig' with _badge only %}
+        {% include '@oe-bcl/badge' with _badge only %}
       {% endfor %}
     {%- endif -%}
   </div>
