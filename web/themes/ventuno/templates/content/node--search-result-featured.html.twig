@@ -34,7 +34,7 @@
       }]) %}
     {% endif %}
   {% endfor %}
-  {% include directory ~ '/templates/bcl-card/card.html.twig' with {
+  {{ pattern('card', {
     attributes: create_attribute().addClass(['border-0', 'border-bottom', 'pb-3', 'mb-3']),
     horizontal: true,
     horizontal_grid: {
@@ -54,5 +54,5 @@
     },
     content: metadata,
     image: image,
-  } %}
+  }) }}
 {% endblock %}
