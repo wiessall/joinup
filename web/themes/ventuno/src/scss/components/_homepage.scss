@@ -15,6 +15,7 @@
       font-size: 1.25rem; // 20px
       padding-top: .75em;
       margin-bottom: 1em;
+      line-height: 1.2;
     }
   }
   .field--name-field-topic {
@@ -95,10 +96,18 @@
     }
     .search-bar {
       .search-bar__input {
+        padding-left: $spacer * 1.5;
+        padding-right: $spacer * 1.5;
+        padding-top: $spacer;
+        padding-bottom: $spacer;
         font-size: $font-size-base;
         border-style: none;
         border-top-left-radius: $border-radius-pill;
         border-bottom-left-radius: $border-radius-pill;
+        @include media-breakpoint-up(md) {
+          padding-top: 0;
+          padding-bottom: 0;
+        }
       }
       .btn-search {
         @include font-icon-before("\E805", 1.2rem, $primary, inherit, 0);
@@ -107,6 +116,10 @@
         color: $dark;
         background-color: $white;
         font-size: 0;
+        padding: $spacer * .425 $spacer;
+        &:hover {
+          box-shadow: none;
+        }
       }
     }
   }
@@ -256,7 +269,7 @@
         }
         .date--month {
           line-height: 1.4;
-          font-size: $h5-font-size; 
+          font-size: $h5-font-size;
         }
       }
       .dated-listing--content {
