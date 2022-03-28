@@ -5,6 +5,7 @@ declare(strict_types = 1);
 namespace Drupal\joinup\Context;
 
 use Behat\Gherkin\Node\TableNode;
+use Behat\Testwork\Hook\Scope\BeforeSuiteScope;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\joinup\Chip;
 use Drupal\joinup\Traits\BrowserCapabilityDetectionTrait;
@@ -323,14 +324,15 @@ class JoinupCoreContext extends RawDrupalContext {
   }
 
   /**
-   * Tests that the cli timezone is the same as Drupal's.
+   * Sets the default timezone before a suite.
    *
-   * @Then /^cli should use the same timezone as Drupal$/
+   * @param \Behat\Testwork\Hook\Scope\BeforeSuiteScope $before_suite
+   *   Contains information about the suite.
+   *
+   * @BeforeSuite
    */
-  public function cliShouldUseTheSameTimezoneAsDrupal(): void {
-    $cli_timezone = date_default_timezone_get();
-    $drupal_timezone = \Drupal::configFactory()->getEditable('system.date')->get('timezone.default');
-    Assert::assertSame($drupal_timezone, $cli_timezone);
+  public static function defaultTimezoneSet(BeforeSuiteScope $before_suite): void {
+    date_default_timezone_set('Europe/Brussels');
   }
 
 }
