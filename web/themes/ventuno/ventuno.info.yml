@@ -35,7 +35,3 @@ regions:
   content: Content
   content_bottom: 'Content bottom'
   footer: Footer
-
-openeuropa:
-  bootstrap_component_library:
-    components_location: templates/bcl
