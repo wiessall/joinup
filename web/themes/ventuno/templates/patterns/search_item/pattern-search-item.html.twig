@@ -1,0 +1,41 @@
+{#
+/**
+ * @file
+ * Search item pattern.
+ */
+#}
+{% spaceless %}
+
+  {# Parameters:
+    - badges (array of badge object) (default: [])
+    - title (string) (default: '')
+    - text (string) (default: '')
+    - metadata (string) (default: '')
+  #}
+
+  {% set _badges = badges|default([]) %}
+  {% set _title = title|default('') %}
+  {% set _text = text|default('') %}
+  {% set _metadata = metadata|default('') %}
+
+  <div class="border-0 border-bottom pb-3 mb-3 card">
+    {%- if _badges is not empty and _badges is iterable -%}
+      <div class="card-header border-0 bg-transparent p-0">
+        {% for _badge in _badges %}
+          {% include '@oe-bcl/badge' with _badge only %}
+        {% endfor %}
+      </div>
+    {%- endif -%}
+    <div class="card-body p-0">
+      <h2 class="card-title">
+        <a class="fs-5 fw-normal text-underline-hover mb-3" href="{{ url }}">{{ title }}</a>
+      </h2>
+      <p class="card-text">
+        {{ text }}
+      </p>
+      <p>
+        {{ metadata }}
+      </p>
+    </div>
+  </div>
+{% endspaceless %}

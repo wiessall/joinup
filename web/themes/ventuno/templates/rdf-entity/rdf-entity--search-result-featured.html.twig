@@ -30,20 +30,11 @@
       }]) %}
     {% endif %}
   {% endfor %}
-  {{ pattern('card', {
-    attributes: create_attribute().addClass(['border-0', 'border-bottom', 'pb-3', 'mb-3']),
-    horizontal: true,
-    horizontal_grid: {
-      left_col_classes: 'col-12 col-md-2',
-      right_col_classes: 'col-12 col-md-10',
-      gutter: '1',
-    },
-    extra_classes_header: 'border-0 bg-transparent p-0 px-md-3',
-    extra_classes_body: 'p-0 px-md-3',
+  {{ pattern('search_item', {
+    image: image,
     badges: badges,
     title: title,
-    text: body,
-    content: metadata,
-    image: image,
-  }) }}
+    text: text,
+    metadata: metadata,
+  }, 'featured') }}
 {% endblock %}
