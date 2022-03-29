@@ -126,7 +126,7 @@ Feature: As a site moderator I am able to import RDF files.
       | state | validated              |
     And solutions:
       | uri                           | title                       | collection | description         | state     | modification date |
-      | http://example.com/solution/2 | Local version of Solution 2 | NIO        | Initial description | validated | 15-07-2018        |
+      | http://example.com/solution/2 | Local version of Solution 2 | NIO        | Initial description | validated | 15-07-2018 +0200  |
     And the following solution user membership:
       | solution                    | user     | roles                      | state  |
       | Local version of Solution 2 | CS Owner | facilitator, administrator | active |
@@ -136,8 +136,8 @@ Feature: As a site moderator I am able to import RDF files.
       | description       | No one cares.                              |
       | access url        | http://example.com/file.zip                |
       | parent            | Local version of Solution 2                |
-      | creation date     | 15-07-2018                                 |
-      | modification date | 15-07-2018                                 |
+      | creation date     | 15-07-2018 +0200                           |
+      | modification date | 15-07-2018 +0200                           |
     And the following collection user membership:
       | collection | user     | roles                      | state  |
       | NIO        | CS Owner | facilitator, administrator | active |
@@ -145,9 +145,9 @@ Feature: As a site moderator I am able to import RDF files.
     # that it will detect changes in the first attempt.
     # Hash for solution 3 is the one matching to the values from valid_adms.rdf.
     And provenance activities:
-      | entity                        | enabled | associated with | author          | started          | hash                             |
-      | Local version of Solution 2   | yes     | NIO             | Antoine Batiste | 2012-07-07 23:01 | 958c1834800217af62253353d0d4bdef |
-      | http://example.com/solution/3 | no      | NIO             | Antoine Batiste | 2015-12-25 01:30 | e5e7aceb15c50ab628c744673daf5ca1 |
+      | entity                        | enabled | associated with | author          | started                | hash                             |
+      | Local version of Solution 2   | yes     | NIO             | Antoine Batiste | 2012-07-07 23:01 +0200 | 958c1834800217af62253353d0d4bdef |
+      | http://example.com/solution/3 | no      | NIO             | Antoine Batiste | 2015-12-25 01:30 +0200 | e5e7aceb15c50ab628c744673daf5ca1 |
     Given SPDX licences:
       | uri                                 | title       |
       | http://spdx.org/licenses/Apache-2.0 | Apache 2    |
