@@ -246,7 +246,8 @@ trait OgTrait {
     }
 
     $state = !empty($values['state']) ? $values['state'] : NULL;
-    $timestamp = !empty($values['created']) ? strtotime($values['created']) : NULL;
+    $timestamp = !empty($values['created']) ? (new \DateTimeImmutable($values['created'], new \DateTimeZone('UTC')))->getTimestamp() : NULL;
+
     $this->subscribeUserToGroup($member, $group, $roles, $state, $timestamp);
   }
 
