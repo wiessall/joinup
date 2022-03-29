@@ -243,7 +243,7 @@ class UserSelectionFilter extends JoinupFederationStepPluginBase implements Pipe
     $activity = $this->provenanceHelper->loadOrCreateEntityActivity($id);
     $arguments = [
       '%last_user' => $activity->getOwner() ? $activity->getOwner()->getDisplayName() : $this->t('[unknown]'),
-      '%last_date' => !$activity->get('provenance_started')->isEmpty() ? $this->dateFormatter->format($activity->get('provenance_started')->value, 'short') : $this->t('[unknown]'),
+      '%last_date' => !$activity->get('provenance_started')->isEmpty() ? $this->dateFormatter->format($activity->get('provenance_started')->value, 'short', NULL, 'UTC') : $this->t('[unknown]'),
     ];
     switch ($category) {
       case 'not_federated':

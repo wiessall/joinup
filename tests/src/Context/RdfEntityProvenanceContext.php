@@ -76,7 +76,7 @@ class RdfEntityProvenanceContext extends RawDrupalContext {
 
       // Transform the date into a timestamp.
       if (array_key_exists('provenance_started', $values)) {
-        $values['provenance_started'] = (new \DateTimeImmutable($values['provenance_started'], new \DateTimeZone('UTC')))->getTimestamp();
+        $values['provenance_started'] = (new \DateTimeImmutable($values['provenance_started'], new \DateTimeZone('Europe/Brussels')))->getTimestamp();
       }
 
       // Convert user friendly values to machine values.
