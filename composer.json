@@ -378,6 +378,10 @@
             "drupal/views_block_area": {
                 "Views block area missing schema @see https://www.drupal.org/project/views_block_area/issues/3157188": "https://www.drupal.org/files/issues/2020-07-06/views_block_area-missing_schema-3157188-2.patch"
             },
+            "openeuropa/oe_bootstrap_theme": {
+                "Fix chip icons (1)": "https://github.com/openeuropa/oe_bootstrap_theme/commit/813d855e7c25104ef8ae14b9c28aeab6f0f43820.diff",
+                "Fix chip icons (2)": "https://github.com/openeuropa/oe_bootstrap_theme/commit/bed7586635085c581949e817f6c1a77be0c72296.diff"
+            },
             "openeuropa/oe_webtools": {
                 "Allow to pass an optional referer. @see https://github.com/openeuropa/oe_webtools/pull/96": "https://patch-diff.githubusercontent.com/raw/openeuropa/oe_webtools/pull/96.diff",
                 "Place the webtools loader on the head. @see https://github.com/openeuropa/oe_webtools/pull/102": "https://patch-diff.githubusercontent.com/raw/openeuropa/oe_webtools/pull/102.diff",
