@@ -5,6 +5,7 @@ dependencies:
   config:
     - og_menu.ogmenu.navigation
   module:
+    - joinup_core
     - joinup_group
     - og
   theme:
@@ -19,7 +20,7 @@ settings:
   id: 'group_menu_block:navigation'
   label: 'Collection | Solution menu'
   label_display: '0'
-  provider: joinup_core
+  provider: joinup_group
   context_mapping:
     og: '@og.context:og'
   level: 1
@@ -33,3 +34,8 @@ visibility:
     group_types:
       rdf_entity-collection: rdf_entity-collection
       rdf_entity-solution: rdf_entity-solution
+  request_route:
+    id: request_route
+    negate: true
+    routes:
+      - entity.rdf_entity.edit_form

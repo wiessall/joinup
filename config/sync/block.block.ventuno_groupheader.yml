@@ -4,6 +4,7 @@ status: true
 dependencies:
   module:
     - joinup
+    - joinup_core
   theme:
     - ventuno
 _core:
@@ -20,5 +21,10 @@ settings:
   label_display: '0'
   provider: joinup
   context_mapping:
-    og: '@og.context:og'
-visibility: {  }
+    og: '@asset_release.asset_release_route_context:asset_release'
+visibility:
+  request_route:
+    id: request_route
+    negate: true
+    routes:
+      - entity.rdf_entity.edit_form
