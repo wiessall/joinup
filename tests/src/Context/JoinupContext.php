@@ -740,7 +740,7 @@ class JoinupContext extends RawDrupalContext {
         // The strtotime() PHP function is using the default timezone when doing
         // the conversion. But we want to stick to UTC in order to avoid
         // timezone and DST issue.
-        $node->published_at = (new \DateTimeImmutable($node->published_at, new \DateTimeZone('UTC')))->getTimestamp();
+        $node->published_at = (new \DateTimeImmutable($node->published_at, new \DateTimeZone('Europe/Brussels')))->getTimestamp();
       }
     }
 
@@ -926,7 +926,7 @@ class JoinupContext extends RawDrupalContext {
     $is_relative_value = $date_component === 'date' ? preg_match('/^\d{2}-\d{2}-\d{4}$/', $value) === 0 : preg_match('/^\d{2}:\d{2}:\d{2}$/', $value) === 0;
 
     if ($is_relative_value) {
-      $value = (new \DateTimeImmutable($value, new \DateTimeZone('UTC')))->format('Y-m-d');
+      $value = (new \DateTimeImmutable($value, new \DateTimeZone('Europe/Brussels')))->format('Y-m-d');
     }
 
     $field_selectors = $this->findDateFields($field_group);
@@ -1698,7 +1698,7 @@ class JoinupContext extends RawDrupalContext {
       if (!empty($comment_values['created'])) {
         // Convert creation date to UNIX time if needed.
         if (!is_int($comment_values['created'])) {
-          $comment_values['created'] = (new \DateTimeImmutable($comment_values['created'], new \DateTimeZone('UTC')))->getTimestamp();
+          $comment_values['created'] = (new \DateTimeImmutable($comment_values['created'], new \DateTimeZone('Europe/Brussels')))->getTimestamp();
         }
         $comment->setCreatedTime($comment_values['created']);
       }
@@ -2917,7 +2917,7 @@ class JoinupContext extends RawDrupalContext {
     $entity = $this->getEntityByLabel($entity_type_id, $title, $bundle);
     $publication_date = is_numeric($new_publication_date)
       ? ((int) $new_publication_date)
-      : (new \DateTimeImmutable($new_publication_date, new \DateTimeZone('UTC')))->getTimestamp();
+      : (new \DateTimeImmutable($new_publication_date, new \DateTimeZone('Europe/Brussels')))->getTimestamp();
 
     if (empty($new_publication_date)) {
       throw new \InvalidArgumentException("'{$new_publication_date}' could not be converted to a proper timestamp.");

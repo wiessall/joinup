@@ -23,7 +23,7 @@ class LatestNewsUrlGenerator extends JoinupUrlGeneratorBase {
   public function alterQuery(QueryInterface $query, string $entity_type_id, string $bundle, array $bundle_settings): void {
     // It is assumed that this is called only for news and checks of validity
     // should be performed before the query object is constructed.
-    $two_days_ago = (new \DateTimeImmutable('2 days ago', new \DateTimeZone('UTC')))->getTimestamp();
+    $two_days_ago = (new \DateTimeImmutable('2 days ago', new \DateTimeZone('Europe/Brussels')))->getTimestamp();
     $query->condition('published_at', PUBLICATION_DATE_DEFAULT, '<');
     $query->condition('published_at', $two_days_ago, '>=');
   }

@@ -73,7 +73,7 @@ class HomepageContext extends RawDrupalContext {
       Assert::assertEquals($expected_data['description'], $actual_description, sprintf('The body text for the %s "%s" in the "Explore" section does not contain the expected text.', $type, $expected_data['title']));
 
       // Check date.
-      $expected_date = (new \DateTimeImmutable($expected_data['date'], new \DateTimeZone('UTC')))->format('d/m/Y');
+      $expected_date = (new \DateTimeImmutable($expected_data['date'], new \DateTimeZone('Europe/Brussels')))->format('d/m/Y');
       $xpath = '//*[text() = "' . $expected_date . '"]';
       Assert::assertNotEmpty($actual_data->find('xpath', $xpath), sprintf('The date for the %s "%s" in the "Explore" section does not contain the expected format.', $type, $expected_data['title']));
 
