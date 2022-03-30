@@ -77,7 +77,7 @@ class JoinupDocumentContext extends RawDrupalContext {
     if (isset($node->field_document_publication_date)) {
       $time = $node->field_document_publication_date;
       if (!is_numeric($time)) {
-        $time = (new \DateTimeImmutable($time, new \DateTimeZone('Europe/Brussels')))->getTimestamp();
+        $time = (new \DateTimeImmutable($time, new \DateTimeZone('UTC')))->getTimestamp();
       }
 
       /** @var \Drupal\Core\Datetime\DateFormatterInterface $date_formatter */
