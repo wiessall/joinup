@@ -5,3 +5,31 @@ contact_form.contact_page:
     _title: 'Contact'
   requirements:
     _access: 'TRUE'
+
+contact_form.content_form:
+  path: '/contact_form/{entity_type}/{entity}/{field_name}'
+  options:
+    parameters:
+      entity:
+        type: entity:{entity_type}
+      field_name:
+        type: string
+  defaults:
+    _form: 'Drupal\contact_form\Form\ContactForm'
+    _title: 'Contact Form'
+  requirements:
+    _access: 'TRUE'
+
+contact_form.open_modal_contact_form:
+  path: modal/{entity_type}/{entity}/contact_form/{field_name}
+  options:
+    parameters:
+      entity:
+        type: entity:{entity_type}
+      field_name:
+        type: string
+  defaults:
+    _title: 'Contact Form'
+    _controller: '\Drupal\contact_form\Controller\ModalContactFormController::openModalForm'
+  requirements:
+    _access: 'TRUE'
