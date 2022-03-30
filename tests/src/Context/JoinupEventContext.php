@@ -62,9 +62,7 @@ class JoinupEventContext extends RawDrupalContext {
 
     foreach (['field_event_date:value', 'field_event_date:end_value'] as $field) {
       if (isset($node->$field)) {
-        $node->$field = (new \DateTimeImmutable($node->$field,
-          new \DateTimeZone('UTC'))
-        )->format(DateTimeItemInterface::DATETIME_STORAGE_FORMAT);
+        $node->$field = date(DateTimeItemInterface::DATETIME_STORAGE_FORMAT, strtotime($node->$field));
       }
     }
 

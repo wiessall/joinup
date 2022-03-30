@@ -225,7 +225,10 @@ class JoinupCommunityContentContext extends RawDrupalContext {
    * @Given the :field_name date of the :title :bundle is :new_date
    */
   public function updateNodeDateProperty(string $field_name, string $title, string $bundle, string $new_date): void {
-    $time = (new \DateTimeImmutable($new_date, new \DateTimeZone('UTC')))->getTimestamp();
+    if (!($time = strtotime($new_date))) {
+      throw new \Exception("{$new_date} could not be converted to string.");
+    }
+
     $this->getNodeByTitle($title, $bundle)
       ->set($field_name, $time)
       ->save();
