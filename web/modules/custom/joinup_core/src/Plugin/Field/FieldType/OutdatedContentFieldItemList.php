@@ -37,9 +37,7 @@ class OutdatedContentFieldItemList extends FieldItemList {
     // If $publication_time is NULL, then the entity has never been published,
     // thus it cannot be outdated.
     if (!empty($publication_time)) {
-      // Calculate the difference from the date in Europe/Brussels as is the
-      // default - not configurable - timezone of the website.
-      $published_at = new \DateTimeImmutable("@$publication_time", new \DateTimeZone('Europe/Brussels'));
+      $published_at = new \DateTime("@$publication_time");
       $outdated_date = $published_at->add(new \DateInterval("P{$threshold}Y"))->getTimestamp();
     }
 
