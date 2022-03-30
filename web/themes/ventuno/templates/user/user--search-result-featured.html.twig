@@ -19,17 +19,8 @@
     extra_classes_header: 'border-0 bg-transparent py-0',
     extra_classes_body: 'py-0',
     badges: [],
-    title: {
-      content: title,
-    },
-    text: {
-      content: content|without('field_user_photo'),
-    },
-    image: {
-      path: file_url(content.field_user_photo.0['#item'].entity.uri.value),
-      alt: content.field_user_photo.0['#item'].alt,
-      position: 'top',
-      extra_classes: 'd-none d-md-block',
-    },
+    title: title,
+    text: content|without('field_user_photo'),
+    image: null,
   }) }}
 {% endif %}
