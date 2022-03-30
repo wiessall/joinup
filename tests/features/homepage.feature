@@ -114,7 +114,7 @@ Feature: Homepage
   Scenario: An event can be highlighted on the homepage
     Given event content:
       | title                     | start date       | end date         | state     |
-      | Florentine steak festival | 2021-06-04T20:00 | 2021-06-04T22:00 | validated |
+      | Florentine steak festival | 2021-06-04T20:00 | 2021-06-05T22:00 | validated |
     And the "Highlighted event" content listing contains:
       | type    | label                     |
       | content | Florentine steak festival |
