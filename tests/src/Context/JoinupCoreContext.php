@@ -332,7 +332,7 @@ class JoinupCoreContext extends RawDrupalContext {
    * @BeforeSuite
    */
   public static function defaultTimezoneSet(BeforeSuiteScope $before_suite): void {
-    date_default_timezone_set('Europe/Brussels');
+    date_default_timezone_set('UTC');
   }
 
 }
