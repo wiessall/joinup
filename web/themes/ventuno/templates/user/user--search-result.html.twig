@@ -19,11 +19,7 @@
     extra_classes_header: 'border-0 bg-transparent py-0',
     extra_classes_body: 'py-0',
     badges: [],
-    title: {
-      content: title
-    },
-    text: {
-      content: content,
-    }
+    title: title,
+    text: content|without('field_user_photo'),
   }) }}
 {% endif %}
