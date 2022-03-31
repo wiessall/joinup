@@ -212,16 +212,6 @@ module.exports = {
       from: [
         path.resolve(
           __dirname,
-          "src/icons/bootstrap-icons.svg"
-        ),
-      ],
-      to: path.resolve(outputFolder, "assets/icons"),
-      options: { up: true },
-    },
-    {
-      from: [
-        path.resolve(
-          __dirname,
           "src/images/logo-ec--en.svg"
         ),
       ],
@@ -309,4 +299,50 @@ module.exports = {
       options: { up: true },
     },
   ],
+  sprite: [
+    {
+      entry: path.resolve(nodeModules, "@openeuropa/bcl-bootstrap/icons/"),
+      dest: path.resolve(outputFolder, "assets/icons"),
+      options: {
+        file: 'icons.svg',
+        list: [
+            'arrow-left.svg',
+            'arrow-right.svg',
+            'award.svg',
+            'calendar.svg',
+            'calendar3.svg',
+            'chat-left-text.svg',
+            'check-circle-fill.svg',
+            'chevron-bar-left.svg',
+            'chevron-bar-right.svg',
+            'chevron-left.svg',
+            'chevron-right.svg',
+            'clipboard-check.svg',
+            'exclamation-circle-fill.svg',
+            'exclamation-lg.svg',
+            'eye.svg',
+            'file-earmark-medical.svg',
+            'file-earmark-play.svg',
+            'file-earmark-richtext.svg',
+            'file-earmark-text.svg',
+            'file-earmark-zip.svg',
+            'filter.svg',
+            'folder2-open.svg',
+            'info-circle.svg',
+            'info-circle-fill.svg',
+            'justify.svg',
+            'lightning-charge.svg',
+            'linkedin.svg',
+            'newspaper.svg',
+            'person-circle.svg',
+            'search.svg',
+            'star.svg',
+            'twitter.svg',
+            'x.svg',
+            'x-lg.svg',
+            'x-square-fill.svg',
+          ]
+      },
+    }
+  ]
 };
