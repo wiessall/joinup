@@ -109,7 +109,7 @@
         "masterminds/html5": "^2.7",
         "ml/json-ld": "^1.2",
         "openeuropa/composer-artifacts": "dev-master",
-        "openeuropa/oe_bootstrap_theme": "0.71.0",
+        "openeuropa/oe_bootstrap_theme": "0.1.202203290731",
         "openeuropa/oe_dashboard_agent": "^0.3.0",
         "openeuropa/oe_webtools": "^1.14",
         "openeuropa/webtools-geocoding-provider": "~0.1",
@@ -378,14 +378,14 @@
             "drupal/views_block_area": {
                 "Views block area missing schema @see https://www.drupal.org/project/views_block_area/issues/3157188": "https://www.drupal.org/files/issues/2020-07-06/views_block_area-missing_schema-3157188-2.patch"
             },
+            "openeuropa/oe_bootstrap_theme": {
+                "Make Slim Select optional @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/OEL-1384": "https://patch-diff.githubusercontent.com/raw/openeuropa/oe_bootstrap_theme/pull/224.diff"
+            },
             "openeuropa/oe_webtools": {
                 "Allow to pass an optional referer. @see https://github.com/openeuropa/oe_webtools/pull/96": "https://patch-diff.githubusercontent.com/raw/openeuropa/oe_webtools/pull/96.diff",
                 "Place the webtools loader on the head. @see https://github.com/openeuropa/oe_webtools/pull/102": "https://patch-diff.githubusercontent.com/raw/openeuropa/oe_webtools/pull/102.diff",
                 "Add the possibility to display a marker on the map. @see https://github.com/openeuropa/oe_webtools/pull/111": "https://patch-diff.githubusercontent.com/raw/openeuropa/oe_webtools/pull/111.diff",
                 "Integrate with Webtools eTrans component @see https://github.com/openeuropa/oe_webtools/pull/146": "https://patch-diff.githubusercontent.com/raw/openeuropa/oe_webtools/pull/146.diff"
-            },
-            "openeuropa/oe_bootstrap_theme": {
-                "Preserve link attributes in navigation menus @see https://github.com/openeuropa/oe_bootstrap_theme/pull/38": "https://patch-diff.githubusercontent.com/raw/openeuropa/oe_bootstrap_theme/pull/38.diff"
             }
         },
         "artifacts": {
