@@ -73,9 +73,7 @@ Feature: About this solution
     And I should see the text "E-mail address"
     And I should see the text "Website URL"
     And I should see the following links:
-      | ariel@nova.dk               |
-      | maiken@nova.dk              |
-      | peer@nova.dk                |
+      | Contact owner               |
       | http://nova.com             |
       | http://nova.dk              |
       | https://innovation.nova.org |
@@ -116,3 +114,62 @@ Feature: About this solution
 
     # A related solution which is not yet approved should not be visible.
     And I should not see the text "Protein"
+
+  @terms @javascript
+  Scenario: About page contact form
+    Given the following contacts:
+      | name                    | email                        | Website URL    |
+      | Elise Lucile            | elise@nova.dk                | http://nova.dk |
+    And owners:
+      | name                 | type               |
+      | Rotterdam            | National agency    |
+    And collection:
+      | title | Antibody Development |
+      | state | validated            |
+    And solutions:
+      | title   | state     |
+      | Gelo    | validated |
+    And solution:
+      | title               | Six exclusion advantages                          |
+      | description         | Separating molecules by weight.                   |
+      | logo                | logo.png                                          |
+      | banner              | banner.jpg                                        |
+      | contact information | Elise Lucile                                      |
+      | owner               | Rotterdam                                         |
+      | state               | validated                                         |
+      | documentation       | text.pdf                                          |
+      | language            | Italian, Kallawaya                                |
+      | topic               | Demography, E-inclusion                           |
+      | related solutions   | Gelo                                              |
+      | solution type       | Non-binding Instrument, Service Discovery Service |
+      | spatial coverage    | Italy, Egypt                                      |
+      | status              | Under development                                 |
+      | collection          | Monoclonal Antibody Development                   |
+
+    # The link to the about page should be visible on the solution homepage.
+    When I am not logged in
+    And I go to the homepage of the "Six exclusion advantages" solution
+    Then I should see the link "About"
+
+    # All the public information from the basic fields should be visible on the
+    # about page.
+    When I click "About"
+
+    # Clean URLs should be applied to the "About" subpage.
+    Then I should be on "/collection/monoclonal-antibody-development/solution/six-exclusion-advantages/about"
+
+    # The grey area for owner and contact information.
+    And I should see the text "Owner/Contact Information"
+    And I should see the link "Contact owner"
+    Then I click "Contact owner"
+    And a modal should open
+    And I should see the text "Contact owner" in the "Modal title"
+    When I fill in "Subject" with "New reclamation about Owner"
+    When I fill in "Message" with "This is reclamation test."
+    And I should see the button "Send" in the "Modal buttons" region
+    Then I press the "Send" button
+
+    And I should see the following success messages:
+      | success messages            |
+      | Your message has been sent. |
+    And I should be on "/collection/monoclonal-antibody-development/solution/six-exclusion-advantages/about"
