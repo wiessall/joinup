@@ -4,6 +4,8 @@ declare(strict_types = 1);
 
 namespace Drupal\contact_form\Plugin\Field\FieldFormatter;
 
+use Drupal\Core\Extension\ModuleHandlerInterface;
+use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Field\FormatterBase;
 use Drupal\Core\Form\FormStateInterface;
@@ -41,36 +43,51 @@ class EmailContactFormFormatter extends FormatterBase {
    *
    * @var \Drupal\Core\Logger\LoggerChannelFactoryInterface
    */
-  protected LoggerChannelFactoryInterface $logger;
+  protected $loggerFactory;
 
   /**
    * Constructs an EmailAction object.
    *
-   * @param array $configuration
-   *   A configuration array containing information about the plugin instance.
    * @param string $plugin_id
-   *   The plugin ID for the plugin instance.
+   *   The plugin_id for the formatter.
    * @param mixed $plugin_definition
    *   The plugin implementation definition.
-   * @param \Drupal\contact_form\Plugin\Field\FieldFormatter\ModuleHandlerInterface $module_handler
+   * @param \Drupal\Core\Field\FieldDefinitionInterface $field_definition
+   *   The definition of the field to which the formatter is associated.
+   * @param array $settings
+   *   The formatter settings.
+   * @param string $label
+   *   The formatter label display setting.
+   * @param string $view_mode
+   *   The view mode.
+   * @param array $third_party_settings
+   *   Any third party settings.
+   * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
    *   The module handler.
    * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $loggerFactory
    *   The logger channel factory.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, ModuleHandlerInterface $module_handler, LoggerChannelFactoryInterface $loggerFactory) {
-    parent::__construct($configuration, $plugin_id, $plugin_definition);
+  public function __construct($plugin_id, $plugin_definition, FieldDefinitionInterface $field_definition, array $settings, $label, $view_mode, array $third_party_settings, ModuleHandlerInterface $module_handler, LoggerChannelFactoryInterface $loggerFactory) {
+    parent::__construct($plugin_id, $plugin_definition, $field_definition, $settings, $label, $view_mode, $third_party_settings);
 
     $this->moduleHandler = $module_handler;
-    $this->logger = $loggerFactory->get('contact_form');
+    $this->loggerFactory = $loggerFactory;
   }
 
   /**
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
-    return new static($configuration, $plugin_id, $plugin_definition,
+    return new static(
+      $plugin_id,
+      $plugin_definition,
+      $configuration['field_definition'],
+      $configuration['settings'],
+      $configuration['label'],
+      $configuration['view_mode'],
+      $configuration['third_party_settings'],
       $container->get('module_handler'),
-      $container->get('logger.factory')->get('action'),
+      $container->get('logger.factory'),
     );
   }
 
@@ -145,7 +162,7 @@ class EmailContactFormFormatter extends FormatterBase {
         ];
       }
       catch (NotFoundHttpException $e) {
-        $this->logger->notice('Invalid inline contact form on @entity_type id @id.', [
+        $this->loggerFactory->get('contact_form')->notice('Invalid inline contact form on @entity_type id @id.', [
           '@entity_type' => $entity->getEntityTypeId(),
           '@id' => $entity->id(),
         ]);

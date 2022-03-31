@@ -39,7 +39,7 @@ class ContactForm extends FormBase {
   /**
    * {@inheritdoc}
    */
-  public static function create(ContainerInterface $container): ContactForm {
+  public static function create(ContainerInterface $container) {
     return new static($container->get('plugin.manager.mail'));
   }
 
