@@ -9,12 +9,12 @@ contact_form.settings:
       label: 'Default sender for contact form (except from reports)'
       type: string
 
-field.field_settings.email_contact_form:
+field.formatter.settings.email_contact_form:
   type: mapping
   label: 'Email contact form popup settings'
   mapping:
     include_values:
-      type: boolean
+      type: string
       label: 'Display all field values in email body'
     default_message:
       type: string

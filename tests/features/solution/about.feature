@@ -121,8 +121,8 @@ Feature: About this solution
       | name                    | email                        | Website URL    |
       | Elise Lucile            | elise@nova.dk                | http://nova.dk |
     And owners:
-      | name                 | type               |
-      | Rotterdam            | National agency    |
+      | name                 | type                  |
+      | Rotterdam            | National authority    |
     And collection:
       | title | Antibody Development |
       | state | validated            |
@@ -144,7 +144,7 @@ Feature: About this solution
       | solution type       | Non-binding Instrument, Service Discovery Service |
       | spatial coverage    | Italy, Egypt                                      |
       | status              | Under development                                 |
-      | collection          | Monoclonal Antibody Development                   |
+      | collection          | Antibody Development                              |
 
     # The link to the about page should be visible on the solution homepage.
     When I am not logged in
@@ -156,7 +156,7 @@ Feature: About this solution
     When I click "About"
 
     # Clean URLs should be applied to the "About" subpage.
-    Then I should be on "/collection/monoclonal-antibody-development/solution/six-exclusion-advantages/about"
+    Then I should be on "/collection/antibody-development/solution/six-exclusion-advantages/about"
 
     # The grey area for owner and contact information.
     And I should see the text "Owner/Contact Information"
@@ -167,9 +167,9 @@ Feature: About this solution
     When I fill in "Subject" with "New reclamation about Owner"
     When I fill in "Message" with "This is reclamation test."
     And I should see the button "Send" in the "Modal buttons" region
-    Then I press the "Send" button
+    Then I press "Send" in the "Modal buttons" region
 
     And I should see the following success messages:
       | success messages            |
       | Your message has been sent. |
-    And I should be on "/collection/monoclonal-antibody-development/solution/six-exclusion-advantages/about"
+    And I should be on "/collection/antibody-development/solution/six-exclusion-advantages/about"
