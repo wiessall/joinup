@@ -58,7 +58,8 @@ drupal:
         - Custom error handler
         - Permissions
         - Development
-        - OpenEuropa Newsroom Newsletter
+        - OpenEuropa Newsroom Newsletter Mock
+        - OpenEuropa Newsroom Newsletter Settings
         - OpenEuropa Webtools Geocoding Cache
         - Verbose error logging
         - Development mail collector
@@ -75,7 +76,8 @@ drupal:
         - Custom error handler
         - Permissions
         - Development
-        - OpenEuropa Newsroom Newsletter
+        - OpenEuropa Newsroom Newsletter Mock
+        - OpenEuropa Newsroom Newsletter Settings
         - OpenEuropa Webtools Geocoding Cache
         - Redis
         - Custom queue services
@@ -90,7 +92,8 @@ drupal:
         - Custom error handler
         - Permissions
         - Development
-        - OpenEuropa Newsroom Newsletter
+        - OpenEuropa Newsroom Newsletter Mock
+        - OpenEuropa Newsroom Newsletter Settings
         - OpenEuropa Webtools Geocoding Cache
         - Redis
         - Pipe errors to a temporary file
@@ -106,7 +109,8 @@ drupal:
         - Custom error handler
         - Permissions
         - Development
-        - OpenEuropa Newsroom Newsletter
+        - OpenEuropa Newsroom Newsletter Mock
+        - OpenEuropa Newsroom Newsletter Settings
         - OpenEuropa Webtools Geocoding Cache
         - Verbose error logging
         - Custom queue services
@@ -117,6 +121,7 @@ drupal:
         - Databases
         - Configuration
         - Search API
+        - OpenEuropa Newsroom Newsletter Settings
         - OpenEuropa Webtools Analytics
         - Custom error handler
         - Redis
@@ -278,8 +283,10 @@ drupal:
       Pipe errors to a temporary file: |
         $settings['error_page']['log']['method'] = 3;
         $settings['error_page']['log']['destination'] = 'php://temp';
-      OpenEuropa Newsroom Newsletter: |
+      OpenEuropa Newsroom Newsletter Mock: |
         $config['oe_newsroom_newsletter.subscriber']['class'] = 'Drupal\oe_newsroom_newsletter\NewsletterSubscriber\MockNewsletterSubscriber';
+      OpenEuropa Newsroom Newsletter Settings: |
+        $settings['oe_newsroom_universe_keys'] = getenv('OE_NEWSROOM_UNIVERSE_KEYS');
       OpenEuropa Webtools Geocoding Cache: |
         $settings['cache']['bins']['geocoder'] = 'cache.backend.file_system';
         $settings['filecache']['directory']['bins']['geocoder'] = '../tests/fixtures/webtools_geocoding_cache';
