@@ -156,7 +156,7 @@ class JoinGroupAnonymousRedirectForm extends FormBase {
    * @see https://www.drupal.org/node/2661046
    */
   protected function isModal(): bool {
-    return $this->getRequest()->query->get(MainContentViewSubscriber::WRAPPER_FORMAT) === 'drupal_modal';
+    return (bool) preg_match('/^drupal_.*modal$/', $this->getRequest()->query->get(MainContentViewSubscriber::WRAPPER_FORMAT));
   }
 
 }
