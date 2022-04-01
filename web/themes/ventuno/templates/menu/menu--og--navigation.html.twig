@@ -1,0 +1,30 @@
+{#
+/**
+ * Template for a menu.
+ */
+#}
+{% set menu = pattern('navigation', {
+    'variant': 'pills',
+    'orientation': 'vertical',
+    'items': pattern_items,
+    'attributes': create_attribute(),
+  })
+%}
+
+{{ pattern('button', {
+  label: 'Toggle menu',
+  variant: 'primary',
+  outline: true,
+  size: 'md',
+  type: 'button',
+  icon: 'justify',
+  attributes: create_attribute().addClass(['d-lg-none', 'mt-3', 'w-100', 'collapsed']).setAttribute('data-bs-toggle', 'collapse').setAttribute('aria-expanded', 'false').setAttribute('data-bs-target', '#menuCollapse'),
+}) }}
+
+<div class="d-lg-none collapse w-100 mt-3" id="menuCollapse">
+  {{ menu }}
+</div>
+
+<div class="d-none d-lg-block mt-3">
+  {{ menu }}
+</div>
