@@ -14,12 +14,14 @@ use Drupal\meta_entity\Entity\MetaEntityType;
  *   label = @Translation("RDF meta entity type"),
  *   handlers = {
  *     "form" = {
- *       "default" = "Drupal\meta_entity\Form\MetaEntityTypeForm",
+ *       "add" = "Drupal\meta_entity\Form\MetaEntityTypeForm",
+ *       "edit" = "Drupal\meta_entity\Form\MetaEntityTypeForm",
+ *       "delete" = "Drupal\Core\Entity\EntityDeleteForm",
  *     },
  *     "route_provider" = {
  *       "html" = "Drupal\Core\Entity\Routing\AdminHtmlRouteProvider",
  *     },
- *     "list_builder" = "\Drupal\rdf_meta_entity\RdfMetaEntityTypeListBuilder",
+ *     "list_builder" = "\Drupal\meta_entity\MetaEntityTypeListBuilder",
  *   },
  *   admin_permission = "administer rdf meta entity",
  *   bundle_of = "rdf_meta_entity",
@@ -30,7 +32,9 @@ use Drupal\meta_entity\Entity\MetaEntityType;
  *   },
  *   links = {
  *     "collection" = "/admin/structure/rdf-meta-entity",
+ *     "add-form" = "/admin/structure/rdf-meta-entity/add",
  *     "edit-form" = "/admin/structure/rdf-meta-entity/manage/{rdf_meta_entity_type}",
+ *     "delete-form" = "/admin/structure/rdf-meta-entity/manage/{rdf_meta_entity_type}/delete",
  *   },
  *   config_export = {
  *     "id",
