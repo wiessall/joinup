@@ -87,6 +87,9 @@ class NewsletterSubscriber implements NewsletterSubscriberInterface {
       ]);
       if ($response->getStatusCode() === 200) {
         $body = json_decode((string) $response->getBody()->getContents());
+        // The request allows multiple subscriptions so returns an array of
+        // responses.
+        $body = reset($body);
         // Check if the JSON data about the subscription has been returned.
         if (!empty($body->subscription)) {
           $data = $body->subscription;
