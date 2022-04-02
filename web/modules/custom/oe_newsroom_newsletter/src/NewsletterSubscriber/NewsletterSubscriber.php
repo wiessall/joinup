@@ -30,6 +30,13 @@ class NewsletterSubscriber implements NewsletterSubscriberInterface {
   protected $httpClient;
 
   /**
+   * The list of registered service application keys.
+   *
+   * @var array
+   */
+  protected $settings;
+
+  /**
    * Constructs a new NewsletterSubscriber object.
    *
    * @param \GuzzleHttp\ClientInterface $httpClient
@@ -40,7 +47,7 @@ class NewsletterSubscriber implements NewsletterSubscriberInterface {
     $this->settings = [];
     $settings = Settings::get('oe_newsroom_universe_keys');
     if (!empty($settings) && $settings = json_decode($settings)) {
-      $this->settings = $settings;
+      $this->settings = (array) $settings;
     }
   }
 

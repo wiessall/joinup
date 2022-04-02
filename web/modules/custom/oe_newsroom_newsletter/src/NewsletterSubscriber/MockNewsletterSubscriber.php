@@ -4,6 +4,7 @@ declare(strict_types = 1);
 
 namespace Drupal\oe_newsroom_newsletter\NewsletterSubscriber;
 
+use Drupal\Core\Site\Settings;
 use Drupal\Core\State\StateInterface;
 use Drupal\oe_newsroom_newsletter\Exception\EmailAddressAlreadySubscribedException;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -28,6 +29,13 @@ class MockNewsletterSubscriber implements NewsletterSubscriberInterface {
   protected $state;
 
   /**
+   * The list of registered service application keys.
+   *
+   * @var array
+   */
+  protected $settings;
+
+  /**
    * Constructs a new NewsletterSubscriber object.
    *
    * @param \Drupal\Core\State\StateInterface $state
@@ -35,6 +43,11 @@ class MockNewsletterSubscriber implements NewsletterSubscriberInterface {
    */
   public function __construct(StateInterface $state) {
     $this->state = $state;
+    $this->settings = [];
+    $settings = Settings::get('oe_newsroom_universe_keys');
+    if (!empty($settings) && $settings = json_decode($settings)) {
+      $this->settings = (array) $settings;
+    }
   }
 
   /**
@@ -50,6 +63,10 @@ class MockNewsletterSubscriber implements NewsletterSubscriberInterface {
    * {@inheritdoc}
    */
   public function subscribe(string $email, string $universe, string $service_id): void {
+    if (!isset($this->settings[$universe])) {
+      throw new \RuntimeException("There is no key set up for the {$universe} universe");
+    }
+
     $subscriptions = $this->state->get(self::STATE_KEY, []);
     if (!empty($subscriptions[$universe][$service_id][$email])) {
       throw new EmailAddressAlreadySubscribedException();
