@@ -400,7 +400,8 @@ text_files:
     quelles
     sans
     soi
-  protwords: ''
+  protwords: |
+
   accents: |
     # À => A
     "\u00C0" => "A"
