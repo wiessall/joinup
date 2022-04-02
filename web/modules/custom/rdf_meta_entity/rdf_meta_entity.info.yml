@@ -5,6 +5,5 @@ core_version_requirement: ^8 || ^9
 php: 7.1
 
 dependencies:
-  - dynamic_entity_reference:dynamic_entity_reference (>=8.x-2.x)
   - meta_entity:meta_entity (>=8.x-2.x)
   - sparql_entity_storage:sparql_entity_storage
