@@ -39,8 +39,8 @@ class RdfMetaEntity extends MetaEntity {
   /**
    * {@inheritdoc}
    */
-  public static function loadOrCreate(string $meta_entity_type, ContentEntityInterface $target_entity): MetaEntityInterface {
-    return self::loadOrCreateHelper('rdf_meta_entity', $meta_entity_type, $target_entity);
+  public static function loadOrCreate(string $meta_entity_bundle, ContentEntityInterface $target_entity): MetaEntityInterface {
+    return self::loadOrCreateHelper('rdf_meta_entity', $meta_entity_bundle, $target_entity);
   }
 
 }
