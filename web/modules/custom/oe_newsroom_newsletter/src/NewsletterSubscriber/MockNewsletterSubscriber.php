@@ -26,14 +26,14 @@ class MockNewsletterSubscriber implements NewsletterSubscriberInterface {
    *
    * @var \Drupal\Core\State\StateInterface
    */
-  protected $state;
+  protected StateInterface $state;
 
   /**
    * The list of registered service application keys.
    *
    * @var array
    */
-  protected $settings;
+  protected array $settings;
 
   /**
    * Constructs a new NewsletterSubscriber object.
@@ -63,10 +63,6 @@ class MockNewsletterSubscriber implements NewsletterSubscriberInterface {
    * {@inheritdoc}
    */
   public function subscribe(string $email, string $universe, string $service_id): void {
-    if (!isset($this->settings[$universe])) {
-      throw new \RuntimeException("There is no key set up for the {$universe} universe");
-    }
-
     $subscriptions = $this->state->get(self::STATE_KEY, []);
     if (!empty($subscriptions[$universe][$service_id][$email])) {
       throw new EmailAddressAlreadySubscribedException();
