@@ -33,6 +33,7 @@ drupal:
         - Configuration
         - Search API
         - OpenEuropa Webtools Analytics
+        - OpenEuropa Newsroom Newsletter Settings
         - Custom error handler
         - Permissions
         - Null mail collector
@@ -42,6 +43,7 @@ drupal:
         - Configuration
         - Search API
         - OpenEuropa Webtools Analytics
+        - OpenEuropa Newsroom Newsletter Settings
         - Custom error handler
         - Permissions
         - Verbose error logging
@@ -55,6 +57,7 @@ drupal:
         - Configuration
         - Search API
         - OpenEuropa Webtools Analytics
+        - OpenEuropa Newsroom Newsletter Settings
         - Custom error handler
         - Permissions
         - Development
