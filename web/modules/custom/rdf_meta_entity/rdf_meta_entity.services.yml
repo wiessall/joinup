@@ -1,24 +1,5 @@
 services:
 
   rdf_meta_entity.repository:
-    class: Drupal\meta_entity\MetaEntityRepository
-    arguments: ['@entity_type.manager', '@rdf_meta_entity.cache', 'rdf_meta_entity']
-
-  rdf_meta_entity.cache:
-    class: Drupal\Core\Cache\BackendChain
-    calls:
-      - [appendBackend, ['@rdf_meta_entity.memory_cache']]
-      - [appendBackend, ['@rdf_meta_entity.persistent_cache']]
     tags:
-      - { name: cache.bin }
-    arguments: ['']
-
-  rdf_meta_entity.persistent_cache:
-    class: Drupal\Core\Cache\CacheBackendInterface
-    tags:
-      - { name: cache.bin }
-    factory: cache_factory:get
-    arguments: [rdf_meta_entity]
-
-  rdf_meta_entity.memory_cache:
-    class: Drupal\Core\Cache\MemoryCache\MemoryCache
+      - { name: meta_entity.repository, meta_entity_type: rdf_meta_entity }

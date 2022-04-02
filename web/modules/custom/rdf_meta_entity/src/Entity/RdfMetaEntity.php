@@ -14,14 +14,14 @@ use Drupal\meta_entity\Entity\MetaEntityInterface;
  * @ContentEntityType(
  *   id = "rdf_meta_entity",
  *   label = @Translation("RDF meta entity"),
- *   label_collection = @Translation("Meta entities"),
- *   bundle_label = @Translation("Meta entity type"),
+ *   label_collection = @Translation("RDF meta entities"),
+ *   bundle_label = @Translation("RDF meta entity type"),
  *   handlers = {
  *     "storage" = "\Drupal\sparql_entity_storage\SparqlEntityStorage",
  *     "route_provider" = {
  *       "html" = "Drupal\Core\Entity\Routing\AdminHtmlRouteProvider",
  *     },
- *     "access" = "Drupal\rdf_meta_entity\RdfMetaEntityAccessControlHandler",
+ *     "access" = "Drupal\meta_entity\MetaEntityAccessControlHandler",
  *   },
  *   bundle_entity_type = "rdf_meta_entity_type",
  *   admin_permission = "administer rdf meta entity",
