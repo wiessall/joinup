@@ -14,7 +14,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * Modal dialog renderer that uses Bootstrap modals then on Ventuno theme.
+ * Modal dialog renderer that uses Bootstrap modals when using Ventuno theme.
  */
 class VentunoModalRenderer extends ModalRenderer {
 
