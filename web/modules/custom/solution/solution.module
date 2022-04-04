@@ -499,7 +499,7 @@ function solution_rdf_entity_presave(RdfInterface $entity) {
     return;
   }
 
-  if (!$entity->get('field_is_contact_information')->isEmpty()) {
+  if ($entity->hasField('field_is_contact_information') && !$entity->get('field_is_contact_information')->isEmpty()) {
     $emails = [];
     foreach ($entity->get('field_is_contact_information')->referencedEntities() as $contact) {
       if ($contact->isNew()) {
