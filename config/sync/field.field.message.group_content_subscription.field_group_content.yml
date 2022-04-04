@@ -286,4 +286,7 @@ settings:
   solr_request_handler:
     handler: 'default:solr_request_handler'
     handler_settings: {  }
+  email_confirmer_confirmation:
+    handler: 'default:email_confirmer_confirmation'
+    handler_settings: {  }
 field_type: dynamic_entity_reference
