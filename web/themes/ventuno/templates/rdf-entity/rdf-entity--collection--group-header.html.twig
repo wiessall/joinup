@@ -16,19 +16,19 @@
     {# {{ title_suffix }} #}
     <div class="col-12 col-sm-6 d-flex flex-column align-items-center align-items-sm-start justify-content-center">
       <ul class="list-unstyled ms-3 mb-0 text-primary">
-        <li class="d-flex my-2">
+        <li class="my-2 d-flex align-items-center">
           <svg class="bi icon--s me-2">
             <use xlink:href="{{ bcl_icon_path }}#calendar3"></use>
           </svg>
-          <span>{{ 'Last update'|t }}</span><span class="ms-1 fw-bold">{{ content.last_update }}</span>
+          <span>{{ 'Last update'|t }}</span><span class="fw-bold">{{ content.last_update }}</span>
         </li>
-        <li class="d-flex my-2">
+        <li class="my-2 d-flex align-items-center">
           <svg class="bi icon--s me-2">
             <use xlink:href="{{ bcl_icon_path }}#person-circle"></use>
           </svg>
           {{ content.members }}
         </li>
-        <li class="my-2">
+        <li class="my-2 d-flex align-items-center">
           <svg class="bi icon--s me-2">
             <use xlink:href="{{ bcl_icon_path }}#clipboard-check"></use>
           </svg>
