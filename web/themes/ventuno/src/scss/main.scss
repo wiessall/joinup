@@ -3,6 +3,8 @@
 
 // BCL bundle for Joinup
 // Configuration
+@import "@openeuropa/bcl-theme-default/src/scss/base/colors";
+@import "@openeuropa/bcl-theme-joinup/src/scss/base/colors";
 @import "@openeuropa/bcl-bootstrap/scss/functions";
 @import "@openeuropa/bcl-bootstrap/scss/variables";
 
@@ -55,7 +57,7 @@
 @import "overrides/utilities"; // Only use required utilities
 @import "@openeuropa/bcl-theme-joinup/src/scss/base/utilities";
 @import "@openeuropa/bcl-bootstrap/scss/helpers";
-@import "@openeuropa/bcl-theme-default/src/scss/utilities";
+@import "@openeuropa/bcl-theme-default/src/scss/base/utilities";
 @import "@openeuropa/bcl-bootstrap/scss/utilities/api";
 
 // Custom styles
