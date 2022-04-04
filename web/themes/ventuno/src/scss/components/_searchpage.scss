@@ -21,7 +21,9 @@
     .offcanvas-title {
       font-weight: $font-weight-normal;
       font-size: $font-size-lg; // 20px
+      margin-bottom: $spacer;
       @include media-breakpoint-up(lg) {
+        padding-top: $spacer * 1.5; // 24px
         font-size: $font-size-lg * .9; // 18px
       }
     }
@@ -214,7 +216,7 @@
       justify-content: space-between;
       color: $primary;
       @include media-breakpoint-up(lg) {
-        margin-top: $spacer * 1.5; // 24px
+        margin-top: $spacer; // 16px
       }
       .form-item-keys {
         flex-basis: 100%;
