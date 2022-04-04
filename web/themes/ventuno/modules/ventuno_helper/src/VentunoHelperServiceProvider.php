@@ -9,6 +9,11 @@ use Drupal\Core\DependencyInjection\ServiceModifierInterface;
 use Drupal\ventuno_helper\Render\MainContent\VentunoModalRenderer;
 use Symfony\Component\DependencyInjection\Reference;
 
+/**
+ * Alters 'main_content_renderer.modal' service to use a custom class.
+ *
+ * @see \Drupal\ventuno_helper\Render\MainContent\VentunoModalRenderer
+ */
 class VentunoHelperServiceProvider implements ServiceModifierInterface {
 
   /**
