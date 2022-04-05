@@ -61,6 +61,11 @@ glide:
     theme:
       assets/css/glide.core.min.css: { minified: true }
 
+dropdown:
+  css:
+    theme:
+      assets/css/dropdown.css: {}
+
 navbar:
   css:
     theme:
