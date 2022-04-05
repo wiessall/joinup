@@ -21,7 +21,7 @@ abstract class JoinupTestSuiteBase extends TestSuiteBase {
   protected function findExtensionDirectories($root): array {
     $extension_roots = [
       "$root/modules/custom",
-      "$root/themes",
+      "$root/themes/ventuno",
       "$root/profiles",
     ];
     $extension_directories = array_map('drupal_phpunit_find_extension_directories', $extension_roots);
