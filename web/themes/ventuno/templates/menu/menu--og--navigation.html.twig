@@ -3,28 +3,25 @@
  * Template for a menu.
  */
 #}
+{{ attach_library('ventuno/dropdown') }}
 {% set menu = pattern('navigation', {
     'variant': 'pills',
     'orientation': 'vertical',
     'items': pattern_items,
-    'attributes': create_attribute(),
   })
 %}
-
 {{ pattern('button', {
-  label: 'Toggle menu',
+  label: 'Toggle menu'|t,
   variant: 'primary',
   outline: true,
   size: 'md',
   type: 'button',
   icon: 'justify',
-  attributes: create_attribute().addClass(['d-lg-none', 'mt-3', 'w-100', 'collapsed']).setAttribute('data-bs-toggle', 'collapse').setAttribute('aria-expanded', 'false').setAttribute('data-bs-target', '#menuCollapse'),
+  attributes: create_attribute().addClass(['d-lg-none', 'mt-3', 'w-100']).setAttribute('data-bs-toggle', 'dropdown').setAttribute('id', 'dropdown-menu').setAttribute('aria-expanded', 'false').setAttribute('data-bs-target', '#menuCollapse'),
 }) }}
-
-<div class="d-lg-none collapse w-100 mt-3" id="menuCollapse">
+<div class="dropdown-menu d-lg-none">
   {{ menu }}
 </div>
-
 <div class="d-none d-lg-block mt-3">
   {{ menu }}
 </div>
