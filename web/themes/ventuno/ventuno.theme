@@ -341,14 +341,6 @@ function ventuno_theme_suggestions_alter(array &$suggestions, array $variables, 
   ) {
     $suggestions[] = $hook . '__rdf_entity_form';
   }
-
-  if ($hook === 'input' && $variables['element']['#type'] === 'submit') {
-    // Provide different template for state machine buttons.
-    // State machine buttons have a class called 'state-machine-action-button'.
-    if (isset($variables['element']['#attributes']['class']) && in_array('state-machine-action-button', $variables['element']['#attributes']['class'])) {
-      $suggestions[] = $hook . '__submit__state_machine';
-    }
-  }
 }
 
 /**
@@ -513,9 +505,7 @@ function ventuno_form_alter(&$form, FormStateInterface $form_state, $form_id): v
 
   // Add classes to the delete action in any kind of form.
   if (isset($form['actions']['delete'])) {
-    $form['actions']['delete']['#attributes']['class'][] = 'btn';
-    $form['actions']['delete']['#attributes']['class'][] = 'btn-md';
-    $form['actions']['delete']['#attributes']['class'][] = 'btn-danger';
+    $form['actions']['delete']['#attributes']['class'] = ['btn', 'btn-md', 'btn-outline-danger'];
   }
 }
 
