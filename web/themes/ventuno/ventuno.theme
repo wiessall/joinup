@@ -553,5 +553,5 @@ function ventuno_theme_suggestions_container_alter(array &$suggestions, array $v
     if (end($suggestions) != 'container__edit_actions' && strpos($variables['element']['#id'], 'edit-actions') !== FALSE) {
       $suggestions[] = 'container__edit_actions';
     }
- * Implements hook_theme_suggestions_HOOK_alter().
- */
+  }
+}
