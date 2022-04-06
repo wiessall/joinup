@@ -10,12 +10,12 @@
  * @see template_preprocess_input()
  */
 #}
-{% if attributes['value'] == 'Publish' or attributes['value'] == 'Save as draft' or attributes['value'] == 'Propose' or attributes['value'] == 'Request archival' %}
-  {% set attributes = attributes.addClass(['btn-outline-primary', 'me-2', 'mb-2']) %}
+{% if attributes['value'] == 'Publish' or attributes['value'] == 'Save as draft' or attributes['value'] == 'Propose' or attributes['value'] == 'Request archival' or attributes['value'] == 'Archive' %}
+  {% set attributes = attributes.addClass(['btn-outline-primary', 'mb-2', 'me-md-2']) %}
 {% elseif attributes.hasClass('button--primary') or (attributes['data-drupal-selector'] == 'edit-submit') %}
-  {% set attributes = attributes.addClass(['btn-primary']) %}
+  {% set attributes = attributes.addClass(['btn-primary', 'mb-2', 'me-md-2']) %}
 {% else %}
-  {% set attributes = attributes.addClass(['btn-secondary']) %}
+  {% set attributes = attributes.addClass(['btn-secondary', 'mb-2', 'me-md-2']) %}
 {% endif %}
 {% if attributes.disabled == 'disabled' %}
   {% set attributes = attributes.addClass(['disabled']) %}
