@@ -10,8 +10,8 @@
 
 // Override Bootstrap variables
 // @import "@openeuropa/bcl-theme-default/src/scss/variables";
-@import "@openeuropa/bcl-theme-joinup/src/scss/base/variables";
 @import "overrides/variables"; // Only use required variables
+@import "@openeuropa/bcl-theme-joinup/src/scss/base/variables";
 
 @import "@openeuropa/bcl-bootstrap/scss/mixins";
 
