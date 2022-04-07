@@ -420,7 +420,7 @@ class SolutionRdfSubscriber extends NotificationSubscriberBase implements EventS
     $arguments = parent::generateArguments($entity);
     /** @var \Drupal\user\UserInterface $actor */
     $actor = $this->entityTypeManager->getStorage('user')->load($this->currentUser->id());
-    $motivation = isset($this->entity->motivation) ? $this->entity->motivation : '';
+    $motivation = $this->entity->motivation ?? '';
     $arguments['@transition:motivation'] = $motivation;
 
     if (empty($arguments['@actor:role'])) {

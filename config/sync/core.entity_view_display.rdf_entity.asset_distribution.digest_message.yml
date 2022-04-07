@@ -26,20 +26,20 @@ third_party_settings:
         - field_ad_format
         - field_status
         - field_ad_repr_technique
+      label: Categorisation
       parent_name: ''
+      region: hidden
       weight: 6
       format_type: html_element
       format_settings:
-        id: ''
         classes: ''
+        id: ''
         element: div
         show_label: true
         label_element: h3
         attributes: ''
         effect: none
         speed: fast
-      label: Categorisation
-      region: hidden
 _core:
   default_config_hash: yuBnsBjApVTopV3xSPFpHg406x-7OVMswqbIvjnhFlU
 id: rdf_entity.asset_distribution.digest_message
@@ -49,8 +49,6 @@ mode: digest_message
 content:
   created:
     type: timestamp
-    weight: 2
-    region: content
     label: hidden
     settings:
       date_format: date_only
@@ -59,36 +57,38 @@ content:
     third_party_settings:
       template_suggestion:
         template_suggestion: ''
+    weight: 2
+    region: content
   field_ad_description:
-    weight: 1
+    type: smart_trim
     label: hidden
     settings:
       trim_length: 200
       trim_type: chars
       trim_suffix: …
+      wrap_output: false
       wrap_class: trimmed
-      more_text: More
+      more_link: false
       more_class: more-link
+      more_text: More
+      summary_handler: full
       trim_options:
         text: true
         trim_zero: false
-      wrap_output: false
-      more_link: false
-      summary_handler: full
     third_party_settings:
       template_suggestion:
         template_suggestion: ''
-    type: smart_trim
+    weight: 1
     region: content
   label:
-    label: hidden
     type: string
-    weight: 0
+    label: hidden
     settings:
       link_to_entity: false
     third_party_settings:
       template_suggestion:
         template_suggestion: no_wrappers
+    weight: 0
     region: content
 hidden:
   changed: true
@@ -103,3 +103,4 @@ hidden:
   field_status: true
   langcode: true
   og_audience: true
+  search_api_excerpt: true

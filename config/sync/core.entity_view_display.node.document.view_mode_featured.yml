@@ -34,52 +34,52 @@ bundle: document
 mode: view_mode_featured
 content:
   body:
-    label: hidden
     type: smart_trim
-    weight: 0
+    label: hidden
     settings:
       trim_length: 200
       trim_type: chars
       trim_suffix: …
+      wrap_output: false
+      wrap_class: trimmed
       more_link: false
+      more_class: more-link
       more_text: More
       summary_handler: trim
       trim_options:
         text: false
-      more_class: more-link
-      wrap_output: false
-      wrap_class: trimmed
     third_party_settings:
       template_suggestion:
         template_suggestion: no_wrappers
+    weight: 0
     region: content
   field_file:
     type: file_url_default
-    weight: 2
-    region: content
     label: hidden
     settings:
       mode: link
     third_party_settings: {  }
+    weight: 2
+    region: content
   field_keywords:
     type: string
-    weight: 3
-    region: content
     label: hidden
     settings:
       link_to_entity: false
     third_party_settings:
       template_suggestion:
         template_suggestion: comma_separated
+    weight: 3
+    region: content
   field_type:
     type: list_default
-    weight: 1
-    region: content
     label: hidden
     settings: {  }
     third_party_settings:
       template_suggestion:
         template_suggestion: no_wrappers
+    weight: 1
+    region: content
 hidden:
   field_comments: true
   field_document_logo: true
@@ -97,4 +97,5 @@ hidden:
   published_at: true
   read_more: true
   report: true
+  search_api_excerpt: true
   share_link: true

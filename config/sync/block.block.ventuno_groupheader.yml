@@ -11,14 +11,14 @@ _core:
 id: ventuno_groupheader
 theme: ventuno
 region: header_bottom
-weight: -25
+weight: -24
 provider: null
 plugin: group_header_block
 settings:
   id: group_header_block
   label: 'Group header'
-  provider: joinup
   label_display: '0'
+  provider: joinup
   context_mapping:
     og: '@og.context:og'
 visibility: {  }

@@ -39,11 +39,11 @@ Feature: User profile
 
     # Verify that the business title is a field limited to 255 characters.
     When I fill in "Business title" with "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent sagittis justo ornare justo porta tristique vitae eu ligula. Mauris iaculis eros id nulla posuere, id luctus orci ultricies. Aenean at leo diam. Aliquam dapibus nibh et est pharetra, quis interdum"
-    And I press the "Save" button
+    And I press "Save"
     Then I should see the error message "Business title cannot be longer than 255 characters but is currently 262 characters long."
 
     When I fill in "Business title" with "Italian Renaissance polymath"
-    And I press the "Save" button
+    And I press "Save"
     Then I should see the success message "The changes have been saved."
     And I should see the heading "Leoke di ser Piero da Vinci" in the "Header" region
     And I see the text "Italian Renaissance polymath" in the "Header" region
@@ -77,7 +77,7 @@ Feature: User profile
     Then I click "People"
     Then I should be on "admin/people"
     Then I fill in "Name or email contains" with "Leonardo"
-    And I press the "Filter" button
+    And I press "Filter"
     Then I click "Leonardo Da Vinci"
     Then I click "Edit"
     Then the following fields should be present "Email, Username, Password, Confirm password"
@@ -89,7 +89,7 @@ Feature: User profile
     And I fill in "Family name" with "di ser Piero da Vinci"
     And I select "Finance in EU" from "Professional domain"
     And I fill in "Country of origin" with "Italy"
-    And I press the "Save" button
+    And I press "Save"
     Then I should see the success message "The changes have been saved."
     And I should see the success message "The user has been notified that their account has been updated."
     And the following email should have been sent:
@@ -210,7 +210,7 @@ Feature: User profile
     # cleared and the collection that was joined should show up.
     Given I am logged in as "Korben Dallas"
     And I go to the homepage of the "Federated Army Veterans" collection
-    And I press the "Join this collection" button
+    And I press "Join this collection"
 
     When I am an anonymous user
     And I go to the public profile of "Korben Dallas"
@@ -226,7 +226,7 @@ Feature: User profile
     Given I am logged in as "Korben Dallas"
     And I go to the homepage of the "Federated Army Veterans" collection
     And I click "Leave this collection"
-    And I press the "Confirm" button
+    And I press "Confirm"
 
     When I am an anonymous user
     And I go to the public profile of "Korben Dallas"
@@ -260,8 +260,8 @@ Feature: User profile
     And I fill in "Email" with "she@example.com"
     When I press "Save"
     Then I should see the following warning messages:
-      | warning messages                                                                                                 |
-      | Your updated email address needs to be validated. Further instructions have been sent to your new email address. |
+      | warning messages                                                                                    |
+      | You must confirm your email address. Further instructions have been sent to your new email address. |
     And the following email should have been sent:
       | recipient_mail | he@example.com                                                                                                          |
       | subject        | Joinup: Email change information for Caitlyn Jenner                                                                     |

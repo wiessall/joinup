@@ -39,7 +39,7 @@
 {{ attach_library('ventuno/navbar') }}
 
 {% if search %}
-  {{ attach_library('ventuno/header-search-bar') }}
+  {{ attach_library('ventuno/navbar-search') }}
 {% endif %}
 
 {% set _brand = brand|default({}) %}
@@ -85,18 +85,10 @@
   <div class="container">
     <div class="d-flex">
       <a class="navbar-brand" href="{{ _brand.link }}">
-        <img class="navbar-brand-image" src="{{ _brand.src }}" alt="{{ _brand.alt }}" />
+        <img class="navbar-brand-image" src="{{ _brand.src }}" alt="{{ _brand.alt }}" width="96" height="25"/>
       </a>
-      {% if _brand.motto is not empty %}
-        <span class="navbar-motto d-none d-md-block">{{ _brand.motto }}</span>
-      {% endif %}
-      {% if search %}
-        <div class="header-search-bar d-none d-md-block">
-          {{ search }}
-        </div>
-      {% endif %}
     </div>
-    <div class="" id="{{ _collapse_id }}">
+    <div id="{{ _collapse_id }}">
       <ul
         {{ list_attributes }}
       >
@@ -110,13 +102,14 @@
                     {{ link(link.label, link.link, attributes.addClass('nav-link')) }}
                   {% elseif link.popover %}
                     <button
+                      id="popover-trigger"
                       data-bs-toggle="popover"
                       autocomplete="off"
                       data-bs-placement="bottom"
                       data-bs-content="<a class='popover__cta' href='{{ link.popover.cta.link }}' {{ link.popover.cta.attributes }}>{{ link.popover.cta.text }}</a><p class='popover__description'>{{ link.popover.description }}</p>"
                       data-bs-custom-class="navbar__popover"
                       data-bs-html="true"
-                      data-bs-container=".nav-item"
+                      data-bs-container="#popover-trigger"
                       data-bs-offset="-74, 16"
                       class="btn btn-light popover-trigger popover-getstarted"
                       type="button"
@@ -144,15 +137,12 @@
                 aria-controls="collapse-{{ item.id }}"
                 aria-expanded="false"
                 type="button"
-                title="{{ 'Toggle menu'|t }}"
+                title="{{ item.label }}"
               >
                 {% if item.icon is not empty %}
                   <svg class="bi icon--s">
                     <use xlink:href="{{ bcl_icon_path }}#{{ item.icon.name }}"></use>
                   </svg>
-                {% endif %}
-                {% if item.label is not empty %}
-                  <span class="accordion-button-label">{{ item.label }}</span>
                 {% endif %}
               </button>
             </span>
@@ -163,17 +153,23 @@
               data-bs-parent="#{{ _list_id }}"
             >
               <div class="accordion-body">
-                <ul class="accordion-list">
-                  {% for link in item.links %}
-                    {% if link.link %}
-                      <li class="accordion-list-item">
-                        <a href="{{ link.link }}" class="accordion-list-link">
-                          {{ link.label }}
-                        </a>
-                      </li>
-                    {% endif %}
-                  {% endfor %}
-                </ul>
+                {% if item.type is same as 'search' and search %}
+                  <div class="navbar-search">
+                    {{ search }}
+                  </div>
+                {% else %}
+                  <ul class="accordion-list">
+                    {% for link in item.links %}
+                      {% if link.link %}
+                        <li class="accordion-list-item">
+                          <a href="{{ link.link }}" class="accordion-list-link">
+                            {{ link.label }}
+                          </a>
+                        </li>
+                      {% endif %}
+                    {% endfor %}
+                  </ul>
+                {% endif %}
               </div>
             </div>
           </li>
@@ -182,12 +178,5 @@
     </div>
   </div>
 </nav>
-{% if search %}
-  <div class="header-search-bar d-md-none">
-    <div class="container">
-      {{ search }}
-    </div>
-  </div>
-{% endif %}
 
 {% endspaceless %}

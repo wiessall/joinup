@@ -135,7 +135,6 @@ Feature:
   @javascript
   Scenario: Configure a custom page to show specific tiles.
     Given I am logged in as a facilitator of the "Nintendo64" collection
-    And I accept essential cookies
     When I go to the homepage of the "Nintendo64" collection
     And I click "Add custom page" in the plus button menu
     Then I should see the heading "Add custom page"
@@ -144,8 +143,7 @@ Feature:
 
     # The "List additional actions" is the button arrow that shows the full list of paragraphs to add.
     Given I press "List additional actions"
-    And I press "Add Content listing"
-    And I wait for AJAX to finish
+    Then I press "Add Content listing" in the "Custom page body" paragraphs field
     And I select "Discussion" from "Available filters"
     And I press "Add and configure filter"
     And I fill in "Discussion" with "Searching for green pad."
@@ -244,7 +242,6 @@ Feature:
 
     # Query presets should still apply when available.
     When I am logged in as a moderator
-    And I accept essential cookies
     And I go to the "Chosen content" custom page
     And I open the header local tasks menu
     And I click "Edit" in the "Entity actions" region

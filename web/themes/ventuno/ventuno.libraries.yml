@@ -1,20 +1,63 @@
-searchpage:
+# Main
+style:
+  version: VERSION
   css:
-    theme:
-      assets/css/searchpage.css: {}
+    base:
+      assets/css/main.css: {}
+  js:
+    assets/js/oe-bcl-joinup.bundle.min.js: { minified: true }
+    assets/js/popovers.js: { minified: false }
+  dependencies:
+    - core/drupal
 
+# Pages
 homepage:
   css:
     theme:
       assets/css/homepage.css: {}
 
-bootstrap-base:
+licence-comparer:
   css:
-    component:
-      assets/css/bootstrap-base.css: {}
+    theme:
+      assets/css/licence-comparer.css: {}
+
+searchpage:
+  css:
+    theme:
+      assets/css/searchpage.css: {}
+  dependencies:
+    - ventuno/close
+
+# Bootstrap components
+close:
+  css:
+    theme:
+      assets/css/close.css: {}
+
+modals:
+  css:
+    theme:
+      assets/css/modals.css: {}
+  dependencies:
+    - ventuno/close
+
+tables:
+  css:
+    theme:
+      assets/css/tables.css: {}
+
+# Custom components
+footer:
+  css:
+    theme:
+      assets/css/footer.css: {}
+
+glide:
   js:
-    assets/js/oe-bcl-joinup.bundle.min.js: { minified: true }
-    assets/js/popovers.js: { minified: false }
+    assets/js/glide.js: { minified: false }
+  css:
+    theme:
+      assets/css/glide.core.min.css: { minified: true }
 
 navbar:
   css:
@@ -23,44 +66,33 @@ navbar:
   js:
     assets/js/sticky-menu.js: { minified: true, attributes: { defer: true } }
 
-header-search-bar:
+navbar-search:
   css:
     theme:
-      assets/css/header-search-bar.css: {}
+      assets/css/navbar-search.css: {}
+  js:
+    assets/js/searchbox-focus.js: { minified: true, attributes: { defer: true } }
 
 pager:
   css:
     theme:
       assets/css/pager.css: {}
 
-footer:
-  css:
-    theme:
-      assets/css/footer.css: {}
-
 site-alerts-messages:
   css:
     theme:
       assets/css/site-alerts-messages.css: {}
-
-slick:
-  js:
-    assets/js/slick.js: { minified: true }
-    assets/js/slick-config.js: { minified: false }
-  css:
-    theme:
-      assets/css/slick.css: { minified: true }
 
 tables:
   css:
     component:
       assets/css/tables.css: {}
 
-style:
-  version: VERSION
+# @todo remove when switch to Ventuno theme is complete
+bootstrap-base:
   css:
-    base:
-      assets/css/main.css: {}
+    component:
+      assets/css/bootstrap-base.css: {}
   js:
     assets/js/oe-bcl-joinup.bundle.min.js: { minified: true }
     assets/js/popovers.js: { minified: false }

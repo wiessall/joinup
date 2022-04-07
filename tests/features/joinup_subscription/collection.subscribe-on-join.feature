@@ -19,7 +19,7 @@ Feature: Subscribing to a collection after joining
     # Join an open collection.
     Given I am logged in as "Echinoid Blacksly"
     And I go to the homepage of the "Sapient Pearwood" collection
-    When I press the "Join this collection" button
+    When I press "Join this collection"
     Then I should see the success message "You are now a member of Sapient Pearwood."
 
     # A modal dialog opens proposing the user to subscribe to the collection.
@@ -38,7 +38,7 @@ Feature: Subscribing to a collection after joining
 
     # Navigate to another open collection, this time subscribing.
     When I go to the homepage of the "Drop bears" collection
-    And I press the "Join this collection" button
+    And I press "Join this collection"
     Then a modal should open
     When I press "Subscribe" in the "Modal buttons" region
     Then the modal should be closed
@@ -48,7 +48,7 @@ Feature: Subscribing to a collection after joining
 
     # Navigate to a closed collection and deny the subscription.
     When I go to the homepage of the "Troll ducks" collection
-    And I press the "Join this collection" button
+    And I press "Join this collection"
     Then a modal should open
     And I should see the text "Welcome to Troll ducks" in the "Modal title"
     And I should see the text "When your membership is approved you will be able to publish content in it." in the "Modal content"
@@ -62,7 +62,7 @@ Feature: Subscribing to a collection after joining
 
     # Navigate to a closed collection and accept the subscription.
     When I go to the homepage of the "Swamp dragons" collection
-    And I press the "Join this collection" button
+    And I press "Join this collection"
     Then a modal should open
     When I press "Subscribe" in the "Modal buttons" region
     Then the modal should be closed

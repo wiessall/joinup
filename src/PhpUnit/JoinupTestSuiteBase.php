@@ -6,6 +6,7 @@ namespace Joinup\PhpUnit;
 
 use Drupal\Core\Test\TestDiscovery;
 use Drupal\Tests\TestSuites\TestSuiteBase;
+use PHPUnit\Framework\Test;
 
 require_once __DIR__ . '/../../web/core/tests/TestSuites/TestSuiteBase.php';
 
@@ -20,7 +21,7 @@ abstract class JoinupTestSuiteBase extends TestSuiteBase {
   protected function findExtensionDirectories($root): array {
     $extension_roots = [
       "$root/modules/custom",
-      "$root/themes",
+      "$root/themes/ventuno",
       "$root/profiles",
     ];
     $extension_directories = array_map('drupal_phpunit_find_extension_directories', $extension_roots);
@@ -37,6 +38,16 @@ abstract class JoinupTestSuiteBase extends TestSuiteBase {
       if (is_dir($test_path)) {
         $this->addTestFiles(TestDiscovery::scanDirectory("Drupal\\Tests\\$extension_name\\$suite_namespace\\", $test_path));
       }
+    }
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function addTest(Test $test, $groups = []): void {
+    // Temporary disable a test, by adding `@group wip` in the class docblock.
+    if (!in_array('wip', $test->getGroups(), TRUE)) {
+      parent::addTest($test, $groups);
     }
   }
 

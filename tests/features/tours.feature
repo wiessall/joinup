@@ -45,8 +45,7 @@ Feature: Tours
     # occurs and in the screenshots we can see that the "Guided tour" button is
     # just on the bottom edge of the display.
     And I use a device with an "extra extra large" display
-    And I accept essential cookies
-    When I click "Guided tour"
+    When I press "Guided tour"
     # @todo: Revert to the text of the first balloon when ISAICP-6855 is fixed.
     # @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-6855
     #Then I should see the text "Sign in or out, and manage your user account"

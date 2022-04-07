@@ -28,7 +28,7 @@ Feature:
     And I click the last "Delete" link
     And I press "Delete"
     Then I should see the heading "Revisions collection has been published"
-    But I should not see the link "Revisions" in the "Entity actions" region
+    And I should see the link "Revisions" in the "Entity actions" region
 
     When I am logged in as a facilitator of the "Revisions collection" collection
     And I go to the homepage of the "Revisions collection" collection
@@ -53,7 +53,6 @@ Feature:
       | owner               | Some owner       |
 
     When I am logged in as a user with the "moderator" role
-    And I accept essential cookies
     And I go to the "Share solution" solution
     And I click "About"
     Then I should not see the contextual link "Share"

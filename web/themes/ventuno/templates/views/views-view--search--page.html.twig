@@ -45,6 +45,17 @@
     {{ title }}
   {% endif %}
   {{ title_suffix }}
+  {{ pattern('button', {
+    label: 'Filter options',
+    variant: 'primary',
+    size: 'md',
+    type: 'button',
+    outline: false,
+    disabled: false,
+    icon: 'filter',
+    icon_position: 'after',
+    attributes: create_attribute().addClass(["d-lg-none", "mt-2", "mb-4", "rounded-0", "w-100"]).setAttribute("data-bs-toggle", "offcanvas").setAttribute("data-bs-target", "#bcl-offcanvas").setAttribute("aria-controls", "bcl-offcanvas"),
+  }) }}
   {% if header %}
     <div class="view-header">
       {% set results_count = header.views_block_area_1.content.results_count|merge({'value': header.result}) %}

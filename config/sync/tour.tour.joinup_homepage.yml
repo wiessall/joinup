@@ -12,56 +12,56 @@ tips:
   account:
     id: account
     plugin: text
-    body: 'Sign in or out, and manage your user account.'
+    label: 'Your account'
     weight: 1
-    location: left
-    attributes:
-      data-class: 'temporarily-disabled joinup-navbar .nav-item:nth-child(2)'
+    position: left-start
+    selector: '.temporarily-disabled joinup-navbar .nav-item:nth-last-child(3)'
+    body: 'Sign in or out, and manage your user account.'
   search:
     id: search
     plugin: text
-    body: 'Search through the entire Joinup platform and its supported content items.'
+    label: Search
     weight: 2
-    location: left
-    attributes:
-      data-class: search-bar
+    position: left-start
+    selector: '#block-exposed-search .input-group.js-form-type-search-api-autocomplete'
+    body: 'Search through the entire Joinup platform and its supported content items.'
   spotlight:
     id: spotlight
     plugin: text
-    body: 'View a list of curated content items published on the platform.'
+    label: 'Curated content'
     weight: 4
-    location: left
-    attributes:
-      data-class: block-views-blockin-the-spotlight-block
+    position: left-start
+    selector: .block-views-blockin-the-spotlight-block
+    body: 'View a list of curated content items published on the platform.'
   news:
     id: news
     plugin: text
-    body: 'View the latest news and events published on the platform.'
+    label: News
     weight: 5
-    location: left
-    attributes:
-      data-class: block-views-blocklatest-news-block
+    position: left-start
+    selector: .block-views-blocklatest-news-block
+    body: 'View the latest news and events published on the platform.'
   explore:
     id: explore
     plugin: text
-    body: 'Explore the platform''s published content items per type.'
+    label: Explore
     weight: 6
-    location: left
-    attributes:
-      data-class: 'block-joinup-front-page-explore-block .explore-block-title'
+    position: left-start
+    selector: '#myTab'
+    body: 'Explore the platform''s published content items per type.'
   about:
     id: about
     plugin: text
-    body: 'Learn more about the platform.'
+    label: 'About Joinup'
     weight: 7
-    location: left
-    attributes:
-      data-class: about-what
+    position: left-start
+    selector: .about-what
+    body: 'Learn more about the platform.'
   contact:
     id: contact
     plugin: text
-    body: 'If you have any questions or suggestions regarding the Joinup platform, you can contact us through this link.'
+    label: 'Contact us'
     weight: 8
-    location: bottom
-    attributes:
-      data-class: 'about-us-menu li:nth-child(2)'
+    position: bottom-start
+    selector: 'li a[data-drupal-link-system-path="contact"]'
+    body: 'If you have any questions or suggestions regarding the Joinup platform, you can contact us through this link.'

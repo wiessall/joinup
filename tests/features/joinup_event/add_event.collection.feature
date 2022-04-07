@@ -127,7 +127,6 @@ Feature: "Add event" visibility options.
       | The Great Opening | Stream of Dreams | It opens! | webinar - http://example.com | validated |
 
     And I am logged in as a moderator
-    And I accept essential cookies
 
     # Upload works.
     When I go to the edit form of the "The Great Opening" event
