@@ -83,6 +83,14 @@ module.exports = {
     },
     // Bootstrap components
     {
+      entry: path.resolve(outputFolder, "src/scss/accordion.scss"),
+      dest: path.resolve(outputFolder, "assets/css/accordion.css"),
+      options: {
+        includePaths,
+        sourceMap: "file",
+      },
+    },
+    {
       entry: path.resolve(outputFolder, "src/scss/close.scss"),
       dest: path.resolve(outputFolder, "assets/css/close.css"),
       options: {
