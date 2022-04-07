@@ -1,0 +1,29 @@
+uuid: 985dffb5-7a89-46ae-b914-66441ee5656e
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.rdf_entity.eif_settings_qualifier
+    - rdf_entity.rdfentity.eif_layer
+    - taxonomy.vocabulary.eif_interoperability_layer
+id: rdf_entity.eif_layer.eif_settings_qualifier
+field_name: eif_settings_qualifier
+entity_type: rdf_entity
+bundle: eif_layer
+label: 'EIF qualifier'
+description: ''
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings:
+    target_bundles:
+      eif_interoperability_layer: eif_interoperability_layer
+    sort:
+      field: name
+      direction: asc
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

@@ -1,0 +1,97 @@
+uuid: f2b90aaf-a907-4974-b17d-c138ed516f2d
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.rdf_meta_entity.eif_settings.eif_layer
+    - field.field.rdf_meta_entity.eif_settings.eif_model
+    - field.field.rdf_meta_entity.eif_settings.eif_principle
+    - field.field.rdf_meta_entity.eif_settings.eif_recommendation
+    - field.field.rdf_meta_entity.eif_settings.field_eif_description
+    - field.field.rdf_meta_entity.eif_settings.field_eif_solution_type
+    - rdf_meta_entity.type.eif_settings
+  module:
+    - text
+id: rdf_meta_entity.eif_settings.default
+targetEntityType: rdf_meta_entity
+bundle: eif_settings
+mode: default
+content:
+  changed:
+    type: timestamp
+    label: inline
+    settings:
+      date_format: medium
+      custom_date_format: ''
+      timezone: ''
+    third_party_settings: {  }
+    weight: 22
+    region: content
+  created:
+    type: timestamp
+    label: inline
+    settings:
+      date_format: medium
+      custom_date_format: ''
+      timezone: ''
+    third_party_settings: {  }
+    weight: 20
+    region: content
+  eif_layer:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 30
+    region: content
+  eif_model:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 31
+    region: content
+  eif_principle:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 29
+    region: content
+  eif_recommendation:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 32
+    region: content
+  field_eif_description:
+    type: text_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 27
+    region: content
+  field_eif_solution_type:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 28
+    region: content
+  label:
+    type: string
+    label: hidden
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: -5
+    region: content
+hidden:
+  search_api_excerpt: true
+  target: true
