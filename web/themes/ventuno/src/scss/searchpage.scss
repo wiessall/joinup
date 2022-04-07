@@ -1,5 +1,4 @@
-// Searchpage CSS
-@import "components/component-base";
+@import "core/base/base";
 @import "@openeuropa/bcl-bootstrap/scss/card";
 @import "@openeuropa/bcl-bootstrap/scss/close";
 @import "@openeuropa/bcl-bootstrap/scss/badge";
@@ -12,5 +11,5 @@
 @import "@openeuropa/bcl-theme-default/src/scss/multiselect";
 @import "@openeuropa/bcl-theme-default/src/scss/bcl-offcanvas";
 @import "@openeuropa/bcl-theme-joinup/src/scss/form";
-@import "mixins/joinup-icons";
-@import "components/searchpage";
+@import "core/mixins/joinup-icons";
+@import "pages/searchpage";
