@@ -16,8 +16,8 @@ plugin: facets_block
 settings:
   id: facets_block
   label: 'Facets block: View Search, display Page'
-  provider: facets_block
   label_display: '0'
+  provider: facets_block
   show_title: false
   exclude_empty_facets: true
   hide_empty_block: false
@@ -51,7 +51,7 @@ settings:
 visibility:
   request_route:
     id: request_route
-    routes:
-      - view.search.page_1
     negate: false
     context_mapping: {  }
+    routes:
+      - view.search.page_1

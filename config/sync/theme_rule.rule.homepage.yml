@@ -13,6 +13,6 @@ weight: 0
 conditions:
   request_route:
     id: request_route
+    negate: false
     routes:
       - page_manager.page_view_homepage_homepage-layout_builder-0
-    negate: false

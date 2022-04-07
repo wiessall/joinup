@@ -17,7 +17,7 @@ plugin: 'facet_block:collection_my_content'
 settings:
   id: 'facet_block:collection_my_content'
   label: 'Collections - My content'
-  provider: facets
   label_display: '0'
+  provider: facets
   block_id: mycontentcollection
 visibility: {  }

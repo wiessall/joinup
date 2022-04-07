@@ -12,7 +12,6 @@ use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\joinup_featured\FeaturedContentInterface;
 use Drupal\meta_entity\Entity\MetaEntityInterface;
-use Drupal\search_api\Plugin\search_api\datasource\ContentEntity;
 
 /**
  * Implements hook_ENTITY_TYPE_update().
@@ -45,7 +44,9 @@ function joinup_featured_meta_entity_update(MetaEntityInterface $entity): void {
 
     // Reindex the featured entity since the featured status affects the
     // filtering of search results using the "Featured content" facets.
-    ContentEntity::indexEntity($featured_entity);
+    /** @var \Drupal\search_api\Plugin\search_api\datasource\ContentEntityTrackingManager $content_tracking_manager */
+    $content_tracking_manager = \Drupal::service('search_api.entity_datasource.tracking_manager');
+    $content_tracking_manager->trackEntityChange($featured_entity);
 
     // Invalidate caches of the featured entity so that the "star" icon will be
     // shown or hidden according to the new featured status.

@@ -115,10 +115,10 @@ class SolutionsByLicenceForm extends FormBase {
     $rows = [];
     foreach ($items as $item) {
       $licence_url = Url::fromRoute('entity.rdf_entity.canonical', [
-        'rdf_entity' => $item->licence,
+        'rdf_entity' => $item->licence->getUri(),
       ]);
       $solution_url = Url::fromRoute('entity.rdf_entity.canonical', [
-        'rdf_entity' => $item->solution,
+        'rdf_entity' => $item->solution->getUri(),
       ]);
 
       $rows[] = [

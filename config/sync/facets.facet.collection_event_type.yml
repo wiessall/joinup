@@ -4,29 +4,36 @@ status: true
 dependencies: {  }
 id: collection_event_type
 name: 'Event date'
-url_alias: event_type
 weight: 0
 min_count: 1
-show_only_one_result: true
-field_identifier: field_event_date
+url_alias: event_type
 facet_source_id: 'search_api_field:rdf_entity.field_collection_content'
+field_identifier: field_event_date
+query_operator: or
+hard_limit: 0
+exclude: false
+use_hierarchy: false
+keep_hierarchy_parents_active: false
+hierarchy:
+  type: taxonomy
+  config: {  }
+expand_hierarchy: false
+enable_parent_when_child_gets_disabled: true
 widget:
   type: links_inline
   config:
     show_numbers: true
+    arbitrary_facet_plugin: events_arbitrary
     all_text: 'All events'
     prefix_text: ''
     suffix_text: ''
-    arbitrary_facet_plugin: events_arbitrary
     cache_contexts:
       - 'community_content_author:event'
-query_operator: or
-use_hierarchy: false
-expand_hierarchy: false
-enable_parent_when_child_gets_disabled: true
-hard_limit: 0
-exclude: false
+empty_behavior:
+  behavior: none
 only_visible_when_facet_source_is_visible: true
+show_only_one_result: true
+show_title: null
 processor_configs:
   active_widget_order:
     processor_id: active_widget_order
@@ -67,6 +74,3 @@ processor_configs:
       pre_query: -10
       build: -9
     settings: {  }
-empty_behavior:
-  behavior: none
-show_title: null

@@ -32,7 +32,7 @@ drupal:
         - Databases
         - Configuration
         - Search API
-        - Matomo & OpenEuropa Webtools Analytics
+        - OpenEuropa Webtools Analytics
         - Custom error handler
         - Permissions
         - Null mail collector
@@ -41,7 +41,7 @@ drupal:
         - Databases
         - Configuration
         - Search API
-        - Matomo & OpenEuropa Webtools Analytics
+        - OpenEuropa Webtools Analytics
         - Custom error handler
         - Permissions
         - Verbose error logging
@@ -54,7 +54,7 @@ drupal:
         - Databases
         - Configuration
         - Search API
-        - Matomo & OpenEuropa Webtools Analytics
+        - OpenEuropa Webtools Analytics
         - Custom error handler
         - Permissions
         - Development
@@ -69,8 +69,9 @@ drupal:
         - Main settings
         - Databases
         - Configuration
+        - Testing configuration alters
         - Search API
-        - Matomo & OpenEuropa Webtools Analytics
+        - OpenEuropa Webtools Analytics
         - Custom error handler
         - Permissions
         - Development
@@ -85,7 +86,7 @@ drupal:
         - Databases
         - Configuration
         - Search API
-        - Matomo & OpenEuropa Webtools Analytics
+        - OpenEuropa Webtools Analytics
         - Custom error handler
         - Permissions
         - Development
@@ -101,7 +102,7 @@ drupal:
         - Databases
         - Configuration
         - Search API
-        - Matomo & OpenEuropa Webtools Analytics
+        - OpenEuropa Webtools Analytics
         - Custom error handler
         - Permissions
         - Development
@@ -116,7 +117,7 @@ drupal:
         - Databases
         - Configuration
         - Search API
-        - Matomo & OpenEuropa Webtools Analytics
+        - OpenEuropa Webtools Analytics
         - Custom error handler
         - Redis
         - Custom queue services
@@ -161,18 +162,6 @@ drupal:
         $settings['file_scan_ignore_directories'] = [
           'node_modules',
           'bower_components',
-          // In some circumstances, the Bootstrap Components Library (BCL) components,
-          // from "OE Bootstrap Theme", located under the theme assets directory
-          // `web/themes/contrib/oe_bootstrap_theme/assets/bcl`, are discovered and used
-          // as Drupal Twig templates. But they shouldn't be used directly, they rather
-          // should be called by a UI Pattern wrapper. For instance, the accordion should
-          // use `web/themes/contrib/oe_bootstrap_theme/templates/patterns/accordion`
-          // rather than `web/themes/contrib/oe_bootstrap_theme/assets/bcl/bcl-accordion`.
-          // This is a known issue with "OE Bootstrap Theme", handled in OEL-522. Until a
-          // fix will be available, in OEL-522, we exclude the `bcl` from file scanning,
-          // as a temporary fix.
-          // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/OEL-522
-          'bcl',
         ];
         $settings['entity_update_batch_size'] = 50;
         $settings['entity_update_backup'] = TRUE;
@@ -184,6 +173,10 @@ drupal:
         if ($trusted_host_patterns = getenv('DRUPAL_TRUSTED_HOST_PATTERNS')) {
           $settings['trusted_host_patterns'] = [$trusted_host_patterns];
         }
+
+        // Disable Piwik API calls until ISAICP-6944.
+        // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-6944
+        $settings['joinup.parse_cached_computed_field'] = FALSE;
       Configuration: |
         $settings['config_exclude_modules'] = [
           'admin_toolbar',
@@ -206,6 +199,13 @@ drupal:
         // Location of the site configuration files.
         $settings['config_sync_directory'] = '../config/sync';
         $settings['config_readonly'] = !file_exists(getcwd() . '/../disable-config-readonly');
+      Testing configuration alters: |
+        // The video from the home page interracts with Selenium tests.
+        $config['page_manager.page_variant.homepage-layout_builder-1']['variant_settings']['sections'][0]['components']['6ab0ceea-4541-4153-8b64-227e02369d30']['configuration']['text'] = 'Some joinup video';
+        // Almost all tests should run without the cookie consent widget.
+        $oe_webtools_cck_enabled = !file_exists(getcwd() . '/../disable-cookie-consent');
+        $config['oe_webtools_cookie_consent.settings']['banner_popup'] = $oe_webtools_cck_enabled;
+        $config['oe_webtools_cookie_consent.settings']['video_popup'] = $oe_webtools_cck_enabled;
       Databases: |
         $databases['default']['default'] = [
           'database' => getenv('DRUPAL_DATABASE_NAME'),
@@ -241,19 +241,30 @@ drupal:
         $config['swiftmailer.transport']['sendmail_mode'] = getenv('DRUPAL_MAIL_SENDMAIL_MODE');
         $config['swiftmailer.transport']['spool_directory'] = getenv('DRUPAL_MAIL_SPOOL_DIR');
       Search API: |
-        $config['search_api.server.joinup']['backend_config']['connector_config'] = parse_url(getenv('SOLR_URL'));
-        $config['search_api.server.joinup']['backend_config']['connector_config']['core'] = getenv('SOLR_CORE');
-      Matomo & OpenEuropa Webtools Analytics: |
-        $config['matomo_reporting_api.settings']['site_id'] = getenv('MATOMO_SITE_ID');
-        $config['matomo_reporting_api.settings']['url_http'] = getenv('MATOMO_SITE_URL_HTTP');
-        $config['matomo_reporting_api.settings']['url_https'] = getenv('MATOMO_SITE_URL_HTTPS');
-        $config['matomo_reporting_api.settings']['token_auth'] = getenv('MATOMO_REPORTING_API_AUTH_TOKEN');
-        $config['oe_webtools_analytics.settings']['siteID'] = getenv('MATOMO_SITE_ID');
+        // Backards compatibility layer for SOLR_* environment variables.
+        \Joinup\TaskRunner\Traits\SolrTrait::solrEnvVarsBackwardsCompatibility();
+        // Adding a fallback for the scheme in case it is not properly
+        // consumed by the production environment.
+        $config['search_api.server.joinup']['backend_config']['connector_config']['scheme'] = getenv('SEARCH_API_SERVER_SS_SOLR_SCHEME') ?: 'http';
+        $config['search_api.server.joinup']['backend_config']['connector_config']['host'] = getenv('SEARCH_API_SERVER_SS_SOLR_HOST');
+        $config['search_api.server.joinup']['backend_config']['connector_config']['port'] = getenv('SEARCH_API_SERVER_SS_SOLR_PORT');
+        // Since Search API Solr 3.x, the Solr endpoint '/solr' (V1 API) has been
+        // dropped in favour of '/'. The Solarium library automatically appends the
+        // 'solr' part in Endpoint::getCoreBaseUri(). We  prevent changes of
+        // environment variables of deployment servers and pipelines by hardcodeing
+        // the value.
+        // @see search_api_solr_update_8309()
+        // @see \Solarium\Core\Client\Endpoint::getCoreBaseUri()
+        // @see \Joinup\TaskRunner\Commands\SolrCommands::getUrl()
+        $config['search_api.server.joinup']['backend_config']['connector_config']['path'] = '/';
+        $config['search_api.server.joinup']['backend_config']['connector_config']['core'] = getenv('SEARCH_API_SERVER_SS_SOLR_CORE');
+      OpenEuropa Webtools Analytics: |
+        $config['oe_webtools_analytics.settings']['siteID'] = getenv('OE_WEBTOOLS_ANALYTICS_SITE_ID');
         $config['oe_webtools_analytics.settings']['sitePath'] = getenv('OE_WEBTOOLS_ANALYTICS_SITE_PATH');
         $config['oe_webtools_analytics.settings']['instance'] = getenv('OE_WEBTOOLS_ANALYTICS_SITE_INSTANCE');
       Redis: |
         if (empty(getenv('REDIS_DISABLED'))) {
-          $settings['redis.connection']['interface'] = 'Predis';
+          $settings['redis.connection']['interface'] = 'PhpRedis';
           $settings['redis.connection']['host'] = getenv('REDIS_HOST');
           $settings['redis.connection']['port'] = getenv('REDIS_PORT');
           $settings['cache']['default'] = 'cache.backend.redis';

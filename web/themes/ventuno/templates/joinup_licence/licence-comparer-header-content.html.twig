@@ -1,0 +1,41 @@
+{#
+/**
+ * @file
+ * Default implementation of displaying a licence comparer header cell content.
+ *
+ * Available variables:
+ * - spdx_id: The SPDX ID.
+ * - title: The licence title.
+ * - description: The licence description.
+ * - url: The SPDX URL.
+ * - first_header: Whether this is the first header.
+ */
+#}
+
+{{ attach_library('ventuno/modals') }}
+
+{% set _modal_id = spdx_id|lower|replace({'.': '-'}) %}
+<button class="btn btn-link btn-md text-dark p-0" type="button" data-bs-toggle="modal" data-bs-target="#{{ _modal_id }}">
+  {{ spdx_id }}
+  <svg class="bi icon--fluid">
+    <use xlink:href="{{ bcl_icon_path }}#info-circle"></use>
+  </svg>
+</button>
+{% set _body %}
+  <p class="h4">{{ title }}</p>
+  <p>{{ description|striptags }}</p>
+{% endset %}
+{% set _footer %}
+  <a class="btn btn-outline-primary btn-md" href="{{ url }}" target="_blank" rel="noopener nofollow" role="button">{{ 'Licence text'|t }}</a>
+{% endset %}
+{% if first_header %}
+  {{ pattern('modal', {
+    attributes: {
+      id: _modal_id,
+    },
+    size: 'lg',
+    show_close_button: true,
+    body: _body,
+    footer: _footer,
+  }) }}
+{% endif %}

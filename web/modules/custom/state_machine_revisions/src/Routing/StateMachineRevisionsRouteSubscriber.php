@@ -76,7 +76,7 @@ class StateMachineRevisionsRouteSubscriber extends RouteSubscriberBase {
       return;
     }
     // Only set the flag on entity types which are revisionable.
-    list($entity_type) = explode('.', $entity_form, 2);
+    [$entity_type] = explode('.', $entity_form, 2);
     if (!$this->hasStateAndIsRevisionable($entity_type)) {
       return;
     }

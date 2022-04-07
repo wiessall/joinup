@@ -51,11 +51,12 @@ Feature:
     When I visit the revisions page for "Goodbi world"
     Then I should see the heading "Access denied"
 
+    # Moderators always can access the revisions.
     Given I am logged in as "Fuzzy Moderator"
     When I visit the "Goodbi world" <content type>
-    Then I should not see the link "Revisions" in the "Entity actions" region
+    Then I should see the link "Revisions" in the "Entity actions" region
     When I visit the revisions page for "Goodbi world"
-    Then I should see the heading "Access denied"
+    Then I should see the heading "Revisions for Goodbi world"
 
     Given I am logged in as "Jelly Facilitator"
     When I visit the "Goodbi world" <content type>
@@ -137,7 +138,7 @@ Feature:
 
     # After leaving the group the user is no longer able to see revisions.
     When I click "<leave link>"
-    And I press the "Confirm" button
+    And I press "Confirm"
     Then I should see the success message "You are no longer a member of Hellow world."
 
     When I visit the "<final title>" <content type>
@@ -165,7 +166,7 @@ Feature:
     And I click "Members" in the "Left sidebar"
     And I check the box "Update the member Clumsy Bounce"
     And I select "Block the selected membership(s)" from "Action"
-    And I press the "Apply to selected items" button
+    And I press "Apply to selected items"
     Then I should see the following success messages:
       | success messages                                        |
       | Block the selected membership(s) was applied to 1 item. |

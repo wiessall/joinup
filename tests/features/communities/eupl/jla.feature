@@ -42,7 +42,6 @@ Feature:
     And the response should contain "http://joinup.eu/spdx/foo.html#licenseText"
     And the response should contain "http://joinup.eu/spdx/bar.html#licenseText"
 
-    When I accept essential cookies
     And I click "Distribute" in the "Content" region
     Then I should see the text "1 licences found"
     And I should see the text "Bar Licence"
@@ -90,7 +89,6 @@ Feature:
 
     Given I am an anonymous user
     When I visit the "JLA" custom page
-    And I accept essential cookies
     Then the Compare buttons are disabled
 
     When I add the "Apache-2.0" licence to the compare list
@@ -125,7 +123,7 @@ Feature:
     And I add the "BSL-1.0" licence to the compare list
     And I add the "0BSD" licence to the compare list
     And I add the "LGPL-2.1" licence to the compare list
-    And I click "Compare"
+    And I click "Compare" in the "LGPL-2.1" licence tile
     And the url should match "/licence/compare/Apache-2.0;GPL-2.0\+;BSL-1.0;0BSD;LGPL-2.1"
 
   Scenario: Test the licence comparer.
@@ -184,7 +182,6 @@ Feature:
 
     When I visit "/licence/compare/Apache-2.0;GPL-2.0+"
     Then I should see the "licence comparer" table
-    And the response should contain "<script type=\"application/json\" data-drupal-selector=\"licence-comparer-data\">{\"Apache-2.0\":{\"title\":\"Apache License, Version 2.0\",\"description\":\"Apache-2.0 descr\",\"spdxUrl\":\"http:\/\/joinup.eu\/spdx\/Apache-2.0\"},\"GPL-2.0+\":{\"title\":\"GNU General Public License v2.0 or later\",\"description\":\"GPL-2.0+ descr\",\"spdxUrl\":\"http:\/\/joinup.eu\/spdx\/GPL-2.0+\"}}</script>"
     And the "licence comparer" table should be:
       | Can               | Apache-2.0 | GPL-2.0+ |  |  |  |
       | Use/reproduce     | x          |          |  |  |  |
@@ -375,7 +372,6 @@ Feature:
 
     Given I am an anonymous user
     When I visit the "JLA" custom page
-    And I accept essential cookies
 
     When I click "Distribute" in the "Content" region
     # The licence was hidden.

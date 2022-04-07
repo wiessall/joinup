@@ -12,10 +12,11 @@ bundle: sol_request_changes
 mode: mail_subject
 content:
   partial_0:
-    weight: 0
-    region: content
     settings: {  }
     third_party_settings: {  }
+    weight: 0
+    region: content
 hidden:
   field_message_bcc: true
   partial_1: true
+  search_api_excerpt: true

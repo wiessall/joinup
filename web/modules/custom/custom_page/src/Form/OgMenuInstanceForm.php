@@ -4,9 +4,11 @@ declare(strict_types = 1);
 
 namespace Drupal\custom_page\Form;
 
+use Drupal\Component\Datetime\TimeInterface;
 use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Entity\EntityForm;
 use Drupal\Core\Entity\EntityRepositoryInterface;
+use Drupal\Core\Entity\EntityTypeBundleInfoInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Link;
 use Drupal\Core\Menu\MenuLinkManagerInterface;
@@ -57,7 +59,7 @@ class OgMenuInstanceForm extends OriginalOgMenuInstanceForm {
    *
    * @var \Symfony\Component\Routing\Matcher\UrlMatcherInterface
    */
-  protected $urlMatcher;
+  protected UrlMatcherInterface $urlMatcher;
 
   /**
    * Constructs an OgMenuInstanceForm.
@@ -74,11 +76,25 @@ class OgMenuInstanceForm extends OriginalOgMenuInstanceForm {
    *   The OG Access service.
    * @param \Drupal\Core\Routing\UrlGeneratorInterface $url_generator
    *   The URL generator.
+   * @param \Drupal\Core\Entity\EntityTypeBundleInfoInterface $entity_type_bundle_info
+   *   The entity type bundle service.
+   * @param \Drupal\Component\Datetime\TimeInterface $time
+   *   The time service.
    * @param \Symfony\Component\Routing\Matcher\UrlMatcherInterface $url_matcher
    *   The Symfony route matcher.
    */
-  public function __construct(EntityRepositoryInterface $entity_repository, MenuLinkManagerInterface $menu_link_manager, MenuLinkTreeInterface $menu_tree, LinkGeneratorInterface $link_generator, OgAccessInterface $og_access, UrlGeneratorInterface $url_generator, UrlMatcherInterface $url_matcher) {
-    parent::__construct($entity_repository, $menu_link_manager, $menu_tree, $link_generator, $og_access, $url_generator);
+  public function __construct(
+    EntityRepositoryInterface $entity_repository,
+    MenuLinkManagerInterface $menu_link_manager,
+    MenuLinkTreeInterface $menu_tree,
+    LinkGeneratorInterface $link_generator,
+    OgAccessInterface $og_access,
+    UrlGeneratorInterface $url_generator,
+    EntityTypeBundleInfoInterface $entity_type_bundle_info,
+    TimeInterface $time,
+    UrlMatcherInterface $url_matcher
+  ) {
+    parent::__construct($entity_repository, $menu_link_manager, $menu_tree, $link_generator, $og_access, $url_generator, $entity_type_bundle_info, $time);
 
     $this->urlMatcher = $url_matcher;
   }
@@ -94,6 +110,8 @@ class OgMenuInstanceForm extends OriginalOgMenuInstanceForm {
       $container->get('link_generator'),
       $container->get('og.access'),
       $container->get('url_generator'),
+      $container->get('entity_type.bundle.info'),
+      $container->get('datetime.time'),
       $container->get('router.no_access_checks')
     );
   }
@@ -101,7 +119,7 @@ class OgMenuInstanceForm extends OriginalOgMenuInstanceForm {
   /**
    * {@inheritdoc}
    */
-  public function buildForm(array $form, FormStateInterface $form_state) {
+  public function buildForm(array $form, FormStateInterface $form_state): array {
     // If we are not showing the navigation menu for custom pages, fall back to
     // the original form.
     if ($this->entity->getType() !== 'navigation') {
@@ -243,7 +261,7 @@ class OgMenuInstanceForm extends OriginalOgMenuInstanceForm {
   /**
    * {@inheritdoc}
    */
-  protected function buildOverviewTreeForm($tree, $delta) {
+  protected function buildOverviewTreeForm($tree, $delta): array {
     // If we are not showing the navigation menu for custom pages, fall back to
     // the original method.
     if ($this->entity->getType() !== 'navigation') {

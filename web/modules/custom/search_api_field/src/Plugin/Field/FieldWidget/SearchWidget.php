@@ -220,7 +220,7 @@ class SearchWidget extends WidgetBase implements ContainerFactoryPluginInterface
         '%syntax2' => 'field|value|operator',
         '%field' => 'field',
       ]),
-      '#default_value' => isset($default_values['query_presets']) ? $default_values['query_presets'] : '',
+      '#default_value' => $default_values['query_presets'] ?? '',
       '#element_validate' => [[$this, 'validateQueryPresets']],
     ];
 
@@ -228,7 +228,7 @@ class SearchWidget extends WidgetBase implements ContainerFactoryPluginInterface
       '#type' => 'number',
       '#title' => $this->t('Limit'),
       '#description' => $this->t('The number of results to show per page.'),
-      '#default_value' => isset($default_values['limit']) ? $default_values['limit'] : 10,
+      '#default_value' => $default_values['limit'] ?? 10,
       '#min' => 1,
     ];
 
@@ -319,8 +319,8 @@ class SearchWidget extends WidgetBase implements ContainerFactoryPluginInterface
     foreach ($updated_rows as $name) {
       foreach ($updated_columns as $key) {
         $element = &$form['wrapper']['fields'][$name][$key];
-        $element['#prefix'] = '<div class="ajax-new-content">' . (isset($element['#prefix']) ? $element['#prefix'] : '');
-        $element['#suffix'] = (isset($element['#suffix']) ? $element['#suffix'] : '') . '</div>';
+        $element['#prefix'] = '<div class="ajax-new-content">' . ($element['#prefix'] ?? '');
+        $element['#suffix'] = ($element['#suffix'] ?? '') . '</div>';
       }
     }
 
@@ -619,7 +619,7 @@ class SearchWidget extends WidgetBase implements ContainerFactoryPluginInterface
     // Extract field id and plugin id from the selected option. Since field ids
     // cannot contain special characters, it's safe to explode on the first
     // colon.
-    list($field_id, $plugin_id) = explode(':', $form_state->getValue($wrapper['field']['#parents']), 2);
+    [$field_id, $plugin_id] = explode(':', $form_state->getValue($wrapper['field']['#parents']), 2);
 
     // Extract element and widget elements.
     $element = NestedArray::getValue($form, array_slice($button['#array_parents'], 0, -4));

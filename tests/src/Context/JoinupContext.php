@@ -6,6 +6,7 @@ namespace Drupal\joinup\Context;
 
 use Behat\Behat\Hook\Scope\AfterScenarioScope;
 use Behat\Gherkin\Node\TableNode;
+use Behat\Mink\Element\NodeElement;
 use Behat\Mink\Exception\ElementNotFoundException;
 use Drupal\Component\Utility\UrlHelper;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
@@ -1557,7 +1558,7 @@ class JoinupContext extends RawDrupalContext {
    * @When I open the header local tasks menu
    */
   public function iOpenTheMdlDropdown() {
-    $element = $this->getSession()->getPage()->findById('block-three-dots-menu');
+    $element = $this->getSession()->getPage()->find('css', '.block-joinup-local-tasks-block');
     $this->openMaterialDesignMenu($element);
   }
 
@@ -1761,7 +1762,7 @@ class JoinupContext extends RawDrupalContext {
     }
     foreach ($elements as $element) {
       try {
-        Assert::assertContains($description, $element->getText());
+        Assert::assertStringContainsString($description, $element->getText());
         // The description was found, stop searching.
         return;
       }
@@ -2033,7 +2034,7 @@ class JoinupContext extends RawDrupalContext {
     ])->setAbsolute()->toString();
     $href = $link_element->getAttribute('href');
 
-    Assert::assertContains(urlencode($entity_url), $href);
+    Assert::assertStringContainsString(urlencode($entity_url), $href);
   }
 
   /**
@@ -2110,7 +2111,7 @@ class JoinupContext extends RawDrupalContext {
   public function thePersistentUrlShouldContain($pattern) {
     $field_selector = $this->getSession()->getPage()->find('css', '.permalink');
     $href = $field_selector->getAttribute('href');
-    Assert::assertContains($pattern, $href);
+    Assert::assertStringContainsString($pattern, $href);
   }
 
   /**
@@ -2179,7 +2180,7 @@ class JoinupContext extends RawDrupalContext {
    *
    * @param string $value
    *   The value to select from suggestions.
-   * @param string $field
+   * @param string|null $field
    *   The field name.
    *
    * @throws \Exception
@@ -2188,46 +2189,60 @@ class JoinupContext extends RawDrupalContext {
    *   or if the wanted suggestion is not found.
    *
    * @When I pick :value from the :field autocomplete suggestions
+   * @When I pick :value from the autocomplete suggestions
    */
-  public function fillFieldWithNormalisedEntityReference($value, $field) {
-    $element = $this->getSession()->getPage()->findField($field);
-    if (!$element) {
-      throw new \Exception("The field '$field' not found in the page.");
-    }
+  public function fillFieldWithNormalisedEntityReference(string $value, ?string $field = NULL): void {
+    if ($this->browserSupportsJavaScript()) {
+      $session = $this->getSession();
+      $xpath = '//ul[contains(concat(" ", normalize-space(@class), " "), " ui-autocomplete ")]//a[text() = "' . $value . '"]';
+      $element = $session->getPage()->find('xpath', $xpath);
+      $session->wait(500, 'document.querySelector(".ui-autocomplete").style.display !== "none"');
 
-    if (!$element->hasAttribute('data-autocomplete-path')) {
-      throw new \Exception("The field '$field' is not an entity reference autocomplete field.");
-    }
-
-    // Use the Mink base uri.
-    // @see ::locatePath()
-    $client = new Client(['base_uri' => $this->getMinkParameter('base_url')]);
-    $uri = $element->getAttribute('data-autocomplete-path') . '?' . UrlHelper::buildQuery([
-      'q' => $value,
-    ]);
-    $response = $client->get($uri);
-
-    if ($response->getStatusCode() !== 200) {
-      throw new \Exception("Failed to obtain suggestions for field '$field'.");
-    }
-
-    $suggestions = json_decode($response->getBody()->getContents());
-    if ($suggestions === NULL) {
-      throw new \Exception("Failed to decode suggestions for field '$field'.");
-    }
-
-    if (!count($suggestions)) {
-      throw new \Exception("No suggestions for value '$value' found in field '$field'.");
-    }
-
-    foreach ($suggestions as $suggestion) {
-      if ($suggestion->label === $value) {
-        $element->setValue($suggestion->value);
-        return;
+      if (!$element instanceof NodeElement) {
+        throw new \Exception("The value '$value' was not found in the autocomplete suggestions.");
       }
+      $element->click();
     }
+    else {
+      $element = $this->getSession()->getPage()->findField($field);
+      if (!$element) {
+        throw new \Exception("The field '$field' not found in the page.");
+      }
 
-    throw new \Exception("The value '$value' was not found in the autocomplete suggestions.");
+      if (!$element->hasAttribute('data-autocomplete-path')) {
+        throw new \Exception("The field '$field' is not an entity reference autocomplete field.");
+      }
+
+      // Use the Mink base uri.
+      // @see ::locatePath()
+      $client = new Client(['base_uri' => $this->getMinkParameter('base_url')]);
+      $uri = $element->getAttribute('data-autocomplete-path') . '?' . UrlHelper::buildQuery([
+        'q' => $value,
+      ]);
+      $response = $client->get($uri);
+
+      if ($response->getStatusCode() !== 200) {
+        throw new \Exception("Failed to obtain suggestions for field '$field'.");
+      }
+
+      $suggestions = json_decode($response->getBody()->getContents());
+      if ($suggestions === NULL) {
+        throw new \Exception("Failed to decode suggestions for field '$field'.");
+      }
+
+      if (!count($suggestions)) {
+        throw new \Exception("No suggestions for value '$value' found in field '$field'.");
+      }
+
+      foreach ($suggestions as $suggestion) {
+        if ($suggestion->label === $value) {
+          $element->setValue($suggestion->value);
+          return;
+        }
+      }
+
+      throw new \Exception("The value '$value' was not found in the autocomplete suggestions.");
+    }
   }
 
   /**
@@ -2946,10 +2961,10 @@ class JoinupContext extends RawDrupalContext {
     $expected = '<loc>' . $link_text . '</loc>';
     $response = $this->getSession()->getPage()->getContent();
     if ($exists) {
-      Assert::assertContains($expected, $response);
+      Assert::assertStringContainsString($expected, $response);
     }
     else {
-      Assert::assertNotContains($expected, $response);
+      Assert::assertStringNotContainsString($expected, $response);
     }
   }
 
@@ -2996,121 +3011,6 @@ class JoinupContext extends RawDrupalContext {
     $xpath = "//ul/li[contains(concat(' ', @class, ' '), ' menu-item--active-trail ')]/descendant::a/descendant-or-self::*[text()='{$link_label}']";
     if (!$page->find('xpath', $xpath)) {
       throw new ExpectationFailedException("The '{$link_label}' link is not in the active trail but it should.");
-    }
-  }
-
-  /**
-   * Shows the button in the middle of the screen.
-   *
-   * In the latest version of Selenium in docker, moving to a button element
-   * might throw this exception while the button is visible.
-   * This might be due to attempting to find the button too fast.
-   *
-   * @param string $type
-   *   Type of element link/button.
-   * @param string $label
-   *   The label of the radio button.
-   *
-   * @throws \Exception
-   *    Thrown when an expected scroll in to view failed.
-   *
-   * @Given I scroll :type :label into view
-   */
-  public function scrollButtonIntoView(string $type, string $label): void {
-    $page = $this->getSession()->getPage();
-    $button = $page->find('named', [$type, str_replace('\\"', '"', $label)]);
-    $id = $button->getAttribute('id');
-    $function = <<<JS
-  (
-      function(){
-        setTimeout(() => {
-          let elem = document.getElementById("$id");
-          elem.scrollIntoView({ behavior: 'instant', block: 'center' });
-        }, 300);
-      }
-  )()
-  JS;
-    try {
-      $this->getSession()->executeScript($function);
-      sleep(1);
-    }
-    catch (\Exception $e) {
-      throw new \Exception("Scroll element into view failed");
-    }
-  }
-
-  /**
-   * Shows the facet element in the middle of the screen.
-   *
-   * In the latest version of Selenium in docker, moving to a button element
-   * might throw this exception while the button is visible.
-   * This might be due to attempting to find the button too fast.
-   *
-   * @param string $label
-   *   The label of the radio button.
-   *
-   * @throws \Exception
-   *    Thrown when an expected scroll in to view failed.
-   *
-   * @Given I scroll the :label facet into view
-   */
-  public function scrollFacetIntoView(string $label): void {
-    $facet = $this->findFacetByAlias($label);
-    $facet_id = $facet->getAttribute('data-drupal-facet-id');
-    $function = <<<JS
-  (
-      function(){
-        setTimeout(() => {
-          let elem = document.querySelector('[data-drupal-facet-id="$facet_id"]');
-          elem.scrollIntoView({ behavior: 'instant', block: 'center' });
-        }, 300);
-      }
-  )()
-  JS;
-    try {
-      $this->getSession()->executeScript($function);
-      sleep(1);
-    }
-    catch (\Exception $e) {
-      throw new \Exception("Scroll element into view failed");
-    }
-  }
-
-  /**
-   * Shows the button in the middle of the screen.
-   *
-   * In the latest version of Selenium in docker, moving to a button element
-   * might throw this exception while the button is visible.
-   * This might be due to attempting to find the button too fast.
-   *
-   * @param string $label
-   *   The label of the radio button.
-   *
-   * @throws \Exception
-   *    Thrown when an expected scroll in to view failed.
-   *
-   * @Given I scroll the :label chip into view
-   */
-  public function scrollChipIntoView(string $label): void {
-    $css = "div.block-facets-summary-blocksearch-facets-summary li.facet-summary-item--facet a:contains('{$label}')";
-    $element = $this->getSession()->getPage()->find('css', $css);
-    $xpath = $element->getXpath();
-    $function = <<<JS
-  (
-      function(){
-        setTimeout(() => {
-          let elem = document.evaluate("$xpath", document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
-          elem.scrollIntoView({ behavior: 'instant', block: 'center' });
-        }, 300);
-      }
-  )()
-  JS;
-    try {
-      $this->getSession()->executeScript($function);
-      sleep(1);
-    }
-    catch (\Exception $e) {
-      throw new \Exception("Scroll element into view failed");
     }
   }
 

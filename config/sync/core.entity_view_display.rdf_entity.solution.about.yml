@@ -61,73 +61,73 @@ third_party_settings:
         - field_is_solution_type
         - field_status
         - field_is_language
+      label: Categorisation
       parent_name: ''
+      region: content
       weight: 2
       format_type: html_element
       format_settings:
-        id: ''
         classes: ''
+        id: ''
         element: div
         show_label: true
         label_element: h3
         attributes: ''
         effect: none
         speed: fast
-      label: Categorisation
-      region: content
     group_moderation:
       children:
         - field_is_content_creation
         - field_is_moderation
+      label: Moderation
       parent_name: ''
+      region: content
       weight: 5
       format_type: html_element
       format_settings:
-        id: ''
         classes: ''
+        id: ''
         element: div
         show_label: true
         label_element: h3
         attributes: ''
         effect: none
         speed: fast
-      label: Moderation
-      region: content
     group_owner_contact_information:
       children:
         - field_is_owner
         - field_is_contact_information
+      label: 'Owner/Contact Information'
       parent_name: ''
+      region: content
       weight: 1
       format_type: html_element
       format_settings:
-        id: ''
         classes: ''
+        id: ''
         element: div
         show_label: true
         label_element: h3
         attributes: ''
         effect: none
         speed: fast
-      label: 'Owner/Contact Information'
-      region: content
     group_documentation:
       children:
         - field_is_documentation
+      label: Documentation
       parent_name: ''
+      region: content
       weight: 4
       format_type: html_element
       format_settings:
-        id: ''
         classes: ''
+        id: ''
         element: div
         show_label: true
         label_element: h3
         attributes: ''
         effect: none
         speed: fast
-      label: Documentation
-      region: content
     group_trr_information:
       children:
         - field_is_test_resource_type
@@ -135,38 +135,38 @@ third_party_settings:
         - field_is_business_process
         - field_is_product_type
         - field_is_standardization_level
+      label: 'TRR Information'
       parent_name: ''
+      region: content
       weight: 6
       format_type: html_element
       format_settings:
-        id: ''
         classes: ''
+        id: ''
         element: div
         show_label: true
         label_element: h3
         attributes: ''
         effect: none
         speed: fast
-      label: 'TRR Information'
-      region: content
     group_solution_external_links:
       children:
         - field_is_landing_page
         - field_is_metrics_page
+      label: 'Solution external reference information'
       parent_name: ''
+      region: content
       weight: 3
       format_type: html_element
       format_settings:
-        id: ''
         classes: ''
+        id: ''
         element: div
         show_label: true
         label_element: h3
         attributes: ''
         effect: none
         speed: fast
-      label: 'Solution external reference information'
-      region: content
 id: rdf_entity.solution.about
 targetEntityType: rdf_entity
 bundle: solution
@@ -174,26 +174,26 @@ mode: about
 content:
   field_is_actor:
     type: entity_reference_label
+    label: above
+    settings:
+      link: false
+    third_party_settings:
+      template_suggestion:
+        template_suggestion: fieldset
     weight: 1
     region: content
-    label: above
-    settings:
-      link: false
-    third_party_settings:
-      template_suggestion:
-        template_suggestion: fieldset
   field_is_business_process:
     type: entity_reference_label
-    weight: 2
-    region: content
     label: above
     settings:
       link: false
     third_party_settings:
       template_suggestion:
         template_suggestion: fieldset
+    weight: 2
+    region: content
   field_is_contact_information:
-    weight: 7
+    type: entity_reference_entity_view
     label: above
     settings:
       view_mode: about
@@ -201,86 +201,86 @@ content:
     third_party_settings:
       template_suggestion:
         template_suggestion: two_columns
-    type: entity_reference_entity_view
+    weight: 7
     region: content
   field_is_content_creation:
     type: list_default
-    weight: 20
-    region: content
     label: hidden
     settings: {  }
     third_party_settings:
       template_suggestion:
         template_suggestion: fieldset
+    weight: 20
+    region: content
   field_is_description:
     type: text_default
-    weight: 0
-    region: content
     label: hidden
     settings: {  }
     third_party_settings: {  }
+    weight: 0
+    region: content
   field_is_documentation:
     type: file_url_default
-    weight: 3
-    region: content
     label: hidden
     settings:
       mode: link
     third_party_settings:
       template_suggestion:
         template_suggestion: fieldset
+    weight: 3
+    region: content
   field_is_landing_page:
     type: link_separate
-    weight: 0
-    region: content
     label: above
     settings:
       trim_length: null
-      target: _blank
       url_only: false
       url_plain: false
       rel: '0'
+      target: _blank
     third_party_settings:
       template_suggestion:
         template_suggestion: ''
+    weight: 0
+    region: content
   field_is_language:
     type: entity_reference_label
-    weight: 6
-    region: content
     label: above
     settings:
       link: false
     third_party_settings:
       template_suggestion:
         template_suggestion: fieldset
+    weight: 6
+    region: content
   field_is_metrics_page:
     type: link_separate
-    weight: 1
-    region: content
     label: above
     settings:
       trim_length: null
-      target: _blank
       url_only: false
       url_plain: false
       rel: '0'
+      target: _blank
     third_party_settings:
       template_suggestion:
         template_suggestion: ''
+    weight: 1
+    region: content
   field_is_moderation:
     type: boolean
-    weight: 21
-    region: content
     label: hidden
     settings:
       format: default
-      format_custom_true: ''
       format_custom_false: ''
+      format_custom_true: ''
     third_party_settings:
       template_suggestion:
         template_suggestion: fieldset
+    weight: 21
+    region: content
   field_is_owner:
-    weight: 6
+    type: entity_reference_entity_view
     label: above
     settings:
       view_mode: about
@@ -288,63 +288,63 @@ content:
     third_party_settings:
       template_suggestion:
         template_suggestion: two_columns
-    type: entity_reference_entity_view
+    weight: 6
     region: content
   field_is_product_type:
     type: entity_reference_label
+    label: above
+    settings:
+      link: false
+    third_party_settings:
+      template_suggestion:
+        template_suggestion: fieldset
     weight: 3
     region: content
-    label: above
-    settings:
-      link: false
-    third_party_settings:
-      template_suggestion:
-        template_suggestion: fieldset
   field_is_solution_type:
     type: entity_reference_label
-    weight: 4
-    region: content
     label: above
     settings:
       link: false
     third_party_settings:
       template_suggestion:
         template_suggestion: fieldset
+    weight: 4
+    region: content
   field_is_standardization_level:
     type: entity_reference_label
-    weight: 4
-    region: content
     label: above
     settings:
       link: false
     third_party_settings:
       template_suggestion:
         template_suggestion: fieldset
+    weight: 4
+    region: content
   field_is_test_resource_type:
     type: entity_reference_label
-    weight: 0
-    region: content
     label: hidden
     settings:
       link: false
     third_party_settings:
       template_suggestion:
         template_suggestion: fieldset
+    weight: 0
+    region: content
   field_status:
     type: entity_reference_label
-    weight: 5
-    region: content
     label: above
     settings:
       link: false
     third_party_settings:
       template_suggestion:
         template_suggestion: fieldset
-  share_link:
-    weight: 7
+    weight: 5
     region: content
+  share_link:
     settings: {  }
     third_party_settings: {  }
+    weight: 7
+    region: content
 hidden:
   changed: true
   collections: true
@@ -383,4 +383,5 @@ hidden:
   read_more: true
   related_solutions: true
   releases_overview: true
+  search_api_excerpt: true
   solution_subscribe: true

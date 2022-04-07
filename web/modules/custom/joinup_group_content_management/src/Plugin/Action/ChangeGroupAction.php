@@ -222,7 +222,7 @@ class ChangeGroupAction extends ViewsBulkOperationsActionBase implements Contain
         // Check the user selected 2nd tier custom pages.
         if ($is_custom_page && empty($node->isChild)) {
           if ($parent_id = $this->pageMenuLinks[$node->id()]->getParentId()) {
-            list(, $uuid) = explode(':', $parent_id, 2);
+            [, $uuid] = explode(':', $parent_id, 2);
             // If the custom page has a parent that wasn't selected by the user,
             // the page will be moved as top-level page. This is accomplished by
             // removing the corresponding OG menu link parent reference.

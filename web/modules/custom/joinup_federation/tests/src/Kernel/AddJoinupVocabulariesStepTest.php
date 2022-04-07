@@ -35,7 +35,7 @@ class AddJoinupVocabulariesStepTest extends StepTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
 
     Vocabulary::create(['vid' => 'language', 'name' => 'Language'])->save();

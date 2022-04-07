@@ -25,47 +25,47 @@ third_party_settings:
         - spdx_licence_id
         - spdx_licence_text
         - spdx_see_also
+      label: 'Licence wrapper'
       parent_name: ''
+      region: hidden
       weight: 3
       format_type: html_element
       format_settings:
-        id: ''
         classes: ''
+        id: ''
         element: div
         show_label: false
         label_element: h3
         attributes: ''
         effect: none
         speed: fast
-      label: 'Licence wrapper'
-      region: hidden
   layout_builder:
-    allow_custom: false
     enabled: false
+    allow_custom: false
 id: rdf_entity.licence.search_result
 targetEntityType: rdf_entity
 bundle: licence
 mode: search_result
 content:
   field_licence_description:
-    weight: 1
+    type: joinup_html_stripper_stripped
     label: hidden
     settings:
       trim_length: 200
     third_party_settings:
       template_suggestion:
         template_suggestion: ''
-    type: joinup_html_stripper_stripped
+    weight: 1
     region: content
   label:
-    label: hidden
     type: string
-    weight: 0
+    label: hidden
     settings:
       link_to_entity: false
     third_party_settings:
       template_suggestion:
         template_suggestion: no_wrappers
+    weight: 0
     region: content
 hidden:
   changed: true
@@ -75,6 +75,7 @@ hidden:
   field_licence_spdx_licence: true
   field_licence_type: true
   langcode: true
+  search_api_excerpt: true
   spdx_licence_external_url: true
   spdx_licence_id: true
   spdx_licence_label: true

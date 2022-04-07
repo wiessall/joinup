@@ -16,11 +16,11 @@ Feature: Log in through EU Login
     Then I should see the heading "Sign in to continue"
     When I fill in "E-mail address" with "texasranger@chucknorris.com.eu"
     And I fill in "Password" with "wrong password"
-    And I press the "Log in" button
+    And I press "Log in"
     Then I should see the error message "Unrecognized user name or password."
 
     When I fill in "Password" with "Qwerty098"
-    And I press the "Log in" button
+    And I press "Log in"
 
     # The user gets redirected back to Drupal.
     Then I should see the heading "Already a Joinup user?"
@@ -65,7 +65,7 @@ Feature: Log in through EU Login
     Then I should see the heading "Sign in to continue"
     When I fill in "E-mail address" with "texasranger@chucknorris.com.eu"
     When I fill in "Password" with "Qwerty098"
-    And I press the "Log in" button
+    And I press "Log in"
 
     # The user gets redirected back to Drupal.
     Then I should see the heading "Already a Joinup user?"
@@ -115,7 +115,7 @@ Feature: Log in through EU Login
     Given I visit "/cas"
     And I fill in "E-mail address" with "texasranger@chucknorris.com.eu"
     And I fill in "Password" with "Qwerty098"
-    When I press the "Log in" button
+    When I press "Log in"
     Then I should see the heading "Already a Joinup user?"
     Given I select the radio button "I am an existing user (pair my existing account with my EU Login account)"
 
@@ -152,7 +152,7 @@ Feature: Log in through EU Login
     Then I should see the heading "Sign in to continue"
     And I fill in "E-mail address" with "007@mi6.eu"
     When I fill in "Password" with "shaken_not_stirred"
-    And I press the "Log in" button
+    And I press "Log in"
 
     Then I should see the success message "You have been logged in."
     And I should not see the link "Sign in"
@@ -181,7 +181,7 @@ Feature: Log in through EU Login
     Then I should see the heading "Sign in to continue"
     When I fill in "E-mail address" with "007.changed@mi6.eu"
     And I fill in "Password" with "shaken_not_stirred"
-    When I press the "Log in" button
+    When I press "Log in"
     Then I should see the error message "You've recently changed your EU Login account email but that email is already used in Joinup by another user. You cannot login until, either you change your EU Login email or you contact support to fix the issue."
     And I should see the link "contact support"
 
@@ -195,7 +195,7 @@ Feature: Log in through EU Login
     Then I should see the heading "Sign in to continue"
     When I fill in "E-mail address" with "uniq@example.com"
     And I fill in "Password" with "shaken_not_stirred"
-    When I press the "Log in" button
+    When I press "Log in"
 
     And the user jb007_local should have the following data in their user profile:
       | Username    | jb007_local      |
@@ -219,14 +219,14 @@ Feature: Log in through EU Login
     And I click "Sign in"
     And I fill in "E-mail address" with "muscles@brussels.be"
     And I fill in "Password" with "dragon12"
-    And I press the "Log in" button
+    And I press "Log in"
     And I select the radio button "I am an existing user (pair my existing account with my EU Login account)"
 
     When I click "reset your password"
     And I fill in "Email" with "jcvd@gmail.com"
     And I wait for the spam protection time limit to pass
-    And I press the "Submit" button
-    Then I should see the success message "Further instructions have been sent to your email address."
+    And I press "Submit"
+    Then I should see the success message "If jcvd@gmail.com is a valid account, an email will be sent with instructions to reset your password."
 
     When I go to the one time sign in page of the user "jclocal"
     And I fill in "Password" with "Cœur-de-lion-123!"
@@ -241,7 +241,7 @@ Feature: Log in through EU Login
     And I click "Sign in"
     And I fill in "E-mail address" with "muscles@brussels.be"
     And I fill in "Password" with "dragon12"
-    And I press the "Log in" button
+    And I press "Log in"
     And I select the radio button "I am an existing user (pair my existing account with my EU Login account)"
     And I fill in "Email or username" with "jcvd@gmail.com"
     And I fill in "Password" with "Cœur-de-lion-123!"
@@ -267,7 +267,7 @@ Feature: Log in through EU Login
     And I click "Sign in"
     When I fill in "E-mail address" with "f@example.com"
     When I fill in "Password" with "123"
-    And I press the "Log in" button
+    And I press "Log in"
     And I click "My account"
 
     When I click "Edit"
@@ -292,7 +292,7 @@ Feature: Log in through EU Login
     And I click "Sign in"
     When I fill in "E-mail address" with "p@example.com"
     When I fill in "Password" with "123"
-    And I press the "Log in" button
+    And I press "Log in"
     And I click "My account"
 
     When I click "Edit"
@@ -318,7 +318,7 @@ Feature: Log in through EU Login
     And I click "Sign in"
     When I fill in "E-mail address" with "n@example.com"
     When I fill in "Password" with "123"
-    And I press the "Log in" button
+    And I press "Log in"
     And I click "My account"
 
     When I click "Edit"
@@ -371,7 +371,7 @@ Feature: Log in through EU Login
     And I click "Sign in"
     When I fill in "E-mail address" with "joe@example.com"
     When I fill in "Password" with "123"
-    And I press the "Log in" button
+    And I press "Log in"
 
     Given I select the radio button "I am a new user (create a new account)"
     When I press "Next"
@@ -394,7 +394,7 @@ Feature: Log in through EU Login
     And I click "Sign in"
     When I fill in "E-mail address" with "joe.cas@example.com"
     When I fill in "Password" with "123"
-    And I press the "Log in" button
+    And I press "Log in"
 
     When I select the radio button "I am a new user (create a new account)"
     When I press "Next"
@@ -451,7 +451,7 @@ Feature: Log in through EU Login
     And I click "Sign in"
     And I fill in "E-mail address" with "Joe_Case_Insensitive@example.com"
     And I fill in "Password" with "123"
-    When I press the "Log in" button
+    When I press "Log in"
     Then I should see the success message "You have been logged in."
     # The email ends up getting the upstream email so that correct character casing is applied.
     And the user joe should have the following data in their user profile:

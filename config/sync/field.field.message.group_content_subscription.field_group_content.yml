@@ -277,5 +277,13 @@ settings:
     handler_settings: {  }
   search_api_autocomplete_search:
     handler: 'default:search_api_autocomplete_search'
+  solr_cache:
+    handler: 'default:solr_cache'
+    handler_settings: {  }
+  solr_request_dispatcher:
+    handler: 'default:solr_request_dispatcher'
+    handler_settings: {  }
+  solr_request_handler:
+    handler: 'default:solr_request_handler'
     handler_settings: {  }
 field_type: dynamic_entity_reference

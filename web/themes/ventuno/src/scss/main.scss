@@ -3,12 +3,14 @@
 
 // BCL bundle for Joinup
 // Configuration
+@import "@openeuropa/bcl-theme-default/src/scss/base/colors";
+@import "@openeuropa/bcl-theme-joinup/src/scss/base/colors";
 @import "@openeuropa/bcl-bootstrap/scss/functions";
 @import "@openeuropa/bcl-bootstrap/scss/variables";
 
 // Override Bootstrap variables
 // @import "@openeuropa/bcl-theme-default/src/scss/variables";
-@import "overrides/variables"; // Only use required variables
+@import "core/overrides/variables"; // Only use required variables
 @import "@openeuropa/bcl-theme-joinup/src/scss/base/variables";
 
 @import "@openeuropa/bcl-bootstrap/scss/mixins";
@@ -52,10 +54,10 @@
 
 // Utilities
 // @import "@openeuropa/bcl-bootstrap/scss/utilities";
-@import "overrides/utilities"; // Only use required utilities
+@import "core/overrides/utilities"; // Only use required utilities
 @import "@openeuropa/bcl-theme-joinup/src/scss/base/utilities";
 @import "@openeuropa/bcl-bootstrap/scss/helpers";
-@import "@openeuropa/bcl-theme-default/src/scss/utilities";
+@import "@openeuropa/bcl-theme-default/src/scss/base/utilities";
 @import "@openeuropa/bcl-bootstrap/scss/utilities/api";
 
 // Custom styles
@@ -81,5 +83,5 @@
 
 
 // Custom Joinup mixins
-// @import "mixins/joinup-icons";
-// @import "mixins/full-width-background-colors";
+// @import "core/mixins/joinup-icons";
+// @import "core/mixins/full-width-background-colors";

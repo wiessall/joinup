@@ -13,10 +13,10 @@ field_name: field_file
 entity_type: node
 type: file_url
 settings:
+  target_type: file
   display_field: false
   display_default: false
   uri_scheme: public
-  target_type: file
 module: file_url
 locked: false
 cardinality: -1

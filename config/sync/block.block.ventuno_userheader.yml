@@ -11,14 +11,14 @@ _core:
 id: ventuno_userheader
 theme: ventuno
 region: header_bottom
-weight: -24
+weight: -23
 provider: null
 plugin: user_header_block
 settings:
   id: user_header_block
   label: 'User header'
-  provider: joinup_user
   label_display: '0'
+  provider: joinup_user
   context_mapping:
     user_route: '@joinup_user.user_route_context:user_route'
 visibility: {  }

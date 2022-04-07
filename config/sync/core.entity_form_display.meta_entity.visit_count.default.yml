@@ -27,9 +27,9 @@ content:
     region: content
     settings:
       match_operator: CONTAINS
+      match_limit: 10
       size: 40
       placeholder: ''
-      match_limit: 10
     third_party_settings: {  }
 hidden:
   label: true

@@ -15,12 +15,12 @@ plugin: oe_webtools_etrans
 settings:
   id: oe_webtools_etrans
   label: 'OpenEuropa Webtools ETrans'
-  provider: oe_webtools_etrans
   label_display: '0'
+  provider: oe_webtools_etrans
+  delay: 0
+  domain: gen
+  exclude: ''
+  include: ''
   render_as: button
   render_to: ''
-  domain: gen
-  delay: 0
-  include: ''
-  exclude: ''
 visibility: {  }

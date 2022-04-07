@@ -9,31 +9,6 @@ dependencies:
     - search_api
 id: search_facets_summary
 name: 'Search facets summary'
-facets:
-  spatial_coverage:
-    checked: true
-    label: 'Geographic coverage'
-    separator: ', '
-    weight: 0
-    show_count: false
-  topic:
-    checked: true
-    label: Topic
-    separator: ', '
-    weight: 0
-    show_count: false
-  type:
-    checked: true
-    label: Type
-    separator: ', '
-    weight: 0
-    show_count: false
-  group:
-    checked: true
-    label: Collection/Solution
-    separator: ', '
-    weight: 0
-    show_count: false
 facet_source_id: 'search_api:views_page__search__page_1'
 processor_configs:
   hide_when_not_rendered:
@@ -41,3 +16,28 @@ processor_configs:
     weights:
       build: '45'
     settings: {  }
+facets:
+  spatial_coverage:
+    checked: true
+    label: 'Geographic coverage'
+    separator: ', '
+    show_count: false
+    weight: 0
+  topic:
+    checked: true
+    label: Topic
+    separator: ', '
+    show_count: false
+    weight: 0
+  type:
+    checked: true
+    label: Type
+    separator: ', '
+    show_count: false
+    weight: 0
+  group:
+    checked: true
+    label: Collection/Solution
+    separator: ', '
+    show_count: false
+    weight: 0

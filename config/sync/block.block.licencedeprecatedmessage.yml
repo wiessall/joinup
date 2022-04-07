@@ -16,12 +16,12 @@ plugin: licence_deprecated_message_block
 settings:
   id: licence_deprecated_message_block
   label: 'Licence overview deprecated message'
-  provider: joinup_licence
   label_display: '0'
+  provider: joinup_licence
 visibility:
   request_route:
     id: request_route
-    routes:
-      - entity.rdf_entity.canonical
     negate: false
     context_mapping: {  }
+    routes:
+      - entity.rdf_entity.canonical

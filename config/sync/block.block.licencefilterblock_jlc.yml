@@ -16,12 +16,12 @@ plugin: licence_filter_block
 settings:
   id: licence_filter_block
   label: 'Licence filter block (JLC)'
-  provider: joinup_licence
   label_display: '0'
+  provider: joinup_licence
   show_terms: false
 visibility:
   request_path:
     id: request_path
-    pages: /node/703242
     negate: false
     context_mapping: {  }
+    pages: /node/703242

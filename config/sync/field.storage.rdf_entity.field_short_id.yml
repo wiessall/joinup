@@ -17,8 +17,8 @@ entity_type: rdf_entity
 type: string
 settings:
   max_length: 26
-  is_ascii: true
   case_sensitive: false
+  is_ascii: true
 module: core
 locked: false
 cardinality: 1

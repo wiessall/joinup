@@ -16,12 +16,12 @@ plugin: collection_settings_link
 settings:
   id: collection_settings_link
   label: 'Collection settings link'
-  provider: collection
   label_display: '0'
+  provider: collection
 visibility:
   request_route:
     id: request_route
-    routes:
-      - collection.glossary_page
     negate: false
     context_mapping: {  }
+    routes:
+      - collection.glossary_page

@@ -37,8 +37,6 @@ mode: view_mode_featured
 content:
   created:
     type: timestamp
-    weight: 3
-    region: content
     label: hidden
     settings:
       date_format: date_only
@@ -47,32 +45,34 @@ content:
     third_party_settings:
       template_suggestion:
         template_suggestion: ''
+    weight: 3
+    region: content
   field_isr_affiliations_requests:
-    weight: 22
+    type: entity_reference_label
     label: above
     settings:
       link: true
     third_party_settings: {  }
-    type: entity_reference_label
+    weight: 22
     region: content
   field_isr_asset_release_category:
-    weight: 3
+    type: entity_reference_label
     label: above
     settings:
       link: true
     third_party_settings: {  }
-    type: entity_reference_label
+    weight: 3
     region: content
   field_isr_asset_release_type:
-    weight: 4
+    type: entity_reference_label
     label: above
     settings:
       link: true
     third_party_settings: {  }
-    type: entity_reference_label
+    weight: 4
     region: content
   field_isr_issue_tracker:
-    weight: 19
+    type: link
     label: above
     settings:
       trim_length: 80
@@ -81,10 +81,10 @@ content:
       rel: ''
       target: ''
     third_party_settings: {  }
-    type: link
+    weight: 19
     region: content
   field_isr_landing_page:
-    weight: 17
+    type: link
     label: above
     settings:
       trim_length: 80
@@ -93,10 +93,10 @@ content:
       rel: ''
       target: ''
     third_party_settings: {  }
-    type: link
+    weight: 17
     region: content
   field_isr_metrics_page:
-    weight: 18
+    type: link
     label: above
     settings:
       trim_length: 80
@@ -105,38 +105,38 @@ content:
       rel: ''
       target: ''
     third_party_settings: {  }
-    type: link
+    weight: 18
     region: content
   field_isr_moderation:
-    weight: 14
+    type: boolean
     label: above
     settings:
       format: default
       format_custom_false: ''
       format_custom_true: ''
     third_party_settings: {  }
-    type: boolean
+    weight: 14
     region: content
   field_isr_related_asset_releases:
-    weight: 2
+    type: entity_reference_label
     label: above
     settings:
       link: true
     third_party_settings: {  }
-    type: entity_reference_label
+    weight: 2
     region: content
   field_isr_release_number:
     type: string
-    weight: 1
     label: hidden
     settings:
       link_to_entity: false
     third_party_settings:
       template_suggestion:
         template_suggestion: no_wrappers
+    weight: 1
     region: content
   field_isr_source_code_repository:
-    weight: 21
+    type: link
     label: above
     settings:
       trim_length: 80
@@ -145,20 +145,20 @@ content:
       rel: ''
       target: ''
     third_party_settings: {  }
-    type: link
+    weight: 21
     region: content
   field_isr_webdav_creation:
-    weight: 15
+    type: boolean
     label: above
     settings:
       format: default
       format_custom_false: ''
       format_custom_true: ''
     third_party_settings: {  }
-    type: boolean
+    weight: 15
     region: content
   field_isr_webdav_url:
-    weight: 16
+    type: link
     label: above
     settings:
       trim_length: 80
@@ -167,10 +167,10 @@ content:
       rel: ''
       target: ''
     third_party_settings: {  }
-    type: link
+    weight: 16
     region: content
   field_isr_wiki:
-    weight: 20
+    type: link
     label: above
     settings:
       trim_length: 80
@@ -179,27 +179,27 @@ content:
       rel: ''
       target: ''
     third_party_settings: {  }
-    type: link
+    weight: 20
     region: content
   field_status:
     type: entity_reference_label
-    weight: 2
-    region: content
     label: hidden
     settings:
       link: false
     third_party_settings:
       template_suggestion:
         template_suggestion: no_wrappers
+    weight: 2
+    region: content
   label:
-    label: hidden
     type: string
-    weight: 0
+    label: hidden
     settings:
       link_to_entity: false
     third_party_settings:
       template_suggestion:
         template_suggestion: no_wrappers
+    weight: 0
     region: content
 hidden:
   changed: true
@@ -224,3 +224,4 @@ hidden:
   field_topic: true
   langcode: true
   og_audience: true
+  search_api_excerpt: true

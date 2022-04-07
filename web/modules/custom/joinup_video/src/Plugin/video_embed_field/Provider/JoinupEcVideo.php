@@ -98,7 +98,7 @@ class JoinupEcVideo extends ProviderPluginBase {
    */
   protected function getTimeIndex() {
     preg_match('#[&?]starttime=(?<time_index>\d+)#i', $this->getInput(), $matches);
-    return isset($matches['time_index']) ? $matches['time_index'] : 0;
+    return $matches['time_index'] ?? 0;
   }
 
   /**
@@ -109,7 +109,7 @@ class JoinupEcVideo extends ProviderPluginBase {
    */
   protected function getLanguagePreference() {
     preg_match('#[&?](?:videolang|lg)=(?<language>[a-z\-]+)#i', $this->getInput(), $matches);
-    return isset($matches['language']) ? $matches['language'] : 'en';
+    return $matches['language'] ?? 'en';
   }
 
   /**

@@ -33,14 +33,14 @@ bundle: collection
 mode: digest_message_header
 content:
   label:
-    label: inline
     type: string
-    weight: 0
+    label: inline
     settings:
       link_to_entity: true
     third_party_settings:
       template_suggestion:
         template_suggestion: ''
+    weight: 0
     region: content
 hidden:
   changed: true
@@ -72,4 +72,5 @@ hidden:
   rdf_entity_field_collection_content_inline_facets: true
   rdf_entity_field_collection_content_top: true
   read_more: true
+  search_api_excerpt: true
   solutions: true

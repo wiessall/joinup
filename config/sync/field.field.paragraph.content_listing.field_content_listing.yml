@@ -25,8 +25,8 @@ default_value:
       enabled: 1
       query_presets: ''
       limit: 10
-      show_shared: false
       global_search: false
+      show_shared: false
 default_value_callback: ''
 settings: {  }
 field_type: search_api_field

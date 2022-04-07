@@ -23,10 +23,10 @@ field_name: field_is_documentation
 entity_type: rdf_entity
 type: file_url
 settings:
+  target_type: file
   display_field: false
   display_default: false
   uri_scheme: public
-  target_type: file
 module: file_url
 locked: false
 cardinality: -1
