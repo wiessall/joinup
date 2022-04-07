@@ -1,0 +1,26 @@
+uuid: 50e12fe9-03a7-4e96-9192-6c8471741311
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.rdf_entity.eif_settings_description
+    - rdf_entity.rdfentity.eif_recommendation
+  module:
+    - allowed_formats
+    - text
+third_party_settings:
+  allowed_formats:
+    allowed_formats:
+      - content_editor
+id: rdf_entity.eif_recommendation.eif_settings_description
+field_name: eif_settings_description
+entity_type: rdf_entity
+bundle: eif_recommendation
+label: Description
+description: 'Describe how the solution helps implementing this qualifier.'
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: text_long

@@ -19,14 +19,14 @@ _core:
 id: rdf_meta_entity.eif_settings
 entity_type_id: rdf_meta_entity
 bundle: eif_settings
-rdf_type: 'http://joinup.eu/rdf_meta_entity/eif_settings'
+rdf_type: 'http://data.europa.eu/eif/adms/PerspectiveEIF'
 graph:
   default: 'http://joinup.eu/rdf_meta_entity/eif_settings/graph/published'
-  draft: 'http://joinup.eu/rdf_meta_entity/eif_settings/graph/published'
+  draft: ''
 base_fields_mapping:
   uuid:
     value:
-      predicate: 'http://joinup.eu/rdf_meta_entity/eif_settings/base/uuid'
+      predicate: 'http://data.europa.eu/eif/adms/PerspectiveEIF/base/uuid'
       format: t_literal
   rid:
     target_id:

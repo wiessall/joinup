@@ -1,0 +1,21 @@
+uuid: ab1e68d5-4e15-4edd-bc62-cf6322080ca7
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.rdf_meta_entity.eif_model
+    - rdf_meta_entity.type.eif_settings
+id: rdf_meta_entity.eif_settings.eif_model
+field_name: eif_model
+entity_type: rdf_meta_entity
+bundle: eif_settings
+label: Model
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:rdf_entity'
+  handler_settings: {  }
+field_type: entity_reference

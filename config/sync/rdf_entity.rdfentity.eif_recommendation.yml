@@ -1,0 +1,10 @@
+uuid: 56185b1a-d316-43a2-889f-b5008bbd0e01
+langcode: en
+status: true
+dependencies: {  }
+label_singular: null
+label_plural: null
+label_count: null
+name: 'Qualified concept recommendation'
+rid: eif_recommendation
+description: 'The EIF qualified concept recommendation.'

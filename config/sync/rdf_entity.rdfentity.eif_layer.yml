@@ -1,0 +1,10 @@
+uuid: b8ecea58-4839-4d9e-842d-9de14abb5c7c
+langcode: en
+status: true
+dependencies: {  }
+label_singular: null
+label_plural: null
+label_count: null
+name: 'Qualified concept layer'
+rid: eif_layer
+description: 'The EIF qualified concept layer.'

@@ -1,0 +1,44 @@
+uuid: 95f46b6d-b9c1-4230-bec0-39e6ed7d7349
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.rdf_entity.eif_recommendation.eif_settings_description
+    - field.field.rdf_entity.eif_recommendation.eif_settings_qualifier
+    - rdf_entity.rdfentity.eif_recommendation
+  module:
+    - text
+    - user
+id: rdf_entity.eif_recommendation.default
+targetEntityType: rdf_entity
+bundle: eif_recommendation
+mode: default
+content:
+  eif_settings_description:
+    type: text_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 2
+    region: content
+  eif_settings_qualifier:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 1
+    region: content
+  label:
+    type: string
+    label: hidden
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: -5
+    region: content
+hidden:
+  changed: true
+  created: true
+  langcode: true
+  search_api_excerpt: true

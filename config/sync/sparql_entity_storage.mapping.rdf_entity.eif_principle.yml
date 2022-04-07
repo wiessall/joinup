@@ -1,0 +1,69 @@
+uuid: fb5d3e3b-dcee-4f4e-be99-33d4be731e37
+langcode: en
+status: true
+dependencies:
+  config:
+    - rdf_entity.rdfentity.eif_principle
+    - sparql_entity_storage.graph.default
+    - sparql_entity_storage.graph.staging
+id: rdf_entity.eif_principle
+entity_type_id: rdf_entity
+bundle: eif_principle
+rdf_type: 'http://data.europa.eu/eif/adms/QualifiedConceptPrinciple'
+graph:
+  default: 'http://joinup.eu/rdf_entity/eif_principle/graph/default'
+  staging: 'http://joinup-federation/sink'
+base_fields_mapping:
+  rid:
+    target_id:
+      predicate: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type'
+      format: resource
+  uid:
+    target_id:
+      predicate: ''
+      format: ''
+  label:
+    value:
+      predicate: 'http://purl.org/dc/terms/title'
+      format: t_literal
+  created:
+    value:
+      predicate: 'http://purl.org/dc/terms/issued'
+      format: 'xsd:dateTime'
+  changed:
+    value:
+      predicate: 'http://purl.org/dc/terms/modified'
+      format: 'xsd:dateTime'
+  uuid:
+    value:
+      predicate: ''
+      format: ''
+  langcode:
+    value:
+      predicate: ''
+      format: ''
+  default_langcode:
+    value:
+      predicate: ''
+      format: ''
+  content_translation_source:
+    value:
+      predicate: ''
+      format: ''
+  content_translation_outdated:
+    value:
+      predicate: ''
+      format: ''
+  content_translation_uid:
+    target_id:
+      predicate: ''
+      format: ''
+  content_translation_status:
+    value:
+      predicate: ''
+      format: ''
+  graph:
+    target_id:
+      predicate: ''
+      format: ''
+entity_id_plugin: default
