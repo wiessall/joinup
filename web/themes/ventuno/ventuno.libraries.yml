@@ -52,6 +52,11 @@ tables:
       assets/css/tables.css: {}
 
 # Custom components
+drupal_hacks:
+  css:
+    theme:
+      assets/css/drupal_hacks.css: {}
+
 footer:
   css:
     theme:
