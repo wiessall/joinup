@@ -42,7 +42,6 @@ third_party_settings:
       children:
         - group_main
         - group_description
-        - field_ar_state
       label: General
       region: content
       parent_name: ''
