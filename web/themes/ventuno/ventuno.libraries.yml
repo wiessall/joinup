@@ -29,6 +29,11 @@ searchpage:
     - ventuno/close
 
 # Bootstrap components
+accordion:
+  css:
+    theme:
+      assets/css/accordion.css: {}
+
 close:
   css:
     theme:
