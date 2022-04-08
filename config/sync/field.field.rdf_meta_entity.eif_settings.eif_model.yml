@@ -4,6 +4,7 @@ status: true
 dependencies:
   config:
     - field.storage.rdf_meta_entity.eif_model
+    - rdf_entity.rdfentity.eif_model
     - rdf_meta_entity.type.eif_settings
 id: rdf_meta_entity.eif_settings.eif_model
 field_name: eif_model
@@ -17,5 +18,12 @@ default_value: {  }
 default_value_callback: ''
 settings:
   handler: 'default:rdf_entity'
-  handler_settings: {  }
+  handler_settings:
+    target_bundles:
+      eif_model: eif_model
+    sort:
+      field: _none
+      direction: ASC
+    auto_create: false
+    auto_create_bundle: ''
 field_type: entity_reference

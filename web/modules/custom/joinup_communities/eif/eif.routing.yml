@@ -10,3 +10,17 @@ eif.solutions:
     parameters:
       eif_category:
         type: eif_category
+
+eif.eif_settings_form:
+  path: '/rdf_entity/{rdf_entity}/eif-settings'
+  defaults:
+    _controller: Drupal\eif\Controller\EifSettingsController::settings
+    _title_callback: Drupal\eif\Controller\EifSettingsController::title
+  requirements:
+    _custom_access: Drupal\eif\Controller\EifSettingsController::access
+  options:
+    parameters:
+      rdf_entity:
+        type: entity:rdf_entity
+        bundle:
+          - solution
