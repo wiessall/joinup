@@ -223,16 +223,10 @@
     },
     "scripts": {
         "post-install-cmd": [
-            "test ! -f ./vendor/bin/grumphp || ./vendor/bin/grumphp git:deinit",
-            "test ! -f ./vendor/bin/run || ./vendor/bin/run toolkit:build-dev",
-            "cd web/themes/ventuno && npm ci",
-            "npm ci"
+            "./scripts/composer/composer.sh install"
         ],
         "post-update-cmd": [
-            "test ! -f ./vendor/bin/grumphp || ./vendor/bin/grumphp git:deinit",
-            "test ! -f ./vendor/bin/run || ./vendor/bin/run toolkit:build-dev",
-            "cd web/themes/ventuno && npm ci",
-            "npm install"
+            "./scripts/composer/composer.sh update"
         ]
     },
     "extra": {
