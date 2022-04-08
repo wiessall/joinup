@@ -1,0 +1,30 @@
+<?php
+
+/**
+ * @file
+ * Contains functions and hooks for the rdf_meta_entity module.
+ */
+
+declare(strict_types = 1);
+
+use Drupal\Core\Entity\EntityInterface;
+
+/**
+ * Implements hook_ENTITY_TYPE_presave().
+ */
+function rdf_meta_entity_rdf_entity_presave(EntityInterface $entity): void {
+  $bundles = [
+    'eif_layer',
+    'eif_model',
+    'eif_principle',
+    'eif_recommendation',
+  ];
+
+  if (!in_array($entity->bundle(), $bundles)) {
+    return;
+  }
+
+  if ($target_principle = $entity->get('eif_settings_qualifier')->entity) {
+    $entity->set('label', $target_principle->label());
+  }
+}
