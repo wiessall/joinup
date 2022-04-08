@@ -1,0 +1,4 @@
+eif.eif_settings_form:
+  route_name: eif.eif_settings_form
+  title: 'EIF settings'
+  base_route: entity.rdf_entity.canonical
