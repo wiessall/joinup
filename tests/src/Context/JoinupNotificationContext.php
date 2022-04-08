@@ -246,6 +246,45 @@ class JoinupNotificationContext extends RawDrupalContext {
   }
 
   /**
+   * Asserts contact owner email has been sent and contains some pieces of text.
+   *
+   * @param string $email
+   *   The user name.
+   * @param string $subject
+   *   The subject of the email.
+   * @param \Behat\Gherkin\Node\TableNode $table
+   *   The mail data table.
+   *
+   * @throws \Exception
+   *   Throws an exception when a parameter is not the expected one.
+   *
+   * @Then the contact owner email sent to :email with subject :subject contains the( following lines of) text:
+   */
+  public function assertContactOwnerEmailSentAndContainsText(string $email, string $subject, TableNode $table) {
+    $lines_of_text = $table->getColumnsHash();
+    $mails = $this->getEmailsBySubjectAndMail($subject, $email);
+    $email_found = FALSE;
+    foreach ($mails as $mail) {
+      $mail_body = ($mail['body'] instanceof MarkupInterface) ?
+        $this->formatMailBodyMarkup($mail['body']) :
+        $this->formatMailBodyText($mail['body']);
+
+      foreach ($lines_of_text as $line_of_text) {
+        $text = $line_of_text['text'];
+        if (strpos($mail_body, $text) === FALSE) {
+          continue 2;
+        }
+      }
+
+      // We found a match. Stop searching.
+      $email_found = TRUE;
+      break;
+    }
+
+    Assert::assertTrue($email_found, "Did not find expected email to '$email' with subject '$subject'.");
+  }
+
+  /**
    * Asserts that no email of the relevant criteria have been sent.
    *
    * @param string $user

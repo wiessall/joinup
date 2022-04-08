@@ -123,6 +123,11 @@ Feature: About this solution
     And owners:
       | name                 | type                  |
       | Rotterdam            | National authority    |
+    And user:
+      | Username    | Pally Rapamichael           |
+      | First name  | Pally                       |
+      | Family name | Rapamichael                 |
+      | E-mail      | p.papamichael@pally.de      |
     And collection:
       | title | Antibody Development |
       | state | validated            |
@@ -163,13 +168,45 @@ Feature: About this solution
     And I should see the link "Contact owner"
     Then I click "Contact owner"
     And a modal should open
-    And I should see the text "Contact owner" in the "Modal title"
+    And I should see the text "Email Contact" in the "Modal title"
+    When I fill in "Your name" with "Jonny Example"
+    When I fill in "Your e-mail address" with "example@test.test"
     When I fill in "Subject" with "New reclamation about Owner"
     When I fill in "Message" with "This is reclamation test."
     And I should see the button "Send" in the "Modal buttons" region
-    Then I press "Send" in the "Modal buttons" region
+    Then I wait for the honeypot time limit to pass
+    And I press "Send" in the "Modal buttons" region
 
-    And I should see the following success messages:
+    Then I should see the following success messages:
       | success messages            |
       | Your message has been sent. |
+    And the contact owner email sent to "elise@nova.dk" with subject "New reclamation about Owner" contains the following lines of text:
+      | text                               |
+      | Name: Jonny Example                |
+      | Email: example@test.test           |
+      | Message: This is reclamation test. |
     And I should be on "/collection/antibody-development/solution/six-exclusion-advantages/about"
+
+    Given I am logged in as "Pally Rapamichael"
+    And I go to the homepage of the "Six exclusion advantages" solution
+    Then I click "About"
+
+    And I should see the text "Owner/Contact Information"
+    And I should see the link "Contact owner"
+    Then I click "Contact owner"
+    And a modal should open
+    And I should see the text "Email Contact" in the "Modal title"
+    When I fill in "Subject" with "New reclamation about solution"
+    When I fill in "Message" with "This is solution reclamation test."
+    And I should see the button "Send" in the "Modal buttons" region
+    Then I wait for the honeypot time limit to pass
+    And I press "Send" in the "Modal buttons" region
+
+    Then I should see the following success messages:
+      | success messages            |
+      | Your message has been sent. |
+    And the contact owner email sent to "elise@nova.dk" with subject "New reclamation about solution" contains the following lines of text:
+      | text                                        |
+      | Name: Pally Rapamichael                     |
+      | Email: p.papamichael@pally.de               |
+      | Message: This is solution reclamation test. |

@@ -17,7 +17,6 @@ use Drupal\Core\Url;
 use Drupal\contact_form\ContactFormEvents;
 use Drupal\joinup_notification\Event\NotificationEvent;
 use Drupal\user\Entity\User;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
  * Implements hook_preprocess_HOOK() for html.html.twig.
@@ -214,51 +213,21 @@ function contact_form_message_access(EntityInterface $entity, $operation, Accoun
 }
 
 /**
- * Return emails from entity and given field name.
+ * Implements hook_form_alter().
  *
- * @param null|string $entity_type
- *   The type of requested entity.
- * @param null|string $id
- *   The id of the requested entity.
- * @param null|string $field_name
- *   The name of the email field.
- *
- * @return array
- *   An array with valid email addresses.
- *
- * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
- * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
+ * Add honeypot to the contact form in the contact owner link.
  */
-function contact_form_get_emails_from_field(string $entity_type, string $id, string $field_name): array {
-  /** @var \Drupal\Core\Entity\ContentEntityInterface $entity */
-  $entity = \Drupal::entityTypeManager()->getStorage($entity_type)->load($id);
-
-  // Check that the entity exists.
-  if ($entity === NULL) {
-    throw new NotFoundHttpException();
+function contact_form_form_alter(&$form, FormStateInterface $form_state, $form_id): void {
+  if ($form_id != 'email_contact_mail_modal_form') {
+    return;
   }
 
-  // Check that the field exists and has the right type.
-  if (!$entity->hasField($field_name)) {
-    throw new NotFoundHttpException();
+  // If honeypot is enabled, add protection to the form.
+  if (function_exists('honeypot_add_form_protection')) {
+    honeypot_add_form_protection(
+      $form,
+      $form_state,
+      ['honeypot', 'time_restriction']
+    );
   }
-  $field = $entity->get($field_name);
-
-  if ($field === NULL || $field->getFieldDefinition()->getType() != 'email') {
-    throw new NotFoundHttpException();
-  }
-
-  // Load email addresses.
-  foreach ($field->getIterator() as $item) {
-    $value = $item->getValue()['value'];
-    if (!empty($value) && strpos($value, '@') !== FALSE) {
-      $emails[] = $value;
-    }
-  }
-
-  // Verify that the email address is not empty.
-  if (empty($emails)) {
-    throw new NotFoundHttpException();
-  }
-  return $emails;
 }
