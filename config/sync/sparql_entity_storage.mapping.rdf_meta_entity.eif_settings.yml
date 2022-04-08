@@ -28,7 +28,7 @@ base_fields_mapping:
     value:
       predicate: 'http://data.europa.eu/eif/adms/PerspectiveEIF/base/uuid'
       format: t_literal
-  rid:
+  type:
     target_id:
       predicate: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type'
       format: resource
