@@ -8,14 +8,3 @@ contact_form.settings:
     contact_form_from:
       label: 'Default sender for contact form (except from reports)'
       type: string
-
-field.formatter.settings.email_contact_form:
-  type: mapping
-  label: 'Email contact form popup settings'
-  mapping:
-    include_values:
-      type: string
-      label: 'Display all field values in email body'
-    default_message:
-      type: string
-      label: 'Additional message in email body'

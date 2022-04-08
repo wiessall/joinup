@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "3c19893cf22bf0bcbe9a3d4711ff575a",
+    "content-hash": "9c966e2fccc206c7721d78242a477276",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -3081,6 +3081,59 @@
             "homepage": "https://www.drupal.org/project/editor_file",
             "support": {
                 "source": "https://git.drupalcode.org/project/editor_file"
+            }
+        },
+        {
+            "name": "drupal/email_contact",
+            "version": "dev-1.x",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/email_contact.git",
+                "reference": "0f6fc263a505629ae5d208558e896e9fc5782a59"
+            },
+            "require": {
+                "drupal/core": "^8 || ^9"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "branch-alias": {
+                    "dev-1.x": "1.x-dev"
+                },
+                "drupal": {
+                    "version": "8.x-1.2+3-dev",
+                    "datestamp": "1646561846",
+                    "security-coverage": {
+                        "status": "not-covered",
+                        "message": "Dev releases are not covered by Drupal security advisories."
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "Denes.Szabo",
+                    "homepage": "https://www.drupal.org/user/582668"
+                },
+                {
+                    "name": "artis",
+                    "homepage": "https://www.drupal.org/user/77599"
+                },
+                {
+                    "name": "cebasqueira",
+                    "homepage": "https://www.drupal.org/user/3224891"
+                },
+                {
+                    "name": "nagy.balint",
+                    "homepage": "https://www.drupal.org/user/1763952"
+                }
+            ],
+            "description": "Defines extra contact field formatters",
+            "homepage": "https://www.drupal.org/project/email_contact",
+            "support": {
+                "source": "https://git.drupalcode.org/project/email_contact"
             }
         },
         {
@@ -23764,6 +23817,7 @@
         "dkarv/mdl-chip-input": 20,
         "drupal/default_content": 15,
         "drupal/dropsolid_purge": 10,
+        "drupal/email_contact": 20,
         "drupal/facets_date_range": 10,
         "drupal/menu_link_destination": 20,
         "drupal/og_menu": 20,
@@ -23800,5 +23854,5 @@
     "platform-overrides": {
         "php": "7.4.0"
     },
-    "plugin-api-version": "2.2.0"
+    "plugin-api-version": "2.3.0"
 }
