@@ -10,5 +10,4 @@ id: media_delete_action
 label: 'Delete media'
 type: media
 plugin: 'entity:delete_action:media'
-weight: 1
 configuration: {  }
