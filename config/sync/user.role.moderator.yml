@@ -41,6 +41,7 @@ dependencies:
     - pipeline
     - rdf_draft
     - rdf_entity
+    - rdf_meta_entity
     - site_alert
     - solution
     - state_machine_permissions
@@ -92,13 +93,13 @@ permissions:
   - 'create collection_banner media'
   - 'create collection_logo media'
   - 'create discussion content'
-  - 'create eif_settings rdf-meta-entity'
-  - 'create event_banner media'
-  - 'create event_logo media'
   - 'create eif_layer rdf entity'
   - 'create eif_model rdf entity'
   - 'create eif_principle rdf entity'
   - 'create eif_recommendation rdf entity'
+  - 'create eif_settings rdf-meta-entity'
+  - 'create event_banner media'
+  - 'create event_logo media'
   - 'create field_is_eif_category'
   - 'create field_is_eif_recommendation'
   - 'create licence rdf entity'

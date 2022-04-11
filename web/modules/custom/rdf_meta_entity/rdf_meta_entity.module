@@ -7,7 +7,6 @@
 
 declare(strict_types = 1);
 
-use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\rdf_entity\RdfInterface;
 
@@ -36,10 +35,10 @@ function rdf_meta_entity_inline_entity_form_entity_form_alter(array &$entity_for
  *
  * @param string $entity_type
  *   The type of the entity being created.
- * @param \Drupal\Core\Entity\EntityInterface $entity
+ * @param \Drupal\rdf_entity\RdfInterface $entity
  *   The entity being built.
  */
-function rdf_meta_entity_inline_entity_form_entity_builder(string $entity_type, EntityInterface $entity) {
+function rdf_meta_entity_inline_entity_form_entity_builder(string $entity_type, RdfInterface $entity) {
   rdf_meta_entity_eif_auto_label($entity);
 }
 
