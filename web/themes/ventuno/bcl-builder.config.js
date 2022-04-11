@@ -9,6 +9,7 @@ const includePaths = [nodeModules];
 
 module.exports = {
   scripts: [
+    // Bootstrap components
     {
       entry: path.resolve(outputFolder, "src/js/popovers.js"),
       dest: path.resolve(outputFolder, "assets/js/popovers.js"),
@@ -17,15 +18,7 @@ module.exports = {
         sourceMap: true,
       },
     },
-    {
-      entry: path.resolve(outputFolder, "src/js/glide.js"),
-      dest: path.resolve(outputFolder, "assets/js/glide.js"),
-      options: {
-        name: "glide",
-        minify: false,
-        sourceMap: true,
-      },
-    },
+    // Custom
     {
       entry: path.resolve(outputFolder, "src/js/sticky-menu.js"),
       dest: path.resolve(outputFolder, "assets/js/sticky-menu.js"),
@@ -42,8 +35,19 @@ module.exports = {
         sourceMap: true,
       },
     },
+    // Third party
+    {
+      entry: path.resolve(outputFolder, "src/js/glide.js"),
+      dest: path.resolve(outputFolder, "assets/js/glide.js"),
+      options: {
+        name: "glide",
+        minify: false,
+        sourceMap: true,
+      },
+    },
   ],
   styles: [
+    // Main
     {
       entry: path.resolve(outputFolder, "src/scss/main.scss"),
       dest: path.resolve(outputFolder, "assets/css/main.css"),
@@ -52,65 +56,10 @@ module.exports = {
         sourceMap: "file",
       },
     },
+    // Pages
     {
       entry: path.resolve(outputFolder, "src/scss/homepage.scss"),
       dest: path.resolve(outputFolder, "assets/css/homepage.css"),
-      options: {
-        includePaths,
-        sourceMap: "file",
-      },
-    },
-    {
-      entry: path.resolve(outputFolder, "src/scss/searchpage.scss"),
-      dest: path.resolve(outputFolder, "assets/css/searchpage.css"),
-      options: {
-        includePaths,
-        sourceMap: "file",
-      },
-    },
-    {
-      entry: path.resolve(outputFolder, "src/scss/navbar.scss"),
-      dest: path.resolve(outputFolder, "assets/css/navbar.css"),
-      options: {
-        includePaths,
-        sourceMap: "file",
-      },
-    },
-    {
-      entry: path.resolve(outputFolder, "src/scss/modals.scss"),
-      dest: path.resolve(outputFolder, "assets/css/modals.css"),
-      options: {
-        includePaths,
-        sourceMap: "file",
-      },
-    },
-    {
-      entry: path.resolve(outputFolder, "src/scss/navbar-search.scss"),
-      dest: path.resolve(outputFolder, "assets/css/navbar-search.css"),
-      options: {
-        includePaths,
-        sourceMap: "file",
-      },
-    },
-    {
-      entry: path.resolve(outputFolder, "src/scss/close.scss"),
-      dest: path.resolve(outputFolder, "assets/css/close.css"),
-      options: {
-        includePaths,
-        sourceMap: "file",
-      },
-    },
-    {
-      entry: path.resolve(outputFolder, "src/scss/pager.scss"),
-      dest: path.resolve(outputFolder, "assets/css/pager.css"),
-      options: {
-        includePaths,
-        sourceMap: "file",
-      },
-    },
-    {
-      entry: path.resolve(outputFolder, "src/scss/tables.scss"),
-      dest: path.resolve(outputFolder, "assets/css/tables.css"),
       options: {
         includePaths,
         sourceMap: "file",
@@ -125,8 +74,66 @@ module.exports = {
       },
     },
     {
+      entry: path.resolve(outputFolder, "src/scss/searchpage.scss"),
+      dest: path.resolve(outputFolder, "assets/css/searchpage.css"),
+      options: {
+        includePaths,
+        sourceMap: "file",
+      },
+    },
+    // Bootstrap components
+    {
+      entry: path.resolve(outputFolder, "src/scss/close.scss"),
+      dest: path.resolve(outputFolder, "assets/css/close.css"),
+      options: {
+        includePaths,
+        sourceMap: "file",
+      },
+    },
+    {
+      entry: path.resolve(outputFolder, "src/scss/modals.scss"),
+      dest: path.resolve(outputFolder, "assets/css/modals.css"),
+      options: {
+        includePaths,
+        sourceMap: "file",
+      },
+    },
+    {
+      entry: path.resolve(outputFolder, "src/scss/tables.scss"),
+      dest: path.resolve(outputFolder, "assets/css/tables.css"),
+      options: {
+        includePaths,
+        sourceMap: "file",
+      },
+    },
+    // Custom components
+    {
       entry: path.resolve(outputFolder, "src/scss/footer.scss"),
       dest: path.resolve(outputFolder, "assets/css/footer.css"),
+      options: {
+        includePaths,
+        sourceMap: "file",
+      },
+    },
+    {
+      entry: path.resolve(outputFolder, "src/scss/navbar.scss"),
+      dest: path.resolve(outputFolder, "assets/css/navbar.css"),
+      options: {
+        includePaths,
+        sourceMap: "file",
+      },
+    },
+    {
+      entry: path.resolve(outputFolder, "src/scss/navbar-search.scss"),
+      dest: path.resolve(outputFolder, "assets/css/navbar-search.css"),
+      options: {
+        includePaths,
+        sourceMap: "file",
+      },
+    },
+    {
+      entry: path.resolve(outputFolder, "src/scss/pager.scss"),
+      dest: path.resolve(outputFolder, "assets/css/pager.css"),
       options: {
         includePaths,
         sourceMap: "file",
@@ -148,8 +155,9 @@ module.exports = {
         sourceMap: "file",
       },
     },
+    // @todo remove when switch to Ventuno theme is complete
     {
-      entry: path.resolve(outputFolder, "src/scss/overrides/bootstrap-base.scss"),
+      entry: path.resolve(outputFolder, "src/scss/core/base/bootstrap-base.scss"),
       dest: path.resolve(outputFolder, "assets/css/bootstrap-base.css"),
       options: {
         includePaths,
@@ -158,16 +166,7 @@ module.exports = {
     },
   ],
   copy: [
-    {
-      from: [
-        path.resolve(
-          __dirname,
-          "src/images/favicon/*"
-        ),
-      ],
-      to: path.resolve(outputFolder, "assets/images/favicon"),
-      options: { up: true },
-    },
+    // Bootstrap: fonts
     {
       from: [
         path.resolve(
@@ -188,6 +187,7 @@ module.exports = {
       to: path.resolve(outputFolder, "assets/css/fonts/files"),
       options: { up: true },
     },
+    // Bootrstrap: scripts
     {
       from: [
         path.resolve(
@@ -198,31 +198,22 @@ module.exports = {
       to: path.resolve(outputFolder, "assets/js"),
       options: { up: true },
     },
+    // Theme images
     {
       from: [
         path.resolve(
           __dirname,
-          "src/fonts/joinup-icons/*.woff*"
+          "src/images/favicon/*"
         ),
       ],
-      to: path.resolve(outputFolder, "assets/fonts/joinup-icons"),
+      to: path.resolve(outputFolder, "assets/images/favicon"),
       options: { up: true },
     },
     {
       from: [
         path.resolve(
           __dirname,
-          "src/icons/bootstrap-icons.svg"
-        ),
-      ],
-      to: path.resolve(outputFolder, "assets/icons"),
-      options: { up: true },
-    },
-    {
-      from: [
-        path.resolve(
-          __dirname,
-          "src/images/logo-ec--en.svg"
+          "src/images/homepage-banner/background.svg"
         ),
       ],
       to: path.resolve(outputFolder, "assets/images"),
@@ -232,7 +223,17 @@ module.exports = {
       from: [
         path.resolve(
           __dirname,
-          "src/images/logo.svg"
+          "src/images/homepage-banner/banner-md.svg"
+        ),
+      ],
+      to: path.resolve(outputFolder, "assets/images"),
+      options: { up: true },
+    },
+    {
+      from: [
+        path.resolve(
+          __dirname,
+          "src/images/homepage-banner/wave.svg"
         ),
       ],
       to: path.resolve(outputFolder, "assets/images"),
@@ -262,7 +263,7 @@ module.exports = {
       from: [
         path.resolve(
           __dirname,
-          "src/images/homepage-banner.svg"
+          "src/images/logo.svg"
         ),
       ],
       to: path.resolve(outputFolder, "assets/images"),
@@ -272,32 +273,24 @@ module.exports = {
       from: [
         path.resolve(
           __dirname,
-          "src/images/homepage-banner/background.svg"
+          "src/images/logo-ec--en.svg"
         ),
       ],
       to: path.resolve(outputFolder, "assets/images"),
       options: { up: true },
     },
+    // Fontello icons
     {
       from: [
         path.resolve(
           __dirname,
-          "src/images/homepage-banner/wave.svg"
+          "src/fonts/joinup-icons/*.woff*"
         ),
       ],
-      to: path.resolve(outputFolder, "assets/images"),
+      to: path.resolve(outputFolder, "assets/fonts/joinup-icons"),
       options: { up: true },
     },
-    {
-      from: [
-        path.resolve(
-          __dirname,
-          "src/images/homepage-banner/banner-md.svg"
-        ),
-      ],
-      to: path.resolve(outputFolder, "assets/images"),
-      options: { up: true },
-    },
+    // Third party files
     {
       from: [
         path.resolve(
@@ -309,4 +302,50 @@ module.exports = {
       options: { up: true },
     },
   ],
+  sprite: [
+    {
+      entry: path.resolve(nodeModules, "@openeuropa/bcl-bootstrap/icons/"),
+      dest: path.resolve(outputFolder, "assets/icons"),
+      options: {
+        file: 'icons.svg',
+        list: [
+            'arrow-left.svg',
+            'arrow-right.svg',
+            'award.svg',
+            'calendar.svg',
+            'calendar3.svg',
+            'chat-left-text.svg',
+            'check-circle-fill.svg',
+            'chevron-bar-left.svg',
+            'chevron-bar-right.svg',
+            'chevron-left.svg',
+            'chevron-right.svg',
+            'clipboard-check.svg',
+            'exclamation-circle-fill.svg',
+            'exclamation-lg.svg',
+            'eye.svg',
+            'file-earmark-medical.svg',
+            'file-earmark-play.svg',
+            'file-earmark-richtext.svg',
+            'file-earmark-text.svg',
+            'file-earmark-zip.svg',
+            'filter.svg',
+            'folder2-open.svg',
+            'info-circle.svg',
+            'info-circle-fill.svg',
+            'justify.svg',
+            'lightning-charge.svg',
+            'linkedin.svg',
+            'newspaper.svg',
+            'person-circle.svg',
+            'search.svg',
+            'star.svg',
+            'twitter.svg',
+            'x.svg',
+            'x-lg.svg',
+            'x-square-fill.svg',
+          ]
+      },
+    }
+  ]
 };

@@ -1,3 +1,4 @@
+// @todo remove when switch to Ventuno theme is complete
 /*
 /* Bootstrap's base for components that need it while being rendered in a "material"
 /* based environment, like navbar and footer.
@@ -7,11 +8,15 @@
 
 .bs-wrapper {
   // Configuration
+  // Base theme colors
+  @import "@openeuropa/bcl-theme-default/src/scss/base/colors";
+  // Custom theme colors
+  @import "@openeuropa/bcl-theme-joinup/src/scss/base/colors";
   @import "@openeuropa/bcl-bootstrap/scss/functions";
   @import "@openeuropa/bcl-bootstrap/scss/variables";
 
   // Override Bootstrap variables
-  @import "@openeuropa/bcl-theme-default/src/scss/variables";
+  @import "@openeuropa/bcl-theme-default/src/scss/base/variables";
   @import "@openeuropa/bcl-theme-joinup/src/scss/base/variables";
 
   @import "@openeuropa/bcl-bootstrap/scss/mixins";
@@ -71,7 +76,7 @@
 
   // Helpers
   @import "@openeuropa/bcl-bootstrap/scss/helpers";
-  @import "@openeuropa/bcl-theme-default/src/scss/utilities";
+  @import "@openeuropa/bcl-theme-default/src/scss/base/utilities";
 
   // Utilities
   @import "@openeuropa/bcl-bootstrap/scss/utilities/api";
