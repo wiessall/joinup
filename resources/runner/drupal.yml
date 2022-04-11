@@ -209,9 +209,10 @@ drupal:
         $config['oe_webtools_cookie_consent.settings']['banner_popup'] = $oe_webtools_cck_enabled;
         $config['oe_webtools_cookie_consent.settings']['video_popup'] = $oe_webtools_cck_enabled;
 
-        // In order to ensure that tests assert dates correctly even in edge cases, we set the website
-        // default timezone to UTC and the same in tests too so that even edge cases produce expected results.
-        // @see \Drupal\joinup\Context\JoinupCoreContext::defaultTimezoneSet
+        // In order to ensure that tests assert dates correctly even in edge cases, we
+        // set the website default timezone to UTC and the same in tests too so that
+        // even edge cases produce expected results.
+        // @see \Drupal\joinup\Context\JoinupCoreContext::setDefaultTimezone()
         $config['system.date']['timezone']['default'] = 'UTC';
       Databases: |
         $databases['default']['default'] = [
