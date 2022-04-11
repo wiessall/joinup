@@ -40,6 +40,7 @@ display:
           hide_empty: false
           empty_zero: false
           hide_alter_empty: true
+          actions_order: {  }
         title:
           id: title
           table: node_field_data
@@ -564,6 +565,7 @@ display:
         type: fields
       query:
         type: views_query
+        options: {  }
       relationships:
         uid:
           id: uid
