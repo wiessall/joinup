@@ -8,7 +8,7 @@ use Drupal\Core\Routing\RouteSubscriberBase;
 use Symfony\Component\Routing\RouteCollection;
 
 /**
- *
+ * Update the canonical path for the RDF meta entity.
  */
 class RouteSubscriber extends RouteSubscriberBase {
 

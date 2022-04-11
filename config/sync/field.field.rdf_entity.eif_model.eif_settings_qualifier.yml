@@ -12,7 +12,7 @@ entity_type: rdf_entity
 bundle: eif_model
 label: 'EIF qualifier'
 description: ''
-required: false
+required: true
 translatable: true
 default_value: {  }
 default_value_callback: ''
