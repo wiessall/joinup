@@ -270,8 +270,12 @@ class FeatureContext extends RawDrupalContext implements SnippetAcceptingContext
     $page = $this->getSession()->getPage();
     $not_found = [];
     foreach ($fieldsets as $fieldset) {
-      $is_found = $page->find('named', ['fieldset', $fieldset]);
+      // Find by fieldset legend or by details summary depending on how the
+      // fieldset is rendered.
+      $is_found = $page->find('named', ['fieldset', $fieldset])
+        || $page->find('xpath', "//details/summary[contains(text(), '$fieldset')]");
       if (!$is_found) {
+        // Try to find the fieldset according to the collapse button.
         $not_found[] = $fieldset;
       }
     }
@@ -476,6 +480,7 @@ class FeatureContext extends RawDrupalContext implements SnippetAcceptingContext
    *   not the expected one.
    *
    * @Then the option with text :option from select :select is selected
+   * @Then the option with text :option from select :select should be selected
    */
   public function assertFieldOptionSelected(string $option, string $select): void {
     $this->assertFieldOptionSelectedInRegion($option, $select);
