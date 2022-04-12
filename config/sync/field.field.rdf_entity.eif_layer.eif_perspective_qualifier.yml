@@ -3,11 +3,11 @@ langcode: en
 status: true
 dependencies:
   config:
-    - field.storage.rdf_entity.eif_settings_qualifier
+    - field.storage.rdf_entity.eif_perspective_qualifier
     - rdf_entity.rdfentity.eif_layer
     - taxonomy.vocabulary.eif_interoperability_layer
-id: rdf_entity.eif_layer.eif_settings_qualifier
-field_name: eif_settings_qualifier
+id: rdf_entity.eif_layer.eif_perspective_qualifier
+field_name: eif_perspective_qualifier
 entity_type: rdf_entity
 bundle: eif_layer
 label: 'EIF qualifier'

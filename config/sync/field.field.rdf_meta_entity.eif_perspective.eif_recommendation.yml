@@ -5,11 +5,11 @@ dependencies:
   config:
     - field.storage.rdf_meta_entity.eif_recommendation
     - rdf_entity.rdfentity.eif_recommendation
-    - rdf_meta_entity.type.eif_settings
-id: rdf_meta_entity.eif_settings.eif_recommendation
+    - rdf_meta_entity.type.eif_perspective
+id: rdf_meta_entity.eif_perspective.eif_recommendation
 field_name: eif_recommendation
 entity_type: rdf_meta_entity
-bundle: eif_settings
+bundle: eif_perspective
 label: Recommendation
 description: ''
 required: false

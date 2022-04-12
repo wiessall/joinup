@@ -1,10 +1,10 @@
-uuid: 7c82ffad-3ca0-4358-9f8e-3f23b6813364
+uuid: ab1f24f9-ce74-49c7-be87-aede87e8095f
 langcode: en
 status: true
 dependencies:
   config:
-    - field.storage.rdf_entity.eif_settings_description
-    - rdf_entity.rdfentity.eif_principle
+    - field.storage.rdf_entity.eif_perspective_description
+    - rdf_entity.rdfentity.eif_layer
   module:
     - allowed_formats
     - text
@@ -12,14 +12,14 @@ third_party_settings:
   allowed_formats:
     allowed_formats:
       - content_editor
-id: rdf_entity.eif_principle.eif_settings_description
-field_name: eif_settings_description
+id: rdf_entity.eif_layer.eif_perspective_description
+field_name: eif_perspective_description
 entity_type: rdf_entity
-bundle: eif_principle
+bundle: eif_layer
 label: Description
 description: 'Describe how the solution helps implementing this qualifier.'
 required: false
-translatable: true
+translatable: false
 default_value: {  }
 default_value_callback: ''
 settings: {  }

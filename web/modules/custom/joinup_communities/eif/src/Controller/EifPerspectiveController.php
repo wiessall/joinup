@@ -17,7 +17,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 /**
  * Controller class for the solution EIF settings.
  */
-class EifSettingsController extends ControllerBase {
+class EifPerspectiveController extends ControllerBase {
 
   /**
    * The entity type manager service.
@@ -68,7 +68,7 @@ class EifSettingsController extends ControllerBase {
   }
 
   /**
-   * Provides a controller for the 'eif.eif_settings_form' route title.
+   * Provides a controller for the 'eif.eif_perspective_form' route title.
    *
    * @param \Drupal\solution\Entity\SolutionInterface $rdf_entity
    *   The solution.
@@ -83,7 +83,7 @@ class EifSettingsController extends ControllerBase {
   }
 
   /**
-   * Provides a controller for the 'eif.eif_settings_form' route.
+   * Provides a controller for the 'eif.eif_perspective_form' route.
    *
    * @param \Drupal\solution\Entity\SolutionInterface $rdf_entity
    *   The solution.
@@ -92,10 +92,10 @@ class EifSettingsController extends ControllerBase {
    *   The content as a render array.
    */
   public function settings(SolutionInterface $rdf_entity): array {
-    $meta_entity = $this->metaEntityRepository->getMetaEntityForEntity($rdf_entity, 'eif_settings');
+    $meta_entity = $this->metaEntityRepository->getMetaEntityForEntity($rdf_entity, 'eif_perspective');
     if (empty($meta_entity)) {
       $meta_entity = $this->entityTypeManager->getStorage('rdf_meta_entity')->create([
-        'type' => 'eif_settings',
+        'type' => 'eif_perspective',
         'target' => $rdf_entity,
       ]);
     }
@@ -109,7 +109,7 @@ class EifSettingsController extends ControllerBase {
   }
 
   /**
-   * Provides an access controller for the 'eif.eif_settings_form' route.
+   * Provides an access controller for the 'eif.eif_perspective_form' route.
    *
    * @param \Drupal\solution\Entity\SolutionInterface $rdf_entity
    *   The solution.
@@ -118,17 +118,17 @@ class EifSettingsController extends ControllerBase {
    *   The access result.
    */
   public function access(SolutionInterface $rdf_entity): AccessResultInterface {
-    if ($meta_entity = $this->metaEntityRepository->getMetaEntityForEntity($rdf_entity, 'eif_settings')) {
+    if ($meta_entity = $this->metaEntityRepository->getMetaEntityForEntity($rdf_entity, 'eif_perspective')) {
       $access_result = $meta_entity->access('update', NULL, TRUE);
     }
     else {
-      $access_result = $this->entityTypeManager->getAccessControlHandler('rdf_meta_entity')->createAccess('eif_settings', NULL, [], TRUE);
+      $access_result = $this->entityTypeManager->getAccessControlHandler('rdf_meta_entity')->createAccess('eif_perspective', NULL, [], TRUE);
     }
 
     if ($access_result->isAllowed()) {
       return $access_result;
     }
-    return $access_result->orIf($this->ogAccess->userAccess($rdf_entity, 'update eif_settings rdf-meta-entity'));
+    return $access_result->orIf($this->ogAccess->userAccess($rdf_entity, 'update eif_perspective rdf-meta-entity'));
   }
 
 }

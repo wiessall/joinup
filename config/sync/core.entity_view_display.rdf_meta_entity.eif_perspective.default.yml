@@ -3,18 +3,18 @@ langcode: en
 status: true
 dependencies:
   config:
-    - field.field.rdf_meta_entity.eif_settings.eif_layer
-    - field.field.rdf_meta_entity.eif_settings.eif_model
-    - field.field.rdf_meta_entity.eif_settings.eif_principle
-    - field.field.rdf_meta_entity.eif_settings.eif_recommendation
-    - field.field.rdf_meta_entity.eif_settings.field_eif_description
-    - field.field.rdf_meta_entity.eif_settings.field_eif_solution_type
-    - rdf_meta_entity.type.eif_settings
+    - field.field.rdf_meta_entity.eif_perspective.eif_layer
+    - field.field.rdf_meta_entity.eif_perspective.eif_model
+    - field.field.rdf_meta_entity.eif_perspective.eif_principle
+    - field.field.rdf_meta_entity.eif_perspective.eif_recommendation
+    - field.field.rdf_meta_entity.eif_perspective.field_eif_description
+    - field.field.rdf_meta_entity.eif_perspective.field_eif_solution_type
+    - rdf_meta_entity.type.eif_perspective
   module:
     - text
-id: rdf_meta_entity.eif_settings.default
+id: rdf_meta_entity.eif_perspective.default
 targetEntityType: rdf_meta_entity
-bundle: eif_settings
+bundle: eif_perspective
 mode: default
 content:
   changed:

@@ -4,12 +4,12 @@ status: true
 dependencies:
   config:
     - field.storage.rdf_meta_entity.field_eif_solution_type
-    - rdf_meta_entity.type.eif_settings
+    - rdf_meta_entity.type.eif_perspective
     - taxonomy.vocabulary.solution_category
-id: rdf_meta_entity.eif_settings.field_eif_solution_type
+id: rdf_meta_entity.eif_perspective.field_eif_solution_type
 field_name: field_eif_solution_type
 entity_type: rdf_meta_entity
-bundle: eif_settings
+bundle: eif_perspective
 label: Type
 description: ''
 required: false

@@ -3,8 +3,8 @@ langcode: en
 status: true
 dependencies:
   config:
-    - field.field.rdf_entity.eif_model.eif_settings_description
-    - field.field.rdf_entity.eif_model.eif_settings_qualifier
+    - field.field.rdf_entity.eif_model.eif_perspective_description
+    - field.field.rdf_entity.eif_model.eif_perspective_qualifier
     - rdf_entity.rdfentity.eif_model
   module:
     - text
@@ -14,14 +14,14 @@ targetEntityType: rdf_entity
 bundle: eif_model
 mode: default
 content:
-  eif_settings_description:
+  eif_perspective_description:
     type: text_default
     label: above
     settings: {  }
     third_party_settings: {  }
     weight: 2
     region: content
-  eif_settings_qualifier:
+  eif_perspective_qualifier:
     type: entity_reference_label
     label: above
     settings:
