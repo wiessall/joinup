@@ -1,18 +1,18 @@
-uuid: 5c2b571a-a55b-4a76-afe8-ca4bcccaca68
+uuid: ab1e68d5-4e15-4edd-bc62-cf6322080ca7
 langcode: en
 status: true
 dependencies:
   config:
-    - field.storage.rdf_meta_entity.eif_principle
-    - rdf_entity.rdfentity.eif_principle
-    - rdf_meta_entity.type.eif_settings
-id: rdf_meta_entity.eif_settings.eif_principle
-field_name: eif_principle
+    - field.storage.rdf_meta_entity.eif_model
+    - rdf_entity.rdfentity.eif_model
+    - rdf_meta_entity.type.eif_perspective
+id: rdf_meta_entity.eif_perspective.eif_model
+field_name: eif_model
 entity_type: rdf_meta_entity
-bundle: eif_settings
-label: Principle
+bundle: eif_perspective
+label: Model
 description: ''
-required: true
+required: false
 translatable: false
 default_value: {  }
 default_value_callback: ''
@@ -20,7 +20,7 @@ settings:
   handler: 'default:rdf_entity'
   handler_settings:
     target_bundles:
-      eif_principle: eif_principle
+      eif_model: eif_model
     sort:
       field: _none
       direction: ASC

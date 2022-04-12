@@ -3,8 +3,8 @@ langcode: en
 status: true
 dependencies:
   config:
-    - field.field.rdf_entity.eif_layer.eif_settings_description
-    - field.field.rdf_entity.eif_layer.eif_settings_qualifier
+    - field.field.rdf_entity.eif_layer.eif_perspective_description
+    - field.field.rdf_entity.eif_layer.eif_perspective_qualifier
     - rdf_entity.rdfentity.eif_layer
   module:
     - text
@@ -13,7 +13,7 @@ targetEntityType: rdf_entity
 bundle: eif_layer
 mode: default
 content:
-  eif_settings_description:
+  eif_perspective_description:
     type: text_textarea
     weight: 1
     region: content
@@ -21,7 +21,7 @@ content:
       rows: 5
       placeholder: ''
     third_party_settings: {  }
-  eif_settings_qualifier:
+  eif_perspective_qualifier:
     type: options_select
     weight: 0
     region: content

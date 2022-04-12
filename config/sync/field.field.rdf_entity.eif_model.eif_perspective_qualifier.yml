@@ -1,15 +1,15 @@
-uuid: 1e7d4697-21d2-484f-bdac-02e6084a4586
+uuid: ed1ebabb-d6c6-4d84-ab93-54e3bc27ae3f
 langcode: en
 status: true
 dependencies:
   config:
-    - field.storage.rdf_entity.eif_settings_qualifier
-    - rdf_entity.rdfentity.eif_principle
-    - taxonomy.vocabulary.eif_principle
-id: rdf_entity.eif_principle.eif_settings_qualifier
-field_name: eif_settings_qualifier
+    - field.storage.rdf_entity.eif_perspective_qualifier
+    - rdf_entity.rdfentity.eif_model
+    - taxonomy.vocabulary.eif_conceptual_model
+id: rdf_entity.eif_model.eif_perspective_qualifier
+field_name: eif_perspective_qualifier
 entity_type: rdf_entity
-bundle: eif_principle
+bundle: eif_model
 label: 'EIF qualifier'
 description: ''
 required: true
@@ -20,7 +20,7 @@ settings:
   handler: 'default:taxonomy_term'
   handler_settings:
     target_bundles:
-      eif_principle: eif_principle
+      eif_conceptual_model: eif_conceptual_model
     sort:
       field: name
       direction: asc

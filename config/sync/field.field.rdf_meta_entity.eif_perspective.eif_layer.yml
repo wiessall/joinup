@@ -5,11 +5,11 @@ dependencies:
   config:
     - field.storage.rdf_meta_entity.eif_layer
     - rdf_entity.rdfentity.eif_layer
-    - rdf_meta_entity.type.eif_settings
-id: rdf_meta_entity.eif_settings.eif_layer
+    - rdf_meta_entity.type.eif_perspective
+id: rdf_meta_entity.eif_perspective.eif_layer
 field_name: eif_layer
 entity_type: rdf_meta_entity
-bundle: eif_settings
+bundle: eif_perspective
 label: Layer
 description: ''
 required: false

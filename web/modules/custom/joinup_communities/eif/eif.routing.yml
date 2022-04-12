@@ -11,13 +11,13 @@ eif.solutions:
       eif_category:
         type: eif_category
 
-eif.eif_settings_form:
-  path: '/rdf_entity/{rdf_entity}/eif-settings'
+eif.eif_perspective_form:
+  path: '/rdf_entity/{rdf_entity}/eif-perspective'
   defaults:
-    _controller: Drupal\eif\Controller\EifSettingsController::settings
-    _title_callback: Drupal\eif\Controller\EifSettingsController::title
+    _controller: Drupal\eif\Controller\EifPerspectiveController::settings
+    _title_callback: Drupal\eif\Controller\EifPerspectiveController::title
   requirements:
-    _custom_access: Drupal\eif\Controller\EifSettingsController::access
+    _custom_access: Drupal\eif\Controller\EifPerspectiveController::access
   options:
     parameters:
       rdf_entity:
