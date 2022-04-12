@@ -75,14 +75,32 @@ display:
           empty_zero: false
           hide_alter_empty: true
           action_title: Action
-          include_exclude: exclude
+          include_exclude: include
           selected_actions:
+            - joinup_og_membership_delete_action
+            - joinup_transfer_group_ownership
+            - og_membership_add_single_role_action.author
+            - og_membership_add_single_role_action.facilitator
+            - og_membership_approve_pending_action
+            - og_membership_block_action
+            - og_membership_remove_single_role_action.author
+            - og_membership_remove_single_role_action.facilitator
+            - og_membership_unblock_action
+          actions_order:
+            - og_membership_approve_pending_action
+            - og_membership_block_action
+            - og_membership_unblock_action
+            - joinup_og_membership_delete_action
+            - og_membership_add_single_role_action.author
+            - og_membership_add_single_role_action.facilitator
+            - joinup_transfer_group_ownership
+            - og_membership_remove_single_role_action.facilitator
+            - og_membership_remove_single_role_action.author
             - og_membership_add_multiple_roles_action
             - og_membership_add_single_role_action.administrator
             - og_membership_delete_action
             - og_membership_remove_multiple_roles_action
             - og_membership_remove_single_role_action.administrator
-          actions_order: {  }
         name:
           id: name
           table: users_field_data
