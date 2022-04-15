@@ -1,9 +1,0 @@
-type: module
-name: 'RDF Meta Entity'
-description: 'Allows to store metadata about an RDF entity outside its storage.'
-core_version_requirement: ">=9.3"
-php: 7.4
-
-dependencies:
-  - meta_entity:meta_entity (>=8.x-2.x)
-  - sparql_entity_storage:sparql_entity_storage

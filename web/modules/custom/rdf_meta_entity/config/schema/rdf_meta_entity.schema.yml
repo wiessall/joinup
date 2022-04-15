@@ -1,3 +1,0 @@
-rdf_meta_entity.type.*:
-  type: meta_entity.type.*
-  label: 'RDF meta entity type'
