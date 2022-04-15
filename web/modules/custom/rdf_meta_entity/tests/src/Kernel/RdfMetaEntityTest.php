@@ -133,7 +133,10 @@ class RdfMetaEntityTest extends KernelTestBase {
     $rdf_meta_entity->save();
 
     /** @var \Drupal\user\RoleInterface $role */
-    $role = Role::create(['id' => $this->randomMachineName()]);
+    $role = Role::create([
+      'id' => $this->randomMachineName(),
+      'label' => $this->randomString(),
+    ]);
     $role->save();
 
     // User account with no permissions.
