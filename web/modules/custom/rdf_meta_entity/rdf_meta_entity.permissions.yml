@@ -1,7 +1,0 @@
-administer rdf meta entity:
-  title: 'Administer rdf meta entity'
-  description: 'Administer RDF meta entity types and entities.'
-  restrict access: true
-
-permission_callbacks:
-  - Drupal\rdf_meta_entity\RdfMetaEntityPermissionProvider::getPermissions

@@ -74,6 +74,7 @@
         "drupal/pipeline": "^1.0",
         "drupal/publication_date": "^2.0-beta2",
         "drupal/rdf_entity": "^1.0",
+        "drupal/rdf_meta_entity": "^1.0",
         "drupal/redirect": "^1.6",
         "drupal/redis": "^1.4",
         "drupal/schema_digital_document": "dev-1.0.x",
