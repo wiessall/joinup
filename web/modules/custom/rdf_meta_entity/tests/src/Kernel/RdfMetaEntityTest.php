@@ -13,7 +13,7 @@ use Drupal\rdf_meta_entity\Entity\RdfMetaEntityType;
 use Drupal\user\Entity\Role;
 
 /**
- * Tests rdf meta entity.
+ * Tests RDF meta entity.
  *
  * @group rdf_meta_entity
  */
