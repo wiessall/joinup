@@ -1,5 +1,0 @@
-services:
-
-  rdf_meta_entity.repository:
-    tags:
-      - { name: meta_entity.repository, meta_entity_type: rdf_meta_entity }
