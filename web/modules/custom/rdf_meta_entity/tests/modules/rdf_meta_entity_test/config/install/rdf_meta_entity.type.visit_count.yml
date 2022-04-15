@@ -1,9 +1,0 @@
-langcode: en
-status: true
-dependencies:
-  - rdf_meta_entity
-  - sparql_entity_storage
-id: visit_count
-label: 'Visit count'
-description: 'Holds information about the visit count.'
-mapping: {  }
