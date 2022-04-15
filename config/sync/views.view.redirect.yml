@@ -75,6 +75,7 @@ display:
           action_title: 'With selection'
           include_exclude: exclude
           selected_actions: {  }
+          actions_order: {  }
         redirect_source__path:
           id: redirect_source__path
           table: redirect

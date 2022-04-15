@@ -14,8 +14,8 @@ Feature: Creating comments through the API
     And user:
       | Username | Vasundhara Guadarrama |
     And comments:
-      | cid  | message             | author                | parent                     | created                   |
-      | 9999 | RX 580 undervolting | Vasundhara Guadarrama | Current effective hashrate | 2017-08-21T09:08:36+02:00 |
+      | cid  | message             | author                | parent                     | created             |
+      | 9999 | RX 580 undervolting | Vasundhara Guadarrama | Current effective hashrate | 2017-08-21T09:08:36 |
     Given I am an anonymous user
     When I go to the content page of the type "<content type>" with the title "Current effective hashrate"
     Then I should see the following lines of text:

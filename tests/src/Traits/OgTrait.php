@@ -247,6 +247,7 @@ trait OgTrait {
 
     $state = !empty($values['state']) ? $values['state'] : NULL;
     $timestamp = !empty($values['created']) ? strtotime($values['created']) : NULL;
+
     $this->subscribeUserToGroup($member, $group, $roles, $state, $timestamp);
   }
 
