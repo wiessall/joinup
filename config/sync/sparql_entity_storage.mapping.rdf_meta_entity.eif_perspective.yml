@@ -22,7 +22,7 @@ bundle: eif_perspective
 rdf_type: 'http://data.europa.eu/eif/adms/PerspectiveEIF'
 graph:
   default: 'http://joinup.eu/rdf_meta_entity/eif_perspective/graph/published'
-  draft: ''
+  draft: 'http://joinup.eu/rdf_meta_entity/eif_perspective/graph/draft'
 base_fields_mapping:
   uuid:
     value:
