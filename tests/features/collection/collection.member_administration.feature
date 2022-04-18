@@ -441,7 +441,7 @@ Feature: Collection membership administration
     When I fill in "E-mail" with "pending_member@example.com"
     And I press "Add"
     Then the page should show the following chips in the Content region:
-      | Pending Member   |
+      | Pending Member |
     And I press "Invite members"
     Then I should not see the success message "Successfully invited the selected users."
     And I should see the error message "1 user has a pending membership. Please, approve their membership request and assign the roles."
