@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "3c19893cf22bf0bcbe9a3d4711ff575a",
+    "content-hash": "dae916fa2125fd70fca77d26251a272a",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -5334,17 +5334,17 @@
         },
         {
             "name": "drupal/meta_entity",
-            "version": "1.0.0",
+            "version": "1.1.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/meta_entity.git",
-                "reference": "8.x-1.0"
+                "reference": "8.x-1.1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/meta_entity-8.x-1.0.zip",
-                "reference": "8.x-1.0",
-                "shasum": "f562f07208e0948fc8e4ebf825d26effccaec018"
+                "url": "https://ftp.drupal.org/files/projects/meta_entity-8.x-1.1.zip",
+                "reference": "8.x-1.1",
+                "shasum": "bd36fbb24eb20776ccf551fcc60b2a8353a2fcb7"
             },
             "require": {
                 "drupal/core": "^8 || ^9",
@@ -5354,8 +5354,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "8.x-1.0",
-                    "datestamp": "1618066086",
+                    "version": "8.x-1.1",
+                    "datestamp": "1650020266",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -6457,6 +6457,58 @@
             }
         },
         {
+            "name": "drupal/rdf_meta_entity",
+            "version": "1.0.0-alpha1",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/rdf_meta_entity.git",
+                "reference": "1.0.0-alpha1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/rdf_meta_entity-1.0.0-alpha1.zip",
+                "reference": "1.0.0-alpha1",
+                "shasum": "7dc348570f150a54808d1c194da5e28da8e386c8"
+            },
+            "require": {
+                "drupal/core": ">=9.3",
+                "drupal/meta_entity": ">=1.1",
+                "drupal/sparql_entity_storage": "^2.0"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "1.0.0-alpha1",
+                    "datestamp": "1650024559",
+                    "security-coverage": {
+                        "status": "not-covered",
+                        "message": "Alpha releases are not covered by Drupal security advisories."
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0+"
+            ],
+            "authors": [
+                {
+                    "name": "Ilias Dimopoulos",
+                    "homepage": "https://www.drupal.org/u/idimopoulos-0"
+                },
+                {
+                    "name": "Claudiu Cristea",
+                    "homepage": "https://www.drupal.org/user/2578708",
+                    "email": "https://www.drupal.org/u/claudiucristea"
+                }
+            ],
+            "description": "Allows storing metadata about an entity in entities having a SPARQL backend.",
+            "homepage": "https://www.drupal.org/project/rdf_meta_entity",
+            "support": {
+                "source": "https://git.drupalcode.org/project/rdf_meta_entity",
+                "issues": "https://www.drupal.org/project/issues/rdf_meta_entity"
+            }
+        },
+        {
             "name": "drupal/redirect",
             "version": "1.7.0",
             "source": {
@@ -7343,17 +7395,17 @@
         },
         {
             "name": "drupal/sparql_entity_storage",
-            "version": "2.0.0-alpha1",
+            "version": "2.0.0-alpha2",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/sparql_entity_storage.git",
-                "reference": "2.0.0-alpha1"
+                "reference": "2.0.0-alpha2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/sparql_entity_storage-2.0.0-alpha1.zip",
-                "reference": "2.0.0-alpha1",
-                "shasum": "9286d6147d55099bf6594c8241d2418906ea704b"
+                "url": "https://ftp.drupal.org/files/projects/sparql_entity_storage-2.0.0-alpha2.zip",
+                "reference": "2.0.0-alpha2",
+                "shasum": "3c5d8933b6808050fbc8659508c4626362728cdf"
             },
             "require": {
                 "drupal/core": "^9.3 || ^10",
@@ -7367,8 +7419,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "2.0.0-alpha1",
-                    "datestamp": "1642512542",
+                    "version": "2.0.0-alpha2",
+                    "datestamp": "1650020546",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Project has not opted into security advisory coverage!"
@@ -23742,7 +23794,7 @@
     "aliases": [
         {
             "package": "drupal/sparql_entity_storage",
-            "version": "2.0.0.0-alpha1",
+            "version": "2.0.0.0-alpha2",
             "alias": "1.0-alpha11",
             "alias_normalized": "1.0.0.0-alpha11"
         },
