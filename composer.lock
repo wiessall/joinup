@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "1f2100d3c4b491eae0f9be91af718e94",
+    "content-hash": "8de34d68496d12243b288a9e5ec6ab3e",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -5388,63 +5388,33 @@
         },
         {
             "name": "drupal/meta_entity",
-            "version": "1.1.0",
+            "version": "dev-3275830-abstraction",
             "source": {
                 "type": "git",
-                "url": "https://git.drupalcode.org/project/meta_entity.git",
-                "reference": "8.x-1.1"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/meta_entity-8.x-1.1.zip",
-                "reference": "8.x-1.1",
-                "shasum": "bd36fbb24eb20776ccf551fcc60b2a8353a2fcb7"
+                "url": "git@git.drupal.org:issue/meta_entity-3275830.git",
+                "reference": "d619469a6a5e96bc6dc553c4b270ac8d35fda8a4"
             },
             "require": {
-                "drupal/core": "^8 || ^9",
                 "drupal/dynamic_entity_reference": "^2.0",
                 "php": ">=7.1"
             },
             "type": "drupal-module",
-            "extra": {
-                "drupal": {
-                    "version": "8.x-1.1",
-                    "datestamp": "1650020266",
-                    "security-coverage": {
-                        "status": "covered",
-                        "message": "Covered by Drupal's security advisory policy"
-                    }
-                }
-            },
-            "notification-url": "https://packages.drupal.org/8/downloads",
             "license": [
                 "GPL-2.0+"
             ],
             "authors": [
                 {
                     "name": "Claudiu Cristea",
-                    "homepage": "https://www.drupal.org/user/56348",
                     "email": "https://www.drupal.org/u/claudiucristea"
-                },
-                {
-                    "name": "idimopoulos",
-                    "homepage": "https://www.drupal.org/user/2578708"
-                },
-                {
-                    "name": "pfrenssen",
-                    "homepage": "https://www.drupal.org/user/382067"
-                },
-                {
-                    "name": "sandervd",
-                    "homepage": "https://www.drupal.org/user/346775"
                 }
             ],
             "description": "Allows to store metadata about an entity outside its storage.",
             "homepage": "https://www.drupal.org/project/meta_entity",
             "support": {
-                "source": "https://git.drupalcode.org/project/meta_entity",
-                "issues": "https://www.drupal.org/project/issues/meta_entity"
-            }
+                "issues": "https://www.drupal.org/project/issues/meta_entity",
+                "source": "https://git.drupalcode.org/project/meta_entity"
+            },
+            "time": "2022-04-18T18:53:56+00:00"
         },
         {
             "name": "drupal/metatag",
@@ -6535,38 +6505,17 @@
         },
         {
             "name": "drupal/rdf_meta_entity",
-            "version": "1.0.0-alpha1",
+            "version": "dev-3275700-string-route-parameter",
             "source": {
                 "type": "git",
-                "url": "https://git.drupalcode.org/project/rdf_meta_entity.git",
-                "reference": "1.0.0-alpha1"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/rdf_meta_entity-1.0.0-alpha1.zip",
-                "reference": "1.0.0-alpha1",
-                "shasum": "7dc348570f150a54808d1c194da5e28da8e386c8"
+                "url": "git@git.drupal.org:issue/rdf_meta_entity-3275700.git",
+                "reference": "4e3b83b35c0247e464a5f00894dab3d77c6af5a4"
             },
             "require": {
-                "drupal/core": ">=9.3",
                 "drupal/meta_entity": ">=1.1",
                 "drupal/sparql_entity_storage": "^2.0"
             },
             "type": "drupal-module",
-            "extra": {
-                "drupal": {
-                    "version": "1.0.0-alpha1",
-                    "datestamp": "1650024559",
-                    "security-coverage": {
-                        "status": "not-covered",
-                        "message": "Alpha releases are not covered by Drupal security advisories."
-                    }
-                },
-                "patches_applied": {
-                    "Override default entity ID requirments @see https://www.drupal.org/project/rdf_meta_entity/issues/3275700": "https://git.drupalcode.org/project/rdf_meta_entity/-/merge_requests/1.diff"
-                }
-            },
-            "notification-url": "https://packages.drupal.org/8/downloads",
             "license": [
                 "GPL-2.0+"
             ],
@@ -6577,16 +6526,16 @@
                 },
                 {
                     "name": "Claudiu Cristea",
-                    "homepage": "https://www.drupal.org/user/2578708",
                     "email": "https://www.drupal.org/u/claudiucristea"
                 }
             ],
             "description": "Allows storing metadata about an entity in entities having a SPARQL backend.",
             "homepage": "https://www.drupal.org/project/rdf_meta_entity",
             "support": {
-                "source": "https://git.drupalcode.org/project/rdf_meta_entity",
-                "issues": "https://www.drupal.org/project/issues/rdf_meta_entity"
-            }
+                "issues": "https://www.drupal.org/project/issues/rdf_meta_entity",
+                "source": "https://git.drupalcode.org/project/rdf_meta_entity"
+            },
+            "time": "2022-04-18T18:31:42+00:00"
         },
         {
             "name": "drupal/redirect",
@@ -10664,14 +10613,9 @@
         {
             "name": "openeuropa/oe_bootstrap_theme",
             "version": "0.1.202203290731",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/openeuropa/oe_bootstrap_theme.git",
-                "reference": "20e9508094a2db72159253bc8035f450af6dfebb"
-            },
             "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/openeuropa/oe_bootstrap_theme/zipball/20e9508094a2db72159253bc8035f450af6dfebb",
+                "type": "tar",
+                "url": "https://github.com/openeuropa/oe_bootstrap_theme/releases/download/0.1.202203290731/oe_bootstrap_theme-0.1.202203290731.tar.gz",
                 "reference": "20e9508094a2db72159253bc8035f450af6dfebb",
                 "shasum": ""
             },
@@ -23927,22 +23871,28 @@
     ],
     "aliases": [
         {
-            "alias": "1.0-alpha11",
-            "alias_normalized": "1.0.0.0-alpha11",
+            "package": "drupal/meta_entity",
+            "version": "dev-3275830-abstraction",
+            "alias": "1.1.1",
+            "alias_normalized": "1.1.1.0"
+        },
+        {
+            "package": "drupal/sparql_entity_storage",
             "version": "2.0.0.0-alpha2",
-            "package": "drupal/sparql_entity_storage"
+            "alias": "1.0-alpha11",
+            "alias_normalized": "1.0.0.0-alpha11"
         },
         {
-            "alias": "0.9.2",
-            "alias_normalized": "0.9.2.0",
+            "package": "easyrdf/easyrdf",
             "version": "1.0.0.0",
-            "package": "easyrdf/easyrdf"
+            "alias": "0.9.2",
+            "alias_normalized": "0.9.2.0"
         },
         {
-            "alias": "1.0.0-beta7",
-            "alias_normalized": "1.0.0.0-beta7",
+            "package": "openeuropa/task-runner",
             "version": "9999999-dev",
-            "package": "openeuropa/task-runner"
+            "alias": "1.0.0-beta7",
+            "alias_normalized": "1.0.0.0-beta7"
         }
     ],
     "minimum-stability": "dev",
@@ -23952,8 +23902,10 @@
         "drupal/dropsolid_purge": 10,
         "drupal/facets_date_range": 10,
         "drupal/menu_link_destination": 20,
+        "drupal/meta_entity": 20,
         "drupal/og_menu": 20,
         "drupal/page_manager": 10,
+        "drupal/rdf_meta_entity": 20,
         "drupal/schema_digital_document": 20,
         "drupal/schema_social_media_posting": 20,
         "drupal/site_verify": 20,
@@ -23986,5 +23938,5 @@
     "platform-overrides": {
         "php": "7.4.0"
     },
-    "plugin-api-version": "1.1.0"
+    "plugin-api-version": "2.2.0"
 }
