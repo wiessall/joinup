@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "0319993c39590c8ce89d10017d68f1f8",
+    "content-hash": "8fdb1b6e8c6d5cc6612068b35f4855db",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -3085,26 +3085,23 @@
         },
         {
             "name": "drupal/email_confirmer",
-            "version": "1.0.0-beta6",
+            "version": "dev-1.x",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/email_confirmer.git",
-                "reference": "8.x-1.0-beta6"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/email_confirmer-8.x-1.0-beta6.zip",
-                "reference": "8.x-1.0-beta6",
-                "shasum": "fb465d0c127666a76b074cd0c245fff1ffd780f7"
+                "reference": "511a8e2949bae6d62e9dd3bdab01d1ef8e5eeb83"
             },
             "require": {
                 "drupal/core": "^8 || ^9"
             },
             "type": "drupal-module",
             "extra": {
+                "branch-alias": {
+                    "dev-1.x": "1.x-dev"
+                },
                 "drupal": {
-                    "version": "8.x-1.0-beta6",
-                    "datestamp": "1613906468",
+                    "version": "8.x-1.0-beta5+9-dev",
+                    "datestamp": "1613905342",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Project has not opted into security advisory coverage!"
@@ -23812,7 +23809,7 @@
         "dkarv/mdl-chip-input": 20,
         "drupal/default_content": 15,
         "drupal/dropsolid_purge": 10,
-        "drupal/email_confirmer": 10,
+        "drupal/email_confirmer": 20,
         "drupal/facets_date_range": 10,
         "drupal/menu_link_destination": 20,
         "drupal/og_menu": 20,
