@@ -1,0 +1,24 @@
+uuid: a4efcf38-fa77-4981-9525-cb8da887f5b3
+langcode: en
+status: true
+dependencies:
+  config:
+    - sparql_entity_storage.graph.default
+  module:
+    - eif
+id: eif_wrapper.eif_wrapper
+entity_type_id: eif_wrapper
+bundle: eif_wrapper
+rdf_type: 'http://joinup.eu/eif-wrapper'
+graph:
+  default: 'http://joinup.eu/eif-wrapper/graph/default'
+base_fields_mapping:
+  term:
+    target_id:
+      predicate: 'http://data.europa.eu/eif/adms/qualifier'
+      format: resource
+  description:
+    value:
+      predicate: 'http://purl.org/dc/terms/description'
+      format: literal
+entity_id_plugin: default

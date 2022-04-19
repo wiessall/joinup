@@ -292,4 +292,7 @@ settings:
   rdf_meta_entity_type:
     handler: 'default:rdf_meta_entity_type'
     handler_settings: {  }
+  eif_wrapper:
+    handler: 'default:eif_wrapper'
+    handler_settings: {  }
 field_type: dynamic_entity_reference

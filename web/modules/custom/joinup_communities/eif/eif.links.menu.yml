@@ -1,0 +1,10 @@
+entity.eif_wrapper.settings:
+  title: EIF Wrapper
+  description: Configure an EIF Wrapper entity type
+  route_name: entity.eif_wrapper.settings
+  parent: system.admin_structure
+entity.eif_wrapper.collection:
+  title: EIF Wrappers
+  description: List of EIF Wrappers
+  route_name: entity.eif_wrapper.collection
+  parent: system.admin_content

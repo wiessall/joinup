@@ -1,0 +1,5 @@
+eif_wrapper.add_form:
+  route_name: entity.eif_wrapper.add_form
+  title: 'Add EIF Wrapper'
+  appears_on:
+    - entity.eif_wrapper.collection
