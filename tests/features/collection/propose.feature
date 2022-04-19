@@ -125,7 +125,8 @@ Feature: Proposing a collection
   Scenario: Content creation options should not vanish after AJAX request.
     Given I am logged in as a user with the "authenticated" role
     When I go to the propose collection form
-    And I click the "Additional fields" tab
+    And I press "Main fields"
+    And I press "Additional fields"
     And I attach the file "banner.jpg" to "Banner"
     And I wait for AJAX to finish
     Then I should see the link "banner.jpg"
@@ -178,6 +179,7 @@ Feature: Proposing a collection
     And the "Just a proposal" collection banner is image #8
 
     Given I go to the edit form of the "Just a proposal" collection
+    And I press "Main fields"
     And I press "Additional fields"
     And I remove the file from the "Logo" field
     But I wait for AJAX to finish
@@ -204,14 +206,15 @@ Feature: Proposing a collection
   Scenario: Browser validation errors should focus the correct field group.
     Given I am logged in as an "authenticated user"
     When I go to the propose collection form
-    Then the "Main fields" tab should be active
+    Then the "Main fields" accordion item should be active
     # This form has two elements only that have browser-side validation.
     When I fill in "Title" with "Constraint validation API"
-    And I click the "Additional fields" tab
+    And I press "Main fields"
+    And I press "Additional fields"
     And I press "Propose"
-    # Our code should have changed the active tab now. A browser message will
+    # Our code should have changed the active accordion item now. A browser message will
     # be shown to the user.
-    Then the "Main fields" tab should be active
+    Then the "Main fields" accordion item should be active
     # Fill the required fields.
     When I select "HR" from "Topic"
     And I fill in the following:
