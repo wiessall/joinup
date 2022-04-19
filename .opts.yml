@@ -51,3 +51,5 @@ composer_version: 2
 
 install_clean: True
 install_clone: True
+dev_install_clone: True
+dev_install_clean: True
