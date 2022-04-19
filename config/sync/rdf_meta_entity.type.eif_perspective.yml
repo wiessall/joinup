@@ -5,7 +5,7 @@ dependencies: {  }
 _core:
   default_config_hash: hVv6uOKGMcWjYreZwL7Nbg41Ina-v-54lq1jqcsTlgE
 id: eif_perspective
-label: 'EIF settings'
+label: 'EIF perspective'
 description: 'Holds settings related to the EIF toolbox.'
 mapping:
   rdf_entity:

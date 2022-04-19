@@ -3,8 +3,8 @@ langcode: en
 status: true
 dependencies:
   module:
+    - eif
     - field_permissions
-    - rdf_entity
     - rdf_meta_entity
     - sparql_entity_storage
 third_party_settings:
@@ -20,7 +20,7 @@ field_name: eif_model
 entity_type: rdf_meta_entity
 type: entity_reference
 settings:
-  target_type: rdf_entity
+  target_type: eif_wrapper
 module: core
 locked: false
 cardinality: -1

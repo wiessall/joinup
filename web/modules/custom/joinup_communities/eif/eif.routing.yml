@@ -24,3 +24,11 @@ eif.eif_perspective_form:
         type: entity:rdf_entity
         bundle:
           - solution
+
+entity.eif_wrapper.settings:
+  path: 'admin/structure/eif-wrapper'
+  defaults:
+    _controller: Drupal\eif\Controller\EifWrapperController::content
+    _title: 'EIF Wrapper'
+  requirements:
+    _permission: 'administer rdf meta entity'
