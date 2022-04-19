@@ -178,7 +178,7 @@ Feature: Proposing a collection
     And the "Just a proposal" collection banner is image #8
 
     Given I go to the edit form of the "Just a proposal" collection
-    And I click "Additional fields" tab
+    And I press "Additional fields"
     And I remove the file from the "Logo" field
     But I wait for AJAX to finish
 
