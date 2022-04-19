@@ -410,11 +410,11 @@
         },
         {
             "type": "vcs",
-            "url": "git@git.drupal.org:issue/meta_entity-3275830.git"
+            "url": "https://git.drupalcode.org/issue/meta_entity-3275830.git"
         },
         {
             "type": "vcs",
-            "url": "git@git.drupal.org:issue/rdf_meta_entity-3275700.git"
+            "url": "https://git.drupalcode.org/issue/rdf_meta_entity-3275700.git"
         },
         {
             "type": "vcs",
