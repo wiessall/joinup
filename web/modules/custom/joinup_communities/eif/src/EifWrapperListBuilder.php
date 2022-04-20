@@ -6,7 +6,6 @@ namespace Drupal\eif;
 
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityListBuilder;
-use Drupal\Core\Datetime\DateFormatterInterface;
 use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Routing\RedirectDestinationInterface;
@@ -77,7 +76,7 @@ class EifWrapperListBuilder extends EntityListBuilder {
    * {@inheritdoc}
    */
   public function buildRow(EntityInterface $entity): array {
-    /* @var $entity \Drupal\eif\EifWrapperInterface */
+    /** @var $entity \Drupal\eif\EifWrapperInterface */
     $row['id'] = $entity->toLink();
     return $row + parent::buildRow($entity);
   }
