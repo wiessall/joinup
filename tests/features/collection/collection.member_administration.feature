@@ -68,6 +68,7 @@ Feature: Collection membership administration
     Given I am logged in as "Lisa Cuddy"
     And I am on the members page of "Medical diagnosis"
     Then the "Action" select should contain the following options:
+      | - Select -                                                      |
       | Approve the pending membership(s)                               |
       | Block the selected membership(s)                                |
       | Unblock the selected membership(s)                              |
