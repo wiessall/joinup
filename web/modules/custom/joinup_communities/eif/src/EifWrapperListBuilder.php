@@ -76,7 +76,7 @@ class EifWrapperListBuilder extends EntityListBuilder {
    * {@inheritdoc}
    */
   public function buildRow(EntityInterface $entity): array {
-    /** @var $entity \Drupal\eif\EifWrapperInterface */
+    /** @var \Drupal\eif\EifWrapperInterface $entity */
     $row['id'] = $entity->toLink();
     return $row + parent::buildRow($entity);
   }
