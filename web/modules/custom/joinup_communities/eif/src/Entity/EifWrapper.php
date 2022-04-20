@@ -72,8 +72,8 @@ class EifWrapper extends ContentEntityBase implements EifWrapperInterface {
     ];
 
     $fields['id'] = BaseFieldDefinition::create('uri')
-        ->setLabel(t('ID'))
-        ->setTranslatable(FALSE);
+      ->setLabel(t('ID'))
+      ->setTranslatable(FALSE);
 
     $fields['term'] = BaseFieldDefinition::create('entity_reference')
       ->setLabel(t('Term'))
