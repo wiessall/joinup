@@ -6501,7 +6501,7 @@
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/issue/rdf_meta_entity-3275700.git",
-                "reference": "4e3b83b35c0247e464a5f00894dab3d77c6af5a4"
+                "reference": "e857a5c1cc8166bc92b4b282577d2d03ea66ab7d"
             },
             "require": {
                 "drupal/meta_entity": ">=1.1",
@@ -6527,7 +6527,7 @@
                 "issues": "https://www.drupal.org/project/issues/rdf_meta_entity",
                 "source": "https://git.drupalcode.org/project/rdf_meta_entity"
             },
-            "time": "2022-04-18T18:31:42+00:00"
+            "time": "2022-04-20T05:51:09+00:00"
         },
         {
             "name": "drupal/redirect",
@@ -7437,7 +7437,7 @@
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/issue/sparql_entity_storage-3275936.git",
-                "reference": "4c6a4d40c6b7c9108234918e9694e50a0b354167"
+                "reference": "92248a41e966aefd7946b1dbaf01a81ff24f136f"
             },
             "require": {
                 "easyrdf/easyrdf": "^1.0",
@@ -7462,7 +7462,7 @@
                 "issues": "https://drupal.org/project/issues/sparql_entity_storage",
                 "source": "https://cgit.drupalcode.org/sparql_entity_storage"
             },
-            "time": "2022-03-28T10:27:27+00:00"
+            "time": "2022-04-19T15:25:38+00:00"
         },
         {
             "name": "drupal/state_machine",
