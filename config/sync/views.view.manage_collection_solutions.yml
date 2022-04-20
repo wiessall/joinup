@@ -78,6 +78,8 @@ display:
           include_exclude: include
           selected_actions:
             - change_collection
+          actions_order:
+            - change_collection
           link_to_item: false
           use_highlighting: false
         label:

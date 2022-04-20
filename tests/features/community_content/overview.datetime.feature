@@ -9,8 +9,8 @@ Feature:
       | title | Gravitational wave detectors |
       | state | validated                    |
     And <type> content:
-      | title | created                         | <publication field name>        | changed                         | collection                   | state     |
-      | LIGO  | Wed, 25 Dec 2019 13:00:00 +0100 | Wed, 25 Dec 2019 14:00:00 +0100 | Wed, 25 Dec 2019 15:00:00 +0100 | Gravitational wave detectors | validated |
+      | title | created                   | <publication field name>  | changed                   | collection                   | state     |
+      | LIGO  | Wed, 25 Dec 2019 13:00:00 | Wed, 25 Dec 2019 14:00:00 | Wed, 25 Dec 2019 15:00:00 | Gravitational wave detectors | validated |
 
     When I go to the "LIGO" <type>
     Then I should see the text "Published on: 25/12/2019"
@@ -18,7 +18,7 @@ Feature:
     And I should not see the text "Last update: 25/12/2019"
 
     # Avoid having to fill in different mandatory fields for different bundles by directly updating the entity.
-    Given the changed date of the "LIGO" <type> is "Thu, 26 Dec 2019 14:00:00 +0100"
+    Given the changed date of the "LIGO" <type> is "Thu, 26 Dec 2019 14:00:00"
     When I go to the "LIGO" <type>
     Then I should see the text "Published on: 25/12/2019"
     And I should see the text "Last update: 26/12/2019"

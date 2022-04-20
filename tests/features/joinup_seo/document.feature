@@ -18,8 +18,8 @@ Feature: SEO for document content.
 
   Scenario: Basic metatags are attached as JSON schema on the page.
     Given document content:
-      | title        | author            | document type | document publication date       | changed                         | keywords         | short title | file type | file     | body               | licence      | state     | collection                     |
-      | SEO document | Joinup SEO author | document      | Wed, 25 Dec 2019 13:00:00 +0100 | Wed, 01 Jan 2020 13:00:00 +0100 | key1, key2, key3 | SEO         | upload    | test.zip | Document test1.zip | Some license | validated | Joinup SEO document collection |
+      | title        | author            | document type | document publication date | changed                   | keywords         | short title | file type | file     | body               | licence      | state     | collection                     |
+      | SEO document | Joinup SEO author | document      | Wed, 25 Dec 2019 13:00:00 | Wed, 01 Jan 2020 13:00:00 | key1, key2, key3 | SEO         | upload    | test.zip | Document test1.zip | Some license | validated | Joinup SEO document collection |
 
     When I visit the "SEO document" document
     Then the metatag JSON should be attached in the page
@@ -31,9 +31,9 @@ Feature: SEO for document content.
       | name                | SEO document                                             |
       | license             | https://example.com/license1                             |
       | description         | Document test1.zip                                       |
-      | datePublished       | 2019-12-25T__timezone__:00:00+0100                       |
+      | datePublished       | 2019-12-25T__timezone__:00:00+0000                       |
       | isAccessibleForFree | True                                                     |
-      | dateModified        | 2020-01-01T__timezone__:00:00+0100                       |
+      | dateModified        | 2020-01-01T__timezone__:00:00+0000                       |
       | mainEntityOfPage    | __base_url__/sites/default/files/test__random_text__.zip |
     # Adding numerical property values is turning the "about" property into an array comparison.
     And the metatag graph of the item with "name" "SEO document" should have the following "about" properties:
@@ -49,7 +49,7 @@ Feature: SEO for document content.
       | @id           | __base_url__/sites/default/files/test__random_text__.zip |
       | name          | test.zip                                                 |
       | url           | __base_url__/sites/default/files/test__random_text__.zip |
-      | datePublished | 2019-12-25T__timezone__:00:00+0100                       |
+      | datePublished | 2019-12-25T__timezone__:00:00+0000                       |
     And the metatag graph of the item with "name" "SEO document" should have the following "author" properties:
       | property | value                             |
       | @type    | Person                            |
@@ -75,8 +75,8 @@ Feature: SEO for document content.
 
   Scenario: Metatags for remote URL in documents.
     Given document content:
-      | title        | author            | document publication date       | changed                         | file type | file                                       | body               | state     | collection                     |
-      | SEO document | Joinup SEO author | Wed, 25 Dec 2019 13:00:00 +0100 | Wed, 01 Jan 2020 13:00:00 +0100 | remote    | http://example.com/some-file-url.extension | Remote url example | validated | Joinup SEO document collection |
+      | title        | author            | document publication date | changed                   | file type | file                                       | body               | state     | collection                     |
+      | SEO document | Joinup SEO author | Wed, 25 Dec 2019 13:00:00 | Wed, 01 Jan 2020 13:00:00 | remote    | http://example.com/some-file-url.extension | Remote url example | validated | Joinup SEO document collection |
 
     When I visit the "SEO document" document
     Then the metatag JSON should be attached in the page
@@ -87,9 +87,9 @@ Feature: SEO for document content.
       | headline            | SEO document                               |
       | name                | SEO document                               |
       | description         | Remote url example                         |
-      | datePublished       | 2019-12-25T__timezone__:00:00+0100         |
+      | datePublished       | 2019-12-25T__timezone__:00:00+0000         |
       | isAccessibleForFree | True                                       |
-      | dateModified        | 2020-01-01T__timezone__:00:00+0100         |
+      | dateModified        | 2020-01-01T__timezone__:00:00+0000         |
       | mainEntityOfPage    | http://example.com/some-file-url.extension |
     And the metatag graph of the item with "name" "SEO document" should have the following "associatedMedia" properties:
       | property      | value                                      |
@@ -97,4 +97,4 @@ Feature: SEO for document content.
       | @id           | http://example.com/some-file-url.extension |
       | name          | some-file-url.extension                    |
       | url           | http://example.com/some-file-url.extension |
-      | datePublished | 2019-12-25T__timezone__:00:00+0100         |
+      | datePublished | 2019-12-25T__timezone__:00:00+0000         |

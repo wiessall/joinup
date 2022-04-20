@@ -12,8 +12,8 @@ Feature: SEO for discussion forum posts.
       | Username          | E-mail                 | First name | Family name |
       | Joinup SEO author | joinup.seo@example.com | Kindle     | eReader     |
     And "discussion" content:
-      | title                           | publication date                | changed                         | content                                                      | author            | attachments         | keywords                       | state     | collection                       |
-      | Discussions are now forum posts | Wed, 25 Dec 2019 13:00:00 +0100 | Wed, 01 Jan 2020 13:00:00 +0100 | This discussion is to ensure that SEO tags are set properly. | Joinup SEO author | test.zip, test1.zip | seo, tags, metatag, schema.org | validated | Joinup SEO discussion collection |
+      | title                           | publication date          | changed                   | content                                                      | author            | attachments         | keywords                       | state     | collection                       |
+      | Discussions are now forum posts | Wed, 25 Dec 2019 13:00:00 | Wed, 01 Jan 2020 13:00:00 | This discussion is to ensure that SEO tags are set properly. | Joinup SEO author | test.zip, test1.zip | seo, tags, metatag, schema.org | validated | Joinup SEO discussion collection |
 
     When I visit the "Discussions are now forum posts" discussion
     Then the metatag JSON should be attached in the page
@@ -24,9 +24,9 @@ Feature: SEO for discussion forum posts.
       | headline            | Discussions are now forum posts                                                                     |
       | name                | Discussions are now forum posts                                                                     |
       | description         | This discussion is to ensure that SEO tags are set properly.                                        |
-      | datePublished       | 2019-12-25T13:00:00+0100                                                                            |
+      | datePublished       | 2019-12-25T13:00:00+0000                                                                            |
       | isAccessibleForFree | True                                                                                                |
-      | dateModified        | 2020-01-01T13:00:00+0100                                                                            |
+      | dateModified        | 2020-01-01T13:00:00+0000                                                                            |
       | mainEntityOfPage    | __base_url__/collection/joinup-seo-discussion-collection/discussion/discussions-are-now-forum-posts |
     # Adding numerical property values is turning the "about" property into an array comparison.
     And the metatag graph of the item with "name" "Discussions are now forum posts" should have the following "about" properties:
@@ -36,8 +36,8 @@ Feature: SEO for discussion forum posts.
       | 2        | metatag    |
       | 3        | schema.org |
     And the metatag graph of the item with "name" "Discussions are now forum posts" should have the following "image" properties:
-      | property | value                                                                                                                                           |
-      | @type    | ImageObject                                                                                                                                     |
+      | property | value                                                                                                                    |
+      | @type    | ImageObject                                                                                                              |
       # Discussions don't have an image field but an image is required by google. Add the Joinup logo as the image of
       # all discussions.
       | url      | https://joinup.ec.europa.eu/sites/default/files/styles/logo/public/collection/logo/2019-04/190404-logo-JOINUP-blue-2.png |
