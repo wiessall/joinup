@@ -35,6 +35,7 @@ Feature: Proposing a collection
     And the following field widgets should be present "Contact information, Owner"
     # Ensure that the description for the "Access url" is shown.
     # @see: https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-3196
+    Then I press "Additional fields"
     And I should see the description "Web page for the external Repository." for the "Access URL" field
     And I should see the description "This must be an external URL such as http://example.com." for the "Access URL" field
     And I should see the description "For best result the image must be larger than 2400x345 pixels." for the "Banner" field
