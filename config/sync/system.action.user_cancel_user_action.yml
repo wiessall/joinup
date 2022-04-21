@@ -10,5 +10,4 @@ id: user_cancel_user_action
 label: 'Delete selected account(s) and their content'
 type: user
 plugin: user_cancel_user_action
-weight: 0
 configuration: {  }
