@@ -25,6 +25,7 @@ use Drupal\eif\EifWrapperInterface;
  *   id = "eif_wrapper",
  *   label = @Translation("EIF Wrapper"),
  *   label_collection = @Translation("EIF Wrappers"),
+ *   bundle_label = @Translation("EIF Wrapper type"),
  *   handlers = {
  *     "form" = {
  *       "default" = "Drupal\eif\Form\EifWrapperForm",
@@ -41,6 +42,7 @@ use Drupal\eif\EifWrapperInterface;
  *   entity_keys = {
  *     "id" = "id",
  *     "label" = "id",
+ *     "bundle" = "type",
  *   },
  *   links = {
  *     "add-form" = "/admin/content/eif-wrapper/add",
@@ -49,10 +51,11 @@ use Drupal\eif\EifWrapperInterface;
  *     "delete-form" = "/admin/content/eif-wrapper/manage/{eif_wrapper}/delete",
  *     "collection" = "/admin/content/eif-wrapper"
  *   },
- *   field_ui_base_route = "entity.eif_wrapper.settings",
+ *   field_ui_base_route = "entity.eif_wrapper_type.edit_form",
+ *   bundle_entity_type = "eif_wrapper_type",
  * )
  *
- * @todo Move the whole logic to a custim field type once ISAICP-3576 lands.
+ * @todo Move the whole logic to a custom field type once ISAICP-3576 lands.
  *
  * @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-3576
  */
@@ -64,40 +67,26 @@ class EifWrapper extends ContentEntityBase implements EifWrapperInterface {
   public static function baseFieldDefinitions(EntityTypeInterface $entity_type) {
     $fields = parent::baseFieldDefinitions($entity_type);
 
-    $vocabularies = [
-      'eif_conceptual_model',
-      'eif_interoperability_layer',
-      'eif_principle',
-      'eif_recommendation',
-    ];
-
     $fields['id'] = BaseFieldDefinition::create('uri')
       ->setLabel(t('ID'))
       ->setTranslatable(FALSE);
 
-    $fields['term'] = BaseFieldDefinition::create('entity_reference')
-      ->setLabel(t('Term'))
-      ->setDescription(t('Reference to EIF layer, model, principle or recommendation'))
-      ->setSetting('target_type', 'taxonomy_term')
-      ->setSettings([
-        'handler' => 'default:taxonomy_term',
-        'handler_settings' => [
-          'target_bundles' => array_combine($vocabularies, $vocabularies),
-        ],
-      ])
+    $fields['description'] = BaseFieldDefinition::create('text_long')
+      ->setLabel(t('Description'))
       ->setRevisionable(FALSE)
       ->setTranslatable(FALSE)
       ->setCardinality(1)
-      ->setRequired(TRUE);
-
-    $fields['description'] = BaseFieldDefinition::create('text_long')
-      ->setLabel(t('Description'))
-      ->setDescription(t('A description of the EIF wrapper.'))
-      ->setRevisionable(FALSE)
-      ->setTranslatable(FALSE)
-      ->setCardinality(1);
+      ->setDisplayConfigurable('form', TRUE)
+      ->setDisplayConfigurable('view', TRUE);
 
     return $fields;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function label(): string {
+    return $this->get('term')->entity->label();
   }
 
 }

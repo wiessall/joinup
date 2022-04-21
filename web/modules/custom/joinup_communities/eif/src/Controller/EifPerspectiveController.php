@@ -9,8 +9,8 @@ use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Url;
-use Drupal\meta_entity\MetaEntityRepositoryInterface;
 use Drupal\og\OgAccessInterface;
+use Drupal\rdf_meta_entity\Entity\RdfMetaEntity;
 use Drupal\solution\Entity\SolutionInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -27,13 +27,6 @@ class EifPerspectiveController extends ControllerBase {
   protected $entityTypeManager;
 
   /**
-   * The meta entity repository service.
-   *
-   * @var \Drupal\meta_entity\MetaEntityRepositoryInterface
-   */
-  protected $metaEntityRepository;
-
-  /**
    * The OG access service.
    *
    * @var \Drupal\og\OgAccessInterface
@@ -45,14 +38,11 @@ class EifPerspectiveController extends ControllerBase {
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   The entity type manager service.
-   * @param \Drupal\meta_entity\MetaEntityRepositoryInterface $meta_entity_repository
-   *   The meta entity repository service.
    * @param \Drupal\og\OgAccessInterface $og_access
    *   The OG access service.
    */
-  public function __construct(EntityTypeManagerInterface $entity_type_manager, MetaEntityRepositoryInterface $meta_entity_repository, OgAccessInterface $og_access) {
+  public function __construct(EntityTypeManagerInterface $entity_type_manager, OgAccessInterface $og_access) {
     $this->entityTypeManager = $entity_type_manager;
-    $this->metaEntityRepository = $meta_entity_repository;
     $this->ogAccess = $og_access;
   }
 
@@ -62,7 +52,6 @@ class EifPerspectiveController extends ControllerBase {
   public static function create(ContainerInterface $container) {
     return new static(
       $container->get('entity_type.manager'),
-      $container->get('rdf_meta_entity.repository'),
       $container->get('og.access')
     );
   }
@@ -92,20 +81,12 @@ class EifPerspectiveController extends ControllerBase {
    *   The content as a render array.
    */
   public function settings(SolutionInterface $rdf_entity): array {
-    $meta_entity = $this->metaEntityRepository->getMetaEntityForEntity($rdf_entity, 'eif_perspective');
-    if (empty($meta_entity)) {
-      $meta_entity = $this->entityTypeManager->getStorage('rdf_meta_entity')->create([
-        'type' => 'eif_perspective',
-        'target' => $rdf_entity,
-      ]);
-    }
-
-    $form_state_additions = [
+    $meta_entity = RdfMetaEntity::loadOrCreate('eif_perspective', $rdf_entity);
+    return $this->entityFormBuilder()->getForm($meta_entity, 'default', [
       'redirect' => Url::fromRoute('entity.rdf_entity.canonical', [
         'rdf_entity' => $rdf_entity->id(),
       ]),
-    ];
-    return $this->entityFormBuilder()->getForm($meta_entity, 'add', $form_state_additions);
+    ]);
   }
 
   /**
@@ -118,7 +99,8 @@ class EifPerspectiveController extends ControllerBase {
    *   The access result.
    */
   public function access(SolutionInterface $rdf_entity): AccessResultInterface {
-    if ($meta_entity = $this->metaEntityRepository->getMetaEntityForEntity($rdf_entity, 'eif_perspective')) {
+    $meta_entity = RdfMetaEntity::loadOrCreate('eif_perspective', $rdf_entity);
+    if (!$meta_entity->isNew()) {
       $access_result = $meta_entity->access('update', NULL, TRUE);
     }
     else {

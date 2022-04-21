@@ -18,7 +18,8 @@ default_value_callback: ''
 settings:
   handler: 'default:eif_wrapper'
   handler_settings:
-    target_bundles: null
+    target_bundles:
+      recommendation: recommendation
     sort:
       field: _none
       direction: ASC
