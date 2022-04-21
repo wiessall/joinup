@@ -4,40 +4,37 @@
  * Themeing for rdf entities.
  */
 #}
-<article {{ attributes.addClass(['bg-secondary', 'py-4', 'py-md-5']) }}>
-  <div class="row">
-    {# {{ title_prefix }} #}
-    <div class="col-12 col-sm-6 d-flex flex-column align-items-center align-items-sm-end justify-content-center">
-      <a class="d-flex flex-column align-items-center align-items-sm-end" href="{{ path('entity.rdf_entity.canonical',{'rdf_entity': rdf_entity.id()}) }}">
-        {{content.field_ar_logo}}
-        <p class="mb-sm-0 text-center text-sm-end fs-1 fw-bold text-primary">{{ label }}</p>
-      </a>
-    </div>
+<article {{ attributes.addClass(['py-4', 'py-md-5']) }} style="background: linear-gradient(117deg, rgba(20,59,118,.4), rgba(20,59,118,.1)), url('{{ content.field_ar_banner }}') no-repeat, rgba(20,59,118,.4); background-size: cover;">
+  {# {{ title_prefix }} #}
+  <div class="container d-flex flex-column align-items-center">
+    <a href="{{ path('entity.rdf_entity.canonical',{'rdf_entity': rdf_entity.id()}) }}">
+      {{ content.field_ar_logo }}
+    </a>
+    <a class="mt-3 fs-2 fw-bold text-light text-center" href="{{ path('entity.rdf_entity.canonical',{'rdf_entity': rdf_entity.id()}) }}">
+      {{ label }}
+    </a>
     {# {{ title_suffix }} #}
-    <div class="col-12 col-sm-6 d-flex flex-column align-items-center align-items-sm-start justify-content-center">
-      <ul class="list-unstyled ms-3 mb-0 text-primary">
-        <li class="my-2 d-flex align-items-center">
-          <svg class="bi icon--s me-2">
-            <use xlink:href="{{ bcl_icon_path }}#calendar3"></use>
-          </svg>
-          <span>{{ 'Last update'|t }}</span>&nbsp;<span class="fw-bold">{{ content.last_update }}</span>
-        </li>
-        <li class="my-2 d-flex align-items-center">
-          <svg class="bi icon--s me-2">
-            <use xlink:href="{{ bcl_icon_path }}#person-circle"></use>
-          </svg>
-          {{ content.members }}
-        </li>
-        <li class="my-2 d-flex align-items-center">
-          <svg class="bi icon--s me-2">
-            <use xlink:href="{{ bcl_icon_path }}#clipboard-check"></use>
-          </svg>
-          {{ content.solutions }}
-        </li>
-      </ul>
-    </div>
-    <div class="col-12 mt-4 d-flex flex-column align-items-center">
+    <ul class="list-unstyled mt-3 mb-0 p-3 bg-secondary rounded text-dark">
+      <li class="mb-2 d-flex align-items-center">
+        <svg class="bi icon--s me-2">
+          <use xlink:href="{{ bcl_icon_path }}#calendar3"></use>
+        </svg>
+        <span>{{ 'Last update'|t }}</span>&nbsp;<span class="fw-bold">{{ content.last_update }}</span>
+      </li>
+      <li class="mb-2 d-flex align-items-center">
+        <svg class="bi icon--s me-2">
+          <use xlink:href="{{ bcl_icon_path }}#person-circle"></use>
+        </svg>
+        {{ content.members }}
+      </li>
+      <li class="d-flex align-items-center">
+        <svg class="bi icon--s me-2">
+          <use xlink:href="{{ bcl_icon_path }}#clipboard-check"></use>
+        </svg>
+        {{ content.solutions }}
+      </li>
+    </ul>
+    <div class="mt-4 d-flex text-light">
       {{ content.join_collection }}
     </div>
   </div>
-</article>
