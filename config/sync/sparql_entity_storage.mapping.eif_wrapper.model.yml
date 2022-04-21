@@ -3,22 +3,21 @@ langcode: en
 status: true
 dependencies:
   config:
+    - eif.eif_wrapper_type.model
     - sparql_entity_storage.graph.default
-  module:
-    - eif
-id: eif_wrapper.eif_wrapper
+id: eif_wrapper.model
 entity_type_id: eif_wrapper
-bundle: eif_wrapper
-rdf_type: 'http://joinup.eu/eif-wrapper'
+bundle: model
+rdf_type: 'http://joinup.eu/eif-wrapper/rdf-type/model'
 graph:
-  default: 'http://joinup.eu/eif-wrapper/graph/default'
+  default: 'http://joinup.eu/eif-wrapper/graph/model'
 base_fields_mapping:
-  term:
+  type:
     target_id:
-      predicate: 'http://data.europa.eu/eif/adms/qualifier'
+      predicate: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type'
       format: resource
   description:
     value:
       predicate: 'http://purl.org/dc/terms/description'
-      format: literal
+      format: 'xsd:string'
 entity_id_plugin: default

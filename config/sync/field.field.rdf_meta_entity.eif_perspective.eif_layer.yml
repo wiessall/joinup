@@ -18,7 +18,8 @@ default_value_callback: ''
 settings:
   handler: 'default:eif_wrapper'
   handler_settings:
-    target_bundles: null
+    target_bundles:
+      layer: layer
     sort:
       field: _none
       direction: ASC
