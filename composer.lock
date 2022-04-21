@@ -6501,7 +6501,7 @@
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/issue/rdf_meta_entity-3275700.git",
-                "reference": "e857a5c1cc8166bc92b4b282577d2d03ea66ab7d"
+                "reference": "ba5fa66e03450a808822175160aec8bef461452a"
             },
             "require": {
                 "drupal/meta_entity": ">=1.1",
@@ -6527,7 +6527,7 @@
                 "issues": "https://www.drupal.org/project/issues/rdf_meta_entity",
                 "source": "https://git.drupalcode.org/project/rdf_meta_entity"
             },
-            "time": "2022-04-20T05:51:09+00:00"
+            "time": "2022-04-21T07:12:45+00:00"
         },
         {
             "name": "drupal/redirect",
