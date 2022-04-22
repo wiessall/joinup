@@ -40,11 +40,11 @@ dependencies:
     - field.field.rdf_entity.solution.field_is_webdav_url
     - field.field.rdf_entity.solution.field_is_wiki
     - field.field.rdf_entity.solution.field_keywords
-    - field.field.rdf_entity.solution.field_topic
     - field.field.rdf_entity.solution.field_short_id
     - field.field.rdf_entity.solution.field_site_featured
     - field.field.rdf_entity.solution.field_spatial_coverage
     - field.field.rdf_entity.solution.field_status
+    - field.field.rdf_entity.solution.field_topic
     - image.style.thumbnail
     - media.type.solution_logo
     - rdf_entity.rdfentity.solution
@@ -67,11 +67,12 @@ third_party_settings:
       region: content
       parent_name: ''
       weight: 0
-      format_type: tabs
+      format_type: accordion
       format_settings:
         classes: ''
+        show_empty_fields: false
         id: ''
-        direction: vertical
+        effect: none
     group_main:
       children:
         - label
@@ -95,12 +96,12 @@ third_party_settings:
       region: content
       parent_name: group_general
       weight: 20
-      format_type: tab
+      format_type: accordion_item
       format_settings:
         classes: ''
+        show_empty_fields: false
         id: ''
         formatter: open
-        description: 'Contains all the fields to be mandatorily filled to create a solution'
         required_fields: true
     group_management:
       children:
@@ -121,12 +122,12 @@ third_party_settings:
       region: content
       parent_name: group_general
       weight: 21
-      format_type: tab
+      format_type: accordion_item
       format_settings:
         classes: ''
+        show_empty_fields: false
         id: ''
         formatter: closed
-        description: 'Contains all optional fields providing additional information on the solution'
         required_fields: true
 id: rdf_entity.solution.default
 targetEntityType: rdf_entity
