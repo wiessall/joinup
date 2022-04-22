@@ -505,7 +505,11 @@ function ventuno_form_alter(&$form, FormStateInterface $form_state, $form_id): v
 
   // Add classes to the delete action in any kind of form.
   if (isset($form['actions']['delete'])) {
-    $form['actions']['delete']['#attributes']['class'] = ['btn', 'btn-md', 'btn-outline-danger'];
+    $form['actions']['delete']['#attributes']['class'] = [
+      'btn',
+      'btn-md',
+      'btn-outline-danger',
+    ];
   }
 }
 
