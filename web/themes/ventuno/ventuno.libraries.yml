@@ -94,6 +94,12 @@ tour-first-balloon:
   js:
     assets/js/tour-first-balloon.js: { minified: true, attributes: { defer: true } }
 
+content-tables:
+  js:
+    assets/js/content-tables.js: { minified: true, attributes: { defer: true } }
+  dependencies:
+    - ventuno/tables
+
 # @todo remove when switch to Ventuno theme is complete
 bootstrap-base:
   css:
