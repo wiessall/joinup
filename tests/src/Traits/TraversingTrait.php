@@ -220,7 +220,8 @@ trait TraversingTrait {
   protected function findAccordionItem(string $item): NodeElement {
     // Xpath to find the accordion item.
     $xpath = "//div[@class and contains(concat(' ', normalize-space(@class), ' '), ' accordion-item ')]";
-    // Filter down to the accordion item containing a button with the provided text.
+    // Filter down to the accordion item containing a button with the
+    // provided text.
     $xpath .= "[.//h2[@class and contains(concat(' ', normalize-space(@class), ' '), ' accordion-header ')]/button[@class and contains(concat(' ', normalize-space(@class), ' '), ' accordion-button ')]"
       . "[normalize-space(string(.)) = '$item']]";
     $element = $this->getSession()->getPage()->find('xpath', $xpath);

@@ -49,9 +49,9 @@ third_party_settings:
       format_type: accordion
       format_settings:
         classes: ''
+        show_empty_fields: false
         id: ''
         effect: none
-        direction: vertical
     group_main:
       children:
         - label
@@ -69,11 +69,10 @@ third_party_settings:
       format_type: accordion_item
       format_settings:
         classes: ''
+        show_empty_fields: false
         id: ''
         formatter: open
-        description: 'Contains all the fields to be mandatorily filled to create a collection'
         required_fields: true
-        effect: none
     group_description:
       children:
         - field_ar_abstract
@@ -93,9 +92,9 @@ third_party_settings:
       format_type: accordion_item
       format_settings:
         classes: ''
+        show_empty_fields: false
         id: ''
         formatter: closed
-        description: 'Contains all optional fields providing additional information on the collection'
         required_fields: true
 id: rdf_entity.collection.default
 targetEntityType: rdf_entity
