@@ -191,7 +191,8 @@ Feature: Proposing a collection
     And I press "Propose"
 
     When I go to the edit form of the "Just a proposal" collection
-    And I click "Additional fields" tab
+    And I press "Main fields"
+    And I press "Additional fields"
     Then I should see the link "logo.png"
 
     # As some entities were created via UI, we should explicitly delete them.

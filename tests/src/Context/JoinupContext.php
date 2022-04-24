@@ -2287,11 +2287,11 @@ class JoinupContext extends RawDrupalContext {
    *
    * @Then the fields :fields should be correctly ordered in the region :region
    */
-  public function assertFieldsPresentInOrder($fields, $region) {
+  public function assertFieldsPresentInOrder(string $fields, string $region): void {
     $fields = $this->explodeCommaSeparatedStepArgument($fields);
     /** @var \Behat\Mink\Element\Element $regionObj */
     $regionObj = $this->getRegion($region);
-    $labels = $regionObj->findAll('xpath', "/.//*[contains(concat(' ', normalize-space(@class), ' '), ' form-wrapper ')]//label");
+    $labels = $regionObj->findAll('xpath', "/.//*[contains(concat(' ', normalize-space(@class), ' '), ' form-wrapper ')]//label | /.//*[contains(concat(' ', normalize-space(@class), ' '), ' form-wrapper ')]//h4[contains(concat(' ', normalize-space(@class), ' '), ' label ')] | /.//*[contains(concat(' ', normalize-space(@class), ' '), ' form-wrapper ')]//fieldset//legend[contains(concat(' ', normalize-space(@class), ' '), ' col-form-label ')]");
     $labels_on_page = [];
     /** @var \Behat\Mink\Element\NodeElement $label */
     foreach ($labels as $label) {
