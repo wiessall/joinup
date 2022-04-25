@@ -693,7 +693,7 @@ function joinup_group_generate_share_link(EntityInterface $entity, string $route
     '#theme' => 'link_icon',
     '#title' => t('Share'),
     '#icon' => 'arrow-right',
-    '#route' => $route,
+    '#url' => $url,
     '#attributes' => [
       'class' => ['use-ajax'],
       'data-dialog-type' => 'modal',
