@@ -35,7 +35,6 @@ Feature: Proposing a collection
     And the following field widgets should be present "Contact information, Owner"
     # Ensure that the description for the "Access url" is shown.
     # @see: https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-3196
-    Then I press "Additional fields"
     And I should see the description "Web page for the external Repository." for the "Access URL" field
     And I should see the description "This must be an external URL such as http://example.com." for the "Access URL" field
     And I should see the description "For best result the image must be larger than 2400x345 pixels." for the "Banner" field
@@ -152,6 +151,7 @@ Feature: Proposing a collection
     And I fill in "Title" with "Just a proposal"
     And I enter "Nothing..." in the "Description" wysiwyg editor
     And I select "Employment and Support Allowance" from "Topic"
+    And I scroll "Owner" into view
     And I press "Add existing" at the "Owner" field
     And I fill in "Owner" with "Organisation example"
     And I press "Add owner"
@@ -160,7 +160,9 @@ Feature: Proposing a collection
       | Name   | Invisible Man             |
     And I press "Create contact information"
 
-    When I click "Additional fields" tab
+    When I scroll "Main fields" into view
+    And I press "Main fields"
+    And I press "Additional fields"
     Then the following fields should not be visible "Title, Description, Topic"
     And the following field widgets should not be visible "Owner"
     And the following fields should be visible "Content creation, Moderated, Abstract, Geographical coverage"
@@ -170,8 +172,10 @@ Feature: Proposing a collection
     # As a user, editing a collection, solution, event or news item, I want to
     # be able to pick-up a pre-uploaded image when editing the logo or the
     # banner, as an alternative to the image upload.
-    When I select image #3 as collection logo
+    When I scroll "Logo" into view
+    And I select image #3 as collection logo
     And I wait for AJAX to finish
+    And I scroll "Banner" into view
     And I select image #8 as collection banner
     And I wait for AJAX to finish
     And I press "Propose"
