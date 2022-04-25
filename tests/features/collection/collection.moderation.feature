@@ -442,6 +442,7 @@ Feature: Collection moderation
     And I press "Add new" at the "Owner" field
     And I wait for AJAX to finish
     And I fill in "Name" with "Mable Pelley"
+    And I scroll "Type" into view
     And I check the box "National authority"
     And I scroll "Additional fields" into view
     And I press "Additional fields"
