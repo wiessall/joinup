@@ -41,7 +41,26 @@ class WysiwygContext extends RawDrupalContext {
     if ($this->browserSupportsJavaScript()) {
       // Scroll to the top because the button might be obscured by the floating
       // header.
-      $this->scrollToTop();
+      $page = $this->getSession()->getPage();
+      $element = $page->find('xpath', "//*[contains(text(),'{$label}')]");
+      $xpath = $element->getXpath();
+      $function = <<<JS
+  (
+      function(){
+        setTimeout(() => {
+          let elem = document.evaluate("$xpath", document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
+          elem.scrollIntoView({ behavior: 'instant', block: 'center' });
+        }, 300);
+      }
+  )()
+  JS;
+      try {
+        $this->getSession()->executeScript($function);
+        sleep(1);
+      }
+      catch (\Exception $e) {
+        throw new \Exception("Scroll element into view failed");
+      }
       $this->pressWysiwygButton($label, 'Source');
       $this->setWysiwygText($label, $text);
     }

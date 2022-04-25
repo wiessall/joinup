@@ -16,6 +16,7 @@ Feature: Subscribing to a collection after creating
     When I select "EU and European Policies" from "Topic"
 
     # Click the button to create an organisation owner.
+    And I scroll "Owner" into view
     And I press "Add new" at the "Owner" field
     When I set the Owner type to "Company"
     And I fill in "Name" with "Acme"

@@ -29,7 +29,7 @@ Feature: Owner moderation
     # An authenticated user can create an owner in published state.
     When I click the 'Additional fields' tab
     And I press "Add new" at the "Owner" field
-    And I set the Owner type to "Academia/Scientific organisation"
+    And I check the box "Academia/Scientific organisation"
     And I fill in "Name" with "EU healthy movement"
     When I press "Create owner"
     Then I should see "EU healthy movement"
@@ -76,7 +76,7 @@ Feature: Owner moderation
     And the current workflow state should be "Needs update"
     And I should not see the link "Delete"
     # Do the changes.
-    When I set the Owner type to "Non-Governmental Organisation"
+    When I check the box "Non-Governmental Organisation"
     And I press "Update"
     Then I should see the heading "EU healthy group"
 

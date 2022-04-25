@@ -225,17 +225,19 @@ Feature: Collection moderation
       | E-mail | fog@example.com        |
     And I enter "The samurai are attacking the railroads" in the "Description" wysiwyg editor
     And I select "Employment and Support Allowance" from "Topic"
+    And I scroll "Owner" into view
     And I press "Add new" at the "Owner" field
     And I wait for AJAX to finish
     And I fill in "Name" with "Katsumoto"
     And I check the box "Academia/Scientific organisation"
-    And I press "Main fields"
+    And I scroll "Additional fields" into view
     And I press "Additional fields"
     Then the "Additional fields" accordion item should be active
     And I attach the file "logo.png" to "Logo"
     And I wait for AJAX to finish
     And I attach the file "banner.jpg" to "Banner"
     And I wait for AJAX to finish
+    And I scroll "Content creation" into view
     And I select the radio button "Any user can create content."
 
     # Regression test for a bug that caused the content creation setting to be
@@ -243,7 +245,8 @@ Feature: Collection moderation
     # Note that this is an issue that affected the legacy eLibrary slider which
     # has been replaced with the Content creation radio buttons, but we are
     # keeping the coverage for now.
-    When I press "Add another item" at the "Geographical coverage" field
+    When I scroll "Geographical coverage" into view
+    And I press "Add another item" at the "Geographical coverage" field
     And I wait for AJAX to finish
     Then the radio button "Any user can create content." from field "Content creation" should be selected
 
@@ -255,7 +258,7 @@ Feature: Collection moderation
     And I go to the homepage of the "Spectres in fog" collection
     And I open the header local tasks menu
     And I click "Edit" in the "Entity actions" region
-    And I press "Main fields"
+    And I scroll "Additional fields" into view
     And I press "Additional fields"
     Then the radio button "Any user can create content." from field "Content creation" should be selected
     # Also when saving and reopening the edit form the content creation option
@@ -289,16 +292,20 @@ Feature: Collection moderation
     And I enter "Yaks and goats are friendly pets." in the "Description" wysiwyg editor
     And I select "Statistics and Analysis" from "Topic"
     # An ajax callback is executed now.
+    And I scroll "Owner" into view
     And I press "Add new" at the "Owner" field
     And I wait for AJAX to finish
     And I fill in "Name" with "Garnett Clifton"
+    And I scroll "Contact information" into view
     And I check the box "Supra-national authority"
-    And I press "Main fields"
+    And I scroll "Additional fields" into view
     And I press "Additional fields"
+    And I scroll "Logo" into view
     And I attach the file "logo.png" to "Logo"
     And I wait for AJAX to finish
     And I attach the file "banner.jpg" to "Banner"
     And I wait for AJAX to finish
+    And I scroll "Content creation" into view
     And I select the radio button "Any user can create content."
 
     # Save the collection.
@@ -333,16 +340,19 @@ Feature: Collection moderation
     And I enter "Kleptomaniac to the bone." in the "Description" wysiwyg editor
     And I select "Supplier exchange" from "Topic"
     # An ajax callback is executed now.
+    And I scroll "Owner" into view
     And I press "Add new" at the "Owner" field
     And I wait for AJAX to finish
     And I fill in "Name" with "Coretta Simonson"
+    And I scroll "Type" into view
     And I check the box "Private Individual(s)"
-    And I press "Main fields"
+    And I scroll "Additional fields" into view
     And I press "Additional fields"
     And I attach the file "logo.png" to "Logo"
     And I wait for AJAX to finish
     And I attach the file "banner.jpg" to "Banner"
     And I wait for AJAX to finish
+    And I scroll "Content creation" into view
     And I select the radio button "Only facilitators and authors can create content."
 
     # Save the collection.
@@ -378,18 +388,22 @@ Feature: Collection moderation
     And I enter "So smooth." in the "Description" wysiwyg editor
     And I select "Data gathering, data processing" from "Topic"
     # An ajax callback is executed now.
+    And I scroll "Owner" into view
     And I press "Add new" at the "Owner" field
     And I wait for AJAX to finish
     And I fill in "Name" with "Terrance Nash"
+    And I scroll "Type" into view
     And I check the box "Regional authority"
-    And I press "Main fields"
+    And I scroll "Additional fields" into view
     And I press "Additional fields"
     And I attach the file "logo.png" to "Logo"
     And I wait for AJAX to finish
     And I attach the file "banner.jpg" to "Banner"
     And I wait for AJAX to finish
+    And I scroll "Geographical coverage" into view
     When I press "Add another item" at the "Geographical coverage" field
     And I wait for AJAX to finish
+    And I scroll "Content creation" into view
     And I select the radio button "Only facilitators and authors can create content."
 
     # Save the collection.
@@ -424,19 +438,22 @@ Feature: Collection moderation
     And I enter "Invisible ships on deep sea." in the "Description" wysiwyg editor
     And I select "Employment and Support Allowance" from "Topic"
     # An ajax callback is executed now.
+    And I scroll "Owner" into view
     And I press "Add new" at the "Owner" field
     And I wait for AJAX to finish
     And I fill in "Name" with "Mable Pelley"
     And I check the box "National authority"
-    And I press "Main fields"
+    And I scroll "Additional fields" into view
     And I press "Additional fields"
     And I attach the file "logo.png" to "Logo"
     And I wait for AJAX to finish
     And I attach the file "banner.jpg" to "Banner"
     And I wait for AJAX to finish
+    And I scroll "Content creation" into view
     And I select the radio button "Only facilitators and authors can create content."
 
-    When I press "Add another item" at the "Geographical coverage" field
+    When I scroll "Geographical coverage" into view
+    And I press "Add another item" at the "Geographical coverage" field
     And I wait for AJAX to finish
 
     # Save the collection.
