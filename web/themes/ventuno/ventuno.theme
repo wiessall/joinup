@@ -584,7 +584,7 @@ function ventuno_preprocess_rdf_entity__solution__group_header(&$variables): voi
       'class' => [
         'btn',
         'btn-outline-secondary',
-        'featured__form-button',
+        'ms-3',
       ],
     ];
   }
