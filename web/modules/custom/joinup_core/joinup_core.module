@@ -30,7 +30,7 @@ use Drupal\node\NodeInterface;
 /**
  * Implements hook_theme().
  */
-function joinup_core_theme($existing, $type, $theme, $path) {
+function joinup_core_theme(array $existing, string $type, string $theme, string $path): array {
   return [
     '404_not_found' => [
       'variables' => [
@@ -50,6 +50,12 @@ function joinup_core_theme($existing, $type, $theme, $path) {
       'variables' => [
         'attributes' => [],
         'rows' => [],
+      ],
+    ],
+    'contact_owners_validation' => [
+      'variables' => [
+        'name' => NULL,
+        'entity_name' => NULL,
       ],
     ],
   ];
@@ -396,4 +402,19 @@ function joinup_core_menu_local_tasks_alter(&$data, $route_name, RefinableCachea
   if (in_array($route_name, $routes) && isset($data['tabs'][0][$route_name])) {
     $data['tabs'][0][$route_name]['#access'] = FALSE;
   }
+}
+
+/**
+ * Implements hook_mail().
+ */
+function joinup_core_mail(string $key, array &$message, array $params): void {
+  if ($key !== 'contact_owners_validation') {
+    return;
+  }
+
+  $message['from'] = \Drupal::config('system.site')->get('mail');
+  $message['subject'] = t('Validate the contact email address for @name', ['@name' => $params['name']]);
+  $message['body'][] = $params['message'];
+  // Send as HTML.
+  $message['headers']['Content-Type'] = SWIFTMAILER_FORMAT_HTML;
 }
