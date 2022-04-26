@@ -9,16 +9,11 @@
  * @ingroup themeable
  */
 #}
-{# @todo remove 'joinup_theme' condition when conversion to ventuno is over #}
-{% if directory is same as 'themes/ventuno' %}
-  <button class="btn btn-md btn-outline-primary" data-bs-trigger="hover focus" data-bs-toggle="popover" autocomplete="off" data-bs-placement="bottom" data-bs-content='{{ confirm }}' data-bs-html="true">
-    {{ "You're a member"|t }}
-  </button>
-{% elseif directory is same as 'themes/joinup' %}
-  <button id="you-are-member-button" class="button button--blue-light mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" type="button">
-    {{ "You're a member"|t }}
-  </button>
-  <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="you-are-member-button">
-    <li class="mdl-menu__item">{{ confirm }}</li>
-  </ul>
-{% endif %}
+{# Dropdown menu for leave link. #}
+<button id="you-are-member-button" class="button button--blue-light mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" type="button">
+  {{ "You're a member"|t }}
+</button>
+
+<ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="you-are-member-button">
+  <li class="mdl-menu__item">{{ confirm }}</li>
+</ul>
