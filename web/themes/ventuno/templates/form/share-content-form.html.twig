@@ -11,19 +11,20 @@
  * @ingroup themeable
  */
 #}
+{{ attach_library('ventuno/share-content-form') }}
 {% if form.groups|render %}
   <div class="row">
-    <div class="col-12 col-md-6">
-      <h3 class="fs-5">{{ 'Social networks'|t }}</h3>
+    <div class="col-12 col-sm-4">
+      <h3 class="fs-6">{{ 'Social networks'|t }}</h3>
       {{ form.share }}
     </div>
-    <div class="col-12 col-md-6">
-      <h3 class="fs-5">{{ 'Other groups on Joinup'|t }}</h3>
+    <div class="col-12 col-sm-8">
+      <h3 class="fs-6">{{ 'Other groups on Joinup'|t }}</h3>
       {{ form|without('share')|render }}
     </div>
   </div>
 {% else %}
-  <h3 class="fs-5 text-center">{{ 'Social networks'|t }}</h3>
+  <h3 class="fs-6 text-center">{{ 'Social networks'|t }}</h3>
   <div class="d-flex justify-content-center">
     {{ form.share }}
   </div>

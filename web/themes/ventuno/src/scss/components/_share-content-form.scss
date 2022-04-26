@@ -1,0 +1,25 @@
+.share-content-form {
+  .form-wrapper {
+    margin-top: 1rem;
+    display: flex;
+  }
+  .rdf-entity--compact {
+    order: 1;
+    display: flex;
+    align-items: center;
+    img {
+      width: 3rem;
+      height: auto;
+    }
+  }
+  .form-check {
+    display: flex;
+    align-items: center;
+    &-input {
+      margin-top: 0;
+    }
+    &-label {
+      display: none;
+    }
+  }
+}
