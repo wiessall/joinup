@@ -6,6 +6,7 @@ dependencies:
     - search_api.index.published
   module:
     - search_api
+    - search_api_spellcheck
     - views_autosubmit
     - views_block_area
 _core:
@@ -443,7 +444,19 @@ display:
           plugin_id: views_block_area
           block_id: 'facets_summary_block:search_facets_summary'
           empty: false
-      footer: {  }
+      footer:
+        search_api_spellcheck_did_you_mean:
+          id: search_api_spellcheck_did_you_mean
+          table: views
+          field: search_api_spellcheck_did_you_mean
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: search_api_spellcheck_did_you_mean
+          empty: true
+          search_api_spellcheck_count: 1
+          search_api_spellcheck_hide_on_result: 1
+          search_api_spellcheck_collate: true
       display_extenders: {  }
     cache_metadata:
       max-age: -1
@@ -456,7 +469,6 @@ display:
         - 'user.node_grants:view'
       tags:
         - 'config:search_api.index.published'
-        - 'search_api_list:published'
   page_1:
     id: page_1
     display_title: Page
@@ -484,4 +496,3 @@ display:
         - 'user.node_grants:view'
       tags:
         - 'config:search_api.index.published'
-        - 'search_api_list:published'
