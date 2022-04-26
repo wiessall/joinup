@@ -485,6 +485,11 @@ function ventuno_form_alter(&$form, FormStateInterface $form_state, $form_id): v
     'btn-outline-secondary',
   ];
 
+  $link_button_warning_classes = [
+    'btn',
+    'btn-warning',
+  ];
+
   switch ($form_id) {
     case 'join_group_form':
       // Add class for join collection button.
@@ -499,6 +504,11 @@ function ventuno_form_alter(&$form, FormStateInterface $form_state, $form_id): v
       if (isset($form['pending'])) {
         // Add classes for pending membership link.
         $form['pending']['#attributes']['class'] = $link_button_classes;
+      }
+
+      if (isset($form['leave'])) {
+        // Add classes for pending membership link.
+        $form['leave']['#confirm']['#attributes']['class'] = array_merge($link_button_warning_classes, $form['leave']['#confirm']['#attributes']['class'] ?? []);
       }
       break;
   }
