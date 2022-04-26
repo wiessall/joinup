@@ -186,6 +186,7 @@ Feature: Proposing a collection
     Given I go to the edit form of the "Just a proposal" collection
     And I press "Main fields"
     And I press "Additional fields"
+    And I scroll "Logo" into view
     And I remove the file from the "Logo" field
     But I wait for AJAX to finish
 
