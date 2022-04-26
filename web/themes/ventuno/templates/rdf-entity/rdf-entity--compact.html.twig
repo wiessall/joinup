@@ -4,18 +4,9 @@
  * Themeing for rdf entities.
  */
 #}
-{% set classes =
-  [
-    'mt-3',
-    'd-flex',
-    'justify-content-center',
-  ]
-%}
-<article{{ attributes.addClass(classes) }}>
-  <div class="w-50">
+<article{{ attributes.addClass('rdf-entity--compact') }}>
     {{ content }}
-  </div>
   {# {{ title_prefix }} #}
-  {# <a href="{{ url }}" rel="bookmark">{{ label }}</a> #}
+  <a class="ms-2" href="{{ url }}" rel="bookmark">{{ label }}</a>
   {# {{ title_suffix }} #}
 </article>

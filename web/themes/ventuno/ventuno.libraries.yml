@@ -85,6 +85,11 @@ pager:
     theme:
       assets/css/pager.css: {}
 
+share-content-form:
+  css:
+    theme:
+      assets/css/share-content-form.css: {}
+
 site-alerts-messages:
   css:
     theme:
