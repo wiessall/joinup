@@ -10,9 +10,6 @@
       requiredFields.forEach((field) => {
         field.addEventListener('invalid', () => {
           openAccordionItem(field);
-          if (!field.classList.contains('is-invalid')) {
-            field.classList.add('is-invalid');
-          };
         });
       });
       function openAccordionItem(element) {
