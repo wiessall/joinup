@@ -93,9 +93,9 @@ site-alerts-messages:
     theme:
       assets/css/site-alerts-messages.css: {}
 
-show-accordion-invalid-inputs:
+show-accordion-invalid-fields:
   js:
-    assets/js/show-accordion-invalid-inputs.js: { minified: true, attributes: { defer: true } }
+    assets/js/show-accordion-invalid-fields.js: { minified: true, attributes: { defer: true } }
 
 # @todo remove when switch to Ventuno theme is complete
 bootstrap-base:

@@ -36,8 +36,8 @@ module.exports = {
       },
     },
     {
-      entry: path.resolve(outputFolder, "src/js/show-accordion-invalid-inputs.js"),
-      dest: path.resolve(outputFolder, "assets/js/show-accordion-invalid-inputs.js"),
+      entry: path.resolve(outputFolder, "src/js/show-accordion-invalid-fields.js"),
+      dest: path.resolve(outputFolder, "assets/js/show-accordion-invalid-fields.js"),
       options: {
         minify: true,
         sourceMap: true,
