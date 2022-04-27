@@ -66,6 +66,8 @@ forms:
   css:
     theme:
       assets/css/forms.css: {}
+  js:
+    assets/js/highlight-invalid-fields.js: { minified: true, attributes: { defer: true } }
 
 glide:
   js:

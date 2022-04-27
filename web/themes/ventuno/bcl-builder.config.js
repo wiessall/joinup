@@ -20,6 +20,14 @@ module.exports = {
     },
     // Custom
     {
+      entry: path.resolve(outputFolder, "src/js/highlight-invalid-fields.js"),
+      dest: path.resolve(outputFolder, "assets/js/highlight-invalid-fields.js"),
+      options: {
+        minify: true,
+        sourceMap: true,
+      },
+    },
+    {
       entry: path.resolve(outputFolder, "src/js/sticky-menu.js"),
       dest: path.resolve(outputFolder, "assets/js/sticky-menu.js"),
       options: {
