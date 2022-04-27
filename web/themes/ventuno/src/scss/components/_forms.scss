@@ -1,6 +1,8 @@
 .form-wrapper {
   margin-bottom: 1.5rem;
 }
+
+// Mark required fields
 .form-required {
   &::after {
     content: '*';
@@ -8,6 +10,8 @@
     margin-left: $spacer * .25; // 4px
   }
 }
+
+// Make CKEditor textareas emulate @openeuropa invalid state
 .form-control.required.is-invalid + .cke {
   border: 1px solid $danger;
   border-radius: $form-check-input-border-radius;
@@ -29,4 +33,10 @@
     border-bottom-right-radius: $form-check-input-border-radius;
     border-bottom-left-radius: $form-check-input-border-radius;
   }
+}
+
+// As we dropped slimselect which @openeuropa based the multiselect on,
+// emulate @openeuropa form-select.
+.multi-select {
+  @extend .form-select;
 }
