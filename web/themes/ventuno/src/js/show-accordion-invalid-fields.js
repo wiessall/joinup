@@ -1,0 +1,28 @@
+/**
+ * @file
+ * Open accordions to allow user spot the invalid required field(s).
+ */
+(() => {
+
+  Drupal.behaviors.showAccordionInvalidFields = {
+    attach: function () {
+      const requiredFields = document.querySelectorAll('.accordion-body .required');
+      requiredFields.forEach((field) => {
+        field.addEventListener('invalid', () => {
+          openAccordionItem(field);
+          if (!field.classList.contains('is-invalid')) {
+            field.classList.add('is-invalid');
+          };
+        });
+      });
+      function openAccordionItem(element) {
+        const item = element.closest('.accordion-item');
+        const button = item.querySelector('.accordion-button');
+        if (button.classList.contains('collapsed')) {
+          button.click();
+        }
+      }
+    }
+  }
+
+})();
