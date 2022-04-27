@@ -575,6 +575,7 @@ field_settings:
     label: Spellcheck
     property_path: aggregated_field
     type: solr_text_spellcheck
+    boost: !!float 0
     configuration:
       type: union
       fields:

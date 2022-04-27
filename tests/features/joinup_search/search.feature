@@ -641,6 +641,17 @@ Feature: Global search
       | funni |
       | funny |
 
+    # Check if search did you mean works.
+    Given I am on the homepage
+    Then I should see the search bar in homepage's header
+    And I enter "funnaa" in the search bar
+    Then I submit the search by pressing enter
+    And I should see the text "Did you mean: funny ?"
+
+    Then I enter "funky" in the search bar
+    And I submit the search by pressing enter
+    And I should see the text "Did you mean: funny ?"
+
   @terms
   Scenario: Filter on date
     Given collection:
