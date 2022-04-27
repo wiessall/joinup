@@ -89,7 +89,7 @@ module.exports = {
         sourceMap: "file",
       },
     },
-    // Bootstrap components
+    // Pure BCL components
     {
       entry: path.resolve(outputFolder, "src/scss/accordion.scss"),
       dest: path.resolve(outputFolder, "assets/css/accordion.css"),
@@ -122,7 +122,7 @@ module.exports = {
         sourceMap: "file",
       },
     },
-    // Custom components
+    // Custom and hybrid (BCL + custom) components
     {
       entry: path.resolve(outputFolder, "src/scss/drupal_hacks.scss"),
       dest: path.resolve(outputFolder, "assets/css/drupal_hacks.css"),
@@ -134,6 +134,14 @@ module.exports = {
     {
       entry: path.resolve(outputFolder, "src/scss/footer.scss"),
       dest: path.resolve(outputFolder, "assets/css/footer.css"),
+      options: {
+        includePaths,
+        sourceMap: "file",
+      },
+    },
+    {
+      entry: path.resolve(outputFolder, "src/scss/forms.scss"),
+      dest: path.resolve(outputFolder, "assets/css/forms.css"),
       options: {
         includePaths,
         sourceMap: "file",

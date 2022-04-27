@@ -590,3 +590,10 @@ function ventuno_preprocess_field_ui_table(&$variables) {
 function ventuno_preprocess_field_multiple_value_form(&$variables) {
   $variables['#attached']['library'][] = 'ventuno/drupal_hacks';
 }
+
+/**
+ * Implements hook_preprocess_form_element().
+ */
+function ventuno_preprocess_form_element(&$variables) {
+  $variables['#attached']['library'][] = 'ventuno/forms';
+}

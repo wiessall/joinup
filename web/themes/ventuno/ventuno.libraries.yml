@@ -28,7 +28,7 @@ searchpage:
   dependencies:
     - ventuno/close
 
-# Bootstrap components
+# Pure BCL components
 accordion:
   css:
     theme:
@@ -51,7 +51,7 @@ tables:
     theme:
       assets/css/tables.css: {}
 
-# Custom components
+# Custom and hybrid (BCL + custom) components
 drupal_hacks:
   css:
     theme:
@@ -61,6 +61,11 @@ footer:
   css:
     theme:
       assets/css/footer.css: {}
+
+forms:
+  css:
+    theme:
+      assets/css/forms.css: {}
 
 glide:
   js:
