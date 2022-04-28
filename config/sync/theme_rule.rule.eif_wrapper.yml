@@ -6,8 +6,8 @@ dependencies:
     - joinup_core
   theme:
     - ventuno
-id: eif_settings
-label: 'EIF Settings'
+id: eif_wrapper
+label: 'EIF Wrapper'
 theme: ventuno
 weight: 0
 conditions:
