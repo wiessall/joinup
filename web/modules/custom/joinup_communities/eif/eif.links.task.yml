@@ -1,6 +1,6 @@
 eif.eif_perspective_form:
   route_name: eif.eif_perspective_form
-  title: 'EIF settings'
+  title: 'EIF perspective'
   base_route: entity.rdf_entity.canonical
 
 # EIF Wrapper Type links
