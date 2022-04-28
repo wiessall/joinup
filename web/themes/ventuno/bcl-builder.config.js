@@ -132,14 +132,6 @@ module.exports = {
     },
     // Custom and hybrid (BCL + custom) components
     {
-      entry: path.resolve(outputFolder, "src/scss/drupal_hacks.scss"),
-      dest: path.resolve(outputFolder, "assets/css/drupal_hacks.css"),
-      options: {
-        includePaths,
-        sourceMap: "file",
-      },
-    },
-    {
       entry: path.resolve(outputFolder, "src/scss/footer.scss"),
       dest: path.resolve(outputFolder, "assets/css/footer.css"),
       options: {
@@ -190,6 +182,14 @@ module.exports = {
     {
       entry: path.resolve(outputFolder, "src/scss/tour.scss"),
       dest: path.resolve(outputFolder, "assets/css/tour.css"),
+      options: {
+        includePaths,
+        sourceMap: "file",
+      },
+    },
+    {
+      entry: path.resolve(outputFolder, "src/scss/tabledrag.scss"),
+      dest: path.resolve(outputFolder, "assets/css/tabledrag.css"),
       options: {
         includePaths,
         sourceMap: "file",
