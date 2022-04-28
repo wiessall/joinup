@@ -579,6 +579,7 @@ field_settings:
     configuration:
       type: union
       fields:
+        - 'entity:node/body'
         - 'entity:node/field_event_agenda'
         - 'entity:node/field_keywords'
         - 'entity:node/field_location'
