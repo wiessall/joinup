@@ -7,8 +7,11 @@
 
 declare(strict_types = 1);
 
+use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\Element;
+use Drupal\Core\Session\AccountInterface;
 use Drupal\eif\EifInterface;
 use Drupal\eif\Form\EifWrapperInlineForm;
 use Drupal\eif\Plugin\views\argument\EifGroupArgument;
@@ -181,4 +184,18 @@ function eif_form_rdf_meta_entity_eif_perspective_form_alter(array &$form, FormS
       $form[$name]['widget']['form']['#title'] = NULL;
     }
   }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_create_access().
+ */
+function eif_eif_wrapper_create_access(AccountInterface $account, array $context, $entity_bundle) {
+  return AccessResult::allowedIf($account->hasPermission('create eif wrapper entity'));
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_access().
+ */
+function eif_eif_wrapper_access(EntityInterface $entity, $operation, AccountInterface $account) {
+  return AccessResult::allowedIf($account->hasPermission("{$operation} eif wrapper entity"));
 }
