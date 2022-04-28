@@ -12,7 +12,7 @@ eif.solutions:
         type: eif_category
 
 eif.eif_perspective_form:
-  path: '/rdf_entity/{rdf_entity}/eif-perspective'
+  path: '/rdf_entity/{rdf_entity}/eif-perspective/edit'
   defaults:
     _controller: Drupal\eif\Controller\EifPerspectiveController::settings
     _title_callback: Drupal\eif\Controller\EifPerspectiveController::title
