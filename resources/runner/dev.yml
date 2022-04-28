@@ -56,7 +56,7 @@ commands:
     # Make sure CAS mock server module is installed.
     - task: run
       command: drush:module-install
-      arguments: cas_mock_server
+      arguments: joinup_cas_mock_server
     - task: exec
       command: ${drush.bin}
       arguments:
