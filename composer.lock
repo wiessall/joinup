@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ea9b188ee24059ce03745fc4855c3108",
+    "content-hash": "c73161098a930cdbd8a1a95e4531a23f",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -1542,7 +1542,7 @@
             "extra": {
                 "drupal": {
                     "version": "8.x-1.4",
-                    "datestamp": "1643490593",
+                    "datestamp": "1643490687",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -1688,20 +1688,13 @@
         },
         {
             "name": "drupal/cas",
-            "version": "2.0.0-beta3",
+            "version": "dev-3277861-cache",
             "source": {
                 "type": "git",
-                "url": "https://git.drupalcode.org/project/cas.git",
-                "reference": "2.0.0-beta3"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/cas-2.0.0-beta3.zip",
-                "reference": "2.0.0-beta3",
-                "shasum": "73f09e95914942756b15de24fe47117bac946a1b"
+                "url": "https://git.drupalcode.org/issue/cas-3277861.git",
+                "reference": "891660a7fbd735a298faa61becd8e8c8314d4271"
             },
             "require": {
-                "drupal/core": "^8.8 || ^9",
                 "drupal/externalauth": "^1.2"
             },
             "require-dev": {
@@ -1709,21 +1702,12 @@
             },
             "type": "drupal-module",
             "extra": {
-                "drupal": {
-                    "version": "2.0.0-beta3",
-                    "datestamp": "1633028470",
-                    "security-coverage": {
-                        "status": "not-covered",
-                        "message": "Beta releases are not covered by Drupal security advisories."
-                    }
-                },
                 "drush": {
                     "services": {
                         "drush.services.yml": "^9 || ^10"
                     }
                 }
             },
-            "notification-url": "https://packages.drupal.org/8/downloads",
             "license": [
                 "GPL-2.0-or-later"
             ],
@@ -1752,10 +1736,11 @@
             "description": "Provides CAS authentication for Drupal.",
             "homepage": "http://drupal.org/project/cas",
             "support": {
-                "source": "https://git.drupalcode.org/project/cas",
                 "issues": "http://drupal.org/project/issues/cas",
-                "irc": "irc://irc.freenode.org/drupal-contribute"
-            }
+                "irc": "irc://irc.freenode.org/drupal-contribute",
+                "source": "https://git.drupalcode.org/project/cas"
+            },
+            "time": "2022-04-28T15:53:15+00:00"
         },
         {
             "name": "drupal/cas_account_link",
@@ -4404,6 +4389,10 @@
                 {
                     "name": "RobLoach",
                     "homepage": "https://www.drupal.org/user/61114"
+                },
+                {
+                    "name": "bnjmnm",
+                    "homepage": "https://www.drupal.org/user/2369194"
                 },
                 {
                     "name": "jjeff",
@@ -23551,6 +23540,12 @@
     ],
     "aliases": [
         {
+            "package": "drupal/cas",
+            "version": "dev-3277861-cache",
+            "alias": "2.0",
+            "alias_normalized": "2.0.0.0"
+        },
+        {
             "package": "drupal/sparql_entity_storage",
             "version": "2.0.0.0-alpha1",
             "alias": "1.0-alpha11",
@@ -23572,6 +23567,7 @@
     "minimum-stability": "dev",
     "stability-flags": {
         "dkarv/mdl-chip-input": 20,
+        "drupal/cas": 20,
         "drupal/default_content": 15,
         "drupal/dropsolid_purge": 10,
         "drupal/facets_date_range": 10,
