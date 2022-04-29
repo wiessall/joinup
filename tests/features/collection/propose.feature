@@ -220,3 +220,32 @@ Feature: Proposing a collection
     And I press "Propose"
     # The backend-side validation will kick in now.
     Then I should see the error message "Description field is required."
+
+  @javascript @terms
+  Scenario: Email validator after submit a Collection.
+    Given the following owner:
+      | name                 | type    |
+      | Organisation valid   | Company |
+    Then I am logged in as an "authenticated user"
+    When I go to the propose collection form
+    Then the "Main fields" tab should be active
+    When I fill in "Title" with "Colly email validation"
+    And I enter "Nothing..." in the "Description" wysiwyg editor
+    And I select "HR" from "Topic"
+    And I press "Add existing" at the "Owner" field
+    And I fill in "Owner" with "Organisation valid"
+    And I press "Add owner"
+    And I fill in the following:
+      | Name   | Contact person             |
+      | E-mail | contact_person@example.com |
+    And I press "Create contact information"
+    And I press "Propose"
+    And the following email should have been sent:
+      | recipient_mail     | contact_person@example.com                                                         |
+      | subject            | Request for confirmation of email address from Joinup                              |
+      | body               | We have received a request to confirm contact_person@example.com on Joinup website |
+      | signature_required | no                                                                                 |
+      | html               | no                                                                                 |
+
+    # As some entities were created via UI, we should explicitly delete them.
+    And I delete the "Colly email validation" collection

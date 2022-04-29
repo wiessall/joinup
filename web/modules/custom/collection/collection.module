@@ -210,11 +210,9 @@ function collection_rdf_entity_presave(RdfInterface $entity) {
   if (!$entity->get('field_ar_contact_information')->isEmpty()) {
     $emails = [];
     foreach ($entity->get('field_ar_contact_information')->referencedEntities() as $contact) {
-      if ($contact->isNew()) {
-        $email = $contact->get('field_ci_email')->value;
-        \Drupal::service('email_confirmer')->confirm($email);
-        $emails[] = $email;
-      }
+      $email = $contact->get('field_ci_email')->value;
+      \Drupal::service('email_confirmer')->confirm($email);
+      $emails[] = $email;
     }
     if ($emails) {
       \Drupal::messenger()->addStatus(t('%emails for verification.', ['%emails' => implode(', ', $emails)]));
