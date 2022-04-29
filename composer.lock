@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "4f7914b6c665e26a24976ac32b63bc38",
+    "content-hash": "a51a3f18a38845bfd38ed24e79f7b987",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -5388,17 +5388,17 @@
         },
         {
             "name": "drupal/meta_entity",
-            "version": "1.1.0",
+            "version": "1.2.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/meta_entity.git",
-                "reference": "8.x-1.1"
+                "reference": "8.x-1.2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/meta_entity-8.x-1.1.zip",
-                "reference": "8.x-1.1",
-                "shasum": "bd36fbb24eb20776ccf551fcc60b2a8353a2fcb7"
+                "url": "https://ftp.drupal.org/files/projects/meta_entity-8.x-1.2.zip",
+                "reference": "8.x-1.2",
+                "shasum": "284e243aba817c08a63876fc046522bfaa7fe22f"
             },
             "require": {
                 "drupal/core": "^8 || ^9",
@@ -5408,8 +5408,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "8.x-1.1",
-                    "datestamp": "1650020266",
+                    "version": "8.x-1.2",
+                    "datestamp": "1651238925",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -6530,17 +6530,17 @@
         },
         {
             "name": "drupal/rdf_meta_entity",
-            "version": "1.0.0-alpha1",
+            "version": "1.0.0-alpha2",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/rdf_meta_entity.git",
-                "reference": "1.0.0-alpha1"
+                "reference": "1.0.0-alpha2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/rdf_meta_entity-1.0.0-alpha1.zip",
-                "reference": "1.0.0-alpha1",
-                "shasum": "7dc348570f150a54808d1c194da5e28da8e386c8"
+                "url": "https://ftp.drupal.org/files/projects/rdf_meta_entity-1.0.0-alpha2.zip",
+                "reference": "1.0.0-alpha2",
+                "shasum": "579b6ce3dc0b79f93dd3e2e63b84bdd8a8c1f0b2"
             },
             "require": {
                 "drupal/core": ">=9.3",
@@ -6550,8 +6550,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "1.0.0-alpha1",
-                    "datestamp": "1650024559",
+                    "version": "1.0.0-alpha2",
+                    "datestamp": "1651238895",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Alpha releases are not covered by Drupal security advisories."
@@ -7484,17 +7484,17 @@
         },
         {
             "name": "drupal/sparql_entity_storage",
-            "version": "2.0.0-alpha2",
+            "version": "2.0.0-alpha3",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/sparql_entity_storage.git",
-                "reference": "2.0.0-alpha2"
+                "reference": "2.0.0-alpha3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/sparql_entity_storage-2.0.0-alpha2.zip",
-                "reference": "2.0.0-alpha2",
-                "shasum": "3c5d8933b6808050fbc8659508c4626362728cdf"
+                "url": "https://ftp.drupal.org/files/projects/sparql_entity_storage-2.0.0-alpha3.zip",
+                "reference": "2.0.0-alpha3",
+                "shasum": "72c65c0b43522c807d25e0694dbb88dad9e0bbde"
             },
             "require": {
                 "drupal/core": "^9.3 || ^10",
@@ -7508,8 +7508,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "2.0.0-alpha2",
-                    "datestamp": "1650020546",
+                    "version": "2.0.0-alpha3",
+                    "datestamp": "1651238949",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Project has not opted into security advisory coverage!"
@@ -23915,7 +23915,7 @@
     "aliases": [
         {
             "package": "drupal/sparql_entity_storage",
-            "version": "2.0.0.0-alpha2",
+            "version": "2.0.0.0-alpha3",
             "alias": "1.0-alpha11",
             "alias_normalized": "1.0.0.0-alpha11"
         },
