@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace Drupal\eif\Entity;
 
 use Drupal\Core\Config\Entity\ConfigEntityBundleBase;

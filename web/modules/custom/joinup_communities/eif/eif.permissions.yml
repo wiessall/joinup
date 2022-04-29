@@ -9,4 +9,3 @@ update eif wrapper entity:
   title: 'Update EIF wrapper entity'
 delete eif wrapper entity:
   title: 'Delete EIF wrapper entity'
-

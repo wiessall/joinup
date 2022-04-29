@@ -21,6 +21,9 @@ class EifWrapperTypeListBuilder extends ConfigEntityListBuilder {
     ] + parent::buildHeader();
   }
 
+  /**
+   * {@inheritdoc}
+   */
   public function buildRow(EntityInterface $entity): array {
     return [
       'type' => $entity->toLink(NULL, 'edit-form'),
