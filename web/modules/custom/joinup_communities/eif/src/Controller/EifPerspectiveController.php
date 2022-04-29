@@ -15,7 +15,7 @@ use Drupal\solution\Entity\SolutionInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Controller class for the solution EIF settings.
+ * Controller class for the solution EIF perspective.
  */
 class EifPerspectiveController extends ControllerBase {
 
@@ -66,7 +66,7 @@ class EifPerspectiveController extends ControllerBase {
    *   The content as a render array.
    */
   public function title(SolutionInterface $rdf_entity): MarkupInterface {
-    return $this->t('@solution EIF settings', [
+    return $this->t('@solution EIF perspective', [
       '@solution' => $rdf_entity->label(),
     ]);
   }
