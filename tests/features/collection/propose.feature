@@ -221,7 +221,7 @@ Feature: Proposing a collection
     # The backend-side validation will kick in now.
     Then I should see the error message "Description field is required."
 
-  @javascript @terms
+  @terms
   Scenario: Email validator after submit a Collection/Solution.
     Given the following owner:
       | name                 | type    |
@@ -247,7 +247,7 @@ Feature: Proposing a collection
       | html               | no                                                                                 |
 
     When I click "Add solution" in the plus button menu
-    And I check the "I have read and accept the legal notice and I commit to manage my solution on a regular basis." material checkbox
+    And I check "I have read and accept the legal notice and I commit to manage my solution on a regular basis."
     And I press "Yes"
     Then I fill in "Title" with "Rolly email validation"
     And I enter "Nothing..." in the "Description" wysiwyg editor
