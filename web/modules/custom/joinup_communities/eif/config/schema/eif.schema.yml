@@ -9,3 +9,14 @@ condition.plugin.eif_solutions_page:
 views.argument_validator.eif_toolbox:
   type: views.argument_validator_entity
   label: 'EIF Toolbox argument validator'
+
+eif.eif_wrapper_type.*:
+  type: config_entity
+  label: 'EIF Wrapper type'
+  mapping:
+    id:
+      type: string
+      label: 'Machine-readable name'
+    label:
+      type: label
+      label: 'Label'

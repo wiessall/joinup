@@ -92,7 +92,7 @@ function owner_inline_entity_form_entity_form_alter(&$entity_form, &$form_state)
  * @param \Drupal\Core\Entity\EntityInterface $entity
  *   The entity being built.
  */
-function owner_inline_entity_form_entity_builder($entity_type, EntityInterface $entity) {
+function owner_inline_entity_form_entity_builder(string $entity_type, EntityInterface $entity) {
   owner_entity_auto_label($entity);
 }
 

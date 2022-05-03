@@ -1,0 +1,27 @@
+uuid: 5c2b571a-a55b-4a76-afe8-ca4bcccaca68
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.rdf_meta_entity.eif_principle
+    - rdf_meta_entity.type.eif_perspective
+id: rdf_meta_entity.eif_perspective.eif_principle
+field_name: eif_principle
+entity_type: rdf_meta_entity
+bundle: eif_perspective
+label: Principle
+description: ''
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:eif_wrapper'
+  handler_settings:
+    target_bundles:
+      principle: principle
+    sort:
+      field: _none
+      direction: ASC
+    auto_create: false
+field_type: entity_reference
