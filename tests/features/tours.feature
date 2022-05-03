@@ -48,7 +48,6 @@ Feature: Tours
     When I press "Guided tour"
     # @todo: Revert to the text of the first balloon when ISAICP-6855 is fixed.
     # @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-6855
-    #Then I should see the text "Sign in or out, and manage your user account"
-    Then I should see the text "Search through the entire Joinup platform and its supported content items."
+    Then I should see the text "Sign in or out, and manage your user account"
     # Switch back to a smaller resolution.
     And I use a device with an "extra large" display
