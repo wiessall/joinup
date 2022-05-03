@@ -127,6 +127,7 @@ Feature: Global search
     # The countries are still sorted alphabetically even though the Luxembourg value is selected and has more results.
     And the "spatial coverage" checkbox facet should allow selecting the following values "Greece (1), Luxembourg (2)"
 
+  @javascript
   Scenario: Content can be found with a full-text search.
     Given the following owner:
       | name              | type    |
@@ -298,7 +299,7 @@ Feature: Global search
       | Best place to find an exotic bird |
       | Bird Birdman                      |
 
-  @clearStaticCache
+  @javascript @clearStaticCache
   Scenario: Solutions and/or releases are found by their distribution keyword.
     Given the following licences:
       | title      |
