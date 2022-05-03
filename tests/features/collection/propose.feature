@@ -224,8 +224,8 @@ Feature: Proposing a collection
   @terms
   Scenario: Email validator after submit a Collection/Solution.
     Given the following owner:
-      | name                 | type    |
-      | Organisation valid   | Company |
+      | name               | type    |
+      | Organisation valid | Company |
     When I am logged in as an "authenticated user"
     Then I go to the propose collection form
     And I fill in "Title" with "Colly email validation"
@@ -235,12 +235,12 @@ Feature: Proposing a collection
     And I fill in "Owner" with "Organisation valid"
     And I press "Add owner"
     And I fill in the following:
-      | Name   | Contact person             |
-      | E-mail | contact_person@example.com |
+      | Name   | Contact person                         |
+      | E-mail | some_unique_contact_person@example.com |
     And I press "Create contact information"
     And I press "Propose"
     And the following email should have been sent:
-      | recipient_mail     | contact_person@example.com                                                         |
+      | recipient_mail     | some_unique_contact_person@example.com                                             |
       | subject            | Request for confirmation of email address from Joinup                              |
       | body               | We have received a request to confirm contact_person@example.com on Joinup website |
       | signature_required | no                                                                                 |
