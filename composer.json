@@ -131,7 +131,7 @@
         "behat/mink-selenium2-driver": "1.4.0",
         "boedah/robo-drush": "^4.2",
         "drupal/admin_toolbar": "~2.4",
-        "drupal/cas_mock_server": "^1.3",
+        "drupal/cas_mock_server": "dev-3278266-ticket-fail as 1.5.0",
         "drupal/coder": "^8.3.11",
         "drupal/composer_deploy": "^1.6",
         "drupal/config_devel": "~1.7",
@@ -410,6 +410,10 @@
         {
             "type": "vcs",
             "url": "https://git.drupalcode.org/issue/cas-3277861.git"
+        },
+        {
+            "type": "vcs",
+            "url": "https://git.drupalcode.org/issue/cas_mock_server-3278266.git"
         },
         {
             "type": "vcs",
