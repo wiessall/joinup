@@ -221,11 +221,12 @@ Feature: Proposing a collection
     # The backend-side validation will kick in now.
     Then I should see the error message "Description field is required."
 
-  @terms
+  @terms @email
   Scenario: Email validator after submit a Collection/Solution.
     Given the following owner:
       | name               | type    |
       | Organisation valid | Company |
+    And I mark all emails as read
     When I am logged in as an "authenticated user"
     Then I go to the propose collection form
     And I fill in "Title" with "Colly email validation"
