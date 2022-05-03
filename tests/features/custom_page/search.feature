@@ -4,7 +4,6 @@ Feature: Custom pages enhance search results for their collections/solutions
   As a facilitator
   I want search results for keywords that match content in my custom pages to include my group
 
-  @clearStaticCache
   Scenario Outline: Collections and solutions are found when searching for keywords in custom pages
     Given the following <group>s:
       | title           | state     |
@@ -12,7 +11,8 @@ Feature: Custom pages enhance search results for their collections/solutions
       | Slab allocation | validated |
 
     # Initially I get no results. This is intended to warm up any caches.
-    When I enter "memory" in the search bar and press enter
+    When I go to the homepage
+    Then I enter "memory" in the search bar and press enter
     Then I should see "No content found for your search."
 
     Given custom_page content:
@@ -28,6 +28,8 @@ Feature: Custom pages enhance search results for their collections/solutions
       | Reduces memory fragmentation   | no      |
       | Memory initialization overhead | yes     |
       | Alleviates fragmentation       | no      |
+    # Clear cache to get correct content.
+    And the cache has been cleared
 
     # When I search for a keyword that is present in all 4 custom pages, I will
     # only get a single result back. Of the 4 custom pages, two are currently
@@ -40,12 +42,16 @@ Feature: Custom pages enhance search results for their collections/solutions
     # of its parent group. When it becomes enabled, its content will be included
     # in the search index for the group, so the group will appear in the search.
     When I enable "Alleviates fragmentation" in the navigation menu of the "Slab allocation" <group>
-    And I enter "memory" in the search bar and press enter
+    # Clear cache to get correct content.
+    And the cache has been cleared
+    Then I enter "memory" in the search bar and press enter
     Then the page should show only the tiles "Alleviates fragmentation, Slab allocation"
 
     # Publish the custom page which is currently unpublished. It should now
     # appear in the search results.
     When the publication state of the "Memory initialization overhead" custom page is changed to published
+    # Clear cache to get correct content.
+    And the cache has been cleared
     When I enter "memory" in the search bar and press enter
     Then the page should show only the tiles "Alleviates fragmentation, Memory initialization overhead, Slab allocation"
 
@@ -58,13 +64,17 @@ Feature: Custom pages enhance search results for their collections/solutions
     # used to enrich the group, but it should still show up on its own because
     # it is published content.
     When I disable "Memory initialization overhead" in the navigation menu of the "Slab allocation" <group>
-    And I enter "overhead" in the search bar and press enter
+    # Clear cache to get correct content.
+    And the cache has been cleared
+    Then I enter "overhead" in the search bar and press enter
     Then the page should show only the tiles "Memory initialization overhead"
 
     # Publish the group which is in draft. When searching I should now also get
     # this group and its enabled custom page back.
     When the workflow state of the "Buddy system" group is changed to "validated"
-    And I enter "memory" in the search bar and press enter
+    # Clear cache to get correct content.
+    And the cache has been cleared
+    Then I enter "memory" in the search bar and press enter
     Then the page should show only the tiles "Alleviates fragmentation, Memory initialization overhead, Slab allocation, Splitting and coalescing, Buddy system"
 
     # An unpublished custom page doesn't show up in any results.
