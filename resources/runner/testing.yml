@@ -1,5 +1,15 @@
 # Testing configs and commands.
 
+testing:
+  modules:
+    - cas_mock_server
+    - composer_deploy
+    - config_devel
+    - dblog
+    - filecache
+    - joinup_cas_mock_server
+    - upgrade_status
+
 behat:
   screenshots:
     local:
@@ -71,3 +81,8 @@ commands:
     - task: exec
       # Mute the returning error code as is used only for reporting.
       command: php -d memory_limit=-1 ${phpstan.bin} --no-progress analyse web/modules/contrib || true
+
+  testing:install-modules:
+    - task: run
+      command: drush:module-install
+      arguments: ${testing.modules}
