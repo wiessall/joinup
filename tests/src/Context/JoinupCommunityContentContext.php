@@ -228,6 +228,7 @@ class JoinupCommunityContentContext extends RawDrupalContext {
     if (!($time = strtotime($new_date))) {
       throw new \Exception("{$new_date} could not be converted to string.");
     }
+
     $this->getNodeByTitle($title, $bundle)
       ->set($field_name, $time)
       ->save();
