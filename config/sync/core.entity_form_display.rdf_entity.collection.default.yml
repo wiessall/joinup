@@ -85,6 +85,7 @@ third_party_settings:
         - field_ar_closed
         - field_ar_content_creation
         - field_newsletter
+        - field_collection_content
       label: 'Additional fields'
       region: content
       parent_name: group_general
@@ -141,7 +142,7 @@ content:
     third_party_settings: {  }
   field_ar_closed:
     type: boolean_checkbox
-    weight: 18
+    weight: 17
     region: content
     settings:
       display_label: false
@@ -165,7 +166,7 @@ content:
     third_party_settings: {  }
   field_ar_content_creation:
     type: options_buttons
-    weight: 19
+    weight: 18
     region: content
     settings: {  }
     third_party_settings: {  }
@@ -192,7 +193,7 @@ content:
     third_party_settings: {  }
   field_ar_moderation:
     type: boolean_checkbox
-    weight: 17
+    weight: 16
     region: content
     settings:
       display_label: false
@@ -223,7 +224,7 @@ content:
     third_party_settings: {  }
   field_collection_content:
     type: search_api_field_default
-    weight: 1
+    weight: 20
     region: content
     settings:
       query_builder: false
@@ -238,7 +239,7 @@ content:
     third_party_settings: {  }
   field_newsletter:
     type: oe_newsroom_newsletter_default
-    weight: 20
+    weight: 19
     region: content
     settings: {  }
     third_party_settings: {  }
