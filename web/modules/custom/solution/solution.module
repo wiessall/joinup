@@ -507,7 +507,7 @@ function solution_rdf_entity_presave(RdfInterface $entity) {
       $emails[] = $email;
     }
     if ($emails) {
-      \Drupal::messenger()->addStatus(t('%emails for verification.', ['%emails' => implode(', ', $emails)]));
+      \Drupal::messenger()->addStatus(t('A new confirmation message has been sent to %emails.', ['%emails' => implode(', ', $emails)]));
     }
   }
 
