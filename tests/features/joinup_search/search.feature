@@ -299,7 +299,7 @@ Feature: Global search
       | Best place to find an exotic bird |
       | Bird Birdman                      |
 
-  @javascript @clearStaticCache
+  @clearStaticCache
   Scenario: Solutions and/or releases are found by their distribution keyword.
     Given the following licences:
       | title      |
@@ -381,6 +381,8 @@ Feature: Global search
     Then the page should show only the tiles "Zzolution"
 
     Given I delete the "DistroZzolu" asset distribution
+    # Clear cache to get correct content.
+    And the cache has been cleared
 
     # The parent solution has been re-indexed without distribution data.
     When I enter "distrozzolu" in the search bar and press enter
@@ -401,6 +403,8 @@ Feature: Global search
       | title         | Releazz   |
       | state         | validated |
       | is version of | Zzolution |
+    # Clear cache to get correct content.
+    And the cache has been cleared
 
     When I enter "ReleazzDistro" in the search bar and press enter
     Then I should see "No content found for your search."
@@ -413,6 +417,8 @@ Feature: Global search
       | licence                  | Apache-2.0                        |
       | format                   | HTML                              |
       | representation technique | Datalog                           |
+    # Clear cache to get correct content.
+    And the cache has been cleared
 
     When I enter "releazzDistro" in the search bar and press enter
     Then the page should show only the tiles "Releazz"
@@ -438,6 +444,8 @@ Feature: Global search
     And I select "CSV" from "Format"
     And I select "Human Language" from "Representation technique"
     And I press "Save"
+    # Clear cache to get correct content.
+    And the cache has been cleared
 
     # Repeat the previous searches to prove that the initial keywords were
     # removed from the Search API index.
@@ -471,6 +479,8 @@ Feature: Global search
     Then the page should show only the tiles "Releazz"
 
     Given I delete the "DistroReleazz" asset distribution
+    # Clear cache to get correct content.
+    And the cache has been cleared
 
     # The parent release has been re-indexed without distribution data.
     When I enter "dIstrOreleazz" in the search bar and press enter
