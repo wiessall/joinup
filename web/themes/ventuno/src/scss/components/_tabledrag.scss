@@ -1,14 +1,16 @@
-.tabledrag-toggle-weight-wrapper {
-  display: none;
+.tabledrag-toggle-weight-wrapper,
+.tabledrag-handle {
+  display: none!important;
 }
-.joinup-nodrag {
-  .table {
-    td.field-multiple-drag {
-    width: 0;
-    padding: 0;
-    }
-    td.delta-order {
-      min-width: 5rem;
-    }
+.tabledrag-hide {
+  display: table-cell!important;
+}
+.table {
+  td.field-multiple-drag {
+  width: 0;
+  padding: 0;
+  }
+  td.delta-order {
+    min-width: 5rem;
   }
 }
