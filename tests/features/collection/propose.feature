@@ -272,5 +272,5 @@ Feature: Proposing a collection
       | html               | no                                                                                     |
 
     # As some entities were created via UI, we should explicitly delete them.
-    And I delete the "Colly email validation" collection
+    And I delete the "Some email validation" collection
     And I delete the "Rolly email validation" solution
