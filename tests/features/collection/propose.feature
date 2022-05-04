@@ -227,9 +227,10 @@ Feature: Proposing a collection
       | name               | type    |
       | Organisation valid | Company |
     And I mark all emails as read
+    And there are no pending email confirmation requests
     When I am logged in as an "authenticated user"
     Then I go to the propose collection form
-    And I fill in "Title" with "Colly email validation"
+    And I fill in "Title" with "Some email validation"
     And I enter "Nothing..." in the "Description" wysiwyg editor
     And I select "HR" from "Topic"
     And I press "Add existing" at the "Owner" field
@@ -240,12 +241,13 @@ Feature: Proposing a collection
       | E-mail | some_unique_contact_person@example.com |
     And I press "Create contact information"
     And I press "Propose"
+    Then I should see the heading "Some email validation"
     And the following email should have been sent:
-      | recipient_mail     | some_unique_contact_person@example.com                                             |
-      | subject            | Request for confirmation of email address from Joinup                              |
-      | body               | We have received a request to confirm contact_person@example.com on Joinup website |
-      | signature_required | no                                                                                 |
-      | html               | no                                                                                 |
+      | recipient_mail     | some_unique_contact_person@example.com                                                         |
+      | subject            | Request for confirmation of email address from Joinup                                          |
+      | body               | We have received a request to confirm some_unique_contact_person@example.com on Joinup website |
+      | signature_required | no                                                                                             |
+      | html               | no                                                                                             |
 
     When I click "Add solution" in the plus button menu
     And I check "I have read and accept the legal notice and I commit to manage my solution on a regular basis."
