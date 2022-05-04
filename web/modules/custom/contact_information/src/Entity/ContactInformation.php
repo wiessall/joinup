@@ -4,6 +4,7 @@ declare(strict_types = 1);
 
 namespace Drupal\contact_information\Entity;
 
+use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\joinup_bundle_class\JoinupBundleClassFieldAccessTrait;
 use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_group\JoinupGroupHelper;
@@ -61,6 +62,19 @@ class ContactInformation extends Rdf implements ContactInformationInterface {
     $id = reset($ids);
     $group = $this->entityTypeManager()->getStorage('rdf_entity')->load($id);
     return $group instanceof GroupInterface ? $group : NULL;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function postSave(EntityStorageInterface $storage, $update = TRUE) {
+    parent::postSave($storage, $update);
+    /** @var \Drupal\Core\Field\FieldItemListInterface $field */
+    $field = $this->get('field_ci_email');
+    if (!$field->isEmpty()) {
+      \Drupal::service('email_confirmer')->confirm($field->value);
+      \Drupal::messenger()->addStatus($this->t('A new confirmation message has been sent to %mail.', ['%mail' => $field->value]));
+    }
   }
 
 }

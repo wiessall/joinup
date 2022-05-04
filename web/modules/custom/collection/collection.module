@@ -207,18 +207,6 @@ function collection_rdf_entity_presave(RdfInterface $entity) {
     }
   }
 
-  if (!$entity->get('field_ar_contact_information')->isEmpty()) {
-    $emails = [];
-    foreach ($entity->get('field_ar_contact_information')->referencedEntities() as $contact) {
-      $email = $contact->get('field_ci_email')->value;
-      \Drupal::service('email_confirmer')->confirm($email);
-      $emails[] = $email;
-    }
-    if ($emails) {
-      \Drupal::messenger()->addStatus(t('A new confirmation message has been sent to %emails.', ['%emails' => implode(', ', $emails)]));
-    }
-  }
-
   if (!\Drupal::service('sparql.graph_handler')->bundleHasGraph('rdf_entity', 'collection', 'draft')) {
     return;
   }
