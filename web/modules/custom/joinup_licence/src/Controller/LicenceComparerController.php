@@ -53,12 +53,6 @@ class LicenceComparerController extends ControllerBase {
     }
 
     $build = [
-      '#type' => 'container',
-      '#attributes' => [
-        'class' => [
-          'licence-comparer__wrapper',
-        ],
-      ],
       'table' => [
         '#theme' => 'table',
         '#rows' => $rows,
