@@ -8,10 +8,9 @@ blockquote {
   position: relative;
   clear: both;
   overflow: hidden;
-  margin: 24px -23px;
-  padding: 40px 80px;
-  color: #fff;
-  background-color: $color-blue-medium;
+  border-left: 20px solid $color-orange;
+  margin-left: 100px;
+  padding: 24px 0 24px 24px;
 
   &:before,
   &:after {
