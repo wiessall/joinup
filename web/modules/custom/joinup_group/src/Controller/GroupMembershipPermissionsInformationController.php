@@ -212,16 +212,16 @@ class GroupMembershipPermissionsInformationController extends ControllerBase {
             '#plain_text' => $permission_info['description'],
           ],
           [
-            '#plain_text' => $permission_info['permitted']['member'] ? '✓' : '',
+            '#plain_text' => $permission_info['permitted']['member'] ? '✅' : '',
           ],
           [
-            '#plain_text' => $permission_info['permitted']['author'] ? '✓' : '',
+            '#plain_text' => $permission_info['permitted']['author'] ? '✅' : '',
           ],
           [
-            '#plain_text' => $permission_info['permitted']['facilitator'] ? '✓' : '',
+            '#plain_text' => $permission_info['permitted']['facilitator'] ? '✅' : '',
           ],
           [
-            '#plain_text' => $permission_info['permitted']['owner'] ? '✓' : '',
+            '#plain_text' => $permission_info['permitted']['owner'] ? '✅' : '',
           ],
         ];
       }
