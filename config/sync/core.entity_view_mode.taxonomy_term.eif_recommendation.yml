@@ -1,0 +1,10 @@
+uuid: 9f3a81f9-ff69-4a20-b3de-061244b5d525
+langcode: en
+status: true
+dependencies:
+  module:
+    - taxonomy
+id: taxonomy_term.eif_recommendation
+label: 'EIF recommendation inline'
+targetEntityType: taxonomy_term
+cache: true

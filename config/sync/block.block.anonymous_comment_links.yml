@@ -5,7 +5,7 @@ dependencies:
   config:
     - simple_block.simple_block.anonymous_comment_links
   module:
-    - ctools
+    - node
     - simple_block
     - user
   theme:
