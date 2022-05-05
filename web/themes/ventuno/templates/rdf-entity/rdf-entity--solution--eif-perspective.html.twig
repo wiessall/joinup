@@ -1,0 +1,38 @@
+{#
+/**
+ * @file
+ * Themeing for rdf entities.
+ */
+#}
+<article{{ attributes }}>
+  {{ title_prefix }}
+  <h2{{ title_attributes }}><span class="eif-title-prefix">Solution: </span>{{ label }}</h2>
+  {{ title_suffix }}
+
+  <div class="row">
+    <div class="col col-lg-8 col-md-8 col-sm-12 col-xs-12">
+      <a class="btn btn-outline-info" href="/">Back to recommendations</a>
+      <a class="btn btn-outline-info" href="/">Back to solutions</a>
+    </div>
+    <div class="col col-lg-4 col-md-4 col-sm-12 col-xs-12">
+      <a class="btn btn-outline-info" href="/">Glossary</a>
+      <a class="btn btn-outline-info" href="/">What is EIF?</a>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col col-lg-3 col-md-3 col-sm-4 col-xs-12">
+      {{ content.field_is_logo }}
+    </div>
+    <div class="col col-lg-9 col-md-9 col-sm-8 col-xs-12">
+      <p><strong>Name of the solution:</strong> {{ label|striptags }}</p>
+      <p><strong>Solution's owner:</strong> {{ content.field_is_owner }}</p>
+    </div>
+  </div>
+  <div class="row">
+    <p><strong>Description:</strong> {{ content.field_is_description }}</p>
+    <p><strong>Type of solution:</strong> {{ content.field_is_solution_type }}</p>
+  </div>
+  <a class="btn btn-outline-info" href="{{ url }}">Go to Solution</a>
+  {{ content.eif_perspective }}
+</article>
