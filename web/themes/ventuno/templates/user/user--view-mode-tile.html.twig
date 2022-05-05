@@ -1,0 +1,47 @@
+{#
+/**
+ * @file
+ * Theme override to present all user data.
+ *
+ * This template is used when viewing a registered user's page,
+ * e.g., example.com/user/123. 123 being the user's ID.
+ *
+ * Available variables:
+ * - content: A list of content items. Use 'content' to print all content, or
+ *   print a subset such as 'content.field_example'. Fields attached to a user
+ *   such as 'user_picture' are available as 'content.user_picture'.
+ * - attributes: HTML attributes for the container element.
+ * - user: A Drupal User entity.
+ *
+ * @see template_preprocess_user()
+ */
+#}
+{%
+  set classes = [
+    'joinup-tile',
+    elements['#view_mode'] == 'view_mode_featured' ? 'bg-secondary' : 'bg-light',
+  ]
+%}
+<div class="{{ classes|join(' ') }}">
+  <div class="mb-3">
+    {{ content.field_user_photo }}
+    <p class="joinup-tile__title">
+      <a href="{{ path('entity.user.canonical', {'user': user.id}) }}">
+        {{- full_name -}}
+      </a>
+    </p>
+    {% if short_business_title %}
+      <p class="joinup-tile__business-title">
+        {{ short_business_title }}
+      </p>
+    {% endif %}
+  </div>
+  <div>
+    <p class="text-end text-muted mb-0">
+      {{ 'user'|t }}
+      <svg class="bi icon--s">
+        <use xlink:href="{{ bcl_icon_path }}#person-circle"></use>
+      </svg>
+    </p>
+  </div>
+</div>

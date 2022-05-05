@@ -52,6 +52,11 @@ footer:
     theme:
       assets/css/footer.css: {}
 
+joinup-tiles:
+  css:
+    theme:
+      assets/css/joinup-tiles.css: {}
+
 glide:
   js:
     assets/js/glide.js: { minified: false }

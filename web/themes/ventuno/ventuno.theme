@@ -337,6 +337,10 @@ function ventuno_theme_suggestions_alter(array &$suggestions, array $variables, 
  */
 function ventuno_preprocess_user(&$variables) {
   $variables['full_name'] = $variables['user']->getDisplayName();
+
+  // Truncate business title.
+  $business_title = $variables['user']->get('field_user_business_title')->value;
+  $variables['short_business_title'] = !empty($business_title) ? substr($business_title, 0, 30) : '';
 }
 
 /**
@@ -542,5 +546,42 @@ function ventuno_theme_suggestions_field_alter(array &$suggestions, array $varia
     // Prepend the new suggestion right after the default field template. This
     // allows overriding single fields, while keeping all the rest markup-free.
     array_unshift($suggestions, 'field__bare');
+  }
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for joinup-tiles--members-overview.html.twig.
+ */
+function ventuno_preprocess_joinup_tiles__members_overview(&$variables) {
+  // The members overview is a view of OgMembership entities, but these have no
+  // view modes. Replace them with standard User tiles.
+  $view_builder = \Drupal::entityTypeManager()->getViewBuilder('user');
+  /** @var \Drupal\og\OgMembershipInterface $row */
+  foreach ($variables['rows'] as &$row) {
+    /** @var \Drupal\og\OgMembershipInterface $membership */
+    $membership = $row['content']['#row']->_entity;
+    $row['content'] = $view_builder->view($membership->getOwner(), 'view_mode_tile');
+  }
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for views-exposed-form.html.twig.
+ */
+function ventuno_preprocess_views_exposed_form(&$variables) {
+  // Bail out if we are not on the members overview.
+  if (\Drupal::routeMatch()->getRouteName() != 'entity.rdf_entity.member_overview') {
+    return;
+  }
+  if ($variables['form']['#id'] === 'views-exposed-form-og-members-overview-default') {
+    $variables['form']['#attributes']['class'] = array_merge($variables['form']['#attributes']['class'], ['p-3', 'bg-light', 'rounded', 'row']);
+  }
+  // Append a help icon to the member permissions link on the members page.
+  if (!empty($variables['form']['member_permissions_link']['#title'])) {
+    $link = &$variables['form']['member_permissions_link'];
+    $title = $link['#title'];
+    $link['#title'] = [
+      // @todo Please append the $variables['form']['member_permissions_link']['#title'] ('Member permissions') right after the icon
+      '#markup' => Drupal\Core\Render\Markup::create('<svg class="bi icon--s me-2"><use xlink:href="' . base_path() . drupal_get_path('theme', 'ventuno') . '/assets/icons/icons.svg#info-circle"></use></svg>'),
+    ];
   }
 }
