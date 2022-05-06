@@ -35,10 +35,13 @@
       <p><strong>Solution's owner:</strong> {{ content.field_is_owner }}</p>
     </div>
   </div>
-  <div class="row">
-    <p><strong>Description:</strong> {{ content.field_is_description }}</p>
-    <p><strong>Type of solution:</strong> {{ content.field_is_solution_type }}</p>
-  </div>
-  <a class="btn btn-outline-info" href="{{ url }}">Go to Solution</a>
   {{ content.eif_perspective }}
+
+  <div class="row">
+    <div class="col">
+      <a class="btn btn-sm btn-outline-info" href="{{ url('<front>')|render }}/collection/nifo-national-interoperability-framework-observatory/solution/eif-toolbox/recommendations">Back to recommendations</a>
+      <a class="btn btn-sm btn-outline-info" href="{{ url('<front>')|render }}/collection/nifo-national-interoperability-framework-observatory/solution/eif-toolbox/solutions-0">Back to solutions</a>
+    </div>
+  </div>
+
 </article>
