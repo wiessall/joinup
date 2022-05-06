@@ -7,6 +7,7 @@ dependencies:
     - filter.format.simple_text
   module:
     - comment
+    - eif
     - entity_legal
     - filter
     - joinup_licence
@@ -14,6 +15,7 @@ dependencies:
     - paragraphs_type_permissions
     - rdf_entity
     - rdf_export
+    - rdf_meta_entity
     - search_api_autocomplete
     - system
     - tour
@@ -34,6 +36,8 @@ permissions:
   - 'use text format basic_html'
   - 'use text format simple_text'
   - 'view compatibility documents'
+  - 'view eif wrapper entity'
+  - 'view eif_perspective rdf-meta-entity'
   - 'view media'
   - 'view paragraph content accordion'
   - 'view paragraph content accordion_item'

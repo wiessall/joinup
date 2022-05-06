@@ -30,7 +30,7 @@ eif.eif_perspective:
   defaults:
     _controller: Drupal\eif\Controller\EifPerspectiveController::view
   requirements:
-    _custom_access: Drupal\eif\Controller\EifPerspectiveController::access
+    _entity_access: 'rdf_entity.view'
   options:
     parameters:
       rdf_entity:
