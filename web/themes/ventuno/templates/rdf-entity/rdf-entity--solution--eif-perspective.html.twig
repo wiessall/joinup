@@ -6,42 +6,42 @@
 #}
 <article{{ attributes }}>
   {{ title_prefix }}
-  <h2{{ title_attributes }}><span class="eif-title-prefix">Solution: </span>{{ label }}</h2>
+  <h1{{ title_attributes.addClass(['mt-4', 'mb-3', 'fs-3']) }}>{{ 'Solution'|t }}: {{ label }}</h1>
   {{ title_suffix }}
 
-  <div class="row">
-    <div class="col col-lg-8 col-md-8 col-sm-12 col-xs-12">
-      <a class="btn btn-sm btn-outline-info" href="{{ url('<front>')|render }}/collection/nifo-national-interoperability-framework-observatory/solution/eif-toolbox/recommendations">Back to recommendations</a>
-      <a class="btn btn-sm btn-outline-info" href="{{ url('<front>')|render }}/collection/nifo-national-interoperability-framework-observatory/solution/eif-toolbox/solutions-0">Back to solutions</a>
+  <div class="d-flex justify-content-between">
+    <div>
+      <a class="btn btn-sm btn-outline-brand rounded-pill mb-1" href="{{ url('<front>')|render }}/collection/nifo-national-interoperability-framework-observatory/solution/eif-toolbox/recommendations">Back to recommendations</a>
+      <a class="btn btn-sm btn-outline-brand rounded-pill mb-1" href="{{ url('<front>')|render }}/collection/nifo-national-interoperability-framework-observatory/solution/eif-toolbox/solutions-0">Back to solutions</a>
     </div>
-    <div class="col col-lg-4 col-md-4 col-sm-12 col-xs-12">
-      <a class="btn btn-sm btn-outline-info" href="{{ url('<front>')|render }}/collection/nifo-national-interoperability-framework-observatory/glossary">Glossary</a>
-      <a class="btn btn-sm btn-outline-info" href="{{ url('<front>')|render }}/collection/nifo-national-interoperability-framework-observatory/solution/eif-toolbox/what-eif">What is EIF?</a>
+    <div>
+      <a class="btn btn-sm btn-outline-brand rounded-pill mb-1" href="{{ url('<front>')|render }}/collection/nifo-national-interoperability-framework-observatory/glossary">
+        {{ pattern('icon', {
+          name: 'journal-text',
+          path: bcl_icon_path,
+          size: 's',
+        }) }}
+        {{ 'Glossary'|t }}
+      </a>
+      <a class="btn btn-sm btn-outline-brand rounded-pill mb-1" href="{{ url('<front>')|render }}/collection/nifo-national-interoperability-framework-observatory/solution/eif-toolbox/what-eif">
+        {{ pattern('icon', {
+          name: 'question-lg',
+          path: bcl_icon_path,
+          size: 's',
+        }) }}
+        {{ 'What is EIF'|t }}
+      </a>
     </div>
   </div>
 
-  <div class="row">
-    <div class="col">
-      <h3>{{ "General information"|t }}</h3>
-    </div>
-  </div>
+  <h2 class="my-3 fs-4">{{ "General information"|t }}</h2>
 
-  <div class="row">
-    <div class="col col-lg-3 col-md-3 col-sm-4 col-xs-12">
-      {{ content.field_is_logo }}
-    </div>
-    <div class="col col-lg-9 col-md-9 col-sm-8 col-xs-12">
-      <p><strong>Name of the solution:</strong> {{ label|striptags }}</p>
-      <p><strong>Solution's owner:</strong> {{ content.field_is_owner }}</p>
-    </div>
+  <div class="float-start w-25 me-3 mb-2">
+    {{ content.field_is_logo }}
   </div>
+  <ul class="list-unstyled">
+    <li class="mb-2"><strong>{{ 'Name of the solution'|t }}:</strong> {{ label|striptags }}</li>
+    <li class="mb-2"><strong>{{ 'Solution\'s owner'|t }}:</strong> {{ content.field_is_owner }}</li>
+  </ul>
   {{ content.eif_perspective }}
-
-  <div class="row">
-    <div class="col">
-      <a class="btn btn-sm btn-outline-info" href="{{ url('<front>')|render }}/collection/nifo-national-interoperability-framework-observatory/solution/eif-toolbox/recommendations">Back to recommendations</a>
-      <a class="btn btn-sm btn-outline-info" href="{{ url('<front>')|render }}/collection/nifo-national-interoperability-framework-observatory/solution/eif-toolbox/solutions-0">Back to solutions</a>
-    </div>
-  </div>
-
 </article>
