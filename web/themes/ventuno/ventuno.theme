@@ -573,12 +573,14 @@ function ventuno_preprocess_views_exposed_form(&$variables) {
     return;
   }
   if ($variables['form']['#id'] === 'views-exposed-form-og-members-overview-default') {
-    $variables['form']['#attributes']['class'] = array_merge($variables['form']['#attributes']['class'], ['p-3', 'bg-light', 'rounded', 'row']);
+    $variables['form']['#attributes']['class'] = array_merge(
+      $variables['form']['#attributes']['class'],
+      ['p-3', 'bg-light', 'rounded', 'row']
+    );
   }
   // Append a help icon to the member permissions link on the members page.
   if (!empty($variables['form']['member_permissions_link']['#title'])) {
     $link = &$variables['form']['member_permissions_link'];
-    $title = $link['#title'];
     $link['#title'] = [
       // @todo Please append the $variables['form']['member_permissions_link']['#title'] ('Member permissions') right after the icon
       '#markup' => Drupal\Core\Render\Markup::create('<svg class="bi icon--s me-2"><use xlink:href="' . base_path() . drupal_get_path('theme', 'ventuno') . '/assets/icons/icons.svg#info-circle"></use></svg>'),

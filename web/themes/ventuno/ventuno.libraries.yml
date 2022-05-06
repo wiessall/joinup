@@ -29,6 +29,11 @@ searchpage:
     - ventuno/close
 
 # Bootstrap components
+card:
+  css:
+    theme:
+      assets/css/card.css: {}
+
 close:
   css:
     theme:
@@ -51,11 +56,6 @@ footer:
   css:
     theme:
       assets/css/footer.css: {}
-
-joinup-tiles:
-  css:
-    theme:
-      assets/css/joinup-tiles.css: {}
 
 glide:
   js:
@@ -87,6 +87,11 @@ site-alerts-messages:
   css:
     theme:
       assets/css/site-alerts-messages.css: {}
+
+tiles:
+  css:
+    theme:
+      assets/css/tiles.css: {}
 
 # @todo remove when switch to Ventuno theme is complete
 bootstrap-base:
