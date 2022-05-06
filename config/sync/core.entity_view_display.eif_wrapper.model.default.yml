@@ -14,18 +14,18 @@ mode: default
 content:
   description:
     type: text_default
-    label: above
+    label: hidden
     settings: {  }
     third_party_settings: {  }
-    weight: 10
+    weight: 1
     region: content
   term:
     type: entity_reference_label
-    label: above
+    label: hidden
     settings:
       link: true
     third_party_settings: {  }
-    weight: 11
+    weight: 0
     region: content
 hidden:
   search_api_excerpt: true
