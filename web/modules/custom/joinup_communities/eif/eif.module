@@ -22,6 +22,9 @@ use Drupal\og\OgGroupAudienceHelperInterface;
  */
 function eif_theme(array $existing, string $type, string $theme, string $path): array {
   return [
+    'eif_wrapper' => [
+      'render element' => 'elements',
+    ],
     'eif_category_navigator' => [
       'variables' => [
         'all_link' => NULL,
