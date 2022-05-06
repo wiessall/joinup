@@ -1,0 +1,68 @@
+{#
+/**
+ * @file
+ * Default template for a field.
+ */
+#}
+{%
+  set classes = [
+    'ps-0',
+    'field--name-' ~ field_name|clean_class,
+    bundle|clean_class ~ '__' ~ field_name_clean|clean_class,
+    label_display == 'inline' ? 'd-flex',
+  ]
+%}
+{%
+  set title_classes = [
+    'field__label',
+    'fw-bold',
+    label_display == 'visually_hidden' ? 'visually-hidden',
+  ]
+%}
+
+{% if label_hidden %}
+  {% if multiple %}
+    <ul{{ attributes.addClass(classes) }}>
+      {% for item in items %}
+        <li{{ item.attributes.addClass(['field__item', 'list-unstyled', 'mb-2']) }}>
+            <span class="text-success">
+              {{ pattern('icon', {
+                name: 'check-circle-fill',
+                path: bcl_icon_path,
+                size: 's',
+              }) }}
+            </span>
+          {{ item.content }}
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    {% for item in items %}
+      <div{{ attributes.addClass(classes) }}>{{ item.content }}</div>
+    {% endfor %}
+  {% endif %}
+{% else %}
+  <div{{ attributes.addClass(classes) }}>
+    <div{{ title_attributes.addClass(title_classes) }}>
+      {{ label }}{% if label_display == 'inline' %}<span class="me-1">:</span>{% endif %}
+    </div>
+    {% if multiple %}
+    <ul class="field__items ps-0">
+      {% endif %}
+      {% for item in items %}
+        <li{{ item.attributes.addClass(['field__item', 'list-unstyled', 'mb-2']) }}>
+          <span class="text-success">
+            {{ pattern('icon', {
+              name: 'check-circle-fill',
+              path: bcl_icon_path,
+              size: 's',
+            }) }}
+          </span>
+          {{ item.content }}
+        </li>
+      {% endfor %}
+      {% if multiple %}
+    </ul>
+    {% endif %}
+  </div>
+{% endif %}

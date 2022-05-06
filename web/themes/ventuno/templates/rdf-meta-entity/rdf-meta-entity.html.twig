@@ -4,31 +4,27 @@
  * Themeing for RDF meta entities.
  */
 #}
-<article{{ attributes }}>
-  <div class="row">
+<article{{ attributes.addClass(['mt-3']) }}>
+  <ul class="list-unstyled">
     <p><strong>Description:</strong> {{ content.field_eif_description }}</p>
     <p><strong>Type of solution:</strong> {{ content.field_eif_solution_type }}</p>
-  </div>
-  <a class="btn btn-sm btn-outline-info" href="{{ solution_url }}">Go to Solution</a>
-  <h4>The {{ solution_label }} {{ "implements the following"|t }}:</h4>
+  </ul>
+  <a class="btn btn-sm btn-outline-brand rounded-pill" href="{{ solution_url }}">{{ 'Go to Solution'|t }}</a>
+  <h3 class="fs-5 mt-4 mb-3">{{ 'The'|t}} {{ solution_label }} {{ 'implements the following'|t }}:</h3>
   <div class="row">
-    <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12">
+    <div class="col-12 col-md-6 col-lg-4">
       <h5><a href="/">Principles</a></h5>
       {{ content.eif_principle }}
     </div>
-    <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12">
+    <div class="col-12 col-md-6 col-lg-4">
       <h5><a href="/">Interoperability layers</a></h5>
       {{ content.eif_layer }}
     </div>
-    <div class="col col-lg-4 col-md-4 col-sm-4 col-xs-12">
+    <div class="col-12 col-md-6 col-lg-4">
       <h5><a href="/">Conceptual model</a></h5>
       {{ content.eif_model }}
     </div>
   </div>
-  <div class="row">
-    <h4>{{ solution_label }} {{ "implements the following EIF recommendations as explained below"|t }}:</h4>
-  </div>
-  <div class="row">
-    {{ content.eif_recommendation }}
-  </div>
+  <h3 class="fs-5 mt-4 mb-3">{{ solution_label }} {{ 'implements the following EIF recommendations as explained below'|t }}:</h3>
+  {{ content.eif_recommendation }}
 </article>
