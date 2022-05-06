@@ -18,6 +18,7 @@ dependencies:
     - comment
     - contact_form
     - dashboard
+    - eif
     - entity_legal
     - entityqueue
     - field_permissions
@@ -112,7 +113,6 @@ permissions:
   - 'delete any collection_banner media'
   - 'delete any collection_logo media'
   - 'delete any document content'
-  - 'delete eif wrapper entity'
   - 'delete any event_banner media'
   - 'delete any event_logo media'
   - 'delete any news_banner media'
@@ -121,6 +121,7 @@ permissions:
   - 'delete any solution_logo media'
   - 'delete asset_release rdf entity'
   - 'delete contact_information rdf entity'
+  - 'delete eif wrapper entity'
   - 'delete licence rdf entity'
   - 'delete owner rdf entity'
   - 'delete paragraph content iframe'
