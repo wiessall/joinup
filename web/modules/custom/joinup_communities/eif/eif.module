@@ -35,6 +35,26 @@ function eif_theme(array $existing, string $type, string $theme, string $path): 
 }
 
 /**
+ * Prepares variables for EIF wrapper templates.
+ *
+ * Default template: eif-wrapper.html.twig.
+ *
+ * @param array $variables
+ *   An associative array containing:
+ *   - elements: An associative array containing the user information and any
+ *     fields attached to the entity. Properties used:
+ *     - #eif_wrapper: A \Drupal\eif\Entity\EifWrapper
+ *       object. The entity being viewed.
+ *   - attributes: HTML attributes for the containing element.
+ */
+function template_preprocess_eif_wrapper(&$variables) {
+  $variables['eif_wrapper'] = $variables['elements']['#eif_wrapper'];
+  foreach (Element::children($variables['elements']) as $key) {
+    $variables['content'][$key] = $variables['elements'][$key];
+  }
+}
+
+/**
  * Implements hook_views_plugins_argument_alter().
  */
 function eif_views_plugins_argument_alter(array &$plugins) {

@@ -324,24 +324,30 @@ function ventuno_form_facets_form_alter(array &$form, FormStateInterface $form_s
  * Implements hook_theme_suggestions_alter().
  */
 function ventuno_theme_suggestions_alter(array &$suggestions, array $variables, $hook) {
-  // Add suggestion based on view mode for user entity and terms.
-  $hooks_with_bundle = ['rdf_meta_entity', 'taxonomy_term'];
-  if ($hook == 'user' && !empty($variables['elements']['#view_mode'])) {
+  $hooks = [
+    'eif_wrapper',
+    'user',
+    'rdf_meta_entity',
+    'taxonomy_term',
+  ];
+
+  if (in_array($hook, $hooks) && !empty($variables['elements']['#view_mode'])) {
     $original_theme_hook = $variables['theme_hook_original'];
     $view_mode = $variables['elements']['#view_mode'];
     $suggestions[] = $original_theme_hook . '__' . str_replace('-', '_', $view_mode);
+
+    $entity_type_id = $variables['elements']['#entity_type'];
+    if ($hook !== 'user' && $bundle = $variables['elements']["#{$entity_type_id}"]->bundle()) {
+      $suggestions[] = $original_theme_hook . '__' . str_replace('-', '_', $bundle) . '__' . str_replace('-', '_', $view_mode);
+    }
   }
-  elseif (in_array($hook, $hooks_with_bundle) && !empty($variables['elements']['#view_mode'])) {
-    $original_theme_hook = $variables['theme_hook_original'];
-    $view_mode = $variables['elements']['#view_mode'];
-    $bundle = $variables['elements']['#taxonomy_term']->bundle();
-    $suggestions[] = $original_theme_hook . '__' . str_replace('-', '_', $bundle) . '__' . str_replace('-', '_', $view_mode);
-  }
-  elseif (in_array($hook, $hooks_with_bundle)) {
-    $original_theme_hook = $variables['theme_hook_original'];
-    $bundle = $variables['elements']['#taxonomy_term']->bundle();
-    $suggestions[] = $original_theme_hook . '__' . str_replace('-', '_', $bundle);
-  }
+}
+
+/**
+ * Implements hook_preprocess_HOOK().
+ */
+function ventuno_preprocess_rdf_meta_entity(&$variables) {
+  $variables['solution_label'] = $variables['rdf_meta_entity']->getTargetEntity()->label();
 }
 
 /**
@@ -554,14 +560,5 @@ function ventuno_theme_suggestions_field_alter(array &$suggestions, array $varia
     // Prepend the new suggestion right after the default field template. This
     // allows overriding single fields, while keeping all the rest markup-free.
     array_unshift($suggestions, 'field__bare');
-  }
-}
-
-/**
- * Implements hook_preprocess_HOOK().
- */
-function ventuno_preprocess_field__rdf_entity__eif_perspective__solution(&$variables) {
-  if (!isset($variables['items'][0]['content']['#rdf_meta_entity'])) {
-    return;
   }
 }

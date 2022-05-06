@@ -1,0 +1,31 @@
+uuid: d3c022ab-b530-428b-aebf-76e7d996c8ed
+langcode: en
+status: true
+dependencies:
+  config:
+    - eif.eif_wrapper_type.principle
+    - field.field.eif_wrapper.principle.term
+  module:
+    - text
+id: eif_wrapper.principle.default
+targetEntityType: eif_wrapper
+bundle: principle
+mode: default
+content:
+  description:
+    type: text_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 1
+    region: content
+  term:
+    type: entity_reference_label
+    label: hidden
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 0
+    region: content
+hidden:
+  search_api_excerpt: true
