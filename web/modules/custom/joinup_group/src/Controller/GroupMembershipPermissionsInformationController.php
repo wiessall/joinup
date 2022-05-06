@@ -5,8 +5,8 @@ declare(strict_types = 1);
 namespace Drupal\joinup_group\Controller;
 
 use Drupal\Core\Controller\ControllerBase;
-use Drupal\Core\Url;
 use Drupal\Core\Link;
+use Drupal\Core\Url;
 use Drupal\joinup_group\ContentCreationOptions;
 use Drupal\joinup_group\Entity\GroupInterface;
 
@@ -212,16 +212,16 @@ class GroupMembershipPermissionsInformationController extends ControllerBase {
             '#plain_text' => $permission_info['description'],
           ],
           [
-            '#plain_text' => $permission_info['permitted']['member'] ? '✅' : '',
+            '#plain_text' => $permission_info['permitted']['member'] ? '✓' : '',
           ],
           [
-            '#plain_text' => $permission_info['permitted']['author'] ? '✅' : '',
+            '#plain_text' => $permission_info['permitted']['author'] ? '✓' : '',
           ],
           [
-            '#plain_text' => $permission_info['permitted']['facilitator'] ? '✅' : '',
+            '#plain_text' => $permission_info['permitted']['facilitator'] ? '✓' : '',
           ],
           [
-            '#plain_text' => $permission_info['permitted']['owner'] ? '✅' : '',
+            '#plain_text' => $permission_info['permitted']['owner'] ? '✓' : '',
           ],
         ];
       }
@@ -238,7 +238,8 @@ class GroupMembershipPermissionsInformationController extends ControllerBase {
     ];
     $url = Url::fromRoute('entity.rdf_entity.member_overview', [
       'rdf_entity' => $rdf_entity->id()],
-       $options);
+      $options
+    );
     $link = Link::fromTextAndUrl($this->t('Got it'), $url);
     $build['close'] = $link->toRenderable();
 
