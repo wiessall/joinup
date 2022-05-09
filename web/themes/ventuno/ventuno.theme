@@ -493,7 +493,8 @@ function ventuno_form_alter(&$form, FormStateInterface $form_state, $form_id): v
   switch ($form_id) {
     case 'join_group_form':
       // Add class for join collection button.
-      $form['join']['#attributes']['class'][] = $link_button_outline_classes;
+      $form['join']['#attributes']['class'] = $form['join']['#attributes']['class'] ?? [];
+      $form['join']['#attributes']['class'] = array_merge($link_button_outline_classes, $form['join']['#attributes']['class']);
 
       // Make the 'Join' link that opens a modal for anonymous users appear as a
       // button.
