@@ -9,8 +9,16 @@ blockquote {
   clear: both;
   overflow: hidden;
   border-left: 20px solid $color-orange;
-  margin-left: 100px;
   padding: 24px 0 24px 24px;
+  margin-right: 0;
+  margin-left: 0;
+  @include breakpoint(xs) {
+    margin-left: 40px;
+    margin-right: 40px;
+  }
+  @include breakpoint(sm) {
+    margin-left: 100px;
+  }
 
   &:before,
   &:after {
