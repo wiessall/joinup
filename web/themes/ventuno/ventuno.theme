@@ -585,9 +585,11 @@ function ventuno_preprocess_views_exposed_form(&$variables) {
     $icon[] = [
       '#markup' => Markup::create('<svg class="bi icon--s me-2"><use xlink:href="' . base_path() . drupal_get_path('theme', 'ventuno') . '/assets/icons/icons.svg#info-circle"></use></svg>'),
     ];
-    $link['#title'] = $icon[0]['#markup'] . $variables['form']['member_permissions_link']['#title']; # @todo make this be correctly rendered as processed markup
-    // Add proper button classes
+    // @todo make this be correctly rendered as processed markup.
+    $link['#title'] = $icon[0]['#markup'] . $variables['form']['member_permissions_link']['#title'];
+    // Add proper button classes.
     $button_link_classes[] = ['btn', 'btn-md', 'btn-link'];
-    $link['#attributes']['class'][] .= $button_link_classes; # @todo make this be correctly rendered as classes
+    // @todo make this be correctly rendered as classes.
+    $link['#attributes']['class'][] .= $button_link_classes;
   }
 }
