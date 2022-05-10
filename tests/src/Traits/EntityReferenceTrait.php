@@ -41,6 +41,10 @@ trait EntityReferenceTrait {
         $values[$name] = [$values[$name]];
       }
 
+      if (is_string($values[$name])) {
+        $values[$name] = [$values[$name]];
+      }
+
       foreach ($values[$name] as &$label) {
         $id = $this->getEntityIdByLabel($label, $target_entity_type, $target_entity_bundles);
 
