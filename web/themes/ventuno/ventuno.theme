@@ -551,21 +551,6 @@ function ventuno_theme_suggestions_field_alter(array &$suggestions, array $varia
 }
 
 /**
- * Implements hook_preprocess_HOOK() for joinup-tiles--members-overview.html.twig.
- */
-function ventuno_preprocess_joinup_tiles__members_overview(&$variables) {
-  // The members overview is a view of OgMembership entities, but these have no
-  // view modes. Replace them with standard User tiles.
-  $view_builder = \Drupal::entityTypeManager()->getViewBuilder('user');
-  /** @var \Drupal\og\OgMembershipInterface $row */
-  foreach ($variables['rows'] as &$row) {
-    /** @var \Drupal\og\OgMembershipInterface $membership */
-    $membership = $row['content']['#row']->_entity;
-    $row['content'] = $view_builder->view($membership->getOwner(), 'view_mode_tile');
-  }
-}
-
-/**
  * Implements hook_preprocess_HOOK() for views-exposed-form.html.twig.
  */
 function ventuno_preprocess_views_exposed_form(&$variables) {
