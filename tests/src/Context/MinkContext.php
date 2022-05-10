@@ -22,21 +22,25 @@ class MinkContext extends DrupalExtensionMinkContext {
    */
   public function checkOption($option) {
     $this->scrollElementWithIdIntoView('checkbox', $option);
-    if ($this->usesMaterialDesignLite()) {
-      // Overrides the default method for checking checkboxes to make it
-      // compatible with material design.
-      $option = $this->fixStepArgument($option);
-      $this->checkMaterialDesignField($option, $this->getSession()->getPage());
-    }
-    else {
+    if (!$this->usesMaterialDesignLite()) {
       parent::checkOption($option);
+      return;
     }
+    // Overrides the default method for checking checkboxes to make it
+    // compatible with material design.
+    $option = $this->fixStepArgument($option);
+    $this->checkMaterialDesignField($option, $this->getSession()->getPage());
   }
 
   /**
    * {@inheritdoc}
    */
   public function uncheckOption($option) {
+    $this->scrollElementWithIdIntoView('checkbox', $option);
+    if (!$this->usesMaterialDesignLite()) {
+      parent::uncheckOption($option);
+      return;
+    }
     // Overrides the default method for unchecking checkboxes to make it
     // compatible with material design.
     $option = $this->fixStepArgument($option);
