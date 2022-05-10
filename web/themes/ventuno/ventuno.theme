@@ -487,9 +487,11 @@ function ventuno_form_views_exposed_form_alter(array &$form, FormStateInterface 
     $form['keys']['#title_display'] = 'invisible';
     $form['keys']['#attributes']['placeholder'] = t('Start typing to search…');
     $form['keys']['#joinup_parent'] = $form_id . '_' . $view->id();
-    // When re-using the exposed search form anywhere other than the search
-    // page, hide the "Sort by" select.
-    $form['sort_by']['#type'] = 'hidden';
+    if (\Drupal::routeMatch()->getRouteName() !== 'view.search.page_1') {
+      // When re-using the exposed search form anywhere other than the search
+      // page, hide the "Sort by" select.
+      $form['sort_by']['#type'] = 'hidden';
+    }
   }
 
   if ($view_id === 'og_members_overview') {
