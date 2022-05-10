@@ -102,6 +102,20 @@ class EifContext extends RawDrupalContext {
       ]),
     ])->save();
 
+    Node::create([
+      'type' => 'custom_page',
+      'nid' => EifInterface::EIF_ONLINE_ASSISTANT,
+      'title' => 'Online Assistant',
+      'og_audience' => EifInterface::EIF_ID,
+      'field_paragraphs_body' => Paragraph::create([
+        'type' => 'simple_paragraph',
+        'field_body' => [
+          'value' => '',
+          'format' => 'content_editor',
+        ],
+      ]),
+    ])->save();
+
     $instances = \Drupal::entityTypeManager()->getStorage('ogmenu_instance')->loadByProperties([
       'type' => 'navigation',
       OgGroupAudienceHelperInterface::DEFAULT_FIELD => $solution->id(),
