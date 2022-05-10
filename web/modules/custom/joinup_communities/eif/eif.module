@@ -17,6 +17,7 @@ use Drupal\eif\EifInterface;
 use Drupal\eif\Form\EifWrapperInlineForm;
 use Drupal\eif\Plugin\views\argument\EifGroupArgument;
 use Drupal\og\OgGroupAudienceHelperInterface;
+use Drupal\solution\Entity\SolutionInterface;
 
 /**
  * Implements hook_theme().
@@ -30,6 +31,11 @@ function eif_theme(array $existing, string $type, string $theme, string $path): 
       'variables' => [
         'all_link' => NULL,
         'category_links' => [],
+      ],
+    ],
+    'eif_filter_list' => [
+      'variables' => [
+        'items' => NULL,
       ],
     ],
   ];
@@ -222,4 +228,46 @@ function eif_eif_wrapper_create_access(AccountInterface $account, array $context
  */
 function eif_eif_wrapper_access(EntityInterface $entity, string $operation, AccountInterface $account): AccessResultInterface {
   return AccessResult::allowedIf($account->hasPermission("{$operation} eif wrapper entity"));
+}
+
+/**
+ * Implements hook_preprocess_HOOK().
+ */
+function eif_preprocess_rdf_entity(array &$variables): void {
+  $solution = $variables['rdf_entity'];
+  if ($solution instanceof SolutionInterface && $variables['view_mode'] === 'view_mode_search_list_item') {
+    $eif_perspective = $solution->eif_perspective->entity;
+    $data_property_categories = [];
+    foreach ($solution->field_is_eif_category as $category) {
+      $data_property_categories[] = htmlentities(
+        str_replace([' ', '/', ':'], ['-', '-', ''], strtolower($category->value))
+      );
+    }
+    foreach ($eif_perspective->eif_layer as $layer) {
+      $data_property_categories[] = htmlentities(
+        str_replace([' ', '/', ':'], ['-', '-', ''], strtolower($layer->entity->label()))
+      );
+    }
+
+    foreach ($eif_perspective->eif_principle as $layer) {
+      $data_property_categories[] = htmlentities(
+        str_replace([' ', '/', ':'], ['-', '-', ''], strtolower($layer->entity->label()))
+      );
+    }
+
+    foreach ($eif_perspective->eif_recommendation as $layer) {
+      $data_property_categories[] = htmlentities(
+        str_replace([' ', '/', ':'], ['-', '-', ''], strtolower($layer->entity->label()))
+      );
+    }
+
+    foreach ($eif_perspective->eif_model as $layer) {
+      $data_property_categories[] = htmlentities(
+        str_replace([' ', '/', ':'], ['-', '-', ''], strtolower($layer->entity->label()))
+      );
+    }
+
+    $variables['attributes']['data-eif-category'] = implode(' ', $data_property_categories);
+    $variables['attributes']['class'][] = 'eif-tile';
+  }
 }

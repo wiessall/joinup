@@ -5,3 +5,10 @@ recommendations.selector:
     - core/jquery
     - core/jquery.once
     - core/drupal
+
+eif-filter:
+  js:
+    js/eif_filter.js: {}
+  dependencies:
+    - core/jquery
+    - core/drupal

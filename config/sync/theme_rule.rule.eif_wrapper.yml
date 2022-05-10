@@ -4,6 +4,7 @@ status: true
 dependencies:
   module:
     - joinup_core
+    - system
   theme:
     - ventuno
 id: eif_wrapper
@@ -16,3 +17,7 @@ conditions:
     negate: false
     routes:
       - solution.eif_perspective.form
+  request_path:
+    id: request_path
+    negate: false
+    pages: /node/705372
