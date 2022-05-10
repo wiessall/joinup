@@ -12,25 +12,22 @@ trait JavascriptTrait {
   use BrowserCapabilityDetectionTrait;
 
   /**
-   * Moves a button in the middle of the screen for Javascript tests.
-   *
-   * In the latest versions of Selenium in Docker, moving to a button element
-   * might throw this exception while the button is visible. This might be due
-   * to attempting to find the button too fast.
+   * Moves an element in the middle of the screen for Javascript tests.
    *
    * @param string $type
-   *   The type: link/button.
+   *   The type: fieldset, field, link, button, link_or_button, content, select,
+   *   checkbox, radio, file, optgroup, option, table, id, id_or_name.
    * @param string $label
    *   The label of the radio button.
    *
    * @throws \Exception
    *    Thrown when an expected scroll in to view failed.
    */
-  protected function scrollLinkOrButtonIntoView(string $type, string $label): void {
+  protected function scrollElementWithIdIntoView(string $type, string $label): void {
     if ($this->browserSupportsJavaScript()) {
       $page = $this->getSession()->getPage();
-      $button = $page->find('named', [$type, str_replace('\\"', '"', $label)]);
-      if ($button && $id = $button->getAttribute('id')) {
+      $element = $page->find('named', [$type, str_replace('\\"', '"', $label)]);
+      if ($element && $id = $element->getAttribute('id')) {
         // This method only works for links and buttons having an ID.
         $this->scrollElementIntoView("#$id");
       }
