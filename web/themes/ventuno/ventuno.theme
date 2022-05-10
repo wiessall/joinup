@@ -9,7 +9,6 @@ declare(strict_types = 1);
 
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Menu\MenuLinkInterface;
-use Drupal\Core\Render\Markup;
 use Drupal\Core\Url;
 use Drupal\interoperable_europe\InteroperableEuropeCollectionInterface;
 use Drupal\joinup_bundle_class\DescriptionInterface;
@@ -476,27 +475,28 @@ function ventuno_theme_suggestions_form_element_alter(array &$suggestions, array
 }
 
 /**
- * Implements hook_form_alter().
+ * Implements hook_form_FORM_ID_alter().
  */
-function ventuno_form_alter(&$form, FormStateInterface $form_state, $form_id): void {
-  // Check if the form contains exposed filter form element.
-  if ($form_id !== 'views_exposed_form') {
-    return;
-  }
-
-  $route_name = \Drupal::routeMatch()->getRouteName();
+function ventuno_form_views_exposed_form_alter(array &$form, FormStateInterface $form_state, string $form_id): void {
+  /** @var \Drupal\views\ViewExecutable $view */
   $view = $form_state->get('view');
-  if ($view->id() === 'search') {
+  $view_id = $view->id();
+
+  if ($view_id === 'search' && $view->current_display === 'page_1') {
     $form['keys']['#theme'] = 'input__search_expose_form';
     $form['keys']['#title_display'] = 'invisible';
     $form['keys']['#attributes']['placeholder'] = t('Start typing to search…');
     $form['keys']['#joinup_parent'] = $form_id . '_' . $view->id();
-  }
-
-  if ($route_name != 'view.search.page_1' && $view->id() === 'search') {
     // When re-using the exposed search form anywhere other than the search
     // page, hide the "Sort by" select.
     $form['sort_by']['#type'] = 'hidden';
+  }
+
+  if ($view_id === 'og_members_overview') {
+    $form['#attributes']['class'][] = 'p-3';
+    $form['#attributes']['class'][] = 'bg-light';
+    $form['#attributes']['class'][] = 'rounded';
+    $form['#attributes']['class'][] = 'row';
   }
 }
 
@@ -547,34 +547,5 @@ function ventuno_theme_suggestions_field_alter(array &$suggestions, array $varia
     // Prepend the new suggestion right after the default field template. This
     // allows overriding single fields, while keeping all the rest markup-free.
     array_unshift($suggestions, 'field__bare');
-  }
-}
-
-/**
- * Implements hook_preprocess_HOOK() for views-exposed-form.html.twig.
- */
-function ventuno_preprocess_views_exposed_form(&$variables) {
-  // Bail out if we are not on the members overview.
-  if (\Drupal::routeMatch()->getRouteName() != 'entity.rdf_entity.member_overview') {
-    return;
-  }
-  if ($variables['form']['#id'] === 'views-exposed-form-og-members-overview-default') {
-    $variables['form']['#attributes']['class'] = array_merge(
-      $variables['form']['#attributes']['class'],
-      ['p-3', 'bg-light', 'rounded', 'row']
-    );
-  }
-  if (!empty($variables['form']['member_permissions_link']['#title'])) {
-    $link = &$variables['form']['member_permissions_link'];
-    // Append a help icon to the member permissions link on the members page.
-    $icon[] = [
-      '#markup' => Markup::create('<svg class="bi icon--s me-2"><use xlink:href="' . base_path() . drupal_get_path('theme', 'ventuno') . '/assets/icons/icons.svg#info-circle"></use></svg>'),
-    ];
-    // @todo make this be correctly rendered as processed markup.
-    $link['#title'] = $icon[0]['#markup'] . $variables['form']['member_permissions_link']['#title'];
-    // Add proper button classes.
-    $button_link_classes[] = ['btn', 'btn-md', 'btn-link'];
-    // @todo make this be correctly rendered as classes.
-    $link['#attributes']['class'][] .= $button_link_classes;
   }
 }
