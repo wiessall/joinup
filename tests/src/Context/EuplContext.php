@@ -458,7 +458,7 @@ class EuplContext extends RawDrupalContext {
    *   When the licence tile is not found on the page.
    */
   protected function findLicenceTile(string $spdx_id): NodeElement {
-    $this->scrollLinkOrButtonIntoView('link', 'Check compatibility');
+    $this->scrollElementWithIdIntoView('link', 'Check compatibility');
     if ($licence = $this->getSession()->getPage()->find('css', 'div[data-spdx="' . $spdx_id . '"]')) {
       return $licence;
     }

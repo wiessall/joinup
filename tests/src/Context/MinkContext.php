@@ -21,10 +21,16 @@ class MinkContext extends DrupalExtensionMinkContext {
    * {@inheritdoc}
    */
   public function checkOption($option) {
-    // Overrides the default method for checking checkboxes to make it
-    // compatible with material design.
-    $option = $this->fixStepArgument($option);
-    $this->checkMaterialDesignField($option, $this->getSession()->getPage());
+    $this->scrollElementWithIdIntoView('checkbox', $option);
+    if ($this->usesMaterialDesignLite()) {
+      // Overrides the default method for checking checkboxes to make it
+      // compatible with material design.
+      $option = $this->fixStepArgument($option);
+      $this->checkMaterialDesignField($option, $this->getSession()->getPage());
+    }
+    else {
+      parent::checkOption($option);
+    }
   }
 
   /**
@@ -93,7 +99,7 @@ class MinkContext extends DrupalExtensionMinkContext {
    */
   public function assertClick($link): void {
     // Overriding the base method for Javascript tests.
-    $this->scrollLinkOrButtonIntoView('link', $link);
+    $this->scrollElementWithIdIntoView('link', $link);
     parent::clickLink($link);
   }
 
@@ -102,7 +108,7 @@ class MinkContext extends DrupalExtensionMinkContext {
    */
   public function pressButton($button): void {
     // Overriding the base method for Javascript tests.
-    $this->scrollLinkOrButtonIntoView('button', $button);
+    $this->scrollElementWithIdIntoView('button', $button);
     parent::pressButton($button);
   }
 
