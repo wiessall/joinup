@@ -47,7 +47,7 @@ function eif_theme(array $existing, string $type, string $theme, string $path): 
  *       object. The entity being viewed.
  *   - attributes: HTML attributes for the containing element.
  */
-function template_preprocess_eif_wrapper(&$variables) {
+function template_preprocess_eif_wrapper(array &$variables) {
   $variables['eif_wrapper'] = $variables['elements']['#eif_wrapper'];
   foreach (Element::children($variables['elements']) as $key) {
     $variables['content'][$key] = $variables['elements'][$key];
