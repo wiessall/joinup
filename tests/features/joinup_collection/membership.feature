@@ -17,7 +17,6 @@ Feature: Tests membership to Joinup collection.
 
     When I go to the homepage of the "Joinup" collection
     Then I should not see the link "Leave this collection"
-    But I should see "You cannot leave the Joinup collection"
 
     When I am about to leave the "Joinup" collection
     Then I should get an access denied error
