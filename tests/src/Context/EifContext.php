@@ -40,14 +40,14 @@ class EifContext extends RawDrupalContext {
    *
    * @var \Drupal\eif\EifWrapperInterface[]
    */
-  protected array $eifWrapperEntities;
+  protected array $eifWrapperEntities = [];
 
   /**
    * An array of EIF entities to be cleaned up after the tests.
    *
    * @var \Drupal\rdf_meta_entity\Entity\RdfMetaEntityInterface[]
    */
-  protected array $eifPerspectiveEntities;
+  protected array $eifPerspectiveEntities = [];
 
   /**
    * Creates the standard 'EIF' solution and a random parent collection.
