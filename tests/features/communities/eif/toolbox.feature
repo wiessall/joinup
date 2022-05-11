@@ -1,4 +1,4 @@
-@api @eif_community @group-e
+@api @eif_community @terms @group-e
 Feature:
   As the owner of the EIF toolbox
   in order to make it easier for users to find appropriate solutions
@@ -30,18 +30,21 @@ Feature:
     And I fill in "Description" with "It will be an amazing principle."
     And I check "Test resource"
     And I select "Underlying Principle 2: Openness" from "EIF qualifier"
+    And I press "Create qualifier"
     And I press "Save"
 
     When I go to the "Jordan 2" solution
     And I click "EIF perspective" in the "Entity actions" region
     Then I check "Test resource"
     And I select "Underlying Principle 3: Transparency" from "EIF qualifier"
+    And I press "Create qualifier"
     And I press "Save"
 
     When I go to the "Jordan 3" solution
     And I click "EIF perspective" in the "Entity actions" region
     Then I check "Test resource"
     And I select "Underlying Principle 11: Preservation of information" from "EIF qualifier"
+    And I press "Create qualifier"
     And I press "Save"
 
     When I visit the "Online Assistant" custom page
