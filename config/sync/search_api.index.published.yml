@@ -215,7 +215,7 @@ field_settings:
       config:
         - field.storage.taxonomy_term.field_eif_identifier
   field_eif_identifier_spellcheck:
-    label: Identifier Spellcheck'
+    label: 'Identifier Spellcheck'
     datasource_id: 'entity:taxonomy_term'
     property_path: field_eif_identifier
     type: solr_text_spellcheck
