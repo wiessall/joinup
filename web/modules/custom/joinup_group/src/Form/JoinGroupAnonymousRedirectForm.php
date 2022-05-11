@@ -121,7 +121,7 @@ class JoinGroupAnonymousRedirectForm extends FormBase {
     // to the group page.
     $url = new Url('cas.login', [
       'query' => [
-        'returnto' => $this->group->toUrl()->setAbsolute()->toString(),
+        'destination' => $this->group->toUrl()->setAbsolute()->toString(),
       ],
     ]);
     $form_state->setRedirectUrl($url);
