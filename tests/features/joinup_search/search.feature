@@ -658,10 +658,15 @@ Feature: Global search
     And I enter "funnaa" in the search bar
     Then I submit the search by pressing enter
     And I should see the text "Did you mean: funny ?"
+    Then I click "funny"
+    And I should see the text "SEARCH RESULTS (4)"
 
-    Then I enter "funky" in the search bar
+    Then I enter "cosine" in the search bar
     And I submit the search by pressing enter
-    And I should see the text "Did you mean: funny ?"
+    And I should see the text "Did you mean: cuisine ?"
+    Then I click "cuisine"
+    And I should see the text "SEARCH RESULTS (1)"
+    And I should see the "Movistar" tile
 
   @terms
   Scenario: Filter on date
