@@ -643,19 +643,18 @@ Feature: Global search
       | funny |
 
     # Check if search did you mean works.
-    Given I am on the homepage
-    Then I should see the search bar in homepage's header
-    And I enter "funnaa" in the search bar
+    Given I visit the search page
+    And I enter "histore" in the search bar
     Then I submit the search by pressing enter
-    And I should see the text "Did you mean: funny ?"
-    Then I click "funny"
-    And I should see the text "SEARCH RESULTS (4)"
+    And I should see the text "Did you mean: history ?"
+    And I click "history"
+    Then I should see the text "SEARCH RESULTS (1)"
 
     Then I enter "cosine" in the search bar
     And I submit the search by pressing enter
     And I should see the text "Did you mean: cuisine ?"
-    Then I click "cuisine"
-    And I should see the text "SEARCH RESULTS (1)"
+    And I click "cuisine"
+    Then I should see the text "SEARCH RESULTS (1)"
     And I should see the "Movistar" tile
 
   @terms
