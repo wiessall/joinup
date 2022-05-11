@@ -171,6 +171,7 @@ content:
     weight: 5
     region: content
 hidden:
+  featured: true
   field_document_logo: true
   field_document_spatial_coverage: true
   field_keywords: true
@@ -180,6 +181,8 @@ hidden:
   langcode: true
   links: true
   og_audience: true
+  pinned_in: true
   published_at: true
   read_more: true
   search_api_excerpt: true
+  visit_count: true
