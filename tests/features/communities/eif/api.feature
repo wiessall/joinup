@@ -9,7 +9,7 @@ Feature:
       | state       | validated                                        |
     Given the following EIF perspective data for the "EIF solution" solution:
       | Description      | This should be in the description field.                                                   |
-      | Type of solution | Specification or standard                                                                  |
+      | Type of solution | Common frameworks                                                                          |
       | Principle        | name: Underlying Principle 1: Subsidiarity and proportionality, description: Hello world 1 |
       | Principle        | name: Underlying Principle 3: Transparency, description: Hello world 3                     |
       | Layer            | name: Interoperability Layer 3: Legal interoperability, description: Hello layer 3         |
@@ -24,7 +24,7 @@ Feature:
     And I should see the text "This should be in the description field."
     But I should not see the text "Some description not to be shown in the EIF page"
 
-    And I should see the text "Specification or standard"
+    And I should see the text "Common frameworks"
     And the "Underlying Principle 1: Subsidiarity and proportionality" should have the "title" set to "Hello world 1"
     And the "Underlying Principle 3: Transparency" should have the "title" set to "Hello world 3"
     And the "Interoperability Layer 3: Legal interoperability" should have the "title" set to "Hello layer 3"
