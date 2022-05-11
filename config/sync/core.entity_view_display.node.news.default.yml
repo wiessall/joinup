@@ -156,6 +156,7 @@ content:
     weight: 4
     region: content
 hidden:
+  featured: true
   field_keywords: true
   field_news_spatial_coverage: true
   field_site_featured: true
@@ -164,6 +165,8 @@ hidden:
   langcode: true
   links: true
   og_audience: true
+  pinned_in: true
   published_at: true
   read_more: true
   search_api_excerpt: true
+  visit_count: true

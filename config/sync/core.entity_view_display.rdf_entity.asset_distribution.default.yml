@@ -131,6 +131,7 @@ content:
 hidden:
   changed: true
   created: true
+  download_count: true
   field_ad_creation_date: true
   field_ad_gitb_compliant: true
   field_ad_modification_date: true
