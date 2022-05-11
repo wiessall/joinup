@@ -126,13 +126,16 @@
   background: $white;
   border-radius: $border-radius;
   box-shadow: $box-shadow-lg;
-  max-width: 400px;
+  max-width: 200px;
   opacity: 0;
   outline: none;
   transition: $transition-fade;
   visibility: hidden;
   width: 100%;
   z-index: 9999;
+  @include media-breakpoint-up(sm) {
+    max-width: 400px;
+  }
 }
 
 .shepherd-enabled.shepherd-element {
