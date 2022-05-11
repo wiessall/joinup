@@ -288,12 +288,9 @@ class EifContext extends RawDrupalContext {
   /**
    * Deletes entities created during EIF related features.
    *
-   * @param \Behat\Behat\Hook\Scope\AfterScenarioScope $scope
-   *   The scenario scope.
-   *
-   * @afterScenario
+   * @AfterScenario
    */
-  public function cleanupCreatedEntities(AfterScenarioScope $scope): void {
+  public function cleanupCreatedEntities(): void {
     foreach ($this->eifWrapperEntities as $entity) {
       $entity->delete();
     }
