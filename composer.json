@@ -152,6 +152,7 @@
         "lovers-of-behat/table-extension": "^1.2.0",
         "mikey179/vfsstream": "~1.6",
         "openeuropa/task-runner": "dev-master as 1.0.0-beta7",
+        "palantirnet/drupal-rector": "^0.12.2",
         "pear/http_request2": "~2.4",
         "pfrenssen/phpcs-pre-push": "1.1",
         "php-task-runner/composer": "dev-master",
