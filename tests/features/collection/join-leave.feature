@@ -162,7 +162,7 @@ Feature: Joining and leaving collections through the web interface
     When I click "Leave this collection"
     Then a modal dialog should open
 
-    When I press "Cancel" in the "Modal buttons" region
+    When I press "Cancel" in the "Modal footer" region
     And I wait for AJAX to finish
     Then I should not see the text "Leave collection"
     # Since this is a modal, the dialog simply closes and the user is not redirected
