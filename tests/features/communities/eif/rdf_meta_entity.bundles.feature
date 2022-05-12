@@ -30,7 +30,7 @@ Feature:
     And the following field widgets should be present "Principle, Layer, Model, Recommendation"
 
     Given I fill in "Description" with "It will be an amazing principle."
-    And I check "Specification or standard"
+    And I check "Common frameworks"
     And I select "Underlying Principle 2: Openness" from "EIF qualifier"
     And I press "Create qualifier"
     Then I should see the text "Underlying Principle 2: Openness"
