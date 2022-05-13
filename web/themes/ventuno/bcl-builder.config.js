@@ -164,6 +164,14 @@ module.exports = {
       },
     },
     {
+      entry: path.resolve(outputFolder, "src/scss/page-title.scss"),
+      dest: path.resolve(outputFolder, "assets/css/page-title.css"),
+      options: {
+        includePaths,
+        sourceMap: "file",
+      },
+    },
+    {
       entry: path.resolve(outputFolder, "src/scss/pager.scss"),
       dest: path.resolve(outputFolder, "assets/css/pager.css"),
       options: {
@@ -376,6 +384,7 @@ module.exports = {
             'info-circle-fill.svg',
             'justify.svg',
             'lightning-charge.svg',
+            'link-45deg.svg',
             'linkedin.svg',
             'newspaper.svg',
             'person-circle.svg',
