@@ -20,6 +20,14 @@ module.exports = {
     },
     // Custom
     {
+      entry: path.resolve(outputFolder, "src/js/content-tables.js"),
+      dest: path.resolve(outputFolder, "assets/js/content-tables.js"),
+      options: {
+        minify: true,
+        sourceMap: true,
+      },
+    },
+    {
       entry: path.resolve(outputFolder, "src/js/sticky-menu.js"),
       dest: path.resolve(outputFolder, "assets/js/sticky-menu.js"),
       options: {
@@ -115,6 +123,14 @@ module.exports = {
       },
     },
     // Custom components
+    {
+      entry: path.resolve(outputFolder, "src/scss/dropdown.scss"),
+      dest: path.resolve(outputFolder, "assets/css/dropdown.css"),
+      options: {
+        includePaths,
+        sourceMap: "file",
+      },
+    },
     {
       entry: path.resolve(outputFolder, "src/scss/footer.scss"),
       dest: path.resolve(outputFolder, "assets/css/footer.css"),
@@ -355,6 +371,7 @@ module.exports = {
             'linkedin.svg',
             'newspaper.svg',
             'person-circle.svg',
+            'plus.svg',
             'search.svg',
             'star.svg',
             'twitter.svg',
