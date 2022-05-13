@@ -51,6 +51,14 @@ module.exports = {
         sourceMap: true,
       },
     },
+    {
+      entry: path.resolve(outputFolder, "src/js/tour-first-balloon.js"),
+      dest: path.resolve(outputFolder, "assets/js/tour-first-balloon.js"),
+      options: {
+        minify: true,
+        sourceMap: true,
+      },
+    },
     // Third party
     {
       entry: path.resolve(outputFolder, "src/js/glide.js"),

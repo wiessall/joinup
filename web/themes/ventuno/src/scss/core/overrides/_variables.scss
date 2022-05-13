@@ -72,7 +72,7 @@ $spacers-extended: (
 $spacers: map-merge($spacers, $spacers-extended);
 $gutters: $spacers;
 
-// accordion
+// Accordion
 $accordion-button-active-color: $accordion-button-color;
 $accordion-button-active-bg: $lighter;
 $accordion-border-color: $gray-300;
@@ -82,7 +82,7 @@ $badge-font-weight: $font-weight-normal; // 400
 $badge-font-size: 1.125rem; // 18px
 $badge-font-size-desktop: 1rem; // 16px
 
-// banners
+// Banners
 $banner-content-border-color: $primary;
 
 // Forms

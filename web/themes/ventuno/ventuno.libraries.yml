@@ -15,6 +15,8 @@ homepage:
   css:
     theme:
       assets/css/homepage.css: {}
+  dependencies:
+    - ventuno/tour-first-balloon
 
 licence-comparer:
   css:
@@ -104,6 +106,10 @@ tabledrag:
   css:
     theme:
       assets/css/tabledrag.css: {}
+
+tour-first-balloon:
+  js:
+    assets/js/tour-first-balloon.js: { minified: true, attributes: { defer: true } }
 
 # @todo remove when switch to Ventuno theme is complete
 bootstrap-base:
