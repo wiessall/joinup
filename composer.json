@@ -350,7 +350,8 @@
                 "Clear timeout autosubmit used in views_autosubmit.": "resources/patch/search_api_autocomplete_override_views_autosubmit.patch"
             },
             "drupal/search_api_spellcheck": {
-                "Missing plugins config schema @see https://www.drupal.org/project/search_api_spellcheck/issues/3277693": "https://git.drupalcode.org/project/search_api_spellcheck/-/merge_requests/1.diff"
+                "Missing plugins config schema @see https://www.drupal.org/project/search_api_spellcheck/issues/3277693": "https://git.drupalcode.org/project/search_api_spellcheck/-/merge_requests/1.diff",
+                "URL don't include the base path @see https://www.drupal.org/project/search_api_spellcheck/issues/3280372" : "https://git.drupalcode.org/project/search_api_spellcheck/-/merge_requests/2.diff"
             },
             "drupal/site_alert": {
                 "Add drush commands @see https://www.drupal.org/project/site_alert/issues/3118800": "https://www.drupal.org/files/issues/2020-10-26/3118800-44.patch"
