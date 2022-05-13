@@ -94,7 +94,7 @@ class ScreenshotContext extends RawMinkContext {
    * @Then I take a screenshot
    */
   public function takeScreenshotUnnamed(): void {
-    $file_name = 'screenshot-' . user_password();
+    $file_name = 'screenshot-' . \Drupal::service('password_generator')->generate();
     $message = "Screenshot: @file_name";
     $this->createScreenshots($file_name, $message);
   }
