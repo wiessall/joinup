@@ -25,15 +25,16 @@
  * @see template_preprocess_block()
  */
 #}
+{{ attach_library('ventuno/add-content') }}
 {{ attach_library('ventuno/dropdown') }}
 {%
   set classes = [
     'block',
     'block-' ~ configuration.provider|clean_class,
     'block-' ~ plugin_id|clean_class,
-    'menu--add-content',
     'd-flex',
     'justify-content-end',
+    'add-content',
   ]
 %}
 <div{{ attributes.addClass(classes) }}>
@@ -44,7 +45,7 @@
   {# Disable contextual links because they interfere with the dropdown trigger #}
   {# {{ title_suffix }} #}
   {% block content %}
-    <button type="button" id="dropdown-add-content" data-bs-toggle="dropdown" aria-expanded="false" class="dropdown-toggle btn btn-primary btn-lg rounded-circle p-0 mt-n3" title="{{ 'Add content'|t }}">
+    <button type="button" id="dropdown-add-content" data-bs-toggle="dropdown" aria-expanded="false" class="dropdown-toggle btn btn-primary btn-lg rounded-circle p-0 add-content__btn" title="{{ 'Add content'|t }}">
       <svg class="bi icon--xl">
         <use xlink:href="{{ bcl_icon_path }}#plus"></use>
       </svg>

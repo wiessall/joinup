@@ -124,6 +124,14 @@ module.exports = {
     },
     // Custom components
     {
+      entry: path.resolve(outputFolder, "src/scss/add-content.scss"),
+      dest: path.resolve(outputFolder, "assets/css/add-content.css"),
+      options: {
+        includePaths,
+        sourceMap: "file",
+      },
+    },
+    {
       entry: path.resolve(outputFolder, "src/scss/dropdown.scss"),
       dest: path.resolve(outputFolder, "assets/css/dropdown.css"),
       options: {
