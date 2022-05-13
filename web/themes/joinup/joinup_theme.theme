@@ -414,7 +414,7 @@ function joinup_theme_preprocess_page(&$variables) {
 
   // Make the Bootstrap icons available for theming. They are used in Bootstrap
   // components such as the hamburger menu.
-  $variables['bcl_icon_path'] = base_path() . drupal_get_path('theme', 'ventuno') . '/assets/icons/icons.svg';
+  $variables['bcl_icon_path'] = base_path() . \Drupal::service('extension.list.theme')->getPath('ventuno') . '/assets/icons/icons.svg';
 
   // Generate a link to the contact form with the current path (including query
   // arguments) as the 'destination' query argument so that the user will return
@@ -1223,7 +1223,7 @@ function joinup_theme_preprocess_user__group_header(&$variables) {
   $variables['member_for'] = \Drupal::service('date.formatter')->formatTimeDiffSince($variables['user']->getCreatedTime(), ['granularity' => 1]);
   $variables['full_name'] = $variables['user']->getDisplayName();
   $variables['field_user_photo_url'] = !empty($variables['content']['field_user_photo'][0]['#item']->entity->uri->value) ?
-    file_create_url($variables['content']['field_user_photo'][0]['#item']->entity->uri->value)
+    \Drupal::service('file_url_generator')->generateAbsoluteString($variables['content']['field_user_photo'][0]['#item']->entity->uri->value)
     : '';
 }
 

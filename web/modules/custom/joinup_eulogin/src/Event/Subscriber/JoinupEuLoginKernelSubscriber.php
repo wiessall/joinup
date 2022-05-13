@@ -15,8 +15,8 @@ use Drupal\Core\Url;
 use Drupal\externalauth\AuthmapInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
-use Symfony\Component\HttpKernel\Event\GetResponseEvent;
+use Symfony\Component\HttpKernel\Event\RequestEvent;
+use Symfony\Component\HttpKernel\Event\ResponseEvent;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\KernelEvents;
 
@@ -93,10 +93,10 @@ class JoinupEuLoginKernelSubscriber implements EventSubscriberInterface {
    * It's not enough to show the 'Limited access' page to the user, we have some
    * appropriate response also for the browser.
    *
-   * @param \Symfony\Component\HttpKernel\Event\FilterResponseEvent $event
+   * @param \Symfony\Component\HttpKernel\Event\ResponseEvent $event
    *   The response event object.
    */
-  public function setAccessDeniedCode(FilterResponseEvent $event): void {
+  public function setAccessDeniedCode(ResponseEvent $event): void {
     if ($this->limitedAccessIsDisabled()) {
       return;
     }
@@ -114,10 +114,10 @@ class JoinupEuLoginKernelSubscriber implements EventSubscriberInterface {
   /**
    * Limits the access to the site functionality for one-time-login sessions.
    *
-   * @param \Symfony\Component\HttpKernel\Event\GetResponseEvent $event
+   * @param \Symfony\Component\HttpKernel\Event\RequestEvent $event
    *   The request event.
    */
-  public function redirectWhenNoAccess(GetResponseEvent $event): void {
+  public function redirectWhenNoAccess(RequestEvent $event): void {
     if ($this->limitedAccessIsDisabled()) {
       return;
     }

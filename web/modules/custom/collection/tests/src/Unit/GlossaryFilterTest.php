@@ -34,9 +34,7 @@ class GlossaryFilterTest extends TestCase {
   public function testIsLinkText(string $markup, bool $expectation): void {
     $assert_method = $expectation ? 'assertTrue' : 'assertFalse';
 
-    $filter = $this->getMockBuilder(Glossary::class)
-      ->disableOriginalConstructor()
-      ->getMock();
+    $filter = $this->createMock(Glossary::class);
 
     // Make ::isLinkText() accessible.
     $method = (new \ReflectionClass($filter))->getMethod('isLinkText');

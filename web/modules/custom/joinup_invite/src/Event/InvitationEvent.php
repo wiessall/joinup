@@ -5,7 +5,7 @@ declare(strict_types = 1);
 namespace Drupal\joinup_invite\Event;
 
 use Drupal\joinup_invite\Entity\InvitationInterface;
-use Symfony\Component\EventDispatcher\Event;
+use Symfony\Contracts\EventDispatcher\Event;
 
 /**
  * Events that fire when invitations are accepted or rejected.

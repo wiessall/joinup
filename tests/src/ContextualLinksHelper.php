@@ -103,7 +103,7 @@ class ContextualLinksHelper {
     // from the current logged in user, but doing so will change the last page
     // output, possibly breaking other steps. This can be prevented by cloning
     // the client.
-    /** @var \Symfony\Component\BrowserKit\Client $client */
+    /** @var \Symfony\Component\BrowserKit\AbstractBrowser $client */
     $client = clone $this->getSession()->getDriver()->getClient();
 
     $ids = [];

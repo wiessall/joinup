@@ -22,6 +22,8 @@ class ConvertToAdms2StepTest extends StepTestBase {
 
   /**
    * Test ADMSv2 changes.
+   *
+   * @doesNotPerformAssertions
    */
   public function test() {
     /** @var \Drupal\joinup_federation\JoinupFederationAdms2ConvertPassPluginManager $plugin_manager */

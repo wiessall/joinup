@@ -362,7 +362,7 @@ class CustomPageContext extends RawDrupalContext {
     // @see \Drupal\image\Plugin\Field\FieldFormatter\ImageUrlFormatter::viewElements()
     /** @var \Drupal\image\ImageStyleInterface $image_style */
     $image_style = \Drupal::entityTypeManager()->getStorage('image_style')->load('horizontal_medium_image');
-    $expected_url = file_url_transform_relative($image_style->buildUrl($image->getFileUri()));
+    $expected_url = \Drupal::service('file_url_generator')->transformRelative($image_style->buildUrl($image->getFileUri()));
 
     Assert::assertEquals($expected_url, $actual_url, 'The logo shown is not the correct one.');
   }

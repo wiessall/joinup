@@ -167,7 +167,7 @@ class TrackedHostedFileDownloadFormatter extends FileFormatterBase implements Co
           '#title' => [
             '#markup' => '<span class="icon icon--download"></span>' . $this->getSetting('hosted_files_title'),
           ],
-          '#url' => Url::fromUri(file_create_url($file->getFileUri())),
+          '#url' => \Drupal::service('file_url_generator')->generate($file->getFileUri()),
           '#attributes' => [
             'id' => Html::getUniqueId('tracked-file-download'),
             'class' => ['track-download button--icon button button--blue-light mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent'],

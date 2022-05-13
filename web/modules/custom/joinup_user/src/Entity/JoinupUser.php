@@ -39,7 +39,7 @@ class JoinupUser extends User implements JoinupUserInterface {
     $event_dispatcher = \Drupal::service('event_dispatcher');
     $event = new JoinupUserCancelEvent($this);
     // Let subscribers react on user cancellation.
-    $event_dispatcher->dispatch('joinup_user.cancel', $event);
+    $event_dispatcher->dispatch($event, 'joinup_user.cancel');
 
     return $this->set('status', -1);
   }

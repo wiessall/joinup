@@ -11,7 +11,7 @@ use Drupal\Core\Url;
 use Drupal\og\Entity\OgMembership;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
+use Symfony\Component\HttpKernel\Event\ResponseEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 
 /**
@@ -70,13 +70,13 @@ class TransferGroupOwnershipSubscriber implements EventSubscriberInterface {
   /**
    * Alters the redirection to 'joinup_group.transfer_group_ownership_confirm'.
    *
-   * @param \Symfony\Component\HttpKernel\Event\FilterResponseEvent $event
+   * @param \Symfony\Component\HttpKernel\Event\ResponseEvent $event
    *   The response event.
    *
    * @throws \Drupal\Core\TempStore\TempStoreException
    *   If the tempstore couldn't acquire the lock.
    */
-  public function alterRedirection(FilterResponseEvent $event): void {
+  public function alterRedirection(ResponseEvent $event): void {
     $response = $event->getResponse();
     if ($response->isRedirect() && $response instanceof RedirectResponse) {
       $path = rtrim(parse_url($response->getTargetUrl(), PHP_URL_PATH), '/');

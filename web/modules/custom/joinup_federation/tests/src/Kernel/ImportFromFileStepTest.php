@@ -16,6 +16,8 @@ use Prophecy\Argument;
  */
 class ImportFromFileStepTest extends StepTestBase {
 
+  use \Prophecy\PhpUnit\ProphecyTrait;
+
   /**
    * {@inheritdoc}
    */

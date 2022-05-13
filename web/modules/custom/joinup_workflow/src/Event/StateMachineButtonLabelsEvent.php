@@ -6,7 +6,7 @@ namespace Drupal\joinup_workflow\Event;
 
 use Drupal\joinup_workflow\EntityWorkflowStateInterface;
 use Drupal\state_machine\Plugin\Workflow\WorkflowTransition;
-use Symfony\Component\EventDispatcher\Event;
+use Symfony\Contracts\EventDispatcher\Event;
 
 /**
  * Event fired when labels for state machine buttons are being applied.

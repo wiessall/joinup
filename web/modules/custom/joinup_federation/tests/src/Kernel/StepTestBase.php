@@ -56,7 +56,7 @@ abstract class StepTestBase extends KernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
     $this->setUpPipeline();
   }
@@ -111,7 +111,7 @@ abstract class StepTestBase extends KernelTestBase {
   /**
    * {@inheritdoc}
    */
-  public function tearDown() {
+  public function tearDown(): void {
     $this->pipeline->clearGraphs();
     parent::tearDown();
   }
