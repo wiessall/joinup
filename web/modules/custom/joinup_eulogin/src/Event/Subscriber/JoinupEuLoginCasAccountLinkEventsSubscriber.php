@@ -93,7 +93,7 @@ class JoinupEuLoginCasAccountLinkEventsSubscriber implements EventSubscriberInte
     if ($event->isLocalAccountSelected()) {
       // Using the same password length as for new users.
       // @see \Drupal\cas\Service\CasUserManager::randomPassword()
-      $event->getAccount()->setPassword(\user_password(30))->save();
+      $event->getAccount()->setPassword(\Drupal::service('password_generator')->generate(30))->save();
     }
   }
 

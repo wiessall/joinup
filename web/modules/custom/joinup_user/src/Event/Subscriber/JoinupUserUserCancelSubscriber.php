@@ -91,7 +91,7 @@ class JoinupUserUserCancelSubscriber implements EventSubscriberInterface {
     $account
       ->setEmail(NULL)
       ->set('init', NULL)
-      ->setPassword(user_password())
+      ->setPassword(\Drupal::service('password_generator')->generate())
       ->set('langcode', LanguageInterface::LANGCODE_NOT_SPECIFIED)
       ->set('preferred_langcode', LanguageInterface::LANGCODE_NOT_SPECIFIED)
       ->set('preferred_admin_langcode', LanguageInterface::LANGCODE_NOT_SPECIFIED)

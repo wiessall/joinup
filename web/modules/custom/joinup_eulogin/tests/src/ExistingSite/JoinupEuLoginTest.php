@@ -35,7 +35,7 @@ class JoinupEuLoginTest extends JoinupExistingSiteTestBase {
     // Create an EU Login user.
     $authname = $this->randomMachineName();
     $email = "{$authname}@example.com";
-    $eulogin_pass = user_password();
+    $eulogin_pass = \Drupal::service('password_generator')->generate();
     $this->createCasUser($authname, $email, $eulogin_pass);
 
     // Create a local user.
@@ -163,7 +163,7 @@ class JoinupEuLoginTest extends JoinupExistingSiteTestBase {
 
     // Create a EU Login user and link it to the local user.
     $authname = $this->randomMachineName();
-    $eulogin_pass = user_password();
+    $eulogin_pass = \Drupal::service('password_generator')->generate();
     $this->createCasUser($authname, "{$authname}@example.com", $eulogin_pass, [], $this->account);
 
     // The access is allowed.
@@ -297,7 +297,7 @@ class JoinupEuLoginTest extends JoinupExistingSiteTestBase {
     };
 
     do {
-      $password = user_password() . $this->randomString(6);
+      $password = \Drupal::service('password_generator')->generate() . $this->randomString(6);
     } while (!$valid_password($password));
 
     return $password;
