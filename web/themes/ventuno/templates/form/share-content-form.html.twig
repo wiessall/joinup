@@ -12,7 +12,7 @@
  */
 #}
 {{ attach_library('ventuno/share-content-form') }}
-{% if form.groups|render %}
+{% if form.groups %}
   <div class="row">
     <div class="col-12 col-sm-4">
       <h3 class="fs-6">{{ 'Social networks'|t }}</h3>
@@ -20,7 +20,7 @@
     </div>
     <div class="col-12 col-sm-8">
       <h3 class="fs-6">{{ 'Other groups on Joinup'|t }}</h3>
-      {{ form|without('share')|render }}
+      {{ form|without('share') }}
     </div>
   </div>
 {% else %}

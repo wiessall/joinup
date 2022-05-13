@@ -574,7 +574,6 @@ function ventuno_theme_suggestions_field_alter(array &$suggestions, array $varia
 function ventuno_preprocess_rdf_entity__solution__group_header(array &$variables): void {
   if (isset($variables['content']['releases_overview'])) {
     $variables['content']['releases_overview']['#attributes'] = [
-      'role' => 'button',
       'class' => [
         'btn',
         'btn-outline-secondary',
