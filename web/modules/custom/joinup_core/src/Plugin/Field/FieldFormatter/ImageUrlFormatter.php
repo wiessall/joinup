@@ -192,7 +192,7 @@ class ImageUrlFormatter extends ImageFormatter {
       }
 
       $elements[$delta] = [
-        '#plain_text' => file_create_url($uri),
+        '#plain_text' => \Drupal::service('file_url_generator')->generateAbsoluteString($uri),
         '#item' => $item,
         '#item_attributes' => $item_attributes,
         '#image_style' => $image_style_setting,
