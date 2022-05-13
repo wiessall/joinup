@@ -29,6 +29,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
       '*/upgrade_status/tests/modules/*',
       // Errors.
       '*/JoinupDataSanitizationCommands.php',
+      '*/ValidUpdateNameSniff.php',
     ]);
     $parameters->set(Option::FILE_EXTENSIONS, ['php', 'module', 'theme', 'install', 'profile', 'inc', 'engine']);
     $parameters->set(Option::AUTO_IMPORT_NAMES, false);
