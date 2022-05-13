@@ -85,6 +85,11 @@ navbar-search:
   js:
     assets/js/searchbox-focus.js: { minified: true, attributes: { defer: true } }
 
+page-title:
+  css:
+    theme:
+      assets/css/page-title.css: {}
+
 pager:
   css:
     theme:
