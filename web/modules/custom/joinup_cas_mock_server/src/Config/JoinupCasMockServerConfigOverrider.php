@@ -36,8 +36,8 @@ class JoinupCasMockServerConfigOverrider implements ConfigFactoryOverrideInterfa
    */
   public function loadOverrides($names): array {
     return [
-      // Configure the CAS authentication form so it uses the same interface
-      // text as on EU Login.
+      // Configure the CAS authentication form, so that is using the same
+      // interface text as on EU Login.
       'cas_mock_server.settings' => [
         'login_form' => [
           'title' => 'Sign in to continue',
