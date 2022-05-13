@@ -4,9 +4,9 @@ declare(strict_types = 1);
 
 namespace Drupal\trr\EventSubscriber;
 
+use Drupal\Component\EventDispatcher\Event;
 use EasyRdf\RdfNamespace;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Contracts\EventDispatcher\Event;
 
 /**
  * Event subscriber that registers the TRR namespace on every page load.
@@ -25,7 +25,7 @@ class RegisterNamespace implements EventSubscriberInterface {
   /**
    * Register the TRR namespace on each page load.
    *
-   * @param \Symfony\Contracts\EventDispatcher\Event $event
+   * @param \Drupal\Component\EventDispatcher\Event $event
    *   The dispatched event.
    */
   public function kernelRequest(Event $event) {
