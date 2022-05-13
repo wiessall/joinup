@@ -1,9 +1,7 @@
 .tabledrag-toggle-weight-wrapper,
-.tabledrag-handle {
-  display: none!important;
-}
+.tabledrag-handle,
 .tabledrag-hide {
-  display: table-cell!important;
+  display: none!important;
 }
 .table {
   td.field-multiple-drag {
