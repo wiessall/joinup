@@ -6,8 +6,8 @@
 #}
 <article{{ attributes.addClass(['mt-3']) }}>
   <ul class="list-unstyled">
-    <p><strong>Description:</strong> {{ content.field_eif_description }}</p>
-    <p><strong>Type of solution:</strong> {{ content.field_eif_solution_type }}</p>
+    {{ content.field_eif_description }}
+    {{ content.field_eif_solution_type }}
   </ul>
   <a class="btn btn-sm btn-outline-brand rounded-pill" href="{{ solution_url }}">{{ 'Go to Solution'|t }}</a>
   <h3 class="fs-5 mt-4 mb-3">{{ 'The'|t}} {{ solution_label }} {{ 'implements the following'|t }}:</h3>
