@@ -160,9 +160,13 @@ $utilities: map-merge(
         )
       ),
       "max-width": (
+        responsive: true,
         property: max-width,
         class: mw,
-        values: (100: 100%)
+        values: (
+          50: 50%,
+          100: 100%
+        )
       ),
       // "viewport-width": (
       //   property: width,
@@ -223,15 +227,15 @@ $utilities: map-merge(
       //     grow-1: 1,
       //   )
       // ),
-      // "flex-shrink": (
-      //   responsive: true,
-      //   property: flex-shrink,
-      //   class: flex,
-      //   values: (
-      //     shrink-0: 0,
-      //     shrink-1: 1,
-      //   )
-      // ),
+      "flex-shrink": (
+        responsive: false,
+        property: flex-shrink,
+        class: flex,
+        values: (
+          shrink-0: 0,
+          shrink-1: 1,
+        )
+      ),
       "flex-wrap": (
         responsive: true,
         property: flex-wrap,
