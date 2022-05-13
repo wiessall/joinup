@@ -49,6 +49,11 @@ tables:
       assets/css/tables.css: {}
 
 # Custom components
+add-content:
+  css:
+    theme:
+      assets/css/add-content.css: {}
+
 footer:
   css:
     theme:

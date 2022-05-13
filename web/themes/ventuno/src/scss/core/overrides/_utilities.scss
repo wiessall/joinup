@@ -369,12 +369,12 @@ $utilities: map-merge(
       //   class: my,
       //   values: $negative-spacers
       // ),
-      "negative-margin-top": (
-        responsive: true,
-        property: margin-top,
-        class: mt,
-        values: $negative-spacers
-      ),
+      // "negative-margin-top": (
+      //   responsive: true,
+      //   property: margin-top,
+      //   class: mt,
+      //   values: $negative-spacers
+      // ),
       // "negative-margin-end": (
       //   responsive: true,
       //   property: margin-right,
