@@ -78,7 +78,7 @@ content:
     region: content
   eif_recommendation:
     type: entity_reference_entity_view
-    label: above
+    label: hidden
     settings:
       view_mode: default
       link: false
@@ -95,14 +95,14 @@ content:
     region: content
   field_eif_description:
     type: text_default
-    label: inline
+    label: hidden
     settings: {  }
     third_party_settings: {  }
     weight: 0
     region: content
   field_eif_solution_type:
     type: entity_reference_label
-    label: inline
+    label: hidden
     settings:
       link: true
     third_party_settings: {  }
