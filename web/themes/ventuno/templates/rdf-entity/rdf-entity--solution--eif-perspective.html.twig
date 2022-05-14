@@ -41,7 +41,7 @@
   </div>
   <ul class="list-unstyled">
     <li class="mb-2"><strong>{{ 'Name of the solution'|t }}:</strong> {{ label|striptags }}</li>
-    <li class="mb-2"><strong>{{ 'Solution\'s owner'|t }}:</strong> {{ content.field_is_owner }}</li>
+    <li class="mb-2"><strong>{{ 'Solution\'s owner'|t }}:</strong> {{ content.field_is_owner|render|striptags }}</li>
   </ul>
   {{ content.eif_perspective }}
 </article>
