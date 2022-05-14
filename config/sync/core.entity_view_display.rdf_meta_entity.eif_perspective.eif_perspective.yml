@@ -119,7 +119,7 @@ content:
     region: content
   label:
     type: string
-    label: inline
+    label: hidden
     settings:
       link_to_entity: false
     third_party_settings: {  }
