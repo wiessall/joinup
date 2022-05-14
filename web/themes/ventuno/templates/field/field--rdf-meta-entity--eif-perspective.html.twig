@@ -9,7 +9,6 @@
     'ps-0',
     'field--name-' ~ field_name|clean_class,
     bundle|clean_class ~ '__' ~ field_name_clean|clean_class,
-    label_display == 'inline' ? 'd-flex',
   ]
 %}
 {%
@@ -36,19 +35,30 @@
   {% endif %}
 {% else %}
   <div{{ attributes.addClass(classes) }}>
-    <div{{ title_attributes.addClass(title_classes) }}>
-      {{ label }}{% if label_display == 'inline' %}<span class="me-1">:</span>{% endif %}
-    </div>
     {% if multiple %}
-    <ul class="field__items ps-0">
+      {% if label_display == 'inline' %}
+        <span{{ title_attributes.addClass(title_classes) }}>{{ label }}<span class="me-1">:</span></span>
+      {% else %}
+        <div{{ title_attributes.addClass(title_classes) }}>{{ label }}</div>
       {% endif %}
       {% for item in items %}
-        <li{{ item.attributes.addClass(['field__item', 'list-unstyled', 'mb-2']) }}>
-          {{ item.content }}
-        </li>
+        <span{{ item.attributes }}>{{ item.content }}</span>{{ not loop.last ? ', ' }}
       {% endfor %}
-      {% if multiple %}
-    </ul>
+    {% else %}
+      {% if label_display == 'inline' %}
+        {% for item in items %}
+          <span{{ title_attributes.addClass(title_classes) }}>{{ label }}:</span>
+          <span{{ item.attributes }}>{{ item.content }}</span>
+        {% endfor %}
+      {% else %}
+        <div{{ title_attributes.addClass(title_classes) }}>
+          {{ label }}
+        </div>
+        {% for item in items %}
+          <span{{ title_attributes.addClass(title_classes) }}>{{ label }}:</span>
+          <span{{ item.attributes }}>{{ item.content }}</span>
+        {% endfor %}
+      {% endif %}
     {% endif %}
   </div>
 {% endif %}
