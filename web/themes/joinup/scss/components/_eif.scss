@@ -214,7 +214,7 @@
 
 // Modifiers
 // --------------------------------------------------
-.eif-filter--can {
+.eif-filter--underlying-principles {
   .eif-filter__header {
     background-color: $color-green-warm;
   }
@@ -274,7 +274,7 @@
   }
 }
 
-.eif-filter--compatible {
+.eif-filter--conceptual-model {
   .eif-filter__header {
     background-color: $color-blue-warm;
   }
@@ -294,7 +294,7 @@
   }
 }
 
-.eif-filter--law {
+.eif-filter--solution-category {
   .eif-filter__header {
     background-color: $color-grey-warm;
   }
@@ -314,7 +314,7 @@
   }
 }
 
-.eif-filter--support {
+.eif-filter--interoperability-layer {
   .eif-filter__header {
     background-color: $color-orange-warm;
   }
@@ -334,7 +334,7 @@
   }
 }
 
-.eif-tile__line--can {
+.eif-tile__line--underlying-principles {
   .eif-tile__label {
     background-color: $color-green-warm;
   }
@@ -364,7 +364,7 @@
   }
 }
 
-.eif-tile__line--compatible {
+.eif-tile__line--conceptual-model {
   .eif-tile__label {
     background-color: $color-blue-warm;
   }
@@ -374,7 +374,7 @@
   }
 }
 
-.eif-tile__line--law {
+.eif-tile__line--solution-category {
   .eif-tile__label {
     background-color: $color-grey-warm;
   }
@@ -384,7 +384,7 @@
   }
 }
 
-.eif-tile__line--support {
+.eif-tile__line--interoperability-layer {
   .eif-tile__label {
     background-color: $color-orange-warm;
   }
