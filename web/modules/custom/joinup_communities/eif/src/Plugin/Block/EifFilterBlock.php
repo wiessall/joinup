@@ -144,7 +144,7 @@ class EifFilterBlock extends BlockBase implements ContainerFactoryPluginInterfac
     // @todo This should be with the skos:hiddenLabel field instead where we
     // should have a duplicate simpler title.
     $parts = explode(':', $term->name);
-    $name = empty($parts[1]) ? $term->name : $parts[1];
+    $name = empty($parts[1]) ? $term->name : trim($parts[1]);
     // End @todo.
     $tree[$id]['items'][] = [
       'title' => $name,
