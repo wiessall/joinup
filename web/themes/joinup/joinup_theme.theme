@@ -1869,6 +1869,132 @@ function joinup_theme_preprocess_rdf_entity__licence__search_list_item(&$variabl
       $variables['category_lists'] = $category_lists;
     }
   }
+}/**
+ * Implements hook_preprocess_HOOK().
+ *
+ * Provides variables needed for the search_list_item view mode of licences.
+ * This is used on the Joinup Licence Assistant overview page.
+ */
+function joinup_theme_preprocess_rdf_entity__solution__view_mode_search_list_item(&$variables) {
+  /** @var \Drupal\joinup_licence\Entity\LicenceInterface $entity */
+  $entity = $variables['elements']['#rdf_entity'];
+  $eif_perspective = $entity->eif_perspective->entity;
+  if (empty($eif_perspective)) {
+    return;
+  }
+
+  $data_property_categories = [];
+
+  $parent_id = 'solution-category';
+  $category_lists[$parent_id] = [
+    'title' => 'Solution category',
+    'weight' => 3,
+    'class' => 'eif-tile__line--' . $parent_id,
+  ];
+  $category_lists[$parent_id]['items'] = [];
+  foreach ($entity->field_is_eif_category as $category) {
+    $category = $category->value;
+    $category_lists[$parent_id]['items'][] = [
+      'title' => $category,
+      'weight' => 0,
+      'description' => '',
+    ];
+
+    $normalized_title = htmlentities(str_replace([' ', '/'], ['-', '-'], strtolower($category)));
+    $data_property_categories[$category] = $normalized_title;
+  }
+
+  $parent_id = 'interoperability-layer';
+  $category_lists[$parent_id] = [
+    'title' => 'Interoperability layer',
+    'weight' => 3,
+    'class' => 'eif-tile__line--' . $parent_id,
+  ];
+  $category_lists[$parent_id]['items'] = [];
+  foreach ($eif_perspective->eif_layer as $layer) {
+    $category_lists[$parent_id]['items'][] = [
+      'title' => $layer->label(),
+      'weight' => $layer->getWeight(),
+      'description' => $layer->getDescription(),
+    ];
+
+    $normalized_title = htmlentities(str_replace([' ', '/'], ['-', '-'], strtolower($layer->label())));
+    $data_property_categories[$layer->id()] = $normalized_title;
+  }
+
+  $parent_id = 'underlying-principles';
+  $category_lists[$parent_id] = [
+    'title' => 'Underlying principle',
+    'weight' => 3,
+    'class' => 'eif-tile__line--' . $parent_id,
+  ];
+  $category_lists[$parent_id]['items'] = [];
+  foreach ($eif_perspective->eif_principle as $principle) {
+    $term = $principle->entity->term->entity;
+    $category_lists[$parent_id]['items'][] = [
+      'title' => $term->label(),
+      'weight' => $term->getWeight(),
+      'description' => $principle->entity->description->value,
+    ];
+
+    $normalized_title = htmlentities(str_replace([' ', '/'], ['-', '-'], strtolower($term->label())));
+    $data_property_categories[$term->id()] = $normalized_title;
+  }
+
+  $parent_id = 'conceptual-model';
+  $category_lists[$parent_id] = [
+    'title' => 'Conceptual model',
+    'weight' => 3,
+    'class' => 'eif-tile__line--' . $parent_id,
+  ];
+  $category_lists[$parent_id]['items'] = [];
+  foreach ($eif_perspective->eif_model as $model) {
+    $term = $model->entity->term->entity;
+    $category_lists[$parent_id]['items'][] = [
+      'title' => $term->label(),
+      'weight' => $term->getWeight(),
+      'description' => $model->entity->description->value,
+    ];
+
+    $normalized_title = htmlentities(str_replace([' ', '/'], ['-', '-'], strtolower($term->label())));
+    $data_property_categories[$term->id()] = $normalized_title;
+  }
+
+  $parent_id = 'recommendation';
+  $category_lists[$parent_id] = [
+    'title' => 'Recommendation',
+    'weight' => 3,
+    'class' => 'eif-tile__line--' . $parent_id,
+  ];
+  $category_lists[$parent_id]['items'] = [];
+  foreach ($eif_perspective->eif_recommendation as $recommendation) {
+    $term = $recommendation->entity->term->entity;
+    $category_lists[$parent_id]['items'][] = [
+      'title' => $term->label(),
+      'weight' => $term->getWeight(),
+      'description' => $recommendation->entity->description->value,
+    ];
+
+    $normalized_title = htmlentities(str_replace([' ', '/'], ['-', '-'], strtolower($term->label())));
+    $data_property_categories[$term->id()] = $normalized_title;
+  }
+
+  $variables['attributes']['data-eif-category'] = implode(' ', $data_property_categories);
+  $variables['attributes']['class'][] = 'eif-tile';
+
+  if (!empty($data_property_categories)) {
+    $sort_function = function ($a, $b) {
+      return $a['weight'] <=> $b['weight'];
+    };
+
+    usort($category_lists, $sort_function);
+    foreach ($category_lists as &$category_data) {
+      usort($category_data['items'], $sort_function);
+    }
+
+    $variables['eif_categories'] = implode(' ', $data_property_categories);
+    $variables['category_lists'] = $category_lists;
+  }
 }
 
 /**
