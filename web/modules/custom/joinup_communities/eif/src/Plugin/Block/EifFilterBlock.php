@@ -64,6 +64,15 @@ class EifFilterBlock extends BlockBase implements ContainerFactoryPluginInterfac
   public function build(): array {
     $tree = [];
     $storage = $this->entityTypeManager->getStorage('taxonomy_term');
+    // Underlying principles.
+    $principle_terms = $storage->loadTree('eif_principle');
+    foreach ($principle_terms as $term) {
+      $name = $this->t('Underlying principles');
+      $id = htmlentities(
+        str_replace([' ', '/', ':'], ['-', '-', ''], strtolower((string) $name))
+      );
+      $tree = $this->getTree($id, (string) $name, $tree, $term, $storage);
+    }
     // Interoperability layer.
     $layer_terms = $storage->loadTree('eif_interoperability_layer');
     foreach ($layer_terms as $term) {
@@ -77,15 +86,6 @@ class EifFilterBlock extends BlockBase implements ContainerFactoryPluginInterfac
     $model_terms = $storage->loadTree('eif_conceptual_model');
     foreach ($model_terms as $term) {
       $name = $this->t('Conceptual model');
-      $id = htmlentities(
-        str_replace([' ', '/', ':'], ['-', '-', ''], strtolower((string) $name))
-      );
-      $tree = $this->getTree($id, (string) $name, $tree, $term, $storage);
-    }
-    // Underlying principles.
-    $principle_terms = $storage->loadTree('eif_principle');
-    foreach ($principle_terms as $term) {
-      $name = $this->t('Underlying principles');
       $id = htmlentities(
         str_replace([' ', '/', ':'], ['-', '-', ''], strtolower((string) $name))
       );
