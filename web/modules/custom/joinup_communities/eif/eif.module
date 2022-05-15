@@ -237,6 +237,10 @@ function eif_preprocess_rdf_entity(array &$variables): void {
   $solution = $variables['rdf_entity'];
   if ($solution instanceof SolutionInterface && $variables['view_mode'] === 'view_mode_search_list_item') {
     $eif_perspective = $solution->eif_perspective->entity;
+    if (empty($eif_perspective)) {
+      return;
+    }
+
     $data_property_categories = [];
     foreach ($solution->field_is_eif_category as $category) {
       $data_property_categories[] = htmlentities(
