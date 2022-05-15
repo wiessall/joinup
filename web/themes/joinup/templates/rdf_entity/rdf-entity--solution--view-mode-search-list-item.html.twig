@@ -1,22 +1,11 @@
 {#
 /**
  * @file
- * Themeing for the search_list_item view mode of eif rdf entities.
+ * Themeing for the search_list_item view mode of solution rdf entities.
  *
  * Available variables:
  * - eif_title: The eif title.
- * - spdx_title: The spdx eif title.
- * - spdx_url: The spdx eif url.
- * - spdx_eif_id: The spdx eif code.
- * - spdx_eif_id_plain: The plain spdx eif code.
- * - legal_categories: a concatenated string of lowercase characters of the legal type categories related to the
- * eif.
  * - category_lists: An array of variables with details on the category lists. Contains variables:
- * -- title: The title of the parent.
- * -- class: An array of list items.
- * -- items: A list of items for each category. Contains variables:
- * --- title: The label of the item.
- * --- description: the description of the item.
  */
 #}
 {%
@@ -60,9 +49,17 @@
             {% endfor %}
           </div>
           <div class="listing__metadata listing__metadata--eif">
-            <p>{{ 'eif comment'|t }}:</p>
             <div class="listing__field">
-              {{ content.field_eif_description }}
+              <div class="mdl-grid">
+                <div class="mdl-cell mdl-cell--3-col mdl-cell--3-col-wide">
+                  {{ content.field_is_logo }}
+                </div>
+                <div class="mdl-cell mdl-cell--9-col mdl-cell--9-col-wide">
+                  {{ eif_perspective_description }}
+                  <li class="mb-2"><strong>{{ 'Solution\'s owner'|t }}:</strong> {{ content.field_is_owner|render|striptags }}</li>
+                  <a class="eif-tile__button eif-tile__button--compare " href="{{ solution_url }}">{{ 'Go to Solution'|t }}</a>
+                </div>
+              </div>
             </div>
           </div>
         </div>
