@@ -633,7 +633,7 @@ display:
             min: ''
             max: ''
             value: solution
-          group: 1
+          group: 2
           exposed: false
           expose:
             operator_id: ''
@@ -668,6 +668,7 @@ display:
         operator: AND
         groups:
           1: OR
+          2: AND
       style:
         type: default
       row:
