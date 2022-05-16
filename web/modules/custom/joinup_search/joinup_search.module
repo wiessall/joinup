@@ -41,6 +41,12 @@ function joinup_search_theme($existing, $type, $theme, $path) {
     'joinup_search_global_search' => [
       'variables' => ['filters' => [], 'template_suggestion' => ''],
     ],
+    'joinup_search_filter' => [
+      'variables' => ['name' => ''],
+    ],
+    'joinup_search_magnifying_glass' => [
+      'variables' => ['label' => ''],
+    ],
   ];
 }
 
@@ -416,12 +422,39 @@ function joinup_search_views_plugins_row_alter(array &$plugins): void {
  */
 function joinup_search_form_alter(&$form, FormStateInterface $form_state, $form_id) {
   if ($form_id == 'views_exposed_form') {
+    $route_name = \Drupal::routeMatch()->getRouteName();
     $view = $form_state->getStorage('view');
-    if ($view['view']->id() == 'search' && $view['view']->current_display == 'page_1') {
+    if ($view['view']->id() == 'search' && $view['view']->current_display == 'page_1' && $route_name == 'view.search.page_1') {
       $form['results_count'] = [
         '#type' => 'item',
         '#weight' => 0,
         '#markup' => '',
+      ];
+    }
+
+    if ($route_name != 'view.search.page_1') {
+      $group = \Drupal::service('og.context')->getGroup();
+      if ($group) {
+        /** @var \Drupal\Core\Entity\ContentEntityInterface $group */
+        if (in_array($group->bundle(), ['collection', 'solution'])) {
+          $form['filters'] = [
+            '#type' => 'hidden',
+            '#name' => 'f[]',
+            '#value' => 'group:' . $group->id(),
+          ];
+          $form['list_container'] = [
+            '#type' => 'container',
+            '#weight' => -5,
+          ];
+          $form['list_container']['list'] = [
+            '#theme' => 'joinup_search_filter',
+            '#name' => $group->label(),
+          ];
+        }
+      }
+      $form['search_submit'] = [
+        '#theme' => 'joinup_search_magnifying_glass',
+        '#label' => t('Trigger search sitewide'),
       ];
     }
   }

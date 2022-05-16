@@ -95,10 +95,4 @@
       {{ description.content }}
     </small>
   {% endif %}
-  {#
-    Do not add a label to the button as it will be converted to a magnifying glass
-    and by removing the label, we avoid tests to fail due to duplicated buttons in
-    the search page.
-  #}
-  <button type="submit" class="btn btn-search" aria-label="{{ 'Trigger search sitewide'|trans }}"></button>
 </div>
