@@ -1892,16 +1892,16 @@ function joinup_theme_preprocess_rdf_entity__solution__view_mode_search_list_ite
     'class' => 'eif-tile__line--' . $parent_id,
   ];
   $category_lists[$parent_id]['items'] = [];
-  foreach ($entity->field_is_eif_category as $category) {
-    $category = $category->value;
+  foreach ($eif_perspective->field_eif_solution_type as $solution_type) {
+    $solution_type = $solution_type->entity;
     $category_lists[$parent_id]['items'][] = [
-      'title' => $category,
+      'title' => $solution_type->label(),
       'weight' => 0,
       'description' => '',
     ];
 
-    $normalized_title = htmlentities(str_replace([' ', '/'], ['-', '-'], strtolower($category)));
-    $data_property_categories[$category] = $normalized_title;
+    $normalized_title = htmlentities(str_replace([' ', '/'], ['-', '-'], strtolower($solution_type->label())));
+    $data_property_categories[$solution_type->id()] = $normalized_title;
   }
 
   $data = [
