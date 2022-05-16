@@ -1920,11 +1920,6 @@ function joinup_theme_preprocess_rdf_entity__solution__view_mode_search_list_ite
       'label' => 'Conceptual model',
       'class' => 'conceptual-model',
     ],
-    'recommendation' => [
-      'field' => 'eif_recommendation',
-      'label' => 'Recommendation',
-      'class' => 'recommendation',
-    ],
   ];
   foreach ($data as $key => $key_data) {
     $category_lists[$key] = [
