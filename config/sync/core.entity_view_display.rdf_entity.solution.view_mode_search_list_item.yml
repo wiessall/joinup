@@ -46,12 +46,13 @@ dependencies:
     - field.field.rdf_entity.solution.field_status
     - field.field.rdf_entity.solution.field_topic
     - rdf_entity.rdfentity.solution
+    - responsive_image.styles.teaser
   module:
     - field_group
-    - image
     - joinup_html_stripper
     - layout_builder
     - options
+    - responsive_image
     - template_suggestion
     - user
 third_party_settings:
@@ -99,12 +100,14 @@ content:
     weight: 4
     region: content
   field_is_logo:
-    type: image
+    type: responsive_image
     label: hidden
     settings:
+      responsive_image_style: teaser
       image_link: ''
-      image_style: ''
-    third_party_settings: {  }
+    third_party_settings:
+      template_suggestion:
+        template_suggestion: ''
     weight: 0
     region: content
   field_is_owner:
