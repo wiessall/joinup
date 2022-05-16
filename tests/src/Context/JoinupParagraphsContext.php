@@ -328,6 +328,7 @@ class JoinupParagraphsContext extends RawDrupalContext {
    *
    * @return \Behat\Mink\Element\TraversableElement
    *   The field element.
+   *
    * @throws \Behat\Mink\Exception\ElementNotFoundException
    *   When the paragraph field cannot be found.
    */
