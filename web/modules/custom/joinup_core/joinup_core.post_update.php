@@ -14,3 +14,11 @@
  */
 
 declare(strict_types = 1);
+
+/**
+ * Implements hook_post_update_NAME().
+ */
+function joinup_core_post_update_108100(&$sandbox) {
+  $fixtures_helper = \Drupal::getContainer()->get('joinup_rdf.vocabulary_fixtures.helper');
+  $fixtures_helper->importFixtures('eif_solution_type');
+}
