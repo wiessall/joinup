@@ -26,7 +26,7 @@ Feature:
     And I go to the "Some EIF solution" solution
     And I click "EIF perspective"
     Then I should see the heading "Some EIF solution EIF perspective"
-    And the following fields should be present "Description, Type"
+    And the following fields should be present "Description, Type of solution"
     And the following field widgets should be present "Principle, Layer, Model, Recommendation"
 
     Given I fill in "Description" with "It will be an amazing principle."
