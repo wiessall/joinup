@@ -45,6 +45,19 @@
       outline-offset: 0px;
     }
   }
+  .badge {
+    padding: 0.35em 0.65em;
+    line-height: 1;
+    color: #fff;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: baseline;
+    display: inline-flex;
+    align-items: center;
+    --bs-bg-opacity: 1;
+    background-color: rgb(20, 59, 118) !important;
+    margin: 0.5rem;
+  }
 }
 
 #collapse-search {

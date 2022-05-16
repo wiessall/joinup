@@ -44,9 +44,6 @@ function joinup_search_theme($existing, $type, $theme, $path) {
     'joinup_search_filter' => [
       'variables' => ['name' => ''],
     ],
-    'joinup_search_magnifying_glass' => [
-      'variables' => ['label' => ''],
-    ],
   ];
 }
 
@@ -442,20 +439,13 @@ function joinup_search_form_alter(&$form, FormStateInterface $form_state, $form_
             '#name' => 'f[]',
             '#value' => 'group:' . $group->id(),
           ];
-          $form['list_container'] = [
-            '#type' => 'container',
-            '#weight' => -5,
-          ];
-          $form['list_container']['list'] = [
+          $form['list'] = [
             '#theme' => 'joinup_search_filter',
             '#name' => $group->label(),
+            '#weight' => -5,
           ];
         }
       }
-      $form['search_submit'] = [
-        '#theme' => 'joinup_search_magnifying_glass',
-        '#label' => t('Trigger search sitewide'),
-      ];
     }
   }
 }
