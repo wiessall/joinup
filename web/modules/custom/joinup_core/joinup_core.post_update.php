@@ -16,7 +16,7 @@
 declare(strict_types = 1);
 
 /**
- * Implements hook_post_update_NAME().
+ * Import the EIF solution type vocabulary.
  */
 function joinup_core_post_update_108100(&$sandbox) {
   $fixtures_helper = \Drupal::getContainer()->get('joinup_rdf.vocabulary_fixtures.helper');
