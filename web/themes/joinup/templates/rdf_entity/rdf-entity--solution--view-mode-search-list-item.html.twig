@@ -20,15 +20,6 @@
   <div class="row">
     <div class="mdl-grid">
       <div {{ attributes.addClass(classes) }} data-eif-category="{{ eif_categories }}">
-        {{ title_prefix }}
-        <div class="listing__card listing__card--inline-container mdl-card">
-          <div class="listing__inner-tile listing__inner-tile--shifted">
-            <div class="listing__field">
-              <h2 class="listing__title licence-tile__title">{{ label }}</h2>
-            </div>
-          </div>
-        </div>
-        {{ title_suffix }}
         <div class="listing__card listing__card--inline-container mdl-card">
           <div class="listing__inner-tile listing__inner-tile--wider">
             {% for category_list in category_lists  %}
@@ -48,17 +39,24 @@
               </div>
             {% endfor %}
           </div>
-          <div class="listing__metadata listing__metadata--eif">
-            <div class="listing__field">
-              <div class="mdl-grid">
-                <div class="mdl-cell mdl-cell--3-col mdl-cell--3-col-wide">
-                  {{ content.field_is_logo }}
-                </div>
-                <div class="mdl-cell mdl-cell--9-col mdl-cell--9-col-wide">
-                  {{ eif_perspective_description }}
-                  <li class="mb-2"><strong>{{ 'Solution\'s owner'|t }}:</strong> {{ content.field_is_owner|render|striptags }}</li>
-                  <a class="eif-tile__button eif-tile__button--compare " href="{{ solution_url }}">{{ 'Go to Solution'|t }}</a>
-                </div>
+          <div class="listing__card listing__card--inline-container">
+            <div class="listing__inner-tile">
+              <div class="listing__field">
+                {{ content.field_is_logo }}
+              </div>
+            </div>
+            <div class="listing__inner-tile">
+              <div class="listing__field">
+                {{ title_prefix }}<h2 class="listing__title licence-tile__title">{{ label }}</h2>{{ title_suffix }}
+              </div>
+              <div class="listing__field">
+                {{ eif_perspective_description }}
+              </div>
+              <div class="listing__field">
+                <li class="mb-2"><strong>{{ 'Solution\'s owner'|t }}:</strong> {{ content.field_is_owner|render|striptags }}</li>
+              </div>
+              <div class="listing__field">
+                <a class="eif-tile__button eif-tile__button--compare " href="{{ solution_url }}">{{ 'Go to Solution'|t }}</a>
               </div>
             </div>
           </div>
