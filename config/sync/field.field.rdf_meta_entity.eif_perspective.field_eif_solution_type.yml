@@ -5,7 +5,7 @@ dependencies:
   config:
     - field.storage.rdf_meta_entity.field_eif_solution_type
     - rdf_meta_entity.type.eif_perspective
-    - taxonomy.vocabulary.solution_category
+    - taxonomy.vocabulary.eif_solution_type
 id: rdf_meta_entity.eif_perspective.field_eif_solution_type
 field_name: field_eif_solution_type
 entity_type: rdf_meta_entity
@@ -20,7 +20,7 @@ settings:
   handler: 'default:taxonomy_term'
   handler_settings:
     target_bundles:
-      solution_category: solution_category
+      solution_category: eif_solution_type
     sort:
       field: name
       direction: asc
