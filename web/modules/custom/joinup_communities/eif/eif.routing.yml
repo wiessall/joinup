@@ -25,10 +25,10 @@ eif.eif_perspective_form:
         bundle:
           - solution
 
-eif.eif_perspective:
+entity.rdf_entity.eif_perspective:
   path: '/rdf_entity/{rdf_entity}/eif-perspective'
   defaults:
-    _controller: Drupal\eif\Controller\EifPerspectiveController::view
+    _entity_view: 'rdf_entity.eif_perspective'
   requirements:
     _entity_access: 'rdf_entity.view'
   options:

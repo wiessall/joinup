@@ -90,19 +90,6 @@ class EifPerspectiveController extends ControllerBase {
   }
 
   /**
-   * Provides a controller for the 'eif.eif_perspective' route.
-   *
-   * @param \Drupal\solution\Entity\SolutionInterface $rdf_entity
-   *   The solution.
-   *
-   * @return array
-   *   The content as a render array.
-   */
-  public function view(SolutionInterface $rdf_entity): array {
-    return $this->entityTypeManager->getViewBuilder('rdf_entity')->view($rdf_entity, 'eif_perspective');
-  }
-
-  /**
    * Provides an access controller for the 'eif.eif_perspective_form' route.
    *
    * @param \Drupal\solution\Entity\SolutionInterface $rdf_entity
