@@ -42,7 +42,7 @@ function joinup_search_theme($existing, $type, $theme, $path) {
       'variables' => ['filters' => [], 'template_suggestion' => ''],
     ],
     'joinup_search_filter' => [
-      'variables' => ['name' => ''],
+      'variables' => ['name' => '', 'bcl_icon_path' => ''],
     ],
   ];
 }
@@ -438,10 +438,17 @@ function joinup_search_form_alter(&$form, FormStateInterface $form_state, $form_
             '#type' => 'hidden',
             '#name' => 'f[]',
             '#value' => 'group:' . $group->id(),
+            '#attributes' => [
+              'class' => [
+                'search_bar_badge',
+              ],
+              'data-description' => $group->label(),
+            ],
           ];
           $form['list'] = [
             '#theme' => 'joinup_search_filter',
             '#name' => $group->label(),
+            '#bcl_icon_path' => base_path() . \Drupal::service('extension.path.resolver')->getPath('theme', 'ventuno') . '/assets/icons/icons.svg',
             '#weight' => -5,
           ];
         }
