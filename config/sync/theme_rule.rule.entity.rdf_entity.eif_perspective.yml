@@ -6,7 +6,7 @@ dependencies:
     - joinup_core
   theme:
     - ventuno
-id: eif_perspective
+id: entity.rdf_entity.eif_perspective
 label: 'EIF Perspective'
 theme: ventuno
 weight: 0
@@ -15,4 +15,4 @@ conditions:
     id: request_route
     negate: false
     routes:
-      - eif.eif_perspective
+      - entity.rdf_entity.eif_perspective

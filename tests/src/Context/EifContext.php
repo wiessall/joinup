@@ -16,6 +16,7 @@ use Drupal\eif\Entity\EifWrapper;
 use Drupal\joinup\Traits\EntityReferenceTrait;
 use Drupal\joinup\Traits\RdfEntityTrait;
 use Drupal\joinup\Traits\SearchTrait;
+use Drupal\joinup\Traits\TestingEntitiesTrait;
 use Drupal\menu_link_content\Entity\MenuLinkContent;
 use Drupal\node\Entity\Node;
 use Drupal\og\OgGroupAudienceHelperInterface;
@@ -30,10 +31,11 @@ use Drupal\taxonomy\Entity\Term;
  */
 class EifContext extends RawDrupalContext {
 
+  use EntityReferenceTrait;
+  use RdfEntityTrait;
   use SearchTrait;
   use StringTranslationTrait;
-  use RdfEntityTrait;
-  use EntityReferenceTrait;
+  use TestingEntitiesTrait;
 
   /**
    * An array of EIF entities to be cleaned up after the tests.
@@ -229,7 +231,7 @@ class EifContext extends RawDrupalContext {
       'target' => $solution,
     ] + $eif_perspective_fields + $qualifiers);
     $eif_perspective->save();
-    $this->eifPerspectiveEntities[$eif_perspective->id()] = $eif_perspective;
+    $this->entities['rdf_meta_entity'][$eif_perspective->id()] = $eif_perspective;
   }
 
   /**
@@ -242,7 +244,7 @@ class EifContext extends RawDrupalContext {
    */
   public function goToEifPerspectiveOfSolution(string $solution): void {
     $solution = $this->getRdfEntityByLabel($solution, 'solution');
-    $url = Url::fromRoute('eif.eif_perspective', [
+    $url = Url::fromRoute('entity.rdf_entity.eif_perspective', [
       'rdf_entity' => $solution->id(),
     ]);
     $this->visitPath($url->getInternalPath());
@@ -258,9 +260,7 @@ class EifContext extends RawDrupalContext {
    */
   public function assertSolutionWithPerspective(string $solution): void {
     $solution = $this->getRdfEntityByLabel($solution, 'solution');
-    if (empty(\Drupal::entityTypeManager()->getStorage('rdf_meta_entity')->loadByProperties([
-      'target' => $solution->id(),
-    ]))) {
+    if (empty(\Drupal::getContainer()->get('rdf_meta_entity.repository')->getMetaEntityForEntity($solution, 'eif_perspective'))) {
       throw new \Exception('No perspective was found for the solution');
     }
   }
@@ -281,22 +281,8 @@ class EifContext extends RawDrupalContext {
     $values['type'] = $bundle;
     $eif_wrapper = EifWrapper::create($values);
     $eif_wrapper->save();
-    $this->eifWrapperEntities[$eif_wrapper->id()] = $eif_wrapper;
+    $this->entities['eif_wrapper'][$eif_wrapper->id()] = $eif_wrapper;
     return $eif_wrapper;
-  }
-
-  /**
-   * Deletes entities created during EIF related features.
-   *
-   * @AfterScenario
-   */
-  public function cleanupCreatedEntities(): void {
-    foreach ($this->eifWrapperEntities as $entity) {
-      $entity->delete();
-    }
-    foreach ($this->eifPerspectiveEntities as $entity) {
-      $entity->delete();
-    }
   }
 
 }
