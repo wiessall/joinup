@@ -321,26 +321,38 @@ function ventuno_form_facets_form_alter(array &$form, FormStateInterface $form_s
 }
 
 /**
- * Implements hook_theme_suggestions_alter().
+ * Implements hook_theme_suggestions_HOOK_alter().
  */
-function ventuno_theme_suggestions_alter(array &$suggestions, array $variables, $hook): void {
-  $hooks = [
-    'eif_wrapper',
-    'user',
-    'rdf_meta_entity',
-    'taxonomy_term',
-  ];
+function ventuno_theme_suggestions_user_alter(array &$suggestions, array $variables): void {
+  $view_mode = $variables['elements']['#view_mode'];
+  $suggestions[] = 'user__' . str_replace('-', '_', $view_mode);
+}
 
-  if (in_array($hook, $hooks) && !empty($variables['elements']['#view_mode'])) {
-    $original_theme_hook = $variables['theme_hook_original'];
-    $view_mode = $variables['elements']['#view_mode'];
-    $suggestions[] = $original_theme_hook . '__' . str_replace('-', '_', $view_mode);
+/**
+ * Implements hook_theme_suggestions_HOOK_alter().
+ */
+function ventuno_theme_suggestions_eif_wrapper_alter(array &$suggestions, array $variables): void {
+  _ventuno_theme_suggestions_alter($suggestions, $variables);
+}
 
-    $entity_type_id = $variables['elements']['#entity_type'];
-    if ($hook !== 'user' && $bundle = $variables['elements']["#{$entity_type_id}"]->bundle()) {
-      $suggestions[] = $original_theme_hook . '__' . str_replace('-', '_', $bundle) . '__' . str_replace('-', '_', $view_mode);
-    }
-  }
+/**
+ * Implements hook_theme_suggestions_HOOK_alter().
+ */
+function ventuno_theme_suggestions_taxonomy_term_alter(array &$suggestions, array $variables): void {
+  _ventuno_theme_suggestions_alter($suggestions, $variables);
+}
+
+/**
+ * Creates suggestions per view mode.
+ */
+function _ventuno_theme_suggestions_alter(array &$suggestions, array $variables): void {
+  $original_theme_hook = $variables['theme_hook_original'];
+  $view_mode = $variables['elements']['#view_mode'];
+  $suggestions[] = $original_theme_hook . '__' . str_replace('-', '_', $view_mode);
+
+  $entity_type_id = $variables['elements']['#entity_type'];
+  $bundle = $variables['elements']["#{$entity_type_id}"]->bundle();
+  $suggestions[] = $original_theme_hook . '__' . str_replace('-', '_', $bundle) . '__' . str_replace('-', '_', $view_mode);
 }
 
 /**
