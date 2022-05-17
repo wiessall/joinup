@@ -141,11 +141,11 @@ class EifFilterBlock extends BlockBase implements ContainerFactoryPluginInterfac
     $tree[$id]['title'] = $name;
     $tree[$id]['class'] = 'eif-filter--' . $id;
 
-    // @todo This should be with the skos:hiddenLabel field instead where we
-    // should have a duplicate simpler title.
+    // @todo Use an alternative title instead of dynamically splitting it.
+    // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7110.
     $parts = explode(':', $term->name);
     $name = empty($parts[1]) ? $term->name : trim($parts[1]);
-    // End @todo.
+
     $tree[$id]['items'][] = [
       'title' => $name,
       'description' => $storage->load($term->tid)->getDescription(),

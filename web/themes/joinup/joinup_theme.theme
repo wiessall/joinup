@@ -1929,12 +1929,12 @@ function joinup_theme_preprocess_rdf_entity__solution__view_mode_search_list_ite
     ];
     $category_lists[$key]['items'] = [];
     foreach ($eif_perspective->{$key_data['field']} as $eif_wrapper_reference) {
-      // @todo This should be with the skos:hiddenLabel field instead where we
-      // should have a duplicate simpler title.
+      // @todo Use an alternative title instead of dynamically splitting it.
+      // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7110.
       $term = $eif_wrapper_reference->entity->term->entity;
       $parts = explode(':', $term->label());
       $name = empty($parts[1]) ? $term->label() : trim($parts[1]);
-      // End @todo.
+
       $category_lists[$key]['items'][] = [
         'title' => $name,
         'weight' => $term->getWeight(),
