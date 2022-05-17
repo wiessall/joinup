@@ -86,6 +86,7 @@
 .eif-tile__line {
   font-size: $font-size-xsmall;
   display: flex;
+  align-items: center;
 }
 
 .eif-tile__label {
@@ -498,8 +499,55 @@
 // Dependencies
 // --------------------------------------------------
 .eif-tile {
+  border: 1px solid $color-grey-warm;
+  padding: 1rem;
+  background: white;
   .listing__card {
     min-height: 0;
+    flex-direction: column!important;
+    @include breakpoint(tablet) {
+      flex-direction: row!important;
+    }
+    .listing__inner-tile--wider {
+      padding-right: 1rem;
+    }
+    .listing__card--inline-container {
+      border: 1px solid $color-grey-warm;
+      border-radius: .5rem;
+      .listing__inner-tile:first-of-type {
+        display: none;
+        @include breakpoint(tablet) {
+          display: flex;
+          align-items: center;
+          flex: 0 0 25%;
+          background: $color-grey-warm;
+        }
+      }
+      .listing__inner-tile:last-of-type {
+        flex: 0 0 100%;
+        @include breakpoint(tablet) {
+          flex: 0 0 75%;
+        }
+        .listing__field {
+          .listing__title {
+            font-size: 16px;
+            font-weight: $font-weight-bold;
+            max-height: unset;
+          }
+          li, p {
+            font-size: 12px;
+            line-height: 1.2;
+          }
+          li {
+            color: $color-grey-medium;
+            list-style-type: none;
+          }
+        }
+        .eif-tile__button {
+          float: right;
+        }
+      }
+    }
   }
 }
 
