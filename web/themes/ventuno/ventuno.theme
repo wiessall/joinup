@@ -26,7 +26,7 @@ use Drupal\topic\Entity\TopicReferencingEntityInterface;
  * Adds a theme suggestion for the menus rendered in the footer, so they can be
  * styled in the same way.
  */
-function ventuno_theme_suggestions_menu_alter(array &$suggestions, array $variables) {
+function ventuno_theme_suggestions_menu_alter(array &$suggestions, array $variables): void {
   if (in_array($variables['menu_name'], [
     'footer',
     'support',
@@ -49,7 +49,7 @@ function ventuno_theme_suggestions_menu_alter(array &$suggestions, array $variab
  *   block for the 4 different entity bundles shown in the "Explore" block on
  *   the homepage.
  */
-function ventuno_theme_suggestions_block_alter(array &$suggestions, array $variables) {
+function ventuno_theme_suggestions_block_alter(array &$suggestions, array $variables): void {
   $elements = &$variables['elements'];
   if (
     $elements['#base_plugin_id'] === 'extra_field_block' &&
@@ -62,7 +62,7 @@ function ventuno_theme_suggestions_block_alter(array &$suggestions, array $varia
 /**
  * Implements hook_preprocess_rdf_entity().
  */
-function ventuno_preprocess_rdf_entity(&$variables) {
+function ventuno_preprocess_rdf_entity(array &$variables): void {
   // Workaround for incorrect rendering of RDF entity label.
   // @see https://www.drupal.org/project/rdf_entity/issues/3209500
   $variables['label'] = $variables['rdf_entity']->label();
@@ -71,7 +71,7 @@ function ventuno_preprocess_rdf_entity(&$variables) {
 /**
  * Implements hook_preprocess_HOOK() for html.html.twig.
  */
-function ventuno_preprocess_html(&$variables) {
+function ventuno_preprocess_html(array &$variables): void {
   // Expose the base path so we can use it to generate favicon URIs.
   $variables['base_path'] = base_path();
   // Licence comparer specific styling.
@@ -83,7 +83,7 @@ function ventuno_preprocess_html(&$variables) {
 /**
  * Implements hook_preprocess_page().
  */
-function ventuno_preprocess_page(&$variables) {
+function ventuno_preprocess_page(array &$variables): void {
   // Retrieve the Joinup version and link to display in the footer.
   // @todo Move this into a block.
   /** @var \Drupal\joinup_core\JoinupVersionInterface $joinup_version */
@@ -101,7 +101,7 @@ function ventuno_preprocess_page(&$variables) {
 /**
  * Implements template_preprocess_region().
  */
-function ventuno_preprocess_region__header(&$variables) {
+function ventuno_preprocess_region__header(array &$variables): void {
   // Export the user name to display in the header.
   $variables['user_name'] = \Drupal::currentUser()->getDisplayName();
 
@@ -129,7 +129,7 @@ function ventuno_preprocess_region__header(&$variables) {
 /**
  * Implements hook_preprocess_block().
  */
-function ventuno_preprocess_block__facetsblock_searchpage(&$variables) {
+function ventuno_preprocess_block__facetsblock_searchpage(array &$variables): void {
   $block_manager = \Drupal::getContainer()->get('plugin.manager.block');
   $plugin_block = $block_manager->createInstance('joinup_search_clear_filters');
   $clear_button = $plugin_block->build();
@@ -149,7 +149,7 @@ function ventuno_preprocess_block__facetsblock_searchpage(&$variables) {
  * by the first referenced topic. If no topics are referenced the link will be
  * hidden.
  */
-function ventuno_preprocess_block__entityqueue_block__highlighted_content(&$variables) {
+function ventuno_preprocess_block__entityqueue_block__highlighted_content(array &$variables): void {
   /** @var \Drupal\node\NodeInterface $node */
   $node = $variables['elements']['content']['entities'][0]['#node'] ?? NULL;
 
@@ -184,7 +184,7 @@ function ventuno_preprocess_block__entityqueue_block__highlighted_content(&$vari
  * Page Manager as a variable. This section is using a Layout but needs to be
  * rendered outside the main content region which is controlled by Page Manager.
  */
-function ventuno_preprocess_page__home(&$variables) {
+function ventuno_preprocess_page__home(array &$variables): void {
   /** @var \Drupal\page_manager\Entity\PageVariant $about_section_variant */
   $about_section_variant = \Drupal::entityTypeManager()->getStorage('page_variant')->load('homepage-layout_builder-1');
   $view_builder = \Drupal::entityTypeManager()->getViewBuilder('page_variant');
@@ -194,7 +194,7 @@ function ventuno_preprocess_page__home(&$variables) {
 /**
  * Implements hook_preprocess_HOOK().
  */
-function ventuno_preprocess_node__numbered_listing(&$variables) {
+function ventuno_preprocess_node__numbered_listing(array &$variables): void {
   /** @var \Drupal\node\NodeInterface $node */
   $node = $variables['node'];
 
@@ -221,7 +221,7 @@ function ventuno_preprocess_node__numbered_listing(&$variables) {
 /**
  * Implements hook_preprocess_HOOK().
  */
-function ventuno_preprocess_responsive_image_formatter(&$variables) {
+function ventuno_preprocess_responsive_image_formatter(array &$variables): void {
   if ($variables['url']) {
     $options = $variables['url']->getOptions();
     if ($options['entity'] instanceof CommunityContentInterface) {
@@ -240,7 +240,7 @@ function ventuno_preprocess_responsive_image_formatter(&$variables) {
  * Trim the labels of the items in the Explore block on the homepage down to a
  * manageable size.
  */
-function ventuno_preprocess_node__explore_item(&$variables) {
+function ventuno_preprocess_node__explore_item(array &$variables): void {
   /** @var \Drupal\node\NodeInterface $node */
   $node = $variables['node'];
 
@@ -254,7 +254,7 @@ function ventuno_preprocess_node__explore_item(&$variables) {
  * Trim the labels of the items in the Explore block on the homepage down to a
  * manageable size.
  */
-function ventuno_preprocess_rdf_entity__explore_item(&$variables) {
+function ventuno_preprocess_rdf_entity__explore_item(array &$variables): void {
   /** @var \Drupal\rdf_entity\RdfInterface $entity */
   $entity = $variables['rdf_entity'];
 
@@ -265,7 +265,7 @@ function ventuno_preprocess_rdf_entity__explore_item(&$variables) {
 /**
  * Implements template_preprocess_menu().
  */
-function ventuno_preprocess_menu(&$variables) {
+function ventuno_preprocess_menu(array &$variables): void {
   // Set a class on each link in the social media footer menu, so that the link
   // text can be replaced with an icon.
   if ($variables['menu_name'] === 'footer-social-media') {
@@ -279,7 +279,7 @@ function ventuno_preprocess_menu(&$variables) {
  * These classes identify the social media links so we can replace them with
  * icons. Used for the links to Twitter and LinkedIn.
  */
-function _ventuno_preprocess_menu_items(&$items) {
+function _ventuno_preprocess_menu_items(array &$items): void {
   foreach ($items as $item) {
     /** @var \Drupal\Core\Menu\MenuLinkDefault $menu_link */
     $menu_link ??= $item['original_link'];
@@ -323,7 +323,7 @@ function ventuno_form_facets_form_alter(array &$form, FormStateInterface $form_s
 /**
  * Implements hook_theme_suggestions_alter().
  */
-function ventuno_theme_suggestions_alter(array &$suggestions, array $variables, $hook) {
+function ventuno_theme_suggestions_alter(array &$suggestions, array $variables, $hook): void {
   $hooks = [
     'eif_wrapper',
     'user',
@@ -346,7 +346,7 @@ function ventuno_theme_suggestions_alter(array &$suggestions, array $variables, 
 /**
  * Implements hook_preprocess_HOOK().
  */
-function ventuno_preprocess_rdf_meta_entity(&$variables) {
+function ventuno_preprocess_rdf_meta_entity(array &$variables): void {
   /** @var \Drupal\solution\Entity\SolutionInterface $solution */
   $solution = $variables['rdf_meta_entity']->getTargetEntity();
   $variables['solution_label'] = $solution->label();
@@ -356,35 +356,35 @@ function ventuno_preprocess_rdf_meta_entity(&$variables) {
 /**
  * Implements hook_preprocess_user().
  */
-function ventuno_preprocess_user(&$variables) {
+function ventuno_preprocess_user(array &$variables): void {
   $variables['full_name'] = $variables['user']->getDisplayName();
 }
 
 /**
  * Implements hook_preprocess_HOOK().
  */
-function ventuno_preprocess_rdf_entity__search_result_featured(&$variables) {
+function ventuno_preprocess_rdf_entity__search_result_featured(array &$variables): void {
   _ventuno_preprocess_search_result($variables, 'rdf_entity');
 }
 
 /**
  * Implements hook_preprocess_HOOK().
  */
-function ventuno_preprocess_rdf_entity__search_result(&$variables) {
+function ventuno_preprocess_rdf_entity__search_result(array &$variables): void {
   _ventuno_preprocess_search_result($variables, 'rdf_entity');
 }
 
 /**
  * Implements hook_preprocess_HOOK().
  */
-function ventuno_preprocess_node__search_result_featured(&$variables) {
+function ventuno_preprocess_node__search_result_featured(array &$variables): void {
   _ventuno_preprocess_search_result($variables, 'node');
 }
 
 /**
  * Implements hook_preprocess_HOOK().
  */
-function ventuno_preprocess_node__search_result(&$variables) {
+function ventuno_preprocess_node__search_result(array &$variables): void {
   _ventuno_preprocess_search_result($variables, 'node');
 }
 
@@ -475,7 +475,7 @@ function _ventuno_get_default_icon_render_array(string $entity_type_id, string $
 /**
  * Implements hook_preprocess().
  */
-function ventuno_preprocess(&$variables) {
+function ventuno_preprocess(array &$variables): void {
   /** @var \Drupal\Core\Extension\ThemeHandler $themeHandler */
   $themeHandler = \Drupal::service('theme_handler');
   $ventuno = $themeHandler->getTheme('ventuno')->getPath();
@@ -494,7 +494,7 @@ function ventuno_theme_suggestions_form_element_alter(array &$suggestions, array
 /**
  * Implements hook_form_alter().
  */
-function ventuno_form_alter(&$form, FormStateInterface $form_state, $form_id): void {
+function ventuno_form_alter(array &$form, FormStateInterface $form_state, string $form_id): void {
   // Check if the form contains exposed filter form element.
   if ($form_id !== 'views_exposed_form') {
     return;
@@ -524,7 +524,7 @@ function ventuno_form_alter(&$form, FormStateInterface $form_state, $form_id): v
  * We use the 16:9 ratio as a premise: ratios are not fixed, we allow users to
  * upload images without restrictions. It's not possible to match them exaclty.
  */
-function ventuno_preprocess_responsive_image(&$variables) {
+function ventuno_preprocess_responsive_image(array &$variables): void {
   $style_id = $variables['responsive_image_style_id'];
   switch ($style_id) {
     // 'In the spotlight' section on homepage
@@ -550,7 +550,7 @@ function ventuno_preprocess_responsive_image(&$variables) {
 /**
  * Implements hook_preprocess_image().
  */
-function ventuno_preprocess_image(&$variables) {
+function ventuno_preprocess_image(array &$variables): void {
   $variables['attributes']['loading'] = 'lazy';
 }
 
