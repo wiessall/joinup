@@ -18,7 +18,7 @@ Feature:
     Then there should be an EIF perspective associated with the "EIF solution" solution
 
     When I go to the EIF perspective page of the "EIF solution" solution
-    Then I should see the heading "Solution: EIF solution"
+    Then I should see the heading "EIF solution"
     And I should see the heading "General information"
 
     And I should see the text "This should be in the description field."
