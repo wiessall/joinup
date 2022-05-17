@@ -7,7 +7,7 @@ namespace Drupal\joinup\Context;
 use Behat\Gherkin\Node\TableNode;
 use Behat\Testwork\Hook\Scope\BeforeSuiteScope;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
-use Drupal\joinup\Badge;
+use Drupal\joinup\Chip;
 use Drupal\joinup\Traits\BrowserCapabilityDetectionTrait;
 use Drupal\joinup\Traits\EntityTrait;
 use Drupal\joinup\Traits\TraversingTrait;
@@ -25,127 +25,127 @@ class JoinupCoreContext extends RawDrupalContext {
   use UtilityTrait;
 
   /**
-   * Asserts that only the expected badges are shown in the page.
+   * Asserts that only the expected chips are shown in the page.
    *
    * @param \Behat\Gherkin\Node\TableNode $table
-   *   The table containing the expected badge labels.
+   *   The table containing the expected chip labels.
    * @param string|null $region
-   *   Optional region in which to locate the badges to check. If omitted all
-   *   badges found in the entire page will be checked.
+   *   Optional region in which to locate the chips to check. If omitted all
+   *   chips found in the entire page will be checked.
    *
    * @throws \Exception
    *    Thrown when the region is not found.
    *
-   * @Then the page should show( only) the( following) badge(s):
-   * @Then the page should show( only) the( following) badge(s) in the :region( region):
+   * @Then the page should show( only) the( following) chip(s):
+   * @Then the page should show( only) the( following) chip(s) in the :region( region):
    */
-  public function assertBadgeElements(TableNode $table, ?string $region = NULL): void {
-    $badges = $this->getBadges($region);
-    $found = array_map(function (Badge $element) {
+  public function assertChipElements(TableNode $table, ?string $region = NULL): void {
+    $chips = $this->getChips($region);
+    $found = array_map(function (Chip $element) {
       return $element->getText();
-    }, $badges);
+    }, $chips);
 
     $expected = $table->getColumn(0);
-    Assert::assertEquals($expected, $found, "The expected badge elements don't match the ones found in the page", 0.0, 10, TRUE);
+    Assert::assertEquals($expected, $found, "The expected chip elements don't match the ones found in the page", 0.0, 10, TRUE);
   }
 
   /**
-   * Asserts that the expected number of badges are shown.
+   * Asserts that the expected number of chips are shown.
    *
    * @param string|null $number
-   *   The expected number of badges. This is a string rather than an integer
+   *   The expected number of chips. This is a string rather than an integer
    *   because step definitions are represented in text.
    * @param string|null $region
-   *   Optional region in which to locate the badges to check. If omitted all
-   *   badges found in the entire page will be checked.
+   *   Optional region in which to locate the chips to check. If omitted all
+   *   chips found in the entire page will be checked.
    *
    * @throws \Exception
    *    Thrown when the region is not found.
    *
-   * @Then the page should contain :number badge(s)
-   * @Then the page should not contain any badges
-   * @Then the :region region should contain :number badge(s)
-   * @Then the :region region should not contain any badges
+   * @Then the page should contain :number chip(s)
+   * @Then the page should not contain any chips
+   * @Then the :region region should contain :number chip(s)
+   * @Then the :region region should not contain any chips
    */
-  public function assertBadgeCount(?string $number = NULL, ?string $region = NULL): void {
+  public function assertChipCount(?string $number = NULL, ?string $region = NULL): void {
     $number = (int) $number;
-    Assert::assertCount($number, $this->getBadges($region));
+    Assert::assertCount($number, $this->getChips($region));
   }
 
   /**
-   * Clicks the remove button in a badge.
+   * Clicks the remove button in a chip.
    *
    * @param string $text
-   *   The text or partial text of the badge.
+   *   The text or partial text of the chip.
    *
    * @throws \Exception
-   *   Thrown when either the badge or its remove button are not found.
+   *   Thrown when either the chip or its remove button are not found.
    *
-   * @When I press the remove button on the badge :text
+   * @When I press the remove button on the chip :text
    */
-  public function clickRemoveBadgeButton(string $text): void {
+  public function clickRemoveChipButton(string $text): void {
     // Find the element that contains the given text.
-    $badge = $this->getBadgeByText($text);
-    if (!$badge) {
-      throw new \Exception("The badge containing the label '$text' was not found on the page.");
+    $chip = $this->getChipByText($text);
+    if (!$chip) {
+      throw new \Exception("The chip containing the label '$text' was not found on the page.");
     }
 
     // Find the related button.
-    $button = $badge->getRemoveButton();
+    $button = $chip->getRemoveButton();
     if (!$button) {
-      throw new \Exception("Couldn't find the button to remove the badge '$text'.");
+      throw new \Exception("Couldn't find the button to remove the chip '$text'.");
     }
 
     $button->press();
   }
 
   /**
-   * Returns the badges that are present in the given region.
+   * Returns the chips that are present in the given region.
    *
    * @param string|null $region
-   *   Optional region in which to locate the badges to return. If omitted all
-   *   badges found in the entire page will be returned.
+   *   Optional region in which to locate the chips to return. If omitted all
+   *   chips found in the entire page will be returned.
    *
-   * @return \Drupal\joinup\Badge[]
-   *   The elements representing the badges.
+   * @return \Drupal\joinup\Chip[]
+   *   The elements representing the chips.
    *
    * @throws \Exception
    *    Thrown when the region is not found.
    */
-  protected function getBadges(?string $region = NULL): array {
+  protected function getChips(?string $region = NULL): array {
     // Default to the entire page if the region is omitted.
     $base_element = $region ? $this->getRegion($region) : $this->getSession()->getPage();
 
-    $badges = [];
-    foreach ($base_element->findAll('css', '.navbar-search .badge') as $element) {
-      $badges[] = new Badge($element, !$this->browserSupportsJavaScript());
+    $chips = [];
+    foreach ($base_element->findAll('css', '.navbar-search .chip') as $element) {
+      $chips[] = new Chip($element, !$this->browserSupportsJavaScript());
     }
 
-    return $badges;
+    return $chips;
   }
 
   /**
-   * Returns the badge with the given text.
+   * Returns the chip with the given text.
    *
-   * If multiple badges are present with the same text, then the first one will
+   * If multiple chips are present with the same text, then the first one will
    * be returned.
    *
    * @param string $text
-   *   The text that should be present in the badge.
+   *   The text that should be present in the chip.
    * @param string|null $region
-   *   Optional region in which to locate the badges to return. If omitted all
-   *   badges found in the entire page will be returned.
+   *   Optional region in which to locate the chips to return. If omitted all
+   *   chips found in the entire page will be returned.
    *
    * @throws \Exception
    *    Thrown when the region is not found.
    *
-   * @return \Drupal\joinup\Badge|null
-   *   The badge or NULL if no badge with the given text is present in the page.
+   * @return \Drupal\joinup\Chip|null
+   *   The chip or NULL if no chip with the given text is present in the page.
    */
-  protected function getBadgeByText(string $text, ?string $region = NULL): ?Badge {
-    foreach ($this->getBadges($region) as $badge) {
-      if ($badge->getText() === $text) {
-        return $badge;
+  protected function getChipByText(string $text, ?string $region = NULL): ?Chip {
+    foreach ($this->getChips($region) as $chip) {
+      if ($chip->getText() === $text) {
+        return $chip;
       }
     }
 

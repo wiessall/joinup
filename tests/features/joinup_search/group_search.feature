@@ -47,28 +47,28 @@ Feature: Search inside groups
       | Zip archive | It has files inside. | Pre-alpha | test.zip   |
 
   @javascript
-  Scenario: Group filters are shown as badges
-    # Pages that do not belong to a collection or solution do not have badges in
+  Scenario: Group filters are shown as chips
+    # Pages that do not belong to a collection or solution do not have chips in
     # the search field.
     When I am on the homepage
-    Then the page should not contain any badges
+    Then the page should not contain any chips
     When I visit the collection overview
-    Then the page should not contain any badges
+    Then the page should not contain any chips
     When I visit the solution overview
-    Then the page should not contain any badges
+    Then the page should not contain any chips
     When I visit the contact form
-    Then the page should not contain any badges
+    Then the page should not contain any chips
 
-    # Check that the name of the collection is shown as a badge in the search
-    # field on the collection homepage. The badges are initially hidden but will
+    # Check that the name of the collection is shown as a chip in the search
+    # field on the collection homepage. The chips are initially hidden but will
     # appear after clicking on the search icon to open the search bar.
     When I go to the homepage of the "Chalet construction" collection
     And I should toggle search bar in navbar
-    Then the page should show the following badge:
+    Then the page should show the following chip:
       | Chalet construction |
 
     # Do a search without entering any keywords. Because the collection is shown
-    # as a badge in the search field the search results should be filtered and
+    # as a chip in the search field the search results should be filtered and
     # only show the content of the collection.
     When I submit the search by pressing enter
     Then the "Chalet construction" content checkbox item should be selected
@@ -76,113 +76,111 @@ Feature: Search inside groups
     And the page should show the tiles "Room sizes, Ground plan, Opening of the winter season, Materials natural, Resources, Inclined foundations"
 
     # Check that other types of pages in the collection also show the collection
-    # as a badge.
+    # as a chip.
     When I go to the "Room sizes" discussion
     And I should toggle search bar in navbar
-    Then the page should show the following badge:
+    Then the page should show the following chip:
       | Chalet construction |
-    # TODO: Add js to remove badges
-    # It should be possible to remove the badge by clicking the delete button.
-    #When I press the remove button on the badge "Chalet construction"
-    #Then the page should not contain any badges
+    # It should be possible to remove the chip by clicking the delete button.
+    When I press the remove button on the chip "Chalet construction"
+    Then the page should not contain any chips
 
     When I go to the "Ground plan" document
     And I should toggle search bar in navbar
-    Then the page should show the following badge:
+    Then the page should show the following chip:
       | Chalet construction |
 
     When I go to the "Opening of the winter season" event
     And I should toggle search bar in navbar
-    Then the page should show the following badge:
+    Then the page should show the following chip:
       | Chalet construction |
     When I go to the "Natural materials" news
     And I should toggle search bar in navbar
-    Then the page should show the following badge:
+    Then the page should show the following chip:
       | Chalet construction |
     When I go to the "Resources" custom page
     And I should toggle search bar in navbar
-    Then the page should show the following badge:
+    Then the page should show the following chip:
       | Chalet construction |
 
-    # Check that the name of the solution is shown as a badge in the search field
+    # Check that the name of the solution is shown as a chip in the search field
     # on the solution homepage.
     When I go to the homepage of the "Inclined foundations" solution
     And I should toggle search bar in navbar
-    Then the page should show the following badge:
+    Then the page should show the following chip:
       | Inclined foundations |
 
     # Do a search without entering any keywords. Because the solution is shown
-    # as a badge in the search field the search results should be filtered and
+    # as a chip in the search field the search results should be filtered and
     # only show the content of the solution.
     When I submit the search by pressing enter
     Then the "Inclined foundations" content checkbox item should be selected
     And I should see the following facet summary "Inclined foundations"
     Then the page should show the tiles "Pre-alpha, Presenting DrillMaster X88, Rock types, Frozen still, Geography, Terrace?"
 
-    # Do a search with a keyword. The badge for the solution should be present
+    # Do a search with a keyword. The chip for the solution should be present
     # so the results are filtered by keyword and solution.
     Given I am on the homepage of the "Inclined foundations" solution
     When I should toggle search bar in navbar
-    Then the page should show the following badge:
+    Then the page should show the following chip:
       | Inclined foundations |
     When I enter "ground" in the search bar and press enter
     Then the "Inclined foundations" content checkbox item should be selected
     And I should see the following facet summary "Inclined foundations"
     And the page should show the tiles "Pre-alpha, Presenting DrillMaster X88"
 
-    # TODO: Add js to remove badges
-    #    # Do a search with a keyword after removing the badge for the solution. The
-    #    # results should only be filtered by keyword, not by solution.
-    #    Given I am on the homepage of the "Inclined foundations" solution
-    #    When I should toggle search bar in navbar
-    #    And I press the remove button on the badge "Inclined foundations"
-    #    And I enter "ground" in the search bar and press enter
-    #    Then the page should show the tiles "Ground plan, Pre-alpha, Natural materials, Presenting DrillMaster X88"
-    #
-    #    # Do a search with a keyword and removing the badge for the solution after
-    #    # the keywords have been typed in. This should have the same result.
-    #    Given I am on the homepage of the "Inclined foundations" solution
-    #    When I should toggle search bar in navbar
-    #    And I enter "ground" in the search bar
-    #    And I press the remove button on the badge "Inclined foundations"
-    #    And I submit the search by pressing enter
-    #    Then the page should show the tiles "Ground plan, Pre-alpha, Natural materials, Presenting DrillMaster X88"
-    #
-    #    # Check that other types of pages in the solution also show the collection
-    #    # as a badge.
-    #    When I go to the "Terrace?" discussion
-    #    And I should toggle search bar in navbar
-    #    Then the page should show the following badge:
-    #      | Inclined foundations |
-    #
-    #    # It should be possible to remove the badge by clicking the delete button.
-    #    When I press the remove button on the badge "Inclined foundations"
-    #    Then the page should not contain any badges
+    # Do a search with a keyword after removing the chip for the solution. The
+    # results should only be filtered by keyword, not by solution.
+    Given I am on the homepage of the "Inclined foundations" solution
+    When I should toggle search bar in navbar
+    And I press the remove button on the chip "Inclined foundations"
+    And I enter "ground" in the search bar and press enter
+    Then the page should show the tiles "Ground plan, Pre-alpha, Materials natural, Presenting DrillMaster X88"
+
+    # Do a search with a keyword and removing the chip for the solution after
+    # the keywords have been typed in. This should have the same result.
+    Given I am on the homepage of the "Inclined foundations" solution
+    When I should toggle search bar in navbar
+    And I enter "ground" in the search bar
+    And I press the remove button on the chip "Inclined foundations"
+    And I submit the search by pressing enter
+    Then the page should show the tiles "Ground plan, Pre-alpha, Materials natural, Presenting DrillMaster X88"
+
+    # Check that other types of pages in the solution also show the collection
+    # as a chip.
+    When I go to the "Terrace?" discussion
+    And I should toggle search bar in navbar
+    Then the page should show the following chip:
+      | Inclined foundations |
+
+    # It should be possible to remove the chip by clicking the delete button.
+    When I press the remove button on the chip "Inclined foundations"
+    Then the page should not contain any chips
 
     When I go to the "Rock types" document
     And I should toggle search bar in navbar
-    Then the page should show the following badge:
+    Then the page should show the following chip:
       | Inclined foundations |
 
     When I go to the "Presenting DrillMaster X88" event
     And I should toggle search bar in navbar
-    Then the page should show the following badge:
+    Then the page should show the following chip:
       | Inclined foundations |
     When I go to the "Still frozen" news
     And I should toggle search bar in navbar
-    Then the page should show the following badge:
+    Then the page should show the following chip:
       | Inclined foundations |
     When I go to the "Geography" custom page
     And I should toggle search bar in navbar
-    Then the page should show the following badge:
+    Then the page should show the following chip:
       | Inclined foundations |
     When I go to the "Pre-alpha" release
     And I should toggle search bar in navbar
-    Then the page should show the following badge:
+    Then the page should show the following chip:
       | Inclined foundations |
     When I go to the "Zip archive" distribution
     And I should toggle search bar in navbar
-    Then the page should show the following badge:
+    Then the page should show the following chip:
       | Inclined foundations |
 
   @clearStaticCache
@@ -191,23 +189,23 @@ Feature: Search inside groups
   Scenario: Group search caching
     # Initially the cache is cold.
     When I go to the homepage of the "Chalet construction" collection
-    Then the page should show the following badge:
+    Then the page should show the following chip:
       | Chalet construction |
     And the page should not be cached
     # A subsequent request should be served from cache.
     When I reload the page
-    Then the page should show the following badge:
+    Then the page should show the following chip:
       | Chalet construction |
     And the page should be cached
     # Check that changing the name of the collection correctly invalidates the
     # cache.
     When I change the name of the "Chalet construction" collection to "Chalet destruction"
     And I go to the homepage of the "Chalet destruction" collection
-    Then the page should show the following badge:
+    Then the page should show the following chip:
       | Chalet destruction |
     And the page should not be cached
     When I reload the page
-    Then the page should show the following badge:
+    Then the page should show the following chip:
       | Chalet destruction |
     And the page should be cached
 
@@ -217,7 +215,7 @@ Feature: Search inside groups
   Scenario: Group filters remain active in the search bar when viewing search results
     When I go to the homepage of the "Chalet construction" collection
     And I should toggle search bar in navbar
-    Then the page should show the following badge:
+    Then the page should show the following chip:
       | Chalet construction |
     When I enter "ground" in the search bar and press enter
     Then the "Chalet construction" content checkbox item should be selected
@@ -228,7 +226,7 @@ Feature: Search inside groups
     And the page should show the tiles "Ground plan, Pre-alpha, Materials natural, Presenting DrillMaster X88"
 
   @javascript
-  Scenario: Group filter badges appear in search bar after selecting them in facets
+  Scenario: Group filter chips appear in search bar after selecting them in facets
     When I visit the search page
     And I should see 12 tiles
 
@@ -239,7 +237,7 @@ Feature: Search inside groups
 
     Then I should not see search bar icon in navbar
 
-    # The filter badge should remain active when doing another search.
+    # The filter chip should remain active when doing another search.
     When I enter "ground" in the search bar and press enter
     Then the "Inclined foundations" content checkbox item should be selected
     And I should see the following facet summary "Inclined foundations"
@@ -248,4 +246,4 @@ Feature: Search inside groups
     # Search page doesn't have search bar in header.
     When I am on the homepage
     Then I should toggle search bar in navbar
-    And the page should not contain any badges
+    And the page should not contain any chips
