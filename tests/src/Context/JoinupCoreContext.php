@@ -117,7 +117,7 @@ class JoinupCoreContext extends RawDrupalContext {
     $base_element = $region ? $this->getRegion($region) : $this->getSession()->getPage();
 
     $chips = [];
-    foreach ($base_element->findAll('css', '.navbar-search .chip') as $element) {
+    foreach ($base_element->findAll('css', '.navbar-search .badge') as $element) {
       $chips[] = new Chip($element, !$this->browserSupportsJavaScript());
     }
 
