@@ -7,7 +7,7 @@ namespace Drupal\joinup;
 use Behat\Mink\Element\NodeElement;
 
 /**
- * Wraps a "badge" element.
+ * Wraps a "chip" element.
  *
  * Chips are depending on JavaScript for their full functionality but they can
  * also have some limited interaction done when JavaScript is disabled, such as
@@ -18,10 +18,10 @@ use Behat\Mink\Element\NodeElement;
  * the DOM as a visible text element (with JS enabled) or as a hidden form
  * element (with JS disabled).
  */
-class Badge {
+class Chip {
 
   /**
-   * The Mink element representing the badge in the document.
+   * The Mink element representing the chip in the document.
    *
    * @var \Behat\Mink\Element\NodeElement
    */
@@ -35,10 +35,10 @@ class Badge {
   protected bool $isVisible;
 
   /**
-   * Constructs a new Badge.
+   * Constructs a new Chip.
    *
    * @param \Behat\Mink\Element\NodeElement $element
-   *   The Mink element that represents the badge in the document.
+   *   The Mink element that represents the chip in the document.
    * @param bool $isVisible
    *   Whether or not the element can be visually interacted with.
    */
@@ -48,7 +48,7 @@ class Badge {
   }
 
   /**
-   * Returns the badge text.
+   * Returns the chip text.
    *
    * @return string
    *   The chip text.
@@ -58,10 +58,10 @@ class Badge {
   }
 
   /**
-   * Returns whether or not the badge can be visually interacted with.
+   * Returns whether or not the chip can be visually interacted with.
    *
    * @return bool
-   *   TRUE if the badge can be visually interacted with.
+   *   TRUE if the chip can be visually interacted with.
    */
   public function isVisible(): bool {
     return $this->isVisible;
@@ -72,10 +72,10 @@ class Badge {
    *
    * @return \Behat\Mink\Element\NodeElement|null
    *   The element representing the remove button, or NULL if no remove button
-   *   is present on the badge.
+   *   is present on the chip.
    */
   public function getRemoveButton(): ?NodeElement {
-    $xpath = "/following-sibling::span[contains(concat(' ', normalize-space(@class), ' '), ' icon--close ')]";
+    $xpath = "//span[contains(concat(' ', normalize-space(@class), ' '), ' icon--close ')]";
     return $this->element->find('xpath', $xpath);
   }
 
