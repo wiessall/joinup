@@ -12,14 +12,6 @@ rdf_type: 'http://data.europa.eu/eif/SolutionType/'
 graph:
   default: 'http://eif_solution_type'
 base_fields_mapping:
-  uuid:
-    value:
-      predicate: ''
-      format: ''
-  langcode:
-    value:
-      predicate: ''
-      format: ''
   vid:
     target_id:
       predicate: 'http://www.w3.org/2004/02/skos/core#inScheme'
@@ -40,32 +32,4 @@ base_fields_mapping:
     value:
       predicate: 'http://www.w3.org/ns/adms#identifier'
       format: 'xsd:integer'
-  parent:
-    target_id:
-      predicate: ''
-      format: ''
-  changed:
-    value:
-      predicate: ''
-      format: ''
-  default_langcode:
-    value:
-      predicate: ''
-      format: ''
-  revision_default:
-    value:
-      predicate: ''
-      format: ''
-  revision_translation_affected:
-    value:
-      predicate: ''
-      format: ''
-  metatag:
-    value:
-      predicate: ''
-      format: ''
-  graph:
-    target_id:
-      predicate: ''
-      format: ''
 entity_id_plugin: null
