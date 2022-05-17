@@ -5,10 +5,6 @@
  */
 #}
 <article{{ attributes }}>
-  {{ title_prefix }}
-  <h1{{ title_attributes.addClass(['mt-4', 'mb-3', 'fs-3']) }}>{{ 'Solution'|t }}: {{ label }}</h1>
-  {{ title_suffix }}
-
   <div class="d-flex justify-content-between">
     <div>
       <a class="btn btn-sm btn-outline-brand rounded-pill mb-1" href="{{ url('<front>')|render }}/node/703244">Back to recommendations</a>
@@ -40,8 +36,9 @@
     {{ content.field_is_logo }}
   </div>
   <ul class="list-unstyled">
-    <li class="mb-2"><strong>{{ 'Name of the solution'|t }}:</strong> {{ label|striptags }}</li>
+    <li class="mb-2">{{ title_prefix }}<strong>{{ 'Name of the solution'|t }}:</strong> {{ label|striptags }}{{ title_suffix }}</li>
     <li class="mb-2"><strong>{{ 'Solution\'s owner'|t }}:</strong> {{ content.field_is_owner|render|striptags }}</li>
   </ul>
+
   {{ content.eif_perspective }}
 </article>
