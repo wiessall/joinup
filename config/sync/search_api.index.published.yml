@@ -3,40 +3,36 @@ langcode: en
 status: true
 dependencies:
   config:
-    - field.storage.node.field_event_agenda
-    - field.storage.node.field_paragraphs_body
-    - field.storage.paragraph.field_body
-    - field.storage.node.body
-    - field.storage.node.field_event_date
+    - field.storage.meta_entity.count
     - field.storage.meta_entity.field_featured
-    - field.storage.node.field_news_headline
-    - field.storage.node.field_location
-    - field.storage.node.field_organisation
     - field.storage.meta_entity.field_pinned_in
+    - field.storage.node.body
+    - field.storage.node.field_event_agenda
+    - field.storage.node.field_event_date
+    - field.storage.node.field_location
+    - field.storage.node.field_news_headline
+    - field.storage.node.field_organisation
+    - field.storage.node.field_paragraphs_body
     - field.storage.node.field_scope
     - field.storage.node.field_short_title
-    - field.storage.meta_entity.count
-    - field.storage.rdf_entity.field_ar_abstract
-    - field.storage.rdf_entity.field_ci_name
-    - field.storage.rdf_entity.field_isr_contact_information
-    - field.storage.rdf_entity.field_is_contact_information
-    - field.storage.rdf_entity.field_licence_spdx_licence
-    - field.storage.rdf_entity.field_is_description
-    - field.storage.rdf_entity.field_ar_description
-    - field.storage.rdf_entity.field_licence_description
+    - field.storage.paragraph.field_body
     - field.storage.rdf_entity.field_ad_description
-    - field.storage.rdf_entity.field_isr_description
+    - field.storage.rdf_entity.field_ar_abstract
+    - field.storage.rdf_entity.field_ar_description
+    - field.storage.rdf_entity.field_ci_name
+    - field.storage.rdf_entity.field_is_contact_information
+    - field.storage.rdf_entity.field_is_description
     - field.storage.rdf_entity.field_is_eif_category
     - field.storage.rdf_entity.field_is_eif_recommendation
     - field.storage.rdf_entity.field_is_owner
-    - field.storage.rdf_entity.field_owner_name
+    - field.storage.rdf_entity.field_is_solution_type
+    - field.storage.rdf_entity.field_isr_contact_information
+    - field.storage.rdf_entity.field_isr_description
     - field.storage.rdf_entity.field_isr_owner
     - field.storage.rdf_entity.field_isr_release_notes
-    - field.storage.eif_wrapper.term
-    - field.storage.rdf_meta_entity.eif_layer
-    - field.storage.rdf_meta_entity.eif_model
-    - field.storage.rdf_meta_entity.eif_principle
-    - field.storage.rdf_entity.field_is_solution_type
+    - field.storage.rdf_entity.field_licence_description
+    - field.storage.rdf_entity.field_licence_spdx_licence
+    - field.storage.rdf_entity.field_owner_name
     - field.storage.taxonomy_term.field_eif_identifier
     - field.storage.taxonomy_term.field_eif_related_term
     - field.storage.user.field_user_family_name
@@ -46,13 +42,11 @@ dependencies:
   module:
     - search_api_solr
     - node
-    - paragraphs
     - meta_entity
     - rdf_entity
-    - publication_date
-    - eif
-    - rdf_meta_entity
     - taxonomy
+    - paragraphs
+    - publication_date
     - rdf_taxonomy
     - user
     - search_api
@@ -108,56 +102,6 @@ field_settings:
     dependencies:
       module:
         - node
-  eif_perspective:
-    label: 'Solution reference'
-    datasource_id: 'entity:rdf_entity'
-    property_path: eif_perspective
-    type: string
-    dependencies:
-      module:
-        - meta_entity
-  eif_perspective_layer:
-    label: 'Solution reference » RDF meta entity » Layer » EIF Wrapper » EIF qualifier » Taxonomy term » Name'
-    datasource_id: 'entity:rdf_entity'
-    property_path: 'eif_perspective:entity:eif_layer:entity:term:entity:name'
-    type: string
-    dependencies:
-      config:
-        - field.storage.eif_wrapper.term
-        - field.storage.rdf_meta_entity.eif_layer
-      module:
-        - eif
-        - meta_entity
-        - rdf_meta_entity
-        - taxonomy
-  eif_perspective_model:
-    label: 'Solution reference » RDF meta entity » Model » EIF Wrapper » EIF qualifier » Taxonomy term » Name'
-    datasource_id: 'entity:rdf_entity'
-    property_path: 'eif_perspective:entity:eif_model:entity:term:entity:name'
-    type: string
-    dependencies:
-      config:
-        - field.storage.eif_wrapper.term
-        - field.storage.rdf_meta_entity.eif_model
-      module:
-        - eif
-        - meta_entity
-        - rdf_meta_entity
-        - taxonomy
-  eif_perspective_principle:
-    label: 'Solution reference » RDF meta entity » Principle » EIF Wrapper » EIF qualifier » Taxonomy term » Name'
-    datasource_id: 'entity:rdf_entity'
-    property_path: 'eif_perspective:entity:eif_principle:entity:term:entity:name'
-    type: string
-    dependencies:
-      config:
-        - field.storage.eif_wrapper.term
-        - field.storage.rdf_meta_entity.eif_principle
-      module:
-        - eif
-        - meta_entity
-        - rdf_meta_entity
-        - taxonomy
   entity_author:
     label: Author
     property_path: aggregated_field
@@ -298,8 +242,7 @@ field_settings:
     label: 'Solution type'
     datasource_id: 'entity:rdf_entity'
     property_path: field_is_solution_type
-    type: text
-    boost: !!float 5
+    type: string
     dependencies:
       config:
         - field.storage.rdf_entity.field_is_solution_type
@@ -315,7 +258,7 @@ field_settings:
     label: 'Release notes » Processed text'
     datasource_id: 'entity:rdf_entity'
     property_path: 'field_isr_release_notes:processed'
-    type: string
+    type: text
     dependencies:
       config:
         - field.storage.rdf_entity.field_isr_release_notes
@@ -396,7 +339,7 @@ field_settings:
     label: Organisation
     datasource_id: 'entity:user'
     property_path: field_user_organisation
-    type: integer
+    type: text
     dependencies:
       config:
         - field.storage.user.field_user_organisation
@@ -414,7 +357,7 @@ field_settings:
     label: ID
     datasource_id: 'entity:rdf_entity'
     property_path: id
-    type: text
+    type: string
     dependencies:
       module:
         - rdf_entity
@@ -455,7 +398,7 @@ field_settings:
     label: 'Owner » Rdf entity » Name'
     datasource_id: 'entity:rdf_entity'
     property_path: 'field_isr_owner:entity:field_owner_name'
-    type: string
+    type: text
     dependencies:
       config:
         - field.storage.rdf_entity.field_isr_owner
@@ -476,6 +419,7 @@ field_settings:
     datasource_id: 'entity:rdf_entity'
     property_path: label
     type: text
+    boost: !!float 5
     dependencies:
       module:
         - rdf_entity
@@ -584,7 +528,7 @@ field_settings:
     label: 'Reverse » Related term » Term ID'
     datasource_id: 'entity:taxonomy_term'
     property_path: 'search_api_reverse_entity_references_taxonomy_term__field_eif_related_term:tid'
-    type: string
+    type: text
   reverse_field_eif_identifier:
     label: 'Reverse » Related term » Identifier'
     datasource_id: 'entity:taxonomy_term'
@@ -594,7 +538,7 @@ field_settings:
     label: 'Rdf Type'
     datasource_id: 'entity:rdf_entity'
     property_path: rid
-    type: text
+    type: string
     dependencies:
       module:
         - rdf_entity
@@ -673,7 +617,7 @@ field_settings:
     label: Vocabulary
     datasource_id: 'entity:taxonomy_term'
     property_path: vid
-    type: integer
+    type: string
     dependencies:
       module:
         - taxonomy
@@ -681,7 +625,7 @@ field_settings:
     label: Weight
     datasource_id: 'entity:taxonomy_term'
     property_path: weight
-    type: text
+    type: integer
     dependencies:
       module:
         - taxonomy
@@ -735,7 +679,6 @@ processor_settings:
   aggregated_topic_hierarchy:
     weights:
       preprocess_index: -50
-  entity_type: {  }
   hierarchy:
     weights:
       preprocess_index: -45
@@ -785,6 +728,7 @@ processor_settings:
       - field_short_title
       - field_user_family_name
       - field_user_first_name
+      - field_user_organisation
       - isr_field_ci_name
       - isr_field_owner_name
       - label
@@ -798,7 +742,6 @@ processor_settings:
   joinup_entity_published_revision: {  }
   joinup_entity_status:
     inverse: false
-  language_with_fallback: {  }
   rendered_item: {  }
   reverse_entity_references: {  }
   solr_date_range:
@@ -817,6 +760,7 @@ processor_settings:
       - field_event_agenda
       - field_is_description
       - field_isr_description
+      - field_isr_release_notes
       - field_licence_description
       - field_location
       - field_news_headline
@@ -873,6 +817,7 @@ processor_settings:
       - field_event_agenda
       - field_is_description
       - field_isr_description
+      - field_isr_release_notes
       - field_licence_description
       - field_location
       - field_news_headline
@@ -881,13 +826,14 @@ processor_settings:
       - field_short_title
       - field_user_family_name
       - field_user_first_name
+      - field_user_organisation
       - is_field_ci_name
       - is_field_owner_name
       - isr_field_ci_name
+      - isr_field_owner_name
       - label
       - title
     spaces: ''
-    ignored: ._-
     overlap_cjk: 1
     minimum_word_size: '3'
   transliteration:
@@ -911,6 +857,7 @@ processor_settings:
       - field_short_title
       - field_user_family_name
       - field_user_first_name
+      - field_user_organisation
       - is_field_ci_name
       - is_field_owner_name
       - isr_field_ci_name
