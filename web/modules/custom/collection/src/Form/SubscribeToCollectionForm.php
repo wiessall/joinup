@@ -149,6 +149,9 @@ class SubscribeToCollectionForm extends FormBase {
     $form['proposal'] = [
       '#type' => 'html_tag',
       '#tag' => 'h2',
+      '#attributes' => [
+        'class' => ['fs-6'],
+      ],
       '#value' => $this->t('Want to receive notifications, too?'),
     ];
     $form['description'] = [
