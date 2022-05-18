@@ -117,8 +117,14 @@ class JoinupCoreContext extends RawDrupalContext {
     $base_element = $region ? $this->getRegion($region) : $this->getSession()->getPage();
 
     $chips = [];
-    foreach ($base_element->findAll('css', '.navbar-search .badge') as $element) {
-      $chips[] = new Chip($element, !$this->browserSupportsJavaScript());
+    // If the chips are being displayed using the `mdl-chip-input` JavaScript
+    // library then they will only be visible if the browser supports JS. If the
+    // browser doesn't support JavaScript then the chips are still present in
+    // the DOM as invisible form input fields. We can still add them with the
+    // `is_visible` flag disabled to indicate they only can be interacted with
+    // in a limited way.
+    foreach ($base_element->findAll('css', '.mdl-chip__text, .mdl-chipfield__input, .navbar-search .badge') as $element) {
+      $chips[] = new Chip($element, $this->browserSupportsJavaScript());
     }
 
     return $chips;

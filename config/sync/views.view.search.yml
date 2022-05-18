@@ -119,7 +119,7 @@ display:
       exposed_form:
         type: autosubmit
         options:
-          submit_button: Apply
+          submit_button: 'Apply Search'
           reset_button: false
           reset_button_label: Reset
           exposed_sorts_label: 'Sort by: '
@@ -472,6 +472,7 @@ display:
         metatag_display_extender:
           metatags:
             description: 'Search the Joinup platform for digital government information and interoperability solutions with the help of advanced filters.'
+          tokenize: false
       path: search
     cache_metadata:
       max-age: -1

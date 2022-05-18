@@ -429,7 +429,7 @@ function joinup_search_form_alter(&$form, FormStateInterface $form_state, $form_
       ];
     }
 
-    if ($route_name != 'view.search.page_1') {
+    if ($view['view']->id() == 'search' && $view['view']->current_display == 'page_1' && $route_name != 'view.search.page_1') {
       $group = \Drupal::service('og.context')->getGroup();
       if ($group) {
         /** @var \Drupal\Core\Entity\ContentEntityInterface $group */
