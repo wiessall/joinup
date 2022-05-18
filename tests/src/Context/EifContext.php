@@ -235,6 +235,42 @@ class EifContext extends RawDrupalContext {
   }
 
   /**
+   * Creates an EIF wrapper entity and returns it. Does not save the entity.
+   *
+   * @param string $bundle
+   *   The bundle of the EIF wrapper.
+   * @param array $values
+   *   An array of values of the EIF wrapper.
+   *
+   * @return \Drupal\eif\EifWrapperInterface
+   *   The created EIF wrapper.
+   */
+  protected function createEifWrapper(string $bundle, array $values): EifWrapperInterface {
+    $values = $this->convertEntityReferencesValues('eif_wrapper', $bundle, $values);
+    $values['type'] = $bundle;
+    $eif_wrapper = EifWrapper::create($values);
+    $eif_wrapper->save();
+    $this->entities['eif_wrapper'][$eif_wrapper->id()] = $eif_wrapper;
+    return $eif_wrapper;
+  }
+
+  /**
+   * Navigates to the EIF perspective edit form of the given solution.
+   *
+   * @param string $solution
+   *   The solution label.
+   *
+   * @Given I go to the EIF perspective edit form of the :solution solution
+   */
+  public function goToEifEditFormOfSolution(string $solution): void {
+    $solution = $this->getRdfEntityByLabel($solution, 'solution');
+    $url = Url::fromRoute('eif.eif_perspective_form', [
+      'rdf_entity' => $solution->id(),
+    ]);
+    $this->visitPath($url->getInternalPath());
+  }
+
+  /**
    * Navigates to the EIF perspective page of the given solution.
    *
    * @param string $solution
@@ -263,26 +299,6 @@ class EifContext extends RawDrupalContext {
     if (empty(\Drupal::getContainer()->get('rdf_meta_entity.repository')->getMetaEntityForEntity($solution, 'eif_perspective'))) {
       throw new \Exception('No perspective was found for the solution');
     }
-  }
-
-  /**
-   * Creates an EIF wrapper entity and returns it. Does not save the entity.
-   *
-   * @param string $bundle
-   *   The bundle of the EIF wrapper.
-   * @param array $values
-   *   An array of values of the EIF wrapper.
-   *
-   * @return \Drupal\eif\EifWrapperInterface
-   *   The created EIF wrapper.
-   */
-  protected function createEifWrapper(string $bundle, array $values): EifWrapperInterface {
-    $values = $this->convertEntityReferencesValues('eif_wrapper', $bundle, $values);
-    $values['type'] = $bundle;
-    $eif_wrapper = EifWrapper::create($values);
-    $eif_wrapper->save();
-    $this->entities['eif_wrapper'][$eif_wrapper->id()] = $eif_wrapper;
-    return $eif_wrapper;
   }
 
 }
