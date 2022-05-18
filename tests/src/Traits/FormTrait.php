@@ -26,7 +26,7 @@ trait FormTrait {
    *   button is present.
    */
   public function assertSubmitButtonsVisible(array $labels, bool $strict = TRUE) {
-    $buttons = $this->getSession()->getPage()->findAll('xpath', '//div[contains(concat(" ", normalize-space(@class), " "), " form-actions ")]//input[@type = "submit"]');
+    $buttons = $this->getSession()->getPage()->findAll('xpath', '//div[contains(concat(" ", normalize-space(@class), " "), " form-actions ")]//input[@type = "submit" and not(contains(concat(" ", normalize-space(@class), " "), " js-hide "))]');
     $actual_labels = [];
     foreach ($buttons as $button) {
       $actual_labels[] = $button->getValue();
