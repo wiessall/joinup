@@ -5,11 +5,14 @@ declare(strict_types = 1);
 namespace Drupal\joinup_eulogin\Event\Subscriber;
 
 use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\Config\ImmutableConfig;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\Url;
 use Drupal\cas\Event\CasPostLoginEvent;
 use Drupal\cas\Event\CasPostValidateEvent;
 use Drupal\cas\Event\CasPreLoginEvent;
+use Drupal\cas\Event\CasPreRegisterEvent;
 use Drupal\cas\Event\CasPreValidateEvent;
 use Drupal\cas\Service\CasHelper;
 use Drupal\user\UserDataInterface;
@@ -27,14 +30,21 @@ class JoinupEuLoginCasEventsSubscriber implements EventSubscriberInterface {
    *
    * @var \Drupal\Core\Config\ImmutableConfig
    */
-  protected $settings;
+  protected ImmutableConfig $settings;
 
   /**
    * The user data service.
    *
    * @var \Drupal\user\UserDataInterface
    */
-  protected $userData;
+  protected UserDataInterface $userData;
+
+  /**
+   * The entity type manager service.
+   *
+   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
+   */
+  protected EntityTypeManagerInterface $entityTypeManager;
 
   /**
    * Constructs a new event subscriber instance.
@@ -43,10 +53,13 @@ class JoinupEuLoginCasEventsSubscriber implements EventSubscriberInterface {
    *   The config factory service.
    * @param \Drupal\user\UserDataInterface $user_data
    *   The user data service.
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
+   *   The entity type manager service.
    */
-  public function __construct(ConfigFactoryInterface $config_factory, UserDataInterface $user_data) {
+  public function __construct(ConfigFactoryInterface $config_factory, UserDataInterface $user_data, EntityTypeManagerInterface $entity_type_manager) {
     $this->settings = $config_factory->get('joinup_eulogin.settings');
     $this->userData = $user_data;
+    $this->entityTypeManager = $entity_type_manager;
   }
 
   /**
@@ -60,6 +73,7 @@ class JoinupEuLoginCasEventsSubscriber implements EventSubscriberInterface {
       CasHelper::EVENT_PRE_LOGIN => ['handlePotentialMailCollision', 21],
       CasHelper::EVENT_POST_LOGIN => 'storeAttributes',
       CasHelper::EVENT_POST_VALIDATE => 'prepareAttributes',
+      CasHelper::EVENT_PRE_REGISTER => 'preventRegisterEmailCollision',
     ];
   }
 
@@ -143,6 +157,35 @@ class JoinupEuLoginCasEventsSubscriber implements EventSubscriberInterface {
     foreach ($xml->xpath('//cas:authenticationSuccess/*') as $element) {
       $event->getCasPropertyBag()->setAttribute($element->getName(), $element->__toString());
     };
+  }
+
+  /**
+   * Prevents registration of a CAS user when their email already exists.
+   *
+   * @param \Drupal\cas\Event\CasPreRegisterEvent $event
+   *   The CAS pre-register event.
+   *
+   * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
+   *   Thrown if the entity type doesn't exist.
+   * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
+   *   Thrown if the storage handler couldn't be loaded.
+   */
+  public function preventRegisterEmailCollision(CasPreRegisterEvent $event): void {
+    $mail = $event->getPropertyValues()['mail'] ?? NULL;
+    if (!$mail) {
+      throw new \InvalidArgumentException("Unexpected empty 'mail' property value.");
+    }
+
+    $same_mail_accounts = $this->entityTypeManager->getStorage('user')->loadByProperties([
+      'mail' => $mail,
+    ]);
+
+    if ($same_mail_accounts) {
+      $event->cancelAutomaticRegistration($this->t('While trying to register your account with Joinup, we found that your EU Login email address %mail is already in use on our site. Either change your EU Login email address or contact the <a href=":contact">Joinup support</a> if you feel that something is wrong.', [
+        '%mail' => $mail,
+        ':contact' => Url::fromRoute('contact_form.contact_page')->toString(),
+      ]));
+    }
   }
 
 }
