@@ -378,13 +378,9 @@ Feature: Log in through EU Login
     When I fill in "Password" with "123"
     And I press "Log in"
 
-    Given I select the radio button "I am a new user (create a new account)"
-    When I press "Next"
-
-    Then I should see the following error messages:
-      | error messages                                                                                             |
-      | The email address joe@example.com is already taken.                                                        |
-      | If you are the owner of this account please select the first option, otherwise contact the Joinup support. |
+    Then I should see the following error message:
+      | error messages                                                                                                                                                                                                                                           |
+      | While trying to register your account with Joinup, we found that your EU Login email address joe@example.com is already in use on our site. Either change your EU Login email address or contact the Joinup support if you feel that something is wrong. |
 
   Scenario: A new user tries to register with an existing username.
     Given users:
