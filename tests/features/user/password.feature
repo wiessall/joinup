@@ -44,11 +44,3 @@ Feature: Password management
     And I fill in "Confirm password" with "Cr4bbyP4tties"
     And I press "Save"
     Then I should see the success message "The changes have been saved."
-
-  # Todo: Re-enable this in ISAICP-6662, or move this inside header.feature.
-  @wip
-  Scenario: A user can see information about EU Login
-    When I am an anonymous user
-    And I am on the homepage
-    Then I should not see the link "Sign in (legacy)"
-    And I should see the link "More about EU Login"
