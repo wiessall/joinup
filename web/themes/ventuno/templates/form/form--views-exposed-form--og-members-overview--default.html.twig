@@ -13,6 +13,7 @@
  * @ingroup themeable
  */
 #}
-<form{{ attributes.addClass(['p-3', 'bg-light', 'rounded', 'row']) }}>
+{{ attach_library('ventuno/members-overview-exposed-form') }}
+<form{{ attributes.addClass('members-overview-exposed-form') }}>
   {{ children }}
 </form>

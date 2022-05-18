@@ -66,6 +66,11 @@ glide:
     theme:
       assets/css/glide.core.min.css: { minified: true }
 
+members-overview-exposed-form:
+  css:
+    theme:
+      assets/css/members-overview-exposed-form.css: {}
+
 navbar:
   css:
     theme:

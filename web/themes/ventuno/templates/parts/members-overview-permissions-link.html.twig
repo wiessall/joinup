@@ -12,7 +12,7 @@
  */
 #}
 {% set attributes = attributes
-  .addClass(['btn', 'btn-md', 'btn-link'])
+  .addClass(['members-overview-exposed-form__member-permissions', 'btn', 'btn-md', 'btn-link'])
 %}
 {% if dialog %}
   {% set attributes = attributes
@@ -23,8 +23,8 @@
 {% endif %}
 
 <a href="{{ url }}"{{ attributes }}>
-  <svg class="bi icon--s me-2">
-    <use xlink:href="{{ file_url('themes/ventuno/assets/icons/icons.svg#info-circle') }}"></use>
+  <svg class="bi icon--fluid me-2">
+    <use xlink:href="{{ bcl_icon_path }}#info-circle"></use>
   </svg>
   {{ text }}
 </a>
