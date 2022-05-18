@@ -75,7 +75,7 @@ class Chip {
    *   is present on the chip.
    */
   public function getRemoveButton(): ?NodeElement {
-    $xpath = "//span[contains(concat(' ', normalize-space(@class), ' '), ' icon--close ')]";
+    $xpath = "/following-sibling::button[contains(concat(' ', normalize-space(@class), ' '), ' mdl-chip__action ')] | //span[contains(concat(' ', normalize-space(@class), ' '), ' icon--close ')]";
     return $this->element->find('xpath', $xpath);
   }
 
