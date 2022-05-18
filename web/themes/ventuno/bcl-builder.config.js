@@ -132,6 +132,14 @@ module.exports = {
       },
     },
     {
+      entry: path.resolve(outputFolder, "src/scss/members-overview-exposed-form.scss"),
+      dest: path.resolve(outputFolder, "assets/css/members-overview-exposed-form.css"),
+      options: {
+        includePaths,
+        sourceMap: "file",
+      },
+    },
+    {
       entry: path.resolve(outputFolder, "src/scss/navbar.scss"),
       dest: path.resolve(outputFolder, "assets/css/navbar.css"),
       options: {
