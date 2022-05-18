@@ -1463,7 +1463,7 @@ class JoinupContext extends RawDrupalContext {
       // Only check the actual form submit buttons, ignore other buttons that
       // might be present in wysiwygs or are used to add multiple values to a
       // field.
-      $actual = count($this->getSession()->getPage()->findAll('xpath', '//div[contains(concat(" ", normalize-space(@class), " "), " form-actions ")]//input[@type = "submit"]'));
+      $actual = count($this->getSession()->getPage()->findAll('xpath', '//main//div[contains(concat(" ", normalize-space(@class), " "), " form-actions ")]//input[@type = "submit"]'));
       Assert::assertEquals($count, $actual);
     }
   }
