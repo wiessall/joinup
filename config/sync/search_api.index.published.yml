@@ -47,12 +47,12 @@ dependencies:
     - search_api.server.joinup
   module:
     - search_api_solr
+    - eif
     - node
     - paragraphs
     - meta_entity
     - rdf_entity
     - publication_date
-    - eif
     - rdf_meta_entity
     - taxonomy
     - rdf_taxonomy
@@ -66,6 +66,7 @@ third_party_settings:
     finalize: false
     commit_before_finalize: false
     commit_after_finalize: false
+    debug_finalize: false
     highlighter:
       maxAnalyzedChars: 51200
       fragmenter: gap
@@ -81,11 +82,24 @@ third_party_settings:
         requireFieldMatch: false
         snippets: 3
         fragsize: 0
+    mlt:
+      mintf: 1
+      mindf: 1
+      maxdf: 0
+      maxdfpct: 0
+      minwl: 0
+      maxwl: 0
+      maxqt: 100
+      maxntp: 2000
+      boost: false
+      interestingTerms: none
     term_modifiers:
       slop: 10000000
       fuzzy: 2
     advanced:
       index_prefix: ''
+      collection: ''
+      timezone: ''
     multilingual:
       limit_to_content_language: false
       include_language_independent: true
@@ -146,6 +160,14 @@ field_settings:
     dependencies:
       module:
         - meta_entity
+  eif_principle:
+    label: Principle
+    datasource_id: 'entity:rdf_meta_entity'
+    property_path: eif_principle
+    type: string
+    dependencies:
+      config:
+        - field.storage.rdf_meta_entity.eif_principle
   eif_principle_term_name:
     label: 'EIF meta entity » Principle » Taxonomy term » Name'
     datasource_id: 'entity:rdf_entity'
@@ -186,6 +208,14 @@ field_settings:
         - meta_entity
         - rdf_meta_entity
         - taxonomy
+  eif_wrapper_id:
+    label: ID
+    datasource_id: 'entity:eif_wrapper'
+    property_path: id
+    type: string
+    dependencies:
+      module:
+        - eif
   entity_author:
     label: Author
     property_path: aggregated_field
@@ -597,6 +627,22 @@ field_settings:
         - field.storage.meta_entity.field_featured
       module:
         - meta_entity
+  rdf_meta_entity_id:
+    label: ID
+    datasource_id: 'entity:rdf_meta_entity'
+    property_path: id
+    type: string
+    dependencies:
+      module:
+        - rdf_meta_entity
+  rdf_meta_entity_target_entity:
+    label: 'Related entity of the RDF meta entity'
+    datasource_id: 'entity:rdf_meta_entity'
+    property_path: target
+    type: string
+    dependencies:
+      module:
+        - rdf_meta_entity
   rdf_pinned_in:
     label: 'Pinned in'
     datasource_id: 'entity:rdf_entity'
@@ -714,6 +760,10 @@ field_settings:
       module:
         - taxonomy
 datasource_settings:
+  'entity:eif_wrapper':
+    bundles:
+      default: true
+      selected: {  }
   'entity:node':
     bundles:
       default: false
@@ -739,6 +789,10 @@ datasource_settings:
         - solution
         - spdx_licence
     languages:
+      default: true
+      selected: {  }
+  'entity:rdf_meta_entity':
+    bundles:
       default: true
       selected: {  }
   'entity:taxonomy_term':
