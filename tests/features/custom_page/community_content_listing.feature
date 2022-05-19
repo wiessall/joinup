@@ -443,3 +443,45 @@ Feature:
       | NEC VR4300 CPU                        |
       | 20 year anniversary                   |
       | Rare Nintendo64 disk drive discovered |
+
+  @javascript
+  Scenario: Regression test for ISAICP-7040
+    See https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7040
+
+    Given collections:
+      | title      | state     |
+      | Nintendo64 | validated |
+    And solutions:
+      | title                | collection | state     |
+      | Save the Planet      | Nintendo64 | validated |
+      | Fight Global Warming | Nintendo64 | validated |
+      | The Green Alliance   | Nintendo64 | validated |
+
+    And custom_page content:
+      | title   | collection |
+      | Forests | Nintendo64 |
+
+    Given I am logged in as a facilitator of the "Nintendo64" collection
+    And I go to the edit form of the "Forests" "custom page"
+
+    # Paragraph #1.
+    When I press "List additional actions"
+    And I press "Add Content listing" in the "Custom page body" paragraphs field
+
+    And I press "Add and configure filter"
+    And I fill in "Solution" with "Save the Planet"
+
+    # Paragraph #2.
+    When I press "List additional actions"
+    And I press "Add Content listing" in the "Custom page body" paragraphs field
+
+    And I press latest "Add and configure filter"
+    And I fill in the latest "Solution" field with "Fight Global Warming"
+
+    And I press latest "Add and configure filter"
+    And I fill in the latest "Solution" field with "The Green Alliance"
+
+    # Back to paragraph #1.
+    And I press "Add and configure filter"
+    Then the 1st filter of the 1st content listing paragraph value is "Save the Planet"
+    And the 2nd filter of the 1st content listing paragraph is empty
