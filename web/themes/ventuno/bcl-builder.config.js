@@ -91,6 +91,14 @@ module.exports = {
     },
     // Bootstrap components
     {
+      entry: path.resolve(outputFolder, "src/scss/badge.scss"),
+      dest: path.resolve(outputFolder, "assets/css/badge.css"),
+      options: {
+        includePaths,
+        sourceMap: "file",
+      },
+    },
+    {
       entry: path.resolve(outputFolder, "src/scss/close.scss"),
       dest: path.resolve(outputFolder, "assets/css/close.css"),
       options: {
