@@ -18,11 +18,11 @@ use Drupal\comment\Entity\Comment;
 use Drupal\file\Entity\File;
 use Drupal\image\Entity\ImageStyle;
 use Drupal\joinup\Traits\BootstrapTrait;
-use Drupal\joinup\Traits\BrowserCapabilityDetectionTrait;
 use Drupal\joinup\Traits\ContextualLinksTrait;
 use Drupal\joinup\Traits\EntityTrait;
 use Drupal\joinup\Traits\FileTrait;
 use Drupal\joinup\Traits\FormTrait;
+use Drupal\joinup\Traits\JavascriptTrait;
 use Drupal\joinup\Traits\KeyboardInteractionTrait;
 use Drupal\joinup\Traits\MaterialDesignTrait;
 use Drupal\joinup\Traits\NodeTrait;
@@ -55,11 +55,11 @@ use WebDriver\Exception\StaleElementReference;
 class JoinupContext extends RawDrupalContext {
 
   use BootstrapTrait;
-  use BrowserCapabilityDetectionTrait;
   use ContextualLinksTrait;
   use EntityTrait;
   use FileTrait;
   use FormTrait;
+  use JavascriptTrait;
   use KeyboardInteractionTrait;
   use MaterialDesignTrait;
   use NodeTrait;
@@ -2687,6 +2687,32 @@ class JoinupContext extends RawDrupalContext {
     /** @var \Behat\Mink\Element\NodeElement $last */
     $last = array_pop($fields);
     $last->setValue($value);
+  }
+
+  /**
+   * Presses the latest button with a given label.
+   *
+   * Used for dynamic forms where a button can be added multiple times.
+   *
+   * @param string $label
+   *   The button label.
+   *
+   * @When I press latest :label
+   */
+  public function pressLatestButton(string $label): void {
+    $page = $this->getSession()->getPage();
+    $buttons = $page->findAll('named', ['button', $label]);
+
+    if (empty($buttons)) {
+      throw new ElementNotFoundException($this->getSession()->getDriver(), 'button', 'label', $label);
+    }
+
+    /** @var \Behat\Mink\Element\NodeElement $last_button */
+    $last_button = array_pop($buttons);
+    if ($id = $last_button->getAttribute('id')) {
+      $this->scrollElementIntoView("#$id");
+    }
+    $last_button->press();
   }
 
   /**
