@@ -25,9 +25,9 @@ Feature:
     But I should not see the text "Some description not to be shown in the EIF page"
 
     And I should see the text "Common frameworks"
-    And the "Underlying Principle 1: Subsidiarity and proportionality" should have the "title" set to "Hello world 1"
-    And the "Underlying Principle 3: Transparency" should have the "title" set to "Hello world 3"
-    And the "Interoperability Layer 3: Legal interoperability" should have the "title" set to "Hello layer 3"
+    And the "Underlying Principle 1: Subsidiarity and proportionality" link should have the "title" attribute set to "Hello world 1"
+    And the "Underlying Principle 3: Transparency" link should have the "title" attribute set to "Hello world 3"
+    And the "Interoperability Layer 3: Legal interoperability" link should have the "title" attribute set to "Hello layer 3"
 
     And I should see the following lines of text:
       # Recommendation titles appear with their related term a
