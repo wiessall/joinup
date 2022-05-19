@@ -2458,7 +2458,7 @@ class FeatureContext extends RawDrupalContext implements SnippetAcceptingContext
    * @param string $attribute_value
    *   The value of the attribute to assert.
    *
-   * @Then the :link_text should have the :attribute_name set to :attribute_value
+   * @Then the :link_text link should have the :attribute_name attribute set to :attribute_value
    */
   public function givenLinkHasAttribute(string $link_text, string $attribute_name, string $attribute_value): void {
     Assert::assertNotNull($this->getSession()->getPage()->find('xpath', "//a[@$attribute_name='$attribute_value' and text()='$link_text']"));
