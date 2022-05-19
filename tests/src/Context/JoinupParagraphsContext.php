@@ -9,17 +9,18 @@ use Behat\Mink\Element\TraversableElement;
 use Behat\Mink\Exception\ElementNotFoundException;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\joinup\Exception\WysiwygEditorNotFoundException;
-use Drupal\joinup\Traits\BrowserCapabilityDetectionTrait;
+use Drupal\joinup\Traits\JavascriptTrait;
 use Drupal\joinup\Traits\UtilityTrait;
 use Drupal\joinup\Traits\WysiwygTrait;
 use PHPUnit\Framework\Assert;
+use PHPUnit\Framework\ExpectationFailedException;
 
 /**
  * Behat step definitions for testing searches.
  */
 class JoinupParagraphsContext extends RawDrupalContext {
 
-  use BrowserCapabilityDetectionTrait;
+  use JavascriptTrait;
   use WysiwygTrait;
   use UtilityTrait;
 
@@ -63,7 +64,7 @@ class JoinupParagraphsContext extends RawDrupalContext {
    * @When I enter :text in the :label wysiwyg editor in the :field field for paragraph :position
    */
   public function enterTextInWysiwyg(string $text, string $label, string $field, int $position): void {
-    $field = $this->getParagraphsElement($field, $position);
+    $field = $this->getParagraphsElementItem($field, $position);
 
     // If we are running in a JavaScript enabled browser, first click the
     // 'Source' button so we can enter the text as HTML and get the same result
@@ -157,31 +158,14 @@ class JoinupParagraphsContext extends RawDrupalContext {
    *   The button label.
    * @param string $field
    *   The field name.
-   * @param int $position
+   * @param int $delta
    *   The paragraphs row number. Starts at 1 for readability.
    *
-   * @Given I should see the :button button in the :field field for paragraph :position
+   * @Given I should see the :button button in the :field field for paragraph :delta
    */
-  public function assertButtonInParagraphsItem(string $button, string $field, int $position): void {
-    $paragraph_item = $this->getParagraphsElement($field, --$position);
+  public function assertButtonInParagraphsItem(string $button, string $field, int $delta): void {
+    $paragraph_item = $this->getParagraphsElementItem($field, --$delta);
     Assert::assertNotEmpty($paragraph_item->findButton($button));
-  }
-
-  /**
-   * Asserts that a button does not exist in a row of paragraphs.
-   *
-   * @param string $button
-   *   The button label.
-   * @param string $field
-   *   The field name.
-   * @param int $position
-   *   The paragraphs row number. Starts at 1 for readability.
-   *
-   * @Given I should not see the :button button in the :field field for paragraph :position
-   */
-  public function assertButtonNotInParagraphsItem(string $button, string $field, int $position): void {
-    $paragraph_item = $this->getParagraphsElement($field, --$position);
-    Assert::assertEmpty($paragraph_item->findButton($button));
   }
 
   /**
@@ -192,23 +176,23 @@ class JoinupParagraphsContext extends RawDrupalContext {
    * @param string $field
    *   The field identifier. One of the keys in the
    *   \JoinupParagraphsSubContext::fieldMapping array.
-   * @param int|null $position
+   * @param int|null $delta
    *   (optional) The position of the item to remove. Starts at 1 for
    *   readability. If left empty, the button will be searched in the entire
    *   field.
    *
-   * @Given I press :label in the :field field for paragraph :position
+   * @Given I press :label in the :field field for paragraph :delta
    * @Given I press :label in the :field paragraphs field
    */
-  public function clickButtonInParagraphsField(string $label, string $field, ?int $position = NULL): void {
-    if ($position === NULL) {
+  public function clickButtonInParagraphsField(string $label, string $field, ?int $delta = NULL): void {
+    if ($delta === NULL) {
       // This is a field button, not linked to any paragraph item, such as the
       // button that adds a new paragraph item.
       $this->getParagraphsElement($field)->findButton($label)->press();
       return;
     }
 
-    $paragraph_item = $this->getParagraphsElement($field, --$position);
+    $paragraph_item = $this->getParagraphsElementItem($field, --$delta);
 
     if (!$button = $paragraph_item->findButton($label)) {
       throw new ElementNotFoundException($this->getSession()->getDriver(), 'button', 'label');
@@ -269,52 +253,102 @@ class JoinupParagraphsContext extends RawDrupalContext {
   }
 
   /**
-   * Returns the field element according to the xpath selector.
+   * Asserts the value of a filter from a given content listing paragraph.
+   *
+   * @param string $paragraph
+   *   The "1-based" delta of the content listing paragraph.
+   * @param string $filter
+   *   The "1-based" delta of the filter within content listing paragraph.
+   * @param string|null $expected_value
+   *   (optional) The expected value. If omitted, the step definition asserts an
+   *   empty value.
+   *
+   * @throws \Behat\Mink\Exception\ElementNotFoundException
+   *   When content listing paragraph is not found in the page.
+   *
+   * @Then the :filter filter of the :paragraph content listing paragraph value is :expected_value
+   * @Then the :filter filter of the :paragraph content listing paragraph is empty
+   */
+  public function assertFilterFromParagraphHasValue(string $paragraph, string $filter, ?string $expected_value = NULL): void {
+    $paragraph_0_based_delta = $this->convertOrdinalToNumber($paragraph) - 1;
+    $field = $this->getParagraphsElement('Custom content listing', $paragraph_0_based_delta);
+    $filter_1_based_delta = $this->convertOrdinalToNumber($filter);
+    $input = $field->find('xpath', "(//input[@type='text'])[$filter_1_based_delta]");
+    if (!$input) {
+      throw new ExpectationFailedException("The $filter filter from $paragraph paragraph doesn't contain '$expected_value'");
+    }
+    if ($expected_value) {
+      Assert::assertSame($expected_value, $input->getAttribute('value'));
+    }
+    else {
+      Assert::assertEmpty($input->getAttribute('value'));
+    }
+  }
+
+  /**
+   * Returns the paragraph field element.
    *
    * @param string $field
    *   The field designator.
-   * @param int|null $position
-   *   (optional) If empty, the whole field will be returned. If passed, the
-   *   corresponding delta will be returned.
+   * @param int $position
+   *   (optional) The zero-based paragraph field position. If empty, the first
+   *   paragraph will be returned. Defaults to 0.
    *
    * @return \Behat\Mink\Element\TraversableElement
    *   The field element.
    *
-   * @throws \Exception
-   *   When an element that matches the given data is not found, or multiple
-   *   elements match the data.
+   * @throws \Behat\Mink\Exception\ElementNotFoundException
+   *   When content listing paragraph is not found in the page.
    */
-  protected function getParagraphsElement(string $field, ?int $position = NULL): TraversableElement {
-    if (!isset(self::FIELD_MAP[$field])) {
-      throw new \InvalidArgumentException("The '$field' field is not mapped. Check \JoinupParagraphsSubContext::fieldMapping for the mapped fields and add your field and your selector to it.");
-    }
-
+  protected function getParagraphsElement(string $field, int $position = 0): TraversableElement {
+    assert(isset(self::FIELD_MAP[$field]));
     $mapping = self::FIELD_MAP[$field];
-    $xpath = "//div[contains(concat(' ', @class, ' '), ' field--name-$mapping ')]";
-    $elements = $this->getSession()->getPage()->findAll('xpath', $xpath);
-    if (empty($elements)) {
-      throw new \Exception("The $field field was not found anywhere in the page.");
-    }
-    if (count($elements) > 1) {
-      throw new \Exception("Multiple instances of the $field field were found in the page.");
-    }
 
-    $element = reset($elements);
-    if ($position === NULL) {
-      return $element;
-    }
+    // XPath element delta is "1-based".
+    $position++;
 
-    // Normally, the id of the element we are seeking is in the form of
+    $xpath = "(//div[contains(concat(' ', @class, ' '), ' field--name-$mapping ')])[$position]";
+    $element = $this->getSession()->getPage()->find('xpath', $xpath);
+    if (empty($element)) {
+      throw new ElementNotFoundException($this->getSession()->getDriver(), 'paragraph field', $field);
+    }
+    return $element;
+  }
+
+  /**
+   * Returns the paragraph field element item.
+   *
+   * @param string $field
+   *   The field designator.
+   * @param int $delta
+   *   The zero-based delta of the paragraph field item.
+   * @param int $position
+   *   (optional) The zero-based paragraph field position. If empty, the first
+   *   paragraph will be returned. Defaults to 0.
+   *
+   * @return \Behat\Mink\Element\TraversableElement
+   *   The field element.
+   *
+   * @throws \Behat\Mink\Exception\ElementNotFoundException
+   *   When the paragraph field cannot be found.
+   */
+  protected function getParagraphsElementItem(string $field, int $delta, int $position = 0): TraversableElement {
+    assert(isset(self::FIELD_MAP[$field]));
+    $mapping = self::FIELD_MAP[$field];
+
+    $element = $this->getParagraphsElement($field, $position);
+
+    // Normally, the ID of the element we are seeking is in the form of
     // '{field-name}-{delta}-item-wrapper'. However, when submitting the remove
     // button for example, it receives a small hash for a suffix and receives
     // the form of '{field-name}-{delta}-item-wrapper--{hash}'.
-    $xpath = "//div[starts-with(@id, '$mapping-$position-item-wrapper')]";
+    $xpath = "//div[starts-with(@id, '$mapping-$delta-item-wrapper')]";
     $elements = $element->findAll('xpath', $xpath);
     if (empty($elements)) {
-      throw new \Exception("The $field field does not have an item at row $position.");
+      throw new \Exception("The $field field does not have an item at row $delta.");
     }
     if (count($elements) > 1) {
-      throw new \Exception("Multiple instances of the $field field were found in the page at row $position.");
+      throw new \Exception("Multiple instances of the $field field were found in the page at row $delta.");
     }
     return reset($elements);
   }
