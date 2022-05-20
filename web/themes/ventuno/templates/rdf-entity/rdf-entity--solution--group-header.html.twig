@@ -1,0 +1,45 @@
+{#
+/**
+ * @file
+ * Themeing for group header.
+ */
+#}
+<article {{ attributes.addClass(['py-4', 'py-md-5']) }} style="background: linear-gradient(117deg, rgba(20,59,118,.7), rgba(20,59,118,.4)), url('{{ content.field_is_banner }}') no-repeat, rgba(20,59,118,.4); background-size: cover;">
+  <div class="container d-flex flex-column align-items-center">
+    <a href="{{ path('entity.rdf_entity.canonical',{'rdf_entity': rdf_entity.id()}) }}">
+      {{ content.field_is_logo }}
+    </a>
+    {{ title_prefix }}
+    <a class="mt-3 fs-2 fw-bold text-light text-center" href="{{ path('entity.rdf_entity.canonical',{'rdf_entity': rdf_entity.id()}) }}">
+      {{ label }}
+    </a>
+    {{ title_suffix }}
+    <ul class="list-unstyled mt-3 mb-0 p-3 bg-secondary rounded text-dark mw-lg-50">
+      <li class="mb-2 d-flex align-items-center">
+        <svg class="bi icon--s me-2">
+          <use xlink:href="{{ bcl_icon_path }}#folder2-open"></use>
+        </svg>
+        {{ content.collections }}
+      </li>
+      {% if content.downloads|render|striptags|trim is not empty %}
+        <li class="mb-2 d-flex align-items-center">
+          <svg class="bi icon--s me-2">
+            <use xlink:href="{{ bcl_icon_path }}#download"></use>
+          </svg>
+          <strong>{{ 'Downloads'|t }}:&nbsp;</strong>
+          {{ content.downloads }}
+        </li>
+      {% endif %}
+      <li class="d-flex">
+        <svg class="bi icon--s me-2 flex-shrink-0 mt-1">
+          <use xlink:href="{{ bcl_icon_path }}#card-list"></use>
+        </svg>
+        {{ content.field_topic }}
+      </li>
+    </ul>
+    <div class="mt-4 d-flex text-light">
+      {{ content.solution_subscribe }}
+      {{ content.releases_overview }}
+    </div>
+  </div>
+</article>

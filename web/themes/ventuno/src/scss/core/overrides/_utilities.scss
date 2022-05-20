@@ -160,9 +160,13 @@ $utilities: map-merge(
         )
       ),
       "max-width": (
+        responsive: true,
         property: max-width,
         class: mw,
-        values: (100: 100%)
+        values: (
+          50: 50%,
+          100: 100%
+        )
       ),
       // "viewport-width": (
       //   property: width,
@@ -208,12 +212,12 @@ $utilities: map-merge(
       //   property: flex,
       //   values: (fill: 1 1 auto)
       // ),
-      // "flex-direction": (
-      //   responsive: true,
-      //   property: flex-direction,
-      //   class: flex,
-      //   values: row column row-reverse column-reverse
-      // ),
+      "flex-direction": (
+        responsive: true,
+        property: flex-direction,
+        class: flex,
+        values: row column row-reverse column-reverse
+      ),
       // "flex-grow": (
       //   responsive: true,
       //   property: flex-grow,
@@ -223,15 +227,15 @@ $utilities: map-merge(
       //     grow-1: 1,
       //   )
       // ),
-      // "flex-shrink": (
-      //   responsive: true,
-      //   property: flex-shrink,
-      //   class: flex,
-      //   values: (
-      //     shrink-0: 0,
-      //     shrink-1: 1,
-      //   )
-      // ),
+      "flex-shrink": (
+        responsive: false,
+        property: flex-shrink,
+        class: flex,
+        values: (
+          shrink-0: 0,
+          shrink-1: 1,
+        )
+      ),
       "flex-wrap": (
         responsive: true,
         property: flex-wrap,
@@ -256,17 +260,17 @@ $utilities: map-merge(
           evenly: space-evenly,
         )
       ),
-      // "align-items": (
-      //   responsive: true,
-      //   property: align-items,
-      //   values: (
-      //     start: flex-start,
-      //     end: flex-end,
-      //     center: center,
-      //     baseline: baseline,
-      //     stretch: stretch,
-      //   )
-      // ),
+      "align-items": (
+        responsive: true,
+        property: align-items,
+        values: (
+          start: flex-start,
+          end: flex-end,
+          center: center,
+          baseline: baseline,
+          stretch: stretch,
+        )
+      ),
       "align-content": (
         responsive: true,
         property: align-content,
