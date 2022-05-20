@@ -3,58 +3,58 @@ langcode: en
 status: true
 dependencies:
   config:
-    - field.storage.node.field_event_agenda
-    - field.storage.node.field_paragraphs_body
-    - field.storage.paragraph.field_body
     - field.storage.node.body
-    - field.storage.node.field_event_date
-    - field.storage.meta_entity.field_featured
-    - field.storage.node.field_news_headline
-    - field.storage.node.field_location
-    - field.storage.node.field_organisation
-    - field.storage.meta_entity.field_pinned_in
-    - field.storage.node.field_scope
-    - field.storage.node.field_short_title
-    - field.storage.meta_entity.count
-    - field.storage.rdf_entity.field_ar_abstract
-    - field.storage.rdf_entity.field_ci_name
-    - field.storage.rdf_entity.field_isr_contact_information
-    - field.storage.rdf_entity.field_is_contact_information
-    - field.storage.rdf_entity.field_licence_spdx_licence
-    - field.storage.rdf_entity.field_isr_description
-    - field.storage.rdf_entity.field_licence_description
-    - field.storage.rdf_entity.field_ad_description
-    - field.storage.rdf_entity.field_ar_description
-    - field.storage.rdf_entity.field_is_description
-    - field.storage.rdf_entity.field_is_eif_category
     - field.storage.eif_wrapper.term
     - field.storage.rdf_meta_entity.eif_layer
     - field.storage.rdf_meta_entity.eif_model
     - field.storage.rdf_meta_entity.eif_principle
     - field.storage.rdf_meta_entity.eif_recommendation
     - field.storage.rdf_meta_entity.field_eif_solution_type
-    - field.storage.rdf_entity.field_is_eif_recommendation
-    - field.storage.rdf_entity.field_is_owner
-    - field.storage.rdf_entity.field_owner_name
-    - field.storage.rdf_entity.field_isr_owner
-    - field.storage.rdf_entity.field_isr_release_notes
-    - field.storage.rdf_entity.field_is_solution_type
+    - field.storage.rdf_entity.field_ad_description
+    - field.storage.rdf_entity.field_ar_abstract
+    - field.storage.rdf_entity.field_ar_description
     - field.storage.taxonomy_term.field_eif_identifier
     - field.storage.taxonomy_term.field_eif_related_term
+    - field.storage.node.field_event_agenda
+    - field.storage.node.field_event_date
+    - field.storage.rdf_entity.field_is_description
+    - field.storage.rdf_entity.field_is_eif_category
+    - field.storage.rdf_entity.field_is_eif_recommendation
+    - field.storage.rdf_entity.field_is_solution_type
+    - field.storage.rdf_entity.field_isr_description
+    - field.storage.rdf_entity.field_isr_release_notes
+    - field.storage.rdf_entity.field_licence_description
+    - field.storage.rdf_entity.field_licence_spdx_licence
+    - field.storage.node.field_location
+    - field.storage.node.field_news_headline
+    - field.storage.node.field_organisation
+    - field.storage.node.field_scope
+    - field.storage.node.field_short_title
     - field.storage.user.field_user_family_name
     - field.storage.user.field_user_first_name
     - field.storage.user.field_user_organisation
+    - field.storage.meta_entity.count
+    - field.storage.rdf_entity.field_ci_name
+    - field.storage.rdf_entity.field_is_contact_information
+    - field.storage.rdf_entity.field_is_owner
+    - field.storage.rdf_entity.field_owner_name
+    - field.storage.rdf_entity.field_isr_contact_information
+    - field.storage.rdf_entity.field_isr_owner
+    - field.storage.meta_entity.field_featured
+    - field.storage.meta_entity.field_pinned_in
+    - field.storage.node.field_paragraphs_body
+    - field.storage.paragraph.field_body
     - search_api.server.joinup
   module:
     - search_api_solr
-    - eif
     - node
-    - paragraphs
+    - eif
     - meta_entity
-    - rdf_entity
-    - publication_date
     - rdf_meta_entity
     - taxonomy
+    - rdf_entity
+    - paragraphs
+    - publication_date
     - rdf_taxonomy
     - user
     - search_api
@@ -160,14 +160,6 @@ field_settings:
     dependencies:
       module:
         - meta_entity
-  eif_principle:
-    label: Principle
-    datasource_id: 'entity:rdf_meta_entity'
-    property_path: eif_principle
-    type: string
-    dependencies:
-      config:
-        - field.storage.rdf_meta_entity.eif_principle
   eif_principle_term_name:
     label: 'EIF meta entity » Principle » Taxonomy term » Name'
     datasource_id: 'entity:rdf_entity'
@@ -208,14 +200,6 @@ field_settings:
         - meta_entity
         - rdf_meta_entity
         - taxonomy
-  eif_wrapper_id:
-    label: ID
-    datasource_id: 'entity:eif_wrapper'
-    property_path: id
-    type: string
-    dependencies:
-      module:
-        - eif
   entity_author:
     label: Author
     property_path: aggregated_field
@@ -627,22 +611,6 @@ field_settings:
         - field.storage.meta_entity.field_featured
       module:
         - meta_entity
-  rdf_meta_entity_id:
-    label: ID
-    datasource_id: 'entity:rdf_meta_entity'
-    property_path: id
-    type: string
-    dependencies:
-      module:
-        - rdf_meta_entity
-  rdf_meta_entity_target_entity:
-    label: 'Related entity of the RDF meta entity'
-    datasource_id: 'entity:rdf_meta_entity'
-    property_path: target
-    type: string
-    dependencies:
-      module:
-        - rdf_meta_entity
   rdf_pinned_in:
     label: 'Pinned in'
     datasource_id: 'entity:rdf_entity'
@@ -760,10 +728,6 @@ field_settings:
       module:
         - taxonomy
 datasource_settings:
-  'entity:eif_wrapper':
-    bundles:
-      default: true
-      selected: {  }
   'entity:node':
     bundles:
       default: false
@@ -789,10 +753,6 @@ datasource_settings:
         - solution
         - spdx_licence
     languages:
-      default: true
-      selected: {  }
-  'entity:rdf_meta_entity':
-    bundles:
       default: true
       selected: {  }
   'entity:taxonomy_term':
