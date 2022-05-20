@@ -412,19 +412,19 @@ display:
           exposed: false
       arguments: {  }
       filters:
-        eif_principle_term_name:
-          id: eif_principle_term_name
+        entity_bundle:
+          id: entity_bundle
           table: search_api_index_published
-          field: eif_principle_term_name
+          field: entity_bundle
           relationship: none
           group_type: group
           admin_label: ''
           plugin_id: search_api_string
-          operator: 'not empty'
+          operator: '='
           value:
             min: ''
             max: ''
-            value: ''
+            value: solution
           group: 1
           exposed: false
           expose:
@@ -456,19 +456,19 @@ display:
             default_group: All
             default_group_multiple: {  }
             group_items: {  }
-        entity_bundle:
-          id: entity_bundle
+        eif_perspective:
+          id: eif_perspective
           table: search_api_index_published
-          field: entity_bundle
+          field: eif_perspective
           relationship: none
           group_type: group
           admin_label: ''
           plugin_id: search_api_string
-          operator: '='
+          operator: 'not empty'
           value:
             min: ''
             max: ''
-            value: solution
+            value: ''
           group: 1
           exposed: false
           expose:
