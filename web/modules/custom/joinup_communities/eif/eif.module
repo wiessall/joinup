@@ -17,6 +17,7 @@ use Drupal\eif\EifInterface;
 use Drupal\eif\Form\EifWrapperInlineForm;
 use Drupal\eif\Plugin\views\argument\EifGroupArgument;
 use Drupal\og\OgGroupAudienceHelperInterface;
+use Drupal\rdf_meta_entity\Entity\RdfMetaEntityInterface;
 use Drupal\solution\Entity\SolutionInterface;
 
 /**
@@ -228,4 +229,42 @@ function eif_eif_wrapper_create_access(AccountInterface $account, array $context
  */
 function eif_eif_wrapper_access(EntityInterface $entity, string $operation, AccountInterface $account): AccessResultInterface {
   return AccessResult::allowedIf($account->hasPermission("{$operation} eif wrapper entity"));
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_insert().
+ */
+function eif_rdf_meta_entity_insert(RdfMetaEntityInterface $entity): void {
+  _eif_reindex_parent_solution($entity);
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_update().
+ */
+function eif_rdf_meta_entity_update(RdfMetaEntityInterface $entity): void {
+  _eif_reindex_parent_solution($entity);
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_delete().
+ */
+function eif_rdf_meta_entity_delete(\Drupal\Core\Entity\EntityInterface $entity) {
+  _eif_reindex_parent_solution($entity);
+}
+
+/**
+ * Re index the parent solution to include the reference to the perspective.
+ *
+ * @param \Drupal\rdf_meta_entity\Entity\RdfMetaEntityInterface $entity
+ *   The RDF meta entity.
+ */
+function _eif_reindex_parent_solution(RdfMetaEntityInterface $entity): void {
+  if ($entity->bundle() !== 'eif_perspective') {
+    return;
+  }
+
+  $solution = \Drupal::entityTypeManager()->getStorage('rdf_entity')->loadUnchanged($entity->target->target_id);
+  $tracking_manager = \Drupal::getContainer()->get('search_api.entity_datasource.tracking_manager');
+  $tracking_manager->entityDelete($solution);
+  $tracking_manager->entityInsert($solution);
 }

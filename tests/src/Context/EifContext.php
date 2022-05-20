@@ -271,22 +271,6 @@ class EifContext extends RawDrupalContext {
   }
 
   /**
-   * Navigates to the EIF perspective page of the given solution.
-   *
-   * @param string $solution
-   *   The solution label.
-   *
-   * @Given I go to the EIF perspective page of the :solution solution
-   */
-  public function goToEifPerspectiveOfSolution(string $solution): void {
-    $solution = $this->getRdfEntityByLabel($solution, 'solution');
-    $url = Url::fromRoute('entity.rdf_entity.eif_perspective', [
-      'rdf_entity' => $solution->id(),
-    ]);
-    $this->visitPath($url->getInternalPath());
-  }
-
-  /**
    * Asserts that there is an EIF perspective entity associated to the solution.
    *
    * @param string $solution
@@ -299,6 +283,20 @@ class EifContext extends RawDrupalContext {
     if (empty(\Drupal::getContainer()->get('rdf_meta_entity.repository')->getMetaEntityForEntity($solution, 'eif_perspective'))) {
       throw new \Exception('No perspective was found for the solution');
     }
+  }
+
+  /**
+   * Deletes the EIF perspective of a solution.
+   *
+   * @param string $solution_label
+   *   The solution label.
+   *
+   * @Given I delete the EIF perspective of the :solution_label solution
+   */
+  public function deletePerspectiveOfSolution(string $solution_label): void {
+    $solution = $this->getRdfEntityByLabel($solution_label, 'solution');
+    $eif_perspective = $solution->get('eif_perspective')->entity;
+    $eif_perspective->delete();
   }
 
 }
