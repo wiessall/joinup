@@ -1,3 +1,4 @@
 {{ attach_library('joinup_search/group-badge') }}
 {{ attach_library('ventuno/badge') }}
-<span class="me-2 fs-6 badge bg-primary rounded-pill" data-description="{{ name }}">{{ name }}<svg class="bi icon--s icon--close"><use xlink:href="{{ bcl_icon_path }}#x"></use></svg></span>
+<span class="d-lg-none badge bg-primary mx-2 rounded-pill fs-6" data-description="{{ name }}">{{ name|length > 10 ? name|slice(0, 10) ~ '...' : name }}<span class="icon--close" aria-hidden="true"><svg class="bi icon--s"><use xlink:href="{{ bcl_icon_path }}#x-lg"></use></svg></span></span>
+<span class="d-none d-lg-inline-flex badge bg-primary mx-2 rounded-pill fs-6" data-description="{{ name }}">{{ name|length > 28 ? name|slice(0, 28) ~ '...' : name }}<span class="icon--close" aria-hidden="true"><svg class="bi icon--s"><use xlink:href="{{ bcl_icon_path }}#x-lg"></use></svg></span></span>

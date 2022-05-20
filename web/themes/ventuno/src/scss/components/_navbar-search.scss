@@ -18,9 +18,16 @@
   @include media-breakpoint-up(xxl) {
     width: calc(map-get($container-max-widths, xxl) - 2.5rem);
   }
+  .navbar-search__form-container {
+    display: flex;
+    align-items: center;
+    border: $border-width solid $border-color;
+    border-radius: $border-radius-sm;
+  }
   .form-item {
     width: 100%;
     align-self: center;
+    margin-bottom: 0!important;
   }
   .form-autocomplete {
     border-style: none;
@@ -28,12 +35,14 @@
     padding: .25rem;
     font-size: $font-size-sm;
   }
+  .form__actions {
+    display: none;
+  }
   .btn.btn-search {
     @include font-icon-before("\E805", 1.2rem, $primary, inherit, 0);
     width: 2.5rem;
     border-style: none;
-    padding-left: $spacer * .5;
-    padding-right: $spacer * .25;
+    padding: $spacer * .25 $spacer * .5;
     color: $dark;
     background: transparent;
     color: $primary;
@@ -42,10 +51,6 @@
     &:hover {
       box-shadow: none;
     }
-  }
-  .input-group {
-    border: 1px solid $gray-300;
-    border-radius: $border-radius-sm; // .2rem
   }
   .form-autocomplete,
   &__submit {
@@ -63,6 +68,6 @@
     right: -10.5px;
   }
   .accordion-body {
-    padding: $spacer * .5 $spacer * .5 0 $spacer * .5; // 8px 8px 0 8px
+    padding: $spacer * .5; // 8px
   }
 }
