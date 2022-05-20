@@ -52,7 +52,7 @@ Feature: Asset release moderation
     And I should not see the following warning messages:
       | warning messages                                                                     |
       | You are viewing the published version. To view the latest draft version, click here. |
-    And 0 e-mails should have been sent
+    And 1 e-mails should have been sent
 
     When I click "Edit" in the "Entity actions" region
     And I should see the workflow buttons "Update, Save as draft"
