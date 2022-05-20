@@ -326,7 +326,8 @@
             },
             "drupal/metatag": {
                 "Error: Call to a member function __wakeup() on null @see https://www.drupal.org/project/metatag/issues/3258346": "https://www.drupal.org/files/issues/2022-01-13/metatag_views-fix-cache-wrapper-serialization-3258346-3.patch",
-                "Views cache wrapper overrides other modules cache logic @see https://www.drupal.org/project/metatag/issues/3261473": "https://git.drupalcode.org/project/metatag/-/merge_requests/48.diff"
+                "Views cache wrapper overrides other modules cache logic @see https://www.drupal.org/project/metatag/issues/3261473": "https://git.drupalcode.org/project/metatag/-/merge_requests/48.diff",
+                "Tokenize not in config schema @see https://www.drupal.org/project/metatag/issues/3258978": "https://www.drupal.org/files/issues/2022-01-17/3258978.patch"
             },
             "drupal/paragraphs_jquery_ui_accordion": {
                 "Formatter settings are missing schema @see https://www.drupal.org/i/3194916": "https://git.drupalcode.org/project/paragraphs_jquery_ui_accordion/-/merge_requests/1.diff",

@@ -5487,10 +5487,6 @@
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
                     }
-                },
-                "patches_applied": {
-                    "Error: Call to a member function __wakeup() on null @see https://www.drupal.org/project/metatag/issues/3258346": "https://www.drupal.org/files/issues/2022-01-13/metatag_views-fix-cache-wrapper-serialization-3258346-3.patch",
-                    "Views cache wrapper overrides other modules cache logic @see https://www.drupal.org/project/metatag/issues/3261473": "https://git.drupalcode.org/project/metatag/-/merge_requests/48.diff"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -24173,5 +24169,5 @@
     "platform-overrides": {
         "php": "7.4.0"
     },
-    "plugin-api-version": "2.2.0"
+    "plugin-api-version": "2.3.0"
 }
