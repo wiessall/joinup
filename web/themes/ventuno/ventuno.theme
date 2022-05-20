@@ -475,7 +475,6 @@ function ventuno_theme_suggestions_form_element_alter(array &$suggestions, array
  * Implements hook_form_FORM_ID_alter().
  */
 function ventuno_form_join_group_form_alter(array &$form, FormStateInterface $form_state, string $form_id): void {
-
   // Make the 'Join' modal link for anonymous users appear as a button.
   if (isset($form['authenticate'])) {
     $form['authenticate']['#attributes']['class'][] = 'btn';
@@ -489,7 +488,7 @@ function ventuno_form_join_group_form_alter(array &$form, FormStateInterface $fo
   }
 
   if (isset($form['leave'])) {
-    // Add classes for pending membership link.
+    // Add classes for leave membership link.
     $form['leave']['#confirm']['#attributes']['class'][] = 'btn';
     $form['leave']['#confirm']['#attributes']['class'][] = 'btn-warning';
   }
