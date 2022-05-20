@@ -18,7 +18,7 @@ use Drupal\eif\Form\EifWrapperInlineForm;
 use Drupal\eif\Plugin\views\argument\EifGroupArgument;
 use Drupal\og\OgGroupAudienceHelperInterface;
 use Drupal\rdf_meta_entity\Entity\RdfMetaEntityInterface;
-use Drupal\solution\Entity\SolutionInterface;
+use Drupal\views\Views;
 
 /**
  * Implements hook_theme().
@@ -248,7 +248,7 @@ function eif_rdf_meta_entity_update(RdfMetaEntityInterface $entity): void {
 /**
  * Implements hook_ENTITY_TYPE_delete().
  */
-function eif_rdf_meta_entity_delete(\Drupal\Core\Entity\EntityInterface $entity) {
+function eif_rdf_meta_entity_delete(RdfMetaEntityInterface $entity) {
   _eif_reindex_parent_solution($entity);
 }
 
@@ -267,4 +267,6 @@ function _eif_reindex_parent_solution(RdfMetaEntityInterface $entity): void {
   $tracking_manager = \Drupal::getContainer()->get('search_api.entity_datasource.tracking_manager');
   $tracking_manager->entityDelete($solution);
   $tracking_manager->entityInsert($solution);
+
+  Views::getView('solutions_meta_entity')->storage->invalidateCaches();
 }

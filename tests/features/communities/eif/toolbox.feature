@@ -23,9 +23,10 @@ Feature:
       | Jordan 5 | Recommendation 4                   | Common services | Killjoy    | draft     |
 
     # Visit the toolbox page once to ensure that solutions are properly
-    # re-indexed when an EIF perspective is created or deleted.
+    # re-indexed when an EIF perspective is created or deleted and that
+    # cache is invalidated properly.
     Given I visit the "Online Assistant" custom page
-    Then I should not see the heading "Jordan 1"
+    Then I should see the text "There are no solutions with an EIF perspective assigned"
 
     Given the following EIF perspective data for the "Jordan 1" solution:
       | Description      | It will be an amazing principle.                                   |
