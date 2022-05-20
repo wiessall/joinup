@@ -121,7 +121,7 @@ class JoinCollectionForm extends JoinGroupFormBase {
       // Rebuild the form and replace it in the page, so that the "Join this
       // "collection" button will be replaced with either the "You're a member"
       // button or the "Membership is pending" button.
-      $form_button = $this->formBuilder->rebuildForm('join-group-form', $form_state, $form);
+      $form_button = $this->formBuilder->rebuildForm('join_group_form', $form_state, $form);
       $response->addCommand(new ReplaceCommand('#join-group-form', $form_button));
 
       $title = $this->t('Welcome to %collection', ['%collection' => $this->group->label()]);
