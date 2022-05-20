@@ -7,6 +7,7 @@ dependencies:
     - filter.format.simple_text
   module:
     - comment
+    - email_confirmer
     - entity_legal
     - filter
     - joinup_licence
@@ -25,6 +26,7 @@ is_admin: false
 permissions:
   - 'access comments'
   - 'access content'
+  - 'access email confirmation'
   - 'access tour'
   - 'access user profiles'
   - 'export rdf metadata'
