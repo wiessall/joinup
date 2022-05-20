@@ -24,6 +24,9 @@ libraries-override:
     css:
       component:
         css/tour.module.css: assets/css/tour.css
+  core/drupal.checkbox:
+    js:
+      misc/checkbox.js: js/checkbox.js
 
 regions:
   header: Header
