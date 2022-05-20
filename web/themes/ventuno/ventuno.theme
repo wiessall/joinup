@@ -585,6 +585,15 @@ function ventuno_preprocess_field_multiple_value_form(&$variables) {
 }
 
 /**
+ * Implements hook_preprocess_inline_entity_form_entity_table().
+ */
+function ventuno_preprocess_inline_entity_form_entity_table(&$variables) {
+  if ($variables['user']->isAuthenticated()) {
+    $variables['#attached']['library'][] = 'ventuno/ief-entity-table';
+  }
+}
+
+/**
  * Implements hook_preprocess_form_element().
  */
 function ventuno_preprocess_form_element(&$variables) {
