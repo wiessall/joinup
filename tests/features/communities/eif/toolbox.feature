@@ -21,7 +21,13 @@ Feature:
       | Jordan 3 | Recommendation 5, Recommendation 2 | Common services | Sage       | draft     |
       | Jordan 4 | Recommendation 3, Recommendation 1 | Common services | Phoenix    | validated |
       | Jordan 5 | Recommendation 4                   | Common services | Killjoy    | draft     |
-    And the following EIF perspective data for the "Jordan 1" solution:
+
+    # Visit the toolbox page once to ensure that solutions are properly
+    # re-indexed when an EIF perspective is created or deleted.
+    Given I visit the "Online Assistant" custom page
+    Then I should not see the heading "Jordan 1"
+
+    Given the following EIF perspective data for the "Jordan 1" solution:
       | Description      | It will be an amazing principle.                                   |
       | Type of solution | Common services                                                    |
       | Principle        | name: Underlying Principle 2: Openness, description: Hello world 2 |
@@ -34,7 +40,6 @@ Feature:
       | Type of solution | Common services                                                                         |
       | Principle        | name: Underlying Principle 11: Preservation of information, description: Hello world 11 |
 
-    Given I am logged in as a user with the moderator role
     When I visit the "Online Assistant" custom page
     And I should see the following filter categories in the correct order:
       | Underlying principles  |
@@ -45,7 +50,13 @@ Feature:
     And I should see the heading "Jordan 2"
     But I should not see the heading "Jordan 3"
 
-    And I click "Transparency" in the "Content" region
+    When I click "Transparency" in the "Content" region
     And I should see the heading "Jordan 2"
     But I should not see the heading "Jordan 3"
+    And I should not see the heading "Jordan 1"
+
+    # Ensure that deleting an EIF perspective, the online assistant is updated
+    # as well.
+    Given I delete the EIF perspective of the "Jordan 1" solution
+    When I visit the "Online Assistant" custom page
     And I should not see the heading "Jordan 1"
