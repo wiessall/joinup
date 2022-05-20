@@ -1,0 +1,42 @@
+{#
+/**
+ * @file
+ * Default template for a field.
+ */
+#}
+{%
+  set classes = [
+    'field--name-' ~ field_name|clean_class,
+    bundle|clean_class ~ '__' ~ field_name_clean|clean_class,
+  ]
+%}
+{%
+  set title_classes = [
+    'field__label',
+    'fw-bold',
+    label_display == 'visually_hidden' ? 'visually-hidden',
+  ]
+%}
+
+{% if label_hidden %}
+  {% if multiple %}
+    <div{{ attributes.addClass(classes) }}>
+      {% for item in items %}
+        <div{{ item.attributes.addClass('field__item') }}>{{ item.content }}</div>
+      {% endfor %}
+    </div>
+  {% else %}
+    {% for item in items %}
+      <div{{ attributes.addClass(classes) }}>{{ item.content }}</div>
+    {% endfor %}
+  {% endif %}
+{% else %}
+  <div{{ attributes.addClass(classes) }}>
+    <span{{ title_attributes.addClass(title_classes) }}>
+      {{ label }}{% if label_display == 'inline' %}<span class="me-1">:</span>{% endif %}
+    </span>
+    {% for item in items %}
+      <span{{ item.attributes.addClass('field__item') }}>{{ item.content }}{% if not loop.last %}, {% endif %}</span>
+    {% endfor %}
+  </div>
+{% endif %}

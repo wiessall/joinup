@@ -1,0 +1,34 @@
+{#
+/**
+ * @file
+ * Template for a menu.
+ *
+ * Available variables:
+ * - pattern_items:  A nested list of menu items. Each menu item contains:
+ *   - label: The menu link label.
+ *   - path: The path corresponding to the menu item.
+ *   - attributes: HTML attributes for the menu item.
+ */
+#}
+{{ attach_library('ventuno/dropdown') }}
+{% set menu = pattern('navigation', {
+    'variant': 'pills',
+    'orientation': 'vertical',
+    'items': pattern_items,
+  })
+%}
+{{ pattern('button', {
+  label: 'Toggle menu'|t,
+  variant: 'primary',
+  outline: true,
+  size: 'md',
+  type: 'button',
+  icon: 'justify',
+  attributes: create_attribute().addClass(['d-lg-none', 'mt-3', 'w-100']).setAttribute('data-bs-toggle', 'dropdown').setAttribute('id', 'dropdown-menu').setAttribute('aria-expanded', 'false').setAttribute('data-bs-target', '#menuCollapse'),
+}) }}
+<div class="dropdown-menu d-lg-none">
+  {{ menu }}
+</div>
+<div class="d-none d-lg-block mt-3">
+  {{ menu }}
+</div>
