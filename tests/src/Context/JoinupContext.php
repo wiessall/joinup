@@ -1940,6 +1940,29 @@ class JoinupContext extends RawDrupalContext {
   }
 
   /**
+   * Asserts that the Bootstrap modal is opened.
+   *
+   * @throws \Exception
+   *   Thrown when the modal doesn't open within 5 seconds.
+   *
+   * @Then a modal dialog should open
+   */
+  public function waitForDrupalModalDialogToOpen(): void {
+    // A modal can be opened only in a JavaScript-enabled browser.
+    self::assertJavaScriptEnabledBrowser();
+
+    $result = $this->getSession()->getPage()->waitFor(10, function () {
+      // Retrieve again a fresh copy of the page element at each cycle.
+      $modal = $this->getSession()->getPage()->find('css', '.modal-body');
+      return $modal && $modal->isVisible();
+    });
+
+    if (!$result) {
+      throw new \Exception('The modal did not open.');
+    }
+  }
+
+  /**
    * Asserts that the default Drupal modal is opened.
    *
    * @throws \Exception

@@ -132,6 +132,11 @@ default:
         Management solution vertical tab: '#edit-group-management'
         Members admin form actions: '#edit-action'
         Members admin form header: '#edit-header'
+        # Bootstrap modal dialog regions.
+        Modal header: '.modal-header'
+        Modal body: '.modal-body'
+        Modal footer: '.modal-footer'
+        # Drupal modal dialog regions.
         Modal buttons: '.ui-dialog-buttonpane'
         Modal content: '#drupal-modal'
         Modal title: '.ui-dialog-title'
