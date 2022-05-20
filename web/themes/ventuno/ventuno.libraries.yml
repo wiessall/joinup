@@ -74,6 +74,11 @@ glide:
     theme:
       assets/css/glide.core.min.css: { minified: true }
 
+ief-entity-table:
+  css:
+    theme:
+      assets/css/ief-entity-table.css: {}
+
 navbar:
   css:
     theme:
