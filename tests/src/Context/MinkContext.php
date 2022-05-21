@@ -101,7 +101,7 @@ class MinkContext extends DrupalExtensionMinkContext {
   /**
    * {@inheritdoc}
    */
-  public function assertClick($link): void {
+  public function clickLink($link): void {
     // Overriding the base method for Javascript tests.
     $this->scrollElementWithIdIntoView('link', $link);
     parent::clickLink($link);
