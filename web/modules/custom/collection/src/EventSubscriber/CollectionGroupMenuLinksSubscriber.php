@@ -40,6 +40,11 @@ class CollectionGroupMenuLinksSubscriber implements EventSubscriberInterface {
           'rdf_entity' => $group->id(),
           'letter' => NULL,
         ])->toUriString(),
+        'options' => [
+          'attributes' => [
+            'id' => 'glossary-link',
+          ],
+        ],
       ];
       $event->addMenuLink($link, $this->t('Glossary'), -7);
     }
