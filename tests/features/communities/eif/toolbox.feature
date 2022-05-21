@@ -26,7 +26,7 @@ Feature:
     # re-indexed when an EIF perspective is created or deleted and that
     # cache is invalidated properly.
     Given I visit the "Online Assistant" custom page
-    Then I should see the text "There are no solutions with an EIF perspective assigned"
+    Then I should not see the heading "Jordan 1"
 
     Given the following EIF perspective data for the "Jordan 1" solution:
       | Description      | It will be an amazing principle.                                   |
