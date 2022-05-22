@@ -560,6 +560,7 @@ display:
     display_options:
       cache:
         type: none
+        options: {  }
       defaults:
         cache: false
       display_extenders:
