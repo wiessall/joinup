@@ -20,6 +20,14 @@ module.exports = {
     },
     // Custom
     {
+      entry: path.resolve(outputFolder, "src/js/checkbox.js"),
+      dest: path.resolve(outputFolder, "assets/js/checkbox.js"),
+      options: {
+        minify: true,
+        sourceMap: true,
+      },
+    },
+    {
       entry: path.resolve(outputFolder, "src/js/content-tables.js"),
       dest: path.resolve(outputFolder, "assets/js/content-tables.js"),
       options: {
