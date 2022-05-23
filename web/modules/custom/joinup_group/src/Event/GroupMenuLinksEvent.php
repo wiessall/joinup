@@ -88,7 +88,7 @@ class GroupMenuLinksEvent extends Event {
   /**
    * Adds a new menu link content to the group OG menu instance.
    *
-   * @param Url $url
+   * @param \Drupal\Core\Url $url
    *   The menu link label.
    * @param string $label
    *   The menu link URL.
