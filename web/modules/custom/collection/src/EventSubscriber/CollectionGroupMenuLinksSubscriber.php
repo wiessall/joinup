@@ -5,7 +5,6 @@ declare(strict_types = 1);
 namespace Drupal\collection\EventSubscriber;
 
 use Drupal\Core\StringTranslation\StringTranslationTrait;
-use Drupal\Core\Url;
 use Drupal\collection\Entity\CollectionInterface;
 use Drupal\joinup_group\Event\GroupMenuLinksEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -35,13 +34,7 @@ class CollectionGroupMenuLinksSubscriber implements EventSubscriberInterface {
   public function addLinks(GroupMenuLinksEvent $event): void {
     $group = $event->getGroup();
     if ($group instanceof CollectionInterface) {
-      $link = [
-        'uri' => Url::fromRoute('collection.glossary_page', [
-          'rdf_entity' => $group->id(),
-          'letter' => NULL,
-        ])->toUriString(),
-      ];
-      $event->addMenuLink($link, $this->t('Glossary'), -7);
+      $event->addMenuLink($group->toUrl('glossary'), 'Glossary', -7);
     }
   }
 
