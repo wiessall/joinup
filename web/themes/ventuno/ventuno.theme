@@ -693,3 +693,10 @@ function ventuno_build_permalink() {
     'absolute' => TRUE,
   ])->toString();
 }
+
+/**
+ * Implements hook_preprocess_pattern_navigation().
+ */
+function ventuno_preprocess_pattern_navigation(array &$variables) {
+  $variables['#attached']['library'][] = 'ventuno/nav';
+}

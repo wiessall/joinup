@@ -81,6 +81,11 @@ dropdown:
     theme:
       assets/css/dropdown.css: {}
 
+nav:
+  css:
+    theme:
+      assets/css/nav.css: {}
+
 navbar:
   css:
     theme:
