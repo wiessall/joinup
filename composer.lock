@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "0319993c39590c8ce89d10017d68f1f8",
+    "content-hash": "ccbf1c25d0ce43232613c7dc9219ec42",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -10495,11 +10495,11 @@
         },
         {
             "name": "openeuropa/oe_bootstrap_theme",
-            "version": "0.1.202203290731",
+            "version": "1.0.0-alpha8",
             "dist": {
                 "type": "tar",
-                "url": "https://github.com/openeuropa/oe_bootstrap_theme/releases/download/0.1.202203290731/oe_bootstrap_theme-0.1.202203290731.tar.gz",
-                "reference": "20e9508094a2db72159253bc8035f450af6dfebb",
+                "url": "https://github.com/openeuropa/oe_bootstrap_theme/releases/download/1.0.0-alpha8/oe_bootstrap_theme-1.0.0-alpha8.tar.gz",
+                "reference": "755e04814fc9604d473a00f40049b7d63fcc52dc",
                 "shasum": ""
             },
             "require": {
@@ -10578,9 +10578,9 @@
             "description": "OpenEuropa Bootstrap base theme.",
             "support": {
                 "issues": "https://github.com/openeuropa/oe_bootstrap_theme/issues",
-                "source": "https://github.com/openeuropa/oe_bootstrap_theme/tree/0.1.202203290731"
+                "source": "https://github.com/openeuropa/oe_bootstrap_theme/tree/1.0.0-alpha8"
             },
-            "time": "2022-03-29T05:30:31+00:00"
+            "time": "2022-04-07T10:27:04+00:00"
         },
         {
             "name": "openeuropa/oe_dashboard_agent",
@@ -23804,5 +23804,5 @@
     "platform-overrides": {
         "php": "7.4.0"
     },
-    "plugin-api-version": "2.2.0"
+    "plugin-api-version": "2.3.0"
 }
