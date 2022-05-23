@@ -25,6 +25,8 @@ phpcs:
     config: ${joinup.dir}/phpcs.xml
     standard: ${joinup.dir}/phpcs-ruleset.xml.dist
     global: ${joinup.dir}/vendor/squizlabs/php_codesniffer/CodeSniffer.conf
+    phpcbf:
+      bin: ${joinup.dir}/vendor/bin/phpcbf
   check:
     extensions:
       - css
