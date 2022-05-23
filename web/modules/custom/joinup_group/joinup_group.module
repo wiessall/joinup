@@ -125,8 +125,8 @@ function joinup_group_entity_type_alter(array &$entity_types): void {
     // Override the delete form to disallow deletion of groups with children.
     $entity_types['rdf_entity']->setFormClass('delete', RdfDeleteForm::class);
 
-    // Add the about page and member overview as link templates, so the OG context
-    // will be automatically solved.
+    // Add the about page and member overview as link templates, so the OG
+    // context will be automatically solved.
     $link_templates = [
       'about-page' => '/rdf_entity/{rdf_entity}/about',
       'member-overview' => '/rdf_entity/{rdf_entity}/members',
