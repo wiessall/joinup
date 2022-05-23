@@ -23,7 +23,7 @@ collection.subscribe_to_collection_form.after_authenticating:
         type: entity:rdf_entity
         bundle:
           - collection
-collection.glossary_page:
+entity.rdf_entity.glossary:
   path: /rdf_entity/{rdf_entity}/glossary/{letter}
   defaults:
     _controller: Drupal\collection\Controller\GlossaryController::glossary

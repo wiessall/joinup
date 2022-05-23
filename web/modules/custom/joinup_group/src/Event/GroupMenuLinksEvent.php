@@ -4,9 +4,11 @@ declare(strict_types = 1);
 
 namespace Drupal\joinup_group\Event;
 
-use Drupal\Component\Render\MarkupInterface;
+use Drupal\Component\Utility\UrlHelper;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Url;
 use Drupal\rdf_entity\RdfInterface;
+use Drupal\sparql_entity_storage\UriEncoder;
 use Symfony\Contracts\EventDispatcher\Event;
 
 /**
@@ -86,12 +88,10 @@ class GroupMenuLinksEvent extends Event {
   /**
    * Adds a new menu link content to the group OG menu instance.
    *
-   * @param array $link
-   *   The menu link as an array with the following keys:
-   *   - uri: Link URI,
-   *   - options: Link options.
-   * @param \Drupal\Component\Render\MarkupInterface $label
-   *   The menu translated label.
+   * @param Url $url
+   *   The menu link label.
+   * @param string $label
+   *   The menu link URL.
    * @param int $weight
    *   (optional) The menu weight. Defaults to 0.
    * @param array $values
@@ -103,14 +103,54 @@ class GroupMenuLinksEvent extends Event {
    * @throws \Drupal\Core\Entity\EntityStorageException
    *   Thrown if the menu link entity could not be saved.
    */
-  public function addMenuLink(array $link, MarkupInterface $label, int $weight = 0, array $values = []): self {
+  public function addMenuLink(Url $url, string $label, int $weight = 0, array $values = []): self {
     $this->menuLinkContentStorage->create([
       'title' => $label,
       'menu_name' => $this->getMenuName(),
-      'link' => $link,
+      'link' => [
+        'uri' => $this->getUriString($url),
+        'options' => $url->getOptions(),
+      ],
       'weight' => $weight,
     ] + $values)->save();
     return $this;
+  }
+
+  /**
+   * Returns the URL as URI string.
+   *
+   * We cannot use \Drupal\Core\Url::toUriString() for RDF entities because the
+   * `rdf_entity` route parameter should be encoded. Most of the code is copied
+   * from Url::toUriString().
+   *
+   * @param \Drupal\Core\Url $url
+   *   The URL object.
+   *
+   * @return string
+   *   The URI string.
+   *
+   * @see \Drupal\Core\Url::toUriString()
+   * @see \Drupal\sparql_entity_storage\UriEncoder::encodeUrl()
+   */
+  protected function getUriString(Url $url): string {
+    if ($url->getOption('entity_type') === 'rdf_entity' && $url->getOption('entity') instanceof RdfInterface) {
+      // Canonical routes are getting a special treatment.
+      if ($url->getRouteName() === 'entity.rdf_entity.canonical') {
+        return 'entity:rdf_entity/' . UriEncoder::encodeUrl($url->getOption('entity')->id());
+      }
+
+      $uri = 'route:' . $url->getRouteName();
+      if ($parameters = $url->getRouteParameters()) {
+        if (isset($parameters['rdf_entity'])) {
+          $parameters['rdf_entity'] = UriEncoder::encodeUrl($parameters['rdf_entity']);
+        }
+        $uri .= ';' . UrlHelper::buildQuery($parameters);
+      }
+      $query = !empty($this->options['query']) ? ('?' . UrlHelper::buildQuery($this->options['query'])) : '';
+      $fragment = isset($this->options['fragment']) && strlen($this->options['fragment']) ? '#' . $this->options['fragment'] : '';
+      return $uri . $query . $fragment;
+    }
+    return $url->toUriString();
   }
 
 }
