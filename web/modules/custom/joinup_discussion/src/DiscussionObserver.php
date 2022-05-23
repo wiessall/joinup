@@ -64,7 +64,7 @@ class DiscussionObserver implements ObserverInterface {
     // and the discussion is in the 'validated' state.
     if ($discussion instanceof DiscussionInterface && $changed_fields && $discussion->get('field_state')->value === 'validated') {
       $event = new DiscussionUpdateEvent($discussion, $changed_fields);
-      $this->eventDispatcher->dispatch(DiscussionEvents::UPDATE, $event);
+      $this->eventDispatcher->dispatch($event, DiscussionEvents::UPDATE);
     }
   }
 

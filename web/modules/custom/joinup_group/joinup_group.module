@@ -228,7 +228,7 @@ function joinup_group_rdf_entity_insert(RdfInterface $group): void {
 
   // Allow third-party to add group menu links.
   $event = new GroupMenuLinksEvent($group, $menu_name, \Drupal::entityTypeManager());
-  $event_dispatcher->dispatch($event::ADD_LINKS, $event);
+  $event_dispatcher->dispatch($event, $event::ADD_LINKS);
 }
 
 /**
@@ -247,7 +247,7 @@ function joinup_group_rdf_entity_presave(EntityInterface $entity) {
   ];
 
   $file_system = \Drupal::service('file_system');
-  $fixtures_path = drupal_get_path('module', 'joinup_group') . '/fixtures/images/';
+  $fixtures_path = \Drupal::service('extension.list.module')->getPath('joinup_group') . '/fixtures/images/';
   foreach ($field_data as $field_type => $fields) {
     foreach ($fields as $field) {
       if ($entity->hasField($field) && empty($entity->get($field)->getValue())) {

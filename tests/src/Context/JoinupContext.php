@@ -105,7 +105,7 @@ class JoinupContext extends RawDrupalContext {
     $regex = '/' . preg_quote($text, '/') . '/ui';
     $message = sprintf('The text "%s" was not found anywhere in the text of the current page.', $text);
 
-    Assert::assertRegExp($regex, $actual, $message);
+    Assert::assertMatchesRegularExpression($regex, $actual, $message);
   }
 
   /**
