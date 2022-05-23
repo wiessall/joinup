@@ -20,7 +20,6 @@ use Drupal\eif\Plugin\views\argument\EifGroupArgument;
 use Drupal\og\OgGroupAudienceHelperInterface;
 use Drupal\rdf_meta_entity\Entity\RdfMetaEntityInterface;
 use Drupal\views\ViewExecutable;
-use Drupal\views\Views;
 
 /**
  * Implements hook_theme().
@@ -302,7 +301,7 @@ function eif_views_pre_render(ViewExecutable $view) {
   $cache_tags = [];
 
   /** @var \Drupal\search_api\Plugin\views\ResultRow $result_row */
-  foreach($view->result as $result_row) {
+  foreach ($view->result as $result_row) {
     $solution = $result_row->_entity;
     $cache_tags = Cache::mergeTags($cache_tags, $solution->getCacheTags());
   }
@@ -312,5 +311,3 @@ function eif_views_pre_render(ViewExecutable $view) {
   $cache_tags = Cache::mergeTags($cache_tags, $eif_perspective_list_cache_tags);
   $view->element['#cache']['tags'] = Cache::mergeTags($view->element['#cache']['tags'], $cache_tags);
 }
-
-
