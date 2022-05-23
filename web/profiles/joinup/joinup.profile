@@ -236,7 +236,7 @@ function joinup_form_node_form_alter(&$form, FormStateInterface $form_state, $fo
 function joinup_theme($existing, $type, $theme, $path) {
   $page_template = [
     'variables' => [],
-    'path' => drupal_get_path('profile', 'joinup') . '/templates',
+    'path' => \Drupal::service('extension.list.profile')->getPath('joinup') . '/templates',
   ];
   return [
     'joinup_eligibility_criteria' => $page_template,
