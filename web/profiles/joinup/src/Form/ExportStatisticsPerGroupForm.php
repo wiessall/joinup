@@ -95,6 +95,13 @@ class ExportStatisticsPerGroupForm extends ExportBatchedDataFormBase {
   /**
    * {@inheritdoc}
    */
+  protected function getDownloadedFileName(): string {
+    return 'statistics_export.csv';
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function getFormId() {
     return 'joinup_export_statistics_per_group';
   }

@@ -70,6 +70,13 @@ class ExportGroupAdministratorsForm extends ExportBatchedDataFormBase {
   /**
    * {@inheritdoc}
    */
+  protected function getDownloadedFileName(): string {
+    return 'user_list.csv';
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function getFormId() {
     return 'joinup_export_group_administrators';
   }

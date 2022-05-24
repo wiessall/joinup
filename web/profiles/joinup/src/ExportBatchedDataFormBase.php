@@ -124,7 +124,7 @@ abstract class ExportBatchedDataFormBase extends FormBase {
   public function downloadCsv(array &$form, FormStateInterface $form_state) {
     $headers = [
       'Content-Type' => 'text/csv',
-      'Content-Disposition' => 'attachment;filename=user_list.csv',
+      'Content-Disposition' => "attachment;filename={$this->getDownloadedFileName()}",
     ];
 
     $response = new Response($form_state->get('download_data'), 200, $headers);
@@ -184,6 +184,16 @@ abstract class ExportBatchedDataFormBase extends FormBase {
    *   The route name.
    */
   abstract protected function getDownloadRouteName(): string;
+
+  /**
+   * Returns the name of the file that will be downloaded.
+   *
+   * @return string
+   *   The file name.
+   */
+  protected function getDownloadedFileName(): string {
+    return 'data_export.csv';
+  }
 
   /**
    * {@inheritdoc}
