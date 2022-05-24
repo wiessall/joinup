@@ -237,9 +237,8 @@ class GroupMembershipPermissionsInformationController extends ControllerBase {
       ],
     ];
     $url = Url::fromRoute('entity.rdf_entity.member_overview', [
-      'rdf_entity' => $rdf_entity->id()],
-      $options
-    );
+      'rdf_entity' => $rdf_entity->id(),
+    ], $options);
     $link = Link::fromTextAndUrl($this->t('Got it'), $url);
     $build['close'] = $link->toRenderable();
 
