@@ -2,16 +2,15 @@
 
 declare(strict_types = 1);
 
-namespace Drupal\joinup_group\Controller;
+namespace Drupal\joinup_group\Form;
 
-use Drupal\Core\Controller\ControllerBase;
-use Drupal\Core\Link;
-use Drupal\Core\Url;
+use Drupal\Core\Form\FormBase;
+use Drupal\Core\Form\FormStateInterface;
 use Drupal\joinup_group\ContentCreationOptions;
 use Drupal\joinup_group\Entity\GroupInterface;
 
 /**
- * Page controller for the member permissions information table.
+ * Form for the member permissions information table.
  *
  * Renders a table with a simplified subset of the available permissions for the
  * different roles in a group. This is intended for end users and facilitators
@@ -20,23 +19,81 @@ use Drupal\joinup_group\Entity\GroupInterface;
  * This table is shown in a modal dialog when pressing the "Member permissions"
  * link in the Members page.
  */
-class GroupMembershipPermissionsInformationController extends ControllerBase {
+class GroupMembershipPermissionsInformationForm extends FormBase {
 
   /**
    * Builds the table that shows information about member permissions.
    *
-   * @param \Drupal\joinup_group\Entity\GroupInterface $rdf_entity
+   * @param array $form
+   *   The form render array.
+   * @param \Drupal\Core\Form\FormStateInterface $form_state
+   *   The form state object.
+   * @param \Drupal\joinup_group\Entity\GroupInterface|null $group
    *   The group for which the membership permission information is rendered.
    *
    * @return array
-   *   A render array containing the table.
+   *   A render array containing the form.
    */
-  public function build(GroupInterface $rdf_entity): array {
-    $is_moderated = $rdf_entity->isModerated();
-    $content_creators = $rdf_entity->getContentCreators();
-    $only_authors_can_create = $content_creators === ContentCreationOptions::FACILITATORS_AND_AUTHORS;
+  public function buildForm(array $form, FormStateInterface $form_state, ?GroupInterface $group = NULL): array {
+    $form['permissions'] = [
+      '#type' => 'table',
+      '#header' => [
+        $this->t('Permission'),
+        $this->t('Member'),
+        $this->t('Author'),
+        $this->t('Facilitator'),
+        $this->t('Owner'),
+      ],
+    ];
 
-    $permissions_info = [
+    foreach ($this->getPermissionInfo($group) as $permission_info) {
+      if ($permission_info['applicable'] ?? TRUE) {
+        $form['permissions'][] = [
+          [
+            '#plain_text' => $permission_info['description'],
+          ],
+          [
+            '#plain_text' => $permission_info['permitted']['member'] ? '✓' : '',
+          ],
+          [
+            '#plain_text' => $permission_info['permitted']['author'] ? '✓' : '',
+          ],
+          [
+            '#plain_text' => $permission_info['permitted']['facilitator'] ? '✓' : '',
+          ],
+          [
+            '#plain_text' => $permission_info['permitted']['owner'] ? '✓' : '',
+          ],
+        ];
+      }
+    }
+
+    $form['actions'] = [
+      '#type' => 'actions',
+      'close' => [
+        '#type' => 'link',
+        '#title' => $this->t('Got it'),
+        '#url' => $group->toUrl('member-overview'),
+      ],
+    ];
+
+    return $form;
+  }
+
+  /**
+   * Returns a list of permission information.
+   *
+   * @param \Drupal\joinup_group\Entity\GroupInterface $group
+   *   The group for which the membership permission information is rendered.
+   *
+   * @return array
+   *   A list of permission information.
+   */
+  protected function getPermissionInfo(GroupInterface $group): array {
+    $is_moderated = $group->isModerated();
+    $content_creators = $group->getContentCreators();
+    $only_authors_can_create = $content_creators === ContentCreationOptions::FACILITATORS_AND_AUTHORS;
+    return [
       [
         // A custom description is provided since this is intended for a non-
         // technical audience which is not familiar with Drupal permissions.
@@ -193,56 +250,18 @@ class GroupMembershipPermissionsInformationController extends ControllerBase {
         ],
       ],
     ];
+  }
 
-    $build['permissions'] = [
-      '#type' => 'table',
-      '#header' => [
-        $this->t('Permission'),
-        $this->t('Member'),
-        $this->t('Author'),
-        $this->t('Facilitator'),
-        $this->t('Owner'),
-      ],
-    ];
+  /**
+   * {@inheritdoc}
+   */
+  public function submitForm(array &$form, FormStateInterface $form_state): void {}
 
-    foreach ($permissions_info as $permission_info) {
-      if ($permission_info['applicable'] ?? TRUE) {
-        $build['permissions'][] = [
-          [
-            '#plain_text' => $permission_info['description'],
-          ],
-          [
-            '#plain_text' => $permission_info['permitted']['member'] ? '✓' : '',
-          ],
-          [
-            '#plain_text' => $permission_info['permitted']['author'] ? '✓' : '',
-          ],
-          [
-            '#plain_text' => $permission_info['permitted']['facilitator'] ? '✓' : '',
-          ],
-          [
-            '#plain_text' => $permission_info['permitted']['owner'] ? '✓' : '',
-          ],
-        ];
-      }
-    }
-
-    $options = [
-      'attributes' => [
-        'class' => [
-          'btn',
-          'btn-md',
-          'btn-outline-brand',
-        ],
-      ],
-    ];
-    $url = Url::fromRoute('entity.rdf_entity.member_overview', [
-      'rdf_entity' => $rdf_entity->id(),
-    ], $options);
-    $link = Link::fromTextAndUrl($this->t('Got it'), $url);
-    $build['close'] = $link->toRenderable();
-
-    return $build;
+  /**
+   * {@inheritdoc}
+   */
+  public function getFormId(): string {
+    return 'joinup_group_membership_permissions_info';
   }
 
 }

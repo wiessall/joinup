@@ -676,3 +676,12 @@ function ventuno_build_permalink(): ?string {
     'absolute' => TRUE,
   ])->toString();
 }
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function ventuno_form_joinup_group_membership_permissions_info_alter(array &$form, FormStateInterface $form_state, string $form_id): void {
+  $form['actions']['close']['#attributes']['class'][] = 'btn';
+  $form['actions']['close']['#attributes']['class'][] = 'btn-md';
+  $form['actions']['close']['#attributes']['class'][] = 'btn-outline-brand';
+}
