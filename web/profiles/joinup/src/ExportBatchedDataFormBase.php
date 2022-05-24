@@ -158,7 +158,7 @@ abstract class ExportBatchedDataFormBase extends FormBase {
     $this->messenger()->addMessage('Data have been rebuilt.');
 
     // Handle the file here.
-    return new RedirectResponse(Url::fromRoute($this->getDownloadRouteName())->toString());
+    return new RedirectResponse(Url::fromRoute($this->getRedirectRouteName())->toString());
   }
 
   /**
@@ -185,7 +185,7 @@ abstract class ExportBatchedDataFormBase extends FormBase {
    * @return string
    *   The route name.
    */
-  abstract protected function getDownloadRouteName(): string;
+  abstract protected function getRedirectRouteName(): string;
 
   /**
    * Returns the name of the file that will be downloaded.
