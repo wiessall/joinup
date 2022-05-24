@@ -46,7 +46,6 @@ drupal:
         - OpenEuropa Newsroom Newsletter Settings
         - Custom error handler
         - Permissions
-        - OpenEuropa Newsroom Newsletter
         - OpenEuropa Webtools Geocoding Cache
         - Verbose error logging
         - Development mail collector
@@ -59,7 +58,6 @@ drupal:
         - Configuration
         - Search API
         - OpenEuropa Webtools Analytics
-        - OpenEuropa Newsroom Newsletter Settings
         - Custom error handler
         - Permissions
         - Development
