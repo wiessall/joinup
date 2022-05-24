@@ -4,20 +4,70 @@ declare(strict_types = 1);
 
 namespace Drupal\collection\Form;
 
+use Drupal\Core\Access\AccessManagerInterface;
 use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\OpenModalDialogCommand;
 use Drupal\Core\Ajax\PrependCommand;
 use Drupal\Core\Ajax\ReplaceCommand;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Form\FormBuilderInterface;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\Core\Session\AccountProxyInterface;
+use Drupal\joinup_core\Event\AjaxCommandEvent;
 use Drupal\joinup_group\Form\JoinGroupFormBase;
+use Drupal\og\MembershipManagerInterface;
 use Drupal\rdf_entity\RdfInterface;
 use Drupal\sparql_entity_storage\UriEncoder;
+use Psr\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * A simple form with a button to join or leave a collection.
  */
 class JoinCollectionForm extends JoinGroupFormBase {
+
+  /**
+   * The event dispatcher service.
+   *
+   * @var \Psr\EventDispatcher\EventDispatcherInterface
+   */
+  protected EventDispatcherInterface $eventDispatcher;
+
+  /**
+   * Constructs a new form instance.
+   *
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
+   *   The entity type manager service.
+   * @param \Drupal\og\MembershipManagerInterface $membership_manager
+   *   The membership manager service.
+   * @param \Drupal\Core\Access\AccessManagerInterface $access_manager
+   *   The access manager service.
+   * @param \Drupal\Core\Messenger\MessengerInterface $messenger
+   *   The messenger service.
+   * @param \Drupal\Core\Form\FormBuilderInterface $form_builder
+   *   The form builder.
+   * @param \Psr\EventDispatcher\EventDispatcherInterface $event_dispatcher
+   *   The event dispatcher service.
+   */
+  public function __construct(EntityTypeManagerInterface $entity_type_manager, MembershipManagerInterface $membership_manager, AccessManagerInterface $access_manager, MessengerInterface $messenger, FormBuilderInterface $form_builder, EventDispatcherInterface $event_dispatcher) {
+    parent::__construct($entity_type_manager, $membership_manager, $access_manager, $messenger, $form_builder);
+    $this->eventDispatcher = $event_dispatcher;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container) {
+    return new static(
+      $container->get('entity_type.manager'),
+      $container->get('og.membership_manager'),
+      $container->get('access_manager'),
+      $container->get('messenger'),
+      $container->get('form_builder'),
+      $container->get('event_dispatcher'),
+    );
+  }
 
   /**
    * {@inheritdoc}
@@ -62,6 +112,8 @@ class JoinCollectionForm extends JoinGroupFormBase {
 
     // Output messages in the page.
     $messages = ['#type' => 'status_messages'];
+    // @todo Replace with a theme-agnostic selector in ISAICP-7109.
+    // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7109
     $response->addCommand(new PrependCommand('.section--content-top', $messages));
 
     // If the form submitted successfully, make an offer the user cannot refuse.
@@ -69,7 +121,7 @@ class JoinCollectionForm extends JoinGroupFormBase {
       // Rebuild the form and replace it in the page, so that the "Join this
       // "collection" button will be replaced with either the "You're a member"
       // button or the "Membership is pending" button.
-      $form_button = $this->formBuilder->rebuildForm('join-group-form', $form_state, $form);
+      $form_button = $this->formBuilder->rebuildForm('join_group_form', $form_state, $form);
       $response->addCommand(new ReplaceCommand('#join-group-form', $form_button));
 
       $title = $this->t('Welcome to %collection', ['%collection' => $this->group->label()]);
@@ -77,7 +129,16 @@ class JoinCollectionForm extends JoinGroupFormBase {
       $modal_form = $this->formBuilder->getForm(SubscribeToCollectionForm::class, $this->group);
       $modal_form['#attached']['library'][] = 'core/drupal.dialog.ajax';
 
-      $response->addCommand(new OpenModalDialogCommand($title, $modal_form, ['width' => '500']));
+      // Allow modules to alter or replace the Ajax command.
+      $event = new AjaxCommandEvent(new OpenModalDialogCommand($title, $modal_form, [
+        'width' => '500',
+      ]), [
+        'instance' => 'join_collection.subscribe_dialog.open',
+        'title' => $title,
+        'content' => $modal_form,
+      ]);
+      $this->eventDispatcher->dispatch($event);
+      $response->addCommand($event->getCommand())->addAttachments($event->getAttachments());
     }
     return $response;
   }

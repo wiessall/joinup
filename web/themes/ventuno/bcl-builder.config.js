@@ -20,6 +20,14 @@ module.exports = {
     },
     // Custom
     {
+      entry: path.resolve(outputFolder, "src/js/content-tables.js"),
+      dest: path.resolve(outputFolder, "assets/js/content-tables.js"),
+      options: {
+        minify: true,
+        sourceMap: true,
+      },
+    },
+    {
       entry: path.resolve(outputFolder, "src/js/sticky-menu.js"),
       dest: path.resolve(outputFolder, "assets/js/sticky-menu.js"),
       options: {
@@ -30,6 +38,14 @@ module.exports = {
     {
       entry: path.resolve(outputFolder, "src/js/searchbox-focus.js"),
       dest: path.resolve(outputFolder, "assets/js/searchbox-focus.js"),
+      options: {
+        minify: true,
+        sourceMap: true,
+      },
+    },
+    {
+      entry: path.resolve(outputFolder, "src/js/tour-first-balloon.js"),
+      dest: path.resolve(outputFolder, "assets/js/tour-first-balloon.js"),
       options: {
         minify: true,
         sourceMap: true,
@@ -108,6 +124,22 @@ module.exports = {
     },
     // Custom components
     {
+      entry: path.resolve(outputFolder, "src/scss/add-content.scss"),
+      dest: path.resolve(outputFolder, "assets/css/add-content.css"),
+      options: {
+        includePaths,
+        sourceMap: "file",
+      },
+    },
+    {
+      entry: path.resolve(outputFolder, "src/scss/dropdown.scss"),
+      dest: path.resolve(outputFolder, "assets/css/dropdown.css"),
+      options: {
+        includePaths,
+        sourceMap: "file",
+      },
+    },
+    {
       entry: path.resolve(outputFolder, "src/scss/footer.scss"),
       dest: path.resolve(outputFolder, "assets/css/footer.css"),
       options: {
@@ -132,8 +164,24 @@ module.exports = {
       },
     },
     {
+      entry: path.resolve(outputFolder, "src/scss/page-title.scss"),
+      dest: path.resolve(outputFolder, "assets/css/page-title.css"),
+      options: {
+        includePaths,
+        sourceMap: "file",
+      },
+    },
+    {
       entry: path.resolve(outputFolder, "src/scss/pager.scss"),
       dest: path.resolve(outputFolder, "assets/css/pager.css"),
+      options: {
+        includePaths,
+        sourceMap: "file",
+      },
+    },
+    {
+      entry: path.resolve(outputFolder, "src/scss/share-content-form.scss"),
+      dest: path.resolve(outputFolder, "assets/css/share-content-form.css"),
       options: {
         includePaths,
         sourceMap: "file",
@@ -332,6 +380,7 @@ module.exports = {
             'exclamation-circle-fill.svg',
             'exclamation-lg.svg',
             'eye.svg',
+            'facebook.svg',
             'file-earmark-medical.svg',
             'file-earmark-play.svg',
             'file-earmark-richtext.svg',
@@ -343,9 +392,11 @@ module.exports = {
             'info-circle-fill.svg',
             'justify.svg',
             'lightning-charge.svg',
+            'link-45deg.svg',
             'linkedin.svg',
             'newspaper.svg',
             'person-circle.svg',
+            'plus.svg',
             'search.svg',
             'star.svg',
             'twitter.svg',

@@ -6,6 +6,7 @@ namespace Drupal\joinup_user\Event\Subscriber;
 
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Language\LanguageInterface;
+use Drupal\Core\Password\PasswordGeneratorInterface;
 use Drupal\joinup_user\Event\JoinupUserCancelEvent;
 use Drupal\og\MembershipManagerInterface;
 use Drupal\og\OgMembershipInterface;
@@ -36,7 +37,14 @@ class JoinupUserUserCancelSubscriber implements EventSubscriberInterface {
    *
    * @var \Drupal\user\UserDataInterface
    */
-  protected $userData;
+  protected UserDataInterface $userData;
+
+  /**
+   * The password generator service.
+   *
+   * @var \Drupal\Core\Password\PasswordGeneratorInterface
+   */
+  protected PasswordGeneratorInterface $passwordGenerator;
 
   /**
    * Constructs a new event subscriber instance.
@@ -47,11 +55,14 @@ class JoinupUserUserCancelSubscriber implements EventSubscriberInterface {
    *   The OG membership manager service.
    * @param \Drupal\user\UserDataInterface $user_data
    *   The user data service.
+   * @param \Drupal\Core\Password\PasswordGeneratorInterface $password_generator
+   *   The password generator service.
    */
-  public function __construct(EntityTypeManagerInterface $entity_type_manager, MembershipManagerInterface $membership_manager, UserDataInterface $user_data) {
+  public function __construct(EntityTypeManagerInterface $entity_type_manager, MembershipManagerInterface $membership_manager, UserDataInterface $user_data, PasswordGeneratorInterface $password_generator) {
     $this->entityTypeManager = $entity_type_manager;
     $this->membershipManager = $membership_manager;
     $this->userData = $user_data;
+    $this->passwordGenerator = $password_generator;
   }
 
   /**
@@ -91,7 +102,7 @@ class JoinupUserUserCancelSubscriber implements EventSubscriberInterface {
     $account
       ->setEmail(NULL)
       ->set('init', NULL)
-      ->setPassword(user_password())
+      ->setPassword($this->passwordGenerator->generate())
       ->set('langcode', LanguageInterface::LANGCODE_NOT_SPECIFIED)
       ->set('preferred_langcode', LanguageInterface::LANGCODE_NOT_SPECIFIED)
       ->set('preferred_admin_langcode', LanguageInterface::LANGCODE_NOT_SPECIFIED)

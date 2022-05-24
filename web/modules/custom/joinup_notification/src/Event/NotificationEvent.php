@@ -5,7 +5,7 @@ declare(strict_types = 1);
 namespace Drupal\joinup_notification\Event;
 
 use Drupal\Core\Entity\EntityInterface;
-use Symfony\Component\EventDispatcher\Event;
+use Symfony\Contracts\EventDispatcher\Event;
 
 /**
  * A notification event class.

@@ -10,7 +10,7 @@ use Drupal\Core\Cache\CacheableRedirectResponse;
 use Drupal\Core\EventSubscriber\HttpExceptionSubscriberBase;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Url;
-use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
+use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 
 /**
  * Redirects anonymous 403 pages to EU Login login page.
@@ -44,10 +44,10 @@ class JoinupEuLoginAnonymous403Subscriber extends HttpExceptionSubscriberBase {
   /**
    * Redirects anonymous to EU Login login on '403 Access Denied' exceptions.
    *
-   * @param \Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent $event
+   * @param \Symfony\Component\HttpKernel\Event\ExceptionEvent $event
    *   The event to process.
    */
-  public function on403(GetResponseForExceptionEvent $event) {
+  public function on403(ExceptionEvent $event) {
     if (!$this->currentUser->isAnonymous()) {
       return;
     }
@@ -62,7 +62,7 @@ class JoinupEuLoginAnonymous403Subscriber extends HttpExceptionSubscriberBase {
     $options = [
       'absolute' => TRUE,
       'query' => [
-        'returnto' => $destination,
+        'destination' => $destination,
       ],
     ];
     $redirect_url = Url::fromRoute('cas.login', [], $options)->toString();
@@ -77,8 +77,8 @@ class JoinupEuLoginAnonymous403Subscriber extends HttpExceptionSubscriberBase {
     // Copy the original cache metadata associated with the exception. The
     // exception itself received the cache metadata from the route access check.
     // @see \Drupal\Core\Routing\AccessAwareRouter::checkAccess()
-    if ($event->getException() instanceof CacheableDependencyInterface) {
-      $cache_metadata->addCacheableDependency($event->getException());
+    if ($event->getThrowable() instanceof CacheableDependencyInterface) {
+      $cache_metadata->addCacheableDependency($event->getThrowable());
     }
 
     $response->addCacheableDependency($cache_metadata);

@@ -15,6 +15,8 @@ homepage:
   css:
     theme:
       assets/css/homepage.css: {}
+  dependencies:
+    - ventuno/tour-first-balloon
 
 licence-comparer:
   css:
@@ -47,6 +49,11 @@ tables:
       assets/css/tables.css: {}
 
 # Custom components
+add-content:
+  css:
+    theme:
+      assets/css/add-content.css: {}
+
 footer:
   css:
     theme:
@@ -58,6 +65,11 @@ glide:
   css:
     theme:
       assets/css/glide.core.min.css: { minified: true }
+
+dropdown:
+  css:
+    theme:
+      assets/css/dropdown.css: {}
 
 navbar:
   css:
@@ -73,15 +85,35 @@ navbar-search:
   js:
     assets/js/searchbox-focus.js: { minified: true, attributes: { defer: true } }
 
+page-title:
+  css:
+    theme:
+      assets/css/page-title.css: {}
+
 pager:
   css:
     theme:
       assets/css/pager.css: {}
 
+share-content-form:
+  css:
+    theme:
+      assets/css/share-content-form.css: {}
+
 site-alerts-messages:
   css:
     theme:
       assets/css/site-alerts-messages.css: {}
+
+tour-first-balloon:
+  js:
+    assets/js/tour-first-balloon.js: { minified: true, attributes: { defer: true } }
+
+content-tables:
+  js:
+    assets/js/content-tables.js: { minified: true, attributes: { defer: true } }
+  dependencies:
+    - ventuno/tables
 
 # @todo remove when switch to Ventuno theme is complete
 bootstrap-base:

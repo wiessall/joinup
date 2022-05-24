@@ -83,7 +83,7 @@ abstract class AddGroupContentEventSubscriberBase implements EventSubscriberInte
         '#type' => 'link',
         '#title' => $this->t('Add @label', ['@label' => $label]),
         '#url' => $page_url,
-        '#attributes' => ['class' => ['circle-menu__link']],
+        '#attributes' => ['class' => ['circle-menu__link', 'nav-link']],
       ]);
     }
   }

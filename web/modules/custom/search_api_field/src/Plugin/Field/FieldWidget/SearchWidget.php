@@ -565,10 +565,12 @@ class SearchWidget extends WidgetBase implements ContainerFactoryPluginInterface
       '#options' => $options,
       '#required' => FALSE,
     ];
+    // Create a name suffix from the parents to make sure each submit is unique.
+    $id_suffix = $parents ? '_' . implode('_', $parents) : '';
     $element['add_more']['submit'] = [
       '#type' => 'submit',
       '#value' => $this->t('Add and configure filter'),
-      '#name' => 'add_filter',
+      '#name' => 'add_filter' . $id_suffix,
       '#submit' => [[$this, 'submitAddFilter']],
       '#ajax' => [
         'callback' => [$this, 'ajaxUpdateQueryBuilder'],

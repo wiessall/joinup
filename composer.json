@@ -152,6 +152,7 @@
         "lovers-of-behat/table-extension": "^1.2.0",
         "mikey179/vfsstream": "~1.6",
         "openeuropa/task-runner": "dev-master as 1.0.0-beta7",
+        "palantirnet/drupal-rector": "^0.12.2",
         "pear/http_request2": "~2.4",
         "pfrenssen/phpcs-pre-push": "1.1",
         "php-task-runner/composer": "dev-master",
@@ -262,6 +263,9 @@
         "patches": {
             "drupal/config_devel": {
                 "Add a Drush command for manipulating module info files @see https://www.drupal.org/project/config_devel/issues/2392929": "https://git.drupalcode.org/project/config_devel/-/merge_requests/4.diff"
+            },
+            "drupal/cas": {
+                "Cached redirect response issue with failed ticket validation @see https://www.drupal.org/project/cas/issues/3277861": "https://git.drupalcode.org/project/cas/-/merge_requests/12.diff"
             },
             "drupal/core": {
                 "Use email verification when changing user email addresses @see https://www.drupal.org/project/drupal/issues/85494": "https://www.drupal.org/files/issues/2022-01-17/85494-376-9.3.x.patch",
@@ -382,6 +386,13 @@
                 "Place the webtools loader on the head. @see https://github.com/openeuropa/oe_webtools/pull/102": "https://patch-diff.githubusercontent.com/raw/openeuropa/oe_webtools/pull/102.diff",
                 "Add the possibility to display a marker on the map. @see https://github.com/openeuropa/oe_webtools/pull/111": "https://patch-diff.githubusercontent.com/raw/openeuropa/oe_webtools/pull/111.diff",
                 "Integrate with Webtools eTrans component @see https://github.com/openeuropa/oe_webtools/pull/146": "https://patch-diff.githubusercontent.com/raw/openeuropa/oe_webtools/pull/146.diff"
+            },
+            "openeuropa/task-runner": {
+                "Array options @see https://github.com/openeuropa/task-runner/pull/137": "https://patch-diff.githubusercontent.com/raw/openeuropa/task-runner/pull/137.diff"
+            },
+            "palantirnet/drupal-rector": {
+                "drupalPostForm() with 1st param NULL @see https://github.com/palantirnet/drupal-rector/pull/198": "https://patch-diff.githubusercontent.com/raw/palantirnet/drupal-rector/pull/198.diff",
+                "user_password() deprecation @see https://github.com/palantirnet/drupal-rector/pull/199": "https://patch-diff.githubusercontent.com/raw/palantirnet/drupal-rector/pull/199.diff"
             }
         },
         "artifacts": {
