@@ -85,21 +85,21 @@ class NewsletterSubscriber implements NewsletterSubscriberInterface {
         'headers' => $headers,
         'json' => $data,
       ]);
+
       if ($response->getStatusCode() === 200) {
         $body = json_decode((string) $response->getBody()->getContents());
         // The request allows multiple subscriptions so returns an array of
         // responses.
         $body = reset($body);
-        // Check if the JSON data about the subscription has been returned.
-        if (!empty($body->subscription)) {
-          $data = $body->subscription;
-          if (!empty($data->isNewSubscription) && $data->isNewSubscription === 'True') {
+
+        if (!empty($body->status) && $body->status === 'Valid') {
+          if (!empty($body->isNewSubscription) && $body->isNewSubscription === TRUE) {
             // The subscription was successful.
             return;
           }
           // The user has not been subscribed. Throw a relevant exception.
-          if (!empty($data->feedbackMessage)) {
-            switch (trim($data->feedbackMessage)) {
+          if (!empty($body->feedbackMessage)) {
+            switch (trim($body->feedbackMessage)) {
               case 'A subscription for this service is already registered for this email address':
                 throw new EmailAddressAlreadySubscribedException();
 
@@ -107,7 +107,7 @@ class NewsletterSubscriber implements NewsletterSubscriberInterface {
                 throw new InvalidEmailAddressException();
 
               default:
-                throw new BadResponseException($data->feedbackMessage);
+                throw new BadResponseException($body->feedbackMessage);
             }
           }
           throw new BadResponseException('Response returned by Newsroom newsletter API is not according to specification.');
