@@ -152,6 +152,7 @@
         "lovers-of-behat/table-extension": "^1.2.0",
         "mikey179/vfsstream": "~1.6",
         "openeuropa/task-runner": "dev-master as 1.0.0-beta7",
+        "palantirnet/drupal-rector": "^0.12.2",
         "pear/http_request2": "~2.4",
         "pfrenssen/phpcs-pre-push": "1.1",
         "php-task-runner/composer": "dev-master",
@@ -389,6 +390,10 @@
             },
             "openeuropa/task-runner": {
                 "Array options @see https://github.com/openeuropa/task-runner/pull/137": "https://patch-diff.githubusercontent.com/raw/openeuropa/task-runner/pull/137.diff"
+            },
+            "palantirnet/drupal-rector": {
+                "drupalPostForm() with 1st param NULL @see https://github.com/palantirnet/drupal-rector/pull/198": "https://patch-diff.githubusercontent.com/raw/palantirnet/drupal-rector/pull/198.diff",
+                "user_password() deprecation @see https://github.com/palantirnet/drupal-rector/pull/199": "https://patch-diff.githubusercontent.com/raw/palantirnet/drupal-rector/pull/199.diff"
             }
         },
         "artifacts": {

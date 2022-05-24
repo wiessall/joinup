@@ -303,7 +303,7 @@ class AssetDistributionContext extends RawDrupalContext {
       throw new \Exception(sprintf('Asset distribution "%s" does not contain any download links.', $distribution->label()));
     }
     $file = FileUrlHandler::urlToFile($distribution->field_ad_access_url->target_id);
-    $link = FileUrlHandler::isRemote($file) ? $distribution->field_ad_access_url->target_id : file_create_url($file->getFileUri());
+    $link = FileUrlHandler::isRemote($file) ? $distribution->field_ad_access_url->target_id : \Drupal::service('file_url_generator')->generateAbsoluteString($file->getFileUri());
     $result = $this->getSession()->getPage()->find('xpath', "//a[contains(., '{$distribution->label()}')]/ancestor::div[contains(concat(' ', @class, ' '), ' timeline__listing-item ')]//a[@href='{$link}' and contains(text(), '{$link_type}')]");
     if (empty($result)) {
       throw new \Exception(sprintf('No link was found in the "%s" distribution on the page %s', $distribution->label(), $this->getSession()->getCurrentUrl()));
@@ -346,7 +346,7 @@ class AssetDistributionContext extends RawDrupalContext {
   public function assertLinkSynchronized(string $distribution, string $file_name): void {
     $distribution = $this->getAssetDistributionByName($distribution);
     $file = FileUrlHandler::urlToFile($distribution->field_ad_access_url->target_id);
-    if (($file->getFilename() !== $file_name) || !file_create_url($file->getFileUri())) {
+    if (($file->getFilename() !== $file_name) || !\Drupal::service('file_url_generator')->generateAbsoluteString($file->getFileUri())) {
       throw new \Exception("The file {$file_name} was not found in the '{$distribution->label()}' distribution'");
     }
 
@@ -356,7 +356,7 @@ class AssetDistributionContext extends RawDrupalContext {
       throw new \Exception("File '$file_name' was not found in file path '$files_path'.");
     }
 
-    /** @var \Symfony\Component\HttpFoundation\File\MimeType\MimeTypeGuesserInterface $mime_guesser */
+    /** @var \Symfony\Component\Mime\MimeTypesInterface $mime_guesser */
     $mime_guesser = \Drupal::service('file.mime_type.guesser');
     $mime_type = $mime_guesser->guess($path);
     $expected_file_type = asset_distribution_get_file_type_term_by_mime($mime_type);

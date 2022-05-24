@@ -449,7 +449,7 @@ function _ventuno_get_default_icon_render_array(string $entity_type_id, string $
   $class = $mapping[$entity_type_id][$bundle] ?? 'lightning-charge';
   return [
     '#type' => 'inline_template',
-    '#template' => '<svg class="bi img-fluid w-100 py-3 p-lg-3 text-white bg-secondary"><use xlink:href="' . base_path() . drupal_get_path('theme', 'ventuno') . '/assets/icons/icons.svg#{{ icon }}"></use></svg>',
+    '#template' => '<svg class="bi img-fluid w-100 py-3 p-lg-3 text-white bg-secondary"><use xlink:href="' . base_path() . \Drupal::service('extension.list.theme')->getPath('ventuno') . '/assets/icons/icons.svg#{{ icon }}"></use></svg>',
     '#context' => [
       'icon' => $class,
     ],

@@ -5,7 +5,7 @@ declare(strict_types = 1);
 namespace Drupal\joinup_discussion\Event;
 
 use Drupal\joinup_discussion\Entity\DiscussionInterface;
-use Symfony\Component\EventDispatcher\Event;
+use Symfony\Contracts\EventDispatcher\Event;
 
 /**
  * A base class for discussion events.
