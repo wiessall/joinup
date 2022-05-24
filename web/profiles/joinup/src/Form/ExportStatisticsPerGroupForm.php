@@ -202,21 +202,21 @@ QUERY;
 
     // Add data to the final array.
     $context['results']['data'][$group->id()] = [
-      'entity_id' => $group->id(),
-      'label' => $group->label(),
-      'bundle' => ucfirst($group->bundle()),
-      'changed' => \Drupal::getContainer()
+      'Entity ID' => $group->id(),
+      'Label' => $group->label(),
+      'Bundle' => ucfirst($group->bundle()),
+      'Last update date' => \Drupal::getContainer()
         ->get('date.formatter')
         ->format($group->getChangedTime(), 'c'),
-      'page_count' => $group_content['custom_page'],
-      'discussion_count' => $group_content['discussion'],
-      'document_count' => $group_content['document'],
-      'event_count' => $group_content['event'],
-      'news_count' => $group_content['news'],
-      'solution_count' => $group_content['solution'],
-      'release_count' => $group_content['asset_release'],
-      'distribution_count' => $group_content['asset_distribution'],
-      'total_count' => $group_content['custom_page']
+      'Custom pages' => $group_content['custom_page'],
+      'Discussions' => $group_content['discussion'],
+      'Documents' => $group_content['document'],
+      'Events' => $group_content['event'],
+      'News' => $group_content['news'],
+      'Solutions' => $group_content['solution'],
+      'Releases' => $group_content['asset_release'],
+      'Distributions' => $group_content['asset_distribution'],
+      'Total number of items' => $group_content['custom_page']
       + $group_content['discussion']
       + $group_content['document']
       + $group_content['event']
