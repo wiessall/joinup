@@ -1,0 +1,193 @@
+<?php
+
+declare(strict_types = 1);
+
+namespace Drupal\joinup;
+
+use Drupal\Component\Datetime\TimeInterface;
+use Drupal\Core\Cache\CacheBackendInterface;
+use Drupal\Core\Datetime\DateFormatterInterface;
+use Drupal\Core\Form\FormBase;
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Url;
+use Drupal\csv_serialization\Encoder\CsvEncoder;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Response;
+
+/**
+ * Provides a form base to generate and export data in a CSV.
+ */
+abstract class ExportBatchedDataFormBase extends FormBase {
+
+  /**
+   * The entity type manager.
+   *
+   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
+   */
+  protected $entityTypeManager;
+
+  /**
+   * The default cache bin.
+   *
+   * @var \Drupal\Core\Cache\CacheBackendInterface
+   */
+  protected $cacheStorage;
+
+  /**
+   * The date formatter service.
+   *
+   * @var \Drupal\Core\Datetime\DateFormatterInterface
+   */
+  protected $dateFormatter;
+
+  /**
+   * The time service.
+   *
+   * @var \Drupal\Component\Datetime\TimeInterface
+   */
+  protected $time;
+
+  /**
+   * Constructs an ExportUserListForm.
+   *
+   * @param \Drupal\Core\Cache\CacheBackendInterface $cache
+   *   The default cache bin.
+   * @param \Drupal\Core\Datetime\DateFormatterInterface $date_formatter
+   *   The date formatter service.
+   * @param \Drupal\Component\Datetime\TimeInterface $time
+   *   The time service.
+   */
+  public function __construct(CacheBackendInterface $cache, DateFormatterInterface $date_formatter, TimeInterface $time) {
+    $this->cacheStorage = $cache;
+    $this->dateFormatter = $date_formatter;
+    $this->time = $time;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container) {
+    return new static(
+      $container->get('cache.default'),
+      $container->get('date.formatter'),
+      $container->get('datetime.time')
+    );
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function buildForm(array $form, FormStateInterface $form_state) {
+    $form['help'] = [
+      '#markup' => $this->t('Press generate data to generate the list.'),
+    ];
+
+    $form['actions'] = [
+      '#type' => 'container',
+    ];
+
+    if ($data = $this->cacheStorage->get($this->getCacheTagName())) {
+      $form['help']['#markup'] = $this->t('Last dump was created at :date and will be removed by :expire', [
+        ':date' => $this->dateFormatter->format($data->created),
+        ':expire' => $this->dateFormatter->format($data->expire),
+      ]);
+
+      $form['actions']['download_link'] = [
+        '#type' => 'submit',
+        '#value' => $this->t('Download'),
+        '#submit' => ['::downloadCsv'],
+      ];
+
+      $form_state->set('download_data', $data->data);
+    }
+
+    $form['actions']['submit'] = [
+      '#type' => 'submit',
+      '#value' => $this->t(':generate data', [
+        ':generate' => empty($data) ? 'Generate' : 'Regenerate',
+      ]),
+      '#submit' => ['::generateData'],
+    ];
+
+    return $form;
+  }
+
+  /**
+   * Downloads the CSV file of the user list.
+   *
+   * @param array $form
+   *   The form array.
+   * @param \Drupal\Core\Form\FormStateInterface $form_state
+   *   The form state object.
+   */
+  public function downloadCsv(array &$form, FormStateInterface $form_state) {
+    $headers = [
+      'Content-Type' => 'text/csv',
+      'Content-Disposition' => 'attachment;filename=user_list.csv',
+    ];
+
+    $response = new Response($form_state->get('download_data'), 200, $headers);
+    $form_state->setResponse($response);
+  }
+
+  /**
+   * Stores the data into the cache.
+   *
+   * This method should be called as a finished callback for the batch process.
+   *
+   * @param bool $success
+   *   Whether the batch ended without a fatal error.
+   * @param array $results
+   *   The result set.
+   * @param array $operations
+   *   The remaining operations.
+   *
+   * @return \Symfony\Component\HttpFoundation\Response
+   *   A redirect response to the page that serves the CSV file as a download.
+   */
+  public function storeToCache(bool $success, array $results, array $operations): Response {
+    // Set the expiration time to 1 day.
+    $expire = $this->time->getRequestTime() + 3600 * 24;
+
+    $csv_encoder = new CsvEncoder();
+    $data = $csv_encoder->encode(array_values($results['data']), 'csv');
+    $this->cacheStorage->set($this->getCacheTagName(), $data, $expire);
+    $this->messenger()->addMessage('Data have been rebuilt.');
+
+    // Handle the file here.
+    return new RedirectResponse(Url::fromRoute($this->getDownloadRouteName())->toString());
+  }
+
+  /**
+   * Generates the data array.
+   *
+   * @param array $form
+   *   The form array.
+   * @param \Drupal\Core\Form\FormStateInterface $form_state
+   *   The form state object.
+   */
+  abstract protected function generateData(array &$form, FormStateInterface $form_state): void;
+
+  /**
+   * Returns the name of the cache tag that is used to store the data.
+   *
+   * @return string
+   *   The cache tag name.
+   */
+  abstract protected function getCacheTagName(): string;
+
+  /**
+   * Returns the routename for the report download.
+   *
+   * @return string
+   *   The route name.
+   */
+  abstract protected function getDownloadRouteName(): string;
+
+  /**
+   * {@inheritdoc}
+   */
+  public function submitForm(array &$form, FormStateInterface $form_state) {}
+
+}
