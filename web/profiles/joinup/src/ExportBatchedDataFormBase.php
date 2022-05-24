@@ -150,7 +150,9 @@ abstract class ExportBatchedDataFormBase extends FormBase {
     // Set the expiration time to 1 day.
     $expire = $this->time->getRequestTime() + 3600 * 24;
 
-    $csv_encoder = new CsvEncoder();
+    // Use ';' as a delimiter as some software have an issue when the delimiter
+    // and the decimal separator is the same symbol.
+    $csv_encoder = new CsvEncoder(';');
     $data = $csv_encoder->encode(array_values($results['data']), 'csv');
     $this->cacheStorage->set($this->getCacheTagName(), $data, $expire);
     $this->messenger()->addMessage('Data have been rebuilt.');
