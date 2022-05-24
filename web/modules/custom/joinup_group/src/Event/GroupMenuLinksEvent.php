@@ -17,13 +17,6 @@ use Symfony\Contracts\EventDispatcher\Event;
 class GroupMenuLinksEvent extends Event {
 
   /**
-   * Identifier for add group menu link event.
-   *
-   * @var string
-   */
-  public const ADD_LINKS = 'joinup_group.add_group_menu_links';
-
-  /**
    * The group to provide menu links for.
    *
    * @var \Drupal\rdf_entity\RdfInterface

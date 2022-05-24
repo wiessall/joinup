@@ -241,7 +241,7 @@ function joinup_group_rdf_entity_insert(RdfInterface $group): void {
 
   // Allow third-party to add group menu links.
   $event = new GroupMenuLinksEvent($group, $menu_name, \Drupal::entityTypeManager());
-  $event_dispatcher->dispatch($event, $event::ADD_LINKS);
+  $event_dispatcher->dispatch($event);
 }
 
 /**
