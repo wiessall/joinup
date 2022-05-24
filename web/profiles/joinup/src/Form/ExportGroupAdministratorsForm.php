@@ -63,7 +63,7 @@ class ExportGroupAdministratorsForm extends ExportBatchedDataFormBase {
   /**
    * {@inheritdoc}
    */
-  protected function getDownloadRouteName(): string {
+  protected function getRedirectRouteName(): string {
     return 'joinup.group_administrators_report';
   }
 

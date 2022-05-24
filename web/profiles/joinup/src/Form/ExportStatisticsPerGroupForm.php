@@ -88,8 +88,8 @@ class ExportStatisticsPerGroupForm extends ExportBatchedDataFormBase {
   /**
    * {@inheritdoc}
    */
-  protected function getDownloadRouteName(): string {
-    return 'joinup.statistics_per_group.download';
+  protected function getRedirectRouteName(): string {
+    return 'joinup.statistics_per_group';
   }
 
   /**
