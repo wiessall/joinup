@@ -34,7 +34,7 @@ class SolutionGroupMenuLinksSubscriber implements EventSubscriberInterface {
   public function addLinks(GroupMenuLinksEvent $event): void {
     $solution = $event->getGroup();
     if ($solution instanceof SolutionInterface) {
-      $url = $solution->toUrl('glossary')->mergeOptions([
+      $url = $solution->getCollection()->toUrl('glossary')->mergeOptions([
         'attributes' => [
           'class' => [
             'group-menu-link-external',
