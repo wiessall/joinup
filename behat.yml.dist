@@ -76,9 +76,14 @@
   - Drupal\joinup\Context\FeatureContext
   - LoversOfBehat\TableExtension\Context\TableContext
 
-# Default profile.
 default:
-  suites: {  }
+  # Suites to run with the site installed with content.
+  suites:
+    default:
+      contexts: *contexts
+      paths: *paths
+      filters:
+        tags: '~@wip&&@group-clone'
   extensions:
     Drupal\MinkExtension:
       base_url: ${env.DRUPAL_BASE_URL}
@@ -208,12 +213,3 @@ clean:
       paths: *paths
       filters:
         tags: '~@wip&&~@group-a&&~@group-b&&~@group-c&&~@group-d&&~@group-e&&~@group-f&&~@group-g&&~@group-clone'
-
-# Suites to run with the site installed with content.
-clone:
-  suites:
-    default:
-      contexts: *contexts
-      paths: *paths
-      filters:
-        tags: '~@wip&&@group-clone'

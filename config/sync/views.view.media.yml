@@ -77,8 +77,17 @@ display:
           empty_zero: false
           hide_alter_empty: true
           action_title: Action
-          include_exclude: exclude
-          selected_actions: {  }
+          include_exclude: include
+          selected_actions:
+            - media_delete_action
+            - media_publish_action
+            - media_save_action
+            - media_unpublish_action
+          actions_order:
+            - media_publish_action
+            - media_unpublish_action
+            - media_save_action
+            - media_delete_action
         thumbnail__target_id:
           id: thumbnail__target_id
           table: media_field_data

@@ -77,6 +77,8 @@ display:
           include_exclude: include
           selected_actions:
             - message_delete_action
+          actions_order:
+            - message_delete_action
         mid:
           id: mid
           table: message_field_data

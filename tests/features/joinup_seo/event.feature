@@ -12,8 +12,8 @@ Feature: SEO for news articles.
       | Username          | E-mail                 | First name | Family name |
       | Joinup SEO author | joinup.seo@example.com | Patrick    | Stewart     |
     And "event" content:
-      | title            | short title   | web url   | start date                      | end date                        | body           | logo     | agenda        | location   | online location                                          | organisation        | scope         | keywords | collection                  | state     |
-      | Joinup SEO event | JOINUPSEO2020 | <web url> | Wed, 25 Dec 2019 13:00:00 +0100 | Wed, 01 Jan 2020 13:00:00 +0100 | Body of event. | logo.png | Event agenda. | <location> | 0: Some title - 1: http://example.com/some-online-meetup | European Commission | International | Alphabet | Joinup SEO event collection | validated |
+      | title            | short title   | web url   | start date                | end date                  | body           | logo     | agenda        | location   | online location                                          | organisation        | scope         | keywords | collection                  | state     |
+      | Joinup SEO event | JOINUPSEO2020 | <web url> | Wed, 25 Dec 2019 13:00:00 | Wed, 01 Jan 2020 13:00:00 | Body of event. | logo.png | Event agenda. | <location> | 0: Some title - 1: http://example.com/some-online-meetup | European Commission | International | Alphabet | Joinup SEO event collection | validated |
 
     When I visit the "Joinup SEO event" event
     Then the metatag JSON should be attached in the page
@@ -31,8 +31,8 @@ Feature: SEO for news articles.
       | description | Body of event.                     |
       # The __timezone__ variable will allow any 2-digit number in the string. This is because of different timezones in
       # different environments.
-      | startDate   | 2019-12-25T__timezone__:00:00+0100 |
-      | endDate     | 2020-01-01T__timezone__:00:00+0100 |
+      | startDate   | 2019-12-25T__timezone__:00:00+0000 |
+      | endDate     | 2020-01-01T__timezone__:00:00+0000 |
       # __base_url__ will be replaced with the base url of the website.
       | @id         | <expected url>                     |
     And the metatag graph of the item with "name" "Joinup SEO event" should have the following "image" properties:

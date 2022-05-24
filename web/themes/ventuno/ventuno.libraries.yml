@@ -1,3 +1,28 @@
+# Main
+style:
+  version: VERSION
+  css:
+    base:
+      assets/css/main.css: {}
+  js:
+    assets/js/oe-bcl-joinup.bundle.min.js: { minified: true }
+    assets/js/popovers.js: { minified: false }
+  dependencies:
+    - core/drupal
+
+# Pages
+homepage:
+  css:
+    theme:
+      assets/css/homepage.css: {}
+  dependencies:
+    - ventuno/tour-first-balloon
+
+licence-comparer:
+  css:
+    theme:
+      assets/css/licence-comparer.css: {}
+
 searchpage:
   css:
     theme:
@@ -5,18 +30,36 @@ searchpage:
   dependencies:
     - ventuno/close
 
-homepage:
+# Bootstrap components
+close:
   css:
     theme:
-      assets/css/homepage.css: {}
+      assets/css/close.css: {}
 
-bootstrap-base:
+modals:
   css:
-    component:
-      assets/css/bootstrap-base.css: {}
+    theme:
+      assets/css/modals.css: {}
+  dependencies:
+    - ventuno/close
+
+tables:
+  css:
+    theme:
+      assets/css/tables.css: {}
+
+# Custom components
+footer:
+  css:
+    theme:
+      assets/css/footer.css: {}
+
+glide:
   js:
-    assets/js/oe-bcl-joinup.bundle.min.js: { minified: true }
-    assets/js/popovers.js: { minified: false }
+    assets/js/glide.js: { minified: false }
+  css:
+    theme:
+      assets/css/glide.core.min.css: { minified: true }
 
 navbar:
   css:
@@ -37,52 +80,20 @@ pager:
     theme:
       assets/css/pager.css: {}
 
-close:
-  css:
-    theme:
-      assets/css/close.css: {}
-
-modals:
-  css:
-    theme:
-      assets/css/modals.css: {}
-  dependencies:
-    - ventuno/close
-
-footer:
-  css:
-    theme:
-      assets/css/footer.css: {}
-
 site-alerts-messages:
   css:
     theme:
       assets/css/site-alerts-messages.css: {}
 
-glide:
+tour-first-balloon:
   js:
-    assets/js/glide.js: { minified: false }
-  css:
-    theme:
-      assets/css/glide.core.min.css: { minified: true }
+    assets/js/tour-first-balloon.js: { minified: true, attributes: { defer: true } }
 
-tables:
+# @todo remove when switch to Ventuno theme is complete
+bootstrap-base:
   css:
-    theme:
-      assets/css/tables.css: {}
-
-licence-comparer:
-  css:
-    theme:
-      assets/css/licence-comparer.css: {}
-
-style:
-  version: VERSION
-  css:
-    base:
-      assets/css/main.css: {}
+    component:
+      assets/css/bootstrap-base.css: {}
   js:
     assets/js/oe-bcl-joinup.bundle.min.js: { minified: true }
     assets/js/popovers.js: { minified: false }
-  dependencies:
-    - core/drupal

@@ -55,18 +55,6 @@ commands:
       dir: ${joinup.files_private_dir}
     - task: mkdir
       dir: ${env.DRUPAL_FILE_TEMP_PATH}
-    # Handle a potential case where the repo has been shallow cloned. Typically,
-    # this happens in GitLab pipelines, where the repos are shallow cloned for
-    # performance reasons. A shallow clone repository prevents us to get the
-    # latest Git tag as no tags are available.
-    - task: exec
-      command: test "$(git rev-parse --is-shallow-repository)" = "false" || git fetch --unshallow
-    - task: exec
-      command: test ! -f ./vendor/bin/grumphp || ./vendor/bin/grumphp git:deinit
-    - task: exec
-      command: test "$(git tag)" = "" || git describe --tags | tr -d '\n' > ${joinup.site_dir}/VERSION.txt
-    - task: exec
-      command: 'echo "Detected Joinup version: $(<${joinup.site_dir}/VERSION.txt)"'
     - task: run
       command: joinup:build-assets
 
@@ -90,14 +78,19 @@ commands:
       command: drupal:site-install
     - task: run
       command: dev:import-sparql-fixtures
+    # This is a safety net for the eventuality a developer lacks a mail catcher
+    # tool on their local environment. See the 'Development mail collector'
+    # `settings.php` section from `resources/runner/drupal.yml` for details.
     - task: run
-      command: dev:install-modules
+      command: drush:module-install
+      arguments:
+        - devel
+    - task: run
+      command: testing:install-modules
     - task: run
       command: drupal:settings
       arguments:
         - site-clean
-    - task: run
-      command: dev:demo-users
     - task: exec
       command: ${drush.bin}
       arguments:
@@ -122,11 +115,41 @@ commands:
     - task: run
       command: drupal:settings
       arguments:
-        - site-clone
+        - install
     - task: run
       command: toolkit:install-dump
     - task: run
       command: toolkit:run-deploy
+    # The `toolkit:run-deploy` command has enabled config read-only.
+    - task: run
+      command: config-readonly:disable
+    # This is a safety net for the eventuality a developer lacks a mail catcher
+    # tool on their local environment. See the 'Development mail collector'
+    # `settings.php` section from `resources/runner/drupal.yml` for details.
+    - task: run
+      command: drush:module-install
+      arguments:
+        - devel
+    - task: run
+      command: testing:install-modules
+    - task: exec
+      command: ${drush.bin}
+      arguments:
+        - cas-mock-server:start
+      options:
+        yes: null
+        root: ${joinup.site_dir}
+    - task: exec
+      command: ${drush.bin}
+      arguments:
+        - php:eval
+        - if (node_access_needs_rebuild()) { node_access_rebuild(); }
+    - task: run
+      command: drupal:settings
+      arguments:
+        - site-clone
+    - task: run
+      command: config-readonly:enable
 
   # Overrides the toolkit:test-phpcs command.
   toolkit:test-phpcs:

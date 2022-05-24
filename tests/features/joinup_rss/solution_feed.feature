@@ -12,28 +12,28 @@ Feature: Solution RSS feed.
       | title | Unrandomed collection |
       | state | validated             |
     And solutions:
-      | title             | state     | author  | creation date          | collection            |
-      | Lantern Domestic  | validated | scorlan | 2018-12-18 08:00 +0100 | Unrandomed collection |
-      | Deuteron Lonesome | draft     | scorlan | 2019-01-05 10:00 +0100 | Unrandomed collection |
+      | title             | state     | author  | creation date    | collection            |
+      | Lantern Domestic  | validated | scorlan | 2018-12-18 08:00 | Unrandomed collection |
+      | Deuteron Lonesome | draft     | scorlan | 2019-01-05 10:00 | Unrandomed collection |
     And solution user memberships:
       | solution          | user    | role        |
       | Lantern Domestic  | scorlan | facilitator |
       | Deuteron Lonesome | scorlan | facilitator |
     And news content:
-      | title                                  | body                                                     | state     | author  | created                | solution          |
-      | Monkeys worst indigo amongst colors    | Research results are out.                                | validated | scorlan | 2019-01-21 12:36 +0100 | Lantern Domestic  |
-      | Proton lonesomeness doesn't reach peak | More than 200 thousand protons were interviewed.         | validated | scorlan | 2019-01-07 12:00 +0100 | Deuteron Lonesome |
-      | Old metal alloy improves scissors      | It improves sharpness but they are more subject to rust. | validated | scorlan | 2018-04-11 09:00 +0100 | Lantern Domestic  |
+      | title                                  | body                                                     | state     | author  | created          | solution          |
+      | Monkeys worst indigo amongst colors    | Research results are out.                                | validated | scorlan | 2019-01-21 12:36 | Lantern Domestic  |
+      | Proton lonesomeness doesn't reach peak | More than 200 thousand protons were interviewed.         | validated | scorlan | 2019-01-07 12:00 | Deuteron Lonesome |
+      | Old metal alloy improves scissors      | It improves sharpness but they are more subject to rust. | validated | scorlan | 2018-04-11 09:00 | Lantern Domestic  |
     And event content:
-      | title                      | body                                                                                                                                                                                                                                                                                                                                                            | state     | author  | created                | solution         |
-      | Scissor sharpening funeral | <p>The place where to be if you want to keep <strong>cutting</strong> the paper at the best of your scissors <a href="http://www.example.com/">possibilities</a>.</p> <table><tr><td>Lorem ipsum dolor sit amet consectetur adipiscing elit. Etiam sed consectetur turpis. In porta lectus sit amet nulla feugiat et viverra massa fringilla.</td></tr></table> | validated | scorlan | 2017-11-26 14:18 +0100 | Lantern Domestic |
+      | title                      | body                                                                                                                                                                                                                                                                                                                                                            | state     | author  | created          | solution         |
+      | Scissor sharpening funeral | <p>The place where to be if you want to keep <strong>cutting</strong> the paper at the best of your scissors <a href="http://www.example.com/">possibilities</a>.</p> <table><tr><td>Lorem ipsum dolor sit amet consectetur adipiscing elit. Etiam sed consectetur turpis. In porta lectus sit amet nulla feugiat et viverra massa fringilla.</td></tr></table> | validated | scorlan | 2017-11-26 14:18 | Lantern Domestic |
     And discussion content:
-      | title                                           | body                                                                                   | state     | author  | created                | solution          |
-      | Is the indigo coloration caused by their smile? | I was reading the technical paper and it seems their main food is the indigo cherries. | validated | scorlan | 2019-01-21 13:00 +0100 | Deuteron Lonesome |
+      | title                                           | body                                                                                   | state     | author  | created          | solution          |
+      | Is the indigo coloration caused by their smile? | I was reading the technical paper and it seems their main food is the indigo cherries. | validated | scorlan | 2019-01-21 13:00 | Deuteron Lonesome |
     And custom_page content:
-      | title             | body                                            | state     | author  | created                | solution          |
-      | Indigo variations | The four major tones of indigo are listed here. | validated | scorlan | 2017-10-15 19:30 +0200 | Lantern Domestic  |
-      | List of devices   | Available remote electrical devices.            | validated | scorlan | 2019-02-08 10:00 +0200 | Deuteron Lonesome |
+      | title             | body                                            | state     | author  | created          | solution          |
+      | Indigo variations | The four major tones of indigo are listed here. | validated | scorlan | 2017-10-15 19:30 | Lantern Domestic  |
+      | List of devices   | Available remote electrical devices.            | validated | scorlan | 2019-02-08 10:00 | Deuteron Lonesome |
 
     When I am an anonymous user
     And I go to the homepage of the "Lantern Domestic" solution
@@ -48,10 +48,10 @@ Feature: Solution RSS feed.
     And the RSS feed should have 4 items
     And the RSS feed items should be:
       | title                                     | link                                                                                                 | description                                                                                                                                                                                            | publication date                | author        |
-      | News: Monkeys worst indigo amongst colors | /collection/unrandomed-collection/solution/lantern-domestic/news/monkeys-worst-indigo-amongst-colors | Research results are out.                                                                                                                                                                              | Mon, 21 Jan 2019 12:36:00 +0100 | Sartin Corlan |
-      | News: Old metal alloy improves scissors   | /collection/unrandomed-collection/solution/lantern-domestic/news/old-metal-alloy-improves-scissors   | It improves sharpness but they are more subject to rust.                                                                                                                                               | Wed, 11 Apr 2018 10:00:00 +0200 | Sartin Corlan |
-      | Event: Scissor sharpening funeral         | /collection/unrandomed-collection/solution/lantern-domestic/event/scissor-sharpening-funeral         | The place where to be if you want to keep cutting the paper at the best of your scissors possibilities. Lorem ipsum dolor sit amet consectetur adipiscing elit. Etiam sed consectetur turpis. In porta | Sun, 26 Nov 2017 14:18:00 +0100 | Sartin Corlan |
-      | Custom page: Indigo variations            | /collection/unrandomed-collection/solution/lantern-domestic/indigo-variations                        | The four major tones of indigo are listed here.                                                                                                                                                        | Sun, 15 Oct 2017 19:30:00 +0200 | Sartin Corlan |
+      | News: Monkeys worst indigo amongst colors | /collection/unrandomed-collection/solution/lantern-domestic/news/monkeys-worst-indigo-amongst-colors | Research results are out.                                                                                                                                                                              | Mon, 21 Jan 2019 12:36:00 +0000 | Sartin Corlan |
+      | News: Old metal alloy improves scissors   | /collection/unrandomed-collection/solution/lantern-domestic/news/old-metal-alloy-improves-scissors   | It improves sharpness but they are more subject to rust.                                                                                                                                               | Wed, 11 Apr 2018 09:00:00 +0000 | Sartin Corlan |
+      | Event: Scissor sharpening funeral         | /collection/unrandomed-collection/solution/lantern-domestic/event/scissor-sharpening-funeral         | The place where to be if you want to keep cutting the paper at the best of your scissors possibilities. Lorem ipsum dolor sit amet consectetur adipiscing elit. Etiam sed consectetur turpis. In porta | Sun, 26 Nov 2017 14:18:00 +0000 | Sartin Corlan |
+      | Custom page: Indigo variations            | /collection/unrandomed-collection/solution/lantern-domestic/indigo-variations                        | The four major tones of indigo are listed here.                                                                                                                                                        | Sun, 15 Oct 2017 19:30:00 +0000 | Sartin Corlan |
 
     When I am logged in as a facilitator of the "Deuteron Lonesome" solution
     And I go to the homepage of the "Deuteron Lonesome" solution

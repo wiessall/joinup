@@ -10,6 +10,5 @@ id: user_remove_role_action.rdf_graph_manager
 label: 'Remove the RDF graph manager role from the selected user(s)'
 type: user
 plugin: user_remove_role_action
-weight: 0
 configuration:
   rid: rdf_graph_manager

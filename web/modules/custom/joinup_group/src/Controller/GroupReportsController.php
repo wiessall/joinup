@@ -96,7 +96,7 @@ class GroupReportsController extends ControllerBase {
    */
   protected function getReports(GroupInterface $group): array {
     $event = new GroupReportsEvent($group);
-    $this->dispatcher->dispatch(GroupReportsEventInterface::EVENT_NAME, $event);
+    $this->dispatcher->dispatch($event, GroupReportsEventInterface::EVENT_NAME);
 
     return $event->getGroupReports();
   }

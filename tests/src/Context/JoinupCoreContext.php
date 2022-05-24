@@ -5,6 +5,7 @@ declare(strict_types = 1);
 namespace Drupal\joinup\Context;
 
 use Behat\Gherkin\Node\TableNode;
+use Behat\Testwork\Hook\Scope\BeforeSuiteScope;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\joinup\Chip;
 use Drupal\joinup\Traits\BrowserCapabilityDetectionTrait;
@@ -320,6 +321,18 @@ class JoinupCoreContext extends RawDrupalContext {
   public function givenNoPipelineRanYet(): void {
     $collection = \Drupal::getContainer()->get('keyvalue')->get('joinup_pipeline_log');
     $collection->deleteAll();
+  }
+
+  /**
+   * Sets the default timezone before a suite.
+   *
+   * @param \Behat\Testwork\Hook\Scope\BeforeSuiteScope $before_suite
+   *   Contains information about the suite.
+   *
+   * @BeforeSuite
+   */
+  public static function setDefaultTimezone(BeforeSuiteScope $before_suite): void {
+    date_default_timezone_set('UTC');
   }
 
 }

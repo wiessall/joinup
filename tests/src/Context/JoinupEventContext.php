@@ -56,22 +56,13 @@ class JoinupEventContext extends RawDrupalContext {
    */
   public static function massageEventFieldsBeforeNodeCreate(BeforeNodeCreateScope $scope): void {
     $node = $scope->getEntity();
-    /** @var \Drupal\Core\Datetime\DateFormatterInterface $date_formatter */
-    $date_formatter = \Drupal::service('date.formatter');
-
     if ($node->type !== 'event') {
       return;
     }
 
     foreach (['field_event_date:value', 'field_event_date:end_value'] as $field) {
       if (isset($node->$field)) {
-        $date = strtotime($node->$field);
-
-        if ($date === FALSE) {
-          throw new \Exception(sprintf('Invalid format for date specified: %s', $node->$field));
-        }
-
-        $node->$field = $date_formatter->format($date, 'custom', DateTimeItemInterface::DATETIME_STORAGE_FORMAT);
+        $node->$field = date(DateTimeItemInterface::DATETIME_STORAGE_FORMAT, strtotime($node->$field));
       }
     }
 
