@@ -107,3 +107,23 @@ joinup.admin_reporting:
     _title: 'Reporting'
   requirements:
     _permission: 'access joinup reports'
+
+joinup.statistics_per_group:
+  path: '/admin/reporting/statistics-per-group'
+  defaults:
+    _form: '\Drupal\joinup\Form\ExportStatisticsPerGroupForm'
+    _title: 'Statistics per group'
+  requirements:
+    _permission: 'access joinup reports'
+  options:
+    _admin_route: TRUE
+
+joinup.statistics_per_group.download:
+  path: '/admin/reporting/statistics-per-group/download'
+  defaults:
+    _controller: '\Drupal\joinup\Form\ExportStatisticsPerGroupForm::downloadCsv'
+    _title: 'Download CSV'
+  requirements:
+    _permission: 'access joinup reports'
+  options:
+    _admin_route: TRUE
