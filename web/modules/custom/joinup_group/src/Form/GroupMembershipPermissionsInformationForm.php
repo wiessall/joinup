@@ -28,13 +28,13 @@ class GroupMembershipPermissionsInformationForm extends FormBase {
    *   The form render array.
    * @param \Drupal\Core\Form\FormStateInterface $form_state
    *   The form state object.
-   * @param \Drupal\joinup_group\Entity\GroupInterface|null $group
+   * @param \Drupal\joinup_group\Entity\GroupInterface|null $rdf_entity
    *   The group for which the membership permission information is rendered.
    *
    * @return array
    *   A render array containing the form.
    */
-  public function buildForm(array $form, FormStateInterface $form_state, ?GroupInterface $group = NULL): array {
+  public function buildForm(array $form, FormStateInterface $form_state, ?GroupInterface $rdf_entity = NULL): array {
     $form['permissions'] = [
       '#type' => 'table',
       '#header' => [
@@ -46,7 +46,7 @@ class GroupMembershipPermissionsInformationForm extends FormBase {
       ],
     ];
 
-    foreach ($this->getPermissionInfo($group) as $permission_info) {
+    foreach ($this->getPermissionInfo($rdf_entity) as $permission_info) {
       if ($permission_info['applicable'] ?? TRUE) {
         $form['permissions'][] = [
           [
@@ -73,7 +73,7 @@ class GroupMembershipPermissionsInformationForm extends FormBase {
       'close' => [
         '#type' => 'link',
         '#title' => $this->t('Got it'),
-        '#url' => $group->toUrl('member-overview'),
+        '#url' => $rdf_entity->toUrl('member-overview'),
       ],
     ];
 
