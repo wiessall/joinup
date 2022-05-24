@@ -14,6 +14,7 @@ use Drupal\interoperable_europe\InteroperableEuropeCollectionInterface;
 use Drupal\joinup_bundle_class\DescriptionInterface;
 use Drupal\joinup_bundle_class\LogoInterface;
 use Drupal\joinup_community_content\Entity\CommunityContentInterface;
+use Drupal\joinup_core\Controller\IdRedirect;
 use Drupal\node\Entity\Node;
 use Drupal\node\NodeInterface;
 use Drupal\smart_trim\Truncate\TruncateHTML;
@@ -444,7 +445,7 @@ function _ventuno_get_default_icon_render_array(string $entity_type_id, string $
   $class = $mapping[$entity_type_id][$bundle] ?? 'lightning-charge';
   return [
     '#type' => 'inline_template',
-    '#template' => '<svg class="bi img-fluid w-100 py-3 p-lg-3 text-white bg-secondary"><use xlink:href="' . base_path() . drupal_get_path('theme', 'ventuno') . '/assets/icons/icons.svg#{{ icon }}"></use></svg>',
+    '#template' => '<svg class="bi img-fluid w-100 py-3 p-lg-3 text-white bg-secondary"><use xlink:href="' . base_path() . \Drupal::service('extension.list.theme')->getPath('ventuno') . '/assets/icons/icons.svg#{{ icon }}"></use></svg>',
     '#context' => [
       'icon' => $class,
     ],
@@ -471,14 +472,32 @@ function ventuno_theme_suggestions_form_element_alter(array &$suggestions, array
 }
 
 /**
- * Implements hook_form_alter().
+ * Implements hook_form_FORM_ID_alter().
  */
-function ventuno_form_alter(&$form, FormStateInterface $form_state, $form_id): void {
-  // Check if the form contains exposed filter form element.
-  if ($form_id !== 'views_exposed_form') {
-    return;
+function ventuno_form_join_group_form_alter(array &$form, FormStateInterface $form_state, string $form_id): void {
+  // Make the 'Join' modal link for anonymous users appear as a button.
+  if (isset($form['authenticate'])) {
+    $form['authenticate']['#attributes']['class'][] = 'btn';
+    $form['authenticate']['#attributes']['class'][] = 'btn-outline-secondary';
   }
 
+  if (isset($form['pending'])) {
+    // Add classes for pending membership link.
+    $form['pending']['#attributes']['class'][] = 'btn';
+    $form['pending']['#attributes']['class'][] = 'btn-primary';
+  }
+
+  if (isset($form['leave'])) {
+    // Add classes for leave membership link.
+    $form['leave']['#confirm']['#attributes']['class'][] = 'btn';
+    $form['leave']['#confirm']['#attributes']['class'][] = 'btn-warning';
+  }
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function ventuno_form_views_exposed_form_alter(array &$form, FormStateInterface $form_state, string $form_id): void {
   $route_name = \Drupal::routeMatch()->getRouteName();
   $view = $form_state->get('view');
   if ($view->id() === 'search') {
@@ -543,4 +562,117 @@ function ventuno_theme_suggestions_field_alter(array &$suggestions, array $varia
     // allows overriding single fields, while keeping all the rest markup-free.
     array_unshift($suggestions, 'field__bare');
   }
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for rdf-entity--solution--group-header.html.twig.
+ */
+function ventuno_preprocess_rdf_entity__solution__group_header(array &$variables): void {
+  if (isset($variables['content']['releases_overview'])) {
+    $variables['content']['releases_overview']['#attributes'] = [
+      'class' => [
+        'btn',
+        'btn-outline-secondary',
+        'ms-3',
+      ],
+    ];
+  }
+}
+
+/**
+ * Implements hook_theme().
+ */
+function ventuno_theme(array $existing, string $type, string $theme, string $path): array {
+  return [
+    'share_content_form' => [
+      'render element' => 'form',
+      'path' => $path . '/templates/form',
+    ],
+    'social_share' => [
+      'variables' => ['entity' => NULL],
+      'path' => $path . '/templates/parts',
+    ],
+  ];
+}
+
+/**
+ * Preprocess function for the "social_share" theme hook.
+ *
+ * @param array $variables
+ *   An associative array containing:
+ *   - entity: the entity being shared.
+ *
+ * @throws \Drupal\Core\Entity\EntityMalformedException
+ *   Thrown when the entity being shared does not support generating a URL.
+ */
+function ventuno_preprocess_social_share(array &$variables) {
+  /** @var \Drupal\Core\Entity\EntityInterface $entity */
+  $entity = $variables['entity'];
+  // Generate an entity absolute URL.
+  $variables['url'] = $entity->toUrl('canonical', [
+    'language' => $entity->language(),
+  ])->setAbsolute();
+
+  $variables['encoded_url'] = urlencode($variables['url']->toString());
+  $variables['encoded_title'] = urlencode($entity->label());
+}
+
+/**
+ * Implements hook_preprocess_page_title().
+ */
+function ventuno_preprocess_page_title(array &$variables): void {
+  // @todo Move the permalink computing outside the theme layer, in ISAICP-4724.
+  // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-4724
+  if ($permalink = ventuno_build_permalink()) {
+    $variables['permalink'] = $permalink;
+  }
+}
+
+/**
+ * Builds the permalink for the given route.
+ *
+ * @return string
+ *   The permalink URI.
+ */
+function ventuno_build_permalink() {
+  $route_match = \Drupal::routeMatch();
+  $route_name = $route_match->getRouteName();
+
+  $routes = [
+    'entity.node.canonical',
+    'entity.rdf_entity.canonical',
+    'entity.rdf_entity.about_page',
+  ];
+
+  if (!in_array($route_name, $routes)) {
+    return FALSE;
+  }
+
+  if (!($parameters = $route_match->getRouteObject()->getOption('parameters')) || empty($parameters)) {
+    return FALSE;
+  }
+
+  foreach ($parameters as $key => $info) {
+    if (!empty($info['type']) && $info['type'] == "entity:$key") {
+      $type = $key;
+      break;
+    }
+  }
+
+  if (!isset($type) || !($entity = $route_match->getParameter($type))) {
+    return FALSE;
+  }
+
+  // Entity ID is pointing to the publication office redirect.
+  $namespaces = implode('|', array_keys(
+    IdRedirect::getEntityTypeFromPersistentUriNamespace()));
+  if (preg_match('{^http://data.europa.eu/(?:' . $namespaces . ')/}', $entity->id())) {
+    return $entity->id();
+  }
+
+  // Don't process the path to avoid pathauto aliasing.
+  return $entity->toUrl('canonical', [
+    'path_processing' => FALSE,
+    'absolute' => TRUE,
+  ])->toString();
 }

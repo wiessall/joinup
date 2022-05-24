@@ -1,12 +1,8 @@
-html,
-body {
-  min-height: 100vh;
-}
 .layout-container {
   display: flex;
   flex-direction: column;
-  min-height: calc(100vh - 28px);
-  main {
+  min-height: calc(100vh - 28px); // Full height minus the height of globan banner (which gets injected in DOM after page load)
+  .content {
     flex: 1;
   }
 }

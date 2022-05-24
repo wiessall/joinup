@@ -13,7 +13,9 @@ article, .navigation-bottom {
       padding-left: 15px;
       margin-bottom: 4px;
       text-indent: -12px;
+    }
 
+    & > li {
       &:before {
         padding-right: 6px;
         content: "•";

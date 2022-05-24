@@ -107,6 +107,7 @@ class EuplContext extends RawDrupalContext {
     if (empty($button)) {
       throw new \Exception("Could not locate a table cell with the button {$spdx}.");
     }
+    $this->scrollElementIntoView('.licence-comparer__header');
     $button->press();
 
     // Wait for modal dialog to be ready.

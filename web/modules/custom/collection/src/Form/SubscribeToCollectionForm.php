@@ -17,11 +17,13 @@ use Drupal\Core\Form\FormBuilderInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\Core\Url;
+use Drupal\joinup_core\Event\AjaxCommandEvent;
 use Drupal\joinup_subscription\JoinupSubscriptionsHelper;
 use Drupal\og\MembershipManagerInterface;
 use Drupal\og\OgMembershipInterface;
 use Drupal\rdf_entity\RdfInterface;
 use Drupal\user\UserInterface;
+use Psr\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -41,35 +43,35 @@ class SubscribeToCollectionForm extends FormBase {
    *
    * @var \Drupal\Core\Entity\EntityTypeManagerInterface
    */
-  protected $entityTypeManager;
+  protected EntityTypeManagerInterface $entityTypeManager;
 
   /**
    * The membership manager service.
    *
    * @var \Drupal\og\MembershipManagerInterface
    */
-  protected $membershipManager;
-
-  /**
-   * The messenger service.
-   *
-   * @var \Drupal\Core\Messenger\MessengerInterface
-   */
-  protected $messenger;
+  protected MembershipManagerInterface $membershipManager;
 
   /**
    * The form builder.
    *
    * @var \Drupal\Core\Form\FormBuilderInterface
    */
-  protected $formBuilder;
+  protected FormBuilderInterface $formBuilder;
 
   /**
    * The time keeping service.
    *
    * @var \Drupal\Component\Datetime\TimeInterface
    */
-  protected $time;
+  protected TimeInterface $time;
+
+  /**
+   * The event dispatcher service.
+   *
+   * @var \Psr\EventDispatcher\EventDispatcherInterface
+   */
+  protected EventDispatcherInterface $eventDispatcher;
 
   /**
    * Constructs a SubscribeToCollectionForm.
@@ -84,13 +86,16 @@ class SubscribeToCollectionForm extends FormBase {
    *   The form builder.
    * @param \Drupal\Component\Datetime\TimeInterface $time
    *   The time keeping service.
+   * @param \Psr\EventDispatcher\EventDispatcherInterface $event_dispatcher
+   *   The event dispatcher service.
    */
-  public function __construct(EntityTypeManagerInterface $entity_type_manager, MembershipManagerInterface $membership_manager, MessengerInterface $messenger, FormBuilderInterface $form_builder, TimeInterface $time) {
+  public function __construct(EntityTypeManagerInterface $entity_type_manager, MembershipManagerInterface $membership_manager, MessengerInterface $messenger, FormBuilderInterface $form_builder, TimeInterface $time, EventDispatcherInterface $event_dispatcher) {
     $this->entityTypeManager = $entity_type_manager;
     $this->membershipManager = $membership_manager;
     $this->messenger = $messenger;
     $this->formBuilder = $form_builder;
     $this->time = $time;
+    $this->eventDispatcher = $event_dispatcher;
   }
 
   /**
@@ -102,7 +107,8 @@ class SubscribeToCollectionForm extends FormBase {
       $container->get('og.membership_manager'),
       $container->get('messenger'),
       $container->get('form_builder'),
-      $container->get('datetime.time')
+      $container->get('datetime.time'),
+      $container->get('event_dispatcher'),
     );
   }
 
@@ -143,6 +149,9 @@ class SubscribeToCollectionForm extends FormBase {
     $form['proposal'] = [
       '#type' => 'html_tag',
       '#tag' => 'h2',
+      '#attributes' => [
+        'class' => ['fs-6'],
+      ],
       '#value' => $this->t('Want to receive notifications, too?'),
     ];
     $form['description'] = [
@@ -163,7 +172,7 @@ class SubscribeToCollectionForm extends FormBase {
       '#type' => 'submit',
       '#value' => $this->t('Subscribe'),
       // This form is opened via AJAX in a modal dialog that is triggered by
-      // submitting the JoinCollectionForm. By default Drupal will send the
+      // submitting the JoinCollectionForm. By default, Drupal will send the
       // AJAX requests to the route of the original form, which in this case
       // would be the JoinCollectionForm. We need to manually specify the
       // callback URL and the query argument that triggers AJAX so that this
@@ -245,10 +254,18 @@ class SubscribeToCollectionForm extends FormBase {
 
     // Output messages in the page.
     $messages = ['#type' => 'status_messages'];
+    // @todo Replace with a theme-agnostic selector in ISAICP-7109.
+    // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7109
     $response->addCommand(new PrependCommand('.section--content-top', $messages));
 
     if (!$form_state->getErrors()) {
-      $response->addCommand(new CloseModalDialogCommand());
+      // Allow modules to alter or replace the Ajax command.
+      $event = new AjaxCommandEvent(new CloseModalDialogCommand(), [
+        'instance' => 'join_collection.subscribe_dialog.close',
+      ]);
+      $this->eventDispatcher->dispatch($event);
+
+      $response->addCommand($event->getCommand());
     }
     return $response;
   }
@@ -318,7 +335,16 @@ class SubscribeToCollectionForm extends FormBase {
     $modal_form['#attached']['library'][] = 'core/drupal.dialog.ajax';
 
     $response = new AjaxResponse();
-    $response->addCommand(new OpenModalDialogCommand($title, $modal_form, ['width' => '500']));
+    // Allow modules to alter or replace the Ajax command.
+    $event = new AjaxCommandEvent(new OpenModalDialogCommand($title, $modal_form, [
+      'width' => '500',
+    ]), [
+      'instance' => 'join_collection.subscribe_dialog.open',
+      'title' => $title,
+      'content' => $modal_form,
+    ]);
+    $this->eventDispatcher->dispatch($event);
+    $response->addCommand($event->getCommand())->addAttachments($event->getAttachments());
 
     // This modal should only be shown once, immediately after the user logs in.
     // Deleting the cookie ensures it will not be shown again.

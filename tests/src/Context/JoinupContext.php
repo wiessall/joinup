@@ -18,11 +18,11 @@ use Drupal\comment\Entity\Comment;
 use Drupal\file\Entity\File;
 use Drupal\image\Entity\ImageStyle;
 use Drupal\joinup\Traits\BootstrapTrait;
-use Drupal\joinup\Traits\BrowserCapabilityDetectionTrait;
 use Drupal\joinup\Traits\ContextualLinksTrait;
 use Drupal\joinup\Traits\EntityTrait;
 use Drupal\joinup\Traits\FileTrait;
 use Drupal\joinup\Traits\FormTrait;
+use Drupal\joinup\Traits\JavascriptTrait;
 use Drupal\joinup\Traits\KeyboardInteractionTrait;
 use Drupal\joinup\Traits\MaterialDesignTrait;
 use Drupal\joinup\Traits\NodeTrait;
@@ -55,11 +55,11 @@ use WebDriver\Exception\StaleElementReference;
 class JoinupContext extends RawDrupalContext {
 
   use BootstrapTrait;
-  use BrowserCapabilityDetectionTrait;
   use ContextualLinksTrait;
   use EntityTrait;
   use FileTrait;
   use FormTrait;
+  use JavascriptTrait;
   use KeyboardInteractionTrait;
   use MaterialDesignTrait;
   use NodeTrait;
@@ -105,7 +105,7 @@ class JoinupContext extends RawDrupalContext {
     $regex = '/' . preg_quote($text, '/') . '/ui';
     $message = sprintf('The text "%s" was not found anywhere in the text of the current page.', $text);
 
-    Assert::assertRegExp($regex, $actual, $message);
+    Assert::assertMatchesRegularExpression($regex, $actual, $message);
   }
 
   /**
@@ -1940,6 +1940,29 @@ class JoinupContext extends RawDrupalContext {
   }
 
   /**
+   * Asserts that the Bootstrap modal is opened.
+   *
+   * @throws \Exception
+   *   Thrown when the modal doesn't open within 5 seconds.
+   *
+   * @Then a modal dialog should open
+   */
+  public function waitForDrupalModalDialogToOpen(): void {
+    // A modal can be opened only in a JavaScript-enabled browser.
+    self::assertJavaScriptEnabledBrowser();
+
+    $result = $this->getSession()->getPage()->waitFor(10, function () {
+      // Retrieve again a fresh copy of the page element at each cycle.
+      $modal = $this->getSession()->getPage()->find('css', '.modal-body');
+      return $modal && $modal->isVisible();
+    });
+
+    if (!$result) {
+      throw new \Exception('The modal did not open.');
+    }
+  }
+
+  /**
    * Asserts that the default Drupal modal is opened.
    *
    * @throws \Exception
@@ -2687,6 +2710,32 @@ class JoinupContext extends RawDrupalContext {
     /** @var \Behat\Mink\Element\NodeElement $last */
     $last = array_pop($fields);
     $last->setValue($value);
+  }
+
+  /**
+   * Presses the latest button with a given label.
+   *
+   * Used for dynamic forms where a button can be added multiple times.
+   *
+   * @param string $label
+   *   The button label.
+   *
+   * @When I press latest :label
+   */
+  public function pressLatestButton(string $label): void {
+    $page = $this->getSession()->getPage();
+    $buttons = $page->findAll('named', ['button', $label]);
+
+    if (empty($buttons)) {
+      throw new ElementNotFoundException($this->getSession()->getDriver(), 'button', 'label', $label);
+    }
+
+    /** @var \Behat\Mink\Element\NodeElement $last_button */
+    $last_button = array_pop($buttons);
+    if ($id = $last_button->getAttribute('id')) {
+      $this->scrollElementIntoView("#$id");
+    }
+    $last_button->press();
   }
 
   /**

@@ -1,0 +1,18 @@
+uuid: da0adf06-47c9-4add-8060-95b38abb25c1
+langcode: en
+status: true
+dependencies:
+  module:
+    - joinup_core
+  theme:
+    - ventuno
+id: legal_document
+label: 'Legal document'
+theme: ventuno
+weight: 0
+conditions:
+  request_route:
+    id: request_route
+    negate: false
+    routes:
+      - entity.entity_legal_document.canonical

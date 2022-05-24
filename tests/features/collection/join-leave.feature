@@ -159,12 +159,10 @@ Feature: Joining and leaving collections through the web interface
     When I click "Read more"
     Then I should see the heading "About Sapient Pearwood"
 
-    When I press "You're a member"
-    And I wait for animations to finish
-    And I click "Leave this collection"
-    Then a modal should open
+    When I click "Leave this collection"
+    Then a modal dialog should open
 
-    When I press "Cancel" in the "Modal buttons" region
+    When I press "Cancel" in the "Modal footer" region
     And I wait for AJAX to finish
     Then I should not see the text "Leave collection"
     # Since this is a modal, the dialog simply closes and the user is not redirected
