@@ -631,10 +631,10 @@ function ventuno_preprocess_page_title(array &$variables): void {
 /**
  * Builds the permalink for the given route.
  *
- * @return string
+ * @return string|null
  *   The permalink URI.
  */
-function ventuno_build_permalink() {
+function ventuno_build_permalink(): ?string {
   $route_match = \Drupal::routeMatch();
   $route_name = $route_match->getRouteName();
 
@@ -645,11 +645,11 @@ function ventuno_build_permalink() {
   ];
 
   if (!in_array($route_name, $routes)) {
-    return FALSE;
+    return NULL;
   }
 
   if (!($parameters = $route_match->getRouteObject()->getOption('parameters')) || empty($parameters)) {
-    return FALSE;
+    return NULL;
   }
 
   foreach ($parameters as $key => $info) {
@@ -660,7 +660,7 @@ function ventuno_build_permalink() {
   }
 
   if (!isset($type) || !($entity = $route_match->getParameter($type))) {
-    return FALSE;
+    return NULL;
   }
 
   // Entity ID is pointing to the publication office redirect.
