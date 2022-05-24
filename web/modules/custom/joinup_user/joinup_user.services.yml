@@ -22,7 +22,7 @@ services:
       - { name: access_check, applies_to: _user_status }
   joinup_user.user_cancel:
     class: Drupal\joinup_user\Event\Subscriber\JoinupUserUserCancelSubscriber
-    arguments: ['@entity_type.manager', '@og.membership_manager', '@user.data']
+    arguments: ['@entity_type.manager', '@og.membership_manager', '@user.data', '@password_generator']
     tags:
       - { name: 'event_subscriber' }
 

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "75204ff32e61db07be339d5dc115d21e",
+    "content-hash": "5e8b38a47085c6b9c6e2773e79da9240",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -19829,6 +19829,88 @@
             "time": "2022-01-27T09:35:39+00:00"
         },
         {
+            "name": "palantirnet/drupal-rector",
+            "version": "0.12.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/palantirnet/drupal-rector.git",
+                "reference": "1ffc693ab36855bf76c897d5f38e487a7e60a97d"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/palantirnet/drupal-rector/zipball/1ffc693ab36855bf76c897d5f38e487a7e60a97d",
+                "reference": "1ffc693ab36855bf76c897d5f38e487a7e60a97d",
+                "shasum": ""
+            },
+            "require": {
+                "rector/rector": "~0.12",
+                "webflo/drupal-finder": "^1.2"
+            },
+            "conflict": {
+                "rector/rector": ">0.12.17"
+            },
+            "replace": {
+                "drupal8-rector/drupal8-rector": "*",
+                "palantirnet/drupal8-rector": "*"
+            },
+            "require-dev": {
+                "php": "^8.0",
+                "phpstan/extension-installer": "^1.1",
+                "phpstan/phpstan": "^1.0",
+                "phpstan/phpstan-deprecation-rules": "^1.0",
+                "phpunit/phpunit": "^9.5",
+                "rector/rector-cakephp": "dev-main#eab7b7992e3462c40b2eb8f7ab6d2013eaf20c76",
+                "rector/rector-doctrine": "dev-main#21431cc9e81990191be9c235e67c631ed518d0a3",
+                "rector/rector-laravel": "dev-main#31d9892d1f2abd41a118589ad76a065bb24150ea",
+                "rector/rector-nette": "dev-main#7aa632f0fd210b0795cb92b98e648164049db80e",
+                "rector/rector-phpoffice": "dev-main#1e12437861bb9e06f776b9f9be5811a7bf219729",
+                "rector/rector-phpunit": "dev-main#baf6f9eaa1eadc03d61ac6f414077d85b0540dfa",
+                "rector/rector-src": "dev-main#77a4582d5044446b8da43ab91a09082fa0413a23",
+                "rector/rector-symfony": "dev-main#a3ad2a20c028535c7d26ba85bed729d838eb9297",
+                "symfony/yaml": "^5 || ^6"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "DrupalRector\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Dezső Biczó",
+                    "email": "mxr576@gmail.com"
+                },
+                {
+                    "name": "Ofer Shaal",
+                    "email": "shaal@palantir.net"
+                },
+                {
+                    "name": "Daniel Montgomery",
+                    "email": "montgomery@palantir.net"
+                },
+                {
+                    "name": "Matt Glaman",
+                    "email": "nmd.matt@gmail.com"
+                }
+            ],
+            "description": "Instant fixes for your Drupal code by using Rector.",
+            "keywords": [
+                "Code style",
+                "Drupal 8",
+                "ast",
+                "drupal 9",
+                "rector"
+            ],
+            "support": {
+                "source": "https://github.com/palantirnet/drupal-rector/tree/0.12.2"
+            },
+            "time": "2022-05-04T15:23:25+00:00"
+        },
+        {
             "name": "pdepend/pdepend",
             "version": "2.10.3",
             "source": {
@@ -21702,6 +21784,66 @@
                 }
             ],
             "time": "2022-01-05T17:46:08+00:00"
+        },
+        {
+            "name": "rector/rector",
+            "version": "0.12.17",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/rectorphp/rector.git",
+                "reference": "4f32575b718a4d7032423dc8e9d1e530ad859782"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/rectorphp/rector/zipball/4f32575b718a4d7032423dc8e9d1e530ad859782",
+                "reference": "4f32575b718a4d7032423dc8e9d1e530ad859782",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.1|^8.0",
+                "phpstan/phpstan": "^1.4.6"
+            },
+            "conflict": {
+                "phpstan/phpdoc-parser": "<1.2",
+                "rector/rector-cakephp": "*",
+                "rector/rector-doctrine": "*",
+                "rector/rector-laravel": "*",
+                "rector/rector-nette": "*",
+                "rector/rector-phpoffice": "*",
+                "rector/rector-phpunit": "*",
+                "rector/rector-prefixed": "*",
+                "rector/rector-symfony": "*"
+            },
+            "bin": [
+                "bin/rector"
+            ],
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-main": "0.12-dev"
+                }
+            },
+            "autoload": {
+                "files": [
+                    "bootstrap.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "Instant Upgrade and Automated Refactoring of any PHP code",
+            "support": {
+                "issues": "https://github.com/rectorphp/rector/issues",
+                "source": "https://github.com/rectorphp/rector/tree/0.12.17"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/tomasvotruba",
+                    "type": "github"
+                }
+            ],
+            "time": "2022-03-03T12:18:11+00:00"
         },
         {
             "name": "scssphp/scssphp",
