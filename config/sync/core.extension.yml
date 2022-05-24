@@ -7,6 +7,7 @@ module:
   asset_distribution: 0
   asset_release: 0
   block: 0
+  bootstrap4_modal: 0
   breakpoint: 0
   cached_computed_field: 0
   cas: 0
@@ -80,7 +81,6 @@ module:
   joinup_collection: 0
   joinup_community_content: 0
   joinup_core: 0
-  joinup_default_content: 0
   joinup_discussion: 0
   joinup_document: 0
   joinup_eulogin: 0
@@ -226,6 +226,7 @@ module:
   ui_patterns_library: 0
   ui_patterns_settings: 0
   user: 0
+  ventuno_helper: 0
   video_embed_field: 0
   video_embed_wysiwyg: 0
   view_unpublished: 0

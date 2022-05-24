@@ -120,7 +120,7 @@ class JoinupDocumentContext extends RawDrupalContext {
     }
 
     // @see \Drupal\file_url\Plugin\Field\FieldFormatter\FileUrlFormatter::viewElements()
-    $expected_href = file_url_transform_relative(file_create_url($file->getFileUri()));
+    $expected_href = \Drupal::service('file_url_generator')->generateString($file->getFileUri());
     Assert::assertEquals($expected_href, $link->getAttribute('href'), 'The download link is not pointing to the correct file.');
   }
 

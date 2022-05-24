@@ -1,5 +1,15 @@
 # Testing configs and commands.
 
+testing:
+  modules:
+    - cas_mock_server
+    - composer_deploy
+    - config_devel
+    - dblog
+    - filecache
+    - joinup_cas_mock_server
+    - upgrade_status
+
 behat:
   screenshots:
     local:
@@ -15,6 +25,8 @@ phpcs:
     config: ${joinup.dir}/phpcs.xml
     standard: ${joinup.dir}/phpcs-ruleset.xml.dist
     global: ${joinup.dir}/vendor/squizlabs/php_codesniffer/CodeSniffer.conf
+    phpcbf:
+      bin: ${joinup.dir}/vendor/bin/phpcbf
   check:
     extensions:
       - css
@@ -71,3 +83,8 @@ commands:
     - task: exec
       # Mute the returning error code as is used only for reporting.
       command: php -d memory_limit=-1 ${phpstan.bin} --no-progress analyse web/modules/contrib || true
+
+  testing:install-modules:
+    - task: run
+      command: drush:module-install
+      arguments: ${testing.modules}

@@ -6,19 +6,13 @@ phpstan:
 dev:
   modules:
     - admin_toolbar
-    - cas_mock_server
-    - composer_deploy
-    - config_devel
     - config_update
-    - dblog
-    - joinup_default_content
-    - devel
     - field_ui
-    - filecache
-    - joinup_cas_mock_server
     - page_manager_ui
-    - upgrade_status
     - views_ui
+
+rector:
+  bin: ${joinup.dir}/vendor/bin/rector
 
 commands:
 
@@ -247,3 +241,17 @@ commands:
         - WITH <http://licence-legal-type> INSERT { ?subject a skos:Concept } WHERE { ?subject a skos:Collection . };
         - WITH <http://licence-legal-type> INSERT { ?subject skos:topConceptOf <http://joinup.eu/legal-type#> } WHERE { ?subject a skos:Concept . FILTER NOT EXISTS { ?subject skos:topConceptOf <http://joinup.eu/legal-type#> } };
         - WITH <http://licence-legal-type> INSERT { ?member skos:broaderTransitive ?collection } WHERE { ?collection a skos:Collection . ?collection skos:member ?member };
+
+  dev:rector:
+    - task: exec
+      command: ${rector.bin} --clear-cache --memory-limit=-1
+    - task: exec
+      command: ${rector.bin} process --memory-limit=-1 src/ tests/src/ web/modules/custom/ web/profiles/joinup/ web/themes/ventuno/ web/themes/joinup/
+    - task: run
+      command: testing:phpcs-setup
+      # Not all Rector changes are Drupal coding standards compliant.
+    - task: exec
+      command: ${phpcs.file.phpcbf.bin}
+      # Show what wasn't fixed automatically.
+    - task: exec
+      command: ${phpcs.file.bin}

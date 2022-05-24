@@ -18,11 +18,11 @@ use Drupal\comment\Entity\Comment;
 use Drupal\file\Entity\File;
 use Drupal\image\Entity\ImageStyle;
 use Drupal\joinup\Traits\BootstrapTrait;
-use Drupal\joinup\Traits\BrowserCapabilityDetectionTrait;
 use Drupal\joinup\Traits\ContextualLinksTrait;
 use Drupal\joinup\Traits\EntityTrait;
 use Drupal\joinup\Traits\FileTrait;
 use Drupal\joinup\Traits\FormTrait;
+use Drupal\joinup\Traits\JavascriptTrait;
 use Drupal\joinup\Traits\KeyboardInteractionTrait;
 use Drupal\joinup\Traits\MaterialDesignTrait;
 use Drupal\joinup\Traits\NodeTrait;
@@ -55,11 +55,11 @@ use WebDriver\Exception\StaleElementReference;
 class JoinupContext extends RawDrupalContext {
 
   use BootstrapTrait;
-  use BrowserCapabilityDetectionTrait;
   use ContextualLinksTrait;
   use EntityTrait;
   use FileTrait;
   use FormTrait;
+  use JavascriptTrait;
   use KeyboardInteractionTrait;
   use MaterialDesignTrait;
   use NodeTrait;
@@ -105,7 +105,7 @@ class JoinupContext extends RawDrupalContext {
     $regex = '/' . preg_quote($text, '/') . '/ui';
     $message = sprintf('The text "%s" was not found anywhere in the text of the current page.', $text);
 
-    Assert::assertRegExp($regex, $actual, $message);
+    Assert::assertMatchesRegularExpression($regex, $actual, $message);
   }
 
   /**
@@ -740,7 +740,7 @@ class JoinupContext extends RawDrupalContext {
         // The strtotime() PHP function is using the default timezone when doing
         // the conversion. But we want to stick to UTC in order to avoid
         // timezone and DST issue.
-        $node->published_at = date_create($node->published_at, new \DateTimeZone('UTC'))->format('U');
+        $node->published_at = date('U', strtotime($node->published_at));
       }
     }
 
@@ -2690,6 +2690,32 @@ class JoinupContext extends RawDrupalContext {
   }
 
   /**
+   * Presses the latest button with a given label.
+   *
+   * Used for dynamic forms where a button can be added multiple times.
+   *
+   * @param string $label
+   *   The button label.
+   *
+   * @When I press latest :label
+   */
+  public function pressLatestButton(string $label): void {
+    $page = $this->getSession()->getPage();
+    $buttons = $page->findAll('named', ['button', $label]);
+
+    if (empty($buttons)) {
+      throw new ElementNotFoundException($this->getSession()->getDriver(), 'button', 'label', $label);
+    }
+
+    /** @var \Behat\Mink\Element\NodeElement $last_button */
+    $last_button = array_pop($buttons);
+    if ($id = $last_button->getAttribute('id')) {
+      $this->scrollElementIntoView("#$id");
+    }
+    $last_button->press();
+  }
+
+  /**
    * Checks if the output is exactly the same as the contents of a given file.
    *
    * @param string $file_path
@@ -2916,6 +2942,7 @@ class JoinupContext extends RawDrupalContext {
     $entity_type_id = $entity_type_id === 'content' ? 'node' : 'rdf_entity';
     $entity = $this->getEntityByLabel($entity_type_id, $title, $bundle);
     $publication_date = is_numeric($new_publication_date) ? ((int) $new_publication_date) : strtotime($new_publication_date);
+
     if (empty($new_publication_date)) {
       throw new \InvalidArgumentException("'{$new_publication_date}' could not be converted to a proper timestamp.");
     }
