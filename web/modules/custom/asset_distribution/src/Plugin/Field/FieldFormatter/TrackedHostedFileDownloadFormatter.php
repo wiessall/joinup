@@ -7,6 +7,7 @@ namespace Drupal\asset_distribution\Plugin\Field\FieldFormatter;
 use Drupal\Component\Utility\Html;
 use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Field\FieldItemListInterface;
+use Drupal\Core\File\FileUrlGeneratorInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Url;
@@ -33,7 +34,14 @@ class TrackedHostedFileDownloadFormatter extends FileFormatterBase implements Co
    *
    * @var \Drupal\file_url\FileUrlHandler
    */
-  protected $fileUrlHandler;
+  protected FileUrlHandler $fileUrlHandler;
+
+  /**
+   * The file URL generator.
+   *
+   * @var \Drupal\Core\File\FileUrlGeneratorInterface
+   */
+  protected FileUrlGeneratorInterface $fileUrlGenerator;
 
   /**
    * Constructs a new TrackedHostedFileDownloadFormatter.
@@ -54,11 +62,13 @@ class TrackedHostedFileDownloadFormatter extends FileFormatterBase implements Co
    *   Third party settings.
    * @param \Drupal\file_url\FileUrlHandler $file_url_handler
    *   The file URL handler service.
+   * @param \Drupal\Core\File\FileUrlGeneratorInterface $file_url_generator
+   *   The file URL generator.
    */
-  public function __construct($plugin_id, $plugin_definition, FieldDefinitionInterface $field_definition, array $settings, $label, $view_mode, array $third_party_settings, FileUrlHandler $file_url_handler) {
+  public function __construct($plugin_id, $plugin_definition, FieldDefinitionInterface $field_definition, array $settings, $label, $view_mode, array $third_party_settings, FileUrlHandler $file_url_handler, FileUrlGeneratorInterface $file_url_generator) {
     parent::__construct($plugin_id, $plugin_definition, $field_definition, $settings, $label, $view_mode, $third_party_settings);
-
     $this->fileUrlHandler = $file_url_handler;
+    $this->fileUrlGenerator = $file_url_generator;
   }
 
   /**
@@ -73,7 +83,8 @@ class TrackedHostedFileDownloadFormatter extends FileFormatterBase implements Co
       $configuration['label'],
       $configuration['view_mode'],
       $configuration['third_party_settings'],
-      $container->get('file_url.handler')
+      $container->get('file_url.handler'),
+      $container->get('file_url_generator')
     );
   }
 
@@ -167,7 +178,7 @@ class TrackedHostedFileDownloadFormatter extends FileFormatterBase implements Co
           '#title' => [
             '#markup' => '<span class="icon icon--download"></span>' . $this->getSetting('hosted_files_title'),
           ],
-          '#url' => Url::fromUri(file_create_url($file->getFileUri())),
+          '#url' => Url::fromUri($this->fileUrlGenerator->generateAbsoluteString($file->getFileUri())),
           '#attributes' => [
             'id' => Html::getUniqueId('tracked-file-download'),
             'class' => ['track-download button--icon button button--blue-light mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent'],

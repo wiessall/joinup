@@ -5,6 +5,7 @@ declare(strict_types = 1);
 namespace Drupal\joinup_eulogin\Event\Subscriber;
 
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Password\PasswordGeneratorInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\Url;
 use Drupal\cas_account_link\Event\CasAccountLinkEvents;
@@ -25,16 +26,26 @@ class JoinupEuLoginCasAccountLinkEventsSubscriber implements EventSubscriberInte
    *
    * @var \Drupal\Core\Entity\EntityTypeManagerInterface
    */
-  protected $entityTypeManager;
+  protected EntityTypeManagerInterface $entityTypeManager;
+
+  /**
+   * The password generator service.
+   *
+   * @var \Drupal\Core\Password\PasswordGeneratorInterface
+   */
+  protected PasswordGeneratorInterface $passwordGenerator;
 
   /**
    * Constructs a new event subscriber instance.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   The entity type manager service.
+   * @param \Drupal\Core\Password\PasswordGeneratorInterface $password_generator
+   *   The password generator service.
    */
-  public function __construct(EntityTypeManagerInterface $entity_type_manager) {
+  public function __construct(EntityTypeManagerInterface $entity_type_manager, PasswordGeneratorInterface $password_generator) {
     $this->entityTypeManager = $entity_type_manager;
+    $this->passwordGenerator = $password_generator;
   }
 
   /**
@@ -93,7 +104,7 @@ class JoinupEuLoginCasAccountLinkEventsSubscriber implements EventSubscriberInte
     if ($event->isLocalAccountSelected()) {
       // Using the same password length as for new users.
       // @see \Drupal\cas\Service\CasUserManager::randomPassword()
-      $event->getAccount()->setPassword(\user_password(30))->save();
+      $event->getAccount()->setPassword($this->passwordGenerator->generate(30))->save();
     }
   }
 

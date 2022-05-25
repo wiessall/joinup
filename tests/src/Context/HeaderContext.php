@@ -42,7 +42,7 @@ class HeaderContext extends RawDrupalContext {
     $logo_element = $link_element->find('css', 'img.navbar-brand-image');
     Assert::assertInstanceOf(NodeElement::class, $logo_element, 'A logo is present in the navbar.');
     Assert::assertEquals('Joinup logo', $logo_element->getAttribute('alt'), 'The logo has an alt text.');
-    $expected_logo_uri = base_path() . drupal_get_path('theme', 'ventuno') . '/assets/images/logo.svg';
+    $expected_logo_uri = base_path() . \Drupal::service('extension.list.theme')->getPath('ventuno') . '/assets/images/logo.svg';
     Assert::assertEquals($expected_logo_uri, $logo_element->getAttribute('src'), 'The Joinup logo is shown in the navbar.');
   }
 
@@ -109,7 +109,7 @@ class HeaderContext extends RawDrupalContext {
   public function assertHamburgerMenuIconPresent(string $icon): void {
     assert(array_key_exists($icon, self::ICON_ALIASES), 'Unknown icon ' . $icon);
 
-    $icon_uri = base_path() . drupal_get_path('theme', 'ventuno') . '/assets/icons/icons.svg#' . self::ICON_ALIASES[$icon];
+    $icon_uri = base_path() . \Drupal::service('extension.list.theme')->getPath('ventuno') . '/assets/icons/icons.svg#' . self::ICON_ALIASES[$icon];
     $icon_selector = 'nav.joinup-navbar .nav-item svg > use';
     foreach ($this->getSession()->getPage()->findAll('css', $icon_selector) as $icon) {
       if ($icon->getAttribute('xlink:href') === $icon_uri) {
