@@ -8,6 +8,7 @@
 declare(strict_types = 1);
 
 use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\Element;
@@ -22,6 +23,9 @@ use Drupal\og\OgGroupAudienceHelperInterface;
  */
 function eif_theme(array $existing, string $type, string $theme, string $path): array {
   return [
+    'eif_wrapper' => [
+      'render element' => 'elements',
+    ],
     'eif_category_navigator' => [
       'variables' => [
         'all_link' => NULL,
@@ -32,9 +36,29 @@ function eif_theme(array $existing, string $type, string $theme, string $path): 
 }
 
 /**
+ * Prepares variables for EIF wrapper templates.
+ *
+ * Default template: eif-wrapper.html.twig.
+ *
+ * @param array $variables
+ *   An associative array containing:
+ *   - elements: An associative array containing the user information and any
+ *     fields attached to the entity. Properties used:
+ *     - #eif_wrapper: A \Drupal\eif\Entity\EifWrapper
+ *       object. The entity being viewed.
+ *   - attributes: HTML attributes for the containing element.
+ */
+function template_preprocess_eif_wrapper(array &$variables): void {
+  $variables['eif_wrapper'] = $variables['elements']['#eif_wrapper'];
+  foreach (Element::children($variables['elements']) as $key) {
+    $variables['content'][$key] = $variables['elements'][$key];
+  }
+}
+
+/**
  * Implements hook_views_plugins_argument_alter().
  */
-function eif_views_plugins_argument_alter(array &$plugins) {
+function eif_views_plugins_argument_alter(array &$plugins): void {
   // We don't want to apply a group contextual filter for eif_recommendation
   // view. The contextual filter is added only for validation. Swapping the
   // class to treat this exception.
@@ -47,7 +71,7 @@ function eif_views_plugins_argument_alter(array &$plugins) {
 /**
  * Implements hook_preprocess_HOOK().
  */
-function eif_preprocess_views_view_field(&$variables) {
+function eif_preprocess_views_view_field(array &$variables): void {
   if ($variables['view']->id() !== 'eif_recommendation') {
     return;
   }
@@ -189,13 +213,13 @@ function eif_form_rdf_meta_entity_eif_perspective_form_alter(array &$form, FormS
 /**
  * Implements hook_ENTITY_TYPE_create_access().
  */
-function eif_eif_wrapper_create_access(AccountInterface $account, array $context, $entity_bundle) {
+function eif_eif_wrapper_create_access(AccountInterface $account, array $context, $entity_bundle): AccessResultInterface {
   return AccessResult::allowedIf($account->hasPermission('create eif wrapper entity'));
 }
 
 /**
  * Implements hook_ENTITY_TYPE_access().
  */
-function eif_eif_wrapper_access(EntityInterface $entity, $operation, AccountInterface $account) {
+function eif_eif_wrapper_access(EntityInterface $entity, string $operation, AccountInterface $account): AccessResultInterface {
   return AccessResult::allowedIf($account->hasPermission("{$operation} eif wrapper entity"));
 }

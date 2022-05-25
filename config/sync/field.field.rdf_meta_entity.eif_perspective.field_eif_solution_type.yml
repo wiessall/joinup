@@ -10,7 +10,7 @@ id: rdf_meta_entity.eif_perspective.field_eif_solution_type
 field_name: field_eif_solution_type
 entity_type: rdf_meta_entity
 bundle: eif_perspective
-label: Type
+label: 'Type of solution'
 description: ''
 required: false
 translatable: false
