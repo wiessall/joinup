@@ -22,6 +22,7 @@ use Drupal\joinup_group\Entity\GroupContentInterface;
 use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_group\Event\GroupMenuLinksEvent;
 use Drupal\joinup_group\Form\RdfDeleteForm;
+use Drupal\joinup_group\Form\UserCancelForm;
 use Drupal\joinup_group\JoinupGroupHelper;
 use Drupal\joinup_workflow\EntityWorkflowStateInterface;
 use Drupal\meta_entity\Entity\MetaEntityInterface;
@@ -121,16 +122,28 @@ function joinup_group_preprocess_page(&$variables) {
 /**
  * Implements hook_entity_type_alter().
  */
-function joinup_group_entity_type_alter(array &$entity_types) {
+function joinup_group_entity_type_alter(array &$entity_types): void {
+  /** @var \Drupal\Core\Entity\EntityTypeInterface[] $entity_types */
   // Swap the default user cancel form implementation with a custom one that
   // prevents deleting users when they are the sole owner of a group.
-  $entity_types['user']->setFormClass('cancel', 'Drupal\joinup_group\Form\UserCancelForm');
+  $entity_types['user']->setFormClass('cancel', UserCancelForm::class);
 
-  // Override the delete form to disallow deletion of groups with children.
-  /** @var \Drupal\Core\Entity\ContentEntityTypeInterface $rdf_entity_type */
   if (array_key_exists('rdf_entity', $entity_types)) {
-    $rdf_entity_type = $entity_types['rdf_entity'];
-    $rdf_entity_type->setFormClass('delete', RdfDeleteForm::class);
+    // Override the delete form to disallow deletion of groups with children.
+    $entity_types['rdf_entity']->setFormClass('delete', RdfDeleteForm::class);
+
+    // Add the about page and member overview as link templates, so the OG
+    // context will be automatically solved.
+    $link_templates = [
+      'about-page' => '/rdf_entity/{rdf_entity}/about',
+      'member-overview' => '/rdf_entity/{rdf_entity}/members',
+      'member-add' => '/rdf_entity/{rdf_entity}/members/add',
+      'member-invite' => '/rdf_entity/{rdf_entity}/members/invite',
+    ];
+
+    foreach ($link_templates as $key => $path) {
+      $entity_types['rdf_entity']->setLinkTemplate($key, $path);
+    }
   }
 }
 
@@ -235,7 +248,7 @@ function joinup_group_rdf_entity_insert(RdfInterface $group): void {
 
   // Allow third-party to add group menu links.
   $event = new GroupMenuLinksEvent($group, $menu_name, \Drupal::entityTypeManager());
-  $event_dispatcher->dispatch($event, $event::ADD_LINKS);
+  $event_dispatcher->dispatch($event);
 }
 
 /**
