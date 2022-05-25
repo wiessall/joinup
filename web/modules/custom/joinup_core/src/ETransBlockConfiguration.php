@@ -69,7 +69,7 @@ class ETransBlockConfiguration {
       ],
 
       // The "Glossary" page of a collection.
-      'collection.glossary_page' => [
+      'entity.rdf_entity.glossary' => [
         'include' => '.view-glossary',
         'exclude' => 'h3,.views-field-title-1,.views-field-field-glossary-synonyms',
       ],

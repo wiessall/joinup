@@ -33,6 +33,14 @@ use Drupal\search_api\Query\QueryInterface;
 use Drupal\sparql_entity_storage\SparqlGraphInterface;
 
 /**
+ * Implements hook_entity_type_alter().
+ */
+function collection_entity_type_alter(array &$entity_types): void {
+  /** @var \Drupal\Core\Entity\EntityTypeInterface[] $entity_types */
+  $entity_types['rdf_entity']->setLinkTemplate('glossary', '/rdf_entity/{rdf_entity}/glossary/{letter}');
+}
+
+/**
  * Implements hook_theme().
  */
 function collection_theme($existing, $type, $theme, $path) {
