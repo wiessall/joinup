@@ -11,7 +11,7 @@
  * - flaggable: The flaggable entity.
  */
 #}
-{% spaceless %}
+{% apply spaceless %}
 {# Attach the flag CSS library.#}
 {{ attach_library('flag/flag.link') }}
 
@@ -34,4 +34,4 @@ action_class
 {% set attributes = attributes.setAttribute('rel', 'nofollow') %}
 
 <a{{ attributes.addClass(classes) }}>{{ title }}</a>
-{% endspaceless %}
+{% endapply %}
