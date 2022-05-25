@@ -46,7 +46,7 @@
     <div class="licence-tile__actions">
       <div class="licence-tile__compare-checkbox licence-tile__actions-item">
         <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect">
-          {% spaceless %}
+          {% apply spaceless %}
             <span class="mdl-checkbox__label">
               {#
               We need to add this additional <label> tag in order to
@@ -56,11 +56,11 @@
               #}
               <label for="{{ url|clean_id }}-inbound">{{ 'Inbound'|t }}</label>
             </span>
-          {% endspaceless %}
+          {% endapply %}
           <input type="radio" id="{{ url|clean_id }}-inbound" class="mdl-radio__button" name="inbound-licence" data-licence-name="{{ spdx_licence_id_plain }}">
         </label>
         <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect">
-          {% spaceless %}
+          {% apply spaceless %}
             <span class="mdl-checkbox__label">
               {#
               We need to add this additional <label> tag in order to
@@ -70,7 +70,7 @@
               #}
               <label for="{{ url|clean_id }}-outbound">{{ 'Outbound'|t }}</label>
             </span>
-          {% endspaceless %}
+          {% endapply %}
           <input type="radio" id="{{ url|clean_id }}-outbound" class="mdl-radio__button" name="outbound-licence" data-licence-name="{{ spdx_licence_id_plain }}">
         </label>
       </div>
