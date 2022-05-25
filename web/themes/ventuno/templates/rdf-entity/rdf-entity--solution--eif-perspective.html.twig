@@ -1,0 +1,44 @@
+{#
+/**
+ * @file
+ * Themeing for rdf entities.
+ */
+#}
+<article{{ attributes }}>
+  <div class="d-flex justify-content-between">
+    <div>
+      <a class="btn btn-sm btn-outline-brand rounded-pill mb-1" href="{{ url('<front>')|render }}/node/703244">Back to recommendations</a>
+      <a class="btn btn-sm btn-outline-brand rounded-pill mb-1" href="{{ url('<front>')|render }}/node/703245">Back to solutions</a>
+    </div>
+    <div>
+      <a class="btn btn-sm btn-outline-brand rounded-pill mb-1" href="{{ url('<front>')|render }}/collection/nifo-national-interoperability-framework-observatory/glossary">
+        {{ pattern('icon', {
+          name: 'journal-text',
+          path: bcl_icon_path,
+          size: 'fluid',
+        }) }}
+        {{ 'Glossary'|t }}
+      </a>
+      <a class="btn btn-sm btn-outline-brand rounded-pill mb-1" href="{{ url('<front>')|render }}/collection/nifo-national-interoperability-framework-observatory/solution/eif-toolbox/what-eif">
+        {{ pattern('icon', {
+          name: 'question-lg',
+          path: bcl_icon_path,
+          size: 'fluid',
+        }) }}
+        {{ 'What is EIF'|t }}
+      </a>
+    </div>
+  </div>
+
+  <h2 class="my-3 fs-4">{{ "General information"|t }}</h2>
+
+  <div class="float-start w-25 me-3 mb-2">
+    {{ content.field_is_logo }}
+  </div>
+  <ul class="list-unstyled">
+    <li class="mb-2">{{ title_prefix }}<strong>{{ 'Name of the solution'|t }}:</strong> {{ label|striptags }}{{ title_suffix }}</li>
+    <li class="mb-2"><strong>{{ 'Solution\'s owner'|t }}:</strong> {{ content.field_is_owner|render|striptags }}</li>
+  </ul>
+
+  {{ content.eif_perspective }}
+</article>

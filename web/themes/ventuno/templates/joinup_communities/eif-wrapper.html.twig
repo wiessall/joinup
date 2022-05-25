@@ -1,0 +1,16 @@
+{#
+/**
+ * @file
+ * Themeing for EIF wrapper.
+ */
+#}
+<article {{ attributes.addClass('d-inline') }}>
+  <span class="text-success">
+    {{ pattern('icon', {
+      name: 'check-circle-fill',
+      path: bcl_icon_path,
+      size: 's',
+    }) }}
+  </span>
+  <a title="{{ content.description.0['#text']|striptags }}" href="{{ content.term.0['#url'] }}">{{ content.term.0['#title'] }}</a>
+</article>

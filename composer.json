@@ -320,6 +320,9 @@
             "drupal/matomo_reporting_api": {
                 "Ensure backward compatibility with Piwik @see https://www.drupal.org/project/matomo_reporting_api/issues/3080854": "https://www.drupal.org/files/issues/2019-09-18/3080854-7.patch"
             },
+            "drupal/meta_entity": {
+                "Make the field configurable in the view @see https://www.drupal.org/project/meta_entity/issues/3279161": "https://git.drupalcode.org/project/meta_entity/-/merge_requests/4.diff"
+            },
             "drupal/metatag": {
                 "Error: Call to a member function __wakeup() on null @see https://www.drupal.org/project/metatag/issues/3258346": "https://www.drupal.org/files/issues/2022-01-13/metatag_views-fix-cache-wrapper-serialization-3258346-3.patch",
                 "Views cache wrapper overrides other modules cache logic @see https://www.drupal.org/project/metatag/issues/3261473": "https://git.drupalcode.org/project/metatag/-/merge_requests/48.diff"
@@ -341,6 +344,9 @@
             "drupal/rdf_entity": {
                 "Allow bundle label plural variants @see https://github.com/ec-europa/rdf_entity/pull/12": "https://github.com/ec-europa/rdf_entity/compare/8.x-1.x...ea8f6af001fca732e89a4be0e29643953f49a88f.diff",
                 "Support sparql_entity_storage 2.x @see https://www.drupal.org/project/rdf_entity/issues/3259145": "https://git.drupalcode.org/project/rdf_entity/-/merge_requests/1.diff"
+            },
+            "drupal/rdf_meta_entity": {
+                "Provide a default template file @see https://www.drupal.org/project/rdf_meta_entity/issues/3279162": "https://git.drupalcode.org/project/rdf_meta_entity/-/merge_requests/2.diff"
             },
             "drupal/search_api": {
                 "item_id column is too short @see https://www.drupal.org/node/2829696": "resources/patch/search_api-item_id-length-2829696.patch",
