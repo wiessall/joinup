@@ -111,7 +111,7 @@
         "masterminds/html5": "^2.7",
         "ml/json-ld": "^1.2",
         "openeuropa/composer-artifacts": "dev-master",
-        "openeuropa/oe_bootstrap_theme": "1.0.0-alpha8",
+        "openeuropa/oe_bootstrap_theme": "1.0.0-beta1",
         "openeuropa/oe_dashboard_agent": "^0.3.0",
         "openeuropa/oe_webtools": "^1.14",
         "openeuropa/webtools-geocoding-provider": "~0.1",
