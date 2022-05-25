@@ -1,4 +1,4 @@
-@api
+@group-clone @api
 Feature: Test joinup_core_update_108100().
 
   Scenario: The 'About' group link should be highlighted.
