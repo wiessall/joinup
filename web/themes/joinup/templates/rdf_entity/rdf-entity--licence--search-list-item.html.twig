@@ -77,7 +77,7 @@
       <div class="licence-tile__actions">
         <div class="licence-tile__compare-checkbox licence-tile__actions-item">
           <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect">
-            {% spaceless %}
+            {% apply spaceless %}
             <span class="mdl-checkbox__label">
               {#
                 We need to add this additional <label> tag in order to
@@ -87,7 +87,7 @@
               #}
               <label for="{{ url|clean_id }}">{{ 'Add to compare list'|t }}</label>
             </span>
-            {% endspaceless %}
+            {% endapply %}
             <input type="checkbox" id="{{ url|clean_id }}" class="mdl-checkbox__input" data-licence-name="{{ spdx_licence_id_plain }}">
           </label>
         </div>
