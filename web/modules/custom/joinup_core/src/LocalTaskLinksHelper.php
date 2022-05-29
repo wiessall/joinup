@@ -22,7 +22,7 @@ class LocalTaskLinksHelper implements LocalTaskLinksHelperInterface {
   protected EntityTypeManagerInterface $entityTypeManager;
 
   /**
-   * The theme manager interface.
+   * The theme manager service.
    *
    * @var \Drupal\Core\Theme\ThemeManagerInterface
    */
@@ -33,6 +33,8 @@ class LocalTaskLinksHelper implements LocalTaskLinksHelperInterface {
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   The entity type manager service.
+   * @param \Drupal\Core\Theme\ThemeManagerInterface $theme_manager
+   *   The theme manager service.
    */
   public function __construct(EntityTypeManagerInterface $entity_type_manager, ThemeManagerInterface $theme_manager) {
     $this->entityTypeManager = $entity_type_manager;

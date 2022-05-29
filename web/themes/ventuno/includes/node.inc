@@ -38,7 +38,6 @@ function ventuno_preprocess_node__numbered_listing(array &$variables): void {
 
 /**
  * Implements hook_preprocess_HOOK().
- *
  */
 function ventuno_preprocess_node__explore_item(array &$variables): void {
   /** @var \Drupal\node\NodeInterface $node */

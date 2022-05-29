@@ -349,8 +349,8 @@ function joinup_core_theme_suggestions_alter(array &$suggestions, array $variabl
     return;
   }
   elseif ($horizontal_tabs_access->isAllowed()) {
-     $suggestions[] = "{$hook}__horizontal_tabs";
-     return;
+    $suggestions[] = "{$hook}__horizontal_tabs";
+    return;
   }
   $suggestions[] = "{$hook}__three_dots_menu";
 }

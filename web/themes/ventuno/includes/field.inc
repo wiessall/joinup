@@ -5,6 +5,8 @@
  * Field specific procedural functions.
  */
 
+declare(strict_types = 1);
+
 /**
  * Implements hook_theme_suggestions_HOOK_alter().
  */

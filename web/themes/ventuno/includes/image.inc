@@ -13,4 +13,3 @@ declare(strict_types = 1);
 function ventuno_preprocess_image(array &$variables): void {
   $variables['attributes']['loading'] = 'lazy';
 }
-
