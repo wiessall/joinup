@@ -1,0 +1,21 @@
+uuid: d0f9f080-4089-4ef3-8732-932b5c5a1ea5
+langcode: en
+status: true
+dependencies:
+  module:
+    - rdf_entity
+  theme:
+    - ventuno
+id: group_overview
+label: 'Group Overview'
+theme: ventuno
+weight: 0
+conditions:
+  rdf_entity_bundle:
+    id: rdf_entity_bundle
+    negate: false
+    context_mapping:
+      rdf_entity: '@rdf_entity.rdf_entity_route_context:rdf_entity'
+    bundles:
+      collection: collection
+      solution: solution
