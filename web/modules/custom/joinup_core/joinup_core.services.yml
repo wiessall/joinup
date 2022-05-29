@@ -13,7 +13,8 @@ services:
 
   joinup_core.local_task_links_helper:
     class: Drupal\joinup_core\LocalTaskLinksHelper
-    arguments: ['@entity_type.manager']
+    arguments: ['@entity_type.manager', '@theme.manager']
+
   joinup_core.outdated_content.config.sunscriber:
     class: Drupal\joinup_core\EventSubscriber\OutdatedContentConfigSubscriber
     arguments: ['@entity_field.manager']
