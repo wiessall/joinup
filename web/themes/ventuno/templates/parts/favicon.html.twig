@@ -1,16 +1,17 @@
-<link rel="icon" type="image/png" sizes="16x16" href="{{ base_path }}{{ directory }}/assets/images/favicon/favicon-16x16.png" />
-<link rel="icon" type="image/png" sizes="32x32" href="{{ base_path }}{{ directory }}/assets/images/favicon/favicon-32x32.png" />
-<link rel="icon" type="image/png" sizes="96x96" href="{{ base_path }}{{ directory }}/assets/images/favicon/favicon-96x96.png" />
-<link rel="icon" type="image/png" sizes="192x192" href="{{ base_path }}{{ directory }}/assets/images/favicon/android-chrome-192x192.png" />
-<link rel="apple-touch-icon" sizes="57x57" href="{{ base_path }}{{ directory }}/assets/images/favicon/apple-touch-icon-57x57.png" />
-<link rel="apple-touch-icon" sizes="60x60" href="{{ base_path }}{{ directory }}/assets/images/favicon/apple-touch-icon-60x60.png" />
-<link rel="apple-touch-icon" sizes="114x114" href="{{ base_path }}{{ directory }}/assets/images/favicon/apple-touch-icon-114x114.png" />
-<link rel="apple-touch-icon" sizes="120x120" href="{{ base_path }}{{ directory }}/assets/images/favicon/apple-touch-icon-120x120.png" />
-<link rel="apple-touch-icon" sizes="144x144" href="{{ base_path }}{{ directory }}/assets/images/favicon/apple-touch-icon-144x144.png" />
-<link rel="apple-touch-icon" sizes="152x152" href="{{ base_path }}{{ directory }}/assets/images/favicon/apple-touch-icon-152x152.png" />
-<link rel="apple-touch-icon" sizes="180x180" href="{{ base_path }}{{ directory }}/assets/images/favicon/apple-touch-icon-180x180.png" />
-<meta name="msapplication-wide310x150logo" content="{{ base_path }}{{ directory }}/assets/images/favicon/mstile-310x150.png" />
-<meta name="msapplication-square150x150logo" content="{{ base_path }}{{ directory }}/assets/images/favicon/mstile-150x150.png" />
-<meta name="msapplication-square310x310logo" content="{{ base_path }}{{ directory }}/assets/images/favicon/mstile-310x310.png" />
-<meta name="msapplication-square70x70logo" content="{{ base_path }}{{ directory }}/assets/images/favicon/mstile-70x70.png" />
-<meta name="msapplication-TileImage" content="{{ base_path }}{{ directory }}/assets/images/favicon/mstile-144x144.png" />
+{% set favicon_dir = file_url(directory) ~ '/assets/images/favicon/' %}
+<link rel="icon" type="image/png" sizes="16x16" href="{{ favicon_dir }}favicon-16x16.png" />
+<link rel="icon" type="image/png" sizes="32x32" href="{{ favicon_dir }}favicon-32x32.png" />
+<link rel="icon" type="image/png" sizes="96x96" href="{{ favicon_dir }}favicon-96x96.png" />
+<link rel="icon" type="image/png" sizes="192x192" href="{{ favicon_dir }}android-chrome-192x192.png" />
+<link rel="apple-touch-icon" sizes="57x57" href="{{ favicon_dir }}apple-touch-icon-57x57.png" />
+<link rel="apple-touch-icon" sizes="60x60" href="{{ favicon_dir }}apple-touch-icon-60x60.png" />
+<link rel="apple-touch-icon" sizes="114x114" href="{{ favicon_dir }}apple-touch-icon-114x114.png" />
+<link rel="apple-touch-icon" sizes="120x120" href="{{ favicon_dir }}apple-touch-icon-120x120.png" />
+<link rel="apple-touch-icon" sizes="144x144" href="{{ favicon_dir }}apple-touch-icon-144x144.png" />
+<link rel="apple-touch-icon" sizes="152x152" href="{{ favicon_dir }}apple-touch-icon-152x152.png" />
+<link rel="apple-touch-icon" sizes="180x180" href="{{ favicon_dir }}apple-touch-icon-180x180.png" />
+<meta name="msapplication-wide310x150logo" content="{{ favicon_dir }}mstile-310x150.png" />
+<meta name="msapplication-square150x150logo" content="{{ favicon_dir }}mstile-150x150.png" />
+<meta name="msapplication-square310x310logo" content="{{ favicon_dir }}mstile-310x310.png" />
+<meta name="msapplication-square70x70logo" content="{{ favicon_dir }}mstile-70x70.png" />
+<meta name="msapplication-TileImage" content="{{ favicon_dir }}mstile-144x144.png" />
