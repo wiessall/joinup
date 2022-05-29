@@ -219,7 +219,6 @@ function joinup_core_config_readonly_whitelist_patterns() {
     'system.menu.footer-european-commission',
     'system.menu.footer-follow-us',
     'system.menu.footer-help-and-support',
-    'system.menu.footer-social-media',
     'system.menu.support',
     // The outdated content threshold is editable by moderators.
     'joinup_core.outdated_content_threshold',

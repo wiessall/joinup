@@ -8,7 +8,6 @@
 declare(strict_types = 1);
 
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Menu\MenuLinkInterface;
 use Drupal\Core\Url;
 use Drupal\interoperable_europe\InteroperableEuropeCollectionInterface;
 use Drupal\joinup_bundle_class\DescriptionInterface;
@@ -261,38 +260,6 @@ function ventuno_preprocess_rdf_entity__explore_item(&$variables) {
 
   // Trim the label text.
   $variables['label'] = ventuno_smart_trim($entity->label(), 74);
-}
-
-/**
- * Implements template_preprocess_menu().
- */
-function ventuno_preprocess_menu(&$variables) {
-  // Set a class on each link in the social media footer menu, so that the link
-  // text can be replaced with an icon.
-  if ($variables['menu_name'] === 'footer-social-media') {
-    _ventuno_preprocess_menu_items($variables['items']);
-  }
-}
-
-/**
- * Helper function to recursively set a class on each menu item.
- *
- * These classes identify the social media links so we can replace them with
- * icons. Used for the links to Twitter and LinkedIn.
- */
-function _ventuno_preprocess_menu_items(&$items) {
-  foreach ($items as $item) {
-    /** @var \Drupal\Core\Menu\MenuLinkDefault $menu_link */
-    $menu_link ??= $item['original_link'];
-    if ($menu_link instanceof MenuLinkInterface) {
-      $title = strtolower(trim($menu_link->getTitle()));
-      $machine_name = preg_replace('/[^a-z0-9-]+/', '-', $title);
-      $item['attributes']->setAttribute('class', $machine_name);
-    }
-    if (!empty($item['below'])) {
-      _ventuno_preprocess_menu_items($item['below']);
-    }
-  }
 }
 
 /**
