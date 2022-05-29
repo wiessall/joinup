@@ -1,0 +1,31 @@
+{#
+/**
+ * @file
+ * Theme override to display primary and secondary local tasks.
+ *
+ * Available variables:
+ * - primary: HTML list items representing primary tasks.
+ * - secondary: HTML list items representing primary tasks.
+ *
+ * Each item in these variables (primary and secondary) can be individually
+ * themed in menu-local-task.html.twig.
+ *
+ * @see joinup_core_theme_suggestions_alter()
+ *
+ * @ingroup themeable
+ */
+#}
+{% if primary %}
+  <button id="local-tasks-primary">
+    <span class="icon icon--dots"></span>
+  </button>
+  <h2 class="visually-hidden">{{ 'Primary tabs'|t }}</h2>
+  <ul for="local-tasks-primary">{{ primary }}</ul>
+{% endif %}
+{% if secondary %}
+  <button id="local-tasks-secondary">
+    <span class="icon icon--dots"></span>
+  </button>
+  <h2 class="visually-hidden">{{ 'Secondary tabs'|t }}</h2>
+  <ul for="local-tasks-secondary">{{ secondary }}</ul>
+{% endif %}
