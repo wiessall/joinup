@@ -11,7 +11,7 @@ theme: ventuno
 region: header_bottom
 weight: -21
 provider: null
-plugin: local_tasks_block
+plugin: joinup_local_tasks_block
 settings:
   id: local_tasks_block
   label: Tabs
