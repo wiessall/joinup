@@ -9,7 +9,6 @@ use Drupal\Component\Datetime\TimeInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
-use Drupal\Core\Url;
 use Drupal\cached_computed_field\Event\RefreshExpiredFieldsEventInterface;
 use Drupal\cached_computed_field\EventSubscriber\RefreshExpiredFieldsSubscriberBase;
 use Drupal\cached_computed_field\ExpiredItemCollection;
@@ -221,7 +220,7 @@ class RefreshCachedFieldsEventSubscriber extends RefreshExpiredFieldsSubscriberB
       if ($file !== NULL) {
         return ($file instanceof RemoteFile) ?
           $file->getFileUri() :
-          Url::fromUri(file_create_url($file->getFileUri()))->setAbsolute()->toString();
+          \Drupal::service('file_url_generator')->generate($file->getFileUri())->setAbsolute()->toString();
       }
     }
 
