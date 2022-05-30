@@ -102,7 +102,7 @@ content:
     settings: {  }
     third_party_settings:
       oe_bootstrap_theme_helper:
-        switch: true
+        switch: false
 hidden:
   label: true
   target: true

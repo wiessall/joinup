@@ -124,6 +124,14 @@ module.exports = {
       },
     },
     {
+      entry: path.resolve(outputFolder, "src/scss/form-checkboxes.scss"),
+      dest: path.resolve(outputFolder, "assets/css/form-checkboxes.css"),
+      options: {
+        includePaths,
+        sourceMap: "file",
+      },
+    },
+    {
       entry: path.resolve(outputFolder, "src/scss/navbar.scss"),
       dest: path.resolve(outputFolder, "assets/css/navbar.css"),
       options: {
