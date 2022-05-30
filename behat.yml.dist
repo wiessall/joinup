@@ -153,7 +153,9 @@ default:
         Highlighted content: '.block-entityqueue--highlighted-content'
         Highlighted event: '.block-entityqueue--highlighted-event'
         In the spotlight: '.block-views-blockin-the-spotlight-block'
-        Left sidebar: '.section--sidebar-left'
+        # TODO: Remove .section--sidebar-left as soon as the sidebar is not more
+        # rendered in the legacy theme.
+        Left sidebar: 'aside.layout-sidebar,.section--sidebar-left'
         Main fields accordion: '#main-fields'
         Management solution vertical tab: '#edit-group-management'
         Members admin form actions: '#edit-action'
