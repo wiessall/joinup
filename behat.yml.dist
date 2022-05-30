@@ -130,7 +130,6 @@ default:
         In the spotlight: '.block-views-blockin-the-spotlight-block'
         Left sidebar: '.section--sidebar-left'
         Main fields accordion: '#main-fields'
-        Main solution vertical tab: '#edit-group-main'
         Management solution vertical tab: '#edit-group-management'
         Members admin form actions: '#edit-action'
         Members admin form header: '#edit-header'
