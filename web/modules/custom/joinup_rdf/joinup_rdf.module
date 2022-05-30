@@ -132,3 +132,13 @@ function joinup_rdf_rdf_entity_view(array &$build, EntityInterface $entity, Enti
     '@here' => $link,
   ]), 'warning');
 }
+
+/**
+ * Implements hook_condition_info_alter().
+ */
+function joinup_rdf_condition_info_alter(array &$definitions): void {
+  // The 'rdf_entity_bundle' condition plugin is deprecated and replaced with
+  // 'entity_bundle:rdf_entity'.
+  // @see https://www.drupal.org/node/3283076
+  unset($definitions['rdf_entity_bundle']);
+}

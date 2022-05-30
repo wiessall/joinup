@@ -11,8 +11,8 @@ label: 'Group Overview'
 theme: ventuno
 weight: 0
 conditions:
-  rdf_entity_bundle:
-    id: rdf_entity_bundle
+  'entity_bundle:rdf_entity':
+    id: 'entity_bundle:rdf_entity'
     negate: false
     context_mapping:
       rdf_entity: '@rdf_entity.rdf_entity_route_context:rdf_entity'
