@@ -41,7 +41,7 @@ function semic_preprocess_field(&$variables) {
     return;
   }
   $content = &$variables['items'][0]['content'];
-  $module_url = $GLOBALS['base_url'] . '/' . drupal_get_path('module', 'semic');
+  $module_url = $GLOBALS['base_url'] . '/' . \Drupal::service('extension.list.module')->getPath('semic');
 
   $content['#attached']['library'][] = 'semic/eu.webtools.load';
   $content['#attached']['drupalSettings']['semic']['map']['adoptersListUrl'] = "$module_url/adopters.xml";
