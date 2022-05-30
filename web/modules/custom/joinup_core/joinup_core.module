@@ -211,7 +211,7 @@ function joinup_core_editor_js_settings_alter(array &$settings) {
  * Implements hook_ckeditor_css_alter().
  */
 function joinup_core_ckeditor_css_alter(array &$css) {
-  $css[] = drupal_get_path('module', 'joinup_core') . '/css/wysiwyg.css';
+  $css[] = \Drupal::service('extension.list.module')->getPath('joinup_core') . '/css/wysiwyg.css';
 }
 
 /**
