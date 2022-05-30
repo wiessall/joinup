@@ -48,7 +48,9 @@ Feature: Event moderation
     And I go to the homepage of the "Wet Lords" collection
     And I open the header local tasks menu
     And I click "Edit" in the "Entity actions" region
-    And I click the "Additional fields" tab
+    And I scroll "Additional fields" into view
+    And I press "Additional fields"
+    And I scroll "Content creation" into view
     And I check the box "Moderated"
     Then I press "Publish"
     And I should see the heading "Wet Lords"
@@ -68,7 +70,9 @@ Feature: Event moderation
     And I go to the homepage of the "Wet Lords" collection
     And I open the header local tasks menu
     And I click "Edit" in the "Entity actions" region
-    And I click the "Additional fields" tab
+    And I scroll "Additional fields" into view
+    And I press "Additional fields"
+    And I scroll "Content creation" into view
     And I check "Closed collection"
     And I wait for AJAX to finish
     And I select the radio button "Only members can create content."
