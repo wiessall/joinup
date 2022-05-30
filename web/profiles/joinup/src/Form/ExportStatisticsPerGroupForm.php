@@ -102,7 +102,7 @@ class ExportStatisticsPerGroupForm extends ExportBatchedDataFormBase {
   /**
    * {@inheritdoc}
    */
-  public function getFormId() {
+  public function getFormId(): string {
     return 'joinup_export_statistics_per_group';
   }
 
@@ -227,11 +227,6 @@ QUERY;
       'Description word count' => str_word_count(strip_tags($description)),
     ];
   }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function submitForm(array &$form, FormStateInterface $form_state) {}
 
   /**
    * Helper method to return a query to fetch group content.
