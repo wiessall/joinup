@@ -36,6 +36,12 @@ card:
     theme:
       assets/css/card.css: {}
 
+# Pure BCL components
+accordion:
+  css:
+    theme:
+      assets/css/accordion.css: {}
+
 close:
   css:
     theme:
@@ -59,10 +65,18 @@ add-content:
     theme:
       assets/css/add-content.css: {}
 
+# Custom and hybrid (BCL + custom) components
 footer:
   css:
     theme:
       assets/css/footer.css: {}
+
+forms:
+  css:
+    theme:
+      assets/css/forms.css: {}
+  js:
+    assets/js/highlight-invalid-fields.js: { minified: true, attributes: { defer: true } }
 
 glide:
   js:
@@ -81,10 +95,16 @@ dropdown:
     theme:
       assets/css/dropdown.css: {}
 
+
 nav:
   css:
     theme:
       assets/css/nav.css: {}
+
+ief-entity-table:
+  css:
+    theme:
+      assets/css/ief-entity-table.css: {}
 
 navbar:
   css:
@@ -119,6 +139,15 @@ site-alerts-messages:
   css:
     theme:
       assets/css/site-alerts-messages.css: {}
+
+show-accordion-invalid-fields:
+  js:
+    assets/js/show-accordion-invalid-fields.js: { minified: true, attributes: { defer: true } }
+
+tabledrag:
+  css:
+    theme:
+      assets/css/tabledrag.css: {}
 
 tour-first-balloon:
   js:
