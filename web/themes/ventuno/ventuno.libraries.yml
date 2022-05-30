@@ -30,6 +30,12 @@ searchpage:
   dependencies:
     - ventuno/close
 
+# Pure BCL components
+accordion:
+  css:
+    theme:
+      assets/css/accordion.css: {}
+
 # Bootstrap components
 badge:
   css:
@@ -53,11 +59,19 @@ tables:
     theme:
       assets/css/tables.css: {}
 
-# Custom components
+# Custom and hybrid (BCL + custom) components
+
 footer:
   css:
     theme:
       assets/css/footer.css: {}
+
+forms:
+  css:
+    theme:
+      assets/css/forms.css: {}
+  js:
+    assets/js/highlight-invalid-fields.js: { minified: true, attributes: { defer: true } }
 
 glide:
   js:
@@ -65,6 +79,11 @@ glide:
   css:
     theme:
       assets/css/glide.core.min.css: { minified: true }
+
+ief-entity-table:
+  css:
+    theme:
+      assets/css/ief-entity-table.css: {}
 
 navbar:
   css:
@@ -89,6 +108,15 @@ site-alerts-messages:
   css:
     theme:
       assets/css/site-alerts-messages.css: {}
+
+show-accordion-invalid-fields:
+  js:
+    assets/js/show-accordion-invalid-fields.js: { minified: true, attributes: { defer: true } }
+
+tabledrag:
+  css:
+    theme:
+      assets/css/tabledrag.css: {}
 
 tour-first-balloon:
   js:

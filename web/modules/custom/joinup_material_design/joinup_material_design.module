@@ -13,7 +13,7 @@ declare(strict_types = 1);
 function joinup_material_design_theme($existing, $type, $theme, $path): array {
   return [
     'joinup_tiles' => [
-      'path' => drupal_get_path('module', 'joinup_material_design') . '/templates',
+      'path' => \Drupal::service('extension.list.module')->getPath('joinup_material_design') . '/templates',
     ],
     'chip' => [
       'render element' => 'element',
