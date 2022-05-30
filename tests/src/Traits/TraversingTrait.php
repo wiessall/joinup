@@ -38,7 +38,7 @@ trait TraversingTrait {
       // elements such as 'select' and 'input', so try both the standard
       // findField() as well as an XPath expression that finds the given label
       // inside any element marked as a form item.
-      $xpath = '//*[contains(concat(" ", normalize-space(@class), " "), " form-item ") and .//label[text() = "' . $field . '"]]';
+      $xpath = '//*[contains(concat(" ", normalize-space(@class), " "), " form-item ") and .//label[text() = "' . $field . '"]] | //*[contains(concat(" ", normalize-space(@class), " "), " form-wrapper ") and .//h4[text() = "' . $field . '"]] | //*[contains(concat(" ", normalize-space(@class), " "), " col-form-label ") and .//span[text() = "' . $field . '"]]';
       $element = $region->find('xpath', $xpath);
     }
 
@@ -200,6 +200,34 @@ trait TraversingTrait {
 
     if ($element === NULL) {
       throw new \Exception('Tab not found: ' . $tab);
+    }
+
+    return $element;
+  }
+
+  /**
+   * Finds an accordion item by its title.
+   *
+   * @param string $item
+   *   The title of the accordion item.
+   *
+   * @return \Behat\Mink\Element\NodeElement
+   *   The accordion item element.
+   *
+   * @throws \Exception
+   *   Thrown when no item element is found.
+   */
+  protected function findAccordionItem(string $item): NodeElement {
+    // Xpath to find the accordion item.
+    $xpath = "//div[@class and contains(concat(' ', normalize-space(@class), ' '), ' accordion-item ')]";
+    // Filter down to the accordion item containing a button with the
+    // provided text.
+    $xpath .= "[.//h2[@class and contains(concat(' ', normalize-space(@class), ' '), ' accordion-header ')]/button[@class and contains(concat(' ', normalize-space(@class), ' '), ' accordion-button ')]"
+      . "[normalize-space(string(.)) = '$item']]";
+    $element = $this->getSession()->getPage()->find('xpath', $xpath);
+
+    if ($element === NULL) {
+      throw new \Exception('Accordion item not found: ' . $item);
     }
 
     return $element;

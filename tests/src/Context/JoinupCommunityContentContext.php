@@ -293,7 +293,7 @@ class JoinupCommunityContentContext extends RawDrupalContext {
   public function assertCommentContainsMarkup(string $comment_number, string $markup): void {
     $comment = $this->getNumberedComment($comment_number - 1);
     $regex = '/' . preg_quote($markup, '/') . '/ui';
-    Assert::assertRegExp($regex, $comment->getOuterHtml());
+    Assert::assertMatchesRegularExpression($regex, $comment->getOuterHtml());
   }
 
   /**
