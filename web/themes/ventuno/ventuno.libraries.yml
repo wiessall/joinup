@@ -54,6 +54,11 @@ footer:
     theme:
       assets/css/footer.css: {}
 
+form-checkboxes:
+  css:
+    theme:
+      assets/css/form-checkboxes.css: {}
+
 glide:
   js:
     assets/js/glide.js: { minified: false }
