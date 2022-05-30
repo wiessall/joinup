@@ -213,7 +213,7 @@ Feature: Collection moderation
     Given I am logged in as a user with the "authenticated" role
     # Propose a collection, filling in the required fields.
     When I go to the propose collection form
-    Then the "Main fields" tab should be active
+    Then the "Main fields" accordion item should be active
     # @todo The summaries are no longer visible since we migrated to Drupal 9.
     #   Restore these when ISAICP-6963 is fixed.
     # And the "Main fields" tab summary should be "Contains all the fields to be mandatorily filled to create a collection"
@@ -225,16 +225,19 @@ Feature: Collection moderation
       | E-mail | fog@example.com        |
     And I enter "The samurai are attacking the railroads" in the "Description" wysiwyg editor
     And I select "Employment and Support Allowance" from "Topic"
+    And I scroll "Owner" into view
     And I press "Add new" at the "Owner" field
     And I wait for AJAX to finish
     And I fill in "Name" with "Katsumoto"
     And I check the box "Academia/Scientific organisation"
-    And I click the "Additional fields" tab
-    Then the "Additional fields" tab should be active
+    And I scroll "Additional fields" into view
+    And I press "Additional fields"
+    Then the "Additional fields" accordion item should be active
     And I attach the file "logo.png" to "Logo"
     And I wait for AJAX to finish
     And I attach the file "banner.jpg" to "Banner"
     And I wait for AJAX to finish
+    And I scroll "Content creation" into view
     And I select the radio button "Any user can create content."
 
     # Regression test for a bug that caused the content creation setting to be
@@ -242,7 +245,8 @@ Feature: Collection moderation
     # Note that this is an issue that affected the legacy eLibrary slider which
     # has been replaced with the Content creation radio buttons, but we are
     # keeping the coverage for now.
-    When I press "Add another item" at the "Geographical coverage" field
+    When I scroll "Geographical coverage" into view
+    And I press "Add another item" at the "Geographical coverage" field
     And I wait for AJAX to finish
     Then the radio button "Any user can create content." from field "Content creation" should be selected
 
@@ -254,14 +258,16 @@ Feature: Collection moderation
     And I go to the homepage of the "Spectres in fog" collection
     And I open the header local tasks menu
     And I click "Edit" in the "Entity actions" region
-    And I click the "Additional fields" tab
+    And I scroll "Additional fields" into view
+    And I press "Additional fields"
     Then the radio button "Any user can create content." from field "Content creation" should be selected
     # Also when saving and reopening the edit form the content creation option
     # should remain unchanged.
     When I press "Publish"
     And I open the header local tasks menu
     And I click "Edit" in the "Entity actions" region
-    And I click the "Additional fields" tab
+    And I press "Main fields"
+    And I press "Additional fields"
     Then the radio button "Any user can create content." from field "Content creation" should be selected
 
     # Clean up the entities that were created.
@@ -286,15 +292,20 @@ Feature: Collection moderation
     And I enter "Yaks and goats are friendly pets." in the "Description" wysiwyg editor
     And I select "Statistics and Analysis" from "Topic"
     # An ajax callback is executed now.
+    And I scroll "Owner" into view
     And I press "Add new" at the "Owner" field
     And I wait for AJAX to finish
     And I fill in "Name" with "Garnett Clifton"
+    And I scroll "Contact information" into view
     And I check the box "Supra-national authority"
-    And I click the "Additional fields" tab
+    And I scroll "Additional fields" into view
+    And I press "Additional fields"
+    And I scroll "Logo" into view
     And I attach the file "logo.png" to "Logo"
     And I wait for AJAX to finish
     And I attach the file "banner.jpg" to "Banner"
     And I wait for AJAX to finish
+    And I scroll "Content creation" into view
     And I select the radio button "Any user can create content."
 
     # Save the collection.
@@ -303,7 +314,8 @@ Feature: Collection moderation
     # Edit again.
     When I open the header local tasks menu
     And I click "Edit" in the "Entity actions" region
-    And I click the "Additional fields" tab
+    And I press "Main fields"
+    And I press "Additional fields"
     Then the radio button "Any user can create content." from field "Content creation" should be selected
 
     # Clean up the entities that were created.
@@ -328,15 +340,19 @@ Feature: Collection moderation
     And I enter "Kleptomaniac to the bone." in the "Description" wysiwyg editor
     And I select "Supplier exchange" from "Topic"
     # An ajax callback is executed now.
+    And I scroll "Owner" into view
     And I press "Add new" at the "Owner" field
     And I wait for AJAX to finish
     And I fill in "Name" with "Coretta Simonson"
+    And I scroll "Type" into view
     And I check the box "Private Individual(s)"
-    And I click the "Additional fields" tab
+    And I scroll "Additional fields" into view
+    And I press "Additional fields"
     And I attach the file "logo.png" to "Logo"
     And I wait for AJAX to finish
     And I attach the file "banner.jpg" to "Banner"
     And I wait for AJAX to finish
+    And I scroll "Content creation" into view
     And I select the radio button "Only facilitators and authors can create content."
 
     # Save the collection.
@@ -345,7 +361,8 @@ Feature: Collection moderation
     # Edit again.
     When I open the header local tasks menu
     And I click "Edit" in the "Entity actions" region
-    And I click the "Additional fields" tab
+    And I press "Main fields"
+    And I press "Additional fields"
     Then the radio button "Only facilitators and authors can create content." from field "Content creation" should be selected
 
     # Clean up the entities that were created.
@@ -371,17 +388,22 @@ Feature: Collection moderation
     And I enter "So smooth." in the "Description" wysiwyg editor
     And I select "Data gathering, data processing" from "Topic"
     # An ajax callback is executed now.
+    And I scroll "Owner" into view
     And I press "Add new" at the "Owner" field
     And I wait for AJAX to finish
     And I fill in "Name" with "Terrance Nash"
+    And I scroll "Type" into view
     And I check the box "Regional authority"
-    And I click the "Additional fields" tab
+    And I scroll "Additional fields" into view
+    And I press "Additional fields"
     And I attach the file "logo.png" to "Logo"
     And I wait for AJAX to finish
     And I attach the file "banner.jpg" to "Banner"
     And I wait for AJAX to finish
+    And I scroll "Geographical coverage" into view
     When I press "Add another item" at the "Geographical coverage" field
     And I wait for AJAX to finish
+    And I scroll "Content creation" into view
     And I select the radio button "Only facilitators and authors can create content."
 
     # Save the collection.
@@ -390,7 +412,8 @@ Feature: Collection moderation
     # Edit again.
     When I open the header local tasks menu
     And I click "Edit" in the "Entity actions" region
-    And I click the "Additional fields" tab
+    And I press "Main fields"
+    And I press "Additional fields"
     Then the radio button "Only facilitators and authors can create content." from field "Content creation" should be selected
 
     # Clean up the entities that were created.
@@ -415,18 +438,23 @@ Feature: Collection moderation
     And I enter "Invisible ships on deep sea." in the "Description" wysiwyg editor
     And I select "Employment and Support Allowance" from "Topic"
     # An ajax callback is executed now.
+    And I scroll "Owner" into view
     And I press "Add new" at the "Owner" field
     And I wait for AJAX to finish
     And I fill in "Name" with "Mable Pelley"
+    And I scroll "Type" into view
     And I check the box "National authority"
-    And I click the "Additional fields" tab
+    And I scroll "Additional fields" into view
+    And I press "Additional fields"
     And I attach the file "logo.png" to "Logo"
     And I wait for AJAX to finish
     And I attach the file "banner.jpg" to "Banner"
     And I wait for AJAX to finish
+    And I scroll "Content creation" into view
     And I select the radio button "Only facilitators and authors can create content."
 
-    When I press "Add another item" at the "Geographical coverage" field
+    When I scroll "Geographical coverage" into view
+    And I press "Add another item" at the "Geographical coverage" field
     And I wait for AJAX to finish
 
     # Save the collection.
@@ -435,7 +463,8 @@ Feature: Collection moderation
     # Edit again.
     When I open the header local tasks menu
     And I click "Edit" in the "Entity actions" region
-    And I click the "Additional fields" tab
+    And I press "Main fields"
+    And I press "Additional fields"
     Then the radio button "Only facilitators and authors can create content." from field "Content creation" should be selected
 
     # Clean up the entities that were created.
