@@ -125,7 +125,8 @@ Feature: Proposing a collection
   Scenario: Content creation options should not vanish after AJAX request.
     Given I am logged in as a user with the "authenticated" role
     When I go to the propose collection form
-    And I click the "Additional fields" tab
+    And I press "Main fields"
+    And I press "Additional fields"
     And I attach the file "banner.jpg" to "Banner"
     And I wait for AJAX to finish
     Then I should see the link "banner.jpg"
@@ -150,6 +151,7 @@ Feature: Proposing a collection
     And I fill in "Title" with "Just a proposal"
     And I enter "Nothing..." in the "Description" wysiwyg editor
     And I select "Employment and Support Allowance" from "Topic"
+    And I scroll "Owner" into view
     And I press "Add existing" at the "Owner" field
     And I fill in "Owner" with "Organisation example"
     And I press "Add owner"
@@ -158,7 +160,9 @@ Feature: Proposing a collection
       | Name   | Invisible Man             |
     And I press "Create contact information"
 
-    When I click "Additional fields" tab
+    When I scroll "Main fields" into view
+    And I press "Main fields"
+    And I press "Additional fields"
     Then the following fields should not be visible "Title, Description, Topic"
     And the following field widgets should not be visible "Owner"
     And the following fields should be visible "Content creation, Moderated, Abstract, Geographical coverage"
@@ -168,8 +172,10 @@ Feature: Proposing a collection
     # As a user, editing a collection, solution, event or news item, I want to
     # be able to pick-up a pre-uploaded image when editing the logo or the
     # banner, as an alternative to the image upload.
-    When I select image #3 as collection logo
+    When I scroll "Logo" into view
+    And I select image #3 as collection logo
     And I wait for AJAX to finish
+    And I scroll "Banner" into view
     And I select image #8 as collection banner
     And I wait for AJAX to finish
     And I press "Propose"
@@ -178,7 +184,9 @@ Feature: Proposing a collection
     And the "Just a proposal" collection banner is image #8
 
     Given I go to the edit form of the "Just a proposal" collection
-    And I click "Additional fields" tab
+    And I press "Main fields"
+    And I press "Additional fields"
+    And I scroll "Logo" into view
     And I remove the file from the "Logo" field
     But I wait for AJAX to finish
 
@@ -188,7 +196,8 @@ Feature: Proposing a collection
     And I press "Propose"
 
     When I go to the edit form of the "Just a proposal" collection
-    And I click "Additional fields" tab
+    And I press "Main fields"
+    And I press "Additional fields"
     Then I should see the link "logo.png"
 
     # As some entities were created via UI, we should explicitly delete them.
@@ -204,14 +213,15 @@ Feature: Proposing a collection
   Scenario: Browser validation errors should focus the correct field group.
     Given I am logged in as an "authenticated user"
     When I go to the propose collection form
-    Then the "Main fields" tab should be active
+    Then the "Main fields" accordion item should be active
     # This form has two elements only that have browser-side validation.
     When I fill in "Title" with "Constraint validation API"
-    And I click the "Additional fields" tab
+    And I press "Main fields"
+    And I press "Additional fields"
     And I press "Propose"
-    # Our code should have changed the active tab now. A browser message will
+    # Our code should have changed the active accordion item now. A browser message will
     # be shown to the user.
-    Then the "Main fields" tab should be active
+    Then the "Main fields" accordion item should be active
     # Fill the required fields.
     When I select "HR" from "Topic"
     And I fill in the following:
