@@ -45,7 +45,7 @@
     {{ page.header }}
 
     {% if page.header_bottom %}
-      <div class="region-header-bottom">
+      <div class="region-header-bottom container">
         {{ page.header_bottom }}
       </div>
     {% endif %}
@@ -65,7 +65,12 @@
     {{ page.messages }}
   {% endif %}
 
-  {{ page.content_top }}
+  {% if page.content_top %}
+    <div class="container">
+      {{ page.content_top }}
+    </div>
+  {% endif %}
+
   <div class="content container mb-5">
     <div class="row">
       {% if page.sidebar|render|striptags|trim is not empty %}

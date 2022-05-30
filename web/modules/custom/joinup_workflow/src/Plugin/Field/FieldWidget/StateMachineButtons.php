@@ -202,6 +202,7 @@ class StateMachineButtons extends OptionsSelectWidget implements ContainerFactor
         : t('Save as @transition', ['@transition' => $label]);
 
       $form['actions']['state_machine_' . $state_id] = $button + $default_button;
+      $form['actions']['state_machine_' . $state_id]['#attributes']['class'][] = 'state-machine-action-button';
     }
 
     // Hide the default buttons, including the specialty ones added by
