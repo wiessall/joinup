@@ -19,7 +19,7 @@ plugin: add_content_block
 settings:
   id: add_content_block
   label: 'Add content'
-  label_display: visible
+  label_display: '0'
   provider: joinup_group
   context_mapping:
     og: '@og.context:og'
