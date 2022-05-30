@@ -29,7 +29,13 @@ class MinkContext extends DrupalExtensionMinkContext {
     // Overrides the default method for checking checkboxes to make it
     // compatible with material design.
     $option = $this->fixStepArgument($option);
-    $this->checkMaterialDesignField($option, $this->getSession()->getPage());
+    $page = $this->getSession()->getPage();
+    if (!$page->find('css', 'div#block-ventuno-pagetitle')) {
+      $this->checkMaterialDesignField($option, $page);
+    }
+    else {
+      $page->checkField($option);
+    }
   }
 
   /**
@@ -44,7 +50,13 @@ class MinkContext extends DrupalExtensionMinkContext {
     // Overrides the default method for unchecking checkboxes to make it
     // compatible with material design.
     $option = $this->fixStepArgument($option);
-    $this->uncheckMaterialDesignField($option, $this->getSession()->getPage());
+    $page = $this->getSession()->getPage();
+    if (!$page->find('css', 'div#block-ventuno-pagetitle')) {
+      $this->uncheckMaterialDesignField($option, $this->getSession()->getPage());
+    }
+    else {
+      $page->uncheckField($option);
+    }
   }
 
   /**
