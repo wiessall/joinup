@@ -515,6 +515,20 @@ function ventuno_form_views_exposed_form_alter(array &$form, FormStateInterface 
 }
 
 /**
+ * Implements hook_form_alter().
+ */
+function ventuno_form_alter(&$form, FormStateInterface $form_state, $form_id): void {
+  // Add classes to the delete action in any kind of form.
+  if (isset($form['actions']['delete'])) {
+    $form['actions']['delete']['#attributes']['class'] = [
+      'btn',
+      'btn-md',
+      'btn-outline-danger',
+    ];
+  }
+}
+
+/**
  * Implements hook_preprocess_responsive_image().
  *
  * Explicitly sets dimensions to images using responsive image styles to avoid
@@ -648,7 +662,9 @@ function ventuno_build_permalink() {
     return FALSE;
   }
 
-  if (!($parameters = $route_match->getRouteObject()->getOption('parameters')) || empty($parameters)) {
+  if (!($parameters = $route_match->getRouteObject()->getOption(
+      'parameters'
+    )) || empty($parameters)) {
     return FALSE;
   }
 
@@ -664,9 +680,16 @@ function ventuno_build_permalink() {
   }
 
   // Entity ID is pointing to the publication office redirect.
-  $namespaces = implode('|', array_keys(
-    IdRedirect::getEntityTypeFromPersistentUriNamespace()));
-  if (preg_match('{^http://data.europa.eu/(?:' . $namespaces . ')/}', $entity->id())) {
+  $namespaces = implode(
+    '|',
+    array_keys(
+      IdRedirect::getEntityTypeFromPersistentUriNamespace()
+    )
+  );
+  if (preg_match(
+    '{^http://data.europa.eu/(?:' . $namespaces . ')/}',
+    $entity->id()
+  )) {
     return $entity->id();
   }
 
@@ -675,4 +698,52 @@ function ventuno_build_permalink() {
     'path_processing' => FALSE,
     'absolute' => TRUE,
   ])->toString();
+}
+
+/**
+ * Implements hook_theme_suggestions_HOOK_alter() for container.html.twig.
+ */
+function ventuno_theme_suggestions_container_alter(array &$suggestions, array $variables) {
+  if (isset($variables['element']['#id'])) {
+    $suggestions[] = 'container__' . str_replace('-', '_', $variables['element']['#id']);
+
+    // Suggestion for form actions container if id has suffix.
+    if (end($suggestions) != 'container__edit_actions' && strpos($variables['element']['#id'], 'edit-actions') !== FALSE) {
+      $suggestions[] = 'container__edit_actions';
+    }
+  }
+}
+
+/**
+ * Implements hook_preprocess_field_ui_table().
+ */
+function ventuno_preprocess_field_ui_table(&$variables) {
+  if ($variables['user']->isAuthenticated()) {
+    $variables['#attached']['library'][] = 'ventuno/tabledrag';
+  }
+}
+
+/**
+ * Implements hook_preprocess_field_multiple_value_form().
+ */
+function ventuno_preprocess_field_multiple_value_form(&$variables) {
+  if ($variables['user']->isAuthenticated()) {
+    $variables['#attached']['library'][] = 'ventuno/tabledrag';
+  }
+}
+
+/**
+ * Implements hook_preprocess_inline_entity_form_entity_table().
+ */
+function ventuno_preprocess_inline_entity_form_entity_table(&$variables) {
+  if ($variables['user']->isAuthenticated()) {
+    $variables['#attached']['library'][] = 'ventuno/ief-entity-table';
+  }
+}
+
+/**
+ * Implements hook_preprocess_form_element().
+ */
+function ventuno_preprocess_form_element(&$variables) {
+  $variables['#attached']['library'][] = 'ventuno/forms';
 }
