@@ -184,16 +184,6 @@ function joinup_field_widget_inline_entity_form_complex_form_alter(&$element, Fo
       }
     }
   }
-
-  // If no title is provided for the fieldset wrapping the create form, add the
-  // label of the bundle of the entity being created.
-  if (empty($element['form']['#title']) && !empty($element['form']['inline_entity_form']['#bundle'])) {
-    $entity_type = $element['form']['inline_entity_form']['#entity_type'];
-    $bundle = $element['form']['inline_entity_form']['#bundle'];
-
-    $bundle_info = \Drupal::service('entity_type.bundle.info')->getBundleInfo($entity_type);
-    $element['form']['#title'] = $bundle_info[$bundle]['label'];
-  }
 }
 
 /**
