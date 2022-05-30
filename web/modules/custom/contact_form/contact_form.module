@@ -216,7 +216,7 @@ function contact_form_message_access(EntityInterface $entity, $operation, Accoun
 }
 
 /**
- * Implements hook_form_alter().
+ * Implements hook_form_FORM_ID_alter().
  */
 function contact_form_form_email_contact_mail_form_alter(array &$form, FormStateInterface $form_state, string $form_id): void {
   // Add honeypot to the contact form in the contact owner link.
@@ -233,7 +233,7 @@ function contact_form_form_email_contact_mail_form_alter(array &$form, FormState
 /**
  * Implements hook_email_confirmer().
  */
-function contact_form_email_confirmer($op, EmailConfirmationInterface $confirmation) {
+function contact_form_email_confirmer(string $op, EmailConfirmationInterface $confirmation): void {
   $result = \Drupal::entityQuery('rdf_entity')
     ->condition('rid', 'contact_information')
     ->condition('field_ci_email', $confirmation->getEmail())
