@@ -1,0 +1,14 @@
+.tabledrag-toggle-weight-wrapper,
+.tabledrag-handle,
+.tabledrag-hide {
+  display: none!important;
+}
+.table {
+  td.field-multiple-drag {
+  width: 0;
+  padding: 0;
+  }
+  td.delta-order {
+    min-width: 5rem;
+  }
+}
