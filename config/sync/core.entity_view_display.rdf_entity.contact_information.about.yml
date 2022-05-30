@@ -24,7 +24,7 @@ bundle: contact_information
 mode: about
 content:
   field_ci_email:
-    type: email_contact_popup
+    type: email_contact_link
     label: above
     settings:
       link_text: 'Contact owner'
@@ -32,6 +32,7 @@ content:
       custom_path: ''
       include_values: '1'
       default_message: ''
+      modal: true
     third_party_settings:
       field_delimiter:
         delimiter: ''

@@ -217,14 +217,9 @@ function contact_form_message_access(EntityInterface $entity, $operation, Accoun
 
 /**
  * Implements hook_form_alter().
- *
- * Add honeypot to the contact form in the contact owner link.
  */
-function contact_form_form_alter(&$form, FormStateInterface $form_state, $form_id): void {
-  if ($form_id != 'email_contact_mail_modal_form') {
-    return;
-  }
-
+function contact_form_form_email_contact_mail_form_alter(array &$form, FormStateInterface $form_state, string $form_id): void {
+  // Add honeypot to the contact form in the contact owner link.
   // If honeypot is enabled, add protection to the form.
   if (function_exists('honeypot_add_form_protection')) {
     honeypot_add_form_protection(
