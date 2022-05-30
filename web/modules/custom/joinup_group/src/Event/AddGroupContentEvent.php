@@ -5,7 +5,7 @@ declare(strict_types = 1);
 namespace Drupal\joinup_group\Event;
 
 use Drupal\rdf_entity\RdfInterface;
-use Symfony\Component\EventDispatcher\Event;
+use Symfony\Contracts\EventDispatcher\Event;
 
 /**
  * Provides an event class to react when building the group add content block.
