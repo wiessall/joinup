@@ -208,12 +208,12 @@ $utilities: map-merge(
       //   property: flex,
       //   values: (fill: 1 1 auto)
       // ),
-      // "flex-direction": (
-      //   responsive: true,
-      //   property: flex-direction,
-      //   class: flex,
-      //   values: row column row-reverse column-reverse
-      // ),
+      "flex-direction": (
+        responsive: true,
+        property: flex-direction,
+        class: flex,
+        values: row column row-reverse column-reverse
+      ),
       // "flex-grow": (
       //   responsive: true,
       //   property: flex-grow,

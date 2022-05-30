@@ -910,43 +910,22 @@ class FeatureContext extends RawDrupalContext implements SnippetAcceptingContext
   }
 
   /**
-   * Asserts that a vertical tab is active.
+   * Asserts that an accordion item is active.
    *
-   * @param string $tab
-   *   The tab title.
-   *
-   * @throws \Exception
-   *   When the tab is not found on the page or it's not active.
-   *
-   * @Then the :tab tab should be active
-   */
-  public function assertVerticalTabActive(string $tab): void {
-    $element = $this->findVerticalTab($tab);
-
-    if (!$element->hasClass('is-selected')) {
-      throw new \Exception("The tab '$tab' is not active.");
-    }
-  }
-
-  /**
-   * Asserts that a vertical tab has a given summary.
-   *
-   * @param string $tab
-   *   The tab title.
-   * @param string $summary
-   *   The expected tab summary.
+   * @param string $item
+   *   The accordion item title.
    *
    * @throws \Exception
-   *   When the tab is not found on the page or it's not active.
+   *   When the accordion item is not found on the page or it's not active.
    *
-   * @Then the :tab tab summary should be :summary
+   * @Then the :item accordion item should be active
    */
-  public function assertVerticalTabSummary(string $tab, string $summary): void {
-    $element = $this->findVerticalTab($tab);
-    if (!$actual_summary = $element->find('css', '.vertical-tabs__menu-item-summary')) {
-      throw new ElementNotFoundException($this->getSession()->getDriver(), 'span', 'css', '.vertical-tabs__menu-item-summary');
+  public function assertAccordionItemActive(string $item): void {
+    $element = $this->findAccordionItem($item);
+
+    if ($element->hasClass('collapsed')) {
+      throw new \Exception("The accordion item '$item' is not active.");
     }
-    Assert::assertSame($summary, $actual_summary->getText());
   }
 
   /**

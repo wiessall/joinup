@@ -2,6 +2,8 @@ uuid: c431d6ac-f6d0-4be7-80a8-2b7746dd7a6f
 langcode: en
 status: true
 dependencies:
+  module:
+    - joinup_core
   theme:
     - ventuno
 id: ventuno_three_dots_menu
@@ -17,4 +19,9 @@ settings:
   provider: core
   primary: true
   secondary: false
-visibility: {  }
+visibility:
+  request_route:
+    id: request_route
+    negate: true
+    routes:
+      - entity.rdf_entity.edit_form
