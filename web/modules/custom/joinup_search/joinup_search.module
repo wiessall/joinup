@@ -20,6 +20,7 @@ use Drupal\search_api\IndexInterface;
 use Drupal\search_api\Query\ConditionGroupInterface;
 use Drupal\search_api\Query\QueryInterface;
 use Drupal\search_api\Utility\Utility;
+use Drupal\smart_trim\Truncate\TruncateHTML;
 use Drupal\views\ViewExecutable;
 use Solarium\Core\Query\QueryInterface as SolariumQueryInterface;
 use Solarium\QueryType\Select\Query\Query;
@@ -42,7 +43,12 @@ function joinup_search_theme($existing, $type, $theme, $path) {
       'variables' => ['filters' => [], 'template_suggestion' => ''],
     ],
     'joinup_search_filter' => [
-      'variables' => ['name' => '', 'bcl_icon_path' => ''],
+      'variables' => [
+        'name' => '',
+        'name_desktop' => '',
+        'name_mobile' => '',
+        'bcl_icon_path' => '',
+      ],
     ],
   ];
 }
@@ -432,6 +438,7 @@ function joinup_search_form_alter(&$form, FormStateInterface $form_state, $form_
     if ($view['view']->id() == 'search' && $view['view']->current_display == 'page_1' && $route_name != 'view.search.page_1') {
       $group = \Drupal::service('og.context')->getGroup();
       if ($group) {
+        $truncate = new TruncateHTML();
         /** @var \Drupal\Core\Entity\ContentEntityInterface $group */
         if (in_array($group->bundle(), ['collection', 'solution'])) {
           $form['filters'] = [
@@ -448,6 +455,8 @@ function joinup_search_form_alter(&$form, FormStateInterface $form_state, $form_
           $form['list'] = [
             '#theme' => 'joinup_search_filter',
             '#name' => $group->label(),
+            '#name_desktop' => $truncate->truncateChars($group->label(), 10, '…'),
+            '#name_mobile' => $truncate->truncateChars($group->label(), 28, '…'),
             '#bcl_icon_path' => base_path() . \Drupal::service('extension.path.resolver')->getPath('theme', 'ventuno') . '/assets/icons/icons.svg',
             '#weight' => -5,
           ];
