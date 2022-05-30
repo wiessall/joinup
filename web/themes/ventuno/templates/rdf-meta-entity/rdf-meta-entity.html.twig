@@ -5,23 +5,21 @@
  */
 #}
 <article{{ attributes.addClass(['mt-3']) }}>
-  <ul class="list-unstyled">
-    {{ content.field_eif_description }}
-    {{ content.field_eif_solution_type }}
-  </ul>
+  {{ content.field_eif_description }}
+  {{ content.field_eif_solution_type }}
   <a class="btn btn-sm btn-outline-brand rounded-pill" href="{{ solution_url }}">{{ 'Go to Solution'|t }}</a>
   <h3 class="fs-5 mt-4 mb-3">{{ 'The'|t}} {{ solution_label }} {{ 'implements the following'|t }}:</h3>
   <div class="row">
     <div class="col-12 col-md-6 col-lg-4">
-      <h5><a href="/">Principles</a></h5>
+      <h4 class="fs-6 pb-2 border-bottom"><a href="/">Principles</a></h5>
       {{ content.eif_principle }}
     </div>
     <div class="col-12 col-md-6 col-lg-4">
-      <h5><a href="/">Interoperability layers</a></h5>
+      <h4 class="fs-6 pb-2 border-bottom"><a href="/">Interoperability layers</a></h5>
       {{ content.eif_layer }}
     </div>
     <div class="col-12 col-md-6 col-lg-4">
-      <h5><a href="/">Conceptual model</a></h5>
+      <h4 class="fs-6 pb-2 border-bottom"><a href="/">Conceptual model</a></h5>
       {{ content.eif_model }}
     </div>
   </div>
