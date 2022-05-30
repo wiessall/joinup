@@ -1163,8 +1163,15 @@ class JoinupContext extends RawDrupalContext {
    *
    * @Then I (should )see the :heading tile
    */
-  public function assertTilePresent($heading) {
-    $results = $this->getSession()->getPage()->findAll('css', '.listing__item--tile .listing__title, .card .card-title, article.tile h2');
+  public function assertTilePresent(string $heading): void {
+    $selector = [
+      '.card .card-title',
+      // @todo Legacy selectors to be removed in ISAICP-7138.
+      // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7138
+      '.listing__item--tile .listing__title',
+      'article.card-tile h2',
+    ];
+    $results = $this->getSession()->getPage()->findAll('css', implode(',', $selector));
     foreach ($results as $result) {
       /** @var \Behat\Mink\Element\Element $result */
       if ($result->getText() === $heading) {
