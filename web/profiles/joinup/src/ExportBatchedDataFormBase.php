@@ -78,7 +78,7 @@ abstract class ExportBatchedDataFormBase extends FormBase {
   /**
    * {@inheritdoc}
    */
-  public function buildForm(array $form, FormStateInterface $form_state) {
+  public function buildForm(array $form, FormStateInterface $form_state): array {
     $form['help'] = [
       '#markup' => $this->t('Press generate data to generate the list.'),
     ];
@@ -121,7 +121,7 @@ abstract class ExportBatchedDataFormBase extends FormBase {
    * @param \Drupal\Core\Form\FormStateInterface $form_state
    *   The form state object.
    */
-  public function downloadCsv(array &$form, FormStateInterface $form_state) {
+  public function downloadCsv(array &$form, FormStateInterface $form_state): void {
     $headers = [
       'Content-Type' => 'text/csv',
       'Content-Disposition' => "attachment;filename={$this->getDownloadedFileName()}",

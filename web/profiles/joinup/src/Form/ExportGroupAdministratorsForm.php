@@ -77,7 +77,7 @@ class ExportGroupAdministratorsForm extends ExportBatchedDataFormBase {
   /**
    * {@inheritdoc}
    */
-  public function getFormId() {
+  public function getFormId(): string {
     return 'joinup_export_group_administrators';
   }
 
@@ -158,10 +158,5 @@ class ExportGroupAdministratorsForm extends ExportBatchedDataFormBase {
       'Is administrator' => $is_administrator,
     ];
   }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function submitForm(array &$form, FormStateInterface $form_state) {}
 
 }
