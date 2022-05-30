@@ -17,7 +17,7 @@ Feature: Subscribing to a collection after creating
 
     # Click the button to create an organisation owner.
     And I press "Add new" at the "Owner" field
-    When I set the Owner type to "Company"
+    When I check the box "Company"
     And I fill in "Name" with "Acme"
     And I press "Create owner"
 

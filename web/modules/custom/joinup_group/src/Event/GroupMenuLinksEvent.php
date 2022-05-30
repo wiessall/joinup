@@ -7,7 +7,7 @@ namespace Drupal\joinup_group\Event;
 use Drupal\Component\Render\MarkupInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\rdf_entity\RdfInterface;
-use Symfony\Component\EventDispatcher\Event;
+use Symfony\Contracts\EventDispatcher\Event;
 
 /**
  * Event class allowing subscribers to add group menu links.
