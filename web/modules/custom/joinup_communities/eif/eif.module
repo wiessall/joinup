@@ -277,4 +277,21 @@ function eif_inline_entity_form_entity_form_alter(array &$entity_form, FormState
   }
 
   $entity_form['term']['widget']['#title_display'] = 'hidden';
+  $entity_form['#after_build'][] = '_eif_inline_entity_form_actions_alter';
+}
+
+/**
+ * Callback function to rename IEF action buttons for the EIF recommendation.
+ *
+ * @param array $entity_form
+ *   The entity form.
+ * @param \Drupal\Core\Form\FormStateInterface $form_state
+ *   The form API form state object.
+ *
+ * @return array
+ *   The processed form array.
+ */
+function _eif_inline_entity_form_actions_alter(array $entity_form, FormStateInterface $form_state): array {
+  $entity_form['actions']['ief_add_save']['#value'] = t('Save recommendation');
+  return $entity_form;
 }
