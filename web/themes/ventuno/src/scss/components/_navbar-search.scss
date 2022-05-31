@@ -18,7 +18,7 @@
   @include media-breakpoint-up(xxl) {
     width: calc(map-get($container-max-widths, xxl) - 2.5rem);
   }
-  .navbar-search__form-container {
+  form {
     display: flex;
     align-items: center;
     border: $border-width solid $border-color;
