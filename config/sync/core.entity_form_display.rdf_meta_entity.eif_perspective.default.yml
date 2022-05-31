@@ -20,55 +20,22 @@ bundle: eif_perspective
 mode: default
 content:
   eif_layer:
-    type: inline_entity_form_complex
+    type: options_buttons
     weight: 3
     region: content
-    settings:
-      form_mode: default
-      override_labels: true
-      label_singular: qualifier
-      label_plural: qualifiers
-      allow_new: true
-      allow_existing: false
-      match_operator: CONTAINS
-      allow_duplicate: false
-      collapsible: false
-      collapsed: false
-      revision: false
+    settings: {  }
     third_party_settings: {  }
   eif_model:
-    type: inline_entity_form_complex
+    type: options_buttons
     weight: 4
     region: content
-    settings:
-      form_mode: default
-      override_labels: true
-      label_singular: qualifier
-      label_plural: qualifiers
-      allow_new: true
-      allow_existing: false
-      match_operator: CONTAINS
-      allow_duplicate: false
-      collapsible: false
-      collapsed: false
-      revision: false
+    settings: {  }
     third_party_settings: {  }
   eif_principle:
-    type: inline_entity_form_complex
+    type: options_buttons
     weight: 2
     region: content
-    settings:
-      form_mode: default
-      override_labels: true
-      label_singular: qualifier
-      label_plural: qualifiers
-      allow_new: true
-      allow_existing: false
-      match_operator: CONTAINS
-      allow_duplicate: false
-      collapsible: false
-      collapsed: false
-      revision: false
+    settings: {  }
     third_party_settings: {  }
   eif_recommendation:
     type: inline_entity_form_complex
