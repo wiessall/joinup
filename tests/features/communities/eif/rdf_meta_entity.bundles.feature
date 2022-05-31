@@ -29,16 +29,28 @@ Feature:
     And the following fields should be present "Description, Type of solution"
     And the following field widgets should be present "Principle, Layer, Model, Recommendation"
 
-    Given I fill in "Description" with "It will be an amazing principle."
-    And I check "Assessment tools"
-    And I select "Underlying Principle 2: Openness" from "EIF qualifier"
-    And I press "Create qualifier"
-    Then I should see the text "Underlying Principle 2: Openness"
+    When I click "Save"
+    Then I should see the error message "An EIF perspective cannot be created without any information. Please, fill in at least one field."
 
+    Given I fill in "Description" with "It will be an amazing principle."
+    # Solution type.
+    And I check "Assessment tools"
+    And I check "Common frameworks"
+    # Principle.
+    And I check "Subsidiarity and proportionality"
+    And I check "Openness"
+    # Model.
+    And I check "Coordination function"
     When I press "Save"
+
     Then I should see the heading "Some EIF solution"
     When I click "EIF perspective"
-    # The only "Edit" button is in the inline entity form for principles.
-    And I press "Edit" in the "Content" region
-    Then the option with text "Underlying Principle 2: Openness" from select "EIF qualifier" should be selected
-    And I should see the text "It will be an amazing principle"
+
+    And I click "Add new"
+    # Test the '_none' option label, the better naming of the recommendations
+    # and the order - that 10 does not come after 1 (string comparison) and 2
+    # follows normally.
+    Then the "EIF qualifier" select should contain the following options:
+      | - Select a Recommendation -                                                 |
+      | Recommendation 1 - Underlying Principle 1: Subsidiarity and proportionality |
+      | Recommendation 2 - Underlying Principle 2: Openness                         |
