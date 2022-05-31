@@ -346,7 +346,8 @@
                 "Support sparql_entity_storage 2.x @see https://www.drupal.org/project/rdf_entity/issues/3259145": "https://git.drupalcode.org/project/rdf_entity/-/merge_requests/1.diff"
             },
             "drupal/rdf_meta_entity": {
-                "Provide a default template file @see https://www.drupal.org/project/rdf_meta_entity/issues/3279162": "https://git.drupalcode.org/project/rdf_meta_entity/-/merge_requests/2.diff"
+                "Provide a default template file @see https://www.drupal.org/project/rdf_meta_entity/issues/3279162": "https://git.drupalcode.org/project/rdf_meta_entity/-/merge_requests/2.diff",
+                "Provide a default delete form @see https://www.drupal.org/project/rdf_meta_entity/issues/3283343": "https://git.drupalcode.org/project/rdf_meta_entity/-/merge_requests/3.diff"
             },
             "drupal/search_api": {
                 "item_id column is too short @see https://www.drupal.org/node/2829696": "resources/patch/search_api-item_id-length-2829696.patch",
