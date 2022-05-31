@@ -397,6 +397,26 @@ function ventuno_preprocess_rdf_entity__search_result(array &$variables): void {
 /**
  * Implements hook_preprocess_HOOK().
  */
+function ventuno_preprocess_rdf_entity__solution__eif_perspective(array &$variables): void {
+  /** @var \Drupal\solution\Entity\SolutionInterface $solution */
+  $solution = $variables['rdf_entity'];
+  if (empty($solution)) {
+    return;
+  }
+
+  $rdf_meta_entity = $solution->eif_perspective->entity;
+  if (empty($rdf_meta_entity)) {
+    return;
+  }
+
+  $eif_description = \Drupal::entityTypeManager()->getViewBuilder('rdf_meta_entity')->viewField($rdf_meta_entity->get('field_eif_description'), 'eif_perspective');
+  $rendered_description = \Drupal::getContainer()->get('renderer')->renderPlain($eif_description);
+  $variables['content']['eif_perspective_fields']['field_eif_description'] = $rendered_description;
+}
+
+/**
+ * Implements hook_preprocess_HOOK().
+ */
 function ventuno_preprocess_node__search_result_featured(array &$variables): void {
   _ventuno_preprocess_search_result($variables, 'node');
 }
