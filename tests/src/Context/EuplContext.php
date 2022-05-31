@@ -107,7 +107,7 @@ class EuplContext extends RawDrupalContext {
     if (empty($button)) {
       throw new \Exception("Could not locate a table cell with the button {$spdx}.");
     }
-    $this->scrollElementIntoView('.licence-comparer__header');
+    $this->scrollCssSelectedElementIntoView('.licence-comparer__header');
     $button->press();
 
     // Wait for modal dialog to be ready.
@@ -459,7 +459,7 @@ class EuplContext extends RawDrupalContext {
    *   When the licence tile is not found on the page.
    */
   protected function findLicenceTile(string $spdx_id): NodeElement {
-    $this->scrollElementWithIdIntoView('link', 'Check compatibility');
+    $this->scrollNamedElementIntoView('link', 'Check compatibility');
     if ($licence = $this->getSession()->getPage()->find('css', 'div[data-spdx="' . $spdx_id . '"]')) {
       return $licence;
     }
