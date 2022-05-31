@@ -21,7 +21,7 @@ class MinkContext extends DrupalExtensionMinkContext {
    * {@inheritdoc}
    */
   public function checkOption($option) {
-    $this->scrollElementWithIdIntoView('checkbox', $option);
+    $this->scrollNamedElementIntoView('checkbox', $option);
     if (!$this->usesMaterialDesignLite()) {
       parent::checkOption($option);
       return;
@@ -42,7 +42,7 @@ class MinkContext extends DrupalExtensionMinkContext {
    * {@inheritdoc}
    */
   public function uncheckOption($option) {
-    $this->scrollElementWithIdIntoView('checkbox', $option);
+    $this->scrollNamedElementIntoView('checkbox', $option);
     if (!$this->usesMaterialDesignLite()) {
       parent::uncheckOption($option);
       return;
@@ -115,7 +115,7 @@ class MinkContext extends DrupalExtensionMinkContext {
    */
   public function clickLink($link): void {
     // Overriding the base method for Javascript tests.
-    $this->scrollElementWithIdIntoView('link', $link);
+    $this->scrollNamedElementIntoView('link', $link);
     parent::clickLink($link);
   }
 
@@ -124,7 +124,7 @@ class MinkContext extends DrupalExtensionMinkContext {
    */
   public function pressButton($button): void {
     // Overriding the base method for Javascript tests.
-    $this->scrollElementWithIdIntoView('button', $button);
+    $this->scrollNamedElementIntoView('button', $button);
     parent::pressButton($button);
   }
 
