@@ -80,7 +80,10 @@ trait JavascriptTrait {
    *   The node element.
    */
   protected function scrollElementIntoView(NodeElement $element): void {
-    $xpath = str_replace("\n", ' ', $element->getXpath());
+    // Strings (labels) containing simple quotes (') are enclosed with double
+    // quotes ("), thus we need to escape them. Also, xpath might contain new
+    // lines which we replace with spaces.
+    $xpath = str_replace(['"', "\n"], ['\"', ' '], $element->getXpath());
     $this->getSession()->executeScript("
     (
       function() {
