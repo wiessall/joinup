@@ -9,6 +9,7 @@ style:
     assets/js/popovers.js: { minified: false }
   dependencies:
     - core/drupal
+    - ventuno/site-alerts-messages
 
 # Pages
 homepage:
