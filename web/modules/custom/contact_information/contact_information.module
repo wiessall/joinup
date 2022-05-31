@@ -88,7 +88,7 @@ function contact_information_inline_entity_form_entity_form_alter(&$entity_form,
  * @param \Drupal\Core\Entity\EntityInterface $entity
  *   The entity being built.
  */
-function contact_information_inline_entity_form_entity_builder($entity_type, EntityInterface $entity) {
+function contact_information_inline_entity_form_entity_builder(string $entity_type, EntityInterface $entity): void {
   contact_information_entity_auto_label($entity);
 }
 
