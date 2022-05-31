@@ -30,13 +30,15 @@
     </div>
   </div>
 
+  {{ title_prefix }}
   <h2 class="my-3 fs-4">{{ "General information"|t }}</h2>
+  {{ title_suffix }}
   <div class="row">
     <div class="col-12 col-sm-4 col-md-3 col-lg-2">
       {{ content.field_is_logo }}
     </div>
     <div class="col-12 col-sm-8 col-md-9 col-lg-10">
-      <p class="mb-2">{{ title_prefix }}<strong>{{ 'Name of the solution'|t }}:</strong> {{ label|striptags }}{{ title_suffix }}</p>
+      <p class="mb-2"><strong>{{ 'Name of the solution'|t }}:</strong> {{ label|striptags }}</p>
       <p class="mb-2"><strong>{{ 'Solution\'s owner'|t }}:</strong> {{ content.field_is_owner|render|striptags }}</p>
       <p class="mb-2">{{ content.eif_perspective_fields.field_eif_description }}</p>
     </div>
