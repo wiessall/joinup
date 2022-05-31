@@ -188,4 +188,16 @@ class JoinupGroupContext extends RawDrupalContext {
     }
   }
 
+  /**
+   * Asserts that a group menu link is active.
+   *
+   * @param string $link
+   *   The group menu link text.
+   *
+   * @Then the :link group menu link should be active
+   */
+  public function assertGroupMenuLinkActive(string $link): void {
+    Assert::assertNotNull($this->getSession()->getPage()->find('xpath', "//a[text() = '$link' and contains(concat(' ', normalize-space(@class), ' '), ' active ')]"));
+  }
+
 }
