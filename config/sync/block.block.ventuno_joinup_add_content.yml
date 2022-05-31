@@ -3,6 +3,7 @@ langcode: en
 status: true
 dependencies:
   module:
+    - joinup_core
     - joinup_group
     - og
   theme:
@@ -18,7 +19,7 @@ plugin: add_content_block
 settings:
   id: add_content_block
   label: 'Add content'
-  label_display: '0'
+  label_display: visible
   provider: joinup_group
   context_mapping:
     og: '@og.context:og'
@@ -31,3 +32,8 @@ visibility:
     group_types:
       rdf_entity-collection: rdf_entity-collection
       rdf_entity-solution: rdf_entity-solution
+  request_route:
+    id: request_route
+    negate: true
+    routes:
+      - entity.rdf_entity.edit_form

@@ -879,7 +879,7 @@ class JoinupContext extends RawDrupalContext {
     // If this doesn't exist, search for a multivalue entity reference field
     // containing a label for the given field name.
     if (empty($element)) {
-      $xpath = '//table[contains(concat(" ", normalize-space(@class), " "), " field-multiple-table ") and //label[text()="' . $field . '"]]/ancestor::div[contains(concat(" ", normalize-space(@class), " "), " form-wrapper ")]';
+      $xpath = '//table[contains(concat(" ", normalize-space(@class), " "), " field-multiple-table ") and //label[text()="' . $field . '"]]/ancestor::div[contains(concat(" ", normalize-space(@class), " "), " form-wrapper ")] | //table[contains(concat(" ", normalize-space(@class), " "), " field-multiple-table ") and //h4[contains(concat(" ", normalize-space(@class), " "), " label ") and text()="' . $field . '"]]/ancestor::div[contains(concat(" ", normalize-space(@class), " "), " form-wrapper ")]';
       $element = $this->getSession()->getPage()->find('xpath', $xpath);
     }
 
@@ -1463,7 +1463,7 @@ class JoinupContext extends RawDrupalContext {
       // Only check the actual form submit buttons, ignore other buttons that
       // might be present in wysiwygs or are used to add multiple values to a
       // field.
-      $actual = count($this->getSession()->getPage()->findAll('xpath', '//div[contains(concat(" ", normalize-space(@class), " "), " form-actions ")]//input[@type = "submit"]'));
+      $actual = count($this->getSession()->getPage()->findAll('xpath', '//main//div[contains(concat(" ", normalize-space(@class), " "), " form-actions ")]//input[@type = "submit"]'));
       Assert::assertEquals($count, $actual);
     }
   }
@@ -1755,7 +1755,7 @@ class JoinupContext extends RawDrupalContext {
    * @Then I should see the description :description for (the ):label( field)
    */
   public function assertFieldDescription($label, $description) {
-    $xpath = '//label[text()="' . $label . '"]/ancestor::div[contains(concat(" ", normalize-space(@class), " "), " form-item ")]//div[contains(concat(" ", normalize-space(@class), " "), " description ")]';
+    $xpath = '//label[text()="' . $label . '"]/ancestor::div[contains(concat(" ", normalize-space(@class), " "), " form-item ")]//div[contains(concat(" ", normalize-space(@class), " "), " description ")] | //label[text()="' . $label . '"]/ancestor::div[contains(concat(" ", normalize-space(@class), " "), " form-item ")]//small[contains(concat(" ", normalize-space(@class), " "), " description ")]';
     $elements = $this->getSession()->getPage()->findAll('xpath', $xpath);
     if (empty($elements)) {
       throw new \Exception("The $label field does not have a description.");
@@ -1787,7 +1787,7 @@ class JoinupContext extends RawDrupalContext {
    * @Then I should not see the description :description for (the ):label( field)
    */
   public function assertNoFieldDescription($label, $description) {
-    $xpath = '//label[text()="' . $label . '"]/ancestor::div[contains(concat(" ", normalize-space(@class), " "), " form-item ")]//div[contains(concat(" ", normalize-space(@class), " "), " description ")]';
+    $xpath = '//label[text()="' . $label . '"]/ancestor::div[contains(concat(" ", normalize-space(@class), " "), " form-item ")]//div[contains(concat(" ", normalize-space(@class), " "), " description ")] | //label[text()="' . $label . '"]/ancestor::div[contains(concat(" ", normalize-space(@class), " "), " form-item ")]//small[contains(concat(" ", normalize-space(@class), " "), " description ")]';
     $elements = $this->getSession()->getPage()->findAll('xpath', $xpath);
     foreach ($elements as $element) {
       Assert::assertNotEquals($description, trim($element->getText()));
@@ -2310,11 +2310,11 @@ class JoinupContext extends RawDrupalContext {
    *
    * @Then the fields :fields should be correctly ordered in the region :region
    */
-  public function assertFieldsPresentInOrder($fields, $region) {
+  public function assertFieldsPresentInOrder(string $fields, string $region): void {
     $fields = $this->explodeCommaSeparatedStepArgument($fields);
     /** @var \Behat\Mink\Element\Element $regionObj */
     $regionObj = $this->getRegion($region);
-    $labels = $regionObj->findAll('xpath', "/.//*[contains(concat(' ', normalize-space(@class), ' '), ' form-wrapper ')]//label");
+    $labels = $regionObj->findAll('xpath', "/.//*[contains(concat(' ', normalize-space(@class), ' '), ' form-wrapper ')]//label | /.//*[contains(concat(' ', normalize-space(@class), ' '), ' form-wrapper ')]//h4[contains(concat(' ', normalize-space(@class), ' '), ' label ')] | /.//*[contains(concat(' ', normalize-space(@class), ' '), ' form-wrapper ')]//fieldset//legend[contains(concat(' ', normalize-space(@class), ' '), ' col-form-label ')]");
     $labels_on_page = [];
     /** @var \Behat\Mink\Element\NodeElement $label */
     foreach ($labels as $label) {
@@ -3061,6 +3061,44 @@ class JoinupContext extends RawDrupalContext {
     $xpath = "//ul/li[contains(concat(' ', @class, ' '), ' menu-item--active-trail ')]/descendant::a/descendant-or-self::*[text()='{$link_label}']";
     if (!$page->find('xpath', $xpath)) {
       throw new ExpectationFailedException("The '{$link_label}' link is not in the active trail but it should.");
+    }
+  }
+
+  /**
+   * Shows label in the middle of the screen.
+   *
+   * In the latest version of Selenium in docker, moving to a button element
+   * might throw this exception while label is visible.
+   * This might be due to attempting to find label too fast.
+   *
+   * @param string $label
+   *   The label of field.
+   *
+   * @throws \Exception
+   *    Thrown when an expected scroll in to view failed.
+   *
+   * @Given I scroll :label into view
+   */
+  public function scrollLabelIntoView(string $label): void {
+    $page = $this->getSession()->getPage();
+    $element = $page->find('xpath', "//*[contains(text(),'{$label}')]");
+    $xpath = $element->getXpath();
+    $function = <<<JS
+  (
+      function(){
+        setTimeout(() => {
+          let elem = document.evaluate("$xpath", document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
+          elem.scrollIntoView({ behavior: 'instant', block: 'center' });
+        }, 300);
+      }
+  )()
+  JS;
+    try {
+      $this->getSession()->executeScript($function);
+      sleep(1);
+    }
+    catch (\Exception $e) {
+      throw new \Exception("Scroll element into view failed");
     }
   }
 

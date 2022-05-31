@@ -73,6 +73,7 @@ function custom_page_node_insert(EntityInterface $entity) {
   // reindex the parent group so that the new custom page is included.
   // @see \Drupal\custom_page\Plugin\search_api\processor\IncludeCustomPageContent
   // @todo This is mistakenly acting on all content, not just on custom pages.
+  // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7129
   $parent = $entity->og_audience->entity;
   if (!empty($parent)) {
     /** @var \Drupal\search_api\Plugin\search_api\datasource\ContentEntityTrackingManager $content_tracking_manager */

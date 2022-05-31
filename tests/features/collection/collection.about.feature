@@ -37,6 +37,7 @@ Feature: About page
     # The 'Read more' link leads to the About page.
     When I click "Read more" in the "Content" region
     Then I should see the heading "About Fitness at work"
+    And the "About" group menu link should be active
 
     And I should see the text "Fit while working is dope"
     And I should see the text "This collection is intended to show ways of being fit while working"
