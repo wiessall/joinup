@@ -208,6 +208,30 @@ function eif_form_rdf_meta_entity_eif_perspective_form_alter(array &$form, FormS
       $form[$name]['widget']['form']['#title'] = NULL;
     }
   }
+
+  $form['#validate'][] = '_eif_form_rdf_meta_entity_no_empty_field_validate';
+}
+
+/**
+ * Validation callback for the EIF perspective form.
+ *
+ * @param array $form
+ *   The form array.
+ * @param \Drupal\Core\Form\FormStateInterface $form_state
+ *   The form state object.
+ */
+function _eif_form_rdf_meta_entity_no_empty_field_validate(array &$form, FormStateInterface $form_state): void {
+  // No field is required but the user needs to fill in at least 1 field in the
+  // form.
+  if (empty($form_state->getValue('field_eif_description')[0]['value'])
+    && empty($form_state->getValue('eif_solution_type'))
+    && empty($form_state->getValue('eif_model'))
+    && empty($form_state->getValue('eif_layer'))
+    && empty($form_state->getValue('eif_principle'))
+    && empty($form_state->getValue('eif_recommendation')['entities'])
+  ) {
+      $form_state->setError($form, 'An EIF perspective cannot be created without any information. Please, fill in at least one field.');
+  }
 }
 
 /**
