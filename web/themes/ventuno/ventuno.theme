@@ -410,8 +410,8 @@ function ventuno_preprocess_rdf_entity__solution__eif_perspective(array &$variab
   }
 
   $eif_description = \Drupal::entityTypeManager()->getViewBuilder('rdf_meta_entity')->viewField($rdf_meta_entity->get('field_eif_description'), 'eif_perspective');
-  $rendered_description = \Drupal::getContainer()->get('renderer')->renderPlain($eif_description);
-  $variables['content']['eif_perspective_fields']['field_eif_description'] = $rendered_description;
+  $eif_description[0]['#text'] = strip_tags($eif_description[0]['#text']);
+  $variables['content']['eif_perspective_fields']['field_eif_description'] = $eif_description;
 }
 
 /**
