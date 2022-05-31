@@ -23,6 +23,23 @@
     align-items: center;
     border: $border-width solid $border-color;
     border-radius: $border-radius-sm;
+    .badge {
+      .badge__text {
+        max-width: 5rem;
+        @include media-breakpoint-up(sm) {
+          max-width: 10rem;
+        }
+        @include media-breakpoint-up(md) {
+          max-width: 20rem;
+        }
+        @include media-breakpoint-up(lg) {
+          max-width: 30rem;
+        }
+        @include media-breakpoint-up(xl) {
+          max-width: 45rem;
+        }
+      }
+    }
   }
   .form-item {
     width: 100%;

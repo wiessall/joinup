@@ -75,6 +75,25 @@
     @media screen and (min-width: 1400px) {
       width: calc(1320px - 2.5rem);
     }
+    form {
+      .badge {
+        .badge__text {
+          max-width: 5rem;
+          @media screen and (min-width: 576px) {
+            max-width: 10rem;
+          }
+          @media screen and (min-width: 768px) {
+            max-width: 20rem;
+          }
+          @media screen and (min-width: 992px) {
+            max-width: 30rem;
+          }
+          @media screen and (min-width: 1200px) {
+            max-width: 45rem;
+          }
+        }
+      }
+    }
   }
   .accordion-body {
     padding: $spacer * .5;
