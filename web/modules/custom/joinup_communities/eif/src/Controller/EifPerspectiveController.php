@@ -5,6 +5,7 @@ declare(strict_types = 1);
 namespace Drupal\eif\Controller;
 
 use Drupal\Component\Render\MarkupInterface;
+use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
@@ -90,7 +91,7 @@ class EifPerspectiveController extends ControllerBase {
   }
 
   /**
-   * Provides an access controller for the 'eif.eif_perspective_form' route.
+   * Provides an access callback for the 'eif.eif_perspective_form' route.
    *
    * @param \Drupal\solution\Entity\SolutionInterface $rdf_entity
    *   The solution.
@@ -98,7 +99,7 @@ class EifPerspectiveController extends ControllerBase {
    * @return \Drupal\Core\Access\AccessResultInterface
    *   The access result.
    */
-  public function access(SolutionInterface $rdf_entity): AccessResultInterface {
+  public function editAccess(SolutionInterface $rdf_entity): AccessResultInterface {
     $meta_entity = RdfMetaEntity::loadOrCreate('eif_perspective', $rdf_entity);
     if (!$meta_entity->isNew()) {
       $access_result = $meta_entity->access('update', NULL, TRUE);
@@ -111,6 +112,23 @@ class EifPerspectiveController extends ControllerBase {
       return $access_result;
     }
     return $access_result->orIf($this->ogAccess->userAccess($rdf_entity, 'update eif_perspective rdf-meta-entity'));
+  }
+
+  /**
+   * Provides an access callback to view the EIF perspective.
+   *
+   * @param \Drupal\solution\Entity\SolutionInterface $rdf_entity
+   *   The solution.
+   *
+   * @return \Drupal\Core\Access\AccessResultInterface
+   *   The access result.
+   */
+  public function viewAccess(SolutionInterface $rdf_entity): AccessResultInterface {
+    if (empty($rdf_entity->eif_perspective->entity) || !$rdf_entity->access('view')) {
+      return AccessResult::forbidden();
+    }
+
+    return $this->entityTypeManager->getAccessControlHandler('rdf_meta_entity')->access($rdf_entity->eif_perspective->entity, 'view', NULL, TRUE);
   }
 
 }
