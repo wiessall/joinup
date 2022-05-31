@@ -267,3 +267,14 @@ function eif_options_list_alter(array &$options, array $context): void {
     $options = $empty_option + $options;
   }
 }
+
+/**
+ * Implements hook_inline_entity_form_entity_form_alter().
+ */
+function eif_inline_entity_form_entity_form_alter(array &$entity_form, FormStateInterface &$form_state) {
+  if ($entity_form['#entity_type'] !== 'eif_wrapper' || $entity_form['#bundle'] !== 'recommendation') {
+    return;
+  }
+
+  $entity_form['term']['widget']['#title_display'] = 'hidden';
+}
