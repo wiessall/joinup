@@ -223,3 +223,47 @@ function eif_eif_wrapper_create_access(AccountInterface $account, array $context
 function eif_eif_wrapper_access(EntityInterface $entity, string $operation, AccountInterface $account): AccessResultInterface {
   return AccessResult::allowedIf($account->hasPermission("{$operation} eif wrapper entity"));
 }
+
+/**
+ * Implements hook_options_list_alter().
+ */
+function eif_options_list_alter(array &$options, array $context): void {
+  // @todo Remove this in ISAICP-7110 apart from the sorting part.
+  // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7110.
+  if (empty($context['fieldDefinition'])) {
+    return;
+  }
+
+  $fields = ['eif_layer', 'eif_model', 'eif_principle'];
+  if (in_array($context['fieldDefinition']->getName(), $fields)) {
+    foreach ($options as $key => $value) {
+      $parts = explode(':', $value);
+      // Some labels do not have prefix.
+      if (count($parts) === 2) {
+        $options[$key] = trim($parts[1]);
+      }
+    }
+  }
+  elseif ($context['fieldDefinition']->id() === 'eif_wrapper.recommendation.term') {
+    $empty_option = [];
+    if (isset($options['_none'])) {
+      $empty_option['_none'] = t('- Select a Recommendation -');
+    }
+
+    $terms = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->loadByProperties([
+      'vid' => 'eif_recommendation',
+    ]);
+    foreach ($options as $key => $value) {
+      if (isset($terms[$key]) && !empty($terms[$key]->field_eif_related_term->entity)) {
+        $options[$key] = $value . ' - ' . $terms[$key]->field_eif_related_term->entity->label();
+      }
+    }
+
+    // Remove the empty option - if available - to re-add it later first.
+    unset($options['_none']);
+    uksort($options, function (string $key1, string $key2) use ($terms): bool {
+      return $terms[$key1]->field_eif_identifier->value > $terms[$key2]->field_eif_identifier->value;
+    });
+    $options = $empty_option + $options;
+  }
+}
