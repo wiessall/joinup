@@ -70,6 +70,9 @@ function contact_information_inline_entity_form_table_fields_alter(&$fields, $co
  * in the widget table would be empty.
  */
 function contact_information_inline_entity_form_entity_form_alter(&$entity_form, &$form_state) {
+  if ($entity_form['#entity_type'] !== 'rdf_entity' || $entity_form['#bundle'] !== 'contact_information') {
+    return;
+  }
   // Add an entity builder callback to fill the label field with the values of
   // the name field. This is needed because inline entity form doesn't save
   // the entity until the parent entity is saved. Due to this, the label column
@@ -86,10 +89,6 @@ function contact_information_inline_entity_form_entity_form_alter(&$entity_form,
  *   The entity being built.
  */
 function contact_information_inline_entity_form_entity_builder($entity_type, EntityInterface $entity) {
-  // Handle only contact information entities.
-  if ($entity->bundle() != 'contact_information') {
-    return;
-  }
   contact_information_entity_auto_label($entity);
 }
 
