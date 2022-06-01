@@ -295,7 +295,7 @@ function eif_options_list_alter(array &$options, array $context): void {
 /**
  * Implements hook_inline_entity_form_entity_form_alter().
  */
-function eif_inline_entity_form_entity_form_alter(array &$entity_form, FormStateInterface &$form_state) {
+function eif_inline_entity_form_entity_form_alter(array &$entity_form, FormStateInterface &$form_state): void {
   if ($entity_form['#entity_type'] !== 'eif_wrapper' || $entity_form['#bundle'] !== 'recommendation') {
     return;
   }
