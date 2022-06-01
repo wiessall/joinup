@@ -20,6 +20,14 @@ module.exports = {
     },
     // Custom
     {
+      entry: path.resolve(outputFolder, "src/js/checkbox.js"),
+      dest: path.resolve(outputFolder, "assets/js/checkbox.js"),
+      options: {
+        minify: true,
+        sourceMap: true,
+      },
+    },
+    {
       entry: path.resolve(outputFolder, "src/js/content-tables.js"),
       dest: path.resolve(outputFolder, "assets/js/content-tables.js"),
       options: {
@@ -123,6 +131,14 @@ module.exports = {
       },
     },
     {
+      entry: path.resolve(outputFolder, "src/scss/card.scss"),
+      dest: path.resolve(outputFolder, "assets/css/card.css"),
+      options: {
+        includePaths,
+        sourceMap: "file",
+      },
+    },
+    {
       entry: path.resolve(outputFolder, "src/scss/close.scss"),
       dest: path.resolve(outputFolder, "assets/css/close.css"),
       options: {
@@ -172,8 +188,24 @@ module.exports = {
       },
     },
     {
+      entry: path.resolve(outputFolder, "src/scss/members-overview-exposed-form.scss"),
+      dest: path.resolve(outputFolder, "assets/css/members-overview-exposed-form.css"),
+      options: {
+        includePaths,
+        sourceMap: "file",
+      },
+    },
+    {
       entry: path.resolve(outputFolder, "src/scss/forms.scss"),
       dest: path.resolve(outputFolder, "assets/css/forms.css"),
+      options: {
+        includePaths,
+        sourceMap: "file",
+      },
+    },
+    {
+      entry: path.resolve(outputFolder, "src/scss/nav.scss"),
+      dest: path.resolve(outputFolder, "assets/css/nav.css"),
       options: {
         includePaths,
         sourceMap: "file",

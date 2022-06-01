@@ -17,7 +17,7 @@ dependencies:
     - field.field.user.user.field_user_organisation
     - field.field.user.user.field_user_photo
     - field.field.user.user.field_user_professional_domain
-    - image.style.horizontal_medium_image
+    - image.style.profile_icon_big
   module:
     - image
     - user
@@ -55,7 +55,7 @@ content:
     label: hidden
     settings:
       image_link: content
-      image_style: horizontal_medium_image
+      image_style: profile_icon_big
     third_party_settings: {  }
     weight: 0
     region: content

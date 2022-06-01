@@ -24,6 +24,9 @@ libraries-override:
     css:
       component:
         css/tour.module.css: assets/css/tour.css
+  core/drupal.checkbox:
+    js:
+      misc/checkbox.js: assets/js/checkbox.js
 
 regions:
   header: Header
@@ -35,3 +38,7 @@ regions:
   content: Content
   content_bottom: 'Content bottom'
   footer: Footer
+
+openeuropa:
+  bootstrap_component_library:
+    components_location: bcl-overrides
