@@ -300,7 +300,7 @@ function eif_inline_entity_form_entity_form_alter(array &$entity_form, FormState
     return;
   }
 
-  $entity_form['term']['widget']['#title_display'] = 'hidden';
+  $entity_form['term']['widget']['#title_display'] = 'invisible';
   $entity_form['#after_build'][] = '_eif_inline_entity_form_actions_alter';
 }
 
