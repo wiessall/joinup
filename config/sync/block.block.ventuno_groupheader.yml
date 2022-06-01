@@ -21,7 +21,7 @@ settings:
   label_display: '0'
   provider: joinup
   context_mapping:
-    og: '@asset_release.asset_release_route_context:asset_release'
+    og: '@og.context:og'
 visibility:
   request_route:
     id: request_route

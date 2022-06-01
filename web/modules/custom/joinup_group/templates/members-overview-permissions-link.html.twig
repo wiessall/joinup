@@ -1,0 +1,21 @@
+{#
+/**
+ * @file
+ * Template to render the members overview permissions info link.
+ *
+ * Available variables:
+ * - url: the link URL.
+ * - text: the link text.
+ * - dialog: info to show as dialog.
+ *
+ * @ingroup themeable
+ */
+#}
+{% if dialog %}
+  {% set attributes = attributes
+    .addClass('use-ajax')
+    .setAttribute('data-dialog-type', dialog.type)
+    .setAttribute('data-dialog-options', dialog.options|json_encode)
+  %}
+{% endif %}
+<a href="{{ url }}{{ attributes }}">{{ text }}</a>
