@@ -411,6 +411,26 @@ function ventuno_preprocess_rdf_entity__search_result(array &$variables): void {
 /**
  * Implements hook_preprocess_HOOK().
  */
+function ventuno_preprocess_rdf_entity__solution__eif_perspective(array &$variables): void {
+  /** @var \Drupal\solution\Entity\SolutionInterface $solution */
+  $solution = $variables['rdf_entity'];
+  if (empty($solution)) {
+    return;
+  }
+
+  $rdf_meta_entity = $solution->eif_perspective->entity;
+  if (empty($rdf_meta_entity)) {
+    return;
+  }
+
+  $eif_description = \Drupal::entityTypeManager()->getViewBuilder('rdf_meta_entity')->viewField($rdf_meta_entity->get('field_eif_description'), 'eif_perspective');
+  $eif_description[0]['#text'] = strip_tags($eif_description[0]['#text']);
+  $variables['content']['eif_perspective_fields']['field_eif_description'] = $eif_description;
+}
+
+/**
+ * Implements hook_preprocess_HOOK().
+ */
 function ventuno_preprocess_node__search_result_featured(array &$variables): void {
   _ventuno_preprocess_search_result($variables, 'node');
 }
@@ -605,6 +625,20 @@ function ventuno_theme_suggestions_field_alter(array &$suggestions, array $varia
     // allows overriding single fields, while keeping all the rest markup-free.
     array_unshift($suggestions, 'field__bare');
   }
+}
+
+/**
+ * Implements hook_preprocess_container__text_format_filter_help().
+ */
+function ventuno_preprocess_container__text_format_filter_help(&$variables) {
+  $variables['attributes']['class'] = ['text-end', 'fs-sm'];
+}
+
+/**
+ * Implements hook_preprocess_form_element_label().
+ */
+function ventuno_preprocess_form_element_label(&$variables) {
+  $variables['#attached']['library'][] = 'ventuno/form-checkboxes';
 }
 
 /**
