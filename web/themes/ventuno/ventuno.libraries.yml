@@ -98,6 +98,10 @@ pager:
     theme:
       assets/css/pager.css: {}
 
+remove-domain-from-url:
+  js:
+    assets/js/remove-domain-from-url.js: { minified: true, attributes: { defer: true } }
+
 site-alerts-messages:
   css:
     theme:
