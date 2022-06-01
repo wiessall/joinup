@@ -1,0 +1,336 @@
+diff --git a/core/assets/scaffold/files/default.settings.php b/core/assets/scaffold/files/default.settings.php
+index 72be7750b9..ff7f2e2123 100644
+--- a/core/assets/scaffold/files/default.settings.php
++++ b/core/assets/scaffold/files/default.settings.php
+@@ -138,6 +138,17 @@ $databases = [];
+  * request as needed.  The fourth line creates a new database with a name of
+  * "extra".
+  *
++ * For MySQL, MariaDB or equivalent databases can the option 'isolation_level'
++ * be set. The recommended and default option is 'READ COMMITTED'. The other 3
++ * options are 'REPEATABLE READ', 'READ UNCOMMITTED' and 'SERIALIZABLE'. They
++ * are available, but not supported. Use them at your own risk. For more info:
++ * https://dev.mysql.com/doc/refman/5.7/en/innodb-transaction-isolation-levels.html
++ *
++ * On your settings.php, change the isolation level:
++ * @code
++ * $databases['default']['default']['isolation_level'] = 'READ COMMITTED';
++ * @endcode
++ *
+  * You can optionally set a prefix for all database table names by using the
+  * 'prefix' setting. If a prefix is specified, the table name will be prepended
+  * with its value. Be sure to use valid database characters only, usually
+diff --git a/core/lib/Drupal/Core/Test/FunctionalTestSetupTrait.php b/core/lib/Drupal/Core/Test/FunctionalTestSetupTrait.php
+index c102459182..5eb0df1b46 100644
+--- a/core/lib/Drupal/Core/Test/FunctionalTestSetupTrait.php
++++ b/core/lib/Drupal/Core/Test/FunctionalTestSetupTrait.php
+@@ -519,6 +519,7 @@ trait FunctionalTestSetupTrait {
+     unset($connection_info['default']['autoload']);
+     unset($connection_info['default']['pdo']);
+     unset($connection_info['default']['init_commands']);
++    unset($connection_info['default']['isolation_level']);
+     // Remove database connection info that is not used by SQLite.
+     if ($driver === 'sqlite') {
+       unset($connection_info['default']['username']);
+diff --git a/core/modules/migrate_drupal_ui/tests/src/Functional/MigrateUpgradeTestBase.php b/core/modules/migrate_drupal_ui/tests/src/Functional/MigrateUpgradeTestBase.php
+index 1c61113ad3..705d1a3fb5 100644
+--- a/core/modules/migrate_drupal_ui/tests/src/Functional/MigrateUpgradeTestBase.php
++++ b/core/modules/migrate_drupal_ui/tests/src/Functional/MigrateUpgradeTestBase.php
+@@ -301,6 +301,8 @@ abstract class MigrateUpgradeTestBase extends BrowserTestBase {
+     $drivers = drupal_get_database_types();
+     $form = $drivers[$driver]->getFormOptions($connection_options);
+     $connection_options = array_intersect_key($connection_options, $form + $form['advanced_options']);
++    // Remove isolation_level since that options is not configurable in the UI.
++    unset($connection_options['isolation_level']);
+     $edit = [
+       $driver => $connection_options,
+       'source_private_file_path' => $this->getSourceBasePath(),
+diff --git a/core/modules/migrate_drupal_ui/tests/src/Functional/d7/FilePathTest.php b/core/modules/migrate_drupal_ui/tests/src/Functional/d7/FilePathTest.php
+index 5f8652e8d2..8fd58676a5 100644
+--- a/core/modules/migrate_drupal_ui/tests/src/Functional/d7/FilePathTest.php
++++ b/core/modules/migrate_drupal_ui/tests/src/Functional/d7/FilePathTest.php
+@@ -127,6 +127,8 @@ class FilePathTest extends MigrateUpgradeTestBase {
+     $drivers = drupal_get_database_types();
+     $form = $drivers[$driver]->getFormOptions($connection_options);
+     $connection_options = array_intersect_key($connection_options, $form + $form['advanced_options']);
++    // Remove isolation_level since that options is not configurable in the UI.
++    unset($connection_options['isolation_level']);
+     $edit = [
+       $driver => $connection_options,
+       'version' => '7',
+diff --git a/core/modules/mysql/src/Driver/Database/mysql/Connection.php b/core/modules/mysql/src/Driver/Database/mysql/Connection.php
+index 4fbb2221ee..4fef16567c 100644
+--- a/core/modules/mysql/src/Driver/Database/mysql/Connection.php
++++ b/core/modules/mysql/src/Driver/Database/mysql/Connection.php
+@@ -219,10 +219,23 @@ class Connection extends DatabaseConnection {
+     // by one.
+     $connection_options += [
+       'init_commands' => [],
++      'isolation_level' => 'READ COMMITTED',
+     ];
+
++    $isolation_levels = [
++      'READ COMMITTED',
++      'REPEATABLE READ',
++      'READ UNCOMMITTED',
++      'SERIALIZABLE',
++    ];
++
++    if (!in_array($connection_options['isolation_level'], $isolation_levels)) {
++      throw new DatabaseTransactionIsolationLevelException($connection_options['isolation_level']);
++    }
++
+     $connection_options['init_commands'] += [
+       'sql_mode' => "SET sql_mode = 'ANSI,TRADITIONAL'",
++      'isolation' => 'SET SESSION TRANSACTION ISOLATION LEVEL ' . $connection_options['isolation_level'],
+     ];
+
+     // Execute initial commands.
+diff --git a/core/modules/mysql/src/Driver/Database/mysql/DatabaseTransactionIsolationLevelException.php b/core/modules/mysql/src/Driver/Database/mysql/DatabaseTransactionIsolationLevelException.php
+new file mode 100644
+index 0000000000..97b73b6f0a
+--- /dev/null
++++ b/core/modules/mysql/src/Driver/Database/mysql/DatabaseTransactionIsolationLevelException.php
+@@ -0,0 +1,25 @@
++<?php
++
++namespace Drupal\mysql\Driver\Database\mysql;
++
++use Drupal\Core\Database\DatabaseException;
++
++/**
++ * Exception thrown if the isolation level is not valid.
++ *
++ * @see \Drupal\mysql\Driver\Database\mysql\Connection::open()
++ */
++class DatabaseTransactionIsolationLevelException extends \RuntimeException implements DatabaseException {
++
++  /**
++   * Constructs a DatabaseTransactionIsolationLevelException.
++   *
++   * @param string $isolation_level
++   *   The invalid isolation level.
++   */
++  public function __construct(string $isolation_level) {
++    $message = sprintf('The isolation level %s is not valid, use one of options available instead.', $isolation_level);
++    parent::__construct($message);
++  }
++
++}
+diff --git a/core/modules/mysql/src/Driver/Database/mysql/Install/Tasks.php b/core/modules/mysql/src/Driver/Database/mysql/Install/Tasks.php
+index a6ad642425..6d6b123cc6 100644
+--- a/core/modules/mysql/src/Driver/Database/mysql/Install/Tasks.php
++++ b/core/modules/mysql/src/Driver/Database/mysql/Install/Tasks.php
+@@ -175,6 +175,12 @@ class Tasks extends InstallTasks {
+       $form['advanced_options']['port']['#default_value'] = '3306';
+     }
+
++    // Add the isolation_level option to settings.php.
++    $form['isolation_level'] = [
++      '#type' => 'value',
++      '#default_value' => $database['isolation_level'] ?? 'READ COMMITTED',
++    ];
++
+     return $form;
+   }
+
+diff --git a/core/modules/mysql/tests/src/Functional/InstallerIsolationLevelExistingSettingsTest.php b/core/modules/mysql/tests/src/Functional/InstallerIsolationLevelExistingSettingsTest.php
+new file mode 100644
+index 0000000000..63aa6fe2ab
+--- /dev/null
++++ b/core/modules/mysql/tests/src/Functional/InstallerIsolationLevelExistingSettingsTest.php
+@@ -0,0 +1,69 @@
++<?php
++
++namespace Drupal\Tests\mysql\Functional;
++
++use Drupal\Core\Database\Database;
++use Drupal\FunctionalTests\Installer\InstallerExistingSettingsTest;
++
++/**
++ * Tests the isolation_level setting with existing database settings.
++ *
++ * @group Installer
++ */
++class InstallerIsolationLevelExistingSettingsTest extends InstallerExistingSettingsTest {
++
++  /**
++   * {@inheritdoc}
++   */
++  protected function prepareEnvironment() {
++    parent::prepareEnvironment();
++
++    $connection_info = Database::getConnectionInfo();
++    // The isolation_level option is only available for MySQL.
++    if ($connection_info['default']['driver'] !== 'mysql') {
++      $this->markTestSkipped("This test does not support the {$connection_info['default']['driver']} database driver.");
++    }
++  }
++
++  /**
++   * Verifies that isolation_level is not set in the database settings.
++   */
++  public function testInstaller() {
++    $contents = file_get_contents($this->container->getParameter('app.root') . '/' . $this->siteDirectory . '/settings.php');
++
++    // Test that isolation_level was not set.
++    $this->assertStringNotContainsString("'isolation_level' =>", $contents);
++
++    // Change the default database connection to use the isolation level from
++    // the test.
++    $connection_info = Database::getConnectionInfo();
++    $driver_test_connection = $connection_info['default'];
++    // We have asserted that the isolation level was not set.
++    unset($driver_test_connection['isolation_level']);
++    unset($driver_test_connection['init_commands']);
++
++    Database::renameConnection('default', 'original_database_connection');
++    Database::addConnectionInfo('default', 'default', $driver_test_connection);
++    // Close and reopen the database connection, so the database init commands
++    // get executed.
++    Database::closeConnection('default', 'default');
++    $connection = Database::getConnection('default', 'default');
++
++    $query = 'SELECT @@SESSION.tx_isolation';
++    // The database variable "tx_isolation" has been removed in MySQL v8.0 and
++    // has been replaced by "transaction_isolation".
++    // @see https://dev.mysql.com/doc/refman/5.7/en/server-system-variables.html#sysvar_tx_isolation
++    if (!$connection->isMariaDb() && version_compare($connection->version(), '8.0.0-AnyName', '>')) {
++      $query = 'SELECT @@SESSION.transaction_isolation';
++    }
++
++    // Test that transaction level is READ-COMMITTED.
++    $this->assertEquals('READ-COMMITTED', $connection->query($query)->fetchField());
++
++    // Restore the old database connection.
++    Database::addConnectionInfo('default', 'default', $connection_info['default']);
++    Database::closeConnection('default', 'default');
++    Database::getConnection('default', 'default');
++  }
++
++}
+diff --git a/core/modules/mysql/tests/src/Functional/InstallerIsolationLevelNoDatabaseSettingsTest.php b/core/modules/mysql/tests/src/Functional/InstallerIsolationLevelNoDatabaseSettingsTest.php
+new file mode 100644
+index 0000000000..f54dca0595
+--- /dev/null
++++ b/core/modules/mysql/tests/src/Functional/InstallerIsolationLevelNoDatabaseSettingsTest.php
+@@ -0,0 +1,74 @@
++<?php
++
++namespace Drupal\Tests\mysql\Functional;
++
++use Drupal\Core\Database\Database;
++use Drupal\FunctionalTests\Installer\InstallerTestBase;
++
++/**
++ * Tests the isolation_level setting with no database settings.
++ *
++ * @group Installer
++ */
++class InstallerIsolationLevelNoDatabaseSettingsTest extends InstallerTestBase {
++
++  /**
++   * {@inheritdoc}
++   */
++  protected $defaultTheme = 'stark';
++
++  /**
++   * {@inheritdoc}
++   */
++  protected function prepareEnvironment() {
++    parent::prepareEnvironment();
++
++    // The isolation_level option is only available for MySQL.
++    $connection_info = Database::getConnectionInfo();
++    if ($connection_info['default']['driver'] !== 'mysql') {
++      $this->markTestSkipped("This test does not support the {$connection_info['default']['driver']} database driver.");
++    }
++  }
++
++  /**
++   * Verifies that the isolation_level was added to the database settings.
++   */
++  public function testInstaller() {
++    $contents = file_get_contents($this->container->getParameter('app.root') . '/' . $this->siteDirectory . '/settings.php');
++
++    // Test that isolation_level was set to "READ COMMITTED".
++    $this->assertStringContainsString("'isolation_level' => 'READ COMMITTED',", $contents);
++
++    // Change the default database connection to use the isolation level from
++    // the test.
++    $connection_info = Database::getConnectionInfo();
++    $driver_test_connection = $connection_info['default'];
++    // We have asserted that the isolation level was set to 'READ COMMITTED'.
++    $driver_test_connection['isolation_level'] = 'READ COMMITTED';
++    unset($driver_test_connection['init_commands']);
++
++    Database::renameConnection('default', 'original_database_connection');
++    Database::addConnectionInfo('default', 'default', $driver_test_connection);
++    // Close and reopen the database connection, so the database init commands
++    // get executed.
++    Database::closeConnection('default', 'default');
++    $connection = Database::getConnection('default', 'default');
++
++    $query = 'SELECT @@SESSION.tx_isolation';
++    // The database variable "tx_isolation" has been removed in MySQL v8.0 and
++    // has been replaced by "transaction_isolation".
++    // @see https://dev.mysql.com/doc/refman/5.7/en/server-system-variables.html#sysvar_tx_isolation
++    if (!$connection->isMariaDb() && version_compare($connection->version(), '8.0.0-AnyName', '>')) {
++      $query = 'SELECT @@SESSION.transaction_isolation';
++    }
++
++    // Test that transaction level is READ-COMMITTED.
++    $this->assertEquals('READ-COMMITTED', $connection->query($query)->fetchField());
++
++    // Restore the old database connection.
++    Database::addConnectionInfo('default', 'default', $connection_info['default']);
++    Database::closeConnection('default', 'default');
++    Database::getConnection('default', 'default');
++  }
++
++}
+diff --git a/core/modules/mysql/tests/src/Kernel/ConnectionTest.php b/core/modules/mysql/tests/src/Kernel/ConnectionTest.php
+new file mode 100644
+index 0000000000..4b8b023fed
+--- /dev/null
++++ b/core/modules/mysql/tests/src/Kernel/ConnectionTest.php
+@@ -0,0 +1,39 @@
++<?php
++
++namespace Drupal\Tests\mysql\Kernel;
++
++use Drupal\Core\Database\Database;
++use Drupal\KernelTests\KernelTestBase;
++use Drupal\mysql\Driver\Database\mysql\Connection;
++use Drupal\mysql\Driver\Database\mysql\DatabaseTransactionIsolationLevelException;
++
++/**
++ * Tests the connection class.
++ *
++ * @coversDefaultClass \Drupal\mysql\Driver\Database\mysql\Connection
++ *
++ * @group Mysql
++ */
++class ConnectionTest extends KernelTestBase {
++
++  /**
++   * Tests transaction isolation level when an invalid option is set.
++   *
++   * @covers ::open
++   */
++  public function testInvalidIsolationLevelOption() {
++    $connection_info = Database::getConnectionInfo();
++
++    // The isolation_level option is only available for MySQL.
++    if ($connection_info['default']['driver'] !== 'mysql') {
++      $this->markTestSkipped("This test does not support the {$connection_info['default']['driver']} database driver.");
++    }
++
++    $connection_info['default']['isolation_level'] = 'INVALID_LEVEL';
++    $this->expectException(DatabaseTransactionIsolationLevelException::class);
++    $this->expectExceptionMessage("The isolation level INVALID_LEVEL is not valid, use one of options available instead.");
++
++    Connection::open($connection_info['default']);
++  }
++
++}
