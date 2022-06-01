@@ -373,9 +373,15 @@ function ventuno_preprocess_rdf_meta_entity(array &$variables): void {
   $solution = $variables['rdf_meta_entity']->getTargetEntity();
   $variables['solution_label'] = $solution->label();
   $variables['solution_url'] = $solution->toUrl()->setAbsolute()->toString();
-  $edit_url = Url::fromRoute('entity.rdf_meta_entity.edit_form', [
-    'rdf_meta_entity' => $rdf_meta_entity->id(),
-  ]);
+  $route_parameters = ['rdf_meta_entity' => $rdf_meta_entity->id()];
+  $url_options = [
+    'query' => [
+      'destination' => Url::fromRoute('entity.rdf_entity.eif_perspective', [
+        'rdf_entity' => $solution->id(),
+      ])->getInternalPath(),
+    ],
+  ];
+  $edit_url = Url::fromRoute('entity.rdf_meta_entity.edit_form', $route_parameters, $url_options);
   if ($edit_url->access()) {
     $variables['edit_url'] = $edit_url->setAbsolute()->toString();
   }
