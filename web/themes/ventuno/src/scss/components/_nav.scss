@@ -1,0 +1,8 @@
+.nav {
+  &-link {
+    &.is-active {
+      color: $nav-pills-link-active-color;
+      @include gradient-bg($nav-pills-link-active-bg);
+    }
+  }
+}
