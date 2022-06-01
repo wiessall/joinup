@@ -434,10 +434,6 @@
         },
         {
             "type": "vcs",
-            "url": "https://github.com/claudiu-cristea/toolkit.git"
-        },
-        {
-            "type": "vcs",
             "url": "https://github.com/alexpott/easyrdf.git"
         },
         {
