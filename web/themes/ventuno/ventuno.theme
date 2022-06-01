@@ -78,6 +78,10 @@ function ventuno_preprocess_html(&$variables) {
   if (\Drupal::routeMatch()->getRouteName() === 'joinup_licence.comparer') {
     $variables['#attached']['library'][] = 'ventuno/licence-comparer';
   }
+  // Attach remove-domain-from-url library to contact page.
+  if (\Drupal::routeMatch()->getRouteName() === 'contact_form.contact_page') {
+    $variables['#attached']['library'][] = 'ventuno/remove-domain-from-url';
+  }
 }
 
 /**
