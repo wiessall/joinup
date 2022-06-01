@@ -12,7 +12,7 @@ entity_type: rdf_meta_entity
 bundle: eif_perspective
 label: Principle
 description: ''
-required: true
+required: false
 translatable: false
 default_value: {  }
 default_value_callback: ''
