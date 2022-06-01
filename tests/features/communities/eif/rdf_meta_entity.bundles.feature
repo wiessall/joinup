@@ -29,7 +29,7 @@ Feature:
     And the following fields should be present "Description, Type of solution"
     And the following field widgets should be present "Principle, Layer, Model, Recommendation"
 
-    When I click "Save"
+    When I press "Save"
     Then I should see the error message "An EIF perspective cannot be created without any information. Please, fill in at least one field."
 
     Given I fill in "Description" with "It will be an amazing principle."
@@ -46,7 +46,7 @@ Feature:
     Then I should see the heading "Some EIF solution"
     When I click "EIF perspective"
 
-    And I click "Add new"
+    And I press "Add new"
     # Test the '_none' option label, the better naming of the recommendations
     # and the order - that 10 does not come after 1 (string comparison) and 2
     # follows normally.
@@ -54,3 +54,7 @@ Feature:
       | - Select a Recommendation -                                                 |
       | Recommendation 1 - Underlying Principle 1: Subsidiarity and proportionality |
       | Recommendation 2 - Underlying Principle 2: Openness                         |
+
+    Given I select "Recommendation 2 - Underlying Principle 2: Openness" from "EIF qualifier"
+    And I press "Save"
+    Then I should see the heading "Some EIF solution"
