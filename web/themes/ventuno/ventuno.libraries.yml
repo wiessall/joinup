@@ -30,6 +30,12 @@ searchpage:
   dependencies:
     - ventuno/close
 
+# Bootstrap components
+card:
+  css:
+    theme:
+      assets/css/card.css: {}
+
 # Pure BCL components
 accordion:
   css:
@@ -79,10 +85,21 @@ glide:
     theme:
       assets/css/glide.core.min.css: { minified: true }
 
+members-overview-exposed-form:
+  css:
+    theme:
+      assets/css/members-overview-exposed-form.css: {}
+
 dropdown:
   css:
     theme:
       assets/css/dropdown.css: {}
+
+
+nav:
+  css:
+    theme:
+      assets/css/nav.css: {}
 
 ief-entity-table:
   css:

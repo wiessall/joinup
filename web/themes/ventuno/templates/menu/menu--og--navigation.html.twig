@@ -26,9 +26,9 @@
   icon: 'justify',
   attributes: create_attribute().addClass(['d-lg-none', 'mt-3', 'w-100']).setAttribute('data-bs-toggle', 'dropdown').setAttribute('id', 'dropdown-menu').setAttribute('aria-expanded', 'false').setAttribute('data-bs-target', '#menuCollapse'),
 }) }}
-<div class="dropdown-menu d-lg-none">
+<div class="d-none d-lg-block mt-3">
   {{ menu }}
 </div>
-<div class="d-none d-lg-block mt-3">
+<div class="dropdown-menu d-lg-none">
   {{ menu }}
 </div>

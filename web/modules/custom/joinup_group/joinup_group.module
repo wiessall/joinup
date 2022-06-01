@@ -51,6 +51,13 @@ function joinup_group_theme($existing, $type, $theme, $path) {
         'confirm' => '',
       ],
     ],
+    'members_overview_permissions_link' => [
+      'variables' => [
+        'text' => '',
+        'url' => '',
+        'dialog' => NULL,
+      ],
+    ],
   ];
 }
 
@@ -470,16 +477,15 @@ function joinup_group_form_views_exposed_form_alter(&$form, FormStateInterface $
     'rdf_entity' => $group->id(),
   ]);
   $form['member_permissions_link'] = [
-    '#type' => 'link',
-    '#title' => t('Member permissions'),
+    '#theme' => 'members_overview_permissions_link',
     '#url' => $url,
-    '#attributes' => [
-      'class' => ['use-ajax'],
-      'data-dialog-type' => 'modal',
-      'data-dialog-options' => Json::encode([
+    '#text' => t('Member permissions'),
+    '#dialog' => [
+      'type' => 'modal',
+      'options' => [
         'width' => 'auto',
         'height' => 'auto',
-      ]),
+      ],
     ],
     '#access' => $url->access(),
     '#attached' => ['library' => ['core/drupal.dialog.ajax']],

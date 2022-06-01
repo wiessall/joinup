@@ -1,0 +1,50 @@
+{#
+/**
+ * @file
+ * Theme override to present all user data.
+ *
+ * This template is used when viewing a registered user's page,
+ * e.g., example.com/user/123. 123 being the user's ID.
+ *
+ * Available variables:
+ * - content: A list of content items. Use 'content' to print all content, or
+ *   print a subset such as 'content.field_example'. Fields attached to a user
+ *   such as 'user_picture' are available as 'content.user_picture'.
+ * - attributes: HTML attributes for the container element.
+ * - user: A Drupal User entity.
+ *
+ * @see template_preprocess_user()
+ */
+#}
+{{ attach_library('ventuno/card') }}
+{%
+  set classes = [
+    'card',
+    'border-0',
+    'h-100',
+    elements['#view_mode'] == 'view_mode_featured' ? 'bg-secondary' : 'bg-light',
+  ]
+%}
+<article {{ attributes.addClass(classes) }}>
+  <div class="pt-3 px-3 mx-auto">
+    {{ content.field_user_photo }}
+  </div>
+  <div class="card-body">
+    <h2 class="card-title fs-6">
+      <a href="{{ path('entity.user.canonical', {'user': user.id}) }}">
+        {{- full_name -}}
+      </a>
+    </h2>
+    {% if short_business_title %}
+      <p class="card-text mb-0">
+        {{ short_business_title }}
+      </p>
+    {% endif %}
+  </div>
+  <div class="card-footer pt-0 border-0 bg-transparent text-end small">
+    {{ 'user'|t }}
+    <svg class="bi icon--s">
+      <use xlink:href="{{ bcl_icon_path }}#person-circle"></use>
+    </svg>
+  </div>
+</article>
