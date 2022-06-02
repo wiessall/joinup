@@ -10,7 +10,6 @@ dependencies:
     - field.field.rdf_entity.contact_information.field_ci_webpage
     - rdf_entity.rdfentity.contact_information
   module:
-    - email_contact
     - field_delimiter
     - field_formatter_range
     - link
@@ -24,15 +23,9 @@ bundle: contact_information
 mode: about
 content:
   field_ci_email:
-    type: email_contact_link
+    type: email_mailto
     label: above
-    settings:
-      link_text: 'Contact owner'
-      redirection_to: custom
-      custom_path: ''
-      include_values: '1'
-      default_message: ''
-      modal: true
+    settings: {  }
     third_party_settings:
       field_delimiter:
         delimiter: ''
