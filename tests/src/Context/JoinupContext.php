@@ -1164,14 +1164,7 @@ class JoinupContext extends RawDrupalContext {
    * @Then I (should )see the :heading tile
    */
   public function assertTilePresent(string $heading): void {
-    $selector = [
-      '.card .card-title',
-      // @todo Legacy selectors to be removed in ISAICP-7138.
-      // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7138
-      '.listing__item--tile .listing__title',
-      'article.card-tile h2',
-    ];
-    $results = $this->getSession()->getPage()->findAll('css', implode(',', $selector));
+    $results = $this->getSession()->getPage()->findAll('css', $this->getTileCssSelector());
     foreach ($results as $result) {
       /** @var \Behat\Mink\Element\Element $result */
       if ($result->getText() === $heading) {
@@ -1194,7 +1187,7 @@ class JoinupContext extends RawDrupalContext {
    * @Then I (should )see :number tile(s)
    */
   public function assertTileCount($number) {
-    $results = $this->getSession()->getPage()->findAll('css', '.listing__item--tile .listing__title, .card .card-title, article.tile h2');
+    $results = $this->getSession()->getPage()->findAll('css', $this->getTileCssSelector());
     $nr_found = count($results);
     if ($nr_found != $number) {
       throw new \Exception("Found $nr_found tiles, expected $number");
@@ -1215,7 +1208,11 @@ class JoinupContext extends RawDrupalContext {
   public function assertTileNotPresent($heading) {
     // We target the heading with "h2" instead of ".listing__title" because both
     // unstyled and styled tiles use h2 as element for their titles.
-    $results = $this->getSession()->getPage()->findAll('css', '.listing__item--tile h2, .card h5, article.tile h2');
+    $results = $this->getSession()->getPage()->findAll('css', $this->getTileCssSelector() .
+      // @todo Check in ISAICP-7138 if this selector is still needed.
+      // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7138
+      ', .card h5'
+    );
     foreach ($results as $result) {
       /** @var \Behat\Mink\Element\Element $result */
       if ($result->getText() === $heading) {
