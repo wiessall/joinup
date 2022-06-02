@@ -73,7 +73,9 @@ Feature: About this solution
     And I should see the text "E-mail address"
     And I should see the text "Website URL"
     And I should see the following links:
-      | Contact owner               |
+      | ariel@nova.dk               |
+      | maiken@nova.dk              |
+      | peer@nova.dk                |
       | http://nova.com             |
       | http://nova.dk              |
       | https://innovation.nova.org |

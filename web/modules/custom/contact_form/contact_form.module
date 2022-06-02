@@ -243,7 +243,7 @@ function contact_form_email_confirmer(string $op, EmailConfirmationInterface $co
   foreach ($contacts as $contact) {
     $email_validator = MetaEntity::loadOrCreate('email_validator', $contact);
     $old_date = $email_validator->get('latest_validation')->getValue();
-    $validation_dates = array_merge($old_date, [ 'value' => \Drupal::time()->getRequestTime()]);
+    $validation_dates = array_merge($old_date, ['value' => \Drupal::time()->getRequestTime()]);
     $email_validator->set('latest_validation', $validation_dates);
     $email_validator->set('valid_email', $op == 'confirm');
     $email_validator->save();
