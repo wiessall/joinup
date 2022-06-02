@@ -149,7 +149,6 @@
         "jcalderonzumba/gastonjs": "^1.2@dev",
         "lovers-of-behat/table-extension": "^1.2.0",
         "mikey179/vfsstream": "~1.6",
-        "openeuropa/task-runner": "^2.0",
         "palantirnet/drupal-rector": "^0.12.2",
         "pear/http_request2": "~2.4",
         "pfrenssen/phpcs-pre-push": "1.1",
