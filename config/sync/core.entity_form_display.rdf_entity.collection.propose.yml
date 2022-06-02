@@ -20,10 +20,10 @@ dependencies:
     - field.field.rdf_entity.collection.field_collection_content
     - field.field.rdf_entity.collection.field_keywords
     - field.field.rdf_entity.collection.field_newsletter
-    - field.field.rdf_entity.collection.field_topic
     - field.field.rdf_entity.collection.field_short_id
     - field.field.rdf_entity.collection.field_site_featured
     - field.field.rdf_entity.collection.field_spatial_coverage
+    - field.field.rdf_entity.collection.field_topic
     - image.style.thumbnail
     - media.type.collection_logo
     - rdf_entity.rdfentity.collection
@@ -45,11 +45,12 @@ third_party_settings:
       region: content
       parent_name: ''
       weight: 0
-      format_type: tabs
+      format_type: accordion
       format_settings:
         classes: ''
+        show_empty_fields: false
         id: ''
-        direction: vertical
+        effect: none
     group_main:
       children:
         - label
@@ -63,12 +64,12 @@ third_party_settings:
       region: content
       parent_name: group_general
       weight: 5
-      format_type: tab
+      format_type: accordion_item
       format_settings:
         classes: ''
+        show_empty_fields: false
         id: ''
         formatter: open
-        description: 'Contains all the fields to be mandatorily filled to create a collection'
         required_fields: true
     group_description:
       children:
@@ -85,12 +86,12 @@ third_party_settings:
       region: content
       parent_name: group_general
       weight: 6
-      format_type: tab
+      format_type: accordion_item
       format_settings:
         classes: ''
+        show_empty_fields: false
         id: ''
         formatter: closed
-        description: 'Contains all optional fields providing additional information on the collection'
         required_fields: true
 _core:
   default_config_hash: sZ7uqiT2tsjscaEeNtBA28aEOnVEi4XiH_rJHHWbIWA

@@ -1,0 +1,18 @@
+uuid: 57aaff61-1262-4b1a-99a7-aa7a6c2d9f29
+langcode: en
+status: true
+dependencies:
+  module:
+    - joinup_core
+  theme:
+    - ventuno
+id: solution_add_form
+label: 'Solution add form'
+theme: ventuno
+weight: 0
+conditions:
+  request_route:
+    id: request_route
+    negate: false
+    routes:
+      - solution.collection_solution.add
