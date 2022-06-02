@@ -234,36 +234,32 @@ function contact_form_form_email_contact_mail_form_alter(array &$form, FormState
  * Implements hook_email_confirmer().
  */
 function contact_form_email_confirmer(string $op, EmailConfirmationInterface $confirmation): void {
-  $result = \Drupal::entityQuery('rdf_entity')
-    ->condition('rid', 'contact_information')
+  $query = \Drupal::entityQuery('rdf_entity')
     ->condition('field_ci_email', $confirmation->getEmail())
-    ->sort('created', 'DESC')
-    ->execute();
+    ->condition('rid', 'contact_information');
+  $results = $query->execute();
 
-  $contacts = Rdf::loadMultiple($result);
-
+  $contacts = Rdf::loadMultiple($results);
   foreach ($contacts as $contact) {
     $email_validator = MetaEntity::loadOrCreate('email_validator', $contact);
-    $email_validator->set('latest_validation', \Drupal::time()->getRequestTime());
+    $old_date = $email_validator->get('latest_validation')->getValue();
+    $validation_dates = array_merge($old_date, [ 'value' => \Drupal::time()->getRequestTime()]);
+    $email_validator->set('latest_validation', $validation_dates);
     $email_validator->set('valid_email', $op == 'confirm');
     $email_validator->save();
   }
 }
 
 /**
- * Implements hook_preprocess_field_ci_email().
+ * Implements hook_entity_view_mode_alter().
  */
-function contact_form_preprocess_field(array &$variables): void {
-  $element = $variables['element'];
-  // Add class to label and items fields to be styled using the meta styles.
-  if (isset($element['#field_name'])) {
-    if ($element['#field_name'] == 'field_ci_email') {
-      /** @var \Drupal\rdf_entity\Entity\Rdf $entity */
-      $entity = $element['#object'];
-      /** @var \Drupal\meta_entity\Entity\MetaEntityInterface $meta_entity */
+function contact_form_entity_view_mode_alter(string &$view_mode, EntityInterface $entity, array $context): void {
+  // Change the view mode when email has been validated in Contact information.
+  if ($entity->getEntityTypeId() == 'rdf_entity' && $entity->bundle() == 'contact_information' && $view_mode == 'about') {
+    if ($entity->email_validator) {
       $meta_entity = $entity->email_validator->entity;
-      if (!$meta_entity) {
-        $variables['element']['#view_mode'] = 'email_mailto';
+      if ($meta_entity && $meta_entity->valid_email->value) {
+        $view_mode = 'about_contact_form';
       }
     }
   }
