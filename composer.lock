@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "265d35d26afc644ee6137afbeda1691b",
+    "content-hash": "5bd6c888e164d3147a7242dad9fbdf1a",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -18838,16 +18838,16 @@
         },
         {
             "name": "ec-europa/toolkit",
-            "version": "8.6.10",
+            "version": "8.6.12",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ec-europa/toolkit.git",
-                "reference": "212fc0c29a36c25f69716667a5f01f4ca2e037a0"
+                "reference": "d5aed270e998b5ace365da9fac572d30e27bafc0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ec-europa/toolkit/zipball/212fc0c29a36c25f69716667a5f01f4ca2e037a0",
-                "reference": "212fc0c29a36c25f69716667a5f01f4ca2e037a0",
+                "url": "https://api.github.com/repos/ec-europa/toolkit/zipball/d5aed270e998b5ace365da9fac572d30e27bafc0",
+                "reference": "d5aed270e998b5ace365da9fac572d30e27bafc0",
                 "shasum": ""
             },
             "require": {
@@ -18859,7 +18859,7 @@
                 "ext-dom": "*",
                 "ext-json": "*",
                 "ext-simplexml": "*",
-                "guzzlehttp/guzzle": "^6.3",
+                "guzzlehttp/guzzle": "^6.3 || ^7.0",
                 "j13k/yaml-lint": "^1.1",
                 "openeuropa/task-runner": "^2.0@alpha",
                 "php": ">=7.4",
@@ -18889,7 +18889,7 @@
                 "email": "europamanagement@ec.europa.eu",
                 "source": "https://github.com/ec-europa/toolkit"
             },
-            "time": "2022-05-03T06:51:37+00:00"
+            "time": "2022-05-24T17:12:33+00:00"
         },
         {
             "name": "fabpot/goutte",
