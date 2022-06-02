@@ -17,6 +17,8 @@ Feature: Fill Page URL field in Technical problem / bug report on contact form
     And I fill in "Page URL" with "/collection/interoperable-europe/interoperable-europe"
     And I fill in "Subject" with "Friendly reminder"
     And I enter "I will be back..." in the "Message" wysiwyg editor
+    And I scroll "I agree to the Legal notice document" into view
+    And I check "I agree to the Legal notice document"
     Then I press "Submit"
     And I should see the following success messages:
       | success messages                                              |
@@ -32,6 +34,8 @@ Feature: Fill Page URL field in Technical problem / bug report on contact form
     And I fill in "Page URL" with "/collection/interoperable-europe/interoperable-europe"
     And I fill in "Subject" with "Friendly reminder"
     And I enter "I will be back..." in the "Message" wysiwyg editor
+    And I scroll "I agree to the Legal notice document" into view
+    And I check "I agree to the Legal notice document"
     Then I press "Submit"
     And I should see the following success messages:
       | success messages                                              |
