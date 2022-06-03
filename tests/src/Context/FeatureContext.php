@@ -2458,4 +2458,40 @@ class FeatureContext extends RawDrupalContext implements SnippetAcceptingContext
     touch(__DIR__ . '/../../../disable-cookie-consent');
   }
 
+  /**
+   * Fills a given input with the current page URL.
+   *
+   * @param string $label
+   *   The label of the input.
+   *
+   * @throws \Exception
+   *    Thrown when the input fill failed.
+   *
+   * @When I fill :arg1 with the current URL
+   */
+  public function iFillWithTheCurrentUrl(string $label): void {
+    $page = $this->getSession()->getPage();
+    $element = $page->find('xpath', "//div[contains(concat(' ', @class, ' '), ' form-item ')]/descendant::label/descendant-or-self::*[text()='{$label}']");
+    $xpath = $element->getXpath();
+    $function = <<<JS
+  (
+      function(){
+        setTimeout(() => {
+          const domain = window.location.origin;
+          const element = document.evaluate("$xpath", document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
+          const input = element.querySelector("input");
+          input.value = domain;
+        }, 300);
+      }
+  )()
+  JS;
+    try {
+      $this->getSession()->executeScript($function);
+      sleep(1);
+    }
+    catch (\Exception $e) {
+      throw new \Exception("Input fill failed");
+    }
+  }
+
 }
