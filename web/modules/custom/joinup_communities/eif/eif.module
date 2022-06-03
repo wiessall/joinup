@@ -16,6 +16,7 @@ use Drupal\Core\Session\AccountInterface;
 use Drupal\eif\EifInterface;
 use Drupal\eif\Form\EifWrapperInlineForm;
 use Drupal\eif\Plugin\views\argument\EifGroupArgument;
+use Drupal\field\FieldConfigInterface;
 use Drupal\og\OgGroupAudienceHelperInterface;
 
 /**
@@ -254,7 +255,7 @@ function eif_eif_wrapper_access(EntityInterface $entity, string $operation, Acco
 function eif_options_list_alter(array &$options, array $context): void {
   // @todo Remove this in ISAICP-7110 apart from the sorting part.
   // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7110.
-  if (empty($context['fieldDefinition'])) {
+  if (empty($context['fieldDefinition']) || !($context['fieldDefinition'] instanceof FieldConfigInterface)) {
     return;
   }
 
