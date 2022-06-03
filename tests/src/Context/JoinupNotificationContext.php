@@ -249,7 +249,7 @@ class JoinupNotificationContext extends RawDrupalContext {
    * Asserts contact owner email has been sent and contains some pieces of text.
    *
    * @param string $email
-   *   The user name.
+   *   The recipient E-mail address.
    * @param string $subject
    *   The subject of the email.
    * @param \Behat\Gherkin\Node\TableNode $table
@@ -501,6 +501,24 @@ class JoinupNotificationContext extends RawDrupalContext {
       throw new \Exception($no_match_message);
     }
     throw new \Exception($no_mail_message);
+  }
+
+  /**
+   * Clicks the validate contact info link found in an email.
+   *
+   * @param string $mail
+   *   The recipient E-mail address.
+   *
+   * @throws \Exception
+   *   Thrown when a user is not found.
+   *
+   * @When I click the validate contact info email from the last email sent to :mail
+   */
+  public function clickValidateContactInfoInEmail(string $mail): void {
+    $pattern = '#https?://[^/].*/email-confirmer/reply/[^/].*/.*#';
+    $no_mail_message = "No email was sent to $mail containing a validate contact info link.";
+    $no_match_message = "The email sent to $mail did not contain a valid validate contact info link.";
+    $this->assertMailLinkMatchingPattern($pattern, $mail, $no_mail_message, $no_match_message, 'confirmation_request');
   }
 
 }

@@ -153,6 +153,26 @@ Feature: About this solution
       | status              | Under development                                 |
       | collection          | Antibody Development                              |
 
+    When I am logged in as a moderator
+    Then I go to the "Six exclusion advantages" solution
+    And I open the header local tasks menu
+    And I click "Edit" in the "Header" region
+    And I scroll "Contact information" into view
+    And I press "Add new" at the "Contact information" field
+    And I wait for AJAX to finish
+    And I fill in "Name" with "Invisible Cat"
+    And I fill in "E-mail" with "invisible.cat@example.com"
+    And I press "Create contact information"
+    And I press "Publish"
+    Then I should see the following success messages:
+      | success messages                                                       |
+      | A new confirmation message has been sent to invisible.cat@example.com. |
+    And the contact owner email sent to "invisible.cat@example.com" with subject "Request for confirmation of email address from Joinup" contains the following lines of text:
+      | text                                                                      |
+      | We have received a request to confirm elise@nova.dk on Joinup website at  |
+      | Please, reply to this request using the link below.                       |
+    But I click the validate contact info email from the last email sent to "invisible.cat@example.com"
+
     # The link to the about page should be visible on the solution homepage.
     When I am not logged in
     And I go to the homepage of the "Six exclusion advantages" solution
@@ -167,7 +187,9 @@ Feature: About this solution
 
     # The grey area for owner and contact information.
     And I should see the text "Owner/Contact Information"
-    And I should see the link "Contact owner"
+    And I should see the following links:
+      | elise@nova.dk               |
+      | Contact owner               |
     Then I click "Contact owner"
     And a modal should open
     And I should see the text "Email Contact" in the "Modal title"
@@ -182,7 +204,7 @@ Feature: About this solution
     Then I should see the following success messages:
       | success messages            |
       | Your message has been sent. |
-    And the contact owner email sent to "elise@nova.dk" with subject "New reclamation about Owner" contains the following lines of text:
+    And the contact owner email sent to "invisible.cat@example.com" with subject "New reclamation about Owner" contains the following lines of text:
       | text                               |
       | Name: Jonny Example                |
       | Email: example@test.test           |
@@ -194,7 +216,9 @@ Feature: About this solution
     Then I click "About"
 
     And I should see the text "Owner/Contact Information"
-    And I should see the link "Contact owner"
+    And I should see the following links:
+      | elise@nova.dk               |
+      | Contact owner               |
     Then I click "Contact owner"
     And a modal should open
     And I should see the text "Email Contact" in the "Modal title"
@@ -207,7 +231,7 @@ Feature: About this solution
     Then I should see the following success messages:
       | success messages            |
       | Your message has been sent. |
-    And the contact owner email sent to "elise@nova.dk" with subject "New reclamation about solution" contains the following lines of text:
+    And the contact owner email sent to "invisible.cat@example.com" with subject "New reclamation about solution" contains the following lines of text:
       | text                                        |
       | Name: Pally Rapamichael                     |
       | Email: p.papamichael@pally.de               |
