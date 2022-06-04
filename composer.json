@@ -383,7 +383,7 @@
                 "Integrate with Webtools eTrans component @see https://github.com/openeuropa/oe_webtools/pull/146": "https://patch-diff.githubusercontent.com/raw/openeuropa/oe_webtools/pull/146.diff"
             },
             "openeuropa/task-runner": {
-                "Array options @see https://github.com/openeuropa/task-runner/pull/137": "https://patch-diff.githubusercontent.com/raw/openeuropa/task-runner/pull/137.diff"
+                "Command config cannot be overridden @see https://github.com/openeuropa/task-runner/pull/135": "https://patch-diff.githubusercontent.com/raw/openeuropa/task-runner/pull/135.diff"
             },
             "palantirnet/drupal-rector": {
                 "drupalPostForm() with 1st param NULL @see https://github.com/palantirnet/drupal-rector/pull/198": "https://patch-diff.githubusercontent.com/raw/palantirnet/drupal-rector/pull/198.diff",
