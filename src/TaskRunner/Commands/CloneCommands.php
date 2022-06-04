@@ -19,7 +19,7 @@ class CloneCommands extends AbstractCommands {
   public const TEMP_INPUTFILE = 'temporary_inputfile.txt';
 
   /**
-   * Replaces the Toolkit original command.
+   * Replaces the toolkit:download-dump original Toolkit command.
    *
    * The current Toolkit command dropped the possibility to pass ASDA URL as
    * command line option. Instead, it implemented a more complex system which,
@@ -161,6 +161,35 @@ class CloneCommands extends AbstractCommands {
       ->taskWriteToFile(self::TEMP_INPUTFILE)
       ->line($downloadLink)
       ->run();
+  }
+
+  /**
+   * Replaces the original toolkit:install-dump Toolkit command.
+   *
+   * @hook replace-command toolkit:install-dump
+   */
+  public function installDump(array $options = [
+    'dumpfile' => InputOption::VALUE_REQUIRED,
+  ]): CollectionBuilder {
+    $tasks = [];
+
+    if (!file_exists($options['dumpfile'])) {
+      if (!getenv('CI')) {
+        $this->say('"' . $options['dumpfile'] . '" file not found, use the command "toolkit:download-dump --dumpfile ' . $options['dumpfile'] . '".');
+        return $this->collectionBuilder()->addTaskList($tasks);
+      }
+    }
+
+    // Unzip and dump database file.
+    $drush_bin = $this->getConfig()->get('runner.bin_dir') . '/drush';
+    $tasks[] = $this->taskExecStack()
+      ->stopOnFail()
+      ->exec($drush_bin . ' sql-drop -y')
+      ->exec($drush_bin . ' sql-create -y')
+      ->exec($drush_bin . ' sqlc < ' . $options['dumpfile']);
+
+    // Build and return task collection.
+    return $this->collectionBuilder()->addTaskList($tasks);
   }
 
 }

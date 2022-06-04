@@ -34,6 +34,12 @@ toolkit:
         - task: remove
           file: ${toolkit.build.dist.root}/web/themes/ventuno/package-lock.json
 
+command:
+  toolkit:
+    install-dump:
+      options:
+        dumpfile: ${mysql.dump_dir}/mysql.sql
+
 commands:
 
   # Overrides the toolkit:build-dev command.
