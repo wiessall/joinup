@@ -90,6 +90,8 @@ class CloneCommands extends AbstractCommands {
       ->option('-A', 'sql.gz')
       ->option('-P', './');
 
+    $tasks[] = $this->taskFilesystemStack()->remove($options['dumpfile']);
+
     // Unzip the file.
     $tasks[] = $this->taskExec('gunzip')
       ->arg($options['dumpfile'] . '.gz');
@@ -145,21 +147,17 @@ class CloneCommands extends AbstractCommands {
     'asda-user' => InputOption::VALUE_REQUIRED,
     'asda-password' => InputOption::VALUE_REQUIRED,
   ]): void {
-    // Workaround to EWPP projects.
-    $url = getenv('ASDA_URL') ?: $options['asda-url'];
-
-    $disallowed = ['http://', 'https://'];
-    foreach ($disallowed as $d) {
-      if (strpos($url, $d) === 0) {
-        $url = str_replace($d, '', $options['asda-url']);
-      }
-    }
-
-    $downloadLink = 'https://' . $options['asda-user'] . ':' . $options['asda-password'] . '@' . $url . '/' . $filename;
+    $url = parse_url($options['asda-url'] ?: getenv('env.ASDA_URL'));
+    $url = [
+      'scheme' => 'https',
+      'user' => $options['asda-user'],
+      'pass' => $options['asda-password'],
+      'path' => rtrim($url['path'], '/') . "/$filename",
+    ] + $url;
 
     $this->taskFilesystemStack()
       ->taskWriteToFile(self::TEMP_INPUTFILE)
-      ->line($downloadLink)
+      ->line(http_build_url($url))
       ->run();
   }
 
