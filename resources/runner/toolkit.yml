@@ -36,6 +36,10 @@ toolkit:
 
 command:
   toolkit:
+    download-dump:
+      options:
+        asda-url: https://asda.fpfis.tech.ec.europa.eu/ec-europa/digit-joinup-reference/dumps
+        dumpfile: ${mysql.dump_dir}/mysql.sql
     install-dump:
       options:
         dumpfile: ${mysql.dump_dir}/mysql.sql
