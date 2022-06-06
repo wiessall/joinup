@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "66d8bda84b06a5b0142d49f327799470",
+    "content-hash": "ea826290ab6d275346ff1ea8777d94d9",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -8637,16 +8637,16 @@
         },
         {
             "name": "ec-europa/joinup-tallinn-dashboard",
-            "version": "dev-update-deps",
+            "version": "1.0.0-alpha2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ec-europa/joinup-tallinn-dashboard.git",
-                "reference": "255ac57124da525106edba3280b8d501b614c28a"
+                "reference": "163b8a4cab38f1e1d7133fe13a86a8712fc68ca7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ec-europa/joinup-tallinn-dashboard/zipball/255ac57124da525106edba3280b8d501b614c28a",
-                "reference": "255ac57124da525106edba3280b8d501b614c28a",
+                "url": "https://api.github.com/repos/ec-europa/joinup-tallinn-dashboard/zipball/163b8a4cab38f1e1d7133fe13a86a8712fc68ca7",
+                "reference": "163b8a4cab38f1e1d7133fe13a86a8712fc68ca7",
                 "shasum": ""
             },
             "type": "drupal-library",
@@ -8659,7 +8659,7 @@
                 "issues": "https://github.com/ec-europa/joinup-tallinn-dashboard/issues",
                 "source": "https://github.com/ec-europa/joinup-tallinn-dashboard"
             },
-            "time": "2022-06-06T07:53:48+00:00"
+            "time": "2022-06-06T09:09:16+00:00"
         },
         {
             "name": "ec-europa/material-design-lite",
@@ -24113,7 +24113,6 @@
         "drupal/page_manager": 10,
         "drupal/site_verify": 20,
         "drupal/views_block_area": 10,
-        "ec-europa/joinup-tallinn-dashboard": 20,
         "jcalderonzumba/gastonjs": 20,
         "php-task-runner/composer": 20,
         "php-task-runner/redis": 20,
