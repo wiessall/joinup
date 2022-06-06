@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e10d6ff1bbedb7f7aba563eb54361508",
+    "content-hash": "5fb6ecb0768f88fb1cc385f485112c4b",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -6718,11 +6718,17 @@
         },
         {
             "name": "drupal/schema_social_media_posting",
-            "version": "dev-1.0.x",
+            "version": "1.0.0-alpha1",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/schema_social_media_posting.git",
-                "reference": "ed680cecdfe83cb56261104ee90d0e44e5e7f231"
+                "reference": "1.0.0-alpha1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/schema_social_media_posting-1.0.0-alpha1.zip",
+                "reference": "1.0.0-alpha1",
+                "shasum": "87bf85848948ba105d850fe9441320e67525058c"
             },
             "require": {
                 "drupal/core": "^8 || ^9",
@@ -6731,12 +6737,9 @@
             },
             "type": "drupal-module",
             "extra": {
-                "branch-alias": {
-                    "dev-1.0.x": "1.0.x-dev"
-                },
                 "drupal": {
-                    "version": "1.0.x-dev",
-                    "datestamp": "1634046282",
+                    "version": "1.0.0-alpha1",
+                    "datestamp": "1654501410",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Project has not opted into security advisory coverage!"
@@ -6765,8 +6768,7 @@
             "homepage": "https://www.drupal.org/project/schema_social_media_posting",
             "support": {
                 "source": "https://git.drupalcode.org/project/schema_social_media_posting"
-            },
-            "time": "2021-10-12T18:22:40+00:00"
+            }
         },
         {
             "name": "drupal/search_api",
@@ -24111,7 +24113,6 @@
         "drupal/facets_date_range": 10,
         "drupal/og_menu": 20,
         "drupal/page_manager": 10,
-        "drupal/schema_social_media_posting": 20,
         "drupal/site_verify": 20,
         "drupal/views_block_area": 10,
         "ec-europa/joinup-tallinn-dashboard": 20,

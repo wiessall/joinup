@@ -77,7 +77,7 @@
         "drupal/redis": "^1.4",
         "drupal/schema_digital_document": "^1.0.0",
         "drupal/schema_metatag": "^2",
-        "drupal/schema_social_media_posting": "dev-1.0.x",
+        "drupal/schema_social_media_posting": "^1.0.0",
         "drupal/search_api": "^1.23",
         "drupal/search_api_autocomplete": "^1.5",
         "drupal/search_api_solr": "^4.2.7",
