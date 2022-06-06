@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "445947e2b839c12aa123619f8811e77e",
+    "content-hash": "e10d6ff1bbedb7f7aba563eb54361508",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -1201,17 +1201,6 @@
                 "source": "https://github.com/dflydev/dflydev-dot-access-data/tree/v3.0.1"
             },
             "time": "2021-08-13T13:06:58+00:00"
-        },
-        {
-            "name": "dkarv/mdl-chip-input",
-            "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "git@github.com:dkarv/mdl-chip-input.git",
-                "reference": "master"
-            },
-            "type": "drupal-theme-library",
-            "time": "2018-10-19T20:09:36+00:00"
         },
         {
             "name": "doctrine/annotations",
@@ -5009,26 +4998,29 @@
         },
         {
             "name": "drupal/menu_link_destination",
-            "version": "dev-1.x",
+            "version": "1.0.0-alpha2",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/menu_link_destination.git",
-                "reference": "3a9395429fbf70ea36e225e78851d7ca1af49de2"
+                "reference": "1.0.0-alpha2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/menu_link_destination-1.0.0-alpha2.zip",
+                "reference": "1.0.0-alpha2",
+                "shasum": "2629165a75037c7bf6f6129003cfc4e981dd5424"
             },
             "require": {
                 "drupal/core": "^8.9 || ^9.1"
             },
             "type": "drupal-module",
             "extra": {
-                "branch-alias": {
-                    "dev-1.x": "1.x-dev"
-                },
                 "drupal": {
-                    "version": "1.x-dev",
-                    "datestamp": "1629882173",
+                    "version": "1.0.0-alpha2",
+                    "datestamp": "1654500101",
                     "security-coverage": {
                         "status": "not-covered",
-                        "message": "Project has not opted into security advisory coverage!"
+                        "message": "Alpha releases are not covered by Drupal security advisories."
                     }
                 }
             },
@@ -5053,8 +5045,7 @@
             "support": {
                 "source": "https://git.drupalcode.org/project/menu_link_destination",
                 "issues": "https://www.drupal.org/project/issues/menu_link_destination"
-            },
-            "time": "2021-10-12T14:43:09+00:00"
+            }
         },
         {
             "name": "drupal/message",
@@ -6610,11 +6601,17 @@
         },
         {
             "name": "drupal/schema_digital_document",
-            "version": "dev-1.0.x",
+            "version": "1.0.0-alpha1",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/schema_digital_document.git",
-                "reference": "a5769bbce0415ac5f57240d4f04da2d7760374bd"
+                "reference": "1.0.0-alpha1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/schema_digital_document-1.0.0-alpha1.zip",
+                "reference": "1.0.0-alpha1",
+                "shasum": "0f4b51db71f105bc3ff57ac6166ec67588de4720"
             },
             "require": {
                 "drupal/core": "^8 || ^9",
@@ -6622,12 +6619,9 @@
             },
             "type": "drupal-module",
             "extra": {
-                "branch-alias": {
-                    "dev-1.0.x": "1.0.x-dev"
-                },
                 "drupal": {
-                    "version": "1.0.x-dev",
-                    "datestamp": "1634053474",
+                    "version": "1.0.0-alpha1",
+                    "datestamp": "1654501258",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Project has not opted into security advisory coverage!"
@@ -6656,8 +6650,7 @@
             "homepage": "https://www.drupal.org/project/schema_digital_document",
             "support": {
                 "source": "https://git.drupalcode.org/project/schema_digital_document"
-            },
-            "time": "2021-10-12T17:45:49+00:00"
+            }
         },
         {
             "name": "drupal/schema_metatag",
@@ -8642,16 +8635,16 @@
         },
         {
             "name": "ec-europa/joinup-tallinn-dashboard",
-            "version": "dev-master",
+            "version": "dev-update-deps",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ec-europa/joinup-tallinn-dashboard.git",
-                "reference": "1c9448be1d04b525df73dcd9189fa0f032806687"
+                "reference": "255ac57124da525106edba3280b8d501b614c28a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ec-europa/joinup-tallinn-dashboard/zipball/1c9448be1d04b525df73dcd9189fa0f032806687",
-                "reference": "1c9448be1d04b525df73dcd9189fa0f032806687",
+                "url": "https://api.github.com/repos/ec-europa/joinup-tallinn-dashboard/zipball/255ac57124da525106edba3280b8d501b614c28a",
+                "reference": "255ac57124da525106edba3280b8d501b614c28a",
                 "shasum": ""
             },
             "type": "drupal-library",
@@ -8664,7 +8657,7 @@
                 "issues": "https://github.com/ec-europa/joinup-tallinn-dashboard/issues",
                 "source": "https://github.com/ec-europa/joinup-tallinn-dashboard"
             },
-            "time": "2021-05-11T09:43:46+00:00"
+            "time": "2022-06-06T07:53:48+00:00"
         },
         {
             "name": "ec-europa/material-design-lite",
@@ -24113,14 +24106,11 @@
     ],
     "minimum-stability": "dev",
     "stability-flags": {
-        "dkarv/mdl-chip-input": 20,
         "drupal/default_content": 15,
         "drupal/dropsolid_purge": 10,
         "drupal/facets_date_range": 10,
-        "drupal/menu_link_destination": 20,
         "drupal/og_menu": 20,
         "drupal/page_manager": 10,
-        "drupal/schema_digital_document": 20,
         "drupal/schema_social_media_posting": 20,
         "drupal/site_verify": 20,
         "drupal/views_block_area": 10,
