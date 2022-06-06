@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "9326d936da7d67832da298096bea7c00",
+    "content-hash": "66d8bda84b06a5b0142d49f327799470",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -12144,14 +12144,13 @@
         },
         {
             "name": "semiceu/adms-ap_validator",
-            "version": "dev-master",
+            "version": "1.0.0-alpha1",
             "source": {
                 "type": "git",
                 "url": "git@github.com:SEMICeu/adms-ap_validator.git",
                 "reference": "master"
             },
-            "type": "library",
-            "time": "2017-03-23T16:26:10+00:00"
+            "type": "library"
         },
         {
             "name": "solarium/solarium",
@@ -24115,7 +24114,6 @@
         "drupal/site_verify": 20,
         "drupal/views_block_area": 10,
         "ec-europa/joinup-tallinn-dashboard": 20,
-        "semiceu/adms-ap_validator": 20,
         "jcalderonzumba/gastonjs": 20,
         "php-task-runner/composer": 20,
         "php-task-runner/redis": 20,
