@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c8bfb56240a1864bd78dbd58bd1e54ce",
+    "content-hash": "9326d936da7d67832da298096bea7c00",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -9390,14 +9390,13 @@
         },
         {
             "name": "jacklmoore/autosize",
-            "version": "dev-master",
+            "version": "5.0.2",
             "source": {
                 "type": "git",
                 "url": "git@github.com:jackmoore/autosize.git",
                 "reference": "master"
             },
-            "type": "drupal-theme-library",
-            "time": "2021-06-30T06:04:10+00:00"
+            "type": "drupal-theme-library"
         },
         {
             "name": "laminas/laminas-diactoros",
@@ -24116,7 +24115,6 @@
         "drupal/site_verify": 20,
         "drupal/views_block_area": 10,
         "ec-europa/joinup-tallinn-dashboard": 20,
-        "jacklmoore/autosize": 20,
         "semiceu/adms-ap_validator": 20,
         "jcalderonzumba/gastonjs": 20,
         "php-task-runner/composer": 20,
