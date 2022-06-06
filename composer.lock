@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "0a137f587362c0cbf41cae3f68b11559",
+    "content-hash": "c8bfb56240a1864bd78dbd58bd1e54ce",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -8663,14 +8663,13 @@
         },
         {
             "name": "ec-europa/material-design-lite",
-            "version": "dev-joinup",
+            "version": "1.3.1",
             "source": {
                 "type": "git",
                 "url": "git@github.com:ec-europa/material-design-lite.git",
                 "reference": "joinup"
             },
-            "type": "drupal-theme-library",
-            "time": "2018-03-29T12:58:02+00:00"
+            "type": "drupal-theme-library"
         },
         {
             "name": "ec-europa/spdx",
@@ -24117,7 +24116,6 @@
         "drupal/site_verify": 20,
         "drupal/views_block_area": 10,
         "ec-europa/joinup-tallinn-dashboard": 20,
-        "ec-europa/material-design-lite": 20,
         "jacklmoore/autosize": 20,
         "semiceu/adms-ap_validator": 20,
         "jcalderonzumba/gastonjs": 20,
