@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "5fb6ecb0768f88fb1cc385f485112c4b",
+    "content-hash": "0a137f587362c0cbf41cae3f68b11559",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -10443,33 +10443,34 @@
         },
         {
             "name": "openeuropa/composer-artifacts",
-            "version": "dev-master",
+            "version": "1.0.0-alpha1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/openeuropa/composer-artifacts.git",
-                "reference": "11c0a02c90a854109e73211f3f3759b4a5911f5a"
+                "reference": "21c1a59d4465b49804295ec1327e13620900ecd1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/openeuropa/composer-artifacts/zipball/11c0a02c90a854109e73211f3f3759b4a5911f5a",
-                "reference": "11c0a02c90a854109e73211f3f3759b4a5911f5a",
+                "url": "https://api.github.com/repos/openeuropa/composer-artifacts/zipball/21c1a59d4465b49804295ec1327e13620900ecd1",
+                "reference": "21c1a59d4465b49804295ec1327e13620900ecd1",
                 "shasum": ""
             },
             "require": {
-                "composer-plugin-api": "^1.1 || ^2.0",
-                "php": ">=7.2"
+                "composer-plugin-api": "^2.0",
+                "php": ">=7.4"
             },
             "require-dev": {
-                "composer/composer": "~1.6 || ~2.0",
+                "composer/composer": "~2.0",
                 "cweagans/composer-patches": "^1.6",
-                "openeuropa/code-review": "2.x-dev",
-                "phpunit/phpunit": "^7.5"
+                "openeuropa/code-review": "^2.0",
+                "phpunit/phpunit": "^9"
             },
             "type": "composer-plugin",
             "extra": {
                 "class": "OpenEuropa\\ComposerArtifacts\\Plugin",
                 "enable-patching": true,
-                "composer-exit-on-patch-failure": true
+                "composer-exit-on-patch-failure": true,
+                "plugin-modifies-downloads": true
             },
             "autoload": {
                 "psr-4": {
@@ -10487,9 +10488,9 @@
             ],
             "support": {
                 "issues": "https://github.com/openeuropa/composer-artifacts/issues",
-                "source": "https://github.com/openeuropa/composer-artifacts/tree/master"
+                "source": "https://github.com/openeuropa/composer-artifacts/tree/1.0.0-alpha1"
             },
-            "time": "2021-09-08T08:17:51+00:00"
+            "time": "2022-02-22T14:47:02+00:00"
         },
         {
             "name": "openeuropa/ecl-twig-loader",
@@ -24118,7 +24119,6 @@
         "ec-europa/joinup-tallinn-dashboard": 20,
         "ec-europa/material-design-lite": 20,
         "jacklmoore/autosize": 20,
-        "openeuropa/composer-artifacts": 20,
         "semiceu/adms-ap_validator": 20,
         "jcalderonzumba/gastonjs": 20,
         "php-task-runner/composer": 20,
