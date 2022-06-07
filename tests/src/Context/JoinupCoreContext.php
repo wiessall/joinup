@@ -117,7 +117,6 @@ class JoinupCoreContext extends RawDrupalContext {
     $base_element = $region ? $this->getRegion($region) : $this->getSession()->getPage();
 
     $chips = [];
-
     // If the chips are being displayed using the `mdl-chip-input` JavaScript
     // library then they will only be visible if the browser supports JS. If the
     // browser doesn't support JavaScript then the chips are still present in
@@ -125,7 +124,7 @@ class JoinupCoreContext extends RawDrupalContext {
     // `is_visible` flag disabled to indicate they only can be interacted with
     // in a limited way.
     $locator_visibility_mapping = [
-      '.mdl-chip__text' => TRUE,
+      '.mdl-chip__text, .navbar-search .badge' => TRUE,
     ];
     if (!$this->browserSupportsJavaScript()) {
       $locator_visibility_mapping['.mdl-chipfield__input'] = FALSE;
@@ -155,7 +154,7 @@ class JoinupCoreContext extends RawDrupalContext {
    *    Thrown when the region is not found.
    *
    * @return \Drupal\joinup\Chip|null
-   *   The chip, or NULL if no chip with the given text is present in the page.
+   *   The chip or NULL if no chip with the given text is present in the page.
    */
   protected function getChipByText(string $text, ?string $region = NULL): ?Chip {
     foreach ($this->getChips($region) as $chip) {
