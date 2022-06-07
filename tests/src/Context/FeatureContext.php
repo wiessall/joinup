@@ -2469,7 +2469,7 @@ class FeatureContext extends RawDrupalContext implements SnippetAcceptingContext
    * @throws \Exception
    *    Thrown when the input fill failed.
    *
-   * @When I fill :label with the current path :url
+   * @When I fill :label with the absolute url :url
    */
   public function iFillWithTheCurrentUrlPath(string $label, string $url): void {
     $this->getSession()->getPage()->fillField($label, $this->locatePath($url));
