@@ -7,7 +7,7 @@ namespace Drupal\joinup;
 use Behat\Mink\Element\NodeElement;
 
 /**
- * Wraps a Material Design "chip" element.
+ * Wraps a "chip" element.
  *
  * Chips are depending on JavaScript for their full functionality but they can
  * also have some limited interaction done when JavaScript is disabled, such as
@@ -25,14 +25,14 @@ class Chip {
    *
    * @var \Behat\Mink\Element\NodeElement
    */
-  protected $element;
+  protected NodeElement $element;
 
   /**
    * Whether or not the element can be visually interacted with.
    *
    * @var bool
    */
-  protected $isVisible;
+  protected bool $isVisible;
 
   /**
    * Constructs a new Chip.
@@ -75,7 +75,7 @@ class Chip {
    *   is present on the chip.
    */
   public function getRemoveButton(): ?NodeElement {
-    $xpath = "/following-sibling::button[contains(concat(' ', normalize-space(@class), ' '), ' mdl-chip__action ')]";
+    $xpath = "/following-sibling::button[contains(concat(' ', normalize-space(@class), ' '), ' mdl-chip__action ')] | //span[contains(concat(' ', normalize-space(@class), ' '), ' icon--close ')]";
     return $this->element->find('xpath', $xpath);
   }
 
