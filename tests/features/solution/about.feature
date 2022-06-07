@@ -161,16 +161,16 @@ Feature: About this solution
     And I press "Add new" at the "Contact information" field
     And I wait for AJAX to finish
     And I fill in "Name" with "Invisible Cat"
-    And I fill in "E-mail" with "invisible.cat@example.com"
+    And I fill in "E-mail" with "invisible.cat@xpto.com"
     And I press "Create contact information"
     And I press "Publish"
-    Then I should see the success message "A new confirmation message has been sent to invisible.cat@example.com."
-    And the contact owner email sent to "invisible.cat@example.com" with subject "Request for confirmation of email address from Joinup" contains the following lines of text:
-      | text                                                                      |
-      | We have received a request to confirm elise@nova.dk on Joinup website at  |
-      | Please, reply to this request using the link below.                       |
-    But I click the validate contact info email from the last email sent to "invisible.cat@example.com"
-    Then I should not see the text "Confirm invisible.cat@example.com"
+    Then I should see the success message "A new confirmation message has been sent to invisible.cat@xpto.com."
+    And the contact owner email sent to "invisible.cat@xpto.com" with subject "Request for confirmation of email address from Joinup" contains the following lines of text:
+      | text                                                                               |
+      | We have received a request to confirm invisible.cat@xpto.com on Joinup website at  |
+      | Please, reply to this request using the link below.                                |
+    But I click the validate contact info email from the last email sent to "invisible.cat@xpto.com"
+    Then I should not see the text "Confirm invisible.cat@xpto.com"
     And I press "Send"
     Then I should see the success message "Email confirmation confirmed."
 
@@ -191,17 +191,16 @@ Feature: About this solution
     When I fill in "Your e-mail address" with "example@test.test"
     When I fill in "Subject" with "New reclamation about Owner"
     When I fill in "Message" with "This is reclamation test."
-    And I should see the button "Send" in the "Modal buttons" region
+    And I should see the button "Send e-mail"
     Then I wait for the honeypot time limit to pass
-    And I press "Send" in the "Modal buttons" region
+    And I press "Send e-mail"
 
     Then I should see the success message "Your message has been sent."
-    And the contact owner email sent to "invisible.cat@example.com" with subject "New reclamation about Owner" contains the following lines of text:
+    And the contact owner email sent to "invisible.cat@xpto.com" with subject "New reclamation about Owner" contains the following lines of text:
       | text                               |
       | Name: Jonny Example                |
       | Email: example@test.test           |
       | Message: This is reclamation test. |
-    And I should be on "/collection/antibody-development/solution/six-exclusion-advantages/about"
 
     Given I am logged in as "Pally Rapamichael"
     And I go to the homepage of the "Six exclusion advantages" solution
@@ -216,12 +215,12 @@ Feature: About this solution
     And I should see the text "Email Contact" in the "Modal title"
     When I fill in "Subject" with "New reclamation about solution"
     When I fill in "Message" with "This is solution reclamation test."
-    And I should see the button "Send" in the "Modal buttons" region
+    And I should see the button "Send e-mail"
     Then I wait for the honeypot time limit to pass
-    And I press "Send" in the "Modal buttons" region
+    And I press "Send e-mail"
 
     Then I should see the success message "Your message has been sent."
-    And the contact owner email sent to "invisible.cat@example.com" with subject "New reclamation about solution" contains the following lines of text:
+    And the contact owner email sent to "invisible.cat@xpto.com" with subject "New reclamation about solution" contains the following lines of text:
       | text                                        |
       | Name: Pally Rapamichael                     |
       | Email: p.papamichael@pally.de               |

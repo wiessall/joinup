@@ -33,7 +33,7 @@ content:
     label: above
     settings:
       link_text: 'Contact owner'
-      redirection_to: custom
+      redirection_to: current
       custom_path: ''
       include_values: '1'
       default_message: ''
