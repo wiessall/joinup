@@ -1,16 +1,11 @@
 #!/usr/bin/env bash
 
-set -x
-
 # Mute GrumPHP.
 test ! -f ./vendor/bin/grumphp || ./vendor/bin/grumphp git:deinit
 
-# Store the Joinup version.
-test "$(git rev-parse --is-shallow-repository)" = "false" || git fetch --unshallow
-test "$(git tag)" = "" || git describe --tags | tr -d '\n' > web/VERSION.txt
-
-# Build the codebase.
-test ! -f ./vendor/bin/run || ./vendor/bin/run toolkit:build-dev
+# NPM version.
+echo "Node $(node --version)"
+echo "NPM $(npm --version)"
 
 # Bring theme dependencies.
 cd web/themes/ventuno && npm ci
