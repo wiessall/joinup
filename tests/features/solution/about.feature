@@ -117,7 +117,7 @@ Feature: About this solution
     # A related solution which is not yet approved should not be visible.
     And I should not see the text "Protein"
 
-  @terms @javascript
+  @terms @javascript @email
   Scenario: About page contact form
     Given the following contacts:
       | name                    | email                        | Website URL    |
@@ -164,28 +164,22 @@ Feature: About this solution
     And I fill in "E-mail" with "invisible.cat@example.com"
     And I press "Create contact information"
     And I press "Publish"
-    Then I should see the following success messages:
-      | success messages                                                       |
-      | A new confirmation message has been sent to invisible.cat@example.com. |
+    Then I should see the success message "A new confirmation message has been sent to invisible.cat@example.com."
     And the contact owner email sent to "invisible.cat@example.com" with subject "Request for confirmation of email address from Joinup" contains the following lines of text:
       | text                                                                      |
       | We have received a request to confirm elise@nova.dk on Joinup website at  |
       | Please, reply to this request using the link below.                       |
     But I click the validate contact info email from the last email sent to "invisible.cat@example.com"
+    Then I should not see the text "Confirm invisible.cat@example.com"
+    And I press "Send"
+    Then I should see the success message "Email confirmation confirmed."
 
-    # The link to the about page should be visible on the solution homepage.
     When I am not logged in
     And I go to the homepage of the "Six exclusion advantages" solution
     Then I should see the link "About"
 
-    # All the public information from the basic fields should be visible on the
-    # about page.
     When I click "About"
-
-    # Clean URLs should be applied to the "About" subpage.
     Then I should be on "/collection/antibody-development/solution/six-exclusion-advantages/about"
-
-    # The grey area for owner and contact information.
     And I should see the text "Owner/Contact Information"
     And I should see the following links:
       | elise@nova.dk               |
@@ -201,9 +195,7 @@ Feature: About this solution
     Then I wait for the honeypot time limit to pass
     And I press "Send" in the "Modal buttons" region
 
-    Then I should see the following success messages:
-      | success messages            |
-      | Your message has been sent. |
+    Then I should see the success message "Your message has been sent."
     And the contact owner email sent to "invisible.cat@example.com" with subject "New reclamation about Owner" contains the following lines of text:
       | text                               |
       | Name: Jonny Example                |
@@ -228,9 +220,7 @@ Feature: About this solution
     Then I wait for the honeypot time limit to pass
     And I press "Send" in the "Modal buttons" region
 
-    Then I should see the following success messages:
-      | success messages            |
-      | Your message has been sent. |
+    Then I should see the success message "Your message has been sent."
     And the contact owner email sent to "invisible.cat@example.com" with subject "New reclamation about solution" contains the following lines of text:
       | text                                        |
       | Name: Pally Rapamichael                     |
