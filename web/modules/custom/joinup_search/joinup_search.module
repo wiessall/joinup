@@ -42,7 +42,10 @@ function joinup_search_theme($existing, $type, $theme, $path) {
       'variables' => ['filters' => [], 'template_suggestion' => ''],
     ],
     'joinup_search_filter' => [
-      'variables' => ['name' => '', 'bcl_icon_path' => ''],
+      'variables' => [
+        'name' => '',
+        'bcl_icon_path' => '',
+      ],
     ],
   ];
 }
