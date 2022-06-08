@@ -89,7 +89,7 @@ class DeployDrushCommands extends DrushCommands {
       ->condition('collection', '')
       ->condition('name', 'core.extension')
       ->execute()
-      ->fetchField());
+      ->fetchField(), ['allowed_classes' => FALSE]);
 
     $modules = array_combine($modules, $modules);
     if ($already_uninstalled = array_diff_key($modules, $config['module'])) {
