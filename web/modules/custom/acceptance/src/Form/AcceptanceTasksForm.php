@@ -10,6 +10,7 @@ use Drupal\Core\Queue\QueueFactory;
 use Drupal\Core\Queue\QueueWorkerManagerInterface;
 use Drupal\Core\Queue\RequeueException;
 use Drupal\Core\Queue\SuspendQueueException;
+use Drupal\joinup_acceptance\SendSpooledEmailsInterface;
 use Drupal\message_digest\Traits\MessageDigestTrait;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -25,14 +26,21 @@ class AcceptanceTasksForm extends FormBase {
    *
    * @var \Drupal\Core\Queue\QueueFactory
    */
-  protected $queueFactory;
+  protected QueueFactory $queueFactory;
 
   /**
    * The queue manager.
    *
    * @var \Drupal\Core\Queue\QueueWorkerManagerInterface
    */
-  protected $queueManager;
+  protected QueueWorkerManagerInterface $queueManager;
+
+  /**
+   * Send spool emails.
+   *
+   * @var \Drupal\joinup_acceptance\SendSpooledEmailsInterface
+   */
+  protected SendSpooledEmailsInterface $sendSpooledEmails;
 
   /**
    * Constructs a new form instance.
@@ -41,10 +49,13 @@ class AcceptanceTasksForm extends FormBase {
    *   The queue service.
    * @param \Drupal\Core\Queue\QueueWorkerManagerInterface $queue_manager
    *   The queue manager.
+   * @param \Drupal\joinup_acceptance\SendSpooledEmailsInterface $send_spool
+   *   Send spool emails.
    */
-  public function __construct(QueueFactory $queue_factory, QueueWorkerManagerInterface $queue_manager) {
+  public function __construct(QueueFactory $queue_factory, QueueWorkerManagerInterface $queue_manager, SendSpooledEmailsInterface $send_spool) {
     $this->queueFactory = $queue_factory;
     $this->queueManager = $queue_manager;
+    $this->sendSpooledEmails = $send_spool;
   }
 
   /**
@@ -53,7 +64,8 @@ class AcceptanceTasksForm extends FormBase {
   public static function create(ContainerInterface $container): self {
     return new static(
       $container->get('queue'),
-      $container->get('plugin.manager.queue_worker')
+      $container->get('plugin.manager.queue_worker'),
+      $container->get('send_spool.emails')
     );
   }
 
@@ -65,6 +77,11 @@ class AcceptanceTasksForm extends FormBase {
       '#type' => 'submit',
       '#value' => $this->t('Deliver message digests'),
       '#submit' => [[$this, 'deliverDigestMessages']],
+    ];
+    $form['send_spool'] = [
+      '#type' => 'submit',
+      '#value' => $this->t('Send spooled emails'),
+      '#submit' => [[$this, 'sendSpoolEmails']],
     ];
     return $form;
   }
@@ -88,6 +105,18 @@ class AcceptanceTasksForm extends FormBase {
       }
     } while ($this->countAllUndeliveredDigestMessages());
     $this->messenger()->addStatus('Successfully delivered all digest messages. Note that the messages might have been spooled, meaning it could take some time to receive them.');
+  }
+
+  /**
+   * Provides submit handler for send spooled email button.
+   *
+   * @param array $form
+   *   The form API render array.
+   * @param \Drupal\Core\Form\FormStateInterface $form_state
+   *   The form state API object.
+   */
+  public function sendSpoolEmails(array &$form, FormStateInterface $form_state): void {
+    $this->sendSpooledEmails->sendSpool();
   }
 
   /**
