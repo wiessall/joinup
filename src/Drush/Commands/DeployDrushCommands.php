@@ -19,11 +19,11 @@ class DeployDrushCommands extends DrushCommands {
    */
   public function nodeAccessRebuild(): void {
     if (node_access_needs_rebuild()) {
-      $this->say('Rebuilding node access... (patience, it takes a while)');
+      $this->logger()->notice('Rebuilding node access... (patience, it takes a while)');
       node_access_rebuild();
       return;
     }
-    $this->say("Node access doesn't need rebuild.");
+    $this->logger()->notice("Node access doesn't need rebuild.");
   }
 
   /**
@@ -80,7 +80,10 @@ class DeployDrushCommands extends DrushCommands {
       return isset($paths[$module]);
     });
     if ($non_orphan_modules) {
-      throw new \Exception(sprintf('The codebase of %s module(s) is still present. Use generic Drush generic commands to uninstall them.', implode(', ', $non_orphan_modules)));
+      $this->logger()->error(dt('The codebase of !modules module(s) is still present. Use Drush pm:uninstall command to uninstall them.', [
+        '!modules' => implode(', ', $non_orphan_modules),
+      ]));
+      return;
     }
 
     $db = \Drupal::database();
@@ -92,8 +95,11 @@ class DeployDrushCommands extends DrushCommands {
       ->fetchField(), ['allowed_classes' => FALSE]);
 
     $modules = array_combine($modules, $modules);
-    if ($already_uninstalled = array_diff_key($modules, $config['module'])) {
-      throw new \Exception(sprintf('Some modules are already uninstalled: %s. Aborting.', implode(', ', $already_uninstalled)));
+    if ($already_uninstalled_modules = array_diff_key($modules, $config['module'])) {
+      $this->logger()->error(dt('Module(s) !modules are already uninstalled.', [
+        '!modules' => implode(', ', $already_uninstalled_modules),
+      ]));
+      return;
     }
 
     $config['module'] = array_diff_key($config['module'], $modules);
@@ -107,6 +113,10 @@ class DeployDrushCommands extends DrushCommands {
       ->condition('collection', 'system.schema')
       ->condition('name', $modules, 'IN')
       ->execute();
+
+    $this->logger()->success(dt('Forcefully uninstalled !modules modules(s).', [
+      '!modules' => implode(', ', $modules),
+    ]));
   }
 
 }
