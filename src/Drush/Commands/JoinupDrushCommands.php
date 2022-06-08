@@ -4,12 +4,14 @@ declare(strict_types = 1);
 
 namespace Joinup\Drush\Commands;
 
+use Drupal\Core\Database\Database;
+use Drupal\Core\Extension\ExtensionDiscovery;
 use Drush\Commands\DrushCommands;
 
 /**
  * Specific commands to run on Joinup code deployment.
  */
-class DeployDrushCommands extends DrushCommands {
+class JoinupDrushCommands extends DrushCommands {
 
   /**
    * Rebuilds node access if case.
@@ -60,12 +62,17 @@ class DeployDrushCommands extends DrushCommands {
    * That said, the user issuing this command is responsible to check and ensure
    * that all the above points are properly addressed.
    *
+   * Note that this command is only bootstrapping the database to avoid any
+   * interaction with the container, which might be damaged due to missing
+   * modules code.
+   *
    * @param array $modules
    *   A space separated list of installed modules whose codebase is gone.
    *
-   * @command joinup:uninstall-orphan-modules
-   * @bootstrap full
-   * @usage joinup:uninstall-orphan-modules module1 module2
+   * @command joinup:force-uninstall-modules
+   *
+   * @bootstrap database
+   * @usage joinup:force-uninstall-modules module1 module2
    *   Uninstalls module1 and module2
    */
   public function uninstallModules(array $modules): void {
@@ -73,20 +80,14 @@ class DeployDrushCommands extends DrushCommands {
       throw new \Exception('No modules passed.');
     }
 
-    /** @var \Drupal\Core\Extension\ModuleExtensionList $extension_list */
-    $extension_list = \Drupal::service('extension.list.module')->reset();
-    $paths = $extension_list->getPathnames();
-    $non_orphan_modules = array_filter($modules, function (string $module) use ($paths): bool {
-      return isset($paths[$module]);
-    });
-    if ($non_orphan_modules) {
+    if ($modules_with_code = array_intersect($modules, $this->scanFileSystemModules())) {
       $this->logger()->error(dt('The codebase of !modules module(s) is still present. Use Drush pm:uninstall command to uninstall them.', [
-        '!modules' => implode(', ', $non_orphan_modules),
+        '!modules' => implode(', ', $modules_with_code),
       ]));
       return;
     }
 
-    $db = \Drupal::database();
+    $db = Database::getConnection();
     $config = unserialize($db->select('config')
       ->fields('config', ['data'])
       ->condition('collection', '')
@@ -117,6 +118,17 @@ class DeployDrushCommands extends DrushCommands {
     $this->logger()->success(dt('Forcefully uninstalled !modules modules(s).', [
       '!modules' => implode(', ', $modules),
     ]));
+  }
+
+  /**
+   * Returns all modules from codebase regardless if they are installed or not.
+   *
+   * @return string[]
+   *   A list of modules.
+   */
+  protected function scanFileSystemModules(): array {
+    $discovery = new ExtensionDiscovery(DRUPAL_ROOT, FALSE, ['profiles/joinup']);
+    return array_keys($discovery->scan('module', FALSE));
   }
 
 }
