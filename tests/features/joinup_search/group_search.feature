@@ -32,9 +32,9 @@ Feature: Search inside groups
       | Opening of the winter season | Ski resorts will open in December | validated | Chalet construction |                      |
       | Presenting DrillMaster X88   | Our most finely ground drill bit  | validated |                     | Inclined foundations |
     And news content:
-      | title             | body            | collection          | solution             | topic                   | spatial coverage | state     |
-      | Natural materials | Ground feel     | Chalet construction |                      | Statistics and Analysis | Switzerland      | validated |
-      | Still frozen      | Maybe next week |                     | Inclined foundations |                         | Austria          | validated |
+      | title             | headline          | body            | collection          | solution             | topic                   | spatial coverage | state     |
+      | Natural materials | Materials natural | Ground feel     | Chalet construction |                      | Statistics and Analysis | Switzerland      | validated |
+      | Still frozen      | Frozen still      | Maybe next week |                     | Inclined foundations |                         | Austria          | validated |
     And custom_page content:
       | title     | body                             | collection          | solution             |
       | Resources | Here are some interesting links. | Chalet construction |                      |
@@ -46,9 +46,7 @@ Feature: Search inside groups
       | title       | description          | parent    | access url |
       | Zip archive | It has files inside. | Pre-alpha | test.zip   |
 
-  @javascript @wip
-  # This is disabled because the search bar is currently not shown in the header
-  # but this functionality will probably be restored in the future.
+  @javascript
   Scenario: Group filters are shown as chips
     # Pages that do not belong to a collection or solution do not have chips in
     # the search field.
@@ -65,7 +63,7 @@ Feature: Search inside groups
     # field on the collection homepage. The chips are initially hidden but will
     # appear after clicking on the search icon to open the search bar.
     When I go to the homepage of the "Chalet construction" collection
-    And I open the search bar by clicking on the search icon
+    And I should toggle search bar in navbar
     Then the page should show the following chip:
       | Chalet construction |
 
@@ -73,13 +71,14 @@ Feature: Search inside groups
     # as a chip in the search field the search results should be filtered and
     # only show the content of the collection.
     When I submit the search by pressing enter
-    Then the option with text "Chalet construction (6)" from select facet "collection/solution" is selected
-    And the page should show the tiles "Room sizes, Ground plan, Opening of the winter season, Natural materials, Resources, Inclined foundations"
+    Then the "Chalet construction" content checkbox item should be selected
+    And I should see the following facet summary "Chalet construction"
+    And the page should show the tiles "Room sizes, Ground plan, Opening of the winter season, Materials natural, Resources, Inclined foundations"
 
     # Check that other types of pages in the collection also show the collection
     # as a chip.
     When I go to the "Room sizes" discussion
-    And I open the search bar by clicking on the search icon
+    And I should toggle search bar in navbar
     Then the page should show the following chip:
       | Chalet construction |
     # It should be possible to remove the chip by clicking the delete button.
@@ -87,31 +86,27 @@ Feature: Search inside groups
     Then the page should not contain any chips
 
     When I go to the "Ground plan" document
-    And I open the search bar by clicking on the search icon
+    And I should toggle search bar in navbar
     Then the page should show the following chip:
       | Chalet construction |
-    # It should be possible to remove the chip by typing a backspace in the
-    # search field.
-    When I press backspace in the search bar
-    Then the page should not contain any chips
 
     When I go to the "Opening of the winter season" event
-    And I open the search bar by clicking on the search icon
+    And I should toggle search bar in navbar
     Then the page should show the following chip:
       | Chalet construction |
     When I go to the "Natural materials" news
-    And I open the search bar by clicking on the search icon
+    And I should toggle search bar in navbar
     Then the page should show the following chip:
       | Chalet construction |
     When I go to the "Resources" custom page
-    And I open the search bar by clicking on the search icon
+    And I should toggle search bar in navbar
     Then the page should show the following chip:
       | Chalet construction |
 
     # Check that the name of the solution is shown as a chip in the search field
     # on the solution homepage.
     When I go to the homepage of the "Inclined foundations" solution
-    And I open the search bar by clicking on the search icon
+    And I should toggle search bar in navbar
     Then the page should show the following chip:
       | Inclined foundations |
 
@@ -119,78 +114,76 @@ Feature: Search inside groups
     # as a chip in the search field the search results should be filtered and
     # only show the content of the solution.
     When I submit the search by pressing enter
-    Then the option with text "Inclined foundations (6)" from select facet "collection/solution" is selected
-    Then the page should show the tiles "Pre-alpha, Presenting DrillMaster X88, Rock types, Still frozen, Geography, Terrace?"
+    Then the "Inclined foundations" content checkbox item should be selected
+    And I should see the following facet summary "Inclined foundations"
+    Then the page should show the tiles "Pre-alpha, Presenting DrillMaster X88, Rock types, Frozen still, Geography, Terrace?"
 
     # Do a search with a keyword. The chip for the solution should be present
     # so the results are filtered by keyword and solution.
     Given I am on the homepage of the "Inclined foundations" solution
-    When I open the search bar by clicking on the search icon
+    When I should toggle search bar in navbar
     Then the page should show the following chip:
       | Inclined foundations |
     When I enter "ground" in the search bar and press enter
-    Then the option with text "Inclined foundations (2)" from select facet "collection/solution" is selected
+    Then the "Inclined foundations" content checkbox item should be selected
+    And I should see the following facet summary "Inclined foundations"
     And the page should show the tiles "Pre-alpha, Presenting DrillMaster X88"
 
     # Do a search with a keyword after removing the chip for the solution. The
     # results should only be filtered by keyword, not by solution.
     Given I am on the homepage of the "Inclined foundations" solution
-    When I open the search bar by clicking on the search icon
+    When I should toggle search bar in navbar
     And I press the remove button on the chip "Inclined foundations"
     And I enter "ground" in the search bar and press enter
-    Then the option with text "Any Collection or Solution" from select facet "collection/solution" is selected
-    Then the page should show the tiles "Ground plan, Pre-alpha, Natural materials, Presenting DrillMaster X88"
+    Then the page should show the tiles "Ground plan, Pre-alpha, Materials natural, Presenting DrillMaster X88"
 
     # Do a search with a keyword and removing the chip for the solution after
     # the keywords have been typed in. This should have the same result.
     Given I am on the homepage of the "Inclined foundations" solution
-    When I open the search bar by clicking on the search icon
+    When I should toggle search bar in navbar
     And I enter "ground" in the search bar
     And I press the remove button on the chip "Inclined foundations"
     And I submit the search by pressing enter
-    Then the page should show the tiles "Ground plan, Pre-alpha, Natural materials, Presenting DrillMaster X88"
+    Then the page should show the tiles "Ground plan, Pre-alpha, Materials natural, Presenting DrillMaster X88"
 
     # Check that other types of pages in the solution also show the collection
     # as a chip.
     When I go to the "Terrace?" discussion
-    And I open the search bar by clicking on the search icon
+    And I should toggle search bar in navbar
     Then the page should show the following chip:
       | Inclined foundations |
+
     # It should be possible to remove the chip by clicking the delete button.
     When I press the remove button on the chip "Inclined foundations"
     Then the page should not contain any chips
 
     When I go to the "Rock types" document
-    And I open the search bar by clicking on the search icon
+    And I should toggle search bar in navbar
     Then the page should show the following chip:
       | Inclined foundations |
-    # It should be possible to remove the chip by typing a backspace in the
-    # search field.
-    When I press backspace in the search bar
-    Then the page should not contain any chips
 
     When I go to the "Presenting DrillMaster X88" event
-    And I open the search bar by clicking on the search icon
+    And I should toggle search bar in navbar
     Then the page should show the following chip:
       | Inclined foundations |
     When I go to the "Still frozen" news
-    And I open the search bar by clicking on the search icon
+    And I should toggle search bar in navbar
     Then the page should show the following chip:
       | Inclined foundations |
     When I go to the "Geography" custom page
-    And I open the search bar by clicking on the search icon
+    And I should toggle search bar in navbar
     Then the page should show the following chip:
       | Inclined foundations |
     When I go to the "Pre-alpha" release
-    And I open the search bar by clicking on the search icon
+    And I should toggle search bar in navbar
     Then the page should show the following chip:
       | Inclined foundations |
     When I go to the "Zip archive" distribution
-    And I open the search bar by clicking on the search icon
+    And I should toggle search bar in navbar
     Then the page should show the following chip:
       | Inclined foundations |
 
-  @clearStaticCache @wip
+  @clearStaticCache
   # This is disabled because the search bar is currently not shown in the header
   # but this functionality will probably be restored in the future.
   Scenario: Group search caching
@@ -216,50 +209,41 @@ Feature: Search inside groups
       | Chalet destruction |
     And the page should be cached
 
-  @javascript @wip
+  @javascript
   # This is disabled because the search bar is currently not shown in the header
   # but this functionality will probably be restored in the future.
   Scenario: Group filters remain active in the search bar when viewing search results
     When I go to the homepage of the "Chalet construction" collection
-    And I open the search bar by clicking on the search icon
+    And I should toggle search bar in navbar
     Then the page should show the following chip:
       | Chalet construction |
     When I enter "ground" in the search bar and press enter
-    Then the option with text "Chalet construction (2)" from select facet "collection/solution" is selected
-    And the page should show the tiles "Ground plan, Natural materials"
-    And the page should show the following chip:
-      | Chalet construction |
-    When I press the remove button on the chip "Chalet construction"
-    And I submit the search by pressing enter
-    Then the page should not contain any chips
-    And the page should show the tiles "Ground plan, Pre-alpha, Natural materials, Presenting DrillMaster X88"
+    Then the "Chalet construction" content checkbox item should be selected
+    And I should see the following facet summary "Chalet construction"
+    And the page should show the tiles "Ground plan, Materials natural"
+    When I remove the following facet summary "Chalet construction"
+    Then the page should not contain any facet summary
+    And the page should show the tiles "Ground plan, Pre-alpha, Materials natural, Presenting DrillMaster X88"
 
-  @javascript @wip
-  # This is disabled because the search bar is currently not shown in the header
-  # but this functionality will probably be restored in the future.
+  @javascript
   Scenario: Group filter chips appear in search bar after selecting them in facets
     When I visit the search page
-    Then the option with text "Any Collection or Solution" from select facet "collection/solution" is selected
     And I should see 12 tiles
 
-    When I open the search bar by clicking on the search icon
-    Then the page should not contain any chips
-
-    When I select "Inclined foundations" from "Collection/Solution"
-    And I press "Search"
-    Then the option with text "Inclined foundations (6)" from select facet form "collection/solution" is selected
+    When I check the "Inclined foundations (6)" checkbox from the "collection/solution" facet
+    Then the "Inclined foundations" content checkbox item should be selected
+    And I should see the following facet summary "Inclined foundations"
     And I should see 6 tiles
 
-    When I open the search bar by clicking on the search icon
-    Then the page should show the following chip:
-      | Inclined foundations |
+    Then I should not see search bar icon in navbar
 
     # The filter chip should remain active when doing another search.
     When I enter "ground" in the search bar and press enter
-    Then I select "Inclined foundations" from "Collection/Solution"
-    And I press "Search"
-    Then the option with text "Inclined foundations (2)" from select facet form "collection/solution" is selected
+    Then the "Inclined foundations" content checkbox item should be selected
+    And I should see the following facet summary "Inclined foundations"
     And I should see 2 tiles
-    When I open the search bar by clicking on the search icon
-    Then the page should show the following chip:
-      | Inclined foundations |
+
+    # Search page doesn't have search bar in header.
+    When I am on the homepage
+    Then I should toggle search bar in navbar
+    And the page should not contain any chips
