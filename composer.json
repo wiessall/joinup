@@ -64,7 +64,7 @@
         "drupal/meta_entity": "^1.0-alpha2",
         "drupal/monolog": "^2.0",
         "drupal/og": "^1.0-alpha7",
-        "drupal/og_menu": "dev-1.x",
+        "drupal/og_menu": "^2.0",
         "drupal/page_manager": "^4.0@beta",
         "drupal/paragraphs": "^1.12",
         "drupal/paragraphs_jquery_ui_accordion": "^1.4",

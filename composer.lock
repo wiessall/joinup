@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ea826290ab6d275346ff1ea8777d94d9",
+    "content-hash": "f8d027dcd358a6b26d9e85723f855d8e",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -5598,11 +5598,17 @@
         },
         {
             "name": "drupal/og_menu",
-            "version": "dev-1.x",
+            "version": "2.0.0-alpha1",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/og_menu.git",
-                "reference": "eff47905d46024ebaa37b37ffd82ecdeb63ae2ad"
+                "reference": "2.0.0-alpha1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/og_menu-2.0.0-alpha1.zip",
+                "reference": "2.0.0-alpha1",
+                "shasum": "0ff3d6323721aaf405ebb40413e7205bee5c6242"
             },
             "require": {
                 "drupal/core": "^8.8 || ^9",
@@ -5610,15 +5616,12 @@
             },
             "type": "drupal-module",
             "extra": {
-                "branch-alias": {
-                    "dev-1.x": "1.x-dev"
-                },
                 "drupal": {
-                    "version": "8.x-1.0-alpha4+5-dev",
-                    "datestamp": "1622143982",
+                    "version": "2.0.0-alpha1",
+                    "datestamp": "1654672029",
                     "security-coverage": {
                         "status": "not-covered",
-                        "message": "Dev releases are not covered by Drupal security advisories."
+                        "message": "Alpha releases are not covered by Drupal security advisories."
                     }
                 }
             },
@@ -5657,8 +5660,7 @@
             "support": {
                 "source": "https://git.drupalcode.org/project/og_menu",
                 "issues": "https://drupal.org/project/issues/og_menu"
-            },
-            "time": "2021-05-27T19:32:42+00:00"
+            }
         },
         {
             "name": "drupal/page_manager",
@@ -24109,7 +24111,6 @@
         "drupal/default_content": 15,
         "drupal/dropsolid_purge": 10,
         "drupal/facets_date_range": 10,
-        "drupal/og_menu": 20,
         "drupal/page_manager": 10,
         "drupal/site_verify": 20,
         "drupal/views_block_area": 10,
