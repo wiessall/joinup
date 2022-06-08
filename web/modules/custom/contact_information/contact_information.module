@@ -9,7 +9,6 @@ declare(strict_types = 1);
 
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Entity\EntityInterface;
-use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\contact_information\Entity\ContactInformation;
 use Drupal\contact_information\Entity\ContactInformationInterface;
@@ -20,23 +19,6 @@ use Drupal\contact_information\Entity\ContactInformationInterface;
 function contact_information_entity_bundle_info_alter(&$bundles) {
   if (!empty($bundles['rdf_entity']['contact_information'])) {
     $bundles['rdf_entity']['contact_information']['class'] = ContactInformation::class;
-  }
-}
-
-/**
- * Implements hook_entity_bundle_field_info_alter().
- */
-function contact_information_entity_bundle_field_info_alter(&$fields, EntityTypeInterface $entity_type, $bundle) {
-  // During the development of the contact information functionality we were
-  // helpfully supplied by the business analysts with a regular expression to
-  // validate the email addresses, and they were insistent to use this. So we
-  // use a bespoke regex instead of \Drupal\Component\Utility\EmailValidator.
-  // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-2404
-  if ($entity_type->id() == 'rdf_entity' && $bundle == 'contact_information' && !empty($fields['field_ci_email'])) {
-    // @todo Consider either restoring the custom email validation or dead code
-    // removal in ISAICP-6965.
-    // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-6965
-    // $fields['field_ci_email']->addConstraint('JoinupEmail');
   }
 }
 

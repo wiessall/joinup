@@ -9,7 +9,7 @@ use Drupal\Core\Routing\LocalRedirectResponse;
 use Drupal\Core\Url;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Event\GetResponseEvent;
+use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 
 /**
@@ -54,10 +54,10 @@ class JoinupEventEventSubscriber implements EventSubscriberInterface {
    * Until the Events page is ready we temporarily redirect to the search page.
    * This way our users can already find the events they are looking for.
    *
-   * @param \Symfony\Component\HttpKernel\Event\GetResponseEvent $event
+   * @param \Symfony\Component\HttpKernel\Event\RequestEvent $event
    *   Response event.
    */
-  public function onKernelRequest(GetResponseEvent $event) {
+  public function onKernelRequest(RequestEvent $event) {
     // Retrieve the request path, and do inbound processing so that language
     // prefixes are removed.
     $request = $event->getRequest();

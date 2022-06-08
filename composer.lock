@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "3c19893cf22bf0bcbe9a3d4711ff575a",
+    "content-hash": "677c68e12c87e17365c304f64cf44e57",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -1289,7 +1289,8 @@
                 "url": "git@github.com:dkarv/mdl-chip-input.git",
                 "reference": "master"
             },
-            "type": "drupal-theme-library"
+            "type": "drupal-theme-library",
+            "time": "2018-10-19T20:09:36+00:00"
         },
         {
             "name": "doctrine/annotations",
@@ -1772,6 +1773,9 @@
                     "services": {
                         "drush.services.yml": "^9 || ^10"
                     }
+                },
+                "patches_applied": {
+                    "Cached redirect response issue with failed ticket validation @see https://www.drupal.org/project/cas/issues/3277861": "https://git.drupalcode.org/project/cas/-/merge_requests/12.diff"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -2164,16 +2168,16 @@
         },
         {
             "name": "drupal/core",
-            "version": "9.3.12",
+            "version": "9.3.14",
             "source": {
                 "type": "git",
                 "url": "https://github.com/drupal/core.git",
-                "reference": "ed6af33093f66a9c5048d02f9f2c326ad0e7e90c"
+                "reference": "ea4c4780324c6ee6679823927e95601938d7f6a3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/drupal/core/zipball/ed6af33093f66a9c5048d02f9f2c326ad0e7e90c",
-                "reference": "ed6af33093f66a9c5048d02f9f2c326ad0e7e90c",
+                "url": "https://api.github.com/repos/drupal/core/zipball/ea4c4780324c6ee6679823927e95601938d7f6a3",
+                "reference": "ea4c4780324c6ee6679823927e95601938d7f6a3",
                 "shasum": ""
             },
             "require": {
@@ -2195,7 +2199,7 @@
                 "ext-spl": "*",
                 "ext-tokenizer": "*",
                 "ext-xml": "*",
-                "guzzlehttp/guzzle": "^6.5.2",
+                "guzzlehttp/guzzle": "^6.5.6",
                 "laminas/laminas-diactoros": "^2.1",
                 "laminas/laminas-feed": "^2.12",
                 "masterminds/html5": "^2.1",
@@ -2368,6 +2372,34 @@
                         "[web-root]/profiles/README.txt": "assets/scaffold/files/profiles.README.txt",
                         "[web-root]/themes/README.txt": "assets/scaffold/files/themes.README.txt"
                     }
+                },
+                "patches_applied": {
+                    "Use email verification when changing user email addresses @see https://www.drupal.org/project/drupal/issues/85494": "https://www.drupal.org/files/issues/2022-01-17/85494-376-9.3.x.patch",
+                    "Use READ COMMITTED by default for MySQL transactions @see https://www.drupal.org/project/drupal/issues/1650930": "https://www.drupal.org/files/issues/2021-10-13/1650930-144.patch",
+                    "Allow image style to be selected in text editor @see https://www.drupal.org/node/2061377": "https://git.drupalcode.org/project/drupal/-/merge_requests/48.diff",
+                    "Allow making the file description a required field @see https://www.drupal.org/node/2320877": "https://git.drupalcode.org/project/drupal/-/merge_requests/975.diff",
+                    "Delete should not be the default action on /admin/content @see https://www.drupal.org/project/drupal/issues/2381293": "https://git.drupalcode.org/project/drupal/-/merge_requests/1670.diff",
+                    "Regression: Do not bypass route access with 'link to any page' permissions for menu links @see https://www.drupal.org/project/drupal/issues/2463753": "https://www.drupal.org/files/issues/2021-09-15/2463753-87_0.patch",
+                    "Upcast named arguments/named parameters in views @see https://www.drupal.org/project/drupal/issues/2528166": "https://git.drupalcode.org/project/drupal/-/merge_requests/1323.diff",
+                    "Confirmation cancel links are incorrect if installed in a subdirectory @see https://www.drupal.org/project/drupal/issues/2582295": "https://www.drupal.org/files/issues/2021-08-23/2582295-52.patch",
+                    "Allow plurals on bundle labels @see https://www.drupal.org/node/2765065": "https://git.drupalcode.org/project/drupal/-/merge_requests/1652.diff",
+                    "Enlarge file_usage entity ID length. @see https://www.drupal.org/node/2675600": "https://www.drupal.org/files/issues/2675600-30.patch",
+                    "Menu link plugins should provide a way for the link to be conditionally hidden @see https://www.drupal.org/project/drupal/issues/2719609": "https://www.drupal.org/files/issues/2719609-2.patch",
+                    "New option for Views page displays to use the admin theme @see https://www.drupal.org/node/2719797": "https://www.drupal.org/files/issues/2719797-65.patch",
+                    "Make the tab active when the fragment is present in URL @see https://www.drupal.org/project/drupal/issues/2752511": "https://www.drupal.org/files/issues/2022-01-03/vertical-tabs-2752511-109.patch",
+                    "Add thread depth configuration to comments. Includes patch for parent issue #2879087. @see https://www.drupal.org/project/drupal/issues/2786587 @see https://www.drupal.org/project/drupal/issues/2879087": "https://www.drupal.org/files/issues/2022-01-17/2786587-58-9.3.x.patch",
+                    "Set fixed depth for comment threads.": "resources/patch/2786587-thread-depth-fixed-limit.patch",
+                    "Views with a different query plugin created via the UI do not have the correct query plugin ID in the view config @see https://www.drupal.org/project/drupal/issues/2836237": "https://www.drupal.org/files/issues/2022-01-17/2836237-49-9.3.x.patch",
+                    "Disable tableselect element options @see https://www.drupal.org/project/drupal/issues/2895352": "https://www.drupal.org/files/issues/2021-12-04/2895352-53.patch",
+                    "Form is built when not using fields @see https://www.drupal.org/project/drupal/issues/2917239": "https://www.drupal.org/files/issues/2022-05-09/2917239-15.patch",
+                    "Pass current route parameters to the confirmation form route @see https://www.drupal.org/project/drupal/issues/2901412": "https://git.drupalcode.org/project/drupal/-/merge_requests/1666.diff",
+                    "Lazy services: support PHP7 return types in generate-proxy-class @see https://www.drupal.org/node/2919243": "https://www.drupal.org/files/issues/2919243-2.patch",
+                    "Cache tags are not invalidated on revision delete @see https://www.drupal.org/project/drupal/issues/2945928": "https://www.drupal.org/files/issues/entity-cache_revision_deletion-2945928-2.patch",
+                    "Users w/o access to content should still have configurable access to the content URL @see https://www.drupal.org/project/drupal/issues/3008254": "https://www.drupal.org/files/issues/2022-01-17/3008254-26-9.3.x.patch",
+                    "Make it easier to trigger a tour @see https://www.drupal.org/project/drupal/issues/3012027": "https://www.drupal.org/files/issues/2022-01-17/3012027-52-9.3.x.patch",
+                    "EntityConstraintValidationList::findByCode is inconsistent @see https://www.drupal.org/project/drupal/issues/3126654": "https://www.drupal.org/files/issues/2020-04-10/find_by_code_override-3126654-D8-4.patch",
+                    "Cannot implement a custom user cancellation method @see https://www.drupal.org/project/drupal/issues/3135592": "https://git.drupalcode.org/project/drupal/-/merge_requests/1675.diff",
+                    "The old storage handler is still defined for RDF entities.": "resources/patch/core-fix-sparql-storage-hack.patch"
                 }
             },
             "autoload": {
@@ -2415,13 +2447,13 @@
             ],
             "description": "Drupal is an open source content management platform powering millions of websites and applications.",
             "support": {
-                "source": "https://github.com/drupal/core/tree/9.3.12"
+                "source": "https://github.com/drupal/core/tree/9.3.14"
             },
-            "time": "2022-04-20T14:25:27+00:00"
+            "time": "2022-05-25T18:43:19+00:00"
         },
         {
             "name": "drupal/core-composer-scaffold",
-            "version": "9.3.12",
+            "version": "9.3.14",
             "source": {
                 "type": "git",
                 "url": "https://github.com/drupal/core-composer-scaffold.git",
@@ -2465,22 +2497,22 @@
                 "drupal"
             ],
             "support": {
-                "source": "https://github.com/drupal/core-composer-scaffold/tree/9.3.12"
+                "source": "https://github.com/drupal/core-composer-scaffold/tree/9.3.14"
             },
             "time": "2022-02-24T17:40:56+00:00"
         },
         {
             "name": "drupal/core-recommended",
-            "version": "9.3.12",
+            "version": "9.3.14",
             "source": {
                 "type": "git",
                 "url": "https://github.com/drupal/core-recommended.git",
-                "reference": "a8fa50016c1aa1eb7f4e54f590e6343d286c418f"
+                "reference": "31f23ce0ae7cf3925f6fb6a3953762b259a0494e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/drupal/core-recommended/zipball/a8fa50016c1aa1eb7f4e54f590e6343d286c418f",
-                "reference": "a8fa50016c1aa1eb7f4e54f590e6343d286c418f",
+                "url": "https://api.github.com/repos/drupal/core-recommended/zipball/31f23ce0ae7cf3925f6fb6a3953762b259a0494e",
+                "reference": "31f23ce0ae7cf3925f6fb6a3953762b259a0494e",
                 "shasum": ""
             },
             "require": {
@@ -2489,9 +2521,9 @@
                 "doctrine/annotations": "1.13.2",
                 "doctrine/lexer": "1.2.1",
                 "doctrine/reflection": "1.2.2",
-                "drupal/core": "9.3.12",
+                "drupal/core": "9.3.14",
                 "egulias/email-validator": "3.1.2",
-                "guzzlehttp/guzzle": "6.5.5",
+                "guzzlehttp/guzzle": "6.5.6",
                 "guzzlehttp/promises": "1.5.1",
                 "guzzlehttp/psr7": "1.8.5",
                 "laminas/laminas-diactoros": "2.8.0",
@@ -2551,9 +2583,9 @@
             ],
             "description": "Locked core dependencies; require this project INSTEAD OF drupal/core.",
             "support": {
-                "source": "https://github.com/drupal/core-recommended/tree/9.3.12"
+                "source": "https://github.com/drupal/core-recommended/tree/9.3.14"
             },
-            "time": "2022-04-20T14:25:27+00:00"
+            "time": "2022-05-25T18:43:19+00:00"
         },
         {
             "name": "drupal/csv_serialization",
@@ -3237,6 +3269,11 @@
                         "status": "not-covered",
                         "message": "Beta releases are not covered by Drupal security advisories."
                     }
+                },
+                "patches_applied": {
+                    "core_version_requirement error when updating @see https://www.drupal.org/project/entity_legal/issues/3215912": "https://git.drupalcode.org/project/entity_legal/-/merge_requests/2.diff",
+                    "Dynamic page cache prevents redirection @see https://www.drupal.org/project/entity_legal/issues/3251128": "https://www.drupal.org/files/issues/2021-11-24/3251128-2.patch",
+                    "Delete Entity Legal version @see https://www.drupal.org/project/entity_legal/issues/3258368": "https://git.drupalcode.org/project/entity_legal/-/merge_requests/3.diff"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -3372,6 +3409,9 @@
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
                     }
+                },
+                "patches_applied": {
+                    "Missing config schema for EntityQueueDragtableWidget @see Missing config schema for EntityQueueDragtableWidget": "https://git.drupalcode.org/project/entityqueue/-/merge_requests/3.diff"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -3550,6 +3590,10 @@
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
                     }
+                },
+                "patches_applied": {
+                    "Facet Summary for Facet Items with a set dependency. @see https://www.drupal.org/node/2873480": "https://www.drupal.org/files/issues/2020-07-30/2873480-33-8.x-1.5.patch",
+                    "Apply soft limit to facet root li tags. @see https://www.drupal.org/i/3208580": "https://git.drupalcode.org/project/facets/-/commit/6b404ed09e824a08c67a8e6f41cf0d78776762f8.diff"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -4277,6 +4321,10 @@
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
                     }
+                },
+                "patches_applied": {
+                    "Behat integration. @see https://www.drupal.org/project/honeypot/issues/3059040": "https://www.drupal.org/files/issues/2020-09-09/3059040-31.patch",
+                    "Provide ways to clean up old honeypot_time_restriction values @see https://www.drupal.org/project/honeypot/issues/2997609": "https://git.drupalcode.org/project/honeypot/-/merge_requests/2.diff"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -4443,6 +4491,9 @@
                         "status": "not-covered",
                         "message": "RC releases are not covered by Drupal security advisories."
                     }
+                },
+                "patches_applied": {
+                    "Autocomplete field doesn't allow to reference entities with long titles @see https://www.drupal.org/node/2895663": "https://www.drupal.org/files/issues/2895663-2.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -4816,6 +4867,9 @@
                         "status": "not-covered",
                         "message": "Beta releases are not covered by Drupal security advisories."
                     }
+                },
+                "patches_applied": {
+                    "Link shown after the autocomplete selection is the bare node/xxx link, not the alias @see https://www.drupal.org/node/2877535": "https://www.drupal.org/files/issues/2020-03-11/2877535-12.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -4935,6 +4989,9 @@
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
                     }
+                },
+                "patches_applied": {
+                    "Ensure backward compatibility with Piwik @see https://www.drupal.org/project/matomo_reporting_api/issues/3080854": "https://www.drupal.org/files/issues/2019-09-18/3080854-7.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -5075,7 +5132,8 @@
             "support": {
                 "source": "https://git.drupalcode.org/project/menu_link_destination",
                 "issues": "https://www.drupal.org/project/issues/menu_link_destination"
-            }
+            },
+            "time": "2021-10-12T14:43:09+00:00"
         },
         {
             "name": "drupal/message",
@@ -5429,6 +5487,10 @@
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
                     }
+                },
+                "patches_applied": {
+                    "Error: Call to a member function __wakeup() on null @see https://www.drupal.org/project/metatag/issues/3258346": "https://www.drupal.org/files/issues/2022-01-13/metatag_views-fix-cache-wrapper-serialization-3258346-3.patch",
+                    "Views cache wrapper overrides other modules cache logic @see https://www.drupal.org/project/metatag/issues/3261473": "https://git.drupalcode.org/project/metatag/-/merge_requests/48.diff"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -5683,7 +5745,8 @@
             "support": {
                 "source": "https://git.drupalcode.org/project/og_menu",
                 "issues": "https://drupal.org/project/issues/og_menu"
-            }
+            },
+            "time": "2021-05-27T19:32:42+00:00"
         },
         {
             "name": "drupal/page_manager",
@@ -5864,6 +5927,10 @@
                         "status": "not-covered",
                         "message": "Project has not opted into security advisory coverage!"
                     }
+                },
+                "patches_applied": {
+                    "Formatter settings are missing schema @see https://www.drupal.org/i/3194916": "https://git.drupalcode.org/project/paragraphs_jquery_ui_accordion/-/merge_requests/1.diff",
+                    "Replacing the deprecated core/jquery.ui.accordion library with jquery_ui_accordion/accordion @see https://www.drupal.org/i/3171508": "https://www.drupal.org/files/issues/2020-09-17/paragraphs_jquery_ui_accordion-accordion-library-3171508-2.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -5909,6 +5976,10 @@
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
                     }
+                },
+                "patches_applied": {
+                    "'Field field_last_password_reset is unknown' while importing configuration on site without password_policy activated @see https://www.drupal.org/project/password_policy/issues/2771129": "https://www.drupal.org/files/issues/2021-07-05/password_policy_field_last_password_reset_unknown_error_2771129-130.patch",
+                    "password_policy_update_8302 takes too long for a large amount of users @see https://www.drupal.org/project/password_policy/issues/3258563": "https://git.drupalcode.org/project/password_policy/-/merge_requests/22.diff"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -6042,6 +6113,9 @@
                         "status": "not-covered",
                         "message": "Alpha releases are not covered by Drupal security advisories."
                     }
+                },
+                "patches_applied": {
+                    "Accessing Lock::$updated is no longer supported @see https://www.drupal.org/project/pipeline/issues/3261553": "https://git.drupalcode.org/project/pipeline/-/merge_requests/3.diff"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -6100,6 +6174,9 @@
                         "status": "not-covered",
                         "message": "Beta releases are not covered by Drupal security advisories."
                     }
+                },
+                "patches_applied": {
+                    "Provide computed properties that return the publication date or the created/updated date @see https://www.drupal.org/project/publication_date/issues/3066317": "https://www.drupal.org/files/issues/2019-07-07/3066317-3.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -6417,6 +6494,10 @@
                         "status": "not-covered",
                         "message": "Alpha releases are not covered by Drupal security advisories."
                     }
+                },
+                "patches_applied": {
+                    "Allow bundle label plural variants @see https://github.com/ec-europa/rdf_entity/pull/12": "https://github.com/ec-europa/rdf_entity/compare/8.x-1.x...ea8f6af001fca732e89a4be0e29643953f49a88f.diff",
+                    "Support Sparql Entity Storage 2.x @see https://www.drupal.org/project/rdf_entity/issues/3259145": "https://git.drupalcode.org/project/rdf_entity/-/merge_requests/1.diff"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -6654,7 +6735,8 @@
             "homepage": "https://www.drupal.org/project/schema_digital_document",
             "support": {
                 "source": "https://git.drupalcode.org/project/schema_digital_document"
-            }
+            },
+            "time": "2021-10-12T17:45:49+00:00"
         },
         {
             "name": "drupal/schema_metatag",
@@ -6769,7 +6851,8 @@
             "homepage": "https://www.drupal.org/project/schema_social_media_posting",
             "support": {
                 "source": "https://git.drupalcode.org/project/schema_social_media_posting"
-            }
+            },
+            "time": "2021-10-12T18:22:40+00:00"
         },
         {
             "name": "drupal/search_api",
@@ -6815,6 +6898,11 @@
                     "services": {
                         "drush.services.yml": "^9 || ^10"
                     }
+                },
+                "patches_applied": {
+                    "item_id column is too short @see https://www.drupal.org/node/2829696": "resources/patch/search_api-item_id-length-2829696.patch",
+                    "Some bulk form field options are missing schema @see https://www.drupal.org/project/search_api/issues/3195199": "https://git.drupalcode.org/project/search_api/-/merge_requests/6.diff",
+                    "Out of memory error when used with views, metatag and memcache modules @see https://www.drupal.org/project/search_api/issues/3258375": "https://www.drupal.org/files/issues/2022-01-13/search_api-metatag-out-of-memory-3258375-2.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -6873,6 +6961,9 @@
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
                     }
+                },
+                "patches_applied": {
+                    "Clear timeout autosubmit used in views_autosubmit.": "resources/patch/search_api_autocomplete_override_views_autosubmit.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -7133,6 +7224,9 @@
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
                     }
+                },
+                "patches_applied": {
+                    "Add drush commands @see https://www.drupal.org/project/site_alert/issues/3118800": "https://www.drupal.org/files/issues/2020-10-26/3118800-44.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -7230,7 +7324,8 @@
             "homepage": "https://www.drupal.org/project/site_verify",
             "support": {
                 "source": "https://git.drupalcode.org/project/site_verify"
-            }
+            },
+            "time": "2020-11-16T14:54:55+00:00"
         },
         {
             "name": "drupal/smart_trim",
@@ -7316,6 +7411,9 @@
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
                     }
+                },
+                "patches_applied": {
+                    "Missing config schema for field, widget and formatter @see https://www.drupal.org/node/2898680": "https://git.drupalcode.org/project/social_media_links/-/merge_requests/4.diff"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -7373,6 +7471,9 @@
                         "status": "not-covered",
                         "message": "Project has not opted into security advisory coverage!"
                     }
+                },
+                "patches_applied": {
+                    "Error due to nullable $entity_id_plugin @see https://www.drupal.org/project/sparql_entity_storage/issues/3259160": "https://www.drupal.org/files/issues/2022-01-18/3259160-2.patch"
                 }
             },
             "autoload": {
@@ -7528,6 +7629,9 @@
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
                     }
+                },
+                "patches_applied": {
+                    "Subpaths with redirect not resolved @see https://www.drupal.org/project/subpathauto/issues/3175637": "https://git.drupalcode.org/project/subpathauto/-/merge_requests/1/diffs.diff"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -7582,6 +7686,11 @@
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
                     }
+                },
+                "patches_applied": {
+                    "Add spooling for increased performance @see https://www.drupal.org/project/swiftmailer/issues/3000553": "https://git.drupalcode.org/project/swiftmailer/-/merge_requests/2.diff",
+                    "Allow Cc and Bcc headers @see https://www.drupal.org/project/swiftmailer/issues/2892104": "https://www.drupal.org/files/issues/2021-10-11/2892104-38.patch",
+                    "Improve spool error message": "resources/patch/swiftmailer.drush.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -7697,6 +7806,9 @@
                     "services": {
                         "drush.services.yml": "^9 || ^10"
                     }
+                },
+                "patches_applied": {
+                    "token-devel link templates don't work when canonical template has multiple parameters @see https://www.drupal.org/project/token/issues/3254619": "https://www.drupal.org/files/issues/2021-12-15/3254619-2.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -7799,6 +7911,9 @@
                     "build/themes/contrib/{$name}": [
                         "type:drupal-theme"
                     ]
+                },
+                "patches_applied": {
+                    "Fix unable to detect a pattern from default theme having same id as the pattern in the base theme @see https://github.com/nuvoleweb/ui_patterns/issues/304": "https://patch-diff.githubusercontent.com/raw/nuvoleweb/ui_patterns/pull/318.diff"
                 }
             },
             "autoload": {
@@ -7988,6 +8103,9 @@
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
                     }
+                },
+                "patches_applied": {
+                    "Extend support for embed URLs. Option to force privacy @see https://www.drupal.org/project/video_embed_field/issues/3060201 (originally on https://www.drupal.org/node/2899093)": "https://www.drupal.org/files/issues/2019-06-11/privacy_mode-3060201-D8-6.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -8097,6 +8215,9 @@
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
                     }
+                },
+                "patches_applied": {
+                    "Stop auto submitting first character entered in an Autocomplete Filter field. @see https://www.drupal.org/project/views_autosubmit/issues/3160600": "https://www.drupal.org/files/issues/2021-09-06/3160600_views_autosubmit_16.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -8155,6 +8276,9 @@
                         "status": "not-covered",
                         "message": "Beta releases are not covered by Drupal security advisories."
                     }
+                },
+                "patches_applied": {
+                    "Views block area missing schema @see https://www.drupal.org/project/views_block_area/issues/3157188": "https://www.drupal.org/files/issues/2020-07-06/views_block_area-missing_schema-3157188-2.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -8605,7 +8729,6 @@
                 "reference": "1c9448be1d04b525df73dcd9189fa0f032806687",
                 "shasum": ""
             },
-            "default-branch": true,
             "type": "drupal-library",
             "license": [
                 "GPL-2.0+"
@@ -8626,7 +8749,8 @@
                 "url": "git@github.com:ec-europa/material-design-lite.git",
                 "reference": "joinup"
             },
-            "type": "drupal-theme-library"
+            "type": "drupal-theme-library",
+            "time": "2018-03-29T12:58:02+00:00"
         },
         {
             "name": "ec-europa/spdx",
@@ -9049,16 +9173,16 @@
         },
         {
             "name": "guzzlehttp/guzzle",
-            "version": "6.5.5",
+            "version": "6.5.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/guzzle/guzzle.git",
-                "reference": "9d4290de1cfd701f38099ef7e183b64b4b7b0c5e"
+                "reference": "f092dd734083473658de3ee4bef093ed77d2689c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/guzzle/guzzle/zipball/9d4290de1cfd701f38099ef7e183b64b4b7b0c5e",
-                "reference": "9d4290de1cfd701f38099ef7e183b64b4b7b0c5e",
+                "url": "https://api.github.com/repos/guzzle/guzzle/zipball/f092dd734083473658de3ee4bef093ed77d2689c",
+                "reference": "f092dd734083473658de3ee4bef093ed77d2689c",
                 "shasum": ""
             },
             "require": {
@@ -9096,9 +9220,39 @@
             ],
             "authors": [
                 {
+                    "name": "Graham Campbell",
+                    "email": "hello@gjcampbell.co.uk",
+                    "homepage": "https://github.com/GrahamCampbell"
+                },
+                {
                     "name": "Michael Dowling",
                     "email": "mtdowling@gmail.com",
                     "homepage": "https://github.com/mtdowling"
+                },
+                {
+                    "name": "Jeremy Lindblom",
+                    "email": "jeremeamia@gmail.com",
+                    "homepage": "https://github.com/jeremeamia"
+                },
+                {
+                    "name": "George Mponos",
+                    "email": "gmponos@gmail.com",
+                    "homepage": "https://github.com/gmponos"
+                },
+                {
+                    "name": "Tobias Nyholm",
+                    "email": "tobias.nyholm@gmail.com",
+                    "homepage": "https://github.com/Nyholm"
+                },
+                {
+                    "name": "Márk Sági-Kazár",
+                    "email": "mark.sagikazar@gmail.com",
+                    "homepage": "https://github.com/sagikazarmark"
+                },
+                {
+                    "name": "Tobias Schultze",
+                    "email": "webmaster@tubo-world.de",
+                    "homepage": "https://github.com/Tobion"
                 }
             ],
             "description": "Guzzle is a PHP HTTP client library",
@@ -9114,9 +9268,23 @@
             ],
             "support": {
                 "issues": "https://github.com/guzzle/guzzle/issues",
-                "source": "https://github.com/guzzle/guzzle/tree/6.5"
+                "source": "https://github.com/guzzle/guzzle/tree/6.5.6"
             },
-            "time": "2020-06-16T21:01:06+00:00"
+            "funding": [
+                {
+                    "url": "https://github.com/GrahamCampbell",
+                    "type": "github"
+                },
+                {
+                    "url": "https://github.com/Nyholm",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/guzzlehttp/guzzle",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2022-05-25T13:19:12+00:00"
         },
         {
             "name": "guzzlehttp/promises",
@@ -9361,7 +9529,8 @@
                 "url": "git@github.com:jackmoore/autosize.git",
                 "reference": "master"
             },
-            "type": "drupal-theme-library"
+            "type": "drupal-theme-library",
+            "time": "2021-06-30T06:04:10+00:00"
         },
         {
             "name": "laminas/laminas-diactoros",
@@ -10418,7 +10587,6 @@
                 "openeuropa/code-review": "2.x-dev",
                 "phpunit/phpunit": "^7.5"
             },
-            "default-branch": true,
             "type": "composer-plugin",
             "extra": {
                 "class": "OpenEuropa\\ComposerArtifacts\\Plugin",
@@ -10491,11 +10659,11 @@
         },
         {
             "name": "openeuropa/oe_bootstrap_theme",
-            "version": "0.1.202203290731",
+            "version": "1.0.0-beta1",
             "dist": {
                 "type": "tar",
-                "url": "https://github.com/openeuropa/oe_bootstrap_theme/releases/download/0.1.202203290731/oe_bootstrap_theme-0.1.202203290731.tar.gz",
-                "reference": "20e9508094a2db72159253bc8035f450af6dfebb",
+                "url": "https://github.com/openeuropa/oe_bootstrap_theme/releases/download/1.0.0-beta1/oe_bootstrap_theme-1.0.0-beta1.tar.gz",
+                "reference": "f38e249869a9cd4e988b621897bf769e0e398f94",
                 "shasum": ""
             },
             "require": {
@@ -10521,9 +10689,9 @@
                 "egulias/email-validator": "^2.1.22 || ^3.0",
                 "nikic/php-parser": "^4.13",
                 "openeuropa/code-review": "^2.0",
-                "openeuropa/oe_content": "^2.7.0",
-                "openeuropa/oe_media": "^1.14",
-                "openeuropa/oe_paragraphs": "^1.12",
+                "openeuropa/oe_content": "^2.8.0",
+                "openeuropa/oe_media": "^1.16",
+                "openeuropa/oe_paragraphs": "^1.13",
                 "openeuropa/task-runner-drupal-project-symlink": "^1.0-beta5",
                 "phpspec/prophecy-phpunit": "^1 || ^2",
                 "symfony/dom-crawler": "^4.4.12"
@@ -10574,9 +10742,9 @@
             "description": "OpenEuropa Bootstrap base theme.",
             "support": {
                 "issues": "https://github.com/openeuropa/oe_bootstrap_theme/issues",
-                "source": "https://github.com/openeuropa/oe_bootstrap_theme/tree/0.1.202203290731"
+                "source": "https://github.com/openeuropa/oe_bootstrap_theme/tree/1.0.0-beta1"
             },
-            "time": "2022-03-29T05:30:31+00:00"
+            "time": "2022-05-20T15:24:27+00:00"
         },
         {
             "name": "openeuropa/oe_dashboard_agent",
@@ -10735,7 +10903,13 @@
                     "Explicit requirement of behat module due to PHP8 compatibility.",
                     "Explicit lower version requirement of drupal/ctools due to Drupal core 9.2 compatibility.",
                     "Explicit requirement for egulias/email-validator due to https://www.drupal.org/project/drupal/issues/3061074#comment-14300579. It can be removed when Drupal core 9.2 support is droppped."
-                ]
+                ],
+                "patches_applied": {
+                    "Allow to pass an optional referer. @see https://github.com/openeuropa/oe_webtools/pull/96": "https://patch-diff.githubusercontent.com/raw/openeuropa/oe_webtools/pull/96.diff",
+                    "Place the webtools loader on the head. @see https://github.com/openeuropa/oe_webtools/pull/102": "https://patch-diff.githubusercontent.com/raw/openeuropa/oe_webtools/pull/102.diff",
+                    "Add the possibility to display a marker on the map. @see https://github.com/openeuropa/oe_webtools/pull/111": "https://patch-diff.githubusercontent.com/raw/openeuropa/oe_webtools/pull/111.diff",
+                    "Integrate with Webtools eTrans component @see https://github.com/openeuropa/oe_webtools/pull/146": "https://patch-diff.githubusercontent.com/raw/openeuropa/oe_webtools/pull/146.diff"
+                }
             },
             "autoload": {
                 "psr-4": {
@@ -12098,7 +12272,8 @@
                 "url": "git@github.com:SEMICeu/adms-ap_validator.git",
                 "reference": "master"
             },
-            "type": "library"
+            "type": "library",
+            "time": "2017-03-23T16:26:10+00:00"
         },
         {
             "name": "solarium/solarium",
@@ -12171,7 +12346,8 @@
                 "url": "https://github.com/spdx/license-list-data",
                 "reference": "master"
             },
-            "type": "library"
+            "type": "library",
+            "time": "2022-03-26T20:57:39+00:00"
         },
         {
             "name": "stack/builder",
@@ -17525,17 +17701,17 @@
         },
         {
             "name": "drupal/cas_mock_server",
-            "version": "1.3.0",
+            "version": "1.4.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/cas_mock_server.git",
-                "reference": "8.x-1.3"
+                "reference": "8.x-1.4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/cas_mock_server-8.x-1.3.zip",
-                "reference": "8.x-1.3",
-                "shasum": "b7fb047fc048f0f92136cd961a515f8ec7a43615"
+                "url": "https://ftp.drupal.org/files/projects/cas_mock_server-8.x-1.4.zip",
+                "reference": "8.x-1.4",
+                "shasum": "2f21bc0c878ee1219b598e1dc8348cd514f32aa0"
             },
             "require": {
                 "drupal/core": "^8 || ^9"
@@ -17560,8 +17736,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "8.x-1.3",
-                    "datestamp": "1630943966",
+                    "version": "8.x-1.4",
+                    "datestamp": "1651515347",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -17754,6 +17930,9 @@
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
                     }
+                },
+                "patches_applied": {
+                    "Add a Drush command for manipulating module info files @see https://www.drupal.org/project/config_devel/issues/2392929": "https://git.drupalcode.org/project/config_devel/-/merge_requests/4.diff"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -19728,14 +19907,16 @@
                 "phpunit/phpunit": "~6.0||~7.0",
                 "slevomat/coding-standard": "~6.0"
             },
-            "default-branch": true,
             "bin": [
                 "bin/run"
             ],
             "type": "library",
             "extra": {
                 "enable-patching": true,
-                "composer-exit-on-patch-failure": true
+                "composer-exit-on-patch-failure": true,
+                "patches_applied": {
+                    "Array options @see https://github.com/openeuropa/task-runner/pull/137": "https://patch-diff.githubusercontent.com/raw/openeuropa/task-runner/pull/137.diff"
+                }
             },
             "autoload": {
                 "psr-4": {
@@ -19823,6 +20004,88 @@
                 "source": "https://github.com/opis/closure/tree/3.6.3"
             },
             "time": "2022-01-27T09:35:39+00:00"
+        },
+        {
+            "name": "palantirnet/drupal-rector",
+            "version": "0.12.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/palantirnet/drupal-rector.git",
+                "reference": "1ffc693ab36855bf76c897d5f38e487a7e60a97d"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/palantirnet/drupal-rector/zipball/1ffc693ab36855bf76c897d5f38e487a7e60a97d",
+                "reference": "1ffc693ab36855bf76c897d5f38e487a7e60a97d",
+                "shasum": ""
+            },
+            "require": {
+                "rector/rector": "~0.12",
+                "webflo/drupal-finder": "^1.2"
+            },
+            "conflict": {
+                "rector/rector": ">0.12.17"
+            },
+            "replace": {
+                "drupal8-rector/drupal8-rector": "*",
+                "palantirnet/drupal8-rector": "*"
+            },
+            "require-dev": {
+                "php": "^8.0",
+                "phpstan/extension-installer": "^1.1",
+                "phpstan/phpstan": "^1.0",
+                "phpstan/phpstan-deprecation-rules": "^1.0",
+                "phpunit/phpunit": "^9.5",
+                "rector/rector-cakephp": "dev-main#eab7b7992e3462c40b2eb8f7ab6d2013eaf20c76",
+                "rector/rector-doctrine": "dev-main#21431cc9e81990191be9c235e67c631ed518d0a3",
+                "rector/rector-laravel": "dev-main#31d9892d1f2abd41a118589ad76a065bb24150ea",
+                "rector/rector-nette": "dev-main#7aa632f0fd210b0795cb92b98e648164049db80e",
+                "rector/rector-phpoffice": "dev-main#1e12437861bb9e06f776b9f9be5811a7bf219729",
+                "rector/rector-phpunit": "dev-main#baf6f9eaa1eadc03d61ac6f414077d85b0540dfa",
+                "rector/rector-src": "dev-main#77a4582d5044446b8da43ab91a09082fa0413a23",
+                "rector/rector-symfony": "dev-main#a3ad2a20c028535c7d26ba85bed729d838eb9297",
+                "symfony/yaml": "^5 || ^6"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "DrupalRector\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Dezső Biczó",
+                    "email": "mxr576@gmail.com"
+                },
+                {
+                    "name": "Ofer Shaal",
+                    "email": "shaal@palantir.net"
+                },
+                {
+                    "name": "Daniel Montgomery",
+                    "email": "montgomery@palantir.net"
+                },
+                {
+                    "name": "Matt Glaman",
+                    "email": "nmd.matt@gmail.com"
+                }
+            ],
+            "description": "Instant fixes for your Drupal code by using Rector.",
+            "keywords": [
+                "Code style",
+                "Drupal 8",
+                "ast",
+                "drupal 9",
+                "rector"
+            ],
+            "support": {
+                "source": "https://github.com/palantirnet/drupal-rector/tree/0.12.2"
+            },
+            "time": "2022-05-04T15:23:25+00:00"
         },
         {
             "name": "pdepend/pdepend",
@@ -20212,7 +20475,6 @@
                 "slevomat/coding-standard": "~6",
                 "squizlabs/php_codesniffer": "~3"
             },
-            "default-branch": true,
             "type": "library",
             "autoload": {
                 "psr-4": {
@@ -20264,7 +20526,6 @@
                 "slevomat/coding-standard": "~6",
                 "squizlabs/php_codesniffer": "~3"
             },
-            "default-branch": true,
             "type": "library",
             "autoload": {
                 "psr-4": {
@@ -20366,7 +20627,6 @@
                 "slevomat/coding-standard": "~6",
                 "squizlabs/php_codesniffer": "~3"
             },
-            "default-branch": true,
             "type": "library",
             "autoload": {
                 "psr-4": {
@@ -20417,7 +20677,6 @@
                 "slevomat/coding-standard": "~6",
                 "squizlabs/php_codesniffer": "~3"
             },
-            "default-branch": true,
             "type": "robo-tasks",
             "autoload": {
                 "psr-4": {
@@ -21698,6 +21957,66 @@
                 }
             ],
             "time": "2022-01-05T17:46:08+00:00"
+        },
+        {
+            "name": "rector/rector",
+            "version": "0.12.17",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/rectorphp/rector.git",
+                "reference": "4f32575b718a4d7032423dc8e9d1e530ad859782"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/rectorphp/rector/zipball/4f32575b718a4d7032423dc8e9d1e530ad859782",
+                "reference": "4f32575b718a4d7032423dc8e9d1e530ad859782",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.1|^8.0",
+                "phpstan/phpstan": "^1.4.6"
+            },
+            "conflict": {
+                "phpstan/phpdoc-parser": "<1.2",
+                "rector/rector-cakephp": "*",
+                "rector/rector-doctrine": "*",
+                "rector/rector-laravel": "*",
+                "rector/rector-nette": "*",
+                "rector/rector-phpoffice": "*",
+                "rector/rector-phpunit": "*",
+                "rector/rector-prefixed": "*",
+                "rector/rector-symfony": "*"
+            },
+            "bin": [
+                "bin/rector"
+            ],
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-main": "0.12-dev"
+                }
+            },
+            "autoload": {
+                "files": [
+                    "bootstrap.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "Instant Upgrade and Automated Refactoring of any PHP code",
+            "support": {
+                "issues": "https://github.com/rectorphp/rector/issues",
+                "source": "https://github.com/rectorphp/rector/tree/0.12.17"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/tomasvotruba",
+                    "type": "github"
+                }
+            ],
+            "time": "2022-03-03T12:18:11+00:00"
         },
         {
             "name": "scssphp/scssphp",

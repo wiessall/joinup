@@ -20,6 +20,14 @@ module.exports = {
     },
     // Custom
     {
+      entry: path.resolve(outputFolder, "src/js/highlight-invalid-fields.js"),
+      dest: path.resolve(outputFolder, "assets/js/highlight-invalid-fields.js"),
+      options: {
+        minify: true,
+        sourceMap: true,
+      },
+    },
+    {
       entry: path.resolve(outputFolder, "src/js/sticky-menu.js"),
       dest: path.resolve(outputFolder, "assets/js/sticky-menu.js"),
       options: {
@@ -30,6 +38,22 @@ module.exports = {
     {
       entry: path.resolve(outputFolder, "src/js/searchbox-focus.js"),
       dest: path.resolve(outputFolder, "assets/js/searchbox-focus.js"),
+      options: {
+        minify: true,
+        sourceMap: true,
+      },
+    },
+    {
+      entry: path.resolve(outputFolder, "src/js/show-accordion-invalid-fields.js"),
+      dest: path.resolve(outputFolder, "assets/js/show-accordion-invalid-fields.js"),
+      options: {
+        minify: true,
+        sourceMap: true,
+      },
+    },
+    {
+      entry: path.resolve(outputFolder, "src/js/tour-first-balloon.js"),
+      dest: path.resolve(outputFolder, "assets/js/tour-first-balloon.js"),
       options: {
         minify: true,
         sourceMap: true,
@@ -81,7 +105,23 @@ module.exports = {
         sourceMap: "file",
       },
     },
-    // Bootstrap components
+    // Pure BCL components
+    {
+      entry: path.resolve(outputFolder, "src/scss/accordion.scss"),
+      dest: path.resolve(outputFolder, "assets/css/accordion.css"),
+      options: {
+        includePaths,
+        sourceMap: "file",
+      },
+    },
+    {
+      entry: path.resolve(outputFolder, "src/scss/badge.scss"),
+      dest: path.resolve(outputFolder, "assets/css/badge.css"),
+      options: {
+        includePaths,
+        sourceMap: "file",
+      },
+    },
     {
       entry: path.resolve(outputFolder, "src/scss/close.scss"),
       dest: path.resolve(outputFolder, "assets/css/close.css"),
@@ -106,10 +146,26 @@ module.exports = {
         sourceMap: "file",
       },
     },
-    // Custom components
+    // Custom and hybrid (BCL + custom) components
     {
       entry: path.resolve(outputFolder, "src/scss/footer.scss"),
       dest: path.resolve(outputFolder, "assets/css/footer.css"),
+      options: {
+        includePaths,
+        sourceMap: "file",
+      },
+    },
+    {
+      entry: path.resolve(outputFolder, "src/scss/forms.scss"),
+      dest: path.resolve(outputFolder, "assets/css/forms.css"),
+      options: {
+        includePaths,
+        sourceMap: "file",
+      },
+    },
+    {
+      entry: path.resolve(outputFolder, "src/scss/ief-entity-table.scss"),
+      dest: path.resolve(outputFolder, "assets/css/ief-entity-table.css"),
       options: {
         includePaths,
         sourceMap: "file",
@@ -150,6 +206,14 @@ module.exports = {
     {
       entry: path.resolve(outputFolder, "src/scss/tour.scss"),
       dest: path.resolve(outputFolder, "assets/css/tour.css"),
+      options: {
+        includePaths,
+        sourceMap: "file",
+      },
+    },
+    {
+      entry: path.resolve(outputFolder, "src/scss/tabledrag.scss"),
+      dest: path.resolve(outputFolder, "assets/css/tabledrag.css"),
       options: {
         includePaths,
         sourceMap: "file",

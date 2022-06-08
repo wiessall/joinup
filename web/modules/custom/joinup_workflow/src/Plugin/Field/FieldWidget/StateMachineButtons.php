@@ -128,7 +128,7 @@ class StateMachineButtons extends OptionsSelectWidget implements ContainerFactor
     // access, we will add a submit button for the same state update.
     $state = $items->value;
     $event = new UnchangedWorkflowStateUpdateEvent($items->getEntity(), $state, $this->getDefaultSameStateUpdateLabel($state), -20);
-    $this->eventDispatcher->dispatch('joinup_workflow.unchanged_workflow_state_update', $event);
+    $this->eventDispatcher->dispatch($event, 'joinup_workflow.unchanged_workflow_state_update');
 
     if (!$event->getAccess()->isForbidden()) {
       $element['#same_state_button'] = [
@@ -202,6 +202,7 @@ class StateMachineButtons extends OptionsSelectWidget implements ContainerFactor
         : t('Save as @transition', ['@transition' => $label]);
 
       $form['actions']['state_machine_' . $state_id] = $button + $default_button;
+      $form['actions']['state_machine_' . $state_id]['#attributes']['class'][] = 'state-machine-action-button';
     }
 
     // Hide the default buttons, including the specialty ones added by
@@ -252,7 +253,7 @@ class StateMachineButtons extends OptionsSelectWidget implements ContainerFactor
 
       // Allow modules to alter the transitions.
       $event = new StateMachineButtonLabelsEvent($entity, $transitions, $current_state);
-      $this->eventDispatcher->dispatch(StateMachineButtonLabelsEventInterface::EVENT_NAME, $event);
+      $this->eventDispatcher->dispatch($event, StateMachineButtonLabelsEventInterface::EVENT_NAME);
 
       // Replace "to state" labels with the label associated to that transition.
       foreach ($event->getTransitions() as $transition) {

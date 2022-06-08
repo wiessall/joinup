@@ -111,7 +111,7 @@
         "masterminds/html5": "^2.7",
         "ml/json-ld": "^1.2",
         "openeuropa/composer-artifacts": "dev-master",
-        "openeuropa/oe_bootstrap_theme": "0.1.202203290731",
+        "openeuropa/oe_bootstrap_theme": "^1.0",
         "openeuropa/oe_dashboard_agent": "^0.3.0",
         "openeuropa/oe_webtools": "^1.14",
         "openeuropa/webtools-geocoding-provider": "~0.1",
@@ -152,6 +152,7 @@
         "lovers-of-behat/table-extension": "^1.2.0",
         "mikey179/vfsstream": "~1.6",
         "openeuropa/task-runner": "dev-master as 1.0.0-beta7",
+        "palantirnet/drupal-rector": "^0.12.2",
         "pear/http_request2": "~2.4",
         "pfrenssen/phpcs-pre-push": "1.1",
         "php-task-runner/composer": "dev-master",
@@ -263,6 +264,9 @@
             "drupal/config_devel": {
                 "Add a Drush command for manipulating module info files @see https://www.drupal.org/project/config_devel/issues/2392929": "https://git.drupalcode.org/project/config_devel/-/merge_requests/4.diff"
             },
+            "drupal/cas": {
+                "Cached redirect response issue with failed ticket validation @see https://www.drupal.org/project/cas/issues/3277861": "https://git.drupalcode.org/project/cas/-/merge_requests/12.diff"
+            },
             "drupal/core": {
                 "Use email verification when changing user email addresses @see https://www.drupal.org/project/drupal/issues/85494": "https://www.drupal.org/files/issues/2022-01-17/85494-376-9.3.x.patch",
                 "Use READ COMMITTED by default for MySQL transactions @see https://www.drupal.org/project/drupal/issues/1650930": "https://www.drupal.org/files/issues/2021-10-13/1650930-144.patch",
@@ -281,6 +285,7 @@
                 "Set fixed depth for comment threads.": "resources/patch/2786587-thread-depth-fixed-limit.patch",
                 "Views with a different query plugin created via the UI do not have the correct query plugin ID in the view config @see https://www.drupal.org/project/drupal/issues/2836237": "https://www.drupal.org/files/issues/2022-01-17/2836237-49-9.3.x.patch",
                 "Disable tableselect element options @see https://www.drupal.org/project/drupal/issues/2895352": "https://www.drupal.org/files/issues/2021-12-04/2895352-53.patch",
+                "Form is built when not using fields @see https://www.drupal.org/project/drupal/issues/2917239": "https://www.drupal.org/files/issues/2022-05-09/2917239-15.patch",
                 "Pass current route parameters to the confirmation form route @see https://www.drupal.org/project/drupal/issues/2901412": "https://git.drupalcode.org/project/drupal/-/merge_requests/1666.diff",
                 "Lazy services: support PHP7 return types in generate-proxy-class @see https://www.drupal.org/node/2919243": "https://www.drupal.org/files/issues/2919243-2.patch",
                 "Cache tags are not invalidated on revision delete @see https://www.drupal.org/project/drupal/issues/2945928": "https://www.drupal.org/files/issues/entity-cache_revision_deletion-2945928-2.patch",
@@ -374,14 +379,18 @@
             "drupal/views_block_area": {
                 "Views block area missing schema @see https://www.drupal.org/project/views_block_area/issues/3157188": "https://www.drupal.org/files/issues/2020-07-06/views_block_area-missing_schema-3157188-2.patch"
             },
-            "openeuropa/oe_bootstrap_theme": {
-                "Make Slim Select optional @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/OEL-1384": "https://patch-diff.githubusercontent.com/raw/openeuropa/oe_bootstrap_theme/pull/224.diff"
-            },
             "openeuropa/oe_webtools": {
                 "Allow to pass an optional referer. @see https://github.com/openeuropa/oe_webtools/pull/96": "https://patch-diff.githubusercontent.com/raw/openeuropa/oe_webtools/pull/96.diff",
                 "Place the webtools loader on the head. @see https://github.com/openeuropa/oe_webtools/pull/102": "https://patch-diff.githubusercontent.com/raw/openeuropa/oe_webtools/pull/102.diff",
                 "Add the possibility to display a marker on the map. @see https://github.com/openeuropa/oe_webtools/pull/111": "https://patch-diff.githubusercontent.com/raw/openeuropa/oe_webtools/pull/111.diff",
                 "Integrate with Webtools eTrans component @see https://github.com/openeuropa/oe_webtools/pull/146": "https://patch-diff.githubusercontent.com/raw/openeuropa/oe_webtools/pull/146.diff"
+            },
+            "openeuropa/task-runner": {
+                "Array options @see https://github.com/openeuropa/task-runner/pull/137": "https://patch-diff.githubusercontent.com/raw/openeuropa/task-runner/pull/137.diff"
+            },
+            "palantirnet/drupal-rector": {
+                "drupalPostForm() with 1st param NULL @see https://github.com/palantirnet/drupal-rector/pull/198": "https://patch-diff.githubusercontent.com/raw/palantirnet/drupal-rector/pull/198.diff",
+                "user_password() deprecation @see https://github.com/palantirnet/drupal-rector/pull/199": "https://patch-diff.githubusercontent.com/raw/palantirnet/drupal-rector/pull/199.diff"
             }
         },
         "artifacts": {

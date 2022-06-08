@@ -15,7 +15,7 @@ tips:
     label: 'Your account'
     weight: 1
     position: left-start
-    selector: '.temporarily-disabled joinup-navbar .nav-item:nth-last-child(3)'
+    selector: '#tour-first-balloon'
     body: 'Sign in or out, and manage your user account.'
   search:
     id: search
