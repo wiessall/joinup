@@ -2,19 +2,16 @@
  * @file
  * Attaches the behaviours to show visual cues on pinned community content.
  */
-
-(function ($, Drupal) {
-
+((Drupal, once) => {
   /**
    * Theme function that renders a visual cue for pinned content.
    *
-   * @returns {string}
+   * @return {string}
    *   The HTML for the pinned content visual cue.
    */
-  Drupal.theme.pinnedContentCue = function () {
+  Drupal.theme.pinnedContentCue = () => {
     return '<div class="listing__corner"><span class="icon icon--pin"></span></div>';
   };
-
   /**
    * Adds visual cues for content pinned inside the parent collection.
    *
@@ -24,33 +21,32 @@
    *   Attaches pinned entities behaviors.
    */
   Drupal.behaviors.pinnedEntities = {
-    attach: function (context) {
-      var group = $('[data-drupal-group-context]').data('drupal-group-context');
-
+    attach(context) {
+      const group = context
+        .querySelector("[data-drupal-group-context]")
+        .data("drupal-group-context");
       // If there is no global collection context, bail out.
       if (!group) {
         return;
       }
-
-      $(context).find('.is-pinned').once('pinned-cue').each(function () {
-        var $this = $(this);
-        var parent = $this.data('drupal-parent-id');
-        var affiliated = $this.data('drupal-pinned-in') || '';
-
+      once("pinned-cue", ".is-pinned", context).forEach((element) => {
+        const parent = element.dataset.drupalParentId;
+        const affiliated = element.dataset.drupalPinnedIn || "";
         // Show the cue only when the global collection context is the same
         // as the parent of the tile.
-        if (parent !== group && affiliated.split(',').indexOf(group) === -1) {
+        if (parent !== group && affiliated.split(",").indexOf(group) === -1) {
           return;
         }
-
-        $this.addClass('listing__card--corner');
+        element.classList.add("listing__card--corner");
         // It is needed for listing title padding if image doesn't exist.
-        if (!$this.find('.listing__image').length) {
-          $this.addClass('listing__card--corner-title');
+        if (!element.querySelector(".listing__image")) {
+          element.classlist.add("listing__card--corner-title");
         }
-        $this.prepend(Drupal.theme('pinnedContentCue'));
+        element.insertBefore(
+          Drupal.theme("pinnedContentCue"),
+          element.firstChild
+        );
       });
-    }
+    },
   };
-
-})(jQuery, Drupal);
+})(Drupal, once);
