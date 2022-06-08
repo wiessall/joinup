@@ -19,7 +19,7 @@ use Drupal\joinup_user\JoinupUserViewsData;
 function joinup_user_install() {
   // Set a default image for the users avatar.
   $directory = \Drupal::service('file_system')
-    ->realpath(drupal_get_path('module', 'joinup_user') . '/includes');
+    ->realpath(\Drupal::service('extension.list.module')->getPath('joinup_user') . '/includes');
   $file_name = 'user_icon.png';
   $file_path = $directory . '/' . $file_name;
   $internal_path = "public://default_images";

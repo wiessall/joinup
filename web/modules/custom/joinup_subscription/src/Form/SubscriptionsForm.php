@@ -32,28 +32,28 @@ class SubscriptionsForm extends FormBase {
    *
    * @var \Drupal\Core\Entity\EntityTypeManagerInterface
    */
-  protected $entityTypeManager;
+  protected EntityTypeManagerInterface $entityTypeManager;
 
   /**
    * The entity type bundle info service.
    *
    * @var \Drupal\Core\Entity\EntityTypeBundleInfoInterface
    */
-  protected $entityTypeBundleInfo;
+  protected EntityTypeBundleInfoInterface $entityTypeBundleInfo;
 
   /**
    * The Joinup group manager service.
    *
    * @var \Drupal\joinup_group\JoinupGroupManagerInterface
    */
-  protected $groupManager;
+  protected JoinupGroupManagerInterface $groupManager;
 
   /**
    * The OG membership manager.
    *
    * @var \Drupal\og\MembershipManagerInterface
    */
-  protected $membershipManager;
+  protected MembershipManagerInterface $membershipManager;
 
   /**
    * Constructs a new MySubscriptionsForm.
@@ -354,7 +354,7 @@ class SubscriptionsForm extends FormBase {
 
     return (new AjaxResponse())
       ->addCommand(new ReplaceCommand("#{$form['groups'][$submitted_group_id]['#id']}", $form['groups'][$submitted_group_id]))
-      ->addCommand(new ReplaceCommand('#edit-actions', $form['edit-actions']));
+      ->addCommand(new ReplaceCommand('.form__subscribe-actions', $form['edit-actions']));
   }
 
   /**

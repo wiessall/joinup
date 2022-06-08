@@ -27,7 +27,7 @@
 @import "@openeuropa/bcl-bootstrap/scss/containers";
 @import "@openeuropa/bcl-bootstrap/scss/grid";
 // @import "@openeuropa/bcl-bootstrap/scss/tables";
-@import "@openeuropa/bcl-bootstrap/scss/forms";
+// @import "@openeuropa/bcl-bootstrap/scss/forms";
 @import "@openeuropa/bcl-bootstrap/scss/buttons";
 @import "@openeuropa/bcl-bootstrap/scss/transitions";
 // @import "@openeuropa/bcl-bootstrap/scss/dropdown";
@@ -81,7 +81,4 @@
 // @import "@openeuropa/bcl-theme-joinup/src/scss/pagination";
 // @import "@openeuropa/bcl-theme-default/src/scss/inpage-navigation";
 
-
-// Custom Joinup mixins
-// @import "core/mixins/joinup-icons";
-// @import "core/mixins/full-width-background-colors";
+@import "components/layout";
