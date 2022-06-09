@@ -15,9 +15,16 @@
 declare(strict_types = 1);
 
 /**
+ * Remove site_verify leftovers.
+ */
+function joinup_core_deploy_108200(): void {
+  \Drupal::database()->schema()->dropTable('site_verify');
+}
+
+/**
  * Validate contact info email.
  */
-function joinup_core_deploy_0108100(array &$sandbox) {
+function joinup_core_deploy_0108201(array &$sandbox) {
   if (empty($sandbox['ids'])) {
     $sandbox['ids'] = \Drupal::entityQuery('rdf_entity')->condition('rid', [
       'collection',
