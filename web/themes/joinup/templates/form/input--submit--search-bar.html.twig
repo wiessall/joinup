@@ -12,13 +12,9 @@
 #}
 {%
   set classes = [
-    'button',
-    'button--blue',
-    'mdl-button',
-    'mdl-js-button',
-    'mdl-button--raised',
-    'mdl-js-ripple-effect',
-    'mdl-button--accent',
-  ]
+  'hidden',
+  'search-bar__button',
+  'visually-hidden',
+]
 %}
-<input{{ attributes.removeClass('button').addClass('search-bar__button') }} /><span class="search-bar__icon icon icon--search"></span>{{ children }}
+<input{{ attributes.removeClass('button').addClass(classes) }} />{{ children }}
