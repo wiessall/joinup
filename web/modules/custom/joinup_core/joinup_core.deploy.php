@@ -13,3 +13,10 @@
  */
 
 declare(strict_types = 1);
+
+/**
+ * Remove site_verify leftovers.
+ */
+function joinup_core_deploy_108200(): void {
+  \Drupal::database()->schema()->dropTable('site_verify');
+}
