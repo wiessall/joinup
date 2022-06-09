@@ -24,7 +24,7 @@ function joinup_core_deploy_108200(): void {
 /**
  * Validate contact info email.
  */
-function joinup_core_deploy_0108201(array &$sandbox) {
+function joinup_core_deploy_0108201(array &$sandbox): string {
   if (empty($sandbox['ids'])) {
     $sandbox['ids'] = \Drupal::entityQuery('rdf_entity')->condition('rid', [
       'collection',
