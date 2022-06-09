@@ -4,10 +4,12 @@ declare(strict_types = 1);
 
 namespace Joinup\TaskRunner\Commands;
 
+use Behat\Behat\ApplicationFactory;
 use Drupal\Core\Database\Database;
 use EasyRdf\Http;
 use Joinup\TaskRunner\Traits\SolrTrait;
 use OpenEuropa\TaskRunner\Commands\AbstractCommands;
+use PHPUnit\Runner\Version;
 
 /**
  * Joinup Environment Commands.
@@ -32,7 +34,10 @@ class JoinupEnvironmentCommands extends AbstractCommands {
       " MySQL    {$this->mysqlVersion()} (or MariaDB, Percona Server, or equivalent)\n" .
       " Virtuoso {$this->virtuosoVersion()}\n" .
       " Solr     {$this->solrVersion()}\n" .
-      " Joinup   {$this->joinupVersion()}\n";
+      " PHPUnit  {$this->phpunitVersion()}\n" .
+      " Behat    {$this->behatVersion()}\n" .
+      " Selenium {$this->seleniumVersion()}\n" .
+      " Joinup   {$this->joinupVersion()}";
   }
 
   /**
@@ -93,6 +98,12 @@ class JoinupEnvironmentCommands extends AbstractCommands {
     return $version;
   }
 
+  /**
+   * Returns the Joinup version.
+   *
+   * @return string
+   *   The Joinup version.
+   */
   protected function joinupVersion(): string {
     $config = $this->getConfig();
     $file = "{$config->get('joinup.site_dir')}/VERSION.txt";
@@ -100,6 +111,50 @@ class JoinupEnvironmentCommands extends AbstractCommands {
       return $version;
     }
     return '(version unknown)';
+  }
+
+  /**
+   * Returns the Selenium version.
+   *
+   * @return string
+   *   The Selenium version.
+   */
+  protected function seleniumVersion(): string {
+    try {
+      $webdriver_url = $this->getConfig()->get('env.WEBDRIVER_URL');
+      $status = json_decode($this->httpGet("$webdriver_url/status")->getBody()->getContents(), TRUE);
+    }
+    catch (\Exception $e) {
+      return '(cannot determine)';
+    }
+
+    if (isset($status['value']['nodes'][0]['version'])) {
+      return $status['value']['nodes'][0]['version'];
+    }
+    elseif (isset($status['value']['build']['version'])) {
+      return $status['value']['build']['version'];
+    }
+    return '(version unknown)';
+  }
+
+  /**
+   * Returns the PHPUnit version.
+   *
+   * @return string
+   *   The PHPUnit version.
+   */
+  protected function phpunitVersion(): string {
+    return Version::id();
+  }
+
+  /**
+   * Returns the Behat version.
+   *
+   * @return string
+   *   The Behat version.
+   */
+  protected function behatVersion(): string {
+    return ApplicationFactory::VERSION;
   }
 
 }
