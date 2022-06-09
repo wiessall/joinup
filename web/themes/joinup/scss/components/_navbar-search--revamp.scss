@@ -4,6 +4,7 @@
   .search-bar__input-container {
     background: $white;
     display: flex;
+    align-items: center;
     border: 1px solid $gray-300;
     border-radius: $border-radius-sm; // .2rem
     padding: 0;
@@ -17,6 +18,9 @@
     border-style: none;
     padding: .5rem;
     font-size: $font-size-sm;
+  }
+  .form__actions {
+    display: none;
   }
   .search-bar__submit {
     border-style: none;
@@ -70,6 +74,25 @@
     }
     @media screen and (min-width: 1400px) {
       width: calc(1320px - 2.5rem);
+    }
+    form {
+      .badge {
+        .badge__text {
+          max-width: 5rem;
+          @media screen and (min-width: 576px) {
+            max-width: 10rem;
+          }
+          @media screen and (min-width: 768px) {
+            max-width: 20rem;
+          }
+          @media screen and (min-width: 992px) {
+            max-width: 30rem;
+          }
+          @media screen and (min-width: 1200px) {
+            max-width: 45rem;
+          }
+        }
+      }
     }
   }
   .accordion-body {
