@@ -50,7 +50,8 @@
       // Keep a flag to focus only the first one in case of multiple tabs with
       // validation errors.
       var alreadyTriggered = false;
-      $(once('tabValidation', '.field-group-tabs-wrapper :input', context)).each(function () {
+      var formElements = $('.field-group-tabs-wrapper', context).filter(':input');
+      $(once('tabValidation', formElements, context)).each(function () {
         this.addEventListener('invalid', function (e) {
           // Open any hidden parents first.
           $(e.target).parents('details').each(function () {

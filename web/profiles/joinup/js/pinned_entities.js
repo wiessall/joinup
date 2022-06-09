@@ -4,15 +4,6 @@
  */
 ((Drupal, once) => {
   /**
-   * Theme function that renders a visual cue for pinned content.
-   *
-   * @return {string}
-   *   The HTML for the pinned content visual cue.
-   */
-  Drupal.theme.pinnedContentCue = () => {
-    return '<div class="listing__corner"><span class="icon icon--pin"></span></div>';
-  };
-  /**
    * Adds visual cues for content pinned inside the parent collection.
    *
    * @type {Drupal~behavior}
@@ -22,9 +13,13 @@
    */
   Drupal.behaviors.pinnedEntities = {
     attach(context) {
-      const group = context
-        .querySelector("[data-drupal-group-context]")
-        .data("drupal-group-context");
+      // Create a visual cue to be added on pinned content.
+      const pin = document.createElement("div");
+      pin.classList.add("listing__corner");
+      pin.innerHTML = "<span class='icon icon--pin'></span>";
+      // Check for global collection context.
+      const group = context.querySelector("[data-drupal-group-context]").dataset
+        .drupalGroupContext;
       // If there is no global collection context, bail out.
       if (!group) {
         return;
@@ -38,14 +33,12 @@
           return;
         }
         element.classList.add("listing__card--corner");
-        // It is needed for listing title padding if image doesn't exist.
+        // This is needed for listing title padding if image doesn't exist.
         if (!element.querySelector(".listing__image")) {
           element.classlist.add("listing__card--corner-title");
         }
-        element.insertBefore(
-          Drupal.theme("pinnedContentCue"),
-          element.firstChild
-        );
+        // Add the visual where needed.
+        element.prepend(pin.cloneNode(true));
       });
     },
   };

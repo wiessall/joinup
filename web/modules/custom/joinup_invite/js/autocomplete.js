@@ -16,9 +16,9 @@
    */
   Drupal.behaviors.inviteAutocomplete = {
     attach(context) {
-      const list = context.getElementById("ui-id-2");
-      const input = context.querySelector("input.invite-autocomplete");
-      const inviteButton = context.getElementById("invite-to-group-form");
+      const form = document.getElementById("invite-to-discussion-form");
+      const list = document.getElementById("ui-id-2");
+      const input = document.querySelector("input.invite-autocomplete");
       let preventDoubleEnter = false;
       // Allow typing straight away.
       input.focus();
@@ -27,7 +27,7 @@
         if (input.value !== "") {
           // Avoid keydown events if the selection was submitted with the enter key.
           preventDoubleEnter = true;
-          inviteButton.submit();
+          form.submit();
           return false;
         }
       });
@@ -42,7 +42,7 @@
           // Note that Drupal.ajax should prevent this already, as the ajax request
           // should be still executing, but it's better to cover this explicitly.
           if (!preventDoubleEnter) {
-            inviteButton.submit();
+            form.submit();
           }
           preventDoubleEnter = false;
         }
