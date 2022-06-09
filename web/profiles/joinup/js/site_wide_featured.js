@@ -4,15 +4,6 @@
  */
 ((Drupal, once) => {
   /**
-   * Theme function that renders a visual cue for featured content.
-   *
-   * @return {string}
-   *   The HTML for the featured content visual cue.
-   */
-  Drupal.theme.featuredContentCue = () => {
-    return '<div class="listing__corner"><span class="icon icon--star"></span></div>';
-  };
-  /**
    * Adds a class to featured tiles when not in scope of a group.
    *
    * @type {Drupal~behavior}
@@ -22,9 +13,13 @@
    */
   Drupal.behaviors.siteWideFeatured = {
     attach(context) {
-      const group = context
-        .querySelector("[data-drupal-group-context]")
-        .data("drupal-group-context");
+      // Create a visual cue to be added on featured content.
+      const star = document.createElement("div");
+      star.classList.add("listing__corner");
+      star.innerHTML = "<span class='icon icon--star'></span>";
+      // Check for global collection context.
+      const group = context.querySelector("[data-drupal-group-context]").dataset
+        .drupalGroupContext;
       // If there is a global group context, bail out. We mark tiles as
       // globally featured only when we have no context, meaning we are in a
       // "global" page (search, collections, solutions, content).
@@ -32,14 +27,12 @@
         return;
       }
       once("featured", "[data-drupal-featured]", context).forEach((element) => {
-        element.classList.add("is-featured listing__card--corner");
+        element.classList.add("listing__card--corner");
+        element.classList.add("is-featured");
         if (!element.querySelector(".listing__image")) {
           element.classList.add("listing__card--corner-title");
         }
-        element.insertBefore(
-          Drupal.theme("featuredContentCue"),
-          element.firstChild
-        );
+        element.prepend(star.cloneNode(true));
       });
     },
   };
