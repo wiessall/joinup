@@ -36,6 +36,12 @@ accordion:
     theme:
       assets/css/accordion.css: {}
 
+# Bootstrap components
+badge:
+  css:
+    theme:
+      assets/css/badge.css: {}
+
 close:
   css:
     theme:
