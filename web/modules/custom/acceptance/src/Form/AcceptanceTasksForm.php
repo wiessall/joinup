@@ -116,7 +116,7 @@ class AcceptanceTasksForm extends FormBase {
    *   The form state API object.
    */
   public function sendSpoolEmails(array &$form, FormStateInterface $form_state): void {
-    $this->sendSpooledEmails->sendSpool();
+    $this->sendSpooledEmails->sendSpool("sendmail");
   }
 
   /**
