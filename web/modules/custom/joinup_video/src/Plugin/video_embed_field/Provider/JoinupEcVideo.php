@@ -88,10 +88,10 @@ class JoinupEcVideo extends ProviderPluginBase {
   /**
    * Gets the time index from the URL.
    *
-   * @return int
+   * @return string
    *   A time index parameter to pass to the frame or 0 if none is found.
    */
-  protected function getTimeIndex(): int {
+  protected function getTimeIndex() {
     preg_match('#[&?]starttime=(?<time_index>\d+)#i', $this->getInput(), $matches);
     return $matches['time_index'] ?? 0;
   }
