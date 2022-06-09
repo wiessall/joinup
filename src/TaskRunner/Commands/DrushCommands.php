@@ -4,18 +4,15 @@ declare(strict_types = 1);
 
 namespace Joinup\TaskRunner\Commands;
 
-use Boedah\Robo\Task\Drush\loadTasks;
 use Consolidation\AnnotatedCommand\CommandData;
 use OpenEuropa\TaskRunner\Commands\AbstractCommands;
 use Robo\Collection\CollectionBuilder;
 use Robo\Exception\AbortTasksException;
 
 /**
- * Provides commands for Virtuoso backend.
+ * Provides commands to enable modules.
  */
 class DrushCommands extends AbstractCommands {
-
-  use loadTasks;
 
   /**
    * Install one or more modules.
@@ -30,8 +27,8 @@ class DrushCommands extends AbstractCommands {
    */
   public function installModule(array $modules): CollectionBuilder {
     $config = $this->getConfig();
-    $task = $this->taskDrushStack($config->get('drush.bin'))
-      ->drush('pm:enable ' . implode(',', $modules));
+    $modules_concatenated = implode(',', $modules);
+    $task = $this->taskExec("{$config->get('drush.bin')} pm:enable $modules_concatenated --yes");
     return $this->collectionBuilder()->addTask($task);
   }
 
