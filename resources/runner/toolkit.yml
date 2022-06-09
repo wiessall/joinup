@@ -34,6 +34,16 @@ toolkit:
         - task: remove
           file: ${toolkit.build.dist.root}/web/themes/ventuno/package-lock.json
 
+command:
+  toolkit:
+    download-dump:
+      options:
+        asda-url: https://asda.fpfis.tech.ec.europa.eu/ec-europa/digit-joinup-reference/dumps
+        dumpfile: ${mysql.dump_dir}/mysql.sql
+    install-dump:
+      options:
+        dumpfile: ${mysql.dump_dir}/mysql.sql
+
 commands:
 
   # Overrides the toolkit:build-dev command.

@@ -34,6 +34,8 @@
     permissions: 509
     umask: 0
     recursive: true
+  - task: run
+    command: joinup:environment
 
 # See \EcEuropa\Toolkit\TaskRunner\Commands\TestsCommands::toolkitPhpUnit()
 phpunit:
