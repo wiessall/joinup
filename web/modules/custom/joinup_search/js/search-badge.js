@@ -13,14 +13,14 @@
       );
       closeIcons.forEach((icon) => {
         icon.addEventListener("click", () => {
-          // Get data-description value to remove it from search input and
+          // Get data-description value to find search input, remove value and
           // achieve search accordingly.
           const badge = icon.parentNode;
           const dataDescription = badge.dataset.description;
           const input = context.querySelector(
             `input.search_bar_badge[data-description="${dataDescription}"]`
           );
-          input.removeAttribute("data-description");
+          input.removeAttribute("value");
           badge.remove();
         });
       });
