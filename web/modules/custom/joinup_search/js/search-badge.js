@@ -3,19 +3,27 @@
  * JavaScript behaviors for the global search bar.
  */
 
-(function ($, Drupal, drupalSettings) {
-  'use strict';
-
+((Drupal, once) => {
   Drupal.behaviors.globalHeaderSearch = {
-    attach: function (context, settings) {
-      $('.navbar-search .badge .icon--close', context).once('myBadge').each(function () {
-        this.addEventListener('click', function () {
-          let name = $(this).parent().data('description');
-          $(".search_bar_badge[data-description='" + name + "']").val('');
-          $(this).parent().remove();
-        })
+    attach(context) {
+      const closeIcons = once(
+        "myBadge",
+        ".navbar-search .badge .icon--close",
+        context
+      );
+      closeIcons.forEach((icon) => {
+        icon.addEventListener("click", () => {
+          // Get data-description value to remove it from search input and
+          // achieve search accordingly.
+          const badge = icon.parentNode;
+          const dataDescription = badge.dataset.description;
+          const input = context.querySelector(
+            `input.search_bar_badge[data-description="${dataDescription}"]`
+          );
+          input.removeAttribute("data-description");
+          badge.remove();
+        });
       });
-    }
+    },
   };
-
-})(jQuery, Drupal, drupalSettings);
+})(Drupal, once);
