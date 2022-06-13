@@ -4,6 +4,8 @@ declare(strict_types = 1);
 
 namespace Drupal\joinup_group\Form;
 
+use Drupal\Core\Ajax\AjaxResponse;
+use Drupal\Core\Ajax\RedirectCommand;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\joinup_group\Entity\GroupInterface;
@@ -54,6 +56,12 @@ abstract class UnshareForm extends ShareFormBase {
       '#value' => $this->t('Submit'),
     ];
 
+    if ($this->isModal() || $this->isAjaxForm()) {
+      $form['actions']['submit']['#ajax'] = [
+        'callback' => '::ajaxSubmit',
+      ];
+    }
+
     return $form;
   }
 
@@ -76,6 +84,27 @@ abstract class UnshareForm extends ShareFormBase {
       $this->messenger->addStatus('Item was unshared from the following groups: ' . implode(', ', $groups) . '.');
     }
     $form_state->setRedirectUrl($this->entity->toUrl());
+  }
+
+  /**
+   * Ajax callback to close the modal.
+   *
+   * @param array $form
+   *   An associative array containing the structure of the form.
+   * @param \Drupal\Core\Form\FormStateInterface $form_state
+   *   The current state of the form.
+   *
+   * @return \Drupal\Core\Ajax\AjaxResponse
+   *   An ajax response that will close the modal.
+   *
+   * @throws \Drupal\Core\Entity\EntityMalformedException
+   *   Thrown when the canonical URL cannot be generated for the shared entity.
+   */
+  public function ajaxSubmit(array &$form, FormStateInterface $form_state): AjaxResponse {
+    $response = new AjaxResponse();
+    $response->addCommand(new RedirectCommand((string) $this->entity->toUrl()->toString()));
+
+    return $response;
   }
 
   /**

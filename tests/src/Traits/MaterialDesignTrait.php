@@ -4,6 +4,7 @@ declare(strict_types = 1);
 
 namespace Drupal\joinup\Traits;
 
+use Behat\Mink\Element\NodeElement;
 use Behat\Mink\Element\TraversableElement;
 
 /**
@@ -132,7 +133,7 @@ trait MaterialDesignTrait {
    *   Thrown when the browser does not support JavaScript or when the animated
    *   checkbox with the given label is not found.
    */
-  protected function findMaterialDesignCheckbox($label, TraversableElement $element) {
+  protected function findMaterialDesignCheckbox($label, TraversableElement $element): NodeElement {
     if (!$this->browserSupportsJavaScript()) {
       throw new \Exception("The hidden input field for the $label checkbox cannot be found in a browser that doesn't support JavaScript.");
     }

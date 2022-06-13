@@ -107,24 +107,4 @@ trait SolrTrait {
     ]);
   }
 
-  /**
-   * Ensures transition from SOLR_* to SEARCH_API_SERVER_SS_SOLR_* variables.
-   *
-   * This is a backwards compatibility layer for Solr environment variables, and
-   * it will be removed in ISAICP-7063.
-   *
-   * @todo Remove this method in ISAICP-7063.
-   * @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7063
-   */
-  public static function solrEnvVarsBackwardsCompatibility(): void {
-    if (!getenv('SEARCH_API_SERVER_SS_SOLR_HOST')) {
-      $url = parse_url(getenv('SOLR_URL'));
-      foreach (['scheme', 'host', 'port', 'path'] as $part) {
-        $value = $url[$part] ?? '';
-        putenv('SEARCH_API_SERVER_SS_SOLR_' . strtoupper($part) . "=$value");
-      }
-      putenv('SEARCH_API_SERVER_SS_SOLR_CORE=' . getenv('SOLR_CORE'));
-    }
-  }
-
 }
