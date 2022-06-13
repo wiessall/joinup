@@ -38,7 +38,7 @@
         element.classList.add("listing__card--corner");
         // This is needed for listing title padding if image doesn't exist.
         if (!element.querySelector(".listing__image")) {
-          element.classlist.add("listing__card--corner-title");
+          element.classList.add("listing__card--corner-title");
         }
         // Add the visual where needed.
         element.prepend(pin.cloneNode(true));
