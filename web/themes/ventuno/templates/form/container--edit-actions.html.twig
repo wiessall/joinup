@@ -21,9 +21,11 @@
 #}
 {%
   set classes = [
-    has_parent ? 'js-form-wrapper',
-    has_parent ? 'form-wrapper',
-    'search-bar__button-container',
+    'd-flex',
+    'flex-column',
+    'd-md-block'
   ]
 %}
-<div{{ attributes.addClass(classes) }}>{{ children }}</div>
+<div{{ attributes.addClass(classes) }}>
+  {{ children }}
+</div>
