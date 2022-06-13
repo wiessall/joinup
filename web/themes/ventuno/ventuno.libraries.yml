@@ -6,7 +6,6 @@ style:
       assets/css/main.css: {}
   js:
     assets/js/oe-bcl-joinup.bundle.min.js: { minified: true }
-    assets/js/popovers.js: { minified: false }
   dependencies:
     - core/drupal
 
