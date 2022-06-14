@@ -9,7 +9,7 @@
     "watch": "watch 'npm run build' src",
     "clean:assets": "del-cli assets/*",
     "eslint": "eslint src/js/",
-    "build": "npm-run-all clean:assets eslint build:*",
+    "build": "npm-run-all clean:assets build:*",
     "build:scripts": "cross-env bcl-builder scripts",
     "build:styles": "cross-env bcl-builder styles",
     "build:copy": "cross-env bcl-builder copy",
