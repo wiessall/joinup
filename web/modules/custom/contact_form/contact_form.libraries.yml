@@ -1,0 +1,5 @@
+empty-url:
+  js:
+    js/empty-url.js: { }
+    dependencies:
+      - core/drupal
