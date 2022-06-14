@@ -93,6 +93,8 @@ function contact_form_form_message_contact_form_submission_form_alter(&$form, Fo
   // sent.
   $form['actions']['submit']['#submit'][] = 'contact_form_form_message_contact_form_submission_submit';
 
+  $form['#attached']['library'][] = 'contact_form/empty-url';
+
   $form['actions']['#suffix'] = '<span class="d-block mt-2">' . (string) t('Submissions of this form are processed by a contractor of the European Commission.') . '</span>';
 }
 
