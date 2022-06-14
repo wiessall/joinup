@@ -58,7 +58,7 @@ class HeaderContext extends RawDrupalContext {
     // Retrieve the main navigation links on desktop.
     $desktop_items = $this->getSession()->getPage()->findAll('xpath', '//nav[contains(concat(" ", normalize-space(@class), " "), " joinup-navbar ")]//ul[contains(concat(" ", normalize-space(@class), " "), " navbar-nav ")]/li/*[self::a or self::button]');
     // Retrieve the main navigation links on mobile.
-    $mobile_items = $this->getSession()->getPage()->findAll('css', 'nav.joinup-navbar ul.accordion-list a');
+    $mobile_items = $this->getSession()->getPage()->findAll('css', 'nav.joinup-navbar ul.dropdown-list a');
 
     foreach ($items->getColumnsHash() as $item) {
       // Check if the item is present in the desktop menu.

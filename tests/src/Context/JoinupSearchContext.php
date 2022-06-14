@@ -918,7 +918,7 @@ class JoinupSearchContext extends RawDrupalContext {
    * @Then I should see search bar icon in navbar
    */
   public function assertSearchIconNavbar(): void {
-    $getAllInput = $this->getSession()->getPage()->findAll('css', 'nav.joinup-navbar span#heading-search button.accordion-button');
+    $getAllInput = $this->getSession()->getPage()->findAll('css', 'nav.joinup-navbar button#search.dropdown-toggle');
 
     if (count($getAllInput) < 1) {
       throw new \Exception('Search bar icon not found in navbar.');
