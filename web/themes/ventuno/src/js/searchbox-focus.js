@@ -20,13 +20,13 @@
       }
       // Listen for click
       trigger.addEventListener("click", () => {
-        // If click was for closing, blur.
-        if (!box.classList.contains("show")) {
-          input.blur();
-        }
         // If click was for opening, focus.
-        else {
+        if (box.classList.contains("show")) {
           input.focus();
+        }
+        // If click was for closing, blur.
+        else {
+          input.blur();
         }
       });
     },
