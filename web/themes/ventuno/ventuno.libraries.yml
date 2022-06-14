@@ -128,4 +128,3 @@ bootstrap-base:
       assets/css/bootstrap-base.css: {}
   js:
     assets/js/oe-bcl-joinup.bundle.min.js: { minified: true }
-    assets/js/popovers.js: { minified: false }
