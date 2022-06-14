@@ -1,0 +1,38 @@
+uuid: 59744184-3f15-42c3-ae5c-2ba7bcc57e18
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.meta_entity.email_validator.latest_validation
+    - field.field.meta_entity.email_validator.valid_email
+    - meta_entity.type.email_validator
+  module:
+    - datetime
+id: meta_entity.email_validator.default
+targetEntityType: meta_entity
+bundle: email_validator
+mode: default
+content:
+  label:
+    type: string_textfield
+    weight: -5
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  latest_validation:
+    type: datetime_default
+    weight: -3
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  valid_email:
+    type: boolean_checkbox
+    weight: -4
+    region: content
+    settings:
+      display_label: true
+    third_party_settings: {  }
+hidden:
+  target: true
