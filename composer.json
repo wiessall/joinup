@@ -30,7 +30,7 @@
         "drupal/dropsolid_purge": "^1.0@beta",
         "drupal/dynamic_entity_reference": "~2.0",
         "drupal/editor_file": "~1.5",
-        "drupal/email_confirmer": "1.x-dev@dev",
+        "drupal/email_confirmer": "^1.0",
         "drupal/email_contact": "1.x-dev@dev",
         "drupal/email_registration": "^1.1",
         "drupal/embed_block": "^1.0",
@@ -396,8 +396,8 @@
         "artifacts": {
             "openeuropa/oe_bootstrap_theme": {
                 "dist": {
-                    "url": "https://github.com/{name}/releases/download/{pretty-version}/{project-name}-{pretty-version}.tar.gz",
-                    "type": "tar"
+                    "url": "https://github.com/{name}/releases/download/{pretty-version}/{project-name}-{pretty-version}.zip",
+                    "type": "zip"
                 }
             }
         }
