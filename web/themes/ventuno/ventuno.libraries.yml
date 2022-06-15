@@ -71,6 +71,11 @@ add-content:
     theme:
       assets/css/add-content.css: {}
 
+menu--og--navigation:
+  css:
+    theme:
+      assets/css/menu--og--navigation.css: {}
+
 # Custom and hybrid (BCL + custom) components
 footer:
   css:
