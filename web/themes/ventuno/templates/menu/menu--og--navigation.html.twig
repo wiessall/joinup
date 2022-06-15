@@ -11,24 +11,28 @@
  */
 #}
 {{ attach_library('ventuno/dropdown') }}
+{{ attach_library('ventuno/menu--og--navigation') }}
 {% set menu = pattern('navigation', {
     'variant': 'pills',
     'orientation': 'vertical',
     'items': pattern_items,
   })
 %}
-{{ pattern('button', {
-  label: 'Toggle menu'|t,
-  variant: 'primary',
-  outline: true,
-  size: 'md',
-  type: 'button',
-  icon: 'justify',
-  attributes: create_attribute().addClass(['d-lg-none', 'mt-3', 'w-100']).setAttribute('data-bs-toggle', 'dropdown').setAttribute('id', 'dropdown-menu').setAttribute('aria-expanded', 'false').setAttribute('data-bs-target', '#menuCollapse'),
-}) }}
-<div class="d-none d-lg-block mt-3">
-  {{ menu }}
-</div>
-<div class="dropdown-menu d-lg-none">
-  {{ menu }}
+<div class="dropdown menu--og--navigation">
+  {{ pattern('button', {
+    label: 'Toggle menu'|t,
+    variant: 'primary',
+    outline: true,
+    size: 'md',
+    type: 'button',
+    icon: 'justify',
+    attributes: create_attribute()
+      .addClass(['d-lg-none', 'w-100'])
+      .setAttribute('data-bs-toggle', 'dropdown')
+      .setAttribute('id', 'dropdownMenuButton')
+      .setAttribute('aria-expanded', 'false'),
+  }) }}
+  <div class="dropdown-menu menu--og--navigation__menu" aria-labelledby="dropdownMenuButton">
+    {{ menu }}
+  </div>
 </div>
