@@ -145,18 +145,18 @@ Feature: Navigation menu for custom pages
       | Mists of dreams | This is a sample body. | Prism Gazers |
     When I am logged in as a facilitator of the "Prism Gazers" <group>
     And I go to the homepage of the "Prism Gazers" <group>
-    Then I should see the contextual links button in the "Navigation menu block"
+    Then I should see the contextual links button in the "Navigation menu"
     # The links to manage the navigation menu should only appear after clicking on the button.
-    And the "Edit menu" link in the "Navigation menu block" should not be visible
-    And the "Add new page" link in the "Navigation menu block" should not be visible
+    And the "Edit menu" link in the "Navigation menu" should not be visible
+    And the "Add new page" link in the "Navigation menu" should not be visible
     # Click the button, now the links appear.
-    When I click the contextual links button in the "Navigation menu block"
-    Then the "Edit menu" link in the "Navigation menu block" should be visible
-    And the "Add new page" link in the "Navigation menu block" should be visible
+    When I click the contextual links button in the "Navigation menu"
+    Then the "Edit menu" link in the "Navigation menu" should be visible
+    And the "Add new page" link in the "Navigation menu" should be visible
     # Click the button a second time to hide the links again.
-    When I click the contextual links button in the "Navigation menu block"
-    Then the "Edit menu" link in the "Navigation menu block" should not be visible
-    And the "Add new page" link in the "Navigation menu block" should not be visible
+    When I click the contextual links button in the "Navigation menu"
+    Then the "Edit menu" link in the "Navigation menu" should not be visible
+    And the "Add new page" link in the "Navigation menu" should not be visible
 
     Examples:
       | group      |
@@ -259,9 +259,9 @@ Feature: Navigation menu for custom pages
     And I should not see the link "Overview" in the "Table of contents"
     And I should not see the link "Members" in the "Table of contents"
     And I should not see the link "About" in the "Table of contents"
-    But I should see the link "Overview" in the "Navigation menu block"
-    And I should see the link "Members" in the "Navigation menu block"
-    And I should see the link "About" in the "Navigation menu block"
+    But I should see the link "Overview" in the "Navigation menu"
+    And I should see the link "Members" in the "Navigation menu"
+    And I should see the link "About" in the "Navigation menu"
 
     # Only the sub-page links of "Page 2" are rendered.
     When I visit the "Page 2" custom page
