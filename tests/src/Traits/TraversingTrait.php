@@ -695,10 +695,10 @@ trait TraversingTrait {
   protected function getTileCssSelector(): string {
     return implode(', ', [
       '.card .card-title',
+      'article.card-tile h2',
       // @todo Legacy selectors to be removed in ISAICP-7138.
       // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7138
       '.listing__item--tile .listing__title',
-      'article.card-tile h2',
     ]);
   }
 
