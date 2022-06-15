@@ -204,6 +204,14 @@ module.exports = {
       },
     },
     {
+      entry: path.resolve(outputFolder, "src/scss/menu--og--navigation.scss"),
+      dest: path.resolve(outputFolder, "assets/css/menu--og--navigation.css"),
+      options: {
+        includePaths,
+        sourceMap: "file",
+      },
+    },
+    {
       entry: path.resolve(outputFolder, "src/scss/forms.scss"),
       dest: path.resolve(outputFolder, "assets/css/forms.css"),
       options: {
