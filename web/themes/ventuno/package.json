@@ -8,6 +8,7 @@
   "scripts": {
     "watch": "watch 'npm run build' src",
     "clean:assets": "del-cli assets/*",
+    "eslint": "eslint src/js/",
     "build": "npm-run-all clean:assets build:*",
     "build:scripts": "cross-env bcl-builder scripts",
     "build:styles": "cross-env bcl-builder styles",
@@ -28,7 +29,6 @@
     "watch": "^0.13.0"
   },
   "dependencies": {
-    "@glidejs/glide": "^3.5.2",
-    "@popperjs/core": "^2.9.1"
+    "@glidejs/glide": "^3.5.2"
   }
 }
