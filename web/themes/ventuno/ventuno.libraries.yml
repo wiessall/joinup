@@ -165,7 +165,7 @@ content-tables:
   dependencies:
     - ventuno/tables
 
-# @todo remove when switch to Ventuno theme is complete
+# @todo ISAICP-7138 remove when switch to Ventuno theme is complete
 bootstrap-base:
   css:
     component:
