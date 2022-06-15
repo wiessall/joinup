@@ -72,7 +72,8 @@ trait BootstrapTrait {
    *
    * @throws \RuntimeException
    *   Thrown when the dropdown wrapper or button are not found in the page, or
-   *   when the dropdown-menu doesn't become visible within a reasonable time frame.
+   *   when the dropdown-menu doesn't become visible within a reasonable time
+   *   frame.
    */
   protected function openBootstrapDropdown(NodeElement $wrapper) {
     \assert(method_exists($this, 'browserSupportsJavaScript'), __METHOD__ . ' depends on BrowserCapabilityDetectionTrait. Please include it in your class.');
