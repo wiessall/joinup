@@ -128,4 +128,57 @@ trait MailCollectorTrait {
     return \Drupal::state()->get('system.test_mail_collector', []);
   }
 
+  /**
+   * Clicks on a link matching a pattern given the email text and the recipient.
+   *
+   * Note that if multiple messages have been sent to the same user, all of them
+   * will be checked but only the first instance of the link matching the
+   * pattern will be clicked.
+   *
+   * @param string $pattern
+   *   The pattern that the link should match to.
+   * @param string $mail
+   *   The recipient's mail.
+   * @param string $no_mail_message
+   *   The exception message to show when no mail was found that matches the
+   *   given e-mail address.
+   * @param string $no_match_message
+   *   The exception message to show when the given pattern was not found in the
+   *   messages sent to the given e-mail address.
+   * @param string|null $template
+   *   (optional) Message template to filter the messages by.
+   *
+   * @throws \Exception
+   *   If no mail was found linked to the given email or if the pattern did not
+   *   find any matches.
+   */
+  protected function assertMailLinkMatchingPattern(string $pattern, string $mail, string $no_mail_message, string $no_match_message, ?string $template = NULL): void {
+    $found = FALSE;
+    foreach ($this->getMails() as $mail_sent) {
+      // Optionally filter by mail template.
+      if (!empty($template) && $mail_sent['key'] !== $template) {
+        continue;
+      }
+
+      // Filter out messages that do not match the given e-mail address.
+      if ($mail_sent['to'] !== $mail) {
+        continue;
+      }
+
+      // This is a flag that a message was found to have been sent to the user.
+      $found = TRUE;
+      if (!preg_match($pattern, $mail_sent['plain'], $match)) {
+        continue;
+      }
+
+      $this->visitPath($match[0]);
+      return;
+    }
+
+    if ($found) {
+      throw new \Exception($no_match_message);
+    }
+    throw new \Exception($no_mail_message);
+  }
+
 }
