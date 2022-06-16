@@ -3,6 +3,7 @@ langcode: en
 status: true
 dependencies:
   module:
+    - joinup_core
     - rdf_entity
   theme:
     - ventuno
@@ -19,3 +20,8 @@ conditions:
     bundles:
       collection: collection
       solution: solution
+  request_route:
+    id: request_route
+    negate: false
+    routes:
+      - entity.rdf_entity.canonical
