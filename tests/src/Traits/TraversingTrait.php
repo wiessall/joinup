@@ -15,6 +15,8 @@ use PHPUnit\Framework\Assert;
  */
 trait TraversingTrait {
 
+  use MaterialDesignTrait;
+
   /**
    * Searches for any kind of field in a form by label.
    *
@@ -309,8 +311,14 @@ trait TraversingTrait {
    *   Thrown when the element is not found.
    */
   protected function getTileByHeading(string $heading): NodeElement {
+    $class = 'card-tile';
+    // @todo Remove the if (...) block in ISAICP-7138.
+    // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7138
+    if ($this->usesMaterialDesignLite()) {
+      $class = 'listing__item--tile';
+    }
     try {
-      return $this->getListingByHeading($this->getTileCssSelector(), $heading);
+      return $this->getListingByHeading($class, $heading);
     }
     catch (ElementNotFoundException $e) {
       return $this->getListingByHeading('tile', $heading);
