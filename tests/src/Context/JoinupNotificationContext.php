@@ -246,45 +246,6 @@ class JoinupNotificationContext extends RawDrupalContext {
   }
 
   /**
-   * Asserts contact owner email has been sent and contains some pieces of text.
-   *
-   * @param string $email
-   *   The recipient E-mail address.
-   * @param string $subject
-   *   The subject of the email.
-   * @param \Behat\Gherkin\Node\TableNode $table
-   *   The mail data table.
-   *
-   * @throws \Exception
-   *   Throws an exception when a parameter is not the expected one.
-   *
-   * @Then the contact owner email sent to :email with subject :subject contains the( following lines of) text:
-   */
-  public function assertContactOwnerEmailSentAndContainsText(string $email, string $subject, TableNode $table) {
-    $lines_of_text = $table->getColumnsHash();
-    $mails = $this->getEmailsBySubjectAndMail($subject, $email);
-    $email_found = FALSE;
-    foreach ($mails as $mail) {
-      $mail_body = ($mail['body'] instanceof MarkupInterface) ?
-        $this->formatMailBodyMarkup($mail['body']) :
-        $this->formatMailBodyText($mail['body']);
-
-      foreach ($lines_of_text as $line_of_text) {
-        $text = $line_of_text['text'];
-        if (strpos($mail_body, $text) === FALSE) {
-          continue 2;
-        }
-      }
-
-      // We found a match. Stop searching.
-      $email_found = TRUE;
-      break;
-    }
-
-    Assert::assertTrue($email_found, "Did not find expected email to '$email' with subject '$subject'.");
-  }
-
-  /**
    * Asserts that no email of the relevant criteria have been sent.
    *
    * @param string $user
@@ -448,77 +409,6 @@ class JoinupNotificationContext extends RawDrupalContext {
     $no_match_message = "No link to an attachment with filename '$filename' was found in the emails sent to '$mail'.";
 
     $this->assertMailLinkMatchingPattern($pattern, $mail, $no_mail_message, $no_match_message, 'contact_form_submission');
-  }
-
-  /**
-   * Clicks on a link matching a pattern given the email text and the recipient.
-   *
-   * Note that if multiple messages have been sent to the same user, all of them
-   * will be checked but only the first instance of the link matching the
-   * pattern will be clicked.
-   *
-   * @param string $pattern
-   *   The pattern that the link should match to.
-   * @param string $mail
-   *   The recipient's mail.
-   * @param string $no_mail_message
-   *   The exception message to show when no mail was found that matches the
-   *   given e-mail address.
-   * @param string $no_match_message
-   *   The exception message to show when the given pattern was not found in the
-   *   messages sent to the given e-mail address.
-   * @param string|null $template
-   *   (optional) Message template to filter the messages by.
-   *
-   * @throws \Exception
-   *   If no mail was found linked to the given email or if the pattern did not
-   *   find any matches.
-   */
-  protected function assertMailLinkMatchingPattern(string $pattern, string $mail, string $no_mail_message, string $no_match_message, ?string $template = NULL): void {
-    $found = FALSE;
-    foreach ($this->getMails() as $mail_sent) {
-      // Optionally filter by mail template.
-      if (!empty($template) && $mail_sent['key'] !== $template) {
-        continue;
-      }
-
-      // Filter out messages that do not match the given e-mail address.
-      if ($mail_sent['to'] !== $mail) {
-        continue;
-      }
-
-      // This is a flag that a message was found to have been sent to the user.
-      $found = TRUE;
-      if (!preg_match($pattern, $mail_sent['plain'], $match)) {
-        continue;
-      }
-
-      $this->visitPath($match[0]);
-      return;
-    }
-
-    if ($found) {
-      throw new \Exception($no_match_message);
-    }
-    throw new \Exception($no_mail_message);
-  }
-
-  /**
-   * Clicks the validate contact info link found in an email.
-   *
-   * @param string $mail
-   *   The recipient E-mail address.
-   *
-   * @throws \Exception
-   *   Thrown when a user is not found.
-   *
-   * @When I click the validate contact info email from the last email sent to :mail
-   */
-  public function clickValidateContactInfoInEmail(string $mail): void {
-    $pattern = '#https?://[^/].*/email-confirmer/reply/[^/].*/.*#';
-    $no_mail_message = "No email was sent to $mail containing a validate contact info link.";
-    $no_match_message = "The email sent to $mail did not contain a valid validate contact info link.";
-    $this->assertMailLinkMatchingPattern($pattern, $mail, $no_mail_message, $no_match_message, 'confirmation_request');
   }
 
 }
