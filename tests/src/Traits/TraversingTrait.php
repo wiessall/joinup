@@ -702,4 +702,24 @@ trait TraversingTrait {
     ]);
   }
 
+  /**
+   * Returns a region CSS selector given its label defined in behat.yml.
+   *
+   * @param string $label
+   *   The region label.
+   *
+   * @return string
+   *   The region's CSS selector.
+   *
+   * @throws \Exception
+   *   When the region with passed label doesn't exist.
+   */
+  protected function getRegionSelector(string $label): string {
+    $region_map = $this->getDrupalParameter('region_map');
+    if (!isset($region_map[$label])) {
+      throw new \Exception("No such region configured: $label");
+    }
+    return $region_map[$label];
+  }
+
 }
