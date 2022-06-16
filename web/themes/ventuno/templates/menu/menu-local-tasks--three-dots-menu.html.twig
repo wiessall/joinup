@@ -15,17 +15,30 @@
  * @ingroup themeable
  */
 #}
+{{ attach_library('ventuno/three-dots-menu') }}
 {% if primary %}
-  <button id="local-tasks-primary">
-    <span class="icon icon--dots"></span>
-  </button>
-  <h2 class="visually-hidden">{{ 'Primary tabs'|t }}</h2>
-  <ul for="local-tasks-primary">{{ primary }}</ul>
+  <div class="three-dots-menu three-dots-menu--primary dropdown">
+    <button id="local-tasks-primary" class="btn text-light p-0 rounded-pill three-dots-menu__button dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+      <svg class="bi icon--m">
+        <use xlink:href="{{ bcl_icon_path }}#three-dots-vertical"></use>
+      </svg>
+    </button>
+    <div class="dropdown-menu dropdown-menu-end px-3" aria-labelledby="local-tasks-primary">
+      <h2 class="visually-hidden">{{ 'Primary tabs'|t }}</h2>
+      <ul for="local-tasks-primary" class="list-unstyled ps-0 mb-0">{{ primary }}</ul>
+    </div>
+  </div>
 {% endif %}
 {% if secondary %}
-  <button id="local-tasks-secondary">
-    <span class="icon icon--dots"></span>
-  </button>
-  <h2 class="visually-hidden">{{ 'Secondary tabs'|t }}</h2>
-  <ul for="local-tasks-secondary">{{ secondary }}</ul>
+  <div class="three-dots-menu three-dots-menu--secondary dropdown">
+    <button id="local-tasks-secondary" class="btn btn-light p-0 rounded-pill three-dots-menu__button dropdown-toggle">
+      <svg class="bi icon--m">
+        <use xlink:href="{{ bcl_icon_path }}#three-dots-vertical"></use>
+      </svg>
+    </button>
+    <div class="dropdown-menu dropdown-menu-end px-3" aria-labelledby="local-tasks-secondary">
+      <h2 class="visually-hidden">{{ 'Secondary tabs'|t }}</h2>
+      <ul for="local-tasks-secondary" class="list-unstyled ps-0 mb-0">{{ secondary }}</ul>
+    </div>
+  </div>
 {% endif %}

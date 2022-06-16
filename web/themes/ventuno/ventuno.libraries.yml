@@ -160,6 +160,13 @@ tabledrag:
     theme:
       assets/css/tabledrag.css: {}
 
+three-dots-menu:
+  css:
+    theme:
+      assets/css/three-dots-menu.css: {}
+  dependencies:
+    - ventuno/dropdown
+
 tour-first-balloon:
   js:
     assets/js/tour-first-balloon.js: { minified: true, attributes: { defer: true } }
