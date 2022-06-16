@@ -255,13 +255,10 @@ class JoinupCoreContext extends RawDrupalContext {
   public function assertRepeatedElementContainsText(TableNode $table): void {
     $navigation_menu_selector = $this->getDrupalParameter('region_map')['Navigation menu'];
     $parent = $this->getSession()->getPage()->findAll('css', "$navigation_menu_selector nav a");
-    // Navigation menu links are doubled because of mobile version.
-    // @todo Fix the count in ISAICP-7164
-    // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7164
-    // @see web/themes/ventuno/templates/menu/menu--og--navigation.html.twig
-    Assert::assertSame(count($table->getHash()), count($parent) / 2);
+    $table_hash = $table->getHash();
+    Assert::assertSameSize($table_hash, $parent);
     $i = 0;
-    foreach ($table->getHash() as $expected_element) {
+    foreach ($table_hash as $expected_element) {
       $expected_text = $expected_element['text'];
       $actual_text = $parent[$i++]->getText();
       Assert::assertSame($expected_text, $actual_text);
