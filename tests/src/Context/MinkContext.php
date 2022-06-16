@@ -22,20 +22,22 @@ class MinkContext extends DrupalExtensionMinkContext {
    */
   public function checkOption($option) {
     $this->scrollNamedElementIntoView('checkbox', $option);
-    if (!$this->usesMaterialDesignLite()) {
-      parent::checkOption($option);
+    // @todo Remove the if (...) block in ISAICP-7138.
+    // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7138
+    if ($this->usesMaterialDesignLite()) {
+      // Overrides the default method for checking checkboxes to make it
+      // compatible with material design.
+      $option = $this->fixStepArgument($option);
+      $page = $this->getSession()->getPage();
+      if (!$page->find('css', 'div#block-ventuno-pagetitle')) {
+        $this->checkMaterialDesignField($option, $page);
+      }
+      else {
+        $page->checkField($option);
+      }
       return;
     }
-    // Overrides the default method for checking checkboxes to make it
-    // compatible with material design.
-    $option = $this->fixStepArgument($option);
-    $page = $this->getSession()->getPage();
-    if (!$page->find('css', 'div#block-ventuno-pagetitle')) {
-      $this->checkMaterialDesignField($option, $page);
-    }
-    else {
-      $page->checkField($option);
-    }
+    parent::checkOption($option);
   }
 
   /**
@@ -43,20 +45,22 @@ class MinkContext extends DrupalExtensionMinkContext {
    */
   public function uncheckOption($option) {
     $this->scrollNamedElementIntoView('checkbox', $option);
-    if (!$this->usesMaterialDesignLite()) {
-      parent::uncheckOption($option);
+    // @todo Remove the if (...) block in ISAICP-7138.
+    // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7138
+    if ($this->usesMaterialDesignLite()) {
+      // Overrides the default method for unchecking checkboxes to make it
+      // compatible with material design.
+      $option = $this->fixStepArgument($option);
+      $page = $this->getSession()->getPage();
+      if (!$page->find('css', 'div#block-ventuno-pagetitle')) {
+        $this->uncheckMaterialDesignField($option, $this->getSession()->getPage());
+      }
+      else {
+        $page->uncheckField($option);
+      }
       return;
     }
-    // Overrides the default method for unchecking checkboxes to make it
-    // compatible with material design.
-    $option = $this->fixStepArgument($option);
-    $page = $this->getSession()->getPage();
-    if (!$page->find('css', 'div#block-ventuno-pagetitle')) {
-      $this->uncheckMaterialDesignField($option, $this->getSession()->getPage());
-    }
-    else {
-      $page->uncheckField($option);
-    }
+    parent::uncheckOption($option);
   }
 
   /**
