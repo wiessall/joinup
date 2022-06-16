@@ -1553,7 +1553,14 @@ class JoinupContext extends RawDrupalContext {
    * @When I open the group sidebar menu
    */
   public function openGroupMenu() {
-    $this->openMaterialDesignMenu($this->getSession()->getPage()->find('css', '.sidebar-menu'));
+    // @todo Remove the if (...) block in ISAICP-7138.
+    // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7138
+    if ($this->usesMaterialDesignLite()) {
+      $this->openMaterialDesignMenu($this->getSession()->getPage()->find('css', '.sidebar-menu'));
+      return;
+    }
+    $region = $this->getSession()->getPage()->find('css', $this->getRegionSelector('Left sidebar'));
+    $this->getContextualLinksHelper()->openContextualLinksMenu($region);
   }
 
   /**
