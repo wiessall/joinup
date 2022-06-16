@@ -1505,7 +1505,7 @@ class JoinupContext extends RawDrupalContext {
    * @Then I should see the plus button menu
    */
   public function assertPlusButtonMenuPresent() {
-    $element = $this->getSession()->getPage()->find('css', 'div.add-content-menu ul');
+    $element = $this->getSession()->getPage()->find('css', '#dropdown-add-content');
     Assert::assertNotEmpty($element);
   }
 
