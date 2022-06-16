@@ -10,6 +10,7 @@
       display: block!important;
       border: none!important;
       box-shadow: none!important;
+      background: transparent!important;
       // Following is needed in case user opened dropdown in xs-sm-md and then made window bigger
       position: relative!important;
       transform: revert!important;
