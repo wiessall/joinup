@@ -115,14 +115,14 @@ Feature: Sharing content between collections
     Then I should see the "Interesting content" tile
     And I should see the contextual link "Unshare" in the "Interesting content" tile
     When I click the contextual link "Unshare" in the "Interesting content" tile
-    Then a modal will open
+    Then a modal dialog should open
     And I should see the text "Unshare Interesting content from"
     Then the following fields should be present "Classic Rock"
     And the following fields should not be present "Drum'n'Bass, Hip-Hop, Power ballad"
 
     # Unshare the content.
     When I check "Classic Rock"
-    And I press "Submit" in the "Modal buttons" region
+    And I press "Submit" in the "Modal footer" region
     And I wait for AJAX to finish
 
     # I should still be on the same page, but the group content should be
