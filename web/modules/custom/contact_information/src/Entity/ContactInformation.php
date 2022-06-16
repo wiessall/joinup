@@ -68,12 +68,13 @@ class ContactInformation extends Rdf implements ContactInformationInterface {
   /**
    * {@inheritdoc}
    */
-  public function postSave(EntityStorageInterface $storage, $update = TRUE) {
+  public function postSave(EntityStorageInterface $storage, $update = TRUE): void {
     parent::postSave($storage, $update);
+    $email_confirmer = \Drupal::service('email_confirmer');
     /** @var \Drupal\Core\Field\FieldItemListInterface $field */
     $field = $this->get('field_ci_email');
-    if (!$field->isEmpty()) {
-      \Drupal::service('email_confirmer')->confirm($field->value);
+    if (!$field->isEmpty() && !$email_confirmer->getConfirmation($field->value)) {
+      $email_confirmer->confirm($field->value);
       \Drupal::messenger()->addStatus(new TranslatableMarkup('A new confirmation message has been sent to %mail.', ['%mail' => $field->value]));
     }
   }

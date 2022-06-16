@@ -15,10 +15,7 @@ use Drupal\Core\Render\BubbleableMetadata;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Url;
 use Drupal\contact_form\ContactFormEvents;
-use Drupal\email_confirmer\EmailConfirmationInterface;
 use Drupal\joinup_notification\Event\NotificationEvent;
-use Drupal\meta_entity\Entity\MetaEntity;
-use Drupal\rdf_entity\Entity\Rdf;
 use Drupal\user\Entity\User;
 
 /**
@@ -213,54 +210,4 @@ function contact_form_message_access(EntityInterface $entity, $operation, Accoun
   }
   // Allow users to access the contact form messages and its attachments.
   return AccessResult::allowedIf($account->hasPermission('access contact form messages'));
-}
-
-/**
- * Implements hook_form_FORM_ID_alter().
- */
-function contact_form_form_email_contact_mail_form_alter(array &$form, FormStateInterface $form_state, string $form_id): void {
-  // Add honeypot to the contact form in the contact owner link.
-  // If honeypot is enabled, add protection to the form.
-  if (function_exists('honeypot_add_form_protection')) {
-    honeypot_add_form_protection(
-      $form,
-      $form_state,
-      ['honeypot', 'time_restriction']
-    );
-  }
-}
-
-/**
- * Implements hook_email_confirmer().
- */
-function contact_form_email_confirmer(string $op, EmailConfirmationInterface $confirmation): void {
-  $query = \Drupal::entityQuery('rdf_entity')
-    ->condition('field_ci_email', $confirmation->getEmail())
-    ->condition('rid', 'contact_information');
-  $results = $query->execute();
-
-  $contacts = Rdf::loadMultiple($results);
-  foreach ($contacts as $contact) {
-    $email_validator = MetaEntity::loadOrCreate('email_validator', $contact);
-    $old_date = $email_validator->get('latest_validation')->getValue();
-    $validation_dates = array_merge($old_date, ['value' => \Drupal::time()->getRequestTime()]);
-    $email_validator->set('latest_validation', $validation_dates);
-    $email_validator->set('valid_email', $op == 'confirm');
-    $email_validator->save();
-  }
-}
-
-/**
- * Implements hook_entity_view_mode_alter().
- */
-function contact_form_entity_view_mode_alter(string &$view_mode, EntityInterface $entity, array $context): void {
-  // Change the view mode when email has been validated in Contact information.
-  if ($entity->getEntityTypeId() == 'rdf_entity' && $entity->bundle() == 'contact_information' && $view_mode == 'about') {
-    if ($entity->email_validator) {
-      $meta_entity = $entity->email_validator->entity;
-      if ($meta_entity && $meta_entity->valid_email->value) {
-        $view_mode = 'about_contact_form';
-      }
-    }
-  }
 }
