@@ -167,6 +167,8 @@ trait MaterialDesignTrait {
    * @throws \Exception
    *   Thrown when the menu wrapper or menu button are not found in the page,
    *   and when the menu doesn't become visible within the allowed time frame.
+   *
+   * @deprecated and removed in ISAICP-7138
    */
   protected function openMaterialDesignMenu($wrapper) {
     if ($this->browserSupportsJavaScript()) {

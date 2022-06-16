@@ -90,7 +90,7 @@ Feature: Subscribing to collection newsletters
   Scenario: Subscribe to a newsletter
     Given I am logged in as "Magdalini Kokinos"
     When I go to the "Volkor X" collection
-    And I open the header local tasks menu
+    And I open the entity tasks menu
     And I click "Edit" in the "Entity actions" region
     Then I scroll "Additional fields" into view
     And I press "Additional fields"

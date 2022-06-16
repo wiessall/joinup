@@ -14,7 +14,7 @@ Feature:
     Given I am logged in as a moderator
     And I click "People"
     And I click "Alicia Potter"
-    And I open the header local tasks menu
+    And I open the entity tasks menu
     And I click "Edit" in the "Header" region
     And I click "Cancel account"
     Then I should see the link "Go back"
@@ -101,7 +101,7 @@ Feature:
 
     Given I am logged in as "alicia__1997"
     And I visit "/user"
-    And I open the header local tasks menu
+    And I open the entity tasks menu
     And I click "Edit" in the "Header" region
     And I click "Cancel account"
     And I press "Confirm"

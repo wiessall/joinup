@@ -1559,11 +1559,23 @@ class JoinupContext extends RawDrupalContext {
   /**
    * Opens a specific MDL dropdown menu on JS-enabled browsers.
    *
-   * @When I open the header local tasks menu
+   * @When I open the entity tasks menu
    */
-  public function iOpenTheMdlDropdown() {
-    $element = $this->getSession()->getPage()->find('css', '.block-joinup-local-tasks-block');
-    $this->openMaterialDesignMenu($element);
+  public function iOpenTheEntityTasksMenu(): void {
+    // @todo Remove the if (...) block in ISAICP-7138.
+    // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7138
+    if ($this->usesMaterialDesignLite()) {
+      $element = $this->getSession()->getPage()->find('css', '.block-joinup-local-tasks-block');
+      $this->openMaterialDesignMenu($element);
+      return;
+    }
+    if (!$this->browserSupportsJavaScript()) {
+      // Do nothing, if it's a non-Javascript browser.
+      return;
+    }
+
+    $entity_tasks_selector = $this->getRegionSelector('Entity tasks');
+    $this->getSession()->getPage()->find('css', "$entity_tasks_selector button")->press();
   }
 
   /**

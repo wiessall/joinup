@@ -147,9 +147,9 @@ default:
         Explore block: '.block-joinup-front-page-explore-block'
         Featured: '.region-featured'
         Footer: '.section--footer, footer'
+        Group Header: '#block-ventuno-groupheader'
         Hamburger menu: 'nav.joinup-navbar ul.navbar-nav ul.accordion-list'
         Header menu: '#block-joinup-theme-main-menu'
-        Header: '.section--featured, .section-header'
         Highlighted content: '.block-entityqueue--highlighted-content'
         Highlighted event: '.block-entityqueue--highlighted-event'
         In the spotlight: '.block-views-blockin-the-spotlight-block'
@@ -164,10 +164,6 @@ default:
         Modal header: '.modal-header'
         Modal body: '.modal-body'
         Modal footer: '.modal-footer'
-        # Drupal modal dialog regions.
-        Modal buttons: '.ui-dialog-buttonpane'
-        Modal content: '#drupal-modal'
-        Modal title: '.ui-dialog-title'
         My unpublished content area: '.block-user-unpublished'
         Navigation bar: 'nav.joinup-navbar'
         Navigation menu: '#block-ventuno-navigation'
@@ -181,6 +177,12 @@ default:
         Table of contents: '#block-table-of-contents'
         Table of contents outline: '#block-toc-outline'
         Unpublished content area: '.block-entity-unpublished'
+        # Deprecated regions to be removed in ISAICP-7138.
+        # See https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7138
+        Header: '.section--featured, .section-header'
+        Modal buttons: '.ui-dialog-buttonpane'
+        Modal content: '#drupal-modal'
+        Modal title: '.ui-dialog-title'
       drupal:
         drupal_root: ${joinup.site_dir}
       selectors:
