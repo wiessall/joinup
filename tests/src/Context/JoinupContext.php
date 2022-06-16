@@ -1985,6 +1985,9 @@ class JoinupContext extends RawDrupalContext {
    *   Thrown when the modal doesn't open within 5 seconds.
    *
    * @Then a modal should/will open
+   *
+   * @todo Remove in ISAICP-7138.
+   * @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7138
    */
   public function waitForDrupalModalToOpen() {
     // A modal can be opened only in a JavaScript-enabled browser.
