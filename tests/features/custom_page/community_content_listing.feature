@@ -165,7 +165,7 @@ Feature:
       | 20 year anniversary                   |
       | Rare Nintendo64 disk drive discovered |
 
-    When I open the header local tasks menu
+    When I open the entity tasks menu
     And I click "Edit" in the "Entity actions" region
     And I drag the table row in the "Content listing field filter form" region at position 3 up
     And I drag the table row in the "Content listing field filter form" region at position 2 up
@@ -177,7 +177,7 @@ Feature:
       | Rare Nintendo64 disk drive discovered |
 
     # Content that doesn't belong to the collection won't show up, even when selected.
-    When I open the header local tasks menu
+    When I open the entity tasks menu
     And I click "Edit" in the "Entity actions" region
     And I select "News" from "Available filters"
     And I press "Add and configure filter"
@@ -205,7 +205,7 @@ Feature:
       | NEC VR4300 CPU                        |
 
     # Disabling inclusion of shared content will remove it from the list, even if still referenced.
-    When I open the header local tasks menu
+    When I open the entity tasks menu
     And I click "Edit" in the "Entity actions" region
     And I uncheck "Allow shared content"
     And I press "Save"
@@ -220,7 +220,7 @@ Feature:
       | title      | N64 cartridge cleaner |
       | state      | validated             |
       | collection | Nintendo64            |
-    When I open the header local tasks menu
+    When I open the entity tasks menu
     And I click "Edit" in the "Entity actions" region
     # Simulate reordering and removal of rows.
     And I drag the table row in the "Content listing field filter form" region at position 4 up
@@ -243,7 +243,7 @@ Feature:
     # Query presets should still apply when available.
     When I am logged in as a moderator
     And I go to the "Chosen content" custom page
-    And I open the header local tasks menu
+    And I open the entity tasks menu
     And I click "Edit" in the "Entity actions" region
     And I fill in "Query presets" with "entity_bundle|solution"
     And I press "Save"
@@ -254,14 +254,14 @@ Feature:
     # anymore to facilitators.
     Given I am logged in as a facilitator of the "Nintendo64" collection
     And I go to the "Chosen content" custom page
-    And I open the header local tasks menu
+    And I open the entity tasks menu
     And I click "Edit" in the "Entity actions" region
     Then the following field should not be present "Available filters"
 
     # Moderators should still have access to the query builder.
     When I am logged in as a moderator
     And I go to the "Chosen content" custom page
-    And I open the header local tasks menu
+    And I open the entity tasks menu
     And I click "Edit" in the "Entity actions" region
     Then the following field should be present "Available filters"
 
