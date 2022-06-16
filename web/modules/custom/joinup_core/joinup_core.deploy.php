@@ -60,35 +60,14 @@ function joinup_core_deploy_0108202(array &$sandbox): string {
   }
   $entity_storage = \Drupal::entityTypeManager()->getStorage('rdf_entity');
   $nids = array_splice($sandbox['ids'], 0, 50);
+  $queue = \Drupal::queue('joinup_email_confirmer');
+  $queue->createQueue();
   foreach ($entity_storage->loadMultiple($nids) as $entity) {
     $field_name = $entity->bundle() === 'collection' ? 'field_ar_contact_information' : 'field_is_contact_information';
     if (!$entity->get($field_name)->isEmpty()) {
-      $emails = [];
       foreach ($entity->get($field_name)->referencedEntities() as $contact) {
         if ($email = $contact->get('field_ci_email')->value) {
-          \Drupal::service('email_confirmer')->confirm($email);
-          $emails[] = $email;
-        }
-      }
-      if ($emails) {
-        $account = $entity->getOwner();
-        if ($account && $account->isActive()) {
-          $mailManager = \Drupal::service('plugin.manager.mail');
-          $module = 'joinup_core';
-          $key = 'contact_owners_validation';
-          $to = $account->getEmail();
-          $body_data = [
-            '#theme' => 'contact_owners_validation',
-            '#name' => $account->label(),
-            '#entity_name' => $entity->getName(),
-          ];
-          $output = \Drupal::service('renderer')->renderPlain($body_data);
-          $params['message'] = $output;
-          $params['name'] = $entity->getName();
-          $langcode = $account->getPreferredLangcode();
-          $send = TRUE;
-
-          $mailManager->mail($module, $key, $to, $langcode, $params, NULL, $send);
+          $queue->createItem($email);
         }
       }
     }

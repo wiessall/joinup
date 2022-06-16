@@ -70,15 +70,16 @@ Feature: About this solution
       | Ariel Lucile |
       | Maiken Bine  |
       | Peer Milla   |
-    And I should see the text "E-mail address"
+    And I should not see the text "E-mail address"
     And I should see the text "Website URL"
     And I should see the following links:
-      | ariel@nova.dk               |
-      | maiken@nova.dk              |
-      | peer@nova.dk                |
       | http://nova.com             |
       | http://nova.dk              |
       | https://innovation.nova.org |
+    And I should not see the following links:
+      | ariel@nova.dk               |
+      | maiken@nova.dk              |
+      | peer@nova.dk                |
 
     # Categorisation grey area.
     And I should see the text "Categorisation"
@@ -166,9 +167,12 @@ Feature: About this solution
     And I press "Publish"
     Then I should see the success message "A new confirmation message has been sent to invisible.cat@xpto.com."
     And the contact owner email sent to "invisible.cat@xpto.com" with subject "Request for confirmation of email address from Joinup" contains the following lines of text:
-      | text                                                                               |
-      | We have received a request to confirm invisible.cat@xpto.com on Joinup website at  |
-      | Please, reply to this request using the link below.                                |
+      | text                                                                                                       |
+      | We have received a request to confirm invisible.cat@xpto.com on Joinup website at                          |
+      | This dedicated form will allow users to get in touch with you in a quick, secure and privacy-friendly way. |
+      | Please, reply to this request using the link below.                                                        |
+      | Best regards,                                                                                              |
+      | The Joinup Team                                                                                            |
     But I click the validate contact info email from the last email sent to "invisible.cat@xpto.com"
     Then I should not see the text "Confirm invisible.cat@xpto.com"
     And I press "Send"
@@ -181,9 +185,8 @@ Feature: About this solution
     When I click "About"
     Then I should be on "/collection/antibody-development/solution/six-exclusion-advantages/about"
     And I should see the text "Owner/Contact Information"
-    And I should see the following links:
-      | elise@nova.dk               |
-      | Contact owner               |
+    And I should see the link "Contact owner"
+    And I should not see the link "elise@nova.dk"
     Then I click "Contact owner"
     And a modal should open
     And I should see the text "Email Contact" in the "Modal title"
@@ -207,9 +210,9 @@ Feature: About this solution
     Then I click "About"
 
     And I should see the text "Owner/Contact Information"
-    And I should see the following links:
-      | elise@nova.dk               |
-      | Contact owner               |
+    And I should see the link "Contact owner"
+    And I should not see the link "elise@nova.dk"
+
     Then I click "Contact owner"
     And a modal should open
     And I should see the text "Email Contact" in the "Modal title"
@@ -225,3 +228,31 @@ Feature: About this solution
       | Name: Pally Rapamichael                     |
       | Email: p.papamichael@pally.de               |
       | Message: This is solution reclamation test. |
+
+    When I am logged in as a moderator
+    Then I go to the "Six exclusion advantages" solution
+    And I open the header local tasks menu
+    And I click "Edit" in the "Header" region
+    And I scroll "Contact information" into view
+    And I press "Edit" in the "Invisible Cat" row
+    And I press "Update contact information"
+    Then I should not see the success message "A new confirmation message has been sent to invisible.cat@xpto.com."
+
+    When I open the header local tasks menu
+    And I click "Edit" in the "Header" region
+    And I scroll "Contact information" into view
+    And I press "Edit" in the "Invisible Cat" row
+    And I fill in "E-mail" with "invisible.cat.one@xpto.com"
+    And I press "Update contact information"
+    Then I should see the success message "A new confirmation message has been sent to invisible.cat.one@xpto.com."
+    And the contact owner email sent to "invisible.cat.one@xpto.com" with subject "Request for confirmation of email address from Joinup" contains the following lines of text:
+      | text                                                                                                       |
+      | We have received a request to confirm invisible.cat.one@xpto.com on Joinup website at                      |
+      | This dedicated form will allow users to get in touch with you in a quick, secure and privacy-friendly way. |
+      | Please, reply to this request using the link below.                                                        |
+      | Best regards,                                                                                              |
+      | The Joinup Team                                                                                            |
+    But I click the validate contact info email from the last email sent to "invisible.cat.one@xpto.com"
+    Then I should not see the text "Confirm invisible.cat.one@xpto.com"
+    And I press "Send"
+    Then I should see the success message "Email confirmation confirmed."
