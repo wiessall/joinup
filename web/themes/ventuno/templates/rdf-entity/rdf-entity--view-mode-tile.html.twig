@@ -6,14 +6,13 @@
 #}
 <article{{ attributes.addClass('card-tile') }}>
   {{ title_prefix }}
-  {% if not page %}
-      <h2{{ title_attributes }}>
-          <a href="{{ url }}" rel="bookmark">{{ label }}</a>
-      </h2>
-  {% endif %}
+  {{ pattern('search_item', {
+    image: content.field_is_logo,
+    url: url,
+    title: page ? '' : label|render|striptags|raw,
+    text: content.field_is_description|render|striptags,
+  }, 'featured') }}
   {{ title_suffix }}
-
-  {{ content }}
 
   <div data-drupal-card-stats class="card-stats"></div>
 </article>
