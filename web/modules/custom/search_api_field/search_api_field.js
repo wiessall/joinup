@@ -3,7 +3,7 @@
  * Attaches the behaviors for the Field UI module.
  */
 
-(function ($, Drupal, drupalSettings) {
+(function ($, Drupal, drupalSettings, once) {
 
   'use strict';
 
@@ -18,10 +18,11 @@
    * @see Drupal.fieldUIOverview.attach
    */
   Drupal.behaviors.fieldUIDisplayOverview = {
-    attach: function (context, settings) {
-      $(context).find('table#field-display-overview').once('field-display-overview').each(function () {
-        Drupal.fieldUIOverview.attach(this, settings.fieldUIRowsData, Drupal.fieldUIDisplayOverview);
-      });
+    attach(context, settings) {
+      $(once("field-display-overview", "table#field-display-overview", context)).each(function () {
+          Drupal.fieldUIOverview.attach(this, settings.fieldUIRowsData, Drupal.fieldUIDisplayOverview);
+        }
+      );
     }
   };
 
@@ -220,4 +221,4 @@
     }
   };
 
-})(jQuery, Drupal, drupalSettings);
+})(jQuery, Drupal, drupalSettings, once);
