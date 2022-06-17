@@ -5,7 +5,7 @@
  * @see templates/field/field--fieldset--show-more.html.twig
  */
 
-(function ($, Drupal) {
+(function ($, Drupal, once) {
 
   /**
    * Attaches the show more functionality.
@@ -17,7 +17,7 @@
    */
   Drupal.behaviors.fieldsetShowMore = {
     attach: function (context) {
-      $('.fieldset__field--show-more', context).once('fieldset-show-more').each(function () {
+      $(once('fieldset-show-more', '.fieldset__field--show-more', context)).each(function () {
         var $fieldset = $(this);
         var $wrapper = $('.fieldset__extra-items', $fieldset);
         var $link = $('.fieldset__show-more-link', $fieldset);
@@ -47,4 +47,4 @@
     }
   };
 
-})(jQuery, Drupal);
+})(jQuery, Drupal, once);
