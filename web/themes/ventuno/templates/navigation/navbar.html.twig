@@ -105,8 +105,9 @@
                       id="{{ item.id }}"
                       class="btn btn-light get-started__trigger"
                       data-bs-toggle="dropdown"
-                      autocomplete="off"
+                      aria-expanded="false"
                       type="button"
+                      data-bs-auto-close="outside"
                     >
                       {{ link.label }}
                     </button>
@@ -139,8 +140,9 @@
               id="{{ item.id }}"
               class="dropdown-toggle nav-link"
               data-bs-toggle="dropdown"
-              autocomplete="off"
+              aria-expanded="false"
               type="button"
+              data-bs-auto-close="outside"
             >
               {% if item.icon is not empty %}
                 <svg class="bi icon--s">
