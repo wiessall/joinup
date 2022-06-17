@@ -200,4 +200,7 @@
       }
     }
   }
+  .badge {
+    border-radius: 50rem; // Avoid override of the rounded badge in search box
+  }
 }
