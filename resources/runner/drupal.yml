@@ -221,7 +221,7 @@ drupal:
           'password' => getenv('DRUPAL_DATABASE_PASSWORD'),
           'host' => getenv('DRUPAL_DATABASE_HOST'),
           'port' => getenv('DRUPAL_DATABASE_PORT'),
-          'namespace' => 'Drupal\\Core\\Database\\Driver\\mysql',
+          'namespace' => 'Drupal\\mysql\\Driver\\Database\\mysql',
           'driver' => 'mysql',
         ];
         $databases['sparql_default']['default'] = [
