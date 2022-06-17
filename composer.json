@@ -19,11 +19,10 @@
         "drupal/cas_account_link": "^2.0",
         "drupal/cas_attributes": "^2.0",
         "drupal/changed_fields": "^3.2",
-        "drupal/components": "^2.4",
         "drupal/config_ignore": "^3.0",
         "drupal/config_readonly": "^1.0",
-        "drupal/core-composer-scaffold": "^9.3",
-        "drupal/core-recommended": "^9.3",
+        "drupal/core-composer-scaffold": "^9.4",
+        "drupal/core-recommended": "^9.4",
         "drupal/default_content": "^2.0@alpha",
         "drupal/diff": "~1.0",
         "drupal/digital_size_formatter": "~2.0",
@@ -35,7 +34,7 @@
         "drupal/entity_legal": "^3.0.0-beta3",
         "drupal/entityqueue": "^1.2",
         "drupal/error_page": "^1.0 || ^2.0",
-        "drupal/facets": "^2.0",
+        "drupal/facets": "2.0.1",
         "drupal/facets_block": "^1.4",
         "drupal/facets_date_range": "^1.0@beta",
         "drupal/field_delimiter": "^1.1",
@@ -55,7 +54,6 @@
         "drupal/layout_builder_block": "^1.0",
         "drupal/layout_builder_component_attributes": "^1.2",
         "drupal/linkit": "^5.0-beta11",
-        "drupal/matomo_reporting_api": "^2.4",
         "drupal/menu_admin_per_menu": "^1.3",
         "drupal/menu_link_destination": "^1.0",
         "drupal/message": "^1.1",
@@ -72,7 +70,7 @@
         "drupal/pathauto": "~1.8",
         "drupal/pipeline": "^1.0",
         "drupal/publication_date": "^2.0-beta2",
-        "drupal/rdf_entity": "^1.0",
+        "drupal/rdf_entity": "^2.0",
         "drupal/redirect": "^1.6",
         "drupal/redis": "^1.4",
         "drupal/schema_digital_document": "^1.0.0",
@@ -86,7 +84,6 @@
         "drupal/site_alert": "~1.2",
         "drupal/smart_trim": "~1.3",
         "drupal/social_media_links": "^2.7",
-        "drupal/sparql_entity_storage": "2.0.0-alpha1 as 1.0-alpha11",
         "drupal/state_machine": "^1.0",
         "drupal/subpathauto": "^1.2",
         "drupal/swiftmailer": "^2.2",
@@ -133,14 +130,11 @@
         "drupal/coder": "^8.3.11",
         "drupal/composer_deploy": "^1.6",
         "drupal/config_devel": "~1.7",
-        "drupal/config_filter": "^1.8",
-        "drupal/config_inspector": "^1.1",
         "drupal/config_update": "^1.7",
         "drupal/devel": "^4.0",
         "drupal/drupal-extension": "^4.1",
         "drupal/filecache": "^1",
         "drupal/renderviz": "^1.0",
-        "drupal/restui": "^1.18",
         "drupal/upgrade_status": "^3.12",
         "drupaltest/behat-one-time-login": "^1.0",
         "ec-europa/toolkit": "^8.6.12",
@@ -264,8 +258,8 @@
             },
             "drupal/core": {
                 "Use email verification when changing user email addresses @see https://www.drupal.org/project/drupal/issues/85494": "https://www.drupal.org/files/issues/2022-01-17/85494-376-9.3.x.patch",
-                "Use READ COMMITTED by default for MySQL transactions @see https://www.drupal.org/project/drupal/issues/1650930": "https://www.drupal.org/files/issues/2021-10-13/1650930-144.patch",
-                "Allow image style to be selected in text editor @see https://www.drupal.org/node/2061377": "https://git.drupalcode.org/project/drupal/-/merge_requests/48.diff",
+                "Use READ COMMITTED by default for MySQL transactions @see https://www.drupal.org/project/drupal/issues/1650930": "https://git.drupalcode.org/project/drupal/-/merge_requests/2394.diff",
+                "Allow image style to be selected in text editor @see https://www.drupal.org/node/2061377": "https://git.drupalcode.org/project/drupal/-/merge_requests/2344.diff",
                 "Allow making the file description a required field @see https://www.drupal.org/node/2320877": "https://git.drupalcode.org/project/drupal/-/merge_requests/975.diff",
                 "Delete should not be the default action on /admin/content @see https://www.drupal.org/project/drupal/issues/2381293": "https://git.drupalcode.org/project/drupal/-/merge_requests/1670.diff",
                 "Regression: Do not bypass route access with 'link to any page' permissions for menu links @see https://www.drupal.org/project/drupal/issues/2463753": "https://www.drupal.org/files/issues/2021-09-15/2463753-87_0.patch",
@@ -275,7 +269,7 @@
                 "Enlarge file_usage entity ID length. @see https://www.drupal.org/node/2675600": "https://www.drupal.org/files/issues/2675600-30.patch",
                 "Menu link plugins should provide a way for the link to be conditionally hidden @see https://www.drupal.org/project/drupal/issues/2719609": "https://www.drupal.org/files/issues/2719609-2.patch",
                 "New option for Views page displays to use the admin theme @see https://www.drupal.org/node/2719797": "https://www.drupal.org/files/issues/2719797-65.patch",
-                "Make the tab active when the fragment is present in URL @see https://www.drupal.org/project/drupal/issues/2752511": "https://www.drupal.org/files/issues/2022-01-03/vertical-tabs-2752511-109.patch",
+                "Make the tab active when the fragment is present in URL @see https://www.drupal.org/project/drupal/issues/2752511": "https://www.drupal.org/files/issues/2022-06-17/2752511-109-9.5.x.patch",
                 "Add thread depth configuration to comments. Includes patch for parent issue #2879087. @see https://www.drupal.org/project/drupal/issues/2786587 @see https://www.drupal.org/project/drupal/issues/2879087": "https://www.drupal.org/files/issues/2022-01-17/2786587-58-9.3.x.patch",
                 "Set fixed depth for comment threads.": "resources/patch/2786587-thread-depth-fixed-limit.patch",
                 "Views with a different query plugin created via the UI do not have the correct query plugin ID in the view config @see https://www.drupal.org/project/drupal/issues/2836237": "https://www.drupal.org/files/issues/2022-01-17/2836237-49-9.3.x.patch",
@@ -318,9 +312,11 @@
                 "Error: Call to a member function __wakeup() on null @see https://www.drupal.org/project/metatag/issues/3258346": "https://www.drupal.org/files/issues/2022-01-13/metatag_views-fix-cache-wrapper-serialization-3258346-3.patch",
                 "Views cache wrapper overrides other modules cache logic @see https://www.drupal.org/project/metatag/issues/3261473": "https://git.drupalcode.org/project/metatag/-/merge_requests/48.diff"
             },
+            "drupal/monolog": {
+                "Argument add to addRecord upstream @see https://www.drupal.org/project/monolog/issues/3284825": "https://git.drupalcode.org/project/monolog/-/merge_requests/7.diff"
+            },
             "drupal/paragraphs_jquery_ui_accordion": {
-                "Formatter settings are missing schema @see https://www.drupal.org/i/3194916": "https://git.drupalcode.org/project/paragraphs_jquery_ui_accordion/-/merge_requests/1.diff",
-                "Replacing the deprecated core/jquery.ui.accordion library with jquery_ui_accordion/accordion @see https://www.drupal.org/i/3171508": "https://www.drupal.org/files/issues/2020-09-17/paragraphs_jquery_ui_accordion-accordion-library-3171508-2.patch"
+                "Formatter settings are missing schema @see https://www.drupal.org/i/3194916": "https://git.drupalcode.org/project/paragraphs_jquery_ui_accordion/-/merge_requests/1.diff"
             },
             "drupal/password_policy": {
                 "'Field field_last_password_reset is unknown' while importing configuration on site without password_policy activated @see https://www.drupal.org/project/password_policy/issues/2771129": "https://www.drupal.org/files/issues/2021-07-05/password_policy_field_last_password_reset_unknown_error_2771129-130.patch",
@@ -333,8 +329,7 @@
                 "Provide computed properties that return the publication date or the created/updated date @see https://www.drupal.org/project/publication_date/issues/3066317": "https://www.drupal.org/files/issues/2019-07-07/3066317-3.patch"
             },
             "drupal/rdf_entity": {
-                "Allow bundle label plural variants @see https://github.com/ec-europa/rdf_entity/pull/12": "https://github.com/ec-europa/rdf_entity/compare/8.x-1.x...ea8f6af001fca732e89a4be0e29643953f49a88f.diff",
-                "Support Sparql Entity Storage 2.x @see https://www.drupal.org/project/rdf_entity/issues/3259145": "https://git.drupalcode.org/project/rdf_entity/-/merge_requests/1.diff"
+                "Allow bundle label plural variants @see https://github.com/ec-europa/rdf_entity/pull/12": "https://github.com/ec-europa/rdf_entity/compare/8.x-1.x...ea8f6af001fca732e89a4be0e29643953f49a88f.diff"
             },
             "drupal/search_api": {
                 "item_id column is too short @see https://www.drupal.org/node/2829696": "resources/patch/search_api-item_id-length-2829696.patch",
@@ -349,9 +344,6 @@
             },
             "drupal/social_media_links": {
                 "Missing config schema for field, widget and formatter @see https://www.drupal.org/node/2898680": "https://git.drupalcode.org/project/social_media_links/-/merge_requests/4.diff"
-            },
-            "drupal/sparql_entity_storage": {
-                "Error due to nullable $entity_id_plugin @see https://www.drupal.org/project/sparql_entity_storage/issues/3259160": "https://www.drupal.org/files/issues/2022-01-18/3259160-2.patch"
             },
             "drupal/subpathauto": {
                 "Subpaths with redirect not resolved @see https://www.drupal.org/project/subpathauto/issues/3175637": "https://git.drupalcode.org/project/subpathauto/-/merge_requests/1/diffs.diff"
@@ -381,17 +373,13 @@
             },
             "openeuropa/task-runner": {
                 "Command config cannot be overridden @see https://github.com/openeuropa/task-runner/pull/135": "https://patch-diff.githubusercontent.com/raw/openeuropa/task-runner/pull/135.diff"
-            },
-            "palantirnet/drupal-rector": {
-                "drupalPostForm() with 1st param NULL @see https://github.com/palantirnet/drupal-rector/pull/198": "https://patch-diff.githubusercontent.com/raw/palantirnet/drupal-rector/pull/198.diff",
-                "user_password() deprecation @see https://github.com/palantirnet/drupal-rector/pull/199": "https://patch-diff.githubusercontent.com/raw/palantirnet/drupal-rector/pull/199.diff"
             }
         },
         "artifacts": {
             "openeuropa/oe_bootstrap_theme": {
                 "dist": {
-                    "url": "https://github.com/{name}/releases/download/{pretty-version}/{project-name}-{pretty-version}.tar.gz",
-                    "type": "tar"
+                    "url": "https://github.com/{name}/releases/download/{pretty-version}/{project-name}-{pretty-version}.zip",
+                    "type": "zip"
                 }
             }
         }
