@@ -662,10 +662,10 @@ function ventuno_preprocess_page_title(array &$variables): void {
 /**
  * Builds the permalink for the given route.
  *
- * @return string
+ * @return string|null
  *   The permalink URI.
  */
-function ventuno_build_permalink() {
+function ventuno_build_permalink(): ?string {
   $route_match = \Drupal::routeMatch();
   $route_name = $route_match->getRouteName();
 
@@ -676,7 +676,7 @@ function ventuno_build_permalink() {
   ];
 
   if (!in_array($route_name, $routes)) {
-    return FALSE;
+    return NULL;
   }
 
   if (!($parameters = $route_match->getRouteObject()->getOption(
@@ -693,7 +693,7 @@ function ventuno_build_permalink() {
   }
 
   if (!isset($type) || !($entity = $route_match->getParameter($type))) {
-    return FALSE;
+    return NULL;
   }
 
   // Entity ID is pointing to the publication office redirect.
@@ -715,6 +715,15 @@ function ventuno_build_permalink() {
     'path_processing' => FALSE,
     'absolute' => TRUE,
   ])->toString();
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function ventuno_form_joinup_group_membership_permissions_info_alter(array &$form, FormStateInterface $form_state, string $form_id): void {
+  $form['actions']['close']['#attributes']['class'][] = 'btn';
+  $form['actions']['close']['#attributes']['class'][] = 'btn-md';
+  $form['actions']['close']['#attributes']['class'][] = 'btn-outline-brand';
 }
 
 /**
