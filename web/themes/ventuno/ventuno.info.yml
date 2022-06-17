@@ -10,6 +10,7 @@ libraries:
   - ventuno/style
 
 libraries-override:
+  core/jquery.once: false
   oe_bootstrap_theme/style: false
   oe_bootstrap_theme/bcl: false
   joinup_layout/twocol_60_40:
