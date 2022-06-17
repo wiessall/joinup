@@ -253,11 +253,11 @@ Feature: Proposing a collection
     And I press "Propose"
     Then I should see the heading "Some email validation"
     And the following email should have been sent:
-      | recipient_mail     | some_unique_contact_person@example.com                                                         |
-      | subject            | Request for confirmation of email address from Joinup                                          |
-      | body               | We have received a request to confirm some_unique_contact_person@example.com on Joinup website |
-      | signature_required | no                                                                                             |
-      | html               | no                                                                                             |
+      | recipient_mail     | some_unique_contact_person@example.com                                                                                      |
+      | subject            | Request for confirmation of email address from Joinup                                                                       |
+      | body               | We have received a request to validate the contact email address (some_unique_contact_person@example.com) on Joinup website |
+      | signature_required | no                                                                                                                          |
+      | html               | no                                                                                                                          |
 
     When I click "Add solution" in the plus button menu
     And I check "I have read and accept the legal notice and I commit to manage my solution on a regular basis."
@@ -275,11 +275,11 @@ Feature: Proposing a collection
     And I select "Logging Service" from "Solution type"
     And I press "Propose"
     And the following email should have been sent:
-      | recipient_mail     | contact_Rapazoglou@example.com                                                         |
-      | subject            | Request for confirmation of email address from Joinup                                  |
-      | body               | We have received a request to confirm contact_Rapazoglou@example.com on Joinup website |
-      | signature_required | no                                                                                     |
-      | html               | no                                                                                     |
+      | recipient_mail     | contact_Rapazoglou@example.com                                                                                      |
+      | subject            | Request for confirmation of email address from Joinup                                                               |
+      | body               | We have received a request to validate the contact email address (contact_Rapazoglou@example.com) on Joinup website |
+      | signature_required | no                                                                                                                  |
+      | html               | no                                                                                                                  |
 
     # As some entities were created via UI, we should explicitly delete them.
     And I delete the "Some email validation" collection

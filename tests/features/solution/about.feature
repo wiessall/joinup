@@ -167,12 +167,12 @@ Feature: About this solution
     And I press "Publish"
     Then I should see the success message "A new confirmation message has been sent to invisible.cat@xpto.com."
     And the contact owner email sent to "invisible.cat@xpto.com" with subject "Request for confirmation of email address from Joinup" contains the following lines of text:
-      | text                                                                                                       |
-      | We have received a request to confirm invisible.cat@xpto.com on Joinup website at                          |
-      | This dedicated form will allow users to get in touch with you in a quick, secure and privacy-friendly way. |
-      | Please, reply to this request using the link below.                                                        |
-      | Best regards,                                                                                              |
-      | The Joinup Team                                                                                            |
+      | text                                                                                                        |
+      | We have received a request to validate the contact email address (invisible.cat@xpto.com) on Joinup website |
+      | This dedicated form will allow users to get in touch with you in a quick, secure and privacy-friendly way.  |
+      | Please, reply to this request using the link below.                                                         |
+      | Best regards,                                                                                               |
+      | The Joinup Team                                                                                             |
     But I click the validate contact info email from the last email sent to "invisible.cat@xpto.com"
     Then I should not see the text "Confirm invisible.cat@xpto.com"
     And I press "Send"
@@ -236,6 +236,7 @@ Feature: About this solution
     And I scroll "Contact information" into view
     And I press "Edit" in the "Invisible Cat" row
     And I press "Update contact information"
+    And I press "Publish"
     Then I should not see the success message "A new confirmation message has been sent to invisible.cat@xpto.com."
 
     When I open the header local tasks menu
@@ -244,14 +245,15 @@ Feature: About this solution
     And I press "Edit" in the "Invisible Cat" row
     And I fill in "E-mail" with "invisible.cat.one@xpto.com"
     And I press "Update contact information"
+    And I press "Publish"
     Then I should see the success message "A new confirmation message has been sent to invisible.cat.one@xpto.com."
     And the contact owner email sent to "invisible.cat.one@xpto.com" with subject "Request for confirmation of email address from Joinup" contains the following lines of text:
-      | text                                                                                                       |
-      | We have received a request to confirm invisible.cat.one@xpto.com on Joinup website at                      |
-      | This dedicated form will allow users to get in touch with you in a quick, secure and privacy-friendly way. |
-      | Please, reply to this request using the link below.                                                        |
-      | Best regards,                                                                                              |
-      | The Joinup Team                                                                                            |
+      | text                                                                                                            |
+      | We have received a request to validate the contact email address (invisible.cat.one@xpto.com) on Joinup website |
+      | This dedicated form will allow users to get in touch with you in a quick, secure and privacy-friendly way.      |
+      | Please, reply to this request using the link below.                                                             |
+      | Best regards,                                                                                                   |
+      | The Joinup Team                                                                                                 |
     But I click the validate contact info email from the last email sent to "invisible.cat.one@xpto.com"
     Then I should not see the text "Confirm invisible.cat.one@xpto.com"
     And I press "Send"
