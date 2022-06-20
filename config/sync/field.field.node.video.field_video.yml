@@ -22,7 +22,12 @@ default_value_callback: ''
 settings:
   allowed_providers:
     joinup_ec_video: joinup_ec_video
+    joinup_ec_webcast_video: joinup_ec_webcast_video
     youtube: youtube
+    internal_path: '0'
+    google_docs: '0'
+    prezi: '0'
+    slideshare: '0'
     vimeo: '0'
     youtube_playlist: '0'
 field_type: video_embed_field

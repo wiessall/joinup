@@ -2192,18 +2192,3 @@ function joinup_theme_preprocess_social_share(array &$variables) {
   $variables['encoded_url'] = urlencode($variables['url']->toString());
   $variables['encoded_title'] = urlencode($entity->label());
 }
-
-/**
- * Implements hook_library_info_alter().
- *
- * Whenever the jQuery UI dialog is used, invoke the Bootstrap compatibility
- * mode to avoid Bootstrap overwriting the methods used by jQuery UI to render
- * buttons.
- */
-function joinup_theme_library_info_alter(&$libraries, $extension) {
-  switch ($extension) {
-    case 'core':
-      $libraries['jquery.ui.dialog']['dependencies'][] = 'joinup_theme/bootstrap-jquery-ui-compatibility';
-      break;
-  }
-}

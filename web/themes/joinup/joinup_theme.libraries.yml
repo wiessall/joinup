@@ -34,19 +34,18 @@ form-components:
     js/form.js: {}
     vendor/autosize/dist/autosize.js: {}
   dependencies:
-    - core/jquery
-    - core/jquery.once
     - core/drupal
     - core/drupalSettings
+    - core/once
 
 fieldset-show-more:
   version: 1.x
   js:
     js/fieldset-show-more.js: {}
   dependencies:
-    - core/jquery
-    - core/jquery.once
     - core/drupal
+    - core/jquery
+    - core/once
     - jquery_ui_accordion:jquery_ui_accordion
 
 tableselect:
@@ -58,9 +57,9 @@ shared_entity:
   js:
     js/shared_entity.js: {}
   dependencies:
-    - core/jquery
-    - core/jquery.once
     - core/drupal
+    - core/jquery
+    - core/once
 
 facets-extend:
   version: VERSION
