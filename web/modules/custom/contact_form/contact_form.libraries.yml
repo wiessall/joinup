@@ -1,0 +1,4 @@
+remove-domain-from-url:
+  version: VERSION
+  js:
+    js/remove-domain-from-url.js: { minified: false }
