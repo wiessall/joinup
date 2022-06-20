@@ -94,10 +94,35 @@ default:
       browser_name: ${behat.browser_name}
       selenium2:
         wd_host: ${env.WEBDRIVER_URL}
-        capabilities: {"browserName": "chrome", "browser": "chrome", 'chrome': {'switches':[
-          '--no-sandbox',
-          '--window-size=1024,768'
-        ]}}
+        capabilities:
+          browser: chrome
+          nativeEvents: true
+          marionette: true
+          browserName: chrome
+          version: '*'
+          extra_capabilities:
+            loggingPrefs:
+              performance: ALL
+              browser: ALL
+            chromeOptions:
+              w3c: false
+              args:
+                - '--no-sandbox'
+                - '--start-maximized'
+                - '--disable-gpu'
+                - '--window-size=1600,1200'
+                - '--disable-dev-shm-usage'
+                - '--disable-setuid-sandbox'
+                - '--disable-web-security'
+                - '--DNS-prefetch-disable'
+                - '--disable-translate'
+                - '--ignore-certificate-errors'
+                - '--test-type'
+                - '--disable-extensions'
+                - '--incognito'
+                - '--disable-infobars'
+                - '--allowed-ips=*'
+                - '--whitelisted-ips=*'
     LoversOfBehat\TableExtension:
       table_map:
         'group menu edit table': '#menu-overview'
