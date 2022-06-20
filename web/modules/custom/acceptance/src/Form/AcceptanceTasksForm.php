@@ -36,7 +36,7 @@ class AcceptanceTasksForm extends FormBase {
   protected QueueWorkerManagerInterface $queueManager;
 
   /**
-   * Send spool emails.
+   * Helper service to send spooled emails.
    *
    * @var \Drupal\joinup_acceptance\SendSpooledEmailsInterface
    */
@@ -50,7 +50,7 @@ class AcceptanceTasksForm extends FormBase {
    * @param \Drupal\Core\Queue\QueueWorkerManagerInterface $queue_manager
    *   The queue manager.
    * @param \Drupal\joinup_acceptance\SendSpooledEmailsInterface $send_spool
-   *   Send spool emails.
+   *   Helper service to send spooled emails.
    */
   public function __construct(QueueFactory $queue_factory, QueueWorkerManagerInterface $queue_manager, SendSpooledEmailsInterface $send_spool) {
     $this->queueFactory = $queue_factory;
@@ -108,7 +108,7 @@ class AcceptanceTasksForm extends FormBase {
   }
 
   /**
-   * Provides submit handler for send spooled email button.
+   * Provides a submit handler for the "Send spooled email" button.
    *
    * @param array $form
    *   The form API render array.

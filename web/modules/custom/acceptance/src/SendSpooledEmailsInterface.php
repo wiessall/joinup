@@ -15,6 +15,6 @@ interface SendSpooledEmailsInterface {
    * @param string $transport
    *   The transport method to use. Valid values: "smtp", "sendmail" and "null".
    */
-  public function sendSpool(string $transport);
+  public function sendSpool(string $transport): void;
 
 }

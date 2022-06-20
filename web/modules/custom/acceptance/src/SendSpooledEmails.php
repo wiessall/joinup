@@ -42,10 +42,7 @@ class SendSpooledEmails implements SendSpooledEmailsInterface {
   }
 
   /**
-   * Sends out the spooled emails.
-   *
-   * @param string $transport
-   *   The transport method to use. Valid values: "smtp", "sendmail" and "null".
+   * {@inheritdoc}
    */
   public function sendSpool(string $transport = "null"): void {
     if (in_array($transport, self::$validtransports, TRUE)) {
