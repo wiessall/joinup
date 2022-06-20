@@ -10,6 +10,7 @@ use EasyRdf\Http;
 use Joinup\TaskRunner\Traits\SolrTrait;
 use OpenEuropa\TaskRunner\Commands\AbstractCommands;
 use PHPUnit\Runner\Version;
+use Robo\Robo;
 
 /**
  * Joinup Environment Commands.
@@ -47,6 +48,13 @@ class JoinupEnvironmentCommands extends AbstractCommands {
    *   The MySQL version.
    */
   protected function mysqlVersion(): string {
+    /** @var \Composer\Autoload\ClassLoader $classLoader */
+    $class_loader = Robo::getContainer()->get('classLoader');
+    // As Drupal is not bootstrapped, the module PSR4 autoload mappings are not
+    // set. We manually register the PSR4 prefix.
+    // @see https://www.drupal.org/node/3129492
+    $class_loader->addPsr4('Drupal\\mysql\\',  'web/core/modules/mysql/src');
+
     $config = $this->getConfig();
     $info = Database::parseConnectionInfo([
       'database' => $config->get('env.DRUPAL_DATABASE_NAME'),
@@ -54,7 +62,7 @@ class JoinupEnvironmentCommands extends AbstractCommands {
       'password' => $config->get('env.DRUPAL_DATABASE_PASSWORD'),
       'host' => $config->get('env.DRUPAL_DATABASE_HOST'),
       'port' => $config->get('env.DRUPAL_DATABASE_PORT'),
-      'namespace' => 'Drupal\\Core\\Database\\Driver\\mysql',
+      'namespace' => 'Drupal\\mysql\\Driver\\Database\\mysql',
       'driver' => 'mysql',
     ]);
     Database::addConnectionInfo('default', 'default', $info);

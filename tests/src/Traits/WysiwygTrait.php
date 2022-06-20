@@ -14,6 +14,8 @@ use Drupal\joinup\Exception\WysiwygEditorNotFoundException;
  */
 trait WysiwygTrait {
 
+  use JavascriptTrait;
+
   /**
    * Presses the given WYSIWYG button.
    *
@@ -39,8 +41,10 @@ trait WysiwygTrait {
     if (count($button_elements) > 1) {
       throw new \Exception("Multiple '$button' buttons found in the editor.");
     }
+    /** @var \Behat\Mink\Element\NodeElement $button */
     $button = reset($button_elements);
-    $button->click();
+    $this->scrollElementIntoView($button);
+    $button->press();
   }
 
   /**
