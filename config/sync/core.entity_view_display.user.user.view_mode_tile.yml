@@ -56,6 +56,8 @@ content:
     settings:
       image_link: content
       image_style: profile_icon_big
+      image_loading:
+        attribute: lazy
     third_party_settings: {  }
     weight: 0
     region: content
