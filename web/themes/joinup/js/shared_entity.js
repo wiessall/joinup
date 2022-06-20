@@ -3,7 +3,7 @@
  * Attaches the behaviours to show visual cues on shared community content.
  */
 
-(function ($, Drupal) {
+(function ($, Drupal, once) {
 
   /**
    * Theme function that renders a visual cue for shared content.
@@ -37,7 +37,7 @@
         return;
       }
 
-      $(context).find('[data-drupal-parent-id]').once('shared-cue').each(function () {
+      $(once('shared-cue', '[data-drupal-parent-id]', context)).each(function () {
         var $this = $(this);
         var parent = $this.data('drupal-parent-id');
 
@@ -52,4 +52,4 @@
     }
   };
 
-})(jQuery, Drupal);
+})(jQuery, Drupal, once);

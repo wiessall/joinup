@@ -62,6 +62,7 @@ filters:
         joinup_ec_video: joinup_ec_video
         internal_path: internal_path
         google_docs: google_docs
+        joinup_ec_webcast_video: joinup_ec_webcast_video
         prezi: prezi
         slideshare: slideshare
         vimeo: vimeo
