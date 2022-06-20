@@ -28,14 +28,6 @@ module.exports = {
       },
     },
     {
-      entry: path.resolve(outputFolder, "src/js/remove-domain-from-url.js"),
-      dest: path.resolve(outputFolder, "assets/js/remove-domain-from-url.js"),
-      options: {
-        minify: true,
-        sourceMap: true,
-      },
-    },
-    {
       entry: path.resolve(outputFolder, "src/js/sticky-menu.js"),
       dest: path.resolve(outputFolder, "assets/js/sticky-menu.js"),
       options: {

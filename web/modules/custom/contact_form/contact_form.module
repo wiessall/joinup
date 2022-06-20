@@ -35,6 +35,7 @@ function contact_form_preprocess_html(&$variables) {
     ];
     $variables['page']['#attached']['html_head'][] = [$metadesc, 'description'];
   };
+  $variables['page']['#attached']['library'][] = 'contact_form/remove-domain-from-url';
 }
 
 /**
