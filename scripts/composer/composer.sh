@@ -17,8 +17,16 @@ fi
 # Build the codebase.
 test ! -f ./vendor/bin/run || ./vendor/bin/run toolkit:build-dev
 
+# NPM version.
+echo "Node $(node --version)"
+echo "NPM $(npm --version)"
+
 # Bring theme dependencies.
 cd web/themes/ventuno && npm ci
+if [ $? != 0 ]
+then
+  exit 2;
+fi
 cd ../../..
 
 if [ "$1" == "install" ]; then
@@ -27,5 +35,10 @@ elif [ "$1" == "update" ]; then
   npm install;
 else
   echo "Wrong parameter!";
-  exit 1;
+  exit 4;
+fi
+
+if [ $? != 0 ]
+then
+  exit 3;
 fi

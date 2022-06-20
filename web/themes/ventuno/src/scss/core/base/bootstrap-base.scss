@@ -1,4 +1,4 @@
-// @todo remove when switch to Ventuno theme is complete
+// @todo ISAICP-7138 delete file when switch to Ventuno theme is complete
 /*
 /* Bootstrap's base for components that need it while being rendered in a "material"
 /* based environment, like navbar and footer.
@@ -61,7 +61,7 @@
   @import "@openeuropa/bcl-bootstrap/scss/accordion";
   // @import "@openeuropa/bcl-bootstrap/scss/breadcrumb";
   // @import "@openeuropa/bcl-bootstrap/scss/pagination";
-  // @import "@openeuropa/bcl-bootstrap/scss/badge";
+  @import "@openeuropa/bcl-bootstrap/scss/badge";
   // @import "@openeuropa/bcl-bootstrap/scss/alert";
   // @import "@openeuropa/bcl-bootstrap/scss/progress";
   // @import "@openeuropa/bcl-bootstrap/scss/list-group";
@@ -89,7 +89,7 @@
   // @import "@openeuropa/bcl-theme-default/src/scss/tabs";
   // @import "@openeuropa/bcl-theme-default/src/scss/input";
   // @import "@openeuropa/bcl-theme-default/src/scss/spinners";
-  // @import "@openeuropa/bcl-theme-default/src/scss/badge";
+  @import "@openeuropa/bcl-theme-default/src/scss/badge";
   // @import "@openeuropa/bcl-theme-default/src/scss/multiselect";
   // @import "@openeuropa/bcl-theme-default/src/scss/bcl-offcanvas";
   // @import "@openeuropa/bcl-theme-default/src/scss/breadcrumb";
@@ -177,11 +177,16 @@
     background: $white;
   }
 
+  .icon--close::before {
+    content: '';
+  }
+
+  .bg-primary {
+    background-color: $primary !important;
+    color: #f5f6f7 !important;
+  }
+
   .page__footer{
-    &.bg-primary {
-      background-color: $primary !important;
-      color: #f5f6f7 !important;
-    }
     h3 {
       font-size: 14px;
       font-weight: 700 !important;

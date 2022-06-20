@@ -948,20 +948,6 @@ function joinup_theme_preprocess_form(&$variables) {
     $variables['attributes']['class'][] = 'form__margin-top';
     $variables['attributes']['class'][] = 'form__member-actions';
   }
-
-  // Get group parameter on the search page.
-  if ($variables['element']['#id'] == 'views-exposed-form-search-page-1') {
-    $param = \Drupal::request()->get('f');
-    if (isset($param[0])) {
-      $id = str_replace('group:', '', $param[0], $count);
-      if ($count == 1) {
-        $rdf_entity = \Drupal::entityTypeManager()->getStorage('rdf_entity')->load($id);
-        if (!empty($rdf_entity)) {
-          $variables['filters'][$id] = $rdf_entity->label();
-        }
-      }
-    }
-  }
 }
 
 /**
@@ -1480,11 +1466,6 @@ function joinup_theme_theme_suggestions_page_title_alter(array &$suggestions, ar
  */
 function joinup_theme_theme_suggestions_form_alter(array &$suggestions, array $variables) {
   $suggestions[] = 'form__' . str_replace('-', '_', $variables['element']['#form_id']);
-
-  // Add suggestion for search form in the header.
-  if ($variables['element']['#id'] == 'views-exposed-form-search-page-1') {
-    $suggestions[] = 'form__joinup_exposed_search';
-  }
 }
 
 /**
@@ -1661,12 +1642,6 @@ function joinup_theme_form_alter(&$form, FormStateInterface $form_state, $form_i
 
   if (is_array($form['#theme']) && array_intersect($form['#theme'], $custom_forms) && !array_intersect($form['#theme'], $tab_forms)) {
     $form['#theme'][] = 'buttons_separated_form';
-  }
-
-  // Add suggestion for search form in the header.
-  if ($form['#id'] == 'views-exposed-form-search-page-1') {
-    $form['#theme'] = ['joinup_exposed_search'];
-    $form['keys']['#extra_suggestion'] = 'joinup_exposed_search';
   }
 
   if ($form_id === 'user_form') {
@@ -2320,19 +2295,4 @@ function joinup_theme_preprocess_social_share(array &$variables) {
 
   $variables['encoded_url'] = urlencode($variables['url']->toString());
   $variables['encoded_title'] = urlencode($entity->label());
-}
-
-/**
- * Implements hook_library_info_alter().
- *
- * Whenever the jQuery UI dialog is used, invoke the Bootstrap compatibility
- * mode to avoid Bootstrap overwriting the methods used by jQuery UI to render
- * buttons.
- */
-function joinup_theme_library_info_alter(&$libraries, $extension) {
-  switch ($extension) {
-    case 'core':
-      $libraries['jquery.ui.dialog']['dependencies'][] = 'joinup_theme/bootstrap-jquery-ui-compatibility';
-      break;
-  }
 }

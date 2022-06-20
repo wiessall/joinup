@@ -1,0 +1,6 @@
+{
+  "extends": "../../core/.eslintrc.json",
+  "globals": {
+    "bootstrap": true
+  }
+}
