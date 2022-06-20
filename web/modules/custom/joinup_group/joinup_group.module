@@ -103,19 +103,46 @@ function joinup_group_preprocess_menu__main(&$variables) {
 
 /**
  * Implements hook_preprocess_page().
- *
- * Adds the current og group context as attribute on the page wrapper.
  */
-function joinup_group_preprocess_page(&$variables) {
+function joinup_group_preprocess_page(array &$variables): void {
   /** @var \Drupal\Core\Plugin\Context\ContextInterface[] $context */
   $context = \Drupal::service('og.context')->getRuntimeContexts(['og']);
 
+  // Adds the current OG group context as attribute on the page wrapper.
   if (!empty($context['og'])) {
     $group = $context['og']->getContextValue();
 
     if ($group && $group->getEntityTypeId() === 'rdf_entity') {
       $variables['attributes']['data-drupal-group-context'] = $group->id();
     }
+  }
+}
+
+/**
+ * Implements hook_preprocess().
+ */
+function joinup_group_preprocess(array &$variables, string $hook): void {
+  if (!in_array($hook, ['rdf_entity', 'node'], TRUE)) {
+    return;
+  }
+
+  // Apply the visual cue only on the tile view mode.
+  if (!isset($variables['view_mode']) || $variables['view_mode'] !== 'view_mode_tile') {
+    return;
+  }
+
+  $group_content = $variables[$hook];
+  if (
+    // It's group content (solution, news, discussion, etc)
+    $group_content instanceof GroupContentInterface
+    // And belongs to a group.
+    && ($parent = $group_content->getGroup())
+    // And is shared.
+    && ($group_content->getSharedInField() && !$group_content->getSharedInField()->isEmpty())
+  ) {
+    $variables['#attached']['library'][] = 'joinup_group/shared_entity';
+    $variables['attributes']['data-drupal-parent-id'] = $parent->id();
+    $variables['attributes']['data-drupal-parent-label'] = $parent->label();
   }
 }
 
