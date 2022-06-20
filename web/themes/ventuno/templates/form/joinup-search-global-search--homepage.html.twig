@@ -19,9 +19,6 @@
   <div class="col-12 order-md-2">
     <div class="search-bar mb-3 px-2 ps-md-0 pe-md-5">
       <form action="{{ search_url }}">
-        {% for id, filter in filters %}
-          <input type="hidden" class="search-bar__chip" name="f[]" value="{{ id }}" data-description="{{ filter }}">
-        {% endfor %}
         <div class="input-group">
           <input class="search-bar__input form-control px-4 py-3 py-md-0" type="text" name="keys" id="search-bar__input" placeholder="{{ 'Start typing to search…'|trans }}">
           <button type="submit" class="btn btn-search">{{ 'Search'|trans }}</button>

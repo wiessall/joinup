@@ -115,6 +115,14 @@ module.exports = {
       },
     },
     {
+      entry: path.resolve(outputFolder, "src/scss/badge.scss"),
+      dest: path.resolve(outputFolder, "assets/css/badge.css"),
+      options: {
+        includePaths,
+        sourceMap: "file",
+      },
+    },
+    {
       entry: path.resolve(outputFolder, "src/scss/close.scss"),
       dest: path.resolve(outputFolder, "assets/css/close.css"),
       options: {
@@ -211,7 +219,7 @@ module.exports = {
         sourceMap: "file",
       },
     },
-    // @todo remove when switch to Ventuno theme is complete
+    // @todo ISAICP-7138 remove when switch to Ventuno theme is complete
     {
       entry: path.resolve(outputFolder, "src/scss/core/base/bootstrap-base.scss"),
       dest: path.resolve(outputFolder, "assets/css/bootstrap-base.css"),

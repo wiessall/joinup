@@ -36,6 +36,12 @@ accordion:
     theme:
       assets/css/accordion.css: {}
 
+# Bootstrap components
+badge:
+  css:
+    theme:
+      assets/css/badge.css: {}
+
 close:
   css:
     theme:
@@ -116,7 +122,7 @@ tour-first-balloon:
   js:
     assets/js/tour-first-balloon.js: { minified: true, attributes: { defer: true } }
 
-# @todo remove when switch to Ventuno theme is complete
+# @todo ISAICP-7138 remove when switch to Ventuno theme is complete
 bootstrap-base:
   css:
     component:

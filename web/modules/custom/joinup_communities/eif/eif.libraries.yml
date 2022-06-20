@@ -2,8 +2,6 @@ recommendations.selector:
   js:
     js/eif_recommendations.js: {}
   dependencies:
-    - core/jquery
-    - core/jquery.once
     - core/drupal
 
 eif-filter:
