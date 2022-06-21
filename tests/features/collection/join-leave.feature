@@ -143,10 +143,10 @@ Feature: Joining and leaving collections through the web interface
     And I go to the homepage of the "Sapient Pearwood" collection
     # This is actually a link which is styled as a button.
     When I click "Join this collection"
-    Then a modal should open
+    Then a modal dialog should open
     And I should see the text "Sign in to join"
 
-    When I press "Cancel" in the "Modal buttons" region
+    When I press "Cancel" in the "Modal footer" region
     And I wait for AJAX to finish
     Then I should not see the text "Sign in to join"
     # Since this is a modal, the dialog simply closes instead of redirecting to
