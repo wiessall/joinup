@@ -1,0 +1,27 @@
+uuid: 1be5831a-5192-4897-9e37-fe27bf442fca
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.meta_entity.announcements_enabled
+    - meta_entity.type.collection_settings
+  module:
+    - cached_computed_field
+id: meta_entity.collection_settings.announcements_enabled
+field_name: announcements_enabled
+entity_type: meta_entity
+bundle: collection_settings
+label: 'Announcements enabled'
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    expire: null
+    value: true
+default_value_callback: ''
+settings:
+  on_label: 'On'
+  off_label: 'Off'
+  cache-max-age: 3600
+field_type: cached_computed_boolean

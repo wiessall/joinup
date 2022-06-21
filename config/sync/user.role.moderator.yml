@@ -286,6 +286,7 @@ permissions:
   - 'update paragraph content iframe'
   - 'update paragraph content json_map'
   - 'update site alerts'
+  - 'update solution_settings meta-entity'
   - 'update spotlight entityqueue'
   - 'view any unpublished content'
   - 'view field_is_eif_category'
