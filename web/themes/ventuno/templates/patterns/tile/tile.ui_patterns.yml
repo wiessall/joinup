@@ -1,37 +1,31 @@
 tile:
   label: 'Tile'
-  description: 'Custom version of <a href="https://oelibrary.netlify.app/default/?path=/story/components-card--default" target="_blank">BCL''s card</a> to fit the needs of Joinup tiles display.'
-  settings:
+  description: 'Custom version of <a href="https://oelibrary.netlify.app/default/?path=/story/components-card--default" target="_blank">BCL''s card</a> to fit the needs of Joinup search page.'
+  variants:
+    default:
+      label: 'Default'
+      description: 'Standard result item.'
     featured:
-      type: boolean
       label: 'Featured'
-      description: 'Enable to mark the item as featured, with secondary background.'
-      preview: false
+      description: 'Featured result item: the three first results are shown with their image.'
   fields:
     image:
-      type: object
+      type: array
       label: 'Image'
-      description: 'Card image with path and alt.'
+      description: 'Card image with path, alt and position.'
       preview:
         path: 'https://placeimg.com/1000/500/people'
         alt: 'Alternative text for card image'
-    url:
-      type: text
-      label: 'Url'
-      description: 'Url leading to the article.'
-      preview: 'https://joinup.ec.europa.eu'
-    title_prefix:
-      type: object
-      label: 'Title'
-      description: 'Card title.'
-      preview: 'Title card'
+    badges:
+      type: array
+      label: 'Badges'
+      description: 'List of badges for the card.'
+      preview:
+        - label: 'Primary badge'
+        - label: 'Secondary badge'
+          rounded_pill: true
     title:
       type: text
-      label: 'Title'
-      description: 'Card title.'
-      preview: 'Title card'
-    title_suffix:
-      type: object
       label: 'Title'
       description: 'Card title.'
       preview: 'Title card'
@@ -41,10 +35,7 @@ tile:
       description: 'Card text.'
       preview: 'Text card with longer text which is supported'
     metadata:
-      type: array
+      type: text
       label: 'Metadata'
-      description: 'Pairs of label/icon describing the type of content the tile refers to. Label is optional.'
-      preview:
-        - label: 'solution'
-          icon: 'clipboard-check'
-        - icon: 'clipboard-check'
+      description: 'Item metadata.'
+      preview: '<span class="text-muted text-nowrap me-4">COLLECTION</span><span class="text-muted text-nowrap">Created: 17/01/2022</span>'
