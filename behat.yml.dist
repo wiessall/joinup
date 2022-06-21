@@ -183,6 +183,7 @@ default:
         Modal buttons: '.ui-dialog-buttonpane'
         Modal content: '#drupal-modal'
         Modal title: '.ui-dialog-title'
+        Navigation menu block: '#block-navigation'
       drupal:
         drupal_root: ${joinup.site_dir}
       selectors:
