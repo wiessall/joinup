@@ -259,9 +259,9 @@ Feature: Navigation menu for custom pages
     And I should not see the link "Overview" in the "Table of contents"
     And I should not see the link "Members" in the "Table of contents"
     And I should not see the link "About" in the "Table of contents"
-    But I should see the link "Overview" in the "Navigation menu"
-    And I should see the link "Members" in the "Navigation menu"
-    And I should see the link "About" in the "Navigation menu"
+    But I should see the link "Overview" in the "Navigation menu block"
+    And I should see the link "Members" in the "Navigation menu block"
+    And I should see the link "About" in the "Navigation menu block"
 
     # Only the sub-page links of "Page 2" are rendered.
     When I visit the "Page 2" custom page
