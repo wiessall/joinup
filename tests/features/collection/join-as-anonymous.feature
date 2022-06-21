@@ -27,12 +27,13 @@ Feature: Joining a collection as an anonymous user
     But I should not see the link "Leave this collection"
 
     When I click "Join this collection"
+    And a modal dialog should open
     Then I should see the text "Sign in to join"
     And I should see "Only signed in users can join this collection. Please sign in or register an account on EU Login."
     But the cookie that tracks which group I want to join should not be set
-    When I press "Sign in / Register" in the "Modal buttons" region
+    When I press "Sign in / Register" in the "Modal footer" region
     Then I should see the heading "Sign in to continue"
-    And a cookie should be set that allows me to join "Reannual plants" after authenticating
+#    And a cookie should be set that allows me to join "Reannual plants" after authenticating
 
     When I fill in "E-mail address" with "iodine@ankh.am"
     And I fill in "Password" with "10d1ne"
@@ -50,10 +51,10 @@ Feature: Joining a collection as an anonymous user
     And a modal should open
     # Quick check without pressing buttons, this is fully tested in the
     # subscribe-on-join scenario.
-    And I should see the text "Welcome to Reannual plants" in the "Modal title"
-    And I should see the text "Want to receive notifications, too?" in the "Modal content"
-    And I should see the button "No thanks" in the "Modal buttons" region
-    And I should see the button "Subscribe" in the "Modal buttons" region
+    And I should see the text "Welcome to Reannual plants" in the "Modal header"
+    And I should see the text "Want to receive notifications, too?" in the "Modal body"
+    And I should see the button "No thanks" in the "Modal footer" region
+    And I should see the button "Subscribe" in the "Modal footer" region
 
     # The modal should not open when visiting the page for a second time.
     When I reload the page
@@ -65,8 +66,10 @@ Feature: Joining a collection as an anonymous user
     Given I am an anonymous user
     When I go to the homepage of the "Reannual plants" collection
     And I click "Join this collection"
-    And I press "Sign in / Register" in the "Modal buttons" region
-    Then I should see the heading "Sign in to continue"
+    Then a modal dialog should open
+    When I press "Sign in / Register" in the "Modal footer" region
+    Then a modal dialog should open
+    And I should see the heading "Sign in to continue"
 
     When I fill in "E-mail address" with "iodine@ankh.am"
     And I fill in "Password" with "10d1ne"
@@ -83,10 +86,11 @@ Feature: Joining a collection as an anonymous user
     But I should not see the link "Leave this collection"
 
     When I click "Join this collection"
-    Then I should see the text "Sign in to join"
+    Then a modal dialog should open
+    And I should see the text "Sign in to join"
     And I should see "Only signed in users can join this collection. Please sign in or register an account on EU Login."
     But the cookie that tracks which group I want to join should not be set
-    When I press "Sign in / Register" in the "Modal buttons" region
+    When I press "Sign in / Register" in the "Modal footer" region
     Then I should see the heading "Sign in to continue"
     And a cookie should be set that allows me to join "Vul nuts" after authenticating
 
@@ -98,15 +102,16 @@ Feature: Joining a collection as an anonymous user
     And I should see the success message "Your membership to the Vul nuts collection is under approval."
     And the "Vul nuts" collection should have 1 pending member
     And a modal should open
-    And I should see the text "Welcome to Vul nuts" in the "Modal title"
-    And I should see the text "Want to receive notifications, too?" in the "Modal content"
-    And I should see the button "No thanks" in the "Modal buttons" region
-    And I should see the button "Subscribe" in the "Modal buttons" region
+    And I should see the text "Welcome to Vul nuts" in the "Modal header"
+    And I should see the text "Want to receive notifications, too?" in the "Modal body"
+    And I should see the button "No thanks" in the "Modal footer" region
+    And I should see the button "Subscribe" in the "Modal footer" region
 
     Given I am an anonymous user
     When I go to the homepage of the "Vul nuts" collection
     And I click "Join this collection"
-    And I press "Sign in / Register" in the "Modal buttons" region
+    Then a modal dialog should open
+    And I press "Sign in / Register" in the "Modal footer" region
     Then I should see the heading "Sign in to continue"
 
     When I fill in "E-mail address" with "iodine@ankh.am"
@@ -136,10 +141,11 @@ Feature: Joining a collection as an anonymous user
     But I should not see the link "Leave this collection"
 
     When I click "Join this collection"
-    Then I should see the text "Sign in to join"
+    Then a modal dialog should open
+    And I should see the text "Sign in to join"
     And I should see "Only signed in users can join this collection. Please sign in or register an account on EU Login."
     But the cookie that tracks which group I want to join should not be set
-    When I press "Sign in / Register" in the "Modal buttons" region
+    When I press "Sign in / Register" in the "Modal footer" region
     Then I should see the heading "Sign in to continue"
     And a cookie should be set that allows me to join "Reannual plants" after authenticating
 
@@ -156,10 +162,10 @@ Feature: Joining a collection as an anonymous user
     And a modal should open
     # Quick check without pressing buttons, this is fully tested in the
     # subscribe-on-join scenario.
-    And I should see the text "Welcome to Reannual plants" in the "Modal title"
-    And I should see the text "Want to receive notifications, too?" in the "Modal content"
-    And I should see the button "No thanks" in the "Modal buttons" region
-    And I should see the button "Subscribe" in the "Modal buttons" region
+    And I should see the text "Welcome to Reannual plants" in the "Modal header"
+    And I should see the text "Want to receive notifications, too?" in the "Modal body"
+    And I should see the button "No thanks" in the "Modal footer" region
+    And I should see the button "Subscribe" in the "Modal footer" region
 
     # The modal should not open when visiting the page for a second time.
     When I reload the page
@@ -173,10 +179,11 @@ Feature: Joining a collection as an anonymous user
     But I should not see the link "Leave this collection"
 
     When I click "Join this collection"
-    Then I should see the text "Sign in to join"
+    Then a modal dialog should open
+    And I should see the text "Sign in to join"
     And I should see "Only signed in users can join this collection. Please sign in or register an account on EU Login."
     But the cookie that tracks which group I want to join should not be set
-    When I press "Sign in / Register" in the "Modal buttons" region
+    When I press "Sign in / Register" in the "Modal footer" region
     Then I should see the heading "Sign in to continue"
     And a cookie should be set that allows me to join "Vul nuts" after authenticating
 
@@ -189,10 +196,10 @@ Feature: Joining a collection as an anonymous user
     And I should see the success message "Your membership to the Vul nuts collection is under approval."
     And the "Vul nuts" collection should have 1 pending member
     And a modal should open
-    And I should see the text "Welcome to Vul nuts" in the "Modal title"
-    And I should see the text "Want to receive notifications, too?" in the "Modal content"
-    And I should see the button "No thanks" in the "Modal buttons" region
-    And I should see the button "Subscribe" in the "Modal buttons" region
+    And I should see the text "Welcome to Vul nuts" in the "Modal header"
+    And I should see the text "Want to receive notifications, too?" in the "Modal body"
+    And I should see the button "No thanks" in the "Modal footer" region
+    And I should see the button "Subscribe" in the "Modal footer" region
 
     When I reload the page
     And I wait for AJAX to finish
@@ -212,7 +219,8 @@ Feature: Joining a collection as an anonymous user
     Given I am an anonymous user
     When I go to the homepage of the "Reannual plants" collection
     And I click "Join this collection"
-    Then I should see the text "Sign in to join"
+    Then a modal dialog should open
+    And I should see the text "Sign in to join"
     When I press "Sign in / Register"
     Then I should see the heading "Sign in to continue"
 
