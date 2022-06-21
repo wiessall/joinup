@@ -13,7 +13,7 @@ weight: -23
 provider: null
 plugin: joinup_local_tasks_block
 settings:
-  id: local_tasks_block
+  id: joinup_local_tasks_block
   label: Tabs
   label_display: '0'
   provider: joinup_core

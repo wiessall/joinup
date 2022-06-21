@@ -9,8 +9,10 @@ declare(strict_types = 1);
 
 use Drupal\Component\Serialization\Json;
 use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Block\BlockPluginInterface;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Cache\CacheableMetadata;
+use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Form\FormStateInterface;
@@ -888,5 +890,31 @@ function joinup_group_entity_update(EntityInterface $group): void {
         \Drupal::messenger()->addStatus(t("You've removed the @bundle's short ID: %original. It will take some time until the @bundle content URLs will be updated.", $arguments));
       }
     }
+  }
+}
+
+/**
+ * Implements hook_block_view_BASE_BLOCK_ID_alter().
+ */
+function joinup_group_block_view_joinup_local_tasks_block_alter(array &$build, BlockPluginInterface $block): void {
+  // Hide contextual links for three-dots menu block.
+  unset($build['#contextual_links']);
+}
+
+/**
+ * Implements hook_block_view_BASE_BLOCK_ID_alter().
+ */
+function joinup_group_block_view_group_header_block_alter(array &$build, BlockPluginInterface $block): void {
+  // Hide contextual links for the 'ventuno_groupheader' block.
+  unset($build['#contextual_links']);
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_view_alter().
+ */
+function joinup_group_rdf_entity_view_alter(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display): void {
+  if ($entity instanceof GroupInterface && $display->getMode() === 'group_header') {
+    // Hide contextual links for group header block.
+    unset($build['#contextual_links']);
   }
 }

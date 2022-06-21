@@ -277,14 +277,6 @@ function joinup_core_block_access(BlockInterface $block, string $operation, Acco
 }
 
 /**
- * Implements hook_block_view_BASE_BLOCK_ID_alter().
- */
-function joinup_core_block_view_joinup_local_tasks_block_alter(array &$build, BlockPluginInterface $block): void {
-  // Hide contextual links for three-dots menu block.
-  unset($build['#contextual_links']);
-}
-
-/**
  * Implements hook_block_build_BASE_BLOCK_ID_alter().
  *
  * Ensures that the Webtools eTrans block varies by route, since we are altering
