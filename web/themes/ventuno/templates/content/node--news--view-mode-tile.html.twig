@@ -72,7 +72,6 @@
 #}
 {% set view_mode_featured = view_mode is same as 'view_mode_featured' %}
 {{ pattern('tile', {
-  attributes: attributes,
   featured: view_mode_featured,
   image: content.field_news_logo|render ? content.field_news_logo : '',
   url: url,

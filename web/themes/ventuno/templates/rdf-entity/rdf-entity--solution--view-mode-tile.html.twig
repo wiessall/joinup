@@ -8,7 +8,7 @@
 {% set metadata = [] %}
 {% if show_download_counter %}
   {% set metadata = metadata|merge([{
-    label: 'Downloads: @counter' |t({'@counter': content.downloads|render|striptags}),
+    label: content.downloads,
     icon: 'download'}])
   %}
 {% endif %}
@@ -17,13 +17,10 @@
   icon: 'clipboard-check'}])
 %}
 {{ pattern('tile', {
-  attributes: attributes,
   featured: view_mode_featured,
   image: content.field_is_logo,
   url: url,
-  title_prefix: title_prefix,
   title: label|render|striptags|raw,
-  title_suffix: title_suffix,
   text: '',
   metadata: metadata,
 }) }}
