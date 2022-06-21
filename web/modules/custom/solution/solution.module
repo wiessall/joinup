@@ -8,12 +8,15 @@
 declare(strict_types = 1);
 
 use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityMalformedException;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Field\BaseFieldDefinition;
+use Drupal\Core\Field\FieldDefinitionInterface;
+use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Field\FieldStorageDefinitionInterface;
 use Drupal\Core\Form\FormBuilderInterface;
 use Drupal\Core\Form\FormStateInterface;
@@ -799,4 +802,17 @@ function solution_module_implements_alter(&$implementations, $hook) {
     unset($implementations['solution']);
     $implementations = ['solution' => $solution] + $implementations;
   }
+}
+
+/**
+ * Implements hook_entity_field_access().
+ */
+function solution_entity_field_access($operation, FieldDefinitionInterface $field_definition, AccountInterface $account, ?FieldItemListInterface $items = NULL): AccessResultInterface {
+  return AccessResult::forbiddenIf(
+    $operation === 'edit'
+    && $field_definition->getName() === 'announcements_enabled'
+    && $field_definition->getTargetEntityTypeId() === 'meta_entity'
+    && $field_definition->getTargetBundle() === 'solution_settings'
+    && !in_array('moderator', $account->getRoles())
+  );
 }
