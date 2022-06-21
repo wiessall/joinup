@@ -5,11 +5,12 @@ declare(strict_types = 1);
 namespace Drupal\solution\Controller;
 
 use Drupal\Component\Render\MarkupInterface;
+use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Controller\ControllerBase;
+use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Url;
 use Drupal\meta_entity\MetaEntityRepositoryInterface;
-use Drupal\og\OgAccessInterface;
 use Drupal\solution\Entity\SolutionInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -26,23 +27,13 @@ class SolutionSettingsController extends ControllerBase {
   protected MetaEntityRepositoryInterface $metaEntityRepository;
 
   /**
-   * The OG access service.
-   *
-   * @var \Drupal\og\OgAccessInterface
-   */
-  protected OgAccessInterface $ogAccess;
-
-  /**
    * Constructs a new controller instance.
    *
    * @param \Drupal\meta_entity\MetaEntityRepositoryInterface $meta_entity_repository
    *   The meta entity repository service.
-   * @param \Drupal\og\OgAccessInterface $og_access
-   *   The OG access service.
    */
-  public function __construct(MetaEntityRepositoryInterface $meta_entity_repository, OgAccessInterface $og_access) {
+  public function __construct(MetaEntityRepositoryInterface $meta_entity_repository) {
     $this->metaEntityRepository = $meta_entity_repository;
-    $this->ogAccess = $og_access;
   }
 
   /**
@@ -50,8 +41,7 @@ class SolutionSettingsController extends ControllerBase {
    */
   public static function create(ContainerInterface $container): self {
     return new static(
-      $container->get('meta_entity.repository'),
-      $container->get('og.access')
+      $container->get('meta_entity.repository')
     );
   }
 
@@ -92,19 +82,14 @@ class SolutionSettingsController extends ControllerBase {
   /**
    * Provides an access controller for the 'solution.settings_form' route.
    *
-   * @param \Drupal\solution\Entity\SolutionInterface $rdf_entity
-   *   The solution.
+   * @param \Drupal\Core\Session\AccountInterface $account
+   *   The account for which to check access.
    *
    * @return \Drupal\Core\Access\AccessResultInterface
    *   The access result.
    */
-  public function access(SolutionInterface $rdf_entity): AccessResultInterface {
-    $meta_entity = $this->metaEntityRepository->getMetaEntityForEntity($rdf_entity, 'solution_settings');
-    $access_result = $meta_entity->access('update', NULL, TRUE);
-    if ($access_result->isAllowed()) {
-      return $access_result;
-    }
-    return $access_result->orIf($this->ogAccess->userAccess($rdf_entity, 'update solution_settings meta-entity'));
+  public function access(AccountInterface $account): AccessResultInterface {
+    return AccessResult::allowedIf($account->hasPermission('update solution_settings meta-entity'));
   }
 
 }
