@@ -12,19 +12,28 @@
   {% endif %}
   <h3 class="fs-5 mt-4 mb-3">{{ 'The'|t}} {{ solution_label }} {{ 'implements the following'|t }}:</h3>
   <div class="row">
-    <div class="col-12 col-md-6 col-lg-4">
-      <h4 class="fs-6 pb-2 border-bottom">Principles</h4>
-      {{ content.eif_principle }}
-    </div>
-    <div class="col-12 col-md-6 col-lg-4">
-      <h4 class="fs-6 pb-2 border-bottom">Interoperability layers</h4>
-      {{ content.eif_layer }}
-    </div>
-    <div class="col-12 col-md-6 col-lg-4">
-      <h4 class="fs-6 pb-2 border-bottom">Conceptual model</h4>
-      {{ content.eif_model }}
-    </div>
+    {{ dump(content) }}
+    {% if content.eif_principle.0 %}
+      <div class="col-12 col-md-6 col-lg-4">
+        <h4 class="fs-6 pb-2 border-bottom">Principles</h4>
+        {{ content.eif_principle }}
+      </div>
+    {% endif %}
+    {% if content.eif_layer.0 %}
+      <div class="col-12 col-md-6 col-lg-4">
+        <h4 class="fs-6 pb-2 border-bottom">Interoperability layers</h4>
+        {{ content.eif_layer }}
+      </div>
+    {% endif %}
+    {% if content.eif_model.0 %}
+      <div class="col-12 col-md-6 col-lg-4">
+        <h4 class="fs-6 pb-2 border-bottom">Conceptual model</h4>
+        {{ content.eif_model }}
+      </div>
+    {% endif %}
   </div>
-  <h3 class="fs-5 mt-4 mb-3">{{ solution_label }} {{ 'implements the following EIF recommendations as explained below'|t }}:</h3>
-  {{ content.eif_recommendation }}
+  {% if content.eif_recommendation.0 %}
+    <h3 class="fs-5 mt-4 mb-3">{{ solution_label }} {{ 'implements the following EIF recommendations as explained below'|t }}:</h3>
+    {{ content.eif_recommendation }}
+  {% endif %}
 </article>
