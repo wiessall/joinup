@@ -1530,7 +1530,7 @@ class JoinupContext extends RawDrupalContext {
    *
    * @When I click :link in the plus button menu
    */
-  public function clickLinkInPlusButtonMenu($link) {
+  public function clickLinkInPlusButtonMenu($link): void {
     // Check if we are running in an environment that supports JavaScript like
     // Selenium or PhantomJS. If this is the case the plus button menu will be
     // closed by default and needs to be opened first.
@@ -1543,8 +1543,21 @@ class JoinupContext extends RawDrupalContext {
    *
    * @When I open the plus button menu
    */
-  public function openPlusButtonMenu() {
-    $this->openMaterialDesignMenu($this->getSession()->getPage()->find('css', '.add-content-menu'));
+  public function openPlusButtonMenu(): void {
+    // @todo Remove the if (...) block in ISAICP-7138.
+    // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7138
+    if ($this->usesMaterialDesignLite()) {
+      $this->openMaterialDesignMenu($this->getSession()->getPage()->find('css', '.add-content-menu'));
+      return;
+    }
+    if (!$this->browserSupportsJavaScript()) {
+      // Do nothing, if it's a non-Javascript browser.
+      return;
+    }
+
+    $button = $this->getSession()->getPage()->find('css', '#dropdown-add-content');
+    $this->scrollElementIntoView($button);
+    $button->press();
   }
 
   /**
