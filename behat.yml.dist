@@ -169,7 +169,7 @@ default:
         Navigation menu: '#block-ventuno-navigation'
         Page title: 'div.page__title-wrapper'
         Pager: 'nav.pager'
-        Plus button menu: 'div.add-content-menu'
+        Plus menu: '#block-ventuno-joinup-add-content'
         Primary menu: '.region-primary-menu'
         Related solutions: '.field--name-field-is-related-solutions'
         SevenHeader: '.region-header'
@@ -184,6 +184,7 @@ default:
         Modal content: '#drupal-modal'
         Modal title: '.ui-dialog-title'
         Navigation menu block: '#block-navigation'
+        Plus button menu: 'div.add-content-menu'
       drupal:
         drupal_root: ${joinup.site_dir}
       selectors:
