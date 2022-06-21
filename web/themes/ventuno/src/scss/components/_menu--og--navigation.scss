@@ -3,14 +3,14 @@
   @include media-breakpoint-up(lg) {
     margin-top: $spacer * 1.5;  // 24px
   }
-  &__menu {
+  &__menu.dropdown-menu {
     @include media-breakpoint-up(lg) {
       max-width: calc(100% - $spacer * 1.5); // Allocate some space for permalink icon
       // Override dropdown properties
-      display: block!important;
-      border: none!important;
-      box-shadow: none!important;
-      background: transparent!important;
+      display: block;
+      z-index: 0;
+      border: none;
+      box-shadow: none;
       // Following is needed in case user opened dropdown in xs-sm-md and then made window bigger
       position: relative!important;
       transform: revert!important;
