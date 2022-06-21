@@ -132,4 +132,12 @@ class MinkContext extends DrupalExtensionMinkContext {
     parent::pressButton($button);
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  public function assertLinkVisible($link): void {
+    $this->scrollNamedElementIntoView('link', $link);
+    parent::assertLinkVisible($link);
+  }
+
 }
