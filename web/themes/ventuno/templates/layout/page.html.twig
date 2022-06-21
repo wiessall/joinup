@@ -86,12 +86,11 @@
       {% endif %}
     </div>
   </div>
-    {% if page.content_bottom %}
+  {% if page.content_bottom %}
     <div class="container">
       {{ page.content_bottom }}
     </div>
   {% endif %}
-
   {% if page.footer %}
     {% include directory ~ '/templates/parts/footer.html.twig' %}
   {% endif %}
