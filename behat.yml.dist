@@ -147,7 +147,7 @@ default:
         Explore block: '.block-joinup-front-page-explore-block'
         Featured: '.region-featured'
         Footer: '.section--footer, footer'
-        Group Header: '#block-ventuno-groupheader'
+        Group header: '#block-ventuno-groupheader'
         Hamburger menu: 'nav.joinup-navbar ul.navbar-nav ul.accordion-list'
         Header menu: '#block-joinup-theme-main-menu'
         Highlighted content: '.block-entityqueue--highlighted-content'
