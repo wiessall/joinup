@@ -32,12 +32,12 @@ Feature: Collection homepage
 
   Scenario: Counters are properly synced for open collections.
     When I go to the homepage of the "Under the mountain" collection
-    Then I see the text "3 Members" in the "Header" region
+    Then I see the text "3 Members" in the "Group header" region
     When I am logged in as "Some goblin"
     And I go to the homepage of the "Under the mountain" collection
     And I press "Join this collection"
     And I go to the homepage of the "Under the mountain" collection
-    Then I see the text "4 Members" in the "Header" region
+    Then I see the text "4 Members" in the "Group header" region
     And I click "Members" in the "Left sidebar"
     Then the "Roles" field should contain the "- Any - (4)" option
 
@@ -45,18 +45,18 @@ Feature: Collection homepage
     When I click "Leave this collection"
     When I press "Confirm"
     Then I should see the success message "You are no longer a member of Under the mountain."
-    Then I see the text "3 Members" in the "Header" region
+    Then I see the text "3 Members" in the "Group header" region
     And I click "Members" in the "Left sidebar"
     Then the "Roles" field should contain the "- Any - (3)" option
 
   Scenario: Counters are properly synced for closed collections.
     When I go to the homepage of the "Exactly the same collection, but closed" collection
-    Then I see the text "3 Members" in the "Header" region
+    Then I see the text "3 Members" in the "Group header" region
     When I am logged in as "Some goblin"
     And I go to the homepage of the "Exactly the same collection, but closed" collection
     And I press "Join this collection"
     And I go to the homepage of the "Exactly the same collection, but closed" collection
-    Then I see the text "3 Members" in the "Header" region
+    Then I see the text "3 Members" in the "Group header" region
     And I click "Members" in the "Left sidebar"
     Then the "Roles" field should contain the "- Any - (3)" option
 
@@ -71,10 +71,10 @@ Feature: Collection homepage
 
     When I am an anonymous user
     And I go to the homepage of the "Exactly the same collection, but closed" collection
-    Then I see the text "4 Members" in the "Header" region
+    Then I see the text "4 Members" in the "Group header" region
     When I click "Members" in the "Left sidebar"
     Then the "Roles" field should contain the "- Any - (4)" option
-    Then I see the text "4 Members" in the "Header" region
+    Then I see the text "4 Members" in the "Group header" region
 
   Scenario: Blocked users are not counted towards total member count.
     # Cache the collection overview page.
@@ -93,7 +93,7 @@ Feature: Collection homepage
     Then I should see the success message "Unblock the selected user(s) was applied to 1 item."
     When I am not logged in
     When I go to the homepage of the "Under the mountain" collection
-    Then I should see the text "4 Members" in the "Header" region
+    Then I should see the text "4 members" in the "Group header" region
     And I click "Members" in the "Left sidebar"
     Then the "Roles" field should contain the "- Any - (4)" option
 
@@ -113,7 +113,7 @@ Feature: Collection homepage
     Then I should see the success message "Block the selected user(s) was applied to 1 item."
     When I am not logged in
     When I go to the homepage of the "Under the mountain" collection
-    Then I should see the text "3 Members" in the "Header" region
+    Then I should see the text "3 members" in the "Group header" region
     And I click "Members" in the "Left sidebar"
     Then the "Roles" field should contain the "- Any - (3)" option
 
