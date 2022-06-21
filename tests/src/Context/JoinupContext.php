@@ -1581,7 +1581,7 @@ class JoinupContext extends RawDrupalContext {
       return;
     }
 
-    $entity_tasks_selector = $this->getRegionSelector('Entity tasks');
+    $entity_tasks_selector = $this->getRegionSelector('Entity actions');
     $this->getSession()->getPage()->find('css', "$entity_tasks_selector button")->press();
   }
 
