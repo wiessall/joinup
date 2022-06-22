@@ -45,13 +45,13 @@ Feature: As a privileged user
     And I should see the contextual link "Share" in the "Solution to be shared" tile
     But I should not see the contextual link "Unshare" in the "Solution to be shared" tile
     When I click the contextual link "Share" in the "Solution to be shared" tile
-    Then a modal should open
+    Then a modal dialog should open
     And the following fields should be present "Collection share candidate 1"
     And the following fields should not be present "Collection share original, Collection share candidate 2"
 
     # Share the solution into a collection.
     When I check "Collection share candidate 1"
-    And I press "Share" in the "Modal buttons" region
+    And I press "Share" in the "Modal footer" region
     And I wait for AJAX to finish
     Then I should see the success message "Item was shared on the following groups: Collection share candidate 1."
 
@@ -59,7 +59,7 @@ Feature: As a privileged user
     # not shown anymore in the list.
     And I go to the homepage of the "Collection share original" collection
     When I click the contextual link "Share" in the "Solution to be shared" tile
-    Then a modal should open
+    Then a modal dialog should open
     And the following fields should not be present "Collection share original, Collection share candidate 1, Collection share candidate 2"
 
     # The shared solution should be shown amongst the other content tiles.
@@ -99,14 +99,14 @@ Feature: As a privileged user
     Then I should see the "Solution to be shared" tile
     And I should see the contextual link "Unshare" in the "Solution to be shared" tile
     When I click the contextual link "Unshare" in the "Solution to be shared" tile
-    Then a modal will open
+    Then a modal dialog should open
     And I should see the text "Unshare Solution to be shared from"
     Then the following fields should be present "Collection share candidate 1"
     And the following fields should not be present "Collection share original, Collection share candidate 2"
 
     # Unshare the content.
     When I check "Collection share candidate 1"
-    And I press "Submit" in the "Modal buttons" region
+    And I press "Submit" in the "Modal footer" region
     And I wait for AJAX to finish
 
     # I should still be on the same page, but the collection content should be
@@ -121,7 +121,7 @@ Feature: As a privileged user
     Then I should not see the contextual link "Unshare" in the "Solution to be shared" tile
 
     When I click the contextual link "Share" in the "Solution to be shared" tile
-    Then a modal should open
+    Then a modal dialog should open
     And the following fields should be present "Collection share candidate 1"
     And the following fields should not be present "Collection share original, Collection share candidate 2"
 
