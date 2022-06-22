@@ -35,7 +35,6 @@ function contact_form_preprocess_html(&$variables) {
     ];
     $variables['page']['#attached']['html_head'][] = [$metadesc, 'description'];
   };
-  $variables['page']['#attached']['library'][] = 'contact_form/remove-domain-from-url';
 }
 
 /**
@@ -52,6 +51,7 @@ function contact_form_preprocess_html(&$variables) {
  *    successfully sent.
  */
 function contact_form_form_message_contact_form_submission_form_alter(&$form, FormStateInterface $form_state, string $form_id): void {
+  $form['field_contact_url']['#attached']['library'][] = 'contact_form/remove-domain-from-url';
   $arguments = [
     ':faq-url' => Url::fromUri('base:/collection/joinup/faq')->toString(),
   ];

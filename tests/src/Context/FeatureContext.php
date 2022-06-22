@@ -2468,16 +2468,16 @@ class FeatureContext extends RawDrupalContext implements SnippetAcceptingContext
    *
    * @param string $label
    *   The label of the input.
-   * @param string $url
-   *   The url path.
+   * @param string $URL
+   *   The URL path.
    *
    * @throws \Exception
    *    Thrown when the input fill failed.
    *
-   * @When I fill :label with the absolute url :url
+   * @When I fill :label with the absolute URL :URL
    */
-  public function iFillWithTheCurrentUrlPath(string $label, string $url): void {
-    $this->getSession()->getPage()->fillField($label, $this->locatePath($url));
+  public function iFillWithTheCurrentURLPath(string $label, string $URL): void {
+    $this->getSession()->getPage()->fillField($label, $this->locatePath($URL));
   }
 
 }
