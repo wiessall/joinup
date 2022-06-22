@@ -302,8 +302,7 @@ text_files:
     ισωσ
     οσο
     οτι
-  protwords: |
-
+  protwords: ''
   accents: |
     # À => A
     "\u00C0" => "A"
