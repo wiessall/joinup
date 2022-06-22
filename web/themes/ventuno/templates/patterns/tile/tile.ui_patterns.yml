@@ -30,10 +30,15 @@ tile:
       label: 'Text'
       description: 'Card text.'
       preview: 'Text card with longer text which is supported'
+    subtext:
+      type: text
+      label: 'Subext'
+      description: 'Card subtext.'
+      preview: 'Text, card, with, longer text, supported'
     metadata:
       type: array
       label: 'Metadata'
-      description: 'Pairs of label/icon describing the type of content the tile refers to. Label is optional.'
+      description: 'Pairs of label/icon describing the type of content the tile refers to. Both are optional.'
       preview:
         - label: 'solution'
           icon: 'clipboard-check'
