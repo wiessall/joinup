@@ -241,7 +241,8 @@ class Solution extends Rdf implements SolutionInterface {
    * {@inheritdoc}
    */
   public function getCacheTagsToInvalidate(): array {
-    return Cache::mergeTags(parent::getCacheTagsToInvalidate(), ['solution_download_count:' . md5($this->id())]);
+    $tags = $this->id() ? ['solution_download_count:' . md5($this->id())] : [];
+    return Cache::mergeTags(parent::getCacheTagsToInvalidate(), $tags);
   }
 
 }
