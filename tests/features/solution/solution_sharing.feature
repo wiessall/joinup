@@ -35,7 +35,7 @@ Feature: As a privileged user
     And I should see the contextual link "Share" in the "Solution to be shared" tile
     But I should not see the contextual link "Unshare" in the "Solution to be shared" tile
     When I click the contextual link "Share" in the "Solution to be shared" tile
-    Then a modal should open
+    Then a modal dialog should open
     # The moderator has access to the modal but no collections are available.
     And the following fields should not be present "Collection share original, Collection share candidate 1, Collection share candidate 2"
 
