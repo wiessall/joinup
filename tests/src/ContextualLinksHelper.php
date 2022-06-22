@@ -8,6 +8,7 @@ use Behat\Mink\Element\NodeElement;
 use Behat\Mink\Element\TraversableElement;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\joinup\Traits\BrowserCapabilityDetectionTrait;
+use Drupal\joinup\Traits\JavascriptTrait;
 use Drupal\joinup\Traits\TraversingTrait;
 use Drupal\joinup\Traits\UtilityTrait;
 use Symfony\Component\DomCrawler\Crawler;
@@ -25,6 +26,7 @@ use Symfony\Component\DomCrawler\Crawler;
 class ContextualLinksHelper {
 
   use BrowserCapabilityDetectionTrait;
+  use JavascriptTrait;
   use TraversingTrait;
   use UtilityTrait;
 
@@ -218,6 +220,7 @@ class ContextualLinksHelper {
     $contextual_button = $this->waitUntil(function () use ($element): ?NodeElement {
       return $element->find('css', '.contextual > button.trigger');
     });
+    $this->scrollElementIntoView($contextual_button);
 
     // Open the contextual links menu if it is not yet open.
     $link_list = $element->find('css', '.contextual ul.contextual-links');
@@ -226,7 +229,7 @@ class ContextualLinksHelper {
       $contextual_button->focus();
       $contextual_button->click();
 
-      $visible = $this->waitUntil(function () use ($link_list) {
+      $visible = $this->waitUntil(function () use ($link_list): bool {
         return $link_list->isVisible();
       });
 
