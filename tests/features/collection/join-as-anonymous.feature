@@ -194,7 +194,7 @@ Feature: Joining a collection as an anonymous user
     And I should see the success message "You have been logged in."
     And I should see the success message "Your membership to the Vul nuts collection is under approval."
     And the "Vul nuts" collection should have 1 pending member
-    And a modal should open
+    And a modal dialog should open
     And I should see the text "Welcome to Vul nuts" in the "Modal header"
     And I should see the text "Want to receive notifications, too?" in the "Modal body"
     And I should see the button "No thanks" in the "Modal footer" region
