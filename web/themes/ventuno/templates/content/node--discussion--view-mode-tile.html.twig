@@ -71,19 +71,14 @@
  */
 #}
 {% set view_mode_featured = view_mode is same as 'view_mode_featured' %}
-{% set text %}
-  <p class="mb-0">{{ content.body }}</p>
-  {% if content.field_keywords|render %}
-    <p class="mb-0">{{ content.field_keywords }}</p>
-  {% endif %}
-{% endset %}
 {{ pattern('tile', {
   featured: view_mode_featured,
   url: url,
   title_prefix: title_prefix,
   title: label,
   title_suffix: title_suffix,
-  text: text,
+  text: content.body|render|striptags,
+  subtext: content.field_keywords|render|striptags|trim,
   metadata: [{
     label: comment_count,
     icon: 'chat',

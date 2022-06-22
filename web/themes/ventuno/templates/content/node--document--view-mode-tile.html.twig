@@ -74,21 +74,24 @@
 {% set rendered_logo = content.field_document_logo|render %}
 {% set text %}
   {% if not rendered_logo %}
-    <p class="mb-0 fw-bold">{{ content.field_type }}</p>
-    <p class="mb-0">{{ content.body }}</p>
-    {% if content.field_keywords|render %}
-      <p class="mb-0">{{ content.field_keywords }}</p>
-    {% endif %}
+    {{ content.field_type|render|striptags }}
+    {{ content.body|render|striptags }}
+  {% endif %}
+{% endset %}
+{% set subtext %}
+  {% if not rendered_logo and content.field_keywords|render%}
+    {{ content.field_keywords|render|striptags }}
   {% endif %}
 {% endset %}
 {{ pattern('tile', {
   featured: view_mode_featured,
-  image: rendered_logo,
+  image: rendered_logo ? rendered_logo,
   url: url,
   title_prefix: title_prefix,
   title: label,
   title_suffix: title_suffix,
   text: text,
+  subtext: subtext,
   metadata: [{
     label: 'document',
     icon: 'file-earmark-text',
