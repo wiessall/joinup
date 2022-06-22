@@ -26,6 +26,7 @@ use Drupal\joinup\Traits\BrowserCapabilityDetectionTrait;
 use Drupal\joinup\Traits\BrowserWindowTrait;
 use Drupal\joinup\Traits\ContextualLinksTrait;
 use Drupal\joinup\Traits\EntityTrait;
+use Drupal\joinup\Traits\JavascriptTrait;
 use Drupal\joinup\Traits\MaterialDesignTrait;
 use Drupal\joinup\Traits\PageCacheTrait;
 use Drupal\joinup\Traits\SearchTrait;
@@ -52,6 +53,7 @@ class FeatureContext extends RawDrupalContext implements SnippetAcceptingContext
   use BrowserWindowTrait;
   use ContextualLinksTrait;
   use EntityTrait;
+  use JavascriptTrait;
   use MaterialDesignTrait;
   use PageCacheTrait;
   use SearchTrait;
@@ -2278,6 +2280,7 @@ class FeatureContext extends RawDrupalContext implements SnippetAcceptingContext
       throw new \InvalidArgumentException("No image at position #$offset in $image_type field.");
     }
 
+    $this->scrollElementIntoView($images[$delta]);
     $images[$delta]->click();
 
     // Get the clicked image file ID.
@@ -2419,7 +2422,9 @@ class FeatureContext extends RawDrupalContext implements SnippetAcceptingContext
     }
     // Get the field wrapper.
     $field = $label->find('xpath', './ancestor::*[contains(concat(" ", @class, " "), " form-item ")][1]');
-    $field->findButton('Remove')->press();
+    $button = $field->findButton('Remove');
+    $this->scrollElementIntoView($button);
+    $button->press();
   }
 
   /**

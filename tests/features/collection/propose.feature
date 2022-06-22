@@ -125,7 +125,6 @@ Feature: Proposing a collection
   Scenario: Content creation options should not vanish after AJAX request.
     Given I am logged in as a user with the "authenticated" role
     When I go to the propose collection form
-    And I press "Main fields"
     And I press "Additional fields"
     And I attach the file "banner.jpg" to "Banner"
     And I wait for AJAX to finish
@@ -151,7 +150,6 @@ Feature: Proposing a collection
     And I fill in "Title" with "Just a proposal"
     And I enter "Nothing..." in the "Description" wysiwyg editor
     And I select "Employment and Support Allowance" from "Topic"
-    And I scroll "Owner" into view
     And I press "Add existing" at the "Owner" field
     And I fill in "Owner" with "Organisation example"
     And I press "Add owner"
@@ -160,8 +158,8 @@ Feature: Proposing a collection
       | Name   | Invisible Man             |
     And I press "Create contact information"
 
-    When I scroll "Main fields" into view
-    And I press "Main fields"
+    # Close "Main fields" to check its fields visibility.
+    When I press "Main fields"
     And I press "Additional fields"
     Then the following fields should not be visible "Title, Description, Topic"
     And the following field widgets should not be visible "Owner"
@@ -172,10 +170,8 @@ Feature: Proposing a collection
     # As a user, editing a collection, solution, event or news item, I want to
     # be able to pick-up a pre-uploaded image when editing the logo or the
     # banner, as an alternative to the image upload.
-    When I scroll "Logo" into view
     And I select image #3 as collection logo
     And I wait for AJAX to finish
-    And I scroll "Banner" into view
     And I select image #8 as collection banner
     And I wait for AJAX to finish
     And I press "Propose"
@@ -184,9 +180,7 @@ Feature: Proposing a collection
     And the "Just a proposal" collection banner is image #8
 
     Given I go to the edit form of the "Just a proposal" collection
-    And I press "Main fields"
     And I press "Additional fields"
-    And I scroll "Logo" into view
     And I remove the file from the "Logo" field
     But I wait for AJAX to finish
 
@@ -196,7 +190,6 @@ Feature: Proposing a collection
     And I press "Propose"
 
     When I go to the edit form of the "Just a proposal" collection
-    And I press "Main fields"
     And I press "Additional fields"
     Then I should see the link "logo.png"
 
