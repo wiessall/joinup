@@ -48,7 +48,7 @@ Feature: Joining a collection as an anonymous user
     And I should see the success message "You have been logged in."
     And I should see the success message "You are now a member of Reannual plants."
     And the "Reannual plants" collection should have 1 active member
-    And a modal should open
+    And a modal dialog should open
     # Quick check without pressing buttons, this is fully tested in the
     # subscribe-on-join scenario.
     And I should see the text "Welcome to Reannual plants" in the "Modal header"
