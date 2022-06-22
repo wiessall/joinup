@@ -16,7 +16,7 @@
       input.addEventListener("blur", (event) => {
         const domain = window.location.origin + drupalSettings.path.baseUrl;
         if (event.target.value.startsWith(domain)) {
-          event.target.value = event.target.value.replace(domain, "");
+          event.target.value = event.target.value.replace(domain, "/");
         }
       });
     },
