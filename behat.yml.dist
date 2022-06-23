@@ -160,13 +160,15 @@ default:
         Management solution vertical tab: '#edit-group-management'
         Members admin form actions: '#edit-action'
         Members admin form header: '#edit-header'
-        # TODO: Remove .ui-dialog-title in ISAICP-7138.
-        # See https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7138
-        Modal title: '.modal-header,.ui-dialog-title'
-        Modal body: '.modal-body'
         # TODO: Remove .ui-dialog-buttonpane in ISAICP-7138.
         # See https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7138
         Modal buttons: '.modal-footer,.ui-dialog-buttonpane'
+        # TODO: Remove #drupal-modal in ISAICP-7138.
+        # See https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7138
+        Modal content: '.modal-body,#drupal-modal'
+        # TODO: Remove .ui-dialog-title in ISAICP-7138.
+        # See https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7138
+        Modal title: '.modal-header,.ui-dialog-title'
         My unpublished content area: '.block-user-unpublished'
         Navigation bar: 'nav.joinup-navbar'
         Navigation menu: '#block-ventuno-navigation'
@@ -183,7 +185,6 @@ default:
         # Deprecated regions to be removed in ISAICP-7138.
         # See https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7138
         Header: '.section--featured, .section-header'
-        Modal content: '#drupal-modal'
         Navigation menu block: '#block-navigation'
         Plus button menu: 'div.add-content-menu'
       drupal:
