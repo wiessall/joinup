@@ -1,0 +1,18 @@
+uuid: e229256e-00e6-4f8b-b723-40fee1b7aef9
+langcode: en
+status: true
+dependencies:
+  module:
+    - joinup_core
+  theme:
+    - ventuno
+id: custom_pages
+label: 'Custom pages'
+theme: ventuno
+weight: 0
+conditions:
+  request_route:
+    id: request_route
+    negate: false
+    routes:
+      - entity.node.canonical
