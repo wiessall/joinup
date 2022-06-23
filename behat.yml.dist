@@ -176,7 +176,9 @@ default:
         Navigation menu: '#block-ventuno-navigation'
         Page title: 'div.page__title-wrapper'
         Pager: 'nav.pager'
-        Plus menu: '#block-ventuno-joinup-add-content'
+        # TODO: Remove div.add-content-menu in ISAICP-7138.
+        # See https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7138
+        Plus button menu: '#block-ventuno-joinup-add-content,div.add-content-menu'
         Primary menu: '.region-primary-menu'
         Related solutions: '.field--name-field-is-related-solutions'
         SevenHeader: '.region-header'
@@ -187,7 +189,6 @@ default:
         # Deprecated regions to be removed in ISAICP-7138.
         # See https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7138
         Navigation menu block: '#block-navigation'
-        Plus button menu: 'div.add-content-menu'
       drupal:
         drupal_root: ${joinup.site_dir}
       selectors:
