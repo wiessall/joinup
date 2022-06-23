@@ -241,7 +241,7 @@ class Solution extends Rdf implements SolutionInterface {
   /**
    * {@inheritdoc}
    */
-  public function getSharedInField(): ?EntityReferenceFieldItemList§ {
+  public function getSharedInField(): ?EntityReferenceFieldItemList {
     return $this->get('field_is_shared_in');
   }
 
