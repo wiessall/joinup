@@ -20,6 +20,14 @@ module.exports = {
     },
     // Custom
     {
+      entry: path.resolve(outputFolder, "src/js/ajax-throbber.js"),
+      dest: path.resolve(outputFolder, "assets/js/ajax-throbber.js"),
+      options: {
+        minify: true,
+        sourceMap: true,
+      },
+    },
+    {
       entry: path.resolve(outputFolder, "src/js/checkbox.js"),
       dest: path.resolve(outputFolder, "assets/js/checkbox.js"),
       options: {
@@ -157,6 +165,14 @@ module.exports = {
     {
       entry: path.resolve(outputFolder, "src/scss/modals.scss"),
       dest: path.resolve(outputFolder, "assets/css/modals.css"),
+      options: {
+        includePaths,
+        sourceMap: "file",
+      },
+    },
+    {
+      entry: path.resolve(outputFolder, "src/scss/spinners.scss"),
+      dest: path.resolve(outputFolder, "assets/css/spinners.css"),
       options: {
         includePaths,
         sourceMap: "file",
