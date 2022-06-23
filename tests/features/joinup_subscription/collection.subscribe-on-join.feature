@@ -25,9 +25,9 @@ Feature: Subscribing to a collection after joining
     # A modal dialog opens proposing the user to subscribe to the collection.
     And a modal should open
     And I should see the text "Welcome to Sapient Pearwood" in the "Modal title"
-    And I should see the text "You have joined the collection and you are now able to publish content in it." in the "Modal body"
-    And I should see the text "Want to receive notifications, too?" in the "Modal body"
-    And I should see the text "You can receive weekly notifications for this collection, by selecting the subscribe button below" in the "Modal body"
+    And I should see the text "You have joined the collection and you are now able to publish content in it." in the "Modal content"
+    And I should see the text "Want to receive notifications, too?" in the "Modal content"
+    And I should see the text "You can receive weekly notifications for this collection, by selecting the subscribe button below" in the "Modal content"
     And I should see the button "No thanks" in the "Modal buttons" region
     And I should see the button "Subscribe" in the "Modal buttons" region
 
@@ -51,9 +51,9 @@ Feature: Subscribing to a collection after joining
     And I press "Join this collection"
     Then a modal should open
     And I should see the text "Welcome to Troll ducks" in the "Modal title"
-    And I should see the text "When your membership is approved you will be able to publish content in it." in the "Modal body"
-    And I should see the text "Want to receive notifications, too?" in the "Modal body"
-    And I should see the text "You can receive weekly notifications for this collection, by selecting the subscribe button below" in the "Modal body"
+    And I should see the text "When your membership is approved you will be able to publish content in it." in the "Modal content"
+    And I should see the text "Want to receive notifications, too?" in the "Modal content"
+    And I should see the text "You can receive weekly notifications for this collection, by selecting the subscribe button below" in the "Modal content"
     And I should see the button "No thanks" in the "Modal buttons" region
     And I should see the button "Subscribe" in the "Modal buttons" region
     When I press "No thanks" in the "Modal buttons" region
