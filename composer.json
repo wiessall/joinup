@@ -123,7 +123,7 @@
         "drupal/drupal-extension": "^4.2",
         "drupal/filecache": "^1",
         "drupal/renderviz": "^1.0",
-        "drupal/upgrade_status": "^3.12",
+        "drupal/upgrade_status": "^3.14",
         "drupaltest/behat-one-time-login": "^1.0",
         "ec-europa/toolkit": "^8.6.12",
         "lovers-of-behat/table-extension": "^1.2.0",
