@@ -155,7 +155,6 @@ module:
   owner: 0
   page_cache: 0
   page_manager: 0
-  paragraphs_jquery_ui_accordion: 0
   paragraphs_type_permissions: 0
   path: 0
   path_alias: 0
