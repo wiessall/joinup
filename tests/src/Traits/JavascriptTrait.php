@@ -5,6 +5,7 @@ declare(strict_types = 1);
 namespace Drupal\joinup\Traits;
 
 use Behat\Mink\Element\NodeElement;
+use Behat\Mink\Element\TraversableElement;
 
 /**
  * Support for Javascript testing.
@@ -21,8 +22,10 @@ trait JavascriptTrait {
    *   checkbox, radio, file, optgroup, option, table, id, id_or_name.
    * @param string $label
    *   The label of the radio button.
+   * @param \Behat\Mink\Element\TraversableElement|null $container
+   *   A traversable element to restrict the search to. Defaults to page.
    */
-  protected function scrollNamedElementIntoView(string $type, string $label): void {
+  protected function scrollNamedElementIntoView(string $type, string $label, ?TraversableElement $container = NULL): void {
     assert(in_array($type, [
       'fieldset',
       'field',
@@ -42,8 +45,10 @@ trait JavascriptTrait {
     ], TRUE));
 
     if ($this->browserSupportsJavaScript()) {
-      $page = $this->getSession()->getPage();
-      $element = $page->find('named', [$type, str_replace('\\"', '"', $label)]);
+      $container ??= $this->getSession()->getPage();
+      $element = $container->find('named', [
+        $type, str_replace('\\"', '"', $label),
+      ]);
       if ($element) {
         $this->scrollElementIntoView($element);
       }
@@ -55,11 +60,13 @@ trait JavascriptTrait {
    *
    * @param string $css_selector
    *   The element CSS selector.
+   * @param \Behat\Mink\Element\TraversableElement|null $container
+   *   A traversable element to restrict the search to. Defaults to page.
    */
-  protected function scrollCssSelectedElementIntoView(string $css_selector): void {
+  protected function scrollCssSelectedElementIntoView(string $css_selector, ?TraversableElement $container = NULL): void {
     if ($this->browserSupportsJavaScript()) {
-      $page = $this->getSession()->getPage();
-      if ($element = $page->find('css', $css_selector)) {
+      $container ??= $this->getSession()->getPage();
+      if ($element = $container->find('css', $css_selector)) {
         $this->scrollElementIntoView($element);
       }
     }
