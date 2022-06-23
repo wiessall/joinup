@@ -1179,7 +1179,7 @@ class JoinupContext extends RawDrupalContext {
   /**
    * Count the tiles on the page.
    *
-   * @param string $number
+   * @param int $number
    *   The expected number of tiles.
    *
    * @throws \Exception
@@ -1187,7 +1187,7 @@ class JoinupContext extends RawDrupalContext {
    *
    * @Then I (should )see :number tile(s)
    */
-  public function assertTileCount($number) {
+  public function assertTileCount(int $number): void {
     $results = $this->getSession()->getPage()->findAll('css', $this->getTileCssSelector());
     $nr_found = count($results);
     if ($nr_found != $number) {
@@ -1206,7 +1206,7 @@ class JoinupContext extends RawDrupalContext {
    *
    * @Then I (should )not see the :heading tile
    */
-  public function assertTileNotPresent($heading) {
+  public function assertTileNotPresent(string $heading): void {
     // We target the heading with "h2" instead of ".listing__title" because both
     // unstyled and styled tiles use h2 as element for their titles.
     $results = $this->getSession()->getPage()->findAll('css', $this->getTileCssSelector() .
@@ -1505,7 +1505,7 @@ class JoinupContext extends RawDrupalContext {
    *
    * @Then I should see the plus button menu
    */
-  public function assertPlusButtonMenuPresent() {
+  public function assertPlusButtonMenuPresent(): void {
     $element = $this->getSession()->getPage()->find('css', '#dropdown-add-content');
     Assert::assertNotEmpty($element);
   }
@@ -1566,7 +1566,7 @@ class JoinupContext extends RawDrupalContext {
    *
    * @When I open the group sidebar menu
    */
-  public function openGroupMenu() {
+  public function openGroupMenu(): void {
     // @todo Remove the if (...) block in ISAICP-7138.
     // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7138
     if ($this->usesMaterialDesignLite()) {

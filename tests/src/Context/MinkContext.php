@@ -20,7 +20,7 @@ class MinkContext extends DrupalExtensionMinkContext {
   /**
    * {@inheritdoc}
    */
-  public function checkOption($option) {
+  public function checkOption($option): void {
     $this->scrollNamedElementIntoView('checkbox', $option);
     // @todo Remove the if (...) block in ISAICP-7138.
     // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7138
@@ -43,7 +43,7 @@ class MinkContext extends DrupalExtensionMinkContext {
   /**
    * {@inheritdoc}
    */
-  public function uncheckOption($option) {
+  public function uncheckOption($option): void {
     $this->scrollNamedElementIntoView('checkbox', $option);
     // @todo Remove the if (...) block in ISAICP-7138.
     // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7138
