@@ -75,6 +75,7 @@ function contact_form_form_message_contact_form_submission_form_alter(&$form, Fo
       ],
     ],
   ];
+  $form['field_contact_url']['#attached']['library'][] = 'contact_form/remove-domain-from-url';
 
   // If honeypot is enabled, add protection to the form.
   if (function_exists('honeypot_add_form_protection')) {
