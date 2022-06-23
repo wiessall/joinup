@@ -1,0 +1,23 @@
+uuid: 5d30c19d-2ce3-437b-a720-765cafd8a339
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.message.state
+    - message.template.announcement
+  module:
+    - options
+id: message.announcement.state
+field_name: state
+entity_type: message
+bundle: announcement
+label: State
+description: "new | New\r\nsent | Sent\r\nrejected | Rejected"
+required: false
+translatable: true
+default_value:
+  -
+    value: new
+default_value_callback: ''
+settings: {  }
+field_type: list_string

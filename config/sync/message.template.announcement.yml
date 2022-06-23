@@ -1,0 +1,14 @@
+uuid: da390b4b-1bf1-4358-8d0e-be0c6ef72580
+langcode: en
+status: true
+dependencies: {  }
+template: announcement
+label: Announcement
+description: 'Messaging group announcements.'
+text: {  }
+settings:
+  'token options':
+    clear: false
+    'token replace': true
+  purge_override: false
+  purge_methods: {  }
