@@ -23,7 +23,7 @@ Feature: Subscribing to a collection after joining
     Then I should see the success message "You are now a member of Sapient Pearwood."
 
     # A modal dialog opens proposing the user to subscribe to the collection.
-    And a modal dialog should open
+    And a modal should open
     And I should see the text "Welcome to Sapient Pearwood" in the "Modal header"
     And I should see the text "You have joined the collection and you are now able to publish content in it." in the "Modal body"
     And I should see the text "Want to receive notifications, too?" in the "Modal body"
@@ -39,7 +39,7 @@ Feature: Subscribing to a collection after joining
     # Navigate to another open collection, this time subscribing.
     When I go to the homepage of the "Drop bears" collection
     And I press "Join this collection"
-    Then a modal dialog should open
+    Then a modal should open
     When I press "Subscribe" in the "Modal footer" region
     Then the modal should be closed
     And I should see the success message "You have been subscribed to Drop bears and will receive weekly notifications. To manage your notifications go to My subscriptions in your user menu."
@@ -49,7 +49,7 @@ Feature: Subscribing to a collection after joining
     # Navigate to a closed collection and deny the subscription.
     When I go to the homepage of the "Troll ducks" collection
     And I press "Join this collection"
-    Then a modal dialog should open
+    Then a modal should open
     And I should see the text "Welcome to Troll ducks" in the "Modal header"
     And I should see the text "When your membership is approved you will be able to publish content in it." in the "Modal body"
     And I should see the text "Want to receive notifications, too?" in the "Modal body"
@@ -63,7 +63,7 @@ Feature: Subscribing to a collection after joining
     # Navigate to a closed collection and accept the subscription.
     When I go to the homepage of the "Swamp dragons" collection
     And I press "Join this collection"
-    Then a modal dialog should open
+    Then a modal should open
     When I press "Subscribe" in the "Modal footer" region
     Then the modal should be closed
     And I should see the success message "You have been subscribed to Swamp dragons and will receive weekly notifications once your membership is approved."

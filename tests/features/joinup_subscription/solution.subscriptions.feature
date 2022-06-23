@@ -35,7 +35,7 @@ Feature: Subscribing to a solution
     And the "Some solution to subscribe" solution should have 0 active members
 
     When I click "Subscribe to this solution"
-    Then a modal dialog should open
+    Then a modal should open
     And I should see the text "Sign in to subscribe"
     And I should see "Only signed in users can subscribe to this solution. Please sign in or register an account on EU Login."
     But the cookie that tracks which group I want to join should not be set
@@ -62,7 +62,7 @@ Feature: Subscribing to a solution
     When I am not logged in
     And I go to the "Some solution to subscribe" solution
     And I click "Subscribe to this solution"
-    Then a modal dialog should open
+    Then a modal should open
     And I press "Sign in / Register" in the "Modal footer" region
     Then I should see the heading "Sign in to continue"
 
@@ -92,7 +92,7 @@ Feature: Subscribing to a solution
     And the "Some solution to subscribe" solution should have 0 active members
 
     When I click "Subscribe to this solution"
-    Then a modal dialog should open
+    Then a modal should open
     And I should see the text "Sign in to subscribe"
     And I should see "Only signed in users can subscribe to this solution. Please sign in or register an account on EU Login."
     But the cookie that tracks which group I want to join should not be set
@@ -172,7 +172,7 @@ Feature: Subscribing to a solution
 
     When I go to the "Some solution to subscribe" solution
     And I click "Unsubscribe from this solution"
-    Then a modal dialog should open
+    Then a modal should open
 
     Then I should see the following lines of text:
       | Leave solution                                                                                                |

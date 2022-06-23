@@ -1972,46 +1972,26 @@ class JoinupContext extends RawDrupalContext {
   }
 
   /**
-   * Asserts that the Bootstrap modal is opened.
-   *
-   * @throws \Exception
-   *   Thrown when the modal doesn't open within 5 seconds.
-   *
-   * @Then a modal dialog should open
-   */
-  public function waitForDrupalModalDialogToOpen(): void {
-    // A modal can be opened only in a JavaScript-enabled browser.
-    self::assertJavaScriptEnabledBrowser();
-
-    $result = $this->getSession()->getPage()->waitFor(10, function () {
-      // Retrieve again a fresh copy of the page element at each cycle.
-      $modal = $this->getSession()->getPage()->find('css', '.modal-body');
-      return $modal && $modal->isVisible();
-    });
-
-    if (!$result) {
-      throw new \Exception('The modal did not open.');
-    }
-  }
-
-  /**
    * Asserts that the default Drupal modal is opened.
    *
    * @throws \Exception
    *   Thrown when the modal doesn't open within 5 seconds.
    *
    * @Then a modal should/will open
-   *
-   * @todo Remove in ISAICP-7138.
-   * @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7138
    */
-  public function waitForDrupalModalToOpen() {
+  public function waitForDrupalModalToOpen(): void {
     // A modal can be opened only in a JavaScript-enabled browser.
     self::assertJavaScriptEnabledBrowser();
 
-    $result = $this->getSession()->getPage()->waitFor(5, function () {
+    $result = $this->getSession()->getPage()->waitFor(5, function (): bool {
+      $css_selector = '.modal-body';
+      // @todo Remove the if (...) block in ISAICP-7138.
+      // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7138
+      if ($this->usesMaterialDesignLite()) {
+        $css_selector = '#drupal-modal';
+      }
       // Retrieve again a fresh copy of the page element at each cycle.
-      $modal = $this->getSession()->getPage()->find('css', '#drupal-modal');
+      $modal = $this->getSession()->getPage()->find('css', $css_selector);
 
       return $modal && $modal->isVisible();
     });

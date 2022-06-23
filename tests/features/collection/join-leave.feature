@@ -143,7 +143,7 @@ Feature: Joining and leaving collections through the web interface
     And I go to the homepage of the "Sapient Pearwood" collection
     # This is actually a link which is styled as a button.
     When I click "Join this collection"
-    Then a modal dialog should open
+    Then a modal should open
     And I should see the text "Sign in to join"
 
     When I press "Cancel" in the "Modal footer" region
@@ -159,7 +159,7 @@ Feature: Joining and leaving collections through the web interface
     Then I should see the heading "About Sapient Pearwood"
 
     When I click "Leave this collection"
-    Then a modal dialog should open
+    Then a modal should open
 
     When I press "Cancel" in the "Modal footer" region
     And I wait for AJAX to finish

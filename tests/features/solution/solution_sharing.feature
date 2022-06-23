@@ -35,7 +35,7 @@ Feature: As a privileged user
     And I should see the contextual link "Share" in the "Solution to be shared" tile
     But I should not see the contextual link "Unshare" in the "Solution to be shared" tile
     When I click the contextual link "Share" in the "Solution to be shared" tile
-    Then a modal dialog should open
+    Then a modal should open
     # The moderator has access to the modal but no collections are available.
     And the following fields should not be present "Collection share original, Collection share candidate 1, Collection share candidate 2"
 
@@ -45,7 +45,7 @@ Feature: As a privileged user
     And I should see the contextual link "Share" in the "Solution to be shared" tile
     But I should not see the contextual link "Unshare" in the "Solution to be shared" tile
     When I click the contextual link "Share" in the "Solution to be shared" tile
-    Then a modal dialog should open
+    Then a modal should open
     And the following fields should be present "Collection share candidate 1"
     And the following fields should not be present "Collection share original, Collection share candidate 2"
 
@@ -59,7 +59,7 @@ Feature: As a privileged user
     # not shown anymore in the list.
     And I go to the homepage of the "Collection share original" collection
     When I click the contextual link "Share" in the "Solution to be shared" tile
-    Then a modal dialog should open
+    Then a modal should open
     And the following fields should not be present "Collection share original, Collection share candidate 1, Collection share candidate 2"
 
     # The shared solution should be shown amongst the other content tiles.
@@ -99,7 +99,7 @@ Feature: As a privileged user
     Then I should see the "Solution to be shared" tile
     And I should see the contextual link "Unshare" in the "Solution to be shared" tile
     When I click the contextual link "Unshare" in the "Solution to be shared" tile
-    Then a modal dialog should open
+    Then a modal will open
     And I should see the text "Unshare Solution to be shared from"
     Then the following fields should be present "Collection share candidate 1"
     And the following fields should not be present "Collection share original, Collection share candidate 2"
@@ -121,7 +121,7 @@ Feature: As a privileged user
     Then I should not see the contextual link "Unshare" in the "Solution to be shared" tile
 
     When I click the contextual link "Share" in the "Solution to be shared" tile
-    Then a modal dialog should open
+    Then a modal should open
     And the following fields should be present "Collection share candidate 1"
     And the following fields should not be present "Collection share original, Collection share candidate 2"
 
