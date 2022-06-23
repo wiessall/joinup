@@ -122,7 +122,7 @@ Feature: Sharing content between collections
 
     # Unshare the content.
     When I check "Classic Rock"
-    And I press "Submit" in the "Modal footer" region
+    And I press "Submit" in the "Modal buttons" region
     And I wait for AJAX to finish
 
     # I should still be on the same page, but the group content should be

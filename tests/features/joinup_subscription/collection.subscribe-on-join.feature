@@ -28,11 +28,11 @@ Feature: Subscribing to a collection after joining
     And I should see the text "You have joined the collection and you are now able to publish content in it." in the "Modal body"
     And I should see the text "Want to receive notifications, too?" in the "Modal body"
     And I should see the text "You can receive weekly notifications for this collection, by selecting the subscribe button below" in the "Modal body"
-    And I should see the button "No thanks" in the "Modal footer" region
-    And I should see the button "Subscribe" in the "Modal footer" region
+    And I should see the button "No thanks" in the "Modal buttons" region
+    And I should see the button "Subscribe" in the "Modal buttons" region
 
     # The user can decline the subscription.
-    When I press "No thanks" in the "Modal footer" region
+    When I press "No thanks" in the "Modal buttons" region
     Then the modal should be closed
     And I should not be subscribed to the "Sapient Pearwood" collection
 
@@ -40,7 +40,7 @@ Feature: Subscribing to a collection after joining
     When I go to the homepage of the "Drop bears" collection
     And I press "Join this collection"
     Then a modal should open
-    When I press "Subscribe" in the "Modal footer" region
+    When I press "Subscribe" in the "Modal buttons" region
     Then the modal should be closed
     And I should see the success message "You have been subscribed to Drop bears and will receive weekly notifications. To manage your notifications go to My subscriptions in your user menu."
     And I should have the following content subscriptions:
@@ -54,9 +54,9 @@ Feature: Subscribing to a collection after joining
     And I should see the text "When your membership is approved you will be able to publish content in it." in the "Modal body"
     And I should see the text "Want to receive notifications, too?" in the "Modal body"
     And I should see the text "You can receive weekly notifications for this collection, by selecting the subscribe button below" in the "Modal body"
-    And I should see the button "No thanks" in the "Modal footer" region
-    And I should see the button "Subscribe" in the "Modal footer" region
-    When I press "No thanks" in the "Modal footer" region
+    And I should see the button "No thanks" in the "Modal buttons" region
+    And I should see the button "Subscribe" in the "Modal buttons" region
+    When I press "No thanks" in the "Modal buttons" region
     Then the modal should be closed
     And I should not be subscribed to the "Troll ducks" collection
 
@@ -64,7 +64,7 @@ Feature: Subscribing to a collection after joining
     When I go to the homepage of the "Swamp dragons" collection
     And I press "Join this collection"
     Then a modal should open
-    When I press "Subscribe" in the "Modal footer" region
+    When I press "Subscribe" in the "Modal buttons" region
     Then the modal should be closed
     And I should see the success message "You have been subscribed to Swamp dragons and will receive weekly notifications once your membership is approved."
     And I should have the following content subscriptions:
