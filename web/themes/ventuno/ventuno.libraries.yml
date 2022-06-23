@@ -5,8 +5,8 @@ style:
     base:
       assets/css/main.css: {}
   js:
-    assets/js/oe-bcl-joinup.bundle.min.js: { minified: true }
-    assets/js/popovers.js: { minified: false }
+    assets/js/oe-bcl-joinup.bundle.min.js: {}
+    assets/js/popovers.js: {}
   dependencies:
     - core/drupal
 
@@ -87,11 +87,11 @@ forms:
     theme:
       assets/css/forms.css: {}
   js:
-    assets/js/highlight-invalid-fields.js: { minified: true, attributes: { defer: true } }
+    assets/js/highlight-invalid-fields.js: { attributes: { defer: true } }
 
 glide:
   js:
-    assets/js/glide.js: { minified: false }
+    assets/js/glide.js: {}
   css:
     theme:
       assets/css/glide.core.min.css: { minified: true }
@@ -105,7 +105,6 @@ dropdown:
   css:
     theme:
       assets/css/dropdown.css: {}
-
 
 nav:
   css:
@@ -122,14 +121,14 @@ navbar:
     theme:
       assets/css/navbar.css: {}
   js:
-    assets/js/sticky-menu.js: { minified: true, attributes: { defer: true } }
+    assets/js/sticky-menu.js: { attributes: { defer: true } }
 
 navbar-search:
   css:
     theme:
       assets/css/navbar-search.css: {}
   js:
-    assets/js/searchbox-focus.js: { minified: true, attributes: { defer: true } }
+    assets/js/searchbox-focus.js: { attributes: { defer: true } }
 
 page-title:
   css:
@@ -153,7 +152,7 @@ site-alerts-messages:
 
 show-accordion-invalid-fields:
   js:
-    assets/js/show-accordion-invalid-fields.js: { minified: true, attributes: { defer: true } }
+    assets/js/show-accordion-invalid-fields.js: { attributes: { defer: true } }
 
 tabledrag:
   css:
@@ -162,11 +161,11 @@ tabledrag:
 
 tour-first-balloon:
   js:
-    assets/js/tour-first-balloon.js: { minified: true, attributes: { defer: true } }
+    assets/js/tour-first-balloon.js: { attributes: { defer: true } }
 
 content-tables:
   js:
-    assets/js/content-tables.js: { minified: true, attributes: { defer: true } }
+    assets/js/content-tables.js: { attributes: { defer: true } }
   dependencies:
     - ventuno/tables
 
@@ -176,5 +175,5 @@ bootstrap-base:
     component:
       assets/css/bootstrap-base.css: {}
   js:
-    assets/js/oe-bcl-joinup.bundle.min.js: { minified: true }
-    assets/js/popovers.js: { minified: false }
+    assets/js/oe-bcl-joinup.bundle.min.js: {}
+    assets/js/popovers.js: {}
