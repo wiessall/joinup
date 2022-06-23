@@ -51,7 +51,7 @@ Feature: As a privileged user
 
     # Share the solution into a collection.
     When I check "Collection share candidate 1"
-    And I press "Share" in the "Modal footer" region
+    And I press "Share" in the "Modal buttons" region
     And I wait for AJAX to finish
     Then I should see the success message "Item was shared on the following groups: Collection share candidate 1."
 
@@ -106,7 +106,7 @@ Feature: As a privileged user
 
     # Unshare the content.
     When I check "Collection share candidate 1"
-    And I press "Submit" in the "Modal footer" region
+    And I press "Submit" in the "Modal buttons" region
     And I wait for AJAX to finish
 
     # I should still be on the same page, but the collection content should be

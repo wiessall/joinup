@@ -39,7 +39,7 @@ Feature: Subscribing to a solution
     And I should see the text "Sign in to subscribe"
     And I should see "Only signed in users can subscribe to this solution. Please sign in or register an account on EU Login."
     But the cookie that tracks which group I want to join should not be set
-    When I press "Sign in / Register" in the "Modal footer" region
+    When I press "Sign in / Register" in the "Modal buttons" region
     And I should see the heading "Sign in to continue"
     And a cookie should be set that allows me to join "Some solution to subscribe" after authenticating
 
@@ -63,7 +63,7 @@ Feature: Subscribing to a solution
     And I go to the "Some solution to subscribe" solution
     And I click "Subscribe to this solution"
     Then a modal should open
-    And I press "Sign in / Register" in the "Modal footer" region
+    And I press "Sign in / Register" in the "Modal buttons" region
     Then I should see the heading "Sign in to continue"
 
     When I fill in "E-mail address" with "jon@ankh.am"
@@ -96,7 +96,7 @@ Feature: Subscribing to a solution
     And I should see the text "Sign in to subscribe"
     And I should see "Only signed in users can subscribe to this solution. Please sign in or register an account on EU Login."
     But the cookie that tracks which group I want to join should not be set
-    When I press "Sign in / Register" in the "Modal footer" region
+    When I press "Sign in / Register" in the "Modal buttons" region
     Then I should see the heading "Sign in to continue"
     And a cookie should be set that allows me to join "Some solution to subscribe" after authenticating
 
