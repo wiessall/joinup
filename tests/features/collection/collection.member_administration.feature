@@ -107,7 +107,7 @@ Feature: Collection membership administration
     When I am logged in as "Cam Bridge"
     And I go to the "Medical diagnosis" collection
     And I press "Join this collection"
-    Then a modal dialog should open
+    Then a modal should open
     And I should see the text "Want to receive notifications, too?"
 
     When I press "Subscribe" in the "Modal footer" region

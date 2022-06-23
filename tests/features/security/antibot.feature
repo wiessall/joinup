@@ -35,7 +35,7 @@ Feature: As a visitor or logged-in user, when I want to post content, the form
 
     When I press "Join this collection"
     Then I should see the success message "You are now a member of Family photos."
-    And a modal dialog should open
+    And a modal should open
     Then the form is protected by Antibot
 
     When I press "No thanks" in the "Modal footer" region
