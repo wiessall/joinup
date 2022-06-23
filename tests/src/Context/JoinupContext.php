@@ -1579,7 +1579,7 @@ class JoinupContext extends RawDrupalContext {
   /**
    * Opens a specific MDL dropdown menu on JS-enabled browsers.
    *
-   * @When I open the entity tasks menu
+   * @When I open the header local tasks menu
    */
   public function iOpenTheEntityTasksMenu(): void {
     // @todo Remove the if (...) block in ISAICP-7138.
@@ -1589,13 +1589,10 @@ class JoinupContext extends RawDrupalContext {
       $this->openMaterialDesignMenu($element);
       return;
     }
-    if (!$this->browserSupportsJavaScript()) {
-      // Do nothing, if it's a non-Javascript browser.
-      return;
+    if ($this->browserSupportsJavaScript()) {
+      $entity_tasks_selector = $this->getRegionSelector('Entity actions');
+      $this->getSession()->getPage()->find('css', "$entity_tasks_selector button")->press();
     }
-
-    $entity_tasks_selector = $this->getRegionSelector('Entity actions');
-    $this->getSession()->getPage()->find('css', "$entity_tasks_selector button")->press();
   }
 
   /**
