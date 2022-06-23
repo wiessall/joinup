@@ -147,8 +147,10 @@ default:
         Explore block: '.block-joinup-front-page-explore-block'
         Featured: '.region-featured'
         Footer: '.section--footer, footer'
-        Group header: '#block-ventuno-groupheader'
         Hamburger menu: 'nav.joinup-navbar ul.navbar-nav ul.accordion-list'
+        # TODO: Remove .section--featured,.section-header in ISAICP-7138.
+        # See https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7138
+        Header: '#block-ventuno-groupheader,.section--featured,.section-header'
         Header menu: '#block-joinup-theme-main-menu'
         Highlighted content: '.block-entityqueue--highlighted-content'
         Highlighted event: '.block-entityqueue--highlighted-event'
@@ -184,7 +186,6 @@ default:
         Unpublished content area: '.block-entity-unpublished'
         # Deprecated regions to be removed in ISAICP-7138.
         # See https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7138
-        Header: '.section--featured, .section-header'
         Navigation menu block: '#block-navigation'
         Plus button menu: 'div.add-content-menu'
       drupal:
