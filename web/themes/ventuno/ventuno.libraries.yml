@@ -36,6 +36,11 @@ card:
     theme:
       assets/css/card.css: {}
 
+spinners:
+  css:
+    theme:
+      assets/css/spinners.css: {}
+
 # Pure BCL components
 accordion:
   css:
@@ -70,6 +75,13 @@ add-content:
   css:
     theme:
       assets/css/add-content.css: {}
+
+ajax-throbber:
+  js:
+    assets/js/ajax-throbber.js: {}
+  dependencies:
+    - core/drupal
+    - ventuno/spinners
 
 menu--og--navigation:
   css:
