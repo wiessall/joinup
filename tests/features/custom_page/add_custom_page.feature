@@ -27,7 +27,7 @@ Feature: "Add custom page" visibility options.
     # should become visible.
     Given my role in the "<title>" "<group>" changes to facilitator
     And I reload the page
-    Then I should see the link "Add custom page" in the "Plus menu"
+    Then I should see the link "Add custom page" in the "Plus button menu"
     And I should see the contextual link "Add new page" in the "Left sidebar" region
 
     # An authenticated user which is not a member should also not see the links
@@ -48,7 +48,7 @@ Feature: "Add custom page" visibility options.
     # A facilitator should see it.
     When I am logged in as a facilitator of the "<title>" <group>
     And I go to the homepage of the "<title>" <group>
-    Then I should see the link "Add custom page" in the "Plus menu"
+    Then I should see the link "Add custom page" in the "Plus button menu"
     And I should see the contextual link "Add new page" in the "Left sidebar" region
 
     Examples:
@@ -112,13 +112,13 @@ Feature: "Add custom page" visibility options.
 
     Given I am logged in as "Falstad"
     When I go to the homepage of the "Open Collective" collection
-    Then I should see the link "Add custom page" in the "Plus menu"
+    Then I should see the link "Add custom page" in the "Plus button menu"
     When I go to the homepage of the "Code Camp" collection
-    Then I should see the link "Add custom page" in the "Plus menu"
+    Then I should see the link "Add custom page" in the "Plus button menu"
     When I go to the homepage of the "Parachute" solution
-    Then I should see the link "Add custom page" in the "Plus menu"
+    Then I should see the link "Add custom page" in the "Plus button menu"
     When I go to the homepage of the "Skydiving" solution
-    Then I should see the link "Add custom page" in the "Plus menu"
+    Then I should see the link "Add custom page" in the "Plus button menu"
 
   @javascript
   Scenario: Long list of attachments should be collapsed.
