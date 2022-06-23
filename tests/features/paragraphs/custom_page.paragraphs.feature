@@ -19,7 +19,7 @@ Feature:
     And I press "Save"
     Then I should see the heading "Paragraphs page"
 
-    When I open the entity tasks menu
+    When I open the header local tasks menu
     And I click "Edit"
     # The first paragraphs item is open by default.
     Then there should be 1 paragraph in the "Custom page body" field

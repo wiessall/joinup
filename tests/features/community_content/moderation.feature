@@ -329,7 +329,7 @@ Feature: Moderate community content
 
     When I am logged in as a facilitator of the "Neutron stars" collection
     And I go to the homepage of the "Neutron stars" collection
-    And I open the entity tasks menu
+    And I open the header local tasks menu
     And I click "Moderate content" in the "Entity actions" region
     Then I should see the heading "Content moderation"
     And the available options in the "Content of type" select should be "All (7), Discussion (2), Document (3), Event (1), News (1)"

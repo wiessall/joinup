@@ -256,7 +256,7 @@ Feature: Collection moderation
     Then I should see the heading "Spectres in fog"
     When I am logged in as a user with the "moderator" role
     And I go to the homepage of the "Spectres in fog" collection
-    And I open the entity tasks menu
+    And I open the header local tasks menu
     And I click "Edit" in the "Entity actions" region
     And I scroll "Additional fields" into view
     And I press "Additional fields"
@@ -264,7 +264,7 @@ Feature: Collection moderation
     # Also when saving and reopening the edit form the content creation option
     # should remain unchanged.
     When I press "Publish"
-    And I open the entity tasks menu
+    And I open the header local tasks menu
     And I click "Edit" in the "Entity actions" region
     And I press "Main fields"
     And I press "Additional fields"
@@ -312,7 +312,7 @@ Feature: Collection moderation
     When I press "Propose"
     Then I should see the heading "Domestic bovins"
     # Edit again.
-    When I open the entity tasks menu
+    When I open the header local tasks menu
     And I click "Edit" in the "Entity actions" region
     And I press "Main fields"
     And I press "Additional fields"
@@ -359,7 +359,7 @@ Feature: Collection moderation
     When I press "Propose"
     Then I should see the heading "Theft of Body"
     # Edit again.
-    When I open the entity tasks menu
+    When I open the header local tasks menu
     And I click "Edit" in the "Entity actions" region
     And I press "Main fields"
     And I press "Additional fields"
@@ -410,7 +410,7 @@ Feature: Collection moderation
     When I press "Propose"
     Then I should see the heading "Silken Emperor"
     # Edit again.
-    When I open the entity tasks menu
+    When I open the header local tasks menu
     And I click "Edit" in the "Entity actions" region
     And I press "Main fields"
     And I press "Additional fields"
@@ -461,7 +461,7 @@ Feature: Collection moderation
     When I press "Propose"
     Then I should see the heading "The blue ships"
     # Edit again.
-    When I open the entity tasks menu
+    When I open the header local tasks menu
     And I click "Edit" in the "Entity actions" region
     And I press "Main fields"
     And I press "Additional fields"

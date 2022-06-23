@@ -45,7 +45,7 @@ Feature: Document moderation
     # Edit the collection and set it as moderated.
     When I am logged in as a moderator
     And I go to the homepage of the "The Naked Ashes" collection
-    And I open the entity tasks menu
+    And I open the header local tasks menu
     And I click "Edit" in the "Entity actions" region
     And I scroll "Additional fields" into view
     And I press "Additional fields"
@@ -67,7 +67,7 @@ Feature: Document moderation
     # content.
     When I am logged in as a moderator
     And I go to the homepage of the "The Naked Ashes" collection
-    And I open the entity tasks menu
+    And I open the header local tasks menu
     And I click "Edit" in the "Entity actions" region
     And I press "Main fields"
     And I press "Additional fields"
