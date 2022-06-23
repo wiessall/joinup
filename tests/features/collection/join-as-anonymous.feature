@@ -51,7 +51,7 @@ Feature: Joining a collection as an anonymous user
     And a modal should open
     # Quick check without pressing buttons, this is fully tested in the
     # subscribe-on-join scenario.
-    And I should see the text "Welcome to Reannual plants" in the "Modal header"
+    And I should see the text "Welcome to Reannual plants" in the "Modal title"
     And I should see the text "Want to receive notifications, too?" in the "Modal body"
     And I should see the button "No thanks" in the "Modal buttons" region
     And I should see the button "Subscribe" in the "Modal buttons" region
@@ -101,7 +101,7 @@ Feature: Joining a collection as an anonymous user
     And I should see the success message "Your membership to the Vul nuts collection is under approval."
     And the "Vul nuts" collection should have 1 pending member
     And a modal should open
-    And I should see the text "Welcome to Vul nuts" in the "Modal header"
+    And I should see the text "Welcome to Vul nuts" in the "Modal title"
     And I should see the text "Want to receive notifications, too?" in the "Modal body"
     And I should see the button "No thanks" in the "Modal buttons" region
     And I should see the button "Subscribe" in the "Modal buttons" region
@@ -161,7 +161,7 @@ Feature: Joining a collection as an anonymous user
     And a modal should open
     # Quick check without pressing buttons, this is fully tested in the
     # subscribe-on-join scenario.
-    And I should see the text "Welcome to Reannual plants" in the "Modal header"
+    And I should see the text "Welcome to Reannual plants" in the "Modal title"
     And I should see the text "Want to receive notifications, too?" in the "Modal body"
     And I should see the button "No thanks" in the "Modal buttons" region
     And I should see the button "Subscribe" in the "Modal buttons" region
@@ -195,7 +195,7 @@ Feature: Joining a collection as an anonymous user
     And I should see the success message "Your membership to the Vul nuts collection is under approval."
     And the "Vul nuts" collection should have 1 pending member
     And a modal should open
-    And I should see the text "Welcome to Vul nuts" in the "Modal header"
+    And I should see the text "Welcome to Vul nuts" in the "Modal title"
     And I should see the text "Want to receive notifications, too?" in the "Modal body"
     And I should see the button "No thanks" in the "Modal buttons" region
     And I should see the button "Subscribe" in the "Modal buttons" region

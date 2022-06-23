@@ -160,7 +160,9 @@ default:
         Management solution vertical tab: '#edit-group-management'
         Members admin form actions: '#edit-action'
         Members admin form header: '#edit-header'
-        Modal header: '.modal-header'
+        # TODO: Remove .ui-dialog-title in ISAICP-7138.
+        # See https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7138
+        Modal title: '.modal-header,.ui-dialog-title'
         Modal body: '.modal-body'
         # TODO: Remove .ui-dialog-buttonpane in ISAICP-7138.
         # See https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7138
@@ -182,7 +184,6 @@ default:
         # See https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7138
         Header: '.section--featured, .section-header'
         Modal content: '#drupal-modal'
-        Modal title: '.ui-dialog-title'
         Navigation menu block: '#block-navigation'
         Plus button menu: 'div.add-content-menu'
       drupal:
