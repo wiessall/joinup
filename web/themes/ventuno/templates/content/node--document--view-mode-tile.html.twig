@@ -84,6 +84,7 @@
   {% endif %}
 {% endset %}
 {{ pattern('tile', {
+  attributes: attributes,
   featured: view_mode_featured,
   image: rendered_logo ? rendered_logo,
   url: url,

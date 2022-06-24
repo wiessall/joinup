@@ -7,6 +7,7 @@
 {% apply spaceless %}
 
   {# Parameters:
+    - attributes (object) (default: {}})
     - featured (boolean) (default: false)
     - image (object) (default: {})
     - url (string) (default: '')
@@ -18,6 +19,7 @@
     - metadata (array of objects) (default: [])
   #}
 
+  {% set _attributes = attributes|default({}) %}
   {% set _featured = featured|default(false) %}
   {% set _image = image|default({}) %}
   {% set _url = url|default('') %}
@@ -28,7 +30,9 @@
   {% set _subtext = subtext|default('') %}
   {% set _metadata = metadata|default([]) %}
 
-  {% set attributes = create_attribute() %}
+  {% if _attributes is empty %}
+    {% set _attributes = create_attribute() %}
+  {% endif %}
   {% set _classes = [
     'card',
     'card--tile',
@@ -46,7 +50,7 @@
 
   {{ attach_library('ventuno/card') }}
   <div class="col">
-    <article{{ attributes.addClass(_classes) }}>
+    <article{{ _attributes.addClass(_classes) }}>
       {% if _text is empty %}
         <div class="card-header border-0 bg-transparent">
           <figure class="d-flex justify-content-center mb-0">
