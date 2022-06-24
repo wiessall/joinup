@@ -311,7 +311,7 @@ trait TraversingTrait {
    *   Thrown when the element is not found.
    */
   protected function getTileByHeading(string $heading): NodeElement {
-    $class = 'card-tile';
+    $class = 'card--tile';
     // @todo Remove the if (...) block in ISAICP-7138.
     // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7138
     if ($this->usesMaterialDesignLite()) {
@@ -742,7 +742,7 @@ trait TraversingTrait {
   protected function getTileCssSelector(): string {
     return implode(', ', [
       '.card .card-title',
-      'article.card-tile h2',
+      'article.card--tile h2',
       // @todo Legacy selectors to be removed in ISAICP-7138.
       // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7138
       '.listing__item--tile .listing__title',
