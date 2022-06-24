@@ -1,0 +1,17 @@
+{#
+/**
+ * @file
+ * Joinup theme override for a local task link from horizontal tabs.
+ *
+ * Available variables:
+ * - attributes: HTML attributes for the wrapper element.
+ * - link: A rendered link element.
+ *
+ * @see template_preprocess_menu_local_task()
+ * @see joinup_core_theme_suggestions_alter()
+ *
+ * @ingroup themeable
+ */
+#}
+{% set attributes = attributes.addClass('tab--horizontal') %}
+<li{{ attributes }}>{{ link }}</li>

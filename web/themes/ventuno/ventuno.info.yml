@@ -47,3 +47,7 @@ regions:
 openeuropa:
   bootstrap_component_library:
     components_location: bcl-overrides
+
+joinup:
+  menu_local_tasks:
+    horizontal_tabs_block: ventuno_horizontal_tabs

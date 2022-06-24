@@ -64,13 +64,10 @@
  *   is an administrator.
  *
  * @see template_preprocess_node()
- *
- * @todo Remove the id attribute (or make it a class), because if that gets
- *   rendered twice on a page this is invalid CSS for example: two lists
- *   in different view modes.
+ * @see joinup_discussion_preprocess_node__view_mode_tile()
  */
 #}
-<article{{ attributes.addClass('tile') }}>
+<article{{ attributes.addClass('card-tile') }}>
 
   {{ title_prefix }}
   {% if not page %}
@@ -91,7 +88,13 @@
   {% endif %}
 
   <div{{ content_attributes }}>
-    {{ content }}
+    {{ content|without('field_file') }}
+  </div>
+
+  <div data-drupal-card-stats class="card-stats">
+    {% if comment_count is defined %}
+      <div class="card-comment-count">{{ comment_count }}</div>
+    {% endif %}
   </div>
 
 </article>

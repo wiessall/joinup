@@ -883,6 +883,7 @@ class JoinupContext extends RawDrupalContext {
       $element = $this->getSession()->getPage()->find('xpath', $xpath);
     }
 
+    $this->scrollNamedElementIntoView('button', $button, $element);
     $element->pressButton($button);
   }
 
@@ -1163,8 +1164,8 @@ class JoinupContext extends RawDrupalContext {
    *
    * @Then I (should )see the :heading tile
    */
-  public function assertTilePresent($heading) {
-    $results = $this->getSession()->getPage()->findAll('css', '.listing__item--tile .listing__title, .card .card-title, article.tile h2');
+  public function assertTilePresent(string $heading): void {
+    $results = $this->getSession()->getPage()->findAll('css', $this->getTileCssSelector());
     foreach ($results as $result) {
       /** @var \Behat\Mink\Element\Element $result */
       if ($result->getText() === $heading) {
@@ -1178,7 +1179,7 @@ class JoinupContext extends RawDrupalContext {
   /**
    * Count the tiles on the page.
    *
-   * @param string $number
+   * @param int $number
    *   The expected number of tiles.
    *
    * @throws \Exception
@@ -1186,8 +1187,8 @@ class JoinupContext extends RawDrupalContext {
    *
    * @Then I (should )see :number tile(s)
    */
-  public function assertTileCount($number) {
-    $results = $this->getSession()->getPage()->findAll('css', '.listing__item--tile .listing__title, .card .card-title, article.tile h2');
+  public function assertTileCount(int $number): void {
+    $results = $this->getSession()->getPage()->findAll('css', $this->getTileCssSelector());
     $nr_found = count($results);
     if ($nr_found != $number) {
       throw new \Exception("Found $nr_found tiles, expected $number");
@@ -1205,10 +1206,14 @@ class JoinupContext extends RawDrupalContext {
    *
    * @Then I (should )not see the :heading tile
    */
-  public function assertTileNotPresent($heading) {
+  public function assertTileNotPresent(string $heading): void {
     // We target the heading with "h2" instead of ".listing__title" because both
     // unstyled and styled tiles use h2 as element for their titles.
-    $results = $this->getSession()->getPage()->findAll('css', '.listing__item--tile h2, .card h5, article.tile h2');
+    $results = $this->getSession()->getPage()->findAll('css', $this->getTileCssSelector() .
+      // @todo Check in ISAICP-7138 if this selector is still needed.
+      // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7138
+      ', .card h5'
+    );
     foreach ($results as $result) {
       /** @var \Behat\Mink\Element\Element $result */
       if ($result->getText() === $heading) {
@@ -1500,8 +1505,8 @@ class JoinupContext extends RawDrupalContext {
    *
    * @Then I should see the plus button menu
    */
-  public function assertPlusButtonMenuPresent() {
-    $element = $this->getSession()->getPage()->find('css', 'div.add-content-menu ul');
+  public function assertPlusButtonMenuPresent(): void {
+    $element = $this->getSession()->getPage()->find('css', '#dropdown-add-content');
     Assert::assertNotEmpty($element);
   }
 
@@ -1526,7 +1531,7 @@ class JoinupContext extends RawDrupalContext {
    *
    * @When I click :link in the plus button menu
    */
-  public function clickLinkInPlusButtonMenu($link) {
+  public function clickLinkInPlusButtonMenu($link): void {
     // Check if we are running in an environment that supports JavaScript like
     // Selenium or PhantomJS. If this is the case the plus button menu will be
     // closed by default and needs to be opened first.
@@ -1539,8 +1544,21 @@ class JoinupContext extends RawDrupalContext {
    *
    * @When I open the plus button menu
    */
-  public function openPlusButtonMenu() {
-    $this->openMaterialDesignMenu($this->getSession()->getPage()->find('css', '.add-content-menu'));
+  public function openPlusButtonMenu(): void {
+    // @todo Remove the if (...) block in ISAICP-7138.
+    // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7138
+    if ($this->usesMaterialDesignLite()) {
+      $this->openMaterialDesignMenu($this->getSession()->getPage()->find('css', '.add-content-menu'));
+      return;
+    }
+    if (!$this->browserSupportsJavaScript()) {
+      // Do nothing, if it's a non-Javascript browser.
+      return;
+    }
+
+    $button = $this->getSession()->getPage()->find('css', '#dropdown-add-content');
+    $this->scrollElementIntoView($button);
+    $button->press();
   }
 
   /**
@@ -1548,8 +1566,15 @@ class JoinupContext extends RawDrupalContext {
    *
    * @When I open the group sidebar menu
    */
-  public function openGroupMenu() {
-    $this->openMaterialDesignMenu($this->getSession()->getPage()->find('css', '.sidebar-menu'));
+  public function openGroupMenu(): void {
+    // @todo Remove the if (...) block in ISAICP-7138.
+    // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7138
+    if ($this->usesMaterialDesignLite()) {
+      $this->openMaterialDesignMenu($this->getSession()->getPage()->find('css', '.sidebar-menu'));
+      return;
+    }
+    $region = $this->getSession()->getPage()->find('css', $this->getRegionSelector('Left sidebar'));
+    $this->getContextualLinksHelper()->openContextualLinksMenu($region);
   }
 
   /**
@@ -1557,9 +1582,18 @@ class JoinupContext extends RawDrupalContext {
    *
    * @When I open the header local tasks menu
    */
-  public function iOpenTheMdlDropdown() {
-    $element = $this->getSession()->getPage()->find('css', '.block-joinup-local-tasks-block');
-    $this->openMaterialDesignMenu($element);
+  public function iOpenTheEntityTasksMenu(): void {
+    // @todo Remove the if (...) block in ISAICP-7138.
+    // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7138
+    if ($this->usesMaterialDesignLite()) {
+      $element = $this->getSession()->getPage()->find('css', '.block-joinup-local-tasks-block');
+      $this->openMaterialDesignMenu($element);
+      return;
+    }
+    if ($this->browserSupportsJavaScript()) {
+      $entity_tasks_selector = $this->getRegionSelector('Entity actions');
+      $this->getSession()->getPage()->find('css', "$entity_tasks_selector button")->press();
+    }
   }
 
   /**
@@ -1799,8 +1833,8 @@ class JoinupContext extends RawDrupalContext {
    *
    * @Then I should see a logo on the header
    */
-  public function assertExistingLogo() {
-    $xpath = '//div[contains(concat(" ", normalize-space(@class), " "), " featured__logo ")]//img';
+  public function assertExistingLogo(): void {
+    $xpath = '//a[contains(concat(" ", normalize-space(@class), " "), " group-logo ")]//img';
     $this->assertSession()->elementsCount('xpath', $xpath, 1);
   }
 
@@ -1809,14 +1843,10 @@ class JoinupContext extends RawDrupalContext {
    *
    * @Then I should see a banner on the header
    */
-  public function assertExistingBanner() {
-    $xpath = '//div[contains(concat(" ", normalize-space(@class), " "), " featured__outer-wrapper ")]/@style';
-    $results = $this->getSession()->getPage()->find('xpath', $xpath);
-    // If the preg_match get a match, it means that the background image is
-    // empty.
-    $match = preg_match('/background-image: url\([\'"][\'"]\)/', $results->getText());
-    if ($match !== 0) {
-      throw new \Exception("The banner is empty.");
+  public function assertExistingBanner(): void {
+    $xpath = '//article[contains(concat(" ", normalize-space(@class), " "), " group-banner ")]';
+    if (!$this->getSession()->getPage()->find('xpath', $xpath)) {
+      throw new \Exception("No banner");
     }
   }
 
@@ -1940,29 +1970,6 @@ class JoinupContext extends RawDrupalContext {
   }
 
   /**
-   * Asserts that the Bootstrap modal is opened.
-   *
-   * @throws \Exception
-   *   Thrown when the modal doesn't open within 5 seconds.
-   *
-   * @Then a modal dialog should open
-   */
-  public function waitForDrupalModalDialogToOpen(): void {
-    // A modal can be opened only in a JavaScript-enabled browser.
-    self::assertJavaScriptEnabledBrowser();
-
-    $result = $this->getSession()->getPage()->waitFor(10, function () {
-      // Retrieve again a fresh copy of the page element at each cycle.
-      $modal = $this->getSession()->getPage()->find('css', '.modal-body');
-      return $modal && $modal->isVisible();
-    });
-
-    if (!$result) {
-      throw new \Exception('The modal did not open.');
-    }
-  }
-
-  /**
    * Asserts that the default Drupal modal is opened.
    *
    * @throws \Exception
@@ -1970,13 +1977,19 @@ class JoinupContext extends RawDrupalContext {
    *
    * @Then a modal should/will open
    */
-  public function waitForDrupalModalToOpen() {
+  public function waitForDrupalModalToOpen(): void {
     // A modal can be opened only in a JavaScript-enabled browser.
     self::assertJavaScriptEnabledBrowser();
 
-    $result = $this->getSession()->getPage()->waitFor(5, function () {
+    $result = $this->getSession()->getPage()->waitFor(5, function (): bool {
+      $css_selector = '.modal-body';
+      // @todo Remove the if (...) block in ISAICP-7138.
+      // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7138
+      if ($this->usesMaterialDesignLite()) {
+        $css_selector = '#drupal-modal';
+      }
       // Retrieve again a fresh copy of the page element at each cycle.
-      $modal = $this->getSession()->getPage()->find('css', '#drupal-modal');
+      $modal = $this->getSession()->getPage()->find('css', $css_selector);
 
       return $modal && $modal->isVisible();
     });

@@ -5,9 +5,9 @@ declare(strict_types = 1);
 namespace Drupal\collection\Form;
 
 use Drupal\Core\Access\AccessManagerInterface;
+use Drupal\Core\Ajax\AfterCommand;
 use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\OpenModalDialogCommand;
-use Drupal\Core\Ajax\PrependCommand;
 use Drupal\Core\Ajax\ReplaceCommand;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormBuilderInterface;
@@ -112,9 +112,7 @@ class JoinCollectionForm extends JoinGroupFormBase {
 
     // Output messages in the page.
     $messages = ['#type' => 'status_messages'];
-    // @todo Replace with a theme-agnostic selector in ISAICP-7109.
-    // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7109
-    $response->addCommand(new PrependCommand('.section--content-top', $messages));
+    $response->addCommand(new AfterCommand('*[data-drupal-messages-fallback]', $messages));
 
     // If the form submitted successfully, make an offer the user cannot refuse.
     if (!$form_state->getErrors()) {

@@ -1,0 +1,6 @@
+shared_entity:
+  js:
+    js/shared_entity.js: {}
+  dependencies:
+    - core/drupal
+    - core/once

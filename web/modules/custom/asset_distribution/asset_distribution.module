@@ -16,6 +16,7 @@ use Drupal\asset_distribution\Entity\AssetDistribution;
 use Drupal\asset_distribution\Entity\AssetDistributionInterface;
 use Drupal\file_url\FileUrlHandler;
 use Drupal\rdf_entity\RdfInterface;
+use Drupal\solution\Exception\MissingSolutionException;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 /**
@@ -162,19 +163,23 @@ function asset_distribution_rdf_entity_update(RdfInterface $distribution): void 
 /**
  * Invalidates the distribution solution cache.
  *
- * @param \Drupal\rdf_entity\RdfInterface $distribution
+ * @param \Drupal\asset_distribution\Entity\AssetDistributionInterface $distribution
  *   The distribution being inserted/updated.
  */
-function asset_distribution_invalidate_solution_cache(RdfInterface $distribution): void {
-  /** @var \Drupal\rdf_entity\RdfInterface $solution */
-  if ($solution = $distribution->og_audience->entity) {
-    /** @var \Drupal\Core\Cache\CacheTagsInvalidatorInterface $cache_tags_invalidator */
-    $cache_tags_invalidator = \Drupal::service('cache_tags.invalidator');
-    // Solutions show the licence of their releases in the solution header.
-    // Clear the cache of the solution this release belongs to so any licence
-    // change is picked up.
-    $cache_tags_invalidator->invalidateTags($solution->getCacheTagsToInvalidate());
+function asset_distribution_invalidate_solution_cache(AssetDistributionInterface $distribution): void {
+  try {
+    $solution = $distribution->getSolution();
   }
+  catch (MissingSolutionException $exception) {
+    // The parent solution might not be set yet.
+    return;
+  }
+  /** @var \Drupal\Core\Cache\CacheTagsInvalidatorInterface $cache_tags_invalidator */
+  $cache_tags_invalidator = \Drupal::service('cache_tags.invalidator');
+  // Solutions show the licence of their releases in the solution header.
+  // Clear the cache of the solution this release belongs to so any licence
+  // change is picked up.
+  $cache_tags_invalidator->invalidateTags($solution->getCacheTagsToInvalidate());
 }
 
 /**
