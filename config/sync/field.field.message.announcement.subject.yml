@@ -1,0 +1,19 @@
+uuid: 49944b25-3297-47bd-b6d4-b447768c017d
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.message.subject
+    - message.template.announcement
+id: message.announcement.subject
+field_name: subject
+entity_type: message
+bundle: announcement
+label: Subject
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

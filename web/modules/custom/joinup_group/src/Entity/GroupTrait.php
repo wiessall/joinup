@@ -197,6 +197,29 @@ trait GroupTrait {
   }
 
   /**
+   * {@inheritdoc}
+   */
+  public function getMembers(array $states = [OgMembershipInterface::STATE_ACTIVE]): ?array {
+    $ids = (array) \Drupal::entityQuery('og_membership')
+      ->condition('entity_type', 'rdf_entity')
+      ->condition('entity_id', $this->id())
+      ->condition('state', $states, 'IN')
+      ->execute();
+
+    if (empty($ids)) {
+      return [];
+    }
+
+    $users = [];
+    $og_users = \Drupal::entityTypeManager()->getStorage('og_membership')->loadMultiple($ids);
+    foreach ($og_users as $user) {
+      $users[] = \Drupal::entityTypeManager()->getStorage('user')->load($user->uid->target_id);
+    }
+
+    return $users;
+  }
+
+  /**
    * Processes and returns a list of group content entities.
    *
    * @return array

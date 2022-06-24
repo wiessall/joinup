@@ -4,9 +4,11 @@ status: true
 dependencies:
   config:
     - core.entity_view_mode.message.mail_subject
+    - field.field.message.announcement.body
     - field.field.message.announcement.group_reference
     - field.field.message.announcement.recipients
     - field.field.message.announcement.state
+    - field.field.message.announcement.subject
     - message.template.announcement
   module:
     - layout_builder
@@ -23,8 +25,10 @@ content:
     weight: 0
     region: content
 hidden:
+  body: true
   group_reference: true
   partial_1: true
   recipients: true
   search_api_excerpt: true
   state: true
+  subject: true
