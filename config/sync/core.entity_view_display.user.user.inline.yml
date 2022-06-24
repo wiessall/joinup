@@ -53,6 +53,8 @@ content:
     settings:
       image_link: ''
       image_style: profile_icon
+      image_loading:
+        attribute: lazy
     third_party_settings:
       template_suggestion:
         template_suggestion: no_wrappers

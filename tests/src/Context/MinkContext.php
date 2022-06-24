@@ -128,4 +128,28 @@ class MinkContext extends DrupalExtensionMinkContext {
     parent::pressButton($button);
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  public function assertLinkVisible($link): void {
+    $this->scrollNamedElementIntoView('link', $link);
+    parent::assertLinkVisible($link);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function fillField($field, $value): void {
+    $this->scrollNamedElementIntoView('field', $field);
+    parent::fillField($field, $value);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function attachFileToField($field, $path): void {
+    $this->scrollNamedElementIntoView('field', $field);
+    parent::attachFileToField($field, $path);
+  }
+
 }
