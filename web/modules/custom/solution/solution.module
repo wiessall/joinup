@@ -702,23 +702,6 @@ function solution_search_api_query_search_api_field_field_is_content_alter(Query
 }
 
 /**
- * Implements hook_preprocess_HOOK().
- */
-function solution_preprocess_rdf_entity(&$variables) {
-  $rdf_entity = $variables['rdf_entity'];
-
-  // Apply the visual cue only on the tile view mode.
-  if ($variables['view_mode'] !== 'view_mode_tile') {
-    return;
-  }
-
-  // If the solution is shared somewhere, attach the related library.
-  if ($rdf_entity->hasField('field_is_shared_in') && !$rdf_entity->get('field_is_shared_in')->isEmpty()) {
-    $variables['#attached']['library'][] = 'joinup_theme/shared_entity';
-  }
-}
-
-/**
  * Sync the solution settings with the corresponding entity.
  *
  * Stores the values of the related solutions of a solution to a meta entity in

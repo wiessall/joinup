@@ -307,6 +307,14 @@ module.exports = {
         sourceMap: "file",
       },
     },
+    {
+      entry: path.resolve(outputFolder, "src/scss/three-dots-menu.scss"),
+      dest: path.resolve(outputFolder, "assets/css/three-dots-menu.css"),
+      options: {
+        includePaths,
+        sourceMap: "file",
+      },
+    },
     // @todo ISAICP-7138 remove when switch to Ventuno theme is complete
     {
       entry: path.resolve(outputFolder, "src/scss/core/base/bootstrap-base.scss"),
@@ -495,6 +503,7 @@ module.exports = {
             'plus.svg',
             'search.svg',
             'star.svg',
+            'three-dots-vertical.svg',
             'twitter.svg',
             'x.svg',
             'x-lg.svg',
