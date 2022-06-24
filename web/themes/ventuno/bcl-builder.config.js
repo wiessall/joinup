@@ -80,6 +80,20 @@ module.exports = {
       },
     },
     {
+      entry: path.resolve(
+        outputFolder,
+        "src/js/show-accordion-invalid-fields.js"
+      ),
+      dest: path.resolve(
+        outputFolder,
+        "assets/js/show-accordion-invalid-fields.js"
+      ),
+      options: {
+        minify: true,
+        sourceMap: true,
+      },
+    },
+    {
       entry: path.resolve(outputFolder, "src/js/tour-first-balloon.js"),
       dest: path.resolve(outputFolder, "assets/js/tour-first-balloon.js"),
       options: {

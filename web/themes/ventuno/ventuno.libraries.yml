@@ -151,7 +151,7 @@ members-overview-exposed-form:
 dropdown:
   css:
     theme:
-      assets/css/dropdown.min.css: { minified: true }
+      assets/css/dropdown.css: {}
 
 nav:
   css:
@@ -196,6 +196,12 @@ share-content-form:
   css:
     theme:
       assets/css/share-content-form.min.css: { minified: true }
+
+shared-entity:
+  js:
+    assets/js/shared-entity.js: { minified: true, attributes: { defer: true } }
+  dependencies:
+    - core/drupalSettings
 
 shared-entity:
   js:
