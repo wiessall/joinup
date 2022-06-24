@@ -148,31 +148,37 @@ default:
         Featured: '.region-featured'
         Footer: '.section--footer, footer'
         Hamburger menu: 'nav.joinup-navbar ul.navbar-nav ul.accordion-list'
+        # TODO: Remove .section--featured,.section-header in ISAICP-7138.
+        # See https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7138
+        Header: '#block-ventuno-groupheader,.section--featured,.section-header'
         Header menu: '#block-joinup-theme-main-menu'
-        Header: '.section--featured, .section-header'
         Highlighted content: '.block-entityqueue--highlighted-content'
         Highlighted event: '.block-entityqueue--highlighted-event'
         In the spotlight: '.block-views-blockin-the-spotlight-block'
-        Left sidebar: '.section--sidebar-left'
+        # TODO: Remove .section--sidebar-left in ISAICP-7138.
+        # See https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7138
+        Left sidebar: 'aside.layout-sidebar,.section--sidebar-left'
         Main fields accordion: '#main-fields'
         Management solution vertical tab: '#edit-group-management'
         Members admin form actions: '#edit-action'
         Members admin form header: '#edit-header'
-        # Bootstrap modal dialog regions.
-        Modal header: '.modal-header'
-        Modal body: '.modal-body'
-        Modal footer: '.modal-footer'
-        # Drupal modal dialog regions.
-        Modal buttons: '.ui-dialog-buttonpane'
-        Modal content: '#drupal-modal'
-        Modal title: '.ui-dialog-title'
+        # TODO: Remove .ui-dialog-buttonpane in ISAICP-7138.
+        # See https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7138
+        Modal buttons: '.modal-footer,.ui-dialog-buttonpane'
+        # TODO: Remove #drupal-modal in ISAICP-7138.
+        # See https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7138
+        Modal content: '.modal-body,#drupal-modal'
+        # TODO: Remove .ui-dialog-title in ISAICP-7138.
+        # See https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7138
+        Modal title: '.modal-header,.ui-dialog-title'
         My unpublished content area: '.block-user-unpublished'
         Navigation bar: 'nav.joinup-navbar'
-        Navigation menu block: '#block-navigation'
-        Navigation menu: 'div.navigation-menu ul'
+        Navigation menu: '#block-ventuno-navigation'
         Page title: 'div.page__title-wrapper'
         Pager: 'nav.pager'
-        Plus button menu: 'div.add-content-menu'
+        # TODO: Remove div.add-content-menu in ISAICP-7138.
+        # See https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7138
+        Plus button menu: '#block-ventuno-joinup-add-content,div.add-content-menu'
         Primary menu: '.region-primary-menu'
         Related solutions: '.field--name-field-is-related-solutions'
         SevenHeader: '.region-header'
@@ -180,6 +186,9 @@ default:
         Table of contents: '#block-table-of-contents'
         Table of contents outline: '#block-toc-outline'
         Unpublished content area: '.block-entity-unpublished'
+        # Deprecated regions to be removed in ISAICP-7138.
+        # See https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7138
+        Navigation menu block: '#block-navigation'
       drupal:
         drupal_root: ${joinup.site_dir}
       selectors:

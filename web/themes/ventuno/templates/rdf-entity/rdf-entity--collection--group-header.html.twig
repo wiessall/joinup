@@ -4,9 +4,9 @@
  * Themeing for RDF entities.
  */
 #}
-<article {{ attributes.addClass(['py-4', 'py-md-5']) }} style="background: linear-gradient(117deg, rgba(20,59,118,.7), rgba(20,59,118,.4)), url('{{ content.field_ar_banner }}') no-repeat, rgba(20,59,118,.4); background-size: cover;">
+<article {{ attributes.addClass(['py-4', 'py-md-5', 'group-banner']) }} style="background: linear-gradient(117deg, rgba(20,59,118,.7), rgba(20,59,118,.4)), url('{{ content.field_ar_banner }}') no-repeat, rgba(20,59,118,.4); background-size: cover;">
   <div class="container d-flex flex-column align-items-center">
-    <a href="{{ path('entity.rdf_entity.canonical',{'rdf_entity': rdf_entity.id()}) }}">
+    <a href="{{ path('entity.rdf_entity.canonical',{'rdf_entity': rdf_entity.id()}) }}" class="group-logo">
       {{ content.field_ar_logo }}
     </a>
     {{ title_prefix }}

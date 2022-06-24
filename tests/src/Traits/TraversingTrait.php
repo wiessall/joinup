@@ -15,6 +15,8 @@ use PHPUnit\Framework\Assert;
  */
 trait TraversingTrait {
 
+  use MaterialDesignTrait;
+
   /**
    * Searches for any kind of field in a form by label.
    *
@@ -274,12 +276,17 @@ trait TraversingTrait {
     }
 
     $result = [];
-    // @todo The `.listing__item--tile` selector is part of the original Joinup
-    //   theme and can be removed once we have fully migrated to the new theme.
-    foreach ($regionObj->findAll('css', '.listing__item--tile, .card, article.tile') as $element) {
+    foreach ($regionObj->findAll('css', $this->getTileCssSelector()) as $element) {
       // @todo The `.listing__title` selector is part of the original Joinup
       //   theme and can be removed once we migrated to the new theme.
-      $title_element = $element->find('css', ' .listing__title, .card-title, h2 a');
+      $title_selector = implode(', ', [
+        '.card-title',
+        'h2 a',
+        // @todo Legacy selectors to be removed in ISAICP-7138.
+        // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7138
+        '.listing__title',
+      ]);
+      $title_element = $element->find('css', $title_selector);
       // Some tiles don't have a title, like the one to create a new collection
       // in the collections page.
       if ($title_element) {
@@ -304,10 +311,14 @@ trait TraversingTrait {
    *   Thrown when the element is not found.
    */
   protected function getTileByHeading(string $heading): NodeElement {
-    // @todo The `.listing__item--tile` selector is part of the original Joinup
-    //   theme and can be removed once we have fully migrated to the new theme.
+    $class = 'card-tile';
+    // @todo Remove the if (...) block in ISAICP-7138.
+    // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7138
+    if ($this->usesMaterialDesignLite()) {
+      $class = 'listing__item--tile';
+    }
     try {
-      return $this->getListingByHeading('listing__item--tile', $heading);
+      return $this->getListingByHeading($class, $heading);
     }
     catch (ElementNotFoundException $e) {
       return $this->getListingByHeading('tile', $heading);
@@ -681,6 +692,42 @@ trait TraversingTrait {
       }
     }
     return FALSE;
+  }
+
+  /**
+   * Returns the tile CSS selector.
+   *
+   * @return string
+   *   The tile CSS selector.
+   */
+  protected function getTileCssSelector(): string {
+    return implode(', ', [
+      '.card .card-title',
+      'article.card-tile h2',
+      // @todo Legacy selectors to be removed in ISAICP-7138.
+      // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7138
+      '.listing__item--tile .listing__title',
+    ]);
+  }
+
+  /**
+   * Returns a region CSS selector given its label defined in behat.yml.
+   *
+   * @param string $label
+   *   The region label.
+   *
+   * @return string
+   *   The region's CSS selector.
+   *
+   * @throws \Exception
+   *   When the region with passed label doesn't exist.
+   */
+  protected function getRegionSelector(string $label): string {
+    $region_map = $this->getDrupalParameter('region_map');
+    if (!isset($region_map[$label])) {
+      throw new \Exception("No such region configured: $label");
+    }
+    return $region_map[$label];
   }
 
 }

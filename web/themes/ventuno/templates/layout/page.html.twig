@@ -40,12 +40,12 @@
  * @see html.html.twig
  */
 #}
-<div class="layout-container">
+<div{{ attributes.addClass('layout-container') }}>
   <div class="section-header">
     {{ page.header }}
 
     {% if page.header_bottom %}
-      <div class="region-header-bottom container">
+      <div class="region-header-bottom">
         {{ page.header_bottom }}
       </div>
     {% endif %}

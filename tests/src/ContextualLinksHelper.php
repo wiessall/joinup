@@ -210,7 +210,7 @@ class ContextualLinksHelper {
    * @param \Behat\Mink\Element\TraversableElement $element
    *   The element that contains the contextual links to open.
    */
-  protected function openContextualLinksMenu(TraversableElement $element): void {
+  public function openContextualLinksMenu(TraversableElement $element): void {
     if (!$this->browserSupportsJavaScript()) {
       throw new \LogicException('Cannot open the contextual link menu on a browser that doesn\'t support JavaScript.');
     }
