@@ -4,10 +4,13 @@ declare(strict_types = 1);
 
 namespace Drupal\joinup_group\Form;
 
+use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Utility\Token;
 use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\message\Entity\Message;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Form to send an announcement message.
@@ -20,6 +23,43 @@ class SendAnnouncementsForm extends FormBase {
    * @var \Drupal\joinup_group\Entity\GroupInterface
    */
   protected GroupInterface $group;
+
+  /**
+   * The token service.
+   *
+   * @var \Drupal\Core\Utility\Token
+   */
+  protected Token $token;
+
+  /**
+   * The module handler.
+   *
+   * @var \Drupal\Core\Extension\ModuleHandlerInterface
+   */
+  protected ModuleHandlerInterface $moduleHandler;
+
+  /**
+   * Builds a new form instance.
+   *
+   * @param \Drupal\Core\Utility\Token $token
+   *   The token service.
+   * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
+   *   The module handler.
+   */
+  public function __construct(Token $token, ModuleHandlerInterface $module_handler) {
+    $this->token = $token;
+    $this->moduleHandler = $module_handler;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container): self {
+    return new static(
+      $container->get('token'),
+      $container->get('module_handler')
+    );
+  }
 
   /**
    * {@inheritdoc}
@@ -60,7 +100,7 @@ class SendAnnouncementsForm extends FormBase {
       '#value' => $this->t('Submit'),
     ];
 
-    if (\Drupal::moduleHandler()->moduleExists('token')) {
+    if ($this->moduleHandler->moduleExists('token')) {
       $form['tokens'] = [
         '#theme' => 'token_tree_link',
         '#token_types' => ['rdf_entity'],
@@ -76,12 +116,11 @@ class SendAnnouncementsForm extends FormBase {
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state): void {
-    $token_service = \Drupal::token();
     $token_data = ['rdf_entity' => $this->group];
     $message = Message::create(['template' => 'announcement']);
     $message->set('group_reference', $this->group->id());
-    $message->set('subject', $token_service->replacePlain($form_state->getValue('subject'), $token_data));
-    $message->set('body', $token_service->replacePlain($form_state->getValue('body'), $token_data));
+    $message->set('subject', $this->token->replacePlain($form_state->getValue('subject'), $token_data));
+    $message->set('body', $this->token->replacePlain($form_state->getValue('body'), $token_data));
     $message->set('recipients', $this->group->getMembers());
     $message->save();
   }
