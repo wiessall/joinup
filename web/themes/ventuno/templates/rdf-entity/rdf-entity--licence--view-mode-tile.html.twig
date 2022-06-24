@@ -1,0 +1,18 @@
+{#
+/**
+ * @file
+ * Themeing for rdf entities.
+ */
+#}
+{% set view_mode_featured = view_mode is same as 'view_mode_featured' %}
+{{ pattern('tile', {
+  attributes: attributes,
+  featured: view_mode_featured,
+  url: url,
+  title: label,
+  text: content.field_licence_description,
+  metadata: [{
+    label: 'licence',
+    icon: 'file-earmark-medical'
+  }],
+}) }}

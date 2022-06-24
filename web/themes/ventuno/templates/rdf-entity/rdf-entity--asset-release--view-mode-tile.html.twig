@@ -1,0 +1,25 @@
+{#
+/**
+ * @file
+ * Themeing for rdf entities.
+ */
+#}
+{% set view_mode_featured = view_mode is same as 'view_mode_featured' %}
+{% set text %}
+  <p class="mb-0">{{ 'Release number'|t }}: {{ content.field_isr_release_number }}</p>
+  <p class="mb-0">{{ 'Status'|t }}: {{ content.field_status }}</p>
+{% endset %}
+{{ pattern('tile', {
+  attributes: attributes,
+  featured: view_mode_featured,
+  url: url,
+  title: label,
+  text: text,
+  metadata: [{
+    label: date,
+    icon: 'calendar'
+  },{
+    label: 'asset release',
+    icon: 'file-earmark-zip'
+  }],
+}) }}

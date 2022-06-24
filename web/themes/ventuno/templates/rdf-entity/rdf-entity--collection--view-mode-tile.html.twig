@@ -1,0 +1,22 @@
+{#
+/**
+ * @file
+ * Themeing for rdf entities.
+ */
+#}
+{% set view_mode_featured = view_mode is same as 'view_mode_featured' %}
+{{ pattern('tile', {
+  attributes: attributes,
+  featured: view_mode_featured,
+  image: content.field_ar_logo,
+  url: url,
+  title: label,
+  text: view_mode_featured ? content.field_ar_abstract|render|striptags|raw : '',
+  metadata: [{
+    label: content.members,
+    icon: 'people'
+  },{
+    label: 'collection',
+    icon: 'folder2-open'
+  }],
+}) }}

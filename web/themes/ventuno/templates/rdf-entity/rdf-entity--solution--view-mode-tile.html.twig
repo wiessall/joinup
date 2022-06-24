@@ -1,0 +1,27 @@
+{#
+/**
+ * @file
+ * Themeing for rdf entities.
+ */
+#}
+{% set view_mode_featured = view_mode is same as 'view_mode_featured' %}
+{% set metadata = [] %}
+{% if show_download_counter %}
+  {% set metadata = metadata|merge([{
+    label: content.downloads,
+    icon: 'download'}])
+  %}
+{% endif %}
+{% set metadata = metadata|merge([{
+  label: 'solution',
+  icon: 'clipboard-check'}])
+%}
+{{ pattern('tile', {
+  attributes: attributes,
+  featured: view_mode_featured,
+  image: content.field_is_logo,
+  url: url,
+  title: label|render|striptags|raw,
+  text: '',
+  metadata: metadata,
+}) }}
