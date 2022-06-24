@@ -253,13 +253,15 @@ class JoinupCoreContext extends RawDrupalContext {
    * @Then I should see the following group menu items in the specified order:
    */
   public function assertRepeatedElementContainsText(TableNode $table): void {
-    $parent = $this->getSession()->getPage()->findAll('css', '.block-group-menu-blocknavigation li.sidebar-menu__item');
+    $navigation_menu_selector = $this->getRegionSelector('Navigation menu');
+    $parent = $this->getSession()->getPage()->findAll('css', "$navigation_menu_selector nav a");
+    $table_hash = $table->getHash();
+    Assert::assertSameSize($table_hash, $parent);
     $i = 0;
-    foreach ($table->getHash() as $repeatedElement) {
-      $child = $parent[$i];
-      $actual_text = $child->find('css', 'a.sidebar-menu__link')->getText();
-      Assert::assertEquals($repeatedElement['text'], $actual_text);
-      $i++;
+    foreach ($table_hash as $expected_element) {
+      $expected_text = $expected_element['text'];
+      $actual_text = $parent[$i++]->getText();
+      Assert::assertSame($expected_text, $actual_text);
     }
   }
 

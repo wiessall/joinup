@@ -7,10 +7,10 @@ namespace Drupal\collection\Form;
 use Drupal\Component\Datetime\TimeInterface;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
+use Drupal\Core\Ajax\AfterCommand;
 use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\CloseModalDialogCommand;
 use Drupal\Core\Ajax\OpenModalDialogCommand;
-use Drupal\Core\Ajax\PrependCommand;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormBuilderInterface;
@@ -254,9 +254,7 @@ class SubscribeToCollectionForm extends FormBase {
 
     // Output messages in the page.
     $messages = ['#type' => 'status_messages'];
-    // @todo Replace with a theme-agnostic selector in ISAICP-7109.
-    // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7109
-    $response->addCommand(new PrependCommand('.section--content-top', $messages));
+    $response->addCommand(new AfterCommand('*[data-drupal-messages-fallback]', $messages));
 
     if (!$form_state->getErrors()) {
       // Allow modules to alter or replace the Ajax command.

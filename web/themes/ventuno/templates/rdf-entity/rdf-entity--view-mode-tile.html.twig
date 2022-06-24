@@ -4,14 +4,16 @@
  * Themeing for rdf entities.
  */
 #}
-<article{{ attributes.addClass('tile') }}>
-    {{ title_prefix }}
-    {% if not page %}
-        <h2{{ title_attributes }}>
-            <a href="{{ url }}" rel="bookmark">{{ label }}</a>
-        </h2>
-    {% endif %}
-    {{ title_suffix }}
+<article{{ attributes.addClass('card-tile') }}>
+  {{ title_prefix }}
+  {% if not page %}
+      <h2{{ title_attributes }}>
+          <a href="{{ url }}" rel="bookmark">{{ label }}</a>
+      </h2>
+  {% endif %}
+  {{ title_suffix }}
 
-    {{ content }}
+  {{ content }}
+
+  <div data-drupal-card-stats class="card-stats"></div>
 </article>
