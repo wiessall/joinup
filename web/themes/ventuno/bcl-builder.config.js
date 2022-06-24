@@ -59,6 +59,14 @@ module.exports = {
       },
     },
     {
+      entry: path.resolve(outputFolder, "src/js/shared-entity.js"),
+      dest: path.resolve(outputFolder, "assets/js/shared-entity.js"),
+      options: {
+        minify: true,
+        sourceMap: true,
+      },
+    },
+    {
       entry: path.resolve(outputFolder, "src/js/show-accordion-invalid-fields.js"),
       dest: path.resolve(outputFolder, "assets/js/show-accordion-invalid-fields.js"),
       options: {
@@ -514,6 +522,7 @@ module.exports = {
         file: 'icons.svg',
         list: [
             'arrow-left.svg',
+            'arrow-repeat.svg',
             'arrow-right.svg',
             'award.svg',
             'card-list.svg',
