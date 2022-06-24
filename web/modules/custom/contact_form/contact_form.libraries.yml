@@ -4,3 +4,9 @@ remove-domain-from-url:
     js/remove-domain-from-url.js: {}
   dependencies:
     - core/drupalSettings
+
+empty-url:
+  js:
+    js/empty-url.js: { }
+    dependencies:
+      - core/drupal
