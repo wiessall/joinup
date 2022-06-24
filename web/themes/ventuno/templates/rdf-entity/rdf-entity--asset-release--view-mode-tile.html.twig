@@ -10,6 +10,7 @@
   <p class="mb-0">{{ 'Status'|t }}: {{ content.field_status }}</p>
 {% endset %}
 {{ pattern('tile', {
+  attributes: attributes,
   featured: view_mode_featured,
   url: url,
   title: label,
