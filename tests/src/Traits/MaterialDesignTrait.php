@@ -16,6 +16,17 @@ trait MaterialDesignTrait {
   use BrowserWindowTrait;
 
   /**
+   * Checks whether the current page is based on Material Design Lite library.
+   *
+   * @return bool
+   *   Whether the current page is based on Material Design Lite library.
+   */
+  protected function usesMaterialDesignLite(): bool {
+    $page_markup = $this->getSession()->getPage()->getContent();
+    return strpos($page_markup, 'material-design-lite') !== FALSE;
+  }
+
+  /**
    * Checks the materially designed checkbox with the given label.
    *
    * In Material Design regular checkboxes are hidden and replaces with fancy

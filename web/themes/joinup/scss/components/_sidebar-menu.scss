@@ -100,19 +100,6 @@
   }
 }
 
-.sidebar-menu__button--desktop {
-  display: none;
-  margin: 10px 0 10px 6px;
-
-  .icon {
-    color: $color-base;
-  }
-
-  @include breakpoint(desktop) {
-    display: block;
-  }
-}
-
 // Dependencies
 // --------------------------------------------------
 .section--sidebar-left {

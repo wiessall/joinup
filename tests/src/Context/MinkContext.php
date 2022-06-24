@@ -21,6 +21,11 @@ class MinkContext extends DrupalExtensionMinkContext {
    * {@inheritdoc}
    */
   public function checkOption($option) {
+    $this->scrollNamedElementIntoView('checkbox', $option);
+    if (!$this->usesMaterialDesignLite()) {
+      parent::checkOption($option);
+      return;
+    }
     // Overrides the default method for checking checkboxes to make it
     // compatible with material design.
     $option = $this->fixStepArgument($option);
@@ -37,6 +42,11 @@ class MinkContext extends DrupalExtensionMinkContext {
    * {@inheritdoc}
    */
   public function uncheckOption($option) {
+    $this->scrollNamedElementIntoView('checkbox', $option);
+    if (!$this->usesMaterialDesignLite()) {
+      parent::uncheckOption($option);
+      return;
+    }
     // Overrides the default method for unchecking checkboxes to make it
     // compatible with material design.
     $option = $this->fixStepArgument($option);
@@ -103,9 +113,9 @@ class MinkContext extends DrupalExtensionMinkContext {
   /**
    * {@inheritdoc}
    */
-  public function assertClick($link): void {
+  public function clickLink($link): void {
     // Overriding the base method for Javascript tests.
-    $this->scrollLinkOrButtonIntoView('link', $link);
+    $this->scrollNamedElementIntoView('link', $link);
     parent::clickLink($link);
   }
 
@@ -114,8 +124,32 @@ class MinkContext extends DrupalExtensionMinkContext {
    */
   public function pressButton($button): void {
     // Overriding the base method for Javascript tests.
-    $this->scrollLinkOrButtonIntoView('button', $button);
+    $this->scrollNamedElementIntoView('button', $button);
     parent::pressButton($button);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function assertLinkVisible($link): void {
+    $this->scrollNamedElementIntoView('link', $link);
+    parent::assertLinkVisible($link);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function fillField($field, $value): void {
+    $this->scrollNamedElementIntoView('field', $field);
+    parent::fillField($field, $value);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function attachFileToField($field, $path): void {
+    $this->scrollNamedElementIntoView('field', $field);
+    parent::attachFileToField($field, $path);
   }
 
 }
