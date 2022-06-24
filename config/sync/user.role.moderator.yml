@@ -150,6 +150,7 @@ permissions:
   - 'execute spain pipeline'
   - 'feature entity'
   - 'filter membership overview'
+  - 'manage group announcements'
   - 'manage newsroom newsletter subscriptions'
   - 'manage solutions'
   - 'moderate entity parents'
