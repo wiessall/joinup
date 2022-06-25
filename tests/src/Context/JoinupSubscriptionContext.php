@@ -164,6 +164,9 @@ class JoinupSubscriptionContext extends RawDrupalContext {
           'bundle' => $subscription_bundle,
         ];
       }
+      if (isset($values['announcements']) && $values['announcements'] === 'yes') {
+        $membership->set('announcements', TRUE);
+      }
       $membership->set('subscription_bundles', $subscriptions)->save();
     }
   }
@@ -401,6 +404,13 @@ class JoinupSubscriptionContext extends RawDrupalContext {
       $membership = $this->getMembershipByGroupAndUser($group, $account, OgMembershipInterface::ALL_STATES);
       $expected_bundle_ids = $this->explodeCommaSeparatedStepArgument(strtolower($expected_bundle_ids));
 
+      $announcements = FALSE;
+      if (in_array('announcements', $expected_bundle_ids)) {
+        unset($expected_bundle_ids[array_search('announcements', $expected_bundle_ids)]);
+        $announcements = TRUE;
+      }
+      Assert::assertEquals($announcements, $membership->get('announcements')->value);
+
       $actual_bundle_ids = array_map(function (array $item): string {
         return $item['bundle'];
       }, $membership->get('subscription_bundles')->getValue());
@@ -431,6 +441,7 @@ class JoinupSubscriptionContext extends RawDrupalContext {
     $group = self::getRdfEntityByLabel($label, $bundle);
     $membership = $this->getMembershipByGroupAndUser($group, $account, OgMembershipInterface::ALL_STATES);
     Assert::assertEmpty($membership->get('subscription_bundles')->getValue());
+    Assert::assertFalse($membership->get('announcements')->getValue());
   }
 
   /**
