@@ -143,6 +143,7 @@ function collection_rdf_entity_insert(EntityInterface $entity) {
     $membership = Og::createMembership($entity, $entity->getOwner());
     $membership->setRoles(array_values(OgRole::loadMultiple($roles)));
     $membership->set('subscription_bundles', $subscription_bundles);
+    $membership->set('announcements', TRUE);
     $membership->save();
   }
 }
