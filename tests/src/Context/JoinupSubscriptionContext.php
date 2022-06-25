@@ -357,22 +357,22 @@ class JoinupSubscriptionContext extends RawDrupalContext {
    * @Then the following content subscriptions should be selected:
    */
   public function assertSubscriptionOptionsInSubscriptions(TableNode $subscription_options): void {
-    foreach ($subscription_options->getRowsHash() as $group_label => $expected_bundle_ids) {
-      $expected_bundle_ids = $this->explodeCommaSeparatedStepArgument(strtolower($expected_bundle_ids));
+    foreach ($subscription_options->getRowsHash() as $group_label => $expected_options) {
+      $expected_options = $this->explodeCommaSeparatedStepArgument(strtolower($expected_options));
       $group = self::getRdfEntityByLabel($group_label);
       $subscription_bundles = JoinupSubscriptionsHelper::SUBSCRIPTION_BUNDLES[$group->bundle()];
       foreach ($subscription_bundles as $entity_type_id => $bundle_ids) {
         foreach ($bundle_ids as $bundle_id) {
           $key = implode('|', [$entity_type_id, $bundle_id]);
-          $locator = 'groups[' . $group->id() . '][bundles][' . $key . ']';
-          if (in_array($bundle_id, $expected_bundle_ids)) {
-            $this->assertSession()->checkboxChecked($locator);
-          }
-          else {
-            $this->assertSession()->checkboxNotChecked($locator);
-          }
+          $locator = 'groups[' . $group->id() . '][options][' . $key . ']';
+          in_array($bundle_id, $expected_options)
+            ? $this->assertSession()->checkboxChecked($locator)
+            : $this->assertSession()->checkboxNotChecked($locator);
         }
       }
+      in_array('announcements', $expected_options)
+        ? $this->assertSession()->checkboxChecked('groups[' . $group->id() . '][options][announcements]')
+        : $this->assertSession()->checkboxNotChecked('groups[' . $group->id() . '][options][announcements]');
     }
   }
 
