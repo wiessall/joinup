@@ -239,7 +239,7 @@ class SubscriptionsForm extends FormBase {
             'autocomplete' => 'off',
             // Store the initial state of the subscriptions so that we can
             // unlock the save button in JS whenever a state changes.
-            'data-drupal-subscriptions' => Json::encode(array_values($subscription_status) + ['announcements']),
+            'data-drupal-subscriptions' => Json::encode(array_values($subscription_status + ['announcements' => (bool) $membership->get('announcements')->value])),
           ],
         ];
       }
@@ -283,20 +283,20 @@ class SubscriptionsForm extends FormBase {
     unset($bundles_value['submit']);
     $subscribed_bundles = array_keys(array_filter($bundles_value));
 
-    $original_options = array_map(function (array $item): string {
+    $original_bundles = array_map(function (array $item): string {
       return $item['bundle'];
     }, $membership->get('subscription_bundles')->getValue());
-    $original_options = array_merge($original_options, [
-      $membership->get('announcements')->value,
-    ]);
+    $original_announcements = $membership->get('announcements')->value;
 
     $announcements = in_array('announcements', $subscribed_bundles);
-    $membership->set('announcements', $announcements !== FALSE);
+    $membership->set('announcements', $announcements);
+    unset($subscribed_bundles[array_search('announcements', $subscribed_bundles)]);
 
     sort($subscribed_bundles);
-    sort($original_options);
-    if ($subscribed_bundles !== $original_options) {
-
+    sort($original_bundles);
+    // Do not save the membership if the bundles or the announcements are not
+    // changed.
+    if ($subscribed_bundles !== $original_bundles || $announcements !== $original_announcements) {
       // Bundle subscriptions have changed, update the membership.
       $membership->set('subscription_bundles', array_map(function (string $key): array {
         return array_combine(['entity_type', 'bundle'], explode('|', $key));
@@ -360,6 +360,8 @@ class SubscriptionsForm extends FormBase {
         $subscription_status[$key] = $form['groups'][$submitted_group_id]['options'][$key]['#checked'];
       }
     }
+    // Add also the announcements.
+    $subscription_status['announcements'] = $form['groups'][$submitted_group_id]['options']['announcements']['#checked'];
     $form['groups'][$submitted_group_id]['options']['submit']['#attributes']['data-drupal-subscriptions'] = Json::encode(array_values($subscription_status));
 
     $user = $form_state->get('#user');
