@@ -441,7 +441,7 @@ class JoinupSubscriptionContext extends RawDrupalContext {
     $group = self::getRdfEntityByLabel($label, $bundle);
     $membership = $this->getMembershipByGroupAndUser($group, $account, OgMembershipInterface::ALL_STATES);
     Assert::assertEmpty($membership->get('subscription_bundles')->getValue());
-    Assert::assertFalse($membership->get('announcements')->getValue());
+    Assert::assertFalse((bool) $membership->get('announcements')->value);
   }
 
   /**
