@@ -130,6 +130,7 @@ Feature: My subscriptions
     Then the "Save changes" button on the "Alpha Centauri" subscription card should be disabled
 
     Given I check the "Discussion" checkbox of the "Alpha Centauri" subscription
+    Given I check the "Announcements" checkbox of the "Alpha Centauri" subscription
     When I press "Save changes" on the "Alpha Centauri" subscription card
     And I wait for AJAX to finish
     Then I should not see the "Save changes" button on the "Alpha Centauri" subscription card
@@ -143,18 +144,19 @@ Feature: My subscriptions
     And the "Save changes" button on the "Wolf 359" subscription card should be enabled
 
     And the following content subscriptions should be selected:
-      | Alpha Centauri | Discussion |
-      | Barnard's Star |            |
-      | Wolf 359       | Event      |
+      | Alpha Centauri | Discussion, Announcements |
+      | Barnard's Star |                           |
+      | Wolf 359       | Event                     |
 
     # The 'Event' subscription was checked but not saved, so we should not be subscribed to it.
     And I should have the following content subscriptions:
-      | Alpha Centauri | Discussion |
-      | Barnard's Star |            |
-      | Wolf 359       |            |
+      | Alpha Centauri | Discussion, Announcements |
+      | Barnard's Star |                           |
+      | Wolf 359       |                           |
 
     # Re-try a change on the same collection.
     Given I uncheck the "Discussion" checkbox of the "Alpha Centauri" subscription
+    Given I uncheck the "Announcements" checkbox of the "Alpha Centauri" subscription
     And the "Save changes" button on the "Alpha Centauri" subscription card should be enabled
     And the "Save changes" button on the "Barnard's Star" subscription card should be disabled
     And the "Save changes" button on the "Wolf 359" subscription card should be enabled
