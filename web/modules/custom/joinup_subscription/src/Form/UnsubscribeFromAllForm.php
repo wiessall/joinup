@@ -181,6 +181,7 @@ class UnsubscribeFromAllForm extends ConfirmFormBase {
       return;
     }
     $membership->set('subscription_bundles', []);
+    $membership->set('announcements', FALSE);
     $membership->save();
     $context['results']['labels'][$group->bundle()][] = $group->label();
     $context['results']['user'] = $membership->getOwner();
@@ -276,11 +277,16 @@ class UnsubscribeFromAllForm extends ConfirmFormBase {
    *   An array of membership IDs.
    */
   protected function getUserMembershipIds(UserInterface $user): array {
+    $condition_group = $this->entityTypeManager->getStorage('og_membership')->getQuery()->orConditionGroup();
+    $condition_group
+      ->exists('subscription_bundles')
+      ->condition('announcements', 1);
+
     return $this->entityTypeManager
       ->getStorage('og_membership')
       ->getQuery()
       ->condition('uid', $user->id())
-      ->exists('subscription_bundles')
+      ->condition($condition_group)
       ->execute();
   }
 
