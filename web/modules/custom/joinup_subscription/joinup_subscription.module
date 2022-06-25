@@ -44,6 +44,16 @@ function joinup_subscription_entity_base_field_info(EntityTypeInterface $entity_
       // By default, the new member gets subscribed to all community content of
       // the group.
       ->setDefaultValue([]);
+
+    $fields['announcements'] = BaseFieldDefinition::create('boolean')
+      ->setName('announcements')
+      ->setLabel(t('Announcements'))
+      ->setDescription(t('If checked, the user will receive group announcements by email.'))
+      ->setCardinality(1)
+      ->setRequired(FALSE)
+      // Set the default value to FALSE so that when a user joins a group and
+      // does not subscribe, they do not receive announcements.
+      ->setDefaultValue(FALSE);
   }
 
   return $fields;
