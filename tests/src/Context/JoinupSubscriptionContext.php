@@ -409,7 +409,7 @@ class JoinupSubscriptionContext extends RawDrupalContext {
         unset($expected_bundle_ids[array_search('announcements', $expected_bundle_ids)]);
         $announcements = TRUE;
       }
-      Assert::assertEquals($announcements, $membership->get('announcements')->value);
+      Assert::assertSame($announcements, (bool) $membership->get('announcements')->value);
 
       $actual_bundle_ids = array_map(function (array $item): string {
         return $item['bundle'];

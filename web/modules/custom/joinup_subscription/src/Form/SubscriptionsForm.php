@@ -281,6 +281,12 @@ class SubscriptionsForm extends FormBase {
     );
     // Ignore the submit button.
     unset($bundles_value['submit']);
+
+    // Get the announcements value early so that we can remove it as well from
+    // the bundles value.
+    $announcements = in_array('announcements', $bundles_value) && $bundles_value['announcements'] === TRUE;
+    $membership->set('announcements', $announcements);
+    unset($bundles_value['announcements']);
     $subscribed_bundles = array_keys(array_filter($bundles_value));
 
     $original_bundles = array_map(function (array $item): string {
@@ -288,19 +294,16 @@ class SubscriptionsForm extends FormBase {
     }, $membership->get('subscription_bundles')->getValue());
     $original_announcements = $membership->get('announcements')->value;
 
-    $announcements = in_array('announcements', $subscribed_bundles);
-    $membership->set('announcements', $announcements);
-    unset($subscribed_bundles[array_search('announcements', $subscribed_bundles)]);
-
     sort($subscribed_bundles);
     sort($original_bundles);
     // Do not save the membership if the bundles or the announcements are not
     // changed.
     if ($subscribed_bundles !== $original_bundles || $announcements !== $original_announcements) {
       // Bundle subscriptions have changed, update the membership.
-      $membership->set('subscription_bundles', array_map(function (string $key): array {
+      $value = array_map(function (string $key): array {
         return array_combine(['entity_type', 'bundle'], explode('|', $key));
-      }, $subscribed_bundles))->save();
+      }, $subscribed_bundles);
+      $membership->set('subscription_bundles', $value)->save();
     }
   }
 
