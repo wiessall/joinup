@@ -487,6 +487,7 @@ module.exports = {
             'check-circle-fill.svg',
             'chevron-bar-left.svg',
             'chevron-bar-right.svg',
+            'chevron-down.svg',
             'chevron-left.svg',
             'chevron-right.svg',
             'clipboard-check.svg',
