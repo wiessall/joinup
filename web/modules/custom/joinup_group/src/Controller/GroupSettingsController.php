@@ -2,13 +2,12 @@
 
 declare(strict_types = 1);
 
-namespace Drupal\collection\Controller;
+namespace Drupal\joinup_group\Controller;
 
 use Drupal\Component\Render\MarkupInterface;
 use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Url;
-use Drupal\collection\Entity\CollectionInterface;
 use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\meta_entity\Entity\MetaEntity;
 use Drupal\meta_entity\MetaEntityRepositoryInterface;
@@ -50,7 +49,7 @@ class GroupSettingsController extends ControllerBase {
   /**
    * {@inheritdoc}
    */
-  public static function create(ContainerInterface $container) {
+  public static function create(ContainerInterface $container): self {
     return new static(
       $container->get('meta_entity.repository'),
       $container->get('og.access')
@@ -60,53 +59,67 @@ class GroupSettingsController extends ControllerBase {
   /**
    * Provides a controller for the 'collection.settings_form' route title.
    *
-   * @param \Drupal\collection\Entity\CollectionInterface $rdf_entity
-   *   The collection.
+   * @param \Drupal\joinup_group\Entity\GroupInterface $rdf_entity
+   *   The group where to show settings.
    *
    * @return \Drupal\Component\Render\MarkupInterface
    *   The content as a render array.
    */
-  public function title(CollectionInterface $rdf_entity): MarkupInterface {
-    return $this->t('@collection collection settings', [
-      '@collection' => $rdf_entity->label(),
+  public function title(GroupInterface $rdf_entity): MarkupInterface {
+    return $this->t('@label @group settings', [
+      '@label' => $rdf_entity->label(),
+      '@group' => $rdf_entity->get('rid')->entity->getSingularLabel(),
     ]);
   }
 
   /**
-   * Provides a controller for the 'collection.settings_form' route.
+   * Provides a controller for the 'joinup_group.settings_form' route.
    *
-   * @param \Drupal\joinup_group\Entity\GroupInterface $group
+   * @param \Drupal\joinup_group\Entity\GroupInterface $rdf_entity
    *   The group where to show settings.
    *
    * @return array
    *   The content as a render array.
    */
-  public function settings(GroupInterface $group): array {
-    $meta_entity = MetaEntity::loadOrCreate($group, 'collection_settings');
+  public function settings(GroupInterface $rdf_entity): array {
+    $meta_entity = MetaEntity::loadOrCreate($this->getMetaEntityBundle($rdf_entity), $rdf_entity);
     $form_state_additions = [
       'redirect' => Url::fromRoute('entity.rdf_entity.canonical', [
-        'rdf_entity' => $group->id(),
+        'rdf_entity' => $rdf_entity->id(),
       ]),
     ];
     return $this->entityFormBuilder()->getForm($meta_entity, 'default', $form_state_additions);
   }
 
   /**
-   * Povides an access controller for the 'collection.settings_form' route.
+   * Provides an access controller for the 'joinup_group.settings_form' route.
    *
-   * @param \Drupal\collection\Entity\CollectionInterface $rdf_entity
-   *   The collection.
+   * @param \Drupal\joinup_group\Entity\GroupInterface $rdf_entity
+   *   The group where to show settings.
    *
    * @return \Drupal\Core\Access\AccessResultInterface
    *   The access result.
    */
-  public function access(CollectionInterface $rdf_entity): AccessResultInterface {
-    $meta_entity = $this->metaEntityRepository->getMetaEntityForEntity($rdf_entity, 'collection_settings');
+  public function access(GroupInterface $rdf_entity): AccessResultInterface {
+    $meta_entity = MetaEntity::loadOrCreate($this->getMetaEntityBundle($rdf_entity), $rdf_entity);
     $access_result = $meta_entity->access('update', NULL, TRUE);
     if ($access_result->isAllowed()) {
       return $access_result;
     }
-    return $access_result->orIf($this->ogAccess->userAccess($rdf_entity, 'update collection_settings meta-entity'));
+    return $access_result->orIf($this->ogAccess->userAccess($rdf_entity, 'update ' . $this->getMetaEntityBundle($rdf_entity) . ' meta-entity'));
+  }
+
+  /**
+   * Format a meta entity bundle ID.
+   *
+   * @param \Drupal\joinup_group\Entity\GroupInterface $rdf_entity
+   *   The group where to show settings.
+   *
+   * @return string
+   *   The meta entity bundle ID.
+   */
+  private function getMetaEntityBundle(GroupInterface $rdf_entity): string {
+    return "{$rdf_entity->bundle()}_settings";
   }
 
 }
