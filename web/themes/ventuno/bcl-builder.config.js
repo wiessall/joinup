@@ -172,6 +172,14 @@ module.exports = {
     },
     // Custom and hybrid (BCL + custom) components
     {
+      entry: path.resolve(outputFolder, "src/scss/abstract.scss"),
+      dest: path.resolve(outputFolder, "assets/css/abstract.css"),
+      options: {
+        includePaths,
+        sourceMap: "file",
+      },
+    },
+    {
       entry: path.resolve(outputFolder, "src/scss/add-content.scss"),
       dest: path.resolve(outputFolder, "assets/css/add-content.css"),
       options: {
@@ -472,6 +480,7 @@ module.exports = {
             'arrow-left.svg',
             'arrow-right.svg',
             'award.svg',
+            'card-list.svg',
             'calendar.svg',
             'calendar3.svg',
             'chat-left-text.svg',

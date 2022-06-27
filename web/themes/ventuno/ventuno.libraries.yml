@@ -66,6 +66,11 @@ tables:
       assets/css/tables.css: {}
 
 # Custom components
+abstract:
+  css:
+    theme:
+      assets/css/abstract.css: {}
+
 add-content:
   css:
     theme:
