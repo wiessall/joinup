@@ -63,17 +63,3 @@ solution.change_collection:
     parameters:
       rdf_entity:
         type: entity:rdf_entity
-
-solution.settings_form:
-  path: '/rdf_entity/{rdf_entity}/settings/edit'
-  defaults:
-    _controller: Drupal\solution\Controller\SolutionSettingsController::settings
-    _title_callback: Drupal\solution\Controller\SolutionSettingsController::title
-  requirements:
-    _custom_access: Drupal\solution\Controller\SolutionSettingsController::access
-  options:
-    parameters:
-      rdf_entity:
-        type: entity:rdf_entity
-        bundle:
-          - solution
