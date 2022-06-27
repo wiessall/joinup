@@ -130,15 +130,21 @@ Feature: My subscriptions
     Then the "Save changes" button on the "Alpha Centauri" subscription card should be disabled
 
     Given I check the "Discussion" checkbox of the "Alpha Centauri" subscription
-    Given I check the "Announcements" checkbox of the "Alpha Centauri" subscription
+    And I check the "Announcements" checkbox of the "Alpha Centauri" subscription
     When I press "Save changes" on the "Alpha Centauri" subscription card
     And I wait for AJAX to finish
     Then I should not see the "Save changes" button on the "Alpha Centauri" subscription card
     But I should see the "Saved!" button on the "Alpha Centauri" subscription card
+    And the "Saved!" button on the "Alpha Centauri" subscription card should be disabled
+    # Test that the announcements button enables and disables the save button accordingly.
+    When I uncheck the "Announcements" checkbox of the "Alpha Centauri" subscription
+    Then the "Save changes" button on the "Alpha Centauri" subscription card should be enabled
+    When I check the "Announcements" checkbox of the "Alpha Centauri" subscription
+    Then the "Save changes" button on the "Alpha Centauri" subscription card should be disabled
+
     # The button "Unsubscribe from all" is now visible.
     And I should see the link "Unsubscribe from all"
 
-    And the "Saved!" button on the "Alpha Centauri" subscription card should be disabled
     And the "Save changes" button on the "Barnard's Star" subscription card should be disabled
     # The button remains enabled as changes persist after AJAX save.
     And the "Save changes" button on the "Wolf 359" subscription card should be enabled
