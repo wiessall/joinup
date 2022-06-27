@@ -712,12 +712,11 @@ class JoinupSubscriptionContext extends RawDrupalContext {
   /**
    * Asserts if memberships with bundle subscriptions have announcements too.
    *
-   * @Given all memberships with at least one bundle subscription should be subscribed to announcements
+   * @Given all memberships have active announcements
    */
   public function assertAnnouncementsInMemberships(): void {
-    $expected = \Drupal::entityQuery('og_membership')->exists('subscription_bundles')->execute();
-    $actual = \Drupal::entityQuery('og_membership')->condition('announcements', '1')->execute();
-    Assert::assertEquals($expected, $actual);
+    $actual = \Drupal::entityQuery('og_membership')->condition('announcements', '0')->count()->execute();
+    Assert::assertSame(0, $actual);
   }
 
 }
