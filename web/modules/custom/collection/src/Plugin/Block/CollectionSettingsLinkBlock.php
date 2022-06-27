@@ -27,7 +27,7 @@ class CollectionSettingsLinkBlock extends BlockBase implements ContainerFactoryP
    *
    * @var \Drupal\og\OgContextInterface
    */
-  protected $ogContext;
+  protected OgContextInterface $ogContext;
 
   /**
    * Constructs a new plugin instance.
@@ -68,7 +68,7 @@ class CollectionSettingsLinkBlock extends BlockBase implements ContainerFactoryP
     $collection = $this->ogContext->getGroup();
     if ($collection && $collection instanceof CollectionInterface) {
       $cache_metadata->addCacheableDependency($collection);
-      $url = Url::fromRoute('collection.settings_form', [
+      $url = Url::fromRoute('joinup_group.settings_form', [
         'rdf_entity' => $collection->id(),
       ]);
       $build['link'] = [
