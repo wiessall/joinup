@@ -2,23 +2,21 @@
  * @file
  * Eif module behaviors.
  */
-
-(function ($, Drupal) {
+(function (Drupal) {
   Drupal.behaviors.Eif = {
-    attach: function (context, settings) {
-      // Get the select element.
-      const recommendationSelector = $(context)
-        .find('select[data-drupal-eif-recommendation-selector="true"]');
-      // Get the parent form.
-      const form = recommendationSelector.closest('form');
+    attach(context) {
+      const
+        // Get the select element.
+        recommendationSelector = context
+          .querySelector('select[data-drupal-eif-recommendation-selector="true"]'),
+        // Get the parent form.
+        form = recommendationSelector.closest('form');
       // Bind the event handler.
-      recommendationSelector
-        .once('eif-recommendations')
-        .change(function (event) {
-          if (recommendationSelector.val() !== '') {
-            form.submit();
-          }
+      recommendationSelector.addEventListener('change', () => {
+        if (recommendationSelector.value !== '') {
+          form.submit();
+        }
       });
     }
-  };
-})(jQuery, Drupal);
+  }
+}(Drupal));

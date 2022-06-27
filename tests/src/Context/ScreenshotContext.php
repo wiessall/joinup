@@ -4,8 +4,6 @@ declare(strict_types = 1);
 
 namespace Drupal\joinup\Context;
 
-use Aws\S3\S3Client;
-use Aws\S3\S3ClientInterface;
 use Behat\Behat\Context\Environment\InitializedContextEnvironment;
 use Behat\Behat\Hook\Scope\AfterStepScope;
 use Behat\Mink\Driver\Selenium2Driver;
@@ -30,49 +28,16 @@ class ScreenshotContext extends RawMinkContext {
   protected $localDir;
 
   /**
-   * Optional folder on an S3 bucket where screenshots will be uploaded to.
-   *
-   * @var string
-   */
-  protected $s3Dir;
-
-  /**
-   * Optional AWS region where the Amazon S3 bucket is located.
-   *
-   * @var string
-   */
-  protected $s3Region;
-
-  /**
-   * Optional name of the Amazon S3 bucket where screenshots will be uploaded.
-   *
-   * @var string
-   */
-  protected $s3Bucket;
-
-  /**
    * Constructs a new ScreenshotContext context.
    *
    * @param string|null $localDir
    *   Optional directory where the screenshots are saved. If omitted the
    *   screenshots will not be saved.
-   * @param string|null $s3Dir
-   *   Optional folder on an Amazon S3 bucket where screenshots will be uploaded
-   *   to. If omitted, the screenshots will not be uploaded to AWS S3.
-   * @param string|null $s3Region
-   *   Optional AWS region where the Amazon S3 bucket is located. If omitted,
-   *   the screenshots will not be uploaded to AWS S3.
-   * @param string|null $s3Bucket
-   *   Optional name of the Amazon S3 bucket where screenshots will be uploaded.
-   *   If omitted, the screenshots will not be uploaded to AWS S3.
    *
    * @see tests/behat.yml.dist
    */
-  public function __construct(?string $localDir = NULL, ?string $s3Dir = NULL, ?string $s3Region = NULL, ?string $s3Bucket = NULL) {
+  public function __construct(?string $localDir = NULL) {
     $this->localDir = $localDir;
-    $this->s3Dir = $s3Dir;
-    $this->s3Region = $s3Region;
-    $this->s3Bucket = $s3Bucket;
   }
 
   /**
@@ -174,6 +139,7 @@ class ScreenshotContext extends RawMinkContext {
     if ($this->getSession()->getDriver() instanceof Selenium2Driver) {
       try {
         $screenshot = $this->getSession()->getDriver()->getScreenshot();
+        print "\n";
         $this->storeScreenshot($screenshot, "{$file_name}.png", $message, $suite_name);
       }
       catch (DriverException $e) {
@@ -202,8 +168,6 @@ class ScreenshotContext extends RawMinkContext {
   protected function storeScreenshot(string $screenshot, string $file_name, string $message, ?string $suite_name = NULL): void {
     // Save the screenshot locally.
     $path = $this->save($screenshot, $file_name, $suite_name);
-    // Upload the screenshot to Amazon S3.
-    $this->upload($screenshot, $file_name);
     print strtr($message, ['@file_name' => $path ?: $file_name]);
   }
 
@@ -245,49 +209,6 @@ class ScreenshotContext extends RawMinkContext {
     file_put_contents($path, $screenshot);
 
     return $path;
-  }
-
-  /**
-   * Uploads the given screenshot to Amazon S3.
-   *
-   * @param string $screenshot
-   *   The screenshot data.
-   * @param string $file_name
-   *   The file name.
-   *
-   * @throws \Exception
-   *   Thrown if the destination folder doesn't exist and couldn't be created.
-   */
-  protected function upload(string $screenshot, string $file_name): void {
-    // Don't attempt to upload the screenshot if any of the required parameters
-    // are missing.
-    $required_parameters = ['s3Dir', 's3Region', 's3Bucket'];
-    foreach ($required_parameters as $required_parameter) {
-      if (empty($this->$required_parameter)) {
-        return;
-      }
-    }
-
-    $client = $this->getS3Client();
-    // Prepend the UNIX timestamp to the filename to add some degree of
-    // uniqueness to the filename, because S3 doesn't allow to overwrite
-    // existing files.
-    $file_name = (string) time() . '-' . $file_name;
-    $path = $this->s3Dir . '/' . $file_name;
-    $client->upload($this->s3Bucket, $path, $screenshot);
-  }
-
-  /**
-   * Returns an instance of the Amazon S3 client.
-   *
-   * @return \Aws\S3\S3ClientInterface
-   *   The client.
-   */
-  protected function getS3Client(): S3ClientInterface {
-    return new S3Client([
-      'version' => 'latest',
-      'region' => $this->s3Region,
-    ]);
   }
 
   /**

@@ -883,6 +883,7 @@ class JoinupContext extends RawDrupalContext {
       $element = $this->getSession()->getPage()->find('xpath', $xpath);
     }
 
+    $this->scrollNamedElementIntoView('button', $button, $element);
     $element->pressButton($button);
   }
 
@@ -2709,9 +2710,7 @@ class JoinupContext extends RawDrupalContext {
 
     /** @var \Behat\Mink\Element\NodeElement $last_button */
     $last_button = array_pop($buttons);
-    if ($id = $last_button->getAttribute('id')) {
-      $this->scrollElementIntoView("#$id");
-    }
+    $this->scrollElementIntoView($last_button);
     $last_button->press();
   }
 
