@@ -883,6 +883,7 @@ class JoinupContext extends RawDrupalContext {
       $element = $this->getSession()->getPage()->find('xpath', $xpath);
     }
 
+    $this->scrollNamedElementIntoView('button', $button, $element);
     $element->pressButton($button);
   }
 
