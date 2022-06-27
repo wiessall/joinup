@@ -45,7 +45,7 @@ class GroupSettingsController extends ControllerBase {
   }
 
   /**
-   * Provides a controller for the 'collection.settings_form' route title.
+   * Provides a controller for the 'joinup_group.settings_form' route title.
    *
    * @param \Drupal\joinup_group\Entity\GroupInterface $rdf_entity
    *   The group where to show settings.
