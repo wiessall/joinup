@@ -10,7 +10,6 @@ use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Url;
 use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\meta_entity\Entity\MetaEntity;
-use Drupal\meta_entity\MetaEntityRepositoryInterface;
 use Drupal\og\OgAccessInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -18,13 +17,6 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * Controller class for collection/solution settings.
  */
 class GroupSettingsController extends ControllerBase {
-
-  /**
-   * The meta entity repository service.
-   *
-   * @var \Drupal\meta_entity\MetaEntityRepositoryInterface
-   */
-  protected MetaEntityRepositoryInterface $metaEntityRepository;
 
   /**
    * The OG access service.
@@ -36,13 +28,10 @@ class GroupSettingsController extends ControllerBase {
   /**
    * Constructs a new controller instance.
    *
-   * @param \Drupal\meta_entity\MetaEntityRepositoryInterface $meta_entity_repository
-   *   The meta entity repository service.
    * @param \Drupal\og\OgAccessInterface $og_access
    *   The OG access service.
    */
-  public function __construct(MetaEntityRepositoryInterface $meta_entity_repository, OgAccessInterface $og_access) {
-    $this->metaEntityRepository = $meta_entity_repository;
+  public function __construct(OgAccessInterface $og_access) {
     $this->ogAccess = $og_access;
   }
 
@@ -51,7 +40,6 @@ class GroupSettingsController extends ControllerBase {
    */
   public static function create(ContainerInterface $container): self {
     return new static(
-      $container->get('meta_entity.repository'),
       $container->get('og.access')
     );
   }
@@ -66,9 +54,9 @@ class GroupSettingsController extends ControllerBase {
    *   The content as a render array.
    */
   public function title(GroupInterface $rdf_entity): MarkupInterface {
-    return $this->t('@label @group settings', [
+    return $this->t('@label @type settings', [
       '@label' => $rdf_entity->label(),
-      '@group' => $rdf_entity->get('rid')->entity->getSingularLabel(),
+      '@type' => $rdf_entity->get('rid')->entity->getSingularLabel(),
     ]);
   }
 
