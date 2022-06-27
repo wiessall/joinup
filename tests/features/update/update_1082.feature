@@ -1,4 +1,4 @@
-@api
+@group-clone @api
 Feature: Tests deploy hooks for the 1.82 release.
 
   Scenario: Test deploy hook 108203.
