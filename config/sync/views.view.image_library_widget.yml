@@ -2,7 +2,11 @@ uuid: 3fb73334-1a2a-47c7-beb0-58cd8ef1f702
 langcode: en
 status: true
 dependencies:
+  config:
+    - field.storage.media.image_library_widget_image
+    - image.style.thumbnail
   module:
+    - image
     - media
     - user
 _core:
@@ -77,6 +81,8 @@ display:
           settings:
             image_link: ''
             image_style: ''
+            image_loading:
+              attribute: lazy
           group_column: ''
           group_columns: {  }
           group_rows: true
@@ -141,6 +147,8 @@ display:
           settings:
             image_link: ''
             image_style: thumbnail
+            image_loading:
+              attribute: lazy
           group_column: ''
           group_columns: {  }
           group_rows: true

@@ -19,12 +19,12 @@ dependencies:
     - field.field.node.event.field_location
     - field.field.node.event.field_organisation
     - field.field.node.event.field_organisation_type
-    - field.field.node.event.field_topic
     - field.field.node.event.field_scope
     - field.field.node.event.field_shared_in
     - field.field.node.event.field_short_title
     - field.field.node.event.field_site_featured
     - field.field.node.event.field_state
+    - field.field.node.event.field_topic
     - field.field.node.event.og_audience
     - image.style.horizontal_medium_image
     - node.type.event
@@ -77,6 +77,8 @@ content:
     settings:
       image_link: content
       image_style: horizontal_medium_image
+      image_loading:
+        attribute: lazy
     third_party_settings: {  }
     weight: 1
     region: content
