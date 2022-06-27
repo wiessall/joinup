@@ -139,6 +139,7 @@ module:
   metatag_views: 0
   moderation: 0
   monolog: 0
+  mysql: 0
   nio: 0
   node: 0
   oe_bootstrap_theme_helper: 0
