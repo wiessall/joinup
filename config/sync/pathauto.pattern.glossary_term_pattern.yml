@@ -10,7 +10,7 @@ type: 'canonical_entities:node'
 pattern: '[node:og_audience:entity:url:path]/glossary/term/[node:title]'
 selection_criteria:
   abbe74da-97dd-4ff3-98a1-0fe633b618a2:
-    id: node_type
+    id: 'entity_bundle:node'
     negate: false
     uuid: abbe74da-97dd-4ff3-98a1-0fe633b618a2
     context_mapping:
