@@ -27,7 +27,7 @@ class JoinupEcVideo extends ProviderPluginBase {
   /**
    * {@inheritdoc}
    */
-  public function renderEmbedCode($width, $height, $autoplay) {
+  public function renderEmbedCode($width, $height, $autoplay): array {
     $iframe = [
       '#type' => 'video_embed_iframe',
       '#provider' => 'joinup_ec_video',
@@ -62,11 +62,6 @@ class JoinupEcVideo extends ProviderPluginBase {
         /** @var \Psr\Http\Message\UriInterface $uri */
         \Drupal::httpClient()->get($input, [
           'on_stats' => function (TransferStats $stats) use (&$uri) {
-            // @todo Allow coding standards checks on the following line once
-            //   the Coder module correctly recognizes that the $uri variable is
-            //   used.
-            // @see https://www.drupal.org/project/coder/issues/3065679
-            // @codingStandardsIgnoreLine
             $uri = $stats->getEffectiveUri();
           },
         ]);
@@ -107,7 +102,7 @@ class JoinupEcVideo extends ProviderPluginBase {
    * @return string
    *   The language preference if one exists or 'en' if one could not be found.
    */
-  protected function getLanguagePreference() {
+  protected function getLanguagePreference(): string {
     preg_match('#[&?](?:videolang|lg)=(?<language>[a-z\-]+)#i', $this->getInput(), $matches);
     return $matches['language'] ?? 'en';
   }
@@ -115,7 +110,7 @@ class JoinupEcVideo extends ProviderPluginBase {
   /**
    * {@inheritdoc}
    */
-  public function getRemoteThumbnailUrl() {
+  public function getRemoteThumbnailUrl(): string {
     return '';
   }
 
