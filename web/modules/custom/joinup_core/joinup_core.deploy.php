@@ -36,16 +36,8 @@ function joinup_core_deploy_108202(): void {
  * Set the default value for the "Announcements" field for og_membership.
  */
 function joinup_core_deploy_108203(): void {
-  $ids = \Drupal::entityQuery('og_membership')
-    ->exists('subscription_bundles')
-    ->execute();
-
   $database = \Drupal::database();
-  while ($ids) {
-    $batch_ids = array_splice($ids, 0, 100);
-    $database->update('og_membership')
-      ->fields(['announcements' => TRUE])
-      ->condition('id', $batch_ids, 'IN')
-      ->execute();
-  }
+  $database->update('og_membership')
+    ->fields(['announcements' => TRUE])
+    ->execute();
 }
