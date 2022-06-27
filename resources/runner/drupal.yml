@@ -208,7 +208,7 @@ drupal:
         $settings['config_sync_directory'] = '../config/sync';
         $settings['config_readonly'] = !file_exists(getcwd() . '/../disable-config-readonly');
       Testing configuration alters: |
-        // The video from the home page interracts with Selenium tests.
+        // The video from the home page interacts with Selenium tests.
         $config['page_manager.page_variant.homepage-layout_builder-1']['variant_settings']['sections'][0]['components']['6ab0ceea-4541-4153-8b64-227e02369d30']['configuration']['text'] = 'Some joinup video';
         // Almost all tests should run without the cookie consent widget.
         $oe_webtools_cck_enabled = !file_exists(getcwd() . '/../disable-cookie-consent');
@@ -227,7 +227,7 @@ drupal:
           'password' => getenv('DRUPAL_DATABASE_PASSWORD'),
           'host' => getenv('DRUPAL_DATABASE_HOST'),
           'port' => getenv('DRUPAL_DATABASE_PORT'),
-          'namespace' => 'Drupal\\Core\\Database\\Driver\\mysql',
+          'namespace' => 'Drupal\\mysql\\Driver\\Database\\mysql',
           'driver' => 'mysql',
         ];
         $databases['sparql_default']['default'] = [
