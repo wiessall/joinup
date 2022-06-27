@@ -1,0 +1,43 @@
+<?php
+
+/**
+ * @file
+ * Provides functionality for the Dashboard module.
+ */
+
+declare(strict_types = 1);
+
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Url;
+
+/**
+ * Implements hook_form_alter().
+ *
+ * Change the EntitySubqueueForm::save() because when they
+ * save a content listing they go to access denied page
+ * instead of Curated content listings page.
+ */
+function dashboard_form_alter(array &$form, FormStateInterface $form_state, string $form_id): void {
+  $ids = [
+    'entity_subqueue_highlighted_event_edit_form',
+    'entity_subqueue_highlighted_content_edit_form',
+    'entity_subqueue_spotlight_edit_form',
+  ];
+  if (!in_array($form_id, $ids)) {
+    return;
+  }
+  $form['actions']['submit']['#submit'][] = 'redirect_curated_content_listing';
+}
+
+/**
+ * Redirect users to the Curated content listings after saving a content list.
+ *
+ * @param array $form
+ *   The form array.
+ * @param \Drupal\Core\Form\FormStateInterface $form_state
+ *   The form state.
+ */
+function redirect_curated_content_listing(array &$form, FormStateInterface &$form_state): void {
+  $url = Url::fromRoute('view.curated_content_listings.page');
+  $form_state->setRedirectUrl($url);
+}
