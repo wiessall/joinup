@@ -104,13 +104,12 @@ class UniqueSpdxReferenceTest extends JoinupKernelTestBase {
    * {@inheritdoc}
    */
   public function tearDown(): void {
-    parent::tearDown();
-
     if (!empty($this->entities)) {
       foreach ($this->entities as $entity) {
         $entity->delete();
       }
     }
+    parent::tearDown();
   }
 
 }
