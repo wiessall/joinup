@@ -4,11 +4,6 @@ Feature: Log in through EU Login
   As a user with an existing EU Login account
   I need to be able to register and log in to Joinup using EU Login
 
-  Scenario: User password reset route has been removed.
-    Given I am an anonymous user
-    When I go to "/user/password"
-    Then the response status code should be 404
-
   Scenario: A local account is auto-registered on user choice.
     Given CAS users:
       | Username    | E-mail                         | Password  | First name | Last name |

@@ -31,9 +31,6 @@ class JoinupEuLoginRouteSubscriber extends RouteSubscriberBase {
     }
 
     // Password reset should not be available anymore.
-    $collection->remove('user.pass');
-    $collection->remove('user.pass.http');
-
     if ($route = $collection->get('user.login')) {
       $route->setRequirements(['_access' => 'FALSE']);
     }
