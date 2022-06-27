@@ -1,0 +1,19 @@
+.abstract {
+  div,
+  p {
+    display: inline;
+  }
+  .read-more {
+    margin-left: $spacer;
+    &::after {
+      margin: 0 0 0 $spacer * .25;
+      @include get-bootstrap-icon('arrow-right', $link-color);
+    }
+    &:hover {
+      &::after {
+        margin: 0 0 0 $spacer * .25;
+        @include get-bootstrap-icon('arrow-right', $link-hover-color);
+      }
+    }
+  }
+}
