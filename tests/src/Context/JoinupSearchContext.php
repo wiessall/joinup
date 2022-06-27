@@ -394,7 +394,7 @@ class JoinupSearchContext extends RawDrupalContext {
     foreach ($node_elements as $node_element) {
       if ($node_element->getText() === $option) {
         $facet_id = $facet->getAttribute('data-drupal-facet-id');
-        $this->scrollElementIntoView('[data-drupal-facet-id="' . $facet_id . '"]');
+        $this->scrollCssSelectedElementIntoView('[data-drupal-facet-id="' . $facet_id . '"]');
         $node_element->click();
         return;
       }
