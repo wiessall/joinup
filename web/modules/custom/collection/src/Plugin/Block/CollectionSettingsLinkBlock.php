@@ -63,7 +63,11 @@ class CollectionSettingsLinkBlock extends BlockBase implements ContainerFactoryP
    */
   public function build(): array {
     $build = [];
-    $cache_metadata = (new CacheableMetadata())->addCacheContexts(['route']);
+    $cache_metadata = (new CacheableMetadata())->addCacheContexts([
+      'route',
+      'user.roles',
+      'og_role',
+    ]);
 
     $collection = $this->ogContext->getGroup();
     if ($collection && $collection instanceof CollectionInterface) {
