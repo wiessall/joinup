@@ -63,11 +63,73 @@ Feature: Collections/Solutions settings
     And I press "Add owner"
     And I press "Propose"
     Then I should see the heading "Solution Beta"
-    And I should not see the link "Settings" in the "Entity actions" region
+    And I should see the link "Settings" in the "Entity actions" region
+    And I click "Settings" in the "Entity actions" region
+    But I should not see the text "Announcements enabled"
 
     When I am logged in as a moderator
     And I go to the homepage of the "Solution Beta" solution
     And I should see the link "Settings" in the "Entity actions" region
     And I click "Settings" in the "Entity actions" region
     Then I should see the heading "Solution Beta solution settings"
+    And the "Announcements enabled" checkbox should be checked
+
+
+  Scenario: Testing group settings permissions
+    Given the following collection:
+      | title | Rally fanatics |
+      | logo  | logo.png       |
+      | state | validated      |
+    And the following solution:
+      | title      | Klop mirubes   |
+      | state      | validated      |
+      | collection | Rally fanatics |
+    And users:
+      | Username         | E-mail                     | First name  | Family name |
+      | Ferners Lee      | ferners-lee@example.com    | Ferners     | Lee         |
+      | Plot user        | plot.user@example.com      | Plot        | user        |
+      | Lope Facilitator | lopfacilitator@example.com | Lope        | Facilitator |
+    And the following collection user memberships:
+      | collection     | user             | roles       |
+      | Rally fanatics | Lope Facilitator | facilitator |
+      | Rally fanatics | Plot user        | owner       |
+    And the following solution user memberships:
+      | solution     | user             | roles       |
+      | Klop mirubes | Lope Facilitator | owner       |
+      | Klop mirubes | Plot user        | facilitator |
+
+    Given I am logged in as "Ferners Lee"
+    When I go to the "Rally fanatics" collection
+    And I should not see the link "Settings" in the "Entity actions" region
+    Then I go to the homepage of the "Klop mirubes" solution
+    And I should not see the link "Settings" in the "Entity actions" region
+
+    Given I am logged in as "Plot user"
+    When I go to the "Rally fanatics" collection
+    And I should see the link "Settings" in the "Entity actions" region
+    And I should see the link "Settings" in the "Entity actions" region
+    And I click "Settings" in the "Entity actions" region
+    But I should not see the text "Announcements enabled"
+    Then I go to the homepage of the "Klop mirubes" solution
+    And I should not see the link "Settings" in the "Entity actions" region
+
+    Given I am logged in as "Lope Facilitator"
+    When I go to the "Rally fanatics" collection
+    And I should see the link "Settings" in the "Entity actions" region
+    And I should see the link "Settings" in the "Entity actions" region
+    And I click "Settings" in the "Entity actions" region
+    But I should not see the text "Announcements enabled"
+    Then I go to the homepage of the "Klop mirubes" solution
+    And I should not see the link "Settings" in the "Entity actions" region
+
+    Given I am logged in as a moderator
+    When I go to the "Rally fanatics" collection
+    And I should see the link "Settings" in the "Entity actions" region
+    And I should see the link "Settings" in the "Entity actions" region
+    And I click "Settings" in the "Entity actions" region
+    And the "Announcements enabled" checkbox should be checked
+    Then I go to the homepage of the "Klop mirubes" solution
+    And I should see the link "Settings" in the "Entity actions" region
+    And I should see the link "Settings" in the "Entity actions" region
+    And I click "Settings" in the "Entity actions" region
     And the "Announcements enabled" checkbox should be checked
