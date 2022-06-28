@@ -13,9 +13,11 @@
  */
 #}
 {% if items  %}
-<div class="my-5 d-flex justify-content-center flex-wrap">
+<div class="my-4 row row-cols-{{ items.length }} g-2 justify-content-center">
   {%- for item in items -%}
-    {{ item }}
+    <div class="col">
+      {{ item }}
+    </div>
   {%- endfor -%}
 </div>
 {%- endif %}
