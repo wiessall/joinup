@@ -281,6 +281,7 @@ trait TraversingTrait {
       //   theme and can be removed once we migrated to the new theme.
       $title_selector = implode(', ', [
         '.card-title',
+        '.card-title > h1 a',
         'h2 a',
         // @todo Legacy selectors to be removed in ISAICP-7138.
         // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7138
