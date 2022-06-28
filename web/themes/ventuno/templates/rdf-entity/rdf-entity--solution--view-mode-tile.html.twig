@@ -8,7 +8,7 @@
 {% set metadata = [] %}
 {% if show_download_counter %}
   {% set metadata = metadata|merge([{
-    label: content.downloads,
+    label: 'Downloads: @counter' |t({'@counter': content.downloads|render|striptags}),
     icon: 'download'}])
   %}
 {% endif %}
