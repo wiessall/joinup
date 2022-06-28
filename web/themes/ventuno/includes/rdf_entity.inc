@@ -55,3 +55,23 @@ function ventuno_preprocess_rdf_entity__solution__group_header(array &$variables
     ];
   }
 }
+
+/**
+ * Implements hook_preprocess_HOOK() for rdf-entity--solution--view-mode-tile.html.twig.
+ *
+ * - Add a flag that indicates whether to show the download counter.
+ */
+function ventuno_preprocess_rdf_entity__solution__view_mode_tile(&$variables) {
+  // Add a flag to indicate if the download counter is visible.
+  if (isset($variables['elements']['downloads']['count']['#access'])) {
+    $variables['show_download_counter'] = $variables['elements']['downloads']['count']['#access'];
+  }
+
+  $rdf_entity = $variables['rdf_entity'];
+  if (!$rdf_entity->get('collection')->isEmpty()) {
+    /** @var \Drupal\rdf_entity\RdfInterface|null $parent */
+    $parent = $rdf_entity->get('collection')->first()->entity;
+    $variables['attributes']['data-drupal-parent-id'] = $parent->id();
+    $variables['attributes']['data-drupal-parent-label'] = $parent->label();
+  }
+}
