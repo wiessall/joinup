@@ -29,10 +29,12 @@
   {% set icon = 'file-earmark-medical' %}
 {% elseif type is same as 'asset_release' %}
   {% set icon = 'file-earmark-zip' %}
+{% elseif type is same as 'asset_distribution' %}
+  {% set icon = 'file-earmark-post' %}
 {% elseif type is same as 'solution' %}
   {% set icon = 'clipboard-check' %}
 {% endif %}
-<div class="d-flex flex-column mx-4 text-center">
+<div class="d-flex flex-column mx-4 my-2 text-center">
   <svg class="bi icon--xl m-auto">
     <use xlink:href="{{ bcl_icon_path }}#{{ icon }}"></use>
   </svg>
