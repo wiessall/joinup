@@ -50,7 +50,7 @@ function ventuno_preprocess_rdf_entity__solution__group_header(array &$variables
       'class' => [
         'btn',
         'btn-outline-secondary',
-        'ms-3',
+        'ms-sm-3',
       ],
     ];
   }
