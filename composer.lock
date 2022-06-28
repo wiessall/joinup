@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "9a1a3f57e6f900b60117e94e324b44df",
+    "content-hash": "a0d2e154cb9e27c7fbb2377c123f98aa",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -3066,27 +3066,27 @@
         },
         {
             "name": "drupal/entity_legal",
-            "version": "3.0.0-beta3",
+            "version": "3.0.0-beta4",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/entity_legal.git",
-                "reference": "3.0.0-beta3"
+                "reference": "3.0.0-beta4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/entity_legal-3.0.0-beta3.zip",
-                "reference": "3.0.0-beta3",
-                "shasum": "9df7702a62f69666d496de68c8464c062560461b"
+                "url": "https://ftp.drupal.org/files/projects/entity_legal-3.0.0-beta4.zip",
+                "reference": "3.0.0-beta4",
+                "shasum": "f66165d80dc3229505a8b1898fe78b1ea579ecc9"
             },
             "require": {
-                "drupal/core": "^8 || ^9",
-                "drupal/token": "*"
+                "drupal/core": "^9 || ^10",
+                "drupal/token": "^1.1"
             },
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "3.0.0-beta3",
-                    "datestamp": "1639745474",
+                    "version": "3.0.0-beta4",
+                    "datestamp": "1656431182",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Beta releases are not covered by Drupal security advisories."
@@ -3095,7 +3095,7 @@
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
             "license": [
-                "GPL-2.0-or-later"
+                "GPL-2.0+"
             ],
             "authors": [
                 {
@@ -3135,10 +3135,15 @@
                     "homepage": "https://www.drupal.org/user/3202261"
                 }
             ],
-            "description": "Create versionable, trackable legal forms for site users.",
+            "description": "Create versionable, trackable legal forms for site users",
             "homepage": "https://www.drupal.org/project/entity_legal",
+            "keywords": [
+                "Drupal",
+                "legal"
+            ],
             "support": {
-                "source": "https://git.drupalcode.org/project/entity_legal"
+                "source": "https://git.drupalcode.org/project/entity_legal",
+                "issues": "https://www.drupal.org/project/issues/entity_legal"
             }
         },
         {
@@ -23264,7 +23269,8 @@
         "ext-dom": "*",
         "ext-json": "*",
         "ext-pdo": "*",
-        "ext-redis": "*"
+        "ext-redis": "*",
+        "ext-simplexml": "*"
     },
     "platform-dev": {
         "ext-fileinfo": "*",
