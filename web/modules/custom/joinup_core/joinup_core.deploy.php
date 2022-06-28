@@ -37,7 +37,14 @@ function joinup_core_deploy_108202(): void {
  */
 function joinup_core_deploy_108203(): void {
   $database = \Drupal::database();
-  $database->update('og_membership')
-    ->fields(['announcements' => TRUE])
-    ->execute();
+
+  // Only enable the announcements to users that have accepted the terms of use.
+  $query = <<<SQL
+UPDATE {og_membership} og
+SET og.announcements = 1
+WHERE og.state = 'active'
+    AND og.uid IN (SELECT DISTINCT(a.uid) FROM {entity_legal_document_acceptance} a)
+SQL;
+
+  $database->query($query)->execute();
 }

@@ -712,11 +712,18 @@ class JoinupSubscriptionContext extends RawDrupalContext {
   /**
    * Asserts if memberships with bundle subscriptions have announcements too.
    *
-   * @Given all memberships have active announcements
+   * @Given all active memberships with accepted terms have active announcements
    */
   public function assertAnnouncementsInMemberships(): void {
-    $actual = \Drupal::entityQuery('og_membership')->condition('announcements', '0')->count()->execute();
-    Assert::assertSame(0, $actual);
+    $query = <<<SQL
+SELECT COUNT(*) FROM {og_membership} og
+WHERE og.announcements = 0
+    AND og.state = 'active'
+    AND og.uid IN (SELECT DISTINCT(a.uid) FROM {entity_legal_document_acceptance} a)
+SQL;
+
+    $actual =\Drupal::database()->query($query)->fetchCol()[0];
+    Assert::assertSame('0', $actual);
   }
 
 }
