@@ -49,7 +49,7 @@ Feature:
     # check that no stale cached content is being shown.
     When I go to the homepage of the "Vintage Art" collection
     And I click "HOWTOs" in the "Navigation menu" region
-    Then I should see the heading "Vintage Art"
+    Then I should see the link "Vintage Art"
 
     # Start the actual test scenario as a moderator.
     When I go to the homepage of the "Vintage Art" collection
