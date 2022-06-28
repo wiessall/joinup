@@ -77,14 +77,14 @@
           </div>
         {% endif %}
       </div>
-      <div data-drupal-card-stats class="card-footer border-0 bg-transparent fs-sm text-muted d-flex align-items-center justify-content-end">
+      <div data-drupal-card-stats class="card-footer border-0 bg-transparent fs-xs text-muted d-flex align-items-center justify-content-end">
         {% for data in metadata %}
-          <span{% if not loop.first %} class="ms-3"{% endif %}>
+          <span class="d-flex align-items-center{% if not loop.first %} ms-3{% endif %}">
             {% if data.label is defined and data.label is not empty %}
               {{ data.label }}
             {% endif %}
             {% if data.icon is defined and data.icon is not empty %}
-              <svg class="bi icon--xs">
+              <svg class="bi icon--fluid ms-1">
                 <use xlink:href="{{ bcl_icon_path }}#{{ data.icon }}"></use>
               </svg>
             {% endif %}
