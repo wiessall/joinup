@@ -162,9 +162,7 @@ class TrackedHostedFileDownloadFormatter extends FileFormatterBase implements Co
         if ($this->getSetting('show_remote_files')) {
           $elements[$delta] = [
             '#type' => 'link',
-            '#title' => [
-              '#markup' => '<span class="icon icon--external"></span>' . $this->getSetting('remote_files_title'),
-            ],
+            '#title' => $this->getSetting('remote_files_title'),
             '#attributes' => [
               'class' => ['button--icon button button--blue-light mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent'],
             ],
@@ -175,13 +173,11 @@ class TrackedHostedFileDownloadFormatter extends FileFormatterBase implements Co
       else {
         $elements[$delta] = [
           '#type' => 'link',
-          '#title' => [
-            '#markup' => '<span class="icon icon--download"></span>' . $this->getSetting('hosted_files_title'),
-          ],
+          '#title' => $this->getSetting('hosted_files_title'),
           '#url' => Url::fromUri($this->fileUrlGenerator->generateAbsoluteString($file->getFileUri())),
           '#attributes' => [
             'id' => Html::getUniqueId('tracked-file-download'),
-            'class' => ['track-download button--icon button button--blue-light mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent'],
+            'class' => ['track-download btn btn-outline-primary'],
             'data-tracking' => Url::fromRoute('asset_distribution.track_download', [
               'file' => $file->id(),
             ])->toString(),
