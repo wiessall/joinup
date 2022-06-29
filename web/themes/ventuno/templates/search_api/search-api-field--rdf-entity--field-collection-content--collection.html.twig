@@ -41,7 +41,7 @@
       {% endset %}
       {{ pattern('tile', {
         attributes: attributes,
-        featured: true,
+        featured: view_mode_featured,
         title: 'Newsletter'|t,
         text: text,
       }) }}
