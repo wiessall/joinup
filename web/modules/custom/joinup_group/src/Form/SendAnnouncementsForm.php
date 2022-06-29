@@ -123,6 +123,7 @@ class SendAnnouncementsForm extends FormBase {
     $message->set('body', $this->token->replacePlain($form_state->getValue('body'), $token_data));
     $message->set('recipients', $this->group->getMembers());
     $message->save();
+    $this->messenger()->addStatus($this->t('Your announcement has been submitted for validation.'));
   }
 
 }

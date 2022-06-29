@@ -152,3 +152,4 @@ joinup_group.send_announcements:
         bundle:
           - collection
           - solution
+    _og_entity_type_id: rdf_entity
