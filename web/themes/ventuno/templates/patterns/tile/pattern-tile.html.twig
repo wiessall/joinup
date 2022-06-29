@@ -61,9 +61,13 @@
       <div class="card-body">
         {{ _title_prefix }}
         <h1 class="card-title fs-6">
-          <a class="text-primary" href="{{ _url }}">
-            {{ _title }}
-          </a>
+          {% if _url is not empty %}
+            <a class="text-primary" href="{{ _url }}">
+              {{ _title|render|striptags }}
+            </a>
+          {% else %}
+            {{ _title|render|striptags }}
+          {% endif %}
         </h1>
         {{ _title_suffix }}
         {% if _text is not empty %}
