@@ -856,7 +856,10 @@ function joinup_group_entity_field_access(string $operation, FieldDefinitionInte
     $operation === 'edit'
     && $field_definition->getName() === 'announcements_enabled'
     && $field_definition->getTargetEntityTypeId() === 'meta_entity'
-    && $items->getEntity() instanceof GroupInterface
+    && in_array($field_definition->getTargetBundle(), [
+      'collection_settings',
+      'solution_settings',
+    ], TRUE)
     && !$account->hasPermission('manage group announcements')
   );
 }
