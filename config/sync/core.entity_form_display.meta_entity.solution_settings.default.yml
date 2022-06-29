@@ -17,7 +17,7 @@ content:
     region: content
     settings:
       display_label: true
-    third_party_settings: { }
+    third_party_settings: {  }
 hidden:
   field_ss_related_solutions: true
   label: true
