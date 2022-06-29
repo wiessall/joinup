@@ -1,12 +1,7 @@
 services:
   joinup_eulogin.cas.subscriber:
     class: Drupal\joinup_eulogin\Event\Subscriber\JoinupEuLoginCasEventsSubscriber
-    arguments: ['@config.factory', '@user.data', '@entity_type.manager']
-    tags:
-      - { name: 'event_subscriber' }
-  joinup_eulogin.cas_account_link.subscriber:
-    class: Drupal\joinup_eulogin\Event\Subscriber\JoinupEuLoginCasAccountLinkEventsSubscriber
-    arguments: ['@entity_type.manager', '@password_generator']
+    arguments: ['@config.factory', '@user.data', '@entity_type.manager', '@request_stack', '@messenger']
     tags:
       - { name: 'event_subscriber' }
   joinup_eulogin.route.subscriber:
