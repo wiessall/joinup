@@ -5,6 +5,7 @@ dependencies:
   config:
     - field.storage.rdf_meta_entity.eif_model
     - rdf_meta_entity.type.eif_perspective
+    - taxonomy.vocabulary.eif_conceptual_model
 id: rdf_meta_entity.eif_perspective.eif_model
 field_name: eif_model
 entity_type: rdf_meta_entity
@@ -16,12 +17,13 @@ translatable: false
 default_value: {  }
 default_value_callback: ''
 settings:
-  handler: 'default:eif_wrapper'
+  handler: 'default:taxonomy_term'
   handler_settings:
     target_bundles:
-      model: model
+      eif_conceptual_model: eif_conceptual_model
     sort:
-      field: _none
-      direction: ASC
+      field: name
+      direction: asc
     auto_create: false
+    auto_create_bundle: ''
 field_type: entity_reference

@@ -1,6 +1,0 @@
-uuid: 4f0d094f-8f0c-4167-bba3-222efb48616a
-langcode: en
-status: true
-dependencies: {  }
-id: model
-label: 'Qualified concept model'

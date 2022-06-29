@@ -17,6 +17,7 @@ use Drupal\joinup\Traits\EntityReferenceTrait;
 use Drupal\joinup\Traits\RdfEntityTrait;
 use Drupal\joinup\Traits\SearchTrait;
 use Drupal\joinup\Traits\TestingEntitiesTrait;
+use Drupal\joinup\Traits\UtilityTrait;
 use Drupal\menu_link_content\Entity\MenuLinkContent;
 use Drupal\node\Entity\Node;
 use Drupal\og\OgGroupAudienceHelperInterface;
@@ -36,6 +37,7 @@ class EifContext extends RawDrupalContext {
   use SearchTrait;
   use StringTranslationTrait;
   use TestingEntitiesTrait;
+  use UtilityTrait;
 
   /**
    * Creates the standard 'EIF' solution and a random parent collection.
@@ -194,6 +196,9 @@ class EifContext extends RawDrupalContext {
         case 'Layer':
         case 'Model':
         case 'Principle':
+          $eif_perspective_fields['eif_' . strtolower($row[0])] = $this->explodeCommaSeparatedStepArgument($row[1]);
+          break;
+
         case 'Recommendation':
           $bundle = strtolower($row[0]);
           // The following will split a phrase in the format of:

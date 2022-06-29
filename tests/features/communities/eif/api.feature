@@ -3,19 +3,22 @@ Feature:
   Basic test steps for the EIF perspective meta entity.
 
   Scenario: Create an EIF perspective and view the data.
-    Given the following solution:
-      | title       | EIF solution                                     |
-      | description | Some description not to be shown in the EIF page |
-      | state       | validated                                        |
+    Given the following solutions:
+      | title         | description                                      | state     |
+      | EIF solution  | Some description not to be shown in the EIF page | validated |
+      | EIF only type | Some description not to be shown in the EIF page | validated |
     Given the following EIF perspective data for the "EIF solution" solution:
-      | Description      | This should be in the description field.                                                   |
-      | Type of solution | Common frameworks                                                                          |
-      | Principle        | name: Underlying Principle 1: Subsidiarity and proportionality, description: Hello world 1 |
-      | Principle        | name: Underlying Principle 3: Transparency, description: Hello world 3                     |
-      | Layer            | name: Interoperability Layer 3: Legal interoperability, description: Hello layer 3         |
-      | Recommendation   | name: Recommendation 21, description: This is recommended                                  |
-      | Recommendation   | name: Recommendation 15, description: This is also recommended                             |
+      | Description      | This should be in the description field.                                                       |
+      | Type of solution | Common frameworks                                                                              |
+      | Principle        | Underlying Principle 1: Subsidiarity and proportionality, Underlying Principle 3: Transparency |
+      | Layer            | Interoperability Layer 3: Legal interoperability                                               |
+      | Recommendation   | name: Recommendation 21, description: This is recommended                                      |
+      | Recommendation   | name: Recommendation 15, description: This is also recommended                                 |
+    Given the following EIF perspective data for the "EIF only type" solution:
+      | Description      | This should be in the description field. |
+      | Type of solution | Common frameworks                        |
     Then there should be an EIF perspective associated with the "EIF solution" solution
+    And there should be an EIF perspective associated with the "EIF only type" solution
 
     When I go to the EIF perspective page of the "EIF solution" solution
     Then I should see the heading "EIF solution"
@@ -24,10 +27,17 @@ Feature:
     And I should see the text "This should be in the description field."
     But I should not see the text "Some description not to be shown in the EIF page"
 
+    # Verify that only columns with data are shown.
+    And I should see the heading "Principles"
+    And I should see the heading "Interoperability layers"
+    And I should see the text "implements the following EIF recommendations as explained below"
+    But I should not see the heading "Conceptual model"
+
     And I should see the text "Common frameworks"
-    And the "Underlying Principle 1: Subsidiarity and proportionality" link should have the "title" attribute set to "Hello world 1"
-    And the "Underlying Principle 3: Transparency" link should have the "title" attribute set to "Hello world 3"
-    And the "Interoperability Layer 3: Legal interoperability" link should have the "title" attribute set to "Hello layer 3"
+    And I should see the following links:
+      | Subsidiarity and proportionality |
+      | Transparency                     |
+      | Legal interoperability           |
 
     And I should see the following lines of text:
       # Recommendation titles appear with their related term a
@@ -36,3 +46,16 @@ Feature:
       | This is recommended                                                        |
       | Recommendation 15                                                          |
       | Recommendation 15 \| Underlying Principle 8: Security and privacy          |
+
+    When I go to the EIF perspective page of the "EIF only type" solution
+    Then I should see the heading "EIF only type"
+    And I should see the heading "General information"
+
+    And I should see the text "This should be in the description field."
+    But I should not see the text "Some description not to be shown in the EIF page"
+
+    # Verify that only columns with data are shown.
+    And I should not see the heading "Principles"
+    And I should not see the heading "Interoperability layers"
+    But I should not see the heading "Conceptual model"
+    And I should not see the text "implements the following EIF recommendations as explained below"
