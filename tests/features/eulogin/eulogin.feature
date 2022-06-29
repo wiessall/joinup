@@ -101,10 +101,6 @@ Feature: Log in through EU Login
       | First name  | James            |
       | Family name | Bond             |
 
-    # A logged in user cannot access the reset password form.
-    When I go to "/user/password"
-    Then I should get an access denied error
-
   Scenario: Fields imported from EU Login cannot be edited locally.
     Given users:
       | Username            | E-mail        |
@@ -324,3 +320,11 @@ Feature: Log in through EU Login
     And I press "Log in"
     # The user should be redirected to the original page after logging in.
     Then I should see the heading "People"
+
+  Scenario: Password reset is disabled.
+    Given I am an anonymous user
+    When I go to "/user/password"
+    Then the response status code should be 404
+    Given I am logged in as an "authenticated user"
+    When I go to "/user/password"
+    Then the response status code should be 404
