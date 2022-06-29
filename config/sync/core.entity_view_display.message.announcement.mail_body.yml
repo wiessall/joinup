@@ -21,11 +21,17 @@ targetEntityType: message
 bundle: announcement
 mode: mail_body
 content:
+  body:
+    type: basic_string
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: content
   partial_1:
     weight: 0
     region: content
 hidden:
-  body: true
   group_reference: true
   partial_0: true
   recipients: true
