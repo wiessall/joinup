@@ -9,6 +9,10 @@ base theme: oe_bootstrap_theme
 libraries:
   - ventuno/style
 
+libraries-extend:
+  core/drupal.ajax:
+    - ventuno/ajax-throbber
+
 libraries-override:
   core/jquery.once: false
   oe_bootstrap_theme/style: false
