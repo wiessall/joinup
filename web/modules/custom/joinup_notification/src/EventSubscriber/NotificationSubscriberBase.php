@@ -307,7 +307,13 @@ abstract class NotificationSubscriberBase {
 
     $arguments['@entity:title'] = $entity->label();
     $arguments['@entity:bundle'] = $entity->bundle();
-    $arguments['@entity:url'] = $entity->toUrl('canonical')->setAbsolute()->toString();
+    // Check for canonical to prevent error with "Message" entity type.
+    if ($entity->hasLinkTemplate('canonical')) {
+      $arguments['@entity:url'] = $entity->toUrl('canonical')->setAbsolute()->toString();
+    }
+    if ($entity->hasField('subject')) {
+      $arguments['@entity:subject'] = $entity->get('subject')->value;
+    }
     $arguments['@user:my_subscriptions'] = Url::fromRoute('joinup_subscription.my_subscriptions')->setAbsolute()->toString();
 
     $arguments += MessageArgumentGenerator::getActorArguments();

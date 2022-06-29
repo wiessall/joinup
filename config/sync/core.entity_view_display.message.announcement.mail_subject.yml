@@ -24,6 +24,14 @@ content:
   partial_0:
     weight: 0
     region: content
+  subject:
+    type: string
+    label: hidden
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 0
+    region: content
 hidden:
   body: true
   group_reference: true
@@ -31,4 +39,3 @@ hidden:
   recipients: true
   search_api_excerpt: true
   state: true
-  subject: true

@@ -45,3 +45,8 @@ services:
   joinup_group.url_alias_updater:
     class: Drupal\joinup_group\JoinupGroupContentUrlAliasUpdater
     arguments: ['@queue']
+  joinup_group.announcement.subscriber:
+    class: Drupal\joinup_group\EventSubscriber\AnnouncementEventSubscriber
+    parent: joinup_notification.notification_subscriber_base
+    tags:
+      - { name: event_subscriber }

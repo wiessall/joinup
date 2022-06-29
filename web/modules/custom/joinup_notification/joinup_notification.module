@@ -257,3 +257,13 @@ function joinup_notification_og_membership_presave(EntityInterface $entity) {
 function joinup_notification_og_membership_predelete(EntityInterface $entity) {
   joinup_notification_dispatch_notification('delete', NotificationEvents::OG_MEMBERSHIP_MANAGEMENT, $entity);
 }
+
+/**
+ * Implements hook_ENTITY_TYPE_insert().
+ */
+function joinup_notification_message_insert(EntityInterface $entity): void {
+  if ($entity->bundle() != 'announcement') {
+    return;
+  }
+  joinup_notification_dispatch_notification('create', NotificationEvents::ANNOUNCEMENT_CREATE, $entity);
+}
