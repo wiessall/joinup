@@ -62,7 +62,7 @@
         {{ _title_prefix }}
         <h1 class="card-title fs-6">
           <a class="text-primary" href="{{ _url }}">
-            {{ _title }}
+            {{ _title|render|striptags }}
           </a>
         </h1>
         {{ _title_suffix }}
