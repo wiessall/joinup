@@ -63,10 +63,10 @@
         <h1 class="card-title fs-6">
           {% if _url is not empty %}
             <a class="text-primary" href="{{ _url }}">
-              {{ _title|render|striptags }}
+              {{ _title }}
             </a>
           {% else %}
-            {{ _title|render|striptags }}
+            {{ _title }}
           {% endif %}
         </h1>
         {{ _title_suffix }}
