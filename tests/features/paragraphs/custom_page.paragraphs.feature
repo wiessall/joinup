@@ -134,7 +134,7 @@ Feature:
 
     Given I am not logged in
     And I go to the "Paragraphs accordion page" custom page
-    And I click "Duper"
+    And I press "Duper"
     Then I should see the text "Crunchy text"
     But I should not see the text "Clumsy text"
 
