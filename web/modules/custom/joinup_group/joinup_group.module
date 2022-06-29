@@ -9,10 +9,13 @@ declare(strict_types = 1);
 
 use Drupal\Component\Serialization\Json;
 use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
+use Drupal\Core\Field\FieldDefinitionInterface;
+use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Test\Exception\MissingGroupException;
@@ -843,4 +846,20 @@ function joinup_group_entity_update(EntityInterface $group): void {
       }
     }
   }
+}
+
+/**
+ * Implements hook_entity_field_access().
+ */
+function joinup_group_entity_field_access(string $operation, FieldDefinitionInterface $field_definition, AccountInterface $account, ?FieldItemListInterface $items = NULL): AccessResultInterface {
+  return AccessResult::forbiddenIf(
+    $operation === 'edit'
+    && $field_definition->getName() === 'announcements_enabled'
+    && $field_definition->getTargetEntityTypeId() === 'meta_entity'
+    && in_array($field_definition->getTargetBundle(), [
+      'collection_settings',
+      'solution_settings',
+    ], TRUE)
+    && !$account->hasPermission('manage group announcements')
+  );
 }

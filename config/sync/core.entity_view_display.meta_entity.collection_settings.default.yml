@@ -3,6 +3,7 @@ langcode: en
 status: true
 dependencies:
   config:
+    - field.field.meta_entity.collection_settings.announcements_enabled
     - field.field.meta_entity.collection_settings.glossary_link_only_first
     - meta_entity.type.collection_settings
 id: meta_entity.collection_settings.default
@@ -10,6 +11,16 @@ targetEntityType: meta_entity
 bundle: collection_settings
 mode: default
 content:
+  announcements_enabled:
+    type: boolean
+    label: above
+    settings:
+      format: default
+      format_custom_false: ''
+      format_custom_true: ''
+    third_party_settings: {  }
+    weight: 24
+    region: content
   changed:
     type: timestamp
     label: inline
