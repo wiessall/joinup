@@ -3,10 +3,10 @@ style:
   version: VERSION
   css:
     base:
-      assets/css/main.css: {}
+      assets/css/main.min.css: { minified: true }
   js:
-    assets/js/oe-bcl-joinup.bundle.min.js: { minified: true }
-    assets/js/popovers.js: { minified: false }
+    assets/js/oe-bcl-joinup.bundle.min.js: { minified: true, attributes: { defer: true } }
+    assets/js/popovers.min.js: { minified: true, attributes: { defer: true } }
   dependencies:
     - core/drupal
 
@@ -14,84 +14,94 @@ style:
 homepage:
   css:
     theme:
-      assets/css/homepage.css: {}
+      assets/css/homepage.min.css: { minified: true }
   dependencies:
     - ventuno/tour-first-balloon
 
 licence-comparer:
   css:
     theme:
-      assets/css/licence-comparer.css: {}
+      assets/css/licence-comparer.min.css: { minified: true }
 
 searchpage:
   css:
     theme:
-      assets/css/searchpage.css: {}
+      assets/css/searchpage.min.css: { minified: true }
   dependencies:
     - ventuno/close
-
-# Bootstrap components
-card:
-  css:
-    theme:
-      assets/css/card.css: {}
 
 # Pure BCL components
 accordion:
   css:
     theme:
-      assets/css/accordion.css: {}
+      assets/css/accordion.min.css: { minified: true }
 
-# Bootstrap components
 badge:
   css:
     theme:
-      assets/css/badge.css: {}
+      assets/css/badge.min.css: { minified: true }
+
+card:
+  css:
+    theme:
+      assets/css/card.min.css: { minified: true }
 
 close:
   css:
     theme:
-      assets/css/close.css: {}
+      assets/css/close.min.css: { minified: true }
 
 modals:
   css:
     theme:
-      assets/css/modals.css: {}
+      assets/css/modals.min.css: { minified: true }
   dependencies:
     - ventuno/close
+
+spinners:
+  css:
+    theme:
+      assets/css/spinners.min.css: { minified: true }
 
 tables:
   css:
     theme:
-      assets/css/tables.css: {}
+      assets/css/tables.min.css: { minified: true }
 
 # Custom components
 add-content:
   css:
     theme:
-      assets/css/add-content.css: {}
+      assets/css/add-content.min.css: { minified: true }
+
+ajax-throbber:
+  js:
+    assets/js/ajax-throbber.min.js: { minified: true, attributes: { defer: true } }
+  dependencies:
+    - core/drupal
+    - ventuno/spinners
 
 menu--og--navigation:
   css:
     theme:
-      assets/css/menu--og--navigation.css: {}
+      assets/css/menu--og--navigation.min.css: { minified: true }
 
 # Custom and hybrid (BCL + custom) components
 footer:
   css:
     theme:
-      assets/css/footer.css: {}
+      assets/css/footer.min.css: { minified: true }
 
 forms:
   css:
     theme:
-      assets/css/forms.css: {}
+      assets/css/forms.min.css: { minified: true }
   js:
-    assets/js/highlight-invalid-fields.js: { minified: true, attributes: { defer: true } }
+    assets/js/highlight-invalid-fields.min.js: { minified: true, attributes: { defer: true } }
 
 glide:
   js:
-    assets/js/glide.js: { minified: false }
+    assets/js/glide.min.js: { minified: true, attributes: { defer: true } }
   css:
     theme:
       assets/css/glide.core.min.css: { minified: true }
@@ -99,66 +109,65 @@ glide:
 members-overview-exposed-form:
   css:
     theme:
-      assets/css/members-overview-exposed-form.css: {}
+      assets/css/members-overview-exposed-form.min.css: { minified: true }
 
 dropdown:
   css:
     theme:
-      assets/css/dropdown.css: {}
-
+      assets/css/dropdown.min.css: { minified: true }
 
 nav:
   css:
     theme:
-      assets/css/nav.css: {}
+      assets/css/nav.min.css: { minified: true }
 
 ief-entity-table:
   css:
     theme:
-      assets/css/ief-entity-table.css: {}
+      assets/css/ief-entity-table.min.css: { minified: true }
 
 navbar:
   css:
     theme:
-      assets/css/navbar.css: {}
+      assets/css/navbar.min.css: { minified: true }
   js:
-    assets/js/sticky-menu.js: { minified: true, attributes: { defer: true } }
+    assets/js/sticky-menu.min.js: { minified: true, attributes: { defer: true } }
 
 navbar-search:
   css:
     theme:
-      assets/css/navbar-search.css: {}
+      assets/css/navbar-search.min.css: { minified: true }
   js:
-    assets/js/searchbox-focus.js: { minified: true, attributes: { defer: true } }
+    assets/js/searchbox-focus.min.js: { minified: true, attributes: { defer: true } }
 
 page-title:
   css:
     theme:
-      assets/css/page-title.css: {}
+      assets/css/page-title.min.css: { minified: true }
 
 pager:
   css:
     theme:
-      assets/css/pager.css: {}
+      assets/css/pager.min.css: { minified: true }
 
 share-content-form:
   css:
     theme:
-      assets/css/share-content-form.css: {}
+      assets/css/share-content-form.min.css: { minified: true }
 
 site-alerts-messages:
   css:
     theme:
-      assets/css/site-alerts-messages.css: {}
+      assets/css/site-alerts-messages.min.css: { minified: true }
 
 show-accordion-invalid-fields:
   js:
-    assets/js/show-accordion-invalid-fields.js: { minified: true, attributes: { defer: true } }
+    assets/js/show-accordion-invalid-fields.min.js: { minified: true, attributes: { defer: true } }
 
 tabledrag:
   css:
     theme:
-      assets/css/tabledrag.css: {}
+      assets/css/tabledrag.min.css: { minified: true }
 
 three-dots-menu:
   css:
@@ -169,11 +178,11 @@ three-dots-menu:
 
 tour-first-balloon:
   js:
-    assets/js/tour-first-balloon.js: { minified: true, attributes: { defer: true } }
+    assets/js/tour-first-balloon.min.js: { minified: true, attributes: { defer: true } }
 
 content-tables:
   js:
-    assets/js/content-tables.js: { minified: true, attributes: { defer: true } }
+    assets/js/content-tables.min.js: { minified: true, attributes: { defer: true } }
   dependencies:
     - ventuno/tables
 
@@ -181,7 +190,7 @@ content-tables:
 bootstrap-base:
   css:
     component:
-      assets/css/bootstrap-base.css: {}
+      assets/css/bootstrap-base.min.css: { minified: true }
   js:
-    assets/js/oe-bcl-joinup.bundle.min.js: { minified: true }
-    assets/js/popovers.js: { minified: false }
+    assets/js/oe-bcl-joinup.bundle.min.js: { minified: true, attributes: { defer: true } }
+    assets/js/popovers.min.js: { minified: true, attributes: { defer: true } }
