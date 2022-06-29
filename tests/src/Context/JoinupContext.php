@@ -1575,12 +1575,12 @@ class JoinupContext extends RawDrupalContext {
       return;
     }
 
-    // Depending on the screen width, a different accordion item may be visible.
+    // Depending on the screen width, a different dropdown item may be visible.
     /** @var \Behat\Mink\Element\NodeElement[] $elements */
-    $elements = $this->getSession()->getPage()->findAll('css', '#main-navbar .accordion-item');
+    $elements = $this->getSession()->getPage()->findAll('css', '#main-navbar .dropdown');
     foreach ($elements as $element) {
       if ($element->isVisible()) {
-        $this->openBootstrapAccordion($element);
+        $this->openBootstrapDropdown($element);
         return;
       }
     }
