@@ -554,6 +554,7 @@ abstract class CommunityContentWorkflowTestBase extends JoinupWorkflowExistingSi
           'own' => TRUE,
           'any' => [
             'userModerator',
+            'userOgFacilitator',
           ],
         ],
         'validated' => [
@@ -594,6 +595,7 @@ abstract class CommunityContentWorkflowTestBase extends JoinupWorkflowExistingSi
           'own' => TRUE,
           'any' => [
             'userModerator',
+            'userOgFacilitator',
           ],
         ],
         'validated' => [
@@ -675,6 +677,11 @@ abstract class CommunityContentWorkflowTestBase extends JoinupWorkflowExistingSi
           ],
           'any' => [
             'userModerator' => [
+              'draft',
+              'proposed',
+              'validated',
+            ],
+            'userOgFacilitator' => [
               'draft',
               'proposed',
               'validated',
@@ -917,6 +924,7 @@ abstract class CommunityContentWorkflowTestBase extends JoinupWorkflowExistingSi
             ],
             'any' => [
               'userModerator',
+              'userOgFacilitator',
             ],
           ],
           'proposed' => [
@@ -1020,6 +1028,7 @@ abstract class CommunityContentWorkflowTestBase extends JoinupWorkflowExistingSi
             ],
             'any' => [
               'userModerator',
+              'userOgFacilitator',
             ],
           ],
           'proposed' => [
