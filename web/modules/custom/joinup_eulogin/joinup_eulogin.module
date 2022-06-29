@@ -49,6 +49,23 @@ function joinup_eulogin_form_user_form_alter(array &$form, FormStateInterface $f
 
   /** @var \Drupal\user\UserInterface $account */
   $account = $form_state->getFormObject()->getEntity();
+  // This hook implementation runs after cas_form_user_form_alter() because the
+  // two modules have the same weight but the module list is sorted by weight
+  // and then alphabetically, making the CAS module to be placed before 'Joinup
+  // EU Login'. For this reason, it's safe to use the form alter to overwrite
+  // the behavior of CAS module hook implementation.
+  // @see module_config_sort()
+  // @see cas_form_user_form_alter()
+  $cas_settings = \Drupal::config('cas.settings');
+  if (isset($form['account']['mail']) && $cas_settings->get('user_accounts.restrict_email_management')) {
+    $form['account']['mail']['#disabled'] = TRUE;
+  }
+  if (isset($form['account']['pass']) && $cas_settings->get('user_accounts.restrict_password_management')) {
+    $form['account']['pass']['#access'] = FALSE;
+    if (isset($form['account']['current_pass'])) {
+      $form['account']['current_pass']['#access'] = FALSE;
+    }
+  }
 
   // This account is not linked to an EU Login account.
   if ($account->get('eulogin_authname')->isEmpty()) {
@@ -81,19 +98,6 @@ function joinup_eulogin_form_user_form_alter(array &$form, FormStateInterface $f
   ];
 
   $form['account']['mail']['#description'] = t('Your e-mail address is not made public. We will only send you necessary system notifications and you can opt in later if you wish to receive additional notifications about content you are subscribed to.');
-  // This hook implementation runs after cas_form_user_form_alter() because the
-  // two modules have the same weight but the module list is sorted by weight
-  // and then alphabetically, making the CAS module to be placed before 'Joinup
-  // EU Login'. For this reason, it's safe to use the form alter to overwrite
-  // the behavior of CAS module hook implementation.
-  // @see module_config_sort()
-  // @see cas_form_user_form_alter()
-  if (isset($form['account']['mail']) && \Drupal::config('cas.settings')->get('user_accounts.restrict_email_management')) {
-    $form['account']['mail']['#disabled'] = TRUE;
-  }
-  if (isset($form['account']['pass']) && \Drupal::config('cas.settings')->get('user_accounts.restrict_password_management')) {
-    $form['account']['pass']['#access'] = FALSE;
-  }
 
   $mapping = \Drupal::configFactory()
     ->get('cas_attributes.settings')
@@ -108,8 +112,7 @@ function joinup_eulogin_form_user_form_alter(array &$form, FormStateInterface $f
     // @see cas_attributes_tokens()
     $attributes = array_change_key_case(
       // Cast to an array to overcome the NULL value when user data is missed.
-      (array) $user_data->get('joinup_eulogin', $account->id(), 'attributes'),
-      CASE_LOWER
+      (array) $user_data->get('joinup_eulogin', $account->id(), 'attributes')
     );
 
     foreach ($mapping as $field_name => $token) {
