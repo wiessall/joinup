@@ -6,10 +6,10 @@
   Drupal.behaviors.searchboxFocus = {
     attach() {
       const trigger = document.querySelector(
-        "#heading-search .accordion-button"
+        "#joinup-navbar .dropdown-toggle#search"
       );
-      const box = document.querySelector("#collapse-search");
-      const input = document.querySelector("#collapse-search #edit-keys");
+      const box = document.querySelector("#dropdown-menu--search");
+      const input = document.querySelector("#dropdown-menu--search #edit-keys");
       if (
         trigger === null ||
         trigger === undefined ||
@@ -20,13 +20,13 @@
       }
       // Listen for click
       trigger.addEventListener("click", () => {
-        // If click was for closing, blur.
-        if (box.classList.contains("show")) {
-          input.blur();
-        }
         // If click was for opening, focus.
-        else {
+        if (box.classList.contains("show")) {
           input.focus();
+        }
+        // If click was for closing, blur.
+        else {
+          input.blur();
         }
       });
     },
