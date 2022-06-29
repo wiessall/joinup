@@ -214,7 +214,7 @@ class SubscriptionsForm extends FormBase {
           '#type' => 'checkbox',
           '#title' => $this->t('Announcements'),
           '#return_value' => TRUE,
-          '#default_value' =>  $membership->get('announcements')->value,
+          '#default_value' => $membership->get('announcements')->value,
         ];
 
         $form['groups'][$group->id()]['options']['submit'] = [
