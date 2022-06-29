@@ -23,7 +23,7 @@
         "drupal/config_ignore": "^3.0",
         "drupal/config_readonly": "^1.0",
         "drupal/core-composer-scaffold": "^9.4",
-        "drupal/core-recommended": "^9.4",
+        "drupal/core": "^9.4",
         "drupal/default_content": "^2.0@alpha",
         "drupal/diff": "~1.0",
         "drupal/digital_size_formatter": "~2.0",
@@ -248,7 +248,6 @@
                 "Do not require @var tag if a property has typehint @see https://www.drupal.org/project/coder/issues/3123282": "https://git.drupalcode.org/project/coder/-/commit/d1bb7ea.diff"
             },
             "drupal/core": {
-                "Use email verification when changing user email addresses @see https://www.drupal.org/project/drupal/issues/85494": "https://www.drupal.org/files/issues/2022-01-17/85494-376-9.3.x.patch",
                 "Use READ COMMITTED by default for MySQL transactions @see https://www.drupal.org/project/drupal/issues/1650930": "https://git.drupalcode.org/project/drupal/-/merge_requests/2394.diff",
                 "Allow image style to be selected in text editor @see https://www.drupal.org/node/2061377": "https://git.drupalcode.org/project/drupal/-/merge_requests/2344.diff",
                 "Allow making the file description a required field @see https://www.drupal.org/node/2320877": "https://git.drupalcode.org/project/drupal/-/merge_requests/975.diff",
