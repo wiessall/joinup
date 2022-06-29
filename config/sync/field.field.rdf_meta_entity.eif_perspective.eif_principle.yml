@@ -5,23 +5,25 @@ dependencies:
   config:
     - field.storage.rdf_meta_entity.eif_principle
     - rdf_meta_entity.type.eif_perspective
+    - taxonomy.vocabulary.eif_principle
 id: rdf_meta_entity.eif_perspective.eif_principle
 field_name: eif_principle
 entity_type: rdf_meta_entity
 bundle: eif_perspective
 label: Principle
 description: ''
-required: true
+required: false
 translatable: false
 default_value: {  }
 default_value_callback: ''
 settings:
-  handler: 'default:eif_wrapper'
+  handler: 'default:taxonomy_term'
   handler_settings:
     target_bundles:
-      principle: principle
+      eif_principle: eif_principle
     sort:
-      field: _none
-      direction: ASC
+      field: name
+      direction: asc
     auto_create: false
+    auto_create_bundle: ''
 field_type: entity_reference

@@ -17,7 +17,7 @@ eif.eif_perspective_form:
     _controller: Drupal\eif\Controller\EifPerspectiveController::settings
     _title_callback: Drupal\eif\Controller\EifPerspectiveController::title
   requirements:
-    _custom_access: Drupal\eif\Controller\EifPerspectiveController::access
+    _custom_access: Drupal\eif\Controller\EifPerspectiveController::editAccess
   options:
     parameters:
       rdf_entity:
@@ -30,7 +30,7 @@ entity.rdf_entity.eif_perspective:
   defaults:
     _entity_view: 'rdf_entity.eif_perspective'
   requirements:
-    _entity_access: 'rdf_entity.view'
+    _custom_access: Drupal\eif\Controller\EifPerspectiveController::viewAccess
   options:
     parameters:
       rdf_entity:

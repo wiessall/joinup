@@ -26,11 +26,10 @@ bundle: eif_perspective
 mode: default
 content:
   eif_layer:
-    type: entity_reference_entity_view
+    type: entity_reference_label
     label: above
     settings:
-      view_mode: default
-      link: false
+      link: true
     third_party_settings:
       field_delimiter:
         delimiter: ''
@@ -43,11 +42,10 @@ content:
     weight: 3
     region: content
   eif_model:
-    type: entity_reference_entity_view
+    type: entity_reference_label
     label: above
     settings:
-      view_mode: default
-      link: false
+      link: true
     third_party_settings:
       field_delimiter:
         delimiter: ''
@@ -60,11 +58,10 @@ content:
     weight: 4
     region: content
   eif_principle:
-    type: entity_reference_entity_view
+    type: entity_reference_label
     label: above
     settings:
-      view_mode: default
-      link: false
+      link: true
     third_party_settings:
       field_delimiter:
         delimiter: ''
