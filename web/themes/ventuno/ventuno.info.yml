@@ -3,13 +3,12 @@ description: Custom theme for Joinup.
 package: Custom
 type: theme
 core_version_requirement: '>=9.3'
-php: 7.4
 base theme: oe_bootstrap_theme
 
 libraries:
-  - ventuno/base
-  - ventuno/layout
+  - ventuno/main
   - ventuno/components
+  - ventuno/layout
   - ventuno/theme
 
 libraries-extend:
@@ -37,10 +36,6 @@ libraries-override:
   core/drupal.checkbox:
     js:
       misc/checkbox.js: assets/js/checkbox.min.js
-
-libraries-extend:
-  joinup_group/shared_entity:
-    - ventuno/shared-entity
 
 regions:
   header: Header
