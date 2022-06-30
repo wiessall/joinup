@@ -695,6 +695,45 @@ trait TraversingTrait {
   }
 
   /**
+   * Asserts that the current URL matches the expected one, including the query.
+   *
+   * Note that \Behat\Mink\WebAssert::addressEquals() strips out the query
+   * string, comparing only the path and the fragment. But, in the scope of this
+   * test, we need to also compare the query strings.
+   *
+   * @param \Drupal\Core\Url|string $expected_url
+   *   The expected URL.
+   *
+   * @throws \Behat\Mink\Exception\ExpectationException
+   *
+   * @see \Behat\Mink\WebAssert::addressEquals()
+   */
+  public function assertCurrentUrl(string $expected_url): void {
+    // Check first the path & the fragment.
+    $this->assertSession()->addressEquals($expected_url);
+    // Compare also the query strings as arrays but allow different order.
+    $expected_query = $this->normalizeQueryString($expected_url);
+    $current_url = $this->getSession()->getCurrentUrl();
+    $actual_query = $this->normalizeQueryString($current_url);
+    Assert::assertEquals($expected_query, $actual_query, sprintf('Expected the %s url but found %s.', $expected_url, $current_url));
+  }
+
+  /**
+   * Normalizes a given URL query string to an array.
+   *
+   * @param string $url
+   *   The URL.
+   *
+   * @return array
+   *   The array representation of the query string.
+   */
+  protected function normalizeQueryString(string $url): array {
+    $query_string = utf8_decode((string) parse_url(urldecode($url), PHP_URL_QUERY));
+    parse_str($query_string, $query_array);
+    return $query_array;
+  }
+
+  /**
    * Returns the tile CSS selector.
    *
    * @return string
@@ -729,5 +768,4 @@ trait TraversingTrait {
     }
     return $region_map[$label];
   }
-
 }

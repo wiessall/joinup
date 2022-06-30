@@ -6,7 +6,6 @@ style:
       assets/css/main.min.css: { minified: true }
   js:
     assets/js/oe-bcl-joinup.bundle.min.js: { minified: true, attributes: { defer: true } }
-    assets/js/popovers.min.js: { minified: true, attributes: { defer: true } }
   dependencies:
     - core/drupal
 
@@ -193,4 +192,3 @@ bootstrap-base:
       assets/css/bootstrap-base.min.css: { minified: true }
   js:
     assets/js/oe-bcl-joinup.bundle.min.js: { minified: true, attributes: { defer: true } }
-    assets/js/popovers.min.js: { minified: true, attributes: { defer: true } }
