@@ -691,7 +691,7 @@ class JoinupSearchContext extends RawDrupalContext {
       $this->visitPath('/');
       $page = $this->getSession()->getPage();
       $page->fillField('keys', $keywords);
-      $page->pressButton("Apply");
+      $page->pressButton("Search site-wide");
       $this->assertCurrentUrl($this->locatePath('search?keys=' . $keywords . '&sort_by=relevance'));
     }
   }
@@ -938,7 +938,7 @@ class JoinupSearchContext extends RawDrupalContext {
    * @Then I should not see search bar icon in navbar
    */
   public function failSearchIconNavbar(): void {
-    $getAllInput = $this->getSession()->getPage()->findAll('css', 'nav.joinup-navbar span#heading-search button.accordion-button');
+    $getAllInput = $this->getSession()->getPage()->findAll('css', 'nav.joinup-navbar button#search.dropdown-toggle');
 
     if (count($getAllInput) > 0) {
       throw new \Exception('Search bar icon found in navbar.');
