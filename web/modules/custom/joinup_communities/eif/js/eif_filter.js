@@ -17,11 +17,9 @@
     // data-eif-category.
     $('.eif-filter__item a.is-active').each(function () {
       var currenteifCategory = $(this).attr('data-eif-category');
-      console.log(currenteifCategory);
       if (typeof currenteifCategory !== 'undefined') {
         $eifTile.each(function () {
           var eifCategory = $(this).attr('data-eif-category');
-          console.log(eifCategory);
           if (typeof eifCategory !== 'undefined') {
             var eifCategoryArray = eifCategory.split(' ');
             if ($.inArray(currenteifCategory, eifCategoryArray) < 0 && !$(this).hasClass('visually-hidden')) {
