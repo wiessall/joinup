@@ -28,10 +28,10 @@ libraries-override:
   tour/tour-styling:
     css:
       component:
-        css/tour.module.css: assets/css/tour.css
+        css/tour.module.css: assets/css/tour.min.css
   core/drupal.checkbox:
     js:
-      misc/checkbox.js: assets/js/checkbox.js
+      misc/checkbox.js: assets/js/checkbox.min.js
 
 regions:
   header: Header
