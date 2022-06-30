@@ -2,10 +2,17 @@
   // Modifier
   &--tile {
     .card-header {
+      height: 150px;
+      figure,
       img,
       svg {
-        height: 150px;
-        width: auto;
+        max-height: 150px;
+      }
+    }
+    .card-body {
+      .card-text {
+        font-size: $font-size-sm;
+        line-height: normal;
       }
     }
   }
