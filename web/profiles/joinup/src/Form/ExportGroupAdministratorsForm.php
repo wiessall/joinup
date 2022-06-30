@@ -4,31 +4,18 @@ declare(strict_types = 1);
 
 namespace Drupal\joinup\Form;
 
-use Drupal\Component\Datetime\Time;
+use Drupal\Component\Datetime\TimeInterface;
 use Drupal\Core\Cache\CacheBackendInterface;
-use Drupal\Core\Datetime\DateFormatter;
+use Drupal\Core\Datetime\DateFormatterInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
-use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Url;
-use Drupal\csv_serialization\Encoder\CsvEncoder;
+use Drupal\joinup\ExportBatchedDataFormBase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Provides a form to export the list of group facilitators and administrators.
  */
-class ExportGroupAdministratorsForm extends FormBase {
-
-  const GROUP_ADMINISTRATION_CACHE_TAG = 'group_administration_list';
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getFormId() {
-    return 'joinup_export_group_administrators';
-  }
+class ExportGroupAdministratorsForm extends ExportBatchedDataFormBase {
 
   /**
    * The entity type manager.
@@ -38,43 +25,20 @@ class ExportGroupAdministratorsForm extends FormBase {
   protected $entityTypeManager;
 
   /**
-   * The default cache bin.
-   *
-   * @var \Drupal\Core\Cache\CacheBackendInterface
-   */
-  protected $cacheStorage;
-
-  /**
-   * The date formatter service.
-   *
-   * @var \Drupal\Core\Datetime\DateFormatter
-   */
-  protected $dateFormatter;
-
-  /**
-   * The time service.
-   *
-   * @var \Drupal\Component\Datetime\Time
-   */
-  protected $time;
-
-  /**
    * Constructs an ExportUserListForm.
    *
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
-   *   The entity type manager.
    * @param \Drupal\Core\Cache\CacheBackendInterface $cache
    *   The default cache bin.
-   * @param \Drupal\Core\Datetime\DateFormatter $date_formatter
+   * @param \Drupal\Core\Datetime\DateFormatterInterface $date_formatter
    *   The date formatter service.
-   * @param \Drupal\Component\Datetime\Time $time
+   * @param \Drupal\Component\Datetime\TimeInterface $time
    *   The time service.
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
+   *   The entity type manager.
    */
-  public function __construct(EntityTypeManagerInterface $entityTypeManager, CacheBackendInterface $cache, DateFormatter $date_formatter, Time $time) {
+  public function __construct(CacheBackendInterface $cache, DateFormatterInterface $date_formatter, TimeInterface $time, EntityTypeManagerInterface $entityTypeManager) {
+    parent::__construct($cache, $date_formatter, $time);
     $this->entityTypeManager = $entityTypeManager;
-    $this->cacheStorage = $cache;
-    $this->dateFormatter = $date_formatter;
-    $this->time = $time;
   }
 
   /**
@@ -82,49 +46,39 @@ class ExportGroupAdministratorsForm extends FormBase {
    */
   public static function create(ContainerInterface $container) {
     return new static(
-      $container->get('entity_type.manager'),
       $container->get('cache.default'),
       $container->get('date.formatter'),
-      $container->get('datetime.time')
+      $container->get('datetime.time'),
+      $container->get('entity_type.manager'),
     );
   }
 
   /**
    * {@inheritdoc}
    */
-  public function buildForm(array $form, FormStateInterface $form_state) {
-    $form['help'] = [
-      '#markup' => $this->t('Press generate data to generate the list.'),
-    ];
+  protected function getCacheTagName(): string {
+    return 'group_administration_list';
+  }
 
-    $form['actions'] = [
-      '#type' => 'container',
-    ];
+  /**
+   * {@inheritdoc}
+   */
+  protected function getRedirectRouteName(): string {
+    return 'joinup.group_administrators_report';
+  }
 
-    if ($data = $this->cacheStorage->get(self::GROUP_ADMINISTRATION_CACHE_TAG)) {
-      $form['help']['#markup'] = $this->t('Last dump was created at :date and will be removed by :expire', [
-        ':date' => $this->dateFormatter->format($data->created),
-        ':expire' => $this->dateFormatter->format($data->expire),
-      ]);
+  /**
+   * {@inheritdoc}
+   */
+  protected function getDownloadedFileName(): string {
+    return 'user_list.csv';
+  }
 
-      $form['actions']['download_link'] = [
-        '#type' => 'submit',
-        '#value' => $this->t('Download'),
-        '#submit' => ['::downloadCsv'],
-      ];
-
-      $form_state->set('download_data', $data->data);
-    }
-
-    $form['actions']['submit'] = [
-      '#type' => 'submit',
-      '#value' => $this->t(':generate data', [
-        ':generate' => empty($data) ? 'Generate' : 'Regenerate',
-      ]),
-      '#submit' => ['::generateData'],
-    ];
-
-    return $form;
+  /**
+   * {@inheritdoc}
+   */
+  public function getFormId(): string {
+    return 'joinup_export_group_administrators';
   }
 
   /**
@@ -135,7 +89,7 @@ class ExportGroupAdministratorsForm extends FormBase {
    * @param \Drupal\Core\Form\FormStateInterface $form_state
    *   The form state object.
    */
-  public function generateData(array &$form, FormStateInterface $form_state) {
+  public function generateData(array &$form, FormStateInterface $form_state): void {
     $membership_query = $this->entityTypeManager->getStorage('og_membership')->getQuery();
     $membership_or = $membership_query->orConditionGroup()
       ->condition('roles', 'rdf_entity-collection-facilitator')
@@ -167,24 +121,6 @@ class ExportGroupAdministratorsForm extends FormBase {
       ];
       batch_set($batch);
     }
-  }
-
-  /**
-   * Downloads the CSV file of the user list.
-   *
-   * @param array $form
-   *   The form array.
-   * @param \Drupal\Core\Form\FormStateInterface $form_state
-   *   The form state object.
-   */
-  public function downloadCsv(array &$form, FormStateInterface $form_state) {
-    $headers = [
-      'Content-Type' => 'text/csv',
-      'Content-Disposition' => 'attachment;filename=user_list.csv',
-    ];
-
-    $response = new Response($form_state->get('download_data'), 200, $headers);
-    $form_state->setResponse($response);
   }
 
   /**
@@ -222,39 +158,5 @@ class ExportGroupAdministratorsForm extends FormBase {
       'Is administrator' => $is_administrator,
     ];
   }
-
-  /**
-   * Stores the data into the cache.
-   *
-   * @param bool $success
-   *   Whether the batch ended without a fatal error.
-   * @param array $results
-   *   The result set.
-   * @param array $operations
-   *   The remaining operations.
-   *
-   * @return \Symfony\Component\HttpFoundation\Response
-   *   A redirect response to the page that serves the CSV file as a download.
-   */
-  public function storeToCache(bool $success, array $results, array $operations): Response {
-    // Set the expiration time to 1 day.
-    $expire = $this->time->getRequestTime() + 3600 * 24;
-
-    $csv_encoder = new CsvEncoder();
-    $data = $csv_encoder->encode(array_values($results['data']), 'csv');
-
-    // The cache entry varies per the og membership list, the user list and the
-    // rdf entity list cache tag.
-    $this->cacheStorage->set(self::GROUP_ADMINISTRATION_CACHE_TAG, $data, $expire);
-    $this->messenger()->addMessage('Data have been rebuilt.');
-
-    // Handle the file here.
-    return new RedirectResponse(Url::fromRoute('joinup.group_administrators_report')->toString());
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function submitForm(array &$form, FormStateInterface $form_state) {}
 
 }
