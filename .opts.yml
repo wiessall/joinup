@@ -14,22 +14,17 @@ upgrade_commands:
     - ./vendor/bin/drush site-alert:disable
     - ./vendor/bin/drush state:set system.maintenance_mode 0 --input-format=integer --yes
   append:
+    production:
+      - test $(./vendor/bin/drush core:requirements --severity=1 --ignore="update status,joinup_core_root_user_blocked,search_api_solr_schema_joinup_modifications" --field=title | wc -l) = "0" || (echo "Status Report shows errors & warnings" && ./vendor/bin/drush core:requirements --severity=1 --ignore="update status,joinup_core_root_user_blocked,search_api_solr_schema_joinup_modifications" && exit 1)
     acceptance:
       - touch disable-config-readonly
       - ./vendor/bin/drush joinup:acc
-      # Note that the 'Root user access' exception will be removed in ISAICP-6822.
-      # See https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-6822.
-      # Don't run Status Report check and keep config editable on demo
-      # environments. Currently, the `KUBERNETES_PORT` environment variable
-      # exists on ephemeral/demo environments. Temporary, this is the only way
-      # we're able to differentiate a demo environment from acceptance but on a
-      # long run this will be fixed in FPFISINFRA-262.
-      # See https://citnet.tech.ec.europa.eu/CITnet/jira/browse/FPFISINFRA-262.
-      - if [ -z "$KUBERNETES_PORT" ]; then rm disable-config-readonly; test $(./vendor/bin/drush core:requirements --severity=1 --ignore="update status,joinup_core_root_user_blocked,search_api_solr_schema_joinup_modifications" --field=title | wc -l) = "0" || (echo "Status Report shows errors & warnings" && ./vendor/bin/drush core:requirements --severity=1 --ignore="update status,joinup_core_root_user_blocked,search_api_solr_schema_joinup_modifications" && exit 1); fi
-    production:
-      # Note that the 'Root user access' exception will be removed in ISAICP-6822.
-      # See https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-6822.
+      - rm disable-config-readonly
       - test $(./vendor/bin/drush core:requirements --severity=1 --ignore="update status,joinup_core_root_user_blocked,search_api_solr_schema_joinup_modifications" --field=title | wc -l) = "0" || (echo "Status Report shows errors & warnings" && ./vendor/bin/drush core:requirements --severity=1 --ignore="update status,joinup_core_root_user_blocked,search_api_solr_schema_joinup_modifications" && exit 1)
+    ephemeral:
+      - touch disable-config-readonly
+      - ./vendor/bin/drush joinup:acc
+      - rm disable-config-readonly
 
 php_version: 7.4
 extra_pkgs:
