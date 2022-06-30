@@ -17,7 +17,3 @@ conditions:
     negate: false
     routes:
       - solution.eif_perspective.form
-  request_path:
-    id: request_path
-    negate: false
-    pages: /node/705372
