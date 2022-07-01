@@ -43,7 +43,11 @@ function joinup_core_deploy_108203(): void {
 UPDATE {og_membership} og
 SET og.announcements = 1
 WHERE og.state = 'active'
-    AND og.uid IN (SELECT DISTINCT(a.uid) FROM {entity_legal_document_acceptance} a)
+AND (
+  og.uid IN (SELECT DISTINCT(uid) FROM {entity_legal_document_acceptance})
+    OR
+  og.uid IN (SELECT entity_id FROM {user__roles} WHERE roles_target_id = 'moderator')
+)
 SQL;
 
   $database->query($query)->execute();
