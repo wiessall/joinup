@@ -9,6 +9,10 @@ base theme: oe_bootstrap_theme
 libraries:
   - ventuno/style
 
+libraries-extend:
+  core/drupal.ajax:
+    - ventuno/ajax-throbber
+
 libraries-override:
   core/jquery.once: false
   oe_bootstrap_theme/style: false
@@ -24,10 +28,10 @@ libraries-override:
   tour/tour-styling:
     css:
       component:
-        css/tour.module.css: assets/css/tour.css
+        css/tour.module.css: assets/css/tour.min.css
   core/drupal.checkbox:
     js:
-      misc/checkbox.js: assets/js/checkbox.js
+      misc/checkbox.js: assets/js/checkbox.min.js
 
 regions:
   header: Header

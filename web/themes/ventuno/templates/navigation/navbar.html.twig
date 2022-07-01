@@ -49,8 +49,8 @@
 
 {% set _nav_classes = ['joinup-navbar', 'navbar', 'navbar-expand', 'joinup-navbar--sticky'] %}
 {% set _navbar_toggler_classes = ['navbar-toggler'] %}
-{% set _list_id = list_id|default('accordion-1') %}
-{% set _list_classes = ['navbar-nav', 'accordion', 'accordion-flush'] %}
+{% set _list_id = list_id|default('list-1') %}
+{% set _list_classes = ['navbar-nav'] %}
 
 {% if nav_attributes is empty %}
   {% set nav_attributes = create_attribute() %}
@@ -102,75 +102,79 @@
                     {{ link(link.label, link.link, attributes.addClass('nav-link')) }}
                   {% elseif link.popover %}
                     <button
-                      id="popover-trigger"
-                      data-bs-toggle="popover"
-                      autocomplete="off"
-                      data-bs-placement="bottom"
-                      data-bs-content="<a class='popover__cta' href='{{ link.popover.cta.link }}' {{ link.popover.cta.attributes }}>{{ link.popover.cta.text }}</a><p class='popover__description'>{{ link.popover.description }}</p>"
-                      data-bs-custom-class="navbar__popover"
-                      data-bs-html="true"
-                      data-bs-container="#popover-trigger"
-                      data-bs-offset="-74, 16"
-                      class="btn btn-light popover-trigger popover-getstarted"
+                      id="{{ item.id }}"
+                      class="btn btn-light get-started__trigger"
+                      data-bs-toggle="dropdown"
+                      aria-expanded="false"
                       type="button"
+                      data-bs-auto-close="outside"
                     >
                       {{ link.label }}
                     </button>
+                    <div
+                      class="dropdown-menu get-started__menu"
+                      aria-labelledby="{{ item.id }}"
+                      data-popper-placement="right"
+                    >
+                      <a class="get-started__cta" href="{{ link.popover.cta.link }}" {{ link.popover.cta.attributes }}>
+                        {{ link.popover.cta.text }}
+                        <svg class="bi icon--s ms-2">
+                          <use xlink:href="{{ bcl_icon_path }}#arrow-right"></use>
+                        </svg>
+                      </a>
+                      <p class="get-started__description">{{ link.popover.description }}</p>
+                    </div>
                   {% endif %}
                 </li>
               {% endif %}
             {% endfor %}
           {% endif %}
           {% set list_item_attributes = create_attribute() %}
-          {% set _list_item_classes = item.classes|default([])|merge(['nav-item', 'accordion-item']) %}
+          {% set _list_item_classes = item.classes|default([])|merge(['nav-item', 'dropdown']) %}
           {% if item.breakpoint %}
             {% set _list_item_classes = _list_item_classes|merge(['d-' ~ item.breakpoint ~ '-none']) %}
           {% endif %}
           {% set list_item_attributes = list_item_attributes.addClass(_list_item_classes) %}
           <li {{ list_item_attributes }}>
-            <span class="accordion-header" id="heading-{{ item.id }}">
-              <button
-                class="accordion-button nav-link"
-                data-bs-toggle="collapse"
-                autocomplete="off"
-                data-bs-target="#collapse-{{ item.id }}"
-                aria-controls="collapse-{{ item.id }}"
-                aria-expanded="false"
-                type="button"
-                title="{{ item.label }}"
-              >
-                {% if item.icon is not empty %}
-                  <svg class="bi icon--s">
-                    <use xlink:href="{{ bcl_icon_path }}#{{ item.icon.name }}"></use>
-                  </svg>
-                {% endif %}
-              </button>
-            </span>
-            <div
-              id="collapse-{{ item.id }}"
-              class="accordion-collapse collapse rounded-bottom"
-              aria-labelledby="heading-{{ item.id }}"
-              data-bs-parent="#{{ _list_id }}"
+            <button
+              id="{{ item.id }}"
+              class="dropdown-toggle nav-link"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+              type="button"
+              data-bs-auto-close="outside"
             >
-              <div class="accordion-body">
-                {% if item.type is same as 'search' and search %}
-                  <div class="navbar-search">
-                    {{ search }}
-                  </div>
-                {% else %}
-                  <ul class="accordion-list">
-                    {% for link in item.links %}
-                      {% if link.link %}
-                        <li class="accordion-list-item">
-                          <a href="{{ link.link }}" class="accordion-list-link">
-                            {{ link.label }}
-                          </a>
-                        </li>
-                      {% endif %}
-                    {% endfor %}
-                  </ul>
-                {% endif %}
-              </div>
+              {% if item.icon is not empty %}
+                <svg class="bi icon--s">
+                  <use xlink:href="{{ bcl_icon_path }}#{{ item.icon.name }}"></use>
+                </svg>
+              {% endif %}
+            </button>
+            <div
+              {% if item.type is same as 'search' and search %}
+                id="dropdown-menu--search"
+              {% endif %}
+              class="dropdown-menu p-0"
+              aria-labelledby="{{ item.id }}"
+              data-popper-placement="right"
+            >
+              {% if item.type is same as 'search' and search %}
+                <div class="navbar-search p-2">
+                  {{ search }}
+                </div>
+              {% else %}
+                <ul class="dropdown-list p-3">
+                  {% for link in item.links %}
+                    {% if link.link %}
+                      <li class="dropdown-list-item">
+                        <a href="{{ link.link }}" class="dropdown-list-link">
+                          {{ link.label }}
+                        </a>
+                      </li>
+                    {% endif %}
+                  {% endfor %}
+                </ul>
+              {% endif %}
             </div>
           </li>
         {% endfor %}

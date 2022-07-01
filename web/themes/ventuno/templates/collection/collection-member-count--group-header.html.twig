@@ -9,13 +9,10 @@
  * @ingroup themeable
  */
 #}
-{%
-  set classes = ['collection-member-count']
-%}
-<span{{ attributes.addClass(classes) }}>
+<span{{ attributes }}>
   {% trans %}
-    1 member.
+    1 member
   {% plural count %}
-    {{ count }} members.
+    {{ count }} members
   {% endtrans %}
 </span>
