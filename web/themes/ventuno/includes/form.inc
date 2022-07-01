@@ -33,7 +33,7 @@ function ventuno_form_join_group_form_alter(array &$form, FormStateInterface $fo
   // Make the 'Join' modal link for anonymous users appear as a button.
   if (isset($form['authenticate'])) {
     $form['authenticate']['#attributes']['class'][] = 'btn';
-    $form['authenticate']['#attributes']['class'][] = 'btn-outline-secondary';
+    $form['authenticate']['#attributes']['class'][] = 'btn-secondary';
   }
 
   if (isset($form['pending'])) {
