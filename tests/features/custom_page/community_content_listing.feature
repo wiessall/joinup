@@ -529,8 +529,12 @@ Feature:
     And I should see the heading "Bikes"
 
     When I go to the edit form of the "Bikes" "custom page"
+    # Remove the first row.
     And I press "Remove filter"
     And I wait for AJAX to finish
     Then the 1st filter of the 1st content listing paragraph value is "Fight battery mode"
-    And the 1st filter of the 1st content listing paragraph value is "Black Noise"
-    And I press "Save"
+    And the 2nd filter of the 1st content listing paragraph value is "Black Noise"
+    And the 1st filter of the 2nd content listing paragraph value is "Black Noise"
+    And the 2nd filter of the 2nd content listing paragraph value is "Fight battery mode"
+    And I press "Add and configure filter"
+    And the 3nd filter of the 1st content listing paragraph is empty
