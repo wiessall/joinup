@@ -130,6 +130,11 @@ ief-entity-table:
     theme:
       assets/css/ief-entity-table.min.css: { minified: true }
 
+iop-header:
+  css:
+    theme:
+      assets/css/iop-header.min.css: { minified: true }
+
 navbar:
   css:
     theme:
