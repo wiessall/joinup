@@ -147,11 +147,10 @@ default:
         Explore block: '.block-joinup-front-page-explore-block'
         Featured: '.region-featured'
         Footer: '.section--footer, footer'
-        Hamburger menu: 'nav.joinup-navbar ul.navbar-nav ul.accordion-list'
+        Hamburger menu: 'nav.joinup-navbar ul.navbar-nav ul.dropdown-list'
         # TODO: Remove .section--featured,.section-header in ISAICP-7138.
         # See https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7138
         Header: '#block-ventuno-groupheader,.section--featured,.section-header'
-        Header menu: '#block-joinup-theme-main-menu'
         Highlighted content: '.block-entityqueue--highlighted-content'
         Highlighted event: '.block-entityqueue--highlighted-event'
         In the spotlight: '.block-views-blockin-the-spotlight-block'
