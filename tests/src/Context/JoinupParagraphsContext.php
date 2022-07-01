@@ -278,7 +278,9 @@ class JoinupParagraphsContext extends RawDrupalContext {
       throw new ExpectationFailedException("The $filter filter from $paragraph paragraph doesn't contain '$expected_value'");
     }
     if ($expected_value) {
-      Assert::assertSame($expected_value, $input->getAttribute('value'));
+      if (strpos($input->getAttribute('value'), $expected_value) === FALSE) {
+        throw new \Exception(sprintf('Expected content listing value is "%s", but "%s" found.', $expected_value, $input->getAttribute('value')));
+      }
     }
     else {
       Assert::assertEmpty($input->getAttribute('value'));

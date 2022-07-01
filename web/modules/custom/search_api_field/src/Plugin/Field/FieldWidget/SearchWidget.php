@@ -515,6 +515,8 @@ class SearchWidget extends WidgetBase implements ContainerFactoryPluginInterface
         ],
       ],
     ];
+    // Create a name suffix from the parents to make sure each submit is unique.
+    $id_suffix = $parents ? '_' . implode('_', $parents) : '';
     foreach ($filters as $plugin_delta => $plugin_config) {
       /** @var \Drupal\search_api_field\Plugin\FilterPluginInterface $plugin */
       $plugin = $this->filterPluginManager->createInstance($plugin_config['plugin'], $plugin_config);
@@ -536,7 +538,7 @@ class SearchWidget extends WidgetBase implements ContainerFactoryPluginInterface
         'remove_button' => [
           '#type' => 'submit',
           '#value' => $this->t('Remove filter'),
-          '#name' => 'remove_filter_' . $plugin_delta,
+          '#name' => 'remove_filter' . $id_suffix . '_' . $plugin_delta,
           '#submit' => [[$this, 'submitRemoveFilter']],
           '#ajax' => [
             'callback' => [$this, 'ajaxUpdateQueryBuilder'],
@@ -565,8 +567,6 @@ class SearchWidget extends WidgetBase implements ContainerFactoryPluginInterface
       '#options' => $options,
       '#required' => FALSE,
     ];
-    // Create a name suffix from the parents to make sure each submit is unique.
-    $id_suffix = $parents ? '_' . implode('_', $parents) : '';
     $element['add_more']['submit'] = [
       '#type' => 'submit',
       '#value' => $this->t('Add and configure filter'),
