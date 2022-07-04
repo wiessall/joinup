@@ -13,7 +13,9 @@
       <span>{{ prefix_text }}</span>
     {% endif -%}
     {{ suffix_text }}
+    <div class="filter__term d-inline">
     {{ active|safe_join(', ') }}
+    </div>
     <button{{ button_attributes }}>
       <svg class="bi icon--s">
         <use xlink:href="{{ bcl_icon_path }}#chevron-down"></use>
