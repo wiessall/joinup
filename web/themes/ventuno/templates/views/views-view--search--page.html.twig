@@ -62,6 +62,7 @@
       {% set search_exposed = header.views_block_area_1.content|merge({'results_count': results_count}) %}
       {{ search_exposed }}
       {{ header.views_block_area }}
+      {{ header.search_api_spellcheck_did_you_mean }}
     </div>
   {% endif %}
   {% if exposed %}
@@ -80,7 +81,7 @@
       {{ rows }}
     </div>
   {% elseif empty %}
-    <div class="view-empty">
+    <div class="view-empty my-3">
       {{ empty }}
     </div>
   {% endif %}
