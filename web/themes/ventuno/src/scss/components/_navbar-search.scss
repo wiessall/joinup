@@ -1,22 +1,22 @@
 .navbar-search {
   // Adjust position to right side of container
   @include media-breakpoint-between(xs, sm) {
-    width: calc(100vw - 1rem);
+    width: calc(100vw - .25rem);
   }
   @include media-breakpoint-between(sm, md) {
-    width: calc(map-get($container-max-widths, sm) - 2.5rem);
+    width: calc(map-get($container-max-widths, sm) - 1.5rem);
   }
   @include media-breakpoint-between(md, lg) {
-    width: calc(map-get($container-max-widths, md) - 2.5rem);
+    width: calc(map-get($container-max-widths, md) - 1.5rem);
   }
   @include media-breakpoint-between(lg, xl) {
-    width: calc(map-get($container-max-widths, lg) - 2.5rem);
+    width: calc(map-get($container-max-widths, lg) - 1.5rem);
   }
   @include media-breakpoint-between(xl, xxl) {
-    width: calc(map-get($container-max-widths, xl) - 2.5rem);
+    width: calc(map-get($container-max-widths, xl) - 1.5rem);
   }
   @include media-breakpoint-up(xxl) {
-    width: calc(map-get($container-max-widths, xxl) - 2.5rem);
+    width: calc(map-get($container-max-widths, xxl) - 1.5rem);
   }
   form {
     display: flex;
@@ -80,11 +80,9 @@
     display: none;
   }
 }
-#collapse-search {
+#dropdown-menu--search {
+  padding: $spacer * .5; // 8px
   @include media-breakpoint-between(xs, sm) {
     right: -10.5px;
-  }
-  .accordion-body {
-    padding: $spacer * .5; // 8px
   }
 }
