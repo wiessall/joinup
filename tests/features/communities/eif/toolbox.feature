@@ -26,22 +26,38 @@ Feature:
     # re-indexed when an EIF perspective is created or deleted and that
     # cache is invalidated properly.
     Given I visit the "Online Assistant" custom page
-    Then I should not see the heading "Jordan 1"
+    Then I should not see the following headings:
+      | Jordan 1 |
+      | Jordan 2 |
+      | Jordan 3 |
+      | Jordan 4 |
+      | Jordan 5 |
 
     Given the following EIF perspective data for the "Jordan 1" solution:
-      | Description      | It will be an amazing principle.                   |
-      | Type of solution | Common services                                    |
-      | Principle        | name: Underlying Principle 2: Openness             |
-      | Principle        | name: Underlying Principle 3: Transparency         |
-      | Principle        | name: Underlying Principle 8: Security and privacy |
+      | Description      | It will be an amazing principle.                                                                                     |
+      | Type of solution | Common services                                                                                                      |
+      | Solution type    | Assessment tools, Generic tools                                                                                      |
+      | Layer            | Interoperability Layer 3: Legal interoperability                                                                     |
+      | Model            | Basic Component 1: Coordination function                                                                             |
+      | Principle        | Underlying Principle 2: Openness, Underlying Principle 3: Transparency, Underlying Principle 8: Security and privacy |
     And the following EIF perspective data for the "Jordan 2" solution:
-      | Description      | It will be an amazing principle.           |
-      | Type of solution | Common services                            |
-      | Principle        | name: Underlying Principle 3: Transparency |
+      | Description   | It will be an amazing principle.                 |
+      | Solution type | Assessment tools, Generic tools                  |
+      | Layer         | Interoperability Layer 3: Legal interoperability |
+      | Model         | Basic Component 1: Coordination function         |
+      | Principle     | Underlying Principle 3: Transparency             |
     And the following EIF perspective data for the "Jordan 3" solution:
-      | Description      | It will be an amazing principle.                                                        |
-      | Type of solution | Common services                                                                         |
-      | Principle        | name: Underlying Principle 11: Preservation of information, description: Hello world 11 |
+      | Description   | It will be an amazing principle.                      |
+      | Solution type | Common services                                       |
+      | Principle     | Underlying Principle 11: Preservation of information  |
+      | Layer         | Interoperability Layer 1: Interoperability governance |
+      | Model         | Basic Component 4: Open data                          |
+    And the following EIF perspective data for the "Jordan 4" solution:
+      | Description   | It will be an amazing principle.                      |
+      | Solution type | Common services                                       |
+      | Principle     | Underlying Principle 11: Preservation of information  |
+      | Layer         | Interoperability Layer 1: Interoperability governance |
+      | Model         | Basic Component 4: Open data                          |
 
     When I visit the "Online Assistant" custom page
     And I should see the following filter categories in the correct order:
@@ -49,14 +65,116 @@ Feature:
       | Interoperability layer |
       | Conceptual model       |
       | Solution category      |
-    And I should see the heading "Jordan 1"
-    And I should see the heading "Jordan 2"
-    But I should not see the heading "Jordan 3"
+    Then I should see the following headings:
+      | Jordan 1 |
+      | Jordan 2 |
+      | Jordan 4 |
+    But I should not see the following headings:
+      | Jordan 3 |
+      | Jordan 5 |
 
+    # Test the principles.
     When I click "Transparency" in the "Content" region
-    And I should see the heading "Jordan 2"
-    But I should not see the heading "Jordan 3"
-    And I should not see the heading "Jordan 1"
+    Then I should see the following headings:
+      | Jordan 1 |
+      | Jordan 2 |
+    But I should not see the following headings:
+      | Jordan 3 |
+      | Jordan 4 |
+      | Jordan 5 |
+
+    # Test multiple options. Both "Transparency" and "Security and privacy" are
+    # selected.
+    When I click "Security and privacy" in the "Content" region
+    Then I should see the following headings:
+      | Jordan 1 |
+    But I should not see the following headings:
+      | Jordan 2 |
+      | Jordan 3 |
+      | Jordan 4 |
+      | Jordan 5 |
+
+    # Reset the options.
+    When I click "Transparency" in the "Content" region
+    When I click "Security and privacy" in the "Content" region
+    Then I should see the following headings:
+      | Jordan 1 |
+      | Jordan 2 |
+      | Jordan 4 |
+    But I should not see the following headings:
+      | Jordan 3 |
+      | Jordan 5 |
+
+    # Test the interoperability layer.
+    When I click "Legal interoperability" in the "Content" region
+    Then I should see the following headings:
+      | Jordan 1 |
+      | Jordan 2 |
+    But I should not see the following headings:
+      | Jordan 3 |
+      | Jordan 4 |
+      | Jordan 5 |
+
+    # Test selecting terms from more than one vocabularies.
+    When I click "Openness" in the "Content" region
+    Then I should see the following headings:
+      | Jordan 1 |
+    But I should not see the following headings:
+      | Jordan 2 |
+      | Jordan 3 |
+      | Jordan 4 |
+      | Jordan 5 |
+
+    # Reset the options.
+    When I click "Openness" in the "Content" region
+    When I click "Legal interoperability" in the "Content" region
+    Then I should see the following headings:
+      | Jordan 1 |
+      | Jordan 2 |
+      | Jordan 4 |
+    But I should not see the following headings:
+      | Jordan 3 |
+      | Jordan 5 |
+
+    # Test the conceptual model.
+    When I click "Open data" in the "Content" region
+    Then I should see the following headings:
+      | Jordan 4 |
+    But I should not see the following headings:
+      | Jordan 1 |
+      | Jordan 2 |
+      | Jordan 3 |
+      | Jordan 5 |
+
+    # Reset the options.
+    When I click "Open data" in the "Content" region
+    Then I should see the following headings:
+      | Jordan 1 |
+      | Jordan 2 |
+      | Jordan 4 |
+    But I should not see the following headings:
+      | Jordan 3 |
+      | Jordan 5 |
+
+    # Test the solution category.
+    When I click "Assessment tools" in the "Content" region
+    Then I should see the following headings:
+      | Jordan 1 |
+      | Jordan 2 |
+    Then I should not see the following headings:
+      | Jordan 3 |
+      | Jordan 4 |
+      | Jordan 5 |
+
+    # Reset the options.
+    When I click "Assessment tools" in the "Content" region
+    Then I should see the following headings:
+      | Jordan 1 |
+      | Jordan 2 |
+      | Jordan 4 |
+    But I should not see the following headings:
+      | Jordan 3 |
+      | Jordan 5 |
 
     # Ensure that deleting an EIF perspective, the online assistant is updated
     # as well.
