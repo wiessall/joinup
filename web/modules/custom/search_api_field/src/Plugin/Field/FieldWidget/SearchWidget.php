@@ -538,7 +538,7 @@ class SearchWidget extends WidgetBase implements ContainerFactoryPluginInterface
         'remove_button' => [
           '#type' => 'submit',
           '#value' => $this->t('Remove filter'),
-          '#name' => 'remove_filter' . $id_suffix . '_' . $plugin_delta,
+          '#name' => "remove_filter_{$plugin_delta}{$id_suffix}",
           '#submit' => [[$this, 'submitRemoveFilter']],
           '#ajax' => [
             'callback' => [$this, 'ajaxUpdateQueryBuilder'],

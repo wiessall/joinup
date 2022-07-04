@@ -13,7 +13,6 @@ use Drupal\joinup\Traits\JavascriptTrait;
 use Drupal\joinup\Traits\UtilityTrait;
 use Drupal\joinup\Traits\WysiwygTrait;
 use PHPUnit\Framework\Assert;
-use PHPUnit\Framework\ExpectationFailedException;
 
 /**
  * Behat step definitions for testing searches.
@@ -275,12 +274,10 @@ class JoinupParagraphsContext extends RawDrupalContext {
     $filter_1_based_delta = $this->convertOrdinalToNumber($filter);
     $input = $field->find('xpath', "(//input[@type='text'])[$filter_1_based_delta]");
     if (!$input) {
-      throw new ExpectationFailedException("The $filter filter from $paragraph paragraph doesn't contain '$expected_value'");
+      throw new ElementNotFoundException($this->getSession()->getDriver(), "Text field from $paragraph paragraph");
     }
     if ($expected_value) {
-      if (strpos($input->getAttribute('value'), $expected_value) === FALSE) {
-        throw new \Exception(sprintf('Expected content listing value is "%s", but "%s" found.', $expected_value, $input->getAttribute('value')));
-      }
+      Assert::assertStringContainsString($input->getAttribute('value'), $expected_value);
     }
     else {
       Assert::assertEmpty($input->getAttribute('value'));
@@ -306,9 +303,9 @@ class JoinupParagraphsContext extends RawDrupalContext {
     $paragraph_0_based_delta = $this->convertOrdinalToNumber($paragraph) - 1;
     $field = $this->getParagraphsElement('Custom content listing', $paragraph_0_based_delta);
     $filter_1_based_delta = $this->convertOrdinalToNumber($filter);
-    $input = $field->find('xpath', "(//input[@type='submit'])[$filter_1_based_delta]");
-    if ($input->getValue() !== $button) {
-      throw new ExpectationFailedException("The $filter filter from $paragraph paragraph doesn't contain '$button'");
+    $input = $field->find('xpath', "(//input[@type='submit' and @value='$button'])[$filter_1_based_delta]");
+    if (!$input) {
+      throw new ElementNotFoundException($this->getSession()->getDriver(), "Button contained $filter filter from $paragraph paragraph");
     }
     $input->click();
   }
