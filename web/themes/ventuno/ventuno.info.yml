@@ -12,6 +12,8 @@ libraries:
 libraries-extend:
   core/drupal.ajax:
     - ventuno/ajax-throbber
+  joinup_group/shared_entity:
+    - ventuno/shared-entity
 
 libraries-override:
   core/jquery.once: false
@@ -32,14 +34,6 @@ libraries-override:
   core/drupal.checkbox:
     js:
       misc/checkbox.js: assets/js/checkbox.min.js
-
-libraries-extend:
-  joinup_group/shared_entity:
-    - ventuno/shared-entity
-
-libraries-extend:
-  joinup_group/shared_entity:
-    - ventuno/shared-entity
 
 regions:
   header: Header
