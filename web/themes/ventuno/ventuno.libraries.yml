@@ -167,10 +167,6 @@ share-content-form:
 shared-entity:
   js:
     assets/js/shared-entity.js: { minified: true, attributes: { defer: true } }
-
-shared-entity:
-  js:
-    assets/js/shared-entity.js: { minified: true, attributes: { defer: true } }
   dependencies:
     - core/drupalSettings
 
