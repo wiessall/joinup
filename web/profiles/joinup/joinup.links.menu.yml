@@ -27,3 +27,9 @@ joinup.solutions_by_licences_report:
   route_name: joinup.solutions_by_licences_report
   parent: joinup.admin_reporting
   weight: 2
+
+joinup.statistics_per_group:
+  title: 'Statistics per group'
+  route_name: joinup.statistics_per_group
+  parent: joinup.admin_reporting
+  weight: 2
