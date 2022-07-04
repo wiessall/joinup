@@ -722,8 +722,8 @@ WHERE og.announcements = 0
     AND og.uid IN (SELECT DISTINCT(a.uid) FROM {entity_legal_document_acceptance} a)
 SQL;
 
-    $actual = \Drupal::database()->query($query)->fetchCol()[0];
-    Assert::assertSame('0', $actual);
+    $actual = \Drupal::database()->query($query)->fetchField();
+    Assert::assertEquals(0, $actual);
   }
 
 }
