@@ -17,6 +17,7 @@ use Drupal\joinup\Traits\EntityReferenceTrait;
 use Drupal\joinup\Traits\RdfEntityTrait;
 use Drupal\joinup\Traits\SearchTrait;
 use Drupal\joinup\Traits\TestingEntitiesTrait;
+use Drupal\joinup\Traits\UtilityTrait;
 use Drupal\menu_link_content\Entity\MenuLinkContent;
 use Drupal\node\Entity\Node;
 use Drupal\og\OgGroupAudienceHelperInterface;
@@ -36,6 +37,7 @@ class EifContext extends RawDrupalContext {
   use SearchTrait;
   use StringTranslationTrait;
   use TestingEntitiesTrait;
+  use UtilityTrait;
 
   /**
    * Creates the standard 'EIF' solution and a random parent collection.
@@ -202,23 +204,22 @@ class EifContext extends RawDrupalContext {
           break;
 
         case 'Solution type':
+          $qualifiers['eif_solution_type'] = $this->explodeCommaSeparatedStepArgument($row[1]) ?? [];
+          break;
+
         case 'Layer':
         case 'Model':
         case 'Principle':
         case 'Recommendation':
           $bundle = strtolower($row[0]);
-          // The following will split a phrase in the format of:
-          // name: Some title without comma, description: Some description
-          // the part from the comma symbol on (the description) is optional.
-          preg_match_all('/name:(\s*?)(?<name>[^,]*)(?:,(\s*?)description:(\s*?)(?<description>.*$))?/', $row[1], $matches);
-          if (isset($matches['name'][0])) {
-            $values = ['term' => trim($matches['name'][0])];
-            if (isset($matches['description'][0])) {
-              $values['description'] = trim($matches['description'][0]);
+          if ($labels = $this->explodeCommaSeparatedStepArgument($row[1])) {
+            foreach ($labels as $label) {
+              $qualifiers['eif_' . $bundle][] = $this->createEifWrapper($bundle, [
+                'name' => $label,
+              ]);;
             }
-
-            $qualifiers['eif_' . $bundle][] = $this->createEifWrapper($bundle, $values);
           }
+          break;
       }
     }
 
