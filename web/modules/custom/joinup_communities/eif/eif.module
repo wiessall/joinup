@@ -294,8 +294,7 @@ function _eif_reindex_parent_solution(RdfMetaEntityInterface $entity): void {
   // Manually update the entry of the solution in the SOLR index as we need to
   // index the extra property for the EIF perspective.
   $tracking_manager = \Drupal::getContainer()->get('search_api.entity_datasource.tracking_manager');
-  $tracking_manager->entityDelete($solution);
-  $tracking_manager->entityInsert($solution);
+  $tracking_manager->trackEntityChange($solution);
 
   // Invalidate cache tags of the solution and the RDF meta entity in order to
   // invalidate screens that are presenting them, like the EIF toolbox. The
