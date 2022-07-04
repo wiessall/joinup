@@ -604,12 +604,11 @@ class SolutionContext extends RawDrupalContext {
       'field_is_show_eira_related' => ['no' => 0, 'yes' => 1],
     ];
 
-    $eif_categories = array_flip(EifInterface::EIF_CATEGORIES);
     if (isset($fields['field_is_eif_category'])) {
       $labels = $this->explodeCommaSeparatedStepArgument($fields['field_is_eif_category']);
       $values = [];
       foreach ($labels as $label) {
-        $values[] = $eif_categories[$label];
+        $values[] = $this->getEntityIdByLabel($label, 'taxonomy_term', ['eif_solution_type']);
       }
       $fields['field_is_eif_category'] = implode(',', $values);
     }

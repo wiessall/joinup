@@ -29,13 +29,15 @@ Feature:
     Then I should not see the heading "Jordan 1"
 
     Given the following EIF perspective data for the "Jordan 1" solution:
-      | Description      | It will be an amazing principle.                                   |
-      | Type of solution | Common services                                                    |
-      | Principle        | name: Underlying Principle 2: Openness, description: Hello world 2 |
+      | Description      | It will be an amazing principle.                   |
+      | Type of solution | Common services                                    |
+      | Principle        | name: Underlying Principle 2: Openness             |
+      | Principle        | name: Underlying Principle 3: Transparency         |
+      | Principle        | name: Underlying Principle 8: Security and privacy |
     And the following EIF perspective data for the "Jordan 2" solution:
-      | Description      | It will be an amazing principle.                                       |
-      | Type of solution | Common services                                                        |
-      | Principle        | name: Underlying Principle 3: Transparency, description: Hello world 3 |
+      | Description      | It will be an amazing principle.           |
+      | Type of solution | Common services                            |
+      | Principle        | name: Underlying Principle 3: Transparency |
     And the following EIF perspective data for the "Jordan 3" solution:
       | Description      | It will be an amazing principle.                                                        |
       | Type of solution | Common services                                                                         |

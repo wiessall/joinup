@@ -16,7 +16,9 @@ class Eif implements EifInterface {
    * {@inheritdoc}
    */
   public static function getCategories(FieldStorageDefinitionInterface $definition, ?FieldableEntityInterface $entity = NULL, bool &$cacheable = TRUE): array {
-    return static::EIF_CATEGORIES;
+    return static::EIF_CATEGORY_VOCABULARIES;
   }
+
+  public static function
 
 }

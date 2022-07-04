@@ -249,7 +249,7 @@ function eif_rdf_meta_entity_update(RdfMetaEntityInterface $entity): void {
 /**
  * Implements hook_ENTITY_TYPE_delete().
  */
-function eif_rdf_meta_entity_delete(RdfMetaEntityInterface $entity) {
+function eif_rdf_meta_entity_delete(RdfMetaEntityInterface $entity): void {
   _eif_reindex_parent_solution($entity);
 }
 
@@ -273,16 +273,15 @@ function _eif_reindex_parent_solution(RdfMetaEntityInterface $entity): void {
   $tracking_manager->entityInsert($solution);
 
   // Invalidate cache tags of the solution and the RDF meta entity in order to
-  // invalidate screens that are presenting them, like the EIF toolbox.
-  // The solution cache tags are needed because text from the solution is
-  // displayed in the EIF toolbox. The solution entity type list tags are not
-  // though, as there needs to be a change to an EIF perspective in order to
-  // have an addition or a deletion to/from the EIF toolbox.
-  // Deletion of solutions will trigger the deletion of the EIF perspective.
-  // Creation of a solution 'with' an EIF perspective, will trigger the
-  // invalidation of cache as well.
-  // The solution cache tags are added independently to ensure minimal
-  // performance impact in CRUD operations of the EIF perspective.
+  // invalidate screens that are presenting them, like the EIF toolbox. The
+  // solution cache tags are needed because text from the solution is displayed
+  // in the EIF toolbox. The solution entity type list tags are not though, as
+  // there needs to be a change to an EIF perspective in order to have an
+  // addition or a deletion to/from the EIF toolbox. Deletion of solutions will
+  // trigger the deletion of the EIF perspective. Creation of a solution 'with'
+  // an EIF perspective, will trigger the invalidation of cache as well. The
+  // solution cache tags are added independently to ensure minimal performance
+  // impact in CRUD operations of the EIF perspective.
   // @see eif_views_pre_render().
   $cache_tags_invalidator = \Drupal::service('cache_tags.invalidator');
   $list_cache_tags = ["{$entity->getEntityTypeId()}_list:{$entity->bundle()}"];
@@ -293,7 +292,7 @@ function _eif_reindex_parent_solution(RdfMetaEntityInterface $entity): void {
 /**
  * Implements hook_views_pre_render().
  */
-function eif_views_pre_render(ViewExecutable $view) {
+function eif_views_pre_render(ViewExecutable $view): void {
   if ($view->current_display !== 'solutions_meta_entity_block') {
     return;
   }
