@@ -90,6 +90,11 @@ menu--og--navigation:
     theme:
       assets/css/menu--og--navigation.min.css: { minified: true }
 
+tabs:
+  css:
+    theme:
+      assets/css/tabs.min.css: { minified: true }
+
 # Custom and hybrid (BCL + custom) components
 footer:
   css:

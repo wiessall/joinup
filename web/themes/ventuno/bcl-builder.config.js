@@ -350,6 +350,15 @@ module.exports = {
       },
     },
     {
+      entry: path.resolve(outputFolder, "src/scss/tabs.scss"),
+      dest: path.resolve(outputFolder, "assets/css/tabs.min.css"),
+      options: {
+        includePaths,
+        minify: true,
+        sourceMap: "file",
+      },
+    },
+    {
       entry: path.resolve(outputFolder, "src/scss/tour.scss"),
       dest: path.resolve(outputFolder, "assets/css/tour.min.css"),
       options: {
