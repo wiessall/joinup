@@ -65,36 +65,19 @@ class EifFilterBlock extends BlockBase implements ContainerFactoryPluginInterfac
     $tree = [];
     $term_storage = $this->entityTypeManager->getStorage('taxonomy_term');
 
-    // Underlying principles.
-    $principle_terms = $term_storage->loadTree('eif_principle');
-    $name = $this->t('Underlying principles');
-    $id = htmlentities(str_replace([' ', '/', ':'], ['-', '-', ''], strtolower((string) $name)));
-    foreach ($principle_terms as $term) {
-      $tree = $this->getTree($id, (string) $name, $tree, $term, $term_storage);
-    }
+    $vocabularies = [
+      'eif_principle' => t('Underlying principles'),
+      'eif_interoperability_layer' => t('Interoperability layer'),
+      'eif_conceptual_model' => t('Conceptual model'),
+      'eif_solution_type' => t('Solution category'),
+    ];
 
-    // Interoperability layer.
-    $layer_terms = $term_storage->loadTree('eif_interoperability_layer');
-    $name = $this->t('Interoperability layer');
-    $id = htmlentities(str_replace([' ', '/', ':'], ['-', '-', ''], strtolower((string) $name)));
-    foreach ($layer_terms as $term) {
-      $tree = $this->getTree($id, (string) $name, $tree, $term, $term_storage);
-    }
-
-    // Conceptual model.
-    $model_terms = $term_storage->loadTree('eif_conceptual_model');
-    $name = $this->t('Conceptual model');
-    $id = htmlentities(str_replace([' ', '/', ':'], ['-', '-', ''], strtolower((string) $name)));
-    foreach ($model_terms as $term) {
-      $tree = $this->getTree($id, (string) $name, $tree, $term, $term_storage);
-    }
-
-    // Solution category.
-    $category_terms = $term_storage->loadTree('eif_solution_type');
-    $name = $this->t('Solution category');
-    $id = htmlentities(str_replace([' ', '/', ':'], ['-', '-', ''], strtolower((string)$name)));
-    foreach ($category_terms as $term) {
-      $tree = $this->getTree($id, (string) $name, $tree, $term, $term_storage);
+    foreach ($vocabularies as $machine_name => $name) {
+      $principle_terms = $term_storage->loadTree($machine_name);
+      $id = htmlentities(str_replace([' ', '/', ':'], ['-', '-', ''], strtolower((string) $name)));
+      foreach ($principle_terms as $term) {
+        $tree = $this->getTree($id, (string) $name, $tree, $term, $term_storage);
+      }
     }
 
     if (empty($tree)) {
