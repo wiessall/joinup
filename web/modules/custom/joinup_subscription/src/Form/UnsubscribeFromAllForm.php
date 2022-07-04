@@ -180,9 +180,10 @@ class UnsubscribeFromAllForm extends ConfirmFormBase {
       // on cron run.
       return;
     }
-    $membership->set('subscription_bundles', []);
-    $membership->set('announcements', FALSE);
-    $membership->save();
+    $membership
+      ->set('subscription_bundles', [])
+      ->set('announcements', FALSE)
+      ->save();
     $context['results']['labels'][$group->bundle()][] = $group->label();
     $context['results']['user'] = $membership->getOwner();
   }
