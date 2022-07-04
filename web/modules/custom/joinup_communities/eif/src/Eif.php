@@ -19,6 +19,4 @@ class Eif implements EifInterface {
     return static::EIF_CATEGORY_VOCABULARIES;
   }
 
-  public static function
-
 }
