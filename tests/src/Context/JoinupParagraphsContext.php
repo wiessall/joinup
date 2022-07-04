@@ -277,7 +277,7 @@ class JoinupParagraphsContext extends RawDrupalContext {
       throw new ElementNotFoundException($this->getSession()->getDriver(), "Text field from $paragraph paragraph");
     }
     if ($expected_value) {
-      Assert::assertStringContainsString($input->getAttribute('value'), $expected_value);
+      Assert::assertStringContainsString($expected_value, $input->getAttribute('value'));
     }
     else {
       Assert::assertEmpty($input->getAttribute('value'));
