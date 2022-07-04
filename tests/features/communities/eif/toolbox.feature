@@ -65,7 +65,7 @@ Feature:
       | Interoperability layer |
       | Conceptual model       |
       | Solution category      |
-    Then I should see the following headings:
+    And I should see the following headings:
       | Jordan 1 |
       | Jordan 2 |
       | Jordan 4 |
