@@ -16,7 +16,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *
  * @Block(
  *   id = "eif_filter_block",
- *   admin_label = @Translation("Eif filter block"),
+ *   admin_label = @Translation("EIF filter block"),
  *   category = @Translation("EIF")
  * )
  */
@@ -49,7 +49,7 @@ class EifFilterBlock extends BlockBase implements ContainerFactoryPluginInterfac
   /**
    * {@inheritdoc}
    */
-  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
+  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition): self {
     return new static(
       $configuration,
       $plugin_id,
@@ -63,45 +63,38 @@ class EifFilterBlock extends BlockBase implements ContainerFactoryPluginInterfac
    */
   public function build(): array {
     $tree = [];
-    $storage = $this->entityTypeManager->getStorage('taxonomy_term');
-    // Underlying principles.
-    $principle_terms = $storage->loadTree('eif_principle');
-    foreach ($principle_terms as $term) {
-      $name = $this->t('Underlying principles');
-      $id = htmlentities(
-        str_replace([' ', '/', ':'], ['-', '-', ''], strtolower((string) $name))
-      );
-      $tree = $this->getTree($id, (string) $name, $tree, $term, $storage);
-    }
-    // Interoperability layer.
-    $layer_terms = $storage->loadTree('eif_interoperability_layer');
-    foreach ($layer_terms as $term) {
-      $name = $this->t('Interoperability layer');
-      $id = htmlentities(
-        str_replace([' ', '/', ':'], ['-', '-', ''], strtolower((string) $name))
-      );
-      $tree = $this->getTree($id, (string) $name, $tree, $term, $storage);
-    }
-    // Conceptual model.
-    $model_terms = $storage->loadTree('eif_conceptual_model');
-    foreach ($model_terms as $term) {
-      $name = $this->t('Conceptual model');
-      $id = htmlentities(
-        str_replace([' ', '/', ':'], ['-', '-', ''], strtolower((string) $name))
-      );
-      $tree = $this->getTree($id, (string) $name, $tree, $term, $storage);
-    }
-    // Solution category.
-    foreach (EifInterface::EIF_CATEGORIES as $category => $label) {
-      $name = $this->t('Solution category');
-      $tree['solution-category']['title'] = $name;
-      $tree['solution-category']['class'] = 'eif-filter--solution-category';
+    $term_storage = $this->entityTypeManager->getStorage('taxonomy_term');
 
-      $tree['solution-category']['items'][] = [
-        'title' => $label,
-        'description' => NULL,
-        'eif_category' => $category,
-      ];
+    // Underlying principles.
+    $principle_terms = $term_storage->loadTree('eif_principle');
+    $name = $this->t('Underlying principles');
+    $id = htmlentities(str_replace([' ', '/', ':'], ['-', '-', ''], strtolower((string) $name)));
+    foreach ($principle_terms as $term) {
+      $tree = $this->getTree($id, (string) $name, $tree, $term, $term_storage);
+    }
+
+    // Interoperability layer.
+    $layer_terms = $term_storage->loadTree('eif_interoperability_layer');
+    $name = $this->t('Interoperability layer');
+    $id = htmlentities(str_replace([' ', '/', ':'], ['-', '-', ''], strtolower((string) $name)));
+    foreach ($layer_terms as $term) {
+      $tree = $this->getTree($id, (string) $name, $tree, $term, $term_storage);
+    }
+
+    // Conceptual model.
+    $model_terms = $term_storage->loadTree('eif_conceptual_model');
+    $name = $this->t('Conceptual model');
+    $id = htmlentities(str_replace([' ', '/', ':'], ['-', '-', ''], strtolower((string) $name)));
+    foreach ($model_terms as $term) {
+      $tree = $this->getTree($id, (string) $name, $tree, $term, $term_storage);
+    }
+
+    // Solution category.
+    $category_terms = $term_storage->loadTree('eif_solution_type');
+    $name = $this->t('Solution category');
+    $id = htmlentities(str_replace([' ', '/', ':'], ['-', '-', ''], strtolower((string)$name)));
+    foreach ($category_terms as $term) {
+      $tree = $this->getTree($id, (string) $name, $tree, $term, $term_storage);
     }
 
     if (empty($tree)) {

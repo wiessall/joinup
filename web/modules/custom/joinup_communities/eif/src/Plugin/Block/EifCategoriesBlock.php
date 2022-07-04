@@ -89,7 +89,7 @@ class EifCategoriesBlock extends BlockBase implements ContainerFactoryPluginInte
 
     $active_category = $this->routeMatch->getParameter('eif_category');
     $category_links = [];
-    foreach (EifInterface::EIF_CATEGORIES as $category => $label) {
+    foreach (EifInterface::EIF_CATEGORY_VOCABULARIES as $category => $label) {
       if (isset($categories[$category])) {
         $category_link = [
           '#type' => 'link',

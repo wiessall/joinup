@@ -201,10 +201,7 @@ class EifContext extends RawDrupalContext {
           $eif_perspective_fields['field_eif_description'] = trim($row[1]);
           break;
 
-        case 'Type of solution':
-          $eif_perspective_fields['field_eif_solution_type'] = ['target_id' => trim($row[1])];
-          break;
-
+        case 'Solution type':
         case 'Layer':
         case 'Model':
         case 'Principle':

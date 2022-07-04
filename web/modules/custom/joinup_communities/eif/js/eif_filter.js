@@ -37,8 +37,6 @@
       event.preventDefault();
 
       $(this).toggleClass('is-active');
-      console.log($(this));
-
       checkEifCategories();
     });
   });
