@@ -20,8 +20,18 @@ tile:
       label: 'Url'
       description: 'Url leading to the article.'
       preview: 'https://joinup.ec.europa.eu'
+    title_prefix:
+      type: object
+      label: 'Title'
+      description: 'Card title.'
+      preview: 'Title card'
     title:
       type: text
+      label: 'Title'
+      description: 'Card title.'
+      preview: 'Title card'
+    title_suffix:
+      type: object
       label: 'Title'
       description: 'Card title.'
       preview: 'Title card'
