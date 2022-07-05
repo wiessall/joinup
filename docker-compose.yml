@@ -118,8 +118,7 @@ services:
   # Includes a Selenium server accessible at port 5900.
   # See docker-compose.override.yml.dist
   selenium:
-    image: selenium/standalone-chrome-debug
+    image: selenium/standalone-chrome
     environment:
       - DISPLAY=:99
-      - SE_OPTS=-debug
       - VNC_NO_PASSWORD=1
