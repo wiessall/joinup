@@ -46,9 +46,10 @@ class EifCategoryConverter implements ParamConverterInterface {
       'name' => ucfirst(str_replace('-', ' ', $value)),
     ];
 
-    return $this->entityTypeManager
-      ->getStorage('taxonomy_term')
-      ->loadByProperties($properties) ? $value : NULL;
+    if ($terms = $this->entityTypeManager->getStorage('taxonomy_term')->loadByProperties($properties)) {
+      return reset($terms)->id();
+    }
+    return NULL;
   }
 
 }
