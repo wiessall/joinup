@@ -4,3 +4,4 @@ services:
     tags:
       # Use a higher priority than SparqlEntityStorageConverter.
       - { name: paramconverter, priority: 20 }
+    arguments: ['@entity_type.manager']
