@@ -285,13 +285,6 @@ class ReleaseRdfSubscriber extends NotificationSubscriberBase {
   /**
    * {@inheritdoc}
    */
-  protected function getConfigurationName(): string {
-    return '';
-  }
-
-  /**
-   * {@inheritdoc}
-   */
   protected function generateArguments(EntityInterface $entity): array {
     // PHP does not support covariance on arguments so we cannot narrow the type
     // hint to only asset release entities. Let's assert the type instead.

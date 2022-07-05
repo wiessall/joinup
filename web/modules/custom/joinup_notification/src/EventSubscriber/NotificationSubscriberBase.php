@@ -5,7 +5,6 @@ declare(strict_types = 1);
 namespace Drupal\joinup_notification\EventSubscriber;
 
 use Drupal\Core\Config\ConfigFactory;
-use Drupal\Core\Config\ImmutableConfig;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Session\AccountProxy;
@@ -47,9 +46,9 @@ abstract class NotificationSubscriberBase implements EventSubscriberInterface {
   /**
    * The config object that has the notification settings.
    *
-   * @var \Drupal\Core\Config\ImmutableConfig|null
+   * @var \Drupal\Core\Config\ImmutableConfig[]|null
    */
-  protected ?ImmutableConfig $config;
+  protected ?array $config;
 
   /**
    * The entity type manager.

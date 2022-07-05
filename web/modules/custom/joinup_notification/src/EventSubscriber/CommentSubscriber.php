@@ -245,13 +245,6 @@ class CommentSubscriber extends NotificationSubscriberBase {
   /**
    * {@inheritdoc}
    */
-  protected function getConfigurationName(): string {
-    return '';
-  }
-
-  /**
-   * {@inheritdoc}
-   */
   protected function generateArguments(EntityInterface $entity): array {
     // The parent is passed here instead so that the entity url will retrieve
     // the parent entity's url as the comments do not have one.
