@@ -15,5 +15,24 @@
         line-height: normal;
       }
     }
+    .pin {
+      position: absolute;
+      top: $spacer * .5; // 8px
+      right: $spacer * .5; // 8px
+      border-radius: $border-radius-pill;
+      width: $spacer * 1.5; // 24px
+      height: $spacer * 1.5; // 24px
+      background-color: $warning;
+      &::before {
+        margin-left: $spacer * .25; // 4px
+        @include get-bootstrap-icon('pin-angle-fill', $white);
+      }
+      // Avoid pin over the title when no image
+      & + .card-body {
+        .card-title {
+          margin-right: $spacer * 1.5; // 24px
+        }
+      }
+    }
   }
 }
