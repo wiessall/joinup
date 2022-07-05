@@ -210,6 +210,9 @@ class EifContext extends RawDrupalContext {
         case 'Layer':
         case 'Model':
         case 'Principle':
+          $eif_perspective_fields['eif_' . strtolower($row[0])] = $this->explodeCommaSeparatedStepArgument($row[1]);
+          break;
+
         case 'Recommendation':
           $bundle = strtolower($row[0]);
           if ($labels = $this->explodeCommaSeparatedStepArgument($row[1])) {

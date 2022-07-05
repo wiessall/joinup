@@ -9,6 +9,7 @@ style:
     assets/js/popovers.js: { minified: false }
   dependencies:
     - core/drupal
+    - ventuno/site-alerts-messages
 
 # Pages
 homepage:
@@ -65,6 +66,11 @@ footer:
   css:
     theme:
       assets/css/footer.css: {}
+
+form-checkboxes:
+  css:
+    theme:
+      assets/css/form-checkboxes.css: {}
 
 forms:
   css:

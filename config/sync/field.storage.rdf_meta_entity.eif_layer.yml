@@ -3,10 +3,10 @@ langcode: en
 status: true
 dependencies:
   module:
-    - eif
     - field_permissions
     - rdf_meta_entity
     - sparql_entity_storage
+    - taxonomy
 third_party_settings:
   sparql_entity_storage:
     mapping:
@@ -20,7 +20,7 @@ field_name: eif_layer
 entity_type: rdf_meta_entity
 type: entity_reference
 settings:
-  target_type: eif_wrapper
+  target_type: taxonomy_term
 module: core
 locked: false
 cardinality: -1
