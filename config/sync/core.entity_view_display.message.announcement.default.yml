@@ -45,7 +45,7 @@ content:
     label: above
     settings: {  }
     third_party_settings: {  }
-    weight: 1
+    weight: 5
     region: content
   subject:
     type: string

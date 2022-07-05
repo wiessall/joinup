@@ -1,4 +1,4 @@
-uuid: 5d30c19d-2ce3-437b-a720-765cafd8a339
+uuid: a4361246-a8f8-4af3-bdb5-9d5b87e0f71c
 langcode: en
 status: true
 dependencies:
@@ -6,18 +6,20 @@ dependencies:
     - field.storage.message.state
     - message.template.announcement
   module:
-    - options
+    - state_machine
 id: message.announcement.state
 field_name: state
 entity_type: message
 bundle: announcement
 label: State
-description: "new | New\r\nsent | Sent\r\nrejected | Rejected"
+description: ''
 required: false
-translatable: true
+translatable: false
 default_value:
   -
-    value: new
+    value: __new__
 default_value_callback: ''
-settings: {  }
-field_type: list_string
+settings:
+  workflow: announcement_workflow
+  workflow_callback: ''
+field_type: state

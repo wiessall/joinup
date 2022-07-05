@@ -16,6 +16,7 @@ use Drupal\joinup_group\Entity\GroupContentInterface;
 use Drupal\joinup_group\Exception\MissingGroupException;
 use Drupal\joinup_notification\Event\NotificationEvent;
 use Drupal\joinup_notification\NotificationEvents;
+use Drupal\message\MessageInterface;
 use Drupal\rdf_entity\RdfInterface;
 
 /**
@@ -23,11 +24,10 @@ use Drupal\rdf_entity\RdfInterface;
  *
  * Sends notifications when community content is updated.
  */
-function joinup_notification_node_insert(EntityInterface $entity) {
-  if (!$entity instanceof CommunityContentInterface) {
-    return;
+function joinup_notification_node_insert(EntityInterface $entity): void {
+  if ($entity instanceof CommunityContentInterface) {
+    joinup_notification_dispatch_notification('create', NotificationEvents::COMMUNITY_CONTENT_CREATE, $entity);
   }
-  joinup_notification_dispatch_notification('create', NotificationEvents::COMMUNITY_CONTENT_CREATE, $entity);
 }
 
 /**
@@ -45,11 +45,10 @@ function joinup_notification_node_insert(EntityInterface $entity) {
  *
  * @see https://www.drupal.org/node/2833084
  */
-function joinup_notification_node_presave(EntityInterface $entity) {
-  if ($entity->isNew() || !$entity instanceof CommunityContentInterface) {
-    return;
+function joinup_notification_node_presave(EntityInterface $entity): void {
+  if (!$entity->isNew() || $entity instanceof CommunityContentInterface) {
+    $entity->field_state_initial_value = $entity->get('field_state')->first()->getOriginalId();
   }
-  $entity->field_state_initial_value = $entity->get('field_state')->first()->getOriginalId();
 }
 
 /**
@@ -71,7 +70,7 @@ function joinup_notification_node_presave(EntityInterface $entity) {
  *
  * @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-6481
  */
-function joinup_notification_rdf_entity_presave(RdfInterface $entity) {
+function joinup_notification_rdf_entity_presave(RdfInterface $entity): void {
   $entity->hasPublished = !$entity->isNew() && $entity->hasGraph('default');
 }
 
@@ -80,11 +79,10 @@ function joinup_notification_rdf_entity_presave(RdfInterface $entity) {
  *
  * Sends notifications when community content is updated.
  */
-function joinup_notification_node_update(EntityInterface $entity) {
-  if (!$entity instanceof CommunityContentInterface) {
-    return;
+function joinup_notification_node_update(EntityInterface $entity): void {
+  if ($entity instanceof CommunityContentInterface) {
+    joinup_notification_dispatch_notification('update', NotificationEvents::COMMUNITY_CONTENT_UPDATE, $entity);
   }
-  joinup_notification_dispatch_notification('update', NotificationEvents::COMMUNITY_CONTENT_UPDATE, $entity);
 }
 
 /**
@@ -95,31 +93,30 @@ function joinup_notification_node_update(EntityInterface $entity) {
  * already before the active revision. In the end, the active revision is passed
  * into the delete hooks which can lead into false data e.g. wrong state.
  */
-function joinup_notification_node_predelete(EntityInterface $entity) {
-  if (!$entity instanceof CommunityContentInterface) {
-    return;
+function joinup_notification_node_predelete(EntityInterface $entity): void {
+  if ($entity instanceof CommunityContentInterface) {
+    joinup_notification_dispatch_notification('delete', NotificationEvents::COMMUNITY_CONTENT_DELETE, $entity);
   }
-  joinup_notification_dispatch_notification('delete', NotificationEvents::COMMUNITY_CONTENT_DELETE, $entity);
 }
 
 /**
  * Implements hook_ENTITY_TYPE_insert().
  */
-function joinup_notification_rdf_entity_insert(EntityInterface $entity) {
+function joinup_notification_rdf_entity_insert(EntityInterface $entity): void {
   joinup_notification_dispatch_notification('create', NotificationEvents::RDF_ENTITY_CRUD, $entity);
 }
 
 /**
  * Implements hook_ENTITY_TYPE_update().
  */
-function joinup_notification_rdf_entity_update(EntityInterface $entity) {
+function joinup_notification_rdf_entity_update(EntityInterface $entity): void {
   joinup_notification_dispatch_notification('update', NotificationEvents::RDF_ENTITY_CRUD, $entity);
 }
 
 /**
  * Implements hook_ENTITY_TYPE_delete().
  */
-function joinup_notification_rdf_entity_predelete(EntityInterface $entity) {
+function joinup_notification_rdf_entity_predelete(EntityInterface $entity): void {
   // Avoid sending notifications e.g. when orphaned entities are deleted.
   if ($entity instanceof AssetDistributionInterface) {
     try {
@@ -145,21 +142,21 @@ function joinup_notification_rdf_entity_predelete(EntityInterface $entity) {
 /**
  * Implements hook_ENTITY_TYPE_insert().
  */
-function joinup_notification_comment_insert(EntityInterface $entity) {
+function joinup_notification_comment_insert(EntityInterface $entity): void {
   joinup_notification_dispatch_notification('create', NotificationEvents::COMMENT_CRUD, $entity);
 }
 
 /**
  * Implements hook_ENTITY_TYPE_update().
  */
-function joinup_notification_comment_update(EntityInterface $entity) {
+function joinup_notification_comment_update(EntityInterface $entity): void {
   joinup_notification_dispatch_notification('update', NotificationEvents::COMMENT_CRUD, $entity);
 }
 
 /**
  * Implements hook_ENTITY_TYPE_delete().
  */
-function joinup_notification_comment_delete(EntityInterface $entity) {
+function joinup_notification_comment_delete(EntityInterface $entity): void {
   joinup_notification_dispatch_notification('delete', NotificationEvents::COMMENT_CRUD, $entity);
 }
 
@@ -173,7 +170,7 @@ function joinup_notification_comment_delete(EntityInterface $entity) {
  * @param \Drupal\Core\Entity\EntityInterface $entity
  *   The entity object.
  */
-function joinup_notification_dispatch_notification($operation, $event_name, EntityInterface $entity) {
+function joinup_notification_dispatch_notification(string $operation, string $event_name, EntityInterface $entity): void {
   // @todo Replace this direct access of a custom entity property with the
   //   temporary entity data API once it lands in core.
   // @see https://www.drupal.org/node/2896474
@@ -237,33 +234,31 @@ function joinup_notification_mail_alter(array &$message): void {
 /**
  * Implements hook_ENTITY_TYPE_insert().
  */
-function joinup_notification_og_membership_insert(EntityInterface $entity) {
+function joinup_notification_og_membership_insert(EntityInterface $entity): void {
   joinup_notification_dispatch_notification('create', NotificationEvents::OG_MEMBERSHIP_MANAGEMENT, $entity);
 }
 
 /**
  * Implements hook_ENTITY_TYPE_presave().
  */
-function joinup_notification_og_membership_presave(EntityInterface $entity) {
-  if ($entity->isNew()) {
-    return;
+function joinup_notification_og_membership_presave(EntityInterface $entity): void {
+  if (!$entity->isNew()) {
+    joinup_notification_dispatch_notification('update', NotificationEvents::OG_MEMBERSHIP_MANAGEMENT, $entity);
   }
-  joinup_notification_dispatch_notification('update', NotificationEvents::OG_MEMBERSHIP_MANAGEMENT, $entity);
 }
 
 /**
  * Implements hook_ENTITY_TYPE_predelete().
  */
-function joinup_notification_og_membership_predelete(EntityInterface $entity) {
+function joinup_notification_og_membership_predelete(EntityInterface $entity): void {
   joinup_notification_dispatch_notification('delete', NotificationEvents::OG_MEMBERSHIP_MANAGEMENT, $entity);
 }
 
 /**
  * Implements hook_ENTITY_TYPE_insert().
  */
-function joinup_notification_message_insert(EntityInterface $entity): void {
-  if ($entity->bundle() != 'announcement') {
-    return;
+function joinup_notification_message_insert(MessageInterface $message): void {
+  if ($message->bundle() === 'announcement') {
+    joinup_notification_dispatch_notification('create', NotificationEvents::ANNOUNCEMENT_CREATE, $message);
   }
-  joinup_notification_dispatch_notification('create', NotificationEvents::ANNOUNCEMENT_CREATE, $entity);
 }

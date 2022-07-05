@@ -5,21 +5,17 @@ declare(strict_types = 1);
 namespace Drupal\joinup_notification\EventSubscriber;
 
 use Drupal\Core\Entity\EntityInterface;
-use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\joinup_group\Entity\GroupContentInterface;
 use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_group\JoinupGroupHelper;
 use Drupal\joinup_notification\Event\NotificationEvent;
 use Drupal\joinup_notification\MessageArgumentGenerator;
 use Drupal\joinup_notification\NotificationEvents;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
  * Handles notifications related to comments.
  */
-class CommentSubscriber extends NotificationSubscriberBase implements EventSubscriberInterface {
-
-  use StringTranslationTrait;
+class CommentSubscriber extends NotificationSubscriberBase {
 
   const TEMPLATE_CREATE = 'comment_create';
   const TEMPLATE_UPDATE = 'comment_update';

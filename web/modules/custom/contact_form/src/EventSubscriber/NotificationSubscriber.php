@@ -9,12 +9,11 @@ use Drupal\Core\Url;
 use Drupal\contact_form\ContactFormEvents;
 use Drupal\joinup_notification\Event\NotificationEvent;
 use Drupal\joinup_notification\EventSubscriber\NotificationSubscriberBase;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
  * Class responsible to send the email after a contact form.
  */
-class NotificationSubscriber extends NotificationSubscriberBase implements EventSubscriberInterface {
+class NotificationSubscriber extends NotificationSubscriberBase {
 
   /**
    * {@inheritdoc}

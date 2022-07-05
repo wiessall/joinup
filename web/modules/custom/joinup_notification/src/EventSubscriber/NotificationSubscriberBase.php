@@ -5,9 +5,11 @@ declare(strict_types = 1);
 namespace Drupal\joinup_notification\EventSubscriber;
 
 use Drupal\Core\Config\ConfigFactory;
+use Drupal\Core\Config\ImmutableConfig;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Session\AccountProxy;
+use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\Url;
 use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_group\JoinupGroupHelper;
@@ -19,74 +21,77 @@ use Drupal\og\MembershipManagerInterface;
 use Drupal\og\OgRoleInterface;
 use Drupal\user\Entity\User;
 use Drupal\user\UserInterface;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
  * A base class for the notification subscribers.
  */
-abstract class NotificationSubscriberBase {
+abstract class NotificationSubscriberBase implements EventSubscriberInterface {
+
+  use StringTranslationTrait;
 
   /**
    * The entity object.
    *
    * @var \Drupal\Core\Entity\EntityInterface
    */
-  protected $entity;
+  protected EntityInterface $entity;
 
   /**
    * The operation id.
    *
    * @var string
    */
-  protected $operation;
+  protected string $operation;
 
   /**
    * The config object that has the notification settings.
    *
-   * @var \Drupal\Core\Config\ImmutableConfig
+   * @var \Drupal\Core\Config\ImmutableConfig|null
    */
-  protected $config;
+  protected ?ImmutableConfig $config;
 
   /**
    * The entity type manager.
    *
    * @var \Drupal\Core\Entity\EntityTypeManagerInterface
    */
-  protected $entityTypeManager;
+  protected EntityTypeManagerInterface $entityTypeManager;
 
   /**
    * The config factory service.
    *
    * @var \Drupal\Core\Config\ConfigFactory
    */
-  protected $configFactory;
+  protected ConfigFactory $configFactory;
 
   /**
    * The current user service.
    *
    * @var \Drupal\Core\Session\AccountProxy
    */
-  protected $currentUser;
+  protected AccountProxy $currentUser;
 
   /**
    * The membership manager service.
    *
    * @var \Drupal\og\MembershipManagerInterface
    */
-  protected $membershipManager;
+  protected MembershipManagerInterface $membershipManager;
 
   /**
    * The workflow helper service.
    *
    * @var \Drupal\joinup_workflow\WorkflowHelperInterface
    */
-  protected $workflowHelper;
+  protected WorkflowHelperInterface $workflowHelper;
 
   /**
    * The message delivery service.
    *
    * @var \Drupal\joinup_notification\JoinupMessageDeliveryInterface
    */
-  protected $messageDelivery;
+  protected JoinupMessageDeliveryInterface $messageDelivery;
 
   /**
    * Constructs a new CommunityContentSubscriber object.
@@ -240,7 +245,7 @@ abstract class NotificationSubscriberBase {
    * @return array
    *   An array of user ids.
    */
-  protected function getRecipientIdsByRole($role_id): array {
+  protected function getRecipientIdsByRole(string $role_id): array {
     return $this->entityTypeManager->getStorage('user')->getQuery()
       ->condition('status', 1)
       ->condition('roles', $role_id)
@@ -310,9 +315,6 @@ abstract class NotificationSubscriberBase {
     // Check for canonical to prevent error with "Message" entity type.
     if ($entity->hasLinkTemplate('canonical')) {
       $arguments['@entity:url'] = $entity->toUrl('canonical')->setAbsolute()->toString();
-    }
-    if ($entity->hasField('subject')) {
-      $arguments['@entity:subject'] = $entity->get('subject')->value;
     }
     $arguments['@user:my_subscriptions'] = Url::fromRoute('joinup_subscription.my_subscriptions')->setAbsolute()->toString();
 

@@ -200,11 +200,7 @@ trait GroupTrait {
    * {@inheritdoc}
    */
   public function getMembers(array $states = [OgMembershipInterface::STATE_ACTIVE]): ?array {
-    $ids = (array) \Drupal::entityQuery('og_membership')
-      ->condition('entity_type', 'rdf_entity')
-      ->condition('entity_id', $this->id())
-      ->condition('state', $states, 'IN')
-      ->execute();
+    $ids = $this->getMembershipManager()->getGroupMembershipIdsByRoleNames($this, [OgRoleInterface::AUTHENTICATED], $states);
 
     if (empty($ids)) {
       return [];
