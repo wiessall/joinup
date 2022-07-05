@@ -466,13 +466,6 @@ class CollectionRdfSubscriber extends NotificationSubscriberBase {
   /**
    * {@inheritdoc}
    */
-  protected function getConfigurationName(): string {
-    return '';
-  }
-
-  /**
-   * {@inheritdoc}
-   */
   protected function generateArguments(EntityInterface $entity): array {
     $arguments = parent::generateArguments($entity);
     /** @var \Drupal\user\UserInterface $actor */

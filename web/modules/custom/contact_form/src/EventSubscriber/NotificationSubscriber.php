@@ -195,11 +195,4 @@ class NotificationSubscriber extends NotificationSubscriberBase {
     return [];
   }
 
-  /**
-   * {@inheritdoc}
-   */
-  protected function getConfigurationName(): string {
-    return '';
-  }
-
 }

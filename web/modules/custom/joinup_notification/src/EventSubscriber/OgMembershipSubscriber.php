@@ -48,7 +48,6 @@ class OgMembershipSubscriber extends NotificationSubscriberBase {
     $this->membership = $event->getEntity();
     $this->entity = $this->membership->getGroup();
     $this->operation = $event->getOperation();
-    $this->config = $this->getConfigurationName();
   }
 
   /**
@@ -194,13 +193,6 @@ class OgMembershipSubscriber extends NotificationSubscriberBase {
     }
 
     return TRUE;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  protected function getConfigurationName(): string {
-    return '';
   }
 
   /**
