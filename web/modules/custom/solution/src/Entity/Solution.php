@@ -5,6 +5,7 @@ declare(strict_types = 1);
 namespace Drupal\solution\Entity;
 
 use Drupal\Component\Utility\NestedArray;
+use Drupal\Core\Cache\Cache;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\asset_release\Entity\AssetReleaseInterface;
@@ -234,6 +235,14 @@ class Solution extends Rdf implements SolutionInterface {
       default:
         return $this->t('You are already subscribed to %group.', $parameters);
     }
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getCacheTagsToInvalidate(): array {
+    $tags = $this->id() ? ['solution_download_count:' . md5($this->id())] : [];
+    return Cache::mergeTags(parent::getCacheTagsToInvalidate(), $tags);
   }
 
 }

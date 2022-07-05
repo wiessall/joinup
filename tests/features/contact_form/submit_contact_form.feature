@@ -106,3 +106,25 @@ Feature: Submit the contact form
     Then the "First name" field should contain "Wally"
     And the "Last name" field should contain "Papamichael"
     And the "E-mail address" field should contain "w.papamichael@schiffmann.de"
+
+  @javascript
+  Scenario: Regression test for ISAICP-7104
+  See https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7104
+
+    Given I am not logged in
+    Then I go to the contact form
+    And I fill in "First name" with "Diana"
+    And I fill in "Last name" with "Chaves"
+    And I fill in "Organisation" with "Lucotores State"
+    And I fill in "E-mail address" with "doana.chaves@free.pe"
+    And I select "Technical problem / bug report" from "Category"
+    And I fill in "Page URL" with "https://joinup.test:8080"
+    And I select "Question on usage" from "Category"
+    And I fill in "Subject" with "Reminder me please"
+    And I enter "I will be back..." in the "Message" wysiwyg editor
+    # We need to wait 5 seconds for the spam protection time limit to pass.
+    And I wait for the spam protection time limit to pass
+    Then I press "Submit"
+    And I should see the following success messages:
+      | success messages                                              |
+      | Your message has been submitted. Thank you for your feedback. |
