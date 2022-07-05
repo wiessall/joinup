@@ -22,6 +22,7 @@ use Drupal\Core\Url;
 use Drupal\file\Entity\File;
 use Drupal\joinup_group\Entity\GroupContentInterface;
 use Drupal\joinup_group\Entity\GroupInterface;
+use Drupal\joinup_group\Entity\PinnableGroupContentInterface;
 use Drupal\joinup_group\Event\GroupMenuLinksEvent;
 use Drupal\joinup_group\Form\RdfDeleteForm;
 use Drupal\joinup_group\Form\UserCancelForm;
@@ -916,5 +917,21 @@ function joinup_group_rdf_entity_view_alter(array &$build, EntityInterface $enti
   if ($entity instanceof GroupInterface && $display->getMode() === 'group_header') {
     // Hide contextual links for group header block.
     unset($build['#contextual_links']);
+  }
+}
+
+/**
+ * Implements hook_entity_view().
+ */
+function joinup_group_entity_view(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, string $view_mode): void {
+  if (!$entity instanceof PinnableGroupContentInterface || $view_mode !== 'view_mode_tile') {
+    return;
+  }
+
+  $group = \Drupal::service('joinup_group.group_manager')->getGroupFromContext();
+  if ($entity->isPinned($group)) {
+    $build['#attributes']['class'][] = 'is-pinned';
+    $build['#attributes']['data-drupal-pinned-in'] = implode(',', $entity->getPinnedGroupIds());
+    $build['#attached']['library'][] = 'joinup_group/pinned_entities';
   }
 }
