@@ -8,15 +8,15 @@ Feature:
       | EIF solution  | Some description not to be shown in the EIF page | validated |
       | EIF only type | Some description not to be shown in the EIF page | validated |
     Given the following EIF perspective data for the "EIF solution" solution:
-      | Description      | This should be in the description field.                                                       |
-      | Type of solution | Common frameworks                                                                              |
-      | Principle        | Underlying Principle 1: Subsidiarity and proportionality, Underlying Principle 3: Transparency |
-      | Layer            | Interoperability Layer 3: Legal interoperability                                               |
-      | Recommendation   | name: Recommendation 21, description: This is recommended                                      |
-      | Recommendation   | name: Recommendation 15, description: This is also recommended                                 |
+      | Description    | This should be in the description field.                                                       |
+      | Solution type  | Common frameworks                                                                              |
+      | Principle      | Underlying Principle 1: Subsidiarity and proportionality, Underlying Principle 3: Transparency |
+      | Layer          | Interoperability Layer 3: Legal interoperability                                               |
+      | Recommendation | name: Recommendation 21, description: This is recommended                                      |
+      | Recommendation | name: Recommendation 15, description: This is also recommended                                 |
     Given the following EIF perspective data for the "EIF only type" solution:
-      | Description      | This should be in the description field. |
-      | Type of solution | Common frameworks                        |
+      | Description   | This should be in the description field. |
+      | Solution type | Common frameworks                        |
     Then there should be an EIF perspective associated with the "EIF solution" solution
     And there should be an EIF perspective associated with the "EIF only type" solution
 
