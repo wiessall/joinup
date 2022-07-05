@@ -215,12 +215,18 @@ class EifContext extends RawDrupalContext {
 
         case 'Recommendation':
           $bundle = strtolower($row[0]);
-          if ($labels = $this->explodeCommaSeparatedStepArgument($row[1])) {
-            foreach ($labels as $label) {
-              $qualifiers['eif_' . $bundle][] = $this->createEifWrapper($bundle, [
-                'name' => $label,
-              ]);
+          // The following will split a phrase in the format of:
+          // name: Some title without comma, description: Some description.
+          //
+          // The part from the comma symbol on (the description) is optional.
+          preg_match_all('/name:(\s*?)(?<name>[^,]*)(?:,(\s*?)description:(\s*?)(?<description>.*$))?/', $row[1], $matches);
+          if (isset($matches['name'][0])) {
+            $values = ['term' => trim($matches['name'][0])];
+            if (isset($matches['description'][0])) {
+              $values['description'] = trim($matches['description'][0]);
             }
+
+            $qualifiers['eif_recommendation'][] = $this->createEifWrapper($bundle, $values);
           }
           break;
       }
