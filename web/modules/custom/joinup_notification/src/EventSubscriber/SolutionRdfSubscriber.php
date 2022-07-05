@@ -5,13 +5,11 @@ declare(strict_types = 1);
 namespace Drupal\joinup_notification\EventSubscriber;
 
 use Drupal\Core\Entity\EntityInterface;
-use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\joinup_notification\Event\NotificationEvent;
 use Drupal\joinup_notification\NotificationEvents;
 use Drupal\joinup_workflow\EntityWorkflowStateInterface;
 use Drupal\og\OgRoleInterface;
 use Drupal\solution\Entity\SolutionInterface;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
  * Notification handler for the notifications related to solutions.
@@ -59,9 +57,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
  *   Recipients: owner
  * @codingStandardsIgnoreEnd
  */
-class SolutionRdfSubscriber extends NotificationSubscriberBase implements EventSubscriberInterface {
-
-  use StringTranslationTrait;
+class SolutionRdfSubscriber extends NotificationSubscriberBase {
 
   const TEMPLATE_APPROVE = 'sol_approve_proposed';
   const TEMPLATE_BLACKLIST = 'sol_blacklist';

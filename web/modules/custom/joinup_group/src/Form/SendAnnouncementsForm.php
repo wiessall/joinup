@@ -117,12 +117,12 @@ class SendAnnouncementsForm extends FormBase {
    */
   public function submitForm(array &$form, FormStateInterface $form_state): void {
     $token_data = ['rdf_entity' => $this->group];
-    $message = Message::create(['template' => 'announcement']);
-    $message->set('group_reference', $this->group->id());
-    $message->set('subject', $this->token->replacePlain($form_state->getValue('subject'), $token_data));
-    $message->set('body', $this->token->replacePlain($form_state->getValue('body'), $token_data));
-    $message->set('recipients', $this->group->getMembers());
-    $message->save();
+    Message::create(['template' => 'announcement'])
+      ->set('group_reference', $this->group->id())
+      ->set('subject', $this->token->replacePlain($form_state->getValue('subject'), $token_data))
+      ->set('body', $this->token->replacePlain($form_state->getValue('body'), $token_data))
+      ->set('recipients', $this->group->getMembers())
+      ->save();
     $this->messenger()->addStatus($this->t('Your announcement has been submitted for validation.'));
   }
 

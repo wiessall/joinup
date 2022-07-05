@@ -1,31 +1,20 @@
-uuid: 6173d6fd-ef3c-4363-a28b-46217dddd4b4
+uuid: 0348ad70-ab72-42a1-89e9-9e0f62ca884c
 langcode: en
 status: true
 dependencies:
   module:
     - field_permissions
     - message
-    - options
+    - state_machine
 third_party_settings:
   field_permissions:
     permission_type: custom
 id: message.state
 field_name: state
 entity_type: message
-type: list_string
-settings:
-  allowed_values:
-    -
-      value: new
-      label: New
-    -
-      value: sent
-      label: Sent
-    -
-      value: rejected
-      label: Rejected
-  allowed_values_function: ''
-module: options
+type: state
+settings: {  }
+module: state_machine
 locked: false
 cardinality: 1
 translatable: true
