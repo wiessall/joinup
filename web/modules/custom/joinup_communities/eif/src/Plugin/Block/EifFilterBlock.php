@@ -8,7 +8,6 @@ use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
-use Drupal\eif\EifInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -66,10 +65,10 @@ class EifFilterBlock extends BlockBase implements ContainerFactoryPluginInterfac
     $term_storage = $this->entityTypeManager->getStorage('taxonomy_term');
 
     $vocabularies = [
-      'eif_principle' => t('Underlying principles'),
-      'eif_interoperability_layer' => t('Interoperability layer'),
-      'eif_conceptual_model' => t('Conceptual model'),
-      'eif_solution_type' => t('Solution category'),
+      'eif_principle' => $this->t('Underlying principles'),
+      'eif_interoperability_layer' => $this->t('Interoperability layer'),
+      'eif_conceptual_model' => $this->t('Conceptual model'),
+      'eif_solution_type' => $this->t('Solution category'),
     ];
 
     foreach ($vocabularies as $machine_name => $name) {
