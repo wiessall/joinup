@@ -585,6 +585,7 @@ module.exports = {
             'linkedin.svg',
             'newspaper.svg',
             'person-circle.svg',
+            'pin-angle-fill.svg',
             'plus.svg',
             'search.svg',
             'star.svg',
