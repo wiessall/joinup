@@ -363,7 +363,7 @@ function _joinup_preprocess_entity_tiles(array &$variables) {
 
   if ($entity instanceof PinnableGroupContentInterface && $entity->isPinned($group)) {
     $variables['attributes']['class'][] = 'is-pinned';
-    $variables['#attached']['library'][] = 'joinup/pinned_entities';
+    $variables['#attached']['library'][] = 'joinup_group/pinned_entities';
 
     $group_ids = $entity->getPinnedGroupIds();
     $variables['attributes']['data-drupal-pinned-in'] = implode(',', $group_ids);
