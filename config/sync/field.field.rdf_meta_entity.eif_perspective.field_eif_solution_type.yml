@@ -12,7 +12,7 @@ entity_type: rdf_meta_entity
 bundle: eif_perspective
 label: 'Type of solution'
 description: ''
-required: false
+required: true
 translatable: false
 default_value: {  }
 default_value_callback: ''

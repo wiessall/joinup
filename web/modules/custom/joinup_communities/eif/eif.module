@@ -17,6 +17,7 @@ use Drupal\Core\Session\AccountInterface;
 use Drupal\eif\EifInterface;
 use Drupal\eif\Form\EifWrapperInlineForm;
 use Drupal\eif\Plugin\views\argument\EifGroupArgument;
+use Drupal\field\FieldConfigInterface;
 use Drupal\og\OgGroupAudienceHelperInterface;
 use Drupal\rdf_meta_entity\Entity\RdfMetaEntityInterface;
 use Drupal\views\ViewExecutable;
@@ -216,6 +217,30 @@ function eif_form_rdf_meta_entity_eif_perspective_form_alter(array &$form, FormS
       $form[$name]['widget']['form']['#title'] = NULL;
     }
   }
+
+  $form['#validate'][] = '_eif_form_rdf_meta_entity_no_empty_field_validate';
+}
+
+/**
+ * Validation callback for the EIF perspective form.
+ *
+ * @param array $form
+ *   The form array.
+ * @param \Drupal\Core\Form\FormStateInterface $form_state
+ *   The form state object.
+ */
+function _eif_form_rdf_meta_entity_no_empty_field_validate(array &$form, FormStateInterface $form_state): void {
+  // No field is required but the user needs to fill in at least 1 field in the
+  // form.
+  if (empty($form_state->getValue('field_eif_description')[0]['value'])
+    && empty($form_state->getValue('eif_solution_type'))
+    && empty($form_state->getValue('eif_model'))
+    && empty($form_state->getValue('eif_layer'))
+    && empty($form_state->getValue('eif_principle'))
+    && empty($form_state->getValue('eif_recommendation')['entities'])
+  ) {
+    $form_state->setError($form, 'An EIF perspective cannot be created without any information. Please, fill in at least one field.');
+  }
 }
 
 /**
@@ -305,8 +330,83 @@ function eif_views_pre_render(ViewExecutable $view): void {
     $cache_tags = Cache::mergeTags($cache_tags, $solution->getCacheTags());
   }
 
-  $eif_perspective_list_cache_tags = \Drupal::entityTypeManager()->getStorage('rdf_meta_entity_type')->load('eif_perspective')->getCacheTags();
+  $eif_perspective_list_cache_tags = \Drupal::entityTypeManager()
+    ->getStorage('rdf_meta_entity_type')
+    ->load('eif_perspective')
+    ->getCacheTags();
   $cache_tags[] = 'rdf_meta_entity_list:eif_perspective';
   $cache_tags = Cache::mergeTags($cache_tags, $eif_perspective_list_cache_tags);
   $view->element['#cache']['tags'] = Cache::mergeTags($view->element['#cache']['tags'], $cache_tags);
+}
+
+/**
+ * Implements hook_options_list_alter().
+ */
+function eif_options_list_alter(array &$options, array $context): void {
+  // @todo Remove this in ISAICP-7110 apart from the sorting part.
+  // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7110.
+  if (empty($context['fieldDefinition']) || !($context['fieldDefinition'] instanceof FieldConfigInterface)) {
+    return;
+  }
+
+  $fields = ['eif_layer', 'eif_model', 'eif_principle'];
+  if (in_array($context['fieldDefinition']->getName(), $fields)) {
+    foreach ($options as $key => $value) {
+      $parts = explode(':', $value);
+      // Some labels do not have prefix.
+      if (count($parts) === 2) {
+        $options[$key] = trim($parts[1]);
+      }
+    }
+  }
+  elseif ($context['fieldDefinition']->id() === 'eif_wrapper.recommendation.term') {
+    $empty_option = [];
+    if (isset($options['_none'])) {
+      $empty_option['_none'] = t('- Select a Recommendation -');
+    }
+
+    $terms = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->loadByProperties([
+      'vid' => 'eif_recommendation',
+    ]);
+    foreach ($options as $key => $value) {
+      if (isset($terms[$key]) && !empty($terms[$key]->field_eif_related_term->entity)) {
+        $options[$key] = $value . ' - ' . $terms[$key]->field_eif_related_term->entity->label();
+      }
+    }
+
+    // Remove the empty option - if available - to re-add it later first.
+    unset($options['_none']);
+    uksort($options, function (string $key1, string $key2) use ($terms): bool {
+      return $terms[$key1]->field_eif_identifier->value > $terms[$key2]->field_eif_identifier->value;
+    });
+    $options = $empty_option + $options;
+  }
+}
+
+/**
+ * Implements hook_inline_entity_form_entity_form_alter().
+ */
+function eif_inline_entity_form_entity_form_alter(array &$entity_form, FormStateInterface &$form_state): void {
+  if ($entity_form['#entity_type'] !== 'eif_wrapper' || $entity_form['#bundle'] !== 'recommendation') {
+    return;
+  }
+
+  $entity_form['term']['widget']['#title_display'] = 'invisible';
+  $entity_form['#after_build'][] = '_eif_inline_entity_form_actions_alter';
+}
+
+/**
+ * Callback function to rename IEF action buttons for the EIF recommendation.
+ *
+ * @param array $entity_form
+ *   The entity form.
+ * @param \Drupal\Core\Form\FormStateInterface $form_state
+ *   The form API form state object.
+ *
+ * @return array
+ *   The processed form array.
+ */
+function _eif_inline_entity_form_actions_alter(array $entity_form, FormStateInterface $form_state): array {
+  $entity_form['actions']['ief_add_save']['#value'] = t('Save recommendation');
+  return $entity_form;
 }
