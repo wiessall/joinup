@@ -219,7 +219,7 @@ class EifContext extends RawDrupalContext {
             foreach ($labels as $label) {
               $qualifiers['eif_' . $bundle][] = $this->createEifWrapper($bundle, [
                 'name' => $label,
-              ]);;
+              ]);
             }
           }
           break;
