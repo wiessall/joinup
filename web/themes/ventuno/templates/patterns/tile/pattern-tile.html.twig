@@ -42,9 +42,7 @@
   ] %}
   {% if _image is empty %}
     {% set _image %}
-      <a href="{{ _url }}" class="d-block">
-        <svg class="py-3 img-fluid{{ _featured ? ' text-primary' : ' text-secondary' }}"><use xlink:href="{{ bcl_icon_path }}#{{ _metadata|last.icon }}"></use></svg>
-      </a>
+      <svg class="py-3 img-fluid{{ _featured ? ' text-primary' : ' text-secondary' }}"><use xlink:href="{{ bcl_icon_path }}#{{ _metadata|last.icon }}"></use></svg>
     {% endset %}
   {% endif %}
 
