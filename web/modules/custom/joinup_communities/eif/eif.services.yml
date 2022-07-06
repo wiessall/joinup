@@ -1,0 +1,7 @@
+services:
+  eif.category.paramconverter:
+    class: Drupal\eif\ParamConverter\EifCategoryConverter
+    tags:
+      # Use a higher priority than SparqlEntityStorageConverter.
+      - { name: paramconverter, priority: 20 }
+    arguments: ['@entity_type.manager']

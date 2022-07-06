@@ -1,16 +1,15 @@
 eif.solutions:
-  path: /node/703013/category/{taxonomy_term}
+  path: /node/703013/category/{eif_category}
   defaults:
     _controller: Drupal\node\Controller\NodeViewController::view
     _title_callback: Drupal\node\Controller\NodeViewController::title
     node: 703013
   requirements:
     _entity_access: node.view
-    taxonomy_term: .+
   options:
     parameters:
-      taxonomy_term:
-        type: entity:taxonomy_term
+      eif_category:
+        type: eif_category
 
 eif.eif_perspective_form:
   path: '/rdf_entity/{rdf_entity}/eif-perspective/edit'
