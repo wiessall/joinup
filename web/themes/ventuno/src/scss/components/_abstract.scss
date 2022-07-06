@@ -2,9 +2,12 @@
   div,
   p {
     display: inline;
+    &:last-of-type {
+      margin-right: $spacer * .5; // 8px
+    }
   }
   .read-more {
-    margin-left: $spacer * .5; // 8px
+    display: inline-block;
     &::after {
       margin: 0 0 0 $spacer * .25; // 0 0 0 4px
       @include get-bootstrap-icon('arrow-right', $link-color);

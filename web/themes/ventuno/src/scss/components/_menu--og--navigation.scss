@@ -5,7 +5,6 @@
   }
   &__menu.dropdown-menu {
     @include media-breakpoint-up(lg) {
-      max-width: calc(100% - $spacer * 1.5); // Allocate some space for permalink icon
       // Override dropdown properties
       display: block;
       z-index: 0;
