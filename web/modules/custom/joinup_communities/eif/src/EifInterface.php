@@ -24,11 +24,13 @@ interface EifInterface {
    *
    * @var string[]
    */
-  public const EIF_CATEGORY_VOCABULARIES = [
-    'eif_principle',
-    'eif_interoperability_layer',
-    'eif_conceptual_model',
-    'eif_solution_type',
+  public const EIF_CATEGORIES = [
+    'assessment-tools' => 'Assessment tools',
+    'common-frameworks' => 'Common frameworks',
+    'common-services' => 'Common services',
+    'generic-tools' => 'Generic tools',
+    'legal-interoperability-tools' => 'Legal interoperability tools',
+    'semantic-assets' => 'Semantic assets',
   ];
 
   /**

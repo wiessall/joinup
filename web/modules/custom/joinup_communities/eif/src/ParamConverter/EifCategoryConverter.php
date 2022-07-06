@@ -24,7 +24,7 @@ class EifCategoryConverter implements ParamConverterInterface {
    * {@inheritdoc}
    */
   public function convert($value, $definition, $name, array $defaults) {
-    return isset(EifInterface::EIF_CATEGORY_VOCABULARIES[$value]) ? $value : NULL;
+    return isset(EifInterface::EIF_CATEGORIES[$value]) ? $value : NULL;
   }
 
 }
