@@ -12,6 +12,7 @@ use Drupal\Core\Routing\CurrentRouteMatch;
 use Drupal\Core\Url;
 use Drupal\eif\EifInterface;
 use Drupal\sparql_entity_storage\Driver\Database\sparql\ConnectionInterface;
+use Drupal\sparql_entity_storage\UriEncoder;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -99,20 +100,19 @@ class EifCategoriesBlock extends BlockBase implements ContainerFactoryPluginInte
       return $row->category->getValue();
     }, $results->getArrayCopy());
 
-    $active_category = $this->routeMatch->getParameter('eif_category');
+    $active_term = $this->routeMatch->getParameter('taxonomy_term');
     $category_links = [];
     foreach ($this->entityTypeManager->getStorage('taxonomy_term')->loadMultiple($categories) as $term) {
-      $encoded_category = strtolower(str_replace(' ', '-', $term->label()));
       $category_link = [
         '#type' => 'link',
         '#title' => $term->label(),
         '#url' => Url::fromRoute('eif.solutions', [
           'node' => EifInterface::EIF_SOLUTIONS_NID,
-          'eif_category' => $encoded_category,
+          'taxonomy_term' => UriEncoder::encodeUrl($term->id()),
         ]),
       ];
 
-      if (!empty($active_category) && $active_category === $encoded_category) {
+      if (!empty($active_term) && $active_term->id() === $term->id()) {
         $category_link['#attributes']['class'][] = 'is-active';
       }
       $category_links[] = $category_link;
@@ -125,7 +125,7 @@ class EifCategoriesBlock extends BlockBase implements ContainerFactoryPluginInte
         'node' => EifInterface::EIF_SOLUTIONS_NID,
       ]),
     ];
-    if (empty($active_category)) {
+    if (empty($active_term)) {
       $all_link['#attributes']['class'][] = 'is-active';
     }
 

@@ -146,10 +146,13 @@ display:
             title: All
           title_enable: false
           title: ''
-          default_argument_type: raw
+          default_argument_type: taxonomy_tid
           default_argument_options:
-            index: 3
-            use_alias: false
+            term_page: '1'
+            node: false
+            limit: false
+            vids: {  }
+            anyall: ','
           default_argument_skip_url: false
           summary_options: {  }
           summary:
