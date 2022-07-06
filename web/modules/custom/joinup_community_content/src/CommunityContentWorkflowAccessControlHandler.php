@@ -114,18 +114,6 @@ class CommunityContentWorkflowAccessControlHandler {
       return $access;
     }
 
-    // For entities that do not have a published version and are in draft state,
-    // only the owner has access. This access restriction does not apply to
-    // moderators.
-    if (
-      !$account->hasPermission('access draft community content')
-      && !$this->hasPublishedVersion($content)
-      && $content->getWorkflowState() === 'draft'
-      && $content->getOwnerId() !== $account->id()
-    ) {
-      return AccessResult::forbidden()->addCacheableDependency($content);
-    }
-
     switch ($operation) {
       case 'view':
         return $this->entityViewAccess($content, $account);

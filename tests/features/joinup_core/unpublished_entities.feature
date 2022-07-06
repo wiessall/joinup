@@ -50,13 +50,13 @@ Feature: Unpublished content of the website
     And I should see the "The Male of the Gift" tile
     And I should see the "Mists in the Thought" tile
 
-    # The facilitator should not be able to see content that only have a draft state.
+    # The facilitator should be able to see all content.
     When I am logged in as "Phillip Shaw"
     And I go to the "Invisible Boyfriend" collection
     Then I should see the "The Ragged Streams" tile
     And I should see the "Storms of Touch" tile
     And I should see the "The Male of the Gift" tile
-    But I should not see the "Mists in the Thought" tile
+    And I should see the "Mists in the Thought" tile
 
     # The author should be able to see all his content in his profile.
     When I am logged in as "Ed Abbott"
@@ -181,29 +181,23 @@ Feature: Unpublished content of the website
     And I press "Save as draft"
     Then I should see the heading "Chasing shadows 1.0"
 
-    # As a facilitator, I should see my own unpublished content, and content
-    # that is proposed by other members and is awaiting publication.
     When I go to the "Invisible Boyfriend" solution
     And I should see the following tiles in the "Unpublished content area" region:
-      | Chasing shadows    |
-      | The Ragged Streams |
+      | Chasing shadows      |
+      | The Ragged Streams   |
+      | Mists in the Thought |
 
     # The entity should be visible in the user's account page as well.
     When I click "My account"
     And I should see the following tiles in the "My unpublished content area" region:
       | Chasing shadows |
 
-    # Other facilitators should also see draft releases and proposed entities
-    # in the "Unpublished content" region, but they should not see other content
-    # in draft state. The reason for this is that facilitators should only be
-    # aware of content that is proposed / ready for publication. Releases are an
-    # exception because these are facilitator-only and always OK to show.
     When I am logged in as "Facilitator 2"
     And I go to the "Invisible Boyfriend" solution
     And I should see the following tiles in the "Unpublished content area" region:
-      | Chasing shadows    |
-      | The Ragged Streams |
-    But I should not see the "Mists in the Thought" tile
+      | Chasing shadows      |
+      | The Ragged Streams   |
+      | Mists in the Thought |
     # The unpublished release created by the other facilitator should not show
     # up in the user's account page.
     When I click "My account"
