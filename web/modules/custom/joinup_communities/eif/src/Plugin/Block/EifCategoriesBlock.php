@@ -6,7 +6,6 @@ namespace Drupal\eif\Plugin\Block;
 
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Cache\Cache;
-use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Routing\CurrentRouteMatch;
 use Drupal\Core\Url;
@@ -40,13 +39,6 @@ class EifCategoriesBlock extends BlockBase implements ContainerFactoryPluginInte
   protected $routeMatch;
 
   /**
-   * The entity type manager.
-   *
-   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
-   */
-  protected $entityTypeManager;
-
-  /**
    * Constructs a new block plugin instance.
    *
    * @param array $configuration
@@ -59,14 +51,11 @@ class EifCategoriesBlock extends BlockBase implements ContainerFactoryPluginInte
    *   The SPARQL connection.
    * @param \Drupal\Core\Routing\CurrentRouteMatch $route_match
    *   The current route match service.
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
-   *   The entity type manager.
    */
-  public function __construct(array $configuration, string $plugin_id, $plugin_definition, ConnectionInterface $sparql, CurrentRouteMatch $route_match, EntityTypeManagerInterface $entity_type_manager) {
+  public function __construct(array $configuration, string $plugin_id, $plugin_definition, ConnectionInterface $sparql, CurrentRouteMatch $route_match) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->sparql = $sparql;
     $this->routeMatch = $route_match;
-    $this->entityTypeManager = $entity_type_manager;
   }
 
   /**
@@ -78,8 +67,7 @@ class EifCategoriesBlock extends BlockBase implements ContainerFactoryPluginInte
       $plugin_id,
       $plugin_definition,
       $container->get('sparql.endpoint'),
-      $container->get('current_route_match'),
-      $container->get('entity_type.manager')
+      $container->get('current_route_match')
     );
   }
 
@@ -95,27 +83,28 @@ class EifCategoriesBlock extends BlockBase implements ContainerFactoryPluginInte
         ?solution_id <http://joinup.eu/eif/categories> ?category .
       }');
 
-    $categories = array_map(function (\stdClass $row): string {
+    $categories = array_flip(array_map(function (\stdClass $row): string {
       return $row->category->getValue();
-    }, $results->getArrayCopy());
+    }, $results->getArrayCopy()));
 
     $active_category = $this->routeMatch->getParameter('eif_category');
     $category_links = [];
-    foreach ($this->entityTypeManager->getStorage('taxonomy_term')->loadMultiple($categories) as $term) {
-      $encoded_category = strtolower(str_replace(' ', '-', $term->label()));
-      $category_link = [
-        '#type' => 'link',
-        '#title' => $term->label(),
-        '#url' => Url::fromRoute('eif.solutions', [
-          'node' => EifInterface::EIF_SOLUTIONS_NID,
-          'eif_category' => $encoded_category,
-        ]),
-      ];
+    foreach (EifInterface::EIF_CATEGORY_VOCABULARIES as $category => $label) {
+      if (isset($categories[$category])) {
+        $category_link = [
+          '#type' => 'link',
+          '#title' => $label,
+          '#url' => Url::fromRoute('eif.solutions', [
+            'node' => EifInterface::EIF_SOLUTIONS_NID,
+            'eif_category' => $category,
+          ]),
+        ];
 
-      if (!empty($active_category) && $active_category === $encoded_category) {
-        $category_link['#attributes']['class'][] = 'is-active';
+        if (!empty($active_category) && $active_category === $category) {
+          $category_link['#attributes']['class'][] = 'is-active';
+        }
+        $category_links[] = $category_link;
       }
-      $category_links[] = $category_link;
     }
 
     $all_link = [
