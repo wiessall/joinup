@@ -87,11 +87,7 @@ class EifFilterBlock extends BlockBase implements ContainerFactoryPluginInterfac
       '#theme' => 'eif_filter_list',
       '#items' => $tree,
     ];
-
-    $build['#cache']['max-age'] = 0;
-
     $build['#attached']['library'][] = 'eif/eif-filter';
-
     return $build;
   }
 
