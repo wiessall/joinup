@@ -55,7 +55,7 @@ services:
       - selenium
 
   mysql:
-    image: mysql:5.7
+    image: percona:8.0
     # macOS users should override 'volumes:' in docker-compose.override.yml.
     # See docker-compose.override.yml.dist.
     volumes:
@@ -70,6 +70,12 @@ services:
       MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
       MYSQL_DATABASE: 'joinup'
       DOCKER_RESTORE_PRODUCTION:
+    command:
+      - '--max_allowed_packet=1G'
+      - '--innodb-buffer-pool-size=512M'
+      - '--wait_timeout=3000'
+      - '--net_write_timeout=3000'
+      - '--log-bin-trust-function-creators=ON'
 
   sparql:
     image: tenforce/virtuoso
@@ -118,7 +124,7 @@ services:
   # Includes a Selenium server accessible at port 5900.
   # See docker-compose.override.yml.dist
   selenium:
-    image: selenium/standalone-chrome
+    image: selenium/standalone-chrome:4.2.2
     environment:
       - DISPLAY=:99
       - VNC_NO_PASSWORD=1
