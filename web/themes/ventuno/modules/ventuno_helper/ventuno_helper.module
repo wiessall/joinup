@@ -1,0 +1,26 @@
+<?php
+
+/**
+ * @file
+ * Hook implementations for Ventuno Helper module.
+ */
+
+declare(strict_types = 1);
+
+/**
+ * Implements hook_link_alter().
+ */
+function ventuno_helper_link_alter(array &$variables): void {
+  // @see \Drupal\asset_distribution\Plugin\Field\FieldFormatter\TrackedHostedFileDownloadFormatter::viewElements()
+  if (array_key_exists('data-tracking', $variables['options']['attributes'])) {
+    $variables['options']['attributes']['class'][] = 'btn';
+    $variables['options']['attributes']['class'][] = 'btn-outline-primary';
+  }
+  // @see collection_rdf_entity_view()
+  if (array_key_exists('data-drupal-group-view-mode', $variables['options']['attributes'])) {
+    if ($variables['options']['attributes']['data-drupal-group-view-mode'] === 'explore_item') {
+      $variables['options']['attributes']['class'][] = 'btn';
+      $variables['options']['attributes']['class'][] = 'btn-secondary';
+    }
+  }
+}
