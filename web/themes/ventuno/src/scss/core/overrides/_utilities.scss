@@ -105,13 +105,13 @@ $utilities: map-merge(
           0: 0,
         )
       ),
-      // "border-top": (
-      //   property: border-top,
-      //   values: (
-      //     null: $border-width solid $border-color,
-      //     0: 0,
-      //   )
-      // ),
+      "border-top": (
+        property: border-top,
+        values: (
+          null: $border-width solid $border-color,
+          0: 0,
+        )
+      ),
       // "border-end": (
       //   property: border-right,
       //   class: border-end,

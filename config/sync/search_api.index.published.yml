@@ -3,43 +3,42 @@ langcode: en
 status: true
 dependencies:
   config:
-    - field.storage.node.field_event_agenda
-    - field.storage.node.field_paragraphs_body
-    - field.storage.paragraph.field_body
-    - field.storage.node.body
-    - field.storage.node.field_event_date
+    - field.storage.meta_entity.count
     - field.storage.meta_entity.field_featured
-    - field.storage.node.field_news_headline
-    - field.storage.node.field_location
-    - field.storage.node.field_organisation
     - field.storage.meta_entity.field_pinned_in
+    - field.storage.node.body
+    - field.storage.node.field_event_agenda
+    - field.storage.node.field_event_date
+    - field.storage.node.field_location
+    - field.storage.node.field_news_headline
+    - field.storage.node.field_organisation
+    - field.storage.node.field_paragraphs_body
     - field.storage.node.field_scope
     - field.storage.node.field_short_title
-    - field.storage.meta_entity.count
+    - field.storage.paragraph.field_body
+    - field.storage.rdf_entity.field_ad_description
     - field.storage.rdf_entity.field_ar_abstract
+    - field.storage.rdf_entity.field_ar_description
     - field.storage.rdf_entity.field_ci_name
     - field.storage.rdf_entity.field_is_contact_information
-    - field.storage.rdf_entity.field_isr_contact_information
-    - field.storage.rdf_entity.field_licence_spdx_licence
-    - field.storage.rdf_entity.field_ar_description
     - field.storage.rdf_entity.field_is_description
-    - field.storage.rdf_entity.field_isr_description
-    - field.storage.rdf_entity.field_licence_description
-    - field.storage.rdf_entity.field_ad_description
     - field.storage.rdf_entity.field_is_eif_category
     - field.storage.rdf_entity.field_is_eif_recommendation
     - field.storage.rdf_entity.field_is_owner
-    - field.storage.rdf_entity.field_owner_name
+    - field.storage.rdf_entity.field_is_solution_type
+    - field.storage.rdf_entity.field_isr_contact_information
+    - field.storage.rdf_entity.field_isr_description
     - field.storage.rdf_entity.field_isr_owner
     - field.storage.rdf_entity.field_isr_release_notes
-    - field.storage.rdf_entity.field_is_solution_type
+    - field.storage.rdf_entity.field_licence_description
+    - field.storage.rdf_entity.field_licence_spdx_licence
+    - field.storage.rdf_entity.field_owner_name
     - field.storage.taxonomy_term.field_eif_identifier
     - field.storage.taxonomy_term.field_eif_related_term
     - field.storage.user.field_user_family_name
     - field.storage.user.field_user_first_name
     - field.storage.user.field_user_organisation
-    - search_api.server.joinup
-  module:
+    - search_api.server.joinup  module:
     - search_api_solr
     - node
     - paragraphs
@@ -105,6 +104,14 @@ field_settings:
     datasource_id: 'entity:node'
     property_path: 'body:processed'
     type: text
+    dependencies:
+      config:
+        - field.storage.node.body
+  body_spellcheck:
+    label: 'Body » Processed text - Spellcheck'
+    datasource_id: 'entity:node'
+    property_path: 'body:processed'
+    type: solr_text_spellcheck
     dependencies:
       config:
         - field.storage.node.body
@@ -180,11 +187,27 @@ field_settings:
     dependencies:
       config:
         - field.storage.rdf_entity.field_ad_description
+  field_ad_description_spellcheck:
+    label: 'Description » Processed text - Spellcheck'
+    datasource_id: 'entity:rdf_entity'
+    property_path: 'field_ad_description:processed'
+    type: solr_text_spellcheck
+    dependencies:
+      config:
+        - field.storage.rdf_entity.field_ad_description
   field_ar_abstract:
     label: 'Abstract » Processed text'
     datasource_id: 'entity:rdf_entity'
     property_path: 'field_ar_abstract:processed'
     type: text
+    dependencies:
+      config:
+        - field.storage.rdf_entity.field_ar_abstract
+  field_ar_abstract_spellcheck:
+    label: 'Abstract » Processed text - Spellcheck'
+    datasource_id: 'entity:rdf_entity'
+    property_path: 'field_ar_abstract:processed'
+    type: solr_text_spellcheck
     dependencies:
       config:
         - field.storage.rdf_entity.field_ar_abstract
@@ -196,11 +219,27 @@ field_settings:
     dependencies:
       config:
         - field.storage.rdf_entity.field_ar_description
+  field_ar_description_spellcheck:
+    label: 'Description » Processed text - Spellcheck'
+    datasource_id: 'entity:rdf_entity'
+    property_path: 'field_ar_description:processed'
+    type: solr_text_spellcheck
+    dependencies:
+      config:
+        - field.storage.rdf_entity.field_ar_description
   field_eif_identifier:
     label: Identifier
     datasource_id: 'entity:taxonomy_term'
     property_path: field_eif_identifier
     type: text
+    dependencies:
+      config:
+        - field.storage.taxonomy_term.field_eif_identifier
+  field_eif_identifier_spellcheck:
+    label: 'Identifier Spellcheck'
+    datasource_id: 'entity:taxonomy_term'
+    property_path: field_eif_identifier
+    type: solr_text_spellcheck
     dependencies:
       config:
         - field.storage.taxonomy_term.field_eif_identifier
@@ -212,11 +251,27 @@ field_settings:
     dependencies:
       config:
         - field.storage.taxonomy_term.field_eif_related_term
+  field_eif_related_term_spellcheck:
+    label: 'Related term - Spellcheck'
+    datasource_id: 'entity:taxonomy_term'
+    property_path: field_eif_related_term
+    type: solr_text_spellcheck
+    dependencies:
+      config:
+        - field.storage.taxonomy_term.field_eif_related_term
   field_event_agenda:
     label: 'Agenda » Processed text'
     datasource_id: 'entity:node'
     property_path: 'field_event_agenda:processed'
     type: text
+    dependencies:
+      config:
+        - field.storage.node.field_event_agenda
+  field_event_agenda_spellcheck:
+    label: 'Agenda » Processed text - Spellcheck'
+    datasource_id: 'entity:node'
+    property_path: 'field_event_agenda:processed'
+    type: solr_text_spellcheck
     dependencies:
       config:
         - field.storage.node.field_event_agenda
@@ -241,6 +296,14 @@ field_settings:
     datasource_id: 'entity:rdf_entity'
     property_path: 'field_is_description:processed'
     type: text
+    dependencies:
+      config:
+        - field.storage.rdf_entity.field_is_description
+  field_is_description_spellcheck:
+    label: 'Description » Processed text - Spellcheck'
+    datasource_id: 'entity:rdf_entity'
+    property_path: 'field_is_description:processed'
+    type: solr_text_spellcheck
     dependencies:
       config:
         - field.storage.rdf_entity.field_is_description
@@ -276,6 +339,14 @@ field_settings:
     dependencies:
       config:
         - field.storage.rdf_entity.field_isr_description
+  field_isr_description_spellcheck:
+    label: 'Description » Processed text - Spellcheck'
+    datasource_id: 'entity:rdf_entity'
+    property_path: 'field_isr_description:processed'
+    type: solr_text_spellcheck
+    dependencies:
+      config:
+        - field.storage.rdf_entity.field_isr_description
   field_isr_release_notes:
     label: 'Release notes » Processed text'
     datasource_id: 'entity:rdf_entity'
@@ -284,11 +355,27 @@ field_settings:
     dependencies:
       config:
         - field.storage.rdf_entity.field_isr_release_notes
+  field_isr_release_notes_spellcheck:
+    label: 'Release notes » Processed text - Spellcheck'
+    datasource_id: 'entity:rdf_entity'
+    property_path: 'field_isr_release_notes:processed'
+    type: solr_text_spellcheck
+    dependencies:
+      config:
+        - field.storage.rdf_entity.field_isr_release_notes
   field_licence_description:
     label: 'Description » Processed text'
     datasource_id: 'entity:rdf_entity'
     property_path: 'field_licence_description:processed'
     type: text
+    dependencies:
+      config:
+        - field.storage.rdf_entity.field_licence_description
+  field_licence_description_spellcheck:
+    label: 'Description » Processed text - Spellcheck'
+    datasource_id: 'entity:rdf_entity'
+    property_path: 'field_licence_description:processed'
+    type: solr_text_spellcheck
     dependencies:
       config:
         - field.storage.rdf_entity.field_licence_description
@@ -308,11 +395,28 @@ field_settings:
     dependencies:
       config:
         - field.storage.node.field_location
+  field_location_spellcheck:
+    label: 'Location - Spellcheck'
+    datasource_id: 'entity:node'
+    property_path: field_location
+    type: solr_text_spellcheck
+    dependencies:
+      config:
+        - field.storage.node.field_location
   field_news_headline:
     label: Headline
     datasource_id: 'entity:node'
     property_path: field_news_headline
     type: text
+    boost: !!float 5
+    dependencies:
+      config:
+        - field.storage.node.field_news_headline
+  field_news_headline_spellcheck:
+    label: 'Headline - Spellcheck'
+    datasource_id: 'entity:node'
+    property_path: field_news_headline
+    type: solr_text_spellcheck
     boost: !!float 5
     dependencies:
       config:
@@ -325,11 +429,27 @@ field_settings:
     dependencies:
       config:
         - field.storage.node.field_organisation
+  field_organisation_spellcheck:
+    label: 'Organisation - Spellcheck'
+    datasource_id: 'entity:node'
+    property_path: field_organisation
+    type: solr_text_spellcheck
+    dependencies:
+      config:
+        - field.storage.node.field_organisation
   field_scope:
     label: Scope
     datasource_id: 'entity:node'
     property_path: field_scope
     type: text
+    dependencies:
+      config:
+        - field.storage.node.field_scope
+  field_scope_spellcheck:
+    label: 'Scope - Spellcheck'
+    datasource_id: 'entity:node'
+    property_path: field_scope
+    type: solr_text_spellcheck
     dependencies:
       config:
         - field.storage.node.field_scope
@@ -341,11 +461,27 @@ field_settings:
     dependencies:
       config:
         - field.storage.node.field_short_title
+  field_short_title_spellcheck:
+    label: 'Short title - Spellcheck'
+    datasource_id: 'entity:node'
+    property_path: field_short_title
+    type: solr_text_spellcheck
+    dependencies:
+      config:
+        - field.storage.node.field_short_title
   field_user_family_name:
     label: 'Family name'
     datasource_id: 'entity:user'
     property_path: field_user_family_name
     type: text
+    dependencies:
+      config:
+        - field.storage.user.field_user_family_name
+  field_user_family_name_spellcheck:
+    label: 'Family name - Spellcheck'
+    datasource_id: 'entity:user'
+    property_path: field_user_family_name
+    type: solr_text_spellcheck
     dependencies:
       config:
         - field.storage.user.field_user_family_name
@@ -357,11 +493,27 @@ field_settings:
     dependencies:
       config:
         - field.storage.user.field_user_first_name
+  field_user_first_name_spellcheck:
+    label: 'First name - Spellcheck'
+    datasource_id: 'entity:user'
+    property_path: field_user_first_name
+    type: solr_text_spellcheck
+    dependencies:
+      config:
+        - field.storage.user.field_user_first_name
   field_user_organisation:
     label: Organisation
     datasource_id: 'entity:user'
     property_path: field_user_organisation
     type: text
+    dependencies:
+      config:
+        - field.storage.user.field_user_organisation
+  field_user_organisation_spellcheck:
+    label: 'Organisation - Spellcheck'
+    datasource_id: 'entity:user'
+    property_path: field_user_organisation
+    type: solr_text_spellcheck
     dependencies:
       config:
         - field.storage.user.field_user_organisation
@@ -394,11 +546,33 @@ field_settings:
         - field.storage.rdf_entity.field_is_contact_information
       module:
         - rdf_entity
+  is_field_ci_name_spellcheck:
+    label: 'Contact information » Rdf entity » Name - Spellcheck'
+    datasource_id: 'entity:rdf_entity'
+    property_path: 'field_is_contact_information:entity:field_ci_name'
+    type: solr_text_spellcheck
+    dependencies:
+      config:
+        - field.storage.rdf_entity.field_ci_name
+        - field.storage.rdf_entity.field_is_contact_information
+      module:
+        - rdf_entity
   is_field_owner_name:
     label: 'Owner » Rdf entity » Name'
     datasource_id: 'entity:rdf_entity'
     property_path: 'field_is_owner:entity:field_owner_name'
     type: text
+    dependencies:
+      config:
+        - field.storage.rdf_entity.field_is_owner
+        - field.storage.rdf_entity.field_owner_name
+      module:
+        - rdf_entity
+  is_field_owner_name_spellcheck:
+    label: 'Owner » Rdf entity » Name - Spellcheck'
+    datasource_id: 'entity:rdf_entity'
+    property_path: 'field_is_owner:entity:field_owner_name'
+    type: solr_text_spellcheck
     dependencies:
       config:
         - field.storage.rdf_entity.field_is_owner
@@ -416,11 +590,33 @@ field_settings:
         - field.storage.rdf_entity.field_isr_contact_information
       module:
         - rdf_entity
+  isr_field_ci_name_spellcheck:
+    label: 'Contact information » Rdf entity » Name - Spellcheck'
+    datasource_id: 'entity:rdf_entity'
+    property_path: 'field_isr_contact_information:entity:field_ci_name'
+    type: solr_text_spellcheck
+    dependencies:
+      config:
+        - field.storage.rdf_entity.field_ci_name
+        - field.storage.rdf_entity.field_isr_contact_information
+      module:
+        - rdf_entity
   isr_field_owner_name:
     label: 'Owner » Rdf entity » Name'
     datasource_id: 'entity:rdf_entity'
     property_path: 'field_isr_owner:entity:field_owner_name'
     type: text
+    dependencies:
+      config:
+        - field.storage.rdf_entity.field_isr_owner
+        - field.storage.rdf_entity.field_owner_name
+      module:
+        - rdf_entity
+  isr_field_owner_name_spellcheck:
+    label: 'Owner » Rdf entity » Name - Spellcheck'
+    datasource_id: 'entity:rdf_entity'
+    property_path: 'field_isr_owner:entity:field_owner_name'
+    type: solr_text_spellcheck
     dependencies:
       config:
         - field.storage.rdf_entity.field_isr_owner
@@ -436,6 +632,15 @@ field_settings:
       fields:
         - 'entity:node/field_keywords'
         - 'entity:rdf_entity/field_keywords'
+  keywords_spellcheck:
+    label: 'Keywords - Spellcheck'
+    property_path: aggregated_field
+    type: solr_text_spellcheck
+    configuration:
+      type: union
+      fields:
+        - 'entity:node/field_keywords'
+        - 'entity:rdf_entity/field_keywords'
   label:
     label: Title
     datasource_id: 'entity:rdf_entity'
@@ -445,11 +650,28 @@ field_settings:
     dependencies:
       module:
         - rdf_entity
+  label_spellcheck:
+    label: 'Title - Spellcheck'
+    datasource_id: 'entity:rdf_entity'
+    property_path: label
+    type: solr_text_spellcheck
+    boost: !!float 5
+    dependencies:
+      module:
+        - rdf_entity
   name:
     label: Name
     datasource_id: 'entity:taxonomy_term'
     property_path: name
     type: text
+    dependencies:
+      module:
+        - taxonomy
+  name_spellcheck:
+    label: 'Name - Spellcheck'
+    datasource_id: 'entity:taxonomy_term'
+    property_path: name
+    type: solr_text_spellcheck
     dependencies:
       module:
         - taxonomy
@@ -495,6 +717,17 @@ field_settings:
     datasource_id: 'entity:node'
     property_path: 'field_paragraphs_body:entity:field_body:processed'
     type: text
+    dependencies:
+      config:
+        - field.storage.node.field_paragraphs_body
+        - field.storage.paragraph.field_body
+      module:
+        - paragraphs
+  processed_spellcheck:
+    label: 'Body » Paragraph » Body » Processed text - Spellcheck'
+    datasource_id: 'entity:node'
+    property_path: 'field_paragraphs_body:entity:field_body:processed'
+    type: solr_text_spellcheck
     dependencies:
       config:
         - field.storage.node.field_paragraphs_body
@@ -551,11 +784,21 @@ field_settings:
     datasource_id: 'entity:taxonomy_term'
     property_path: 'search_api_reverse_entity_references_taxonomy_term__field_eif_related_term:tid'
     type: text
+  reverse_eif_related_term_tid_spellcheck:
+    label: 'Reverse » Related term » Term ID - Spellcheck'
+    datasource_id: 'entity:taxonomy_term'
+    property_path: 'search_api_reverse_entity_references_taxonomy_term__field_eif_related_term:tid'
+    type: solr_text_spellcheck
   reverse_field_eif_identifier:
     label: 'Reverse » Related term » Identifier'
     datasource_id: 'entity:taxonomy_term'
     property_path: 'search_api_reverse_entity_references_taxonomy_term__field_eif_related_term:field_eif_identifier'
     type: text
+  reverse_field_eif_identifier_spellcheck:
+    label: 'Reverse » Related term » Identifier - Spellcheck'
+    datasource_id: 'entity:taxonomy_term'
+    property_path: 'search_api_reverse_entity_references_taxonomy_term__field_eif_related_term:field_eif_identifier'
+    type: solr_text_spellcheck
   rid:
     label: 'Rdf Type'
     datasource_id: 'entity:rdf_entity'
@@ -614,6 +857,15 @@ field_settings:
     datasource_id: 'entity:node'
     property_path: title
     type: text
+    boost: !!float 5
+    dependencies:
+      module:
+        - node
+  title_spellcheck:
+    label: 'Title - Spellcheck'
+    datasource_id: 'entity:node'
+    property_path: title
+    type: solr_text_spellcheck
     boost: !!float 5
     dependencies:
       module:
@@ -714,14 +966,23 @@ processor_settings:
     all_fields: false
     fields:
       - body
+      - body_spellcheck
       - field_ad_description
+      - field_ad_description_spellcheck
       - field_ar_abstract
+      - field_ar_abstract_spellcheck
       - field_ar_description
+      - field_ar_description_spellcheck
       - field_event_agenda
+      - field_event_agenda_spellcheck
       - field_is_description
+      - field_is_description_spellcheck
       - field_isr_description
+      - field_isr_description_spellcheck
       - field_isr_release_notes
+      - field_isr_release_notes_spellcheck
       - field_licence_description
+      - field_licence_description_spellcheck
     title: true
     alt: true
     tags:
@@ -731,31 +992,48 @@ processor_settings:
       h3: 2
       strong: 2
   ignorecase:
-    weights:
-      preprocess_index: -48
-      preprocess_query: -50
     all_fields: false
     fields:
       - body
+      - body_spellcheck
       - field_ad_description
+      - field_ad_description_spellcheck
       - field_ar_abstract
+      - field_ar_abstract_spellcheck
       - field_ar_description
+      - field_ar_description_spellcheck
       - field_event_agenda
+      - field_event_agenda_spellcheck
       - field_is_description
+      - field_is_description_spellcheck
       - field_isr_description
+      - field_isr_description_spellcheck
       - field_isr_release_notes
+      - field_isr_release_notes_spellcheck
       - field_licence_description
+      - field_licence_description_spellcheck
       - field_location
+      - field_location_spellcheck
       - field_news_headline
+      - field_news_headline_spellcheck
       - field_organisation
+      - field_organisation_spellcheck
       - field_short_title
+      - field_short_title_spellcheck
       - field_user_family_name
+      - field_user_family_name_spellcheck
       - field_user_first_name
+      - field_user_first_name_spellcheck
       - field_user_organisation
+      - field_user_organisation_spellcheck
       - isr_field_ci_name
+      - isr_field_ci_name_spellcheck
       - isr_field_owner_name
+      - isr_field_owner_name_spellcheck
       - label
+      - label_spellcheck
       - title
+      - title_spellcheck
   include_custom_page_content:
     weights:
       preprocess_index: -49
@@ -772,26 +1050,38 @@ processor_settings:
     weights:
       preprocess_index: 0
   stopwords:
-    weights:
-      preprocess_index: -45
-      preprocess_query: -47
     all_fields: false
     fields:
       - body
+      - body_spellcheck
       - field_ad_description
+      - field_ad_description_spellcheck
       - field_ar_abstract
+      - field_ar_abstract_spellcheck
       - field_ar_description
+      - field_ar_description_spellcheck
       - field_event_agenda
+      - field_event_agenda_spellcheck
       - field_is_description
+      - field_is_description_spellcheck
       - field_isr_description
+      - field_isr_description_spellcheck
       - field_isr_release_notes
+      - field_isr_release_notes_spellcheck
       - field_licence_description
+      - field_licence_description_spellcheck
       - field_location
+      - field_location_spellcheck
       - field_news_headline
+      - field_news_headline_spellcheck
       - field_scope
+      - field_scope_spellcheck
       - field_short_title
+      - field_short_title_spellcheck
       - label
+      - label_spellcheck
       - title
+      - title_spellcheck
     stopwords:
       - a
       - an
@@ -829,66 +1119,105 @@ processor_settings:
       - will
       - with
   tokenizer:
-    weights:
-      preprocess_index: -47
-      preprocess_query: -49
     all_fields: false
     fields:
       - body
+      - body_spellcheck
       - field_ad_description
+      - field_ad_description_spellcheck
       - field_ar_abstract
+      - field_ar_abstract_spellcheck
       - field_ar_description
+      - field_ar_description_spellcheck
       - field_event_agenda
+      - field_event_agenda_spellcheck
       - field_is_description
+      - field_is_description_spellcheck
       - field_isr_description
+      - field_isr_description_spellcheck
       - field_isr_release_notes
+      - field_isr_release_notes_spellcheck
       - field_licence_description
+      - field_licence_description_spellcheck
       - field_location
+      - field_location_spellcheck
       - field_news_headline
+      - field_news_headline_spellcheck
       - field_organisation
+      - field_organisation_spellcheck
       - field_scope
+      - field_scope_spellcheck
       - field_short_title
+      - field_short_title_spellcheck
       - field_user_family_name
+      - field_user_family_name_spellcheck
       - field_user_first_name
+      - field_user_first_name_spellcheck
       - field_user_organisation
+      - field_user_organisation_spellcheck
       - is_field_ci_name
+      - is_field_ci_name_spellcheck
       - is_field_owner_name
+      - is_field_owner_name_spellcheck
       - isr_field_ci_name
+      - isr_field_ci_name_spellcheck
       - isr_field_owner_name
+      - isr_field_owner_name_spellcheck
       - label
+      - label_spellcheck
       - title
+      - title_spellcheck
     spaces: ''
     ignored: ._-
     overlap_cjk: 1
     minimum_word_size: '3'
   transliteration:
-    weights:
-      preprocess_index: -46
-      preprocess_query: -48
     all_fields: false
     fields:
       - body
+      - body_spellcheck
       - field_ad_description
+      - field_ad_description_spellcheck
       - field_ar_abstract
+      - field_ar_abstract_spellcheck
       - field_ar_description
+      - field_ar_description_spellcheck
       - field_event_agenda
+      - field_event_agenda_spellcheck
       - field_is_description
+      - field_is_description_spellcheck
       - field_isr_description
+      - field_isr_description_spellcheck
       - field_isr_release_notes
+      - field_isr_release_notes_spellcheck
       - field_licence_description
+      - field_licence_description_spellcheck
       - field_location
+      - field_location_spellcheck
       - field_news_headline
+      - field_news_headline_spellcheck
       - field_organisation
+      - field_organisation_spellcheck
       - field_short_title
+      - field_short_title_spellcheck
       - field_user_family_name
+      - field_user_family_name_spellcheck
       - field_user_first_name
+      - field_user_first_name_spellcheck
       - field_user_organisation
+      - field_user_organisation_spellcheck
       - is_field_ci_name
+      - is_field_ci_name_spellcheck
       - is_field_owner_name
+      - is_field_owner_name_spellcheck
       - isr_field_ci_name
+      - isr_field_ci_name_spellcheck
       - isr_field_owner_name
+      - isr_field_owner_name_spellcheck
       - label
+      - label_spellcheck
       - title
+      - title_spellcheck
   type_boost:
     weights:
       preprocess_index: -42
@@ -901,14 +1230,25 @@ processor_settings:
           document: !!float 0
           event: !!float 3
           news: !!float 5
+          tallinn_report: !!float 0
           video: !!float 0
       'entity:rdf_entity':
         datasource_boost: !!float 0
         bundle_boosts:
+          asset_distribution: !!float 0
+          asset_release: !!float 0
           collection: !!float 21
+          licence: !!float 0
           solution: !!float 13
+          spdx_licence: !!float 0
       'entity:taxonomy_term':
-        datasource_boost: !!float 1
+        datasource_boost: !!float 0
+        bundle_boosts:
+          eif_conceptual_model: !!float 0
+          eif_interoperability_layer: !!float 0
+          eif_principle: !!float 0
+          eif_recommendation: !!float 0
+          topic: !!float 0
       'entity:user':
         datasource_boost: !!float 0
 tracker_settings:
