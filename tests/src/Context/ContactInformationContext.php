@@ -215,7 +215,7 @@ class ContactInformationContext extends RawDrupalContext {
    *
    * @Then the contact owner email sent to :email with subject :subject contains the( following lines of) text:
    */
-  public function assertContactOwnerEmailSentAndContainsText(string $email, string $subject, TableNode $table) {
+  public function assertContactOwnerEmailSentAndContainsText(string $email, string $subject, TableNode $table): void {
     $lines_of_text = $table->getColumnsHash();
     $mails = $this->getEmailsBySubjectAndMail($subject, $email);
     $email_found = FALSE;

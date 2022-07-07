@@ -8,6 +8,7 @@
 declare(strict_types = 1);
 
 use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Field\FieldItemListInterface;
@@ -163,10 +164,10 @@ function contact_information_rdf_entity_access(EntityInterface $entity, $operati
 /**
  * Implements hook_entity_field_access().
  */
-function contact_information_entity_field_access(string $operation, FieldDefinitionInterface $field_definition, AccountInterface $account, ?FieldItemListInterface $items = NULL): AccessResult {
-  if ($field_definition->getName() == 'field_ci_email' && $operation == 'view') {
-    $email_confirmer = \Drupal::service('email_confirmer')->getConfirmation($items->value);
-    if ($email_confirmer && $email_confirmer->get('confirmed')->value != EmailConfirmationInterface::CONFIRMED) {
+function contact_information_entity_field_access(string $operation, FieldDefinitionInterface $field_definition, AccountInterface $account, ?FieldItemListInterface $items = NULL): AccessResultInterface {
+  if ($field_definition->getName() === 'field_ci_email' && $operation === 'view') {
+    $confirmation = \Drupal::service('email_confirmer')->getConfirmation($items->value);
+    if ($confirmation && $confirmation->get('confirmed')->value != EmailConfirmationInterface::CONFIRMED) {
       return AccessResult::forbidden()->addCacheableDependency($items->getEntity());
     }
     return AccessResult::allowed()->addCacheableDependency($items->getEntity());
