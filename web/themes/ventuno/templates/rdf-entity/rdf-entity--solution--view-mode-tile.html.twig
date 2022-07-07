@@ -1,0 +1,29 @@
+{#
+/**
+ * @file
+ * Themeing for RDF entities.
+ */
+#}
+{% set view_mode_featured = view_mode is same as 'view_mode_featured' %}
+{% set metadata = [] %}
+{% if show_download_counter %}
+  {% set metadata = metadata|merge([{
+    label: 'Downloads: @counter' |t({'@counter': content.downloads|render|striptags}),
+    icon: 'download'}])
+  %}
+{% endif %}
+{% set metadata = metadata|merge([{
+  label: 'solution',
+  icon: 'clipboard-check'}])
+%}
+{{ pattern('tile', {
+  attributes: attributes,
+  featured: view_mode_featured,
+  image: content.field_is_logo,
+  url: url,
+  title_prefix: title_prefix,
+  title: label|render|striptags|raw,
+  title_suffix: title_suffix,
+  text: '',
+  metadata: metadata,
+}) }}

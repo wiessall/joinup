@@ -354,20 +354,6 @@ function _joinup_preprocess_entity_tiles(array &$variables) {
     $variables['attributes']['data-drupal-featured'][] = TRUE;
     $variables['#attached']['library'][] = 'joinup/site_wide_featured';
   }
-
-  $context = \Drupal::service('og.context')->getRuntimeContexts(['og']);
-  $group = NULL;
-  if (!empty($context['og'])) {
-    $group = $context['og']->getContextValue();
-  }
-
-  if ($entity instanceof PinnableGroupContentInterface && $entity->isPinned($group)) {
-    $variables['attributes']['class'][] = 'is-pinned';
-    $variables['#attached']['library'][] = 'joinup/pinned_entities';
-
-    $group_ids = $entity->getPinnedGroupIds();
-    $variables['attributes']['data-drupal-pinned-in'] = implode(',', $group_ids);
-  }
 }
 
 /**

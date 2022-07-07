@@ -354,14 +354,9 @@ function solution_rdf_entity_view(array &$build, RdfInterface $solution, EntityV
     try {
       $link = $solution->toLink(t('Read more'), 'about-page', [
         'attributes' => [
-          'class' => [
-            'about-page',
-            'read-more',
-            'fieldset__read-more',
-            'btn',
-            'btn-secondary',
-          ],
-          'aria-label' => 'Read more about \'' . $solution->getName() . '\'.',
+          'data-drupal-group-view-mode' => $view_mode,
+          'class' => ['about-page', 'read-more'],
+          'aria-label' => t('Read more about @name.', ['@name' => $solution->getName()]),
         ],
       ]);
       $build['read_more'] = $link->toRenderable();

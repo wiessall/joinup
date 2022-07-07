@@ -68,6 +68,11 @@ tables:
       assets/css/tables.min.css: { minified: true }
 
 # Custom components
+abstract:
+  css:
+    theme:
+      assets/css/abstract.css: {}
+
 add-content:
   css:
     theme:
@@ -84,6 +89,11 @@ menu--og--navigation:
   css:
     theme:
       assets/css/menu--og--navigation.min.css: { minified: true }
+
+tabs:
+  css:
+    theme:
+      assets/css/tabs.min.css: { minified: true }
 
 # Custom and hybrid (BCL + custom) components
 footer:
@@ -125,6 +135,11 @@ ief-entity-table:
     theme:
       assets/css/ief-entity-table.min.css: { minified: true }
 
+iop-header:
+  css:
+    theme:
+      assets/css/iop-header.min.css: { minified: true }
+
 navbar:
   css:
     theme:
@@ -153,6 +168,12 @@ share-content-form:
   css:
     theme:
       assets/css/share-content-form.min.css: { minified: true }
+
+shared-entity:
+  js:
+    assets/js/shared-entity.js: { minified: true, attributes: { defer: true } }
+  dependencies:
+    - core/drupalSettings
 
 site-alerts-messages:
   css:

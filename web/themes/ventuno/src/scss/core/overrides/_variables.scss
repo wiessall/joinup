@@ -13,6 +13,7 @@ $btn-close-eu-filter: invert(20%) sepia(70%) saturate(2876%) hue-rotate(216deg)
   brightness(94%) contrast(105%);
 
 // Colors variables
+$iop-darkblue: #001e2f;
 $light: #f0f0f0;
 $lighter: $gray-100;
 $date: #1698af;
@@ -92,3 +93,6 @@ $form-font-size-lg: $font-size-base + 0.25rem !default;
 $form-label-font-weight: $font-weight-bold;
 $form-select-height: 3rem !default;
 $form-select-height-md: 2.375rem !default;
+
+// Path for icons
+$bootstrap-icons-path: '../../node_modules/@openeuropa/bcl-bootstrap/icons';

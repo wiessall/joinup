@@ -18,7 +18,7 @@
 {{ attach_library('ventuno/three-dots-menu') }}
 {% if primary %}
   <div class="three-dots-menu three-dots-menu--primary dropdown">
-    <button id="local-tasks-primary" class="btn text-light p-0 rounded-pill three-dots-menu__button dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+    <button aria-label="{{ 'Show primary options'|t }}" id="local-tasks-primary" class="btn text-light p-0 rounded-pill three-dots-menu__button dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
       <svg class="bi icon--m">
         <use xlink:href="{{ bcl_icon_path }}#three-dots-vertical"></use>
       </svg>
@@ -31,7 +31,7 @@
 {% endif %}
 {% if secondary %}
   <div class="three-dots-menu three-dots-menu--secondary dropdown">
-    <button id="local-tasks-secondary" class="btn btn-light p-0 rounded-pill three-dots-menu__button dropdown-toggle">
+    <button aria-label="{{ 'Show secondary options'|t }}" id="local-tasks-secondary" class="btn btn-light p-0 rounded-pill three-dots-menu__button dropdown-toggle">
       <svg class="bi icon--m">
         <use xlink:href="{{ bcl_icon_path }}#three-dots-vertical"></use>
       </svg>
