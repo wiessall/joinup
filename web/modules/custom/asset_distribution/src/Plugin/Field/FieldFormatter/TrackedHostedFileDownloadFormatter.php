@@ -164,7 +164,7 @@ class TrackedHostedFileDownloadFormatter extends FileFormatterBase implements Co
             '#type' => 'link',
             '#title' => $this->getSetting('remote_files_title'),
             '#attributes' => [
-              'class' => ['btn btn-outline-primary'],
+              'data-tracking' => NULL,
             ],
             '#url' => Url::fromUri($file->getFileUri()),
           ];
@@ -177,7 +177,7 @@ class TrackedHostedFileDownloadFormatter extends FileFormatterBase implements Co
           '#url' => Url::fromUri($this->fileUrlGenerator->generateAbsoluteString($file->getFileUri())),
           '#attributes' => [
             'id' => Html::getUniqueId('tracked-file-download'),
-            'class' => ['track-download btn btn-outline-primary'],
+            'class' => ['track-download'],
             'data-tracking' => Url::fromRoute('asset_distribution.track_download', [
               'file' => $file->id(),
             ])->toString(),
@@ -196,6 +196,12 @@ class TrackedHostedFileDownloadFormatter extends FileFormatterBase implements Co
           unset($item->_attributes);
         }
       }
+
+      // @todo Remove these classes in ISAICP-7138. Ventuno classes are
+      //   added in ventuno_helper_link_alter().
+      // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7138
+      // @see ventuno_helper_link_alter()
+      $elements[$delta]['#attributes']['class'][] = 'button--icon button button--blue-light mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent';
     }
 
     if (!empty($elements)) {
