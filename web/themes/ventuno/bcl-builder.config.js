@@ -9,15 +9,6 @@ const includePaths = [nodeModules];
 
 module.exports = {
   scripts: [
-    // Bootstrap components
-    {
-      entry: path.resolve(outputFolder, "src/js/popovers.js"),
-      dest: path.resolve(outputFolder, "assets/js/popovers.js"),
-      options: {
-        minify: false,
-        sourceMap: true,
-      },
-    },
     // Custom
     {
       entry: path.resolve(outputFolder, "src/js/highlight-invalid-fields.js"),
