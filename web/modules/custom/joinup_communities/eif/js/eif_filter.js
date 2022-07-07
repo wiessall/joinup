@@ -16,13 +16,13 @@
     // Check every active filter item and hide tiles which don't contain proper
     // data-eif-category.
     $('.eif-filter__item a.is-active').each(function () {
-      var currenteifCategory = $(this).attr('data-eif-category');
-      if (typeof currenteifCategory !== 'undefined') {
+      const currentEifCategory = $(this).attr('data-eif-category');
+      if (typeof currentEifCategory !== 'undefined') {
         $eifTile.each(function () {
-          var eifCategory = $(this).attr('data-eif-category');
+          const eifCategory = $(this).attr('data-eif-category');
           if (typeof eifCategory !== 'undefined') {
-            var eifCategoryArray = eifCategory.split(' ');
-            if ($.inArray(currenteifCategory, eifCategoryArray) < 0 && !$(this).hasClass('visually-hidden')) {
+            const eifCategoryArray = eifCategory.split(' ');
+            if ($.inArray(currentEifCategory, eifCategoryArray) < 0 && !$(this).hasClass('visually-hidden')) {
               $(this).addClass('visually-hidden');
             }
           }
