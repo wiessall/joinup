@@ -61,7 +61,7 @@ function ventuno_preprocess_rdf_entity__solution__group_header(array &$variables
  *
  * - Add a flag that indicates whether to show the download counter.
  */
-function ventuno_preprocess_rdf_entity__solution__view_mode_tile(&$variables) {
+function ventuno_preprocess_rdf_entity__solution__view_mode_tile(array &$variables): void {
   // Add a flag to indicate if the download counter is visible.
   if (isset($variables['elements']['downloads']['count']['#access'])) {
     $variables['show_download_counter'] = $variables['elements']['downloads']['count']['#access'];
