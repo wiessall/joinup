@@ -75,7 +75,7 @@ class JoinupCommunityContentContext extends RawDrupalContext {
     }
 
     /** @var \Behat\Mink\Element\NodeElement $parent */
-    $parent = $share->find('xpath', "/ancestor::article[contains(concat(' ', normalize-space(@class), ' '), ' card-tile ')]");
+    $parent = $share->find('xpath', "/ancestor::article[contains(concat(' ', normalize-space(@class), ' '), ' card--tile ')]");
     if (!$parent) {
       throw new \Exception("The tile '$heading' has faulty markup for the shared content visual cue.");
     }

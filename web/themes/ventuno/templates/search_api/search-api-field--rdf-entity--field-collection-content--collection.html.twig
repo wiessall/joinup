@@ -32,14 +32,19 @@
 #}
 
 {% if results %}
-  <div>
+  <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-xl-4 g-3 mb-3">
     {{ results }}
     {% if newsletter_enabled %}
-      <article class="card-tile">
-        <h2 class="card-title">{{ 'Newsletter'|t }}</h2>
-        <p>{{ newsletter_motivation }}</p>
+      {% set text %}
+        {{ newsletter_motivation }}
         {{ newsletter_form }}
-      </article>
+      {% endset %}
+      {{ pattern('tile', {
+        attributes: attributes,
+        featured: true,
+        title: 'Newsletter'|t,
+        text: text,
+      }) }}
     {% endif %}
   </div>
   {{ pager }}

@@ -244,6 +244,9 @@
             "drupal/cas": {
                 "Cached redirect response issue with failed ticket validation @see https://www.drupal.org/project/cas/issues/3277861": "https://git.drupalcode.org/project/cas/-/merge_requests/12.diff"
             },
+            "drupal/coder": {
+                "Do not require @var tag if a property has typehint @see https://www.drupal.org/project/coder/issues/3123282": "https://patch-diff.githubusercontent.com/raw/pfrenssen/coder/pull/164.diff"
+            },
             "drupal/core": {
                 "Use email verification when changing user email addresses @see https://www.drupal.org/project/drupal/issues/85494": "https://www.drupal.org/files/issues/2022-01-17/85494-376-9.3.x.patch",
                 "Use READ COMMITTED by default for MySQL transactions @see https://www.drupal.org/project/drupal/issues/1650930": "https://git.drupalcode.org/project/drupal/-/merge_requests/2394.diff",

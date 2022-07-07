@@ -369,14 +369,9 @@ function collection_rdf_entity_view(array &$build, EntityInterface $entity, Enti
   if ($display->getComponent('read_more')) {
     $build['read_more'] = $entity->toLink(t('Read more'), 'about-page', [
       'attributes' => [
-        'class' => [
-          'about-page',
-          'read-more',
-          'fieldset__read-more',
-          'btn',
-          'btn-secondary',
-        ],
-        'aria-label' => 'Read more about \'' . $entity->getName() . '\'.',
+        'data-drupal-group-view-mode' => $view_mode,
+        'class' => ['about-page', 'read-more'],
+        'aria-label' => t('Read more about @name.', ['@name' => $entity->getName()]),
       ],
     ])->toRenderable();
   }

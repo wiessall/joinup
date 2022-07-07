@@ -15,8 +15,7 @@
     attach(context) {
       // Create a visual cue to be added on pinned content.
       const pin = document.createElement("div");
-      pin.classList.add("listing__corner");
-      pin.innerHTML = "<span class='icon icon--pin'></span>";
+      pin.classList.add("pin");
       // Check for global collection context.
       const group = context.querySelector("[data-drupal-group-context]");
       // If there is no global collection context, bail out.
@@ -34,11 +33,6 @@
           affiliated.split(",").indexOf(groupContext) === -1
         ) {
           return;
-        }
-        element.classList.add("listing__card--corner");
-        // This is needed for listing title padding if image doesn't exist.
-        if (!element.querySelector(".listing__image")) {
-          element.classList.add("listing__card--corner-title");
         }
         // Add the visual where needed.
         element.prepend(pin.cloneNode(true));

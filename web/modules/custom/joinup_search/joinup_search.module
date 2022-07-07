@@ -64,7 +64,6 @@ function joinup_search_theme($existing, $type, $theme, $path) {
 function template_preprocess_facet_widget_links_inline(array &$variables) {
   $variables['button_attributes'] = new Attribute([
     'id' => Html::getUniqueId('filter-button'),
-    'class' => ['filter__icon', 'icon', 'icon--arrow-down'],
   ]);
 }
 

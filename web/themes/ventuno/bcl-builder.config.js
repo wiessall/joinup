@@ -59,6 +59,14 @@ module.exports = {
       },
     },
     {
+      entry: path.resolve(outputFolder, "src/js/shared-entity.js"),
+      dest: path.resolve(outputFolder, "assets/js/shared-entity.js"),
+      options: {
+        minify: true,
+        sourceMap: true,
+      },
+    },
+    {
       entry: path.resolve(outputFolder, "src/js/show-accordion-invalid-fields.js"),
       dest: path.resolve(outputFolder, "assets/js/show-accordion-invalid-fields.js"),
       options: {
@@ -190,6 +198,14 @@ module.exports = {
     },
     // Custom and hybrid (BCL + custom) components
     {
+      entry: path.resolve(outputFolder, "src/scss/abstract.scss"),
+      dest: path.resolve(outputFolder, "assets/css/abstract.css"),
+      options: {
+        includePaths,
+        sourceMap: "file",
+      },
+    },
+    {
       entry: path.resolve(outputFolder, "src/scss/add-content.scss"),
       dest: path.resolve(outputFolder, "assets/css/add-content.min.css"),
       options: {
@@ -262,6 +278,15 @@ module.exports = {
       },
     },
     {
+      entry: path.resolve(outputFolder, "src/scss/iop-header.scss"),
+      dest: path.resolve(outputFolder, "assets/css/iop-header.min.css"),
+      options: {
+        includePaths,
+        minify: true,
+        sourceMap: "file",
+      },
+    },
+    {
       entry: path.resolve(outputFolder, "src/scss/navbar.scss"),
       dest: path.resolve(outputFolder, "assets/css/navbar.min.css"),
       options: {
@@ -318,6 +343,15 @@ module.exports = {
     {
       entry: path.resolve(outputFolder, "src/scss/tables.scss"),
       dest: path.resolve(outputFolder, "assets/css/tables.min.css"),
+      options: {
+        includePaths,
+        minify: true,
+        sourceMap: "file",
+      },
+    },
+    {
+      entry: path.resolve(outputFolder, "src/scss/tabs.scss"),
+      dest: path.resolve(outputFolder, "assets/css/tabs.min.css"),
       options: {
         includePaths,
         minify: true,
@@ -459,6 +493,16 @@ module.exports = {
       from: [
         path.resolve(
           __dirname,
+          "src/images/iop-eu-header.svg"
+        ),
+      ],
+      to: path.resolve(outputFolder, "assets/images"),
+      options: { up: true },
+    },
+    {
+      from: [
+        path.resolve(
+          __dirname,
           "src/images/logo.svg"
         ),
       ],
@@ -506,22 +550,28 @@ module.exports = {
         file: 'icons.svg',
         list: [
             'arrow-left.svg',
+            'arrow-repeat.svg',
             'arrow-right.svg',
             'award.svg',
             'calendar.svg',
             'calendar3.svg',
+            'card-list.svg',
+            'chat.svg',
             'chat-left-text.svg',
             'check-circle-fill.svg',
             'chevron-bar-left.svg',
             'chevron-bar-right.svg',
+            'chevron-down.svg',
             'chevron-left.svg',
             'chevron-right.svg',
             'clipboard-check.svg',
+            'download.svg',
             'exclamation-circle-fill.svg',
             'exclamation-lg.svg',
             'eye.svg',
             'facebook.svg',
             'file-earmark-medical.svg',
+            'file-earmark-post.svg',
             'file-earmark-play.svg',
             'file-earmark-richtext.svg',
             'file-earmark-text.svg',
@@ -535,7 +585,9 @@ module.exports = {
             'link-45deg.svg',
             'linkedin.svg',
             'newspaper.svg',
+            'people.svg',
             'person-circle.svg',
+            'pin-angle-fill.svg',
             'plus.svg',
             'search.svg',
             'star.svg',

@@ -1,0 +1,32 @@
+{#
+/**
+ * @file
+ * Default theme implementation for a list of tabs.
+ *
+ * Available variables:
+ * - items: A list of items. Each item contains:
+ *   - attributes: HTML attributes to be applied to each list item.
+ *   - value: The content of the list element.
+ * - attributes: HTML attributes to be applied to the list.
+ *
+ * @ingroup themeable
+ */
+#}
+{{ attach_library('ventuno/tabs') }}
+{% if items %}
+{% set col_classes = [
+  'tabs--content-type',
+  'row',
+  items|length is even ? 'row-cols-2 row-cols-md-4 row-cols-xl-6 row-cols-xxl-8' : 'row-cols-1 row-cols-sm-3 row-cols-lg-5 row-cols-xl-7 row-cols-xxl-9',
+  'g-2',
+  'justify-content-center',
+  'my-4',
+] %}
+<div{{ create_attribute().addClass(col_classes)}}>
+  {%- for item in items -%}
+    <div class="col d-flex justify-content-center">
+      {{ item }}
+    </div>
+  {%- endfor -%}
+</div>
+{%- endif %}

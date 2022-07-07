@@ -12,6 +12,8 @@ libraries:
 libraries-extend:
   core/drupal.ajax:
     - ventuno/ajax-throbber
+  joinup_group/shared_entity:
+    - ventuno/shared-entity
 
 libraries-override:
   core/jquery.once: false

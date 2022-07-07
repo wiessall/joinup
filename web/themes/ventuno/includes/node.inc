@@ -60,3 +60,13 @@ function ventuno_preprocess_node__search_result_featured(array &$variables): voi
 function ventuno_preprocess_node__search_result(array &$variables): void {
   _ventuno_preprocess_search_result($variables, 'node');
 }
+
+/**
+ * Implements hook_preprocess_HOOK() for node--discussion--view-mode-tile.html.twig.
+ *
+ * Provides the comment count as a variable.
+ */
+function ventuno_preprocess_node__discussion__view_mode_tile(array &$variables): void {
+  $node = $variables['elements']['#node'];
+  $variables['comment_count'] = $node->get('field_replies')->comment_count;
+}

@@ -1,0 +1,29 @@
+{#
+/**
+ * @file
+ * Themeing for RDF entities.
+ */
+#}
+{% set view_mode_featured = view_mode is same as 'view_mode_featured' %}
+{% set text %}
+  {% if content.field_ad_file_size|render %}
+    <p class="mb-0">{{ 'Weight'|t }}: {{ content.field_ad_file_size|render|striptags|trim }}</p>
+  {% endif %}
+  {% if content.field_ad_file_size|render|striptags|trim %}
+    <p class="mb-0">{{ 'Licence'|t }}: {{ content.field_ad_licence|render|striptags|trim }}</p>
+  {% endif %}
+  {{ content.field_ad_access_url }}
+{% endset %}
+{{ pattern('tile', {
+  attributes: attributes,
+  featured: view_mode_featured,
+  url: url,
+  title_prefix: title_prefix,
+  title: label,
+  title_suffix: title_suffix,
+  text: text,
+  metadata: [{
+    label: 'asset distribution',
+    icon: 'file-earmark-post'
+  }],
+}) }}

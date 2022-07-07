@@ -36,4 +36,5 @@ function ventuno_preprocess(array &$variables): void {
   $themeHandler = \Drupal::service('theme_handler');
   $ventuno = $themeHandler->getTheme('ventuno')->getPath();
   $variables['bcl_icon_path'] = base_path() . $ventuno . '/assets/icons/icons.svg';
+  $variables['#attached']['drupalSettings']['path']['bclIconPath'] = $variables['bcl_icon_path'];
 }

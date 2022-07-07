@@ -1,0 +1,44 @@
+{#
+/**
+ * @file
+ * Themeing for RDF entities.
+ */
+#}
+{{ attach_library('ventuno/iop-header') }}
+<article {{ attributes.addClass('iop-header') }}>
+  <div class="iop-header__bg">
+    {{ title_prefix }}
+    <div class="container">
+      <figure class="iop-header__figure">
+        <img class="img-fluid" src="{{ path('<front>') }}themes/ventuno/assets/images/iop-eu-header.svg" alt/>
+      </figure>
+    </div>
+    {{ title_suffix }}
+  </div>
+  <div class="iop-header__separator"></div>
+  <div class="container d-flex flex-column align-items-center">
+    <ul class="list-unstyled mt-3 mb-0 p-3 bg-secondary rounded text-dark">
+      <li class="mb-2 d-flex align-items-center">
+        <svg class="bi icon--s me-2">
+          <use xlink:href="{{ bcl_icon_path }}#calendar3"></use>
+        </svg>
+        <span>{{ 'Last update'|t }}</span>&nbsp;<span class="fw-bold">{{ content.last_update }}</span>
+      </li>
+      <li class="mb-2 d-flex align-items-center">
+        <svg class="bi icon--s me-2">
+          <use xlink:href="{{ bcl_icon_path }}#person-circle"></use>
+        </svg>
+        {{ content.members }}
+      </li>
+      <li class="d-flex align-items-center">
+        <svg class="bi icon--s me-2">
+          <use xlink:href="{{ bcl_icon_path }}#clipboard-check"></use>
+        </svg>
+        {{ content.solutions }}
+      </li>
+    </ul>
+    <div class="mt-4 d-flex text-light">
+      {{ content.join_collection }}
+    </div>
+  </div>
+</article>

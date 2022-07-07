@@ -6,11 +6,9 @@
 #}
 <article {{ attributes.addClass(['py-4', 'py-md-5', 'group-banner']) }} style="background: linear-gradient(117deg, rgba(20,59,118,.7), rgba(20,59,118,.4)), url('{{ content.field_is_banner }}') no-repeat, rgba(20,59,118,.4); background-size: cover;">
   <div class="container d-flex flex-column align-items-center">
-    <a href="{{ path('entity.rdf_entity.canonical',{'rdf_entity': rdf_entity.id()}) }}" class="group-logo">
-      {{ content.field_is_logo }}
-    </a>
+    <span data-drupal-group-logo>{{ content.field_is_logo }}</span>
     {{ title_prefix }}
-    <a class="mt-3 fs-2 fw-bold text-light text-center" href="{{ path('entity.rdf_entity.canonical',{'rdf_entity': rdf_entity.id()}) }}">
+    <a class="mt-3 px-2 fs-2 fw-bold text-light text-center bg-primary rounded" href="{{ path('entity.rdf_entity.canonical',{'rdf_entity': rdf_entity.id()}) }}">
       {{ label }}
     </a>
     {{ title_suffix }}
