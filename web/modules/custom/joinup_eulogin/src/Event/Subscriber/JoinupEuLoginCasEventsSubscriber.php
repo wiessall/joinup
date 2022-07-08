@@ -4,16 +4,24 @@ declare(strict_types = 1);
 
 namespace Drupal\joinup_eulogin\Event\Subscriber;
 
+use Drupal\Component\Utility\Random;
 use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\Config\ImmutableConfig;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\Url;
 use Drupal\cas\Event\CasPostLoginEvent;
 use Drupal\cas\Event\CasPostValidateEvent;
 use Drupal\cas\Event\CasPreLoginEvent;
+use Drupal\cas\Event\CasPreRegisterEvent;
 use Drupal\cas\Event\CasPreValidateEvent;
 use Drupal\cas\Service\CasHelper;
 use Drupal\user\UserDataInterface;
+use Drupal\user\UserInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
  * Listens to CAS events.
@@ -24,17 +32,33 @@ class JoinupEuLoginCasEventsSubscriber implements EventSubscriberInterface {
 
   /**
    * The module's settings.
-   *
-   * @var \Drupal\Core\Config\ImmutableConfig
    */
-  protected $settings;
+  protected ImmutableConfig $settings;
+
+  /**
+   * The CAS settings.
+   */
+  protected ImmutableConfig $casSettings;
 
   /**
    * The user data service.
-   *
-   * @var \Drupal\user\UserDataInterface
    */
-  protected $userData;
+  protected UserDataInterface $userData;
+
+  /**
+   * The entity type manager service.
+   */
+  protected EntityTypeManagerInterface $entityTypeManager;
+
+  /**
+   * The current request.
+   */
+  protected Request $currentRequest;
+
+  /**
+   * The messenger service.
+   */
+  protected MessengerInterface $messenger;
 
   /**
    * Constructs a new event subscriber instance.
@@ -43,23 +67,41 @@ class JoinupEuLoginCasEventsSubscriber implements EventSubscriberInterface {
    *   The config factory service.
    * @param \Drupal\user\UserDataInterface $user_data
    *   The user data service.
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
+   *   The entity type manager service.
+   * @param \Symfony\Component\HttpFoundation\RequestStack $request_stack
+   *   The request stack.
+   * @param \Drupal\Core\Messenger\MessengerInterface $messenger
+   *   The messenger service.
    */
-  public function __construct(ConfigFactoryInterface $config_factory, UserDataInterface $user_data) {
+  public function __construct(ConfigFactoryInterface $config_factory, UserDataInterface $user_data, EntityTypeManagerInterface $entity_type_manager, RequestStack $request_stack, MessengerInterface $messenger) {
     $this->settings = $config_factory->get('joinup_eulogin.settings');
+    $this->casSettings = $config_factory->get('cas.settings');
     $this->userData = $user_data;
+    $this->entityTypeManager = $entity_type_manager;
+    $this->currentRequest = $request_stack->getCurrentRequest();
+    $this->messenger = $messenger;
   }
 
   /**
    * {@inheritdoc}
    */
-  public static function getSubscribedEvents() {
+  public static function getSubscribedEvents(): array {
     return [
       CasHelper::EVENT_PRE_VALIDATE => 'alterValidationUrl',
+      CasHelper::EVENT_POST_VALIDATE => 'prepareAttributes',
+      CasHelper::EVENT_PRE_REGISTER => [
+        ['markAsNewAccountRegistration'],
+        ['handleDrupalUsernameCollision'],
+        ['preventRegisterEmailCollision'],
+      ],
       // This runs just before CasAttributesSubscriber::onPreLogin().
       // @see \Drupal\cas_attributes\Subscriber\CasAttributesSubscriber::onPreLogin()
       CasHelper::EVENT_PRE_LOGIN => ['handlePotentialMailCollision', 21],
-      CasHelper::EVENT_POST_LOGIN => 'storeAttributes',
-      CasHelper::EVENT_POST_VALIDATE => 'prepareAttributes',
+      CasHelper::EVENT_POST_LOGIN => [
+        ['storeAttributes'],
+        ['setRedirectAndStatusOnNewAccount', -20],
+      ],
     ];
   }
 
@@ -67,7 +109,7 @@ class JoinupEuLoginCasEventsSubscriber implements EventSubscriberInterface {
    * Alters the validation path and query string.
    *
    * EU Login uses a different ticket validation path comparing to the standard
-   * CAS 3.0 specifications. Also it adds additional query parameters to the
+   * CAS 3.0 specifications. Also, it adds additional query parameters to the
    * ticket validation URL.
    *
    * @param \Drupal\cas\Event\CasPreValidateEvent $event
@@ -84,6 +126,81 @@ class JoinupEuLoginCasEventsSubscriber implements EventSubscriberInterface {
 
     $event->setValidationPath($this->settings->get('ticket_validation.path'));
     $event->addParameters($parameters);
+  }
+
+  /**
+   * Stores the EU Login attributes in the CAS property bag.
+   *
+   * @param \Drupal\cas\Event\CasPostValidateEvent $event
+   *   The CAS post-validate event object.
+   */
+  public function prepareAttributes(CasPostValidateEvent $event): void {
+    $xml = new \SimpleXMLElement($event->getResponseData());
+    foreach ($xml->xpath('//cas:authenticationSuccess/*') as $element) {
+      $event->getCasPropertyBag()->setAttribute($element->getName(), $element->__toString());
+    };
+  }
+
+  /**
+   * Marks this login as being preceded by account registration.
+   *
+   * We use this flag later, in ::redirectOnNewAccount().
+   *
+   * @param \Drupal\cas\Event\CasPreRegisterEvent $event
+   *   The CAS pre-register event.
+   *
+   * @see self::redirectOnNewAccount()
+   */
+  public function markAsNewAccountRegistration(CasPreRegisterEvent $event): void {
+    $event->getCasPropertyBag()->setAttribute('newAccountRegistered', TRUE);
+  }
+
+  /**
+   * Assigns a new name to the user being registered if a local user exists.
+   *
+   * @param \Drupal\cas\Event\CasPreRegisterEvent $event
+   *   The CAS pre user register event object.
+   */
+  public function handleDrupalUsernameCollision(CasPreRegisterEvent $event): void {
+    if (!$this->casSettings->get('user_accounts.auto_register')) {
+      return;
+    }
+
+    $new_name = $name = $event->getDrupalUsername();
+    while (user_load_by_name($new_name)) {
+      $new_name = $this->buildUserName($name);
+    }
+
+    $event->setDrupalUsername($new_name);
+  }
+
+  /**
+   * Prevents registration of a CAS user when their email already exists.
+   *
+   * @param \Drupal\cas\Event\CasPreRegisterEvent $event
+   *   The CAS pre-register event.
+   *
+   * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
+   *   Thrown if the entity type doesn't exist.
+   * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
+   *   Thrown if the storage handler couldn't be loaded.
+   */
+  public function preventRegisterEmailCollision(CasPreRegisterEvent $event): void {
+    $mail = $event->getPropertyValues()['mail'] ?? NULL;
+    if (!$mail) {
+      throw new \InvalidArgumentException("Unexpected empty 'mail' property value.");
+    }
+
+    $same_mail_accounts = $this->entityTypeManager->getStorage('user')->loadByProperties([
+      'mail' => $mail,
+    ]);
+
+    if ($same_mail_accounts) {
+      $event->cancelAutomaticRegistration($this->t('While trying to register your account with Joinup, we found that your EU Login email address %mail is already in use on our site. Either change your EU Login email address or contact the <a href=":contact">Joinup support</a> if you feel that something is wrong.', [
+        '%mail' => $mail,
+        ':contact' => Url::fromRoute('contact_form.contact_page')->toString(),
+      ]));
+    }
   }
 
   /**
@@ -133,16 +250,34 @@ class JoinupEuLoginCasEventsSubscriber implements EventSubscriberInterface {
   }
 
   /**
-   * Stores the EU Login attributes in the CAS property bag.
+   * Sets a redirect and a success status message after registering the account.
    *
-   * @param \Drupal\cas\Event\CasPostValidateEvent $event
-   *   The CAS post-validate event object.
+   * @param \Drupal\cas\Event\CasPostLoginEvent $event
+   *   The CAS post-login event object.
    */
-  public function prepareAttributes(CasPostValidateEvent $event): void {
-    $xml = new \SimpleXMLElement($event->getResponseData());
-    foreach ($xml->xpath('//cas:authenticationSuccess/*') as $element) {
-      $event->getCasPropertyBag()->setAttribute($element->getName(), $element->__toString());
-    };
+  public function setRedirectAndStatusOnNewAccount(CasPostLoginEvent $event): void {
+    if ($event->getCasPropertyBag()->hasAttribute('newAccountRegistered')) {
+      $url = $event->getAccount()->toUrl('edit-form');
+      $this->currentRequest->query->set('destination', $url->toString());
+      $this->messenger->addStatus('Fill in the fields below to let the Joinup community learn more about you!');
+    }
+  }
+
+  /**
+   * Builds a new username starting from the original name.
+   *
+   * @param string $name
+   *   The original name passed by the event dispatcher.
+   *
+   * @return string
+   *   A new name that pretends to be unique.
+   */
+  protected function buildUserName(string $name): string {
+    if (mb_strlen($name) > UserInterface::USERNAME_MAX_LENGTH - 7) {
+      // In case the original name is too long, make some room for the suffix.
+      $name = substr($name, 0, UserInterface::USERNAME_MAX_LENGTH - 7);
+    }
+    return $name . '_' . (new Random())->name(6, TRUE);
   }
 
 }

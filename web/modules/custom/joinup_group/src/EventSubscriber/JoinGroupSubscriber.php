@@ -9,8 +9,8 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\Url;
-use Drupal\cas_account_link\Event\CasAccountLinkEvents;
-use Drupal\cas_account_link\Event\Events\CasAccountLinkPostLinkEvent;
+use Drupal\cas\Event\CasPostLoginEvent;
+use Drupal\cas\Service\CasHelper;
 use Drupal\externalauth\Event\ExternalAuthEvents;
 use Drupal\externalauth\Event\ExternalAuthLoginEvent;
 use Drupal\joinup_group\Entity\GroupInterface;
@@ -23,8 +23,8 @@ use Symfony\Component\HttpFoundation\RequestStack;
  *
  * When an anonymous user wants to join a group, they are redirected to EU Login
  * and a cookie is set to keep track of the group the user wants to join. This
- * event subscriber listens to login events, checks for the presence of the
- * cookie, and redirects the user back to the group they wanted to join so they
+ * event subscriber listens to sign in events, checks for the presence of the
+ * cookie, and redirects the user back to the group they wanted to join, so they
  * can decide whether they want to receive the group's notifications.
  */
 class JoinGroupSubscriber implements EventSubscriberInterface {
@@ -33,31 +33,23 @@ class JoinGroupSubscriber implements EventSubscriberInterface {
 
   /**
    * The entity type manager service.
-   *
-   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
    */
-  protected $entityTypeManager;
+  protected EntityTypeManagerInterface $entityTypeManager;
 
   /**
    * The time keeping service.
-   *
-   * @var \Drupal\Component\Datetime\TimeInterface
    */
-  protected $time;
+  protected TimeInterface $time;
 
   /**
    * The request stack.
-   *
-   * @var \Symfony\Component\HttpFoundation\RequestStack
    */
-  protected $requestStack;
+  protected RequestStack $requestStack;
 
   /**
    * The messenger service.
-   *
-   * @var \Drupal\Core\Messenger\MessengerInterface
    */
-  protected $messenger;
+  protected MessengerInterface $messenger;
 
   /**
    * Constructs a new event subscriber instance.
@@ -84,7 +76,11 @@ class JoinGroupSubscriber implements EventSubscriberInterface {
   public static function getSubscribedEvents(): array {
     return [
       ExternalAuthEvents::LOGIN => 'onLogin',
-      CasAccountLinkEvents::POST_LINK => [['onPostLink', 100]],
+      // Prevent the success status message and redirect about to be set in
+      // JoinupEuLoginCasEventsSubscriber::setRedirectAndStatusOnNewAccount() by
+      // acting before and stealing the show.
+      // @see \Drupal\joinup_eulogin\Event\Subscriber\JoinupEuLoginCasEventsSubscriber::setRedirectAndStatusOnNewAccount()
+      CasHelper::EVENT_POST_LOGIN => ['onPostLogin', -10],
     ];
   }
 
@@ -124,8 +120,8 @@ class JoinGroupSubscriber implements EventSubscriberInterface {
       catch (\Exception $e) {
         // We are acting on user supplied data in a cookie. Do not allow any
         // exception to bubble up since this could prevent the user from logging
-        // in until they manually clear their cookies. Instead delete the cookie
-        // and proceed as if no cookie was set.
+        // in until they manually clear their cookies. Instead, delete the
+        // cookie and proceed as if no cookie was set.
         $this->deleteCookie();
         return;
       }
@@ -133,22 +129,22 @@ class JoinGroupSubscriber implements EventSubscriberInterface {
   }
 
   /**
-   * Listens to the CasAccountLinkEvents::POST_LINK event.
+   * Listens to the CasHelper::EVENT_POST_LOGIN event.
    *
    * If a valid cookie is set indicating that the user is logging in with the
    * intention of joining a group, prevent the user from being redirected
    * elsewhere.
    *
-   * @param \Drupal\cas_account_link\Event\Events\CasAccountLinkPostLinkEvent $event
-   *   The event firing when a CAS account is linked to a Drupal account.
+   * @param \Drupal\cas\Event\CasPostLoginEvent $event
+   *   The event firing after successful CAS login.
    */
-  public function onPostLink(CasAccountLinkPostLinkEvent $event): void {
+  public function onPostLogin(CasPostLoginEvent $event): void {
     if ($this->getGroup()) {
       // Ensure our redirection takes precedence over any other listeners. The
       // POST_LINK event fires after the LOGIN event and would redirect the user
       // to their profile page. This would overwrite our redirection.
       // @see ::onLogin()
-      // @see \Drupal\joinup_eulogin\Event\Subscriber\JoinupEuLoginCasAccountLinkEventsSubscriber::setMessageAndRedirect()
+      // @see \Drupal\joinup_eulogin\Event\Subscriber\JoinupEuLoginCasEventsSubscriber::setRedirectAndStatusOnNewAccount()
       $event->stopPropagation();
     }
   }
@@ -179,7 +175,7 @@ class JoinGroupSubscriber implements EventSubscriberInterface {
       // We are acting on user supplied data in a cookie. If the group cannot be
       // loaded, or an exception occurs, possibly the cookie was tampered with.
       // Do not allow any exceptions to bubble up since they could prevent the
-      // user from logging in until they manually clear their cookies. Instead
+      // user from logging in until they manually clear their cookies. Instead,
       // delete the cookie and carry on as if no cookie was set.
       $this->deleteCookie();
     }
@@ -191,41 +187,6 @@ class JoinGroupSubscriber implements EventSubscriberInterface {
    */
   protected function deleteCookie(): void {
     setcookie('join_group', '', $this->time->getRequestTime() - 86400, '/');
-  }
-
-  /**
-   * Returns the canonical URL of the group that is referenced in the cookie.
-   *
-   * If the user who is logging in has previously indicated that they want to
-   * join a group, a cookie is set which tracks which group they want to join.
-   *
-   * If a cookie is set and turns out to contain invalid data, the cookie is
-   * deleted because it is possibly being tampered with.
-   *
-   * @return \Drupal\Core\Url|null
-   *   The URL of the group that is referenced in the cookie, or NULL in case no
-   *   cookie is set, or the cookie contains invalid data.
-   */
-  protected function getGroupUrl(): ?Url {
-    if (!empty($entity_id = $this->requestStack->getCurrentRequest()->cookies->get('join_group'))) {
-      try {
-        $entity = $this->entityTypeManager->getStorage('rdf_entity')->load($entity_id);
-        if ($entity instanceof GroupInterface) {
-          $url = $entity->toUrl();
-          if ($url instanceof Url) {
-            return $url;
-          }
-        }
-      }
-      catch (\Exception $e) {
-      }
-      // We are acting on user supplied data in a cookie. If the group does not
-      // exist or an exception occurs during the loading of the entity or
-      // generation of the URL, then possibly the cookie was tampered with.
-      // Delete the cookie and carry on as if no cookie was set.
-      $this->deleteCookie();
-    }
-    return NULL;
   }
 
 }
