@@ -1,0 +1,13 @@
+/**
+ * @file
+ * Layout styles.
+ *
+ * Macro arrangement of the website.
+ */
+
+@import "core"; // Functions, variables, utilities and mixins required
+@import "@openeuropa/bcl-bootstrap/scss/root";
+@import "@openeuropa/bcl-bootstrap/scss/images";
+@import "@openeuropa/bcl-bootstrap/scss/containers";
+@import "@openeuropa/bcl-bootstrap/scss/grid";
+@import "components/layout";
