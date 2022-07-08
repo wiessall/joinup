@@ -8,22 +8,12 @@ use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\joinup_group\Entity\GroupInterface;
-use Drupal\joinup_group\Event\GroupReportsEvent;
-use Drupal\joinup_group\Event\GroupReportsEventInterface;
 use Drupal\meta_entity\Entity\MetaEntity;
-use Drupal\meta_entity\Entity\MetaEntityInterface;
 use Drupal\og\OgAccessInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
- * Returns responses for the group reports page.
- *
- * This is a page containing various reports about a group and is accessible for
- * facilitators and moderators. Modules can add reports for inclusion in this
- * page by subscribing to the GroupReportsEvent.
- *
- * This page can be reached through the three-dots menu on the group overview.
+ * Returns responses for the group announcement form.
  */
 class AnnouncementsController extends ControllerBase {
 
@@ -52,10 +42,7 @@ class AnnouncementsController extends ControllerBase {
   }
 
   /**
-   * Access check for the group reports page.
-   *
-   * Only facilitators and moderators have the required 'access group reports'
-   * permission.
+   * Access check for the group announcement form.
    *
    * @param \Drupal\joinup_group\Entity\GroupInterface $rdf_entity
    *   The group for which the access to the reports page is being determined.
