@@ -164,6 +164,9 @@ class JoinupSubscriptionContext extends RawDrupalContext {
           'bundle' => $subscription_bundle,
         ];
       }
+      if (isset($values['announcements']) && $values['announcements'] === 'yes') {
+        $membership->set('announcements', TRUE);
+      }
       $membership->set('subscription_bundles', $subscriptions)->save();
     }
   }
@@ -354,22 +357,22 @@ class JoinupSubscriptionContext extends RawDrupalContext {
    * @Then the following content subscriptions should be selected:
    */
   public function assertSubscriptionOptionsInSubscriptions(TableNode $subscription_options): void {
-    foreach ($subscription_options->getRowsHash() as $group_label => $expected_bundle_ids) {
-      $expected_bundle_ids = $this->explodeCommaSeparatedStepArgument(strtolower($expected_bundle_ids));
+    foreach ($subscription_options->getRowsHash() as $group_label => $expected_options) {
+      $expected_options = $this->explodeCommaSeparatedStepArgument(strtolower($expected_options));
       $group = self::getRdfEntityByLabel($group_label);
       $subscription_bundles = JoinupSubscriptionsHelper::SUBSCRIPTION_BUNDLES[$group->bundle()];
       foreach ($subscription_bundles as $entity_type_id => $bundle_ids) {
         foreach ($bundle_ids as $bundle_id) {
           $key = implode('|', [$entity_type_id, $bundle_id]);
-          $locator = 'groups[' . $group->id() . '][bundles][' . $key . ']';
-          if (in_array($bundle_id, $expected_bundle_ids)) {
-            $this->assertSession()->checkboxChecked($locator);
-          }
-          else {
-            $this->assertSession()->checkboxNotChecked($locator);
-          }
+          $locator = 'groups[' . $group->id() . '][options][' . $key . ']';
+          in_array($bundle_id, $expected_options)
+            ? $this->assertSession()->checkboxChecked($locator)
+            : $this->assertSession()->checkboxNotChecked($locator);
         }
       }
+      in_array('announcements', $expected_options)
+        ? $this->assertSession()->checkboxChecked('groups[' . $group->id() . '][options][announcements]')
+        : $this->assertSession()->checkboxNotChecked('groups[' . $group->id() . '][options][announcements]');
     }
   }
 
@@ -401,6 +404,13 @@ class JoinupSubscriptionContext extends RawDrupalContext {
       $membership = $this->getMembershipByGroupAndUser($group, $account, OgMembershipInterface::ALL_STATES);
       $expected_bundle_ids = $this->explodeCommaSeparatedStepArgument(strtolower($expected_bundle_ids));
 
+      $announcements = FALSE;
+      if (in_array('announcements', $expected_bundle_ids)) {
+        unset($expected_bundle_ids[array_search('announcements', $expected_bundle_ids)]);
+        $announcements = TRUE;
+      }
+      Assert::assertSame($announcements, (bool) $membership->get('announcements')->value);
+
       $actual_bundle_ids = array_map(function (array $item): string {
         return $item['bundle'];
       }, $membership->get('subscription_bundles')->getValue());
@@ -431,6 +441,7 @@ class JoinupSubscriptionContext extends RawDrupalContext {
     $group = self::getRdfEntityByLabel($label, $bundle);
     $membership = $this->getMembershipByGroupAndUser($group, $account, OgMembershipInterface::ALL_STATES);
     Assert::assertEmpty($membership->get('subscription_bundles')->getValue());
+    Assert::assertFalse((bool) $membership->get('announcements')->value);
   }
 
   /**
@@ -696,6 +707,23 @@ class JoinupSubscriptionContext extends RawDrupalContext {
     }
 
     return $emails;
+  }
+
+  /**
+   * Asserts if memberships with bundle subscriptions have announcements too.
+   *
+   * @Given all active memberships with accepted terms have active announcements
+   */
+  public function assertAnnouncementsInMemberships(): void {
+    $query = <<<SQL
+SELECT COUNT(*) FROM {og_membership} og
+WHERE og.announcements = 0
+    AND og.state = 'active'
+    AND og.uid IN (SELECT DISTINCT(a.uid) FROM {entity_legal_document_acceptance} a)
+SQL;
+
+    $actual = \Drupal::database()->query($query)->fetchField();
+    Assert::assertEquals(0, $actual);
   }
 
 }
