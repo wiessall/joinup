@@ -239,7 +239,7 @@ Feature: Global search
     Then the page should show the tiles "Ulysses Freeman"
     When I enter "clyffco" in the search bar and press enter
     Then the page should show the tiles "Jenessa Carlyle"
-    When I enter "Omero+snc" in the search bar and press enter
+    When I enter "Omero snc" in the search bar and press enter
     Then the page should show the tiles "Ulysses Freeman"
 
   Scenario: Advanced search
@@ -338,7 +338,7 @@ Feature: Global search
     Given I am logged in as a moderator
     When I go to the edit form of the "ZzoluDistro" distribution
     And I fill in "Title" with "DistroZzolu"
-    And I fill in "Description" with "Nietzsche's"
+    And I enter "Nietzsche's" in the "Description" wysiwyg editor
     And I press "Remove"
     And I set a remote URL "http://example.com/guzzle" to "Access URL"
     And I select "LGPL" from "Licence"
@@ -640,6 +640,21 @@ Feature: Global search
     Then I should see the following search suggestions:
       | funni |
       | funny |
+
+    # Check if search did you mean works.
+    Given I visit the search page
+    And I enter "histore" in the search bar
+    Then I submit the search by pressing enter
+    And I should see the text "Did you mean: history ?"
+    And I click "history"
+    Then I should see the text "SEARCH RESULTS (1)"
+
+    Then I enter "cosine" in the search bar
+    And I submit the search by pressing enter
+    And I should see the text "Did you mean: cuisine ?"
+    And I click "cuisine"
+    Then I should see the text "SEARCH RESULTS (1)"
+    And I should see the "Movistar" tile
 
   @terms
   Scenario: Filter on date
