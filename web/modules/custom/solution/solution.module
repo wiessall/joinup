@@ -9,6 +9,7 @@ declare(strict_types = 1);
 
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Cache\Cache;
+use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityMalformedException;
@@ -798,5 +799,21 @@ function solution_module_implements_alter(&$implementations, $hook) {
     $solution = $implementations['solution'];
     unset($implementations['solution']);
     $implementations = ['solution' => $solution] + $implementations;
+  }
+}
+
+/**
+ * Implements hook_og_user_access_alter().
+ */
+function solution_og_user_access_alter(array &$permissions, CacheableMetadata &$cacheable_metadata, array $context): void {
+  $group = $context['group'];
+  $user = $context['user'];
+  $membership = $group->getMembership((int) $user->id());
+  if ($group instanceof SolutionInterface && $membership->hasPermission('update solution_settings meta-entity')) {
+    $key = array_search('update solution_settings meta-entity', $permissions);
+    if ($key !== FALSE) {
+      unset($permissions[$key]);
+    }
+    $cacheable_metadata->addCacheableDependency($group);
   }
 }
