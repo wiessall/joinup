@@ -15,9 +15,34 @@
 declare(strict_types = 1);
 
 /**
+ * Impersonate the passwords of users not linked to EU Login.
+ */
+function joinup_core_deploy_108202(?array &$sandbox = NULL): void {
+  // While using CAS Account Link module, only the paired accounts passwords
+  // were impersonated. The other passwords were kept to allow un-paired account
+  // users to link their accounts through their Drupal credentials. As the
+  // pairing mechanism is being dismantled, we impersonate all other passwords.
+  // Not using entity API for performance reasons.
+  \Drupal::database()
+    ->query("UPDATE {users_field_data}
+      SET pass = CONCAT(
+        '\$S\$E',
+        SUBSTR(
+          SHA2(
+            CONCAT(name, uid, mail, timezone, UUID()),
+            256
+          ),
+          1,
+          51
+        )
+      )
+      WHERE uid NOT IN(SELECT uid FROM {authmap})");
+}
+
+/**
  * Validate contact info email.
  */
-function joinup_core_deploy_0108200(array &$sandbox) {
+function joinup_core_deploy_0108203(array &$sandbox) {
   if (empty($sandbox['ids'])) {
     $sandbox['ids'] = \Drupal::entityQuery('rdf_entity')->condition('rid', [
       'collection',
@@ -28,35 +53,14 @@ function joinup_core_deploy_0108200(array &$sandbox) {
   }
   $entity_storage = \Drupal::entityTypeManager()->getStorage('rdf_entity');
   $nids = array_splice($sandbox['ids'], 0, 50);
+  $queue = \Drupal::queue('joinup_email_confirmer');
+  $queue->createQueue();
   foreach ($entity_storage->loadMultiple($nids) as $entity) {
     $field_name = $entity->bundle() === 'collection' ? 'field_ar_contact_information' : 'field_is_contact_information';
     if (!$entity->get($field_name)->isEmpty()) {
-      $emails = [];
       foreach ($entity->get($field_name)->referencedEntities() as $contact) {
         if ($email = $contact->get('field_ci_email')->value) {
-          \Drupal::service('email_confirmer')->confirm($email);
-          $emails[] = $email;
-        }
-      }
-      if ($emails) {
-        $account = $entity->getOwner();
-        if ($account && $account->isActive()) {
-          $mailManager = \Drupal::service('plugin.manager.mail');
-          $module = 'joinup_core';
-          $key = 'contact_owners_validation';
-          $to = $account->getEmail();
-          $body_data = [
-            '#theme' => 'contact_owners_validation',
-            '#name' => $account->label(),
-            '#entity_name' => $entity->getName(),
-          ];
-          $output = \Drupal::service('renderer')->renderPlain($body_data);
-          $params['message'] = $output;
-          $params['name'] = $entity->getName();
-          $langcode = $account->getPreferredLangcode();
-          $send = TRUE;
-
-          $mailManager->mail($module, $key, $to, $langcode, $params, NULL, $send);
+          $queue->createItem($email);
         }
       }
     }

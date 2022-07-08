@@ -4,6 +4,7 @@ declare(strict_types = 1);
 
 namespace Drupal\oe_newsroom_newsletter\NewsletterSubscriber;
 
+use Drupal\Core\Site\Settings;
 use Drupal\oe_newsroom_newsletter\Exception\BadResponseException;
 use Drupal\oe_newsroom_newsletter\Exception\EmailAddressAlreadySubscribedException;
 use Drupal\oe_newsroom_newsletter\Exception\InvalidEmailAddressException;
@@ -29,6 +30,13 @@ class NewsletterSubscriber implements NewsletterSubscriberInterface {
   protected $httpClient;
 
   /**
+   * The list of registered service application keys.
+   *
+   * @var array
+   */
+  protected $settings;
+
+  /**
    * Constructs a new NewsletterSubscriber object.
    *
    * @param \GuzzleHttp\ClientInterface $httpClient
@@ -36,6 +44,11 @@ class NewsletterSubscriber implements NewsletterSubscriberInterface {
    */
   public function __construct(ClientInterface $httpClient) {
     $this->httpClient = $httpClient;
+    $this->settings = [];
+    $settings = Settings::get('oe_newsroom_universe_keys');
+    if (!empty($settings) && $settings = json_decode($settings)) {
+      $this->settings = (array) $settings;
+    }
   }
 
   /**
@@ -51,28 +64,42 @@ class NewsletterSubscriber implements NewsletterSubscriberInterface {
    * {@inheritdoc}
    */
   public function subscribe(string $email, string $universe, string $service_id): void {
+    if (!isset($this->settings[$universe])) {
+      throw new \RuntimeException("There is no key set up for the {$universe} universe");
+    }
+
     $uri = $this->getApiEndpoint($universe);
-    $options = [
-      'query' => [
-        'service_id' => $service_id,
+
+    $headers = ['Content-Type' => 'application/json'];
+    $data = [
+      'key' => hash('sha256', $email . $this->settings[$universe]),
+      'subscription' => [
+        'topicExtWebsite' => $universe,
+        'ExtWebsite' => $universe,
+        'sv_id' => $service_id,
         'email' => $email,
-        'response_type' => 'json',
       ],
     ];
     try {
-      $response = $this->httpClient->get($uri, $options);
+      $response = $this->httpClient->post($uri, [
+        'headers' => $headers,
+        'json' => $data,
+      ]);
+
       if ($response->getStatusCode() === 200) {
         $body = json_decode((string) $response->getBody()->getContents());
-        // Check if the JSON data about the subscription has been returned.
-        if (!empty($body->subscription)) {
-          $data = $body->subscription;
-          if (!empty($data->isNewSubscription) && $data->isNewSubscription === 'True') {
+        // The request allows multiple subscriptions so returns an array of
+        // responses.
+        $body = reset($body);
+
+        if (!empty($body->status) && $body->status === 'Valid') {
+          if (!empty($body->isNewSubscription) && $body->isNewSubscription === TRUE) {
             // The subscription was successful.
             return;
           }
           // The user has not been subscribed. Throw a relevant exception.
-          if (!empty($data->feedbackMessage)) {
-            switch (trim($data->feedbackMessage)) {
+          if (!empty($body->feedbackMessage)) {
+            switch (trim($body->feedbackMessage)) {
               case 'A subscription for this service is already registered for this email address':
                 throw new EmailAddressAlreadySubscribedException();
 
@@ -80,7 +107,7 @@ class NewsletterSubscriber implements NewsletterSubscriberInterface {
                 throw new InvalidEmailAddressException();
 
               default:
-                throw new BadResponseException($data->feedbackMessage);
+                throw new BadResponseException($body->feedbackMessage);
             }
           }
           throw new BadResponseException('Response returned by Newsroom newsletter API is not according to specification.');

@@ -26,16 +26,16 @@ Feature:
     And I fill in "Password" with "secretz"
     And I press "Log in"
 
-    And I select the radio button "I am a new user (create a new account)"
     Then I should see "I have read and accept the Legal notice"
+    And I should see the warning message "You must accept this agreement before continuing."
 
     # Submit without accepting the 'Legal notice'.
-    When I press "Next"
+    When I press "Submit"
     Then I should see the error message "You must accept the Legal notice in order to use our platform."
 
     # After accepting the agreement the user can continue.
     Given I check "I have read and accept the Legal notice"
-    And I press "Sign in"
+    And I press "Submit"
     Then I should see the success message "Fill in the fields below to let the Joinup community learn more about you!"
 
     # The user has been redirected to its user account edit form.

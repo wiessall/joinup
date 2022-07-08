@@ -11,7 +11,6 @@ module:
   breakpoint: 0
   cached_computed_field: 0
   cas: 0
-  cas_account_link: 0
   cas_attributes: 0
   changed_fields: 0
   ckeditor: 0
@@ -161,10 +160,6 @@ module:
   page_manager: 0
   paragraphs_jquery_ui_accordion: 0
   paragraphs_type_permissions: 0
-  password_policy: 0
-  password_policy_character_types: 0
-  password_policy_characters: 0
-  password_policy_length: 0
   path: 0
   path_alias: 0
   pipeline: 0
