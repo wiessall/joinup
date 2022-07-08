@@ -21,11 +21,10 @@ Feature: User profile
     And I should not see the link "View" in the "Entity actions" region
 
     When I click "Edit"
-    Then the following fields should be present "Current password, Email, Password, Confirm password, First name"
+    Then the following fields should be present "Email, First name"
     And the following fields should be present "Family name, Photo, Country of origin, Professional domain, Business title"
     And the following fields should be present "Facebook, Twitter, LinkedIn, GitHub, SlideShare, Youtube, Vimeo"
     And the following fields should not be present "Time zone"
-    # Username label and user name are on separate lines to be more MDL-like after ISAICP-3770
     And I should see the text "Username"
     And I should see the text "Leonardo Da Vinci"
     And I fill in "First name" with "Leoke"
@@ -80,7 +79,7 @@ Feature: User profile
     And I press "Filter"
     Then I click "Leonardo Da Vinci"
     Then I click "Edit"
-    Then the following fields should be present "Email, Username, Password, Confirm password"
+    Then the following fields should be present "Email, Username"
     And the following fields should be present "First name, Family name, Photo, Professional domain, Business title"
     And the following fields should be present "Country of origin, Organisation"
     And the following fields should not be present "Time zone"
@@ -243,39 +242,3 @@ Feature: User profile
     And I click "My account"
     Then I should not see the link "Subscription settings"
     And I should not see the link "Persistent Logins"
-
-  Scenario: A user, changing its E-mail should receive a notification on his old
-  E-mail address and a verification link on its new address.
-
-    Given users:
-      | Username       | E-mail         | Password | First name | Family name |
-      | Caitlyn Jenner | he@example.com | secret   | Caitlyn    | Jenner      |
-    When I am logged in as "Caitlyn Jenner"
-    And I am on the homepage
-    And I click "My account"
-    When I click "Edit"
-    Then the "Email" field should contain "he@example.com"
-
-    Given I fill in "Current password" with "secret"
-    And I fill in "Email" with "she@example.com"
-    When I press "Save"
-    Then I should see the following warning messages:
-      | warning messages                                                                                    |
-      | You must confirm your email address. Further instructions have been sent to your new email address. |
-    And the following email should have been sent:
-      | recipient_mail | he@example.com                                                                                                          |
-      | subject        | Joinup: Email change information for Caitlyn Jenner                                                                     |
-      | body           | In order to complete the change you will need to follow the instructions sent to your new email address within one day. |
-    And the following email should have been sent:
-      | recipient_mail | she@example.com                                                                                                                   |
-      | subject        | Joinup: Email change information for Caitlyn Jenner                                                                               |
-      | body           | A request to change your email address has been made in your Joinup profile. To confirm the request, please click the link below: |
-
-    But I click the mail change link from the email sent to "she@example.com"
-    Then I should see the following success messages:
-      | success messages                                        |
-      | Your email address has been changed to she@example.com. |
-    # Check that the E-mail has been successfully updated.
-    When I click "My account"
-    And I click "Edit"
-    Then the "Email" field should contain "she@example.com"

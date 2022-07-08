@@ -1,0 +1,18 @@
+uuid: 25608a62-0562-4e4a-9a60-44495b54a6cd
+langcode: en
+status: true
+dependencies:
+  module:
+    - joinup_core
+  theme:
+    - ventuno
+id: authenticate_to_join
+label: 'Authenticate to join'
+theme: ventuno
+weight: 0
+conditions:
+  request_route:
+    id: request_route
+    negate: false
+    routes:
+      - joinup_group.authenticate_to_join

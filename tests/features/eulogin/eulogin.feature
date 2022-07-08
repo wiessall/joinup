@@ -23,19 +23,6 @@ Feature: Log in through EU Login
     And I press "Log in"
 
     # The user gets redirected back to Drupal.
-    Then I should see the heading "Already a Joinup user?"
-    And I should see "Since you have signed in for the first time using EU Login, you need to take one extra step."
-    And I should see "Before you make your selection below, please note this important information:"
-    And I should see "If you are an existing user on Joinup, and would like to keep all your account data (collection/solution memberships, published events, news, documents, discussions etc.), we suggest you select the first option to pair your existing account with your EU Login account;"
-    And I should see "If you are a new user on Joinup, the second option is the right one for you."
-    And I should see "Please make your selection:"
-    And I should see "I am an existing user (pair my existing account with my EU Login account)"
-    And I should see "You will be asked to login with your site credentials."
-    And I should see "I am a new user (create a new account)"
-    And I should see "No action is required on your side. A new account, linked to your EU Login account, will be created."
-
-    Given I select the radio button "I am a new user (create a new account)"
-    When I press "Next"
     Then I should see the success message "Fill in the fields below to let the Joinup community learn more about you!"
 
     # The user has been redirected to its user account edit form.
@@ -50,87 +37,6 @@ Feature: Log in through EU Login
       | First name  | Chuck  |
       | Family name | Norris |
 
-  Scenario: An existing local account can be linked by the user.
-    Given CAS users:
-      | Username    | E-mail                         | Password  | First name | Last name |
-      | chucknorris | texasranger@chucknorris.com.eu | Qwerty098 | Chuck      | Norris    |
-    And users:
-      | Username             | Password | E-mail                           | First name | Family name | Organisation |
-      | chuck_the_local_hero | 12345    | chuck_the_local_hero@example.com | LocalChick | LocalNorris | ACME         |
-
-    Given I am on the homepage
-    And I click "Sign in"
-
-    # The user gets redirected to the CAS server.
-    Then I should see the heading "Sign in to continue"
-    When I fill in "E-mail address" with "texasranger@chucknorris.com.eu"
-    When I fill in "Password" with "Qwerty098"
-    And I press "Log in"
-
-    # The user gets redirected back to Drupal.
-    Then I should see the heading "Already a Joinup user?"
-    Given I select the radio button "I am an existing user (pair my existing account with my EU Login account)"
-
-    # Try post the form with incomplete data.
-    When I press "Sign in"
-    Then I should see the following error messages:
-      | error messages              |
-      | Username field is required. |
-      | Password field is required. |
-
-    # Try to post with wrong credentials.
-    Given I fill in "Email or username" with "chuck_the_local_hero"
-    And I fill in "Password" with "wrong..."
-    When I press "Sign in"
-    Then I should see the error message "Unrecognized username or password. Forgot your password?"
-
-    # Check that user can still reset their password.
-    When I click "reset your password"
-    Then I should see the heading "Reset your password"
-    And the following fields should be present "Email"
-    And I should see "Password reset instructions will be sent to your registered email address."
-
-    # Successful login.
-    Given I move backward one page
-    And I fill in "Email or username" with "chuck_the_local_hero"
-    And I fill in "Password" with "12345"
-    When I press "Sign in"
-    Then I should see the success message "Your EU Login account chucknorris has been successfully linked to your local account Chuck Norris."
-
-    # The profile entries are overwritten, except the username.
-    And the user chuck_the_local_hero should have the following data in their user profile:
-      | Username    | chuck_the_local_hero           |
-      | E-mail      | texasranger@chucknorris.com.eu |
-      | First name  | Chuck                          |
-      | Family name | Norris                         |
-
-  Scenario: An existing local account can be linked by the user using the email.
-    Given CAS users:
-      | Username    | E-mail                         | Password  | First name | Last name |
-      | chucknorris | texasranger@chucknorris.com.eu | Qwerty098 | Chuck      | Norris    |
-    And users:
-      | Username             | Password | E-mail                           | First name | Family name | Organisation |
-      | chuck_the_local_hero | 12345    | chuck_the_local_hero@example.com | LocalChick | LocalNorris | ACME         |
-
-    Given I visit "/cas"
-    And I fill in "E-mail address" with "texasranger@chucknorris.com.eu"
-    And I fill in "Password" with "Qwerty098"
-    When I press "Log in"
-    Then I should see the heading "Already a Joinup user?"
-    Given I select the radio button "I am an existing user (pair my existing account with my EU Login account)"
-
-    And I fill in "Email or username" with "chuck_the_local_hero@example.com"
-    And I fill in "Password" with "12345"
-    When I press "Sign in"
-    Then I should see the success message "Your EU Login account chucknorris has been successfully linked to your local account Chuck Norris."
-
-    # The profile entries are overwritten, except the username.
-    And the user chuck_the_local_hero should have the following data in their user profile:
-      | Username    | chuck_the_local_hero           |
-      | E-mail      | texasranger@chucknorris.com.eu |
-      | First name  | Chuck                          |
-      | Family name | Norris                         |
-
   Scenario: An existing user can log in through EU Login
     Given users:
       | Username    | E-mail           | First name | Family name |
@@ -138,14 +44,6 @@ Feature: Log in through EU Login
     Given CAS users:
       | Username | E-mail     | Password           | First name | Last name | Local username |
       | jb007    | 007@mi6.eu | shaken_not_stirred | James      | Bond      | jb007_local    |
-
-    # Test the password reset customized message as anonymous.
-    Given I visit "/user/password"
-    And I fill in "Email" with "007-local@mi6.eu"
-    And I wait for the honeypot time limit to pass
-    And I press "Submit"
-    Then I should see the error message "The requested account is associated with EU Login and its password cannot be managed from this website."
-    And I should see the link "EU Login"
 
     Given I am on the homepage
     And I click "Sign in"
@@ -202,51 +100,6 @@ Feature: Log in through EU Login
       | E-mail      | uniq@example.com |
       | First name  | James            |
       | Family name | Bond             |
-
-    # A logged in user cannot access the reset password form.
-    When I go to "/user/password"
-    Then I should get an access denied error
-
-  Scenario: An existing local user wants to link their EU Login account but forgot their Drupal password.
-    Given CAS users:
-      | Username   | E-mail              | Password | First name  | Last name |
-      | jeanclaude | muscles@brussels.be | dragon12 | Jean-Claude | Van Damme |
-    And users:
-      | Username | Password | E-mail         | First name | Family name |
-      | jclocal  | dragonne | jcvd@gmail.com | JC         | VD          |
-
-    Given I am on the homepage
-    And I click "Sign in"
-    And I fill in "E-mail address" with "muscles@brussels.be"
-    And I fill in "Password" with "dragon12"
-    And I press "Log in"
-    And I select the radio button "I am an existing user (pair my existing account with my EU Login account)"
-
-    When I click "reset your password"
-    And I fill in "Email" with "jcvd@gmail.com"
-    And I wait for the spam protection time limit to pass
-    And I press "Submit"
-    Then I should see the success message "If jcvd@gmail.com is a valid account, an email will be sent with instructions to reset your password."
-
-    When I go to the one time sign in page of the user "jclocal"
-    And I fill in "Password" with "Cœur-de-lion-123!"
-    And I fill in "Confirm password" with "Cœur-de-lion-123!"
-    And I press "Save"
-    Then I should see the success message "The changes have been saved."
-    # The user is logged in at this point which is a loophole that allows users
-    # to bypass EU Login for as long as we keep the old password reset form.
-    And I click "Sign out"
-
-    Given I am on the homepage
-    And I click "Sign in"
-    And I fill in "E-mail address" with "muscles@brussels.be"
-    And I fill in "Password" with "dragon12"
-    And I press "Log in"
-    And I select the radio button "I am an existing user (pair my existing account with my EU Login account)"
-    And I fill in "Email or username" with "jcvd@gmail.com"
-    And I fill in "Password" with "Cœur-de-lion-123!"
-    And I press "Sign in"
-    Then I should see the success message "Your EU Login account jeanclaude has been successfully linked to your local account Jean-Claude Van Damme."
 
   Scenario: Fields imported from EU Login cannot be edited locally.
     Given users:
@@ -349,10 +202,6 @@ Feature: Log in through EU Login
     And I should see "Username"
     And I should see "without_cas"
     And I should see "A valid email address. All emails from the system will be sent to this address. The email address is not made public and will only be used if you wish to receive a new password or wish to receive certain news or notifications by email."
-    And I should see "Fail - Password length must be at least 8 characters."
-    And I should see "Password character length of at least 8"
-    And I should see "Fail - Password must contain at least 3 types of characters from the following character types: lowercase letters, uppercase letters, digits, special characters."
-    And I should see "Minimum password character types: 3"
 
     When I press "Save"
     Then I should see the error message "First name field is required."
@@ -373,13 +222,9 @@ Feature: Log in through EU Login
     When I fill in "Password" with "123"
     And I press "Log in"
 
-    Given I select the radio button "I am a new user (create a new account)"
-    When I press "Next"
-
-    Then I should see the following error messages:
-      | error messages                                                                                             |
-      | The email address joe@example.com is already taken.                                                        |
-      | If you are the owner of this account please select the first option, otherwise contact the Joinup support. |
+    Then I should see the following error message:
+      | error messages                                                                                                                                                                                                                                           |
+      | While trying to register your account with Joinup, we found that your EU Login email address joe@example.com is already in use on our site. Either change your EU Login email address or contact the Joinup support if you feel that something is wrong. |
 
   Scenario: A new user tries to register with an existing username.
     Given users:
@@ -395,10 +240,6 @@ Feature: Log in through EU Login
     When I fill in "E-mail address" with "joe.cas@example.com"
     When I fill in "Password" with "123"
     And I press "Log in"
-
-    When I select the radio button "I am a new user (create a new account)"
-    When I press "Next"
-
     Then I should see the success message "Fill in the fields below to let the Joinup community learn more about you!"
 
   Scenario: The Drupal registration tab has been removed and the /user/register
@@ -430,7 +271,6 @@ Feature: Log in through EU Login
     And I click "People"
     When I click "Edit" in the "Joe Doe" row
     Then the "Allow user to log in via CAS" checkbox should not be checked
-    And the following field should be present "Password"
 
     Given I check "Allow user to log in via CAS"
     And I fill in "CAS Username" with "joe"
@@ -480,3 +320,11 @@ Feature: Log in through EU Login
     And I press "Log in"
     # The user should be redirected to the original page after logging in.
     Then I should see the heading "People"
+
+  Scenario: Password reset is disabled.
+    Given I am an anonymous user
+    When I go to "/user/password"
+    Then the response status code should be 404
+    Given I am logged in as an "authenticated user"
+    When I go to "/user/password"
+    Then the response status code should be 404
