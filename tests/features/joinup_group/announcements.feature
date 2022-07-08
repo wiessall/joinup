@@ -50,3 +50,67 @@ Feature: Messaging group announcements
     Then I click "Members"
     And I should not see the link "Announcement"
 
+ @javascript
+  Scenario Outline: Check permissions when disable and enable announcements.
+
+    Given the following <content type>:
+      | title      | Nachos test   |
+      | state      | validated     |
+    And users:
+      | Username         | E-mail                       | First name  | Family name | Roles     |
+      | Loan Lee         | loan-lee@example.com         | Loan        | Lee         |           |
+      | Xiau user        | xiau.user@example.com        | Xiau        | user        |           |
+      | Rony Facilitator | ronyfacilitator@example.com  | Rony        | Facilitator |           |
+      | Alex moderator   | alex.moderator@example.com   | Alex        | Mod         | moderator |
+    And the following <content type> user memberships:
+      | <content type>  | user             | roles       |
+      | Nachos test     | Rony Facilitator | facilitator |
+      | Nachos test     | Xiau user        | owner       |
+
+    Given I am logged in as "Loan Lee"
+    And I go to the homepage of the "Nachos test" <content type>
+    Then I click "Members"
+    And I should not see the link "Announcement"
+
+    When I am logged in as "Rony Facilitator"
+    And I go to the homepage of the "Nachos test" <content type>
+    Then I click "Members"
+    And I should see the link "Announcement"
+
+    When I am logged in as "Xiau user"
+    And I go to the homepage of the "Nachos test" <content type>
+    Then I click "Members"
+    And I should see the link "Announcement"
+
+    When I am logged in as "Alex moderator"
+    And I go to the homepage of the "Nachos test" <content type>
+    Then I click "Members"
+    And I should see the link "Announcement"
+
+    # Disable announcements.
+    And I go to the homepage of the "Nachos test" <content type>
+    And I open the header local tasks menu
+    And I should see the link "Settings" in the "Entity actions" region
+    And I click "Settings" in the "Entity actions" region
+    And I uncheck the box "Announcements enabled"
+    Then I press "Save"
+
+    Given I am logged in as "Loan Lee"
+    And I go to the homepage of the "Nachos test" <content type>
+    Then I click "Members"
+    And I should not see the link "Announcement"
+
+    When I am logged in as "Rony Facilitator"
+    And I go to the homepage of the "Nachos test" <content type>
+    Then I click "Members"
+    And I should not see the link "Announcement"
+
+    When I am logged in as "Xiau user"
+    And I go to the homepage of the "Nachos test" <content type>
+    Then I click "Members"
+    And I should not see the link "Announcement"
+
+    Examples:
+      | content type |
+      | collection   |
+      | solution     |
