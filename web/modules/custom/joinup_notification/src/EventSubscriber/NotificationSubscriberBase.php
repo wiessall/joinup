@@ -31,15 +31,11 @@ abstract class NotificationSubscriberBase implements EventSubscriberInterface {
 
   /**
    * The entity object.
-   *
-   * @var \Drupal\Core\Entity\EntityInterface
    */
   protected EntityInterface $entity;
 
   /**
    * The operation id.
-   *
-   * @var string
    */
   protected string $operation;
 
@@ -52,43 +48,31 @@ abstract class NotificationSubscriberBase implements EventSubscriberInterface {
 
   /**
    * The entity type manager.
-   *
-   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
    */
   protected EntityTypeManagerInterface $entityTypeManager;
 
   /**
    * The config factory service.
-   *
-   * @var \Drupal\Core\Config\ConfigFactory
    */
   protected ConfigFactory $configFactory;
 
   /**
    * The current user service.
-   *
-   * @var \Drupal\Core\Session\AccountProxy
    */
   protected AccountProxy $currentUser;
 
   /**
    * The membership manager service.
-   *
-   * @var \Drupal\og\MembershipManagerInterface
    */
   protected MembershipManagerInterface $membershipManager;
 
   /**
    * The workflow helper service.
-   *
-   * @var \Drupal\joinup_workflow\WorkflowHelperInterface
    */
   protected WorkflowHelperInterface $workflowHelper;
 
   /**
    * The message delivery service.
-   *
-   * @var \Drupal\joinup_notification\JoinupMessageDeliveryInterface
    */
   protected JoinupMessageDeliveryInterface $messageDelivery;
 

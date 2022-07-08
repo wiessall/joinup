@@ -13,7 +13,7 @@ announcement_workflow:
   transitions:
     sent:
       label: Sent
-      from: [__new__]
+      from: [__new__, rejected]
       to: sent
     rejected:
       label: Rejected
