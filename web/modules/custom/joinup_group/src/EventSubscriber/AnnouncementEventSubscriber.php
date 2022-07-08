@@ -26,8 +26,6 @@ class AnnouncementEventSubscriber extends NotificationSubscriberBase {
 
   /**
    * The entity that the comment belongs to.
-   *
-   * @var \Drupal\joinup_federation\RdfEntityReferenceFieldItemList
    */
   protected RdfEntityReferenceFieldItemList $parent;
 
@@ -36,8 +34,6 @@ class AnnouncementEventSubscriber extends NotificationSubscriberBase {
    *
    * If the comment belongs to a group, then the group is the same as the parent
    * variable.
-   *
-   * @var \Drupal\joinup_group\Entity\GroupInterface
    */
   protected GroupInterface $group;
 
