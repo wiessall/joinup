@@ -9,7 +9,6 @@ Feature: As a visitor or logged-in user, when I want to post content, the form
 
     Examples:
       | path           |
-      | /user/password |
       | /contact       |
 
   Scenario: Authenticated users.

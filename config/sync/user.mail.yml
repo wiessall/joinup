@@ -31,32 +31,6 @@ password_reset:
     Kind regards,
 
     The Joinup Support Team
-mail_change_notification:
-  subject: '[site:name]: Email change information for [user:display-name]'
-  body: |-
-    Dear [user:display-name],
-
-    A request to change your email address has been made at [site:name]. In order to complete the change you will need to follow the instructions sent to your new email address within one day.
-
-    If you think this action is not clear or not due, please contact the <a href="[site:contact-form]">[site:name] Support Team</a>.
-
-    Kind regards,
-    The [site:name] Support Team
-mail_change_verification:
-  subject: '[site:name]: Email change information for [user:display-name]'
-  body: |-
-    Dear [user:display-name],
-
-    A request to change your email address has been made in your [site:name] profile. To confirm the request, please click the link below:
-
-    [user:mail-change-url]
-
-    This is a one-time URL, so it can be used only once. It expires after one day. If not used, your email address related to your [site:name] profile will not change.
-
-    If you think this action is not clear or not due, please contact the <a href="[site:contact-form]">[site:name] Support Team</a>.
-
-    Kind regards,
-    The [site:name] Support Team
 register_admin_created:
   subject: 'Your Joinup account was created successfully.'
   body: |-

@@ -6,8 +6,6 @@ core_version_requirement: ^8.9 || ^9.1
 php: 7.1
 
 dependencies:
-  - 'cas:cas'
-  - 'cas_account_link:cas_account_link'
   - 'cas_attributes:cas_attributes'
 
 config_devel:
