@@ -5,9 +5,3 @@ joinup_eulogin.eulogin:
   class: Drupal\joinup_eulogin\Plugin\Menu\EuLoginMenuLink
   destination: true
   weight: -21
-
-joinup_eulogin.eu_login_info:
-  title: 'More about EU Login'
-  menu_name: account
-  url: 'internal:/node/702253'
-  weight: 1

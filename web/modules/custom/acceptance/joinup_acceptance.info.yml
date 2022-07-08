@@ -8,3 +8,4 @@ php: 7.1
 dependencies:
   - joinup:dashboard
   - message_digest:message_digest
+  - mail:swiftmailer
