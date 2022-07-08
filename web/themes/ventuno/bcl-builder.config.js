@@ -62,10 +62,37 @@ module.exports = {
     },
   ],
   styles: [
-    // Main
+    // Base
     {
-      entry: path.resolve(outputFolder, "src/scss/main.scss"),
-      dest: path.resolve(outputFolder, "assets/css/main.css"),
+      entry: path.resolve(outputFolder, "src/scss/base.scss"),
+      dest: path.resolve(outputFolder, "assets/css/base.css"),
+      options: {
+        includePaths,
+        sourceMap: "file",
+      },
+    },
+    // Layout
+    {
+      entry: path.resolve(outputFolder, "src/scss/layout.scss"),
+      dest: path.resolve(outputFolder, "assets/css/layout.css"),
+      options: {
+        includePaths,
+        sourceMap: "file",
+      },
+    },
+    // Components
+    {
+      entry: path.resolve(outputFolder, "src/scss/components.scss"),
+      dest: path.resolve(outputFolder, "assets/css/components.css"),
+      options: {
+        includePaths,
+        sourceMap: "file",
+      },
+    },
+    // Theme
+    {
+      entry: path.resolve(outputFolder, "src/scss/theme.scss"),
+      dest: path.resolve(outputFolder, "assets/css/theme.css"),
       options: {
         includePaths,
         sourceMap: "file",
