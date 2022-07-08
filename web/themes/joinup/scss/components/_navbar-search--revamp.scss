@@ -51,29 +51,25 @@
   }
 }
 
-#collapse-search {
-  right: -10px;
-  @media screen and (min-width: 576px) {
-    right: 0;
-  }
+.dropdown-menu {
   .navbar-search {
     // On sm-mobile, full-width
-    width: calc(100vw - 1rem);
+    width: calc(100vw - 4px);
     // On bigger screens, adjust position to right side of container
     @media screen and (min-width: 576px) {
-      width: calc(540px - 2.5rem);
+      width: calc(540px - 1.5rem);
     }
     @media screen and (min-width: 768px) {
-      width: calc(720px - 2.5rem);
+      width: calc(720px - 1.5rem);
     }
     @media screen and (min-width: 992px) {
-      width: calc(960px - 2.5rem);
+      width: calc(960px - 1.5rem);
     }
     @media screen and (min-width: 1200px) {
-      width: calc(1140px - 2.5rem);
+      width: calc(1140px - 1.5rem);
     }
     @media screen and (min-width: 1400px) {
-      width: calc(1320px - 2.5rem);
+      width: calc(1320px - 1.5rem);
     }
     form {
       .badge {
@@ -95,7 +91,11 @@
       }
     }
   }
-  .accordion-body {
-    padding: $spacer * .5;
+}
+.dropdown-menu#dropdown-menu--search {
+  padding: $spacer * .5;
+  right: -9px;
+  @media screen and (min-width: 576px) {
+    right: 0;
   }
 }
