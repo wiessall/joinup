@@ -45,9 +45,8 @@ Feature: Subscribing to a solution
     When I fill in "E-mail address" with "jon@ankh.am"
     And I fill in "Password" with "j0nathan"
     And I press "Log in"
-    And I select the radio button "I am a new user (create a new account)"
-    And I check the "I have read and accept the Legal notice" material checkbox
-    And I press "Next"
+    And I check "I have read and accept the Legal notice"
+    And I press "Submit"
 
     # The user should be redirected to the solution and be presented with a
     # welcome message.
