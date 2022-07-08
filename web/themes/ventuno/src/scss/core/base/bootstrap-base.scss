@@ -69,7 +69,7 @@
   // @import "@openeuropa/bcl-bootstrap/scss/toasts";
   // @import "@openeuropa/bcl-bootstrap/scss/modal";
   // @import "@openeuropa/bcl-bootstrap/scss/tooltip";
-  @import "@openeuropa/bcl-bootstrap/scss/popover";
+  // @import "@openeuropa/bcl-bootstrap/scss/popover";
   // @import "@openeuropa/bcl-bootstrap/scss/carousel";
   // @import "@openeuropa/bcl-bootstrap/scss/spinners";
   // @import "@openeuropa/bcl-bootstrap/scss/offcanvas";
@@ -159,16 +159,18 @@
       width: 22px;
       height: 22px;
     }
-    .accordion .accordion-item .accordion-collapse {
+    .accordion .accordion-item .dropdown-menu {
       z-index: 16;
     }
-    .popover.navbar__popover {
-      margin-top: 1px !important;
+    .get-started__menu {
+      margin-top: 10px !important;
+      margin-right: 16px;
     }
-    .navbar__popover .popover-body .popover__cta {
+    .get-started__cta {
       font-size: 16px;
     }
-    .navbar__popover .popover-body .popover__description {
+    .get-started__description {
+      font-weight: 400!important;
       font-size: 12px;
       line-height: 18px;
     }
@@ -197,5 +199,8 @@
         color: $gray-200;
       }
     }
+  }
+  .badge {
+    border-radius: 50rem; // Avoid override of the rounded badge in search box
   }
 }

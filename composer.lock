@@ -6813,6 +6813,60 @@
             }
         },
         {
+            "name": "drupal/search_api_spellcheck",
+            "version": "4.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/search_api_spellcheck.git",
+                "reference": "4.0.0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/search_api_spellcheck-4.0.0.zip",
+                "reference": "4.0.0",
+                "shasum": "a1dfd60994f9bbee407e3ca68f4ff9b797b103a7"
+            },
+            "require": {
+                "drupal/core": "^9.2 || ^10.0",
+                "drupal/search_api": "~1.21"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "4.0.0",
+                    "datestamp": "1640512135",
+                    "security-coverage": {
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "Contributors",
+                    "homepage": "https://www.drupal.org/node/1150950/committers"
+                },
+                {
+                    "name": "mkalkbrenner",
+                    "homepage": "https://www.drupal.org/user/124705"
+                },
+                {
+                    "name": "welly",
+                    "homepage": "https://www.drupal.org/user/354705"
+                }
+            ],
+            "description": "Allows you to display search spellcheck suggestions in views.",
+            "homepage": "https://www.drupal.org/project/search_api_spellcheck",
+            "support": {
+                "source": "http://git.drupal.org/project/search_api_spellcheck.git",
+                "issues": "https://www.drupal.org/project/issues/search_api_spellcheck"
+            }
+        },
+        {
             "name": "drupal/simple_block",
             "version": "1.3.0",
             "source": {
