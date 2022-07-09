@@ -44,3 +44,7 @@ services:
   joinup_group.url_alias_updater:
     class: Drupal\joinup_group\JoinupGroupContentUrlAliasUpdater
     arguments: ['@queue']
+  joinup_group.page_display_variant.subscriber:
+    class: Drupal\joinup_group\EventSubscriber\JoinupGroupPageDisplayVariantSubscriber
+    tags:
+      - { name: event_subscriber }
