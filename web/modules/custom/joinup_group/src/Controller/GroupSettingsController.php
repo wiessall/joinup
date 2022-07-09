@@ -20,8 +20,6 @@ class GroupSettingsController extends ControllerBase {
 
   /**
    * The OG access service.
-   *
-   * @var \Drupal\og\OgAccessInterface
    */
   protected OgAccessInterface $ogAccess;
 
@@ -89,12 +87,13 @@ class GroupSettingsController extends ControllerBase {
    *   The access result.
    */
   public function access(GroupInterface $rdf_entity): AccessResultInterface {
-    $meta_entity = MetaEntity::loadOrCreate($this->getMetaEntityBundle($rdf_entity), $rdf_entity);
+    $meta_entity_bundle = $this->getMetaEntityBundle($rdf_entity);
+    $meta_entity = MetaEntity::loadOrCreate($meta_entity_bundle, $rdf_entity);
     $access_result = $meta_entity->access('update', NULL, TRUE);
     if ($access_result->isAllowed()) {
       return $access_result;
     }
-    return $access_result->orIf($this->ogAccess->userAccess($rdf_entity, 'update ' . $this->getMetaEntityBundle($rdf_entity) . ' meta-entity'));
+    return $access_result->orIf($this->ogAccess->userAccess($rdf_entity, "update $meta_entity_bundle meta-entity"));
   }
 
   /**
@@ -106,7 +105,7 @@ class GroupSettingsController extends ControllerBase {
    * @return string
    *   The meta entity bundle ID.
    */
-  private function getMetaEntityBundle(GroupInterface $rdf_entity): string {
+  protected function getMetaEntityBundle(GroupInterface $rdf_entity): string {
     return "{$rdf_entity->bundle()}_settings";
   }
 
