@@ -1,0 +1,24 @@
+uuid: ce3be239-b95b-4c9f-8f66-2f94f4c5d55d
+langcode: en
+status: true
+dependencies:
+  module:
+    - field_permissions
+    - meta_entity
+    - node
+third_party_settings:
+  field_permissions:
+    permission_type: public
+id: meta_entity.landing_page
+field_name: landing_page
+entity_type: meta_entity
+type: entity_reference
+settings:
+  target_type: node
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false
