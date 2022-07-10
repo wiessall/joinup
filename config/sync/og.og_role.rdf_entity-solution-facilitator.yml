@@ -155,7 +155,6 @@ permissions:
   - 'update group'
   - 'update own asset_distribution rdf_entity'
   - 'update own asset_release rdf_entity'
-  - 'update solution_settings meta-entity'
   - 'view all revisions'
   - 'view any unpublished content'
   - 'view rdf entity'
