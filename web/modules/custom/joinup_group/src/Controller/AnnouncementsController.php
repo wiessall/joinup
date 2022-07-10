@@ -52,14 +52,7 @@ class AnnouncementsController extends ControllerBase {
    */
   public function access(GroupInterface $rdf_entity): AccessResultInterface {
     $meta_entity = MetaEntity::loadOrCreate($this->getMetaEntityBundle($rdf_entity), $rdf_entity);
-    if ((bool) $meta_entity->announcements_enabled->value) {
-      $access_result = $meta_entity->access('update', NULL, TRUE);
-      if ($access_result->isAllowed()) {
-        return $access_result;
-      }
-      return $access_result->orIf($this->ogAccess->userAccess($rdf_entity, 'update ' . $this->getMetaEntityBundle($rdf_entity) . ' meta-entity'));
-    }
-    return AccessResult::forbidden()->addCacheTags($meta_entity->getCacheTags());
+    return AccessResult::allowedIf((bool) $meta_entity->announcements_enabled->value && $this->ogAccess->userAccess($rdf_entity, 'manage members')->isAllowed())->addCacheTags(['meta_entity_list:' . $this->getMetaEntityBundle($rdf_entity)]);
   }
 
   /**
