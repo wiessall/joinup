@@ -485,3 +485,59 @@ Feature:
     And I press "Add and configure filter"
     Then the 1st filter of the 1st content listing paragraph value is "Save the Planet"
     And the 2nd filter of the 1st content listing paragraph is empty
+
+  @javascript
+  Scenario: Regression test for ISAICP-7183
+  See https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7183
+
+    Given solutions:
+      | title                | collection    | state     |
+      | Save gasoline        | Nintendo64    | validated |
+      | Fight battery mode   | Nintendo64    | validated |
+      | Black Noise          | Nintendo64    | validated |
+
+    And custom_page content:
+      | title   | collection |
+      | Bikes   | Nintendo64 |
+
+    Given I am logged in as a facilitator of the "Nintendo64" collection
+    And I go to the edit form of the "Bikes" "custom page"
+
+    # Paragraph #1.
+    When I press "List additional actions"
+    And I press "Add Content listing" in the "Custom page body" paragraphs field
+
+    And I press "Add and configure filter"
+    And I fill in "Solution" with "Save gasoline"
+
+    And I press latest "Add and configure filter"
+    And I fill in the latest "Solution" field with "Fight battery mode"
+
+    And I press latest "Add and configure filter"
+    And I fill in the latest "Solution" field with "Black Noise"
+
+    # Paragraph #2.
+    When I press "List additional actions"
+    And I press "Add Content listing" in the "Custom page body" paragraphs field
+
+    And I press latest "Add and configure filter"
+    And I fill in the latest "Solution" field with "Black Noise"
+
+    And I press latest "Add and configure filter"
+    And I fill in the latest "Solution" field with "Fight battery mode"
+    Then I press "Save"
+    And I should see the heading "Bikes"
+
+    When I go to the edit form of the "Bikes" "custom page"
+    And I click "Remove filter" at 1st filter of the 1st content listing paragraph
+    And I wait for AJAX to finish
+    Then the 1st filter of the 1st content listing paragraph value is "Fight battery mode"
+    And the 2nd filter of the 1st content listing paragraph value is "Black Noise"
+    And the 1st filter of the 2nd content listing paragraph value is "Black Noise"
+    And the 2nd filter of the 2nd content listing paragraph value is "Fight battery mode"
+    And I press "Add and configure filter"
+    And the 3nd filter of the 1st content listing paragraph is empty
+
+    And I click "Remove filter" at 2nd filter of the 2nd content listing paragraph
+    And I wait for AJAX to finish
+    Then the 1st filter of the 2nd content listing paragraph value is "Black Noise"
