@@ -164,9 +164,6 @@ settings:
   page:
     handler: 'default:page'
     handler_settings: {  }
-  password_policy:
-    handler: 'default:password_policy'
-    handler_settings: {  }
   path_alias:
     handler: 'default:path_alias'
     handler_settings: {  }
