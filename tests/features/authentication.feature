@@ -12,7 +12,6 @@ Feature: User authentication
       | path          |
       | collections   |
       | user/login    |
-      | user/password |
       | user/register |
 
   Scenario Outline: Anonymous user cannot access restricted pages
