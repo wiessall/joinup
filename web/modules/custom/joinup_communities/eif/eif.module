@@ -9,6 +9,7 @@ declare(strict_types = 1);
 
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
+use Drupal\Core\Cache\Cache;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\Element;
@@ -18,6 +19,8 @@ use Drupal\eif\Form\EifWrapperInlineForm;
 use Drupal\eif\Plugin\views\argument\EifGroupArgument;
 use Drupal\field\FieldConfigInterface;
 use Drupal\og\OgGroupAudienceHelperInterface;
+use Drupal\rdf_meta_entity\Entity\RdfMetaEntityInterface;
+use Drupal\views\ViewExecutable;
 
 /**
  * Implements hook_theme().
@@ -31,6 +34,11 @@ function eif_theme(array $existing, string $type, string $theme, string $path): 
       'variables' => [
         'all_link' => NULL,
         'category_links' => [],
+      ],
+    ],
+    'eif_filter_list' => [
+      'variables' => [
+        'items' => NULL,
       ],
     ],
   ];
@@ -247,6 +255,87 @@ function eif_eif_wrapper_create_access(AccountInterface $account, array $context
  */
 function eif_eif_wrapper_access(EntityInterface $entity, string $operation, AccountInterface $account): AccessResultInterface {
   return AccessResult::allowedIf($account->hasPermission("{$operation} eif wrapper entity"));
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_insert().
+ */
+function eif_rdf_meta_entity_insert(RdfMetaEntityInterface $entity): void {
+  _eif_reindex_parent_solution($entity);
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_update().
+ */
+function eif_rdf_meta_entity_update(RdfMetaEntityInterface $entity): void {
+  _eif_reindex_parent_solution($entity);
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_delete().
+ */
+function eif_rdf_meta_entity_delete(RdfMetaEntityInterface $entity): void {
+  _eif_reindex_parent_solution($entity);
+}
+
+/**
+ * Re index the parent solution to include the reference to the perspective.
+ *
+ * @param \Drupal\rdf_meta_entity\Entity\RdfMetaEntityInterface $entity
+ *   The RDF meta entity.
+ */
+function _eif_reindex_parent_solution(RdfMetaEntityInterface $entity): void {
+  if ($entity->bundle() !== 'eif_perspective') {
+    return;
+  }
+
+  $solution = \Drupal::entityTypeManager()->getStorage('rdf_entity')->loadUnchanged($entity->target->target_id);
+
+  // Manually update the entry of the solution in the SOLR index as we need to
+  // index the extra property for the EIF perspective.
+  $tracking_manager = \Drupal::getContainer()->get('search_api.entity_datasource.tracking_manager');
+  $tracking_manager->trackEntityChange($solution);
+
+  // Invalidate cache tags of the solution and the RDF meta entity in order to
+  // invalidate screens that are presenting them, like the EIF toolbox. The
+  // solution cache tags are needed because text from the solution is displayed
+  // in the EIF toolbox. The solution entity type list tags are not though, as
+  // there needs to be a change to an EIF perspective in order to have an
+  // addition or a deletion to/from the EIF toolbox. Deletion of solutions will
+  // trigger the deletion of the EIF perspective. Creation of a solution 'with'
+  // an EIF perspective, will trigger the invalidation of cache as well. The
+  // solution cache tags are added independently to ensure minimal performance
+  // impact in CRUD operations of the EIF perspective.
+  // @see eif_views_pre_render().
+  $cache_tags_invalidator = \Drupal::service('cache_tags.invalidator');
+  $list_cache_tags = ["{$entity->getEntityTypeId()}_list:{$entity->bundle()}"];
+  $tags_to_invalidate = Cache::mergeTags($solution->getCacheTagsToInvalidate(), $list_cache_tags, $entity->getCacheTagsToInvalidate());
+  $cache_tags_invalidator->invalidateTags($tags_to_invalidate);
+}
+
+/**
+ * Implements hook_views_pre_render().
+ */
+function eif_views_pre_render(ViewExecutable $view): void {
+  if ($view->current_display !== 'solutions_meta_entity_block') {
+    return;
+  }
+
+  $cache_tags = [];
+
+  /** @var \Drupal\search_api\Plugin\views\ResultRow $result_row */
+  foreach ($view->result as $result_row) {
+    $solution = $result_row->_entity;
+    $cache_tags = Cache::mergeTags($cache_tags, $solution->getCacheTags());
+  }
+
+  $eif_perspective_list_cache_tags = \Drupal::entityTypeManager()
+    ->getStorage('rdf_meta_entity_type')
+    ->load('eif_perspective')
+    ->getCacheTags();
+  $cache_tags[] = 'rdf_meta_entity_list:eif_perspective';
+  $cache_tags = Cache::mergeTags($cache_tags, $eif_perspective_list_cache_tags);
+  $view->element['#cache']['tags'] = Cache::mergeTags($view->element['#cache']['tags'], $cache_tags);
 }
 
 /**
