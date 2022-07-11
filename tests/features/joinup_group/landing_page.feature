@@ -47,10 +47,10 @@ Feature: Tests the group landing page customization.
     # When I click "Settings"
     # Then the following fields should be present "Landing page"
     # And the "Landing page" select should contain the following options:
-    #   | - None -      |
-    #   | Custom Page 1 |
-    #   | Custom Page 2 |
-    #   | Custom Page 3 |
+    #   | - Standard landing page - |
+    #   | Custom Page 1             |
+    #   | Custom Page 2             |
+    #   | Custom Page 3             |
     # When I select "Custom Page 2" from "Landing page"
     # And I press "Save"
     # Then I should see the heading "<group> group"
@@ -64,10 +64,10 @@ Feature: Tests the group landing page customization.
     When I click "Settings"
     Then the following fields should be present "Landing page"
     And the "Landing page" select should contain the following options:
-      | - None -      |
-      | Custom Page 1 |
-      | Custom Page 2 |
-      | Custom Page 3 |
+      | - Standard landing page - |
+      | Custom Page 1             |
+      | Custom Page 2             |
+      | Custom Page 3             |
     When I select "Custom Page 3" from "Landing page"
     And I press "Save"
     Then I should see the heading "<group> group"
@@ -76,7 +76,7 @@ Feature: Tests the group landing page customization.
     And I should not see "The custom page 2 content"
 
     When I click "Settings"
-    When I select "- None -" from "Landing page"
+    When I select "- Standard landing page -" from "Landing page"
     And I press "Save"
     Then I should see the heading "<group> group"
     And I should see "The <group> group description"
