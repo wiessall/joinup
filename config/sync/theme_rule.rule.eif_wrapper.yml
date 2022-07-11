@@ -4,6 +4,7 @@ status: true
 dependencies:
   module:
     - joinup_core
+    - system
   theme:
     - ventuno
 id: eif_wrapper

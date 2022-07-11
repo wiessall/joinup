@@ -104,6 +104,20 @@ class EifContext extends RawDrupalContext {
       ]),
     ])->save();
 
+    Node::create([
+      'type' => 'custom_page',
+      'nid' => EifInterface::EIF_ONLINE_ASSISTANT,
+      'title' => 'Online Assistant',
+      'og_audience' => EifInterface::EIF_ID,
+      'field_paragraphs_body' => Paragraph::create([
+        'type' => 'simple_paragraph',
+        'field_body' => [
+          'value' => '',
+          'format' => 'content_editor',
+        ],
+      ]),
+    ])->save();
+
     $instances = \Drupal::entityTypeManager()->getStorage('ogmenu_instance')->loadByProperties([
       'type' => 'navigation',
       OgGroupAudienceHelperInterface::DEFAULT_FIELD => $solution->id(),
@@ -189,8 +203,8 @@ class EifContext extends RawDrupalContext {
           $eif_perspective_fields['field_eif_description'] = trim($row[1]);
           break;
 
-        case 'Type of solution':
-          $eif_perspective_fields['field_eif_solution_type'] = ['target_id' => trim($row[1])];
+        case 'Solution type':
+          $eif_perspective_fields['field_eif_solution_type'] = $this->explodeCommaSeparatedStepArgument($row[1]);
           break;
 
         case 'Layer':
@@ -202,8 +216,9 @@ class EifContext extends RawDrupalContext {
         case 'Recommendation':
           $bundle = strtolower($row[0]);
           // The following will split a phrase in the format of:
-          // name: Some title without comma, description: Some description
-          // the part from the comma symbol on (the description) is optional.
+          // name: Some title without comma, description: Some description.
+          //
+          // The part from the comma symbol on (the description) is optional.
           preg_match_all('/name:(\s*?)(?<name>[^,]*)(?:,(\s*?)description:(\s*?)(?<description>.*$))?/', $row[1], $matches);
           if (isset($matches['name'][0])) {
             $values = ['term' => trim($matches['name'][0])];
@@ -211,8 +226,9 @@ class EifContext extends RawDrupalContext {
               $values['description'] = trim($matches['description'][0]);
             }
 
-            $qualifiers['eif_' . $bundle][] = $this->createEifWrapper($bundle, $values);
+            $qualifiers['eif_recommendation'][] = $this->createEifWrapper($bundle, $values);
           }
+          break;
       }
     }
 
@@ -226,6 +242,26 @@ class EifContext extends RawDrupalContext {
   }
 
   /**
+   * Creates an EIF wrapper entity and returns it. Does not save the entity.
+   *
+   * @param string $bundle
+   *   The bundle of the EIF wrapper.
+   * @param array $values
+   *   An array of values of the EIF wrapper.
+   *
+   * @return \Drupal\eif\EifWrapperInterface
+   *   The created EIF wrapper.
+   */
+  protected function createEifWrapper(string $bundle, array $values): EifWrapperInterface {
+    $values = $this->convertEntityReferencesValues('eif_wrapper', $bundle, $values);
+    $values['type'] = $bundle;
+    $eif_wrapper = EifWrapper::create($values);
+    $eif_wrapper->save();
+    $this->entities['eif_wrapper'][$eif_wrapper->id()] = $eif_wrapper;
+    return $eif_wrapper;
+  }
+
+  /**
    * Navigates to the EIF perspective page of the given solution.
    *
    * @param string $solution
@@ -236,6 +272,22 @@ class EifContext extends RawDrupalContext {
   public function goToEifPerspectiveOfSolution(string $solution): void {
     $solution = $this->getRdfEntityByLabel($solution, 'solution');
     $url = Url::fromRoute('entity.rdf_entity.eif_perspective', [
+      'rdf_entity' => $solution->id(),
+    ]);
+    $this->visitPath($url->getInternalPath());
+  }
+
+  /**
+   * Navigates to the EIF perspective edit form of the given solution.
+   *
+   * @param string $solution
+   *   The solution label.
+   *
+   * @Given I go to the EIF perspective edit form of the :solution solution
+   */
+  public function goToEifEditFormOfSolution(string $solution): void {
+    $solution = $this->getRdfEntityByLabel($solution, 'solution');
+    $url = Url::fromRoute('eif.eif_perspective_form', [
       'rdf_entity' => $solution->id(),
     ]);
     $this->visitPath($url->getInternalPath());
@@ -257,23 +309,17 @@ class EifContext extends RawDrupalContext {
   }
 
   /**
-   * Creates an EIF wrapper entity and returns it. Does not save the entity.
+   * Deletes the EIF perspective of a solution.
    *
-   * @param string $bundle
-   *   The bundle of the EIF wrapper.
-   * @param array $values
-   *   An array of values of the EIF wrapper.
+   * @param string $solution_label
+   *   The solution label.
    *
-   * @return \Drupal\eif\EifWrapperInterface
-   *   The created EIF wrapper.
+   * @Given I delete the EIF perspective of the :solution_label solution
    */
-  protected function createEifWrapper(string $bundle, array $values): EifWrapperInterface {
-    $values = $this->convertEntityReferencesValues('eif_wrapper', $bundle, $values);
-    $values['type'] = $bundle;
-    $eif_wrapper = EifWrapper::create($values);
-    $eif_wrapper->save();
-    $this->entities['eif_wrapper'][$eif_wrapper->id()] = $eif_wrapper;
-    return $eif_wrapper;
+  public function deletePerspectiveOfSolution(string $solution_label): void {
+    $solution = $this->getRdfEntityByLabel($solution_label, 'solution');
+    $eif_perspective = $solution->get('eif_perspective')->entity;
+    $eif_perspective->delete();
   }
 
 }
