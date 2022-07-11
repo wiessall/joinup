@@ -81,7 +81,10 @@ class ContactInformation extends Rdf implements ContactInformationInterface {
     /** @var \Drupal\Core\Field\FieldItemListInterface $field */
     $field = $this->get('field_ci_email');
     if (!$field->isEmpty() && !$email_confirmer->getConfirmation($field->value)) {
-      $email_confirmer->confirm($field->value, ['name' => $this->label(), 'fake_entity' => TRUE]);
+      $email_confirmer->confirm($field->value, [
+        'name' => $this->label(),
+        'fake_entity' => TRUE,
+      ]);
       \Drupal::messenger()->addStatus(new TranslatableMarkup('A new confirmation message has been sent to %mail.', ['%mail' => $field->value]));
     }
   }

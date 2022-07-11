@@ -247,8 +247,8 @@ Feature: Proposing a collection
     Then I should see the heading "Some email validation"
     And the following email should have been sent:
       | recipient_mail     | some_unique_contact_person@example.com                                                                                      |
-      | subject            | Request for confirmation of email address from Joinup                                                                       |
-      | body               | We have received a request to validate the contact email address (some_unique_contact_person@example.com) on Joinup website |
+      | subject            | Joinup - Please validate your contact details                                                                               |
+      | body               | Your email address some_unique_contact_person@example.com is used as a contact detail for the following:                    |
       | signature_required | no                                                                                                                          |
       | html               | no                                                                                                                          |
 
@@ -269,8 +269,8 @@ Feature: Proposing a collection
     And I press "Propose"
     And the following email should have been sent:
       | recipient_mail     | contact_Rapazoglou@example.com                                                                                      |
-      | subject            | Request for confirmation of email address from Joinup                                                               |
-      | body               | We have received a request to validate the contact email address (contact_Rapazoglou@example.com) on Joinup website |
+      | subject            | Joinup - Please validate your contact details                                                                       |
+      | body               | Your email address contact_Rapazoglou@example.com is used as a contact detail for the following:                    |
       | signature_required | no                                                                                                                  |
       | html               | no                                                                                                                  |
 
