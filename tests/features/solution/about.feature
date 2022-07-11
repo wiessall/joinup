@@ -166,13 +166,16 @@ Feature: About this solution
     And I press "Create contact information"
     And I press "Publish"
     Then I should see the success message "A new confirmation message has been sent to invisible.cat@xpto.com."
-    And the contact owner email sent to "invisible.cat@xpto.com" with subject "Request for confirmation of email address from Joinup" contains the following lines of text:
-      | text                                                                                                        |
-      | We have received a request to validate the contact email address (invisible.cat@xpto.com) on Joinup website |
-      | This dedicated form will allow users to get in touch with you in a quick, secure and privacy-friendly way.  |
-      | Please, reply to this request using the link below.                                                         |
-      | Best regards,                                                                                               |
-      | The Joinup Team                                                                                             |
+    And the contact owner email sent to "invisible.cat@xpto.com" with subject "Joinup - Please validate your contact details" contains the following lines of text:
+      | text                                                                                                                                                                   |
+      | Dear Invisible Cat,                                                                                                                                                    |
+      | Your email address invisible.cat@xpto.com is used as a contact detail for the following:                                                                               |
+      | Six exclusion advantages                                                                                                                                               |
+      | (or copy this URL to your browser) to benefit from a dedicated form which will allow your users to get in touch with you in a quick, secure and privacy-friendly way.  |
+      | Unless this step is completed, you will not be able to receive any messages from interested users or members.                                                          |
+      | If you think this action is not clear or not due, please contact Joinup Support at https://joinup.ec.europa.eu/contact.                                                |
+      | Best regards,                                                                                                                                                          |
+      | The Joinup Team                                                                                                                                                        |
     But I click the validate contact info email from the last email sent to "invisible.cat@xpto.com"
     Then I should not see the text "Confirm invisible.cat@xpto.com"
     And I press "Send"
@@ -247,13 +250,16 @@ Feature: About this solution
     And I press "Update contact information"
     And I press "Publish"
     Then I should see the success message "A new confirmation message has been sent to invisible.cat.one@xpto.com."
-    And the contact owner email sent to "invisible.cat.one@xpto.com" with subject "Request for confirmation of email address from Joinup" contains the following lines of text:
-      | text                                                                                                            |
-      | We have received a request to validate the contact email address (invisible.cat.one@xpto.com) on Joinup website |
-      | This dedicated form will allow users to get in touch with you in a quick, secure and privacy-friendly way.      |
-      | Please, reply to this request using the link below.                                                             |
-      | Best regards,                                                                                                   |
-      | The Joinup Team                                                                                                 |
+    And the contact owner email sent to "invisible.cat.one@xpto.com" with subject "Joinup - Please validate your contact details" contains the following lines of text:
+      | text                                                                                                                                                                   |
+      | Dear Invisible Cat,                                                                                                                                                    |
+      | Your email address invisible.cat.one@xpto.com is used as a contact detail for the following:                                                                           |
+      | Six exclusion advantages                                                                                                                                               |
+      | (or copy this URL to your browser) to benefit from a dedicated form which will allow your users to get in touch with you in a quick, secure and privacy-friendly way.  |
+      | Unless this step is completed, you will not be able to receive any messages from interested users or members.                                                          |
+      | If you think this action is not clear or not due, please contact Joinup Support at https://joinup.ec.europa.eu/contact.                                                |
+      | Best regards,                                                                                                                                                          |
+      | The Joinup Team                                                                                                                                                        |
     But I click the validate contact info email from the last email sent to "invisible.cat.one@xpto.com"
     Then I should not see the text "Confirm invisible.cat.one@xpto.com"
     And I press "Send"
