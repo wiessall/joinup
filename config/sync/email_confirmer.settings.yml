@@ -7,7 +7,7 @@ resendrequest_delay: 3600
 confirmation_lifetime: 0
 confirmation_request:
   subject: '[site:name] - Please validate your contact details'
-  body: "Dear [First name],\r\n\r\nYour email address [email-confirmer:confirmation-mail] is used as a contact detail for the following:\r\n    [Collection/Solution name]\r\nFollow this link (or copy this URL to your browser: [email-confirmer:confirmation-url]) to benefit from a dedicated form which will allow your users to get in touch with you in a quick, secure and privacy-friendly way. Unless this step is completed, you will not be able to receive any messages from interested users or members.\r\n\r\nIf you think this action is not clear or not due, please contact Joinup Support at https://joinup.ec.europa.eu/contact.\r\n\r\nBest regards,\r\nThe Joinup Team"
+  body: "Dear [email-confirmer:confirmation-name],\r\n\r\nYour email address [email-confirmer:confirmation-mail] is used as a contact detail for the following:\r\n    [email-confirmer:confirmation-entities]\r\nFollow this link (or copy this URL to your browser: [email-confirmer:confirmation-url]) to benefit from a dedicated form which will allow your users to get in touch with you in a quick, secure and privacy-friendly way. Unless this step is completed, you will not be able to receive any messages from interested users or members.\r\n\r\nIf you think this action is not clear or not due, please contact Joinup Support at https://joinup.ec.europa.eu/contact.\r\n\r\nBest regards,\r\nThe Joinup Team"
 confirmation_response:
   skip_confirmation_form: false
   questions:
