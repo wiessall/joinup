@@ -53,17 +53,22 @@ function joinup_core_deploy_0108203(array &$sandbox) {
   }
   $entity_storage = \Drupal::entityTypeManager()->getStorage('rdf_entity');
   $nids = array_splice($sandbox['ids'], 0, 50);
-  $queue = \Drupal::queue('joinup_email_confirmer');
-  $queue->createQueue();
+  $emails = [];
   foreach ($entity_storage->loadMultiple($nids) as $entity) {
     $field_name = $entity->bundle() === 'collection' ? 'field_ar_contact_information' : 'field_is_contact_information';
     if (!$entity->get($field_name)->isEmpty()) {
       foreach ($entity->get($field_name)->referencedEntities() as $contact) {
         if ($email = $contact->get('field_ci_email')->value) {
-          $queue->createItem($email);
+          $emails[$email]['name'] = $contact->get('field_ci_name')->value;
+          $emails[$email]['entities'][] = $entity->label();
         }
       }
     }
+  }
+  $queue = \Drupal::queue('joinup_email_confirmer');
+  $queue->createQueue();
+  foreach ($emails as $email => $data) {
+    $queue->createItem($email, $data);
     $sandbox['count']++;
   }
 
