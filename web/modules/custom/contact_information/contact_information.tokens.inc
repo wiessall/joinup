@@ -8,6 +8,7 @@
 declare(strict_types = 1);
 
 use Drupal\Core\Render\BubbleableMetadata;
+use Drupal\joinup_group\Entity\GroupInterface;
 
 /**
  * Implements hook_token_info().
@@ -49,7 +50,19 @@ function contact_information_tokens(string $type, array $tokens, array $data, ar
         break;
 
       case 'confirmation-entities':
-        $replacements[$original] = $confirmation->getProperty('entities');
+        $elements = [
+          '#theme' => 'item_list',
+          '#items' => $confirmation->getProperty('entities') ?? [],
+        ];
+        if (
+          $confirmation->getProperty('fake_entity') &&
+          ($group = \Drupal::routeMatch()->getParameter('rdf_entity')) &&
+          $group instanceof GroupInterface
+        ) {
+          $replacements[$original] = $group->label();
+          break;
+        }
+        $replacements[$original] = \Drupal::service('renderer')->render($elements);
         break;
     }
   }

@@ -31,4 +31,13 @@ interface ContactInformationInterface extends RdfInterface, EntityWorkflowStateI
    */
   public function getRelatedGroup(): ?GroupInterface;
 
+  /**
+   * Returns all group ids that include this entity among their contacts.
+   *
+   * @return array|null
+   *   The groups that have this contact information entity listed, or NULL if no
+   *   group references it.
+   */
+  public function getRelatedGroupsIds(): ?array;
+
 }
