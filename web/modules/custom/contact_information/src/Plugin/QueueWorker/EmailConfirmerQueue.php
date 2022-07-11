@@ -22,8 +22,6 @@ class EmailConfirmerQueue extends QueueWorkerBase implements ContainerFactoryPlu
 
   /**
    * The email confirmer.
-   *
-   * @var \Drupal\email_confirmer\EmailConfirmerManagerInterface
    */
   protected EmailConfirmerManagerInterface $emailConfirmer;
 
@@ -60,7 +58,7 @@ class EmailConfirmerQueue extends QueueWorkerBase implements ContainerFactoryPlu
    * {@inheritdoc}
    */
   public function processItem($data): void {
-    $this->emailConfirmer->confirm($data);
+    $this->emailConfirmer->confirm($data['email'], $data['data']);
   }
 
 }

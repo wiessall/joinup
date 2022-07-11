@@ -42,36 +42,27 @@ function joinup_core_deploy_108202(?array &$sandbox = NULL): void {
 /**
  * Validate contact info email.
  */
-function joinup_core_deploy_0108203(array &$sandbox) {
-  if (empty($sandbox['ids'])) {
-    $sandbox['ids'] = \Drupal::entityQuery('rdf_entity')->condition('rid', [
-      'collection',
-      'solution',
-    ], 'IN')->execute();
-    $sandbox['count'] = 0;
-    $sandbox['max'] = count($sandbox['ids']);
-  }
+function joinup_core_deploy_0108203(?array &$sandbox = NULL): void {
+  $rids = \Drupal::entityQuery('rdf_entity')->condition('rid', [
+    'contact_information',
+  ], 'IN')->execute();
   $entity_storage = \Drupal::entityTypeManager()->getStorage('rdf_entity');
-  $nids = array_splice($sandbox['ids'], 0, 50);
-  $emails = [];
-  foreach ($entity_storage->loadMultiple($nids) as $entity) {
-    $field_name = $entity->bundle() === 'collection' ? 'field_ar_contact_information' : 'field_is_contact_information';
-    if (!$entity->get($field_name)->isEmpty()) {
-      foreach ($entity->get($field_name)->referencedEntities() as $contact) {
-        if ($email = $contact->get('field_ci_email')->value) {
-          $emails[$email]['name'] = $contact->get('field_ci_name')->value;
-          $emails[$email]['entities'][] = $entity->label();
-        }
+  $confirmations = [];
+  foreach ($entity_storage->loadMultiple($rids) as $contact) {
+    if ($contact->get('field_ci_email')->value) {
+      $email = strtolower($contact->get('field_ci_email')->value);
+      $confirmations[$email]['email'] = $email;
+      $confirmations[$email]['data']['name'] = $contact->get('field_ci_name')->value;
+      foreach ($contact->getRelatedGroupsIds() as $group) {
+        $entity = $entity_storage->load($group);
+        $confirmations[$email]['data']['entities'][] = $entity->label();
       }
     }
   }
+
   $queue = \Drupal::queue('joinup_email_confirmer');
   $queue->createQueue();
-  foreach ($emails as $email => $data) {
-    $queue->createItem($email, $data);
-    $sandbox['count']++;
+  foreach ($confirmations as $confirmation) {
+    $queue->createItem($confirmation);
   }
-
-  $sandbox['#finished'] = $sandbox['count'] === $sandbox['max'];
-  return "Updated {$sandbox['count']} out of {$sandbox['max']} collection/solution pages.";
 }
