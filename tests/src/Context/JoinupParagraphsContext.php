@@ -13,7 +13,6 @@ use Drupal\joinup\Traits\JavascriptTrait;
 use Drupal\joinup\Traits\UtilityTrait;
 use Drupal\joinup\Traits\WysiwygTrait;
 use PHPUnit\Framework\Assert;
-use PHPUnit\Framework\ExpectationFailedException;
 
 /**
  * Behat step definitions for testing searches.
@@ -275,14 +274,40 @@ class JoinupParagraphsContext extends RawDrupalContext {
     $filter_1_based_delta = $this->convertOrdinalToNumber($filter);
     $input = $field->find('xpath', "(//input[@type='text'])[$filter_1_based_delta]");
     if (!$input) {
-      throw new ExpectationFailedException("The $filter filter from $paragraph paragraph doesn't contain '$expected_value'");
+      throw new ElementNotFoundException($this->getSession()->getDriver(), "Text field from $paragraph paragraph");
     }
     if ($expected_value) {
-      Assert::assertSame($expected_value, $input->getAttribute('value'));
+      Assert::assertStringContainsString($expected_value, $input->getAttribute('value'));
     }
     else {
       Assert::assertEmpty($input->getAttribute('value'));
     }
+  }
+
+  /**
+   * Presses button of a filter from a given content listing paragraph.
+   *
+   * @param string $button
+   *   The expected button name.
+   * @param string $paragraph
+   *   The "1-based" delta of the content listing paragraph.
+   * @param string $filter
+   *   The "1-based" delta of the filter within content listing paragraph.
+   *
+   * @throws \Behat\Mink\Exception\ElementNotFoundException
+   *   When content listing paragraph is not found in the page.
+   *
+   * @Then I click :button at :filter filter of the :paragraph content listing paragraph
+   */
+  public function pressRemoveFilterFromParagraph(string $button, string $paragraph, string $filter): void {
+    $paragraph_0_based_delta = $this->convertOrdinalToNumber($paragraph) - 1;
+    $field = $this->getParagraphsElement('Custom content listing', $paragraph_0_based_delta);
+    $filter_1_based_delta = $this->convertOrdinalToNumber($filter);
+    $input = $field->find('xpath', "(//input[@type='submit' and @value='$button'])[$filter_1_based_delta]");
+    if (!$input) {
+      throw new ElementNotFoundException($this->getSession()->getDriver(), "Button contained $filter filter from $paragraph paragraph");
+    }
+    $input->click();
   }
 
   /**
