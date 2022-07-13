@@ -275,6 +275,9 @@
                 "The old storage handler is still defined for RDF entities.": "resources/patch/core-fix-sparql-storage-hack.patch",
                 "Page variant plugin is not correctlly instantiated @see https://www.drupal.org/project/drupal/issues/3294833": "https://git.drupalcode.org/project/drupal/-/merge_requests/2484.diff"
             },
+            "drupal/drupal-extension": {
+                "Port https://www.drupal.org/project/drupal/issues/3175718 @see https://github.com/jhedstrom/drupalextension/pull/612": "https://patch-diff.githubusercontent.com/raw/jhedstrom/drupalextension/pull/612.diff"
+            },
             "drupal/entityqueue": {
                 "Missing config schema for EntityQueueDragtableWidget @see Missing config schema for EntityQueueDragtableWidget": "https://git.drupalcode.org/project/entityqueue/-/merge_requests/3.diff"
             },
