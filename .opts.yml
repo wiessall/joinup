@@ -15,12 +15,12 @@ upgrade_commands:
     - ./vendor/bin/drush state:set system.maintenance_mode 0 --input-format=integer --yes
   append:
     production:
-      - test $(./vendor/bin/drush core:requirements --severity=1 --ignore="update status,joinup_core_root_user_blocked,search_api_solr_schema_joinup_modifications" --field=title | wc -l) = "0" || (echo "Status Report shows errors & warnings" && ./vendor/bin/drush core:requirements --severity=1 --ignore="update status,joinup_core_root_user_blocked,search_api_solr_schema_joinup_modifications" && exit 1)
+      - ./scripts/check_status_report.sh
     acceptance:
       - touch disable-config-readonly
       - ./vendor/bin/drush joinup:acc
       - rm disable-config-readonly
-      - test $(./vendor/bin/drush core:requirements --severity=1 --ignore="update status,joinup_core_root_user_blocked,search_api_solr_schema_joinup_modifications" --field=title | wc -l) = "0" || (echo "Status Report shows errors & warnings" && ./vendor/bin/drush core:requirements --severity=1 --ignore="update status,joinup_core_root_user_blocked,search_api_solr_schema_joinup_modifications" && exit 1)
+      - ./scripts/check_status_report.sh
     ephemeral:
       - touch disable-config-readonly
       - ./vendor/bin/drush joinup:acc
