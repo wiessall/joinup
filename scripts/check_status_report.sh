@@ -5,21 +5,21 @@
 
 IGNORE_OPTION=${DRUPAL_STATUS_REPORT_IGNORE:-update status,joinup_core_root_user_blocked,search_api_solr_schema_joinup_modifications}
 
-if [[ ! -z $IGNORE_OPTION ]]
+if [[ -n $IGNORE_OPTION ]]
 then
   IGNORE_OPTION="--ignore='$IGNORE_OPTION'"
 fi
 
 status_report() {
   STATUS_REPORT_CMD="./vendor/bin/drush core:requirements --severity=1 $IGNORE_OPTION"
-  if [ ! -z $1 ]
+  if [[ -n $1 ]]
   then
     STATUS_REPORT_CMD="$STATUS_REPORT_CMD --field=title"
   fi
   eval $STATUS_REPORT_CMD
 }
 
-if [ $(status_report title_only | wc -l) != "0" ]
+if [ "$(status_report title_only | wc -l)" != "0" ]
 then
   echo "Status Report shows errors & warnings"
   status_report
