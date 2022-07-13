@@ -40,7 +40,6 @@ Feature: Add a licence through the UI
     And I press "Save"
     Then I should have 1 licence
     And I should see the heading "MIT Licence"
-    And I should see the text "Description"
     And I should see the text "The classic open source licence without copyleft."
     And I should see the text "Type"
     And I should see the text "Public domain"
