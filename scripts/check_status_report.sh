@@ -14,7 +14,7 @@ status_report() {
   STATUS_REPORT_CMD="./vendor/bin/drush core:requirements --severity=1 $IGNORE_OPTION"
   if [ ! -z $1 ]
   then
-    STATUS_REPORT_CMD="$STATUS_REPORT_CMD  --field=title"
+    STATUS_REPORT_CMD="$STATUS_REPORT_CMD --field=title"
   fi
   eval $STATUS_REPORT_CMD
 }
