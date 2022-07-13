@@ -23,12 +23,13 @@ variant_settings:
           uuid: b0ffc367-218e-4407-bb94-bd9682a9552e
           region: first
           configuration:
-            id: layout_builder_block
+            id: custom_markup
             label: 'What''s Joinup about?'
             label_display: '0'
-            provider: layout_builder_block
-            text: "<p class=\"about-what__title\">What's Joinup about?</p>\r\n<h1 class=\"h1--disguised\">Joinup is a collaborative platform to help e-Government professionals.</h1>\r\n<p>The European Commission created Joinup to provide a common venue that enables public administrations, businesses and citizens to share and reuse IT solutions and good practices, and facilitate communication and collaboration on IT projects across Europe.</p>\r\n"
-            format: full_html
+            provider: custom_markup_block
+            markup:
+              value: "<p class=\"about-what__title\">What's Joinup about?</p>\r\n<h1 class=\"h1--disguised\">Joinup is a collaborative platform to help e-Government professionals.</h1>\r\n<p>The European Commission created Joinup to provide a common venue that enables public administrations, businesses and citizens to share and reuse IT solutions and good practices, and facilitate communication and collaboration on IT projects across Europe.</p>\r\n"
+              format: full_html
           weight: 0
           additional:
             component_attributes:
@@ -51,13 +52,14 @@ variant_settings:
           uuid: e1eeef2d-dde1-4aa3-af7b-a6709184d497
           region: second
           configuration:
-            id: layout_builder_block
+            id: custom_markup
             label: 'Who is it for?'
             label_display: visible
-            provider: layout_builder_block
+            provider: custom_markup_block
             context_mapping: {  }
-            text: '<p>Joinup offers several services that aim to help <strong>e-Government professionals</strong> share their experience with each other. Joinup supports them to find, choose, re-use, develop and implement interoperability solutions.</p>'
-            format: content_editor
+            markup:
+              value: '<p>Joinup offers several services that aim to help <strong>e-Government professionals</strong> share their experience with each other. Joinup supports them to find, choose, re-use, develop and implement interoperability solutions.</p>'
+              format: content_editor
           weight: 0
           additional:
             component_attributes:
@@ -80,13 +82,14 @@ variant_settings:
           uuid: e82de3d1-2e2f-4244-8ba8-c147ba44d577
           region: two_col_footer
           configuration:
-            id: layout_builder_block
+            id: custom_markup
             label: 'For fresh start on creating content'
             label_display: '0'
-            provider: layout_builder_block
+            provider: custom_markup_block
             context_mapping: {  }
-            text: "<p><a class=\"btn btn-secondary\" href=\"/collection/joinup/help-videos\">How to video</a>&nbsp;<button class=\"btn btn-secondary js-tour-start-button\" type=\"button\" data-drupal-tour-link=\"\">Guided tour</button>&nbsp;<a class=\"btn btn-secondary\" href=\"/collection/joinup/faq\">FAQ</a></p>\r\n"
-            format: full_html
+            markup:
+              value: "<p><a class=\"btn btn-secondary\" href=\"/collection/joinup/help-videos\">How to video</a>&nbsp;<button class=\"btn btn-secondary js-tour-start-button\" type=\"button\" data-drupal-tour-link=\"\">Guided tour</button>&nbsp;<a class=\"btn btn-secondary\" href=\"/collection/joinup/faq\">FAQ</a></p>\r\n"
+              format: full_html
           weight: 0
           additional:
             component_attributes:
@@ -109,13 +112,14 @@ variant_settings:
           uuid: 6ab0ceea-4541-4153-8b64-227e02369d30
           region: third
           configuration:
-            id: layout_builder_block
+            id: custom_markup
             label: 'New Joinup video'
             label_display: '0'
-            provider: layout_builder_block
+            provider: custom_markup_block
             context_mapping: {  }
-            text: "<p>{\"preview_thumbnail\":\"/sites/default/files/styles/video_embed_wysiwyg_preview/public/video_thumbnails/3_dx-K0P9JI.jpg?itok=LryC_a1d\",\"video_url\":\"https://youtu.be/3_dx-K0P9JI\",\"settings\":{\"responsive\":true,\"width\":\"854\",\"height\":\"480\",\"autoplay\":false},\"settings_summary\":[\"Embedded Video (Responsive).\"]}</p>\r\n"
-            format: content_editor
+            markup:
+              value: "<p>{\"preview_thumbnail\":\"/sites/default/files/styles/video_embed_wysiwyg_preview/public/video_thumbnails/3_dx-K0P9JI.jpg?itok=LryC_a1d\",\"video_url\":\"https://youtu.be/3_dx-K0P9JI\",\"settings\":{\"responsive\":true,\"width\":\"854\",\"height\":\"480\",\"autoplay\":false},\"settings_summary\":[\"Embedded Video (Responsive).\"]}</p>\r\n"
+              format: content_editor
           weight: 0
           additional:
             component_attributes:
