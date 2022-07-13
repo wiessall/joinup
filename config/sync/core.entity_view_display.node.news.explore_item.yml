@@ -106,7 +106,7 @@ third_party_settings:
                 type: joinup_html_stripper_stripped
                 label: hidden
                 settings:
-                  trim_length: 230
+                  trim_length: 225
                 third_party_settings:
                   template_suggestion:
                     template_suggestion: ''
