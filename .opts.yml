@@ -13,14 +13,12 @@ upgrade_commands:
     - rm disable-config-readonly
     - ./vendor/bin/drush site-alert:disable
     - ./vendor/bin/drush state:set system.maintenance_mode 0 --input-format=integer --yes
+    - ./scripts/check_status_report.sh
   append:
-    production:
-      - ./scripts/check_status_report.sh
     acceptance:
       - touch disable-config-readonly
       - ./vendor/bin/drush joinup:acc
       - rm disable-config-readonly
-      - ./scripts/check_status_report.sh
     ephemeral:
       - touch disable-config-readonly
       - ./vendor/bin/drush joinup:acc
