@@ -34,7 +34,7 @@ class DevelopersItaliaPipeline extends JoinupFederationPipelinePluginBase {
    * {@inheritdoc}
    */
   public function getCollection(): string {
-    return 'https://joinup.ec.europa.eu/collection/italia';
+    return 'http://data.europa.eu/w21/de741a91-cde3-471c-8ffe-0c5347aa0bee';
   }
 
 }
