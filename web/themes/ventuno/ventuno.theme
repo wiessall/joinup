@@ -245,7 +245,7 @@ function ventuno_preprocess_node__explore_item(&$variables) {
   $node = $variables['node'];
 
   // Trim the label text.
-  $variables['label'] = ventuno_smart_trim($node->getTitle(), 74);
+  $variables['label'] = ventuno_smart_trim($node->getTitle(), 45);
 }
 
 /**
@@ -259,7 +259,7 @@ function ventuno_preprocess_rdf_entity__explore_item(&$variables) {
   $entity = $variables['rdf_entity'];
 
   // Trim the label text.
-  $variables['label'] = ventuno_smart_trim($entity->label(), 74);
+  $variables['label'] = ventuno_smart_trim($entity->label(), 45);
 }
 
 /**
