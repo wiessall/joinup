@@ -81,15 +81,15 @@ Feature: Messaging group announcements
     Then I click "Members"
     And I should see the link "Announcement"
 
+    When I am an anonymous user
+    And I go to the homepage of the "Nachos test" <content type>
+    Then I click "Members"
+    And I should not see the link "Announcement"
+
     When I am logged in as "Alex moderator"
     And I go to the homepage of the "Nachos test" <content type>
     Then I click "Members"
     And I should see the link "Announcement"
-
-   When I am an anonymous user
-   And I go to the homepage of the "Nachos test" <content type>
-   Then I click "Members"
-   And I should not see the link "Announcement"
 
     # Disable announcements.
     And I go to the homepage of the "Nachos test" <content type>
@@ -113,10 +113,10 @@ Feature: Messaging group announcements
     Then I click "Members"
     And I should not see the link "Announcement"
 
-   When I am an anonymous user
-   And I go to the homepage of the "Nachos test" <content type>
-   Then I click "Members"
-   And I should not see the link "Announcement"
+    When I am an anonymous user
+    And I go to the homepage of the "Nachos test" <content type>
+    Then I click "Members"
+    And I should not see the link "Announcement"
 
     Examples:
       | content type |
