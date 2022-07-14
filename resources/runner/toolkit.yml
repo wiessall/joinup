@@ -115,6 +115,10 @@ commands:
         - if (node_access_needs_rebuild()) { node_access_rebuild(); }
     - task: run
       command: config-readonly:enable
+    - task: exec
+      command: ${drush.bin}
+      arguments:
+        - core:requirements
 
   # Overrides the toolkit:install-clone command.
   toolkit:install-clone:
@@ -160,6 +164,10 @@ commands:
         - site-clone
     - task: run
       command: config-readonly:enable
+    - task: exec
+      command: ${drush.bin}
+      arguments:
+        - core:requirements
 
   # Overrides the toolkit:test-phpcs command.
   toolkit:test-phpcs:
