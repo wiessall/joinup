@@ -4,12 +4,12 @@ declare(strict_types = 1);
 
 namespace Drupal\joinup_group\Form;
 
+use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Utility\Token;
 use Drupal\joinup_group\Entity\GroupInterface;
-use Drupal\message\Entity\Message;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -19,24 +19,23 @@ class SendAnnouncementsForm extends FormBase {
 
   /**
    * The group that is about to be joined by the user.
-   *
-   * @var \Drupal\joinup_group\Entity\GroupInterface
    */
   protected GroupInterface $group;
 
   /**
    * The token service.
-   *
-   * @var \Drupal\Core\Utility\Token
    */
   protected Token $token;
 
   /**
    * The module handler.
-   *
-   * @var \Drupal\Core\Extension\ModuleHandlerInterface
    */
   protected ModuleHandlerInterface $moduleHandler;
+
+  /**
+   * The entity type manager service.
+   */
+  protected EntityTypeManagerInterface $entityTypeManager;
 
   /**
    * Builds a new form instance.
@@ -45,10 +44,13 @@ class SendAnnouncementsForm extends FormBase {
    *   The token service.
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
    *   The module handler.
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
+   *   The entity type manager service.
    */
-  public function __construct(Token $token, ModuleHandlerInterface $module_handler) {
+  public function __construct(Token $token, ModuleHandlerInterface $module_handler, EntityTypeManagerInterface $entity_type_manager) {
     $this->token = $token;
     $this->moduleHandler = $module_handler;
+    $this->entityTypeManager = $entity_type_manager;
   }
 
   /**
@@ -57,7 +59,8 @@ class SendAnnouncementsForm extends FormBase {
   public static function create(ContainerInterface $container): self {
     return new static(
       $container->get('token'),
-      $container->get('module_handler')
+      $container->get('module_handler'),
+      $container->get('entity_type.manager')
     );
   }
 
@@ -117,7 +120,7 @@ class SendAnnouncementsForm extends FormBase {
    */
   public function submitForm(array &$form, FormStateInterface $form_state): void {
     $token_data = ['rdf_entity' => $this->group];
-    Message::create(['template' => 'announcement'])
+    $this->entityTypeManager->getStorage('message')->create(['template' => 'announcement'])
       ->set('group_reference', $this->group->id())
       ->set('subject', $this->token->replacePlain($form_state->getValue('subject'), $token_data))
       ->set('body', $this->token->replacePlain($form_state->getValue('body'), $token_data))

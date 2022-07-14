@@ -50,7 +50,6 @@ Feature: Messaging group announcements
     Then I click "Members"
     And I should not see the link "Announcement"
 
- @javascript
   Scenario Outline: Check permissions when disable and enable announcements.
 
     Given the following <content type>:
@@ -87,9 +86,13 @@ Feature: Messaging group announcements
     Then I click "Members"
     And I should see the link "Announcement"
 
+   When I am an anonymous user
+   And I go to the homepage of the "Nachos test" <content type>
+   Then I click "Members"
+   And I should not see the link "Announcement"
+
     # Disable announcements.
     And I go to the homepage of the "Nachos test" <content type>
-    And I open the header local tasks menu
     And I should see the link "Settings" in the "Entity actions" region
     And I click "Settings" in the "Entity actions" region
     And I uncheck the box "Announcements enabled"
@@ -109,6 +112,11 @@ Feature: Messaging group announcements
     And I go to the homepage of the "Nachos test" <content type>
     Then I click "Members"
     And I should not see the link "Announcement"
+
+   When I am an anonymous user
+   And I go to the homepage of the "Nachos test" <content type>
+   Then I click "Members"
+   And I should not see the link "Announcement"
 
     Examples:
       | content type |

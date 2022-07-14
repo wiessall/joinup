@@ -205,11 +205,11 @@ trait GroupTrait {
     if (empty($ids)) {
       return [];
     }
-
+    $entity_type_manager = \Drupal::entityTypeManager();
     $users = [];
-    $og_users = \Drupal::entityTypeManager()->getStorage('og_membership')->loadMultiple($ids);
+    $og_users = $entity_type_manager->getStorage('og_membership')->loadMultiple($ids);
     foreach ($og_users as $user) {
-      $users[] = \Drupal::entityTypeManager()->getStorage('user')->load($user->uid->target_id);
+      $users[] = $entity_type_manager->getStorage('user')->load($user->uid->target_id);
     }
 
     return $users;
