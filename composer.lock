@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d481026eca50956c0cd51eb6942f534b",
+    "content-hash": "cd0c9edafa285cc59858f7abffceb467",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -2464,6 +2464,66 @@
             "support": {
                 "source": "https://git.drupalcode.org/project/ctools",
                 "issues": "https://www.drupal.org/project/issues/ctools"
+            }
+        },
+        {
+            "name": "drupal/custom_markup_block",
+            "version": "1.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/custom_markup_block.git",
+                "reference": "8.x-1.1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/custom_markup_block-8.x-1.1.zip",
+                "reference": "8.x-1.1",
+                "shasum": "0d4e48032830d6431d6376cd148cbce5a86612ac"
+            },
+            "require": {
+                "drupal/core": "^8 || ^9"
+            },
+            "suggest": {
+                "drupal/token_filter": "Enables the usage of tokens in the custom markup block content."
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "8.x-1.1",
+                    "datestamp": "1586002387",
+                    "security-coverage": {
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "Jeremy Graham",
+                    "homepage": "https://www.drupal.org/user/459856",
+                    "role": "Maintainer"
+                },
+                {
+                    "name": "Manuel Adan (manuel.adan)",
+                    "homepage": "https://www.drupal.org/user/516420",
+                    "role": "Maintainer"
+                }
+            ],
+            "description": "Custom Markup Block",
+            "homepage": "https://www.drupal.org/project/custom_markup_block",
+            "keywords": [
+                "blocks",
+                "drupal",
+                "php"
+            ],
+            "support": {
+                "source": "https://git.drupalcode.org/project/custom_markup_block",
+                "issues": "https://www.drupal.org/project/issues/custom_markup_block",
+                "irc": "irc://irc.freenode.org/drupal-contribute"
             }
         },
         {
@@ -5211,17 +5271,17 @@
         },
         {
             "name": "drupal/metatag",
-            "version": "1.19.0",
+            "version": "1.20.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/metatag.git",
-                "reference": "8.x-1.19"
+                "reference": "8.x-1.20"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/metatag-8.x-1.19.zip",
-                "reference": "8.x-1.19",
-                "shasum": "d70f59c034e971885ed4969a11bb392f6ab447ee"
+                "url": "https://ftp.drupal.org/files/projects/metatag-8.x-1.20.zip",
+                "reference": "8.x-1.20",
+                "shasum": "f9b0019bad629a734da588f64839abdcb076f3d8"
             },
             "require": {
                 "drupal/core": "^9",
@@ -5240,8 +5300,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "8.x-1.19",
-                    "datestamp": "1641496014",
+                    "version": "8.x-1.20",
+                    "datestamp": "1657649277",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
