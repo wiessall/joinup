@@ -22,8 +22,9 @@
         "drupal/changed_fields": "^3.2",
         "drupal/config_ignore": "^3.0",
         "drupal/config_readonly": "^1.0",
-        "drupal/core-composer-scaffold": "^9.4",
         "drupal/core": "^9.4",
+        "drupal/core-composer-scaffold": "^9.4",
+        "drupal/custom_markup_block": "^1.1",
         "drupal/default_content": "^2.0@alpha",
         "drupal/diff": "~1.0",
         "drupal/digital_size_formatter": "~2.0",
@@ -303,7 +304,6 @@
                 "Ensure backward compatibility with Piwik @see https://www.drupal.org/project/matomo_reporting_api/issues/3080854": "https://www.drupal.org/files/issues/2019-09-18/3080854-7.patch"
             },
             "drupal/metatag": {
-                "Error: Call to a member function __wakeup() on null @see https://www.drupal.org/project/metatag/issues/3258346": "https://www.drupal.org/files/issues/2022-01-13/metatag_views-fix-cache-wrapper-serialization-3258346-3.patch",
                 "Views cache wrapper overrides other modules cache logic @see https://www.drupal.org/project/metatag/issues/3261473": "https://git.drupalcode.org/project/metatag/-/merge_requests/48.diff"
             },
             "drupal/monolog": {
