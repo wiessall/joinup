@@ -144,8 +144,8 @@ joinup_group.send_announcements:
     _form: '\Drupal\joinup_group\Form\SendAnnouncementsForm'
     _title: 'Announcement'
   requirements:
-    _og_user_access_group: 'manage members'
     _custom_access: Drupal\joinup_group\Controller\AnnouncementsController::access
+    _og_user_access_group: 'manage members'
   options:
     parameters:
       rdf_entity:
@@ -153,3 +153,4 @@ joinup_group.send_announcements:
         bundle:
           - collection
           - solution
+    _og_entity_type_id: rdf_entity
