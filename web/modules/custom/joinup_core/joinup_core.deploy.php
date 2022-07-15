@@ -42,10 +42,8 @@ function joinup_core_deploy_108202(?array &$sandbox = NULL): void {
 /**
  * Validate contact info email.
  */
-function joinup_core_deploy_0108203(?array &$sandbox = NULL): void {
-  $rids = \Drupal::entityQuery('rdf_entity')->condition('rid', [
-    'contact_information',
-  ], 'IN')->execute();
+function joinup_core_deploy_0108203(array &$sandbox): void {
+  $rids = \Drupal::entityQuery('rdf_entity')->condition('rid', 'contact_information')->execute();
   $entity_storage = \Drupal::entityTypeManager()->getStorage('rdf_entity');
   $confirmations = [];
   foreach ($entity_storage->loadMultiple($rids) as $contact) {
