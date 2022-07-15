@@ -181,7 +181,7 @@ function contact_information_entity_field_access(string $operation, FieldDefinit
 function contact_information_form_email_contact_mail_form_alter(array &$form, FormStateInterface $form_state, string $form_id): void {
   // Add honeypot to the contact form in the contact owner link.
   // If honeypot is enabled, add protection to the form.
-  if (function_exists('honeypot_add_form_protection')) {
+  if (\Drupal::hasService('honeypot')) {
     \Drupal::service('honeypot')->addFormProtection(
       $form,
       $form_state,

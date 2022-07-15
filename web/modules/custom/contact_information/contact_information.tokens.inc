@@ -7,6 +7,7 @@
 
 declare(strict_types = 1);
 
+use Drupal\Core\Mail\MailFormatHelper;
 use Drupal\Core\Render\BubbleableMetadata;
 use Drupal\joinup_group\Entity\GroupInterface;
 
@@ -62,7 +63,7 @@ function contact_information_tokens(string $type, array $tokens, array $data, ar
           $replacements[$original] = $group->label();
           break;
         }
-        $replacements[$original] = \Drupal::service('renderer')->render($elements);
+        $replacements[$original] = MailFormatHelper::htmlToText(\Drupal::service('renderer')->render($elements));
         break;
     }
   }
