@@ -14,6 +14,8 @@
 
 declare(strict_types = 1);
 
+use Drupal\Core\Link;
+
 /**
  * Impersonate the passwords of users not linked to EU Login.
  */
@@ -42,7 +44,7 @@ function joinup_core_deploy_108202(?array &$sandbox = NULL): void {
 /**
  * Validate contact info email.
  */
-function joinup_core_deploy_0108203(array &$sandbox): string {
+function joinup_core_deploy_0108209(array &$sandbox): string {
   if (empty($sandbox['rids'])) {
     $sandbox['rids'] = \Drupal::entityQuery('rdf_entity')->condition('rid', 'contact_information')->execute();
     $sandbox['count'] = 0;
@@ -59,7 +61,8 @@ function joinup_core_deploy_0108203(array &$sandbox): string {
       $sandbox['confirmations'][$email]['data']['name'] = $contact->get('field_ci_name')->value;
       foreach ($contact->getRelatedGroupsIds() as $group) {
         $entity = $entity_storage->load($group);
-        $sandbox['confirmations'][$email]['data']['entities'][] = $entity->bundle() . ': '. $entity->label();
+        $bundle_info = \Drupal::getContainer()->get('entity_type.bundle.info')->getBundleInfo($entity->getEntityTypeId())[$entity->bundle()];
+        $sandbox['confirmations'][$email]['data']['entities'][] = ['#markup' => $bundle_info['label'] . ': ' . Link::fromTextAndUrl($entity->label(), $entity->toUrl('canonical', ['absolute' => TRUE]))->toString()];
       }
     }
     $sandbox['count']++;
@@ -73,5 +76,5 @@ function joinup_core_deploy_0108203(array &$sandbox): string {
       $queue->createItem($confirmation);
     }
   }
-  return "Processed {$sandbox['count']} out of {$sandbox['max']} contact information.";
+  return "Processed {$sandbox['count']} of {$sandbox['max']} contact information.";
 }

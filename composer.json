@@ -277,6 +277,9 @@
                 "Cannot implement a custom user cancellation method @see https://www.drupal.org/project/drupal/issues/3135592": "https://git.drupalcode.org/project/drupal/-/merge_requests/1675.diff",
                 "The old storage handler is still defined for RDF entities.": "resources/patch/core-fix-sparql-storage-hack.patch"
             },
+            "drupal/email_confirmer": {
+                "Support for HTML mails @see https://www.drupal.org/i/3047124": "https://git.drupalcode.org/project/email_confirmer/-/merge_requests/3.diff"
+            },
             "drupal/email_contact": {
                 "Email contact form opens in a modal. @see https://www.drupal.org/project/email_contact/issues/3273996": "https://git.drupalcode.org/project/email_contact/-/merge_requests/1.diff"
             },
