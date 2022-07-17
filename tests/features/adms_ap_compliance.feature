@@ -9,7 +9,7 @@ Feature: Joinup should be ADMS-AP compliant.
     And contacts:
       | name           | email                    | website url            |
       | Jocelyn Bass   | jocelyn.bass@example.com | http://www.example.org |
-      | Geoffrey Bryce | geoffrey.bryce           |                        |
+      | Geoffrey Bryce | geoffrey.bryce@exam.com  |                        |
     And owner:
       | name       | type                          |
       | Teddy Bass | Non-Governmental Organisation |
