@@ -1,6 +1,6 @@
 joinup_group.send_announcement:
   route_name: joinup_group.send_announcements
-  title: 'Announcement'
+  title: 'Add announcement'
   appears_on:
     - entity.rdf_entity.member_overview
   cache_contexts:
