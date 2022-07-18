@@ -57,5 +57,6 @@ services:
       - { name: event_subscriber }
   joinup_group.announcements_edit.access_check:
     class: Drupal\joinup_group\Access\JoinupAnnouncementsAccessCheck
+    arguments: ['@entity_type.manager', '@og.access']
     tags:
       - { name: access_check, applies_to: _entity_access }

@@ -34,6 +34,7 @@ dependencies:
     - joinup_subscription
     - media
     - menu_admin_per_menu
+    - message_ui
     - meta_entity
     - moderation
     - node
@@ -105,7 +106,6 @@ permissions:
   - 'create rdf entity news'
   - 'create solution_banner media'
   - 'create solution_logo media'
-  - 'create state'
   - 'delete any collection_banner media'
   - 'delete any collection_logo media'
   - 'delete any document content'
@@ -128,6 +128,7 @@ permissions:
   - 'edit any discussion content'
   - 'edit any event_logo media'
   - 'edit any glossary content'
+  - 'edit any message template'
   - 'edit any news_logo media'
   - 'edit any solution_banner media'
   - 'edit any solution_logo media'
@@ -138,7 +139,6 @@ permissions:
   - 'edit own document content'
   - 'edit own field_is_eif_category'
   - 'edit own field_is_eif_recommendation'
-  - 'edit own state'
   - 'edit owner rdf entity'
   - 'edit short id after publication'
   - 'edit state'
@@ -292,6 +292,7 @@ permissions:
   - 'update site alerts'
   - 'update solution_settings meta-entity'
   - 'update spotlight entityqueue'
+  - 'view any message template'
   - 'view any unpublished content'
   - 'view eif wrapper entity'
   - 'view field_is_eif_category'
@@ -299,8 +300,6 @@ permissions:
   - 'view licence overview page'
   - 'view own field_is_eif_category'
   - 'view own field_is_eif_recommendation'
-  - 'view own state'
   - 'view rdf entity overview'
   - 'view rdf_entity draft graph'
-  - 'view state'
   - 'view unpublished rdf entity'
