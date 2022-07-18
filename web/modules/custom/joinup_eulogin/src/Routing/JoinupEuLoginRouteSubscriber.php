@@ -30,7 +30,12 @@ class JoinupEuLoginRouteSubscriber extends RouteSubscriberBase {
         ->setRequirements(['_user_is_logged_in' => 'FALSE']);
     }
 
-    // Password reset should not be available anymore.
+    // Password reset should not be available anymore. Note that we cannot just
+    // remove the routes as 'user.pass' is used in AccountForm::form().
+    // @see \Drupal\user\AccountForm::form()
+    $collection->add('user.pass', $collection->get('system.404'));
+    $collection->add('user.pass.http', $collection->get('system.404'));
+
     if ($route = $collection->get('user.login')) {
       $route->setRequirements(['_access' => 'FALSE']);
     }
