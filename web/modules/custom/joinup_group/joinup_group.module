@@ -422,6 +422,7 @@ function joinup_group_form_views_exposed_form_alter(array &$form, FormStateInter
   /** @var \Drupal\views\ViewExecutable $view */
   $view = $form_state->get('view');
   $view_id = $view->id();
+<<<<<<< HEAD
   $display = $view->current_display;
 
   if ($view_id === 'announcements' && $display === 'all') {
@@ -452,6 +453,34 @@ function joinup_group_form_views_exposed_form_alter(array &$form, FormStateInter
 
   // Adds result counts to the role options on the membership overview for
   // collections and solutions.
+=======
+  if ($view_id === 'announcements' && $form['#id'] === 'views-exposed-form-announcements-admin-list') {
+    if (array_key_exists('group_reference_target_id', $form)) {
+
+      // Rewrite the default 'All' option.
+      if (!empty($form['group_reference_target_id']['#options']['All'])) {
+        $option_default = ['All' => t('- Any -')];
+      }
+
+      $options = $form['group_reference_target_id']['#options'];
+
+      // Ensure that only group reference that are used in the view
+      // are displayed in the filter.
+      $query = \Drupal::database()->select('message', 'm');
+      $query->join('message__group_reference', 'mgr', 'mgr.entity_id = m.mid');
+      $query->fields('mgr', ['group_reference_target_id']);
+      $query->condition('m.template', 'announcement');
+      $data = $query->distinct()->execute();
+
+      $results = array_flip($data->fetchCol());
+      $options = array_intersect_key($options, $results);
+
+      // Rebuild the option select with the term values and the all option.
+      $form['group_reference_target_id']['#options'] = $option_default + $options;
+    }
+  }
+
+>>>>>>> 004a7c3c4a (ISAICP-6402: Add Announcements views.)
   if (!in_array($view_id, ['members_overview', 'og_members_overview'])) {
     return;
   }
