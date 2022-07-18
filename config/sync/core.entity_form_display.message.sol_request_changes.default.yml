@@ -10,12 +10,6 @@ targetEntityType: message
 bundle: sol_request_changes
 mode: default
 content:
-  created:
-    type: datetime_timestamp
-    weight: 10
-    region: content
-    settings: {  }
-    third_party_settings: {  }
   field_message_bcc:
     type: email_default
     weight: 11
@@ -24,16 +18,6 @@ content:
       placeholder: ''
       size: 60
     third_party_settings: {  }
-    field_name: field_message_bcc
-  uid:
-    type: entity_reference_autocomplete
-    weight: 5
-    region: content
-    settings:
-      match_operator: CONTAINS
-      match_limit: 10
-      size: 60
-      placeholder: ''
-    third_party_settings: {  }
-    '#group': advanced
-hidden: {  }
+hidden:
+  created: true
+  uid: true

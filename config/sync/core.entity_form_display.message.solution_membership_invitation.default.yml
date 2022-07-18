@@ -10,12 +10,6 @@ targetEntityType: message
 bundle: solution_membership_invitation
 mode: default
 content:
-  created:
-    type: datetime_timestamp
-    weight: 10
-    region: content
-    settings: {  }
-    third_party_settings: {  }
   field_invitation:
     type: entity_reference_autocomplete
     weight: 0
@@ -26,15 +20,6 @@ content:
       size: 60
       placeholder: ''
     third_party_settings: {  }
-  uid:
-    type: entity_reference_autocomplete
-    weight: 5
-    region: content
-    settings:
-      match_operator: CONTAINS
-      match_limit: 10
-      size: 60
-      placeholder: ''
-    third_party_settings: {  }
-    '#group': advanced
-hidden: {  }
+hidden:
+  created: true
+  uid: true
