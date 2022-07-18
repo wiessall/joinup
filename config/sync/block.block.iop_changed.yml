@@ -1,0 +1,23 @@
+uuid: 08327da8-9243-43db-9ec9-16ebe3bcbc00
+langcode: en
+status: true
+dependencies:
+  config:
+    - facets.facet.aggregated_changed
+  module:
+    - facets
+  theme:
+    - iop
+id: iop_changed
+theme: iop
+region: header
+weight: -20
+provider: null
+plugin: 'facet_block:aggregated_changed'
+settings:
+  id: 'facet_block:aggregated_changed'
+  label: Changed
+  label_display: visible
+  provider: facets
+  block_id: changed
+visibility: {  }

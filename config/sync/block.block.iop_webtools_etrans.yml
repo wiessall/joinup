@@ -1,0 +1,38 @@
+uuid: 08d84467-88e8-4281-af4f-c0d0b1d6e2c6
+langcode: en
+status: true
+dependencies:
+  module:
+    - joinup_core
+    - oe_webtools_etrans
+  theme:
+    - iop
+id: iop_webtools_etrans
+theme: iop
+region: content
+weight: -25
+provider: null
+plugin: oe_webtools_etrans
+settings:
+  id: oe_webtools_etrans
+  label: 'OpenEuropa Webtools ETrans'
+  label_display: '0'
+  provider: oe_webtools_etrans
+  delay: 0
+  domain: gen
+  exclude: ''
+  include: ''
+  render_as: button
+  render_to: ''
+visibility:
+  request_route:
+    id: request_route
+    negate: true
+    context_mapping: {  }
+    routes:
+      - entity.node.delete_form
+      - entity.node.edit_form
+      - entity.rdf_entity.delete_form
+      - entity.rdf_entity.edit_form
+      - entity.taxonomy_term.edit_form
+      - entity.taxonomy_term.delete_form

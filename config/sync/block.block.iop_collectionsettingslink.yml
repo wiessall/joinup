@@ -1,0 +1,27 @@
+uuid: 92d9dcd9-a6d0-49ee-b0b6-26ad92a3d56f
+langcode: en
+status: true
+dependencies:
+  module:
+    - collection
+    - joinup_core
+  theme:
+    - iop
+id: iop_collectionsettingslink
+theme: iop
+region: content
+weight: -21
+provider: null
+plugin: collection_settings_link
+settings:
+  id: collection_settings_link
+  label: 'Collection settings link'
+  label_display: '0'
+  provider: collection
+visibility:
+  request_route:
+    id: request_route
+    negate: false
+    context_mapping: {  }
+    routes:
+      - collection.glossary_page

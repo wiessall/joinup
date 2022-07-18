@@ -247,4 +247,5 @@ theme:
   joinup_theme: 0
   ventuno: 0
   oe_bootstrap_theme: 0
+  iop: 0
 profile: joinup

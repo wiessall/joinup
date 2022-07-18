@@ -1,0 +1,22 @@
+uuid: 771bd5f5-7920-4850-887b-131b20e982e1
+langcode: en
+status: true
+dependencies:
+  module:
+    - system
+  theme:
+    - iop
+_core:
+  default_config_hash: U8VHHZGmwUulZiUO6NVs1BXf9rRtY6zwNoAc6c-3rP8
+id: iop_messages
+theme: iop
+region: content_top
+weight: -20
+provider: null
+plugin: system_messages_block
+settings:
+  id: system_messages_block
+  label: 'Status messages'
+  label_display: '0'
+  provider: system
+visibility: {  }
