@@ -87,12 +87,13 @@ function contact_form_form_message_contact_form_submission_form_alter(&$form, Fo
   }
 
   // Change the text of the submit button to "Submit".
-  $form['actions']['submit']['#value'] = t('Submit');
+  $form['actions']['save']['#value'] = t('Submit');
+  unset($form['actions']['cancel']);
 
   // Add a submit handler that sends a notification to moderators and shows a
   // success message informing the user that their message has been successfully
   // sent.
-  $form['actions']['submit']['#submit'][] = 'contact_form_form_message_contact_form_submission_submit';
+  $form['actions']['save']['#submit'][] = 'contact_form_form_message_contact_form_submission_submit';
 
   $form['#attached']['library'][] = 'contact_form/empty-url';
 
