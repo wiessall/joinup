@@ -29,6 +29,8 @@ class JoinupRouteGroupResolver extends RouteGroupResolver {
     return [
       '/rdf_entity/{rdf_entity}/moderate' => 'rdf_entity',
       '/rdf_entity/{rdf_entity}/reports' => 'rdf_entity',
+      '/rdf_entity/{rdf_entity}/announcements/list' => 'rdf_entity',
+      '/rdf_entity/{rdf_entity}/announcements/send' => 'rdf_entity',
     ];
   }
 

@@ -34,6 +34,7 @@ dependencies:
     - joinup_subscription
     - media
     - menu_admin_per_menu
+    - message_ui
     - meta_entity
     - moderation
     - node
@@ -293,6 +294,7 @@ permissions:
   - 'update site alerts'
   - 'update solution_settings meta-entity'
   - 'update spotlight entityqueue'
+  - 'view any message template'
   - 'view any unpublished content'
   - 'view eif wrapper entity'
   - 'view field_is_eif_category'
@@ -302,5 +304,4 @@ permissions:
   - 'view own field_is_eif_recommendation'
   - 'view rdf entity overview'
   - 'view rdf_entity draft graph'
-  - 'view state'
   - 'view unpublished rdf entity'

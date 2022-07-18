@@ -10,6 +10,12 @@ targetEntityType: message
 bundle: discussion_invite
 mode: default
 content:
+  created:
+    type: datetime_timestamp
+    weight: 10
+    region: content
+    settings: {  }
+    third_party_settings: {  }
   field_invitation:
     type: entity_reference_autocomplete
     weight: 0

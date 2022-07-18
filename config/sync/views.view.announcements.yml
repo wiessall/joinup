@@ -8,6 +8,8 @@ dependencies:
     - field.storage.message.subject
     - message.template.announcement
     - system.menu.admin
+    - user.role.administrator
+    - user.role.moderator
   module:
     - joinup_group
     - message
@@ -1267,6 +1269,7 @@ display:
         - 'languages:language_interface'
         - url
         - url.query_args
+        - user.roles
       tags:
         - 'config:field.storage.message.state'
         - 'config:field.storage.message.subject'
