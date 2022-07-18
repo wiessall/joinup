@@ -9,7 +9,9 @@ use Drupal\Component\Plugin\Exception\PluginNotFoundException;
 use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Session\AccountInterface;
+use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\og\MembershipManagerInterface;
+use Drupal\og\OgContextInterface;
 use Drupal\og\OgMembershipInterface;
 
 /**
@@ -19,17 +21,18 @@ class JoinupGroupManager implements JoinupGroupManagerInterface {
 
   /**
    * The entity type manager.
-   *
-   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
    */
-  protected $entityTypeManager;
+  protected EntityTypeManagerInterface $entityTypeManager;
 
   /**
    * The OG membership manager service.
-   *
-   * @var \Drupal\og\MembershipManagerInterface
    */
-  protected $membershipManager;
+  protected MembershipManagerInterface $membershipManager;
+
+  /**
+   * The Organic Groups context service.
+   */
+  protected OgContextInterface $ogContext;
 
   /**
    * Constructs a JoinupRelationshipManager object.
@@ -38,10 +41,13 @@ class JoinupGroupManager implements JoinupGroupManagerInterface {
    *   The OG membership manager service.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
    *   The entity type manager.
+   * @param \Drupal\og\OgContextInterface $og_context
+   *   The Organic Groups context service.
    */
-  public function __construct(MembershipManagerInterface $membershipManager, EntityTypeManagerInterface $entityTypeManager) {
+  public function __construct(MembershipManagerInterface $membershipManager, EntityTypeManagerInterface $entityTypeManager, OgContextInterface $og_context) {
     $this->membershipManager = $membershipManager;
     $this->entityTypeManager = $entityTypeManager;
+    $this->ogContext = $og_context;
   }
 
   /**
@@ -92,6 +98,14 @@ class JoinupGroupManager implements JoinupGroupManagerInterface {
     $result = $query->execute();
 
     return $storage->loadMultiple($result);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getGroupFromContext(): ?GroupInterface {
+    $context = $this->ogContext->getRuntimeContexts(['og']);
+    return !empty($context['og']) ? $context['og']->getContextValue() : NULL;
   }
 
   /**
