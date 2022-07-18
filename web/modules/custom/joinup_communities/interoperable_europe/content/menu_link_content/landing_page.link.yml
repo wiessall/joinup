@@ -1,34 +1,35 @@
 _meta:
   version: '1.0'
   entity_type: menu_link_content
-  uuid: fb1a271d-3ae9-4231-8df8-c83e0902c79d
+  uuid: 79b9196e-b86e-4aeb-9f50-d523e490a665
   bundle: menu_link_content
   default_langcode: en
+  depends:
+    61e83391-9f96-4c9e-995d-9b22705b9f9f: node
 default:
   enabled:
     -
-      value: true
+      value: false
   title:
     -
-      value: 'Privacy statement'
+      value: 'IOP landing page'
   menu_name:
     -
-      value: footer-help-and-support
+      value: ogmenu-3600
   link:
     -
-      uri: 'internal:/collection/joinup/specific-privacy-statement'
+      target_uuid: 61e83391-9f96-4c9e-995d-9b22705b9f9f
       title: ''
-      options:
-        menu_link_destination: 0
+      options: {  }
   external:
     -
       value: false
   rediscover:
     -
-      value: true
+      value: false
   weight:
     -
-      value: -46
+      value: 0
   expanded:
     -
       value: false
