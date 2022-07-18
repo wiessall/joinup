@@ -1,0 +1,31 @@
+{
+  "name": "iop",
+  "author": "European Commission",
+  "license": "EUPL-1.2",
+  "version": "1.0.0",
+  "description": "IOP is a Drupal child theme of Ventuno for IOP Europe in Joinup.",
+  "private": true,
+  "scripts": {
+    "watch": "watch 'npm run build' src",
+    "clean:assets": "del-cli assets/*",
+    "eslint": "eslint src/js/",
+    "build": "npm-run-all clean:assets build:*",
+    "build:scripts": "cross-env bcl-builder scripts",
+    "build:styles": "cross-env bcl-builder styles",
+    "build:copy": "cross-env bcl-builder copy",
+    "build:sprite": "cross-env bcl-builder sprite",
+    "postinstall": "npm run build"
+  },
+  "devDependencies": {
+    "@openeuropa/bcl-bootstrap": "0.24.0",
+    "@openeuropa/bcl-builder": "0.24.0",
+    "@openeuropa/bcl-theme-default": "0.24.0",
+    "@openeuropa/bcl-theme-joinup": "0.24.0",
+    "cross-env": "7.0.3",
+    "del-cli": "^4.0.1",
+    "glob": "7.1.7",
+    "npm-run-all": "4.1.5",
+    "slim-select": "^1.27.1",
+    "watch": "^0.13.0"
+  }
+}
