@@ -5,8 +5,10 @@ declare(strict_types = 1);
 namespace Drupal\joinup_group\Entity;
 
 use Drupal\Core\Access\AccessResultInterface;
+use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\joinup_core\Entity\OutdatedContentTrait;
+use Drupal\meta_entity\Entity\MetaEntity;
 use Drupal\og\Entity\OgRole;
 use Drupal\og\MembershipManagerInterface;
 use Drupal\og\OgGroupAudienceHelperInterface;
@@ -194,6 +196,18 @@ trait GroupTrait {
       ->condition('state', $states, 'IN')
       ->count()
       ->execute();
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getSetting(string $field_name): FieldItemListInterface {
+    $meta_entity_bundle = "{$this->bundle()}_settings";
+    $meta_entity = MetaEntity::loadOrCreate($meta_entity_bundle, $this);
+    if (!$meta_entity->hasField($field_name)) {
+      throw new \InvalidArgumentException("Field $field_name doesn't exist");
+    }
+    return $meta_entity->get($field_name);
   }
 
   /**

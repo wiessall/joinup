@@ -5,6 +5,7 @@ declare(strict_types = 1);
 namespace Drupal\joinup_group;
 
 use Drupal\Core\Session\AccountInterface;
+use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\og\OgMembershipInterface;
 
 /**
@@ -57,5 +58,13 @@ interface JoinupGroupManagerInterface {
    *   An array of OG memberships that match the criteria.
    */
   public function getUserMembershipsByRole(AccountInterface $user, string $role, array $states = [OgMembershipInterface::STATE_ACTIVE]): array;
+
+  /**
+   * Returns the group from the OG context.
+   *
+   * @return \Drupal\joinup_group\Entity\GroupInterface|null
+   *   The group from the current context, if any.
+   */
+  public function getGroupFromContext(): ?GroupInterface;
 
 }
