@@ -1,11 +1,12 @@
-@group-clone @api @email
-Feature: Test joinup_core_deploy_0108203.
+@group-clone @api
+Feature: Test joinup_core_deploy_108203.
 
+  @email
   Scenario: Ensure email confirmation are send correctly.
     Given I run cron
     And the contact owner email sent to "joinup.legal@gmail.com" with subject "Joinup - Please validate your contact details" contains the following lines of text:
       | text                                                                                                                                                                   |
-      | Dear joinup legal support,                                                                                                                                                    |
+      | Dear joinup legal support,                                                                                                                                             |
       | Your email address joinup.legal@gmail.com is used as a contact detail for the following:                                                                               |
       | Solution: ISA Contributor Agreement                                                                                                                                    |
       | (or copy this URL to your browser) to benefit from a dedicated form which will allow your users to get in touch with you in a quick, secure and privacy-friendly way.  |
