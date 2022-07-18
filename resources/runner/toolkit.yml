@@ -197,3 +197,13 @@ commands:
   toolkit:fix-yaml:
     - task: exec
       command: ${joinup.dir}/node_modules/.bin/eslint --ext .yml --fix .
+
+  test:
+    behat:
+      profile: "default"
+      commands:
+        before:
+          - task: run
+            command: drupal:settings
+            arguments:
+              - behat
