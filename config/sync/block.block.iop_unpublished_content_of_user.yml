@@ -1,0 +1,31 @@
+uuid: 3262614f-ee37-4cd2-a973-3e9e1e540640
+langcode: en
+status: true
+dependencies:
+  module:
+    - joinup_core
+    - joinup_user
+  theme:
+    - iop
+_core:
+  default_config_hash: K15zkMgDnwRG7Pa_FNbxbX6j3w5gp2vEDtuQ0hwiRYs
+id: iop_unpublished_content_of_user
+theme: iop
+region: content_bottom
+weight: -8
+provider: null
+plugin: user_unpublished
+settings:
+  id: user_unpublished
+  label: 'My unpublished content'
+  label_display: visible
+  provider: joinup_user
+  context_mapping:
+    user_route: '@joinup_user.user_route_context:user_route'
+visibility:
+  request_route:
+    id: request_route
+    negate: false
+    context_mapping: {  }
+    routes:
+      - entity.user.canonical

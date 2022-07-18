@@ -1,0 +1,23 @@
+uuid: 0f394cf5-f3c8-4964-a2ad-53a76a945f1e
+langcode: en
+status: true
+dependencies:
+  config:
+    - facets.facet.authoredon
+  module:
+    - facets
+  theme:
+    - iop
+id: iop_authoredon
+theme: iop
+region: header
+weight: -21
+provider: null
+plugin: 'facet_block:authoredon'
+settings:
+  id: 'facet_block:authoredon'
+  label: 'Authored on'
+  label_display: visible
+  provider: facets
+  block_id: authoredon
+visibility: {  }

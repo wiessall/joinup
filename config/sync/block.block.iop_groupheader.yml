@@ -1,0 +1,24 @@
+uuid: 827fb1fa-ed46-471b-91f7-38cd7bf59bf1
+langcode: en
+status: true
+dependencies:
+  module:
+    - joinup
+  theme:
+    - iop
+_core:
+  default_config_hash: h5CYj7Tnz0AfDbd7lm81Q1EBn7jA6-IcEpCbJt4ddsk
+id: iop_groupheader
+theme: iop
+region: featured
+weight: -21
+provider: null
+plugin: group_header_block
+settings:
+  id: group_header_block
+  label: 'Group header'
+  label_display: '0'
+  provider: joinup
+  context_mapping:
+    og: '@og.context:og'
+visibility: {  }

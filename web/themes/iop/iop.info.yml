@@ -1,0 +1,19 @@
+name: Interoperable Europe
+description: A sub-theme of Ventuno
+package: Custom
+type: theme
+core_version_requirement: '>=9.4'
+php: 7.4
+base theme: ventuno
+
+# Copied from Ventuno.
+regions:
+  header: Header
+  header_bottom: 'Header bottom'
+  featured: Featured
+  messages: Messages
+  sidebar: Sidebar
+  content_top: 'Content top'
+  content: Content
+  content_bottom: 'Content bottom'
+  footer: Footer
