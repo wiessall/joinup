@@ -58,19 +58,21 @@ class JoinupAnnouncementsAccessCheck implements AccessInterface {
     if ($route->getRequirement('_entity_access') === 'message.edit' || $route->getRequirement('_entity_access') === 'message.view') {
       $message = $route_match->getParameter('message');
       if ($message instanceof MessageInterface) {
-        /** @var \Drupal\joinup_group\Entity\GroupContentInterface $group */
-        $group = $this->entityTypeManager->getStorage('rdf_entity')
-          ->load($message->get('group_reference')->target_id);
+        if ($message->getTemplate()->id() === 'announcement') {
+          /** @var \Drupal\joinup_group\Entity\GroupContentInterface $group */
+          $group = $this->entityTypeManager->getStorage('rdf_entity')
+            ->load($message->get('group_reference')->target_id);
 
-        $access = $this->ogAccess->userAccess($group, 'manage members')->isAllowed();
-        // Check if message was already sent.
-        if ($route->getRequirement('_entity_access') === 'message.edit') {
-          $access = $access && $message->get('state')->value !== 'sent';
+          $access = $this->ogAccess->userAccess($group, 'manage members')->isAllowed();
+          // Check if message was already sent.
+          if ($route->getRequirement('_entity_access') === 'message.edit') {
+            $access = $access && $message->get('state')->value !== 'sent';
+          }
+
+          return AccessResult::allowedIf($access)
+            ->addCacheableDependency($message)
+            ->addCacheableDependency($group);
         }
-
-        return AccessResult::allowedIf($access)
-          ->addCacheableDependency($message)
-          ->addCacheableDependency($group);
       }
     }
     return AccessResult::allowed();
