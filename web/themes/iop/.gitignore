@@ -1,5 +1,0 @@
-# Ignore build artifacts.
-/node_modules/*
-/css/*
-/assets/*
-*.map
