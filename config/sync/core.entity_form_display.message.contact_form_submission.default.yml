@@ -24,12 +24,6 @@ targetEntityType: message
 bundle: contact_form_submission
 mode: default
 content:
-  created:
-    type: datetime_timestamp
-    weight: 10
-    region: content
-    settings: {  }
-    third_party_settings: {  }
   field_contact_attachment:
     type: file_generic
     weight: 8
