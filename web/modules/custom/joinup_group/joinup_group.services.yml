@@ -64,3 +64,7 @@ services:
     arguments: ['@entity_type.manager', '@plugin.manager.mail', '@language_manager']
     tags:
       - { name: event_subscriber }
+  joinup_group.announcements_edit.access_check:
+    class: Drupal\joinup_group\Access\JoinupAnnouncementsAccessCheck
+    tags:
+      - { name: access_check, applies_to: _entity_access }
