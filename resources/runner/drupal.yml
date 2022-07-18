@@ -86,6 +86,8 @@ drupal:
         - Custom queue services
         - Test mail collector
         - Monolog
+      behat-clone:
+        - Test mail collector
       error_page_test:
         - Main settings
         - Databases

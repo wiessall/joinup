@@ -206,4 +206,4 @@ commands:
           - task: run
             command: drupal:settings
             arguments:
-              - behat
+              - behat-clone
