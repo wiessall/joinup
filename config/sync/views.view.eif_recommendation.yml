@@ -267,7 +267,7 @@ display:
         type: none
         options: {  }
       cache:
-        type: tag
+        type: search_api_tag
         options: {  }
       empty: {  }
       sorts:
@@ -564,6 +564,8 @@ display:
       tags:
         - 'config:field.storage.taxonomy_term.field_eif_identifier'
         - 'config:search_api.index.published'
+        - 'config:views.view.eif_recommendation'
+        - 'search_api_list:published'
   all:
     id: all
     display_title: All
@@ -571,12 +573,16 @@ display:
     position: 1
     display_options:
       cache:
-        type: none
+        type: search_api_tag
+        options: {  }
       defaults:
         empty: true
         cache: false
       display_description: ''
-      display_extenders: {  }
+      display_extenders:
+        metatag_display_extender:
+          metatags: {  }
+          tokenize: false
       path: rdf_entity/%rdf_entity/recommendations
       menu:
         type: 'default tab'
@@ -603,6 +609,8 @@ display:
       tags:
         - 'config:field.storage.taxonomy_term.field_eif_identifier'
         - 'config:search_api.index.published'
+        - 'config:views.view.eif_recommendation'
+        - 'search_api_list:published'
   conceptual_model:
     id: conceptual_model
     display_title: 'Conceptual model'
@@ -727,6 +735,8 @@ display:
       tags:
         - 'config:field.storage.taxonomy_term.field_eif_identifier'
         - 'config:search_api.index.published'
+        - 'config:views.view.eif_recommendation'
+        - 'search_api_list:published'
   interoperability_layer:
     id: interoperability_layer
     display_title: 'Interoperability layer'
@@ -851,6 +861,8 @@ display:
       tags:
         - 'config:field.storage.taxonomy_term.field_eif_identifier'
         - 'config:search_api.index.published'
+        - 'config:views.view.eif_recommendation'
+        - 'search_api_list:published'
   principle:
     id: principle
     display_title: 'Underlying principle'
@@ -953,7 +965,10 @@ display:
         filters: false
         filter_groups: false
       display_description: ''
-      display_extenders: {  }
+      display_extenders:
+        metatag_display_extender:
+          metatags: {  }
+          tokenize: false
       path: rdf_entity/%rdf_entity/recommendations/principle
       menu:
         type: tab
@@ -975,3 +990,5 @@ display:
       tags:
         - 'config:field.storage.taxonomy_term.field_eif_identifier'
         - 'config:search_api.index.published'
+        - 'config:views.view.eif_recommendation'
+        - 'search_api_list:published'
