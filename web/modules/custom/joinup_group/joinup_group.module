@@ -24,10 +24,13 @@ use Drupal\file\Entity\File;
 use Drupal\joinup_group\Entity\Announcement;
 use Drupal\joinup_group\Entity\GroupContentInterface;
 use Drupal\joinup_group\Entity\GroupInterface;
+use Drupal\joinup_group\Event\AnnouncementEvents;
+use Drupal\joinup_group\Event\AnnouncementsEvent;
 use Drupal\joinup_group\Event\GroupMenuLinksEvent;
 use Drupal\joinup_group\Form\RdfDeleteForm;
 use Drupal\joinup_group\JoinupGroupHelper;
 use Drupal\joinup_workflow\EntityWorkflowStateInterface;
+use Drupal\message\MessageInterface;
 use Drupal\meta_entity\Entity\MetaEntityInterface;
 use Drupal\node\NodeInterface;
 use Drupal\og\OgAccess;
@@ -960,5 +963,27 @@ function joinup_group_mail(string $key, array &$message, array $params): void {
       t("A new announcement '@subject' has been created by @author for the @group @type.", $args),
       t("You can approve or reject the announcement at :url", $args),
     ];
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_insert().
+ */
+function joinup_group_message_insert(MessageInterface $message): void {
+  if ($message->bundle() === 'announcement') {
+    $event = new AnnouncementsEvent('create', $message);
+    $event_dispatcher = \Drupal::getContainer()->get('event_dispatcher');
+    $event_dispatcher->dispatch(AnnouncementEvents::ANNOUNCEMENT_CREATE, $event);
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_update().
+ */
+function joinup_group_message_update(MessageInterface $message): void {
+  if ($message->bundle() === 'announcement') {
+    $event = new AnnouncementsEvent('update', $message);
+    $event_dispatcher = \Drupal::getContainer()->get('event_dispatcher');
+    $event_dispatcher->dispatch(AnnouncementEvents::ANNOUNCEMENT_UPDATE, $event);
   }
 }
