@@ -1,15 +1,13 @@
 _core:
   default_config_hash: mZPvli4k5ulC_BcD35Yk2c8mlzSa6xwRkustThIT4jk
-hash_expiration: 86400
+langcode: en
+hash_expiration: 172800
 restrict_same_ip: false
-resendrequest_delay: 900
-confirmation_lifetime: 604800
+resendrequest_delay: 3600
+confirmation_lifetime: 0
 confirmation_request:
-  subject: 'Request for confirmation of email address from [site:name]'
-  body: |-
-    We have received a request to confirm [email-confirmer:confirmation-mail] on [site:name] website at [site:url]. Please, reply to this request using the link below.
-
-    [email-confirmer:confirmation-url]
+  subject: '[site:name] - Please validate your contact details'
+  body: "Dear [email-confirmer:confirmation-name],\r\n\r\nYour email address [email-confirmer:confirmation-mail] is used as a contact detail for the following:\r\n    [email-confirmer:confirmation-entities]\r\n\r\nFollow this [email-confirmer:confirmation-url] (or copy this URL to your browser) to benefit from a dedicated form which will allow your users to get in touch with you in a quick, secure and privacy-friendly way. Unless this step is completed, you will not be able to receive any messages from interested users or members.\r\n\r\nIf you think this action is not clear or not due, please contact Joinup Support at https://joinup.ec.europa.eu/contact.\r\n\r\nBest regards,\r\nThe Joinup Team"
 confirmation_response:
   skip_confirmation_form: false
   questions:
@@ -21,4 +19,3 @@ confirmation_response:
     confirm: '<front>'
     cancel: '<front>'
     error: '<front>'
-langcode: en

@@ -15,10 +15,7 @@ use Drupal\Core\Render\BubbleableMetadata;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Url;
 use Drupal\contact_form\ContactFormEvents;
-use Drupal\email_confirmer\EmailConfirmationInterface;
 use Drupal\joinup_notification\Event\NotificationEvent;
-use Drupal\meta_entity\Entity\MetaEntity;
-use Drupal\rdf_entity\Entity\Rdf;
 use Drupal\user\Entity\User;
 
 /**
@@ -216,24 +213,4 @@ function contact_form_message_access(EntityInterface $entity, $operation, Accoun
   }
   // Allow users to access the contact form messages and its attachments.
   return AccessResult::allowedIf($account->hasPermission('access contact form messages'));
-}
-
-/**
- * Implements hook_email_confirmer().
- */
-function contact_form_email_confirmer($op, EmailConfirmationInterface $confirmation) {
-  $result = \Drupal::entityQuery('rdf_entity')
-    ->condition('rid', 'contact_information')
-    ->condition('field_ci_email', $confirmation->getEmail())
-    ->sort('created', 'DESC')
-    ->execute();
-
-  $contacts = Rdf::loadMultiple($result);
-
-  foreach ($contacts as $contact) {
-    $email_validator = MetaEntity::loadOrCreate('email_validator', $contact);
-    $email_validator->set('latest_validation', \Drupal::time()->getRequestTime());
-    $email_validator->set('valid_email', $op == 'confirm');
-    $email_validator->save();
-  }
 }

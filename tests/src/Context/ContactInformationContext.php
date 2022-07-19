@@ -5,12 +5,15 @@ declare(strict_types = 1);
 namespace Drupal\joinup\Context;
 
 use Behat\Gherkin\Node\TableNode;
+use Drupal\Component\Render\MarkupInterface;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\joinup\Traits\AliasTranslatorTrait;
+use Drupal\joinup\Traits\MailCollectorTrait;
 use Drupal\joinup\Traits\RdfEntityTrait;
 use Drupal\joinup\Traits\SearchTrait;
 use Drupal\joinup\Traits\UserTrait;
 use Drupal\rdf_entity\RdfInterface;
+use PHPUnit\Framework\Assert;
 
 /**
  * Behat step definitions for testing contact information entities.
@@ -19,6 +22,7 @@ class ContactInformationContext extends RawDrupalContext {
 
   use AliasTranslatorTrait;
   use RdfEntityTrait;
+  use MailCollectorTrait;
   use SearchTrait;
   use UserTrait;
 
@@ -194,6 +198,72 @@ class ContactInformationContext extends RawDrupalContext {
       'website url' => 'field_ci_webpage',
       'author' => 'uid',
     ];
+  }
+
+  /**
+   * Asserts contact owner email has been sent and contains some pieces of text.
+   *
+   * @param string $email
+   *   The recipient E-mail address.
+   * @param string $subject
+   *   The subject of the email.
+   * @param \Behat\Gherkin\Node\TableNode $table
+   *   The mail data table.
+   *
+   * @throws \Exception
+   *   Throws an exception when a parameter is not the expected one.
+   *
+   * @Then the contact owner email sent to :email with subject :subject contains the( following lines of) text:
+   */
+  public function assertContactOwnerEmailSentAndContainsText(string $email, string $subject, TableNode $table): void {
+    $lines_of_text = $table->getColumnsHash();
+    $mails = $this->getEmailsBySubjectAndMail($subject, $email);
+    $email_found = FALSE;
+    foreach ($mails as $mail) {
+      $mail_body = ($mail['body'] instanceof MarkupInterface) ?
+        $this->formatMailBodyMarkup($mail['body']) :
+        $this->formatMailBodyText($mail['body']);
+
+      foreach ($lines_of_text as $line_of_text) {
+        $text = $line_of_text['text'];
+        if (strpos($mail_body, $text) === FALSE) {
+          continue 2;
+        }
+      }
+
+      // We found a match. Stop searching.
+      $email_found = TRUE;
+      break;
+    }
+
+    Assert::assertTrue($email_found, "Did not find expected email to '$email' with subject '$subject'.");
+  }
+
+  /**
+   * Clicks the validate contact info link found in an email.
+   *
+   * @param string $mail
+   *   The recipient E-mail address.
+   *
+   * @throws \Exception
+   *   Thrown when a user is not found.
+   *
+   * @When I click the validate contact info email from the last email sent to :mail
+   */
+  public function clickValidateContactInfoInEmail(string $mail): void {
+    $pattern = '#https?://[^/].*/email-confirmer/reply/[^/].*/.*#';
+    $no_mail_message = "No email was sent to $mail containing a validate contact info link.";
+    $no_match_message = "The email sent to $mail did not contain a valid validate contact info link.";
+    $this->assertMailLinkMatchingPattern($pattern, $mail, $no_mail_message, $no_match_message, 'confirmation_request');
+  }
+
+  /**
+   * Ensures that there are no pending email confirmation requests.
+   *
+   * @Given there are no pending email confirmation requests
+   */
+  public function givenNoPendingEmailConfirmations(): void {
+    \Drupal::database()->delete('email_confirmer_confirmation')->execute();
   }
 
 }

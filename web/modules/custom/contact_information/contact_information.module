@@ -8,10 +8,15 @@
 declare(strict_types = 1);
 
 use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Field\FieldDefinitionInterface;
+use Drupal\Core\Field\FieldItemListInterface;
+use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\contact_information\Entity\ContactInformation;
 use Drupal\contact_information\Entity\ContactInformationInterface;
+use Drupal\email_confirmer\EmailConfirmationInterface;
 
 /**
  * Implements hook_entity_bundle_info_alter().
@@ -154,4 +159,33 @@ function contact_information_rdf_entity_access(EntityInterface $entity, $operati
   }
 
   return AccessResult::neutral();
+}
+
+/**
+ * Implements hook_entity_field_access().
+ */
+function contact_information_entity_field_access(string $operation, FieldDefinitionInterface $field_definition, AccountInterface $account, ?FieldItemListInterface $items = NULL): AccessResultInterface {
+  if ($field_definition->getName() === 'field_ci_email' && $operation === 'view') {
+    $confirmation = \Drupal::service('email_confirmer')->getConfirmation($items->value);
+    if ($confirmation && $confirmation->get('confirmed')->value != EmailConfirmationInterface::CONFIRMED) {
+      return AccessResult::forbidden()->addCacheableDependency($items->getEntity());
+    }
+    return AccessResult::allowed()->addCacheableDependency($items->getEntity());
+  }
+  return AccessResult::neutral();
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function contact_information_form_email_contact_mail_form_alter(array &$form, FormStateInterface $form_state, string $form_id): void {
+  // Add honeypot to the contact form in the contact owner link.
+  // If honeypot is enabled, add protection to the form.
+  if (function_exists('honeypot_add_form_protection')) {
+    \Drupal::service('honeypot')->addFormProtection(
+      $form,
+      $form_state,
+      ['honeypot', 'time_restriction']
+    );
+  }
 }

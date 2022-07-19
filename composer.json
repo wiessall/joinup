@@ -32,6 +32,7 @@
         "drupal/dynamic_entity_reference": "~2.0",
         "drupal/editor_file": "~1.5",
         "drupal/email_confirmer": "^1.0",
+        "drupal/email_contact": "^1.0",
         "drupal/email_registration": "^1.1",
         "drupal/embed_block": "^1.0",
         "drupal/entity_legal": "^3.0.0",
@@ -275,6 +276,9 @@
                 "EntityConstraintValidationList::findByCode is inconsistent @see https://www.drupal.org/project/drupal/issues/3126654": "https://www.drupal.org/files/issues/2020-04-10/find_by_code_override-3126654-D8-4.patch",
                 "Cannot implement a custom user cancellation method @see https://www.drupal.org/project/drupal/issues/3135592": "https://git.drupalcode.org/project/drupal/-/merge_requests/1675.diff",
                 "The old storage handler is still defined for RDF entities.": "resources/patch/core-fix-sparql-storage-hack.patch"
+            },
+            "drupal/email_contact": {
+                "Email contact form opens in a modal. @see https://www.drupal.org/project/email_contact/issues/3273996": "https://git.drupalcode.org/project/email_contact/-/merge_requests/1.diff"
             },
             "drupal/entityqueue": {
                 "Missing config schema for EntityQueueDragtableWidget @see Missing config schema for EntityQueueDragtableWidget": "https://git.drupalcode.org/project/entityqueue/-/merge_requests/3.diff"
