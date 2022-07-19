@@ -20,10 +20,8 @@ $ignored_option = "--ignore='$ignored_requirements'";
 
 function run_status_report(bool $title_only): string {
   global $ignored_option;
-  $command = __DIR__ . "/../vendor/bin/drush core:requirements --severity=1 $ignored_option";
-  if ($title_only) {
-    $command .= ' --field=title';
-  }
+  $command = __DIR__ . "/../vendor/bin/drush core:requirements --severity=1 $ignored_option ";
+  $command .= $title_only ? '--field=title' : '--fields=title,severity,value,description';
   return trim(shell_exec($command));
 }
 
