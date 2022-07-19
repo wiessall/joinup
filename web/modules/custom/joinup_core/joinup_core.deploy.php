@@ -17,7 +17,7 @@ declare(strict_types = 1);
 /**
  * Install the "Announcements" field for og_membership.
  */
-function joinup_core_update_108203(): void {
+function joinup_core_update_108300(): void {
   $field_storage_definition = BaseFieldDefinition::create('boolean')
     ->setName('announcements')
     ->setLabel(t('Announcements'))
