@@ -390,7 +390,7 @@ display:
         options:
           perm: 'access joinup reports'
       cache:
-        type: tag
+        type: search_api_tag
         options: {  }
       empty:
         area_text_custom:
@@ -468,6 +468,8 @@ display:
       tags:
         - 'config:field.storage.rdf_entity.field_is_solution_type'
         - 'config:search_api.index.published'
+        - 'config:views.view.moderator_solutions_by_type'
+        - 'search_api_list:published'
   csv_export:
     id: csv_export
     display_title: 'CSV export'
@@ -479,7 +481,8 @@ display:
         options:
           offset: 0
       cache:
-        type: none
+        type: search_api_tag
+        options: {  }
       style:
         type: data_export
         options:
@@ -507,7 +510,10 @@ display:
       defaults:
         cache: false
       display_description: ''
-      display_extenders: {  }
+      display_extenders:
+        metatag_display_extender:
+          metatags: {  }
+          tokenize: false
       path: admin/reporting/solutions-by-type/csv
       auth:
         - cookie
@@ -526,17 +532,20 @@ display:
       tags:
         - 'config:field.storage.rdf_entity.field_is_solution_type'
         - 'config:search_api.index.published'
+        - 'config:views.view.moderator_solutions_by_type'
+        - 'search_api_list:published'
   page_1:
     id: page_1
     display_title: Page
     display_plugin: page
     position: 1
     display_options:
-      cache:
-        type: none
       defaults:
-        cache: false
-      display_extenders: {  }
+        cache: true
+      display_extenders:
+        metatag_display_extender:
+          metatags: {  }
+          tokenize: false
       path: admin/reporting/solutions-by-type
       menu:
         type: normal
@@ -559,3 +568,5 @@ display:
       tags:
         - 'config:field.storage.rdf_entity.field_is_solution_type'
         - 'config:search_api.index.published'
+        - 'config:views.view.moderator_solutions_by_type'
+        - 'search_api_list:published'
