@@ -17,34 +17,9 @@ declare(strict_types = 1);
 use Drupal\Core\Link;
 
 /**
- * Impersonate the passwords of users not linked to EU Login.
- */
-function joinup_core_deploy_108202(?array &$sandbox = NULL): void {
-  // While using CAS Account Link module, only the paired accounts passwords
-  // were impersonated. The other passwords were kept to allow un-paired account
-  // users to link their accounts through their Drupal credentials. As the
-  // pairing mechanism is being dismantled, we impersonate all other passwords.
-  // Not using entity API for performance reasons.
-  \Drupal::database()
-    ->query("UPDATE {users_field_data}
-      SET pass = CONCAT(
-        '\$S\$E',
-        SUBSTR(
-          SHA2(
-            CONCAT(name, uid, mail, timezone, UUID()),
-            256
-          ),
-          1,
-          51
-        )
-      )
-      WHERE uid NOT IN(SELECT uid FROM {authmap})");
-}
-
-/**
  * Validate contact info email.
  */
-function joinup_core_deploy_108203(array &$sandbox): string {
+function joinup_core_deploy_108300(array &$sandbox): string {
   if (empty($sandbox['rids'])) {
     $sandbox['rids'] = \Drupal::entityQuery('rdf_entity')->condition('rid', 'contact_information')->execute();
     $sandbox['count'] = 0;
@@ -78,3 +53,4 @@ function joinup_core_deploy_108203(array &$sandbox): string {
   }
   return "Processed {$sandbox['count']} of {$sandbox['max']} contact information.";
 }
+
