@@ -334,13 +334,4 @@ class JoinupCoreContext extends RawDrupalContext {
     date_default_timezone_set('UTC');
   }
 
-  /**
-   * Ensures that there are no pending email confirmation requests.
-   *
-   * @Given there are no pending email confirmation requests
-   */
-  public function givenNoPendingEmailConfirmations(): void {
-    \Drupal::database()->delete('email_confirmer_confirmation')->execute();
-  }
-
 }
