@@ -1,5 +1,5 @@
 @group-clone @api
-Feature: Test joinup_core_deploy_108203.
+Feature: Test joinup_core_deploy_108300.
 
   @email
   Scenario: Ensure email confirmation are send correctly.

@@ -53,4 +53,3 @@ function joinup_core_deploy_108300(array &$sandbox): string {
   }
   return "Processed {$sandbox['count']} of {$sandbox['max']} contact information.";
 }
-
