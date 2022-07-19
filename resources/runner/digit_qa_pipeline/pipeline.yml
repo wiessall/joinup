@@ -47,10 +47,3 @@ toolkit:
     behat:
       commands:
         before: *before
-      profile: "default"
-        commands:
-          before:
-            - task: run
-              command: drupal:settings
-              arguments:
-                - behat-clone
