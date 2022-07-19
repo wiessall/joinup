@@ -208,8 +208,9 @@ trait GroupTrait {
     $entity_type_manager = \Drupal::entityTypeManager();
     $users = [];
     $og_users = $entity_type_manager->getStorage('og_membership')->loadMultiple($ids);
+    $user_storage = $entity_type_manager->getStorage('user');
     foreach ($og_users as $user) {
-      $users[] = $entity_type_manager->getStorage('user')->load($user->uid->target_id);
+      $users[] = $user_storage->load($user->uid->target_id);
     }
 
     return $users;
