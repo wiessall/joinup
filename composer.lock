@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "76e680a21756041cb94704d92fcf8c5e",
+    "content-hash": "37479f6445442e6aeb259924acd4c3c4",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -4079,12 +4079,12 @@
             ],
             "authors": [
                 {
-                    "name": "Centarro",
-                    "homepage": "https://www.drupal.org/user/3661446"
-                },
-                {
                     "name": "bojanz",
                     "homepage": "https://www.drupal.org/user/86106"
+                },
+                {
+                    "name": "Centarro",
+                    "homepage": "https://www.drupal.org/user/3661446"
                 },
                 {
                     "name": "dawehner",
@@ -5910,6 +5910,58 @@
             "support": {
                 "source": "https://cgit.drupalcode.org/rdf_entity",
                 "issues": "https://drupal.org/project/issues/rdf_entity"
+            }
+        },
+        {
+            "name": "drupal/rdf_meta_entity",
+            "version": "1.0.0-alpha2",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/rdf_meta_entity.git",
+                "reference": "1.0.0-alpha2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/rdf_meta_entity-1.0.0-alpha2.zip",
+                "reference": "1.0.0-alpha2",
+                "shasum": "579b6ce3dc0b79f93dd3e2e63b84bdd8a8c1f0b2"
+            },
+            "require": {
+                "drupal/core": ">=9.3",
+                "drupal/meta_entity": ">=1.1",
+                "drupal/sparql_entity_storage": "^2.0"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "1.0.0-alpha2",
+                    "datestamp": "1651238895",
+                    "security-coverage": {
+                        "status": "not-covered",
+                        "message": "Alpha releases are not covered by Drupal security advisories."
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0+"
+            ],
+            "authors": [
+                {
+                    "name": "Ilias Dimopoulos",
+                    "homepage": "https://www.drupal.org/u/idimopoulos-0"
+                },
+                {
+                    "name": "Claudiu Cristea",
+                    "homepage": "https://www.drupal.org/user/2578708",
+                    "email": "https://www.drupal.org/u/claudiucristea"
+                }
+            ],
+            "description": "Allows storing metadata about an entity in entities having a SPARQL backend.",
+            "homepage": "https://www.drupal.org/project/rdf_meta_entity",
+            "support": {
+                "source": "https://git.drupalcode.org/project/rdf_meta_entity",
+                "issues": "https://www.drupal.org/project/issues/rdf_meta_entity"
             }
         },
         {

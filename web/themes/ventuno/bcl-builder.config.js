@@ -174,6 +174,14 @@ module.exports = {
       },
     },
     {
+      entry: path.resolve(outputFolder, "src/scss/form-checkboxes.scss"),
+      dest: path.resolve(outputFolder, "assets/css/form-checkboxes.css"),
+      options: {
+        includePaths,
+        sourceMap: "file",
+      },
+    },
+    {
       entry: path.resolve(outputFolder, "src/scss/forms.scss"),
       dest: path.resolve(outputFolder, "assets/css/forms.css"),
       options: {
@@ -415,11 +423,13 @@ module.exports = {
             'folder2-open.svg',
             'info-circle.svg',
             'info-circle-fill.svg',
+            'journal-text.svg',
             'justify.svg',
             'lightning-charge.svg',
             'linkedin.svg',
             'newspaper.svg',
             'person-circle.svg',
+            'question-lg.svg',
             'search.svg',
             'star.svg',
             'twitter.svg',
