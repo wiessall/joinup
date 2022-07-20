@@ -57,7 +57,7 @@
         "drupal/message": "^1.1",
         "drupal/message_digest": "^1.0.0",
         "drupal/message_notify": "~1.2",
-        "drupal/message_ui": "^1.x-dev",
+        "drupal/message_ui": "^1.0@beta",
         "drupal/meta_entity": "^1.2",
         "drupal/monolog": "^2.0",
         "drupal/og": "^1.0-alpha7",
@@ -306,6 +306,7 @@
                 "Non-node permissions overrides one each other @see https://github.com/Gizra/og/pull/748": "https://patch-diff.githubusercontent.com/raw/Gizra/og/pull/748.diff"
             },
             "drupal/message_ui": {
+                "Deleted and replaced configuration entity error @see https://www.drupal.org/project/message_ui/issues/3021923": "https://www.drupal.org/files/issues/2018-12-21/issue-3021923-deleted-replaced-config-error-1.patch",
                 "Fatal error Drupal 9 @see https://www.drupal.org/project/message_ui/issues/3296378": "https://git.drupalcode.org/project/message_ui/-/merge_requests/2.diff"
             },
             "drupal/paragraphs_jquery_ui_accordion": {
