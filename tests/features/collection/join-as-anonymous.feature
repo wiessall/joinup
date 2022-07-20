@@ -38,9 +38,9 @@ Feature: Joining a collection as an anonymous user
     When I fill in "E-mail address" with "iodine@ankh.am"
     And I fill in "Password" with "10d1ne"
     And I press "Log in"
-    And I select the radio button "I am a new user (create a new account)"
-    And I check the "I have read and accept the Legal notice" material checkbox
-    And I press "Next"
+
+    Given I check "I have read and accept the Legal notice"
+    And I press "Submit"
 
     # The user should be redirected to the collection so they can opt in to
     # receiving notifications.
