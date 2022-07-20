@@ -1,13 +1,35 @@
-# Main
-style:
+base:
   version: VERSION
   css:
     base:
-      assets/css/main.min.css: { minified: true }
+      assets/css/base.css: {}
+
+layout:
+  version: VERSION
+  css:
+    layout:
+      assets/css/layout.css: {}
+
+components:
+  version: VERSION
+  css:
+    component:
+      assets/css/components.css: {}
+  dependencies:
+    - ventuno/components.js
+
+components.js:
+  version: VERSION
   js:
     assets/js/oe-bcl-joinup.bundle.min.js: { minified: true, attributes: { defer: true } }
   dependencies:
     - core/drupal
+
+theme:
+  version: VERSION
+  css:
+    theme:
+      assets/css/theme.css: {}
 
 # Pages
 homepage:

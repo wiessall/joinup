@@ -11,7 +11,7 @@ time_limit: 5
 expire: 300
 form_settings:
   user_register_form: false
-  user_pass: true
+  user_pass: false
   node_custom_page_form: false
   node_discussion_form: false
   node_document_form: false
