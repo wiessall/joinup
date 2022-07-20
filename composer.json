@@ -57,7 +57,7 @@
         "drupal/message": "^1.1",
         "drupal/message_digest": "^1.0.0",
         "drupal/message_notify": "~1.2",
-        "drupal/message_ui": "1.x-dev@dev",
+        "drupal/message_ui": "^1.0@beta",
         "drupal/meta_entity": "^1.2",
         "drupal/monolog": "^2.0",
         "drupal/og": "^1.0-alpha7",
