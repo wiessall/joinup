@@ -11,7 +11,7 @@ use Drupal\Core\Config\Entity\ConfigEntityBundleBase;
  *
  * @ConfigEntityType(
  *   id = "eif_wrapper_type",
- *   label = @Translation("EIF Wrapper"),
+ *   label = @Translation("EIF Wrapper Type"),
  *   handlers = {
  *     "form" = {
  *       "add" = "Drupal\eif\Form\EifWrapperTypeForm",

@@ -64,7 +64,7 @@ class EifWrapper extends ContentEntityBase implements EifWrapperInterface {
   /**
    * {@inheritdoc}
    */
-  public static function baseFieldDefinitions(EntityTypeInterface $entity_type) {
+  public static function baseFieldDefinitions(EntityTypeInterface $entity_type): array {
     $fields = parent::baseFieldDefinitions($entity_type);
 
     $fields['id'] = BaseFieldDefinition::create('uri')
@@ -86,7 +86,7 @@ class EifWrapper extends ContentEntityBase implements EifWrapperInterface {
    * {@inheritdoc}
    */
   public function label(): string {
-    return $this->get('term')->entity->label();
+    return $this->hasField('term') ? $this->get('term')->entity->label() : $this->id();
   }
 
 }
