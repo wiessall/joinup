@@ -33,16 +33,14 @@ toolkit:
           file: ${toolkit.build.dist.root}/web/themes/ventuno/package.json
         - task: remove
           file: ${toolkit.build.dist.root}/web/themes/ventuno/package-lock.json
-
   test:
     behat:
-      profile: "default"
       commands:
         before:
           - task: run
             command: drupal:settings
             arguments:
-              - behat-clone
+              - behat-mail-collector
 
 command:
   toolkit:

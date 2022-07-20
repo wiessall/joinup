@@ -47,3 +47,7 @@ toolkit:
     behat:
       commands:
         before: *before
+          - task: run
+            command: drupal:settings
+            arguments:
+              - behat-mail-collector
