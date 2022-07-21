@@ -12,7 +12,7 @@ use Drupal\search_api\SearchApiException;
  *
  * @ViewsRow(
  *   id = "joinup_search_api",
- *   title = @Translation("Rendered entity"),
+ *   title = @Translation("Rendered entity with 3 featured items"),
  *   help = @Translation("Displays entity of the matching search API item"),
  * )
  *

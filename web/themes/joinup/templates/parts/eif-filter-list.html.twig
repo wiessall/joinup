@@ -1,0 +1,37 @@
+{#
+/**
+ * @file
+ * Default implementation of displaying a grid of lists.
+ *
+ * Available variables:
+ * - items: A nested list of items. Each item contains:
+ * -- title: The title of the parent.
+ * -- class: The explicit parent class to pass to the list
+ * -- children: A nested list of items. Each item contains:
+ * --- data-eif-category: The eif category to pass to the data attribute data-eif-category.
+ * --- title: The title of the child.
+ * --- description: The description of the field to pass to the data attribute.
+ */
+#}
+<div class="listing listing--grid">
+  <div class="row">
+    <div class="mdl-grid">
+      {% for parent_item in items %}
+        <div class="eif-filter {{ parent_item.class }} mdl-cell mdl-cell--3-col mdl-cell--3-col-wide">
+          <div class="eif__card mdl-card">
+            <div class="eif-filter__header">
+              <span>{{ parent_item.title }}</span>
+            </div>
+            <div class="eif-filter__content">
+              <ul class="eif-filter__list">
+                {% for child in parent_item.items %}
+                  <li class="eif-filter__item"><a data-eif-category="{{ child.eif_category }}" href="#" title="{{ child.description }}">{{ child.title }}</a></li>
+                {% endfor %}
+              </ul>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>

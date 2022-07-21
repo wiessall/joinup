@@ -94,13 +94,25 @@ function joinup_core_requirements($phase): array {
 }
 
 /**
+ * Install 'EIF Wrapper' entity type.
+ */
+function joinup_core_update_108300(?array &$sandbox = NULL): void {
+  $entity_type_manager = \Drupal::entityTypeManager();
+  $entity_definition_manager = \Drupal::entityDefinitionUpdateManager();
+  $entity_definition_manager->installEntityType($entity_type_manager->getDefinition('eif_wrapper_type'));
+  $entity_definition_manager->installEntityType($entity_type_manager->getDefinition('eif_wrapper'));
+}
+
+/**
  * Install the "Announcements" field for og_membership.
  */
-function joinup_core_update_108300(): void {
+function joinup_core_update_108301(): void {
   $field_storage_definition = BaseFieldDefinition::create('boolean')
     ->setName('announcements')
     ->setLabel(t('Announcements'))
-    ->setDescription(t('If checked, the user will receive group announcements by email.'))
+    ->setDescription(
+      t('If checked, the user will receive group announcements by email.')
+    )
     ->setCardinality(1)
     ->setRequired(FALSE)
     ->setDefaultValue(FALSE);
