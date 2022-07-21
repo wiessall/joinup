@@ -36,11 +36,13 @@ toolkit:
   test:
     behat:
       commands:
+        profile: "default"
         before:
           - task: run
-            command: drupal:settings
-            arguments:
-              - behat-mail-collector
+            command: config-readonly:disable
+        after:
+          - task: run
+            command: config-readonly:enable
 
 command:
   toolkit:
