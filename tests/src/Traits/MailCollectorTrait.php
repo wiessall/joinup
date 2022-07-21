@@ -191,7 +191,7 @@ trait MailCollectorTrait {
   /**
    * Set email settings test_mail_collector in behat-clone tests.
    *
-   * @BeforeScenario @email
+   * @BeforeScenario @group-clone&&@email
    */
   public function beforeEmailScenario(BeforeScenarioScope $scope): void {
     $config = \Drupal::configFactory();
@@ -210,7 +210,7 @@ trait MailCollectorTrait {
   /**
    * Restore email settings.
    *
-   * @AfterScenario @email
+   * @AfterScenario @group-clone&&@email
    */
   public function afterEmailScenario(AfterScenarioScope $scope): void {
     $config = \Drupal::configFactory();
