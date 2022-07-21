@@ -7,15 +7,522 @@
 
 declare(strict_types = 1);
 
+<<<<<<< HEAD
 // Include all files from the includes directory.
 foreach (glob(__DIR__ . '/includes/*.inc') as $filename) {
   require_once __DIR__ . '/includes/' . basename($filename);
+=======
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Menu\MenuLinkInterface;
+use Drupal\Core\Url;
+use Drupal\interoperable_europe\InteroperableEuropeCollectionInterface;
+use Drupal\joinup_bundle_class\DescriptionInterface;
+use Drupal\joinup_bundle_class\LogoInterface;
+use Drupal\joinup_community_content\Entity\CommunityContentInterface;
+use Drupal\node\Entity\Node;
+use Drupal\node\NodeInterface;
+use Drupal\smart_trim\Truncate\TruncateHTML;
+use Drupal\topic\Entity\TopicInterface;
+use Drupal\topic\Entity\TopicReferencingEntityInterface;
+
+/**
+ * Implements hook_theme_suggestions_HOOK_alter().
+ *
+ * Adds a theme suggestion for the menus rendered in the footer, so they can be
+ * styled in the same way.
+ */
+function ventuno_theme_suggestions_menu_alter(array &$suggestions, array $variables): void {
+  if (in_array($variables['menu_name'], [
+    'footer',
+    'support',
+    'footer-about-us',
+    'footer-european-commission',
+    'footer-follow-us',
+    'footer-help-and-support',
+    'footer-social-media',
+  ])) {
+    $suggestions[] = 'menu__region_footer';
+    $suggestions[] = 'menu__region_footer__' . str_replace('-', '_', $variables['menu_name']);
+  }
+}
+
+/**
+ * Implements hook_theme_suggestions_HOOK_alter().
+ *
+ * Adds the following theme suggestions:
+ * - A dedicated suggestion for a template rendering the "Read more" extra field
+ *   block for the 4 different entity bundles shown in the "Explore" block on
+ *   the homepage.
+ */
+function ventuno_theme_suggestions_block_alter(array &$suggestions, array $variables): void {
+  $elements = &$variables['elements'];
+  if (
+    $elements['#base_plugin_id'] === 'extra_field_block' &&
+    preg_match('/extra_field_block:.*:read_more/', $elements['#plugin_id']) === 1
+  ) {
+    $suggestions[] = 'block__extra_field_block__read_more';
+  }
+}
+
+/**
+ * Implements hook_preprocess_rdf_entity().
+ */
+function ventuno_preprocess_rdf_entity(array &$variables): void {
+  // Workaround for incorrect rendering of RDF entity label.
+  // @see https://www.drupal.org/project/rdf_entity/issues/3209500
+  $variables['label'] = $variables['rdf_entity']->label();
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for html.html.twig.
+ */
+function ventuno_preprocess_html(array &$variables): void {
+  // Expose the base path so we can use it to generate favicon URIs.
+  $variables['base_path'] = base_path();
+  // Licence comparer specific styling.
+  if (\Drupal::routeMatch()->getRouteName() === 'joinup_licence.comparer') {
+    $variables['#attached']['library'][] = 'ventuno/licence-comparer';
+  }
+}
+
+/**
+ * Implements hook_preprocess_page().
+ */
+function ventuno_preprocess_page(array &$variables): void {
+  // Retrieve the Joinup version and link to display in the footer.
+  // @todo Move this into a block.
+  /** @var \Drupal\joinup_core\JoinupVersionInterface $joinup_version */
+  $joinup_version = \Drupal::service('joinup_core.joinup_version');
+  $variables['version'] = $joinup_version->getVersion();
+  $variables['version_url'] = $joinup_version->getUrl();
+
+  // Export the URL of the Interoperable Europe landing page.
+  $landing_page = Node::load(InteroperableEuropeCollectionInterface::LANDING_PAGE_ENTITY_ID);
+  if ($landing_page instanceof NodeInterface) {
+    $variables['interoperable_europe_url'] = $landing_page->toUrl()->toString();
+  }
+}
+
+/**
+ * Implements template_preprocess_region().
+ */
+function ventuno_preprocess_region__header(array &$variables): void {
+  // Export the user name to display in the header.
+  $variables['user_name'] = \Drupal::currentUser()->getDisplayName();
+
+  // Show links to 'Interoperable Europe' and 'Interoperability Solutions'.
+  /** @var \Drupal\joinup_menu\MenuHelperInterface $menu_helper */
+  $menu_helper = \Drupal::service('joinup_menu.menu_helper');
+  $variables['landing_page_links'] = $menu_helper->getBclLandingPageLinks();
+
+  // Export the user account menu in the format expected by the header template.
+  $variables['profile_links'] = $menu_helper->getBclAccountMenu();
+
+  // Populate the links shown to anonymous users.
+  $variables['anonymous_links'] = $menu_helper->getBclAnonymousMenu();
+
+  // The "About us" link is only shown if the Joinup collection exists.
+  $variables['#cache']['tags'][] = 'joinup_collection:exists';
+
+  $variables['hide_searchbar'] = FALSE;
+  $route_name = \Drupal::routeMatch()->getRouteName();
+  if ($route_name == 'view.search.page_1') {
+    $variables['hide_searchbar'] = TRUE;
+  }
+}
+
+/**
+ * Implements hook_preprocess_block().
+ */
+function ventuno_preprocess_block__facetsblock_searchpage(array &$variables): void {
+  $block_manager = \Drupal::getContainer()->get('plugin.manager.block');
+  $plugin_block = $block_manager->createInstance('joinup_search_clear_filters');
+  $clear_button = $plugin_block->build();
+  \Drupal::getContainer()->get('renderer')->addCacheableDependency($clear_button, $plugin_block);
+
+  $variables['content'] = [
+    $clear_button,
+    $variables['content'],
+  ];
+}
+
+/**
+ * Implements hook_preprocess_block() for the highlighted content block.
+ *
+ * Add a link to related content in the Highlighted Content block which is shown
+ * on the homepage. This will lead to the search page with the results filtered
+ * by the first referenced topic. If no topics are referenced the link will be
+ * hidden.
+ */
+function ventuno_preprocess_block__entityqueue_block__highlighted_content(array &$variables): void {
+  /** @var \Drupal\node\NodeInterface $node */
+  $node = $variables['elements']['content']['entities'][0]['#node'] ?? NULL;
+
+  if ($node instanceof TopicReferencingEntityInterface) {
+    $topics = $node->getTopics();
+    $topic = reset($topics);
+
+    if ($topic instanceof TopicInterface) {
+      $options = [
+        'query' => [
+          'f' => [
+            'topic:' . $topic->id(),
+          ],
+        ],
+      ];
+      $variables['related_content'] = [
+        '#type' => 'link',
+        '#title' => t('Related content'),
+        '#url' => Url::fromRoute('view.search.page_1', [], $options),
+        '#attributes' => [
+          'class' => ['more-link'],
+        ],
+      ];
+    }
+  }
+>>>>>>> origin/develop
 }
 
 /**
  * Implements hook_theme().
  */
+<<<<<<< HEAD
 function ventuno_theme(array $existing, string $type, string $theme, string $path): array {
+=======
+function ventuno_preprocess_page__home(array &$variables): void {
+  /** @var \Drupal\page_manager\Entity\PageVariant $about_section_variant */
+  $about_section_variant = \Drupal::entityTypeManager()->getStorage('page_variant')->load('homepage-layout_builder-1');
+  $view_builder = \Drupal::entityTypeManager()->getViewBuilder('page_variant');
+  $variables['about'] = $view_builder->view($about_section_variant);
+}
+
+/**
+ * Implements hook_preprocess_HOOK().
+ */
+function ventuno_preprocess_node__numbered_listing(array &$variables): void {
+  /** @var \Drupal\node\NodeInterface $node */
+  $node = $variables['node'];
+
+  // Trim the label text.
+  $variables['label'] = ventuno_smart_trim($node->getTitle(), 65);
+
+  // Expose the logo if it exists.
+  if ($node instanceof LogoInterface) {
+    $field_name = $node->getLogoFieldName();
+    if (!empty($variables['content'][$field_name])) {
+      $variables['logo'] = $variables['content'][$field_name];
+    }
+  }
+
+  // Provide date using the date format that is standardized site wide.
+  /** @var \Drupal\Core\Datetime\DateFormatterInterface $date_formatter */
+  $date_formatter = \Drupal::service('date.formatter');
+  $variables['date'] = $date_formatter->format($node->getCreatedTime(), 'date_only');
+
+  // Provide the content type.
+  $variables['type'] = $node->type->entity->label();
+}
+
+/**
+ * Implements hook_preprocess_HOOK().
+ */
+function ventuno_preprocess_responsive_image_formatter(array &$variables): void {
+  if ($variables['url']) {
+    $options = $variables['url']->getOptions();
+    if ($options['entity'] instanceof CommunityContentInterface) {
+      $title = $options['entity']->getTitle();
+    }
+    else {
+      $title = $options['entity']->label();
+    }
+    $variables['aria_label'] = 'Read more about \'' . $title . '\'.';
+  }
+}
+
+/**
+ * Implements hook_preprocess_HOOK().
+ *
+ * Trim the labels of the items in the Explore block on the homepage down to a
+ * manageable size.
+ */
+function ventuno_preprocess_node__explore_item(array &$variables): void {
+  /** @var \Drupal\node\NodeInterface $node */
+  $node = $variables['node'];
+
+  // Trim the label text.
+  $variables['label'] = ventuno_smart_trim($node->getTitle(), 74);
+}
+
+/**
+ * Implements hook_preprocess_HOOK().
+ *
+ * Trim the labels of the items in the Explore block on the homepage down to a
+ * manageable size.
+ */
+function ventuno_preprocess_rdf_entity__explore_item(array &$variables): void {
+  /** @var \Drupal\rdf_entity\RdfInterface $entity */
+  $entity = $variables['rdf_entity'];
+
+  // Trim the label text.
+  $variables['label'] = ventuno_smart_trim($entity->label(), 74);
+}
+
+/**
+ * Implements template_preprocess_menu().
+ */
+function ventuno_preprocess_menu(array &$variables): void {
+  // Set a class on each link in the social media footer menu, so that the link
+  // text can be replaced with an icon.
+  if ($variables['menu_name'] === 'footer-social-media') {
+    _ventuno_preprocess_menu_items($variables['items']);
+  }
+}
+
+/**
+ * Helper function to recursively set a class on each menu item.
+ *
+ * These classes identify the social media links so we can replace them with
+ * icons. Used for the links to Twitter and LinkedIn.
+ */
+function _ventuno_preprocess_menu_items(array &$items): void {
+  foreach ($items as $item) {
+    /** @var \Drupal\Core\Menu\MenuLinkDefault $menu_link */
+    $menu_link ??= $item['original_link'];
+    if ($menu_link instanceof MenuLinkInterface) {
+      $title = strtolower(trim($menu_link->getTitle()));
+      $machine_name = preg_replace('/[^a-z0-9-]+/', '-', $title);
+      $item['attributes']->setAttribute('class', $machine_name);
+    }
+    if (!empty($item['below'])) {
+      _ventuno_preprocess_menu_items($item['below']);
+    }
+  }
+}
+
+/**
+ * Performs smart trimming on the provided string.
+ *
+ * @param string $string
+ *   The string to trim.
+ * @param int $length
+ *   The maximum length to trim the string to.
+ * @param bool $ellipsis
+ *   Whether to append an ellipsis. Defaults to TRUE.
+ *
+ * @return string
+ *   The trimmed string.
+ */
+function ventuno_smart_trim(string $string, int $length, bool $ellipsis = TRUE): string {
+  $truncate = new TruncateHTML();
+  return $truncate->truncateChars($string, $length, $ellipsis ? '…' : '');
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function ventuno_form_facets_form_alter(array &$form, FormStateInterface $form_state, string $form_id): void {
+  $form['actions']['submit']['#attributes']['class'] = ['mt-3 w-100'];
+  $form['actions']['reset']['#attributes']['class'][] = 'btn btn-outline-brand my-3 w-100';
+}
+
+/**
+ * Implements hook_theme_suggestions_HOOK_alter().
+ */
+function ventuno_theme_suggestions_user_alter(array &$suggestions, array $variables): void {
+  $view_mode = $variables['elements']['#view_mode'];
+  $suggestions[] = 'user__' . str_replace('-', '_', $view_mode);
+}
+
+/**
+ * Implements hook_theme_suggestions_HOOK_alter().
+ */
+function ventuno_theme_suggestions_eif_wrapper_alter(array &$suggestions, array $variables): void {
+  _ventuno_theme_suggestions_alter($suggestions, $variables);
+}
+
+/**
+ * Implements hook_theme_suggestions_HOOK_alter().
+ */
+function ventuno_theme_suggestions_taxonomy_term_alter(array &$suggestions, array $variables): void {
+  _ventuno_theme_suggestions_alter($suggestions, $variables);
+}
+
+/**
+ * Provides a helper to create suggestions per view mode.
+ *
+ * @param array $suggestions
+ *   Current suggestions, passed by reference.
+ * @param array $variables
+ *   Template variables.
+ *
+ * @see ventuno_theme_suggestions_eif_wrapper_alter()
+ * @see ventuno_theme_suggestions_taxonomy_term_alter()
+ */
+function _ventuno_theme_suggestions_alter(array &$suggestions, array $variables): void {
+  $original_theme_hook = $variables['theme_hook_original'];
+  $view_mode = $variables['elements']['#view_mode'];
+  $suggestions[] = $original_theme_hook . '__' . str_replace('-', '_', $view_mode);
+
+  $entity_type_id = $variables['elements']['#entity_type'];
+  $bundle = $variables['elements']["#{$entity_type_id}"]->bundle();
+  $suggestions[] = $original_theme_hook . '__' . str_replace('-', '_', $bundle) . '__' . str_replace('-', '_', $view_mode);
+}
+
+/**
+ * Implements hook_preprocess_HOOK().
+ */
+function ventuno_preprocess_rdf_meta_entity(array &$variables): void {
+  /** @var \Drupal\rdf_meta_entity\Entity\RdfMetaEntityInterface $rdf_meta_entity */
+  $rdf_meta_entity = $variables['rdf_meta_entity'];
+  /** @var \Drupal\solution\Entity\SolutionInterface $solution */
+  $solution = $variables['rdf_meta_entity']->getTargetEntity();
+  $variables['solution_label'] = $solution->label();
+  $variables['solution_url'] = $solution->toUrl()->setAbsolute()->toString();
+  $route_parameters = ['rdf_meta_entity' => $rdf_meta_entity->id()];
+  $url_options = [
+    'query' => [
+      'destination' => Url::fromRoute('entity.rdf_entity.eif_perspective', [
+        'rdf_entity' => $solution->id(),
+      ])->getInternalPath(),
+    ],
+  ];
+  $edit_url = Url::fromRoute('entity.rdf_meta_entity.edit_form', $route_parameters, $url_options);
+  if ($edit_url->access()) {
+    $variables['edit_url'] = $edit_url->setAbsolute()->toString();
+  }
+}
+
+/**
+ * Implements hook_preprocess_user().
+ */
+function ventuno_preprocess_user(array &$variables): void {
+  $variables['full_name'] = $variables['user']->getDisplayName();
+}
+
+/**
+ * Implements hook_preprocess_HOOK().
+ */
+function ventuno_preprocess_rdf_entity__search_result_featured(array &$variables): void {
+  _ventuno_preprocess_search_result($variables, 'rdf_entity');
+}
+
+/**
+ * Implements hook_preprocess_HOOK().
+ */
+function ventuno_preprocess_rdf_entity__search_result(array &$variables): void {
+  _ventuno_preprocess_search_result($variables, 'rdf_entity');
+}
+
+/**
+ * Implements hook_preprocess_HOOK().
+ */
+function ventuno_preprocess_rdf_entity__solution__eif_perspective(array &$variables): void {
+  /** @var \Drupal\solution\Entity\SolutionInterface $solution */
+  $solution = $variables['rdf_entity'];
+  if (empty($solution)) {
+    return;
+  }
+
+  $rdf_meta_entity = $solution->eif_perspective->entity;
+  if (empty($rdf_meta_entity)) {
+    return;
+  }
+
+  $eif_description = \Drupal::entityTypeManager()->getViewBuilder('rdf_meta_entity')->viewField($rdf_meta_entity->get('field_eif_description'), 'eif_perspective');
+  $eif_description[0]['#text'] = strip_tags($eif_description[0]['#text']);
+  $variables['content']['eif_perspective_fields']['field_eif_description'] = $eif_description;
+}
+
+/**
+ * Implements hook_preprocess_HOOK().
+ */
+function ventuno_preprocess_node__search_result_featured(array &$variables): void {
+  _ventuno_preprocess_search_result($variables, 'node');
+}
+
+/**
+ * Implements hook_preprocess_HOOK().
+ */
+function ventuno_preprocess_node__search_result(array &$variables): void {
+  _ventuno_preprocess_search_result($variables, 'node');
+}
+
+/**
+ * Prepares some variables for all search result view modes.
+ *
+ * @param array $variables
+ *   The variables array.
+ * @param string $entity_type_id
+ *   The entity type ID.
+ */
+function _ventuno_preprocess_search_result(array &$variables, string $entity_type_id): void {
+  $entity = $variables[$entity_type_id];
+  $bundle_key = \Drupal::entityTypeManager()->getDefinition($entity_type_id)->getKey('bundle');
+  $variables['text'] = $entity instanceof DescriptionInterface ? $variables['content'][$entity->getDescriptionField()] : NULL;
+  $variables['topics'] = ($entity instanceof TopicReferencingEntityInterface) ? $entity->getTopics() : NULL;
+  if ($variables['topics']) {
+    $num_of_items = count($variables['topics']);
+    if ($num_of_items > 3) {
+      $extra_items = $num_of_items - 3;
+      $variables['topics'] = array_splice($variables['topics'], 0, 3);
+      // The structure name => value mimics the way topics are accessed in the
+      // template.
+      // @see node--search-result.html.twig.
+      // @see node--search-result-featured.html.twig.
+      // @see rdf-entity--search-result.html.twig.
+      // @see rdf-entity--search-result-featured.html.twig.
+      $variables['topics'][]['name']['value'] = t('+:number topics', [
+        ':number' => $extra_items,
+      ]);
+    }
+  }
+
+  $variables['type'] = strtoupper($entity->get($bundle_key)->entity->getSingularLabel());
+  if ($created_time = $entity->getCreatedTime()) {
+    $variables['creation'] = t('@label: @created', [
+      '@label' => t('Created'),
+      '@created' => \Drupal::service('date.formatter')->format($created_time, 'date_only'),
+    ]);
+  }
+
+  if ($variables['view_mode'] === 'search_result_featured') {
+    $variables['image'] = ($entity instanceof LogoInterface) && $entity->getLogoAsFile()
+      ? $entity->getLogoAsRenderArray($variables['view_mode'])
+      : _ventuno_get_default_icon_render_array($entity->getEntityTypeId(), $entity->bundle());
+  }
+}
+
+/**
+ * Returns the default icon for the given bundle or the generic entity icon.
+ *
+ * @param string $entity_type_id
+ *   The entity type ID.
+ * @param string $bundle
+ *   The bundle.
+ *
+ * @return array
+ *   The icon class render array.
+ */
+function _ventuno_get_default_icon_render_array(string $entity_type_id, string $bundle): array {
+  $mapping = [
+    'node' => [
+      'custom_page' => 'file-earmark-richtext',
+      'discussion' => 'chat-left-text',
+      'document' => 'file-earmark-text',
+      'event' => 'calendar3',
+      'news' => 'newspaper',
+      'video' => 'file-earmark-play',
+    ],
+    'rdf_entity' => [
+      'collection' => 'folder2-open',
+      'licence' => 'file-earmark-medical',
+      'asset_release' => 'file-earmark-zip',
+      'solution' => 'clipboard-check',
+    ],
+  ];
+
+  $class = $mapping[$entity_type_id][$bundle] ?? 'lightning-charge';
+>>>>>>> origin/develop
   return [
     'share_content_form' => [
       'render element' => 'form',
@@ -36,5 +543,161 @@ function ventuno_preprocess(array &$variables): void {
   $themeHandler = \Drupal::service('theme_handler');
   $ventuno = $themeHandler->getTheme('ventuno')->getPath();
   $variables['bcl_icon_path'] = base_path() . $ventuno . '/assets/icons/icons.svg';
+<<<<<<< HEAD
   $variables['#attached']['drupalSettings']['path']['bclIconPath'] = $variables['bcl_icon_path'];
+=======
+}
+
+/**
+ * Implements hook_theme_suggestions_HOOK_alter() for form-element.html.twig.
+ */
+function ventuno_theme_suggestions_form_element_alter(array &$suggestions, array $variables): void {
+  if (isset($variables['element']['#joinup_parent'])) {
+    $suggestions[] = 'form_element__' . $variables['element']['#joinup_parent'];
+  }
+}
+
+/**
+ * Implements hook_form_alter().
+ */
+function ventuno_form_alter(array &$form, FormStateInterface $form_state, string $form_id): void {
+  // Check if the form contains exposed filter form element.
+  if ($form_id === 'views_exposed_form') {
+    $route_name = \Drupal::routeMatch()->getRouteName();
+    $view = $form_state->get('view');
+    if ($view->id() === 'search') {
+      $form['keys']['#theme'] = 'input__search_expose_form';
+      $form['keys']['#title_display'] = 'invisible';
+      $form['keys']['#attributes']['placeholder'] = t('Start typing to search…');
+      $form['keys']['#joinup_parent'] = $form_id . '_' . $view->id();
+    }
+
+    if ($route_name != 'view.search.page_1' && $view->id() === 'search') {
+      // When re-using the exposed search form anywhere other than the search
+      // page, hide the "Sort by" select.
+      $form['sort_by']['#type'] = 'hidden';
+    }
+  }
+
+  // Add classes to the delete action in any kind of form.
+  if (isset($form['actions']['delete'])) {
+    $form['actions']['delete']['#attributes']['class'] = [
+      'btn',
+      'btn-md',
+      'btn-outline-danger',
+    ];
+  }
+}
+
+/**
+ * Implements hook_preprocess_responsive_image().
+ *
+ * Explicitly sets dimensions to images using responsive image styles to avoid
+ * Cumulative Layout Shift.
+ * We use the 16:9 ratio as a premise: ratios are not fixed, we allow users to
+ * upload images without restrictions. It's not possible to match them exaclty.
+ */
+function ventuno_preprocess_responsive_image(array &$variables): void {
+  $style_id = $variables['responsive_image_style_id'];
+  switch ($style_id) {
+    // 'In the spotlight' section on homepage
+    case 'spotlight':
+      $variables['img_element']['#attributes']['height'] = 290;
+      $variables['img_element']['#attributes']['width'] = 516;
+      break;
+
+    // 'Highlighted content' section on homepage
+    case 'highlighted_content':
+      $variables['img_element']['#attributes']['height'] = 392;
+      $variables['img_element']['#attributes']['width'] = 696;
+      break;
+
+    // Highlighted results on search page (3 first results)
+    case 'teaser':
+      $variables['img_element']['#attributes']['height'] = 290;
+      $variables['img_element']['#attributes']['width'] = 516;
+      break;
+  }
+}
+
+/**
+ * Implements hook_preprocess_image().
+ */
+function ventuno_preprocess_image(array &$variables): void {
+  $variables['attributes']['loading'] = 'lazy';
+}
+
+/**
+ * Implements hook_theme_suggestions_HOOK_alter().
+ */
+function ventuno_theme_suggestions_field_alter(array &$suggestions, array $variables): void {
+  // Do not output field labels and wrapping markup for paragraph fields.
+  if (isset($variables['element']['#entity_type']) && $variables['element']['#entity_type'] === 'paragraph') {
+    // Prepend the new suggestion right after the default field template. This
+    // allows overriding single fields, while keeping all the rest markup-free.
+    array_unshift($suggestions, 'field__bare');
+  }
+}
+
+/**
+ * Implements hook_preprocess_container__text_format_filter_help().
+ */
+function ventuno_preprocess_container__text_format_filter_help(array &$variables): void {
+  $variables['attributes']['class'] = ['text-end', 'fs-sm'];
+}
+
+/**
+ * Implements hook_preprocess_form_element_label().
+ */
+function ventuno_preprocess_form_element_label(array &$variables): void {
+  $variables['#attached']['library'][] = 'ventuno/form-checkboxes';
+}
+
+/**
+ * Implements hook_theme_suggestions_HOOK_alter() for container.html.twig.
+ */
+function ventuno_theme_suggestions_container_alter(array &$suggestions, array $variables) {
+  if (isset($variables['element']['#id'])) {
+    $suggestions[] = 'container__' . str_replace('-', '_', $variables['element']['#id']);
+
+    // Suggestion for form actions container if id has suffix.
+    if (end($suggestions) != 'container__edit_actions' && strpos($variables['element']['#id'], 'edit-actions') !== FALSE) {
+      $suggestions[] = 'container__edit_actions';
+    }
+  }
+}
+
+/**
+ * Implements hook_preprocess_field_ui_table().
+ */
+function ventuno_preprocess_field_ui_table(&$variables) {
+  if ($variables['user']->isAuthenticated()) {
+    $variables['#attached']['library'][] = 'ventuno/tabledrag';
+  }
+}
+
+/**
+ * Implements hook_preprocess_field_multiple_value_form().
+ */
+function ventuno_preprocess_field_multiple_value_form(&$variables) {
+  if ($variables['user']->isAuthenticated()) {
+    $variables['#attached']['library'][] = 'ventuno/tabledrag';
+  }
+}
+
+/**
+ * Implements hook_preprocess_inline_entity_form_entity_table().
+ */
+function ventuno_preprocess_inline_entity_form_entity_table(&$variables) {
+  if ($variables['user']->isAuthenticated()) {
+    $variables['#attached']['library'][] = 'ventuno/ief-entity-table';
+  }
+}
+
+/**
+ * Implements hook_preprocess_form_element().
+ */
+function ventuno_preprocess_form_element(&$variables) {
+  $variables['#attached']['library'][] = 'ventuno/forms';
+>>>>>>> origin/develop
 }

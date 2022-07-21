@@ -1,0 +1,36 @@
+uuid: d73cd510-d4e1-4e7d-80ef-439fbe16858c
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.taxonomy_term.eif_recommendation
+    - field.field.taxonomy_term.eif_recommendation.field_eif_identifier
+    - field.field.taxonomy_term.eif_recommendation.field_eif_related_term
+    - taxonomy.vocabulary.eif_recommendation
+  module:
+    - layout_builder
+    - template_suggestion
+third_party_settings:
+  layout_builder:
+    enabled: false
+    allow_custom: false
+id: taxonomy_term.eif_recommendation.eif_recommendation
+targetEntityType: taxonomy_term
+bundle: eif_recommendation
+mode: eif_recommendation
+content:
+  field_eif_related_term:
+    type: entity_reference_label
+    label: hidden
+    settings:
+      link: false
+    third_party_settings:
+      template_suggestion:
+        template_suggestion: ''
+    weight: 0
+    region: content
+hidden:
+  description: true
+  field_eif_identifier: true
+  langcode: true
+  search_api_excerpt: true
