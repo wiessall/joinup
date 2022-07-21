@@ -92,6 +92,7 @@ content:
     region: content
 hidden:
   changed: true
+  download_count: true
   field_ad_access_url: true
   field_ad_creation_date: true
   field_ad_file_size: true

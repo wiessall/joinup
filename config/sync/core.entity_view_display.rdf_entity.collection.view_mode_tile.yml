@@ -82,6 +82,7 @@ content:
 hidden:
   changed: true
   created: true
+  featured: true
   field_ar_access_url: true
   field_ar_affiliates: true
   field_ar_banner: true
@@ -107,4 +108,5 @@ hidden:
   rdf_entity_field_collection_content_top: true
   read_more: true
   search_api_excerpt: true
+  settings: true
   solutions: true

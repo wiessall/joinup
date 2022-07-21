@@ -183,7 +183,7 @@ function joinup_search_search_api_index_items_alter(IndexInterface $index, array
     [, $raw_id] = Utility::splitCombinedId($item_id);
     [, $langcode] = Utility::splitPropertyPath($raw_id);
     // Unset non-english content from the index.
-    if ($langcode != 'en') {
+    if (!in_array($langcode, ['en', 'und'])) {
       unset($items[$item_id]);
     }
   }

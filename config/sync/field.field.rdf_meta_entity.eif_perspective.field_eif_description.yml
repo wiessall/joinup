@@ -1,0 +1,26 @@
+uuid: cf81a3ef-6fcf-494b-83fd-5701b6398c96
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.rdf_meta_entity.field_eif_description
+    - rdf_meta_entity.type.eif_perspective
+  module:
+    - allowed_formats
+    - text
+third_party_settings:
+  allowed_formats:
+    allowed_formats:
+      - content_editor
+id: rdf_meta_entity.eif_perspective.field_eif_description
+field_name: field_eif_description
+entity_type: rdf_meta_entity
+bundle: eif_perspective
+label: Description
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: text_long
