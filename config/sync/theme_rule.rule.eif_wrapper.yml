@@ -1,0 +1,19 @@
+uuid: 5dc46554-3a90-4bc9-99f4-3da51609fe13
+langcode: en
+status: true
+dependencies:
+  module:
+    - joinup_core
+    - system
+  theme:
+    - ventuno
+id: eif_wrapper
+label: 'EIF Wrapper'
+theme: ventuno
+weight: 0
+conditions:
+  request_route:
+    id: request_route
+    negate: false
+    routes:
+      - solution.eif_perspective.form

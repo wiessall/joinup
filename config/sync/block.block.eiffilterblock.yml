@@ -1,0 +1,25 @@
+uuid: ade53e5b-b29c-4bb4-92f8-d0212ab97968
+langcode: en
+status: true
+dependencies:
+  module:
+    - eif
+    - system
+  theme:
+    - joinup_theme
+id: eiffilterblock
+theme: joinup_theme
+region: content
+weight: 0
+provider: null
+plugin: eif_filter_block
+settings:
+  id: eif_filter_block
+  label: 'Eif filter block'
+  label_display: '0'
+  provider: eif
+visibility:
+  request_path:
+    id: request_path
+    negate: false
+    pages: /node/705372
