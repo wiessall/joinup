@@ -35,10 +35,6 @@
     umask: 0
     recursive: true
   - task: run
-    command: drupal:settings
-    arguments:
-      - behat-mail-collector
-  - task: run
     command: joinup:environment
 
 # See \EcEuropa\Toolkit\TaskRunner\Commands\TestsCommands::toolkitPhpUnit()

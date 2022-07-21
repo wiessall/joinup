@@ -84,9 +84,8 @@ drupal:
         - OpenEuropa Webtools Geocoding Cache
         - Redis
         - Custom queue services
-        - Monolog
-      behat-mail-collector:
         - Test mail collector
+        - Monolog
       error_page_test:
         - Main settings
         - Databases
