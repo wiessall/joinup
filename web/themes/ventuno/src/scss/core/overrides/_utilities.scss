@@ -14,15 +14,15 @@ $utilities: map-merge(
       // ),
       // scss-docs-end utils-vertical-align
       // scss-docs-start utils-float
-      // "float": (
-      //   responsive: true,
-      //   property: float,
-      //   values: (
-      //     start: left,
-      //     end: right,
-      //     none: none,
-      //   )
-      // ),
+      "float": (
+        responsive: false,
+        property: float,
+        values: (
+          start: left,
+          end: right,
+          none: none,
+        )
+      ),
       // scss-docs-end utils-float
       // Opacity utilities
       // scss-docs-start utils-opacity

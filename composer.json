@@ -57,7 +57,7 @@
         "drupal/message": "^1.1",
         "drupal/message_digest": "^1.0.0",
         "drupal/message_notify": "~1.2",
-        "drupal/meta_entity": "^1.0-alpha2",
+        "drupal/meta_entity": "^1.2",
         "drupal/monolog": "^2.0",
         "drupal/og": "^1.0-alpha7",
         "drupal/og_menu": "^2.0",
@@ -68,6 +68,7 @@
         "drupal/pipeline": "^1.0",
         "drupal/publication_date": "^2.0-beta2",
         "drupal/rdf_entity": "^2.0",
+        "drupal/rdf_meta_entity": "^1.0",
         "drupal/redirect": "^1.6",
         "drupal/redis": "^1.4",
         "drupal/schema_digital_document": "^1.0.0",
@@ -293,6 +294,9 @@
             "drupal/matomo_reporting_api": {
                 "Ensure backward compatibility with Piwik @see https://www.drupal.org/project/matomo_reporting_api/issues/3080854": "https://www.drupal.org/files/issues/2019-09-18/3080854-7.patch"
             },
+            "drupal/meta_entity": {
+                "Make the field configurable in the view @see https://www.drupal.org/project/meta_entity/issues/3279161": "https://git.drupalcode.org/project/meta_entity/-/merge_requests/4.diff"
+            },
             "drupal/metatag": {
                 "Views cache wrapper overrides other modules cache logic @see https://www.drupal.org/project/metatag/issues/3261473": "https://git.drupalcode.org/project/metatag/-/merge_requests/48.diff"
             },
@@ -307,6 +311,10 @@
             },
             "drupal/rdf_entity": {
                 "Allow bundle label plural variants @see https://github.com/ec-europa/rdf_entity/pull/12": "https://github.com/ec-europa/rdf_entity/compare/8.x-1.x...ea8f6af001fca732e89a4be0e29643953f49a88f.diff"
+            },
+            "drupal/rdf_meta_entity": {
+                "Provide a default template file @see https://www.drupal.org/project/rdf_meta_entity/issues/3279162": "https://git.drupalcode.org/project/rdf_meta_entity/-/merge_requests/2.diff",
+                "Provide a default delete form @see https://www.drupal.org/project/rdf_meta_entity/issues/3283343": "https://git.drupalcode.org/project/rdf_meta_entity/-/merge_requests/3.diff"
             },
             "drupal/search_api": {
                 "item_id column is too short @see https://www.drupal.org/node/2829696": "resources/patch/search_api-item_id-length-2829696.patch",
