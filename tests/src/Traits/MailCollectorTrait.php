@@ -4,8 +4,6 @@ declare(strict_types = 1);
 
 namespace Drupal\joinup\Traits;
 
-use Behat\Behat\Hook\Scope\AfterScenarioScope;
-use Behat\Behat\Hook\Scope\BeforeScenarioScope;
 use Drupal\Component\Render\MarkupInterface;
 use Drupal\user\UserInterface;
 
@@ -186,36 +184,6 @@ trait MailCollectorTrait {
       throw new \Exception($no_match_message);
     }
     throw new \Exception($no_mail_message);
-  }
-
-  /**
-   * Set email settings test_mail_collector in behat-clone tests.
-   *
-   * @BeforeScenario @group-clone&&@email
-   */
-  public function beforeEmailScenario(BeforeScenarioScope $scope): void {
-    $config = \Drupal::configFactory();
-    $system = $config->getEditable('system.mail');
-    $mailsystem = $config->getEditable('mailsystem.settings');
-
-    $this->defaultEmailSettings = [
-      'system' => $system->get('interface.default'),
-      'mailsystem' => $mailsystem->get('defaults.sender'),
-    ];
-
-    $system->set('interface.default', 'test_mail_collector')->save();
-    $mailsystem->set('defaults.sender', 'test_mail_collector')->save();
-  }
-
-  /**
-   * Restore email settings.
-   *
-   * @AfterScenario @group-clone&&@email
-   */
-  public function afterEmailScenario(AfterScenarioScope $scope): void {
-    $config = \Drupal::configFactory();
-    $config->getEditable('system.mail')->set('interface.default', $this->defaultEmailSettings['system'])->save();
-    $config->getEditable('mailsystem.settings')->set('defaults.sender', $this->defaultEmailSettings['mailsystem'])->save();
   }
 
 }

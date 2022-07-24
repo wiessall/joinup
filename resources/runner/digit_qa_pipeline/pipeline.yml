@@ -37,7 +37,9 @@
   - task: run
     command: joinup:environment
   - task: run
-    command: config-readonly:disable
+    command: drupal:settings
+    arguments:
+      - behat-clone
 
 # See \EcEuropa\Toolkit\TaskRunner\Commands\TestsCommands::toolkitPhpUnit()
 phpunit:
@@ -49,6 +51,3 @@ toolkit:
     behat:
       commands:
         before: *before
-        after:
-          - task: run
-            command: config-readonly:enable
