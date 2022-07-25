@@ -1,27 +1,33 @@
-@api @interoperable-europe
+@api @group-clone
 Feature:
   In order to present the details about Interoperable Europe
   As a content editor
   I want to manage a dedicated collection and landing page
 
-  Scenario Outline: Page customizations for the Interoperable Europe collection
-    Given I am <user>
+  Scenario: Anonymous visiting the landing page.
+    Given I am not logged in
     And I am on the homepage
     # A dedicated link in the header should lead to the landing page.
     When I click "Interoperable Europe" in the Header region
-    Then I should see the heading "Interoperable Europe"
+    # TODO: The page title is temporary.
+    Then I should see "IOP landing page"
     # Check that we are on the expected URL for the landing page.
-    And I should be on "/collection/interoperable-europe/interoperable-europe"
+    And I should be on "/collection/interoperable-europe"
 
-    # The link to join the collection has a customized label.
-    And I should see the <element> "Subscribe for fresh content"
-
-    Examples:
-      | user                                            | element |
-      | not logged in                                   | link    |
-      | logged in as a user with the authenticated role | button  |
-
-  Scenario: Discover more link on the homepage leads to the Interoperable Europe landing page
     Given I am on the homepage
     When I click "Discover more"
-    Then I should see the heading "Interoperable Europe"
+    # TODO: The page title is temporary.
+    Then I should see "IOP landing page"
+
+  Scenario: Authenticated user visiting the landing page.
+    Given I am logged in as a user with the authenticated role
+    When I check the box "I agree to the Legal notice document"
+    And I press "Submit"
+    Then I should see the link "Interoperable Europe"
+
+    # A dedicated link in the header should lead to the landing page.
+    When I click "Interoperable Europe" in the Header region
+    # TODO: The page title is temporary.
+    Then I should see "IOP landing page"
+    # Check that we are on the expected URL for the landing page.
+    And I should be on "/collection/interoperable-europe"
