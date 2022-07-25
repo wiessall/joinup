@@ -30,7 +30,6 @@ module:
   dashboard: 0
   datetime: 0
   datetime_range: 0
-  default_content: 0
   diff: 0
   digital_size_formatter: 0
   dpsi: 0

@@ -9,6 +9,7 @@ upgrade_commands:
     - touch disable-config-readonly
     - ./vendor/bin/drush deploy --yes
     # One-time task. To be removed after release.
+    - ./vendor/bin/drush joinup:install default_content
     - ./vendor/bin/drush default-content:import interoperable_europe
     - ./vendor/bin/drush search-api:reset-tracker --yes
     - ./vendor/bin/drush joinup:node-access-rebuild

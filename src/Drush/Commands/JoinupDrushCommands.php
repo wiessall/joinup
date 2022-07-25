@@ -14,6 +14,21 @@ use Drush\Commands\DrushCommands;
 class JoinupDrushCommands extends DrushCommands {
 
   /**
+   * Install modules.
+   *
+   * @param array $modules
+   *   List of modules.
+   *
+   * @command joinup:install
+   * @bootstrap full
+   */
+  public function installModules(array $modules): void {
+    /** @var \Drush\Drupal\Commands\pm\PmCommands $original */
+    $original = \Drupal::service('pm.commands');
+    $original->install($modules);
+  }
+
+  /**
    * Rebuilds node access if case.
    *
    * @command joinup:node-access-rebuild
