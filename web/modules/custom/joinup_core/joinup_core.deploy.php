@@ -13,3 +13,10 @@
  */
 
 declare(strict_types = 1);
+
+/**
+ * Remove old IOP landing page.
+ */
+function joinup_core_deploy_108300(): void {
+  \Drupal::entityTypeManager()->getStorage('node')->load(704740)->delete();
+}
