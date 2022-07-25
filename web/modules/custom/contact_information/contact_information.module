@@ -74,7 +74,10 @@ function contact_information_inline_entity_form_table_fields_alter(&$fields, $co
  * the entity until the parent entity is saved. Due to this, the label column
  * in the widget table would be empty.
  */
-function contact_information_inline_entity_form_entity_form_alter(&$entity_form, &$form_state) {
+function contact_information_inline_entity_form_entity_form_alter(array &$entity_form, FormStateInterface &$form_state): void {
+  if ($entity_form['#entity_type'] !== 'rdf_entity' || $entity_form['#bundle'] !== 'contact_information') {
+    return;
+  }
   // Add an entity builder callback to fill the label field with the values of
   // the name field. This is needed because inline entity form doesn't save
   // the entity until the parent entity is saved. Due to this, the label column
@@ -90,11 +93,7 @@ function contact_information_inline_entity_form_entity_form_alter(&$entity_form,
  * @param \Drupal\Core\Entity\EntityInterface $entity
  *   The entity being built.
  */
-function contact_information_inline_entity_form_entity_builder($entity_type, EntityInterface $entity) {
-  // Handle only contact information entities.
-  if ($entity->bundle() != 'contact_information') {
-    return;
-  }
+function contact_information_inline_entity_form_entity_builder(string $entity_type, EntityInterface $entity): void {
   contact_information_entity_auto_label($entity);
 }
 
