@@ -28,7 +28,6 @@
   - Drupal\joinup\Context\FooterContext
   - Drupal\joinup\Context\HeaderContext
   - Drupal\joinup\Context\HomepageContext
-  - Drupal\joinup\Context\InteroperableEuropeContext
   - Drupal\joinup\Context\Isa2AnalyticsContext
   - Drupal\joinup\Context\JoinupCollectionContext
   - Drupal\joinup\Context\JoinupCommunityContentContext
