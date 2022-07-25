@@ -160,7 +160,7 @@ class EuplContext extends RawDrupalContext {
    */
   public function assertFilterCategoriesAndOrder(TableNode $table): void {
     $expected = $table->getColumn(0);
-    $xpath = '//div[contains(concat(" ", normalize-space(@class), " "), " licence-filter ")]//div[contains(concat(" ", normalize-space(@class), " "), " licence-filter__header ")]';
+    $xpath = '//div[contains(concat(" ", normalize-space(@class), " "), " licence-filter ")]//div[contains(concat(" ", normalize-space(@class), " "), " licence-filter__header ")] | //div[contains(concat(" ", normalize-space(@class), " "), " eif-filter ")]//div[contains(concat(" ", normalize-space(@class), " "), " eif-filter__header ")]';
     $this->assertCategoriesAndOrder($xpath, $expected);
   }
 

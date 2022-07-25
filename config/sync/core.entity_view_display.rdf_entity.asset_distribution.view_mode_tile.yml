@@ -64,6 +64,7 @@ content:
 hidden:
   changed: true
   created: true
+  download_count: true
   field_ad_description: true
   field_ad_format: true
   field_ad_gitb_compliant: true
