@@ -1,0 +1,28 @@
+{#
+/**
+ * @file
+ * Default template for a field.
+ */
+#}
+{%
+  set classes = [
+    'ps-0',
+    'field--name-' ~ field_name|clean_class,
+    bundle|clean_class ~ '__' ~ field_name_clean|clean_class,
+  ]
+%}
+
+<ul{{ attributes.addClass(classes) }}>
+  {% for item in items %}
+    <li{{ item.attributes.addClass(['field__item', 'list-unstyled', 'mb-2']) }}>
+      <span class="text-success">
+        {{ pattern('icon', {
+          name: 'check-circle-fill',
+          path: bcl_icon_path,
+          size: 's',
+        }) }}
+      </span>
+      {{ item.content }}
+    </li>
+  {% endfor %}
+</ul>
