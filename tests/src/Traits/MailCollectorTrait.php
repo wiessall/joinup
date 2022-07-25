@@ -13,11 +13,6 @@ use Drupal\user\UserInterface;
 trait MailCollectorTrait {
 
   /**
-   * Store email settings.
-   */
-  private array $defaultEmailSettings;
-
-  /**
    * Formats a mail body to a simple string.
    *
    * @param \Drupal\Component\Render\MarkupInterface $markup

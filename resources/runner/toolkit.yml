@@ -33,16 +33,6 @@ toolkit:
           file: ${toolkit.build.dist.root}/web/themes/ventuno/package.json
         - task: remove
           file: ${toolkit.build.dist.root}/web/themes/ventuno/package-lock.json
-  test:
-    behat:
-      commands:
-        profile: "default"
-        before:
-          - task: run
-            command: config-readonly:disable
-        after:
-          - task: run
-            command: config-readonly:enable
 
 command:
   toolkit:
