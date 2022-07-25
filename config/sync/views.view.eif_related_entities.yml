@@ -114,7 +114,7 @@ display:
         type: none
         options: {  }
       cache:
-        type: tag
+        type: search_api_tag
         options: {  }
       empty: {  }
       sorts: {  }
@@ -213,6 +213,7 @@ display:
         - 'user.node_grants:view'
       tags:
         - 'config:search_api.index.published'
+        - 'config:views.view.eif_related_entities'
         - 'search_api_list:published'
   block_1:
     id: block_1
@@ -220,7 +221,10 @@ display:
     display_plugin: block
     position: 1
     display_options:
-      display_extenders: {  }
+      display_extenders:
+        metatag_display_extender:
+          metatags: {  }
+          tokenize: false
     cache_metadata:
       max-age: -1
       contexts:
@@ -230,4 +234,5 @@ display:
         - 'user.node_grants:view'
       tags:
         - 'config:search_api.index.published'
+        - 'config:views.view.eif_related_entities'
         - 'search_api_list:published'

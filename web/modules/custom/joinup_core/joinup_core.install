@@ -91,3 +91,13 @@ function joinup_core_requirements($phase): array {
 
   return $requirements;
 }
+
+/**
+ * Install 'EIF Wrapper' entity type.
+ */
+function joinup_core_update_108300(?array &$sandbox = NULL): void {
+  $entity_type_manager = \Drupal::entityTypeManager();
+  $entity_definition_manager = \Drupal::entityDefinitionUpdateManager();
+  $entity_definition_manager->installEntityType($entity_type_manager->getDefinition('eif_wrapper_type'));
+  $entity_definition_manager->installEntityType($entity_type_manager->getDefinition('eif_wrapper'));
+}
