@@ -16,7 +16,7 @@
   <nav class="w-100 shadow-sm navbar navbar-expand-lg navbar-light" aria-label="Top Navigation">
     <div class="container">
       <a class="navbar-brand" href="https://ec.europa.eu/info/index_en">
-        <img src="{{ path('<front>') }}themes/ventuno/assets/images/logo-ec--en.svg" alt="European Commission logo"/>
+        <img src="{{ file_url('themes/ventuno/assets/images/logo-ec--en.svg') }}" alt="European Commission logo"/>
       </a>
     </div>
   </nav>
@@ -52,9 +52,9 @@
       links: search,
     }]) %}
   {% endif %}
-  {% include directory ~ '/templates/navigation/navbar.html.twig' with {
+  {% include '@ventuno/navigation/navbar.html.twig' with {
     brand: {
-      src: path('<front>') ~ "themes/ventuno/assets/images/logo.svg",
+      src: file_url('themes/ventuno/assets/images/logo.svg'),
       alt: "Joinup logo"|t,
       link: path('<front>'),
     },
