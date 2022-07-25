@@ -1,0 +1,47 @@
+{#
+/**
+ * @file
+ * Default template for a field.
+ */
+#}
+{%
+  set classes = [
+    'mb-3',
+    'field--name-' ~ field_name|clean_class,
+    bundle|clean_class ~ '__' ~ field_name_clean|clean_class,
+  ]
+%}
+{%
+  set title_classes = [
+    'field__label',
+    'fw-bold',
+  ]
+%}
+
+<div{{ attributes.addClass(classes) }}>
+  {% if multiple %}
+    {% if label_display == 'inline' %}
+      <span{{ title_attributes.addClass(title_classes) }}>{{ label }}<span class="me-1">:</span></span>
+    {% else %}
+      <div{{ title_attributes.addClass(title_classes) }}>{{ label }}</div>
+    {% endif %}
+    {% for item in items %}
+      <span{{ item.attributes }}>{{ item.content }}</span>{{ not loop.last ? ', ' }}
+    {% endfor %}
+  {% else %}
+    {% if label_display == 'inline' %}
+      {% for item in items %}
+        <span{{ title_attributes.addClass(title_classes) }}>{{ label }}:</span>
+        <span{{ item.attributes }}>{{ item.content }}</span>
+      {% endfor %}
+    {% else %}
+      <div{{ title_attributes.addClass(title_classes) }}>
+        {{ label }}
+      </div>
+      {% for item in items %}
+        <span{{ title_attributes.addClass(title_classes) }}>{{ label }}:</span>
+        <span{{ item.attributes }}>{{ item.content }}</span>
+      {% endfor %}
+    {% endif %}
+  {% endif %}
+</div>
