@@ -337,7 +337,7 @@ display:
         type: manage_solutions
         options: {  }
       cache:
-        type: tag
+        type: search_api_tag
         options: {  }
       empty:
         area:
@@ -514,6 +514,7 @@ display:
         - user.permissions
       tags:
         - 'config:search_api.index.published'
+        - 'config:views.view.manage_collection_solutions'
         - 'search_api_list:published'
   manage_solutions:
     id: manage_solutions
@@ -521,7 +522,10 @@ display:
     display_plugin: page
     position: 1
     display_options:
-      display_extenders: {  }
+      display_extenders:
+        metatag_display_extender:
+          metatags: {  }
+          tokenize: false
       path: rdf_entity/%rdf_entity/manage-solutions
       menu:
         type: tab
@@ -544,4 +548,5 @@ display:
         - user.permissions
       tags:
         - 'config:search_api.index.published'
+        - 'config:views.view.manage_collection_solutions'
         - 'search_api_list:published'

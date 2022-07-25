@@ -4,9 +4,6 @@ status: true
 dependencies:
   config:
     - core.entity_view_mode.user.group_header
-    - field.field.user.user.field_last_password_reset
-    - field.field.user.user.field_password_expiration
-    - field.field.user.user.field_pending_expire_sent
     - field.field.user.user.field_social_media
     - field.field.user.user.field_user_business_title
     - field.field.user.user.field_user_content
@@ -118,9 +115,6 @@ content:
     weight: 7
     region: content
 hidden:
-  field_last_password_reset: true
-  field_password_expiration: true
-  field_pending_expire_sent: true
   field_user_content: true
   field_user_frequency: true
   langcode: true

@@ -283,4 +283,16 @@ settings:
   solr_request_handler:
     handler: 'default:solr_request_handler'
     handler_settings: {  }
+  rdf_meta_entity:
+    handler: 'default:rdf_meta_entity'
+    handler_settings: {  }
+  rdf_meta_entity_type:
+    handler: 'default:rdf_meta_entity_type'
+    handler_settings: {  }
+  eif_wrapper:
+    handler: 'default:eif_wrapper'
+    handler_settings: {  }
+  eif_wrapper_type:
+    handler: 'default:eif_wrapper_type'
+    handler_settings: {  }
 field_type: dynamic_entity_reference
