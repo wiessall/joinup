@@ -10,3 +10,30 @@ eif.solutions:
     parameters:
       eif_category:
         type: eif_category
+
+eif.eif_perspective_form:
+  path: '/rdf_entity/{rdf_entity}/eif-perspective/edit'
+  defaults:
+    _controller: Drupal\eif\Controller\EifPerspectiveController::settings
+    _title_callback: Drupal\eif\Controller\EifPerspectiveController::title
+  requirements:
+    _custom_access: Drupal\eif\Controller\EifPerspectiveController::editAccess
+  options:
+    parameters:
+      rdf_entity:
+        type: entity:rdf_entity
+        bundle:
+          - solution
+
+entity.rdf_entity.eif_perspective:
+  path: '/rdf_entity/{rdf_entity}/eif-perspective'
+  defaults:
+    _entity_view: 'rdf_entity.eif_perspective'
+  requirements:
+    _custom_access: Drupal\eif\Controller\EifPerspectiveController::viewAccess
+  options:
+    parameters:
+      rdf_entity:
+        type: entity:rdf_entity
+        bundle:
+          - solution

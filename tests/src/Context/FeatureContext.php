@@ -272,8 +272,12 @@ class FeatureContext extends RawDrupalContext implements SnippetAcceptingContext
     $page = $this->getSession()->getPage();
     $not_found = [];
     foreach ($fieldsets as $fieldset) {
-      $is_found = $page->find('named', ['fieldset', $fieldset]);
+      // Find by fieldset legend or by details summary depending on how the
+      // fieldset is rendered.
+      $is_found = $page->find('named', ['fieldset', $fieldset])
+        || $page->find('xpath', "//details/summary[contains(text(), '$fieldset')]");
       if (!$is_found) {
+        // Try to find the fieldset according to the collapse button.
         $not_found[] = $fieldset;
       }
     }
@@ -478,6 +482,7 @@ class FeatureContext extends RawDrupalContext implements SnippetAcceptingContext
    *   not the expected one.
    *
    * @Then the option with text :option from select :select is selected
+   * @Then the option with text :option from select :select should be selected
    */
   public function assertFieldOptionSelected(string $option, string $select): void {
     $this->assertFieldOptionSelectedInRegion($option, $select);
@@ -2425,6 +2430,22 @@ class FeatureContext extends RawDrupalContext implements SnippetAcceptingContext
     $button = $field->findButton('Remove');
     $this->scrollElementIntoView($button);
     $button->press();
+  }
+
+  /**
+   * Asserts that a link has an attribute set to a specific value.
+   *
+   * @param string $link_text
+   *   The link text.
+   * @param string $attribute_name
+   *   The name of the attribute to assert.
+   * @param string $attribute_value
+   *   The value of the attribute to assert.
+   *
+   * @Then the :link_text link should have the :attribute_name attribute set to :attribute_value
+   */
+  public function givenLinkHasAttribute(string $link_text, string $attribute_name, string $attribute_value): void {
+    Assert::assertNotNull($this->getSession()->getPage()->find('xpath', "//a[@$attribute_name='$attribute_value' and text()='$link_text']"));
   }
 
   /**
