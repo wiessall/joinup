@@ -973,7 +973,7 @@ function joinup_group_message_insert(MessageInterface $message): void {
   if ($message->bundle() === 'announcement') {
     $event = new AnnouncementsEvent('create', $message);
     $event_dispatcher = \Drupal::getContainer()->get('event_dispatcher');
-    $event_dispatcher->dispatch(AnnouncementEvents::ANNOUNCEMENT_CREATE, $event);
+    $event_dispatcher->dispatch($event, AnnouncementEvents::ANNOUNCEMENT_CREATE);
   }
 }
 
@@ -984,6 +984,6 @@ function joinup_group_message_update(MessageInterface $message): void {
   if ($message->bundle() === 'announcement') {
     $event = new AnnouncementsEvent('update', $message);
     $event_dispatcher = \Drupal::getContainer()->get('event_dispatcher');
-    $event_dispatcher->dispatch(AnnouncementEvents::ANNOUNCEMENT_UPDATE, $event);
+    $event_dispatcher->dispatch($event, AnnouncementEvents::ANNOUNCEMENT_UPDATE);
   }
 }
