@@ -17,7 +17,6 @@ use Drupal\Core\Url;
 use Drupal\collection\Entity\CollectionInterface;
 use Drupal\interoperable_europe\InteroperableEuropeCollectionInterface;
 use Drupal\joinup_collection\JoinupCollectionHelper;
-use Drupal\node\NodeInterface;
 use Exception;
 use Symfony\Component\HttpFoundation\RequestStack;
 
@@ -193,23 +192,17 @@ class MenuHelper implements MenuHelperInterface {
    * {@inheritdoc}
    */
   public function getBclLandingPageLinks(): array {
-    $node_storage = $this->entityTypeManager->getStorage('node');
     // Include links to 'Interoperable Europe' and 'Interoperability Solutions'.
     $landing_page_links = [];
     foreach ([
-      InteroperableEuropeCollectionInterface::LANDING_PAGE_ENTITY_ID,
-      JoinupCollectionHelper::INTEROPERABILITY_SOLUTIONS_ENTITY_ID,
-    ] as $node_id) {
+      InteroperableEuropeCollectionInterface::COLLECTION_ENTITY_ID => 'rdf_entity',
+      JoinupCollectionHelper::INTEROPERABILITY_SOLUTIONS_ENTITY_ID => 'node',
+    ] as $id => $entity_type_id) {
       try {
-        $node = $node_storage->load($node_id);
-        if (!$node instanceof NodeInterface) {
-          throw new Exception();
-        }
-        $label = $node->getTitle();
-        $url = $node->toUrl();
+        $entity = $this->entityTypeManager->getStorage($entity_type_id)->load($id);
         $landing_page_links[] = [
-          'label' => $label,
-          'link' => $url,
+          'label' => $entity->label(),
+          'link' => $entity->toUrl(),
         ];
       }
       catch (Exception $e) {
