@@ -52,6 +52,11 @@ class VocabularyFixturesHelper implements VocabularyFixturesHelperInterface {
           'WITH <http://licence-legal-type> INSERT { ?member skos:broaderTransitive ?collection } WHERE { ?collection a skos:Collection . ?collection skos:member ?member };',
         ],
       ],
+      'eif_solution_type' => [
+        'graph' => 'http://eif_solution_type',
+        'filename' => 'eif_solution_type.rdf',
+        'extra queries' => [],
+      ],
     ];
   }
 

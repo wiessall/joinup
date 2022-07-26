@@ -41,6 +41,13 @@ interface EifInterface {
   public const EIF_SOLUTIONS_NID = 703013;
 
   /**
+   * The node ID of the EIF Online Assistant solutions custom page.
+   *
+   * @var int
+   */
+  public const EIF_ONLINE_ASSISTANT = 705372;
+
+  /**
    * Returns the EIF categories.
    *
    * This is a wrapper around static::EIF_ID, used in the
