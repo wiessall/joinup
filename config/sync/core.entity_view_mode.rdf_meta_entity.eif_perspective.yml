@@ -1,0 +1,10 @@
+uuid: af376d5b-5f7a-4050-95c1-e624ca822f9d
+langcode: en
+status: true
+dependencies:
+  module:
+    - rdf_meta_entity
+id: rdf_meta_entity.eif_perspective
+label: 'EIF Perspective'
+targetEntityType: rdf_meta_entity
+cache: true
