@@ -8,8 +8,6 @@
 declare(strict_types = 1);
 
 use Drupal\interoperable_europe\InteroperableEuropeCollectionInterface;
-use Drupal\node\Entity\Node;
-use Drupal\node\NodeInterface;
 use Drupal\rdf_entity\RdfInterface;
 
 /**
