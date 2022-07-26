@@ -25,3 +25,16 @@ function ventuno_theme_suggestions_user_alter(array &$suggestions, array $variab
     $suggestions[] = $original_theme_hook . '__' . str_replace('-', '_', $view_mode);
   }
 }
+
+/**
+ * Implements hook_preprocess_user__group_header().
+ */
+function ventuno_preprocess_user__group_header(&$variables) {
+  // Create customizable 'member for' field.
+  // It creates a timespan without label and with lower granularity.
+  $variables['member_for'] = \Drupal::service('date.formatter')->formatTimeDiffSince($variables['user']->getCreatedTime(), ['granularity' => 1]);
+  $variables['full_name'] = $variables['user']->getDisplayName();
+  $variables['field_user_photo_url'] = !empty($variables['content']['field_user_photo'][0]['#item']->entity->uri->value) ?
+    \Drupal::service('file_url_generator')->generateAbsoluteString($variables['content']['field_user_photo'][0]['#item']->entity->uri->value)
+    : '';
+}
