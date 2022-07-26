@@ -198,17 +198,11 @@ class MenuHelper implements MenuHelperInterface {
       InteroperableEuropeCollectionInterface::COLLECTION_ENTITY_ID => 'rdf_entity',
       JoinupCollectionHelper::INTEROPERABILITY_SOLUTIONS_ENTITY_ID => 'node',
     ] as $id => $entity_type_id) {
-      try {
-        $entity = $this->entityTypeManager->getStorage($entity_type_id)->load($id);
+      if ($entity = $this->entityTypeManager->getStorage($entity_type_id)->load($id)) {
         $landing_page_links[] = [
           'label' => $entity->label(),
           'link' => $entity->toUrl(),
         ];
-      }
-      catch (Exception $e) {
-        // The custom pages cannot be loaded. This should not crash the page
-        // since these pages might not exist in projects that reuse the Joinup
-        // open source project.
       }
     }
     return $landing_page_links;
