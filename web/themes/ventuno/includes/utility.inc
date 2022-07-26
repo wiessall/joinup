@@ -163,3 +163,24 @@ function _ventuno_build_permalink(): ?string {
     'absolute' => TRUE,
   ])->toString();
 }
+
+/**
+ * Provides a helper to create suggestions per view mode.
+ *
+ * @param array $suggestions
+ *   Current suggestions, passed by reference.
+ * @param array $variables
+ *   Template variables.
+ *
+ * @see ventuno_theme_suggestions_eif_wrapper_alter()
+ * @see ventuno_theme_suggestions_taxonomy_term_alter()
+ */
+function _ventuno_theme_suggestions_alter(array &$suggestions, array $variables): void {
+  $original_theme_hook = $variables['theme_hook_original'];
+  $view_mode = $variables['elements']['#view_mode'];
+  $suggestions[] = $original_theme_hook . '__' . str_replace('-', '_', $view_mode);
+
+  $entity_type_id = $variables['elements']['#entity_type'];
+  $bundle = $variables['elements']["#{$entity_type_id}"]->bundle();
+  $suggestions[] = $original_theme_hook . '__' . str_replace('-', '_', $bundle) . '__' . str_replace('-', '_', $view_mode);
+}

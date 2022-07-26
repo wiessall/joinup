@@ -84,3 +84,20 @@ function ventuno_theme_suggestions_container_alter(array &$suggestions, array $v
     }
   }
 }
+
+/**
+ * Implements hook_preprocess_HOOK() for html.html.twig.
+ */
+function ventuno_preprocess_html(array &$variables): void {
+  // Licence comparer specific styling.
+  if (\Drupal::routeMatch()->getRouteName() === 'joinup_licence.comparer') {
+    $variables['#attached']['library'][] = 'ventuno/licence-comparer';
+  }
+}
+
+/**
+ * Implements hook_preprocess_container__text_format_filter_help().
+ */
+function ventuno_preprocess_container__text_format_filter_help(array &$variables): void {
+  $variables['attributes']['class'] = ['text-end', 'fs-sm'];
+}
