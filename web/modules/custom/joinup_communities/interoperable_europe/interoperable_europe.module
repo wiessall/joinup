@@ -10,6 +10,7 @@ declare(strict_types = 1);
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\collection\Entity\CollectionInterface;
 use Drupal\interoperable_europe\InteroperableEuropeCollectionInterface;
+use Drupal\interoperable_europe\Plugin\Condition\TemporaryIopCondition;
 use Drupal\joinup_group\Form\JoinGroupFormInterface;
 
 /**
@@ -73,4 +74,13 @@ function interoperable_europe_preprocess_rdf_entity__collection__interoperable_e
   $module_handler = \Drupal::service('module_handler');
   $module_path = $module_handler->getModule('interoperable_europe')->getPath();
   $variables['logo'] = base_path() . $module_path . '/assets/interoperable-europe-logo.svg';
+}
+
+/**
+ * Implements hook_condition_info_alter().
+ */
+function interoperable_europe_condition_info_alter(array &$definitions): void {
+  // Temporary replace the original plugin class to define some exceptions.
+  // @see \Drupal\interoperable_europe\Plugin\Condition\TemporaryIopCondition
+  $definitions['group_context']['class'] = TemporaryIopCondition::class;
 }
