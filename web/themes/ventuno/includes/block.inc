@@ -19,7 +19,10 @@ function ventuno_theme_suggestions_block_alter(array &$suggestions, array $varia
   // Adds a dedicated suggestion for a template rendering the "Read more" extra
   // field block for the 4 different entity bundles shown in the "Explore" block
   // on the homepage.
-  if ($elements['#base_plugin_id'] === 'extra_field_block' && preg_match('/extra_field_block:.*:read_more/', $elements['#plugin_id'])) {
+  if (
+    $elements['#base_plugin_id'] === 'extra_field_block'
+    && preg_match('/extra_field_block:.*:read_more/', $elements['#plugin_id'])
+  ) {
     $suggestions[] = 'block__extra_field_block__read_more';
   }
 }
