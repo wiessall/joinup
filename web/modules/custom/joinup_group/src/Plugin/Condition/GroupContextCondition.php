@@ -163,13 +163,16 @@ class GroupContextCondition extends ConditionPluginBase implements ContainerFact
       return FALSE;
     }
 
-    $group_from_context = $this->groupManager->getGroupFromContext();
-    $limit_to_groups = $this->getConfiguration()['limit_to_groups'];
-    if (!$limit_to_groups) {
-      return (bool) $group_from_context;
+    if (!$group_from_context = $this->groupManager->getGroupFromContext()) {
+      return FALSE;
     }
 
-    return !$group_from_context || in_array($group_from_context->id(), $limit_to_groups);
+    $limit_to_groups = $this->getConfiguration()['limit_to_groups'];
+    if (!$limit_to_groups) {
+      return TRUE;
+    }
+
+    return in_array($group_from_context->id(), $limit_to_groups);
   }
 
   /**
