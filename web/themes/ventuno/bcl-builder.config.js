@@ -286,6 +286,14 @@ module.exports = {
       },
     },
     {
+      entry: path.resolve(outputFolder, "src/scss/form-checkboxes.scss"),
+      dest: path.resolve(outputFolder, "assets/css/form-checkboxes.css"),
+      options: {
+        includePaths,
+        sourceMap: "file",
+      },
+    },
+    {
       entry: path.resolve(outputFolder, "src/scss/forms.scss"),
       dest: path.resolve(outputFolder, "assets/css/forms.min.css"),
       options: {
