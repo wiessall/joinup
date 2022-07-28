@@ -64,19 +64,13 @@ class ValidUpdateNameSniff extends ValidFunctionNameSniff {
 
   /**
    * Static cache for latest stable Git tag.
-   *
-   * @var string
    */
   protected static string $latestStableTag;
 
   /**
-   * Static cache for currently checked out Git tag.
-   *
-   * @var string|null
-   *   NULL when not initialized, an empty string when no tag is checked out, or
-   *   a string representing the currently checked out tag.
+   * Whether the current commit and the latest stable tag commit are the same.
    */
-  protected static string $checkedOutTag;
+  protected static bool $exactMatch;
 
   /**
    * Static cache for next version candidates.
@@ -84,6 +78,11 @@ class ValidUpdateNameSniff extends ValidFunctionNameSniff {
    * @var string[]
    */
   protected static array $nextVersionCandidates;
+
+  /**
+   * Static cache of the Git repository instance.
+   */
+  protected static Repository $git;
 
   /**
    * {@inheritdoc}
@@ -124,14 +123,14 @@ class ValidUpdateNameSniff extends ValidFunctionNameSniff {
       $minorVersionTag = "{$majorVersion}.{$minorVersion}";
       $tag = "{$minorVersionTag}.0";
 
-      if (Comparator::lessThan($tag, static::getLatestStableTag())) {
+      if (static::newerThanLatestStableTag($tag)) {
         $error = "Remove %s(). Already applied in %s";
         $data = [$functionName, $minorVersionTag];
       }
-      // If the release tag is currently checked out we are on a production
-      // build and the updates for the current tag are allowed. If not we show
-      // a helpful message suggesting the right identifier to use.
-      elseif (Comparator::notEqualTo($tag, static::getCheckedOutTag())) {
+
+      // The commit is newer than the latest stable release but the update
+      // hasn't been yet applied. Check its identifier.
+      if (!$error && static::$exactMatch === FALSE) {
         $nextVersionCandidates = static::getNextVersionCandidates();
         if (!in_array(substr($zero_padded_name, 0, 5), $nextVersionCandidates)) {
           $digits_count = strlen($name) === 7 ? 5 : 4;
@@ -152,6 +151,38 @@ class ValidUpdateNameSniff extends ValidFunctionNameSniff {
   }
 
   /**
+   * Checks whether the identifier is a tag newer than the latest stable tag.
+   *
+   * @param string $tag
+   *   The update identifier as a tag.
+   *
+   * @return bool
+   *   Whether the current commit is away from the latest stable tag.
+   */
+  protected static function newerThanLatestStableTag(string $tag): bool {
+    if (Comparator::lessThan($tag, static::getLatestStableTag())) {
+      return TRUE;
+    }
+    if (Comparator::greaterThan($tag, static::getLatestStableTag())) {
+      return FALSE;
+    }
+
+    if (!isset(static::$exactMatch)) {
+      try {
+        static::git()->run('describe', ['--tags', '--exact-match']);
+        // We're on the latest stable tag commit.
+        static::$exactMatch = TRUE;
+      }
+      catch (ProcessException $exception) {
+        // We're one or many commits away from the latest stable tag.
+        static::$exactMatch = FALSE;
+      }
+    }
+
+    return !static::$exactMatch;
+  }
+
+  /**
    * Returns the latest semver valid and stable Git tag.
    *
    * @return string
@@ -160,8 +191,7 @@ class ValidUpdateNameSniff extends ValidFunctionNameSniff {
    */
   protected static function getLatestStableTag(): string {
     if (!isset(static::$latestStableTag)) {
-      $repository = new Repository(getcwd());
-      $tagsString = trim($repository->run('tag', ['--sort=creatordate']));
+      $tagsString = trim(static::git()->run('tag', ['--sort=creatordate']));
       $tags = array_reverse(preg_split('/\s/', $tagsString));
       foreach ($tags as $tag) {
         // Only support stable release tags. The regexp is borrowed and adapted
@@ -178,31 +208,7 @@ class ValidUpdateNameSniff extends ValidFunctionNameSniff {
   }
 
   /**
-   * Returns the currently checked out Git tag.
-   *
-   * @return string
-   *   The currently checked out Git tag with the potential leading 'v' stripped
-   *   out. If no tag is currently checked out an empty string is returned.
-   */
-  protected static function getCheckedOutTag(): string {
-    if (!isset(static::$checkedOutTag)) {
-      $repository = new Repository(getcwd());
-      try {
-        $tag = trim($repository->run('describe', ['--tags', '--exact-match']));
-        // An exact match was found.
-        static::$checkedOutTag = ltrim($tag, 'v');
-      }
-      catch (ProcessException $e) {
-        // There is no exact match.
-        static::$checkedOutTag = '';
-      }
-    }
-
-    return static::$checkedOutTag;
-  }
-
-  /**
-   * Returns a list of possible next version.
+   * Returns a list of possible next versions.
    *
    * @return array
    *   A two elements array.
@@ -231,6 +237,19 @@ class ValidUpdateNameSniff extends ValidFunctionNameSniff {
       static::$enabledExtensions = array_keys(Yaml::decode(file_get_contents(getcwd() . '/config/sync/core.extension.yml'))['module']);
     }
     return static::$enabledExtensions;
+  }
+
+  /**
+   * Returns the Git repository instance.
+   *
+   * @return \Gitonomy\Git\Repository
+   *   The Git repository instance.
+   */
+  protected static function git(): Repository {
+    if (!isset(static::$git)) {
+      static::$git = new Repository(getcwd());
+    }
+    return static::$git;
   }
 
 }
