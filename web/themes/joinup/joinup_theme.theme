@@ -1885,16 +1885,19 @@ function joinup_theme_preprocess_rdf_entity__solution__view_mode_search_list_ite
       'field' => 'eif_principle',
       'label' => 'Underlying principle',
       'class' => 'underlying-principles',
+      'weight' => 0,
     ],
     'layer' => [
       'field' => 'eif_layer',
       'label' => 'Interoperability layer',
       'class' => 'interoperability-layer',
+      'weight' => 1,
     ],
     'model' => [
       'field' => 'eif_model',
       'label' => 'Conceptual model',
       'class' => 'conceptual-model',
+      'weight' => 2,
     ],
   ];
 
@@ -1905,7 +1908,7 @@ function joinup_theme_preprocess_rdf_entity__solution__view_mode_search_list_ite
     if ($terms) {
       $category_lists[$key] = [
         'title' => $key_data['label'],
-        'weight' => 3,
+        'weight' => $key_data['weight'],
         'class' => 'eif-tile__line--' . $key_data['class'],
       ];
       $category_lists[$key]['items'] = [];

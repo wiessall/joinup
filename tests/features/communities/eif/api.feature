@@ -21,6 +21,7 @@ Feature:
     And there should be an EIF perspective associated with the "EIF only type" solution
 
     When I go to the EIF perspective page of the "EIF solution" solution
+    Then I break
     Then I should see the heading "EIF solution"
     And I should see the heading "General information"
 
