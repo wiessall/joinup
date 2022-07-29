@@ -4,6 +4,8 @@ declare(strict_types = 1);
 
 namespace Drupal\joinup_group\Controller;
 
+use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\og\OgAccessInterface;
@@ -75,6 +77,22 @@ class GroupMembersController extends ControllerBase {
     $view = $show_admin_view ? 'og_members_overview' : 'members_overview';
     $arguments = [$group->getEntityTypeId(), $group->id()];
     return Views::getView($view)->executeDisplay('default', $arguments);
+  }
+
+  /**
+   * Access check for the group members page.
+   *
+   * @return \Drupal\Core\Access\AccessResultInterface
+   *   The access result object.
+   */
+  public function access(): AccessResultInterface {
+    $user = $this->currentUser();
+
+    // Check if user is authenticated in order to access the group members.
+    if ($user->isAuthenticated()) {
+      return AccessResult::allowed();
+    }
+    return AccessResult::forbidden();
   }
 
 }
