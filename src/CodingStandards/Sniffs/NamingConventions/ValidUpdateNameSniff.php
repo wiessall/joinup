@@ -12,46 +12,50 @@ use Gitonomy\Git\Repository;
 use PHP_CodeSniffer\Files\File;
 
 /**
- * Checks the naming of (post)update functions.
+ * Checks the naming of (post)update/deploy functions.
  *
- * Joinup offers only _contiguous upgrades_. For instance, if you project is
+ * Joinup offers only _contiguous upgrades_. For instance, if your project is
  * currently on Joinup `v1.39.2`, and the latest stable version is `v1.42.0`,
  * then you cannot upgrade directly to the latest version. Instead, you should
  * upgrade first to `v1.40.0`, second to `v1.40.1` (if exists) and, finally, to
  * `v1.42.0`.
  *
- * The Joinup update, post-update and deploy scripts naming is following this
+ * The Joinup update, post-update and deploy scripts namings are following this
  * pattern:
  * @code
- * function mymodule_update_0106100() {...}
+ * function mymodule_update_106100() {...}
  * @endcode
  * or
  * @code
- * function mymodule_post_update_0207503() {...}
+ * function mymodule_post_update_207503() {...}
  * @endcode
  * or
  * @code
- * function mymodule_deploy_0208101() {...}
+ * function mymodule_deploy_1008101() {...}
  * @endcode
- * The (post)updated identifier (the numeric part consists in seven digits with
- * the following meaning:
- * - The first two digits are the Joinup major version.
- * - The following three digits are the Joinup minor version.
+ * The (post)update/deploy identifier (the numeric part consists in six or seven
+ * digits with the following meaning:
  * - The last two digits are an integer that sets the weight within updates or
  *   post updates from the same extension (module or profile). `00` is the first
  *   (post)update that applies.
+ * - The middle three digits are the Joinup minor version.
+ * - The first one or two digits are the Joinup major version.
  *
  * Given the above example:
  *
- * `function mymodule_update_0106100() {...}`: Was applied in Joinup `v1.61.x`
- * as the first update of the `mymodule` module (`01` major version, `061` minor
- * version, `00` update weight within the module).
- * `function mymodule_post_update_0207503() {...}`: Was applied in Joinup
- * `v2.75.x` as the fourth post update of the `mymodule` module (`02` major
- * version, `075` minor version, `03` update weight within the module).
+ * - `function mymodule_update_106100() {...}`: Was applied in Joinup `v1.61.x`
+ *   as the first update of the `mymodule` module (`1` major version, `061`
+ *   minor version, `00` update weight within the module).
+ * - `function mymodule_post_update_207503() {...}`: Was applied in Joinup
+ *   `v2.75.x` as the fourth post update of the `mymodule` module (`2` major
+ *   version, `075` minor version, `03` post-update weight within the module).
+ * - `function mymodule_deploy_1008101() {...}`: Was applied in Joinup
+ *   `v10.81.x` as the second deploy of the `mymodule` module (`10` major
+ *   version, `081` minor version, `01` deploy weight within the module).
  *
- * This sniff checks if the (post)update is correctly formed and if the version
- * represented by the (post)update identifier was not already released.
+ * This sniff checks if the (post)update or deploy is correctly formed and if
+ * the version represented by the (post)update/deploy identifier was not already
+ * released.
  */
 class ValidUpdateNameSniff extends ValidFunctionNameSniff {
 
@@ -70,7 +74,7 @@ class ValidUpdateNameSniff extends ValidFunctionNameSniff {
   /**
    * Whether the current commit and the latest stable tag commit are the same.
    */
-  protected static bool $exactMatch;
+  protected static bool $exactMatch = FALSE;
 
   /**
    * Static cache for next version candidates.
@@ -105,7 +109,7 @@ class ValidUpdateNameSniff extends ValidFunctionNameSniff {
       }
     }
 
-    // Not a (post)update.
+    // Not a (post)update or deploy.
     if (!$match) {
       return;
     }
@@ -119,17 +123,14 @@ class ValidUpdateNameSniff extends ValidFunctionNameSniff {
       $zero_padded_name = sprintf('%07d', (int) $name);
       $majorVersion = (int) substr($zero_padded_name, 0, 2);
       $minorVersion = (int) substr($zero_padded_name, 2, 3);
-
       $minorVersionTag = "{$majorVersion}.{$minorVersion}";
-      $tag = "{$minorVersionTag}.0";
 
-      if (static::newerThanLatestStableTag($tag)) {
+      if (static::isAlreadyApplied($minorVersionTag)) {
         $error = "Remove %s(). Already applied in %s";
         $data = [$functionName, $minorVersionTag];
       }
 
-      // The commit is newer than the latest stable release but the update
-      // hasn't been yet applied. Check its identifier.
+      // This update hasn't been yet applied. Check its identifier.
       if (!$error && static::$exactMatch === FALSE) {
         $nextVersionCandidates = static::getNextVersionCandidates();
         if (!in_array(substr($zero_padded_name, 0, 5), $nextVersionCandidates)) {
@@ -151,15 +152,17 @@ class ValidUpdateNameSniff extends ValidFunctionNameSniff {
   }
 
   /**
-   * Checks whether the identifier is a tag newer than the latest stable tag.
+   * Checks whether the (post)update/deploy has been already applied.
    *
-   * @param string $tag
+   * @param string $minorVersionTag
    *   The update identifier as a tag.
    *
    * @return bool
-   *   Whether the current commit is away from the latest stable tag.
+   *   Whether the (post)update/deploy has been already applied.
    */
-  protected static function newerThanLatestStableTag(string $tag): bool {
+  protected static function isAlreadyApplied(string $minorVersionTag): bool {
+    $tag = "$minorVersionTag.0";
+
     if (Comparator::lessThan($tag, static::getLatestStableTag())) {
       return TRUE;
     }
@@ -175,7 +178,6 @@ class ValidUpdateNameSniff extends ValidFunctionNameSniff {
       }
       catch (ProcessException $exception) {
         // We're one or many commits away from the latest stable tag.
-        static::$exactMatch = FALSE;
       }
     }
 
