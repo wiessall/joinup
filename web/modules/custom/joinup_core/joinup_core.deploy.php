@@ -17,7 +17,7 @@ declare(strict_types = 1);
 /**
  * Import new landing page.
  */
-function joinup_core_deploy_108300(): void {
+function joinup_core_deploy_108400(): void {
   /** @var \Drupal\Core\Extension\ModuleInstallerInterface $module_installer */
   $module_installer = \Drupal::service('module_installer');
   /** @var \Drupal\Core\Entity\EntityRepositoryInterface $entity_repository */
