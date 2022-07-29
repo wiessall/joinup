@@ -7,6 +7,7 @@ namespace Drupal\eif\Plugin\Block;
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Link;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -62,20 +63,33 @@ class EifFilterBlock extends BlockBase implements ContainerFactoryPluginInterfac
    */
   public function build(): array {
     $tree = [];
+
     $term_storage = $this->entityTypeManager->getStorage('taxonomy_term');
 
     $vocabularies = [
-      'eif_principle' => $this->t('Underlying principles'),
-      'eif_interoperability_layer' => $this->t('Interoperability layer'),
-      'eif_conceptual_model' => $this->t('Conceptual model'),
-      'eif_solution_type' => $this->t('Solution category'),
+      'eif_principle' => [
+        'name' => $this->t('Underlying principles'),
+        'nid'  => 703017,
+      ],
+      'eif_interoperability_layer' => [
+        'name' => $this->t('Interoperability layer'),
+        'nid'  => 703018,
+      ],
+      'eif_conceptual_model' => [
+        'name' => $this->t('Conceptual model'),
+        'nid'  => 703019,
+      ],
+      'eif_solution_type' => [
+        'name' => $this->t('Solution category'),
+        'nid'  => NULL,
+      ],
     ];
-
-    foreach ($vocabularies as $machine_name => $name) {
+    foreach ($vocabularies as $machine_name => $vocabulary) {
       $principle_terms = $term_storage->loadTree($machine_name);
-      $id = htmlentities(str_replace([' ', '/', ':'], ['-', '-', ''], strtolower((string) $name)));
+      $id = htmlentities(str_replace([' ', '/', ':'], ['-', '-', ''], strtolower((string) $vocabulary['name'])));
+
       foreach ($principle_terms as $term) {
-        $tree = $this->getTree($id, (string) $name, $tree, $term, $term_storage);
+        $tree = $this->getTree($id, (string) $vocabulary['name'], $tree, $term, $term_storage, $vocabulary['nid']);
       }
     }
 
@@ -104,12 +118,14 @@ class EifFilterBlock extends BlockBase implements ContainerFactoryPluginInterfac
    *   Taxonomy term.
    * @param \Drupal\Core\Entity\EntityStorageInterface $storage
    *   The entity storage.
+   * @param int|null $nid
+   *   EIF Pillars node id.
    *
    * @return array
    *   Added items for filters.
    */
-  public function getTree(string $id, string $name, array $tree, \stdClass $term, EntityStorageInterface $storage): array {
-    $tree[$id]['title'] = $name;
+  public function getTree(string $id, string $name, array $tree, \stdClass $term, EntityStorageInterface $storage, ?int $nid): array {
+    $tree[$id]['title'] = $nid ? Link::createFromRoute($name, 'entity.node.canonical', ['node' => $nid]) : $name;
     $tree[$id]['class'] = 'eif-filter--' . $id;
 
     // @todo Use an alternative title instead of dynamically splitting it.

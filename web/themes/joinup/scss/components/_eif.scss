@@ -506,6 +506,7 @@
     min-height: 0;
     flex-direction: column!important;
     @include breakpoint(tablet) {
+      flex: 0 0 60%;
       flex-direction: row!important;
     }
     .listing__inner-tile--wider {
