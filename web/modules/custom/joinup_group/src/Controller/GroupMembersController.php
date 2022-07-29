@@ -8,6 +8,7 @@ use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\og\OgAccessInterface;
 use Drupal\views\Views;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -82,10 +83,13 @@ class GroupMembersController extends ControllerBase {
   /**
    * Access check for the group members page.
    *
+   * @param \Drupal\rdf_entity\RdfInterface $rdf_entity
+   *   The collection or solution rdf_entity.
+   *
    * @return \Drupal\Core\Access\AccessResultInterface
    *   The access result object.
    */
-  public function access(): AccessResultInterface {
+  public function access(GroupInterface $rdf_entity): AccessResultInterface {
     $user = $this->currentUser();
 
     // Check if user is authenticated in order to access the group members.
