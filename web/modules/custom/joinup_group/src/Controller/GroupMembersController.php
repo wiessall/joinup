@@ -83,8 +83,8 @@ class GroupMembersController extends ControllerBase {
   /**
    * Access check for the group members page.
    *
-   * @param \Drupal\rdf_entity\RdfInterface $rdf_entity
-   *   The collection or solution rdf_entity.
+   * @param \Drupal\joinup_group\Entity\GroupInterface $rdf_entity
+   *   The group for which the access to the members page is being determined.
    *
    * @return \Drupal\Core\Access\AccessResultInterface
    *   The access result object.
