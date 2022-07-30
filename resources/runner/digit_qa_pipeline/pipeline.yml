@@ -36,10 +36,6 @@
     recursive: true
   - task: run
     command: joinup:environment
-  - task: run
-    command: drupal:settings
-    arguments:
-      - behat-clone
 
 # See \EcEuropa\Toolkit\TaskRunner\Commands\TestsCommands::toolkitPhpUnit()
 phpunit:
