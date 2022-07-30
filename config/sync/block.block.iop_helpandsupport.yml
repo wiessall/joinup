@@ -1,0 +1,25 @@
+uuid: 95fe34dc-62f5-43ea-b7b7-21e49e1f7ce6
+langcode: en
+status: true
+dependencies:
+  config:
+    - system.menu.footer-help-and-support
+  module:
+    - system
+  theme:
+    - iop
+id: iop_helpandsupport
+theme: iop
+region: footer
+weight: -23
+provider: null
+plugin: 'system_menu_block:footer-help-and-support'
+settings:
+  id: 'system_menu_block:footer-help-and-support'
+  label: 'Help and support'
+  label_display: visible
+  provider: system
+  level: 1
+  depth: 0
+  expand_all_items: false
+visibility: {  }
