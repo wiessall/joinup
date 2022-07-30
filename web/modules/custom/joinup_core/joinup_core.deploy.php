@@ -19,7 +19,7 @@ use Drupal\Core\Link;
 /**
  * Validate contact info email.
  */
-function joinup_core_deploy_108300(array &$sandbox): string {
+function joinup_core_deploy_108400(array &$sandbox): string {
   if (empty($sandbox['rids'])) {
     $sandbox['rids'] = \Drupal::entityQuery('rdf_entity')->condition('rid', 'contact_information')->execute();
     $sandbox['count'] = 0;
