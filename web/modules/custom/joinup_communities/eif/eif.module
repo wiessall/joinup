@@ -41,6 +41,12 @@ function eif_theme(array $existing, string $type, string $theme, string $path): 
         'items' => NULL,
       ],
     ],
+    'eif_description' => [
+      'variables' => [
+        'title' => NULL,
+        'description' => NULL,
+      ],
+    ],
   ];
 }
 
