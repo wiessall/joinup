@@ -97,6 +97,12 @@ class EifFilterBlock extends BlockBase implements ContainerFactoryPluginInterfac
       return [];
     }
 
+    $build['description'] = [
+      '#theme' => 'eif_description',
+      '#title' => $this->t('Select an option to filter the solution results'),
+      '#description' => $this->t('The EIF assistant helps you filter solutions based on the EIF perspectives. Hover the options to find our more and refine results matching best to your criteria.'),
+    ];
+
     $build['tree_filters'] = [
       '#theme' => 'eif_filter_list',
       '#items' => $tree,
