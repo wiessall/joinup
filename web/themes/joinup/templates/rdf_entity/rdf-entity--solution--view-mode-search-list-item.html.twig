@@ -22,7 +22,9 @@
       <div {{ attributes.addClass(classes) }} data-eif-category="{{ eif_categories }}">
         <div class="listing__card listing__card--inline-container mdl-card">
           <div class="listing__inner-tile listing__inner-tile--wider">
-            <span>{{ 'Attributes matching the European Interoperability Framework'|t }}</span>
+            <div class="listing__field">
+              <span>{{ 'Attributes matching the European Interoperability Framework'|t }}</span>
+            </div>
             {% for category_list in category_lists  %}
               <div class="listing__field">
                 <div class="eif-tile__line {{ category_list.class }}">
