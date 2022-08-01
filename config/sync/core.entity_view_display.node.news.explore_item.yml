@@ -171,6 +171,7 @@ content:
     weight: 2
     region: content
 hidden:
+  featured: true
   field_attachment: true
   field_comments: true
   field_keywords: true
@@ -186,6 +187,8 @@ hidden:
   langcode: true
   links: true
   og_audience: true
+  pinned_in: true
   report: true
   search_api_excerpt: true
   share_link: true
+  visit_count: true
