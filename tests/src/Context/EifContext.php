@@ -6,16 +6,24 @@ namespace Drupal\joinup\Context;
 
 use Behat\Behat\Hook\Scope\AfterScenarioScope;
 use Behat\Behat\Hook\Scope\BeforeScenarioScope;
+use Behat\Gherkin\Node\TableNode;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\Url;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\eif\EifInterface;
+use Drupal\eif\EifWrapperInterface;
+use Drupal\eif\Entity\EifWrapper;
+use Drupal\joinup\Traits\EntityReferenceTrait;
+use Drupal\joinup\Traits\RdfEntityTrait;
 use Drupal\joinup\Traits\SearchTrait;
+use Drupal\joinup\Traits\TestingEntitiesTrait;
+use Drupal\joinup\Traits\UtilityTrait;
 use Drupal\menu_link_content\Entity\MenuLinkContent;
 use Drupal\node\Entity\Node;
 use Drupal\og\OgGroupAudienceHelperInterface;
 use Drupal\paragraphs\Entity\Paragraph;
 use Drupal\rdf_entity\Entity\Rdf;
+use Drupal\rdf_meta_entity\Entity\RdfMetaEntity;
 use Drupal\sparql_entity_storage\UriEncoder;
 use Drupal\taxonomy\Entity\Term;
 
@@ -24,8 +32,12 @@ use Drupal\taxonomy\Entity\Term;
  */
 class EifContext extends RawDrupalContext {
 
+  use EntityReferenceTrait;
+  use RdfEntityTrait;
   use SearchTrait;
   use StringTranslationTrait;
+  use TestingEntitiesTrait;
+  use UtilityTrait;
 
   /**
    * Creates the standard 'EIF' solution and a random parent collection.
@@ -87,6 +99,20 @@ class EifContext extends RawDrupalContext {
         'type' => 'simple_paragraph',
         'field_body' => [
           'value' => 'Currently available supporting solutions that can be used as added components that help build interoperability solutions.',
+          'format' => 'content_editor',
+        ],
+      ]),
+    ])->save();
+
+    Node::create([
+      'type' => 'custom_page',
+      'nid' => EifInterface::EIF_ONLINE_ASSISTANT,
+      'title' => 'Online Assistant',
+      'og_audience' => EifInterface::EIF_ID,
+      'field_paragraphs_body' => Paragraph::create([
+        'type' => 'simple_paragraph',
+        'field_body' => [
+          'value' => '',
           'format' => 'content_editor',
         ],
       ]),
@@ -155,6 +181,145 @@ class EifContext extends RawDrupalContext {
 
     Term::load('http://example.com/term/1')->delete();
     $this->enableCommitOnUpdate();
+  }
+
+  /**
+   * Generates an EIF perspective entity for a solution.
+   *
+   * @param \Behat\Gherkin\Node\TableNode $table_data
+   *   The table data.
+   * @param string $solution
+   *   The solution label.
+   *
+   * @Given the following EIF perspective data for the :solution solution:
+   */
+  public function givenEifPerspectiveOfSolution(TableNode $table_data, string $solution): void {
+    $solution = $this->getRdfEntityByLabel($solution, 'solution');
+    $qualifiers = [];
+    $eif_perspective_fields = [];
+    foreach ($table_data->getRows() as $row) {
+      switch ($row[0]) {
+        case 'Description':
+          $eif_perspective_fields['field_eif_description'] = trim($row[1]);
+          break;
+
+        case 'Solution type':
+          $eif_perspective_fields['field_eif_solution_type'] = $this->explodeCommaSeparatedStepArgument($row[1]);
+          break;
+
+        case 'Layer':
+        case 'Model':
+        case 'Principle':
+          $eif_perspective_fields['eif_' . strtolower($row[0])] = $this->explodeCommaSeparatedStepArgument($row[1]);
+          break;
+
+        case 'Recommendation':
+          $bundle = strtolower($row[0]);
+          // The following will split a phrase in the format of:
+          // name: Some title without comma, description: Some description.
+          //
+          // The part from the comma symbol on (the description) is optional.
+          preg_match_all('/name:(\s*?)(?<name>[^,]*)(?:,(\s*?)description:(\s*?)(?<description>.*$))?/', $row[1], $matches);
+          if (isset($matches['name'][0])) {
+            $values = ['term' => trim($matches['name'][0])];
+            if (isset($matches['description'][0])) {
+              $values['description'] = trim($matches['description'][0]);
+            }
+
+            $qualifiers['eif_recommendation'][] = $this->createEifWrapper($bundle, $values);
+          }
+          break;
+      }
+    }
+
+    $eif_perspective_fields = $this->convertEntityReferencesValues('rdf_meta_entity', 'eif_perspective', $eif_perspective_fields);
+    $eif_perspective = RdfMetaEntity::create([
+      'type' => 'eif_perspective',
+      'target' => $solution,
+    ] + $eif_perspective_fields + $qualifiers);
+    $eif_perspective->save();
+    $this->entities['rdf_meta_entity'][$eif_perspective->id()] = $eif_perspective;
+  }
+
+  /**
+   * Creates an EIF wrapper entity and returns it. Does not save the entity.
+   *
+   * @param string $bundle
+   *   The bundle of the EIF wrapper.
+   * @param array $values
+   *   An array of values of the EIF wrapper.
+   *
+   * @return \Drupal\eif\EifWrapperInterface
+   *   The created EIF wrapper.
+   */
+  protected function createEifWrapper(string $bundle, array $values): EifWrapperInterface {
+    $values = $this->convertEntityReferencesValues('eif_wrapper', $bundle, $values);
+    $values['type'] = $bundle;
+    $eif_wrapper = EifWrapper::create($values);
+    $eif_wrapper->save();
+    $this->entities['eif_wrapper'][$eif_wrapper->id()] = $eif_wrapper;
+    return $eif_wrapper;
+  }
+
+  /**
+   * Navigates to the EIF perspective page of the given solution.
+   *
+   * @param string $solution
+   *   The solution label.
+   *
+   * @Given I go to the EIF perspective page of the :solution solution
+   */
+  public function goToEifPerspectiveOfSolution(string $solution): void {
+    $solution = $this->getRdfEntityByLabel($solution, 'solution');
+    $url = Url::fromRoute('entity.rdf_entity.eif_perspective', [
+      'rdf_entity' => $solution->id(),
+    ]);
+    $this->visitPath($url->getInternalPath());
+  }
+
+  /**
+   * Navigates to the EIF perspective edit form of the given solution.
+   *
+   * @param string $solution
+   *   The solution label.
+   *
+   * @Given I go to the EIF perspective edit form of the :solution solution
+   */
+  public function goToEifEditFormOfSolution(string $solution): void {
+    $solution = $this->getRdfEntityByLabel($solution, 'solution');
+    $url = Url::fromRoute('eif.eif_perspective_form', [
+      'rdf_entity' => $solution->id(),
+    ]);
+    $this->visitPath($url->getInternalPath());
+  }
+
+  /**
+   * Asserts that there is an EIF perspective entity associated to the solution.
+   *
+   * @param string $solution
+   *   The solution label.
+   *
+   * @Given there should be an EIF perspective associated with the :solution solution
+   */
+  public function assertSolutionWithPerspective(string $solution): void {
+    $solution = $this->getRdfEntityByLabel($solution, 'solution');
+    if (empty(\Drupal::getContainer()->get('rdf_meta_entity.repository')->getMetaEntityForEntity($solution, 'eif_perspective'))) {
+      throw new \Exception('No perspective was found for the solution');
+    }
+  }
+
+  /**
+   * Deletes the EIF perspective of a solution.
+   *
+   * @param string $solution_label
+   *   The solution label.
+   *
+   * @Given I delete the EIF perspective of the :solution_label solution
+   */
+  public function deletePerspectiveOfSolution(string $solution_label): void {
+    $solution = $this->getRdfEntityByLabel($solution_label, 'solution');
+    $eif_perspective = $solution->get('eif_perspective')->entity;
+    $eif_perspective->delete();
   }
 
 }

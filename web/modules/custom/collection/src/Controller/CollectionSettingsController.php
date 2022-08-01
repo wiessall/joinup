@@ -90,7 +90,7 @@ class CollectionSettingsController extends ControllerBase {
   }
 
   /**
-   * Povides an access controller for the 'collection.settings_form' route.
+   * Provides an access controller for the 'collection.settings_form' route.
    *
    * @param \Drupal\collection\Entity\CollectionInterface $rdf_entity
    *   The collection.

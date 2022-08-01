@@ -3,9 +3,9 @@ langcode: en
 status: true
 dependencies:
   module:
-    - ctools
     - joinup_core
     - joinup_group
+    - rdf_entity
   theme:
     - joinup_theme
 _core:
