@@ -17,7 +17,6 @@ Feature:
       | European Commission |
       | Follow us           |
       | Help and support    |
-      | Social media        |
       | Support             |
 
     When I click "Add link" in the "About us" row
@@ -53,4 +52,3 @@ Feature:
       | European Commission |
       | Follow us           |
       | Help and support    |
-      | Social media        |
