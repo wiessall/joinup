@@ -1954,10 +1954,19 @@ class JoinupContext extends RawDrupalContext {
 
     $result = $this->getSession()->getPage()->waitFor(5, function () {
       // Retrieve again a fresh copy of the page element at each cycle.
-      $modal = $this->getSession()->getPage()->find('css', '#drupal-modal, #drupal-bootstrap4-modal');
+      $modal = $this->getSession()->getPage()->find('css', '#drupal-modal');
 
       return $modal && $modal->isVisible();
     });
+
+    if (!$result) {
+      $result = $this->getSession()->getPage()->waitFor(5, function () {
+        // Retrieve again a fresh copy of the page element at each cycle.
+        $modal = $this->getSession()->getPage()->find('css', '#drupal-bootstrap4-modal');
+
+        return $modal && $modal->isVisible();
+      });
+    }
 
     if (!$result) {
       throw new \Exception('The modal did not open.');
