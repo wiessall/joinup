@@ -75,3 +75,24 @@ function ventuno_form_views_exposed_form_alter(array &$form, FormStateInterface 
 function ventuno_preprocess_form_element(array &$variables): void {
   $variables['#attached']['library'][] = 'ventuno/forms';
 }
+
+/**
+ * Implements hook_preprocess_form_element_label().
+ */
+function ventuno_preprocess_form_element_label(array &$variables): void {
+  $variables['#attached']['library'][] = 'ventuno/form-checkboxes';
+}
+
+/**
+ * Implements hook_form_alter().
+ */
+function ventuno_form_alter(array &$form, FormStateInterface $form_state, string $form_id): void {
+  // Add classes to the delete action in any kind of form.
+  if (isset($form['actions']['delete'])) {
+    $form['actions']['delete']['#attributes']['class'] = [
+      'btn',
+      'btn-md',
+      'btn-outline-danger',
+    ];
+  }
+}

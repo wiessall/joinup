@@ -8,7 +8,6 @@
 declare(strict_types = 1);
 
 use Drupal\Core\Site\Settings;
-use Drupal\sparql_entity_storage\UriEncoder;
 use Drupal\user\Entity\User;
 
 /**
@@ -96,7 +95,7 @@ function joinup_core_requirements($phase): array {
 /**
  * Fix group OG menu links.
  */
-function joinup_core_update_108300(?array &$sandbox = NULL): string {
+function joinup_core_update_108400(?array &$sandbox = NULL): string {
   $menu_link_content_storage = \Drupal::entityTypeManager()->getStorage('menu_link_content');
   $uri = [
     'Overview' => 'entity:rdf_entity/%s',

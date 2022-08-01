@@ -24,6 +24,7 @@ components.js:
     assets/js/oe-bcl-joinup.bundle.min.js: { minified: true, attributes: { defer: true } }
   dependencies:
     - core/drupal
+    - ventuno/site-alerts-messages
 
 theme:
   version: VERSION
@@ -122,6 +123,11 @@ footer:
   css:
     theme:
       assets/css/footer.min.css: { minified: true }
+
+form-checkboxes:
+  css:
+    theme:
+      assets/css/form-checkboxes.css: {}
 
 forms:
   css:
