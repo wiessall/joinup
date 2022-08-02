@@ -7,7 +7,6 @@ namespace Drupal\joinup_group\Controller;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Controller\ControllerBase;
-use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\og\OgAccessInterface;
@@ -33,26 +32,16 @@ class GroupMembersController extends ControllerBase {
    *
    * @var \Drupal\og\OgAccessInterface
    */
-  protected $ogAccess;
-
-  /**
-   * Entity Type Manager service.
-   *
-   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
-   */
-  protected $entityTypeManager;
+  protected OgAccessInterface $ogAccess;
 
   /**
    * Constructs a new OgAdminMembersController object.
    *
    * @param \Drupal\og\OgAccessInterface $ogAccess
    *   The OG access service.
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
-   *   Entity Type Manager service.
    */
-  public function __construct(OgAccessInterface $ogAccess, EntityTypeManagerInterface $entityTypeManager) {
+  public function __construct(OgAccessInterface $ogAccess) {
     $this->ogAccess = $ogAccess;
-    $this->entityTypeManager = $entityTypeManager;
   }
 
   /**
@@ -60,8 +49,7 @@ class GroupMembersController extends ControllerBase {
    */
   public static function create(ContainerInterface $container) {
     return new static(
-      $container->get('og.access'),
-      $container->get('entity_type.manager')
+      $container->get('og.access')
     );
   }
 
@@ -103,7 +91,7 @@ class GroupMembersController extends ControllerBase {
    */
   public function access(GroupInterface $rdf_entity): AccessResultInterface {
     $user = $this->currentUser();
-    $access = $this->entityTypeManager->getAccessControlHandler('rdf_entity')->access($rdf_entity, 'view');
+    $access = $this->entityTypeManager()->getAccessControlHandler('rdf_entity')->access($rdf_entity, 'view');
     return AccessResult::allowedIf($access && $user->hasPermission('access user profiles'));
   }
 
