@@ -52,18 +52,8 @@ Feature: Solution membership overview
       | Growing zone | Pocahontas Mathieu  |             |         |
       | Growing zone | Callista Wronski    |             |         |
 
-    # The membership overview should not be accessible for anonymous users for solutions.
+    # The membership overview should be accessible for anonymous users.
     When I am not logged in
-    And I go to the "Growing zone" solution
-    Then I should not see the link "Members" in the "Left sidebar"
-
-    # The membership overview should not be accessible for anonymous users for collections.
-    When I am not logged in
-    And I go to the "Growing collection" collection
-    Then I should not see the link "Members" in the "Left sidebar"
-
-    # For not anonymous user we have an access to members.
-    When I am logged in as "Callista Wronski"
     And I go to the "Growing zone" solution
     Then I should see the link "Members" in the "Left sidebar"
 
