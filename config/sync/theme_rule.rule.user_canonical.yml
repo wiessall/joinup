@@ -16,3 +16,4 @@ conditions:
     negate: false
     routes:
       - entity.user.canonical
+      - entity.user.edit_form
