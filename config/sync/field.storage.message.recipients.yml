@@ -3,7 +3,6 @@ langcode: en
 status: true
 dependencies:
   module:
-    - dynamic_entity_reference
     - field_permissions
     - message
     - user
@@ -13,12 +12,10 @@ third_party_settings:
 id: message.recipients
 field_name: recipients
 entity_type: message
-type: dynamic_entity_reference
+type: entity_reference
 settings:
-  exclude_entity_types: false
-  entity_type_ids:
-    user: user
-module: dynamic_entity_reference
+  target_type: user
+module: core
 locked: false
 cardinality: -1
 translatable: true
