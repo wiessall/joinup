@@ -47,8 +47,7 @@ class GroupMembersController extends ControllerBase {
    *
    * @param \Drupal\og\OgAccessInterface $ogAccess
    *   The OG access service.
-   *
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
    *   Entity Type Manager service.
    */
   public function __construct(OgAccessInterface $ogAccess, EntityTypeManagerInterface $entityTypeManager) {
