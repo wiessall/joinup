@@ -7,6 +7,7 @@ namespace Drupal\joinup_group\Controller;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Controller\ControllerBase;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\og\OgAccessInterface;
@@ -35,13 +36,24 @@ class GroupMembersController extends ControllerBase {
   protected $ogAccess;
 
   /**
+   * Entity Type Manager service.
+   *
+   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
+   */
+  protected $entityTypeManager;
+
+  /**
    * Constructs a new OgAdminMembersController object.
    *
    * @param \Drupal\og\OgAccessInterface $ogAccess
    *   The OG access service.
+   *
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface
+   *   Entity Type Manager service.
    */
-  public function __construct(OgAccessInterface $ogAccess) {
+  public function __construct(OgAccessInterface $ogAccess, EntityTypeManagerInterface $entityTypeManager) {
     $this->ogAccess = $ogAccess;
+    $this->entityTypeManager = $entityTypeManager;
   }
 
   /**
@@ -49,7 +61,8 @@ class GroupMembersController extends ControllerBase {
    */
   public static function create(ContainerInterface $container) {
     return new static(
-      $container->get('og.access')
+      $container->get('og.access'),
+      $container->get('entity_type.manager')
     );
   }
 
@@ -91,12 +104,8 @@ class GroupMembersController extends ControllerBase {
    */
   public function access(GroupInterface $rdf_entity): AccessResultInterface {
     $user = $this->currentUser();
-
-    // Check if user is authenticated in order to access the group members.
-    if ($user->isAuthenticated()) {
-      return AccessResult::allowed();
-    }
-    return AccessResult::forbidden();
+    $access = $this->entityTypeManager->getAccessControlHandler('rdf_entity')->access($rdf_entity, 'view');
+    return AccessResult::allowedIf($access && $user->hasPermission('access user profiles'));
   }
 
 }
