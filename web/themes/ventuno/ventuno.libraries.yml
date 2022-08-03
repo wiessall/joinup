@@ -102,7 +102,7 @@ forms:
 
 glide:
   js:
-    assets/js/glide.js: { minified: false }
+    assets/js/glide.min.js: { minified: false }
   css:
     theme:
       assets/css/glide.core.min.css: { minified: true }
