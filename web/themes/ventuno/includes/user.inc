@@ -29,7 +29,7 @@ function ventuno_theme_suggestions_user_alter(array &$suggestions, array $variab
 /**
  * Implements hook_preprocess_user__group_header().
  */
-function ventuno_preprocess_user__group_header(&$variables) {
+function ventuno_preprocess_user__group_header(array &$variables): void {
   // Create customizable 'member for' field.
   // It creates a timespan without label and with lower granularity.
   $variables['member_for'] = \Drupal::service('date.formatter')->formatTimeDiffSince($variables['user']->getCreatedTime(), ['granularity' => 1]);
