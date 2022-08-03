@@ -38,3 +38,25 @@ function ventuno_preprocess_user__group_header(array &$variables): void {
     \Drupal::service('file_url_generator')->generateAbsoluteString($variables['content']['field_user_photo'][0]['#item']->entity->uri->value)
     : '';
 }
+
+/**
+ * Implements hook_preprocess_search_api_field__user__field_user_content().
+ */
+function ventuno_preprocess_search_api_field__user__field_user_content(array &$variables): void {
+  // Provides a nicer message when the user hasn't created any content.
+  // The "no_results_found" render array is not there if there are results.
+  if (empty($variables['no_results_found'])) {
+    return;
+  }
+
+  $first_name = $variables['entity']->get('field_user_first_name')->value;
+  if (!empty($first_name)) {
+    $markup = t('@name does not have any content yet.', ['@name' => $first_name]);
+  }
+  else {
+    $markup = t('This user does not have any content yet.');
+  }
+  $variables['no_results_found'] = [
+    '#markup' => $markup,
+  ];
+}
