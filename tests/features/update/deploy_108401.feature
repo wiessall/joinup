@@ -1,5 +1,5 @@
 @group-clone @api
-Feature: Test joinup_core_deploy_108301.
+Feature: Test joinup_core_deploy_108401.
 
   Scenario: Ensure announcements are enable in existing collection.
     When I am logged in as a moderator
