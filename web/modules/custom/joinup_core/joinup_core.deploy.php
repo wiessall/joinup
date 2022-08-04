@@ -39,7 +39,7 @@ function joinup_core_update_108300(): void {
 /**
  * Set announcements_enabled enable in collections.
  */
-function joinup_core_deploy_108301(array &$sandbox): string {
+function joinup_core_deploy_108401(array &$sandbox): string {
   if (empty($sandbox['ids'])) {
     $sandbox['ids'] = \Drupal::entityQuery('meta_entity')->condition('type', 'collection_settings')->execute();
     $sandbox['count'] = 0;
