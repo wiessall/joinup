@@ -1,0 +1,79 @@
+_meta:
+  version: '1.0'
+  entity_type: node
+  uuid: 61e83391-9f96-4c9e-995d-9b22705b9f9f
+  bundle: custom_page
+  default_langcode: en
+  depends:
+    'http://data.europa.eu/w21/8e30f798-ff2b-478b-9c09-5ed5a63b4c8c': rdf_entity
+default:
+  revision_uid:
+    -
+      target_id: 1
+  status:
+    -
+      value: true
+  uid:
+    -
+      target_id: 1
+  title:
+    -
+      value: 'IOP landing page'
+  created:
+    -
+      value: 1658758452
+  promote:
+    -
+      value: false
+  sticky:
+    -
+      value: false
+  revision_translation_affected:
+    -
+      value: true
+  report:
+    -
+      uri: 'internal:/contact'
+      title: 'Report abusive content'
+      options:
+        query:
+          category: report
+          uri: /collection/interoperable-europe/iop-landing-page
+          destination: collection/interoperable-europe/iop-landing-page
+  path:
+    -
+      alias: /collection/interoperable-europe/iop-landing-page
+      langcode: en
+      pathauto: 1
+  published_at:
+    -
+      value: 1658758452
+  field_paragraphs_body:
+    -
+      entity:
+        _meta:
+          version: '1.0'
+          entity_type: paragraph
+          uuid: 3a48bd9b-80bf-47c0-8260-c546e072b490
+          bundle: simple_paragraph
+          default_langcode: en
+        default:
+          status:
+            -
+              value: true
+          created:
+            -
+              value: 1658758452
+          behavior_settings:
+            -
+              value: {  }
+          revision_translation_affected:
+            -
+              value: true
+          field_body:
+            -
+              value: "<p>Placeholder</p>\r\n"
+              format: content_editor
+  og_audience:
+    -
+      entity: 'http://data.europa.eu/w21/8e30f798-ff2b-478b-9c09-5ed5a63b4c8c'

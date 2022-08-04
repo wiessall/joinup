@@ -14,6 +14,7 @@ use Behat\Mink\Element\TraversableElement;
 use Behat\Mink\Exception\ElementNotFoundException;
 use Behat\Mink\Exception\ExpectationException;
 use Behat\Mink\Exception\ResponseTextException;
+use Drupal\Component\Serialization\Json;
 use Drupal\Component\Serialization\Yaml;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Site\Settings;
@@ -2499,6 +2500,35 @@ class FeatureContext extends RawDrupalContext implements SnippetAcceptingContext
    */
   public function iFillWithTheCurrentUrlPath(string $label, string $url): void {
     $this->getSession()->getPage()->fillField($label, $this->locatePath($url));
+  }
+
+  /**
+   * Asserts that the current page is rendered using a certain theme.
+   *
+   * @param string $expected_theme_name
+   *   The expected theme label.
+   *
+   * @Then the page should be rendered using the :expected_theme_name theme
+   */
+  public function assertCurrentTheme(string $expected_theme_name): void {
+    $theme_list = \Drupal::service('theme_handler')->listInfo();
+    $expected_theme = array_reduce(array_keys($theme_list), function (?string $expected_theme, string $theme) use ($expected_theme_name, $theme_list): ?string {
+      if (!$expected_theme) {
+        $info = $theme_list[$theme];
+        if ($info->info['name'] === $expected_theme_name) {
+          return $theme;
+        }
+      }
+      return $expected_theme;
+    }, NULL);
+    if (!$expected_theme) {
+      throw new \InvalidArgumentException("The '$expected_theme_name' theme doesn't exist or is not installed");
+    }
+
+    $drupal_settings = $this->getSession()->getPage()->find('xpath', '//script[@data-drupal-selector="drupal-settings-json"]');
+    $actual_theme = Json::decode($drupal_settings->getText())['theme'];
+
+    Assert::assertSame($expected_theme, $actual_theme);
   }
 
 }

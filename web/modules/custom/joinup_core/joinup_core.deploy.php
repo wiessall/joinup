@@ -13,3 +13,34 @@
  */
 
 declare(strict_types = 1);
+
+/**
+ * Import new landing page.
+ */
+function joinup_core_deploy_108400(): void {
+  /** @var \Drupal\Core\Extension\ModuleInstallerInterface $module_installer */
+  $module_installer = \Drupal::service('module_installer');
+  /** @var \Drupal\Core\Entity\EntityRepositoryInterface $entity_repository */
+  $entity_repository = \Drupal::service('entity.repository');
+
+  // Import new content.
+  $module_installer->install(['default_content']);
+  /** @var \Drupal\default_content\ImporterInterface $importer */
+  \Drupal::service('default_content.importer')->importContent('interoperable_europe', TRUE);
+  $module_installer->uninstall(['default_content']);
+
+  // Disable auto-created left-side menu link.
+  $landing_page = $entity_repository->loadEntityByUuid('node', '61e83391-9f96-4c9e-995d-9b22705b9f9f');
+  $link_plugins = \Drupal::service('plugin.manager.menu.link')->loadLinksByRoute('entity.node.canonical', [
+    'node' => $landing_page->id(),
+  ], 'ogmenu-3600');
+  /** @var \Drupal\menu_link_content\Plugin\Menu\MenuLinkContent $link_plugin */
+  $link_plugin = reset($link_plugins);
+  $entity_repository
+    ->loadEntityByUuid('menu_link_content', $link_plugin->getDerivativeId())
+    ->setUnpublished()
+    ->save();
+
+  // Remove old IOP landing page.
+  \Drupal::entityTypeManager()->getStorage('node')->load(704740)->delete();
+}
