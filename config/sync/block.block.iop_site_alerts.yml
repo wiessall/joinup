@@ -1,0 +1,21 @@
+uuid: 790147e7-4c31-453e-a779-e4d1c9b511e1
+langcode: en
+status: true
+dependencies:
+  module:
+    - site_alert
+  theme:
+    - iop
+id: iop_site_alerts
+theme: iop
+region: content_top
+weight: -21
+provider: null
+plugin: site_alert_block
+settings:
+  id: site_alert_block
+  label: 'Site alerts'
+  label_display: '0'
+  provider: site_alert
+  timeout: 0
+visibility: {  }

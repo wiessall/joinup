@@ -1,0 +1,30 @@
+uuid: d14afaae-cc2d-4336-b3a7-a86a4dc47838
+langcode: en
+status: true
+dependencies:
+  config:
+    - facets.facet.event_date
+  module:
+    - facets
+    - joinup_core
+  theme:
+    - iop
+id: iop_eventdate
+theme: iop
+region: header
+weight: -9
+provider: null
+plugin: 'facet_block:event_date'
+settings:
+  id: 'facet_block:event_date'
+  label: 'Event date'
+  label_display: '0'
+  provider: facets
+  block_id: eventdate
+visibility:
+  request_route:
+    id: request_route
+    negate: false
+    context_mapping: {  }
+    routes:
+      - view.content_overview.page_1

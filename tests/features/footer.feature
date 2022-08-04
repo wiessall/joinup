@@ -1,4 +1,4 @@
-@api
+@api @group-clone
 Feature: Footer
   In order to allow users to access secondary pages
   As a UX designer
@@ -6,13 +6,16 @@ Feature: Footer
 
   Scenario Outline: Footer content not managed through menus
     Given I am not logged in
-    And I am on <page>
+    And I visit "<page>"
     Then I should see the Joinup logo in the footer
     And I should see the Joinup version in the footer
 
     Examples:
-      | page         |
-      # A page with the new Ventuno theme.
-      | the homepage |
-      # A page with the old Joinup Theme theme.
-      | the search   |
+      | page                             |
+      # Pages rendered with Ventuno theme.
+      | /                                |
+      | /search                          |
+      # Page rendered with Interoperable Europe theme.
+      | /collection/interoperable-europe |
+      # Page rendered with the legacy Joinup Theme theme.
+      | /collection/joinup               |
