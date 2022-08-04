@@ -7,7 +7,21 @@ namespace Drupal\joinup_group\Event;
 /**
  * Interface for events that fire when message announcement have sent state.
  */
-interface AnnouncementEventInterface {
+interface AnnouncementsEventsInterface {
+
+  /**
+   * An event that fires when a message announcements is created.
+   *
+   * @var string
+   */
+  const ANNOUNCEMENT_CREATE = 'joinup.announcement.create';
+
+  /**
+   * An event that fires when a message announcements is updated.
+   *
+   * @var string
+   */
+  const ANNOUNCEMENT_UPDATE = 'joinup.announcement.update';
 
   /**
    * Returns the list of recipients.
