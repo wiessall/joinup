@@ -9,7 +9,7 @@ use Drupal\joinup_notification\Event\NotificationEvent;
 /**
  * Wraps a node insertion demo event for event listeners.
  */
-class AnnouncementsEvent extends NotificationEvent implements AnnouncementEventInterface {
+class AnnouncementsEvent extends NotificationEvent implements AnnouncementsEventsInterface {
 
   /**
    * {@inheritdoc}
