@@ -5,6 +5,10 @@
  */
 #}
 <div>
-  <strong>{{ title }}</strong>
-  <p>{{ description }}</p>
+  <p><strong>{{ title }}</strong></p>
+  <div class="gray">
+    {% for step in steps %}
+      <p>{{ step }}</p>
+    {% endfor %}
+  </div>
 </div>

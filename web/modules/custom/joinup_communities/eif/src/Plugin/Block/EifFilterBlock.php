@@ -81,7 +81,7 @@ class EifFilterBlock extends BlockBase implements ContainerFactoryPluginInterfac
       ],
       'eif_solution_type' => [
         'name' => $this->t('Solution category'),
-        'nid'  => NULL,
+        'nid'  => 703245,
       ],
     ];
     foreach ($vocabularies as $machine_name => $vocabulary) {
@@ -99,8 +99,11 @@ class EifFilterBlock extends BlockBase implements ContainerFactoryPluginInterfac
 
     $build['description'] = [
       '#theme' => 'eif_description',
-      '#title' => $this->t('Select an option to filter the solution results'),
-      '#description' => $this->t('The EIF assistant helps you filter solutions based on the EIF perspectives. Hover the options to find our more and refine results matching best to your criteria.'),
+      '#title' => $this->t('The online assistant helps users to find operational solutions that cover the alignment and implementation of the European Interoperability Framework and filter them by attributes.'),
+      '#steps' => [
+        $this->t('Step 1 - Choose one or combine multiple filters to find solutions that match specifically your EIF requirements'),
+        $this->t('Step 2 - Explore operational solutions that help align to the European Interoperability Framework'),
+      ],
     ];
 
     $build['tree_filters'] = [
