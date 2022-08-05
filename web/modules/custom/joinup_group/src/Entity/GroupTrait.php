@@ -14,7 +14,6 @@ use Drupal\og\OgMembershipInterface;
 use Drupal\og\OgRoleInterface;
 use Drupal\user\Entity\User;
 use Drupal\user\UserInterface;
-use PDO;
 
 /**
  * Reusable methods for group bundles.
@@ -201,11 +200,20 @@ trait GroupTrait {
    * {@inheritdoc}
    */
   public function getMembers(array $states = [OgMembershipInterface::STATE_ACTIVE]): ?array {
-    $query = \Drupal::database()->select('og_membership');
-    $query->addField('og_membership', 'uid', 'target_id');
-    $query->condition('entity_id', $this->id());
-    $query->condition('state', $states, 'IN');
-    return $query->execute()->fetchAll(PDO::FETCH_ASSOC);
+    $ids = $this->getMembershipManager()->getGroupMembershipIdsByRoleNames($this, [OgRoleInterface::AUTHENTICATED], $states);
+
+    if (empty($ids)) {
+      return [];
+    }
+    $entity_type_manager = \Drupal::entityTypeManager();
+    $users = [];
+    $og_users = $entity_type_manager->getStorage('og_membership')->loadMultiple($ids);
+    $user_storage = $entity_type_manager->getStorage('user');
+    foreach ($og_users as $user) {
+      $users[] = $user_storage->load($user->uid->target_id);
+    }
+
+    return $users;
   }
 
   /**
