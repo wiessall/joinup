@@ -1952,6 +1952,7 @@ function joinup_theme_preprocess_rdf_entity__solution__view_mode_search_list_ite
   ]);
   $variables['eif_perspective_description'] = $eif_perspective_view;
   $variables['solution_url'] = $entity->toUrl()->setAbsolute()->toString();
+  $variables['eif_perspective'] = Url::fromRoute('entity.rdf_entity.eif_perspective', ['rdf_entity' => $entity->id()])->toString();
 }
 
 /**
@@ -2276,6 +2277,11 @@ function joinup_theme_preprocess_node(&$variables) {
         $variables['extension'] = t('External');
       }
     }
+  }
+
+  // Hide the white area (main content block) from the EIF Toolbox.
+  if ((int) $node->id() === 705372) {
+    unset($variables['content']);
   }
 }
 
