@@ -10,6 +10,8 @@ use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Utility\Token;
 use Drupal\joinup_group\Entity\GroupInterface;
+use Drupal\og\OgMembershipInterface;
+use PDO;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -124,9 +126,29 @@ class SendAnnouncementsForm extends FormBase {
       ->set('group_reference', $this->group->id())
       ->set('subject', $this->token->replacePlain($form_state->getValue('subject'), $token_data))
       ->set('body', $this->token->replacePlain($form_state->getValue('body'), $token_data))
-      ->set('recipients', $this->group->getMembers())
+      ->set('recipients', $this->getMemberIds())
       ->save();
     $this->messenger()->addStatus($this->t('Your announcement has been submitted for validation.'));
   }
+
+  /**
+   * Returns the active members of the group.
+   *
+   * In order for the member to be active, the membership must be active and the
+   * user must not be blocked.
+   *
+   * @return array
+   *   The array of the user IDs that are members in the group.
+   */
+  protected function getMemberIds(): ?array {
+    $query = \Drupal::database()->select('og_membership', 'og');
+    $query->leftJoin('users_field_data', 'u', 'og.uid=u.uid');
+    $query->addField('og', 'uid', 'target_id');
+    $query->condition('entity_id', $this->group->id())
+      ->condition('state', OgMembershipInterface::STATE_ACTIVE)
+      ->condition('status', 1);
+
+    return $query->execute()->fetchAll(PDO::FETCH_ASSOC);
+   }
 
 }
