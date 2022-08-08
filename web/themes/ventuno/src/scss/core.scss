@@ -1,0 +1,30 @@
+/**
+ * @file
+ * Common base.
+ *
+ * Functions, variables, utilities and mixins required for the build.
+ * When compiled, this file should not output anything.
+ */
+
+// Base theme colors
+@import "@openeuropa/bcl-theme-default/src/scss/base/colors";
+
+// Custom theme colors
+@import "@openeuropa/bcl-theme-joinup/src/scss/base/colors";
+
+// Bootstrap default functions
+@import "@openeuropa/bcl-bootstrap/scss/functions";
+
+// Bootstrap default variables
+@import "@openeuropa/bcl-bootstrap/scss/variables";
+
+// To make utilities lighter, we include only the required variables
+// instead of all the default BCL variables
+// @import "@openeuropa/bcl-theme-default/src/scss/variables";
+@import "core/overrides/variables";
+
+// Override with Joinup variables
+@import "@openeuropa/bcl-theme-joinup/src/scss/base/variables";
+
+// Bootstrap mixins
+@import "@openeuropa/bcl-bootstrap/scss/mixins";

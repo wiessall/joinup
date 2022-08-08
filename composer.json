@@ -17,7 +17,6 @@
         "drupal/bootstrap4_modal": "^2.1",
         "drupal/cached_computed_field": "^1.0",
         "drupal/cas": "^2.0",
-        "drupal/cas_account_link": "^2.0",
         "drupal/cas_attributes": "^2.0",
         "drupal/changed_fields": "^3.2",
         "drupal/config_ignore": "^3.0",
@@ -25,13 +24,12 @@
         "drupal/core": "^9.4",
         "drupal/core-composer-scaffold": "^9.4",
         "drupal/custom_markup_block": "^1.1",
-        "drupal/default_content": "^2.0@alpha",
+        "drupal/default_content": "^2.0",
         "drupal/diff": "~1.0",
         "drupal/digital_size_formatter": "~2.0",
         "drupal/dropsolid_purge": "^1.0@beta",
         "drupal/dynamic_entity_reference": "~2.0",
         "drupal/editor_file": "~1.5",
-        "drupal/email_registration": "^1.1",
         "drupal/embed_block": "^1.0",
         "drupal/entity_legal": "^3.0.0",
         "drupal/entityqueue": "^1.2",
@@ -53,7 +51,6 @@
         "drupal/inline_entity_form": "^1.0",
         "drupal/jquery_ui_accordion": "^1.1",
         "drupal/json_field": "^1.0",
-        "drupal/layout_builder_block": "^1.0",
         "drupal/layout_builder_component_attributes": "^1.2",
         "drupal/linkit": "^5.0-beta11",
         "drupal/menu_admin_per_menu": "^1.3",
@@ -61,18 +58,18 @@
         "drupal/message": "^1.1",
         "drupal/message_digest": "^1.0.0",
         "drupal/message_notify": "~1.2",
-        "drupal/meta_entity": "^1.0-alpha2",
+        "drupal/meta_entity": "^1.2",
         "drupal/monolog": "^2.0",
         "drupal/og": "^1.0-alpha7",
         "drupal/og_menu": "^2.0",
         "drupal/page_manager": "^4.0@beta",
         "drupal/paragraphs": "^1.12",
         "drupal/paragraphs_jquery_ui_accordion": "^1.4",
-        "drupal/password_policy": "^3.0",
         "drupal/pathauto": "~1.8",
         "drupal/pipeline": "^1.0",
         "drupal/publication_date": "^2.0-beta2",
         "drupal/rdf_entity": "^2.0",
+        "drupal/rdf_meta_entity": "^1.0",
         "drupal/redirect": "^1.6",
         "drupal/redis": "^1.4",
         "drupal/schema_digital_document": "^1.0.0",
@@ -273,7 +270,14 @@
                 "Make it easier to trigger a tour @see https://www.drupal.org/project/drupal/issues/3012027": "https://www.drupal.org/files/issues/2022-01-17/3012027-52-9.3.x.patch",
                 "EntityConstraintValidationList::findByCode is inconsistent @see https://www.drupal.org/project/drupal/issues/3126654": "https://www.drupal.org/files/issues/2020-04-10/find_by_code_override-3126654-D8-4.patch",
                 "Cannot implement a custom user cancellation method @see https://www.drupal.org/project/drupal/issues/3135592": "https://git.drupalcode.org/project/drupal/-/merge_requests/1675.diff",
-                "The old storage handler is still defined for RDF entities.": "resources/patch/core-fix-sparql-storage-hack.patch"
+                "The old storage handler is still defined for RDF entities.": "resources/patch/core-fix-sparql-storage-hack.patch",
+                "Page variant plugin is not correctlly instantiated @see https://www.drupal.org/project/drupal/issues/3294833": "https://git.drupalcode.org/project/drupal/-/merge_requests/2484.diff"
+            },
+            "drupal/default_content": {
+                "Combined https://www.drupal.org/i/3164451 and https://www.drupal.org/i/2640734": "resources/patch/default_content-combined-3164451-and-2640734.diff"
+            },
+            "drupal/drupal-extension": {
+                "Port https://www.drupal.org/project/drupal/issues/3175718 @see https://github.com/jhedstrom/drupalextension/pull/612": "https://patch-diff.githubusercontent.com/raw/jhedstrom/drupalextension/pull/612.diff"
             },
             "drupal/entityqueue": {
                 "Missing config schema for EntityQueueDragtableWidget @see Missing config schema for EntityQueueDragtableWidget": "https://git.drupalcode.org/project/entityqueue/-/merge_requests/3.diff"
@@ -298,18 +302,15 @@
             "drupal/matomo_reporting_api": {
                 "Ensure backward compatibility with Piwik @see https://www.drupal.org/project/matomo_reporting_api/issues/3080854": "https://www.drupal.org/files/issues/2019-09-18/3080854-7.patch"
             },
+            "drupal/meta_entity": {
+                "Make the field configurable in the view @see https://www.drupal.org/project/meta_entity/issues/3279161": "https://git.drupalcode.org/project/meta_entity/-/merge_requests/4.diff",
+                "Improve ::getMetaEntitiesForEntity() performance @see https://www.drupal.org/project/meta_entity/issues/3299712": "https://git.drupalcode.org/project/meta_entity/-/merge_requests/6.diff"
+            },
             "drupal/metatag": {
                 "Views cache wrapper overrides other modules cache logic @see https://www.drupal.org/project/metatag/issues/3261473": "https://git.drupalcode.org/project/metatag/-/merge_requests/48.diff"
             },
-            "drupal/monolog": {
-                "Argument add to addRecord upstream @see https://www.drupal.org/project/monolog/issues/3284825": "https://git.drupalcode.org/project/monolog/-/merge_requests/7.diff"
-            },
             "drupal/paragraphs_jquery_ui_accordion": {
                 "Formatter settings are missing schema @see https://www.drupal.org/i/3194916": "https://git.drupalcode.org/project/paragraphs_jquery_ui_accordion/-/merge_requests/1.diff"
-            },
-            "drupal/password_policy": {
-                "'Field field_last_password_reset is unknown' while importing configuration on site without password_policy activated @see https://www.drupal.org/project/password_policy/issues/2771129": "https://www.drupal.org/files/issues/2021-07-05/password_policy_field_last_password_reset_unknown_error_2771129-130.patch",
-                "password_policy_update_8302 takes too long for a large amount of users @see https://www.drupal.org/project/password_policy/issues/3258563": "https://git.drupalcode.org/project/password_policy/-/merge_requests/22.diff"
             },
             "drupal/pipeline": {
                 "Accessing Lock::$updated is no longer supported @see https://www.drupal.org/project/pipeline/issues/3261553": "https://git.drupalcode.org/project/pipeline/-/merge_requests/3.diff"
@@ -320,10 +321,14 @@
             "drupal/rdf_entity": {
                 "Allow bundle label plural variants @see https://github.com/ec-europa/rdf_entity/pull/12": "https://github.com/ec-europa/rdf_entity/compare/8.x-1.x...ea8f6af001fca732e89a4be0e29643953f49a88f.diff"
             },
+            "drupal/rdf_meta_entity": {
+                "Provide a default template file @see https://www.drupal.org/project/rdf_meta_entity/issues/3279162": "https://git.drupalcode.org/project/rdf_meta_entity/-/merge_requests/2.diff",
+                "Provide a default delete form @see https://www.drupal.org/project/rdf_meta_entity/issues/3283343": "https://git.drupalcode.org/project/rdf_meta_entity/-/merge_requests/3.diff"
+            },
             "drupal/search_api": {
                 "item_id column is too short @see https://www.drupal.org/node/2829696": "resources/patch/search_api-item_id-length-2829696.patch",
                 "Some bulk form field options are missing schema @see https://www.drupal.org/project/search_api/issues/3195199": "https://git.drupalcode.org/project/search_api/-/merge_requests/6.diff",
-                "Out of memory error when used with views, metatag and memcache modules @see https://www.drupal.org/project/search_api/issues/3258375": "https://www.drupal.org/files/issues/2022-01-13/search_api-metatag-out-of-memory-3258375-2.patch"
+                "The search_api_list:{index} cache tag is not added to the view display @see https://www.drupal.org/project/search_api/issues/3298295": "https://git.drupalcode.org/project/search_api/-/merge_requests/50.diff"
             },
             "drupal/search_api_autocomplete": {
                 "Clear timeout autosubmit used in views_autosubmit.": "resources/patch/search_api_autocomplete_override_views_autosubmit.patch"
@@ -361,8 +366,7 @@
             "openeuropa/oe_webtools": {
                 "Allow to pass an optional referer. @see https://github.com/openeuropa/oe_webtools/pull/96": "https://patch-diff.githubusercontent.com/raw/openeuropa/oe_webtools/pull/96.diff",
                 "Place the webtools loader on the head. @see https://github.com/openeuropa/oe_webtools/pull/102": "https://patch-diff.githubusercontent.com/raw/openeuropa/oe_webtools/pull/102.diff",
-                "Add the possibility to display a marker on the map. @see https://github.com/openeuropa/oe_webtools/pull/111": "https://patch-diff.githubusercontent.com/raw/openeuropa/oe_webtools/pull/111.diff",
-                "Integrate with Webtools eTrans component @see https://github.com/openeuropa/oe_webtools/pull/146": "https://patch-diff.githubusercontent.com/raw/openeuropa/oe_webtools/pull/146.diff"
+                "Add the possibility to display a marker on the map. @see https://github.com/openeuropa/oe_webtools/pull/111": "https://patch-diff.githubusercontent.com/raw/openeuropa/oe_webtools/pull/111.diff"
             },
             "openeuropa/task-runner": {
                 "Command config cannot be overridden @see https://github.com/openeuropa/task-runner/pull/135": "https://patch-diff.githubusercontent.com/raw/openeuropa/task-runner/pull/135.diff"

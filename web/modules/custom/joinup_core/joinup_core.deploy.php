@@ -15,26 +15,32 @@
 declare(strict_types = 1);
 
 /**
- * Impersonate the passwords of users not linked to EU Login.
+ * Import new landing page.
  */
-function joinup_core_deploy_108202(?array &$sandbox = NULL): void {
-  // While using CAS Account Link module, only the paired accounts passwords
-  // were impersonated. The other passwords were kept to allow un-paired account
-  // users to link their accounts through their Drupal credentials. As the
-  // pairing mechanism is being dismantled, we impersonate all other passwords.
-  // Not using entity API for performance reasons.
-  \Drupal::database()
-    ->query("UPDATE {users_field_data}
-      SET pass = CONCAT(
-        '\$S\$E',
-        SUBSTR(
-          SHA2(
-            CONCAT(name, uid, mail, timezone, UUID()),
-            256
-          ),
-          1,
-          51
-        )
-      )
-      WHERE uid NOT IN(SELECT uid FROM {authmap})");
+function joinup_core_deploy_108400(): void {
+  /** @var \Drupal\Core\Extension\ModuleInstallerInterface $module_installer */
+  $module_installer = \Drupal::service('module_installer');
+  /** @var \Drupal\Core\Entity\EntityRepositoryInterface $entity_repository */
+  $entity_repository = \Drupal::service('entity.repository');
+
+  // Import new content.
+  $module_installer->install(['default_content']);
+  /** @var \Drupal\default_content\ImporterInterface $importer */
+  \Drupal::service('default_content.importer')->importContent('interoperable_europe', TRUE);
+  $module_installer->uninstall(['default_content']);
+
+  // Disable auto-created left-side menu link.
+  $landing_page = $entity_repository->loadEntityByUuid('node', '61e83391-9f96-4c9e-995d-9b22705b9f9f');
+  $link_plugins = \Drupal::service('plugin.manager.menu.link')->loadLinksByRoute('entity.node.canonical', [
+    'node' => $landing_page->id(),
+  ], 'ogmenu-3600');
+  /** @var \Drupal\menu_link_content\Plugin\Menu\MenuLinkContent $link_plugin */
+  $link_plugin = reset($link_plugins);
+  $entity_repository
+    ->loadEntityByUuid('menu_link_content', $link_plugin->getDerivativeId())
+    ->setUnpublished()
+    ->save();
+
+  // Remove old IOP landing page.
+  \Drupal::entityTypeManager()->getStorage('node')->load(704740)->delete();
 }

@@ -1,0 +1,28 @@
+uuid: 7750b5be-6354-4d57-b32e-c83826965bfb
+langcode: en
+status: true
+dependencies:
+  module:
+    - joinup_group
+    - system
+  theme:
+    - iop
+id: iop_overviewmessage
+theme: iop
+region: header
+weight: -16
+provider: null
+plugin: overview_message_block
+settings:
+  id: overview_message_block
+  label: 'Overview message'
+  label_display: '0'
+  provider: joinup_group
+visibility:
+  request_path:
+    id: request_path
+    negate: false
+    context_mapping: {  }
+    pages: |-
+      /collections
+      /solutions

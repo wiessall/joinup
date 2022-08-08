@@ -1,0 +1,30 @@
+uuid: b006e1de-ddd5-4278-87e5-36da10bf70ea
+langcode: en
+status: true
+dependencies:
+  config:
+    - views.view.licence_list
+  module:
+    - system
+    - views
+  theme:
+    - iop
+id: iop_views_block__licence_list_licence_list_block
+theme: iop
+region: content
+weight: -16
+provider: null
+plugin: 'views_block:licence_list-licence_list_block'
+settings:
+  id: 'views_block:licence_list-licence_list_block'
+  label: ''
+  label_display: '0'
+  provider: views
+  views_label: ''
+  items_per_page: none
+visibility:
+  request_path:
+    id: request_path
+    negate: false
+    context_mapping: {  }
+    pages: /node/701805

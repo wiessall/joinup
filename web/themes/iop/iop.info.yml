@@ -1,8 +1,9 @@
-name: Iop
-description: Custom theme for Interoperable Europe.
+
+name: Interoperable Europe
+description: A sub-theme of Ventuno
 package: Custom
 type: theme
-core_version_requirement: '>=9.3'
+core_version_requirement: '>=9.4'
 php: 7.4
 base theme: ventuno
 

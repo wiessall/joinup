@@ -168,6 +168,7 @@ module:
   rdf_entity: 0
   rdf_entity_provenance: 0
   rdf_export: 0
+  rdf_meta_entity: 0
   rdf_schema_field_validation: 0
   rdf_taxonomy: 0
   redirect: 0
@@ -246,4 +247,5 @@ theme:
   joinup_theme: 0
   ventuno: 0
   oe_bootstrap_theme: 0
+  iop: 0
 profile: joinup

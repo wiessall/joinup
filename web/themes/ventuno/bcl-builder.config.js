@@ -62,10 +62,37 @@ module.exports = {
     },
   ],
   styles: [
-    // Main
+    // Base
     {
-      entry: path.resolve(outputFolder, "src/scss/main.scss"),
-      dest: path.resolve(outputFolder, "assets/css/main.css"),
+      entry: path.resolve(outputFolder, "src/scss/base.scss"),
+      dest: path.resolve(outputFolder, "assets/css/base.css"),
+      options: {
+        includePaths,
+        sourceMap: "file",
+      },
+    },
+    // Layout
+    {
+      entry: path.resolve(outputFolder, "src/scss/layout.scss"),
+      dest: path.resolve(outputFolder, "assets/css/layout.css"),
+      options: {
+        includePaths,
+        sourceMap: "file",
+      },
+    },
+    // Components
+    {
+      entry: path.resolve(outputFolder, "src/scss/components.scss"),
+      dest: path.resolve(outputFolder, "assets/css/components.css"),
+      options: {
+        includePaths,
+        sourceMap: "file",
+      },
+    },
+    // Theme
+    {
+      entry: path.resolve(outputFolder, "src/scss/theme.scss"),
+      dest: path.resolve(outputFolder, "assets/css/theme.css"),
       options: {
         includePaths,
         sourceMap: "file",
@@ -141,6 +168,14 @@ module.exports = {
     {
       entry: path.resolve(outputFolder, "src/scss/footer.scss"),
       dest: path.resolve(outputFolder, "assets/css/footer.css"),
+      options: {
+        includePaths,
+        sourceMap: "file",
+      },
+    },
+    {
+      entry: path.resolve(outputFolder, "src/scss/form-checkboxes.scss"),
+      dest: path.resolve(outputFolder, "assets/css/form-checkboxes.css"),
       options: {
         includePaths,
         sourceMap: "file",
@@ -388,11 +423,13 @@ module.exports = {
             'folder2-open.svg',
             'info-circle.svg',
             'info-circle-fill.svg',
+            'journal-text.svg',
             'justify.svg',
             'lightning-charge.svg',
             'linkedin.svg',
             'newspaper.svg',
             'person-circle.svg',
+            'question-lg.svg',
             'search.svg',
             'star.svg',
             'twitter.svg',
