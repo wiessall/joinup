@@ -36,3 +36,18 @@ function ventuno_preprocess_field_multiple_value_form(array &$variables): void {
     $variables['#attached']['library'][] = 'ventuno/tabledrag';
   }
 }
+
+/**
+ * Implements hook_preprocess_field().
+ */
+function ventuno_preprocess_field(array &$variables): void {
+  $element = $variables['element'];
+  $field_names = ['eif_layer', 'eif_model', 'eif_principle'];
+  if (in_array($element['#field_name'], $field_names)) {
+    foreach ($variables['items'] as $key => $item) {
+      $parts = explode(':', $item['content']['#title']);
+      $title = empty($parts[1]) ? $item['content']['#title'] : trim($parts[1]);
+      $variables['items'][$key]['content']['#title'] = $title;
+    }
+  }
+}

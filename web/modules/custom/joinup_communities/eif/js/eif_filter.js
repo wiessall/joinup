@@ -15,6 +15,7 @@
 
     // Check every active filter item and hide tiles which don't contain proper
     // data-eif-category.
+    var solutionsCount = 0;
     $('.eif-filter__item a.is-active').each(function () {
       const currentEifCategory = $(this).attr('data-eif-category');
       if (typeof currentEifCategory !== 'undefined') {
@@ -29,6 +30,14 @@
         });
       }
     });
+
+    // Show calculated number of solutions.
+    $eifTile.each(function () {
+      if (!$(this).hasClass('visually-hidden')) {
+        solutionsCount++;
+      }
+    });
+    $('.eif-counter__number').text(solutionsCount);
   }
 
   // Trigger if eif filter is clicked.

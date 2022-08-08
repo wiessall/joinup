@@ -540,7 +540,17 @@ display:
           skip_access: false
           preserve_facet_query_args: false
       relationships: {  }
-      header: {  }
+      header:
+        result:
+          id: result
+          table: views
+          field: result
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: result
+          empty: false
+          content: "<div class=\"eif-counter\">\r\n  <span class=\"eif-counter__number\">\r\n    @total\r\n  </span>\r\n  <span class=\"licence-counter__text\">\r\n    matching solutions found\r\n  </span>\r\n</div>"
       footer: {  }
       display_extenders: {  }
     cache_metadata:
@@ -552,6 +562,8 @@ display:
       tags:
         - 'config:field.storage.rdf_entity.field_is_eif_category'
         - 'config:search_api.index.published'
+        - 'config:views.view.solutions_meta_entity'
+        - 'search_api_list:published'
   solutions_meta_entity_block:
     id: solutions_meta_entity_block
     display_title: Block
