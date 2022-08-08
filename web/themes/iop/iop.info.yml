@@ -15,6 +15,7 @@ libraries:
 
 libraries-override:
   tour/tour-styling: false
+  ventuno/theme: false
 
 regions:
   header: Header
