@@ -305,7 +305,8 @@
                 "Formatter settings are missing schema @see https://www.drupal.org/i/3194916": "https://git.drupalcode.org/project/paragraphs_jquery_ui_accordion/-/merge_requests/1.diff"
             },
             "drupal/pipeline": {
-                "Accessing Lock::$updated is no longer supported @see https://www.drupal.org/project/pipeline/issues/3261553": "https://git.drupalcode.org/project/pipeline/-/merge_requests/3.diff"
+                "Accessing Lock::$updated is no longer supported @see https://www.drupal.org/project/pipeline/issues/3261553": "https://git.drupalcode.org/project/pipeline/-/merge_requests/3.diff",
+                "Pipeline does not work with subpaths @see https://www.drupal.org/project/pipeline/issues/3295697": "https://git.drupalcode.org/project/pipeline/-/merge_requests/4.diff"
             },
             "drupal/publication_date": {
                 "Provide computed properties that return the publication date or the created/updated date @see https://www.drupal.org/project/publication_date/issues/3066317": "https://www.drupal.org/files/issues/2019-07-07/3066317-3.patch"
