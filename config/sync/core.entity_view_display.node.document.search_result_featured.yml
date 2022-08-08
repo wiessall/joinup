@@ -127,6 +127,7 @@ content:
     weight: 2
     region: content
 hidden:
+  featured: true
   field_comments: true
   field_document_publication_date: true
   field_document_spatial_coverage: true
@@ -141,7 +142,9 @@ hidden:
   langcode: true
   links: true
   og_audience: true
+  pinned_in: true
   read_more: true
   report: true
   search_api_excerpt: true
   share_link: true
+  visit_count: true

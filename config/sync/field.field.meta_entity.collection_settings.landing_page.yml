@@ -1,0 +1,25 @@
+uuid: 265acf93-a32b-4741-8b9d-9958bfed79c3
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.meta_entity.landing_page
+    - meta_entity.type.collection_settings
+id: meta_entity.collection_settings.landing_page
+field_name: landing_page
+entity_type: meta_entity
+bundle: collection_settings
+label: 'Landing page'
+description: 'If no custom page is selected, the standard collection overview page is used.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: views
+  handler_settings:
+    view:
+      view_name: custom_pages
+      display_name: entity_reference_1
+      arguments: {  }
+field_type: entity_reference

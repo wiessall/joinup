@@ -78,7 +78,7 @@
             {{ page.featured }}
           </div>
           <div class="col-12 col-md-6 my-5 my-md-0 d-flex align-content-between flex-wrap">
-            <img src="{{ directory }}/assets/images/iop-eu-logo.svg" class="px-2 ms-md-5 img-fluid w-100" alt="Interoperable Europe logo" width="516" height="118">
+            <img src="{{ file_url('themes/ventuno/assets/images/iop-eu-logo.svg') }}" class="px-2 ms-md-5 img-fluid w-100" alt="Interoperable Europe logo" width="516" height="118">
             {% if interoperable_europe_url %}
               <p class="w-100 px-2 mt-4 mb-0 d-block text-center text-md-end">
                 <a href="{{ interoperable_europe_url }}" class="text-light fw-bold fs-5">{{ 'Discover more'|trans }} <span class="iop-gradient">...</span></a>
@@ -114,7 +114,7 @@
   {{ page.content_bottom }}
 
   {% if page.footer %}
-    {% include directory ~ '/templates/parts/footer.html.twig' %}
+    {% include '@ventuno/parts/footer.html.twig' %}
   {% endif %}
 
 </div>{# /.layout-container #}

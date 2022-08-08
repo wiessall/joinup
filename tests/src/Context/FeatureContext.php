@@ -14,6 +14,7 @@ use Behat\Mink\Element\TraversableElement;
 use Behat\Mink\Exception\ElementNotFoundException;
 use Behat\Mink\Exception\ExpectationException;
 use Behat\Mink\Exception\ResponseTextException;
+use Drupal\Component\Serialization\Json;
 use Drupal\Component\Serialization\Yaml;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Site\Settings;
@@ -272,8 +273,12 @@ class FeatureContext extends RawDrupalContext implements SnippetAcceptingContext
     $page = $this->getSession()->getPage();
     $not_found = [];
     foreach ($fieldsets as $fieldset) {
-      $is_found = $page->find('named', ['fieldset', $fieldset]);
+      // Find by fieldset legend or by details summary depending on how the
+      // fieldset is rendered.
+      $is_found = $page->find('named', ['fieldset', $fieldset])
+        || $page->find('xpath', "//details/summary[contains(text(), '$fieldset')]");
       if (!$is_found) {
+        // Try to find the fieldset according to the collapse button.
         $not_found[] = $fieldset;
       }
     }
@@ -478,6 +483,7 @@ class FeatureContext extends RawDrupalContext implements SnippetAcceptingContext
    *   not the expected one.
    *
    * @Then the option with text :option from select :select is selected
+   * @Then the option with text :option from select :select should be selected
    */
   public function assertFieldOptionSelected(string $option, string $select): void {
     $this->assertFieldOptionSelectedInRegion($option, $select);
@@ -2428,6 +2434,22 @@ class FeatureContext extends RawDrupalContext implements SnippetAcceptingContext
   }
 
   /**
+   * Asserts that a link has an attribute set to a specific value.
+   *
+   * @param string $link_text
+   *   The link text.
+   * @param string $attribute_name
+   *   The name of the attribute to assert.
+   * @param string $attribute_value
+   *   The value of the attribute to assert.
+   *
+   * @Then the :link_text link should have the :attribute_name attribute set to :attribute_value
+   */
+  public function givenLinkHasAttribute(string $link_text, string $attribute_name, string $attribute_value): void {
+    Assert::assertNotNull($this->getSession()->getPage()->find('xpath', "//a[@$attribute_name='$attribute_value' and text()='$link_text']"));
+  }
+
+  /**
    * Disables cookie consent banner for all tests.
    *
    * @BeforeSuite
@@ -2478,6 +2500,35 @@ class FeatureContext extends RawDrupalContext implements SnippetAcceptingContext
    */
   public function iFillWithTheCurrentUrlPath(string $label, string $url): void {
     $this->getSession()->getPage()->fillField($label, $this->locatePath($url));
+  }
+
+  /**
+   * Asserts that the current page is rendered using a certain theme.
+   *
+   * @param string $expected_theme_name
+   *   The expected theme label.
+   *
+   * @Then the page should be rendered using the :expected_theme_name theme
+   */
+  public function assertCurrentTheme(string $expected_theme_name): void {
+    $theme_list = \Drupal::service('theme_handler')->listInfo();
+    $expected_theme = array_reduce(array_keys($theme_list), function (?string $expected_theme, string $theme) use ($expected_theme_name, $theme_list): ?string {
+      if (!$expected_theme) {
+        $info = $theme_list[$theme];
+        if ($info->info['name'] === $expected_theme_name) {
+          return $theme;
+        }
+      }
+      return $expected_theme;
+    }, NULL);
+    if (!$expected_theme) {
+      throw new \InvalidArgumentException("The '$expected_theme_name' theme doesn't exist or is not installed");
+    }
+
+    $drupal_settings = $this->getSession()->getPage()->find('xpath', '//script[@data-drupal-selector="drupal-settings-json"]');
+    $actual_theme = Json::decode($drupal_settings->getText())['theme'];
+
+    Assert::assertSame($expected_theme, $actual_theme);
   }
 
 }

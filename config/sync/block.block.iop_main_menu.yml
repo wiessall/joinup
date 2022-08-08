@@ -1,0 +1,27 @@
+uuid: 33881ebd-3575-476b-8cb5-7e18d90b7392
+langcode: en
+status: true
+dependencies:
+  config:
+    - system.menu.main
+  module:
+    - system
+  theme:
+    - iop
+_core:
+  default_config_hash: YbwsPoFoqCMnBXGAo4u6Z_SMksbwJx1qVtFKpfv4U34
+id: iop_main_menu
+theme: iop
+region: header
+weight: -9
+provider: null
+plugin: 'system_menu_block:main'
+settings:
+  id: 'system_menu_block:main'
+  label: 'Main navigation'
+  label_display: '0'
+  provider: system
+  level: 1
+  depth: 1
+  expand_all_items: false
+visibility: {  }

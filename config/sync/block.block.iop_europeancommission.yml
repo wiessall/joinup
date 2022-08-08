@@ -1,0 +1,25 @@
+uuid: 66d7f59e-9f5e-4340-ba04-3fcb501f597f
+langcode: en
+status: true
+dependencies:
+  config:
+    - system.menu.footer-european-commission
+  module:
+    - system
+  theme:
+    - iop
+id: iop_europeancommission
+theme: iop
+region: footer
+weight: -22
+provider: null
+plugin: 'system_menu_block:footer-european-commission'
+settings:
+  id: 'system_menu_block:footer-european-commission'
+  label: 'European Commission'
+  label_display: visible
+  provider: system
+  level: 1
+  depth: 0
+  expand_all_items: false
+visibility: {  }

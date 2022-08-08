@@ -1,0 +1,35 @@
+uuid: f2a2033a-a8a8-4ac3-a712-bc4d8719ecd3
+langcode: en
+status: true
+dependencies:
+  config:
+    - og_menu.ogmenu.navigation
+  module:
+    - joinup_group
+    - og
+  theme:
+    - iop
+id: iop_navigation
+theme: iop
+region: header
+weight: -22
+provider: null
+plugin: 'group_menu_block:navigation'
+settings:
+  id: 'group_menu_block:navigation'
+  label: 'Collection | Solution menu'
+  label_display: '0'
+  provider: joinup_core
+  context_mapping:
+    og: '@og.context:og'
+  level: 1
+  depth: 1
+visibility:
+  og_group_type:
+    id: og_group_type
+    negate: false
+    context_mapping:
+      og: '@og.context:og'
+    group_types:
+      rdf_entity-collection: rdf_entity-collection
+      rdf_entity-solution: rdf_entity-solution

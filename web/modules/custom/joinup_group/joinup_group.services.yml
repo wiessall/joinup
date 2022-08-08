@@ -11,8 +11,7 @@ services:
       - { name: access_check, applies_to: _joinup_group }
   joinup_group.group_manager:
     class: Drupal\joinup_group\JoinupGroupManager
-    arguments: ['@og.membership_manager', '@entity_type.manager']
-    lazy: true
+    arguments: ['@og.membership_manager', '@entity_type.manager', '@og.context']
   joinup_group.group_menu_links:
     class: Drupal\joinup_group\EventSubscriber\GroupMenuLinksSubscriber
     tags:
@@ -45,3 +44,7 @@ services:
   joinup_group.url_alias_updater:
     class: Drupal\joinup_group\JoinupGroupContentUrlAliasUpdater
     arguments: ['@queue']
+  joinup_group.page_display_variant.subscriber:
+    class: Drupal\joinup_group\EventSubscriber\JoinupGroupPageDisplayVariantSubscriber
+    tags:
+      - { name: event_subscriber }
