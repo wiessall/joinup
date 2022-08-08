@@ -517,7 +517,7 @@
   .listing__card {
     min-height: 0;
     flex-direction: column!important;
-    @include breakpoint(tablet) {
+    @include breakpoint(lg) {
       flex: 0 0 60%;
       flex-direction: row!important;
     }
