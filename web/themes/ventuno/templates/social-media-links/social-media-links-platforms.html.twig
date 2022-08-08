@@ -23,7 +23,7 @@
     <li class="mx-2">
       <a href="{{ platform.url }}" target="_blank" rel="noopener" class="text-light" title="{{ platform.name }}">
         <svg class="bi icon--m">
-          <use xlink:href="{{ bcl_icon_path }}#{{ platform.id }}"></use>
+          <use xlink:href="{{ bcl_icon_path }}#{{ platform.id is same as 'slideshare' ? 'person-workspace' : platform.id }}"></use>
         </svg>
       </a>
     </li>
