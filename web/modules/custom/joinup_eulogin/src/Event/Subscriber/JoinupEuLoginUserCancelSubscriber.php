@@ -46,7 +46,7 @@ class JoinupEuLoginUserCancelSubscriber implements EventSubscriberInterface {
    *   The user cancel event.
    */
   public function onUserCancel(JoinupUserCancelEvent $event): void {
-    $this->authmap->delete($event->getAccount()->id(), 'cas');
+    $this->authmap->delete((int) $event->getAccount()->id(), 'cas');
   }
 
 }
