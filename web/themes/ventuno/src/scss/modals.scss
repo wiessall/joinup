@@ -1,2 +1,7 @@
 @import "core";
 @import "@openeuropa/bcl-bootstrap/scss/modal";
+
+ul.linkit-ui-autocomplete {
+  position: absolute;
+  z-index: 9999;
+}
