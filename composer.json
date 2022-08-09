@@ -239,9 +239,6 @@
             "drupal/config_devel": {
                 "Add a Drush command for manipulating module info files @see https://www.drupal.org/project/config_devel/issues/2392929": "https://git.drupalcode.org/project/config_devel/-/merge_requests/4.diff"
             },
-            "drupal/cas": {
-                "Cached redirect response issue with failed ticket validation @see https://www.drupal.org/project/cas/issues/3277861": "https://git.drupalcode.org/project/cas/-/merge_requests/12.diff"
-            },
             "drupal/coder": {
                 "Do not require @var tag if a property has typehint @see https://www.drupal.org/project/coder/issues/3123282": "https://git.drupalcode.org/project/coder/-/commit/d1bb7ea.diff"
             },
