@@ -21,8 +21,15 @@ test ! -f ./vendor/bin/run || ./vendor/bin/run toolkit:build-dev
 echo "Node $(node --version)"
 echo "NPM $(npm --version)"
 
-# Bring theme dependencies.
+# Bring Ventuno theme dependencies.
 cd web/themes/ventuno && npm ci
+if [ $? != 0 ]
+then
+  exit 2;
+fi
+
+# Bring IOP subtheme dependencies.
+cd ../iop && npm ci
 if [ $? != 0 ]
 then
   exit 2;
