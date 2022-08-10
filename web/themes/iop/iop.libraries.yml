@@ -1,0 +1,25 @@
+components:
+  version: VERSION
+  css:
+    component:
+      assets/css/components.min.css: {}
+  dependencies:
+    - ventuno/components.js
+
+theme:
+  version: VERSION
+  css:
+    theme:
+      assets/css/theme.min.css: {}
+
+# Pages
+homepage:
+  css:
+    theme:
+      assets/css/homepage.min.css: {}
+
+# Components
+navbar:
+  css:
+    theme:
+      assets/css/navbar.min.css: {}
