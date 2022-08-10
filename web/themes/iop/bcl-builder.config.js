@@ -13,7 +13,7 @@ module.exports = {
     // Components
     {
       entry: path.resolve(outputFolder, "src/scss/components.scss"),
-      dest: path.resolve(outputFolder, "assets/css/components.css"),
+      dest: path.resolve(outputFolder, "assets/css/components.min.css"),
       options: {
         includePaths,
         sourceMap: "file",
@@ -22,8 +22,9 @@ module.exports = {
     // Theme
     {
       entry: path.resolve(outputFolder, "src/scss/theme.scss"),
-      dest: path.resolve(outputFolder, "assets/css/theme.css"),
+      dest: path.resolve(outputFolder, "assets/css/theme.min.css"),
       options: {
+        minify: true,
         includePaths,
         sourceMap: "file",
       },
@@ -31,8 +32,9 @@ module.exports = {
     // Pages
     {
       entry: path.resolve(outputFolder, "src/scss/homepage.scss"),
-      dest: path.resolve(outputFolder, "assets/css/homepage.css"),
+      dest: path.resolve(outputFolder, "assets/css/homepage.min.css"),
       options: {
+        minify: true,
         includePaths,
         sourceMap: "file",
       },
