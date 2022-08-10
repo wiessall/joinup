@@ -60,6 +60,9 @@ Feature:
       | Model         | Basic Component 4: Open data                          |
 
     When I visit the "Online Assistant" custom page
+    And I should see the text "The online assistant helps users to find operational solutions that cover the alignment and implementation of the European Interoperability Framework and filter them by attributes."
+    And I should see the text "Step 1 - Choose one or combine multiple filters to find solutions that match specifically your EIF requirements"
+    And I should see the text "Step 2 - Explore operational solutions that help align to the European Interoperability Framework"
     And I should see the following filter categories in the correct order:
       | Underlying principles  |
       | Interoperability layer |
@@ -78,6 +81,7 @@ Feature:
     Then I should see the following headings:
       | Jordan 1 |
       | Jordan 2 |
+    And I should see the text "2 matching solutions found"
     But I should not see the following headings:
       | Jordan 3 |
       | Jordan 4 |
@@ -88,6 +92,7 @@ Feature:
     When I click "Security and privacy" in the "Content" region
     Then I should see the following headings:
       | Jordan 1 |
+    And I should see the text "1 matching solutions found"
     But I should not see the following headings:
       | Jordan 2 |
       | Jordan 3 |
@@ -101,6 +106,7 @@ Feature:
       | Jordan 1 |
       | Jordan 2 |
       | Jordan 4 |
+    And I should see the text "3 matching solutions found"
     But I should not see the following headings:
       | Jordan 3 |
       | Jordan 5 |

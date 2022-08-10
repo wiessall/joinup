@@ -30,20 +30,9 @@ settings:
           items:
             - Source
   plugins:
-    stylescombo:
-      styles: ''
     drupallink:
       linkit_enabled: false
       linkit_profile: ''
-    language:
-      language_list: un
-    video_embed:
-      defaults:
-        children:
-          autoplay: true
-          responsive: true
-          width: '854'
-          height: '480'
 image_upload:
   status: false
   scheme: public
