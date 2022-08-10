@@ -1881,47 +1881,52 @@ function joinup_theme_preprocess_rdf_entity__solution__view_mode_search_list_ite
   }
 
   $data = [
-    'layer' => [
-      'field' => 'eif_layer',
-      'label' => 'Interoperability layer',
-      'class' => 'interoperability-layer',
-    ],
     'principle' => [
       'field' => 'eif_principle',
       'label' => 'Underlying principle',
       'class' => 'underlying-principles',
+      'weight' => 0,
+    ],
+    'layer' => [
+      'field' => 'eif_layer',
+      'label' => 'Interoperability layer',
+      'class' => 'interoperability-layer',
+      'weight' => 1,
     ],
     'model' => [
       'field' => 'eif_model',
       'label' => 'Conceptual model',
       'class' => 'conceptual-model',
+      'weight' => 2,
     ],
   ];
 
   $search = [' ', '/', ':'];
   $replace = ['-', '-', ''];
   foreach ($data as $key => $key_data) {
-    $category_lists[$key] = [
-      'title' => $key_data['label'],
-      'weight' => 3,
-      'class' => 'eif-tile__line--' . $key_data['class'],
-    ];
-    $category_lists[$key]['items'] = [];
-    foreach ($eif_perspective->{$key_data['field']} as $eif_wrapper_reference) {
-      // @todo Use an alternative title instead of dynamically splitting it.
-      // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7110.
-      $term = $eif_wrapper_reference->entity;
-      $parts = explode(':', $term->label());
-      $name = empty($parts[1]) ? $term->label() : trim($parts[1]);
-
-      $category_lists[$key]['items'][] = [
-        'title' => $name,
-        'weight' => $term->getWeight(),
-        'description' => $eif_wrapper_reference->entity->description->value,
+    $terms = $eif_perspective->{$key_data['field']}->referencedEntities();
+    if ($terms) {
+      $category_lists[$key] = [
+        'title' => $key_data['label'],
+        'weight' => $key_data['weight'],
+        'class' => 'eif-tile__line--' . $key_data['class'],
       ];
+      $category_lists[$key]['items'] = [];
+      foreach ($terms as $term) {
+        // @todo Use an alternative title instead of dynamically splitting it.
+        // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7110.
+        $parts = explode(':', $term->label());
+        $name = empty($parts[1]) ? $term->label() : trim($parts[1]);
 
-      $normalized_title = htmlentities(str_replace($search, $replace, strtolower($term->label())));
-      $data_property_categories[$term->id()] = $normalized_title;
+        $category_lists[$key]['items'][] = [
+          'title' => $name,
+          'weight' => $term->getWeight(),
+          'description' => $term->description->value,
+        ];
+
+        $normalized_title = htmlentities(str_replace($search, $replace, strtolower($term->label())));
+        $data_property_categories[$term->id()] = $normalized_title;
+      }
     }
   }
 
@@ -1947,6 +1952,7 @@ function joinup_theme_preprocess_rdf_entity__solution__view_mode_search_list_ite
   ]);
   $variables['eif_perspective_description'] = $eif_perspective_view;
   $variables['solution_url'] = $entity->toUrl()->setAbsolute()->toString();
+  $variables['eif_perspective'] = Url::fromRoute('entity.rdf_entity.eif_perspective', ['rdf_entity' => $entity->id()])->toString();
 }
 
 /**
@@ -2271,6 +2277,11 @@ function joinup_theme_preprocess_node(&$variables) {
         $variables['extension'] = t('External');
       }
     }
+  }
+
+  // Hide the white area (main content block) from the EIF Toolbox.
+  if ((int) $node->id() === 705372) {
+    unset($variables['content']);
   }
 }
 
