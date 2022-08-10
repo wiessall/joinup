@@ -16,6 +16,7 @@ Feature: As a site moderator I am able to import RDF files.
     Given I click "ADMS-AP importer" in the "Administration toolbar" region
     Then the "Data pipeline" select should contain the following options:
       | - Select -                               |
+      | Developers Italia                        |
       | Danish Public Sector Interoperability    |
       | EU Schemantic Interoperability Catalogue |
       | Joinup collection                        |

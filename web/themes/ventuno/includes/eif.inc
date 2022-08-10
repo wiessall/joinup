@@ -30,6 +30,6 @@ function ventuno_preprocess_rdf_entity__solution__eif_perspective(array &$variab
   }
 
   $eif_description = \Drupal::entityTypeManager()->getViewBuilder('rdf_meta_entity')->viewField($rdf_meta_entity->get('field_eif_description'), 'eif_perspective');
-  $eif_description[0]['#text'] = strip_tags($eif_description[0]['#text']);
+  $eif_description[0]['#text'] = array_key_exists(0, $eif_description) ? strip_tags($eif_description[0]['#text']) : '';
   $variables['content']['eif_perspective_fields']['field_eif_description'] = $eif_description;
 }

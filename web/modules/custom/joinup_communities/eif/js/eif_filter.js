@@ -16,6 +16,7 @@
 
     // Check every active filter item and hide tiles which don't contain proper
     // data-eif-category.
+    let solutionsCount = 0;
     const eifFilterItem = document.querySelectorAll(
       ".eif-filter__item a.is-active"
     );
@@ -37,6 +38,13 @@
         });
       }
     });
+    // Show calculated number of solutions.
+    eifTile.forEach((el) => {
+      if (!el.classList.contains("visually-hidden")) {
+        solutionsCount++;
+      }
+    });
+    document.querySelector(".eif-counter__number").textContent = solutionsCount;
   }
   // Trigger if eif filter is clicked.
   document.querySelectorAll(".eif-filter__item a").forEach((el) => {
