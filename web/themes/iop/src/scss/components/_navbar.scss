@@ -1,0 +1,72 @@
+.iop-navbar {
+  background: linear-gradient(to bottom, $darkblue 0%, $darkblue 60%, $blue 120%);
+  .navbar-brand {
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 0;
+    @include media-breakpoint-up(md) {
+      left: 0;
+      transform: translateX(0);
+      margin: 0 $spacer 0 0; // 0px 16px 0px 0px
+    }
+  }
+  .navbar-brand-image {
+    width: 8rem; // 128px
+    height: auto;
+    @include media-breakpoint-up(lg) {
+      width: 10rem; // 160px
+    }
+  }
+  button,
+  a {
+    &:focus-visible {
+      box-shadow: 0 0 0 0.125rem $lightblue;
+    }
+  }
+  .navbar-toggler {
+    border: 0;
+    padding: $spacer * .25; // 4px
+    &:focus {
+      box-shadow: 0 0 0 0.125rem $lightblue;
+    }
+  }
+  .navbar-toggler-icon {
+    width: 24px;
+    height: 24px;
+  }
+  .navbar-collapse {
+    justify-content: end;
+  }
+  .navbar-nav {
+    margin: $spacer * .5 0; // 8px 0;
+  }
+  .nav-item {
+    margin-top: $spacer * .5; // 8px
+    text-align: right;
+    @include media-breakpoint-up(md) {
+      margin-top: 0;
+      margin-right: $spacer; // 16px
+      &:last-of-type {
+        margin-right: 0;
+      }
+    }
+  }
+  .nav-link {
+    display: inline;
+    color: $white;
+    border: 2px solid transparent;
+    padding: $spacer * .25; // 4px
+    border-radius: $border-radius-pill;
+    &:hover {
+      background:
+        linear-gradient($primary, $primary) padding-box,
+        $gradient border-box;
+    }
+  }
+  &.js-is--sticky {
+    position: fixed;
+    top: 0;
+    width: 100%
+  }
+}
