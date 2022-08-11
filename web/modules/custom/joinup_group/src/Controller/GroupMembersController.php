@@ -29,8 +29,6 @@ class GroupMembersController extends ControllerBase {
 
   /**
    * The OG access service.
-   *
-   * @var \Drupal\og\OgAccessInterface
    */
   protected OgAccessInterface $ogAccess;
 
@@ -90,9 +88,8 @@ class GroupMembersController extends ControllerBase {
    *   The access result object.
    */
   public function access(GroupInterface $rdf_entity): AccessResultInterface {
-    $user = $this->currentUser();
     $access = $this->entityTypeManager()->getAccessControlHandler('rdf_entity')->access($rdf_entity, 'view');
-    return AccessResult::allowedIf($access && $user->hasPermission('access user profiles'));
+    return AccessResult::allowedIf($access && $this->currentUser()->hasPermission('access user profiles'));
   }
 
 }
