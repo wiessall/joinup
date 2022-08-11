@@ -1,0 +1,14 @@
+// Custom theme colors
+
+$white: #fff;
+$darkblue: #082330;
+$blue: #0047ba;
+$lightblue: #238dc1;
+$turquoise: #19d3c5;
+$lightgreen: #cdd854;
+$orange: #f29100;
+
+$brand: $lightblue;
+$primary: $darkblue;
+$secondary: $orange;
+$gradient: linear-gradient(to right, $lightblue 0%, $blue 25%, $turquoise 55%, $lightgreen 80%, $orange 100%);
