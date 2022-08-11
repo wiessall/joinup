@@ -45,7 +45,11 @@
             solutionsCount += 1;
           }
         });
-        document.querySelector(".eif-counter__number").textContent = solutionsCount;
+        const counter = document.querySelector(".eif-counter__number");
+        if (counter === null || counter === undefined) {
+          return;
+        }
+        counter.textContent = solutionsCount;
       }
       // Trigger if eif filter is clicked.
       document.querySelectorAll(".eif-filter__item a").forEach((el) => {
