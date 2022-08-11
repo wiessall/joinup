@@ -55,12 +55,12 @@ Feature: Collection membership overview
       | Jubilant Robots | Aali Dalton           |             |         |
       | Jubilant Rabits | Ruby Valenta          | owner       |         |
 
-    # The membership overview should not be accessible for anonymous users for draft collection.
+     # The membership overview should not be accessible for anonymous users for draft collection.
     When I am not logged in
-    And I go to the "Jubilant Rabits" collection
+    And I go to the members page of "Jubilant Rabits"
     Then I should not see the link "Members" in the "Left sidebar"
 
-    # The membership overview should not be accessible for not members users for draft collection.
+    # The membership overview should not be accessible for non members users for draft collection.
     When I am logged in as "Janna Miller"
     And I go to the "Jubilant Rabits" collection
     Then I should not see the link "Members" in the "Left sidebar"
