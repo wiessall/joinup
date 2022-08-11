@@ -62,17 +62,17 @@ Feature: Collection membership overview
 
     # The membership overview should not be accessible for non members users for draft collection.
     When I am logged in as "Janna Miller"
-    And I go to the "Jubilant Rabits" collection
+    And I go to the members page of "Jubilant Rabits"
     Then I should not see the link "Members" in the "Left sidebar"
 
     # The membership overview should be accessible for owner users for draft collection.
     When I am logged in as "Ruby Valenta"
-    And I go to the "Jubilant Rabits" collection
+    And I go to the members page of "Jubilant Rabits"
     Then I should see the link "Members" in the "Left sidebar"
 
     # The membership overview should be accessible for anonymous users.
     When I am not logged in
-    And I go to the "Jubilant Robots" collection
+    And I go to the members page of "Jubilant Rabits"
     Then I should see the link "Members" in the "Left sidebar"
 
     # The first 12 active members should be shown, ordered by first name - last name.
