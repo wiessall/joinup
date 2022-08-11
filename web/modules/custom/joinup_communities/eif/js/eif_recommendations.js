@@ -2,8 +2,8 @@
  * @file
  * Eif module behaviors.
  */
-((Drupal) => {
-  Drupal.behaviors.Eif = {
+(() => {
+  Drupal.behaviors.eifRecommendations = {
     attach(context) {
       const // Get the select element.
         recommendationSelector = context.querySelector(
@@ -19,4 +19,4 @@
       });
     },
   };
-})(Drupal);
+})();
