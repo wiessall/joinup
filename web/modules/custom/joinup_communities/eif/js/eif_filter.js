@@ -4,70 +4,73 @@
  */
 
 (() => {
-  // CheckEifCategories function.
-  function checkEifCategories() {
-    const eifTile = document.querySelectorAll(".eif-tile");
-    // Remove hidden class before further processing.
-    eifTile.forEach((el) => {
-      if (el.classList.contains("visually-hidden")) {
-        el.classList.remove("visually-hidden");
-      }
-    });
-
-    // Check every active filter item and hide tiles which don't contain proper
-    // data-eif-category.
-    let solutionsCount = 0;
-    const eifFilterItem = document.querySelectorAll(
-      ".eif-filter__item a.is-active"
-    );
-    eifFilterItem.forEach((element) => {
-      const currentEifCategory = element.getAttribute("data-eif-category");
-
-      if (typeof currentEifCategory !== "undefined") {
+  Drupal.behaviors.eifFilter = {
+    attach() {
+      function checkEifCategories() {
+        const eifTile = document.querySelectorAll(".eif-tile");
+        // Remove hidden class before further processing.
         eifTile.forEach((el) => {
-          const eifCategory = el.getAttribute("data-eif-category");
-          if (typeof eifCategory !== "undefined") {
-            const eifCategoryArray = eifCategory.split(" ");
-            if (
-              !eifCategoryArray.includes(currentEifCategory) &&
-              !el.classList.contains("visually-hidden")
-            ) {
-              el.classList.add("visually-hidden");
-            }
+          if (el.classList.contains("visually-hidden")) {
+            el.classList.remove("visually-hidden");
           }
         });
-      }
-    });
-    // Show calculated number of solutions.
-    eifTile.forEach((el) => {
-      if (!el.classList.contains("visually-hidden")) {
-        solutionsCount += 1;
-      }
-    });
-    document.querySelector(".eif-counter__number").textContent = solutionsCount;
-  }
-  // Trigger if eif filter is clicked.
-  document.querySelectorAll(".eif-filter__item a").forEach((el) => {
-    el.addEventListener("click", (e) => {
-      e.preventDefault();
-      e.target.classList.toggle("is-active");
-      checkEifCategories();
-    });
-  });
 
-  // Reset eif listing.
-  const eifRest = document.getElementById("eif-reset");
-  if (eifRest) {
-    eifRest.addEventListener("click", () => {
-      document
-        .querySelector(".eif-filter__item a.is-active")
-        .classList.remove("is-active");
-      checkEifCategories();
-    });
-  }
+        // Check every active filter item and hide tiles which don't contain proper
+        // data-eif-category.
+        let solutionsCount = 0;
+        const eifFilterItem = document.querySelectorAll(
+          ".eif-filter__item a.is-active"
+        );
+        eifFilterItem.forEach((element) => {
+          const currentEifCategory = element.getAttribute("data-eif-category");
 
-  // Filter on window load. Needed for eif search filter.
-  window.onload = () => {
-    checkEifCategories();
+          if (typeof currentEifCategory !== "undefined") {
+            eifTile.forEach((el) => {
+              const eifCategory = el.getAttribute("data-eif-category");
+              if (typeof eifCategory !== "undefined") {
+                const eifCategoryArray = eifCategory.split(" ");
+                if (
+                  !eifCategoryArray.includes(currentEifCategory) &&
+                  !el.classList.contains("visually-hidden")
+                ) {
+                  el.classList.add("visually-hidden");
+                }
+              }
+            });
+          }
+        });
+        // Show calculated number of solutions.
+        eifTile.forEach((el) => {
+          if (!el.classList.contains("visually-hidden")) {
+            solutionsCount += 1;
+          }
+        });
+        document.querySelector(".eif-counter__number").textContent = solutionsCount;
+      }
+      // Trigger if eif filter is clicked.
+      document.querySelectorAll(".eif-filter__item a").forEach((el) => {
+        el.addEventListener("click", (e) => {
+          e.preventDefault();
+          e.target.classList.toggle("is-active");
+          checkEifCategories();
+        });
+      });
+
+      // Reset eif listing.
+      const eifRest = document.getElementById("eif-reset");
+      if (eifRest) {
+        eifRest.addEventListener("click", () => {
+          document
+            .querySelector(".eif-filter__item a.is-active")
+            .classList.remove("is-active");
+          checkEifCategories();
+        });
+      }
+
+      // Filter on window load. Needed for eif search filter.
+      window.onload = () => {
+        checkEifCategories();
+      };
+    },
   };
 })();
