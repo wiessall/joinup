@@ -129,13 +129,15 @@
       }
 
       // Trigger if licence filter is clicked.
-      document.querySelectorAll(".licence-filter__item a").forEach((element) => {
-        element.addEventListener("click", (e) => {
-          e.preventDefault();
-          e.target.classList.toggle("is-active");
-          checkLicenceCategories();
+      document
+        .querySelectorAll(".licence-filter__item a")
+        .forEach((element) => {
+          element.addEventListener("click", (e) => {
+            e.preventDefault();
+            e.target.classList.toggle("is-active");
+            checkLicenceCategories();
+          });
         });
-      });
 
       // Cancel the 'Enter' key of the filter input. Entered key is cancelled on
       // keypress, not on keyup.
@@ -172,11 +174,14 @@
         // Also, uncheck any selected licences checked for comparison and disable
         // the "Compare" buttons. The 'data-licence-compare' attribute which is set
         // to [], is the attribute that stores the licences set-up for comparison.
-
-        if (document.querySelectorAll(".licence-tile__button--compatible").length) {
-          document.querySelectorAll(".licence-tile .mdl-js-radio").forEach((el) => {
-            el.MaterialRadio.uncheck();
-          });
+        if (
+          document.querySelectorAll(".licence-tile__button--compatible").length
+        ) {
+          document
+            .querySelectorAll(".licence-tile .mdl-js-radio")
+            .forEach((el) => {
+              el.MaterialRadio.uncheck();
+            });
         } else {
           document
             .querySelectorAll(".licence-tile .mdl-js-checkbox")
@@ -196,7 +201,9 @@
         .forEach((element) => {
           element.addEventListener("click", (e) => {
             const licenceListing = document.querySelector(".listing--licences");
-            const licences = licenceListing.getAttribute("data-licence-compare");
+            const licences = licenceListing.getAttribute(
+              "data-licence-compare"
+            );
             const licenceName = e.target.getAttribute("data-licence-name");
             let licencesString = "";
             let licencesArray = [];
@@ -216,6 +223,7 @@
             } else {
               if (licencesArray.length > 0) {
                 licencesArray = JSON.parse(licences);
+                // eslint-disable-next-line max-nested-callbacks
                 licencesArray = licencesArray.filter((value) => {
                   return value !== licenceName;
                 });
@@ -272,6 +280,7 @@
               const licenceTileCompatibleButton = document.querySelectorAll(
                 ".licence-tile__button--compatible"
               );
+              // eslint-disable-next-line max-nested-callbacks
               licenceTileCompatibleButton.forEach((el) => {
                 el.setAttribute("href", compatibleUrl);
               });
