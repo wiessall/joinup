@@ -3,7 +3,7 @@
  * Eif filter functionality.
  */
 
-(function (Drupal) {
+(() => {
   // CheckEifCategories function.
   function checkEifCategories() {
     const eifTile = document.querySelectorAll(".eif-tile");
@@ -41,7 +41,7 @@
     // Show calculated number of solutions.
     eifTile.forEach((el) => {
       if (!el.classList.contains("visually-hidden")) {
-        solutionsCount++;
+        solutionsCount += 1;
       }
     });
     document.querySelector(".eif-counter__number").textContent = solutionsCount;
@@ -58,7 +58,7 @@
   // Reset eif listing.
   const eifRest = document.getElementById("eif-reset");
   if (eifRest) {
-    eifRest.addEventListener("click", (e) => {
+    eifRest.addEventListener("click", () => {
       document
         .querySelector(".eif-filter__item a.is-active")
         .classList.remove("is-active");
@@ -67,7 +67,7 @@
   }
 
   // Filter on window load. Needed for eif search filter.
-  window.onload = (event) => {
+  window.onload = () => {
     checkEifCategories();
   };
-})(Drupal);
+})();
