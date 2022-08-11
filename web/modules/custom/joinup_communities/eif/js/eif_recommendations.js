@@ -5,10 +5,10 @@
 (() => {
   Drupal.behaviors.eifRecommendations = {
     attach(context) {
-      const // Get the select element.
-        recommendationSelector = context.querySelector(
-          'select[data-drupal-eif-recommendation-selector="true"]'
-        );
+      // Get the select element.
+      const recommendationSelector = context.querySelector(
+        'select[data-drupal-eif-recommendation-selector="true"]'
+      );
       // Get the parent form.
       const form = recommendationSelector.closest("form");
       // Bind the event handler.
