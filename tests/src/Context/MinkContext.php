@@ -115,6 +115,18 @@ class MinkContext extends DrupalExtensionMinkContext {
   }
 
   /**
+   * Wait for the given amount of seconds.
+   *
+   * @param string $seconds
+   *   The seconds to wait.
+   *
+   * @Given I wait for :seconds second(s)
+   */
+  public function iWaitForSeconds(string $seconds) {
+    $this->getSession()->wait($seconds * 1000);
+  }
+
+  /**
    * {@inheritdoc}
    */
   public function clickLink($link): void {
