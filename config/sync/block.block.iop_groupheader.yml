@@ -4,6 +4,7 @@ status: true
 dependencies:
   module:
     - joinup
+    - joinup_group
   theme:
     - iop
 _core:
@@ -20,5 +21,11 @@ settings:
   label_display: '0'
   provider: joinup
   context_mapping:
-    og: '@og.context:og'
-visibility: {  }
+    og: '@asset_release.asset_release_route_context:asset_release'
+visibility:
+  group_context:
+    id: group_context
+    negate: true
+    group_context: true
+    limit_to_groups:
+      - 'http://data.europa.eu/w21/8e30f798-ff2b-478b-9c09-5ed5a63b4c8c'
