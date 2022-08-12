@@ -6,6 +6,7 @@ dependencies:
     - facets.facet.solution_type
   module:
     - facets
+    - system
   theme:
     - joinup_theme
 id: solutiontype
@@ -19,5 +20,10 @@ settings:
   label: 'Solution type'
   label_display: visible
   provider: facets
+  context_mapping: {  }
   block_id: solutiontype
-visibility: {  }
+visibility:
+  request_path:
+    id: request_path
+    negate: false
+    pages: admin/reporting/solutions-by-type
