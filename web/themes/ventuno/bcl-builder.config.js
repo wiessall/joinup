@@ -429,6 +429,7 @@ module.exports = {
             'linkedin.svg',
             'newspaper.svg',
             'person-circle.svg',
+            'plus.svg',
             'question-lg.svg',
             'search.svg',
             'star.svg',
