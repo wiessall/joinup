@@ -1,0 +1,22 @@
+.pagination {
+  .page-item.active .page-link {
+    color: $gray-900;
+    font-weight: $font-weight-bold;
+    background: $gray-300;
+  }
+  .page-item .page-link {
+    color: $gray-700;
+  }
+  .page-item.disabled .page-link {
+    color: $gray-500;
+  }
+  .page-link {
+    padding: $spacer * .5 $spacer * .875; // 8px 14px
+  }
+  .page-link:hover {
+    background: $gray-300;
+  }
+  .page-item .page-link .bi{
+    color: $gray-900;
+  }
+}
