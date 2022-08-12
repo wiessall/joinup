@@ -72,7 +72,7 @@ Feature: Collection membership overview
 
     # The membership overview should be accessible for anonymous users.
     When I am not logged in
-    And I go to the members page of "Jubilant Rabits"
+    And I go to the members page of "Jubilant Robots"
     Then I should see the link "Members" in the "Left sidebar"
 
     # The first 12 active members should be shown, ordered by first name - last name.
