@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "89167be2dee4916fa903794ba10e5eb4",
+    "content-hash": "ec8446e3836adaaac61013785519443c",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -3766,16 +3766,8 @@
                     "role": "Co-maintainer"
                 },
                 {
-                    "name": "Pol",
-                    "homepage": "https://www.drupal.org/user/47194"
-                },
-                {
-                    "name": "Simon Georges",
-                    "homepage": "https://www.drupal.org/user/172312"
-                },
-                {
-                    "name": "claudiu.cristea",
-                    "homepage": "https://www.drupal.org/user/56348"
+                    "name": "Dean Reilly",
+                    "homepage": "https://www.drupal.org/user/336031"
                 },
                 {
                     "name": "gregseb",
@@ -3796,6 +3788,14 @@
                 {
                     "name": "phayes",
                     "homepage": "https://www.drupal.org/user/47098"
+                },
+                {
+                    "name": "Pol",
+                    "homepage": "https://www.drupal.org/user/47194"
+                },
+                {
+                    "name": "Simon Georges",
+                    "homepage": "https://www.drupal.org/user/172312"
                 },
                 {
                     "name": "vidhatanand",
@@ -5640,12 +5640,16 @@
                     "homepage": "http://www.nielsvm.org"
                 },
                 {
-                    "name": "djbobbydrake",
-                    "homepage": "https://www.drupal.org/user/336378"
+                    "name": "japerry",
+                    "homepage": "https://www.drupal.org/user/45640"
                 },
                 {
                     "name": "nielsvm",
                     "homepage": "https://www.drupal.org/user/163285"
+                },
+                {
+                    "name": "SqyD",
+                    "homepage": "https://www.drupal.org/user/106525"
                 }
             ],
             "description": "Provides a generic external cache invalidation API and queue service.",
@@ -5691,12 +5695,16 @@
                     "homepage": "http://www.nielsvm.org"
                 },
                 {
-                    "name": "djbobbydrake",
-                    "homepage": "https://www.drupal.org/user/336378"
+                    "name": "japerry",
+                    "homepage": "https://www.drupal.org/user/45640"
                 },
                 {
                     "name": "nielsvm",
                     "homepage": "https://www.drupal.org/user/163285"
+                },
+                {
+                    "name": "SqyD",
+                    "homepage": "https://www.drupal.org/user/106525"
                 }
             ],
             "description": "Administrative Drush commands for Purge.",
@@ -5737,12 +5745,16 @@
                     "homepage": "http://www.nielsvm.org"
                 },
                 {
-                    "name": "djbobbydrake",
-                    "homepage": "https://www.drupal.org/user/336378"
+                    "name": "japerry",
+                    "homepage": "https://www.drupal.org/user/45640"
                 },
                 {
                     "name": "nielsvm",
                     "homepage": "https://www.drupal.org/user/163285"
+                },
+                {
+                    "name": "SqyD",
+                    "homepage": "https://www.drupal.org/user/106525"
                 }
             ],
             "description": "Processes the queue every time cron runs, recommended for most configurations.",
@@ -5783,12 +5795,16 @@
                     "homepage": "http://www.nielsvm.org"
                 },
                 {
-                    "name": "djbobbydrake",
-                    "homepage": "https://www.drupal.org/user/336378"
+                    "name": "japerry",
+                    "homepage": "https://www.drupal.org/user/45640"
                 },
                 {
                     "name": "nielsvm",
                     "homepage": "https://www.drupal.org/user/163285"
+                },
+                {
+                    "name": "SqyD",
+                    "homepage": "https://www.drupal.org/user/106525"
                 }
             ],
             "description": "Process the queue on every request, this is only recommended on high latency configurations.",
@@ -5829,12 +5845,16 @@
                     "homepage": "http://www.nielsvm.org"
                 },
                 {
-                    "name": "djbobbydrake",
-                    "homepage": "https://www.drupal.org/user/336378"
+                    "name": "japerry",
+                    "homepage": "https://www.drupal.org/user/45640"
                 },
                 {
                     "name": "nielsvm",
                     "homepage": "https://www.drupal.org/user/163285"
+                },
+                {
+                    "name": "SqyD",
+                    "homepage": "https://www.drupal.org/user/106525"
                 }
             ],
             "description": "Queues every tag that Drupal invalidates internally.",
@@ -7796,10 +7816,6 @@
             ],
             "authors": [
                 {
-                    "name": "Steven Jones",
-                    "homepage": "https://www.drupal.org/user/99644"
-                },
-                {
                     "name": "amoebanath",
                     "homepage": "https://www.drupal.org/user/2810799"
                 },
@@ -7818,6 +7834,10 @@
                 {
                     "name": "nerdstein",
                     "homepage": "https://www.drupal.org/user/1557710"
+                },
+                {
+                    "name": "Steven Jones",
+                    "homepage": "https://www.drupal.org/user/99644"
                 }
             ],
             "description": "Plugin to export views data into various file formats.",
@@ -17798,12 +17818,12 @@
             ],
             "authors": [
                 {
-                    "name": "Gábor Hojtsy",
-                    "homepage": "https://www.drupal.org/user/4166"
-                },
-                {
                     "name": "colan",
                     "homepage": "https://www.drupal.org/user/58704"
+                },
+                {
+                    "name": "Gábor Hojtsy",
+                    "homepage": "https://www.drupal.org/user/4166"
                 },
                 {
                     "name": "herczogzoltan",
