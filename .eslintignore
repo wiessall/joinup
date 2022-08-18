@@ -26,5 +26,6 @@
 /db/
 /tmp/
 
-# Ignore min file copied as it is.
+# Ignore files copied as they are.
 /web/modules/custom/joinup_core/js/jquery.timeago.min.js
+/web/modules/custom/joinup_communities/tallinn/lib/

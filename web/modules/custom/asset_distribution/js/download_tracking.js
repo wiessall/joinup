@@ -13,7 +13,7 @@
    *   Attaches distribution download tracking functionality.
    */
   Drupal.behaviors.assetDistributionDownloadTracking = {
-    attach(context, settings) {
+    attach(context) {
       $(context)
         .find("a.track-download")
         .once("track-download")
@@ -30,7 +30,7 @@
             dialogType: "modal",
           });
 
-          $this.on("click", (event) => {
+          $this.on("click", () => {
             $(this).trigger("track_download.joinup");
             // IE11 misbehaves when clicking the link and the default behaviour
             // is not working.
