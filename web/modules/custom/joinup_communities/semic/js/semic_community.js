@@ -17,7 +17,7 @@ L.custom = {
     // MARKERS.
     const kml = drupalSettings.semic.map.adoptersListUrl;
 
-    const kml_options = {
+    const kmlOptions = {
       onEachFeature(feature, layer) {
         layer.bindInfo(
           `<p><b>${feature.properties.name}</b></p>${feature.properties.description}`
@@ -25,7 +25,7 @@ L.custom = {
       },
     };
 
-    const markers = L.wt.markers([kml], kml_options).addTo(map);
+    const markers = L.wt.markers([kml], kmlOptions).addTo(map);
 
     $wt._queue("next"); // Process next components.
   },
