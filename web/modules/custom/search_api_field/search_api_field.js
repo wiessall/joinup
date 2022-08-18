@@ -3,7 +3,7 @@
  * Attaches the behaviors for the Field UI module.
  */
 
-(function ($, Drupal, drupalSettings, once) {
+(($, Drupal, drupalSettings, once) => {
   /**
    * Attaches the fieldUIOverview behavior.
    *
@@ -18,7 +18,7 @@
     attach(context, settings) {
       $(
         once("field-display-overview", "table#field-display-overview", context)
-      ).each(function () {
+      ).each(() => {
         Drupal.fieldUIOverview.attach(
           this,
           settings.fieldUIRowsData,
@@ -54,7 +54,7 @@
       // Create row handlers.
       $(table)
         .find("tr.draggable")
-        .each(function () {
+        .each(() => {
           // Extract server-side data for the row.
           const row = this;
           if (row.id in rowsData) {
@@ -111,7 +111,7 @@
 
         if (region !== rowHandler.region) {
           // Let the row handler deal with the region change.
-          const refreshRows = rowHandler.regionChange(region);
+          rowHandler.regionChange(region);
           // Update the row region.
           rowHandler.region = region;
           // Ajax-update the rows.
@@ -123,15 +123,12 @@
      * Refreshes placeholder rows in empty regions while a row is being dragged.
      *
      * Copied from block.js.
-     *
-     * @param {HTMLElement} draggedRow
-     *   The tableDrag rowObject for the row being dragged.
      */
-    onSwap(draggedRow) {
+    onSwap() {
       const rowObject = this;
       $(rowObject.table)
         .find("tr.region-message")
-        .each(function () {
+        .each(() => {
           const $this = $(this);
           // If the dragged row is in this region, but above the message row, swap
           // it down one space.
@@ -185,7 +182,7 @@
    * @return {Drupal.fieldUIDisplayOverview.field}
    *   The field row handler constructed.
    */
-  Drupal.fieldUIDisplayOverview.field = function (row, data) {
+  Drupal.fieldUIDisplayOverview.field = (row, data) => {
     this.row = row;
     this.name = data.name;
     this.region = data.region;
@@ -223,11 +220,6 @@
      *
      * @param {string} region
      *   The name of the new region for the row.
-     *
-     * @return {object}
-     *   A hash object indicating which rows should be Ajax-updated as a result
-     *   of the change, in the format expected by
-     *   {@link Drupal.fieldUIOverview.AJAXRefreshRows}.
      */
     regionChange(region) {
       // Replace dashes with underscores.
