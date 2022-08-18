@@ -25,3 +25,6 @@
 # Ignore database backups and temporary files directories.
 /db/
 /tmp/
+
+# Ignore min file copied as it is.
+/web/modules/custom/joinup_core/js/jquery.timeago.min.js
