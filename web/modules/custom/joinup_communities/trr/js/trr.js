@@ -7,20 +7,20 @@
  * Hides/shows fields on the solution form for the TRR community.
  */
 (($) => {
-  Drupal.behaviors.trr_solution = {
-    attach(context, settings) {
-      $(context)
-        .find('select[name="field_is_solution_type[]"]')
-        .once("trr_solution")
-        .each(() => {
-          const $element = $(this);
-          solutionTypeUpdated($element);
-          $element.on("change", () => {
-            solutionTypeUpdated($element);
-          });
-        });
-    },
-  };
+  function arrayIntersect(arrays) {
+    return arrays.shift().reduce((res, v) => {
+      if (res.indexOf(v) === -1) {
+        if (
+          arrays.every((a) => {
+            return a.indexOf(v) !== -1;
+          })
+        ) {
+          res.push(v);
+        }
+      }
+      return res;
+    }, []);
+  }
 
   /**
    * Hide/show an element when the solution is a 'trr' solution.
@@ -76,19 +76,18 @@
     );
     toggleTrrElement(solutionType, $editFieldIsStandardizationLevelWrapper);
   }
-
-  function arrayIntersect(arrays) {
-    return arrays.shift().reduce((res, v) => {
-      if (res.indexOf(v) === -1) {
-        if (
-          arrays.every((a) => {
-            return a.indexOf(v) !== -1;
-          })
-        ) {
-          res.push(v);
-        }
-      }
-      return res;
-    }, []);
-  }
+  Drupal.behaviors.trr_solution = {
+    attach(context) {
+      $(context)
+        .find('select[name="field_is_solution_type[]"]')
+        .once("trr_solution")
+        .each(() => {
+          const $element = $(this);
+          solutionTypeUpdated($element);
+          $element.on("change", () => {
+            solutionTypeUpdated($element);
+          });
+        });
+    },
+  };
 })(jQuery);
