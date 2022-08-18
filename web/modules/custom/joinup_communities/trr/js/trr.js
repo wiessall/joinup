@@ -7,6 +7,14 @@
  * Hides/shows fields on the solution form for the TRR community.
  */
 (($) => {
+  /**
+   * Computes the intersection of two or many array.
+   *
+   * @param {Array[]} arrays
+   *   An array of arrays.
+   * @return {*}
+   *   The intersection of the passed arrays.
+   */
   function arrayIntersect(arrays) {
     return arrays.shift().reduce((res, v) => {
       if (res.indexOf(v) === -1) {
@@ -25,8 +33,10 @@
   /**
    * Hide/show an element when the solution is a 'trr' solution.
    *
-   * @param solutionType
-   * @param $element
+   * @param {String[]} solutionType
+   *   The solution type.
+   * @param {HTMLElement} $element
+   *   The element.
    */
   function toggleTrrElement(solutionType, $element) {
     const trrSolutionTerms = [
@@ -45,7 +55,8 @@
   /**
    * Only show some field when the solution type is set to one of the TRR terms.
    *
-   * @param $solutionTypeElement
+   * @param {HTMLElement} $solutionTypeElement
+   *   The element.
    */
   function solutionTypeUpdated($solutionTypeElement) {
     let solutionType = $solutionTypeElement.val();
