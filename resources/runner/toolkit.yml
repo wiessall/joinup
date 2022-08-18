@@ -183,17 +183,30 @@ commands:
       command: testing:phpcs-setup
     - task: exec
       command: ${phpcs.file.bin}
+    # This is a temporary solution as the Digit QA pipeline doesn't run JS lint.
+    - task: run
+      command: toolkit:lint-js
     #- task: run
     #  command: testing:check-deprecated-code
     #- task: run
     #  command: testing:check-deprecated-code-contrib
 
+  # Lints JS files  using ESLint.
+  toolkit:lint-js:
+    - task: exec
+      command: ${joinup.dir}/node_modules/.bin/eslint --config .eslintrc.json --ext js .
+
+  # Fixes JS files using ESLint.
+  toolkit:fix-js:
+    - task: exec
+      command: ${joinup.dir}/node_modules/.bin/eslint --config .eslintrc.json --ext js --fix .
+
   # Lints YAML files using ESLint.
   toolkit:lint-yaml:
     - task: exec
-      command: ${joinup.dir}/node_modules/.bin/eslint --ext .yml .
+      command: ${joinup.dir}/node_modules/.bin/eslint --config .eslintrc.json --ext yml .
 
   # Fixes YAML files using ESLint.
   toolkit:fix-yaml:
     - task: exec
-      command: ${joinup.dir}/node_modules/.bin/eslint --ext .yml --fix .
+      command: ${joinup.dir}/node_modules/.bin/eslint --config .eslintrc.json --ext yml --fix .

@@ -1,14 +1,19 @@
 # Ignore generated files.
-behat.yml
-docker-compose.override.yml
-runner.yml
+/behat.yml
+/docker-compose.override.yml
+/runner.yml
+/web/themes/ventuno/assets/
 
 # Ignore third party dependencies.
-/node_modules/
+**/node_modules/
 /vendor/
 /web/core/
+/web/libraries/
 /web/modules/contrib/
 /web/themes/contrib/
+
+# Ignore legacy theme.
+/web/themes/joinup/
 
 # Ignore user uploaded content.
 /private/

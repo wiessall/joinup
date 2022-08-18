@@ -227,7 +227,9 @@
                 },
                 "[project-root]/.gitattributes": {
                     "append": "resources/drupal-scaffold/.gitattributes.append"
-                }
+                },
+                "[web-root]/.eslintignore": false,
+                "[web-root]/.eslintrc.json": false
             }
         },
         "enable-patching": true,
