@@ -8,5 +8,4 @@ eif-filter:
   js:
     js/eif_filter.js: {}
   dependencies:
-    - core/jquery
     - core/drupal
