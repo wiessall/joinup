@@ -25,14 +25,14 @@
         .once("dashboard")
         .each(() => {
           $(this).on("click", () => {
-            const subscription_status = [];
+            const subscriptionStatus = [];
 
             // Get current status of checkboxes.
             $(this)
               .closest(".form__subscribe-types-inner")
               .find("input.form-checkbox")
               .each(() => {
-                subscription_status.push($(this).prop("checked"));
+                subscriptionStatus.push($(this).prop("checked"));
               });
 
             // Get subscription button.
@@ -41,14 +41,14 @@
               .find("input.button");
 
             // Get initial status of checkboxes stored inside button attribute.
-            const subscription_status_initial = $button.attr(
+            const subscriptionStatusInitial = $button.attr(
               "data-drupal-subscriptions"
             );
 
             // Compare current and initial status of checkboxes.
             if (
-              JSON.stringify(subscription_status) ===
-              subscription_status_initial
+              JSON.stringify(subscriptionStatus) ===
+              subscriptionStatusInitial
             ) {
               $button.prop("disabled", true).addClass("is-disabled");
             } else {
