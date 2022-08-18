@@ -14,76 +14,70 @@
         .once("trr_solution")
         .each(() => {
           const $element = $(this);
-          solution_type_updated($element);
+          solutionTypeUpdated($element);
           $element.on("change", () => {
-            solution_type_updated($element);
+            solutionTypeUpdated($element);
           });
         });
     },
   };
 
   /**
-   * Only show some field when the solution type is set to one of the TRR terms.
-   *
-   * @param $solution_type_element
-   */
-  function solution_type_updated($solution_type_element) {
-    let solution_type = $solution_type_element.val();
-    if (!solution_type) {
-      solution_type = [];
-    }
-    // Test resource type field.
-    const $field_is_test_resource_type = $(
-      "#edit-field-is-test-resource-type-wrapper"
-    );
-    toggle_trr_element(solution_type, $field_is_test_resource_type);
-    // Actor field.
-    const $edit_field_is_actor_wrapper = $("#edit-field-is-actor-wrapper");
-    toggle_trr_element(solution_type, $edit_field_is_actor_wrapper);
-    // Business process field.
-    const $edit_field_is_business_process_wrapper = $(
-      "#edit-field-is-business-process-wrapper"
-    );
-    toggle_trr_element(solution_type, $edit_field_is_business_process_wrapper);
-    // Business process field.
-    const $edit_field_is_product_type_wrapper = $(
-      "#edit-field-is-product-type-wrapper"
-    );
-    toggle_trr_element(solution_type, $edit_field_is_product_type_wrapper);
-    // Standardisation level.
-    const $edit_field_is_standardization_level_wrapper = $(
-      "#edit-field-is-standardization-level-wrapper"
-    );
-    toggle_trr_element(
-      solution_type,
-      $edit_field_is_standardization_level_wrapper
-    );
-  }
-
-  /**
    * Hide/show an element when the solution is a 'trr' solution.
    *
-   * @param solution_type
+   * @param solutionType
    * @param $element
    */
-  function toggle_trr_element(solution_type, $element) {
-    const trr_solution_terms = [
+  function toggleTrrElement(solutionType, $element) {
+    const trrSolutionTerms = [
       "http://data.europa.eu/dr8/ConformanceTestingComponent",
       "http://data.europa.eu/dr8/ConformanceTestingService",
       "http://data.europa.eu/dr8/ConformanceTestScenario",
     ];
-    const selected_trr_terms = array_intersect([
-      solution_type,
-      trr_solution_terms,
-    ]);
-    if (selected_trr_terms.length) {
+    const selectedTrrTerms = arrayIntersect([solutionType, trrSolutionTerms]);
+    if (selectedTrrTerms.length) {
       $element.show();
     } else {
       $element.hide();
     }
   }
 
-  function array_intersect(arrays) {
+  /**
+   * Only show some field when the solution type is set to one of the TRR terms.
+   *
+   * @param $solutionTypeElement
+   */
+  function solutionTypeUpdated($solutionTypeElement) {
+    let solutionType = $solutionTypeElement.val();
+    if (!solutionType) {
+      solutionType = [];
+    }
+    // Test resource type field.
+    const $fieldIsTestResourceType = $(
+      "#edit-field-is-test-resource-type-wrapper"
+    );
+    toggleTrrElement(solutionType, $fieldIsTestResourceType);
+    // Actor field.
+    const $editFieldIsActorWrapper = $("#edit-field-is-actor-wrapper");
+    toggleTrrElement(solutionType, $editFieldIsActorWrapper);
+    // Business process field.
+    const $editFieldIsBusinessProcessWrapper = $(
+      "#edit-field-is-business-process-wrapper"
+    );
+    toggleTrrElement(solutionType, $editFieldIsBusinessProcessWrapper);
+    // Business process field.
+    const $editFieldIsProductTypeWrapper = $(
+      "#edit-field-is-product-type-wrapper"
+    );
+    toggleTrrElement(solutionType, $editFieldIsProductTypeWrapper);
+    // Standardisation level.
+    const $editFieldIsStandardizationLevelWrapper = $(
+      "#edit-field-is-standardization-level-wrapper"
+    );
+    toggleTrrElement(solutionType, $editFieldIsStandardizationLevelWrapper);
+  }
+
+  function arrayIntersect(arrays) {
     return arrays.shift().reduce((res, v) => {
       if (res.indexOf(v) === -1) {
         if (

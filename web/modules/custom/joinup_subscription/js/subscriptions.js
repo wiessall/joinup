@@ -31,6 +31,7 @@
             $(this)
               .closest(".form__subscribe-types-inner")
               .find("input.form-checkbox")
+              // eslint-disable-next-line max-nested-callbacks
               .each(() => {
                 subscriptionStatus.push($(this).prop("checked"));
               });
@@ -47,8 +48,7 @@
 
             // Compare current and initial status of checkboxes.
             if (
-              JSON.stringify(subscriptionStatus) ===
-              subscriptionStatusInitial
+              JSON.stringify(subscriptionStatus) === subscriptionStatusInitial
             ) {
               $button.prop("disabled", true).addClass("is-disabled");
             } else {

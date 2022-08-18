@@ -7,16 +7,15 @@
     // so that we can show a dialog urging the user to subscribe to email
     // notifications.
     // If the cookie is set, do an AJAX request to show the subscribe form.
-    const encoded_collection_id = cookies.get("join_group");
-    if (encoded_collection_id) {
+    const encodedCollectionId = cookies.get("join_group");
+    if (encodedCollectionId) {
       try {
-        const collection_id = decodeURIComponent(encoded_collection_id);
-        if (collection_id === drupalSettings.joinGroupData.id) {
-          const sparql_encoded_id =
-            drupalSettings.joinGroupData.sparqlEncodedId;
-          if (sparql_encoded_id) {
+        const collectionId = decodeURIComponent(encodedCollectionId);
+        if (collectionId === drupalSettings.joinGroupData.id) {
+          const { sparqlEncodedId } = drupalSettings.joinGroupData;
+          if (sparqlEncodedId) {
             Drupal.ajax({
-              url: `${drupalSettings.path.baseUrl}ajax/collection/${sparql_encoded_id}/subscribe/auth`,
+              url: `${drupalSettings.path.baseUrl}ajax/collection/${sparqlEncodedId}/subscribe/auth`,
             }).execute();
           }
         }
