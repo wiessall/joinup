@@ -3,15 +3,15 @@
  * JavaScript code for the subscriptions form.
  */
 
-(function ($, Drupal) {
+(($, Drupal) => {
   Drupal.behaviors.joinupSubscription = {
-    attach(context, settings) {
+    attach(context) {
       // Whenever any of the checkboxes for a collection is clicked, enable the
       // submit button.
       $(context)
         .find(".form-select")
-        .each(function () {
-          $(this).on("change", function () {
+        .each(() => {
+          $(this).on("change", () => {
             $(this)
               .closest(".field--name-field-user-frequency")
               .find("input.button")
@@ -23,15 +23,15 @@
       $(context)
         .find("input.form-checkbox")
         .once("dashboard")
-        .each(function () {
-          $(this).on("click", function () {
+        .each(() => {
+          $(this).on("click", () => {
             const subscription_status = [];
 
             // Get current status of checkboxes.
             $(this)
               .closest(".form__subscribe-types-inner")
               .find("input.form-checkbox")
-              .each(function () {
+              .each(() => {
                 subscription_status.push($(this).prop("checked"));
               });
 

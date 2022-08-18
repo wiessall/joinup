@@ -3,7 +3,7 @@
  * Display an 'outdated content' notice if case.
  */
 
-(function ($, Drupal, drupalSettings) {
+(($, Drupal, drupalSettings) => {
   /**
    * Shows a notice if the page displays an entity whose content is outdated.
    *

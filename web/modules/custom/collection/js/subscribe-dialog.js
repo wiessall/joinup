@@ -1,4 +1,4 @@
-(function ($, Drupal, cookies, drupalSettings) {
+(($, Drupal, cookies, drupalSettings) => {
   // This is firing on document ready instead of using Drupal behaviors since
   // we only want to check this on initial page load, not on AJAX requests.
   $(document).ready(() => {
