@@ -9,5 +9,8 @@
         "yml/no-empty-mapping-value": "off"
       }
     }
-  ]
+  ],
+  "globals": {
+    "L": true
+  }
 }
