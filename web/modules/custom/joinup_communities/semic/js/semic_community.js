@@ -4,7 +4,7 @@
  */
 
 L.custom = {
-  init(obj, params) {
+  init(obj) {
     // CUSTOM.
     obj.style.minHeight = "400px";
 
@@ -12,7 +12,7 @@ L.custom = {
     const map = L.map(obj, { center: [48, 9], zoom: 4 });
 
     // TILES.
-    const tileLayer = L.wt.tileLayer().addTo(map);
+    L.wt.tileLayer().addTo(map);
 
     // MARKERS.
     const kml = drupalSettings.semic.map.adoptersListUrl;
@@ -25,8 +25,7 @@ L.custom = {
       },
     };
 
-    const markers = L.wt.markers([kml], kmlOptions).addTo(map);
-
-    $wt._queue("next"); // Process next components.
+    L.wt.markers([kml], kmlOptions).addTo(map);
+    L.wt._queue("next"); // Process next components.
   },
 };
