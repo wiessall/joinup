@@ -4,9 +4,6 @@
  */
 
 (function ($, Drupal, drupalSettings, once) {
-
-  'use strict';
-
   /**
    * Attaches the fieldUIOverview behavior.
    *
@@ -19,11 +16,16 @@
    */
   Drupal.behaviors.fieldUIDisplayOverview = {
     attach(context, settings) {
-      $(once("field-display-overview", "table#field-display-overview", context)).each(function () {
-          Drupal.fieldUIOverview.attach(this, settings.fieldUIRowsData, Drupal.fieldUIDisplayOverview);
-        }
-      );
-    }
+      $(
+        once("field-display-overview", "table#field-display-overview", context)
+      ).each(function () {
+        Drupal.fieldUIOverview.attach(
+          this,
+          settings.fieldUIRowsData,
+          Drupal.fieldUIDisplayOverview
+        );
+      });
+    },
   };
 
   /**
@@ -32,7 +34,6 @@
    * @namespace
    */
   Drupal.fieldUIOverview = {
-
     /**
      * Attaches the fieldUIOverview behavior.
      *
@@ -43,45 +44,47 @@
      * @param {object} rowHandlers
      *   Handlers to be added to the rows.
      */
-    attach: function (table, rowsData, rowHandlers) {
-      var tableDrag = Drupal.tableDrag[table.id];
+    attach(table, rowsData, rowHandlers) {
+      const tableDrag = Drupal.tableDrag[table.id];
 
       // Add custom tabledrag callbacks.
       tableDrag.onDrop = this.onDrop;
       tableDrag.row.prototype.onSwap = this.onSwap;
 
       // Create row handlers.
-      $(table).find('tr.draggable').each(function () {
-        // Extract server-side data for the row.
-        var row = this;
-        if (row.id in rowsData) {
-          var data = rowsData[row.id];
-          data.tableDrag = tableDrag;
+      $(table)
+        .find("tr.draggable")
+        .each(function () {
+          // Extract server-side data for the row.
+          const row = this;
+          if (row.id in rowsData) {
+            const data = rowsData[row.id];
+            data.tableDrag = tableDrag;
 
-          // Create the row handler, make it accessible from the DOM row
-          // element.
-          var rowHandler = new rowHandlers[data.rowHandler](row, data);
-          $(row).data('fieldUIRowHandler', rowHandler);
-        }
-      });
+            // Create the row handler, make it accessible from the DOM row
+            // element.
+            const rowHandler = new rowHandlers[data.rowHandler](row, data);
+            $(row).data("fieldUIRowHandler", rowHandler);
+          }
+        });
     },
 
     /**
      * Event handler to be attached to form inputs triggering a region change.
      */
-    onChange: function () {
-      var $trigger = $(this);
-      var $row = $trigger.closest('tr');
-      var rowHandler = $row.data('fieldUIRowHandler');
+    onChange() {
+      const $trigger = $(this);
+      const $row = $trigger.closest("tr");
+      const rowHandler = $row.data("fieldUIRowHandler");
 
-      var refreshRows = {};
+      const refreshRows = {};
       refreshRows[rowHandler.name] = $trigger.get(0);
 
       // Handle region change.
-      var region = rowHandler.getRegion();
+      const region = rowHandler.getRegion();
       if (region !== rowHandler.region) {
         // Remove parenting.
-        $row.find('select.js-field-parent').val('');
+        $row.find("select.js-field-parent").val("");
         // Let the row handler deal with the region change.
         $.extend(refreshRows, rowHandler.regionChange(region));
         // Update the row region.
@@ -94,18 +97,21 @@
     /**
      * Lets row handlers react when a row is dropped into a new region.
      */
-    onDrop: function () {
-      var dragObject = this;
-      var row = dragObject.rowObject.element;
-      var $row = $(row);
-      var rowHandler = $row.data('fieldUIRowHandler');
-      if (typeof rowHandler !== 'undefined') {
-        var regionRow = $row.prevAll('tr.region-message').get(0);
-        var region = regionRow.className.replace(/([^ ]+[ ]+)*region-([^ ]+)-message([ ]+[^ ]+)*/, '$2');
+    onDrop() {
+      const dragObject = this;
+      const row = dragObject.rowObject.element;
+      const $row = $(row);
+      const rowHandler = $row.data("fieldUIRowHandler");
+      if (typeof rowHandler !== "undefined") {
+        const regionRow = $row.prevAll("tr.region-message").get(0);
+        const region = regionRow.className.replace(
+          /([^ ]+[ ]+)*region-([^ ]+)-message([ ]+[^ ]+)*/,
+          "$2"
+        );
 
         if (region !== rowHandler.region) {
           // Let the row handler deal with the region change.
-          var refreshRows = rowHandler.regionChange(region);
+          const refreshRows = rowHandler.regionChange(region);
           // Update the row region.
           rowHandler.region = region;
           // Ajax-update the rows.
@@ -121,29 +127,40 @@
      * @param {HTMLElement} draggedRow
      *   The tableDrag rowObject for the row being dragged.
      */
-    onSwap: function (draggedRow) {
-      var rowObject = this;
-      $(rowObject.table).find('tr.region-message').each(function () {
-        var $this = $(this);
-        // If the dragged row is in this region, but above the message row, swap
-        // it down one space.
-        if ($this.prev('tr').get(0) === rowObject.group[rowObject.group.length - 1]) {
-          // Prevent a recursion problem when using the keyboard to move rows
-          // up.
-          if ((rowObject.method !== 'keyboard' || rowObject.direction === 'down')) {
-            rowObject.swap('after', this);
+    onSwap(draggedRow) {
+      const rowObject = this;
+      $(rowObject.table)
+        .find("tr.region-message")
+        .each(function () {
+          const $this = $(this);
+          // If the dragged row is in this region, but above the message row, swap
+          // it down one space.
+          if (
+            $this.prev("tr").get(0) ===
+            rowObject.group[rowObject.group.length - 1]
+          ) {
+            // Prevent a recursion problem when using the keyboard to move rows
+            // up.
+            if (
+              rowObject.method !== "keyboard" ||
+              rowObject.direction === "down"
+            ) {
+              rowObject.swap("after", this);
+            }
           }
-        }
-        // This region has become empty.
-        if ($this.next('tr').is(':not(.draggable)') || $this.next('tr').length === 0) {
-          $this.removeClass('region-populated').addClass('region-empty');
-        }
-        // This region has become populated.
-        else if ($this.is('.region-empty')) {
-          $this.removeClass('region-empty').addClass('region-populated');
-        }
-      });
-    }
+          // This region has become empty.
+          if (
+            $this.next("tr").is(":not(.draggable)") ||
+            $this.next("tr").length === 0
+          ) {
+            $this.removeClass("region-populated").addClass("region-empty");
+          }
+          // This region has become populated.
+          else if ($this.is(".region-empty")) {
+            $this.removeClass("region-empty").addClass("region-populated");
+          }
+        });
+    },
   };
 
   /**
@@ -175,22 +192,23 @@
     this.tableDrag = data.tableDrag;
 
     // Attach change listener to the 'plugin type' select.
-    this.$pluginSelect = $(row).find('select.field-plugin-type');
-    this.$pluginSelect.on('change', Drupal.fieldUIOverview.onChange);
+    this.$pluginSelect = $(row).find("select.field-plugin-type");
+    this.$pluginSelect.on("change", Drupal.fieldUIOverview.onChange);
 
     return this;
   };
 
   Drupal.fieldUIDisplayOverview.field.prototype = {
-
     /**
      * Returns the region corresponding to the current form values of the row.
      *
      * @return {string}
      *   Either 'hidden' or 'content'.
      */
-    getRegion: function () {
-      return (this.$pluginSelect.val() !== 'undefined') ? this.$pluginSelect.val() : 'hidden';
+    getRegion() {
+      return this.$pluginSelect.val() !== "undefined"
+        ? this.$pluginSelect.val()
+        : "hidden";
     },
 
     /**
@@ -211,14 +229,12 @@
      *   of the change, in the format expected by
      *   {@link Drupal.fieldUIOverview.AJAXRefreshRows}.
      */
-    regionChange: function (region) {
-
+    regionChange(region) {
       // Replace dashes with underscores.
-      region = region.replace(/-/g, '_');
+      region = region.replace(/-/g, "_");
 
       // Set the region of the select list.
       this.$pluginSelect.val(region);
-    }
+    },
   };
-
 })(jQuery, Drupal, drupalSettings, once);

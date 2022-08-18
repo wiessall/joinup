@@ -35,8 +35,14 @@ module.exports = {
       },
     },
     {
-      entry: path.resolve(outputFolder, "src/js/show-accordion-invalid-fields.js"),
-      dest: path.resolve(outputFolder, "assets/js/show-accordion-invalid-fields.js"),
+      entry: path.resolve(
+        outputFolder,
+        "src/js/show-accordion-invalid-fields.js"
+      ),
+      dest: path.resolve(
+        outputFolder,
+        "assets/js/show-accordion-invalid-fields.js"
+      ),
       options: {
         minify: true,
         sourceMap: true,
@@ -247,7 +253,10 @@ module.exports = {
     },
     // @todo ISAICP-7138 remove when switch to Ventuno theme is complete
     {
-      entry: path.resolve(outputFolder, "src/scss/core/base/bootstrap-base.scss"),
+      entry: path.resolve(
+        outputFolder,
+        "src/scss/core/base/bootstrap-base.scss"
+      ),
       dest: path.resolve(outputFolder, "assets/css/bootstrap-base.css"),
       options: {
         includePaths,
@@ -259,10 +268,7 @@ module.exports = {
     // Bootstrap: fonts
     {
       from: [
-        path.resolve(
-          nodeModules,
-          "@openeuropa/bcl-theme-joinup/fonts/*.css"
-        ),
+        path.resolve(nodeModules, "@openeuropa/bcl-theme-joinup/fonts/*.css"),
       ],
       to: path.resolve(outputFolder, "assets/css/fonts"),
       options: { up: true },
@@ -290,103 +296,59 @@ module.exports = {
     },
     // Theme images
     {
-      from: [
-        path.resolve(
-          __dirname,
-          "src/images/favicon/*"
-        ),
-      ],
+      from: [path.resolve(__dirname, "src/images/favicon/*")],
       to: path.resolve(outputFolder, "assets/images/favicon"),
       options: { up: true },
     },
     {
       from: [
-        path.resolve(
-          __dirname,
-          "src/images/homepage-banner/background.svg"
-        ),
+        path.resolve(__dirname, "src/images/homepage-banner/background.svg"),
       ],
       to: path.resolve(outputFolder, "assets/images"),
       options: { up: true },
     },
     {
       from: [
-        path.resolve(
-          __dirname,
-          "src/images/homepage-banner/banner-md.svg"
-        ),
+        path.resolve(__dirname, "src/images/homepage-banner/banner-md.svg"),
       ],
       to: path.resolve(outputFolder, "assets/images"),
       options: { up: true },
     },
     {
-      from: [
-        path.resolve(
-          __dirname,
-          "src/images/homepage-banner/wave.svg"
-        ),
-      ],
+      from: [path.resolve(__dirname, "src/images/homepage-banner/wave.svg")],
       to: path.resolve(outputFolder, "assets/images"),
       options: { up: true },
     },
     {
-      from: [
-        path.resolve(
-          __dirname,
-          "src/images/highlighted-event.jpg"
-        ),
-      ],
+      from: [path.resolve(__dirname, "src/images/highlighted-event.jpg")],
       to: path.resolve(outputFolder, "assets/images"),
       options: { up: true },
     },
     {
-      from: [
-        path.resolve(
-          __dirname,
-          "src/images/iop-eu-logo.svg"
-        ),
-      ],
+      from: [path.resolve(__dirname, "src/images/iop-eu-logo.svg")],
       to: path.resolve(outputFolder, "assets/images"),
       options: { up: true },
     },
     {
-      from: [
-        path.resolve(
-          __dirname,
-          "src/images/logo.svg"
-        ),
-      ],
+      from: [path.resolve(__dirname, "src/images/logo.svg")],
       to: path.resolve(outputFolder, "assets/images"),
       options: { up: true },
     },
     {
-      from: [
-        path.resolve(
-          __dirname,
-          "src/images/logo-ec--en.svg"
-        ),
-      ],
+      from: [path.resolve(__dirname, "src/images/logo-ec--en.svg")],
       to: path.resolve(outputFolder, "assets/images"),
       options: { up: true },
     },
     // Fontello icons
     {
-      from: [
-        path.resolve(
-          __dirname,
-          "src/fonts/joinup-icons/*.woff*"
-        ),
-      ],
+      from: [path.resolve(__dirname, "src/fonts/joinup-icons/*.woff*")],
       to: path.resolve(outputFolder, "assets/fonts/joinup-icons"),
       options: { up: true },
     },
     // Third party files
     {
       from: [
-        path.resolve(
-          nodeModules,
-          "@glidejs/glide/dist/css/glide.core.min.css"
-        ),
+        path.resolve(nodeModules, "@glidejs/glide/dist/css/glide.core.min.css"),
       ],
       to: path.resolve(outputFolder, "assets/css"),
       options: { up: true },
@@ -397,47 +359,47 @@ module.exports = {
       entry: path.resolve(nodeModules, "@openeuropa/bcl-bootstrap/icons/"),
       dest: path.resolve(outputFolder, "assets/icons"),
       options: {
-        file: 'icons.svg',
+        file: "icons.svg",
         list: [
-            'arrow-left.svg',
-            'arrow-right.svg',
-            'award.svg',
-            'calendar.svg',
-            'calendar3.svg',
-            'chat-left-text.svg',
-            'check-circle-fill.svg',
-            'chevron-bar-left.svg',
-            'chevron-bar-right.svg',
-            'chevron-left.svg',
-            'chevron-right.svg',
-            'clipboard-check.svg',
-            'exclamation-circle-fill.svg',
-            'exclamation-lg.svg',
-            'eye.svg',
-            'file-earmark-medical.svg',
-            'file-earmark-play.svg',
-            'file-earmark-richtext.svg',
-            'file-earmark-text.svg',
-            'file-earmark-zip.svg',
-            'filter.svg',
-            'folder2-open.svg',
-            'info-circle.svg',
-            'info-circle-fill.svg',
-            'journal-text.svg',
-            'justify.svg',
-            'lightning-charge.svg',
-            'linkedin.svg',
-            'newspaper.svg',
-            'person-circle.svg',
-            'question-lg.svg',
-            'search.svg',
-            'star.svg',
-            'twitter.svg',
-            'x.svg',
-            'x-lg.svg',
-            'x-square-fill.svg',
-          ]
+          "arrow-left.svg",
+          "arrow-right.svg",
+          "award.svg",
+          "calendar.svg",
+          "calendar3.svg",
+          "chat-left-text.svg",
+          "check-circle-fill.svg",
+          "chevron-bar-left.svg",
+          "chevron-bar-right.svg",
+          "chevron-left.svg",
+          "chevron-right.svg",
+          "clipboard-check.svg",
+          "exclamation-circle-fill.svg",
+          "exclamation-lg.svg",
+          "eye.svg",
+          "file-earmark-medical.svg",
+          "file-earmark-play.svg",
+          "file-earmark-richtext.svg",
+          "file-earmark-text.svg",
+          "file-earmark-zip.svg",
+          "filter.svg",
+          "folder2-open.svg",
+          "info-circle.svg",
+          "info-circle-fill.svg",
+          "journal-text.svg",
+          "justify.svg",
+          "lightning-charge.svg",
+          "linkedin.svg",
+          "newspaper.svg",
+          "person-circle.svg",
+          "question-lg.svg",
+          "search.svg",
+          "star.svg",
+          "twitter.svg",
+          "x.svg",
+          "x-lg.svg",
+          "x-square-fill.svg",
+        ],
       },
-    }
-  ]
+    },
+  ],
 };

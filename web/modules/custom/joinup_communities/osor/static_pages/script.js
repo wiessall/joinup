@@ -3,13 +3,13 @@
  */
 
 document.addEventListener("DOMContentLoaded", function () {
-  var actions = document.querySelectorAll("[id*='action-']");
+  const actions = document.querySelectorAll("[id*='action-']");
   actions.forEach(function (action) {
-    var actionId = action.getAttribute("id").split("-")[1];
-    var reaction = "reaction-" + actionId;
-    var reactionEl = document.getElementById(reaction);
-    var substitude = "substitute-" + actionId;
-    var substitudeEl = document.getElementById(substitude);
+    const actionId = action.getAttribute("id").split("-")[1];
+    const reaction = `reaction-${actionId}`;
+    const reactionEl = document.getElementById(reaction);
+    const substitude = `substitute-${actionId}`;
+    const substitudeEl = document.getElementById(substitude);
     if (reactionEl && substitudeEl) {
       action.addEventListener("mouseover", function () {
         reactionEl.style.display = "block";
