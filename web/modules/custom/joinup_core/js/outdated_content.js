@@ -13,7 +13,7 @@
    *   Shows a notice if the page displays an entity whose content is outdated.
    */
   Drupal.behaviors.outdatedContent = {
-    attach(context) {
+    attach() {
       const { outdatedTime } = drupalSettings.outdatedContent;
       if (outdatedTime !== null) {
         const currentTime = Math.round(Date.now() / 1000);

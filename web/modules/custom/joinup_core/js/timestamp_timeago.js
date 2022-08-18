@@ -24,7 +24,7 @@
    * @see http://timeago.yarp.com
    */
   Drupal.behaviors.timestampTimeago = {
-    attach(context) {
+    attach() {
       // Merge the custom settings.
       $.extend(
         true,
