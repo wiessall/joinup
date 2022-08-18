@@ -1,5 +1,4 @@
 const path = require("path");
-const replace = require("@rollup/plugin-replace");
 
 const outputFolder = path.resolve(__dirname);
 const nodeModules = "./node_modules";
