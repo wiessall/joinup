@@ -3,7 +3,7 @@
  * Attaches the behaviors for the asset distribution download tracking module.
  */
 
-(function ($, Drupal) {
+(($, Drupal) => {
   /**
    * Tracks downloads of distributions.
    *
@@ -17,7 +17,7 @@
       $(context)
         .find("a.track-download")
         .once("track-download")
-        .each(function () {
+        .each(() => {
           const $this = $(this);
           const url = $this.data("tracking");
 
@@ -30,7 +30,7 @@
             dialogType: "modal",
           });
 
-          $this.on("click", function (event) {
+          $this.on("click", (event) => {
             $(this).trigger("track_download.joinup");
             // IE11 misbehaves when clicking the link and the default behaviour
             // is not working.

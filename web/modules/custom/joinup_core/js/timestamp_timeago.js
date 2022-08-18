@@ -3,7 +3,7 @@
  * Dynamically shows a date/time as a cacheable "time ago" string.
  */
 
-(function ($, Drupal, drupalSettings) {
+(($, Drupal, drupalSettings) => {
   /**
    * Shows a date/time as a cacheable "time ago" string.
    *

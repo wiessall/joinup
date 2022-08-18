@@ -1,4 +1,4 @@
-(function (Drupal) {
+((Drupal) => {
   Drupal.behaviors.emptyUrlContactForm = {
     attach() {
       const url = document.querySelector("input[name*='field_contact_url']");

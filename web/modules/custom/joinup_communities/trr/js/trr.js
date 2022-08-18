@@ -6,16 +6,16 @@
 /**
  * Hides/shows fields on the solution form for the TRR community.
  */
-(function ($) {
+(($) => {
   Drupal.behaviors.trr_solution = {
     attach(context, settings) {
       $(context)
         .find('select[name="field_is_solution_type[]"]')
         .once("trr_solution")
-        .each(function () {
+        .each(() => {
           const $element = $(this);
           solution_type_updated($element);
-          $element.on("change", function () {
+          $element.on("change", () => {
             solution_type_updated($element);
           });
         });
@@ -84,10 +84,10 @@
   }
 
   function array_intersect(arrays) {
-    return arrays.shift().reduce(function (res, v) {
+    return arrays.shift().reduce((res, v) => {
       if (res.indexOf(v) === -1) {
         if (
-          arrays.every(function (a) {
+          arrays.every((a) => {
             return a.indexOf(v) !== -1;
           })
         ) {
