@@ -3,62 +3,65 @@
  * JavaScript code for the subscriptions form.
  */
 
-(($, Drupal) => {
+((Drupal) => {
   Drupal.behaviors.joinupSubscription = {
     attach(context) {
       // Whenever any of the checkboxes for a collection is clicked, enable the
       // submit button.
-      $(context)
-        .find(".form-select")
-        .each(() => {
-          $(this).on("change", () => {
-            $(this)
-              .closest(".field--name-field-user-frequency")
-              .find("input.button")
-              .prop("disabled", false)
-              .prop("value", "Save changes")
-              .removeClass("is-disabled");
-          });
+      const frequencyButton = document
+        .querySelector(
+          "[data-drupal-selector='edit-field-user-frequency-wrapper']"
+        )
+        .querySelector("input[type='submit']");
+      once(
+        "user_subscriptions",
+        "select[name='field_user_frequency']",
+        context
+      ).forEach((selectElement) => {
+        selectElement.addEventListener("change", () => {
+          frequencyButton.removeAttribute("disabled");
+          frequencyButton.setAttribute("value", Drupal.t("Save changes"));
+          frequencyButton.classList.remove("is-disabled");
         });
-      $(context)
-        .find("input.form-checkbox")
-        .once("dashboard")
-        .each(() => {
-          $(this).on("click", () => {
+      });
+      once("user_subscriptions", "input.form-checkbox", context).forEach(
+        (triggeringElement) => {
+          triggeringElement.addEventListener("change", () => {
             const subscriptionStatus = [];
+            const group = triggeringElement.dataset.joinupGroup;
 
             // Get current status of checkboxes.
-            $(this)
-              .closest(".form__subscribe-types-inner")
-              .find("input.form-checkbox")
+            document
+              .querySelectorAll(
+                `input[type='checkbox'][data-joinup-group='${group}']`
+              )
               // eslint-disable-next-line max-nested-callbacks
-              .each(() => {
-                subscriptionStatus.push($(this).prop("checked"));
+              .forEach((checkboxElement) => {
+                subscriptionStatus.push(checkboxElement.checked);
               });
 
-            // Get subscription button.
-            const $button = $(this)
-              .closest(".form__subscribe-types-inner")
-              .find("input.button");
+            const button = document.querySelector(
+              `input[type='submit'][data-joinup-group='${group}']`
+            );
 
             // Get initial status of checkboxes stored inside button attribute.
-            const subscriptionStatusInitial = $button.attr(
-              "data-drupal-subscriptions"
-            );
+            const subscriptionStatusInitial =
+              button.dataset.drupalSubscriptions;
 
             // Compare current and initial status of checkboxes.
             if (
               JSON.stringify(subscriptionStatus) === subscriptionStatusInitial
             ) {
-              $button.prop("disabled", true).addClass("is-disabled");
+              button.setAttribute("disabled", "disabled");
+              button.classList.add("is-disabled");
             } else {
-              $button
-                .prop("disabled", false)
-                .prop("value", "Save changes")
-                .removeClass("is-disabled");
+              button.removeAttribute("disabled");
+              button.setAttribute("value", Drupal.t("Save changes"));
+              button.classList.remove("is-disabled");
             }
           });
-        });
+        }
+      );
     },
   };
-})(jQuery, Drupal);
+})(Drupal);
