@@ -73,7 +73,7 @@ commands:
     - task: remove
       file: ${joinup.dir}/.git/hooks/pre-push
     - task: exec
-      command: (test "${phpcs.run_on_push}" = "1" && ln -s ${joinup.dir}/vendor/pfrenssen/phpcs-pre-push/pre-push ${joinup.dir}/.git/hooks/pre-push) || true
+      command: (test "${phpcs.run_on_push}" = "1" && ln -s ${joinup.dir}/scripts/git/pre_push ${joinup.dir}/.git/hooks/pre-push) || true
 
   # Scans the code base for deprecated code.
   testing:check-deprecated-code:
