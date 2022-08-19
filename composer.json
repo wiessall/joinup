@@ -239,9 +239,6 @@
             "drupal/config_devel": {
                 "Add a Drush command for manipulating module info files @see https://www.drupal.org/project/config_devel/issues/2392929": "https://git.drupalcode.org/project/config_devel/-/merge_requests/4.diff"
             },
-            "drupal/cas": {
-                "Cached redirect response issue with failed ticket validation @see https://www.drupal.org/project/cas/issues/3277861": "https://git.drupalcode.org/project/cas/-/merge_requests/12.diff"
-            },
             "drupal/coder": {
                 "Do not require @var tag if a property has typehint @see https://www.drupal.org/project/coder/issues/3123282": "https://git.drupalcode.org/project/coder/-/commit/d1bb7ea.diff"
             },
@@ -290,7 +287,7 @@
                 "Autocomplete field doesn't allow to reference entities with long titles @see https://www.drupal.org/node/2895663": "https://www.drupal.org/files/issues/2895663-2.patch"
             },
             "drupal/linkit": {
-                "Link shown after the autocomplete selection is the bare node/xxx link, not the alias @see https://www.drupal.org/node/2877535": "https://www.drupal.org/files/issues/2020-03-11/2877535-12.patch"
+                "Link shown after the autocomplete selection is the bare node/xxx link, not the alias @see https://www.drupal.org/node/2877535": "https://www.drupal.org/files/issues/2022-06-07/2877535-39.patch"
             },
             "drupal/matomo_reporting_api": {
                 "Ensure backward compatibility with Piwik @see https://www.drupal.org/project/matomo_reporting_api/issues/3080854": "https://www.drupal.org/files/issues/2019-09-18/3080854-7.patch"
@@ -306,7 +303,8 @@
                 "Formatter settings are missing schema @see https://www.drupal.org/i/3194916": "https://git.drupalcode.org/project/paragraphs_jquery_ui_accordion/-/merge_requests/1.diff"
             },
             "drupal/pipeline": {
-                "Accessing Lock::$updated is no longer supported @see https://www.drupal.org/project/pipeline/issues/3261553": "https://git.drupalcode.org/project/pipeline/-/merge_requests/3.diff"
+                "Accessing Lock::$updated is no longer supported @see https://www.drupal.org/project/pipeline/issues/3261553": "https://git.drupalcode.org/project/pipeline/-/merge_requests/3.diff",
+                "Pipeline does not work with subpaths @see https://www.drupal.org/project/pipeline/issues/3295697": "https://git.drupalcode.org/project/pipeline/-/merge_requests/4.diff"
             },
             "drupal/publication_date": {
                 "Provide computed properties that return the publication date or the created/updated date @see https://www.drupal.org/project/publication_date/issues/3066317": "https://www.drupal.org/files/issues/2019-07-07/3066317-3.patch"
@@ -337,7 +335,7 @@
                 "Missing config schema for field, widget and formatter @see https://www.drupal.org/node/2898680": "https://git.drupalcode.org/project/social_media_links/-/merge_requests/4.diff"
             },
             "drupal/subpathauto": {
-                "Subpaths with redirect not resolved @see https://www.drupal.org/project/subpathauto/issues/3175637": "https://git.drupalcode.org/project/subpathauto/-/merge_requests/1/diffs.diff"
+                "Subpaths with redirect not resolved @see https://www.drupal.org/project/subpathauto/issues/3175637": "https://git.drupalcode.org/project/subpathauto/-/merge_requests/1.diff"
             },
             "drupal/swiftmailer": {
                 "Add spooling for increased performance @see https://www.drupal.org/project/swiftmailer/issues/3000553": "https://git.drupalcode.org/project/swiftmailer/-/merge_requests/2.diff",
