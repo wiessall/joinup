@@ -208,7 +208,6 @@ Feature: My subscriptions
     And the "Save changes" button should be disabled
     When I select "Daily" from "Notification frequency"
     And I select "Weekly" from "Notification frequency"
-
     Then the "Save changes" button should be enabled
 
     # When we save the changes the button label should change to "Saved!" and
