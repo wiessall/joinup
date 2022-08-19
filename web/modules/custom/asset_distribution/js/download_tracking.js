@@ -3,7 +3,7 @@
  * Attaches the behaviors for the asset distribution download tracking module.
  */
 
-(($, Drupal) => {
+((Drupal) => {
   /**
    * Tracks downloads of distributions.
    *
@@ -14,34 +14,28 @@
    */
   Drupal.behaviors.assetDistributionDownloadTracking = {
     attach(context) {
-      $(context)
-        .find("a.track-download")
-        .once("track-download")
-        .each(() => {
-          const $this = $(this);
-          const url = $this.data("tracking");
-
-          Drupal.ajax({
-            url,
-            base: $this.attr("id"),
-            event: "track_download.joinup",
-            progress: false,
-            element: this,
-            dialogType: "modal",
-          });
-
-          $this.on("click", () => {
-            $(this).trigger("track_download.joinup");
+      once("track-download", "a.track-download", context).forEach(
+        (downloadLink) => {
+          const url = downloadLink.dataset.tracking;
+          downloadLink.addEventListener("click", () => {
+            Drupal.ajax({
+              url,
+              base: downloadLink.id,
+              progress: false,
+              element: downloadLink,
+              dialogType: "modal",
+            }).execute();
             // IE11 misbehaves when clicking the link and the default behaviour
-            // is not working.
-            // For IE11, force the click. The following check ensures that this is
-            // IE and fails for Edge (where the click event behaves properly).
+            // is not working. For IE11, force the click. The following check
+            // ensures that this is IE and fails for Edge (where the click event
+            // behaves properly).
             // @see https://stackoverflow.com/a/21825207.
             if (!!window.MSInputMethodContext && !!document.documentMode) {
-              window.location.href = $(this).prop("href");
+              window.location.href = downloadLink.href;
             }
           });
-        });
+        }
+      );
     },
   };
-})(jQuery, Drupal);
+})(Drupal);
