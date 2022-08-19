@@ -132,6 +132,7 @@ if (file_exists('phpcs.xml')) {
   }
 }
 
+$return_phpcs = 0;
 if ($file_list || $full_check) {
   // Run PHP CodeSniffer and exit.
   $file_filter = $full_check ? '' : " '" . implode("' '", $file_list) . "'";
