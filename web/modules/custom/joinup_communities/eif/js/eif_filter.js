@@ -3,62 +3,78 @@
  * Eif filter functionality.
  */
 
-(function ($, drupalSettings) {
-  "use strict";
-  function checkEifCategories() {
-    var $eifTile = $('.eif-tile');
-
-    // Remove hidden class before further processing.
-    $eifTile.each(function () {
-      $(this).removeClass('visually-hidden');
-    });
-
-    // Check every active filter item and hide tiles which don't contain proper
-    // data-eif-category.
-    var solutionsCount = 0;
-    $('.eif-filter__item a.is-active').each(function () {
-      const currentEifCategory = $(this).attr('data-eif-category');
-      if (typeof currentEifCategory !== 'undefined') {
-        $eifTile.each(function () {
-          const eifCategory = $(this).attr('data-eif-category');
-          if (typeof eifCategory !== 'undefined') {
-            const eifCategoryArray = eifCategory.split(' ');
-            if ($.inArray(currentEifCategory, eifCategoryArray) < 0 && !$(this).hasClass('visually-hidden')) {
-              $(this).addClass('visually-hidden');
-            }
+(() => {
+  Drupal.behaviors.eifFilter = {
+    attach() {
+      function checkEifCategories() {
+        const eifTile = document.querySelectorAll(".eif-tile");
+        // Remove hidden class before further processing.
+        eifTile.forEach((el) => {
+          if (el.classList.contains("visually-hidden")) {
+            el.classList.remove("visually-hidden");
           }
         });
+
+        // Check every active filter item and hide tiles which don't contain proper
+        // data-eif-category.
+        let solutionsCount = 0;
+        const eifFilterItem = document.querySelectorAll(
+          ".eif-filter__item a.is-active"
+        );
+        eifFilterItem.forEach((element) => {
+          const currentEifCategory = element.getAttribute("data-eif-category");
+
+          if (typeof currentEifCategory !== "undefined") {
+            eifTile.forEach((el) => {
+              const eifCategory = el.getAttribute("data-eif-category");
+              if (typeof eifCategory !== "undefined") {
+                const eifCategoryArray = eifCategory.split(" ");
+                if (
+                  !eifCategoryArray.includes(currentEifCategory) &&
+                  !el.classList.contains("visually-hidden")
+                ) {
+                  el.classList.add("visually-hidden");
+                }
+              }
+            });
+          }
+        });
+        // Show calculated number of solutions.
+        eifTile.forEach((el) => {
+          if (!el.classList.contains("visually-hidden")) {
+            solutionsCount += 1;
+          }
+        });
+        const counter = document.querySelector(".eif-counter__number");
+        if (counter === null || counter === undefined) {
+          return;
+        }
+        counter.textContent = solutionsCount;
       }
-    });
+      // Trigger if eif filter is clicked.
+      document.querySelectorAll(".eif-filter__item a").forEach((el) => {
+        el.addEventListener("click", (e) => {
+          e.preventDefault();
+          e.target.classList.toggle("is-active");
+          checkEifCategories();
+        });
+      });
 
-    // Show calculated number of solutions.
-    $eifTile.each(function () {
-      if (!$(this).hasClass('visually-hidden')) {
-        solutionsCount++;
+      // Reset eif listing.
+      const eifRest = document.getElementById("eif-reset");
+      if (eifRest) {
+        eifRest.addEventListener("click", () => {
+          document
+            .querySelector(".eif-filter__item a.is-active")
+            .classList.remove("is-active");
+          checkEifCategories();
+        });
       }
-    });
-    $('.eif-counter__number').text(solutionsCount);
-  }
 
-  // Trigger if eif filter is clicked.
-  $('.eif-filter__item a').each(function () {
-    $(this).on('click', function (event) {
-      event.preventDefault();
-
-      $(this).toggleClass('is-active');
-      checkEifCategories();
-    });
-  });
-
-  // Reset eif listing.
-  $('#eif-reset').on('click', function (event) {
-    $('.eif-filter__item a.is-active').removeClass('is-active');
-    checkEifCategories();
-  });
-
-  // Filter on window load. Needed for eif search filter.
-  $(window).on('load', function () {
-    checkEifCategories();
-  });
-
-})(jQuery, drupalSettings);
+      // Filter on window load. Needed for eif search filter.
+      window.onload = () => {
+        checkEifCategories();
+      };
+    },
+  };
+})();
