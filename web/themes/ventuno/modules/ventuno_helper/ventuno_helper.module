@@ -1,0 +1,26 @@
+<?php
+
+/**
+ * @file
+ * Provides functionality for the Ventuno helper module.
+ */
+
+declare(strict_types = 1);
+
+use Drupal\bootstrap4_modal\Ajax\CloseBootstrap4ModalDialogCommand;
+
+/**
+ * Implements hook_ajax_render_alter().
+ */
+function ventuno_helper_ajax_render_alter(array &$data): void {
+  if (\Drupal::theme()->getActiveTheme()->getName() === 'ventuno') {
+    foreach ($data as $key => $command) {
+      if ($command['command'] === 'closeDialog') {
+        unset($data[$key]);
+        $bootstrap_command = new CloseBootstrap4ModalDialogCommand();
+        $data[] = $bootstrap_command->render();
+        break;
+      }
+    }
+  }
+}
