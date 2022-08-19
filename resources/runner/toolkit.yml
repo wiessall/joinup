@@ -184,6 +184,8 @@ commands:
     - task: exec
       command: ${phpcs.file.bin}
     # This is a temporary solution as the Digit QA pipeline doesn't run JS lint.
+    # Todo: Remove this task in DROPSEC-2040.
+    # See: https://citnet.tech.ec.europa.eu/CITnet/jira/browse/DROPSEC-2040.
     - task: run
       command: toolkit:lint-js
     #- task: run
