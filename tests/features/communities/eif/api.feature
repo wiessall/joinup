@@ -21,7 +21,7 @@ Feature:
     And there should be an EIF perspective associated with the "EIF only type" solution
 
     When I go to the EIF perspective page of the "EIF solution" solution
-    Then I should see the heading "EIF solution"
+    Then I should see the heading "EIF Perspective attributes of EIF solution"
     And I should see the heading "General information"
 
     And I should see the text "This should be in the description field."
@@ -42,13 +42,13 @@ Feature:
     And I should see the following lines of text:
       # Recommendation titles appear with their related term a
       # "Recommendation [identifier] | Term name".
-      | Recommendation 21 \| Interoperability Layer 1: Interoperability governance |
-      | This is recommended                                                        |
-      | Recommendation 15                                                          |
-      | Recommendation 15 \| Underlying Principle 8: Security and privacy          |
+      | Recommendation 21 \| Interoperability governance |
+      | This is recommended                              |
+      | Recommendation 15                                |
+      | Recommendation 15 \| Security and privacy        |
 
     When I go to the EIF perspective page of the "EIF only type" solution
-    Then I should see the heading "EIF only type"
+    Then I should see the heading "EIF Perspective attributes of EIF only type"
     And I should see the heading "General information"
 
     And I should see the text "This should be in the description field."

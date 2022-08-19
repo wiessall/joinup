@@ -7,8 +7,10 @@
 <article{{ attributes }}>
   <div class="d-flex justify-content-between">
     <div>
-      <a class="btn btn-sm btn-outline-brand rounded-pill mb-1" href="{{ url('<front>')|render }}/node/703244">Back to recommendations</a>
-      <a class="btn btn-sm btn-outline-brand rounded-pill mb-1" href="{{ url('<front>')|render }}/node/703245">Back to solutions</a>
+      <a class="btn btn-sm btn-outline-brand rounded-pill mb-1" href="{{ path('entity.node.canonical', {'node': 703244}) }}">{{ 'Back to
+      recommendations'|t }}</a>
+      <a class="btn btn-sm btn-outline-brand rounded-pill mb-1" href="{{ path('entity.node.canonical', {'node': 703245}) }}">{{ 'Back to
+      Solutions'|t }}</a>
     </div>
     <div>
       <a class="btn btn-sm btn-outline-brand rounded-pill mb-1" href="{{ url('<front>')|render }}/collection/nifo-national-interoperability-framework-observatory/glossary">
