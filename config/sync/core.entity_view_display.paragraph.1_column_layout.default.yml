@@ -1,0 +1,25 @@
+uuid: 04421427-080b-48e3-9a11-c074c6f06130
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.1_column_layout.paragraph_column_center
+    - paragraphs.paragraphs_type.1_column_layout
+  module:
+    - entity_reference_revisions
+id: paragraph.1_column_layout.default
+targetEntityType: paragraph
+bundle: 1_column_layout
+mode: default
+content:
+  paragraph_column_center:
+    type: entity_reference_revisions_entity_view
+    label: above
+    settings:
+      view_mode: default
+      link: ''
+    third_party_settings: {  }
+    weight: 0
+    region: content
+hidden:
+  search_api_excerpt: true

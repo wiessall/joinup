@@ -1,0 +1,23 @@
+uuid: 4b19d6e2-c822-45ed-bd31-957b263fc1bf
+langcode: en
+status: true
+dependencies:
+  module:
+    - field_permissions
+    - paragraphs
+    - social_media_links_field
+third_party_settings:
+  field_permissions:
+    permission_type: public
+id: paragraph.paragraph_social_links
+field_name: paragraph_social_links
+entity_type: paragraph
+type: social_media_links_field
+settings: {  }
+module: social_media_links_field
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

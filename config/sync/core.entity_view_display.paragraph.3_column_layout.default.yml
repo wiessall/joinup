@@ -1,0 +1,45 @@
+uuid: 832e9145-b724-4afe-b655-d6c45edb6e6c
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.3_column_layout.paragraph_column_center
+    - field.field.paragraph.3_column_layout.paragraph_column_left
+    - field.field.paragraph.3_column_layout.paragraph_column_right
+    - paragraphs.paragraphs_type.3_column_layout
+  module:
+    - entity_reference_revisions
+id: paragraph.3_column_layout.default
+targetEntityType: paragraph
+bundle: 3_column_layout
+mode: default
+content:
+  paragraph_column_center:
+    type: entity_reference_revisions_entity_view
+    label: above
+    settings:
+      view_mode: default
+      link: ''
+    third_party_settings: {  }
+    weight: 2
+    region: content
+  paragraph_column_left:
+    type: entity_reference_revisions_entity_view
+    label: above
+    settings:
+      view_mode: default
+      link: ''
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  paragraph_column_right:
+    type: entity_reference_revisions_entity_view
+    label: above
+    settings:
+      view_mode: default
+      link: ''
+    third_party_settings: {  }
+    weight: 1
+    region: content
+hidden:
+  search_api_excerpt: true

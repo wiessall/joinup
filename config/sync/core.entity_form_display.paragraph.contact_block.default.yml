@@ -1,0 +1,23 @@
+uuid: 3deeacb2-5095-4380-aeb3-8d18f3b18c6e
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.contact_block.paragraph_social_links
+    - paragraphs.paragraphs_type.contact_block
+  module:
+    - social_media_links_field
+id: paragraph.contact_block.default
+targetEntityType: paragraph
+bundle: contact_block
+mode: default
+content:
+  paragraph_social_links:
+    type: social_media_links_field_default
+    weight: 0
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+hidden:
+  created: true
+  status: true
