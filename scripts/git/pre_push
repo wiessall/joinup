@@ -143,5 +143,9 @@ if ($file_list || $full_check) {
 
 echo "Running ESLint on all files...\n";
 passthru("$eslint --config .eslintrc.json --format compact --ext yml --ext js .", $return_eslint);
+if ($return_eslint) {
+  echo "- Run ./vendor/bin/run toolkit:fix-js to fix most Javascript issues.\n";
+  echo "- Run ./vendor/bin/run toolkit:fix-yaml to fix most YAML issues.\n";
+}
 
 exit($return_phpcs + $return_eslint);
