@@ -16,9 +16,7 @@
 
 // Get the path to the PHP CodeSniffer binary from composer.json.
 $phpcs = getcwd() . '/vendor/bin/phpcs';
-if ($composer_json = json_decode(
-  file_get_contents(getcwd() . '/composer.json')
-)) {
+if ($composer_json = json_decode(file_get_contents(getcwd() . '/composer.json'))) {
   if (!empty($composer_json->config->{'bin-dir'})) {
     $bin_dir = escapeshellcmd(trim($composer_json->config->{'bin-dir'}, '/'));
     $phpcs = getcwd() . '/' . $bin_dir . '/phpcs';
@@ -31,7 +29,7 @@ if (!is_executable($phpcs)) {
   exit(1);
 }
 
-// Get the path to the ESLint binary from composer.json.
+// Get the path to the ESLint binary.
 $eslint = getcwd() . '/node_modules/.bin/eslint';
 // Check if the ESLint binary is present.
 if (!is_executable($eslint)) {
@@ -39,9 +37,7 @@ if (!is_executable($eslint)) {
   exit(1);
 }
 
-/**
- * The SHA1 ID of an empty branch.
- */
+// The SHA1 ID of an empty branch.
 define ('SHA1_EMPTY', '0000000000000000000000000000000000000000');
 
 $file_list = [];
@@ -74,7 +70,7 @@ while ($commit = trim(fgets(STDIN))) {
 }
 
 // Remove duplicates, empty lines and files that no longer exist in the branch.
-$file_list = array_unique(array_filter($file_list, function ($file) {
+$file_list = array_unique(array_filter($file_list, function ($file): bool {
   return !empty($file) && file_exists($file);
 }));
 
