@@ -5,7 +5,13 @@
  * @file
  * Git pre-push hook to check code before pushing.
  *
- * Original code https://gist.github.com/pfrenssen/498fc52fea3f965f6640.
+ * This is a slightly changed version of the original code which has been
+ * published at https://gist.github.com/pfrenssen/498fc52fea3f965f6640. As Git
+ * allows only one script to run for a given event/hook we had to include also
+ * the code check with ESLint. But that would make the script too specific for
+ * the Joinup project, so the code has to be included in this codebase. Along
+ * with the PHP Coding Standards check, we're running also ESLint check on
+ * Javascript and YAML files.
  */
 
 // Get the path to the PHP CodeSniffer binary from composer.json.
