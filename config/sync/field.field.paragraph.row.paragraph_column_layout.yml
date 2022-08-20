@@ -1,0 +1,71 @@
+uuid: eb6682d9-35c6-40ff-b711-e8373c70d4cc
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.paragraph_column_layout
+    - paragraphs.paragraphs_type.1_column_layout
+    - paragraphs.paragraphs_type.2_column_layout
+    - paragraphs.paragraphs_type.3_column_layout
+    - paragraphs.paragraphs_type.row
+  module:
+    - entity_reference_revisions
+id: paragraph.row.paragraph_column_layout
+field_name: paragraph_column_layout
+entity_type: paragraph
+bundle: row
+label: 'Column layout'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:paragraph'
+  handler_settings:
+    target_bundles:
+      1_column_layout: 1_column_layout
+      2_column_layout: 2_column_layout
+      3_column_layout: 3_column_layout
+    negate: 0
+    target_bundles_drag_drop:
+      1_column_layout:
+        weight: 14
+        enabled: true
+      2_column_layout:
+        weight: 15
+        enabled: true
+      3_column_layout:
+        weight: 16
+        enabled: true
+      accordion:
+        weight: 17
+        enabled: false
+      accordion_item:
+        weight: 18
+        enabled: false
+      contact_block:
+        weight: 19
+        enabled: false
+      content_listing:
+        weight: 20
+        enabled: false
+      entity_reference:
+        weight: 21
+        enabled: false
+      iframe:
+        weight: 22
+        enabled: false
+      json_map:
+        weight: 23
+        enabled: false
+      row:
+        weight: 24
+        enabled: false
+      simple_paragraph:
+        weight: 25
+        enabled: false
+      testimony:
+        weight: 26
+        enabled: false
+field_type: entity_reference_revisions

@@ -1,0 +1,12 @@
+uuid: 46b1b992-ad93-4e5f-9a1c-35bb3af5daaf
+langcode: en
+status: true
+dependencies:
+  content:
+    - 'file:file:4d2eaf5a-6e16-41b1-b52b-6c3620c106b6'
+id: 2_column_layout
+label: '2 column layout'
+icon_uuid: 4d2eaf5a-6e16-41b1-b52b-6c3620c106b6
+icon_default: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNiIgaGVpZ2h0PSIxNiIgZmlsbD0iY3VycmVudENvbG9yIiBjbGFzcz0iYmkgYmktbGF5b3V0LXNwbGl0IiB2aWV3Qm94PSIwIDAgMTYgMTYiPgogIDxwYXRoIGQ9Ik0wIDNhMiAyIDAgMCAxIDItMmgxMmEyIDIgMCAwIDEgMiAydjEwYTIgMiAwIDAgMS0yIDJIMmEyIDIgMCAwIDEtMi0yVjN6bTguNS0xdjEySDE0YTEgMSAwIDAgMCAxLTFWM2ExIDEgMCAwIDAtMS0xSDguNXptLTEgMEgyYTEgMSAwIDAgMC0xIDF2MTBhMSAxIDAgMCAwIDEgMWg1LjVWMnoiLz4KPC9zdmc+'
+description: ''
+behavior_plugins: {  }

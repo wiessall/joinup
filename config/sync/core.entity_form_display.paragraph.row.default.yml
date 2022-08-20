@@ -1,0 +1,47 @@
+uuid: 8d8e96ae-26d5-4c45-ab9a-c50461cd0497
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.row.paragraph_column_layout
+    - field.field.paragraph.row.paragraph_row_background
+    - field.field.paragraph.row.row_theme
+    - image.style.thumbnail
+    - paragraphs.paragraphs_type.row
+  module:
+    - image
+    - paragraphs
+id: paragraph.row.default
+targetEntityType: paragraph
+bundle: row
+mode: default
+content:
+  paragraph_column_layout:
+    type: entity_reference_paragraphs
+    weight: 2
+    region: content
+    settings:
+      title: Paragraph
+      title_plural: Paragraphs
+      edit_mode: open
+      add_mode: dropdown
+      form_display_mode: default
+      default_paragraph_type: ''
+    third_party_settings: {  }
+  paragraph_row_background:
+    type: image_image
+    weight: 1
+    region: content
+    settings:
+      progress_indicator: throbber
+      preview_image_style: thumbnail
+    third_party_settings: {  }
+  row_theme:
+    type: options_select
+    weight: 0
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+hidden:
+  created: true
+  status: true
