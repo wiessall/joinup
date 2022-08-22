@@ -19,7 +19,7 @@
       // This behavior is used by both the invitation form and the add form.
       // The 2 forms have different IDs but they are both based in the
       // InviteFormBase which passes the class 'invite-form' to the form.
-      const form = document.getElementsByClassName("invite-form")[0];
+      const form = document.querySelector(".invite-form");
       const list = document.getElementById("ui-id-2");
       const input = document.querySelector("input.invite-autocomplete");
       let preventDoubleEnter = false;
