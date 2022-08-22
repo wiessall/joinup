@@ -56,7 +56,7 @@ module.exports = {
       dest: path.resolve(outputFolder, "assets/js/glide.js"),
       options: {
         name: "glide",
-        minify: false,
+        minify: true,
         sourceMap: true,
       },
     },

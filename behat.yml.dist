@@ -157,7 +157,7 @@ default:
         Management solution vertical tab: '#edit-group-management'
         Members admin form actions: '#edit-action'
         Members admin form header: '#edit-header'
-        Modal buttons: '.ui-dialog-buttonpane'
+        Modal buttons: '.ui-dialog-buttonpane, .modal-footer'
         Modal content: '#drupal-modal'
         Modal title: '.ui-dialog-title'
         My unpublished content area: '.block-user-unpublished'

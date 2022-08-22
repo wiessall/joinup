@@ -103,7 +103,7 @@ class UserCancelTest extends JoinupExistingSiteTestBase {
 
     // Create a CAS link.
     $authmap->save($account, 'cas', $username);
-    $this->assertSame($username, $authmap->get($account->id(), 'cas'));
+    $this->assertSame($username, $authmap->get((int) $account->id(), 'cas'));
 
     // Add account membership to collection and solution.
     $og_membership->createMembership($collection, $account)->save();
@@ -143,7 +143,7 @@ class UserCancelTest extends JoinupExistingSiteTestBase {
     $this->assertFileDoesNotExist($photo_file->getFileUri());
     $this->assertNull($account->get('field_user_photo')->value);
     $this->assertNull($account->get('field_user_professional_domain')->value);
-    $this->assertFalse($authmap->get($account->id(), 'cas'));
+    $this->assertFalse($authmap->get((int) $account->id(), 'cas'));
     $this->assertEmpty($og_membership->getMemberships($account->id(), OgMembershipInterface::ALL_STATES));
     $this->assertNull($user_data->get('joinup_user', $account->id(), 'foo'));
 

@@ -22,16 +22,18 @@ class InternalPath extends ProviderPluginBase {
    * {@inheritdoc}
    */
   public function renderEmbedCode($width, $height, $autoplay) {
-    $iframe = [
+    $path = $this->getVideoId();
+    if (UrlHelper::isExternal($path)) {
+      return [];
+    }
+    return [
       '#type' => 'video_embed_iframe',
       '#provider' => 'internal_path',
-      '#url' => Url::fromUri('internal:/' . $this->getVideoId())
+      '#url' => Url::fromUri("internal:/$path")
         ->setOption('base_url', $GLOBALS['base_url'])
         ->setAbsolute()
         ->toString(),
     ];
-
-    return $iframe;
   }
 
   /**
