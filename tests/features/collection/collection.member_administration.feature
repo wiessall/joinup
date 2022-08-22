@@ -443,5 +443,41 @@ Feature: Collection membership administration
     Then the page should show the following chips in the Content region:
       | Pending Member |
     And I press "Invite members"
-    Then I should not see the success message "Successfully invited the selected users."
+    Then I should not see the success message "1 user has been invited to this group."
     And I should see the error message "1 user has a pending membership. Please, approve their membership request and assign the roles."
+
+  @javascript
+  Scenario: Autocomplete creates chips in both the add and the invite forms.
+    Given I am logged in as "Lisa Cuddy"
+    And I go to the "Medical diagnosis" collection
+    And I click "Members" in the "Left sidebar"
+    When I click "Invite members"
+    And I type "Donald" in the "E-mail" autocomplete field
+    And I wait until the page contains the text "Donald Duck (Donald Duck)"
+    And I pick "Donald Duck (Donald Duck)" from the "Link" autocomplete suggestions
+    Then the page should show the following chips in the Content region:
+      | Donald Duck |
+    When I press the remove button on the chip "Donald Duck"
+    Then I should not see the text "Donald Duck"
+    When I type "Donald" in the "E-mail" autocomplete field
+    And I wait until the page contains the text "Donald Duck (Donald Duck)"
+    And I pick "Donald Duck (Donald Duck)" from the "Link" autocomplete suggestions
+    And I press "Invite members"
+    Then I should see the success message "1 user has been invited to this group."
+
+    And I click "Members" in the "Left sidebar"
+    When I click "Add members"
+    And I type "Turkey" in the "E-mail" autocomplete field
+    And I wait until the page contains the text "Turkey Ham (Turkey Ham)"
+    And I pick "Turkey Ham (Turkey Ham)" from the "Link" autocomplete suggestions
+    Then the page should show the following chips in the Content region:
+      | Turkey Ham |
+    When I press the remove button on the chip "Turkey Ham"
+    Then I should not see the text "Turkey Ham"
+    When I type "Turkey" in the "E-mail" autocomplete field
+    And I wait until the page contains the text "Turkey Ham (Turkey Ham)"
+    And I pick "Turkey Ham (Turkey Ham)" from the "Link" autocomplete suggestions
+    Then the page should show the following chips in the Content region:
+      | Turkey Ham |
+    And I press "Add members"
+    Then I should see the success message "Successfully added the role Member to the selected users."
