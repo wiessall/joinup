@@ -13,23 +13,3 @@
  */
 
 declare(strict_types = 1);
-
-/**
- * Install the "Announcements" field for og_membership.
- */
-function joinup_core_update_108400(): void {
-  $field_storage_definition = BaseFieldDefinition::create('boolean')
-    ->setName('announcements')
-    ->setLabel(t('Announcements'))
-    ->setDescription(t('If checked, the user will receive group announcements by email.'))
-    ->setCardinality(1)
-    ->setRequired(FALSE)
-    ->setDefaultValue(FALSE);
-
-  \Drupal::entityDefinitionUpdateManager()->installFieldStorageDefinition(
-    'announcements',
-    'og_membership',
-    'joinup_subscription',
-    $field_storage_definition
-  );
-}
