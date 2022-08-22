@@ -710,3 +710,17 @@ Feature: Global search
     When I visit the search page
     Then there should be 3 topics in the "Max 3 topic collection" card
     And I should see the text "+2 topics" in the "Max 3 topic collection" card
+
+  Scenario: In search result I can see updated date label.
+    Given collections:
+      | title             | description       | state     |
+      | Custom collection | Some custom data. | validated |
+    And news content:
+      | title               | headline                           | body                                                              | collection        | state     | created    | changed    |
+      | Quantum information | Relativity is the word             | No one cares about the body.                                      | Custom collection | validated | 01/01/2019 | 03/08/2019 |
+      | The uneven universe | Relativity news: Relativity theory | I do care about the relativity keyword in the body.               | Custom collection | validated | 02/01/2019 | 02/08/2019 |
+      | The earth is square | Absolutely nonsense                | Some news are not worth it but I will add relativity here anyway. | Custom collection | validated | 03/01/2019 | 01/08/2019 |
+    When I visit the search page
+    Then I should see the text "Updated Date: 08/03/2019" in the "Relativity is the word" card
+    And I should see the text "Updated Date: 08/02/2019" in the "Relativity news: Relativity theory" card
+    And I should see the text "Updated Date: 08/01/2019" in the "Absolutely nonsense" card
