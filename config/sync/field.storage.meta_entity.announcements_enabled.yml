@@ -3,7 +3,6 @@ langcode: en
 status: true
 dependencies:
   module:
-    - cached_computed_field
     - field_permissions
     - meta_entity
 third_party_settings:
@@ -12,9 +11,9 @@ third_party_settings:
 id: meta_entity.announcements_enabled
 field_name: announcements_enabled
 entity_type: meta_entity
-type: cached_computed_boolean
+type: boolean
 settings: {  }
-module: cached_computed_field
+module: core
 locked: false
 cardinality: 1
 translatable: true
