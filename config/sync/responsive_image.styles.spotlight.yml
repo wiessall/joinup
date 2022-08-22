@@ -90,5 +90,20 @@ image_style_mappings:
     image_mapping: spotlight_1035
     breakpoint_id: ventuno.sm
     multiplier: 2x
+  -
+    image_mapping_type: image_style
+    image_mapping: spotlight_518
+    breakpoint_id: ventuno.xs
+    multiplier: 1.5x
+  -
+    image_mapping_type: image_style
+    image_mapping: spotlight_776
+    breakpoint_id: ventuno.xs
+    multiplier: 1x
+  -
+    image_mapping_type: image_style
+    image_mapping: spotlight_1035
+    breakpoint_id: ventuno.xs
+    multiplier: 2x
 breakpoint_group: ventuno
 fallback_image_style: spotlight_136
