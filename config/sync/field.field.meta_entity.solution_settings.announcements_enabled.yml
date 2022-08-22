@@ -16,7 +16,7 @@ translatable: false
 default_value:
   -
     value: 1
-  default_value_callback: ''
+default_value_callback: ''
 settings:
   on_label: 'On'
   off_label: 'Off'
