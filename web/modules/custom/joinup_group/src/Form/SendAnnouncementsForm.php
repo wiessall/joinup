@@ -4,6 +4,7 @@ declare(strict_types = 1);
 
 namespace Drupal\joinup_group\Form;
 
+use Drupal\Core\Database\Connection;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Form\FormBase;
@@ -40,6 +41,11 @@ class SendAnnouncementsForm extends FormBase {
   protected EntityTypeManagerInterface $entityTypeManager;
 
   /**
+   * The database connection.
+   */
+  protected Connection $database;
+
+  /**
    * Builds a new form instance.
    *
    * @param \Drupal\Core\Utility\Token $token
@@ -48,11 +54,14 @@ class SendAnnouncementsForm extends FormBase {
    *   The module handler.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   The entity type manager service.
+   * @param \Drupal\Core\Database\Connection $database
+   *   The database connection.
    */
-  public function __construct(Token $token, ModuleHandlerInterface $module_handler, EntityTypeManagerInterface $entity_type_manager) {
+  public function __construct(Token $token, ModuleHandlerInterface $module_handler, EntityTypeManagerInterface $entity_type_manager, Connection $database) {
     $this->token = $token;
     $this->moduleHandler = $module_handler;
     $this->entityTypeManager = $entity_type_manager;
+    $this->database = $database;
   }
 
   /**
@@ -62,7 +71,8 @@ class SendAnnouncementsForm extends FormBase {
     return new static(
       $container->get('token'),
       $container->get('module_handler'),
-      $container->get('entity_type.manager')
+      $container->get('entity_type.manager'),
+      $container->get('database'),
     );
   }
 
@@ -141,7 +151,7 @@ class SendAnnouncementsForm extends FormBase {
    *   The array of the user IDs that are members in the group.
    */
   protected function getMemberIds(): ?array {
-    $query = \Drupal::database()->select('og_membership', 'og');
+    $query = $this->database->select('og_membership', 'og');
     $query->leftJoin('users_field_data', 'u', 'og.uid=u.uid');
     $query->addField('og', 'uid', 'target_id');
     $query->condition('entity_id', $this->group->id())
@@ -149,6 +159,6 @@ class SendAnnouncementsForm extends FormBase {
       ->condition('status', 1);
 
     return $query->execute()->fetchAll(PDO::FETCH_ASSOC);
-   }
+  }
 
 }
