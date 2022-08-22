@@ -152,4 +152,12 @@ class MinkContext extends DrupalExtensionMinkContext {
     parent::attachFileToField($field, $path);
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  public function assertSelectRadioById($label, $id = ''): void {
+    $this->scrollNamedElementIntoView('field', $label);
+    parent::assertSelectRadioById($label, $id);
+  }
+
 }
