@@ -218,6 +218,9 @@ class SubscriptionsForm extends FormBase {
           '#title' => $this->t('Announcements'),
           '#return_value' => TRUE,
           '#default_value' => $membership->get('announcements')->value,
+          '#attributes' => [
+            'data-joinup-group' => $group->id(),
+          ],
         ];
 
         $form['groups'][$group->id()]['options']['submit'] = [
