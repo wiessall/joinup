@@ -17,7 +17,7 @@ declare(strict_types = 1);
 /**
  * Validate contact info email.
  */
-function joinup_core_deploy_0108400(?array &$sandbox = NULL): void {
+function joinup_core_deploy_0108500(?array &$sandbox = NULL): void {
   $rids = \Drupal::entityQuery('rdf_entity')->condition('rid', [
     'contact_information',
   ], 'IN')->execute();
