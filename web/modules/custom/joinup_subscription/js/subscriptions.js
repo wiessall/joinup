@@ -3,52 +3,65 @@
  * JavaScript code for the subscriptions form.
  */
 
-(function ($, Drupal) {
+((Drupal) => {
   Drupal.behaviors.joinupSubscription = {
-    attach: function (context, settings) {
+    attach(context) {
       // Whenever any of the checkboxes for a collection is clicked, enable the
       // submit button.
-      $(context).find('.form-select').each(function () {
-        $(this)
-          .on('change', function () {
-            $(this)
-              .closest('.field--name-field-user-frequency')
-              .find('input.button')
-              .prop('disabled', false)
-              .prop('value', 'Save changes')
-              .removeClass('is-disabled');
-          });
+      const frequencyButton = document
+        .querySelector(
+          "[data-drupal-selector='edit-field-user-frequency-wrapper']"
+        )
+        .querySelector("input[type='submit']");
+      once(
+        "user_subscriptions",
+        "select[name='field_user_frequency']",
+        context
+      ).forEach((selectElement) => {
+        selectElement.addEventListener("change", () => {
+          frequencyButton.removeAttribute("disabled");
+          frequencyButton.setAttribute("value", Drupal.t("Save changes"));
+          frequencyButton.classList.remove("is-disabled");
+        });
       });
-      $(context).find('input.form-checkbox').once('dashboard').each(function () {
-        $(this)
-          .on('click', function () {
-            var subscription_status = [];
+      once("user_subscriptions", "input.form-checkbox", context).forEach(
+        (triggeringElement) => {
+          triggeringElement.addEventListener("change", () => {
+            const subscriptionStatus = [];
+            const group = triggeringElement.dataset.joinupGroup;
 
             // Get current status of checkboxes.
-            $(this).closest('.form__subscribe-types-inner').find('input.form-checkbox').each(function () {
-              subscription_status.push($(this).prop('checked'));
-            });
+            document
+              .querySelectorAll(
+                `input[type='checkbox'][data-joinup-group='${group}']`
+              )
+              // eslint-disable-next-line max-nested-callbacks
+              .forEach((checkboxElement) => {
+                subscriptionStatus.push(checkboxElement.checked);
+              });
 
-            // Get subscription button.
-            var $button = $(this).closest('.form__subscribe-types-inner').find('input.button');
+            const button = document.querySelector(
+              `input[type='submit'][data-joinup-group='${group}']`
+            );
 
             // Get initial status of checkboxes stored inside button attribute.
-            var subscription_status_initial = $button.attr('data-drupal-subscriptions');
+            const subscriptionStatusInitial =
+              button.dataset.drupalSubscriptions;
 
             // Compare current and initial status of checkboxes.
-            if (JSON.stringify(subscription_status) === subscription_status_initial) {
-              $button
-                .prop('disabled', true)
-                .addClass('is-disabled');
-            }
-            else {
-              $button
-                .prop('disabled', false)
-                .prop('value', 'Save changes')
-                .removeClass('is-disabled');
+            if (
+              JSON.stringify(subscriptionStatus) === subscriptionStatusInitial
+            ) {
+              button.setAttribute("disabled", "disabled");
+              button.classList.add("is-disabled");
+            } else {
+              button.removeAttribute("disabled");
+              button.setAttribute("value", Drupal.t("Save changes"));
+              button.classList.remove("is-disabled");
             }
           });
-      });
-    }
+        }
+      );
+    },
   };
-})(jQuery, Drupal);
+})(Drupal);
