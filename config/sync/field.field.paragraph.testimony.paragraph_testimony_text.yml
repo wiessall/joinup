@@ -1,26 +1,19 @@
-uuid: 3e08ffb5-d99b-40e6-930a-5d8fd2958327
+uuid: fc9bbe89-6440-43f0-af95-263d0a9a53e6
 langcode: en
 status: true
 dependencies:
   config:
     - field.storage.paragraph.paragraph_testimony_text
     - paragraphs.paragraphs_type.testimony
-  module:
-    - allowed_formats
-    - text
-third_party_settings:
-  allowed_formats:
-    allowed_formats:
-      - basic_html
 id: paragraph.testimony.paragraph_testimony_text
 field_name: paragraph_testimony_text
 entity_type: paragraph
 bundle: testimony
-label: 'Testimony text'
+label: Testimony
 description: ''
-required: true
+required: false
 translatable: false
 default_value: {  }
 default_value_callback: ''
 settings: {  }
-field_type: text_long
+field_type: string_long

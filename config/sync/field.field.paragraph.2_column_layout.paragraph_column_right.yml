@@ -5,7 +5,6 @@ dependencies:
   config:
     - field.storage.paragraph.paragraph_column_right
     - paragraphs.paragraphs_type.2_column_layout
-    - paragraphs.paragraphs_type.entity_reference
     - paragraphs.paragraphs_type.simple_paragraph
     - paragraphs.paragraphs_type.testimony
   module:
@@ -24,7 +23,6 @@ settings:
   handler: 'default:paragraph'
   handler_settings:
     target_bundles:
-      entity_reference: entity_reference
       simple_paragraph: simple_paragraph
       testimony: testimony
     negate: 0
@@ -44,15 +42,12 @@ settings:
       accordion_item:
         weight: 15
         enabled: false
-      contact_block:
-        weight: 19
-        enabled: false
       content_listing:
         weight: 16
         enabled: false
       entity_reference:
         weight: 18
-        enabled: true
+        enabled: false
       iframe:
         weight: 17
         enabled: false

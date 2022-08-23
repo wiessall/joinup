@@ -8,7 +8,92 @@ dependencies:
     - field.field.paragraph.3_column_layout.paragraph_column_right
     - paragraphs.paragraphs_type.3_column_layout
   module:
+    - field_group
     - paragraphs
+third_party_settings:
+  field_group:
+    group_3_col_row:
+      children:
+        - group_3_col_left
+        - group_3_col_center
+        - group_3_col_right
+      label: '3 column row'
+      region: content
+      parent_name: ''
+      weight: 0
+      format_type: html_element
+      format_settings:
+        classes: row
+        show_empty_fields: false
+        id: ''
+        element: div
+        show_label: false
+        label_element: h3
+        label_element_classes: ''
+        attributes: ''
+        effect: none
+        speed: fast
+        required_fields: true
+    group_3_col_left:
+      children:
+        - paragraph_column_left
+      label: '3 column left'
+      region: content
+      parent_name: group_3_col_row
+      weight: 6
+      format_type: html_element
+      format_settings:
+        classes: 'col col-lg-4 col-md-4 col-sm-6 col-xs-12'
+        show_empty_fields: false
+        id: ''
+        element: div
+        show_label: false
+        label_element: h3
+        label_element_classes: ''
+        attributes: ''
+        effect: none
+        speed: fast
+        required_fields: true
+    group_3_col_center:
+      children:
+        - paragraph_column_center
+      label: '3 column center'
+      region: content
+      parent_name: group_3_col_row
+      weight: 7
+      format_type: html_element
+      format_settings:
+        classes: 'col col-lg-4 col-md-4 col-sm-6 col-xs-12'
+        show_empty_fields: false
+        id: ''
+        element: div
+        show_label: false
+        label_element: h3
+        label_element_classes: ''
+        attributes: ''
+        effect: none
+        speed: fast
+        required_fields: true
+    group_3_col_right:
+      children:
+        - paragraph_column_right
+      label: '3 column right'
+      region: content
+      parent_name: group_3_col_row
+      weight: 8
+      format_type: html_element
+      format_settings:
+        classes: 'col col-lg-4 col-md-4 col-sm-6 col-xs-12'
+        show_empty_fields: false
+        id: ''
+        element: div
+        show_label: false
+        label_element: h3
+        label_element_classes: ''
+        attributes: ''
+        effect: none
+        speed: fast
+        required_fields: true
 id: paragraph.3_column_layout.default
 targetEntityType: paragraph
 bundle: 3_column_layout
@@ -16,56 +101,59 @@ mode: default
 content:
   paragraph_column_center:
     type: paragraphs
-    weight: 2
+    weight: 3
     region: content
     settings:
       title: Paragraph
       title_plural: Paragraphs
-      edit_mode: open
+      edit_mode: closed
       closed_mode: summary
       autocollapse: none
       closed_mode_threshold: 0
-      add_mode: dropdown
+      add_mode: modal
       form_display_mode: default
-      default_paragraph_type: ''
+      default_paragraph_type: _none
       features:
-        collapse_edit_all: collapse_edit_all
+        add_above: '0'
+        collapse_edit_all: '0'
         duplicate: duplicate
     third_party_settings: {  }
   paragraph_column_left:
-    type: paragraphs
-    weight: 0
-    region: content
-    settings:
-      title: Paragraph
-      title_plural: Paragraphs
-      edit_mode: open
-      closed_mode: summary
-      autocollapse: none
-      closed_mode_threshold: 0
-      add_mode: dropdown
-      form_display_mode: default
-      default_paragraph_type: ''
-      features:
-        collapse_edit_all: collapse_edit_all
-        duplicate: duplicate
-    third_party_settings: {  }
-  paragraph_column_right:
     type: paragraphs
     weight: 1
     region: content
     settings:
       title: Paragraph
       title_plural: Paragraphs
-      edit_mode: open
+      edit_mode: closed
       closed_mode: summary
       autocollapse: none
       closed_mode_threshold: 0
-      add_mode: dropdown
+      add_mode: modal
       form_display_mode: default
-      default_paragraph_type: ''
+      default_paragraph_type: _none
       features:
-        collapse_edit_all: collapse_edit_all
+        add_above: '0'
+        collapse_edit_all: '0'
+        duplicate: duplicate
+    third_party_settings: {  }
+  paragraph_column_right:
+    type: paragraphs
+    weight: 2
+    region: content
+    settings:
+      title: Paragraph
+      title_plural: Paragraphs
+      edit_mode: closed
+      closed_mode: summary
+      autocollapse: none
+      closed_mode_threshold: 0
+      add_mode: modal
+      form_display_mode: default
+      default_paragraph_type: _none
+      features:
+        add_above: '0'
+        collapse_edit_all: '0'
         duplicate: duplicate
     third_party_settings: {  }
 hidden:

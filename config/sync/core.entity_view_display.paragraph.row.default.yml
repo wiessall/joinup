@@ -9,8 +9,6 @@ dependencies:
     - paragraphs.paragraphs_type.row
   module:
     - entity_reference_revisions
-    - image
-    - options
 id: paragraph.row.default
 targetEntityType: paragraph
 bundle: row
@@ -18,30 +16,14 @@ mode: default
 content:
   paragraph_column_layout:
     type: entity_reference_revisions_entity_view
-    label: above
+    label: hidden
     settings:
       view_mode: default
       link: ''
     third_party_settings: {  }
-    weight: 2
-    region: content
-  paragraph_row_background:
-    type: image
-    label: above
-    settings:
-      image_link: ''
-      image_style: ''
-      image_loading:
-        attribute: lazy
-    third_party_settings: {  }
-    weight: 1
-    region: content
-  row_theme:
-    type: list_default
-    label: above
-    settings: {  }
-    third_party_settings: {  }
     weight: 0
     region: content
 hidden:
+  paragraph_row_background: true
+  row_theme: true
   search_api_excerpt: true
