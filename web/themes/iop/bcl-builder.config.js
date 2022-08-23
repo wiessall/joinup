@@ -1,5 +1,4 @@
 const path = require("path");
-const replace = require("@rollup/plugin-replace");
 
 const outputFolder = path.resolve(__dirname);
 const nodeModules = "./node_modules";
@@ -73,10 +72,7 @@ module.exports = {
     // Bootstrap: fonts
     {
       from: [
-        path.resolve(
-          nodeModules,
-          "@openeuropa/bcl-theme-joinup/fonts/*.css"
-        ),
+        path.resolve(nodeModules, "@openeuropa/bcl-theme-joinup/fonts/*.css"),
       ],
       to: path.resolve(outputFolder, "assets/css/fonts"),
       options: { up: true },
@@ -93,15 +89,10 @@ module.exports = {
     },
     // Theme images
     {
-      from: [
-        path.resolve(
-          __dirname,
-          "src/images/iop-eu-logo.svg"
-        ),
-      ],
+      from: [path.resolve(__dirname, "src/images/iop-eu-logo.svg")],
       to: path.resolve(outputFolder, "assets/images"),
       options: { up: true },
     },
   ],
-  sprite: []
+  sprite: [],
 };

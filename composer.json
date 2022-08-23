@@ -130,7 +130,6 @@
         "mikey179/vfsstream": "~1.6",
         "palantirnet/drupal-rector": "^0.12.2",
         "pear/http_request2": "~2.4",
-        "pfrenssen/phpcs-pre-push": "1.1",
         "php-task-runner/composer": "dev-master",
         "php-task-runner/redis": "1.x-dev",
         "php-task-runner/scss": "1.x-dev",
@@ -228,7 +227,9 @@
                 },
                 "[project-root]/.gitattributes": {
                     "append": "resources/drupal-scaffold/.gitattributes.append"
-                }
+                },
+                "[web-root]/.eslintignore": false,
+                "[web-root]/.eslintrc.json": false
             }
         },
         "enable-patching": true,
@@ -258,6 +259,7 @@
                 "Make the tab active when the fragment is present in URL @see https://www.drupal.org/project/drupal/issues/2752511": "https://www.drupal.org/files/issues/2022-06-17/2752511-109-9.5.x.patch",
                 "Add thread depth configuration to comments. Includes patch for parent issue #2879087. @see https://www.drupal.org/project/drupal/issues/2786587 @see https://www.drupal.org/project/drupal/issues/2879087": "https://www.drupal.org/files/issues/2022-01-17/2786587-58-9.3.x.patch",
                 "Set fixed depth for comment threads.": "resources/patch/2786587-thread-depth-fixed-limit.patch",
+                "Add option to show only start or end date in the DateTime Range custom formatter @see https://www.drupal.org/project/drupal/issues/2827055": "https://www.drupal.org/files/issues/2022-06-16/2827055-69.patch",
                 "Views with a different query plugin created via the UI do not have the correct query plugin ID in the view config @see https://www.drupal.org/project/drupal/issues/2836237": "https://www.drupal.org/files/issues/2022-01-17/2836237-49-9.3.x.patch",
                 "Disable tableselect element options @see https://www.drupal.org/project/drupal/issues/2895352": "https://www.drupal.org/files/issues/2021-12-04/2895352-53.patch",
                 "Pass current route parameters to the confirmation form route @see https://www.drupal.org/project/drupal/issues/2901412": "https://git.drupalcode.org/project/drupal/-/merge_requests/1666.diff",
@@ -267,7 +269,6 @@
                 "Make it easier to trigger a tour @see https://www.drupal.org/project/drupal/issues/3012027": "https://www.drupal.org/files/issues/2022-01-17/3012027-52-9.3.x.patch",
                 "EntityConstraintValidationList::findByCode is inconsistent @see https://www.drupal.org/project/drupal/issues/3126654": "https://www.drupal.org/files/issues/2020-04-10/find_by_code_override-3126654-D8-4.patch",
                 "Cannot implement a custom user cancellation method @see https://www.drupal.org/project/drupal/issues/3135592": "https://git.drupalcode.org/project/drupal/-/merge_requests/1675.diff",
-                "The old storage handler is still defined for RDF entities.": "resources/patch/core-fix-sparql-storage-hack.patch",
                 "Page variant plugin is not correctlly instantiated @see https://www.drupal.org/project/drupal/issues/3294833": "https://git.drupalcode.org/project/drupal/-/merge_requests/2484.diff"
             },
             "drupal/default_content": {
@@ -403,19 +404,6 @@
         {
             "type": "composer",
             "url": "https://packages.drupal.org/8"
-        },
-        {
-            "type": "package",
-            "package": {
-                "name": "pfrenssen/phpcs-pre-push",
-                "version": "1.1",
-                "type": "git-hook",
-                "source": {
-                    "url": "https://gist.github.com/1ec87c25930861654cc94251da69f14b.git",
-                    "type": "git",
-                    "reference": "master"
-                }
-            }
         },
         {
             "type": "package",
