@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f0a8a4a82debc7d7fb4e4b9247d4cd60",
+    "content-hash": "2dd00ad52e3a1fde762166d175450cf3",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -19360,16 +19360,6 @@
                 "source": "https://github.com/pear/Net_URL2"
             },
             "time": "2017-08-25T06:16:11+00:00"
-        },
-        {
-            "name": "pfrenssen/phpcs-pre-push",
-            "version": "1.1",
-            "source": {
-                "type": "git",
-                "url": "https://gist.github.com/1ec87c25930861654cc94251da69f14b.git",
-                "reference": "master"
-            },
-            "type": "git-hook"
         },
         {
             "name": "phar-io/manifest",
