@@ -504,21 +504,13 @@ module.exports = {
       options: { up: true },
     },
     {
-      from: [
-        path.resolve(
-          __dirname,
-          "src/images/featured-bg.jpg"
-        ),
-      ],
+      from: [path.resolve(__dirname, "src/images/featured-bg.jpg")],
       to: path.resolve(outputFolder, "assets/images"),
       options: { up: true },
     },
     {
       from: [
-        path.resolve(
-          __dirname,
-          "src/images/homepage-banner/background.svg"
-        ),
+        path.resolve(__dirname, "src/images/homepage-banner/background.svg"),
       ],
       to: path.resolve(outputFolder, "assets/images"),
       options: { up: true },
