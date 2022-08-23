@@ -865,10 +865,6 @@ class JoinupContext extends RawDrupalContext {
    * @When I press :button at( the) :field( field)
    */
   public function pressButtonInWidget($button, $field) {
-    // Fixes a step argument (with \\" replaced back to ")
-    // @see: Behat\MinkExtension\Context\MinkContext::fixStepArgument
-    $button = str_replace('\\"', '"', $button);
-
     // First check if a fieldset exists containing the given field name. This
     // is used for inline entity forms.
     $element = $this->getSession()->getPage()->find('named', [

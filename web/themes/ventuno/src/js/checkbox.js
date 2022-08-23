@@ -4,8 +4,8 @@
  *
  * @see @see Drupal.theme.checkbox
  */
-(function (Drupal) {
-  Drupal.theme.checkbox = function () {
-    return "<input type=\"checkbox\" class=\"form-checkbox form-check-input\"/>";
+((Drupal) => {
+  Drupal.theme.checkbox = () => {
+    return '<input type="checkbox" class="form-checkbox form-check-input"/>';
   };
 })(Drupal);

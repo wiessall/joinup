@@ -4,7 +4,6 @@ declare(strict_types = 1);
 
 namespace Drupal\joinup\Traits;
 
-use Behat\Mink\Element\NodeElement;
 use Behat\Mink\Element\TraversableElement;
 
 /**
@@ -45,6 +44,9 @@ trait JavascriptTrait {
     ], TRUE));
 
     if ($this->browserSupportsJavaScript()) {
+      if ($container) {
+        $this->scrollElementIntoView($container);
+      }
       $container ??= $this->getSession()->getPage();
       $element = $container->find('named', [
         $type, str_replace('\\"', '"', $label),
@@ -83,10 +85,10 @@ trait JavascriptTrait {
    * which is not available in Internet Explorer, but we're using this method
    * only in tests with Mozilla FireFox and Chrome browser.
    *
-   * @param \Behat\Mink\Element\NodeElement $element
+   * @param \Behat\Mink\Element\TraversableElement $element
    *   The node element.
    */
-  protected function scrollElementIntoView(NodeElement $element): void {
+  protected function scrollElementIntoView(TraversableElement $element): void {
     // Strings (labels) containing simple quotes (') are enclosed with double
     // quotes ("), thus we need to escape them. Also, xpath might contain new
     // lines which we replace with spaces.

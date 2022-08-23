@@ -4,28 +4,28 @@
  */
 
 L.custom = {
-  init: function (obj, params) {
-
+  init(obj) {
     // CUSTOM.
     obj.style.minHeight = "400px";
 
     // INIT MAP OBJECT.
-    var map = L.map(obj, {"center": [48, 9], "zoom": 4});
+    const map = L.map(obj, { center: [48, 9], zoom: 4 });
 
     // TILES.
-    var tileLayer = L.wt.tileLayer().addTo(map);
+    L.wt.tileLayer().addTo(map);
 
     // MARKERS.
-    var kml = drupalSettings.semic.map.adoptersListUrl;
+    const kml = drupalSettings.semic.map.adoptersListUrl;
 
-    var kml_options = {
-      onEachFeature: function (feature, layer) {
-        layer.bindInfo("<p><b>" + feature.properties.name + "</b></p>" + feature.properties.description);
-      }
+    const kmlOptions = {
+      onEachFeature(feature, layer) {
+        layer.bindInfo(
+          `<p><b>${feature.properties.name}</b></p>${feature.properties.description}`
+        );
+      },
     };
 
-    var markers = L.wt.markers([kml], kml_options).addTo(map);
-
-    $wt._queue("next"); // Process next components.
-  }
+    L.wt.markers([kml], kmlOptions).addTo(map);
+    L.wt._queue("next"); // Process next components.
+  },
 };
