@@ -24,7 +24,7 @@ function ventuno_preprocess_rdf_entity__explore_item(array &$variables): void {
   $entity = $variables['rdf_entity'];
   // Trim the labels of the items in the Explore block on the homepage down to a
   // manageable size.
-  $variables['label'] = _ventuno_smart_trim($entity->label(), 74);
+  $variables['label'] = _ventuno_smart_trim($entity->label(), 45);
 }
 
 /**

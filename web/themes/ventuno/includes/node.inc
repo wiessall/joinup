@@ -44,7 +44,7 @@ function ventuno_preprocess_node__explore_item(array &$variables): void {
   $node = $variables['node'];
   // Trim the labels of the items in the Explore block on the homepage down to a
   // manageable size.
-  $variables['label'] = _ventuno_smart_trim($node->getTitle(), 74);
+  $variables['label'] = _ventuno_smart_trim($node->getTitle(), 45);
 }
 
 /**

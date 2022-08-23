@@ -129,7 +129,6 @@
         "mikey179/vfsstream": "~1.6",
         "palantirnet/drupal-rector": "^0.12.2",
         "pear/http_request2": "~2.4",
-        "pfrenssen/phpcs-pre-push": "1.1",
         "php-task-runner/composer": "dev-master",
         "php-task-runner/redis": "1.x-dev",
         "php-task-runner/scss": "1.x-dev",
@@ -227,7 +226,9 @@
                 },
                 "[project-root]/.gitattributes": {
                     "append": "resources/drupal-scaffold/.gitattributes.append"
-                }
+                },
+                "[web-root]/.eslintignore": false,
+                "[web-root]/.eslintrc.json": false
             }
         },
         "enable-patching": true,
@@ -266,7 +267,8 @@
                 "Make it easier to trigger a tour @see https://www.drupal.org/project/drupal/issues/3012027": "https://www.drupal.org/files/issues/2022-01-17/3012027-52-9.3.x.patch",
                 "EntityConstraintValidationList::findByCode is inconsistent @see https://www.drupal.org/project/drupal/issues/3126654": "https://www.drupal.org/files/issues/2020-04-10/find_by_code_override-3126654-D8-4.patch",
                 "Cannot implement a custom user cancellation method @see https://www.drupal.org/project/drupal/issues/3135592": "https://git.drupalcode.org/project/drupal/-/merge_requests/1675.diff",
-                "The old storage handler is still defined for RDF entities.": "resources/patch/core-fix-sparql-storage-hack.patch"
+                "The old storage handler is still defined for RDF entities.": "resources/patch/core-fix-sparql-storage-hack.patch",
+                "Add option to show only start or end date in the DateTime Range custom formatter @see https://www.drupal.org/project/drupal/issues/2827055": "https://www.drupal.org/files/issues/2022-06-16/2827055-69.patch"
             },
             "drupal/entityqueue": {
                 "Missing config schema for EntityQueueDragtableWidget @see Missing config schema for EntityQueueDragtableWidget": "https://git.drupalcode.org/project/entityqueue/-/merge_requests/3.diff"
@@ -398,19 +400,6 @@
         {
             "type": "composer",
             "url": "https://packages.drupal.org/8"
-        },
-        {
-            "type": "package",
-            "package": {
-                "name": "pfrenssen/phpcs-pre-push",
-                "version": "1.1",
-                "type": "git-hook",
-                "source": {
-                    "url": "https://gist.github.com/1ec87c25930861654cc94251da69f14b.git",
-                    "type": "git",
-                    "reference": "master"
-                }
-            }
         },
         {
             "type": "package",
