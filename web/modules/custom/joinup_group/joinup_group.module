@@ -769,7 +769,7 @@ function joinup_group_node_access_records(NodeInterface $node): array {
   $access_grants_helper = \Drupal::service('joinup_group.node_access_grants');
   $grants = [];
 
-  foreach ($node->getTranslationLanguages(TRUE) as $langcode => $language) {
+  foreach ($node->getTranslationLanguages() as $langcode => $language) {
     $translated_node = $node->getTranslation($langcode);
     if ($translated_node instanceof GroupContentInterface && !$translated_node->isPublished()) {
       try {
@@ -842,5 +842,17 @@ function joinup_group_entity_update(EntityInterface $group): void {
         \Drupal::messenger()->addStatus(t("You've removed the @bundle's short ID: %original. It will take some time until the @bundle content URLs will be updated.", $arguments));
       }
     }
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_delete().
+ */
+function joinup_group_rdf_entity_delete(RdfInterface $group) {
+  if ($group instanceof GroupInterface) {
+    \Drupal::database()->delete('joinup_group_node_access')
+      ->condition('entity_type', $group->getEntityTypeId())
+      ->condition('entity_id', $group->id())
+      ->execute();
   }
 }
