@@ -203,7 +203,10 @@ class SubscriptionsForm extends FormBase {
               // Make sure to turn autocomplete off so that the browser doesn't
               // try to restore a half submitted form when the user does a soft
               // reload.
-              '#attributes' => ['autocomplete' => 'off'],
+              '#attributes' => [
+                'autocomplete' => 'off',
+                'data-joinup-group' => $group->id(),
+              ],
             ];
 
             // Store status of checkboxes.
@@ -239,7 +242,10 @@ class SubscriptionsForm extends FormBase {
             'autocomplete' => 'off',
             // Store the initial state of the subscriptions so that we can
             // unlock the save button in JS whenever a state changes.
-            'data-drupal-subscriptions' => Json::encode(array_values($subscription_status + ['announcements' => (bool) $membership->get('announcements')->value])),
+            'data-drupal-subscriptions' => Json::encode(array_values($subscription_status + [
+              'announcements' => (bool) $membership->get('announcements')->value,
+            ])),
+            'data-joinup-group' => $group->id(),
           ],
         ];
       }
