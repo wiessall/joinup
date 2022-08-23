@@ -3,8 +3,7 @@
  * Dynamically shows a date/time as a cacheable "time ago" string.
  */
 
-(function ($, Drupal, drupalSettings) {
-
+(($, Drupal, drupalSettings) => {
   /**
    * Shows a date/time as a cacheable "time ago" string.
    *
@@ -25,13 +24,14 @@
    * @see http://timeago.yarp.com
    */
   Drupal.behaviors.timestampTimeago = {
-    attach: function (context) {
+    attach() {
       // Merge the custom settings.
-      $.extend(true, $.timeago.settings,
+      $.extend(
+        true,
+        $.timeago.settings,
         drupalSettings.joinupCore.timeagoSettings
       );
-      $('time.js-joinup-timestamp-timeago').timeago();
-    }
+      $("time.js-joinup-timestamp-timeago").timeago();
+    },
   };
-
 })(jQuery, Drupal, drupalSettings);

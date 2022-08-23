@@ -2,20 +2,20 @@
  * @file
  */
 
-document.addEventListener("DOMContentLoaded", function () {
-  var actions = document.querySelectorAll("[id*='action-']");
-  actions.forEach(function (action) {
-    var actionId = action.getAttribute("id").split("-")[1];
-    var reaction = "reaction-" + actionId;
-    var reactionEl = document.getElementById(reaction);
-    var substitude = "substitute-" + actionId;
-    var substitudeEl = document.getElementById(substitude);
+document.addEventListener("DOMContentLoaded", () => {
+  const actions = document.querySelectorAll("[id*='action-']");
+  actions.forEach((action) => {
+    const actionId = action.getAttribute("id").split("-")[1];
+    const reaction = `reaction-${actionId}`;
+    const reactionEl = document.getElementById(reaction);
+    const substitude = `substitute-${actionId}`;
+    const substitudeEl = document.getElementById(substitude);
     if (reactionEl && substitudeEl) {
-      action.addEventListener("mouseover", function () {
+      action.addEventListener("mouseover", () => {
         reactionEl.style.display = "block";
         substitudeEl.style.display = "none";
       });
-      action.addEventListener("mouseleave", function () {
+      action.addEventListener("mouseleave", () => {
         reactionEl.style.display = "none";
         substitudeEl.style.display = "block";
       });
