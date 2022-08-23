@@ -5,17 +5,15 @@ dependencies:
   config:
     - field.storage.paragraph.paragraph_column_center
     - paragraphs.paragraphs_type.1_column_layout
-    - paragraphs.paragraphs_type.contact_block
     - paragraphs.paragraphs_type.entity_reference
     - paragraphs.paragraphs_type.simple_paragraph
-    - paragraphs.paragraphs_type.testimony
   module:
     - entity_reference_revisions
 id: paragraph.1_column_layout.paragraph_column_center
 field_name: paragraph_column_center
 entity_type: paragraph
 bundle: 1_column_layout
-label: 'Content in center'
+label: '1 column Items'
 description: ''
 required: true
 translatable: true
@@ -25,49 +23,47 @@ settings:
   handler: 'default:paragraph'
   handler_settings:
     target_bundles:
-      entity_reference: entity_reference
       simple_paragraph: simple_paragraph
-      contact_block: contact_block
-      testimony: testimony
+      entity_reference: entity_reference
     negate: 0
     target_bundles_drag_drop:
       1_column_layout:
-        weight: 10
+        weight: -27
         enabled: false
       2_column_layout:
-        weight: 13
+        weight: -24
         enabled: false
       3_column_layout:
-        weight: 11
+        weight: -26
         enabled: false
       accordion:
-        weight: 12
+        weight: -25
         enabled: false
       accordion_item:
-        weight: 13
+        weight: -23
         enabled: false
-      contact_block:
-        weight: 19
-        enabled: true
+      bp_simple:
+        weight: -16
+        enabled: false
       content_listing:
-        weight: 14
+        weight: -22
         enabled: false
       entity_reference:
-        weight: 18
+        weight: -17
         enabled: true
       iframe:
-        weight: 15
+        weight: -21
         enabled: false
       json_map:
-        weight: 16
+        weight: -20
         enabled: false
       row:
-        weight: 17
+        weight: -19
         enabled: false
       simple_paragraph:
-        weight: 18
+        weight: -18
         enabled: true
       testimony:
-        weight: 26
-        enabled: true
+        weight: -15
+        enabled: false
 field_type: entity_reference_revisions

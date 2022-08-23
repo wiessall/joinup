@@ -3,39 +3,42 @@ langcode: en
 status: true
 dependencies:
   config:
-    - field.field.paragraph.testimony.paragraph_testimony_caption
+    - field.field.paragraph.testimony.paragraph_testimony_bio
     - field.field.paragraph.testimony.paragraph_testimony_image
     - field.field.paragraph.testimony.paragraph_testimony_text
+    - image.style.medium
     - paragraphs.paragraphs_type.testimony
   module:
     - image
-    - text
+    - template_suggestion
 id: paragraph.testimony.default
 targetEntityType: paragraph
 bundle: testimony
 mode: default
 content:
-  paragraph_testimony_caption:
-    type: text_default
-    label: above
+  paragraph_testimony_bio:
+    type: basic_string
+    label: hidden
     settings: {  }
     third_party_settings: {  }
     weight: 2
     region: content
   paragraph_testimony_image:
     type: image
-    label: above
+    label: hidden
     settings:
       image_link: ''
-      image_style: ''
+      image_style: medium
       image_loading:
         attribute: lazy
-    third_party_settings: {  }
+    third_party_settings:
+      template_suggestion:
+        template_suggestion: ''
     weight: 1
     region: content
   paragraph_testimony_text:
-    type: text_default
-    label: above
+    type: basic_string
+    label: hidden
     settings: {  }
     third_party_settings: {  }
     weight: 0
