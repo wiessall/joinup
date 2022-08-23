@@ -88,8 +88,8 @@ class GroupMembersController extends ControllerBase {
    *   The access result object.
    */
   public function access(GroupInterface $rdf_entity): AccessResultInterface {
-    $access = $this->entityTypeManager()->getAccessControlHandler('rdf_entity')->access($rdf_entity, 'view');
-    return AccessResult::allowedIf($access && $this->currentUser()->hasPermission('access user profiles'));
+    $access = $this->entityTypeManager()->getAccessControlHandler('rdf_entity')->access($rdf_entity, 'view', $this->currentUser(), TRUE);
+    return $access->andIf(AccessResult::allowedIfHasPermission($this->currentUser(), 'access user profiles'));
   }
 
 }
