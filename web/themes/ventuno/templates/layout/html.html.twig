@@ -25,6 +25,11 @@
  * @ingroup themeable
  */
 #}
+{%
+  set body_classes = [
+  logged_in ? 'user-logged-in' : 'user-anonymous',
+]
+%}
 <!DOCTYPE html>
 <html{{ html_attributes }}>
   <head>
@@ -35,7 +40,7 @@
     {# Include responsive favicons #}
     {% include directory ~ '/templates/parts/favicon.html.twig' %}
   </head>
-  <body{{ attributes }}>
+  <body{{ attributes.addClass(body_classes) }}>
     {#
       Keyboard navigation/accessibility link to main content section in
       page.html.twig.

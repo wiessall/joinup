@@ -96,7 +96,7 @@ function joinup_core_requirements($phase): array {
 /**
  * Fix group OG menu links.
  */
-function joinup_core_update_108400(?array &$sandbox = NULL): string {
+function joinup_core_update_108500(?array &$sandbox = NULL): string {
   $menu_link_content_storage = \Drupal::entityTypeManager()->getStorage('menu_link_content');
   $uri = [
     'Overview' => 'entity:rdf_entity/%s',
