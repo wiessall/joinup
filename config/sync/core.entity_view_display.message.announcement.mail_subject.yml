@@ -1,0 +1,41 @@
+uuid: be43b07b-625d-48b4-b7e2-5f3ea78ef06a
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.message.mail_subject
+    - field.field.message.announcement.body
+    - field.field.message.announcement.group_reference
+    - field.field.message.announcement.recipients
+    - field.field.message.announcement.state
+    - field.field.message.announcement.subject
+    - message.template.announcement
+  module:
+    - layout_builder
+third_party_settings:
+  layout_builder:
+    enabled: false
+    allow_custom: false
+id: message.announcement.mail_subject
+targetEntityType: message
+bundle: announcement
+mode: mail_subject
+content:
+  partial_0:
+    weight: 0
+    region: content
+  subject:
+    type: string
+    label: hidden
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 0
+    region: content
+hidden:
+  body: true
+  group_reference: true
+  partial_1: true
+  recipients: true
+  search_api_excerpt: true
+  state: true

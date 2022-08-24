@@ -137,3 +137,20 @@ joinup_group.settings_form:
         bundle:
           - collection
           - solution
+
+joinup_group.send_announcements:
+  path: '/rdf_entity/{rdf_entity}/announcements/send'
+  defaults:
+    _form: '\Drupal\joinup_group\Form\SendAnnouncementsForm'
+    _title: 'Announcement'
+  requirements:
+    _custom_access: Drupal\joinup_group\Controller\AnnouncementsController::access
+    _og_user_access_group: 'manage members'
+  options:
+    parameters:
+      rdf_entity:
+        type: entity:rdf_entity
+        bundle:
+          - collection
+          - solution
+    _og_entity_type_id: rdf_entity

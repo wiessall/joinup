@@ -1,0 +1,24 @@
+uuid: f3428ebd-ea36-4518-91f0-b6a9b6714a22
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.message.mail_subject
+    - message.template.announcement_create
+  module:
+    - layout_builder
+third_party_settings:
+  layout_builder:
+    enabled: false
+    allow_custom: false
+id: message.announcement_create.mail_subject
+targetEntityType: message
+bundle: announcement_create
+mode: mail_subject
+content:
+  partial_0:
+    weight: 0
+    region: content
+hidden:
+  partial_1: true
+  search_api_excerpt: true

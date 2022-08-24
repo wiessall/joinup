@@ -107,7 +107,6 @@ Feature: Collections/Solutions settings
     Given I am logged in as "Plot user"
     When I go to the "Rally fanatics" collection
     And I should see the link "Settings" in the "Entity actions" region
-    And I should see the link "Settings" in the "Entity actions" region
     And I click "Settings" in the "Entity actions" region
     But I should not see the text "Announcements enabled"
     Then I go to the homepage of the "Klop mirubes" solution
@@ -115,7 +114,6 @@ Feature: Collections/Solutions settings
 
     Given I am logged in as "Lope Facilitator"
     When I go to the "Rally fanatics" collection
-    And I should see the link "Settings" in the "Entity actions" region
     And I should see the link "Settings" in the "Entity actions" region
     And I click "Settings" in the "Entity actions" region
     But I should not see the text "Announcements enabled"
@@ -125,11 +123,9 @@ Feature: Collections/Solutions settings
     Given I am logged in as a moderator
     When I go to the "Rally fanatics" collection
     And I should see the link "Settings" in the "Entity actions" region
-    And I should see the link "Settings" in the "Entity actions" region
     And I click "Settings" in the "Entity actions" region
     And the "Announcements enabled" checkbox should be checked
     Then I go to the homepage of the "Klop mirubes" solution
-    And I should see the link "Settings" in the "Entity actions" region
     And I should see the link "Settings" in the "Entity actions" region
     And I click "Settings" in the "Entity actions" region
     And the "Announcements enabled" checkbox should be checked
