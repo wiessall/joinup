@@ -110,8 +110,8 @@ third_party_settings:
                 settings:
                   timezone_override: ''
                   format_type: date_only
-                  fromto: start_date
                   separator: '-'
+                  fromto: start_date
                 third_party_settings:
                   template_suggestion:
                     template_suggestion: ''

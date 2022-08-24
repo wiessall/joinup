@@ -6,6 +6,7 @@ dependencies:
     - field.storage.paragraph.paragraph_column_center
     - paragraphs.paragraphs_type.1_column_layout
     - paragraphs.paragraphs_type.accordion
+    - paragraphs.paragraphs_type.carousel
     - paragraphs.paragraphs_type.content_listing
     - paragraphs.paragraphs_type.iframe
     - paragraphs.paragraphs_type.json_map
@@ -29,6 +30,7 @@ settings:
     target_bundles:
       simple_paragraph: simple_paragraph
       content_listing: content_listing
+      carousel: carousel
       accordion: accordion
       iframe: iframe
       testimony: testimony
@@ -36,39 +38,42 @@ settings:
     negate: 0
     target_bundles_drag_drop:
       1_column_layout:
-        weight: -25
+        weight: -27
         enabled: false
       2_column_layout:
-        weight: -17
+        weight: -18
         enabled: false
       3_column_layout:
-        weight: -24
+        weight: -26
         enabled: false
       accordion:
-        weight: -21
-        enabled: true
-      accordion_item:
-        weight: -16
-        enabled: false
-      content_listing:
         weight: -22
         enabled: true
-      entity_reference:
-        weight: -14
+      accordion_item:
+        weight: -17
         enabled: false
-      iframe:
-        weight: -20
-        enabled: true
-      json_map:
-        weight: -18
-        enabled: true
-      row:
-        weight: -15
-        enabled: false
-      simple_paragraph:
+      carousel:
         weight: -23
         enabled: true
-      testimony:
+      content_listing:
+        weight: -24
+        enabled: true
+      entity_reference:
+        weight: -15
+        enabled: false
+      iframe:
+        weight: -21
+        enabled: true
+      json_map:
         weight: -19
+        enabled: true
+      row:
+        weight: -16
+        enabled: false
+      simple_paragraph:
+        weight: -25
+        enabled: true
+      testimony:
+        weight: -20
         enabled: true
 field_type: entity_reference_revisions
