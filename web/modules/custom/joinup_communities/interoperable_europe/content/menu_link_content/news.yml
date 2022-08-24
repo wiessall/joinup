@@ -1,0 +1,41 @@
+_meta:
+  version: '1.0'
+  entity_type: menu_link_content
+  uuid: f042129e-da39-4291-a7cf-c52dd1e77fdc
+  bundle: menu_link_content
+  default_langcode: en
+default:
+  enabled:
+    -
+      value: true
+  title:
+    -
+      value: News
+  menu_name:
+    -
+      value: iope
+  link:
+    -
+      uri: 'internal:/node/704825'
+      title: ''
+      options:
+        attributes: {  }
+        menu_link_destination: 0
+  external:
+    -
+      value: false
+  rediscover:
+    -
+      value: true
+  weight:
+    -
+      value: 0
+  expanded:
+    -
+      value: false
+  revision_translation_affected:
+    -
+      value: true
+  live_link:
+    -
+      value: false
