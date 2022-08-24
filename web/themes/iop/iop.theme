@@ -5,6 +5,8 @@
  * Functions to support theming in the Interoperable Europe theme.
  */
 
+declare(strict_types = 1);
+
 /**
  * Implements hook_preprocess_HOOK() for html.html.twig.
  */
