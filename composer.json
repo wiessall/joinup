@@ -272,6 +272,9 @@
                 "The old storage handler is still defined for RDF entities.": "resources/patch/core-fix-sparql-storage-hack.patch",
                 "Add option to show only start or end date in the DateTime Range custom formatter @see https://www.drupal.org/project/drupal/issues/2827055": "https://www.drupal.org/files/issues/2022-06-16/2827055-69.patch"
             },
+            "drupal/email_confirmer": {
+                "Support for HTML mails @see https://www.drupal.org/i/3047124": "https://git.drupalcode.org/project/email_confirmer/-/merge_requests/3.diff"
+            },
             "drupal/email_contact": {
                 "Email contact form opens in a modal. @see https://www.drupal.org/project/email_contact/issues/3273996": "https://git.drupalcode.org/project/email_contact/-/merge_requests/1.diff"
             },
