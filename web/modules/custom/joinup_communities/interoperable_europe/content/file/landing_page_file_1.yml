@@ -1,0 +1,27 @@
+_meta:
+  version: '1.0'
+  entity_type: file
+  uuid: 6905e91d-f7bc-4601-9286-2a4d93d29e57
+  default_langcode: en
+default:
+  uid:
+    -
+      target_id: 1
+  filename:
+    -
+      value: 'IOP EU JOINUP banner 2560 x 500px4- ACT.jpg'
+  uri:
+    -
+      value: 'public://2022-08/IOP EU JOINUP banner 2560 x 500px4- ACT.jpg'
+  filemime:
+    -
+      value: image/jpeg
+  filesize:
+    -
+      value: 295490
+  status:
+    -
+      value: true
+  created:
+    -
+      value: 1661350068

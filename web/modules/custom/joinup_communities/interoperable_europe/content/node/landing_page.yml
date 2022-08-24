@@ -5,9 +5,10 @@ _meta:
   bundle: custom_page
   default_langcode: en
   depends:
-    274b4bfa-5925-4e77-9e9f-ee65bc356b21: file
-    5b5f5471-e2b5-4ffa-bbd9-b092cf940c57: file
-    c0f81bce-bd00-453b-a46b-81dd3c506333: file
+    6905e91d-f7bc-4601-9286-2a4d93d29e57: file
+    b319fcaf-316e-45a2-8ead-af89b9df7e27: file
+    9ad5eede-1b7a-4295-864f-24e1fe0d241d: file
+    4c17c0b5-4530-459e-a7f6-1e25995db275: file
     'http://data.europa.eu/w21/8e30f798-ff2b-478b-9c09-5ed5a63b4c8c': rdf_entity
 default:
   revision_uid:
@@ -113,7 +114,7 @@ default:
                               value: true
                           field_body:
                             -
-                              value: "<img alt=\"Interoperable Europe logo\" data-align=\"center\" data-entity-type=\"file\" data-entity-uuid=\"5aca5a4a-d9d0-4ed9-b306-071ecad996b3\" data-image-style=\"wysiwyg_full_width\" height=\"221\" src=\"/web/sites/default/files/inline-images/interoperable-europe-logo.png\" width=\"920\" />\r\n<p>Interoperable Europe is teh initiative of the European Commission for a reinforced interoperability policy in the public sector. It is committed to introducing a new cooperative Interoperability policy for Europe that will transform the public administrations and help them in their digital transformation. The initiative is supported by the Digital Europe programme. It continues and expands the mission of the now completed ISA2 programme.</p>\r\n\r\n<p>&nbsp;</p>\r\n\r\n<p>Learn more</p>\r\n"
+                              value: "<img alt=\"Interoperable Europe logo\" data-align=\"center\" data-entity-type=\"file\" data-entity-uuid=\"2caf9633-dbb4-498a-92c0-0f04f8eb50ec\" data-image-style=\"wysiwyg_full_width\" height=\"159\" src=\"/web/sites/default/files/inline-images/iop-logo.png\" width=\"473\" />\r\n<p>Interoperable Europe is teh initiative of the European Commission for a reinforced interoperability policy in the public sector. It is committed to introducing a new cooperative Interoperability policy for Europe that will transform the public administrations and help them in their digital transformation. The initiative is supported by the Digital Europe programme. It continues and expands the mission of the now completed ISA2 programme.</p>\r\n\r\n<p>&nbsp;</p>\r\n\r\n<p>Learn more</p>\r\n"
                               format: content_editor
                   paragraph_column_right:
                     -
@@ -141,9 +142,16 @@ default:
                             -
                               value: "<p>{\"preview_thumbnail\":\"/web/sites/default/files/styles/video_embed_wysiwyg_preview/public/video_thumbnails/N7cNbrwP7qo.jpg?itok=5MgPY-V7\",\"video_url\":\"https://www.youtube.com/watch?v=N7cNbrwP7qo\",\"settings\":{\"responsive\":true,\"width\":\"854\",\"height\":\"480\",\"autoplay\":false},\"settings_summary\":[\"Embedded Video (Responsive).\"]}</p>\r\n"
                               format: content_editor
+          paragraph_row_background:
+            -
+              entity: 6905e91d-f7bc-4601-9286-2a4d93d29e57
+              alt: ''
+              title: ''
+              width: 3413
+              height: 667
           row_theme:
             -
-              value: dark
+              value: light
     -
       entity:
         _meta:
@@ -200,9 +208,6 @@ default:
                           behavior_settings:
                             -
                               value: {  }
-                          revision_translation_affected:
-                            -
-                              value: true
                           field_body:
                             -
                               value: "<h2>news</h2>\r\n"
@@ -212,8 +217,8 @@ default:
                         _meta:
                           version: '1.0'
                           entity_type: paragraph
-                          uuid: ead95dc5-1e62-4601-a6cf-ebdfb4c74050
-                          bundle: content_listing
+                          uuid: e9a1ed14-172c-4768-ae7d-d0729f33ee1f
+                          bundle: carousel
                           default_langcode: en
                         default:
                           status:
@@ -221,20 +226,16 @@ default:
                               value: true
                           created:
                             -
-                              value: 1661333639
+                              value: 1661350309
                           behavior_settings:
                             -
                               value: {  }
                           revision_translation_affected:
                             -
                               value: true
-                          field_content_listing:
+                          content_listing:
                             -
                               value:
-                                fields:
-                                  field_content_listing_type:
-                                    weight: 0
-                                    region: top
                                 enabled: 1
                                 query_presets: entity_bundle|news
                                 limit: '10'
@@ -299,9 +300,6 @@ default:
                           behavior_settings:
                             -
                               value: {  }
-                          revision_translation_affected:
-                            -
-                              value: true
                           field_body:
                             -
                               value: "<h2>events</h2>\r\n"
@@ -311,8 +309,8 @@ default:
                         _meta:
                           version: '1.0'
                           entity_type: paragraph
-                          uuid: b86ac9f3-d4b1-44d9-aaf6-503f423bb71f
-                          bundle: content_listing
+                          uuid: e8c70877-8949-4de1-96d3-2580b73381b8
+                          bundle: carousel
                           default_langcode: en
                         default:
                           status:
@@ -320,20 +318,16 @@ default:
                               value: true
                           created:
                             -
-                              value: 1661333725
+                              value: 1661350343
                           behavior_settings:
                             -
                               value: {  }
                           revision_translation_affected:
                             -
                               value: true
-                          field_content_listing:
+                          content_listing:
                             -
                               value:
-                                fields:
-                                  field_content_listing_type:
-                                    weight: 0
-                                    region: top
                                 enabled: 1
                                 query_presets: entity_bundle|event
                                 limit: '10'
@@ -360,6 +354,9 @@ default:
           behavior_settings:
             -
               value: {  }
+          revision_translation_affected:
+            -
+              value: true
           paragraph_column_layout:
             -
               entity:
@@ -379,6 +376,9 @@ default:
                   behavior_settings:
                     -
                       value: {  }
+                  revision_translation_affected:
+                    -
+                      value: true
                   paragraph_column_left:
                     -
                       entity:
@@ -398,9 +398,12 @@ default:
                           behavior_settings:
                             -
                               value: {  }
+                          revision_translation_affected:
+                            -
+                              value: true
                           field_body:
                             -
-                              value: "<img alt=\"IOP image\" data-align=\"center\" data-entity-type=\"file\" data-entity-uuid=\"20498538-7001-4e83-aa98-1ecae51b8acd\" data-image-style=\"wysiwyg_full_width\" height=\"386\" src=\"/web/sites/default/files/inline-images/iop-image-1.png\" width=\"637\" />\r\n<p>&nbsp;</p>\r\n"
+                              value: "<img alt=\"IOP image\" data-align=\"center\" data-entity-type=\"file\" data-entity-uuid=\"353147e2-ac81-4ccb-8122-c03da9524343\" data-image-style=\"wysiwyg_full_width\" height=\"585\" src=\"/web/sites/default/files/inline-images/WHY%20a%20POLICY-%20image.png\" width=\"920\" />\r\n<p>&nbsp;</p>\r\n"
                               format: content_editor
                   paragraph_column_right:
                     -
@@ -512,9 +515,6 @@ default:
                           behavior_settings:
                             -
                               value: {  }
-                          revision_translation_affected:
-                            -
-                              value: true
                           field_body:
                             -
                               value: "<h2>Did you know?</h2>\r\n\r\n<h3>Facts about interoperability</h3>\r\n"
@@ -524,8 +524,8 @@ default:
                         _meta:
                           version: '1.0'
                           entity_type: paragraph
-                          uuid: 1bdf5ea5-419b-4c87-bb32-13376d03ec81
-                          bundle: content_listing
+                          uuid: 10ac46a1-92df-47ce-8a24-d6a8b33e0727
+                          bundle: carousel
                           default_langcode: en
                         default:
                           status:
@@ -533,20 +533,16 @@ default:
                               value: true
                           created:
                             -
-                              value: 1661334094
+                              value: 1661350363
                           behavior_settings:
                             -
                               value: {  }
                           revision_translation_affected:
                             -
                               value: true
-                          field_content_listing:
+                          content_listing:
                             -
                               value:
-                                fields:
-                                  field_content_listing_type:
-                                    weight: 0
-                                    region: top
                                 enabled: 1
                                 query_presets: entity_bundle|custom_page
                                 limit: '10'
@@ -573,9 +569,6 @@ default:
           behavior_settings:
             -
               value: {  }
-          revision_translation_affected:
-            -
-              value: true
           paragraph_column_layout:
             -
               entity:
@@ -595,9 +588,6 @@ default:
                   behavior_settings:
                     -
                       value: {  }
-                  revision_translation_affected:
-                    -
-                      value: true
                   paragraph_column_center:
                     -
                       entity:
@@ -622,11 +612,11 @@ default:
                               value: "Johannes Hahn\r\nCommissioner for Budget and administration\r\nEuropean commission\r\n\r\nHearing of Johannes Hahn at the European parliament\r\n3 October 2019"
                           paragraph_testimony_image:
                             -
-                              entity: 274b4bfa-5925-4e77-9e9f-ee65bc356b21
+                              entity: b319fcaf-316e-45a2-8ead-af89b9df7e27
                               alt: ''
                               title: ''
-                              width: 200
-                              height: 185
+                              width: 217
+                              height: 204
                           paragraph_testimony_text:
                             -
                               value: 'I am committed to deliver on digitally transformed Commission and user-focused and data-driven public administrations. This means building sand operating digital government solutions in support of policy and administrative processes.'
@@ -649,16 +639,19 @@ default:
                           behavior_settings:
                             -
                               value: {  }
+                          revision_translation_affected:
+                            -
+                              value: true
                           paragraph_testimony_bio:
                             -
                               value: "Johannes Hahn\r\nCommissioner for Budget and administration\r\nEuropean commission\r\n\r\nHearing of Johannes Hahn at the European parliament\r\n3 October 2019"
                           paragraph_testimony_image:
                             -
-                              entity: 5b5f5471-e2b5-4ffa-bbd9-b092cf940c57
+                              entity: 9ad5eede-1b7a-4295-864f-24e1fe0d241d
                               alt: ''
                               title: ''
-                              width: 200
-                              height: 185
+                              width: 217
+                              height: 204
                           paragraph_testimony_text:
                             -
                               value: 'I am committed to deliver on digitally transformed Commission and user-focused and data-driven public administrations. This means building sand operating digital government solutions in support of policy and administrative processes.'
@@ -689,11 +682,11 @@ default:
                               value: "Johannes Hahn\r\nCommissioner for Budget and administration\r\nEuropean commission\r\n\r\nHearing of Johannes Hahn at the European parliament\r\n3 October 2019"
                           paragraph_testimony_image:
                             -
-                              entity: c0f81bce-bd00-453b-a46b-81dd3c506333
+                              entity: 4c17c0b5-4530-459e-a7f6-1e25995db275
                               alt: ''
                               title: ''
-                              width: 200
-                              height: 185
+                              width: 217
+                              height: 204
                           paragraph_testimony_text:
                             -
                               value: 'I am committed to deliver on digitally transformed Commission and user-focused and data-driven public administrations. This means building sand operating digital government solutions in support of policy and administrative processes.'
