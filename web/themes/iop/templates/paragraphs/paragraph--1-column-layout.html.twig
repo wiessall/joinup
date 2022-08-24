@@ -44,7 +44,7 @@
   'paragraph--type--' ~ paragraph.bundle|clean_class,
   view_mode ? 'paragraph--view-mode--' ~ view_mode|clean_class,
   'paragraph--id--' ~ paragraph.id.value,
-  '',
+  'col col-lg-12 col-md-12 col-sm-6 col-xs-12',
 ] %}
 
 {# Merges Background field with classes. #}
@@ -54,7 +54,6 @@
   {% set classes = classes|merge(content.paragraph_row_them['#value']) %}
 {% endif %}
 
-{# @todo: No classes are added from above so that the HTML is clean. #}
-<div class="col col-lg-12 col-md-12 col-sm-12 col-xs-12">
+<div{{ attributes.addClass(classes) }}>
   {{ content.paragraph_column_center }}
 </div>
