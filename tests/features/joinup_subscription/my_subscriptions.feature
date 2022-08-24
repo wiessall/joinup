@@ -236,3 +236,39 @@ Feature: My subscriptions
       | Daily   | daily     |
       | Weekly  | weekly    |
       | Monthly | monthly   |
+
+  @javascript
+  # This is a regression test for a bug in "My subscriptions".
+  # If a user doesn't have subscriptions enable and only want to enable announcements
+  # it should be checked after save.
+  Scenario: Regression test "My subscriptions"
+
+    Given the following collections:
+      | title    | state     |
+      | Fireblade | validated |
+      | Lopitopes | validated |
+    And user:
+      | Username  | Blade One           |
+      | E-mail    | blade.1@example.com |
+    And the following collection user membership:
+      | collection  | user       | state  |
+      | Fireblade   | Blade One  | active |
+      | Lopitopes   | Blade One  | active |
+
+    When I am logged in as "Blade One"
+    Then I go to my subscriptions
+    And I should not see the text "No collection memberships yet."
+    Then I check the "Announcements" checkbox of the "Fireblade" subscription
+    And I press "Save changes" on the "Fireblade" subscription card
+    Then the following content subscriptions should be selected:
+      | Fireblade | Announcements |
+      | Lopitopes |               |
+
+    When I uncheck the "Announcements" checkbox of the "Fireblade" subscription
+    And I press "Save changes" on the "Fireblade" subscription card
+    Then I check the "Announcements" checkbox of the "Lopitopes" subscription
+    And I check the "News" checkbox of the "Lopitopes" subscription
+    And I press "Save changes" on the "Lopitopes" subscription card
+    Then the following content subscriptions should be selected:
+      | Fireblade |                     |
+      | Lopitopes | News, Announcements |
