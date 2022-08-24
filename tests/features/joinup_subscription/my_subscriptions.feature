@@ -260,7 +260,8 @@ Feature: My subscriptions
     And I should not see the text "No collection memberships yet."
     Then I check the "Announcements" checkbox of the "Fireblade" subscription
     And I press "Save changes" on the "Fireblade" subscription card
-    Then the following content subscriptions should be selected:
+    Then I reload the page
+    And the following content subscriptions should be selected:
       | Fireblade | Announcements |
       | Lopitopes |               |
 
@@ -269,6 +270,7 @@ Feature: My subscriptions
     Then I check the "Announcements" checkbox of the "Lopitopes" subscription
     And I check the "News" checkbox of the "Lopitopes" subscription
     And I press "Save changes" on the "Lopitopes" subscription card
-    Then the following content subscriptions should be selected:
+    Then I reload the page
+    And the following content subscriptions should be selected:
       | Fireblade |                     |
       | Lopitopes | News, Announcements |
