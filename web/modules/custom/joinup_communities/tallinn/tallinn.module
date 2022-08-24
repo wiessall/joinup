@@ -189,9 +189,8 @@ function tallinn_paragraph_view_alter(array &$build, EntityInterface $entity, En
     $parent_entity = $parent_entity->getParentEntity();
   }
 
-  // The parent entity should now point to a group content entity.
-  $group = $parent_entity->getGroup();
-  if (empty($parent) || $parent->getGroup()->id() !== Tallinn::TALLINN_COMMUNITY_ID) {
+  // The parent_entity should now point to a group content entity.
+  if (empty($parent_entity) || $parent_entity->getGroup()->id() !== Tallinn::TALLINN_COMMUNITY_ID) {
     return;
   }
 
