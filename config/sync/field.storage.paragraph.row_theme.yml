@@ -22,8 +22,11 @@ settings:
       value: dark
       label: Dark
     -
-      value: Mixed
-      label: Mixed
+      value: mixed_top_light
+      label: 'Mixed (Top light)'
+    -
+      value: mixed_top_dark
+      label: 'Mixed (Top dark)'
   allowed_values_function: ''
 module: options
 locked: false

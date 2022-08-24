@@ -1,0 +1,24 @@
+<?php
+
+/**
+ * @file
+ * Functions to support theming in the Interoperable Europe theme.
+ */
+
+declare(strict_types = 1);
+
+/**
+ * Implements hook_preprocess_HOOK() for html.html.twig.
+ */
+function iop_preprocess_paragraph__row(&$variables) {
+  $paragraph = $variables['elements']['#paragraph'];
+  $variables['row_theme'] = $paragraph->get('row_theme')->value ?? 'light';
+  if (!$paragraph->get('paragraph_row_background')->isEmpty()) {
+    /** @var \Drupal\file\FileInterface $file */
+    $file = $paragraph->get('paragraph_row_background')->entity;
+    // @todo: Is this the best way to get the background? Because normally we
+    // need a style image (compressed?) but also, the image will be used for
+    // large screens too. To be decided by the FE team.
+    $variables['row_background'] = \Drupal::service('file_url_generator')->generateAbsoluteString($file->getFileUri());
+  }
+}

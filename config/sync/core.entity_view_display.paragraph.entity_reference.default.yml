@@ -16,7 +16,7 @@ content:
     type: entity_reference_entity_view
     label: above
     settings:
-      view_mode: view_mode_tile
+      view_mode: view_mode_featured
       link: false
     third_party_settings:
       template_suggestion:

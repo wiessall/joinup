@@ -8,6 +8,11 @@ dependencies:
     - paragraphs.paragraphs_type.2_column_layout
   module:
     - entity_reference_revisions
+    - layout_builder
+third_party_settings:
+  layout_builder:
+    enabled: false
+    allow_custom: false
 id: paragraph.2_column_layout.default
 targetEntityType: paragraph
 bundle: 2_column_layout
@@ -15,7 +20,7 @@ mode: default
 content:
   paragraph_column_left:
     type: entity_reference_revisions_entity_view
-    label: above
+    label: hidden
     settings:
       view_mode: default
       link: ''
@@ -24,7 +29,7 @@ content:
     region: content
   paragraph_column_right:
     type: entity_reference_revisions_entity_view
-    label: above
+    label: hidden
     settings:
       view_mode: default
       link: ''

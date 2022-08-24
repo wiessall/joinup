@@ -33,6 +33,8 @@ settings:
       content_listing: content_listing
       iframe: iframe
       row: row
+      bp_columns_three_uneven: bp_columns_three_uneven
+      bp_simple: bp_simple
     negate: 0
     target_bundles_drag_drop:
       1_column_layout:
@@ -49,9 +51,6 @@ settings:
         enabled: true
       accordion_item:
         weight: 7
-        enabled: false
-      contact_block:
-        weight: 19
         enabled: false
       content_listing:
         weight: 8

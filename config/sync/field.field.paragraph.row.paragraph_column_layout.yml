@@ -14,7 +14,7 @@ id: paragraph.row.paragraph_column_layout
 field_name: paragraph_column_layout
 entity_type: paragraph
 bundle: row
-label: 'Column layout'
+label: 'Row items'
 description: ''
 required: false
 translatable: false
