@@ -30,8 +30,10 @@
  *   current user is a logged-in member.
  * - is_admin: Flag for admin user status. Will be true when the current user
  *   is an administrator.
+ * - row_theme: The theme class to add to the classes.
  *
  * @see template_preprocess_paragraph()
+ * @see @iop_preprocess_paragraph__row()
  *
  * @ingroup themeable
  */
@@ -44,14 +46,14 @@
   'paragraph--type--' ~ paragraph.bundle|clean_class,
   view_mode ? 'paragraph--view-mode--' ~ view_mode|clean_class,
   'paragraph--id--' ~ paragraph.id.value,
-  'row',
+  'row row--theme-' ~ row_theme,
 ] %}
 
 {# Merges Background field with classes. #}
 {% set background_field = content.paragraph_row_theme|render %}
 {% if background_field %}
   {# @todo: This might not work. Fix it. #}
-  {% set classes = classes|merge(content.paragraph_row_them['#value']) %}
+  {% set classes = classes|merge("row-theme--" ~ content.paragraph_row_theme['#value']) %}
 {% endif %}
 
 {# Prints div with classes, and content without Width and Background. #}

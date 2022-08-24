@@ -46,13 +46,6 @@
   'paragraph--id--' ~ paragraph.id.value,
 ] %}
 
-{# Merges Background field with classes. #}
-{% set background_field = content.paragraph_row_theme|render %}
-{% if background_field %}
-  {# @todo: This might not work. Fix it. #}
-  {% set classes = classes|merge(content.paragraph_row_them['#value']) %}
-{% endif %}
-
 {# @todo: No classes are added from above so that the HTML is clean. #}
 <div class="col col-lg-6 col-md-6 col-sm-6 col-xs-12">
   {{ content.paragraph_column_left }}

@@ -44,15 +44,7 @@
   'paragraph--type--' ~ paragraph.bundle|clean_class,
   view_mode ? 'paragraph--view-mode--' ~ view_mode|clean_class,
   'paragraph--id--' ~ paragraph.id.value,
-  'row',
 ] %}
-
-{# Merges Background field with classes. #}
-{% set background_field = content.paragraph_row_theme|render %}
-{% if background_field %}
-  {# @todo: This might not work. Fix it. #}
-  {% set classes = classes|merge(content.paragraph_row_them['#value']) %}
-{% endif %}
 
 {# @todo: No classes are added from above so that the HTML is clean. #}
 <div class="col col-lg-4 col-md-4 col-sm-12 col-xs-12">
