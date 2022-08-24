@@ -1,0 +1,16 @@
+{#
+/**
+ * @file
+ * Theme implementation for displaying a single search result coming from Search API field.
+ *
+ * @ingroup themeable
+ */
+#}
+{%
+  set classes = [
+    'col col-lg-4 col-md-4 col-sm-4 col-xs-12',
+  ]
+%}
+<div class="{{ classes|join(' ') }}">
+  {{ item }}
+</div>
