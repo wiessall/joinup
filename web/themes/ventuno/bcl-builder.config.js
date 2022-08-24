@@ -444,6 +444,15 @@ module.exports = {
         sourceMap: "file",
       },
     },
+    {
+      entry: path.resolve(outputFolder, "src/scss/user--group-header.scss"),
+      dest: path.resolve(outputFolder, "assets/css/user--group-header.min.css"),
+      options: {
+        includePaths,
+        minify: true,
+        sourceMap: "file",
+      },
+    },
     // @todo ISAICP-7138 remove when switch to Ventuno theme is complete
     {
       entry: path.resolve(
@@ -477,7 +486,7 @@ module.exports = {
       to: path.resolve(outputFolder, "assets/css/fonts/files"),
       options: { up: true },
     },
-    // Bootrstrap: scripts
+    // Bootstrap: scripts
     {
       from: [
         path.resolve(
@@ -492,6 +501,11 @@ module.exports = {
     {
       from: [path.resolve(__dirname, "src/images/favicon/*")],
       to: path.resolve(outputFolder, "assets/images/favicon"),
+      options: { up: true },
+    },
+    {
+      from: [path.resolve(__dirname, "src/images/featured-bg.jpg")],
+      to: path.resolve(outputFolder, "assets/images"),
       options: { up: true },
     },
     {
@@ -589,6 +603,7 @@ module.exports = {
           "file-earmark-zip.svg",
           "filter.svg",
           "folder2-open.svg",
+          "github.svg",
           "info-circle-fill.svg",
           "info-circle.svg",
           "journal-text.svg",
@@ -599,6 +614,7 @@ module.exports = {
           "newspaper.svg",
           "people.svg",
           "person-circle.svg",
+          "person-workspace.svg",
           "pin-angle-fill.svg",
           "plus.svg",
           "question-lg.svg",
@@ -606,9 +622,11 @@ module.exports = {
           "star.svg",
           "three-dots-vertical.svg",
           "twitter.svg",
+          "vimeo.svg",
           "x-lg.svg",
           "x-square-fill.svg",
           "x.svg",
+          "youtube.svg",
         ],
       },
     },
