@@ -7,6 +7,7 @@
 
 declare(strict_types = 1);
 
+use Drupal\Core\Link;
 use Drupal\Core\Render\BubbleableMetadata;
 use Drupal\joinup_group\Entity\GroupInterface;
 
@@ -50,19 +51,21 @@ function contact_information_tokens(string $type, array $tokens, array $data, ar
         break;
 
       case 'confirmation-entities':
-        $elements = [
-          '#theme' => 'item_list',
-          '#items' => $confirmation->getProperty('entities') ?? [],
-        ];
+        $entities = $confirmation->getProperty('entities') ?? [];
         if (
           $confirmation->getProperty('fake_entity') &&
           ($group = \Drupal::routeMatch()->getParameter('rdf_entity')) &&
           $group instanceof GroupInterface
         ) {
-          $replacements[$original] = $group->label();
-          break;
+          $bundle_info = \Drupal::getContainer()->get('entity_type.bundle.info')->getBundleInfo($group->getEntityTypeId())[$group->bundle()];
+          $entities[] = ['#markup' => $bundle_info['label'] . ': ' . Link::fromTextAndUrl($group->label(), $group->toUrl('canonical', ['absolute' => TRUE]))->toString()];
         }
-        $replacements[$original] = \Drupal::service('renderer')->render($elements);
+
+        $elements = [
+          '#theme' => 'item_list',
+          '#items' => $entities,
+        ];
+        $replacements[$original] = \Drupal::service('renderer')->renderPlain($elements);
         break;
     }
   }
