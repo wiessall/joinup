@@ -312,8 +312,9 @@ class SubscriptionsForm extends FormBase {
       $value = array_map(function (string $key): array {
         return array_combine(['entity_type', 'bundle'], explode('|', $key));
       }, $subscribed_bundles);
-      $membership->set('subscription_bundles', $value)->save();
+      $membership->set('subscription_bundles', $value);
     }
+    $membership->save();
   }
 
   /**
