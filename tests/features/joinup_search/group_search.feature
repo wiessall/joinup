@@ -225,9 +225,8 @@ Feature: Search inside groups
   Scenario: Group filter chips appear in search bar after selecting them in facets
     When I visit the search page
     And I should see 12 tiles
-
     Then I should not see search bar icon in navbar
-
     # Search page doesn't have search bar in header.
     When I am on the homepage
     Then I should toggle search bar in navbar
+    And the page should not contain any chips
