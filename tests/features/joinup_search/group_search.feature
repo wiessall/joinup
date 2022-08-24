@@ -67,6 +67,13 @@ Feature: Search inside groups
     Then the page should show the following chip:
       | Chalet construction |
 
+    # Do a search without entering any keywords. Because the collection is shown
+    # as a chip in the search field the search results should be filtered and
+    # only show the content of the collection.
+    When I submit the search by pressing enter
+    And I should see the following facet summary "Chalet construction"
+    And the page should show the tiles "Room sizes, Ground plan, Opening of the winter season, Materials natural, Resources, Inclined foundations"
+
     # Check that other types of pages in the collection also show the collection
     # as a chip.
     When I go to the "Room sizes" discussion
@@ -102,12 +109,22 @@ Feature: Search inside groups
     Then the page should show the following chip:
       | Inclined foundations |
 
+    # Do a search without entering any keywords. Because the solution is shown
+    # as a chip in the search field the search results should be filtered and
+    # only show the content of the solution.
+    When I submit the search by pressing enter
+    And I should see the following facet summary "Inclined foundations"
+    Then the page should show the tiles "Pre-alpha, Presenting DrillMaster X88, Rock types, Frozen still, Geography, Terrace?"
+
     # Do a search with a keyword. The chip for the solution should be present
     # so the results are filtered by keyword and solution.
     Given I am on the homepage of the "Inclined foundations" solution
     When I should toggle search bar in navbar
     Then the page should show the following chip:
       | Inclined foundations |
+    When I enter "ground" in the search bar and press enter
+    And I should see the following facet summary "Inclined foundations"
+    And the page should show the tiles "Pre-alpha, Presenting DrillMaster X88"
 
     # Do a search with a keyword after removing the chip for the solution. The
     # results should only be filtered by keyword, not by solution.
@@ -197,13 +214,20 @@ Feature: Search inside groups
     And I should toggle search bar in navbar
     Then the page should show the following chip:
       | Chalet construction |
+    When I enter "ground" in the search bar and press enter
+    And I should see the following facet summary "Chalet construction"
+    And the page should show the tiles "Ground plan, Materials natural"
+    When I remove the following facet summary "Chalet construction"
+    Then the page should not contain any facet summary
+    And the page should show the tiles "Ground plan, Pre-alpha, Materials natural, Presenting DrillMaster X88"
 
   @javascript
   Scenario: Group filter chips appear in search bar after selecting them in facets
     When I visit the search page
     And I should see 12 tiles
+
     Then I should not see search bar icon in navbar
+
     # Search page doesn't have search bar in header.
     When I am on the homepage
     Then I should toggle search bar in navbar
-    And the page should not contain any chips
