@@ -1,0 +1,24 @@
+uuid: 382266e5-1fc4-46f8-96e4-b0397e4a0740
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.message.mail_body
+    - message.template.announcement_create
+  module:
+    - layout_builder
+third_party_settings:
+  layout_builder:
+    enabled: false
+    allow_custom: false
+id: message.announcement_create.mail_body
+targetEntityType: message
+bundle: announcement_create
+mode: mail_body
+content:
+  partial_1:
+    weight: 0
+    region: content
+hidden:
+  partial_0: true
+  search_api_excerpt: true

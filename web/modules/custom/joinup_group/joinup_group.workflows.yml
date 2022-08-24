@@ -1,0 +1,21 @@
+# The workflow of the entity announcements.
+announcement_workflow:
+  id: announcement_workflow
+  label: "Default"
+  group: announcement
+  states:
+    __new__:
+      label: New
+    sent:
+      label: Sent
+    rejected:
+      label: Rejected
+  transitions:
+    sent:
+      label: Sent
+      from: [__new__, rejected]
+      to: sent
+    rejected:
+      label: Rejected
+      from: [__new__]
+      to: rejected

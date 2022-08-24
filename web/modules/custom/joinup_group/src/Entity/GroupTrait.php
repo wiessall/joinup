@@ -197,6 +197,26 @@ trait GroupTrait {
   }
 
   /**
+   * {@inheritdoc}
+   */
+  public function getMembers(array $states = [OgMembershipInterface::STATE_ACTIVE]): ?array {
+    $ids = $this->getMembershipManager()->getGroupMembershipIdsByRoleNames($this, [OgRoleInterface::AUTHENTICATED], $states);
+
+    if (empty($ids)) {
+      return [];
+    }
+    $entity_type_manager = \Drupal::entityTypeManager();
+    $users = [];
+    $og_users = $entity_type_manager->getStorage('og_membership')->loadMultiple($ids);
+    $user_storage = $entity_type_manager->getStorage('user');
+    foreach ($og_users as $user) {
+      $users[] = $user_storage->load($user->uid->target_id);
+    }
+
+    return $users;
+  }
+
+  /**
    * Processes and returns a list of group content entities.
    *
    * @return array
