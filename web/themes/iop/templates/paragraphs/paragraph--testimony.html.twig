@@ -44,14 +44,17 @@
   'paragraph--type--' ~ paragraph.bundle|clean_class,
   view_mode ? 'paragraph--view-mode--' ~ view_mode|clean_class,
   'paragraph--id--' ~ paragraph.id.value,
+  'row',
 ] %}
 
-<div class="col col-lg-12 col-md-12 col-sm-12 col-xs-12">
-  {{ content.paragraph_testimony_text }}
-</div>
-<div class="col col-lg-6 col-md-6 col-sm-6 col-xs-6">
-  {{ content.paragraph_testimony_image }}
-</div>
-<div class="col col-lg-6 col-md-6 col-sm-6 col-xs-6">
-  {{ content.paragraph_testimony_bio }}
+<div {{ attributes.addClass(classes) }}>
+  <div class="col col-lg-12 col-md-12 col-sm-12 col-xs-12">
+    {{ content.paragraph_testimony_text }}
+  </div>
+  <div class="col col-lg-6 col-md-6 col-sm-6 col-xs-6">
+    {{ content.paragraph_testimony_image }}
+  </div>
+  <div class="col col-lg-6 col-md-6 col-sm-6 col-xs-6">
+    {{ content.paragraph_testimony_bio }}
+  </div>
 </div>
