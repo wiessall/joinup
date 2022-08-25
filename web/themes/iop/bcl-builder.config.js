@@ -1,5 +1,4 @@
 const path = require("path");
-const replace = require("@rollup/plugin-replace");
 
 const outputFolder = path.resolve(__dirname);
 const nodeModules = "./node_modules";
@@ -54,10 +53,7 @@ module.exports = {
     // Bootstrap: fonts
     {
       from: [
-        path.resolve(
-          nodeModules,
-          "@openeuropa/bcl-theme-joinup/fonts/*.css"
-        ),
+        path.resolve(nodeModules, "@openeuropa/bcl-theme-joinup/fonts/*.css"),
       ],
       to: path.resolve(outputFolder, "assets/css/fonts"),
       options: { up: true },
@@ -94,5 +90,5 @@ module.exports = {
       options: { up: true },
     },
   ],
-  sprite: []
+  sprite: [],
 };

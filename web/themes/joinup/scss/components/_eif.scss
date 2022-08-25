@@ -16,6 +16,12 @@
     vertical-align: middle;
     line-height: 45px;
   }
+
+  a {
+    color: #FFFFFF;
+    text-decoration: underline;
+    font-weight: bold;
+  }
 }
 
 .eif-filter__label {
@@ -65,6 +71,11 @@
 
 .eif-tile {
   display: block;
+
+  .eif__attributes_info {
+    font-size: $font-size-small;
+    text-align: center;
+  }
 }
 
 .eif-tile__title {
@@ -93,6 +104,7 @@
   color: #fff;
   padding: 5px 10px;
   margin-right: 10px;
+  display: block;
 }
 
 .eif-tile__label-wrapper {
@@ -505,7 +517,8 @@
   .listing__card {
     min-height: 0;
     flex-direction: column!important;
-    @include breakpoint(tablet) {
+    @include breakpoint(lg) {
+      flex: 0 0 60%;
       flex-direction: row!important;
     }
     .listing__inner-tile--wider {
@@ -540,6 +553,21 @@
           li {
             color: $color-grey-medium;
             list-style-type: none;
+          }
+          &.listing__buttons{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-end;
+            a:first-child {
+              margin: 20px 0;
+            }
+            @include breakpoint(tablet) {
+              flex-direction: row;
+              a:first-child {
+                margin: 0 20px;
+              }
+            }
           }
         }
         .eif-tile__button {
