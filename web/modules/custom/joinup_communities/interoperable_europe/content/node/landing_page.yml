@@ -113,7 +113,7 @@ default:
                               value: true
                           field_body:
                             -
-                              value: "<img alt=\"Interoperable Europe logo\" data-align=\"center\" data-entity-type=\"file\" data-entity-uuid=\"2caf9633-dbb4-498a-92c0-0f04f8eb50ec\" data-image-style=\"wysiwyg_full_width\" height=\"159\" src=\"/sites/default/files/inline-images/iop-logo.png\" width=\"473\" />\r\n<p>Interoperable Europe is teh initiative of the European Commission for a reinforced interoperability policy in the public sector. It is committed to introducing a new cooperative Interoperability policy for Europe that will transform the public administrations and help them in their digital transformation. The initiative is supported by the Digital Europe programme. It continues and expands the mission of the now completed ISA2 programme.</p>\r\n\r\n<p>&nbsp;</p>\r\n\r\n<p>Learn more</p>\r\n"
+                              value: "<p>Interoperable Europe is teh initiative of the European Commission for a reinforced interoperability policy in the public sector. It is committed to introducing a new cooperative Interoperability policy for Europe that will transform the public administrations and help them in their digital transformation. The initiative is supported by the Digital Europe programme. It continues and expands the mission of the now completed ISA2 programme.</p>\r\n\r\n<p>&nbsp;</p>\r\n\r\n<p>Learn more</p>\r\n"
                               format: content_editor
                   paragraph_column_right:
                     -
