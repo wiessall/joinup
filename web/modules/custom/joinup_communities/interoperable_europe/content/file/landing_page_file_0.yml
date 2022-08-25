@@ -9,10 +9,10 @@ default:
       target_id: 1
   filename:
     -
-      value: iop-testimony-image.png
+      value: iop-testimony-image_0.png
   uri:
     -
-      value: 'public://2022-08/iop-testimony-image.png'
+      value: 'public://2022-08/iop-testimony-image_0.png'
   filemime:
     -
       value: image/png
