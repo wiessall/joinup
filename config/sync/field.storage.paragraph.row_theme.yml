@@ -22,11 +22,20 @@ settings:
       value: dark
       label: Dark
     -
-      value: mixed_top_light
+      value: light-to-dark
       label: 'Mixed (Top light)'
     -
-      value: mixed_top_dark
+      value: dark-to-light
       label: 'Mixed (Top dark)'
+    -
+      value: light-banner
+      label: Banner Light
+    -
+      value: dark-banner
+      label: Banner Dark
+    -
+      value: light-wave
+      label: 'Light (with grey wavy background)'
   allowed_values_function: ''
 module: options
 locked: false
