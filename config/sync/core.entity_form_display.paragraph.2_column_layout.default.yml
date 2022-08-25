@@ -13,8 +13,8 @@ third_party_settings:
   field_group:
     group_2_column_accordion:
       children:
-        - group_2_col_acc_left
         - group_2_col_acc_right
+        - group_2_col_acc_left
       label: '2 column accordion'
       region: content
       parent_name: ''
@@ -71,7 +71,7 @@ content:
       closed_mode: summary
       autocollapse: none
       closed_mode_threshold: 0
-      add_mode: modal
+      add_mode: dropdown
       form_display_mode: default
       default_paragraph_type: _none
       features:
@@ -90,7 +90,7 @@ content:
       closed_mode: summary
       autocollapse: all
       closed_mode_threshold: 0
-      add_mode: modal
+      add_mode: dropdown
       form_display_mode: default
       default_paragraph_type: _none
       features:
