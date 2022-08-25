@@ -5,7 +5,6 @@ _meta:
   bundle: custom_page
   default_langcode: en
   depends:
-    6905e91d-f7bc-4601-9286-2a4d93d29e57: file
     b319fcaf-316e-45a2-8ead-af89b9df7e27: file
     9ad5eede-1b7a-4295-864f-24e1fe0d241d: file
     4c17c0b5-4530-459e-a7f6-1e25995db275: file
@@ -142,13 +141,6 @@ default:
                             -
                               value: "<p>{\"preview_thumbnail\":\"/web/sites/default/files/styles/video_embed_wysiwyg_preview/public/video_thumbnails/N7cNbrwP7qo.jpg?itok=5MgPY-V7\",\"video_url\":\"https://www.youtube.com/watch?v=N7cNbrwP7qo\",\"settings\":{\"responsive\":true,\"width\":\"854\",\"height\":\"480\",\"autoplay\":false},\"settings_summary\":[\"Embedded Video (Responsive).\"]}</p>\r\n"
                               format: content_editor
-          paragraph_row_background:
-            -
-              entity: 6905e91d-f7bc-4601-9286-2a4d93d29e57
-              alt: ''
-              title: ''
-              width: 3413
-              height: 667
           row_theme:
             -
               value: light
