@@ -7,8 +7,11 @@
 
 declare(strict_types = 1);
 
+use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\collection\Entity\CollectionInterface;
+use Drupal\Core\Session\AccountInterface;
 use Drupal\interoperable_europe\InteroperableEuropeCollectionInterface;
 use Drupal\interoperable_europe\Plugin\Condition\TemporaryIopCondition;
 use Drupal\joinup_group\Form\JoinGroupFormInterface;
@@ -83,4 +86,21 @@ function interoperable_europe_condition_info_alter(array &$definitions): void {
   // Temporary replace the original plugin class to define some exceptions.
   // @see \Drupal\interoperable_europe\Plugin\Condition\TemporaryIopCondition
   $definitions['group_context']['class'] = TemporaryIopCondition::class;
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_create_access().
+ */
+function interoperable_europe_paragraph_create_access(AccountInterface $account, array $context, $entity_bundle): AccessResultInterface {
+  if ($entity_bundle !== 'row') {
+    return AccessResult::neutral();
+  }
+
+  // Only allow rows for interoperable europe for now.
+  $group = \Drupal::getContainer()->get('og.context')->getGroup();
+  if (!empty($group) && $group->id() === InteroperableEuropeCollectionInterface::COLLECTION_ENTITY_ID) {
+    return AccessResult::allowed();
+  }
+
+  return AccessResult::forbidden();
 }
