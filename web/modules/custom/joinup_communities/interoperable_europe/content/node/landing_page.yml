@@ -464,7 +464,7 @@ default:
                               format: content_editor
           row_theme:
             -
-              value: mixed_top_dark
+              value: dark-to-light
     -
       entity:
         _meta:
