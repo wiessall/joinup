@@ -14,67 +14,51 @@ dependencies:
     - paragraphs
 third_party_settings:
   field_group:
-    group_row_settings:
+    group_paragraph_row_accordion:
       children:
-        - group_row_settings_left
-        - group_row_settings_right
-      label: 'Row settings'
+        - group_paragraph_row_settings
+        - group_paragraph_row_items
+      label: 'Row accordion'
       region: content
       parent_name: ''
       weight: 0
-      format_type: html_element
+      format_type: accordion
       format_settings:
-        classes: row
+        classes: ''
         show_empty_fields: false
         id: ''
-        element: div
-        show_label: false
-        label_element: h3
-        label_element_classes: ''
-        attributes: ''
         effect: none
-        speed: fast
-        required_fields: true
-    group_row_settings_left:
+    group_paragraph_row_settings:
       children:
         - row_theme
-      label: 'Row settings left'
-      region: content
-      parent_name: group_row_settings
-      weight: 6
-      format_type: html_element
-      format_settings:
-        classes: 'col col-lg-6 col-md-6 col-sm-12 col-xs-12'
-        show_empty_fields: false
-        id: ''
-        element: div
-        show_label: false
-        label_element: h3
-        label_element_classes: ''
-        attributes: ''
-        effect: none
-        speed: fast
-        required_fields: false
-    group_row_settings_right:
-      children:
         - paragraph_row_background
-      label: 'Row settings right'
+      label: Settings
       region: content
-      parent_name: group_row_settings
-      weight: 7
-      format_type: html_element
+      parent_name: group_paragraph_row_accordion
+      weight: 6
+      format_type: accordion_item
       format_settings:
-        classes: 'col col-lg-6 col-md-6 col-sm-12 col-xs-12'
+        classes: ''
         show_empty_fields: false
         id: ''
-        element: div
-        show_label: false
-        label_element: h3
-        label_element_classes: ''
-        attributes: ''
-        effect: none
-        speed: fast
-        required_fields: false
+        formatter: closed
+        description: ''
+        required_fields: true
+    group_paragraph_row_items:
+      children:
+        - paragraph_column_layout
+      label: 'Row items'
+      region: hidden
+      parent_name: group_paragraph_row_accordion
+      weight: 8
+      format_type: accordion_item
+      format_settings:
+        classes: ''
+        show_empty_fields: false
+        id: ''
+        formatter: open
+        description: ''
+        required_fields: true
 id: paragraph.row.default
 targetEntityType: paragraph
 bundle: row
@@ -82,7 +66,7 @@ mode: default
 content:
   paragraph_column_layout:
     type: paragraphs
-    weight: 3
+    weight: 4
     region: content
     settings:
       title: Paragraph
@@ -91,7 +75,7 @@ content:
       closed_mode: summary
       autocollapse: none
       closed_mode_threshold: 0
-      add_mode: modal
+      add_mode: dropdown
       form_display_mode: default
       default_paragraph_type: _none
       features:
@@ -101,7 +85,7 @@ content:
     third_party_settings: {  }
   paragraph_row_background:
     type: image_image
-    weight: 2
+    weight: 8
     region: content
     settings:
       progress_indicator: throbber
@@ -109,7 +93,7 @@ content:
     third_party_settings: {  }
   row_theme:
     type: options_select
-    weight: 1
+    weight: 7
     region: content
     settings: {  }
     third_party_settings: {  }
