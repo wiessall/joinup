@@ -208,6 +208,9 @@ default:
                           behavior_settings:
                             -
                               value: {  }
+                          revision_translation_affected:
+                            -
+                              value: true
                           field_body:
                             -
                               value: "<h2>news</h2>\r\n"
@@ -300,6 +303,9 @@ default:
                           behavior_settings:
                             -
                               value: {  }
+                          revision_translation_affected:
+                            -
+                              value: true
                           field_body:
                             -
                               value: "<h2>events</h2>\r\n"
@@ -403,7 +409,7 @@ default:
                               value: true
                           field_body:
                             -
-                              value: "<img alt=\"IOP image\" data-align=\"center\" data-entity-type=\"file\" data-entity-uuid=\"353147e2-ac81-4ccb-8122-c03da9524343\" data-image-style=\"wysiwyg_full_width\" height=\"585\" src=\"/web/sites/default/files/inline-images/WHY%20a%20POLICY-%20image.png\" width=\"920\" />\r\n<p>&nbsp;</p>\r\n"
+                              value: "<img alt=\"IOP image\" data-align=\"center\" data-entity-type=\"file\" data-entity-uuid=\"353147e2-ac81-4ccb-8122-c03da9524343\" data-image-style=\"wysiwyg_half_width\" height=\"250\" src=\"/web/sites/default/files/inline-images/WHY%20a%20POLICY-%20image.png\" width=\"400\" />\r\n<p>&nbsp;</p>\r\n"
                               format: content_editor
                   paragraph_column_right:
                     -
@@ -515,6 +521,9 @@ default:
                           behavior_settings:
                             -
                               value: {  }
+                          revision_translation_affected:
+                            -
+                              value: true
                           field_body:
                             -
                               value: "<h2>Did you know?</h2>\r\n\r\n<h3>Facts about interoperability</h3>\r\n"
@@ -607,9 +616,12 @@ default:
                           behavior_settings:
                             -
                               value: {  }
+                          paragraph_testimony_author:
+                            -
+                              value: 'Johannes Hahn'
                           paragraph_testimony_bio:
                             -
-                              value: "Johannes Hahn\r\nCommissioner for Budget and administration\r\nEuropean commission\r\n\r\nHearing of Johannes Hahn at the European parliament\r\n3 October 2019"
+                              value: "Commissioner for Budget and administration\r\nEuropean commission\r\n\r\nHearing of Johannes Hahn at the European parliament\r\n3 October 2019"
                           paragraph_testimony_image:
                             -
                               entity: b319fcaf-316e-45a2-8ead-af89b9df7e27
@@ -642,9 +654,12 @@ default:
                           revision_translation_affected:
                             -
                               value: true
+                          paragraph_testimony_author:
+                            -
+                              value: 'Johannes Hahn'
                           paragraph_testimony_bio:
                             -
-                              value: "Johannes Hahn\r\nCommissioner for Budget and administration\r\nEuropean commission\r\n\r\nHearing of Johannes Hahn at the European parliament\r\n3 October 2019"
+                              value: "Commissioner for Budget and administration\r\nEuropean commission\r\n\r\nHearing of Johannes Hahn at the European parliament\r\n3 October 2019"
                           paragraph_testimony_image:
                             -
                               entity: 9ad5eede-1b7a-4295-864f-24e1fe0d241d
@@ -677,9 +692,12 @@ default:
                           revision_translation_affected:
                             -
                               value: true
+                          paragraph_testimony_author:
+                            -
+                              value: 'Johannes Hahn'
                           paragraph_testimony_bio:
                             -
-                              value: "Johannes Hahn\r\nCommissioner for Budget and administration\r\nEuropean commission\r\n\r\nHearing of Johannes Hahn at the European parliament\r\n3 October 2019"
+                              value: "Commissioner for Budget and administration\r\nEuropean commission\r\n\r\nHearing of Johannes Hahn at the European parliament\r\n3 October 2019"
                           paragraph_testimony_image:
                             -
                               entity: 4c17c0b5-4530-459e-a7f6-1e25995db275
