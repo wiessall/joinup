@@ -13,7 +13,13 @@ theme:
       assets/css/theme.min.css: {}
 
 # Pages
-homepage:
+landing-page:
   css:
     theme:
-      assets/css/homepage.min.css: {}
+      assets/css/landing-page.min.css: {}
+
+# Components
+paragraph:
+  css:
+    theme:
+      assets/css/paragraph.min.css: {}
