@@ -6,81 +6,56 @@
 /**
  * Hides/shows fields on the solution form for the TRR community.
  */
-(function ($) {
+(() => {
+  Drupal.trrSolution = {
+    solutionTerms: [
+      "http://data.europa.eu/dr8/ConformanceTestingComponent",
+      "http://data.europa.eu/dr8/ConformanceTestingService",
+      "http://data.europa.eu/dr8/ConformanceTestScenario",
+    ],
 
-    'use strict';
-
-    Drupal.behaviors.trr_solution = {
-        attach: function (context, settings) {
-            $(context).find('select[name="field_is_solution_type[]"]').once('trr_solution').each(function () {
-                var $element = $(this);
-                solution_type_updated($element);
-                $element.on('change', function () {
-                    solution_type_updated($element)
-                });
-            });
-        }
-    };
+    fieldsSelector:
+      "#edit-field-is-test-resource-type-wrapper,#edit-field-is-actor-wrapper,#edit-field-is-business-process-wrapper,#edit-field-is-product-type-wrapper,#edit-field-is-standardization-level-wrapper",
 
     /**
      * Only show some field when the solution type is set to one of the TRR terms.
      *
-     * @param $solution_type_element
+     * @param {HTMLSelectElement} solutionTypeElement
+     *   The element.
      */
-    function solution_type_updated($solution_type_element) {
+    solutionTypeUpdated: (solutionTypeElement) => {
+      const solutionTypes = [];
+      solutionTypeElement.querySelectorAll("option:checked").forEach((o) => {
+        solutionTypes.push(o.getAttribute("value"));
+      });
 
-        var solution_type = $solution_type_element.val();
-        if (!solution_type) {
-            solution_type = [];
-        }
-        // Test resource type field.
-        var $field_is_test_resource_type = $('#edit-field-is-test-resource-type-wrapper');
-        toggle_trr_element(solution_type, $field_is_test_resource_type);
-        // Actor field.
-        var $edit_field_is_actor_wrapper = $('#edit-field-is-actor-wrapper');
-        toggle_trr_element(solution_type, $edit_field_is_actor_wrapper);
-        // Business process field.
-        var $edit_field_is_business_process_wrapper = $('#edit-field-is-business-process-wrapper');
-        toggle_trr_element(solution_type, $edit_field_is_business_process_wrapper);
-        // Business process field.
-        var $edit_field_is_product_type_wrapper = $('#edit-field-is-product-type-wrapper');
-        toggle_trr_element(solution_type, $edit_field_is_product_type_wrapper);
-        // Standardisation level.
-        var $edit_field_is_standardization_level_wrapper = $('#edit-field-is-standardization-level-wrapper');
-        toggle_trr_element(solution_type, $edit_field_is_standardization_level_wrapper);
-    }
+      const selectedTrrTerms = solutionTypes.filter((item) =>
+        Drupal.trrSolution.solutionTerms.includes(item)
+      );
+      document
+        .querySelectorAll(Drupal.trrSolution.fieldsSelector)
+        .forEach((field) => {
+          if (selectedTrrTerms.length) {
+            field.classList.remove("visually-hidden");
+          } else {
+            field.classList.add("visually-hidden");
+          }
+        });
+    },
+  };
 
-    /**
-     * Hide/show an element when the solution is a 'trr' solution.
-     *
-     * @param solution_type
-     * @param $element
-     */
-    function toggle_trr_element(solution_type, $element) {
-        var trr_solution_terms = [
-            'http://data.europa.eu/dr8/ConformanceTestingComponent',
-            'http://data.europa.eu/dr8/ConformanceTestingService',
-            'http://data.europa.eu/dr8/ConformanceTestScenario'
-        ];
-        var selected_trr_terms = array_intersect([solution_type, trr_solution_terms]);
-        if (selected_trr_terms.length) {
-            $element.show();
-        }
-        else {
-            $element.hide();
-        }
-    }
-
-    function array_intersect(arrays) {
-        return arrays.shift().reduce(function (res, v) {
-            if (res.indexOf(v) === -1) {
-                if (arrays.every(function (a) {
-                    return a.indexOf(v) !== -1;
-                })) {
-                    res.push(v);
-                }
-            }
-            return res;
-        }, []);
-    }
-})(jQuery);
+  Drupal.behaviors.trrSolution = {
+    attach(context) {
+      once(
+        "trr_solution",
+        "select[name='field_is_solution_type[]']",
+        context
+      ).forEach((solutionTypeElement) => {
+        Drupal.trrSolution.solutionTypeUpdated(solutionTypeElement);
+        solutionTypeElement.addEventListener("change", () => {
+          Drupal.trrSolution.solutionTypeUpdated(solutionTypeElement);
+        });
+      });
+    },
+  };
+})();

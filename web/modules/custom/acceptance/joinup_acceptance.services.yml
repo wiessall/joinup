@@ -1,4 +1,4 @@
 services:
-  send_spool.emails:
-    class: Drupal\joinup_acceptance\SendSpooledEmails
+  joinup_acceptance.swiftmailer_commands:
+    class: Drupal\swiftmailer\Commands\SwiftMailerCommands
     arguments: [ '@swiftmailer.transport' ]
