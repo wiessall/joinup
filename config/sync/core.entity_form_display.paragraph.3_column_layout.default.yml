@@ -12,87 +12,65 @@ dependencies:
     - paragraphs
 third_party_settings:
   field_group:
-    group_3_col_row:
+    group_3_column_accordion:
       children:
-        - group_3_col_left
-        - group_3_col_center
-        - group_3_col_right
-      label: '3 column row'
+        - group_3_col_acc_left
+        - group_3_col_acc_center
+        - group_3_col_acc_right
+      label: '3 column accordion'
       region: content
       parent_name: ''
       weight: 0
-      format_type: html_element
+      format_type: accordion
       format_settings:
-        classes: row
+        classes: ''
         show_empty_fields: false
         id: ''
-        element: div
-        show_label: false
-        label_element: h3
-        label_element_classes: ''
-        attributes: ''
         effect: none
-        speed: fast
-        required_fields: true
-    group_3_col_left:
+    group_3_col_acc_left:
       children:
         - paragraph_column_left
-      label: '3 column left'
+      label: 'Left sidebar'
       region: content
-      parent_name: group_3_col_row
+      parent_name: group_3_column_accordion
       weight: 6
-      format_type: html_element
+      format_type: accordion_item
       format_settings:
-        classes: 'col col-lg-4 col-md-4 col-sm-6 col-xs-12'
+        classes: ''
         show_empty_fields: false
         id: ''
-        element: div
-        show_label: false
-        label_element: h3
-        label_element_classes: ''
-        attributes: ''
-        effect: none
-        speed: fast
+        formatter: closed
+        description: ''
         required_fields: true
-    group_3_col_center:
+    group_3_col_acc_center:
       children:
         - paragraph_column_center
-      label: '3 column center'
+      label: Center
       region: content
-      parent_name: group_3_col_row
+      parent_name: group_3_column_accordion
       weight: 7
-      format_type: html_element
+      format_type: accordion_item
       format_settings:
-        classes: 'col col-lg-4 col-md-4 col-sm-6 col-xs-12'
+        classes: ''
         show_empty_fields: false
         id: ''
-        element: div
-        show_label: false
-        label_element: h3
-        label_element_classes: ''
-        attributes: ''
-        effect: none
-        speed: fast
+        formatter: closed
+        description: ''
         required_fields: true
-    group_3_col_right:
+    group_3_col_acc_right:
       children:
         - paragraph_column_right
-      label: '3 column right'
-      region: content
-      parent_name: group_3_col_row
+      label: 'Right side'
+      region: hidden
+      parent_name: group_3_column_accordion
       weight: 8
-      format_type: html_element
+      format_type: accordion_item
       format_settings:
-        classes: 'col col-lg-4 col-md-4 col-sm-6 col-xs-12'
+        classes: ''
         show_empty_fields: false
         id: ''
-        element: div
-        show_label: false
-        label_element: h3
-        label_element_classes: ''
-        attributes: ''
-        effect: none
-        speed: fast
+        formatter: closed
+        description: ''
         required_fields: true
 id: paragraph.3_column_layout.default
 targetEntityType: paragraph
@@ -101,7 +79,7 @@ mode: default
 content:
   paragraph_column_center:
     type: paragraphs
-    weight: 3
+    weight: 4
     region: content
     settings:
       title: Paragraph
@@ -139,7 +117,7 @@ content:
     third_party_settings: {  }
   paragraph_column_right:
     type: paragraphs
-    weight: 2
+    weight: 3
     region: content
     settings:
       title: Paragraph

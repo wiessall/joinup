@@ -42,6 +42,9 @@ settings:
       accordion_item:
         weight: 15
         enabled: false
+      carousel:
+        weight: 19
+        enabled: false
       content_listing:
         weight: 16
         enabled: false
