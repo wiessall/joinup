@@ -151,6 +151,7 @@ default:
         Highlighted content: '.block-entityqueue--highlighted-content'
         Highlighted event: '.block-entityqueue--highlighted-event'
         In the spotlight: '.block-views-blockin-the-spotlight-block'
+        IOPE Menu: '#block-interoperableeurope'
         Left sidebar: '.section--sidebar-left'
         Main fields accordion: '#main-fields'
         Main solution vertical tab: '#edit-group-main'
