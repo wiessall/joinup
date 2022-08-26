@@ -39,12 +39,9 @@
   'navbar',
   'navbar-expand-md',
   'iop-navbar',
+  directory is same as 'themes/iop' ? 'stickynav',
 ] %}
-{# Make navbar sticky if active theme is 'iop' #}
-{% if directory is same as 'themes/iop' %}
-  {% set atributes = attributes.setAttribute('id', 'stickynav') %}
-{% endif %}
-{% set atributes = attributes.addClass(classes) %}
+{% set attributes = attributes.addClass(classes) %}
 <nav role="navigation" aria-labelledby="{{ heading_id }}"{{ attributes|without('role', 'aria-labelledby') }}>
   {# Label. If not displayed, we still provide it for screen readers. #}
   {% if not configuration.label_display %}

@@ -10,7 +10,7 @@
       window.addEventListener(
         "wtGlobanReady",
         () => {
-          const navbar = document.getElementById("stickynav");
+          const navbar = document.querySelector("nav.stickynav");
           if (navbar === null || navbar === undefined) {
             return;
           }
