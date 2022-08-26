@@ -40,4 +40,4 @@ visibility:
   request_path:
     id: request_path
     negate: true
-    pages: /collection/interoperable-europe/latest-news
+    pages: "/collection/interoperable-europe/latest-news\r\n/collection/interoperable-europe/events"

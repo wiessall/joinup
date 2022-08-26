@@ -15,10 +15,7 @@
       background-position: center;
       background-size: cover;
     }
-    margin-bottom: $spacer * -1;
     padding: $spacer * 2 0!important; // 32px 0
-    @include media-breakpoint-up(sm) {
-    }
     @include media-breakpoint-up(lg) {
       margin-bottom: $spacer * -1.5;
       padding: $spacer * 3.5 0!important; // 56px 0
@@ -26,12 +23,6 @@
     @include media-breakpoint-up(xxl) {
       margin-bottom: $spacer * -2;
       padding: $spacer * 5 0!important; // 64px 0
-    }
-    // Backgrounds depending on the modifier
-    &--news {
-      &::before {
-        background-image: url("#{$theme-path-iop}/banners/news.webp");
-      }
     }
     h1 {
       margin: 0!important;
@@ -84,6 +75,12 @@
     }
   }
   &--news {
+    .listing-header {
+      margin-bottom: $spacer * -1;
+      &::before {
+        background-image: url("#{$theme-path-iop}/banners/news.webp");
+      }
+    }
     .cards-wrapper {
       @include media-breakpoint-up(sm) {
         & > .col:nth-child(even) {
@@ -93,6 +90,31 @@
       @include media-breakpoint-up(lg) {
         & > .col:nth-child(3n+2) {
           margin-top: 5rem;
+        }
+      }
+    }
+  }
+  &--events {
+    .listing-header {
+      margin-bottom: $spacer * -2;
+      &::before {
+        background-image: url("#{$theme-path-iop}/banners/events.webp");
+      }
+    }
+    .cards-wrapper {
+      @include media-breakpoint-up(sm) {
+        & > .col:nth-child(even) {
+          margin-top: 3rem;
+        }
+      }
+      @include media-breakpoint-up(lg) {
+        & > .col:nth-child(3n - 1) {
+          background: lime;
+          margin-top: 4rem;
+        }
+        & > .col:nth-child(3n) {
+          background: linen;
+          margin-top: 8rem;
         }
       }
     }
