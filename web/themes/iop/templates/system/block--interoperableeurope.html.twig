@@ -39,9 +39,13 @@
   'navbar',
   'navbar-expand-md',
   'iop-navbar',
-  'navbar--sticky',
 ] %}
-<nav role="navigation" aria-labelledby="{{ heading_id }}"{{ attributes|without('role', 'aria-labelledby').addClass(classes) }}>
+{# Make navbar sticky if active theme is 'iop' #}
+{% if directory is same as 'themes/iop' %}
+  {% set atributes = attributes.setAttribute('id', 'stickynav') %}
+{% endif %}
+{% set atributes = attributes.addClass(classes) %}
+<nav role="navigation" aria-labelledby="{{ heading_id }}"{{ attributes|without('role', 'aria-labelledby') }}>
   {# Label. If not displayed, we still provide it for screen readers. #}
   {% if not configuration.label_display %}
     {% set title_attributes = title_attributes.addClass('visually-hidden') %}
