@@ -18,10 +18,6 @@ function contact_information_token_info(): array {
   return [
     'tokens' => [
       'email-confirmer' => [
-        'confirmation-name' => [
-          'name' => t('Confirmation Name'),
-          'description' => t('The name to confirm.'),
-        ],
         'confirmation-entities' => [
           'name' => t('Contact information entities list'),
           'description' => t('Generates a list of entities with this contact information.'),
@@ -46,10 +42,6 @@ function contact_information_tokens(string $type, array $tokens, array $data, ar
 
   foreach ($tokens as $name => $original) {
     switch ($name) {
-      case 'confirmation-name':
-        $replacements[$original] = $confirmation->getProperty('name');
-        break;
-
       case 'confirmation-entities':
         $entities = $confirmation->getProperty('entities') ?? [];
         if (
