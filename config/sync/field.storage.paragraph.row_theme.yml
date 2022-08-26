@@ -29,10 +29,10 @@ settings:
       label: 'Mixed (Top dark)'
     -
       value: light-banner
-      label: Banner Light
+      label: 'Banner Light'
     -
       value: dark-banner
-      label: Banner Dark
+      label: 'Banner Dark'
     -
       value: light-wave
       label: 'Light (with grey wavy background)'

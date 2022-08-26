@@ -3,6 +3,7 @@ langcode: en
 status: true
 dependencies:
   config:
+    - field.field.paragraph.testimony.paragraph_testimony_author
     - field.field.paragraph.testimony.paragraph_testimony_bio
     - field.field.paragraph.testimony.paragraph_testimony_image
     - field.field.paragraph.testimony.paragraph_testimony_text
@@ -15,9 +16,17 @@ targetEntityType: paragraph
 bundle: testimony
 mode: default
 content:
+  paragraph_testimony_author:
+    type: string_textfield
+    weight: 2
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
   paragraph_testimony_bio:
     type: string_textarea
-    weight: 2
+    weight: 3
     region: content
     settings:
       rows: 3

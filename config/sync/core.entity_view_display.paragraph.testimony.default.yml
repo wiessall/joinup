@@ -3,6 +3,7 @@ langcode: en
 status: true
 dependencies:
   config:
+    - field.field.paragraph.testimony.paragraph_testimony_author
     - field.field.paragraph.testimony.paragraph_testimony_bio
     - field.field.paragraph.testimony.paragraph_testimony_image
     - field.field.paragraph.testimony.paragraph_testimony_text
@@ -16,12 +17,20 @@ targetEntityType: paragraph
 bundle: testimony
 mode: default
 content:
+  paragraph_testimony_author:
+    type: string
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 2
+    region: content
   paragraph_testimony_bio:
     type: basic_string
     label: hidden
     settings: {  }
     third_party_settings: {  }
-    weight: 2
+    weight: 3
     region: content
   paragraph_testimony_image:
     type: image
