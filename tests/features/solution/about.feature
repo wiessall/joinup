@@ -226,6 +226,8 @@ Feature: About this solution
     And I press "Send e-mail"
 
     Then I should see the success message "Your message has been sent."
+    # Submitting the modal should not redirect anywhere - ISAICP-7290.
+    And I should be on "/collection/antibody-development/solution/six-exclusion-advantages/about"
     And the contact owner email sent to "invisible.cat@xpto.com" with subject "New reclamation about solution" contains the following lines of text:
       | text                                        |
       | Name: Pally Rapamichael                     |
