@@ -7,7 +7,6 @@
 
 declare(strict_types = 1);
 
-use Drupal\Core\Link;
 use Drupal\Core\Render\BubbleableMetadata;
 use Drupal\joinup_group\Entity\GroupInterface;
 
@@ -41,24 +40,26 @@ function contact_information_tokens(string $type, array $tokens, array $data, ar
   $confirmation = $data['email_confirmer_confirmation'];
 
   foreach ($tokens as $name => $original) {
-    switch ($name) {
-      case 'confirmation-entities':
-        $entities = $confirmation->getProperty('entities') ?? [];
-        if (
-          $confirmation->getProperty('fake_entity') &&
-          ($group = \Drupal::routeMatch()->getParameter('rdf_entity')) &&
-          $group instanceof GroupInterface
-        ) {
-          $bundle_info = \Drupal::getContainer()->get('entity_type.bundle.info')->getBundleInfo($group->getEntityTypeId())[$group->bundle()];
-          $entities[] = ['#markup' => $bundle_info['label'] . ': ' . Link::fromTextAndUrl($group->label(), $group->toUrl('canonical', ['absolute' => TRUE]))->toString()];
-        }
-
-        $elements = [
-          '#theme' => 'item_list',
-          '#items' => $entities,
-        ];
-        $replacements[$original] = \Drupal::service('renderer')->renderPlain($elements);
-        break;
+    if ($name === 'confirmation-entities') {
+      $gids = $confirmation->getProperty('groups');
+      $groups = \Drupal::entityTypeManager()->getStorage('rdf_entity')->loadMultiple($gids);
+      $render_array = [
+        '#theme' => 'item_list',
+        '#items' => array_values(
+          array_map(
+            function (GroupInterface $group): array {
+              return [
+                '#type' => 'link',
+                '#url' => $group->toUrl()->setAbsolute(),
+                '#title' => $group->label(),
+                '#prefix' => "{$group->get('rid')->entity->label()}: ",
+              ];
+            },
+            $groups)
+        ),
+      ];
+      $replacements[$original] = \Drupal::service('renderer')->renderPlain($render_array);
+      break;
     }
   }
 
