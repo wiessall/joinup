@@ -4,8 +4,6 @@ declare(strict_types = 1);
 
 namespace Drupal\contact_information\Entity;
 
-use Drupal\Core\Entity\EntityStorageInterface;
-use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\joinup_bundle_class\JoinupBundleClassFieldAccessTrait;
 use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_group\JoinupGroupHelper;
@@ -38,21 +36,6 @@ class ContactInformation extends Rdf implements ContactInformationInterface {
       return NULL;
     }
 
-    $ids = $this->getRelatedGroupsIds();
-
-    if (empty($ids)) {
-      return NULL;
-    }
-
-    $id = reset($ids);
-    $group = $this->entityTypeManager()->getStorage('rdf_entity')->load($id);
-    return $group instanceof GroupInterface ? $group : NULL;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getRelatedGroupsIds(): array {
     $query = $this->entityTypeManager()->getStorage('rdf_entity')->getQuery();
     $condition_or = $query->orConditionGroup();
     // Contact entities are also referenced by asset releases but the same
@@ -69,24 +52,15 @@ class ContactInformation extends Rdf implements ContactInformationInterface {
     // collections and solutions are queried, instead of querying every possible
     // graph.
     $query->condition('rid', JoinupGroupHelper::GROUP_BUNDLES, 'IN');
-    return $query->execute();
-  }
+    $ids = $query->execute();
 
-  /**
-   * {@inheritdoc}
-   */
-  public function postSave(EntityStorageInterface $storage, $update = TRUE): void {
-    parent::postSave($storage, $update);
-    $email_confirmer = \Drupal::service('email_confirmer');
-    /** @var \Drupal\Core\Field\FieldItemListInterface $field */
-    $field = $this->get('field_ci_email');
-    if (!$field->isEmpty() && !$email_confirmer->getConfirmation($field->value)) {
-      $email_confirmer->confirm($field->value, [
-        'name' => $this->label(),
-        'fake_entity' => TRUE,
-      ]);
-      \Drupal::messenger()->addStatus(new TranslatableMarkup('A new confirmation message has been sent to %mail.', ['%mail' => $field->value]));
+    if (empty($ids)) {
+      return NULL;
     }
+
+    $id = reset($ids);
+    $group = $this->entityTypeManager()->getStorage('rdf_entity')->load($id);
+    return $group instanceof GroupInterface ? $group : NULL;
   }
 
 }
