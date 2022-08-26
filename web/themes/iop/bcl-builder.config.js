@@ -70,22 +70,12 @@ module.exports = {
     },
     // Theme images
     {
-      from: [
-        path.resolve(
-          __dirname,
-          "src/images/hamburger-menu-icon.svg"
-        ),
-      ],
+      from: [path.resolve(__dirname, "src/images/hamburger-menu-icon.svg")],
       to: path.resolve(outputFolder, "assets/images"),
       options: { up: true },
     },
     {
-      from: [
-        path.resolve(
-          __dirname,
-          "src/images/iop-eu-logo.svg"
-        ),
-      ],
+      from: [path.resolve(__dirname, "src/images/iop-eu-logo.svg")],
       to: path.resolve(outputFolder, "assets/images"),
       options: { up: true },
     },
