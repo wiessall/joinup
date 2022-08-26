@@ -6,7 +6,7 @@ namespace Drupal\contact_information\Plugin\QueueWorker;
 
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Queue\QueueWorkerBase;
-use Drupal\email_confirmer\EmailConfirmerManagerInterface;
+use Drupal\contact_information\ContactInformationEmailConfirmInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -15,15 +15,15 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * @QueueWorker(
  *   id = "joinup_email_confirmer",
  *   title = @Translation("Delayed email confirmation request dispatcher"),
- *   cron = {"time" = 5}
+ *   cron = {"time" = 5},
  * )
  */
-class EmailConfirmerQueue extends QueueWorkerBase implements ContainerFactoryPluginInterface {
+class EmailConfirmerQueueWorker extends QueueWorkerBase implements ContainerFactoryPluginInterface {
 
   /**
-   * The email confirmer.
+   * The contact information email confirm service.
    */
-  protected EmailConfirmerManagerInterface $emailConfirmer;
+  protected ContactInformationEmailConfirmInterface $emailConfirm;
 
   /**
    * Constructs a new plugin instance.
@@ -34,12 +34,12 @@ class EmailConfirmerQueue extends QueueWorkerBase implements ContainerFactoryPlu
    *   The plugin_id for the plugin instance.
    * @param mixed $plugin_definition
    *   The plugin implementation definition.
-   * @param \Drupal\email_confirmer\EmailConfirmerManagerInterface $email_confirmer
-   *   The email confirmer.
+   * @param \Drupal\contact_information\ContactInformationEmailConfirmInterface $email_confirm
+   *   The contact information email confirm service.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, EmailConfirmerManagerInterface $email_confirmer) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, ContactInformationEmailConfirmInterface $email_confirm) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
-    $this->emailConfirmer = $email_confirmer;
+    $this->emailConfirm = $email_confirm;
   }
 
   /**
@@ -50,7 +50,7 @@ class EmailConfirmerQueue extends QueueWorkerBase implements ContainerFactoryPlu
       $configuration,
       $plugin_id,
       $plugin_definition,
-      $container->get('email_confirmer'),
+      $container->get('contact_information.email_confirm'),
     );
   }
 
@@ -58,7 +58,7 @@ class EmailConfirmerQueue extends QueueWorkerBase implements ContainerFactoryPlu
    * {@inheritdoc}
    */
   public function processItem($data): void {
-    $this->emailConfirmer->confirm($data['email'], $data['data']);
+    $this->emailConfirm->confirmEmail($data['email']);
   }
 
 }
