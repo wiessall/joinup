@@ -1,0 +1,57 @@
+<?php
+
+declare(strict_types = 1);
+
+namespace Drupal\contact_information;
+
+use Drupal\joinup_group\Entity\GroupInterface;
+
+/**
+ * Provides an interface for 'contact_information.email_confirm' service.
+ */
+interface ContactInformationEmailConfirmInterface {
+
+  /**
+   * Used to distinguish this kind of email confirmation.
+   *
+   * @var string
+   */
+  const REALM = 'contact_information_email';
+
+  /**
+   * Creates confirmation of emails belonging to contact information of a group.
+   *
+   * The method only creates email confirmation entries for emails not already
+   * confirmed previously.
+   *
+   * @param \Drupal\joinup_group\Entity\GroupInterface $group
+   *   The group containing the contact info for which to generate email
+   *   confirmations.
+   */
+  public function confirmEmailsForGroup(GroupInterface $group): void;
+
+  /**
+   * Confirm an email regardless of which contact information they belong.
+   *
+   * The method collects all contact information having a given email and
+   * creates an email confirmation.
+   *
+   * @param string $email
+   *   A contact information email.
+   */
+  public function confirmEmail(string $email): void;
+
+  /**
+   * Returns a list of group IDs where the given email is used in contact infos.
+   *
+   * @param string $email
+   *   The email used in contact information entities attached to groups that
+   *   should be returned.
+   *
+   * @return string[]
+   *   A list of groups IDs having attached contact information entities with
+   *   the passed email.
+   */
+  public function getGroupsUsingContactInfoWithEmail(string $email): array;
+
+}
