@@ -15,11 +15,9 @@
       background-position: center;
       background-size: cover;
     }
-    margin-bottom: $spacer * -.5;
-    padding: $spacer * 1.5 0; // 24px 0
+    margin-bottom: $spacer * -1;
+    padding: $spacer * 2 0!important; // 32px 0
     @include media-breakpoint-up(sm) {
-      margin-bottom: $spacer * -1;
-      padding: $spacer * 2 0!important; // 32px 0
     }
     @include media-breakpoint-up(lg) {
       margin-bottom: $spacer * -1.5;
