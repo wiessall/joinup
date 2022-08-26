@@ -17,6 +17,8 @@ use Drupal\Core\Session\AccountInterface;
 use Drupal\contact_information\Entity\ContactInformation;
 use Drupal\contact_information\Entity\ContactInformationInterface;
 use Drupal\email_confirmer\EmailConfirmationInterface;
+use Drupal\joinup_group\Entity\GroupInterface;
+use Drupal\rdf_entity\RdfInterface;
 
 /**
  * Implements hook_entity_bundle_info_alter().
@@ -186,5 +188,23 @@ function contact_information_form_email_contact_mail_form_alter(array &$form, Fo
       $form_state,
       ['honeypot', 'time_restriction']
     );
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_insert().
+ */
+function contact_information_rdf_entity_insert(RdfInterface $group): void {
+  if ($group instanceof GroupInterface) {
+    \Drupal::service('contact_information.email_confirm')->confirmEmailsForGroup($group);
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_update().
+ */
+function contact_information_rdf_entity_update(RdfInterface $group): void {
+  if ($group instanceof GroupInterface) {
+    \Drupal::service('contact_information.email_confirm')->confirmEmailsForGroup($group);
   }
 }
