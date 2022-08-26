@@ -46,22 +46,3 @@ Feature:
     # Check that we are on the expected URL for the landing page.
     And I should be on "/collection/interoperable-europe"
     And the page should be rendered using the "Interoperable Europe" theme
-
-  Scenario: Only moderators can see the IOP related paragraphs and only in IOP.
-    Given I am logged in as a moderator
-    And I go to the "Joinup" collection
-    And I click "Add custom page"
-    Then I should not see the button "Add Row"
-
-    Given I am on the homepage
-    And I click "Interoperable Europe" in the Header region
-    And I click "Add custom page"
-    Then I should see the button "Add Row"
-    But I should not see the button "Add 1 column layout"
-    But I should not see the button "Add 2 column layout"
-    But I should not see the button "Add 3 column layout"
-
-    When I press "Add Row"
-    Then I should see the button "Add 1 column layout"
-    Then I should see the button "Add 2 column layout"
-    Then I should see the button "Add 3 column layout"
