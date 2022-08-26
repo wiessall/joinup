@@ -1,4 +1,5 @@
 .iop-navbar {
+  z-index: 101; // Overlap joinup's navbar which is 100
   background: linear-gradient(to bottom, $darkblue 0%, $darkblue 60%, $blue 120%);
   @include media-breakpoint-up(lg) {
     padding: $spacer 0; // 16px 0
