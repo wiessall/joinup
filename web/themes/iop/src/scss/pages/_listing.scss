@@ -109,11 +109,9 @@
       }
       @include media-breakpoint-up(lg) {
         & > .col:nth-child(3n - 1) {
-          background: lime;
           margin-top: 4rem;
         }
         & > .col:nth-child(3n) {
-          background: linen;
           margin-top: 8rem;
         }
       }
