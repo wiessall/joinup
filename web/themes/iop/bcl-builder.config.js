@@ -93,6 +93,31 @@ module.exports = {
       to: path.resolve(outputFolder, "assets/images"),
       options: { up: true },
     },
+    {
+      from: [path.resolve(__dirname, "src/images//banners/ACT.webp")],
+      to: path.resolve(outputFolder, "assets/images/banners/"),
+      options: { up: true },
+    },
+    {
+      from: [path.resolve(__dirname, "src/images//banners/events.webp")],
+      to: path.resolve(outputFolder, "assets/images/banners/"),
+      options: { up: true },
+    },
+    {
+      from: [path.resolve(__dirname, "src/images//banners/FAQ.webp")],
+      to: path.resolve(outputFolder, "assets/images/banners/"),
+      options: { up: true },
+    },
+    {
+      from: [path.resolve(__dirname, "src/images//banners/news.webp")],
+      to: path.resolve(outputFolder, "assets/images/banners/"),
+      options: { up: true },
+    },
+    {
+      from: [path.resolve(__dirname, "src/images//banners/policy.webp")],
+      to: path.resolve(outputFolder, "assets/images/banners/"),
+      options: { up: true },
+    },
   ],
   sprite: [],
 };
