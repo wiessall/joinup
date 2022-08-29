@@ -251,7 +251,7 @@ class ContactInformationContext extends RawDrupalContext {
    * @When I click the validate contact info email from the last email sent to :mail
    */
   public function clickValidateContactInfoInEmail(string $mail): void {
-    $pattern = '#https?://[^/].*/email-confirmer/reply/[^/].*/.*#';
+    $pattern = '#\[(?<url>https?://[^/].*' . base_path() . 'email-confirmer/reply/[^/].*/[^]].*)\]#';
     $no_mail_message = "No email was sent to $mail containing a validate contact info link.";
     $no_match_message = "The email sent to $mail did not contain a valid validate contact info link.";
     $this->assertMailLinkMatchingPattern($pattern, $mail, $no_mail_message, $no_match_message, 'confirmation_request');
