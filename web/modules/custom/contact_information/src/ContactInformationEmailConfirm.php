@@ -73,16 +73,19 @@ class ContactInformationEmailConfirm implements ContactInformationEmailConfirmIn
     $emails = [];
     /** @var \Drupal\contact_information\Entity\ContactInformationInterface $contact_information */
     foreach ($field->referencedEntities() as $contact_information) {
-      $email = $contact_information->get('field_ci_email')->value;
-      if (!in_array($email, $emails, TRUE)) {
-        if (!$this->emailConfirmer->getConfirmation($email, FALSE, static::REALM)) {
-          $this->emailConfirmer->confirm($email, [
-            'groups' => [$group->id()],
-          ], static::REALM);
+      $email_field = $contact_information->get('field_ci_email');
+      if (!$email_field->isEmpty()) {
+        $email = $email_field->value;
+        if (!in_array($email, $emails, TRUE)) {
+          if (!$this->emailConfirmer->getConfirmation($email, FALSE, static::REALM)) {
+            $this->emailConfirmer->confirm($email, [
+              'groups' => [$group->id()],
+            ], static::REALM);
+          }
+          // Different contact information entities might have the same email. We
+          // register them in $emails array to prevent duplication.
+          $emails[] = $email;
         }
-        // Different contact information entities might have the same email. We
-        // register them in $emails array to prevent duplication.
-        $emails[] = $email;
       }
     }
   }
