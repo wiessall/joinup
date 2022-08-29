@@ -1,0 +1,29 @@
+uuid: 2dd092a2-490e-4492-a6d0-b35e9b6445da
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.row.paragraph_column_layout
+    - field.field.paragraph.row.paragraph_row_background
+    - field.field.paragraph.row.row_theme
+    - paragraphs.paragraphs_type.row
+  module:
+    - entity_reference_revisions
+id: paragraph.row.default
+targetEntityType: paragraph
+bundle: row
+mode: default
+content:
+  paragraph_column_layout:
+    type: entity_reference_revisions_entity_view
+    label: hidden
+    settings:
+      view_mode: default
+      link: ''
+    third_party_settings: {  }
+    weight: 0
+    region: content
+hidden:
+  paragraph_row_background: true
+  row_theme: true
+  search_api_excerpt: true
