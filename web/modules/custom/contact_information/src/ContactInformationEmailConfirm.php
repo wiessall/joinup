@@ -82,8 +82,8 @@ class ContactInformationEmailConfirm implements ContactInformationEmailConfirmIn
               'groups' => [$group->id()],
             ], static::REALM);
           }
-          // Different contact information entities might have the same email. We
-          // register them in $emails array to prevent duplication.
+          // Different contact information entities might have the same email.
+          // We register them in $emails array to prevent duplication.
           $emails[] = $email;
         }
       }
