@@ -1,0 +1,24 @@
+uuid: ea63d735-3a6c-419c-9e5a-fe8461d6707e
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.carousel.content_listing
+    - paragraphs.paragraphs_type.carousel
+  module:
+    - custom_page
+id: paragraph.carousel.default
+targetEntityType: paragraph
+bundle: carousel
+mode: default
+content:
+  content_listing:
+    type: search_api_field_custom_page
+    weight: 0
+    region: content
+    settings:
+      query_builder: false
+    third_party_settings: {  }
+hidden:
+  created: true
+  status: true
