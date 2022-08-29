@@ -91,7 +91,7 @@ function interoperable_europe_condition_info_alter(array &$definitions): void {
 /**
  * Implements hook_ENTITY_TYPE_create_access().
  */
-function interoperable_europe_paragraph_create_access(AccountInterface $account, array $context, $entity_bundle): AccessResultInterface {
+function interoperable_europe_paragraph_create_access(AccountInterface $account, array $context, string $entity_bundle): AccessResultInterface {
   if ($entity_bundle !== 'row') {
     return AccessResult::neutral();
   }

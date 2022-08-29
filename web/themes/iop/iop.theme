@@ -10,7 +10,7 @@ declare(strict_types = 1);
 /**
  * Implements hook_preprocess_HOOK() for html.html.twig.
  */
-function iop_preprocess_paragraph__row(&$variables) {
+function iop_preprocess_paragraph__row(array &$variables): void {
   $paragraph = $variables['elements']['#paragraph'];
   $variables['row_theme'] = $paragraph->get('row_theme')->value ?? 'light';
   if (!$paragraph->get('paragraph_row_background')->isEmpty()) {
