@@ -29,7 +29,7 @@ import Glide, {
           }).mount({ Controls, Breakpoints, Swipe });
 
           glide.update({ wrapperWidth: 300 });
-        })
+        });
       }
       // when switching tabs, mount visible slide again (otherwise slides are buggy)
       for (let i = 0; i < tabs.length; i++) {

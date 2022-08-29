@@ -46,3 +46,8 @@ Feature:
     # Check that we are on the expected URL for the landing page.
     And I should be on "/collection/interoperable-europe"
     And the page should be rendered using the "Interoperable Europe" theme
+
+    # Check IOPE menu
+    Then I should see the link "News" in the "IOPE Menu"
+    And I should see the link "Events" in the "IOPE Menu"
+    And I should see the link "Policy" in the "IOPE Menu"
