@@ -5,6 +5,9 @@ _meta:
   bundle: custom_page
   default_langcode: en
   depends:
+    b319fcaf-316e-45a2-8ead-af89b9df7e27: file
+    9ad5eede-1b7a-4295-864f-24e1fe0d241d: file
+    4c17c0b5-4530-459e-a7f6-1e25995db275: file
     'http://data.europa.eu/w21/8e30f798-ff2b-478b-9c09-5ed5a63b4c8c': rdf_entity
 default:
   revision_uid:
@@ -54,8 +57,8 @@ default:
         _meta:
           version: '1.0'
           entity_type: paragraph
-          uuid: 3a48bd9b-80bf-47c0-8260-c546e072b490
-          bundle: simple_paragraph
+          uuid: 68af1c32-d94d-4c1e-bc14-9ad3dad78d62
+          bundle: row
           default_langcode: en
         default:
           status:
@@ -63,17 +66,643 @@ default:
               value: true
           created:
             -
-              value: 1658758452
+              value: 1661333223
+          behavior_settings:
+            -
+              value: {  }
+          paragraph_column_layout:
+            -
+              entity:
+                _meta:
+                  version: '1.0'
+                  entity_type: paragraph
+                  uuid: 0028ab97-81c7-4215-9b10-89153edf9cf6
+                  bundle: 2_column_layout
+                  default_langcode: en
+                default:
+                  status:
+                    -
+                      value: true
+                  created:
+                    -
+                      value: 1661333243
+                  behavior_settings:
+                    -
+                      value: {  }
+                  paragraph_column_left:
+                    -
+                      entity:
+                        _meta:
+                          version: '1.0'
+                          entity_type: paragraph
+                          uuid: 36d05c29-019d-42da-8bcb-61da248e1759
+                          bundle: simple_paragraph
+                          default_langcode: en
+                        default:
+                          status:
+                            -
+                              value: true
+                          created:
+                            -
+                              value: 1661333247
+                          behavior_settings:
+                            -
+                              value: {  }
+                          revision_translation_affected:
+                            -
+                              value: true
+                          field_body:
+                            -
+                              value: "<p>Interoperable Europe is teh initiative of the European Commission for a reinforced interoperability policy in the public sector. It is committed to introducing a new cooperative Interoperability policy for Europe that will transform the public administrations and help them in their digital transformation. The initiative is supported by the Digital Europe programme. It continues and expands the mission of the now completed ISA2 programme.</p>\r\n\r\n<p>&nbsp;</p>\r\n\r\n<p>Learn more</p>\r\n"
+                              format: content_editor
+                  paragraph_column_right:
+                    -
+                      entity:
+                        _meta:
+                          version: '1.0'
+                          entity_type: paragraph
+                          uuid: bc5564a7-91cb-428e-bd58-e444611ea4c0
+                          bundle: simple_paragraph
+                          default_langcode: en
+                        default:
+                          status:
+                            -
+                              value: true
+                          created:
+                            -
+                              value: 1661333394
+                          behavior_settings:
+                            -
+                              value: {  }
+                          revision_translation_affected:
+                            -
+                              value: true
+                          field_body:
+                            -
+                              value: "<p>{\"preview_thumbnail\":\"/sites/default/files/styles/video_embed_wysiwyg_preview/public/video_thumbnails/N7cNbrwP7qo.jpg?itok=5MgPY-V7\",\"video_url\":\"https://www.youtube.com/watch?v=N7cNbrwP7qo\",\"settings\":{\"responsive\":true,\"width\":\"854\",\"height\":\"480\",\"autoplay\":false},\"settings_summary\":[\"Embedded Video (Responsive).\"]}</p>\r\n"
+                              format: content_editor
+          row_theme:
+            -
+              value: light
+    -
+      entity:
+        _meta:
+          version: '1.0'
+          entity_type: paragraph
+          uuid: 4f762c4f-0ad3-46e9-9504-9e7f12f66621
+          bundle: row
+          default_langcode: en
+        default:
+          status:
+            -
+              value: true
+          created:
+            -
+              value: 1661333499
+          behavior_settings:
+            -
+              value: {  }
+          paragraph_column_layout:
+            -
+              entity:
+                _meta:
+                  version: '1.0'
+                  entity_type: paragraph
+                  uuid: def956e8-5682-4b77-8fbc-46e2c346ecbb
+                  bundle: 1_column_layout
+                  default_langcode: en
+                default:
+                  status:
+                    -
+                      value: true
+                  created:
+                    -
+                      value: 1661333595
+                  behavior_settings:
+                    -
+                      value: {  }
+                  paragraph_column_center:
+                    -
+                      entity:
+                        _meta:
+                          version: '1.0'
+                          entity_type: paragraph
+                          uuid: fb03767f-cfc8-41ed-b87e-976a9ad21df1
+                          bundle: simple_paragraph
+                          default_langcode: en
+                        default:
+                          status:
+                            -
+                              value: true
+                          created:
+                            -
+                              value: 1661333624
+                          behavior_settings:
+                            -
+                              value: {  }
+                          revision_translation_affected:
+                            -
+                              value: true
+                          field_body:
+                            -
+                              value: "<h2>news</h2>\r\n"
+                              format: content_editor
+                    -
+                      entity:
+                        _meta:
+                          version: '1.0'
+                          entity_type: paragraph
+                          uuid: e9a1ed14-172c-4768-ae7d-d0729f33ee1f
+                          bundle: carousel
+                          default_langcode: en
+                        default:
+                          status:
+                            -
+                              value: true
+                          created:
+                            -
+                              value: 1661350309
+                          behavior_settings:
+                            -
+                              value: {  }
+                          revision_translation_affected:
+                            -
+                              value: true
+                          content_listing:
+                            -
+                              value:
+                                enabled: 1
+                                query_presets: entity_bundle|news
+                                limit: '10'
+                                show_shared: 0
+                                global_search: 0
+          row_theme:
+            -
+              value: dark
+    -
+      entity:
+        _meta:
+          version: '1.0'
+          entity_type: paragraph
+          uuid: e85adaac-741b-4e2d-bb37-ecaa7d1ffbb6
+          bundle: row
+          default_langcode: en
+        default:
+          status:
+            -
+              value: true
+          created:
+            -
+              value: 1661333682
+          behavior_settings:
+            -
+              value: {  }
+          paragraph_column_layout:
+            -
+              entity:
+                _meta:
+                  version: '1.0'
+                  entity_type: paragraph
+                  uuid: 3738ea4b-7d53-4b5f-8e6c-ad2f3e874c03
+                  bundle: 1_column_layout
+                  default_langcode: en
+                default:
+                  status:
+                    -
+                      value: true
+                  created:
+                    -
+                      value: 1661333695
+                  behavior_settings:
+                    -
+                      value: {  }
+                  paragraph_column_center:
+                    -
+                      entity:
+                        _meta:
+                          version: '1.0'
+                          entity_type: paragraph
+                          uuid: 095bea91-08a4-4dcc-a4dc-69c85068f7fe
+                          bundle: simple_paragraph
+                          default_langcode: en
+                        default:
+                          status:
+                            -
+                              value: true
+                          created:
+                            -
+                              value: 1661333714
+                          behavior_settings:
+                            -
+                              value: {  }
+                          revision_translation_affected:
+                            -
+                              value: true
+                          field_body:
+                            -
+                              value: "<h2>events</h2>\r\n"
+                              format: content_editor
+                    -
+                      entity:
+                        _meta:
+                          version: '1.0'
+                          entity_type: paragraph
+                          uuid: e8c70877-8949-4de1-96d3-2580b73381b8
+                          bundle: carousel
+                          default_langcode: en
+                        default:
+                          status:
+                            -
+                              value: true
+                          created:
+                            -
+                              value: 1661350343
+                          behavior_settings:
+                            -
+                              value: {  }
+                          revision_translation_affected:
+                            -
+                              value: true
+                          content_listing:
+                            -
+                              value:
+                                enabled: 1
+                                query_presets: entity_bundle|event
+                                limit: '10'
+                                show_shared: 0
+                                global_search: 0
+          row_theme:
+            -
+              value: dark
+    -
+      entity:
+        _meta:
+          version: '1.0'
+          entity_type: paragraph
+          uuid: f7398406-a8d5-4c94-9d1f-7c82a331dffc
+          bundle: row
+          default_langcode: en
+        default:
+          status:
+            -
+              value: true
+          created:
+            -
+              value: 1661333815
           behavior_settings:
             -
               value: {  }
           revision_translation_affected:
             -
               value: true
-          field_body:
+          paragraph_column_layout:
             -
-              value: "<p>Placeholder</p>\r\n"
-              format: content_editor
+              entity:
+                _meta:
+                  version: '1.0'
+                  entity_type: paragraph
+                  uuid: 81731321-dbc1-4856-86db-6043ebdc7018
+                  bundle: 2_column_layout
+                  default_langcode: en
+                default:
+                  status:
+                    -
+                      value: true
+                  created:
+                    -
+                      value: 1661333823
+                  behavior_settings:
+                    -
+                      value: {  }
+                  revision_translation_affected:
+                    -
+                      value: true
+                  paragraph_column_left:
+                    -
+                      entity:
+                        _meta:
+                          version: '1.0'
+                          entity_type: paragraph
+                          uuid: d3529e7a-1715-4515-8c64-0a7587b8c820
+                          bundle: simple_paragraph
+                          default_langcode: en
+                        default:
+                          status:
+                            -
+                              value: true
+                          created:
+                            -
+                              value: 1661333830
+                          behavior_settings:
+                            -
+                              value: {  }
+                          revision_translation_affected:
+                            -
+                              value: true
+                          field_body:
+                            -
+                              value: "<img alt=\"IOP image\" data-align=\"center\" data-entity-type=\"file\" data-entity-uuid=\"353147e2-ac81-4ccb-8122-c03da9524343\" data-image-style=\"wysiwyg_half_width\" height=\"250\" src=\"/sites/default/files/inline-images/WHY%20a%20POLICY-%20image.png\" width=\"400\" />\r\n<p>&nbsp;</p>\r\n"
+                              format: content_editor
+                  paragraph_column_right:
+                    -
+                      entity:
+                        _meta:
+                          version: '1.0'
+                          entity_type: paragraph
+                          uuid: 668ff42f-509d-44f8-8969-88096da22468
+                          bundle: simple_paragraph
+                          default_langcode: en
+                        default:
+                          status:
+                            -
+                              value: true
+                          created:
+                            -
+                              value: 1661333858
+                          behavior_settings:
+                            -
+                              value: {  }
+                          revision_translation_affected:
+                            -
+                              value: true
+                          field_body:
+                            -
+                              value: "<h2>Why a policy in interoperability?</h2>\r\n"
+                              format: content_editor
+                    -
+                      entity:
+                        _meta:
+                          version: '1.0'
+                          entity_type: paragraph
+                          uuid: cfb0107f-c857-4ea3-988f-a442851584eb
+                          bundle: simple_paragraph
+                          default_langcode: en
+                        default:
+                          status:
+                            -
+                              value: true
+                          created:
+                            -
+                              value: 1661333944
+                          behavior_settings:
+                            -
+                              value: {  }
+                          revision_translation_affected:
+                            -
+                              value: true
+                          field_body:
+                            -
+                              value: "<p>Interoperable Europe is the initiative of the European Commission for a reinforced interoperability policy in the public sector. It is committed to introducing a new cooperative Interoperability policy for Europe that will transform the public administrations and help them in their digital transformation. The initiative is supported by the Digital Europe programme. It continues and expands the mission of the now completed ISA2 programme.</p>\r\n\r\n<p>Read more</p>\r\n"
+                              format: content_editor
+          row_theme:
+            -
+              value: dark-to-light
+    -
+      entity:
+        _meta:
+          version: '1.0'
+          entity_type: paragraph
+          uuid: a89af5d2-d004-464e-8af7-2bdb95534d80
+          bundle: row
+          default_langcode: en
+        default:
+          status:
+            -
+              value: true
+          created:
+            -
+              value: 1661334062
+          behavior_settings:
+            -
+              value: {  }
+          paragraph_column_layout:
+            -
+              entity:
+                _meta:
+                  version: '1.0'
+                  entity_type: paragraph
+                  uuid: 8797febc-e875-4a62-84d3-9743ae9c4d41
+                  bundle: 1_column_layout
+                  default_langcode: en
+                default:
+                  status:
+                    -
+                      value: true
+                  created:
+                    -
+                      value: 1661334067
+                  behavior_settings:
+                    -
+                      value: {  }
+                  paragraph_column_center:
+                    -
+                      entity:
+                        _meta:
+                          version: '1.0'
+                          entity_type: paragraph
+                          uuid: 256734bf-e40f-483b-98ec-46f41f40cfbd
+                          bundle: simple_paragraph
+                          default_langcode: en
+                        default:
+                          status:
+                            -
+                              value: true
+                          created:
+                            -
+                              value: 1661334070
+                          behavior_settings:
+                            -
+                              value: {  }
+                          revision_translation_affected:
+                            -
+                              value: true
+                          field_body:
+                            -
+                              value: "<h2>Did you know?</h2>\r\n\r\n<h3>Facts about interoperability</h3>\r\n"
+                              format: content_editor
+                    -
+                      entity:
+                        _meta:
+                          version: '1.0'
+                          entity_type: paragraph
+                          uuid: 10ac46a1-92df-47ce-8a24-d6a8b33e0727
+                          bundle: carousel
+                          default_langcode: en
+                        default:
+                          status:
+                            -
+                              value: true
+                          created:
+                            -
+                              value: 1661350363
+                          behavior_settings:
+                            -
+                              value: {  }
+                          revision_translation_affected:
+                            -
+                              value: true
+                          content_listing:
+                            -
+                              value:
+                                enabled: 1
+                                query_presets: entity_bundle|custom_page
+                                limit: '10'
+                                show_shared: 0
+                                global_search: 0
+          row_theme:
+            -
+              value: light
+    -
+      entity:
+        _meta:
+          version: '1.0'
+          entity_type: paragraph
+          uuid: 0ab259df-1d2e-416b-9b1d-6b3c5481f47c
+          bundle: row
+          default_langcode: en
+        default:
+          status:
+            -
+              value: true
+          created:
+            -
+              value: 1661334131
+          behavior_settings:
+            -
+              value: {  }
+          paragraph_column_layout:
+            -
+              entity:
+                _meta:
+                  version: '1.0'
+                  entity_type: paragraph
+                  uuid: 98260bf3-3495-4c88-ab9e-5dac097f2b9b
+                  bundle: 3_column_layout
+                  default_langcode: en
+                default:
+                  status:
+                    -
+                      value: true
+                  created:
+                    -
+                      value: 1661334134
+                  behavior_settings:
+                    -
+                      value: {  }
+                  paragraph_column_center:
+                    -
+                      entity:
+                        _meta:
+                          version: '1.0'
+                          entity_type: paragraph
+                          uuid: 26c8f336-99e0-41cf-959b-cf6af612e9d0
+                          bundle: testimony
+                          default_langcode: en
+                        default:
+                          status:
+                            -
+                              value: true
+                          created:
+                            -
+                              value: 1661334278
+                          behavior_settings:
+                            -
+                              value: {  }
+                          paragraph_testimony_author:
+                            -
+                              value: 'Johannes Hahn'
+                          paragraph_testimony_bio:
+                            -
+                              value: "Commissioner for Budget and administration\r\nEuropean commission\r\n\r\nHearing of Johannes Hahn at the European parliament\r\n3 October 2019"
+                          paragraph_testimony_image:
+                            -
+                              entity: b319fcaf-316e-45a2-8ead-af89b9df7e27
+                              alt: ''
+                              title: ''
+                              width: 217
+                              height: 204
+                          paragraph_testimony_text:
+                            -
+                              value: 'I am committed to deliver on digitally transformed Commission and user-focused and data-driven public administrations. This means building sand operating digital government solutions in support of policy and administrative processes.'
+                  paragraph_column_left:
+                    -
+                      entity:
+                        _meta:
+                          version: '1.0'
+                          entity_type: paragraph
+                          uuid: 4cd030ad-9b19-4604-b25a-73777e18bf47
+                          bundle: testimony
+                          default_langcode: en
+                        default:
+                          status:
+                            -
+                              value: true
+                          created:
+                            -
+                              value: 1661334140
+                          behavior_settings:
+                            -
+                              value: {  }
+                          revision_translation_affected:
+                            -
+                              value: true
+                          paragraph_testimony_author:
+                            -
+                              value: 'Johannes Hahn'
+                          paragraph_testimony_bio:
+                            -
+                              value: "Commissioner for Budget and administration\r\nEuropean commission\r\n\r\nHearing of Johannes Hahn at the European parliament\r\n3 October 2019"
+                          paragraph_testimony_image:
+                            -
+                              entity: 9ad5eede-1b7a-4295-864f-24e1fe0d241d
+                              alt: ''
+                              title: ''
+                              width: 217
+                              height: 204
+                          paragraph_testimony_text:
+                            -
+                              value: 'I am committed to deliver on digitally transformed Commission and user-focused and data-driven public administrations. This means building sand operating digital government solutions in support of policy and administrative processes.'
+                  paragraph_column_right:
+                    -
+                      entity:
+                        _meta:
+                          version: '1.0'
+                          entity_type: paragraph
+                          uuid: 2a2d7ef0-f2ca-44c9-82e2-d41780dc884f
+                          bundle: testimony
+                          default_langcode: en
+                        default:
+                          status:
+                            -
+                              value: true
+                          created:
+                            -
+                              value: 1661334297
+                          behavior_settings:
+                            -
+                              value: {  }
+                          revision_translation_affected:
+                            -
+                              value: true
+                          paragraph_testimony_author:
+                            -
+                              value: 'Johannes Hahn'
+                          paragraph_testimony_bio:
+                            -
+                              value: "Commissioner for Budget and administration\r\nEuropean commission\r\n\r\nHearing of Johannes Hahn at the European parliament\r\n3 October 2019"
+                          paragraph_testimony_image:
+                            -
+                              entity: 4c17c0b5-4530-459e-a7f6-1e25995db275
+                              alt: ''
+                              title: ''
+                              width: 217
+                              height: 204
+                          paragraph_testimony_text:
+                            -
+                              value: 'I am committed to deliver on digitally transformed Commission and user-focused and data-driven public administrations. This means building sand operating digital government solutions in support of policy and administrative processes.'
+          row_theme:
+            -
+              value: light
   og_audience:
     -
       entity: 'http://data.europa.eu/w21/8e30f798-ff2b-478b-9c09-5ed5a63b4c8c'
