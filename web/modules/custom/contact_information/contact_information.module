@@ -234,3 +234,23 @@ function contact_information_rdf_entity_update(RdfInterface $group): void {
     \Drupal::service('contact_information.email_confirm')->confirmEmailsForGroup($group);
   }
 }
+
+/**
+ * Implements hook_email_confirmer().
+ */
+function contact_information_email_confirmer(string $op, EmailConfirmationInterface $confirmation): void {
+  if ($op === 'confirm' && $confirmation->getRealm() === ContactInformationEmailConfirmInterface::REALM) {
+    /** @var \Drupal\contact_information\ContactInformationEmailConfirmInterface $email_confirm */
+    $email_confirm = \Drupal::service('contact_information.email_confirm');
+    if ($gids = $email_confirm->getGroupsUsingContactInfoWithEmail($confirmation->getEmail())) {
+      if ($groups = \Drupal::entityTypeManager()->getStorage('rdf_entity')->loadMultiple($gids)) {
+        // When an email is confirmed, invalidate the cache of groups where the
+        // contact information entities with this email so that each group about
+        // page will refresh from backend and will show the contact form link.
+        foreach ($groups as $group) {
+          Cache::invalidateTags($group->getCacheTagsToInvalidate());
+        }
+      }
+    }
+  }
+}
