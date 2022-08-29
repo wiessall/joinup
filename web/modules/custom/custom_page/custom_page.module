@@ -18,6 +18,7 @@ use Drupal\custom_page\Entity\CustomPageInterface;
 use Drupal\joinup_group\Exception\MissingGroupException;
 use Drupal\menu_link_content\MenuLinkContentInterface;
 use Drupal\node\NodeInterface;
+use Drupal\paragraphs\ParagraphInterface;
 use Drupal\search_api\Query\QueryInterface;
 
 /**
@@ -213,7 +214,13 @@ function custom_page_menu_local_actions_alter(&$local_actions) {
  */
 function custom_page_search_api_query_search_api_field_field_content_listing_alter(QueryInterface &$query) {
   $entity = $query->getOption('search_api_field entity');
-  $parent_entity = \Drupal::entityTypeManager()->getStorage($entity->get('parent_type')->value)->load($entity->get('parent_id')->value);
+  $parent_entity = $entity->getParentEntity();
+  // Support nested paragraphs.
+  while ($parent_entity instanceof ParagraphInterface) {
+    $parent_entity = $parent_entity->getParentEntity();
+  }
+
+  // The parent entity should now point to a group content entity.
   $group = $parent_entity->getGroup();
   if (!$group) {
     return;
