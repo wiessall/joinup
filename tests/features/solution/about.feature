@@ -268,20 +268,22 @@ Feature: About this solution
     Then I should see the success message "Email confirmation confirmed."
 
     # Check when submit form has an error.
-    Given I am logged in as "Pally Rapamichael"
-    And I go to the homepage of the "Six exclusion advantages" solution
+    Given I am an anonymous user
+    When I go to the homepage of the "Six exclusion advantages" solution
     Then I click "About"
-
     And I should see the text "Owner/Contact Information"
     Then I click "Contact owner"
     And a modal should open
     And I should see the text "Email Contact" in the "Modal title"
-    When I fill in "Subject" with "Test form error"
+    When I fill in "Your name" with "Jonny K"
+    And I fill in "Your e-mail address" with "jonnyk"
+    And I fill in "Subject" with "Test form error"
+    And I fill in "Message" with "This is solution reclamation test."
     Then I wait for the honeypot time limit to pass
     And I press "Send e-mail"
     Then I should see the heading "Email Contact"
-    And I should see the error message "Message field is required."
-    Then I fill in "Message" with "This is solution reclamation test."
+    And I should see the error message "You must enter a valid e-mail address."
+    Then I fill in "Your e-mail address" with "jonnyk@test.com"
     And I wait for the honeypot time limit to pass
     Then I press "Send e-mail"
     And I should see the success message "Your message has been sent."
