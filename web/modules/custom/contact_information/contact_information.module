@@ -10,12 +10,15 @@ declare(strict_types = 1);
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Entity\EntityTypeInterface;
+use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\contact_information\Entity\ContactInformation;
 use Drupal\contact_information\Entity\ContactInformationInterface;
+use Drupal\contact_information\ParentGroupFieldItemList;
 use Drupal\email_confirmer\EmailConfirmationInterface;
 use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\rdf_entity\RdfInterface;
@@ -26,6 +29,23 @@ use Drupal\rdf_entity\RdfInterface;
 function contact_information_entity_bundle_info_alter(&$bundles) {
   if (!empty($bundles['rdf_entity']['contact_information'])) {
     $bundles['rdf_entity']['contact_information']['class'] = ContactInformation::class;
+  }
+}
+
+/**
+ * Implements hook_entity_bundle_field_info_alter().
+ */
+function contact_information_entity_bundle_field_info_alter(array &$fields, EntityTypeInterface $entity_type, string $bundle): void {
+  if ($entity_type->id() === 'rdf_entity' && $bundle === 'contact_information') {
+    $fields['related_group'] = BaseFieldDefinition::create('entity_reference')
+      ->setLabel(t('Related group'))
+      ->setName('related_group')
+      ->setDescription(t('The related group where this contact information entity is attached.'))
+      ->setTargetEntityTypeId('rdf_entity')
+      ->setTargetBundle('contact_information')
+      ->setSetting('target_type', 'rdf_entity')
+      ->setComputed(TRUE)
+      ->setClass(ParentGroupFieldItemList::class);
   }
 }
 
