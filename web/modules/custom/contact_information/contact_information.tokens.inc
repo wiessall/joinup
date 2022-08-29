@@ -8,6 +8,7 @@
 declare(strict_types = 1);
 
 use Drupal\Core\Render\BubbleableMetadata;
+use Drupal\Core\Url;
 use Drupal\joinup_group\Entity\GroupInterface;
 
 /**
@@ -64,4 +65,30 @@ function contact_information_tokens(string $type, array $tokens, array $data, ar
   }
 
   return $replacements;
+}
+
+/**
+ * Implements hook_tokens_alter().
+ */
+function contact_information_tokens_alter(array &$replacements, array $context, BubbleableMetadata $bubbleable_metadata): void {
+  if ($context['type'] === 'email-confirmer' && isset($context['data']['email_confirmer_confirmation'])) {
+    if (isset($context['tokens']['confirmation-url'])) {
+      /** @var \Drupal\email_confirmer\EmailConfirmationInterface $confirmation */
+      $confirmation = $context['data']['email_confirmer_confirmation'];
+      $url = Url::fromRoute('entity.email_confirmer_confirmation.response_form', [
+        'email_confirmer_confirmation' => $confirmation->uuid(),
+        'hash' => $confirmation->getHash(),
+      ])
+        // The base URL is derived by the Symfony request handler from the
+        // global variables set by the web server, i.e. REQUEST_URI or similar.
+        // Since Behat tests are run from the command line this request context
+        // is not available and we need to set the base URL manually.
+        // @todo Remove this workaround once this is fixed in core.
+        // @see https://www.drupal.org/project/drupal/issues/2548095
+        ->setOption('base_url', $GLOBALS['base_url'])
+        ->setAbsolute()
+        ->toString();
+      $replacements[$context['tokens']['confirmation-url']] = $url;
+    }
+  }
 }
