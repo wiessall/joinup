@@ -9,6 +9,7 @@ declare(strict_types = 1);
 
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
+use Drupal\Core\Cache\Cache;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Field\BaseFieldDefinition;
@@ -16,6 +17,7 @@ use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Session\AccountInterface;
+use Drupal\contact_information\ContactInformationEmailConfirmInterface;
 use Drupal\contact_information\Entity\ContactInformation;
 use Drupal\contact_information\Entity\ContactInformationInterface;
 use Drupal\contact_information\ParentGroupFieldItemList;
@@ -186,12 +188,16 @@ function contact_information_rdf_entity_access(EntityInterface $entity, $operati
  * Implements hook_entity_field_access().
  */
 function contact_information_entity_field_access(string $operation, FieldDefinitionInterface $field_definition, AccountInterface $account, ?FieldItemListInterface $items = NULL): AccessResultInterface {
-  if ($field_definition->getName() === 'field_ci_email' && $operation === 'view') {
+  if ($operation === 'view' && $field_definition->getName() === 'field_ci_email') {
     $confirmation = \Drupal::service('email_confirmer')->getConfirmation($items->value);
-    if (!$confirmation || $confirmation->get('confirmed')->value != EmailConfirmationInterface::CONFIRMED) {
-      return AccessResult::forbidden()->addCacheableDependency($items->getEntity());
-    }
-    return AccessResult::allowed()->addCacheableDependency($items->getEntity());
+    $access = $confirmation && $confirmation->get('confirmed')->value == EmailConfirmationInterface::CONFIRMED ? AccessResult::allowed() : AccessResult::forbidden();
+    /** @var \Drupal\contact_information\Entity\ContactInformationInterface $contact_info */
+    $contact_info = $items->getEntity();
+    return $access
+      ->addCacheableDependency($contact_info)
+      // Depend also on the group that attaches this contact information so that
+      // this field access cache is invalidated together with the group cache.
+      ->addCacheableDependency($contact_info->getRelatedGroup());
   }
   return AccessResult::neutral();
 }
