@@ -25,11 +25,18 @@ Feature:
     But I should not see the button "Add 1 column layout"
     And I should not see the button "Add 2 column layout"
     And I should not see the button "Add 3 column layout"
+    And I should not see the button "Add Image"
+    And I should not see the button "Add Call to action"
 
     When I press "Add Row"
     Then I should see the button "Add 1 column layout"
     And I should see the button "Add 2 column layout"
     And I should see the button "Add 3 column layout"
+    But I should not see the button "Add Image"
+    And I should not see the button "Add Call to action"
+    When I press "Add 1 column layout"
+    And I should see the button "Add Image"
+    And I should see the button "Add Call to action"
 
     Given I am logged in as a facilitator of the "Joinup" collection
     And I go to the "Joinup" collection
