@@ -23,3 +23,9 @@ paragraph:
   css:
     theme:
       assets/css/paragraph.min.css: {}
+
+# Components
+navbar:
+  css:
+    theme:
+      assets/css/navbar.min.css: {}
