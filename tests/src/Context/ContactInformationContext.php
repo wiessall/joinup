@@ -6,6 +6,7 @@ namespace Drupal\joinup\Context;
 
 use Behat\Gherkin\Node\TableNode;
 use Drupal\Component\Render\MarkupInterface;
+use Drupal\contact_information\ContactInformationEmailConfirmInterface;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\joinup\Traits\AliasTranslatorTrait;
 use Drupal\joinup\Traits\MailCollectorTrait;
@@ -237,6 +238,34 @@ class ContactInformationContext extends RawDrupalContext {
    */
   public function givenNoPendingEmailConfirmations(): void {
     \Drupal::database()->delete('email_confirmer_confirmation')->execute();
+  }
+
+  /**
+   * Validates the emails of given list of contact information entities.
+   *
+   * @param \Behat\Gherkin\Node\TableNode $contact_info_list
+   *   A list of contact information labels.
+   *
+   * @Given the following contact information emails are validated:
+   */
+  public function validateContactInformationEmails(TableNode $contact_info_list): void {
+    foreach ($contact_info_list->getColumn(0) as $label) {
+      /** @var \Drupal\contact_information\Entity\ContactInformationInterface $contact_info */
+      $contact_info = $this->getRdfEntityByLabel($label, 'contact_information');
+      $email_field = $contact_info->get('field_ci_email');
+      if (!$email_field->isEmpty()) {
+        $email = $email_field->value;
+        /** @var \Drupal\email_confirmer\EmailConfirmerManagerInterface $email_confirmer */
+        $email_confirmer = \Drupal::service('email_confirmer');
+        if ($confirmation = $email_confirmer->getConfirmation($email, 'pending', ContactInformationEmailConfirmInterface::REALM)) {
+          if (!$confirmation->confirm($confirmation->getHash())) {
+            throw new \RuntimeException("Failed to confirm $email");
+          }
+          $confirmation->save();
+        }
+      }
+    }
+
   }
 
 }

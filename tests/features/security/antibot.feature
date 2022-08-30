@@ -15,9 +15,13 @@ Feature: As a visitor or logged-in user, when I want to post content, the form
     Given users:
       | Username |
       | Günther  |
+    And the following contact:
+      | name            | ACME Inc.            |
+      | email           | acme.inc@example.com |
     And the following collection:
-      | title | Family photos |
-      | state | validated     |
+      | title               | Family photos |
+      | state               | validated     |
+      | contact information | ACME Inc.     |
     And discussion content:
       | title      | collection    | state     |
       | Let's talk | Family photos | validated |
@@ -27,6 +31,8 @@ Feature: As a visitor or logged-in user, when I want to post content, the form
     And news content:
       | title       | collection    | state     |
       | Got married | Family photos | validated |
+    And the following contact information emails are validated:
+      | ACME Inc. |
 
     Given I am logged in as "Günther"
     And I go to the homepage of the "Family photos" collection
@@ -57,3 +63,8 @@ Feature: As a visitor or logged-in user, when I want to post content, the form
     When I click "Share"
     And I wait for AJAX to finish
     Then the form is protected by Antibot
+
+    When I go to the about page of "Family photos"
+    And I click "Contact owner"
+    Then a modal should open
+    And the form is protected by Antibot
