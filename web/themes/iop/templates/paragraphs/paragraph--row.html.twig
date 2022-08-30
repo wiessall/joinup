@@ -47,7 +47,9 @@
   'paragraph--type--' ~ paragraph.bundle|clean_class,
   view_mode ? 'paragraph--view-mode--' ~ view_mode|clean_class,
   'paragraph--id--' ~ paragraph.id.value,
-  'row row--theme-' ~ row_theme,
+  'paragraph--' ~ row_theme,
+  'paragraph--row',
+  'row',
 ] %}
 
 {# Merges Background field with classes. #}
@@ -56,10 +58,8 @@
   {# @todo: This might not work. Fix it. #}
   {% set classes = classes|merge("row-theme--" ~ content.paragraph_row_theme['#value']) %}
 {% endif %}
-
 {% if row_background %}
-{# This is NOT the correct way to do it I guess??? #}
-  <div{{ attributes.addClass(classes) }} style="background-image: url('{{ row_background }}'); background-size: cover">
+  <div{{ attributes.addClass(classes) }} style="background-image: url('{{ row_background }}');">
 {% else %}
   <div{{ attributes.addClass(classes) }}>
 {% endif %}
