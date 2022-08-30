@@ -107,7 +107,6 @@ Feature: "Add solution" visibility options.
     And I select "Completed" from "Status"
     And I press "Propose"
     Then the email sent to "Ruth Lee" with subject "Joinup: A new solution has been proposed" contains the following lines of text:
-      | text                                                                                              |
       | Wendell Silva has proposed a new Interoperability solution: "Espresso is the solution" on Joinup. |
       | If you think this action is not clear or not due, please contact Joinup Support at                |
     And I should see "Thank you for proposing a solution. Your request is currently pending approval by the site administrator."
