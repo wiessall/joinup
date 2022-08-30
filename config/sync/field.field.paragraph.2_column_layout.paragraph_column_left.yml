@@ -1,0 +1,69 @@
+uuid: e3dc69c2-4a7c-4ec0-a2ad-6d5cf7ec74dd
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.paragraph_column_left
+    - paragraphs.paragraphs_type.2_column_layout
+    - paragraphs.paragraphs_type.simple_paragraph
+    - paragraphs.paragraphs_type.testimony
+  module:
+    - entity_reference_revisions
+id: paragraph.2_column_layout.paragraph_column_left
+field_name: paragraph_column_left
+entity_type: paragraph
+bundle: 2_column_layout
+label: 'Left side content'
+description: ''
+required: true
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:paragraph'
+  handler_settings:
+    target_bundles:
+      simple_paragraph: simple_paragraph
+      testimony: testimony
+    negate: 0
+    target_bundles_drag_drop:
+      1_column_layout:
+        weight: 11
+        enabled: false
+      2_column_layout:
+        weight: 12
+        enabled: false
+      3_column_layout:
+        weight: 13
+        enabled: false
+      accordion:
+        weight: 14
+        enabled: false
+      accordion_item:
+        weight: 15
+        enabled: false
+      carousel:
+        weight: 19
+        enabled: false
+      content_listing:
+        weight: 16
+        enabled: false
+      entity_reference:
+        weight: 18
+        enabled: false
+      iframe:
+        weight: 17
+        enabled: false
+      json_map:
+        weight: 18
+        enabled: false
+      row:
+        weight: 19
+        enabled: false
+      simple_paragraph:
+        weight: 20
+        enabled: true
+      testimony:
+        weight: 26
+        enabled: true
+field_type: entity_reference_revisions

@@ -40,12 +40,13 @@
  * @see html.html.twig
  */
 #}
+{{ attach_library('iop/landing-page') }}
 <div class="layout-container">
   <div class="section-header">
     {{ page.header }}
 
     {% if page.header_bottom %}
-      <div class="region-header-bottom">
+      <div class="region-header-bottom container">
         {{ page.header_bottom }}
       </div>
     {% endif %}
