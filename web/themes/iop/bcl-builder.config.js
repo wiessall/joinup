@@ -14,6 +14,16 @@ module.exports = {
       entry: path.resolve(outputFolder, "src/scss/components.scss"),
       dest: path.resolve(outputFolder, "assets/css/components.min.css"),
       options: {
+        minify: true,
+        includePaths,
+        sourceMap: "file",
+      },
+    },
+    {
+      entry: path.resolve(outputFolder, "src/scss/navbar.scss"),
+      dest: path.resolve(outputFolder, "assets/css/navbar.min.css"),
+      options: {
+        minify: true,
         includePaths,
         sourceMap: "file",
       },
@@ -67,6 +77,11 @@ module.exports = {
       options: { up: true },
     },
     // Theme images
+    {
+      from: [path.resolve(__dirname, "src/images/hamburger-menu-icon.svg")],
+      to: path.resolve(outputFolder, "assets/images"),
+      options: { up: true },
+    },
     {
       from: [path.resolve(__dirname, "src/images/iop-eu-logo.svg")],
       to: path.resolve(outputFolder, "assets/images"),
