@@ -25,6 +25,11 @@ paragraph:
       assets/css/paragraph.min.css: {}
 
 # Components
+navbar:
+  css:
+    theme:
+      assets/css/navbar.min.css: {}
+
 carousel:
   css:
     theme:
