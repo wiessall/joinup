@@ -10,11 +10,11 @@
       window.addEventListener(
         "wtGlobanReady",
         () => {
-          const navbar = document.getElementById("joinup-navbar");
+          const navbar = document.querySelector("nav.stickynav");
           if (navbar === null || navbar === undefined) {
             return;
           }
-          if (navbar && navbar.classList.contains("joinup-navbar--sticky")) {
+          if (navbar) {
             const navbarOffsetTop = navbar.getBoundingClientRect().top;
             // Run function on user scroll.
             window.addEventListener("scroll", () => {
