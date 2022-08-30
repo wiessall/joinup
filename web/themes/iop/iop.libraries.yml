@@ -17,3 +17,13 @@ homepage:
   css:
     theme:
       assets/css/homepage.min.css: {}
+
+# Components
+carousel:
+  css:
+    theme:
+      assets/css/carousel.min.css: {}
+      assets/css/glide.core.min.css: {}
+  js:
+    assets/js/glide.min.js: {}
+

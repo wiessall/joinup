@@ -7,7 +7,18 @@ const nodeModules = "./node_modules";
 const includePaths = [nodeModules];
 
 module.exports = {
-  scripts: [],
+  scripts: [
+    // Third party
+    {
+      entry: path.resolve(outputFolder, "src/js/glide.js"),
+      dest: path.resolve(outputFolder, "assets/js/glide.js"),
+      options: {
+        name: "glide",
+        minify: true,
+        sourceMap: true,
+      },
+    },
+  ],
   styles: [
     // Components
     {
@@ -38,6 +49,16 @@ module.exports = {
         sourceMap: "file",
       },
     },
+    // Spare components
+    {
+      entry: path.resolve(outputFolder, "src/scss/carousel.scss"),
+      dest: path.resolve(outputFolder, "assets/css/carousel.min.css"),
+      options: {
+        minify: true,
+        includePaths,
+        sourceMap: "file",
+      },
+    },
   ],
   copy: [
     // Bootstrap: fonts
@@ -62,6 +83,14 @@ module.exports = {
     {
       from: [path.resolve(__dirname, "src/images/iop-eu-logo.svg")],
       to: path.resolve(outputFolder, "assets/images"),
+      options: { up: true },
+    },
+    // Third party files
+    {
+      from: [
+        path.resolve(nodeModules, "@glidejs/glide/dist/css/glide.core.min.css"),
+      ],
+      to: path.resolve(outputFolder, "assets/css"),
       options: { up: true },
     },
   ],
