@@ -166,7 +166,7 @@ Feature: About this solution
     And I press "Create contact information"
     And I press "Publish"
     Then I should see the success message "A new confirmation message has been sent to invisible.cat@xpto.com."
-    And the contact owner email sent to "invisible.cat@xpto.com" with subject "Joinup - Please validate your contact details" contains the following lines of text:
+    And the contact information email confirmation sent to "invisible.cat@xpto.com" with subject "Joinup - Please validate your contact details" contains:
       | text                                                                                                                                                                                                                                     |
       | Dear Joinup user,                                                                                                                                                                                                                        |
       | Your email address invisible.cat@xpto.com is used as a contact detail for the following:                                                                                                                                                 |
@@ -190,9 +190,9 @@ Feature: About this solution
     When I click "About"
     Then I should be on "/collection/antibody-development/solution/six-exclusion-advantages/about"
     And I should see the text "Owner/Contact Information"
-    And I should see the link "Contact owner"
+    And I should see the link "Contact"
     And I should not see the link "elise@nova.dk"
-    Then I click "Contact owner"
+    Then I click "Contact"
     And a modal should open
     And I should see the text "Email Contact" in the "Modal title"
     When I fill in "Your name" with "Jonny Example"
@@ -204,7 +204,7 @@ Feature: About this solution
     And I press "Send e-mail"
 
     Then I should see the success message "Your message has been sent."
-    And the contact owner email sent to "invisible.cat@xpto.com" with subject "New reclamation about Owner" contains the following lines of text:
+    And the contact information email confirmation sent to "invisible.cat@xpto.com" with subject "New reclamation about Owner" contains:
       | text                               |
       | Name: Jonny Example                |
       | Email: example@test.test           |
@@ -215,10 +215,10 @@ Feature: About this solution
     Then I click "About"
 
     And I should see the text "Owner/Contact Information"
-    And I should see the link "Contact owner"
+    And I should see the link "Contact"
     And I should not see the link "elise@nova.dk"
 
-    Then I click "Contact owner"
+    Then I click "Contact"
     And a modal should open
     And I should see the text "Email Contact" in the "Modal title"
     When I fill in "Subject" with "New reclamation about solution"
@@ -230,7 +230,7 @@ Feature: About this solution
     Then I should see the success message "Your message has been sent."
     # Submitting the modal should not redirect anywhere - ISAICP-7290.
     And I should be on "/collection/antibody-development/solution/six-exclusion-advantages/about"
-    And the contact owner email sent to "invisible.cat@xpto.com" with subject "New reclamation about solution" contains the following lines of text:
+    And the contact information email confirmation sent to "invisible.cat@xpto.com" with subject "New reclamation about solution" contains:
       | text                                        |
       | Name: Pally Rapamichael                     |
       | Email: p.papamichael@pally.de               |
@@ -254,7 +254,7 @@ Feature: About this solution
     And I press "Update contact information"
     And I press "Publish"
     Then I should see the success message "A new confirmation message has been sent to invisible.cat.one@xpto.com."
-    And the contact owner email sent to "invisible.cat.one@xpto.com" with subject "Joinup - Please validate your contact details" contains the following lines of text:
+    And the contact information email confirmation sent to "invisible.cat.one@xpto.com" with subject "Joinup - Please validate your contact details" contains:
       | text                                                                                                                                                                                                                                     |
       | Dear Joinup user,                                                                                                                                                                                                                        |
       | Your email address invisible.cat.one@xpto.com is used as a contact detail for the following:                                                                                                                                             |
