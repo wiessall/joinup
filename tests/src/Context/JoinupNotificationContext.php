@@ -220,7 +220,7 @@ class JoinupNotificationContext extends RawDrupalContext {
    * @Then the email sent to :user with subject :subject contains the( following lines of) text:
    */
   public function assertEmailSentAndContainsText(string $user, string $subject, TableNode $table) {
-    $lines_of_text = $table->getColumnsHash();
+    $lines_of_text = $table->getColumn(0);
     $user = user_load_by_name($user);
     $recipient = $user->getEmail();
     $mails = $this->getEmailsBySubjectAndMail($subject, $recipient);
@@ -230,8 +230,7 @@ class JoinupNotificationContext extends RawDrupalContext {
         $this->formatMailBodyMarkup($mail['body']) :
         $this->formatMailBodyText($mail['body']);
 
-      foreach ($lines_of_text as $line_of_text) {
-        $text = $line_of_text['text'];
+      foreach ($lines_of_text as $text) {
         if (strpos($mail_body, $text) === FALSE) {
           continue 2;
         }
@@ -261,7 +260,7 @@ class JoinupNotificationContext extends RawDrupalContext {
    * @Then the email sent to :user with subject :subject should not contain the( following lines of) text:
    */
   public function assertEmailSentNotContainsText(string $user, string $subject, TableNode $table) {
-    $lines_of_text = $table->getColumnsHash();
+    $lines_of_text = $table->getColumnsHash(0);
     $user = user_load_by_name($user);
     $recipient = $user->getEmail();
     $mails = $this->getEmailsBySubjectAndMail($subject, $recipient);
@@ -270,8 +269,7 @@ class JoinupNotificationContext extends RawDrupalContext {
         $this->formatMailBodyMarkup($mail['body']) :
         $this->formatMailBodyText($mail['body']);
 
-      foreach ($lines_of_text as $line_of_text) {
-        $text = $line_of_text['text'];
+      foreach ($lines_of_text as $text) {
         if (strpos($mail_body, $text) !== FALSE) {
           throw new \Exception("Message with subject '$subject' sent to '$recipient' contains the text '$text'.");
         }
