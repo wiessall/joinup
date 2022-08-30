@@ -4,6 +4,7 @@ declare(strict_types = 1);
 
 namespace Drupal\contact_information;
 
+use Drupal\contact_information\Entity\ContactInformationInterface;
 use Drupal\joinup_group\Entity\GroupInterface;
 
 /**
@@ -53,5 +54,13 @@ interface ContactInformationEmailConfirmInterface {
    *   the passed email.
    */
   public function getGroupsUsingContactInfoWithEmail(string $email): array;
+
+  /**
+   * Deletes unused confirmations for a given contact information entity.
+   *
+   * @param \Drupal\contact_information\Entity\ContactInformationInterface $contact_information
+   *   The contact information for which to delete unused confirmations.
+   */
+  public function deleteContactInfoConfirmation(ContactInformationInterface $contact_information): void;
 
 }

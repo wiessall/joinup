@@ -6,6 +6,7 @@ namespace Drupal\contact_information;
 
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Render\RendererInterface;
+use Drupal\contact_information\Entity\ContactInformationInterface;
 use Drupal\email_confirmer\EmailConfirmerManagerInterface;
 use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_group\JoinupGroupHelper;
@@ -131,6 +132,29 @@ class ContactInformationEmailConfirm implements ContactInformationEmailConfirmIn
       ->sort('rid')
       ->sort('label')
       ->execute());
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function deleteContactInfoConfirmation(ContactInformationInterface $contact_information): void {
+    $email_field = $contact_information->get('field_ci_email');
+    if (!$email_field->isEmpty()) {
+      $email = $email_field->value;
+      $email_is_used_elsewhere = (bool) $this->entityTypeManager->getStorage('rdf_entity')
+        ->getQuery()
+        ->accessCheck(FALSE)
+        ->condition('rid', 'contact_information')
+        ->condition('field_ci_email', $email)
+        ->condition('id', $contact_information->id(), '<>')
+        ->count()
+        ->execute();
+      if (!$email_is_used_elsewhere) {
+        if ($confirmation = $this->emailConfirmer->getConfirmation($email, FALSE, static::REALM)) {
+          $confirmation->delete();
+        }
+      }
+    }
   }
 
 }
