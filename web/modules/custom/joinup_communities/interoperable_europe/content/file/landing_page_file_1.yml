@@ -1,0 +1,27 @@
+_meta:
+  version: '1.0'
+  entity_type: file
+  uuid: 4c17c0b5-4530-459e-a7f6-1e25995db275
+  default_langcode: en
+default:
+  uid:
+    -
+      target_id: 1
+  filename:
+    -
+      value: iop-testimony-image_1.png
+  uri:
+    -
+      value: 'public://2022-08/iop-testimony-image_1.png'
+  filemime:
+    -
+      value: image/png
+  filesize:
+    -
+      value: 81734
+  status:
+    -
+      value: true
+  created:
+    -
+      value: 1661367858
