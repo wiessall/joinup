@@ -232,15 +232,6 @@ class ContactInformationContext extends RawDrupalContext {
   }
 
   /**
-   * Ensures that there are no pending email confirmation requests.
-   *
-   * @Given there are no pending email confirmation requests
-   */
-  public function givenNoPendingEmailConfirmations(): void {
-    \Drupal::database()->delete('email_confirmer_confirmation')->execute();
-  }
-
-  /**
    * Validates the emails of given list of contact information entities.
    *
    * @param \Behat\Gherkin\Node\TableNode $contact_info_list
