@@ -166,8 +166,7 @@ Feature: About this solution
     And I press "Create contact information"
     And I press "Publish"
     Then I should see the success message "A new confirmation message has been sent to invisible.cat@xpto.com."
-    And the contact information email confirmation sent to "invisible.cat@xpto.com" with subject "Joinup - Please validate your contact details" contains:
-      | text                                                                                                                                                                                                                                     |
+    And the email sent to "invisible.cat@xpto.com" with subject "Joinup - Please validate your contact details" contains the text:
       | Dear Joinup user,                                                                                                                                                                                                                        |
       | Your email address invisible.cat@xpto.com is used as a contact detail for the following:                                                                                                                                                 |
       | Solution: Six exclusion advantages                                                                                                                                                                                                       |
@@ -204,8 +203,7 @@ Feature: About this solution
     And I press "Send e-mail"
 
     Then I should see the success message "Your message has been sent."
-    And the contact information email confirmation sent to "invisible.cat@xpto.com" with subject "New reclamation about Owner" contains:
-      | text                               |
+    And the email sent to "invisible.cat@xpto.com" with subject "New reclamation about Owner" contains the text:
       | Name: Jonny Example                |
       | Email: example@test.test           |
       | Message: This is reclamation test. |
@@ -230,8 +228,7 @@ Feature: About this solution
     Then I should see the success message "Your message has been sent."
     # Submitting the modal should not redirect anywhere - ISAICP-7290.
     And I should be on "/collection/antibody-development/solution/six-exclusion-advantages/about"
-    And the contact information email confirmation sent to "invisible.cat@xpto.com" with subject "New reclamation about solution" contains:
-      | text                                        |
+    And the email sent to "invisible.cat@xpto.com" with subject "New reclamation about solution" contains the text:
       | Name: Pally Rapamichael                     |
       | Email: p.papamichael@pally.de               |
       | Message: This is solution reclamation test. |
@@ -254,8 +251,7 @@ Feature: About this solution
     And I press "Update contact information"
     And I press "Publish"
     Then I should see the success message "A new confirmation message has been sent to invisible.cat.one@xpto.com."
-    And the contact information email confirmation sent to "invisible.cat.one@xpto.com" with subject "Joinup - Please validate your contact details" contains:
-      | text                                                                                                                                                                                                                                     |
+    Then the email sent to "invisible.cat.one@xpto.com" with subject "Joinup - Please validate your contact details" contains the text:
       | Dear Joinup user,                                                                                                                                                                                                                        |
       | Your email address invisible.cat.one@xpto.com is used as a contact detail for the following:                                                                                                                                             |
       | Solution: Six exclusion advantages                                                                                                                                                                                                       |

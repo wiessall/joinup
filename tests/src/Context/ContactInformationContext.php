@@ -5,8 +5,6 @@ declare(strict_types = 1);
 namespace Drupal\joinup\Context;
 
 use Behat\Gherkin\Node\TableNode;
-use Drupal\Component\Render\MarkupInterface;
-use Drupal\contact_information\ContactInformationEmailConfirmInterface;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\joinup\Traits\AliasTranslatorTrait;
 use Drupal\joinup\Traits\MailCollectorTrait;
@@ -15,7 +13,6 @@ use Drupal\joinup\Traits\SearchTrait;
 use Drupal\joinup\Traits\TestingEntitiesTrait;
 use Drupal\joinup\Traits\UserTrait;
 use Drupal\rdf_entity\RdfInterface;
-use PHPUnit\Framework\Assert;
 
 /**
  * Behat step definitions for testing contact information entities.
@@ -172,45 +169,6 @@ class ContactInformationContext extends RawDrupalContext {
       'website url' => 'field_ci_webpage',
       'author' => 'uid',
     ];
-  }
-
-  /**
-   * Asserts contact info email has been sent and contains some pieces of text.
-   *
-   * @param string $email
-   *   The recipient E-mail address.
-   * @param string $subject
-   *   The subject of the email.
-   * @param \Behat\Gherkin\Node\TableNode $table
-   *   The mail data table.
-   *
-   * @throws \Exception
-   *   Throws an exception when a parameter is not the expected one.
-   *
-   * @Then the contact information email confirmation sent to :email with subject :subject contains:
-   */
-  public function assertContactInformationEmailConfirmationSentAndContainsText(string $email, string $subject, TableNode $table): void {
-    $lines_of_text = $table->getColumnsHash();
-    $mails = $this->getEmailsBySubjectAndMail($subject, $email);
-    $email_found = FALSE;
-    foreach ($mails as $mail) {
-      $mail_body = ($mail['body'] instanceof MarkupInterface) ?
-        $this->formatMailBodyMarkup($mail['body']) :
-        $this->formatMailBodyText($mail['body']);
-
-      foreach ($lines_of_text as $line_of_text) {
-        $text = $line_of_text['text'];
-        if (strpos($mail_body, $text) === FALSE) {
-          continue 2;
-        }
-      }
-
-      // We found a match. Stop searching.
-      $email_found = TRUE;
-      break;
-    }
-
-    Assert::assertTrue($email_found, "Did not find expected email to '$email' with subject '$subject'.");
   }
 
   /**

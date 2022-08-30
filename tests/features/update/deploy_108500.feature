@@ -20,8 +20,7 @@ Feature: Test joinup_core_deploy_108500.
     # Note that emails are added in alphabetical order in the queue. That's why,
     # for the purpose of this test, we chose one from the top to make sure that
     # the queue entry is consumed on first cron run.
-    Then the contact information email confirmation sent to "ABR@trasysinternational.com" with subject "Joinup - Please validate your contact details" contains:
-      | text                                                                                                                                                                                                                                     |
+    Then the email sent to "ABR@trasysinternational.com" with subject "Joinup - Please validate your contact details" contains the text:
       | Dear Joinup user,                                                                                                                                                                                                                        |
       | Your email address ABR@trasysinternational.com is used as a contact detail for the following:                                                                                                                                            |
       | Collection: Access to Base Registries                                                                                                                                                                                                    |
