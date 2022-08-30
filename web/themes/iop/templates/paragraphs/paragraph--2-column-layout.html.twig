@@ -36,20 +36,22 @@
  * @ingroup themeable
  */
 #}
-
+{{ attach_library('iop/paragraph') }}
 {# The template default set classes. #}
 {# Sets Paragraph ID as class. #}
 {% set classes = [
   'paragraph',
+  'paragraph--2-column-layout',
   'paragraph--type--' ~ paragraph.bundle|clean_class,
   view_mode ? 'paragraph--view-mode--' ~ view_mode|clean_class,
   'paragraph--id--' ~ paragraph.id.value,
+  'col-12',
+  'col-md-6'
 ] %}
 
-{# @todo: No classes are added from above so that the HTML is clean. #}
-<div class="col col-lg-6 col-md-6 col-sm-6 col-xs-12">
+<div {{ attributes.addClass(classes) }}>
   {{ content.paragraph_column_left }}
 </div>
-<div class="col col-lg-6 col-md-6 col-sm-6 col-xs-12">
+<div {{ attributes.addClass(classes) }}>
   {{ content.paragraph_column_right }}
 </div>
