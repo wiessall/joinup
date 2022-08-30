@@ -18,11 +18,11 @@ settings:
   facet_regions: {  }
   view_modes:
     'entity:node':
-      custom_page: explore_item
+      custom_page: highlighted
       discussion: explore_item
       document: explore_item
-      event: explore_item
-      news: explore_item
+      event: highlighted
+      news: highlighted
       tallinn_report: explore_item
       video: explore_item
     'entity:rdf_entity':
