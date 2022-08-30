@@ -229,9 +229,32 @@ function contact_information_rdf_entity_insert(RdfInterface $group): void {
 /**
  * Implements hook_ENTITY_TYPE_update().
  */
-function contact_information_rdf_entity_update(RdfInterface $group): void {
-  if ($group instanceof GroupInterface) {
-    \Drupal::service('contact_information.email_confirm')->confirmEmailsForGroup($group);
+function contact_information_rdf_entity_update(RdfInterface $entity): void {
+  if ($entity instanceof GroupInterface) {
+    \Drupal::service('contact_information.email_confirm')->confirmEmailsForGroup($entity);
+  }
+  elseif ($entity instanceof ContactInformationInterface) {
+    /** @var \Drupal\contact_information\Entity\ContactInformationInterface|null $original */
+    if ($original = $entity->original ?? NULL) {
+      $original_email = $original->get('field_ci_email')->value;
+      $email = $entity->get('field_ci_email')->value;
+      if (!empty($original_email) && $original_email !== $email) {
+        /** @var \Drupal\contact_information\ContactInformationEmailConfirmInterface $email_confirm */
+        $email_confirm = \Drupal::service('contact_information.email_confirm');
+        $email_confirm->deleteContactInfoConfirmation($original);
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_delete().
+ */
+function contact_information_rdf_entity_delete(RdfInterface $contact_information) {
+  if ($contact_information instanceof ContactInformationInterface) {
+    /** @var \Drupal\contact_information\ContactInformationEmailConfirmInterface $email_confirm */
+    $email_confirm = \Drupal::service('contact_information.email_confirm');
+    $email_confirm->deleteContactInfoConfirmation($contact_information);
   }
 }
 
