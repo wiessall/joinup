@@ -29,6 +29,14 @@ module.exports = {
         sourceMap: "file",
       },
     },
+    {
+      entry: path.resolve(outputFolder, "src/scss/paragraph.scss"),
+      dest: path.resolve(outputFolder, "assets/css/paragraph.min.css"),
+      options: {
+        includePaths,
+        sourceMap: "file",
+      },
+    },
     // Theme
     {
       entry: path.resolve(outputFolder, "src/scss/theme.scss"),
@@ -41,8 +49,8 @@ module.exports = {
     },
     // Pages
     {
-      entry: path.resolve(outputFolder, "src/scss/homepage.scss"),
-      dest: path.resolve(outputFolder, "assets/css/homepage.min.css"),
+      entry: path.resolve(outputFolder, "src/scss/landing-page.scss"),
+      dest: path.resolve(outputFolder, "assets/css/landing-page.min.css"),
       options: {
         minify: true,
         includePaths,
