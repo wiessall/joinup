@@ -65,6 +65,6 @@ Feature: As a visitor or logged-in user, when I want to post content, the form
     Then the form is protected by Antibot
 
     When I go to the about page of "Family photos"
-    And I click "Contact owner"
+    And I click "Contact"
     Then a modal should open
     And the form is protected by Antibot

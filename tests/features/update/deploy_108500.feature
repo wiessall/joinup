@@ -6,21 +6,21 @@ Feature: Test joinup_core_deploy_108500.
 
     When I go to the about page of "Access to Base Registries"
     Then I should not see the text "E-mail address"
-    And I should not see the link "Contact owner"
+    And I should not see the link "Contact"
 
     When I go to the about page of "ABR - BRegDCAT-AP"
     Then I should not see the text "E-mail address"
-    And I should not see the link "Contact owner"
+    And I should not see the link "Contact"
 
     When I go to the about page of "ABR - BRegDCAT-AP Tools"
     Then I should not see the text "E-mail address"
-    And I should not see the link "Contact owner"
+    And I should not see the link "Contact"
 
     When I run cron
     # Note that emails are added in alphabetical order in the queue. That's why,
     # for the purpose of this test, we chose one from the top to make sure that
     # the queue entry is consumed on first cron run.
-    Then the contact owner email sent to "ABR@trasysinternational.com" with subject "Joinup - Please validate your contact details" contains the following lines of text:
+    Then the contact information email confirmation sent to "ABR@trasysinternational.com" with subject "Joinup - Please validate your contact details" contains:
       | text                                                                                                                                                                                                                                     |
       | Dear Joinup user,                                                                                                                                                                                                                        |
       | Your email address ABR@trasysinternational.com is used as a contact detail for the following:                                                                                                                                            |
@@ -39,12 +39,12 @@ Feature: Test joinup_core_deploy_108500.
 
     When I go to the about page of "Access to Base Registries"
     Then I should see the text "E-mail address"
-    And I should see the link "Contact owner"
+    And I should see the link "Contact"
 
     When I go to the about page of "ABR - BRegDCAT-AP"
     Then I should see the text "E-mail address"
-    And I should see the link "Contact owner"
+    And I should see the link "Contact"
 
     When I go to the about page of "ABR - BRegDCAT-AP Tools"
     Then I should see the text "E-mail address"
-    And I should see the link "Contact owner"
+    And I should see the link "Contact"
