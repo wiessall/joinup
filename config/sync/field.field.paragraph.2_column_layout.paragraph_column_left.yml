@@ -5,6 +5,8 @@ dependencies:
   config:
     - field.storage.paragraph.paragraph_column_left
     - paragraphs.paragraphs_type.2_column_layout
+    - paragraphs.paragraphs_type.call_to_action
+    - paragraphs.paragraphs_type.image
     - paragraphs.paragraphs_type.simple_paragraph
     - paragraphs.paragraphs_type.testimony
   module:
@@ -24,46 +26,54 @@ settings:
   handler_settings:
     target_bundles:
       simple_paragraph: simple_paragraph
+      image: image
+      call_to_action: call_to_action
       testimony: testimony
     negate: 0
     target_bundles_drag_drop:
       1_column_layout:
-        weight: 11
+        weight: -31
         enabled: false
       2_column_layout:
-        weight: 12
+        weight: -30
         enabled: false
       3_column_layout:
-        weight: 13
+        weight: -29
         enabled: false
       accordion:
-        weight: 14
+        weight: -28
         enabled: false
       accordion_item:
-        weight: 15
+        weight: -27
         enabled: false
+      call_to_action:
+        weight: -18
+        enabled: true
       carousel:
-        weight: 19
+        weight: -22
         enabled: false
       content_listing:
-        weight: 16
+        weight: -26
         enabled: false
       entity_reference:
-        weight: 18
+        weight: -24
         enabled: false
       iframe:
-        weight: 17
+        weight: -25
         enabled: false
+      image:
+        weight: -19
+        enabled: true
       json_map:
-        weight: 18
+        weight: -23
         enabled: false
       row:
-        weight: 19
+        weight: -21
         enabled: false
       simple_paragraph:
-        weight: 20
+        weight: -20
         enabled: true
       testimony:
-        weight: 26
+        weight: -17
         enabled: true
 field_type: entity_reference_revisions
