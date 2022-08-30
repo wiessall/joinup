@@ -11,6 +11,7 @@ use Drupal\joinup\Traits\AliasTranslatorTrait;
 use Drupal\joinup\Traits\MailCollectorTrait;
 use Drupal\joinup\Traits\RdfEntityTrait;
 use Drupal\joinup\Traits\SearchTrait;
+use Drupal\joinup\Traits\TestingEntitiesTrait;
 use Drupal\joinup\Traits\UserTrait;
 use Drupal\rdf_entity\RdfInterface;
 use PHPUnit\Framework\Assert;
@@ -21,17 +22,11 @@ use PHPUnit\Framework\Assert;
 class ContactInformationContext extends RawDrupalContext {
 
   use AliasTranslatorTrait;
-  use RdfEntityTrait;
   use MailCollectorTrait;
+  use RdfEntityTrait;
   use SearchTrait;
+  use TestingEntitiesTrait;
   use UserTrait;
-
-  /**
-   * Test contact information rdf entities.
-   *
-   * @var \Drupal\rdf_entity\Entity\Rdf[]
-   */
-  protected $contactInformations = [];
 
   /**
    * Navigates to the canonical page display of a contact information entity.
@@ -138,28 +133,6 @@ class ContactInformationContext extends RawDrupalContext {
   }
 
   /**
-   * Remove any created contact information entities.
-   *
-   * @AfterScenario
-   */
-  public function cleanContactInformationEntities(): void {
-    if (empty($this->contactInformations)) {
-      return;
-    }
-
-    // Since we might be cleaning up many informations, temporarily disable the
-    // feature to commit the index after every query.
-    $this->disableCommitOnUpdate();
-
-    foreach ($this->contactInformations as $entity) {
-      $entity->skip_notification = TRUE;
-      $entity->delete();
-    }
-    $this->contactInformations = [];
-    $this->enableCommitOnUpdate();
-  }
-
-  /**
    * Creates a contact information from the given property and field data.
    *
    * @param array $values
@@ -178,7 +151,7 @@ class ContactInformationContext extends RawDrupalContext {
     }
 
     $entity = $this->createRdfEntity('contact_information', $this->parseRdfEntityFields($values));
-    $this->contactInformations[$entity->id()] = $entity;
+    $this->entities['rdf_entity'][$entity->id()] = $entity;
 
     return $entity;
   }
