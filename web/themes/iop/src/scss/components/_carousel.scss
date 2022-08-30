@@ -19,7 +19,8 @@
   display: flex;
   float: left;
 }
-.glide__image {
+.event__logo img,
+.news__logo img {
   pointer-events: none; // Disable dragging to avoid swipe/drag clashes
   border: 2px solid transparent;
   border-radius: $spacer * 2; // 32px

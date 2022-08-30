@@ -1,0 +1,40 @@
+{#
+/**
+ * @file
+ * Template for a Node.
+ */
+#}
+{%
+  set classes = [
+  node.bundle|clean_class,
+  node.bundle|clean_class ~ '--' ~ view_mode|clean_class,
+  'glide__slide',
+]
+%}
+{%
+  set title_classes = [
+  'h6',
+  'text-center',
+  'glide__title',
+]
+%}
+<article{{ attributes.addClass(classes) }}>
+  {{ title_prefix }}
+  {{ title_suffix }}
+
+  {% block content %}
+    {% if content.field_event_logo %}
+      {{ content.field_event_logo }}
+    {% else %}
+      <div class="glide__image">
+        <img class="img-fluid" src="/web/sites/default/files/news/logo/2022-08/TWITTER POST 1024x512px Miguel Interview (1).jpg">
+      </div>
+    {% endif %}
+    {% if label %}
+      <h1{{ title_attributes.addClass(title_classes) }}>
+        <a class="text-light fw-normal" href="{{ url }}" rel="bookmark">{{ label }}</a>
+      </h1>
+    {% endif %}
+
+  {% endblock %}
+</article>

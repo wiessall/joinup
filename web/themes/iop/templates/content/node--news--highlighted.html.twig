@@ -23,13 +23,18 @@
   {{ title_suffix }}
 
   {% block content %}
-    <img class="img-fluid glide__image" src="/web/sites/default/files/news/logo/2022-08/TWITTER POST 1024x512px Miguel Interview (1).jpg">
+    {% if content.field_news_logo is not empty %}
+      {{ content.field_news_logo }}
+    {% else %}
+      <div class="glide__image">
+        <img class="img-fluid" src="/web/sites/default/files/news/logo/2022-08/TWITTER POST 1024x512px Miguel Interview (1).jpg">
+      </div>
+    {% endif %}
     {% if label %}
       <h1{{ title_attributes.addClass(title_classes) }}>
-        <a href="{{ url }}" rel="bookmark">{{ label }}</a>
+        <a class="text-light fw-normal" href="{{ url }}" rel="bookmark">{{ label }}</a>
       </h1>
     {% endif %}
 
-   {# {{ content }} #}
   {% endblock %}
 </article>
