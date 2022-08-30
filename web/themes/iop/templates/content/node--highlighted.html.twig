@@ -1,0 +1,35 @@
+{#
+/**
+ * @file
+ * Template for a Node.
+ */
+#}
+{%
+  set classes = [
+  node.bundle|clean_class,
+  node.bundle|clean_class ~ '--' ~ view_mode|clean_class,
+  'glide__slide',
+]
+%}
+{%
+  set title_classes = [
+  'h6',
+  'text-center',
+  'glide__title',
+]
+%}
+<article{{ attributes.addClass(classes) }}>
+  {{ title_prefix }}
+  {{ title_suffix }}
+
+  {% block content %}
+    <img class="img-fluid glide__image" src="/web/sites/default/files/news/logo/2022-08/TWITTER POST 1024x512px Miguel Interview (1).jpg">
+    {% if label %}
+      <h1{{ title_attributes.addClass(title_classes) }}>
+        <a href="{{ url }}" rel="bookmark">{{ label }}</a>
+      </h1>
+    {% endif %}
+
+   {# {{ content }} #}
+  {% endblock %}
+</article>

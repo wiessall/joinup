@@ -1,0 +1,28 @@
+.glide__slides { // We need space for the active slide to be scaled up and not cut
+  padding: $spacer * 2 0!important; // 32px 0
+}
+.glide__slide {
+  transition: transform .1s ease;
+  .glide__title {
+    display: none;
+  }
+  &--active {
+    .glide__title {
+      display: block;
+    }
+  }
+  &.glide__slide--active {
+    transform: scale(1.2);
+  }
+}
+.glide__arrows {
+  display: flex;
+  float: left;
+}
+.glide__image {
+  pointer-events: none; // Disable dragging to avoid swipe/drag clashes
+  border: 2px solid transparent;
+  border-radius: $spacer * 2; // 32px
+  background: linear-gradient($primary, $primary) padding-box, $gradient border-box;
+  margin-bottom: $spacer; // 16px
+}
