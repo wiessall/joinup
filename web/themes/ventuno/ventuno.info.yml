@@ -30,12 +30,12 @@ libraries-override:
         css/tour.module.css: assets/css/tour.css
 
 regions:
-  header: Header
+  header: 'Header'
   header_bottom: 'Header bottom'
-  featured: Featured
-  messages: Messages
-  sidebar: Sidebar
+  featured: 'Featured'
+  messages: 'Messages'
+  sidebar: 'Sidebar'
   content_top: 'Content top'
-  content: Content
+  content: 'Content'
   content_bottom: 'Content bottom'
-  footer: Footer
+  footer: 'Footer'

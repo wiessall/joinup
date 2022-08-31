@@ -14,6 +14,24 @@ module.exports = {
       entry: path.resolve(outputFolder, "src/scss/components.scss"),
       dest: path.resolve(outputFolder, "assets/css/components.min.css"),
       options: {
+        minify: true,
+        includePaths,
+        sourceMap: "file",
+      },
+    },
+    {
+      entry: path.resolve(outputFolder, "src/scss/navbar.scss"),
+      dest: path.resolve(outputFolder, "assets/css/navbar.min.css"),
+      options: {
+        minify: true,
+        includePaths,
+        sourceMap: "file",
+      },
+    },
+    {
+      entry: path.resolve(outputFolder, "src/scss/paragraph.scss"),
+      dest: path.resolve(outputFolder, "assets/css/paragraph.min.css"),
+      options: {
         includePaths,
         sourceMap: "file",
       },
@@ -30,8 +48,8 @@ module.exports = {
     },
     // Pages
     {
-      entry: path.resolve(outputFolder, "src/scss/homepage.scss"),
-      dest: path.resolve(outputFolder, "assets/css/homepage.min.css"),
+      entry: path.resolve(outputFolder, "src/scss/landing-page.scss"),
+      dest: path.resolve(outputFolder, "assets/css/landing-page.min.css"),
       options: {
         minify: true,
         includePaths,
@@ -88,6 +106,11 @@ module.exports = {
       options: { up: true },
     },
     // Theme images
+    {
+      from: [path.resolve(__dirname, "src/images/hamburger-menu-icon.svg")],
+      to: path.resolve(outputFolder, "assets/images"),
+      options: { up: true },
+    },
     {
       from: [path.resolve(__dirname, "src/images/iop-eu-logo.svg")],
       to: path.resolve(outputFolder, "assets/images"),
