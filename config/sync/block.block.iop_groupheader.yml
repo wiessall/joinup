@@ -4,6 +4,7 @@ status: true
 dependencies:
   module:
     - joinup
+    - system
   theme:
     - iop
 _core:
@@ -20,5 +21,9 @@ settings:
   label_display: '0'
   provider: joinup
   context_mapping:
-    og: '@og.context:og'
-visibility: {  }
+    og: '@asset_release.asset_release_route_context:asset_release'
+visibility:
+  request_path:
+    id: request_path
+    negate: true
+    pages: /collection/interoperable-europe/iop-landing-page
