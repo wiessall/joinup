@@ -5,6 +5,7 @@ _meta:
   bundle: custom_page
   default_langcode: en
   depends:
+    3faca021-78a8-4bb0-8118-7dac2ea7e549: file
     b319fcaf-316e-45a2-8ead-af89b9df7e27: file
     9ad5eede-1b7a-4295-864f-24e1fe0d241d: file
     4c17c0b5-4530-459e-a7f6-1e25995db275: file
@@ -31,9 +32,6 @@ default:
   sticky:
     -
       value: false
-  revision_translation_affected:
-    -
-      value: true
   report:
     -
       uri: 'internal:/contact'
@@ -95,7 +93,40 @@ default:
                         _meta:
                           version: '1.0'
                           entity_type: paragraph
-                          uuid: 36d05c29-019d-42da-8bcb-61da248e1759
+                          uuid: ff4a9280-15ad-4a37-8191-db2696cefc71
+                          bundle: image
+                          default_langcode: en
+                        default:
+                          status:
+                            -
+                              value: true
+                          created:
+                            -
+                              value: 1661863785
+                          behavior_settings:
+                            -
+                              value: {  }
+                          revision_translation_affected:
+                            -
+                              value: true
+                          paragraph_image:
+                            -
+                              entity: 3faca021-78a8-4bb0-8118-7dac2ea7e549
+                              alt: 'Interoperable Europe logo'
+                              title: ''
+                              width: 1969
+                              height: 461
+                          paragraph_image_visibility:
+                            -
+                              value: hide-on-md
+                            -
+                              value: hide-on-sm
+                    -
+                      entity:
+                        _meta:
+                          version: '1.0'
+                          entity_type: paragraph
+                          uuid: 10fbc47e-e43a-4113-a4d4-02f7894fd08b
                           bundle: simple_paragraph
                           default_langcode: en
                         default:
@@ -104,7 +135,7 @@ default:
                               value: true
                           created:
                             -
-                              value: 1661333247
+                              value: 1661864250
                           behavior_settings:
                             -
                               value: {  }
@@ -113,8 +144,35 @@ default:
                               value: true
                           field_body:
                             -
-                              value: "<p>Interoperable Europe is teh initiative of the European Commission for a reinforced interoperability policy in the public sector. It is committed to introducing a new cooperative Interoperability policy for Europe that will transform the public administrations and help them in their digital transformation. The initiative is supported by the Digital Europe programme. It continues and expands the mission of the now completed ISA2 programme.</p>\r\n\r\n<p>&nbsp;</p>\r\n\r\n<p>Learn more</p>\r\n"
+                              value: "<p>Interoperable Europe is the initiative of the European Commission for a reinforced interoperability policy in the public sector. It is committed to introducing a new cooperative Interoperability policy for Europe that will transform the public administrations and help them in their digital transformation. The initiative is supported by the Digital Europe programme. It continues and expands the mission of the now completed ISA2 programme.</p>\r\n"
                               format: content_editor
+                    -
+                      entity:
+                        _meta:
+                          version: '1.0'
+                          entity_type: paragraph
+                          uuid: 2a5d9fe3-5c2e-4e3f-8474-c180fa02568e
+                          bundle: call_to_action
+                          default_langcode: en
+                        default:
+                          status:
+                            -
+                              value: true
+                          created:
+                            -
+                              value: 1661864258
+                          behavior_settings:
+                            -
+                              value: {  }
+                          revision_translation_affected:
+                            -
+                              value: true
+                          paragraph_action_link:
+                            -
+                              uri: 'internal:/collection/interoperable-europe'
+                              title: 'Read more...'
+                              options:
+                                attributes: {  }
                   paragraph_column_right:
                     -
                       entity:
@@ -134,9 +192,6 @@ default:
                           behavior_settings:
                             -
                               value: {  }
-                          revision_translation_affected:
-                            -
-                              value: true
                           field_body:
                             -
                               value: "<p>{\"preview_thumbnail\":\"/sites/default/files/styles/video_embed_wysiwyg_preview/public/video_thumbnails/N7cNbrwP7qo.jpg?itok=5MgPY-V7\",\"video_url\":\"https://www.youtube.com/watch?v=N7cNbrwP7qo\",\"settings\":{\"responsive\":true,\"width\":\"854\",\"height\":\"480\",\"autoplay\":false},\"settings_summary\":[\"Embedded Video (Responsive).\"]}</p>\r\n"
@@ -352,9 +407,6 @@ default:
           behavior_settings:
             -
               value: {  }
-          revision_translation_affected:
-            -
-              value: true
           paragraph_column_layout:
             -
               entity:
@@ -374,9 +426,6 @@ default:
                   behavior_settings:
                     -
                       value: {  }
-                  revision_translation_affected:
-                    -
-                      value: true
                   paragraph_column_left:
                     -
                       entity:

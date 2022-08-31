@@ -1,0 +1,32 @@
+uuid: 3f072b57-4493-4dee-aa16-8eab6e1014b1
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.image.paragraph_image
+    - field.field.paragraph.image.paragraph_image_visibility
+    - paragraphs.paragraphs_type.image
+  module:
+    - image
+    - template_suggestion
+id: paragraph.image.default
+targetEntityType: paragraph
+bundle: image
+mode: default
+content:
+  paragraph_image:
+    type: image
+    label: hidden
+    settings:
+      image_link: ''
+      image_style: ''
+      image_loading:
+        attribute: lazy
+    third_party_settings:
+      template_suggestion:
+        template_suggestion: ''
+    weight: 0
+    region: content
+hidden:
+  paragraph_image_visibility: true
+  search_api_excerpt: true
