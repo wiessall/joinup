@@ -51,7 +51,7 @@
     {% endif %}
   </div>
 
-  {% if page.featured %}
+  {% if page.featured|render|striptags|trim is not empty %}
     <div class="region-featured mb-5 py-5">
       <div class="container">
         <div class="row">
