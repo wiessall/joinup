@@ -168,9 +168,9 @@ Feature: About this solution
     Given I am not logged in
     When I go to the about page of "Six exclusion advantages"
     Then I should see the text "Owner/Contact Information"
-    And I should see the link "Contact"
+    And I should see the link "Contact" in the "Content" region
     And I should not see the link "elise@nova.dk"
-    Then I click "Contact"
+    Then I click "Contact" in the "Content" region
     And a modal should open
     And I should see the text "Email Contact" in the "Modal title"
     When I fill in "Your name" with "Jonny Example"
@@ -188,7 +188,8 @@ Feature: About this solution
     And I wait for the honeypot time limit to pass
 
     When I press "Send e-mail"
-    Then I should see the success message "Your message has been sent."
+    Then the modal should be closed
+    And I should see the success message "Your message has been sent."
     And I should be on "/collection/antibody-development/solution/six-exclusion-advantages/about"
     And I should see the heading "About Six exclusion advantages"
     And the email sent to "invisible.cat@xpto.com" with subject "New reclamation about Owner" contains the text:
@@ -199,10 +200,10 @@ Feature: About this solution
     Given I am logged in as "Pally Rapamichael"
     When I go to the about page of "Six exclusion advantages"
     Then I should see the text "Owner/Contact Information"
-    And I should see the link "Contact"
+    And I should see the link "Contact" in the "Content" region
     And I should not see the link "elise@nova.dk"
 
-    When I click "Contact"
+    When I click "Contact" in the "Content" region
     Then a modal should open
     And I should see the text "Email Contact" in the "Modal title"
     When I fill in "Subject" with "New reclamation about solution"
@@ -211,7 +212,8 @@ Feature: About this solution
     And I wait for the honeypot time limit to pass
 
     When I press "Send e-mail"
-    Then I should see the success message "Your message has been sent."
+    Then the modal should be closed
+    And I should see the success message "Your message has been sent."
     # Submitting the modal should not redirect anywhere - ISAICP-7290.
     And I should be on "/collection/antibody-development/solution/six-exclusion-advantages/about"
     And the email sent to "invisible.cat@xpto.com" with subject "New reclamation about solution" contains the text:
