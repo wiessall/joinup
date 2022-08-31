@@ -2173,6 +2173,14 @@ class FeatureContext extends RawDrupalContext implements SnippetAcceptingContext
       $storage = \Drupal::entityTypeManager()->getStorage('file');
       $storage->delete($storage->loadMultiple($fids));
     }
+
+    // Due to the nature of behat running everything in a single request, the
+    // cache is not cleared between scenarios. This means that the cache tags
+    // are not invalidated and the cache is not cleared. This causes the default
+    // icons of paragraphs to be cached when the files are deleted above which
+    // breaks tests trying to access paragraphs.
+    // @todo Fix this in ISAICP-7308.
+    \Drupal::getContainer()->get('paragraphs_type.uuid_lookup')->clear();
   }
 
   /**

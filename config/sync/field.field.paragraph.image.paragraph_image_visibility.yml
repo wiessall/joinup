@@ -1,0 +1,21 @@
+uuid: b6ca4f57-be9a-4be0-b7ca-a97ed5db6d26
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.paragraph_image_visibility
+    - paragraphs.paragraphs_type.image
+  module:
+    - options
+id: paragraph.image.paragraph_image_visibility
+field_name: paragraph_image_visibility
+entity_type: paragraph
+bundle: image
+label: Visibility
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: list_string
