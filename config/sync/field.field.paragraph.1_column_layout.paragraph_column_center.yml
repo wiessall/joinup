@@ -6,9 +6,11 @@ dependencies:
     - field.storage.paragraph.paragraph_column_center
     - paragraphs.paragraphs_type.1_column_layout
     - paragraphs.paragraphs_type.accordion
+    - paragraphs.paragraphs_type.call_to_action
     - paragraphs.paragraphs_type.carousel
     - paragraphs.paragraphs_type.content_listing
     - paragraphs.paragraphs_type.iframe
+    - paragraphs.paragraphs_type.image
     - paragraphs.paragraphs_type.json_map
     - paragraphs.paragraphs_type.simple_paragraph
     - paragraphs.paragraphs_type.testimony
@@ -29,51 +31,59 @@ settings:
   handler_settings:
     target_bundles:
       simple_paragraph: simple_paragraph
+      image: image
       content_listing: content_listing
       carousel: carousel
       accordion: accordion
       iframe: iframe
       testimony: testimony
       json_map: json_map
+      call_to_action: call_to_action
     negate: 0
     target_bundles_drag_drop:
       1_column_layout:
-        weight: -27
+        weight: -31
         enabled: false
       2_column_layout:
-        weight: -18
+        weight: -20
         enabled: false
       3_column_layout:
-        weight: -26
+        weight: -30
         enabled: false
       accordion:
-        weight: -22
-        enabled: true
-      accordion_item:
-        weight: -17
-        enabled: false
-      carousel:
-        weight: -23
-        enabled: true
-      content_listing:
-        weight: -24
-        enabled: true
-      entity_reference:
-        weight: -15
-        enabled: false
-      iframe:
-        weight: -21
-        enabled: true
-      json_map:
-        weight: -19
-        enabled: true
-      row:
-        weight: -16
-        enabled: false
-      simple_paragraph:
         weight: -25
         enabled: true
+      accordion_item:
+        weight: -19
+        enabled: false
+      call_to_action:
+        weight: -21
+        enabled: true
+      carousel:
+        weight: -26
+        enabled: true
+      content_listing:
+        weight: -27
+        enabled: true
+      entity_reference:
+        weight: -17
+        enabled: false
+      iframe:
+        weight: -24
+        enabled: true
+      image:
+        weight: -28
+        enabled: true
+      json_map:
+        weight: -22
+        enabled: true
+      row:
+        weight: -18
+        enabled: false
+      simple_paragraph:
+        weight: -29
+        enabled: true
       testimony:
-        weight: -20
+        weight: -23
         enabled: true
 field_type: entity_reference_revisions

@@ -66,3 +66,15 @@ function iop_preprocess_rdf_entity__highlighted(array &$variables): void {
   // manageable size.
   $variables['label'] = _ventuno_smart_trim($entity->label(), 45);
 }
+
+/**
+ * Implements hook_preprocess_HOOK() for paragraph__image.html.twig.
+ */
+function iop_preprocess_paragraph__image(array &$variables): void {
+  $paragraph = $variables['elements']['#paragraph'];
+  if (!$paragraph->get('paragraph_image_visibility')->isEmpty()) {
+    foreach ($paragraph->get('paragraph_image_visibility')->getValue() as $value) {
+      $variables['attributes']['class'][] = 'paragraph-image--' . $value['value'];
+    }
+  }
+}
