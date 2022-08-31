@@ -1,4 +1,4 @@
-@group-clone @api @email @clearStaticCache
+@group-clone @api @email
 Feature: Test joinup_core_deploy_108500.
 
   Scenario: Ensure email confirmation are send correctly.
@@ -6,15 +6,15 @@ Feature: Test joinup_core_deploy_108500.
 
     When I go to the about page of "Access to Base Registries"
     Then I should not see the text "E-mail address"
-    And I should not see the link "Contact"
+    And I should not see the link "Contact" in the "Content" region
 
     When I go to the about page of "ABR - BRegDCAT-AP"
     Then I should not see the text "E-mail address"
-    And I should not see the link "Contact"
+    And I should not see the link "Contact" in the "Content" region
 
     When I go to the about page of "ABR - BRegDCAT-AP Tools"
     Then I should not see the text "E-mail address"
-    And I should not see the link "Contact"
+    And I should not see the link "Contact" in the "Content" region
 
     When I run cron
     # Note that emails are added in alphabetical order in the queue. That's why,
@@ -38,12 +38,12 @@ Feature: Test joinup_core_deploy_108500.
 
     When I go to the about page of "Access to Base Registries"
     Then I should see the text "E-mail address"
-    And I should see the link "Contact"
+    And I should see the link "Contact" in the "Content" region
 
     When I go to the about page of "ABR - BRegDCAT-AP"
     Then I should see the text "E-mail address"
-    And I should see the link "Contact"
+    And I should see the link "Contact" in the "Content" region
 
     When I go to the about page of "ABR - BRegDCAT-AP Tools"
     Then I should see the text "E-mail address"
-    And I should see the link "Contact"
+    And I should see the link "Contact" in the "Content" region
