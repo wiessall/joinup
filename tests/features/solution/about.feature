@@ -281,10 +281,10 @@ Feature: About this solution
     And I fill in "Message" with "This is solution reclamation test."
     Then I wait for the honeypot time limit to pass
     And I press "Send e-mail"
-    Then I should see the heading "Email Contact"
     And I should see the error message "You must enter a valid e-mail address."
     Then I fill in "Your e-mail address" with "jonnyk@test.com"
     And I wait for the honeypot time limit to pass
     Then I press "Send e-mail"
     And I should see the success message "Your message has been sent."
     And I should be on "/collection/antibody-development/solution/six-exclusion-advantages/about"
+    And I should see the heading "About Six exclusion advantages"
