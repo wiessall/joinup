@@ -68,13 +68,24 @@ function iop_preprocess_rdf_entity__highlighted(array &$variables): void {
 }
 
 /**
+ * Implements hook_preprocess_node().
+ */
+function iop_preprocess_node(&$variables) {
+  $nid = $variables['node']->id();
+  // Attach specific library to IOP landing page.
+  if($nid === 705614){
+    $variables['#attached']['library'][] = 'iop/landing-page';
+  }
+}
+
+/**
  * Implements hook_preprocess_HOOK() for paragraph__image.html.twig.
  */
 function iop_preprocess_paragraph__image(array &$variables): void {
   $paragraph = $variables['elements']['#paragraph'];
   if (!$paragraph->get('paragraph_image_visibility')->isEmpty()) {
     foreach ($paragraph->get('paragraph_image_visibility')->getValue() as $value) {
-      $variables['attributes']['class'][] = 'paragraph-image--' . $value['value'];
+      $variables['attributes']['class'][] = 'paragraph--image--' . $value['value'];
     }
   }
 }
