@@ -2,7 +2,11 @@
  * @file
  * Glide slider configuration.
  */
-import Glide, { Controls, Swipe } from "@glidejs/glide/dist/glide.modular.esm";
+import Glide, {
+  Controls,
+  Breakpoints,
+  Swipe,
+} from "@glidejs/glide/dist/glide.modular.esm";
 
 (() => {
   Drupal.behaviors.iopGlide = {
@@ -16,8 +20,17 @@ import Glide, { Controls, Swipe } from "@glidejs/glide/dist/glide.modular.esm";
             focusAt: "center",
             gap: 56,
             perView: 3,
+            breakpoints: {
+              1399: { gap: 50 },
+              1199: { gap: 44 },
+              991: { gap: 36 },
+              767: {
+                gap: 16,
+                perView: 1,
+              },
+            },
           });
-          glide.mount({ Controls, Swipe });
+          glide.mount({ Controls, Breakpoints, Swipe });
           // Right before movement transition begins, add the transitioning classes to the element that is going to be active
           // glide.on("move", () => {
           //   const active = slide.querySelector(".glide__slide--active");

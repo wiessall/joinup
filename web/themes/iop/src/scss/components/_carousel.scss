@@ -1,29 +1,58 @@
-.glide__slides { // We need space for the active slide to be scaled up and not cut
-  padding: $spacer * 2 0!important; // 32px 0
+.glide__track {
+  @include media-breakpoint-between(xs, sm) {
+    width: 80%;
+    margin-left: 10%;
+  }
+  @include media-breakpoint-between(xs, md) {
+    overflow: visible!important; // On small devices, adjacent slides must be visible
+  }
+}
+.glide__slides {
+  // We need space for the active slide to be scaled up and not cut
+  @include media-breakpoint-up(md) {
+    padding: $spacer * 2 0!important; // 32px 0
+  }
 }
 .glide__slide {
   transition: transform .1s ease;
+  .glide__image {
+    width: 100%;
+    border-radius: $spacer; // 16px
+    pointer-events: none; // Disable dragging to avoid swipe/drag clashes
+    border: 2px solid transparent;
+    background: linear-gradient($primary, $primary) padding-box, $gradient border-box;
+    margin-bottom: $spacer; // 16px
+  }
   .glide__title {
     display: none;
+    height: 2.75rem; // Avoid vertical shift when sliding between slides with 1 and 2 lines
   }
+  // Active state modifiers
   &--active {
     .glide__title {
-      display: block;
+      margin-bottom: 0;
+      font-size: 1.125rem; // 18px
+      // Prevent title using more than 2 lines
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      @include media-breakpoint-up(md) {
+        font-size: 1rem;
+        margin-top: $spacer; // Avoid scaled-up image to step over the title
+      }
+    }
+  }
+  &:not(.glide__slide--active) {
+    @include media-breakpoint-between(xs, md) {
+      opacity: .5;
     }
   }
   &.glide__slide--active {
-    transform: scale(1.2);
+    .glide__image {
+      @include media-breakpoint-up(md) {
+        transform: scale(1.2);
+      }
+    }
   }
-}
-.glide__arrows {
-  display: flex;
-  float: left;
-}
-.event__logo img,
-.news__logo img {
-  pointer-events: none; // Disable dragging to avoid swipe/drag clashes
-  border: 2px solid transparent;
-  border-radius: $spacer * 2; // 32px
-  background: linear-gradient($primary, $primary) padding-box, $gradient border-box;
-  margin-bottom: $spacer; // 16px
 }
