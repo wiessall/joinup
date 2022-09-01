@@ -320,6 +320,8 @@ function contact_information_confirm_emails(array &$form, FormStateInterface $fo
     }
   );
   if ($emails) {
+    // Make the list predictable.
+    sort($emails);
     $message = new PluralTranslatableMarkup(
       count($emails),
       'A new confirmation message has been sent to @emails.',
