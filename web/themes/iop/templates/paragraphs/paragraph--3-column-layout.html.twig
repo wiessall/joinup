@@ -37,22 +37,19 @@
  */
 #}
 
-{# The template default set classes. #}
-{# Sets Paragraph ID as class. #}
 {% set classes = [
   'paragraph',
-  'paragraph--type--' ~ paragraph.bundle|clean_class,
-  view_mode ? 'paragraph--view-mode--' ~ view_mode|clean_class,
-  'paragraph--id--' ~ paragraph.id.value,
+  'paragraph--3-column-layout',
+  'col-12',
+  'col-md-4',
 ] %}
 
-{# @todo: No classes are added from above so that the HTML is clean. #}
-<div class="col col-lg-4 col-md-4 col-sm-12 col-xs-12">
+<div {{ attributes.addClass(classes) }}>
   {{ content.paragraph_column_left }}
 </div>
-<div class="col col-lg-4 col-md-4 col-sm-12 col-xs-12">
+<div {{ attributes.addClass(classes) }}>
   {{ content.paragraph_column_center }}
 </div>
-<div class="col col-lg-4 col-md-4 col-sm-12 col-xs-12">
+<div {{ attributes.addClass(classes) }}>
   {{ content.paragraph_column_right }}
 </div>

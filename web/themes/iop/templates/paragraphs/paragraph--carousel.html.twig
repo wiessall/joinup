@@ -36,17 +36,13 @@
  * @ingroup themeable
  */
 #}
-{{ attach_library('iop/glide') }}
 {{ attach_library('iop/carousel') }}
 
 {# The template default set classes. #}
 {# Sets Paragraph ID as class. #}
 {% set classes = [
   'paragraph',
-  'paragraph--type--' ~ paragraph.bundle|clean_class,
-  view_mode ? 'paragraph--view-mode--' ~ view_mode|clean_class,
-  'paragraph--id--' ~ paragraph.id.value,
-  'my-5',
+  'paragraph--' ~ paragraph.bundle|clean_class,
 ] %}
 
 {# Merges Background field with classes. #}
@@ -56,14 +52,10 @@
   {% set classes = classes|merge(content.paragraph_row_them['#value']) %}
 {% endif %}
 
-{% if paragraph_title %}
-  <h2 class="text-center h1">{{ paragraph_title }}</h2>
-{% endif %}
-
 <div{{ attributes.addClass(classes) }}>
   <div class="glide__outer">
     <div class="glide">
-      <div class="explore-slider explore-slider mt-3 glide__track" data-glide-el="track">
+      <div class="glide__track" data-glide-el="track">
         <div class="glide__slides">
           {{ content.content_listing }}
         </div>
