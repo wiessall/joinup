@@ -17,12 +17,13 @@ use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Session\AccountInterface;
+use Drupal\Core\StringTranslation\PluralTranslatableMarkup;
 use Drupal\contact_information\ContactInformationEmailConfirmInterface;
 use Drupal\contact_information\Entity\ContactInformation;
 use Drupal\contact_information\Entity\ContactInformationInterface;
 use Drupal\contact_information\ParentGroupFieldItemList;
 use Drupal\email_confirmer\EmailConfirmationInterface;
-use Drupal\joinup_group\Entity\GroupInterface;
+use Drupal\joinup_group\JoinupGroupHelper;
 use Drupal\rdf_entity\RdfInterface;
 
 /**
@@ -92,20 +93,14 @@ function contact_information_inline_entity_form_table_fields_alter(&$fields, $co
 
 /**
  * Implements hook_inline_entity_form_entity_form_alter().
- *
- * Adds an entity builder callback to fill the label field with the values of
- * the name field. This is needed because inline entity form doesn't save
- * the entity until the parent entity is saved. Due to this, the label column
- * in the widget table would be empty.
  */
 function contact_information_inline_entity_form_entity_form_alter(array &$entity_form, FormStateInterface &$form_state): void {
   if ($entity_form['#entity_type'] !== 'rdf_entity' || $entity_form['#bundle'] !== 'contact_information') {
     return;
   }
   // Add an entity builder callback to fill the label field with the values of
-  // the name field. This is needed because inline entity form doesn't save
-  // the entity until the parent entity is saved. Due to this, the label column
-  // in the widget table would be empty.
+  // the name field and collect new & updated email addresses.
+  // @see contact_information_inline_entity_form_entity_builder()
   $entity_form['#entity_builders'][] = 'contact_information_inline_entity_form_entity_builder';
 }
 
@@ -114,11 +109,53 @@ function contact_information_inline_entity_form_entity_form_alter(array &$entity
  *
  * @param string $entity_type
  *   The type of the entity being created.
- * @param \Drupal\Core\Entity\EntityInterface $entity
+ * @param \Drupal\contact_information\Entity\ContactInformationInterface $contact_information
  *   The entity being built.
  */
-function contact_information_inline_entity_form_entity_builder(string $entity_type, EntityInterface $entity): void {
-  contact_information_entity_auto_label($entity);
+function contact_information_inline_entity_form_entity_builder(string $entity_type, ContactInformationInterface $contact_information, array $form, FormStateInterface $form_state): void {
+  // Fill the label field with the values of the name field. This is needed
+  // because inline entity form doesn't save the entity until the parent entity
+  // is saved. Due to this, the label column in the widget table would be empty.
+  contact_information_entity_auto_label($contact_information);
+
+  // Collect new and updated contact information emails and store them in the
+  // form state storage to be used later, when the main form is submitted.
+  // @see contact_information_confirm_emails()
+  static $processed = [];
+  $delta = $form['#ief_row_delta'];
+  // The entity builder is called twice for the same contact information. Avoid
+  // processing twice the same entity.
+  if (empty($processed[$delta])) {
+    /** @var \Drupal\joinup_group\Entity\GroupInterface $group */
+    $group = $form_state->getFormObject()->getEntity();
+    $field = $group->getContactInformationFieldName();
+
+    if ($contact_information->isNew()) {
+      $path = [$field, 'form', $delta, 'field_ci_email', 'value'];
+      $initial_email = NULL;
+    }
+    else {
+      $path = [
+        $field,
+        'form',
+        'inline_entity_form',
+        'entities',
+        $delta,
+        'form',
+        'field_ci_email',
+        'value',
+      ];
+      $initial_email = $group->get($field)->entity->get('field_ci_email')->value;
+    }
+    $email = $form_state->getValue($path);
+    $emails = $form_state->get('contact_information_emails') ?? [];
+    unset($emails[$delta]);
+    if (!empty($email) && $email !== $initial_email) {
+      $emails[$delta] = $email;
+    }
+    $form_state->set('contact_information_emails', $emails);
+    $processed[$delta] = TRUE;
+  }
 }
 
 /**
@@ -203,22 +240,10 @@ function contact_information_entity_field_access(string $operation, FieldDefinit
 }
 
 /**
- * Implements hook_ENTITY_TYPE_insert().
- */
-function contact_information_rdf_entity_insert(RdfInterface $group): void {
-  if ($group instanceof GroupInterface) {
-    \Drupal::service('contact_information.email_confirm')->confirmEmailsForGroup($group);
-  }
-}
-
-/**
  * Implements hook_ENTITY_TYPE_update().
  */
 function contact_information_rdf_entity_update(RdfInterface $entity): void {
-  if ($entity instanceof GroupInterface) {
-    \Drupal::service('contact_information.email_confirm')->confirmEmailsForGroup($entity);
-  }
-  elseif ($entity instanceof ContactInformationInterface) {
+  if ($entity instanceof ContactInformationInterface) {
     /** @var \Drupal\contact_information\Entity\ContactInformationInterface|null $original */
     if ($original = $entity->original ?? NULL) {
       $original_email = $original->get('field_ci_email')->value;
@@ -260,5 +285,47 @@ function contact_information_email_confirmer(string $op, EmailConfirmationInterf
         }
       }
     }
+  }
+}
+
+/**
+ * Implements hook_form_BASE_FORM_ID_alter().
+ */
+function contact_information_form_rdf_entity_form_alter(array &$form, FormStateInterface $form_state, string $form_id): void {
+  /** @var \Drupal\Core\Entity\Display\EntityFormDisplayInterface $display */
+  $display = $form_state->get('form_display');
+  if (isset(JoinupGroupHelper::GROUP_BUNDLES[$display->getTargetBundle()]) && $display->getMode() === 'default') {
+    $form['actions']['submit']['#submit'][] = 'contact_information_confirm_emails';
+  }
+}
+
+/**
+ * Confirms unconfirmed emails and shows a status message.
+ *
+ * @param array $form
+ *   The form render array.
+ * @param \Drupal\Core\Form\FormStateInterface $form_state
+ *   The form state object.
+ */
+function contact_information_confirm_emails(array &$form, FormStateInterface $form_state): void {
+  /** @var \Drupal\contact_information\ContactInformationEmailConfirmInterface $email_confirm */
+  $email_confirm = \Drupal::service('contact_information.email_confirm');
+
+  // Send email confirmations only for those emails not confirmed yet. Finally,
+  // $emails will contain only the addresses for which confirmations were sent.
+  $emails = array_filter(
+    $form_state->get('contact_information_emails') ?? [],
+    function (string $email) use ($email_confirm): bool {
+      return $email_confirm->confirmEmail($email);
+    }
+  );
+  if ($emails) {
+    $message = new PluralTranslatableMarkup(
+      count($emails),
+      'A new confirmation message has been sent to @emails.',
+      'New confirmation messages have been sent to @emails.',
+      ['@emails' => implode(', ', $emails)]
+    );
+    \Drupal::messenger()->addStatus($message);
   }
 }

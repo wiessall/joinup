@@ -39,8 +39,13 @@ interface ContactInformationEmailConfirmInterface {
    *
    * @param string $email
    *   A contact information email.
+   *
+   * @return bool
+   *   TRUE if a confirmation has been created. FALSE if a confirmation already
+   *   exists or this email is not attached to any contact information entity or
+   *   the contact information is not attached to any group.
    */
-  public function confirmEmail(string $email): void;
+  public function confirmEmail(string $email): bool;
 
   /**
    * Returns a list of group IDs where the given email is used in contact infos.
