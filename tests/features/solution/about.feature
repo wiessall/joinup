@@ -227,6 +227,8 @@ Feature: About this solution
     And I press "Send e-mail"
 
     Then I should see the success message "Your message has been sent."
+    # Submitting the modal should not redirect anywhere - ISAICP-7290.
+    And I should be on "/collection/antibody-development/solution/six-exclusion-advantages/about"
     And the contact owner email sent to "invisible.cat@xpto.com" with subject "New reclamation about solution" contains the following lines of text:
       | text                                        |
       | Name: Pally Rapamichael                     |
@@ -266,3 +268,25 @@ Feature: About this solution
     Then I should not see the text "Confirm invisible.cat.one@xpto.com"
     And I press "Send"
     Then I should see the success message "Email confirmation confirmed."
+
+    # Check when submit form has an error.
+    Given I am an anonymous user
+    When I go to the homepage of the "Six exclusion advantages" solution
+    Then I click "About"
+    And I should see the text "Owner/Contact Information"
+    Then I click "Contact owner"
+    And a modal should open
+    And I should see the text "Email Contact" in the "Modal title"
+    When I fill in "Your name" with "Jonny K"
+    And I fill in "Your e-mail address" with "jonnyk"
+    And I fill in "Subject" with "Test form error"
+    And I fill in "Message" with "This is solution reclamation test."
+    Then I wait for the honeypot time limit to pass
+    And I press "Send e-mail"
+    And I should see the error message "You must enter a valid e-mail address."
+    Then I fill in "Your e-mail address" with "jonnyk@test.com"
+    And I wait for the honeypot time limit to pass
+    Then I press "Send e-mail"
+    And I should see the success message "Your message has been sent."
+    And I should be on "/collection/antibody-development/solution/six-exclusion-advantages/about"
+    And I should see the heading "About Six exclusion advantages"
