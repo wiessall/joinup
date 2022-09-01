@@ -148,8 +148,7 @@ Feature: About this solution
     And I fill in "E-mail" with "invisible.cat@xpto.com"
     And I press "Create contact information"
     And I press "Publish"
-    # WIP: We should move email confirmation from API to FAPI.
-    # Then I should see the success message "A new confirmation message has been sent to invisible.cat@xpto.com."
+    Then I should see the success message "A new confirmation message has been sent to invisible.cat@xpto.com."
     And the email sent to "invisible.cat@xpto.com" with subject "Joinup - Please validate your contact details" contains the text:
       | Dear Joinup user,                                                                                                                                                                                                                        |
       | Your email address invisible.cat@xpto.com is used as a contact detail for the following:                                                                                                                                                 |
@@ -226,19 +225,30 @@ Feature: About this solution
     And I press "Edit" in the "Invisible Cat" row
     And I press "Update contact information"
     And I press "Publish"
-    # WIP: We should move email confirmation from API to FAPI.
-    # Then I should not see the success message "A new confirmation message has been sent to invisible.cat@xpto.com."
+    Then I should not see the success message "A new confirmation message has been sent to invisible.cat@xpto.com."
 
     When I go to the edit form of the "Six exclusion advantages" solution
     And I press "Edit" in the "Invisible Cat" row
     And I fill in "E-mail" with "invisible.cat.one@xpto.com"
     And I press "Update contact information"
+    When I press "Edit" in the "Elise Lucile" row
+    And I fill in "E-mail" with "elise@nova.com"
+    And I press "Update contact information"
     And I press "Publish"
-    # WIP: We should move email confirmation from API to FAPI.
-    # Then I should see the success message "A new confirmation message has been sent to invisible.cat.one@xpto.com."
-    Then the email sent to "invisible.cat.one@xpto.com" with subject "Joinup - Please validate your contact details" contains the text:
+    Then I should see the success message "New confirmation messages have been sent to elise@nova.com, invisible.cat.one@xpto.com."
+    And the email sent to "invisible.cat.one@xpto.com" with subject "Joinup - Please validate your contact details" contains the text:
       | Dear Joinup user,                                                                                                                                                                                                                        |
       | Your email address invisible.cat.one@xpto.com is used as a contact detail for the following:                                                                                                                                             |
+      | Solution: Six exclusion advantages                                                                                                                                                                                                       |
+      | To benefit from a dedicated form which will allow your users to get in touch with you in a quick, secure and privacy-friendly way, all you have to do is confirm your e-mail address by clicking on "Confirm your e-mail address" below. |
+      | If the link doesn't work, just copy this URL to your browser:                                                                                                                                                                            |
+      | Unless this step is completed, you will not be able to receive any messages from interested users or members.                                                                                                                            |
+      | If you think this action is not clear or not due, please contact Joinup Support at https://joinup.ec.europa.eu/contact.                                                                                                                  |
+      | Best regards,                                                                                                                                                                                                                            |
+      | The Joinup Team                                                                                                                                                                                                                          |
+    And the email sent to "elise@nova.com" with subject "Joinup - Please validate your contact details" contains the text:
+      | Dear Joinup user,                                                                                                                                                                                                                        |
+      | Your email address elise@nova.com is used as a contact detail for the following:                                                                                                                                             |
       | Solution: Six exclusion advantages                                                                                                                                                                                                       |
       | To benefit from a dedicated form which will allow your users to get in touch with you in a quick, secure and privacy-friendly way, all you have to do is confirm your e-mail address by clicking on "Confirm your e-mail address" below. |
       | If the link doesn't work, just copy this URL to your browser:                                                                                                                                                                            |
