@@ -63,9 +63,6 @@
       border-radius: $spacer; // 16px
     }
   }
-  &--dark-banner {
-
-  }
   // Backgrounds and font-color
   &--dark,
   &--dark-to-light,
@@ -107,7 +104,8 @@
     h3,
     h4,
     h5,
-    h6 {
+    h6,
+    a {
       color: $white;
     }
     &::before {
@@ -121,7 +119,8 @@
     h3,
     h4,
     h5,
-    h6 {
+    h6,
+    a {
       color: $white;
     }
     &::before {
