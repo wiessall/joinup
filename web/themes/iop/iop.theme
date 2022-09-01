@@ -79,6 +79,13 @@ function iop_preprocess_node(&$variables) {
 }
 
 /**
+ * Implements hook_preprocess_HOOK() for paragraph.html.twig.
+ */
+function iop_preprocess_paragraph(array &$variables): void {
+  $variables['#attached']['library'][] = 'iop/paragraph';
+}
+
+/**
  * Implements hook_preprocess_HOOK() for paragraph__image.html.twig.
  */
 function iop_preprocess_paragraph__image(array &$variables): void {
