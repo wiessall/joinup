@@ -63,32 +63,37 @@ class ContactInformationEmailConfirm implements ContactInformationEmailConfirmIn
   /**
    * {@inheritdoc}
    */
-  public function confirmEmailsForGroup(GroupInterface $group): void {
+  public function confirmEmailsForGroup(GroupInterface $group): array {
+    $processed_emails = $confirmed_emails = [];
+
     // Only act on published groups.
     if (!$group->isPublished()) {
-      return;
+      return $confirmed_emails;
     }
 
     /** @var \Drupal\Core\Field\EntityReferenceFieldItemListInterface $field */
     $field = $group->get($group->getContactInformationFieldName());
-    $emails = [];
     /** @var \Drupal\contact_information\Entity\ContactInformationInterface $contact_information */
     foreach ($field->referencedEntities() as $contact_information) {
       $email_field = $contact_information->get('field_ci_email');
       if (!$email_field->isEmpty()) {
         $email = $email_field->value;
-        if (!in_array($email, $emails, TRUE)) {
+        if (!in_array($email, $processed_emails, TRUE)) {
           if (!$this->emailConfirmer->getConfirmation($email, FALSE, static::REALM)) {
-            $this->emailConfirmer->confirm($email, [
+            $confirmation = $this->emailConfirmer->confirm($email, [
               'groups' => [$group->id()],
             ], static::REALM);
+            if ($confirmation) {
+              $confirmed_emails[] = $email;
+            }
           }
           // Different contact information entities might have the same email.
           // We register them in $emails array to prevent duplication.
-          $emails[] = $email;
+          $processed_emails[] = $email;
         }
       }
     }
+    return $confirmed_emails;
   }
 
   /**

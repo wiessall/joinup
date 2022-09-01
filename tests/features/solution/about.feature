@@ -120,10 +120,7 @@ Feature: About this solution
 
   @terms @javascript @email
   Scenario: About page contact form
-    Given the following contacts:
-      | name         | email         | Website URL    |
-      | Elise Lucile | elise@nova.dk | http://nova.dk |
-    And owners:
+    Given owner:
       | name      | type               |
       | Rotterdam | National authority |
     And user:
@@ -138,7 +135,6 @@ Feature: About this solution
       | title               | Six exclusion advantages                          |
       | description         | Separating molecules by weight.                   |
       | state               | validated                                         |
-      | contact information | Elise Lucile                                      |
       | topic               | Demography, E-inclusion                           |
       | owner               | Rotterdam                                         |
       | solution type       | Non-binding Instrument, Service Discovery Service |
@@ -146,8 +142,6 @@ Feature: About this solution
 
     When I am logged in as a moderator
     And I go to the edit form of the "Six exclusion advantages" solution
-    And I press "Add new" at the "Contact information" field
-    And I wait for AJAX to finish
     And I fill in "Name" with "Invisible Cat"
     And I fill in "E-mail" with "invisible.cat@xpto.com"
     And I press "Create contact information"
@@ -172,7 +166,6 @@ Feature: About this solution
     When I go to the about page of "Six exclusion advantages"
     Then I should see the text "Owner/Contact Information"
     And I should see the link "Contact" in the "Content" region
-    And I should not see the link "elise@nova.dk"
     Then I click "Contact" in the "Content" region
     And a modal should open
     And I should see the text "Email Contact" in the "Modal title"
@@ -204,7 +197,6 @@ Feature: About this solution
     When I go to the about page of "Six exclusion advantages"
     Then I should see the text "Owner/Contact Information"
     And I should see the link "Contact" in the "Content" region
-    And I should not see the link "elise@nova.dk"
 
     When I click "Contact" in the "Content" region
     Then a modal should open
@@ -235,11 +227,15 @@ Feature: About this solution
     And I press "Edit" in the "Invisible Cat" row
     And I fill in "E-mail" with "invisible.cat.one@xpto.com"
     And I press "Update contact information"
-    When I press "Edit" in the "Elise Lucile" row
-    And I fill in "E-mail" with "elise@nova.com"
-    And I press "Update contact information"
-    And I press "Publish"
-    Then I should see the success message "New confirmation messages have been sent to elise@nova.com, invisible.cat.one@xpto.com."
+
+    When I press "Add new" at the "Contact information" field
+    And I wait for AJAX to finish
+    And I fill in "Name" with "Elise Lucile"
+    And I fill in "E-mail" with "elise@nova.dk"
+    And I press "Create contact information"
+
+    When I press "Publish"
+    Then I should see the success message "New confirmation messages have been sent to elise@nova.dk, invisible.cat.one@xpto.com."
     And the email sent to "invisible.cat.one@xpto.com" with subject "Joinup - Please validate your contact details" contains the text:
       | Dear Joinup user,                                                                                                                                                                                                                        |
       | Your email address invisible.cat.one@xpto.com is used as a contact detail for the following:                                                                                                                                             |
@@ -250,9 +246,9 @@ Feature: About this solution
       | If you think this action is not clear or not due, please contact Joinup Support at https://joinup.ec.europa.eu/contact.                                                                                                                  |
       | Best regards,                                                                                                                                                                                                                            |
       | The Joinup Team                                                                                                                                                                                                                          |
-    And the email sent to "elise@nova.com" with subject "Joinup - Please validate your contact details" contains the text:
+    And the email sent to "elise@nova.dk" with subject "Joinup - Please validate your contact details" contains the text:
       | Dear Joinup user,                                                                                                                                                                                                                        |
-      | Your email address elise@nova.com is used as a contact detail for the following:                                                                                                                                                         |
+      | Your email address elise@nova.dk is used as a contact detail for the following:                                                                                                                                                         |
       | Solution: Six exclusion advantages                                                                                                                                                                                                       |
       | To benefit from a dedicated form which will allow your users to get in touch with you in a quick, secure and privacy-friendly way, all you have to do is confirm your e-mail address by clicking on "Confirm your e-mail address" below. |
       | If the link doesn't work, just copy this URL to your browser:                                                                                                                                                                            |
@@ -265,5 +261,24 @@ Feature: About this solution
     And I press "Send"
     Then I should see the success message "Email confirmation confirmed."
 
-    # This contact information has been created via UI.
+    When I go to the edit form of the "Six exclusion advantages" solution
+    And I press "Edit" in the "Elise Lucile" row
+    And I fill in "E-mail" with "elise@nova.com"
+    And I press "Update contact information"
+    And I press "Publish"
+
+    Then I should see the success message "A new confirmation message has been sent to elise@nova.com."
+    And the email sent to "elise@nova.com" with subject "Joinup - Please validate your contact details" contains the text:
+      | Dear Joinup user,                                                                                                                                                                                                                        |
+      | Your email address elise@nova.com is used as a contact detail for the following:                                                                                                                                                         |
+      | Solution: Six exclusion advantages                                                                                                                                                                                                       |
+      | To benefit from a dedicated form which will allow your users to get in touch with you in a quick, secure and privacy-friendly way, all you have to do is confirm your e-mail address by clicking on "Confirm your e-mail address" below. |
+      | If the link doesn't work, just copy this URL to your browser:                                                                                                                                                                            |
+      | Unless this step is completed, you will not be able to receive any messages from interested users or members.                                                                                                                            |
+      | If you think this action is not clear or not due, please contact Joinup Support at https://joinup.ec.europa.eu/contact.                                                                                                                  |
+      | Best regards,                                                                                                                                                                                                                            |
+      | The Joinup Team                                                                                                                                                                                                                          |
+
+    # These contact information have been created via UI.
     But I delete the "Invisible Cat" contact information
+    And I delete the "Elise Lucile" contact information
