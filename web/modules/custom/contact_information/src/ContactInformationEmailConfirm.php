@@ -94,11 +94,14 @@ class ContactInformationEmailConfirm implements ContactInformationEmailConfirmIn
   /**
    * {@inheritdoc}
    */
-  public function confirmEmail(string $email): void {
-    // Ignore if the contact information is not attached to any group.
-    if ($gids = $this->getGroupsUsingContactInfoWithEmail($email)) {
-      $this->emailConfirmer->confirm($email, ['groups' => $gids], static::REALM);
+  public function confirmEmail(string $email): bool {
+    if (!$this->emailConfirmer->getConfirmation($email, FALSE, static::REALM)) {
+      // Ignore if the contact information is not attached to any group.
+      if ($gids = $this->getGroupsUsingContactInfoWithEmail($email)) {
+        return (bool) $this->emailConfirmer->confirm($email, ['groups' => $gids], static::REALM);
+      }
     }
+    return FALSE;
   }
 
   /**
