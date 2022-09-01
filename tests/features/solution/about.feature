@@ -131,6 +131,9 @@ Feature: About this solution
       | First name  | Pally                  |
       | Family name | Rapamichael            |
       | E-mail      | p.papamichael@pally.de |
+    And collection:
+      | title | Antibody development |
+      | state | validated            |
     And solution:
       | title               | Six exclusion advantages                          |
       | description         | Separating molecules by weight.                   |
@@ -139,6 +142,7 @@ Feature: About this solution
       | topic               | Demography, E-inclusion                           |
       | owner               | Rotterdam                                         |
       | solution type       | Non-binding Instrument, Service Discovery Service |
+      | collection          | Antibody development                              |
 
     When I am logged in as a moderator
     And I go to the edit form of the "Six exclusion advantages" solution
@@ -248,7 +252,7 @@ Feature: About this solution
       | The Joinup Team                                                                                                                                                                                                                          |
     And the email sent to "elise@nova.com" with subject "Joinup - Please validate your contact details" contains the text:
       | Dear Joinup user,                                                                                                                                                                                                                        |
-      | Your email address elise@nova.com is used as a contact detail for the following:                                                                                                                                             |
+      | Your email address elise@nova.com is used as a contact detail for the following:                                                                                                                                                         |
       | Solution: Six exclusion advantages                                                                                                                                                                                                       |
       | To benefit from a dedicated form which will allow your users to get in touch with you in a quick, secure and privacy-friendly way, all you have to do is confirm your e-mail address by clicking on "Confirm your e-mail address" below. |
       | If the link doesn't work, just copy this URL to your browser:                                                                                                                                                                            |
