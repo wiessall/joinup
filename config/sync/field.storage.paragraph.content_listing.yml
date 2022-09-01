@@ -21,8 +21,8 @@ settings:
       custom_page: highlighted
       discussion: explore_item
       document: explore_item
-      event: highlighted
-      news: highlighted
+      event: view_mode_tile
+      news: view_mode_tile
       tallinn_report: explore_item
       video: explore_item
     'entity:rdf_entity':
