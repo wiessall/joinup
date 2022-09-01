@@ -28,8 +28,11 @@ interface ContactInformationEmailConfirmInterface {
    * @param \Drupal\joinup_group\Entity\GroupInterface $group
    *   The group containing the contact info for which to generate email
    *   confirmations.
+   *
+   * @return string[]
+   *   A list of emails that were actually confirmed.
    */
-  public function confirmEmailsForGroup(GroupInterface $group): void;
+  public function confirmEmailsForGroup(GroupInterface $group): array;
 
   /**
    * Confirm an email regardless of which contact information they belong.

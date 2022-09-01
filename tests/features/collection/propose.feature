@@ -278,7 +278,7 @@ Feature: Proposing a collection
       | signature_required | no                                                                                               |
       | html               | no                                                                                               |
 
-    # Email conformations are sent on group publishing.
+    # Email confirmations are sent on group publishing.
     Given I am logged in as a "moderator"
     When I go to the edit form of the "Some email validation" collection
     And I press "Publish"
