@@ -5,6 +5,8 @@ dependencies:
   config:
     - field.storage.paragraph.paragraph_column_layout
     - paragraphs.paragraphs_type.1_column_layout
+    - paragraphs.paragraphs_type.2_column_featured_left
+    - paragraphs.paragraphs_type.2_column_featured_right
     - paragraphs.paragraphs_type.2_column_layout
     - paragraphs.paragraphs_type.3_column_layout
     - paragraphs.paragraphs_type.row
@@ -27,45 +29,62 @@ settings:
       1_column_layout: 1_column_layout
       2_column_layout: 2_column_layout
       3_column_layout: 3_column_layout
+      2_column_featured_left: 2_column_featured_left
+      2_column_featured_right: 2_column_featured_right
     negate: 0
     target_bundles_drag_drop:
       1_column_layout:
-        weight: 14
+        weight: -37
+        enabled: true
+      2_column_featured_left:
+        weight: -34
+        enabled: true
+      2_column_featured_right:
+        weight: -33
         enabled: true
       2_column_layout:
-        weight: 15
+        weight: -36
         enabled: true
       3_column_layout:
-        weight: 16
+        weight: -35
         enabled: true
       accordion:
-        weight: 17
+        weight: -32
         enabled: false
       accordion_item:
-        weight: 18
+        weight: -31
         enabled: false
-      contact_block:
-        weight: 19
+      call_to_action:
+        weight: -24
+        enabled: false
+      carousel:
+        weight: -22
         enabled: false
       content_listing:
-        weight: 20
+        weight: -30
         enabled: false
       entity_reference:
-        weight: 21
+        weight: -29
         enabled: false
       iframe:
-        weight: 22
+        weight: -28
+        enabled: false
+      image:
+        weight: -21
         enabled: false
       json_map:
-        weight: 23
+        weight: -27
         enabled: false
       row:
-        weight: 24
+        weight: -26
         enabled: false
       simple_paragraph:
-        weight: 25
+        weight: -25
         enabled: false
       testimony:
-        weight: 26
+        weight: -23
+        enabled: false
+      video:
+        weight: -20
         enabled: false
 field_type: entity_reference_revisions
