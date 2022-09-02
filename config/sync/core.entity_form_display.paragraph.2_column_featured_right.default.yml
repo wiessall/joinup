@@ -1,0 +1,94 @@
+uuid: b5bb3214-ed26-42ec-bdf6-a6845543be5c
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.2_column_featured_right.field_paragraphs_item_content
+    - field.field.paragraph.2_column_featured_right.paragraph_2cf_media
+    - paragraphs.paragraphs_type.2_column_featured_right
+  module:
+    - entity_reference_revisions
+    - field_group
+    - paragraphs
+third_party_settings:
+  field_group:
+    group_2cfr_accodrion:
+      children:
+        - group_2cfr_content
+        - group_2cfr_media
+      label: Accodrion
+      region: content
+      parent_name: ''
+      weight: 0
+      format_type: accordion
+      format_settings:
+        classes: ''
+        show_empty_fields: false
+        id: ''
+        effect: none
+    group_2cfr_content:
+      children:
+        - paragraph_2cfr_items
+      label: Content
+      region: content
+      parent_name: group_2cfr_accodrion
+      weight: 5
+      format_type: accordion_item
+      format_settings:
+        classes: ''
+        show_empty_fields: false
+        id: ''
+        formatter: closed
+        description: ''
+        required_fields: true
+    group_2cfr_media:
+      children:
+        - paragraph_2cfr_media
+      label: 'Featured media'
+      region: content
+      parent_name: group_2cfr_accodrion
+      weight: 6
+      format_type: accordion_item
+      format_settings:
+        classes: ''
+        show_empty_fields: false
+        id: ''
+        formatter: closed
+        description: ''
+        required_fields: true
+id: paragraph.2_column_featured_right.default
+targetEntityType: paragraph
+bundle: 2_column_featured_right
+mode: default
+content:
+  field_paragraphs_item_content:
+    type: entity_reference_revisions_autocomplete
+    weight: 8
+    region: content
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  paragraph_2cf_media:
+    type: paragraphs
+    weight: 7
+    region: content
+    settings:
+      title: Paragraph
+      title_plural: Paragraphs
+      edit_mode: open
+      closed_mode: summary
+      autocollapse: none
+      closed_mode_threshold: 0
+      add_mode: dropdown
+      form_display_mode: default
+      default_paragraph_type: ''
+      features:
+        collapse_edit_all: collapse_edit_all
+        duplicate: duplicate
+    third_party_settings: {  }
+hidden:
+  created: true
+  status: true
