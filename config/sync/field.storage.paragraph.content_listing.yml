@@ -18,7 +18,7 @@ settings:
   facet_regions: {  }
   view_modes:
     'entity:node':
-      custom_page: highlighted
+      custom_page: explore_item
       discussion: explore_item
       document: explore_item
       event: view_mode_tile
