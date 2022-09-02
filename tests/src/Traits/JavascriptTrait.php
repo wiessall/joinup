@@ -89,6 +89,10 @@ trait JavascriptTrait {
    *   The node element.
    */
   protected function scrollElementIntoView(TraversableElement $element): void {
+    if (!$this->browserSupportsJavaScript()) {
+      return;
+    }
+
     // Strings (labels) containing simple quotes (') are enclosed with double
     // quotes ("), thus we need to escape them. Also, xpath might contain new
     // lines which we replace with spaces.

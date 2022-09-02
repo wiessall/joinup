@@ -7,8 +7,8 @@
 
 declare(strict_types = 1);
 
-use Drupal\Core\Link;
 use Drupal\Core\Render\BubbleableMetadata;
+use Drupal\Core\Url;
 use Drupal\joinup_group\Entity\GroupInterface;
 
 /**
@@ -18,10 +18,6 @@ function contact_information_token_info(): array {
   return [
     'tokens' => [
       'email-confirmer' => [
-        'confirmation-name' => [
-          'name' => t('Confirmation Name'),
-          'description' => t('The name to confirm.'),
-        ],
         'confirmation-entities' => [
           'name' => t('Contact information entities list'),
           'description' => t('Generates a list of entities with this contact information.'),
@@ -45,30 +41,54 @@ function contact_information_tokens(string $type, array $tokens, array $data, ar
   $confirmation = $data['email_confirmer_confirmation'];
 
   foreach ($tokens as $name => $original) {
-    switch ($name) {
-      case 'confirmation-name':
-        $replacements[$original] = $confirmation->getProperty('name');
-        break;
-
-      case 'confirmation-entities':
-        $entities = $confirmation->getProperty('entities') ?? [];
-        if (
-          $confirmation->getProperty('fake_entity') &&
-          ($group = \Drupal::routeMatch()->getParameter('rdf_entity')) &&
-          $group instanceof GroupInterface
-        ) {
-          $bundle_info = \Drupal::getContainer()->get('entity_type.bundle.info')->getBundleInfo($group->getEntityTypeId())[$group->bundle()];
-          $entities[] = ['#markup' => $bundle_info['label'] . ': ' . Link::fromTextAndUrl($group->label(), $group->toUrl('canonical', ['absolute' => TRUE]))->toString()];
-        }
-
-        $elements = [
-          '#theme' => 'item_list',
-          '#items' => $entities,
-        ];
-        $replacements[$original] = \Drupal::service('renderer')->renderPlain($elements);
-        break;
+    if ($name === 'confirmation-entities') {
+      $gids = $confirmation->getProperty('groups');
+      $groups = \Drupal::entityTypeManager()->getStorage('rdf_entity')->loadMultiple($gids);
+      $render_array = [
+        '#theme' => 'item_list',
+        '#items' => array_values(
+          array_map(
+            function (GroupInterface $group): array {
+              return [
+                '#type' => 'link',
+                '#url' => $group->toUrl()->setAbsolute(),
+                '#title' => $group->label(),
+                '#prefix' => "{$group->get('rid')->entity->label()}: ",
+              ];
+            },
+            $groups)
+        ),
+      ];
+      $replacements[$original] = \Drupal::service('renderer')->renderPlain($render_array);
+      break;
     }
   }
 
   return $replacements;
+}
+
+/**
+ * Implements hook_tokens_alter().
+ */
+function contact_information_tokens_alter(array &$replacements, array $context, BubbleableMetadata $bubbleable_metadata): void {
+  if ($context['type'] === 'email-confirmer' && isset($context['data']['email_confirmer_confirmation'])) {
+    if (isset($context['tokens']['confirmation-url'])) {
+      /** @var \Drupal\email_confirmer\EmailConfirmationInterface $confirmation */
+      $confirmation = $context['data']['email_confirmer_confirmation'];
+      $url = Url::fromRoute('entity.email_confirmer_confirmation.response_form', [
+        'email_confirmer_confirmation' => $confirmation->uuid(),
+        'hash' => $confirmation->getHash(),
+      ])
+        // The base URL is derived by the Symfony request handler from the
+        // global variables set by the web server, i.e. REQUEST_URI or similar.
+        // Since Behat tests are run from the command line this request context
+        // is not available and we need to set the base URL manually.
+        // @todo Remove this workaround once this is fixed in core.
+        // @see https://www.drupal.org/project/drupal/issues/2548095
+        ->setOption('base_url', $GLOBALS['base_url'])
+        ->setAbsolute()
+        ->toString();
+      $replacements[$context['tokens']['confirmation-url']] = $url;
+    }
+  }
 }

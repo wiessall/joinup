@@ -77,9 +77,9 @@ Feature: About this solution
       | http://nova.dk              |
       | https://innovation.nova.org |
     And I should not see the following links:
-      | ariel@nova.dk               |
-      | maiken@nova.dk              |
-      | peer@nova.dk                |
+      | ariel@nova.dk  |
+      | maiken@nova.dk |
+      | peer@nova.dk   |
 
     # Categorisation grey area.
     And I should see the text "Categorisation"
@@ -120,55 +120,35 @@ Feature: About this solution
 
   @terms @javascript @email
   Scenario: About page contact form
-    Given the following contacts:
-      | name                    | email                        | Website URL    |
-      | Elise Lucile            | elise@nova.dk                | http://nova.dk |
-    And owners:
-      | name                 | type                  |
-      | Rotterdam            | National authority    |
+    Given owner:
+      | name      | type               |
+      | Rotterdam | National authority |
     And user:
-      | Username    | Pally Rapamichael           |
-      | First name  | Pally                       |
-      | Family name | Rapamichael                 |
-      | E-mail      | p.papamichael@pally.de      |
+      | Username    | Pally Rapamichael      |
+      | First name  | Pally                  |
+      | Family name | Rapamichael            |
+      | E-mail      | p.papamichael@pally.de |
     And collection:
-      | title | Antibody Development |
+      | title | Antibody development |
       | state | validated            |
-    And solutions:
-      | title   | state     |
-      | Gelo    | validated |
     And solution:
       | title               | Six exclusion advantages                          |
       | description         | Separating molecules by weight.                   |
-      | logo                | logo.png                                          |
-      | banner              | banner.jpg                                        |
-      | contact information | Elise Lucile                                      |
-      | owner               | Rotterdam                                         |
       | state               | validated                                         |
-      | documentation       | text.pdf                                          |
-      | language            | Italian, Kallawaya                                |
       | topic               | Demography, E-inclusion                           |
-      | related solutions   | Gelo                                              |
+      | owner               | Rotterdam                                         |
       | solution type       | Non-binding Instrument, Service Discovery Service |
-      | spatial coverage    | Italy, Egypt                                      |
-      | status              | Under development                                 |
-      | collection          | Antibody Development                              |
+      | collection          | Antibody development                              |
 
     When I am logged in as a moderator
-    Then I go to the "Six exclusion advantages" solution
-    And I open the header local tasks menu
-    And I click "Edit" in the "Header" region
-    And I scroll "Contact information" into view
-    And I press "Add new" at the "Contact information" field
-    And I wait for AJAX to finish
+    And I go to the edit form of the "Six exclusion advantages" solution
     And I fill in "Name" with "Invisible Cat"
     And I fill in "E-mail" with "invisible.cat@xpto.com"
     And I press "Create contact information"
     And I press "Publish"
     Then I should see the success message "A new confirmation message has been sent to invisible.cat@xpto.com."
-    And the contact owner email sent to "invisible.cat@xpto.com" with subject "Joinup - Please validate your contact details" contains the following lines of text:
-      | text                                                                                                                                                                                                                                     |
-      | Dear Invisible Cat,                                                                                                                                                                                                                      |
+    And the email sent to "invisible.cat@xpto.com" with subject "Joinup - Please validate your contact details" contains the text:
+      | Dear Joinup user,                                                                                                                                                                                                                        |
       | Your email address invisible.cat@xpto.com is used as a contact detail for the following:                                                                                                                                                 |
       | Solution: Six exclusion advantages                                                                                                                                                                                                       |
       | To benefit from a dedicated form which will allow your users to get in touch with you in a quick, secure and privacy-friendly way, all you have to do is confirm your e-mail address by clicking on "Confirm your e-mail address" below. |
@@ -177,85 +157,87 @@ Feature: About this solution
       | If you think this action is not clear or not due, please contact Joinup Support at https://joinup.ec.europa.eu/contact.                                                                                                                  |
       | Best regards,                                                                                                                                                                                                                            |
       | The Joinup Team                                                                                                                                                                                                                          |
-    But I click the validate contact info email from the last email sent to "invisible.cat@xpto.com"
-    Then I should not see the text "Confirm invisible.cat@xpto.com"
+
+    When I click the validate contact info email from the last email sent to "invisible.cat@xpto.com"
     And I press "Send"
     Then I should see the success message "Email confirmation confirmed."
 
-    When I am not logged in
-    And I go to the homepage of the "Six exclusion advantages" solution
-    Then I should see the link "About"
-
-    When I click "About"
-    Then I should be on "/collection/antibody-development/solution/six-exclusion-advantages/about"
-    And I should see the text "Owner/Contact Information"
-    And I should see the link "Contact owner"
-    And I should not see the link "elise@nova.dk"
-    Then I click "Contact owner"
+    Given I am not logged in
+    When I go to the about page of "Six exclusion advantages"
+    Then I should see the text "Owner/Contact Information"
+    And I should see the link "Contact" in the "Content" region
+    Then I click "Contact" in the "Content" region
     And a modal should open
     And I should see the text "Email Contact" in the "Modal title"
     When I fill in "Your name" with "Jonny Example"
-    When I fill in "Your e-mail address" with "example@test.test"
-    When I fill in "Subject" with "New reclamation about Owner"
-    When I fill in "Message" with "This is reclamation test."
-    And I should see the button "Send e-mail"
-    Then I wait for the honeypot time limit to pass
+    And I fill in "Your e-mail address" with "jonnyk"
+    And I fill in "Subject" with "New reclamation about Owner"
+    And I fill in "Message" with "This is reclamation test."
+    And I wait for the honeypot time limit to pass
     And I press "Send e-mail"
+    Then I should see the error message "You must enter a valid e-mail address."
 
-    Then I should see the success message "Your message has been sent."
-    And the contact owner email sent to "invisible.cat@xpto.com" with subject "New reclamation about Owner" contains the following lines of text:
-      | text                               |
+    When I fill in "Your name" with "Jonny Example"
+    And I fill in "Your e-mail address" with "example@test.test"
+    And I fill in "Subject" with "New reclamation about Owner"
+    And I fill in "Message" with "This is reclamation test."
+    And I wait for the honeypot time limit to pass
+
+    When I press "Send e-mail"
+    Then the modal should be closed
+    And I should see the success message "Your message has been sent."
+    And I should be on "/collection/antibody-development/solution/six-exclusion-advantages/about"
+    And I should see the heading "About Six exclusion advantages"
+    And the email sent to "invisible.cat@xpto.com" with subject "New reclamation about Owner" contains the text:
       | Name: Jonny Example                |
       | Email: example@test.test           |
       | Message: This is reclamation test. |
 
     Given I am logged in as "Pally Rapamichael"
-    And I go to the homepage of the "Six exclusion advantages" solution
-    Then I click "About"
+    When I go to the about page of "Six exclusion advantages"
+    Then I should see the text "Owner/Contact Information"
+    And I should see the link "Contact" in the "Content" region
 
-    And I should see the text "Owner/Contact Information"
-    And I should see the link "Contact owner"
-    And I should not see the link "elise@nova.dk"
-
-    Then I click "Contact owner"
-    And a modal should open
+    When I click "Contact" in the "Content" region
+    Then a modal should open
     And I should see the text "Email Contact" in the "Modal title"
     When I fill in "Subject" with "New reclamation about solution"
-    When I fill in "Message" with "This is solution reclamation test."
+    And I fill in "Message" with "This is solution reclamation test."
     And I should see the button "Send e-mail"
-    Then I wait for the honeypot time limit to pass
-    And I press "Send e-mail"
+    And I wait for the honeypot time limit to pass
 
-    Then I should see the success message "Your message has been sent."
+    When I press "Send e-mail"
+    Then the modal should be closed
+    And I should see the success message "Your message has been sent."
     # Submitting the modal should not redirect anywhere - ISAICP-7290.
     And I should be on "/collection/antibody-development/solution/six-exclusion-advantages/about"
-    And the contact owner email sent to "invisible.cat@xpto.com" with subject "New reclamation about solution" contains the following lines of text:
-      | text                                        |
+    And the email sent to "invisible.cat@xpto.com" with subject "New reclamation about solution" contains the text:
       | Name: Pally Rapamichael                     |
       | Email: p.papamichael@pally.de               |
       | Message: This is solution reclamation test. |
 
-    When I am logged in as a moderator
-    Then I go to the "Six exclusion advantages" solution
-    And I open the header local tasks menu
-    And I click "Edit" in the "Header" region
-    And I scroll "Contact information" into view
+    Given I am logged in as a moderator
+    When I go to the edit form of the "Six exclusion advantages" solution
     And I press "Edit" in the "Invisible Cat" row
     And I press "Update contact information"
     And I press "Publish"
     Then I should not see the success message "A new confirmation message has been sent to invisible.cat@xpto.com."
 
-    When I open the header local tasks menu
-    And I click "Edit" in the "Header" region
-    And I scroll "Contact information" into view
+    When I go to the edit form of the "Six exclusion advantages" solution
     And I press "Edit" in the "Invisible Cat" row
     And I fill in "E-mail" with "invisible.cat.one@xpto.com"
     And I press "Update contact information"
-    And I press "Publish"
-    Then I should see the success message "A new confirmation message has been sent to invisible.cat.one@xpto.com."
-    And the contact owner email sent to "invisible.cat.one@xpto.com" with subject "Joinup - Please validate your contact details" contains the following lines of text:
-      | text                                                                                                                                                                                                                                     |
-      | Dear Invisible Cat,                                                                                                                                                                                                                      |
+
+    When I press "Add new" at the "Contact information" field
+    And I wait for AJAX to finish
+    And I fill in "Name" with "Elise Lucile"
+    And I fill in "E-mail" with "elise@nova.dk"
+    And I press "Create contact information"
+
+    When I press "Publish"
+    Then I should see the success message "New confirmation messages have been sent to elise@nova.dk, invisible.cat.one@xpto.com."
+    And the email sent to "invisible.cat.one@xpto.com" with subject "Joinup - Please validate your contact details" contains the text:
+      | Dear Joinup user,                                                                                                                                                                                                                        |
       | Your email address invisible.cat.one@xpto.com is used as a contact detail for the following:                                                                                                                                             |
       | Solution: Six exclusion advantages                                                                                                                                                                                                       |
       | To benefit from a dedicated form which will allow your users to get in touch with you in a quick, secure and privacy-friendly way, all you have to do is confirm your e-mail address by clicking on "Confirm your e-mail address" below. |
@@ -264,29 +246,39 @@ Feature: About this solution
       | If you think this action is not clear or not due, please contact Joinup Support at https://joinup.ec.europa.eu/contact.                                                                                                                  |
       | Best regards,                                                                                                                                                                                                                            |
       | The Joinup Team                                                                                                                                                                                                                          |
-    But I click the validate contact info email from the last email sent to "invisible.cat.one@xpto.com"
-    Then I should not see the text "Confirm invisible.cat.one@xpto.com"
+    And the email sent to "elise@nova.dk" with subject "Joinup - Please validate your contact details" contains the text:
+      | Dear Joinup user,                                                                                                                                                                                                                        |
+      | Your email address elise@nova.dk is used as a contact detail for the following:                                                                                                                                                         |
+      | Solution: Six exclusion advantages                                                                                                                                                                                                       |
+      | To benefit from a dedicated form which will allow your users to get in touch with you in a quick, secure and privacy-friendly way, all you have to do is confirm your e-mail address by clicking on "Confirm your e-mail address" below. |
+      | If the link doesn't work, just copy this URL to your browser:                                                                                                                                                                            |
+      | Unless this step is completed, you will not be able to receive any messages from interested users or members.                                                                                                                            |
+      | If you think this action is not clear or not due, please contact Joinup Support at https://joinup.ec.europa.eu/contact.                                                                                                                  |
+      | Best regards,                                                                                                                                                                                                                            |
+      | The Joinup Team                                                                                                                                                                                                                          |
+
+    When I click the validate contact info email from the last email sent to "invisible.cat.one@xpto.com"
     And I press "Send"
     Then I should see the success message "Email confirmation confirmed."
 
-    # Check when submit form has an error.
-    Given I am an anonymous user
-    When I go to the homepage of the "Six exclusion advantages" solution
-    Then I click "About"
-    And I should see the text "Owner/Contact Information"
-    Then I click "Contact owner"
-    And a modal should open
-    And I should see the text "Email Contact" in the "Modal title"
-    When I fill in "Your name" with "Jonny K"
-    And I fill in "Your e-mail address" with "jonnyk"
-    And I fill in "Subject" with "Test form error"
-    And I fill in "Message" with "This is solution reclamation test."
-    Then I wait for the honeypot time limit to pass
-    And I press "Send e-mail"
-    And I should see the error message "You must enter a valid e-mail address."
-    Then I fill in "Your e-mail address" with "jonnyk@test.com"
-    And I wait for the honeypot time limit to pass
-    Then I press "Send e-mail"
-    And I should see the success message "Your message has been sent."
-    And I should be on "/collection/antibody-development/solution/six-exclusion-advantages/about"
-    And I should see the heading "About Six exclusion advantages"
+    When I go to the edit form of the "Six exclusion advantages" solution
+    And I press "Edit" in the "Elise Lucile" row
+    And I fill in "E-mail" with "elise@nova.com"
+    And I press "Update contact information"
+    And I press "Publish"
+
+    Then I should see the success message "A new confirmation message has been sent to elise@nova.com."
+    And the email sent to "elise@nova.com" with subject "Joinup - Please validate your contact details" contains the text:
+      | Dear Joinup user,                                                                                                                                                                                                                        |
+      | Your email address elise@nova.com is used as a contact detail for the following:                                                                                                                                                         |
+      | Solution: Six exclusion advantages                                                                                                                                                                                                       |
+      | To benefit from a dedicated form which will allow your users to get in touch with you in a quick, secure and privacy-friendly way, all you have to do is confirm your e-mail address by clicking on "Confirm your e-mail address" below. |
+      | If the link doesn't work, just copy this URL to your browser:                                                                                                                                                                            |
+      | Unless this step is completed, you will not be able to receive any messages from interested users or members.                                                                                                                            |
+      | If you think this action is not clear or not due, please contact Joinup Support at https://joinup.ec.europa.eu/contact.                                                                                                                  |
+      | Best regards,                                                                                                                                                                                                                            |
+      | The Joinup Team                                                                                                                                                                                                                          |
+
+    # These contact information have been created via UI.
+    But I delete the "Invisible Cat" contact information
+    And I delete the "Elise Lucile" contact information

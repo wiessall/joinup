@@ -77,7 +77,6 @@ Feature: Notification test for the collection transitions.
     And I fill in "Owner" with "NC for all"
     And I press "Propose"
     Then the email sent to "NC moderator" with subject "User NC proposed collection NC proposed new" contains the following lines of text:
-      | text                                                                               |
       | NC User has proposed collection "NC proposed new".                                 |
       | To approve or reject this proposal, please go to                                   |
       | If you think this action is not clear or not due, please contact Joinup Support at |
@@ -92,7 +91,6 @@ Feature: Notification test for the collection transitions.
     And I click "Edit" in the "Entity actions" region
     And I press "Propose"
     Then the email sent to "NC moderator" with subject "User NC proposed collection NC to propose" contains the following lines of text:
-      | text                                                                               |
       | NC Owner has proposed collection "NC to propose".                                  |
       | To approve or reject this proposal, please go to                                   |
       | If you think this action is not clear or not due, please contact Joinup Support at |
@@ -102,7 +100,6 @@ Feature: Notification test for the collection transitions.
     And I click "Edit" in the "Entity actions" region
     And I press "Request archival"
     Then the email sent to "NC moderator" with subject "User NC requested to archive collection NC to request archival" contains the following lines of text:
-      | text                                                                               |
       | NC Owner has requested to archive the collection "NC to request archival".         |
       | To approve or reject this request, please go to                                    |
       | If you think this action is not clear or not due, please contact Joinup Support at |
@@ -130,11 +127,9 @@ Feature: Notification test for the collection transitions.
     And I fill in "Title" with "NC to propose edit proposed"
     And I press "Propose"
     Then the email sent to "NC moderator" with subject "User NC proposed to edit collection NC to propose edit proposed" contains the following lines of text:
-      | text                                                                          |
       | NC Facilitator has proposed to edit collection "NC to propose edit proposed". |
       | To approve or reject this proposal, please go to                              |
     And the email sent to "NC owner" with subject "User NC proposed to edit collection NC to propose edit proposed" contains the following lines of text:
-      | text                                                                          |
       | NC Facilitator has proposed to edit collection "NC to propose edit proposed". |
       | To modify your collection, please go to                                       |
 
@@ -153,7 +148,6 @@ Feature: Notification test for the collection transitions.
     And I click "Edit" in the "Entity actions" region
     And I press "Publish"
     Then the email sent to "NC owner" with subject "Your request to edit collection NC to propose edit proposed has been approved." contains the following lines of text:
-      | text                                                                                  |
       | Your proposal to edit the collection "NC to propose edit proposed" has been accepted. |
       | You can verify the edited version of the collection at                                |
 
@@ -166,7 +160,6 @@ Feature: Notification test for the collection transitions.
     When I fill in "Motivation" with "It will not be archived."
     And I press "Publish"
     Then the email sent to "NC owner" with subject "Your request to archive collection NC to reject archival has been rejected" contains the following lines of text:
-      | text                                                                                      |
       | NC Moderator has rejected your request to archive the collection "NC to reject archival". |
       | The reason for rejection is: It will not be archived.                                     |
 

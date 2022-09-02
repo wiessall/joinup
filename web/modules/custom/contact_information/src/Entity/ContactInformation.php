@@ -4,11 +4,8 @@ declare(strict_types = 1);
 
 namespace Drupal\contact_information\Entity;
 
-use Drupal\Core\Entity\EntityStorageInterface;
-use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\joinup_bundle_class\JoinupBundleClassFieldAccessTrait;
 use Drupal\joinup_group\Entity\GroupInterface;
-use Drupal\joinup_group\JoinupGroupHelper;
 use Drupal\joinup_workflow\EntityWorkflowStateTrait;
 use Drupal\rdf_entity\Entity\Rdf;
 
@@ -31,62 +28,9 @@ class ContactInformation extends Rdf implements ContactInformationInterface {
    * {@inheritdoc}
    */
   public function getRelatedGroup(): ?GroupInterface {
-    // If this is a newly created contact information it cannot yet be
-    // associated with any groups. Only when the entity is saved it gets an ID
-    // which can be referenced by groups.
-    if ($this->isNew()) {
-      return NULL;
-    }
-
-    $ids = $this->getRelatedGroupsIds();
-
-    if (empty($ids)) {
-      return NULL;
-    }
-
-    $id = reset($ids);
-    $group = $this->entityTypeManager()->getStorage('rdf_entity')->load($id);
-    return $group instanceof GroupInterface ? $group : NULL;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getRelatedGroupsIds(): array {
-    $query = $this->entityTypeManager()->getStorage('rdf_entity')->getQuery();
-    $condition_or = $query->orConditionGroup();
-    // Contact entities are also referenced by asset releases but the same
-    // entity will also be referenced by the solution itself so there is no need
-    // to check them.
-    $condition_or->condition('field_ar_contact_information', $this->id());
-    $condition_or->condition('field_is_contact_information', $this->id());
-    $query->condition($condition_or);
-    // Due to the quirky way in which a SPARQL query is built, we will not only
-    // get the data that matches the fields we request, but also other data that
-    // references our entity with the RDF type `dcat#contactPoint`. The best way
-    // to get the data we need is to add an additional condition that limits the
-    // results on the target bundles. This will make sure only the graphs for
-    // collections and solutions are queried, instead of querying every possible
-    // graph.
-    $query->condition('rid', JoinupGroupHelper::GROUP_BUNDLES, 'IN');
-    return $query->execute();
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function postSave(EntityStorageInterface $storage, $update = TRUE): void {
-    parent::postSave($storage, $update);
-    $email_confirmer = \Drupal::service('email_confirmer');
-    /** @var \Drupal\Core\Field\FieldItemListInterface $field */
-    $field = $this->get('field_ci_email');
-    if (!$field->isEmpty() && !$email_confirmer->getConfirmation($field->value)) {
-      $email_confirmer->confirm($field->value, [
-        'name' => $this->label(),
-        'fake_entity' => TRUE,
-      ]);
-      \Drupal::messenger()->addStatus(new TranslatableMarkup('A new confirmation message has been sent to %mail.', ['%mail' => $field->value]));
-    }
+    /** @var \Drupal\joinup_group\Entity\GroupInterface|null $group */
+    $group = $this->get('related_group')->entity;
+    return $group;
   }
 
 }
