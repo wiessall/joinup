@@ -15,5 +15,4 @@ group_bundle: solution
 is_admin: null
 permissions:
   - 'request solution deletion'
-  - 'solution - solution_workflow - transition from validated to deletion_request'
 role_type: null

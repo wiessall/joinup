@@ -67,8 +67,6 @@ permissions:
   - 'propose collection rdf entity'
   - 'revert all revisions'
   - 'skip comment approval'
-  - 'solution - solution_workflow - transition from __new__ to draft'
-  - 'solution - solution_workflow - transition from __new__ to proposed'
   - 'transition group from __new__ to draft using the collection - collection_workflow workflow'
   - 'transition group from __new__ to draft using the solution - solution_workflow workflow'
   - 'transition group from __new__ to proposed using the collection - collection_workflow workflow'
