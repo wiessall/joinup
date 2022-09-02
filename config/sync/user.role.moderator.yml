@@ -150,7 +150,6 @@ permissions:
   - 'manage newsroom newsletter subscriptions'
   - 'manage solutions'
   - 'moderate entity parents'
-  - 'perform acceptance tasks'
   - 'reset developers_italia pipeline'
   - 'reset dpsi pipeline'
   - 'reset eu_sic pipeline'
