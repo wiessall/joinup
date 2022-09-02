@@ -1,0 +1,126 @@
+uuid: 313b188c-b729-4d01-a249-1d7ee3c5bf6b
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.carousel
+    - field.field.node.document.body
+    - field.field.node.document.field_comments
+    - field.field.node.document.field_document_logo
+    - field.field.node.document.field_document_publication_date
+    - field.field.node.document.field_document_spatial_coverage
+    - field.field.node.document.field_file
+    - field.field.node.document.field_keywords
+    - field.field.node.document.field_licence
+    - field.field.node.document.field_shared_in
+    - field.field.node.document.field_short_title
+    - field.field.node.document.field_site_featured
+    - field.field.node.document.field_state
+    - field.field.node.document.field_topic
+    - field.field.node.document.field_type
+    - field.field.node.document.og_audience
+    - node.type.document
+  module:
+    - field_group
+    - image
+    - layout_builder
+    - template_suggestion
+    - text
+    - user
+third_party_settings:
+  field_group:
+    group_categorisation:
+      children:
+        - field_licence
+        - field_type
+      label: Categorisation
+      parent_name: ''
+      region: hidden
+      weight: 3
+      format_type: html_element
+      format_settings:
+        classes: ''
+        id: ''
+        element: div
+        show_label: true
+        label_element: h3
+        attributes: ''
+        effect: none
+        speed: fast
+    group_attachment:
+      children:
+        - field_file
+      label: Attachment
+      parent_name: ''
+      region: hidden
+      weight: 8
+      format_type: html_element
+      format_settings:
+        classes: ''
+        id: ''
+        element: div
+        show_label: true
+        label_element: h3
+        attributes: ''
+        effect: none
+        speed: fast
+  layout_builder:
+    enabled: false
+    allow_custom: false
+_core:
+  default_config_hash: IBVftmfYLkfapLokxuyLrv1me4toJj5yidZu0ixGxQM
+id: node.document.carousel
+targetEntityType: node
+bundle: document
+mode: carousel
+content:
+  body:
+    type: text_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 2
+    region: content
+  field_document_logo:
+    type: image_url
+    label: hidden
+    settings:
+      image_style: ''
+    third_party_settings:
+      template_suggestion:
+        template_suggestion: ''
+    weight: 1
+    region: content
+  field_short_title:
+    type: string
+    label: hidden
+    settings:
+      link_to_entity: false
+    third_party_settings:
+      template_suggestion:
+        template_suggestion: no_wrappers
+    weight: 0
+    region: content
+hidden:
+  featured: true
+  field_comments: true
+  field_document_publication_date: true
+  field_document_spatial_coverage: true
+  field_file: true
+  field_keywords: true
+  field_licence: true
+  field_shared_in: true
+  field_site_featured: true
+  field_state: true
+  field_topic: true
+  field_type: true
+  langcode: true
+  links: true
+  og_audience: true
+  pinned_in: true
+  published_at: true
+  read_more: true
+  report: true
+  search_api_excerpt: true
+  share_link: true
+  visit_count: true
