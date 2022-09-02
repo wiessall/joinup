@@ -58,6 +58,31 @@
       }
     }
   }
+  &--carousel {
+    &__action {
+      position: absolute;
+      line-height: 1;
+      // Crap properties to get the link rendered at requested place
+      top: 17%;
+      left: 70%;
+      @include media-breakpoint-up(sm) {
+        top: 12%;
+        left: 65%;
+      }
+      @include media-breakpoint-up(md) {
+        top: 15%;
+        left: 65%;
+      }
+      @include media-breakpoint-up(lg) {
+        top: 22%;
+        left: 62%;
+      }
+      @include media-breakpoint-up(xl) {
+        top: 20%;
+        left: 60%;
+      }
+    }
+  }
   .video-embed-field-responsive-video {
     iframe {
       border-radius: $spacer; // 16px

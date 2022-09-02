@@ -52,7 +52,9 @@
   {% set classes = classes|merge(content.paragraph_row_them['#value']) %}
 {% endif %}
 
-{{ content.paragraph_carousel_action }}
+<div class="paragraph--carousel__action">
+  {{ content.paragraph_carousel_action }}
+</div>
 
 <div{{ attributes.addClass(classes) }}>
   <div class="glide__outer">
