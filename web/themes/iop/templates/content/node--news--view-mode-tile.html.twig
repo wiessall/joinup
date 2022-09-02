@@ -15,7 +15,7 @@
   set title_classes = [
   'h6',
   'text-center',
-  'glide__title',
+  'glide__slide-title',
 ]
 %}
 <article{{ attributes.addClass(classes) }}>
@@ -26,11 +26,11 @@
     {# {% if content.field_news_logo is not empty %}
       {{ content.field_news_logo }}
     {% else %} #}
-      <img class="img-fluid glide__image" src="/web/sites/default/files/news/logo/2022-08/TWITTER POST 1024x512px Miguel Interview (1).jpg">
+      <img class="img-fluid glide__slide-image" src="/web/sites/default/files/news/logo/2022-08/TWITTER POST 1024x512px Miguel Interview (1).jpg">
     {# {% endif %} #}
     {% if label %}
       <h1{{ title_attributes.addClass(title_classes) }}>
-        <a class="text-light fw-normal" href="{{ url }}" rel="bookmark">{{ label }}</a>
+        <a class="fw-normal" href="{{ url }}" rel="bookmark">{{ label }}</a>
       </h1>
     {% endif %}
 
