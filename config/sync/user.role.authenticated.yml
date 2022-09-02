@@ -130,7 +130,6 @@ permissions:
   - 'transition own node news from validated to proposed using the community_content - node:pre_moderated workflow'
   - 'transition own node news from validated to validated using the community_content - node:post_moderated workflow'
   - 'unflag subscribe_discussions'
-  - 'update own document content'
   - 'update paragraph content accordion'
   - 'update paragraph content accordion_item'
   - 'update paragraph content content_listing'
