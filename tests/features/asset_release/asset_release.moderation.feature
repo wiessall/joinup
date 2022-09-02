@@ -52,7 +52,7 @@ Feature: Asset release moderation
     And I should not see the following warning messages:
       | warning messages                                                                     |
       | You are viewing the published version. To view the latest draft version, click here. |
-    And 1 e-mails should have been sent
+    And 0 e-mails should have been sent
 
     When I click "Edit" in the "Entity actions" region
     And I should see the workflow buttons "Update, Save as draft"
@@ -106,7 +106,6 @@ Feature: Asset release moderation
       | warning messages                                                                     |
       | You are viewing the published version. To view the latest draft version, click here. |
     And the email sent to "Bonnie Holloway" with subject "Joinup: Modification of a release of your solution has been requested" contains the following lines of text:
-      | text                                                                                                                  |
       | the Joinup moderation team requires editing the release Release, v1 of the solution Dark Ship due to I don't like it. |
       | If you think this action is not clear or not due, please contact Joinup Support at                                    |
     And the following email should have been sent:

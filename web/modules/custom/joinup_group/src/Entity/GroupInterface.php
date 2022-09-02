@@ -276,4 +276,12 @@ interface GroupInterface extends RdfInterface, LogoInterface, ShortIdInterface, 
    */
   public function getMemberCount(array $states = [OgMembershipInterface::STATE_ACTIVE]): int;
 
+  /**
+   * Returns the contact information field name.
+   *
+   * @return string
+   *   The contact information field name.
+   */
+  public function getContactInformationFieldName(): string;
+
 }

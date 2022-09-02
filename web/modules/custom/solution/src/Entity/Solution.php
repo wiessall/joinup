@@ -245,4 +245,11 @@ class Solution extends Rdf implements SolutionInterface {
     return Cache::mergeTags(parent::getCacheTagsToInvalidate(), $tags);
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  public function getContactInformationFieldName(): string {
+    return 'field_is_contact_information';
+  }
+
 }

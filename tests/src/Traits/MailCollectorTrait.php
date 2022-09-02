@@ -171,7 +171,7 @@ trait MailCollectorTrait {
         continue;
       }
 
-      $link = str_replace(']', '', $match[0]);
+      $link = strpos($pattern, '?<url>') === FALSE ? $match[0] : $match['url'];
       $this->visitPath($link);
       return;
     }

@@ -5,15 +5,14 @@ declare(strict_types = 1);
 namespace Drupal\joinup\Context;
 
 use Behat\Gherkin\Node\TableNode;
-use Drupal\Component\Render\MarkupInterface;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\joinup\Traits\AliasTranslatorTrait;
 use Drupal\joinup\Traits\MailCollectorTrait;
 use Drupal\joinup\Traits\RdfEntityTrait;
 use Drupal\joinup\Traits\SearchTrait;
+use Drupal\joinup\Traits\TestingEntitiesTrait;
 use Drupal\joinup\Traits\UserTrait;
 use Drupal\rdf_entity\RdfInterface;
-use PHPUnit\Framework\Assert;
 
 /**
  * Behat step definitions for testing contact information entities.
@@ -21,17 +20,11 @@ use PHPUnit\Framework\Assert;
 class ContactInformationContext extends RawDrupalContext {
 
   use AliasTranslatorTrait;
-  use RdfEntityTrait;
   use MailCollectorTrait;
+  use RdfEntityTrait;
   use SearchTrait;
+  use TestingEntitiesTrait;
   use UserTrait;
-
-  /**
-   * Test contact information rdf entities.
-   *
-   * @var \Drupal\rdf_entity\Entity\Rdf[]
-   */
-  protected $contactInformations = [];
 
   /**
    * Navigates to the canonical page display of a contact information entity.
@@ -138,28 +131,6 @@ class ContactInformationContext extends RawDrupalContext {
   }
 
   /**
-   * Remove any created contact information entities.
-   *
-   * @AfterScenario
-   */
-  public function cleanContactInformationEntities(): void {
-    if (empty($this->contactInformations)) {
-      return;
-    }
-
-    // Since we might be cleaning up many informations, temporarily disable the
-    // feature to commit the index after every query.
-    $this->disableCommitOnUpdate();
-
-    foreach ($this->contactInformations as $entity) {
-      $entity->skip_notification = TRUE;
-      $entity->delete();
-    }
-    $this->contactInformations = [];
-    $this->enableCommitOnUpdate();
-  }
-
-  /**
    * Creates a contact information from the given property and field data.
    *
    * @param array $values
@@ -178,7 +149,7 @@ class ContactInformationContext extends RawDrupalContext {
     }
 
     $entity = $this->createRdfEntity('contact_information', $this->parseRdfEntityFields($values));
-    $this->contactInformations[$entity->id()] = $entity;
+    $this->entities['rdf_entity'][$entity->id()] = $entity;
 
     return $entity;
   }
@@ -201,45 +172,6 @@ class ContactInformationContext extends RawDrupalContext {
   }
 
   /**
-   * Asserts contact owner email has been sent and contains some pieces of text.
-   *
-   * @param string $email
-   *   The recipient E-mail address.
-   * @param string $subject
-   *   The subject of the email.
-   * @param \Behat\Gherkin\Node\TableNode $table
-   *   The mail data table.
-   *
-   * @throws \Exception
-   *   Throws an exception when a parameter is not the expected one.
-   *
-   * @Then the contact owner email sent to :email with subject :subject contains the( following lines of) text:
-   */
-  public function assertContactOwnerEmailSentAndContainsText(string $email, string $subject, TableNode $table): void {
-    $lines_of_text = $table->getColumnsHash();
-    $mails = $this->getEmailsBySubjectAndMail($subject, $email);
-    $email_found = FALSE;
-    foreach ($mails as $mail) {
-      $mail_body = ($mail['body'] instanceof MarkupInterface) ?
-        $this->formatMailBodyMarkup($mail['body']) :
-        $this->formatMailBodyText($mail['body']);
-
-      foreach ($lines_of_text as $line_of_text) {
-        $text = $line_of_text['text'];
-        if (strpos($mail_body, $text) === FALSE) {
-          continue 2;
-        }
-      }
-
-      // We found a match. Stop searching.
-      $email_found = TRUE;
-      break;
-    }
-
-    Assert::assertTrue($email_found, "Did not find expected email to '$email' with subject '$subject'.");
-  }
-
-  /**
    * Clicks the validate contact info link found in an email.
    *
    * @param string $mail
@@ -251,19 +183,10 @@ class ContactInformationContext extends RawDrupalContext {
    * @When I click the validate contact info email from the last email sent to :mail
    */
   public function clickValidateContactInfoInEmail(string $mail): void {
-    $pattern = '#https?://[^/].*/email-confirmer/reply/[^/].*/.*#';
+    $pattern = '#\[(?<url>https?://[^/].*' . base_path() . 'email-confirmer/reply/[^/].*/[^]].*)\]#';
     $no_mail_message = "No email was sent to $mail containing a validate contact info link.";
     $no_match_message = "The email sent to $mail did not contain a valid validate contact info link.";
     $this->assertMailLinkMatchingPattern($pattern, $mail, $no_mail_message, $no_match_message, 'confirmation_request');
-  }
-
-  /**
-   * Ensures that there are no pending email confirmation requests.
-   *
-   * @Given there are no pending email confirmation requests
-   */
-  public function givenNoPendingEmailConfirmations(): void {
-    \Drupal::database()->delete('email_confirmer_confirmation')->execute();
   }
 
 }

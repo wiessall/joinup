@@ -38,12 +38,10 @@ trait TestingEntitiesTrait {
     // feature to commit the index after every query.
     $this->disableCommitOnUpdate();
 
-    foreach ($this->entities as $entities) {
+    foreach ($this->entities as $entity_type_id => $entities) {
       if (!empty($entities)) {
-        foreach ($entities as $entity) {
-          $entity->skip_notification = TRUE;
-          @$entity->delete();
-        }
+        $storage = \Drupal::entityTypeManager()->getStorage($entity_type_id);
+        $storage->delete($storage->loadMultiple(array_keys($entities)));
       }
     }
     $this->entities = [];

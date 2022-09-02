@@ -9,6 +9,7 @@ dependencies:
   - 'drupal:language'
   - 'drupal:link'
   - 'drupal:text'
+  - 'email_confirmer:email_confirmer'
   - 'joinup:joinup_core'
   - 'joinup:joinup_workflow'
   - 'rdf_entity:rdf_entity'
