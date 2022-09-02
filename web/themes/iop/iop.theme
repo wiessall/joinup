@@ -7,6 +7,8 @@
 
 declare(strict_types = 1);
 
+use Drupal\joinup_bundle_class\LogoInterface;
+
 /**
  * Implements hook_preprocess_HOOK() for html.html.twig.
  */
@@ -39,6 +41,28 @@ function iop_preprocess(array &$variables): void {
  */
 function iop_preprocess_paragraph(array &$variables): void {
   $variables['#attached']['library'][] = 'iop/paragraph';
+}
+
+/**
+ * Implements hook_preprocess_HOOK().
+ */
+function iop_preprocess_node__carousel(array &$variables): void {
+  /** @var \Drupal\node\NodeInterface $node */
+  $node = $variables['node'];
+  if (($node instanceof LogoInterface) && $logo = $node->getLogoAsFile()) {
+    $variables['logo_url'] = \Drupal::getContainer()->get('file_url_generator')->generateAbsoluteString($logo->getFileUri());
+  }
+}
+
+/**
+ * Implements hook_preprocess_HOOK().
+ */
+function iop_preprocess_rdf_entity__carousel(array &$variables): void {
+  /** @var \Drupal\rdf_entity\RdfInterface $entity */
+  $entity = $variables['rdf_entity'];
+  if (($entity instanceof LogoInterface) && $logo = $entity->getLogoAsFile()) {
+    $variables['logo_url'] = \Drupal::getContainer()->get('file_url_generator')->generateAbsoluteString($logo->getFileUri());
+  }
 }
 
 /**

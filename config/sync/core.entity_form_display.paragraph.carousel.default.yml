@@ -4,9 +4,11 @@ status: true
 dependencies:
   config:
     - field.field.paragraph.carousel.content_listing
+    - field.field.paragraph.carousel.paragraph_carousel_action
     - paragraphs.paragraphs_type.carousel
   module:
     - custom_page
+    - link
 id: paragraph.carousel.default
 targetEntityType: paragraph
 bundle: carousel
@@ -14,10 +16,18 @@ mode: default
 content:
   content_listing:
     type: search_api_field_custom_page
-    weight: 0
+    weight: 1
     region: content
     settings:
       query_builder: false
+    third_party_settings: {  }
+  paragraph_carousel_action:
+    type: link_default
+    weight: 0
+    region: content
+    settings:
+      placeholder_url: ''
+      placeholder_title: ''
     third_party_settings: {  }
 hidden:
   created: true
