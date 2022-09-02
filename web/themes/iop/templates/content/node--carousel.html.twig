@@ -85,20 +85,48 @@
   'glide__slide-title',
 ]
 %}
+{% if node.bundle is same as 'news' %}
+  {% set icon = 'newspaper' %}
+  {% set logo = content.field_news_logo %}
+{% elseif node.bundle is same as 'event' %}
+  {% set icon = 'calendar3' %}
+  {% set logo = content.field_event_logo %}
+{% elseif node.bundle is same as 'custom_page' %}
+  {% set icon = 'file-earmark-richtext' %}
+  {% set logo = content.field_custom_page_logo %}
+{% endif %}
 <article{{ attributes.addClass(classes) }}>
   {{ title_prefix }}
   {{ title_suffix }}
 
   {% block content %}
-    <img class="img-fluid glide__slide-image" src="/web/sites/default/files/news/logo/2022-08/TWITTER POST 1024x512px Miguel Interview (1).jpg">
-    <div{{ content_attributes.addClass('glide__slide-body') }}>
-      {# @todo: Preprocess the text to be rendered here instead of all these filters #}
-      {% set text = content.field_paragraphs_body|render|striptags|trim %}
-      {{ (text|length > 450 ? text|slice(0, 451)|split(' ')|slice(0, -1)|join(' ') ~ '&hellip;' : text)|raw }}
-      <div>
-        <a class="glide__slide-cta" href="{{ url }}">{{ 'Learn more'|t }}</a>
+    {# @todo: cleaner way to check for 'logo'? #}
+    {% if logo["#items"] is not empty %}
+      <figure class="glide__slide-figure">
+        {{ logo }}
+      </figure>
+    {% else %}
+      <figure class="glide__slide-figure">
+        <svg class="glide__slide-svg">
+          <use xlink:href="{{ bcl_icon_path }}#{{ icon }}"></use>
+        </svg>
+      </figure>
+    {% endif %}
+    {% if node.bundle in ['news', 'event'] %}
+      <h1{{ title_attributes.addClass(title_classes) }}>
+        <a class="fw-normal" href="{{ url }}" rel="bookmark">{{ label }}</a>
+      </h1>
+    {% elseif node.bundle is same as 'custom_page' %}
+      <div class="glide__slide-body">
+        <div class="glide__slide-text">
+          {# @todo: Preprocess the text to be rendered here instead of all these filters #}
+          {% set text = content.field_paragraphs_body|render|striptags|trim %}
+          {{ (text|length > 450 ? text|slice(0, 451)|split(' ')|slice(0, -1)|join(' ') ~ '&hellip;' : text)|raw }}
+        </div>
+        <div>
+          <a class="glide__slide-cta" href="{{ url }}">{{ 'Learn more'|t }}</a>
+        </div>
       </div>
-    </div>
+    {% endif %}
   {% endblock %}
-
 </article>

@@ -15,21 +15,77 @@
 }
 .glide__slide {
   transition: transform .1s ease;
-  &-image {
+  &-figure {
     width: 100%;
+    padding-top: 51.9%; // Trick to set element's ratio based on width
+    position: relative;
     border-radius: $spacer; // 16px
     pointer-events: none; // Disable dragging to avoid swipe/drag clashes
     border: 2px solid transparent;
+    overflow: hidden;
     background: linear-gradient($primary, $primary) padding-box, $gradient border-box;
-    margin-bottom: $spacer; // 16px
+    @include media-breakpoint-up(md) {
+      margin-bottom: $spacer * 2; // 32px
+    }
+    img {
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+  }
+  &-svg {
+    position: absolute;
+    color: $gray-300;
+    width: 30%;
+    left: 35%;
+    height: 60%;
+    top: 20%;
   }
   &-title {
     display: none;
     height: $spacer * 2.75; // Hold space to avoid vertical shift when sliding between slides with different height
+    @include media-breakpoint-up(md) {
+      height: $spacer * 2.5; // Hold space to avoid vertical shift when sliding between slides with different height
+    }
   }
   &-body {
     display: none;
-    height: $spacer * 16; // Hold space to avoid vertical shift when sliding between slides with different height
+    // Hold space to avoid vertical shift when sliding between slides with different height
+    height: calc(13 * 1em * 1.5 + 3.5rem); // 13 lines * font size * line-height + action-link height
+    @include media-breakpoint-up(sm) {
+      height: calc(7 * 1em * 1.5 + 3.5rem); // 7 lines * font size * line-height + action-link height
+    }
+    @include media-breakpoint-up(md) {
+      // Properties below ensure the text width matches the scaled-up active image
+      margin-right: $spacer * -1.25; // -20px
+      margin-left: $spacer * -1.25; // -20px
+    }
+    @include media-breakpoint-up(lg) {
+      margin-right: $spacer * -1.75; // -28px
+      margin-left: $spacer * -1.75; // -28px
+    }
+    @include media-breakpoint-up(xl) {
+      margin-right: $spacer * -2.25; // -36px
+      margin-left: $spacer * -2.25; // -36px
+    }
+    @include media-breakpoint-up(xxl) {
+      margin-right: $spacer * -2.5; // -40px
+      margin-left: $spacer * -2.5; // -40px
+    }
+  }
+  &-text {
+    margin-top: $spacer * .75; // 12px
+    // Prevent text using more than 13 lines
+    display: -webkit-box;
+    -webkit-line-clamp: 13;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    @include media-breakpoint-up(sm) {
+      -webkit-line-clamp: 7; // Prevent text using more than 7 lines
+    }
+    @include media-breakpoint-up(md) {
+      margin-top: $spacer; // 16px
+    }
   }
   &-cta {
     display: inline-block;
@@ -63,31 +119,13 @@
     }
     .glide__slide-body {
       display: block;
-      margin-top: $spacer * .75; // 12px
-      @include media-breakpoint-up(md) {
-        margin-top: $spacer; // 16px
-        margin-right: $spacer * -1.25; // -20px
-        margin-left: $spacer * -1.25; // -20px
-      }
-      @include media-breakpoint-up(lg) {
-        margin-right: $spacer * -1.75; // -28px
-        margin-left: $spacer * -1.75; // -28px
-      }
-      @include media-breakpoint-up(xl) {
-        margin-right: $spacer * -2.25; // -36px
-        margin-left: $spacer * -2.25; // -36px
-      }
-      @include media-breakpoint-up(xxl) {
-        margin-right: $spacer * -2.5; // -40px
-        margin-left: $spacer * -2.5; // -40px
-      }
     }
   }
   &:not(.glide__slide--active) {
     opacity: .5;
   }
   &--active {
-    .glide__slide-image {
+    .glide__slide-figure {
       @include media-breakpoint-up(md) {
         transform: scale(1.2);
       }
