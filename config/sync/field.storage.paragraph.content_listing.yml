@@ -18,17 +18,17 @@ settings:
   facet_regions: {  }
   view_modes:
     'entity:node':
-      custom_page: explore_item
-      discussion: explore_item
-      document: explore_item
-      event: view_mode_tile
-      news: view_mode_tile
-      tallinn_report: explore_item
-      video: explore_item
+      custom_page: carousel
+      discussion: carousel
+      document: carousel
+      event: carousel
+      news: carousel
+      tallinn_report: carousel
+      video: carousel
     'entity:rdf_entity':
-      asset_distribution: explore_item
-      asset_release: explore_item
-      collection: explore_item
+      asset_distribution: carousel
+      asset_release: carousel
+      collection: carousel
       licence: eif_perspective
       solution: eif_perspective
       spdx_licence: eif_perspective
