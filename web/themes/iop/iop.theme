@@ -44,28 +44,6 @@ function iop_preprocess_paragraph(array &$variables): void {
 }
 
 /**
- * Implements hook_preprocess_HOOK().
- */
-function iop_preprocess_node__carousel(array &$variables): void {
-  /** @var \Drupal\node\NodeInterface $node */
-  $node = $variables['node'];
-  if (($node instanceof LogoInterface) && $logo = $node->getLogoAsFile()) {
-    $variables['logo_url'] = \Drupal::getContainer()->get('file_url_generator')->generateAbsoluteString($logo->getFileUri());
-  }
-}
-
-/**
- * Implements hook_preprocess_HOOK().
- */
-function iop_preprocess_rdf_entity__carousel(array &$variables): void {
-  /** @var \Drupal\rdf_entity\RdfInterface $entity */
-  $entity = $variables['rdf_entity'];
-  if (($entity instanceof LogoInterface) && $logo = $entity->getLogoAsFile()) {
-    $variables['logo_url'] = \Drupal::getContainer()->get('file_url_generator')->generateAbsoluteString($logo->getFileUri());
-  }
-}
-
-/**
  * Implements hook_preprocess_HOOK() for paragraph__image.html.twig.
  */
 function iop_preprocess_paragraph__image(array &$variables): void {
