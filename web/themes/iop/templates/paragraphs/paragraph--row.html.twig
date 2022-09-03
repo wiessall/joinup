@@ -49,16 +49,6 @@
   'row',
 ] %}
 
-{# Merges Background field with classes. #}
-{% set background_field = content.paragraph_row_theme|render %}
-{% if background_field %}
-  {# @todo: This might not work. Fix it. #}
-  {% set classes = classes|merge("row-theme--" ~ content.paragraph_row_theme['#value']) %}
-{% endif %}
-{% if row_background %}
-  <div{{ attributes.addClass(classes) }} style="background-image: url('{{ row_background }}');">
-{% else %}
-  <div{{ attributes.addClass(classes) }}>
-{% endif %}
+<div{{ attributes.addClass(classes) }}>
   {{ content }}
 </div>
