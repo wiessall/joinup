@@ -1,0 +1,78 @@
+.paragraph {
+  .video-embed-field-responsive-video {
+    iframe {
+      border-radius: $spacer; // 16px
+    }
+  }
+  // Backgrounds and font-color
+  &--dark,
+  &--dark-to-light,
+  &--dark-banner,
+  &--light-to-dark,
+  &--light-wave {
+    position: relative;
+    &::before {
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: -1;
+      display: block;
+      width: 100vw;
+      height: 100%;
+      content: "";
+      @include media-breakpoint-up(sm) {
+        left: calc(-50vw + 270px);
+      }
+      @include media-breakpoint-up(md) {
+        left: calc(-50vw + 360px);
+      }
+      @include media-breakpoint-up(lg) {
+        left: calc(-50vw + 480px);
+      }
+      @include media-breakpoint-up(xl) {
+        left: calc(-50vw + 570px);
+      }
+      @include media-breakpoint-up(xxl) {
+        left: calc(-50vw + 660px);
+      }
+    }
+  }
+  &--dark,
+  &--dark-banner {
+    color: $white;
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6,
+    a {
+      color: $white;
+    }
+    &::before {
+      background-color: $darkblue;
+    }
+  }
+  &--dark-to-light {
+    color: $white;
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6,
+    a {
+      color: $white;
+    }
+    &::before {
+      background-color: $darkblue;
+    }
+  }
+  &--light-to-dark,
+  &--light-wave {
+    color: $black;
+    &::before {
+      background-color: $white;
+    }
+  }
+}

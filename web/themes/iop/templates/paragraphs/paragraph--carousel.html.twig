@@ -36,10 +36,9 @@
  * @ingroup themeable
  */
 #}
-{{ attach_library('iop/carousel') }}
 
-{# The template default set classes. #}
-{# Sets Paragraph ID as class. #}
+{{ attach_library('iop/paragraph--carousel') }}
+
 {% set classes = [
   'paragraph',
   'paragraph--' ~ paragraph.bundle|clean_class,

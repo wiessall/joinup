@@ -40,8 +40,8 @@
  */
 #}
 
-{# The template default set classes. #}
-{# Sets Paragraph ID as class. #}
+{{ attach_library('iop/paragraph--row') }}
+
 {% set classes = [
   'paragraph',
   'paragraph--' ~ paragraph.bundle|clean_class,
