@@ -27,13 +27,21 @@
   }
 }
 .glide {
+  &__outer {
+    // On small devices, slides adjacent to the active must be visible
+    @include media-breakpoint-between(xs, md) {
+      overflow: hidden;
+      margin: 0 $spacer * -.75;
+    }
+  }
   &__track {
     @include media-breakpoint-between(xs, sm) {
       width: 80%;
       margin-left: 10%;
     }
+    // On small devices, slides adjacent to the active must be visible
     @include media-breakpoint-between(xs, md) {
-      overflow: visible!important; // On small devices, adjacent slides must be visible
+      overflow: visible!important;
     }
   }
   &__slides {
