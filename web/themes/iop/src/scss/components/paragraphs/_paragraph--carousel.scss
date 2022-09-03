@@ -1,15 +1,18 @@
 .paragraph--carousel {
   &__action {
     position: absolute;
+    font-size: .75rem;
     line-height: 1;
     // Crap properties to get the link rendered at requested place
     top: 17%;
     left: 70%;
     @include media-breakpoint-up(sm) {
+      font-size: .875rem;
       top: 12%;
       left: 65%;
     }
     @include media-breakpoint-up(md) {
+      font-size: 1rem;
       top: 15%;
       left: 65%;
     }
