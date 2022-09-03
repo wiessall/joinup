@@ -21,6 +21,9 @@
       top: 20%;
       left: 60%;
     }
+    a:hover:visited {
+      text-decoration-color: $white!important; // Prevent purple underline
+    }
   }
 }
 .glide {
@@ -73,6 +76,9 @@
         height: $spacer * 2.75; // Hold space to avoid vertical shift when sliding between slides with different height
         @include media-breakpoint-up(md) {
           height: $spacer * 2.5; // Hold space to avoid vertical shift when sliding between slides with different height
+        }
+        a:hover:visited {
+          text-decoration-color: $white!important; // Prevent purple underline
         }
       }
       &__body {
