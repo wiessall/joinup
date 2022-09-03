@@ -47,6 +47,51 @@ module.exports = {
         sourceMap: "file",
       },
     },
+    {
+      entry: path.resolve(
+        outputFolder,
+        "src/scss/paragraph--call-to-action.scss"
+      ),
+      dest: path.resolve(
+        outputFolder,
+        "assets/css/paragraph--call-to-action.min.css"
+      ),
+      options: {
+        minify: true,
+        includePaths,
+        sourceMap: "file",
+      },
+    },
+    {
+      entry: path.resolve(outputFolder, "src/scss/paragraph--carousel.scss"),
+      dest: path.resolve(
+        outputFolder,
+        "assets/css/paragraph--carousel.min.css"
+      ),
+      options: {
+        minify: true,
+        includePaths,
+        sourceMap: "file",
+      },
+    },
+    {
+      entry: path.resolve(outputFolder, "src/scss/paragraph--image.scss"),
+      dest: path.resolve(outputFolder, "assets/css/paragraph--image.min.css"),
+      options: {
+        minify: true,
+        includePaths,
+        sourceMap: "file",
+      },
+    },
+    {
+      entry: path.resolve(outputFolder, "src/scss/paragraph--row.scss"),
+      dest: path.resolve(outputFolder, "assets/css/paragraph--row.min.css"),
+      options: {
+        minify: true,
+        includePaths,
+        sourceMap: "file",
+      },
+    },
     // Theme
     {
       entry: path.resolve(outputFolder, "src/scss/theme.scss"),
@@ -61,16 +106,6 @@ module.exports = {
     {
       entry: path.resolve(outputFolder, "src/scss/landing-page.scss"),
       dest: path.resolve(outputFolder, "assets/css/landing-page.min.css"),
-      options: {
-        minify: true,
-        includePaths,
-        sourceMap: "file",
-      },
-    },
-    // Spare components
-    {
-      entry: path.resolve(outputFolder, "src/scss/carousel.scss"),
-      dest: path.resolve(outputFolder, "assets/css/carousel.min.css"),
       options: {
         minify: true,
         includePaths,
