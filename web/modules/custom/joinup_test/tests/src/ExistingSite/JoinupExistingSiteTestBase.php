@@ -6,8 +6,8 @@ namespace Drupal\Tests\joinup_test\ExistingSite;
 
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\State\StateInterface;
-use Drupal\joinup\Traits\AntibotTrait;
 use Drupal\Tests\joinup_test\Traits\RdfEntityCreationTrait;
+use Drupal\joinup\Traits\AntibotTrait;
 use weitzman\DrupalTestTraits\ExistingSiteBase;
 
 /**

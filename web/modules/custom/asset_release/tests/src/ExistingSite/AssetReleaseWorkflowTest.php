@@ -225,7 +225,7 @@ class AssetReleaseWorkflowTest extends JoinupWorkflowExistingSiteTestBase {
    *    ['user1', 'expected_result'],
    *    ['user2', 'expected_result'],
    * ];
-   * @code
+   * @endcode
    * The user variable represents the variable defined in the test.
    * Only two parent states need to be tested as the expected result might
    * differ depending on whether the parent is published or not.
@@ -267,7 +267,7 @@ class AssetReleaseWorkflowTest extends JoinupWorkflowExistingSiteTestBase {
    *     ],
    *   ],
    * ];
-   * @code
+   * @endcode
    * Only two parent states need to be tested as the expected result might
    * differ depending on whether the parent is published or not.
    *
@@ -404,7 +404,7 @@ class AssetReleaseWorkflowTest extends JoinupWorkflowExistingSiteTestBase {
    *     ],
    *   ],
    * ];
-   * @code
+   * @endcode
    * There can be multiple transitions that can lead to a specific state, so
    * the check is being done on allowed transitions.
    *
