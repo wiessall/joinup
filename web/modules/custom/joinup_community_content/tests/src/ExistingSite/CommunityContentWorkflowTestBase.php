@@ -5,6 +5,7 @@ declare(strict_types = 1);
 namespace Drupal\Tests\joinup_community_content\ExistingSite;
 
 use Drupal\Core\Session\AnonymousUserSession;
+use Drupal\Tests\joinup_test\Traits\NodeCreationTrait;
 use Drupal\Tests\joinup_workflow\ExistingSite\JoinupWorkflowExistingSiteTestBase;
 use Drupal\joinup_group\ContentCreationOptions;
 use Drupal\joinup_group\Entity\GroupInterface;
@@ -13,7 +14,6 @@ use Drupal\og\Entity\OgRole;
 use Drupal\og\OgGroupAudienceHelper;
 use Drupal\og\OgMembershipInterface;
 use Drupal\rdf_entity\RdfInterface;
-use Drupal\Tests\joinup_test\Traits\NodeCreationTrait;
 
 /**
  * Base setup for a Joinup workflow test for community content.
@@ -322,7 +322,7 @@ abstract class CommunityContentWorkflowTestBase extends JoinupWorkflowExistingSi
    *     ],
    *   ],
    * ];
-   * @code
+   * @endcode
    * The user variable represents the variable defined in the test.
    * No parent state needs to be checked as it does not affect the possibility
    * to create document.
@@ -539,7 +539,7 @@ abstract class CommunityContentWorkflowTestBase extends JoinupWorkflowExistingSi
    *     ],
    *   ],
    * ];
-   * @code
+   * @endcode
    * The user variable represents the variable defined in the test.
    * No parent state needs to be checked as it does not affect the possibility
    * to create document.
@@ -659,7 +659,7 @@ abstract class CommunityContentWorkflowTestBase extends JoinupWorkflowExistingSi
    *     ],
    *   ],
    * ];
-   * @code
+   * @endcode
    * The user variable represents the variable defined in the test.
    * No parent state needs to be checked as it does not affect the possibility
    * to create document.
@@ -845,7 +845,7 @@ abstract class CommunityContentWorkflowTestBase extends JoinupWorkflowExistingSi
    *     ],
    *   ],
    * ];
-   * @code
+   * @endcode
    * The user variable represents the variable defined in the test.
    * No parent state needs to be checked as it does not affect the possibility
    * to create document.
