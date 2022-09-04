@@ -1703,6 +1703,7 @@ class JoinupContext extends RawDrupalContext {
         $comment->setCreatedTime($comment_values['created']);
       }
 
+      $comment->skip_notification = TRUE;
       $comment->save();
     }
   }
