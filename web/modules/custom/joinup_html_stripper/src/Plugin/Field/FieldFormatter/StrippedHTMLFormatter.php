@@ -89,7 +89,7 @@ class StrippedHTMLFormatter extends FormatterBase {
       $output = !empty($item->summary) ? $item->summary : $item->value;
 
       // Strip HTML, after applying all embedded media filters.
-      $output = check_markup($output, 'stripped_html');
+      $output = (string) check_markup($output, 'stripped_html');
 
       // Replace funny whitespace.
       $output = preg_replace('/\n|\r|\t/m', ' ', $output);
