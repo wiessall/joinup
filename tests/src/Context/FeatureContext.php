@@ -2179,7 +2179,6 @@ class FeatureContext extends RawDrupalContext implements SnippetAcceptingContext
     // are not invalidated and the cache is not cleared. This causes the default
     // icons of paragraphs to be cached when the files are deleted above which
     // breaks tests trying to access paragraphs.
-    // @todo Fix this in ISAICP-7308.
     \Drupal::getContainer()->get('paragraphs_type.uuid_lookup')->clear();
   }
 
