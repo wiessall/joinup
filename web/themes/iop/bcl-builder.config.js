@@ -36,6 +36,17 @@ module.exports = {
         sourceMap: "file",
       },
     },
+    {
+      entry: path.resolve(outputFolder, "src/scss/paragraph--testimony.scss"),
+      dest: path.resolve(
+        outputFolder,
+        "assets/css/paragraphs/paragraph--testimony.min.css"
+      ),
+      options: {
+        includePaths,
+        sourceMap: "file",
+      },
+    },
     // Theme
     {
       entry: path.resolve(outputFolder, "src/scss/theme.scss"),
