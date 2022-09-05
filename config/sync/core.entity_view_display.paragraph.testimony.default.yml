@@ -8,7 +8,7 @@ dependencies:
     - field.field.paragraph.testimony.paragraph_testimony_image
     - field.field.paragraph.testimony.paragraph_testimony_source
     - field.field.paragraph.testimony.paragraph_testimony_text
-    - image.style.medium
+    - image.style.large
     - paragraphs.paragraphs_type.testimony
   module:
     - image
@@ -38,7 +38,7 @@ content:
     label: hidden
     settings:
       image_link: ''
-      image_style: medium
+      image_style: large
       image_loading:
         attribute: lazy
     third_party_settings:
