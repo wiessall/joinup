@@ -901,6 +901,7 @@ function joinup_group_rdf_entity_delete(RdfInterface $group): void {
       ->condition('entity_id', $group->id())
       ->execute();
   }
+}
 
 /**
  * Implements hook_form_BASE_FORM_ID_alter().
@@ -910,16 +911,4 @@ function joinup_group_form_message_form_alter(array &$form, FormStateInterface $
   $form['state']['#disabled'] = !in_array('moderator', \Drupal::currentUser()->getRoles());
   $form['owner']['#type'] = 'hidden';
   $form['advanced']['#type'] = 'hidden';
-}
-
-/**
- * Implements hook_ENTITY_TYPE_delete().
- */
-function joinup_group_rdf_entity_delete(RdfInterface $group) {
-  if ($group instanceof GroupInterface) {
-    \Drupal::database()->delete('joinup_group_node_access')
-      ->condition('entity_type', $group->getEntityTypeId())
-      ->condition('entity_id', $group->id())
-      ->execute();
-  }
 }
