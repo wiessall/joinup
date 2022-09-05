@@ -4,6 +4,7 @@ status: true
 dependencies:
   config:
     - field.field.paragraph.2_column_featured_left.field_paragraphs_item_content
+    - field.field.paragraph.2_column_featured_left.paragraph_2cf_jumper_heading
     - field.field.paragraph.2_column_featured_left.paragraph_2cf_media
     - paragraphs.paragraphs_type.2_column_featured_left
   module:
@@ -20,7 +21,15 @@ content:
       view_mode: default
       link: ''
     third_party_settings: {  }
-    weight: 1
+    weight: 2
+    region: content
+  paragraph_2cf_jumper_heading:
+    type: string
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 3
     region: content
   paragraph_2cf_media:
     type: entity_reference_revisions_entity_view
@@ -29,7 +38,7 @@ content:
       view_mode: default
       link: ''
     third_party_settings: {  }
-    weight: 0
+    weight: 1
     region: content
 hidden:
   search_api_excerpt: true
