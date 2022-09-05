@@ -6,6 +6,7 @@ dependencies:
     - field.field.paragraph.testimony.paragraph_testimony_author
     - field.field.paragraph.testimony.paragraph_testimony_bio
     - field.field.paragraph.testimony.paragraph_testimony_image
+    - field.field.paragraph.testimony.paragraph_testimony_source
     - field.field.paragraph.testimony.paragraph_testimony_text
     - image.style.medium
     - paragraphs.paragraphs_type.testimony
@@ -44,6 +45,13 @@ content:
       template_suggestion:
         template_suggestion: ''
     weight: 1
+    region: content
+  paragraph_testimony_source:
+    type: basic_string
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 5
     region: content
   paragraph_testimony_text:
     type: basic_string
