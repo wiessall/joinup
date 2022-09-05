@@ -27,6 +27,7 @@ use Drupal\joinup\Traits\KeyboardInteractionTrait;
 use Drupal\joinup\Traits\MaterialDesignTrait;
 use Drupal\joinup\Traits\OgTrait;
 use Drupal\joinup\Traits\TabledragTrait;
+use Drupal\joinup\Traits\TestingEntitiesTrait;
 use Drupal\joinup\Traits\TraversingTrait;
 use Drupal\joinup\Traits\UserTrait;
 use Drupal\joinup\Traits\UtilityTrait;
@@ -63,6 +64,7 @@ class JoinupContext extends RawDrupalContext {
   use OgTrait;
   use StringTranslationTrait;
   use TabledragTrait;
+  use TestingEntitiesTrait;
   use TraversingTrait;
   use UserTrait;
   use UtilityTrait;
@@ -1690,6 +1692,7 @@ class JoinupContext extends RawDrupalContext {
         'field_name' => $field_name,
         'entity_type' => 'node',
         'entity_id' => $id,
+        'subject' => $this->getRandom()->string(),
       ];
       $comment_values += $values;
       $comment = Comment::create($comment_values);
@@ -1705,6 +1708,7 @@ class JoinupContext extends RawDrupalContext {
 
       $comment->skip_notification = TRUE;
       $comment->save();
+      $this->entities['comment'][$comment->id()] = $comment;
     }
   }
 
