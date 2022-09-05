@@ -49,9 +49,11 @@
   'col-md-6'
 ] %}
 
+<h2 class="d-md-none">{{ content.paragraph_2cf_jumper_heading }}</h2>
 <div {{ attributes.addClass(classes) }}>
   {{ content.paragraph_2cf_media }}
 </div>
 <div {{ attributes.addClass(classes) }}>
+  <h2 class="d-none d-md-block">{{ content.paragraph_2cf_jumper_heading }}</h2>
   {{ content.field_paragraphs_item_content }}
 </div>
