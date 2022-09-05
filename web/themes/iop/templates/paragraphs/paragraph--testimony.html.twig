@@ -37,27 +37,26 @@
  */
 #}
 
-{# The template default set classes. #}
-{# Sets Paragraph ID as class. #}
+{{ attach_library('iop/paragraph--testimony') }}
+
 {% set classes = [
   'paragraph',
-  'paragraph--type--' ~ paragraph.bundle|clean_class,
-  view_mode ? 'paragraph--view-mode--' ~ view_mode|clean_class,
-  'paragraph--id--' ~ paragraph.id.value,
+  'paragraph--' ~ paragraph.bundle|clean_class,
   'row',
 ] %}
 
-<div {{ attributes.addClass(classes) }}>
-  <div class="col col-lg-12 col-md-12 col-sm-12 col-xs-12">
+<blockquote {{ attributes.addClass(classes) }}>
+  <div class="col-12 testimony__quote">
     {{ content.paragraph_testimony_text }}
   </div>
-  <div class="col col-lg-6 col-md-6 col-sm-6 col-xs-6">
-    {{ content.paragraph_testimony_image }}
-  </div>
-  <div class="col col-lg-6 col-md-6 col-sm-6 col-xs-6">
-    <small>
-      <strong>{{ content.paragraph_testimony_author }}</strong>
-      {{ content.paragraph_testimony_bio }}
-    </small>
-  </div>
-</div>
+  <figure class="testimony__fig">
+    <div class="testimony__img">
+      {{ content.paragraph_testimony_image }}
+    </div>
+    <figcaption class="testimony__figcaption">
+      <p class="testimony__author"><strong>{{ content.paragraph_testimony_author }}</strong></p>
+      <p class="testimony__bio">{{ content.paragraph_testimony_bio }}</p>
+      <cite class="testimony__cite">{{ content.paragraph_testimony_source }}</cite>
+    </figcaption>
+  </figure>
+</blockquote>

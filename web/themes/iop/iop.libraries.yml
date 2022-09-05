@@ -24,6 +24,11 @@ paragraph:
     theme:
       assets/css/paragraph.min.css: {}
 
+paragraph--testimony:
+  css:
+    theme:
+      assets/css/paragraphs/paragraph--testimony.min.css: {}
+
 # Components
 navbar:
   css:
