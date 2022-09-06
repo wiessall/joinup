@@ -1,0 +1,25 @@
+.paragraph--row {
+  padding-top: $spacer; // 16px
+  padding-bottom: $spacer; // 16px
+  @include media-breakpoint-up(lg) {
+    padding-top: $spacer * 3; // 48px
+    padding-bottom: $spacer * 3; // 48px
+  }
+  &__heading {
+    margin-top:  $spacer * 2; // 32px
+    margin-bottom: 0;
+    font-size: 2.5rem;
+    text-align: center;
+    font-weight: $font-weight-normal;
+    display: inline-block;
+    background-repeat: no-repeat;
+    background-image: url("data:image/svg+xml;charset=utf-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 30' style='enable-background:new 0 0 100 30' xml:space='preserve'%3e%3clinearGradient id='a' gradientUnits='userSpaceOnUse' x1='0' y1='15.5' x2='100' y2='15.5'%3e%3cstop offset='.106' style='stop-color:%23268dc2'/%3e%3cstop offset='.129' style='stop-color:%232c94c1'/%3e%3cstop offset='.216' style='stop-color:%233ea9bc'/%3e%3cstop offset='.302' style='stop-color:%2348b6ba'/%3e%3cstop offset='.382' style='stop-color:%234cbab9'/%3e%3cstop offset='.682' style='stop-color:%23ced955'/%3e%3cstop offset='.734' style='stop-color:%23d1d44f'/%3e%3cstop offset='.805' style='stop-color:%23d9c43d'/%3e%3cstop offset='.887' style='stop-color:%23e6ac20'/%3e%3cstop offset='.956' style='stop-color:%23f39202'/%3e%3c/linearGradient%3e%3cpath d='M1 17.6s11.27-6.1 24.01-6.1 34.3 8 49 8 24.99-4 24.99-4' style='fill:none;stroke:url(%23a);stroke-width:2;stroke-linecap:round;stroke-miterlimit:10'/%3e%3c/svg%3e");
+    background-position: center .875em;
+    background-size: 100%;
+    height: 1.5em;
+    @include media-breakpoint-up(md) {
+      margin-top: $spacer * 1.5; // 24px
+      font-size: 3.5rem;
+    }
+  }
+}
