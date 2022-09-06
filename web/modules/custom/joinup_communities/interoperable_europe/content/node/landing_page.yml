@@ -5,7 +5,8 @@ _meta:
   bundle: custom_page
   default_langcode: en
   depends:
-    3faca021-78a8-4bb0-8118-7dac2ea7e549: file
+    6e14621e-340a-44ec-add7-61319398e424: file
+    f8b025e2-601a-4d10-97eb-f375f3c63aac: file
     b319fcaf-316e-45a2-8ead-af89b9df7e27: file
     9ad5eede-1b7a-4295-864f-24e1fe0d241d: file
     4c17c0b5-4530-459e-a7f6-1e25995db275: file
@@ -71,14 +72,17 @@ default:
           behavior_settings:
             -
               value: {  }
+          revision_translation_affected:
+            -
+              value: true
           paragraph_column_layout:
             -
               entity:
                 _meta:
                   version: '1.0'
                   entity_type: paragraph
-                  uuid: 0028ab97-81c7-4215-9b10-89153edf9cf6
-                  bundle: 2_column_layout
+                  uuid: 284e6c07-1258-4005-8f84-059337ff3a98
+                  bundle: 2_column_featured_right
                   default_langcode: en
                 default:
                   status:
@@ -86,17 +90,20 @@ default:
                       value: true
                   created:
                     -
-                      value: 1661333243
+                      value: 1662463964
                   behavior_settings:
                     -
                       value: {  }
-                  paragraph_column_left:
+                  revision_translation_affected:
+                    -
+                      value: true
+                  field_paragraphs_item_content:
                     -
                       entity:
                         _meta:
                           version: '1.0'
                           entity_type: paragraph
-                          uuid: ff4a9280-15ad-4a37-8191-db2696cefc71
+                          uuid: c0885f79-ba1c-4bab-a44c-3d4743a72577
                           bundle: image
                           default_langcode: en
                         default:
@@ -105,16 +112,13 @@ default:
                               value: true
                           created:
                             -
-                              value: 1661863785
+                              value: 1662463996
                           behavior_settings:
                             -
                               value: {  }
-                          revision_translation_affected:
-                            -
-                              value: true
                           paragraph_image:
                             -
-                              entity: 3faca021-78a8-4bb0-8118-7dac2ea7e549
+                              entity: 6e14621e-340a-44ec-add7-61319398e424
                               alt: 'Interoperable Europe logo'
                               title: ''
                               width: 1969
@@ -127,7 +131,7 @@ default:
                         _meta:
                           version: '1.0'
                           entity_type: paragraph
-                          uuid: 10fbc47e-e43a-4113-a4d4-02f7894fd08b
+                          uuid: e09cf5d4-8ac5-431e-a54b-0b63922ebb7b
                           bundle: simple_paragraph
                           default_langcode: en
                         default:
@@ -136,10 +140,13 @@ default:
                               value: true
                           created:
                             -
-                              value: 1661864250
+                              value: 1662464055
                           behavior_settings:
                             -
                               value: {  }
+                          revision_translation_affected:
+                            -
+                              value: true
                           field_body:
                             -
                               value: "<p>Interoperable Europe is the initiative of the European Commission for a reinforced interoperability policy in the public sector. It is committed to introducing a new cooperative Interoperability policy for Europe that will transform the public administrations and help them in their digital transformation. The initiative is supported by the Digital Europe programme. It continues and expands the mission of the now completed ISA2 programme.</p>\r\n"
@@ -149,7 +156,7 @@ default:
                         _meta:
                           version: '1.0'
                           entity_type: paragraph
-                          uuid: 2a5d9fe3-5c2e-4e3f-8474-c180fa02568e
+                          uuid: b3a6a4e8-4917-4261-96fb-ed2a383b0003
                           bundle: call_to_action
                           default_langcode: en
                         default:
@@ -158,24 +165,27 @@ default:
                               value: true
                           created:
                             -
-                              value: 1661864258
+                              value: 1662464078
                           behavior_settings:
                             -
                               value: {  }
+                          revision_translation_affected:
+                            -
+                              value: true
                           paragraph_action_link:
                             -
                               uri: 'internal:/collection/interoperable-europe'
                               title: 'Learn more'
                               options:
                                 attributes: {  }
-                  paragraph_column_right:
+                  paragraph_2cf_media:
                     -
                       entity:
                         _meta:
                           version: '1.0'
                           entity_type: paragraph
-                          uuid: bc5564a7-91cb-428e-bd58-e444611ea4c0
-                          bundle: simple_paragraph
+                          uuid: d14b880c-a53d-4a70-8a54-e006a833a55d
+                          bundle: video
                           default_langcode: en
                         default:
                           status:
@@ -183,17 +193,13 @@ default:
                               value: true
                           created:
                             -
-                              value: 1661333394
+                              value: 1662463986
                           behavior_settings:
                             -
                               value: {  }
-                          revision_translation_affected:
+                          paragraph_video_url:
                             -
-                              value: true
-                          field_body:
-                            -
-                              value: "<p>{\"preview_thumbnail\":\"/web/sites/default/files/styles/video_embed_wysiwyg_preview/public/video_thumbnails/iprs-and-innovation-procurement-22-01-20.jpg?itok=A9PhKHy3\",\"video_url\":\"https://webcast.ec.europa.eu/iprs-and-innovation-procurement-22-01-20/embed\",\"settings\":{\"responsive\":true,\"width\":\"854\",\"height\":\"480\",\"autoplay\":false},\"settings_summary\":[\"Embedded Video (Responsive).\"]}</p>\r\n"
-                              format: content_editor
+                              value: 'https://webcast.ec.europa.eu/iprs-and-innovation-procurement-22-01-20/embed'
           row_theme:
             -
               value: dark-banner
@@ -215,9 +221,6 @@ default:
           behavior_settings:
             -
               value: {  }
-          revision_translation_affected:
-            -
-              value: true
           paragraph_column_layout:
             -
               entity:
@@ -237,9 +240,6 @@ default:
                   behavior_settings:
                     -
                       value: {  }
-                  revision_translation_affected:
-                    -
-                      value: true
                   paragraph_column_center:
                     -
                       entity:
@@ -276,7 +276,7 @@ default:
                               title: 'more news...'
                               options:
                                 attributes: {  }
-          paragraph_row_heading:
+          paragraph_heading:
             -
               value: news
           row_theme:
@@ -300,9 +300,6 @@ default:
           behavior_settings:
             -
               value: {  }
-          revision_translation_affected:
-            -
-              value: true
           paragraph_column_layout:
             -
               entity:
@@ -322,9 +319,6 @@ default:
                   behavior_settings:
                     -
                       value: {  }
-                  revision_translation_affected:
-                    -
-                      value: true
                   paragraph_column_center:
                     -
                       entity:
@@ -361,7 +355,7 @@ default:
                               title: 'more events...'
                               options:
                                 attributes: {  }
-          paragraph_row_heading:
+          paragraph_heading:
             -
               value: events
           row_theme:
@@ -385,14 +379,17 @@ default:
           behavior_settings:
             -
               value: {  }
+          revision_translation_affected:
+            -
+              value: true
           paragraph_column_layout:
             -
               entity:
                 _meta:
                   version: '1.0'
                   entity_type: paragraph
-                  uuid: 81731321-dbc1-4856-86db-6043ebdc7018
-                  bundle: 2_column_layout
+                  uuid: 426a09e3-bd63-4d7a-9d24-38ef2a32f4df
+                  bundle: 2_column_featured_left
                   default_langcode: en
                 default:
                   status:
@@ -400,17 +397,20 @@ default:
                       value: true
                   created:
                     -
-                      value: 1661333823
+                      value: 1662464214
                   behavior_settings:
                     -
                       value: {  }
-                  paragraph_column_left:
+                  revision_translation_affected:
+                    -
+                      value: true
+                  field_paragraphs_item_content:
                     -
                       entity:
                         _meta:
                           version: '1.0'
                           entity_type: paragraph
-                          uuid: d3529e7a-1715-4515-8c64-0a7587b8c820
+                          uuid: 01522d77-c5a5-4f37-85c3-37746da48af8
                           bundle: simple_paragraph
                           default_langcode: en
                         default:
@@ -419,7 +419,7 @@ default:
                               value: true
                           created:
                             -
-                              value: 1661333830
+                              value: 1662464343
                           behavior_settings:
                             -
                               value: {  }
@@ -428,16 +428,15 @@ default:
                               value: true
                           field_body:
                             -
-                              value: "<img alt=\"IOP image\" data-align=\"center\" data-entity-type=\"file\" data-entity-uuid=\"353147e2-ac81-4ccb-8122-c03da9524343\" data-image-style=\"wysiwyg_half_width\" height=\"250\" src=\"/sites/default/files/inline-images/WHY%20a%20POLICY-%20image.png\" width=\"400\" />\r\n<p>&nbsp;</p>\r\n"
+                              value: "<p>Interoperable Europe is the initiative of the European Commission for a reinforced interoperability policy in the public sector. It is committed to introducing a new cooperative Interoperability policy for Europe that will transform the public administrations and help them in their digital transformation. The initiative is supported by the Digital Europe programme. It continues and expands the mission of the now completed ISA2 programme.</p>\r\n"
                               format: content_editor
-                  paragraph_column_right:
                     -
                       entity:
                         _meta:
                           version: '1.0'
                           entity_type: paragraph
-                          uuid: 668ff42f-509d-44f8-8969-88096da22468
-                          bundle: simple_paragraph
+                          uuid: 820598e8-4b32-478e-8d79-1829e5dba45e
+                          bundle: call_to_action
                           default_langcode: en
                         default:
                           status:
@@ -445,24 +444,27 @@ default:
                               value: true
                           created:
                             -
-                              value: 1661333858
+                              value: 1662464348
                           behavior_settings:
                             -
                               value: {  }
                           revision_translation_affected:
                             -
                               value: true
-                          field_body:
+                          paragraph_action_link:
                             -
-                              value: "<h2>Why a policy in interoperability?</h2>\r\n"
-                              format: content_editor
+                              uri: 'internal:#'
+                              title: 'Read more'
+                              options:
+                                attributes: {  }
+                  paragraph_2cf_media:
                     -
                       entity:
                         _meta:
                           version: '1.0'
                           entity_type: paragraph
-                          uuid: cfb0107f-c857-4ea3-988f-a442851584eb
-                          bundle: simple_paragraph
+                          uuid: d1ba3bec-9b3c-43ca-af0d-f8cbc630ba0c
+                          bundle: image
                           default_langcode: en
                         default:
                           status:
@@ -470,17 +472,20 @@ default:
                               value: true
                           created:
                             -
-                              value: 1661333944
+                              value: 1662464219
                           behavior_settings:
                             -
                               value: {  }
-                          revision_translation_affected:
+                          paragraph_image:
                             -
-                              value: true
-                          field_body:
-                            -
-                              value: "<p>Interoperable Europe is the initiative of the European Commission for a reinforced interoperability policy in the public sector. It is committed to introducing a new cooperative Interoperability policy for Europe that will transform the public administrations and help them in their digital transformation. The initiative is supported by the Digital Europe programme. It continues and expands the mission of the now completed ISA2 programme.</p>\r\n\r\n<p>Read more</p>\r\n"
-                              format: content_editor
+                              entity: f8b025e2-601a-4d10-97eb-f375f3c63aac
+                              alt: 'Circular shape filled with organic and colourful lines.'
+                              title: ''
+                              width: 1070
+                              height: 673
+                  paragraph_heading:
+                    -
+                      value: 'Why a policy in Interoperability?'
           row_theme:
             -
               value: dark-to-light
@@ -502,9 +507,6 @@ default:
           behavior_settings:
             -
               value: {  }
-          revision_translation_affected:
-            -
-              value: true
           paragraph_column_layout:
             -
               entity:
@@ -543,6 +545,9 @@ default:
                           behavior_settings:
                             -
                               value: {  }
+                          revision_translation_affected:
+                            -
+                              value: true
                           content_listing:
                             -
                               value:
@@ -572,9 +577,12 @@ default:
                           revision_translation_affected:
                             -
                               value: true
-          paragraph_row_heading:
+          paragraph_heading:
             -
               value: 'Did you know?'
+          paragraph_row_subheading:
+            -
+              value: 'Facts about interoperability'
           row_theme:
             -
               value: light-wave

@@ -1,12 +1,12 @@
-uuid: c18ba30a-1232-4ce5-a1da-6f0cd421f4f5
+uuid: 36898a68-9f50-4153-8bf0-7a9ae5973a5f
 langcode: en
 status: true
 dependencies:
   config:
-    - field.storage.paragraph.paragraph_row_heading
+    - field.storage.paragraph.paragraph_heading
     - paragraphs.paragraphs_type.row
-id: paragraph.row.paragraph_row_heading
-field_name: paragraph_row_heading
+id: paragraph.row.paragraph_heading
+field_name: paragraph_heading
 entity_type: paragraph
 bundle: row
 label: Heading

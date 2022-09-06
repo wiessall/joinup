@@ -1,0 +1,84 @@
+uuid: 6c24a18b-c049-4772-9063-76f2ab737490
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.paragraph_2cf_media
+    - paragraphs.paragraphs_type.2_column_featured_right
+    - paragraphs.paragraphs_type.image
+    - paragraphs.paragraphs_type.video
+  module:
+    - entity_reference_revisions
+id: paragraph.2_column_featured_right.paragraph_2cf_media
+field_name: paragraph_2cf_media
+entity_type: paragraph
+bundle: 2_column_featured_right
+label: 'Featured media'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:paragraph'
+  handler_settings:
+    target_bundles:
+      image: image
+      video: video
+    negate: 0
+    target_bundles_drag_drop:
+      1_column_layout:
+        weight: 19
+        enabled: false
+      2_column_featured_left:
+        weight: 20
+        enabled: false
+      2_column_featured_right:
+        weight: 21
+        enabled: false
+      2_column_layout:
+        weight: 22
+        enabled: false
+      3_column_layout:
+        weight: 23
+        enabled: false
+      accordion:
+        weight: 24
+        enabled: false
+      accordion_item:
+        weight: 25
+        enabled: false
+      call_to_action:
+        weight: 26
+        enabled: false
+      carousel:
+        weight: 27
+        enabled: false
+      content_listing:
+        weight: 28
+        enabled: false
+      entity_reference:
+        weight: 29
+        enabled: false
+      iframe:
+        weight: 30
+        enabled: false
+      image:
+        weight: 31
+        enabled: true
+      json_map:
+        weight: 32
+        enabled: false
+      row:
+        weight: 33
+        enabled: false
+      simple_paragraph:
+        weight: 34
+        enabled: false
+      testimony:
+        weight: 35
+        enabled: false
+      video:
+        weight: 36
+        enabled: true
+field_type: entity_reference_revisions

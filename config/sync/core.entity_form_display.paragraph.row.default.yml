@@ -5,7 +5,8 @@ dependencies:
   config:
     - field.field.paragraph.row.paragraph_column_layout
     - field.field.paragraph.row.paragraph_row_background
-    - field.field.paragraph.row.paragraph_row_heading
+    - field.field.paragraph.row.paragraph_heading
+    - field.field.paragraph.row.paragraph_row_subheading
     - field.field.paragraph.row.row_theme
     - paragraphs.paragraphs_type.row
   module:
@@ -44,7 +45,8 @@ third_party_settings:
         required_fields: true
     group_paragraph_row_items:
       children:
-        - paragraph_row_heading
+        - paragraph_heading
+        - paragraph_row_subheading
         - paragraph_column_layout
       label: 'Row items'
       region: content
@@ -65,7 +67,7 @@ mode: default
 content:
   paragraph_column_layout:
     type: paragraphs
-    weight: 11
+    weight: 12
     region: content
     settings:
       title: Paragraph
@@ -82,9 +84,17 @@ content:
         collapse_edit_all: '0'
         duplicate: '0'
     third_party_settings: {  }
-  paragraph_row_heading:
+  paragraph_heading:
     type: string_textfield
     weight: 10
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  paragraph_row_subheading:
+    type: string_textfield
+    weight: 11
     region: content
     settings:
       size: 60
@@ -99,4 +109,5 @@ content:
 hidden:
   created: true
   paragraph_row_background: true
+  paragraph_row_heading: true
   status: true
