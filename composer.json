@@ -98,7 +98,7 @@
         "drupal/views_data_export": "^1.0",
         "drupal/views_multiple_permissions": "^1.0",
         "drush/drush": "^11.0",
-        "easyrdf/easyrdf": "dev-php8.1-compatibility+php8-testing as 1.1.2",
+        "easyrdf/easyrdf": "^1.1.0",
         "ec-europa/joinup-tallinn-dashboard": "1.0.0-alpha2",
         "ec-europa/material-design-lite": "1.3.1",
         "ec-europa/spdx": "^1.0",
@@ -444,7 +444,7 @@
         },
         {
             "type": "vcs",
-            "url": "https://github.com/alexpott/easyrdf.git"
+            "url": "https://github.com/claudiu-cristea/easyrdf.git"
         },
         {
             "type": "vcs",
