@@ -5,7 +5,7 @@ dependencies:
   config:
     - field.field.paragraph.row.paragraph_column_layout
     - field.field.paragraph.row.paragraph_row_background
-    - field.field.paragraph.row.paragraph_row_heading
+    - field.field.paragraph.row.paragraph_heading
     - field.field.paragraph.row.paragraph_row_subheading
     - field.field.paragraph.row.row_theme
     - paragraphs.paragraphs_type.row
@@ -25,7 +25,7 @@ content:
     third_party_settings: {  }
     weight: 2
     region: content
-  paragraph_row_heading:
+  paragraph_heading:
     type: string
     label: hidden
     settings:
