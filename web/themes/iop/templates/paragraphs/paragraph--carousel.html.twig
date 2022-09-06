@@ -36,16 +36,12 @@
  * @ingroup themeable
  */
 #}
-{{ attach_library('ventuno/glide') }}
 
-{# The template default set classes. #}
-{# Sets Paragraph ID as class. #}
+{{ attach_library('iop/paragraph--carousel') }}
+
 {% set classes = [
   'paragraph',
-  'paragraph--type--' ~ paragraph.bundle|clean_class,
-  view_mode ? 'paragraph--view-mode--' ~ view_mode|clean_class,
-  'paragraph--id--' ~ paragraph.id.value,
-  'explore-block wrapper-class',
+  'paragraph--' ~ paragraph.bundle|clean_class,
 ] %}
 
 {# Merges Background field with classes. #}
@@ -55,22 +51,18 @@
   {% set classes = classes|merge(content.paragraph_row_them['#value']) %}
 {% endif %}
 
-{{ content.paragraph_carousel_action }}
+{% if content.paragraph_carousel_action|render|striptags|trim is not empty %}
+  <div class="paragraph--carousel__action">
+    {{ content.paragraph_carousel_action }}
+  </div>
+{% endif %}
 
 <div{{ attributes.addClass(classes) }}>
-  <div class="tab-content">
-    <div class="tab-pane active">
-      <div class="tab-data glide__outer">
-        <div class="glide">
-          <div class="glide__arrows me-4" data-glide-el="controls">
-            <button type="button" class="glide__arrow glide__arrow--left rounded-circle" data-glide-dir="<" title="{{ 'Previous item'|t }}"><span class="icon"></span></button>
-            <button type="button" class="glide__arrow glide__arrow--right rounded-circle" data-glide-dir=">" title="{{ 'Next item'|t }}"><span class="icon"></span></button>
-          </div>
-          <div class="explore-slider explore-slider mt-3 glide__track" data-glide-el="track">
-            <div class="glide__slides">
-              {{ content.content_listing }}
-            </div>
-          </div>
+  <div class="glide__outer">
+    <div class="glide">
+      <div class="glide__track" data-glide-el="track">
+        <div class="glide__slides">
+          {{ content.content_listing }}
         </div>
       </div>
     </div>

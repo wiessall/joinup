@@ -19,13 +19,35 @@ landing-page:
       assets/css/landing-page.min.css: {}
 
 # Components
+navbar:
+  css:
+    theme:
+      assets/css/navbar.min.css: {}
+
 paragraph:
   css:
     theme:
       assets/css/paragraph.min.css: {}
 
-# Components
-navbar:
+paragraph--call-to-action:
   css:
     theme:
-      assets/css/navbar.min.css: {}
+      assets/css/paragraph--call-to-action.min.css: {}
+
+paragraph--carousel:
+  css:
+    theme:
+      assets/css/paragraph--carousel.min.css: {}
+      assets/css/glide.core.min.css: {}
+  js:
+    assets/js/glide.min.js: {}
+
+paragraph--image:
+  css:
+    theme:
+      assets/css/paragraph--image.min.css: {}
+
+paragraph--row:
+  css:
+    theme:
+      assets/css/paragraph--row.min.css: {}

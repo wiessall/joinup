@@ -20,13 +20,14 @@ dependencies:
     - field.field.node.news.field_topic
     - field.field.node.news.og_audience
     - node.type.news
+    - responsive_image.styles.iop_carousel
   module:
     - comment
     - field_group
     - file
-    - image
     - layout_builder
     - link
+    - responsive_image
     - template_suggestion
     - text
     - user
@@ -94,10 +95,11 @@ content:
     weight: 1
     region: content
   field_news_logo:
-    type: image_url
+    type: responsive_image
     label: above
     settings:
-      image_style: ''
+      responsive_image_style: iop_carousel
+      image_link: ''
     third_party_settings:
       template_suggestion:
         template_suggestion: ''
