@@ -4,8 +4,8 @@ status: true
 dependencies:
   config:
     - field.field.paragraph.2_column_featured_left.field_paragraphs_item_content
-    - field.field.paragraph.2_column_featured_left.paragraph_heading
     - field.field.paragraph.2_column_featured_left.paragraph_2cf_media
+    - field.field.paragraph.2_column_featured_left.paragraph_heading
     - paragraphs.paragraphs_type.2_column_featured_left
   module:
     - entity_reference_revisions
@@ -38,7 +38,7 @@ content:
     settings:
       link_to_entity: false
     third_party_settings: {  }
-    weight: 3
+    weight: 0
     region: content
 hidden:
   search_api_excerpt: true

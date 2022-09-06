@@ -4,8 +4,8 @@ status: true
 dependencies:
   config:
     - field.field.paragraph.2_column_featured_left.field_paragraphs_item_content
-    - field.field.paragraph.2_column_featured_left.paragraph_heading
     - field.field.paragraph.2_column_featured_left.paragraph_2cf_media
+    - field.field.paragraph.2_column_featured_left.paragraph_heading
     - paragraphs.paragraphs_type.2_column_featured_left
   module:
     - field_group
@@ -14,6 +14,7 @@ third_party_settings:
   field_group:
     group_2cfl_accordion:
       children:
+        - paragraph_heading
         - group_2cfl_media
         - group_2cfl_content
       label: Accordion
@@ -32,7 +33,7 @@ third_party_settings:
       label: 'Featured media'
       region: content
       parent_name: group_2cfl_accordion
-      weight: 5
+      weight: 8
       format_type: accordion_item
       format_settings:
         classes: ''
@@ -47,7 +48,7 @@ third_party_settings:
       label: Content
       region: content
       parent_name: group_2cfl_accordion
-      weight: 6
+      weight: 9
       format_type: accordion_item
       format_settings:
         classes: ''
