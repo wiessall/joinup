@@ -109,4 +109,5 @@ content:
 hidden:
   created: true
   paragraph_row_background: true
+  paragraph_row_heading: true
   status: true
