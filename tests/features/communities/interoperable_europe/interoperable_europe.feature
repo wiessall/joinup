@@ -12,7 +12,7 @@ Feature:
     # TODO: The page title is temporary.
     Then I should see "IOP landing page"
     # Check that we are on the expected URL for the landing page.
-    And I should be on "/collection/interoperable-europe"
+    And I should be on "/interoperable-europe"
 
     Given I am on the homepage
     When I click "Discover more"
@@ -21,16 +21,16 @@ Feature:
     And the page should be rendered using the "Interoperable Europe" theme
 
     # Test other pages.
-    When I visit "/collection/interoperable-europe/initiatives"
+    When I visit "/interoperable-europe/initiatives"
     Then the page should be rendered using the "Interoperable Europe" theme
 
     # Event and News item canonical pages are still rendered with the legacy
     # theme until ISAICP-7253 and ISAICP-7255.
     # See https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7253.
     # See https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7255.
-    When I visit "/collection/interoperable-europe/event/save-date-semic-coming-back-8-december-2021"
+    When I visit "/interoperable-europe/event/save-date-semic-coming-back-8-december-2021"
     Then the page should be rendered using the "Joinup Theme" theme
-    When I visit "/collection/interoperable-europe/news/vocbench-semantic-technologies-data-management"
+    When I visit "/interoperable-europe/news/vocbench-semantic-technologies-data-management"
     Then the page should be rendered using the "Joinup Theme" theme
 
   Scenario: Authenticated user visiting the landing page.
@@ -44,7 +44,7 @@ Feature:
     # TODO: The page title is temporary.
     Then I should see "IOP landing page"
     # Check that we are on the expected URL for the landing page.
-    And I should be on "/collection/interoperable-europe"
+    And I should be on "/interoperable-europe"
     And the page should be rendered using the "Interoperable Europe" theme
 
     # Check IOPE menu
