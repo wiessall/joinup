@@ -51,3 +51,8 @@ paragraph--row:
   css:
     theme:
       assets/css/paragraph--row.min.css: {}
+
+paragraph--testimony:
+  css:
+    theme:
+      assets/css/paragraphs/paragraph--testimony.min.css: {}
