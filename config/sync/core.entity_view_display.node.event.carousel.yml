@@ -27,9 +27,10 @@ dependencies:
     - field.field.node.event.field_topic
     - field.field.node.event.og_audience
     - node.type.event
+    - responsive_image.styles.iop_carousel
   module:
-    - image
     - layout_builder
+    - responsive_image
     - template_suggestion
     - text
     - user
@@ -50,10 +51,11 @@ content:
     weight: 0
     region: content
   field_event_logo:
-    type: image_url
+    type: responsive_image
     label: hidden
     settings:
-      image_style: ''
+      responsive_image_style: iop_carousel
+      image_link: ''
     third_party_settings:
       template_suggestion:
         template_suggestion: ''

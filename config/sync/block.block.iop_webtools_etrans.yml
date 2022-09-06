@@ -5,6 +5,7 @@ dependencies:
   module:
     - joinup_core
     - oe_webtools_etrans
+    - system
   theme:
     - iop
 id: iop_webtools_etrans
@@ -36,3 +37,7 @@ visibility:
       - entity.rdf_entity.edit_form
       - entity.taxonomy_term.edit_form
       - entity.taxonomy_term.delete_form
+  request_path:
+    id: request_path
+    negate: true
+    pages: /collection/interoperable-europe/iop-landing-page
