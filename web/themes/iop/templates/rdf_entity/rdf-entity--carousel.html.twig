@@ -1,0 +1,20 @@
+{#
+/**
+ * @file
+ * Template for the carousel view mode of the RDF entity.
+ *
+ * Available variables:
+ * - logo_url: The absolute path to the logo URL.
+ */
+#}
+<article{{ attributes.addClass('glide__slide') }}>
+  {{ title_prefix }}
+  {% if not page %}
+    <h2{{ title_attributes }}>
+      <a href="{{ url }}" rel="bookmark">{{ label }}</a>
+    </h2>
+  {% endif %}
+  {{ title_suffix }}
+
+{#    {{ content }}#}
+</article>

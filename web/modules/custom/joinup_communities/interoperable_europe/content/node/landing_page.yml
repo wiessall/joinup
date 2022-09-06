@@ -32,6 +32,9 @@ default:
   sticky:
     -
       value: false
+  revision_translation_affected:
+    -
+      value: true
   report:
     -
       uri: 'internal:/contact'
@@ -118,8 +121,6 @@ default:
                               height: 461
                           paragraph_image_visibility:
                             -
-                              value: hide-on-md
-                            -
                               value: hide-on-sm
                     -
                       entity:
@@ -139,9 +140,6 @@ default:
                           behavior_settings:
                             -
                               value: {  }
-                          revision_translation_affected:
-                            -
-                              value: true
                           field_body:
                             -
                               value: "<p>Interoperable Europe is the initiative of the European Commission for a reinforced interoperability policy in the public sector. It is committed to introducing a new cooperative Interoperability policy for Europe that will transform the public administrations and help them in their digital transformation. The initiative is supported by the Digital Europe programme. It continues and expands the mission of the now completed ISA2 programme.</p>\r\n"
@@ -164,13 +162,10 @@ default:
                           behavior_settings:
                             -
                               value: {  }
-                          revision_translation_affected:
-                            -
-                              value: true
                           paragraph_action_link:
                             -
                               uri: 'internal:/collection/interoperable-europe'
-                              title: 'Read more...'
+                              title: 'Learn more'
                               options:
                                 attributes: {  }
                   paragraph_column_right:
@@ -192,9 +187,12 @@ default:
                           behavior_settings:
                             -
                               value: {  }
+                          revision_translation_affected:
+                            -
+                              value: true
                           field_body:
                             -
-                              value: "<p>{\"preview_thumbnail\":\"/sites/default/files/styles/video_embed_wysiwyg_preview/public/video_thumbnails/N7cNbrwP7qo.jpg?itok=5MgPY-V7\",\"video_url\":\"https://www.youtube.com/watch?v=N7cNbrwP7qo\",\"settings\":{\"responsive\":true,\"width\":\"854\",\"height\":\"480\",\"autoplay\":false},\"settings_summary\":[\"Embedded Video (Responsive).\"]}</p>\r\n"
+                              value: "<p>{\"preview_thumbnail\":\"/web/sites/default/files/styles/video_embed_wysiwyg_preview/public/video_thumbnails/iprs-and-innovation-procurement-22-01-20.jpg?itok=A9PhKHy3\",\"video_url\":\"https://webcast.ec.europa.eu/iprs-and-innovation-procurement-22-01-20/embed\",\"settings\":{\"responsive\":true,\"width\":\"854\",\"height\":\"480\",\"autoplay\":false},\"settings_summary\":[\"Embedded Video (Responsive).\"]}</p>\r\n"
                               format: content_editor
           row_theme:
             -
@@ -217,6 +215,9 @@ default:
           behavior_settings:
             -
               value: {  }
+          revision_translation_affected:
+            -
+              value: true
           paragraph_column_layout:
             -
               entity:
@@ -236,32 +237,10 @@ default:
                   behavior_settings:
                     -
                       value: {  }
-                  paragraph_column_center:
+                  revision_translation_affected:
                     -
-                      entity:
-                        _meta:
-                          version: '1.0'
-                          entity_type: paragraph
-                          uuid: fb03767f-cfc8-41ed-b87e-976a9ad21df1
-                          bundle: simple_paragraph
-                          default_langcode: en
-                        default:
-                          status:
-                            -
-                              value: true
-                          created:
-                            -
-                              value: 1661333624
-                          behavior_settings:
-                            -
-                              value: {  }
-                          revision_translation_affected:
-                            -
-                              value: true
-                          field_body:
-                            -
-                              value: "<h2>news</h2>\r\n"
-                              format: content_editor
+                      value: true
+                  paragraph_column_center:
                     -
                       entity:
                         _meta:
@@ -291,6 +270,15 @@ default:
                                 limit: '10'
                                 show_shared: 0
                                 global_search: 0
+                          paragraph_carousel_action:
+                            -
+                              uri: 'internal:/collection/interoperable-europe/latest-news'
+                              title: 'more news...'
+                              options:
+                                attributes: {  }
+          paragraph_row_heading:
+            -
+              value: news
           row_theme:
             -
               value: dark
@@ -312,6 +300,9 @@ default:
           behavior_settings:
             -
               value: {  }
+          revision_translation_affected:
+            -
+              value: true
           paragraph_column_layout:
             -
               entity:
@@ -331,32 +322,10 @@ default:
                   behavior_settings:
                     -
                       value: {  }
-                  paragraph_column_center:
+                  revision_translation_affected:
                     -
-                      entity:
-                        _meta:
-                          version: '1.0'
-                          entity_type: paragraph
-                          uuid: 095bea91-08a4-4dcc-a4dc-69c85068f7fe
-                          bundle: simple_paragraph
-                          default_langcode: en
-                        default:
-                          status:
-                            -
-                              value: true
-                          created:
-                            -
-                              value: 1661333714
-                          behavior_settings:
-                            -
-                              value: {  }
-                          revision_translation_affected:
-                            -
-                              value: true
-                          field_body:
-                            -
-                              value: "<h2>events</h2>\r\n"
-                              format: content_editor
+                      value: true
+                  paragraph_column_center:
                     -
                       entity:
                         _meta:
@@ -386,6 +355,15 @@ default:
                                 limit: '10'
                                 show_shared: 0
                                 global_search: 0
+                          paragraph_carousel_action:
+                            -
+                              uri: 'internal:/collection/interoperable-europe/events'
+                              title: 'more events...'
+                              options:
+                                attributes: {  }
+          paragraph_row_heading:
+            -
+              value: events
           row_theme:
             -
               value: dark
@@ -524,6 +502,9 @@ default:
           behavior_settings:
             -
               value: {  }
+          revision_translation_affected:
+            -
+              value: true
           paragraph_column_layout:
             -
               entity:
@@ -549,31 +530,6 @@ default:
                         _meta:
                           version: '1.0'
                           entity_type: paragraph
-                          uuid: 256734bf-e40f-483b-98ec-46f41f40cfbd
-                          bundle: simple_paragraph
-                          default_langcode: en
-                        default:
-                          status:
-                            -
-                              value: true
-                          created:
-                            -
-                              value: 1661334070
-                          behavior_settings:
-                            -
-                              value: {  }
-                          revision_translation_affected:
-                            -
-                              value: true
-                          field_body:
-                            -
-                              value: "<h2>Did you know?</h2>\r\n\r\n<h3>Facts about interoperability</h3>\r\n"
-                              format: content_editor
-                    -
-                      entity:
-                        _meta:
-                          version: '1.0'
-                          entity_type: paragraph
                           uuid: 10ac46a1-92df-47ce-8a24-d6a8b33e0727
                           bundle: carousel
                           default_langcode: en
@@ -587,9 +543,6 @@ default:
                           behavior_settings:
                             -
                               value: {  }
-                          revision_translation_affected:
-                            -
-                              value: true
                           content_listing:
                             -
                               value:
@@ -598,9 +551,33 @@ default:
                                 limit: '10'
                                 show_shared: 0
                                 global_search: 0
+                    -
+                      entity:
+                        _meta:
+                          version: '1.0'
+                          entity_type: paragraph
+                          uuid: 9e55e92a-7e4f-4c78-a3f5-57a2befa5871
+                          bundle: simple_paragraph
+                          default_langcode: en
+                        default:
+                          status:
+                            -
+                              value: true
+                          created:
+                            -
+                              value: 1662034862
+                          behavior_settings:
+                            -
+                              value: {  }
+                          revision_translation_affected:
+                            -
+                              value: true
+          paragraph_row_heading:
+            -
+              value: 'Did you know?'
           row_theme:
             -
-              value: light
+              value: light-wave
     -
       entity:
         _meta:

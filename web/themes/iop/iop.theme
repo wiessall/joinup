@@ -35,25 +35,10 @@ function iop_preprocess(array &$variables): void {
 }
 
 /**
- * Implements hook_preprocess_HOOK().
+ * Implements hook_preprocess_HOOK() for paragraph.html.twig.
  */
-function iop_preprocess_node__explore_item(array &$variables): void {
-  /** @var \Drupal\node\NodeInterface $node */
-  $node = $variables['node'];
-  // Trim the labels of the items in the Explore block on the homepage down to a
-  // manageable size.
-  $variables['label'] = _ventuno_smart_trim($node->getTitle(), 45);
-}
-
-/**
- * Implements hook_preprocess_HOOK().
- */
-function iop_preprocess_rdf_entity__explore_item(array &$variables): void {
-  /** @var \Drupal\rdf_entity\RdfInterface $entity */
-  $entity = $variables['rdf_entity'];
-  // Trim the labels of the items in the Explore block on the homepage down to a
-  // manageable size.
-  $variables['label'] = _ventuno_smart_trim($entity->label(), 45);
+function iop_preprocess_paragraph(array &$variables): void {
+  $variables['#attached']['library'][] = 'iop/paragraph';
 }
 
 /**
@@ -63,7 +48,7 @@ function iop_preprocess_paragraph__image(array &$variables): void {
   $paragraph = $variables['elements']['#paragraph'];
   if (!$paragraph->get('paragraph_image_visibility')->isEmpty()) {
     foreach ($paragraph->get('paragraph_image_visibility')->getValue() as $value) {
-      $variables['attributes']['class'][] = 'paragraph-image--' . $value['value'];
+      $variables['attributes']['class'][] = 'paragraph--image--' . $value['value'];
     }
   }
 }

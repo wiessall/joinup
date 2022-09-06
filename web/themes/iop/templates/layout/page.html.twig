@@ -40,7 +40,6 @@
  * @see html.html.twig
  */
 #}
-{{ attach_library('iop/landing-page') }}
 <div class="layout-container">
   <div class="section-header">
     {{ page.header }}
@@ -52,7 +51,7 @@
     {% endif %}
   </div>
 
-  {% if page.featured %}
+  {% if page.featured|render|striptags|trim is not empty %}
     <div class="region-featured mb-5 py-5">
       <div class="container">
         <div class="row">
@@ -73,26 +72,12 @@
   {% endif %}
 
   <div class="content container mb-5">
-    <div class="row">
-      {% if page.sidebar|render|striptags|trim is not empty %}
-        <main role="main" class="col-12 col-lg-8 offset-lg-1 order-1">
-          <div id="main-content" tabindex="-1"></div>{# link is in html.html.twig #}
-          <div class="layout-content">
-            {{ page.content }}
-          </div>{# /.layout-content #}
-        </main>
-        <aside class="layout-sidebar col-12 col-lg-3">
-          {{ page.sidebar }}
-        </aside>
-      {% else %}
-        <main role="main" class="col-12 col-lg-10 col-xl-9 col-xxl-8">
-          <div id="main-content" tabindex="-1"></div>{# link is in html.html.twig #}
-          <div class="layout-content">
-            {{ page.content }}
-          </div>{# /.layout-content #}
-        </main>
-      {% endif %}
-    </div>
+    <main role="main">
+      <div id="main-content" tabindex="-1"></div>{# link is in html.html.twig #}
+      <div class="layout-content">
+        {{ page.content }}
+      </div>{# /.layout-content #}
+    </main>
   </div>
   {{ page.content_bottom }}
 
