@@ -1,4 +1,4 @@
-uuid: b7c128aa-c0ef-4ef6-b7bf-ae6ab08ce674
+uuid: f4f1662d-9cf6-498a-9b50-084516cd9275
 langcode: en
 status: true
 dependencies:
@@ -8,8 +8,8 @@ dependencies:
 third_party_settings:
   field_permissions:
     permission_type: public
-id: paragraph.paragraph_row_heading
-field_name: paragraph_row_heading
+id: paragraph.paragraph_heading
+field_name: paragraph_heading
 entity_type: paragraph
 type: string
 settings:

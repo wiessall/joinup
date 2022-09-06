@@ -98,4 +98,5 @@ content:
     third_party_settings: {  }
 hidden:
   created: true
+  paragraph_heading: true
   status: true
