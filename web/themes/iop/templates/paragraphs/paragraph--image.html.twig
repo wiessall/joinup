@@ -38,12 +38,12 @@
  */
 #}
 
+{{ attach_library('iop/paragraph--image') }}
+
 {% set classes = [
   'paragraph',
-  'paragraph--type--' ~ paragraph.bundle|clean_class,
-  view_mode ? 'paragraph--view-mode--' ~ view_mode|clean_class,
-  'paragraph--id--' ~ paragraph.id.value,
-  'paragraph--' ~ row_theme,
+  'paragraph--' ~ paragraph.bundle|clean_class,
+  row_theme ? 'paragraph--' ~ row_theme,
 ] %}
 
 <div{{ attributes.addClass(classes) }}>
