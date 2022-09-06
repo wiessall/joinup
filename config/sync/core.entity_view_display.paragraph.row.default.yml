@@ -23,6 +23,14 @@ content:
       view_mode: default
       link: ''
     third_party_settings: {  }
+    weight: 1
+    region: content
+  paragraph_row_heading:
+    type: string
+    label: hidden
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
     weight: 2
     region: content
   paragraph_heading:
