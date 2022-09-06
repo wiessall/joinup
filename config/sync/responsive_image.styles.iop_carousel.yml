@@ -1,0 +1,120 @@
+uuid: b020955a-881a-433d-af90-c92cc759520f
+langcode: en
+status: true
+dependencies:
+  config:
+    - image.style.iop_carousel_lg_1_5x
+    - image.style.iop_carousel_lg_1x
+    - image.style.iop_carousel_lg_2x
+    - image.style.iop_carousel_md_1_5x
+    - image.style.iop_carousel_md_1x
+    - image.style.iop_carousel_md_2x
+    - image.style.iop_carousel_sm_1_5x
+    - image.style.iop_carousel_sm_1x
+    - image.style.iop_carousel_sm_2x
+    - image.style.iop_carousel_xl1_5x
+    - image.style.iop_carousel_xl_1x
+    - image.style.iop_carousel_xl_2x
+    - image.style.iop_carousel_xs_1_5x
+    - image.style.iop_carousel_xs_1x
+    - image.style.iop_carousel_xs_2x
+    - image.style.iop_carousel_xxl_1_5x
+    - image.style.iop_carousel_xxl_1x
+    - image.style.iop_carousel_xxl_2x
+  theme:
+    - ventuno
+id: iop_carousel
+label: 'IOP carousel'
+image_style_mappings:
+  -
+    image_mapping_type: image_style
+    image_mapping: iop_carousel_xxl_1_5x
+    breakpoint_id: ventuno.xxl
+    multiplier: 1.5x
+  -
+    image_mapping_type: image_style
+    image_mapping: iop_carousel_xxl_1x
+    breakpoint_id: ventuno.xxl
+    multiplier: 1x
+  -
+    image_mapping_type: image_style
+    image_mapping: iop_carousel_xxl_2x
+    breakpoint_id: ventuno.xxl
+    multiplier: 2x
+  -
+    image_mapping_type: image_style
+    image_mapping: iop_carousel_xl1_5x
+    breakpoint_id: ventuno.xl
+    multiplier: 1.5x
+  -
+    image_mapping_type: image_style
+    image_mapping: iop_carousel_xl_1x
+    breakpoint_id: ventuno.xl
+    multiplier: 1x
+  -
+    image_mapping_type: image_style
+    image_mapping: iop_carousel_xl_2x
+    breakpoint_id: ventuno.xl
+    multiplier: 2x
+  -
+    image_mapping_type: image_style
+    image_mapping: iop_carousel_lg_1_5x
+    breakpoint_id: ventuno.lg
+    multiplier: 1.5x
+  -
+    image_mapping_type: image_style
+    image_mapping: iop_carousel_lg_1x
+    breakpoint_id: ventuno.lg
+    multiplier: 1x
+  -
+    image_mapping_type: image_style
+    image_mapping: iop_carousel_lg_2x
+    breakpoint_id: ventuno.lg
+    multiplier: 2x
+  -
+    image_mapping_type: image_style
+    image_mapping: iop_carousel_md_1_5x
+    breakpoint_id: ventuno.md
+    multiplier: 1.5x
+  -
+    image_mapping_type: image_style
+    image_mapping: iop_carousel_md_1x
+    breakpoint_id: ventuno.md
+    multiplier: 1x
+  -
+    image_mapping_type: image_style
+    image_mapping: iop_carousel_md_2x
+    breakpoint_id: ventuno.md
+    multiplier: 2x
+  -
+    image_mapping_type: image_style
+    image_mapping: iop_carousel_sm_1_5x
+    breakpoint_id: ventuno.sm
+    multiplier: 1.5x
+  -
+    image_mapping_type: image_style
+    image_mapping: iop_carousel_sm_1x
+    breakpoint_id: ventuno.sm
+    multiplier: 1x
+  -
+    image_mapping_type: image_style
+    image_mapping: iop_carousel_sm_2x
+    breakpoint_id: ventuno.sm
+    multiplier: 2x
+  -
+    image_mapping_type: image_style
+    image_mapping: iop_carousel_xs_1_5x
+    breakpoint_id: ventuno.xs
+    multiplier: 1.5x
+  -
+    image_mapping_type: image_style
+    image_mapping: iop_carousel_xs_1x
+    breakpoint_id: ventuno.xs
+    multiplier: 1x
+  -
+    image_mapping_type: image_style
+    image_mapping: iop_carousel_xs_2x
+    breakpoint_id: ventuno.xs
+    multiplier: 2x
+breakpoint_group: ventuno
+fallback_image_style: iop_carousel_md_1x
