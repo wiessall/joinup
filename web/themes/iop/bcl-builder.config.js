@@ -50,6 +50,34 @@ module.exports = {
     {
       entry: path.resolve(
         outputFolder,
+        "src/scss/paragraph--2-column-featured-left.scss"
+      ),
+      dest: path.resolve(
+        outputFolder,
+        "assets/css/paragraph--2-column-featured-left.min.css"
+      ),
+      options: {
+        includePaths,
+        sourceMap: "file",
+      },
+    },
+    {
+      entry: path.resolve(
+        outputFolder,
+        "src/scss/paragraph--2-column-featured-right.scss"
+      ),
+      dest: path.resolve(
+        outputFolder,
+        "assets/css/paragraph--2-column-featured-right.min.css"
+      ),
+      options: {
+        includePaths,
+        sourceMap: "file",
+      },
+    },
+    {
+      entry: path.resolve(
+        outputFolder,
         "src/scss/paragraph--call-to-action.scss"
       ),
       dest: path.resolve(
@@ -97,6 +125,17 @@ module.exports = {
       dest: path.resolve(
         outputFolder,
         "assets/css/paragraphs/paragraph--testimony.min.css"
+      ),
+      options: {
+        includePaths,
+        sourceMap: "file",
+      },
+    },
+    {
+      entry: path.resolve(outputFolder, "src/scss/paragraph--video.scss"),
+      dest: path.resolve(
+        outputFolder,
+        "assets/css/paragraphs/paragraph--video.min.css"
       ),
       options: {
         includePaths,
