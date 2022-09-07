@@ -29,6 +29,16 @@ paragraph:
     theme:
       assets/css/paragraph.min.css: {}
 
+paragraph--2-column-featured-left:
+  css:
+    theme:
+      assets/css/paragraph--2-column-featured-left.min.css: {}
+
+paragraph--2-column-featured-right:
+  css:
+    theme:
+      assets/css/paragraph--2-column-featured-right.min.css: {}
+
 paragraph--call-to-action:
   css:
     theme:
@@ -56,3 +66,8 @@ paragraph--testimony:
   css:
     theme:
       assets/css/paragraphs/paragraph--testimony.min.css: {}
+
+paragraph--video:
+  css:
+    theme:
+      assets/css/paragraphs/paragraph--video.min.css: {}

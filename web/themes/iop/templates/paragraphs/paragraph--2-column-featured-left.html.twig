@@ -30,30 +30,28 @@
  *   current user is a logged-in member.
  * - is_admin: Flag for admin user status. Will be true when the current user
  *   is an administrator.
+ * - paragraph_heading: Special-case heading inteded to be displayed
+ *   on different places depending on the device width.
  *
  * @see template_preprocess_paragraph()
  *
  * @ingroup themeable
  */
 #}
-{{ attach_library('iop/paragraph') }}
-{# The template default set classes. #}
-{# Sets Paragraph ID as class. #}
+
+{{ attach_library('iop/paragraph--2-column-featured-left') }}
+
 {% set classes = [
   'paragraph',
-  'paragraph--2-column-layout',
-  'paragraph--type--' ~ paragraph.bundle|clean_class,
-  view_mode ? 'paragraph--view-mode--' ~ view_mode|clean_class,
-  'paragraph--id--' ~ paragraph.id.value,
+  'paragraph--2-column-featured-left',
   'col-12',
   'col-md-6'
 ] %}
-
-<h2 class="d-md-none">{{ content.paragraph_heading }}</h2>
+<span class="d-md-none">{{ content.paragraph_heading }}</span>
 <div {{ attributes.addClass(classes) }}>
   {{ content.paragraph_2cf_media }}
 </div>
 <div {{ attributes.addClass(classes) }}>
-  <h2 class="d-none d-md-block">{{ content.paragraph_heading }}</h2>
+  <span class="d-none d-md-block">{{ content.paragraph_heading }}</span>
   {{ content.field_paragraphs_item_content }}
 </div>
