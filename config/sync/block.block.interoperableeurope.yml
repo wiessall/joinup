@@ -11,7 +11,7 @@ dependencies:
 id: interoperableeurope
 theme: iop
 region: header_bottom
-weight: 0
+weight: -25
 provider: null
 plugin: 'system_menu_block:iope'
 settings:
