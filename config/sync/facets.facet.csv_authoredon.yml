@@ -28,7 +28,7 @@ widget:
   config:
     show_numbers: false
     arbitrary_facet_plugin: _none
-    soft_limit: 0
+    soft_limit: 99
     soft_limit_settings:
       show_less_label: 'Show less'
       show_more_label: 'Show more'
