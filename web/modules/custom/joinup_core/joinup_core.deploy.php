@@ -14,6 +14,8 @@
 
 declare(strict_types = 1);
 
+use Drupal\interoperable_europe\InteroperableEuropeCollectionInterface;
+
 /**
  * Import new landing page.
  */
@@ -43,4 +45,29 @@ function joinup_core_deploy_108500(): void {
 
   // Remove old IOP landing page.
   \Drupal::entityTypeManager()->getStorage('node')->load(704740)->delete();
+}
+
+/**
+ * Update path alias IOPE.
+ */
+function joinup_core_deploy_108501(): void {
+  /** @var \Drupal\collection\Entity\CollectionInterface $collection */
+  $collection = \Drupal::entityTypeManager()->getStorage('rdf_entity')->load(InteroperableEuropeCollectionInterface::COLLECTION_ENTITY_ID);
+
+  // Get all entities from IOPE.
+  $content = $collection->getGroupContentIds();
+
+  $collection->path = ['alias' => '/interoperable-europe', 'pathauto' => 0];
+  $collection->save();
+
+  // Update entities in IOPE group.
+  foreach ($content as $type => $entities) {
+    foreach ($entities as $ids) {
+      foreach ($ids as $id) {
+        $entity = \Drupal::entityTypeManager()->getStorage($type)->load($id);
+        $entity->path = ['pathauto' => 1];
+        $entity->save();
+      }
+    }
+  }
 }
