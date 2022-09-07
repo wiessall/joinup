@@ -86,7 +86,7 @@ class BundleAutocompleteDeriver extends DeriverBase implements ContainerDeriverI
       ],
       'node' => [
         'solr_field_name' => 'nid',
-        'allowed_bundles' => CommunityContentHelper::BUNDLES,
+        'allowed_bundles' => array_merge(['custom_page'], CommunityContentHelper::BUNDLES),
       ],
     ];
   }
