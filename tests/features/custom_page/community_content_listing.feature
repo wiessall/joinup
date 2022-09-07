@@ -9,6 +9,9 @@ Feature:
       | title      | logo     | banner     | state     |
       | Nintendo64 | logo.png | banner.jpg | validated |
       | Emulators  | logo.png | banner.jpg | validated |
+    And custom_page content:
+      | title               | collection | created           | body                               | state     |
+      | Latest news listing | Nintendo64 | 2019-10-01 4:26am | You can find the latest news here. | validated |
     And news content:
       | title                                 | collection | created           | content                          | state     |
       | Rare Nintendo64 disk drive discovered | Nintendo64 | 2018-10-01 4:26am | Magnetic drive called 64DD.      | validated |
@@ -65,6 +68,9 @@ Feature:
     And I select "Event" from "Available filters"
     And I press "Add and configure filter"
     And I fill in "Event" with "20 year anniversary"
+    And I select "Custom page" from "Available filters"
+    And I press "Add and configure filter"
+    And I fill in "Custom page" with "Latest news listing"
 
     Then I should see the text "Related content from the community will be displayed below the one that you are publishing."
     And I should see the text "Display content shared from other communities."
@@ -74,6 +80,7 @@ Feature:
     Then I should see the heading "Latest content"
     And I should see the "Rare Nintendo64 disk drive discovered" tile
     And I should see the "20 year anniversary" tile
+    And I should see the "Latest news listing" tile
     # Content from other collections should not be shown.
     But I should not see the "NEC VR4300 CPU" tile
 
@@ -236,9 +243,9 @@ Feature:
     And I fill in "Solution" with "N64 cartridge cleaner"
     And I press "Save"
     Then I should see the following tiles in the correct order:
-      | Searching for green pad.              |
-      | What's your favourite N64 game?       |
-      | N64 cartridge cleaner                 |
+      | Searching for green pad.        |
+      | What's your favourite N64 game? |
+      | N64 cartridge cleaner           |
 
     # Query presets should still apply when available.
     When I am logged in as a moderator
@@ -491,14 +498,14 @@ Feature:
   See https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7183
 
     Given solutions:
-      | title                | collection    | state     |
-      | Save gasoline        | Nintendo64    | validated |
-      | Fight battery mode   | Nintendo64    | validated |
-      | Black Noise          | Nintendo64    | validated |
+      | title              | collection | state     |
+      | Save gasoline      | Nintendo64 | validated |
+      | Fight battery mode | Nintendo64 | validated |
+      | Black Noise        | Nintendo64 | validated |
 
     And custom_page content:
-      | title   | collection |
-      | Bikes   | Nintendo64 |
+      | title | collection |
+      | Bikes | Nintendo64 |
 
     Given I am logged in as a facilitator of the "Nintendo64" collection
     And I go to the edit form of the "Bikes" "custom page"

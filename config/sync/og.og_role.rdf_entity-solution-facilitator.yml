@@ -158,7 +158,6 @@ permissions:
   - 'view all revisions'
   - 'view any unpublished content'
   - 'view rdf entity'
-  - 'view rdf_entity default graph'
   - 'view rdf_entity draft graph'
   - 'view unpublished rdf entity'
 role_type: null
