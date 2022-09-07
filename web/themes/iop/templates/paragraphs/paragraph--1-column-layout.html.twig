@@ -37,14 +37,10 @@
  */
 #}
 
-{# The template default set classes. #}
-{# Sets Paragraph ID as class. #}
 {% set classes = [
   'paragraph',
-  'paragraph--type--' ~ paragraph.bundle|clean_class,
-  view_mode ? 'paragraph--view-mode--' ~ view_mode|clean_class,
-  'paragraph--id--' ~ paragraph.id.value,
-  'col col-lg-12 col-md-12 col-sm-6 col-xs-12',
+  'paragraph--1-column-layout',
+  'col-12',
 ] %}
 
 {# Merges Background field with classes. #}

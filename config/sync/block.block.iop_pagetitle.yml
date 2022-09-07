@@ -4,6 +4,7 @@ status: true
 dependencies:
   module:
     - joinup_core
+    - system
   theme:
     - iop
 id: iop_pagetitle
@@ -25,3 +26,7 @@ visibility:
     routes:
       - entity.user.canonical
       - entity.user.edit_form
+  request_path:
+    id: request_path
+    negate: true
+    pages: /collection/interoperable-europe/iop-landing-page

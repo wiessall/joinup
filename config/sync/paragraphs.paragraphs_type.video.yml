@@ -1,0 +1,12 @@
+uuid: 027f3efa-d557-4346-bf0e-b3c614200aed
+langcode: en
+status: true
+dependencies:
+  content:
+    - 'file:file:078a6913-223c-402e-923d-0ec2de210a66'
+id: video
+label: Video
+icon_uuid: 078a6913-223c-402e-923d-0ec2de210a66
+icon_default: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNiIgaGVpZ2h0PSIxNiIgZmlsbD0iY3VycmVudENvbG9yIiBjbGFzcz0iYmkgYmktZmlsbSIgdmlld0JveD0iMCAwIDE2IDE2Ij4KICA8cGF0aCBkPSJNMCAxYTEgMSAwIDAgMSAxLTFoMTRhMSAxIDAgMCAxIDEgMXYxNGExIDEgMCAwIDEtMSAxSDFhMSAxIDAgMCAxLTEtMVYxem00IDB2Nmg4VjFINHptOCA4SDR2Nmg4Vjl6TTEgMXYyaDJWMUgxem0yIDNIMXYyaDJWNHpNMSA3djJoMlY3SDF6bTIgM0gxdjJoMnYtMnptLTIgM3YyaDJ2LTJIMXpNMTUgMWgtMnYyaDJWMXptLTIgM3YyaDJWNGgtMnptMiAzaC0ydjJoMlY3em0tMiAzdjJoMnYtMmgtMnptMiAzaC0ydjJoMnYtMnoiLz4KPC9zdmc+'
+description: ''
+behavior_plugins: {  }

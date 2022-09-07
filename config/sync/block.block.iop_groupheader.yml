@@ -5,6 +5,7 @@ dependencies:
   module:
     - joinup
     - joinup_group
+    - system
   theme:
     - iop
 _core:
@@ -23,9 +24,14 @@ settings:
   context_mapping:
     og: '@asset_release.asset_release_route_context:asset_release'
 visibility:
+  request_path:
+    id: request_path
+    negate: true
+    pages: /collection/interoperable-europe/iop-landing-page
   group_context:
     id: group_context
     negate: true
     group_context: true
     limit_to_groups:
       - 'http://data.europa.eu/w21/8e30f798-ff2b-478b-9c09-5ed5a63b4c8c'
+

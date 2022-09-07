@@ -24,28 +24,55 @@ listing:
       assets/css/listing.min.css: {}
 
 # Components
-paragraph:
-  css:
-    theme:
-      assets/css/paragraph.min.css: {}
-
-# Components
-navbar:
-  css:
-    theme:
-      assets/css/navbar.min.css: {}
-
-# Spare components
-pager:
-  css:
-    theme:
-      assets/css/pager.min.css: {}
 
 # @todo ISAICP-7138 delete this library when switch to Ventuno theme is complete
 add-content:
   css:
     theme:
       assets/css/add-content.min.css: { minified: true }
+
+navbar:
+  css:
+    theme:
+      assets/css/navbar.min.css: {}
+
+pager:
+  css:
+    theme:
+      assets/css/pager.min.css: {}
+
+paragraph:
+  css:
+    theme:
+      assets/css/paragraph.min.css: {}
+
+paragraph--call-to-action:
+  css:
+    theme:
+      assets/css/paragraph--call-to-action.min.css: {}
+
+paragraph--carousel:
+  css:
+    theme:
+      assets/css/paragraph--carousel.min.css: {}
+      assets/css/glide.core.min.css: {}
+  js:
+    assets/js/glide.min.js: {}
+
+paragraph--image:
+  css:
+    theme:
+      assets/css/paragraph--image.min.css: {}
+
+paragraph--row:
+  css:
+    theme:
+      assets/css/paragraph--row.min.css: {}
+
+paragraph--testimony:
+  css:
+    theme:
+      assets/css/paragraphs/paragraph--testimony.min.css: {}
 
 # @todo ISAICP-7138 delete this library when switch to Ventuno theme is complete
 three-dots-menu:
