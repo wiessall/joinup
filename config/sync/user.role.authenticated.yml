@@ -161,5 +161,4 @@ permissions:
   - 'view paragraph content simple_paragraph'
   - 'view paragraph content testimony'
   - 'view paragraph content video'
-  - 'view published og menu instance entities'
   - 'view rdf entity'
