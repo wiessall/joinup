@@ -105,6 +105,7 @@
   padding: 5px 10px;
   margin-right: 10px;
   display: block;
+  text-align: center;
 }
 
 .eif-tile__label-wrapper {
@@ -115,7 +116,7 @@
 .eif-tile__button {
   display: inline-block;
   text-decoration: none;
-  padding: 10px 30px;
+  padding: 10px 10px;
   border: 2px solid $color-blue-warm;
   font-size: $font-size-small;
   border-radius: 5px;
@@ -125,6 +126,10 @@
   &:hover {
     color: $color-base;
     background: transparent;
+  }
+
+  @include breakpoint(tablet) {
+    padding: 10px 30px;
   }
 }
 
@@ -541,6 +546,10 @@
           flex: 0 0 75%;
         }
         .listing__field {
+          display: -webkit-box;
+          -webkit-line-clamp: 7;
+          -webkit-box-orient: vertical;
+          overflow: hidden;
           .listing__title {
             font-size: 16px;
             font-weight: $font-weight-bold;
@@ -556,17 +565,11 @@
           }
           &.listing__buttons{
             display: flex;
-            flex-direction: column;
             align-items: center;
             justify-content: flex-end;
+            font-size: $font-size-small;
             a:first-child {
-              margin: 20px 0;
-            }
-            @include breakpoint(tablet) {
-              flex-direction: row;
-              a:first-child {
-                margin: 0 20px;
-              }
+              margin: 0 20px;
             }
           }
         }
