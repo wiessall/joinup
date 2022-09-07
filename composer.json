@@ -307,6 +307,9 @@
             "drupal/metatag": {
                 "Views cache wrapper overrides other modules cache logic @see https://www.drupal.org/project/metatag/issues/3261473": "https://git.drupalcode.org/project/metatag/-/merge_requests/48.diff"
             },
+            "drupal/og": {
+                "Non-node permissions overrides one each other @see https://github.com/Gizra/og/pull/748": "https://patch-diff.githubusercontent.com/raw/Gizra/og/pull/748.diff"
+            },
             "drupal/paragraphs_jquery_ui_accordion": {
                 "Formatter settings are missing schema @see https://www.drupal.org/i/3194916": "https://git.drupalcode.org/project/paragraphs_jquery_ui_accordion/-/merge_requests/1.diff"
             },
