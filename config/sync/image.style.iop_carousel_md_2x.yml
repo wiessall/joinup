@@ -1,0 +1,21 @@
+uuid: f2248524-0886-428b-b55f-7ce6005b5616
+langcode: en
+status: true
+dependencies: {  }
+name: iop_carousel_md_2x
+label: 'IOP carousel MD 2x'
+effects:
+  ca8d76d1-132e-4272-b429-eabedcee7362:
+    uuid: ca8d76d1-132e-4272-b429-eabedcee7362
+    id: image_scale_and_crop
+    weight: 1
+    data:
+      width: 490
+      height: 256
+      anchor: center-center
+  cbb6640d-3f95-45ff-a94e-f5b57e6c7fe2:
+    uuid: cbb6640d-3f95-45ff-a94e-f5b57e6c7fe2
+    id: image_convert
+    weight: 2
+    data:
+      extension: webp

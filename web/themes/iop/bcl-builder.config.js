@@ -7,7 +7,18 @@ const nodeModules = "./node_modules";
 const includePaths = [nodeModules];
 
 module.exports = {
-  scripts: [],
+  scripts: [
+    // Third party
+    {
+      entry: path.resolve(outputFolder, "src/js/glide.js"),
+      dest: path.resolve(outputFolder, "assets/js/glide.js"),
+      options: {
+        name: "glide",
+        minify: true,
+        sourceMap: true,
+      },
+    },
+  ],
   styles: [
     // Components
     {
@@ -31,6 +42,62 @@ module.exports = {
     {
       entry: path.resolve(outputFolder, "src/scss/paragraph.scss"),
       dest: path.resolve(outputFolder, "assets/css/paragraph.min.css"),
+      options: {
+        includePaths,
+        sourceMap: "file",
+      },
+    },
+    {
+      entry: path.resolve(
+        outputFolder,
+        "src/scss/paragraph--call-to-action.scss"
+      ),
+      dest: path.resolve(
+        outputFolder,
+        "assets/css/paragraph--call-to-action.min.css"
+      ),
+      options: {
+        minify: true,
+        includePaths,
+        sourceMap: "file",
+      },
+    },
+    {
+      entry: path.resolve(outputFolder, "src/scss/paragraph--carousel.scss"),
+      dest: path.resolve(
+        outputFolder,
+        "assets/css/paragraph--carousel.min.css"
+      ),
+      options: {
+        minify: true,
+        includePaths,
+        sourceMap: "file",
+      },
+    },
+    {
+      entry: path.resolve(outputFolder, "src/scss/paragraph--image.scss"),
+      dest: path.resolve(outputFolder, "assets/css/paragraph--image.min.css"),
+      options: {
+        minify: true,
+        includePaths,
+        sourceMap: "file",
+      },
+    },
+    {
+      entry: path.resolve(outputFolder, "src/scss/paragraph--row.scss"),
+      dest: path.resolve(outputFolder, "assets/css/paragraph--row.min.css"),
+      options: {
+        minify: true,
+        includePaths,
+        sourceMap: "file",
+      },
+    },
+    {
+      entry: path.resolve(outputFolder, "src/scss/paragraph--testimony.scss"),
+      dest: path.resolve(
+        outputFolder,
+        "assets/css/paragraphs/paragraph--testimony.min.css"
+      ),
       options: {
         includePaths,
         sourceMap: "file",
@@ -117,28 +184,36 @@ module.exports = {
       options: { up: true },
     },
     {
-      from: [path.resolve(__dirname, "src/images//banners/ACT.webp")],
+      from: [path.resolve(__dirname, "src/images/banners/ACT.webp")],
       to: path.resolve(outputFolder, "assets/images/banners/"),
       options: { up: true },
     },
     {
-      from: [path.resolve(__dirname, "src/images//banners/events.webp")],
+      from: [path.resolve(__dirname, "src/images/banners/events.webp")],
       to: path.resolve(outputFolder, "assets/images/banners/"),
       options: { up: true },
     },
     {
-      from: [path.resolve(__dirname, "src/images//banners/FAQ.webp")],
+      from: [path.resolve(__dirname, "src/images/banners/FAQ.webp")],
       to: path.resolve(outputFolder, "assets/images/banners/"),
       options: { up: true },
     },
     {
-      from: [path.resolve(__dirname, "src/images//banners/news.webp")],
+      from: [path.resolve(__dirname, "src/images/banners/news.webp")],
       to: path.resolve(outputFolder, "assets/images/banners/"),
       options: { up: true },
     },
     {
-      from: [path.resolve(__dirname, "src/images//banners/policy.webp")],
+      from: [path.resolve(__dirname, "src/images/banners/policy.webp")],
       to: path.resolve(outputFolder, "assets/images/banners/"),
+      options: { up: true },
+    },
+    // Third party files
+    {
+      from: [
+        path.resolve(nodeModules, "@glidejs/glide/dist/css/glide.core.min.css"),
+      ],
+      to: path.resolve(outputFolder, "assets/css"),
       options: { up: true },
     },
   ],
