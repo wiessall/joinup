@@ -1,5 +1,8 @@
 .paragraph--image {
-  margin-bottom: $spacer * 2; // 32px
+  margin-bottom: $spacer; // 16px
+  @include media-breakpoint-up(md) {
+    margin-bottom: $spacer * 2; // 32px
+  }
   &--hide-on-sm {
     @include media-breakpoint-between(xs, md) {
       display: none;
