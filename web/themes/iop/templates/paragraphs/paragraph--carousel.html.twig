@@ -44,20 +44,16 @@
   'paragraph--' ~ paragraph.bundle|clean_class,
 ] %}
 
-{# Merges Background field with classes. #}
-{% set background_field = content.paragraph_row_theme|render %}
-{% if background_field %}
-  {# @todo: This might not work. Fix it. #}
-  {% set classes = classes|merge(content.paragraph_row_them['#value']) %}
-{% endif %}
-
-{% if content.paragraph_carousel_action|render|striptags|trim is not empty %}
-  <div class="paragraph--carousel__action">
-    {{ content.paragraph_carousel_action }}
-  </div>
-{% endif %}
-
 <div{{ attributes.addClass(classes) }}>
+  {% if content.paragraph_heading|render|striptags|trim is not empty %}
+    {{ content.paragraph_heading }}
+  {% endif %}
+
+  {% if content.paragraph_carousel_action|render|striptags|trim is not empty %}
+    <div class="paragraph--carousel__action">
+      {{ content.paragraph_carousel_action }}
+    </div>
+  {% endif %}
   <div class="glide__outer">
     <div class="glide">
       <div class="glide__track" data-glide-el="track">
