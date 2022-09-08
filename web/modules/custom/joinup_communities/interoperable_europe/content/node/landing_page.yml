@@ -5,8 +5,8 @@ _meta:
   bundle: custom_page
   default_langcode: en
   depends:
-    6e14621e-340a-44ec-add7-61319398e424: file
-    f8b025e2-601a-4d10-97eb-f375f3c63aac: file
+    2d35eeec-d538-408d-acbf-2d000acca7da: file
+    222bb03c-b59a-4637-985f-0ac0ac06515e: file
     b319fcaf-316e-45a2-8ead-af89b9df7e27: file
     9ad5eede-1b7a-4295-864f-24e1fe0d241d: file
     4c17c0b5-4530-459e-a7f6-1e25995db275: file
@@ -43,11 +43,11 @@ default:
       options:
         query:
           category: report
-          uri: /collection/interoperable-europe/iop-landing-page
-          destination: collection/interoperable-europe/iop-landing-page
+          uri: /interoperable-europe/iop-landing-page
+          destination: interoperable-europe/iop-landing-page
   path:
     -
-      alias: /collection/interoperable-europe/iop-landing-page
+      alias: /interoperable-europe/iop-landing-page
       langcode: en
       pathauto: 1
   published_at:
@@ -118,11 +118,11 @@ default:
                               value: {  }
                           paragraph_image:
                             -
-                              entity: 6e14621e-340a-44ec-add7-61319398e424
+                              entity: 2d35eeec-d538-408d-acbf-2d000acca7da
                               alt: 'Interoperable Europe logo'
                               title: ''
-                              width: 1969
-                              height: 461
+                              width: 2481
+                              height: 1063
                           paragraph_image_visibility:
                             -
                               value: hide-on-sm
@@ -202,7 +202,7 @@ default:
                               value: 'https://webcast.ec.europa.eu/iprs-and-innovation-procurement-22-01-20/embed'
           row_theme:
             -
-              value: dark-banner
+              value: light
     -
       entity:
         _meta:
@@ -221,6 +221,9 @@ default:
           behavior_settings:
             -
               value: {  }
+          revision_translation_affected:
+            -
+              value: true
           paragraph_column_layout:
             -
               entity:
@@ -240,6 +243,9 @@ default:
                   behavior_settings:
                     -
                       value: {  }
+                  revision_translation_affected:
+                    -
+                      value: true
                   paragraph_column_center:
                     -
                       entity:
@@ -276,56 +282,15 @@ default:
                               title: 'more news...'
                               options:
                                 attributes: {  }
-          paragraph_heading:
-            -
-              value: news
-          row_theme:
-            -
-              value: dark
-    -
-      entity:
-        _meta:
-          version: '1.0'
-          entity_type: paragraph
-          uuid: e85adaac-741b-4e2d-bb37-ecaa7d1ffbb6
-          bundle: row
-          default_langcode: en
-        default:
-          status:
-            -
-              value: true
-          created:
-            -
-              value: 1661333682
-          behavior_settings:
-            -
-              value: {  }
-          paragraph_column_layout:
-            -
-              entity:
-                _meta:
-                  version: '1.0'
-                  entity_type: paragraph
-                  uuid: 3738ea4b-7d53-4b5f-8e6c-ad2f3e874c03
-                  bundle: 1_column_layout
-                  default_langcode: en
-                default:
-                  status:
-                    -
-                      value: true
-                  created:
-                    -
-                      value: 1661333695
-                  behavior_settings:
-                    -
-                      value: {  }
-                  paragraph_column_center:
+                          paragraph_heading:
+                            -
+                              value: news
                     -
                       entity:
                         _meta:
                           version: '1.0'
                           entity_type: paragraph
-                          uuid: e8c70877-8949-4de1-96d3-2580b73381b8
+                          uuid: de52de58-a84b-448e-80ae-ec864e1e1dcf
                           bundle: carousel
                           default_langcode: en
                         default:
@@ -334,7 +299,7 @@ default:
                               value: true
                           created:
                             -
-                              value: 1661350343
+                              value: 1662645392
                           behavior_settings:
                             -
                               value: {  }
@@ -351,16 +316,16 @@ default:
                                 global_search: 0
                           paragraph_carousel_action:
                             -
-                              uri: 'internal:/collection/interoperable-europe/events'
+                              uri: 'internal:/events'
                               title: 'more events...'
                               options:
                                 attributes: {  }
-          paragraph_heading:
-            -
-              value: events
+                          paragraph_heading:
+                            -
+                              value: events
           row_theme:
             -
-              value: dark
+              value: light-wave
     -
       entity:
         _meta:
@@ -423,9 +388,6 @@ default:
                           behavior_settings:
                             -
                               value: {  }
-                          revision_translation_affected:
-                            -
-                              value: true
                           field_body:
                             -
                               value: "<p>Interoperable Europe is the initiative of the European Commission for a reinforced interoperability policy in the public sector. It is committed to introducing a new cooperative Interoperability policy for Europe that will transform the public administrations and help them in their digital transformation. The initiative is supported by the Digital Europe programme. It continues and expands the mission of the now completed ISA2 programme.</p>\r\n"
@@ -448,12 +410,9 @@ default:
                           behavior_settings:
                             -
                               value: {  }
-                          revision_translation_affected:
-                            -
-                              value: true
                           paragraph_action_link:
                             -
-                              uri: 'internal:#'
+                              uri: 'internal:/interoperable-europe'
                               title: 'Read more'
                               options:
                                 attributes: {  }
@@ -478,8 +437,8 @@ default:
                               value: {  }
                           paragraph_image:
                             -
-                              entity: f8b025e2-601a-4d10-97eb-f375f3c63aac
-                              alt: 'Circular shape filled with organic and colourful lines.'
+                              entity: 222bb03c-b59a-4637-985f-0ac0ac06515e
+                              alt: 'Shape of a circle with colorful lines inside.'
                               title: ''
                               width: 1070
                               height: 673
@@ -488,7 +447,7 @@ default:
                       value: 'Why a policy in Interoperability?'
           row_theme:
             -
-              value: dark-to-light
+              value: light
     -
       entity:
         _meta:
