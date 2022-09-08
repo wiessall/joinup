@@ -1,0 +1,24 @@
+{#
+/**
+ * @file
+ * Default template for a field.
+ */
+#}
+{# {%
+  set classes = [
+    'field--name-' ~ field_name|clean_class,
+    bundle|clean_class ~ '__' ~ field_name_clean|clean_class,
+    label_display == 'inline' ? 'd-flex',
+  ]
+%} #}
+{# {%
+  set title_classes = [
+    'field__label',
+    'fw-bold',
+    label_display == 'visually_hidden' ? 'visually-hidden',
+  ]
+%} #}
+
+{% for item in items %}
+  {{ item.content }}
+{% endfor %}
