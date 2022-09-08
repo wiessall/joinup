@@ -15,7 +15,7 @@ use Drupal\oe_newsroom_newsletter\Form\NewsletterSubscribeForm;
  * @Block(
  *   id = "interoperable_europe_iop_footer",
  *   admin_label = @Translation("IOP Footer"),
- *   category = @Translation("Custom")
+ *   category = @Translation("Interoperable Europe")
  * )
  */
 class IopFooterBlock extends BlockBase {
