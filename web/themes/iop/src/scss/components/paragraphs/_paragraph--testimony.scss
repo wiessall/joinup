@@ -52,6 +52,8 @@
       }
     }
     &__figcaption {
+      display: flex;
+      flex-direction: column;
       width: calc(30% - 1rem + 2.5rem);
       margin-left: 1rem;
       color: $gray-600;

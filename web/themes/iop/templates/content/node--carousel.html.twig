@@ -114,7 +114,7 @@
     {% endif %}
     {% if node.bundle in ['news', 'event'] %}
       <h1{{ title_attributes.addClass(title_classes) }}>
-        <a class="fw-normal" href="{{ url }}" rel="bookmark">{{ label }}</a>
+        <a class="slide__title-link" href="{{ url }}" rel="bookmark">{{ label }}</a>
       </h1>
     {% elseif node.bundle is same as 'custom_page' %}
       <div class="slide__body">
@@ -123,9 +123,10 @@
           {% set text = content.field_paragraphs_body|render|striptags|trim %}
           {{ (text|length > 450 ? text|slice(0, 451)|split(' ')|slice(0, -1)|join(' ') ~ '&hellip;' : text)|raw }}
         </div>
-        <div>
+        {# Slide's Call To Action will be enabled later #}
+        {# <div>
           <a class="slide__cta" href="{{ url }}">{{ 'Learn more'|t }}</a>
-        </div>
+        </div> #}
       </div>
     {% endif %}
   {% endblock %}
