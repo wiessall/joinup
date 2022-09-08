@@ -12,12 +12,6 @@ theme:
     theme:
       assets/css/theme.min.css: {}
 
-# Pages
-landing-page:
-  css:
-    theme:
-      assets/css/landing-page.min.css: {}
-
 # Components
 navbar:
   css:
