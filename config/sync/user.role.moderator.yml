@@ -302,4 +302,5 @@ permissions:
   - 'view own field_is_eif_recommendation'
   - 'view rdf entity overview'
   - 'view rdf_entity draft graph'
+  - 'view state'
   - 'view unpublished rdf entity'
