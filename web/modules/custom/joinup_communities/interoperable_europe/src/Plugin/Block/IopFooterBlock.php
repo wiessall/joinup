@@ -7,7 +7,6 @@ namespace Drupal\interoperable_europe\Plugin\Block;
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Plugin\Context\ContextHandlerInterface;
 use Drupal\Core\Url;
-use Drupal\oe_newsroom_newsletter\Form\NewsletterSubscribeForm;
 
 /**
  * Provides an IOP footer block.
@@ -30,18 +29,27 @@ class IopFooterBlock extends BlockBase {
    */
   public function build(): array {
     $icons = [
-      'LinkedIn' => 'internal:#',
-      'Twitter' => 'internal:#',
-      'Youtube' => 'internal:#',
+      'linkedin' => [
+        'title' => $this->t('LinkedIn'),
+        'url' => 'internal:#',
+      ],
+      'twitter' => [
+        'title' => $this->t('Twitter'),
+        'url' => 'internal:#',
+      ],
+      'youtube' => [
+        'title' => $this->t('Youtube'),
+        'url' => 'internal:#',
+      ],
     ];
 
-    foreach ($icons as $icon => $url) {
-      $build[$icon] = [
+    foreach ($icons as $class => $data) {
+      $build[$class] = [
         '#type' => 'link',
-        '#title' => $this->t($icon),
-        '#url' => Url::fromUri($url),
+        '#title' => $data['title'],
+        '#url' => Url::fromUri($data['url']),
         '#attributes' => [
-          'class' => ['icon', 'icon-' . strtolower($icon)],
+          'class' => ['icon', 'icon-' . $class],
         ],
       ];
     }
