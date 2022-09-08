@@ -6,6 +6,8 @@ namespace Drupal\interoperable_europe\Plugin\Block;
 
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Plugin\Context\ContextHandlerInterface;
+use Drupal\Core\Url;
+use Drupal\oe_newsroom_newsletter\Form\NewsletterSubscribeForm;
 
 /**
  * Provides an IOP footer block.
@@ -27,8 +29,30 @@ class IopFooterBlock extends BlockBase {
    * {@inheritdoc}
    */
   public function build(): array {
-    $build['content'] = [
-      '#markup' => $this->t('It works!'),
+    $icons = [
+      'Linkedin' => 'internal:#',
+      'Twitter' => 'internal:#',
+      'Youtube' => 'internal:#',
+    ];
+
+    foreach ($icons as $icon => $url) {
+      $build[$icon] = [
+        '#type' => 'link',
+        '#title' => $this->t($icon),
+        '#url' => Url::fromUri($url),
+        '#attributes' => [
+          'class' => ['icon', 'icon-' . strtolower($icon)],
+        ],
+      ];
+    }
+
+    $build['newsletter'] = [
+      '#type' => 'link',
+      '#url' => Url::fromUri('https://ec.europa.eu/newsroom/informatics/user-subscriptions/1115/create'),
+      '#title' => $this->t('Subscribe to our newsletter'),
+      '#attributes' => [
+        'class' => ['iop-footer__newsletter'],
+      ],
     ];
     return $build;
   }

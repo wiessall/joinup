@@ -1,0 +1,20 @@
+uuid: 5d4e20ad-0a8e-4aaf-864a-ab8d67ab539e
+langcode: en
+status: true
+dependencies:
+  module:
+    - interoperable_europe
+  theme:
+    - iop
+id: iopfooter
+theme: iop
+region: content_bottom
+weight: -24
+provider: null
+plugin: interoperable_europe_iop_footer
+settings:
+  id: interoperable_europe_iop_footer
+  label: 'Join our community!'
+  label_display: visible
+  provider: interoperable_europe
+visibility: {  }
