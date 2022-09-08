@@ -30,7 +30,7 @@ class IopFooterBlock extends BlockBase {
    */
   public function build(): array {
     $icons = [
-      'Linkedin' => 'internal:#',
+      'LinkedIn' => 'internal:#',
       'Twitter' => 'internal:#',
       'Youtube' => 'internal:#',
     ];
