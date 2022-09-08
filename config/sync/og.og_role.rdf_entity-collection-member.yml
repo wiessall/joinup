@@ -37,7 +37,6 @@ permissions:
   - 'share event content'
   - 'share news content'
   - 'share solution rdf_entity'
-  - unsubscribe
   - 'view own revisions'
   - 'view own unpublished content'
 role_type: required
