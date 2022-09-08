@@ -57,7 +57,7 @@ Feature:
     And I should see the following links:
       | LinkedIn                    |
       | Twitter                     |
-      | YouTube                     |
+      | Youtube                     |
       | Subscribe to our newsletter |
 
     When I click "News"
@@ -65,5 +65,5 @@ Feature:
     And I should see the following links:
       | LinkedIn                    |
       | Twitter                     |
-      | YouTube                     |
+      | Youtube                     |
       | Subscribe to our newsletter |
