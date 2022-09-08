@@ -11,7 +11,7 @@ dependencies:
 id: iop_europeancommission
 theme: iop
 region: footer
-weight: -22
+weight: -23
 provider: null
 plugin: 'system_menu_block:footer-european-commission'
 settings:
