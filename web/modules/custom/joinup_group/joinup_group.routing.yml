@@ -138,14 +138,14 @@ joinup_group.settings_form:
           - collection
           - solution
 
-joinup_group.send_announcements:
-  path: '/rdf_entity/{rdf_entity}/announcements/send'
+entity.rdf_entity.announcement_add:
+  path: /rdf_entity/{rdf_entity}/announcements/add
   defaults:
-    _form: '\Drupal\joinup_group\Form\SendAnnouncementsForm'
+    _controller: Drupal\joinup_group\Controller\AnnouncementsController::editForm
     _title: 'Add announcement'
   requirements:
     _custom_access: Drupal\joinup_group\Controller\AnnouncementsController::access
-    _og_user_access_group: 'manage members'
+    _og_user_access_group: 'manage group announcements'
   options:
     parameters:
       rdf_entity:
@@ -153,4 +153,25 @@ joinup_group.send_announcements:
         bundle:
           - collection
           - solution
+    _og_entity_type_id: rdf_entity
+
+entity.rdf_entity.announcement_edit:
+  path: /rdf_entity/{rdf_entity}/announcements/edit/{announcement}
+  defaults:
+    _controller: Drupal\joinup_group\Controller\AnnouncementsController::editForm
+    _title: 'Edit announcement'
+  requirements:
+    _custom_access: Drupal\joinup_group\Controller\AnnouncementsController::access
+    _og_user_access_group: 'manage group announcements'
+  options:
+    parameters:
+      rdf_entity:
+        type: entity:rdf_entity
+        bundle:
+          - collection
+          - solution
+      announcement:
+        type: entity:message
+        bundle:
+          - announcement
     _og_entity_type_id: rdf_entity
