@@ -54,6 +54,7 @@ permissions:
   - 'highlight collections'
   - 'invite facilitators'
   - 'invite users to discussions'
+  - 'manage group announcements'
   - 'manage members'
   - 'pin group content'
   - 'request collection archival'

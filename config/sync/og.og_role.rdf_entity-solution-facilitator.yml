@@ -45,6 +45,7 @@ permissions:
   - 'edit own news content'
   - 'invite facilitators'
   - 'invite users to discussions'
+  - 'manage group announcements'
   - 'manage members'
   - 'pin group content'
   - 'transition any node discussion from deletion_request to validated using the community_content - node:post_moderated workflow'
