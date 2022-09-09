@@ -1,5 +1,8 @@
 .paragraph--testimony {
-  margin-bottom: $spacer * 2; //32px
+  margin-bottom: $spacer * 4; //64px
+  @include media-breakpoint-up(md) {
+    margin-bottom: $spacer * 2; //32px
+  }
   .testimony {
     &__quote {
       margin-bottom: $spacer; // 16px
