@@ -137,6 +137,20 @@ function joinup_group_entity_type_alter(array &$entity_types) {
   if (array_key_exists('rdf_entity', $entity_types)) {
     $rdf_entity_type = $entity_types['rdf_entity'];
     $rdf_entity_type->setFormClass('delete', RdfDeleteForm::class);
+
+    // Add group link templates, so the OG context will be automatically solved.
+    $link_templates = [
+      'about-page' => '/rdf_entity/{rdf_entity}/about',
+      'announcement-overview' => '/rdf_entity/{rdf_entity}/announcements',
+      'announcement-add' => '/rdf_entity/{rdf_entity}/announcements/add',
+      'announcement-edit' => '/rdf_entity/{rdf_entity}/announcements/edit/{message}',
+      'member-overview' => '/rdf_entity/{rdf_entity}/members',
+      'member-add' => '/rdf_entity/{rdf_entity}/members/add',
+      'member-invite' => '/rdf_entity/{rdf_entity}/members/invite',
+    ];
+    foreach ($link_templates as $key => $path) {
+      $entity_types['rdf_entity']->setLinkTemplate($key, $path);
+    }
   }
 }
 
