@@ -5,7 +5,7 @@ announcement_workflow:
   group: announcement
   states:
     __new__:
-      label: New
+      label: Pending
     sent:
       label: Sent
     rejected:
