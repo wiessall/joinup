@@ -154,19 +154,3 @@ joinup_group.send_announcements:
           - collection
           - solution
     _og_entity_type_id: rdf_entity
-
-joinup_group.announcements_list:
-  path: '/rdf_entity/{rdf_entity}/announcements/list'
-  defaults:
-    _controller: \Drupal\joinup_group\Controller\AnnouncementsController::announcementsList
-    _title: 'Announcements list'
-  requirements:
-    _og_user_access_group: 'manage members'
-  options:
-    parameters:
-      rdf_entity:
-        type: entity:rdf_entity
-        bundle:
-          - collection
-          - solution
-    _og_entity_type_id: rdf_entity
