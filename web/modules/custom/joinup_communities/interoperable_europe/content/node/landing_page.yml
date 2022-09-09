@@ -5,8 +5,8 @@ _meta:
   bundle: custom_page
   default_langcode: en
   depends:
-    2d35eeec-d538-408d-acbf-2d000acca7da: file
-    222bb03c-b59a-4637-985f-0ac0ac06515e: file
+    3faca021-78a8-4bb0-8118-7dac2ea7e549: file
+    e3068680-55cb-4544-bab6-f351f744d8b5: file
     b319fcaf-316e-45a2-8ead-af89b9df7e27: file
     9ad5eede-1b7a-4295-864f-24e1fe0d241d: file
     4c17c0b5-4530-459e-a7f6-1e25995db275: file
@@ -118,7 +118,7 @@ default:
                               value: {  }
                           paragraph_image:
                             -
-                              entity: 2d35eeec-d538-408d-acbf-2d000acca7da
+                              entity: 3faca021-78a8-4bb0-8118-7dac2ea7e549
                               alt: 'Interoperable Europe logo'
                               title: ''
                               width: 2481
@@ -437,7 +437,7 @@ default:
                               value: {  }
                           paragraph_image:
                             -
-                              entity: 222bb03c-b59a-4637-985f-0ac0ac06515e
+                              entity: e3068680-55cb-4544-bab6-f351f744d8b5
                               alt: 'Shape of a circle with colorful lines inside.'
                               title: ''
                               width: 1070
