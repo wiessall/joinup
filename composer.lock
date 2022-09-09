@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "bb8b24e20492b80f10c04ff4191d8deb",
+    "content-hash": "273993e8ed8381cffd911d8cdb76da27",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -4956,32 +4956,31 @@
         },
         {
             "name": "drupal/og",
-            "version": "1.0.0-alpha7",
+            "version": "1.0.0-alpha8",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/og.git",
-                "reference": "8.x-1.0-alpha7"
+                "reference": "8.x-1.0-alpha8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/og-8.x-1.0-alpha7.zip",
-                "reference": "8.x-1.0-alpha7",
-                "shasum": "7c2036884946afa376e8fd848829a0f8ff59a653"
+                "url": "https://ftp.drupal.org/files/projects/og-8.x-1.0-alpha8.zip",
+                "reference": "8.x-1.0-alpha8",
+                "shasum": "026780e3aa39108f539d65d30cb7ffe59eb18346"
             },
             "require": {
-                "drupal/core": "^8.8 || ^9.0",
-                "php": "^7.2"
+                "drupal/core": "^9.3",
+                "php": "^7.4 || ^8"
             },
             "require-dev": {
-                "drupal/coder": "^8.2",
-                "phpunit/phpunit": "^7 || ^8",
-                "slevomat/coding-standard": "~6.0"
+                "drupal/coder": "^8.3.16",
+                "phpunit/phpunit": "^7 || ^8"
             },
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "8.x-1.0-alpha7",
-                    "datestamp": "1633634599",
+                    "version": "8.x-1.0-alpha8",
+                    "datestamp": "1661523185",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Alpha releases are not covered by Drupal security advisories."
@@ -5006,20 +5005,12 @@
                     "homepage": "https://www.drupal.org/u/pfrenssen"
                 },
                 {
-                    "name": "Zen",
-                    "homepage": "https://www.drupal.org/user/21209"
-                },
-                {
-                    "name": "alesr",
-                    "homepage": "https://www.drupal.org/user/150704"
-                },
-                {
-                    "name": "amitaibu",
-                    "homepage": "https://www.drupal.org/user/57511"
-                },
-                {
                     "name": "dww",
                     "homepage": "https://www.drupal.org/user/46549"
+                },
+                {
+                    "name": "Grayside",
+                    "homepage": "https://www.drupal.org/user/346868"
                 },
                 {
                     "name": "joelpittet",
@@ -5042,8 +5033,16 @@
                     "homepage": "https://www.drupal.org/user/382067"
                 },
                 {
+                    "name": "RoySegall",
+                    "homepage": "https://www.drupal.org/user/1812910"
+                },
+                {
                     "name": "sethcohn",
                     "homepage": "https://www.drupal.org/user/14944"
+                },
+                {
+                    "name": "Zen",
+                    "homepage": "https://www.drupal.org/user/21209"
                 }
             ],
             "description": "API to allow associating content with groups.",
