@@ -31,15 +31,15 @@ class IopFooterBlock extends BlockBase {
     $icons = [
       'linkedin' => [
         'title' => $this->t('LinkedIn'),
-        'url' => 'internal:#',
+        'url' => 'https://www.linkedin.com/in/interoperableeurope/',
       ],
       'twitter' => [
         'title' => $this->t('Twitter'),
-        'url' => 'internal:#',
+        'url' => 'https://twitter.com/InteroperableEU',
       ],
       'youtube' => [
         'title' => $this->t('Youtube'),
-        'url' => 'internal:#',
+        'url' => 'https://www.youtube.com/c/InteroperableEurope',
       ],
     ];
 
