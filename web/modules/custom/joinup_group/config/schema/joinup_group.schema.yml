@@ -51,3 +51,7 @@ views.argument_validator.joinup_group_user_permission:
 views.argument_validator.joinup_group_announcements_enabled:
   type: views.argument_validator.joinup_group_user_permission
   label: Access to group announcements
+
+views.field.joinup_group_announcement_edit_link:
+  type: views.field.entity_link
+  label: Announcement edit link
