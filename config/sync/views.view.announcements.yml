@@ -1,4 +1,4 @@
-uuid: 1bba9770-844f-4902-8063-bec3913afab0
+uuid: e92bc1b8-8f9c-4d98-b4b8-b4c19677a1f3
 langcode: en
 status: true
 dependencies:
@@ -7,17 +7,13 @@ dependencies:
     - field.storage.message.state
     - field.storage.message.subject
     - message.template.announcement
-    - rdf_entity.rdfentity.collection
-    - rdf_entity.rdfentity.solution
     - system.menu.admin
-    - user.role.administrator
-    - user.role.moderator
   module:
+    - joinup_group
     - message
     - options
     - state_machine
     - user
-    - verf
 id: announcements
 label: Announcements
 module: views
@@ -32,8 +28,72 @@ display:
     display_plugin: default
     position: 0
     display_options:
-      title: 'Announcements list'
+      title: Annoucements
       fields:
+        mid:
+          id: mid
+          table: message_field_data
+          field: mid
+          relationship: none
+          group_type: group
+          admin_label: ''
+          entity_type: message
+          entity_field: mid
+          plugin_id: field
+          label: ''
+          exclude: true
+          alter:
+            alter_text: false
+            text: ''
+            make_link: false
+            path: ''
+            absolute: false
+            external: false
+            replace_spaces: false
+            path_case: none
+            trim_whitespace: false
+            alt: ''
+            rel: ''
+            link_class: ''
+            prefix: ''
+            suffix: ''
+            target: ''
+            nl2br: false
+            max_length: 0
+            word_boundary: true
+            ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
+            strip_tags: false
+            trim: false
+            preserve_tags: ''
+            html: false
+          element_type: ''
+          element_class: ''
+          element_label_type: ''
+          element_label_class: ''
+          element_label_colon: false
+          element_wrapper_type: ''
+          element_wrapper_class: ''
+          element_default_classes: true
+          empty: ''
+          hide_empty: false
+          empty_zero: false
+          hide_alter_empty: true
+          click_sort_column: value
+          type: number_unformatted
+          settings: {  }
+          group_column: value
+          group_columns: {  }
+          group_rows: true
+          delta_limit: 0
+          delta_offset: 0
+          delta_reversed: false
+          delta_first_last: false
+          multi_type: separator
+          separator: ', '
+          field_api_classes: false
         subject:
           id: subject
           table: message__subject
@@ -86,128 +146,7 @@ display:
           click_sort_column: value
           type: string
           settings:
-            link_to_entity: true
-          group_column: value
-          group_columns: {  }
-          group_rows: true
-          delta_limit: 0
-          delta_offset: 0
-          delta_reversed: false
-          delta_first_last: false
-          multi_type: separator
-          separator: ', '
-          field_api_classes: false
-        edit_message:
-          id: edit_message
-          table: message
-          field: edit_message
-          relationship: none
-          group_type: group
-          admin_label: ''
-          entity_type: message
-          plugin_id: entity_link_edit
-          label: Edit
-          exclude: false
-          alter:
-            alter_text: false
-            text: ''
-            make_link: false
-            path: ''
-            absolute: false
-            external: false
-            replace_spaces: false
-            path_case: none
-            trim_whitespace: false
-            alt: ''
-            rel: ''
-            link_class: ''
-            prefix: ''
-            suffix: ''
-            target: ''
-            nl2br: false
-            max_length: 0
-            word_boundary: true
-            ellipsis: true
-            more_link: false
-            more_link_text: ''
-            more_link_path: ''
-            strip_tags: false
-            trim: false
-            preserve_tags: ''
-            html: false
-          element_type: ''
-          element_class: ''
-          element_label_type: ''
-          element_label_class: ''
-          element_label_colon: true
-          element_wrapper_type: ''
-          element_wrapper_class: ''
-          element_default_classes: true
-          empty: ''
-          hide_empty: false
-          empty_zero: false
-          hide_alter_empty: true
-          text: edit
-          bypass_access_check: true
-          output_url_as_text: false
-          absolute: false
-        created:
-          id: created
-          table: message_field_data
-          field: created
-          relationship: none
-          group_type: group
-          admin_label: ''
-          entity_type: message
-          entity_field: created
-          plugin_id: field
-          label: 'Created on'
-          exclude: false
-          alter:
-            alter_text: false
-            text: ''
-            make_link: false
-            path: ''
-            absolute: false
-            external: false
-            replace_spaces: false
-            path_case: none
-            trim_whitespace: false
-            alt: ''
-            rel: ''
-            link_class: ''
-            prefix: ''
-            suffix: ''
-            target: ''
-            nl2br: false
-            max_length: 0
-            word_boundary: true
-            ellipsis: true
-            more_link: false
-            more_link_text: ''
-            more_link_path: ''
-            strip_tags: false
-            trim: false
-            preserve_tags: ''
-            html: false
-          element_type: ''
-          element_class: ''
-          element_label_type: ''
-          element_label_class: ''
-          element_label_colon: true
-          element_wrapper_type: ''
-          element_wrapper_class: ''
-          element_default_classes: true
-          empty: ''
-          hide_empty: false
-          empty_zero: false
-          hide_alter_empty: true
-          click_sort_column: value
-          type: timestamp
-          settings:
-            date_format: date_only
-            custom_date_format: ''
-            timezone: ''
+            link_to_entity: false
           group_column: value
           group_columns: {  }
           group_rows: true
@@ -280,16 +219,203 @@ display:
           multi_type: separator
           separator: ', '
           field_api_classes: false
+        created:
+          id: created
+          table: message_field_data
+          field: created
+          relationship: none
+          group_type: group
+          admin_label: ''
+          entity_type: message
+          entity_field: created
+          plugin_id: field
+          label: 'Created on'
+          exclude: false
+          alter:
+            alter_text: false
+            text: ''
+            make_link: false
+            path: ''
+            absolute: false
+            external: false
+            replace_spaces: false
+            path_case: none
+            trim_whitespace: false
+            alt: ''
+            rel: ''
+            link_class: ''
+            prefix: ''
+            suffix: ''
+            target: ''
+            nl2br: false
+            max_length: 0
+            word_boundary: true
+            ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
+            strip_tags: false
+            trim: false
+            preserve_tags: ''
+            html: false
+          element_type: ''
+          element_class: ''
+          element_label_type: ''
+          element_label_class: ''
+          element_label_colon: true
+          element_wrapper_type: ''
+          element_wrapper_class: ''
+          element_default_classes: true
+          empty: ''
+          hide_empty: false
+          empty_zero: false
+          hide_alter_empty: true
+          click_sort_column: value
+          type: timestamp
+          settings:
+            date_format: date_only
+            custom_date_format: ''
+            timezone: ''
+          group_column: value
+          group_columns: {  }
+          group_rows: true
+          delta_limit: 0
+          delta_offset: 0
+          delta_reversed: false
+          delta_first_last: false
+          multi_type: separator
+          separator: ', '
+          field_api_classes: false
+        uid:
+          id: uid
+          table: message_field_data
+          field: uid
+          relationship: none
+          group_type: group
+          admin_label: ''
+          entity_type: message
+          entity_field: uid
+          plugin_id: field
+          label: Author
+          exclude: false
+          alter:
+            alter_text: false
+            text: ''
+            make_link: false
+            path: ''
+            absolute: false
+            external: false
+            replace_spaces: false
+            path_case: none
+            trim_whitespace: false
+            alt: ''
+            rel: ''
+            link_class: ''
+            prefix: ''
+            suffix: ''
+            target: ''
+            nl2br: false
+            max_length: 0
+            word_boundary: true
+            ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
+            strip_tags: false
+            trim: false
+            preserve_tags: ''
+            html: false
+          element_type: ''
+          element_class: ''
+          element_label_type: ''
+          element_label_class: ''
+          element_label_colon: true
+          element_wrapper_type: ''
+          element_wrapper_class: ''
+          element_default_classes: true
+          empty: ''
+          hide_empty: false
+          empty_zero: false
+          hide_alter_empty: true
+          click_sort_column: target_id
+          type: author
+          settings: {  }
+          group_column: target_id
+          group_columns: {  }
+          group_rows: true
+          delta_limit: 0
+          delta_offset: 0
+          delta_reversed: false
+          delta_first_last: false
+          multi_type: separator
+          separator: ', '
+          field_api_classes: false
+        edit_message__announcement:
+          id: edit_message__announcement
+          table: message
+          field: edit_message__announcement
+          relationship: none
+          group_type: group
+          admin_label: ''
+          entity_type: message
+          plugin_id: joinup_group_announcement_edit_link
+          label: Edit
+          exclude: false
+          alter:
+            alter_text: false
+            text: ''
+            make_link: false
+            path: ''
+            absolute: false
+            external: false
+            replace_spaces: false
+            path_case: none
+            trim_whitespace: false
+            alt: ''
+            rel: ''
+            link_class: ''
+            prefix: ''
+            suffix: ''
+            target: ''
+            nl2br: false
+            max_length: 0
+            word_boundary: true
+            ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
+            strip_tags: false
+            trim: false
+            preserve_tags: ''
+            html: false
+          element_type: ''
+          element_class: ''
+          element_label_type: ''
+          element_label_class: ''
+          element_label_colon: true
+          element_wrapper_type: ''
+          element_wrapper_class: ''
+          element_default_classes: true
+          empty: ''
+          hide_empty: false
+          empty_zero: false
+          hide_alter_empty: true
+          text: edit
+          bypass_access_check: false
+          output_url_as_text: false
+          absolute: false
       pager:
-        type: mini
+        type: full
         options:
           offset: 0
-          items_per_page: 20
+          items_per_page: 30
           total_pages: null
           id: 0
           tags:
             next: ››
             previous: ‹‹
+            first: '« First'
+            last: 'Last »'
           expose:
             items_per_page: false
             items_per_page_label: 'Items per page'
@@ -298,27 +424,55 @@ display:
             items_per_page_options_all_label: '- All -'
             offset: false
             offset_label: Offset
+          quantity: 9
       exposed_form:
         type: basic
         options:
           submit_button: Apply
-          reset_button: false
+          reset_button: true
           reset_button_label: Reset
-          exposed_sorts_label: 'Sort by'
+          exposed_sorts_label: Sort
           expose_sort_order: true
           sort_asc_label: Asc
           sort_desc_label: Desc
       access:
-        type: role
+        type: perm
         options:
-          role:
-            moderator: moderator
-            administrator: administrator
+          perm: 'manage group announcements'
       cache:
         type: tag
         options: {  }
-      empty: {  }
-      sorts: {  }
+      empty:
+        area:
+          id: area
+          table: views
+          field: area
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: text
+          empty: true
+          content:
+            value: 'No announcements for your search criteria.'
+            format: content_editor
+          tokenize: false
+      sorts:
+        created:
+          id: created
+          table: message_field_data
+          field: created
+          relationship: none
+          group_type: group
+          admin_label: ''
+          entity_type: message
+          entity_field: created
+          plugin_id: date
+          order: DESC
+          expose:
+            label: ''
+            field_identifier: ''
+          exposed: false
+          granularity: second
       arguments:
         group_reference_target_id:
           id: group_reference_target_id
@@ -349,15 +503,11 @@ display:
             format: default_summary
           specify_validation: true
           validate:
-            type: 'entity:rdf_entity'
-            fail: empty
+            type: joinup_group_announcements_enabled
+            fail: 'not found'
           validate_options:
-            bundles:
-              collection: collection
-              solution: solution
-            access: false
-            operation: view
-            multiple: 0
+            group_permission: 'manage group announcements'
+            site_permission: 'manage group announcements'
           glossary: false
           limit: 0
           case: none
@@ -369,146 +519,92 @@ display:
           id: template
           table: message_field_data
           field: template
-          relationship: none
-          group_type: group
-          admin_label: ''
           entity_type: message
           entity_field: template
           plugin_id: bundle
-          operator: in
           value:
             announcement: announcement
-          group: 1
-          exposed: false
           expose:
-            operator_id: ''
-            label: ''
-            description: ''
-            use_operator: false
-            operator: ''
             operator_limit_selection: false
             operator_list: {  }
-            identifier: ''
-            required: false
-            remember: false
-            multiple: false
-            remember_roles:
-              authenticated: authenticated
-            reduce: false
-          is_grouped: false
-          group_info:
-            label: ''
-            description: ''
-            identifier: ''
-            optional: true
-            widget: select
-            multiple: false
-            remember: false
-            default_group: All
-            default_group_multiple: {  }
-            group_items: {  }
-        group_reference_target_id_verf:
-          id: group_reference_target_id_verf
-          table: message__group_reference
-          field: group_reference_target_id_verf
-          relationship: none
-          group_type: group
-          admin_label: ''
-          plugin_id: verf
-          operator: in
-          value: {  }
-          group: 1
-          exposed: true
-          expose:
-            operator_id: group_reference_target_id_verf_op
-            label: 'Group reference'
-            description: ''
-            use_operator: false
-            operator: group_reference_target_id_verf_op
-            operator_limit_selection: false
-            operator_list: {  }
-            identifier: group_reference_target_id
-            required: false
-            remember: false
-            multiple: false
-            remember_roles:
-              authenticated: authenticated
-              licence_manager: '0'
-              anonymous: '0'
-              moderator: '0'
-              administrator: '0'
-              rdf_graph_manager: '0'
-          is_grouped: false
-          group_info:
-            label: ''
-            description: ''
-            identifier: ''
-            optional: true
-            widget: select
-            multiple: false
-            remember: false
-            default_group: All
-            default_group_multiple: {  }
-            group_items: {  }
-          verf_target_bundles:
-            collection: collection
-            solution: solution
-            asset_distribution: '0'
-            asset_release: '0'
-            contact_information: '0'
-            licence: '0'
-            owner: '0'
-            provenance_activity: '0'
-            rdf_graph: '0'
-            spdx_licence: '0'
-        state_value:
-          id: state_value
-          table: message__state
-          field: state_value
-          relationship: none
-          group_type: group
-          admin_label: ''
-          plugin_id: state_machine_state
-          operator: in
-          value: {  }
-          group: 1
-          exposed: true
-          expose:
-            operator_id: state_value_op
-            label: State
-            description: ''
-            use_operator: false
-            operator: state_value_op
-            operator_limit_selection: false
-            operator_list: {  }
-            identifier: state
-            required: false
-            remember: false
-            multiple: false
-            remember_roles:
-              authenticated: authenticated
-              licence_manager: '0'
-              anonymous: '0'
-              moderator: '0'
-              administrator: '0'
-              rdf_graph_manager: '0'
-            reduce: false
-          is_grouped: false
-          group_info:
-            label: ''
-            description: ''
-            identifier: ''
-            optional: true
-            widget: select
-            multiple: false
-            remember: false
-            default_group: All
-            default_group_multiple: {  }
-            group_items: {  }
       style:
         type: table
+        options:
+          grouping: {  }
+          row_class: ''
+          default_row_class: true
+          columns:
+            group_reference: group_reference
+            mid: mid
+            subject: subject
+            state: state
+            created: created
+            uid: uid
+            edit_message__announcement: edit_message__announcement
+          default: created
+          info:
+            group_reference:
+              sortable: true
+              default_sort_order: asc
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
+            mid:
+              sortable: false
+              default_sort_order: asc
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
+            subject:
+              sortable: true
+              default_sort_order: asc
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
+            state:
+              sortable: true
+              default_sort_order: asc
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
+            created:
+              sortable: true
+              default_sort_order: desc
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
+            uid:
+              sortable: true
+              default_sort_order: asc
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
+            edit_message__announcement:
+              sortable: false
+              default_sort_order: asc
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
+          override: true
+          sticky: false
+          summary: ''
+          empty_table: false
+          caption: ''
+          description: ''
       row:
         type: fields
+        options:
+          default_field_elements: true
+          inline: {  }
+          separator: ''
+          hide_empty: false
       query:
         type: views_query
         options:
@@ -532,15 +628,13 @@ display:
         - 'languages:language_interface'
         - url
         - url.query_args
-        - user.roles
+        - user.permissions
       tags:
         - 'config:field.storage.message.state'
         - 'config:field.storage.message.subject'
-        - 'config:views.view.announcements'
-        - rdf_entity_list
-  admin_list:
-    id: admin_list
-    display_title: Page
+  all:
+    id: all
+    display_title: All
     display_plugin: page
     position: 2
     display_options:
@@ -553,7 +647,7 @@ display:
           group_type: group
           admin_label: ''
           plugin_id: field
-          label: 'Group reference'
+          label: Group
           exclude: false
           alter:
             alter_text: false
@@ -608,6 +702,70 @@ display:
           multi_type: separator
           separator: ', '
           field_api_classes: false
+        mid:
+          id: mid
+          table: message_field_data
+          field: mid
+          relationship: none
+          group_type: group
+          admin_label: ''
+          entity_type: message
+          entity_field: mid
+          plugin_id: field
+          label: ''
+          exclude: true
+          alter:
+            alter_text: false
+            text: ''
+            make_link: false
+            path: ''
+            absolute: false
+            external: false
+            replace_spaces: false
+            path_case: none
+            trim_whitespace: false
+            alt: ''
+            rel: ''
+            link_class: ''
+            prefix: ''
+            suffix: ''
+            target: ''
+            nl2br: false
+            max_length: 0
+            word_boundary: true
+            ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
+            strip_tags: false
+            trim: false
+            preserve_tags: ''
+            html: false
+          element_type: ''
+          element_class: ''
+          element_label_type: ''
+          element_label_class: ''
+          element_label_colon: false
+          element_wrapper_type: ''
+          element_wrapper_class: ''
+          element_default_classes: true
+          empty: ''
+          hide_empty: false
+          empty_zero: false
+          hide_alter_empty: true
+          click_sort_column: value
+          type: number_unformatted
+          settings: {  }
+          group_column: value
+          group_columns: {  }
+          group_rows: true
+          delta_limit: 0
+          delta_offset: 0
+          delta_reversed: false
+          delta_first_last: false
+          multi_type: separator
+          separator: ', '
+          field_api_classes: false
         subject:
           id: subject
           table: message__subject
@@ -660,128 +818,7 @@ display:
           click_sort_column: value
           type: string
           settings:
-            link_to_entity: true
-          group_column: value
-          group_columns: {  }
-          group_rows: true
-          delta_limit: 0
-          delta_offset: 0
-          delta_reversed: false
-          delta_first_last: false
-          multi_type: separator
-          separator: ', '
-          field_api_classes: false
-        edit_message:
-          id: edit_message
-          table: message
-          field: edit_message
-          relationship: none
-          group_type: group
-          admin_label: ''
-          entity_type: message
-          plugin_id: entity_link_edit
-          label: Edit
-          exclude: false
-          alter:
-            alter_text: false
-            text: ''
-            make_link: false
-            path: ''
-            absolute: false
-            external: false
-            replace_spaces: false
-            path_case: none
-            trim_whitespace: false
-            alt: ''
-            rel: ''
-            link_class: ''
-            prefix: ''
-            suffix: ''
-            target: ''
-            nl2br: false
-            max_length: 0
-            word_boundary: true
-            ellipsis: true
-            more_link: false
-            more_link_text: ''
-            more_link_path: ''
-            strip_tags: false
-            trim: false
-            preserve_tags: ''
-            html: false
-          element_type: ''
-          element_class: ''
-          element_label_type: ''
-          element_label_class: ''
-          element_label_colon: true
-          element_wrapper_type: ''
-          element_wrapper_class: ''
-          element_default_classes: true
-          empty: ''
-          hide_empty: false
-          empty_zero: false
-          hide_alter_empty: true
-          text: edit
-          bypass_access_check: false
-          output_url_as_text: false
-          absolute: false
-        created:
-          id: created
-          table: message_field_data
-          field: created
-          relationship: none
-          group_type: group
-          admin_label: ''
-          entity_type: message
-          entity_field: created
-          plugin_id: field
-          label: 'Created on'
-          exclude: false
-          alter:
-            alter_text: false
-            text: ''
-            make_link: false
-            path: ''
-            absolute: false
-            external: false
-            replace_spaces: false
-            path_case: none
-            trim_whitespace: false
-            alt: ''
-            rel: ''
-            link_class: ''
-            prefix: ''
-            suffix: ''
-            target: ''
-            nl2br: false
-            max_length: 0
-            word_boundary: true
-            ellipsis: true
-            more_link: false
-            more_link_text: ''
-            more_link_path: ''
-            strip_tags: false
-            trim: false
-            preserve_tags: ''
-            html: false
-          element_type: ''
-          element_class: ''
-          element_label_type: ''
-          element_label_class: ''
-          element_label_colon: true
-          element_wrapper_type: ''
-          element_wrapper_class: ''
-          element_default_classes: true
-          empty: ''
-          hide_empty: false
-          empty_zero: false
-          hide_alter_empty: true
-          click_sort_column: value
-          type: timestamp
-          settings:
-            date_format: date_only
-            custom_date_format: ''
-            timezone: ''
+            link_to_entity: false
           group_column: value
           group_columns: {  }
           group_rows: true
@@ -854,10 +891,306 @@ display:
           multi_type: separator
           separator: ', '
           field_api_classes: false
+        created:
+          id: created
+          table: message_field_data
+          field: created
+          relationship: none
+          group_type: group
+          admin_label: ''
+          entity_type: message
+          entity_field: created
+          plugin_id: field
+          label: 'Created on'
+          exclude: false
+          alter:
+            alter_text: false
+            text: ''
+            make_link: false
+            path: ''
+            absolute: false
+            external: false
+            replace_spaces: false
+            path_case: none
+            trim_whitespace: false
+            alt: ''
+            rel: ''
+            link_class: ''
+            prefix: ''
+            suffix: ''
+            target: ''
+            nl2br: false
+            max_length: 0
+            word_boundary: true
+            ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
+            strip_tags: false
+            trim: false
+            preserve_tags: ''
+            html: false
+          element_type: ''
+          element_class: ''
+          element_label_type: ''
+          element_label_class: ''
+          element_label_colon: true
+          element_wrapper_type: ''
+          element_wrapper_class: ''
+          element_default_classes: true
+          empty: ''
+          hide_empty: false
+          empty_zero: false
+          hide_alter_empty: true
+          click_sort_column: value
+          type: timestamp
+          settings:
+            date_format: date_only
+            custom_date_format: ''
+            timezone: ''
+          group_column: value
+          group_columns: {  }
+          group_rows: true
+          delta_limit: 0
+          delta_offset: 0
+          delta_reversed: false
+          delta_first_last: false
+          multi_type: separator
+          separator: ', '
+          field_api_classes: false
+        uid:
+          id: uid
+          table: message_field_data
+          field: uid
+          relationship: none
+          group_type: group
+          admin_label: ''
+          entity_type: message
+          entity_field: uid
+          plugin_id: field
+          label: Author
+          exclude: false
+          alter:
+            alter_text: false
+            text: ''
+            make_link: false
+            path: ''
+            absolute: false
+            external: false
+            replace_spaces: false
+            path_case: none
+            trim_whitespace: false
+            alt: ''
+            rel: ''
+            link_class: ''
+            prefix: ''
+            suffix: ''
+            target: ''
+            nl2br: false
+            max_length: 0
+            word_boundary: true
+            ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
+            strip_tags: false
+            trim: false
+            preserve_tags: ''
+            html: false
+          element_type: ''
+          element_class: ''
+          element_label_type: ''
+          element_label_class: ''
+          element_label_colon: true
+          element_wrapper_type: ''
+          element_wrapper_class: ''
+          element_default_classes: true
+          empty: ''
+          hide_empty: false
+          empty_zero: false
+          hide_alter_empty: true
+          click_sort_column: target_id
+          type: author
+          settings: {  }
+          group_column: target_id
+          group_columns: {  }
+          group_rows: true
+          delta_limit: 0
+          delta_offset: 0
+          delta_reversed: false
+          delta_first_last: false
+          multi_type: separator
+          separator: ', '
+          field_api_classes: false
+        edit_message__announcement:
+          id: edit_message__announcement
+          table: message
+          field: edit_message__announcement
+          relationship: none
+          group_type: group
+          admin_label: ''
+          entity_type: message
+          plugin_id: joinup_group_announcement_edit_link
+          label: Edit
+          exclude: false
+          alter:
+            alter_text: false
+            text: ''
+            make_link: false
+            path: ''
+            absolute: false
+            external: false
+            replace_spaces: false
+            path_case: none
+            trim_whitespace: false
+            alt: ''
+            rel: ''
+            link_class: ''
+            prefix: ''
+            suffix: ''
+            target: ''
+            nl2br: false
+            max_length: 0
+            word_boundary: true
+            ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
+            strip_tags: false
+            trim: false
+            preserve_tags: ''
+            html: false
+          element_type: ''
+          element_class: ''
+          element_label_type: ''
+          element_label_class: ''
+          element_label_colon: true
+          element_wrapper_type: ''
+          element_wrapper_class: ''
+          element_default_classes: true
+          empty: ''
+          hide_empty: false
+          empty_zero: false
+          hide_alter_empty: true
+          text: edit
+          bypass_access_check: false
+          output_url_as_text: false
+          absolute: false
       arguments: {  }
+      filters:
+        template:
+          id: template
+          table: message_field_data
+          field: template
+          entity_type: message
+          entity_field: template
+          plugin_id: bundle
+          value:
+            announcement: announcement
+          group: 1
+          expose:
+            operator_limit_selection: false
+            operator_list: {  }
+        group_reference_target_id:
+          id: group_reference_target_id
+          table: message__group_reference
+          field: group_reference_target_id
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: string
+          operator: '='
+          value: ''
+          group: 1
+          exposed: true
+          expose:
+            operator_id: group_reference_target_id_op
+            label: Group
+            description: ''
+            use_operator: false
+            operator: group_reference_target_id_op
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: group
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+              licence_manager: '0'
+              anonymous: '0'
+              moderator: '0'
+              administrator: '0'
+              rdf_graph_manager: '0'
+            placeholder: ''
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+        state_value:
+          id: state_value
+          table: message__state
+          field: state_value
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: state_machine_state
+          operator: in
+          value: {  }
+          group: 1
+          exposed: true
+          expose:
+            operator_id: state_value_op
+            label: State
+            description: ''
+            use_operator: false
+            operator: state_value_op
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: state
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+              licence_manager: '0'
+              anonymous: '0'
+              moderator: '0'
+              administrator: '0'
+              rdf_graph_manager: '0'
+            reduce: false
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+      filter_groups:
+        operator: AND
+        groups:
+          1: AND
       defaults:
+        relationships: false
         fields: false
         arguments: false
+        filters: false
+        filter_groups: false
+      relationships: {  }
+      display_description: ''
       display_extenders:
         metatag_display_extender:
           metatags: {  }
@@ -867,10 +1200,10 @@ display:
         type: normal
         title: Announcements
         description: ''
-        weight: 10
+        weight: 0
         expanded: false
         menu_name: admin
-        parent: system.admin
+        parent: ''
         context: '0'
       always_use_admin_theme: false
     cache_metadata:
@@ -880,10 +1213,60 @@ display:
         - 'languages:language_interface'
         - url
         - url.query_args
-        - user.roles
+        - user.permissions
       tags:
         - 'config:field.storage.message.group_reference'
         - 'config:field.storage.message.state'
         - 'config:field.storage.message.subject'
-        - 'config:views.view.announcements'
-        - rdf_entity_list
+  group:
+    id: group
+    display_title: 'Per group'
+    display_plugin: page
+    position: 1
+    display_options:
+      access:
+        type: none
+        options: {  }
+      empty:
+        area:
+          id: area
+          table: views
+          field: area
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: text
+          empty: true
+          content:
+            value: 'No announcements yet'
+            format: content_editor
+          tokenize: false
+      defaults:
+        empty: false
+        access: false
+      display_description: ''
+      display_extenders:
+        metatag_display_extender:
+          metatags: {  }
+          tokenize: false
+      path: rdf_entity/%rdf_entity/announcements
+      menu:
+        type: tab
+        title: Announcements
+        description: 'Group announcements.'
+        weight: 120
+        expanded: false
+        menu_name: main
+        parent: ''
+        context: '0'
+      always_use_admin_theme: false
+    cache_metadata:
+      max-age: -1
+      contexts:
+        - 'languages:language_content'
+        - 'languages:language_interface'
+        - url
+        - url.query_args
+      tags:
+        - 'config:field.storage.message.state'
+        - 'config:field.storage.message.subject'
