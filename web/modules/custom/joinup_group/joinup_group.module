@@ -21,6 +21,7 @@ use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Test\Exception\MissingGroupException;
 use Drupal\Core\Url;
 use Drupal\file\Entity\File;
+use Drupal\joinup_group\Entity\Announcement;
 use Drupal\joinup_group\Entity\GroupContentInterface;
 use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_group\Event\GroupMenuLinksEvent;
@@ -54,6 +55,15 @@ function joinup_group_theme($existing, $type, $theme, $path) {
       ],
     ],
   ];
+}
+
+/**
+ * Implements hook_entity_bundle_info_alter().
+ */
+function joinup_group_entity_bundle_info_alter(array &$bundles) {
+  if (!empty($bundles['message']['announcement'])) {
+    $bundles['message']['announcement']['class'] = Announcement::class;
+  }
 }
 
 /**
