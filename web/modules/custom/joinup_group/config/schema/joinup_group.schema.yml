@@ -34,3 +34,20 @@ views.argument_default.rdf_entity:
     parameter_name:
       type: string
       label: 'Parameter name'
+
+views.argument_validator.joinup_group_user_permission:
+  type: views.argument_validator.*
+  label: Validates user group and site permissions
+  mapping:
+    group_permission:
+      type: string
+      nullable: true
+      label: Group permission
+    site_permission:
+      type: string
+      nullable: true
+      label: Site permission
+
+views.argument_validator.joinup_group_announcements_enabled:
+  type: views.argument_validator.joinup_group_user_permission
+  label: Access to group announcements
