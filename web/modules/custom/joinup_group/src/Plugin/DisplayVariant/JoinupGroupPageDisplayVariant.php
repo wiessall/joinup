@@ -114,7 +114,9 @@ class JoinupGroupPageDisplayVariant extends BlockPageVariant {
       $landing_page = $group->getSetting('landing_page');
       return $landing_page->entity;
     }
-    else return null;
+    else {
+      return NULL;
+    }
   }
 
 }
