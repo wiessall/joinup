@@ -4,12 +4,15 @@ declare(strict_types = 1);
 
 namespace Drupal\joinup\Context;
 
+use Behat\Gherkin\Node\TableNode;
 use Behat\Mink\Exception\ElementNotFoundException;
 use Drupal\Core\Url;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\joinup\Traits\EntityTrait;
 use Drupal\joinup\Traits\NodeTrait;
 use Drupal\joinup\Traits\RdfEntityTrait;
+use Drupal\joinup\Traits\TestingEntitiesTrait;
+use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\og\OgGroupAudienceHelperInterface;
 use Drupal\og\OgMembershipInterface;
 use PHPUnit\Framework\Assert;
@@ -23,6 +26,7 @@ class JoinupGroupContext extends RawDrupalContext {
   use EntityTrait;
   use NodeTrait;
   use RdfEntityTrait;
+  use TestingEntitiesTrait;
 
   /**
    * Navigates to the members page of the given group.
@@ -209,6 +213,144 @@ class JoinupGroupContext extends RawDrupalContext {
     }
 
     $row->clickLink($link);
+  }
+
+  /**
+   * Navigates to the announcements page of a given group.
+   *
+   * @param string $group_label
+   *   The label of the group where the announcement belongs.
+   * @param string $group_type
+   *   The group bundle.
+   *
+   * @When I go to the announcements page of :group_label :group_type
+   */
+  public function visitGroupAnnouncementsPage(string $group_label, string $group_type): void {
+    assert(in_array($group_type, ['collection', 'solution']));
+    $group = $this->getEntityByLabel('rdf_entity', $group_label, $group_type);
+    $url = Url::fromRoute('view.announcements.group', [
+      'rdf_entity' => $group->id(),
+    ])->toString();
+    $this->visitPath($url);
+  }
+
+  /**
+   * Navigates to the edit page of a given announcement.
+   *
+   * @param string $subject
+   *   The announcement subject.
+   * @param string $group_label
+   *   The label of the group where the announcement belongs.
+   * @param string $group_type
+   *   The group bundle.
+   *
+   * @When I go the :subject announcement of :group_label :group_type
+   */
+  public function visitAnnouncementEditForm(string $subject, string $group_label, string $group_type): void {
+    assert(in_array($group_type, ['collection', 'solution']));
+    $storage = \Drupal::entityTypeManager()->getStorage('message');
+    $mids = $storage->getQuery()->accessCheck(FALSE)
+      ->condition('template', 'announcement')
+      ->condition('subject', $subject)
+      ->execute();
+    if (!$mids) {
+      throw new \InvalidArgumentException("There's no announcement with the '$subject' subject");
+    }
+    $mid = reset($mids);
+    $group = $this->getEntityByLabel('rdf_entity', $group_label, $group_type);
+    $url = Url::fromRoute('entity.rdf_entity.announcement_edit', [
+      'rdf_entity' => $group->id(),
+      'announcement' => $mid,
+    ])->toString();
+    $this->visitPath($url);
+  }
+
+  /**
+   * Deletes a specific announcement.
+   *
+   * @param string $subject
+   *   The announcement subject.
+   *
+   * @Then I delete the :subject announcement
+   */
+  public function deleteAnnouncement(string $subject): void {
+    $storage = \Drupal::entityTypeManager()->getStorage('message');
+    $mids = $storage->getQuery()->accessCheck(FALSE)
+      ->condition('template', 'announcement')
+      ->condition('subject', $subject)
+      ->execute();
+    if (!$mids) {
+      throw new \InvalidArgumentException("There's no announcement with the '$subject' subject");
+    }
+    $storage->load(reset($mids))->delete();
+  }
+
+  /**
+   * Creates a set of announcements.
+   *
+   * Table format:
+   * @code
+   * | group             | subject                          | body       | state    | author | created   |
+   * | Art Collection    | Come and see what we've achieved | Content... | draft    | user1  | 25/2/2014 |
+   * | The Only Solution | Heavy Metal Treatment            | Text...    | approved | user3  | 1/4/2020  |                | http://mashable.com/category/cats/     | yes|no | 28-01-1995 12:06 | The domestic cat (Felis catus or Felis silvestris catus) is a small usually furry domesticated carnivorous mammal. | facilitators and authors|members|registered users | no       |      | no         |                   |       | draft|proposed|validated|archival request|archived |
+   * @encode
+   * The group and subject fields are required. If omitted, the state field
+   * defaults to draft and the body will be composed of the subject value. The
+   * created date/time default to the current time.
+   *
+   * @param \Behat\Gherkin\Node\TableNode $table
+   *   The announcement data.
+   *
+   * @Given the following announcements:
+   */
+  public function createAnnouncements(TableNode $table): void {
+    $columns = [
+      'group' => TRUE,
+      'subject' => TRUE,
+      'body' => FALSE,
+      'state' => FALSE,
+      'author' => FALSE,
+      'created' => FALSE,
+    ];
+    $keys = $table->getRow(0);
+    if ($invalid_columns = array_diff($keys, array_keys($columns))) {
+      throw new \InvalidArgumentException('Invalid column(s): ' . implode(', ', $invalid_columns));
+    }
+    if ($missing_columns = array_diff(array_keys(array_filter($columns)), $keys)) {
+      throw new \InvalidArgumentException('Missing columns: ' . implode(', ', $missing_columns));
+    }
+
+    $storage = \Drupal::entityTypeManager()->getStorage('message');
+    foreach ($table->getColumnsHash() as $row) {
+      $values = [
+        'template' => 'announcement',
+        'state' => 'draft',
+        'uid' => 1,
+        'body' => "Content of {$row['subject']}",
+        'created' => date('j/n/Y'),
+      ];
+      foreach ($row as $key => $value) {
+        if ($key === 'group') {
+          $group = $this->getEntityByLabel('rdf_entity', $value);
+          if (!$group instanceof GroupInterface) {
+            throw new \InvalidArgumentException("'$value' should be either a collection or a solution");
+          }
+          $values['group_reference'] = $group;
+        }
+        elseif ($key === 'author') {
+          if (!$account = user_load_by_name($value)) {
+            throw new \InvalidArgumentException("'$value' should be a valid user name");
+          }
+          $values['uid'] = $account;
+          continue;
+        }
+        $values[$key] = $value;
+      }
+      $values['created'] = strtotime($values['created']);
+      $announcement = $storage->create($values);
+      $announcement->save();
+      $this->entities['message'][$announcement->id()] = $announcement;
+    }
   }
 
 }
