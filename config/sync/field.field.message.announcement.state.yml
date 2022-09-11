@@ -20,6 +20,6 @@ default_value:
     value: __new__
 default_value_callback: ''
 settings:
-  workflow: announcement_workflow
+  workflow: announcement
   workflow_callback: ''
 field_type: state
