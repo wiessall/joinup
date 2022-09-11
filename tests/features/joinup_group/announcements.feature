@@ -1,288 +1,233 @@
 @api
 Feature: Messaging group announcements
 
-  Scenario: Create new pending announcement
-    Given the following collections:
-      | title        | state     | closed |
-      | Fail pension | validated | no     |
-    And users:
-      | Username             | E-mail                           | Roles     | First name | Family name |
-      | Sons of tweets       | sonsoftweets@example.com         |           | Sons       | Tweets      |
-      | Check edit moderator | check.edit.moderator@example.com | moderator | Ronny      | Ray         |
-    And the following collection user membership:
-      | collection   | user           | roles       |
-      | Fail pension | Sons of tweets | facilitator |
+  Scenario Outline: Announcement creation and transitions
 
-    When I am logged in as "Sons of tweets"
-    And I go to the homepage of the "Fail pension" collection
-    Then I click "Members"
-    And I should see the link "Add announcement"
+    Given the following <group>s:
+      | title        | state     |
+      | Fail pension | validated |
+      | Hidden gems  | draft     |
+    And users:
+      | Username             | E-mail                           | Roles     |
+      | Sons of tweets       | sonsoftweets@example.com         |           |
+      | Check edit moderator | check.edit.moderator@example.com | moderator |
+    And the following <group> user membership:
+      | <group>      | user           | roles       |
+      | Fail pension | Sons of tweets | facilitator |
+      | Hidden gems  | Sons of tweets | facilitator |
+
+    Given I am an anonymous user
+    When I go to the announcements page of "Fail pension" <group>
+    Then the response status code should be 404
+    When I go to the announcements page of "Hidden gems" <group>
+    Then the response status code should be 404
+
+    Given I am logged in as an "authenticated user"
+    When I go to the announcements page of "Fail pension" <group>
+    Then the response status code should be 404
+    When I go to the announcements page of "Hidden gems" <group>
+    Then the response status code should be 404
+
+    Given I am logged in as "Sons of tweets"
+
+    When I go to the announcements page of "Hidden gems" <group>
+    Then the response status code should be 404
+
+    When I go to the announcements page of "Fail pension" <group>
     And I click "Add announcement"
+    Then I should see "Announcement not saved yet"
+    # On announcement creation, the state buttons are hidden.
+    And I should not see the button "Approve"
+    And I should not see the button "Send"
+    And I should not see the button "Reject"
+    And I should not see the button "Undo"
     And I fill in "Subject" with "Test anon [rdf_entity:label]"
     And I fill in "Body" with "Lorem Ipsum is simply dummy text of the printing and typesetting industry."
-    And the following field should not be present "State"
-    When I press "Submit"
-    Then I should see the success message "Your announcement has been submitted for validation."
 
-    And the following email should have been sent:
-      | recipient | Check edit moderator                                                  |
-      | subject   | Joinup: A new announcement "Test anon Fail pension" has been created. |
-      | body      | Sons Tweets has created this announcement "Test anon Fail pension".   |
+    When I press "Create"
+    Then I should see the success message "The announcement has been created as Draft. Review the announcement and, when is ready to be sent, use the 'Send' button."
+    And the "Subject" field should contain "Test anon [rdf_entity:label]"
+    And the "Body" field should contain "Lorem Ipsum is simply dummy text of the printing and typesetting industry."
+    And I should see "Announcement in Draft state"
+    And I should see the button "Send"
+    But I should not see the button "Approve"
+    And I should not see the button "Reject"
+    And I should not see the button "Create"
+    And I should not see the button "Undo"
 
-    # Check "Add announcement" button permissions
+    When I fill in "Subject" with "Test anon [rdf_entity:label] bis"
+    And I fill in "Body" with "Beware, new release is out for [rdf_entity:label]"
+    And I press "Update"
+    Then I should see the success message "The announcement has been updated but it's still in Draft state. Review the announcement and, when is ready to be sent, use the 'Send' button."
+    And I should see "Announcement in Draft state"
+
+    When I press "Send"
+    Then I should see the success message "Your announcement has been sent for validation by Joinup moderators. Once approved, will reach the Fail pension <group> members."
+    And I should see the link "Add announcement"
+    # The facilitator has exhausted all operations they can perform, so they
+    # cannot edit the announcement anymore.
+    And I should not see "edit" in the "Test anon [rdf_entity:label] bis" row
+    And the email sent to "Check edit moderator" with subject "Joinup: A new announcement 'Test anon Fail pension bis' has been created" contains the following lines of text:
+      | text                                                                                                             |
+      | A new announcement 'Test anon Fail pension bis' has been created by Sons of tweets for the Fail pension <group>. |
+      | You can approve or reject the announcement at                                                                    |
+
+    Given I am logged in as "Check edit moderator"
+    When I go to the announcements page of "Hidden gems" <group>
+    Then the response status code should be 404
+    And I click the link from email sent to "Check edit moderator" with subject "Joinup: A new announcement 'Test anon Fail pension bis' has been created"
+    Then I should see "Announcement in Sent state"
+    And I should see the button "Update"
+    And I should see the button "Approve"
+    But I should not see the button "Create"
+    And I should not see the button "Send"
+    And I should not see the button "Undo"
+
+    When I press "Reject"
+    Then I should see the success message "The announcement has been rejected. Press the 'Undo' button to restore the announcement."
+    Then I should see "Announcement in Rejected state"
+    And I should see the button "Update"
+    But I should not see the button "Approve"
+    But I should not see the button "Create"
+    But I should not see the button "Send"
+    But I should not see the button "Reject"
+
     Given I am logged in as "Sons of tweets"
-    And I go to the homepage of the "Fail pension" collection
-    Then I click "Members"
+    When I go the "Test anon [rdf_entity:label] bis" announcement of "Fail pension" <group>
+    Then the response status code should be 403
+
+    Given I am logged in as "Check edit moderator"
+    When I go the "Test anon [rdf_entity:label] bis" announcement of "Fail pension" <group>
+    And  I press "Undo"
+    Then I should see the success message "The announcement has been restored."
+    Then I should see "Announcement in Sent state"
+    And I should see the button "Update"
+    And I should see the button "Approve"
+    But I should not see the button "Create"
+    And I should not see the button "Send"
+    And I should not see the button "Undo"
+
+    Given I am logged in as "Sons of tweets"
+    When I go the "Test anon [rdf_entity:label] bis" announcement of "Fail pension" <group>
+    Then the response status code should be 403
+
+    Given I am logged in as "Check edit moderator"
+    When I go the "Test anon [rdf_entity:label] bis" announcement of "Fail pension" <group>
+    And I press "Approve"
+    Then I should see the success message "The announcement has been delivered to the Fail pension <group> members."
     And I should see the link "Add announcement"
-    And I should see the link "Announcement list"
+    But I should not see "edit" in the "Test anon [rdf_entity:label] bis" row
 
-    When I am logged in as "Check edit moderator"
-    And I go to the homepage of the "Fail pension" collection
-    Then I click "Members"
-    And I should see the link "Add announcement"
-    And I should see the link "Announcement list"
+    Given I am logged in as "Sons of tweets"
+    When I go the "Test anon [rdf_entity:label] bis" announcement of "Fail pension" <group>
+    Then the response status code should be 403
 
-    When I am an anonymous user
-    And I go to the homepage of the "Fail pension" collection
-    Then I click "Members"
-    And I should not see the link "Add announcement"
-    And I should not see the link "Announcement list"
-
-    When I am logged in as a user with the "authenticated" role
-    And I go to the homepage of the "Fail pension" collection
-    Then I click "Members"
-    And I should not see the link "Add announcement"
-    And I should not see the link "Announcement list"
-
-  Scenario Outline: Check permissions when disable and enable announcements.
-    Given the following <content type>:
-      | title      | Nachos test   |
-      | state      | validated     |
-    And users:
-      | Username         | E-mail                       | First name  | Family name | Roles     |
-      | Loan Lee         | loan-lee@example.com         | Loan        | Lee         |           |
-      | Xiau user        | xiau.user@example.com        | Xiau        | user        |           |
-      | Rony Facilitator | ronyfacilitator@example.com  | Rony        | Facilitator |           |
-      | Alex moderator   | alex.moderator@example.com   | Alex        | Mod         | moderator |
-    And the following <content type> user memberships:
-      | <content type>  | user             | roles       |
-      | Nachos test     | Rony Facilitator | facilitator |
-      | Nachos test     | Xiau user        | owner       |
-
-    Given I am logged in as "Loan Lee"
-    And I go to the homepage of the "Nachos test" <content type>
-    Then I click "Members"
-    And I should not see the link "Add announcement"
-    And I should not see the link "Announcement list"
-
-    When I am logged in as "Rony Facilitator"
-    And I go to the homepage of the "Nachos test" <content type>
-    Then I click "Members"
-    And I should see the link "Add announcement"
-    And I should see the link "Announcement list"
-
-    When I am logged in as "Xiau user"
-    And I go to the homepage of the "Nachos test" <content type>
-    Then I click "Members"
-    And I should see the link "Add announcement"
-    And I should see the link "Announcement list"
-
-    When I am an anonymous user
-    And I go to the homepage of the "Nachos test" <content type>
-    Then I click "Members"
-    And I should not see the link "Add announcement"
-    And I should not see the link "Announcement list"
-
-    When I am logged in as "Alex moderator"
-    And I go to the homepage of the "Nachos test" <content type>
-    Then I click "Members"
-    And I should see the link "Add announcement"
-    And I should see the link "Announcement list"
-
-    # Disable announcements.
-    And I go to the homepage of the "Nachos test" <content type>
-    And I should see the link "Settings" in the "Entity actions" region
-    And I click "Settings" in the "Entity actions" region
+    # Switch of notifications for this group.
+    Given I am logged in as "Check edit moderator"
+    When I go to the homepage of the "Fail pension" <group>
+    And I click "Settings"
     And I uncheck the box "Announcements enabled"
-    Then I press "Save"
+    And I press "Save"
 
-    Given I am logged in as "Loan Lee"
-    And I go to the homepage of the "Nachos test" <content type>
-    Then I click "Members"
-    And I should not see the link "Add announcement"
-    And I should not see the link "Announcement list"
+    When I go the "Test anon [rdf_entity:label] bis" announcement of "Fail pension" <group>
+    Then the response status code should be 403
+    But I go to the announcements page of "Fail pension" <group>
+    Then the response status code should be 404
 
-    When I am logged in as "Rony Facilitator"
-    And I go to the homepage of the "Nachos test" <content type>
-    Then I click "Members"
-    And I should not see the link "Add announcement"
-    And I should see the link "Announcement list"
+    Given I am logged in as "Sons of tweets"
+    When I go the "Test anon [rdf_entity:label] bis" announcement of "Fail pension" <group>
+    Then the response status code should be 403
+    But I go to the announcements page of "Fail pension" <group>
+    Then the response status code should be 404
 
-    When I am logged in as "Xiau user"
-    And I go to the homepage of the "Nachos test" <content type>
-    Then I click "Members"
-    And I should not see the link "Add announcement"
-    And I should see the link "Announcement list"
+    Given I am logged in as an "authenticated user"
+    When I go the "Test anon [rdf_entity:label] bis" announcement of "Fail pension" <group>
+    Then the response status code should be 403
+    But I go to the announcements page of "Fail pension" <group>
+    Then the response status code should be 404
 
-    When I am an anonymous user
-    And I go to the homepage of the "Nachos test" <content type>
-    Then I click "Members"
-    And I should not see the link "Add announcement"
-    And I should not see the link "Announcement list"
+    Given I am an anonymous user
+    When I go the "Test anon [rdf_entity:label] bis" announcement of "Fail pension" <group>
+    Then I should see the heading "Sign in to continue"
+    But I go to the announcements page of "Fail pension" <group>
+    Then the response status code should be 404
+
+    # Explicitly delete announcements created via UI.
+    And I delete the "Test anon [rdf_entity:label] bis" announcement
 
     Examples:
-      | content type |
-      | collection   |
-      | solution     |
+      | group      |
+      | collection |
+      | solution   |
 
-  Scenario: Check announcements list
+  Scenario: Announcement moderation
     Given the following collections:
-      | title        | state     | closed |
-      | Old pension | validated | no     |
-      | New pension | validated | no     |
+      | title       | state     |
+      | Collection1 | validated |
+      | Collection2 | validated |
+    And the following solutions:
+      | title                 | collection  | state     |
+      | Collection1 Solution1 | Collection1 | validated |
+      | Collection1 Solution2 | Collection1 | validated |
+      | Collection2 Solution1 | Collection2 | validated |
     And users:
-      | Username         | E-mail                       | First name  | Family name | Roles     |
-      | Rian Lee         | rian-lee@example.com         | Rian        | Lee         |           |
-      | Miau user        | miau.user@example.com        | Miau        | user        |           |
-      | Lory Facilitator | loryfacilitator@example.com  | Lory        | Facilitator |           |
-      | Xela moderator   | xela.moderator@example.com   | Xela        | Mod         | moderator |
+      | Username         | E-mail                      | Roles     |
+      | Rian Lee         | rian-lee@example.com        |           |
+      | Miau user        | miau.user@example.com       |           |
+      | Lory Facilitator | loryfacilitator@example.com |           |
+      | Xela moderator   | xela.moderator@example.com  | moderator |
+    And the following announcements:
+      | group                 | subject            | state     | author           | created    |
+      | Collection1           | Announcement1 C1   | draft     | Lory Facilitator | 2005-11-05 |
+      | Collection1 Solution1 | Announcement1 C1S1 | rejected  | Lory Facilitator | 2018-12-19 |
+      | Collection1 Solution1 | Announcement2 C1S1 | sent      | Lory Facilitator | 2018-05-25 |
+      | Collection1 Solution2 | Announcement1 C1S2 | draft     | Lory Facilitator | 1999-04-30 |
+      | Collection2           | Announcement1 C2   | sent      | Miau user        | 2022-07-29 |
+      | Collection2 Solution1 | Announcement1 C2S1 | delivered | Miau user        | 2022-08-03 |
+
     And the following collection user membership:
-      | collection   | user             | roles       |
-      | Old pension  | Lory Facilitator | facilitator |
-      | New pension  | Rian Lee         | owner       |
-      | New pension  | Miau user        | facilitator |
+      | collection  | user             | roles       |
+      | Collection1 | Lory Facilitator | facilitator |
+      | Collection2 | Miau user        | facilitator |
 
-    When I am logged in as "Rian Lee"
-    And I go to the homepage of the "New pension" collection
-    Then I click "Members"
-    And I should see the link "Add announcement"
-    And I click "Add announcement"
-    And I fill in "Subject" with "Live festival [rdf_entity:label]"
-    And I fill in "Body" with "Lorem Ipsum is simply dummy text of the printing and typesetting industry."
-    And the following field should not be present "State"
-    When I press "Submit"
-    Then I should see the success message "Your announcement has been submitted for validation."
+    Given I am logged in as "Xela moderator"
+    When I visit "/announcements"
 
-    When I am logged in as "Lory Facilitator"
-    And I go to the homepage of the "Old pension" collection
-    Then I click "Members"
-    And I should see the link "Add announcement"
-    And I click "Add announcement"
-    And I fill in "Subject" with "Music pool party"
-    And I fill in "Body" with "Party lorem ipsum is simply dummy text of the printing and typesetting industry."
-    And the following field should not be present "State"
-    When I press "Submit"
-    Then I should see the success message "Your announcement has been submitted for validation."
+    Then the "Group" field should contain the "- Any -,Collection1 (Collection),Collection2 (Collection),Collection1 Solution1 (Solution),Collection1 Solution2 (Solution),Collection2 Solution1 (Solution)" options
+    And the "State" field should contain the "- Any -,Draft,Sent,Delivered,Rejected" options
+    And the "announcement list" table should be:
+      | Group                 | Subject            | State     | Created on | Author           | Edit |
+      | Collection2 Solution1 | Announcement1 C2S1 | Delivered | 03/08/2022 | Miau user        |      |
+      | Collection2           | Announcement1 C2   | Sent      | 29/07/2022 | Miau user        | edit |
+      | Collection1 Solution1 | Announcement1 C1S1 | Rejected  | 19/12/2018 | Lory Facilitator | edit |
+      | Collection1 Solution1 | Announcement2 C1S1 | Sent      | 25/05/2018 | Lory Facilitator | edit |
+      | Collection1           | Announcement1 C1   | Draft     | 05/11/2005 | Lory Facilitator | edit |
+      | Collection1 Solution2 | Announcement1 C1S2 | Draft     | 30/04/1999 | Lory Facilitator | edit |
 
-    # Check "Announcement list" button permissions
-    Given I am logged in as "Rian Lee"
-    And I go to the homepage of the "Old pension" collection
-    Then I click "Members"
-    And I should not see the link "Announcement list"
+    When I select "Collection1 Solution1 (Solution)" from "Group"
+    And I press "Apply"
+    Then the "announcement list" table should be:
+      | Group                 | Subject            | State    | Created on | Author           | Edit |
+      | Collection1 Solution1 | Announcement1 C1S1 | Rejected | 19/12/2018 | Lory Facilitator | edit |
+      | Collection1 Solution1 | Announcement2 C1S1 | Sent     | 25/05/2018 | Lory Facilitator | edit |
 
-    Then I go to the homepage of the "New pension" collection
-    Then I click "Members"
-    And I should see the link "Announcement list"
-    Then I click "Announcement list"
-    And I should see a table with 4 columns
-    And the "announcement list" table should contain the following column:
-      | Subject                  |
-      | Live festival New pension|
-    # Create a new announcement.
-    Then I click "Members"
-    And I should see the link "Add announcement"
-    And I click "Add announcement"
-    And I fill in "Subject" with "The Shining"
-    And I fill in "Body" with "The Shining industry."
-    And the following field should not be present "State"
-    When I press "Submit"
-    Then I should see the success message "Your announcement has been submitted for validation."
+    When I select "Sent" from "State"
+    And I press "Apply"
+    Then the "announcement list" table should be:
+      | Group                 | Subject            | State | Created on | Author           | Edit |
+      | Collection1 Solution1 | Announcement2 C1S1 | Sent  | 25/05/2018 | Lory Facilitator | edit |
 
-    When I am logged in as "Miau user"
-    And I go to the homepage of the "Old pension" collection
-    Then I click "Members"
-    And I should not see the link "Announcement list"
+    When I click "edit" in the "Announcement2 C1S1" row
+    And I press "Approve"
+    Then I should see the success message "The announcement has been delivered to the Collection1 Solution1 solution members."
 
-    Then I go to the homepage of the "New pension" collection
-    Then I click "Members"
-    And I should see the link "Announcement list"
-    Then I click "Announcement list"
-    And the "announcement list" table should contain the following column:
-      | Subject                   | Edit  | State |
-      | Live festival New pension | edit	| New   |
-      | The Shining               | edit	| New   |
-    Then I click "edit" on the row containing "Live festival New pension"
-    And the following fields should be disabled "Group reference,State"
-    And I fill in "Subject" with "Cracking the web."
-    And I press "Update"
-    Then the "announcement list" table should contain the following column:
-      | Subject           | Edit  | State |
-      | Cracking the web. | edit	| New   |
-      | The Shining       | edit	| New   |
-
-    When I am logged in as "Lory Facilitator"
-    And I go to the homepage of the "Old pension" collection
-    Then I click "Members"
-    And I should see the link "Announcement list"
-    Then I click "Announcement list"
-    And the "announcement list" table should contain the following column:
-      | Subject          | Edit  | State |
-      | Music pool party | edit	 | New   |
-    Then I click "edit" on the row containing "Music pool party"
-    And the following fields should be disabled "Group reference,State"
-
-    Then I go to the homepage of the "New pension" collection
-    Then I click "Members"
-    And I should not see the link "Announcement list"
-
-    When I am logged in as "Xela moderator"
-    And I go to the homepage of the "Old pension" collection
-    Then I click "Members"
-    And I should see the link "Announcement list"
-    Then I click "Announcement list"
-    And the "announcement list" table should contain the following column:
-      | Subject          | Edit  | State |
-      | Music pool party | edit	| New    |
-
-    Then I go to the homepage of the "New pension" collection
-    Then I click "Members"
-    And I should see the link "Announcement list"
-    Then I click "Announcement list"
-    And the "announcement list" table should contain the following column:
-      | Subject           | Edit  | State |
-      |	Cracking the web.	| edit	| New   |
-      |	The Shining		    | edit  | New   |
-
-    # Check toolbar announcements view.
-    And I click "Announcements" in the "Administration toolbar" region
-    Then I click "edit" on the row containing "The Shining"
-    And I select "Reject" from "State"
-    And I press "Update"
-    Then I click "edit" on the row containing "The Shining"
-    And I select "Sent" from "State"
-    And I press "Update"
-    And the "announcement list" table should contain the following column:
-      | Group reference | Subject           | Edit  | State |
-      | New pension     |	Cracking the web.	| edit	| New   |
-      | Old pension     |	Music pool party	| edit	| New   |
-      | New pension     |	The Shining		    |       | Sent  |
-
-    When I am an anonymous user
-    And I go to the homepage of the "Old pension" collection
-    Then I click "Members"
-    And I should not see the link "Announcement list"
-
-    Then I go to the homepage of the "New pension" collection
-    Then I click "Members"
-    And I should not see the link "Announcement list"
-
-    # Check announcement list without edit in "The Shining".
-    When I am logged in as "Miau user"
-    Then I go to the homepage of the "New pension" collection
-    Then I click "Members"
-    And I should see the link "Announcement list"
-    Then I click "Announcement list"
-    And the "announcement list" table should contain the following column:
-      | Subject           | Edit  | State |
-      |	Cracking the web.	| edit	| New   |
-      |	The Shining		    |       | Sent  |
+    When I visit "/announcements"
+    Then the "announcement list" table should be:
+      | Group                 | Subject            | State     | Created on | Author           | Edit |
+      | Collection2 Solution1 | Announcement1 C2S1 | Delivered | 03/08/2022 | Miau user        |      |
+      | Collection2           | Announcement1 C2   | Sent      | 29/07/2022 | Miau user        | edit |
+      | Collection1 Solution1 | Announcement1 C1S1 | Rejected  | 19/12/2018 | Lory Facilitator | edit |
+      # Once delivered, the announcement cannot be edited.
+      | Collection1 Solution1 | Announcement2 C1S1 | Delivered | 25/05/2018 | Lory Facilitator |      |
+      | Collection1           | Announcement1 C1   | Draft     | 05/11/2005 | Lory Facilitator | edit |
+      | Collection1 Solution2 | Announcement1 C1S2 | Draft     | 30/04/1999 | Lory Facilitator | edit |
