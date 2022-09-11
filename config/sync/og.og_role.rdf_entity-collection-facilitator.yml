@@ -58,6 +58,7 @@ permissions:
   - 'manage members'
   - 'pin group content'
   - 'request collection archival'
+  - 'transition any message announcement from draft to sent using the announcement - announcement workflow'
   - 'transition any node discussion from deletion_request to validated using the community_content - node:post_moderated workflow'
   - 'transition any node discussion from deletion_request to validated using the community_content - node:pre_moderated workflow'
   - 'transition any node discussion from draft to draft using the community_content - node:post_moderated workflow'

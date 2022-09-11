@@ -15,3 +15,4 @@ manage group announcements:
 
 permission_callbacks:
   - \Drupal\joinup_group\JoinupGroupPermissions::groupOwnershipPermissions
+  - \Drupal\joinup_group\JoinupGroupPermissions::announcementsPermissions
