@@ -63,13 +63,4 @@ final class NotificationEvents {
    */
   const OG_MEMBERSHIP_MANAGEMENT = 'joinup_notification.og_membership.management';
 
-  /**
-   * An event that sends notifications when an announcement is created.
-   *
-   * @Event
-   *
-   * @var string
-   */
-  const ANNOUNCEMENT_CREATE = 'joinup_notification.announcement.create';
-
 }

@@ -16,7 +16,6 @@ use Drupal\joinup_group\Entity\GroupContentInterface;
 use Drupal\joinup_group\Exception\MissingGroupException;
 use Drupal\joinup_notification\Event\NotificationEvent;
 use Drupal\joinup_notification\NotificationEvents;
-use Drupal\message\MessageInterface;
 use Drupal\rdf_entity\RdfInterface;
 
 /**
@@ -253,13 +252,4 @@ function joinup_notification_og_membership_presave(EntityInterface $entity): voi
  */
 function joinup_notification_og_membership_predelete(EntityInterface $entity): void {
   joinup_notification_dispatch_notification('delete', NotificationEvents::OG_MEMBERSHIP_MANAGEMENT, $entity);
-}
-
-/**
- * Implements hook_ENTITY_TYPE_insert().
- */
-function joinup_notification_message_insert(MessageInterface $message): void {
-  if ($message->bundle() === 'announcement') {
-    joinup_notification_dispatch_notification('create', NotificationEvents::ANNOUNCEMENT_CREATE, $message);
-  }
 }
