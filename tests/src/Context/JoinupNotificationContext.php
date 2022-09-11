@@ -464,4 +464,29 @@ class JoinupNotificationContext extends RawDrupalContext {
     throw new \Exception($no_mail_message);
   }
 
+  /**
+   * Clicks on the first link from an email with give subject and recipient.
+   *
+   * @param string $username_or_email
+   *   Either the username or an email.
+   * @param string $subject
+   *   The email subject.
+   *
+   * @When I click the link from email sent to :username_or_email with subject :subject
+   */
+  public function clickLinkInEmail(string $username_or_email, string $subject): void {
+    if ($account = user_load_by_name($username_or_email)) {
+      $recipient = $account->getEmail();
+    }
+    elseif (\Drupal::getContainer()->get('email.validator')->isValid($username_or_email)) {
+      $recipient = $username_or_email;
+    }
+    else {
+      throw new \InvalidArgumentException("'$username_or_email' is neither a valid username, nor a valid email.");
+    }
+    $no_mail_message = "No email with '$subject' subject was sent to $recipient";
+    $no_match_message = "The email sent to $recipient did not contain a link.";
+    $this->assertMailLinkMatchingPattern('!https?://[^\s].*!', $recipient, $no_mail_message, $no_match_message, NULL);
+  }
+
 }
