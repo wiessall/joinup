@@ -49,11 +49,6 @@ services:
   joinup_group.url_alias_updater:
     class: Drupal\joinup_group\JoinupGroupContentUrlAliasUpdater
     arguments: ['@queue']
-  joinup_group.announcement.subscriber:
-    class: Drupal\joinup_group\EventSubscriber\AnnouncementEventSubscriber
-    parent: joinup_notification.notification_subscriber_base
-    tags:
-      - { name: event_subscriber }
   joinup_group.announcements_edit.access_check:
     class: Drupal\joinup_group\Access\JoinupAnnouncementsAccessCheck
     arguments: ['@entity_type.manager', '@og.access']
@@ -64,3 +59,8 @@ services:
     arguments: ['@joinup_group.group_manager']
     tags:
       - { name: state_machine.guard, group: announcement }
+  joinup_group.announcements.subscriber:
+    class: Drupal\joinup_group\EventSubscriber\AnnouncementsSubscriber
+    arguments: ['@entity_type.manager', '@plugin.manager.mail', '@language_manager']
+    tags:
+      - { name: event_subscriber }

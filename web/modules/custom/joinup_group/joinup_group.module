@@ -936,3 +936,31 @@ function joinup_group_form_message_form_alter(array &$form, FormStateInterface $
   $form['owner']['#type'] = 'hidden';
   $form['advanced']['#type'] = 'hidden';
 }
+
+/**
+ * Implements hook_mail().
+ */
+function joinup_group_mail(string $key, array &$message, array $params): void {
+  if ($key === 'group_announcement') {
+    $token = \Drupal::token();
+    /** @var \Drupal\joinup_group\Entity\AnnouncementInterface $announcement */
+    $announcement = $params['announcement'];
+    $group = $announcement->getGroup();
+    $data = ['rdf_entity' => $group];
+    $args = [
+      '@subject' => $token->replace($announcement->getSubject(), $data),
+      '@group' => $group->label(),
+      '@type' => $group->get('rid')->entity->getSingularLabel(),
+      '@author' => $announcement->getOwner()->getDisplayName(),
+      ':url' => Url::fromRoute('entity.rdf_entity.announcement_edit', [
+        'rdf_entity' => $group->id(),
+        'announcement' => $announcement->id(),
+      ])->setAbsolute()->toString(),
+    ];
+    $message['subject'] = t("Joinup: A new announcement '@subject' has been created", $args);
+    $message['body'] = [
+      t("A new announcement '@subject' has been created by @author for the @group @type.", $args),
+      t("You can approve or reject the announcement at :url", $args),
+    ];
+  }
+}
