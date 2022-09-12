@@ -13,7 +13,7 @@ _core:
 id: iop_rdf_entities_in_proposed_state
 theme: iop
 region: content_bottom
-weight: -21
+weight: -22
 provider: null
 plugin: proposed_entities
 settings:
