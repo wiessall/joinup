@@ -33,18 +33,23 @@
     background:
       linear-gradient($white, $white) padding-box,
       linear-gradient(to right, $blue, $turquoise) border-box;
-    fill: linear-gradient(to right, $blue, $turquoise) border-box;
-    color: $brand;
-    @include media-breakpoint-up(sm) {
+      color: $brand;
+      @include media-breakpoint-up(sm) {
       margin: $spacer;
       width: 3rem;
       height: 3rem;
     }
+    svg {
+      fill: url('#join-gradient');
+    }
     &:hover {
       color: $primary;
       background:
-        linear-gradient($white, $white) padding-box,
-        $primary border-box;
+      linear-gradient($white, $white) padding-box,
+      $primary border-box;
+      svg {
+        fill: $primary;;
+      }
     }
   }
 }

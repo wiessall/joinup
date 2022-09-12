@@ -43,10 +43,12 @@ class IopFooterBlock extends BlockBase {
       ],
     ];
 
+    $svg_gradient = '<linearGradient id="join-gradient"><stop offset="0%" stop-color="#0047ba" /><stop offset="100%" stop-color="#19d3c5" /></linearGradient>';
+
     foreach ($icons as $class => $data) {
       $build[$class] = [
         '#type' => 'inline_template',
-        '#template' => '<a class="btn btn-sm rounded-circle join__btn" href="{{ url }}" target="_blank" rel="noopener" title="{{ title }}"><svg class="icon--m"><use xlink:href="' . base_path() . \Drupal::service('extension.list.theme')->getPath('ventuno') . '/assets/icons/icons.svg#{{ icon }}"></use></svg></a>',
+        '#template' => '<a class="btn btn-sm rounded-circle join__btn" href="{{ url }}" target="_blank" rel="noopener" title="{{ title }}"><svg class="icon--m">' . $svg_gradient . '<use xlink:href="' . base_path() . \Drupal::service('extension.list.theme')->getPath('ventuno') . '/assets/icons/icons.svg#{{ icon }}"></use></svg></a>',
         '#context' => [
           'icon' => $class,
           'title' => $this->t('Follow us on ') . $data['title'],
@@ -57,7 +59,7 @@ class IopFooterBlock extends BlockBase {
 
     $build['newsletter'] = [
       '#type' => 'inline_template',
-      '#template' => '<a class="btn btn-sm rounded-circle join__btn" href="{{ url }}" target="_blank" rel="noopener" title="{{ title }}"><svg class="icon--m"><use xlink:href="' . base_path() . \Drupal::service('extension.list.theme')->getPath('ventuno') . '/assets/icons/icons.svg#envelope-fill"></use></svg></a>',
+      '#template' => '<a class="btn btn-sm rounded-circle join__btn" href="{{ url }}" target="_blank" rel="noopener" title="{{ title }}"><svg class="icon--m">' . $svg_gradient . '<use xlink:href="' . base_path() . \Drupal::service('extension.list.theme')->getPath('ventuno') . '/assets/icons/icons.svg#envelope-fill"></use></svg></a>',
       '#context' => [
         'title' => $this->t('Subscribe to the interoperable europe newsletter'),
         'url' =>  Url::fromUri('https://ec.europa.eu/newsroom/informatics/user-subscriptions/1115/create'),
