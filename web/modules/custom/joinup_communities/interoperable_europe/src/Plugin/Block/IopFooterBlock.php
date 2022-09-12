@@ -28,7 +28,7 @@ class IopFooterBlock extends BlockBase implements ContainerFactoryPluginInterfac
   protected ThemeExtensionList $themeExtensionList;
 
   /**
-   * Constructs a new EiraDeprecatedTermBlock.
+   * Constructs a new IopFooterBlock.
    *
    * @param array $configuration
    *   A configuration array containing information about the plugin instance.
