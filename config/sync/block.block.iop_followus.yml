@@ -11,7 +11,7 @@ dependencies:
 id: iop_followus
 theme: iop
 region: footer
-weight: -21
+weight: -22
 provider: null
 plugin: 'system_menu_block:footer-follow-us'
 settings:
