@@ -27,17 +27,19 @@
  * @ingroup themeable
  */
 #}
-<div{{ attributes }}>
-  <div class="row">
-    <div class="col col-12 text-align-center">
-      {{ title_prefix }}
-      {% if label %}
-        <h2{{ title_attributes }}>{{ label }}</h2>
-      {% endif %}
-      {{ title_suffix }}
-      {% block content %}
-        {{ content }}
-      {% endblock %}
-    </div>
-  </div>
-</div>
+
+{{ attach_library('iop/join') }}
+
+{% set classes = [
+  'join',
+] %}
+<section{{ attributes.addClass(classes) }}>
+  {{ title_prefix }}
+  {% if label %}
+    <h1{{ title_attributes.addClass('join__title') }}>{{ label }}</h1>
+  {% endif %}
+  {{ title_suffix }}
+  {% block content %}
+    {{ content }}
+  {% endblock %}
+</section>
