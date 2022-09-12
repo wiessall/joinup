@@ -7,13 +7,32 @@ namespace Drupal\joinup_group\Controller;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Controller\ControllerBase;
+use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\meta_entity\Entity\MetaEntity;
+use Drupal\views\Views;
 
 /**
  * Returns responses for the group announcement form.
  */
 class AnnouncementsController extends ControllerBase {
+
+  /**
+   * Display a list of announcements that belong to the group.
+   *
+   * @param \Drupal\Core\Routing\RouteMatchInterface $route_match
+   *   The route match service.
+   *
+   * @return array
+   *   The view containing the members overview, as a renderable array.
+   */
+  public function announcementsList(RouteMatchInterface $route_match): array {
+    $group_entity_type_id = $route_match->getRouteObject()->getOption('_og_entity_type_id');
+    /** @var \Drupal\Core\Entity\EntityInterface $group */
+    $group = $route_match->getParameter($group_entity_type_id);
+
+    return Views::getView('announcements_list')->executeDisplay('default', [$group->id()]);
+  }
 
   /**
    * Access check for the group announcement form.
