@@ -13,6 +13,11 @@ theme:
       assets/css/theme.min.css: {}
 
 # Components
+join:
+  css:
+    theme:
+      assets/css/join.min.css: {}
+
 navbar:
   css:
     theme:

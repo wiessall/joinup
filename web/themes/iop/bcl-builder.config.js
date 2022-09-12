@@ -31,6 +31,15 @@ module.exports = {
       },
     },
     {
+      entry: path.resolve(outputFolder, "src/scss/join.scss"),
+      dest: path.resolve(outputFolder, "assets/css/join.min.css"),
+      options: {
+        minify: true,
+        includePaths,
+        sourceMap: "file",
+      },
+    },
+    {
       entry: path.resolve(outputFolder, "src/scss/navbar.scss"),
       dest: path.resolve(outputFolder, "assets/css/navbar.min.css"),
       options: {
@@ -180,6 +189,11 @@ module.exports = {
     },
     {
       from: [path.resolve(__dirname, "src/images/iop-eu-logo.svg")],
+      to: path.resolve(outputFolder, "assets/images"),
+      options: { up: true },
+    },
+    {
+      from: [path.resolve(__dirname, "src/images/join-bg.png")],
       to: path.resolve(outputFolder, "assets/images"),
       options: { up: true },
     },
