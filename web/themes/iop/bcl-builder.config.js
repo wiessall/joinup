@@ -133,7 +133,7 @@ module.exports = {
       entry: path.resolve(outputFolder, "src/scss/paragraph--testimony.scss"),
       dest: path.resolve(
         outputFolder,
-        "assets/css/paragraphs/paragraph--testimony.min.css"
+        "assets/css/paragraph--testimony.min.css"
       ),
       options: {
         includePaths,
@@ -142,10 +142,7 @@ module.exports = {
     },
     {
       entry: path.resolve(outputFolder, "src/scss/paragraph--video.scss"),
-      dest: path.resolve(
-        outputFolder,
-        "assets/css/paragraphs/paragraph--video.min.css"
-      ),
+      dest: path.resolve(outputFolder, "assets/css/paragraph--video.min.css"),
       options: {
         includePaths,
         sourceMap: "file",

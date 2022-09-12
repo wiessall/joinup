@@ -64,9 +64,9 @@ paragraph--row:
 paragraph--testimony:
   css:
     theme:
-      assets/css/paragraphs/paragraph--testimony.min.css: {}
+      assets/css/paragraph--testimony.min.css: {}
 
 paragraph--video:
   css:
     theme:
-      assets/css/paragraphs/paragraph--video.min.css: {}
+      assets/css/paragraph--video.min.css: {}
