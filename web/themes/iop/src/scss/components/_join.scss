@@ -8,13 +8,15 @@
   @include media-breakpoint-up(sm) {
     padding: $spacer * 3 0;
   }
+  @include media-breakpoint-up(md) {
+    padding: $spacer * 4 0;
+  }
   @include media-breakpoint-up(lg) {
-    padding: $spacer * 5 0;
+    padding: $spacer * 7 0;
     background-position: top;
-    // background-size: 100% auto;
   }
   @include media-breakpoint-up(xl) {
-    padding: $spacer * 7 0;
+    padding: $spacer * 10 0;
   }
   &__title {
     margin-top: $spacer * 2;
