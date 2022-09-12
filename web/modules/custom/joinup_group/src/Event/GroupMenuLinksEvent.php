@@ -22,6 +22,13 @@ class GroupMenuLinksEvent extends Event {
   public const ADD_LINKS = 'joinup_group.add_group_menu_links';
 
   /**
+   * Identifier for add group eif perspective link event.
+   *
+   * @var string
+   */
+  public const ADD_EIF_PERSPECTIVE_LINK = 'joinup_group.add_eif_perspective_link';
+
+  /**
    * The group to provide menu links for.
    *
    * @var \Drupal\rdf_entity\RdfInterface
