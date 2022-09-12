@@ -8,8 +8,8 @@ dependencies:
     - iop
 id: iopfooter
 theme: iop
-region: content_bottom
-weight: -24
+region: content
+weight: -7
 provider: null
 plugin: interoperable_europe_iop_footer
 settings:
