@@ -42,11 +42,10 @@
 {% set classes = [
   'paragraph',
   'paragraph--' ~ paragraph.bundle|clean_class,
-  'row',
 ] %}
 
 <blockquote {{ attributes.addClass(classes) }}>
-  <div class="col-12 testimony__quote">
+  <div class="testimony__quote">
     {{ content.paragraph_testimony_text }}
   </div>
   <figure class="testimony__fig">

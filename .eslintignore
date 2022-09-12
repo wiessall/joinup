@@ -3,6 +3,7 @@
 /docker-compose.override.yml
 /runner.yml
 /web/themes/ventuno/assets/
+/web/themes/iop/assets/
 
 # Ignore third party dependencies.
 **/node_modules/

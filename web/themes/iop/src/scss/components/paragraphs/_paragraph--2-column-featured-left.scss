@@ -1,0 +1,56 @@
+.paragraph--2-column-featured-left {
+  @include media-breakpoint-up(md) {
+    margin-top: 50px; // Prevent the circular shape to be too close to prev section
+  }
+  h2 {
+    font-size: 2.5rem;
+    @include media-breakpoint-up(md) {
+      font-size: 3rem;
+    }
+    font-weight: normal;
+    text-align: center;
+  }
+  &:first-of-type {
+    position: relative;
+    margin-left: $spacer * -5; // -80px
+    @include media-breakpoint-up(sm) {
+      margin-left: 0;
+    }
+    @include media-breakpoint-up(md) {
+      margin-bottom: 0;
+    }
+    &::before {
+      position: absolute;
+      content: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' style='enable-background:new 0 0 100 100' xml:space='preserve'%3E%3ClinearGradient id='a' gradientUnits='userSpaceOnUse' x1='0' y1='50' x2='100' y2='50'%3E%3Cstop offset='.106' style='stop-color:%23268dc2'/%3E%3Cstop offset='.129' style='stop-color:%232c94c1'/%3E%3Cstop offset='.216' style='stop-color:%233ea9bc'/%3E%3Cstop offset='.302' style='stop-color:%2348b6ba'/%3E%3Cstop offset='.382' style='stop-color:%234cbab9'/%3E%3Cstop offset='.682' style='stop-color:%23ced955'/%3E%3Cstop offset='.734' style='stop-color:%23d1d44f'/%3E%3Cstop offset='.805' style='stop-color:%23d9c43d'/%3E%3Cstop offset='.887' style='stop-color:%23e6ac20'/%3E%3Cstop offset='.956' style='stop-color:%23f39202'/%3E%3C/linearGradient%3E%3Ccircle cx='50' cy='50' r='48' style='opacity:.7;fill:none;stroke:url(%23a);stroke-width:4;stroke-miterlimit:10'/%3E%3C/svg%3E");
+      z-index: -1;
+      width: 80px;
+      top: -20px;
+      right: -20px;
+      @include media-breakpoint-up(md) {
+        width: 100px;
+        top: -50px;
+        right: -35px;
+      }
+    }
+    img {
+      border-radius: $spacer * 2.5; // 40px
+      border: 2px solid transparent;
+      overflow: hidden;
+      background: linear-gradient($primary, $primary) padding-box, $gradient border-box;
+      @include media-breakpoint-up(md) {
+        border-radius: $spacer * 4; // 64px
+      }
+    }
+  }
+  &:last-of-type {
+    order: 2;
+    @include media-breakpoint-up(md) {
+      order: 0;
+    }
+    & > * {
+      @include media-breakpoint-up(lg) {
+        margin-left: $spacer * 5; // 80px
+      }
+    }
+  }
+}

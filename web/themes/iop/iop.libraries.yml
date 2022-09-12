@@ -13,11 +13,6 @@ theme:
       assets/css/theme.min.css: {}
 
 # Pages
-landing-page:
-  css:
-    theme:
-      assets/css/landing-page.min.css: {}
-
 listing:
   css:
     theme:
@@ -46,6 +41,16 @@ paragraph:
     theme:
       assets/css/paragraph.min.css: {}
 
+paragraph--2-column-featured-left:
+  css:
+    theme:
+      assets/css/paragraph--2-column-featured-left.min.css: {}
+
+paragraph--2-column-featured-right:
+  css:
+    theme:
+      assets/css/paragraph--2-column-featured-right.min.css: {}
+
 paragraph--call-to-action:
   css:
     theme:
@@ -73,6 +78,11 @@ paragraph--testimony:
   css:
     theme:
       assets/css/paragraphs/paragraph--testimony.min.css: {}
+
+paragraph--video:
+  css:
+    theme:
+      assets/css/paragraphs/paragraph--video.min.css: {}
 
 # @todo ISAICP-7138 delete this library when switch to Ventuno theme is complete
 three-dots-menu:

@@ -2,6 +2,9 @@ access group reports:
   title: 'Access group reports pages of all groups.'
   restrict access: true
 
+administer shared entities:
+  title: Administer shared entities
+
 edit short id after publication:
   title: 'Edit Short ID after initial group publication'
   description: 'Allows a user to edit the Short ID of the collection or solution after the initial publication of the entity.'

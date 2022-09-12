@@ -1,31 +1,49 @@
 .paragraph--carousel {
+  position: relative;
+  .paragraph__heading {
+    display: block;
+    color: $primary;
+    &::after {
+      content: url("data:image/svg+xml;charset=utf-8,%3csvg preserveAspectRatio='none' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 30' style='enable-background:new 0 0 100 30' xml:space='preserve'%3e%3clinearGradient id='a' gradientUnits='userSpaceOnUse' x1='0' y1='15.5' x2='100' y2='15.5'%3e%3cstop offset='.106' style='stop-color:%23268dc2'/%3e%3cstop offset='.129' style='stop-color:%232c94c1'/%3e%3cstop offset='.216' style='stop-color:%233ea9bc'/%3e%3cstop offset='.302' style='stop-color:%2348b6ba'/%3e%3cstop offset='.382' style='stop-color:%234cbab9'/%3e%3cstop offset='.682' style='stop-color:%23ced955'/%3e%3cstop offset='.734' style='stop-color:%23d1d44f'/%3e%3cstop offset='.805' style='stop-color:%23d9c43d'/%3e%3cstop offset='.887' style='stop-color:%23e6ac20'/%3e%3cstop offset='.956' style='stop-color:%23f39202'/%3e%3c/linearGradient%3e%3cpath d='M1 17.6s11.27-6.1 24.01-6.1 34.3 8 49 8 24.99-4 24.99-4' style='fill:none;stroke:url(%23a);stroke-width:4;stroke-linecap:round;stroke-miterlimit:10'/%3e%3c/svg%3e");
+      display: block;
+      position: relative;;
+      width: 70px;
+      height: 15px;
+      top: -15px;
+      margin: 0 auto;
+      @include media-breakpoint-up(md) {
+        width: 100px;
+        height: 20px;
+        top: -20px;
+      }
+    }
+  }
   &__action {
     position: absolute;
     font-size: .75rem;
     line-height: 1;
     // Crap properties to get the link rendered at requested place
-    top: 17%;
-    left: 70%;
+    top: $spacer * 1.5;
+    left: 67%;
     @include media-breakpoint-up(sm) {
       font-size: .875rem;
-      top: 12%;
       left: 65%;
     }
     @include media-breakpoint-up(md) {
+      top: $spacer * 2;
       font-size: 1rem;
-      top: 15%;
-      left: 65%;
     }
     @include media-breakpoint-up(lg) {
-      top: 22%;
       left: 62%;
     }
     @include media-breakpoint-up(xl) {
-      top: 20%;
       left: 60%;
     }
-    a:hover:visited {
-      text-decoration-color: $white!important; // Prevent purple underline
+    a {
+      color: $primary;
+      &:hover:visited {
+        text-decoration-color: $white!important; // Prevent purple underline
+      }
     }
   }
 }
@@ -64,7 +82,7 @@
         pointer-events: none; // Disable dragging to avoid swipe/drag clashes
         border: 2px solid transparent;
         overflow: hidden;
-        background: linear-gradient($primary, $primary) padding-box, $gradient border-box;
+        background: linear-gradient($gray-300, $gray-300) padding-box, $gradient border-box;
         @include media-breakpoint-up(md) {
           margin-bottom: $spacer * 2; // 32px
         }
@@ -76,7 +94,7 @@
       }
       &__svg {
         position: absolute;
-        color: $gray-300;
+        color: $gray-500;
         width: 30%;
         left: 35%;
         height: 60%;
@@ -84,20 +102,21 @@
       }
       &__title {
         display: none;
-        height: $spacer * 2.75; // Hold space to avoid vertical shift when sliding between slides with different height
-        @include media-breakpoint-up(md) {
-          height: $spacer * 2.5; // Hold space to avoid vertical shift when sliding between slides with different height
-        }
+        height: $spacer * 2.5; // Hold space to avoid vertical shift when sliding between slides with different height
         a:hover:visited {
           text-decoration-color: $white!important; // Prevent purple underline
         }
       }
+      &__title-link {
+        color: $primary;
+        font-weight: $font-weight-normal;
+      }
       &__body {
         display: none;
         // Hold space to avoid vertical shift when sliding between slides with different height
-        height: calc(13 * 1em * 1.5 + 3.5rem); // 13 lines * font size * line-height + action-link height
+        height: calc(13 * 1em * 1.5); // 13 lines * font size * line-height
         @include media-breakpoint-up(sm) {
-          height: calc(7 * 1em * 1.5 + 3.5rem); // 7 lines * font size * line-height + action-link height
+          height: calc(7 * 1em * 1.5); // 7 lines * font size * line-height
         }
         @include media-breakpoint-up(md) {
           // Properties below ensure the text width matches the scaled-up active image
@@ -131,21 +150,22 @@
           margin-top: $spacer; // 16px
         }
       }
-      &__cta {
-        display: inline-block;
-        margin-top: $spacer;
-        font-size: $font-size-lg;
-        color: $darkblue;
-        background-repeat: no-repeat;
-        background-image: url("data:image/svg+xml;charset=utf-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 30' style='enable-background:new 0 0 100 30' xml:space='preserve'%3e%3clinearGradient id='a' gradientUnits='userSpaceOnUse' x1='0' y1='15.5' x2='100' y2='15.5'%3e%3cstop offset='.106' style='stop-color:%23268dc2'/%3e%3cstop offset='.129' style='stop-color:%232c94c1'/%3e%3cstop offset='.216' style='stop-color:%233ea9bc'/%3e%3cstop offset='.302' style='stop-color:%2348b6ba'/%3e%3cstop offset='.382' style='stop-color:%234cbab9'/%3e%3cstop offset='.682' style='stop-color:%23ced955'/%3e%3cstop offset='.734' style='stop-color:%23d1d44f'/%3e%3cstop offset='.805' style='stop-color:%23d9c43d'/%3e%3cstop offset='.887' style='stop-color:%23e6ac20'/%3e%3cstop offset='.956' style='stop-color:%23f39202'/%3e%3c/linearGradient%3e%3cpath d='M1 17.6s11.27-6.1 24.01-6.1 34.3 8 49 8 24.99-4 24.99-4' style='fill:none;stroke:url(%23a);stroke-width:2;stroke-linecap:round;stroke-miterlimit:10'/%3e%3c/svg%3e");
-        background-position: center .875em;
-        background-size: 100%;
-        height: 2em;
-        &:hover {
-          text-decoration: none;
-          background-image: url("data:image/svg+xml;charset=utf-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 30' style='enable-background:new 0 0 100 30' xml:space='preserve'%3e%3cpath d='M1 17.6s11.27-6.1 24.01-6.1 34.3 8 49 8 24.99-4 24.99-4' style='fill:none;stroke:%23082330;stroke-width:2;stroke-linecap:round;stroke-miterlimit:10'/%3e%3c/svg%3e");
-        }
-      }
+      // Slide's Call To Action will be enabled later
+      // &__cta {
+      //   display: inline-block;
+      //   margin-top: $spacer;
+      //   font-size: $font-size-lg;
+      //   color: $darkblue;
+      //   background-repeat: no-repeat;
+      //   background-image: url("data:image/svg+xml;charset=utf-8,%3csvg preserveAspectRatio='none' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 30' style='enable-background:new 0 0 100 30' xml:space='preserve'%3e%3clinearGradient id='a' gradientUnits='userSpaceOnUse' x1='0' y1='15.5' x2='100' y2='15.5'%3e%3cstop offset='.106' style='stop-color:%23268dc2'/%3e%3cstop offset='.129' style='stop-color:%232c94c1'/%3e%3cstop offset='.216' style='stop-color:%233ea9bc'/%3e%3cstop offset='.302' style='stop-color:%2348b6ba'/%3e%3cstop offset='.382' style='stop-color:%234cbab9'/%3e%3cstop offset='.682' style='stop-color:%23ced955'/%3e%3cstop offset='.734' style='stop-color:%23d1d44f'/%3e%3cstop offset='.805' style='stop-color:%23d9c43d'/%3e%3cstop offset='.887' style='stop-color:%23e6ac20'/%3e%3cstop offset='.956' style='stop-color:%23f39202'/%3e%3c/linearGradient%3e%3cpath d='M1 17.6s11.27-6.1 24.01-6.1 34.3 8 49 8 24.99-4 24.99-4' style='fill:none;stroke:url(%23a);stroke-width:4;stroke-linecap:round;stroke-miterlimit:10'/%3e%3c/svg%3e");
+      //   background-position: center 1em;
+      //   background-size: 100% 1em;
+      //   height: 2em;
+      //   &:hover {
+      //     text-decoration: none;
+      //     background-image: url("data:image/svg+xml;charset=utf-8,%3csvg preserveAspectRatio='none' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 30' style='enable-background:new 0 0 100 30' xml:space='preserve'%3e%3cpath d='M1 17.6s11.27-6.1 24.01-6.1 34.3 8 49 8 24.99-4 24.99-4' style='fill:none;stroke:%23082330;stroke-width:4;stroke-linecap:round;stroke-miterlimit:10'/%3e%3c/svg%3e");
+      //   }
+      // }
     }
     // Active state modifiers
     &--active {
@@ -157,7 +177,7 @@
         }
         &__title {
           margin-bottom: 0;
-          font-size: 1.125rem; // 18px
+          color: $primary;
           // Prevent title using more than 2 lines
           display: -webkit-box;
           -webkit-line-clamp: 2;
@@ -177,4 +197,7 @@
       opacity: .5;
     }
   }
+}
+.paragraph--carousel + .paragraph--carousel {
+  margin-top: $spacer * 4; // 64px
 }
