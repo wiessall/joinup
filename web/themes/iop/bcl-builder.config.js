@@ -152,16 +152,6 @@ module.exports = {
         sourceMap: "file",
       },
     },
-    // Pages
-    {
-      entry: path.resolve(outputFolder, "src/scss/landing-page.scss"),
-      dest: path.resolve(outputFolder, "assets/css/landing-page.min.css"),
-      options: {
-        minify: true,
-        includePaths,
-        sourceMap: "file",
-      },
-    },
   ],
   copy: [
     // Bootstrap: fonts

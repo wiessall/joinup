@@ -110,9 +110,13 @@ class JoinupGroupPageDisplayVariant extends BlockPageVariant {
    */
   protected function getCustomLandingPage(): ?CustomPageInterface {
     /** @var \Drupal\joinup_group\Entity\GroupInterface $group */
-    $group = $this->getConfiguration()['group'];
-    $landing_page = $group->getSetting('landing_page');
-    return $landing_page->entity;
+    if ($group = $this->getConfiguration()['group']) {
+      $landing_page = $group->getSetting('landing_page');
+      return $landing_page->entity;
+    }
+    else {
+      return NULL;
+    }
   }
 
 }
