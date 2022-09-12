@@ -40,4 +40,4 @@ visibility:
   request_path:
     id: request_path
     negate: true
-    pages: /collection/interoperable-europe/iop-landing-page
+    pages: "/interoperable-europe\r\n/interoperable-europe/*"

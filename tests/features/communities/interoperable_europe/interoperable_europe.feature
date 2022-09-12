@@ -9,15 +9,15 @@ Feature:
     And I am on the homepage
     # A dedicated link in the header should lead to the landing page.
     When I click "Interoperable Europe" in the Header region
-    # TODO: The page title is temporary.
-    Then I should see "IOP landing page"
+    # The title should not be visible.
+    Then I should not see "IOP landing page"
     # Check that we are on the expected URL for the landing page.
     And I should be on "/interoperable-europe"
 
     Given I am on the homepage
     When I click "Discover more"
-    # TODO: The page title is temporary.
-    Then I should see "IOP landing page"
+    # The title should not be visible when the page is set as landing page.
+    Then I should not see "IOP landing page"
     And the page should be rendered using the "Interoperable Europe" theme
 
     # Test other pages.
@@ -41,8 +41,7 @@ Feature:
 
     # A dedicated link in the header should lead to the landing page.
     When I click "Interoperable Europe" in the Header region
-    # TODO: The page title is temporary.
-    Then I should see "IOP landing page"
+    Then I should not see "IOP landing page"
     # Check that we are on the expected URL for the landing page.
     And I should be on "/interoperable-europe"
     And the page should be rendered using the "Interoperable Europe" theme

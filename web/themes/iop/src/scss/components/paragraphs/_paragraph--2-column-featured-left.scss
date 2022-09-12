@@ -1,4 +1,7 @@
 .paragraph--2-column-featured-left {
+  @include media-breakpoint-up(md) {
+    margin-top: 50px; // Prevent the circular shape to be too close to prev section
+  }
   h2 {
     font-size: 2.5rem;
     @include media-breakpoint-up(md) {

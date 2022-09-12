@@ -7,6 +7,8 @@
 
 declare(strict_types = 1);
 
+use Drupal\custom_page\Entity\CustomPageInterface;
+
 /**
  * Implements hook_preprocess_HOOK() for html.html.twig.
  */
@@ -51,4 +53,22 @@ function iop_preprocess_paragraph__image(array &$variables): void {
       $variables['attributes']['class'][] = 'paragraph--image--' . $value['value'];
     }
   }
+}
+
+/**
+ * Implements hook_preprocess_HOOK().
+ */
+function iop_preprocess_node__custom_page__full(&$variables) {
+  $node = $variables['node'];
+  if (($node instanceof CustomPageInterface)
+    && ($group = $node->getGroup())
+    && ($landing_page = $group->getSetting('landing_page'))
+    && $landing_page->getEntity()->get('landing_page')->target_id === $node->id()) {
+
+    // For the custom page that is set as landing page, do not display the title
+    // or the report link.
+    $variables['label']['#access'] = FALSE;
+    $variables['content']['report']['#access'] = FALSE;
+  }
+
 }
