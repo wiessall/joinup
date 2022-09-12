@@ -50,6 +50,34 @@ module.exports = {
     {
       entry: path.resolve(
         outputFolder,
+        "src/scss/paragraph--2-column-featured-left.scss"
+      ),
+      dest: path.resolve(
+        outputFolder,
+        "assets/css/paragraph--2-column-featured-left.min.css"
+      ),
+      options: {
+        includePaths,
+        sourceMap: "file",
+      },
+    },
+    {
+      entry: path.resolve(
+        outputFolder,
+        "src/scss/paragraph--2-column-featured-right.scss"
+      ),
+      dest: path.resolve(
+        outputFolder,
+        "assets/css/paragraph--2-column-featured-right.min.css"
+      ),
+      options: {
+        includePaths,
+        sourceMap: "file",
+      },
+    },
+    {
+      entry: path.resolve(
+        outputFolder,
         "src/scss/paragraph--call-to-action.scss"
       ),
       dest: path.resolve(
@@ -103,20 +131,21 @@ module.exports = {
         sourceMap: "file",
       },
     },
-    // Theme
     {
-      entry: path.resolve(outputFolder, "src/scss/theme.scss"),
-      dest: path.resolve(outputFolder, "assets/css/theme.min.css"),
+      entry: path.resolve(outputFolder, "src/scss/paragraph--video.scss"),
+      dest: path.resolve(
+        outputFolder,
+        "assets/css/paragraphs/paragraph--video.min.css"
+      ),
       options: {
-        minify: true,
         includePaths,
         sourceMap: "file",
       },
     },
-    // Pages
+    // Theme
     {
-      entry: path.resolve(outputFolder, "src/scss/landing-page.scss"),
-      dest: path.resolve(outputFolder, "assets/css/landing-page.min.css"),
+      entry: path.resolve(outputFolder, "src/scss/theme.scss"),
+      dest: path.resolve(outputFolder, "assets/css/theme.min.css"),
       options: {
         minify: true,
         includePaths,

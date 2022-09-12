@@ -16,6 +16,6 @@ Feature: Footer
       | /                                |
       | /search                          |
       # Page rendered with Interoperable Europe theme.
-      | /collection/interoperable-europe |
+      | /interoperable-europe            |
       # Page rendered with the legacy Joinup Theme theme.
       | /collection/joinup               |

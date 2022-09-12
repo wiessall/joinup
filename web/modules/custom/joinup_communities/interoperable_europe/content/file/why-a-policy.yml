@@ -3,12 +3,10 @@ _meta:
   entity_type: file
   uuid: e3068680-55cb-4544-bab6-f351f744d8b5
   default_langcode: en
-  depends:
-    43bd8db0-60e0-4169-9cd5-1256ef98b0e9: user
 default:
   uid:
     -
-      entity: 43bd8db0-60e0-4169-9cd5-1256ef98b0e9
+      target_id: 1
   filename:
     -
       value: 'WHY a POLICY- image.png'
