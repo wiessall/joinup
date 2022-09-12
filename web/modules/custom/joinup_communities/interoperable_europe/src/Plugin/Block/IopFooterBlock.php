@@ -39,27 +39,28 @@ class IopFooterBlock extends BlockBase {
       ],
       'youtube' => [
         'title' => $this->t('Youtube'),
-        'url' => 'https://www.youtube.com/c/InteroperableEurope',
+        'url' => 'https://www.youtube.com/c/interoperableeurope',
       ],
     ];
 
     foreach ($icons as $class => $data) {
       $build[$class] = [
-        '#type' => 'link',
-        '#title' => $data['title'],
-        '#url' => Url::fromUri($data['url']),
-        '#attributes' => [
-          'class' => ['icon', 'icon-' . $class],
+        '#type' => 'inline_template',
+        '#template' => '<a class="btn btn-sm rounded-circle join__btn" href="{{ url }}" target="_blank" rel="noopener" title="{{ title }}"><svg class="icon--m"><use xlink:href="' . base_path() . \Drupal::service('extension.list.theme')->getPath('ventuno') . '/assets/icons/icons.svg#{{ icon }}"></use></svg></a>',
+        '#context' => [
+          'icon' => $class,
+          'title' => $this->t('Follow us on ') . $data['title'],
+          'url' =>  Url::fromUri($data['url']),
         ],
       ];
     }
 
     $build['newsletter'] = [
-      '#type' => 'link',
-      '#url' => Url::fromUri('https://ec.europa.eu/newsroom/informatics/user-subscriptions/1115/create'),
-      '#title' => $this->t('Subscribe to our newsletter'),
-      '#attributes' => [
-        'class' => ['iop-footer__newsletter'],
+      '#type' => 'inline_template',
+      '#template' => '<a class="btn btn-sm rounded-circle join__btn" href="{{ url }}" target="_blank" rel="noopener" title="{{ title }}"><svg class="icon--m"><use xlink:href="' . base_path() . \Drupal::service('extension.list.theme')->getPath('ventuno') . '/assets/icons/icons.svg#envelope-fill"></use></svg></a>',
+      '#context' => [
+        'title' => $this->t('Subscribe to the interoperable europe newsletter'),
+        'url' =>  Url::fromUri('https://ec.europa.eu/newsroom/informatics/user-subscriptions/1115/create'),
       ],
     ];
     return $build;
