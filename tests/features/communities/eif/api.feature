@@ -59,3 +59,12 @@ Feature:
     And I should not see the heading "Interoperability layers"
     But I should not see the heading "Conceptual model"
     And I should not see the text "implements the following EIF recommendations as explained below"
+
+    # Verify that solution group menu contains correct links.
+    When I go to the "EIF solution" solution
+    Then I should see the following group menu items in the specified order:
+      | text     |
+      | Overview |
+      | Members  |
+      | About    |
+      | EIF view |
