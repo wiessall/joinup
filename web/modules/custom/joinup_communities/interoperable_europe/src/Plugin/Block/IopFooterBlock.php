@@ -5,8 +5,11 @@ declare(strict_types = 1);
 namespace Drupal\interoperable_europe\Plugin\Block;
 
 use Drupal\Core\Block\BlockBase;
+use Drupal\Core\Extension\ThemeExtensionList;
+use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Plugin\Context\ContextHandlerInterface;
 use Drupal\Core\Url;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Provides an IOP footer block.
@@ -17,7 +20,41 @@ use Drupal\Core\Url;
  *   category = @Translation("Interoperable Europe")
  * )
  */
-class IopFooterBlock extends BlockBase {
+class IopFooterBlock extends BlockBase implements ContainerFactoryPluginInterface{
+
+  /**
+   * The theme extension list service.
+   */
+  protected ThemeExtensionList $themeExtensionList;
+
+  /**
+   * Constructs a new EiraDeprecatedTermBlock.
+   *
+   * @param array $configuration
+   *   A configuration array containing information about the plugin instance.
+   * @param string $plugin_id
+   *   The plugin_id for the plugin instance.
+   * @param string $plugin_definition
+   *   The plugin implementation definition.
+   * @param \Drupal\Core\Extension\ThemeExtensionList $theme_extension_list
+   *   The theme extension list service.
+   */
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, ThemeExtensionList $theme_extension_list) {
+    parent::__construct($configuration, $plugin_id, $plugin_definition);
+    $this->themeExtensionList = $theme_extension_list;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
+    return new static(
+      $configuration,
+      $plugin_id,
+      $plugin_definition,
+      $container->get('extension.list.theme'),
+    );
+  }
 
   /**
    * The plugin context handler.
@@ -43,7 +80,7 @@ class IopFooterBlock extends BlockBase {
       ],
     ];
 
-    $icon_uri = base_path() . \Drupal::service('extension.list.theme')->getPath('ventuno') . '/assets/icons/icons.svg#';
+    $icon_uri = base_path() . $this->themeExtensionList->getPath('ventuno') . '/assets/icons/icons.svg#';
     $svg_gradient = '<linearGradient id="join-gradient"><stop offset="0%" stop-color="#0047ba" /><stop offset="100%" stop-color="#19d3c5" /></linearGradient>';
 
     foreach ($icons as $class => $data) {
