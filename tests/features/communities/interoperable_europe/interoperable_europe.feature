@@ -54,15 +54,15 @@ Feature:
     # Check IOPE footer
     Then I should see the heading "Join our community!"
     And I should see the following links:
-      | LinkedIn                    |
-      | Twitter                     |
-      | Youtube                     |
-      | Subscribe to our newsletter |
+      | Follow us on LinkedIn                            |
+      | Follow us on Twitter                             |
+      | Follow us on Youtube                             |
+      | Subscribe to the interoperable europe newsletter |
 
     When I click "News"
     Then I should see the heading "Join our community!"
     And I should see the following links:
-      | LinkedIn                    |
-      | Twitter                     |
-      | Youtube                     |
-      | Subscribe to our newsletter |
+      | Follow us on LinkedIn                            |
+      | Follow us on Twitter                             |
+      | Follow us on Youtube                             |
+      | Subscribe to the interoperable europe newsletter |
