@@ -1,5 +1,6 @@
 .listing {
   &-header {
+    margin-bottom: $spacer * -1; // 16px
     // Allow background to be full width
     position: relative;
     &::before {
@@ -16,8 +17,8 @@
       background-size: cover;
     }
     padding: $spacer * 2 0!important; // 32px 0
-    @include media-breakpoint-up(lg) {
-      margin-bottom: $spacer * -1.5;
+    @include media-breakpoint-up(md) {
+      margin-bottom: $spacer * -2;
       padding: $spacer * 3.5 0!important; // 56px 0
     }
     @include media-breakpoint-up(xxl) {
@@ -76,43 +77,47 @@
   }
   &--news {
     .listing-header {
-      margin-bottom: $spacer * -1;
       &::before {
         background-image: url("#{$theme-path-iop}/banners/news.webp");
       }
     }
     .cards-wrapper {
-      @include media-breakpoint-up(sm) {
+      @include media-breakpoint-between(sm, lg) {
+        & > .col {
+          margin-top: unset;
+        }
         & > .col:nth-child(even) {
-          margin-top: 3rem;
+          margin-top: $spacer * 3;
         }
       }
       @include media-breakpoint-up(lg) {
         & > .col:nth-child(3n+2) {
-          margin-top: 5rem;
+          margin-top: $spacer * 4;
         }
       }
     }
   }
   &--events {
     .listing-header {
-      margin-bottom: $spacer * -2;
       &::before {
         background-image: url("#{$theme-path-iop}/banners/events.webp");
       }
     }
     .cards-wrapper {
-      @include media-breakpoint-up(sm) {
+      @include media-breakpoint-between(sm, lg) {
+        & > .col {
+          margin-top: unset;
+        }
         & > .col:nth-child(even) {
-          margin-top: 3rem;
+          margin-top: $spacer * 3;
         }
       }
       @include media-breakpoint-up(lg) {
         & > .col:nth-child(3n - 1) {
-          margin-top: 4rem;
+          margin-top: $spacer * 4;
         }
         & > .col:nth-child(3n) {
-          margin-top: 8rem;
+          margin-top: $spacer * 8;
         }
       }
     }
