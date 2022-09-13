@@ -844,3 +844,16 @@ function joinup_group_entity_update(EntityInterface $group): void {
     }
   }
 }
+
+/**
+ * Implements hook_ENTITY_TYPE_delete().
+ */
+function joinup_group_rdf_entity_delete(RdfInterface $group) {
+  if ($group instanceof GroupInterface) {
+    // Cleanup the {joinup_group_node_access} table.
+    \Drupal::database()->delete('joinup_group_node_access')
+      ->condition('entity_type', $group->getEntityTypeId())
+      ->condition('entity_id', $group->id())
+      ->execute();
+  }
+}
