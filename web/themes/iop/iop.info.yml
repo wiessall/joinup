@@ -1,6 +1,6 @@
 
 name: Interoperable Europe
-description: A sub-theme of Ventuno
+description: Custom theme for Interoperable Europe, sub-theme of Ventuno < OpenEuropa Bootstrap Theme.
 package: Custom
 type: theme
 core_version_requirement: '>=9.4'
