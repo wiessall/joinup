@@ -53,12 +53,7 @@ class JoinupGroupNodeAccessGrants implements JoinupGroupNodeAccessGrantsInterfac
       throw new \InvalidArgumentException('Cannot provide an access grant ID for an unsaved group.');
     }
 
-    $cid = [
-      __METHOD__,
-      $group->getEntityTypeId(),
-      $group->id(),
-    ];
-    $cid = implode(':', $cid);
+    $cid = "{$group->getEntityTypeId()}:{$group->id()}";
 
     // Use cached result if it exists.
     if (!$gid = $this->memoryCache->get($cid)->data ?? NULL) {
