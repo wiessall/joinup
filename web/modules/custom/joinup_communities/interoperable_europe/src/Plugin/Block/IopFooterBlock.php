@@ -20,7 +20,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *   category = @Translation("Interoperable Europe")
  * )
  */
-class IopFooterBlock extends BlockBase implements ContainerFactoryPluginInterface{
+class IopFooterBlock extends BlockBase implements ContainerFactoryPluginInterface {
 
   /**
    * The theme extension list service.
