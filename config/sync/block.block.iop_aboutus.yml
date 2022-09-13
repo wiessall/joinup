@@ -11,7 +11,7 @@ dependencies:
 id: iop_aboutus
 theme: iop
 region: footer
-weight: -24
+weight: -25
 provider: null
 plugin: 'system_menu_block:footer-about-us'
 settings:

@@ -19,12 +19,16 @@ listing:
       assets/css/listing.min.css: {}
 
 # Components
-
 # @todo ISAICP-7138 delete this library when switch to Ventuno theme is complete
 add-content:
   css:
     theme:
       assets/css/add-content.min.css: { minified: true }
+
+join:
+  css:
+    theme:
+      assets/css/join.min.css: {}
 
 navbar:
   css:
@@ -77,12 +81,12 @@ paragraph--row:
 paragraph--testimony:
   css:
     theme:
-      assets/css/paragraphs/paragraph--testimony.min.css: {}
+      assets/css/paragraph--testimony.min.css: {}
 
 paragraph--video:
   css:
     theme:
-      assets/css/paragraphs/paragraph--video.min.css: {}
+      assets/css/paragraph--video.min.css: {}
 
 # @todo ISAICP-7138 delete this library when switch to Ventuno theme is complete
 three-dots-menu:

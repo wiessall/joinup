@@ -11,7 +11,7 @@ dependencies:
 id: iop_helpandsupport
 theme: iop
 region: footer
-weight: -23
+weight: -24
 provider: null
 plugin: 'system_menu_block:footer-help-and-support'
 settings:
