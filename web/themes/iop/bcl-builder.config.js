@@ -158,6 +158,35 @@ module.exports = {
         sourceMap: "file",
       },
     },
+    {
+      entry: path.resolve(outputFolder, "src/scss/listing.scss"),
+      dest: path.resolve(outputFolder, "assets/css/listing.min.css"),
+      options: {
+        minify: true,
+        includePaths,
+        sourceMap: "file",
+      },
+    },
+    // Spare components
+    {
+      entry: path.resolve(outputFolder, "src/scss/pager.scss"),
+      dest: path.resolve(outputFolder, "assets/css/pager.min.css"),
+      options: {
+        minify: true,
+        includePaths,
+        sourceMap: "file",
+      },
+    },
+    // @todo ISAICP-7138 delete this library when switch to Ventuno theme is complete
+    {
+      entry: path.resolve(outputFolder, "src/scss/add-content.scss"),
+      dest: path.resolve(outputFolder, "assets/css/add-content.min.css"),
+      options: {
+        minify: true,
+        includePaths,
+        sourceMap: "file",
+      },
+    },
   ],
   copy: [
     // Bootstrap: fonts
@@ -187,6 +216,31 @@ module.exports = {
     {
       from: [path.resolve(__dirname, "src/images/iop-eu-logo.svg")],
       to: path.resolve(outputFolder, "assets/images"),
+      options: { up: true },
+    },
+    {
+      from: [path.resolve(__dirname, "src/images/banners/ACT.webp")],
+      to: path.resolve(outputFolder, "assets/images/banners/"),
+      options: { up: true },
+    },
+    {
+      from: [path.resolve(__dirname, "src/images/banners/events.webp")],
+      to: path.resolve(outputFolder, "assets/images/banners/"),
+      options: { up: true },
+    },
+    {
+      from: [path.resolve(__dirname, "src/images/banners/FAQ.webp")],
+      to: path.resolve(outputFolder, "assets/images/banners/"),
+      options: { up: true },
+    },
+    {
+      from: [path.resolve(__dirname, "src/images/banners/news.webp")],
+      to: path.resolve(outputFolder, "assets/images/banners/"),
+      options: { up: true },
+    },
+    {
+      from: [path.resolve(__dirname, "src/images/banners/policy.webp")],
+      to: path.resolve(outputFolder, "assets/images/banners/"),
       options: { up: true },
     },
     {
