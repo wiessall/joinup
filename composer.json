@@ -30,7 +30,7 @@
         "drupal/dynamic_entity_reference": "~2.0",
         "drupal/editor_file": "~1.5",
         "drupal/email_confirmer": "^1.0",
-        "drupal/email_contact": "^1.0",
+        "drupal/email_contact": "^2.0",
         "drupal/embed_block": "^1.0",
         "drupal/entity_legal": "^3.0.0",
         "drupal/entityqueue": "^1.2",
@@ -274,9 +274,6 @@
             },
             "drupal/email_confirmer": {
                 "Support for HTML mails @see https://www.drupal.org/i/3047124": "https://git.drupalcode.org/project/email_confirmer/-/merge_requests/3.diff"
-            },
-            "drupal/email_contact": {
-                "Email contact form opens in a modal. @see https://www.drupal.org/project/email_contact/issues/3273996": "https://git.drupalcode.org/project/email_contact/-/merge_requests/1.diff"
             },
             "drupal/entityqueue": {
                 "Missing config schema for EntityQueueDragtableWidget @see Missing config schema for EntityQueueDragtableWidget": "https://git.drupalcode.org/project/entityqueue/-/merge_requests/3.diff"
