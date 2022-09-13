@@ -17,7 +17,7 @@ use Drupal\joinup_group\Entity\GroupInterface;
  * the 'joinup_group_view_unpublished' realm.
  *
  * The node access grants work with numeric grant IDs while our groups have
- * string IDs so we store a mapping in the 'joinup_group_node_access' table.
+ * string IDs, so we store a mapping in the 'joinup_group_node_access' table.
  * This service provides the mapping data.
  */
 class JoinupGroupNodeAccessGrants implements JoinupGroupNodeAccessGrantsInterface {
