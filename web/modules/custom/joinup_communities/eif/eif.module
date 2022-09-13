@@ -143,7 +143,6 @@ function eif_preprocess_views_view_field(array &$variables): void {
  * Implements hook_form_FORM_ID_alter().
  */
 function eif_form_rdf_entity_solution_edit_form_alter(array &$form, FormStateInterface $form_state, string $form_id): void {
-
   $form['#validate'][] = 'eif_validate_eif_field_values';
 }
 
@@ -272,7 +271,6 @@ function eif_eif_wrapper_access(EntityInterface $entity, string $operation, Acco
 function eif_rdf_meta_entity_insert(RdfMetaEntityInterface $entity): void {
   _eif_reindex_parent_solution($entity);
   _eif_add_eif_link_to_nav($entity);
-
 }
 
 /**
@@ -335,8 +333,8 @@ function _eif_add_eif_link_to_nav(RdfMetaEntityInterface $entity) {
     $rdf_entity = $entity->getTargetEntity();
     if ($rdf_entity instanceof RdfInterface) {
       $og_menu = \Drupal::entityTypeManager()->getStorage('ogmenu_instance')->loadByProperties([
-          'og_audience' => $rdf_entity->id(),
-        ]);
+        'og_audience' => $rdf_entity->id(),
+      ]);
 
       if ($og_menu = reset($og_menu)) {
         $menu_name = 'ogmenu-' . $og_menu->id();

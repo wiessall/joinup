@@ -21,7 +21,7 @@ class EifGroupMenuLinksSubscriber implements EventSubscriberInterface {
    */
   public static function getSubscribedEvents() {
     return [
-      GroupMenuLinksEvent::ADD_EIF_PERSPECTIVE_LINK => 'addEifPerspectiveLink'
+      GroupMenuLinksEvent::ADD_EIF_PERSPECTIVE_LINK => 'addEifPerspectiveLink',
     ];
   }
 
