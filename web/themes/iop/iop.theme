@@ -8,6 +8,7 @@
 declare(strict_types = 1);
 
 use Drupal\custom_page\Entity\CustomPageInterface;
+use Drupal\interoperable_europe\InteroperableEuropeCollectionInterface;
 
 /**
  * Implements hook_preprocess_HOOK() for html.html.twig.
@@ -63,13 +64,13 @@ function iop_preprocess_page(&$variables) {
   if ($node instanceof \Drupal\node\NodeInterface) {
     $nid = $variables['node']->id();
     // News listing page.
-    if ($nid == 704825) {
+    if ($nid === InteroperableEuropeCollectionInterface::NEWS_LISTING) {
       $variables['#attached']['library'][] = 'iop/listing';
       $variables['listing'] = TRUE;
       $variables['news_listing'] = TRUE;
     }
     // Events listing page.
-    elseif ($nid == 704828) {
+    elseif ($nid == InteroperableEuropeCollectionInterface::EVENT_LISTING) {
       $variables['#attached']['library'][] = 'iop/listing';
       $variables['listing'] = TRUE;
       $variables['events_listing'] = TRUE;
