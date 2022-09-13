@@ -71,7 +71,7 @@ function iop_preprocess_page(&$variables) {
       $variables['news_listing'] = TRUE;
     }
     // Events listing page.
-    elseif ($nid == InteroperableEuropeCollectionInterface::EVENT_LISTING) {
+    elseif ($nid === InteroperableEuropeCollectionInterface::EVENT_LISTING) {
       $variables['#attached']['library'][] = 'iop/listing';
       $variables['listing'] = TRUE;
       $variables['events_listing'] = TRUE;
