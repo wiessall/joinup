@@ -19,13 +19,23 @@
             // Run function on user scroll.
             window.addEventListener("scroll", () => {
               if (window.pageYOffset > navbarOffsetTop) {
-                navbar.classList.add("js-is--sticky");
-                // Add the required padding top to show content behind navbar.
-                document.body.style.paddingTop = `${navbar.offsetHeight}px`;
+                if (!navbar.classList.contains("js-is--sticky")) {
+                  navbar.classList.add("js-is--sticky");
+                }
+                if (
+                  document.body.style.paddingTop !== `${navbar.offsetHeight}px`
+                ) {
+                  // Add the required padding top to show content behind navbar.
+                  document.body.style.paddingTop = `${navbar.offsetHeight}px`;
+                }
               } else {
-                navbar.classList.remove("js-is--sticky");
-                // Remove padding top from body.
-                document.body.style.paddingTop = "0";
+                if (navbar.classList.contains("js-is--sticky")) {
+                  navbar.classList.remove("js-is--sticky");
+                }
+                if (document.body.style.paddingTop) {
+                  // Remove padding top from body.
+                  document.body.style.removeProperty("padding-top");
+                }
               }
             });
           }
