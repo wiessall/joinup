@@ -24,17 +24,13 @@ class JoinupGroupNodeAccessGrants implements JoinupGroupNodeAccessGrantsInterfac
 
   /**
    * The SQL connection class for the primary database storage.
-   *
-   * @var \Drupal\Core\Database\Connection
    */
-  protected $sqlConnection;
+  protected Connection $sqlConnection;
 
   /**
    * The static cache backend.
-   *
-   * @var \Drupal\Core\Cache\CacheBackendInterface
    */
-  protected $staticCache;
+  protected CacheBackendInterface $staticCache;
 
   /**
    * Constructs a JoinupGroupNodeAccessGrants service.
