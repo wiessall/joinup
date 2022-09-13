@@ -7,6 +7,7 @@ namespace Drupal\joinup_group;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Database\Connection;
+use Drupal\Core\Database\IntegrityConstraintViolationException;
 use Drupal\joinup_group\Entity\GroupInterface;
 
 /**
@@ -57,43 +58,31 @@ class JoinupGroupNodeAccessGrants implements JoinupGroupNodeAccessGrantsInterfac
 
     // Use cached result if it exists.
     if (!$gid = $this->memoryCache->get($cid)->data ?? NULL) {
-      $query = $this->sqlConnection->select('joinup_group_node_access', 'na')
-        ->fields('na', ['gid'])
-        ->condition('entity_type', $group->getEntityTypeId())
-        ->condition('entity_id', $group->id())
-        ->range(0, 1);
-
-      $record = $query->execute()->fetch();
-      $gid = empty($record) ? $this->createRecord($group) : (int) $record->gid;
+      try {
+        if ($group->isNew()) {
+          throw new \InvalidArgumentException('Cannot create an access grant record for an unsaved group.');
+        }
+        $gid = (int) $this->sqlConnection->insert('joinup_group_node_access')
+          ->fields(
+            ['entity_type', 'entity_id'],
+            [$group->getEntityTypeId(), $group->id()]
+          )->execute();
+      }
+      catch (IntegrityConstraintViolationException $exception) {
+        // Instead of running first a SELECT, in order to check the existence of
+        // this record, we try an INSERT to avoid any race condition that might
+        // occur between SELECT and INSERT.
+        $gid = (int) $this->sqlConnection->select('joinup_group_node_access', 'na')
+          ->fields('na', ['gid'])
+          ->condition('entity_type', $group->getEntityTypeId())
+          ->condition('entity_id', $group->id())
+          ->execute()
+          ->fetchField();
+      }
       $this->memoryCache->set($cid, $gid, Cache::PERMANENT, $group->getCacheTagsToInvalidate());
     }
 
     return $gid;
-  }
-
-  /**
-   * Creates a new record in the access grants table for the given group.
-   *
-   * @param \Drupal\joinup_group\Entity\GroupInterface $group
-   *   The group for which to create a record.
-   *
-   * @return int
-   *   The grant ID.
-   *
-   * @throws \Exception
-   *   Thrown when an error occurs during the creation of the database record.
-   */
-  protected function createRecord(GroupInterface $group): int {
-    if ($group->isNew()) {
-      throw new \InvalidArgumentException('Cannot create an access grant record for an unsaved group.');
-    }
-
-    $query = $this->sqlConnection->insert('joinup_group_node_access')
-      ->fields(
-        ['entity_type', 'entity_id'],
-        [$group->getEntityTypeId(), $group->id()]
-    );
-    return (int) $query->execute();
   }
 
 }
