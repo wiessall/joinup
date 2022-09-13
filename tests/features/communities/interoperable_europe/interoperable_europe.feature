@@ -50,3 +50,19 @@ Feature:
     Then I should see the link "News" in the "IOPE Menu"
     And I should see the link "Events" in the "IOPE Menu"
     And I should see the link "Policy" in the "IOPE Menu"
+
+    # Check IOPE footer
+    Then I should see the heading "Join our community!"
+    And I should see the following links:
+      | Follow us on LinkedIn                            |
+      | Follow us on Twitter                             |
+      | Follow us on Youtube                             |
+      | Subscribe to the interoperable europe newsletter |
+
+    When I click "News"
+    Then I should see the heading "Join our community!"
+    And I should see the following links:
+      | Follow us on LinkedIn                            |
+      | Follow us on Twitter                             |
+      | Follow us on Youtube                             |
+      | Subscribe to the interoperable europe newsletter |

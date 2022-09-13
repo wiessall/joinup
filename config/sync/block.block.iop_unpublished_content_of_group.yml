@@ -6,6 +6,7 @@ dependencies:
     - joinup_core
     - joinup_group
     - rdf_entity
+    - system
   theme:
     - iop
 _core:
@@ -13,14 +14,14 @@ _core:
 id: iop_unpublished_content_of_group
 theme: iop
 region: content_bottom
-weight: -7
+weight: -23
 provider: null
 plugin: entity_unpublished
 settings:
   id: entity_unpublished
   label: 'Unpublished content'
   label_display: visible
-  provider: joinup_core
+  provider: joinup_group
   context_mapping:
     og: '@rdf_entity.rdf_entity_route_context:rdf_entity'
 visibility:
@@ -38,3 +39,7 @@ visibility:
     bundles:
       collection: collection
       solution: solution
+  request_path:
+    id: request_path
+    negate: true
+    pages: /interoperable-europe
