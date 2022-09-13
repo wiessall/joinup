@@ -20,8 +20,8 @@ use Drupal\eif\Plugin\views\argument\EifGroupArgument;
 use Drupal\field\FieldConfigInterface;
 use Drupal\joinup_group\Event\GroupMenuLinksEvent;
 use Drupal\og\OgGroupAudienceHelperInterface;
-use Drupal\rdf_entity\RdfInterface;
 use Drupal\rdf_meta_entity\Entity\RdfMetaEntityInterface;
+use Drupal\solution\Entity\SolutionInterface;
 use Drupal\views\ViewExecutable;
 
 /**
@@ -331,7 +331,7 @@ function _eif_reindex_parent_solution(RdfMetaEntityInterface $entity): void {
 function _eif_add_eif_link_to_nav(RdfMetaEntityInterface $entity) {
   if ($entity->bundle() == 'eif_perspective') {
     $rdf_entity = $entity->getTargetEntity();
-    if ($rdf_entity instanceof RdfInterface) {
+    if ($rdf_entity instanceof SolutionInterface) {
       $og_menu = \Drupal::entityTypeManager()->getStorage('ogmenu_instance')->loadByProperties([
         'og_audience' => $rdf_entity->id(),
       ]);

@@ -6,7 +6,6 @@ namespace Drupal\eif\EventSubscriber;
 
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\joinup_group\Event\GroupMenuLinksEvent;
-use Drupal\solution\Entity\SolutionInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
@@ -33,11 +32,8 @@ class EifGroupMenuLinksSubscriber implements EventSubscriberInterface {
    */
   public function addEifPerspectiveLink(GroupMenuLinksEvent $event): void {
     $group = $event->getGroup();
-
-    if ($group instanceof SolutionInterface) {
-      $link = ['uri' => $group->toUrl('eif-perspective')->toUriString()];
-      $event->addMenuLink($link, $this->t('EIF view'), -6);
-    }
+    $link = ['uri' => $group->toUrl('eif-perspective')->toUriString()];
+    $event->addMenuLink($link, $this->t('EIF view'), -6);
   }
 
 }
