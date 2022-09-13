@@ -78,7 +78,7 @@
   &--news {
     .listing-header {
       &::before {
-        background-image: url("#{$theme-path-iop}/banners/news.webp");
+        background-image: url("#{$theme-images-path}/banners/news.webp");
       }
     }
     .cards-wrapper {
@@ -100,7 +100,7 @@
   &--events {
     .listing-header {
       &::before {
-        background-image: url("#{$theme-path-iop}/banners/events.webp");
+        background-image: url("#{$theme-images-path}/banners/events.webp");
       }
     }
     .cards-wrapper {
