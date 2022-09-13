@@ -77,7 +77,7 @@ function joinup_rdf_entity_type_alter(array &$entity_types) {
     'member-overview' => '/rdf_entity/{rdf_entity}/members',
     'member-add' => '/rdf_entity/{rdf_entity}/members/add',
     'member-invite' => '/rdf_entity/{rdf_entity}/members/invite',
-    'eif-perspective' => '/rdf_entity/{rdf_entity}/eif-perspective'
+    'eif-perspective' => '/rdf_entity/{rdf_entity}/eif-perspective',
   ];
   foreach ($link_templates as $key => $path) {
     $entity_types['rdf_entity']->setLinkTemplate($key, $path);
