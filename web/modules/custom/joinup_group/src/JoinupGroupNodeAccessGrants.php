@@ -28,9 +28,9 @@ class JoinupGroupNodeAccessGrants implements JoinupGroupNodeAccessGrantsInterfac
   protected Connection $sqlConnection;
 
   /**
-   * The static cache backend.
+   * The memory cache backend.
    */
-  protected CacheBackendInterface $staticCache;
+  protected CacheBackendInterface $memoryCache;
 
   /**
    * Constructs a JoinupGroupNodeAccessGrants service.
@@ -38,11 +38,11 @@ class JoinupGroupNodeAccessGrants implements JoinupGroupNodeAccessGrantsInterfac
    * @param \Drupal\Core\Database\Connection $connection
    *   The SQL connection class for the primary database storage.
    * @param \Drupal\Core\Cache\CacheBackendInterface $cache
-   *   The static cache backend.
+   *   The memory cache backend.
    */
   public function __construct(Connection $connection, CacheBackendInterface $cache) {
     $this->sqlConnection = $connection;
-    $this->staticCache = $cache;
+    $this->memoryCache = $cache;
   }
 
   /**
@@ -61,7 +61,7 @@ class JoinupGroupNodeAccessGrants implements JoinupGroupNodeAccessGrantsInterfac
     $cid = implode(':', $cid);
 
     // Use cached result if it exists.
-    if (!$gid = $this->staticCache->get($cid)->data ?? NULL) {
+    if (!$gid = $this->memoryCache->get($cid)->data ?? NULL) {
       $query = $this->sqlConnection->select('joinup_group_node_access', 'na')
         ->fields('na', ['gid'])
         ->condition('entity_type', $group->getEntityTypeId())
@@ -70,7 +70,7 @@ class JoinupGroupNodeAccessGrants implements JoinupGroupNodeAccessGrantsInterfac
 
       $record = $query->execute()->fetch();
       $gid = empty($record) ? $this->createRecord($group) : (int) $record->gid;
-      $this->staticCache->set($cid, $gid, Cache::PERMANENT, $group->getCacheTagsToInvalidate());
+      $this->memoryCache->set($cid, $gid, Cache::PERMANENT, $group->getCacheTagsToInvalidate());
     }
 
     return $gid;
