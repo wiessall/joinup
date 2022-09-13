@@ -59,18 +59,21 @@ function iop_preprocess_paragraph__image(array &$variables): void {
  * Implements hook_preprocess_HOOK().
  */
 function iop_preprocess_page(&$variables) {
-  $nid = $variables['node']->id();
-  // News listing page
-  if ($nid == 704825) {
-    $variables['#attached']['library'][] = 'iop/listing';
-    $variables['listing'] = true;
-    $variables['news_listing'] = true;
-  }
-  // Events listing page
-  elseif ($nid == 704828) {
-    $variables['#attached']['library'][] = 'iop/listing';
-    $variables['listing'] = true;
-    $variables['events_listing'] = true;
+  $node = \Drupal::routeMatch()->getParameter('node');
+  if ($node instanceof \Drupal\node\NodeInterface) {
+    $nid = $variables['node']->id();
+    // News listing page.
+    if ($nid == 704825) {
+      $variables['#attached']['library'][] = 'iop/listing';
+      $variables['listing'] = TRUE;
+      $variables['news_listing'] = TRUE;
+    }
+    // Events listing page.
+    elseif ($nid == 704828) {
+      $variables['#attached']['library'][] = 'iop/listing';
+      $variables['listing'] = TRUE;
+      $variables['events_listing'] = TRUE;
+    }
   }
 }
 
@@ -78,11 +81,11 @@ function iop_preprocess_page(&$variables) {
  * Implements hook_preprocess_HOOK().
  */
 function iop_preprocess_node(&$variables) {
-  // News listing page
+  // News listing page.
   if (!empty($variables['content']['field_news_logo'])) {
     $variables['logo'][] = $variables['content']['field_news_logo'];
   }
-  // Events listing page
+  // Events listing page.
   elseif (!empty($variables['content']['field_event_logo'])) {
     $variables['logo'][] = $variables['content']['field_event_logo'];
   }
