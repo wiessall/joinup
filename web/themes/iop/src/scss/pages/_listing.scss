@@ -3,10 +3,11 @@
     margin-bottom: $spacer * -1; // 16px
     // Allow background to be full width
     position: relative;
+    padding: $spacer * 2 0!important; // 32px 0
     &::before {
       position: absolute;
       top: 0;
-      left: 0;
+      left: -12px;
       z-index: -1;
       width: 100vw;
       height: 100%;
@@ -15,8 +16,22 @@
       background-repeat: no-repeat;
       background-position: center;
       background-size: cover;
+      @include media-breakpoint-up(sm) {
+        left: calc(-50vw + 270px - 12px);
+      }
+      @include media-breakpoint-up(md) {
+        left: calc(-50vw + 360px - 12px);
+      }
+      @include media-breakpoint-up(lg) {
+        left: calc(-50vw + 480px - 12px);
+      }
+      @include media-breakpoint-up(xl) {
+        left: calc(-50vw + 570px - 12px);
+      }
+      @include media-breakpoint-up(xxl) {
+        left: calc(-50vw + 660px - 12px);
+      }
     }
-    padding: $spacer * 2 0!important; // 32px 0
     @include media-breakpoint-up(md) {
       margin-bottom: $spacer * -2;
       padding: $spacer * 3.5 0!important; // 56px 0
@@ -38,6 +53,11 @@
       @include media-breakpoint-up(xxl) {
         font-size: 5rem;
       }
+    }
+  }
+  .cards-wrapper {
+    & > .col {
+      margin-top: unset;
     }
   }
   .card {
@@ -83,9 +103,6 @@
     }
     .cards-wrapper {
       @include media-breakpoint-between(sm, lg) {
-        & > .col {
-          margin-top: unset;
-        }
         & > .col:nth-child(even) {
           margin-top: $spacer * 3;
         }
@@ -105,9 +122,6 @@
     }
     .cards-wrapper {
       @include media-breakpoint-between(sm, lg) {
-        & > .col {
-          margin-top: unset;
-        }
         & > .col:nth-child(even) {
           margin-top: $spacer * 3;
         }
