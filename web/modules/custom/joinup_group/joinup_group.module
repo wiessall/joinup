@@ -925,6 +925,13 @@ function joinup_group_rdf_entity_delete(RdfInterface $group): void {
       ->condition('entity_type', $group->getEntityTypeId())
       ->condition('entity_id', $group->id())
       ->execute();
+    // Delete also announcements belonging to this group.
+    $storage = \Drupal::entityTypeManager()->getStorage('message');
+    $mids = $storage->getQuery()->accessCheck(FALSE)
+      ->condition('template', 'announcement')
+      ->condition('group_reference', $group->id())
+      ->execute();
+    $storage->delete($storage->loadMultiple($mids));
   }
 }
 
