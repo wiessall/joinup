@@ -34,7 +34,6 @@ dependencies:
     - joinup_subscription
     - media
     - menu_admin_per_menu
-    - message_ui
     - meta_entity
     - moderation
     - node
@@ -128,7 +127,6 @@ permissions:
   - 'edit any discussion content'
   - 'edit any event_logo media'
   - 'edit any glossary content'
-  - 'edit any message template'
   - 'edit any news_logo media'
   - 'edit any solution_banner media'
   - 'edit any solution_logo media'
@@ -295,7 +293,6 @@ permissions:
   - 'update site alerts'
   - 'update solution_settings meta-entity'
   - 'update spotlight entityqueue'
-  - 'view any message template'
   - 'view any unpublished content'
   - 'view eif wrapper entity'
   - 'view field_is_eif_category'
