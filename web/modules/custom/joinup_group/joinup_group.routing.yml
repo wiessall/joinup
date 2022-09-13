@@ -19,7 +19,7 @@ entity.rdf_entity.member_overview:
     _controller: '\Drupal\joinup_group\Controller\GroupMembersController::membersList'
     _title: 'Members'
   requirements:
-    _permission: 'access user profiles'
+    _custom_access: Drupal\joinup_group\Controller\GroupMembersController::access
   options:
     parameters:
       rdf_entity:
