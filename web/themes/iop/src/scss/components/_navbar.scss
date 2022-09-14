@@ -1,5 +1,4 @@
 .iop-navbar {
-  z-index: 99; // Avoid joinup navbar's dropdown to be overlapped by IOP sticky menu
   background: linear-gradient(to bottom, $darkblue 0%, $darkblue 60%, $blue 120%);
   @include media-breakpoint-up(lg) {
     padding: $spacer 0; // 16px 0
