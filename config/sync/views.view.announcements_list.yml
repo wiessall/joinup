@@ -320,10 +320,10 @@ display:
           tokenize: false
       sorts: {  }
       arguments:
-        group_reference_target_id:
-          id: group_reference_target_id
-          table: message__group_reference
-          field: group_reference_target_id
+        group_target_id:
+          id: group_target_id
+          table: message__group
+          field: group_target_id
           relationship: none
           group_type: group
           admin_label: ''

@@ -4,7 +4,7 @@ status: true
 dependencies:
   config:
     - field.field.message.announcement.body
-    - field.field.message.announcement.group_reference
+    - field.field.message.announcement.group
     - field.field.message.announcement.recipients
     - field.field.message.announcement.state
     - field.field.message.announcement.subject
@@ -24,7 +24,7 @@ content:
       rows: 5
       placeholder: ''
     third_party_settings: {  }
-  group_reference:
+  group:
     type: entity_reference_autocomplete
     weight: 0
     region: content
