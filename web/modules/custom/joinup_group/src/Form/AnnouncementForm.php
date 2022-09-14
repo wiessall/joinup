@@ -102,7 +102,7 @@ class AnnouncementForm extends FormBase {
 
     $form['state'] = [
       '#markup' => $this->announcement->isNew() ? $this->t("Announcement not saved yet") : $this->t("Announcement in @state state", [
-        '@state' => $this->announcement->getState()->getLabel(),
+        '@state' => $this->announcement->getWorkflowStateInstance()->getLabel(),
       ]),
       '#prefix' => '<h3>',
       '#suffix' => '</h3>',
@@ -139,11 +139,11 @@ class AnnouncementForm extends FormBase {
    */
   public function submitForm(array &$form, FormStateInterface $form_state): void {
     $is_new = $this->announcement->isNew();
-    $initial_state = $this->announcement->getState();
+    $initial_state = $this->announcement->getWorkflowStateInstance();
 
     $trigger = $form_state->getTriggeringElement();
     if ($trigger['#type'] === 'submit' && isset($trigger['#state_machine_transition'])) {
-      $this->announcement->getStateFieldItem()->applyTransitionById($trigger['#state_machine_transition']);
+      $this->announcement->getWorkflowStateField()->applyTransitionById($trigger['#state_machine_transition']);
     }
     $this->announcement
       ->set('subject', $form_state->getValue('subject'))
@@ -151,7 +151,7 @@ class AnnouncementForm extends FormBase {
       ->save();
 
     $args = [
-      '@to' => $this->announcement->getState()->getLabel(),
+      '@to' => $this->announcement->getWorkflowStateInstance()->getLabel(),
       '%group' => $this->announcement->getGroup()->label(),
       '@type' => $this->announcement->getGroup()->get('rid')->entity->getSingularLabel(),
     ];
@@ -159,22 +159,22 @@ class AnnouncementForm extends FormBase {
     if ($is_new) {
       $status = $this->t("The announcement has been created as @to. Review the announcement and, when is ready to be sent, use the 'Send' button.", $args);
     }
-    elseif ($initial_state->getId() == $this->announcement->getStateId()) {
+    elseif ($initial_state->getId() == $this->announcement->getWorkflowState()) {
       $status = $this->t("The announcement has been updated but it's still in @to state. Review the announcement and, when is ready to be sent, use the 'Send' button.", $args);
     }
-    elseif ($initial_state->getId() === 'draft' && $this->announcement->getStateId() === 'sent') {
+    elseif ($initial_state->getId() === 'draft' && $this->announcement->getWorkflowState() === 'sent') {
       $status = $this->t("Your announcement has been sent for validation by Joinup moderators. Once approved, will reach the %group @type members.", $args);
       $redirect = Url::fromRoute('view.announcements.group', [
         'rdf_entity' => $this->announcement->getGroupId(),
       ]);
     }
-    elseif ($this->announcement->getStateId() === 'rejected') {
+    elseif ($this->announcement->getWorkflowState() === 'rejected') {
       $status = $this->t("The announcement has been rejected. Press the 'Undo' button to restore the announcement.");
     }
     elseif ($initial_state->getId() === 'rejected') {
       $status = $this->t("The announcement has been restored.");
     }
-    elseif ($this->announcement->getStateId() === 'delivered') {
+    elseif ($this->announcement->getWorkflowState() === 'delivered') {
       $status = $this->t("The announcement has been delivered to the %group @type members.", $args);
       $redirect = Url::fromRoute('view.announcements.group', [
         'rdf_entity' => $this->announcement->getGroupId(),

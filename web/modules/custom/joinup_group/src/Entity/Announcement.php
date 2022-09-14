@@ -4,15 +4,15 @@ declare(strict_types = 1);
 
 namespace Drupal\joinup_group\Entity;
 
+use Drupal\joinup_workflow\EntityWorkflowStateTrait;
 use Drupal\message\Entity\Message;
-use Drupal\state_machine\Plugin\Field\FieldType\StateItemInterface;
-use Drupal\state_machine\Plugin\Workflow\WorkflowState;
 
 /**
  * Bundle class for announcement messages.
  */
 class Announcement extends Message implements AnnouncementInterface {
 
+  use EntityWorkflowStateTrait;
   use GroupContentTrait;
 
   /**
@@ -32,31 +32,8 @@ class Announcement extends Message implements AnnouncementInterface {
   /**
    * {@inheritdoc}
    */
-  public function getState(): WorkflowState {
-    return $this->getStateFieldItem()->getWorkflow()->getState($this->getStateId());
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getStateFieldItem(): StateItemInterface {
-    /** @var \Drupal\state_machine\Plugin\Field\FieldType\StateItemInterface $state_item */
-    $state_item = $this->get('state')->first();
-    return $state_item;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getStateId(): string {
-    return $this->getStateFieldItem()->getValue()['value'];
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getTransitions(): array {
-    return $this->getStateFieldItem()->getTransitions();
+  public function getWorkflowStateFieldName(): string {
+    return 'state';
   }
 
   /**

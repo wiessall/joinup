@@ -37,7 +37,7 @@ class AnnouncementTransitionsGuard implements GuardInterface {
    */
   public function allowed(WorkflowTransition $transition, WorkflowInterface $workflow, EntityInterface $entity): bool {
     if ($entity instanceof AnnouncementInterface) {
-      $from_state = $entity->getStateId();
+      $from_state = $entity->getWorkflowState();
       $to_state = $transition->getToState()->getId();
       $permission = StateMachinePermissionStringConstructor::constructTransitionPermission('message', 'announcement', $workflow, $from_state, $to_state, TRUE);
       return $this->groupManager->access($entity->getGroup(), $permission, $permission)->isAllowed();
