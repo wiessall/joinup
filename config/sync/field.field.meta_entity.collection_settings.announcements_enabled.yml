@@ -5,8 +5,6 @@ dependencies:
   config:
     - field.storage.meta_entity.announcements_enabled
     - meta_entity.type.collection_settings
-  module:
-    - cached_computed_field
 id: meta_entity.collection_settings.announcements_enabled
 field_name: announcements_enabled
 entity_type: meta_entity
@@ -17,11 +15,9 @@ required: false
 translatable: false
 default_value:
   -
-    expire: null
-    value: true
+    value: 1
 default_value_callback: ''
 settings:
   on_label: 'On'
   off_label: 'Off'
-  cache-max-age: 3600
-field_type: cached_computed_boolean
+field_type: boolean

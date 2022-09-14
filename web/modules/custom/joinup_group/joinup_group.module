@@ -21,6 +21,7 @@ use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Test\Exception\MissingGroupException;
 use Drupal\Core\Url;
 use Drupal\file\Entity\File;
+use Drupal\joinup_group\Entity\Announcement;
 use Drupal\joinup_group\Entity\GroupContentInterface;
 use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_group\Event\GroupMenuLinksEvent;
@@ -54,6 +55,15 @@ function joinup_group_theme($existing, $type, $theme, $path) {
       ],
     ],
   ];
+}
+
+/**
+ * Implements hook_entity_bundle_info_alter().
+ */
+function joinup_group_entity_bundle_info_alter(array &$bundles): void {
+  if (!empty($bundles['message']['announcement'])) {
+    $bundles['message']['announcement']['class'] = Announcement::class;
+  }
 }
 
 /**
@@ -127,6 +137,20 @@ function joinup_group_entity_type_alter(array &$entity_types) {
   if (array_key_exists('rdf_entity', $entity_types)) {
     $rdf_entity_type = $entity_types['rdf_entity'];
     $rdf_entity_type->setFormClass('delete', RdfDeleteForm::class);
+
+    // Add group link templates, so the OG context will be automatically solved.
+    $link_templates = [
+      'about-page' => '/rdf_entity/{rdf_entity}/about',
+      'announcement-overview' => '/rdf_entity/{rdf_entity}/announcements',
+      'announcement-add' => '/rdf_entity/{rdf_entity}/announcements/add',
+      'announcement-edit' => '/rdf_entity/{rdf_entity}/announcements/edit/{message}',
+      'member-overview' => '/rdf_entity/{rdf_entity}/members',
+      'member-add' => '/rdf_entity/{rdf_entity}/members/add',
+      'member-invite' => '/rdf_entity/{rdf_entity}/members/invite',
+    ];
+    foreach ($link_templates as $key => $path) {
+      $entity_types['rdf_entity']->setLinkTemplate($key, $path);
+    }
   }
 }
 
@@ -393,14 +417,41 @@ function joinup_group_og_user_access_alter(array &$permissions, CacheableMetadat
 
 /**
  * Implements hook_form_FORM_ID_alter().
- *
- * Adds result counts to the role options on the membership overview for
- * collections and solutions.
  */
-function joinup_group_form_views_exposed_form_alter(&$form, FormStateInterface $form_state) {
+function joinup_group_form_views_exposed_form_alter(array &$form, FormStateInterface $form_state): void {
   /** @var \Drupal\views\ViewExecutable $view */
   $view = $form_state->get('view');
   $view_id = $view->id();
+  $display = $view->current_display;
+
+  if ($view_id === 'announcements' && $display === 'all') {
+    $announcement_storage = \Drupal::entityTypeManager()->getStorage('message');
+    $mids = $announcement_storage->getQuery()->accessCheck(FALSE)
+      ->condition('template', 'announcement')
+      ->execute();
+    $groups = ['' => t('- Any -')];
+    /** @var \Drupal\joinup_group\Entity\AnnouncementInterface $announcement */
+    foreach ($announcement_storage->loadMultiple($mids) as $announcement) {
+      $group_id = $announcement->getGroupId();
+      if (!isset($groups[$group_id])) {
+        $group = $announcement->getGroup();
+        $groups[$group_id] = t('@title (@type)', [
+          '@type' => $group->get('rid')->entity->label(),
+          '@title' => $group->label(),
+        ]);
+      }
+    }
+    asort($groups);
+    $form['group'] = [
+      '#type' => 'select',
+      '#title' => t('Group'),
+      '#options' => $groups,
+      '#default_value' => $form['group']['#default_value'],
+    ];
+  }
+
+  // Adds result counts to the role options on the membership overview for
+  // collections and solutions.
   if (!in_array($view_id, ['members_overview', 'og_members_overview'])) {
     return;
   }
@@ -874,5 +925,40 @@ function joinup_group_rdf_entity_delete(RdfInterface $group): void {
       ->condition('entity_type', $group->getEntityTypeId())
       ->condition('entity_id', $group->id())
       ->execute();
+    // Delete also announcements belonging to this group.
+    $storage = \Drupal::entityTypeManager()->getStorage('message');
+    $mids = $storage->getQuery()->accessCheck(FALSE)
+      ->condition('template', 'announcement')
+      ->condition('group_reference', $group->id())
+      ->execute();
+    $storage->delete($storage->loadMultiple($mids));
+  }
+}
+
+/**
+ * Implements hook_mail().
+ */
+function joinup_group_mail(string $key, array &$message, array $params): void {
+  if ($key === 'group_announcement') {
+    $token = \Drupal::token();
+    /** @var \Drupal\joinup_group\Entity\AnnouncementInterface $announcement */
+    $announcement = $params['announcement'];
+    $group = $announcement->getGroup();
+    $data = ['rdf_entity' => $group];
+    $args = [
+      '@subject' => $token->replace($announcement->getSubject(), $data),
+      '@group' => $group->label(),
+      '@type' => $group->get('rid')->entity->getSingularLabel(),
+      '@author' => $announcement->getOwner()->getDisplayName(),
+      ':url' => Url::fromRoute('entity.rdf_entity.announcement_edit', [
+        'rdf_entity' => $group->id(),
+        'announcement' => $announcement->id(),
+      ])->setAbsolute()->toString(),
+    ];
+    $message['subject'] = t("Joinup: A new announcement '@subject' has been created", $args);
+    $message['body'] = [
+      t("A new announcement '@subject' has been created by @author for the @group @type.", $args),
+      t("You can approve or reject the announcement at :url", $args),
+    ];
   }
 }

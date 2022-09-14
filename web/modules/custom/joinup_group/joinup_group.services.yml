@@ -11,8 +11,7 @@ services:
       - { name: access_check, applies_to: _joinup_group }
   joinup_group.group_manager:
     class: Drupal\joinup_group\JoinupGroupManager
-    arguments: ['@og.membership_manager', '@entity_type.manager']
-    lazy: true
+    arguments: ['@og.membership_manager', '@entity_type.manager', '@current_user', '@og.access']
   joinup_group.group_menu_links:
     class: Drupal\joinup_group\EventSubscriber\GroupMenuLinksSubscriber
     tags:
@@ -50,8 +49,18 @@ services:
   joinup_group.url_alias_updater:
     class: Drupal\joinup_group\JoinupGroupContentUrlAliasUpdater
     arguments: ['@queue']
-  joinup_group.announcement.subscriber:
-    class: Drupal\joinup_group\EventSubscriber\AnnouncementEventSubscriber
-    parent: joinup_notification.notification_subscriber_base
+  joinup_group.announcements_edit.access_check:
+    class: Drupal\joinup_group\Access\JoinupAnnouncementsAccessCheck
+    arguments: ['@entity_type.manager', '@og.access']
+    tags:
+      - { name: access_check, applies_to: _entity_access }
+  joinup_group.state_machine.transition_guard:
+    class: Drupal\joinup_group\Guard\AnnouncementTransitionsGuard
+    arguments: ['@joinup_group.group_manager']
+    tags:
+      - { name: state_machine.guard, group: announcement }
+  joinup_group.announcements.subscriber:
+    class: Drupal\joinup_group\EventSubscriber\AnnouncementsSubscriber
+    arguments: ['@entity_type.manager', '@plugin.manager.mail', '@language_manager']
     tags:
       - { name: event_subscriber }

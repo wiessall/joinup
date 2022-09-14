@@ -18,6 +18,7 @@ dependencies:
     - filter
     - flag
     - joinup
+    - joinup_community_content
     - joinup_licence
     - media
     - node

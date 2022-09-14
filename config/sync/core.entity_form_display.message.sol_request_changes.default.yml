@@ -1,0 +1,23 @@
+uuid: e375ea9f-1268-4966-bbfa-af336981aea0
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.message.sol_request_changes.field_message_bcc
+    - message.template.sol_request_changes
+id: message.sol_request_changes.default
+targetEntityType: message
+bundle: sol_request_changes
+mode: default
+content:
+  field_message_bcc:
+    type: email_default
+    weight: 11
+    region: content
+    settings:
+      placeholder: ''
+      size: 60
+    third_party_settings: {  }
+hidden:
+  created: true
+  uid: true
