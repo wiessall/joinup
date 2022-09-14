@@ -53,12 +53,13 @@ class AnnouncementsController extends ControllerBase {
    *   The access result object.
    */
   public function access(GroupInterface $rdf_entity, ?AnnouncementInterface $announcement = NULL): AccessResultInterface {
+    $access = AccessResult::allowedIf($rdf_entity->isPublished())->addCacheableDependency($rdf_entity);
     $meta_entity = MetaEntity::loadOrCreate($this->getMetaEntityBundle($rdf_entity), $rdf_entity);
-    $access = AccessResult::allowedIf((bool) $meta_entity->announcements_enabled->value)
+    $access = $access->andIf(AccessResult::allowedIf((bool) $meta_entity->announcements_enabled->value)
       ->addCacheTags([
         'meta_entity_list:' . $this->getMetaEntityBundle($rdf_entity),
         'message_list:announcement',
-      ]);
+      ]));
 
     if ($announcement) {
       // If the current user has no available transition, then they can't do
