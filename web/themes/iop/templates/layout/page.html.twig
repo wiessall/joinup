@@ -40,7 +40,14 @@
  * @see html.html.twig
  */
 #}
-<div class="layout-container">
+{% set node_attributes = create_attribute() %}
+{% set node_classes = [
+  'layout-container',
+  listing ? 'listing',
+  news_listing ? 'listing--news',
+  events_listing ? 'listing--events',
+] %}
+<div{{ node_attributes.addClass(node_classes)}}>
   <div class="section-header">
     {{ page.header }}
 

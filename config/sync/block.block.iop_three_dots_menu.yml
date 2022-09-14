@@ -4,6 +4,7 @@ status: true
 dependencies:
   module:
     - joinup_core
+    - system
   theme:
     - iop
 id: iop_three_dots_menu
@@ -16,7 +17,11 @@ settings:
   id: joinup_local_tasks_block
   label: Tabs
   label_display: '0'
-  provider: core
+  provider: joinup_core
   primary: true
   secondary: false
-visibility: {  }
+visibility:
+  request_path:
+    id: request_path
+    negate: true
+    pages: /collection/interoperable-europe/latest-news

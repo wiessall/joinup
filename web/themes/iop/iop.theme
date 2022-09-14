@@ -8,6 +8,8 @@
 declare(strict_types = 1);
 
 use Drupal\custom_page\Entity\CustomPageInterface;
+use Drupal\interoperable_europe\InteroperableEuropeCollectionInterface;
+use Drupal\node\NodeInterface;
 
 /**
  * Implements hook_preprocess_HOOK() for html.html.twig.
@@ -58,6 +60,42 @@ function iop_preprocess_paragraph__image(array &$variables): void {
 /**
  * Implements hook_preprocess_HOOK().
  */
+function iop_preprocess_page(&$variables) {
+  $node = \Drupal::routeMatch()->getParameter('node');
+  if ($node instanceof NodeInterface) {
+    $nid = $variables['node']->id();
+    // News listing page.
+    if ($nid === InteroperableEuropeCollectionInterface::NEWS_LISTING) {
+      $variables['#attached']['library'][] = 'iop/listing';
+      $variables['listing'] = TRUE;
+      $variables['news_listing'] = TRUE;
+    }
+    // Events listing page.
+    elseif ($nid === InteroperableEuropeCollectionInterface::EVENT_LISTING) {
+      $variables['#attached']['library'][] = 'iop/listing';
+      $variables['listing'] = TRUE;
+      $variables['events_listing'] = TRUE;
+    }
+  }
+}
+
+/**
+ * Implements hook_preprocess_HOOK().
+ */
+function iop_preprocess_node(&$variables) {
+  // News listing page.
+  if (!empty($variables['content']['field_news_logo'])) {
+    $variables['logo'][] = $variables['content']['field_news_logo'];
+  }
+  // Events listing page.
+  elseif (!empty($variables['content']['field_event_logo'])) {
+    $variables['logo'][] = $variables['content']['field_event_logo'];
+  }
+}
+
+/**
+ * Implements hook_preprocess_HOOK().
+ */
 function iop_preprocess_node__custom_page__full(&$variables) {
   $node = $variables['node'];
   if (($node instanceof CustomPageInterface)
@@ -70,5 +108,11 @@ function iop_preprocess_node__custom_page__full(&$variables) {
     $variables['label']['#access'] = FALSE;
     $variables['content']['report']['#access'] = FALSE;
   }
+}
 
+/**
+ * Implements hook_preprocess_block().
+ */
+function iop_preprocess_block__interoperableeurope(array &$variables): void {
+  $variables['base_path'] = base_path();
 }
