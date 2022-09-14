@@ -25,7 +25,7 @@ class JoinupRouteGroupResolver extends RouteGroupResolver {
   /**
    * {@inheritdoc}
    */
-  protected function getContentEntityPaths() {
+  protected function getContentEntityPaths(): array {
     return [
       '/rdf_entity/{rdf_entity}/moderate' => 'rdf_entity',
       '/rdf_entity/{rdf_entity}/reports' => 'rdf_entity',

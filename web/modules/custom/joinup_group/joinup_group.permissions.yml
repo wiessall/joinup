@@ -10,8 +10,9 @@ edit short id after publication:
   description: 'Allows a user to edit the Short ID of the collection or solution after the initial publication of the entity.'
 
 manage group announcements:
-  title: 'Edit group messaging settings'
+  title: 'Manage group announcements'
   restrict access: true
 
 permission_callbacks:
   - \Drupal\joinup_group\JoinupGroupPermissions::groupOwnershipPermissions
+  - \Drupal\joinup_group\JoinupGroupPermissions::announcementsPermissions
