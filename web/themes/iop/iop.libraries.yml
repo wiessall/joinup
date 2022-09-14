@@ -12,7 +12,19 @@ theme:
     theme:
       assets/css/theme.min.css: {}
 
+# Pages
+listing:
+  css:
+    theme:
+      assets/css/listing.min.css: {}
+
 # Components
+# @todo ISAICP-7138 delete this library when switch to Ventuno theme is complete
+add-content:
+  css:
+    theme:
+      assets/css/add-content.min.css: { minified: true }
+
 join:
   css:
     theme:
@@ -22,6 +34,11 @@ navbar:
   css:
     theme:
       assets/css/navbar.min.css: {}
+
+pager:
+  css:
+    theme:
+      assets/css/pager.min.css: {}
 
 paragraph:
   css:
@@ -70,3 +87,9 @@ paragraph--video:
   css:
     theme:
       assets/css/paragraph--video.min.css: {}
+
+# @todo ISAICP-7138 delete this library when switch to Ventuno theme is complete
+three-dots-menu:
+  css:
+    theme:
+      assets/css/three-dots-menu.min.css: { minified: true }
