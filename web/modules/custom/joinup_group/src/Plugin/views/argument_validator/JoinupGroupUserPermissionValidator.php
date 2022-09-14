@@ -150,7 +150,7 @@ class JoinupGroupUserPermissionValidator extends ArgumentValidatorPluginBase {
       '#default_value' => $this->options['site_permission'],
       '#states' => [
         'visible' => [
-          ':input[name="options[validate][options][joinup_group_announcements_enabled][validate_site_permission]"]' => ['checked' => TRUE],
+          ':input[name="options[validate][options][' . $this->getPluginId() . '][validate_site_permission]"]' => ['checked' => TRUE],
         ],
       ],
     ];
