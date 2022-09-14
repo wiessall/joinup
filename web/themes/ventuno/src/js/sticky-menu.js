@@ -20,12 +20,13 @@
             window.addEventListener("scroll", () => {
               if (window.pageYOffset > navbarOffsetTop) {
                 navbar.classList.add("js-is--sticky");
-                // Add the required padding top to show content behind navbar.
+                // Since the navbar is removed of the document flow, add it's
+                // height as padding-top to the body so there is no visual
+                // shift in the content below.
                 document.body.style.paddingTop = `${navbar.offsetHeight}px`;
               } else {
                 navbar.classList.remove("js-is--sticky");
-                // Remove padding top from body.
-                document.body.style.paddingTop = "0";
+                document.body.style.removeProperty("padding-top");
               }
             });
           }
