@@ -3,7 +3,7 @@ langcode: en
 status: true
 dependencies:
   config:
-    - field.storage.message.group_reference
+    - field.storage.message.group
     - field.storage.message.state
     - field.storage.message.subject
     - message.template.announcement
@@ -476,10 +476,10 @@ display:
           exposed: false
           granularity: second
       arguments:
-        group_reference_target_id:
-          id: group_reference_target_id
-          table: message__group_reference
-          field: group_reference_target_id
+        group_target_id:
+          id: group_target_id
+          table: message__group
+          field: group_target_id
           relationship: none
           group_type: group
           admin_label: ''
@@ -536,7 +536,7 @@ display:
           row_class: ''
           default_row_class: true
           columns:
-            group_reference: group_reference
+            group: group
             mid: mid
             subject: subject
             state: state
@@ -545,7 +545,7 @@ display:
             edit_message__announcement: edit_message__announcement
           default: created
           info:
-            group_reference:
+            group:
               sortable: true
               default_sort_order: asc
               align: ''
@@ -641,10 +641,10 @@ display:
     position: 2
     display_options:
       fields:
-        group_reference:
-          id: group_reference
-          table: message__group_reference
-          field: group_reference
+        group:
+          id: group
+          table: message__group
+          field: group
           relationship: none
           group_type: group
           admin_label: ''
@@ -1093,10 +1093,10 @@ display:
           expose:
             operator_limit_selection: false
             operator_list: {  }
-        group_reference_target_id:
-          id: group_reference_target_id
-          table: message__group_reference
-          field: group_reference_target_id
+        group_target_id:
+          id: group_target_id
+          table: message__group
+          field: group_target_id
           relationship: none
           group_type: group
           admin_label: ''
@@ -1106,11 +1106,11 @@ display:
           group: 1
           exposed: true
           expose:
-            operator_id: group_reference_target_id_op
+            operator_id: group_target_id_op
             label: Group
             description: ''
             use_operator: false
-            operator: group_reference_target_id_op
+            operator: group_target_id_op
             operator_limit_selection: false
             operator_list: {  }
             identifier: group
@@ -1217,7 +1217,7 @@ display:
         - url.query_args
         - user.permissions
       tags:
-        - 'config:field.storage.message.group_reference'
+        - 'config:field.storage.message.group'
         - 'config:field.storage.message.state'
         - 'config:field.storage.message.subject'
   group:

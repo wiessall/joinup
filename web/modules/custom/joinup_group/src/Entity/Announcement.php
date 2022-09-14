@@ -43,7 +43,7 @@ class Announcement extends Message implements AnnouncementInterface {
    *   The group reference field name.
    */
   protected function getGroupFieldName(): string {
-    return 'group_reference';
+    return 'group';
   }
 
 }
