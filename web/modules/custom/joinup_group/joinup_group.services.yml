@@ -22,9 +22,14 @@ services:
     arguments: ['@entity_type.manager', '@datetime.time', '@request_stack', '@messenger']
     tags:
       - { name: event_subscriber }
+  joinup_group.node_access_grants.memory_cache:
+    class: Drupal\Core\Cache\MemoryCache\MemoryCache
+    tags:
+      # Ensure tag invalidation for this backend.
+      - { name: cache.bin }
   joinup_group.node_access_grants:
     class: Drupal\joinup_group\JoinupGroupNodeAccessGrants
-    arguments: ['@database', '@cache.static']
+    arguments: ['@database', '@joinup_group.node_access_grants.memory_cache']
   joinup_group.og_subscriber:
     class: Drupal\joinup_group\EventSubscriber\JoinupGroupOgSubscriber
     arguments: [ '@current_user']
