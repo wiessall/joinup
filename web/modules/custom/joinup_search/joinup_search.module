@@ -81,7 +81,9 @@ function joinup_search_entity_field_access($operation, FieldDefinitionInterface 
   }
 
   // Leave open access to the custom page search field.
-  if ($field_definition->getTargetEntityTypeId() === 'paragraph' && $field_definition->getName() === 'field_content_listing') {
+  // @todo Remove the content_listing field in ISAICP-7335.
+  $fields = ['content_listing', 'field_content_listing'];
+  if ($field_definition->getTargetEntityTypeId() === 'paragraph' && in_array($field_definition->getName(), $fields)) {
     return AccessResult::neutral();
   }
 
