@@ -11,15 +11,15 @@ use Drupal\joinup_notification\JoinupMessageDeliveryInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Process queued email announcments on CRON run.
+ * Sends queued announcements by email.
  *
  * @QueueWorker(
- *   id = "joinup_send_announcements",
+ *   id = "send_group_announcements",
  *   title = @Translation("Delayed announcements request dispatcher"),
  *   cron = {"time" = 10}
  * )
  */
-class SendAnnouncementsQueue extends QueueWorkerBase implements ContainerFactoryPluginInterface {
+class SendGroupAnnouncementsQueueWorker extends QueueWorkerBase implements ContainerFactoryPluginInterface {
 
   /**
    * The message delivery service.
@@ -68,8 +68,12 @@ class SendAnnouncementsQueue extends QueueWorkerBase implements ContainerFactory
    * {@inheritdoc}
    */
   public function processItem($data): void {
-    $message = $this->entityTypeManager->getStorage('message')->load($data['entity_id']);
-    $this->messageDelivery->sendMessageToMultipleUsers($message, $message->get('recipients')->referencedEntities());
+    /** @var \Drupal\joinup_group\Entity\AnnouncementInterface $announcement */
+    $announcement = $this->entityTypeManager->getStorage('message')->load($data['announcement']);
+    // The entity might have been deleted in the meantime.
+    if ($announcement) {
+      $this->messageDelivery->sendMessageToEmailAddresses($announcement, $data['emails']);
+    }
   }
 
 }
