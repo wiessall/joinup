@@ -1,0 +1,52 @@
+<div class="bcl-header bcl-header--ec">
+  <nav class="w-100 shadow-sm navbar navbar-expand-lg navbar-light" aria-label="Top Navigation">
+    <div class="container">
+      <a class="navbar-brand" href="https://ec.europa.eu/info/index_en">
+        <img src="{{ file_url('themes/ventuno/assets/images/logo-ec--en.svg') }}" alt="European Commission logo"/>
+      </a>
+    </div>
+  </nav>
+</div>
+<header role="banner" class="region-header">
+  {% set items = logged_in ? [{
+    breakpoint: "lg",
+    classes: ["order-1"],
+    id: "landing-pages",
+    icon: { name: "justify" },
+    label: "Toggle menu"|t,
+    links: landing_page_links,
+  }] : [] %}
+  {% set items = items|merge([{
+    breakpoint: logged_in ? "" : "lg",
+    id: logged_in ? "account" : "navbar-toggler",
+    icon: {
+      name: logged_in ? "person-circle" : "justify",
+    },
+    label: logged_in ? user_name : "Toggle menu"|t,
+    links: logged_in ? profile_links : anonymous_links,
+  }]) %}
+  {% if not hide_searchbar %}
+    {% set items = items|merge([{
+      type: "search",
+      breakpoint: "",
+      classes: ["order-1 dropdown-search"],
+      id: "search",
+      icon: {
+        name: "search",
+      },
+      label: "Toggle search box"|t,
+      links: search,
+    }]) %}
+  {% endif %}
+  {% include '@ventuno/navigation/navbar.html.twig' with {
+    brand: {
+      src: file_url('themes/ventuno/assets/images/logo.svg'),
+      alt: "Joinup logo"|t,
+      link: path('<front>'),
+    },
+    collapse_id: "main-navbar",
+    list_id: "main-navbar-list",
+    items: items,
+    search: hide_searchbar ? '' : searchbar,
+  } %}
+</header>
