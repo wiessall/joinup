@@ -11,7 +11,6 @@ use Drupal\Core\Queue\QueueFactory;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\joinup_notification\JoinupMessageDeliveryInterface;
 use Drupal\state_machine\Event\WorkflowTransitionEvent;
-use Drupal\user\UserInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
@@ -122,21 +121,11 @@ class AnnouncementsSubscriber implements EventSubscriberInterface {
     }
 
     // Announcements for groups with higher number of members are queued.
-    $offset = 0;
-    $limit = 50;
-    // Split the member list into chunks to avoid resource abusing.
-    while ($members = $group->getMembers($offset, $limit)) {
-      $data = [
-        'announcement' => $announcement->id(),
-        'emails' => array_map(function (UserInterface $user): string {
-          return $user->getEmail();
-        }, $members),
-      ];
-      $queue = $this->queueFactory->get('send_group_announcements');
-      $queue->createQueue();
-      $queue->createItem($data);
-      $offset += $limit;
-    }
+    $queue = $this->queueFactory->get('send_group_announcements');
+    $queue->createQueue();
+    // Only pass the announcement to the queue. Let the worker do the heavy job.
+    // @see \Drupal\joinup_group\Plugin\QueueWorker\SendGroupAnnouncementsQueueWorker::processItem()
+    $queue->createItem(['announcement' => $announcement->id()]);
   }
 
 }
