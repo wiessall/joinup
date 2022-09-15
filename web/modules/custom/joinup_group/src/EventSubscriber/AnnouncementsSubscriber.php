@@ -55,9 +55,9 @@ class AnnouncementsSubscriber implements EventSubscriberInterface {
    *   The mail manager service.
    * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
    *   The language manager service.
-   * @param JoinupMessageDeliveryInterface $message_delivery;
+   * @param \Drupal\joinup_notification\JoinupMessageDeliveryInterface $message_delivery
    *   The Joinup message delivery service.
-   * @param QueueFactory $queue_factory
+   * @param \Drupal\Core\Queue\QueueFactory $queue_factory
    *   The queue factory service.
    */
   public function __construct(EntityTypeManagerInterface $entity_type_manager, MailManagerInterface $mail_manager, LanguageManagerInterface $language_manager, JoinupMessageDeliveryInterface $message_delivery, QueueFactory $queue_factory) {
