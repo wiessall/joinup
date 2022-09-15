@@ -143,6 +143,9 @@
         "weitzman/drupal-test-traits": "^1.5",
         "weitzman/logintrait": "^1.1"
     },
+    "replace": {
+        "drupal/ckeditor": "self.version"
+    },
     "conflict": {
         "drupal/drupal": "*",
         "symfony/http-foundation": "3.4.24"
