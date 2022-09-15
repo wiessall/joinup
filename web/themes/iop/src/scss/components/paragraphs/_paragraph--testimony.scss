@@ -1,4 +1,8 @@
 .paragraph--testimony {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
   margin-bottom: $spacer * 4; //64px
   @include media-breakpoint-up(md) {
     margin-bottom: $spacer * 2; //32px
@@ -64,6 +68,10 @@
       @include media-breakpoint-up(sm) {
         width: calc(30% - 1rem);
       }
+      @include media-breakpoint-only(md) {
+        height: $spacer * 4; // 64px
+        margin-top: $spacer;
+      }
       @include media-breakpoint-between(md, lg) {
         width: 100%;
       }
@@ -79,6 +87,7 @@
     &__bio {
       font-size: .75rem;
       line-height: 1.2;
+      margin-bottom: 0;
     }
     &__cite {
       display: inline-block; // Browsers seem to have a min line-height for <cite> element
