@@ -16,7 +16,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 /**
  * Subscribes to group announcements transitions.
  */
-class AnnouncementsSubscriber implements EventSubscriberInterface {
+class AnnouncementTransitionSubscriber implements EventSubscriberInterface {
 
   use StringTranslationTrait;
 
