@@ -199,21 +199,20 @@ trait GroupTrait {
   /**
    * {@inheritdoc}
    */
-  public function getMembers(array $states = [OgMembershipInterface::STATE_ACTIVE]): ?array {
-    $ids = $this->getMembershipManager()->getGroupMembershipIdsByRoleNames($this, [OgRoleInterface::AUTHENTICATED], $states);
-
-    if (empty($ids)) {
+  public function getMembers(int $offset = 0, ?int $limit = NULL, array $roles = [OgRoleInterface::AUTHENTICATED], array $states = [OgMembershipInterface::STATE_ACTIVE]): array {
+    $og_membership_ids = $this->getMembershipManager()->getGroupMembershipIdsByRoleNames($this, $roles, $states);
+    if (empty($og_membership_ids)) {
       return [];
     }
-    $entity_type_manager = \Drupal::entityTypeManager();
-    $users = [];
-    $og_users = $entity_type_manager->getStorage('og_membership')->loadMultiple($ids);
-    $user_storage = $entity_type_manager->getStorage('user');
-    foreach ($og_users as $user) {
-      $users[] = $user_storage->load($user->uid->target_id);
-    }
+    sort($og_membership_ids);
+    $og_membership_ids = array_splice($og_membership_ids, $offset, $limit);
 
-    return $users;
+    $entity_type_manager = \Drupal::entityTypeManager();
+    $uids = array_values(array_map(function (OgMembershipInterface $membership): int {
+      return (int) $membership->getOwnerId();
+    }, $entity_type_manager->getStorage('og_membership')->loadMultiple($og_membership_ids)));
+    sort($uids);
+    return $entity_type_manager->getStorage('user')->loadMultiple($uids);
   }
 
   /**
