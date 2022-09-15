@@ -138,6 +138,10 @@ function joinup_search_search_api_query_alter(QueryInterface $query) {
     'rdf_entity.field_collection_content',
     'rdf_entity.field_is_content',
     'paragraph.field_content_listing',
+    // This is the content listing for the carousels. We have a separate similar
+    // field because the storage saves the view modes in the field.
+    // @todo Remove this when this is united in ISAICP-7335.
+    'paragraph.content_listing',
   ];
 
   if (in_array($query->getSearchId(), $search_ids)) {
