@@ -67,7 +67,7 @@ class AnnouncementsSubscriber implements EventSubscriberInterface {
   }
 
   /**
-   * Reacts just after an announcement has been approved.
+   * Notifies moderators once a new announcement is ready to be sent.
    *
    * @param \Drupal\state_machine\Event\WorkflowTransitionEvent $event
    *   The transition event.
