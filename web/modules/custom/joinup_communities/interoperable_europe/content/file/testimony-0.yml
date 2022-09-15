@@ -12,7 +12,7 @@ default:
       value: iop-testimony-image_0.png
   uri:
     -
-      value: 'public://2022-08/iop-testimony-image_0.png'
+      value: 'public://2022-08/iop-testimony-image_0_41.png'
   filemime:
     -
       value: image/png
