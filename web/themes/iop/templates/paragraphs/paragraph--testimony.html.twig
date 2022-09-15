@@ -54,8 +54,12 @@
     </div>
     <figcaption class="testimony__figcaption">
       <p class="testimony__author"><strong>{{ content.paragraph_testimony_author }}</strong></p>
-      <p class="testimony__bio">{{ content.paragraph_testimony_bio }}</p>
-      <cite class="testimony__cite">{{ content.paragraph_testimony_source }}</cite>
+      {% if content.paragraph_testimony_bio|render|striptags|trim is not empty %}
+        <p class="testimony__bio">{{ content.paragraph_testimony_bio }}</p>
+      {% endif %}
+      {% if content.paragraph_testimony_source|render|striptags|trim is not empty %}
+        <cite class="testimony__cite">{{ content.paragraph_testimony_source }}</cite>
+      {% endif %}
     </figcaption>
   </figure>
 </blockquote>
