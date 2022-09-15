@@ -7,9 +7,11 @@ namespace Drupal\joinup_group\EventSubscriber;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Mail\MailManagerInterface;
+use Drupal\Core\Queue\QueueFactory;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\joinup_notification\JoinupMessageDeliveryInterface;
 use Drupal\state_machine\Event\WorkflowTransitionEvent;
+use Drupal\user\UserInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
@@ -40,6 +42,11 @@ class AnnouncementsSubscriber implements EventSubscriberInterface {
   protected JoinupMessageDeliveryInterface $messageDelivery;
 
   /**
+   * The queue factory service.
+   */
+  protected QueueFactory $queueFactory;
+
+  /**
    * Constructs a new event subscriber instance.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
@@ -48,12 +55,17 @@ class AnnouncementsSubscriber implements EventSubscriberInterface {
    *   The mail manager service.
    * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
    *   The language manager service.
+   * @param JoinupMessageDeliveryInterface $message_delivery;
+   *   The Joinup message delivery service.
+   * @param QueueFactory $queue_factory
+   *   The queue factory service.
    */
-  public function __construct(EntityTypeManagerInterface $entity_type_manager, MailManagerInterface $mail_manager, LanguageManagerInterface $language_manager, JoinupMessageDeliveryInterface $message_delivery) {
+  public function __construct(EntityTypeManagerInterface $entity_type_manager, MailManagerInterface $mail_manager, LanguageManagerInterface $language_manager, JoinupMessageDeliveryInterface $message_delivery, QueueFactory $queue_factory) {
     $this->entityTypeManager = $entity_type_manager;
     $this->mailManager = $mail_manager;
     $this->languageManager = $language_manager;
     $this->messageDelivery = $message_delivery;
+    $this->queueFactory = $queue_factory;
   }
 
   /**
@@ -101,11 +113,28 @@ class AnnouncementsSubscriber implements EventSubscriberInterface {
     /** @var \Drupal\joinup_group\Entity\AnnouncementInterface $announcement */
     $announcement = $event->getEntity();
     $group = $announcement->getGroup();
+
+    // For smaller groups we send the announcements instantly.
+    if ($group->getMemberCount() <= 50) {
+      $members = $group->getMembers();
+      $this->messageDelivery->sendMessageToMultipleUsers($announcement, $members);
+      return;
+    }
+
+    // Announcements for groups with higher number of members are queued.
     $offset = 0;
     $limit = 50;
     // Split the member list into chunks to avoid resource abusing.
     while ($members = $group->getMembers($offset, $limit)) {
-      $this->messageDelivery->sendMessageToMultipleUsers($announcement, $members);
+      $data = [
+        'announcement' => $announcement->id(),
+        'emails' => array_map(function (UserInterface $user): string {
+          return $user->getEmail();
+        }, $members),
+      ];
+      $queue = $this->queueFactory->get('send_group_announcements');
+      $queue->createQueue();
+      $queue->createItem($data);
       $offset += $limit;
     }
   }
