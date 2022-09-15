@@ -30,6 +30,7 @@ libraries-override:
         css/tour.module.css: assets/css/tour.css
 
 regions:
+  search_bar: 'Search bar'
   header: 'Header'
   header_bottom: 'Header bottom'
   featured: 'Featured'
