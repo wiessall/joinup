@@ -8,6 +8,7 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Mail\MailManagerInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
+use Drupal\joinup_notification\JoinupMessageDeliveryInterface;
 use Drupal\state_machine\Event\WorkflowTransitionEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
@@ -34,6 +35,11 @@ class AnnouncementsSubscriber implements EventSubscriberInterface {
   protected LanguageManagerInterface $languageManager;
 
   /**
+   * The Joinup message delivery service.
+   */
+  protected JoinupMessageDeliveryInterface $messageDelivery;
+
+  /**
    * Constructs a new event subscriber instance.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
@@ -43,10 +49,11 @@ class AnnouncementsSubscriber implements EventSubscriberInterface {
    * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
    *   The language manager service.
    */
-  public function __construct(EntityTypeManagerInterface $entity_type_manager, MailManagerInterface $mail_manager, LanguageManagerInterface $language_manager) {
+  public function __construct(EntityTypeManagerInterface $entity_type_manager, MailManagerInterface $mail_manager, LanguageManagerInterface $language_manager, JoinupMessageDeliveryInterface $message_delivery) {
     $this->entityTypeManager = $entity_type_manager;
     $this->mailManager = $mail_manager;
     $this->languageManager = $language_manager;
+    $this->messageDelivery = $message_delivery;
   }
 
   /**
@@ -55,6 +62,7 @@ class AnnouncementsSubscriber implements EventSubscriberInterface {
   public static function getSubscribedEvents(): array {
     return [
       'announcement.send.post_transition' => 'onAnnouncementSentForApproval',
+      'announcement.approve.post_transition' => 'onAnnouncementApproved',
     ];
   }
 
@@ -80,6 +88,25 @@ class AnnouncementsSubscriber implements EventSubscriberInterface {
       foreach ($moderators as $moderator) {
         $this->mailManager->mail('joinup_group', 'group_announcement', $moderator->getEmail(), $langcode, $parameters);
       }
+    }
+  }
+
+  /**
+   * Sends the announcement to group members once it has been approved.
+   *
+   * @param \Drupal\state_machine\Event\WorkflowTransitionEvent $event
+   *   The transition event.
+   */
+  public function onAnnouncementApproved(WorkflowTransitionEvent $event): void {
+    /** @var \Drupal\joinup_group\Entity\AnnouncementInterface $announcement */
+    $announcement = $event->getEntity();
+    $group = $announcement->getGroup();
+    $offset = 0;
+    $limit = 50;
+    // Split the member list into chunks to avoid resource abusing.
+    while ($members = $group->getMembers($offset, $limit)) {
+      $this->messageDelivery->sendMessageToMultipleUsers($announcement, $members);
+      $offset += $limit;
     }
   }
 
