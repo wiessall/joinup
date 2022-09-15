@@ -61,6 +61,6 @@ services:
       - { name: state_machine.guard, group: announcement }
   joinup_group.announcements.subscriber:
     class: Drupal\joinup_group\EventSubscriber\AnnouncementsSubscriber
-    arguments: ['@entity_type.manager', '@plugin.manager.mail', '@language_manager']
+    arguments: ['@entity_type.manager', '@plugin.manager.mail', '@language_manager', '@joinup_notification.message_delivery']
     tags:
       - { name: event_subscriber }
