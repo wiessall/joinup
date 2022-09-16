@@ -1,0 +1,33 @@
+{#
+/**
+ * @file
+ * Default theme implementation for a fieldgroup accordion item.
+ *
+ * Available variables:
+ * - children: The children of the group.
+ * - attributes: A list of HTML attributes for the group wrapper.
+ *
+ * @see template_preprocess_field_group_accordion()
+ * This is a workaround to replace the library from the formatter of the
+ * accordion paragraph formatter. This is needed because the formatter is set
+ * on the field level and currently we need it because Joinup theme is still
+ * active.
+ *
+ * @todo Remove this workaround when ISAICP-7138 along with the preprocess.
+ * @see ventuno_preprocess_paragraph__accordion.
+ *
+ * @ingroup themeable
+ */
+#}
+<div class="accordion-item">
+  <h2 {{ title_attributes.addClass('accordion-header') }} id="heading{{ id }}">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ id }}" aria-expanded="false" aria-controls="collapse{{ id }}">
+      {{ title }}
+    </button>
+  </h2>
+  <div id="collapse{{ id }}" class="accordion-collapse collapse" aria-labelledby="heading{{ id }}">
+    <div {{ content_attributes.addClass('accordion-body') }}>
+      {{ content }}
+    </div>
+  </div>
+</div>
