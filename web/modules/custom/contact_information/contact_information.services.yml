@@ -12,3 +12,8 @@ services:
     # TODO: Make @email_confirmer non-nullable in ISAICP-7300.
     # See https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7300.
     arguments: ['@entity_type.manager', '@renderer', '@?email_confirmer']
+  contact_information.redirected_eu_login.subscriber:
+    class: Drupal\contact_information\EventSubscriber\ContactInformationRedirectedEuLoginSubscriber
+    arguments: ['@datetime.time', '@request_stack', '@entity_type.manager']
+    tags:
+      - { name: event_subscriber }

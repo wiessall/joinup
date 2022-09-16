@@ -352,12 +352,12 @@ function contact_information_form_email_contact_mail_form_alter(array &$form, Fo
         '#ajax' => [
           'callback' => 'contact_information_require_login',
           'event' => 'click',
-        ]
+        ],
       ],
     ];
   }
   else {
-    // Move 'submit' under 'actions'
+    // Move 'submit' under 'actions'.
     $form['actions']['submit'] = $form['submit'];
   }
   unset($form['submit']);
@@ -405,6 +405,12 @@ function contact_information_require_login(array $form, FormStateInterface $form
   if (!$group = $contact_information->getRelatedGroup()) {
     throw new \RuntimeException('Cannot determine the group from contact information entity.');
   }
+
+  // Set a cookie remembering that the user wants to send a message to this
+  // group, using this particular contact information. The cookie is valid for
+  // 30 minutes. If the user takes more time to sign in or register, we assume
+  // they are no longer actively engaged in the joining process.
+  setrawcookie('email_contact_info', rawurlencode('rdf_entity:' . $contact_information->id()), \Drupal::time()->getRequestTime() + 1800, '/');
 
   // Redirect to EU Login, with a query argument instructing to redirect back
   // to the group page.

@@ -9,13 +9,9 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\Url;
-use Drupal\cas\Event\CasPostLoginEvent;
-use Drupal\cas\Service\CasHelper;
-use Drupal\externalauth\Event\ExternalAuthEvents;
 use Drupal\externalauth\Event\ExternalAuthLoginEvent;
 use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\og\OgMembershipInterface;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
@@ -27,7 +23,7 @@ use Symfony\Component\HttpFoundation\RequestStack;
  * cookie, and redirects the user back to the group they wanted to join, so they
  * can decide whether they want to receive the group's notifications.
  */
-class JoinGroupSubscriber implements EventSubscriberInterface {
+class JoinGroupSubscriber extends RedirectedEuLoginAuthenticatedSubscriberBase {
 
   use StringTranslationTrait;
 
@@ -37,16 +33,6 @@ class JoinGroupSubscriber implements EventSubscriberInterface {
   protected EntityTypeManagerInterface $entityTypeManager;
 
   /**
-   * The time keeping service.
-   */
-  protected TimeInterface $time;
-
-  /**
-   * The request stack.
-   */
-  protected RequestStack $requestStack;
-
-  /**
    * The messenger service.
    */
   protected MessengerInterface $messenger;
@@ -54,99 +40,58 @@ class JoinGroupSubscriber implements EventSubscriberInterface {
   /**
    * Constructs a new event subscriber instance.
    *
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
-   *   The entity type manager service.
    * @param \Drupal\Component\Datetime\TimeInterface $time
    *   The time keeping service.
    * @param \Symfony\Component\HttpFoundation\RequestStack $request_stack
    *   The request stack.
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
+   *   The entity type manager service.
    * @param \Drupal\Core\Messenger\MessengerInterface $messenger
    *   The messenger service.
    */
-  public function __construct(EntityTypeManagerInterface $entity_type_manager, TimeInterface $time, RequestStack $request_stack, MessengerInterface $messenger) {
+  public function __construct(TimeInterface $time, RequestStack $request_stack, EntityTypeManagerInterface $entity_type_manager, MessengerInterface $messenger) {
+    parent::__construct($time, $request_stack);
     $this->entityTypeManager = $entity_type_manager;
-    $this->time = $time;
-    $this->requestStack = $request_stack;
     $this->messenger = $messenger;
   }
 
   /**
    * {@inheritdoc}
    */
-  public static function getSubscribedEvents(): array {
-    return [
-      ExternalAuthEvents::LOGIN => 'onLogin',
-      // Prevent the success status message and redirect about to be set in
-      // JoinupEuLoginCasEventsSubscriber::setRedirectAndStatusOnNewAccount() by
-      // acting before and stealing the show.
-      // @see \Drupal\joinup_eulogin\Event\Subscriber\JoinupEuLoginCasEventsSubscriber::setRedirectAndStatusOnNewAccount()
-      CasHelper::EVENT_POST_LOGIN => ['onPostLogin', -10],
-    ];
+  protected function getCookieName(): ?string {
+    return 'join_group';
   }
 
   /**
-   * Listens to the ExternalAuthEvents::LOGIN event.
-   *
-   * When a user is logged in through EU login and has previously expressed
-   * their desire to join a group by setting a cookie, create their membership
-   * and redirect them to the group page.
-   *
-   * @param \Drupal\externalauth\Event\ExternalAuthLoginEvent $event
-   *   The event firing when a user logs in through EU login.
+   * {@inheritdoc}
    */
-  public function onLogin(ExternalAuthLoginEvent $event): void {
+  protected function isRedirectedEuLoginAuthenticated(): bool {
+    return (bool) $this->getGroup();
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function getRedirectUrl(ExternalAuthLoginEvent $event): ?Url {
     if ($group = $this->getGroup()) {
-      try {
-        $uid = (int) $event->getAccount()->id();
-        if ($membership = $group->getMembership($uid, OgMembershipInterface::ALL_STATES)) {
-          // The user is already subscribed. Delete the cookie and show an
-          // appropriate message.
-          $this->messenger->addStatus($group->getExistingMembershipMessage($membership));
-          $this->deleteCookie();
-        }
-        else {
-          // Subscribe the user to the group.
-          $membership = $group->createMembership((int) $event->getAccount()->id());
-          $this->messenger->addStatus($group->getNewMembershipSuccessMessage($membership));
-        }
-
-        // Redirect to the group page so the user sees a confirmation and has
-        // the opportunity to subscribe to group notifications.
-        $url = $group->toUrl();
-        if ($url instanceof Url) {
-          $this->requestStack->getCurrentRequest()->query->set('destination', $url->toString());
-        }
-      }
-      catch (\Exception $e) {
-        // We are acting on user supplied data in a cookie. Do not allow any
-        // exception to bubble up since this could prevent the user from logging
-        // in until they manually clear their cookies. Instead, delete the
-        // cookie and proceed as if no cookie was set.
+      // When a user is logged in through EU login and has previously expressed
+      // their desire to join a group by setting a cookie, create their
+      // membership and redirect them to the group page.
+      $uid = (int) $event->getAccount()->id();
+      if ($membership = $group->getMembership($uid, OgMembershipInterface::ALL_STATES)) {
+        // The user is already subscribed. Delete the cookie and show an
+        // appropriate message.
+        $this->messenger->addStatus($group->getExistingMembershipMessage($membership));
         $this->deleteCookie();
-        return;
       }
+      else {
+        // Subscribe the user to the group.
+        $membership = $group->createMembership((int) $event->getAccount()->id());
+        $this->messenger->addStatus($group->getNewMembershipSuccessMessage($membership));
+      }
+      return $group->toUrl();
     }
-  }
-
-  /**
-   * Listens to the CasHelper::EVENT_POST_LOGIN event.
-   *
-   * If a valid cookie is set indicating that the user is logging in with the
-   * intention of joining a group, prevent the user from being redirected
-   * elsewhere.
-   *
-   * @param \Drupal\cas\Event\CasPostLoginEvent $event
-   *   The event firing after successful CAS login.
-   */
-  public function onPostLogin(CasPostLoginEvent $event): void {
-    if ($this->getGroup()) {
-      // Ensure our redirection takes precedence over any other listeners. The
-      // POST_LINK event fires after the LOGIN event and would redirect the user
-      // to their profile page. This would overwrite our redirection.
-      // @see ::onLogin()
-      // @see \Drupal\joinup_eulogin\Event\Subscriber\JoinupEuLoginCasEventsSubscriber::setRedirectAndStatusOnNewAccount()
-      $event->stopPropagation();
-    }
+    return NULL;
   }
 
   /**
@@ -163,14 +108,10 @@ class JoinGroupSubscriber implements EventSubscriberInterface {
    *   set, or the cookie contains invalid data.
    */
   protected function getGroup(): ?GroupInterface {
-    if (!empty($entity_id = $this->requestStack->getCurrentRequest()->cookies->get('join_group'))) {
-      try {
-        $entity = $this->entityTypeManager->getStorage('rdf_entity')->load($entity_id);
-        if ($entity instanceof GroupInterface) {
-          return $entity;
-        }
-      }
-      catch (\Exception $e) {
+    if ($group_id = $this->requestStack->getCurrentRequest()->cookies->get($this->getCookieName())) {
+      $group = $this->entityTypeManager->getStorage('rdf_entity')->load($group_id);
+      if ($group instanceof GroupInterface) {
+        return $group;
       }
       // We are acting on user supplied data in a cookie. If the group cannot be
       // loaded, or an exception occurs, possibly the cookie was tampered with.
@@ -180,13 +121,6 @@ class JoinGroupSubscriber implements EventSubscriberInterface {
       $this->deleteCookie();
     }
     return NULL;
-  }
-
-  /**
-   * Deletes the cookie which tracks the group an anonymous user wants to join.
-   */
-  protected function deleteCookie(): void {
-    setcookie('join_group', '', $this->time->getRequestTime() - 86400, '/');
   }
 
 }

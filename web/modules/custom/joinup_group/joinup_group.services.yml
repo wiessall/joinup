@@ -18,7 +18,7 @@ services:
       - { name: event_subscriber }
   joinup_group.join_group_subscriber:
     class: Drupal\joinup_group\EventSubscriber\JoinGroupSubscriber
-    arguments: ['@entity_type.manager', '@datetime.time', '@request_stack', '@messenger']
+    arguments: ['@datetime.time', '@request_stack', '@entity_type.manager', '@messenger']
     tags:
       - { name: event_subscriber }
   joinup_group.node_access_grants.memory_cache:
