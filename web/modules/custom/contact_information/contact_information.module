@@ -286,3 +286,35 @@ function contact_information_confirm_emails(array &$form, FormStateInterface $fo
     \Drupal::messenger()->addStatus($message);
   }
 }
+
+/**
+ * Implements hook_form_BASE_FORM_ID_alter().
+ */
+function contact_information_form_email_confirmer_settings_alter(array &$form, FormStateInterface $form_state, string $form_id): void {
+  // Add new hash expiration time - 5 days.
+  $form['hash_expiration']['#options'][120] = t('120 hours');
+  $form['#validate'][] = '_contact_information_hash_expiration_validate';
+}
+
+/**
+ * Validates new hash expiration time.
+ */
+function _contact_information_hash_expiration_validate(array &$form, FormStateInterface $form_state): void {
+  // Hash expiration validation.
+  $hash_expiration = intval($form_state->getValue('hash_expiration'));
+  if ($hash_expiration === 120) {
+    // Temporarily store all form errors.
+    $form_errors = $form_state->getErrors();
+
+    // Clear the form errors.
+    $form_state->clearErrors();
+
+    // Remove the field_hash_expiration form error.
+    unset($form_errors['hash_expiration']);
+
+    // Now loop through and re-apply the remaining form error messages.
+    foreach ($form_errors as $name => $error_message) {
+      $form_state->setErrorByName($name, $error_message);
+    }
+  }
+}
