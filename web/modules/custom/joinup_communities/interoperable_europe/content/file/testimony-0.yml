@@ -9,16 +9,16 @@ default:
       target_id: 1
   filename:
     -
-      value: iop-testimony-image_0.png
+      value: Johannes-Hahn.jpg
   uri:
     -
-      value: 'public://2022-08/iop-testimony-image_0_41.png'
+      value: 'public://2022-08/Johannes-Hahn.jpg'
   filemime:
     -
-      value: image/png
+      value: image/jpeg
   filesize:
     -
-      value: 81734
+      value: 115470
   status:
     -
       value: true
