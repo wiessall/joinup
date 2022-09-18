@@ -28,7 +28,7 @@ variant_settings:
             label_display: '0'
             provider: custom_markup_block
             markup:
-              value: "<p class=\"about-what__title\">What's Joinup about?</p>\r\n<h1 class=\"h1--disguised\">Joinup is a collaborative platform to help e-Government professionals.</h1>\r\n<p>The European Commission created Joinup to provide a common venue that enables public administrations, businesses and citizens to share and reuse IT solutions and good practices, and facilitate communication and collaboration on IT projects across Europe.</p>\r\n"
+              value: "<p class=\"about-what__title\">What's Joinup</p>\r\n<p>The Joinup platform is the European Commission's one-stop shop for interoperable, open, and free digital government ICT solutions and an online space for e-Government professionals and enthusiasts to share and learn about digital public services and initiatives.</p>\r\n<p><strong>Joinup covers the hands-on aspects of interoperability.</strong></p>\r\n"
               format: full_html
           weight: 0
           additional:
@@ -53,12 +53,12 @@ variant_settings:
           region: second
           configuration:
             id: custom_markup
-            label: 'Who is it for?'
+            label: 'What''s Interoperable Europe'
             label_display: visible
             provider: custom_markup_block
             context_mapping: {  }
             markup:
-              value: '<p>Joinup offers several services that aim to help <strong>e-Government professionals</strong> share their experience with each other. Joinup supports them to find, choose, re-use, develop and implement interoperability solutions.</p>'
+              value: '<p>It’s the European Commission’s initiative for a reinforced interoperability policy showcasing news and events about government-related interoperability, along with initiatives and best practices that support the digitalisation of EU public administrations.</p><p><strong>Interoperable Europe covers the policy angle of interoperability.</strong></p>'
               format: content_editor
           weight: 0
           additional:

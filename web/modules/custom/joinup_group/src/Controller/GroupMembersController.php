@@ -4,8 +4,11 @@ declare(strict_types = 1);
 
 namespace Drupal\joinup_group\Controller;
 
+use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\og\OgAccessInterface;
 use Drupal\views\Views;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -26,10 +29,8 @@ class GroupMembersController extends ControllerBase {
 
   /**
    * The OG access service.
-   *
-   * @var \Drupal\og\OgAccessInterface
    */
-  protected $ogAccess;
+  protected OgAccessInterface $ogAccess;
 
   /**
    * Constructs a new OgAdminMembersController object.
@@ -75,6 +76,20 @@ class GroupMembersController extends ControllerBase {
     $view = $show_admin_view ? 'og_members_overview' : 'members_overview';
     $arguments = [$group->getEntityTypeId(), $group->id()];
     return Views::getView($view)->executeDisplay('default', $arguments);
+  }
+
+  /**
+   * Access check for the group members page.
+   *
+   * @param \Drupal\joinup_group\Entity\GroupInterface $rdf_entity
+   *   The group for which the access to the members page is being determined.
+   *
+   * @return \Drupal\Core\Access\AccessResultInterface
+   *   The access result object.
+   */
+  public function access(GroupInterface $rdf_entity): AccessResultInterface {
+    $access = $this->entityTypeManager()->getAccessControlHandler('rdf_entity')->access($rdf_entity, 'view', $this->currentUser(), TRUE);
+    return $access->andIf(AccessResult::allowedIfHasPermission($this->currentUser(), 'access user profiles'));
   }
 
 }
