@@ -9,15 +9,20 @@ declare(strict_types = 1);
 
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
+use Drupal\Core\Ajax\AjaxResponse;
+use Drupal\Core\Ajax\RedirectCommand;
 use Drupal\Core\Cache\Cache;
+use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
+use Drupal\Core\EventSubscriber\MainContentViewSubscriber;
 use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\StringTranslation\PluralTranslatableMarkup;
+use Drupal\Core\Url;
 use Drupal\contact_information\ContactInformationEmailConfirmInterface;
 use Drupal\contact_information\Entity\ContactInformation;
 use Drupal\contact_information\Entity\ContactInformationInterface;
@@ -317,4 +322,84 @@ function _contact_information_hash_expiration_validate(array &$form, FormStateIn
       $form_state->setErrorByName($name, $error_message);
     }
   }
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function contact_information_form_email_contact_mail_form_alter(array &$form, FormStateInterface $form_state, string $form_id): void {
+  $form['actions'] = ['#type' => 'actions'];
+  if (\Drupal::currentUser()->isAnonymous()) {
+    // For anonymous users, we change the form to enforce them to login.
+    unset($form['#submit'][array_search('::submitForm', $form['#submit'], TRUE)]);
+    unset($form['#validate'][array_search('::validateForm', $form['#validate'], TRUE)]);
+
+    // Remove standard form elements from Drupal\email_contact\Form\ContactForm.
+    // @see \Drupal\email_contact\Form\ContactForm::buildForm()
+    unset($form['name'], $form['mail'], $form['subject'], $form['message']);
+
+    $form['description'] = [
+      '#type' => 'html_tag',
+      '#tag' => 'p',
+      '#value' => t('Only signed in users are able to use the contact form. Please sign in or register an account on EU Login.'),
+    ];
+    $form['actions'] = [
+      '#type' => 'actions',
+      'submit' => [
+        '#type' => 'submit',
+        '#value' => t('Sign in / Register'),
+        '#button_type' => 'primary',
+        '#ajax' => [
+          'callback' => 'contact_information_require_login',
+          'event' => 'click',
+        ]
+      ],
+    ];
+  }
+  else {
+    // Move 'submit' under 'actions'
+    $form['actions']['submit'] = $form['submit'];
+  }
+  unset($form['submit']);
+
+  // Vary the form's cache by whether the user is logged in or not.
+  (new CacheableMetadata())
+    ->setCacheContexts(['user.roles:authenticated'])
+    ->applyTo($form);
+}
+
+/**
+ * Provides an Ajax form submit callback for anonymous authentication.
+ *
+ * This callback replaces the original \Drupal\email_contact\Form\ContactForm
+ * Ajax submit callback and, instead of submitting an email contact form, it
+ * redirects an anonymous user to login or register with EU Login.
+ *
+ * @param array $form
+ *   The form render array.
+ * @param \Drupal\Core\Form\FormStateInterface $form_state
+ *   The form state object.
+ */
+function contact_information_require_login(array $form, FormStateInterface $form_state): AjaxResponse {
+  if (\Drupal::currentUser()->isAuthenticated()) {
+    // Normally, we cannot land here while authenticated.
+    throw new \RuntimeException('Bad request.');
+  }
+  /** @var \Drupal\contact_information\Entity\ContactInformationInterface $contact_information */
+  if (!$contact_information = \Drupal::routeMatch()->getParameter('entity')) {
+    throw new \RuntimeException('Cannot determine the contact information entity from route match.');
+  }
+  if (!$group = $contact_information->getRelatedGroup()) {
+    throw new \RuntimeException('Cannot determine the group from contact information entity.');
+  }
+
+  // Redirect to EU Login, with a query argument instructing to redirect back
+  // to the group page.
+  $url = (new Url('cas.login', [
+    'query' => [
+      'destination' => $group->toUrl('about-page')->setAbsolute()->toString(),
+    ],
+  ]))->setAbsolute()->toString();
+
+  return (new AjaxResponse())->addCommand(new RedirectCommand($url));
 }
