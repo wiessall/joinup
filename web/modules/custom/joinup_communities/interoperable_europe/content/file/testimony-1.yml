@@ -1,7 +1,7 @@
 _meta:
   version: '1.0'
   entity_type: file
-  uuid: b319fcaf-316e-45a2-8ead-af89b9df7e27
+  uuid: f4da0e82-109e-46f2-ba5e-973691b3b97a
   default_langcode: en
 default:
   uid:
@@ -9,19 +9,19 @@ default:
       target_id: 1
   filename:
     -
-      value: iop-testimony-image.png
+      value: Natalia_0.JPG
   uri:
     -
-      value: 'public://2022-08/iop-testimony-image.png'
+      value: 'public://2022-09/Natalia_0.JPG'
   filemime:
     -
-      value: image/png
+      value: image/jpeg
   filesize:
     -
-      value: 81734
+      value: 1738112
   status:
     -
       value: true
   created:
     -
-      value: 1661367816
+      value: 1663250184
