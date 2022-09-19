@@ -169,8 +169,11 @@ Feature: About this solution
     When I go to the about page of "Six exclusion advantages"
     Then I should see the text "Owner/Contact Information"
     And I should see the link "Contact" in the "Content" region
-    Then I click "Contact" in the "Content" region
-    And a modal should open
+    # The field label is hidden.
+    But I should not see "E-mail" in the "Content" region
+
+    When I click "Contact" in the "Content" region
+    Then a modal should open
     And I should see the text "Contact us" in the "Modal title" region
     And I should see "Only signed in users can send a message. Please sign in or register an account on EU Login." in the "Modal content" region
 
