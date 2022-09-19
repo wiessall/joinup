@@ -27,7 +27,7 @@ content:
     type: email_contact_link
     label: hidden
     settings:
-      link_text: Contact
+      link_text: 'Contact us'
       redirection_to: custom
       custom_path: ''
       include_values: '1'
