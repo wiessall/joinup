@@ -22,4 +22,3 @@ form_settings:
   node_video_form: false
   comment_comment_form: true
   comment_reply_form: true
-  email_contact_mail_form: true
