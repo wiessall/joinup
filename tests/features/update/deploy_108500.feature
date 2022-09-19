@@ -5,15 +5,12 @@ Feature: Test joinup_core_deploy_108500.
     Given I am an anonymous user
 
     When I go to the about page of "Access to Base Registries"
-    Then I should not see the text "E-mail address"
     And I should not see the link "Contact" in the "Content" region
 
     When I go to the about page of "ABR - BRegDCAT-AP"
-    Then I should not see the text "E-mail address"
     And I should not see the link "Contact" in the "Content" region
 
     When I go to the about page of "ABR - BRegDCAT-AP Tools"
-    Then I should not see the text "E-mail address"
     And I should not see the link "Contact" in the "Content" region
 
     When I run cron
@@ -37,13 +34,10 @@ Feature: Test joinup_core_deploy_108500.
     Then I should see the success message "Email confirmation confirmed."
 
     When I go to the about page of "Access to Base Registries"
-    Then I should see the text "E-mail address"
     And I should see the link "Contact" in the "Content" region
 
     When I go to the about page of "ABR - BRegDCAT-AP"
-    Then I should see the text "E-mail address"
     And I should see the link "Contact" in the "Content" region
 
     When I go to the about page of "ABR - BRegDCAT-AP Tools"
-    Then I should see the text "E-mail address"
     And I should see the link "Contact" in the "Content" region
