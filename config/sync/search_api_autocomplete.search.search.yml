@@ -8,16 +8,57 @@ dependencies:
   module:
     - views
     - search_api_autocomplete
+    - search_api_solr_autocomplete
 id: search
 label: Search
 index_id: published
 suggester_settings:
+  live_results:
+    fields: {  }
+    highlight:
+      enabled: false
+      field: ''
+    view_modes:
+      'entity:node':
+        custom_page: ''
+        discussion: ''
+        document: ''
+        event: ''
+        news: ''
+        tallinn_report: ''
+        video: ''
+      'entity:rdf_entity':
+        asset_distribution: ''
+        asset_release: ''
+        collection: ''
+        licence: ''
+        solution: ''
+        spdx_licence: ''
+      'entity:taxonomy_term':
+        eif_conceptual_model: ''
+        eif_interoperability_layer: ''
+        eif_principle: ''
+        eif_recommendation: ''
+        topic: ''
+      'entity:user':
+        user: ''
   server:
     fields: {  }
+  search_api_solr_spellcheck: {  }
+  search_api_solr_suggester:
+    search_api_solr/site_hash: 1
+    search_api/index: published
+    drupal/langcode: any
 suggester_weights:
-  server: 0
+  live_results: -50
+  server: -48
+  search_api_solr_spellcheck: -47
+  search_api_solr_suggester: -49
 suggester_limits:
+  live_results: 2
   server: 1
+  search_api_solr_spellcheck: 2
+  search_api_solr_suggester: 2
 search_settings:
   'views:search':
     displays:
