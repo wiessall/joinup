@@ -341,7 +341,7 @@ function contact_information_form_email_contact_mail_form_alter(array &$form, Fo
     $form['description'] = [
       '#type' => 'html_tag',
       '#tag' => 'p',
-      '#value' => t('Only signed in users are able to use the contact form. Please sign in or register an account on EU Login.'),
+      '#value' => t('Only signed in users can send a message. Please sign in or register an account on EU Login.'),
     ];
     $form['actions'] = [
       '#type' => 'actions',
