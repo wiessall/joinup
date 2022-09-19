@@ -139,6 +139,9 @@ Feature: About this solution
       | owner               | Rotterdam                                         |
       | solution type       | Non-binding Instrument, Service Discovery Service |
       | collection          | Antibody development                              |
+    And CAS users:
+      | Username           | E-mail         | Password |
+      | Iodine Maccalariat | iodine@ankh.am | 10d1ne   |
 
     When I am logged in as a moderator
     And I go to the edit form of the "Six exclusion advantages" solution
@@ -168,22 +171,52 @@ Feature: About this solution
     And I should see the link "Contact" in the "Content" region
     Then I click "Contact" in the "Content" region
     And a modal should open
-    And I should see the text "Email Contact" in the "Modal title"
+    And I should see the text "Contact us" in the "Modal title" region
+    And I should see "Only signed in users can send a message. Please sign in or register an account on EU Login." in the "Modal content" region
+
+    When I press "Cancel" in the "Modal buttons" region
+    Then the modal should be closed
+    And I should not see "Only signed in users can send a message. Please sign in or register an account on EU Login."
+
+    When I click "Contact" in the "Content" region
+    Then a modal should open
+    And I should see the text "Contact us" in the "Modal title" region
+    And I should see "Only signed in users can send a message. Please sign in or register an account on EU Login." in the "Modal content" region
+
+    When I press "Sign in / Register" in the "Modal buttons" region
+    Then the modal should be closed
+    And I should see the heading "Sign in to continue"
+
+    When I fill in "E-mail address" with "iodine@ankh.am"
+    And I fill in "Password" with "10d1ne"
+    And I press "Log in"
+    Then I should see the heading "Six exclusion advantages"
+
+    When I click "Contact"
+    Then a modal should open
+    And I should see the text "Contact us" in the "Modal title" region
+    And I should see the button "Send e-mail"
+
+    When I wait for the honeypot time limit to pass
+    And I press "Cancel" in the "Modal buttons" region
+    Then the modal should be closed
+    And I should not see the button "Send e-mail"
+
+    When I click "Contact"
+    Then a modal should open
+    And I should see the text "Contact us" in the "Modal title" region
+
     When I fill in "Your name" with "Jonny Example"
     And I fill in "Your e-mail address" with "jonnyk"
     And I fill in "Subject" with "New reclamation about Owner"
     And I fill in "Message" with "This is reclamation test."
     And I wait for the honeypot time limit to pass
-    And I press "Send e-mail"
+    And I press "Send e-mail" in the "Modal buttons" region
     Then I should see the error message "You must enter a valid e-mail address."
 
-    When I fill in "Your name" with "Jonny Example"
-    And I fill in "Your e-mail address" with "example@test.test"
-    And I fill in "Subject" with "New reclamation about Owner"
-    And I fill in "Message" with "This is reclamation test."
+    When I fill in "Your e-mail address" with "example@test.test"
     And I wait for the honeypot time limit to pass
-
-    When I press "Send e-mail"
+    When I press "Send e-mail" in the "Modal buttons" region
     Then the modal should be closed
     And I should see the success message "Your message has been sent."
     And I should be on "/collection/antibody-development/solution/six-exclusion-advantages/about"
@@ -200,13 +233,13 @@ Feature: About this solution
 
     When I click "Contact" in the "Content" region
     Then a modal should open
-    And I should see the text "Email Contact" in the "Modal title"
+    And I should see the text "Contact us" in the "Modal title"
+
     When I fill in "Subject" with "New reclamation about solution"
     And I fill in "Message" with "This is solution reclamation test."
-    And I should see the button "Send e-mail"
     And I wait for the honeypot time limit to pass
 
-    When I press "Send e-mail"
+    When I press "Send e-mail" in the "Modal buttons" region
     Then the modal should be closed
     And I should see the success message "Your message has been sent."
     # Submitting the modal should not redirect anywhere - ISAICP-7290.
