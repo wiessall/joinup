@@ -362,6 +362,19 @@ function contact_information_form_email_contact_mail_form_alter(array &$form, Fo
   }
   unset($form['submit']);
 
+  // @todo Replace this check with ::isModal() when issue #2661046 is in.
+  // @see https://www.drupal.org/node/2661046
+  if (\Drupal::request()->query->get(MainContentViewSubscriber::WRAPPER_FORMAT) === 'drupal_ajax') {
+    $form['actions']['cancel'] = [
+      '#type' => 'button',
+      '#value' => t('Cancel'),
+      '#attributes' => ['class' => ['dialog-cancel']],
+      // Put the cancel button to the left of the confirmation button, so it is
+      // consistent with the dialog shown when joining the group.
+      '#weight' => -1,
+    ];
+  }
+
   // Vary the form's cache by whether the user is logged in or not.
   (new CacheableMetadata())
     ->setCacheContexts(['user.roles:authenticated'])
