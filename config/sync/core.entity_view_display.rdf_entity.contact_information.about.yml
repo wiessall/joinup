@@ -33,6 +33,7 @@ content:
       include_values: '1'
       default_message: ''
       modal: true
+      title: 'Contact us'
     third_party_settings:
       field_delimiter:
         delimiter: ''
