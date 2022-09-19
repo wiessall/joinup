@@ -359,6 +359,8 @@ function contact_information_form_email_contact_mail_form_alter(array &$form, Fo
   else {
     // Move 'submit' under 'actions'.
     $form['actions']['submit'] = $form['submit'];
+    // We only protect the authenticated user version of the form.
+    \Drupal::service('honeypot')->addFormProtection($form, $form_state);
   }
   unset($form['submit']);
 
