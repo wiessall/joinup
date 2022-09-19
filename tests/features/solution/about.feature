@@ -161,6 +161,9 @@ Feature: About this solution
       | Best regards,                                                                                                                                                                                                                            |
       | The Joinup Team                                                                                                                                                                                                                          |
 
+    When I go to the about page of "Six exclusion advantages"
+    Then I should not see the link "Contact us" in the "Content" region
+
     When I click the validate contact info email from the last email sent to "invisible.cat@xpto.com"
     And I press "Send"
     Then I should see the success message "Email confirmation confirmed."
@@ -168,11 +171,11 @@ Feature: About this solution
     Given I am not logged in
     When I go to the about page of "Six exclusion advantages"
     Then I should see the text "Owner/Contact Information"
-    And I should see the link "Contact" in the "Content" region
+    And I should see the link "Contact us" in the "Content" region
     # The field label is hidden.
     But I should not see "E-mail" in the "Content" region
 
-    When I click "Contact" in the "Content" region
+    When I click "Contact us" in the "Content" region
     Then a modal should open
     And I should see the text "Contact us" in the "Modal title" region
     And I should see "Only signed in users can send a message. Please sign in or register an account on EU Login." in the "Modal content" region
@@ -181,7 +184,7 @@ Feature: About this solution
     Then the modal should be closed
     And I should not see "Only signed in users can send a message. Please sign in or register an account on EU Login."
 
-    When I click "Contact" in the "Content" region
+    When I click "Contact us" in the "Content" region
     Then a modal should open
     And I should see the text "Contact us" in the "Modal title" region
     And I should see "Only signed in users can send a message. Please sign in or register an account on EU Login." in the "Modal content" region
@@ -195,7 +198,7 @@ Feature: About this solution
     And I press "Log in"
     Then I should see the heading "Six exclusion advantages"
 
-    When I click "Contact"
+    When I click "Contact us" in the "Content" region
     Then a modal should open
     And I should see the text "Contact us" in the "Modal title" region
     And I should see the button "Send e-mail"
@@ -205,7 +208,7 @@ Feature: About this solution
     Then the modal should be closed
     And I should not see the button "Send e-mail"
 
-    When I click "Contact"
+    When I click "Contact us" in the "Content" region
     Then a modal should open
     And I should see the text "Contact us" in the "Modal title" region
 
@@ -232,9 +235,9 @@ Feature: About this solution
     Given I am logged in as "Pally Rapamichael"
     When I go to the about page of "Six exclusion advantages"
     Then I should see the text "Owner/Contact Information"
-    And I should see the link "Contact" in the "Content" region
+    And I should see the link "Contact us" in the "Content" region
 
-    When I click "Contact" in the "Content" region
+    When I click "Contact us" in the "Content" region
     Then a modal should open
     And I should see the text "Contact us" in the "Modal title"
 
