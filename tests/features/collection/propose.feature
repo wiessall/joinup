@@ -248,11 +248,11 @@ Feature: Proposing a collection
 
     # Email confirmation occurs only for published groups.
     And the following email should not have been sent:
-      | recipient_mail     | some_unique_contact_person@example.com                                                                   |
-      | subject            | Joinup - Please validate your contact details                                                            |
-      | body               | Your email address some_unique_contact_person@example.com is used as a contact detail for the following: |
-      | signature_required | no                                                                                                       |
-      | html               | no                                                                                                       |
+      | recipient_mail     | some_unique_contact_person@example.com                                                                                                |
+      | subject            | Joinup - Please validate your contact details                                                                                         |
+      | body               | Please confirm your email address some_unique_contact_person@example.com, which is set in your contact information for the following: |
+      | signature_required | no                                                                                                                                    |
+      | html               | no                                                                                                                                    |
 
     When I click "Add solution" in the plus button menu
     And I check "I have read and accept the legal notice and I commit to manage my solution on a regular basis."
@@ -272,30 +272,30 @@ Feature: Proposing a collection
 
     # Email confirmation occurs only for published groups.
     And the following email should not have been sent:
-      | recipient_mail     | contact_Rapazoglou@example.com                                                                   |
-      | subject            | Joinup - Please validate your contact details                                                    |
-      | body               | Your email address contact_Rapazoglou@example.com is used as a contact detail for the following: |
-      | signature_required | no                                                                                               |
-      | html               | no                                                                                               |
+      | recipient_mail     | contact_Rapazoglou@example.com                                                                                                |
+      | subject            | Joinup - Please validate your contact details                                                                                 |
+      | body               | Please confirm your email address contact_Rapazoglou@example.com, which is set in your contact information for the following: |
+      | signature_required | no                                                                                                                            |
+      | html               | no                                                                                                                            |
 
     # Email confirmations are sent on group publishing.
     Given I am logged in as a "moderator"
     When I go to the edit form of the "Some email validation" collection
     And I press "Publish"
     Then the following email should have been sent:
-      | recipient_mail     | some_unique_contact_person@example.com                                                                   |
-      | subject            | Joinup - Please validate your contact details                                                            |
-      | body               | Your email address some_unique_contact_person@example.com is used as a contact detail for the following: |
-      | signature_required | no                                                                                                       |
-      | html               | no                                                                                                       |
+      | recipient_mail     | some_unique_contact_person@example.com                                                                                                |
+      | subject            | Joinup - Please validate your contact details                                                                                         |
+      | body               | Please confirm your email address some_unique_contact_person@example.com, which is set in your contact information for the following: |
+      | signature_required | no                                                                                                                                    |
+      | html               | no                                                                                                                                    |
     When I go to the edit form of the "Rolly email validation" solution
     And I press "Publish"
     And the following email should have been sent:
-      | recipient_mail     | contact_Rapazoglou@example.com                                                                   |
-      | subject            | Joinup - Please validate your contact details                                                    |
-      | body               | Your email address contact_Rapazoglou@example.com is used as a contact detail for the following: |
-      | signature_required | no                                                                                               |
-      | html               | no                                                                                               |
+      | recipient_mail     | contact_Rapazoglou@example.com                                                                                                |
+      | subject            | Joinup - Please validate your contact details                                                                                 |
+      | body               | Please confirm your email address contact_Rapazoglou@example.com, which is set in your contact information for the following: |
+      | signature_required | no                                                                                                                            |
+      | html               | no                                                                                                                            |
 
     # As some entities were created via UI, we should explicitly delete them.
     And I delete the "Contact person" contact information
