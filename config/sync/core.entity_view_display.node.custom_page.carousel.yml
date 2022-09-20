@@ -12,6 +12,8 @@ dependencies:
     - responsive_image.styles.iop_carousel
   module:
     - entity_reference_revisions
+    - field_delimiter
+    - field_formatter_range
     - field_group
     - layout_builder
     - link
@@ -62,9 +64,17 @@ content:
     type: entity_reference_revisions_entity_view
     label: hidden
     settings:
-      view_mode: default
+      view_mode: preview
       link: ''
-    third_party_settings: {  }
+    third_party_settings:
+      field_delimiter:
+        delimiter: ''
+      field_formatter_range:
+        order: 0
+        limit: 1
+        offset: 0
+      template_suggestion:
+        template_suggestion: ''
     weight: 1
     region: content
   report:
