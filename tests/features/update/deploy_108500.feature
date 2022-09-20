@@ -30,7 +30,6 @@ Feature: Test joinup_core_deploy_108500.
       | Confirm your e-mail address                                                                                                                                                 |
       | If the link doesn't work, just copy this URL to your browser:                                                                                                               |
       | If you do not validate your email within the next 5 days, you will not be able to receive any messages from users/members.                                                  |
-      | To receive another validation email, edit the contact email field and save the page again.                                                                                  |
       | If you think this action is not clear or not due, please contact Joinup Support at https://joinup.ec.europa.eu/contact                                                      |
       | Best regards,                                                                                                                                                               |
       | The Joinup Team                                                                                                                                                             |
