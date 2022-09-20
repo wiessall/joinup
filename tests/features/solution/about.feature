@@ -132,13 +132,13 @@ Feature: About this solution
       | title | Antibody development |
       | state | validated            |
     And solution:
-      | title               | Six exclusion advantages                          |
-      | description         | Separating molecules by weight.                   |
-      | state               | validated                                         |
-      | topic               | Demography, E-inclusion                           |
-      | owner               | Rotterdam                                         |
-      | solution type       | Non-binding Instrument, Service Discovery Service |
-      | collection          | Antibody development                              |
+      | title         | Six exclusion advantages                          |
+      | description   | Separating molecules by weight.                   |
+      | state         | validated                                         |
+      | topic         | Demography, E-inclusion                           |
+      | owner         | Rotterdam                                         |
+      | solution type | Non-binding Instrument, Service Discovery Service |
+      | collection    | Antibody development                              |
     And CAS users:
       | Username           | E-mail         | Password |
       | Iodine Maccalariat | iodine@ankh.am | 10d1ne   |
@@ -196,20 +196,8 @@ Feature: About this solution
     When I fill in "E-mail address" with "iodine@ankh.am"
     And I fill in "Password" with "10d1ne"
     And I press "Log in"
-    Then I should see the heading "Six exclusion advantages"
-
-    When I click "Contact us" in the "Content" region
-    Then a modal should open
-    And I should see the text "Contact us" in the "Modal title" region
-    And I should see the button "Send e-mail"
-
-    When I wait for the honeypot time limit to pass
-    And I press "Cancel" in the "Modal buttons" region
-    Then the modal should be closed
-    And I should not see the button "Send e-mail"
-
-    When I click "Contact us" in the "Content" region
-    Then a modal should open
+    Then I should see the heading "About Six exclusion advantages"
+    And a modal should open
     And I should see the text "Contact us" in the "Modal title" region
 
     When I fill in "Your name" with "Jonny Example"
@@ -287,7 +275,7 @@ Feature: About this solution
       | The Joinup Team                                                                                                                                                                                                                          |
     And the email sent to "elise@nova.dk" with subject "Joinup - Please validate your contact details" contains the text:
       | Dear Joinup user,                                                                                                                                                                                                                        |
-      | Your email address elise@nova.dk is used as a contact detail for the following:                                                                                                                                                         |
+      | Your email address elise@nova.dk is used as a contact detail for the following:                                                                                                                                                          |
       | Solution: Six exclusion advantages                                                                                                                                                                                                       |
       | To benefit from a dedicated form which will allow your users to get in touch with you in a quick, secure and privacy-friendly way, all you have to do is confirm your e-mail address by clicking on "Confirm your e-mail address" below. |
       | If the link doesn't work, just copy this URL to your browser:                                                                                                                                                                            |
