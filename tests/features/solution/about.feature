@@ -318,6 +318,14 @@ Feature: About this solution
       | Best regards,                                                                                                                                                                                                                            |
       | The Joinup Team                                                                                                                                                                                                                          |
 
+    # Updating the contact, but not its email, doesn't send email confirmation.
+    When I go to the edit form of the "Six exclusion advantages" solution
+    And I press "Edit" in the "Elise Lucile" row
+    And I fill in "Name" with "Elise Anna Lucile "
+    And I press "Update contact information"
+    And I press "Publish"
+    Then I should not see the success message "A new confirmation message has been sent to elise@nova.com."
+
     # These contact information have been created via UI.
     But I delete the "Invisible Cat" contact information
-    And I delete the "Elise Lucile" contact information
+    And I delete the "Elise Anna Lucile" contact information
