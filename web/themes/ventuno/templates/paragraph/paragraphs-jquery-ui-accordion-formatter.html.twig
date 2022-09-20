@@ -6,6 +6,7 @@
  * Available variables:
  * - children: The children of the group.
  * - attributes: A list of HTML attributes for the group wrapper.
+ * - parent_id: The entity ID of the parent accordion.
  *
  * @see template_preprocess_field_group_accordion()
  * This is a workaround to replace the library from the formatter of the
@@ -20,12 +21,14 @@
  */
 #}
 <div class="accordion-item">
-  <h2 {{ title_attributes.addClass('accordion-header') }} id="heading{{ id }}">
-    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ id }}" aria-expanded="false" aria-controls="collapse{{ id }}">
+  <h2 {{ title_attributes.addClass('accordion-header') }} id="heading-{{ id }}">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+            data-bs-target="#collapse-{{ id }}" aria-expanded="false" aria-controls="collapse-{{ id }}">
       {{ title }}
     </button>
   </h2>
-  <div id="collapse{{ id }}" class="accordion-collapse collapse" aria-labelledby="heading{{ id }}">
+  <div id="collapse-{{ id }}" class="accordion-collapse collapse"
+       data-bs-parent="#accordion-{{ parent_id }}" aria-labelledby="heading-{{ id }}">
     <div {{ content_attributes.addClass('accordion-body') }}>
       {{ content }}
     </div>
