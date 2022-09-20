@@ -198,10 +198,10 @@
     },
     "scripts": {
         "post-install-cmd": [
-            "./scripts/composer/composer.sh install"
+            "./scripts/composer/composer.php install"
         ],
         "post-update-cmd": [
-            "./scripts/composer/composer.sh update"
+            "./scripts/composer/composer.php update"
         ]
     },
     "extra": {
