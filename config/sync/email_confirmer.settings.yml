@@ -4,7 +4,7 @@ langcode: en
 hash_expiration: 432000
 restrict_same_ip: false
 resendrequest_delay: 3600
-confirmation_lifetime: 604800
+confirmation_lifetime: 0
 confirmation_request:
   subject: '[site:name] - Please validate your contact details'
   body: "<p>Dear Joinup user,</p><p>Your email address <strong>[email-confirmer:confirmation-mail]</strong> is used as a contact detail for the following:</p>[email-confirmer:confirmation-entities]<p>To benefit from a dedicated form which will allow your users to get in touch with you in a quick, secure and privacy-friendly way, all you have to do is confirm your e-mail address by clicking on \"Confirm your e-mail address\" below.<p><strong><a href=\"[email-confirmer:confirmation-url]\">Confirm your e-mail address</a></strong><p>If the link doesn't work, just copy this URL to your browser:</p><p>[email-confirmer:confirmation-url]</p><p>Unless this step is completed, you will not be able to receive any messages from interested users or members.</p><p>If you think this action is not clear or not due, please contact Joinup Support at <a href=\"https://joinup.ec.europa.eu/contact\" taget=\"_blank\">https://joinup.ec.europa.eu/contact</a>.</p><p>Best regards,<br />The Joinup Team</p>"
