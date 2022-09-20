@@ -1,7 +1,7 @@
 _meta:
   version: '1.0'
   entity_type: file
-  uuid: 4c17c0b5-4530-459e-a7f6-1e25995db275
+  uuid: 9ad5eede-1b7a-4295-864f-24e1fe0d241d
   default_langcode: en
 default:
   uid:
@@ -9,19 +9,19 @@ default:
       target_id: 1
   filename:
     -
-      value: iop-testimony-image_1.png
+      value: Johannes-Hahn.jpg
   uri:
     -
-      value: 'public://2022-08/iop-testimony-image_1.png'
+      value: 'public://2022-08/Johannes-Hahn.jpg'
   filemime:
     -
-      value: image/png
+      value: image/jpeg
   filesize:
     -
-      value: 81734
+      value: 115470
   status:
     -
       value: true
   created:
     -
-      value: 1661367858
+      value: 1661367810
