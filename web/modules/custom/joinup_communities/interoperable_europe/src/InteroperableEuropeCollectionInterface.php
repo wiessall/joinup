@@ -24,4 +24,9 @@ interface InteroperableEuropeCollectionInterface {
    */
   public const EVENT_LISTING = '704828';
 
+  /**
+   * The NID of the FAQ page.
+   */
+  public const FAQ = '705665';
+
 }
