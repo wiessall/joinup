@@ -22,6 +22,15 @@ module.exports = {
   styles: [
     // Components
     {
+      entry: path.resolve(outputFolder, "src/scss/accordion-faq.scss"),
+      dest: path.resolve(outputFolder, "assets/css/accordion-faq.min.css"),
+      options: {
+        minify: true,
+        includePaths,
+        sourceMap: "file",
+      },
+    },
+    {
       entry: path.resolve(outputFolder, "src/scss/components.scss"),
       dest: path.resolve(outputFolder, "assets/css/components.min.css"),
       options: {
