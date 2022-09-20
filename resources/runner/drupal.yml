@@ -133,6 +133,7 @@ drupal:
         - Monolog
         - Dashboard agent
         - Varnish purge
+        - Reverse proxy
     header: |
       <?php
 
@@ -327,3 +328,6 @@ drupal:
           }
           $config['dropsolid_purge.config']['loadbalancers'] = $load_balancers;
         }
+      Reverse proxy: |
+        $settings['reverse_proxy'] = (bool) getenv('DRUPAL_REVERSE_PROXY_ENABLE');
+        $settings['reverse_proxy_addresses'] = array_filter(explode(',', (string) getenv('DRUPAL_REVERSE_PROXY_ADDRESSES')));
