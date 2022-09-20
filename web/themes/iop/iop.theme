@@ -76,6 +76,11 @@ function iop_preprocess_page(&$variables) {
       $variables['listing'] = TRUE;
       $variables['events'] = TRUE;
     }
+    // FAQ page.
+    elseif ($nid === InteroperableEuropeCollectionInterface::FAQ) {
+      $variables['#attached']['library'][] = 'iop/accordion-faq';
+      $variables['faq'] = TRUE;
+    }
   }
 }
 
