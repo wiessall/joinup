@@ -45,21 +45,23 @@ if (file_exists("$project_root/vendor/bin/run") && (system("$project_root/vendor
   exit(4);
 }
 
-// Node/NPM version.
-print 'Node ' . trim(shell_exec("node --version")) . "\n";
-print 'NPM ' . trim(shell_exec("npm --version")) . "\n";
+if (!getenv('COMPOSER_DISABLE_NODE_DEPENDENCIES')) {
+  // Node/NPM version.
+  print 'Node ' . trim(shell_exec("node --version")) . "\n";
+  print 'NPM ' . trim(shell_exec("npm --version")) . "\n";
 
-// Bring theme dependencies.
-$command = "cd $project_root/web/themes/ventuno && npm ci";
-print "Running: $command\n";
-if (system($command) === FALSE) {
-  exit(5);
-}
+  // Bring theme dependencies.
+  $command = "cd $project_root/web/themes/ventuno && npm ci";
+  print "Running: $command\n";
+  if (system($command) === FALSE) {
+    exit(5);
+  }
 
-// Project dependencies.
-$command = $argv[1] === 'install' ? 'npm ci' : 'npm install';
-$command = "cd $project_root && $command";
-print "Running: $command\n";
-if (system($command) === FALSE) {
-  exit(5);
+  // Project dependencies.
+  $command = $argv[1] === 'install' ? 'npm ci' : 'npm install';
+  $command = "cd $project_root && $command";
+  print "Running: $command\n";
+  if (system($command) === FALSE) {
+    exit(5);
+  }
 }
