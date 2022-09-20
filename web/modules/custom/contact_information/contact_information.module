@@ -13,6 +13,7 @@ use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\RedirectCommand;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Cache\CacheableMetadata;
+use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\EventSubscriber\MainContentViewSubscriber;
@@ -412,7 +413,7 @@ function contact_information_require_login(array $form, FormStateInterface $form
   // group, using this particular contact information. The cookie is valid for
   // 30 minutes. If the user takes more time to sign in or register, we assume
   // they are no longer actively engaged in the joining process.
-  setrawcookie('email_contact_info', rawurlencode('rdf_entity:' . $contact_information->id()), \Drupal::time()->getRequestTime() + 1800, '/');
+  setrawcookie('email_contact_info', rawurlencode($contact_information->id()), \Drupal::time()->getRequestTime() + 1800, '/');
 
   // Redirect to EU Login, with a query argument instructing to redirect back
   // to the group page.
@@ -423,4 +424,29 @@ function contact_information_require_login(array $form, FormStateInterface $form
   ]))->setAbsolute()->toString();
 
   return (new AjaxResponse())->addCommand(new RedirectCommand($url));
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_view().
+ */
+function contact_information_rdf_entity_view(array &$build, RdfInterface $contact_information, EntityViewDisplayInterface $display, string $view_mode): void {
+  if ($contact_information instanceof ContactInformationInterface && $view_mode === 'about') {
+    if (\Drupal::currentUser()->isAuthenticated()) {
+      // If an anonymous user clicks on the contact information 'Contact us'
+      // link, they are redirected to login or register with the EU Login
+      // service. After successfully completing the authentication, they are
+      // redirected back to the group about-page where the link is placed. We
+      // attach a Javascript snippet that automatically opens the 'Contact us'
+      // modal dialog.
+      // @see contact_information_form_email_contact_mail_form_alter()
+      // @see \Drupal\contact_information\EventSubscriber\ContactInformationRedirectedEuLoginSubscriber
+      $build['#attached'] = ['library' => ['contact_information/contact-us']];
+      $build += ['#attributes' => []];
+      $build['#attributes']['data-joinup-contact-info-id'] = $contact_information->id();
+    }
+    // Vary the field's cache by whether the user is logged in or not.
+    (new CacheableMetadata())
+      ->setCacheContexts(['user.roles:authenticated'])
+      ->applyTo($build);
+  }
 }
