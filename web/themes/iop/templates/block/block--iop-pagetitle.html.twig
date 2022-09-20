@@ -25,12 +25,13 @@
  * @see template_preprocess_block()
  */
 #}
+{{ attach_library('iop/page-header') }}
 {%
   set classes = [
     'block',
     'block-' ~ configuration.provider|clean_class,
     'block-' ~ plugin_id|clean_class,
-    'listing-header',
+    'page-header',
   ]
 %}
 <div{{ attributes.addClass(classes) }}>

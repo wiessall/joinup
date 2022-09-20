@@ -49,6 +49,14 @@ module.exports = {
       },
     },
     {
+      entry: path.resolve(outputFolder, "src/scss/page-header.scss"),
+      dest: path.resolve(outputFolder, "assets/css/page-header.min.css"),
+      options: {
+        includePaths,
+        sourceMap: "file",
+      },
+    },
+    {
       entry: path.resolve(outputFolder, "src/scss/paragraph.scss"),
       dest: path.resolve(outputFolder, "assets/css/paragraph.min.css"),
       options: {
@@ -167,7 +175,6 @@ module.exports = {
         sourceMap: "file",
       },
     },
-    // Spare components
     {
       entry: path.resolve(outputFolder, "src/scss/pager.scss"),
       dest: path.resolve(outputFolder, "assets/css/pager.min.css"),

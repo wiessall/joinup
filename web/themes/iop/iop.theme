@@ -68,13 +68,13 @@ function iop_preprocess_page(&$variables) {
     if ($nid === InteroperableEuropeCollectionInterface::NEWS_LISTING) {
       $variables['#attached']['library'][] = 'iop/listing';
       $variables['listing'] = TRUE;
-      $variables['news_listing'] = TRUE;
+      $variables['news'] = TRUE;
     }
     // Events listing page.
     elseif ($nid === InteroperableEuropeCollectionInterface::EVENT_LISTING) {
       $variables['#attached']['library'][] = 'iop/listing';
       $variables['listing'] = TRUE;
-      $variables['events_listing'] = TRUE;
+      $variables['events'] = TRUE;
     }
   }
 }
