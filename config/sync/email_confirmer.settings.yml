@@ -1,7 +1,7 @@
 _core:
   default_config_hash: mZPvli4k5ulC_BcD35Yk2c8mlzSa6xwRkustThIT4jk
 langcode: en
-hash_expiration: 172800
+hash_expiration: 432000
 restrict_same_ip: false
 resendrequest_delay: 3600
 confirmation_lifetime: 0
