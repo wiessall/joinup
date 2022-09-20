@@ -35,6 +35,11 @@ navbar:
     theme:
       assets/css/navbar.min.css: {}
 
+page-header:
+  css:
+    theme:
+      assets/css/page-header.min.css: {}
+
 pager:
   css:
     theme:

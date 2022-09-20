@@ -44,8 +44,9 @@
 {% set node_classes = [
   'layout-container',
   listing ? 'listing',
-  news_listing ? 'listing--news',
-  events_listing ? 'listing--events',
+  news ? 'page--news',
+  events ? 'page--events',
+  faq ? 'page--faq',
 ] %}
 <div{{ node_attributes.addClass(node_classes)}}>
   <div class="section-header">
