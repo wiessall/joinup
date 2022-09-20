@@ -50,13 +50,13 @@ suggester_settings:
     search_api/index: published
     drupal/langcode: any
 suggester_weights:
-  live_results: -50
-  server: -48
-  search_api_solr_spellcheck: -47
-  search_api_solr_suggester: -49
+  live_results: 0
+  server: 0
+  search_api_solr_spellcheck: 0
+  search_api_solr_suggester: 0
 suggester_limits:
   live_results: 2
-  server: 1
+  server: 2
   search_api_solr_spellcheck: 2
   search_api_solr_suggester: 2
 search_settings:
