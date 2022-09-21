@@ -9,7 +9,7 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\Url;
-use Drupal\externalauth\Event\ExternalAuthLoginEvent;
+use Drupal\cas\Event\CasPostLoginEvent;
 use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\og\OgMembershipInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -65,14 +65,7 @@ class JoinGroupSubscriber extends RedirectedEuLoginAuthenticatedSubscriberBase {
   /**
    * {@inheritdoc}
    */
-  protected function isRedirectedEuLoginAuthenticated(): bool {
-    return (bool) $this->getGroup();
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  protected function getRedirectUrl(ExternalAuthLoginEvent $event): ?Url {
+  protected function getRedirectUrl(CasPostLoginEvent $event): ?Url {
     if ($group = $this->getGroup()) {
       // When a user is logged in through EU login and has previously expressed
       // their desire to join a group by setting a cookie, create their
