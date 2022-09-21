@@ -1202,10 +1202,10 @@ display:
         type: normal
         title: Announcements
         description: ''
-        weight: 0
+        weight: 10
         expanded: false
         menu_name: admin
-        parent: ''
+        parent: system.admin
         context: '0'
       always_use_admin_theme: false
     cache_metadata:
