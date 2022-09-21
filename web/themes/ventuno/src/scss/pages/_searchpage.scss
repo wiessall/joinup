@@ -5,7 +5,12 @@
     @include media-breakpoint-up(lg) {
       // Avoid sidebar to overlap toolbar tray when logged in.
       // 99 is 1 below the Cookie Consent banner's z-index.
-      z-index: 99;
+      z-index: 49;
+      visibility: visible;
+      position: relative;
+      width: auto;
+      transform: none;
+      border: none;
     }
     &::before {
       width: 100vw;
