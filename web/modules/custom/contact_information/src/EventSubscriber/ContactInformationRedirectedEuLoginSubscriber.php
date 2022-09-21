@@ -4,12 +4,12 @@ declare(strict_types = 1);
 
 namespace Drupal\contact_information\EventSubscriber;
 
+use Drupal\cas\Event\CasPostLoginEvent;
 use Drupal\Component\Datetime\TimeInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Http\RequestStack;
 use Drupal\Core\Url;
 use Drupal\contact_information\Entity\ContactInformationInterface;
-use Drupal\externalauth\Event\ExternalAuthLoginEvent;
 use Drupal\joinup_group\EventSubscriber\RedirectedEuLoginAuthenticatedSubscriberBase;
 
 /**
@@ -47,14 +47,7 @@ class ContactInformationRedirectedEuLoginSubscriber extends RedirectedEuLoginAut
   /**
    * {@inheritdoc}
    */
-  protected function isRedirectedEuLoginAuthenticated(): bool {
-    return (bool) $this->getContactInformation();
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  protected function getRedirectUrl(ExternalAuthLoginEvent $event): ?Url {
+  protected function getRedirectUrl(CasPostLoginEvent $event): ?Url {
     if ($contact_information = $this->getContactInformation()) {
       return $contact_information->getRelatedGroup()->toUrl('about-page');
     }

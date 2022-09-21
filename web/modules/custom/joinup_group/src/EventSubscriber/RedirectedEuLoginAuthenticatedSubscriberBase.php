@@ -9,8 +9,6 @@ use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\Url;
 use Drupal\cas\Event\CasPostLoginEvent;
 use Drupal\cas\Service\CasHelper;
-use Drupal\externalauth\Event\ExternalAuthEvents;
-use Drupal\externalauth\Event\ExternalAuthLoginEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 
@@ -61,12 +59,10 @@ abstract class RedirectedEuLoginAuthenticatedSubscriberBase implements EventSubs
    */
   public static function getSubscribedEvents(): array {
     return [
-      ExternalAuthEvents::LOGIN => 'onLogin',
-      // Prevent the success status message and redirect about to be set in
-      // JoinupEuLoginCasEventsSubscriber::setRedirectAndStatusOnNewAccount() by
-      // acting before and stealing the show.
+      // Act as late as possible in order to have the last word regarding the
+      // destination page.
       // @see \Drupal\joinup_eulogin\Event\Subscriber\JoinupEuLoginCasEventsSubscriber::setRedirectAndStatusOnNewAccount()
-      CasHelper::EVENT_POST_LOGIN => ['onPostLogin', -10],
+      CasHelper::EVENT_POST_LOGIN => ['onPostLogin', -100],
     ];
   }
 
@@ -87,7 +83,7 @@ abstract class RedirectedEuLoginAuthenticatedSubscriberBase implements EventSubs
    * Note: Implementations should implement this method rather than extending
    * the public self::onLoad() method, in order to implement their logic.
    *
-   * @param \Drupal\externalauth\Event\ExternalAuthLoginEvent $event
+   * @param \Drupal\cas\Event\CasPostLoginEvent $event
    *   The event class instance.
    *
    * @return \Drupal\Core\Url|null
@@ -95,39 +91,7 @@ abstract class RedirectedEuLoginAuthenticatedSubscriberBase implements EventSubs
    *   authenticated with EU Login service. NULL, is such a URL cannot be
    *   determined.
    */
-  abstract protected function getRedirectUrl(ExternalAuthLoginEvent $event): ?Url;
-
-  /**
-   * Checks whether we've landed here as result of routing to EU Login.
-   *
-   * Implementations, usually, are checking for the existence of a certain
-   * cookie and foe the cookie validity.
-   *
-   * @return bool
-   *   Whether we've landed here as result of routing to EU Login.
-   */
-  abstract protected function isRedirectedEuLoginAuthenticated(): bool;
-
-  /**
-   * Listens to the ExternalAuthEvents::LOGIN event.
-   *
-   * @param \Drupal\externalauth\Event\ExternalAuthLoginEvent $event
-   *   The event firing when a user logs in through EU login.
-   */
-  public function onLogin(ExternalAuthLoginEvent $event): void {
-    try {
-      if ($url = $this->getRedirectUrl($event)) {
-        $this->requestStack->getCurrentRequest()->query->set('destination', $url->toString());
-      }
-    }
-    catch (\Throwable $exception) {
-      // We are acting on user supplied data in a cookie. Do not allow any
-      // exception to bubble up since this could prevent the user from logging
-      // in until they manually clear their cookies. Instead, delete the cookie
-      // and proceed as if no cookie was set.
-      $this->deleteCookie();
-    }
-  }
+  abstract protected function getRedirectUrl(CasPostLoginEvent $event): ?Url;
 
   /**
    * Listens to the CasHelper::EVENT_POST_LOGIN event.
@@ -140,13 +104,21 @@ abstract class RedirectedEuLoginAuthenticatedSubscriberBase implements EventSubs
    *   The event firing after successful CAS login.
    */
   public function onPostLogin(CasPostLoginEvent $event): void {
-    if ($this->isRedirectedEuLoginAuthenticated()) {
-      // Ensure our redirection takes precedence over any other listeners. The
-      // POST_LINK event fires after the LOGIN event and would redirect the user
-      // to their profile page. This would overwrite our redirection.
-      // @see ::onLogin()
-      // @see \Drupal\joinup_eulogin\Event\Subscriber\JoinupEuLoginCasEventsSubscriber::setRedirectAndStatusOnNewAccount()
-      $event->stopPropagation();
+    try {
+      if ($url = $this->getRedirectUrl($event)) {
+        $this->requestStack->getCurrentRequest()->query->set('destination', $url->toString());
+        // Even we act later, we still stop the propagation as a safe net in the
+        // unlikely scenario when a listener acts after this and tries to set a
+        // different redirect URL.
+        $event->stopPropagation();
+      }
+    }
+    catch (\Throwable $exception) {
+      // We are acting on user supplied data in a cookie. Do not allow any
+      // exception to bubble up since this could prevent the user from logging
+      // in until they manually clear their cookies. Instead, delete the cookie
+      // and proceed as if no cookie was set.
+      $this->deleteCookie();
     }
   }
 
