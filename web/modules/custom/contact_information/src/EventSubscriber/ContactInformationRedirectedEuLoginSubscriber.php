@@ -4,11 +4,11 @@ declare(strict_types = 1);
 
 namespace Drupal\contact_information\EventSubscriber;
 
-use Drupal\cas\Event\CasPostLoginEvent;
 use Drupal\Component\Datetime\TimeInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Http\RequestStack;
 use Drupal\Core\Url;
+use Drupal\cas\Event\CasPostLoginEvent;
 use Drupal\contact_information\Entity\ContactInformationInterface;
 use Drupal\joinup_group\EventSubscriber\RedirectedEuLoginAuthenticatedSubscriberBase;
 
