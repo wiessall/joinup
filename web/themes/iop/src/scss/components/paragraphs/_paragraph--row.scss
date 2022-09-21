@@ -12,6 +12,12 @@
     }
   }
   &.paragraph--light-wave  {
-    padding: $spacer * 4 0!important; // 32px
+    padding: $spacer * 2 0!important; // 32px
+    @include media-breakpoint-up(sm) {
+      padding: $spacer * 4 0!important; // 64px
+    }
+    @include media-breakpoint-up(lg) {
+      padding: $spacer * 5 0!important; // 80px
+    }
   }
 }
