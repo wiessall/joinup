@@ -41,9 +41,8 @@
 {{ attach_library('ventuno/accordion') }}
 {%
   set classes = [
-    'accordion',
     'paragraph',
-    'paragraph--type--' ~ paragraph.bundle|clean_class,
+    'paragraph--' ~ paragraph.bundle|clean_class,
   ]
 %}
 {% block paragraph %}
