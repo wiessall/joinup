@@ -6,10 +6,10 @@ namespace Drupal\joinup_group\EventSubscriber;
 
 use Drupal\Component\Datetime\TimeInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
-use Drupal\Core\Url;
 use Drupal\cas\Event\CasPostLoginEvent;
 use Drupal\cas\Service\CasHelper;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
@@ -39,7 +39,7 @@ abstract class RedirectedEuLoginAuthenticatedSubscriberBase implements EventSubs
   /**
    * The request stack.
    */
-  protected RequestStack $requestStack;
+  protected Request $currentRequest;
 
   /**
    * Constructs a new event subscriber instance.
@@ -51,7 +51,7 @@ abstract class RedirectedEuLoginAuthenticatedSubscriberBase implements EventSubs
    */
   public function __construct(TimeInterface $time, RequestStack $request_stack) {
     $this->time = $time;
-    $this->requestStack = $request_stack;
+    $this->currentRequest = $request_stack->getCurrentRequest();
   }
 
   /**
@@ -59,11 +59,38 @@ abstract class RedirectedEuLoginAuthenticatedSubscriberBase implements EventSubs
    */
   public static function getSubscribedEvents(): array {
     return [
-      // Act as late as possible in order to have the last word regarding the
-      // destination page.
+      // Act before other subscribers that intend to set a redirect destination.
       // @see \Drupal\joinup_eulogin\Event\Subscriber\JoinupEuLoginCasEventsSubscriber::setRedirectAndStatusOnNewAccount()
-      CasHelper::EVENT_POST_LOGIN => ['onPostLogin', -100],
+      CasHelper::EVENT_POST_LOGIN => ['onPostLogin', -10],
     ];
+  }
+
+  /**
+   * Listens to the CasHelper::EVENT_POST_LOGIN event.
+   *
+   * If a valid cookie is set indicating that the user is logging in with the
+   * intention of returning to the origin page, prevent the user from being
+   * redirected elsewhere.
+   *
+   * @param \Drupal\cas\Event\CasPostLoginEvent $event
+   *   The event firing after successful CAS login.
+   */
+  public function onPostLogin(CasPostLoginEvent $event): void {
+    try {
+      if ($destination = $this->getRedirectDestination($event)) {
+        $this->currentRequest->query->set('destination', $destination);
+        // Stop the propagation in order to prevent other downstream subscribers
+        // to set a different redirect destination.
+        $event->stopPropagation();
+      }
+    }
+    catch (\Throwable $exception) {
+      // We are acting on user supplied data in a cookie. Do not allow any
+      // exception to bubble up since this could prevent the user from logging
+      // in until they manually clear their cookies. Instead, delete the cookie
+      // and proceed as if no cookie was set.
+      $this->deleteCookie();
+    }
   }
 
   /**
@@ -78,48 +105,22 @@ abstract class RedirectedEuLoginAuthenticatedSubscriberBase implements EventSubs
   }
 
   /**
-   * Processes the 'on login' logic.
+   * Processes specific logic and, optionally, returns a redirect destination.
    *
-   * Note: Implementations should implement this method rather than extending
-   * the public self::onLoad() method, in order to implement their logic.
+   * Note: Implementations should extend this method rather than extending the
+   * public self::onPostLogin() method, in order to implement their logic.
    *
    * @param \Drupal\cas\Event\CasPostLoginEvent $event
    *   The event class instance.
    *
-   * @return \Drupal\Core\Url|null
-   *   The URL where to redirect the user after they were successfully
-   *   authenticated with EU Login service. NULL, is such a URL cannot be
-   *   determined.
+   * @return string|null
+   *   The destination where to redirect the user after they were successfully
+   *   authenticated with EU Login service. NULL, is such a destination cannot
+   *   be determined.
    */
-  abstract protected function getRedirectUrl(CasPostLoginEvent $event): ?Url;
-
-  /**
-   * Listens to the CasHelper::EVENT_POST_LOGIN event.
-   *
-   * If a valid cookie is set indicating that the user is logging in with the
-   * intention of returning to the origin page, prevent the user from being
-   * redirected elsewhere.
-   *
-   * @param \Drupal\cas\Event\CasPostLoginEvent $event
-   *   The event firing after successful CAS login.
-   */
-  public function onPostLogin(CasPostLoginEvent $event): void {
-    try {
-      if ($url = $this->getRedirectUrl($event)) {
-        $this->requestStack->getCurrentRequest()->query->set('destination', $url->toString());
-        // Even we act later, we still stop the propagation as a safe net in the
-        // unlikely scenario when a listener acts after this and tries to set a
-        // different redirect URL.
-        $event->stopPropagation();
-      }
-    }
-    catch (\Throwable $exception) {
-      // We are acting on user supplied data in a cookie. Do not allow any
-      // exception to bubble up since this could prevent the user from logging
-      // in until they manually clear their cookies. Instead, delete the cookie
-      // and proceed as if no cookie was set.
-      $this->deleteCookie();
-    }
+  protected function getRedirectDestination(CasPostLoginEvent $event): ?string {
+    // By default, read the destination from the current request.
+    return $this->currentRequest->query->get('destination');
   }
 
   /**
