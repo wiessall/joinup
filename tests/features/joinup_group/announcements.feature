@@ -231,3 +231,25 @@ Feature: Messaging group announcements
       | Collection1 Solution1 | Announcement2 C1S1 | Delivered | 25/05/2018 | Lory Facilitator |      |
       | Collection1           | Announcement1 C1   | Draft     | 05/11/2005 | Lory Facilitator | edit |
       | Collection1 Solution2 | Announcement1 C1S2 | Draft     | 30/04/1999 | Lory Facilitator | edit |
+
+  @group-clone
+  Scenario: Sending mass-mailing announcements.
+    Given I am logged in as a moderator
+    When I go to the announcements page of "Open Source Observatory (OSOR)" collection
+    And I click "Add announcement"
+    And I fill in "Subject" with "TEST: Mass-mailing announcement"
+    And I fill in "Body" with "This will gonna reach tens of thousands of Open Source Observatory (OSOR) group members."
+    And I press "Create"
+    Then I should see the success message "The announcement has been created as Draft. Review the announcement and, when is ready to be sent, use the 'Send' button."
+
+    When I press "Send"
+    Then I should see the success message "Your announcement has been sent for validation by Joinup moderators. Once approved, will reach the Open Source Observatory (OSOR) collection members."
+    When I click "edit" in the "TEST: Mass-mailing announcement" row
+    And I press "Approve"
+    Then I should see the success message "The announcement has been scheduled to be delivered to the Open Source Observatory (OSOR) collection members. Because the collection has a large amount of members the emails will be sent in several batches."
+
+    Given the delivery queue of "TEST: Mass-mailing announcement" announcement is processed
+    Then the "TEST: Mass-mailing announcement" announcement should have been delivered for each group member
+
+    # Explicitly delete announcements created via UI.
+    And I delete the "TEST: Mass-mailing announcement" announcement

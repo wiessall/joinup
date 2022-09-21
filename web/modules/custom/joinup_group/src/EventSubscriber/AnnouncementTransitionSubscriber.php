@@ -125,7 +125,7 @@ class AnnouncementTransitionSubscriber implements EventSubscriberInterface {
     $queue->createQueue();
     // Only pass the announcement to the queue. Let the worker do the heavy job.
     // @see \Drupal\joinup_group\Plugin\QueueWorker\SendGroupAnnouncementsQueueWorker::processItem()
-    $queue->createItem(['announcement' => $announcement->id()]);
+    $queue->createItem(['announcement' => (int) $announcement->id()]);
   }
 
 }

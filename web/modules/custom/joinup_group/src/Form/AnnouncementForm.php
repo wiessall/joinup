@@ -175,7 +175,12 @@ class AnnouncementForm extends FormBase {
       $status = $this->t("The announcement has been restored.");
     }
     elseif ($this->announcement->getWorkflowState() === 'delivered') {
-      $status = $this->t("The announcement has been delivered to the %group @type members.", $args);
+      if ($this->announcement->getGroup()->getMemberCount() > 50) {
+        $status = $this->t("The announcement has been scheduled to be delivered to the %group @type members. Because the @type has a large amount of members the emails will be sent in several batches.", $args);
+      }
+      else {
+        $status = $this->t("The announcement has been delivered to the %group @type members.", $args);
+      }
       $redirect = Url::fromRoute('view.announcements.group', [
         'rdf_entity' => $this->announcement->getGroupId(),
       ]);

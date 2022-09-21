@@ -9,9 +9,11 @@ use Behat\Mink\Exception\ElementNotFoundException;
 use Drupal\Core\Url;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\joinup\Traits\EntityTrait;
+use Drupal\joinup\Traits\MailCollectorTrait;
 use Drupal\joinup\Traits\TestingEntitiesTrait;
 use Drupal\joinup_group\Entity\AnnouncementInterface;
 use Drupal\joinup_group\Entity\GroupInterface;
+use Drupal\joinup_group\JoinupGroupHelper;
 use Drupal\og\OgGroupAudienceHelperInterface;
 use Drupal\og\OgMembershipInterface;
 use PHPUnit\Framework\Assert;
@@ -23,6 +25,7 @@ use PHPUnit\Framework\ExpectationFailedException;
 class JoinupGroupContext extends RawDrupalContext {
 
   use EntityTrait;
+  use MailCollectorTrait;
   use TestingEntitiesTrait;
 
   /**
@@ -312,6 +315,53 @@ class JoinupGroupContext extends RawDrupalContext {
   }
 
   /**
+   * Runs a delivery queue (send_group_announcements) for a given announcement.
+   *
+   * @param string $subject
+   *   The announcement subject.
+   *
+   * @Given the delivery queue of :subject announcement is processed
+   */
+  public function runDeliveryQueueForAnnouncement(string $subject): void {
+    $announcement_id = (int) $this->getAnnouncementBySubject($subject)->id();
+    /** @var \Drupal\Core\Queue\QueueWorkerManagerInterface $queue_worker_manager */
+    $queue_worker_manager = \Drupal::service('plugin.manager.queue_worker');
+    $queue = \Drupal::queue('send_group_announcements');
+    /** @var \Drupal\Core\Queue\QueueWorkerInterface $worker */
+    $worker = $queue_worker_manager->createInstance('send_group_announcements');
+    while ($item = $queue->claimItem()) {
+      if ($item->data['announcement'] === $announcement_id) {
+        $worker->processItem($item->data);
+        $queue->deleteItem($item);
+      }
+    }
+  }
+
+  /**
+   * Asserts that an announcement has been delivered to all group members.
+   *
+   * @param string $subject
+   *   The announcement subject.
+   *
+   * @throws \Drupal\joinup_group\Exception\MissingGroupException
+   *   When the announcement is missing the group.
+   *
+   * @Then the :subject announcement should have been delivered for each group member
+   */
+  public function assertDeliveredAnnouncements(string $subject): void {
+    $announcement = $this->getAnnouncementBySubject($subject);
+    $body = $announcement->getBody();
+    foreach ($this->getGroupMembersEmails($announcement->getGroup()) as $member_email) {
+      // This throws an exception if the email is not found.
+      $emails = $this->getEmailsBySubjectAndMail($announcement->getSubject(), $member_email);
+      $email = reset($emails);
+      Assert::assertSame($member_email, $email['to']);
+      Assert::assertSame($subject, $email['subject']);
+      Assert::assertStringContainsString($body, (string) $email['body']);
+    }
+  }
+
+  /**
    * Returns an announcement entity given its subject.
    *
    * @param string $subject
@@ -332,6 +382,29 @@ class JoinupGroupContext extends RawDrupalContext {
     /** @var \Drupal\joinup_group\Entity\AnnouncementInterface $announcement */
     $announcement = $storage->load(reset($mids));
     return $announcement;
+  }
+
+  /**
+   * Returns a list of emails belonging to the members of a given group.
+   *
+   * @param \Drupal\joinup_group\Entity\GroupInterface $group
+   *   The group entity.
+   *
+   * @return string[]
+   *   A list of groups members emails.
+   */
+  protected function getGroupMembersEmails(GroupInterface $group): array {
+    $query = \Drupal::database()->select('og_membership', 'og');
+    $query->join('users_field_data', 'u', 'og.uid = u.uid');
+    return $query->condition('og.entity_type', 'rdf_entity')
+      ->fields('u', ['mail'])
+      ->condition('og.entity_bundle', JoinupGroupHelper::GROUP_BUNDLES, 'IN')
+      ->condition('og.entity_id', $group->id())
+      ->condition('og.state', OgMembershipInterface::STATE_ACTIVE)
+      ->condition('u.status', 1)
+      ->orderBy('og.uid')
+      ->execute()
+      ->fetchCol();
   }
 
 }
