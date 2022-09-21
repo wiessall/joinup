@@ -128,7 +128,7 @@ class SendGroupAnnouncementsQueueWorker extends QueueWorkerBase implements Conta
         // Don't allow queue entries with tens of thousands of recipients.
         while ($recipients = $this->getGroupMembersEmails($announcement->getGroup(), $offset, $limit)) {
           $queue->createItem([
-            'announcement' => $announcement->id(),
+            'announcement' => (int) $announcement->id(),
             'recipients' => $recipients
           ]);
           $offset += $limit;
