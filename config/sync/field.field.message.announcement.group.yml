@@ -11,7 +11,7 @@ id: message.announcement.group
 field_name: group
 entity_type: message
 bundle: announcement
-label: 'Group'
+label: Group
 description: ''
 required: false
 translatable: false
