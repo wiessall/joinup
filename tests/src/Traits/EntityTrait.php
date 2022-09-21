@@ -57,9 +57,6 @@ trait EntityTrait {
 
     if ($result) {
       $result = reset($result);
-      // Make sure we get a fresh entity from the database, to avoid testing
-      // with stale data.
-      $storage->resetCache([$result]);
       return $storage->load($result);
     }
 
@@ -196,9 +193,6 @@ trait EntityTrait {
    *   Thrown when an entity with a non-existing storage is passed.
    */
   protected function forceSearchApiReindex(ContentEntityInterface $entity): void {
-    // Invalidate any static cache, so that all computed fields are calculated
-    // with updated values (e.g. the "collection" computed field of solutions).
-    \Drupal::entityTypeManager()->getStorage($entity->getEntityTypeId())->resetCache([$entity->id()]);
     /** @var \Drupal\search_api\Plugin\search_api\datasource\ContentEntityTrackingManager $content_tracking_manager */
     $content_tracking_manager = \Drupal::service('search_api.entity_datasource.tracking_manager');
     $content_tracking_manager->trackEntityChange($entity);
