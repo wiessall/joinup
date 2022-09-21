@@ -191,7 +191,7 @@ Feature: Messaging group announcements
       | Collection2 | Miau user        | facilitator |
 
     Given I am logged in as "Xela moderator"
-    When I visit "/announcements"
+    When I click "Announcements" in the toolbar
 
     Then the "Group" field should contain the "- Any -,Collection1 (Collection),Collection2 (Collection),Collection1 Solution1 (Solution),Collection1 Solution2 (Solution),Collection2 Solution1 (Solution)" options
     And the "State" field should contain the "- Any -,Draft,Sent,Delivered,Rejected" options
@@ -221,7 +221,7 @@ Feature: Messaging group announcements
     And I press "Approve"
     Then I should see the success message "The announcement has been delivered to the Collection1 Solution1 solution members."
 
-    When I visit "/announcements"
+    When I click "Announcements" in the toolbar
     Then the "announcement list" table should be:
       | Group                 | Subject            | State     | Created on | Author           | Edit |
       | Collection2 Solution1 | Announcement1 C2S1 | Delivered | 03/08/2022 | Miau user        |      |
