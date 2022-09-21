@@ -7,7 +7,6 @@ namespace Drupal\contact_information\EventSubscriber;
 use Drupal\Component\Datetime\TimeInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Http\RequestStack;
-use Drupal\Core\Url;
 use Drupal\cas\Event\CasPostLoginEvent;
 use Drupal\contact_information\Entity\ContactInformationInterface;
 use Drupal\joinup_group\EventSubscriber\RedirectedEuLoginAuthenticatedSubscriberBase;
@@ -47,9 +46,9 @@ class ContactInformationRedirectedEuLoginSubscriber extends RedirectedEuLoginAut
   /**
    * {@inheritdoc}
    */
-  protected function getRedirectUrl(CasPostLoginEvent $event): ?Url {
-    if ($contact_information = $this->getContactInformation()) {
-      return $contact_information->getRelatedGroup()->toUrl('about-page');
+  protected function getRedirectDestination(CasPostLoginEvent $event): ?string {
+    if (($contact_information = $this->getContactInformation()) && $contact_information->getRelatedGroup()) {
+      return parent::getRedirectDestination($event);
     }
     return NULL;
   }
@@ -69,7 +68,7 @@ class ContactInformationRedirectedEuLoginSubscriber extends RedirectedEuLoginAut
    *   in case no cookie is set, or the cookie contains invalid data.
    */
   protected function getContactInformation(): ?ContactInformationInterface {
-    if ($contact_information_id = $this->requestStack->getCurrentRequest()->cookies->get($this->getCookieName())) {
+    if ($contact_information_id = $this->currentRequest->cookies->get($this->getCookieName())) {
       /** @var \Drupal\Core\Entity\ContentEntityInterface $contact_information */
       $contact_information = $this->entityTypeManager->getStorage('rdf_entity')->load($contact_information_id);
       if ($contact_information instanceof ContactInformationInterface) {

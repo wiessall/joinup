@@ -8,7 +8,6 @@ use Drupal\Component\Datetime\TimeInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
-use Drupal\Core\Url;
 use Drupal\cas\Event\CasPostLoginEvent;
 use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\og\OgMembershipInterface;
@@ -65,7 +64,7 @@ class JoinGroupSubscriber extends RedirectedEuLoginAuthenticatedSubscriberBase {
   /**
    * {@inheritdoc}
    */
-  protected function getRedirectUrl(CasPostLoginEvent $event): ?Url {
+  protected function getRedirectDestination(CasPostLoginEvent $event): ?string {
     if ($group = $this->getGroup()) {
       // When a user is logged in through EU login and has previously expressed
       // their desire to join a group by setting a cookie, create their
@@ -82,7 +81,7 @@ class JoinGroupSubscriber extends RedirectedEuLoginAuthenticatedSubscriberBase {
         $membership = $group->createMembership((int) $event->getAccount()->id());
         $this->messenger->addStatus($group->getNewMembershipSuccessMessage($membership));
       }
-      return $group->toUrl();
+      return parent::getRedirectDestination($event);
     }
     return NULL;
   }
@@ -101,7 +100,7 @@ class JoinGroupSubscriber extends RedirectedEuLoginAuthenticatedSubscriberBase {
    *   set, or the cookie contains invalid data.
    */
   protected function getGroup(): ?GroupInterface {
-    if ($group_id = $this->requestStack->getCurrentRequest()->cookies->get($this->getCookieName())) {
+    if ($group_id = $this->currentRequest->cookies->get($this->getCookieName())) {
       $group = $this->entityTypeManager->getStorage('rdf_entity')->load($group_id);
       if ($group instanceof GroupInterface) {
         return $group;
