@@ -10,6 +10,7 @@ use Drupal\Core\Url;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\joinup\Traits\EntityTrait;
 use Drupal\joinup\Traits\TestingEntitiesTrait;
+use Drupal\joinup_group\Entity\AnnouncementInterface;
 use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\og\OgGroupAudienceHelperInterface;
 use Drupal\og\OgMembershipInterface;
@@ -244,19 +245,11 @@ class JoinupGroupContext extends RawDrupalContext {
    */
   public function visitAnnouncementEditForm(string $subject, string $group_label, string $group_type): void {
     assert(in_array($group_type, ['collection', 'solution']));
-    $storage = \Drupal::entityTypeManager()->getStorage('message');
-    $mids = $storage->getQuery()->accessCheck(FALSE)
-      ->condition('template', 'announcement')
-      ->condition('subject', $subject)
-      ->execute();
-    if (!$mids) {
-      throw new \InvalidArgumentException("There's no announcement with the '$subject' subject");
-    }
-    $mid = reset($mids);
+    $announcement = $this->getAnnouncementBySubject($subject);
     $group = $this->getEntityByLabel('rdf_entity', $group_label, $group_type);
     $url = Url::fromRoute('entity.rdf_entity.announcement_edit', [
       'rdf_entity' => $group->id(),
-      'announcement' => $mid,
+      'announcement' => $announcement->id(),
     ])->toString();
     $this->visitPath($url);
   }
@@ -270,15 +263,7 @@ class JoinupGroupContext extends RawDrupalContext {
    * @Then I delete the :subject announcement
    */
   public function deleteAnnouncement(string $subject): void {
-    $storage = \Drupal::entityTypeManager()->getStorage('message');
-    $mids = $storage->getQuery()->accessCheck(FALSE)
-      ->condition('template', 'announcement')
-      ->condition('subject', $subject)
-      ->execute();
-    if (!$mids) {
-      throw new \InvalidArgumentException("There's no announcement with the '$subject' subject");
-    }
-    $storage->load(reset($mids))->delete();
+    $this->getAnnouncementBySubject($subject)->delete();
   }
 
   /**
@@ -347,6 +332,29 @@ class JoinupGroupContext extends RawDrupalContext {
       $announcement->save();
       $this->entities['message'][$announcement->id()] = $announcement;
     }
+  }
+
+  /**
+   * Returns an announcement entity given its subject.
+   *
+   * @param string $subject
+   *   The announcement subject.
+   *
+   * @return \Drupal\joinup_group\Entity\AnnouncementInterface
+   *   The announcement entity.
+   */
+  protected function getAnnouncementBySubject(string $subject): AnnouncementInterface {
+    $storage = \Drupal::entityTypeManager()->getStorage('message');
+    $mids = $storage->getQuery()->accessCheck(FALSE)
+      ->condition('template', 'announcement')
+      ->condition('subject', $subject)
+      ->execute();
+    if (!$mids) {
+      throw new \InvalidArgumentException("There's no announcement with the '$subject' subject");
+    }
+    /** @var \Drupal\joinup_group\Entity\AnnouncementInterface $announcement */
+    $announcement = $storage->load(reset($mids));
+    return $announcement;
   }
 
 }
