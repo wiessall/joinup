@@ -37,7 +37,7 @@ abstract class RedirectedEuLoginAuthenticatedSubscriberBase implements EventSubs
   protected TimeInterface $time;
 
   /**
-   * The request stack.
+   * The current request.
    */
   protected Request $currentRequest;
 
