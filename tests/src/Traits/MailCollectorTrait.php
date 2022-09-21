@@ -6,6 +6,7 @@ namespace Drupal\joinup\Traits;
 
 use Drupal\Component\Render\MarkupInterface;
 use Drupal\user\UserInterface;
+use PHPUnit\Framework\ExpectationFailedException;
 
 /**
  * Contains utility methods.
@@ -88,13 +89,13 @@ trait MailCollectorTrait {
    * @return array
    *   An array of emails found.
    *
-   * @throws \Exception
-   *   Thrown if no emails are found or no user exists with the given data.
+   * @throws \PHPUnit\Framework\ExpectationFailedException
+   *   When no emails are found with the given subject and/or recipient.
    */
   protected function getEmailsBySubjectAndMail(string $subject, string $recipient_mail, bool $strict = TRUE): array {
     $mails = $this->getMails();
     if (empty($mails)) {
-      throw new \Exception('No mail was sent.');
+      throw new ExpectationFailedException('No mail was sent.');
     }
 
     $emails_found = [];
@@ -111,7 +112,7 @@ trait MailCollectorTrait {
     }
 
     if (empty($emails_found) && $strict) {
-      throw new \Exception("No emails found sent to {$recipient_mail} with subject '{$subject}'.");
+      throw new ExpectationFailedException("No emails found sent to {$recipient_mail} with subject '{$subject}'.");
     }
 
     return $emails_found;
