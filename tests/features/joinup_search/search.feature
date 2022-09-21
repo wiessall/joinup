@@ -32,6 +32,7 @@ Feature: Global search
     And I should see the "Foam" tile
     # Terms are sorted alphabetically
     And the "topic" checkbox facet should allow selecting the following values "Info (1), Statistics and Analysis (1), Social and Political (6), Demography (2), E-inclusion (4)"
+    Then I click show more from the "spatial coverage" facet
     And the "spatial coverage" checkbox facet should allow selecting the following values "Belgium (1), European Union (1), Luxembourg (5)"
 
     # Check that only one search field is available. In an earlier version of
@@ -52,6 +53,7 @@ Feature: Global search
     Then the "Demography" content checkbox item should be selected
     # The selected option moves to the last position by default.
     And the "topic" checkbox facet should allow selecting the following values "Info (1), Statistics and Analysis (1), Social and Political (6), Demography (2), E-inclusion (4)"
+    Then I click show more from the "spatial coverage" facet
     And the "spatial coverage" checkbox facet should allow selecting the following values "Belgium (1), European Union (1)"
 
     And I should see the "Molecular cooking collection" tile
@@ -62,6 +64,7 @@ Feature: Global search
     # Test the spatial coverage facet.
     When I check the "Belgium (1)" checkbox from the "spatial coverage" facet
     And the "Belgium" content checkbox item should be selected
+    Then I click show more from the "spatial coverage" facet
     And the "spatial coverage" checkbox facet should allow selecting the following values "Belgium (1), European Union (1)"
     And the "topic" checkbox facet should allow selecting the following values "Social and Political (1), Demography (1)"
     And I should see the "Molecular cooking collection" tile
@@ -80,6 +83,7 @@ Feature: Global search
     And I should see the following facet summary "Solutions, News"
     Then the "Content types" checkbox facet should allow selecting the following values "Collection (1), Solutions (2), News (5)"
     And the "topic" checkbox facet should allow selecting the following values "Info (1), Statistics and Analysis (1), Social and Political (5), Demography (1), E-inclusion (4)"
+    Then I click show more from the "spatial coverage" facet
     And the "spatial coverage" checkbox facet should allow selecting the following values "European Union (1), Luxembourg (5)"
     And I should not see the "Molecular cooking collection" tile
     And I should see the "El Celler de Can Roca" tile
@@ -117,7 +121,8 @@ Feature: Global search
 
     When I visit the search page
 
-    Then the "spatial coverage" checkbox facet should allow selecting the following values "Greece (1), Luxembourg (2)"
+    Then I click show more from the "spatial coverage" facet
+    And the "spatial coverage" checkbox facet should allow selecting the following values "Greece (1), Luxembourg (2)"
     When I check the "Luxembourg (2)" checkbox from the "spatial coverage" facet
     Then the "Luxembourg" content checkbox item should be selected
     And I should see the following search header in the correct order:
@@ -125,6 +130,7 @@ Feature: Global search
       | Sort by:           |
     And I should see the text "SEARCH RESULTS (2)"
     # The countries are still sorted alphabetically even though the Luxembourg value is selected and has more results.
+    Then I click show more from the "spatial coverage" facet
     And the "spatial coverage" checkbox facet should allow selecting the following values "Greece (1), Luxembourg (2)"
 
   Scenario: Content can be found with a full-text search.
