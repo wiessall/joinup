@@ -417,11 +417,9 @@ function contact_information_require_login(array $form, FormStateInterface $form
 
   // Redirect to EU Login, with a query argument instructing to redirect back
   // to the group page.
-  $url = (new Url('cas.login', [
-    'query' => [
-      'destination' => $group->toUrl('about-page')->setAbsolute()->toString(),
-    ],
-  ]))->setAbsolute()->toString();
+  $url = (new Url('cas.login'))->setOption('query', [
+    'destination' => $group->toUrl('about-page')->toString(),
+  ])->setAbsolute()->toString();
 
   return (new AjaxResponse())->addCommand(new RedirectCommand($url));
 }

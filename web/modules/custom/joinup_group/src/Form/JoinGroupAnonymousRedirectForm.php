@@ -119,10 +119,8 @@ class JoinGroupAnonymousRedirectForm extends FormBase {
 
     // Redirect to EU Login, with a query argument instructing to redirect back
     // to the group page.
-    $url = new Url('cas.login', [
-      'query' => [
-        'destination' => $this->group->toUrl()->setAbsolute()->toString(),
-      ],
+    $url = (new Url('cas.login'))->setOption('query', [
+      'destination' => $this->group->toUrl()->toString(),
     ]);
     $form_state->setRedirectUrl($url);
   }
