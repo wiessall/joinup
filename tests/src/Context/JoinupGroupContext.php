@@ -190,29 +190,6 @@ class JoinupGroupContext extends RawDrupalContext {
   }
 
   /**
-   * Clicks a link in a table.
-   *
-   * @param string $link
-   *   The text of the link.
-   * @param string $text
-   *   The text in row.
-   *
-   * @throws \Behat\Mink\Exception\ElementNotFoundException
-   *   The row is missing from table.
-   *
-   * @Given I click :link on the row containing :text
-   */
-  public function iClickOnOnTheRowContaining(string $link, string $text): void {
-    /** @var \Behat\Mink\Element\NodeElement $row */
-    $row = $this->getSession()->getPage()->find('css', sprintf('table tr:contains("%s")', $text));
-    if (!$row) {
-      throw new \Exception(sprintf('Cannot find any row on the page containing the text "%s"', $text));
-    }
-
-    $row->clickLink($link);
-  }
-
-  /**
    * Navigates to the announcements page of a given group.
    *
    * @param string $group_label
