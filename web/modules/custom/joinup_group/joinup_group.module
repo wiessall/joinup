@@ -856,3 +856,16 @@ function joinup_group_form_meta_entity_form_alter(array &$form, FormStateInterfa
     $form['landing_page']['widget']['#options']['_none'] = t('- Standard landing page -');
   }
 }
+
+/**
+ * Implements hook_ENTITY_TYPE_delete().
+ */
+function joinup_group_rdf_entity_delete(RdfInterface $group): void {
+  if ($group instanceof GroupInterface) {
+    // Cleanup the {joinup_group_node_access} table.
+    \Drupal::database()->delete('joinup_group_node_access')
+      ->condition('entity_type', $group->getEntityTypeId())
+      ->condition('entity_id', $group->id())
+      ->execute();
+  }
+}
