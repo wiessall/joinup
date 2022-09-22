@@ -120,7 +120,7 @@ class JoinupEventContext extends RawDrupalContext {
 
     if ($expected_count !== NULL && $expected_count != self::getWebtoolsGeocodingCacheCount()) {
       $feature = $scope->getFeature()->getFile();
-      throw new \Exception("$feature is doing live requests to the Webtools Geocoding service. Please make sure to commit all cached requests in tests/fixtures/webtools_geocoding_cache.");
+      throw new \Exception("$feature is doing live requests to the Webtools Geocoding service. Please make sure to commit all cached requests in tests/fixtures/webtools_geocoding/cache.");
     }
   }
 
