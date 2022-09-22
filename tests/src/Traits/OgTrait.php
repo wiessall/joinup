@@ -268,9 +268,6 @@ trait OgTrait {
    *   Thrown if a membership with the given criteria is not found.
    */
   protected function getMembershipByGroupAndUser(GroupInterface $group, AccountInterface $user, array $states = [OgMembershipInterface::STATE_ACTIVE]): OgMembershipInterface {
-    // Make sure we don't get false positives on previously cached results.
-    \Drupal::service('cache.static')->deleteAll();
-
     $membership = $group->getMembership((int) $user->id(), $states);
     if (empty($membership)) {
       throw new \Exception("Og membership for user {$user->getDisplayName()} in group {$group->label()} was not found.");
