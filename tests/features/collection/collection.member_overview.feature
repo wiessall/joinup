@@ -34,6 +34,7 @@ Feature: Collection membership overview
     And the following collections:
       | title           | description        | logo     | banner     | owner          | contact information | state     |
       | Jubilant Robots | Fresh oil harvest! | logo.png | banner.jpg | Ayodele Sommer | Nita Yang           | validated |
+      | Jubilant Rabits | Fresh oil harvest! | logo.png | banner.jpg | Ayodele Sommer | Nita Yang           | draft     |
     And the following collection user memberships:
       | collection      | user                  | roles       | state   |
       | Jubilant Robots | Ruby Valenta          | owner       |         |
@@ -52,10 +53,26 @@ Feature: Collection membership overview
       | Jubilant Robots | Law Atteberry         |             |         |
       | Jubilant Robots | Aniruddha Kováts      |             |         |
       | Jubilant Robots | Aali Dalton           |             |         |
+      | Jubilant Rabits | Ruby Valenta          | owner       |         |
+
+     # The membership overview should not be accessible for anonymous users for draft collection.
+    When I am not logged in
+    And I go to the members page of "Jubilant Rabits"
+    Then I should not see the link "Members" in the "Left sidebar"
+
+    # The membership overview should not be accessible for non members users for draft collection.
+    When I am logged in as "Janna Miller"
+    And I go to the members page of "Jubilant Rabits"
+    Then I should not see the link "Members" in the "Left sidebar"
+
+    # The membership overview should be accessible for owner users for draft collection.
+    When I am logged in as "Ruby Valenta"
+    And I go to the members page of "Jubilant Rabits"
+    Then I should see the link "Members" in the "Left sidebar"
 
     # The membership overview should be accessible for anonymous users.
     When I am not logged in
-    And I go to the "Jubilant Robots" collection
+    And I go to the members page of "Jubilant Robots"
     Then I should see the link "Members" in the "Left sidebar"
 
     # The first 12 active members should be shown, ordered by first name - last name.
