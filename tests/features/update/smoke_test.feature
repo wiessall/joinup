@@ -9,4 +9,4 @@ Feature: Minimal install clone testing.
 
     # Check that the Solr index has been restored.
     When I visit "/search?keys=joinup&f[0]=type:collection"
-    Then I should see "Joinup is a collaborative platform created by the European Commission"
+    Then I should see "The platform Joinup is the European Commission's one-stop shop for interoperable"
