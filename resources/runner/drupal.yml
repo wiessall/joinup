@@ -133,6 +133,7 @@ drupal:
         - Monolog
         - Dashboard agent
         - Varnish purge
+        - Reverse proxy
     header: |
       <?php
 
@@ -297,7 +298,7 @@ drupal:
         $settings['oe_newsroom_universe_keys'] = getenv('OE_NEWSROOM_UNIVERSE_KEYS');
       OpenEuropa Webtools Geocoding Cache: |
         $settings['cache']['bins']['geocoder'] = 'cache.backend.file_system';
-        $settings['filecache']['directory']['bins']['geocoder'] = '../tests/fixtures/webtools_geocoding_cache';
+        $settings['filecache']['directory']['bins']['geocoder'] = '../tests/fixtures/webtools_geocoding/cache';
         $settings['filecache']['strategy']['bins']['geocoder'] = 'persist';
       Development: |
         $settings['extension_discovery_scan_tests'] = TRUE;
@@ -328,3 +329,6 @@ drupal:
           }
           $config['dropsolid_purge.config']['loadbalancers'] = $load_balancers;
         }
+      Reverse proxy: |
+        $settings['reverse_proxy'] = (bool) getenv('DRUPAL_REVERSE_PROXY_ENABLE');
+        $settings['reverse_proxy_addresses'] = array_filter(explode(',', (string) getenv('DRUPAL_REVERSE_PROXY_ADDRESSES')));
