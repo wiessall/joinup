@@ -26,12 +26,7 @@ function ventuno_preprocess_page(array &$variables): void {
   if ($landing_page instanceof RdfInterface) {
     $variables['interoperable_europe_url'] = $landing_page->toUrl()->toString();
   }
-}
 
-/**
- * Implements template_preprocess_region().
- */
-function ventuno_preprocess_region__header(array &$variables): void {
   // Export the username to display in the header.
   $variables['user_name'] = \Drupal::currentUser()->getDisplayName();
 

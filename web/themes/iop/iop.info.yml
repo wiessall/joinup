@@ -19,6 +19,7 @@ libraries-override:
   ventuno/theme: false
 
 regions:
+  search_bar: 'Search bar'
   header: 'Header'
   header_bottom: 'Header bottom'
   featured: 'Featured'
