@@ -12,10 +12,10 @@
  @import "core/overrides/reboot"; // Hack to prevent build break
  @import "@openeuropa/bcl-bootstrap/scss/type";
  @import "@openeuropa/bcl-bootstrap/scss/transitions";
- // @import "@openeuropa/bcl-bootstrap/scss/utilities";
- @import "core/overrides/utilities"; // Only use required utilities
- @import "@openeuropa/bcl-theme-joinup/src/scss/base/utilities";
- @import "@openeuropa/bcl-bootstrap/scss/helpers";
+ @import "@openeuropa/bcl-bootstrap/scss/utilities";
  @import "@openeuropa/bcl-theme-default/src/scss/base/utilities";
+ @import "@openeuropa/bcl-theme-joinup/src/scss/base/utilities";
+ @import "core/overrides/utilities"; // Override with required utilities only
+ @import "@openeuropa/bcl-bootstrap/scss/helpers";
  @import "@openeuropa/bcl-bootstrap/scss/utilities/api";
  @import "components/link"; // Avoid purple underline for visited links
