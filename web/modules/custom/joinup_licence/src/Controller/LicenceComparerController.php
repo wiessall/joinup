@@ -63,7 +63,7 @@ class LicenceComparerController extends ControllerBase {
         '#theme' => 'table',
         '#rows' => $rows,
         '#attributes' => [
-          'data-drupal-selector' => 'licence-comparer',
+          'data-joinup-selector' => 'licence-comparer',
           'class' => ['licence-comparer'],
         ],
       ],

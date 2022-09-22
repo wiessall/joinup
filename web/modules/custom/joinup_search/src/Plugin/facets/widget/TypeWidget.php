@@ -78,7 +78,7 @@ class TypeWidget extends WidgetPluginBase {
     $build = [
       '#type' => 'container',
       '#attributes' => [
-        'data-drupal-facet-id' => $facet->id(),
+        'data-joinup-facet-id' => $facet->id(),
       ],
       '#cache' => [
         'contexts' => [
@@ -166,7 +166,7 @@ class TypeWidget extends WidgetPluginBase {
     }
 
     $items['#wrapper_attributes'] = ['class' => $classes];
-    $items['#attributes']['data-drupal-facet-item-id'] = $this->facet->getUrlAlias() . '-' . $result->getRawValue();
+    $items['#attributes']['data-joinup-facet-item-id'] = $this->facet->getUrlAlias() . '-' . $result->getRawValue();
 
     if (isset($result->asTab)) {
       $items['#attributes']['class'][] = 'tab';
