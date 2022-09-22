@@ -176,8 +176,8 @@ class LinksInlineWidget extends WidgetPluginBase implements ContainerFactoryPlug
       '#prefix_text' => $configuration['prefix_text'],
       '#suffix_text' => $configuration['suffix_text'],
       '#attributes' => [
-        'data-drupal-facet-id' => $facet->id(),
-        'data-drupal-facet-alias' => $facet->getUrlAlias(),
+        'data-joinup-facet-id' => $facet->id(),
+        'data-joinup-facet-alias' => $facet->getUrlAlias(),
       ],
       '#cache' => [
         'contexts' => Cache::mergeContexts($configuration['cache_contexts'], static::DEFAULT_CACHE_CONTEXTS),
