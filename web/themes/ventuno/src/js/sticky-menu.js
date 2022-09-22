@@ -16,17 +16,21 @@
           }
           if (navbar) {
             const navbarOffsetTop = navbar.getBoundingClientRect().top;
+            const placeholder = document.createElement("div");
+            placeholder.setAttribute("aria-hidden", true);
+            placeholder.style.height = `${navbar.offsetHeight}px`;
             // Run function on user scroll.
             window.addEventListener("scroll", () => {
               if (window.pageYOffset > navbarOffsetTop) {
                 navbar.classList.add("js-is--sticky");
-                // Since the navbar is removed of the document flow, add it's
-                // height as padding-top to the body so there is no visual
-                // shift in the content below.
-                document.body.style.paddingTop = `${navbar.offsetHeight}px`;
+                // Since the navbar is removed of the document flow, add a
+                // placeholder just before it to prevent a visual shift in the
+                // content below.
+                navbar.before(placeholder);
               } else {
                 navbar.classList.remove("js-is--sticky");
-                document.body.style.removeProperty("padding-top");
+                // Remove the placeholder since navbar is back in document flow
+                placeholder.remove();
               }
             });
           }
