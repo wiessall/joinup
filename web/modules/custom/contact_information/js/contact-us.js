@@ -23,6 +23,7 @@
       if (contactInfoElement) {
         const contactInfoLink = contactInfoElement.querySelector("a");
         if (contactInfoLink) {
+          cookies.remove("email_contact_info");
           contactInfoLink.click();
         }
       }
