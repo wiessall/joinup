@@ -268,9 +268,6 @@ trait OgTrait {
    *   Thrown if a membership with the given criteria is not found.
    */
   protected function getMembershipByGroupAndUser(GroupInterface $group, AccountInterface $user, array $states = [OgMembershipInterface::STATE_ACTIVE]): OgMembershipInterface {
-    // Make sure we don't get false positives on previously cached results.
-    self::resetCache();
-
     $membership = $group->getMembership((int) $user->id(), $states);
     if (empty($membership)) {
       throw new \Exception("Og membership for user {$user->getDisplayName()} in group {$group->label()} was not found.");
@@ -299,16 +296,6 @@ trait OgTrait {
     $group_name = $group->label();
     $message = "The $operation operation should " . ($expected_result ? '' : 'not ') . "be accessible for $user_name in $group_name";
     Assert::assertEquals($expected_result, $group->access($operation, $user), $message);
-  }
-
-  /**
-   * Clears the OG related caches.
-   */
-  protected function resetCache(): void {
-    \Drupal::entityTypeManager()->getStorage('og_membership')->resetCache();
-    Og::reset();
-    parent::clearStaticCaches();
-    \Drupal::service('cache.static')->deleteAll();
   }
 
 }
