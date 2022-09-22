@@ -30,7 +30,7 @@
    */
   Drupal.behaviors.sharedContent = {
     attach: function (context) {
-      var collection = $('[data-drupal-group-context]').data('drupal-group-context');
+      var collection = $('[data-joinup-group-context]').data('drupal-group-context');
 
       // If there is no global collection context, bail out.
       if (!collection) {
