@@ -12,8 +12,8 @@ dependencies:
     - iop
 id: iop_exposedformsearchpage_1
 theme: iop
-region: header
-weight: 0
+region: search_bar
+weight: -19
 provider: null
 plugin: 'views_exposed_filter_block:search-page_1'
 settings:
