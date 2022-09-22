@@ -105,7 +105,7 @@
             var target;
             for (var i = 0; i < length; i++) {
                 target = this.targets_[i];
-                this.addChip_(target.value, target.getAttribute('data-description'));
+                this.addChip_(target.value, target.getAttribute('data-joinup-description'));
             }
         }
     };

@@ -158,7 +158,7 @@ abstract class InviteFormBase extends FormBase {
       // Disable refocus of element after ajax callbacks.
       '#attributes' => [
         'class' => ['invite-form__add'],
-        'data-joinup-disable-refocus' => 1,
+        'data-disable-refocus' => 1,
       ],
       '#weight' => -99,
     ];
