@@ -56,6 +56,18 @@
   {% endif %}
   <div class="glide__outer">
     <div class="glide">
+      <div class="glide__arrows" data-glide-el="controls">
+        <button class="glide__arrow glide__arrow--left btn btn-lg rounded-circle" data-glide-dir="<" title="{{ 'Previous item'|t }}">
+          <svg class="icon--m">
+            <use xlink:href="{{ bcl_icon_path }}#chevron-left"></use>
+          </svg>
+        </button>
+        <button class="glide__arrow glide__arrow--right btn btn-lg rounded-circle" data-glide-dir=">" title="{{ 'Next item'|t }}">
+          <svg class="icon--m">
+            <use xlink:href="{{ bcl_icon_path }}#chevron-right"></use>
+          </svg>
+        </button>
+      </div>
       <div class="glide__track" data-glide-el="track">
         <div class="glide__slides">
           {{ content.content_listing }}
