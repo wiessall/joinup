@@ -100,18 +100,19 @@
   {{ title_suffix }}
 
   {% block content %}
-    {# @todo: cleaner way to check for 'logo'? #}
-    {% if logo["#items"] is not empty %}
-      <figure class="slide__figure">
-        {{ logo }}
-      </figure>
-    {% else %}
-      <figure class="slide__figure">
-        <svg class="slide__svg">
-          <use xlink:href="{{ bcl_icon_path }}#{{ icon }}"></use>
-        </svg>
-      </figure>
-    {% endif %}
+    <a class="slide__title-link" href="{{ url }}" rel="bookmark" title="{{ 'Read'|t }}: {{ label|render|striptags|trim }}">
+      {% if logo["#items"] is not empty %}
+        <figure class="slide__figure">
+          {{ logo }}
+        </figure>
+      {% else %}
+        <figure class="slide__figure">
+          <svg class="slide__svg">
+            <use xlink:href="{{ bcl_icon_path }}#{{ icon }}"></use>
+          </svg>
+        </figure>
+      {% endif %}
+    </a>
     {% if node.bundle in ['news', 'event'] %}
       <h1{{ title_attributes.addClass(title_classes) }}>
         <a class="slide__title-link" href="{{ url }}" rel="bookmark">{{ label }}</a>

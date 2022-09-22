@@ -57,7 +57,6 @@
   }
   &__arrows {
     position: absolute;
-    z-index: 1;
     display: flex;
     justify-content: space-between;
     width: 94%;
@@ -84,6 +83,7 @@
     }
   }
   &__arrow {
+    z-index: 1;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -118,7 +118,6 @@
         padding-top: 51.9%; // Trick to set element's ratio based on width
         position: relative;
         border-radius: $spacer; // 16px
-        pointer-events: none; // Disable dragging to avoid swipe/drag clashes
         border: 2px solid transparent;
         overflow: hidden;
         background: linear-gradient($gray-300, $gray-300) padding-box, $gradient border-box;
