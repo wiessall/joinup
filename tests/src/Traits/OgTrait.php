@@ -9,7 +9,6 @@ use Drupal\Core\Session\AccountInterface;
 use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\og\Entity\OgMembership;
 use Drupal\og\Entity\OgRole;
-use Drupal\og\Og;
 use Drupal\og\OgMembershipInterface;
 use Drupal\rdf_entity\RdfInterface;
 use PHPUnit\Framework\Assert;
