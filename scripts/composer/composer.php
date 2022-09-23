@@ -69,7 +69,7 @@ if (!getenv('COMPOSER_DISABLE_NODE_DEPENDENCIES')) {
 function execCmd(string $command) {
   global $exitCode;
   $result = exec($command);
-  if ($result === NULL) {
+  if ($result === FALSE) {
     exit($exitCode);
   }
   $exitCode++;
