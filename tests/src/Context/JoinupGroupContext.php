@@ -94,7 +94,7 @@ class JoinupGroupContext extends RawDrupalContext {
    */
   public function assertNodeOgMembership(string $group_label, string $group_type, string $content_title): void {
     $group = $this->getRdfEntityByLabel($group_label, $group_type);
-    $node = $this->getNodeByTitle($content_title);
+    $node = $this->getEntityByLabel('node', $content_title);
     if ($node->get(OgGroupAudienceHelperInterface::DEFAULT_FIELD)->target_id !== $group->id()) {
       throw new \Exception("The node '$content_title' is not associated with collection '{$group->label()}'.");
     }

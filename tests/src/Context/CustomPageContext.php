@@ -80,7 +80,7 @@ class CustomPageContext extends RawDrupalContext {
    */
   public function visitCustomPage(string $title): void {
     /** @var \Drupal\node\Entity\Node $node */
-    $node = $this->getNodeByTitle($title, 'custom_page');
+    $node = $this->getEntityByLabel('node', $title, 'custom_page');
     $this->visitPath($node->toUrl()->toString());
   }
 
@@ -248,7 +248,7 @@ class CustomPageContext extends RawDrupalContext {
    * @When the publication state of the :title custom page is changed to :state
    */
   public function updatePublicationState(string $title, string $state): void {
-    $node = $this->getNodeByTitle($title, 'custom_page');
+    $node = $this->getEntityByLabel('node', $title, 'custom_page');
     if ($state === 'published') {
       $node->setPublished();
     }
@@ -279,7 +279,7 @@ class CustomPageContext extends RawDrupalContext {
 
     // Retrieve the image entity from the custom page logo.
     /** @var \Drupal\custom_page\Entity\CustomPageInterface $node */
-    $node = $this->getNodeByTitle($title, 'custom_page');
+    $node = $this->getEntityByLabel('node', $title, 'custom_page');
     $image = $node->getLogoAsFile();
 
     // Generate the expected URL of the logo using the right image style.

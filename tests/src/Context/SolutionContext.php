@@ -287,7 +287,7 @@ class SolutionContext extends RawDrupalContext {
     foreach ($membership_table->getColumnsHash() as $values) {
       $group = $this->getRdfEntityByLabel($values['solution'], 'solution');
       /** @var \Drupal\node\NodeInterface $content */
-      $content = $this->getNodeByTitle($values['content'], $bundle);
+      $content = $this->getEntityByLabel('node', $values['content'], $bundle);
       $content->get(OgGroupAudienceHelperInterface::DEFAULT_FIELD)->set(0, $group->id());
       $content->save();
     }

@@ -33,7 +33,7 @@ class JoinupDocumentContext extends RawDrupalContext {
    */
   public function visitDocument($title) {
     /** @var \Drupal\node\Entity\Node $node */
-    $node = $this->getNodeByTitle($title, 'document');
+    $node = $this->getEntityByLabel('node', $title, 'document');
     $this->visitPath($node->toUrl()->toString());
   }
 
@@ -110,7 +110,7 @@ class JoinupDocumentContext extends RawDrupalContext {
 
     $file_url_service = \Drupal::service('file_url.handler');
     /** @var \Drupal\node\Entity\Node $node */
-    $node = $this->getNodeByTitle($title, 'document');
+    $node = $this->getEntityByLabel('node', $title, 'document');
     /** @var \Drupal\file\FileInterface $file */
     $file = $file_url_service::urlToFile($node->get('field_file')->first()->target_id);
 
