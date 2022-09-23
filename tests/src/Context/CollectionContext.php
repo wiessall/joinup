@@ -14,7 +14,6 @@ use Drupal\joinup\Traits\EntityReferenceTrait;
 use Drupal\joinup\Traits\EntityTrait;
 use Drupal\joinup\Traits\FileTrait;
 use Drupal\joinup\Traits\FormTrait;
-use Drupal\joinup\Traits\NodeTrait;
 use Drupal\joinup\Traits\OgTrait;
 use Drupal\joinup\Traits\RdfEntityTrait;
 use Drupal\joinup\Traits\SearchTrait;
@@ -39,7 +38,6 @@ class CollectionContext extends RawDrupalContext {
   use EntityTrait;
   use FileTrait;
   use FormTrait;
-  use NodeTrait;
   use OgMenuTrait;
   use OgTrait;
   use RdfEntityTrait;

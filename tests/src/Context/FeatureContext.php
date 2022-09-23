@@ -1650,7 +1650,7 @@ class FeatureContext extends RawDrupalContext implements SnippetAcceptingContext
       // Sample tests needing this:
       // - solutions_page.feature
       // - collection/homepage.feature
-      // - collection/last_update_time.feature
+      // - collection/last_update_time.feature.
       parent::clearStaticCaches();
     }
 
@@ -1658,11 +1658,11 @@ class FeatureContext extends RawDrupalContext implements SnippetAcceptingContext
     // - unsubscribe.feature
     // - homepage.feature
     // - my_subscriptions.feature
-    // - legal_notice.feature
+    // - legal_notice.feature.
     \Drupal::getContainer()->get('entity.memory_cache')->invalidateAll();
 
     // Sample tests needing this:
-    // - collection.subscribe-on-join.feature
+    // - collection.subscribe-on-join.feature.
     \Drupal::getContainer()->get('cache.static')->invalidateAll();
   }
 

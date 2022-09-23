@@ -5,7 +5,7 @@ declare(strict_types = 1);
 namespace Drupal\joinup\Context;
 
 use Drupal\DrupalExtension\Context\RawDrupalContext;
-use Drupal\joinup\Traits\NodeTrait;
+use Drupal\joinup\Traits\EntityTrait;
 use Drupal\joinup_subscription\JoinupDiscussionSubscriptionInterface;
 use PHPUnit\Framework\Assert;
 
@@ -14,7 +14,7 @@ use PHPUnit\Framework\Assert;
  */
 class JoinupDiscussionContext extends RawDrupalContext {
 
-  use NodeTrait;
+  use EntityTrait;
 
   /**
    * Navigates to the canonical page display of a discussion.

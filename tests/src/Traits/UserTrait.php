@@ -4,7 +4,6 @@ declare(strict_types = 1);
 
 namespace Drupal\joinup\Traits;
 
-use Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException;
 use Drupal\user\UserInterface;
 
 /**

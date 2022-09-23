@@ -8,7 +8,6 @@ use Behat\Gherkin\Node\TableNode;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\DrupalExtension\Hook\Scope\BeforeNodeCreateScope;
 use Drupal\joinup\Traits\EntityTrait;
-use Drupal\joinup\Traits\NodeTrait;
 use PHPUnit\Framework\Assert;
 
 /**
@@ -17,7 +16,6 @@ use PHPUnit\Framework\Assert;
 class JoinupNewsContext extends RawDrupalContext {
 
   use EntityTrait;
-  use NodeTrait;
 
   /**
    * Navigates to the canonical page display of a news page.
