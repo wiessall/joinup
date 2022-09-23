@@ -25,7 +25,6 @@ use Drupal\joinup\Traits\FormTrait;
 use Drupal\joinup\Traits\JavascriptTrait;
 use Drupal\joinup\Traits\KeyboardInteractionTrait;
 use Drupal\joinup\Traits\MaterialDesignTrait;
-use Drupal\joinup\Traits\NodeTrait;
 use Drupal\joinup\Traits\OgTrait;
 use Drupal\joinup\Traits\RdfEntityTrait;
 use Drupal\joinup\Traits\TabledragTrait;
@@ -62,7 +61,6 @@ class JoinupContext extends RawDrupalContext {
   use JavascriptTrait;
   use KeyboardInteractionTrait;
   use MaterialDesignTrait;
-  use NodeTrait;
   use OgTrait;
   use RdfEntityTrait;
   use StringTranslationTrait;

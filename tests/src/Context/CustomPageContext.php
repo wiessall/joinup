@@ -4,17 +4,14 @@ declare(strict_types = 1);
 
 namespace Drupal\joinup\Context;
 
-use Drupal\Core\Session\AnonymousUserSession;
-use Drupal\Core\Url;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\DrupalExtension\Hook\Scope\BeforeNodeCreateScope;
+use Drupal\joinup\Traits\EntityTrait;
 use Drupal\joinup\Traits\FileTrait;
-use Drupal\joinup\Traits\NodeTrait;
 use Drupal\joinup\Traits\OgTrait;
 use Drupal\joinup\Traits\RdfEntityTrait;
 use Drupal\joinup\Traits\TraversingTrait;
 use Drupal\joinup\Traits\UtilityTrait;
-use Drupal\og\OgGroupAudienceHelperInterface;
 use Drupal\og_menu\Tests\Traits\OgMenuTrait;
 use PHPUnit\Framework\Assert;
 
@@ -24,7 +21,7 @@ use PHPUnit\Framework\Assert;
 class CustomPageContext extends RawDrupalContext {
 
   use FileTrait;
-  use NodeTrait;
+  use EntityTrait;
   use OgMenuTrait;
   use OgTrait;
   use RdfEntityTrait;

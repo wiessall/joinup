@@ -8,7 +8,6 @@ use Behat\Mink\Exception\ElementNotFoundException;
 use Drupal\Core\Url;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\joinup\Traits\EntityTrait;
-use Drupal\joinup\Traits\NodeTrait;
 use Drupal\joinup\Traits\RdfEntityTrait;
 use Drupal\og\OgGroupAudienceHelperInterface;
 use Drupal\og\OgMembershipInterface;
@@ -21,7 +20,6 @@ use PHPUnit\Framework\ExpectationFailedException;
 class JoinupGroupContext extends RawDrupalContext {
 
   use EntityTrait;
-  use NodeTrait;
   use RdfEntityTrait;
 
   /**

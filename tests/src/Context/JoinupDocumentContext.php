@@ -6,8 +6,8 @@ namespace Drupal\joinup\Context;
 
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\DrupalExtension\Hook\Scope\BeforeNodeCreateScope;
+use Drupal\joinup\Traits\EntityTrait;
 use Drupal\joinup\Traits\FileTrait;
-use Drupal\joinup\Traits\NodeTrait;
 use Drupal\joinup\Traits\TraversingTrait;
 use PHPUnit\Framework\Assert;
 
@@ -17,7 +17,7 @@ use PHPUnit\Framework\Assert;
 class JoinupDocumentContext extends RawDrupalContext {
 
   use FileTrait;
-  use NodeTrait;
+  use EntityTrait;
   use TraversingTrait;
 
   /**

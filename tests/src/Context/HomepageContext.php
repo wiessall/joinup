@@ -8,7 +8,6 @@ use Behat\Gherkin\Node\TableNode;
 use Behat\Mink\Element\NodeElement;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\joinup\Traits\EntityTrait;
-use Drupal\joinup\Traits\NodeTrait;
 use PHPUnit\Framework\Assert;
 
 /**
@@ -17,7 +16,6 @@ use PHPUnit\Framework\Assert;
 class HomepageContext extends RawDrupalContext {
 
   use EntityTrait;
-  use NodeTrait;
 
   /**
    * Checks the contents of the "Explore" block.
