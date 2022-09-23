@@ -115,7 +115,7 @@
       transition: transform .1s ease;
       &__figure {
         width: 100%;
-        padding-top: 51.9%; // Trick to set element's ratio based on width
+        padding-top: 51.5%; // Trick to set element's ratio based on width
         position: relative;
         border-radius: $spacer; // 16px
         border: 2px solid transparent;
