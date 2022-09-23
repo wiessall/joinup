@@ -42,7 +42,7 @@
     a {
       color: $primary;
       &:hover:visited {
-        text-decoration-color: $white!important; // Prevent purple underline
+        text-decoration-color: $primary!important; // Prevent purple underline
       }
     }
   }
@@ -135,7 +135,7 @@
       &__title {
         opacity: 0;
         a:hover:visited {
-          text-decoration-color: $white!important; // Prevent purple underline
+          text-decoration-color: $primary!important; // Prevent purple underline
         }
       }
       &__title-link {
