@@ -528,7 +528,7 @@ class JoinupContext extends RawDrupalContext {
    */
   public function visitNodePage($type, $title) {
     /** @var \Drupal\node\Entity\Node $node */
-    $node = $this->getNodeByTitle($title, $type);
+    $node = $this->getEntityByLabel('node', $title, $type);
     $this->visitPath($node->toUrl()->toString());
   }
 
@@ -544,7 +544,7 @@ class JoinupContext extends RawDrupalContext {
    */
   public function visitRevisionsForm(string $title): void {
     /** @var \Drupal\node\NodeInterface $node */
-    $node = $this->getNodeByTitle($title);
+    $node = $this->getEntityByLabel('node', $title);
     $this->visitPath($node->toUrl('version-history')->toString());
   }
 
@@ -573,7 +573,7 @@ class JoinupContext extends RawDrupalContext {
    */
   public function assertNodePublished($bundle, $title) {
     /** @var \Drupal\node\NodeInterface $node */
-    $node = $this->getNodeByTitle($title, $bundle);
+    $node = $this->getEntityByLabel('node', $title, $bundle);
     if (!$node->isPublished()) {
       throw new \Exception("$title content should be published but it is not.");
     }
@@ -594,7 +594,7 @@ class JoinupContext extends RawDrupalContext {
    */
   public function assertNodeNotPublished($bundle, $title) {
     /** @var \Drupal\node\NodeInterface $node */
-    $node = $this->getNodeByTitle($title, $bundle);
+    $node = $this->getEntityByLabel('node', $title, $bundle);
     if ($node->isPublished()) {
       throw new \Exception("$title content should not be published but it is.");
     }
@@ -614,7 +614,7 @@ class JoinupContext extends RawDrupalContext {
    */
   public function assertNodeRevisionCount($bundle, $title, $count) {
     /** @var \Drupal\node\NodeInterface $node */
-    $node = $this->getNodeByTitle($title, $bundle);
+    $node = $this->getEntityByLabel('node', $title, $bundle);
 
     $revision_count = \Drupal::entityTypeManager()->getStorage('node')->getQuery()
       ->allRevisions()
@@ -1087,7 +1087,7 @@ class JoinupContext extends RawDrupalContext {
    */
   public function assertNodeWorkflowState(string $title, string $type, string $state): void {
     /** @var \Drupal\joinup_workflow\EntityWorkflowStateInterface $node */
-    $node = $this->getNodeByTitle($title, $type);
+    $node = $this->getEntityByLabel('node', $title, $type);
     $actual = $node->getWorkflowState();
     Assert::assertEquals($state, $actual, "The $title $type content has the expected state '$state' (actual: '$actual')");
   }
@@ -1853,7 +1853,7 @@ class JoinupContext extends RawDrupalContext {
    */
   public function createNodeRevisions($bundle, TableNode $updates_table) {
     foreach ($updates_table->getColumnsHash() as $data) {
-      $node = $this->getNodeByTitle($data['current title'], $bundle);
+      $node = $this->getEntityByLabel('node', $data['current title'], $bundle);
       unset($data['current title']);
 
       // Crete a fake node object to be able to reuse hooks that help with
@@ -1909,7 +1909,7 @@ class JoinupContext extends RawDrupalContext {
    */
   public function assertFieldContainsLinkToPage($field, $title) {
     /** @var \Drupal\node\NodeInterface $node */
-    $node = $this->getNodeByTitle($title);
+    $node = $this->getEntityByLabel('node', $title);
     $uri = $node->toUrl()->toString();
     $this->assertSession()->fieldValueEquals($field, $uri);
   }

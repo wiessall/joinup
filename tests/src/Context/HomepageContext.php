@@ -56,7 +56,7 @@ class HomepageContext extends RawDrupalContext {
         $read_more_url = $this->getEntityUri($entity, 'about-page');
       }
       else {
-        $entity = self::getNodeByTitle($expected_data['title']);
+        $entity = $this->getEntityByLabel('node', $expected_data['title']);
         $read_more_url = $this->getEntityUri($entity, 'canonical');
       }
 

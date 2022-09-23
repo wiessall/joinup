@@ -38,7 +38,7 @@ class JoinupEventContext extends RawDrupalContext {
    */
   public function visitEvent(string $title): void {
     /** @var \Drupal\node\Entity\Node $node */
-    $node = $this->getNodeByTitle($title, 'event');
+    $node = $this->getEntityByLabel('node', $title, 'event');
     $this->visitPath($node->toUrl()->toString());
   }
 

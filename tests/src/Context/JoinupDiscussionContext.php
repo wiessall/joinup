@@ -29,7 +29,7 @@ class JoinupDiscussionContext extends RawDrupalContext {
    */
   public function visitDiscussion(string $title): void {
     /** @var \Drupal\node\Entity\Node $node */
-    $node = $this->getNodeByTitle($title, 'discussion');
+    $node = $this->getEntityByLabel('node', $title, 'discussion');
     $this->visitPath($node->toUrl()->toString());
   }
 
@@ -44,7 +44,7 @@ class JoinupDiscussionContext extends RawDrupalContext {
    * @Then the :title discussion should have :count subscriber(s)
    */
   public function assertSubscribers(string $title, int $count): void {
-    $discussion = $this->getNodeByTitle($title, 'discussion');
+    $discussion = $this->getEntityByLabel('node', $title, 'discussion');
     $subscribers = $this->getDiscussionSubscriptionService()->getSubscribers($discussion, 'subscribe_discussions');
     Assert::assertEquals($count, count($subscribers));
   }
