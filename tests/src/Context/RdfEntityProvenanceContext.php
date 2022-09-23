@@ -120,18 +120,9 @@ class RdfEntityProvenanceContext extends RawDrupalContext {
    *   If $referral was passed as entity label and that entity doesn't exist.
    */
   protected function getActivityForReferral(string $referral): ?RdfInterface {
-    $id = !UrlHelper::isValid($referral, TRUE) ? $this->getRdfEntityByLabel($referral)->id() : $referral;
-    /** @var \Drupal\rdf_entity_provenance\ProvenanceHelperInterface $helper */
-    $helper = \Drupal::service('rdf_entity_provenance.provenance_helper');
-    $activity = $helper->loadProvenanceActivity($id);
-    if (empty($activity)) {
-      return NULL;
-    }
-
-    // Deal with the Behat static cache invalidation issue.
-    /** @var \Drupal\rdf_entity\RdfInterface $return */
-    $return = \Drupal::entityTypeManager()->getStorage('rdf_entity')->loadUnchanged($activity->id());
-    return $return;
+    $id = $this->getRdfEntityByLabel($referral)->id();
+    $helper = \Drupal::getContainer()->get('rdf_entity_provenance.provenance_helper');
+    return $helper->loadProvenanceActivity($id);
   }
 
   /**
