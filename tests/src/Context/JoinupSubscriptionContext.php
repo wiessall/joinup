@@ -439,10 +439,6 @@ class JoinupSubscriptionContext extends RawDrupalContext {
    * This is based on \MessageDigestSubContext::assertDigestContains() and
    * adapted for the group content subscription digest.
    *
-   * If a scenario shows content in digests which has been created by Behat but
-   * subsequently been manipulated in the browser by a logged in user, then tag
-   * the scenario with `@clearEntityMemoryCache`.
-   *
    * Example table:
    * @codingStandardsIgnoreStart
    *   | The content titled "My content" has been deleted       |
