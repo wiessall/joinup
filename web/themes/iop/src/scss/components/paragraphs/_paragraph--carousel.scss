@@ -203,6 +203,9 @@
         }
         &__body {
           opacity: 1;
+          .paragraph {
+            color: $gray-700;
+          }
         }
       }
     }
