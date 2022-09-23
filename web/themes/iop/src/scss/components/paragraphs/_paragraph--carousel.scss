@@ -115,20 +115,13 @@
     .slide {
       transition: transform .1s ease;
       &__figure {
-        width: 100%;
-        padding-top: 51.5%; // Trick to set element's ratio based on width
-        position: relative;
+        aspect-ratio: 1.91 / 1;
         border-radius: $spacer; // 16px
         border: 2px solid transparent;
         overflow: hidden;
         background: linear-gradient($gray-300, $gray-300) padding-box, $gradient border-box;
         @include media-breakpoint-up(md) {
           margin-bottom: $spacer * 2; // 32px
-        }
-        img {
-          position: absolute;
-          top: 0;
-          left: 0;
         }
       }
       &__svg {
