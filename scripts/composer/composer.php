@@ -1,67 +1,77 @@
 #!/usr/bin/env php
 <?php
 
-use Gitonomy\Git\Repository;
-
+// This script runs only from console.
 if (PHP_SAPI !== 'cli') {
   return;
 }
 
-if (count($argv) > 2) {
-  print "The command accepts only one parameter.\n";
-  exit(1);
-}
+$projectRoot = realpath(__DIR__ . '/../..');
+require_once "$projectRoot/vendor/autoload.php";
+$exitCode = 1;
 
-if (isset($argv[1]) && !in_array($argv[1], ['install', 'update'], TRUE)) {
-  print "Only 'install' and 'update' are valid options for command argument.\n";
-  exit(1);
+if ($argc !== 2 || ($argc === 2 && !in_array($argv[1], ['install', 'update'], TRUE))) {
+  print "The command should be used with strictly one parameter: 'install' and 'update'.\n";
+  exit($exitCode++);
 }
-
-$project_root = realpath(__DIR__ . '/../..');
-require_once "$project_root/vendor/autoload.php";
 
 // Mute GrumPHP.
-if (file_exists("$project_root/vendor/bin/grumphp") && (system("$project_root/vendor/bin/grumphp git:deinit") === FALSE)) {
-  exit(2);
+if (file_exists("$projectRoot/vendor/bin/grumphp")) {
+  print execCmd("$projectRoot/vendor/bin/grumphp git:deinit") . "\n";
 }
 
 // Store the Joinup version.
-print "Getting the Joinup version...\n";
-$git = new Repository($project_root);
-if (trim((string) $git->run('rev-parse', ['--is-shallow-repository'])) !== 'false') {
-  $git->run('fetch', ['--unshallow']);
-  if ($version = trim($git->run('describe', ['--tags']))) {
-    file_put_contents("$project_root/web/VERSION.txt", $version);
-    print "Detected Joinup version $version\n";
-  }
-  else {
-    print "Cannot detect Joinup version!\n";
-    exit(3);
-  }
+print "Detecting the Joinup version... ";
+if (execCmd('git rev-parse --is-shallow-repository') !== 'false') {
+  // It's a shallow repo.
+  execCmd('git fetch --unshallow');
 }
+$versioFile = "$projectRoot/web/VERSION.txt";
+execCmd("git describe --tags 2>/dev/null | tr -d '\n' > $versioFile");
+$joinupVersion = trim(file_get_contents($versioFile));
+if (!$joinupVersion) {
+  print "cannot detect Joinup version!\n";
+  exit($exitCode++);
+}
+print "detected Joinup version $joinupVersion\n";
 
 // Build the codebase.
-if (file_exists("$project_root/vendor/bin/run") && (system("$project_root/vendor/bin/run toolkit:build-dev") === FALSE)) {
-  exit(4);
+if (file_exists("$projectRoot/vendor/bin/run")) {
+  execCmd("$projectRoot/vendor/bin/run toolkit:build-dev");
 }
 
 if (!getenv('COMPOSER_DISABLE_NODE_DEPENDENCIES')) {
   // Node/NPM version.
-  print 'Node ' . trim(shell_exec("node --version")) . "\n";
-  print 'NPM ' . trim(shell_exec("npm --version")) . "\n";
+  print 'Node ' . execCmd("node --version") . "\n";
+  print 'NPM ' . execCmd("npm --version") . "\n";
 
-  // Bring theme dependencies.
-  $command = "cd $project_root/web/themes/ventuno && npm ci";
+  // Theme dependencies.
+  $command = "cd $projectRoot/web/themes/ventuno && npm ci";
   print "Running: $command\n";
-  if (system($command) === FALSE) {
-    exit(5);
-  }
+  execCmd($command);
 
   // Project dependencies.
   $command = $argv[1] === 'install' ? 'npm ci' : 'npm install';
-  $command = "cd $project_root && $command";
+  $command = "cd $projectRoot && $command";
   print "Running: $command\n";
-  if (system($command) === FALSE) {
-    exit(5);
+  execCmd($command);
+}
+
+/**
+ * Executes a shell command and exits the script on failure.
+ *
+ * @param string $command
+ *   The command to be executed.
+ *
+ * @return mixed
+ *   The last line of the command execution output.
+ */
+function execCmd(string $command) {
+  global $exitCode;
+  $result = exec($command);
+  if ($result === NULL) {
+    exit($exitCode);
   }
+  $exitCode++;
+  return $result;
 }
