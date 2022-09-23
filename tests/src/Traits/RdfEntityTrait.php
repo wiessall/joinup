@@ -48,56 +48,6 @@ trait RdfEntityTrait {
   }
 
   /**
-   * Returns the RDF entity with the given name and type.
-   *
-   * If multiple RDF entities have the same name the first one will be returned.
-   *
-   * This method resets the static cache before loading the entity and should be
-   * used when an entity is altered through e.g. a hook update.
-   *
-   * @param string $title
-   *   The RDF entity title.
-   * @param string|null $type
-   *   Optional RDF entity type.
-   *
-   * @return \Drupal\rdf_entity\RdfInterface
-   *   The RDF entity.
-   *
-   * @throws \InvalidArgumentException
-   *   Thrown when an RDF entity with the given name and type does not exist.
-   */
-  protected function getRdfEntityByLabelUnchanged(string $title, ?string $type = NULL): RdfInterface {
-    $query = \Drupal::entityQuery('rdf_entity')
-      ->condition('label', $title)
-      ->range(0, 1);
-    if ($type) {
-      $query->condition('rid', $type);
-    }
-    $result = $query->execute();
-
-    if (empty($result)) {
-      $type = $type ?: 'RDF';
-      throw new \InvalidArgumentException("The $type entity with the name '$title' was not found.");
-    }
-
-    try {
-      $storage = \Drupal::entityTypeManager()->getStorage('rdf_entity');
-    }
-    catch (InvalidPluginDefinitionException $e) {
-      // This method is not intended to be used in systems that do not have the
-      // RDF Entity module enabled. This means we can reasonably assume that the
-      // entity storage definition is valid. If it is not this is due to highly
-      // exceptional circumstances occuring at runtime.
-      throw new \RuntimeException('The RDF entity storage has an invalid definition.', 0, $e);
-    }
-
-    /** @var \Drupal\rdf_entity\RdfInterface $entity */
-    $entity = $storage->loadUnchanged(reset($result));
-
-    return $entity;
-  }
-
-  /**
    * Checks the number of available RDF entities filtered by bundle.
    *
    * @param int $number

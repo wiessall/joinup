@@ -135,7 +135,7 @@ class JoinupGroupContext extends RawDrupalContext {
    */
   public function assertAnonGroupJoinTrackingCookiePresent(string $label): void {
     $cookie = $this->getSession()->getCookie('join_group');
-    $entity = $this->getRdfEntityByLabelUnchanged($label);
+    $entity = $this->getEntityByLabel('rdf_entity', $label);
     Assert::assertEquals($entity->id(), $cookie, "A cookie was expected to track that an anonymous user wants to join the '$label' group.");
   }
 
@@ -180,7 +180,7 @@ class JoinupGroupContext extends RawDrupalContext {
     }
 
     /** @var \Drupal\joinup_group\Entity\GroupInterface $entity */
-    $entity = $this->getRdfEntityByLabelUnchanged($label, $type);
+    $entity = $this->getEntityByLabel('rdf_entity', $label, $type);
     $actual = $entity->getMemberCount([$membership_state]);
 
     if ($actual != $number) {
