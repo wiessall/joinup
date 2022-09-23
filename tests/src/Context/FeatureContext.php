@@ -1646,7 +1646,16 @@ class FeatureContext extends RawDrupalContext implements SnippetAcceptingContext
    * @AfterStep
    */
   public function clearCacheTagsStaticCache(AfterStepScope $event): void {
-    \Drupal::getContainer()->get('cache.static')->invalidateAll();
+    // Sample tests needing this:
+    // - unsubscribe.feature.
+    // - homepage.feature.
+    // - my_subscriptions.feature.
+    // - legal_notice.feature.
+    \Drupal::getContainer()->get('entity.memory_cache')->invalidateAll();
+
+    // Sample tests needing this:
+    // - collection.subscribe-on-join.feature.
+    \Drupal::service('cache.static')->deleteAll();
   }
 
   /**
