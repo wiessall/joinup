@@ -120,9 +120,7 @@
     {% elseif node.bundle is same as 'custom_page' %}
       <div class="slide__body">
         <div class="slide__text">
-          {# @todo: Preprocess the text to be rendered here instead of all these filters #}
-          {% set text = content.field_paragraphs_body|render|striptags|trim %}
-          {{ (text|length > 450 ? text|slice(0, 451)|split(' ')|slice(0, -1)|join(' ') ~ '&hellip;' : text)|raw }}
+          {{ content.field_paragraphs_body|render|striptags|trim }}
         </div>
         {# Slide's Call To Action will be enabled later #}
         {# <div>

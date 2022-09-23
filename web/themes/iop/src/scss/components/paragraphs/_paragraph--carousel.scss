@@ -105,6 +105,7 @@
     }
   }
   &__slides {
+    align-items: stretch;
     // We need space for the active slide to be scaled up and not cut
     @include media-breakpoint-up(md) {
       padding: $spacer * 2 0!important; // 32px 0
@@ -139,8 +140,7 @@
         top: 20%;
       }
       &__title {
-        display: none;
-        height: $spacer * 2.5; // Hold space to avoid vertical shift when sliding between slides with different height
+        opacity: 0;
         a:hover:visited {
           text-decoration-color: $white!important; // Prevent purple underline
         }
@@ -150,12 +150,7 @@
         font-weight: $font-weight-normal;
       }
       &__body {
-        display: none;
-        // Hold space to avoid vertical shift when sliding between slides with different height
-        height: calc(13 * 1em * 1.5); // 13 lines * font size * line-height
-        @include media-breakpoint-up(sm) {
-          height: calc(7 * 1em * 1.5); // 7 lines * font size * line-height
-        }
+        opacity: 0;
         @include media-breakpoint-up(md) {
           // Properties below ensure the text width matches the scaled-up active image
           margin-right: $spacer * -1.25; // -20px
@@ -176,14 +171,6 @@
       }
       &__text {
         margin-top: $spacer * .75; // 12px
-        // Prevent text using more than 13 lines
-        display: -webkit-box;
-        -webkit-line-clamp: 13;
-        -webkit-box-orient: vertical;
-        overflow: hidden;
-        @include media-breakpoint-up(sm) {
-          -webkit-line-clamp: 7; // Prevent text using more than 7 lines
-        }
         @include media-breakpoint-up(md) {
           margin-top: $spacer; // 16px
         }
@@ -214,20 +201,15 @@
           }
         }
         &__title {
-          margin-bottom: 0;
           color: $primary;
-          // Prevent title using more than 2 lines
-          display: -webkit-box;
-          -webkit-line-clamp: 2;
-          -webkit-box-orient: vertical;
-          overflow: hidden;
+          opacity: 1;
           @include media-breakpoint-up(md) {
             font-size: 1rem;
             margin-top: $spacer; // Avoid scaled-up image to step over the title
           }
         }
         &__body {
-          display: block;
+          opacity: 1;
         }
       }
     }
