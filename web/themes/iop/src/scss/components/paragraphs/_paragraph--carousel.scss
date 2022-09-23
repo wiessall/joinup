@@ -115,6 +115,9 @@
     .slide {
       transition: transform .1s ease;
       &__figure {
+        display: flex;
+        justify-content: center;
+        align-items: center;
         aspect-ratio: 1.91 / 1;
         border-radius: $spacer; // 16px
         border: 2px solid transparent;
@@ -125,12 +128,9 @@
         }
       }
       &__svg {
-        position: absolute;
         color: $gray-500;
         width: 30%;
-        left: 35%;
         height: 60%;
-        top: 20%;
       }
       &__title {
         opacity: 0;
