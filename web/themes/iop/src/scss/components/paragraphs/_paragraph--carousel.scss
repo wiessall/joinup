@@ -70,15 +70,15 @@
       top: $spacer * 4.25;
       left: -3%;
     }
-    @include media-breakpoint-up(md) {
+    @include media-breakpoint-up(lg) {
       width: 104%;
       top: $spacer * 5.25;
       left: -2%;
     }
-    @include media-breakpoint-up(lg) {
+    @include media-breakpoint-up(xl) {
       top: $spacer * 6.25;
     }
-    @include media-breakpoint-up(xl) {
+    @include media-breakpoint-up(xxl) {
       top: $spacer * 7.25;
     }
   }
