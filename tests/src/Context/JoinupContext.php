@@ -2022,10 +2022,10 @@ class JoinupContext extends RawDrupalContext {
     if (!in_array($type, ['content', 'rdf'])) {
       throw new \InvalidArgumentException('Type can only be one of "content" and "rdf".');
     }
-    $function = $type === 'content' ? 'getNodeByTitle' : 'getRdfEntityByLabel';
+    $type = $type === 'content' ? 'node' : 'rdf_entity';
 
     /** @var \Drupal\Core\Entity\EntityInterface $entity */
-    $entity = $this->$function($title);
+    $entity = $this->getEntityByLabel($type, $title);
     $link_element = $this->getSession()->getPage()->findLink($link);
 
     if (!$link_element) {
