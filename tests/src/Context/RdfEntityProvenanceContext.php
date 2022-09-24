@@ -120,7 +120,7 @@ class RdfEntityProvenanceContext extends RawDrupalContext {
    *   If $referral was passed as entity label and that entity doesn't exist.
    */
   protected function getActivityForReferral(string $referral): ?RdfInterface {
-    $id = $this->getRdfEntityByLabel($referral)->id();
+    $id = !UrlHelper::isValid($referral, TRUE) ? $this->getRdfEntityByLabel($referral)->id() : $referral;
     $helper = \Drupal::getContainer()->get('rdf_entity_provenance.provenance_helper');
     return $helper->loadProvenanceActivity($id);
   }
