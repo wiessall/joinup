@@ -240,7 +240,8 @@
         "enable-patching": true,
         "composer-exit-on-patch-failure": true,
         "patchLevel": {
-            "drupal/core": "-p2"
+            "drupal/core": "-p2",
+            "symfony/browser-kit": "-p5"
         },
         "patches": {
             "behat/mink-extension": {
@@ -404,8 +405,8 @@
             "phpro/grumphp": {
                 "Temporary fix until DQA-3579": "resources/patch/grumphp.diff"
             },
-            "symfony/mime": {
-                "https://github.com/symfony/symfony/issues/47504": "resources/patch/symfony-47505.diff"
+            "symfony/browser-kit": {
+                "https://github.com/symfony/symfony/pull/47618": "resources/patch/symfony-47618.diff"
             }
         },
         "artifacts": {
