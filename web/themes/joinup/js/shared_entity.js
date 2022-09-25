@@ -30,16 +30,16 @@
    */
   Drupal.behaviors.sharedContent = {
     attach: function (context) {
-      var collection = $('[data-joinup-group-context]').data('drupal-group-context');
+      var collection = $('[data-joinup-group-context]').data('joinup-group-context');
 
       // If there is no global collection context, bail out.
       if (!collection) {
         return;
       }
 
-      $(once('shared-cue', '[data-drupal-parent-id]', context)).each(function () {
+      $(once('shared-cue', '[data-joinup-parent-id]', context)).each(function () {
         var $this = $(this);
-        var parent = $this.data('drupal-parent-id');
+        var parent = $this.data('joinup-parent-id');
 
         // If the content comes from the current global collection context,
         // do not add any cue.
@@ -47,7 +47,7 @@
           return;
         }
 
-        $this.find('.listing__stats').append(Drupal.theme('sharedContentCue', $this.data('drupal-parent-label')));
+        $this.find('.listing__stats').append(Drupal.theme('sharedContentCue', $this.data('joinup-parent-label')));
       });
     }
   };

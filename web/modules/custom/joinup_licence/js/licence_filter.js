@@ -17,17 +17,19 @@
         });
 
         // Check every active filter item and hide tiles which don't contain proper
-        // data-licence-category.
+        // data-joinup-licence-category.
         const licenceFilterItem = document.querySelectorAll(
           ".licence-filter__item a.is-active"
         );
         licenceFilterItem.forEach((element) => {
           const currentlicenceCategory = element.getAttribute(
-            "data-licence-category"
+            "data-joinup-licence-category"
           );
           if (typeof currentlicenceCategory !== "undefined") {
             licenceTile.forEach((el) => {
-              const licenceCategory = el.getAttribute("data-licence-category");
+              const licenceCategory = el.getAttribute(
+                "data-joinup-licence-category"
+              );
               if (typeof licenceCategory !== "undefined") {
                 const licenceCategoryArray = licenceCategory.split(" ");
                 if (
@@ -49,7 +51,9 @@
           .value.toLowerCase();
         licenceTile.forEach((element) => {
           if (currentSpdxId.length > 0) {
-            const spdxId = element.getAttribute("data-spdx").toLowerCase();
+            const spdxId = element
+              .getAttribute("data-joinup-spdx")
+              .toLowerCase();
             if (
               spdxId.indexOf(currentSpdxId) === -1 &&
               !element.classList.contains("is-hidden")
@@ -114,7 +118,7 @@
           .querySelectorAll(".licence-tile .mdl-checkbox__input")
           .forEach((element) => {
             if (element.checked) {
-              licenceName = element.getAttribute("data-licence-name");
+              licenceName = element.getAttribute("data-joinup-licence-name");
               licencesArray.push(licenceName);
               licencesString = JSON.stringify(licencesArray);
               if (licencesArray.length >= maxCompare) {
@@ -125,7 +129,10 @@
               }
             }
           });
-        licenceListing.setAttribute("data-licence-compare", licencesString);
+        licenceListing.setAttribute(
+          "data-joinup-licence-compare",
+          licencesString
+        );
       }
 
       // Trigger if licence filter is clicked.
@@ -172,7 +179,7 @@
           .MaterialTextfield.checkDirty();
         checkLicenceCategories();
         // Also, uncheck any selected licences checked for comparison and disable
-        // the "Compare" buttons. The 'data-licence-compare' attribute which is set
+        // the "Compare" buttons. The 'data-joinup-licence-compare' attribute which is set
         // to [], is the attribute that stores the licences set-up for comparison.
         if (
           document.querySelectorAll(".licence-tile__button--compatible").length
@@ -191,7 +198,7 @@
         }
         document
           .querySelector(".listing--licences")
-          .setAttribute("data-licence-compare", "[]");
+          .setAttribute("data-joinup-licence-compare", "[]");
         enableButtons(false);
       });
 
@@ -202,9 +209,11 @@
           element.addEventListener("click", (e) => {
             const licenceListing = document.querySelector(".listing--licences");
             const licences = licenceListing.getAttribute(
-              "data-licence-compare"
+              "data-joinup-licence-compare"
             );
-            const licenceName = e.target.getAttribute("data-licence-name");
+            const licenceName = e.target.getAttribute(
+              "data-joinup-licence-name"
+            );
             let licencesString = "";
             let licencesArray = [];
             const maxCompare = drupalSettings.licenceComparer.maxLicenceCount;
@@ -236,7 +245,10 @@
                 enableButtons(false);
               }
             }
-            licenceListing.setAttribute("data-licence-compare", licencesString);
+            licenceListing.setAttribute(
+              "data-joinup-licence-compare",
+              licencesString
+            );
           });
         });
       // Click in compare button.
@@ -247,7 +259,7 @@
             e.preventDefault();
             const licences = document
               .querySelector(".listing--licences")
-              .getAttribute("data-licence-compare");
+              .getAttribute("data-joinup-licence-compare");
             if (licences.length > 0) {
               const licencesArray = JSON.parse(licences);
               window.location.href = `${
@@ -275,8 +287,8 @@
               const compatibleUrl = `${
                 drupalSettings.path.baseUrl
               }licence/compatibility-check/${inboundLicence.getAttribute(
-                "data-licence-name"
-              )}/${distributeLicence.getAttribute("data-licence-name")}`;
+                "data-joinup-licence-name"
+              )}/${distributeLicence.getAttribute("data-joinup-licence-name")}`;
               const licenceTileCompatibleButton = document.querySelectorAll(
                 ".licence-tile__button--compatible"
               );
