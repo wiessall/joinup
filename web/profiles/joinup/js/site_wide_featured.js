@@ -23,7 +23,7 @@
       // globally featured only when we have no context, meaning we are in a
       // "global" page (search, collections, solutions, content).
       if (group === null || group === undefined) {
-        once("featured", "[data-drupal-featured]", context).forEach(
+        once("featured", "[data-joinup-featured]", context).forEach(
           (element) => {
             element.classList.add("listing__card--corner");
             element.classList.add("is-featured");

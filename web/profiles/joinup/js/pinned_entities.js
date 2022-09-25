@@ -23,10 +23,10 @@
       if (group === null || group === undefined) {
         return;
       }
-      const groupContext = group.dataset.drupalGroupContext;
+      const groupContext = group.dataset.joinupGroupContext;
       once("pinned-cue", ".is-pinned", context).forEach((element) => {
-        const parent = element.dataset.drupalParentId;
-        const affiliated = element.dataset.drupalPinnedIn || "";
+        const parent = element.dataset.joinupParentId;
+        const affiliated = element.dataset.joinupPinnedIn || "";
         // Show the cue only when the global collection context is the same
         // as the parent of the tile.
         if (
