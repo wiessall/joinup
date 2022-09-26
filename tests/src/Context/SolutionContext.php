@@ -28,7 +28,6 @@ use Drupal\language\Entity\ConfigurableLanguage;
 use Drupal\og\OgGroupAudienceHelperInterface;
 use Drupal\og\OgRoleInterface;
 use Drupal\rdf_entity\Entity\Rdf;
-use Drupal\solution\Entity\SolutionInterface;
 use PHPUnit\Framework\Assert;
 
 /**
@@ -78,7 +77,7 @@ class SolutionContext extends RawDrupalContext {
    * @When I visit the add solution form of the :collection collection
    */
   public function visitAddSolutionForm($collection) {
-    $collection = $this->getRdfEntityByLabel($collection);
+    $collection = $this->getEntityByLabel('rdf_entity', $collection);
     $solution_url = Url::fromRoute('solution.collection_solution.add', [
       'rdf_entity' => $collection->id(),
     ]);
@@ -100,7 +99,7 @@ class SolutionContext extends RawDrupalContext {
    */
   public function visitSolution($solution) {
     /** @var \Drupal\rdf_entity\Entity\Rdf $entity */
-    $entity = $this->getSolutionByName($solution);
+    $entity = $this->getEntityByLabel('rdf_entity', $solution);
     $this->visitPath($entity->toUrl()->toString());
   }
 
@@ -283,7 +282,7 @@ class SolutionContext extends RawDrupalContext {
     // As each given step is executed in the same request
     // we need to reset the mapping.
     foreach ($membership_table->getColumnsHash() as $values) {
-      $group = $this->getRdfEntityByLabel($values['solution'], 'solution');
+      $group = $this->getEntityByLabel('rdf_entity', $values['solution'], 'solution');
       /** @var \Drupal\node\NodeInterface $content */
       $content = $this->getEntityByLabel('node', $values['content'], $bundle);
       $content->get(OgGroupAudienceHelperInterface::DEFAULT_FIELD)->set(0, $group->id());
@@ -313,7 +312,7 @@ class SolutionContext extends RawDrupalContext {
       throw new \Exception("User {$username} could not be found.");
     }
 
-    $solution = $this->getRdfEntityByLabel($solution, 'solution');
+    $solution = $this->getEntityByLabel('rdf_entity', $solution, 'solution');
     $owner_roles = [
       OgRoleInterface::ADMINISTRATOR,
       'facilitator',
@@ -368,7 +367,7 @@ class SolutionContext extends RawDrupalContext {
 
     if (!empty($values['pinned_in_collection'])) {
       foreach (explode(',', $values['pinned_in_collection']) as $group_label) {
-        $group = self::getRdfEntityByLabel(trim($group_label));
+        $group = $this->getEntityByLabel('rdf_entity', trim($group_label));
         if (!$group instanceof GroupInterface) {
           throw new \Exception("Cannot pin solution {$solution->label()} in $group_label since it does not exist or is not a group.");
         }
@@ -388,28 +387,9 @@ class SolutionContext extends RawDrupalContext {
    * @When I delete the :solution solution
    */
   public function deleteSolution($solution) {
-    /** @var \Drupal\rdf_entity\Entity\Rdf $solution */
-    $solution = $this->getSolutionByName($solution);
+    $solution = $this->getEntityByLabel('rdf_entity', $solution);
     $solution->skip_notification = TRUE;
     $solution->delete();
-  }
-
-  /**
-   * Returns the Solution with the given name.
-   *
-   * If multiple solution have the same name, the first one will be returned.
-   *
-   * @param string $title
-   *   The solution name.
-   *
-   * @return \Drupal\solution\Entity\SolutionInterface
-   *   The solution.
-   *
-   * @throws \InvalidArgumentException
-   *   Thrown when a solution with the given name does not exist.
-   */
-  protected function getSolutionByName($title): SolutionInterface {
-    return $this->getRdfEntityByLabel($title, 'solution');
   }
 
   /**
@@ -485,7 +465,7 @@ class SolutionContext extends RawDrupalContext {
    */
   public function givenSolutionUserMemberships(TableNode $membership_table) {
     foreach ($membership_table->getColumnsHash() as $values) {
-      $group = $this->getSolutionByName($values['solution']);
+      $group = $this->getEntityByLabel('rdf_entity', $values['solution']);
       $this->givenUserMembership($group, $values);
     }
   }
@@ -694,7 +674,7 @@ class SolutionContext extends RawDrupalContext {
   public function verifyDeleteLinkVisibility(TableNode $check_table): void {
     foreach ($check_table->getColumnsHash() as $values) {
       $user = $this->getUserByName($values['user']);
-      $solution = $this->getSolutionByName($values['solution']);
+      $solution = $this->getEntityByLabel('rdf_entity', $values['solution']);
       $visible = $values['delete link'] === 'yes';
       $this->assertGroupEntityOperation($visible, 'delete', $solution, $user);
     }
@@ -760,7 +740,7 @@ class SolutionContext extends RawDrupalContext {
    * @Then the :solution_label solution should be affiliated with the :collection_label collection
    */
   public function assertCollectionAffiliation($collection_label, $solution_label) {
-    $solution = $this->getRdfEntityByLabel($solution_label, 'solution');
+    $solution = $this->getEntityByLabel('rdf_entity', $solution_label, 'solution');
     $ids = \Drupal::entityQuery('rdf_entity')
       ->condition('rid', 'collection')
       ->condition('label', $collection_label)

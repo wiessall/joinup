@@ -14,39 +14,6 @@ use Drupal\rdf_entity\RdfInterface;
 trait RdfEntityTrait {
 
   /**
-   * Returns the RDF entity with the given name and type.
-   *
-   * If multiple RDF entities have the same name the first one will be returned.
-   *
-   * @param string $label
-   *   The RDF entity label.
-   * @param string|null $type
-   *   Optional RDF entity type.
-   *
-   * @return \Drupal\rdf_entity\RdfInterface
-   *   The RDF entity.
-   *
-   * @throws \InvalidArgumentException
-   *   Thrown when an RDF entity with the given name and type does not exist.
-   */
-  protected static function getRdfEntityByLabel(string $label, ?string $type = NULL): RdfInterface {
-    $query = \Drupal::entityQuery('rdf_entity')
-      ->condition('label', $label)
-      ->range(0, 1);
-    if (!empty($type)) {
-      $query->condition('rid', $type);
-    }
-    $result = $query->execute();
-
-    if (empty($result)) {
-      $message = $type ? "The $type entity with the label '$label' was not found." : "The RDF entity with the label '$label' was not found.";
-      throw new \InvalidArgumentException($message);
-    }
-
-    return Rdf::load(reset($result));
-  }
-
-  /**
    * Checks the number of available RDF entities filtered by bundle.
    *
    * @param int $number

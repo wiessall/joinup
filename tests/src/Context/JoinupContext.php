@@ -26,7 +26,6 @@ use Drupal\joinup\Traits\JavascriptTrait;
 use Drupal\joinup\Traits\KeyboardInteractionTrait;
 use Drupal\joinup\Traits\MaterialDesignTrait;
 use Drupal\joinup\Traits\OgTrait;
-use Drupal\joinup\Traits\RdfEntityTrait;
 use Drupal\joinup\Traits\TabledragTrait;
 use Drupal\joinup\Traits\TraversingTrait;
 use Drupal\joinup\Traits\UserTrait;
@@ -62,7 +61,6 @@ class JoinupContext extends RawDrupalContext {
   use KeyboardInteractionTrait;
   use MaterialDesignTrait;
   use OgTrait;
-  use RdfEntityTrait;
   use StringTranslationTrait;
   use TabledragTrait;
   use TraversingTrait;
@@ -142,7 +140,7 @@ class JoinupContext extends RawDrupalContext {
    * @see \Drupal\DrupalExtension\Context\DrupalContext::assertAuthenticatedByRole()
    */
   public function assertAuthenticatedByOgRole($roles, $rdf_entity, $rdf_entity_bundle) {
-    $entity = $this->getRdfEntityByLabel($rdf_entity, $rdf_entity_bundle);
+    $entity = $this->getEntityByLabel('rdf_entity', $rdf_entity, $rdf_entity_bundle);
     if (!$entity) {
       throw new \Exception("No entity found with label $rdf_entity");
     }
@@ -188,7 +186,7 @@ class JoinupContext extends RawDrupalContext {
    * @Given my role(s) in the :rdf_entity :rdf_entity_bundle change(s) to :roles
    */
   public function updateGroupRoles($rdf_entity, $rdf_entity_bundle, $roles) {
-    $entity = $this->getRdfEntityByLabel($rdf_entity, $rdf_entity_bundle);
+    $entity = $this->getEntityByLabel('rdf_entity', $rdf_entity, $rdf_entity_bundle);
     if (!$entity) {
       throw new \Exception("No entity found with label $rdf_entity");
     }
@@ -219,7 +217,7 @@ class JoinupContext extends RawDrupalContext {
    * @Given my membership state in the :rdf_entity :rdf_entity_bundle changes to :state
    */
   public function updateGroupState($rdf_entity, $rdf_entity_bundle, $state) {
-    $entity = $this->getRdfEntityByLabel($rdf_entity, $rdf_entity_bundle);
+    $entity = $this->getEntityByLabel('rdf_entity', $rdf_entity, $rdf_entity_bundle);
     if (!$entity) {
       throw new \Exception("No entity found with label $rdf_entity");
     }
@@ -705,7 +703,7 @@ class JoinupContext extends RawDrupalContext {
     // solution in a Behat test. This is by design, the URIs are not exposed to
     // end users of the site so they should not be used in BDD scenarios.
     if (!empty($node->{OgGroupAudienceHelperInterface::DEFAULT_FIELD})) {
-      $entity = self::getRdfEntityByLabel($node->{OgGroupAudienceHelperInterface::DEFAULT_FIELD});
+      $entity = $this->getEntityByLabel('rdf_entity', $node->{OgGroupAudienceHelperInterface::DEFAULT_FIELD});
       $node->{OgGroupAudienceHelperInterface::DEFAULT_FIELD} = $entity->id();
     }
 
@@ -2426,7 +2424,7 @@ class JoinupContext extends RawDrupalContext {
     else {
       throw new \Exception("Invalid bundle '$type'.");
     }
-    $entity = static::getEntityByLabel($entity_type_id, $heading);
+    $entity = $this->getEntityByLabel($entity_type_id, $heading);
 
     if ($entity instanceof PinnableGroupContentInterface && $entity->isPinned()) {
       throw new \Exception("The tile '$heading' is marked as featured, but it shouldn't be.");
