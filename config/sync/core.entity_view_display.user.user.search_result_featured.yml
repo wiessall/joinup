@@ -14,7 +14,7 @@ dependencies:
     - field.field.user.user.field_user_organisation
     - field.field.user.user.field_user_photo
     - field.field.user.user.field_user_professional_domain
-    - image.style.horizontal_medium_image
+    - image.style.spotlight_136
   module:
     - image
     - layout_builder
@@ -58,7 +58,7 @@ content:
     label: hidden
     settings:
       image_link: content
-      image_style: horizontal_medium_image
+      image_style: spotlight_136
       image_loading:
         attribute: lazy
     third_party_settings:
