@@ -14,7 +14,6 @@ use Drupal\joinup\Traits\EntityTrait;
 use Drupal\joinup\Traits\MailCollectorTrait;
 use Drupal\joinup\Traits\MaterialDesignTrait;
 use Drupal\joinup\Traits\OgTrait;
-use Drupal\joinup\Traits\RdfEntityTrait;
 use Drupal\joinup\Traits\TraversingTrait;
 use Drupal\joinup\Traits\UserTrait;
 use Drupal\joinup\Traits\UtilityTrait;
@@ -38,7 +37,6 @@ class JoinupSubscriptionContext extends RawDrupalContext {
   use MailCollectorTrait;
   use MessageDigestTrait;
   use OgTrait;
-  use RdfEntityTrait;
   use UserTrait;
   use UtilityTrait;
   use TagTrait;
@@ -94,7 +92,7 @@ class JoinupSubscriptionContext extends RawDrupalContext {
    * @When I go to the subscribers report for :group
    */
   public function visitSubscribersReport(string $group): void {
-    $group_entity = $this->getRdfEntityByLabel($group);
+    $group_entity = $this->getEntityByLabel('rdf_entity', $group);
     $url = Url::fromRoute('joinup_subscription.group_subscribers_report', [
       'rdf_entity' => $group_entity->id(),
     ]);
@@ -144,7 +142,7 @@ class JoinupSubscriptionContext extends RawDrupalContext {
    */
   public function subscribeToGroupContent(TableNode $subscription_table, string $bundle): void {
     foreach ($subscription_table->getColumnsHash() as $values) {
-      $group = $this->getRdfEntityByLabel($values[$bundle], $bundle);
+      $group = $this->getEntityByLabel('rdf_entity', $values[$bundle], $bundle);
       $user = $this->getUserByName($values['user']);
       $membership = $this->getMembershipByGroupAndUser($group, $user, OgMembershipInterface::ALL_STATES);
       $subscriptions = [];
@@ -319,7 +317,7 @@ class JoinupSubscriptionContext extends RawDrupalContext {
   public function selectSubscriptionOptionsInMySubscriptions(TableNode $subscription_options, string $bundle): void {
     foreach ($subscription_options->getRowsHash() as $group_label => $bundle_ids) {
       $bundle_ids = $this->explodeCommaSeparatedStepArgument(strtolower($bundle_ids));
-      $group = self::getRdfEntityByLabel($group_label, $bundle);
+      $group = $this->getEntityByLabel('rdf_entity', $group_label, $bundle);
       foreach (CommunityContentHelper::BUNDLES as $bundle_id) {
         $locator = 'groups[' . $group->id() . '][bundles][' . $bundle_id . ']';
         if (in_array($bundle_id, $bundle_ids)) {
@@ -356,7 +354,7 @@ class JoinupSubscriptionContext extends RawDrupalContext {
   public function assertSubscriptionOptionsInSubscriptions(TableNode $subscription_options): void {
     foreach ($subscription_options->getRowsHash() as $group_label => $expected_bundle_ids) {
       $expected_bundle_ids = $this->explodeCommaSeparatedStepArgument(strtolower($expected_bundle_ids));
-      $group = self::getRdfEntityByLabel($group_label);
+      $group = $this->getEntityByLabel('rdf_entity', $group_label);
       $subscription_bundles = JoinupSubscriptionsHelper::SUBSCRIPTION_BUNDLES[$group->bundle()];
       foreach ($subscription_bundles as $entity_type_id => $bundle_ids) {
         foreach ($bundle_ids as $bundle_id) {
@@ -397,7 +395,7 @@ class JoinupSubscriptionContext extends RawDrupalContext {
     $account = User::load($user->uid);
 
     foreach ($subscriptions->getRowsHash() as $collection_label => $expected_bundle_ids) {
-      $group = self::getRdfEntityByLabel($collection_label);
+      $group = $this->getEntityByLabel('rdf_entity', $collection_label);
       $membership = $this->getMembershipByGroupAndUser($group, $account, OgMembershipInterface::ALL_STATES);
       $expected_bundle_ids = $this->explodeCommaSeparatedStepArgument(strtolower($expected_bundle_ids));
 
@@ -428,7 +426,7 @@ class JoinupSubscriptionContext extends RawDrupalContext {
   public function assertNoGroupContentSubscriptions(string $label, string $bundle): void {
     $user = $this->getUserManager()->getCurrentUser();
     $account = User::load($user->uid);
-    $group = self::getRdfEntityByLabel($label, $bundle);
+    $group = $this->getEntityByLabel('rdf_entity', $label, $bundle);
     $membership = $this->getMembershipByGroupAndUser($group, $account, OgMembershipInterface::ALL_STATES);
     Assert::assertEmpty($membership->get('subscription_bundles')->getValue());
   }

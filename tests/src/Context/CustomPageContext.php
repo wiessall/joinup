@@ -9,7 +9,6 @@ use Drupal\DrupalExtension\Hook\Scope\BeforeNodeCreateScope;
 use Drupal\joinup\Traits\EntityTrait;
 use Drupal\joinup\Traits\FileTrait;
 use Drupal\joinup\Traits\OgTrait;
-use Drupal\joinup\Traits\RdfEntityTrait;
 use Drupal\joinup\Traits\TraversingTrait;
 use Drupal\joinup\Traits\UtilityTrait;
 use Drupal\og_menu\Tests\Traits\OgMenuTrait;
@@ -24,7 +23,6 @@ class CustomPageContext extends RawDrupalContext {
   use EntityTrait;
   use OgMenuTrait;
   use OgTrait;
-  use RdfEntityTrait;
   use UtilityTrait;
   use TraversingTrait;
 
@@ -98,7 +96,7 @@ class CustomPageContext extends RawDrupalContext {
    * @Then the :name :type should have :count custom page(s)
    */
   public function assertContactInformationCount(int $count, string $name, string $type): void {
-    $group = $this->getRdfEntityByLabel($name, $type);
+    $group = $this->getEntityByLabel('rdf_entity', $name, $type);
     $this->assertGroupContentCount($count, $group, 'node', 'custom_page');
   }
 
@@ -223,7 +221,7 @@ class CustomPageContext extends RawDrupalContext {
    *   The menu tree.
    */
   protected function getOgMenuTreeByNameLabelAndType(string $menu_name, string $group_label, string $group_type): array {
-    $group = $this->getRdfEntityByLabel($group_label, $group_type);
+    $group = $this->getEntityByLabel('rdf_entity', $group_label, $group_type);
     $menu_instance = $this->getOgMenuInstance($group->id(), $menu_name);
     return $this->getOgMenuTree($menu_instance);
   }
