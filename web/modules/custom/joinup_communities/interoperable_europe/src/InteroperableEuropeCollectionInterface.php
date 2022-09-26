@@ -27,6 +27,6 @@ interface InteroperableEuropeCollectionInterface {
   /**
    * The NID of the FAQ page.
    */
-  public const FAQ = '705665';
+  public const FAQ = '';
 
 }
