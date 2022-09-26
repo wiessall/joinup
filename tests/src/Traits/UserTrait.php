@@ -116,7 +116,11 @@ trait UserTrait {
    *   Thrown when a user with the provided name is not found.
    */
   protected function getUserByName($name): UserInterface {
-    return user_load_by_name($name);
+    $user = user_load_by_name($name);
+    if (!$user) {
+      throw new \RuntimeException("User with name '$name' not found.");
+    }
+    return $user;
   }
 
 }
