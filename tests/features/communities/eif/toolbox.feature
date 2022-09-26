@@ -21,6 +21,7 @@ Feature:
       | Jordan 3 | Recommendation 5, Recommendation 2 | Common services | Sage       | draft     |
       | Jordan 4 | Recommendation 3, Recommendation 1 | Common services | Phoenix    | validated |
       | Jordan 5 | Recommendation 4                   | Common services | Killjoy    | draft     |
+      | Jordan 6 | Recommendation 4                   | Common services | Killjoy    | validated |
 
     # Visit the toolbox page once to ensure that solutions are properly
     # re-indexed when an EIF perspective is created or deleted and that
@@ -58,11 +59,19 @@ Feature:
       | Principle     | Underlying Principle 11: Preservation of information  |
       | Layer         | Interoperability Layer 1: Interoperability governance |
       | Model         | Basic Component 4: Open data                          |
+    # Regression test for ticket ISAICP-7303.
+    And the following EIF perspective data for the "Jordan 6" solution:
+      | Description   | <p>This is v1.0.0 of the <strong>SMASS</strong> survey.</p> |
+      | Solution type | Common services                                             |
+      | Principle     | Underlying Principle 11: Preservation of information        |
+      | Layer         | Interoperability Layer 1: Interoperability governance       |
+      | Model         | Basic Component 4: Open data                                |
 
     When I visit the "Online Assistant" custom page
     And I should see the text "The online assistant helps users to find operational solutions that cover the alignment and implementation of the European Interoperability Framework and filter them by attributes."
     And I should see the text "Step 1 - Choose one or combine multiple filters to find solutions that match specifically your EIF requirements"
     And I should see the text "Step 2 - Explore operational solutions that help align to the European Interoperability Framework"
+    And the page should contain the html text "<p>This is v1.0.0 of the <strong>SMASS</strong> survey.</p>"
     And I should see the following filter categories in the correct order:
       | Underlying principles  |
       | Interoperability layer |
@@ -72,6 +81,7 @@ Feature:
       | Jordan 1 |
       | Jordan 2 |
       | Jordan 4 |
+      | Jordan 6 |
     But I should not see the following headings:
       | Jordan 3 |
       | Jordan 5 |
@@ -86,6 +96,7 @@ Feature:
       | Jordan 3 |
       | Jordan 4 |
       | Jordan 5 |
+      | Jordan 6 |
 
     # Test multiple options. Both "Transparency" and "Security and privacy" are
     # selected.
@@ -98,6 +109,7 @@ Feature:
       | Jordan 3 |
       | Jordan 4 |
       | Jordan 5 |
+      | Jordan 6 |
 
     # Reset the options.
     When I click "Transparency" in the "Content" region
@@ -106,7 +118,8 @@ Feature:
       | Jordan 1 |
       | Jordan 2 |
       | Jordan 4 |
-    And I should see the text "3 matching solutions found"
+      | Jordan 6 |
+    And I should see the text "4 matching solutions found"
     But I should not see the following headings:
       | Jordan 3 |
       | Jordan 5 |
@@ -120,6 +133,7 @@ Feature:
       | Jordan 3 |
       | Jordan 4 |
       | Jordan 5 |
+      | Jordan 6 |
 
     # Test selecting terms from more than one vocabularies.
     When I click "Openness" in the "Content" region
@@ -130,6 +144,7 @@ Feature:
       | Jordan 3 |
       | Jordan 4 |
       | Jordan 5 |
+      | Jordan 6 |
 
     # Reset the options.
     When I click "Openness" in the "Content" region
@@ -138,6 +153,7 @@ Feature:
       | Jordan 1 |
       | Jordan 2 |
       | Jordan 4 |
+      | Jordan 6 |
     But I should not see the following headings:
       | Jordan 3 |
       | Jordan 5 |
@@ -146,6 +162,7 @@ Feature:
     When I click "Open data" in the "Content" region
     Then I should see the following headings:
       | Jordan 4 |
+      | Jordan 6 |
     But I should not see the following headings:
       | Jordan 1 |
       | Jordan 2 |
@@ -158,6 +175,7 @@ Feature:
       | Jordan 1 |
       | Jordan 2 |
       | Jordan 4 |
+      | Jordan 6 |
     But I should not see the following headings:
       | Jordan 3 |
       | Jordan 5 |
@@ -171,6 +189,7 @@ Feature:
       | Jordan 3 |
       | Jordan 4 |
       | Jordan 5 |
+      | Jordan 6 |
 
     # Reset the options.
     When I click "Assessment tools" in the "Content" region
@@ -178,6 +197,7 @@ Feature:
       | Jordan 1 |
       | Jordan 2 |
       | Jordan 4 |
+      | Jordan 6 |
     But I should not see the following headings:
       | Jordan 3 |
       | Jordan 5 |
