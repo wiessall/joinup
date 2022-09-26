@@ -7,7 +7,6 @@ namespace Drupal\joinup\Context;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\joinup\Traits\ConfigReadOnlyTrait;
 use Drupal\joinup\Traits\EntityTrait;
-use Drupal\joinup\Traits\RdfEntityTrait;
 use Drupal\joinup\Traits\SearchTrait;
 use Drupal\node\Entity\Node;
 use Drupal\paragraphs\Entity\Paragraph;
@@ -23,7 +22,6 @@ class TallinnContext extends RawDrupalContext {
   use ConfigReadOnlyTrait;
   use EntityTrait;
   use SearchTrait;
-  use RdfEntityTrait;
 
   /**
    * Creates the standard 'Tallinn' collection and several dependencies.
