@@ -14,30 +14,28 @@
 
 declare(strict_types = 1);
 
+use Drupal\Core\Url;
 use Drupal\solution\Entity\SolutionInterface;
 
 /**
- * Implements hook_deploy().
- *
  * Create a Link to EIF perspective view from the solution's left-side menu.
- *
- * @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7071
  */
 function joinup_core_deploy_0108502() {
   $eif_perspective_ids = \Drupal::entityQuery('rdf_meta_entity')
     ->condition('type', 'eif_perspective')
     ->execute();
   $eif_perspectives = \Drupal::entityTypeManager()->getStorage('rdf_meta_entity')->loadMultiple($eif_perspective_ids);
+  $og_menu_instance = \Drupal::entityTypeManager()->getStorage('ogmenu_instance');
+  $menu_link_content_storage = \Drupal::entityTypeManager()->getStorage('menu_link_content');
   foreach ($eif_perspectives as $eif_perspective) {
     $rdf_entity = $eif_perspective->getTargetEntity();
     if ($rdf_entity instanceof SolutionInterface) {
-      $og_menus = \Drupal::entityTypeManager()->getStorage('ogmenu_instance')->loadByProperties([
+      $og_menus = $og_menu_instance->loadByProperties([
         'og_audience' => $rdf_entity->id(),
       ]);
       if ($og_menu = reset($og_menus)) {
         $menu_name = 'ogmenu-' . $og_menu->id();
-        $menu_link_content_storage = \Drupal::entityTypeManager()->getStorage('menu_link_content');
-        $link = ['uri' => $rdf_entity->toUrl('eif-perspective')->toUriString()];
+        $link = ['uri' => Url::fromRoute('entity.rdf_entity.eif_perspective', ['rdf_entity' => $rdf_entity->id()])->toUriString()];
         $menu_link_content_storage->create([
           'title' => t('EIF view'),
           'menu_name' => $menu_name,

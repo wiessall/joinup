@@ -4,7 +4,3 @@ services:
     tags:
       # Use a higher priority than SparqlEntityStorageConverter.
       - { name: paramconverter, priority: 20 }
-  eif.group_menu_links:
-    class: Drupal\eif\EventSubscriber\EifGroupMenuLinksSubscriber
-    tags:
-      - { name: event_subscriber }
