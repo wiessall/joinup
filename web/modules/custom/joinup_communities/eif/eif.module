@@ -14,11 +14,11 @@ use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\Element;
 use Drupal\Core\Session\AccountInterface;
+use Drupal\Core\Url;
 use Drupal\eif\EifInterface;
 use Drupal\eif\Form\EifWrapperInlineForm;
 use Drupal\eif\Plugin\views\argument\EifGroupArgument;
 use Drupal\field\FieldConfigInterface;
-use Drupal\joinup_group\Event\GroupMenuLinksEvent;
 use Drupal\og\OgGroupAudienceHelperInterface;
 use Drupal\rdf_meta_entity\Entity\RdfMetaEntityInterface;
 use Drupal\solution\Entity\SolutionInterface;
@@ -323,7 +323,7 @@ function _eif_reindex_parent_solution(RdfMetaEntityInterface $entity): void {
 }
 
 /**
- * When eif_perspective is created, add to navigation menu additional link.
+ * When the EIF perspective is created, add a navigation link.
  *
  * @param \Drupal\rdf_meta_entity\Entity\RdfMetaEntityInterface $entity
  *   The RDF meta entity.
@@ -335,15 +335,15 @@ function _eif_add_eif_link_to_nav(RdfMetaEntityInterface $entity) {
       $og_menu = \Drupal::entityTypeManager()->getStorage('ogmenu_instance')->loadByProperties([
         'og_audience' => $rdf_entity->id(),
       ]);
-
       if ($og_menu = reset($og_menu)) {
         $menu_name = 'ogmenu-' . $og_menu->id();
-        /** @var \Symfony\Component\EventDispatcher\EventDispatcherInterface $event_dispatcher */
-        $event_dispatcher = \Drupal::service('event_dispatcher');
-
-        // Allow third-party to add group menu links.
-        $event = new GroupMenuLinksEvent($rdf_entity, $menu_name, \Drupal::entityTypeManager());
-        $event_dispatcher->dispatch($event, $event::ADD_EIF_PERSPECTIVE_LINK);
+        $link = ['uri' => Url::fromRoute('entity.rdf_entity.eif_perspective', ['rdf_entity' => $rdf_entity->id()])->toUriString()];
+        \Drupal::entityTypeManager()->getStorage('menu_link_content')->create([
+          'title' => t('EIF view'),
+          'menu_name' => $menu_name,
+          'link' => $link,
+          'weight' => -6,
+        ])->save();
       }
     }
   }
