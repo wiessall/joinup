@@ -9,14 +9,14 @@ use Drupal\Core\Site\Settings;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\DrupalExtension\Hook\Scope\BeforeNodeCreateScope;
 use Drupal\datetime\Plugin\Field\FieldType\DateTimeItemInterface;
-use Drupal\joinup\Traits\NodeTrait;
+use Drupal\joinup\Traits\EntityTrait;
 
 /**
  * Behat step definitions for testing events.
  */
 class JoinupEventContext extends RawDrupalContext {
 
-  use NodeTrait;
+  use EntityTrait;
 
   /**
    * Keeps track of the number of Webtools Geocoding cache results that exist.
@@ -38,7 +38,7 @@ class JoinupEventContext extends RawDrupalContext {
    */
   public function visitEvent(string $title): void {
     /** @var \Drupal\node\Entity\Node $node */
-    $node = $this->getNodeByTitle($title, 'event');
+    $node = $this->getEntityByLabel('node', $title, 'event');
     $this->visitPath($node->toUrl()->toString());
   }
 

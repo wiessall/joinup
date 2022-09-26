@@ -49,7 +49,9 @@ class JoinupMessageDelivery implements JoinupMessageDeliveryInterface {
     $recipients_metadata = [];
     /** @var \Drupal\user\UserInterface $account */
     foreach ($accounts as $account) {
-      $this->validateAccount($account);
+      if (!$this->accountIsValid($account)) {
+        continue;
+      }
 
       // By keying on the user ID we can avoid that a user might get the message
       // more than once.
@@ -69,7 +71,10 @@ class JoinupMessageDelivery implements JoinupMessageDeliveryInterface {
    * {@inheritdoc}
    */
   public function sendMessageToUser(MessageInterface $message, UserInterface $account, array $notifier_options = [], bool $digest = FALSE): bool {
-    $this->validateAccount($account);
+    if (!$this->accountIsValid($account)) {
+      return FALSE;
+    }
+
     $message->setOwner($account);
     $recipient_metadata = [
       'options' => $notifier_options,
@@ -200,19 +205,11 @@ class JoinupMessageDelivery implements JoinupMessageDeliveryInterface {
    * @param \Drupal\user\UserInterface $account
    *   The account to check.
    *
-   * @throws \InvalidArgumentException
-   *   Thrown when the user is anonymous or doesn't have an e-mail address.
+   * @return bool
+   *   Whether the account is valid to receive emails.
    */
-  protected function validateAccount(UserInterface $account) {
-    // Throw an exception when attempting to send mails to anonymous users or
-    // users that for some reason do not have an e-mail address set.
-    if ($account->isAnonymous()) {
-      throw new \InvalidArgumentException('Cannot send mail to an anonymous user.');
-    }
-    $mail = $account->getEmail();
-    if (empty($mail)) {
-      throw new \InvalidArgumentException('Cannot send mail to a user that does not have an e-mail address.');
-    }
+  protected function accountIsValid(UserInterface $account): bool {
+    return !$account->isAnonymous() && !empty($account->getEmail());
   }
 
 }

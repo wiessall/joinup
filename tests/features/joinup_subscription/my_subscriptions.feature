@@ -179,7 +179,7 @@ Feature: My subscriptions
       | Barnard's Star |  |
       | Wolf 359       |  |
 
-  @javascript @clearEntityMemoryCache
+  @javascript
   Scenario Outline: Change the notification frequency of my digests
     Given collection:
       | title | Malicious plans |

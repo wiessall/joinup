@@ -4,7 +4,6 @@ declare(strict_types = 1);
 
 namespace Drupal\joinup\Traits;
 
-use Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException;
 use Drupal\user\UserInterface;
 
 /**
@@ -118,21 +117,9 @@ trait UserTrait {
    */
   protected function getUserByName($name): UserInterface {
     $user = user_load_by_name($name);
-
     if (!$user) {
-      throw new \RuntimeException("The user with name '$name' was not found.");
+      throw new \RuntimeException("User with name '$name' not found.");
     }
-
-    // The user object might be cached, make sure to return it straight from the
-    // data storage.
-    try {
-      /** @var \Drupal\user\UserInterface $user */
-      $user = \Drupal::entityTypeManager()->getStorage('user')->loadUnchanged($user->id());
-    }
-    catch (InvalidPluginDefinitionException $e) {
-      throw new \RuntimeException('The user entity storage is not defined.', 0, $e);
-    }
-
     return $user;
   }
 
