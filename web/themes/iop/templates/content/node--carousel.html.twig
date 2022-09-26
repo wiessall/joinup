@@ -100,7 +100,7 @@
   {{ title_suffix }}
 
   {% block content %}
-    <a href="{{ url }}" rel="bookmark" title="{{ 'Read'|t }}: {{ label|render|striptags|trim }}">
+    <a href="{{ url }}" rel="bookmark" title="{{ 'Read'|t }}: {{ label|render|striptags|trim }}" tabindex="-1">
       {% if logo["#items"] is not empty %}
         <figure class="slide__figure">
           {{ logo }}
