@@ -14,9 +14,6 @@
 
 declare(strict_types = 1);
 
-use Drupal\Core\Url;
-use Drupal\solution\Entity\SolutionInterface;
-
 /**
  * Creates a Link to EIF perspective view from the solution's left-side menu.
  */
