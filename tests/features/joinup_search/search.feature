@@ -304,7 +304,6 @@ Feature: Global search
       | Best place to find an exotic bird |
       | Bird Birdman                      |
 
-  @clearStaticCache
   Scenario: Solutions and/or releases are found by their distribution keyword.
     Given the following licences:
       | title      |
