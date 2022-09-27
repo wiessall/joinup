@@ -74,6 +74,11 @@ function iop_preprocess_page(&$variables) {
  * Implements hook_preprocess_HOOK().
  */
 function iop_preprocess_node(&$variables) {
+  // Disables the report and translate for the content of IOP.
+  if (isset($variables['content']['report'])) {
+    $variables['content']['report']['#access'] = FALSE;
+  }
+
   // News listing page.
   if (!empty($variables['content']['field_news_logo'])) {
     $variables['logo'][] = $variables['content']['field_news_logo'];
@@ -97,7 +102,6 @@ function iop_preprocess_node__custom_page__full(&$variables) {
     // For the custom page that is set as landing page, do not display the title
     // or the report link.
     $variables['label']['#access'] = FALSE;
-    $variables['content']['report']['#access'] = FALSE;
   }
 }
 
