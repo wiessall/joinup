@@ -198,14 +198,10 @@ function joinup_core_editor_js_settings_alter(array &$settings) {
     $options = explode(';', $settings['editor']['formats']['content_editor']['editorSettings']['format_tags']);
     $options = array_diff($options, ['h1', 'h5', 'h6']);
     $settings['editor']['formats']['content_editor']['editorSettings']['format_tags'] = implode(';', $options);
+    foreach ($settings['editor']['formats'] as &$format_settings) {
+      $format_settings['editorSettings']['image2_disableResizer'] = TRUE;
+    }
   }
-}
-
-/**
- * Implements hook_ckeditor_css_alter().
- */
-function joinup_core_ckeditor_css_alter(array &$css) {
-  $css[] = \Drupal::service('extension.list.module')->getPath('joinup_core') . '/css/wysiwyg.css';
 }
 
 /**
