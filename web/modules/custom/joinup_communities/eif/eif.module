@@ -323,7 +323,7 @@ function _eif_reindex_parent_solution(RdfMetaEntityInterface $entity): void {
 }
 
 /**
- * Create a Link to EIF perspective view from the solution's left-side menu.
+ * Creates a Link to EIF perspective view from the solution's left-side menu.
  *
  * @param \Drupal\rdf_meta_entity\Entity\RdfMetaEntityInterface $meta_entity
  *   The RDF meta entity.
