@@ -2,7 +2,6 @@
 Feature:
   Check downloads counter's value at different places.
 
-  @clearStaticCache
   Scenario: Check solution downloads counter
     # Create the dummy data to work with.
     Given the following collection:
