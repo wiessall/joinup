@@ -14,9 +14,7 @@ use Drupal\joinup\Traits\ConfigReadOnlyTrait;
 use Drupal\joinup\Traits\EntityTrait;
 use Drupal\joinup\Traits\JavascriptTrait;
 use Drupal\joinup\Traits\MaterialDesignTrait;
-use Drupal\joinup\Traits\RdfEntityTrait;
 use Drupal\joinup_licence\Entity\CompatibilityDocument;
-use Drupal\joinup_licence\Entity\LicenceInterface;
 use Drupal\node\Entity\Node;
 use Drupal\rdf_entity\Entity\Rdf;
 use LoversOfBehat\TableExtension\Hook\Scope\AfterTableFetchScope;
@@ -31,7 +29,6 @@ class EuplContext extends RawDrupalContext {
   use EntityTrait;
   use JavascriptTrait;
   use MaterialDesignTrait;
-  use RdfEntityTrait;
 
   /**
    * Creates the standard 'EUPL' collection and several dependencies.
@@ -388,8 +385,10 @@ class EuplContext extends RawDrupalContext {
       $redistribute_as_label = $test_case['outbound'];
       $expected_result = $test_case['document ID'];
 
-      $inbound_licence = static::loadLicenceByLabel($use_label);
-      $outbound_licence = static::loadLicenceByLabel($redistribute_as_label);
+      /** @var \Drupal\joinup_licence\Entity\LicenceInterface $inbound_licence */
+      $inbound_licence = $this->getEntityByLabel('rdf_entity', $use_label, 'licence');
+      /** @var \Drupal\joinup_licence\Entity\LicenceInterface $outbound_licence */
+      $outbound_licence = $this->getEntityByLabel('rdf_entity', $redistribute_as_label, 'licence');
 
       $result = $plugin_manager->getCompatibilityDocumentId($inbound_licence, $outbound_licence);
 
@@ -425,25 +424,6 @@ class EuplContext extends RawDrupalContext {
         'description' => $document['description'],
       ])->save();
     }
-  }
-
-  /**
-   * Returns the licence entity with the given label.
-   *
-   * @param string $label
-   *   The label for which to return the licence entity.
-   *
-   * @return \Drupal\joinup_licence\Entity\LicenceInterface
-   *   The licence entity.
-   */
-  protected static function loadLicenceByLabel(string $label): LicenceInterface {
-    $entity = static::getRdfEntityByLabel($label, 'licence');
-    if ($entity instanceof LicenceInterface) {
-      return $entity;
-    }
-
-    $message = "The licence entity with the label '$label' was not found.";
-    throw new \InvalidArgumentException($message);
   }
 
   /**
