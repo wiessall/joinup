@@ -1,6 +1,6 @@
 This folder contains cached responses from the Webtools Geocoding service. We
 are using this service to perform the geolocation of event locations. The
-service has a limited monthly quota so we should avoid doing unnecessary
+service has a limited monthly quota, so we should avoid doing unnecessary
 requests. While running tests we will use these cached responses rather than
 querying the live service.
 
@@ -10,7 +10,7 @@ and ensuring the following lines in settings.php:
 
 ```
 $settings['cache']['bins']['geocoder'] = 'cache.backend.file_system';
-$settings['filecache']['directory']['bins']['geocoder'] = '../tests/fixtures/webtools_geocoding_cache';
+$settings['filecache']['directory']['bins']['geocoder'] = '../tests/fixtures/webtools_geocoding/cache';
 $settings['filecache']['strategy']['bins']['geocoder'] = 'persist';
 ```
 
@@ -32,7 +32,7 @@ They should not be committed unless they are actually part of a Behat test. In
 order to clean up any stray cache files, please execute this command:
 
 ```
-$ git clean -fd ./tests/fixtures/webtools_geocoding_cache
+$ git clean -fd ./tests/fixtures/webtools_geocoding/cache
 ```
 
 Please note that in order to query the Webtools Geocoding service from outside

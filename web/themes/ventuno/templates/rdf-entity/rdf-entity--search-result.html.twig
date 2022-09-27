@@ -9,7 +9,7 @@
     <a class="fs-5 fw-normal text-underline-hover mb-3" href="{{ url }}">{{ label|raw }}</a>
   {% endset %}
   {% set metadata %}
-    <span class="text-muted text-nowrap me-4">{{ type }}</span><span class="text-muted text-nowrap me-4">{{ creation }}</span>
+    <span class="text-muted text-nowrap me-4">{{ type }}</span><span class="text-muted text-nowrap me-4">{{ creation }}</span><span class="text-muted text-nowrap me-4">{{ changed }}</span>
   {% endset %}
   {% set badges = [] %}
   {% for topic in topics %}
