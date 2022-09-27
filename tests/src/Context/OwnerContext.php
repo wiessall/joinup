@@ -6,6 +6,7 @@ namespace Drupal\joinup\Context;
 
 use Behat\Gherkin\Node\TableNode;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
+use Drupal\joinup\Traits\EntityTrait;
 use Drupal\joinup\Traits\MaterialDesignTrait;
 use Drupal\joinup\Traits\RdfEntityTrait;
 use Drupal\joinup\Traits\SearchTrait;
@@ -20,6 +21,7 @@ use Drupal\taxonomy\TermInterface;
 class OwnerContext extends RawDrupalContext {
 
   use MaterialDesignTrait;
+  use EntityTrait;
   use RdfEntityTrait;
   use SearchTrait;
   use UserTrait;
@@ -109,7 +111,7 @@ class OwnerContext extends RawDrupalContext {
    * @When I delete the :owner owner
    */
   public function deleteOwner($name) {
-    $this->getRdfEntityByLabel($name, 'owner')->delete();
+    $this->getEntityByLabel('rdf_entity', $name, 'owner')->delete();
   }
 
   /**
@@ -187,7 +189,7 @@ class OwnerContext extends RawDrupalContext {
    */
   public function visitOwner($owner) {
     /** @var \Drupal\rdf_entity\Entity\Rdf $entity */
-    $entity = $this->getRdfEntityByLabel($owner, 'owner');
+    $entity = $this->getEntityByLabel('rdf_entity', $owner, 'owner');
     $this->visitPath($entity->toUrl()->toString());
   }
 
