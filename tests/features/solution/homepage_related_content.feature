@@ -35,7 +35,6 @@ Feature: Solution homepage
       | title               | document type | short title | created           | body                    | spatial coverage | topic       | solution                     | state     |
       | IS protocol draft 2 | Document      | IS draft 2  | 2018-10-04 8:08am | Next proposition draft. | European Union   | E-inclusion | Information sharing protocol | validated |
 
-  @clearStaticCache
   Scenario: The solution homepage shows related content.
     When I go to the homepage of the "Information sharing protocol" solution
     # I should see only the related release.
