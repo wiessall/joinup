@@ -18,7 +18,7 @@ use Drupal\Core\Url;
 use Drupal\solution\Entity\SolutionInterface;
 
 /**
- * Create a Link to EIF perspective view from the solution's left-side menu.
+ * Creates a Link to EIF perspective view from the solution's left-side menu.
  */
 function joinup_core_deploy_0108500(): void {
   $eif_perspective_ids = \Drupal::entityQuery('rdf_meta_entity')
