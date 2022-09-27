@@ -42,7 +42,7 @@
     a {
       color: $primary;
       &:hover:visited {
-        text-decoration-color: $white!important; // Prevent purple underline
+        text-decoration-color: $primary!important; // Prevent purple underline
       }
     }
   }
@@ -55,6 +55,45 @@
       margin: 0 $spacer * -.75;
     }
   }
+  &__arrows {
+    position: absolute;
+    display: flex;
+    justify-content: space-between;
+    width: 94%;
+    top: 16vw;
+    left: 3%;
+    @include media-breakpoint-up(sm) {
+      top: $spacer * 7.5;
+    }
+    @include media-breakpoint-up(md) {
+      width: 106%;
+      top: $spacer * 4.25;
+      left: -3%;
+    }
+    @include media-breakpoint-up(lg) {
+      width: 104%;
+      top: $spacer * 5.25;
+      left: -2%;
+    }
+    @include media-breakpoint-up(xl) {
+      top: $spacer * 6.25;
+    }
+    @include media-breakpoint-up(xxl) {
+      top: $spacer * 7.25;
+    }
+  }
+  &__arrow {
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: $spacer * 2.5;
+    height: $spacer * 2.5;
+    background-color: rgba($white, .5);
+    padding: $spacer * .5;
+    color: $primary;
+    border: 1px solid $primary;
+  }
   &__track {
     @include media-breakpoint-between(xs, sm) {
       width: 80%;
@@ -66,6 +105,7 @@
     }
   }
   &__slides {
+    align-items: stretch;
     // We need space for the active slide to be scaled up and not cut
     @include media-breakpoint-up(md) {
       padding: $spacer * 2 0!important; // 32px 0
@@ -75,36 +115,27 @@
     .slide {
       transition: transform .1s ease;
       &__figure {
-        width: 100%;
-        padding-top: 51.9%; // Trick to set element's ratio based on width
-        position: relative;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        aspect-ratio: 1.91 / 1;
         border-radius: $spacer; // 16px
-        pointer-events: none; // Disable dragging to avoid swipe/drag clashes
         border: 2px solid transparent;
         overflow: hidden;
         background: linear-gradient($gray-300, $gray-300) padding-box, $gradient border-box;
         @include media-breakpoint-up(md) {
           margin-bottom: $spacer * 2; // 32px
         }
-        img {
-          position: absolute;
-          top: 0;
-          left: 0;
-        }
       }
       &__svg {
-        position: absolute;
         color: $gray-500;
         width: 30%;
-        left: 35%;
         height: 60%;
-        top: 20%;
       }
       &__title {
-        display: none;
-        height: $spacer * 2.5; // Hold space to avoid vertical shift when sliding between slides with different height
+        opacity: 0;
         a:hover:visited {
-          text-decoration-color: $white!important; // Prevent purple underline
+          text-decoration-color: $primary!important; // Prevent purple underline
         }
       }
       &__title-link {
@@ -112,12 +143,7 @@
         font-weight: $font-weight-normal;
       }
       &__body {
-        display: none;
-        // Hold space to avoid vertical shift when sliding between slides with different height
-        height: calc(13 * 1em * 1.5); // 13 lines * font size * line-height
-        @include media-breakpoint-up(sm) {
-          height: calc(7 * 1em * 1.5); // 7 lines * font size * line-height
-        }
+        opacity: 0;
         @include media-breakpoint-up(md) {
           // Properties below ensure the text width matches the scaled-up active image
           margin-right: $spacer * -1.25; // -20px
@@ -138,14 +164,6 @@
       }
       &__text {
         margin-top: $spacer * .75; // 12px
-        // Prevent text using more than 13 lines
-        display: -webkit-box;
-        -webkit-line-clamp: 13;
-        -webkit-box-orient: vertical;
-        overflow: hidden;
-        @include media-breakpoint-up(sm) {
-          -webkit-line-clamp: 7; // Prevent text using more than 7 lines
-        }
         @include media-breakpoint-up(md) {
           margin-top: $spacer; // 16px
         }
@@ -176,20 +194,18 @@
           }
         }
         &__title {
-          margin-bottom: 0;
           color: $primary;
-          // Prevent title using more than 2 lines
-          display: -webkit-box;
-          -webkit-line-clamp: 2;
-          -webkit-box-orient: vertical;
-          overflow: hidden;
+          opacity: 1;
           @include media-breakpoint-up(md) {
             font-size: 1rem;
             margin-top: $spacer; // Avoid scaled-up image to step over the title
           }
         }
         &__body {
-          display: block;
+          opacity: 1;
+          .paragraph {
+            color: $gray-700;
+          }
         }
       }
     }

@@ -17,21 +17,12 @@ use Drupal\node\NodeInterface;
 function iop_preprocess_paragraph__row(array &$variables): void {
   $paragraph = $variables['elements']['#paragraph'];
   $variables['row_theme'] = $paragraph->get('row_theme')->value ?? 'light';
-  if (!$paragraph->get('paragraph_row_background')->isEmpty()) {
-    /** @var \Drupal\file\FileInterface $file */
-    $file = $paragraph->get('paragraph_row_background')->entity;
-    // @todo Is this the best way to get the background? Because normally we
-    // need a style image (compressed?) but also, the image will be used for
-    // large screens too. To be decided by the FE team.
-    $variables['row_background'] = \Drupal::service('file_url_generator')->generateAbsoluteString($file->getFileUri());
-  }
 }
 
 /**
  * Implements hook_preprocess().
  */
 function iop_preprocess(array &$variables): void {
-  // @todo Setup the icons for the carousels. This was copied from Ventuno.
   /** @var \Drupal\Core\Extension\ThemeHandler $themeHandler */
   $themeHandler = \Drupal::service('theme_handler');
   $ventuno = $themeHandler->getTheme('ventuno')->getPath();
