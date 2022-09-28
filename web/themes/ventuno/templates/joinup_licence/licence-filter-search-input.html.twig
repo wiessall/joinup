@@ -1,0 +1,25 @@
+{#
+/**
+ * @file
+ * Default implementation of a textfield input for the licence search input.
+ */
+#}
+{{ attach_library('ventuno/forms') }}
+{% apply spaceless %}
+<div class="my-5">
+  <div class="d-flex flex-wrap align-items-baseline">
+    {{ "or enter licence"|t }}<label for="licence-search" class="form-label mx-2">{{ "SPDX ID"|t }}</label>
+    <div class="input-group w-auto">
+      <input class="form-control" type="text" id="licence-search" placeholder="{{ "SPDX ID"|t }}" aria-describedby="helperText">
+      <button id="licence-reset" class="licence-search__reset btn btn-outline-primary" type="reset" value="Reset">{{ 'Reset'|t }}</button>
+    </div>
+  </div>
+  <a href="https://spdx.org/ids" target="_blank" class="d-flex align-items-center mt-4">
+    <span id="helperText" class="me-2">{{ "Learn more about SPDX identifiers"|t }}</span>
+    {{ pattern('icon', {
+      name: 'box-arrow-up-right',
+      size: 'xs'
+    }) }}
+  </a>
+</div>
+{% endapply %}

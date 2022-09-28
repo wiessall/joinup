@@ -144,6 +144,11 @@ glide:
     theme:
       assets/css/glide.core.min.css: { minified: true }
 
+licence-filter:
+  css:
+    theme:
+      assets/css/licence-filter.min.css: { minified: true }
+
 members-overview-exposed-form:
   css:
     theme:

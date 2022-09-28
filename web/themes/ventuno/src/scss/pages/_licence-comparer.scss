@@ -25,7 +25,7 @@
       color: $white;
     }
     &.licence-filter--law {
-      background-color: $orange !important;
+      background-color: darken($orange, 17%) !important; // Increase contrast to pass a11y tests
       color: $white;
     }
     &.licence-filter--support {
