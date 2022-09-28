@@ -66,3 +66,32 @@ Feature:
       | Follow us on Twitter                             |
       | Follow us on Youtube                             |
       | Subscribe to the interoperable europe newsletter |
+
+  @javascript
+  Scenario: Report link and eTranslate button are not available in IOP custom pages.
+    Given custom_page content:
+      | title      | collection           | state     |
+      | IOP page | Interoperable Europe | validated |
+
+    When I am logged in as a user with the authenticated role
+    And I go to the "IOP page" custom page
+    Then I should not see the link "Report abusive content"
+    And I should not see the button "Translate"
+
+  @javascript
+  Scenario Outline: Report link and eTranslate button are not available in IOP.
+    Given <type> content:
+      | title      | collection           | state     |
+      | IOP <type> | Interoperable Europe | validated |
+
+    When I am logged in as a user with the authenticated role
+    And I go to the "IOP <type>" <type>
+    Then I should not see the link "Report abusive content"
+    And I should not see the button "Translate"
+
+    Examples:
+      | type        |
+      | news        |
+      | event       |
+      | discussion  |
+      | document    |
