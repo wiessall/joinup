@@ -16,7 +16,7 @@
     attach(context) {
       once("track-download", "a.track-download", context).forEach(
         (downloadLink) => {
-          const url = downloadLink.dataset.tracking;
+          const url = downloadLink.dataset.joinupTracking;
           downloadLink.addEventListener("click", () => {
             Drupal.ajax({
               url,

@@ -4,7 +4,6 @@ Feature: Custom pages enhance search results for their collections/solutions
   As a facilitator
   I want search results for keywords that match content in my custom pages to include my group
 
-  @clearStaticCache
   Scenario Outline: Collections and solutions are found when searching for keywords in custom pages
     Given the following <group>s:
       | title           | state     |
