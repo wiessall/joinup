@@ -45,10 +45,17 @@ if (!getenv('COMPOSER_DISABLE_NODE_DEPENDENCIES')) {
   print 'Node ' . execCmd("node --version") . "\n";
   print 'NPM ' . execCmd("npm --version") . "\n";
 
-  // Theme dependencies.
-  $command = "cd $projectRoot/web/themes/ventuno && npm ci";
+  // Bring Ventuno theme dependencies.
+  $command = "cd $project_root/web/themes/ventuno && npm ci";
   print "Running: $command\n";
   execCmd($command);
+
+  // Bring IOP subtheme dependencies.
+  $command = "cd $project_root/web/themes/iop && npm ci";
+  print "Running: $command\n";
+  if (system($command) === FALSE) {
+    exit(5);
+  }
 
   // Project dependencies.
   $command = $argv[1] === 'install' ? 'npm ci' : 'npm install';

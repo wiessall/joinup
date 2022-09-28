@@ -54,18 +54,23 @@ function iop_preprocess_paragraph__image(array &$variables): void {
 function iop_preprocess_page(&$variables) {
   $node = \Drupal::routeMatch()->getParameter('node');
   if ($node instanceof NodeInterface) {
-    $nid = $variables['node']->id();
+    $uuid = $variables['node']->uuid();
     // News listing page.
-    if ($nid === InteroperableEuropeCollectionInterface::NEWS_LISTING) {
+    if ($uuid === InteroperableEuropeCollectionInterface::NEWS_LISTING) {
       $variables['#attached']['library'][] = 'iop/listing';
       $variables['listing'] = TRUE;
-      $variables['news_listing'] = TRUE;
+      $variables['news'] = TRUE;
     }
     // Events listing page.
-    elseif ($nid === InteroperableEuropeCollectionInterface::EVENT_LISTING) {
+    elseif ($uuid === InteroperableEuropeCollectionInterface::EVENT_LISTING) {
       $variables['#attached']['library'][] = 'iop/listing';
       $variables['listing'] = TRUE;
-      $variables['events_listing'] = TRUE;
+      $variables['events'] = TRUE;
+    }
+    // FAQ page.
+    elseif ($uuid === InteroperableEuropeCollectionInterface::FAQ) {
+      $variables['#attached']['library'][] = 'iop/accordion-faq';
+      $variables['faq'] = TRUE;
     }
   }
 }

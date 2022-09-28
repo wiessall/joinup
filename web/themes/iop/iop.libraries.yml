@@ -19,6 +19,11 @@ listing:
       assets/css/listing.min.css: {}
 
 # Components
+accordion-faq:
+  css:
+    theme:
+      assets/css/accordion-faq.min.css: { minified: true }
+
 # @todo ISAICP-7138 delete this library when switch to Ventuno theme is complete
 add-content:
   css:
@@ -34,6 +39,11 @@ navbar:
   css:
     theme:
       assets/css/navbar.min.css: {}
+
+page-header:
+  css:
+    theme:
+      assets/css/page-header.min.css: {}
 
 pager:
   css:

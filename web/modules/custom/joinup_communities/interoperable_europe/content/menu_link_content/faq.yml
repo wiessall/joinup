@@ -1,0 +1,43 @@
+_meta:
+  version: '1.0'
+  entity_type: menu_link_content
+  uuid: 8a6a1d78-939b-4f29-95eb-7df86d8b3f6a
+  bundle: menu_link_content
+  default_langcode: en
+  depends:
+    791b9aa0-d417-411a-96af-a96bb546992a: node
+default:
+  enabled:
+    -
+      value: true
+  title:
+    -
+      value: FAQ
+  menu_name:
+    -
+      value: iope
+  link:
+    -
+      target_uuid: 791b9aa0-d417-411a-96af-a96bb546992a
+      title: ''
+      options:
+        attributes: {  }
+        menu_link_destination: 0
+  external:
+    -
+      value: false
+  rediscover:
+    -
+      value: false
+  weight:
+    -
+      value: -47
+  expanded:
+    -
+      value: false
+  revision_translation_affected:
+    -
+      value: true
+  live_link:
+    -
+      value: false
