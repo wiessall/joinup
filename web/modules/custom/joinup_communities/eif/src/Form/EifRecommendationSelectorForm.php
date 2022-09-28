@@ -72,7 +72,7 @@ class EifRecommendationSelectorForm extends FormBase {
         ],
       ],
       '#attributes' => [
-        'data-drupal-eif-recommendation-selector' => 'true',
+        'data-joinup-eif-recommendation-selector' => 'true',
       ],
       '#cache' => [
         'tags' => [
