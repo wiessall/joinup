@@ -161,8 +161,8 @@ module.exports = {
       },
     },
     {
-      entry: path.resolve(outputFolder, "src/scss/licence-comparer.scss"),
-      dest: path.resolve(outputFolder, "assets/css/licence-comparer.min.css"),
+      entry: path.resolve(outputFolder, "src/scss/licence-filter.scss"),
+      dest: path.resolve(outputFolder, "assets/css/licence-filter.min.css"),
       options: {
         includePaths,
         minify: true,
@@ -597,6 +597,7 @@ module.exports = {
           "arrow-repeat.svg",
           "arrow-right.svg",
           "award.svg",
+          "box-arrow-up-right.svg",
           "calendar.svg",
           "calendar3.svg",
           "card-list.svg",
