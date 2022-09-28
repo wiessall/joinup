@@ -7,7 +7,7 @@
     attach(context) {
       // Get the select element.
       const recommendationSelector = context.querySelector(
-        'select[data-drupal-eif-recommendation-selector="true"]'
+        'select[data-joinup-eif-recommendation-selector="true"]'
       );
       // Get the parent form.
       const form = recommendationSelector.closest("form");

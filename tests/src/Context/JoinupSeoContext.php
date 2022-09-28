@@ -6,7 +6,7 @@ namespace Drupal\joinup\Context;
 
 use Behat\Gherkin\Node\TableNode;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
-use Drupal\joinup\Traits\RdfEntityTrait;
+use Drupal\joinup\Traits\EntityTrait;
 use Drupal\rdf_entity\RdfInterface;
 use PHPUnit\Framework\Assert;
 
@@ -15,7 +15,7 @@ use PHPUnit\Framework\Assert;
  */
 class JoinupSeoContext extends RawDrupalContext {
 
-  use RdfEntityTrait;
+  use EntityTrait;
 
   /**
    * Asserts that a list of meta tags are presented in the page.
@@ -360,7 +360,7 @@ class JoinupSeoContext extends RawDrupalContext {
    * @Then the rdf metadata of the :title rdf entity should be attached in the page
    */
   public function assertSerializedRdfMetadataInPage(string $title): void {
-    $rdf_entity = $this->getRdfEntityByLabel($title);
+    $rdf_entity = $this->getEntityByLabel('rdf_entity', $title);
     $json_output = $this->generateSerializedData($rdf_entity);
     $this->assertSession()->responseContains($json_output);
   }
@@ -378,7 +378,7 @@ class JoinupSeoContext extends RawDrupalContext {
    * @Then the rdf metadata of the :title rdf entity should not be attached in the page
    */
   public function assertSerializedRdfMetadataNotInPage(string $title): void {
-    $rdf_entity = $this->getRdfEntityByLabel($title);
+    $rdf_entity = $this->getEntityByLabel('rdf_entity', $title);
     $json_output = $this->generateSerializedData($rdf_entity);
     $this->assertSession()->responseNotContains($json_output);
   }

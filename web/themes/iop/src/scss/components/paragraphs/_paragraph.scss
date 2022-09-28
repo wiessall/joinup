@@ -30,37 +30,56 @@
   // Lightgray wave background
   &--light-wave {
     position: relative;
-    &::before {
+    &::before,
+    &::after {
       position: absolute;
-      top: 0;
       left: 0;
       z-index: -1;
       display: block;
       width: 100vw;
       height: 100%;
       content: "";
-      background-image: url("data:image/svg+xml,%3Csvg preserveAspectRatio='none' xmlns='http://www.w3.org/2000/svg' viewBox='10 0 2558 1210.3'%3E%3Cdefs%3E%3Cstyle%3E.cls-1%7Bfill:none%7D%3C/style%3E%3CclipPath id='clippath'%3E%3Cpath class='cls-1' d='M9 6.99h2560V1209.3H9z'/%3E%3C/clipPath%3E%3CclipPath id='clippath-1'%3E%3Cpath class='cls-1' d='M9 6.99h2560V1209.3H9z'/%3E%3C/clipPath%3E%3CclipPath id='clippath-2'%3E%3Cpath class='cls-1' d='M0 0h2578v1210.3H0z'/%3E%3C/clipPath%3E%3C/defs%3E%3Cg style='clip-path:url(%23clippath)'%3E%3Cg style='clip-path:url(%23clippath-1)'%3E%3Cg style='opacity:.05'%3E%3Cg style='clip-path:url(%23clippath-2)'%3E%3Cpath d='M9 93.11v1083.36s317.95 32.83 755.25 32.83 634.02-118.95 949.9-118.95 854.85 86.12 854.85 86.12V93.11S2098.79 7 1740.06 7s-495.32 118.95-995.27 118.95S9 93.11 9 93.11' style='fill:%232b2b2a'/%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
       background-repeat: no-repeat;
-      background-size: 500% 100%;
-      background-position: center;
       @include media-breakpoint-up(sm) {
         left: calc(-50vw + 270px);
       }
       @include media-breakpoint-up(md) {
-        background-size: 200% 100%;
-        height: 100%;
         left: calc(-50vw + 360px);
       }
       @include media-breakpoint-up(lg) {
-        background-size: 150% 100%;
         left: calc(-50vw + 480px);
       }
       @include media-breakpoint-up(xl) {
-        background-size: 100% 100%;
         left: calc(-50vw + 570px);
       }
       @include media-breakpoint-up(xxl) {
         left: calc(-50vw + 660px);
+      }
+    }
+    // Before pseudo-element contains top and bottom waves.
+    &::before {
+      top: 0;
+      background-image:
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 2578 281'%3E%3Cpath d='M2578 84.05S1784.18-82.21 1277 55.74C819.69 180.13 0 84.05 0 84.05V282.4h2578Z' fill='%23f5f6f7'/%3E%3C/svg%3E"),
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 2578 281'%3E%3Cpath d='M0 198.35s793.82 166.26 1301 28.31c457.31-124.39 1277-28.31 1277-28.31V0H0Z' fill='%23f5f6f7'/%3E%3C/svg%3E");
+      background-position: top, bottom;
+    }
+    // After pseudo-element fills the space between the two waves.
+    &::after {
+      background-color: $gray-200;
+      top: $spacer * 2;
+      height: calc(100% - $spacer * 4);
+      @include media-breakpoint-up(sm) {
+        top: $spacer * 3;
+        height: calc(100% - $spacer * 6);
+      }
+      @include media-breakpoint-up(md) {
+        top: $spacer * 4;
+        height: calc(100% - $spacer * 8);
+      }
+      @include media-breakpoint-up(lg) {
+        top: $spacer * 6;
+        height: calc(100% - $spacer * 12);
       }
     }
   }

@@ -466,7 +466,7 @@ function joinup_search_form_alter(&$form, FormStateInterface $form_state, $form_
               'class' => [
                 'search_bar_badge',
               ],
-              'data-description' => $group->label(),
+              'data-joinup-description' => $group->label(),
             ],
           ];
           $form['list'] = [
