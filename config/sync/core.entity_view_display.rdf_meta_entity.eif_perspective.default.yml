@@ -92,7 +92,7 @@ content:
     region: content
   field_eif_description:
     type: text_default
-    label: hidden
+    label: inline
     settings: {  }
     third_party_settings: {  }
     weight: 0
