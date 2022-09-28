@@ -14,7 +14,6 @@ use Drupal\joinup\Traits\EntityReferenceTrait;
 use Drupal\joinup\Traits\EntityTrait;
 use Drupal\joinup\Traits\FileTrait;
 use Drupal\joinup\Traits\FormTrait;
-use Drupal\joinup\Traits\NodeTrait;
 use Drupal\joinup\Traits\OgTrait;
 use Drupal\joinup\Traits\RdfEntityTrait;
 use Drupal\joinup\Traits\SearchTrait;
@@ -39,7 +38,6 @@ class CollectionContext extends RawDrupalContext {
   use EntityTrait;
   use FileTrait;
   use FormTrait;
-  use NodeTrait;
   use OgMenuTrait;
   use OgTrait;
   use RdfEntityTrait;
@@ -105,27 +103,8 @@ class CollectionContext extends RawDrupalContext {
    */
   public function visitCollection(string $collection): void {
     /** @var \Drupal\rdf_entity\Entity\Rdf $entity */
-    $entity = $this->getCollectionByName($collection);
+    $entity = $this->getEntityByLabel('rdf_entity', $collection);
     $this->visitPath($entity->toUrl()->toString());
-  }
-
-  /**
-   * Returns the Collection with the given title.
-   *
-   * If multiple collections have the same title,
-   * the first one will be returned.
-   *
-   * @param string $title
-   *   The collection title.
-   *
-   * @return \Drupal\collection\Entity\CollectionInterface
-   *   The collection.
-   *
-   * @throws \InvalidArgumentException
-   *   Thrown when a collection with the given title does not exist.
-   */
-  protected function getCollectionByName(string $title): CollectionInterface {
-    return $this->getRdfEntityByLabel($title, 'collection');
   }
 
   /**
@@ -375,7 +354,7 @@ class CollectionContext extends RawDrupalContext {
    * @When I delete the :collection collection
    */
   public function deleteCollection(string $collection): void {
-    $collection = $this->getCollectionByName($collection);
+    $collection = $this->getEntityByLabel('rdf_entity', $collection);
     $collection->skip_notification = TRUE;
     $collection->delete();
   }
@@ -418,7 +397,7 @@ class CollectionContext extends RawDrupalContext {
    */
   public function givenCollectionUserMemberships(TableNode $membership_table): void {
     foreach ($membership_table->getColumnsHash() as $values) {
-      $group = $this->getCollectionByName($values['collection']);
+      $group = $this->getEntityByLabel('rdf_entity', $values['collection']);
       $this->givenUserMembership($group, $values);
     }
   }
@@ -486,7 +465,7 @@ class CollectionContext extends RawDrupalContext {
       throw new \Exception("User {$username} could not be found.");
     }
 
-    $collection = $this->getRdfEntityByLabel($rdf_entity, 'collection');
+    $collection = $this->getEntityByLabel('rdf_entity', $rdf_entity, 'collection');
     $owner_roles = [
       OgRoleInterface::ADMINISTRATOR,
       OgRoleInterface::AUTHENTICATED,
@@ -600,7 +579,7 @@ class CollectionContext extends RawDrupalContext {
   public function verifyDeleteLinkVisibility(TableNode $check_table): void {
     foreach ($check_table->getColumnsHash() as $values) {
       $user = $this->getUserByName($values['user']);
-      $collection = $this->getCollectionByName($values['collection']);
+      $collection = $this->getEntityByLabel('rdf_entity', $values['collection']);
       $visible = $values['delete link'] === 'yes';
       $this->assertGroupEntityOperation($visible, 'delete', $collection, $user);
     }
@@ -676,7 +655,7 @@ class CollectionContext extends RawDrupalContext {
    * @When I change the name of the :collection collection to :name
    */
   public function updateCollectionName(string $collection, string $name): void {
-    $entity = $this->getCollectionByName($collection);
+    $entity = $this->getEntityByLabel('rdf_entity', $collection);
     $entity->setName($name)->save();
   }
 
