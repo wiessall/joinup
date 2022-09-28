@@ -16,17 +16,19 @@
         });
 
         // Check every active filter item and hide tiles which don't contain proper
-        // data-eif-category.
+        // data-joinup-eif-category.
         let solutionsCount = 0;
         const eifFilterItem = document.querySelectorAll(
           ".eif-filter__item a.is-active"
         );
         eifFilterItem.forEach((element) => {
-          const currentEifCategory = element.getAttribute("data-eif-category");
+          const currentEifCategory = element.getAttribute(
+            "data-joinup-eif-category"
+          );
 
           if (typeof currentEifCategory !== "undefined") {
             eifTile.forEach((el) => {
-              const eifCategory = el.getAttribute("data-eif-category");
+              const eifCategory = el.getAttribute("data-joinup-eif-category");
               if (typeof eifCategory !== "undefined") {
                 const eifCategoryArray = eifCategory.split(" ");
                 if (
