@@ -75,7 +75,7 @@ Feature:
 
     When I am logged in as a user with the authenticated role
     And I go to the "IOP page" custom page
-    Then I should not see the link "Report this content"
+    Then I should not see the link "Report abusive content"
     And I should not see the button "Translate"
 
   @javascript
@@ -86,7 +86,7 @@ Feature:
 
     When I am logged in as a user with the authenticated role
     And I go to the "IOP <type>" <type>
-    Then I should not see the link "Report this content"
+    Then I should not see the link "Report abusive content"
     And I should not see the button "Translate"
 
     Examples:
