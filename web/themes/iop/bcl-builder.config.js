@@ -22,6 +22,15 @@ module.exports = {
   styles: [
     // Components
     {
+      entry: path.resolve(outputFolder, "src/scss/accordion-faq.scss"),
+      dest: path.resolve(outputFolder, "assets/css/accordion-faq.min.css"),
+      options: {
+        minify: true,
+        includePaths,
+        sourceMap: "file",
+      },
+    },
+    {
       entry: path.resolve(outputFolder, "src/scss/components.scss"),
       dest: path.resolve(outputFolder, "assets/css/components.min.css"),
       options: {
@@ -44,6 +53,14 @@ module.exports = {
       dest: path.resolve(outputFolder, "assets/css/navbar.min.css"),
       options: {
         minify: true,
+        includePaths,
+        sourceMap: "file",
+      },
+    },
+    {
+      entry: path.resolve(outputFolder, "src/scss/page-header.scss"),
+      dest: path.resolve(outputFolder, "assets/css/page-header.min.css"),
+      options: {
         includePaths,
         sourceMap: "file",
       },
@@ -167,7 +184,6 @@ module.exports = {
         sourceMap: "file",
       },
     },
-    // Spare components
     {
       entry: path.resolve(outputFolder, "src/scss/pager.scss"),
       dest: path.resolve(outputFolder, "assets/css/pager.min.css"),
