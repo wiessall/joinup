@@ -14,7 +14,7 @@ use Drupal\eif\EifInterface;
 use Drupal\eif\EifWrapperInterface;
 use Drupal\eif\Entity\EifWrapper;
 use Drupal\joinup\Traits\EntityReferenceTrait;
-use Drupal\joinup\Traits\RdfEntityTrait;
+use Drupal\joinup\Traits\EntityTrait;
 use Drupal\joinup\Traits\SearchTrait;
 use Drupal\joinup\Traits\TestingEntitiesTrait;
 use Drupal\joinup\Traits\UtilityTrait;
@@ -33,7 +33,7 @@ use Drupal\taxonomy\Entity\Term;
 class EifContext extends RawDrupalContext {
 
   use EntityReferenceTrait;
-  use RdfEntityTrait;
+  use EntityTrait;
   use SearchTrait;
   use StringTranslationTrait;
   use TestingEntitiesTrait;
@@ -194,7 +194,7 @@ class EifContext extends RawDrupalContext {
    * @Given the following EIF perspective data for the :solution solution:
    */
   public function givenEifPerspectiveOfSolution(TableNode $table_data, string $solution): void {
-    $solution = $this->getRdfEntityByLabel($solution, 'solution');
+    $solution = $this->getEntityByLabel('rdf_entity', $solution, 'solution');
     $qualifiers = [];
     $eif_perspective_fields = [];
     foreach ($table_data->getRows() as $row) {
@@ -270,7 +270,7 @@ class EifContext extends RawDrupalContext {
    * @Given I go to the EIF perspective page of the :solution solution
    */
   public function goToEifPerspectiveOfSolution(string $solution): void {
-    $solution = $this->getRdfEntityByLabel($solution, 'solution');
+    $solution = $this->getEntityByLabel('rdf_entity', $solution, 'solution');
     $url = Url::fromRoute('entity.rdf_entity.eif_perspective', [
       'rdf_entity' => $solution->id(),
     ]);
@@ -286,7 +286,7 @@ class EifContext extends RawDrupalContext {
    * @Given I go to the EIF perspective edit form of the :solution solution
    */
   public function goToEifEditFormOfSolution(string $solution): void {
-    $solution = $this->getRdfEntityByLabel($solution, 'solution');
+    $solution = $this->getEntityByLabel('rdf_entity', $solution, 'solution');
     $url = Url::fromRoute('eif.eif_perspective_form', [
       'rdf_entity' => $solution->id(),
     ]);
@@ -302,7 +302,7 @@ class EifContext extends RawDrupalContext {
    * @Given there should be an EIF perspective associated with the :solution solution
    */
   public function assertSolutionWithPerspective(string $solution): void {
-    $solution = $this->getRdfEntityByLabel($solution, 'solution');
+    $solution = $this->getEntityByLabel('rdf_entity', $solution, 'solution');
     if (empty(\Drupal::getContainer()->get('rdf_meta_entity.repository')->getMetaEntityForEntity($solution, 'eif_perspective'))) {
       throw new \Exception('No perspective was found for the solution');
     }
@@ -317,7 +317,7 @@ class EifContext extends RawDrupalContext {
    * @Given I delete the EIF perspective of the :solution_label solution
    */
   public function deletePerspectiveOfSolution(string $solution_label): void {
-    $solution = $this->getRdfEntityByLabel($solution_label, 'solution');
+    $solution = $this->getEntityByLabel('rdf_entity', $solution_label, 'solution');
     $eif_perspective = $solution->get('eif_perspective')->entity;
     $eif_perspective->delete();
   }

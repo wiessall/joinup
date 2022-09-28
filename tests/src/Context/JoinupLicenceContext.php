@@ -7,9 +7,11 @@ namespace Drupal\joinup\Context;
 use Behat\Gherkin\Node\TableNode;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\joinup\Traits\EntityReferenceTrait;
+use Drupal\joinup\Traits\EntityTrait;
 use Drupal\joinup\Traits\RdfEntityTrait;
 use Drupal\joinup\Traits\SearchTrait;
 use Drupal\joinup\Traits\UtilityTrait;
+use Drupal\rdf_entity\RdfInterface;
 
 /**
  * Behat step definitions for testing licences.
@@ -17,6 +19,7 @@ use Drupal\joinup\Traits\UtilityTrait;
 class JoinupLicenceContext extends RawDrupalContext {
 
   use EntityReferenceTrait;
+  use EntityTrait;
   use RdfEntityTrait;
   use SearchTrait;
   use UtilityTrait;
@@ -41,7 +44,7 @@ class JoinupLicenceContext extends RawDrupalContext {
    */
   public function visitLicence($licence) {
     /** @var \Drupal\rdf_entity\Entity\Rdf $entity */
-    $entity = $this->getLicenceByName($licence);
+    $entity = $this->getEntityByLabel('rdf_entity', $licence);
     $this->visitPath($entity->toUrl()->toString());
   }
 
@@ -60,7 +63,7 @@ class JoinupLicenceContext extends RawDrupalContext {
    */
   public function visitLicenceWithFormat($licence, $format) {
     /** @var \Drupal\rdf_entity\Entity\Rdf $entity */
-    $entity = $this->getLicenceByName($licence);
+    $entity = $this->getEntityByLabel('rdf_entity', $licence);
     $this->visitPath($entity->toUrl('canonical', ['query' => ['_format' => $format]])->toString());
   }
 
@@ -147,10 +150,10 @@ class JoinupLicenceContext extends RawDrupalContext {
    * @param array $values
    *   An associative array of values, keyed by property name.
    *
-   * @return \Drupal\rdf_entity\Entity\Rdf
+   * @return \Drupal\rdf_entity\RdfInterface
    *   A new licence entity.
    */
-  protected function createLicence(array $values) {
+  protected function createLicence(array $values): RdfInterface {
     $licence = $this->createRdfEntity('licence', $values);
     $this->licences[$licence->id()] = $licence;
 
@@ -165,30 +168,13 @@ class JoinupLicenceContext extends RawDrupalContext {
    *
    * @When I delete the :licence licence
    */
-  public function deleteLicence($licence) {
-    /** @var \Drupal\rdf_entity\Entity\Rdf $licence */
-    $licence = $this->getLicenceByName($licence);
+  public function deleteLicence(string $licence): void {
+    $licence = $this->getEntityByLabel('rdf_entity', $licence);
     // Do not send email for entities created by the API.
     // @todo Convert the dynamic property to a proper temporary storage.
     // @see: https://www.drupal.org/node/2896474
     $licence->skip_notification = TRUE;
     $licence->delete();
-  }
-
-  /**
-   * Returns the licence with the given title.
-   *
-   * If multiple licences have the same title,
-   * the first one will be returned.
-   *
-   * @param string $title
-   *   The licence title.
-   *
-   * @return \Drupal\rdf_entity\Entity\Rdf
-   *   The asset distribution.
-   */
-  protected function getLicenceByName($title) {
-    return $this->getRdfEntityByLabel($title, 'licence');
   }
 
   /**

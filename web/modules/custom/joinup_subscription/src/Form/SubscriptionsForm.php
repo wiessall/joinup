@@ -236,7 +236,7 @@ class SubscriptionsForm extends FormBase {
             'autocomplete' => 'off',
             // Store the initial state of the subscriptions so that we can
             // unlock the save button in JS whenever a state changes.
-            'data-drupal-subscriptions' => Json::encode(array_values($subscription_status)),
+            'data-joinup-subscriptions' => Json::encode(array_values($subscription_status)),
             'data-joinup-group' => $group->id(),
           ],
         ];
@@ -351,7 +351,7 @@ class SubscriptionsForm extends FormBase {
         $subscription_status[$key] = $form['groups'][$submitted_group_id]['bundles'][$key]['#checked'];
       }
     }
-    $form['groups'][$submitted_group_id]['bundles']['submit']['#attributes']['data-drupal-subscriptions'] = Json::encode(array_values($subscription_status));
+    $form['groups'][$submitted_group_id]['bundles']['submit']['#attributes']['data-joinup-subscriptions'] = Json::encode(array_values($subscription_status));
 
     $user = $form_state->get('#user');
     $form['edit-actions']['unsubscribe_all']['#access'] = $this->hasSubscriptions($user);
