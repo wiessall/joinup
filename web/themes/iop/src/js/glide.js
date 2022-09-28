@@ -3,8 +3,9 @@
  * Glide slider configuration.
  */
 import Glide, {
-  Controls,
   Breakpoints,
+  Controls,
+  Keyboard,
   Swipe,
 } from "@glidejs/glide/dist/glide.modular.esm";
 
@@ -30,7 +31,7 @@ import Glide, {
               },
             },
           });
-          glide.mount({ Controls, Breakpoints, Swipe });
+          glide.mount({ Breakpoints, Controls, Keyboard, Swipe });
         });
       }
       mountSlide();

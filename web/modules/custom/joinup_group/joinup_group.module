@@ -106,7 +106,7 @@ function joinup_group_preprocess_page(&$variables) {
     $group = $context['og']->getContextValue();
 
     if ($group && $group->getEntityTypeId() === 'rdf_entity') {
-      $variables['attributes']['data-drupal-group-context'] = $group->id();
+      $variables['attributes']['data-joinup-group-context'] = $group->id();
     }
   }
 }
