@@ -111,7 +111,7 @@ class BuildCommands extends AbstractCommands {
     // Typically, this happens in GitLab pipelines, where the repos are shallow
     // cloned for performance reasons. A shallow clone repository prevents us to
     // get the latest Git tag as no tags are available.
-    $is_shallow_repository = $repository->run('rev-parse', ['--is-shallow-repository']) === 'true';
+    $is_shallow_repository = trim($repository->run('rev-parse', ['--is-shallow-repository'])) !== 'false';
     if ($is_shallow_repository) {
       $repository->run('fetch', ['--unshallow']);
     }
