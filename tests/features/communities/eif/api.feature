@@ -18,7 +18,7 @@ Feature:
       | Description   | This should be in the description field. |
       | Solution type | Common frameworks                        |
 
-    # Verify that solution group menu not contains EIF view link.
+    # Verify that solution group menu doesn't contain the EIF Perspective link.
     When I go to the "EIF solution" solution
     Then I should see the following group menu items in the specified order:
       | text     |
@@ -72,8 +72,8 @@ Feature:
     # Verify that solution group menu contains correct links.
     When I go to the "EIF solution" solution
     Then I should see the following group menu items in the specified order:
-      | text     |
-      | Overview |
-      | Members  |
-      | About    |
-      | EIF view |
+      | text            |
+      | Overview        |
+      | Members         |
+      | About           |
+      | EIF Perspective |
