@@ -45,3 +45,18 @@ function ventuno_preprocess(array &$variables): void {
 function ventuno_preprocess_paragraph(&$variables) {
   $variables['#attached']['library'][] = 'ventuno/content-tables';
 }
+
+/**
+ * Implements hook_preprocess_HOOK().
+ */
+function ventuno_preprocess_paragraph__accordion_item(&$variables) {
+  $entity = $variables['paragraph'];
+  if ($entity->bundle() !== 'accordion_item') {
+    return;
+  }
+  $parent = $entity->getParentEntity();
+  if ($parent->bundle() !== 'accordion') {
+    return;
+  }
+  $variables['parent_id'] = $parent->id();
+}
