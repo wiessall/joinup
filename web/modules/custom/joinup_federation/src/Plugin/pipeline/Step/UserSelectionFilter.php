@@ -163,7 +163,7 @@ class UserSelectionFilter extends JoinupFederationStepPluginBase implements Pipe
         $options[$id] = [
           'solution' => $label,
           'info' => $this->getInfo($id, $category_id),
-          '#attributes' => ['data-drupal-federation-category' => $category_id],
+          '#attributes' => ['data-joinup-federation-category' => $category_id],
           '#disabled' => $category_id === 'invalid_collection',
         ];
         $unchecked_categories = [
@@ -329,7 +329,7 @@ class UserSelectionFilter extends JoinupFederationStepPluginBase implements Pipe
     $new_rows = [];
     $previous_category = NULL;
     foreach ($element['#rows'] as $row) {
-      $category = $row['data-drupal-federation-category'];
+      $category = $row['data-joinup-federation-category'];
       if ($category !== $previous_category) {
         $info = static::getCategoryMetadata($category);
         $group = [

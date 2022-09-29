@@ -432,4 +432,4 @@ Feature:
     Given I am an anonymous user
     When I visit the "JLA" custom page
     And I should see the text "Disclose source"
-    And the response should contain "<a data-licence-category=\"disclose-source\" href=\"#\" title=\"The source code of distributed derivatives must be publicly available\">Disclose source</a>"
+    And the response should contain "<a data-joinup-licence-category=\"disclose-source\" href=\"#\" title=\"The source code of distributed derivatives must be publicly available\">Disclose source</a>"

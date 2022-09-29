@@ -79,7 +79,6 @@ Feature: Collection content
     Then I delete the "Solution from draft to validated" solution
     And I delete the "Costas Papazoglou" contact information
 
-  @clearStaticCache
   Scenario: Content type facet labels should show the plural form when multiple results are available.
     Given I go to the homepage of the "Turin Egyptian Collection" collection
     Then the "Discussion" content tab is displayed

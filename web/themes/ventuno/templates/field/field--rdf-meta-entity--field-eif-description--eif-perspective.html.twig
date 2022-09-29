@@ -18,30 +18,47 @@
     label_display == 'visually_hidden' ? 'visually-hidden',
   ]
 %}
-<div{{ attributes.addClass(classes) }}>
+
+{% if label_hidden %}
   {% if multiple %}
-    {% if label_display == 'inline' %}
-      <span{{ title_attributes.addClass(title_classes) }}>{{ label }}<span class="me-1">:</span></span>
-    {% else %}
-      <div{{ title_attributes.addClass(title_classes) }}>{{ label }}</div>
-    {% endif %}
-    {% for item in items %}
-      <span{{ item.attributes }}>{{ item.content }}</span>{{ not loop.last ? ', ' }}
-    {% endfor %}
+    <div{{ attributes.addClass(classes) }}>
+      {% for item in items %}
+        <div{{ item.attributes.addClass('field__item') }}>{{ item.content }}</div>
+      {% endfor %}
+    </div>
   {% else %}
-    {% if label_display == 'inline' %}
-      {% for item in items %}
-        <span{{ title_attributes.addClass(title_classes) }}>{{ label }}:</span>
-        <span{{ item.attributes }}>{{ item.content }}</span>
-      {% endfor %}
-    {% else %}
-      <div{{ title_attributes.addClass(title_classes) }}>
-        {{ label }}
-      </div>
-      {% for item in items %}
-        <span{{ title_attributes.addClass(title_classes) }}>{{ label }}:</span>
-        <span{{ item.attributes }}>{{ item.content }}</span>
-      {% endfor %}
-    {% endif %}
+    {% for item in items %}
+      <div{{ attributes.addClass(classes) }}>{{ item.content }}</div>
+    {% endfor %}
   {% endif %}
-</div>
+{% elseif label_display == 'inline' %}
+  <div{{ attributes.addClass(classes) }}>
+    <span{{ title_attributes.addClass(title_classes) }}>
+      {{ label }}:
+    </span>
+    {% if multiple %}
+    <div class="field__items">
+      {% endif %}
+      {% for item in items %}
+        <span{{ item.attributes.addClass('field__item') }}>{{ item.content }}</span>
+      {% endfor %}
+      {% if multiple %}
+    </div>
+    {% endif %}
+  </div>
+{% else %}
+  <div{{ attributes.addClass(classes) }}>
+    <div{{ title_attributes.addClass(title_classes) }}>
+      {{ label }}
+    </div>
+    {% if multiple %}
+    <div class="field__items">
+      {% endif %}
+      {% for item in items %}
+        <div{{ item.attributes.addClass('field__item') }}>{{ item.content }}</div>
+      {% endfor %}
+      {% if multiple %}
+    </div>
+    {% endif %}
+  </div>
+{% endif %}
