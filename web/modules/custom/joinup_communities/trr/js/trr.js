@@ -44,6 +44,22 @@
     },
   };
 
+  /**
+   * Only clear some fields when the solution type is changed.
+   */
+  const clearFields = () => {
+    document
+      .querySelectorAll(Drupal.trrSolution.fieldsSelector)
+      .forEach((field) => {
+        const element = field.querySelector("input, select");
+        if (element.type === "text") {
+          element.value = "";
+        } else {
+          element.value = "_none";
+        }
+      });
+  };
+
   Drupal.behaviors.trrSolution = {
     attach(context) {
       once(
@@ -54,6 +70,7 @@
         Drupal.trrSolution.solutionTypeUpdated(solutionTypeElement);
         solutionTypeElement.addEventListener("change", () => {
           Drupal.trrSolution.solutionTypeUpdated(solutionTypeElement);
+          clearFields();
         });
       });
     },
