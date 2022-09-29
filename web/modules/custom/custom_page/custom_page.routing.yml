@@ -10,3 +10,5 @@ custom_page.file_permalink:
     parameters:
       node:
         type: entity:node
+        bundle:
+          - custom_page
