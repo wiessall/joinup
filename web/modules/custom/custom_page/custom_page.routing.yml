@@ -1,0 +1,12 @@
+custom_page.file_permalink:
+  path: '/node/{node}/f/{delta}'
+  defaults:
+    _title: 'File download'
+    _controller: '\Drupal\custom_page\Controller\CustomPageController::fileDownload'
+  requirements:
+    _permission: 'access content'
+    delta: \d+
+  options:
+    parameters:
+      node:
+        type: entity:node
