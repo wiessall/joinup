@@ -338,9 +338,6 @@
             "drupal/social_media_links": {
                 "Missing config schema for field, widget and formatter @see https://www.drupal.org/node/2898680": "https://git.drupalcode.org/project/social_media_links/-/merge_requests/4.diff"
             },
-            "drupal/sparql_entity_storage": {
-                "Use memory cache as core does @see https://www.drupal.org/project/sparql_entity_storage/issues/3310804": "https://git.drupalcode.org/project/sparql_entity_storage/-/merge_requests/14.diff"
-            },
             "drupal/subpathauto": {
                 "Subpaths with redirect not resolved @see https://www.drupal.org/project/subpathauto/issues/3175637": "https://git.drupalcode.org/project/subpathauto/-/merge_requests/1.diff"
             },
