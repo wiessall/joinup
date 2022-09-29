@@ -249,7 +249,7 @@ class JoinupCoreContext extends RawDrupalContext {
 
   /**
    * Asserts the content type of the response from the server.
-
+   *
    * @param string $header
    *   The header of the response.
    * @param string $value

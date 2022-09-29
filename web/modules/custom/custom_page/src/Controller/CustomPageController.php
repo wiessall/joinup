@@ -67,5 +67,4 @@ class CustomPageController {
     throw new NotFoundHttpException();
   }
 
-
 }
