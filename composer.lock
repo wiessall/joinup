@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "04c1b0cea6e351c51336e4297756f6bd",
+    "content-hash": "047621eea0b8badf41ef13252ea73d05",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -10072,16 +10072,16 @@
         },
         {
             "name": "openeuropa/oe_bootstrap_theme",
-            "version": "1.0.0-beta4",
+            "version": "1.0.0-beta5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/openeuropa/oe_bootstrap_theme.git",
-                "reference": "3a186e8644fcc5d1b75c6a133a72d5117541363a"
+                "reference": "2df6d595bf739ae700182ee93e8c98e8b8412ead"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/openeuropa/oe_bootstrap_theme/zipball/3a186e8644fcc5d1b75c6a133a72d5117541363a",
-                "reference": "3a186e8644fcc5d1b75c6a133a72d5117541363a",
+                "url": "https://api.github.com/repos/openeuropa/oe_bootstrap_theme/zipball/2df6d595bf739ae700182ee93e8c98e8b8412ead",
+                "reference": "2df6d595bf739ae700182ee93e8c98e8b8412ead",
                 "shasum": ""
             },
             "require": {
@@ -10156,9 +10156,9 @@
             "description": "OpenEuropa Bootstrap base theme.",
             "support": {
                 "issues": "https://github.com/openeuropa/oe_bootstrap_theme/issues",
-                "source": "https://github.com/openeuropa/oe_bootstrap_theme/tree/1.0.0-beta4"
+                "source": "https://github.com/openeuropa/oe_bootstrap_theme/tree/1.0.0-beta5"
             },
-            "time": "2022-08-01T15:46:00+00:00"
+            "time": "2022-08-09T14:37:51+00:00"
         },
         {
             "name": "openeuropa/oe_dashboard_agent",
