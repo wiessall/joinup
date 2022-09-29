@@ -60,6 +60,7 @@
   }
   &-button-text {
     margin-left: $spacer * 3; // 48px
+    font-weight: $font-weight-bold;
     @include media-breakpoint-up(md) {
       margin-left: $spacer * 4; // 64px
     }
