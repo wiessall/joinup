@@ -54,7 +54,7 @@ class Chip {
    *   The chip text.
    */
   public function getText(): string {
-    return $this->isVisible() ? $this->element->getText() : $this->element->getAttribute('data-description');
+    return $this->isVisible() ? $this->element->getText() : $this->element->getAttribute('data-joinup-description');
   }
 
   /**
