@@ -12,6 +12,7 @@ use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\asset_distribution\Entity\DownloadEvent;
 use Drupal\file_url\FileUrlHandler;
 use Drupal\joinup\Traits\EntityReferenceTrait;
+use Drupal\joinup\Traits\EntityTrait;
 use Drupal\joinup\Traits\FileTrait;
 use Drupal\joinup\Traits\RdfEntityTrait;
 use Drupal\joinup\Traits\TestingEntitiesTrait;
@@ -24,6 +25,7 @@ use Drupal\rdf_entity\RdfInterface;
 class AssetDistributionContext extends RawDrupalContext {
 
   use EntityReferenceTrait;
+  use EntityTrait;
   use FileTrait;
   use RdfEntityTrait;
   use TestingEntitiesTrait;
@@ -43,7 +45,7 @@ class AssetDistributionContext extends RawDrupalContext {
    */
   public function visitDistribution(string $asset_distribution): void {
     /** @var \Drupal\rdf_entity\Entity\Rdf $entity */
-    $entity = $this->getAssetDistributionByName($asset_distribution);
+    $entity = $this->getEntityByLabel('rdf_entity', $asset_distribution);
     $this->visitPath($entity->toUrl()->toString());
   }
 
@@ -188,50 +190,13 @@ class AssetDistributionContext extends RawDrupalContext {
    *   Thrown when the entity could not be deleted.
    */
   public function deleteAssetDistribution(string $asset_distribution): void {
-    /** @var \Drupal\rdf_entity\Entity\Rdf $entity */
-    $entity = $this->getAssetDistributionByName($asset_distribution);
+    /** @var \Drupal\asset_distribution\Entity\AssetDistributionInterface $entity */
+    $entity = $this->getEntityByLabel('rdf_entity', $asset_distribution);
     if (isset($this->entities['rdf_entity'][$entity->id()])) {
       unset($this->entities['rdf_entity'][$entity->id()]);
     }
     $entity->skip_notification = TRUE;
     $entity->delete();
-  }
-
-  /**
-   * Returns the asset distribution with the given title.
-   *
-   * If multiple asset distributions have the same title,
-   * the first one will be returned.
-   *
-   * @param string $title
-   *   The asset distribution title.
-   *
-   * @return \Drupal\rdf_entity\RdfInterface
-   *   The asset distribution.
-   *
-   * @throws \InvalidArgumentException
-   *   Thrown when an asset distribution with the given title does not exist.
-   */
-  protected function getAssetDistributionByName(string $title): RdfInterface {
-    return $this->getRdfEntityByLabel($title, 'asset_distribution');
-  }
-
-  /**
-   * Returns the Solution with the given title.
-   *
-   * If multiple solution have the same title, the first one will be returned.
-   *
-   * @param string $title
-   *   The solution title.
-   *
-   * @return \Drupal\rdf_entity\RdfInterface
-   *   The solution.
-   *
-   * @throws \InvalidArgumentException
-   *   Thrown when a solution with the given title does not exist.
-   */
-  protected function getSolutionByName(string $title): RdfInterface {
-    return $this->getRdfEntityByLabel($title, 'solution');
   }
 
   /**
@@ -298,7 +263,7 @@ class AssetDistributionContext extends RawDrupalContext {
       throw new \InvalidArgumentException('Only "download" and "external" values are allowed for $link_type.');
     }
     $link_type = ucfirst($link_type);
-    $distribution = $this->getAssetDistributionByName($distribution);
+    $distribution = $this->getEntityByLabel('rdf_entity', $distribution);
     if (empty($distribution->field_ad_access_url->first())) {
       throw new \Exception(sprintf('Asset distribution "%s" does not contain any download links.', $distribution->label()));
     }
@@ -344,7 +309,7 @@ class AssetDistributionContext extends RawDrupalContext {
    * @Then the :distribution distribution should have the link of the :file_name in the access URL field
    */
   public function assertLinkSynchronized(string $distribution, string $file_name): void {
-    $distribution = $this->getAssetDistributionByName($distribution);
+    $distribution = $this->getEntityByLabel('rdf_entity', $distribution);
     $file = FileUrlHandler::urlToFile($distribution->field_ad_access_url->target_id);
     if (($file->getFilename() !== $file_name) || !\Drupal::service('file_url_generator')->generateAbsoluteString($file->getFileUri())) {
       throw new \Exception("The file {$file_name} was not found in the '{$distribution->label()}' distribution'");
@@ -466,7 +431,7 @@ class AssetDistributionContext extends RawDrupalContext {
   public function downloadEvents(TableNode $table): void {
     foreach ($table->getColumnsHash() as $row) {
       /** @var \Drupal\asset_distribution\Entity\AssetDistributionInterface $distribution */
-      $distribution = $this->getRdfEntityByLabel($row['distribution'], 'asset_distribution');
+      $distribution = $this->getEntityByLabel('rdf_entity', $row['distribution'], 'asset_distribution');
       $file = FileUrlHandler::urlToFile($distribution->get('field_ad_access_url')->target_id);
       $account = \Drupal::service('email.validator')->isValid($row['user']) ? new AnonymousUserSession() : user_load_by_name($row['user']);
       $mail = $account->isAnonymous() ? $row['user'] : $account->getEmail();
