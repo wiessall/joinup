@@ -9,6 +9,9 @@ Feature: Permalinks for custom page attachments.
       | title           | body        | collection       | attachments                                                          |
       | Predictable CP1 | Lorem ipsum | Predictable name | empty.rdf, empty_pdf.pdf, invalid_adms.rdf, test.zip, text.pdf       |
       | Predictable CP2 | Lorem ipsum | Predictable name | ada.png, alan.jpg, blaise.jpg, charles.jpg, leonardo.jpg, linus.jpeg |
+    And news content:
+      | title           | headline        | collection       | state     |
+      | Predictable NC1 | Predictable NC1 | Predictable name | validated |
 
     When I go to "/collection/predictable-name/predictable-cp1"
     Then I should see "Predictable CP1"
@@ -33,3 +36,9 @@ Feature: Permalinks for custom page attachments.
     When I go to "/collection/predictable-name/predictable-cp2/f/6"
     Then I should see the heading "Page not found"
 
+    # Ensure the file downlaod functionality only works for custom pages. Other
+    # types simply throw a page not found. The validation is on the route level
+    # so we only need to check that a page not found is returned and there is
+    # no exception thrown.
+    When I go to "/collection/predictable-name/predictable-nc1/f/0"
+    Then I should see the heading "Page not found"
