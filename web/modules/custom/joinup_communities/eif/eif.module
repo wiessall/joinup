@@ -343,7 +343,7 @@ function _eif_add_eif_link_to_leftside_menu(RdfMetaEntityInterface $meta_entity)
           ])->toUriString(),
         ];
         \Drupal::entityTypeManager()->getStorage('menu_link_content')->create([
-          'title' => t('EIF view'),
+          'title' => t('EIF Perspective'),
           'menu_name' => $menu_name,
           'link' => $link,
           'weight' => -6,
