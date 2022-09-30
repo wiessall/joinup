@@ -144,8 +144,8 @@ function joinup_group_preprocess(array &$variables, string $hook): void {
     && ($group_content->getSharedInField() && !$group_content->getSharedInField()->isEmpty())
   ) {
     $variables['#attached']['library'][] = 'joinup_group/shared_entity';
-    $variables['attributes']['data-drupal-parent-id'] = $parent->id();
-    $variables['attributes']['data-drupal-parent-label'] = $parent->label();
+    $variables['attributes']['data-joinup-parent-id'] = $parent->id();
+    $variables['attributes']['data-joinup-parent-label'] = $parent->label();
   }
 }
 

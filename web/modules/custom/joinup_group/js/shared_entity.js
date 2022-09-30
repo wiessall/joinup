@@ -29,7 +29,7 @@
   Drupal.behaviors.sharedContent = {
     attach: (context) => {
       const groupElement = document.querySelector(
-        "[data-drupal-group-context]"
+        "[data-joinup-group-context]"
       );
 
       // If there is no global group context, bail out.
@@ -37,15 +37,15 @@
         return;
       }
 
-      const groupId = groupElement.dataset.drupalGroupContext;
+      const groupId = groupElement.dataset.joinupGroupContext;
       if (!groupId) {
         return;
       }
 
       // context.querySelector()
-      once("shared-cue", "[data-drupal-parent-id]", context).forEach(
+      once("shared-cue", "[data-joinup-parent-id]", context).forEach(
         (groupContent) => {
-          const parentId = groupContent.dataset.drupalParentId;
+          const parentId = groupContent.dataset.joinupParentId;
 
           // If it's in the current global collection context, don't add any cue.
           if (parentId === groupId) {
@@ -60,7 +60,7 @@
             return;
           }
 
-          const parentLabel = groupContent.dataset.drupalParentLabel;
+          const parentLabel = groupContent.dataset.joinupParentLabel;
           const sharedContentCue = document.createElement("div");
           sharedContentCue.setAttribute(
             "data-drupal-card-stats-shared",
