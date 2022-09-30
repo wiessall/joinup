@@ -68,6 +68,12 @@ function _ventuno_preprocess_search_result(array &$variables, string $entity_typ
       '@created' => \Drupal::service('date.formatter')->format($created_time, 'date_only'),
     ]);
   }
+  if ($changed_time = $entity->getChangedTime()) {
+    $variables['changed'] = t('@label: @changed', [
+      '@label' => t('Updated Date'),
+      '@changed' => \Drupal::service('date.formatter')->format($changed_time, 'date_only'),
+    ]);
+  }
 
   if ($variables['view_mode'] === 'search_result_featured') {
     $variables['image'] = ($entity instanceof LogoInterface) && $entity->getLogoAsFile()
