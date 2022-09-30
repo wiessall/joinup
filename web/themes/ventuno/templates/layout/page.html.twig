@@ -78,6 +78,9 @@
         <div class="layout-content">
           {{ page.content }}
         </div>
+          {% if page.content_bottom %}
+            {{ page.content_bottom }}
+          {% endif %}
       </main>
       {% if page.sidebar %}
         <aside class="layout-sidebar col-12 col-lg-3">
@@ -86,11 +89,7 @@
       {% endif %}
     </div>
   </div>
-  {% if page.content_bottom %}
-    <div class="container">
-      {{ page.content_bottom }}
-    </div>
-  {% endif %}
+
   {% if page.footer %}
     {% include directory ~ '/templates/parts/footer.html.twig' %}
   {% endif %}
