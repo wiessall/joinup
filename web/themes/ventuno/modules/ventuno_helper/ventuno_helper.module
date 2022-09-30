@@ -30,7 +30,7 @@ function ventuno_helper_ajax_render_alter(array &$data): void {
  */
 function ventuno_helper_link_alter(array &$variables): void {
   // @see \Drupal\asset_distribution\Plugin\Field\FieldFormatter\TrackedHostedFileDownloadFormatter::viewElements()
-  if (array_key_exists('data-tracking', $variables['options']['attributes'])) {
+  if (array_key_exists('data-joinup-tracking', $variables['options']['attributes'])) {
     $variables['options']['attributes']['class'][] = 'btn';
     $variables['options']['attributes']['class'][] = 'btn-outline-primary';
   }

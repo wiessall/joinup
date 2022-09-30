@@ -71,7 +71,7 @@ function ventuno_preprocess_rdf_entity__solution__view_mode_tile(array &$variabl
   if (!$rdf_entity->get('collection')->isEmpty()) {
     /** @var \Drupal\rdf_entity\RdfInterface|null $parent */
     $parent = $rdf_entity->get('collection')->first()->entity;
-    $variables['attributes']['data-drupal-parent-id'] = $parent->id();
-    $variables['attributes']['data-drupal-parent-label'] = $parent->label();
+    $variables['attributes']['data-joinup-parent-id'] = $parent->id();
+    $variables['attributes']['data-joinup-parent-label'] = $parent->label();
   }
 }
