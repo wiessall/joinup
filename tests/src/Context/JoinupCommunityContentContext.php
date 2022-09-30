@@ -97,7 +97,7 @@ class JoinupCommunityContentContext extends RawDrupalContext {
   public function assertDifferentCreatedTimeWithUnpublishedVersion(string $title, string $type): void {
     // The Publication Date module sets a default value to the publication date
     // for nodes that have never been published.
-    $node = $this->getNodeByTitle($title, $type);
+    $node = $this->getEntityByLabel('node', $title, $type);
     if (!$node instanceof EntityPublicationTimeInterface) {
       throw new \InvalidArgumentException('Node does not have a publication date field.');
     }
@@ -118,7 +118,7 @@ class JoinupCommunityContentContext extends RawDrupalContext {
    *   Thrown when the node does not have a publication date field.
    */
   public function assertDifferentPublishedCreatedTime(string $title, string $type): void {
-    $node = $this->getNodeByTitle($title, $type);
+    $node = $this->getEntityByLabel('node', $title, $type);
     if (!$node instanceof EntityPublicationTimeInterface) {
       throw new \InvalidArgumentException('Node does not have a publication date field.');
     }
@@ -140,7 +140,7 @@ class JoinupCommunityContentContext extends RawDrupalContext {
    *   Thrown when the node does not have a publication date field.
    */
   public function assertSamePublishedCreatedTime(string $title, string $type): void {
-    $node = $this->getNodeByTitle($title, $type);
+    $node = $this->getEntityByLabel('node', $title, $type);
     if (!$node instanceof EntityPublicationTimeInterface) {
       throw new \InvalidArgumentException('Node does not have a publication date field.');
     }
@@ -178,7 +178,7 @@ class JoinupCommunityContentContext extends RawDrupalContext {
     }
     $published = $published === 'published';
 
-    $node = $this->getNodeByTitle($title, $type);
+    $node = $this->getEntityByLabel('node', $title, $type);
     if (!$node instanceof EntityPublicationTimeInterface) {
       throw new \InvalidArgumentException('Node does not have a publication date field.');
     }
@@ -223,7 +223,7 @@ class JoinupCommunityContentContext extends RawDrupalContext {
       throw new \Exception("{$new_date} could not be converted to string.");
     }
 
-    $this->getNodeByTitle($title, $bundle)
+    $this->getEntityByLabel('node', $title, $bundle)
       ->set($field_name, $time)
       ->save();
   }
@@ -480,7 +480,7 @@ class JoinupCommunityContentContext extends RawDrupalContext {
       Assert::assertEquals($expected_data['title'], $actual_title, sprintf('Expected title "%s" for article %d in the "In the spotlight" section but instead found "%s".', $expected_data['title'], $i + 1, $actual_title));
 
       // Check that title links to the canonical page of the article.
-      $node = self::getNodeByTitle($actual_title);
+      $node = $this->getEntityByLabel('node', $actual_title);
       $xpath = '//h2/a[@href = "' . $this->getEntityUri($node) . '"]';
       Assert::assertNotEmpty($actual_data->find('xpath', $xpath), sprintf('Article "%s" does not link to the canonical page.', $actual_title));
 
@@ -520,7 +520,7 @@ class JoinupCommunityContentContext extends RawDrupalContext {
    * @Then I should see :label as the Highlighted content
    */
   public function assertHighlightedContent(string $label): void {
-    $content = self::getNodeByTitle($label);
+    $content = $this->getEntityByLabel('node', $label);
 
     // Only community content can be highlighted.
     Assert::assertInstanceOf(CommunityContentInterface::class, $content);

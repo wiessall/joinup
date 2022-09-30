@@ -351,7 +351,7 @@ function _joinup_preprocess_entity_tiles(array &$variables) {
 
   // If the entity is featured site-wide, enable the related JS library.
   if ($entity instanceof FeaturedContentInterface && $entity->isFeatured()) {
-    $variables['attributes']['data-drupal-featured'][] = TRUE;
+    $variables['attributes']['data-joinup-featured'][] = TRUE;
     $variables['#attached']['library'][] = 'joinup/site_wide_featured';
   }
 }

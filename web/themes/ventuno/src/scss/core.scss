@@ -17,14 +17,15 @@
 
 // Bootstrap default variables
 @import "@openeuropa/bcl-bootstrap/scss/variables";
-
-// To make utilities lighter, we include only the required variables
-// instead of all the default BCL variables
-// @import "@openeuropa/bcl-theme-default/src/scss/variables";
-@import "core/overrides/variables";
-
+// BCL default theme variables
+@import "@openeuropa/bcl-theme-default/src/scss/base/variables";
 // Override with Joinup variables
 @import "@openeuropa/bcl-theme-joinup/src/scss/base/variables";
+// Override with used variables only to make utilities a lot lighter
+@import "core/overrides/variables";
+
+// Bootstrap default maps
+@import "@openeuropa/bcl-bootstrap/scss/maps";
 
 // Bootstrap mixins
 @import "@openeuropa/bcl-bootstrap/scss/mixins";

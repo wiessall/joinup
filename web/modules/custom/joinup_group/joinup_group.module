@@ -116,7 +116,7 @@ function joinup_group_preprocess_page(array &$variables): void {
     $group = $context['og']->getContextValue();
 
     if ($group && $group->getEntityTypeId() === 'rdf_entity') {
-      $variables['attributes']['data-drupal-group-context'] = $group->id();
+      $variables['attributes']['data-joinup-group-context'] = $group->id();
     }
   }
 }
@@ -928,10 +928,24 @@ function joinup_group_entity_view(array &$build, EntityInterface $entity, Entity
     return;
   }
 
-  $group = \Drupal::service('joinup_group.group_manager')->getGroupFromContext();
+  $group = \Drupal::service('joinup_group.group_manager')
+    ->getGroupFromContext();
   if ($entity->isPinned($group)) {
     $build['#attributes']['class'][] = 'is-pinned';
-    $build['#attributes']['data-drupal-pinned-in'] = implode(',', $entity->getPinnedGroupIds());
+    $build['#attributes']['data-joinup-pinned-in'] = implode(',', $entity->getPinnedGroupIds());
     $build['#attached']['library'][] = 'joinup_group/pinned_entities';
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_delete().
+ */
+function joinup_group_rdf_entity_delete(RdfInterface $group): void {
+  if ($group instanceof GroupInterface) {
+    // Cleanup the {joinup_group_node_access} table.
+    \Drupal::database()->delete('joinup_group_node_access')
+      ->condition('entity_type', $group->getEntityTypeId())
+      ->condition('entity_id', $group->id())
+      ->execute();
   }
 }

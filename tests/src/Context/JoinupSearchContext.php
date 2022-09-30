@@ -6,6 +6,7 @@ namespace Drupal\joinup\Context;
 
 use Behat\Gherkin\Node\TableNode;
 use Behat\Mink\Element\NodeElement;
+use Behat\Mink\Exception\ElementNotFoundException;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\joinup\Traits\BootstrapTrait;
 use Drupal\joinup\Traits\JavascriptTrait;
@@ -986,6 +987,27 @@ class JoinupSearchContext extends RawDrupalContext {
       }
     }
     throw new \RuntimeException("'Toggle search box' is not visible and cannot be opened.");
+  }
+
+  /**
+   * Show more options in a facet.
+   *
+   * @param string $facet_type
+   *   The label of the facet.
+   *
+   * @throws \Exception
+   *   Thrown when the checkbox is not found.
+   *
+   * @Given I click show more from the :facet_type facet
+   */
+  public function showMoreFacet(string $facet_type): void {
+    $facet = $this->findFacetByAlias($facet_type);
+    $parent_facet = $facet->getParent();
+    if (!$link = $parent_facet->findLink('Show more')) {
+      throw new ElementNotFoundException($this->getSession()->getDriver(), 'Link', 'label', 'Show more');
+    }
+
+    $link->click();
   }
 
 }

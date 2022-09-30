@@ -8,8 +8,6 @@ use Behat\Mink\Exception\ElementNotFoundException;
 use Drupal\Core\Url;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\joinup\Traits\EntityTrait;
-use Drupal\joinup\Traits\NodeTrait;
-use Drupal\joinup\Traits\RdfEntityTrait;
 use Drupal\og\OgGroupAudienceHelperInterface;
 use Drupal\og\OgMembershipInterface;
 use PHPUnit\Framework\Assert;
@@ -21,8 +19,6 @@ use PHPUnit\Framework\ExpectationFailedException;
 class JoinupGroupContext extends RawDrupalContext {
 
   use EntityTrait;
-  use NodeTrait;
-  use RdfEntityTrait;
 
   /**
    * Navigates to the members page of the given group.
@@ -34,7 +30,7 @@ class JoinupGroupContext extends RawDrupalContext {
    * @When I am on the members page of :label
    */
   public function visitMembersPage(string $label): void {
-    $group = $this->getRdfEntityByLabel($label);
+    $group = $this->getEntityByLabel('rdf_entity', $label);
     $url = Url::fromRoute('entity.rdf_entity.member_overview', [
       'rdf_entity' => $group->id(),
     ]);
@@ -50,7 +46,7 @@ class JoinupGroupContext extends RawDrupalContext {
    * @When I go to the member(ship) permissions table of :label
    */
   public function visitMembershipPermissionsTable(string $label): void {
-    $group = $this->getRdfEntityByLabel($label);
+    $group = $this->getEntityByLabel('rdf_entity', $label);
     $url = Url::fromRoute('joinup_group.membership_permissions_info', [
       'rdf_entity' => $group->id(),
     ]);
@@ -93,8 +89,8 @@ class JoinupGroupContext extends RawDrupalContext {
    * @Then the :group_label :group_type should have a community content titled :group_title
    */
   public function assertNodeOgMembership(string $group_label, string $group_type, string $content_title): void {
-    $group = $this->getRdfEntityByLabel($group_label, $group_type);
-    $node = $this->getNodeByTitle($content_title);
+    $group = $this->getEntityByLabel('rdf_entity', $group_label, $group_type);
+    $node = $this->getEntityByLabel('node', $content_title);
     if ($node->get(OgGroupAudienceHelperInterface::DEFAULT_FIELD)->target_id !== $group->id()) {
       throw new \Exception("The node '$content_title' is not associated with collection '{$group->label()}'.");
     }
@@ -135,7 +131,7 @@ class JoinupGroupContext extends RawDrupalContext {
    */
   public function assertAnonGroupJoinTrackingCookiePresent(string $label): void {
     $cookie = $this->getSession()->getCookie('join_group');
-    $entity = $this->getRdfEntityByLabelUnchanged($label);
+    $entity = $this->getEntityByLabel('rdf_entity', $label);
     Assert::assertEquals($entity->id(), $cookie, "A cookie was expected to track that an anonymous user wants to join the '$label' group.");
   }
 
@@ -180,7 +176,7 @@ class JoinupGroupContext extends RawDrupalContext {
     }
 
     /** @var \Drupal\joinup_group\Entity\GroupInterface $entity */
-    $entity = $this->getRdfEntityByLabelUnchanged($label, $type);
+    $entity = $this->getEntityByLabel('rdf_entity', $label, $type);
     $actual = $entity->getMemberCount([$membership_state]);
 
     if ($actual != $number) {
