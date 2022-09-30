@@ -45,7 +45,7 @@
   };
 
   /**
-   * Only clear some fields when the solution type is changed.
+   * Only clear some fields when the solution type changed.
    */
   const clearFields = () => {
     document

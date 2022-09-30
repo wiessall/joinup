@@ -19,7 +19,6 @@ Feature: Creating a test (solution) in the TRR collection.
       | name | type                         |
       | W3C  | Company, Industry consortium |
     And I am logged in as "Wobbe"
-
     When I go to the homepage of the "Friends of the test repository" collection
     And I open the plus button menu
     And I click "Add solution"
@@ -72,6 +71,10 @@ Feature: Creating a test (solution) in the TRR collection.
     Then I should see the error message 'Test resource type should be either "Test Bed", "Messaging Adapter" or "Document Validator" when solution type is set to "Test service" or "Conformance Testing Component".'
     When I select "Test Scenario" from "Solution type"
     And I select "Messaging Adapter" from "Test resource type"
+    And  I select "Agent" from "Actor"
+    And I fill in "Business process" with "Notification Of Failure"
+    And I fill in "Product type" with "Soya beans"
+    And I select "Level 1" from "Standardization level"
     And I press "Propose"
     Then I should see the error message 'Test resource type should be either "Test Suite", "Test Case", "Test Assertion" or "Document Assertion Set" when solution type is set to "Conformance Test Scenario".'
     When I select "Test Suite" from "Test resource type"
