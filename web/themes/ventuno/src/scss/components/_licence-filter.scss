@@ -13,8 +13,6 @@
   }
 }
 .licence-filter {
-  // border: 2px solid $gray-500;
-  box-shadow: $box-shadow;
   border-radius: $border-radius-lg;
   overflow: hidden;
   &__header {
@@ -29,13 +27,22 @@
     list-style: none;
   }
   &__item {
-    padding: $spacer * .5;
-    .btn {
-      color: inherit;
-      text-align: left;
+    padding: $spacer * .25;
+  }
+  &__button {
+    border: 0; // Resets
+    background: none; // Resets
+    color: inherit; // Resets
+    font-size: .875rem; // 14px
+    word-break: break-word;
+    text-align: left;
+    &:hover {
+      text-decoration: underline;
+      cursor: help;
     }
   }
-  &--can{
+  &--can {
+    border: 1px solid $green;
     .licence-filter__header {
       background-color: $green;
     }
@@ -43,7 +50,8 @@
       color: $green;
     }
   }
-  &--must{
+  &--must {
+    border: 1px solid $gray-700;
     .licence-filter__header {
       background-color: $gray-700;
     }
@@ -51,7 +59,8 @@
       color: $gray-700;
     }
   }
-  &--cannot{
+  &--cannot {
+    border: 1px solid $red;
     .licence-filter__header {
       background-color: $red;
     }
@@ -59,7 +68,8 @@
       color: $red;
     }
   }
-  &--compatible{
+  &--compatible {
+    border: 1px solid $indigo;
     .licence-filter__header {
       background-color: $indigo;
     }
@@ -67,7 +77,8 @@
       color: $indigo;
     }
   }
-  &--law{
+  &--law {
+    border: 1px solid darken($orange, 17%); // Increase contrast to pass a11y tests
     .licence-filter__header {
       background-color: darken($orange, 17%); // Increase contrast to pass a11y tests
     }
@@ -75,7 +86,8 @@
       color: darken($orange, 17%); // Increase contrast to pass a11y tests
     }
   }
-  &--support{
+  &--support {
+    border: 1px solid $brand-darker;
     .licence-filter__header {
       background-color: $brand-darker;
     }
