@@ -609,7 +609,7 @@ Feature: Global search
     When I enter "bott" in the search bar
     And I wait for AJAX to finish
     Then I should see the following search suggestions:
-      | body |
+      | best |
 
     When I check the "Solutions (2)" checkbox from the "Content types" facet
     And I check the "News (5)" checkbox from the "Content types" facet
@@ -673,16 +673,12 @@ Feature: Global search
     Then I enter "sp" in the search bar
     And I wait for AJAX to finish
     Then I should see the following search suggestions:
-      | Spheres               |
-      | Movistar              |
-      | proudly open source   |
-      | proudly open shaping  |
-      | proudly open sourc    |
-      | proudly open shape    |
-      | proudly open sphere   |
-      | proudly open social   |
-      | proudly open social   |
-      | proudly open statist  |
+      | Radio cooking collection |
+      | Spheres                  |
+      | spherification           |
+      | sphere                   |
+      | spherif                  |
+
 
   @terms
   Scenario: Filter on date
