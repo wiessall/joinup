@@ -24,6 +24,7 @@
   - Drupal\joinup\Context\EifContext
   - Drupal\joinup\Context\EntityQueueContext
   - Drupal\joinup\Context\EuplContext
+  - Drupal\joinup\Context\FileFieldContext
   - Drupal\joinup\Context\FaviconContext
   - Drupal\joinup\Context\FooterContext
   - Drupal\joinup\Context\HeaderContext
