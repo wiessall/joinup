@@ -80,6 +80,11 @@ Feature: "Add custom page" visibility options.
     And I press "Upload"
     # The "Description" field is the description of the file.
     And I fill in "Description" with "Test file"
+    And I attach the file "alan.jpg" to "Add a new file"
+    And I press "Upload"
+    And I fill in the 2nd "Description" field of the "Attachments" file field with "Alan"
+    And I uncheck the 2nd "Display" checkbox of the "Attachments" file field
+
     And I uncheck "Published"
     And I press "Save"
     Then I should see the heading "About us"
@@ -87,6 +92,7 @@ Feature: "Add custom page" visibility options.
     And I should see the text "Attachments"
     # The description of the file is set as the text to display.
     And I should see the link "Test file"
+    But I should not see the link "Alan"
     And the "<second title>" <group> should have a custom page titled "About us"
     # Check that the link to the custom page is visible on the group page.
     When I go to the homepage of the "<second title>" <group>
