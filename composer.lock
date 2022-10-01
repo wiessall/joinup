@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "9b63442af23f89eff7782dd8a9b8bc81",
+    "content-hash": "c7907932b98da9c449b4caea2ca00aed",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -17918,16 +17918,16 @@
         },
         {
             "name": "ec-europa/toolkit",
-            "version": "8.6.16",
+            "version": "8.6.20",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ec-europa/toolkit.git",
-                "reference": "8c27c0cfd84443592854c07a288fcded76017075"
+                "reference": "8a4e0bf4b3ff15f05175213f6f2a3e0e2cfc2ea7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ec-europa/toolkit/zipball/8c27c0cfd84443592854c07a288fcded76017075",
-                "reference": "8c27c0cfd84443592854c07a288fcded76017075",
+                "url": "https://api.github.com/repos/ec-europa/toolkit/zipball/8a4e0bf4b3ff15f05175213f6f2a3e0e2cfc2ea7",
+                "reference": "8a4e0bf4b3ff15f05175213f6f2a3e0e2cfc2ea7",
                 "shasum": ""
             },
             "require": {
@@ -17970,7 +17970,7 @@
                 "email": "europamanagement@ec.europa.eu",
                 "source": "https://github.com/ec-europa/toolkit"
             },
-            "time": "2022-07-25T09:03:05+00:00"
+            "time": "2022-09-15T11:17:14+00:00"
         },
         {
             "name": "fabpot/goutte",
