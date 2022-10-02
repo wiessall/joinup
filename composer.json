@@ -363,7 +363,7 @@
                 "Views block area missing schema @see https://www.drupal.org/project/views_block_area/issues/3157188": "https://www.drupal.org/files/issues/2020-07-06/views_block_area-missing_schema-3157188-2.patch"
             },
             "ec-europa/toolkit": {
-                "Add --strict option, it should treat Undefined and Pending steps as failures (and exit with exit status of 1)": "resources/patch/behat_strict.patch"
+                "Add --strict option, it should treat Undefined and Pending steps as failures @see https://github.com/ec-europa/toolkit/pull/559": "https://patch-diff.githubusercontent.com/raw/ec-europa/toolkit/pull/559.diff"
             },
             "openeuropa/oe_webtools": {
                 "Allow to pass an optional referer. @see https://github.com/openeuropa/oe_webtools/pull/96": "https://patch-diff.githubusercontent.com/raw/openeuropa/oe_webtools/pull/96.diff",
