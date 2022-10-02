@@ -41,6 +41,10 @@ class CustomPage extends Node implements CustomPageInterface {
   public function preSave(EntityStorageInterface $storage): void {
     parent::preSave($storage);
 
+    if (!$this->hasField('field_attachment') || $this->get('field_attachment')->isEmpty()) {
+      return;
+    }
+
     // We have set the 'default_display' flag of the attachment field to true
     // however, this only has any effect in the form. Ensure that the property
     // is set to true by default for entities created programmatically.
