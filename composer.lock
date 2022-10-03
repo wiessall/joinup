@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "de6f0b7b1d1cf03764ce008d553f665d",
+    "content-hash": "9b63442af23f89eff7782dd8a9b8bc81",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -7259,91 +7259,39 @@
         },
         {
             "name": "drupal/ui_patterns",
-            "version": "1.2.0",
+            "version": "1.3.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/ui_patterns.git",
-                "reference": "8.x-1.2"
+                "reference": "8.x-1.3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/ui_patterns-8.x-1.2.zip",
-                "reference": "8.x-1.2",
-                "shasum": "c792d38a1511e1c24386af5a8da8181d0394b824"
+                "url": "https://ftp.drupal.org/files/projects/ui_patterns-8.x-1.3.zip",
+                "reference": "8.x-1.3",
+                "shasum": "e76f01d8c5e5cea145f51ad8b3a5c84f6d8be8db"
             },
             "require": {
-                "drupal/core": "^8 || ^9"
+                "drupal/core": "^9 || ^10"
             },
             "require-dev": {
-                "composer/installers": "^1.2",
-                "cweagans/composer-patches": "~1.4",
-                "drupal/config_devel": "~1",
-                "drupal/core-composer-scaffold": "^8.0",
-                "drupal/core-dev": "^8.0",
-                "drupal/core-recommended": "~9.0",
                 "drupal/ds": "~3",
-                "drupal/field_group": "~3",
-                "drupal/page_manager": "*",
-                "drupal/panels": "~4",
-                "drupal/paragraphs": "~1",
-                "drupal/token": "~1",
-                "drush/drush": "~10",
-                "openeuropa/task-runner": "~1.0-beta3",
-                "phpro/grumphp": "~0.14"
+                "drupal/field_group": "~3.0"
             },
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "8.x-1.2",
-                    "datestamp": "1591882155",
+                    "version": "8.x-1.3",
+                    "datestamp": "1663861917",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
                     }
-                },
-                "composer-exit-on-patch-failure": true,
-                "enable-patching": true,
-                "drupal-scaffold": {
-                    "locations": {
-                        "web-root": "build/"
-                    }
-                },
-                "installer-paths": {
-                    "build/core": [
-                        "type:drupal-core"
-                    ],
-                    "build/modules/contrib/{$name}": [
-                        "type:drupal-module"
-                    ],
-                    "build/profiles/contrib/{$name}": [
-                        "type:drupal-profile"
-                    ],
-                    "build/themes/contrib/{$name}": [
-                        "type:drupal-theme"
-                    ]
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Drupal\\ui_patterns\\": "./src"
-                }
-            },
-            "autoload-dev": {
-                "psr-4": {
-                    "Drupal\\Tests\\ui_patterns\\": "./tests/src"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
-            "scripts": {
-                "post-install-cmd": [
-                    "./vendor/bin/run drupal:site-setup"
-                ],
-                "post-update-cmd": [
-                    "./vendor/bin/run drupal:site-setup"
-                ]
-            },
             "license": [
-                "GPL-2.0+"
+                "GPL-2.0-or-later"
             ],
             "authors": [
                 {
@@ -7374,11 +7322,6 @@
             ],
             "description": "UI Patterns.",
             "homepage": "https://www.drupal.org/project/ui_patterns",
-            "keywords": [
-                "drupal",
-                "ui",
-                "web"
-            ],
             "support": {
                 "source": "https://git.drupalcode.org/project/ui_patterns"
             }
@@ -10174,21 +10117,21 @@
         },
         {
             "name": "openeuropa/oe_bootstrap_theme",
-            "version": "1.0.0-beta4",
+            "version": "1.0.0-beta6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/openeuropa/oe_bootstrap_theme.git",
-                "reference": "3a186e8644fcc5d1b75c6a133a72d5117541363a"
+                "reference": "6e808add8962b59e6b54b9c6a6a266d90049d95b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/openeuropa/oe_bootstrap_theme/zipball/3a186e8644fcc5d1b75c6a133a72d5117541363a",
-                "reference": "3a186e8644fcc5d1b75c6a133a72d5117541363a",
+                "url": "https://api.github.com/repos/openeuropa/oe_bootstrap_theme/zipball/6e808add8962b59e6b54b9c6a6a266d90049d95b",
+                "reference": "6e808add8962b59e6b54b9c6a6a266d90049d95b",
                 "shasum": ""
             },
             "require": {
                 "cweagans/composer-patches": "^1.7",
-                "drupal/core": "^9.2",
+                "drupal/core": "^9.3",
                 "drupal/ui_patterns": "^1.2",
                 "drupal/ui_patterns_settings": "^1.1",
                 "openeuropa/ecl-twig-loader": "^3.1",
@@ -10197,15 +10140,13 @@
             "require-dev": {
                 "composer/installers": "^1.11",
                 "drupal/config_devel": "~1.8",
-                "drupal/core-composer-scaffold": "^9.2",
-                "drupal/core-dev": "^9.2",
+                "drupal/core-composer-scaffold": "^9.3",
+                "drupal/core-dev": "^9.3",
                 "drupal/drupal-extension": "^4.1",
-                "drupal/file_link": "^2.0.6",
                 "drupal/styleguide": "^1.0@beta",
                 "drupal/token": "^1.10",
                 "drush/drush": "^10.3",
                 "easyrdf/easyrdf": "1.0.0 as 0.9.2",
-                "egulias/email-validator": "^2.1.22 || ^3.0",
                 "nikic/php-parser": "^4.13",
                 "openeuropa/code-review": "^2.0",
                 "openeuropa/task-runner-drupal-project-symlink": "^1.0-beta5",
@@ -10235,13 +10176,7 @@
                         "web-root": "./build"
                     }
                 },
-                "patches": {
-                    "drupal/ui_patterns": {
-                        "Fix unable to detect a pattern from default theme having same id as the pattern in the base theme @see https://github.com/nuvoleweb/ui_patterns/issues/304": "https://patch-diff.githubusercontent.com/raw/nuvoleweb/ui_patterns/pull/318.diff"
-                    }
-                },
                 "_readme": [
-                    "Explicit requirement for egulias/email-validator due to https://www.drupal.org/project/drupal/issues/3061074#comment-14300579. It can be removed when Drupal core 9.2 support is droppped.",
                     "Explicit minimum version requirement for symfony/dom-crawler due to its lower versions using the deprecated function libxml_disable_entity_loader() in PHP8.",
                     "Explicit requirement of token module due to PHP 8 compatbility."
                 ]
@@ -10258,9 +10193,9 @@
             "description": "OpenEuropa Bootstrap base theme.",
             "support": {
                 "issues": "https://github.com/openeuropa/oe_bootstrap_theme/issues",
-                "source": "https://github.com/openeuropa/oe_bootstrap_theme/tree/1.0.0-beta4"
+                "source": "https://github.com/openeuropa/oe_bootstrap_theme/tree/1.0.0-beta6"
             },
-            "time": "2022-08-01T15:46:00+00:00"
+            "time": "2022-09-29T14:44:59+00:00"
         },
         {
             "name": "openeuropa/oe_dashboard_agent",
