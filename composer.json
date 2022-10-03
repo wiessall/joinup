@@ -28,7 +28,7 @@
         "drupal/digital_size_formatter": "~2.0",
         "drupal/dropsolid_purge": "^1.0@beta",
         "drupal/dynamic_entity_reference": "~2.0",
-        "drupal/editor_file": "~1.5",
+        "drupal/editor_file": "^1.6",
         "drupal/embed_block": "^1.0",
         "drupal/entity_legal": "^3.0.0",
         "drupal/entityqueue": "^1.2",
@@ -272,6 +272,10 @@
             },
             "drupal/entityqueue": {
                 "Missing config schema for EntityQueueDragtableWidget @see Missing config schema for EntityQueueDragtableWidget": "https://git.drupalcode.org/project/entityqueue/-/merge_requests/3.diff"
+            },
+            "drupal/editor_file": {
+                "Wrong file upload size when max upload left empty. @see https://www.drupal.org/i/3300142": "https://www.drupal.org/files/issues/2022-07-27/editor_file-fix_max_file_upload_empty-3300142-2.patch",
+                "Uploaded files are not permanent @see https://www.drupal.org/i/3057895": "https://www.drupal.org/files/issues/2019-05-29/file-upload-marked-permanent-3057895-2.patch"
             },
             "drupal/entity_legal": {
                 "Custom agree validation error message and submit button label @see https://www.drupal.org/project/entity_legal/issues/3293017": "https://git.drupalcode.org/project/entity_legal/-/merge_requests/8.diff"
