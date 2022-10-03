@@ -26,7 +26,7 @@ function dashboard_form_alter(array &$form, FormStateInterface $form_state, stri
   if (!in_array($form_id, $ids)) {
     return;
   }
-  $form['actions']['submit']['#submit'][] = 'redirect_curated_content_listing';
+  $form['actions']['submit']['#submit'][] = 'dashboard_redirect_curated_content_listing';
 }
 
 /**
@@ -37,7 +37,7 @@ function dashboard_form_alter(array &$form, FormStateInterface $form_state, stri
  * @param \Drupal\Core\Form\FormStateInterface $form_state
  *   The form state.
  */
-function redirect_curated_content_listing(array &$form, FormStateInterface &$form_state): void {
+function dashboard_redirect_curated_content_listing(array &$form, FormStateInterface &$form_state): void {
   $url = Url::fromRoute('view.curated_content_listings.page');
   $form_state->setRedirectUrl($url);
 }
