@@ -241,7 +241,7 @@
                 "Add a Drush command for manipulating module info files @see https://www.drupal.org/project/config_devel/issues/2392929": "https://git.drupalcode.org/project/config_devel/-/merge_requests/4.diff"
             },
             "drupal/coder": {
-                "Do not require @var tag if a property has typehint @see https://www.drupal.org/project/coder/issues/3123282": "https://git.drupalcode.org/project/coder/-/commit/d1bb7ea.diff"
+                "PHPCS hangs indefinetly with standard Drupal @see https://www.drupal.org/project/coder/issues/3306999": "https://git.drupalcode.org/project/coder/-/commit/446dea2.diff"
             },
             "drupal/core": {
                 "Use READ COMMITTED by default for MySQL transactions @see https://www.drupal.org/project/drupal/issues/1650930": "https://git.drupalcode.org/project/drupal/-/merge_requests/2394.diff",
@@ -300,9 +300,6 @@
             "drupal/meta_entity": {
                 "Make the field configurable in the view @see https://www.drupal.org/project/meta_entity/issues/3279161": "https://git.drupalcode.org/project/meta_entity/-/merge_requests/4.diff",
                 "Improve ::getMetaEntitiesForEntity() performance @see https://www.drupal.org/project/meta_entity/issues/3299712": "https://git.drupalcode.org/project/meta_entity/-/merge_requests/6.diff"
-            },
-            "drupal/metatag": {
-                "Views cache wrapper overrides other modules cache logic @see https://www.drupal.org/project/metatag/issues/3261473": "https://git.drupalcode.org/project/metatag/-/merge_requests/48.diff"
             },
             "drupal/og": {
                 "Non-node permissions overrides one each other @see https://github.com/Gizra/og/pull/748": "https://patch-diff.githubusercontent.com/raw/Gizra/og/pull/748.diff"
