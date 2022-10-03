@@ -444,7 +444,7 @@ class JoinupSearchContext extends RawDrupalContext {
    *
    * @Then I should see the (following )search suggestion(s):
    */
-  public function iShouldSeeTheSuggestions(TableNode $table): bool {
+  public function iShouldSeeTheSuggestions(TableNode $table): void {
     $session = $this->getSession();
     $element = $this->getSearchBarElement();
     $session->getDriver()->keyDown($element->getXpath(), '', NULL);
@@ -459,7 +459,6 @@ class JoinupSearchContext extends RawDrupalContext {
       $missing_suggestions = implode(', ', $missing_suggestions);
       throw new \RuntimeException("The expected suggestions '$missing_suggestions' were not found in autocomplete.");
     }
-    return TRUE;
   }
 
   /**
