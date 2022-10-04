@@ -1,0 +1,4 @@
+compare vocabulary versions:
+  title: 'Compare vocabulary versions'
+  description: 'Access the vocabulary version comparison form.'
+  restrict access: true

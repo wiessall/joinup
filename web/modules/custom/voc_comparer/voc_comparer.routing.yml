@@ -1,0 +1,7 @@
+voc_comparer.compare:
+  path: '/admin/voc-comparer/compare'
+  defaults:
+    _title: 'Vocabulary version compare'
+    _form: 'Drupal\voc_comparer\Form\VocabularyVersionCompareForm'
+  requirements:
+    _permission: 'compare vocabulary versions'
