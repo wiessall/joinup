@@ -17,22 +17,9 @@ declare(strict_types = 1);
 use Drupal\interoperable_europe\InteroperableEuropeCollectionInterface;
 
 /**
- * Creates a Link to EIF perspective view from the solution's left-side menu.
- */
-function joinup_core_deploy_0108500(): void {
-  $eif_perspective_ids = \Drupal::entityQuery('rdf_meta_entity')
-    ->condition('type', 'eif_perspective')
-    ->execute();
-  $eif_perspectives = \Drupal::entityTypeManager()->getStorage('rdf_meta_entity')->loadMultiple($eif_perspective_ids);
-  foreach ($eif_perspectives as $eif_perspective) {
-    _eif_add_eif_link_to_leftside_menu($eif_perspective);
-  }
-}
-
-/**
  * Import new landing page.
  */
-function joinup_core_deploy_108501(): void {
+function joinup_core_deploy_0108600(): void {
   /** @var \Drupal\Core\Extension\ModuleInstallerInterface $module_installer */
   $module_installer = \Drupal::service('module_installer');
   /** @var \Drupal\Core\Entity\EntityRepositoryInterface $entity_repository */
