@@ -28,4 +28,18 @@ interface VocabularyFixturesHelperInterface {
    */
   public function importFixtures(string $fixture_key, bool $clear_graph = TRUE): void;
 
+  /**
+   * Imports a single file into the SPARQL endpoint.
+   *
+   * @param string $filename
+   *   The filename from where to load the data.
+   * @param string $graph_uri
+   *   The graph URI where to import the data.
+   * @param bool $clear_graph
+   *   Whether to clear the graph before importing. Defaults to TRUE.
+   * @param array $extra_queries
+   *   An array of extra queries to run after the import.
+   */
+  public function importFixtureToGraph(string $filename, string $graph_uri, bool $clear_graph = TRUE, array $extra_queries = []): void;
+
 }

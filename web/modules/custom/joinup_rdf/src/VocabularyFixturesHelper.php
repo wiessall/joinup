@@ -76,22 +76,44 @@ class VocabularyFixturesHelper implements VocabularyFixturesHelperInterface {
       throw new \Exception("Invalid option '{$fixture_key}' supply'.");
     }
 
+    $filename = DRUPAL_ROOT . '/../resources/fixtures/' . $fixtures_data[$fixture_key]['filename'];
+    $this->importFixtureToGraph(
+      $filename,
+      $fixtures_data[$fixture_key]['graph'],
+      $clear_graph,
+      $fixtures_data[$fixture_key]['extra queries']
+    );
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function importFixtureToGraph(string $filename, string $graph_uri, bool $clear_graph = TRUE, array $extra_queries = []): void {
     if ($clear_graph) {
-      $this->clearFixturesGraph($fixtures_data[$fixture_key]['graph']);
+      $this->clearFixturesGraph($graph_uri);
     }
 
-    $graph = new Graph($fixtures_data[$fixture_key]['graph']);
-    $filename = DRUPAL_ROOT . '/../resources/fixtures/' . $fixtures_data[$fixture_key]['filename'];
+    $graph = new Graph($graph_uri);
     $graph->parseFile($filename);
 
-    $connection_options = $this->connection->getConnectionOptions();
-    $connect_string = "http://{$connection_options['host']}:{$connection_options['port']}/sparql-graph-crud";
-    $graph_store = new GraphStore($connect_string);
+    $graph_store = $this->getDefaultGraphStore();
     $graph_store->insert($graph);
 
-    foreach ($fixtures_data[$fixture_key]['extra queries'] as $query) {
+    foreach ($extra_queries as $query) {
       $this->connection->query($query);
     }
+  }
+
+  /**
+   * Returns a graph store with the default connection options.
+   *
+   * @return \EasyRdf\GraphStore
+   *   The graph store object.
+   */
+  protected function getDefaultGraphStore(): GraphStore {
+    $connection_options = $this->connection->getConnectionOptions();
+    $connect_string = "http://{$connection_options['host']}:{$connection_options['port']}/sparql-graph-crud";
+    return new GraphStore($connect_string);
   }
 
 }
