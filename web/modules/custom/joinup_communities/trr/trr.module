@@ -9,6 +9,8 @@ declare(strict_types = 1);
 
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\rdf_entity\RdfInterface;
+use Drupal\solution\Entity\SolutionInterface;
 
 /**
  * Implements hook_entity_bundle_field_info_alter().
@@ -55,4 +57,33 @@ function trr_form_rdf_entity_solution_edit_form_alter(&$form, FormStateInterface
  */
 function trr_form_rdf_entity_solution_form_alter(&$form, FormStateInterface $form_state) {
   $form['#attached']['library'][] = 'trr/solution-trr';
+}
+
+/**
+ * Implements hook_presave().
+ */
+function trr_rdf_entity_presave(RdfInterface $entity): void {
+  if (!$entity instanceof SolutionInterface) {
+    return;
+  }
+  $solution_types = [
+    'http://data.europa.eu/dr8/ConformanceTestingComponent',
+    'http://data.europa.eu/dr8/ConformanceTestingService',
+    'http://data.europa.eu/dr8/ConformanceTestScenario',
+  ];
+  $related_fields = [
+    'field_is_test_resource_type',
+    'field_is_actor',
+    'field_is_business_process',
+    'field_is_product_type',
+    'field_is_standardization_level',
+  ];
+  foreach ($entity->get('field_is_solution_type')->getValue() as $value) {
+    if (!in_array($value['target_id'], $solution_types)) {
+      // Clear TRR related fields.
+      foreach ($related_fields as $field) {
+        $entity->set($field, '');
+      }
+    }
+  }
 }
