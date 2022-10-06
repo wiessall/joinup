@@ -40,7 +40,7 @@ Feature: Messaging group announcements
     And I should not see the button "Approve"
     And I should not see the button "Send"
     And I should not see the button "Reject"
-    And I should not see the button "Undo"
+    And I should not see the button "Undo reject"
     And I fill in "Subject" with "Test anon [rdf_entity:label]"
     And I fill in "Body" with "Lorem Ipsum is simply dummy text of the printing and typesetting industry."
 
@@ -53,7 +53,7 @@ Feature: Messaging group announcements
     But I should not see the button "Approve"
     And I should not see the button "Reject"
     And I should not see the button "Create"
-    And I should not see the button "Undo"
+    And I should not see the button "Undo reject"
 
     When I fill in "Subject" with "Test anon [rdf_entity:label] bis"
     And I fill in "Body" with "Beware, new release is out for [rdf_entity:label]"
@@ -81,10 +81,10 @@ Feature: Messaging group announcements
     And I should see the button "Approve"
     But I should not see the button "Create"
     And I should not see the button "Send"
-    And I should not see the button "Undo"
+    And I should not see the button "Undo reject"
 
     When I press "Reject"
-    Then I should see the success message "The announcement has been rejected. Press the 'Undo' button to restore the announcement."
+    Then I should see the success message "The announcement has been rejected. Press the 'Undo reject' button to restore the announcement."
     Then I should see "Announcement in Rejected state"
     And I should see the button "Update"
     But I should not see the button "Approve"
@@ -98,14 +98,14 @@ Feature: Messaging group announcements
 
     Given I am logged in as "Check edit moderator"
     When I go the "Test anon [rdf_entity:label] bis" announcement of "Fail pension" <group>
-    And  I press "Undo"
+    And  I press "Undo reject"
     Then I should see the success message "The announcement has been restored."
     Then I should see "Announcement in Sent state"
     And I should see the button "Update"
     And I should see the button "Approve"
     But I should not see the button "Create"
     And I should not see the button "Send"
-    And I should not see the button "Undo"
+    And I should not see the button "Undo reject"
 
     Given I am logged in as "Sons of tweets"
     When I go the "Test anon [rdf_entity:label] bis" announcement of "Fail pension" <group>
