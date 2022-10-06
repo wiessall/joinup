@@ -144,16 +144,13 @@ class AnnouncementForm extends FormBase {
     if ($trigger['#type'] === 'submit' && isset($trigger['#state_machine_transition'])) {
       $this->announcement->getWorkflowStateField()->applyTransitionById($trigger['#state_machine_transition']);
     }
-    $arguments = array_map(function (array $argument) {
-      return $argument['value'];
-    }, $this->getArguments()) + [
-      '@group' => $this->announcement->getGroup()->label(),
-      '@type' => $this->announcement->getGroup()->get('rid')->entity->getSingularLabel(),
-    ];
+
     $this->announcement
       ->setSubject($form_state->getValue('subject'))
-      ->setBody($form_state->getValue('body'))
-      ->setArguments($arguments)
+      ->setBody($form_state->getValue(['body', 'value']))
+      ->setArguments(array_map(function (array $argument): string {
+        return (string) $argument['value'];
+      }, $this->getArguments()))
       ->save();
 
     $args = [
@@ -216,25 +213,22 @@ class AnnouncementForm extends FormBase {
    */
   protected function getArguments(): array {
     $group = $this->announcement->getGroup();
-    $parents = [$group];
-    if ($group instanceof GroupContentInterface) {
-      $parents[] = $group->getGroup();
-    }
-    /** @var \Drupal\joinup_group\Entity\GroupInterface $parent */
-    foreach ($parents as $parent) {
-      $vars = ['@label' => $parent->get('rid')->entity->label()];
-      $arguments["@{$parent->bundle()}:name"] = [
-        'label' => $this->t('@label title', $vars),
-        'value' => $parent->label(),
-      ];
-      $arguments["@{$parent->bundle()}:url"] = [
-        'label' => $this->t('@label landing page URL', $vars),
-        'value' => $parent->toUrl()->setAbsolute()->toString(),
-      ];
-    }
-
     $sender = $this->announcement->getOwner();
-    $arguments += [
+    $vars = ['@label' => $group->get('rid')->entity->label()];
+
+    return [
+      '@group:name' => [
+        'label' => $this->t('@label title', $vars),
+        'value' => $group->label(),
+      ],
+      '@group:type' => [
+        'label' => $this->t('Group type (collection, solution)', $vars),
+        'value' => $group->get('rid')->entity->getSingularLabel(),
+      ],
+      '@group:url' => [
+        'label' => $this->t('@label landing page URL', $vars),
+        'value' => $group->toUrl()->setAbsolute()->toString(),
+      ],
       '@sender:name' => [
         'label' => $this->t("Announcement sender name"),
         'value' => $sender->getDisplayName(),
@@ -244,8 +238,6 @@ class AnnouncementForm extends FormBase {
         'value' => $sender->toUrl()->setAbsolute()->toString(),
       ],
     ];
-
-    return $arguments;
   }
 
 }

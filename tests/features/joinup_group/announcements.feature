@@ -11,10 +11,16 @@ Feature: Messaging group announcements
       | Username             | E-mail                           | Roles     |
       | Sons of tweets       | sonsoftweets@example.com         |           |
       | Check edit moderator | check.edit.moderator@example.com | moderator |
+      | The Mogul            | mogul@example.com                |           |
+      | The Greedy           | geed@example.com                 |           |
+      | The Envious          | envy@example.com                 |           |
     And the following <group> user membership:
       | <group>      | user           | roles       |
       | Fail pension | Sons of tweets | facilitator |
       | Hidden gems  | Sons of tweets | facilitator |
+      | Fail pension | The Mogul      |             |
+      | Fail pension | The Greedy     |             |
+      | Fail pension | The Envious    |             |
 
     Given I am an anonymous user
     When I go to the announcements page of "Fail pension" <group>
@@ -41,12 +47,12 @@ Feature: Messaging group announcements
     And I should not see the button "Send"
     And I should not see the button "Reject"
     And I should not see the button "Undo reject"
-    And I fill in "Subject" with "Test anon [rdf_entity:label]"
+    And I fill in "Subject" with "The Big Opening"
     And I fill in "Body" with "Lorem Ipsum is simply dummy text of the printing and typesetting industry."
 
     When I press "Create"
     Then I should see the success message "The announcement has been created as Draft. Review the announcement and, when is ready to be sent, use the 'Send' button."
-    And the "Subject" field should contain "Test anon [rdf_entity:label]"
+    And the "Subject" field should contain "The Big Opening"
     And the "Body" field should contain "Lorem Ipsum is simply dummy text of the printing and typesetting industry."
     And I should see "Announcement in Draft state"
     And I should see the button "Send"
@@ -55,8 +61,8 @@ Feature: Messaging group announcements
     And I should not see the button "Create"
     And I should not see the button "Undo reject"
 
-    When I fill in "Subject" with "Test anon [rdf_entity:label] bis"
-    And I fill in "Body" with "Beware, new release is out for [rdf_entity:label]"
+    When I fill in "Subject" with "The Big Opening is postponed"
+    And I fill in "Body" with "I am @sender:name, you can find me at @sender:url. Sent from @group:name, link @group:url"
     And I press "Update"
     Then I should see the success message "The announcement has been updated but it's still in Draft state. Review the announcement and, when is ready to be sent, use the 'Send' button."
     And I should see "Announcement in Draft state"
@@ -66,16 +72,16 @@ Feature: Messaging group announcements
     And I should see the link "Add announcement"
     # The facilitator has exhausted all operations they can perform, so they
     # cannot edit the announcement anymore.
-    And I should not see "edit" in the "Test anon [rdf_entity:label] bis" row
-    And the email sent to "Check edit moderator" with subject "Joinup: A new announcement 'Test anon Fail pension bis' has been created" contains the following lines of text:
-      | text                                                                                                             |
-      | A new announcement 'Test anon Fail pension bis' has been created by Sons of tweets for the Fail pension <group>. |
-      | You can approve or reject the announcement at                                                                    |
+    And I should not see "edit" in the "The Big Opening is postponed" row
+    And the email sent to "Check edit moderator" with subject "Joinup: A new announcement 'The Big Opening is postponed' has been created" contains the following lines of text:
+      | text                                                                                                               |
+      | A new announcement 'The Big Opening is postponed' has been created by Sons of tweets for the Fail pension <group>. |
+      | You can approve or reject the announcement at                                                                      |
 
     Given I am logged in as "Check edit moderator"
     When I go to the announcements page of "Hidden gems" <group>
     Then the response status code should be 404
-    And I click the link from email sent to "Check edit moderator" with subject "Joinup: A new announcement 'Test anon Fail pension bis' has been created"
+    And I click the link from email sent to "Check edit moderator" with subject "Joinup: A new announcement 'The Big Opening is postponed' has been created"
     Then I should see "Announcement in Sent state"
     And I should see the button "Update"
     And I should see the button "Approve"
@@ -93,11 +99,11 @@ Feature: Messaging group announcements
     But I should not see the button "Reject"
 
     Given I am logged in as "Sons of tweets"
-    When I go the "Test anon [rdf_entity:label] bis" announcement of "Fail pension" <group>
+    When I go the "The Big Opening is postponed" announcement of "Fail pension" <group>
     Then the response status code should be 403
 
     Given I am logged in as "Check edit moderator"
-    When I go the "Test anon [rdf_entity:label] bis" announcement of "Fail pension" <group>
+    When I go the "The Big Opening is postponed" announcement of "Fail pension" <group>
     And  I press "Undo reject"
     Then I should see the success message "The announcement has been restored."
     Then I should see "Announcement in Sent state"
@@ -108,18 +114,36 @@ Feature: Messaging group announcements
     And I should not see the button "Undo reject"
 
     Given I am logged in as "Sons of tweets"
-    When I go the "Test anon [rdf_entity:label] bis" announcement of "Fail pension" <group>
+    When I go the "The Big Opening is postponed" announcement of "Fail pension" <group>
     Then the response status code should be 403
 
     Given I am logged in as "Check edit moderator"
-    When I go the "Test anon [rdf_entity:label] bis" announcement of "Fail pension" <group>
+    When I go the "The Big Opening is postponed" announcement of "Fail pension" <group>
     And I press "Approve"
     Then I should see the success message "The announcement has been delivered to the Fail pension <group> members."
+
+    # Groups having up to 50 members are receiving the announcements instantly.
+    And the email sent to "The Mogul" with subject "The Big Opening is postponed" contains the following lines of text:
+      | text                                    |
+      | Announcement from Fail pension <group>  |
+      | I am Sons of tweets, you can find me at |
+      | Sent from Fail pension, link            |
+    And the email sent to "The Greedy" with subject "The Big Opening is postponed" contains the following lines of text:
+      | text                                    |
+      | Announcement from Fail pension <group>  |
+      | I am Sons of tweets, you can find me at |
+      | Sent from Fail pension, link            |
+    And the email sent to "The Envious" with subject "The Big Opening is postponed" contains the following lines of text:
+      | text                                    |
+      | Announcement from Fail pension <group>  |
+      | I am Sons of tweets, you can find me at |
+      | Sent from Fail pension, link            |
+
     And I should see the link "Add announcement"
-    But I should not see "edit" in the "Test anon [rdf_entity:label] bis" row
+    But I should not see "edit" in the "The Big Opening is postponed" row
 
     Given I am logged in as "Sons of tweets"
-    When I go the "Test anon [rdf_entity:label] bis" announcement of "Fail pension" <group>
+    When I go the "The Big Opening is postponed" announcement of "Fail pension" <group>
     Then the response status code should be 403
 
     # Switch of notifications for this group.
@@ -129,31 +153,31 @@ Feature: Messaging group announcements
     And I uncheck the box "Announcements enabled"
     And I press "Save"
 
-    When I go the "Test anon [rdf_entity:label] bis" announcement of "Fail pension" <group>
+    When I go the "The Big Opening is postponed" announcement of "Fail pension" <group>
     Then the response status code should be 403
     But I go to the announcements page of "Fail pension" <group>
     Then the response status code should be 404
 
     Given I am logged in as "Sons of tweets"
-    When I go the "Test anon [rdf_entity:label] bis" announcement of "Fail pension" <group>
+    When I go the "The Big Opening is postponed" announcement of "Fail pension" <group>
     Then the response status code should be 403
     But I go to the announcements page of "Fail pension" <group>
     Then the response status code should be 404
 
     Given I am logged in as an "authenticated user"
-    When I go the "Test anon [rdf_entity:label] bis" announcement of "Fail pension" <group>
+    When I go the "The Big Opening is postponed" announcement of "Fail pension" <group>
     Then the response status code should be 403
     But I go to the announcements page of "Fail pension" <group>
     Then the response status code should be 404
 
     Given I am an anonymous user
-    When I go the "Test anon [rdf_entity:label] bis" announcement of "Fail pension" <group>
+    When I go the "The Big Opening is postponed" announcement of "Fail pension" <group>
     Then I should see the heading "Sign in to continue"
     But I go to the announcements page of "Fail pension" <group>
     Then the response status code should be 404
 
     # Explicitly delete announcements created via UI.
-    And I delete the "Test anon [rdf_entity:label] bis" announcement
+    And I delete the "The Big Opening is postponed" announcement
 
     Examples:
       | group      |
