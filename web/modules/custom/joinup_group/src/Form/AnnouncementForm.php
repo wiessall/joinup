@@ -6,11 +6,11 @@ namespace Drupal\joinup_group\Form;
 
 use Drupal\Component\Render\MarkupInterface;
 use Drupal\Core\Cache\CacheableMetadata;
-use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
 use Drupal\joinup_group\Entity\AnnouncementInterface;
+use Drupal\joinup_notification\JoinupMessageDeliveryInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -24,27 +24,25 @@ class AnnouncementForm extends FormBase {
   protected AnnouncementInterface $announcement;
 
   /**
-   * The module handler.
+   * The message delivery service.
    */
-  protected ModuleHandlerInterface $moduleHandler;
+  protected JoinupMessageDeliveryInterface $messageDelivery;
 
   /**
    * Builds a new form instance.
    *
-   * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
-   *   The module handler.
+   * @param \Drupal\joinup_notification\JoinupMessageDeliveryInterface $message_delivery
+   *   The message delivery service.
    */
-  public function __construct(ModuleHandlerInterface $module_handler) {
-    $this->moduleHandler = $module_handler;
+  public function __construct(JoinupMessageDeliveryInterface $message_delivery) {
+    $this->messageDelivery = $message_delivery;
   }
 
   /**
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container): self {
-    return new static(
-      $container->get('module_handler'),
-    );
+    return new static($container->get('joinup_notification.message_delivery'));
   }
 
   /**
@@ -82,21 +80,21 @@ class AnnouncementForm extends FormBase {
       '#type' => 'text_format',
       '#format' => $this->announcement->getBodyFormat(),
       '#title' => $this->t('Body'),
-      '#description' => $this->t('Only plain text. HTML or markup are not allowed'),
       '#default_value' => $this->announcement->getBody(),
       '#required' => TRUE,
+      '#allowed_formats' => ['minimal'],
     ];
 
     $arguments = $this->getArguments();
     $form['arguments'] = [
       '#theme' => 'item_list',
       '#items' => array_map(function (string $token) use ($arguments): MarkupInterface {
-        return $this->t('%token: @label', [
+        return $this->t('%token - @label', [
           '%token' => $token,
           '@label' => $arguments[$token]['label'],
         ]);
       }, array_keys($arguments)),
-      '#title' => $this->t('The following placeholders are available to be used in the message subject of body:'),
+      '#title' => $this->t('The following placeholders are available to be used in the message body:'),
     ];
 
     $form['state'] = [
@@ -124,6 +122,12 @@ class AnnouncementForm extends FormBase {
           '#state_machine_transition' => $transition->getId(),
         ];
       }
+
+      $form['actions']['test'] = [
+        '#type' => 'submit',
+        '#value' => $this->t('Test'),
+        '#test_announcement' => TRUE,
+      ];
     }
 
     (new CacheableMetadata())
@@ -159,7 +163,16 @@ class AnnouncementForm extends FormBase {
       '@type' => $this->announcement->getGroup()->get('rid')->entity->getSingularLabel(),
     ];
 
-    if ($is_new) {
+    if ($trigger['#type'] === 'submit' && !empty($trigger['#test_announcement'])) {
+      $email = $this->currentUser()->getEmail();
+      $this->messageDelivery->sendMessageToEmailAddresses($this->announcement, [
+        $email,
+      ]);
+      $status = $this->t('A sample announcement has been delivered to %email.', [
+        '%email' => $email,
+      ]);
+    }
+    elseif ($is_new) {
       $status = $this->t("The announcement has been created as @to. Review the announcement and, when is ready to be sent, use the 'Send' button.", $args);
     }
     elseif ($initial_state->getId() == $this->announcement->getWorkflowState()) {
@@ -214,27 +227,27 @@ class AnnouncementForm extends FormBase {
   protected function getArguments(): array {
     $group = $this->announcement->getGroup();
     $sender = $this->announcement->getOwner();
-    $vars = ['@label' => $group->get('rid')->entity->label()];
+    $vars = ['@label' => $group->get('rid')->entity->getSingularLabel()];
 
     return [
       '@group:name' => [
-        'label' => $this->t('@label title', $vars),
+        'label' => $this->t('The @label title', $vars),
         'value' => $group->label(),
       ],
       '@group:type' => [
-        'label' => $this->t('Group type (collection, solution)', $vars),
-        'value' => $group->get('rid')->entity->getSingularLabel(),
+        'label' => $this->t('The group type (collection, solution)', $vars),
+        'value' => $vars['@label'],
       ],
       '@group:url' => [
-        'label' => $this->t('@label landing page URL', $vars),
+        'label' => $this->t('The @label landing page URL', $vars),
         'value' => $group->toUrl()->setAbsolute()->toString(),
       ],
       '@sender:name' => [
-        'label' => $this->t("Announcement sender name"),
+        'label' => $this->t('The announcement sender name'),
         'value' => $sender->getDisplayName(),
       ],
       '@sender:url' => [
-        'label' => $this->t("Announcement sender profile URL"),
+        'label' => $this->t('The announcement sender profile URL'),
         'value' => $sender->toUrl()->setAbsolute()->toString(),
       ],
     ];
