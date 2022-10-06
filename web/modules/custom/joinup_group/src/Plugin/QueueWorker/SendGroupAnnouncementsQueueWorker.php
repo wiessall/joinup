@@ -129,7 +129,7 @@ class SendGroupAnnouncementsQueueWorker extends QueueWorkerBase implements Conta
         while ($recipients = $this->getGroupMembersEmails($announcement->getGroup(), $offset, $limit)) {
           $queue->createItem([
             'announcement' => (int) $announcement->id(),
-            'recipients' => $recipients
+            'recipients' => $recipients,
           ]);
           $offset += $limit;
         }
@@ -159,7 +159,7 @@ class SendGroupAnnouncementsQueueWorker extends QueueWorkerBase implements Conta
    *   The group entity.
    * @param int $offset
    *   The query offset.
-   * @parm int $limit
+   * @param int $limit
    *   The query limit.
    *
    * @return string[]
