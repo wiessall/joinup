@@ -6,6 +6,3 @@ core_version_requirement: ^8.9 || ^9.1
 php: 7.1
 dependencies:
   - joinup_federation:joinup_federation
-
-config_devel:
-  - joinup_pipeline_log.settings
