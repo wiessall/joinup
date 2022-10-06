@@ -5,7 +5,13 @@ dependencies: {  }
 template: announcement
 label: Announcement
 description: 'Messaging group announcements.'
-text: {  }
+text:
+  -
+    value: '<p>Announcement from <em>@group></em> @type</p><hr />'
+    format: full_html
+  -
+    value: ''
+    format: minimal
 settings:
   'token options':
     clear: false

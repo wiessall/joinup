@@ -88,6 +88,7 @@ class AnnouncementsController extends ControllerBase {
         'template' => 'announcement',
         'group' => $rdf_entity,
         'state' => 'draft',
+        'uid' => $this->currentUser()->id(),
       ]);
     }
     elseif ($announcement->getGroupId() != $rdf_entity->id()) {
