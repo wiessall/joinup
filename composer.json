@@ -236,9 +236,6 @@
             "drupal/core": "-p2"
         },
         "patches": {
-            "drupal/config_devel": {
-                "Add a Drush command for manipulating module info files @see https://www.drupal.org/project/config_devel/issues/2392929": "https://git.drupalcode.org/project/config_devel/-/merge_requests/4.diff"
-            },
             "drupal/coder": {
                 "PHPCS hangs indefinetly with standard Drupal @see https://www.drupal.org/project/coder/issues/3306999": "https://git.drupalcode.org/project/coder/-/commit/446dea2.diff"
             },
