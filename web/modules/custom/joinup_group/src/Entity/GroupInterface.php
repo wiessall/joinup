@@ -282,9 +282,9 @@ interface GroupInterface extends RdfInterface, LogoInterface, ShortIdInterface, 
    *
    * There are groups having a huge number of members. Therefore, returning
    * hundreds or thousands of user entities could exhaust the resources. It's
-   * the caller responsibility to handle such cases, by limiting the amount of
-   * results via the $offset and $limit parameters. The returned list of users
-   * is sorted by the user ID, making it predictable.
+   * the caller's responsibility to handle such cases, by limiting the amount
+   * of results via the $offset and $limit parameters. The returned list of
+   * users is sorted by the user ID, making it predictable.
    *
    * @param int $offset
    *   (optional) If passed, is used to limit the amount of results.
