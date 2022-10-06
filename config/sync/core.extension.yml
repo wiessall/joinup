@@ -246,8 +246,8 @@ module:
   joinup_debug: 1001
 theme:
   stable: 0
-  seven: 0
   joinup_theme: 0
   ventuno: 0
   oe_bootstrap_theme: 0
+  claro: 0
 profile: joinup
