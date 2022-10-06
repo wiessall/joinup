@@ -4,6 +4,7 @@ declare(strict_types = 1);
 
 namespace Drupal\joinup_group\Form;
 
+use Drupal\Component\Render\MarkupInterface;
 use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Form\FormBase;
@@ -74,31 +75,29 @@ class AnnouncementForm extends FormBase {
       '#type' => 'textfield',
       '#title' => $this->t('Subject'),
       '#default_value' => $this->announcement->getSubject(),
-      '#element_validate' => ['token_element_validate'],
-      '#token_types' => ['rdf_entity'],
       '#required' => TRUE,
     ];
 
     $form['body'] = [
-      '#type' => 'textarea',
+      '#type' => 'text_format',
+      '#format' => $this->announcement->getBodyFormat(),
       '#title' => $this->t('Body'),
       '#description' => $this->t('Only plain text. HTML or markup are not allowed'),
       '#default_value' => $this->announcement->getBody(),
-      '#element_validate' => ['token_element_validate'],
-      '#token_types' => ['rdf_entity'],
       '#required' => TRUE,
-      '#cols' => 100,
-      '#rows' => 10,
     ];
 
-    if ($this->moduleHandler->moduleExists('token')) {
-      $form['tokens'] = [
-        '#theme' => 'token_tree_link',
-        '#token_types' => ['rdf_entity'],
-        '#global_types' => TRUE,
-        '#dialog' => TRUE,
-      ];
-    }
+    $arguments = $this->getArguments();
+    $form['arguments'] = [
+      '#theme' => 'item_list',
+      '#items' => array_map(function (string $token) use ($arguments): MarkupInterface {
+        return $this->t('%token: @label', [
+          '%token' => $token,
+          '@label' => $arguments[$token]['label'],
+        ]);
+      }, array_keys($arguments)),
+      '#title' => $this->t('The following placeholders are available to be used in the message subject of body:'),
+    ];
 
     $form['state'] = [
       '#markup' => $this->announcement->isNew() ? $this->t("Announcement not saved yet") : $this->t("Announcement in @state state", [
@@ -145,9 +144,16 @@ class AnnouncementForm extends FormBase {
     if ($trigger['#type'] === 'submit' && isset($trigger['#state_machine_transition'])) {
       $this->announcement->getWorkflowStateField()->applyTransitionById($trigger['#state_machine_transition']);
     }
+    $arguments = array_map(function (array $argument) {
+      return $argument['value'];
+    }, $this->getArguments()) + [
+      '@group' => $this->announcement->getGroup()->label(),
+      '@type' => $this->announcement->getGroup()->get('rid')->entity->getSingularLabel(),
+    ];
     $this->announcement
-      ->set('subject', $form_state->getValue('subject'))
-      ->set('body', $form_state->getValue('body'))
+      ->setSubject($form_state->getValue('subject'))
+      ->setBody($form_state->getValue('body'))
+      ->setArguments($arguments)
       ->save();
 
     $args = [
@@ -197,6 +203,49 @@ class AnnouncementForm extends FormBase {
       ]);
     }
     $form_state->setRedirectUrl($redirect);
+  }
+
+  /**
+   * Builds a list of possible arguments.
+   *
+   * @return array[]
+   *   An associative array keyed by the argument placeholder and having an
+   *   associative array as values, each with two keys:
+   *   - label: A short definition of the argument.
+   *   - value: The argument value.
+   */
+  protected function getArguments(): array {
+    $group = $this->announcement->getGroup();
+    $parents = [$group];
+    if ($group instanceof GroupContentInterface) {
+      $parents[] = $group->getGroup();
+    }
+    /** @var \Drupal\joinup_group\Entity\GroupInterface $parent */
+    foreach ($parents as $parent) {
+      $vars = ['@label' => $parent->get('rid')->entity->label()];
+      $arguments["@{$parent->bundle()}:name"] = [
+        'label' => $this->t('@label title', $vars),
+        'value' => $parent->label(),
+      ];
+      $arguments["@{$parent->bundle()}:url"] = [
+        'label' => $this->t('@label landing page URL', $vars),
+        'value' => $parent->toUrl()->setAbsolute()->toString(),
+      ];
+    }
+
+    $sender = $this->announcement->getOwner();
+    $arguments += [
+      '@sender:name' => [
+        'label' => $this->t("Announcement sender name"),
+        'value' => $sender->getDisplayName(),
+      ],
+      '@sender:url' => [
+        'label' => $this->t("Announcement sender profile URL"),
+        'value' => $sender->toUrl()->setAbsolute()->toString(),
+      ],
+    ];
+
+    return $arguments;
   }
 
 }

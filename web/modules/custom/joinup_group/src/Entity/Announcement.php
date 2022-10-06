@@ -18,8 +18,24 @@ class Announcement extends Message implements AnnouncementInterface {
   /**
    * {@inheritdoc}
    */
+  public function setSubject(string $subject): AnnouncementInterface {
+    $this->set('subject', $subject);
+    return $this;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function getSubject(): ?string {
     return $this->get('subject')->value;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function setBody(string $body): AnnouncementInterface {
+    $this->set('body', $body);
+    return $this;
   }
 
   /**
@@ -32,8 +48,40 @@ class Announcement extends Message implements AnnouncementInterface {
   /**
    * {@inheritdoc}
    */
+  public function getBodyFormat(): string {
+    $template = $this->getTemplate();
+    $text = $template->get('text');
+    if (!isset($text[1])) {
+      throw new \RuntimeException("The 'announcement' message template should have a second text item");
+    }
+    return $text[1]['format'];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function getWorkflowStateFieldName(): string {
     return 'state';
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getText($langcode = NULL, $delta = NULL): array {
+    $text = parent::getText($langcode, $delta);
+
+    // Replace the second text with the processed announcement body.
+    if (isset($text[1])) {
+      $build = [
+        '#type' => 'processed_text',
+        '#text' => $this->getBody(),
+        '#format' => $this->getBodyFormat(),
+      ];
+      $body = \Drupal::service('renderer')->renderPlain($build);
+      $text[1] = $this->processArguments($this->getArguments(), [$body])[0];
+    }
+
+    return $text;
   }
 
   /**
