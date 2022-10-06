@@ -45,12 +45,12 @@ class EntityQueueContext extends RawDrupalContext {
    */
   public function setEntityQueueContent(TableNode $table, string $label): void {
     /** @var \Drupal\entityqueue\EntitySubqueueInterface $subqueue */
-    $subqueue = self::getEntityByLabel('entity_subqueue', $label);
+    $subqueue = $this->getEntityByLabel('entity_subqueue', $label);
 
     $entities = array_map(function (array $row): ContentEntityInterface {
       $entity_type_id = self::translateEntityTypeAlias($row['type']);
       $label = $row['label'];
-      return self::getEntityByLabel($entity_type_id, $label);
+      return $this->getEntityByLabel($entity_type_id, $label);
     }, $table->getColumnsHash());
 
     $subqueue->get('items')->setValue($entities);
@@ -73,7 +73,7 @@ class EntityQueueContext extends RawDrupalContext {
    */
   public function setEntityQueueFieldData(TableNode $table, string $label): void {
     /** @var \Drupal\entityqueue\EntitySubqueueInterface $subqueue */
-    $subqueue = self::getEntityByLabel('entity_subqueue', $label);
+    $subqueue = $this->getEntityByLabel('entity_subqueue', $label);
 
     $values = $table->getRowsHash();
     $this->massageEntityQueueFieldValues($subqueue, $values);

@@ -15,7 +15,7 @@
 <div class="inputs">
   <form{{ attributes.addClass('search-bar__input-container') }}>
     {% for id, filter in filters %}
-      <input type="hidden" class="mdl-chipfield__input" name="f[]" value="group:{{ id }}" data-description="{{ filter }}">
+      <input type="hidden" class="mdl-chipfield__input" name="f[]" value="group:{{ id }}" data-joinup-description="{{ filter }}">
     {% endfor %}
     {{ children }}
     <button type="submit" class="search-bar__submit views-auto-submit-click">{{ 'Search'|trans }}</button>
