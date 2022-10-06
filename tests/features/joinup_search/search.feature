@@ -304,7 +304,6 @@ Feature: Global search
       | Best place to find an exotic bird |
       | Bird Birdman                      |
 
-  @clearStaticCache
   Scenario: Solutions and/or releases are found by their distribution keyword.
     Given the following licences:
       | title      |
@@ -587,16 +586,16 @@ Feature: Global search
       | spatial coverage | Belgium                  |
       | state            | validated                |
     And the following solutions:
-      | title    | collection               | description                                                                                                                          | topic      | spatial coverage | state     |
-      | Spheres  | Radio cooking collection | Spherification is the culinary process of shaping a liquid into spheres                                                              | Demography | European Union   | validated |
-      | Movistar | Radio cooking collection | "The use of foam in cuisine has been used in many forms in the history of cooking:whipped cream, meringue, and mousse are all foams" |            |                  | validated |
+      | title    | collection               | description                                                                                                                                                   | topic      | spatial coverage | state     |
+      | Spheres  | Radio cooking collection | Spherification is the culinary process of shaping a liquid into spheres. Drupal is the best digital experience platform(DXP) on the web, proudly open source. | Demography | European Union   | validated |
+      | Movistar | Radio cooking collection | "The use of foam in cuisine has been used in many forms in the history of cooking:whipped cream, meringue, and mousse are all foams", proudly open source.    |            |                  | validated |
     And news content:
-      | title           | body             | collection               | topic                   | spatial coverage | state     |
-      | El Cabo da Roca | The best in town | Radio cooking collection | Statistics and Analysis | Luxembourg       | validated |
-      | Funny news 1    | Dummy body       | Radio cooking collection | E-inclusion             | Luxembourg       | validated |
-      | Funny news 2    | Dummy body       | Radio cooking collection | E-inclusion             | Luxembourg       | validated |
-      | Funny news 3    | Dummy body       | Radio cooking collection | E-inclusion             | Luxembourg       | validated |
-      | Funny news 4    | Dummy body       | Radio cooking collection | E-inclusion             | Luxembourg       | validated |
+      | title           | body                                                                                 | collection               | topic                   | spatial coverage | state     |
+      | El Cabo da Roca | The best in town, proudly open source.                                               | Radio cooking collection | Statistics and Analysis | Luxembourg       | validated |
+      | Funny news 1    | Drupal is the best digital experience platform(DXP) on the web, proudly open source. | Radio cooking collection | E-inclusion             | Luxembourg       | validated |
+      | Funny news 2    | Drupal is the best digital experience platform(DXP) on the web, proudly open source. | Radio cooking collection | E-inclusion             | Luxembourg       | validated |
+      | Funny news 3    | Drupal is the best digital experience platform(DXP) on the web, proudly open source. | Radio cooking collection | E-inclusion             | Luxembourg       | validated |
+      | Funny news 4    | Drupal is the best digital experience platform(DXP) on the web, proudly open source. | Radio cooking collection | E-inclusion             | Luxembourg       | validated |
 
     Given I am logged in as a user with the "authenticated" role
     When I visit the search page
@@ -610,7 +609,7 @@ Feature: Global search
     When I enter "bott" in the search bar
     And I wait for AJAX to finish
     Then I should see the following search suggestions:
-      | body |
+      | best |
 
     When I check the "Solutions (2)" checkbox from the "Content types" facet
     And I check the "News (5)" checkbox from the "Content types" facet
@@ -661,6 +660,25 @@ Feature: Global search
     And I click "cuisine"
     Then I should see the text "SEARCH RESULTS (1)"
     And I should see the "Movistar" tile
+
+    Then I enter "sp" in the search bar
+    And I wait for AJAX to finish
+    Then I should see the following search suggestions:
+      | Radio cooking collection |
+      | spheres                  |
+      | spherification           |
+      | sphere                   |
+      | spherif                  |
+
+    Then I enter "sp" in the search bar
+    And I wait for AJAX to finish
+    Then I should see the following search suggestions:
+      | Radio cooking collection |
+      | Spheres                  |
+      | spherification           |
+      | sphere                   |
+      | spherif                  |
+
 
   @terms
   Scenario: Filter on date

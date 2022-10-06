@@ -27,15 +27,16 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $parameters->set(Option::SKIP, [
       '*/upgrade_status/tests/modules/*',
-      // Errors.
+      // Errors with no evident reason.
+      // @todo Investigate & fix.
       '*/JoinupDataSanitizationCommands.php',
       '*/ValidUpdateNameSniff.php',
+      '*/JoinupDrushCommands.php',
+      // Dead code that we keep.
+      '*/joinup_stats/tests/modules/*',
     ]);
     $parameters->set(Option::FILE_EXTENSIONS, ['php', 'module', 'theme', 'install', 'profile', 'inc', 'engine']);
     $parameters->set(Option::AUTO_IMPORT_NAMES, false);
     $parameters->set(Option::IMPORT_SHORT_CLASSES, false);
-    // @phpstan-ignore-next-line
-    $parameters->set(Option::IMPORT_DOC_BLOCKS, false);
-
     $parameters->set('drupal_rector_notices_as_comments', true);
 };
