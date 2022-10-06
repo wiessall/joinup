@@ -49,11 +49,6 @@ services:
   joinup_group.url_alias_updater:
     class: Drupal\joinup_group\JoinupGroupContentUrlAliasUpdater
     arguments: ['@queue']
-  joinup_group.announcements_edit.access_check:
-    class: Drupal\joinup_group\Access\JoinupAnnouncementsAccessCheck
-    arguments: ['@entity_type.manager', '@og.access']
-    tags:
-      - { name: access_check, applies_to: _entity_access }
   joinup_group.state_machine.transition_guard:
     class: Drupal\joinup_group\Guard\AnnouncementTransitionsGuard
     arguments: ['@joinup_group.group_manager']
