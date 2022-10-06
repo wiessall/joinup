@@ -962,25 +962,3 @@ function joinup_group_mail(string $key, array &$message, array $params): void {
     ];
   }
 }
-
-/**
- * Implements hook_ENTITY_TYPE_insert().
- */
-function joinup_group_message_insert(MessageInterface $message): void {
-  if ($message->bundle() === 'announcement') {
-    $event = new AnnouncementsEvent('create', $message);
-    $event_dispatcher = \Drupal::getContainer()->get('event_dispatcher');
-    $event_dispatcher->dispatch($event, AnnouncementsEventsInterface::ANNOUNCEMENT_CREATE);
-  }
-}
-
-/**
- * Implements hook_ENTITY_TYPE_update().
- */
-function joinup_group_message_update(MessageInterface $message): void {
-  if ($message->bundle() === 'announcement') {
-    $event = new AnnouncementsEvent('update', $message);
-    $event_dispatcher = \Drupal::getContainer()->get('event_dispatcher');
-    $event_dispatcher->dispatch($event, AnnouncementsEventsInterface::ANNOUNCEMENT_UPDATE);
-  }
-}
