@@ -205,7 +205,7 @@ trait GroupTrait {
       return [];
     }
     sort($og_membership_ids);
-    $og_membership_ids = array_splice($og_membership_ids, $offset, $limit);
+    $og_membership_ids = $limit === NULL ? array_splice($og_membership_ids, $offset) : array_splice($og_membership_ids, $offset, $limit);
 
     $entity_type_manager = \Drupal::entityTypeManager();
     $uids = array_values(array_map(function (OgMembershipInterface $membership): int {
