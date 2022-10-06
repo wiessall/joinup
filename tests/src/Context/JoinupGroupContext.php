@@ -297,6 +297,7 @@ class JoinupGroupContext extends RawDrupalContext {
             throw new \InvalidArgumentException("'$value' should be either a collection or a solution");
           }
           $values['group'] = $group;
+          continue;
         }
         elseif ($key === 'author') {
           if (!$account = user_load_by_name($value)) {
