@@ -28,7 +28,7 @@ announcement:
         - sent
       to: rejected
     undo:
-      label: Undo
+      label: Undo reject
       from:
         - rejected
       to: sent

@@ -169,7 +169,7 @@ class AnnouncementForm extends FormBase {
       ]);
     }
     elseif ($this->announcement->getWorkflowState() === 'rejected') {
-      $status = $this->t("The announcement has been rejected. Press the 'Undo' button to restore the announcement.");
+      $status = $this->t("The announcement has been rejected. Press the 'Undo reject' button to restore the announcement.");
     }
     elseif ($initial_state->getId() === 'rejected') {
       $status = $this->t("The announcement has been restored.");
