@@ -17,7 +17,7 @@ declare(strict_types = 1);
 /**
  * Set announcements_enabled enable in collections.
  */
-function joinup_core_deploy_108401(array &$sandbox): string {
+function joinup_core_deploy_108600(array &$sandbox): string {
   if (empty($sandbox['ids'])) {
     $sandbox['ids'] = \Drupal::entityQuery('meta_entity')->condition('type', 'collection_settings')->execute();
     $sandbox['count'] = 0;
