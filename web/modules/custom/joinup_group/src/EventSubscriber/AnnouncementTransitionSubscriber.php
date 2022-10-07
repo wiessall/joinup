@@ -113,10 +113,16 @@ class AnnouncementTransitionSubscriber implements EventSubscriberInterface {
     $announcement = $event->getEntity();
     $group = $announcement->getGroup();
 
+    if (!$recipients_count = $group->getAnnouncementRecipientsCount()) {
+      // Normally, this cannot happen because we're handling this in the form.
+      // @see \Drupal\joinup_group\Form\AnnouncementForm::validateForm()
+      return;
+    }
+
     // For smaller groups we send the announcements instantly.
-    if ($group->getMemberCount() <= 50) {
-      $members = $group->getMembers();
-      $this->messageDelivery->sendMessageToMultipleUsers($announcement, $members);
+    if ($recipients_count <= 50) {
+      $recipients = $group->getAnnouncementRecipients(0, 50);
+      $this->messageDelivery->sendMessageToEmailAddresses($announcement, $recipients);
       return;
     }
 
