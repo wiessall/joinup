@@ -34,7 +34,7 @@ Feature: Subscribing to a collection after joining
     # The user can decline the subscription.
     When I press "No thanks" in the "Modal buttons" region
     Then the modal should be closed
-    And I should not be subscribed to the "Sapient Pearwood" collection
+    And I should not be subscribed to any bundle from the "Sapient Pearwood" collection
 
     # Navigate to another open collection, this time subscribing.
     When I go to the homepage of the "Drop bears" collection
@@ -58,7 +58,7 @@ Feature: Subscribing to a collection after joining
     And I should see the button "Subscribe" in the "Modal buttons" region
     When I press "No thanks" in the "Modal buttons" region
     Then the modal should be closed
-    And I should not be subscribed to the "Troll ducks" collection
+    And I should not be subscribed to any bundle from the "Troll ducks" collection
 
     # Navigate to a closed collection and accept the subscription.
     When I go to the homepage of the "Swamp dragons" collection

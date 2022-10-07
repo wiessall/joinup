@@ -184,6 +184,45 @@ class JoinupLegalContext extends RawDrupalContext {
   }
 
   /**
+   * Accepts a given legal document by a list of users.
+   *
+   * The table contains a list of usernames:
+   * @code
+   * | user1 |
+   * | user3 |
+   * @endcode
+   *
+   * @param string $document_label
+   *   The legal document label.
+   * @param \Behat\Gherkin\Node\TableNode $table
+   *   The entries list.
+   *
+   * @throws \InvalidArgumentException
+   *   When the given legal document has no published version or invalid
+   *   usernames were passed.
+   *
+   * @Given the following :document_label acceptances:
+   */
+  public function setAcceptances(string $document_label, TableNode $table): void {
+    /** @var \Drupal\entity_legal\EntityLegalDocumentInterface $document */
+    $document = $this->getEntityByLabel(ENTITY_LEGAL_DOCUMENT_ENTITY_NAME, $document_label);
+    if (!$published_version = $document->getPublishedVersion()) {
+      throw new \InvalidArgumentException("Legal document '{$document->label()}' has no published version.");
+    }
+
+    foreach ($table->getRows() as $row) {
+      $username = reset($row);
+      if (!$account = user_load_by_name($username)) {
+        throw new \InvalidArgumentException("Invalid user name '$username'");
+      }
+      EntityLegalDocumentAcceptance::create([
+        'document_version_name' => $published_version->id(),
+        'uid' => $account->id(),
+      ])->save();
+    }
+  }
+
+  /**
    * Clears the testing legal document versions.
    *
    * @AfterScenario @api

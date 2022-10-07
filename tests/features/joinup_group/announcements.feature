@@ -14,6 +14,8 @@ Feature: Messaging group announcements
       | Mogul                | mogul@example.com                |           |
       | Greedy               | greedy@example.com               |           |
       | Envious              | envy@example.com                 |           |
+      | Coward               | coward@example.com               |           |
+      | Nice                 | nice@example.com                 |           |
     And the following <group> user membership:
       | <group>      | user           | roles       |
       | Fail pension | Sons of tweets | facilitator |
@@ -21,6 +23,17 @@ Feature: Messaging group announcements
       | Fail pension | Mogul          |             |
       | Fail pension | Greedy         |             |
       | Fail pension | Envious        |             |
+      | Fail pension | Coward         |             |
+    And the following legal document version:
+      | Document     | Label | Published | Acceptance label                                                                                   | Content                                                    |
+      | Legal notice | 1.1   | yes       | I have read and accept the <a href="[entity_legal_document:url]">[entity_legal_document:label]</a> | The information on this site is subject to a disclaimer... |
+    And the following "Legal notice" acceptances:
+      | Check edit moderator |
+      | Sons of tweets       |
+      | Mogul                |
+      | Greedy               |
+      | Envious              |
+      | Nice                 |
 
     Given I am an anonymous user
     When I go to the announcements page of "Fail pension" <group>
@@ -28,7 +41,7 @@ Feature: Messaging group announcements
     When I go to the announcements page of "Hidden gems" <group>
     Then the response status code should be 404
 
-    Given I am logged in as an "authenticated user"
+    Given I am logged in as "Nice"
     When I go to the announcements page of "Fail pension" <group>
     Then the response status code should be 404
     When I go to the announcements page of "Hidden gems" <group>
@@ -142,14 +155,22 @@ Feature: Messaging group announcements
     When I go the "The Big Opening is postponed" announcement of "Fail pension" <group>
     Then the response status code should be 403
 
+    Given the "Mogul" user unsubscribes from "Fail pension" <group> announcements
+    And the "Greedy" user unsubscribes from "Fail pension" <group> announcements
+    And the "Envious" user unsubscribes from "Fail pension" <group> announcements
+    And the "Sons of tweets" user unsubscribes from "Fail pension" <group> announcements
+
     Given I am logged in as "Check edit moderator"
 
     When I go the "The Big Opening is postponed" announcement of "Fail pension" <group>
     And I press "Approve"
+    # Even 'Coward' is still subscribed, he didn't accept yet the legal notice.
     Then I should see the error message "Cannot send this announcement to Fail pension <group> because none of its members are subscribed to receive announcements."
 
     Given the "Mogul" user subscribes to "Fail pension" <group> announcements
     And the "Greedy" user subscribes to "Fail pension" <group> announcements
+    And the "Coward" user subscribes to "Fail pension" <group> announcements
+    And the "Sons of tweets" user subscribes to "Fail pension" <group> announcements
 
     And I press "Approve"
     Then I should see the success message "The announcement has been delivered to the Fail pension <group> members."
@@ -165,7 +186,15 @@ Feature: Messaging group announcements
       | Announcement from Fail pension <group>  |
       | I am Sons of tweets, you can find me at |
       | Sent from Fail pension, link            |
+    And the email sent to "Sons of tweets" with subject "The Big Opening is postponed" contains the following lines of text:
+      | text                                    |
+      | Announcement from Fail pension <group>  |
+      | I am Sons of tweets, you can find me at |
+      | Sent from Fail pension, link            |
+    # Accepted 'Legal notice' but it's not subscribed to group announcements.
     But no email has been sent to "Envious"
+    # Subscribed to group announcements but didn't accept the 'Legal notice'.
+    And no email has been sent to "Coward"
 
     And I should see the link "Add announcement"
     But I should not see "edit" in the "The Big Opening is postponed" row
@@ -195,7 +224,7 @@ Feature: Messaging group announcements
     But I go to the announcements page of "Fail pension" <group>
     Then the response status code should be 404
 
-    Given I am logged in as an "authenticated user"
+    Given I am logged in as "Nice"
 
     When I go the "The Big Opening is postponed" announcement of "Fail pension" <group>
     Then the response status code should be 403
@@ -241,11 +270,19 @@ Feature: Messaging group announcements
       | Collection1 Solution2 | Announcement1 C1S2 | draft     | Lory Facilitator | 1999-04-30 |
       | Collection2           | Announcement1 C2   | sent      | Miau user        | 2022-07-29 |
       | Collection2 Solution1 | Announcement1 C2S1 | delivered | Miau user        | 2022-08-03 |
-
     And the following collection user membership:
-      | collection  | user             | roles       |
-      | Collection1 | Lory Facilitator | facilitator |
-      | Collection2 | Miau user        | facilitator |
+      | collection            | user             | roles       |
+      | Collection1           | Lory Facilitator | facilitator |
+      | Collection2           | Miau user        | facilitator |
+      | Collection1 Solution1 | Miau user        |             |
+    And the following legal document version:
+      | Document     | Label | Published | Acceptance label                                                                                   | Content                                                    |
+      | Legal notice | 1.1   | yes       | I have read and accept the <a href="[entity_legal_document:url]">[entity_legal_document:label]</a> | The information on this site is subject to a disclaimer... |
+    And the following "Legal notice" acceptances:
+      | Rian Lee         |
+      | Miau user        |
+      | Lory Facilitator |
+      | Xela moderator   |
 
     Given I am logged in as "Xela moderator"
     When I click "Announcements" in the "Administration toolbar"

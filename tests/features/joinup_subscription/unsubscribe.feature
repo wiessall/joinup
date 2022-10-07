@@ -44,12 +44,12 @@ Feature: Unsubscribe from collections
 
     Then I should see the link "Unsubscribe from all"
     And the following content subscriptions should be selected:
-      | Southpark elementary | discussion, document, event, news |
-      | Kenny's house        | discussion, document, event, news |
-      | Koon's hideout       | discussion, document, event, news |
-      | Poor man's Shelter   | discussion, document, event, news |
-      | Anna's house         | discussion, document, event, news |
-      | Greg's foxhole       | discussion, document, event, news |
+      | Southpark elementary | discussion, document, event, news, announcements |
+      | Kenny's house        | discussion, document, event, news, announcements |
+      | Koon's hideout       | discussion, document, event, news, announcements |
+      | Poor man's Shelter   | discussion, document, event, news, announcements |
+      | Anna's house         | discussion, document, event, news, announcements |
+      | Greg's foxhole       | discussion, document, event, news, announcements |
 
     When I click "Unsubscribe from all"
     Then I should see the heading "Unsubscribe from all?"
