@@ -91,12 +91,12 @@ Feature: My subscriptions
 
     # The empty text should not be shown now.
     Then I should not see the text "No collection memberships yet."
-    And I should not see the link "Unsubscribe from all"
+    And I should see the link "Unsubscribe from all"
 
     And the following content subscriptions should be selected:
-      | Alpha Centauri |  |
-      | Barnard's Star |  |
-      | Wolf 359       |  |
+      | Alpha Centauri | Announcements |
+      | Barnard's Star | Announcements |
+      | Wolf 359       | Announcements |
 
     # The collection abstracts were visible in an earlier version but were
     # removed in a more recent design update. Let's ensure they do not pop back
@@ -151,14 +151,14 @@ Feature: My subscriptions
 
     And the following content subscriptions should be selected:
       | Alpha Centauri | Discussion, Announcements |
-      | Barnard's Star |                           |
-      | Wolf 359       | Event                     |
+      | Barnard's Star | Announcements             |
+      | Wolf 359       | Event, Announcements      |
 
     # The 'Event' subscription was checked but not saved, so we should not be subscribed to it.
     And I should have the following content subscriptions:
       | Alpha Centauri | Discussion, Announcements |
-      | Barnard's Star |                           |
-      | Wolf 359       |                           |
+      | Barnard's Star | Announcements             |
+      | Wolf 359       | Announcements             |
 
     # Re-try a change on the same collection.
     Given I uncheck the "Discussion" checkbox of the "Alpha Centauri" subscription
@@ -176,16 +176,16 @@ Feature: My subscriptions
     # Ensure that the changes are not saved for all cards and unsaved changes are lost.
     Given I reload the page
     And the following content subscriptions should be selected:
-      | Alpha Centauri |  |
-      | Barnard's Star |  |
+      | Alpha Centauri |               |
+      | Barnard's Star | Announcements |
       # Even though 'Event' was unchecked, and another 'Save changes' button was clicked,
       # the changes for 'Wolf 359' were not saved and so they are reloaded.
-      | Wolf 359       |  |
+      | Wolf 359       | Announcements |
 
     And I should have the following content subscriptions:
-      | Alpha Centauri |  |
-      | Barnard's Star |  |
-      | Wolf 359       |  |
+      | Alpha Centauri |               |
+      | Barnard's Star | Announcements |
+      | Wolf 359       | Announcements |
 
   @javascript
   Scenario Outline: Change the notification frequency of my digests
@@ -238,26 +238,41 @@ Feature: My subscriptions
       | Monthly | monthly   |
 
   @javascript
-  # This is a regression test for a bug in "My subscriptions".
-  # If a user doesn't have subscriptions enable and only want to enable announcements
-  # it should be checked after save.
+  # This is a regression test for a bug in "My subscriptions". If a user doesn't
+  # have subscriptions enable and only want to enable announcements it should be
+  # checked after save.
   Scenario: Regression test "My subscriptions"
 
     Given the following collections:
-      | title    | state     |
+      | title     | state     |
       | Fireblade | validated |
       | Lopitopes | validated |
     And user:
-      | Username  | Blade One           |
-      | E-mail    | blade.1@example.com |
+      | Username | Blade One           |
+      | E-mail   | blade.1@example.com |
     And the following collection user membership:
-      | collection  | user       | state  |
-      | Fireblade   | Blade One  | active |
-      | Lopitopes   | Blade One  | active |
+      | collection | user      | state  |
+      | Fireblade  | Blade One | active |
+      | Lopitopes  | Blade One | active |
 
     When I am logged in as "Blade One"
     Then I go to my subscriptions
     And I should not see the text "No collection memberships yet."
+    But I should see the text "No solution memberships yet."
+    # User is subscribed to announcements by default.
+    And the following content subscriptions should be selected:
+      | Fireblade | Announcements |
+      | Lopitopes | Announcements |
+
+    When I uncheck the "Announcements" checkbox of the "Fireblade" subscription
+    And I press "Save changes" on the "Fireblade" subscription card
+    And I uncheck the "Announcements" checkbox of the "Lopitopes" subscription
+    And I press "Save changes" on the "Lopitopes" subscription card
+    And I reload the page
+
+    And the following content subscriptions should be selected:
+      | Fireblade |  |
+      | Lopitopes |  |
     Then I check the "Announcements" checkbox of the "Fireblade" subscription
     And I press "Save changes" on the "Fireblade" subscription card
     Then I reload the page

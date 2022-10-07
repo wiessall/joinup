@@ -14,6 +14,9 @@
 
 declare(strict_types = 1);
 
+use Drupal\joinup_group\JoinupGroupHelper;
+use Drupal\og\OgMembershipInterface;
+
 /**
  * Set announcements_enabled enable in collections.
  */
@@ -33,4 +36,19 @@ function joinup_core_deploy_108600(array &$sandbox): string {
 
   $sandbox['#finished'] = $sandbox['count'] === $sandbox['max'];
   return "Updated {$sandbox['count']} out of {$sandbox['max']} meta-entity settings collection.";
+}
+
+/**
+ * Subscribe group members to announcements.
+ */
+function joinup_core_deploy_108601(): void {
+  \Drupal::database()->update('og_membership')
+    ->fields(['announcements' => 1])
+    ->condition('type', OgMembershipInterface::TYPE_DEFAULT)
+    ->condition('entity_type', 'rdf_entity')
+    ->condition('entity_bundle', JoinupGroupHelper::GROUP_BUNDLES, 'IN')
+    // Don't filter on whether the user is blocked, or they didn't agree yet to
+    // the 'Legal notice', or their membership is pending. These conditions may
+    // change in the future, so we default them to subscribe to announcements.
+    ->execute();
 }

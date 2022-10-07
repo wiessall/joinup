@@ -423,7 +423,7 @@ class JoinupSubscriptionContext extends RawDrupalContext {
   }
 
   /**
-   * Checks that the current user is not subscribed to the given group.
+   * Checks that the current user is not subscribed to any group bundle.
    *
    * @param string $label
    *   The name of the group the user should not be subscribed to.
@@ -433,7 +433,7 @@ class JoinupSubscriptionContext extends RawDrupalContext {
    * @throws \Exception
    *   Thrown when the user is not a member of the given group.
    *
-   * @Then I should not be subscribed to the :label :bundle
+   * @Then I should not be subscribed to any bundle from the :label :bundle
    */
   public function assertNoGroupContentSubscriptions(string $label, string $bundle): void {
     $user = $this->getUserManager()->getCurrentUser();
@@ -441,7 +441,6 @@ class JoinupSubscriptionContext extends RawDrupalContext {
     $group = $this->getEntityByLabel('rdf_entity', $label, $bundle);
     $membership = $this->getMembershipByGroupAndUser($group, $account, OgMembershipInterface::ALL_STATES);
     Assert::assertEmpty($membership->get('subscription_bundles')->getValue());
-    Assert::assertFalse((bool) $membership->get('announcements')->value);
   }
 
   /**
@@ -711,15 +710,15 @@ class JoinupSubscriptionContext extends RawDrupalContext {
    * @Given all active memberships with accepted terms have active announcements
    */
   public function assertAnnouncementsInMemberships(): void {
-    $query = <<<SQL
-SELECT COUNT(*) FROM {og_membership} og
-WHERE og.announcements = 0
-    AND og.state = 'active'
-    AND og.uid IN (SELECT DISTINCT(a.uid) FROM {entity_legal_document_acceptance} a)
-SQL;
-
-    $actual = \Drupal::database()->query($query)->fetchField();
-    Assert::assertEquals(0, $actual);
+    $count = \Drupal::database()->select('og_membership')
+      ->condition('type', OgMembershipInterface::TYPE_DEFAULT)
+      ->condition('entity_type', 'rdf_entity')
+      ->condition('entity_bundle', JoinupGroupHelper::GROUP_BUNDLES, 'IN')
+      ->condition('announcements', 1, '<>')
+      ->countQuery()
+      ->execute()
+      ->fetchField();
+    Assert::assertEquals(0, $count);
   }
 
   /**
@@ -743,6 +742,29 @@ SQL;
     /** @var \Drupal\joinup_group\Entity\GroupInterface $group */
     $group = $this->getEntityByLabel('rdf_entity', $group_label, $group_type);
     $this->getMembershipByGroupAndUser($group, $account)->set('announcements', TRUE)->save();
+  }
+
+  /**
+   * Unsubscribes a user from a given group announcements.
+   *
+   * @param string $username
+   *   The user name.
+   * @param string $group_label
+   *   The group label.
+   * @param string $group_type
+   *   The group type (collection/solution).
+   *
+   * @When the :username user unsubscribes from :group_label :group_type announcements
+   */
+  public function unsubscribeFromGroupAnnouncements(string $username, string $group_label, string $group_type): void {
+    assert(isset(JoinupGroupHelper::GROUP_BUNDLES[$group_type]));
+    /** @var \Drupal\user\UserInterface $account */
+    if (!$account = user_load_by_name($username)) {
+      throw new \InvalidArgumentException("Invalid user name: $username");
+    }
+    /** @var \Drupal\joinup_group\Entity\GroupInterface $group */
+    $group = $this->getEntityByLabel('rdf_entity', $group_label, $group_type);
+    $this->getMembershipByGroupAndUser($group, $account)->set('announcements', FALSE)->save();
   }
 
 }

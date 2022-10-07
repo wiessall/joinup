@@ -245,6 +245,8 @@ trait GroupTrait {
   protected function getAnnouncementRecipientsQuery(): SelectInterface {
     $query = \Drupal::database()->select('og_membership', 'og');
     $query->join('users_field_data', 'u', 'og.uid = u.uid');
+    // Only users which accepted the 'Legal notice' are receiving announcements.
+    $query->join('entity_legal_document_acceptance', 'a', 'og.uid = a.uid');
     return $query->condition('og.entity_type', 'rdf_entity')
       ->fields('u', ['mail'])
       ->condition('og.entity_bundle', $this->bundle())
