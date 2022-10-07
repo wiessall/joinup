@@ -4,17 +4,13 @@ declare(strict_types = 1);
 
 namespace Drupal\joinup_group\Plugin\QueueWorker;
 
-use Drupal\Core\Database\Connection;
 use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Queue\QueueFactory;
 use Drupal\Core\Queue\QueueWorkerBase;
-use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_group\Exception\MissingGroupException;
-use Drupal\joinup_group\JoinupGroupHelper;
 use Drupal\joinup_notification\JoinupMessageDeliveryInterface;
-use Drupal\og\OgMembershipInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -35,7 +31,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * @QueueWorker(
  *   id = "send_group_announcements",
  *   title = @Translation("Delayed announcements request dispatcher"),
- *   cron = {"time" = 10}
+ *   cron = {"time" = 10},
  * )
  */
 class SendGroupAnnouncementsQueueWorker extends QueueWorkerBase implements ContainerFactoryPluginInterface {
@@ -54,11 +50,6 @@ class SendGroupAnnouncementsQueueWorker extends QueueWorkerBase implements Conta
    * The queue factory service.
    */
   protected QueueFactory $queueFactory;
-
-  /**
-   * The database connection.
-   */
-  protected Connection $connection;
 
   /**
    * Static cache for message entity storage.
@@ -80,15 +71,12 @@ class SendGroupAnnouncementsQueueWorker extends QueueWorkerBase implements Conta
    *   The entity type manager service.
    * @param \Drupal\Core\Queue\QueueFactory $queue_factory
    *   The queue factory service.
-   * @param \Drupal\Core\Database\Connection $connection
-   *   The database connection.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, JoinupMessageDeliveryInterface $message_delivery, EntityTypeManagerInterface $entity_type_manager, QueueFactory $queue_factory, Connection $connection) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, JoinupMessageDeliveryInterface $message_delivery, EntityTypeManagerInterface $entity_type_manager, QueueFactory $queue_factory) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->messageDelivery = $message_delivery;
     $this->entityTypeManager = $entity_type_manager;
     $this->queueFactory = $queue_factory;
-    $this->connection = $connection;
   }
 
   /**
@@ -101,8 +89,7 @@ class SendGroupAnnouncementsQueueWorker extends QueueWorkerBase implements Conta
       $plugin_definition,
       $container->get('joinup_notification.message_delivery'),
       $container->get('entity_type.manager'),
-      $container->get('queue'),
-      $container->get('database'),
+      $container->get('queue')
     );
   }
 
@@ -125,8 +112,9 @@ class SendGroupAnnouncementsQueueWorker extends QueueWorkerBase implements Conta
         $queue->createQueue();
         $offset = 0;
         $limit = 250;
+        $group = $announcement->getGroup();
         // Don't allow queue entries with tens of thousands of recipients.
-        while ($recipients = $this->getGroupMembersEmails($announcement->getGroup(), $offset, $limit)) {
+        while ($recipients = $group->getAnnouncementRecipients($offset, $limit)) {
           $queue->createItem([
             'announcement' => (int) $announcement->id(),
             'recipients' => $recipients,
@@ -146,38 +134,6 @@ class SendGroupAnnouncementsQueueWorker extends QueueWorkerBase implements Conta
     if (!empty($data['recipients'])) {
       $this->messageDelivery->sendMessageToEmailAddresses($announcement, $data['recipients']);
     }
-  }
-
-  /**
-   * Returns a list of emails belonging to the members of a given group.
-   *
-   * Note that this method is not using the entity API as some groups may have
-   * tens of thousands of members, and we need a fast way to queue them. Doing a
-   * direct database query is faster.
-   *
-   * @param \Drupal\joinup_group\Entity\GroupInterface $group
-   *   The group entity.
-   * @param int $offset
-   *   The query offset.
-   * @param int $limit
-   *   The query limit.
-   *
-   * @return string[]
-   *   A list of groups members emails.
-   */
-  protected function getGroupMembersEmails(GroupInterface $group, int $offset, int $limit): array {
-    $query = $this->connection->select('og_membership', 'og');
-    $query->join('users_field_data', 'u', 'og.uid = u.uid');
-    return $query->condition('og.entity_type', 'rdf_entity')
-      ->fields('u', ['mail'])
-      ->condition('og.entity_bundle', JoinupGroupHelper::GROUP_BUNDLES, 'IN')
-      ->condition('og.entity_id', $group->id())
-      ->condition('og.state', OgMembershipInterface::STATE_ACTIVE)
-      ->condition('u.status', 1)
-      ->orderBy('og.uid')
-      ->range($offset, $limit)
-      ->execute()
-      ->fetchCol();
   }
 
   /**

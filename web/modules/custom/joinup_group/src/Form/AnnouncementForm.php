@@ -140,6 +140,23 @@ class AnnouncementForm extends FormBase {
   /**
    * {@inheritdoc}
    */
+  public function validateForm(array &$form, FormStateInterface $form_state): void {
+    parent::validateForm($form, $form_state);
+    $transition = $form_state->getTriggeringElement()['#state_machine_transition'] ?? NULL;
+    if ($transition === 'approve') {
+      $group = $this->announcement->getGroup();
+      if (!$group->getAnnouncementRecipientsCount()) {
+        $form_state->setError($form, $this->t('Cannot send this announcement to %group @type because none of its members are subscribed to receive announcements.', [
+          '%group' => $group->label(),
+          '@type' => $group->get('rid')->entity->getSingularLabel(),
+        ]));
+      }
+    }
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function submitForm(array &$form, FormStateInterface $form_state): void {
     $is_new = $this->announcement->isNew();
     $initial_state = $this->announcement->getWorkflowStateInstance();

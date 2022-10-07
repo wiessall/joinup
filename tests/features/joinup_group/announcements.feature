@@ -11,16 +11,16 @@ Feature: Messaging group announcements
       | Username             | E-mail                           | Roles     |
       | Sons of tweets       | sonsoftweets@example.com         |           |
       | Check edit moderator | check.edit.moderator@example.com | moderator |
-      | The Mogul            | mogul@example.com                |           |
-      | The Greedy           | geed@example.com                 |           |
-      | The Envious          | envy@example.com                 |           |
+      | Mogul                | mogul@example.com                |           |
+      | Greedy               | greedy@example.com               |           |
+      | Envious              | envy@example.com                 |           |
     And the following <group> user membership:
       | <group>      | user           | roles       |
       | Fail pension | Sons of tweets | facilitator |
       | Hidden gems  | Sons of tweets | facilitator |
-      | Fail pension | The Mogul      |             |
-      | Fail pension | The Greedy     |             |
-      | Fail pension | The Envious    |             |
+      | Fail pension | Mogul          |             |
+      | Fail pension | Greedy         |             |
+      | Fail pension | Envious        |             |
 
     Given I am an anonymous user
     When I go to the announcements page of "Fail pension" <group>
@@ -89,6 +89,7 @@ Feature: Messaging group announcements
       | You can approve or reject the announcement at                                                                      |
 
     Given I am logged in as "Check edit moderator"
+
     When I go to the announcements page of "Hidden gems" <group>
     Then the response status code should be 404
     And I click the link from email sent to "Check edit moderator" with subject "Joinup: A new announcement 'The Big Opening is postponed' has been created"
@@ -119,10 +120,12 @@ Feature: Messaging group announcements
       | Sent from Fail pension, link            |
 
     Given I am logged in as "Sons of tweets"
+
     When I go the "The Big Opening is postponed" announcement of "Fail pension" <group>
     Then the response status code should be 403
 
     Given I am logged in as "Check edit moderator"
+
     When I go the "The Big Opening is postponed" announcement of "Fail pension" <group>
     And  I press "Undo reject"
     Then I should see the success message "The announcement has been restored."
@@ -135,40 +138,46 @@ Feature: Messaging group announcements
     And I should not see the button "Undo reject"
 
     Given I am logged in as "Sons of tweets"
+
     When I go the "The Big Opening is postponed" announcement of "Fail pension" <group>
     Then the response status code should be 403
 
     Given I am logged in as "Check edit moderator"
+
     When I go the "The Big Opening is postponed" announcement of "Fail pension" <group>
+    And I press "Approve"
+    Then I should see the error message "Cannot send this announcement to Fail pension <group> because none of its members are subscribed to receive announcements."
+
+    Given the "Mogul" user subscribes to "Fail pension" <group> announcements
+    And the "Greedy" user subscribes to "Fail pension" <group> announcements
+
     And I press "Approve"
     Then I should see the success message "The announcement has been delivered to the Fail pension <group> members."
 
     # Groups having up to 50 members are receiving the announcements instantly.
-    And the email sent to "The Mogul" with subject "The Big Opening is postponed" contains the following lines of text:
+    And the email sent to "Mogul" with subject "The Big Opening is postponed" contains the following lines of text:
       | text                                    |
       | Announcement from Fail pension <group>  |
       | I am Sons of tweets, you can find me at |
       | Sent from Fail pension, link            |
-    And the email sent to "The Greedy" with subject "The Big Opening is postponed" contains the following lines of text:
+    And the email sent to "Greedy" with subject "The Big Opening is postponed" contains the following lines of text:
       | text                                    |
       | Announcement from Fail pension <group>  |
       | I am Sons of tweets, you can find me at |
       | Sent from Fail pension, link            |
-    And the email sent to "The Envious" with subject "The Big Opening is postponed" contains the following lines of text:
-      | text                                    |
-      | Announcement from Fail pension <group>  |
-      | I am Sons of tweets, you can find me at |
-      | Sent from Fail pension, link            |
+    But no email has been sent to "Envious"
 
     And I should see the link "Add announcement"
     But I should not see "edit" in the "The Big Opening is postponed" row
 
     Given I am logged in as "Sons of tweets"
+
     When I go the "The Big Opening is postponed" announcement of "Fail pension" <group>
     Then the response status code should be 403
 
-    # Switch of notifications for this group.
     Given I am logged in as "Check edit moderator"
+
+    # Switch of notifications for this group.
     When I go to the homepage of the "Fail pension" <group>
     And I click "Settings"
     And I uncheck the box "Announcements enabled"
@@ -180,18 +189,21 @@ Feature: Messaging group announcements
     Then the response status code should be 404
 
     Given I am logged in as "Sons of tweets"
+
     When I go the "The Big Opening is postponed" announcement of "Fail pension" <group>
     Then the response status code should be 403
     But I go to the announcements page of "Fail pension" <group>
     Then the response status code should be 404
 
     Given I am logged in as an "authenticated user"
+
     When I go the "The Big Opening is postponed" announcement of "Fail pension" <group>
     Then the response status code should be 403
     But I go to the announcements page of "Fail pension" <group>
     Then the response status code should be 404
 
     Given I am an anonymous user
+
     When I go the "The Big Opening is postponed" announcement of "Fail pension" <group>
     Then I should see the heading "Sign in to continue"
     But I go to the announcements page of "Fail pension" <group>
