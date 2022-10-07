@@ -18,6 +18,7 @@ use Drupal\joinup\Traits\TraversingTrait;
 use Drupal\joinup\Traits\UserTrait;
 use Drupal\joinup\Traits\UtilityTrait;
 use Drupal\joinup_community_content\CommunityContentHelper;
+use Drupal\joinup_group\JoinupGroupHelper;
 use Drupal\joinup_subscription\Entity\GroupContentSubscriptionMessageInterface;
 use Drupal\joinup_subscription\JoinupDiscussionSubscriptionInterface;
 use Drupal\joinup_subscription\JoinupSubscriptionsHelper;
@@ -719,6 +720,29 @@ SQL;
 
     $actual = \Drupal::database()->query($query)->fetchField();
     Assert::assertEquals(0, $actual);
+  }
+
+  /**
+   * Subscribes a user to a given group announcements.
+   *
+   * @param string $username
+   *   The user name.
+   * @param string $group_label
+   *   The group label.
+   * @param string $group_type
+   *   The group type (collection/solution).
+   *
+   * @When the :username user subscribes to :group_label :group_type announcements
+   */
+  public function subscribeToGroupAnnouncements(string $username, string $group_label, string $group_type): void {
+    assert(isset(JoinupGroupHelper::GROUP_BUNDLES[$group_type]));
+    /** @var \Drupal\user\UserInterface $account */
+    if (!$account = user_load_by_name($username)) {
+      throw new \InvalidArgumentException("Invalid user name: $username");
+    }
+    /** @var \Drupal\joinup_group\Entity\GroupInterface $group */
+    $group = $this->getEntityByLabel('rdf_entity', $group_label, $group_type);
+    $this->getMembershipByGroupAndUser($group, $account)->set('announcements', TRUE)->save();
   }
 
 }
