@@ -13,7 +13,6 @@ use Drupal\joinup\Traits\MailCollectorTrait;
 use Drupal\joinup\Traits\TestingEntitiesTrait;
 use Drupal\joinup_group\Entity\AnnouncementInterface;
 use Drupal\joinup_group\Entity\GroupInterface;
-use Drupal\joinup_group\JoinupGroupHelper;
 use Drupal\og\OgGroupAudienceHelperInterface;
 use Drupal\og\OgMembershipInterface;
 use PHPUnit\Framework\Assert;
@@ -352,13 +351,18 @@ class JoinupGroupContext extends RawDrupalContext {
   public function assertDeliveredAnnouncements(string $subject): void {
     $announcement = $this->getAnnouncementBySubject($subject);
     $body = $announcement->getBody();
-    foreach ($this->getGroupMembersEmails($announcement->getGroup()) as $member_email) {
-      // This throws an exception if the email is not found.
-      $emails = $this->getEmailsBySubjectAndMail($announcement->getSubject(), $member_email);
-      $email = reset($emails);
-      Assert::assertSame($member_email, $email['to']);
-      Assert::assertSame($subject, $email['subject']);
-      Assert::assertStringContainsString($body, (string) $email['body']);
+    $offset = 0;
+    $limit = 250;
+    $group = $announcement->getGroup();
+    while ($member_emails = $group->getAnnouncementRecipients($offset, $limit)) {
+      foreach ($member_emails as $member_email) {
+        $emails = $this->getEmailsBySubjectAndMail($announcement->getSubject(), $member_email);
+        $email = reset($emails);
+        Assert::assertSame($member_email, $email['to']);
+        Assert::assertSame($subject, $email['subject']);
+        Assert::assertStringContainsString($body, (string) $email['body']);
+        $offset += $limit;
+      }
     }
   }
 
@@ -383,29 +387,6 @@ class JoinupGroupContext extends RawDrupalContext {
     /** @var \Drupal\joinup_group\Entity\AnnouncementInterface $announcement */
     $announcement = $storage->load(reset($mids));
     return $announcement;
-  }
-
-  /**
-   * Returns a list of emails belonging to the members of a given group.
-   *
-   * @param \Drupal\joinup_group\Entity\GroupInterface $group
-   *   The group entity.
-   *
-   * @return string[]
-   *   A list of groups members emails.
-   */
-  protected function getGroupMembersEmails(GroupInterface $group): array {
-    $query = \Drupal::database()->select('og_membership', 'og');
-    $query->join('users_field_data', 'u', 'og.uid = u.uid');
-    return $query->condition('og.entity_type', 'rdf_entity')
-      ->fields('u', ['mail'])
-      ->condition('og.entity_bundle', JoinupGroupHelper::GROUP_BUNDLES, 'IN')
-      ->condition('og.entity_id', $group->id())
-      ->condition('og.state', OgMembershipInterface::STATE_ACTIVE)
-      ->condition('u.status', 1)
-      ->orderBy('og.uid')
-      ->execute()
-      ->fetchCol();
   }
 
 }
