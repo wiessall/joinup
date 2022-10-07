@@ -489,4 +489,26 @@ class JoinupNotificationContext extends RawDrupalContext {
     $this->assertMailLinkMatchingPattern('!https?://[^\s].*!', $recipient, $no_mail_message, $no_match_message, NULL);
   }
 
+  /**
+   * Asserts that no email has been sent to a given recipient.
+   *
+   * @param string $username_or_email
+   *   A valid user name or a valid email.
+   *
+   * @Then no email has been sent to :username_or_email
+   */
+  public function noEmailSentToRecipient(string $username_or_email): void {
+    if ($account = user_load_by_name($username_or_email)) {
+      /** @var \Drupal\user\UserInterface $account */
+      $recipient = $account->getEmail();
+    }
+    elseif (\Drupal::service('email.validator')->isValid($username_or_email)) {
+      $recipient = $username_or_email;
+    }
+    else {
+      throw new \InvalidArgumentException("Invalid '$username_or_email' value passed. Should be either a valid username or a vaid email address.");
+    }
+    Assert::assertEmpty($this->getMails(['to' => $recipient]));
+  }
+
 }
