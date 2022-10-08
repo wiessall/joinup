@@ -4,6 +4,7 @@ declare(strict_types = 1);
 
 namespace Drupal\joinup_group\Form;
 
+use Drupal\Component\Datetime\TimeInterface;
 use Drupal\Component\Render\MarkupInterface;
 use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Form\FormBase;
@@ -29,20 +30,31 @@ class AnnouncementForm extends FormBase {
   protected JoinupMessageDeliveryInterface $messageDelivery;
 
   /**
+   * The date/time service.
+   */
+  protected TimeInterface $time;
+
+  /**
    * Builds a new form instance.
    *
    * @param \Drupal\joinup_notification\JoinupMessageDeliveryInterface $message_delivery
    *   The message delivery service.
+   * @param \Drupal\Component\Datetime\TimeInterface $time
+   *   The date/time service.
    */
-  public function __construct(JoinupMessageDeliveryInterface $message_delivery) {
+  public function __construct(JoinupMessageDeliveryInterface $message_delivery, TimeInterface $time) {
     $this->messageDelivery = $message_delivery;
+    $this->time = $time;
   }
 
   /**
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container): self {
-    return new static($container->get('joinup_notification.message_delivery'));
+    return new static(
+      $container->get('joinup_notification.message_delivery'),
+      $container->get('datetime.time'),
+    );
   }
 
   /**
@@ -88,12 +100,17 @@ class AnnouncementForm extends FormBase {
     $arguments = $this->getArguments();
     $form['arguments'] = [
       '#theme' => 'item_list',
-      '#items' => array_map(function (string $token) use ($arguments): MarkupInterface {
+      '#items' => array_filter(array_map(function (string $token) use ($arguments): ?MarkupInterface {
+        if (!isset($arguments[$token]['label'])) {
+          // Only expose arguments having a label. The others are not meant to
+          // be used by facilitators.
+          return NULL;
+        }
         return $this->t('%token - @label', [
           '%token' => $token,
           '@label' => $arguments[$token]['label'],
         ]);
-      }, array_keys($arguments)),
+      }, array_keys($arguments))),
       '#title' => $this->t('The following placeholders are available to be used in the message body:'),
     ];
 
@@ -169,9 +186,12 @@ class AnnouncementForm extends FormBase {
     $this->announcement
       ->setSubject($form_state->getValue('subject'))
       ->setBody($form_state->getValue(['body', 'value']))
-      ->setArguments(array_map(function (array $argument): string {
-        return (string) $argument['value'];
-      }, $this->getArguments()))
+      // Only save the arguments having a 'value' key. Some arguments depend on
+      // the email recipient and will be dynamically set when the email is sent.
+      // @see joinup_group_mail_alter()
+      ->setArguments(array_filter(array_map(function (array $argument): ?string {
+        return isset($argument['value']) ? ((string) $argument['value']) : NULL;
+      }, $this->getArguments())))
       ->save();
 
     $args = [
@@ -247,25 +267,44 @@ class AnnouncementForm extends FormBase {
     $vars = ['@label' => $group->get('rid')->entity->getSingularLabel()];
 
     return [
-      '@group:name' => [
-        'label' => $this->t('The @label title', $vars),
+      '@group:title' => [
         'value' => $group->label(),
       ],
       '@group:type' => [
-        'label' => $this->t('The group type (collection, solution)', $vars),
         'value' => $vars['@label'],
       ],
-      '@group:url' => [
+      '@group:landing_page:url' => [
         'label' => $this->t('The @label landing page URL', $vars),
         'value' => $group->toUrl()->setAbsolute()->toString(),
       ],
-      '@sender:name' => [
-        'label' => $this->t('The announcement sender name'),
+      '@group:about_page:url' => [
+        'value' => $group->toUrl('about-page')->setAbsolute()->toString(),
+      ],
+      '@group:members_page:url' => [
+        'value' => $group->toUrl('member-overview')->setAbsolute()->toString(),
+      ],
+      '@group:logo:url' => [
+        'value' => $group->getLogoAsUrl()->setAbsolute()->toString(),
+      ],
+      '@author:name' => [
         'value' => $sender->getDisplayName(),
       ],
-      '@sender:url' => [
-        'label' => $this->t('The announcement sender profile URL'),
+      '@author:profile:url' => [
         'value' => $sender->toUrl()->setAbsolute()->toString(),
+      ],
+      '@recipient:name' => [
+        'label' => $this->t("The recipient's full name"),
+      ],
+      '@recipient:profile:url' => [
+        'label' => $this->t("The recipient's profile URL"),
+      ],
+      '@recipient:profile_edit:url' => [
+        'label' => $this->t("The recipient's profile edit URL"),
+      ],
+      '@recipient:subscriptions:url' => [],
+      '@recipient:unsubscribe:url' => [],
+      '@delivery:time' => [
+        'value' => $this->time->getRequestTime(),
       ],
     ];
   }

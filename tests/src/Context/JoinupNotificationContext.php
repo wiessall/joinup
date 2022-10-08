@@ -14,6 +14,7 @@ use Drupal\joinup\Traits\UserTrait;
 use Drupal\joinup\Traits\UtilityTrait;
 use Drupal\message\Entity\MessageTemplate;
 use PHPUnit\Framework\Assert;
+use Symfony\Component\DomCrawler\Crawler;
 
 /**
  * Behat step definitions for testing notifications.
@@ -509,6 +510,26 @@ class JoinupNotificationContext extends RawDrupalContext {
       throw new \InvalidArgumentException("Invalid '$username_or_email' value passed. Should be either a valid username or a vaid email address.");
     }
     Assert::assertEmpty($this->getMails(['to' => $recipient]));
+  }
+
+  /**
+   * Clicks on link given its text in an HTML email.
+   *
+   * @param string $link_text
+   *   The link text.
+   * @param string $recipient
+   *   The recipient's email.
+   * @param string $subject
+   *   The email subject.
+   *
+   * @When I click the :link_text link in the email sent to :recipent having the subject :subject
+   */
+  public function clickLinkInHtmlMail(string $link_text, string $recipient, string $subject): void {
+    $mail = $this->getEmailsBySubjectAndMail($subject, $recipient)[0];
+    $body = (string) $mail['body'];
+    $crawler = new Crawler($body);
+    $link = $crawler->filterXPath("//a[text()='$link_text']");
+    $this->visitPath($link->getNode(0)->attributes['href']->nodeValue);
   }
 
 }
