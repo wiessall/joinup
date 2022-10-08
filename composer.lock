@@ -7327,54 +7327,6 @@
             }
         },
         {
-            "name": "drupal/verf",
-            "version": "1.0.0",
-            "source": {
-                "type": "git",
-                "url": "https://git.drupalcode.org/project/verf.git",
-                "reference": "8.x-1.0"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/verf-8.x-1.0.zip",
-                "reference": "8.x-1.0",
-                "shasum": "ac894cf041ae51170e619d60b9c2884c50fc5cfc"
-            },
-            "require": {
-                "drupal/core": "^8 || ^9"
-            },
-            "type": "drupal-module",
-            "extra": {
-                "drupal": {
-                    "version": "8.x-1.0",
-                    "datestamp": "1601470515",
-                    "security-coverage": {
-                        "status": "covered",
-                        "message": "Covered by Drupal's security advisory policy"
-                    }
-                }
-            },
-            "notification-url": "https://packages.drupal.org/8/downloads",
-            "license": [
-                "GPL-2.0-or-later"
-            ],
-            "authors": [
-                {
-                    "name": "legolasbo",
-                    "homepage": "https://www.drupal.org/user/2480548"
-                },
-                {
-                    "name": "podarok",
-                    "homepage": "https://www.drupal.org/user/116002"
-                }
-            ],
-            "description": "Provides Views filters for entity reference fields.",
-            "homepage": "https://www.drupal.org/project/verf",
-            "support": {
-                "source": "https://git.drupalcode.org/project/verf"
-            }
-        },
-        {
             "name": "drupal/video_embed_field",
             "version": "2.4.0",
             "source": {
