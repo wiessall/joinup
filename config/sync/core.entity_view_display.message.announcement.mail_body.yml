@@ -25,11 +25,6 @@ content:
     third_party_settings: {  }
     weight: 0
     region: content
-  partial_1:
-    settings: {  }
-    third_party_settings: {  }
-    weight: 0
-    region: content
 hidden:
   body: true
   group: true

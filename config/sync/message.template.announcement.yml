@@ -7,9 +7,6 @@ label: Announcement
 description: 'Messaging group announcements.'
 text:
   -
-    value: '<p>Announcement from <a href="@group:url">@group:name</a> @group:type</p><hr />'
-    format: full_html
-  -
     value: ''
     format: minimal
 settings:
