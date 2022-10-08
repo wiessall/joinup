@@ -767,4 +767,67 @@ class JoinupSubscriptionContext extends RawDrupalContext {
     $this->getMembershipByGroupAndUser($group, $account)->set('announcements', FALSE)->save();
   }
 
+  /**
+   * Visits the 'unsubscribe from group' confirmation form.
+   *
+   * @param string $group_label
+   *   The label of the group to unsubscribe from.
+   * @param string $group_type
+   *   One of 'collection' or 'solution'.
+   * @param string|null $types
+   *   If passed, it's the route parameter that allows to filter the types of
+   *   content from which to unsubscribe. This is mostly used o test invalid URL
+   *   route parameters.
+   * @param \Behat\Gherkin\Node\TableNode|null $table
+   *   A one-column table with the types of content from which to unsubscribe.
+   *   Allowed values: Solution, Discussion, Document, Event, News,
+   *   Announcements.
+   *
+   * @throws \Exception
+   *   When a wrong type has been passed in the table.
+   *
+   * @When I visit the unsubscribe from :group_label :group_type form
+   * @When I visit the unsubscribe from :group_label :group_type form by content types:
+   * @When I visit the unsubscribe from :group_label :group_type form with :types route parameter
+   */
+  public function unsubscribeFromGroup(string $group_label, string $group_type, ?string $types = NULL, ?TableNode $table = NULL): void {
+    assert(isset(JoinupGroupHelper::GROUP_BUNDLES[$group_type]));
+    $group = $this->getEntityByLabel('rdf_entity', $group_label, $group_type);
+    $url = Url::fromRoute('joinup_subscription.unsubscribe', [
+      'user' => $this->userManager->getCurrentUser()->uid,
+      'group' => $group->id(),
+    ]);
+
+    if ($table === NULL) {
+      if ($types === NULL) {
+        $this->visitPath($url->toString());
+      }
+      else {
+        // This options it's used to test invalid URLs, that's why we pass the
+        // 'types' route parameter without doing any check.
+        $this->visitPath($url->setRouteParameter('types', $types)->toString());
+      }
+      return;
+    }
+
+    $map = [
+      'Solution' => 'rdf_entity:solution',
+      'Discussion' => 'node:discussion',
+      'Document' => 'node:document',
+      'Event' => 'node:event',
+      'News' => 'node:news',
+      'Announcements' => 'announcements',
+    ];
+
+    $types = [];
+    foreach ($table->getColumn(0) as $type) {
+      if (!isset($map[$type])) {
+        throw new \Exception("The '$type' bundle is invalid");
+      }
+      $types[] = $map[$type];
+    }
+
+    $this->visitPath($url->setRouteParameter('types', implode(',', $types))->toString());
+  }
+
 }

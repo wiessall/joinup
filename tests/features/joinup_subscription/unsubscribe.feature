@@ -2,9 +2,9 @@
 Feature: Unsubscribe from collections
   In order to reduce the amount of notifications I receive
   As a user of the website
-  I need to be able to easily unsubscribe from collections.
+  I need to be able to easily unsubscribe from groups or group content types.
 
-  Scenario: Unsubscribe from all groups
+  Background:
     Given user:
       | Username | Eric Cartman             |
       | E-mail   | eric.cartman@example.com |
@@ -12,17 +12,25 @@ Feature: Unsubscribe from collections
       | title                | state     |
       | Southpark elementary | validated |
       | Kenny's house        | draft     |
-      | Koon's hideout       | proposed  |
     And the following collection user memberships:
-      | collection           | user         | roles       |
-      | Southpark elementary | Eric Cartman | member      |
-      | Kenny's house        | Eric Cartman | owner       |
-      | Koon's hideout       | Eric Cartman | facilitator |
+      | collection           | user         | roles  |
+      | Southpark elementary | Eric Cartman | member |
+      | Kenny's house        | Eric Cartman | owner  |
     And the following collection content subscriptions:
       | collection           | user         | subscriptions                     |
       | Southpark elementary | Eric Cartman | discussion, document, event, news |
       | Kenny's house        | Eric Cartman | discussion, document, event, news |
-      | Koon's hideout       | Eric Cartman | discussion, document, event, news |
+
+  Scenario: Unsubscribe from all groups
+    Given collections:
+      | title          | state    |
+      | Koon's hideout | proposed |
+    And the following collection user memberships:
+      | collection     | user         | roles       |
+      | Koon's hideout | Eric Cartman | facilitator |
+    And the following collection content subscriptions:
+      | collection     | user         | subscriptions                     |
+      | Koon's hideout | Eric Cartman | discussion, document, event, news |
     And solutions:
       | title              | state     |
       | Poor man's Shelter | validated |
@@ -102,3 +110,73 @@ Feature: Unsubscribe from collections
       | Poor man's Shelter   |  |
       | Anna's house         |  |
       | Greg's foxhole       |  |
+
+  Scenario: Unsubscribe from a specific group.
+    Given solutions:
+      | title                  | state     |
+      | Not member in this one | validated |
+
+    Given I am logged in as "Eric Cartman"
+
+    When I visit the unsubscribe from "Southpark elementary" collection form
+    Then I should see the heading "Unsubscribe from Southpark elementary collection?"
+    And I should see "Are you sure you want to unsubscribe from Southpark elementary collection? You will stop receiving news and updates, including the pending memberships, from this collection."
+
+    When I press "Confirm"
+    Then I should see the success message "You will no longer receive notifications from Southpark elementary collection."
+    And the following content subscriptions should be selected:
+      | Southpark elementary |                                                  |
+      | Kenny's house        | discussion, document, event, news, announcements |
+
+    When I visit the unsubscribe from "Kenny's house" collection form by content types:
+      | Document      |
+      | Event         |
+      | Announcements |
+    Then I should see the heading "Unsubscribe from Kenny's house collection?"
+    And I should see the following lines of text:
+      | Are you sure you want to unsubscribe from the Kenny's house collection content types? You will stop receiving updates for the following types of content from this collection: |
+      | documents                                                                                                                                                                      |
+      | events                                                                                                                                                                         |
+      | announcements                                                                                                                                                                  |
+
+    When I press "Confirm"
+    Then I should see the success message "You will no longer receive notifications from Kenny's house collection, for: documents, events, announcements."
+    And the following content subscriptions should be selected:
+      | Southpark elementary |                  |
+      | Kenny's house        | discussion, news |
+
+    When I visit the unsubscribe from "Kenny's house" collection form by content types:
+      | News |
+    And I press "Confirm"
+    Then I should see the success message "You will no longer receive notifications from Kenny's house collection, for: news."
+    And the following content subscriptions should be selected:
+      | Southpark elementary |            |
+      | Kenny's house        | discussion |
+
+    # The user tries to unsubscribe from a group where it's not member.
+    When I visit the unsubscribe from "Not member in this one" solution form
+    Then the response status code should be 404
+
+    # Passing malformed type.
+    When I visit the unsubscribe from "Southpark elementary" collection form with "foo" route parameter
+    Then the response status code should be 404
+
+    # Collection is not group content.
+    When I visit the unsubscribe from "Southpark elementary" collection form with "rdf_entity:collection" route parameter
+    Then the response status code should be 404
+
+    # Cannot subscribe to custom pages.
+    When I visit the unsubscribe from "Southpark elementary" collection form with "node:custom_page,rdf_entity:solution" route parameter
+    Then the response status code should be 404
+
+    # Add the user to the solution.
+    Given the following solution user memberships:
+      | solution               | user         | roles  |
+      | Not member in this one | Eric Cartman | member |
+    And the following solution content subscriptions:
+      | solution               | user         | subscriptions                     |
+      | Not member in this one | Eric Cartman | discussion, document, event, news |
+
+    # Solution is not solution group content.
+    When I visit the unsubscribe from "Not member in this one" solution form with "rdf_entity:solution" route parameter
+    Then the response status code should be 404

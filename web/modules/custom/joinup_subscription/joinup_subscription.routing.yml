@@ -56,11 +56,33 @@ joinup_subscription.subscriptions:
 joinup_subscription.unsubscribe_all:
   path: '/user/{user}/unsubscribe-all'
   defaults:
-    _form: Drupal\joinup_subscription\Form\UnsubscribeFromAllForm
-    _title: 'Unsubscribe from all groups'
+    _form: Drupal\joinup_subscription\Form\UnsubscribeForm
+    _title_callback:  Drupal\joinup_subscription\Form\UnsubscribeForm::title
   requirements:
-    _custom_access: Drupal\joinup_subscription\Form\UnsubscribeFromAllForm::access
+    _custom_access: Drupal\joinup_subscription\Form\UnsubscribeForm::access
   options:
     parameters:
       user:
         type: entity:user
+
+joinup_subscription.unsubscribe:
+  path: '/user/{user}/unsubscribe/{group}/{types}'
+  defaults:
+    _form: Drupal\joinup_subscription\Form\UnsubscribeForm
+    _title_callback:  Drupal\joinup_subscription\Form\UnsubscribeForm::title
+    types: ''
+  requirements:
+    _custom_access: Drupal\joinup_subscription\Form\UnsubscribeForm::access
+  options:
+    parameters:
+      user:
+        type: entity:user
+      group:
+        type: entity:rdf_entity
+        bundle:
+          - collection
+          - solution
+      types:
+        type: group_unsubscribe_types
+        user_param: user
+        group_param: group
