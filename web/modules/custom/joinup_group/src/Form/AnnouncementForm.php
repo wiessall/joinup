@@ -228,7 +228,7 @@ class AnnouncementForm extends FormBase {
       $status = $this->t("The announcement has been restored.");
     }
     elseif ($this->announcement->getWorkflowState() === 'delivered') {
-      if ($this->announcement->getGroup()->getMemberCount() > 50) {
+      if ($this->announcement->getGroup()->getAnnouncementRecipientsCount() > 50) {
         $status = $this->t("The announcement has been scheduled to be delivered to the %group @type members. Because the @type has a large amount of members the emails will be sent in several batches.", $args);
       }
       else {
