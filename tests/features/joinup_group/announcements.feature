@@ -77,15 +77,21 @@ Feature: Messaging group announcements
     And I should not see the button "Undo reject"
 
     When I fill in "Subject" with "The Big Opening is postponed"
-    And I fill in "Body" with "I am @sender:name, you can find me at @sender:url. Sent from @group:name, link @group:url"
+    And I fill in "Body" with "I am @author:name, you can find me at @author:profile:url. Sent from @group:title, link '@group:landing_page:url"
     And I press "Test"
     Then I should see the success message "A sample announcement has been delivered to sonsoftweets@example.com."
     And the email sent to "Sons of tweets" with subject "The Big Opening is postponed" contains the following lines of text:
-      | text                                    |
-      | Announcement from Fail pension <group>  |
-      | I am Sons of tweets, you can find me at |
-      | Sent from Fail pension, link            |
-
+      | text                                                                                                                                                                                                                                                             |
+      | Dear Sons of tweets,                                                                                                                                                                                                                                             |
+      | Fail pension <group> has an announcement for its members:                                                                                                                                                                                                     |
+      | The Big Opening is postponed                                                                                                                                                                                                                                     |
+      | I am Sons of tweets, you can find me at                                                                                                                                                                                                                          |
+      | Sent from Fail pension, link                                                                                                                                                                                                                                     |
+      | Kind regards,                                                                                                                                                                                                                                                    |
+      | The Fail pension <group> team                                                                                                                                                                                                                                 |
+      | You received this e-mail because, as a registered user of Joinup and a member of Fail pension <group>, you agreed to receive information sent to you by the Fail pension <group> owner/administrator (based on Article 5(d) of Regulation (EU) 2018/1725). |
+      | In case you do not want to receive such e-mails, you can unsubscribe from group announcement notifications or manage all your subscription notifications from the user subscriptions page.                                                                       |
+      | This is an unmonitored email address, please do not reply. You can contact directly Fail pension <group> via the About page.                                                                                                                                  |
     When I press "Update"
     Then I should see the success message "The announcement has been updated but it's still in Draft state. Review the announcement and, when is ready to be sent, use the 'Send' button."
     And I should see "Announcement in Draft state"
@@ -128,9 +134,16 @@ Feature: Messaging group announcements
     Then I should see the success message "A sample announcement has been delivered to check.edit.moderator@example.com."
     And the email sent to "Check edit moderator" with subject "The Big Opening is postponed" contains the following lines of text:
       | text                                    |
-      | Announcement from Fail pension <group>  |
-      | I am Sons of tweets, you can find me at |
-      | Sent from Fail pension, link            |
+      | Dear Check edit moderator,                                                                                                                                                                                                                                             |
+      | Fail pension <group> has an announcement for its members:                                                                                                                                                                                                     |
+      | The Big Opening is postponed                                                                                                                                                                                                                                     |
+      | I am Sons of tweets, you can find me at                                                                                                                                                                                                                          |
+      | Sent from Fail pension, link                                                                                                                                                                                                                                     |
+      | Kind regards,                                                                                                                                                                                                                                                    |
+      | The Fail pension <group> team                                                                                                                                                                                                                                 |
+      | You received this e-mail because, as a registered user of Joinup and a member of Fail pension <group>, you agreed to receive information sent to you by the Fail pension <group> owner/administrator (based on Article 5(d) of Regulation (EU) 2018/1725). |
+      | In case you do not want to receive such e-mails, you can unsubscribe from group announcement notifications or manage all your subscription notifications from the user subscriptions page.                                                                       |
+      | This is an unmonitored email address, please do not reply. You can contact directly Fail pension <group> via the About page.                                                                                                                                  |
 
     Given I am logged in as "Sons of tweets"
 
@@ -178,19 +191,40 @@ Feature: Messaging group announcements
     # Groups having up to 50 members are receiving the announcements instantly.
     And the email sent to "Mogul" with subject "The Big Opening is postponed" contains the following lines of text:
       | text                                    |
-      | Announcement from Fail pension <group>  |
-      | I am Sons of tweets, you can find me at |
-      | Sent from Fail pension, link            |
+      | Dear Mogul,                                                                                                                                                                                                                                             |
+      | Fail pension <group> has an announcement for its members:                                                                                                                                                                                                     |
+      | The Big Opening is postponed                                                                                                                                                                                                                                     |
+      | I am Sons of tweets, you can find me at                                                                                                                                                                                                                          |
+      | Sent from Fail pension, link                                                                                                                                                                                                                                     |
+      | Kind regards,                                                                                                                                                                                                                                                    |
+      | The Fail pension <group> team                                                                                                                                                                                                                                 |
+      | You received this e-mail because, as a registered user of Joinup and a member of Fail pension <group>, you agreed to receive information sent to you by the Fail pension <group> owner/administrator (based on Article 5(d) of Regulation (EU) 2018/1725). |
+      | In case you do not want to receive such e-mails, you can unsubscribe from group announcement notifications or manage all your subscription notifications from the user subscriptions page.                                                                       |
+      | This is an unmonitored email address, please do not reply. You can contact directly Fail pension <group> via the About page.                                                                                                                                  |
     And the email sent to "Greedy" with subject "The Big Opening is postponed" contains the following lines of text:
       | text                                    |
-      | Announcement from Fail pension <group>  |
-      | I am Sons of tweets, you can find me at |
-      | Sent from Fail pension, link            |
+      | Dear Greedy,                                                                                                                                                                                                                                             |
+      | Fail pension <group> has an announcement for its members:                                                                                                                                                                                                     |
+      | The Big Opening is postponed                                                                                                                                                                                                                                     |
+      | I am Sons of tweets, you can find me at                                                                                                                                                                                                                          |
+      | Sent from Fail pension, link                                                                                                                                                                                                                                     |
+      | Kind regards,                                                                                                                                                                                                                                                    |
+      | The Fail pension <group> team                                                                                                                                                                                                                                 |
+      | You received this e-mail because, as a registered user of Joinup and a member of Fail pension <group>, you agreed to receive information sent to you by the Fail pension <group> owner/administrator (based on Article 5(d) of Regulation (EU) 2018/1725). |
+      | In case you do not want to receive such e-mails, you can unsubscribe from group announcement notifications or manage all your subscription notifications from the user subscriptions page.                                                                       |
+      | This is an unmonitored email address, please do not reply. You can contact directly Fail pension <group> via the About page.                                                                                                                                  |
     And the email sent to "Sons of tweets" with subject "The Big Opening is postponed" contains the following lines of text:
       | text                                    |
-      | Announcement from Fail pension <group>  |
-      | I am Sons of tweets, you can find me at |
-      | Sent from Fail pension, link            |
+      | Dear Sons of tweets,                                                                                                                                                                                                                                             |
+      | Fail pension <group> has an announcement for its members:                                                                                                                                                                                                     |
+      | The Big Opening is postponed                                                                                                                                                                                                                                     |
+      | I am Sons of tweets, you can find me at                                                                                                                                                                                                                          |
+      | Sent from Fail pension, link                                                                                                                                                                                                                                     |
+      | Kind regards,                                                                                                                                                                                                                                                    |
+      | The Fail pension <group> team                                                                                                                                                                                                                                 |
+      | You received this e-mail because, as a registered user of Joinup and a member of Fail pension <group>, you agreed to receive information sent to you by the Fail pension <group> owner/administrator (based on Article 5(d) of Regulation (EU) 2018/1725). |
+      | In case you do not want to receive such e-mails, you can unsubscribe from group announcement notifications or manage all your subscription notifications from the user subscriptions page.                                                                       |
+      | This is an unmonitored email address, please do not reply. You can contact directly Fail pension <group> via the About page.                                                                                                                                  |
     # Accepted 'Legal notice' but it's not subscribed to group announcements.
     But no email has been sent to "Envious"
     # Subscribed to group announcements but didn't accept the 'Legal notice'.
@@ -199,6 +233,14 @@ Feature: Messaging group announcements
     And I should see the link "Add announcement"
     But I should not see "edit" in the "The Big Opening is postponed" row
 
+    # Check email links.
+    When I click the "Fail pension" link in the email sent to "mogul@example.com" having the subject "The Big Opening is postponed"
+    Then I should see the heading "Fail pension"
+    When I click the "unsubscribe" link in the email sent to "mogul@example.com" having the subject "The Big Opening is postponed"
+    Then I should see the heading "Unsubscribe from Fail pension <group>?"
+    When I click the "user subscriptions" link in the email sent to "mogul@example.com" having the subject "The Big Opening is postponed"
+    Then I should see the heading "Subscription settings"
+
     Given I am logged in as "Sons of tweets"
 
     When I go the "The Big Opening is postponed" announcement of "Fail pension" <group>
@@ -206,7 +248,7 @@ Feature: Messaging group announcements
 
     Given I am logged in as "Check edit moderator"
 
-    # Switch of notifications for this group.
+    # Switch off notifications for this group.
     When I go to the homepage of the "Fail pension" <group>
     And I click "Settings"
     And I uncheck the box "Announcements enabled"

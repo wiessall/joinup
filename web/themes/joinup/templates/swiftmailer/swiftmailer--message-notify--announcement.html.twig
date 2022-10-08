@@ -1,33 +1,43 @@
 {#
 /**
  * @file
- * The default template file for e-mails.
+ * The default template file for group announcements emails.
  *
  * Available variables:
- * - subject: The subject.
- * - body: The message content.
+ * - subject: The email subject.
+ * - body: The email content.
  * - is_html: True if generating HTML output, false for plain text.
  * - message: The $message array created and used in the mail building
- *   procedure. Its content varies between cases, but typically contains at
- *   least the following elements:
+ *   procedure. Its main content:
+ *   - from: The email address of the sender.
+ *   - to: The recipient email address.
+ *   - recipient_name: The recipient full-name.
+ *   - recipient_profile_url: The recipient profile page URL.
+ *   - recipient_profile_edit_url: The recipient profile edit page URL.
+ *   - recipient_subscriptions_url: The user subscriptions page URL.
+ *   - recipient_unsubscribe_url: The URL used to unsubscrbe from announcements
+ *     of this group.
+ *   - group_type: One of 'collection' or 'solution'.
+ *   - group_title: The group title.
+ *   - group_logo_url: The URL of the group logo, if any.
+ *   - group_landing_page_url: The group landing page URL.
+ *   - group_about_page_url: The group about page URL.
+ *   - group_members_page_url: The group about page URL.
+ *   - author_name: The announcement authore full-name.
+ *   - author_profile_url: The announcement author profile URL.
+ *   - delivery_time: The date/time when this email has been actually sent.
+ *   The `message` variable contains also some other technical, less used,
+ *   values such as:
  *   - id: The message identifier.
  *   - module: The module that handles the building of the message.
  *   - key: The key of the message.
- *   - to: The recipient email address.
- *   - from: The email address of the sender.
  *   - langcode: The langcode to use to compose the e-mail.
  *   - params: The message parameters.
  * - base_url: The site base url including scheme, without trailing slash.
  *
- * This template may be overriden by module and/or mail key, using any of the
- * following template names:
- * - swiftmailer.html.twig: global, used by default.
- * - swiftmailer--mymodule.html.twig: only emails sent by the module "mymodule".
- * - swiftmailer--mymodule--test.html.twig: only emails by the module
- *   "mymodule" with key "test".
- *
- * @see template_preprocess()
- * @see template_preprocess_swiftmailer()
+ * @see \joinup_group_mail_alter()
+ * @sse \Drupal\joinup_group\Form\AnnouncementForm::getArguments()
+ * @see \template_preprocess_swiftmailer()
  *
  * @ingroup themeable
  */
@@ -53,8 +63,11 @@
           <tr>
             <td style="padding: 0 16px; background-color: #143b76;">
               <div style="width: 112px; margin: auto; padding: 16px 0">
-                {# @todo: {Solution/Collection logo} here instead of joinup logo #}
-                <img src="https://joinup.ec.europa.eu/themes/ventuno/assets/images/logo.png" alt width="112" height="112"/>
+                {% if message.group_logo_url %}
+                  <img src="{{ message.group_logo_url }}" alt="{{ message.group_title }} logo" width="112" height="112"/>
+                {% else %}
+                  <img src="https://joinup.ec.europa.eu/themes/ventuno/assets/images/logo.png" alt="Joinup logo" width="112" height="112"/>
+                {% endif %}
               </div>
             </td>
           </tr>
@@ -62,15 +75,13 @@
         <tbody>
           <tr>
             <td style="padding: 16px 16px 0; text-align: right;">
-              <span style="display: inline-block; padding: 4px 16px; background-color: #143b76; font-weight: 700; color:#ffffff;">
-                {# @todo: #}{Announcement date}
-              </span>
+              <span style="display: inline-block; padding: 4px 16px; background-color: #143b76; font-weight: 700; color:#ffffff;">{{ message.delivery_time|date("j F Y") }}</span>
             </td>
           </tr>
           <tr>
             <td style="padding: 0 16px 16px;">
-              <p style="font-weight: 700;">Dear {# @todo: #} {Members Name},</p>
-              <p style="margin-bottom: 16px;"><a href="#{# @todo: #}{Solution overview page}" target="_blank">{# @todo: #} {Solution or Collection name}</a> has an announcement for its members:</p>
+              <p style="font-weight: 700;">Dear {{ message.recipient_name }},</p>
+              <p style="margin-bottom: 16px;"><a href="{{ message.group_landing_page_url }}" target="_blank">{{ message.group_title }}</a> {{ message.group_type }} has an announcement for its members:</p>
             </td>
           </tr>
           <tr style="background-color: #f5f6f7;">
@@ -88,7 +99,7 @@
           <tr>
             <td style="padding: 0 16px 16px;">
               <p style="font-weight: 700;">Kind regards,</p>
-              <p style="font-weight: 700;">The <span style="color: #eba843;">{# @todo: #}{Solution or Collection name}</span> team</p>
+              <p style="font-weight: 700;">The <span style="color: #eba843;">{{ message.group_title }}</span> {{ message.group_type }} team</p>
             </td>
           </tr>
         </tbody>
@@ -104,9 +115,9 @@
           </tr>
           <tr style="background-color: #f5f6f7;">
             <td style="padding: 0 16px; font-size: 14px; text-align: center;">
-              <p>You received this e-mail because, as a registered user of Joinup and a member of {# @todo: #}{Collection/Solution name}, you agreed to receive information sent to you by the {# @todo: #}{Collection/Solution name} owner/administrator (based on Article 5(d) of Regulation (EU) 2018/1725).</p>
-              <p>In case you do not want to receive such e-mails, you can <a href="#{# @todo: #}{unsubscribe page}" target="_blank">unsubscribe</a> from group announcement notifications or manage all your subscription notifications from the <a href="https://joinup.ec.europa.eu/user/subscriptions" target="_blank">user subscriptions</a> page.</p>
-              <p>This is an unmonitored email address, please do not reply.<br> You can contact directly {# @todo: #}{Collection/Solution name} via the <a href="#{# @todo: #}{About page of the Solution}" target="_blank">About</a> page.</p>
+              <p>You received this e-mail because, as a registered user of Joinup and a member of {{ message.group_title }} {{ message.group_type }}, you agreed to receive information sent to you by the {{ message.group_title }} {{ message.group_type }} owner/administrator (based on Article 5(d) of Regulation (EU) 2018/1725).</p>
+              <p>In case you do not want to receive such e-mails, you can <a href="{{ message.recipient_unsubscribe_url }}" target="_blank">unsubscribe</a> from group announcement notifications or manage all your subscription notifications from the <a href="{{ message.recipient_subscriptions_url }}" target="_blank">user subscriptions</a> page.</p>
+              <p>This is an unmonitored email address, please do not reply.<br> You can contact directly {{ message.group_title }} {{ message.group_type }} via the <a href="{{ message.group_about_page_url }}" target="_blank">About</a> page.</p>
             </td>
           </tr>
         </tfoot>
