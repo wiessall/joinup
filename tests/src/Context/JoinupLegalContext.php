@@ -9,6 +9,7 @@ use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\entity_legal\Entity\EntityLegalDocumentAcceptance;
 use Drupal\entity_legal\Entity\EntityLegalDocumentVersion;
 use Drupal\joinup\Traits\EntityTrait;
+use Drupal\joinup\Traits\TestingEntitiesTrait;
 
 /**
  * Behat step definitions for the Joinup Legal module.
@@ -16,6 +17,7 @@ use Drupal\joinup\Traits\EntityTrait;
 class JoinupLegalContext extends RawDrupalContext {
 
   use EntityTrait;
+  use TestingEntitiesTrait;
 
   /**
    * Field aliases.
@@ -29,13 +31,6 @@ class JoinupLegalContext extends RawDrupalContext {
     'Acceptance label' => 'acceptance_label',
     'Content' => 'entity_legal_document_text',
   ];
-
-  /**
-   * Testing legal document versions.
-   *
-   * @var \Drupal\entity_legal\EntityLegalDocumentVersionInterface[]
-   */
-  protected $legalDocumentVersions = [];
 
   /**
    * Creates new legal document versions.
@@ -106,7 +101,7 @@ class JoinupLegalContext extends RawDrupalContext {
         ],
       ]);
       $document_version->save();
-      $this->legalDocumentVersions[$document_version->id()] = $document_version;
+      $this->entities[ENTITY_LEGAL_DOCUMENT_VERSION_ENTITY_NAME][$document_version->id()] = $document_version;
     }
   }
 
@@ -177,10 +172,12 @@ class JoinupLegalContext extends RawDrupalContext {
       throw new \InvalidArgumentException("Legal document '{$document->label()}' has no published version.");
     }
 
-    EntityLegalDocumentAcceptance::create([
+    $acceptance = EntityLegalDocumentAcceptance::create([
       'document_version_name' => $published_version->id(),
       'uid' => $this->getUserManager()->getCurrentUser()->uid,
-    ])->save();
+    ]);
+    $acceptance->save();
+    $this->entities[ENTITY_LEGAL_DOCUMENT_ACCEPTANCE_ENTITY_NAME][$acceptance->id()] = $acceptance;
   }
 
   /**
@@ -215,22 +212,12 @@ class JoinupLegalContext extends RawDrupalContext {
       if (!$account = user_load_by_name($username)) {
         throw new \InvalidArgumentException("Invalid user name '$username'");
       }
-      EntityLegalDocumentAcceptance::create([
+      $acceptance = EntityLegalDocumentAcceptance::create([
         'document_version_name' => $published_version->id(),
         'uid' => $account->id(),
-      ])->save();
-    }
-  }
-
-  /**
-   * Clears the testing legal document versions.
-   *
-   * @AfterScenario @api
-   */
-  public function clearLegalNoticeVersions(): void {
-    if ($this->legalDocumentVersions) {
-      \Drupal::entityTypeManager()->getStorage('entity_legal_document_version')
-        ->delete($this->legalDocumentVersions);
+      ]);
+      $acceptance->save();
+      $this->entities[ENTITY_LEGAL_DOCUMENT_ACCEPTANCE_ENTITY_NAME][$acceptance->id()] = $acceptance;
     }
   }
 
