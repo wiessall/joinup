@@ -12,12 +12,12 @@ use Drupal\user\UserInterface;
 use Symfony\Component\Routing\Route;
 
 /**
- * Converts route params of type 'group_unsubscribe_items'.
+ * Converts route params of type 'group_unsubscribe_types'.
  *
  * This converter runs after sparql.paramconverter and paramconverter.entity, so
  * the group and user parameters are already converted at this point.
  */
-class GroupUnsubscribeItemsConverter implements ParamConverterInterface {
+class GroupUnsubscribeTypesConverter implements ParamConverterInterface {
 
   /**
    * The OG membership manager service.
