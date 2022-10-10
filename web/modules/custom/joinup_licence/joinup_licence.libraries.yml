@@ -1,5 +1,26 @@
 licence-filter:
+  css:
+    component:
+      css/licence_filter.css: {}
   js:
     js/licence_filter.js: {}
+  dependencies:
+    - core/drupal
+
+comparator:
+  css:
+    component:
+      css/licence_filter.css: {}
+  js:
+    js/comparator.js: {}
+  dependencies:
+    - core/drupal
+
+compatibility-checker:
+  css:
+    component:
+      css/licence_filter.css: {}
+  js:
+    js/compatibility_checker.js: {}
   dependencies:
     - core/drupal
