@@ -26,10 +26,9 @@
     margin-bottom: 0;
     list-style: none;
   }
-  &__item {
-    padding: $spacer * .25;
-  }
   &__button {
+    width: 100%;
+    padding: $spacer * .5; // 8px
     border: 0; // Resets
     background: none; // Resets
     color: inherit; // Resets
@@ -40,59 +39,132 @@
       text-decoration: underline;
       cursor: help;
     }
+    &.is-active {
+      background: $gray-300;
+      color: $black;
+    }
   }
   &--can {
-    border: 1px solid $green;
+    border: 1px solid $jla--can;
     .licence-filter__header {
-      background-color: $green;
+      background-color: $jla--can;
     }
     .licence-filter__content {
-      color: $green;
+      color: $jla--can;
     }
   }
   &--must {
-    border: 1px solid $gray-700;
+    border: 1px solid $jla--must;
     .licence-filter__header {
-      background-color: $gray-700;
+      background-color: $jla--must;
     }
     .licence-filter__content {
-      color: $gray-700;
+      color: $jla--must;
     }
   }
   &--cannot {
-    border: 1px solid $red;
+    border: 1px solid $jla--cannot;
     .licence-filter__header {
-      background-color: $red;
+      background-color: $jla--cannot;
     }
     .licence-filter__content {
-      color: $red;
+      color: $jla--cannot;
     }
   }
   &--compatible {
-    border: 1px solid $indigo;
+    border: 1px solid $jla--compatible;
     .licence-filter__header {
-      background-color: $indigo;
+      background-color: $jla--compatible;
     }
     .licence-filter__content {
-      color: $indigo;
+      color: $jla--compatible;
     }
   }
   &--law {
-    border: 1px solid darken($orange, 17%); // Increase contrast to pass a11y tests
+    border: 1px solid $jla--law;
     .licence-filter__header {
-      background-color: darken($orange, 17%); // Increase contrast to pass a11y tests
+      background-color: $jla--law;
     }
     .licence-filter__content {
-      color: darken($orange, 17%); // Increase contrast to pass a11y tests
+      color: $jla--law;
     }
   }
   &--support {
-    border: 1px solid $brand-darker;
+    border: 1px solid $jla--support;
     .licence-filter__header {
-      background-color: $brand-darker;
+      background-color: $jla--support;
     }
     .licence-filter__content {
-      color: $brand-darker;
+      color: $jla--support;
+    }
+  }
+}
+.listing--licences {
+  .licence-tile {
+    &__label-wrapper {
+      min-width: 100px;
+      text-align: right;
+    }
+    &__label {
+      font-size: $font-size-sm;
+      border-radius: $border-radius-sm;
+    }
+    &__value {
+      font-size: $font-size-sm;
+      &:hover {
+        text-decoration: underline;
+        cursor: help;
+      }
+    }
+    &__line {
+      &--can {
+        .licence-tile__label {
+          background-color: $jla--can;
+        }
+        .licence-tile__values {
+          color: $jla--can;
+        }
+      }
+      &--must {
+        .licence-tile__label {
+          background-color: $jla--must;
+        }
+        .licence-tile__values {
+          color: $jla--must;
+        }
+      }
+      &--cannot {
+        .licence-tile__label {
+          background-color: $jla--cannot;
+        }
+        .licence-tile__values {
+          color: $jla--cannot;
+        }
+      }
+      &--compatible {
+        .licence-tile__label {
+          background-color: $jla--compatible;
+        }
+        .licence-tile__values {
+          color: $jla--compatible;
+        }
+      }
+      &--law {
+        .licence-tile__label {
+          background-color: $jla--law;
+        }
+        .licence-tile__values {
+          color: $jla--law;
+        }
+      }
+      &--support {
+        .licence-tile__label {
+          background-color: $jla--support;
+        }
+        .licence-tile__values {
+          color: $jla--support;
+        }
+      }
     }
   }
 }

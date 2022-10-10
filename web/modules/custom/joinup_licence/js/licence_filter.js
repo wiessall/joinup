@@ -6,6 +6,12 @@
 ((drupalSettings) => {
   Drupal.behaviors.licenceFilter = {
     attach() {
+      /**
+       * Gathers all licence tiles,
+       * removes all hidden classes,
+       * checks active filter items and hides tiles accordingly,
+       * updates visible tiles counter.
+       */
       function checkLicenceCategories() {
         const licenceTile = document.querySelectorAll(".licence-tile");
 
@@ -19,7 +25,7 @@
         // Check every active filter item and hide tiles which don't contain proper
         // data-joinup-licence-category.
         const licenceFilterItem = document.querySelectorAll(
-          ".licence-filter__item a.is-active"
+          ".licence-filter__item button.is-active"
         );
         licenceFilterItem.forEach((element) => {
           const currentlicenceCategory = element.getAttribute(
@@ -62,7 +68,7 @@
             }
           }
 
-          // Count not hidden tiles.
+          // Count visible tiles.
           if (!element.classList.contains("is-hidden")) {
             licenceTiles += 1;
           }
@@ -73,16 +79,25 @@
           ".licence-counter__number"
         );
         licenceCounterNumber.textContent = licenceTiles;
+
+        // Use plural only if licences count is higher than one.
+        const licenceCounterText = document.querySelector(
+          ".licence-counter__text"
+        );
+        if (licenceTiles === 1) {
+          licenceCounterText.textContent = "licence found";
+        } else {
+          licenceCounterText.textContent = "licences found";
+        }
       }
 
       // Disable or enable all compare checkboxes.
       function disableCheckboxes(state) {
         document
-          .querySelectorAll(".licence-tile .mdl-checkbox")
+          .querySelectorAll(".licence-tile .form-check-input")
           .forEach((element) => {
-            if (!element.querySelector("input").checked) {
-              element.querySelector("input").disabled = state;
-              element.MaterialCheckbox.updateClasses_();
+            if (!element.checked) {
+              element.disabled = state;
             }
           });
       }
@@ -95,14 +110,17 @@
           ? ".licence-tile__button--compatible"
           : ".licence-tile__button--compare";
         if (state) {
-          document
-            .querySelectorAll(`${btnSelector}.licence-tile__button--disabled`)
-            .forEach((element) => {
-              element.classList.remove("licence-tile__button--disabled");
-            });
+          const buttons = document.querySelectorAll(`${btnSelector}`);
+          buttons.forEach((element) => {
+            if (element.hasAttribute("disabled")) {
+              element.removeAttribute("disabled");
+              element.removeAttribute("aria-disabled");
+            }
+          });
         } else {
           document.querySelectorAll(`${btnSelector}`).forEach((element) => {
-            element.classList.add("licence-tile__button--disabled");
+            element.setAttribute("disabled", "");
+            element.setAttribute("aria-disabled", "true");
           });
         }
       }
@@ -115,7 +133,7 @@
         const licenceListing = document.querySelector(".listing--licences");
         let licenceName = "";
         document
-          .querySelectorAll(".licence-tile .mdl-checkbox__input")
+          .querySelectorAll(".licence-tile .form-check-input")
           .forEach((element) => {
             if (element.checked) {
               licenceName = element.getAttribute("data-joinup-licence-name");
@@ -137,7 +155,7 @@
 
       // Trigger if licence filter is clicked.
       document
-        .querySelectorAll(".licence-filter__item a")
+        .querySelectorAll(".licence-filter__item button")
         .forEach((element) => {
           element.addEventListener("click", (e) => {
             e.preventDefault();
@@ -164,19 +182,19 @@
 
       licenceResetButton.addEventListener("click", () => {
         const licenceSearchInput = document.querySelector(
-          ".licence-search__input input"
+          "input.licence-search__input"
         );
         const licenceFilterItem = document.querySelectorAll(
-          ".licence-filter__item a.is-active"
+          ".licence-filter__item button.is-active"
         );
         licenceFilterItem.forEach((el) => {
           el.classList.remove("is-active");
         });
 
         licenceSearchInput.value = "";
-        document
-          .querySelector(".licence-search__input .mdl-js-textfield")
-          .MaterialTextfield.checkDirty();
+        // document
+        //   .querySelector(".licence-search__input .mdl-js-textfield")
+        //   .MaterialTextfield.checkDirty();
         checkLicenceCategories();
         // Also, uncheck any selected licences checked for comparison and disable
         // the "Compare" buttons. The 'data-joinup-licence-compare' attribute which is set
@@ -185,15 +203,17 @@
           document.querySelectorAll(".licence-tile__button--compatible").length
         ) {
           document
-            .querySelectorAll(".licence-tile .mdl-js-radio")
+            .querySelectorAll(".licence-tile .form-check-input[type='radio']")
             .forEach((el) => {
               el.MaterialRadio.uncheck();
             });
         } else {
           document
-            .querySelectorAll(".licence-tile .mdl-js-checkbox")
+            .querySelectorAll(
+              ".licence-tile .form-check-input[type='checkbox']"
+            )
             .forEach((el) => {
-              el.MaterialCheckbox.uncheck();
+              el.disabled = true;
             });
         }
         document
@@ -204,7 +224,7 @@
 
       // Change compare elements if the checkbox is clicked.
       document
-        .querySelectorAll(".licence-tile .mdl-checkbox__input")
+        .querySelectorAll(".licence-tile .form-check-input")
         .forEach((element) => {
           element.addEventListener("click", (e) => {
             const licenceListing = document.querySelector(".listing--licences");
@@ -223,10 +243,10 @@
             if (e.target.checked) {
               licencesArray.push(licenceName);
               licencesString = JSON.stringify(licencesArray);
-              if (licencesArray.length === maxCompare) {
+              if (licencesArray.length >= maxCompare) {
                 disableCheckboxes(true);
               }
-              if (licencesArray.length === 2) {
+              if (licencesArray.length >= 2) {
                 enableButtons(true);
               }
             } else {
@@ -270,12 +290,12 @@
         });
 
       function initCompatibleRadios() {
-        const mdlRadios = document.querySelectorAll(
-          ".listing__item--compatibility .mdl-js-radio"
+        const radios = document.querySelectorAll(
+          ".jla--compatibility .form-check-input[type='radio']"
         );
-        mdlRadios.forEach((element) => {
-          // UnCheck radios on page load.
-          element.querySelector("input").checked = false;
+        radios.forEach((element) => {
+          // Uncheck radios on page load.
+          element.checked = false;
           element.addEventListener("click", () => {
             const inboundLicence = document.querySelector(
               "input[name='inbound-licence']:checked"
