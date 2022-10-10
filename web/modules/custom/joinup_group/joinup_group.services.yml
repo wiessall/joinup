@@ -59,3 +59,7 @@ services:
     arguments: ['@entity_type.manager', '@plugin.manager.mail', '@language_manager', '@joinup_notification.message_delivery', '@queue']
     tags:
       - { name: event_subscriber }
+  joinup_group.announcement_delivery.subscriber:
+    class: Drupal\joinup_group\EventSubscriber\AnnouncementDeliverySubscriber
+    tags:
+      - { name: event_subscriber }
