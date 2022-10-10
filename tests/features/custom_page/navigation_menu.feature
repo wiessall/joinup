@@ -57,6 +57,13 @@ Feature: Navigation menu for custom pages
     When I click the contextual link "Edit menu" in the "Left sidebar" region
     Then I should see the heading "Edit navigation menu of the Rainbow tables <group>"
 
+    # The form to add a new menu link should not be accessible by anyone. This
+    # is functionality provided by Drupal which is intended for webmasters. We
+    # are showing the menu overview to collection facilitators so they can
+    # reorder the navigation menu, but they should not be able to access the
+    # related menu administration screens.
+    And I should not have access to the menu link administration pages for the navigation menu of the "Rainbow tables" <group>
+
     # Enable the menu entry for the 'About us' page again so we can check if it
     # is visible for all users.
     When I enable "About us" in the navigation menu of the "Rainbow tables" <group>
@@ -71,6 +78,9 @@ Feature: Navigation menu for custom pages
     # Test as a normal member of the group.
     Given I am logged in as a member of the "Rainbow tables" <group>
     When I go to the homepage of the "Rainbow tables" <group>
+    # Members of the collection should not have access to the administration
+    # pages.
+    Then I should not have access to the menu link administration pages for the navigation menu of the "Rainbow tables" <group>
     # The navigation link from the current group should be visible, but not
     # the link from the second collection.
     And I should see the link "About us" in the "Navigation menu"
@@ -85,6 +95,8 @@ Feature: Navigation menu for custom pages
     # Test as a moderator.
     Given I am logged in as a moderator
     When I go to the homepage of the "Rainbow tables" <group>
+    # Even moderators should not have access to the administration pages.
+    Then I should not have access to the menu link administration pages for the navigation menu of the "Rainbow tables" <group>
     # The navigation link from the current group should be visible, but not
     # the link from the second group.
     And I should see the link "About us" in the "Navigation menu"
@@ -99,6 +111,9 @@ Feature: Navigation menu for custom pages
     # Test as an anonymous user.
     Given I am an anonymous user
     When I go to the homepage of the "Rainbow tables" <group>
+    # Anonymous users should definitely not have access to the administration
+    # pages.
+    Then I should not have access to the menu link administration pages for the navigation menu of the "Rainbow tables" <group>
 
     # The navigation link from the current collection should be visible, but not
     # the link from the second group.
