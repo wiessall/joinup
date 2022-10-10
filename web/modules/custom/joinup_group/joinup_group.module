@@ -974,22 +974,10 @@ function joinup_group_mail_alter(array &$message): void {
       $message['send'] = FALSE;
       return;
     }
+    $message['headers']['Content-Type'] = SWIFTMAILER_FORMAT_HTML;
+
     /** @var \Drupal\joinup_group\Entity\AnnouncementInterface $announcement */
     $announcement = $message['params']['message_entity'];
-
-    $message['headers']['Content-Type'] = SWIFTMAILER_FORMAT_HTML;
-    $message['recipient_name'] = $account->getDisplayName();
-    $message['recipient_profile_url'] = $account->toUrl()->setAbsolute()->toString();
-    $message['recipient_profile_edit_url'] = $account->toUrl('edit-form')->setAbsolute()->toString();
-    $message['recipient_subscriptions_url'] = Url::fromRoute('joinup_subscription.subscriptions', [
-      'user' => $account->id(),
-    ])->setAbsolute()->toString();
-    $message['recipient_unsubscribe_url'] = Url::fromRoute('joinup_subscription.unsubscribe', [
-      'user' => $account->id(),
-      'group' => $announcement->getGroup()->id(),
-      'types' => 'announcements',
-    ])->setAbsolute()->toString();
-
     // Add pre-computed arguments, which are common for all recipients.
     foreach ($announcement->getArguments() as $key => $value) {
       $key = str_replace(':', '_', ltrim($key, '@'));
