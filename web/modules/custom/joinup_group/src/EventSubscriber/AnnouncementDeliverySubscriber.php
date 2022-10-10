@@ -46,13 +46,13 @@ class AnnouncementDeliverySubscriber implements EventSubscriberInterface {
 
         // Enrich the announcement arguments with recipient data.
         $arguments = $announcement->getArguments();
-        $arguments['@recipient:name'] = $account->getDisplayName();
-        $arguments['@recipient:profile:url'] = $account->toUrl()->setAbsolute()->toString();
-        $arguments['@recipient:profile_edit:url'] = $account->toUrl('edit-form')->setAbsolute()->toString();
-        $arguments['@recipient:subscriptions:url'] = Url::fromRoute('joinup_subscription.subscriptions', [
+        $arguments['@recipient_name'] = $account->getDisplayName();
+        $arguments['@recipient_profile'] = $account->toUrl()->setAbsolute()->toString();
+        $arguments['@recipient_profile_edit'] = $account->toUrl('edit-form')->setAbsolute()->toString();
+        $arguments['@recipient_subscriptions'] = Url::fromRoute('joinup_subscription.subscriptions', [
           'user' => $account->id(),
         ])->setAbsolute()->toString();
-        $arguments['@recipient:unsubscribe:url'] = Url::fromRoute('joinup_subscription.unsubscribe', [
+        $arguments['@recipient_unsubscribe'] = Url::fromRoute('joinup_subscription.unsubscribe', [
           'user' => $account->id(),
           'group' => $announcement->getGroup()->id(),
           'types' => 'announcements',

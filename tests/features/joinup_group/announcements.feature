@@ -54,7 +54,17 @@ Feature: Messaging group announcements
 
     When I go to the announcements page of "Fail pension" <group>
     And I click "Add announcement"
-    Then I should see "Announcement not saved yet"
+    Then the following fields should be present "Subject,Body"
+    And I should see the following lines of text:
+      | The following placeholders are available to be used in the message body: |
+      | @group_landing_page - The <group> landing page URL                       |
+      | @group_about_page - The <group> about page URL                           |
+      | @group_members_page - The <group> members page URL                       |
+      | @recipient_name - The recipient's full name                              |
+      | @recipient_profile - The recipient's profile URL                         |
+      | @recipient_profile_edit - The recipient's profile edit URL               |
+      | @recipient_subscriptions - The recipient's subscriptions page URL        |
+      | Announcement not saved yet                                               |
     # On announcement creation, the state buttons are hidden.
     And I should not see the button "Approve"
     And I should not see the button "Send"
@@ -77,24 +87,42 @@ Feature: Messaging group announcements
     And I should not see the button "Undo reject"
 
     When I fill in "Subject" with "The Big Opening is postponed"
-    And I fill in "Body" with "I am @author:name, you can find me at @author:profile:url. Sent from @group:title, link '@group:landing_page:url"
-    And I press "Test"
-    Then I should see the success message "A sample announcement has been delivered to sonsoftweets@example.com."
-    And the email sent to "Sons of tweets" with subject "The Big Opening is postponed" contains the following lines of text:
-      | text                                                                                                                                                                                                                                                             |
-      | Dear Sons of tweets,                                                                                                                                                                                                                                             |
-      | Fail pension <group> has an announcement for its members:                                                                                                                                                                                                     |
-      | The Big Opening is postponed                                                                                                                                                                                                                                     |
-      | I am Sons of tweets, you can find me at                                                                                                                                                                                                                          |
-      | Sent from Fail pension, link                                                                                                                                                                                                                                     |
-      | Kind regards,                                                                                                                                                                                                                                                    |
-      | The Fail pension <group> team                                                                                                                                                                                                                                 |
-      | You received this e-mail because, as a registered user of Joinup and a member of Fail pension <group>, you agreed to receive information sent to you by the Fail pension <group> owner/administrator (based on Article 5(d) of Regulation (EU) 2018/1725). |
-      | In case you do not want to receive such e-mails, you can unsubscribe from group announcement notifications or manage all your subscription notifications from the user subscriptions page.                                                                       |
-      | This is an unmonitored email address, please do not reply. You can contact directly Fail pension <group> via the About page.                                                                                                                                  |
+    And I fill in "Body" with:
+     """
+     In this email we are testing the available arguments:
+     <a href="@group_landing_page">The <group> landing page URL</a>
+     <a href="@group_about_page">The <group> about page URL</a>
+     <a href="@group_members_page">The <group> members page URL</a>
+     The recipient's full name: @recipient_name
+     <a href="@recipient_profile">The recipient's profile URL</a>
+     <a href="@recipient_profile_edit">The recipient's profile edit URL</a>
+     <a href="@recipient_subscriptions">The recipient's subscriptions page URL</a>
+     """
+
     When I press "Update"
     Then I should see the success message "The announcement has been updated but it's still in Draft state. Review the announcement and, when is ready to be sent, use the 'Send' button."
     And I should see "Announcement in Draft state"
+
+    When I press "Test"
+    Then I should see the success message "A sample announcement has been delivered to sonsoftweets@example.com."
+    And the email sent to "Sons of tweets" with subject "The Big Opening is postponed" contains the following lines of text:
+      | text                                                                                                                                                                                                                                                       |
+      | Dear Sons of tweets,                                                                                                                                                                                                                                       |
+      | Fail pension <group> has an announcement for its members:                                                                                                                                                                                                  |
+      | The Big Opening is postponed                                                                                                                                                                                                                               |
+      | In this email we are testing the available arguments:                                                                                                                                                                                                      |
+      | The <group> landing page URL                                                                                                                                                                                                                               |
+      | The <group> about page URL                                                                                                                                                                                                                                 |
+      | The <group> members page URL                                                                                                                                                                                                                               |
+      | The recipient's full name: Sons of tweets                                                                                                                                                                                                                  |
+      | The recipient's profile URL                                                                                                                                                                                                                                |
+      | The recipient's profile edit URL                                                                                                                                                                                                                           |
+      | The recipient's subscriptions page URL                                                                                                                                                                                                                     |
+      | Kind regards,                                                                                                                                                                                                                                              |
+      | The Fail pension <group> team                                                                                                                                                                                                                              |
+      | You received this e-mail because, as a registered user of Joinup and a member of Fail pension <group>, you agreed to receive information sent to you by the Fail pension <group> owner/administrator (based on Article 5(d) of Regulation (EU) 2018/1725). |
+      | In case you do not want to receive such e-mails, you can unsubscribe from group announcement notifications or manage all your subscription notifications from the user subscriptions page.                                                                 |
+      | This is an unmonitored email address, please do not reply. You can contact directly Fail pension <group> via the About page.                                                                                                                               |
 
     When I press "Send"
     Then I should see the success message "Your announcement has been sent for validation by Joinup moderators. Once approved, will reach the Fail pension <group> members."
@@ -133,17 +161,23 @@ Feature: Messaging group announcements
     When I press "Test"
     Then I should see the success message "A sample announcement has been delivered to check.edit.moderator@example.com."
     And the email sent to "Check edit moderator" with subject "The Big Opening is postponed" contains the following lines of text:
-      | text                                    |
-      | Dear Check edit moderator,                                                                                                                                                                                                                                             |
-      | Fail pension <group> has an announcement for its members:                                                                                                                                                                                                     |
-      | The Big Opening is postponed                                                                                                                                                                                                                                     |
-      | I am Sons of tweets, you can find me at                                                                                                                                                                                                                          |
-      | Sent from Fail pension, link                                                                                                                                                                                                                                     |
-      | Kind regards,                                                                                                                                                                                                                                                    |
-      | The Fail pension <group> team                                                                                                                                                                                                                                 |
+      | text                                                                                                                                                                                                                                                       |
+      | Dear Check edit moderator,                                                                                                                                                                                                                                 |
+      | Fail pension <group> has an announcement for its members:                                                                                                                                                                                                  |
+      | The Big Opening is postponed                                                                                                                                                                                                                               |
+      | In this email we are testing the available arguments:                                                                                                                                                                                                      |
+      | The <group> landing page URL                                                                                                                                                                                                                               |
+      | The <group> about page URL                                                                                                                                                                                                                                 |
+      | The <group> members page URL                                                                                                                                                                                                                               |
+      | The recipient's full name: Check edit moderator                                                                                                                                                                                                            |
+      | The recipient's profile URL                                                                                                                                                                                                                                |
+      | The recipient's profile edit URL                                                                                                                                                                                                                           |
+      | The recipient's subscriptions page URL                                                                                                                                                                                                                     |
+      | Kind regards,                                                                                                                                                                                                                                              |
+      | The Fail pension <group> team                                                                                                                                                                                                                              |
       | You received this e-mail because, as a registered user of Joinup and a member of Fail pension <group>, you agreed to receive information sent to you by the Fail pension <group> owner/administrator (based on Article 5(d) of Regulation (EU) 2018/1725). |
-      | In case you do not want to receive such e-mails, you can unsubscribe from group announcement notifications or manage all your subscription notifications from the user subscriptions page.                                                                       |
-      | This is an unmonitored email address, please do not reply. You can contact directly Fail pension <group> via the About page.                                                                                                                                  |
+      | In case you do not want to receive such e-mails, you can unsubscribe from group announcement notifications or manage all your subscription notifications from the user subscriptions page.                                                                 |
+      | This is an unmonitored email address, please do not reply. You can contact directly Fail pension <group> via the About page.                                                                                                                               |
 
     Given I am logged in as "Sons of tweets"
 
@@ -190,41 +224,59 @@ Feature: Messaging group announcements
 
     # Groups having up to 50 members are receiving the announcements instantly.
     And the email sent to "Mogul" with subject "The Big Opening is postponed" contains the following lines of text:
-      | text                                    |
-      | Dear Mogul,                                                                                                                                                                                                                                             |
-      | Fail pension <group> has an announcement for its members:                                                                                                                                                                                                     |
-      | The Big Opening is postponed                                                                                                                                                                                                                                     |
-      | I am Sons of tweets, you can find me at                                                                                                                                                                                                                          |
-      | Sent from Fail pension, link                                                                                                                                                                                                                                     |
-      | Kind regards,                                                                                                                                                                                                                                                    |
-      | The Fail pension <group> team                                                                                                                                                                                                                                 |
+      | text                                                                                                                                                                                                                                                       |
+      | Dear Mogul,                                                                                                                                                                                                                                                |
+      | Fail pension <group> has an announcement for its members:                                                                                                                                                                                                  |
+      | The Big Opening is postponed                                                                                                                                                                                                                               |
+      | In this email we are testing the available arguments:                                                                                                                                                                                                      |
+      | The <group> landing page URL                                                                                                                                                                                                                               |
+      | The <group> about page URL                                                                                                                                                                                                                                 |
+      | The <group> members page URL                                                                                                                                                                                                                               |
+      | The recipient's full name: Mogul                                                                                                                                                                                                                           |
+      | The recipient's profile URL                                                                                                                                                                                                                                |
+      | The recipient's profile edit URL                                                                                                                                                                                                                           |
+      | The recipient's subscriptions page URL                                                                                                                                                                                                                     |
+      | Kind regards,                                                                                                                                                                                                                                              |
+      | The Fail pension <group> team                                                                                                                                                                                                                              |
       | You received this e-mail because, as a registered user of Joinup and a member of Fail pension <group>, you agreed to receive information sent to you by the Fail pension <group> owner/administrator (based on Article 5(d) of Regulation (EU) 2018/1725). |
-      | In case you do not want to receive such e-mails, you can unsubscribe from group announcement notifications or manage all your subscription notifications from the user subscriptions page.                                                                       |
-      | This is an unmonitored email address, please do not reply. You can contact directly Fail pension <group> via the About page.                                                                                                                                  |
+      | In case you do not want to receive such e-mails, you can unsubscribe from group announcement notifications or manage all your subscription notifications from the user subscriptions page.                                                                 |
+      | This is an unmonitored email address, please do not reply. You can contact directly Fail pension <group> via the About page.                                                                                                                               |
     And the email sent to "Greedy" with subject "The Big Opening is postponed" contains the following lines of text:
-      | text                                    |
-      | Dear Greedy,                                                                                                                                                                                                                                             |
-      | Fail pension <group> has an announcement for its members:                                                                                                                                                                                                     |
-      | The Big Opening is postponed                                                                                                                                                                                                                                     |
-      | I am Sons of tweets, you can find me at                                                                                                                                                                                                                          |
-      | Sent from Fail pension, link                                                                                                                                                                                                                                     |
-      | Kind regards,                                                                                                                                                                                                                                                    |
-      | The Fail pension <group> team                                                                                                                                                                                                                                 |
+      | text                                                                                                                                                                                                                                                       |
+      | Dear Greedy,                                                                                                                                                                                                                                               |
+      | Fail pension <group> has an announcement for its members:                                                                                                                                                                                                  |
+      | The Big Opening is postponed                                                                                                                                                                                                                               |
+      | In this email we are testing the available arguments:                                                                                                                                                                                                      |
+      | The <group> landing page URL                                                                                                                                                                                                                               |
+      | The <group> about page URL                                                                                                                                                                                                                                 |
+      | The <group> members page URL                                                                                                                                                                                                                               |
+      | The recipient's full name: Greedy                                                                                                                                                                                                                          |
+      | The recipient's profile URL                                                                                                                                                                                                                                |
+      | The recipient's profile edit URL                                                                                                                                                                                                                           |
+      | The recipient's subscriptions page URL                                                                                                                                                                                                                     |
+      | Kind regards,                                                                                                                                                                                                                                              |
+      | The Fail pension <group> team                                                                                                                                                                                                                              |
       | You received this e-mail because, as a registered user of Joinup and a member of Fail pension <group>, you agreed to receive information sent to you by the Fail pension <group> owner/administrator (based on Article 5(d) of Regulation (EU) 2018/1725). |
-      | In case you do not want to receive such e-mails, you can unsubscribe from group announcement notifications or manage all your subscription notifications from the user subscriptions page.                                                                       |
-      | This is an unmonitored email address, please do not reply. You can contact directly Fail pension <group> via the About page.                                                                                                                                  |
+      | In case you do not want to receive such e-mails, you can unsubscribe from group announcement notifications or manage all your subscription notifications from the user subscriptions page.                                                                 |
+      | This is an unmonitored email address, please do not reply. You can contact directly Fail pension <group> via the About page.                                                                                                                               |
     And the email sent to "Sons of tweets" with subject "The Big Opening is postponed" contains the following lines of text:
-      | text                                    |
-      | Dear Sons of tweets,                                                                                                                                                                                                                                             |
-      | Fail pension <group> has an announcement for its members:                                                                                                                                                                                                     |
-      | The Big Opening is postponed                                                                                                                                                                                                                                     |
-      | I am Sons of tweets, you can find me at                                                                                                                                                                                                                          |
-      | Sent from Fail pension, link                                                                                                                                                                                                                                     |
-      | Kind regards,                                                                                                                                                                                                                                                    |
-      | The Fail pension <group> team                                                                                                                                                                                                                                 |
+      | text                                                                                                                                                                                                                                                       |
+      | Dear Sons of tweets,                                                                                                                                                                                                                                       |
+      | Fail pension <group> has an announcement for its members:                                                                                                                                                                                                  |
+      | The Big Opening is postponed                                                                                                                                                                                                                               |
+      | In this email we are testing the available arguments:                                                                                                                                                                                                      |
+      | The <group> landing page URL                                                                                                                                                                                                                               |
+      | The <group> about page URL                                                                                                                                                                                                                                 |
+      | The <group> members page URL                                                                                                                                                                                                                               |
+      | The recipient's full name: Sons of tweets                                                                                                                                                                                                                  |
+      | The recipient's profile URL                                                                                                                                                                                                                                |
+      | The recipient's profile edit URL                                                                                                                                                                                                                           |
+      | The recipient's subscriptions page URL                                                                                                                                                                                                                     |
+      | Kind regards,                                                                                                                                                                                                                                              |
+      | The Fail pension <group> team                                                                                                                                                                                                                              |
       | You received this e-mail because, as a registered user of Joinup and a member of Fail pension <group>, you agreed to receive information sent to you by the Fail pension <group> owner/administrator (based on Article 5(d) of Regulation (EU) 2018/1725). |
-      | In case you do not want to receive such e-mails, you can unsubscribe from group announcement notifications or manage all your subscription notifications from the user subscriptions page.                                                                       |
-      | This is an unmonitored email address, please do not reply. You can contact directly Fail pension <group> via the About page.                                                                                                                                  |
+      | In case you do not want to receive such e-mails, you can unsubscribe from group announcement notifications or manage all your subscription notifications from the user subscriptions page.                                                                 |
+      | This is an unmonitored email address, please do not reply. You can contact directly Fail pension <group> via the About page.                                                                                                                               |
     # Accepted 'Legal notice' but it's not subscribed to group announcements.
     But no email has been sent to "Envious"
     # Subscribed to group announcements but didn't accept the 'Legal notice'.
@@ -233,13 +285,28 @@ Feature: Messaging group announcements
     And I should see the link "Add announcement"
     But I should not see "edit" in the "The Big Opening is postponed" row
 
-    # Check email links.
+    # Now let's check the links inside email.
     When I click the "Fail pension" link in the email sent to "mogul@example.com" having the subject "The Big Opening is postponed"
     Then I should see the heading "Fail pension"
+    When I click the "The <group> landing page URL" link in the email sent to "mogul@example.com" having the subject "The Big Opening is postponed"
+    Then I should see the heading "Fail pension"
+    When I click the "The <group> about page URL" link in the email sent to "mogul@example.com" having the subject "The Big Opening is postponed"
+    Then I should see the heading "About Fail pension"
+    When I click the "The <group> members page URL" link in the email sent to "mogul@example.com" having the subject "The Big Opening is postponed"
+    Then I should see the heading "Members"
+    When I click the "The recipient's profile URL" link in the email sent to "mogul@example.com" having the subject "The Big Opening is postponed"
+    Then I should see the heading "Mogul"
+    When I click the "The recipient's profile edit URL" link in the email sent to "mogul@example.com" having the subject "The Big Opening is postponed"
+    Then I should see the heading "Mogul"
+    And I should see the button "Save"
+    When I click the "The recipient's subscriptions page URL" link in the email sent to "mogul@example.com" having the subject "The Big Opening is postponed"
+    Then I should see the heading "Subscription settings"
     When I click the "unsubscribe" link in the email sent to "mogul@example.com" having the subject "The Big Opening is postponed"
     Then I should see the heading "Unsubscribe from Fail pension <group>?"
     When I click the "user subscriptions" link in the email sent to "mogul@example.com" having the subject "The Big Opening is postponed"
     Then I should see the heading "Subscription settings"
+    When I click the "About" link in the email sent to "mogul@example.com" having the subject "The Big Opening is postponed"
+    Then I should see the heading "About Fail pension"
 
     Given I am logged in as "Sons of tweets"
 
