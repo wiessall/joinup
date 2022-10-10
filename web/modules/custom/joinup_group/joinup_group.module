@@ -967,21 +967,12 @@ function joinup_group_mail(string $key, array &$message, array $params): void {
  * Implements hook_mail_alter().
  */
 function joinup_group_mail_alter(array &$message): void {
-  if ($message['key'] === 'announcement') {
-    /** @var \Drupal\user\UserInterface $account */
-    if (!$account = user_load_by_mail($message['to'])) {
-      // A concurrent process deleted the user in the meantime? Don't send this.
-      $message['send'] = FALSE;
-      return;
-    }
-    $message['headers']['Content-Type'] = SWIFTMAILER_FORMAT_HTML;
-
+  if ($message['module'] === 'message_notify' && $message['key'] === 'announcement') {
     /** @var \Drupal\joinup_group\Entity\AnnouncementInterface $announcement */
     $announcement = $message['params']['message_entity'];
-    // Add pre-computed arguments, which are common for all recipients.
-    foreach ($announcement->getArguments() as $key => $value) {
-      $key = str_replace(':', '_', ltrim($key, '@'));
-      $message[$key] = $value;
-    }
+    $arguments = $announcement->getArguments();
+    $message += array_combine(array_map(function (string $key): string {
+      return ltrim($key, '@');
+    }, array_keys($arguments)), $arguments);
   }
 }

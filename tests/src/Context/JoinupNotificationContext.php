@@ -528,7 +528,7 @@ class JoinupNotificationContext extends RawDrupalContext {
     $mail = $this->getEmailsBySubjectAndMail($subject, $recipient)[0];
     $body = (string) $mail['body'];
     $crawler = new Crawler($body);
-    $link = $crawler->filterXPath("//a[text()='$link_text']");
+    $link = $crawler->filterXPath('//a[text()="' . $link_text . '"]');
     $this->visitPath($link->getNode(0)->attributes['href']->nodeValue);
   }
 
