@@ -58,3 +58,27 @@ Feature: Editing collections
     When I fill in "Video URL" with "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
     And I press "Save" in the "Modal buttons" region
     Then the modal should be closed
+
+  @terms @javascript
+  Scenario: Regression test wysiwyg add file shows a 0 bytes limit.
+    # Regression test for ticket ISAICP-7177.
+    Given the following owner:
+      | name                       | type                    |
+      | Regression wysiwyg example | Non-Profit Organisation |
+    And the following contact:
+      | name  | bytes editorial             |
+      | email | bytes.editorial@example.com |
+    And collections:
+      | title           | logo     | banner     | abstract                                   | access url                             | closed | creation date    | description                    | content creation         | moderation | topic             | owner                      | contact information  | state |
+      | Rhyme Land wysiwyg Eels | logo.png | banner.jpg | Read up on all about <strong>dogs</strong> | http://dogtime.com/dog-breeds/profiles | yes    | 28-01-1995 12:05 | Hound is elegance personified. | facilitators and authors | yes        | Supplier exchange | Regression wysiwyg example | bytes editorial      | draft |
+    When I am logged in as a facilitator of the "Rhyme Land wysiwyg Eels" collection
+    And I go to the homepage of the "Rhyme Land wysiwyg Eels" collection
+
+    When I open the header local tasks menu
+    And I click "Edit" in the "Entity actions" region
+    And I press the button "File" in the "Description" wysiwyg editor
+    Then a modal should open
+    And I should not see the text "0 bytes limit"
+    When I attach the file "empty_pdf.pdf" to "File"
+    And I press "Save" in the "Modal buttons" region
+    Then the modal should be closed
