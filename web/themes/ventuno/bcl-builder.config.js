@@ -161,6 +161,15 @@ module.exports = {
       },
     },
     {
+      entry: path.resolve(outputFolder, "src/scss/licence-comparer.scss"),
+      dest: path.resolve(outputFolder, "assets/css/licence-comparer.min.css"),
+      options: {
+        includePaths,
+        minify: true,
+        sourceMap: "file",
+      },
+    },
+    {
       entry: path.resolve(outputFolder, "src/scss/licence-filter.scss"),
       dest: path.resolve(outputFolder, "assets/css/licence-filter.min.css"),
       options: {

@@ -9,48 +9,48 @@
   }
   &__sidebar-header {
     &.licence-filter--can {
-      background-color: $green !important;
+      background-color: $jla--can !important;
       color: $white;
     }
     &.licence-filter--must {
-      background-color: $gray-700 !important;
+      background-color: $jla--must !important;
       color: $white;
     }
     &.licence-filter--cannot {
-      background-color: $red !important;
+      background-color: $jla--cannot !important;
       color: $white;
     }
     &.licence-filter--compatible {
-      background-color: $indigo !important;
+      background-color: $jla--compatible !important;
       color: $white;
     }
     &.licence-filter--law {
-      background-color: darken($orange, 17%) !important; // Increase contrast to pass a11y tests
+      background-color: $jla--law !important; // Increase contrast to pass a11y tests
       color: $white;
     }
     &.licence-filter--support {
-      background-color: $brand-darker !important;
+      background-color: $jla--support !important;
       color: $white;
     }
   }
   &__sidebar-cell {
     &.licence-filter--can {
-      background-color: rgba($green, .1);
+      background-color: rgba($jla--can, .1);
     }
     &.licence-filter--must {
-      background-color: rgba($gray-700, .1);
+      background-color: rgba($jla--must, .1);
     }
     &.licence-filter--cannot {
-      background-color: rgba($red, .1);
+      background-color: rgba($jla--cannot, .1);
     }
     &.licence-filter--compatible {
-      background-color: rgba($indigo, .1);
+      background-color: rgba($jla--compatible, .1);
     }
     &.licence-filter--law {
-      background-color: rgba($orange, .1);
+      background-color: rgba($jla--law, .1);
     }
     &.licence-filter--support {
-      background-color: rgba($brand-darker, .1);
+      background-color: rgba($jla--support, .1);
     }
   }
   &__header {
