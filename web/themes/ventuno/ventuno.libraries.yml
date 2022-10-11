@@ -209,12 +209,6 @@ shared-entity:
   dependencies:
     - core/drupalSettings
 
-shared-entity:
-  js:
-    assets/js/shared-entity.js: { minified: true, attributes: { defer: true } }
-  dependencies:
-    - core/drupalSettings
-
 site-alerts-messages:
   css:
     theme:
