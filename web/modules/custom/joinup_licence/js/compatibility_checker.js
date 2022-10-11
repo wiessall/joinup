@@ -32,7 +32,7 @@
         // the "Compare" buttons. The 'data-joinup-licence-compare' attribute which is set
         // to [], is the attribute that stores the licences set-up for comparison.
         document
-          .querySelectorAll(".licence-tile .form-check-input")
+          .querySelectorAll(".licence-tile .form-check-input[type='radio']")
           .forEach((el) => {
             el.checked = false;
           });
@@ -43,7 +43,7 @@
 
       function initCompatibleRadios() {
         const radios = document.querySelectorAll(
-          ".jla--compatibility .form-check-input"
+          ".jla--compatibility .form-check-input[type='radio']"
         );
         radios.forEach((element) => {
           // Uncheck radios on page load.
