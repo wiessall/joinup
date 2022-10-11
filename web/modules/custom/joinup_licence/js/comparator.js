@@ -9,7 +9,7 @@
       // Disable or enable all compare checkboxes.
       function disableCheckboxes(state) {
         document
-          .querySelectorAll(".licence-tile .form-check-input")
+          .querySelectorAll(".licence-tile .form-check-input[type='checkbox']")
           .forEach((element) => {
             if (!element.checked) {
               element.disabled = state;
@@ -47,7 +47,7 @@
         const licenceListing = document.querySelector(".listing--licences");
         let licenceName = "";
         document
-          .querySelectorAll(".licence-tile .form-check-input")
+          .querySelectorAll(".licence-tile .form-check-input[type='checkbox']")
           .forEach((element) => {
             if (element.checked) {
               licenceName = element.getAttribute("data-joinup-licence-name");
@@ -75,7 +75,7 @@
         // the "Compare" buttons. The 'data-joinup-licence-compare' attribute which is set
         // to [], is the attribute that stores the licences set-up for comparison.
         document
-          .querySelectorAll(".licence-tile .form-check-input")
+          .querySelectorAll(".licence-tile .form-check-input[type='checkbox']")
           .forEach((el) => {
             el.disabled = true;
           });
@@ -87,7 +87,7 @@
 
       // Change compare elements if the checkbox is clicked.
       document
-        .querySelectorAll(".licence-tile .form-check-input")
+        .querySelectorAll(".licence-tile .form-check-input[type='checkbox']")
         .forEach((element) => {
           element.addEventListener("click", (e) => {
             const licenceListing = document.querySelector(".listing--licences");
