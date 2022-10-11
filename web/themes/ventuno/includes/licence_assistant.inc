@@ -48,7 +48,7 @@ function ventuno_preprocess_rdf_entity__licence__jla(&$variables) {
  * Provides variables needed for the search_list_item view mode of licences.
  * This is used on the Joinup Licence Assistant overview page.
  */
-function ventuno_preprocess_rdf_entity__view_mode_search_list_item(&$variables) {
+function ventuno_preprocess_rdf_entity__licence__view_mode_search_list_item(&$variables) {
   ventuno_preprocess_rdf_entity__licence__jla($variables);
 
   /** @var \Drupal\joinup_licence\Entity\LicenceInterface $entity */
