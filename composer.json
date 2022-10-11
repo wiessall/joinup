@@ -198,6 +198,7 @@
     },
     "scripts": {
         "post-install-cmd": [
+            "composer validate --no-check-all --no-check-publish",
             "./scripts/composer/composer.php install"
         ],
         "post-update-cmd": [
