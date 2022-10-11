@@ -3066,42 +3066,4 @@ class JoinupContext extends RawDrupalContext {
     }
   }
 
-  /**
-   * Shows label in the middle of the screen.
-   *
-   * In the latest version of Selenium in docker, moving to a button element
-   * might throw this exception while label is visible.
-   * This might be due to attempting to find label too fast.
-   *
-   * @param string $label
-   *   The label of field.
-   *
-   * @throws \Exception
-   *    Thrown when an expected scroll in to view failed.
-   *
-   * @Given I scroll :label into view
-   */
-  public function scrollLabelIntoView(string $label): void {
-    $page = $this->getSession()->getPage();
-    $element = $page->find('xpath', "//*[contains(text(),'{$label}')]");
-    $xpath = $element->getXpath();
-    $function = <<<JS
-  (
-      function(){
-        setTimeout(() => {
-          let elem = document.evaluate("$xpath", document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
-          elem.scrollIntoView({ behavior: 'instant', block: 'center' });
-        }, 300);
-      }
-  )()
-  JS;
-    try {
-      $this->getSession()->executeScript($function);
-      sleep(1);
-    }
-    catch (\Exception $e) {
-      throw new \Exception("Scroll element into view failed");
-    }
-  }
-
 }
