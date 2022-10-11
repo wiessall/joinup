@@ -446,18 +446,19 @@ class JoinupSearchContext extends RawDrupalContext {
    */
   public function iShouldSeeTheSuggestions(TableNode $table): void {
     $session = $this->getSession();
-    $xpath = '//ul[contains(concat(" ", normalize-space(@class), " "), "search-api-autocomplete-search")]//li';
-    $session->getPage()->waitFor(5, function () use ($session, $xpath, $table): bool {
-      $element = $this->getSearchBarElement();
-      $session->getDriver()->keyDown($element->getXpath(), '', NULL);
-      $allResults = $session->getPage()->findAll('xpath', $xpath);
-      $found = array_map(function ($item) {
-        /** @var \Behat\Mink\Element\NodeElement $item */
-        return $item->getText();
-      }, $allResults);
-
-      return $table->getColumn(0) === $found;
-    });
+    $element = $this->getSearchBarElement();
+    $session->getDriver()->keyDown($element->getXpath(), '', NULL);
+    $session->wait(1000);
+    $allResults = $this->getSession()->getPage()->findAll('css', 'ul.ui-autocomplete a');
+    $found = array_map(function ($item) {
+      /** @var \Behat\Mink\Element\NodeElement $item */
+      return $item->getText();
+    }, $allResults);
+    $missing_suggestions = array_diff($table->getColumn(0), $found);
+    if (!empty($missing_suggestions)) {
+      $missing_suggestions = implode(', ', $missing_suggestions);
+      throw new \RuntimeException("The expected suggestions '$missing_suggestions' were not found in autocomplete.");
+    }
   }
 
   /**
@@ -481,7 +482,7 @@ class JoinupSearchContext extends RawDrupalContext {
     $element->setValue($keywords);
 
     $session->getDriver()->keyDown($element->getXpath(), '', NULL);
-    $session->wait(500);
+    $session->wait(1000);
     $allResults = $session->getPage()->findAll('css', '.ui-autocomplete a');
 
     $found = array_map(function ($item) {
