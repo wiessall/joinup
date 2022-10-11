@@ -1,7 +1,7 @@
 # Toolkit overrides.
 
 toolkit:
-  project_id: joinup
+  project_id: digit-joinup
   tmp_folder: ${joinup.dir}/tmp
   clone:
     asda_url: ${env.ASDA_URL}
