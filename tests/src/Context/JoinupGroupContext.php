@@ -9,7 +9,9 @@ use Behat\Mink\Exception\ElementNotFoundException;
 use Drupal\Core\Url;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\joinup\Traits\EntityTrait;
+use Drupal\joinup\Traits\MailCollectorTrait;
 use Drupal\joinup\Traits\TestingEntitiesTrait;
+use Drupal\joinup_group\Entity\AnnouncementInterface;
 use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\og\OgGroupAudienceHelperInterface;
 use Drupal\og\OgMembershipInterface;
@@ -22,6 +24,7 @@ use PHPUnit\Framework\ExpectationFailedException;
 class JoinupGroupContext extends RawDrupalContext {
 
   use EntityTrait;
+  use MailCollectorTrait;
   use TestingEntitiesTrait;
 
   /**
@@ -189,29 +192,6 @@ class JoinupGroupContext extends RawDrupalContext {
   }
 
   /**
-   * Clicks a link in a table.
-   *
-   * @param string $link
-   *   The text of the link.
-   * @param string $text
-   *   The text in row.
-   *
-   * @throws \Behat\Mink\Exception\ElementNotFoundException
-   *   The row is missing from table.
-   *
-   * @Given I click :link on the row containing :text
-   */
-  public function iClickOnOnTheRowContaining(string $link, string $text): void {
-    /** @var \Behat\Mink\Element\NodeElement $row */
-    $row = $this->getSession()->getPage()->find('css', sprintf('table tr:contains("%s")', $text));
-    if (!$row) {
-      throw new \Exception(sprintf('Cannot find any row on the page containing the text "%s"', $text));
-    }
-
-    $row->clickLink($link);
-  }
-
-  /**
    * Navigates to the announcements page of a given group.
    *
    * @param string $group_label
@@ -244,19 +224,11 @@ class JoinupGroupContext extends RawDrupalContext {
    */
   public function visitAnnouncementEditForm(string $subject, string $group_label, string $group_type): void {
     assert(in_array($group_type, ['collection', 'solution']));
-    $storage = \Drupal::entityTypeManager()->getStorage('message');
-    $mids = $storage->getQuery()->accessCheck(FALSE)
-      ->condition('template', 'announcement')
-      ->condition('subject', $subject)
-      ->execute();
-    if (!$mids) {
-      throw new \InvalidArgumentException("There's no announcement with the '$subject' subject");
-    }
-    $mid = reset($mids);
+    $announcement = $this->getAnnouncementBySubject($subject);
     $group = $this->getEntityByLabel('rdf_entity', $group_label, $group_type);
     $url = Url::fromRoute('entity.rdf_entity.announcement_edit', [
       'rdf_entity' => $group->id(),
-      'announcement' => $mid,
+      'announcement' => $announcement->id(),
     ])->toString();
     $this->visitPath($url);
   }
@@ -270,15 +242,7 @@ class JoinupGroupContext extends RawDrupalContext {
    * @Then I delete the :subject announcement
    */
   public function deleteAnnouncement(string $subject): void {
-    $storage = \Drupal::entityTypeManager()->getStorage('message');
-    $mids = $storage->getQuery()->accessCheck(FALSE)
-      ->condition('template', 'announcement')
-      ->condition('subject', $subject)
-      ->execute();
-    if (!$mids) {
-      throw new \InvalidArgumentException("There's no announcement with the '$subject' subject");
-    }
-    $storage->load(reset($mids))->delete();
+    $this->getAnnouncementBySubject($subject)->delete();
   }
 
   /**
@@ -331,7 +295,8 @@ class JoinupGroupContext extends RawDrupalContext {
           if (!$group instanceof GroupInterface) {
             throw new \InvalidArgumentException("'$value' should be either a collection or a solution");
           }
-          $values['group_reference'] = $group;
+          $values['group'] = $group;
+          continue;
         }
         elseif ($key === 'author') {
           if (!$account = user_load_by_name($value)) {
@@ -347,6 +312,81 @@ class JoinupGroupContext extends RawDrupalContext {
       $announcement->save();
       $this->entities['message'][$announcement->id()] = $announcement;
     }
+  }
+
+  /**
+   * Runs a delivery queue (send_group_announcements) for a given announcement.
+   *
+   * @param string $subject
+   *   The announcement subject.
+   *
+   * @Given the delivery queue of :subject announcement is processed
+   */
+  public function runDeliveryQueueForAnnouncement(string $subject): void {
+    $announcement_id = (int) $this->getAnnouncementBySubject($subject)->id();
+    /** @var \Drupal\Core\Queue\QueueWorkerManagerInterface $queue_worker_manager */
+    $queue_worker_manager = \Drupal::service('plugin.manager.queue_worker');
+    $queue = \Drupal::queue('send_group_announcements');
+    /** @var \Drupal\Core\Queue\QueueWorkerInterface $worker */
+    $worker = $queue_worker_manager->createInstance('send_group_announcements');
+    while ($item = $queue->claimItem()) {
+      if ($item->data['announcement'] === $announcement_id) {
+        $worker->processItem($item->data);
+        $queue->deleteItem($item);
+      }
+    }
+  }
+
+  /**
+   * Asserts that an announcement has been delivered to all group members.
+   *
+   * @param string $subject
+   *   The announcement subject.
+   *
+   * @throws \Drupal\joinup_group\Exception\MissingGroupException
+   *   When the announcement is missing the group.
+   *
+   * @Then the :subject announcement should have been delivered for each group member
+   */
+  public function assertDeliveredAnnouncements(string $subject): void {
+    $announcement = $this->getAnnouncementBySubject($subject);
+    $body = $announcement->getBody();
+    $offset = 0;
+    $limit = 250;
+    $group = $announcement->getGroup();
+    while ($member_emails = $group->getAnnouncementRecipients($offset, $limit)) {
+      foreach ($member_emails as $member_email) {
+        $emails = $this->getEmailsBySubjectAndMail($announcement->getSubject(), $member_email);
+        $email = reset($emails);
+        Assert::assertSame($member_email, $email['to']);
+        Assert::assertSame($subject, $email['subject']);
+        Assert::assertStringContainsString($body, (string) $email['body']);
+        $offset += $limit;
+      }
+    }
+  }
+
+  /**
+   * Returns an announcement entity given its subject.
+   *
+   * @param string $subject
+   *   The announcement subject.
+   *
+   * @return \Drupal\joinup_group\Entity\AnnouncementInterface
+   *   The announcement entity.
+   */
+  protected function getAnnouncementBySubject(string $subject): AnnouncementInterface {
+    $storage = \Drupal::entityTypeManager()->getStorage('message');
+    $mids = $storage->getQuery()->accessCheck(FALSE)
+      ->condition('template', 'announcement')
+      ->condition('subject', $subject)
+      ->execute();
+    if (!$mids) {
+      throw new \InvalidArgumentException("There's no announcement with the '$subject' subject");
+    }
+    /** @var \Drupal\joinup_group\Entity\AnnouncementInterface $announcement */
+    $announcement = $storage->load(reset($mids));
+    return $announcement;
   }
 
 }

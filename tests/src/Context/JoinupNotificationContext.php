@@ -14,6 +14,7 @@ use Drupal\joinup\Traits\UserTrait;
 use Drupal\joinup\Traits\UtilityTrait;
 use Drupal\message\Entity\MessageTemplate;
 use PHPUnit\Framework\Assert;
+use Symfony\Component\DomCrawler\Crawler;
 
 /**
  * Behat step definitions for testing notifications.
@@ -487,6 +488,48 @@ class JoinupNotificationContext extends RawDrupalContext {
     $no_mail_message = "No email with '$subject' subject was sent to $recipient";
     $no_match_message = "The email sent to $recipient did not contain a link.";
     $this->assertMailLinkMatchingPattern('!https?://[^\s].*!', $recipient, $no_mail_message, $no_match_message, NULL);
+  }
+
+  /**
+   * Asserts that no email has been sent to a given recipient.
+   *
+   * @param string $username_or_email
+   *   A valid user name or a valid email.
+   *
+   * @Then no email has been sent to :username_or_email
+   */
+  public function noEmailSentToRecipient(string $username_or_email): void {
+    if ($account = user_load_by_name($username_or_email)) {
+      /** @var \Drupal\user\UserInterface $account */
+      $recipient = $account->getEmail();
+    }
+    elseif (\Drupal::service('email.validator')->isValid($username_or_email)) {
+      $recipient = $username_or_email;
+    }
+    else {
+      throw new \InvalidArgumentException("Invalid '$username_or_email' value passed. Should be either a valid username or a vaid email address.");
+    }
+    Assert::assertEmpty($this->getMails(['to' => $recipient]));
+  }
+
+  /**
+   * Clicks on link given its text in an HTML email.
+   *
+   * @param string $link_text
+   *   The link text.
+   * @param string $recipient
+   *   The recipient's email.
+   * @param string $subject
+   *   The email subject.
+   *
+   * @When I click the :link_text link in the email sent to :recipent having the subject :subject
+   */
+  public function clickLinkInHtmlMail(string $link_text, string $recipient, string $subject): void {
+    $mail = $this->getEmailsBySubjectAndMail($subject, $recipient)[0];
+    $body = (string) $mail['body'];
+    $crawler = new Crawler($body);
+    $link = $crawler->filterXPath('//a[text()="' . $link_text . '"]');
+    $this->visitPath($link->getNode(0)->attributes['href']->nodeValue);
   }
 
 }

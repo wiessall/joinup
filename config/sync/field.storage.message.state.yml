@@ -8,7 +8,7 @@ dependencies:
     - state_machine
 third_party_settings:
   field_permissions:
-    permission_type: custom
+    permission_type: public
 id: message.state
 field_name: state
 entity_type: message

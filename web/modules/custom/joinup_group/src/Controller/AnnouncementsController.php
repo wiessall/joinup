@@ -86,8 +86,9 @@ class AnnouncementsController extends ControllerBase {
     if (!$announcement) {
       $announcement = $this->entityTypeManager()->getStorage('message')->create([
         'template' => 'announcement',
-        'group_reference' => $rdf_entity,
+        'group' => $rdf_entity,
         'state' => 'draft',
+        'uid' => $this->currentUser()->id(),
       ]);
     }
     elseif ($announcement->getGroupId() != $rdf_entity->id()) {

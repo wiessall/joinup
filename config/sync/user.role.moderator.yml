@@ -139,7 +139,6 @@ permissions:
   - 'edit own field_is_eif_recommendation'
   - 'edit owner rdf entity'
   - 'edit short id after publication'
-  - 'edit state'
   - 'execute developers_italia pipeline'
   - 'execute dpsi pipeline'
   - 'execute eu_sic pipeline'
@@ -302,5 +301,4 @@ permissions:
   - 'view own field_is_eif_recommendation'
   - 'view rdf entity overview'
   - 'view rdf_entity draft graph'
-  - 'view state'
   - 'view unpublished rdf entity'

@@ -41,6 +41,7 @@ Feature: User authentication
       | admin/structure/compatibility-document/display      |
       | admin/structure/compatibility-document/form-display |
       | admin/structure/media                               |
+      | announcements                                       |
       | dashboard                                           |
       | licence                                             |
       | licence/add                                         |
@@ -122,6 +123,7 @@ Feature: User authentication
       | admin/structure/compatibility-document/display      |
       | admin/structure/compatibility-document/form-display |
       | admin/structure/media                               |
+      | announcements                                       |
       | dashboard                                           |
       | licence                                             |
       | licence/add                                         |
@@ -183,6 +185,7 @@ Feature: User authentication
       | admin/reporting/solutions-by-type           |
       | admin/reporting/subscribers-report          |
       | admin/structure/compatibility-document      |
+      | announcements                                       |
       | dashboard                                   |
       | licence                                     |
       | licence/add                                 |

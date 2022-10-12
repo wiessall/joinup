@@ -5,8 +5,7 @@ dependencies:
   config:
     - core.entity_view_mode.message.mail_body
     - field.field.message.announcement.body
-    - field.field.message.announcement.group_reference
-    - field.field.message.announcement.recipients
+    - field.field.message.announcement.group
     - field.field.message.announcement.state
     - field.field.message.announcement.subject
     - message.template.announcement
@@ -21,20 +20,14 @@ targetEntityType: message
 bundle: announcement
 mode: mail_body
 content:
-  body:
-    type: basic_string
-    label: hidden
+  partial_0:
     settings: {  }
     third_party_settings: {  }
     weight: 0
     region: content
-  partial_1:
-    weight: 0
-    region: content
 hidden:
-  group_reference: true
-  partial_0: true
-  recipients: true
+  body: true
+  group: true
   search_api_excerpt: true
   state: true
   subject: true
