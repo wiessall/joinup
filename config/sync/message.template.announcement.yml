@@ -5,7 +5,10 @@ dependencies: {  }
 template: announcement
 label: Announcement
 description: 'Messaging group announcements.'
-text: {  }
+text:
+  -
+    value: ''
+    format: minimal
 settings:
   'token options':
     clear: false

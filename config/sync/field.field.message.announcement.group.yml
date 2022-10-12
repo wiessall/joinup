@@ -3,15 +3,15 @@ langcode: en
 status: true
 dependencies:
   config:
-    - field.storage.message.group_reference
+    - field.storage.message.group
     - message.template.announcement
     - rdf_entity.rdfentity.collection
     - rdf_entity.rdfentity.solution
-id: message.announcement.group_reference
-field_name: group_reference
+id: message.announcement.group
+field_name: group
 entity_type: message
 bundle: announcement
-label: 'Group reference'
+label: Group
 description: ''
 required: false
 translatable: false

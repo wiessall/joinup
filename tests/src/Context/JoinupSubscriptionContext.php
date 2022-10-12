@@ -18,6 +18,7 @@ use Drupal\joinup\Traits\TraversingTrait;
 use Drupal\joinup\Traits\UserTrait;
 use Drupal\joinup\Traits\UtilityTrait;
 use Drupal\joinup_community_content\CommunityContentHelper;
+use Drupal\joinup_group\JoinupGroupHelper;
 use Drupal\joinup_subscription\Entity\GroupContentSubscriptionMessageInterface;
 use Drupal\joinup_subscription\JoinupDiscussionSubscriptionInterface;
 use Drupal\joinup_subscription\JoinupSubscriptionsHelper;
@@ -422,7 +423,7 @@ class JoinupSubscriptionContext extends RawDrupalContext {
   }
 
   /**
-   * Checks that the current user is not subscribed to the given group.
+   * Checks that the current user is not subscribed to any group bundle.
    *
    * @param string $label
    *   The name of the group the user should not be subscribed to.
@@ -432,7 +433,7 @@ class JoinupSubscriptionContext extends RawDrupalContext {
    * @throws \Exception
    *   Thrown when the user is not a member of the given group.
    *
-   * @Then I should not be subscribed to the :label :bundle
+   * @Then I should not be subscribed to any bundle from the :label :bundle
    */
   public function assertNoGroupContentSubscriptions(string $label, string $bundle): void {
     $user = $this->getUserManager()->getCurrentUser();
@@ -440,7 +441,6 @@ class JoinupSubscriptionContext extends RawDrupalContext {
     $group = $this->getEntityByLabel('rdf_entity', $label, $bundle);
     $membership = $this->getMembershipByGroupAndUser($group, $account, OgMembershipInterface::ALL_STATES);
     Assert::assertEmpty($membership->get('subscription_bundles')->getValue());
-    Assert::assertFalse((bool) $membership->get('announcements')->value);
   }
 
   /**
@@ -710,15 +710,124 @@ class JoinupSubscriptionContext extends RawDrupalContext {
    * @Given all active memberships with accepted terms have active announcements
    */
   public function assertAnnouncementsInMemberships(): void {
-    $query = <<<SQL
-SELECT COUNT(*) FROM {og_membership} og
-WHERE og.announcements = 0
-    AND og.state = 'active'
-    AND og.uid IN (SELECT DISTINCT(a.uid) FROM {entity_legal_document_acceptance} a)
-SQL;
+    $count = \Drupal::database()->select('og_membership')
+      ->condition('type', OgMembershipInterface::TYPE_DEFAULT)
+      ->condition('entity_type', 'rdf_entity')
+      ->condition('entity_bundle', JoinupGroupHelper::GROUP_BUNDLES, 'IN')
+      ->condition('announcements', 1, '<>')
+      ->countQuery()
+      ->execute()
+      ->fetchField();
+    Assert::assertEquals(0, $count);
+  }
 
-    $actual = \Drupal::database()->query($query)->fetchField();
-    Assert::assertEquals(0, $actual);
+  /**
+   * Subscribes a user to a given group announcements.
+   *
+   * @param string $username
+   *   The user name.
+   * @param string $group_label
+   *   The group label.
+   * @param string $group_type
+   *   The group type (collection/solution).
+   *
+   * @When the :username user subscribes to :group_label :group_type announcements
+   */
+  public function subscribeToGroupAnnouncements(string $username, string $group_label, string $group_type): void {
+    assert(isset(JoinupGroupHelper::GROUP_BUNDLES[$group_type]));
+    /** @var \Drupal\user\UserInterface $account */
+    if (!$account = user_load_by_name($username)) {
+      throw new \InvalidArgumentException("Invalid user name: $username");
+    }
+    /** @var \Drupal\joinup_group\Entity\GroupInterface $group */
+    $group = $this->getEntityByLabel('rdf_entity', $group_label, $group_type);
+    $this->getMembershipByGroupAndUser($group, $account)->set('announcements', TRUE)->save();
+  }
+
+  /**
+   * Unsubscribes a user from a given group announcements.
+   *
+   * @param string $username
+   *   The user name.
+   * @param string $group_label
+   *   The group label.
+   * @param string $group_type
+   *   The group type (collection/solution).
+   *
+   * @When the :username user unsubscribes from :group_label :group_type announcements
+   */
+  public function unsubscribeFromGroupAnnouncements(string $username, string $group_label, string $group_type): void {
+    assert(isset(JoinupGroupHelper::GROUP_BUNDLES[$group_type]));
+    /** @var \Drupal\user\UserInterface $account */
+    if (!$account = user_load_by_name($username)) {
+      throw new \InvalidArgumentException("Invalid user name: $username");
+    }
+    /** @var \Drupal\joinup_group\Entity\GroupInterface $group */
+    $group = $this->getEntityByLabel('rdf_entity', $group_label, $group_type);
+    $this->getMembershipByGroupAndUser($group, $account)->set('announcements', FALSE)->save();
+  }
+
+  /**
+   * Visits the 'unsubscribe from group' confirmation form.
+   *
+   * @param string $group_label
+   *   The label of the group to unsubscribe from.
+   * @param string $group_type
+   *   One of 'collection' or 'solution'.
+   * @param string|null $types
+   *   If passed, it's the route parameter that allows to filter the types of
+   *   content from which to unsubscribe. This is mostly used o test invalid URL
+   *   route parameters.
+   * @param \Behat\Gherkin\Node\TableNode|null $table
+   *   A one-column table with the types of content from which to unsubscribe.
+   *   Allowed values: Solution, Discussion, Document, Event, News,
+   *   Announcements.
+   *
+   * @throws \Exception
+   *   When a wrong type has been passed in the table.
+   *
+   * @When I visit the unsubscribe from :group_label :group_type form
+   * @When I visit the unsubscribe from :group_label :group_type form by content types:
+   * @When I visit the unsubscribe from :group_label :group_type form with :types route parameter
+   */
+  public function unsubscribeFromGroup(string $group_label, string $group_type, ?string $types = NULL, ?TableNode $table = NULL): void {
+    assert(isset(JoinupGroupHelper::GROUP_BUNDLES[$group_type]));
+    $group = $this->getEntityByLabel('rdf_entity', $group_label, $group_type);
+    $url = Url::fromRoute('joinup_subscription.unsubscribe', [
+      'user' => $this->userManager->getCurrentUser()->uid,
+      'group' => $group->id(),
+    ]);
+
+    if ($table === NULL) {
+      if ($types === NULL) {
+        $this->visitPath($url->toString());
+      }
+      else {
+        // This options it's used to test invalid URLs, that's why we pass the
+        // 'types' route parameter without doing any check.
+        $this->visitPath($url->setRouteParameter('types', $types)->toString());
+      }
+      return;
+    }
+
+    $map = [
+      'Solution' => 'rdf_entity:solution',
+      'Discussion' => 'node:discussion',
+      'Document' => 'node:document',
+      'Event' => 'node:event',
+      'News' => 'node:news',
+      'Announcements' => 'announcements',
+    ];
+
+    $types = [];
+    foreach ($table->getColumn(0) as $type) {
+      if (!isset($map[$type])) {
+        throw new \Exception("The '$type' bundle is invalid");
+      }
+      $types[] = $map[$type];
+    }
+
+    $this->visitPath($url->setRouteParameter('types', implode(',', $types))->toString());
   }
 
 }

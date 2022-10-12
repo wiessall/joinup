@@ -5,6 +5,7 @@ declare(strict_types = 1);
 namespace Drupal\joinup_group\Entity;
 
 use Drupal\Core\Access\AccessResultInterface;
+use Drupal\Core\Database\Query\SelectInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\joinup_core\Entity\OutdatedContentTrait;
 use Drupal\og\Entity\OgRole;
@@ -199,21 +200,61 @@ trait GroupTrait {
   /**
    * {@inheritdoc}
    */
-  public function getMembers(array $states = [OgMembershipInterface::STATE_ACTIVE]): ?array {
-    $ids = $this->getMembershipManager()->getGroupMembershipIdsByRoleNames($this, [OgRoleInterface::AUTHENTICATED], $states);
-
-    if (empty($ids)) {
+  public function getMembers(int $offset = 0, ?int $limit = NULL, array $roles = [OgRoleInterface::AUTHENTICATED], array $states = [OgMembershipInterface::STATE_ACTIVE]): array {
+    $og_membership_ids = $this->getMembershipManager()->getGroupMembershipIdsByRoleNames($this, $roles, $states);
+    if (empty($og_membership_ids)) {
       return [];
     }
-    $entity_type_manager = \Drupal::entityTypeManager();
-    $users = [];
-    $og_users = $entity_type_manager->getStorage('og_membership')->loadMultiple($ids);
-    $user_storage = $entity_type_manager->getStorage('user');
-    foreach ($og_users as $user) {
-      $users[] = $user_storage->load($user->uid->target_id);
-    }
+    sort($og_membership_ids);
+    $og_membership_ids = $limit === NULL ? array_splice($og_membership_ids, $offset) : array_splice($og_membership_ids, $offset, $limit);
 
-    return $users;
+    $entity_type_manager = \Drupal::entityTypeManager();
+    $uids = array_values(array_map(function (OgMembershipInterface $membership): int {
+      return (int) $membership->getOwnerId();
+    }, $entity_type_manager->getStorage('og_membership')->loadMultiple($og_membership_ids)));
+    sort($uids);
+    return $entity_type_manager->getStorage('user')->loadMultiple($uids);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getAnnouncementRecipients(int $offset, int $limit): array {
+    return $this->getAnnouncementRecipientsQuery()
+      ->range($offset, $limit)
+      ->execute()
+      ->fetchCol();
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getAnnouncementRecipientsCount(): int {
+    return (int) $this->getAnnouncementRecipientsQuery()
+      ->countQuery()
+      ->execute()
+      ->fetchField();
+  }
+
+  /**
+   * Provides a helper function preparing a query.
+   *
+   * @return \Drupal\Core\Database\Query\SelectInterface
+   *   The database query.
+   */
+  protected function getAnnouncementRecipientsQuery(): SelectInterface {
+    $query = \Drupal::database()->select('og_membership', 'og');
+    $query->join('users_field_data', 'u', 'og.uid = u.uid');
+    // Only users which accepted the 'Legal notice' are receiving announcements.
+    $query->join('entity_legal_document_acceptance', 'a', 'og.uid = a.uid');
+    return $query->condition('og.entity_type', 'rdf_entity')
+      ->fields('u', ['mail'])
+      ->condition('og.entity_bundle', $this->bundle())
+      ->condition('og.entity_id', $this->id())
+      ->condition('og.state', OgMembershipInterface::STATE_ACTIVE)
+      ->condition('og.announcements', 1)
+      ->condition('u.status', 1)
+      ->orderBy('og.uid');
   }
 
   /**
