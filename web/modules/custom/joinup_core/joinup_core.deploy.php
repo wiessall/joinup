@@ -15,13 +15,14 @@
 declare(strict_types = 1);
 
 use Drupal\Core\Url;
+use Drupal\eupl\Eupl;
 
 /**
  * Create a Link to Compatibility Documents from the solution's left-side menu.
  */
 function joinup_core_deploy_0108601(array &$sandbox): void {
   $og_menus = \Drupal::entityTypeManager()->getStorage('ogmenu_instance')->loadByProperties([
-    'og_audience' => 'http://data.europa.eu/w21/0b18c781-6c88-41ad-b986-63a184693725',
+    'og_audience' => Eupl::JLA_SOLUTION,
   ]);
   if ($og_menu = reset($og_menus)) {
     $menu_name = 'ogmenu-' . $og_menu->id();
