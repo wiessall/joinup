@@ -5,6 +5,7 @@ declare(strict_types = 1);
 namespace Drupal\custom_page\Controller;
 
 use Drupal\Component\Utility\Xss;
+use Drupal\Core\Cache\CacheableRedirectResponse;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\node\NodeInterface;
 use Drupal\og_menu\OgMenuInstanceInterface;
@@ -59,9 +60,11 @@ class CustomPageController {
    *   The file served as a response.
    */
   public function fileDownload(NodeInterface $node, int $delta): Response {
+    // Use a human version of the delta, i.e. 1-based instead of 0-based.
+    $delta--;
     if ($node->get('field_attachment')->get($delta) && $file = $node->get('field_attachment')->get($delta)->entity) {
-      $response = new BinaryFileResponse($file->getFileUri());
-      $response->setContentDisposition(ResponseHeaderBag::DISPOSITION_ATTACHMENT);
+      $response = new CacheableRedirectResponse($file->getFileUri());
+      $response->addCacheableDependency($node)->addCacheableDependency($file);
       return $response;
     }
     throw new NotFoundHttpException();
