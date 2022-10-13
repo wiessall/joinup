@@ -9,7 +9,3 @@ dependencies:
   - 'joinup:joinup_workflow'
   - 'joinup:workflow_state_permission'
   - 'state_machine:state_machine'
-
-config_devel:
-  install:
-    - owner.settings
