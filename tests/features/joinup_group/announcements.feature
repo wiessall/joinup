@@ -56,7 +56,8 @@ Feature: Messaging group announcements
     And I click "Add announcement"
     Then the following fields should be present "Subject,Body"
     And I should see the following lines of text:
-      | The following placeholders are available to be used in the message body: |
+      | Select dynamic placeholders for your announcement                                                                                                                                                  |
+      | Copy and paste, in the message body, one or more placeholder(s) (e.g. @recipient_name) and the corresponding shortcut link(s) will be displayed in the announcement email. Available placeholders: |
       | @group_landing_page - The <group> landing page URL                       |
       | @group_about_page - The <group> about page URL                           |
       | @group_members_page - The <group> members page URL                       |

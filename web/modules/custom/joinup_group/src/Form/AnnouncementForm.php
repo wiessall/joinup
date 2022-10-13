@@ -99,6 +99,14 @@ class AnnouncementForm extends FormBase {
 
     $arguments = $this->getArguments();
     $form['arguments'] = [
+      '#type' => 'details',
+      '#title' => $this->t('Select dynamic placeholders for your announcement'),
+      '#open' => FALSE,
+    ];
+    $form['arguments']['help'] = [
+      '#markup' => $this->t('Copy and paste, in the message body, one or more placeholder(s) (e.g. @recipient_name) and the corresponding shortcut link(s) will be displayed in the announcement email. Available placeholders:'),
+    ];
+    $form['arguments']['list'] = [
       '#theme' => 'item_list',
       '#items' => array_filter(array_map(function (string $token) use ($arguments): ?MarkupInterface {
         if (!isset($arguments[$token]['label'])) {
@@ -111,7 +119,6 @@ class AnnouncementForm extends FormBase {
           '@label' => $arguments[$token]['label'],
         ]);
       }, array_keys($arguments))),
-      '#title' => $this->t('The following placeholders are available to be used in the message body:'),
     ];
 
     $form['state'] = [
