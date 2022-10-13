@@ -281,15 +281,15 @@ class AnnouncementForm extends FormBase {
         'value' => $vars['@label'],
       ],
       '@group_landing_page' => [
-        'label' => $this->t('The @label landing page URL', $vars),
+        'label' => $this->t('will display the @label landing page URL', $vars),
         'value' => $group->toUrl()->setAbsolute()->toString(),
       ],
       '@group_about_page' => [
-        'label' => $this->t('The @label about page URL', $vars),
+        'label' => $this->t('will display the @label about page URL', $vars),
         'value' => $group->toUrl('about-page')->setAbsolute()->toString(),
       ],
       '@group_members_page' => [
-        'label' => $this->t('The @label members page URL', $vars),
+        'label' => $this->t('will display the @label members page URL', $vars),
         'value' => $group->toUrl('member-overview')->setAbsolute()->toString(),
       ],
       '@group_logo' => [
@@ -302,16 +302,16 @@ class AnnouncementForm extends FormBase {
         'value' => $sender->toUrl()->setAbsolute()->toString(),
       ],
       '@recipient_name' => [
-        'label' => $this->t("The recipient's full name"),
+        'label' => $this->t("will display the recipient's full name"),
       ],
       '@recipient_profile' => [
-        'label' => $this->t("The recipient's profile URL"),
+        'label' => $this->t("will display the recipient's profile URL"),
       ],
       '@recipient_profile_edit' => [
-        'label' => $this->t("The recipient's profile edit URL"),
+        'label' => $this->t("will display the recipient's profile edit URL"),
       ],
       '@recipient_subscriptions' => [
-        'label' => $this->t("The recipient's subscriptions page URL"),
+        'label' => $this->t("will display the recipient's subscriptions page URL"),
       ],
       '@recipient_unsubscribe' => [],
       '@delivery_time' => [
