@@ -122,11 +122,11 @@ class AnnouncementForm extends FormBase {
     ];
 
     $form['state'] = [
-      '#markup' => $this->announcement->isNew() ? $this->t("Announcement not saved yet") : $this->t("Announcement in @state state", [
-        '@state' => $this->announcement->getWorkflowStateInstance()->getLabel(),
-      ]),
-      '#prefix' => '<h3>',
-      '#suffix' => '</h3>',
+      '#type' => 'item',
+      '#title' => $this->t('Announcement state:'),
+      '#markup' => $this->announcement->isNew() ? $this->t('Not saved') : $this->announcement->getWorkflowStateInstance()->getLabel(),
+      '#prefix' => '<div class="container-inline">',
+      '#suffix' => '</div>',
     ];
 
     $form['actions'] = [
