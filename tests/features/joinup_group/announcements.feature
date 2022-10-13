@@ -71,7 +71,7 @@ Feature: Messaging group announcements
     And I should not see the button "Send"
     And I should not see the button "Reject"
     And I should not see the button "Undo reject"
-    And I should not see the button "Test"
+    And I should not see the button "Preview"
     And I fill in "Subject" with "The Big Opening"
     And I fill in "Body" with "Lorem Ipsum is simply dummy text of the printing and typesetting industry."
 
@@ -81,7 +81,7 @@ Feature: Messaging group announcements
     And the "Body" field should contain "Lorem Ipsum is simply dummy text of the printing and typesetting industry."
     And I should see "Announcement in Draft state"
     And I should see the button "Send"
-    And I should see the button "Test"
+    And I should see the button "Preview"
     But I should not see the button "Approve"
     And I should not see the button "Reject"
     And I should not see the button "Create"
@@ -104,7 +104,7 @@ Feature: Messaging group announcements
     Then I should see the success message "The announcement has been updated but it's still in Draft state. Review the announcement and, when is ready to be sent, use the 'Send' button."
     And I should see "Announcement in Draft state"
 
-    When I press "Test"
+    When I press "Preview"
     Then I should see the success message "A sample announcement has been delivered to sonsoftweets@example.com."
     And the email sent to "Sons of tweets" with subject "The Big Opening is postponed" contains the following lines of text:
       | text                                                                                                                                                                                                                                                       |
@@ -144,7 +144,7 @@ Feature: Messaging group announcements
     Then I should see "Announcement in Sent state"
     And I should see the button "Update"
     And I should see the button "Approve"
-    And I should see the button "Test"
+    And I should see the button "Preview"
     But I should not see the button "Create"
     And I should not see the button "Send"
     And I should not see the button "Undo reject"
@@ -153,13 +153,13 @@ Feature: Messaging group announcements
     Then I should see the success message "The announcement has been rejected. Press the 'Undo reject' button to restore the announcement."
     Then I should see "Announcement in Rejected state"
     And I should see the button "Update"
-    And I should see the button "Test"
+    And I should see the button "Preview"
     But I should not see the button "Approve"
     And I should not see the button "Create"
     And I should not see the button "Send"
     And I should not see the button "Reject"
 
-    When I press "Test"
+    When I press "Preview"
     Then I should see the success message "A sample announcement has been delivered to check.edit.moderator@example.com."
     And the email sent to "Check edit moderator" with subject "The Big Opening is postponed" contains the following lines of text:
       | text                                                                                                                                                                                                                                                       |
@@ -193,7 +193,7 @@ Feature: Messaging group announcements
     Then I should see "Announcement in Sent state"
     And I should see the button "Update"
     And I should see the button "Approve"
-    And I should see the button "Test"
+    And I should see the button "Preview"
     But I should not see the button "Create"
     And I should not see the button "Send"
     And I should not see the button "Undo reject"
