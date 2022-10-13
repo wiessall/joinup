@@ -98,4 +98,11 @@ trait EntityWorkflowStateTrait {
     return $this->getWorkflowStateField()->getTransitions();
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  public function hasTransitions(): bool {
+    return (bool) $this->getTransitions();
+  }
+
 }

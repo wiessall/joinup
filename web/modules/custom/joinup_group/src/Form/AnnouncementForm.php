@@ -81,11 +81,33 @@ class AnnouncementForm extends FormBase {
    * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state): array {
+    $disabled = !$this->announcement->hasTransitions();
+
+    if ($disabled) {
+      if ($this->announcement->getWorkflowState() === 'delivered') {
+        $reason = $this->t('it has been already delivered');
+      }
+      else {
+        $reason = $this->t('is pending for moderators approval');
+      }
+      $form['disabled'] = [
+        '#theme' => 'status_messages',
+        '#message_list' => [
+          'warning' => [
+            $this->t('This announcement is in read-only mode because @reason.', [
+              '@reason' => $reason,
+            ]),
+          ],
+        ],
+      ];
+    }
+
     $form['subject'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Subject'),
       '#default_value' => $this->announcement->getSubject(),
       '#required' => TRUE,
+      '#disabled' => $disabled,
     ];
 
     $form['body'] = [
@@ -95,6 +117,7 @@ class AnnouncementForm extends FormBase {
       '#default_value' => $this->announcement->getBody(),
       '#required' => TRUE,
       '#allowed_formats' => ['minimal'],
+      '#disabled' => $disabled,
     ];
 
     $arguments = $this->getArguments();
@@ -102,6 +125,7 @@ class AnnouncementForm extends FormBase {
       '#type' => 'details',
       '#title' => $this->t('Select dynamic placeholders for your announcement'),
       '#open' => FALSE,
+      '#access' => !$disabled,
     ];
     $form['arguments']['help'] = [
       '#markup' => $this->t('Copy and paste, in the message body, one or more placeholder(s) (e.g. @recipient_name) and the corresponding shortcut link(s) will be displayed in the announcement email. Available placeholders:'),
@@ -131,6 +155,7 @@ class AnnouncementForm extends FormBase {
 
     $form['actions'] = [
       '#type' => 'actions',
+      '#access' => !$disabled,
     ];
 
     $form['actions']['submit'] = [
