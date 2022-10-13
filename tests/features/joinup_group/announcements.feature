@@ -58,13 +58,13 @@ Feature: Messaging group announcements
     And I should see the following lines of text:
       | Select dynamic placeholders for your announcement                                                                                                                                                  |
       | Copy and paste, in the message body, one or more placeholder(s) (e.g. @recipient_name) and the corresponding shortcut link(s) will be displayed in the announcement email. Available placeholders: |
-      | @group_landing_page - The <group> landing page URL                       |
-      | @group_about_page - The <group> about page URL                           |
-      | @group_members_page - The <group> members page URL                       |
-      | @recipient_name - The recipient's full name                              |
-      | @recipient_profile - The recipient's profile URL                         |
-      | @recipient_profile_edit - The recipient's profile edit URL               |
-      | @recipient_subscriptions - The recipient's subscriptions page URL        |
+      | @group_landing_page - will display the <group> landing page URL                                                                                                                                    |
+      | @group_about_page - will display the <group> about page URL                                                                                                                                        |
+      | @group_members_page - will display the <group> members page URL                                                                                                                                    |
+      | @recipient_name - will display the recipient's full name                                                                                                                                           |
+      | @recipient_profile - will display the recipient's profile URL                                                                                                                                      |
+      | @recipient_profile_edit - will display the recipient's profile edit URL                                                                                                                            |
+      | @recipient_subscriptions - will display the recipient's subscriptions page URL                                                                                                                     |
       | Announcement not saved yet                                               |
     # On announcement creation, the state buttons are hidden.
     And I should not see the button "Approve"
