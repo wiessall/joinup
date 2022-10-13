@@ -149,7 +149,7 @@ class AnnouncementForm extends FormBase {
 
       $form['actions']['test'] = [
         '#type' => 'submit',
-        '#value' => $this->t('Test'),
+        '#value' => $this->t('Preview'),
         '#test_announcement' => TRUE,
       ];
     }
