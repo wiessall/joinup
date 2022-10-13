@@ -5,3 +5,10 @@ joinup_group.announcement.add:
     - view.announcements.group
   cache_contexts:
     - og_role
+joinup_group.members.announcement.add:
+  route_name: entity.rdf_entity.announcement_add
+  title: 'Add announcement'
+  appears_on:
+    - entity.rdf_entity.member_overview
+  cache_contexts:
+    - og_role

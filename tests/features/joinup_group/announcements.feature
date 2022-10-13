@@ -40,17 +40,37 @@ Feature: Messaging group announcements
     Then the response status code should be 404
     When I go to the announcements page of "Hidden gems" <group>
     Then the response status code should be 404
+    When I go to the members page of "Fail pension"
+    Then I should not see the link "Add announcement"
 
     Given I am logged in as "Nice"
     When I go to the announcements page of "Fail pension" <group>
     Then the response status code should be 404
     When I go to the announcements page of "Hidden gems" <group>
     Then the response status code should be 404
+    When I go to the members page of "Fail pension"
+    Then I should not see the link "Add announcement"
 
     Given I am logged in as "Sons of tweets"
 
     When I go to the announcements page of "Hidden gems" <group>
     Then the response status code should be 404
+
+    # The 'Add announcement' button is also available from the members page.
+    When I go to the members page of "Fail pension"
+    And I click "Add announcement"
+    Then the following fields should be present "Subject,Body"
+    And I should see the following lines of text:
+      | Select dynamic placeholders for your announcement                                                                                                                                                  |
+      | Copy and paste, in the message body, one or more placeholder(s) (e.g. @recipient_name) and the corresponding shortcut link(s) will be displayed in the announcement email. Available placeholders: |
+      | @group_landing_page - will display the <group> landing page URL                                                                                                                                    |
+      | @group_about_page - will display the <group> about page URL                                                                                                                                        |
+      | @group_members_page - will display the <group> members page URL                                                                                                                                    |
+      | @recipient_name - will display the recipient's full name                                                                                                                                           |
+      | @recipient_profile - will display the recipient's profile URL                                                                                                                                      |
+      | @recipient_profile_edit - will display the recipient's profile edit URL                                                                                                                            |
+      | @recipient_subscriptions - will display the recipient's subscriptions page URL                                                                                                                     |
+      | Announcement state: Not saved                                                                                                                                                                      |
 
     When I go to the announcements page of "Fail pension" <group>
     And I click "Add announcement"
