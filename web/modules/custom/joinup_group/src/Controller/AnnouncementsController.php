@@ -53,7 +53,7 @@ class AnnouncementsController extends ControllerBase {
    *   The access result object.
    */
   public function access(GroupInterface $rdf_entity, ?AnnouncementInterface $announcement = NULL): AccessResultInterface {
-    $access = AccessResult::allowedIf($rdf_entity->isPublished())->addCacheableDependency($rdf_entity);
+    $access = $this->accessReadOnly($rdf_entity, $announcement);
     $meta_entity = MetaEntity::loadOrCreate($this->getMetaEntityBundle($rdf_entity), $rdf_entity);
     $access = $access->andIf(AccessResult::allowedIf((bool) $meta_entity->announcements_enabled->value)
       ->addCacheTags([
@@ -69,6 +69,21 @@ class AnnouncementsController extends ControllerBase {
     }
 
     return $access;
+  }
+
+  /**
+   * Access check for the group announcement form in read-only mode.
+   *
+   * @param \Drupal\joinup_group\Entity\GroupInterface $rdf_entity
+   *   The group for which the access to the reports page is being determined.
+   * @param \Drupal\joinup_group\Entity\AnnouncementInterface|null $announcement
+   *   The announcement, when present in the route.
+   *
+   * @return \Drupal\Core\Access\AccessResultInterface
+   *   The access result object.
+   */
+  public function accessReadOnly(GroupInterface $rdf_entity, ?AnnouncementInterface $announcement = NULL): AccessResultInterface {
+    return AccessResult::allowedIf($rdf_entity->isPublished())->addCacheableDependency($rdf_entity);
   }
 
   /**

@@ -151,6 +151,17 @@ Feature: Messaging group announcements
     # The facilitator has exhausted all operations they can perform, so they
     # cannot edit the announcement anymore.
     And I should not see "edit" in the "The Big Opening is postponed" row
+    # ...but they can still see the message in read-only mode.
+    When I click "The Big Opening is postponed"
+    Then I should see the warning message "This announcement is in read-only mode because is pending for moderators approval."
+    And the following fields should be disabled "Subject,Body"
+    And I should not see the button "Create"
+    And I should not see the button "Update"
+    And I should not see the button "Approve"
+    And I should not see the button "Send for approval"
+    And I should not see the button "Reject"
+    And I should not see the button "Undo reject"
+    And I should not see the button "Preview"
     And the email sent to "Check edit moderator" with subject "Joinup: A new announcement 'The Big Opening is postponed' has been created" contains the following lines of text:
       | text                                                                                                               |
       | A new announcement 'The Big Opening is postponed' has been created by Sons of tweets for the Fail pension <group>. |
@@ -304,7 +315,19 @@ Feature: Messaging group announcements
     And no email has been sent to "Coward"
 
     And I should see the link "Add announcement"
+    # The announcement cannot be edited anymore...
     But I should not see "edit" in the "The Big Opening is postponed" row
+    # ...but it can be visualized in read-only mode.
+    When I click "The Big Opening is postponed"
+    Then I should see the warning message "This announcement is in read-only mode because it has been already delivered."
+    And the following fields should be disabled "Subject,Body"
+    And I should not see the button "Create"
+    And I should not see the button "Update"
+    And I should not see the button "Approve"
+    And I should not see the button "Send for approval"
+    And I should not see the button "Reject"
+    And I should not see the button "Undo reject"
+    And I should not see the button "Preview"
 
     # Now let's check the links inside email.
     When I click the "Fail pension" link in the email sent to "mogul@example.com" having the subject "The Big Opening is postponed"
@@ -455,6 +478,18 @@ Feature: Messaging group announcements
       | Collection1 Solution1 | Announcement2 C1S1 | Delivered        | 25/05/2018 | Lory Facilitator |      |
       | Collection1           | Announcement1 C1   | Draft            | 05/11/2005 | Lory Facilitator | edit |
       | Collection1 Solution2 | Announcement1 C1S2 | Draft            | 30/04/1999 | Lory Facilitator | edit |
+
+    # A delivered announcement can still be visualized in read-only mode.
+    When I click "Announcement2 C1S1"
+    Then I should see the warning message "This announcement is in read-only mode because it has been already delivered."
+    And the following fields should be disabled "Subject,Body"
+    And I should not see the button "Create"
+    And I should not see the button "Update"
+    And I should not see the button "Approve"
+    And I should not see the button "Send for approval"
+    And I should not see the button "Reject"
+    And I should not see the button "Undo reject"
+    And I should not see the button "Preview"
 
   @group-clone
   Scenario: Sending mass-mailing announcements.

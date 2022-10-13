@@ -144,6 +144,7 @@ function joinup_group_entity_type_alter(array &$entity_types) {
       'announcement-overview' => '/rdf_entity/{rdf_entity}/announcements',
       'announcement-add' => '/rdf_entity/{rdf_entity}/announcements/add',
       'announcement-edit' => '/rdf_entity/{rdf_entity}/announcements/edit/{message}',
+      'announcement-view' => '/rdf_entity/{rdf_entity}/announcements/view/{message}',
       'member-overview' => '/rdf_entity/{rdf_entity}/members',
       'member-add' => '/rdf_entity/{rdf_entity}/members/add',
       'member-invite' => '/rdf_entity/{rdf_entity}/members/invite',
