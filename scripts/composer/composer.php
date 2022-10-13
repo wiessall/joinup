@@ -10,7 +10,7 @@ $projectRoot = realpath(__DIR__ . '/../..');
 require_once "$projectRoot/vendor/autoload.php";
 $exitCode = 1;
 
-if ($argc !== 2 || ($argc === 2 && !in_array($argv[1], ['install', 'update'], TRUE))) {
+if ($argc !== 2 || !in_array($argv[1], ['install', 'update'], TRUE)) {
   print "The command should be used with strictly one parameter: 'install' and 'update'.\n";
   exit($exitCode++);
 }
