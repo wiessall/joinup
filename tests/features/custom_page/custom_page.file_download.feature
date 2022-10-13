@@ -6,9 +6,9 @@ Feature: Permalinks for custom page attachments.
       | title | Predictable name |
       | state | validated        |
     And custom_page content:
-      | title           | body        | collection       | attachments                                                                                                                                                                                                          |
-      | Predictable CP1 | Lorem ipsum | Predictable name | target_id: empty.rdf - display: 1, target_id: empty_pdf.pdf - display: 1, target_id: invalid_adms.rdf - display: 1, target_id: test.zip - display: 1, target_id: text.pdf - display: 1                               |
-      | Predictable CP2 | Lorem ipsum | Predictable name | target_id: ada.png - display: 1, target_id: alan.jpg - display: 1, target_id: blaise.jpg - display: 1, target_id: charles.jpg - display: 1, target_id: leonardo.jpg - display: 1, target_id: linus.jpeg - display: 1 |
+      | title           | body        | collection       | attachments                                                          |
+      | Predictable CP1 | Lorem ipsum | Predictable name | empty.rdf, empty_pdf.pdf, invalid_adms.rdf, test.zip, text.pdf       |
+      | Predictable CP2 | Lorem ipsum | Predictable name | ada.png, alan.jpg, blaise.jpg, charles.jpg, leonardo.jpg, linus.jpeg |
     And news content:
       | title           | headline        | collection       | state     |
       | Predictable NC1 | Predictable NC1 | Predictable name | validated |
