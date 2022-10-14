@@ -6,5 +6,3 @@ php: 7.1
 package: 'Joinup communities'
 
 dependencies: {  }
-
-config_devel: {  }
