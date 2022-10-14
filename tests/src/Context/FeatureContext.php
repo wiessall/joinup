@@ -942,21 +942,46 @@ class FeatureContext extends RawDrupalContext implements SnippetAcceptingContext
     $hierarchy = Yaml::decode($fixture);
     foreach ($hierarchy as $vid => $terms) {
       foreach ($terms as $key => $data) {
-        $has_children = is_array($terms);
-        $name = $has_children ? $key : $data;
-        $term = (object) [
-          'vocabulary_machine_name' => $vid,
-          'name' => $name,
-        ];
+        $isIndexed = array_values($data) === $data;
+        if ($isIndexed) {
+          $has_children = is_array($terms);
+          $name = $has_children ? $key : $data;
+          $term = (object) [
+            'vocabulary_machine_name' => $vid,
+            'name' => $name,
+          ];
+          $children = $data;
+        }
+        else {
+          $has_children = array_key_exists('children', $data);
+          $term = (object) [
+            'vocabulary_machine_name' => $vid,
+            'name' => $data['name'],
+            'weight' => $data['weight'],
+          ];
+          $children = $data['children'];
+        }
         $this->termCreate($term);
         $parent_tid = $term->tid;
+
         if ($has_children) {
-          foreach ($data as $name) {
-            $term = (object) [
-              'vocabulary_machine_name' => $vid,
-              'name' => $name,
-              'parent' => $parent_tid,
-            ];
+          foreach ($children as $child) {
+            if (!is_array($child)) {
+              $term = (object) [
+                'vocabulary_machine_name' => $vid,
+                'name' => $child,
+                'parent' => $parent_tid,
+              ];
+            }
+            else {
+              $term = (object) [
+                'vocabulary_machine_name' => $vid,
+                'name' => $child['name'],
+                'weight' => $child['weight'],
+                'description' => $child['def'],
+                'parent' => $parent_tid,
+              ];
+            }
             $this->termCreate($term);
           }
         }

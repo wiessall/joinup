@@ -2,6 +2,9 @@ uuid: 3ccc3226-d08d-46e5-9cd2-1de5af636911
 langcode: en
 status: true
 dependencies: {  }
+third_party_settings:
+  rdf_taxonomy:
+    locked: false
 _core:
   default_config_hash: 3OTVrGRs8apPxQkH5XTXzQfuwxH0gLmq_c5nzKmmooU
 name: 'Legal type'
