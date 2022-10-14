@@ -8,6 +8,7 @@
 declare(strict_types = 1);
 
 use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
@@ -162,7 +163,7 @@ function asset_release_theme($existing, $type, $theme, $path) {
  * granted if there are no transitions allowed for the current state of the
  * node.
  */
-function asset_release_rdf_entity_access(EntityInterface $release, $operation, AccountInterface $account) {
+function asset_release_rdf_entity_access(EntityInterface $release, $operation, AccountInterface $account): AccessResultInterface {
   if (!$release instanceof AssetReleaseInterface || $account->hasPermission($release->getEntityType()->getAdminPermission())) {
     return AccessResult::neutral();
   }
@@ -202,11 +203,20 @@ function asset_release_rdf_entity_access(EntityInterface $release, $operation, A
       return AccessResult::forbiddenIf(empty($allowed_states));
 
     case 'delete':
-      // In Joinup, only moderators can delete releases. The following check
-      // will add a forbidden opinion in the delete access check if the user
-      // does not have a global delete permission to override OG group admin
-      // privileges.
-      return AccessResult::forbiddenIf(!$account->hasPermission('delete asset_release rdf entity'));
+      $parent = $release->getSolution();
+
+      // If for any reason access is requested to an entity without a parent,
+      // deny that access.
+      if (empty($parent)) {
+        return AccessResult::forbidden();
+      }
+
+      $membership = $parent->getMembership((int) $account->id());
+      if (empty($membership)) {
+        return AccessResult::allowedIf($account->hasPermission('delete asset_release rdf entity'));
+      }
+
+      return AccessResult::allowedIf($membership->hasPermission('delete asset_release rdf entity'));
   }
 
   return AccessResult::neutral();
