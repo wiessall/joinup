@@ -118,4 +118,12 @@ interface EntityWorkflowStateInterface extends FieldableEntityInterface {
    */
   public function getTransitions(): array;
 
+  /**
+   * Check whether at least one transition is available for the current state.
+   *
+   * @return bool
+   *   Whether at least one transition is available for the current state.
+   */
+  public function hasTransitions(): bool;
+
 }

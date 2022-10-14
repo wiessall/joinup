@@ -175,3 +175,24 @@ entity.rdf_entity.announcement_edit:
         bundle:
           - announcement
     _og_entity_type_id: rdf_entity
+
+entity.rdf_entity.announcement_view:
+  path: /rdf_entity/{rdf_entity}/announcements/view/{announcement}
+  defaults:
+    _controller: Drupal\joinup_group\Controller\AnnouncementsController::editForm
+    _title: 'View announcement'
+  requirements:
+    _custom_access: Drupal\joinup_group\Controller\AnnouncementsController::accessReadOnly
+    _og_user_access_group: 'manage group announcements'
+  options:
+    parameters:
+      rdf_entity:
+        type: entity:rdf_entity
+        bundle:
+          - collection
+          - solution
+      announcement:
+        type: entity:message
+        bundle:
+          - announcement
+    _og_entity_type_id: rdf_entity

@@ -14,6 +14,7 @@ use Drupal\Core\Session\AccountInterface;
 use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\og\MembershipManagerInterface;
 use Drupal\og\OgAccessInterface;
+use Drupal\og\OgContextInterface;
 use Drupal\og\OgMembershipInterface;
 
 /**
@@ -42,6 +43,11 @@ class JoinupGroupManager implements JoinupGroupManagerInterface {
   protected OgAccessInterface $ogAccess;
 
   /**
+   * The Organic Groups context service.
+   */
+  protected OgContextInterface $ogContext;
+
+  /**
    * Constructs a JoinupRelationshipManager object.
    *
    * @param \Drupal\og\MembershipManagerInterface $membershipManager
@@ -52,12 +58,15 @@ class JoinupGroupManager implements JoinupGroupManagerInterface {
    *   The current user.
    * @param \Drupal\og\OgAccessInterface $og_access
    *   The OG access service.
+   * @param \Drupal\og\OgContextInterface $og_context
+   *   The Organic Groups context service.
    */
-  public function __construct(MembershipManagerInterface $membershipManager, EntityTypeManagerInterface $entityTypeManager, AccountInterface $current_user, OgAccessInterface $og_access) {
+  public function __construct(MembershipManagerInterface $membershipManager, EntityTypeManagerInterface $entityTypeManager, AccountInterface $current_user, OgAccessInterface $og_access, OgContextInterface $og_context) {
     $this->membershipManager = $membershipManager;
     $this->entityTypeManager = $entityTypeManager;
     $this->currentUser = $current_user;
     $this->ogAccess = $og_access;
+    $this->ogContext = $og_context;
   }
 
   /**
@@ -121,6 +130,14 @@ class JoinupGroupManager implements JoinupGroupManagerInterface {
       ->orIf($this->ogAccess->userAccess($group, $og_permission, $account))
       ->addCacheableDependency($group)
       ->addCacheContexts(['og_role']);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getGroupFromContext(): ?GroupInterface {
+    $context = $this->ogContext->getRuntimeContexts(['og']);
+    return !empty($context['og']) ? $context['og']->getContextValue() : NULL;
   }
 
   /**
