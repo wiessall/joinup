@@ -83,4 +83,12 @@ interface JoinupGroupManagerInterface {
    */
   public function access(GroupInterface $group, string $og_permission, ?string $site_permission = NULL, ?AccountInterface $account = NULL): AccessResultInterface;
 
+  /**
+   * Returns the group from the OG context.
+   *
+   * @return \Drupal\joinup_group\Entity\GroupInterface|null
+   *   The group from the current context, if any.
+   */
+  public function getGroupFromContext(): ?GroupInterface;
+
 }

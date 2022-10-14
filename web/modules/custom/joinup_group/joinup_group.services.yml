@@ -11,7 +11,7 @@ services:
       - { name: access_check, applies_to: _joinup_group }
   joinup_group.group_manager:
     class: Drupal\joinup_group\JoinupGroupManager
-    arguments: ['@og.membership_manager', '@entity_type.manager', '@current_user', '@og.access']
+    arguments: ['@og.membership_manager', '@entity_type.manager', '@current_user', '@og.access', '@og.context']
   joinup_group.group_menu_links:
     class: Drupal\joinup_group\EventSubscriber\GroupMenuLinksSubscriber
     tags:
@@ -31,7 +31,7 @@ services:
     arguments: ['@database', '@joinup_group.node_access_grants.memory_cache']
   joinup_group.og_subscriber:
     class: Drupal\joinup_group\EventSubscriber\JoinupGroupOgSubscriber
-    arguments: [ '@current_user']
+    arguments: ['@current_user']
     tags:
       - name: event_subscriber
   joinup_group.route_subscriber:
@@ -63,3 +63,9 @@ services:
     class: Drupal\joinup_group\EventSubscriber\AnnouncementDeliverySubscriber
     tags:
       - { name: event_subscriber }
+  joinup_group.announcements_enabled.access_checker:
+    class: Drupal\joinup_group\Access\AnnouncementsAccessCheck
+    calls:
+      - [setJoinupGroupManager, ['@joinup_group.group_manager']]
+    tags:
+      - { name: access_check, applies_to: _joinup_group_announcements }

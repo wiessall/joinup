@@ -55,3 +55,7 @@ views.argument_validator.joinup_group_announcements_enabled:
 views.field.joinup_group_announcement_edit_link:
   type: views.field.entity_link
   label: Announcement edit link
+
+views.access.joinup_group_announcements:
+  type: mapping
+  label: 'Group announcements access'

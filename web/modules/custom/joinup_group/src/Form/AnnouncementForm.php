@@ -81,11 +81,33 @@ class AnnouncementForm extends FormBase {
    * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state): array {
+    $disabled = !$this->announcement->hasTransitions();
+
+    if ($disabled) {
+      if ($this->announcement->getWorkflowState() === 'delivered') {
+        $reason = $this->t('it has been already delivered');
+      }
+      else {
+        $reason = $this->t('is pending for moderators approval');
+      }
+      $form['disabled'] = [
+        '#theme' => 'status_messages',
+        '#message_list' => [
+          'warning' => [
+            $this->t('This announcement is in read-only mode because @reason.', [
+              '@reason' => $reason,
+            ]),
+          ],
+        ],
+      ];
+    }
+
     $form['subject'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Subject'),
       '#default_value' => $this->announcement->getSubject(),
       '#required' => TRUE,
+      '#disabled' => $disabled,
     ];
 
     $form['body'] = [
@@ -95,10 +117,20 @@ class AnnouncementForm extends FormBase {
       '#default_value' => $this->announcement->getBody(),
       '#required' => TRUE,
       '#allowed_formats' => ['minimal'],
+      '#disabled' => $disabled,
     ];
 
     $arguments = $this->getArguments();
     $form['arguments'] = [
+      '#type' => 'details',
+      '#title' => $this->t('Select dynamic placeholders for your announcement'),
+      '#open' => FALSE,
+      '#access' => !$disabled,
+    ];
+    $form['arguments']['help'] = [
+      '#markup' => $this->t('Copy and paste, in the message body, one or more placeholder(s) (e.g. @recipient_name) and the corresponding shortcut link(s) will be displayed in the announcement email. Available placeholders:'),
+    ];
+    $form['arguments']['list'] = [
       '#theme' => 'item_list',
       '#items' => array_filter(array_map(function (string $token) use ($arguments): ?MarkupInterface {
         if (!isset($arguments[$token]['label'])) {
@@ -111,19 +143,19 @@ class AnnouncementForm extends FormBase {
           '@label' => $arguments[$token]['label'],
         ]);
       }, array_keys($arguments))),
-      '#title' => $this->t('The following placeholders are available to be used in the message body:'),
     ];
 
     $form['state'] = [
-      '#markup' => $this->announcement->isNew() ? $this->t("Announcement not saved yet") : $this->t("Announcement in @state state", [
-        '@state' => $this->announcement->getWorkflowStateInstance()->getLabel(),
-      ]),
-      '#prefix' => '<h3>',
-      '#suffix' => '</h3>',
+      '#type' => 'item',
+      '#title' => $this->t('Announcement state:'),
+      '#markup' => $this->announcement->isNew() ? $this->t('Not saved') : $this->announcement->getWorkflowStateInstance()->getLabel(),
+      '#prefix' => '<div class="container-inline">',
+      '#suffix' => '</div>',
     ];
 
     $form['actions'] = [
       '#type' => 'actions',
+      '#access' => !$disabled,
     ];
 
     $form['actions']['submit'] = [
@@ -142,7 +174,7 @@ class AnnouncementForm extends FormBase {
 
       $form['actions']['test'] = [
         '#type' => 'submit',
-        '#value' => $this->t('Test'),
+        '#value' => $this->t('Preview'),
         '#test_announcement' => TRUE,
       ];
     }
@@ -274,15 +306,15 @@ class AnnouncementForm extends FormBase {
         'value' => $vars['@label'],
       ],
       '@group_landing_page' => [
-        'label' => $this->t('The @label landing page URL', $vars),
+        'label' => $this->t('will display the @label landing page URL', $vars),
         'value' => $group->toUrl()->setAbsolute()->toString(),
       ],
       '@group_about_page' => [
-        'label' => $this->t('The @label about page URL', $vars),
+        'label' => $this->t('will display the @label about page URL', $vars),
         'value' => $group->toUrl('about-page')->setAbsolute()->toString(),
       ],
       '@group_members_page' => [
-        'label' => $this->t('The @label members page URL', $vars),
+        'label' => $this->t('will display the @label members page URL', $vars),
         'value' => $group->toUrl('member-overview')->setAbsolute()->toString(),
       ],
       '@group_logo' => [
@@ -295,16 +327,16 @@ class AnnouncementForm extends FormBase {
         'value' => $sender->toUrl()->setAbsolute()->toString(),
       ],
       '@recipient_name' => [
-        'label' => $this->t("The recipient's full name"),
+        'label' => $this->t("will display the recipient's full name"),
       ],
       '@recipient_profile' => [
-        'label' => $this->t("The recipient's profile URL"),
+        'label' => $this->t("will display the recipient's profile URL"),
       ],
       '@recipient_profile_edit' => [
-        'label' => $this->t("The recipient's profile edit URL"),
+        'label' => $this->t("will display the recipient's profile edit URL"),
       ],
       '@recipient_subscriptions' => [
-        'label' => $this->t("The recipient's subscriptions page URL"),
+        'label' => $this->t("will display the recipient's subscriptions page URL"),
       ],
       '@recipient_unsubscribe' => [],
       '@delivery_time' => [
