@@ -37,24 +37,30 @@ Feature: Messaging group announcements
 
     Given I am an anonymous user
     When I go to the announcements page of "Fail pension" <group>
-    Then the response status code should be 404
+    Then I should see the heading "Sign in to continue"
     When I go to the announcements page of "Hidden gems" <group>
-    Then the response status code should be 404
+    Then I should see the heading "Sign in to continue"
     When I go to the members page of "Fail pension"
     Then I should not see the link "Add announcement"
+    When I go to the homepage of the "Fail pension" collection
+    Then I should not see the link "Announcements"
 
     Given I am logged in as "Nice"
     When I go to the announcements page of "Fail pension" <group>
-    Then the response status code should be 404
+    Then the response status code should be 403
     When I go to the announcements page of "Hidden gems" <group>
-    Then the response status code should be 404
+    Then the response status code should be 403
     When I go to the members page of "Fail pension"
     Then I should not see the link "Add announcement"
+    When I go to the homepage of the "Fail pension" collection
+    Then I should not see the link "Announcements"
 
     Given I am logged in as "Sons of tweets"
 
     When I go to the announcements page of "Hidden gems" <group>
-    Then the response status code should be 404
+    Then the response status code should be 403
+    When I go to the homepage of the "Hidden gems" collection
+    Then I should not see the link "Announcements"
 
     # The 'Add announcement' button is also available from the members page.
     When I go to the members page of "Fail pension"
@@ -170,7 +176,7 @@ Feature: Messaging group announcements
     Given I am logged in as "Check edit moderator"
 
     When I go to the announcements page of "Hidden gems" <group>
-    Then the response status code should be 404
+    Then the response status code should be 403
     And I click the link from email sent to "Check edit moderator" with subject "Joinup: A new announcement 'The Big Opening is postponed' has been created"
     Then I should see "Announcement state: Pending approval"
     And I should see the button "Update"
@@ -365,31 +371,40 @@ Feature: Messaging group announcements
     And I uncheck the box "Announcements enabled"
     And I press "Save"
 
+    When I go to the homepage of the "Fail pension" collection
+    # Moderators have an "Announcements" link also in the toolbar.
+    Then I should not see the link "Announcements" in the "Entity actions" region
     When I go the "The Big Opening is postponed" announcement of "Fail pension" <group>
     Then the response status code should be 403
     But I go to the announcements page of "Fail pension" <group>
-    Then the response status code should be 404
+    Then the response status code should be 403
 
     Given I am logged in as "Sons of tweets"
 
+    When I go to the homepage of the "Fail pension" collection
+    Then I should not see the link "Announcements"
     When I go the "The Big Opening is postponed" announcement of "Fail pension" <group>
     Then the response status code should be 403
     But I go to the announcements page of "Fail pension" <group>
-    Then the response status code should be 404
+    Then the response status code should be 403
 
     Given I am logged in as "Nice"
 
+    When I go to the homepage of the "Fail pension" collection
+    Then I should not see the link "Announcements"
     When I go the "The Big Opening is postponed" announcement of "Fail pension" <group>
     Then the response status code should be 403
     But I go to the announcements page of "Fail pension" <group>
-    Then the response status code should be 404
+    Then the response status code should be 403
 
     Given I am an anonymous user
 
+    When I go to the homepage of the "Fail pension" collection
+    Then I should not see the link "Announcements"
     When I go the "The Big Opening is postponed" announcement of "Fail pension" <group>
     Then I should see the heading "Sign in to continue"
-    But I go to the announcements page of "Fail pension" <group>
-    Then the response status code should be 404
+    When I go to the announcements page of "Fail pension" <group>
+    Then I should see the heading "Sign in to continue"
 
     # Explicitly delete announcements created via UI.
     And I delete the "The Big Opening is postponed" announcement

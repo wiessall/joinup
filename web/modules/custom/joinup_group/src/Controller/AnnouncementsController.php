@@ -8,16 +8,18 @@ use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\DependencyInjection\ClassResolverInterface;
+use Drupal\joinup_group\AnnouncementsAccessTrait;
 use Drupal\joinup_group\Entity\AnnouncementInterface;
 use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_group\Form\AnnouncementForm;
-use Drupal\meta_entity\Entity\MetaEntity;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Returns responses for the group announcement form.
  */
 class AnnouncementsController extends ControllerBase {
+
+  use AnnouncementsAccessTrait;
 
   /**
    * The class resolver service.
@@ -38,7 +40,8 @@ class AnnouncementsController extends ControllerBase {
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container): self {
-    return new static($container->get('class_resolver'));
+    return (new static($container->get('class_resolver')))
+      ->setJoinupGroupManager($container->get('joinup_group.group_manager'));
   }
 
   /**
@@ -53,22 +56,14 @@ class AnnouncementsController extends ControllerBase {
    *   The access result object.
    */
   public function access(GroupInterface $rdf_entity, ?AnnouncementInterface $announcement = NULL): AccessResultInterface {
-    $access = $this->accessReadOnly($rdf_entity, $announcement);
-    $meta_entity = MetaEntity::loadOrCreate($this->getMetaEntityBundle($rdf_entity), $rdf_entity);
-    $access = $access->andIf(AccessResult::allowedIf((bool) $meta_entity->announcements_enabled->value)
-      ->addCacheTags([
-        'meta_entity_list:' . $this->getMetaEntityBundle($rdf_entity),
-        'message_list:announcement',
-      ]));
-
+    $access = $this->accessAnnouncements($rdf_entity);
     if ($announcement) {
-      // If the current user has no available transition, then they can't do
+      // If the current user has no available transition, they can't do
       // anything. The announcement is outside their control.
       $access = $access->andIf(AccessResult::allowedIf((bool) $announcement->getTransitions())
         ->addCacheableDependency($announcement));
     }
-
-    return $access;
+    return $access->addCacheTags(['message_list:announcement']);
   }
 
   /**
@@ -112,19 +107,6 @@ class AnnouncementsController extends ControllerBase {
     $form = $this->classResolver->getInstanceFromDefinition(AnnouncementForm::class)
       ->setAnnouncement($announcement);
     return $this->formBuilder()->getForm($form);
-  }
-
-  /**
-   * Format a meta entity bundle ID.
-   *
-   * @param \Drupal\joinup_group\Entity\GroupInterface $rdf_entity
-   *   The group where to show settings.
-   *
-   * @return string
-   *   The meta entity bundle ID.
-   */
-  private function getMetaEntityBundle(GroupInterface $rdf_entity): string {
-    return "{$rdf_entity->bundle()}_settings";
   }
 
 }

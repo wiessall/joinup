@@ -1285,8 +1285,7 @@ display:
     position: 1
     display_options:
       access:
-        type: none
-        options: {  }
+        type: joinup_group_announcements
       empty:
         area:
           id: area
@@ -1325,8 +1324,10 @@ display:
       contexts:
         - 'languages:language_content'
         - 'languages:language_interface'
+        - og_role
         - url
         - url.query_args
+        - user.permissions
       tags:
         - 'config:field.storage.message.state'
         - 'config:field.storage.message.subject'
