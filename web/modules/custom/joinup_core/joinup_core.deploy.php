@@ -14,6 +14,8 @@
 
 declare(strict_types = 1);
 
+use Drupal\Core\Url;
+use Drupal\eupl\Eupl;
 use Drupal\joinup_group\JoinupGroupHelper;
 use Drupal\og\OgMembershipInterface;
 
@@ -51,4 +53,27 @@ function joinup_core_deploy_108601(): void {
     // the 'Legal notice', or their membership is pending. These conditions may
     // change in the future, so we default them to subscribe to announcements.
     ->execute();
+}
+
+/**
+ * Create a Link to Compatibility Documents from the solution's left-side menu.
+ */
+function joinup_core_deploy_0108602(array &$sandbox): void {
+  $og_menus = \Drupal::entityTypeManager()->getStorage('ogmenu_instance')->loadByProperties([
+    'og_audience' => Eupl::JLA_SOLUTION,
+  ]);
+  if ($og_menu = reset($og_menus)) {
+    $menu_name = 'ogmenu-' . $og_menu->id();
+    $menu_link_content_storage = \Drupal::entityTypeManager()->getStorage('menu_link_content');
+    $link = [
+      'uri' => Url::fromRoute('entity.compatibility_document.collection')->toUriString(),
+    ];
+
+    $menu_link_content_storage->create([
+      'title' => t('Compatibility Documents'),
+      'menu_name' => $menu_name,
+      'link' => $link,
+      'weight' => -5,
+    ])->save();
+  }
 }
