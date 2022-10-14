@@ -117,8 +117,8 @@ class LicenceFilterBlock extends BlockBase implements ContainerFactoryPluginInte
   protected function addContextualLinks(array &$build): void {
     $build['#contextual_links']['licence_filter_block'] = [
       'route_parameters' => [
-        'taxonomy_vocabulary' => 'legal_type'
-      ]
+        'taxonomy_vocabulary' => 'legal_type',
+      ],
     ];
   }
 
