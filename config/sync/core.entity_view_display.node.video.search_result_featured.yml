@@ -10,12 +10,11 @@ dependencies:
     - field.field.node.video.field_video
     - field.field.node.video.field_video_spatial_coverage
     - field.field.node.video.og_audience
+    - field.field.node.video.video
     - node.type.video
-    - responsive_image.styles.teaser
   module:
     - joinup_html_stripper
     - layout_builder
-    - responsive_image
     - template_suggestion
     - user
 third_party_settings:
@@ -39,17 +38,6 @@ content:
         template_suggestion: ''
     weight: 0
     region: content
-  field_video:
-    type: responsive_image
-    label: hidden
-    settings:
-      responsive_image_style: teaser
-      image_link: ''
-    third_party_settings:
-      template_suggestion:
-        template_suggestion: ''
-    weight: 3
-    region: content
   published_at:
     type: timestamp
     label: hidden
@@ -61,6 +49,15 @@ content:
       template_suggestion:
         template_suggestion: ''
     weight: 1
+    region: content
+  video:
+    type: entity_reference_entity_view
+    label: hidden
+    settings:
+      view_mode: default
+      link: true
+    third_party_settings: {  }
+    weight: 2
     region: content
 hidden:
   field_comments: true

@@ -1,0 +1,9 @@
+uuid: 81095872-51f4-4fb1-98e3-ad1c9cbef6be
+langcode: en
+status: true
+dependencies: {  }
+id: remote_videos
+label: 'Remote videos'
+description: ''
+providers:
+  - YouTube

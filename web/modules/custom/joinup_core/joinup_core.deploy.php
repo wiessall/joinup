@@ -13,3 +13,35 @@
  */
 
 declare(strict_types = 1);
+
+/**
+ * Migrate Video content into new Media field.
+ */
+function joinup_core_deploy_0108603(): void {
+  /** @var \Drupal\joinup_core\VideoFieldMigrate $videoEmbedMigrate */
+  $videoEmbedMigrate = \Drupal::service('video_field_migrate.migrate');
+
+  $refFieldName = 'video';
+  $fields = $videoEmbedMigrate->findFieldsToMigrate();
+  foreach ($fields as $index => $field) {
+    $values = $videoEmbedMigrate->getFieldValues($field['field_name'], $field['entity_type'], $field['bundle']);
+    $fields[$index]['values'] = $values;
+  }
+
+  $fieldsToMigrate = [];
+  foreach ($fields as $field) {
+    foreach ($field['values'] as $id => $value) {
+      $mediaType = $videoEmbedMigrate->getRemoteVideoMediaType(strpos($value, 'www.youtube.com') ? 'oembed:remote_videos' : 'media_avportal_video');
+      $fieldsToMigrate[] = [
+        'field_name' => $field['field_name'],
+        'entity_type' => $field['entity_type'],
+        'bundle' => $field['bundle'],
+        'target_id' => $id,
+        'media_type' => $mediaType,
+      ];
+    }
+  }
+  foreach ($fieldsToMigrate as $field) {
+    $videoEmbedMigrate->migrateField($field['media_type'], $refFieldName, $field['entity_type'], $field['target_id'], $field['field_name']);
+  }
+}
