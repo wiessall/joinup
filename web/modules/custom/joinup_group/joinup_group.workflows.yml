@@ -1,0 +1,34 @@
+announcement:
+  id: announcement
+  label: "Announcements workflow"
+  group: announcement
+  states:
+    draft:
+      label: Draft
+    sent:
+      label: Pending approval
+    delivered:
+      label: Delivered
+    rejected:
+      label: Rejected
+  transitions:
+    send:
+      label: Send for approval
+      from:
+        - draft
+      to: sent
+    approve:
+      label: Approve
+      from:
+        - sent
+      to: delivered
+    reject:
+      label: Reject
+      from:
+        - sent
+      to: rejected
+    undo:
+      label: Undo reject
+      from:
+        - rejected
+      to: sent

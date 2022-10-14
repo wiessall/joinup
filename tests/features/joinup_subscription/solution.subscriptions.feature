@@ -153,7 +153,7 @@ Feature: Subscribing to a solution
 
     # For solutions, all bundles are selected by default.
     And the following content subscriptions should be selected:
-      | Some solution to subscribe | Discussion, Document, Event, News |
+      | Some solution to subscribe | Discussion, Document, Event, News, Announcements |
     # The button "Unsubscribe from all" is visible.
     And I should see the link "Unsubscribe from all"
 
@@ -164,7 +164,7 @@ Feature: Subscribing to a solution
     Then I should not see the "Save changes" button on the "Some solution to subscribe" subscription card
     But I should see the "Saved!" button on the "Some solution to subscribe" subscription card
     And the following content subscriptions should be selected:
-      | Some solution to subscribe | Document, Event, News |
+      | Some solution to subscribe | Document, Event, News, Announcements |
 
     When I go to the "Some solution to subscribe" solution
     And I press "You're a member"
