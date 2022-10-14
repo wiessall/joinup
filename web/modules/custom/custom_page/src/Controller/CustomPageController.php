@@ -6,18 +6,45 @@ namespace Drupal\custom_page\Controller;
 
 use Drupal\Component\Utility\Xss;
 use Drupal\Core\Cache\CacheableRedirectResponse;
+use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
+use Drupal\Core\File\FileUrlGeneratorInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\node\NodeInterface;
 use Drupal\og_menu\OgMenuInstanceInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
  * Controller for custom pages.
  */
-class CustomPageController {
+class CustomPageController implements ContainerInjectionInterface {
 
   use StringTranslationTrait;
+
+  /**
+   * The file URL generator.
+   */
+  protected FileUrlGeneratorInterface $urlGenerator;
+
+  /**
+   * Constructs a new CustomPageController.
+   *
+   * @param \Drupal\Core\File\FileUrlGeneratorInterface $url_generator
+   *   The file URL generator.
+   */
+  public function __construct(FileUrlGeneratorInterface $url_generator) {
+    $this->urlGenerator = $url_generator;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container) {
+    return new static(
+      $container->get('file_url_generator')
+    );
+  }
 
   /**
    * Altered title callback for the navigation menu edit form.
@@ -61,7 +88,8 @@ class CustomPageController {
     // Use a human version of the delta, i.e. 1-based instead of 0-based.
     $delta--;
     if ($node->get('field_attachment')->get($delta) && $file = $node->get('field_attachment')->get($delta)->entity) {
-      $response = new CacheableRedirectResponse($file->getFileUri());
+      $file_url = $this->urlGenerator->generateAbsoluteString($file->getFileUri());
+      $response = new CacheableRedirectResponse($file_url);
       $response->addCacheableDependency($node)->addCacheableDependency($file);
       return $response;
     }
