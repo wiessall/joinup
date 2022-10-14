@@ -1,0 +1,30 @@
+uuid: 0199a3c0-c7d7-400e-875e-945659963cda
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.media.ec_videos.field_media_media_avportal_video
+    - media.type.ec_videos
+  module:
+    - media_avportal
+id: media.ec_videos.default
+targetEntityType: media
+bundle: ec_videos
+mode: default
+content:
+  field_media_media_avportal_video:
+    type: avportal_video
+    label: visually_hidden
+    settings:
+      max_width: 640
+      max_height: 390
+    third_party_settings: {  }
+    weight: 0
+    region: content
+hidden:
+  created: true
+  langcode: true
+  name: true
+  search_api_excerpt: true
+  thumbnail: true
+  uid: true

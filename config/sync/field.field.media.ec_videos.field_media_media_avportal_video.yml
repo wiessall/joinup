@@ -1,0 +1,19 @@
+uuid: 6fc49b36-0f6f-44f9-9a32-0a12c2a9549d
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.media.field_media_media_avportal_video
+    - media.type.ec_videos
+id: media.ec_videos.field_media_media_avportal_video
+field_name: field_media_media_avportal_video
+entity_type: media
+bundle: ec_videos
+label: 'Media AV Portal Video'
+description: ''
+required: true
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string
