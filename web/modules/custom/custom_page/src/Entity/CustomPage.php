@@ -4,7 +4,6 @@ declare(strict_types = 1);
 
 namespace Drupal\custom_page\Entity;
 
-use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\collection\Entity\NodeCollectionContentTrait;
 use Drupal\joinup_bundle_class\DescriptionTrait;
 use Drupal\joinup_bundle_class\LogoTrait;
