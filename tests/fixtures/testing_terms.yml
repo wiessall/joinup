@@ -18,3 +18,145 @@ topic:
   'Social and Political':
     - Demography
     - E-inclusion
+legal_type:
+  - name: 'Can'
+    weight: -10
+    children:
+      - name: 'Use/reproduce'
+        weight: 1
+        def: 'Ability to use, copy / reproduce the work freely in unlimited quantities'
+      - name: 'Distribute'
+        weight: 2
+        def: 'Ability to distribute the work to third parties freely,  in unlimited quantities'
+      - name: 'Modify/merge'
+        weight: 3
+        def: 'Ability to modify / combine the work with others and create derivatives'
+      - name: 'Sublicense'
+        weight: 4
+        def: 'Ability to license the work, including possible modifications (without changing the licence if it is copyleft or share alike)'
+      - name: 'Commercial use'
+        weight: 5
+        def: 'Ability to make use of the work for commercial purpose or to license it for a fee'
+      - name: 'Use patents'
+        weight: 6
+        def: 'Rights to practice patent claims of the software owner and of the contributors to the code, in so far these rights are necessary to make full use of the software'
+      - name: 'Place warranty'
+        weight: 7
+        def: 'Ability to place additional warranty, services or rights on the software licensed (without holding the software owner and other contributors liable for it)'
+  - name: 'Must'
+    weight: -9
+    children:
+      - name: 'Incl. Copyright'
+        weight: 8
+        def: 'Describes whether the original copyright and attribution marks must be retained'
+      - name: 'Royalty free'
+        weight: 9
+        def: 'In case a fee (i.e. contribution, lump sum) is requested from recipients, it cannot be royalties (depending on the use)'
+      - name: 'State changes'
+        weight: 10
+        def: 'Source code modifications (author, why, beginning, end) must be documented'
+      - name: 'Disclose source'
+        weight: 11
+        def: 'The source code of distributed derivatives must be publicly available'
+      - name: 'Copyleft/Share a.'
+        weight: 12
+        def: 'In case of (re-) distribution of the work or its derivatives, the same licence must be used/granted: no re-licensing.'
+      - name: 'Lesser copyleft'
+        weight: 13
+        def: 'While the work itself is copyleft, derivatives produced by the normal use of the work are not and could be covered by any other licence'
+      - name: 'SaaS/network'
+        weight: 14
+        def: 'Distribution includes providing access to the work (to its functionalities) throug a network, online, from the cloud, as a service'
+      - name: 'Include licence'
+        weight: 15
+        def: 'Include the full text of the licence in the modified software.'
+      - name: 'Rename modifs.'
+        weight: 16
+        def: 'Obligation to rename the work in case a modified/derivative version is distributed'
+  - name: 'Cannot'
+    weight: -8
+    children:
+      - name: 'Hold liable'
+        weight: 17
+        def: 'No recipient may charge the software owner or contributors for direct or indirect damages. This is a frequent clause in open licences'
+      - name: 'Use trademark'
+        weight: 18
+        def: "No allowance of using the original licensor or contributors' names, trademarks or logos (i.e. for advertisement, promotion)"
+      - name: 'Commerce'
+        weight: 19
+        def: 'No allowance of making use of the work for commercial purpose or to license it for a fee. This makes the licence &quot;non open source&quot;.'
+      - name: 'Modify'
+        weight: 20
+        def: 'The software or work (i.e. the text of a regulation, of a court decision) is licensed &quot;as is&quot; and (re-) distributions cannot be modified. For software, this makes the licence &quot;non open source&quot;.'
+      - name: 'Ethical clauses'
+        weight: 21
+        def: 'The use of the work is restricted based on matter/ethical conditions (i.e. not for nuclear industry, weapons,  genetic etc.). This makes the licence &quot;non open source&quot;.'
+      - name: 'Pub sector only'
+        weight: 22
+        def: 'The use of the work is restricted to a specific category of users, i.e. public sector. This makes the licence &quot;non open source&quot;.'
+      - name: 'Sublicence'
+        weight: 23
+        def: 'Recipient re-distributing the work are not &quot;licensors&quot;, even when users that receives the software automatically has the right to copy, modify and distribute the work.'
+  - name: 'Compatible'
+    weight: -7
+    children:
+      - name: 'None N/A'
+        weight: 24
+        def: 'The license does not authorise reusing or marging the covered work in another work'
+      - name: 'Permissive'
+        weight: 25
+        def: 'The licence authorises reusing or merging the covered code in software covered any other licence (free/libre or proprietary)'
+      - name: 'GPL'
+        weight: 26
+        def: 'The licence authorises reusing or merging the covered code in software covered by the GNU/GPL'
+      - name: 'Other copyleft'
+        weight: 27
+        def: 'The licence is interoperable with other copyleft licences and authorises reusing or merging the covered code in software covered by these other copyleft licences'
+      - name: 'Linking freedom'
+        weight: 28
+        def: '&quot;Linking for interoperability&quot; with other software has no impact on the licensing condition of the other software'
+      - name: 'Multilingual'
+        weight: 29
+        def: 'The licence has a working value and is &quot;original&quot; in several languages (i.e. English, French, German, Italian, Spanish etc.)'
+      - name: 'For data'
+        weight: 30
+        def: 'The licence was designed or is also convenient for the distribution of data (i.e. it covers &quot;the copyrighted work&quot; in general)'
+      - name: 'For software'
+        weight: 31
+        def: 'The licence was designed for the distribution of software'
+  - name: 'Law'
+    weight: -6
+    children:
+      - name: 'EU/MS law'
+        weight: 32
+        def: 'The licence states explicitly that the law of EU/or of a Member State is applicable (i.e. the Member State of the Licensor)'
+      - name: 'US law'
+        weight: 33
+        def: 'The licence states explicitly that the law of the United States of America is applicable (i.e. some US State)'
+      - name: "Licensor's law"
+        weight: 34
+        def: "The licence states explicitly that the applicable law is the one of the licensor's state"
+      - name: 'Other law'
+        weight: 35
+        def: 'The licence states explicitly that the law of a specific state (other than EU or US) is applicable'
+      - name: 'Not fixed/local'
+        weight: 36
+        def: 'The licence do not explicitely determines the applicable law'
+      - name: 'Venue fixed'
+        weight: 37
+        def: 'The licence fixes the competent court in case of litigation, with possible exceptions / agreements'
+  - name: 'Support'
+    weight: -5
+    children:
+      - name: 'Strong Community'
+        weight: 38
+        def: 'The licence is supported by a solid community: licence stewart has a web site / has a legal support addressing questions / publish FAQs or cases'
+      - name: 'Governments/EU'
+        weight: 39
+        def: 'The licence is supported by a government, an international organisation, the European Union or important public agencies (i.e. NASA, CERN etc.)'
+      - name: 'OSI approved'
+        weight: 40
+        def: 'The licence is approved by the Open Source Initiative, as compliant with the Open Source Definition (OSD)'
+      - name: 'FSF Free/Libre'
+        weight: 41
+        def: 'The licence is considered as Free/Libre by the Free Software Foundation'

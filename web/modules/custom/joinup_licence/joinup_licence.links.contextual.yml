@@ -1,0 +1,4 @@
+joinup_licence.licence_filter_block.taxonomy_term_overview:
+  route_name: entity.taxonomy_vocabulary.overview_form
+  group: 'licence_filter_block'
+  title: Edit Licence terms
