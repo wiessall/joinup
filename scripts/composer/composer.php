@@ -15,11 +15,6 @@ if ($argc !== 2 || !in_array($argv[1], ['install', 'update'], TRUE)) {
   exit($exitCode++);
 }
 
-// Mute GrumPHP.
-if (file_exists("$projectRoot/vendor/bin/grumphp")) {
-  print execCmd("$projectRoot/vendor/bin/grumphp git:deinit") . "\n";
-}
-
 // Store the Joinup version.
 print "Detecting the Joinup version... ";
 if (execCmd('git rev-parse --is-shallow-repository') !== 'false') {
