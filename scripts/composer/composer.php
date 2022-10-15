@@ -41,13 +41,12 @@ if (!getenv('COMPOSER_DISABLE_NODE_DEPENDENCIES')) {
   print 'NPM ' . execCmd("npm --version") . "\n";
 
   // Theme dependencies.
-  $command = "cd $projectRoot/web/themes/ventuno && npm ci";
+  $command = "npm ci --prefix web/themes/ventuno";
   print "Running: $command\n";
   execCmd($command);
 
   // Project dependencies.
   $command = $argv[1] === 'install' ? 'npm ci' : 'npm install';
-  $command = "cd $projectRoot && $command";
   print "Running: $command\n";
   execCmd($command);
 }
