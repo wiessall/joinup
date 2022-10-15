@@ -164,9 +164,7 @@
             "cweagans/composer-patches": true,
             "composer/installers": true,
             "drupal/core-composer-scaffold": true,
-            "foxy/foxy": true,
-            "openeuropa/composer-artifacts": true,
-            "zaporylie/composer-drupal-optimizations": false
+            "openeuropa/composer-artifacts": true
         }
     },
     "autoload": {
