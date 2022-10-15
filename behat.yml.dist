@@ -90,7 +90,7 @@ default:
       base_url: ${env.DRUPAL_BASE_URL}
       ajax_timeout: 10
       files_path: ${joinup.dir}/tests/fixtures/files
-      goutte: ~
+      browserkit_http: ~
       javascript_session: selenium2
       browser_name: ${behat.browser_name}
       selenium2:
