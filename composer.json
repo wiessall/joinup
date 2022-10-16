@@ -237,8 +237,7 @@
         "enable-patching": true,
         "composer-exit-on-patch-failure": true,
         "patchLevel": {
-            "drupal/core": "-p2",
-            "symfony/browser-kit": "-p5"
+            "drupal/core": "-p2"
         },
         "patches": {
             "behat/mink-extension": {
@@ -392,6 +391,9 @@
             },
             "openeuropa/task-runner": {
                 "Command config cannot be overridden @see https://github.com/openeuropa/task-runner/pull/135": "https://patch-diff.githubusercontent.com/raw/openeuropa/task-runner/pull/135.diff"
+            },
+            "symfony/mime": {
+                "a": "resources/patch/sy.diff"
             }
         },
         "patches-ignore": {
