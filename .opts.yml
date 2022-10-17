@@ -30,7 +30,7 @@ php_version: 7.4
 extra_pkgs:
   - php7.4-apcu
 
-mysql_version: 8.0
+mysql_version: "8.0"
 
 solr: True
 solr_version: 8
