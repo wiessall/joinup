@@ -303,8 +303,7 @@ Feature: "Add solution" visibility options.
     When I press "Additional fields"
     And  I remove the first file from "Logo"
     And I wait for AJAX to finish
-    Then I scroll "Banner" into view
-    And  I remove the first file from "Banner"
+    Then  I remove the first file from "Banner"
     And I wait for AJAX to finish
 
     When I select image #2 as solution logo
