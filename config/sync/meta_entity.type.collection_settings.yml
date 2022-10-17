@@ -21,4 +21,4 @@ mapping:
   rdf_entity:
     collection:
       field_name: settings
-      auto_create: true
+      auto_create: false

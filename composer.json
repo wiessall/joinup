@@ -142,6 +142,9 @@
         "weitzman/drupal-test-traits": "^1.5",
         "weitzman/logintrait": "^1.1"
     },
+    "replace": {
+        "drupal/ckeditor": "self.version"
+    },
     "conflict": {
         "drupal/drupal": "*",
         "symfony/http-foundation": "3.4.24"
@@ -293,6 +296,9 @@
             },
             "drupal/matomo_reporting_api": {
                 "Ensure backward compatibility with Piwik @see https://www.drupal.org/project/matomo_reporting_api/issues/3080854": "https://www.drupal.org/files/issues/2019-09-18/3080854-7.patch"
+            },
+            "drupal/message_notify": {
+                "Allow 3rd-party to act before delivery @see https://www.drupal.org/project/message_notify/issues/3314370": "resources/patch/message_notify-diff-8.x-1.2-3314370.diff"
             },
             "drupal/meta_entity": {
                 "Make the field configurable in the view @see https://www.drupal.org/project/meta_entity/issues/3279161": "https://git.drupalcode.org/project/meta_entity/-/merge_requests/4.diff",

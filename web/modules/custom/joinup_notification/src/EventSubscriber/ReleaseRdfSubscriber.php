@@ -5,7 +5,6 @@ declare(strict_types = 1);
 namespace Drupal\joinup_notification\EventSubscriber;
 
 use Drupal\Core\Entity\EntityInterface;
-use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\asset_release\Entity\AssetReleaseInterface;
 use Drupal\joinup_group\JoinupGroupHelper;
 use Drupal\joinup_notification\Event\NotificationEvent;
@@ -14,7 +13,6 @@ use Drupal\joinup_notification\NotificationEvents;
 use Drupal\og\OgRoleInterface;
 use Drupal\state_machine\Plugin\Workflow\WorkflowInterface;
 use Drupal\state_machine\Plugin\Workflow\WorkflowTransition;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
  * Notification handler for the notifications related to releases.
@@ -40,9 +38,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
  *   Recipients: owner
  * @codingStandardsIgnoreEnd
  */
-class ReleaseRdfSubscriber extends NotificationSubscriberBase implements EventSubscriberInterface {
-
-  use StringTranslationTrait;
+class ReleaseRdfSubscriber extends NotificationSubscriberBase {
 
   const TEMPLATE_UPDATE_PUBLISHED = 'release_update';
   const TEMPLATE_DELETE = 'release_delete';
@@ -284,13 +280,6 @@ class ReleaseRdfSubscriber extends NotificationSubscriberBase implements EventSu
     }
 
     return TRUE;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  protected function getConfigurationName(): string {
-    return '';
   }
 
   /**

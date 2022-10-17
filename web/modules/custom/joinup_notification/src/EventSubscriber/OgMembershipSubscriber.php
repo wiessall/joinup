@@ -9,12 +9,11 @@ use Drupal\Core\Url;
 use Drupal\joinup_notification\Event\NotificationEvent;
 use Drupal\joinup_notification\NotificationEvents;
 use Drupal\og\OgMembershipInterface;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
  * Handles notifications related to changes in group memberships.
  */
-class OgMembershipSubscriber extends NotificationSubscriberBase implements EventSubscriberInterface {
+class OgMembershipSubscriber extends NotificationSubscriberBase {
 
   const TEMPLATE_REQUEST_MEMBERSHIP = 'og_membership_request';
   const TEMPLATE_APPROVE_MEMBERSHIP = 'og_membership_approve';
@@ -49,7 +48,6 @@ class OgMembershipSubscriber extends NotificationSubscriberBase implements Event
     $this->membership = $event->getEntity();
     $this->entity = $this->membership->getGroup();
     $this->operation = $event->getOperation();
-    $this->config = $this->getConfigurationName();
   }
 
   /**
@@ -195,13 +193,6 @@ class OgMembershipSubscriber extends NotificationSubscriberBase implements Event
     }
 
     return TRUE;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  protected function getConfigurationName(): string {
-    return '';
   }
 
   /**
