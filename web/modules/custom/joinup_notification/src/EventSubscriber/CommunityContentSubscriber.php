@@ -8,7 +8,6 @@ use Drupal\Core\Config\ConfigFactory;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Session\AccountProxy;
-use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\joinup_discussion\Entity\Discussion;
 use Drupal\joinup_group\JoinupGroupHelper;
 use Drupal\joinup_notification\Event\NotificationEvent;
@@ -22,14 +21,11 @@ use Drupal\og\OgRoleInterface;
 use Drupal\state_machine\Plugin\Workflow\WorkflowInterface;
 use Drupal\state_machine\Plugin\Workflow\WorkflowTransition;
 use Drupal\state_machine_revisions\RevisionManagerInterface;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
  * Handles notifications related to community content.
  */
-class CommunityContentSubscriber extends NotificationSubscriberBase implements EventSubscriberInterface {
-
-  use StringTranslationTrait;
+class CommunityContentSubscriber extends NotificationSubscriberBase {
 
   /**
    * The transition object.

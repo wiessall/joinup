@@ -748,3 +748,42 @@ Feature: Global search
     Then I should see the text "Updated Date: 08/03/2019" in the "Relativity is the word" card
     And I should see the text "Updated Date: 08/02/2019" in the "Relativity news: Relativity theory" card
     And I should see the text "Updated Date: 08/01/2019" in the "Absolutely nonsense" card
+
+  Scenario: Regression test for ISAICP-7078
+  See https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7078
+
+    Given collections:
+      | title            | description       | state     |
+      | Asset collection | Some custom data. | validated |
+    And the following solution:
+      | title            | My asset solution                    |
+      | collection       | Asset collection                     |
+      | description      | A asset sample solution              |
+      | documentation    | text.pdf                             |
+      | content creation | registered users                     |
+      | landing page     | http://foo-example.com/landing       |
+      | webdav creation  | no                                   |
+      | webdav url       | http://joinup.eu/solution/foo/webdav |
+      | wiki             | http://example.wiki/foobar/wiki      |
+      | state            | validated                            |
+    And the following releases:
+      | title  | documentation | release number | release notes | creation date    | is version of     | state     | status    |
+      | Delta1 | text.pdf      | 1.0.0          | New 1.0       | 2017-11-11T11:11 | My asset solution | validated | Completed |
+      | Delta2 | text.pdf      | 2.0.0          | New 2.0       | 2017-12-11T11:11 | My asset solution | validated | Completed |
+      | Delta3 | text.pdf      | 3.0.0          | New 3.0       | 2018-11-11T11:11 | My asset solution | validated | Completed |
+      | Delta4 | text.pdf      | 4.0.0          | New 4.0       | 2019-11-11T11:11 | My asset solution | validated | Completed |
+      | Delta5 | text.pdf      | 5.0.0          | New 5.0       | 2020-11-11T11:11 | My asset solution | validated | Completed |
+      | Delta6 | text.pdf      | 6.0.0          | New 6.0       | 2021-11-11T11:11 | My asset solution | validated | Completed |
+      | Delta7 | text.pdf      | 7.0.0          | New 7.0       | 2021-12-11T11:11 | My asset solution | validated | Completed |
+      | Delta8 | text.pdf      | 8.0.0          | New 8.0       | 2018-10-11T11:11 | My asset solution | validated | Completed |
+
+    When I go to "/search?f[0]=type%3Aasset_release"
+    And I should see the text "SEARCH RESULTS (8)"
+    Then I should see the text "New 1.0" in the "Delta1" card
+    And I should see the text "New 2.0" in the "Delta2" card
+    And I should see the text "New 3.0" in the "Delta3" card
+    And I should see the text "New 4.0" in the "Delta4" card
+    And I should see the text "New 5.0" in the "Delta5" card
+    And I should see the text "New 6.0" in the "Delta6" card
+    And I should see the text "New 7.0" in the "Delta7" card
+    And I should see the text "New 8.0" in the "Delta8" card
