@@ -5,20 +5,16 @@ declare(strict_types = 1);
 namespace Drupal\joinup_notification\EventSubscriber;
 
 use Drupal\Core\Entity\EntityInterface;
-use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\collection\Entity\CollectionInterface;
 use Drupal\joinup_notification\Event\NotificationEvent;
 use Drupal\joinup_notification\NotificationEvents;
 use Drupal\joinup_workflow\EntityWorkflowStateInterface;
 use Drupal\og\OgRoleInterface;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
  * Handles notifications related to collections.
  */
-class CollectionRdfSubscriber extends NotificationSubscriberBase implements EventSubscriberInterface {
-
-  use StringTranslationTrait;
+class CollectionRdfSubscriber extends NotificationSubscriberBase {
 
   const TEMPLATE_APPROVE_EDIT = 'col_approve_edit';
   const TEMPLATE_APPROVE_NEW = 'col_approve_new';
@@ -465,13 +461,6 @@ class CollectionRdfSubscriber extends NotificationSubscriberBase implements Even
    */
   protected function appliesOnCollections(): bool {
     return $this->entity instanceof CollectionInterface;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  protected function getConfigurationName(): string {
-    return '';
   }
 
   /**

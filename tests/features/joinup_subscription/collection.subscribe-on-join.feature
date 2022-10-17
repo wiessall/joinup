@@ -34,7 +34,7 @@ Feature: Subscribing to a collection after joining
     # The user can decline the subscription.
     When I press "No thanks" in the "Modal buttons" region
     Then the modal should be closed
-    And I should not be subscribed to the "Sapient Pearwood" collection
+    And I should not be subscribed to any bundle from the "Sapient Pearwood" collection
 
     # Navigate to another open collection, this time subscribing.
     When I go to the homepage of the "Drop bears" collection
@@ -44,7 +44,7 @@ Feature: Subscribing to a collection after joining
     Then the modal should be closed
     And I should see the success message "You have been subscribed to Drop bears and will receive weekly notifications. To manage your notifications go to My subscriptions in your user menu."
     And I should have the following content subscriptions:
-      | Drop bears | discussion, document, event, news, solution |
+      | Drop bears | discussion, document, event, news, solution, announcements |
 
     # Navigate to a closed collection and deny the subscription.
     When I go to the homepage of the "Troll ducks" collection
@@ -58,7 +58,7 @@ Feature: Subscribing to a collection after joining
     And I should see the button "Subscribe" in the "Modal buttons" region
     When I press "No thanks" in the "Modal buttons" region
     Then the modal should be closed
-    And I should not be subscribed to the "Troll ducks" collection
+    And I should not be subscribed to any bundle from the "Troll ducks" collection
 
     # Navigate to a closed collection and accept the subscription.
     When I go to the homepage of the "Swamp dragons" collection
@@ -68,4 +68,4 @@ Feature: Subscribing to a collection after joining
     Then the modal should be closed
     And I should see the success message "You have been subscribed to Swamp dragons and will receive weekly notifications once your membership is approved."
     And I should have the following content subscriptions:
-      | Swamp dragons | discussion, document, event, news, solution |
+      | Swamp dragons | discussion, document, event, news, solution, announcements |

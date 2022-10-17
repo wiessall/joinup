@@ -3,6 +3,7 @@ langcode: en
 status: true
 dependencies:
   config:
+    - field.field.meta_entity.collection_settings.announcements_enabled
     - field.field.meta_entity.collection_settings.glossary_link_only_first
     - field.field.meta_entity.collection_settings.landing_page
     - meta_entity.type.collection_settings
@@ -29,6 +30,12 @@ targetEntityType: meta_entity
 bundle: collection_settings
 mode: default
 content:
+  announcements_enabled:
+    type: boolean_checkbox
+    weight: 2
+    region: content
+    settings:
+      display_label: true
   glossary_link_only_first:
     type: boolean_checkbox
     weight: 1
