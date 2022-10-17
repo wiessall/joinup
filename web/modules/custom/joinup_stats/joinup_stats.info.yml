@@ -9,7 +9,3 @@ dependencies:
   - 'cached_computed_field:cached_computed_field'
   - 'joinup:joinup_bundle_class'
   - 'meta_entity:meta_entity'
-
-config_devel:
-  install:
-    - joinup_stats.settings

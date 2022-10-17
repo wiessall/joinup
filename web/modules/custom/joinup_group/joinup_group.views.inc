@@ -16,4 +16,12 @@ function joinup_group_views_data_alter(array &$data): void {
   $data['search_api_index_published']['entity_groups']['argument']['id'] = 'search_api_group';
   $data['search_api_index_unpublished']['entity_groups']['argument']['id'] = 'search_api_group';
   $data['node__og_audience']['og_audience_target_id']['argument']['id'] = 'og_audience_group';
+  $data['message__group']['group_target_id']['argument']['id'] = 'og_audience_group';
+  $data['message']['edit_message__announcement'] = [
+    'field' => [
+      'title' => t('Link to edit announcement'),
+      'help' => t('Provide an edit link the group announcement.'),
+      'id' => 'joinup_group_announcement_edit_link',
+    ],
+  ];
 }

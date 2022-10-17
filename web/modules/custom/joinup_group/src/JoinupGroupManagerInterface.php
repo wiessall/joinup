@@ -4,7 +4,9 @@ declare(strict_types = 1);
 
 namespace Drupal\joinup_group;
 
+use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Session\AccountInterface;
+use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\og\OgMembershipInterface;
 
 /**
@@ -57,5 +59,36 @@ interface JoinupGroupManagerInterface {
    *   An array of OG memberships that match the criteria.
    */
   public function getUserMembershipsByRole(AccountInterface $user, string $role, array $states = [OgMembershipInterface::STATE_ACTIVE]): array;
+
+  /**
+   * Checks whether an account aha access to a group.
+   *
+   * In many places, we're performing a group composite access check, either by
+   * a site-wide permission or by a OG permission. This method aim is to provide
+   * a centralised, unified way to do this check.
+   *
+   * @param \Drupal\joinup_group\Entity\GroupInterface $group
+   *   The group to be checked.
+   * @param string $og_permission
+   *   The OG permission to be checked.
+   * @param string|null $site_permission
+   *   (optional) The site-wide permission. If omitted, only the OG check will
+   *   be performed.
+   * @param \Drupal\Core\Session\AccountInterface|null $account
+   *   (optional) The account for which to perform the check. If omitted, the
+   *   current user account will be checked.
+   *
+   * @return \Drupal\Core\Access\AccessResultInterface
+   *   The access result object, containing also cache metadata.
+   */
+  public function access(GroupInterface $group, string $og_permission, ?string $site_permission = NULL, ?AccountInterface $account = NULL): AccessResultInterface;
+
+  /**
+   * Returns the group from the OG context.
+   *
+   * @return \Drupal\joinup_group\Entity\GroupInterface|null
+   *   The group from the current context, if any.
+   */
+  public function getGroupFromContext(): ?GroupInterface;
 
 }
