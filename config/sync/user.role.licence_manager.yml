@@ -11,6 +11,7 @@ label: 'Licence manager'
 weight: -8
 is_admin: null
 permissions:
+  - 'access compatibility document overview'
   - 'access dashboard'
   - 'create licence rdf entity'
   - 'delete licence rdf entity'

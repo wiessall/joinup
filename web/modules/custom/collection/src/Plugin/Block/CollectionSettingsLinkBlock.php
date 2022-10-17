@@ -27,7 +27,7 @@ class CollectionSettingsLinkBlock extends BlockBase implements ContainerFactoryP
    *
    * @var \Drupal\og\OgContextInterface
    */
-  protected $ogContext;
+  protected OgContextInterface $ogContext;
 
   /**
    * Constructs a new plugin instance.

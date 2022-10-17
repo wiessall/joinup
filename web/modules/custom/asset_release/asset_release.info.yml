@@ -24,7 +24,3 @@ dependencies:
   - 'og:og'
   - 'rdf_entity:rdf_entity'
   - 'state_machine:state_machine'
-
-config_devel:
-  install:
-    - asset_release.settings

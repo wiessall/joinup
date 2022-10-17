@@ -117,7 +117,6 @@
         "drupal/cas_mock_server": "^1.3",
         "drupal/coder": "^8.3.11",
         "drupal/composer_deploy": "^1.6",
-        "drupal/config_devel": "~1.7",
         "drupal/config_update": "^1.7",
         "drupal/devel": "^4.0",
         "drupal/drupal-extension": "^4.1",
@@ -143,6 +142,9 @@
         "vlucas/phpdotenv": "~5",
         "weitzman/drupal-test-traits": "^1.5",
         "weitzman/logintrait": "^1.1"
+    },
+    "replace": {
+        "drupal/ckeditor": "self.version"
     },
     "conflict": {
         "drupal/drupal": "*",
@@ -199,6 +201,7 @@
     },
     "scripts": {
         "post-install-cmd": [
+            "composer validate --no-check-all --no-check-publish",
             "./scripts/composer/composer.php install"
         ],
         "post-update-cmd": [
@@ -238,9 +241,6 @@
             "drupal/core": "-p2"
         },
         "patches": {
-            "drupal/config_devel": {
-                "Add a Drush command for manipulating module info files @see https://www.drupal.org/project/config_devel/issues/2392929": "https://git.drupalcode.org/project/config_devel/-/merge_requests/4.diff"
-            },
             "drupal/coder": {
                 "PHPCS hangs indefinetly with standard Drupal @see https://www.drupal.org/project/coder/issues/3306999": "https://git.drupalcode.org/project/coder/-/commit/446dea2.diff"
             },
@@ -304,6 +304,9 @@
             "drupal/matomo_reporting_api": {
                 "Ensure backward compatibility with Piwik @see https://www.drupal.org/project/matomo_reporting_api/issues/3080854": "https://www.drupal.org/files/issues/2019-09-18/3080854-7.patch"
             },
+            "drupal/message_notify": {
+                "Allow 3rd-party to act before delivery @see https://www.drupal.org/project/message_notify/issues/3314370": "resources/patch/message_notify-diff-8.x-1.2-3314370.diff"
+            },
             "drupal/meta_entity": {
                 "Make the field configurable in the view @see https://www.drupal.org/project/meta_entity/issues/3279161": "https://git.drupalcode.org/project/meta_entity/-/merge_requests/4.diff",
                 "Improve ::getMetaEntitiesForEntity() performance @see https://www.drupal.org/project/meta_entity/issues/3299712": "https://git.drupalcode.org/project/meta_entity/-/merge_requests/6.diff"
@@ -334,7 +337,7 @@
                 "The search_api_list:{index} cache tag is not added to the view display @see https://www.drupal.org/project/search_api/issues/3298295": "https://git.drupalcode.org/project/search_api/-/merge_requests/50.diff"
             },
             "drupal/search_api_autocomplete": {
-                "Clear timeout autosubmit used in views_autosubmit.": "resources/patch/search_api_autocomplete_override_views_autosubmit.patch"
+                "Clear timeout autosubmit used in views_autosubmit. @see https://www.drupal.org/i/3314418": "https://git.drupalcode.org/project/search_api_autocomplete/-/merge_requests/8.diff"
             },
             "drupal/search_api_spellcheck": {
                 "Missing plugins config schema @see https://www.drupal.org/project/search_api_spellcheck/issues/3277693": "https://git.drupalcode.org/project/search_api_spellcheck/-/merge_requests/1.diff",

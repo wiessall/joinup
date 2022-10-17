@@ -48,3 +48,28 @@ condition.plugin.group_context:
       sequence:
         type: uri
         label: Group ID
+
+views.argument_validator.joinup_group_user_permission:
+  type: views.argument_validator.*
+  label: Validates user group and site permissions
+  mapping:
+    group_permission:
+      type: string
+      nullable: true
+      label: Group permission
+    site_permission:
+      type: string
+      nullable: true
+      label: Site permission
+
+views.argument_validator.joinup_group_announcements_enabled:
+  type: views.argument_validator.joinup_group_user_permission
+  label: Access to group announcements
+
+views.field.joinup_group_announcement_edit_link:
+  type: views.field.entity_link
+  label: Announcement edit link
+
+views.access.joinup_group_announcements:
+  type: mapping
+  label: 'Group announcements access'
