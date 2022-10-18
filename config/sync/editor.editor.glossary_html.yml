@@ -1,38 +1,25 @@
-uuid: ac97c65a-d0e0-44d9-ae97-e0271d639625
+uuid: 03f7a0cc-531e-48b9-b7e7-93bb2dacff06
 langcode: en
 status: true
 dependencies:
   config:
     - filter.format.glossary_html
   module:
-    - ckeditor
-    - editor_file
-third_party_settings:
-  editor_file:
-    status: true
-    scheme: public
-    directory: inline-files
-    extensions: txt
-    max_size: ''
+    - ckeditor5
 format: glossary_html
-editor: ckeditor
+editor: ckeditor5
 settings:
   toolbar:
-    rows:
-      -
-        -
-          name: Links
-          items:
-            - DrupalLink
-            - DrupalUnlink
-        -
-          name: Tools
-          items:
-            - Source
+    items:
+      - link
+      - '|'
+      - sourceEditing
   plugins:
-    drupallink:
+    ckeditor5_sourceEditing:
+      allowed_tags:
+        - '<a hreflang>'
+    linkit_extension:
       linkit_enabled: false
-      linkit_profile: ''
 image_upload:
   status: false
   scheme: public
