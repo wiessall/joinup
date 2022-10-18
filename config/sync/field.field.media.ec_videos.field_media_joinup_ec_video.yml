@@ -1,15 +1,15 @@
-uuid: 6fc49b36-0f6f-44f9-9a32-0a12c2a9549d
+uuid: 6d576e84-9671-4908-8404-6e122dd9ddb7
 langcode: en
 status: true
 dependencies:
   config:
-    - field.storage.media.field_media_media_avportal_video
+    - field.storage.media.field_media_joinup_ec_video
     - media.type.ec_videos
-id: media.ec_videos.field_media_media_avportal_video
-field_name: field_media_media_avportal_video
+id: media.ec_videos.field_media_joinup_ec_video
+field_name: field_media_joinup_ec_video
 entity_type: media
 bundle: ec_videos
-label: 'Media AV Portal Video'
+label: 'Media Joinup EC Video'
 description: ''
 required: true
 translatable: true

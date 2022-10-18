@@ -1,11 +1,11 @@
-uuid: 250ecfb8-3e92-47cd-bf91-3e279d9bdcc6
+uuid: 152e5f48-bdcc-4777-8d79-5a1e300ef011
 langcode: en
 status: true
 dependencies:
   module:
     - media
-id: media.field_media_media_avportal_video
-field_name: field_media_media_avportal_video
+id: media.field_media_joinup_ec_video
+field_name: field_media_joinup_ec_video
 entity_type: media
 type: string
 settings:

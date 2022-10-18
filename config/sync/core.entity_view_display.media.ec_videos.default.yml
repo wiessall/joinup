@@ -1,24 +1,27 @@
-uuid: 0199a3c0-c7d7-400e-875e-945659963cda
+uuid: f25711b1-8be9-4f53-8e91-ebe5792aa8df
 langcode: en
 status: true
 dependencies:
   config:
-    - field.field.media.ec_videos.field_media_media_avportal_video
+    - field.field.media.ec_videos.field_media_joinup_ec_video
     - media.type.ec_videos
   module:
     - media_avportal
+    - template_suggestion
 id: media.ec_videos.default
 targetEntityType: media
 bundle: ec_videos
 mode: default
 content:
-  field_media_media_avportal_video:
+  field_media_joinup_ec_video:
     type: avportal_video
     label: visually_hidden
     settings:
       max_width: 640
       max_height: 390
-    third_party_settings: {  }
+    third_party_settings:
+      template_suggestion:
+        template_suggestion: ''
     weight: 0
     region: content
 hidden:

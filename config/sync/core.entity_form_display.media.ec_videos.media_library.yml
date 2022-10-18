@@ -1,10 +1,10 @@
-uuid: 8f1d5112-3b34-4e9b-a708-5a39e3d3217d
+uuid: f8fd6353-5cb4-45e8-ac0a-e2c96ae5f33e
 langcode: en
 status: true
 dependencies:
   config:
     - core.entity_form_mode.media.media_library
-    - field.field.media.ec_videos.field_media_media_avportal_video
+    - field.field.media.ec_videos.field_media_joinup_ec_video
     - media.type.ec_videos
 id: media.ec_videos.media_library
 targetEntityType: media
@@ -13,7 +13,7 @@ mode: media_library
 content: {  }
 hidden:
   created: true
-  field_media_media_avportal_video: true
+  field_media_joinup_ec_video: true
   langcode: true
   name: true
   path: true

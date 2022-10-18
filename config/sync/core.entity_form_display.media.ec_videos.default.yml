@@ -1,9 +1,9 @@
-uuid: 81d888e4-e6b2-4ec5-8790-65624bcc6610
+uuid: dbcc5f68-8b64-4d8d-8ff1-4ceb1955b2a0
 langcode: en
 status: true
 dependencies:
   config:
-    - field.field.media.ec_videos.field_media_media_avportal_video
+    - field.field.media.ec_videos.field_media_joinup_ec_video
     - media.type.ec_videos
   module:
     - media_avportal
@@ -19,7 +19,7 @@ content:
     region: content
     settings: {  }
     third_party_settings: {  }
-  field_media_media_avportal_video:
+  field_media_joinup_ec_video:
     type: avportal_textfield
     weight: 0
     region: content
