@@ -5,14 +5,12 @@
 # See \EcEuropa\Toolkit\TaskRunner\Commands\CloneCommands::runDeploy().
 upgrade_commands:
   default:
-    - ./vendor/bin/drush state:set system.maintenance_mode 1 --input-format=integer --yes
     - touch disable-config-readonly
     - ./vendor/bin/drush deploy --yes
     - ./vendor/bin/drush search-api:reset-tracker --yes
     - ./vendor/bin/drush joinup:node-access-rebuild
     - rm disable-config-readonly
     - ./vendor/bin/drush site-alert:disable
-    - ./vendor/bin/drush state:set system.maintenance_mode 0 --input-format=integer --yes
     - ./scripts/check_status_report.php
   append:
     acceptance:
