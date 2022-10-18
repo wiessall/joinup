@@ -14,7 +14,6 @@ dependencies:
   module:
     - allowed_formats
     - comment
-    - media_library
     - publication_date
     - text
 _core:
@@ -98,11 +97,14 @@ content:
     settings: {  }
     third_party_settings: {  }
   video:
-    type: media_library_widget
-    weight: 1
+    type: entity_reference_autocomplete
+    weight: 26
     region: content
     settings:
-      media_types: {  }
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
     third_party_settings: {  }
 hidden:
   created: true

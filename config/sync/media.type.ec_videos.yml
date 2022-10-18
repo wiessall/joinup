@@ -1,17 +1,17 @@
-uuid: 4c2c768b-3c62-42e0-85be-efd04aceaa75
+uuid: 5bf45872-492c-40a8-9b28-4550283d15c7
 langcode: en
 status: true
 dependencies:
   module:
-    - media_avportal
+    - joinup_video
 id: ec_videos
 label: 'EC videos'
-description: 'EC videos are allowed.'
-source: media_avportal_video
+description: 'European Commission video'
+source: joinup_ec_video
 queue_thumbnail_downloads: false
 new_revision: false
 source_configuration:
-  source_field: field_media_media_avportal_video
   thumbnails_directory: 'public://media_avportal_thumbnails'
+  source_field: field_media_joinup_ec_video
 field_map:
   title: name
