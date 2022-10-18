@@ -75,7 +75,7 @@ filters:
     status: true
     weight: -30
     settings:
-      allowed_html: ''
+      allowed_html: '<br> <p> <strong> <em> <blockquote> <a href> <ul> <ol> <li> <img src alt data-entity-uuid data-entity-type height width> <drupal-media data-entity-type data-entity-uuid alt>'
       filter_html_help: true
       filter_html_nofollow: false
   filter_url:
@@ -95,17 +95,18 @@ filters:
   joinup_video:
     id: joinup_video
     provider: joinup_video
-    status: true
+    status: false
     weight: -49
     settings:
       allowed_providers:
-        google_docs: 0
-        slideshare: 0
-        prezi: 0
         joinup_ec_video: 0
         internal_path: 0
-        youtube: 0
+        google_docs: 0
+        joinup_ec_webcast_video: 0
+        prezi: 0
+        slideshare: 0
         vimeo: 0
+        youtube: 0
         youtube_playlist: 0
       autoplay: false
       responsive: true
@@ -119,15 +120,17 @@ filters:
   media_embed:
     id: media_embed
     provider: media
-    status: false
+    status: true
     weight: -35
     settings:
       default_view_mode: default
       allowed_view_modes: {  }
-      allowed_media_types: {  }
+      allowed_media_types:
+        ec_videos: ec_videos
+        remote_videos: remote_videos
   video_embed_wysiwyg:
     id: video_embed_wysiwyg
     provider: video_embed_wysiwyg
-    status: true
+    status: false
     weight: -37
     settings: {  }

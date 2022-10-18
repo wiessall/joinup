@@ -1,89 +1,84 @@
-uuid: d6f6db07-9ff5-4875-84aa-29d654c6e98c
+uuid: 637f142a-129f-4e3e-89fc-3eb4d29608cf
 langcode: en
 status: true
 dependencies:
   config:
     - filter.format.content_editor
   module:
-    - ckeditor
-    - editor_file
-third_party_settings:
-  editor_file:
-    status: true
-    scheme: public
-    directory: inline-files
-    extensions: 'txt pdf doc docx xls xlsx ods odt ppt pptx vsd zip tar gz png jpg jpeg mp4 avi'
-    max_size: ''
-_core:
-  default_config_hash: q5apLmiD6OtzOkrwK1WJbPTSmeQ0rbG7rQUeTABWvjM
+    - ckeditor5
 format: content_editor
-editor: ckeditor
+editor: ckeditor5
 settings:
   toolbar:
-    rows:
-      -
-        -
-          name: Formatting
-          items:
-            - Format
-            - '-'
-            - Bold
-            - Italic
-            - '-'
-            - RemoveFormat
-        -
-          name: Links
-          items:
-            - DrupalLink
-            - DrupalUnlink
-        -
-          name: Lists
-          items:
-            - BulletedList
-            - NumberedList
-            - '-'
-            - Outdent
-            - Indent
-        -
-          name: Media
-          items:
-            - Blockquote
-            - DrupalImage
-            - DrupalFile
-            - Table
-            - video_embed
-        -
-          name: Tools
-          items:
-            - Cut
-            - Copy
-            - Paste
-            - PasteText
-        -
-          name: Undo/redo
-          items:
-            - Undo
-            - Redo
-        -
-          name: Source
-          items:
-            - Source
+    items:
+      - heading
+      - bold
+      - italic
+      - removeFormat
+      - '|'
+      - link
+      - '|'
+      - bulletedList
+      - numberedList
+      - outdent
+      - indent
+      - '|'
+      - blockQuote
+      - uploadImage
+      - insertTable
+      - drupalMedia
+      - '|'
+      - undo
+      - redo
+      - '|'
+      - sourceEditing
+      - '|'
+      - code
+      - codeBlock
   plugins:
-    drupallink:
+    ckeditor5_heading:
+      enabled_headings:
+        - heading1
+        - heading2
+        - heading3
+        - heading4
+        - heading5
+        - heading6
+    ckeditor5_sourceEditing:
+      allowed_tags:
+        - '<cite>'
+        - '<q>'
+        - '<dl>'
+        - '<dt>'
+        - '<dd>'
+        - '<iframe src allowfullscreen mozallowfullscreen webkitallowfullscreen width height frameborder>'
+        - '<map name>'
+        - '<area alt coords href hreflang rel shape>'
+        - '<blockquote cite>'
+        - '<ul type>'
+        - '<ol type>'
+        - '<h2 id>'
+        - '<h3 id>'
+        - '<h4 id>'
+        - '<h5 id>'
+        - '<h6 id>'
+        - '<img data-image-style usemap>'
+        - '<a hreflang accesskey id rel target title>'
+    ckeditor5_list:
+      reversed: false
+      startIndex: true
+    ckeditor5_imageResize:
+      allow_resize: true
+    media_media:
+      allow_view_mode_override: false
+    linkit_extension:
       linkit_enabled: true
       linkit_profile: default
-    video_embed:
-      defaults:
-        children:
-          autoplay: false
-          responsive: true
-          width: '854'
-          height: '480'
 image_upload:
   status: true
   scheme: public
   directory: inline-images
   max_size: '10 MB'
   max_dimensions:
-    width: null
-    height: null
+    width: 0
+    height: 0
