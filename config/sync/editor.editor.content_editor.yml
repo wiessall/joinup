@@ -24,7 +24,7 @@ settings:
       - indent
       - '|'
       - blockQuote
-      - uploadImage
+      - drupalInsertImage
       - insertTable
       - drupalMedia
       - '|'
