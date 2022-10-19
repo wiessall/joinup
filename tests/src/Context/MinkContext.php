@@ -175,4 +175,16 @@ class MinkContext extends DrupalExtensionMinkContext {
     parent::assertSelectRadioById($label, $id);
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  public function assertRegionPressButton($button, $region): void {
+    $region_node = $this->getRegion($region);
+    if (!$button_node = $region_node->findButton($button)) {
+      throw new \Exception("The button '$button' was not found in the region '$region' on the page {$this->getSession()->getCurrentUrl()}");
+    }
+    $this->scrollElementIntoView($button_node);
+    $region_node->pressButton($button);
+  }
+
 }
