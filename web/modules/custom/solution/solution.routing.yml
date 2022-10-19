@@ -63,17 +63,3 @@ solution.change_collection:
     parameters:
       rdf_entity:
         type: entity:rdf_entity
-
-solution.eif_perspective.form:
-  path: '/rdf_entity/{rdf_entity}/eif-perspective'
-  defaults:
-    _controller: Drupal\collection\Controller\CollectionSettingsController::settings
-    _title_callback: Drupal\collection\Controller\CollectionSettingsController::title
-  requirements:
-    _custom_access: Drupal\collection\Controller\CollectionSettingsController::access
-  options:
-    parameters:
-      rdf_entity:
-        type: entity:rdf_entity
-        bundle:
-          - collection
