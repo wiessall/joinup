@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "46a96947a4af6658be308a5901649cc9",
+    "content-hash": "5aea9533401b35d7ecb9971f3c93fb8e",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -7609,16 +7609,8 @@
                     "homepage": "https://www.drupal.org/user/1599440"
                 },
                 {
-                    "name": "infojunkie",
-                    "homepage": "https://www.drupal.org/user/48424"
-                },
-                {
                     "name": "joelpittet",
                     "homepage": "https://www.drupal.org/user/160302"
-                },
-                {
-                    "name": "Jon Pugh",
-                    "homepage": "https://www.drupal.org/user/17028"
                 }
             ],
             "description": "Adds an ability to perform bulk operations on selected entities from view results. Provides an API to create such operations.",
