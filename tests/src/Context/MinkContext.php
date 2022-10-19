@@ -172,7 +172,7 @@ class MinkContext extends DrupalExtensionMinkContext {
    * {@inheritdoc}
    */
   public function assertSelectRadioById($label, $id = ''): void {
-    $this->scrollNamedElementIntoView('field', $label);
+    $this->scrollNamedElementIntoView('radio', $label);
     parent::assertSelectRadioById($label, $id);
   }
 

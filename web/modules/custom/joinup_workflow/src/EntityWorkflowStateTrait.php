@@ -6,6 +6,7 @@ namespace Drupal\joinup_workflow;
 
 use Drupal\state_machine\Plugin\Field\FieldType\StateItemInterface;
 use Drupal\state_machine\Plugin\Workflow\WorkflowInterface;
+use Drupal\state_machine\Plugin\Workflow\WorkflowState;
 use Drupal\state_machine\Plugin\Workflow\WorkflowTransition;
 
 /**
@@ -21,6 +22,13 @@ trait EntityWorkflowStateTrait {
     assert(method_exists($this, 'getWorkflowStateFieldName'), __TRAIT__ . ' depends on EntityWorkflowStateInterface. Please implement it in your class.');
     $value = $this->getMainPropertyValue($this->getWorkflowStateFieldName());
     return $value ? (string) $value : '__new__';
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getWorkflowStateInstance(): WorkflowState {
+    return $this->getWorkflowStateField()->getWorkflow()->getState($this->getWorkflowState());
   }
 
   /**
@@ -81,6 +89,20 @@ trait EntityWorkflowStateTrait {
     /** @var \Drupal\workflow_state_permission\WorkflowStatePermissionInterface $workflow_state_permission */
     $workflow_state_permission = \Drupal::service('workflow_state_permission.workflow_state_permission');
     return $workflow_state_permission->isStateUpdatePermitted(\Drupal::currentUser(), $this, $this->getWorkflow(), $from_state, $to_state);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getTransitions(): array {
+    return $this->getWorkflowStateField()->getTransitions();
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function hasTransitions(): bool {
+    return (bool) $this->getTransitions();
   }
 
 }

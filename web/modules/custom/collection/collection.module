@@ -149,11 +149,11 @@ function collection_rdf_entity_insert(EntityInterface $entity) {
       }
     }
 
-    /** @var \Drupal\og\OgMembershipInterface $membership */
-    $membership = Og::createMembership($entity, $entity->getOwner());
-    $membership->setRoles(array_values(OgRole::loadMultiple($roles)));
-    $membership->set('subscription_bundles', $subscription_bundles);
-    $membership->save();
+    Og::createMembership($entity, $entity->getOwner())
+      ->setRoles(array_values(OgRole::loadMultiple($roles)))
+      ->set('subscription_bundles', $subscription_bundles)
+      ->set('announcements', TRUE)
+      ->save();
   }
 }
 
