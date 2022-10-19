@@ -142,6 +142,9 @@
         "weitzman/drupal-test-traits": "^1.5",
         "weitzman/logintrait": "^1.1"
     },
+    "replace": {
+        "drupal/ckeditor": "self.version"
+    },
     "conflict": {
         "drupal/drupal": "*",
         "symfony/http-foundation": "3.4.24"
@@ -267,9 +270,6 @@
                 "The old storage handler is still defined for RDF entities.": "resources/patch/core-fix-sparql-storage-hack.patch",
                 "Add option to show only start or end date in the DateTime Range custom formatter @see https://www.drupal.org/project/drupal/issues/2827055": "https://www.drupal.org/files/issues/2022-06-16/2827055-69.patch"
             },
-            "drupal/entityqueue": {
-                "Missing config schema for EntityQueueDragtableWidget @see Missing config schema for EntityQueueDragtableWidget": "https://git.drupalcode.org/project/entityqueue/-/merge_requests/3.diff"
-            },
             "drupal/editor_file": {
                 "Wrong file upload size when max upload left empty. @see https://www.drupal.org/i/3300142": "https://www.drupal.org/files/issues/2022-07-27/editor_file-fix_max_file_upload_empty-3300142-2.patch",
                 "Uploaded files are not permanent @see https://www.drupal.org/i/3057895": "https://www.drupal.org/files/issues/2019-05-29/file-upload-marked-permanent-3057895-2.patch"
@@ -294,12 +294,12 @@
             "drupal/matomo_reporting_api": {
                 "Ensure backward compatibility with Piwik @see https://www.drupal.org/project/matomo_reporting_api/issues/3080854": "https://www.drupal.org/files/issues/2019-09-18/3080854-7.patch"
             },
+            "drupal/message_notify": {
+                "Allow 3rd-party to act before delivery @see https://www.drupal.org/project/message_notify/issues/3314370": "resources/patch/message_notify-diff-8.x-1.2-3314370.diff"
+            },
             "drupal/meta_entity": {
                 "Make the field configurable in the view @see https://www.drupal.org/project/meta_entity/issues/3279161": "https://git.drupalcode.org/project/meta_entity/-/merge_requests/4.diff",
                 "Improve ::getMetaEntitiesForEntity() performance @see https://www.drupal.org/project/meta_entity/issues/3299712": "https://git.drupalcode.org/project/meta_entity/-/merge_requests/6.diff"
-            },
-            "drupal/og": {
-                "Non-node permissions overrides one each other @see https://github.com/Gizra/og/pull/748": "https://patch-diff.githubusercontent.com/raw/Gizra/og/pull/748.diff"
             },
             "drupal/paragraphs_jquery_ui_accordion": {
                 "Formatter settings are missing schema @see https://www.drupal.org/i/3194916": "https://git.drupalcode.org/project/paragraphs_jquery_ui_accordion/-/merge_requests/1.diff"
@@ -362,6 +362,9 @@
             },
             "openeuropa/oe_bootstrap_theme": {
                 "Allow drupal alters in menu links @see https://github.com/openeuropa/oe_bootstrap_theme/pull/241": "https://patch-diff.githubusercontent.com/raw/openeuropa/oe_bootstrap_theme/pull/241.diff"
+            },
+            "ec-europa/toolkit": {
+                "Add --strict option, it should treat Undefined and Pending steps as failures @see https://github.com/ec-europa/toolkit/pull/559": "https://patch-diff.githubusercontent.com/raw/ec-europa/toolkit/pull/559.diff"
             },
             "openeuropa/oe_webtools": {
                 "Allow to pass an optional referer. @see https://github.com/openeuropa/oe_webtools/pull/96": "https://patch-diff.githubusercontent.com/raw/openeuropa/oe_webtools/pull/96.diff",

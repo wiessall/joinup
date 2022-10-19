@@ -124,7 +124,7 @@ services:
   # Includes a Selenium server accessible at port 5900.
   # See docker-compose.override.yml.dist
   selenium:
-    image: selenium/standalone-chrome:4.2.2
+    image: selenium/standalone-chrome:4.5.0
     environment:
       - DISPLAY=:99
       - VNC_NO_PASSWORD=1
