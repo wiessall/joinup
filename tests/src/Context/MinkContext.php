@@ -22,22 +22,21 @@ class MinkContext extends DrupalExtensionMinkContext {
    */
   public function checkOption($option): void {
     $this->scrollNamedElementIntoView('checkbox', $option);
-    // @todo Remove the if (...) block in ISAICP-7138.
-    // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7138
-    if ($this->usesMaterialDesignLite()) {
-      // Overrides the default method for checking checkboxes to make it
-      // compatible with material design.
-      $option = $this->fixStepArgument($option);
-      $page = $this->getSession()->getPage();
-      if (!$page->find('css', 'div#block-ventuno-pagetitle')) {
-        $this->checkMaterialDesignField($option, $page);
-      }
-      else {
-        $page->checkField($option);
-      }
+    if (!$this->usesMaterialDesignLite()) {
+      parent::checkOption($option);
       return;
     }
-    parent::checkOption($option);
+    // Overrides the default method for checking checkboxes to make it
+    // compatible with material design.
+    $option = $this->fixStepArgument($option);
+    $page = $this->getSession()->getPage();
+    if (!$page->find('css', 'div#block-ventuno-pagetitle')) {
+      $this->checkMaterialDesignField($option, $page);
+    }
+    else {
+      $page->checkField($option);
+    }
+
   }
 
   /**
