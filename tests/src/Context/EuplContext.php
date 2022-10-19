@@ -143,7 +143,7 @@ class EuplContext extends RawDrupalContext {
    */
   public function assertLegalTypeTagsCategoriesAndOrder(string $spdx, TableNode $table): void {
     $expected = $table->getColumn(0);
-    $xpath = '//div[@data-joinup-spdx="' . $spdx . '"]//div[contains(concat(" ", normalize-space(@class), " "), " listing__inner-tile--wider ")]//span[contains(concat(" ", normalize-space(@class), " "), " licence-tile__label ")]';
+    $xpath = '//div[@data-joinup-spdx="' . $spdx . '"]//span[contains(concat(" ", normalize-space(@class), " "), " licence-tile__label badge ")]';
     $this->assertCategoriesAndOrder($xpath, $expected);
   }
 
