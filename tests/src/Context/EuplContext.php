@@ -219,12 +219,13 @@ class EuplContext extends RawDrupalContext {
    *   When the licence is not found on the page.
    */
   protected function toggleLicenceForComparison(bool $compare, string $spdx_id): void {
-    $licence = $this->findLicenceTile($spdx_id);
+    $checkbox = $this->findLicenceTile($spdx_id)->findField('Add to compare list');
+    $this->scrollElementIntoView($checkbox);
     if ($compare) {
-      $this->checkMaterialDesignField('Add to compare list', $licence);
+      $checkbox->check();
     }
     else {
-      $this->uncheckMaterialDesignField('Add to compare list', $licence);
+      $checkbox->uncheck();
     }
   }
 
@@ -248,28 +249,22 @@ class EuplContext extends RawDrupalContext {
   }
 
   /**
-   * Clicks a link in a licence tile.
+   * Presses a button in a licence tile.
    *
-   * @param string $link
-   *   The title of the link to click.
+   * @param string $label
+   *   The label of the button to press.
    * @param string $spdx_id
    *   The SPDX ID of the licence tile.
    *
    * @throws \Exception
-   *   Thrown when the licence tile or link is not found in the page.
+   *   Thrown when the licence tile or button are not found in the page.
    *
-   * @When I click :link in the :spdx_id licence tile
+   * @When I press :link in the :spdx_id licence tile
    */
-  public function clickLicenceTileLink(string $link, string $spdx_id): void {
-    $licence = $this->findLicenceTile($spdx_id);
-
-    if ($this->browserSupportsJavaScript()) {
-      // On JS enabled browsers, scroll to the top before clicking the link
-      // since it might be obscured by the floating header.
-      $this->scrollToTop();
-    }
-
-    $licence->clickLink($link);
+  public function clickLicenceTileLink(string $label, string $spdx_id): void {
+    $button = $this->findLicenceTile($spdx_id)->findButton($label);
+    $this->scrollElementIntoView($button);
+    $button->press();
   }
 
   /**
@@ -292,13 +287,13 @@ class EuplContext extends RawDrupalContext {
     \assert(in_array($status, ['enabled', 'disabled']), 'The $status parameter should take one of the values "enabled" or "disabled" but "' . $status . '" was given.');
 
     $mapping = [
-      'Compare' => 'licence-tile__button--compare',
+      'Compare' => 'jla-compare',
       'Check compatibility' => 'licence-tile__button--compatible',
     ];
     \assert(array_key_exists($label, $mapping), 'The label should be one of ' . implode(',', array_keys($mapping)) . ' but "' . $label . '" was given.');
 
     $page = $this->getSession()->getPage();
-    $xpath = '//a[text()="' . $label . '" and contains(concat(" ", normalize-space(@class), " "), " ' . $mapping[$label] . ' ")]';
+    $xpath = '//button[text()="' . $label . '" and contains(concat(" ", normalize-space(@class), " "), " ' . $mapping[$label] . ' ")]';
     $buttons = $page->findAll('xpath', $xpath);
     if (empty($buttons)) {
       throw new \Exception("No '$label' buttons found in the page.");
@@ -306,10 +301,10 @@ class EuplContext extends RawDrupalContext {
 
     /** @var \Behat\Mink\Element\NodeElement[] $buttons */
     foreach ($buttons as $button) {
-      if ($status === 'disabled' && !$button->hasClass('licence-tile__button--disabled')) {
+      if ($status === 'disabled' && !$button->hasAttribute('disabled')) {
         throw new \Exception("'$label' buttons should be disabled but are enabled.");
       }
-      elseif ($status === 'enabled' && $button->hasClass('licence-tile__button--disabled')) {
+      elseif ($status === 'enabled' && $button->hasAttribute('disabled')) {
         throw new \Exception("'$label' buttons should be enabled but are disabled.");
       }
     }
@@ -331,13 +326,12 @@ class EuplContext extends RawDrupalContext {
   public function assertLicenceCanBeCompared(string $spdx_id, string $can) {
     \assert(in_array($can, ['can', 'cannot']), 'The $can parameter should take one of the values "can" or "cannot" but "' . $can . '" was given.');
 
-    $licence = $this->findLicenceTile($spdx_id);
-    $checkbox = $licence->find('xpath', '//label[text()="Add to compare list"]/../..');
+    $checkbox = $this->findLicenceTile($spdx_id)->findField('Add to compare list');
 
-    if ($can === 'can' && $checkbox->hasClass('is-disabled')) {
+    if ($can === 'can' && $checkbox->hasAttribute('disabled')) {
       throw new \Exception("The licence '$spdx_id' should be allowed to be compared but is not.");
     }
-    elseif ($can === 'cannot' && !$checkbox->hasClass('is-disabled')) {
+    elseif ($can === 'cannot' && !$checkbox->hasAttribute('disabled')) {
       throw new \Exception("The licence '$spdx_id' shouldn't be allowed to be compared but it is.");
     }
   }
@@ -358,13 +352,12 @@ class EuplContext extends RawDrupalContext {
   public function assertLicenceChecked(string $spdx_id, string $checked) {
     \assert(in_array($checked, ['checked', 'unchecked']), 'The $checked parameter should take one of the values "checked" or "unchecked" but "' . $checked . '" was given.');
 
-    $licence = $this->findLicenceTile($spdx_id);
-    $checkbox = $licence->find('xpath', '//label[text()="Add to compare list"]/../..');
+    $checkbox = $this->findLicenceTile($spdx_id)->findField('Add to compare list');
 
-    if ($checked === 'checked' && !$checkbox->hasClass('is-checked')) {
+    if ($checked === 'checked' && !$checkbox->hasAttribute('checked')) {
       throw new \Exception("The licence '$spdx_id' should be checked but is not.");
     }
-    elseif ($checked === 'unchecked' && $checkbox->hasClass('is-checked')) {
+    elseif ($checked === 'unchecked' && $checkbox->hasAttribute('checked')) {
       throw new \Exception("The licence '$spdx_id' should not be checked but it is.");
     }
   }
