@@ -104,11 +104,8 @@ class LicenceFilterBlock extends BlockBase implements ContainerFactoryPluginInte
       'maxLicenceCount' => LicenceComparerHelper::MAX_LICENCE_COUNT,
     ];
     $build['#attached']['library'][] = 'joinup_licence/filter';
-    // @todo if worth it, load the following two libraries only on the required pages
-    // /jla-find-and-compare-software-licenses and /jla-compatibility-checker respectively
-    // else the code can stay as is or load everything together in "filter" library
-    $build['#attached']['library'][] = 'joinup_licence/comparator';
-    $build['#attached']['library'][] = 'joinup_licence/compatibility-checker';
+    $library = $this->getConfiguration()['show_terms'] ? 'comparator' : 'compatibility-checker';
+    $build['#attached']['library'][] = "joinup_licence/$library";
 
     return $build;
   }
