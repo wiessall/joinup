@@ -42,24 +42,25 @@ Feature:
     And the response should contain "http://joinup.eu/spdx/foo.html#licenseText"
     And the response should contain "http://joinup.eu/spdx/bar.html#licenseText"
 
-    And I click "Distribute" in the "Content" region
-    Then I should see the text "1 licences found"
+    And I press "Distribute" in the "Content" region
+But break
+    Then I should see the text "1 licence found"
     And I should see the text "Bar Licence"
     But I should not see the text "Foo Licence"
 
     # Clicking again, deselects the item.
-    When I click "Distribute" in the "Content" region
+    When I press "Distribute" in the "Content" region
     Then I should see the text "2 licences found"
     And I should see the text "Foo Licence"
     And I should see the text "Bar Licence"
 
     When I fill in "SPDX id" with "SPDX_FOO"
-    Then I should see the text "1 licences found"
+    Then I should see the text "1 licence found"
     And I should see the text "Foo Licence"
     But I should not see the text "Bar Licence"
     # Hitting 'Enter' does not trigger anything.
     When I hit enter in the keyboard on the field "SPDX id"
-    Then I should see the text "1 licences found"
+    Then I should see the text "1 licence found"
     And I should see the text "Foo Licence"
     But I should not see the text "Bar Licence"
 
