@@ -31,7 +31,7 @@ filters:
     status: true
     weight: -49
     settings:
-      allowed_html: '<br> <p> <h2 id> <h3 id> <h4 id> <cite> <q> <dl> <dt> <dd> <iframe src allowfullscreen mozallowfullscreen webkitallowfullscreen width height frameborder> <map name> <area alt coords href hreflang rel shape> <blockquote cite> <ul type> <ol type start> <h1> <h5 id> <h6 id> <img data-image-style usemap src alt data-entity-uuid data-entity-type height width data-caption data-align> <a hreflang accesskey id rel target title href data-entity-type data-entity-uuid data-entity-substitution> <strong> <em> <code class="language-*"> <pre> <li> <table> <tr> <td rowspan colspan> <th rowspan colspan> <thead> <tbody> <tfoot> <caption> <drupal-media data-entity-type data-entity-uuid alt data-caption data-align>'
+      allowed_html: '<br> <p> <h2 id> <h3 id> <h4 id> <cite> <q> <dl> <dt> <dd> <iframe src allowfullscreen mozallowfullscreen webkitallowfullscreen width height frameborder> <map name> <area alt coords href hreflang rel shape> <blockquote cite> <ul type> <ol type start> <h1> <h5 id> <h6 id> <img data-image-style usemap src alt height width data-entity-uuid data-entity-type data-caption data-align> <a hreflang accesskey id rel target title href data-entity-type data-entity-uuid data-entity-substitution> <strong> <em> <code class="language-*"> <pre> <li> <table> <tr> <td rowspan colspan> <th rowspan colspan> <thead> <tbody> <tfoot> <caption> <drupal-media data-entity-type data-entity-uuid alt data-caption data-align>'
       filter_html_help: true
       filter_html_nofollow: false
   filter_htmlcorrector:
@@ -121,7 +121,7 @@ filters:
   embed_block:
     id: embed_block
     provider: embed_block
-    status: false
+    status: true
     weight: -39
     settings: {  }
   collection_glossary:
