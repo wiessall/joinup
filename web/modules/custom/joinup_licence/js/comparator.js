@@ -75,9 +75,10 @@
         // the "Compare" buttons. The 'data-joinup-licence-compare' attribute which is set
         // to [], is the attribute that stores the licences set-up for comparison.
         document
-          .querySelectorAll(".licence-tile .form-check-input[type='checkbox']")
+          .querySelectorAll("input[type='checkbox'][data-joinup-licence-name]")
           .forEach((el) => {
-            el.disabled = true;
+            el.checked = false;
+            el.disabled = false;
           });
         document
           .querySelector(".listing--licences")
