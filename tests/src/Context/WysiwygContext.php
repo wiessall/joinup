@@ -5,7 +5,6 @@ declare(strict_types = 1);
 namespace Drupal\joinup\Context;
 
 use Drupal\DrupalExtension\Context\RawDrupalContext;
-use Drupal\editor\Entity\Editor;
 use Drupal\joinup\Traits\BrowserCapabilityDetectionTrait;
 use Drupal\joinup\Traits\BrowserWindowTrait;
 use Drupal\joinup\Traits\UtilityTrait;
@@ -142,15 +141,7 @@ class WysiwygContext extends RawDrupalContext {
     ];
     $format_tags = $this->explodeCommaSeparatedStepArgument($format_tags);
 
-    $element = $this->getSession()->getPage()->findField($label);
-    $wrapper = $element->find('xpath', './ancestor::*[contains(concat(" ", @class, " "), " editor-area ")]');
-    $parent = $wrapper->getParent();
-    $editor_id = $parent->find('css', 'textarea')->getAttribute('data-editor-active-text-format');
-
-    $editor = Editor::load($editor_id);
-    if (!$editor) {
-      throw new \Exception(sprintf('%s text format no longer exists.', $editor_id));
-    }
+    $editor = $this->getWysiwygEditorEntity($label);
     $settings = $editor->getSettings();
     $enabled_headings = $settings['plugins']['ckeditor5_heading']['enabled_headings'];
     $found_tags_array = array_diff($headings, $enabled_headings);
@@ -177,7 +168,7 @@ class WysiwygContext extends RawDrupalContext {
    *
    * @Then the :label wysiwyg editor should have the buttons :buttons
    */
-  public function assertWysiwygButtons(string $label, string $buttons) {
+  public function assertWysiwygButtons(string $label, string $buttons): void {
     $actual_buttons = $this->getWysiwygButtons($label);
     $expected_buttons = array_map('trim', explode(',', $buttons));
     Assert::assertEquals(array_values($expected_buttons), array_values($actual_buttons));

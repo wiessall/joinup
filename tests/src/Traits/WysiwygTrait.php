@@ -137,7 +137,7 @@ trait WysiwygTrait {
     }
 
     $label_element = reset($label_elements);
-    $wysiwyg_id = 'cke_' . $label_element->getAttribute('for');
+    $wysiwyg_id = $label_element->getAttribute('for');
 
     $wysiwyg_elements = $region->findAll('xpath', '//div[@id="' . $wysiwyg_id . '"]');
     if (empty($wysiwyg_elements)) {
