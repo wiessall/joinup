@@ -22,7 +22,6 @@ Feature: Creating a test (solution) in the TRR collection.
       | Name           | Lucky Luke          |
       | E-mail address | ernsy1999@gmail.com |
     And I select "Supplier exchange" from "Topic"
-    And I scroll "Owner" into view
     And I press "Add existing" at the "Owner" field
     And I wait for AJAX to finish
     And I fill in "Owner" with "W3C"
