@@ -34,7 +34,7 @@ trait WysiwygTrait {
    */
   public function pressWysiwygButton(string $label, string $button, ?TraversableElement $region = NULL): void {
     $wysiwyg = $this->getWysiwyg($label, $region);
-    $button_elements = $wysiwyg->findAll('xpath', '//a[@title="' . $button . '"]');
+    $button_elements = $wysiwyg->findAll('css', 'button[data-cke-tooltip-text*="' . $button . '"]');
     if (empty($button_elements)) {
       throw new \Exception("Could not find the '$button' button.");
     }
@@ -62,20 +62,37 @@ trait WysiwygTrait {
    *   Defaults to the entire page.
    *
    * @throws \Exception
-   *   Thrown when the textarea could not be found or if there are multiple
-   *   textareas.
+   *   Thrown when the textarea could not be found.
    */
   public function setWysiwygText(string $label, string $text, ?TraversableElement $region = NULL): void {
     $wysiwyg = $this->getWysiwyg($label, $region);
-    $textarea_elements = $wysiwyg->findAll('xpath', '//textarea');
-    if (empty($textarea_elements)) {
-      throw new \Exception("Could not find the textarea for the '$label' field.");
+
+    $wrapper_id = $wysiwyg->getAttribute('id');
+    $ckeditor5_drupal_editable_element = "div#$wrapper_id .ck-editor__editable";
+    $function = <<<JS
+  (
+      function(){
+        const domEditableElement = document.querySelector("$ckeditor5_drupal_editable_element");
+        if (domEditableElement.ckeditorInstance) {
+          const editorInstance = domEditableElement.ckeditorInstance;
+          if (editorInstance) {
+            editorInstance.setData("$text");
+          } else {
+            throw new Exception('Could not get the editor instance!');
+          }
+        } else {
+          throw new Exception('Could not find the element!');
+        }
+      }
+  )()
+  JS;
+    try {
+      $this->getSession()->executeScript($function);
+      sleep(1);
     }
-    if (count($textarea_elements) > 1) {
-      throw new \Exception("Multiple textareas found for '$label'.");
+    catch (\Exception $e) {
+      throw new \Exception("Could not fill the textarea for the '$label' field.");
     }
-    $textarea = reset($textarea_elements);
-    $textarea->setValue($text);
   }
 
   /**
@@ -137,9 +154,8 @@ trait WysiwygTrait {
     }
 
     $label_element = reset($label_elements);
-    $wysiwyg_id = $label_element->getAttribute('for');
 
-    $wysiwyg_elements = $region->findAll('xpath', '//div[@id="' . $wysiwyg_id . '"]');
+    $wysiwyg_elements = $label_element->findAll('xpath', '/ancestor::*[contains(concat(" ", normalize-space(@class), " "), " form-wrapper ")][position() = 1]');
     if (empty($wysiwyg_elements)) {
       throw new WysiwygEditorNotFoundException("Could not find the '$label' wysiwyg editor.");
     }
