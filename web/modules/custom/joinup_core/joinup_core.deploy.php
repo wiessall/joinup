@@ -13,10 +13,11 @@
  */
 
 declare(strict_types = 1);
+
 /**
  * Clears TRR fields for potential cases.
  */
-function joinup_core_deploy_0108605(array &$sandbox): void {
+function joinup_core_deploy_0108700(array &$sandbox): void {
   $field_predicates = [
     'http://joinup.ec.europa.eu/trr#actor',
     'http://joinup.ec.europa.eu/trr#businessProcess',
