@@ -230,27 +230,29 @@ trait WysiwygTrait {
 
     if ($this->browserSupportsJavaScript()) {
       $editor = $this->getWysiwyg($label, $region);
-      $button_elements = $editor->findAll('xpath', '//a[contains(concat(" ", normalize-space(@class), " "), " cke_button ")]/span[contains(@id, "_label")]');
+      $button_elements = $editor->findAll('xpath', '//button[contains(concat(" ", normalize-space(@class), " "), " ck-button ")]');
 
       $buttons = array_map(function (NodeElement $element): string {
-        return trim($element->getHtml());
+        return trim($element->getAttribute('data-cke-tooltip-text'));
       }, $button_elements);
     }
     else {
       // When no JS is available the editor is not loaded in the page. Retrieve
       // the buttons from the editor config.
-      /** @var \Drupal\ckeditor\CKEditorPluginManager $ckeditor_plugin_manager */
-      $ckeditor_plugin_manager = \Drupal::service('plugin.manager.ckeditor.plugin');
+      /** @var \Drupal\ckeditor5\Plugin\CKEditor5PluginManager $cke5_plugin_manager */
+      $cke5_plugin_manager = \Drupal::service('plugin.manager.ckeditor5.plugin');
       $editor = $this->getWysiwygEditorEntity($label);
+
+      $settings = $editor->getSettings();
 
       // Retrieve the buttons that are available for this editor instance, but
       // filter out the separators. We are only concerned with the buttons.
-      $buttons = array_filter($ckeditor_plugin_manager->getEnabledButtons($editor), function (string $id): bool {
-        return $id !== '-';
+      $buttons = array_filter($settings['toolbar']['items'], function (string $id): bool {
+        return $id !== '|';
       });
 
       // Replace the button IDs with human readable labels.
-      $button_data = array_reduce($ckeditor_plugin_manager->getButtons(), 'array_merge', []);
+      $button_data = $cke5_plugin_manager->getToolbarItems();
       $buttons = array_map(function (string $id) use ($button_data) {
         return (string) $button_data[$id]['label'];
       }, $buttons);
