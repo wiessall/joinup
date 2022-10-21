@@ -47,7 +47,7 @@ class JoinupCommunityContentContext extends RawDrupalContext {
    */
   public function assertTileNotMarkedAsShared(string $heading): void {
     $tile = $this->getTileByHeading($heading);
-    if ($tile->find('css', '[data-drupal-card-stats-shared]')) {
+    if ($tile->find('css', '[data-joinup-card-stats-shared]')) {
       throw new \Exception("The tile '$heading' is marked as shared, but it shouldn't be.");
     }
   }
@@ -69,7 +69,7 @@ class JoinupCommunityContentContext extends RawDrupalContext {
   public function assertTileMarkedAsShared(string $heading, string $group_label): void {
     $tile = $this->getTileByHeading($heading);
 
-    $share = $tile->find('css', "[data-drupal-card-stats-shared='$group_label']");
+    $share = $tile->find('css', "[data-joinup-card-stats-shared='$group_label']");
     if (!$share) {
       throw new \Exception("The tile '$heading' is not marked as shared, but it should be.");
     }
