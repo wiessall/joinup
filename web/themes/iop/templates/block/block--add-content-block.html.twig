@@ -32,9 +32,11 @@
     'block',
     'block-' ~ configuration.provider|clean_class,
     'block-' ~ plugin_id|clean_class,
+    'add-content',
+    'dropdown',
     'd-flex',
     'justify-content-end',
-    'add-content',
+    'my-1',
   ]
 %}
 <div{{ attributes.addClass(classes) }}>
@@ -45,12 +47,12 @@
   {# Disable contextual links because they interfere with the dropdown trigger #}
   {# {{ title_suffix }} #}
   {% block content %}
-    <button type="button" id="dropdown-add-content" data-bs-toggle="dropdown" aria-expanded="false" class="dropdown-toggle btn btn-primary btn-lg rounded-circle p-0 add-content__btn" title="{{ 'Add content'|t }}">
+    <button type="button" id="dropdown-add-content" data-bs-toggle="dropdown" aria-expanded="false" class="btn btn-primary btn-lg rounded-circle p-0 add-content__btn" title="{{ 'Add content'|t }}">
       <svg class="bi icon--xl">
         <use xlink:href="{{ bcl_icon_path }}#plus"></use>
       </svg>
     </button>
-    <div class="dropdown-menu">
+    <div class="dropdown-menu dropdown-menu-end p-0">
       <nav class="nav nav-pills flex-column px-3 py-2" aria-labelledby="dropdown-add-content" class="dropdown-menu">
         {{ content }}
       </nav>
