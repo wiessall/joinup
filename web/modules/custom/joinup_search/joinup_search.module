@@ -131,7 +131,7 @@ function joinup_search_search_api_query_search_api_field_alter(QueryInterface $q
   }
 
   $group = $entity;
-  if ($group instanceof GroupContentInterface) {
+  if ($parent_entity instanceof GroupContentInterface) {
     $group = $parent_entity->getGroup();
   }
 
