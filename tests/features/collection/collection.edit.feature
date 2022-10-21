@@ -53,10 +53,14 @@ Feature: Editing collections
 
     When I open the header local tasks menu
     And I click "Edit" in the "Entity actions" region
-    And I press the button "Video Embed" in the "Description" wysiwyg editor
-    Then a modal should open
-    When I fill in "Video URL" with "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
-    And I press "Save" in the "Modal buttons" region
+    And I press the button "Insert Drupal Media" in the "Description" wysiwyg editor
+    Then I wait for AJAX to finish
+    And a modal should open
+    And I click "Remote videos"
+    When I fill in "Add Remote videos via URL" with "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+    And I press "Add"
+    Then I press "Save" in the "Modal buttons" region
+    And I press "Insert selected" in the "Modal buttons" region
     Then the modal should be closed
 
   @terms @javascript
@@ -76,9 +80,13 @@ Feature: Editing collections
 
     When I open the header local tasks menu
     And I click "Edit" in the "Entity actions" region
-    And I press the button "File" in the "Description" wysiwyg editor
-    Then a modal should open
+    And I press the button "Insert Drupal Media" in the "Description" wysiwyg editor
+    Then I wait for AJAX to finish
+    And a modal should open
+    And I click "Files"
     And I should not see the text "0 bytes limit"
-    When I attach the file "empty_pdf.pdf" to "File"
-    And I press "Save" in the "Modal buttons" region
+    When I attach the file "empty_pdf.pdf" to "Add file"
+    And I press "Add"
+    Then I press "Save" in the "Modal buttons" region
+    And I press "Insert selected" in the "Modal buttons" region
     Then the modal should be closed

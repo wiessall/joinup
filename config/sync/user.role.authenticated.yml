@@ -10,6 +10,7 @@ dependencies:
     - filter.format.minimal
     - filter.format.simple_html
     - media.type.ec_videos
+    - media.type.files
     - media.type.remote_videos
     - node.type.document
     - node.type.tallinn_report
@@ -48,6 +49,7 @@ permissions:
   - 'create contact_information rdf entity'
   - 'create document content'
   - 'create ec_videos media'
+  - 'create files media'
   - 'create owner rdf entity'
   - 'create paragraph content accordion'
   - 'create paragraph content accordion_item'
