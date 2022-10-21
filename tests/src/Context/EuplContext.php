@@ -143,7 +143,7 @@ class EuplContext extends RawDrupalContext {
    */
   public function assertLegalTypeTagsCategoriesAndOrder(string $spdx, TableNode $table): void {
     $expected = $table->getColumn(0);
-    $xpath = '//div[@data-joinup-spdx="' . $spdx . '"]//span[contains(concat(" ", normalize-space(@class), " "), " licence-tile__label badge ")]';
+    $xpath = '//article[@data-joinup-spdx="' . $spdx . '"]//span[contains(concat(" ", normalize-space(@class), " "), " licence-tile__label badge ")]';
     $this->assertCategoriesAndOrder($xpath, $expected);
   }
 
@@ -243,9 +243,10 @@ class EuplContext extends RawDrupalContext {
    * @When I choose :spdx_id as the :label licence
    */
   public function selectRadioButtonForLicenceCompatibilityCheck(string $spdx_id, string $label): void {
-    assert(in_array($label, ['Inbound', 'Outbound']), 'The purpose should be either "Use" or "Distribute".');
-    $licence = $this->findLicenceTile($spdx_id);
-    $this->selectMaterialDesignRadioButton($label, $licence);
+    \assert(in_array($label, ['Inbound', 'Outbound']), 'The purpose should be either "Use" or "Distribute".');
+    $radio = $this->findLicenceTile($spdx_id)->findField($label);
+    $this->scrollElementIntoView($radio);
+    $radio->click();
   }
 
   /**
@@ -277,7 +278,7 @@ class EuplContext extends RawDrupalContext {
    *
    * @throws \Exception
    *   When:
-   *   - No 'Compare' buttons were found in page.
+   *   - No buttons were found in page.
    *   - The expectancy is not satisfied.
    *
    * @Then the :label buttons are :status
@@ -287,24 +288,25 @@ class EuplContext extends RawDrupalContext {
     \assert(in_array($status, ['enabled', 'disabled']), 'The $status parameter should take one of the values "enabled" or "disabled" but "' . $status . '" was given.');
 
     $mapping = [
-      'Compare' => 'jla-compare',
-      'Check compatibility' => 'licence-tile__button--compatible',
+      'Compare' => ['tag' => 'button', 'class' => 'jla-compare'],
+      'Check compatibility' => ['tag' => 'a', 'class' => 'jla-compatible'],
     ];
-    \assert(array_key_exists($label, $mapping), 'The label should be one of ' . implode(',', array_keys($mapping)) . ' but "' . $label . '" was given.');
+    \assert(array_key_exists($label, $mapping), 'The $label parameter should take one of the values "Compare" or "Check compatibility" but "' . $label . '" was given.');
 
     $page = $this->getSession()->getPage();
-    $xpath = '//button[text()="' . $label . '" and contains(concat(" ", normalize-space(@class), " "), " ' . $mapping[$label] . ' ")]';
+    $xpath = '//' . $mapping[$label]['tag'] . '[text()="' . $label . '" and contains(concat(" ", normalize-space(@class), " "), " ' . $mapping[$label]['class'] . ' ")]';
     $buttons = $page->findAll('xpath', $xpath);
     if (empty($buttons)) {
       throw new \Exception("No '$label' buttons found in the page.");
     }
+    $method = $mapping[$label]['tag'] === 'button' ? 'hasAttribute' : 'hasClass';
 
     /** @var \Behat\Mink\Element\NodeElement[] $buttons */
     foreach ($buttons as $button) {
-      if ($status === 'disabled' && !$button->hasAttribute('disabled')) {
+      if ($status === 'disabled' && !$button->{$method}('disabled')) {
         throw new \Exception("'$label' buttons should be disabled but are enabled.");
       }
-      elseif ($status === 'enabled' && $button->hasAttribute('disabled')) {
+      elseif ($status === 'enabled' && $button->{$method}('disabled')) {
         throw new \Exception("'$label' buttons should be enabled but are disabled.");
       }
     }
@@ -432,8 +434,7 @@ class EuplContext extends RawDrupalContext {
    *   When the licence tile is not found on the page.
    */
   protected function findLicenceTile(string $spdx_id): NodeElement {
-    $this->scrollNamedElementIntoView('link', 'Check compatibility');
-    if ($licence = $this->getSession()->getPage()->find('css', 'div[data-joinup-spdx="' . $spdx_id . '"]')) {
+    if ($licence = $this->getSession()->getPage()->find('css', 'article[data-joinup-spdx="' . $spdx_id . '"]')) {
       return $licence;
     }
     throw new \Exception("Can't find the '$spdx_id' licence on the page.");

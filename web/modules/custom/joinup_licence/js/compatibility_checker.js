@@ -36,6 +36,10 @@
           .forEach((el) => {
             el.checked = false;
           });
+        document.querySelectorAll("a.jla-compatible").forEach((el) => {
+          el.classList.add("disabled");
+          el.ariaDisabled = true;
+        });
         document
           .querySelector(".listing--licences")
           .setAttribute("data-joinup-licence-compare", "[]");

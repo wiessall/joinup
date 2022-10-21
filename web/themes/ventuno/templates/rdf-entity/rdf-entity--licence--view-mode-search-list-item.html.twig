@@ -14,7 +14,7 @@
   ]
 %}
 {% set spdx_licence_id = render_var(content.spdx_licence_id) %}
-<div{{ attributes.addClass(classes) }} data-joinup-spdx="{{ spdx_licence_id_plain }}" data-joinup-licence-category="{{ legal_categories }}">
+<article {{ attributes.addClass(classes) }} data-joinup-spdx="{{ spdx_licence_id_plain }}" data-joinup-licence-category="{{ legal_categories }}">
   {{ title_prefix }}
   {% if spdx_licence_id %}
     <h2 class="h3 ms-md-5 d-flex align-items-center flex-wrap">
@@ -62,4 +62,4 @@
       </div>
     </div>
   </div>
-</div>
+</article>
