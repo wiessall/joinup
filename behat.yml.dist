@@ -183,8 +183,12 @@ default:
         Related solutions: '.field--name-field-is-related-solutions'
         SevenHeader: '.region-header'
         Statistics: '#block-statistics, #block-ventuno-statistics'
-        Table of contents: '#block-ventuno-table-of-contents'
-        Table of contents outline: '#block-ventuno-toc-outline'
+        # Remove #block-table-of-contents in ISAICP-7138.
+        # See https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7138
+        Table of contents: '#block-ventuno-table-of-contents,#block-table-of-contents'
+        # Remove #block-table-of-contents in ISAICP-7138.
+        # See https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7138
+        Table of contents outline: '#block-ventuno-toc-outline,#block-toc-outline'
         Unpublished content area: '.block-entity-unpublished'
         # Deprecated regions to be removed in ISAICP-7138.
         # See https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7138
