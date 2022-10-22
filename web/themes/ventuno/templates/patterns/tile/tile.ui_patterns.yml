@@ -25,6 +25,14 @@ tile:
       label: 'Title'
       description: 'Card title.'
       preview: 'Title card'
+    # TODO: Add all missed fields:
+    # - featured
+    # - title_prefix
+    title_suffix:
+      type: object
+      label: 'Title'
+      description: 'Card title.'
+      preview: 'Title card'
     text:
       type: text
       label: 'Text'
