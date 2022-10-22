@@ -3060,9 +3060,22 @@ class JoinupContext extends RawDrupalContext {
     if (!$page->findLink($link_label)) {
       throw new ElementNotFoundException($session->getDriver(), 'Link', 'label', $link_label);
     }
-    $xpath = "//ul/li[contains(concat(' ', @class, ' '), ' menu-item--active-trail ')]/descendant::a/descendant-or-self::*[text()='{$link_label}']";
+
+    // @todo Remove this if() block in ISAICP-7138.
+    // @see See https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7138
+    if ($this->usesMaterialDesignLite()) {
+      $xpath = "//ul/li[contains(concat(' ', @class, ' '), ' menu-item--active-trail ')]/descendant::a/descendant-or-self::*[text()='{$link_label}']";
+      if (!$page->find('xpath', $xpath)) {
+        throw new ExpectationFailedException("The '{$link_label}' link is not in the active trail but it should.");
+      }
+      return;
+    }
+
+    // Remove the leading '#'.
+    $navigation_menu_selector = substr($this->getRegionSelector('Navigation menu'), 1);
+    $xpath = "//*[@id='$navigation_menu_selector']//nav//a[text()='$link_label' and contains(concat(' ', normalize-space(@class), ' '), ' is-active ')]";
     if (!$page->find('xpath', $xpath)) {
-      throw new ExpectationFailedException("The '{$link_label}' link is not in the active trail but it should.");
+      throw new ExpectationFailedException("The '$link_label' link is not in the active trail but it should.");
     }
   }
 
