@@ -135,9 +135,9 @@ Feature:
     And I should see the "Version 2.0 Launch Party" tile
     Then I should see the link "HOWTOs" in the "Navigation menu" region
     When I click "HOWTOs" in the "Navigation menu" region
-    Then I should see the link "HOWTOs" in the "Navigation menu block" region
-    And I should see the heading "Decadent Art"
-    And I should not see the link "Looking for Support?" in the "Navigation menu block" region
+    Then I should see the link "HOWTOs" in the "Navigation menu" region
+    And I should see the link "Decadent Art" in the "Header"
+    And I should not see the link "Looking for Support?" in the "Navigation menu" region
 
     # Try moving a child page without moving the parent page. This should move
     # the child to the root of the menu.
