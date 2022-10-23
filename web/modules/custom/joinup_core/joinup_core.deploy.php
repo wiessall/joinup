@@ -50,7 +50,7 @@ function joinup_core_deploy_0108700(): void {
 /**
  * Update path alias IOPE.
  */
-function joinup_core_deploy_0108700(): void {
+function joinup_core_deploy_0108701(): void {
   /** @var \Drupal\collection\Entity\CollectionInterface $collection */
   $collection = \Drupal::entityTypeManager()
     ->getStorage('rdf_entity')
