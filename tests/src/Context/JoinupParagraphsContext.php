@@ -68,7 +68,7 @@ class JoinupParagraphsContext extends RawDrupalContext {
     // If we are running in a JavaScript enabled browser, first click the
     // 'Source' button so we can enter the text as HTML and get the same result
     // as in a non-JS browser.
-    if ($this->browserSupportsJavaScript()) {
+    if ($this->hasJavascriptSupport()) {
       $this->pressWysiwygButton($label, 'Source', $field);
       $this->setWysiwygText($label, $text, $field);
     }
@@ -141,7 +141,7 @@ class JoinupParagraphsContext extends RawDrupalContext {
     // Ascend twice so that the label of the field is also included and can be
     // found by xpath search properly.
     $region = $wysiwygs[$position]->getParent()->getParent();
-    if ($this->browserSupportsJavaScript()) {
+    if ($this->hasJavascriptSupport()) {
       $this->pressWysiwygButton($label, 'Source', $region);
       $this->setWysiwygText($label, $text, $region);
     }
@@ -376,6 +376,32 @@ class JoinupParagraphsContext extends RawDrupalContext {
       throw new \Exception("Multiple instances of the $field field were found in the page at row $delta.");
     }
     return reset($elements);
+  }
+
+  /**
+   * Expands an accordion section.
+   *
+   * @param string $label
+   *   The accordion sections label.
+   *
+   * @throws \Behat\Mink\Exception\ElementNotFoundException
+   *   When there's no accordion section with the given label.
+   *
+   * @When I expand the :label accordion section
+   */
+  public function iExpandAccordionSection(string $label): void {
+    $session = $this->getSession();
+    $page = $session->getPage();
+    if (!$button = $page->findButton($label)) {
+      throw new ElementNotFoundException($session->getDriver(), 'button', 'label', $label);
+    }
+    $this->scrollElementIntoView($button);
+    $button->press();
+    if ($this->hasJavascriptSupport()) {
+      $this->waitUntil(function () use ($button): bool {
+        return !$button->hasClass('collapsed');
+      });
+    }
   }
 
   /**
