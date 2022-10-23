@@ -134,11 +134,12 @@ Feature:
 
     Given I am not logged in
     And I go to the "Paragraphs accordion page" custom page
-    And I press "Duper"
+
+    When I expand the "Duper" accordion section
     Then I should see the text "Crunchy text"
     But I should not see the text "Clumsy text"
 
-    Given I click "Super"
+    When I expand the "Super" accordion section
     Then I should see the text "Clumsy text"
     But I should not see the text "Crunchy text"
 
