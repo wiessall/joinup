@@ -1,0 +1,26 @@
+uuid: 54d6530d-6133-40ce-aed1-60cbd9f8e406
+langcode: en
+status: true
+dependencies:
+  config:
+    - og_menu.ogmenu.navigation
+  module:
+    - joinup_group
+  theme:
+    - iop
+id: iope_navigation
+theme: iop
+region: header_bottom
+weight: 0
+provider: null
+plugin: 'group_menu_block:navigation'
+settings:
+  id: 'group_menu_block:navigation'
+  label: 'Group menu'
+  label_display: '0'
+  provider: joinup_group
+  context_mapping:
+    og: '@rdf_entity.rdf_entity_route_context:rdf_entity'
+  level: 1
+  depth: 2
+visibility: {  }
