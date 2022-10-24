@@ -31,7 +31,7 @@ function joinup_core_deploy_0108700(): void {
   $fieldsToMigrate = [];
   foreach ($fields as $field) {
     foreach ($field['values'] as $id => $value) {
-      $mediaType = $videoEmbedMigrate->getRemoteVideoMediaType(strpos($value, 'www.youtube.com') ? 'oembed:remote_videos' : 'media_avportal_video');
+      $mediaType = $videoEmbedMigrate->getRemoteVideoMediaType(strpos($value, 'www.youtube.com') ? 'oembed:remote_videos' : 'joinup_ec_video');
       $fieldsToMigrate[] = [
         'field_name' => $field['field_name'],
         'entity_type' => $field['entity_type'],
