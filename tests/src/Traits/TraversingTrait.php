@@ -277,8 +277,6 @@ trait TraversingTrait {
 
     $result = [];
     foreach ($regionObj->findAll('css', $this->getTileCssSelector()) as $element) {
-      // @todo The `.listing__title` selector is part of the original Joinup
-      //   theme and can be removed once we migrated to the new theme.
       $title_selector = implode(', ', [
         '.card-title',
         '.card-title > h1 a',
