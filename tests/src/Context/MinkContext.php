@@ -4,6 +4,7 @@ declare(strict_types = 1);
 
 namespace Drupal\joinup\Context;
 
+use Behat\Mink\Selector\Xpath\Escaper;
 use Drupal\DrupalExtension\Context\MinkContext as DrupalExtensionMinkContext;
 use Drupal\joinup\Traits\JavascriptTrait;
 use Drupal\joinup\Traits\MaterialDesignTrait;
@@ -168,8 +169,28 @@ class MinkContext extends DrupalExtensionMinkContext {
    * {@inheritdoc}
    */
   public function assertSelectRadioById($label, $id = ''): void {
-    $this->scrollNamedElementIntoView('radio', $label);
-    parent::assertSelectRadioById($label, $id);
+    $page = $this->getSession()->getPage();
+    if ($id) {
+      $radio = $page->findById($id);
+    }
+    else {
+      $radio = $page->find('named', [
+        'radio',
+        (new Escaper())->escapeLiteral($label),
+      ]);
+    }
+    if (!$radio) {
+      throw new \Exception(sprintf('The radio button with "%s" was not found on the page %s', $id ?: $label, $this->getSession()->getCurrentUrl()));
+    }
+    $value = $radio->getAttribute('value');
+    $radio_id = $radio->getAttribute('id');
+    $label_on_page = $page->find('css', "label[for='$radio_id']")->getText();
+    if ($label !== $label_on_page) {
+      throw new \Exception(sprintf("Button with id '%s' has label '%s' instead of '%s' on the page %s", $id, $label_on_page, $label, $this->getSession()->getCurrentUrl()));
+    }
+
+    $this->scrollElementIntoView($radio);
+    $radio->selectOption($value);
   }
 
   /**
