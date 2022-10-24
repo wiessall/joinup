@@ -92,8 +92,15 @@ class JoinupSearchContext extends RawDrupalContext {
    *   The link as node element or NULL.
    */
   protected function findContentTab(string $type): ?NodeElement {
-    $xpath = "//div[contains(concat(' ', normalize-space(@class), ' '), ' tabs--content-type ')]//span[@class='tab__text--type'][normalize-space(string(.)) = '$type']" .
-      "/ancestor-or-self::a[@class and contains(concat(' ', normalize-space(@class), ' '), ' tab--content-type ')]";
+    $xpath = "//div[contains(concat(' ', normalize-space(@class), ' '), ' tabs--content-type ')]//span[@class='tab__text--type'][normalize-space(string(.)) = '$type']";
+
+    // @todo Remove the if(..) block in ISAICP-7138.
+    // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7138
+    if ($this->usesMaterialDesignLite()) {
+      $xpath = $xpath = "//div[contains(concat(' ', normalize-space(@class), ' '), ' tab__container ')]//span[@class='tab__text--lower'][normalize-space(string(.)) = '$type']";
+    }
+
+    $xpath .= "/ancestor-or-self::a[@class and contains(concat(' ', normalize-space(@class), ' '), ' tab--content-type ')]";
     return $this->getSession()->getPage()->find('xpath', $xpath);
   }
 
@@ -168,6 +175,13 @@ class JoinupSearchContext extends RawDrupalContext {
   public function assertContentTypeFacetItemsPresent(string $labels): void {
     $labels = $this->explodeCommaSeparatedStepArgument($labels);
     $xpath = "//a[@data-drupal-facet-item-id]//span[contains(concat(' ', normalize-space(@class), ' '), ' tab__text--type ')]";
+
+    // @todo Remove the if(..) block in ISAICP-7138.
+    // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7138
+    if ($this->usesMaterialDesignLite()) {
+      $xpath = "//a[contains(concat(' ', normalize-space(@class), ' '), ' tab--content-type ')]//span[contains(concat(' ', normalize-space(@class), ' '), ' tab__text--lower ')]";
+    }
+
     $elements = $this->getSession()->getPage()->findAll('xpath', $xpath);
     $present = [];
 
