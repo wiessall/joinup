@@ -104,22 +104,7 @@ class LicenceFilterBlock extends BlockBase implements ContainerFactoryPluginInte
       'maxLicenceCount' => LicenceComparerHelper::MAX_LICENCE_COUNT,
     ];
     $build['#attached']['library'][] = 'joinup_licence/licence-filter';
-    $this->addContextualLinks($build);
     return $build;
-  }
-
-  /**
-   * Adds contextual links to the block render array.
-   *
-   * @param array $build
-   *   The block render array.
-   */
-  protected function addContextualLinks(array &$build): void {
-    $build['#contextual_links']['licence_filter_block'] = [
-      'route_parameters' => [
-        'taxonomy_vocabulary' => 'legal_type',
-      ],
-    ];
   }
 
   /**

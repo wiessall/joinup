@@ -1,4 +1,0 @@
-joinup_licence.licence_filter_block.legal_type_overview:
-  route_name: entity.taxonomy_vocabulary.overview_form
-  group: 'licence_filter_block'
-  title: Edit tooltip descriptions
