@@ -10,5 +10,11 @@
         "eslint-plugin-react": "^7.25.1",
         "eslint-plugin-yml": "^0.10.1",
         "react": "^17.0.2"
+    },
+    "dependencies": {
+        "jquery-jsonview": "^1.2.3"
+    },
+    "scripts": {
+      "postinstall": "mkdir -p web/libraries/jquery-jsonview/dist && cp node_modules/jquery-jsonview/dist/* web/libraries/jquery-jsonview/dist/"
     }
 }

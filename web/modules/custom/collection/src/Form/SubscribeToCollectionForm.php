@@ -217,6 +217,7 @@ class SubscribeToCollectionForm extends FormBase {
     }
 
     $membership = $this->getUserNonBlockedMembership($collection);
+    $membership->set('announcements', TRUE);
     $membership->set('subscription_bundles', $subscription_bundles)->save();
 
     // Check if the user is pending, so we can adapt the messages for the user.

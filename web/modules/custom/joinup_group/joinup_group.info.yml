@@ -8,5 +8,6 @@ php: 7.1
 dependencies:
   - 'joinup:topic'
   - 'joinup_bundle_class:joinup_bundle_class'
+  - 'joinup:joinup_notification'
   - 'og:og'
   - 'og_menu:og_menu'

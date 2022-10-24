@@ -329,6 +329,11 @@ module.exports = {
       options: { up: true },
     },
     {
+      from: [path.resolve(__dirname, "src/images/logo.png")],
+      to: path.resolve(outputFolder, "assets/images"),
+      options: { up: true },
+    },
+    {
       from: [path.resolve(__dirname, "src/images/logo.svg")],
       to: path.resolve(outputFolder, "assets/images"),
       options: { up: true },
