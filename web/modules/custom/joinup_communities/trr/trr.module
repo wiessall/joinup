@@ -100,8 +100,5 @@ function _trr_contains_trr_fields(RdfInterface $entity): bool {
     return $value['target_id'];
   }, $field_is_solution_type);
 
-  if (!count(array_intersect($target_ids, $solution_types)) === FALSE) {
-    return TRUE;
-  }
-  return FALSE;
+  return (bool) count(array_intersect($target_ids, $solution_types));
 }
