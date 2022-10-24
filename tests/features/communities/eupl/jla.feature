@@ -68,6 +68,31 @@ Feature:
     And I should see the text "Foo Licence"
     And I should see the text "Bar Licence"
 
+  @terms
+  Scenario: Test the licence manager and moderator can edit tooltip description
+    Given SPDX licences:
+      | uri                       | title            | ID       |
+      | http://joinup.eu/spdx/foo | SPDX licence foo | SPDX_FOO |
+      | http://joinup.eu/spdx/bar | SPDX licence bar | SPDX_BAR |
+    And licences:
+      | uri                             | title          | description                             | type | spdx licence     | legal type                                                            |
+      | http://joinup.eu/licence/foo    | Foo Licence    | Licence details for the foo licence.    |      | SPDX licence foo | Strong Community, Royalty free, Modify, Governments/EU, Use/reproduce |
+      | http://joinup.eu/licence/bar    | Bar Licence    | Licence details for the bar licence.    |      | SPDX licence bar | Distribute                                                            |
+      | http://joinup.eu/licence/random | Random Licence | A licence that should not be available. |      |                  | Distribute                                                            |
+
+    When I am logged in as an "Licence manager"
+    And I visit the "JLA" custom page
+    Then I should see "Ability to use, copy / reproduce the work freely in unlimited quantities" in attribute title
+    And I should see the link "Edit tooltip descriptions"
+    When I click "Edit tooltip descriptions"
+    Then I should see the heading "Legal type"
+    When I click "Edit" on the row containing "Use/reproduce"
+    Then I should see the heading "Edit term"
+    When I fill in "Description" with "Description of tooltip"
+    And I press "Save"
+    And I visit the "JLA" custom page
+    Then I should see "Description of tooltip" in attribute title
+
   @terms @javascript
   Scenario: Test the licence comparer trigger.
     Given SPDX licences:

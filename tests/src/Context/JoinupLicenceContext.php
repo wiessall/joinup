@@ -264,4 +264,39 @@ class JoinupLicenceContext extends RawDrupalContext {
     return $fields;
   }
 
+  /**
+   * Checks that the text is present in the link title attribute.
+   *
+   * @param string $text
+   *   The string of title text.
+   *
+   * @throws \Behat\Mink\Exception\ElementNotFoundException
+   *   When the text cannot be found in $context.
+   *
+   * @Then I should see :text in attribute title
+   */
+  public function assertLinkTitleContainsText(string $text) {
+    $element = $this->getSession()->getPage()->find('xpath', '//a[@title="' . $text . '"]');
+    if (!$element) {
+      throw new \ElementNotFoundException($element, 'text', $text, 'title attribute');
+    }
+  }
+
+  /**
+   * Finds the row containing rowText and click in link.
+   *
+   * @throws \Exception
+   *   When the text cannot be found in $context.
+   *
+   * @When /^I click "([^"]*)" on the row containing "([^"]*)"$/
+   */
+  public function iClickOnOnTheRowContaining($linkName, $rowText) {
+    /** @var \Behat\Mink\Element\NodeElement $element */
+    $element = $this->getSession()->getPage()->find('css', sprintf('table tr:contains("%s")', $rowText));
+    if (!$element) {
+      throw new \Exception(sprintf('Cannot find any row on the page containing the text "%s"', $rowText));
+    }
+    $element->clickLink($linkName);
+  }
+
 }
