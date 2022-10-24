@@ -17,7 +17,7 @@ declare(strict_types = 1);
 /**
  * Migrate Video content into new Media field.
  */
-function joinup_core_deploy_0108603(): void {
+function joinup_core_deploy_0108700(): void {
   /** @var \Drupal\joinup_core\VideoFieldMigrate $videoEmbedMigrate */
   $videoEmbedMigrate = \Drupal::service('video_field_migrate.migrate');
 
