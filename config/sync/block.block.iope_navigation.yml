@@ -20,7 +20,7 @@ settings:
   label_display: '0'
   provider: joinup_group
   context_mapping:
-    og: '@rdf_entity.rdf_entity_route_context:rdf_entity'
+    og: '@og.context:og'
   level: 1
   depth: 2
 visibility: {  }
