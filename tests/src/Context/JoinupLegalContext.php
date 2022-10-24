@@ -9,6 +9,7 @@ use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\entity_legal\Entity\EntityLegalDocumentAcceptance;
 use Drupal\entity_legal\Entity\EntityLegalDocumentVersion;
 use Drupal\joinup\Traits\EntityTrait;
+use Drupal\joinup\Traits\TestingEntitiesTrait;
 
 /**
  * Behat step definitions for the Joinup Legal module.
@@ -16,6 +17,7 @@ use Drupal\joinup\Traits\EntityTrait;
 class JoinupLegalContext extends RawDrupalContext {
 
   use EntityTrait;
+  use TestingEntitiesTrait;
 
   /**
    * Field aliases.
@@ -29,13 +31,6 @@ class JoinupLegalContext extends RawDrupalContext {
     'Acceptance label' => 'acceptance_label',
     'Content' => 'entity_legal_document_text',
   ];
-
-  /**
-   * Testing legal document versions.
-   *
-   * @var \Drupal\entity_legal\EntityLegalDocumentVersionInterface[]
-   */
-  protected $legalDocumentVersions = [];
 
   /**
    * Creates new legal document versions.
@@ -106,7 +101,7 @@ class JoinupLegalContext extends RawDrupalContext {
         ],
       ]);
       $document_version->save();
-      $this->legalDocumentVersions[$document_version->id()] = $document_version;
+      $this->entities[ENTITY_LEGAL_DOCUMENT_VERSION_ENTITY_NAME][$document_version->id()] = $document_version;
     }
   }
 
@@ -177,21 +172,52 @@ class JoinupLegalContext extends RawDrupalContext {
       throw new \InvalidArgumentException("Legal document '{$document->label()}' has no published version.");
     }
 
-    EntityLegalDocumentAcceptance::create([
+    $acceptance = EntityLegalDocumentAcceptance::create([
       'document_version_name' => $published_version->id(),
       'uid' => $this->getUserManager()->getCurrentUser()->uid,
-    ])->save();
+    ]);
+    $acceptance->save();
+    $this->entities[ENTITY_LEGAL_DOCUMENT_ACCEPTANCE_ENTITY_NAME][$acceptance->id()] = $acceptance;
   }
 
   /**
-   * Clears the testing legal document versions.
+   * Accepts a given legal document by a list of users.
    *
-   * @AfterScenario @api
+   * The table contains a list of usernames:
+   * @code
+   * | user1 |
+   * | user3 |
+   * @endcode
+   *
+   * @param string $document_label
+   *   The legal document label.
+   * @param \Behat\Gherkin\Node\TableNode $table
+   *   The entries list.
+   *
+   * @throws \InvalidArgumentException
+   *   When the given legal document has no published version or invalid
+   *   usernames were passed.
+   *
+   * @Given the following :document_label acceptances:
    */
-  public function clearLegalNoticeVersions(): void {
-    if ($this->legalDocumentVersions) {
-      \Drupal::entityTypeManager()->getStorage('entity_legal_document_version')
-        ->delete($this->legalDocumentVersions);
+  public function setAcceptances(string $document_label, TableNode $table): void {
+    /** @var \Drupal\entity_legal\EntityLegalDocumentInterface $document */
+    $document = $this->getEntityByLabel(ENTITY_LEGAL_DOCUMENT_ENTITY_NAME, $document_label);
+    if (!$published_version = $document->getPublishedVersion()) {
+      throw new \InvalidArgumentException("Legal document '{$document->label()}' has no published version.");
+    }
+
+    foreach ($table->getRows() as $row) {
+      $username = reset($row);
+      if (!$account = user_load_by_name($username)) {
+        throw new \InvalidArgumentException("Invalid user name '$username'");
+      }
+      $acceptance = EntityLegalDocumentAcceptance::create([
+        'document_version_name' => $published_version->id(),
+        'uid' => $account->id(),
+      ]);
+      $acceptance->save();
+      $this->entities[ENTITY_LEGAL_DOCUMENT_ACCEPTANCE_ENTITY_NAME][$acceptance->id()] = $acceptance;
     }
   }
 
