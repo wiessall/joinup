@@ -9,6 +9,7 @@ dependencies:
     - joinup_licence
     - rdf_entity
     - taxonomy
+    - toolbar
 id: licence_manager
 label: 'Licence manager'
 weight: -8
@@ -17,6 +18,7 @@ permissions:
   - 'access compatibility document overview'
   - 'access dashboard'
   - 'access taxonomy overview'
+  - 'access toolbar'
   - 'create licence rdf entity'
   - 'delete licence rdf entity'
   - 'edit licence rdf entity'
