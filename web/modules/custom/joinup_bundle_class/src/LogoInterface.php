@@ -4,6 +4,7 @@ declare(strict_types = 1);
 
 namespace Drupal\joinup_bundle_class;
 
+use Drupal\Core\Url;
 use Drupal\file\FileInterface;
 
 /**
@@ -53,5 +54,16 @@ interface LogoInterface {
    *   The machine name.
    */
   public function getLogoFieldName(): string;
+
+  /**
+   * Returns the logo URL object.
+   *
+   * @param array $options
+   *   (optional) URL options. Defaults to an empty array.
+   *
+   * @return \Drupal\Core\Url|null
+   *   The logo URL or NULL if the entity doesn't have a logo.
+   */
+  public function getLogoAsUrl(array $options = []): ?Url;
 
 }

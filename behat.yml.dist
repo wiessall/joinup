@@ -126,6 +126,7 @@ default:
                 - '--whitelisted-ips=*'
     LoversOfBehat\TableExtension:
       table_map:
+        'announcement list': '.announcement-list table'
         'group menu edit table': '#menu-overview'
         'eif recommendations': '.eif-recommendations table'
         'member administration': '.og-members-overview table'

@@ -17,6 +17,7 @@ use Drupal\joinup_group\Entity\GroupTrait;
 use Drupal\joinup_publication_date\Entity\EntityPublicationTimeFallbackTrait;
 use Drupal\joinup_workflow\ArchivableEntityTrait;
 use Drupal\joinup_workflow\EntityWorkflowStateTrait;
+use Drupal\meta_entity\Entity\MetaEntity;
 use Drupal\og\OgMembershipInterface;
 use Drupal\rdf_entity\Entity\Rdf;
 use Drupal\topic\Entity\TopicReferencingEntityTrait;
@@ -126,11 +127,7 @@ class Collection extends Rdf implements CollectionInterface {
    * {@inheritdoc}
    */
   public function getGlossarySettings(): array {
-    /** @var \Drupal\meta_entity\Entity\MetaEntityInterface $meta_entity */
-    $meta_entity = $this->get('settings')->entity;
-    if (!$meta_entity) {
-      throw new \Exception("The {$this->label()} collection doesn't have an associated 'collection_settings' meta-entity.");
-    }
+    $meta_entity = MetaEntity::loadOrCreate('collection_settings', $this);
     return [
       'link_only_first' => (bool) $meta_entity->get('glossary_link_only_first')->value,
     ];
