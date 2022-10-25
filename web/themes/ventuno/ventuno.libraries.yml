@@ -109,6 +109,11 @@ ajax-throbber:
     - core/drupal
     - ventuno/spinners
 
+fieldset-show-more:
+  css:
+    theme:
+      assets/css/fieldset-show-more.min.css: { minified: true }
+
 menu--og--navigation:
   css:
     theme:

@@ -279,6 +279,15 @@ module.exports = {
       },
     },
     {
+      entry: path.resolve(outputFolder, "src/scss/fieldset-show-more.scss"),
+      dest: path.resolve(outputFolder, "assets/css/fieldset-show-more.min.css"),
+      options: {
+        includePaths,
+        minify: true,
+        sourceMap: "file",
+      },
+    },
+    {
       entry: path.resolve(outputFolder, "src/scss/footer.scss"),
       dest: path.resolve(outputFolder, "assets/css/footer.min.css"),
       options: {
