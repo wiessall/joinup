@@ -1,0 +1,29 @@
+.fieldset-show-more {
+  .btn-link:focus {
+    text-decoration: none; // Override btn-link
+  }
+  .btn[aria-expanded="false"] {
+    .fieldset-show-more__more {
+      display: inline;
+    }
+    .fieldset-show-more__less {
+      display: none;
+    }
+    svg {
+      transform: rotate(0deg);
+      transition: transform .25s ease;
+    }
+  }
+  .btn[aria-expanded="true"] {
+    .fieldset-show-more__more {
+      display: none;
+    }
+    .fieldset-show-more__less {
+      display: inline;
+    }
+    svg {
+      transform: rotate(180deg);
+      transition: transform .25s ease;
+    }
+  }
+}
