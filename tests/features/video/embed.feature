@@ -65,7 +65,11 @@ Feature: Embed of videos into the page.
       | Files  |
       | Videos |
     And I click "Videos"
-    #And I should see the text "You can link to media from AV Portal by entering a URL in the formats: https://audiovisual.ec.europa.eu/en/video/[REF], https://ec.europa.eu/avservices/video/player.cfm?sitelang=en&ref=[REF], https://europa.eu/!dV74uw, https://audiovisual.ec.europa.eu/embed/index.html?sitelang=en&ref=[REF]"
+    And I should see the text "Youtube and EC videos are allowed."
+    And I should see the text "Youtube example: https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+    And I should see the text "EC url example: http://europa.eu/123abc!123"
+    And I should see the text "EC video example: https://ec.europa.eu/avservices/video/player.cfm?sitelang=en&ref=ABC12345"
+    And I should see the text "EC webcast video example: https://webcast.ec.europa.eu/iprs-and-innovation-procurement-22-01-20/embed"
     When I fill in "Add Videos URL" with "<url>"
     And I press "Add"
     Then I press "Save" in the "Modal buttons" region
