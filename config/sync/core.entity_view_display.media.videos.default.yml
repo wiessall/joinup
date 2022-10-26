@@ -13,15 +13,13 @@ bundle: videos
 mode: default
 content:
   field_media_video_embed_field:
-    type: video_embed_field_lazyload
+    type: video_embed_field_video
     label: visually_hidden
     settings:
       autoplay: true
       responsive: true
       width: 854
       height: 480
-      image_style: ''
-      link_image_to: ''
     third_party_settings: {  }
     weight: 0
     region: content
