@@ -20,43 +20,31 @@ class MinkContext extends DrupalExtensionMinkContext {
   /**
    * {@inheritdoc}
    */
-  public function checkOption($option) {
-    $this->scrollNamedElementIntoView('checkbox', $option);
-    if (!$this->usesMaterialDesignLite()) {
-      parent::checkOption($option);
+  public function checkOption($option): void {
+    // @todo Remove this if (...) block in ISAICP-7138.
+    // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7138
+    if ($this->usesMaterialDesignLite()) {
+      $this->checkMaterialDesignField($option, $this->getSession()->getPage());
       return;
     }
-    // Overrides the default method for checking checkboxes to make it
-    // compatible with material design.
-    $option = $this->fixStepArgument($option);
-    $page = $this->getSession()->getPage();
-    if (!$page->find('css', 'div#block-ventuno-pagetitle')) {
-      $this->checkMaterialDesignField($option, $page);
-    }
-    else {
-      $page->checkField($option);
-    }
+
+    $this->scrollNamedElementIntoView('checkbox', $option);
+    parent::checkOption($option);
   }
 
   /**
    * {@inheritdoc}
    */
-  public function uncheckOption($option) {
-    $this->scrollNamedElementIntoView('checkbox', $option);
-    if (!$this->usesMaterialDesignLite()) {
-      parent::uncheckOption($option);
+  public function uncheckOption($option): void {
+    // @todo Remove this if (...) block in ISAICP-7138.
+    // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7138
+    if ($this->usesMaterialDesignLite()) {
+      $this->uncheckMaterialDesignField($option, $this->getSession()->getPage());
       return;
     }
-    // Overrides the default method for unchecking checkboxes to make it
-    // compatible with material design.
-    $option = $this->fixStepArgument($option);
-    $page = $this->getSession()->getPage();
-    if (!$page->find('css', 'div#block-ventuno-pagetitle')) {
-      $this->uncheckMaterialDesignField($option, $this->getSession()->getPage());
-    }
-    else {
-      $page->uncheckField($option);
-    }
+
+    $this->scrollNamedElementIntoView('checkbox', $option);
+    parent::uncheckOption($option);
   }
 
   /**
