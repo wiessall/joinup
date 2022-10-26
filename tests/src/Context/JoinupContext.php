@@ -1180,7 +1180,7 @@ class JoinupContext extends RawDrupalContext {
    *
    * @Then I (should )see :number tile(s)
    */
-  public function assertTileCount($number) {
+  public function assertTileCount(string $number): void {
     $results = $this->getAllCardsInPage();
     $nr_found = count($results);
     if ($nr_found != $number) {
@@ -1199,7 +1199,7 @@ class JoinupContext extends RawDrupalContext {
    *
    * @Then I (should )not see the :heading tile
    */
-  public function assertTileNotPresent($heading) {
+  public function assertTileNotPresent(string $heading): void {
     $results = $this->getAllCardsInPage();
     foreach ($results as $result) {
       /** @var \Behat\Mink\Element\Element $result */
