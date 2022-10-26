@@ -5,30 +5,32 @@ dependencies:
   config:
     - core.entity_view_mode.media.media_library
     - field.field.media.videos.field_media_video_embed_field
-    - image.style.medium
     - media.type.videos
   module:
-    - image
+    - template_suggestion
+    - video_embed_field
 id: media.videos.media_library
 targetEntityType: media
 bundle: videos
 mode: media_library
 content:
-  thumbnail:
-    type: image
+  field_media_video_embed_field:
+    type: video_embed_field_video
     label: hidden
     settings:
-      image_link: ''
-      image_style: medium
-      image_loading:
-        attribute: lazy
-    third_party_settings: {  }
+      autoplay: true
+      responsive: true
+      width: 854
+      height: 480
+    third_party_settings:
+      template_suggestion:
+        template_suggestion: ''
     weight: 0
     region: content
 hidden:
   created: true
-  field_media_video_embed_field: true
   langcode: true
   name: true
   search_api_excerpt: true
+  thumbnail: true
   uid: true

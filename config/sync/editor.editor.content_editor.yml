@@ -48,7 +48,6 @@ settings:
         - '<dl>'
         - '<dt>'
         - '<dd>'
-        - '<iframe src allowfullscreen mozallowfullscreen webkitallowfullscreen width height frameborder>'
         - '<map name>'
         - '<area alt coords href hreflang rel shape>'
         - '<blockquote cite>'
