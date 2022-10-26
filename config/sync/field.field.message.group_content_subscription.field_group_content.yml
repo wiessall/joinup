@@ -295,10 +295,4 @@ settings:
   eif_wrapper_type:
     handler: 'default:eif_wrapper_type'
     handler_settings: {  }
-  oembed_provider_bucket:
-    handler: 'default:oembed_provider_bucket'
-    handler_settings: {  }
-  oembed_provider:
-    handler: 'default:oembed_provider'
-    handler_settings: {  }
 field_type: dynamic_entity_reference
