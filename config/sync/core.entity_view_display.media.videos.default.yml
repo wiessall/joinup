@@ -1,0 +1,34 @@
+uuid: eacf73fc-f83a-4c67-aee1-b89ee07fec50
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.media.videos.field_media_video_embed_field
+    - media.type.videos
+  module:
+    - video_embed_field
+id: media.videos.default
+targetEntityType: media
+bundle: videos
+mode: default
+content:
+  field_media_video_embed_field:
+    type: video_embed_field_lazyload
+    label: visually_hidden
+    settings:
+      autoplay: true
+      responsive: true
+      width: 854
+      height: 480
+      image_style: ''
+      link_image_to: ''
+    third_party_settings: {  }
+    weight: 0
+    region: content
+hidden:
+  created: true
+  langcode: true
+  name: true
+  search_api_excerpt: true
+  thumbnail: true
+  uid: true

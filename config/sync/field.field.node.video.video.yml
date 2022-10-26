@@ -1,11 +1,10 @@
-uuid: 922e384d-ba3b-45cd-83d9-7769238d45fd
+uuid: 5b6389c4-c4df-4f05-be4a-6f798815c459
 langcode: en
 status: true
 dependencies:
   config:
     - field.storage.node.video
-    - media.type.ec_videos
-    - media.type.remote_videos
+    - media.type.videos
     - node.type.video
 id: node.video.video
 field_name: video
@@ -21,11 +20,10 @@ settings:
   handler: 'default:media'
   handler_settings:
     target_bundles:
-      ec_videos: ec_videos
-      remote_videos: remote_videos
+      videos: videos
     sort:
       field: _none
       direction: ASC
     auto_create: false
-    auto_create_bundle: ec_videos
+    auto_create_bundle: ''
 field_type: entity_reference

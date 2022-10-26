@@ -139,6 +139,5 @@ filters:
       default_view_mode: default
       allowed_view_modes: {  }
       allowed_media_types:
-        ec_videos: ec_videos
         files: files
-        remote_videos: remote_videos
+        videos: videos
