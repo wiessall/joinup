@@ -6,10 +6,15 @@ namespace Drupal\joinup_group;
 
 use Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException;
 use Drupal\Component\Plugin\Exception\PluginNotFoundException;
+use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Session\AccountInterface;
+use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\og\MembershipManagerInterface;
+use Drupal\og\OgAccessInterface;
+use Drupal\og\OgContextInterface;
 use Drupal\og\OgMembershipInterface;
 
 /**
@@ -19,17 +24,28 @@ class JoinupGroupManager implements JoinupGroupManagerInterface {
 
   /**
    * The entity type manager.
-   *
-   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
    */
-  protected $entityTypeManager;
+  protected EntityTypeManagerInterface $entityTypeManager;
 
   /**
    * The OG membership manager service.
-   *
-   * @var \Drupal\og\MembershipManagerInterface
    */
-  protected $membershipManager;
+  protected MembershipManagerInterface $membershipManager;
+
+  /**
+   * The current user.
+   */
+  protected AccountInterface $currentUser;
+
+  /**
+   * The OG access service.
+   */
+  protected OgAccessInterface $ogAccess;
+
+  /**
+   * The Organic Groups context service.
+   */
+  protected OgContextInterface $ogContext;
 
   /**
    * Constructs a JoinupRelationshipManager object.
@@ -38,10 +54,19 @@ class JoinupGroupManager implements JoinupGroupManagerInterface {
    *   The OG membership manager service.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
    *   The entity type manager.
+   * @param \Drupal\Core\Session\AccountInterface $current_user
+   *   The current user.
+   * @param \Drupal\og\OgAccessInterface $og_access
+   *   The OG access service.
+   * @param \Drupal\og\OgContextInterface $og_context
+   *   The Organic Groups context service.
    */
-  public function __construct(MembershipManagerInterface $membershipManager, EntityTypeManagerInterface $entityTypeManager) {
+  public function __construct(MembershipManagerInterface $membershipManager, EntityTypeManagerInterface $entityTypeManager, AccountInterface $current_user, OgAccessInterface $og_access, OgContextInterface $og_context) {
     $this->membershipManager = $membershipManager;
     $this->entityTypeManager = $entityTypeManager;
+    $this->currentUser = $current_user;
+    $this->ogAccess = $og_access;
+    $this->ogContext = $og_context;
   }
 
   /**
@@ -92,6 +117,27 @@ class JoinupGroupManager implements JoinupGroupManagerInterface {
     $result = $query->execute();
 
     return $storage->loadMultiple($result);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function access(GroupInterface $group, string $og_permission, ?string $site_permission = NULL, ?AccountInterface $account = NULL): AccessResultInterface {
+    $account ??= $this->currentUser;
+    // Check the site-wide permission.
+    return (AccessResult::allowedIf($site_permission)->andIf(AccessResult::allowedIfHasPermission($account, $site_permission)))
+        // Check the OG permission.
+      ->orIf($this->ogAccess->userAccess($group, $og_permission, $account))
+      ->addCacheableDependency($group)
+      ->addCacheContexts(['og_role']);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getGroupFromContext(): ?GroupInterface {
+    $context = $this->ogContext->getRuntimeContexts(['og']);
+    return !empty($context['og']) ? $context['og']->getContextValue() : NULL;
   }
 
   /**
