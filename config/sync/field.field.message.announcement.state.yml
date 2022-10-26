@@ -1,0 +1,25 @@
+uuid: a4361246-a8f8-4af3-bdb5-9d5b87e0f71c
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.message.state
+    - message.template.announcement
+  module:
+    - state_machine
+id: message.announcement.state
+field_name: state
+entity_type: message
+bundle: announcement
+label: State
+description: ''
+required: true
+translatable: false
+default_value:
+  -
+    value: __new__
+default_value_callback: ''
+settings:
+  workflow: announcement
+  workflow_callback: ''
+field_type: state
