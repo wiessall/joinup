@@ -297,7 +297,7 @@ class AssetReleaseWorkflowTest extends JoinupWorkflowExistingSiteTestBase {
           ['delete', 'userAuthenticated', FALSE],
           ['delete', 'userModerator', TRUE],
           ['delete', 'userOgFacilitator', FALSE],
-          ['delete', 'userOgAdministrator', FALSE],
+          ['delete', 'userOgAdministrator', TRUE],
         ],
         'validated' => [
           ['view', 'userAnonymous', FALSE],
@@ -314,7 +314,7 @@ class AssetReleaseWorkflowTest extends JoinupWorkflowExistingSiteTestBase {
           ['delete', 'userAuthenticated', FALSE],
           ['delete', 'userModerator', TRUE],
           ['delete', 'userOgFacilitator', FALSE],
-          ['delete', 'userOgAdministrator', FALSE],
+          ['delete', 'userOgAdministrator', TRUE],
         ],
         'needs_update' => [
           ['view', 'userAnonymous', FALSE],
@@ -331,7 +331,7 @@ class AssetReleaseWorkflowTest extends JoinupWorkflowExistingSiteTestBase {
           ['delete', 'userAuthenticated', FALSE],
           ['delete', 'userModerator', TRUE],
           ['delete', 'userOgFacilitator', FALSE],
-          ['delete', 'userOgAdministrator', FALSE],
+          ['delete', 'userOgAdministrator', TRUE],
         ],
       ],
       // Published parent.
@@ -351,7 +351,7 @@ class AssetReleaseWorkflowTest extends JoinupWorkflowExistingSiteTestBase {
           ['delete', 'userAuthenticated', FALSE],
           ['delete', 'userModerator', TRUE],
           ['delete', 'userOgFacilitator', FALSE],
-          ['delete', 'userOgAdministrator', FALSE],
+          ['delete', 'userOgAdministrator', TRUE],
         ],
         'validated' => [
           ['view', 'userAnonymous', TRUE],
@@ -368,7 +368,7 @@ class AssetReleaseWorkflowTest extends JoinupWorkflowExistingSiteTestBase {
           ['delete', 'userAuthenticated', FALSE],
           ['delete', 'userModerator', TRUE],
           ['delete', 'userOgFacilitator', FALSE],
-          ['delete', 'userOgAdministrator', FALSE],
+          ['delete', 'userOgAdministrator', TRUE],
         ],
         'needs_update' => [
           ['view', 'userAnonymous', FALSE],
@@ -385,7 +385,7 @@ class AssetReleaseWorkflowTest extends JoinupWorkflowExistingSiteTestBase {
           ['delete', 'userAuthenticated', FALSE],
           ['delete', 'userModerator', TRUE],
           ['delete', 'userOgFacilitator', FALSE],
-          ['delete', 'userOgAdministrator', FALSE],
+          ['delete', 'userOgAdministrator', TRUE],
         ],
       ],
     ];
