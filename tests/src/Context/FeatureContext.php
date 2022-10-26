@@ -941,47 +941,27 @@ class FeatureContext extends RawDrupalContext implements SnippetAcceptingContext
     $fixture = file_get_contents(__DIR__ . '/../../fixtures/testing_terms.yml');
     $hierarchy = Yaml::decode($fixture);
     foreach ($hierarchy as $vid => $terms) {
-      foreach ($terms as $key => $data) {
-        $isIndexed = array_values($data) === $data;
-        if ($isIndexed) {
-          $has_children = is_array($terms);
-          $name = $has_children ? $key : $data;
-          $term = (object) [
-            'vocabulary_machine_name' => $vid,
-            'name' => $name,
-          ];
-          $children = $data;
-        }
-        else {
-          $has_children = array_key_exists('children', $data);
-          $term = (object) [
-            'vocabulary_machine_name' => $vid,
-            'name' => $data['name'],
-            'weight' => $data['weight'],
-          ];
-          $children = $data['children'];
-        }
+      foreach ($terms as $parent_index => $data) {
+        $weight = $parent_index - 1;
+        $has_children = array_key_exists('children', $data);
+        $term = (object) [
+          'vocabulary_machine_name' => $vid,
+          'name' => $data['name'],
+          'weight' => $weight,
+        ];
+        $children = $data['children'];
         $this->termCreate($term);
         $parent_tid = $term->tid;
-
         if ($has_children) {
-          foreach ($children as $child) {
-            if (!is_array($child)) {
-              $term = (object) [
-                'vocabulary_machine_name' => $vid,
-                'name' => $child,
-                'parent' => $parent_tid,
-              ];
-            }
-            else {
-              $term = (object) [
-                'vocabulary_machine_name' => $vid,
-                'name' => $child['name'],
-                'weight' => $child['weight'],
-                'description' => $child['def'],
-                'parent' => $parent_tid,
-              ];
-            }
+          foreach ($children as $child_index => $child) {
+            $weight = $child_index - 1;
+            $term = (object) [
+              'vocabulary_machine_name' => $vid,
+              'name' => $child['name'],
+              'parent' => $parent_tid,
+              'weight' => $weight,
+              'description' => $child['description'] ?? '',
+            ];
             $this->termCreate($term);
           }
         }
