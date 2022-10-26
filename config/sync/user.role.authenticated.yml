@@ -9,9 +9,8 @@ dependencies:
     - filter.format.glossary_html
     - filter.format.minimal
     - filter.format.simple_html
-    - media.type.ec_videos
     - media.type.files
-    - media.type.remote_videos
+    - media.type.videos
     - node.type.document
     - node.type.tallinn_report
   module:
@@ -48,14 +47,13 @@ permissions:
   - 'cancel account'
   - 'create contact_information rdf entity'
   - 'create document content'
-  - 'create ec_videos media'
   - 'create files media'
   - 'create owner rdf entity'
   - 'create paragraph content accordion'
   - 'create paragraph content accordion_item'
   - 'create paragraph content content_listing'
   - 'create paragraph content simple_paragraph'
-  - 'create remote_videos media'
+  - 'create videos media'
   - 'delete own comments'
   - 'delete own document content'
   - 'delete paragraph content accordion'

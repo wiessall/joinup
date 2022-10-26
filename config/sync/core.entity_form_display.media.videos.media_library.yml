@@ -1,14 +1,14 @@
-uuid: 2bcb1874-22e9-4ee0-93fd-763c572c6bf6
+uuid: 4b87ecf9-b071-4ecf-a332-16472c1ce9ee
 langcode: en
 status: true
 dependencies:
   config:
     - core.entity_form_mode.media.media_library
-    - field.field.media.remote_videos.field_media_oembed_remote_videos
-    - media.type.remote_videos
-id: media.remote_videos.media_library
+    - field.field.media.videos.field_media_video_embed_field
+    - media.type.videos
+id: media.videos.media_library
 targetEntityType: media
-bundle: remote_videos
+bundle: videos
 mode: media_library
 content:
   name:
@@ -21,7 +21,7 @@ content:
     third_party_settings: {  }
 hidden:
   created: true
-  field_media_oembed_remote_videos: true
+  field_media_video_embed_field: true
   langcode: true
   path: true
   status: true

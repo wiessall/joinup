@@ -50,15 +50,6 @@ content:
         template_suggestion: ''
     weight: 1
     region: content
-  video:
-    type: entity_reference_entity_view
-    label: hidden
-    settings:
-      view_mode: default
-      link: true
-    third_party_settings: {  }
-    weight: 2
-    region: content
 hidden:
   field_comments: true
   field_keywords: true
@@ -69,3 +60,4 @@ hidden:
   og_audience: true
   report: true
   search_api_excerpt: true
+  video: true

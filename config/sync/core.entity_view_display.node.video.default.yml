@@ -15,7 +15,6 @@ dependencies:
   module:
     - comment
     - link
-    - template_suggestion
     - text
     - user
 _core:
@@ -67,10 +66,8 @@ content:
     settings:
       view_mode: default
       link: false
-    third_party_settings:
-      template_suggestion:
-        template_suggestion: ''
-    weight: 0
+    third_party_settings: {  }
+    weight: 5
     region: content
 hidden:
   field_keywords: true
