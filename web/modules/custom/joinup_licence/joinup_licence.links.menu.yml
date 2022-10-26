@@ -11,7 +11,8 @@ joinup_licence.compatibility_documents:
   weight: 60
 joinup_licence.legal_type_overview:
   title: 'Edit tooltip descriptions'
-  class:  Drupal\joinup_licence\Plugin\Menu\LegalTypeOverviewMenuLink
+  route_parameters:
+    taxonomy_vocabulary: 'legal_type'
   route_name: entity.taxonomy_vocabulary.overview_form
   description: 'Provides ability to edit tooltip descriptions form legal type terms.'
   parent: system.admin
