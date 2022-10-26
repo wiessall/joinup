@@ -8,9 +8,22 @@
       "rules": {
         "yml/no-empty-mapping-value": "off"
       }
+    },
+    // Only require the @file tag for Javascript files.
+    {
+      "files": ["*.yml"],
+      "rules": {
+        "jsdoc/require-file-overview": "off"
+      }
     }
   ],
   "globals": {
     "L": true
+  },
+  "plugins": [
+    "jsdoc"
+  ],
+  "rules": {
+    "jsdoc/require-file-overview": "error"
   }
 }
