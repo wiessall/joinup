@@ -15,11 +15,3 @@ filter_settings.joinup_video:
     responsive:
       type: boolean
       label: Responsive
-
-media.source.joinup_ec_video:
-  type: media.source.field_aware
-  label: 'Joinup EC Video source configuration'
-  mapping:
-    thumbnails_directory:
-      type: uri
-      label: 'URI of thumbnail storage directory'
