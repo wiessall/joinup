@@ -1,4 +1,8 @@
-((Drupal) => {
+/**
+ * @file
+ * Empties the "url" input if user selects categories other than bug or report.
+ */
+(() => {
   Drupal.behaviors.emptyUrlContactForm = {
     attach() {
       const url = document.querySelector("input[name*='field_contact_url']");
@@ -20,4 +24,4 @@
       });
     },
   };
-})(Drupal);
+})();
