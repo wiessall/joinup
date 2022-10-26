@@ -56,8 +56,8 @@ Feature: Editing collections
     And I press the button "Insert Drupal Media" in the "Description" wysiwyg editor
     Then I wait for AJAX to finish
     And a modal should open
-    And I click "Remote videos"
-    When I fill in "Add Remote videos via URL" with "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+    And I click "Videos"
+    When I fill in "Add Videos URL" with "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
     And I press "Add"
     Then I press "Save" in the "Modal buttons" region
     And I press "Insert selected" in the "Modal buttons" region

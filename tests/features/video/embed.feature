@@ -62,27 +62,28 @@ Feature: Embed of videos into the page.
     Then I wait for AJAX to finish
     And a modal should open
     And I should see the following lines of text:
-      | EC videos     |
-      | Files         |
-      | Remote videos |
-    And I click "EC videos"
-    And I should see the text "You can link to media from AV Portal by entering a URL in the formats: https://audiovisual.ec.europa.eu/en/video/[REF], https://ec.europa.eu/avservices/video/player.cfm?sitelang=en&ref=[REF], https://europa.eu/!dV74uw, https://audiovisual.ec.europa.eu/embed/index.html?sitelang=en&ref=[REF]"
-    And I click "Remote videos"
-    And I should see the text "Allowed providers: YouTube."
-    When I fill in "Video URL" with "<url>"
-    And I press "Save" in the "Modal buttons" region
+      | Files  |
+      | Videos |
+    And I click "Videos"
+    #And I should see the text "You can link to media from AV Portal by entering a URL in the formats: https://audiovisual.ec.europa.eu/en/video/[REF], https://ec.europa.eu/avservices/video/player.cfm?sitelang=en&ref=[REF], https://europa.eu/!dV74uw, https://audiovisual.ec.europa.eu/embed/index.html?sitelang=en&ref=[REF]"
+    When I fill in "Add Videos URL" with "<url>"
+    And I press "Add"
+    Then I press "Save" in the "Modal buttons" region
+    And I press "Insert selected" in the "Modal buttons" region
     Then the modal should be closed
     And I press "Save as draft"
     Then the response should contain "<embed url>"
 
     Examples:
-      | url                                                                                                                                                   | embed url                                                                                                                                                           |
-      | https://www.youtube.com/watch?v=YTaLmMsaLOg                                                                                                           | //europa.eu/webtools/crs/iframe/?oriurl=https%3A%2F%2Fwww.youtube-nocookie.com%2Fembed%2FYTaLmMsaLOg%3Fautoplay%3D0%26start%3D0%26rel%3D0                           |
-      | http://europa.eu/!dV74uw                                                                                                                              | //europa.eu/webtools/crs/iframe/?oriurl=%2F%2Faudiovisual.ec.europa.eu%2Fembed%2Findex.html%3Fref%3DI-136289%26lg%3Den%26starttime%3D0%26autoplay%3Dfalse           |
-      | https://ec.europa.eu/avservices/video/player.cfm?sitelang=en&ref=I156836                                                                              | //europa.eu/webtools/crs/iframe/?oriurl=%2F%2Faudiovisual.ec.europa.eu%2Fembed%2Findex.html%3Fref%3DI156836%26lg%3Den%26starttime%3D0%26autoplay%3Dfalse            |
-      | https://audiovisual.ec.europa.eu/embed/index.html?sitelang=en&ref=I-087075                                                                            | //europa.eu/webtools/crs/iframe/?oriurl=%2F%2Faudiovisual.ec.europa.eu%2Fembed%2Findex.html%3Fref%3DI-087075%26lg%3Den%26starttime%3D0%26autoplay%3Dfalse           |
-      | https://webcast.ec.europa.eu/iprs-and-innovation-procurement-22-01-20/embed                                                                           | //europa.eu/webtools/crs/iframe/?oriurl=%2F%2Fwebcast.ec.europa.eu%2Fiprs-and-innovation-procurement-22-01-20%2Fembed%3Flg%3Den%26starttime%3D0%26autostart%3Dfalse |
+      | url                                                                                                                                                   | embed url                                                                                                                                                                                                                                     |
+      | https://www.youtube.com/watch?v=YTaLmMsaLOg                                                                                                           | //europa.eu/webtools/crs/iframe/?oriurl=https%3A%2F%2Fwww.youtube-nocookie.com%2Fembed%2FYTaLmMsaLOg%3Fautoplay%3D0%26start%3D0%26rel%3D0                                                                                                     |
+      | http://europa.eu/!dV74uw                                                                                                                              | //europa.eu/webtools/crs/iframe/?oriurl=%2F%2Faudiovisual.ec.europa.eu%2Fembed%2Findex.html%3Fref%3DI-136289%26lg%3Den%26starttime%3D0%26autoplay%3Dfalse                                                                                     |
+      | https://ec.europa.eu/avservices/video/player.cfm?sitelang=en&ref=I156836                                                                              | //europa.eu/webtools/crs/iframe/?oriurl=%2F%2Faudiovisual.ec.europa.eu%2Fembed%2Findex.html%3Fref%3DI156836%26lg%3Den%26starttime%3D0%26autoplay%3Dfalse                                                                                      |
+      | https://audiovisual.ec.europa.eu/embed/index.html?sitelang=en&ref=I-087075                                                                            | //europa.eu/webtools/crs/iframe/?oriurl=%2F%2Faudiovisual.ec.europa.eu%2Fembed%2Findex.html%3Fref%3DI-087075%26lg%3Den%26starttime%3D0%26autoplay%3Dfalse                                                                                     |
+      | https://webcast.ec.europa.eu/iprs-and-innovation-procurement-22-01-20/embed                                                                           | //europa.eu/webtools/crs/iframe/?oriurl=%2F%2Fwebcast.ec.europa.eu%2Fiprs-and-innovation-procurement-22-01-20%2Fembed%3Flg%3Den%26starttime%3D0%26autostart%3Dfalse                                                                           |
       | https://webcast.ec.europa.eu/webinar-on-public-procurement-of-artificial-intelligence-ai-building-trust-for-citizens-and-business-2021-06-25-4c/embed | //europa.eu/webtools/crs/iframe/?oriurl=%2F%2Fwebcast.ec.europa.eu%2Fwebinar-on-public-procurement-of-artificial-intelligence-ai-building-trust-for-citizens-and-business-2021-06-25-4c%2Fembed%3Flg%3Den%26starttime%3D0%26autostart%3Dfalse |
+
+  @wip
   Scenario: Forcing auto-play into the content of an entity will not trigger the auto-play.
     Given I am logged in as a "facilitator" of the "Beer brewing corporation" collection
     And I go to the homepage of the "Beer brewing corporation" collection
