@@ -1,3 +1,7 @@
+/**
+ * @file
+ * BCL builder configuration.
+ */
 const path = require("path");
 
 const outputFolder = path.resolve(__dirname);
