@@ -1,3 +1,7 @@
+/**
+ * @file
+ * Configures BCL builder to generate assets.
+ */
 const path = require("path");
 
 const outputFolder = path.resolve(__dirname);
