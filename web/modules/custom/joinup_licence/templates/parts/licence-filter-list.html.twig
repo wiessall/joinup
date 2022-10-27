@@ -13,17 +13,17 @@
  * --- description: The description of the field to pass to the data attribute.
  */
 #}
-<div class="listing listing--grid">
+<div class="listing listing-grid listing-grid--licence">
   {% for parent_item in items %}
     <div class="licence-filter {{ parent_item.class }}">
       <div class="licence-filter__header">
-        <span>{{ parent_item.title }}</span>
+        {{ parent_item.title }}
       </div>
       <div class="licence-filter__content">
         <ul class="licence-filter__list">
           {% for child in parent_item.items %}
             <li class="licence-filter__item">
-              <button class="licence-filter__button" data-joinup-licence-category="{{ child.licence_category }}" title="{{ child.description }}">
+              <button class="licence-filter__button" data-joinup-licence-category="{{ child.licence_category }}" title="{{ child.description }}" type="button">
                 {{ child.title }}
               </button>
             </li>
