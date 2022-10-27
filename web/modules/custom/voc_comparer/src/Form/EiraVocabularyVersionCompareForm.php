@@ -60,7 +60,7 @@ class EiraVocabularyVersionCompareForm extends FormBase {
   /**
    * {@inheritdoc}
    */
-  public static function create(ContainerInterface $container) {
+  public static function create(ContainerInterface $container): self {
     return new static(
       $container->get('entity_type.manager'),
       $container->get('cache.default'),
@@ -79,7 +79,7 @@ class EiraVocabularyVersionCompareForm extends FormBase {
   /**
    * {@inheritdoc}
    */
-  public function buildForm(array $form, FormStateInterface $form_state) {
+  public function buildForm(array $form, FormStateInterface $form_state): array {
     $form['help_text'] = [
       '#type' => 'item',
       '#markup' => $this->t('Upload the new file below and select which vocabulary to test against.'),
@@ -118,7 +118,7 @@ class EiraVocabularyVersionCompareForm extends FormBase {
   /**
    * {@inheritdoc}
    */
-  public function submitForm(array &$form, FormStateInterface $form_state) {
+  public function submitForm(array &$form, FormStateInterface $form_state): void {
     $file = $form_state->getValue('file');
     $file_uri = $this->entityTypeManager->getStorage('file')->load($file[0])->getFileUri();
     $batch_builder = (new BatchBuilder())
