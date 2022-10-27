@@ -3,7 +3,7 @@
  * Attaches the behaviors for the asset distribution download tracking module.
  */
 
-((Drupal) => {
+((Drupal, once) => {
   /**
    * Tracks downloads of distributions.
    *
@@ -17,10 +17,19 @@
       once("track-download", "a.track-download", context).forEach(
         (downloadLink) => {
           const url = downloadLink.dataset.joinupTracking;
+          const base = downloadLink.id;
+          if (
+            url === null ||
+            url === undefined ||
+            base === null ||
+            base === undefined
+          ) {
+            return;
+          }
           downloadLink.addEventListener("click", () => {
             Drupal.ajax({
               url,
-              base: downloadLink.id,
+              base,
               progress: false,
               element: downloadLink,
               dialogType: "modal",
@@ -38,4 +47,4 @@
       );
     },
   };
-})(Drupal);
+})(Drupal, once);
