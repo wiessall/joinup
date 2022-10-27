@@ -18,7 +18,7 @@ Feature: Video API
       | content creation | facilitators and authors |
       | state            | validated                |
     And video content:
-      | title       | body        | video                                       | og_audience   |
+      | title       | body        | video_url                                   | og_audience   |
       | Dummy Video | Dummy text. | https://www.youtube.com/watch?v=uLcS7uIlqPo | Video library |
     Then I should have a "Video" page titled "Dummy Video"
 

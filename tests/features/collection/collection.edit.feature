@@ -24,8 +24,8 @@ Feature: Editing collections
     And the following fields should not be present "Langcode, Translation, Affiliates, Enable the search field, Query presets, Limit"
     And I should see "Short description text of the collection. Appears on the Overview page. (Leave blank to use the trimmed value of the Description field.)"
     And I should see "Add a country name relevant to the content of this collection."
-    And the "Description" wysiwyg editor should have the buttons "HTML block format, Bold, Italic, Remove format, Link, Unlink, Bullet list, Numbered list, Outdent, Indent, Blockquote, Image, File, Table, Insert from Media Library, Cut, Copy, Paste, Paste Text, Undo, Redo, Source code"
-    And the "Abstract" wysiwyg editor should have the buttons "HTML block format, Bold, Italic, Remove format, Link, Unlink, Outdent, Indent, Source code"
+    And the "Description" wysiwyg editor should have the buttons "Heading,Bold,Italic,Remove Format,Link,Bulleted list,Numbered list,Outdent,Indent,Block quote,Image,table,Drupal media,Undo,Redo,Source,Code,Code Block"
+    And the "Abstract" wysiwyg editor should have the buttons "Heading,Bold,Italic,Remove Format,Link,Outdent,Indent,Source,Code,Code Block"
 
     # Query builder is disabled in collections.
     But I should not see the button "Add and configure filter"
@@ -86,7 +86,6 @@ Feature: Editing collections
     And I click "Files"
     And I should not see the text "0 bytes limit"
     When I attach the file "empty_pdf.pdf" to "Add file"
-    And I press "Add"
     Then I press "Save" in the "Modal buttons" region
     And I press "Insert selected" in the "Modal buttons" region
     Then the modal should be closed
