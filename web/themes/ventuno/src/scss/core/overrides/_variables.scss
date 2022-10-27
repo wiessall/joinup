@@ -23,10 +23,10 @@ $ventuno-path: '../..';
 
 // Colors variables
 $iop-darkblue: #001e2f;
-// Joinup Licence Assistant color set
-$jla--can: $green;
-$jla--must: $gray-700;
-$jla--cannot: $red;
-$jla--compatible: $indigo;
-$jla--law: darken($orange, 17%); // Increase contrast to pass a11y tests
-$jla--support: $brand-darker;
+// Joinup color set
+$joinup--green: $green;
+$joinup--gray: $gray-700;
+$joinup--red: $red;
+$joinup--indigo: $indigo;
+$joinup--dark-orange: darken($orange, 17%); // Increase contrast to pass a11y tests
+$joinup--brand-darker: $brand-darker;
