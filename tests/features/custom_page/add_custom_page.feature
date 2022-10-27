@@ -138,7 +138,7 @@ Feature: "Add custom page" visibility options.
     And the "invalid_adms.rdf" link in the Content region should be visible
     And the "test.zip" link in the Content region should be visible
     And the "text.pdf" link in the Content region should be visible
-    But I should not see the link "Show more" in the Content region
+    But I should not see the button "Show more" in the Content region
 
     When I go to the "Elastic rubber" custom page
     Then the "ada.png" link in the Content region should be visible
@@ -146,22 +146,22 @@ Feature: "Add custom page" visibility options.
     And the "blaise.jpg" link in the Content region should be visible
     And the "charles.jpg" link in the Content region should be visible
     And the "leonardo.jpg" link in the Content region should be visible
-    And the "Show more" link in the Content region should be visible
+    And the "Show more" button in the Content region should be visible
     # The sixth element should be hidden.
     But the "linus.jpeg" link in the Content region should not be visible
 
     # Expand the list. The sixth element should become visible.
-    When I click "Show more"
+    When I press "Show more"
     Then the "linus.jpeg" link in the Content region should be visible
-    And the "Show less" link in the Content region should be visible
-    But I should not see the link "Show more" in the Content region
+    And the "Show less" button in the Content region should be visible
+    But I should not see the button "Show more" in the Content region
 
     # Collapse again the list.
-    When I click "Show less"
+    When I press "Show less"
     And I wait for animations to finish
     Then the "linus.jpeg" link in the Content region should not be visible
-    And the "Show more" link in the Content region should be visible
-    But I should not see the link "Show less" in the Content region
+    And the "Show more" button in the Content region should be visible
+    But I should not see the button "Show less" in the Content region
 
   Scenario Outline: Creating a custom page with a title that already exists.
     And custom_page content:
