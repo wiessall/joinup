@@ -56,7 +56,7 @@ filters:
   joinup_video:
     id: joinup_video
     provider: joinup_video
-    status: false
+    status: true
     weight: -49
     settings:
       allowed_providers:
