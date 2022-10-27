@@ -16,9 +16,8 @@
         <div class="collapse" id="extraItems">
           {{ fieldset.render_items(items|slice(5)) }}
         </div>
-        <button class="btn btn-link px-0" type="button" data-bs-toggle="collapse" data-bs-target="#extraItems" aria-expanded="false" aria-controls="extraItems">
-          <span class="fieldset-show-more__more">{{ 'Show more'|t }}</span>
-          <span class="fieldset-show-more__less">{{ 'Show less'|t }}</span>
+        <button class="btn btn-link px-0 fieldset-show-more__btn" type="button" data-bs-toggle="collapse" data-bs-target="#extraItems" aria-expanded="false" aria-controls="extraItems">
+          <span class="fieldset-show-more__btn-text">{{ 'Show more'|t }}</span>
           <svg class="bi icon--s">
             <use xlink:href="{{ bcl_icon_path }}#chevron-down"></use>
           </svg>
