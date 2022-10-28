@@ -1,9 +1,12 @@
 .add-content {
   &__btn,
   &__btn:focus:not(:focus-visible) {
-    width: 3rem;
-    height: 3rem;
+    width: 3.5rem;
+    height: 3.5rem;
     margin-top: -1.5rem;
-    outline: $spacer * .5 solid $white;
+    border: $spacer * .5 solid $white;
+    &:hover {
+      border-color: $white;
+    }
   }
 }
