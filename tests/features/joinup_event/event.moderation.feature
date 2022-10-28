@@ -49,7 +49,7 @@ Feature: Event moderation
     And I open the header local tasks menu
     And I click "Edit" in the "Entity actions" region
     And I press "Additional fields"
-    And I check the box "Moderated"
+    And I check "Moderated"
     Then I press "Publish"
     And I should see the heading "Wet Lords"
 

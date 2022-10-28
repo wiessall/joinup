@@ -5,7 +5,6 @@
   .setAttribute('data-bs-toggle', 'dropdown')
   .setAttribute('autocomplete', 'off')
   .setAttribute('aria-expanded', 'false')
-  .setAttribute('aria-label', 'Show other topics'|t )
 %}
 
 {% if items or active %}
@@ -18,9 +17,7 @@
     {{ active|safe_join(', ') }}
     </div>
     <button{{ button_attributes }}>
-      <svg class="bi icon--s">
-        <use xlink:href="{{ bcl_icon_path }}#chevron-down"></use>
-      </svg>
+      <span class="visually-hidden">{{ 'See more topics'|t }}</span>
     </button>
     {%- if items -%}
     <ul class="dropdown-menu px-3 py-2">
