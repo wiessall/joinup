@@ -109,6 +109,16 @@ ajax-throbber:
     - core/drupal
     - ventuno/spinners
 
+fieldset-show-more:
+  css:
+    theme:
+      assets/css/fieldset-show-more.min.css: { minified: true }
+  js:
+    assets/js/fieldset-show-more.min.js: { minified: true, attributes: { defer: true } }
+  dependencies:
+    - core/drupal
+    - core/once
+
 menu--og--navigation:
   css:
     theme:
@@ -171,7 +181,7 @@ members-overview-exposed-form:
 dropdown:
   css:
     theme:
-      assets/css/dropdown.css: {}
+      assets/css/dropdown.min.css: {}
 
 nav:
   css:
