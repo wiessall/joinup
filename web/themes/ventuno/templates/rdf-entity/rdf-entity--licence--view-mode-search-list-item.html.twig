@@ -17,16 +17,16 @@
 <article {{ attributes.addClass(classes) }} data-joinup-spdx="{{ spdx_licence_id_plain }}" data-joinup-licence-category="{{ legal_categories }}">
   {{ title_prefix }}
   {% if spdx_licence_id %}
-    <h2 class="h3 ms-md-5 d-flex align-items-center flex-wrap">
+    <h1 class="h4 ms-md-5 d-flex align-items-center flex-wrap">
       {{ spdx_licence_id_plain }}
       {{ pattern('badge', {
         label: label,
         background: 'secondary',
-        attributes: create_attribute().addClass('text-primary'),
+        attributes: create_attribute().addClass(['text-primary', 'ms-1']),
         rounded_pill: true,
         dismissible: false,
       }) }}
-    </h2>
+    </h1>
   {% endif %}
   {{ title_suffix }}
 
@@ -34,7 +34,7 @@
     <div class="col-12 col-md-6 col-lg-5">
       {% for category_list in category_lists  %}
         <div class="d-flex align-items-baseline licence-tile__line licence-tile__line--{{ category_list.class }} fs-sm">
-          <div class="licence-tile__label-wrapper">
+          <div class="licence-tile__label-wrapper me-1">
             <span class="licence-tile__label badge">{{ category_list.title }}</span>
           </div>
           <div class="licence-tile__values">

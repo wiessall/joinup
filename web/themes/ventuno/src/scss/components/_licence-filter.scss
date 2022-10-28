@@ -1,17 +1,3 @@
-.listing--grid{
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: $spacer;
-  @include media-breakpoint-up(sm) {
-    grid-template-columns: 1fr 1fr;
-  }
-  @include media-breakpoint-up(md) {
-    grid-template-columns: 1fr 1fr 1fr;
-  }
-  @include media-breakpoint-up(xl) {
-    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
-  }
-}
 .licence-filter {
   border-radius: $border-radius-lg;
   overflow: hidden;
@@ -45,59 +31,63 @@
     }
   }
   &--can {
-    border: 1px solid $jla--can;
+    border: 1px solid $joinup--green;
     .licence-filter__header {
-      background-color: $jla--can;
+      background-color: $joinup--green;
     }
     .licence-filter__content {
-      color: $jla--can;
+      color: $joinup--green;
     }
   }
   &--must {
-    border: 1px solid $jla--must;
+    border: 1px solid $joinup--gray;
     .licence-filter__header {
-      background-color: $jla--must;
+      background-color: $joinup--gray;
     }
     .licence-filter__content {
-      color: $jla--must;
+      color: $joinup--gray;
     }
   }
   &--cannot {
-    border: 1px solid $jla--cannot;
+    border: 1px solid $joinup--red;
     .licence-filter__header {
-      background-color: $jla--cannot;
+      background-color: $joinup--red;
     }
     .licence-filter__content {
-      color: $jla--cannot;
+      color: $joinup--red;
     }
   }
   &--compatible {
-    border: 1px solid $jla--compatible;
+    border: 1px solid $joinup--indigo;
     .licence-filter__header {
-      background-color: $jla--compatible;
+      background-color: $joinup--indigo;
     }
     .licence-filter__content {
-      color: $jla--compatible;
+      color: $joinup--indigo;
     }
   }
   &--law {
-    border: 1px solid $jla--law;
+    border: 1px solid $joinup--dark-orange;
     .licence-filter__header {
-      background-color: $jla--law;
+      background-color: $joinup--dark-orange;
     }
     .licence-filter__content {
-      color: $jla--law;
+      color: $joinup--dark-orange;
     }
   }
   &--support {
-    border: 1px solid $jla--support;
+    border: 1px solid $joinup--brand-darker;
     .licence-filter__header {
-      background-color: $jla--support;
+      background-color: $joinup--brand-darker;
     }
     .licence-filter__content {
-      color: $jla--support;
+      color: $joinup--brand-darker;
     }
   }
+}
+.licence-counter {
+  margin: $spacer 0; // 16px 0
+  font-weight: $font-weight-bold;
 }
 .listing--licences {
   .licence-tile {
@@ -106,6 +96,7 @@
       text-align: right;
     }
     &__label {
+      margin: $spacer * .25; // 4px
       font-size: $font-size-sm;
       border-radius: $border-radius-sm;
     }
@@ -119,50 +110,50 @@
     &__line {
       &--can {
         .licence-tile__label {
-          background-color: $jla--can;
+          background-color: $joinup--green;
         }
         .licence-tile__values {
-          color: $jla--can;
+          color: $joinup--green;
         }
       }
       &--must {
         .licence-tile__label {
-          background-color: $jla--must;
+          background-color: $joinup--gray;
         }
         .licence-tile__values {
-          color: $jla--must;
+          color: $joinup--gray;
         }
       }
       &--cannot {
         .licence-tile__label {
-          background-color: $jla--cannot;
+          background-color: $joinup--red;
         }
         .licence-tile__values {
-          color: $jla--cannot;
+          color: $joinup--red;
         }
       }
       &--compatible {
         .licence-tile__label {
-          background-color: $jla--compatible;
+          background-color: $joinup--indigo;
         }
         .licence-tile__values {
-          color: $jla--compatible;
+          color: $joinup--indigo;
         }
       }
       &--law {
         .licence-tile__label {
-          background-color: $jla--law;
+          background-color: $joinup--dark-orange;
         }
         .licence-tile__values {
-          color: $jla--law;
+          color: $joinup--dark-orange;
         }
       }
       &--support {
         .licence-tile__label {
-          background-color: $jla--support;
+          background-color: $joinup--brand-darker;
         }
         .licence-tile__values {
-          color: $jla--support;
+          color: $joinup--brand-darker;
         }
       }
     }
