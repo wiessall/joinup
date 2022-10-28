@@ -72,12 +72,12 @@
 #}
 {% set view_mode_featured = view_mode is same as 'view_mode_featured' %}
 {% set rendered_logo = content.field_document_logo|render %}
-{% if not rendered_logo %}
-  {% set text %}
+{% set text %}
+  {% if not rendered_logo %}
     {{ content.field_type|render|striptags }}
     {{ content.body|render|striptags }}
-  {% endset %}
-{% endif %}
+  {% endif %}
+{% endset %}
 {% set subtext %}
   {% if not rendered_logo and content.field_keywords|render%}
     {{ content.field_keywords|render|striptags }}

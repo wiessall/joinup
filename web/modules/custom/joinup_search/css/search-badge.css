@@ -1,4 +1,4 @@
-.badge {
+.search-badge {
   display: inline-flex;
   align-items: center;
   margin: 4px 8px 4px 4px;
@@ -12,13 +12,13 @@
   line-height: 1;
   color: #fff;
 }
-.badge__text {
+.search-badge__text {
   display: inline-block;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
-.badge .icon--close {
+.search-badge .icon--close {
   display: inline-flex;
   width: 12px;
   height: 12px;
@@ -32,7 +32,7 @@
   border-radius: 50%;
   color: #143b76;
 }
-.badge .icon--close::after {
+.search-badge .icon--close::after {
   display: inline-block;
   content: "";
   vertical-align: -.125em;

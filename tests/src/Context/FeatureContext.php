@@ -862,6 +862,7 @@ class FeatureContext extends RawDrupalContext implements SnippetAcceptingContext
   public function assertElementNotVisibleInRegion(string $locator, string $element, string $region): void {
     $region = $this->getRegion($region);
     $element = $this->findNamedElementInRegion($locator, $element, $region);
+    $this->scrollElementIntoView($element);
     $this->assertNotVisuallyVisible($element);
   }
 
@@ -886,6 +887,7 @@ class FeatureContext extends RawDrupalContext implements SnippetAcceptingContext
   public function assertElementVisibleInRegion(string $locator, string $element, string $region): void {
     $region = $this->getRegion($region);
     $element = $this->findNamedElementInRegion($locator, $element, $region);
+    $this->scrollElementIntoView($element);
     $this->assertVisuallyVisible($element);
   }
 

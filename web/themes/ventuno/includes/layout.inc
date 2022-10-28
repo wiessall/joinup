@@ -83,6 +83,11 @@ function ventuno_theme_suggestions_container_alter(array &$suggestions, array $v
       $suggestions[] = 'container__edit_actions';
     }
   }
+  // Add extra suggestion for grid elements.
+  $has_extra_suggestions = isset($variables['element']['#extra_suggestion']);
+  if ($has_extra_suggestions) {
+    $suggestions[] = $variables['element']['#extra_suggestion'];
+  }
 }
 
 /**
