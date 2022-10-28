@@ -73,11 +73,14 @@
 
   <div class="content container mb-5">
     <div class="row">
-      <main role="main" class="col-12{% if page.sidebar %} col-lg-9 order-1{% endif %}">
+      <main role="main" class="col-12 col-lg-10 col-xl-9 col-xxl-8{% if page.sidebar %} col-lg-9 order-1{% endif %}">
         <div id="main-content" tabindex="-1"></div>{# link is in html.html.twig #}
         <div class="layout-content">
           {{ page.content }}
         </div>
+          {% if page.content_bottom %}
+            {{ page.content_bottom }}
+          {% endif %}
       </main>
       {% if page.sidebar %}
         <aside class="layout-sidebar col-12 col-lg-3">
@@ -86,11 +89,6 @@
       {% endif %}
     </div>
   </div>
-    {% if page.content_bottom %}
-    <div class="container">
-      {{ page.content_bottom }}
-    </div>
-  {% endif %}
 
   {% if page.footer %}
     {% include directory ~ '/templates/parts/footer.html.twig' %}

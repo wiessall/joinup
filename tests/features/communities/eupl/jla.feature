@@ -19,7 +19,7 @@ Feature:
     When I am not logged in
     And I visit the "JLA" custom page
     Then I should see the heading "JLA"
-    And I should see the link "licence SPDX identifier"
+    And I should see the link "Learn more about SPDX identifiers"
     And I should see the following filter categories in the correct order:
       | Can        |
       | Must       |
@@ -42,28 +42,28 @@ Feature:
     And the response should contain "http://joinup.eu/spdx/foo.html#licenseText"
     And the response should contain "http://joinup.eu/spdx/bar.html#licenseText"
 
-    And I click "Distribute" in the "Content" region
-    Then I should see the text "1 licences found"
+    When I press "Distribute" in the "Content" region
+    Then I should see the text "1 licence found"
     And I should see the text "Bar Licence"
     But I should not see the text "Foo Licence"
 
     # Clicking again, deselects the item.
-    When I click "Distribute" in the "Content" region
+    When I press "Distribute" in the "Content" region
     Then I should see the text "2 licences found"
     And I should see the text "Foo Licence"
     And I should see the text "Bar Licence"
 
-    When I fill in "SPDX id" with "SPDX_FOO"
-    Then I should see the text "1 licences found"
+    When I fill in "SPDX ID" with "SPDX_FOO"
+    Then I should see the text "1 licence found"
     And I should see the text "Foo Licence"
     But I should not see the text "Bar Licence"
     # Hitting 'Enter' does not trigger anything.
-    When I hit enter in the keyboard on the field "SPDX id"
-    Then I should see the text "1 licences found"
+    When I hit enter in the keyboard on the field "SPDX ID"
+    Then I should see the text "1 licence found"
     And I should see the text "Foo Licence"
     But I should not see the text "Bar Licence"
 
-    When I clear the content of the field "SPDX id"
+    When I clear the content of the field "SPDX ID"
     Then I should see the text "2 licences found"
     And I should see the text "Foo Licence"
     And I should see the text "Bar Licence"
@@ -114,7 +114,7 @@ Feature:
     Then the Compare buttons are disabled
 
     When I add the "GPL-2.0+" licence to the compare list
-    And I click "Compare"
+    And I press "Compare"
     Then the url should match "/licence/compare/Apache-2.0;GPL-2.0\+"
 
     When I visit the "JLA" custom page
@@ -123,7 +123,7 @@ Feature:
     And I add the "BSL-1.0" licence to the compare list
     And I add the "0BSD" licence to the compare list
     And I add the "LGPL-2.1" licence to the compare list
-    And I click "Compare" in the "LGPL-2.1" licence tile
+    And I press "Compare" in the "LGPL-2.1" licence tile
     And the url should match "/licence/compare/Apache-2.0;GPL-2.0\+;BSL-1.0;0BSD;LGPL-2.1"
 
   Scenario: Test the licence comparer.
@@ -373,13 +373,13 @@ Feature:
     Given I am an anonymous user
     When I visit the "JLA" custom page
 
-    When I click "Distribute" in the "Content" region
+    When I press "Distribute" in the "Content" region
     # The licence was hidden.
     Then I should not see the text "Apache-2.0"
     When I press "Reset"
     Then I should see the text "Apache-2.0"
 
-    When I fill in "SPDX id" with "GPL"
+    When I fill in "SPDX ID" with "GPL"
     # The licence was hidden.
     Then I should not see the text "Apache-2.0"
     When I press "Reset"
@@ -398,7 +398,8 @@ Feature:
     # Test that the list is also cleared since it is stored in a different property.
     When I add the "Apache-2.0" licence to the compare list
     And I add the "GPL-2.0+" licence to the compare list
-    And I click "Compare"
+    And I wait for animations to finish
+    And I press "Compare"
     Then the url should match "/licence/compare/Apache-2.0;GPL-2.0\+"
 
   @javascript
@@ -432,4 +433,4 @@ Feature:
     Given I am an anonymous user
     When I visit the "JLA" custom page
     And I should see the text "Disclose source"
-    And the response should contain "<a data-joinup-licence-category=\"disclose-source\" href=\"#\" title=\"The source code of distributed derivatives must be publicly available\">Disclose source</a>"
+    And the response should contain "<button class=\"licence-filter__button\" data-joinup-licence-category=\"disclose-source\" title=\"The source code of distributed derivatives must be publicly available\" type=\"button\">"

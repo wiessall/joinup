@@ -53,7 +53,7 @@
           }
 
           const statsContainer = groupContent.querySelector(
-            "[data-drupal-card-stats]"
+            "[data-joinup-card-stats]"
           );
           // There's no stats container defined in this card.
           if (statsContainer === null) {
@@ -63,7 +63,7 @@
           const parentLabel = groupContent.dataset.joinupParentLabel;
           const sharedContentCue = document.createElement("div");
           sharedContentCue.setAttribute(
-            "data-drupal-card-stats-shared",
+            "data-joinup-card-stats-shared",
             parentLabel
           );
           const template = document.createElement("template");

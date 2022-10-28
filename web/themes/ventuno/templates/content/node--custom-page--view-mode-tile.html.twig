@@ -64,7 +64,10 @@
  *   is an administrator.
  *
  * @see template_preprocess_node()
- * @see joinup_discussion_preprocess_node__view_mode_tile()
+ *
+ * @todo Remove the id attribute (or make it a class), because if that gets
+ *   rendered twice on a page this is invalid CSS for example: two lists
+ *   in different view modes.
  */
 #}
 {% set view_mode_featured = view_mode is same as 'view_mode_featured' %}

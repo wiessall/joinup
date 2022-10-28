@@ -38,6 +38,14 @@ module.exports = {
       },
     },
     {
+      entry: path.resolve(outputFolder, "src/js/fieldset-show-more.js"),
+      dest: path.resolve(outputFolder, "assets/js/fieldset-show-more.js"),
+      options: {
+        minify: true,
+        sourceMap: true,
+      },
+    },
+    {
       entry: path.resolve(outputFolder, "src/js/highlight-invalid-fields.js"),
       dest: path.resolve(outputFolder, "assets/js/highlight-invalid-fields.js"),
       options: {
@@ -64,6 +72,20 @@ module.exports = {
     {
       entry: path.resolve(outputFolder, "src/js/shared-entity.js"),
       dest: path.resolve(outputFolder, "assets/js/shared-entity.js"),
+      options: {
+        minify: true,
+        sourceMap: true,
+      },
+    },
+    {
+      entry: path.resolve(
+        outputFolder,
+        "src/js/show-accordion-invalid-fields.js"
+      ),
+      dest: path.resolve(
+        outputFolder,
+        "assets/js/show-accordion-invalid-fields.js"
+      ),
       options: {
         minify: true,
         sourceMap: true,
@@ -160,6 +182,33 @@ module.exports = {
       },
     },
     {
+      entry: path.resolve(outputFolder, "src/scss/eif-filter.scss"),
+      dest: path.resolve(outputFolder, "assets/css/eif-filter.min.css"),
+      options: {
+        includePaths,
+        minify: true,
+        sourceMap: "file",
+      },
+    },
+    {
+      entry: path.resolve(outputFolder, "src/scss/licence-filter.scss"),
+      dest: path.resolve(outputFolder, "assets/css/licence-filter.min.css"),
+      options: {
+        includePaths,
+        minify: true,
+        sourceMap: "file",
+      },
+    },
+    {
+      entry: path.resolve(outputFolder, "src/scss/listing-grid.scss"),
+      dest: path.resolve(outputFolder, "assets/css/listing-grid.min.css"),
+      options: {
+        includePaths,
+        minify: true,
+        sourceMap: "file",
+      },
+    },
+    {
       entry: path.resolve(outputFolder, "src/scss/searchpage.scss"),
       dest: path.resolve(outputFolder, "assets/css/searchpage.min.css"),
       options: {
@@ -244,6 +293,15 @@ module.exports = {
     {
       entry: path.resolve(outputFolder, "src/scss/add-content.scss"),
       dest: path.resolve(outputFolder, "assets/css/add-content.min.css"),
+      options: {
+        includePaths,
+        minify: true,
+        sourceMap: "file",
+      },
+    },
+    {
+      entry: path.resolve(outputFolder, "src/scss/fieldset-show-more.scss"),
+      dest: path.resolve(outputFolder, "assets/css/fieldset-show-more.min.css"),
       options: {
         includePaths,
         minify: true,
@@ -578,11 +636,12 @@ module.exports = {
           "arrow-repeat.svg",
           "arrow-right.svg",
           "award.svg",
+          "box-arrow-up-right.svg",
           "calendar.svg",
           "calendar3.svg",
           "card-list.svg",
-          "chat-left-text.svg",
           "chat.svg",
+          "chat-left-text.svg",
           "check-circle-fill.svg",
           "chevron-bar-left.svg",
           "chevron-bar-right.svg",

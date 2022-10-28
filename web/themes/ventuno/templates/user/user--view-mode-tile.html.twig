@@ -16,35 +16,13 @@
  * @see template_preprocess_user()
  */
 #}
-{{ attach_library('ventuno/card') }}
-{%
-  set classes = [
-    'card',
-    'border-0',
-    'h-100',
-    elements['#view_mode'] == 'view_mode_featured' ? 'bg-secondary' : 'bg-light',
-  ]
-%}
-<article {{ attributes.addClass(classes) }}>
-  <div class="pt-3 px-3 mx-auto">
-    {{ content.field_user_photo }}
-  </div>
-  <div class="card-body">
-    <h2 class="card-title fs-6">
-      <a href="{{ path('entity.user.canonical', {'user': user.id}) }}">
-        {{- full_name -}}
-      </a>
-    </h2>
-    {% if short_business_title %}
-      <p class="card-text mb-0">
-        {{ short_business_title }}
-      </p>
-    {% endif %}
-  </div>
-  <div class="card-footer pt-0 border-0 bg-transparent text-end small">
-    {{ 'user'|t }}
-    <svg class="bi icon--s">
-      <use xlink:href="{{ bcl_icon_path }}#person-circle"></use>
-    </svg>
-  </div>
-</article>
+{{ pattern('tile', {
+  image: content.field_user_photo,
+  url: path('entity.user.canonical', {'user': user.id}),
+  title: full_name,
+  text: short_business_title,
+  metadata: [{
+    label: 'user'|t,
+    icon: 'person-circle'
+    }],
+}) }}

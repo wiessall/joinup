@@ -165,6 +165,7 @@ class TrackedHostedFileDownloadFormatter extends FileFormatterBase implements Co
             '#title' => $this->getSetting('remote_files_title'),
             '#attributes' => [
               'data-joinup-tracking' => NULL,
+              'class' => ['btn btn-outline-primary'],
             ],
             '#url' => Url::fromUri($file->getFileUri()),
           ];

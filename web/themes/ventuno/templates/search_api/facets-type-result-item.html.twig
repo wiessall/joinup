@@ -39,7 +39,6 @@
     <use xlink:href="{{ bcl_icon_path }}#{{ icon }}"></use>
   </svg>
   <span class="mt-2 fs-6 fw-bold">
-    {% if show_count %}<span class="tab__text--amount">{{ count }}</span>{% endif %}
-    <span class="tab__text--type">{{ value }}</span>
+    {% if show_count %}<span class="tab__text--amount">{{ count }}</span>{% endif %} <span class="tab__text--type">{{ value }}</span>
   </span>
 </div>
