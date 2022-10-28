@@ -62,11 +62,11 @@ Feature: Collection content
     # Since there are 2 solutions, the link moved in first since it is the type of content with most items.
     # When the facet tab is displayed, the text is "@count Solutions", while if it is in the "More" dropdown, it shows
     # as "Solutions (@count)".
-    Then I see the text "2 Solution" in the "Header" region
+    Then I see the text "2 Solutions" in the "Header" region
     And I should see the link "2 Solutions"
 
     # Create a draft version of the solution to verify that counters are not affected.
-    # @see: https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-4436
+    # See https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-4436.
     When I go to the homepage of the "Solution from draft to validated" solution
     And I click "Edit" in the "Entity actions" region
     And I fill in "Title" with "Solution from draft to validated but draft"

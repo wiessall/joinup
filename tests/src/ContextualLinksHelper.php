@@ -7,7 +7,6 @@ namespace Drupal\joinup;
 use Behat\Mink\Element\NodeElement;
 use Behat\Mink\Element\TraversableElement;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
-use Drupal\joinup\Traits\BrowserCapabilityDetectionTrait;
 use Drupal\joinup\Traits\JavascriptTrait;
 use Drupal\joinup\Traits\TraversingTrait;
 use Drupal\joinup\Traits\UtilityTrait;
@@ -16,7 +15,7 @@ use Symfony\Component\DomCrawler\Crawler;
 /**
  * Contains the business logic for the ContextualLinksTrait.
  *
- * Depending on whether or not a JS-capable browser is used the way contextual
+ * Depending on whether a JS-capable browser is used the way contextual
  * links are handled is completely different. This class encapsulates the
  * business logic for dealing with this distinction and hides the implementation
  * details from the user. This allows us to only put the "public" methods in the
@@ -25,7 +24,6 @@ use Symfony\Component\DomCrawler\Crawler;
  */
 class ContextualLinksHelper {
 
-  use BrowserCapabilityDetectionTrait;
   use JavascriptTrait;
   use TraversingTrait;
   use UtilityTrait;
@@ -75,7 +73,7 @@ class ContextualLinksHelper {
    *   An array of link paths found keyed by title.
    */
   public function findContextualLinkPaths(TraversableElement $element): array {
-    if (!$this->browserSupportsJavaScript()) {
+    if (!$this->hasJavascriptSupport()) {
       return $this->generateContextualLinks($element);
     }
 
@@ -211,7 +209,7 @@ class ContextualLinksHelper {
    *   The element that contains the contextual links to open.
    */
   public function openContextualLinksMenu(TraversableElement $element): void {
-    if (!$this->browserSupportsJavaScript()) {
+    if (!$this->hasJavascriptSupport()) {
       throw new \LogicException('Cannot open the contextual link menu on a browser that doesn\'t support JavaScript.');
     }
 
@@ -256,7 +254,7 @@ class ContextualLinksHelper {
 
     // If we are not in a real browser, visit the link path instead of actually
     // opening the contextual menu and clicking the link.
-    if ($this->browserSupportsJavaScript()) {
+    if ($this->hasJavascriptSupport()) {
       $this->openContextualLinksMenu($element);
       $link_element = $this->findContextualLinkElement($element, $link_title);
       $link_element->click();

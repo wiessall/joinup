@@ -64,37 +64,22 @@
  *   is an administrator.
  *
  * @see template_preprocess_node()
- * @see joinup_discussion_preprocess_node__view_mode_tile()
+ *
+ * @todo Remove the id attribute (or make it a class), because if that gets
+ *   rendered twice on a page this is invalid CSS for example: two lists
+ *   in different view modes.
  */
 #}
-<article{{ attributes.addClass('card-tile') }}>
-
-  {{ title_prefix }}
-  {% if not page %}
-    <h2{{ title_attributes }}>
-      <a href="{{ url }}" rel="bookmark">{{ label }}</a>
-    </h2>
-  {% endif %}
-  {{ title_suffix }}
-
-  {% if display_submitted %}
-    <footer>
-      {{ author_picture }}
-      <div{{ author_attributes }}>
-        {% trans %}Submitted by {{ author_name }} on {{ date }}{% endtrans %}
-        {{ metadata }}
-      </div>
-    </footer>
-  {% endif %}
-
-  <div{{ content_attributes }}>
-    {{ content|without('field_file') }}
-  </div>
-
-  <div data-drupal-card-stats class="card-stats">
-    {% if comment_count is defined %}
-      <div class="card-comment-count">{{ comment_count }}</div>
-    {% endif %}
-  </div>
-
-</article>
+{% set view_mode_featured = view_mode is same as 'view_mode_featured' %}
+{{ pattern('tile', {
+  attributes: attributes,
+  url: url,
+  title_prefix: title_prefix,
+  title: label,
+  title_suffix: title_suffix,
+  text: text,
+  subtext: subtext,
+  metadata: [{
+    label: 'glossary',
+  }],
+}) }}
