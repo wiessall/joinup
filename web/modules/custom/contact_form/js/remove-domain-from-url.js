@@ -1,7 +1,7 @@
 /**
  * @file
- * Remove the domain from a given URL inputed by the user if needed.
- * For the sites that are installed in a sub-directory, we also remove the base
+ * Removes the domain from a given URL inputed by the user if needed.
+ * For the sites that are installed in a sub-directory, it also removes the base
  * path (drupalSettings.path.baseUrl).
  */
 ((drupalSettings) => {

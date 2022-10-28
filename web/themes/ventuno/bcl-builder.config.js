@@ -1,3 +1,7 @@
+/**
+ * @file
+ * Configures BCL builder to generate assets.
+ */
 const path = require("path");
 
 const outputFolder = path.resolve(__dirname);
@@ -28,6 +32,14 @@ module.exports = {
     {
       entry: path.resolve(outputFolder, "src/js/content-tables.js"),
       dest: path.resolve(outputFolder, "assets/js/content-tables.js"),
+      options: {
+        minify: true,
+        sourceMap: true,
+      },
+    },
+    {
+      entry: path.resolve(outputFolder, "src/js/fieldset-show-more.js"),
+      dest: path.resolve(outputFolder, "assets/js/fieldset-show-more.js"),
       options: {
         minify: true,
         sourceMap: true,
@@ -170,8 +182,26 @@ module.exports = {
       },
     },
     {
+      entry: path.resolve(outputFolder, "src/scss/eif-filter.scss"),
+      dest: path.resolve(outputFolder, "assets/css/eif-filter.min.css"),
+      options: {
+        includePaths,
+        minify: true,
+        sourceMap: "file",
+      },
+    },
+    {
       entry: path.resolve(outputFolder, "src/scss/licence-filter.scss"),
       dest: path.resolve(outputFolder, "assets/css/licence-filter.min.css"),
+      options: {
+        includePaths,
+        minify: true,
+        sourceMap: "file",
+      },
+    },
+    {
+      entry: path.resolve(outputFolder, "src/scss/listing-grid.scss"),
+      dest: path.resolve(outputFolder, "assets/css/listing-grid.min.css"),
       options: {
         includePaths,
         minify: true,
@@ -272,6 +302,15 @@ module.exports = {
     {
       entry: path.resolve(outputFolder, "src/scss/dropdown.scss"),
       dest: path.resolve(outputFolder, "assets/css/dropdown.min.css"),
+      options: {
+        includePaths,
+        minify: true,
+        sourceMap: "file",
+      },
+    },
+    {
+      entry: path.resolve(outputFolder, "src/scss/fieldset-show-more.scss"),
+      dest: path.resolve(outputFolder, "assets/css/fieldset-show-more.min.css"),
       options: {
         includePaths,
         minify: true,
