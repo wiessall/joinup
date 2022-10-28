@@ -1,0 +1,132 @@
+.eif-filter {
+  border-radius: $border-radius-lg;
+  overflow: hidden;
+  &__header {
+    padding: $spacer * .5; // 8px
+    font-weight: $font-weight-bold;
+    text-align: center;
+    a {
+      color: $white;
+      text-decoration: underline;
+      text-decoration-color: $white!important;
+    }
+  }
+  &__list {
+    padding: $spacer * .5 0;
+    margin-bottom: 0;
+    list-style: none;
+  }
+  &__button {
+    width: 100%;
+    padding: $spacer * .5; // 8px
+    border: 0; // Resets
+    background: none; // Resets
+    color: inherit; // Resets
+    font-size: .875rem; // 14px
+    word-break: break-word;
+    text-align: left;
+    &:hover {
+      text-decoration: underline;
+      cursor: help;
+    }
+    &.is-active {
+      background: $gray-300;
+      color: $black;
+    }
+  }
+  &--underlying-principles {
+    border: 1px solid $joinup--green;
+    .eif-filter__header {
+      background-color: $joinup--green;
+    }
+    .eif-filter__content {
+      color: $joinup--green;
+    }
+  }
+  &--interoperability-layer {
+    border: 1px solid $joinup--brand-darker;
+    .eif-filter__header {
+      background-color: $joinup--brand-darker;
+    }
+    .eif-filter__content {
+      color: $joinup--brand-darker;
+    }
+  }
+  &--conceptual-model {
+    border: 1px solid $joinup--indigo;
+    .eif-filter__header {
+      background-color: $joinup--indigo;
+    }
+    .eif-filter__content {
+      color: $joinup--indigo;
+    }
+  }
+  &--solution-category {
+    border: 1px solid $joinup--gray;
+    .eif-filter__header {
+      background-color: $joinup--gray;
+    }
+    .eif-filter__content {
+      color: $joinup--gray;
+    }
+  }
+}
+.eif-counter {
+  margin: $spacer 0; // 16px 0
+  font-weight: $font-weight-bold;
+}
+.eif-tile {
+  &__label-wrapper {
+    min-width: 150px;
+    text-align: right;
+  }
+  &__label {
+    margin: $spacer * .25; // 4px
+    font-size: $font-size-sm;
+    border-radius: $border-radius-sm;
+  }
+  &__value {
+    font-size: $font-size-sm;
+    &:hover {
+      text-decoration: underline;
+      cursor: help;
+    }
+  }
+  &__line {
+    &--underlying-principles {
+      .eif-tile__label {
+        background-color: $joinup--green;
+      }
+      .eif-tile__values {
+        color: $joinup--green;
+      }
+    }
+    &--interoperability-layer {
+      .eif-tile__label {
+        background-color: $joinup--brand-darker;
+      }
+      .eif-tile__values {
+        color: $joinup--brand-darker;
+      }
+    }
+    &--conceptual-model {
+      .eif-tile__label {
+        background-color: $joinup--indigo;
+      }
+      .eif-tile__values {
+        color: $joinup--indigo;
+      }
+    }
+    &--solution-category {
+      .eif-tile__label {
+        background-color: $joinup--gray;
+      }
+      .eif-tile__values {
+        color: $joinup--gray;
+      }
+    }
+  }
+  &__text {
+    font-size: $font-size-sm;
+  }
+}
