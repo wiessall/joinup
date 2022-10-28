@@ -34,11 +34,11 @@
 {% elseif type is same as 'solution' %}
   {% set icon = 'clipboard-check' %}
 {% endif %}
-<div class="d-flex flex-column mx-4 my-3 text-center">
+<div class="d-flex flex-column text-center">
   <svg class="bi icon--l m-auto">
     <use xlink:href="{{ bcl_icon_path }}#{{ icon }}"></use>
   </svg>
-  <span class="mt-2 fs-6 fw-bold">
+  <span class="mt-2 fs-6 fw-bold text-nowrap">
     {% if show_count %}<span class="tab__text--amount">{{ count }}</span>{% endif %} <span class="tab__text--type">{{ value }}</span>
   </span>
 </div>
