@@ -7,6 +7,8 @@
 
 declare(strict_types = 1);
 
+use Drupal\Core\Url;
+
 /**
  * Implements hook_preprocess_rdf_entity().
  */
