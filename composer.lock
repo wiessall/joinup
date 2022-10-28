@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "597c5b6816df7be1a534ee703a07d9e8",
+    "content-hash": "ffc27113d67900991c2fe94c02c0f98f",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -4413,6 +4413,58 @@
             "homepage": "https://www.drupal.org/project/mailsystem",
             "support": {
                 "source": "https://git.drupalcode.org/project/mailsystem"
+            }
+        },
+        {
+            "name": "drupal/media_library_extras",
+            "version": "1.0.0-alpha2",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/media_library_extras.git",
+                "reference": "8.x-1.0-alpha2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/media_library_extras-8.x-1.0-alpha2.zip",
+                "reference": "8.x-1.0-alpha2",
+                "shasum": "2df883658392de945dbb5549324bf5b4b84270a9"
+            },
+            "require": {
+                "drupal/core": "^8 || ^9"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "8.x-1.0-alpha2",
+                    "datestamp": "1627910135",
+                    "security-coverage": {
+                        "status": "not-covered",
+                        "message": "Alpha releases are not covered by Drupal security advisories."
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "Chris Burge",
+                    "homepage": "https://www.drupal.org/user/1826152"
+                },
+                {
+                    "name": "b_sharpe",
+                    "homepage": "https://www.drupal.org/user/2512258"
+                },
+                {
+                    "name": "phenaproxima",
+                    "homepage": "https://www.drupal.org/user/205645"
+                }
+            ],
+            "description": "Provides extra functionality and features to core media library.",
+            "homepage": "https://www.drupal.org/project/media_library_extras",
+            "support": {
+                "source": "https://git.drupalcode.org/project/media_library_extras"
             }
         },
         {
@@ -22792,6 +22844,7 @@
         "drupal/dropsolid_purge": 10,
         "drupal/facets_date_range": 10,
         "drupal/linkit": 10,
+        "drupal/media_library_extras": 15,
         "drupal/page_manager": 10,
         "drupal/views_block_area": 10,
         "php-task-runner/composer": 20,
