@@ -186,4 +186,3 @@ function ventuno_preprocess_rdf_entity__solution__view_mode_search_list_item(arr
   $variables['solution_url'] = $entity->toUrl()->setAbsolute()->toString();
   $variables['eif_perspective'] = Url::fromRoute('entity.rdf_entity.eif_perspective', ['rdf_entity' => $entity->id()])->toString();
 }
-
