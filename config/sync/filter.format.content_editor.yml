@@ -61,13 +61,13 @@ filters:
     settings:
       allowed_providers:
         joinup_ec_video: joinup_ec_video
-        internal_path: internal_path
-        google_docs: google_docs
         joinup_ec_webcast_video: joinup_ec_webcast_video
-        prezi: prezi
-        slideshare: slideshare
-        vimeo: vimeo
         youtube: youtube
+        internal_path: 0
+        google_docs: 0
+        prezi: 0
+        slideshare: 0
+        vimeo: 0
         youtube_playlist: 0
       autoplay: false
       responsive: true
