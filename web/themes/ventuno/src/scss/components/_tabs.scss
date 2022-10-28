@@ -3,7 +3,6 @@
     .tab--content-type {
       display: inline-block;
       position: relative;
-      margin: auto;
       &.is-active {
         border-bottom: 2px solid $brand;
         &::before {
