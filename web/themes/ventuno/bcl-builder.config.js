@@ -251,15 +251,6 @@ module.exports = {
       },
     },
     {
-      entry: path.resolve(outputFolder, "src/scss/dropdown.scss"),
-      dest: path.resolve(outputFolder, "assets/css/dropdown.min.css"),
-      options: {
-        includePaths,
-        minify: true,
-        sourceMap: "file",
-      },
-    },
-    {
       entry: path.resolve(outputFolder, "src/scss/footer.scss"),
       dest: path.resolve(outputFolder, "assets/css/footer.min.css"),
       options: {
