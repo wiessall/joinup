@@ -277,8 +277,6 @@ trait TraversingTrait {
 
     $result = [];
     foreach ($regionObj->findAll('css', $this->getTileCssSelector()) as $element) {
-      // @todo The `.listing__title` selector is part of the original Joinup
-      //   theme and can be removed once we migrated to the new theme.
       $title_selector = implode(', ', [
         '.card-title',
         '.card-title > h1 a',
@@ -743,7 +741,6 @@ trait TraversingTrait {
     return implode(', ', [
       '.card .card-title',
       'article.card--tile h2',
-      'article.card-tile h2',
       // @todo Legacy selectors to be removed in ISAICP-7138.
       // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7138
       '.listing__item--tile .listing__title',

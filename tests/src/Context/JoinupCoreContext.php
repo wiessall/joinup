@@ -124,7 +124,7 @@ class JoinupCoreContext extends RawDrupalContext {
     // `is_visible` flag disabled to indicate they only can be interacted with
     // in a limited way.
     $locator_visibility_mapping = [
-      '.mdl-chip__text, .navbar-search .badge' => TRUE,
+      '.mdl-chip__text, .navbar-search .search-badge' => TRUE,
     ];
     if (!$this->browserSupportsJavaScript()) {
       $locator_visibility_mapping['.mdl-chipfield__input'] = FALSE;

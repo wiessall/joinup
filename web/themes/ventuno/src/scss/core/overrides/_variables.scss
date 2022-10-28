@@ -23,3 +23,10 @@ $ventuno-path: '../..';
 
 // Colors variables
 $iop-darkblue: #001e2f;
+// Joinup color set
+$joinup--green: $green;
+$joinup--gray: $gray-700;
+$joinup--red: $red;
+$joinup--indigo: $indigo;
+$joinup--dark-orange: darken($orange, 17%); // Increase contrast to pass a11y tests
+$joinup--brand-darker: $brand-darker;

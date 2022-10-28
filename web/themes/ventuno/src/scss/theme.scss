@@ -6,6 +6,7 @@
  */
 
  @import "core"; // Functions, variables, utilities and mixins required
+ @import "core/mixins/bootstrap-icons";
  @import "@openeuropa/bcl-theme-joinup/src/scss/base/fonts";
  @import "@openeuropa/bcl-theme-joinup/src/scss/base/typography";
   // @import "@openeuropa/bcl-bootstrap/scss/reboot";

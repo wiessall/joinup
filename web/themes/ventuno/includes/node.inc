@@ -70,3 +70,16 @@ function ventuno_preprocess_node__discussion__view_mode_tile(array &$variables):
   $node = $variables['elements']['#node'];
   $variables['comment_count'] = $node->get('field_replies')->comment_count;
 }
+
+/**
+ * Implements hook_preprocess_HOOK() for node--tallinn-report--view-mode-tile.html.twig.
+ */
+function ventuno_preprocess_node__tallinn_report__view_mode_tile(&$variables) {
+  /** @var \Drupal\node\NodeInterface $node */
+  $node = $variables['node'];
+  $variables['last_update'] = '-';
+  if (!$node->get('created')->equals($node->get('changed'))) {
+    $date = \Drupal::service('date.formatter')->format($node->getChangedTime(), 'custom', 'd/m/Y');
+    $variables['last_update'] = $date;
+  }
+}

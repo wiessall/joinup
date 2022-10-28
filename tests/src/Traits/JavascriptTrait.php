@@ -4,14 +4,13 @@ declare(strict_types = 1);
 
 namespace Drupal\joinup\Traits;
 
+use Behat\Mink\Driver\Selenium2Driver;
 use Behat\Mink\Element\TraversableElement;
 
 /**
  * Support for Javascript testing.
  */
 trait JavascriptTrait {
-
-  use BrowserCapabilityDetectionTrait;
 
   /**
    * Moves a named element in the middle of the screen for Javascript tests.
@@ -25,6 +24,9 @@ trait JavascriptTrait {
    *   A traversable element to restrict the search to. Defaults to page.
    */
   protected function scrollNamedElementIntoView(string $type, string $label, ?TraversableElement $container = NULL): void {
+    if (!$this->hasJavascriptSupport()) {
+      return;
+    }
     assert(in_array($type, [
       'fieldset',
       'field',
@@ -43,17 +45,15 @@ trait JavascriptTrait {
       'id_or_name',
     ], TRUE));
 
-    if ($this->browserSupportsJavaScript()) {
-      if ($container) {
-        $this->scrollElementIntoView($container);
-      }
-      $container ??= $this->getSession()->getPage();
-      $element = $container->find('named', [
-        $type, str_replace('\\"', '"', $label),
-      ]);
-      if ($element) {
-        $this->scrollElementIntoView($element);
-      }
+    if ($container) {
+      $this->scrollElementIntoView($container);
+    }
+    $container ??= $this->getSession()->getPage();
+    $element = $container->find('named', [
+      $type, str_replace('\\"', '"', $label),
+    ]);
+    if ($element) {
+      $this->scrollElementIntoView($element);
     }
   }
 
@@ -66,11 +66,12 @@ trait JavascriptTrait {
    *   A traversable element to restrict the search to. Defaults to page.
    */
   protected function scrollCssSelectedElementIntoView(string $css_selector, ?TraversableElement $container = NULL): void {
-    if ($this->browserSupportsJavaScript()) {
-      $container ??= $this->getSession()->getPage();
-      if ($element = $container->find('css', $css_selector)) {
-        $this->scrollElementIntoView($element);
-      }
+    if (!$this->hasJavascriptSupport()) {
+      return;
+    }
+    $container ??= $this->getSession()->getPage();
+    if ($element = $container->find('css', $css_selector)) {
+      $this->scrollElementIntoView($element);
     }
   }
 
@@ -78,8 +79,8 @@ trait JavascriptTrait {
    * Moves an element in the middle of the screen for Javascript tests.
    *
    * In the latest versions of Selenium in Docker, moving to a button element
-   * might throw this exception while the button is visible. This might be due
-   * to attempting to find the button too fast.
+   * might throw this exception when the button is not visible in the browser
+   * viewport.
    *
    * Note that the method is using the Javascript `document.evaluate()` function
    * which is not available in Internet Explorer, but we're using this method
@@ -89,6 +90,9 @@ trait JavascriptTrait {
    *   The node element.
    */
   protected function scrollElementIntoView(TraversableElement $element): void {
+    if (!$this->hasJavascriptSupport()) {
+      return;
+    }
     // Strings (labels) containing simple quotes (') are enclosed with double
     // quotes ("), thus we need to escape them. Also, xpath might contain new
     // lines which we replace with spaces.
@@ -103,6 +107,16 @@ trait JavascriptTrait {
       }
     )();");
     sleep(1);
+  }
+
+  /**
+   * Detects whether this test has Javascript support.
+   *
+   * @return bool
+   *   Whether this test has Javascript support.
+   */
+  public function hasJavascriptSupport(): bool {
+    return $this->getSession()->getDriver() instanceof Selenium2Driver;
   }
 
 }

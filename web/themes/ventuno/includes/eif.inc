@@ -30,7 +30,15 @@ function ventuno_preprocess_rdf_entity__solution__eif_perspective(array &$variab
   }
 
   $eif_description = \Drupal::entityTypeManager()->getViewBuilder('rdf_meta_entity')->viewField($rdf_meta_entity->field_eif_description, [
-    'label' => 'inline',
+    'label' => 'hidden',
   ]);
   $variables['content']['eif_perspective_fields']['field_eif_description'] = $eif_description;
+}
+
+/**
+ * Implements hook_preprocess_HOOK().
+ */
+function ventuno_preprocess_eif_filter_list(array &$variables): void {
+  $variables['#attached']['library'][] = 'ventuno/listing-grid';
+  $variables['#attached']['library'][] = 'ventuno/eif-filter';
 }

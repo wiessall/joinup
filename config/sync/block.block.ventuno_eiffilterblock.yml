@@ -1,0 +1,25 @@
+uuid: e994d1b2-fe62-476e-a73b-f83856af5169
+langcode: en
+status: true
+dependencies:
+  module:
+    - eif
+    - system
+  theme:
+    - ventuno
+id: ventuno_eiffilterblock
+theme: ventuno
+region: content
+weight: 0
+provider: null
+plugin: eif_filter_block
+settings:
+  id: eif_filter_block
+  label: 'Eif filter block'
+  label_display: '0'
+  provider: eif
+visibility:
+  request_path:
+    id: request_path
+    negate: false
+    pages: /node/705372
