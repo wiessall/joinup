@@ -912,25 +912,6 @@ class FeatureContext extends RawDrupalContext implements SnippetAcceptingContext
   }
 
   /**
-   * Asserts that an accordion item is active.
-   *
-   * @param string $item
-   *   The accordion item title.
-   *
-   * @throws \Exception
-   *   When the accordion item is not found on the page or it's not active.
-   *
-   * @Then the :item accordion item should be active
-   */
-  public function assertAccordionItemActive(string $item): void {
-    $element = $this->findAccordionItem($item);
-
-    if ($element->hasClass('collapsed')) {
-      throw new \Exception("The accordion item '$item' is not active.");
-    }
-  }
-
-  /**
    * Creates testing terms for scenarios tagged with @terms tag.
    *
    * Limitation: It creates terms with maximum 2 level hierarchy.
