@@ -11,6 +11,7 @@
   # Ref. https://github.com/Behat/Behat/issues/62
   # Ref. https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-6060
   - Drupal\joinup\Context\TallinnContext
+  - Drupal\joinup\Context\AccordionContext
   - Drupal\joinup\Context\AdmsValidatorContext
   - Drupal\joinup\Context\AssetDistributionContext
   - Drupal\joinup\Context\AssetReleaseContext
