@@ -1,0 +1,5 @@
+services:
+  joinup_video.route_subscriber:
+    class: Drupal\joinup_video\Routing\RouteSubscriber
+    tags:
+      - { name: event_subscriber }
