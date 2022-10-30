@@ -127,7 +127,6 @@ module:
   mailsystem: 0
   media: 0
   media_library: 0
-  media_library_extras: 0
   menu_link_destination: 0
   menu_ui: 0
   message: 0
