@@ -14,7 +14,7 @@ declare(strict_types = 1);
  */
 function ventuno_theme_suggestions_views_view_grid_alter(array &$suggestions, array $variables) {
   $id = $variables['view']->id();
-  // Allow template override for glossary view
+  // Allow template override for glossary view.
   if ($id === 'glossary') {
     $suggestions[] = 'views_view_grid__' . $id;
   }
