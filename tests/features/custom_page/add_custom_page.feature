@@ -56,7 +56,7 @@ Feature: "Add custom page" visibility options.
       | Code Camp | collection |
       | Parachute | solution   |
 
-  @uploadFiles:test.zip
+  @uploadFiles:test.zip,alan.jpg
   Scenario Outline: Add custom page as a facilitator.
     And I am logged in as a facilitator of the "<second title>" <group>
 
@@ -80,6 +80,11 @@ Feature: "Add custom page" visibility options.
     And I press "Upload"
     # The "Description" field is the description of the file.
     And I fill in "Description" with "Test file"
+    And I attach the file "alan.jpg" to "Add a new file"
+    And I press "Upload"
+    And I fill in the 2nd "Description" field of the "Attachments" file field with "Alan"
+    And I uncheck the 2nd "Display" checkbox of the "Attachments" file field
+
     And I uncheck "Published"
     And I press "Save"
     Then I should see the heading "About us"
@@ -87,6 +92,7 @@ Feature: "Add custom page" visibility options.
     And I should see the text "Attachments"
     # The description of the file is set as the text to display.
     And I should see the link "Test file"
+    But I should not see the link "Alan"
     And the "<second title>" <group> should have a custom page titled "About us"
     # Check that the link to the custom page is visible on the group page.
     When I go to the homepage of the "<second title>" <group>
@@ -128,9 +134,9 @@ Feature: "Add custom page" visibility options.
     # Create custom pages with 5 and 6 attachments.
     # 5 is the limit before adding the "Show more" functionality.
     And custom_page content:
-      | title          | body                 | collection        | attachments                                                          |
-      | Rubber bands   | The aggressive ones. | Aggressive Rubber | empty.rdf, empty_pdf.pdf, invalid_adms.rdf, test.zip, text.pdf       |
-      | Elastic rubber | Also aggressive.     | Aggressive Rubber | ada.png, alan.jpg, blaise.jpg, charles.jpg, leonardo.jpg, linus.jpeg |
+      | title          | body                 | collection        | attachments                                                                                                                                                                                                          |
+      | Rubber bands   | The aggressive ones. | Aggressive Rubber | target_id: empty.rdf - display: 1, target_id: empty_pdf.pdf - display: 1, target_id: invalid_adms.rdf - display: 1, target_id: test.zip - display: 1, target_id: text.pdf - display: 1                               |
+      | Elastic rubber | Also aggressive.     | Aggressive Rubber | target_id: ada.png - display: 1, target_id: alan.jpg - display: 1, target_id: blaise.jpg - display: 1, target_id: charles.jpg - display: 1, target_id: leonardo.jpg - display: 1, target_id: linus.jpeg - display: 1 |
 
     When I go to the "Rubber bands" custom page
     Then the "empty.rdf" link in the Content region should be visible
