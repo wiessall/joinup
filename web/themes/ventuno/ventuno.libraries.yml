@@ -147,6 +147,11 @@ forms:
   js:
     assets/js/highlight-invalid-fields.min.js: { minified: true, attributes: { defer: true } }
 
+glossary:
+  css:
+    theme:
+      assets/css/glossary.min.css: { minified: true }
+
 glide:
   js:
     assets/js/glide.min.js: { minified: true, attributes: { defer: true } }

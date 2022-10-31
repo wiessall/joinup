@@ -1,0 +1,29 @@
+.glossary-navigator {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin: $spacer * 2 0 $spacer; // 16px 0 8px
+  &-item {
+    a {
+      display: inline-block;
+      padding: $spacer * .5 $spacer * .75; // 8px 12px
+      border-radius: $border-radius;
+      &:hover {
+        background-color: $gray-300;
+        text-decoration: none;
+      }
+    }
+    .current {
+      padding: $spacer * .5 $spacer * .75; // 8px 12px
+      border-radius: $border-radius;
+      color: $brand;
+      background-color: rgba(16, 115, 222, 0.1);
+    }
+  }
+}
+.view-glossary {
+  .views-field-title-1 {
+    font-size: 1.25rem;
+    font-weight: $font-weight-bold;
+  }
+}
