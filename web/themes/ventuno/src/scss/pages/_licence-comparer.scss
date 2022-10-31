@@ -3,6 +3,9 @@
   @include media-breakpoint-up(md) {
     table-layout: fixed;
   }
+  &__empty {
+    display: none;
+  }
   &__sidebar-header,
   &__header > .btn {
     font-weight: $font-weight-bold;
