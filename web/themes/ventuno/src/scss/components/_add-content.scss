@@ -10,9 +10,9 @@
   }
   &__btn,
   &__btn:focus:not(:focus-visible) {
-    width: 3.5rem;
-    height: 3.5rem;
-    margin-top: -1.5rem;
+    width: 3.5rem; // 56px
+    height: 3.5rem; // 56px
+    margin-top: -1.75rem; // -28px
     border: $spacer * .5 solid $white;
     &:hover,
     &:active {
