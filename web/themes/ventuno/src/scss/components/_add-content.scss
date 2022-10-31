@@ -4,7 +4,9 @@
   right: $spacer;
   z-index: 501; // Ensure opened dropdown-menu is on top of contextual links
   @include media-breakpoint-up(lg) {
-    position: static;
+    position: relative;
+    bottom: 0;
+    right: 0;
   }
   &__btn,
   &__btn:focus:not(:focus-visible) {
