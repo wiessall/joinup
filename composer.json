@@ -340,6 +340,9 @@
             "drupal/site_alert": {
                 "Add drush commands @see https://www.drupal.org/project/site_alert/issues/3118800": "https://www.drupal.org/files/issues/2020-10-26/3118800-44.patch"
             },
+            "drupal/smart_trim": {
+                "Avoid max nesting level during development @see https://www.drupal.org/project/smart_trim/issues/3013628": "https://www.drupal.org/files/issues/2020-05-28/maximum_function_nesting-3013628-D8-7.patch"
+            },
             "drupal/social_media_links": {
                 "Missing config schema for field, widget and formatter @see https://www.drupal.org/node/2898680": "https://git.drupalcode.org/project/social_media_links/-/merge_requests/4.diff"
             },

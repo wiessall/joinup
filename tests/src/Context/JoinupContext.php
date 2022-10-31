@@ -1155,9 +1155,10 @@ class JoinupContext extends RawDrupalContext {
    *   Thrown when the expected tile is not found.
    *
    * @Then I (should )see the :heading tile
+   * @Then I (should )see the :heading carousel card
    */
-  public function assertTilePresent($heading) {
-    $results = $this->getSession()->getPage()->findAll('css', '.listing__item--tile .listing__title, .card .card-title, article.tile h2');
+  public function assertTilePresent(string $heading): void {
+    $results = $this->getAllCardsInPage();
     foreach ($results as $result) {
       /** @var \Behat\Mink\Element\Element $result */
       if ($result->getText() === $heading) {
@@ -1179,8 +1180,8 @@ class JoinupContext extends RawDrupalContext {
    *
    * @Then I (should )see :number tile(s)
    */
-  public function assertTileCount($number) {
-    $results = $this->getSession()->getPage()->findAll('css', '.listing__item--tile .listing__title, .card .card-title, article.tile h2');
+  public function assertTileCount(string $number): void {
+    $results = $this->getAllCardsInPage();
     $nr_found = count($results);
     if ($nr_found != $number) {
       throw new \Exception("Found $nr_found tiles, expected $number");
@@ -1198,10 +1199,8 @@ class JoinupContext extends RawDrupalContext {
    *
    * @Then I (should )not see the :heading tile
    */
-  public function assertTileNotPresent($heading) {
-    // We target the heading with "h2" instead of ".listing__title" because both
-    // unstyled and styled tiles use h2 as element for their titles.
-    $results = $this->getSession()->getPage()->findAll('css', '.listing__item--tile h2, .card h5, article.tile h2');
+  public function assertTileNotPresent(string $heading): void {
+    $results = $this->getAllCardsInPage();
     foreach ($results as $result) {
       /** @var \Behat\Mink\Element\Element $result */
       if ($result->getText() === $heading) {
@@ -3039,6 +3038,29 @@ class JoinupContext extends RawDrupalContext {
     if (!$page->find('xpath', $xpath)) {
       throw new ExpectationFailedException("The '{$link_label}' link is not in the active trail but it should.");
     }
+  }
+
+  /**
+   * Returns the listing tiles/cards in the page.
+   *
+   * @return \Behat\Mink\Element\NodeElement[]
+   *   A list of tiles/cards in the page.
+   */
+  public function getAllCardsInPage(): array {
+    $locators = [
+      // Legacy tile of Joinup theme.
+      '.listing__item--tile .listing__title',
+      // Card style of Ventuno theme.
+      '.card .card-title',
+      // Tiles as an article.
+      'article.tile h2',
+      // Carousel for non javascript test.
+      '.glide__slides .slide span',
+      // Carousel for javascript test.
+      '.glide__slides .slide h1',
+    ];
+
+    return $this->getSession()->getPage()->findAll('css', implode(', ', $locators));
   }
 
 }
