@@ -4,16 +4,14 @@
   justify-content: center;
   margin: $spacer * 2 0 $spacer; // 16px 0 8px
   &-item {
-    a {
-      display: inline-block;
-      padding: $spacer * .5 $spacer * .75; // 8px 12px
-      border-radius: $border-radius;
-      &:hover {
-        background-color: $gray-300;
-        text-decoration: none;
-      }
+    display: inline-block;
+    padding: $spacer * .5 $spacer * .75; // 8px 12px
+    border-radius: $border-radius;
+    &:hover {
+      background-color: $gray-300;
+      text-decoration: none;
     }
-    .current {
+    &.current {
       padding: $spacer * .5 $spacer * .75; // 8px 12px
       border-radius: $border-radius;
       color: $brand;
