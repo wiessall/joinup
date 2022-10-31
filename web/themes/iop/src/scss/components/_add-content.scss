@@ -2,22 +2,10 @@
 .add-content {
   &__btn,
   &__btn:focus:not(:focus-visible) {
+    margin: $spacer * .25;
+    border: .125rem solid $white;
     width: 3rem;
     height: 3rem;
-    margin-top: -4rem;
-    outline: $spacer * .5 solid $white;
-    @include media-breakpoint-up(sm) {
-      margin-top: $spacer * -3.5;
-    }
-    @include media-breakpoint-up(md) {
-      margin-top: $spacer * -3;
-    }
-    @include media-breakpoint-up(xxl) {
-      margin-top: $spacer * -2.5;
-    }
-  }
-  .dropdown-toggle::after {
-    display: none;
   }
   .circle-menu__link {
     margin: .5rem 0;
