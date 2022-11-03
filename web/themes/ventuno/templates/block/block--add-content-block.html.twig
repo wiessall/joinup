@@ -26,7 +26,6 @@
  */
 #}
 {{ attach_library('ventuno/add-content') }}
-{{ attach_library('ventuno/dropdown') }}
 {%
   set classes = [
     'block',
@@ -34,6 +33,7 @@
     'block-' ~ plugin_id|clean_class,
     'd-flex',
     'justify-content-end',
+    'container',
     'add-content',
   ]
 %}
@@ -50,7 +50,7 @@
         <use xlink:href="{{ bcl_icon_path }}#plus"></use>
       </svg>
     </button>
-    <div class="dropdown-menu ">
+    <div class="dropdown-menu dropdown-menu-end">
       <nav class="nav nav-pills flex-column" aria-labelledby="dropdown-add-content" class="dropdown-menu">
         {{ content }}
       </nav>
