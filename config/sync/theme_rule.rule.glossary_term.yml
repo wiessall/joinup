@@ -1,0 +1,18 @@
+uuid: 2f09ba03-1050-4c90-b28c-4886a89d78c6
+langcode: en
+status: true
+dependencies:
+  module:
+    - joinup_core
+  theme:
+    - ventuno
+id: glossary_term
+label: 'Glossary term'
+theme: ventuno
+weight: 0
+conditions:
+  request_route:
+    id: request_route
+    negate: false
+    routes:
+      - entity.node.canonical
