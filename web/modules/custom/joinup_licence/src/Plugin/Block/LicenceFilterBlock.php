@@ -23,6 +23,13 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class LicenceFilterBlock extends BlockBase implements ContainerFactoryPluginInterface {
 
   /**
+   * Licence filters.
+   */
+  const LICENCE_FILTER_CLASSES = ['licence-filter--can', 'licence-filter--must', 'licence-filter--cannot',
+    'licence-filter--compatible', 'licence-filter--law', 'licence-filter--support',
+  ];
+
+  /**
    * The entity type manager service.
    *
    * @var \Drupal\Core\Entity\EntityTypeManagerInterface
@@ -66,11 +73,14 @@ class LicenceFilterBlock extends BlockBase implements ContainerFactoryPluginInte
       $storage = $this->entityTypeManager->getStorage('taxonomy_term');
       $terms = $storage->loadTree('legal_type');
       $tree = [];
+      $i = 0;
       foreach ($terms as $term) {
         $parent = reset($term->parents);
         if (empty($parent)) {
+          $i++;
           $tree[$term->tid]['title'] = $term->name;
-          $tree[$term->tid]['class'] = 'licence-filter--' . strtolower($term->name);
+          $tree[$term->tid]['class'] = self::LICENCE_FILTER_CLASSES[$i - 1] ?? 'licence-filter--can';
+
         }
         else {
           $child = $storage->load($term->tid);
