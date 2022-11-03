@@ -191,4 +191,32 @@ class ContactInformationContext extends RawDrupalContext {
     $this->assertMailLinkMatchingPattern($pattern, $mail, $no_mail_message, $no_match_message, 'confirmation_request');
   }
 
+  /**
+   * Validates the emails of given list of contact information entities.
+   *
+   * @param \Behat\Gherkin\Node\TableNode $contact_info_list
+   *   A list of contact information labels.
+   *
+   * @Given the following contact information emails are validated:
+   */
+  public function validateContactInformationEmails(TableNode $contact_info_list): void {
+    foreach ($contact_info_list->getColumn(0) as $label) {
+      /** @var \Drupal\contact_information\Entity\ContactInformationInterface $contact_info */
+      $contact_info = $this->getRdfEntityByLabel($label, 'contact_information');
+      $email_field = $contact_info->get('field_ci_email');
+      if (!$email_field->isEmpty()) {
+        $email = $email_field->value;
+        /** @var \Drupal\email_confirmer\EmailConfirmerManagerInterface $email_confirmer */
+        $email_confirmer = \Drupal::service('email_confirmer');
+        if ($confirmation = $email_confirmer->getConfirmation($email, 'pending', ContactInformationEmailConfirmInterface::REALM)) {
+          if (!$confirmation->confirm($confirmation->getHash())) {
+            throw new \RuntimeException("Failed to confirm $email");
+          }
+          $confirmation->save();
+        }
+      }
+    }
+
+  }
+
 }
