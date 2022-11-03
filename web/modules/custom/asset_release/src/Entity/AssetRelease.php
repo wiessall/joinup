@@ -69,7 +69,7 @@ class AssetRelease extends Rdf implements AssetReleaseInterface {
    * {@inheritdoc}
    */
   public function getDescriptionField(): string {
-    return 'field_isr_description';
+    return 'field_isr_release_notes';
   }
 
   /**

@@ -39,7 +39,7 @@ function search_api_arbitrary_facet_search_api_solr_query_alter(SolariumQueryInt
     /** @var \Drupal\search_api_arbitrary_facet\Plugin\ArbitraryFacetInterface $plugin_id */
     $plugin = $arbitrary_facet_manager->createInstance($options['arbitrary_facet_plugin']);
     $definition = $plugin->getFacetDefinition();
-    $solr_field_names = joinup_search_fieldnames_from_index($query->getIndex());
+    $solr_field_names = search_api_arbitrary_facet_search_fieldnames_from_index($query->getIndex());
 
     // For "OR" facets, add the expected tag for exclusion.
     $excludes = isset($options['operator']) && strtolower($options['operator']) === 'or' ? ["arbitrary:$facet_name"] : [];
@@ -167,7 +167,7 @@ function search_api_arbitrary_facet_create_filter_query($field, $value, $operato
  * @return array
  *   Mapping of field names to Solr field names.
  */
-function joinup_search_fieldnames_from_index(IndexInterface $index) {
+function search_api_arbitrary_facet_search_fieldnames_from_index(IndexInterface $index) {
   $server = $index->getServerInstance();
   /** @var \Drupal\search_api_solr\SolrBackendInterface $backend */
   $backend = $server->getBackend();

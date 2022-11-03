@@ -8,7 +8,7 @@
  * -- title: The title of the parent.
  * -- class: The explicit parent class to pass to the list
  * -- children: A nested list of items. Each item contains:
- * --- data-eif-category: The eif category to pass to the data attribute data-eif-category.
+ * --- data-joinup-eif-category: The eif category to pass to the data attribute data-joinup-eif-category.
  * --- title: The title of the child.
  * --- description: The description of the field to pass to the data attribute.
  */
@@ -25,7 +25,7 @@
             <div class="eif-filter__content">
               <ul class="eif-filter__list">
                 {% for child in parent_item.items %}
-                  <li class="eif-filter__item"><a data-eif-category="{{ child.eif_category }}" href="#" title="{{ child.description }}">{{ child.title }}</a></li>
+                  <li class="eif-filter__item"><a data-joinup-eif-category="{{ child.eif_category }}" href="#" title="{{ child.description }}">{{ child.title }}</a></li>
                 {% endfor %}
               </ul>
             </div>

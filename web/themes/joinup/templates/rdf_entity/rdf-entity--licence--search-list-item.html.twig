@@ -29,7 +29,7 @@
   ]
 %}
 {% set spdx_licence_id = render_var(content.spdx_licence_id) %}
-<div {{ attributes.addClass(classes) }} data-spdx="{{ spdx_licence_id_plain }}" data-licence-category="{{ legal_categories }}">
+<div {{ attributes.addClass(classes) }} data-joinup-spdx="{{ spdx_licence_id_plain }}" data-joinup-licence-category="{{ legal_categories }}">
   {{ title_prefix }}
   <div class="listing__card listing__card--inline-container mdl-card">
     <div class="listing__inner-tile listing__inner-tile--shifted">
@@ -88,7 +88,7 @@
               <label for="{{ url|clean_id }}">{{ 'Add to compare list'|t }}</label>
             </span>
             {% endapply %}
-            <input type="checkbox" id="{{ url|clean_id }}" class="mdl-checkbox__input" data-licence-name="{{ spdx_licence_id_plain }}">
+            <input type="checkbox" id="{{ url|clean_id }}" class="mdl-checkbox__input" data-joinup-licence-name="{{ spdx_licence_id_plain }}">
           </label>
         </div>
         <div class="licence-tile__actions-item">

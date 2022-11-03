@@ -5,13 +5,7 @@
  */
 #}
 <article{{ attributes }}>
-  <div class="d-flex justify-content-between">
-    <div>
-      <a class="btn btn-sm btn-outline-brand rounded-pill mb-1" href="{{ path('entity.node.canonical', {'node': 703244}) }}">{{ 'Back to
-      recommendations'|t }}</a>
-      <a class="btn btn-sm btn-outline-brand rounded-pill mb-1" href="{{ path('entity.node.canonical', {'node': 703245}) }}">{{ 'Back to
-      Solutions'|t }}</a>
-    </div>
+  <div class="d-flex justify-content-end">
     <div>
       <a class="btn btn-sm btn-outline-brand rounded-pill mb-1" href="{{ url('<front>')|render }}/collection/nifo-national-interoperability-framework-observatory/glossary">
         {{ pattern('icon', {
@@ -42,7 +36,7 @@
     <div class="col-12 col-sm-8 col-md-9 col-lg-10">
       <p class="mb-2"><strong>{{ 'Name of the solution'|t }}:</strong> {{ label|striptags }}</p>
       <p class="mb-2"><strong>{{ 'Solution\'s owner'|t }}:</strong> {{ content.field_is_owner|render|striptags }}</p>
-      <p class="mb-2">{{ content.eif_perspective_fields.field_eif_description }}</p>
+      {{ content.eif_perspective_fields.field_eif_description }}
     </div>
     {{ content.eif_perspective }}
   </div>

@@ -7,7 +7,3 @@ php: 7.1
 
 dependencies:
   - joinup:joinup_notification
-
-config_devel:
- install:
-  - contact_form.settings

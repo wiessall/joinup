@@ -48,7 +48,6 @@ Feature: Collection homepage
       | title                                    | short title      | body                                      | collection         | created           | start date          | end date            | state     | topic             | changed  |
       | Big hobbit feast - fireworks at midnight | Big hobbit feast | Barbecue followed by dance and fireworks. | Middle earth daily | 2014-10-17 8:33am | 2016-03-15T11:12:12 | 2016-03-15T11:12:12 | validated | Supplier exchange | 2017-7-5 |
 
-  @clearStaticCache
   Scenario: The collection homepage shows the collection metrics.
     When I go to the homepage of the "Middle earth daily" collection
     Then I see the text "3 Members" in the "Header" region

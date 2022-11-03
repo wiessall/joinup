@@ -10,6 +10,7 @@ use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\joinup_bundle_class\LogoInterface;
 use Drupal\joinup_bundle_class\ShortIdInterface;
 use Drupal\og\OgMembershipInterface;
+use Drupal\og\OgRoleInterface;
 use Drupal\rdf_entity\RdfInterface;
 use Drupal\topic\Entity\TopicReferencingEntityInterface;
 
@@ -275,6 +276,61 @@ interface GroupInterface extends RdfInterface, LogoInterface, ShortIdInterface, 
    *   The number of members.
    */
   public function getMemberCount(array $states = [OgMembershipInterface::STATE_ACTIVE]): int;
+
+  /**
+   * Returns a list of group members, optionally filtered by role and state.
+   *
+   * There are groups having a huge number of members. Therefore, returning
+   * hundreds or thousands of user entities could exhaust the resources. It's
+   * the caller's responsibility to handle such cases, by limiting the amount
+   * of results via the $offset and $limit parameters. The returned list of
+   * users is sorted by the user ID, making it predictable.
+   *
+   * @param int $offset
+   *   (optional) If passed, is used to limit the amount of results.
+   * @param int|null $limit
+   *   (optional) If passed, is used to limit the amount of results.
+   * @param string[] $roles
+   *   (optional) A list of OG roles to filter on. If omitted, users from all
+   *   roles will be returned.
+   * @param string[] $states
+   *   (optional) A list of OG membership states to filter on. If omitted, only
+   *   users having the active membership state will be returned.
+   *
+   * @return \Drupal\user\UserInterface[]
+   *   An associative array of user account entities, members of this group,
+   *   keyed by their user ID.
+   */
+  public function getMembers(int $offset = 0, ?int $limit = NULL, array $roles = [OgRoleInterface::AUTHENTICATED], array $states = [OgMembershipInterface::STATE_ACTIVE]): array;
+
+  /**
+   * Returns a list of emails of members subscribed to receive announcements.
+   *
+   * Note that this method is not using the entity API as some groups may have
+   * tens of thousands of members, and we need a fast way to queue them. Doing a
+   * direct database query is faster.
+   *
+   * Also, passing an offset and a limit is mandatory in order to avoid huge
+   * return arrays. It's the caller responsibility to pass the correct range and
+   * reassemble the results according to its functionality.
+   *
+   * @param int $offset
+   *   The query offset.
+   * @param int $limit
+   *   The query limit.
+   *
+   * @return string[]
+   *   A list of groups members emails.
+   */
+  public function getAnnouncementRecipients(int $offset, int $limit): array;
+
+  /**
+   * Returns the number of active members subscribed to receive announcements.
+   *
+   * @return int
+   *   The number of active members subscribed to receive announcements.
+   */
+  public function getAnnouncementRecipientsCount(): int;
 
   /**
    * Returns the contact information field name.

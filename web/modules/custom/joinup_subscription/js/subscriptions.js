@@ -46,7 +46,7 @@
 
             // Get initial status of checkboxes stored inside button attribute.
             const subscriptionStatusInitial =
-              button.dataset.drupalSubscriptions;
+              button.dataset.joinupSubscriptions;
 
             // Compare current and initial status of checkboxes.
             if (

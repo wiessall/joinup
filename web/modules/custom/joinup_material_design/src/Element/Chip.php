@@ -17,11 +17,11 @@ use Drupal\Core\Render\Element\FormElement;
  *
  * Usage Example:
  * @code
- * $form['chip'] = array(
+ * $form['chip'] = [
  *   '#type' => 'chip',
  *   '#text' => $this->t('Example'),
  *   '#submit' => ['::elementSubmit'],
- * );
+ * ];
  * @endcode
  *
  * @see \Drupal\Core\Render\Element\Submit

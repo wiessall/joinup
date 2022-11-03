@@ -91,12 +91,12 @@ Feature: My subscriptions
 
     # The empty text should not be shown now.
     Then I should not see the text "No collection memberships yet."
-    And I should not see the link "Unsubscribe from all"
+    And I should see the link "Unsubscribe from all"
 
     And the following content subscriptions should be selected:
-      | Alpha Centauri |  |
-      | Barnard's Star |  |
-      | Wolf 359       |  |
+      | Alpha Centauri | Announcements |
+      | Barnard's Star | Announcements |
+      | Wolf 359       | Announcements |
 
     # The collection abstracts were visible in an earlier version but were
     # removed in a more recent design update. Let's ensure they do not pop back
@@ -130,31 +130,39 @@ Feature: My subscriptions
     Then the "Save changes" button on the "Alpha Centauri" subscription card should be disabled
 
     Given I check the "Discussion" checkbox of the "Alpha Centauri" subscription
+    And I check the "Announcements" checkbox of the "Alpha Centauri" subscription
     When I press "Save changes" on the "Alpha Centauri" subscription card
     And I wait for AJAX to finish
     Then I should not see the "Save changes" button on the "Alpha Centauri" subscription card
     But I should see the "Saved!" button on the "Alpha Centauri" subscription card
+    And the "Saved!" button on the "Alpha Centauri" subscription card should be disabled
+    # Test that the announcements button enables and disables the save button accordingly.
+    When I uncheck the "Announcements" checkbox of the "Alpha Centauri" subscription
+    Then the "Save changes" button on the "Alpha Centauri" subscription card should be enabled
+    When I check the "Announcements" checkbox of the "Alpha Centauri" subscription
+    Then the "Save changes" button on the "Alpha Centauri" subscription card should be disabled
+
     # The button "Unsubscribe from all" is now visible.
     And I should see the link "Unsubscribe from all"
 
-    And the "Saved!" button on the "Alpha Centauri" subscription card should be disabled
     And the "Save changes" button on the "Barnard's Star" subscription card should be disabled
     # The button remains enabled as changes persist after AJAX save.
     And the "Save changes" button on the "Wolf 359" subscription card should be enabled
 
     And the following content subscriptions should be selected:
-      | Alpha Centauri | Discussion |
-      | Barnard's Star |            |
-      | Wolf 359       | Event      |
+      | Alpha Centauri | Discussion, Announcements |
+      | Barnard's Star | Announcements             |
+      | Wolf 359       | Event, Announcements      |
 
     # The 'Event' subscription was checked but not saved, so we should not be subscribed to it.
     And I should have the following content subscriptions:
-      | Alpha Centauri | Discussion |
-      | Barnard's Star |            |
-      | Wolf 359       |            |
+      | Alpha Centauri | Discussion, Announcements |
+      | Barnard's Star | Announcements             |
+      | Wolf 359       | Announcements             |
 
     # Re-try a change on the same collection.
     Given I uncheck the "Discussion" checkbox of the "Alpha Centauri" subscription
+    Given I uncheck the "Announcements" checkbox of the "Alpha Centauri" subscription
     And the "Save changes" button on the "Alpha Centauri" subscription card should be enabled
     And the "Save changes" button on the "Barnard's Star" subscription card should be disabled
     And the "Save changes" button on the "Wolf 359" subscription card should be enabled
@@ -168,18 +176,18 @@ Feature: My subscriptions
     # Ensure that the changes are not saved for all cards and unsaved changes are lost.
     Given I reload the page
     And the following content subscriptions should be selected:
-      | Alpha Centauri |  |
-      | Barnard's Star |  |
+      | Alpha Centauri |               |
+      | Barnard's Star | Announcements |
       # Even though 'Event' was unchecked, and another 'Save changes' button was clicked,
       # the changes for 'Wolf 359' were not saved and so they are reloaded.
-      | Wolf 359       |  |
+      | Wolf 359       | Announcements |
 
     And I should have the following content subscriptions:
-      | Alpha Centauri |  |
-      | Barnard's Star |  |
-      | Wolf 359       |  |
+      | Alpha Centauri |               |
+      | Barnard's Star | Announcements |
+      | Wolf 359       | Announcements |
 
-  @javascript @clearEntityMemoryCache
+  @javascript
   Scenario Outline: Change the notification frequency of my digests
     Given collection:
       | title | Malicious plans |
@@ -228,3 +236,56 @@ Feature: My subscriptions
       | Daily   | daily     |
       | Weekly  | weekly    |
       | Monthly | monthly   |
+
+  @javascript
+  # This is a regression test for a bug in "My subscriptions". If a user doesn't
+  # have subscriptions enable and only want to enable announcements it should be
+  # checked after save.
+  Scenario: Regression test "My subscriptions"
+
+    Given the following collections:
+      | title     | state     |
+      | Fireblade | validated |
+      | Lopitopes | validated |
+    And user:
+      | Username | Blade One           |
+      | E-mail   | blade.1@example.com |
+    And the following collection user membership:
+      | collection | user      | state  |
+      | Fireblade  | Blade One | active |
+      | Lopitopes  | Blade One | active |
+
+    When I am logged in as "Blade One"
+    Then I go to my subscriptions
+    And I should not see the text "No collection memberships yet."
+    But I should see the text "No solution memberships yet."
+    # User is subscribed to announcements by default.
+    And the following content subscriptions should be selected:
+      | Fireblade | Announcements |
+      | Lopitopes | Announcements |
+
+    When I uncheck the "Announcements" checkbox of the "Fireblade" subscription
+    And I press "Save changes" on the "Fireblade" subscription card
+    And I uncheck the "Announcements" checkbox of the "Lopitopes" subscription
+    And I press "Save changes" on the "Lopitopes" subscription card
+    And I reload the page
+
+    And the following content subscriptions should be selected:
+      | Fireblade |  |
+      | Lopitopes |  |
+    Then I check the "Announcements" checkbox of the "Fireblade" subscription
+    And I press "Save changes" on the "Fireblade" subscription card
+    Then I reload the page
+    And the following content subscriptions should be selected:
+      | Fireblade | Announcements |
+      | Lopitopes |               |
+
+    When I uncheck the "Announcements" checkbox of the "Fireblade" subscription
+    And I press "Save changes" on the "Fireblade" subscription card
+    Then I check the "Announcements" checkbox of the "Lopitopes" subscription
+    And I check the "News" checkbox of the "Lopitopes" subscription
+    And I press "Save changes" on the "Lopitopes" subscription card
+    Then I reload the page
+    And the following content subscriptions should be selected:
+      | Fireblade |                     |
+      | Lopitopes | News, Announcements |

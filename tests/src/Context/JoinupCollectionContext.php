@@ -6,7 +6,6 @@ namespace Drupal\joinup\Context;
 
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\joinup\Traits\EntityTrait;
-use Drupal\joinup\Traits\RdfEntityTrait;
 use Drupal\joinup\Traits\SearchTrait;
 use Drupal\joinup_collection\JoinupCollectionHelper;
 use Drupal\rdf_entity\Entity\Rdf;
@@ -19,7 +18,6 @@ class JoinupCollectionContext extends RawDrupalContext {
 
   use EntityTrait;
   use SearchTrait;
-  use RdfEntityTrait;
 
   /**
    * Creates the 'Joinup' collection and related data.

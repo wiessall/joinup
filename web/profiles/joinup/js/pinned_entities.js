@@ -18,15 +18,15 @@
       pin.classList.add("listing__corner");
       pin.innerHTML = "<span class='icon icon--pin'></span>";
       // Check for global collection context.
-      const group = context.querySelector("[data-drupal-group-context]");
+      const group = context.querySelector("[data-joinup-group-context]");
       // If there is no global collection context, bail out.
       if (group === null || group === undefined) {
         return;
       }
-      const groupContext = group.dataset.drupalGroupContext;
+      const groupContext = group.dataset.joinupGroupContext;
       once("pinned-cue", ".is-pinned", context).forEach((element) => {
-        const parent = element.dataset.drupalParentId;
-        const affiliated = element.dataset.drupalPinnedIn || "";
+        const parent = element.dataset.joinupParentId;
+        const affiliated = element.dataset.joinupPinnedIn || "";
         // Show the cue only when the global collection context is the same
         // as the parent of the tile.
         if (

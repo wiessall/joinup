@@ -180,7 +180,6 @@ Feature: Search inside groups
     Then the page should show the following chip:
       | Inclined foundations |
 
-  @clearStaticCache
   # This is disabled because the search bar is currently not shown in the header
   # but this functionality will probably be restored in the future.
   Scenario: Group search caching

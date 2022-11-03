@@ -1930,7 +1930,7 @@ function joinup_theme_preprocess_rdf_entity__solution__view_mode_search_list_ite
     }
   }
 
-  $variables['attributes']['data-eif-category'] = implode(' ', $data_property_categories);
+  $variables['attributes']['data-joinup-eif-category'] = implode(' ', $data_property_categories);
   $variables['attributes']['class'][] = 'eif-tile';
 
   if (!empty($data_property_categories)) {
@@ -1970,8 +1970,8 @@ function joinup_theme_preprocess_rdf_entity__solution__listing_item(&$variables)
   if (!$rdf_entity->get('collection')->isEmpty()) {
     /** @var \Drupal\rdf_entity\RdfInterface|null $parent */
     $parent = $rdf_entity->get('collection')->first()->entity;
-    $variables['attributes']['data-drupal-parent-id'] = $parent->id();
-    $variables['attributes']['data-drupal-parent-label'] = $parent->label();
+    $variables['attributes']['data-joinup-parent-id'] = $parent->id();
+    $variables['attributes']['data-joinup-parent-label'] = $parent->label();
   }
 }
 
@@ -2239,8 +2239,8 @@ function joinup_theme_preprocess_node(&$variables) {
     /** @var \Drupal\rdf_entity\RdfInterface|null $parent */
     $parent = JoinupGroupHelper::getGroup($node);
     if ($parent) {
-      $variables['attributes']['data-drupal-parent-id'] = $parent->id();
-      $variables['attributes']['data-drupal-parent-label'] = $parent->label();
+      $variables['attributes']['data-joinup-parent-id'] = $parent->id();
+      $variables['attributes']['data-joinup-parent-label'] = $parent->label();
     }
 
     // If the node is shared somewhere, attach the related library.

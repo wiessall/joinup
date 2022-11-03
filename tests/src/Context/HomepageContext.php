@@ -8,7 +8,6 @@ use Behat\Gherkin\Node\TableNode;
 use Behat\Mink\Element\NodeElement;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\joinup\Traits\EntityTrait;
-use Drupal\joinup\Traits\NodeTrait;
 use PHPUnit\Framework\Assert;
 
 /**
@@ -17,7 +16,6 @@ use PHPUnit\Framework\Assert;
 class HomepageContext extends RawDrupalContext {
 
   use EntityTrait;
-  use NodeTrait;
 
   /**
    * Checks the contents of the "Explore" block.
@@ -50,13 +48,13 @@ class HomepageContext extends RawDrupalContext {
       $type = $expected_data['type'];
 
       if (in_array($type, ['collection', 'solution'])) {
-        $entity = self::getEntityByLabel('rdf_entity', $expected_data['title']);
+        $entity = $this->getEntityByLabel('rdf_entity', $expected_data['title']);
         // In Joinup, "Read more" links of collections and solutions lead to the
         // 'About' page.
         $read_more_url = $this->getEntityUri($entity, 'about-page');
       }
       else {
-        $entity = self::getNodeByTitle($expected_data['title']);
+        $entity = $this->getEntityByLabel('node', $expected_data['title']);
         $read_more_url = $this->getEntityUri($entity, 'canonical');
       }
 

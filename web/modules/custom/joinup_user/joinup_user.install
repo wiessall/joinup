@@ -25,7 +25,7 @@ function joinup_user_install() {
   $internal_path = "public://default_images";
   if (is_file($file_path) && \Drupal::service('file_system')->prepareDirectory($internal_path, FileSystemInterface::CREATE_DIRECTORY | FileSystemInterface::MODIFY_PERMISSIONS)) {
     $file_system = \Drupal::service('file_system');
-    $destination = file_build_uri($file_system->basename($file_path));
+    $destination = \Drupal::service('stream_wrapper_manager')->normalizeUri(\Drupal::config('system.file')->get('default_scheme') . ('://' . $file_system->basename($file_path)));
     $file_path = $file_system->copy($file_path, $destination, FileSystemInterface::EXISTS_REPLACE);
   }
   /** @var \Drupal\file\FileInterface $file */
