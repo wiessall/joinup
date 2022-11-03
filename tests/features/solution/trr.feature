@@ -3,7 +3,62 @@ Feature: Creating a test (solution) in the TRR collection.
   In order to create tests
   As a collection facilitator
   I need to be able to add 'test'-enabled solutions.
+  @terms @javascript
+  Scenario: Test a TRR related fields
+    Given the following collection:
+      | title | Friends of the test repository |
+      | state | validated                      |
+    And the following solution:
+      | title              | Linked Open Data Trr field             |
+      | description        | Re-usable government data       |
+      | state              | validated                       |
+    And the following owner:
+      | name | type                         |
+      | W3C  | Company, Industry consortium |
+    And I am logged in as a "facilitator" of the "Linked Open Data Trr field" solution
 
+    When I go to the edit form of the "Linked Open Data Trr field" solution
+    And I fill in the following:
+      | Name           | Lucky Luke          |
+      | E-mail address | ernsy1999@gmail.com |
+    And I select "Supplier exchange" from "Topic"
+    And I press "Add existing" at the "Owner" field
+    And I wait for AJAX to finish
+    And I fill in "Owner" with "W3C"
+    And I press "Add owner"
+    And I wait for AJAX to finish
+    # Select a solution type that is part of the TRR testing terms
+    And I select "Conformance Testing Service" from "Solution type"
+    And I select "Document Validator" from "Test resource type"
+    And I select "Agent" from "Actor"
+    And I fill in "Business process" with "Notification Of Failure"
+    And I fill in "Product type" with "Soya beans"
+    And I select "Level 1" from "Standardization level"
+    And I press "Propose"
+    Then I should not see the heading "Edit Solution Linked Open Data Trr field"
+    # Check if fields are filled
+    When I go to the edit form of the "Linked Open Data Trr field" solution
+    Then the "Solution type" field should contain the "-Conformance Testing Service" option
+    And the "Test resource type" field should contain the "Document Validator" option
+    And the "Actor" field should contain the "Agent" option
+    And the "Business process" field should contain "Notification Of Failure (http://joinup.eu/business-process/591d91aac495f)"
+    And the "Product type" field should contain "Soya beans (http://joinup.eu/product-type#03111100-3)"
+    And the "Standardization level" field should contain the "Level 1" option
+    # Select a solution type that is not part of the TRR testing terms
+    When I select "Conformance Test Report" from "Solution type"
+    # TRR fields should be hidden.
+    Then the following fields should not be visible "Test resource type, Actor, Business process, Product type, Standardization level"
+    And I press "Propose"
+    Then I should not see the heading "Edit Solution Edit Solution Linked Open Data Trr field"
+    # Check if trr fields are empty
+    When I go to the edit form of the "Linked Open Data Trr field" solution
+    And I select "Conformance Testing Service" from "Solution type"
+    Then the "Solution type" field should contain the "-Conformance Testing Service" option
+    And the "Test resource type" field should contain the "- None -" option
+    And the "Actor" field should contain the "- None -" option
+    And the "Business process" field should contain ""
+    And the "Product type" field should contain ""
+    And the "Standardization level" field should contain the "- None -" option
   @terms @javascript
   Scenario: Create a TRR solution
     Given users:
@@ -19,7 +74,6 @@ Feature: Creating a test (solution) in the TRR collection.
       | name | type                         |
       | W3C  | Company, Industry consortium |
     And I am logged in as "Wobbe"
-
     When I go to the homepage of the "Friends of the test repository" collection
     And I open the plus button menu
     And I click "Add solution"
@@ -71,6 +125,10 @@ Feature: Creating a test (solution) in the TRR collection.
     Then I should see the error message 'Test resource type should be either "Test Bed", "Messaging Adapter" or "Document Validator" when solution type is set to "Test service" or "Conformance Testing Component".'
     When I select "Test Scenario" from "Solution type"
     And I select "Messaging Adapter" from "Test resource type"
+    And  I select "Agent" from "Actor"
+    And I fill in "Business process" with "Notification Of Failure"
+    And I fill in "Product type" with "Soya beans"
+    And I select "Level 1" from "Standardization level"
     And I press "Propose"
     Then I should see the error message 'Test resource type should be either "Test Suite", "Test Case", "Test Assertion" or "Document Assertion Set" when solution type is set to "Conformance Test Scenario".'
     When I select "Test Suite" from "Test resource type"
