@@ -1,5 +1,5 @@
 @group-clone @api @email
-Feature: Test joinup_core_deploy_108500.
+Feature: Test joinup_core_deploy_108701.
 
   Scenario: Ensure email confirmation are send correctly.
     Given I am an anonymous user
