@@ -32,7 +32,7 @@ trait GroupContentTrait {
    * {@inheritdoc}
    */
   public function getGroup(): GroupInterface {
-    $group = $this->getFirstReferencedEntity(OgGroupAudienceHelperInterface::DEFAULT_FIELD);
+    $group = $this->getFirstReferencedEntity($this->getGroupFieldName());
     if (empty($group) || !$group instanceof GroupInterface) {
       throw new MissingGroupException();
     }
@@ -44,11 +44,21 @@ trait GroupContentTrait {
    * {@inheritdoc}
    */
   public function getGroupId(): string {
-    $ids = $this->getReferencedEntityIds(OgGroupAudienceHelperInterface::DEFAULT_FIELD);
+    $ids = $this->getReferencedEntityIds($this->getGroupFieldName());
     if (empty($ids['rdf_entity'])) {
       throw new MissingGroupException();
     }
     return array_shift($ids['rdf_entity']);
+  }
+
+  /**
+   * Returns the group reference field name.
+   *
+   * @return string
+   *   The group reference field name.
+   */
+  protected function getGroupFieldName(): string {
+    return OgGroupAudienceHelperInterface::DEFAULT_FIELD;
   }
 
 }

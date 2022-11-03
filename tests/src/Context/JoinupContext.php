@@ -692,6 +692,13 @@ class JoinupContext extends RawDrupalContext {
       /** @var \Drupal\joinup\Context\CustomPageContext $context */
       $context = $environment->getContext(self::class);
       foreach ($context->explodeCommaSeparatedStepArgument($node->field_attachment) as $filename) {
+        if (strpos($filename, ':')) {
+          preg_match('/target_id:\s*(?<filename>[^ -]*)/', $filename, $matches);
+          if (empty($matches['filename'])) {
+            throw new \Exception("Could not extract filename from '$filename'");
+          }
+          $filename = $matches['filename'];
+        }
         // The file is tracked by its filename so the value still remains to be
         // the filenames instead of the url.
         $context->createFile($filename);
@@ -3038,44 +3045,6 @@ class JoinupContext extends RawDrupalContext {
     $xpath = "//ul/li[contains(concat(' ', @class, ' '), ' menu-item--active-trail ')]/descendant::a/descendant-or-self::*[text()='{$link_label}']";
     if (!$page->find('xpath', $xpath)) {
       throw new ExpectationFailedException("The '{$link_label}' link is not in the active trail but it should.");
-    }
-  }
-
-  /**
-   * Shows label in the middle of the screen.
-   *
-   * In the latest version of Selenium in docker, moving to a button element
-   * might throw this exception while label is visible.
-   * This might be due to attempting to find label too fast.
-   *
-   * @param string $label
-   *   The label of field.
-   *
-   * @throws \Exception
-   *    Thrown when an expected scroll in to view failed.
-   *
-   * @Given I scroll :label into view
-   */
-  public function scrollLabelIntoView(string $label): void {
-    $page = $this->getSession()->getPage();
-    $element = $page->find('xpath', "//*[contains(text(),'{$label}')]");
-    $xpath = $element->getXpath();
-    $function = <<<JS
-  (
-      function(){
-        setTimeout(() => {
-          let elem = document.evaluate("$xpath", document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
-          elem.scrollIntoView({ behavior: 'instant', block: 'center' });
-        }, 300);
-      }
-  )()
-  JS;
-    try {
-      $this->getSession()->executeScript($function);
-      sleep(1);
-    }
-    catch (\Exception $e) {
-      throw new \Exception("Scroll element into view failed");
     }
   }
 
