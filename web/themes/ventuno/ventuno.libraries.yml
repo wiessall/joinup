@@ -178,11 +178,6 @@ members-overview-exposed-form:
     theme:
       assets/css/members-overview-exposed-form.min.css: { minified: true }
 
-dropdown:
-  css:
-    theme:
-      assets/css/dropdown.min.css: {}
-
 nav:
   css:
     theme:
@@ -251,8 +246,6 @@ three-dots-menu:
   css:
     theme:
       assets/css/three-dots-menu.css: {}
-  dependencies:
-    - ventuno/dropdown
 
 tour-first-balloon:
   js:
