@@ -133,7 +133,6 @@ Feature: Messaging group announcements
     When I press "Preview"
     Then I should see the success message "A sample announcement has been delivered to sonsoftweets@example.com."
     And the email sent to "Sons of tweets" with subject "The Big Opening is postponed" contains the following lines of text:
-      | text                                                                                                                                                                                                                                                       |
       | Dear Sons of tweets,                                                                                                                                                                                                                                       |
       | Fail pension <group> has an announcement for its members:                                                                                                                                                                                                  |
       | The Big Opening is postponed                                                                                                                                                                                                                               |
@@ -169,7 +168,6 @@ Feature: Messaging group announcements
     And I should not see the button "Undo reject"
     And I should not see the button "Preview"
     And the email sent to "Check edit moderator" with subject "Joinup: A new announcement 'The Big Opening is postponed' has been created" contains the following lines of text:
-      | text                                                                                                               |
       | A new announcement 'The Big Opening is postponed' has been created by Sons of tweets for the Fail pension <group>. |
       | You can approve or reject the announcement at                                                                      |
 
@@ -199,7 +197,6 @@ Feature: Messaging group announcements
     When I press "Preview"
     Then I should see the success message "A sample announcement has been delivered to check.edit.moderator@example.com."
     And the email sent to "Check edit moderator" with subject "The Big Opening is postponed" contains the following lines of text:
-      | text                                                                                                                                                                                                                                                       |
       | Dear Check edit moderator,                                                                                                                                                                                                                                 |
       | Fail pension <group> has an announcement for its members:                                                                                                                                                                                                  |
       | The Big Opening is postponed                                                                                                                                                                                                                               |
@@ -262,7 +259,6 @@ Feature: Messaging group announcements
 
     # Groups having up to 50 members are receiving the announcements instantly.
     And the email sent to "Mogul" with subject "The Big Opening is postponed" contains the following lines of text:
-      | text                                                                                                                                                                                                                                                       |
       | Dear Mogul,                                                                                                                                                                                                                                                |
       | Fail pension <group> has an announcement for its members:                                                                                                                                                                                                  |
       | The Big Opening is postponed                                                                                                                                                                                                                               |
@@ -280,7 +276,6 @@ Feature: Messaging group announcements
       | In case you do not want to receive such e-mails, you can unsubscribe from group announcement notifications or manage all your subscription notifications from the user subscriptions page.                                                                 |
       | This is an unmonitored email address, please do not reply. You can contact directly Fail pension <group> via the About page.                                                                                                                               |
     And the email sent to "Greedy" with subject "The Big Opening is postponed" contains the following lines of text:
-      | text                                                                                                                                                                                                                                                       |
       | Dear Greedy,                                                                                                                                                                                                                                               |
       | Fail pension <group> has an announcement for its members:                                                                                                                                                                                                  |
       | The Big Opening is postponed                                                                                                                                                                                                                               |
@@ -298,7 +293,6 @@ Feature: Messaging group announcements
       | In case you do not want to receive such e-mails, you can unsubscribe from group announcement notifications or manage all your subscription notifications from the user subscriptions page.                                                                 |
       | This is an unmonitored email address, please do not reply. You can contact directly Fail pension <group> via the About page.                                                                                                                               |
     And the email sent to "Sons of tweets" with subject "The Big Opening is postponed" contains the following lines of text:
-      | text                                                                                                                                                                                                                                                       |
       | Dear Sons of tweets,                                                                                                                                                                                                                                       |
       | Fail pension <group> has an announcement for its members:                                                                                                                                                                                                  |
       | The Big Opening is postponed                                                                                                                                                                                                                               |
