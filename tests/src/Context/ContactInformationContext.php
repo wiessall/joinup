@@ -6,6 +6,7 @@ namespace Drupal\joinup\Context;
 
 use Behat\Gherkin\Node\TableNode;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
+use Drupal\contact_information\ContactInformationEmailConfirmInterface;
 use Drupal\joinup\Traits\AliasTranslatorTrait;
 use Drupal\joinup\Traits\EntityTrait;
 use Drupal\joinup\Traits\MailCollectorTrait;
@@ -202,7 +203,7 @@ class ContactInformationContext extends RawDrupalContext {
   public function validateContactInformationEmails(TableNode $contact_info_list): void {
     foreach ($contact_info_list->getColumn(0) as $label) {
       /** @var \Drupal\contact_information\Entity\ContactInformationInterface $contact_info */
-      $contact_info = $this->getRdfEntityByLabel($label, 'contact_information');
+      $contact_info = $this->getEntityByLabel('rdf_entity', $label, 'contact_information');
       $email_field = $contact_info->get('field_ci_email');
       if (!$email_field->isEmpty()) {
         $email = $email_field->value;
