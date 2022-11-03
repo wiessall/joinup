@@ -1618,7 +1618,7 @@ class FeatureContext extends RawDrupalContext implements SnippetAcceptingContext
   }
 
   /**
-   * Clears the static cache of DatabaseCacheTagsChecksum.
+   * Clears the static cache and resets cache invalidators checksums.
    *
    * Static caches are typically cleared at the end of the request since a
    * typical web request is short lived and the process disappears when the page
@@ -1633,13 +1633,9 @@ class FeatureContext extends RawDrupalContext implements SnippetAcceptingContext
    * DatabaseCacheTagsChecksum::invalidateTags() keeps a local storage of which
    * cache tags were invalidated, and this is not reset in time.
    *
-   * For this reason, in such limited cases, where we need to clear the cache
-   * tags cache, we tag the Behat feature with @clearStaticCache. This ensures
-   * that static cache is cleared after each step.
-   *
-   * CAUTION: Use the @clearStaticCache tag only in scenarios where you have
-   * trouble with the static caching being preserved across step requests,
-   * because clearing the static cache too often might affect performance.
+   * For this reason, we clear the static cache after each step. Note that this
+   * is not a performance issue, it has been benchmarked and the difference is
+   * negligible.
    *
    * @param \Behat\Behat\Hook\Scope\AfterStepScope $event
    *   The after step scope event.
@@ -1650,9 +1646,24 @@ class FeatureContext extends RawDrupalContext implements SnippetAcceptingContext
    * @AfterStep
    */
   public function clearCacheTagsStaticCache(AfterStepScope $event): void {
-    if ($this->hasTag('clearStaticCache')) {
+    if ($this->getScenario()->hasTag('api') || $event->getFeature()->hasTag('api')) {
+      // Sample tests needing this:
+      // - solutions_page.feature
+      // - collection/homepage.feature
+      // - collection/last_update_time.feature.
       parent::clearStaticCaches();
     }
+
+    // Sample tests needing this:
+    // - unsubscribe.feature
+    // - homepage.feature
+    // - my_subscriptions.feature
+    // - legal_notice.feature.
+    \Drupal::getContainer()->get('entity.memory_cache')->invalidateAll();
+
+    // Sample tests needing this:
+    // - collection.subscribe-on-join.feature.
+    \Drupal::getContainer()->get('cache.static')->invalidateAll();
   }
 
   /**

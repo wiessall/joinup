@@ -1,3 +1,7 @@
+/**
+ * @file
+ * Configures BCL builder to generate assets.
+ */
 const path = require("path");
 
 const outputFolder = path.resolve(__dirname);
@@ -325,6 +329,11 @@ module.exports = {
     },
     {
       from: [path.resolve(__dirname, "src/images/iop-eu-logo.svg")],
+      to: path.resolve(outputFolder, "assets/images"),
+      options: { up: true },
+    },
+    {
+      from: [path.resolve(__dirname, "src/images/logo.png")],
       to: path.resolve(outputFolder, "assets/images"),
       options: { up: true },
     },

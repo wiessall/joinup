@@ -7,6 +7,7 @@ namespace Drupal\joinup\Context;
 use Behat\Gherkin\Node\TableNode;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\joinup\Traits\AliasTranslatorTrait;
+use Drupal\joinup\Traits\EntityTrait;
 use Drupal\joinup\Traits\MailCollectorTrait;
 use Drupal\joinup\Traits\RdfEntityTrait;
 use Drupal\joinup\Traits\SearchTrait;
@@ -20,6 +21,7 @@ use Drupal\rdf_entity\RdfInterface;
 class ContactInformationContext extends RawDrupalContext {
 
   use AliasTranslatorTrait;
+  use EntityTrait;
   use MailCollectorTrait;
   use RdfEntityTrait;
   use SearchTrait;
@@ -41,7 +43,7 @@ class ContactInformationContext extends RawDrupalContext {
    */
   public function visitContactInformationPage(string $label): void {
     /** @var \Drupal\rdf_entity\Entity\Rdf $entity */
-    $entity = $this->getRdfEntityByLabel($label, 'contact_information');
+    $entity = $this->getEntityByLabel('rdf_entity', $label, 'contact_information');
     $this->visitPath($entity->toUrl()->toString());
   }
 
@@ -127,7 +129,7 @@ class ContactInformationContext extends RawDrupalContext {
    * @When I delete the :contact contact information
    */
   public function deleteContactInformation(string $name): void {
-    $this->getRdfEntityByLabel($name, 'contact_information')->delete();
+    $this->getEntityByLabel('rdf_entity', $name, 'contact_information')->delete();
   }
 
   /**

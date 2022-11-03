@@ -25,9 +25,7 @@ use Drupal\joinup\Traits\FormTrait;
 use Drupal\joinup\Traits\JavascriptTrait;
 use Drupal\joinup\Traits\KeyboardInteractionTrait;
 use Drupal\joinup\Traits\MaterialDesignTrait;
-use Drupal\joinup\Traits\NodeTrait;
 use Drupal\joinup\Traits\OgTrait;
-use Drupal\joinup\Traits\RdfEntityTrait;
 use Drupal\joinup\Traits\TabledragTrait;
 use Drupal\joinup\Traits\TraversingTrait;
 use Drupal\joinup\Traits\UserTrait;
@@ -62,9 +60,7 @@ class JoinupContext extends RawDrupalContext {
   use JavascriptTrait;
   use KeyboardInteractionTrait;
   use MaterialDesignTrait;
-  use NodeTrait;
   use OgTrait;
-  use RdfEntityTrait;
   use StringTranslationTrait;
   use TabledragTrait;
   use TraversingTrait;
@@ -144,7 +140,7 @@ class JoinupContext extends RawDrupalContext {
    * @see \Drupal\DrupalExtension\Context\DrupalContext::assertAuthenticatedByRole()
    */
   public function assertAuthenticatedByOgRole($roles, $rdf_entity, $rdf_entity_bundle) {
-    $entity = $this->getRdfEntityByLabel($rdf_entity, $rdf_entity_bundle);
+    $entity = $this->getEntityByLabel('rdf_entity', $rdf_entity, $rdf_entity_bundle);
     if (!$entity) {
       throw new \Exception("No entity found with label $rdf_entity");
     }
@@ -190,7 +186,7 @@ class JoinupContext extends RawDrupalContext {
    * @Given my role(s) in the :rdf_entity :rdf_entity_bundle change(s) to :roles
    */
   public function updateGroupRoles($rdf_entity, $rdf_entity_bundle, $roles) {
-    $entity = $this->getRdfEntityByLabel($rdf_entity, $rdf_entity_bundle);
+    $entity = $this->getEntityByLabel('rdf_entity', $rdf_entity, $rdf_entity_bundle);
     if (!$entity) {
       throw new \Exception("No entity found with label $rdf_entity");
     }
@@ -221,7 +217,7 @@ class JoinupContext extends RawDrupalContext {
    * @Given my membership state in the :rdf_entity :rdf_entity_bundle changes to :state
    */
   public function updateGroupState($rdf_entity, $rdf_entity_bundle, $state) {
-    $entity = $this->getRdfEntityByLabel($rdf_entity, $rdf_entity_bundle);
+    $entity = $this->getEntityByLabel('rdf_entity', $rdf_entity, $rdf_entity_bundle);
     if (!$entity) {
       throw new \Exception("No entity found with label $rdf_entity");
     }
@@ -528,7 +524,7 @@ class JoinupContext extends RawDrupalContext {
    */
   public function visitNodePage($type, $title) {
     /** @var \Drupal\node\Entity\Node $node */
-    $node = $this->getNodeByTitle($title, $type);
+    $node = $this->getEntityByLabel('node', $title, $type);
     $this->visitPath($node->toUrl()->toString());
   }
 
@@ -544,7 +540,7 @@ class JoinupContext extends RawDrupalContext {
    */
   public function visitRevisionsForm(string $title): void {
     /** @var \Drupal\node\NodeInterface $node */
-    $node = $this->getNodeByTitle($title);
+    $node = $this->getEntityByLabel('node', $title);
     $this->visitPath($node->toUrl('version-history')->toString());
   }
 
@@ -573,7 +569,7 @@ class JoinupContext extends RawDrupalContext {
    */
   public function assertNodePublished($bundle, $title) {
     /** @var \Drupal\node\NodeInterface $node */
-    $node = $this->getNodeByTitle($title, $bundle);
+    $node = $this->getEntityByLabel('node', $title, $bundle);
     if (!$node->isPublished()) {
       throw new \Exception("$title content should be published but it is not.");
     }
@@ -594,7 +590,7 @@ class JoinupContext extends RawDrupalContext {
    */
   public function assertNodeNotPublished($bundle, $title) {
     /** @var \Drupal\node\NodeInterface $node */
-    $node = $this->getNodeByTitle($title, $bundle);
+    $node = $this->getEntityByLabel('node', $title, $bundle);
     if ($node->isPublished()) {
       throw new \Exception("$title content should not be published but it is.");
     }
@@ -614,7 +610,7 @@ class JoinupContext extends RawDrupalContext {
    */
   public function assertNodeRevisionCount($bundle, $title, $count) {
     /** @var \Drupal\node\NodeInterface $node */
-    $node = $this->getNodeByTitle($title, $bundle);
+    $node = $this->getEntityByLabel('node', $title, $bundle);
 
     $revision_count = \Drupal::entityTypeManager()->getStorage('node')->getQuery()
       ->allRevisions()
@@ -696,6 +692,13 @@ class JoinupContext extends RawDrupalContext {
       /** @var \Drupal\joinup\Context\CustomPageContext $context */
       $context = $environment->getContext(self::class);
       foreach ($context->explodeCommaSeparatedStepArgument($node->field_attachment) as $filename) {
+        if (strpos($filename, ':')) {
+          preg_match('/target_id:\s*(?<filename>[^ -]*)/', $filename, $matches);
+          if (empty($matches['filename'])) {
+            throw new \Exception("Could not extract filename from '$filename'");
+          }
+          $filename = $matches['filename'];
+        }
         // The file is tracked by its filename so the value still remains to be
         // the filenames instead of the url.
         $context->createFile($filename);
@@ -707,7 +710,7 @@ class JoinupContext extends RawDrupalContext {
     // solution in a Behat test. This is by design, the URIs are not exposed to
     // end users of the site so they should not be used in BDD scenarios.
     if (!empty($node->{OgGroupAudienceHelperInterface::DEFAULT_FIELD})) {
-      $entity = self::getRdfEntityByLabel($node->{OgGroupAudienceHelperInterface::DEFAULT_FIELD});
+      $entity = $this->getEntityByLabel('rdf_entity', $node->{OgGroupAudienceHelperInterface::DEFAULT_FIELD});
       $node->{OgGroupAudienceHelperInterface::DEFAULT_FIELD} = $entity->id();
     }
 
@@ -1087,7 +1090,7 @@ class JoinupContext extends RawDrupalContext {
    */
   public function assertNodeWorkflowState(string $title, string $type, string $state): void {
     /** @var \Drupal\joinup_workflow\EntityWorkflowStateInterface $node */
-    $node = $this->getNodeByTitle($title, $type);
+    $node = $this->getEntityByLabel('node', $title, $type);
     $actual = $node->getWorkflowState();
     Assert::assertEquals($state, $actual, "The $title $type content has the expected state '$state' (actual: '$actual')");
   }
@@ -1853,7 +1856,7 @@ class JoinupContext extends RawDrupalContext {
    */
   public function createNodeRevisions($bundle, TableNode $updates_table) {
     foreach ($updates_table->getColumnsHash() as $data) {
-      $node = $this->getNodeByTitle($data['current title'], $bundle);
+      $node = $this->getEntityByLabel('node', $data['current title'], $bundle);
       unset($data['current title']);
 
       // Crete a fake node object to be able to reuse hooks that help with
@@ -1909,7 +1912,7 @@ class JoinupContext extends RawDrupalContext {
    */
   public function assertFieldContainsLinkToPage($field, $title) {
     /** @var \Drupal\node\NodeInterface $node */
-    $node = $this->getNodeByTitle($title);
+    $node = $this->getEntityByLabel('node', $title);
     $uri = $node->toUrl()->toString();
     $this->assertSession()->fieldValueEquals($field, $uri);
   }
@@ -2024,10 +2027,10 @@ class JoinupContext extends RawDrupalContext {
     if (!in_array($type, ['content', 'rdf'])) {
       throw new \InvalidArgumentException('Type can only be one of "content" and "rdf".');
     }
-    $function = $type === 'content' ? 'getNodeByTitle' : 'getRdfEntityByLabel';
+    $type = $type === 'content' ? 'node' : 'rdf_entity';
 
     /** @var \Drupal\Core\Entity\EntityInterface $entity */
-    $entity = $this->$function($title);
+    $entity = $this->getEntityByLabel($type, $title);
     $link_element = $this->getSession()->getPage()->findLink($link);
 
     if (!$link_element) {
@@ -2428,7 +2431,7 @@ class JoinupContext extends RawDrupalContext {
     else {
       throw new \Exception("Invalid bundle '$type'.");
     }
-    $entity = static::getEntityByLabel($entity_type_id, $heading);
+    $entity = $this->getEntityByLabel($entity_type_id, $heading);
 
     if ($entity instanceof PinnableGroupContentInterface && $entity->isPinned()) {
       throw new \Exception("The tile '$heading' is marked as featured, but it shouldn't be.");
@@ -3042,44 +3045,6 @@ class JoinupContext extends RawDrupalContext {
     $xpath = "//ul/li[contains(concat(' ', @class, ' '), ' menu-item--active-trail ')]/descendant::a/descendant-or-self::*[text()='{$link_label}']";
     if (!$page->find('xpath', $xpath)) {
       throw new ExpectationFailedException("The '{$link_label}' link is not in the active trail but it should.");
-    }
-  }
-
-  /**
-   * Shows label in the middle of the screen.
-   *
-   * In the latest version of Selenium in docker, moving to a button element
-   * might throw this exception while label is visible.
-   * This might be due to attempting to find label too fast.
-   *
-   * @param string $label
-   *   The label of field.
-   *
-   * @throws \Exception
-   *    Thrown when an expected scroll in to view failed.
-   *
-   * @Given I scroll :label into view
-   */
-  public function scrollLabelIntoView(string $label): void {
-    $page = $this->getSession()->getPage();
-    $element = $page->find('xpath', "//*[contains(text(),'{$label}')]");
-    $xpath = $element->getXpath();
-    $function = <<<JS
-  (
-      function(){
-        setTimeout(() => {
-          let elem = document.evaluate("$xpath", document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
-          elem.scrollIntoView({ behavior: 'instant', block: 'center' });
-        }, 300);
-      }
-  )()
-  JS;
-    try {
-      $this->getSession()->executeScript($function);
-      sleep(1);
-    }
-    catch (\Exception $e) {
-      throw new \Exception("Scroll element into view failed");
     }
   }
 

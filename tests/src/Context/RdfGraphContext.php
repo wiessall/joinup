@@ -7,7 +7,7 @@ namespace Drupal\joinup\Context;
 use Behat\Gherkin\Node\TableNode;
 use Drupal\Component\Utility\SortArray;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
-use Drupal\joinup\Traits\RdfEntityTrait;
+use Drupal\joinup\Traits\EntityTrait;
 use PHPUnit\Framework\ExpectationFailedException;
 
 /**
@@ -15,7 +15,7 @@ use PHPUnit\Framework\ExpectationFailedException;
  */
 class RdfGraphContext extends RawDrupalContext {
 
-  use RdfEntityTrait;
+  use EntityTrait;
 
   /**
    * A list of graphs used during testing.
@@ -43,7 +43,7 @@ class RdfGraphContext extends RawDrupalContext {
    * @Then the :rdf_graph_label RDF graph contains triples:
    */
   public function assertRdfGraphTriples(string $rdf_graph_label, TableNode $triples): void {
-    $rdf_graph = $this->getRdfEntityByLabel($rdf_graph_label, 'rdf_graph');
+    $rdf_graph = $this->getEntityByLabel('rdf_entity', $rdf_graph_label, 'rdf_graph');
 
     $keys = ['subject', 'predicate', 'object'];
 

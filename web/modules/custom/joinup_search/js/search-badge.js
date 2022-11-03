@@ -13,12 +13,12 @@
       );
       closeIcons.forEach((icon) => {
         icon.addEventListener("click", () => {
-          // Get data-description value to find search input, remove value and
+          // Get data-joinup-description value to find search input, remove value and
           // achieve search accordingly.
           const badge = icon.parentNode;
-          const dataDescription = badge.dataset.description;
+          const dataDescription = badge.dataset.joinupDescription;
           const input = context.querySelector(
-            `input.search_bar_badge[data-description="${dataDescription}"]`
+            `input.search_bar_badge[data-joinup-description="${dataDescription}"]`
           );
           input.removeAttribute("value");
           badge.remove();
