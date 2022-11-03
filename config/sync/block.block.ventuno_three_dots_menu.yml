@@ -9,7 +9,7 @@ dependencies:
 id: ventuno_three_dots_menu
 theme: ventuno
 region: header_bottom
-weight: -23
+weight: -24
 provider: null
 plugin: joinup_local_tasks_block
 settings:
