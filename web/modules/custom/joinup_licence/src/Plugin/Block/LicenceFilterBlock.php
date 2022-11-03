@@ -23,7 +23,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class LicenceFilterBlock extends BlockBase implements ContainerFactoryPluginInterface {
 
   /**
-   * Licence filters.
+   * Licence filters classes.
    */
   const LICENCE_FILTER_CLASSES = ['licence-filter--can', 'licence-filter--must', 'licence-filter--cannot',
     'licence-filter--compatible', 'licence-filter--law', 'licence-filter--support',
