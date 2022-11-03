@@ -4,13 +4,13 @@ status: true
 dependencies:
   config:
     - field.storage.media.field_media_video_embed_field
-    - media.type.videos
+    - media.type.video
   module:
     - video_embed_field
 id: media.videos.field_media_video_embed_field
 field_name: field_media_video_embed_field
 entity_type: media
-bundle: videos
+bundle: video
 label: 'Video Url'
 description: ''
 required: true

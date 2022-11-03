@@ -9,7 +9,7 @@ dependencies:
     - media.type.news_logo
     - media.type.solution_banner
     - media.type.solution_logo
-    - media.type.videos
+    - media.type.video
     - node.type.custom_page
     - node.type.discussion
     - node.type.document

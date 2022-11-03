@@ -4,14 +4,14 @@ status: true
 dependencies:
   config:
     - core.entity_view_mode.media.media_library
-    - field.field.media.files.field_media_file
+    - field.field.media.file.field_media_file
     - image.style.medium
-    - media.type.files
+    - media.type.file
   module:
     - image
 id: media.files.media_library
 targetEntityType: media
-bundle: files
+bundle: file
 mode: media_library
 content:
   thumbnail:

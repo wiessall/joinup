@@ -4,14 +4,14 @@ status: true
 dependencies:
   config:
     - core.entity_view_mode.media.media_library
-    - field.field.media.videos.field_media_video_embed_field
-    - media.type.videos
+    - field.field.media.video.field_media_video_embed_field
+    - media.type.video
   module:
     - template_suggestion
     - video_embed_field
 id: media.videos.media_library
 targetEntityType: media
-bundle: videos
+bundle: video
 mode: media_library
 content:
   field_media_video_embed_field:

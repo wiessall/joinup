@@ -1,14 +1,14 @@
-uuid: affcb124-66dc-4518-b2be-fa0485bfc05f
+uuid: 4b87ecf9-b071-4ecf-a332-16472c1ce9ee
 langcode: en
 status: true
 dependencies:
   config:
     - core.entity_form_mode.media.media_library
-    - field.field.media.files.field_media_file
-    - media.type.files
-id: media.files.media_library
+    - field.field.media.video.field_media_video_embed_field
+    - media.type.video
+id: media.videos.media_library
 targetEntityType: media
-bundle: files
+bundle: video
 mode: media_library
 content:
   name:
@@ -21,7 +21,7 @@ content:
     third_party_settings: {  }
 hidden:
   created: true
-  field_media_file: true
+  field_media_video_embed_field: true
   langcode: true
   path: true
   status: true

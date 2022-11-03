@@ -4,8 +4,8 @@ status: true
 dependencies:
   module:
     - video_embed_media
-id: videos
-label: Videos
+id: video
+label: Video
 description: ''
 source: video_embed_field
 queue_thumbnail_downloads: false

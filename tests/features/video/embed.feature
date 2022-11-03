@@ -64,13 +64,13 @@ Feature: Embed of videos into the page.
     And I should see the following lines of text:
       | Files  |
       | Videos |
-    And I click "Videos"
+    And I click "Video"
     And I should see the text "Youtube and EC videos are allowed."
     And I should see the text "Youtube example: https://www.youtube.com/watch?v=dQw4w9WgXcQ"
     And I should see the text "EC url example: http://europa.eu/123abc!123"
     And I should see the text "EC video example: https://ec.europa.eu/avservices/video/player.cfm?sitelang=en&ref=ABC12345"
     And I should see the text "EC webcast video example: https://webcast.ec.europa.eu/iprs-and-innovation-procurement-22-01-20/embed"
-    When I fill in "Add Videos URL" with "<url>"
+    When I fill in "Add Video URL" with "<url>"
     And I press "Add"
     Then I press "Save" in the "Modal buttons" region
     And I press "Insert selected" in the "Modal buttons" region
