@@ -681,6 +681,7 @@ module.exports = {
           "file-font.svg",
           "filter.svg",
           "folder2-open.svg",
+          "gear-fill.svg",
           "github.svg",
           "info-circle-fill.svg",
           "info-circle.svg",
