@@ -370,6 +370,15 @@ module.exports = {
       },
     },
     {
+      entry: path.resolve(outputFolder, "src/scss/glossary.scss"),
+      dest: path.resolve(outputFolder, "assets/css/glossary.min.css"),
+      options: {
+        includePaths,
+        minify: true,
+        sourceMap: "file",
+      },
+    },
+    {
       entry: path.resolve(outputFolder, "src/scss/nav.scss"),
       dest: path.resolve(outputFolder, "assets/css/nav.min.css"),
       options: {
@@ -663,6 +672,7 @@ module.exports = {
           "file-font.svg",
           "filter.svg",
           "folder2-open.svg",
+          "gear-fill.svg",
           "github.svg",
           "info-circle-fill.svg",
           "info-circle.svg",
