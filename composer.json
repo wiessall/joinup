@@ -118,6 +118,7 @@
         "drupal/composer_deploy": "^1.6",
         "drupal/config_update": "^1.7",
         "drupal/devel": "^4.0",
+        "drupal/drupal-driver": "^2.1.0",
         "drupal/drupal-extension": "^4.1",
         "drupal/filecache": "^1",
         "drupal/renderviz": "^1.0",
@@ -269,6 +270,9 @@
                 "Cannot implement a custom user cancellation method @see https://www.drupal.org/project/drupal/issues/3135592": "https://git.drupalcode.org/project/drupal/-/merge_requests/1675.diff",
                 "The old storage handler is still defined for RDF entities.": "resources/patch/core-fix-sparql-storage-hack.patch",
                 "Add option to show only start or end date in the DateTime Range custom formatter @see https://www.drupal.org/project/drupal/issues/2827055": "https://www.drupal.org/files/issues/2022-06-16/2827055-69.patch"
+            },
+            "drupal/drupal-driver": {
+                "Allow multi-property references. @see https://github.com/jhedstrom/DrupalDriver/pull/252": "resources/patch/drupal/drupal-driver/252.diff"
             },
             "drupal/editor_file": {
                 "Wrong file upload size when max upload left empty. @see https://www.drupal.org/i/3300142": "https://www.drupal.org/files/issues/2022-07-27/editor_file-fix_max_file_upload_empty-3300142-2.patch",

@@ -692,6 +692,13 @@ class JoinupContext extends RawDrupalContext {
       /** @var \Drupal\joinup\Context\CustomPageContext $context */
       $context = $environment->getContext(self::class);
       foreach ($context->explodeCommaSeparatedStepArgument($node->field_attachment) as $filename) {
+        if (strpos($filename, ':')) {
+          preg_match('/target_id:\s*(?<filename>[^ -]*)/', $filename, $matches);
+          if (empty($matches['filename'])) {
+            throw new \Exception("Could not extract filename from '$filename'");
+          }
+          $filename = $matches['filename'];
+        }
         // The file is tracked by its filename so the value still remains to be
         // the filenames instead of the url.
         $context->createFile($filename);
