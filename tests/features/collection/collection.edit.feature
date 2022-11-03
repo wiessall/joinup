@@ -56,8 +56,8 @@ Feature: Editing collections
     And I press the button "Insert Drupal Media" in the "Description" wysiwyg editor
     Then I wait for AJAX to finish
     And a modal should open
-    And I click "Videos"
-    When I fill in "Add Videos URL" with "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+    And I click "Video"
+    When I fill in "Add Video URL" with "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
     And I press "Add"
     Then I press "Save" in the "Modal buttons" region
     And I press "Insert selected" in the "Modal buttons" region
@@ -83,7 +83,7 @@ Feature: Editing collections
     And I press the button "Insert Drupal Media" in the "Description" wysiwyg editor
     Then I wait for AJAX to finish
     And a modal should open
-    And I click "Files"
+    And I click "File"
     And I should not see the text "0 bytes limit"
     When I attach the file "empty_pdf.pdf" to "Add file"
     Then I press "Save" in the "Modal buttons" region

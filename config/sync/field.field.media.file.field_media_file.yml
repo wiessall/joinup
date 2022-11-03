@@ -4,13 +4,13 @@ status: true
 dependencies:
   config:
     - field.storage.media.field_media_file
-    - media.type.files
+    - media.type.file
   module:
     - file
 id: media.files.field_media_file
 field_name: field_media_file
 entity_type: media
-bundle: files
+bundle: file
 label: File
 description: ''
 required: true

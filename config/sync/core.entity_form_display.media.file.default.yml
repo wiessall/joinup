@@ -3,14 +3,14 @@ langcode: en
 status: true
 dependencies:
   config:
-    - field.field.media.files.field_media_file
-    - media.type.files
+    - field.field.media.file.field_media_file
+    - media.type.file
   module:
     - file
     - path
 id: media.files.default
 targetEntityType: media
-bundle: files
+bundle: file
 mode: default
 content:
   created:

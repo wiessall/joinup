@@ -4,7 +4,7 @@ status: true
 dependencies:
   config:
     - field.storage.node.video
-    - media.type.videos
+    - media.type.video
     - node.type.video
 id: node.video.video
 field_name: video
@@ -20,7 +20,7 @@ settings:
   handler: 'default:media'
   handler_settings:
     target_bundles:
-      videos: videos
+      video: video
     sort:
       field: _none
       direction: ASC

@@ -3,14 +3,14 @@ langcode: en
 status: true
 dependencies:
   config:
-    - field.field.media.videos.field_media_video_embed_field
-    - media.type.videos
+    - field.field.media.video.field_media_video_embed_field
+    - media.type.video
   module:
     - path
     - video_embed_field
 id: media.videos.default
 targetEntityType: media
-bundle: videos
+bundle: video
 mode: default
 content:
   created:
