@@ -5,5 +5,5 @@ subscribe_dialog:
     - core/drupal
     - core/drupal.ajax
     - core/drupalSettings
-    - core/jquery
+    - core/once
     - core/js-cookie

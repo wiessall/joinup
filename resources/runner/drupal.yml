@@ -192,7 +192,6 @@ drupal:
           'admin_toolbar_tools',
           'cas_mock_server',
           'composer_deploy',
-          'config_devel',
           'config_update',
           'config_update_ui',
           'dblog',

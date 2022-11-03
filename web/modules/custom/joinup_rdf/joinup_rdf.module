@@ -63,27 +63,6 @@ function joinup_rdf_entity_base_field_info(EntityTypeInterface $entity_type) {
 }
 
 /**
- * Implements hook_entity_type_alter().
- */
-function joinup_rdf_entity_type_alter(array &$entity_types) {
-  if (!isset($entity_types['rdf_entity'])) {
-    return;
-  }
-
-  // Add the about page and member overview as link templates, so the OG context
-  // will be automatically solved.
-  $link_templates = [
-    'about-page' => '/rdf_entity/{rdf_entity}/about',
-    'member-overview' => '/rdf_entity/{rdf_entity}/members',
-    'member-add' => '/rdf_entity/{rdf_entity}/members/add',
-    'member-invite' => '/rdf_entity/{rdf_entity}/members/invite',
-  ];
-  foreach ($link_templates as $key => $path) {
-    $entity_types['rdf_entity']->setLinkTemplate($key, $path);
-  }
-}
-
-/**
  * Implements hook_ENTITY_TYPE_storage_load().
  *
  * Fill $term->extension and $term->mime_type fields from 'file_type' vocabulary

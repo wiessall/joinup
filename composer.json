@@ -76,7 +76,7 @@
         "drupal/schema_digital_document": "^1.0.0",
         "drupal/schema_metatag": "^2",
         "drupal/schema_social_media_posting": "^1.0.0",
-        "drupal/search_api": "^1.23",
+        "drupal/search_api": "^1.27",
         "drupal/search_api_autocomplete": "^1.5",
         "drupal/search_api_solr": "^4.2.7",
         "drupal/search_api_spellcheck": "^4.0",
@@ -118,9 +118,9 @@
         "drupal/cas_mock_server": "^1.3",
         "drupal/coder": "^8.3.11",
         "drupal/composer_deploy": "^1.6",
-        "drupal/config_devel": "~1.7",
         "drupal/config_update": "^1.7",
         "drupal/devel": "^4.0",
+        "drupal/drupal-driver": "^2.1.0",
         "drupal/drupal-extension": "^4.1",
         "drupal/filecache": "^1",
         "drupal/renderviz": "^1.0",
@@ -144,6 +144,9 @@
         "vlucas/phpdotenv": "~5",
         "weitzman/drupal-test-traits": "^1.5",
         "weitzman/logintrait": "^1.1"
+    },
+    "replace": {
+        "drupal/ckeditor": "self.version"
     },
     "conflict": {
         "drupal/drupal": "*",
@@ -200,6 +203,7 @@
     },
     "scripts": {
         "post-install-cmd": [
+            "composer validate --no-check-all --no-check-publish",
             "./scripts/composer/composer.php install"
         ],
         "post-update-cmd": [
@@ -239,9 +243,6 @@
             "drupal/core": "-p2"
         },
         "patches": {
-            "drupal/config_devel": {
-                "Add a Drush command for manipulating module info files @see https://www.drupal.org/project/config_devel/issues/2392929": "https://git.drupalcode.org/project/config_devel/-/merge_requests/4.diff"
-            },
             "drupal/coder": {
                 "PHPCS hangs indefinetly with standard Drupal @see https://www.drupal.org/project/coder/issues/3306999": "https://git.drupalcode.org/project/coder/-/commit/446dea2.diff"
             },
@@ -275,8 +276,8 @@
             "drupal/email_confirmer": {
                 "Support for HTML mails @see https://www.drupal.org/i/3047124": "https://git.drupalcode.org/project/email_confirmer/-/merge_requests/3.diff"
             },
-            "drupal/entityqueue": {
-                "Missing config schema for EntityQueueDragtableWidget @see Missing config schema for EntityQueueDragtableWidget": "https://git.drupalcode.org/project/entityqueue/-/merge_requests/3.diff"
+            "drupal/drupal-driver": {
+                "Allow multi-property references. @see https://github.com/jhedstrom/DrupalDriver/pull/252": "resources/patch/drupal/drupal-driver/252.diff"
             },
             "drupal/editor_file": {
                 "Wrong file upload size when max upload left empty. @see https://www.drupal.org/i/3300142": "https://www.drupal.org/files/issues/2022-07-27/editor_file-fix_max_file_upload_empty-3300142-2.patch",
@@ -302,12 +303,12 @@
             "drupal/matomo_reporting_api": {
                 "Ensure backward compatibility with Piwik @see https://www.drupal.org/project/matomo_reporting_api/issues/3080854": "https://www.drupal.org/files/issues/2019-09-18/3080854-7.patch"
             },
+            "drupal/message_notify": {
+                "Allow 3rd-party to act before delivery @see https://www.drupal.org/project/message_notify/issues/3314370": "resources/patch/message_notify-diff-8.x-1.2-3314370.diff"
+            },
             "drupal/meta_entity": {
                 "Make the field configurable in the view @see https://www.drupal.org/project/meta_entity/issues/3279161": "https://git.drupalcode.org/project/meta_entity/-/merge_requests/4.diff",
                 "Improve ::getMetaEntitiesForEntity() performance @see https://www.drupal.org/project/meta_entity/issues/3299712": "https://git.drupalcode.org/project/meta_entity/-/merge_requests/6.diff"
-            },
-            "drupal/og": {
-                "Non-node permissions overrides one each other @see https://github.com/Gizra/og/pull/748": "https://patch-diff.githubusercontent.com/raw/Gizra/og/pull/748.diff"
             },
             "drupal/paragraphs_jquery_ui_accordion": {
                 "Formatter settings are missing schema @see https://www.drupal.org/i/3194916": "https://git.drupalcode.org/project/paragraphs_jquery_ui_accordion/-/merge_requests/1.diff"
@@ -332,7 +333,7 @@
                 "The search_api_list:{index} cache tag is not added to the view display @see https://www.drupal.org/project/search_api/issues/3298295": "https://git.drupalcode.org/project/search_api/-/merge_requests/50.diff"
             },
             "drupal/search_api_autocomplete": {
-                "Clear timeout autosubmit used in views_autosubmit.": "resources/patch/search_api_autocomplete_override_views_autosubmit.patch"
+                "Clear timeout autosubmit used in views_autosubmit. @see https://www.drupal.org/i/3314418": "https://git.drupalcode.org/project/search_api_autocomplete/-/merge_requests/8.diff"
             },
             "drupal/search_api_spellcheck": {
                 "Missing plugins config schema @see https://www.drupal.org/project/search_api_spellcheck/issues/3277693": "https://git.drupalcode.org/project/search_api_spellcheck/-/merge_requests/1.diff",
@@ -367,6 +368,9 @@
             },
             "drupal/views_block_area": {
                 "Views block area missing schema @see https://www.drupal.org/project/views_block_area/issues/3157188": "https://www.drupal.org/files/issues/2020-07-06/views_block_area-missing_schema-3157188-2.patch"
+            },
+            "ec-europa/toolkit": {
+                "Add --strict option, it should treat Undefined and Pending steps as failures @see https://github.com/ec-europa/toolkit/pull/559": "https://patch-diff.githubusercontent.com/raw/ec-europa/toolkit/pull/559.diff"
             },
             "openeuropa/oe_webtools": {
                 "Allow to pass an optional referer. @see https://github.com/openeuropa/oe_webtools/pull/96": "https://patch-diff.githubusercontent.com/raw/openeuropa/oe_webtools/pull/96.diff",

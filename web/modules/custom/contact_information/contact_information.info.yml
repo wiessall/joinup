@@ -14,7 +14,3 @@ dependencies:
   - 'joinup:joinup_workflow'
   - 'rdf_entity:rdf_entity'
   - 'state_machine:state_machine'
-
-config_devel:
-  install:
-    - contact_information.settings
