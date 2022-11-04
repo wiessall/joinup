@@ -9,7 +9,7 @@ dependencies:
     - media.type.file
   module:
     - image
-id: media.files.media_library
+id: media.file.media_library
 targetEntityType: media
 bundle: file
 mode: media_library

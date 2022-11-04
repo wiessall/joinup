@@ -9,7 +9,7 @@ dependencies:
   module:
     - template_suggestion
     - video_embed_field
-id: media.videos.media_library
+id: media.video.media_library
 targetEntityType: media
 bundle: video
 mode: media_library

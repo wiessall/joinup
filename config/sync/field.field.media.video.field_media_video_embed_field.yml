@@ -7,7 +7,7 @@ dependencies:
     - media.type.video
   module:
     - video_embed_field
-id: media.videos.field_media_video_embed_field
+id: media.video.field_media_video_embed_field
 field_name: field_media_video_embed_field
 entity_type: media
 bundle: video
