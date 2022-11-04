@@ -62,8 +62,8 @@ Feature: Embed of videos into the page.
     Then I wait for AJAX to finish
     And a modal should open
     And I should see the following lines of text:
-      | Files  |
-      | Videos |
+      | File  |
+      | Video |
     And I click "Video"
     And I should see the text "Youtube and EC videos are allowed."
     And I should see the text "Youtube example: https://www.youtube.com/watch?v=dQw4w9WgXcQ"
