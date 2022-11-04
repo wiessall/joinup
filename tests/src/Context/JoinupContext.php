@@ -1572,7 +1572,7 @@ class JoinupContext extends RawDrupalContext {
   public function iOpenTheAccountMenu() {
     // Non-JS browsers are directly interacting with the HTML, so we consider
     // the account menu to be already open.
-    if (!$this->browserSupportsJavaScript()) {
+    if (!$this->hasJavascriptSupport()) {
       return;
     }
 
@@ -1615,7 +1615,7 @@ class JoinupContext extends RawDrupalContext {
    * @When the plus button menu should be empty
    */
   public function assertEmptyPlusButtonMenu() {
-    if ($this->browserSupportsJavaScript()) {
+    if ($this->hasJavascriptSupport()) {
       if ($this->getSession()->getPage()->findAll('xpath', '//div[contains(concat(" ", normalize-space(@class), " "), " add-content-menu ")]//li[last()]')) {
         throw new \Exception("The plus button menu is not empty.");
       }
@@ -2206,7 +2206,7 @@ class JoinupContext extends RawDrupalContext {
    * @When I pick :value from the autocomplete suggestions
    */
   public function fillFieldWithNormalisedEntityReference(string $value, ?string $field = NULL): void {
-    if ($this->browserSupportsJavaScript()) {
+    if ($this->hasJavascriptSupport()) {
       $session = $this->getSession();
       $xpath = '//ul[contains(concat(" ", normalize-space(@class), " "), " ui-autocomplete ")]//a[text() = "' . $value . '"]';
       $element = $session->getPage()->find('xpath', $xpath);
@@ -2516,7 +2516,7 @@ class JoinupContext extends RawDrupalContext {
    * @When I hit|press the :key key in the :field field
    */
   public function pressKeyInField(string $key, string $field): void {
-    if (!$this->browserSupportsJavaScript()) {
+    if (!$this->hasJavascriptSupport()) {
       throw new \Exception('This step requires JavaScript to run.');
     }
 
