@@ -23,16 +23,21 @@ Feature: Asset release "delete" functionality.
       | contact information | Yet another contact        |
       | collection          | Yet another collection     |
       | state               | validated                  |
-    And the following release:
-      | title               | Yet another release  |
-      | description         | A sample release     |
-      | documentation       | text.pdf             |
-      | release number      | 1                    |
-      | release notes       | Changed release      |
-      | is version of       | Yet another solution |
-      | owner               | Yet another owner    |
-      | contact information | Yet another contact  |
-      | state               | validated            |
+    And the following releases:
+      | title                | description          | documentation | release number | release notes   | is version of        | owner                | contact information  | state     |
+      | Yet another release  | A sample release     | text.pdf      | 1              | Changed release | Yet another solution | Yet another owner    | Yet another contact  | validated |
+      | No release           | A sample release     | text.pdf      | 1.2            | Changed release | Yet another solution | Yet another owner    | Yet another contact  | validated |
+      | Jinks                | A sample release     | text.pdf      | 3              | Changed release | Yet another solution | Yet another owner    | Yet another contact  | validated |
+    And users:
+      | Username        | E-mail                      | First name | Family name |
+      | Ronnie Holloway | Ronnie.holloway@example.com | Ronnie     | Holloway    |
+      | Felix Rusevelt  | Felix.Rusevelt@example.com  | Felix      | Rusevelt    |
+      | Nuno Mendes     | Nuno.Mendes@example.com     | Nuno       | Mendes      |
+    And the following solution user membership:
+      | solution             | user            | roles       |
+      | Yet another solution | Ronnie Holloway | owner       |
+      | Yet another solution | Felix Rusevelt  | facilitator |
+      | Yet another solution | Nuno Mendes     |             |
 
   Scenario: "Delete" action should redirect users to the parent solution.
     # Navigating through UI should redirect the user to the solution homepage.
@@ -41,3 +46,12 @@ Feature: Asset release "delete" functionality.
     And I click "Delete"
     And I press "Delete"
     Then I should be on "/collection/yet-another-collection/solution/yet-another-solution"
+
+  Scenario: Allow solution owners to "delete" their own releases.
+    When I am logged in as "Ronnie Holloway"
+    And I go to the edit form of the "Yet another release" release
+    And I should see the link "Delete"
+
+    When I am logged in as "Felix Rusevelt"
+    And I go to the edit form of the "Yet another release" release
+    And I should not see the link "Delete"
