@@ -17,9 +17,45 @@ declare(strict_types = 1);
 use Drupal\interoperable_europe\InteroperableEuropeCollectionInterface;
 
 /**
+ * Clears TRR fields for potential cases.
+ */
+function joinup_core_deploy_0108700(array &$sandbox): void {
+  $field_predicates = [
+    'http://joinup.ec.europa.eu/trr#actor',
+    'http://joinup.ec.europa.eu/trr#businessProcess',
+    'http://joinup.ec.europa.eu/trr#productType',
+    'http://joinup.ec.europa.eu/trr#StandardizationLevel',
+    'http://joinup.eu/test_resource_type',
+  ];
+  $sparql = \Drupal::getContainer()->get('sparql.endpoint');
+  $graphs = [
+    '<http://joinup.eu/solution/published>',
+    '<http://joinup.eu/solution/draft>',
+  ];
+  foreach ($graphs as $graph) {
+    foreach ($field_predicates as $field_predicate) {
+      $query = <<<QUERY
+WITH {$graph}
+DELETE { ?entity_id <{$field_predicate}> ?value }
+WHERE {
+    ?entity_id a ?type .
+    FILTER NOT EXISTS {
+      ?entity_id <http://purl.org/dc/terms/type> ?trr_value .
+      VALUES ?trr_value { <http://data.europa.eu/dr8/ConformanceTestingComponent> <http://data.europa.eu/dr8/ConformanceTestingService> <http://data.europa.eu/dr8/ConformanceTestScenario> }
+    }
+    ?entity_id <{$field_predicate}> ?value
+}
+QUERY;
+      $sparql->query($query);
+    }
+  }
+}
+
+
+/**
  * Import new landing page.
  */
-function joinup_core_deploy_0108700(): void {
+function joinup_core_deploy_0108701(): void {
   /** @var \Drupal\Core\Extension\ModuleInstallerInterface $module_installer */
   $module_installer = \Drupal::service('module_installer');
   /** @var \Drupal\Core\Entity\EntityRepositoryInterface $entity_repository */
@@ -50,7 +86,7 @@ function joinup_core_deploy_0108700(): void {
 /**
  * Update path alias IOPE.
  */
-function joinup_core_deploy_0108701(): void {
+function joinup_core_deploy_0108702(): void {
   /** @var \Drupal\collection\Entity\CollectionInterface $collection */
   $collection = \Drupal::entityTypeManager()
     ->getStorage('rdf_entity')

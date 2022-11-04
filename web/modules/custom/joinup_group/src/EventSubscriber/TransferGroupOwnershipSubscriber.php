@@ -78,8 +78,8 @@ class TransferGroupOwnershipSubscriber implements EventSubscriberInterface {
    */
   public function alterRedirection(ResponseEvent $event): void {
     $response = $event->getResponse();
-    if ($response->isRedirect() && $response instanceof RedirectResponse) {
-      $path = rtrim(parse_url($response->getTargetUrl(), PHP_URL_PATH), '/');
+    if ($response->isRedirect() && $response instanceof RedirectResponse && ($path = parse_url($response->getTargetUrl(), PHP_URL_PATH))) {
+      $path = rtrim($path, '/');
       $path = substr($path, strlen(base_path()));
 
       /** @var \Symfony\Component\HttpFoundation\RedirectResponse $response */
