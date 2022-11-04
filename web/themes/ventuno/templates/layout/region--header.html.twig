@@ -21,46 +21,44 @@
     </div>
   </nav>
 </div>
-<header role="banner" class="region-header">
-  {% set items = logged_in ? [{
-    breakpoint: "lg",
-    classes: ["order-1"],
-    id: "landing-pages",
-    icon: { name: "justify" },
-    label: "Toggle menu"|t,
-    links: landing_page_links,
-  }] : [] %}
+{% set items = logged_in ? [{
+  breakpoint: "lg",
+  classes: ["order-1"],
+  id: "landing-pages",
+  icon: { name: "justify" },
+  label: "Toggle menu"|t,
+  links: landing_page_links,
+}] : [] %}
+{% set items = items|merge([{
+  breakpoint: logged_in ? "" : "lg",
+  id: logged_in ? "account" : "navbar-toggler",
+  icon: {
+    name: logged_in ? "person-circle" : "justify",
+  },
+  label: logged_in ? user_name : "Toggle menu"|t,
+  links: logged_in ? profile_links : anonymous_links,
+}]) %}
+{% if not hide_searchbar %}
   {% set items = items|merge([{
-    breakpoint: logged_in ? "" : "lg",
-    id: logged_in ? "account" : "navbar-toggler",
+    type: "search",
+    breakpoint: "",
+    classes: ["order-1 dropdown-search"],
+    id: "search",
     icon: {
-      name: logged_in ? "person-circle" : "justify",
+      name: "search",
     },
-    label: logged_in ? user_name : "Toggle menu"|t,
-    links: logged_in ? profile_links : anonymous_links,
+    label: "Toggle search box"|t,
+    links: search,
   }]) %}
-  {% if not hide_searchbar %}
-    {% set items = items|merge([{
-      type: "search",
-      breakpoint: "",
-      classes: ["order-1 dropdown-search"],
-      id: "search",
-      icon: {
-        name: "search",
-      },
-      label: "Toggle search box"|t,
-      links: search,
-    }]) %}
-  {% endif %}
-  {% include directory ~ '/templates/navigation/navbar.html.twig' with {
-    brand: {
-      src: path('<front>') ~ "themes/ventuno/assets/images/logo.svg",
-      alt: "Joinup logo"|t,
-      link: path('<front>'),
-    },
-    collapse_id: "main-navbar",
-    list_id: "main-navbar-list",
-    items: items,
-    search: hide_searchbar ? '' : content,
-  } %}
-</header>
+{% endif %}
+{% include directory ~ '/templates/navigation/navbar.html.twig' with {
+  brand: {
+    src: path('<front>') ~ "themes/ventuno/assets/images/logo.svg",
+    alt: "Joinup logo"|t,
+    link: path('<front>'),
+  },
+  collapse_id: "main-navbar",
+  list_id: "main-navbar-list",
+  items: items,
+  search: hide_searchbar ? '' : content,
+} %}
