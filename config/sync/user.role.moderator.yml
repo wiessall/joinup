@@ -106,7 +106,7 @@ permissions:
   - 'create rdf entity news'
   - 'create solution_banner media'
   - 'create solution_logo media'
-  - 'create videos media'
+  - 'create video media'
   - 'delete any collection_banner media'
   - 'delete any collection_logo media'
   - 'delete any document content'

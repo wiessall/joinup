@@ -7,7 +7,7 @@ dependencies:
     - media.type.file
   module:
     - file
-id: media.files.field_media_file
+id: media.file.field_media_file
 field_name: field_media_file
 entity_type: media
 bundle: file

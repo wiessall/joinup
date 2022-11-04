@@ -139,5 +139,5 @@ filters:
       default_view_mode: default
       allowed_view_modes: {  }
       allowed_media_types:
-        files: files
-        videos: videos
+        file: file
+        video: video
