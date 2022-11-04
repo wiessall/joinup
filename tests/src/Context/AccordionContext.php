@@ -60,24 +60,28 @@ class AccordionContext extends RawDrupalContext {
    *   When the accordion section with the given label was not found.
    */
   protected function toggleAccordionSection(string $section, bool $expand): void {
+    if (!$this->hasJavascriptSupport()) {
+      return;
+    }
+
     $session = $this->getSession();
     $page = $session->getPage();
     if (!$button = $page->findButton($section)) {
       throw new ElementNotFoundException($session->getDriver(), 'button', 'label', $section);
     }
-    $is_collapsed = $button->hasClass('collapsed');
-    if (($expand && !$is_collapsed) || (!$expand && $is_collapsed)) {
+
+    if ($expand xor $button->hasClass('collapsed')) {
       $state = $expand ? 'expanded' : 'collapsed';
       throw new \Exception("The '$section' accordion section is already $state");
     }
+
     $this->scrollElementIntoView($button);
     $button->press();
-    if ($this->hasJavascriptSupport()) {
-      $this->waitUntil(function () use ($button, $expand): bool {
-        $is_collapsed = $button->hasClass('collapsed');
-        return ($expand && !$is_collapsed) || (!$expand && $is_collapsed);
-      });
-    }
+    // @todo Disable animations and perform an instant expand/collapse.
+    $this->waitUntil(function () use ($button, $expand): bool {
+      return $expand xor $button->hasClass('collapsed');
+    });
+    sleep(1);
   }
 
   /**
