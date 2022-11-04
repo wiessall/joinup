@@ -22,8 +22,6 @@ use Drupal\DrupalExtension\TagTrait;
 use Drupal\image\Plugin\Field\FieldType\ImageItem;
 use Drupal\joinup\HtmlManipulator;
 use Drupal\joinup\Traits\AntibotTrait;
-use Drupal\joinup\Traits\BrowserCapabilityDetectionTrait;
-use Drupal\joinup\Traits\BrowserWindowTrait;
 use Drupal\joinup\Traits\ContextualLinksTrait;
 use Drupal\joinup\Traits\EntityTrait;
 use Drupal\joinup\Traits\JavascriptTrait;
@@ -49,8 +47,6 @@ use WebDriver\Key;
 class FeatureContext extends RawDrupalContext implements SnippetAcceptingContext {
 
   use AntibotTrait;
-  use BrowserCapabilityDetectionTrait;
-  use BrowserWindowTrait;
   use ContextualLinksTrait;
   use EntityTrait;
   use JavascriptTrait;
@@ -902,8 +898,8 @@ class FeatureContext extends RawDrupalContext implements SnippetAcceptingContext
    */
   public function clickVerticalTabLink(string $tab): void {
     // When this is running in a browser without JavaScript the vertical tabs
-    // are rendered as a details element.
-    if (!$this->browserSupportsJavaScript()) {
+    // are rendered as detail elements.
+    if (!$this->hasJavascriptSupport()) {
       return;
     }
 

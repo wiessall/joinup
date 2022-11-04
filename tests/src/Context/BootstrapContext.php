@@ -5,14 +5,14 @@ declare(strict_types = 1);
 namespace Drupal\joinup\Context;
 
 use Drupal\DrupalExtension\Context\RawDrupalContext;
-use Drupal\joinup\Traits\BrowserCapabilityDetectionTrait;
+use Drupal\joinup\Traits\JavascriptTrait;
 
 /**
  * Step definitions for interacting with pages using the Bootstrap framework.
  */
 class BootstrapContext extends RawDrupalContext {
 
-  use BrowserCapabilityDetectionTrait;
+  use JavascriptTrait;
 
   /**
    * Some common screen resolutions, mapped on Bootstrap breakpoints.
