@@ -46,7 +46,13 @@ class OgMembershipSubscriber extends NotificationSubscriberBase {
   protected function initialize(NotificationEvent $event): void {
     /** @var \Drupal\og\Entity\OgMembership $membership */
     $this->membership = $event->getEntity();
-    $this->entity = $this->membership->getGroup();
+    try {
+      $this->entity = $this->membership->getGroup();
+    }
+    catch (\TypeError $exception) {
+      // The group might have been deleted.
+    }
+
     $this->operation = $event->getOperation();
   }
 
@@ -86,6 +92,10 @@ class OgMembershipSubscriber extends NotificationSubscriberBase {
    */
   protected function appliesOnCreate(): bool {
     if ($this->operation !== 'create') {
+      return FALSE;
+    }
+
+    if (!$this->membership->getGroup()) {
       return FALSE;
     }
 
@@ -131,6 +141,10 @@ class OgMembershipSubscriber extends NotificationSubscriberBase {
    */
   protected function appliesOnUpdate(): bool {
     if ($this->operation !== 'update') {
+      return FALSE;
+    }
+
+    if (!$this->membership->getGroup()) {
       return FALSE;
     }
 
