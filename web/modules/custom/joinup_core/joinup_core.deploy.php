@@ -51,7 +51,6 @@ QUERY;
   }
 }
 
-
 /**
  * Import new landing page.
  */

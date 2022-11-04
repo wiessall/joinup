@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d7ccb4e308209cdef0e43a19e11d1f7e",
+    "content-hash": "fda92fc9692e675cab3085b91af23575",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -4684,16 +4684,12 @@
             ],
             "authors": [
                 {
-                    "name": "Grayside",
-                    "homepage": "https://www.drupal.org/user/346868"
-                },
-                {
-                    "name": "RoySegall",
-                    "homepage": "https://www.drupal.org/user/1812910"
-                },
-                {
                     "name": "amitaibu",
                     "homepage": "https://www.drupal.org/user/57511"
+                },
+                {
+                    "name": "Grayside",
+                    "homepage": "https://www.drupal.org/user/346868"
                 },
                 {
                     "name": "itamar",
@@ -4702,6 +4698,10 @@
                 {
                     "name": "jhedstrom",
                     "homepage": "https://www.drupal.org/user/208732"
+                },
+                {
+                    "name": "RoySegall",
+                    "homepage": "https://www.drupal.org/user/1812910"
                 }
             ],
             "description": "Message",
@@ -4811,16 +4811,16 @@
             ],
             "authors": [
                 {
-                    "name": "RoySegall",
-                    "homepage": "https://www.drupal.org/user/1812910"
-                },
-                {
                     "name": "amitaibu",
                     "homepage": "https://www.drupal.org/user/57511"
                 },
                 {
                     "name": "jhedstrom",
                     "homepage": "https://www.drupal.org/user/208732"
+                },
+                {
+                    "name": "RoySegall",
+                    "homepage": "https://www.drupal.org/user/1812910"
                 }
             ],
             "description": "Notification framework for the Message module",
@@ -4878,10 +4878,6 @@
             ],
             "authors": [
                 {
-                    "name": "RoySegall",
-                    "homepage": "https://www.drupal.org/user/1812910"
-                },
-                {
                     "name": "amitaibu",
                     "homepage": "https://www.drupal.org/user/57511"
                 },
@@ -4892,6 +4888,10 @@
                 {
                     "name": "jhedstrom",
                     "homepage": "https://www.drupal.org/user/208732"
+                },
+                {
+                    "name": "RoySegall",
+                    "homepage": "https://www.drupal.org/user/1812910"
                 }
             ],
             "description": "Subscription API for the Message and Message notify modules",
