@@ -278,9 +278,6 @@
             "drupal/drupal-driver": {
                 "Allow multi-property references. @see https://github.com/jhedstrom/DrupalDriver/pull/252": "resources/patch/drupal/drupal-driver/252.diff"
             },
-            "drupal/drupal-extension": {
-                "https://github.com/jhedstrom/drupalextension/pull/602": "https://patch-diff.githubusercontent.com/raw/jhedstrom/drupalextension/pull/602.diff"
-            },
             "drupal/editor_file": {
                 "Wrong file upload size when max upload left empty. @see https://www.drupal.org/i/3300142": "https://www.drupal.org/files/issues/2022-07-27/editor_file-fix_max_file_upload_empty-3300142-2.patch",
                 "Uploaded files are not permanent @see https://www.drupal.org/i/3057895": "https://www.drupal.org/files/issues/2019-05-29/file-upload-marked-permanent-3057895-2.patch"
