@@ -126,7 +126,7 @@
         "drupal/renderviz": "^1.0",
         "drupal/upgrade_status": "^3.14",
         "drupaltest/behat-one-time-login": "dev-drupal-extension as 1.0.999",
-        "ec-europa/toolkit": "^9.0",
+        "ec-europa/toolkit": "~9.0.0",
         "lovers-of-behat/table-extension": "dev-drop-behat-mink-extension",
         "mikey179/vfsstream": "~1.6",
         "palantirnet/drupal-rector": "^0.12.2",
