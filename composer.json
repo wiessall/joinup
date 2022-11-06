@@ -58,7 +58,7 @@
         "drupal/menu_link_destination": "^1.0",
         "drupal/message": "^1.1",
         "drupal/message_digest": "^1.0.0",
-        "drupal/message_notify": "~1.2",
+        "drupal/message_notify": "~1.3",
         "drupal/meta_entity": "^1.2",
         "drupal/monolog": "^2.0",
         "drupal/og": "^1.0-alpha8",
@@ -164,7 +164,8 @@
             "cweagans/composer-patches": true,
             "composer/installers": true,
             "drupal/core-composer-scaffold": true,
-            "openeuropa/composer-artifacts": true
+            "openeuropa/composer-artifacts": true,
+            "phpstan/extension-installer": true
         }
     },
     "autoload": {
@@ -247,12 +248,12 @@
                 "Use READ COMMITTED by default for MySQL transactions @see https://www.drupal.org/project/drupal/issues/1650930": "https://git.drupalcode.org/project/drupal/-/merge_requests/2394.diff",
                 "Allow image style to be selected in text editor @see https://www.drupal.org/node/2061377": "https://git.drupalcode.org/project/drupal/-/merge_requests/2344.diff",
                 "Allow making the file description a required field @see https://www.drupal.org/node/2320877": "https://git.drupalcode.org/project/drupal/-/merge_requests/975.diff",
-                "Delete should not be the default action on /admin/content @see https://www.drupal.org/project/drupal/issues/2381293": "https://git.drupalcode.org/project/drupal/-/merge_requests/1670.diff",
+                "Delete should not be the default action on /admin/content @see https://www.drupal.org/project/drupal/issues/2381293": "resources/patch/drupal/core/2381293.diff",
                 "Regression: Do not bypass route access with 'link to any page' permissions for menu links @see https://www.drupal.org/project/drupal/issues/2463753": "https://www.drupal.org/files/issues/2021-09-15/2463753-87_0.patch",
                 "Upcast named arguments/named parameters in views @see https://www.drupal.org/project/drupal/issues/2528166": "https://git.drupalcode.org/project/drupal/-/merge_requests/1323.diff",
                 "Confirmation cancel links are incorrect if installed in a subdirectory @see https://www.drupal.org/project/drupal/issues/2582295": "https://www.drupal.org/files/issues/2021-08-23/2582295-52.patch",
                 "Allow plurals on bundle labels @see https://www.drupal.org/node/2765065": "https://git.drupalcode.org/project/drupal/-/merge_requests/1652.diff",
-                "Enlarge file_usage entity ID length. @see https://www.drupal.org/node/2675600": "https://www.drupal.org/files/issues/2675600-30.patch",
+                "Enlarge file_usage entity ID length. @see https://www.drupal.org/node/2675600": "resources/patch/drupal/core/2675600.diff",
                 "Menu link plugins should provide a way for the link to be conditionally hidden @see https://www.drupal.org/project/drupal/issues/2719609": "https://www.drupal.org/files/issues/2719609-2.patch",
                 "New option for Views page displays to use the admin theme @see https://www.drupal.org/node/2719797": "https://www.drupal.org/files/issues/2022-09-20/2719797-144.patch",
                 "Make the tab active when the fragment is present in URL @see https://www.drupal.org/project/drupal/issues/2752511": "https://www.drupal.org/files/issues/2022-06-17/2752511-109-9.5.x.patch",
@@ -308,7 +309,7 @@
                 "Ensure backward compatibility with Piwik @see https://www.drupal.org/project/matomo_reporting_api/issues/3080854": "https://www.drupal.org/files/issues/2019-09-18/3080854-7.patch"
             },
             "drupal/message_notify": {
-                "Allow 3rd-party to act before delivery @see https://www.drupal.org/project/message_notify/issues/3314370": "resources/patch/message_notify-diff-8.x-1.2-3314370.diff"
+                "Allow 3rd-party to act before delivery @see https://www.drupal.org/project/message_notify/issues/3314370": "resources/patch/drupal/message_notify/3314370.diff"
             },
             "drupal/meta_entity": {
                 "Make the field configurable in the view @see https://www.drupal.org/project/meta_entity/issues/3279161": "https://git.drupalcode.org/project/meta_entity/-/merge_requests/4.diff",
