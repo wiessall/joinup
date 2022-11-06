@@ -260,7 +260,7 @@ display:
     display_options:
       display_extenders: {  }
       path: admin/curated-content-listings
-      always_use_admin_theme: false
+      use_admin_theme: false
     cache_metadata:
       max-age: -1
       contexts:
