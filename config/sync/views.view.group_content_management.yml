@@ -17,6 +17,7 @@ dependencies:
   module:
     - csv_serialization
     - joinup_group
+    - joinup_group_content_management
     - node
     - rest
     - serialization
@@ -1142,7 +1143,7 @@ display:
           group_type: group
           admin_label: ''
           entity_type: node
-          plugin_id: entity_link
+          plugin_id: accessible_entity_link
           label: URL
           exclude: false
           alter:
@@ -1185,7 +1186,6 @@ display:
           empty_zero: false
           hide_alter_empty: true
           text: view
-          bypass_access_check: true
           output_url_as_text: true
           absolute: true
       pager:

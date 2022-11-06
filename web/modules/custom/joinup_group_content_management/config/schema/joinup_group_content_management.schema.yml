@@ -1,0 +1,3 @@
+views.field.accessible_entity_link:
+  type: views.field.entity_link
+  label: 'Accessible entity link'
