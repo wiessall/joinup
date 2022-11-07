@@ -6,7 +6,7 @@
 #}
 {% block content %}
   {% set title %}
-    <a class="fs-5 fw-normal text-underline-hover mb-3" href="{{ url }}">{{ label|raw }}</a>
+    <a class="fs-5 fw-normal text-underline-hover mb-3" href="{{ url }}">{{ label|raw }} | {{ content.field_isr_release_number|render|striptags }}</a>
   {% endset %}
   {% set metadata %}
     <span class="text-muted text-nowrap me-4">{{ type }}</span><span class="text-muted text-nowrap me-4">{{ creation }}</span><span class="text-muted text-nowrap me-4">{{ changed }}</span>
