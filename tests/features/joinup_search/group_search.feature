@@ -218,7 +218,7 @@ Feature: Search inside groups
     And the page should show the tiles "Ground plan, Materials natural"
     When I remove the following facet summary "Chalet construction"
     Then the page should not contain any facet summary
-    And the page should show the tiles "Ground plan, Pre-alpha, Materials natural, Presenting DrillMaster X88"
+    And the page should show the tiles "Ground plan, Pre-alpha | 0.0-alpha0, Materials natural, Presenting DrillMaster X88"
 
   @javascript
   Scenario: Group filter chips appear in search bar after selecting them in facets
