@@ -6,21 +6,19 @@
 ((Drupal, once) => {
   Drupal.behaviors.joinupMediaCKEditor = {
     attach: function attach(context) {
-      once(
-        "mediaLabelAlter",
-        "div.field--widget-text-textarea",
-        context
-      ).forEach((element) => {
-        window.addEventListener("load", () => {
-          const button = element.querySelector(
-            'button[data-cke-tooltip-text="Insert Drupal Media"]'
-          );
-          button.setAttribute(
-            "data-cke-tooltip-text",
-            Drupal.t("Insert Media")
-          );
-        });
-      });
+      once("mediaLabelAlter", "div.js-text-format-wrapper", context).forEach(
+        (element) => {
+          window.addEventListener("load", () => {
+            const button = element.querySelector(
+              'button[data-cke-tooltip-text="Insert Drupal Media"]'
+            );
+            button.setAttribute(
+              "data-cke-tooltip-text",
+              Drupal.t("Insert Media")
+            );
+          });
+        }
+      );
     },
   };
 })(Drupal, once);
