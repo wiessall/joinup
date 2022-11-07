@@ -24,7 +24,3 @@ services:
     class: Drupal\joinup_core\PathProcessor\IdRedirectUuidProcessor
     tags:
       - { name: path_processor_inbound, priority: 200 }
-
-  video_field_migrate.migrate:
-    class: Drupal\joinup_core\VideoFieldMigrate
-    arguments: ['@config.factory', '@entity_type.manager', '@entity_display.repository']
