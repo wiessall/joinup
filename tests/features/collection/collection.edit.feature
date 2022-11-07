@@ -53,7 +53,7 @@ Feature: Editing collections
 
     When I open the header local tasks menu
     And I click "Edit" in the "Entity actions" region
-    And I press the button "Insert Drupal Media" in the "Description" wysiwyg editor
+    And I press the button "Insert Media" in the "Description" wysiwyg editor
     Then I wait for AJAX to finish
     And a modal should open
     And I click "Video"
@@ -80,7 +80,7 @@ Feature: Editing collections
 
     When I open the header local tasks menu
     And I click "Edit" in the "Entity actions" region
-    And I press the button "Insert Drupal Media" in the "Description" wysiwyg editor
+    And I press the button "Insert Media" in the "Description" wysiwyg editor
     Then I wait for AJAX to finish
     And a modal should open
     And I click "File"
