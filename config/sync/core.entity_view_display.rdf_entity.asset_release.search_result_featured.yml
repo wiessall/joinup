@@ -55,7 +55,7 @@ content:
     third_party_settings:
       template_suggestion:
         template_suggestion: ''
-    weight: 4
+    weight: 3
     region: content
   created:
     type: timestamp
@@ -67,7 +67,7 @@ content:
     third_party_settings:
       template_suggestion:
         template_suggestion: ''
-    weight: 3
+    weight: 2
     region: content
   field_isr_affiliations_requests:
     type: entity_reference_label
@@ -166,15 +166,7 @@ content:
     third_party_settings:
       template_suggestion:
         template_suggestion: ''
-    weight: 2
-    region: content
-  field_isr_release_number:
-    type: string
-    label: hidden
-    settings:
-      link_to_entity: false
-    third_party_settings: {  }
-    weight: 6
+    weight: 1
     region: content
   field_isr_source_code_repository:
     type: link
@@ -236,7 +228,7 @@ content:
         offset: 0
       template_suggestion:
         template_suggestion: ''
-    weight: 5
+    weight: 4
     region: content
   label:
     type: string
@@ -259,6 +251,7 @@ hidden:
   field_isr_language: true
   field_isr_owner: true
   field_isr_related_solutions: true
+  field_isr_release_number: true
   field_isr_solution_type: true
   field_isr_state: true
   field_isr_translation: true
