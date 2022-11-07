@@ -54,7 +54,7 @@ QUERY;
 /**
  * Migrate Video content into new Media field.
  */
-function joinup_core_deploy_0108701(): string {
+function joinup_core_deploy_0108702(array &$sandbox): string {
   if (empty($sandbox['ids'])) {
     $sandbox['ids'] = \Drupal::entityQuery('node')->condition('type', 'video')->execute();
     $sandbox['count'] = 0;
@@ -102,24 +102,26 @@ function migrate_field(MediaType $mediaType, string $refFieldName, string $entit
   /** @var \Drupal\Core\Entity\ContentEntityBase $targetEntity */
   $targetEntity = $storage->load($id);
   $videoUrl = $targetEntity->get($legacyField)->value;
-  $result = $mediaStorage->getQuery()
-    ->condition('bundle', $mediaType->id())
-    ->condition($sourceField->getName(), $videoUrl)
-    ->execute();
-  if (empty($result)) {
-    $videoMedia = $mediaStorage->create([
-      'bundle' => $mediaType->id(),
-      $sourceField->getName() => [
-        'value' => $videoUrl,
-      ],
-    ]);
-    $videoMedia->setOwnerId($targetEntity->getOwner()->id());
-    $videoMedia->save();
+  if ($videoUrl) {
+    $result = $mediaStorage->getQuery()
+      ->condition('bundle', $mediaType->id())
+      ->condition($sourceField->getName(), $videoUrl)
+      ->execute();
+    if (empty($result)) {
+      $videoMedia = $mediaStorage->create([
+        'bundle' => $mediaType->id(),
+        $sourceField->getName() => [
+          'value' => $videoUrl,
+        ],
+      ]);
+      $videoMedia->setOwnerId($targetEntity->getOwner()->id());
+      $videoMedia->save();
+    }
+    else {
+      $videoMedia = $mediaStorage->load(reset($result));
+    }
+    $fieldValues[] = ['target_id' => $videoMedia->id()];
+    $targetEntity->set($refFieldName, $fieldValues);
+    $targetEntity->save();
   }
-  else {
-    $videoMedia = $mediaStorage->load(reset($result));
-  }
-  $fieldValues[] = ['target_id' => $videoMedia->id()];
-  $targetEntity->set($refFieldName, $fieldValues);
-  $targetEntity->save();
 }
