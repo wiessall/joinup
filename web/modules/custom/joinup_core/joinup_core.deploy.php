@@ -14,6 +14,8 @@
 
 declare(strict_types = 1);
 
+use Drupal\media\Entity\MediaType;
+
 /**
  * Clears TRR fields for potential cases.
  */
@@ -52,31 +54,72 @@ QUERY;
 /**
  * Migrate Video content into new Media field.
  */
-function joinup_core_deploy_0108701(): void {
-  /** @var \Drupal\joinup_core\VideoFieldMigrate $videoEmbedMigrate */
-  $videoEmbedMigrate = \Drupal::service('video_field_migrate.migrate');
-
-  $refFieldName = 'video';
-  $fields = $videoEmbedMigrate->findFieldsToMigrate();
-  foreach ($fields as $index => $field) {
-    $values = $videoEmbedMigrate->getFieldValues($field['field_name'], $field['entity_type'], $field['bundle']);
-    $fields[$index]['values'] = $values;
+function joinup_core_deploy_0108701(): string {
+  if (empty($sandbox['ids'])) {
+    $sandbox['ids'] = \Drupal::entityQuery('node')->condition('type', 'video')->execute();
+    $sandbox['count'] = 0;
+    $sandbox['max'] = count($sandbox['ids']);
+  }
+  $entity_type_manager = \Drupal::entityTypeManager();
+  $entity_storage = $entity_type_manager->getStorage('node');
+  $media_type = $entity_type_manager->getStorage('media_type')->loadByProperties(['source' => 'video_embed_field']);
+  $media_type = reset($media_type);
+  $nids = array_splice($sandbox['ids'], 0, 50);
+  foreach ($entity_storage->loadMultiple($nids) as $node) {
+    migrate_field($media_type, 'video', 'node', (int) $node->id(), 'field_video');
+    $sandbox['count']++;
   }
 
-  $fieldsToMigrate = [];
-  foreach ($fields as $field) {
-    foreach ($field['values'] as $id => $value) {
-      $mediaType = $videoEmbedMigrate->getRemoteVideoMediaType('video_embed_field');
-      $fieldsToMigrate[] = [
-        'field_name' => $field['field_name'],
-        'entity_type' => $field['entity_type'],
-        'bundle' => $field['bundle'],
-        'target_id' => $id,
-        'media_type' => $mediaType,
-      ];
-    }
+  $sandbox['#finished'] = $sandbox['count'] === $sandbox['max'];
+  return "Migrate {$sandbox['count']} out of {$sandbox['max']} video embed field.";
+}
+
+/**
+ * Migrate Video Embed Field to Media.
+ *
+ * @param \Drupal\media\Entity\MediaType $mediaType
+ *   Media type.
+ * @param string $refFieldName
+ *   Field name.
+ * @param string $entityType
+ *   Entity type.
+ * @param int $id
+ *   Entity id.
+ * @param string $legacyField
+ *   Migration field.
+ *
+ * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
+ * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
+ * @throws \Drupal\Core\Entity\EntityStorageException
+ */
+function migrate_field(MediaType $mediaType, string $refFieldName, string $entityType, int $id, string $legacyField): void {
+  $entity_type_manager = \Drupal::entityTypeManager();
+  $mediaStorage = $entity_type_manager->getStorage('media');
+  $storage = $entity_type_manager->getStorage($entityType);
+  $sourceField = $mediaType->getSource()->getSourceFieldDefinition($mediaType);
+  $fieldValues = [];
+
+  /** @var \Drupal\Core\Entity\ContentEntityBase $targetEntity */
+  $targetEntity = $storage->load($id);
+  $videoUrl = $targetEntity->get($legacyField)->value;
+  $result = $mediaStorage->getQuery()
+    ->condition('bundle', $mediaType->id())
+    ->condition($sourceField->getName(), $videoUrl)
+    ->execute();
+  if (empty($result)) {
+    $videoMedia = $mediaStorage->create([
+      'bundle' => $mediaType->id(),
+      $sourceField->getName() => [
+        'value' => $videoUrl,
+      ],
+    ]);
+    $videoMedia->setOwnerId($targetEntity->getOwner()->id());
+    $videoMedia->save();
   }
-  foreach ($fieldsToMigrate as $field) {
-    $videoEmbedMigrate->migrateField($field['media_type'], $refFieldName, $field['entity_type'], $field['target_id'], $field['field_name']);
+  else {
+    $videoMedia = $mediaStorage->load(reset($result));
   }
+  $fieldValues[] = ['target_id' => $videoMedia->id()];
+  $targetEntity->set($refFieldName, $fieldValues);
+  $targetEntity->save();
 }
