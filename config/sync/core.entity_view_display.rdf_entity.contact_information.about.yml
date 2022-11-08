@@ -25,14 +25,15 @@ mode: about
 content:
   field_ci_email:
     type: email_contact_link
-    label: above
+    label: hidden
     settings:
-      link_text: 'Contact'
+      link_text: 'Contact us'
       redirection_to: custom
       custom_path: ''
       include_values: '1'
       default_message: ''
       modal: true
+      title: 'Contact us'
     third_party_settings:
       field_delimiter:
         delimiter: ''

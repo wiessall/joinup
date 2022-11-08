@@ -1,0 +1,88 @@
+<?php
+
+declare(strict_types = 1);
+
+namespace Drupal\contact_information\EventSubscriber;
+
+use Drupal\Component\Datetime\TimeInterface;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Http\RequestStack;
+use Drupal\cas\Event\CasPostLoginEvent;
+use Drupal\contact_information\Entity\ContactInformationInterface;
+use Drupal\joinup_group\EventSubscriber\RedirectedEuLoginAuthenticatedSubscriberBase;
+
+/**
+ * Redirects the user back to the group about page.
+ */
+class ContactInformationRedirectedEuLoginSubscriber extends RedirectedEuLoginAuthenticatedSubscriberBase {
+
+  /**
+   * The entity type manager service.
+   */
+  protected EntityTypeManagerInterface $entityTypeManager;
+
+  /**
+   * Constructs a new event subscriber instance.
+   *
+   * @param \Drupal\Component\Datetime\TimeInterface $time
+   *   The time keeping service.
+   * @param \Symfony\Component\HttpFoundation\RequestStack $request_stack
+   *   The request stack.
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
+   *   The entity type manager service.
+   */
+  public function __construct(TimeInterface $time, RequestStack $request_stack, EntityTypeManagerInterface $entity_type_manager) {
+    parent::__construct($time, $request_stack);
+    $this->entityTypeManager = $entity_type_manager;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function getCookieName(): ?string {
+    return 'email_contact_info';
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function getRedirectDestination(CasPostLoginEvent $event): ?string {
+    if (($contact_information = $this->getContactInformation()) && $contact_information->getRelatedGroup()) {
+      return parent::getRedirectDestination($event);
+    }
+    return NULL;
+  }
+
+  /**
+   * Returns the contact information entity referenced in the cookie.
+   *
+   * If the user who is logging in has previously indicated that they want to
+   * contact a group, a cookie is set which tracks a contact information entity
+   * to act on.
+   *
+   * If a cookie is set and turns out to contain invalid data, the cookie is
+   * deleted because it is possibly being tampered with.
+   *
+   * @return \Drupal\contact_information\Entity\ContactInformationInterface|null
+   *   The contact information entity that is referenced in the cookie, or NULL
+   *   in case no cookie is set, or the cookie contains invalid data.
+   */
+  protected function getContactInformation(): ?ContactInformationInterface {
+    if ($contact_information_id = $this->currentRequest->cookies->get($this->getCookieName())) {
+      /** @var \Drupal\Core\Entity\ContentEntityInterface $contact_information */
+      $contact_information = $this->entityTypeManager->getStorage('rdf_entity')->load($contact_information_id);
+      if ($contact_information instanceof ContactInformationInterface) {
+        return $contact_information;
+      }
+      // We are acting on user supplied data in a cookie. If the contact
+      // information entity cannot be loaded, or an exception occurs, possibly
+      // the cookie was tampered with. Do not allow any exceptions to bubble up
+      // since they could prevent the user from logging in until they manually
+      // clear their cookies. Instead, delete the cookie and carry on as if no
+      // cookie was set.
+      $this->deleteCookie();
+    }
+    return NULL;
+  }
+
+}
