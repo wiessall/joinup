@@ -1,8 +1,0 @@
-uuid: 5f17ad2e-c822-4545-a6ff-2bdcd13f3166
-langcode: en
-status: true
-dependencies: {  }
-id: iope
-label: 'Interoperable Europe'
-description: 'Interoperable Europe menu.'
-locked: false
