@@ -30,7 +30,7 @@ use Drupal\node\NodeInterface;
 /**
  * Implements hook_theme().
  */
-function joinup_core_theme($existing, $type, $theme, $path) {
+function joinup_core_theme(array $existing, string $type, string $theme, string $path): array {
   return [
     '404_not_found' => [
       'variables' => [

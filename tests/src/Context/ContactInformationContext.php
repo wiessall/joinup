@@ -8,8 +8,10 @@ use Behat\Gherkin\Node\TableNode;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\joinup\Traits\AliasTranslatorTrait;
 use Drupal\joinup\Traits\EntityTrait;
+use Drupal\joinup\Traits\MailCollectorTrait;
 use Drupal\joinup\Traits\RdfEntityTrait;
 use Drupal\joinup\Traits\SearchTrait;
+use Drupal\joinup\Traits\TestingEntitiesTrait;
 use Drupal\joinup\Traits\UserTrait;
 use Drupal\rdf_entity\RdfInterface;
 
@@ -20,16 +22,11 @@ class ContactInformationContext extends RawDrupalContext {
 
   use AliasTranslatorTrait;
   use EntityTrait;
+  use MailCollectorTrait;
   use RdfEntityTrait;
   use SearchTrait;
+  use TestingEntitiesTrait;
   use UserTrait;
-
-  /**
-   * Test contact information rdf entities.
-   *
-   * @var \Drupal\rdf_entity\Entity\Rdf[]
-   */
-  protected $contactInformations = [];
 
   /**
    * Navigates to the canonical page display of a contact information entity.
@@ -136,28 +133,6 @@ class ContactInformationContext extends RawDrupalContext {
   }
 
   /**
-   * Remove any created contact information entities.
-   *
-   * @AfterScenario
-   */
-  public function cleanContactInformationEntities(): void {
-    if (empty($this->contactInformations)) {
-      return;
-    }
-
-    // Since we might be cleaning up many informations, temporarily disable the
-    // feature to commit the index after every query.
-    $this->disableCommitOnUpdate();
-
-    foreach ($this->contactInformations as $entity) {
-      $entity->skip_notification = TRUE;
-      $entity->delete();
-    }
-    $this->contactInformations = [];
-    $this->enableCommitOnUpdate();
-  }
-
-  /**
    * Creates a contact information from the given property and field data.
    *
    * @param array $values
@@ -176,7 +151,7 @@ class ContactInformationContext extends RawDrupalContext {
     }
 
     $entity = $this->createRdfEntity('contact_information', $this->parseRdfEntityFields($values));
-    $this->contactInformations[$entity->id()] = $entity;
+    $this->entities['rdf_entity'][$entity->id()] = $entity;
 
     return $entity;
   }
@@ -196,6 +171,49 @@ class ContactInformationContext extends RawDrupalContext {
       'website url' => 'field_ci_webpage',
       'author' => 'uid',
     ];
+  }
+
+  /**
+   * Clicks the validate contact info link found in an email.
+   *
+   * @param string $mail
+   *   The recipient E-mail address.
+   *
+   * @throws \Exception
+   *   Thrown when a user is not found.
+   *
+   * @When I click the validate contact info email from the last email sent to :mail
+   */
+  public function clickValidateContactInfoInEmail(string $mail): void {
+    $pattern = '#\[(?<url>https?://[^/].*' . base_path() . 'email-confirmer/reply/[^/].*/[^]].*)\]#';
+    $no_mail_message = "No email was sent to $mail containing a validate contact info link.";
+    $no_match_message = "The email sent to $mail did not contain a valid validate contact info link.";
+    $this->assertMailLinkMatchingPattern($pattern, $mail, $no_mail_message, $no_match_message, 'confirmation_request');
+  }
+
+  /**
+   * Validates the emails of given list of contact information entities.
+   *
+   * @param \Behat\Gherkin\Node\TableNode $contact_info_list
+   *   A list of contact information labels.
+   *
+   * @Given the following contact information emails are validated:
+   */
+  public function validateContactInformationEmails(TableNode $contact_info_list): void {
+    /** @var \Drupal\email_confirmer\EmailConfirmerManagerInterface $email_confirmer */
+    $email_confirmer = \Drupal::service('email_confirmer');
+    foreach ($contact_info_list->getColumn(0) as $label) {
+      /** @var \Drupal\contact_information\Entity\ContactInformationInterface $contact_info */
+      $contact_info = $this->getEntityByLabel('rdf_entity', $label, 'contact_information');
+      $email_field = $contact_info->get('field_ci_email');
+      if (!$email_field->isEmpty()) {
+        $confirmation = $email_confirmer->createConfirmation($email_field->value);
+        if (!$confirmation->confirm($confirmation->getHash())) {
+          throw new \RuntimeException("Failed to confirm {$email_field->value}");
+        }
+        $confirmation->save();
+      }
+    }
   }
 
 }
