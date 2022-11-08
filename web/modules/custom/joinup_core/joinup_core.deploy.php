@@ -99,51 +99,51 @@ function joinup_core_deploy_108702(array &$sandbox): string {
 /**
  * Migrate Video Embed Field to Media.
  *
- * @param \Drupal\media\Entity\MediaType $mediaType
+ * @param \Drupal\media\Entity\MediaType $media_type
  *   Media type.
- * @param string $refFieldName
+ * @param string $ref_field_name
  *   Field name.
- * @param string $entityType
+ * @param string $entity_type
  *   Entity type.
  * @param int $id
  *   Entity id.
- * @param string $legacyField
+ * @param string $legacy_field
  *   Migration field.
  *
  * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
  * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
  * @throws \Drupal\Core\Entity\EntityStorageException
  */
-function _joinup_core_deploy_migrate_field(MediaType $mediaType, string $refFieldName, string $entityType, int $id, string $legacyField): void {
+function _joinup_core_deploy_migrate_field(MediaType $media_type, string $ref_field_name, string $entity_type, int $id, string $legacy_field): void {
   $entity_type_manager = \Drupal::entityTypeManager();
-  $mediaStorage = $entity_type_manager->getStorage('media');
-  $storage = $entity_type_manager->getStorage($entityType);
-  $sourceField = $mediaType->getSource()->getSourceFieldDefinition($mediaType);
-  $fieldValues = [];
+  $media_storage = $entity_type_manager->getStorage('media');
+  $storage = $entity_type_manager->getStorage($entity_type);
+  $source_field = $media_type->getSource()->getSourceFieldDefinition($media_type);
+  $field_values = [];
 
-  /** @var \Drupal\Core\Entity\ContentEntityBase $targetEntity */
-  $targetEntity = $storage->load($id);
-  $videoUrl = $targetEntity->get($legacyField)->value;
-  if ($videoUrl) {
-    $result = $mediaStorage->getQuery()
-      ->condition('bundle', $mediaType->id())
-      ->condition($sourceField->getName(), $videoUrl)
+  /** @var \Drupal\Core\Entity\ContentEntityBase $target_entity */
+  $target_entity = $storage->load($id);
+  $video_url = $target_entity->get($legacy_field)->value;
+  if ($video_url) {
+    $result = $media_storage->getQuery()
+      ->condition('bundle', $media_type->id())
+      ->condition($source_field->getName(), $video_url)
       ->execute();
     if (empty($result)) {
-      $videoMedia = $mediaStorage->create([
-        'bundle' => $mediaType->id(),
-        $sourceField->getName() => [
-          'value' => $videoUrl,
+      $video_media = $media_storage->create([
+        'bundle' => $media_type->id(),
+        $source_field->getName() => [
+          'value' => $video_url,
         ],
       ]);
-      $videoMedia->setOwnerId($targetEntity->getOwner()->id());
-      $videoMedia->save();
+      $video_media->setOwnerId($target_entity->getOwner()->id());
+      $video_media->save();
     }
     else {
-      $videoMedia = $mediaStorage->load(reset($result));
+      $video_media = $media_storage->load(reset($result));
     }
-    $fieldValues[] = ['target_id' => $videoMedia->id()];
-    $targetEntity->set($refFieldName, $fieldValues);
-    $targetEntity->save();
+    $field_values[] = ['target_id' => $video_media->id()];
+    $target_entity->set($ref_field_name, $field_values);
+    $target_entity->save();
   }
 }
