@@ -4,6 +4,7 @@ status: true
 dependencies:
   module:
     - joinup_core
+    - node
   theme:
     - ventuno
 id: glossary_term
@@ -16,3 +17,10 @@ conditions:
     negate: false
     routes:
       - entity.node.canonical
+  node_type:
+    id: node_type
+    negate: false
+    context_mapping:
+      node: '@node.node_route_context:node'
+    bundles:
+      glossary: glossary
