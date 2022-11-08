@@ -109,7 +109,7 @@
         "openeuropa/oe_webtools": "^1.19",
         "openeuropa/webtools-geocoding-provider": "~0.1",
         "semiceu/adms-ap_validator": "1.0.0-alpha1",
-        "sweetrdf/easyrdf": "dev-add-replace-to-composer.json"
+        "sweetrdf/easyrdf": "^1.7.1"
     },
     "require-dev": {
         "ext-fileinfo": "*",
