@@ -60,7 +60,6 @@ Feature: Notification test for the news transitions on a post moderated parent.
     When I fill in "Motivation" with "Can you do some changes?"
     And I press "Request changes"
     Then the email sent to "CC member" with subject "Joinup: Content has been updated" contains the following lines of text:
-      | text                                                                                                                                                                                                  |
       | the Facilitator, CC Facilitator has requested you to modify the news - "CCN post request changes" in the collection: "CC post collection", with the following motivation: "Can you do some changes?". |
       | If you think this action is not clear or not due, please contact Joinup Support at                                                                                                                    |
 
@@ -72,7 +71,6 @@ Feature: Notification test for the news transitions on a post moderated parent.
     When I fill in "Motivation" with "Your content is reported"
     And I press "Request changes"
     Then the email sent to "CC member" with subject "Joinup: Content has been updated" contains the following lines of text:
-      | text                                                                                                                                                                                         |
       | the Facilitator, CC Facilitator has requested you to modify the news - "CCN post report" in the collection: "CC post collection", with the following motivation: "Your content is reported". |
       | If you think this action is not clear or not due, please contact Joinup Support at                                                                                                           |
 

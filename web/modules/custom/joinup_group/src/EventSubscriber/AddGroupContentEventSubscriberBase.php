@@ -11,7 +11,7 @@ use Drupal\joinup_group\Event\AddGroupContentEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
- * Base class for AddGroupContentEvent::BUILD_BLOCK event subscribers.
+ * Base class for AddGroupContentEvent::class event subscribers.
  */
 abstract class AddGroupContentEventSubscriberBase implements EventSubscriberInterface {
 
@@ -39,7 +39,7 @@ abstract class AddGroupContentEventSubscriberBase implements EventSubscriberInte
    */
   public static function getSubscribedEvents() {
     return [
-      AddGroupContentEvent::BUILD_BLOCK => ['addLinks', static::getPriority()],
+      AddGroupContentEvent::class => ['addLinks', static::getPriority()],
     ];
   }
 
