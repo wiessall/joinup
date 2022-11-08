@@ -1,0 +1,7 @@
+contact-us:
+  version: VERSION
+  js:
+    js/contact-us.js: {}
+  dependencies:
+    - core/drupal
+    - core/js-cookie
