@@ -9,5 +9,6 @@ dependencies:
   - 'joinup:topic'
   - 'joinup_bundle_class:joinup_bundle_class'
   - 'joinup:joinup_notification'
+  - 'joinup:joinup_featured'
   - 'og:og'
   - 'og_menu:og_menu'

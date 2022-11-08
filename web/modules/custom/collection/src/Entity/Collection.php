@@ -201,4 +201,11 @@ class Collection extends Rdf implements CollectionInterface {
     return $ids;
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  public function getContactInformationFieldName(): string {
+    return 'field_ar_contact_information';
+  }
+
 }

@@ -13,13 +13,6 @@ use Symfony\Contracts\EventDispatcher\Event;
 class AddGroupContentEvent extends Event {
 
   /**
-   * The ID of the event when building the group content adding block.
-   *
-   * @var string
-   */
-  public const BUILD_BLOCK = 'joinup_group.build_add_content_block';
-
-  /**
    * The group RDF entity.
    *
    * @var \Drupal\rdf_entity\RdfInterface
