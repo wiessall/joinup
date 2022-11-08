@@ -187,7 +187,6 @@ commands:
         - resources/fixtures/EIRA_SKOS.rdf
         - resources/fixtures/filetypes-skos.rdf
         - resources/fixtures/languages-skos.rdf
-        - resources/fixtures/licence-legal-type.rdf
         - resources/fixtures/product_type.rdf
         - resources/fixtures/solution_category.rdf
         - resources/fixtures/standardization_level.rdf
