@@ -11,14 +11,14 @@ services:
       - { name: access_check, applies_to: _joinup_group }
   joinup_group.group_manager:
     class: Drupal\joinup_group\JoinupGroupManager
-    arguments: ['@og.membership_manager', '@entity_type.manager', '@current_user', '@og.access', '@og.context']
+    arguments: ['@og.membership_manager', '@entity_type.manager', '@og.context', '@current_user', '@og.access']
   joinup_group.group_menu_links:
     class: Drupal\joinup_group\EventSubscriber\GroupMenuLinksSubscriber
     tags:
       - { name: event_subscriber }
   joinup_group.join_group_subscriber:
     class: Drupal\joinup_group\EventSubscriber\JoinGroupSubscriber
-    arguments: ['@entity_type.manager', '@datetime.time', '@request_stack', '@messenger']
+    arguments: ['@datetime.time', '@request_stack', '@entity_type.manager', '@messenger']
     tags:
       - { name: event_subscriber }
   joinup_group.node_access_grants.memory_cache:

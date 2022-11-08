@@ -347,4 +347,12 @@ interface GroupInterface extends RdfInterface, LogoInterface, ShortIdInterface, 
    */
   public function getAnnouncementRecipientsCount(): int;
 
+  /**
+   * Returns the contact information field name.
+   *
+   * @return string
+   *   The contact information field name.
+   */
+  public function getContactInformationFieldName(): string;
+
 }
