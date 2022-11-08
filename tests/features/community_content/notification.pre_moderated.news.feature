@@ -45,7 +45,6 @@ Feature: Notification test for the news transitions on a pre moderated parent.
     And I select "Statistics and Analysis" from "Topic"
     And I press "Propose"
     Then the email sent to "CC owner" with subject "Joinup: Content has been proposed" contains the following lines of text:
-      | text                                                                                                              |
       | CC Member has submitted a new news - "CCN create propose" for publication in the collection: "CC pre collection". |
       | If you think this action is not clear or not due, please contact Joinup Support at                                |
 
@@ -65,7 +64,6 @@ Feature: Notification test for the news transitions on a pre moderated parent.
       | subject   | Joinup: Content has been proposed                                                                                            |
       | body      | CC Member has submitted an update of the news - "CCN create propose" for publication in the collection: "CC pre collection". |
     And the email sent to "CC owner" with subject "Joinup: Content has been proposed" contains the following lines of text:
-      | text                                                                                                                         |
       | CC Member has submitted an update of the news - "CCN create propose" for publication in the collection: "CC pre collection". |
       | If you think this action is not clear or not due, please contact Joinup Support at                                           |
 
@@ -88,7 +86,6 @@ Feature: Notification test for the news transitions on a pre moderated parent.
     And I click "Edit" in the "Entity actions" region
     And I press "Propose"
     Then the email sent to "CC owner" with subject "Joinup: Content has been proposed" contains the following lines of text:
-      | text                                                                                                           |
       | CC Member has submitted a new news - "CCN pre propose" for publication in the collection: "CC pre collection". |
       | If you think this action is not clear or not due, please contact Joinup Support at                             |
 
@@ -96,7 +93,6 @@ Feature: Notification test for the news transitions on a pre moderated parent.
     And I click "Edit" in the "Entity actions" region
     And I press "Propose"
     Then the email sent to "CC owner" with subject "Joinup: Content has been updated" contains the following lines of text:
-      | text                                                                                                                                                                  |
       | CC Member has updated the content of the news - "CCN pre propose from reported" as advised and requests again its publication in the collection: "CC pre collection". |
       | If you think this action is not clear or not due, please contact Joinup Support at                                                                                    |
 
@@ -107,7 +103,6 @@ Feature: Notification test for the news transitions on a pre moderated parent.
     When I fill in "Motivation" with "I just want to delete it."
     And I press "Request deletion"
     Then the email sent to "CC owner" with subject "Joinup: Content has been updated" contains the following lines of text:
-      | text                                                                                                                                                                        |
       | CC Member has requested to delete the news - "CCN pre request deletion" in the collection: "CC pre collection", with the following motivation: "I just want to delete it.". |
       | If you think this action is not clear or not due, please contact Joinup Support at                                                                                          |
 
@@ -136,7 +131,6 @@ Feature: Notification test for the news transitions on a pre moderated parent.
     When I fill in "Motivation" with "Can you do some changes?"
     And I press "Request changes"
     Then the email sent to "CC member" with subject "Joinup: Content has been updated" contains the following lines of text:
-      | text                                                                                                                                                                                                |
       | the Facilitator, CC Facilitator has requested you to modify the news - "CCN pre request changes" in the collection: "CC pre collection", with the following motivation: "Can you do some changes?". |
       | If you think this action is not clear or not due, please contact Joinup Support at                                                                                                                  |
     But the following email should not have been sent:
@@ -152,7 +146,6 @@ Feature: Notification test for the news transitions on a pre moderated parent.
     When I fill in "Motivation" with "Your content is reported"
     And I press "Request changes"
     Then the email sent to "CC member" with subject "Joinup: Content has been updated" contains the following lines of text:
-      | text                                                                                                                                                                                       |
       | the Facilitator, CC Facilitator has requested you to modify the news - "CCN pre report" in the collection: "CC pre collection", with the following motivation: "Your content is reported". |
       | If you think this action is not clear or not due, please contact Joinup Support at                                                                                                         |
 

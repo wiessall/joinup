@@ -61,7 +61,7 @@ interface JoinupGroupManagerInterface {
   public function getUserMembershipsByRole(AccountInterface $user, string $role, array $states = [OgMembershipInterface::STATE_ACTIVE]): array;
 
   /**
-   * Checks whether an account aha access to a group.
+   * Checks whether an account has access to a group.
    *
    * In many places, we're performing a group composite access check, either by
    * a site-wide permission or by a OG permission. This method aim is to provide

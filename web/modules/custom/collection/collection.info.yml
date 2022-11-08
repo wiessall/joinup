@@ -16,9 +16,6 @@ dependencies:
   - inline_entity_form:inline_entity_form
   - joinup:contact_information
   - joinup:joinup_bundle_class
-  - joinup:joinup_core
-  - joinup:joinup_featured
-  - joinup:joinup_group
   - joinup:joinup_publication_date
   - joinup:joinup_validation
   - joinup:joinup_workflow
@@ -27,8 +24,6 @@ dependencies:
   - joinup:rdf_schema_field_validation
   - joinup:search_api_field
   - joinup:workflow_state_permission
-  - og:og
-  - og_menu:og_menu
   - rdf_entity:rdf_entity
   - smart_trim:smart_trim
   - state_machine:state_machine

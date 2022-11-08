@@ -17,6 +17,7 @@ dependencies:
     - comment
     - contextual
     - eif
+    - email_confirmer
     - entity_legal
     - filter
     - flag
@@ -42,6 +43,7 @@ permissions:
   - 'access comments'
   - 'access content'
   - 'access contextual links'
+  - 'access email confirmation'
   - 'access tour'
   - 'access user profiles'
   - 'cancel account'
