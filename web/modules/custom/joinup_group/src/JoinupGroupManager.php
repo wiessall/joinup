@@ -54,19 +54,19 @@ class JoinupGroupManager implements JoinupGroupManagerInterface {
    *   The OG membership manager service.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
    *   The entity type manager.
+   * @param \Drupal\og\OgContextInterface $og_context
+   *   The Organic Groups context service.
    * @param \Drupal\Core\Session\AccountInterface $current_user
    *   The current user.
    * @param \Drupal\og\OgAccessInterface $og_access
    *   The OG access service.
-   * @param \Drupal\og\OgContextInterface $og_context
-   *   The Organic Groups context service.
    */
-  public function __construct(MembershipManagerInterface $membershipManager, EntityTypeManagerInterface $entityTypeManager, AccountInterface $current_user, OgAccessInterface $og_access, OgContextInterface $og_context) {
+  public function __construct(MembershipManagerInterface $membershipManager, EntityTypeManagerInterface $entityTypeManager, OgContextInterface $og_context, AccountInterface $current_user, OgAccessInterface $og_access) {
     $this->membershipManager = $membershipManager;
     $this->entityTypeManager = $entityTypeManager;
+    $this->ogContext = $og_context;
     $this->currentUser = $current_user;
     $this->ogAccess = $og_access;
-    $this->ogContext = $og_context;
   }
 
   /**
