@@ -13,4 +13,5 @@ form_ids:
   - join_group_form
   - subscribe_to_collection_form
   - share_content_form
+  - email_contact_mail_form
 show_form_ids: false
