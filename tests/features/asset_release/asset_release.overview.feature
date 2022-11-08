@@ -42,7 +42,7 @@ Feature: Asset distribution overview on solution.
     # Check that clean URLs are being applied to the "releases" subpage.
     And I should be on "/collection/end-past/solution/lovely-butterfly/releases"
 
-    And I should see the heading "Lovely Butterfly" in the Header region
+    And I should see the heading "Releases for Lovely Butterfly solution" in the "Page title" region
     # The general link "Download releases" should not be shown on the releases
     # page itself, since it references the page we are already on.
     But I should not see the link "Download releases"
