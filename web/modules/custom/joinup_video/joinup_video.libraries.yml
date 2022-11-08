@@ -1,5 +1,0 @@
-ckeditor:
-  js:
-    js/joinup_video_ckeditor.js: { }
-  dependencies:
-    - core/once
