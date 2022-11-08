@@ -402,9 +402,10 @@ Feature: Global search
 
     # Add a new distribution, child of a release.
     Given the following release:
-      | title         | Releazz   |
-      | state         | validated |
-      | is version of | Zzolution |
+      | title           | Releazz   |
+      | release number  | 1         |
+      | state           | validated |
+      | is version of   | Zzolution |
 
     When I enter "ReleazzDistro" in the search bar and press enter
     Then I should see "No content found for your search."
@@ -419,18 +420,18 @@ Feature: Global search
       | representation technique | Datalog                           |
 
     When I enter "releazzDistro" in the search bar and press enter
-    Then the page should show only the tiles "Releazz"
+    Then the page should show only the tiles "Releazz | 1"
     When I enter "dracula" in the search bar and press enter
-    Then the page should show only the tiles "Releazz"
+    Then the page should show only the tiles "Releazz | 1"
     When I enter "releazz-distro" in the search bar and press enter
-    Then the page should show only the tiles "Releazz"
+    Then the page should show only the tiles "Releazz | 1"
     When I enter "apache" in the search bar and press enter
     # Also the licence itself is retrieved.
-    Then the page should show only the tiles "Apache-2.0,Releazz"
+    Then the page should show only the tiles "Apache-2.0,Releazz | 1"
     When I enter "HTML" in the search bar and press enter
-    Then the page should show only the tiles "Releazz"
+    Then the page should show only the tiles "Releazz | 1"
     When I enter "Datalog" in the search bar and press enter
-    Then the page should show only the tiles "Releazz"
+    Then the page should show only the tiles "Releazz | 1"
 
     Given I am logged in as a moderator
     When I go to the edit form of the "ReleazzDistro" distribution
@@ -461,18 +462,18 @@ Feature: Global search
 
     # Search now with the new keywords.
     When I enter "dIstrOreleazz" in the search bar and press enter
-    Then the page should show only the tiles "Releazz"
+    Then the page should show only the tiles "Releazz | 1"
     When I enter "zoRRo" in the search bar and press enter
-    Then the page should show only the tiles "Releazz"
+    Then the page should show only the tiles "Releazz | 1"
     When I enter "mishMash" in the search bar and press enter
-    Then the page should show only the tiles "Releazz"
+    Then the page should show only the tiles "Releazz | 1"
     When I enter "LGpl" in the search bar and press enter
     # Also the licence itself is retrieved.
-    Then the page should show only the tiles "LGPL,Releazz"
+    Then the page should show only the tiles "LGPL,Releazz | 1"
     When I enter "CSV" in the search bar and press enter
-    Then the page should show only the tiles "Releazz"
+    Then the page should show only the tiles "Releazz | 1"
     When I enter "Human Language" in the search bar and press enter
-    Then the page should show only the tiles "Releazz"
+    Then the page should show only the tiles "Releazz | 1"
 
     Given I delete the "DistroReleazz" asset distribution
 
