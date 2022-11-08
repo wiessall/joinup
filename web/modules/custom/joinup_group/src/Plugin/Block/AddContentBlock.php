@@ -68,7 +68,7 @@ class AddContentBlock extends BlockBase implements ContainerFactoryPluginInterfa
     $group = $this->getContext('og')->getContextValue();
 
     $event = new AddGroupContentEvent($group);
-    $this->eventDispatcher->dispatch($event, $event::BUILD_BLOCK);
+    $this->eventDispatcher->dispatch($event);
     $items = $event->getItems();
 
     return $items ? [$items] : [];

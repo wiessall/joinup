@@ -43,7 +43,6 @@ Feature: Solution notifications
     When I fill in "Motivation" with "Please, check my updates"
     And I press "Propose"
     Then the email sent to "Ramiro Myers" with subject "Joinup: Changes have been proposed for your solution" contains the following lines of text:
-      | text                                                                                                                                                                                   |
       | The Joinup Support Team has requested you to modify the interoperability solution "Solution notification to propose changes", with the following motivation: Please, check my updates. |
       | If you think this action is not clear or not due, please contact Joinup Support at                                                                                                     |
 
@@ -79,7 +78,6 @@ Feature: Solution notifications
       | body      | the moderator has requested you to modify the interoperability solution - Solution notification to request changes following the following advises: Can you change this?. |
       | bcc       | pat.harper@example.com                                                                                                                                                    |
     And the email sent to "Ramiro Myers" with subject "Joinup: You are requested to update your solution" contains the following lines of text:
-      | text                                                                                                                                                                      |
       | the moderator has requested you to modify the interoperability solution - Solution notification to request changes following the following advises: Can you change this?. |
       | If you think this action is not clear or not due, please contact Joinup Support at                                                                                        |
 
@@ -100,7 +98,6 @@ Feature: Solution notifications
     And I click "Edit" in the "Entity actions" region
     And I press "Propose"
     Then the email sent to "Pat Harper" with subject "Joinup: An update of a solution has been proposed" contains the following lines of text:
-      | text                                                                                                                                     |
       | Ramiro Myers has proposed an update of the Interoperability solution: "Solution notification to propose from request changes" on Joinup. |
       | If you think this action is not clear or not due, please contact Joinup Support at                                                       |
 
