@@ -175,7 +175,9 @@ default:
         My unpublished content area: '.block-user-unpublished'
         Navigation bar: 'nav.joinup-navbar'
         Navigation menu: '#block-ventuno-navigation'
-        Page title: 'div.page__title-wrapper'
+        # TODO: Remove div.page__title-wrapper in ISAICP-7138.
+        # See https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7138
+        Page title: 'div.page__title-wrapper, #block-ventuno-pagetitle'
         Pager: 'nav.pager'
         # TODO: Remove div.add-content-menu in ISAICP-7138.
         # See https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7138
