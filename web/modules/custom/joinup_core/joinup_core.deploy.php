@@ -52,10 +52,31 @@ QUERY;
 }
 
 /**
-<<<<<<< HEAD
+ * Queue contact information emails for validation.
+ */
+function joinup_core_deploy_108701(array &$sandbox): void {
+  $queue = \Drupal::queue('joinup_email_confirmer');
+  $queue->createQueue();
+
+  /** @var \Drupal\sparql_entity_storage\Driver\Database\sparql\ConnectionInterface $sparql */
+  $sparql = \Drupal::service('sparql.endpoint');
+  $rows = $sparql->query('SELECT DISTINCT(?email)
+    WHERE {
+      GRAPH <http://joinup.eu/contact-information/published> {
+        ?id <http://www.w3.org/2006/vcard/ns#hasEmail> ?email .
+        ?id a <http://www.w3.org/2006/vcard/ns#Kind> .
+      }
+    }
+    ORDER BY (?email)')->getArrayCopy();
+  array_walk($rows, function (\stdClass $row) use ($queue): void {
+    $queue->createItem(['email' => $row->email->getValue()]);
+  });
+}
+
+/**
  * Migrate Video content into new Media field.
  */
-function joinup_core_deploy_0108702(array &$sandbox): string {
+function joinup_core_deploy_108702(array &$sandbox): string {
   if (empty($sandbox['ids'])) {
     $sandbox['ids'] = \Drupal::entityQuery('node')->condition('type', 'video')->execute();
     $sandbox['count'] = 0;
@@ -67,7 +88,7 @@ function joinup_core_deploy_0108702(array &$sandbox): string {
   $media_type = reset($media_type);
   $nids = array_splice($sandbox['ids'], 0, 50);
   foreach ($entity_storage->loadMultiple($nids) as $node) {
-    migrate_field($media_type, 'video', 'node', (int) $node->id(), 'field_video');
+    _joinup_core_deploy_migrate_field($media_type, 'video', 'node', (int) $node->id(), 'field_video');
     $sandbox['count']++;
   }
 
@@ -93,7 +114,7 @@ function joinup_core_deploy_0108702(array &$sandbox): string {
  * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
  * @throws \Drupal\Core\Entity\EntityStorageException
  */
-function migrate_field(MediaType $mediaType, string $refFieldName, string $entityType, int $id, string $legacyField): void {
+function _joinup_core_deploy_migrate_field(MediaType $mediaType, string $refFieldName, string $entityType, int $id, string $legacyField): void {
   $entity_type_manager = \Drupal::entityTypeManager();
   $mediaStorage = $entity_type_manager->getStorage('media');
   $storage = $entity_type_manager->getStorage($entityType);
@@ -125,25 +146,4 @@ function migrate_field(MediaType $mediaType, string $refFieldName, string $entit
     $targetEntity->set($refFieldName, $fieldValues);
     $targetEntity->save();
   }
-=======
- * Queue contact information emails for validation.
- */
-function joinup_core_deploy_108701(array &$sandbox): void {
-  $queue = \Drupal::queue('joinup_email_confirmer');
-  $queue->createQueue();
-
-  /** @var \Drupal\sparql_entity_storage\Driver\Database\sparql\ConnectionInterface $sparql */
-  $sparql = \Drupal::service('sparql.endpoint');
-  $rows = $sparql->query('SELECT DISTINCT(?email)
-    WHERE {
-      GRAPH <http://joinup.eu/contact-information/published> {
-        ?id <http://www.w3.org/2006/vcard/ns#hasEmail> ?email .
-        ?id a <http://www.w3.org/2006/vcard/ns#Kind> .
-      }
-    }
-    ORDER BY (?email)')->getArrayCopy();
-  array_walk($rows, function (\stdClass $row) use ($queue): void {
-    $queue->createItem(['email' => $row->email->getValue()]);
-  });
->>>>>>> origin/EPIC-7409
 }
