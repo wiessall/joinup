@@ -12,6 +12,8 @@ use Behat\Mink\Element\TraversableElement;
  */
 trait JavascriptTrait {
 
+  use BrowserCapabilityDetectionTrait;
+
   /**
    * Moves a named element in the middle of the screen for Javascript tests.
    *
