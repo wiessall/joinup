@@ -5,7 +5,7 @@ declare(strict_types = 1);
 namespace Drupal\Tests\joinup_eulogin\ExistingSite;
 
 use Drupal\Tests\joinup_test\ExistingSite\JoinupExistingSiteTestBase;
-use Drupal\Tests\rdf_entity\Traits\DrupalTestTraits\RdfEntityCreationTrait;
+use Drupal\Tests\joinup_test\Traits\NodeCreationTrait;
 
 /**
  * Tests the 403 redirection cache.
@@ -23,7 +23,7 @@ use Drupal\Tests\rdf_entity\Traits\DrupalTestTraits\RdfEntityCreationTrait;
  */
 class Anonymous403RedirectCacheTest extends JoinupExistingSiteTestBase {
 
-  use RdfEntityCreationTrait;
+  use NodeCreationTrait;
 
   /**
    * Tests the 403 redirection cache.

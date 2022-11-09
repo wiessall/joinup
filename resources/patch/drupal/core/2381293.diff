@@ -1,0 +1,844 @@
+diff --git a/core/modules/comment/config/optional/views.view.comment.yml b/core/modules/comment/config/optional/views.view.comment.yml
+index a7003253e3..2bb5054af0 100644
+--- a/core/modules/comment/config/optional/views.view.comment.yml
++++ b/core/modules/comment/config/optional/views.view.comment.yml
+@@ -75,6 +75,9 @@ display:
+           selected_actions:
+             - comment_delete_action
+             - comment_unpublish_action
++          actions_order:
++            - comment_unpublish_action
++            - comment_delete_action
+         subject:
+           id: subject
+           table: comment_field_data
+@@ -953,6 +956,9 @@ display:
+           selected_actions:
+             - comment_delete_action
+             - comment_publish_action
++          actions_order:
++            - comment_publish_action
++            - comment_delete_action
+         subject:
+           id: subject
+           table: comment_field_data
+diff --git a/core/modules/comment/tests/src/Kernel/Views/CommentAdminViewTest.php b/core/modules/comment/tests/src/Kernel/Views/CommentAdminViewTest.php
+index d52e16b584..5ef2b0776d 100644
+--- a/core/modules/comment/tests/src/Kernel/Views/CommentAdminViewTest.php
++++ b/core/modules/comment/tests/src/Kernel/Views/CommentAdminViewTest.php
+@@ -35,11 +35,13 @@ class CommentAdminViewTest extends ViewsKernelTestBase {
+    * {@inheritdoc}
+    */
+   protected static $modules = [
+-    'user',
+     'comment',
+     'entity_test',
++    'field',
+     'language',
+     'locale',
++    'text',
++    'user',
+   ];
+ 
+   /**
+@@ -52,7 +54,7 @@ protected function setUp($import_test_views = TRUE): void {
+     $this->installEntitySchema('comment');
+     $this->installEntitySchema('entity_test');
+     // Create the anonymous role.
+-    $this->installConfig(['user']);
++    $this->installConfig(['comment', 'user']);
+ 
+     // Create user 1 so that the user created later in the test has a different
+     // user ID.
+diff --git a/core/modules/media/config/optional/views.view.media.yml b/core/modules/media/config/optional/views.view.media.yml
+index cbcb293bb5..a7a0a16872 100644
+--- a/core/modules/media/config/optional/views.view.media.yml
++++ b/core/modules/media/config/optional/views.view.media.yml
+@@ -76,6 +76,11 @@ display:
+           action_title: Action
+           include_exclude: exclude
+           selected_actions: {  }
++          actions_order:
++            - media_publish_action
++            - media_unpublish_action
++            - media_save_action
++            - media_delete_action
+         thumbnail__target_id:
+           id: thumbnail__target_id
+           table: media_field_data
+diff --git a/core/modules/media/tests/modules/media_test_views/config/install/views.view.test_media_bulk_form.yml b/core/modules/media/tests/modules/media_test_views/config/install/views.view.test_media_bulk_form.yml
+index 7fb69207ac..2a0c2d8366 100644
+--- a/core/modules/media/tests/modules/media_test_views/config/install/views.view.test_media_bulk_form.yml
++++ b/core/modules/media/tests/modules/media_test_views/config/install/views.view.test_media_bulk_form.yml
+@@ -41,6 +41,11 @@ display:
+           action_title: 'With selection'
+           include_exclude: exclude
+           selected_actions: {  }
++          actions_order:
++            - media_publish_action
++            - media_unpublish_action
++            - media_save_action
++            - media_delete_action
+         name:
+           id: name
+           table: media_field_data
+diff --git a/core/modules/media/tests/src/Functional/MediaBulkFormTest.php b/core/modules/media/tests/src/Functional/MediaBulkFormTest.php
+index d65f34e2b0..8e0e192a13 100644
+--- a/core/modules/media/tests/src/Functional/MediaBulkFormTest.php
++++ b/core/modules/media/tests/src/Functional/MediaBulkFormTest.php
+@@ -2,6 +2,7 @@
+ 
+ namespace Drupal\Tests\media\Functional;
+ 
++use Behat\Mink\Element\NodeElement;
+ use Drupal\media\Entity\Media;
+ use Drupal\views\Views;
+ 
+@@ -72,16 +73,18 @@ public function testBulkForm() {
+ 
+     // Check the operations are accessible to the logged in user.
+     $this->drupalGet('test-media-bulk-form');
+-    // Current available actions: Delete, Save, Publish, Unpublish.
+-    $available_actions = [
+-      'media_delete_action',
++
++    // Tests that actions are sorted according to the view configured order.
++    $actual_actions = $this->xpath('//select[@id="edit-action"]//option');
++    $expected_actions = [
+       'media_publish_action',
+-      'media_save_action',
+       'media_unpublish_action',
++      'media_save_action',
++      'media_delete_action',
+     ];
+-    foreach ($available_actions as $action_name) {
+-      $assert_session->optionExists('action', $action_name);
+-    }
++    $this->assertSame($expected_actions, array_values(array_filter(array_map(function (NodeElement $action): string {
++      return $action->getValue();
++    }, $actual_actions))));
+ 
+     // Test unpublishing in bulk.
+     $page->checkField('media_bulk_form[0]');
+diff --git a/core/modules/media_library/config/install/views.view.media_library.yml b/core/modules/media_library/config/install/views.view.media_library.yml
+index 6f4aae256d..75ca5fda99 100644
+--- a/core/modules/media_library/config/install/views.view.media_library.yml
++++ b/core/modules/media_library/config/install/views.view.media_library.yml
+@@ -81,6 +81,11 @@ display:
+           action_title: Action
+           include_exclude: exclude
+           selected_actions: {  }
++          actions_order:
++            - media_publish_action
++            - media_unpublish_action
++            - media_save_action
++            - media_delete_action
+         rendered_entity:
+           id: rendered_entity
+           table: media
+@@ -542,6 +547,11 @@ display:
+           action_title: Action
+           include_exclude: exclude
+           selected_actions: {  }
++          actions_order:
++            - media_publish_action
++            - media_save_action
++            - media_unpublish_action
++            - media_delete_action
+         name:
+           id: name
+           table: media_field_data
+diff --git a/core/modules/media_library/tests/src/FunctionalJavascript/MediaOverviewTest.php b/core/modules/media_library/tests/src/FunctionalJavascript/MediaOverviewTest.php
+index e3eaab22e1..e38582732f 100644
+--- a/core/modules/media_library/tests/src/FunctionalJavascript/MediaOverviewTest.php
++++ b/core/modules/media_library/tests/src/FunctionalJavascript/MediaOverviewTest.php
+@@ -2,6 +2,8 @@
+ 
+ namespace Drupal\Tests\media_library\FunctionalJavascript;
+ 
++use Behat\Mink\Element\NodeElement;
++
+ /**
+  * Tests the grid-style media overview page.
+  *
+@@ -59,6 +61,18 @@ public function testAdministrationPage() {
+     // Visit the administration page.
+     $this->drupalGet('admin/content/media');
+ 
++    // Tests that actions are sorted according to the view configured order.
++    $actual_actions = $this->xpath('//select[@id="edit-action"]//option');
++    $expected_actions = [
++      'media_publish_action',
++      'media_unpublish_action',
++      'media_save_action',
++      'media_delete_action',
++    ];
++    $this->assertSame($expected_actions, array_values(array_filter(array_map(function (NodeElement $action): string {
++      return $action->getValue();
++    }, $actual_actions))));
++
+     // There should be links to both the grid and table displays.
+     $assert_session->linkExists('Grid');
+     $assert_session->linkExists('Table');
+@@ -101,6 +115,7 @@ public function testAdministrationPage() {
+ 
+     // This tests that anchor tags clicked inside the preview are suppressed.
+     $this->getSession()->executeScript('jQuery(".js-click-to-select-trigger a")[4].click()');
++    $this->getSession()->getPage()->selectFieldOption('Action', 'Delete media');
+     $this->submitForm([], 'Apply to selected items');
+     $assert_session->pageTextContains('Dog');
+     $assert_session->pageTextNotContains('Cat');
+diff --git a/core/modules/node/config/optional/views.view.content.yml b/core/modules/node/config/optional/views.view.content.yml
+index a784f217b3..087848e7c2 100644
+--- a/core/modules/node/config/optional/views.view.content.yml
++++ b/core/modules/node/config/optional/views.view.content.yml
+@@ -36,6 +36,18 @@ display:
+           hide_empty: false
+           empty_zero: false
+           hide_alter_empty: true
++          action_title: Action
++          include_exclude: exclude
++          selected_actions: {  }
++          actions_order:
++            - node_publish_action
++            - node_unpublish_action
++            - node_promote_action
++            - node_unpromote_action
++            - node_make_sticky_action
++            - node_make_unsticky_action
++            - node_save_action
++            - node_delete_action
+         title:
+           id: title
+           table: node_field_data
+diff --git a/core/modules/node/tests/modules/node_test_views/test_views/views.view.test_node_bulk_form.yml b/core/modules/node/tests/modules/node_test_views/test_views/views.view.test_node_bulk_form.yml
+index 78536b8314..f7dc0dc037 100644
+--- a/core/modules/node/tests/modules/node_test_views/test_views/views.view.test_node_bulk_form.yml
++++ b/core/modules/node/tests/modules/node_test_views/test_views/views.view.test_node_bulk_form.yml
+@@ -28,6 +28,18 @@ display:
+           field: node_bulk_form
+           plugin_id: node_bulk_form
+           entity_type: node
++          action_title: Action
++          include_exclude: exclude
++          selected_actions: {  }
++          actions_order:
++            - node_publish_action
++            - node_unpublish_action
++            - node_promote_action
++            - node_unpromote_action
++            - node_make_sticky_action
++            - node_make_unsticky_action
++            - node_save_action
++            - node_delete_action
+         title:
+           id: title
+           table: node_field_data
+diff --git a/core/modules/node/tests/src/Functional/Views/BulkFormTest.php b/core/modules/node/tests/src/Functional/Views/BulkFormTest.php
+index cdbd7b63c7..9568bb0797 100644
+--- a/core/modules/node/tests/src/Functional/Views/BulkFormTest.php
++++ b/core/modules/node/tests/src/Functional/Views/BulkFormTest.php
+@@ -2,6 +2,7 @@
+ 
+ namespace Drupal\Tests\node\Functional\Views;
+ 
++use Behat\Mink\Element\NodeElement;
+ use Drupal\language\Entity\ConfigurableLanguage;
+ use Drupal\views\Views;
+ 
+@@ -94,13 +95,29 @@ protected function setUp($import_test_views = TRUE, $modules = ['node_test_views
+     ]));
+     $this->drupalGet('test-node-bulk-form');
+     $elements = $this->assertSession()->selectExists('edit-action')->findAll('css', 'option');
+-    $this->assertCount(8, $elements, 'All node operations are found.');
++    $this->assertCount(9, $elements, 'All node operations are found.');
+   }
+ 
+   /**
+    * Tests the node bulk form.
+    */
+   public function testBulkForm() {
++    // Tests that actions are sorted according to the view configured order.
++    $actual_actions = $this->xpath('//select[@id="edit-action"]//option');
++    $expected_actions = [
++      'node_publish_action',
++      'node_unpublish_action',
++      'node_promote_action',
++      'node_unpromote_action',
++      'node_make_sticky_action',
++      'node_make_unsticky_action',
++      'node_save_action',
++      'node_delete_action',
++    ];
++    $this->assertSame($expected_actions, array_values(array_filter(array_map(function (NodeElement $action): string {
++      return $action->getValue();
++    }, $actual_actions))));
++
+     // Unpublish a node using the bulk form.
+     $node = reset($this->nodes);
+     $this->assertTrue($node->isPublished(), 'Node is initially published');
+diff --git a/core/modules/user/config/optional/views.view.user_admin_people.yml b/core/modules/user/config/optional/views.view.user_admin_people.yml
+index d49503f814..5f779987c9 100644
+--- a/core/modules/user/config/optional/views.view.user_admin_people.yml
++++ b/core/modules/user/config/optional/views.view.user_admin_people.yml
+@@ -69,6 +69,10 @@ display:
+           hide_empty: false
+           empty_zero: false
+           hide_alter_empty: true
++          action_title: Action
++          include_exclude: exclude
++          selected_actions: {  }
++          actions_order: []
+         name:
+           id: name
+           table: users_field_data
+diff --git a/core/modules/user/tests/src/Functional/Views/BulkFormTest.php b/core/modules/user/tests/src/Functional/Views/BulkFormTest.php
+index 74650146e2..bb8db716c6 100644
+--- a/core/modules/user/tests/src/Functional/Views/BulkFormTest.php
++++ b/core/modules/user/tests/src/Functional/Views/BulkFormTest.php
+@@ -122,7 +122,7 @@ public function testBulkForm() {
+     $action_id = 'user_add_role_action.' . $role;
+     $edit = [
+       'options[include_exclude]' => 'exclude',
+-      "options[selected_actions][$action_id]" => $action_id,
++      "options[selected_actions][$action_id][selected]" => TRUE,
+     ];
+     $this->drupalGet('admin/structure/views/nojs/handler/test_user_bulk_form/default/field/user_bulk_form');
+     $this->submitForm($edit, 'Apply');
+diff --git a/core/modules/views/config/schema/views.data_types.schema.yml b/core/modules/views/config/schema/views.data_types.schema.yml
+index 4c88562ce7..363f214b8d 100644
+--- a/core/modules/views/config/schema/views.data_types.schema.yml
++++ b/core/modules/views/config/schema/views.data_types.schema.yml
+@@ -849,3 +849,9 @@ views_field_bulk_form:
+       sequence:
+         type: string
+         label: 'Action'
++    actions_order:
++      type: sequence
++      label: 'Actions order'
++      sequence:
++        type: string
++        label: 'Action'
+diff --git a/core/modules/views/css/views.bulk_form.css b/core/modules/views/css/views.bulk_form.css
+new file mode 100644
+index 0000000000..1b193ef423
+--- /dev/null
++++ b/core/modules/views/css/views.bulk_form.css
+@@ -0,0 +1,12 @@
++tr.draggable td {
++  width: 100%;
++}
++tr.draggable td:first-child {
++  display: flex;
++  align-items: center;
++  width: 2.5rem;
++}
++/* Ensure a space between checkbox and the 'Changed' asterisk */
++tr.draggable td:first-child input[type=checkbox] {
++  margin-right: 3px;
++}
+diff --git a/core/modules/views/src/Plugin/views/field/BulkForm.php b/core/modules/views/src/Plugin/views/field/BulkForm.php
+index 04c58e46ac..a23e38b057 100644
+--- a/core/modules/views/src/Plugin/views/field/BulkForm.php
++++ b/core/modules/views/src/Plugin/views/field/BulkForm.php
+@@ -200,6 +200,9 @@ protected function defineOptions() {
+     $options['selected_actions'] = [
+       'default' => [],
+     ];
++    $options['actions_order'] = [
++      'default' => [],
++    ];
+     return $options;
+   }
+ 
+@@ -223,13 +226,52 @@ public function buildOptionsForm(&$form, FormStateInterface $form_state) {
+       ],
+       '#default_value' => $this->options['include_exclude'],
+     ];
++
+     $form['selected_actions'] = [
+-      '#type' => 'checkboxes',
++      '#type' => 'table',
+       '#title' => $this->t('Selected actions'),
+-      '#options' => $this->getBulkOptions(FALSE),
+-      '#default_value' => $this->options['selected_actions'],
++      '#tabledrag' => [
++        [
++          'action' => 'order',
++          'relationship' => 'sibling',
++          'group' => 'action-order-weight',
++        ],
++      ],
++      '#tree' => FALSE,
++      '#input' => FALSE,
++      '#theme_wrappers' => ['form_element'],
++      '#attached' => ['library' => ['views/views.bulk_form']],
+     ];
+ 
++    $weight = 0;
++    foreach ($this->getBulkOptions(FALSE) as $action_id => $action_label) {
++      $form['selected_actions'][$action_id]['#attributes']['class'][] = 'draggable';
++      $form['selected_actions'][$action_id]['#weight'] = $weight++;
++
++      $arguments = ['@title' => $action_label];
++      $form['selected_actions'][$action_id]['selected'] = [
++        '#type' => 'checkbox',
++        '#title' => $this->t('Select @title', $arguments),
++        '#title_display' => 'attribute',
++        '#default_value' => in_array($action_id, $this->options['selected_actions'], TRUE),
++        '#parents' => ['options', 'selected_actions', $action_id, 'selected'],
++      ];
++
++      $form['selected_actions'][$action_id]['action'] = [
++        '#markup' => $action_label,
++      ];
++
++      $form['selected_actions'][$action_id]['weight'] = [
++        '#type' => 'weight',
++        '#title' => $this->t('Weight for @title', $arguments),
++        '#title_display' => 'invisible',
++        '#delta' => 50,
++        '#default_value' => $weight,
++        '#parents' => ['options', 'selected_actions', $action_id, 'weight'],
++        '#attributes' => ['class' => ['action-order-weight']],
++      ];
++
++    }
+     parent::buildOptionsForm($form, $form_state);
+   }
+ 
+@@ -239,8 +281,16 @@ public function buildOptionsForm(&$form, FormStateInterface $form_state) {
+   public function validateOptionsForm(&$form, FormStateInterface $form_state) {
+     parent::validateOptionsForm($form, $form_state);
+ 
+-    $selected_actions = $form_state->getValue(['options', 'selected_actions']);
+-    $form_state->setValue(['options', 'selected_actions'], array_values(array_filter($selected_actions)));
++    $selected_actions = $actions_order = [];
++    foreach ($form_state->getValue(['options', 'selected_actions']) as $action_id => $action_data) {
++      if ($action_data['selected']) {
++        $selected_actions[] = $action_id;
++      }
++      $actions_order[$action_id] = (int) $action_data['weight'];
++    }
++    $form_state->setValue(['options', 'selected_actions'], $selected_actions);
++    asort($actions_order);
++    $form_state->setValue(['options', 'actions_order'], array_keys($actions_order));
+   }
+ 
+   /**
+@@ -303,6 +353,11 @@ public function viewsForm(&$form, FormStateInterface $form_state) {
+ 
+       // Replace the form submit button label.
+       $form['actions']['submit']['#value'] = $this->t('Apply to selected items');
++      $form['actions']['submit']['#states'] = [
++        'disabled' => [
++          'select[name="action"]' => ['value' => ''],
++        ],
++      ];
+ 
+       // Ensure a consistent container for filters/operations in the view header.
+       $form['header'] = [
+@@ -319,6 +374,7 @@ public function viewsForm(&$form, FormStateInterface $form_state) {
+         '#type' => 'select',
+         '#title' => $this->options['action_title'],
+         '#options' => $this->getBulkOptions(),
++        '#required' => TRUE,
+       ];
+ 
+       // Duplicate the form actions into the action container in the header.
+@@ -341,8 +397,18 @@ public function viewsForm(&$form, FormStateInterface $form_state) {
+    */
+   protected function getBulkOptions($filtered = TRUE) {
+     $options = [];
++
++    $actions = $this->actions;
++
++    // Only order if there is a user specified order.
++    if ($actions && $this->options['actions_order']) {
++      // Some actions might have been removed. Keep only existing actions.
++      $actions_order = array_intersect($this->options['actions_order'], array_keys($actions));
++      $actions = array_merge(array_flip($actions_order), $actions);
++    }
++
+     // Filter the action list.
+-    foreach ($this->actions as $id => $action) {
++    foreach ($actions as $id => $action) {
+       if ($filtered) {
+         $in_selected = in_array($id, $this->options['selected_actions']);
+         // If the field is configured to include only the selected actions,
+diff --git a/core/modules/views/src/ViewsConfigUpdater.php b/core/modules/views/src/ViewsConfigUpdater.php
+index 2ddb741c0a..b2830c1c50 100644
+--- a/core/modules/views/src/ViewsConfigUpdater.php
++++ b/core/modules/views/src/ViewsConfigUpdater.php
+@@ -10,6 +10,7 @@
+ use Drupal\Core\Entity\EntityTypeManagerInterface;
+ use Drupal\Core\Entity\FieldableEntityInterface;
+ use Drupal\Core\Entity\Sql\DefaultTableMapping;
++use Drupal\views\Plugin\views\field\BulkForm;
+ use Symfony\Component\DependencyInjection\ContainerInterface;
+ 
+ /**
+@@ -561,4 +562,45 @@ protected function processSortFieldIdentifierUpdateHandler(array &$handler, stri
+     return FALSE;
+   }
+ 
++  /**
++   * Updates the bulk form fields by adding the actions order configuration.
++   *
++   * @param \Drupal\views\ViewEntityInterface $view
++   *   The View to update.
++   *
++   * @return bool
++   *   Whether the view was updated.
++   */
++  public function needsBulkFormActionsOrderUpdate(ViewEntityInterface $view): bool {
++    return $this->processDisplayHandlers($view, FALSE, function (array &$handler, string $handler_type): bool {
++      return $this->processBulkFormActionsOrderUpdate($handler, $handler_type);
++    });
++  }
++
++  /**
++   * Processes the bulk form fields by adding the actions order configuration.
++   *
++   * @param array $handler
++   *   A display handler.
++   * @param string $handler_type
++   *   The handler type.
++   *
++   * @return bool
++   *   Whether the handler was updated.
++   */
++  protected function processBulkFormActionsOrderUpdate(array &$handler, string $handler_type): bool {
++    if ($handler_type === 'field' && !isset($handler['actions_order']) && isset($handler['plugin_id'])) {
++      /** @var \Drupal\views\Plugin\ViewsPluginManager $plugin_manager */
++      $plugin_manager = \Drupal::service('plugin.manager.views.field');
++      if ($plugin_manager->hasDefinition($handler['plugin_id'])) {
++        $definition = $plugin_manager->getDefinition($handler['plugin_id']);
++        if (is_subclass_of($definition['class'], BulkForm::class)) {
++          $handler['actions_order'] = [];
++          return TRUE;
++        }
++      }
++    }
++    return FALSE;
++  }
++
+ }
+diff --git a/core/modules/views/tests/modules/action_bulk_test/config/install/views.view.test_bulk_form.yml b/core/modules/views/tests/modules/action_bulk_test/config/install/views.view.test_bulk_form.yml
+index 2928631284..c654443977 100644
+--- a/core/modules/views/tests/modules/action_bulk_test/config/install/views.view.test_bulk_form.yml
++++ b/core/modules/views/tests/modules/action_bulk_test/config/install/views.view.test_bulk_form.yml
+@@ -89,6 +89,18 @@ display:
+           hide_empty: false
+           empty_zero: false
+           hide_alter_empty: true
++          action_title: Action
++          include_exclude: exclude
++          selected_actions: {  }
++          actions_order:
++            - node_publish_action
++            - node_unpublish_action
++            - node_promote_action
++            - node_unpromote_action
++            - node_make_sticky_action
++            - node_make_unsticky_action
++            - node_save_action
++            - node_delete_action
+       pager:
+         type: full
+         options:
+diff --git a/core/modules/views/tests/src/Functional/BulkFormTest.php b/core/modules/views/tests/src/Functional/BulkFormTest.php
+index 4e515c6aa6..c343561073 100644
+--- a/core/modules/views/tests/src/Functional/BulkFormTest.php
++++ b/core/modules/views/tests/src/Functional/BulkFormTest.php
+@@ -2,6 +2,7 @@
+ 
+ namespace Drupal\Tests\views\Functional;
+ 
++use Behat\Mink\Element\NodeElement;
+ use Drupal\Component\Render\FormattableMarkup;
+ use Drupal\Tests\BrowserTestBase;
+ use Drupal\views\Views;
+@@ -52,6 +53,52 @@ public function testBulkForm() {
+ 
+     $this->drupalGet('test_bulk_form');
+ 
++    // Tests that actions are sorted according to the view configured order.
++    $actual_actions = $this->xpath('//select[@id="edit-action"]//option');
++    $expected_actions = [
++      'node_publish_action',
++      'node_unpublish_action',
++      'node_promote_action',
++      'node_unpromote_action',
++      'node_make_sticky_action',
++      'node_make_unsticky_action',
++      'node_save_action',
++      'node_delete_action',
++    ];
++    $this->assertSame($expected_actions, array_values(array_filter(array_map(function (NodeElement $action): string {
++      return $action->getValue();
++    }, $actual_actions))));
++
++    // Test changing the order of the actions.
++    $view = Views::getView('test_bulk_form');
++    $display = &$view->storage->getDisplay('default');
++    $display['display_options']['fields']['node_bulk_form']['actions_order'] = [
++      'node_make_unsticky_action',
++      'node_publish_action',
++      'node_make_sticky_action',
++      'node_save_action',
++      'node_unpromote_action',
++      'node_delete_action',
++      'node_unpublish_action',
++      'node_promote_action',
++    ];
++    $view->save();
++    $this->getSession()->reload();
++    $actual_actions = $this->xpath('//select[@id="edit-action"]//option');
++    $expected_actions = [
++      'node_make_unsticky_action',
++      'node_publish_action',
++      'node_make_sticky_action',
++      'node_save_action',
++      'node_unpromote_action',
++      'node_delete_action',
++      'node_unpublish_action',
++      'node_promote_action',
++    ];
++    $this->assertSame($expected_actions, array_values(array_filter(array_map(function (NodeElement $action): string {
++      return $action->getValue();
++    }, $actual_actions))));
++
+     // Test that the views edit header appears first.
+     $this->assertSession()->elementExists('xpath', '//form/div[1][@id = "edit-header"]');
+ 
+@@ -116,7 +163,7 @@ public function testBulkForm() {
+ 
+     $this->drupalGet('test_bulk_form');
+     $options = $this->assertSession()->selectExists('edit-action')->findAll('css', 'option');
+-    $this->assertCount(2, $options);
++    $this->assertCount(3, $options);
+     $this->assertSession()->optionExists('edit-action', 'node_make_sticky_action');
+     $this->assertSession()->optionExists('edit-action', 'node_make_unsticky_action');
+ 
+diff --git a/core/modules/views/tests/src/Functional/Plugin/ViewsBulkTest.php b/core/modules/views/tests/src/Functional/Plugin/ViewsBulkTest.php
+index f9b92e1d23..171ff9469a 100644
+--- a/core/modules/views/tests/src/Functional/Plugin/ViewsBulkTest.php
++++ b/core/modules/views/tests/src/Functional/Plugin/ViewsBulkTest.php
+@@ -63,7 +63,8 @@ public function testBulkSelection() {
+ 
+     // Now click 'Apply to selected items' and assert the first node is selected
+     // on the confirm form.
+-    $this->submitForm(['node_bulk_form[0]' => TRUE], 'Apply to selected items');
++    $edit = ['node_bulk_form[0]' => TRUE, 'action' => 'node_delete_action'];
++    $this->submitForm($edit, 'Apply to selected items');
+     $this->assertSession()->pageTextContains($node_1->getTitle());
+     $this->assertSession()->pageTextNotContains($node_2->getTitle());
+ 
+@@ -81,7 +82,8 @@ public function testBulkSelection() {
+ 
+     // Now click 'Apply to selected items' and assert the second node is
+     // selected on the confirm form.
+-    $this->submitForm(['node_bulk_form[1]' => TRUE], 'Apply to selected items');
++    $edit = ['node_bulk_form[1]' => TRUE, 'action' => 'node_delete_action'];
++    $this->submitForm($edit, 'Apply to selected items');
+     $this->assertSession()->pageTextContains($node_1->getTitle());
+     $this->assertSession()->pageTextNotContains($node_3->getTitle());
+   }
+diff --git a/core/modules/views/tests/src/Functional/Update/ViewsBulkFormActionsOrderUpdate.php b/core/modules/views/tests/src/Functional/Update/ViewsBulkFormActionsOrderUpdate.php
+new file mode 100644
+index 0000000000..a634c817f6
+--- /dev/null
++++ b/core/modules/views/tests/src/Functional/Update/ViewsBulkFormActionsOrderUpdate.php
+@@ -0,0 +1,40 @@
++<?php
++
++namespace Drupal\Tests\views\Functional\Update;
++
++use Drupal\FunctionalTests\Update\UpdatePathTestBase;
++
++/**
++ * Tests views_post_update_bulk_form_action_order().
++ *
++ * @group views
++ * @group legacy
++ */
++class ViewsBulkFormActionsOrderUpdate extends UpdatePathTestBase {
++
++  /**
++   * {@inheritdoc}
++   */
++  protected function setDatabaseDumpFiles(): void {
++    $this->databaseDumpFiles = [
++      __DIR__ . '/../../../../../system/tests/fixtures/update/drupal-9.0.0.bare.standard.php.gz',
++    ];
++  }
++
++  /**
++   * Tests views_post_update_bulk_form_action_order().
++   *
++   * @see views_post_update_bulk_form_action_order()
++   */
++  public function testBulkFormActionsOrderPostUpdate(): void {
++    $config_factory = \Drupal::configFactory();
++    $path = 'display.default.display_options.fields.user_bulk_form';
++    $config = $config_factory->get('views.view.user_admin_people');
++    $this->assertArrayNotHasKey('actions_order', $config->get($path));
++    $this->runUpdates();
++    $config = $config_factory->get('views.view.user_admin_people');
++    $this->assertArrayHasKey('actions_order', $config->get($path));
++    $this->assertSame([], $config->get("$path.actions_order"));
++  }
++
++}
+diff --git a/core/modules/views/views.libraries.yml b/core/modules/views/views.libraries.yml
+index a191767b0b..f7a557f2e1 100644
+--- a/core/modules/views/views.libraries.yml
++++ b/core/modules/views/views.libraries.yml
+@@ -17,3 +17,9 @@ views.ajax:
+     - core/jquery.once.bc
+     - core/internal.jquery.form
+     - core/drupal.ajax
++
++views.bulk_form:
++  version: VERSION
++  css:
++    component:
++      css/views.bulk_form.css: {}
+diff --git a/core/modules/views/views.post_update.php b/core/modules/views/views.post_update.php
+index 4cca352d89..adf91de47f 100644
+--- a/core/modules/views/views.post_update.php
++++ b/core/modules/views/views.post_update.php
+@@ -105,3 +105,14 @@ function views_post_update_image_lazy_load(?array &$sandbox = NULL): void {
+     return $view_config_updater->needsImageLazyLoadFieldUpdate($view);
+   });
+ }
++
++/**
++ * Add the actions order option to all bulk form field configurations.
++ */
++function views_post_update_bulk_form_action_order(?array &$sandbox = NULL): void {
++  /** @var \Drupal\views\ViewsConfigUpdater $view_config_updater */
++  $view_config_updater = \Drupal::classResolver(ViewsConfigUpdater::class);
++  \Drupal::classResolver(ConfigEntityUpdater::class)->update($sandbox, 'view', function (ViewEntityInterface $view) use ($view_config_updater): bool {
++    return $view_config_updater->needsBulkFormActionsOrderUpdate($view);
++  });
++}
+diff --git a/core/profiles/demo_umami/config/optional/views.view.media.yml b/core/profiles/demo_umami/config/optional/views.view.media.yml
+index dc3b7e813f..f1db673285 100644
+--- a/core/profiles/demo_umami/config/optional/views.view.media.yml
++++ b/core/profiles/demo_umami/config/optional/views.view.media.yml
+@@ -76,6 +76,11 @@ display:
+           action_title: Action
+           include_exclude: exclude
+           selected_actions: {  }
++          actions_order:
++            - media_publish_action
++            - media_unpublish_action
++            - media_save_action
++            - media_delete_action
+         thumbnail__target_id:
+           id: thumbnail__target_id
+           table: media_field_data
+diff --git a/core/themes/claro/claro.info.yml b/core/themes/claro/claro.info.yml
+index 6032f10bc5..53082cda09 100644
+--- a/core/themes/claro/claro.info.yml
++++ b/core/themes/claro/claro.info.yml
+@@ -102,6 +102,11 @@ libraries-override:
+       state:
+         css/toolbar.menu.css: css/state/toolbar.menu.css
+ 
++  views/views.bulk_form:
++    css:
++      component:
++        css/views.bulk_form.css: css/components/views.bulk_form.css
++
+   views_ui/admin.styling:
+     css:
+       component:
+diff --git a/core/themes/claro/css/components/views.bulk_form.css b/core/themes/claro/css/components/views.bulk_form.css
+new file mode 100644
+index 0000000000..17ac9fa0ee
+--- /dev/null
++++ b/core/themes/claro/css/components/views.bulk_form.css
+@@ -0,0 +1,12 @@
++tr.draggable td {
++  width: 100%;
++}
++tr.draggable td:first-child {
++  display: flex;
++  align-items: center;
++  width: 5rem;
++}
++/* Ensure a space between checkbox and the 'Changed' asterisk */
++tr.draggable td:first-child input[type=checkbox] {
++  margin-right: 3px;
++}
+diff --git a/core/themes/stable/css/views/views.bulk_form.css b/core/themes/stable/css/views/views.bulk_form.css
+new file mode 100644
+index 0000000000..1b193ef423
+--- /dev/null
++++ b/core/themes/stable/css/views/views.bulk_form.css
+@@ -0,0 +1,12 @@
++tr.draggable td {
++  width: 100%;
++}
++tr.draggable td:first-child {
++  display: flex;
++  align-items: center;
++  width: 2.5rem;
++}
++/* Ensure a space between checkbox and the 'Changed' asterisk */
++tr.draggable td:first-child input[type=checkbox] {
++  margin-right: 3px;
++}
+diff --git a/core/themes/stable/stable.info.yml b/core/themes/stable/stable.info.yml
+index 13f28498ce..aaf939de04 100644
+--- a/core/themes/stable/stable.info.yml
++++ b/core/themes/stable/stable.info.yml
+@@ -293,6 +293,11 @@ libraries-override:
+       component:
+         css/views.module.css: css/views/views.module.css
+ 
++  views/views.bulk_form:
++    css:
++      component:
++        css/views.bulk_form.css: css/views/views.bulk_form.css
++
+   views_ui/admin.styling:
+     css:
+       component:
+diff --git a/core/themes/stable9/css/views/views.bulk_form.css b/core/themes/stable9/css/views/views.bulk_form.css
+new file mode 100644
+index 0000000000..1b193ef423
+--- /dev/null
++++ b/core/themes/stable9/css/views/views.bulk_form.css
+@@ -0,0 +1,12 @@
++tr.draggable td {
++  width: 100%;
++}
++tr.draggable td:first-child {
++  display: flex;
++  align-items: center;
++  width: 2.5rem;
++}
++/* Ensure a space between checkbox and the 'Changed' asterisk */
++tr.draggable td:first-child input[type=checkbox] {
++  margin-right: 3px;
++}
+diff --git a/core/themes/stable9/stable9.info.yml b/core/themes/stable9/stable9.info.yml
+index 32595170a1..90b182da66 100644
+--- a/core/themes/stable9/stable9.info.yml
++++ b/core/themes/stable9/stable9.info.yml
+@@ -313,6 +313,11 @@ libraries-override:
+       component:
+         css/views.module.css: css/views/views.module.css
+ 
++  views/views.bulk_form:
++    css:
++      component:
++        css/views.bulk_form.css: css/views/views.bulk_form.css
++
+   views_ui/admin.styling:
+     css:
+       component:

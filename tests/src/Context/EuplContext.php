@@ -263,7 +263,7 @@ class EuplContext extends RawDrupalContext {
   public function clickLicenceTileLink(string $link, string $spdx_id): void {
     $licence = $this->findLicenceTile($spdx_id);
 
-    if ($this->browserSupportsJavaScript()) {
+    if ($this->hasJavascriptSupport()) {
       // On JS enabled browsers, scroll to the top before clicking the link
       // since it might be obscured by the floating header.
       $this->scrollToTop();

@@ -115,7 +115,7 @@ Feature: On errors I want to see a friendly page and be able to report an
       | There was an unexpected problem serving your request.            |
       | Please try again and contact us if the problem persist including |
       | in your message.                                                 |
-    And I should see "Notice: Undefined variable: not_initialised_variable in Drupal\error_page_test\Controller\ErrorPageTestController->notice()"
+    And I should see "Warning: Undefined variable $not_initialised_variable in Drupal\error_page_test\Controller\ErrorPageTestController->notice()"
     And the response should not contain "<pre class=\"backtrace\">"
 
     # Error level: verbose.
@@ -152,5 +152,5 @@ Feature: On errors I want to see a friendly page and be able to report an
       | There was an unexpected problem serving your request.            |
       | Please try again and contact us if the problem persist including |
       | in your message.                                                 |
-    And I should see "Notice: Undefined variable: not_initialised_variable in Drupal\error_page_test\Controller\ErrorPageTestController->notice()"
+    And I should see "Warning: Undefined variable $not_initialised_variable in Drupal\error_page_test\Controller\ErrorPageTestController->notice()"
     And the response should contain "<pre class=\"backtrace\">"

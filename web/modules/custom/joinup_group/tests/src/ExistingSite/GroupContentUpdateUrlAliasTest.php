@@ -6,7 +6,6 @@ namespace Drupal\Tests\joinup_group\ExistingSite;
 
 use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Tests\joinup_test\ExistingSite\JoinupExistingSiteTestBase;
-use Drupal\Tests\rdf_entity\Traits\DrupalTestTraits\RdfEntityCreationTrait;
 use Drupal\rdf_taxonomy\Entity\RdfTerm;
 use Drush\TestTraits\DrushTestTrait;
 use weitzman\LoginTrait\LoginTrait;
@@ -20,7 +19,6 @@ class GroupContentUpdateUrlAliasTest extends JoinupExistingSiteTestBase {
 
   use DrushTestTrait;
   use LoginTrait;
-  use RdfEntityCreationTrait;
 
   /**
    * Testing entities.
