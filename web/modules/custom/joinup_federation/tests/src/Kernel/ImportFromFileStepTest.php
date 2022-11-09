@@ -8,6 +8,7 @@ use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\Assert;
 use Prophecy\Argument;
+use Prophecy\PhpUnit\ProphecyTrait;
 
 /**
  * Tests the 'file_import' pipeline step plugin.
@@ -16,7 +17,9 @@ use Prophecy\Argument;
  */
 class ImportFromFileStepTest extends StepTestBase {
 
-  use \Prophecy\PhpUnit\ProphecyTrait;
+  use ProphecyTrait {
+    prophesize as traitProphesize;
+  }
 
   /**
    * {@inheritdoc}
@@ -61,7 +64,7 @@ class ImportFromFileStepTest extends StepTestBase {
    */
   public function testImportFromUrl(): void {
     // Mock the 'http_client' service.
-    $http_client = $this->prophesize(ClientInterface::class);
+    $http_client = $this->traitProphesize(ClientInterface::class);
     $response = new Response(200, [], file_get_contents(__DIR__ . '/../../fixtures/valid_adms.rdf'));
     $http_client->request('GET', 'http://example.com/endpoint', Argument::any())
       ->willReturn($response);
