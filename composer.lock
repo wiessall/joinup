@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "1b46091656cb848c699f785cb3a65996",
+    "content-hash": "6cc3f47900955f58b287793c00fc46be",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -17016,7 +17016,6 @@
             },
             "require": {
                 "behat/behat": "^3.7 || ^3.8",
-                "consolidation/annotated-command": "^4.5 <4.5.7",
                 "cweagans/composer-patches": "^1.4 || ^1.7",
                 "drush/drush": "^9.7.1 || ^10.0.0 || ^11.0.4",
                 "ec-europa/qa-automation": "^9.0",
