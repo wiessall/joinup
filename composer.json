@@ -371,6 +371,9 @@
             "drupal/views_block_area": {
                 "Views block area missing schema @see https://www.drupal.org/project/views_block_area/issues/3157188": "https://www.drupal.org/files/issues/2020-07-06/views_block_area-missing_schema-3157188-2.patch"
             },
+            "openeuropa/oe_bootstrap_theme": {
+                "Allow drupal alters in menu links @see https://github.com/openeuropa/oe_bootstrap_theme/pull/241": "resources/patch/openeuropa/oe_bootstrap_theme/241.diff"
+            },
             "ec-europa/toolkit": {
                 "Add --strict option, it should treat Undefined and Pending steps as failures @see https://github.com/ec-europa/toolkit/pull/566": "resources/patch/ec-europa/toolkit/566.diff"
             },
