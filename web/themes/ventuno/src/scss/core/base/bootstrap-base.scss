@@ -175,6 +175,11 @@
       font-size: 12px;
       line-height: 18px;
     }
+    &.js-is--sticky {
+      position: fixed;
+      top: 0;
+      width: 100%
+    }
   }
   .ec__header.bcl-header {
     background: $white;

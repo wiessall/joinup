@@ -36,7 +36,7 @@ class HeaderContext extends RawDrupalContext {
    * @Then I should see the Joinup logo in the navigation bar
    */
   public function assertLogo(): void {
-    $link_element = $this->getSession()->getPage()->find('css', 'nav.joinup-navbar a.navbar-brand');
+    $link_element = $this->getSession()->getPage()->find('css', '.joinup-navbar a.navbar-brand');
     Assert::assertInstanceOf(NodeElement::class, $link_element, 'A link for the logo is present in the navbar.');
     Assert::assertEquals(base_path(), $link_element->getAttribute('href'), 'The logo links to the homepage.');
     $logo_element = $link_element->find('css', 'img.navbar-brand-image');
@@ -56,9 +56,9 @@ class HeaderContext extends RawDrupalContext {
    */
   public function assertMainNavigationItems(TableNode $items): void {
     // Retrieve the main navigation links on desktop.
-    $desktop_items = $this->getSession()->getPage()->findAll('xpath', '//nav[contains(concat(" ", normalize-space(@class), " "), " joinup-navbar ")]//ul[contains(concat(" ", normalize-space(@class), " "), " navbar-nav ")]/li/*[self::a or self::button]');
+    $desktop_items = $this->getSession()->getPage()->findAll('xpath', '//header[contains(concat(" ", normalize-space(@class), " "), " joinup-navbar ")]//ul[contains(concat(" ", normalize-space(@class), " "), " navbar-nav ")]/li/*[self::a or self::button]');
     // Retrieve the main navigation links on mobile.
-    $mobile_items = $this->getSession()->getPage()->findAll('css', 'nav.joinup-navbar ul.dropdown-list a');
+    $mobile_items = $this->getSession()->getPage()->findAll('css', 'header.joinup-navbar ul.dropdown-list a');
     foreach ($items->getColumnsHash() as $item) {
       // Check if the item is present in the desktop menu.
       if ($item['desktop menu'] !== 'not shown') {
@@ -109,7 +109,7 @@ class HeaderContext extends RawDrupalContext {
     assert(array_key_exists($icon, self::ICON_ALIASES), 'Unknown icon ' . $icon);
 
     $icon_uri = base_path() . \Drupal::service('extension.list.theme')->getPath('ventuno') . '/assets/icons/icons.svg#' . self::ICON_ALIASES[$icon];
-    $icon_selector = 'nav.joinup-navbar .nav-item svg > use';
+    $icon_selector = '.joinup-navbar .nav-item svg > use';
     foreach ($this->getSession()->getPage()->findAll('css', $icon_selector) as $icon) {
       if ($icon->getAttribute('xlink:href') === $icon_uri) {
         // We found the icon.
