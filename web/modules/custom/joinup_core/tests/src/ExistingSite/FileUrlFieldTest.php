@@ -8,7 +8,6 @@ use Behat\Mink\Exception\ElementNotFoundException;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Tests\joinup_core\Traits\TestFileTrait;
 use Drupal\Tests\joinup_test\ExistingSite\JoinupExistingSiteTestBase;
-use Drupal\Tests\rdf_entity\Traits\DrupalTestTraits\RdfEntityCreationTrait;
 use Drupal\Tests\rdf_entity\Traits\EntityUtilityTrait;
 use Drupal\Tests\sparql_entity_storage\Traits\SparqlConnectionTrait;
 use Drupal\file\FileInterface;
@@ -27,7 +26,6 @@ class FileUrlFieldTest extends JoinupExistingSiteTestBase {
   use EntityUtilityTrait;
   use TestFileTrait;
   use LoginTrait;
-  use RdfEntityCreationTrait;
   use SparqlConnectionTrait;
   use StringTranslationTrait;
 

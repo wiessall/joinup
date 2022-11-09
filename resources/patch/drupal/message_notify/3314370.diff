@@ -1,29 +1,3 @@
-diff --git a/composer.json b/composer.json
-index 8b56a61..515721c 100644
---- a/composer.json
-+++ b/composer.json
-@@ -10,7 +10,7 @@
-         "source": "https://cgit.drupalcode.org/message_notify"
-     },
-     "require": {
--      "drupal/message": "~8.1.0"
-+      "drupal/message": "^1.0"
-     },
-     "minimum-stability": "dev"
- }
-diff --git a/message_notify.info.yml b/message_notify.info.yml
-index 9c75b79..6d54b08 100644
---- a/message_notify.info.yml
-+++ b/message_notify.info.yml
-@@ -1,7 +1,6 @@
- name: 'Message Notify'
- description: 'Message notify.'
--core: 8.x
--core_version_requirement: ^8 || ^9
-+core_version_requirement: ^9 || ^10
- package: Message
- dependencies:
-   - message:message
 diff --git a/src/Event/MessageNotifyDeliveryEvent.php b/src/Event/MessageNotifyDeliveryEvent.php
 new file mode 100644
 index 0000000..2e25e4e
@@ -96,7 +70,7 @@ index 0000000..2e25e4e
 +
 +}
 diff --git a/src/Plugin/Notifier/Email.php b/src/Plugin/Notifier/Email.php
-index 9568ef9..45dfc21 100644
+index 97949cf..45dfc21 100644
 --- a/src/Plugin/Notifier/Email.php
 +++ b/src/Plugin/Notifier/Email.php
 @@ -9,6 +9,7 @@ use Drupal\Core\Render\RendererInterface;
@@ -165,7 +139,7 @@ index 9568ef9..45dfc21 100644
      // The subject in an email can't be with HTML, so strip it.
      $output['mail_subject'] = trim(strip_tags($output['mail_subject']));
  
-@@ -115,13 +121,13 @@ class Email extends MessageNotifierBase {
+@@ -115,10 +121,10 @@ class Email extends MessageNotifierBase {
      $result = $this->mailManager->mail(
        'message_notify',
        $this->message->getTemplate()->id(),
@@ -178,13 +152,9 @@ index 9568ef9..45dfc21 100644
 +      $this->configuration['from']
      );
  
--    return $result['result'];
-+    return isset($result['result']);
-   }
- 
- }
+     return isset($result['result']);
 diff --git a/src/Plugin/Notifier/MessageNotifierBase.php b/src/Plugin/Notifier/MessageNotifierBase.php
-index a1b500c..7244a6d 100644
+index 77a93cb..7244a6d 100644
 --- a/src/Plugin/Notifier/MessageNotifierBase.php
 +++ b/src/Plugin/Notifier/MessageNotifierBase.php
 @@ -7,8 +7,10 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
@@ -266,30 +236,7 @@ index a1b500c..7244a6d 100644
      $output = [];
  
      $view_builder = $this->entityTypeManager->getViewBuilder('message');
-@@ -121,13 +144,20 @@ abstract class MessageNotifierBase extends PluginBase implements MessageNotifier
-    */
-   public function postSend($result, array $output = []) {
-     $save = FALSE;
--    if (!$result) {
-+    // NULL means skip delivery. False signifies failure. Strict check.
-+    if ($result === FALSE) {
-       $this->logger->error('Could not send message using {title} to user ID {uid}.', ['{title}' => $this->pluginDefinition['title'], '{uid}' => $this->message->getOwnerId()]);
-       if ($this->configuration['save on fail']) {
-         $save = TRUE;
-       }
-     }
--    elseif ($result && $this->configuration['save on success']) {
-+    // MailManager::doMail may set $message['result'] = NULL in case sending was
-+    // canceled by one or more hook_mail_alter() implementations. This can
-+    // happen for example with Mail queue module. In that case the Message was
-+    // not really sent, on the other hand it didn't fail. As we won't know later
-+    // if it indeed was sent successfully, we take an optimistic approach, and
-+    // assume it will - thus saving the Message.
-+    elseif ($result !== FALSE && $this->configuration['save on success']) {
-       $save = TRUE;
-     }
- 
-@@ -175,4 +205,28 @@ abstract class MessageNotifierBase extends PluginBase implements MessageNotifier
+@@ -182,4 +205,28 @@ abstract class MessageNotifierBase extends PluginBase implements MessageNotifier
      $this->message = $message;
    }
  
@@ -340,15 +287,13 @@ index c45bc02..0cafc00 100644
    /**
     * Entry point to send and process a message.
 diff --git a/tests/modules/message_notify_test/message_notify_test.info.yml b/tests/modules/message_notify_test/message_notify_test.info.yml
-index d05ad96..a0e7786 100644
+index 2c32bab..a0e7786 100644
 --- a/tests/modules/message_notify_test/message_notify_test.info.yml
 +++ b/tests/modules/message_notify_test/message_notify_test.info.yml
-@@ -1,8 +1,7 @@
+@@ -1,6 +1,7 @@
  name: 'Message Notify Test Module'
  description: 'Functionality to assist Message notify testing.'
  type: module
--core: 8.x
--core_version_requirement: ^8 || ^9
 +core_version_requirement: ^9 || ^10
  dependencies:
    - drupal:field
@@ -453,35 +398,8 @@ index 0000000..ebc1b5a
 +  }
 +
 +}
-diff --git a/tests/src/Functional/EmailNotifierTest.php b/tests/src/Functional/EmailNotifierTest.php
-index 1916d39..14b0435 100644
---- a/tests/src/Functional/EmailNotifierTest.php
-+++ b/tests/src/Functional/EmailNotifierTest.php
-@@ -21,7 +21,12 @@ class EmailNotifierTest extends BrowserTestBase {
-   /**
-    * {@inheritdoc}
-    */
--  public static $modules = ['text', 'message_notify_test', 'filter_test'];
-+  protected static $modules = ['text', 'message_notify_test', 'filter_test'];
-+
-+  /**
-+   * {@inheritdoc}
-+   */
-+  protected $defaultTheme = 'stark';
- 
-   /**
-    * Testing message template.
-@@ -40,7 +45,7 @@ class EmailNotifierTest extends BrowserTestBase {
-   /**
-    * {@inheritdoc}
-    */
--  public function setUp() {
-+  public function setUp(): void {
-     parent::setUp();
- 
-     $this->messageTemplate = MessageTemplate::load('message_notify_test');
 diff --git a/tests/src/Kernel/MessageNotifyTest.php b/tests/src/Kernel/MessageNotifyTest.php
-index 415bbc9..1ec96b9 100644
+index 6d8c72e..1ec96b9 100644
 --- a/tests/src/Kernel/MessageNotifyTest.php
 +++ b/tests/src/Kernel/MessageNotifyTest.php
 @@ -2,12 +2,14 @@
@@ -509,179 +427,7 @@ index 415bbc9..1ec96b9 100644
    /**
     * Testing message template.
     *
-@@ -34,7 +39,7 @@ class MessageNotifyTest extends KernelTestBase {
-   /**
-    * {@inheritdoc}
-    */
--  public static $modules = [
-+  protected static $modules = [
-     'message_notify_test',
-     'message_notify',
-     'message',
-@@ -49,7 +54,7 @@ class MessageNotifyTest extends KernelTestBase {
-   /**
-    * {@inheritdoc}
-    */
--  public function setUp() {
-+  public function setUp(): void {
-     parent::setUp();
- 
-     $this->installEntitySchema('user');
-@@ -80,10 +85,10 @@ class MessageNotifyTest extends KernelTestBase {
-     // The test notifier added the output to the message.
-     $output = $message->output;
-     $text = $message->getText();
--    $this->assertContains((string) $text[1], (string) $output['foo']);
--    $this->assertContains('another field', (string) $output['foo']);
--    $this->assertContains((string) $text[0], (string) $output['bar']);
--    $this->assertNotContains('another field', (string) $output['bar']);
-+    $this->assertStringContainsString((string) $text[1], (string) $output['foo']);
-+    $this->assertStringContainsString('another field', (string) $output['foo']);
-+    $this->assertStringContainsString((string) $text[0], (string) $output['bar']);
-+    $this->assertStringNotContainsString('another field', (string) $output['bar']);
-   }
- 
-   /**
-@@ -95,12 +100,12 @@ class MessageNotifyTest extends KernelTestBase {
-     $message = Message::create(['template' => $this->messageTemplate->id(), 'uid' => $account->id()]);
-     $message->fail = FALSE;
-     $this->messageNotifier->send($message, [], 'test');
--    $this->assertTrue($message->id(), 'Message saved after successful delivery.');
-+    $this->assertNotNull($message->id(), 'Message saved after successful delivery.');
- 
-     $message = Message::create(['template' => $this->messageTemplate->id(), 'uid' => $account->id()]);
-     $message->fail = TRUE;
-     $this->messageNotifier->send($message, [], 'test');
--    $this->assertFalse($message->id(), 'Message not saved after unsuccessful delivery.');
-+    $this->assertNull($message->id(), 'Message not saved after unsuccessful delivery.');
- 
-     // Disable saving Message on delivery.
-     $options = [
-@@ -122,65 +127,79 @@ class MessageNotifyTest extends KernelTestBase {
- 
-   /**
-    * Test populating the rednered output to fields.
-+   *
-+   * @dataProvider providerPostSendRenderedField
-    */
--  public function testPostSendRenderedField() {
-+  public function testPostSendRenderedField(array $options, bool $exception) {
-     $this->attachRenderedFields();
- 
--    // Test plain fields.
--    $options = [
--      'rendered fields' => [
--        'foo' => 'rendered_foo',
--        'bar' => 'rendered_bar',
--      ],
--    ];
--
-     $message = Message::create(['template' => $this->messageTemplate->id()]);
-+
-+    if ($exception) {
-+      $this->expectException(MessageNotifyException::class);
-+    }
-+
-     $this->messageNotifier->send($message, $options, 'test');
--    $this->assertTrue($message->rendered_foo->value && $message->rendered_bar->value, 'Message is rendered to fields.');
- 
--    // Test field with text-processing.
--    $options = [
--      'rendered fields' => [
--        'foo' => 'rendered_baz',
--        'bar' => 'rendered_bar',
-+    if (!$exception) {
-+      $this->assertArrayHasKey('rendered fields', $options);
-+      $fields = array_values($options['rendered fields']);
-+      $this->assertNotEmpty($fields);
-+      foreach ($fields as $field) {
-+        $this->assertNotEmpty($message->{$field}->value, 'The message field ' . $field . ' was not rendered.');
-+      }
-+    }
-+  }
-+
-+  /**
-+   * Data provider for ::testPostSendRenderedField.
-+   *
-+   * @return array
-+   */
-+  public function providerPostSendRenderedField():array {
-+    $cases = [];
-+
-+    $cases['plain fields'] = [
-+      [
-+        'rendered fields' => [
-+          'foo' => 'rendered_foo',
-+          'bar' => 'rendered_bar',
-+        ],
-       ],
-+      FALSE,
-     ];
- 
--    $message = Message::create(['template' => $this->messageTemplate->id()]);
--    $this->messageNotifier->send($message, $options, 'test');
--    $this->assertTrue($message->rendered_baz->value && $message->rendered_bar->value, 'Message is rendered to fields with text-processing.');
-+    $cases['field with text-processing'] = [
-+      [
-+        'rendered fields' => [
-+          'foo' => 'rendered_baz',
-+          'bar' => 'rendered_bar',
-+        ],
-+      ],
-+      FALSE,
-+    ];
- 
--    // Test missing view mode key in the rendered fields.
--    $options = [
--      'rendered fields' => [
--        'foo' => 'rendered_foo',
--        // No "bar" field.
-+    $cases['missing view mode key in rendered fields'] = [
-+      [
-+        'rendered fields' => [
-+          'foo' => 'rendered_foo',
-+          // No "bar" field.
-+        ],
-       ],
-+      TRUE,
-     ];
--    $message = Message::create(['template' => $this->messageTemplate->id()]);
--    try {
--      $this->messageNotifier->send($message, $options, 'test');
--      $this->fail('Can save rendered message with missing view mode.');
--    }
--    catch (MessageNotifyException $e) {
--      $this->pass('Cannot save rendered message with missing view mode.');
--    }
- 
--    // Test invalid field name.
--    $options = [
--      'rendered fields' => [
--        'foo' => 'wrong_field',
--        'bar' => 'rendered_bar',
-+    $cases['invalid field name'] = [
-+      [
-+        'rendered fields' => [
-+          'foo' => 'wrong_field',
-+          'bar' => 'rendered_bar',
-+        ],
-       ],
-+      TRUE,
-     ];
--    $message = Message::create(['template' => $this->messageTemplate->id()]);
--    try {
--      $this->messageNotifier->send($message, $options, 'test');
--      $this->fail('Can save rendered message to non-existing field.');
--    }
--    catch (MessageNotifyException $e) {
--      $this->pass('Cannot save rendered message to non-existing field.');
--    }
-+
-+    return $cases;
-   }
- 
-   /**
-@@ -213,4 +232,28 @@ class MessageNotifyTest extends KernelTestBase {
+@@ -227,4 +232,28 @@ class MessageNotifyTest extends KernelTestBase {
      }
    }
  
@@ -711,19 +457,18 @@ index 415bbc9..1ec96b9 100644
 +
  }
 diff --git a/tests/src/Unit/Plugin/Notifier/EmailTest.php b/tests/src/Unit/Plugin/Notifier/EmailTest.php
-index 054fca3..4821236 100644
+index f40bc9e..4821236 100644
 --- a/tests/src/Unit/Plugin/Notifier/EmailTest.php
 +++ b/tests/src/Unit/Plugin/Notifier/EmailTest.php
-@@ -14,6 +14,8 @@ use Drupal\message_notify\Exception\MessageNotifyException;
- use Drupal\message_notify\Plugin\Notifier\Email;
+@@ -15,6 +15,7 @@ use Drupal\message_notify\Plugin\Notifier\Email;
  use Drupal\Tests\UnitTestCase;
  use Drupal\user\UserInterface;
-+use Prophecy\Argument;
+ use Prophecy\Argument;
 +use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
  
  /**
   * Unit tests for the Email notifier.
-@@ -52,6 +54,13 @@ class EmailTest extends UnitTestCase {
+@@ -53,6 +54,13 @@ class EmailTest extends UnitTestCase {
     */
    protected $renderer;
  
@@ -737,47 +482,15 @@ index 054fca3..4821236 100644
    /**
     * Plugin definition.
     *
-@@ -74,12 +83,15 @@ class EmailTest extends UnitTestCase {
-   /**
-    * {@inheritdoc}
-    */
--  public function setUp() {
-+  public function setUp(): void {
-     parent::setUp();
+@@ -80,6 +88,7 @@ class EmailTest extends UnitTestCase {
  
      $this->entityTypeManager = $this->prophesize(EntityTypeManagerInterface::class)->reveal();
      $this->mailManager = $this->prophesize(MailManagerInterface::class)->reveal();
--    $this->renderer = $this->prophesize(RendererInterface::class)->reveal();
 +    $this->eventDispatcher = $this->prophesize(EventDispatcherInterface::class)->reveal();
-+    $renderer = $this->prophesize(RendererInterface::class);
-+    $renderer->renderPlain(Argument::any())->willReturn('foo bar');
-+    $this->renderer = $renderer->reveal();
-     $this->pluginId = $this->randomMachineName();
-     $this->pluginDefinition['title'] = $this->randomMachineName();
-   }
-@@ -101,16 +113,18 @@ class EmailTest extends UnitTestCase {
-     $message->getOwnerId()->willReturn(42);
-     $template = $this->prophesize(MessageTemplateInterface::class)->reveal();
-     $message->getTemplate()->willReturn($template);
-+    $message->save()->willReturn(1);
- 
-     // Mock view builder.
--    $view_builder = $this->prophesize(EntityViewBuilderInterface::class)->reveal();
-+    $view_builder = $this->prophesize(EntityViewBuilderInterface::class);
-+    $view_builder->view(Argument::cetera())->willReturn([]);
-     $entity_type_manager = $this->prophesize(EntityTypeManagerInterface::class);
--    $entity_type_manager->getViewBuilder('message')->willReturn($view_builder);
-+    $entity_type_manager->getViewBuilder('message')->willReturn($view_builder->reveal());
-     $this->entityTypeManager = $entity_type_manager->reveal();
- 
-     $notifier = $this->getNotifier();
-     $notifier->setMessage($message->reveal());
--    $this->assertNull($notifier->send());
-+    $this->assertFalse($notifier->send());
-   }
- 
-   /**
-@@ -137,6 +151,12 @@ class EmailTest extends UnitTestCase {
+     $renderer = $this->prophesize(RendererInterface::class);
+     $renderer->renderPlain(Argument::any())->willReturn('foo bar');
+     $this->renderer = $renderer->reveal();
+@@ -142,6 +151,12 @@ class EmailTest extends UnitTestCase {
      $account = $this->prophesize(UserInterface::class)->reveal();
      $message->getOwner()->willReturn($account);
      $notifier = $this->getNotifier($message->reveal());
@@ -790,7 +503,7 @@ index 054fca3..4821236 100644
      $notifier->deliver([]);
    }
  
-@@ -160,7 +180,8 @@ class EmailTest extends UnitTestCase {
+@@ -165,7 +180,8 @@ class EmailTest extends UnitTestCase {
        $this->entityTypeManager,
        $this->renderer,
        $message,

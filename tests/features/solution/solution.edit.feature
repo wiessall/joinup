@@ -107,20 +107,3 @@ Feature: Solution editing.
     Then I should not see the link "Edit"
     When I go to the edit form of the "Another solution" solution
     Then I should get an access denied error
-
-  @javascript
-  Scenario: Test solution edit form vertical tabs.
-    When I am logged in as "Yancy Burton"
-    And I go to the homepage of the "Collection example" collection
-    And I click "Add solution" in the plus button menu
-    And I check the "I have read and accept the legal notice and I commit to manage my solution on a regular basis." material checkbox
-    And I press "Yes"
-    Then I should see the heading "Add Solution"
-    And the "Main fields" accordion item should be active
-    # @todo The summaries are no longer visible since we migrated to Drupal 9.
-    #   Restore these when ISAICP-6963 is fixed.
-    # And the "Main fields" tab summary should be "Contains all the fields to be mandatorily filled to create a solution"
-    # And the "Additional fields" tab summary should be "Contains all optional fields providing additional information on the solution"
-    And I press "Main fields"
-    And I press "Additional fields"
-    Then the "Additional fields" accordion item should be active
