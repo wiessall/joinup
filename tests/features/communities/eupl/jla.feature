@@ -82,7 +82,7 @@ Feature:
 
     When I am logged in as an "Licence manager"
     And I visit the "JLA" custom page
-    Then I should see the "a" element with the "title" attribute set to "Ability to use, copy / reproduce the work freely in unlimited quantities" in the "Content" region
+    Then I should see the "button" element with the "title" attribute set to "Ability to use, copy / reproduce the work freely in unlimited quantities" in the "Content" region
     And I should see the link "Edit tooltip descriptions"
     When I click "Edit tooltip descriptions"
     Then I should see the heading "Legal type"
@@ -92,7 +92,7 @@ Feature:
     When I fill in "Description" with "Description of tooltip"
     And I press "Save"
     And I visit the "JLA" custom page
-    Then I should see the "a" element with the "title" attribute set to "Description of tooltip" in the "Content" region
+    Then I should see the "button" element with the "title" attribute set to "Description of tooltip" in the "Content" region
 
   @terms
   Scenario: Test the licence manager can not edit name fields of parent terms.
