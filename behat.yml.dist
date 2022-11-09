@@ -174,7 +174,7 @@ default:
         # See https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7138
         Modal title: '.modal-header,.ui-dialog-title'
         My unpublished content area: '.block-user-unpublished'
-        Navigation bar: 'nav.joinup-navbar'
+        Navigation bar: '.joinup-navbar'
         Navigation menu: '#block-ventuno-navigation'
         # TODO: Remove div.page__title-wrapper in ISAICP-7138.
         # See https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7138

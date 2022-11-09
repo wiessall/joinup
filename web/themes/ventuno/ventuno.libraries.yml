@@ -267,10 +267,15 @@ user--group-header:
     theme:
       assets/css/user--group-header.min.css: {}
 
-# @todo ISAICP-7138 remove when switch to Ventuno theme is complete
+# @todo ISAICP-7138 remove following library when switch to Ventuno theme is complete
 bootstrap-base:
   css:
     component:
       assets/css/bootstrap-base.min.css: { minified: true }
   js:
     assets/js/oe-bcl-joinup.bundle.min.js: { minified: true, attributes: { defer: true } }
+
+# @todo ISAICP-7138 remove following library when switch to Ventuno theme is complete
+navbar--sticky:
+  js:
+    assets/js/sticky-menu.js: { minified: true, attributes: { defer: true } }
