@@ -188,6 +188,9 @@ commands:
     # See: https://citnet.tech.ec.europa.eu/CITnet/jira/browse/DROPSEC-2040.
     - task: run
       command: toolkit:lint-js
+    # Checks for extensions metadata deprecations.
+    - task: exec
+      command: ${drush.bin} joinup:check-extension-metadata-deprecation
     #- task: run
     #  command: testing:check-deprecated-code
     #- task: run
