@@ -76,10 +76,11 @@
 {% set navbar_toggler_attributes = navbar_toggler_attributes.setAttribute('aria-controls', _list_id) %}
 {% set navbar_toggler_attributes = navbar_toggler_attributes.setAttribute('aria-expanded', 'false') %}
 {% set navbar_toggler_attributes = navbar_toggler_attributes.setAttribute('aria-label', 'Toggle navigation') %}
+{% set navbar_toggler_attributes = navbar_toggler_attributes.setAttribute('role', 'banner') %}
 {% set list_attributes = list_attributes.addClass(_list_classes) %}
 {% set list_attributes = list_attributes.setAttribute('id', _list_id) %}
 
-<nav
+<header
   {{ nav_attributes }}
 >
   <div class="container">
@@ -88,7 +89,7 @@
         <img class="navbar-brand-image" src="{{ _brand.src }}" alt="{{ _brand.alt }}" width="96" height="25"/>
       </a>
     </div>
-    <div id="{{ _collapse_id }}">
+    <nav id="{{ _collapse_id }}">
       <ul
         {{ list_attributes }}
       >
@@ -179,8 +180,8 @@
           </li>
         {% endfor %}
       </ul>
-    </div>
+    </nav>
   </div>
-</nav>
+</header>
 
 {% endapply %}

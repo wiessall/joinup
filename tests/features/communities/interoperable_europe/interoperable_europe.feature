@@ -7,8 +7,9 @@ Feature:
   Scenario Outline: Page customizations for the Interoperable Europe collection
     Given I am <user>
     And I am on the homepage
-    # A dedicated link in the header should lead to the landing page.
-    When I click "Interoperable Europe" in the Header region
+    # A dedicated link in the navigation bar should lead to the landing page.
+    Then I should see the link "Interoperable Europe" in the "Navigation bar"
+    When I click "Interoperable Europe"
     Then I should see the heading "Interoperable Europe"
     # Check that we are on the expected URL for the landing page.
     And I should be on "/collection/interoperable-europe/interoperable-europe"
