@@ -1552,7 +1552,7 @@ class JoinupContext extends RawDrupalContext {
       $this->openMaterialDesignMenu($this->getSession()->getPage()->find('css', '.add-content-menu'));
       return;
     }
-    if (!$this->browserSupportsJavaScript()) {
+    if (!$this->hasJavascriptSupport()) {
       // Do nothing, if it's a non-Javascript browser.
       return;
     }
@@ -1591,7 +1591,7 @@ class JoinupContext extends RawDrupalContext {
       $this->openMaterialDesignMenu($element);
       return;
     }
-    if ($this->browserSupportsJavaScript()) {
+    if ($this->hasJavascriptSupport()) {
       $entity_tasks_selector = $this->getRegionSelector('Entity actions');
       $this->getSession()->getPage()->find('css', "$entity_tasks_selector button")->press();
     }
