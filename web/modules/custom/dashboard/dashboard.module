@@ -30,7 +30,7 @@ function dashboard_form_alter(array &$form, FormStateInterface $form_state, stri
 }
 
 /**
- * Redirect users to the Curated content listings after saving a content list.
+ * Redirects users to the Curated content listings after saving a content list.
  *
  * @param array $form
  *   The form array.

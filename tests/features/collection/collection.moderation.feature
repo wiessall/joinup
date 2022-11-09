@@ -213,11 +213,7 @@ Feature: Collection moderation
     Given I am logged in as a user with the "authenticated" role
     # Propose a collection, filling in the required fields.
     When I go to the propose collection form
-    Then the "Main fields" accordion item should be active
-    # @todo The summaries are no longer visible since we migrated to Drupal 9.
-    #   Restore these when ISAICP-6963 is fixed.
-    # And the "Main fields" tab summary should be "Contains all the fields to be mandatorily filled to create a collection"
-    # And the "Additional fields" tab summary should be "Contains all optional fields providing additional information on the collection"
+    Then the "Main fields" accordion section should be active
     And I fill in the following:
       | Title  | Spectres in fog        |
       # Contact information data.
@@ -229,8 +225,8 @@ Feature: Collection moderation
     And I wait for AJAX to finish
     And I fill in "Name" with "Katsumoto"
     And I check the box "Academia/Scientific organisation"
-    And I press "Additional fields"
-    Then the "Additional fields" accordion item should be active
+    And I expand the "Additional fields" accordion section
+    Then the "Additional fields" accordion section should be active
     And I attach the file "logo.png" to "Logo"
     And I wait for AJAX to finish
     And I attach the file "banner.jpg" to "Banner"
@@ -254,15 +250,14 @@ Feature: Collection moderation
     And I go to the homepage of the "Spectres in fog" collection
     And I open the header local tasks menu
     And I click "Edit" in the "Entity actions" region
-    And I press "Additional fields"
+    And I expand the "Additional fields" accordion section
     Then the radio button "Any user can create content." from field "Content creation" should be selected
     # Also when saving and reopening the edit form the content creation option
     # should remain unchanged.
     When I press "Publish"
     And I open the header local tasks menu
     And I click "Edit" in the "Entity actions" region
-    And I press "Main fields"
-    And I press "Additional fields"
+    And I expand the "Additional fields" accordion section
     Then the radio button "Any user can create content." from field "Content creation" should be selected
 
     # Clean up the entities that were created.
@@ -291,7 +286,7 @@ Feature: Collection moderation
     And I wait for AJAX to finish
     And I fill in "Name" with "Garnett Clifton"
     And I check the box "Supra-national authority"
-    And I press "Additional fields"
+    And I expand the "Additional fields" accordion section
     And I attach the file "logo.png" to "Logo"
     And I wait for AJAX to finish
     And I attach the file "banner.jpg" to "Banner"
@@ -304,8 +299,7 @@ Feature: Collection moderation
     # Edit again.
     When I open the header local tasks menu
     And I click "Edit" in the "Entity actions" region
-    And I press "Main fields"
-    And I press "Additional fields"
+    And I expand the "Additional fields" accordion section
     Then the radio button "Any user can create content." from field "Content creation" should be selected
 
     # Clean up the entities that were created.
@@ -334,7 +328,7 @@ Feature: Collection moderation
     And I wait for AJAX to finish
     And I fill in "Name" with "Coretta Simonson"
     And I check the box "Private Individual(s)"
-    And I press "Additional fields"
+    And I expand the "Additional fields" accordion section
     And I attach the file "logo.png" to "Logo"
     And I wait for AJAX to finish
     And I attach the file "banner.jpg" to "Banner"
@@ -347,8 +341,7 @@ Feature: Collection moderation
     # Edit again.
     When I open the header local tasks menu
     And I click "Edit" in the "Entity actions" region
-    And I press "Main fields"
-    And I press "Additional fields"
+    And I expand the "Additional fields" accordion section
     Then the radio button "Only facilitators and authors can create content." from field "Content creation" should be selected
 
     # Clean up the entities that were created.
@@ -378,7 +371,7 @@ Feature: Collection moderation
     And I wait for AJAX to finish
     And I fill in "Name" with "Terrance Nash"
     And I check the box "Regional authority"
-    And I press "Additional fields"
+    And I expand the "Additional fields" accordion section
     And I attach the file "logo.png" to "Logo"
     And I wait for AJAX to finish
     And I attach the file "banner.jpg" to "Banner"
@@ -393,8 +386,7 @@ Feature: Collection moderation
     # Edit again.
     When I open the header local tasks menu
     And I click "Edit" in the "Entity actions" region
-    And I press "Main fields"
-    And I press "Additional fields"
+    And I expand the "Additional fields" accordion section
     Then the radio button "Only facilitators and authors can create content." from field "Content creation" should be selected
 
     # Clean up the entities that were created.
@@ -423,7 +415,7 @@ Feature: Collection moderation
     And I wait for AJAX to finish
     And I fill in "Name" with "Mable Pelley"
     And I check the box "National authority"
-    And I press "Additional fields"
+    And I expand the "Additional fields" accordion section
     And I attach the file "logo.png" to "Logo"
     And I wait for AJAX to finish
     And I attach the file "banner.jpg" to "Banner"
@@ -439,8 +431,7 @@ Feature: Collection moderation
     # Edit again.
     When I open the header local tasks menu
     And I click "Edit" in the "Entity actions" region
-    And I press "Main fields"
-    And I press "Additional fields"
+    And I expand the "Additional fields" accordion section
     Then the radio button "Only facilitators and authors can create content." from field "Content creation" should be selected
 
     # Clean up the entities that were created.

@@ -8,8 +8,8 @@ use Behat\Gherkin\Node\TableNode;
 use Behat\Testwork\Hook\Scope\BeforeSuiteScope;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\joinup\Chip;
-use Drupal\joinup\Traits\BrowserCapabilityDetectionTrait;
 use Drupal\joinup\Traits\EntityTrait;
+use Drupal\joinup\Traits\JavascriptTrait;
 use Drupal\joinup\Traits\TraversingTrait;
 use Drupal\joinup\Traits\UtilityTrait;
 use PHPUnit\Framework\Assert;
@@ -19,7 +19,7 @@ use PHPUnit\Framework\Assert;
  */
 class JoinupCoreContext extends RawDrupalContext {
 
-  use BrowserCapabilityDetectionTrait;
+  use JavascriptTrait;
   use EntityTrait;
   use TraversingTrait;
   use UtilityTrait;
@@ -126,7 +126,7 @@ class JoinupCoreContext extends RawDrupalContext {
     $locator_visibility_mapping = [
       '.mdl-chip__text, .navbar-search .search-badge' => TRUE,
     ];
-    if (!$this->browserSupportsJavaScript()) {
+    if (!$this->hasJavascriptSupport()) {
       $locator_visibility_mapping['.mdl-chipfield__input'] = FALSE;
     }
     foreach ($locator_visibility_mapping as $locator => $is_visible) {

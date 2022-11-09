@@ -12,6 +12,7 @@ dependencies:
   - 'drupal:rest'
   - 'drupal:serialization'
   - 'drupal:user'
+  - 'drupal:views'
   - 'joinup:custom_page'
   - 'joinup:joinup_group'
   - 'og_menu:og_menu'

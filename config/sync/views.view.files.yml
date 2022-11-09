@@ -763,7 +763,7 @@ display:
         weight: 0
         menu_name: admin
         context: ''
-      always_use_admin_theme: false
+      use_admin_theme: false
     cache_metadata:
       max-age: -1
       contexts:
@@ -1122,7 +1122,7 @@ display:
       display_description: ''
       display_extenders: {  }
       path: admin/content/files/usage/%
-      always_use_admin_theme: false
+      use_admin_theme: false
     cache_metadata:
       max-age: -1
       contexts:

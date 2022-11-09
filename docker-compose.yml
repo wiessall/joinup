@@ -16,6 +16,7 @@
 version: '3.8'
 services:
   web:
+    image: fpfis/httpd-php-dev:8.1
     build:
       context: './resources/docker/web'
     working_dir: /var/www/html

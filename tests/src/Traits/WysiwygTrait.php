@@ -210,9 +210,9 @@ trait WysiwygTrait {
    *   page.
    */
   protected function getWysiwygButtons(string $label, ?TraversableElement $region = NULL): array {
-    assert(method_exists($this, 'browserSupportsJavaScript'), __METHOD__ . ' depends on BrowserCapabilityDetectionTrait. Please include it in your class.');
+    assert(method_exists($this, 'hasJavascriptSupport'), __METHOD__ . ' depends on JavascriptTrait. Please include it in your class.');
 
-    if ($this->browserSupportsJavaScript()) {
+    if ($this->hasJavascriptSupport()) {
       $editor = $this->getWysiwyg($label, $region);
       $button_elements = $editor->findAll('xpath', '//a[contains(concat(" ", normalize-space(@class), " "), " cke_button ")]/span[contains(@id, "_label")]');
 
