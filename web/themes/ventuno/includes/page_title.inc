@@ -22,3 +22,31 @@ function ventuno_preprocess_page_title(array &$variables): void {
     $variables['title'] = t('EIF Perspective attributes of @title', ['@title' => $solution->label()]);
   }
 }
+
+/**
+ * Implements hook_theme_suggestions_HOOK_alter() for page-title.html.twig.
+ *
+ * Adds suggestions when the route is the canonical view of a rdf entity or a
+ * node.
+ */
+function ventuno_theme_suggestions_page_title_alter(array &$suggestions, array &$variables): void {
+  $route_match = \Drupal::routeMatch();
+  $route_name = $route_match->getRouteName();
+
+  $entity_types = ['rdf_entity', 'node'];
+  foreach ($entity_types as $entity_type) {
+    if ($route_name === "entity.{$entity_type}.canonical") {
+      /** @var \Drupal\core\Entity\EntityInterface $entity */
+      $entity = $route_match->getParameter($entity_type);
+      $suggestions[] = 'page_title__' . $entity_type . '__' . $entity->bundle();
+      $variables['entity'] = $entity;
+    }
+  }
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for page-title--node--glossary.html.twig.
+ */
+function ventuno_preprocess_page_title__node__glossary(array &$variables): void {
+  $variables['title'] = t('Glossary');
+}
