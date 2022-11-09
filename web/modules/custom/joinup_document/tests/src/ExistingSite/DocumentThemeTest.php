@@ -51,7 +51,6 @@ class DocumentThemeTest extends JoinupExistingSiteTestBase {
     $post_request_indexing->destruct();
     $this->getSession()->reload();
 
-    $assert->responseContains('<div class="listing__image">');
     $assert->pageTextContains('Document title');
     $assert->pageTextNotContains('Hello document body');
     $assert->pageTextNotContains('keyword_sample');
