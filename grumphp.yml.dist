@@ -1,6 +1,0 @@
-imports:
-  - { resource: vendor/ec-europa/qa-automation/dist/qa-conventions.yml }
-
-grumphp:
-    ascii: ~
-    tasks: {  }

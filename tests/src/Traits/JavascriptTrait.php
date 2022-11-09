@@ -12,8 +12,6 @@ use Behat\Mink\Element\TraversableElement;
  */
 trait JavascriptTrait {
 
-  use BrowserCapabilityDetectionTrait;
-
   /**
    * Moves a named element in the middle of the screen for Javascript tests.
    *
@@ -92,10 +90,9 @@ trait JavascriptTrait {
    *   The node element.
    */
   protected function scrollElementIntoView(TraversableElement $element): void {
-    if (!$this->browserSupportsJavaScript()) {
+    if (!$this->hasJavascriptSupport()) {
       return;
     }
-
     // Strings (labels) containing simple quotes (') are enclosed with double
     // quotes ("), thus we need to escape them. Also, xpath might contain new
     // lines which we replace with spaces.
@@ -120,6 +117,28 @@ trait JavascriptTrait {
    */
   public function hasJavascriptSupport(): bool {
     return $this->getSession()->getDriver() instanceof Selenium2Driver;
+  }
+
+  /**
+   * Checks that we are running on a JavaScript-enabled browser.
+   *
+   * @throws \LogicException
+   *   Thrown when not running on a JS-enabled browser.
+   */
+  protected function assertJavaScriptEnabledBrowser(): void {
+    if (!$this->hasJavascriptSupport()) {
+      // Show a helpful error message.
+      throw new \LogicException('This test needs to run on a real browser using Selenium or similar. Please add the "@javascript" tag to the scenario.');
+    }
+  }
+
+  /**
+   * Scrolls to the top of the browser's window.
+   */
+  protected function scrollToTop(): void {
+    if ($this->hasJavascriptSupport()) {
+      $this->getSession()->getDriver()->executeScript('window.scroll(0, 0);');
+    }
   }
 
 }

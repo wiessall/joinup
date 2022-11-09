@@ -889,7 +889,7 @@ display:
         menu_name: admin
         parent: ''
         context: '0'
-      always_use_admin_theme: false
+      use_admin_theme: false
     cache_metadata:
       max-age: 0
       contexts:
@@ -1597,7 +1597,7 @@ display:
         menu_name: admin
         parent: ''
         context: '0'
-      always_use_admin_theme: false
+      use_admin_theme: false
     cache_metadata:
       max-age: 0
       contexts:
