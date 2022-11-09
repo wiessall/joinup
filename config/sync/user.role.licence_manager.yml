@@ -2,10 +2,14 @@ uuid: 498c6842-7a39-4604-b09d-03e582afc376
 langcode: en
 status: true
 dependencies:
+  config:
+    - taxonomy.vocabulary.legal_type
   module:
     - dashboard
     - joinup_licence
     - rdf_entity
+    - taxonomy
+    - toolbar
 id: licence_manager
 label: 'Licence manager'
 weight: -8
@@ -13,7 +17,10 @@ is_admin: null
 permissions:
   - 'access compatibility document overview'
   - 'access dashboard'
+  - 'access taxonomy overview'
+  - 'access toolbar'
   - 'create licence rdf entity'
   - 'delete licence rdf entity'
   - 'edit licence rdf entity'
+  - 'edit terms in legal_type'
   - 'view licence overview page'

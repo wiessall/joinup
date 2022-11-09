@@ -918,21 +918,26 @@ class FeatureContext extends RawDrupalContext implements SnippetAcceptingContext
     $fixture = file_get_contents(__DIR__ . '/../../fixtures/testing_terms.yml');
     $hierarchy = Yaml::decode($fixture);
     foreach ($hierarchy as $vid => $terms) {
-      foreach ($terms as $key => $data) {
-        $has_children = is_array($terms);
-        $name = $has_children ? $key : $data;
+      foreach ($terms as $parent_index => $data) {
+        $weight = $parent_index - 1;
+        $has_children = array_key_exists('children', $data);
         $term = (object) [
           'vocabulary_machine_name' => $vid,
-          'name' => $name,
+          'name' => $data['name'],
+          'weight' => $weight,
         ];
+        $children = $data['children'];
         $this->termCreate($term);
         $parent_tid = $term->tid;
         if ($has_children) {
-          foreach ($data as $name) {
+          foreach ($children as $child_index => $child) {
+            $weight = $child_index - 1;
             $term = (object) [
               'vocabulary_machine_name' => $vid,
-              'name' => $name,
+              'name' => $child['name'],
               'parent' => $parent_tid,
+              'weight' => $weight,
+              'description' => $child['description'] ?? '',
             ];
             $this->termCreate($term);
           }
