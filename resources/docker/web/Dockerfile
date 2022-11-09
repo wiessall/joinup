@@ -1,4 +1,4 @@
-FROM fpfis/httpd-php-dev:7.4
+FROM fpfis/httpd-php-dev:8.1
 
 # USER_ID and GROUP_ID should not be used at the same time with DAEMON_USER and DAEMON_GROUP respectively.
 ARG USER_ID
