@@ -190,8 +190,8 @@ commands:
       command: toolkit:lint-js
     - task: run
       command: testing:check-deprecated-code
-    #- task: run
-    #  command: testing:check-deprecated-code-contrib
+    # - task: run
+    #   command: testing:check-deprecated-code-contrib
 
   # Lints JS files  using ESLint.
   toolkit:lint-js:
