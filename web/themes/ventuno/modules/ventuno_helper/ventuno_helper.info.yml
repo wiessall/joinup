@@ -1,7 +1,7 @@
 type: module
 name: Ventuno Helper
 description: Provides backend support for Ventuno theme.
-core_version_requirement: '>=9.3'
+core_version_requirement: ">=9.4"
 php: 7.4
 dependencies:
   - bootstrap4_modal:bootstrap4_modal
