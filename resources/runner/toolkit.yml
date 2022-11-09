@@ -44,6 +44,14 @@ command:
       options:
         dumpfile: ${mysql.dump_dir}/mysql.sql
 
+phpunit:
+  commands:
+    before:
+      # Checks for extensions metadata deprecations. Note that we run this as
+      # part of PHPUnit testing as we need a bootstrapped Drupal.
+      - task: exec
+        command: ${drush.bin} joinup:check-extension-metadata-deprecation
+
 commands:
 
   # Overrides the toolkit:build-dev command.
@@ -188,9 +196,6 @@ commands:
     # See: https://citnet.tech.ec.europa.eu/CITnet/jira/browse/DROPSEC-2040.
     - task: run
       command: toolkit:lint-js
-    # Checks for extensions metadata deprecations.
-    - task: exec
-      command: ${drush.bin} joinup:check-extension-metadata-deprecation
     #- task: run
     #  command: testing:check-deprecated-code
     #- task: run
