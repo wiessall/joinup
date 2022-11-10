@@ -44,14 +44,6 @@ command:
       options:
         dumpfile: ${mysql.dump_dir}/mysql.sql
 
-phpunit:
-  commands:
-    before:
-      # Checks for extensions metadata deprecations. Note that we run this as
-      # part of PHPUnit testing as we need a bootstrapped Drupal.
-      - task: exec
-        command: ${drush.bin} joinup:check-extension-metadata-deprecation
-
 commands:
 
   # Overrides the toolkit:build-dev command.
@@ -109,6 +101,10 @@ commands:
       command: drupal:settings
       arguments:
         - site-clean
+    # Checks for extensions metadata deprecations. Note that we run this after
+    # site install as we need a bootstrapped Drupal.
+    - task: exec
+      command: ${drush.bin} joinup:check-extension-metadata-deprecation
     - task: exec
       command: ${drush.bin}
       arguments:
