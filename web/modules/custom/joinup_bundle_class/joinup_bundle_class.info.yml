@@ -3,4 +3,3 @@ description: 'Shared code for entity types that implement bundle classes in Join
 type: module
 package: Joinup
 core_version_requirement: ">= 9.4"
-php: 7.1

@@ -3,6 +3,5 @@ description: Allows storing triples in the datastore under a specific graph.
 type: module
 package: Joinup
 core_version_requirement: ">= 9.4"
-php: 7.1
 dependencies:
   - rdf_entity:rdf_entity

@@ -2,7 +2,6 @@ name: EUPL
 type: module
 description: 'Customizations for the EUPL community.'
 core_version_requirement: ">= 9.4"
-php: 7.1
 package: 'Joinup communities'
 
 dependencies: {  }

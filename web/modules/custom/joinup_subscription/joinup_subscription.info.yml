@@ -3,7 +3,6 @@ description: Allows users to subscribe to collection content.
 type: module
 package: Joinup
 core_version_requirement: ">= 9.4"
-php: 7.1
 
 dependencies:
   - drupal:options

@@ -3,7 +3,6 @@ description: 'Services and API methods useful for Joinup groups.'
 type: module
 package: Joinup
 core_version_requirement: ">= 9.4"
-php: 7.1
 
 dependencies:
   - 'joinup:topic'

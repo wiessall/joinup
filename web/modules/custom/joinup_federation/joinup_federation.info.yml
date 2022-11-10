@@ -3,7 +3,6 @@ description: 'Allow modules to implement pipelines for RDF data federation.'
 type: module
 package: Joinup
 core_version_requirement: ">= 9.4"
-php: 7.1
 
 dependencies:
   - 'joinup:pipeline'

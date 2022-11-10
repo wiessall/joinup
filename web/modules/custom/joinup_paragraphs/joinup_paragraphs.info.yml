@@ -3,7 +3,6 @@ description: 'Contains settings, installation config and functionality related t
 type: module
 package: Joinup
 core_version_requirement: ">= 9.4"
-php: 7.1
 
 dependencies:
   - json_field:json_field

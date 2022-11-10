@@ -3,7 +3,6 @@ description: 'Handles notifications for joinup project.'
 type: module
 package: Joinup
 core_version_requirement: ">= 9.4"
-php: 7.1
 dependencies:
   - 'joinup:joinup_workflow'
   - 'joinup:state_machine_revisions'
