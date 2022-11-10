@@ -240,7 +240,7 @@ display:
     display_options:
       display_extenders: {  }
       path: topic-list-only-parents
-      always_use_admin_theme: false
+      use_admin_theme: false
     cache_metadata:
       max-age: -1
       contexts:

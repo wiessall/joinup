@@ -27,6 +27,7 @@ use Drupal\joinup\Traits\KeyboardInteractionTrait;
 use Drupal\joinup\Traits\MaterialDesignTrait;
 use Drupal\joinup\Traits\OgTrait;
 use Drupal\joinup\Traits\TabledragTrait;
+use Drupal\joinup\Traits\TestingEntitiesTrait;
 use Drupal\joinup\Traits\TraversingTrait;
 use Drupal\joinup\Traits\UserTrait;
 use Drupal\joinup\Traits\UtilityTrait;
@@ -63,6 +64,7 @@ class JoinupContext extends RawDrupalContext {
   use OgTrait;
   use StringTranslationTrait;
   use TabledragTrait;
+  use TestingEntitiesTrait;
   use TraversingTrait;
   use UserTrait;
   use UtilityTrait;
@@ -1570,7 +1572,7 @@ class JoinupContext extends RawDrupalContext {
   public function iOpenTheAccountMenu() {
     // Non-JS browsers are directly interacting with the HTML, so we consider
     // the account menu to be already open.
-    if (!$this->browserSupportsJavaScript()) {
+    if (!$this->hasJavascriptSupport()) {
       return;
     }
 
@@ -1613,7 +1615,7 @@ class JoinupContext extends RawDrupalContext {
    * @When the plus button menu should be empty
    */
   public function assertEmptyPlusButtonMenu() {
-    if ($this->browserSupportsJavaScript()) {
+    if ($this->hasJavascriptSupport()) {
       if ($this->getSession()->getPage()->findAll('xpath', '//div[contains(concat(" ", normalize-space(@class), " "), " add-content-menu ")]//li[last()]')) {
         throw new \Exception("The plus button menu is not empty.");
       }
@@ -1690,6 +1692,7 @@ class JoinupContext extends RawDrupalContext {
         'field_name' => $field_name,
         'entity_type' => 'node',
         'entity_id' => $id,
+        'subject' => $this->getRandom()->string(),
       ];
       $comment_values += $values;
       $comment = Comment::create($comment_values);
@@ -1703,7 +1706,9 @@ class JoinupContext extends RawDrupalContext {
         $comment->setCreatedTime($comment_values['created']);
       }
 
+      $comment->skip_notification = TRUE;
       $comment->save();
+      $this->entities['comment'][$comment->id()] = $comment;
     }
   }
 
@@ -2201,7 +2206,7 @@ class JoinupContext extends RawDrupalContext {
    * @When I pick :value from the autocomplete suggestions
    */
   public function fillFieldWithNormalisedEntityReference(string $value, ?string $field = NULL): void {
-    if ($this->browserSupportsJavaScript()) {
+    if ($this->hasJavascriptSupport()) {
       $session = $this->getSession();
       $xpath = '//ul[contains(concat(" ", normalize-space(@class), " "), " ui-autocomplete ")]//a[text() = "' . $value . '"]';
       $element = $session->getPage()->find('xpath', $xpath);
@@ -2511,7 +2516,7 @@ class JoinupContext extends RawDrupalContext {
    * @When I hit|press the :key key in the :field field
    */
   public function pressKeyInField(string $key, string $field): void {
-    if (!$this->browserSupportsJavaScript()) {
+    if (!$this->hasJavascriptSupport()) {
       throw new \Exception('This step requires JavaScript to run.');
     }
 

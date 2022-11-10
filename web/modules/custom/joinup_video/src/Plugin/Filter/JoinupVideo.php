@@ -153,7 +153,7 @@ class JoinupVideo extends FilterBase implements ContainerFactoryPluginInterface 
       }
 
       // Replace the JSON settings with a video.
-      $text = str_replace($source_text, $this->renderer->render($embed_code), $text);
+      $text = str_replace($source_text, (string) $this->renderer->render($embed_code), $text);
 
       // Add the required responsive video library only when at least one match
       // is present.

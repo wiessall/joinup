@@ -23,11 +23,11 @@ trait BootstrapTrait {
    *   when the accordion doesn't become visible within a reasonable time frame.
    */
   protected function openBootstrapAccordion(NodeElement $wrapper) {
-    \assert(method_exists($this, 'browserSupportsJavaScript'), __METHOD__ . ' depends on BrowserCapabilityDetectionTrait. Please include it in your class.');
+    \assert(method_exists($this, 'hasJavascriptSupport'), __METHOD__ . ' depends on JavascriptTrait. Please include it in your class.');
 
     // Non-JS browsers are directly interacting with the HTML, so we can
     // consider the content inside the accordion to be visible.
-    if (!$this->browserSupportsJavaScript()) {
+    if (!$this->hasJavascriptSupport()) {
       return;
     }
 
@@ -76,11 +76,11 @@ trait BootstrapTrait {
    *   frame.
    */
   protected function openBootstrapDropdown(NodeElement $wrapper) {
-    \assert(method_exists($this, 'browserSupportsJavaScript'), __METHOD__ . ' depends on BrowserCapabilityDetectionTrait. Please include it in your class.');
+    \assert(method_exists($this, 'hasJavascriptSupport'), __METHOD__ . ' depends on JavascriptTrait. Please include it in your class.');
 
     // Non-JS browsers are directly interacting with the HTML, so we can
     // consider the content inside the dropdown to be visible.
-    if (!$this->browserSupportsJavaScript()) {
+    if (!$this->hasJavascriptSupport()) {
       return;
     }
 

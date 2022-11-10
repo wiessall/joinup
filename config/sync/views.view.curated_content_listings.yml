@@ -72,7 +72,6 @@ display:
           empty_zero: false
           hide_alter_empty: true
           text: edit
-          bypass_access_check: false
           output_url_as_text: true
           absolute: false
         title:
@@ -260,7 +259,7 @@ display:
     display_options:
       display_extenders: {  }
       path: admin/curated-content-listings
-      always_use_admin_theme: false
+      use_admin_theme: false
     cache_metadata:
       max-age: -1
       contexts:

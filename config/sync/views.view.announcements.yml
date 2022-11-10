@@ -400,7 +400,6 @@ display:
           empty_zero: false
           hide_alter_empty: true
           text: edit
-          bypass_access_check: false
           output_url_as_text: false
           absolute: false
       pager:
@@ -1133,7 +1132,6 @@ display:
           empty_zero: false
           hide_alter_empty: true
           text: edit
-          bypass_access_check: false
           output_url_as_text: false
           absolute: false
       arguments: {  }
@@ -1265,7 +1263,7 @@ display:
         menu_name: admin
         parent: system.admin
         context: '0'
-      always_use_admin_theme: false
+      use_admin_theme: false
     cache_metadata:
       max-age: -1
       contexts:
@@ -1318,7 +1316,7 @@ display:
         menu_name: main
         parent: ''
         context: '0'
-      always_use_admin_theme: false
+      use_admin_theme: false
     cache_metadata:
       max-age: -1
       contexts:
