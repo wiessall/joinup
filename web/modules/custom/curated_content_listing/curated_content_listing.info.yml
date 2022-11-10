@@ -4,7 +4,6 @@ description: Provides listings of content that can be hand picked by moderators.
 package: Joinup
 
 core_version_requirement: ">= 9.4"
-php: 7.1
 
 dependencies:
   - entityqueue:entityqueue

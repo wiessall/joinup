@@ -3,7 +3,6 @@ description: Contains specific functionality that helps visibility of the platfo
 type: module
 package: Joinup
 core_version_requirement: ">= 9.4"
-php: 7.1
 
 dependencies:
   - simple_sitemap:simple_sitemap

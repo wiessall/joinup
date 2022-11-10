@@ -3,4 +3,3 @@ description: Allows to subscribe to Newsroom newsletters
 type: module
 package: OpenEuropa
 core_version_requirement: ">= 9.4"
-php: 7.1

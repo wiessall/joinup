@@ -3,4 +3,3 @@ description: 'Provides additional logging when unexpected behavior occurs.'
 type: module
 package: Joinup
 core_version_requirement: ">= 9.4"
-php: 7.1

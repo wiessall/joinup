@@ -4,7 +4,6 @@ type: theme
 package: Joinup
 core_version_requirement: ">= 9.4"
 base theme: stable
-php: 7.1
 
 libraries:
   - joinup_theme/material-design-lite

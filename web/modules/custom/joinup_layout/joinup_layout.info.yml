@@ -2,5 +2,4 @@ name: 'Joinup layout'
 type: module
 description: 'Contains custom layouts for Joinup.'
 core_version_requirement: ">= 9.4"
-php: 7.1
 package: Joinup

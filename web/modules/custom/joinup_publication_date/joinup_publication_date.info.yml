@@ -3,6 +3,5 @@ description: Extends the contributed Publication Date module with goodies such a
 type: module
 package: Joinup
 core_version_requirement: ">= 9.4"
-php: 7.1
 dependencies:
   - publication_date:publication_date

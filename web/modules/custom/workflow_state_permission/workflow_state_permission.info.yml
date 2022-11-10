@@ -3,4 +3,3 @@ description: Provides a plugin type to determine access to workflow states.
 type: module
 package: Custom
 core_version_requirement: ">= 9.4"
-php: 7.1

@@ -3,7 +3,6 @@ description: 'Events content type for joinup.'
 type: module
 package: Joinup
 core_version_requirement: ">= 9.4"
-php: 7.1
 
 dependencies:
   - 'cached_computed_field:cached_computed_field'

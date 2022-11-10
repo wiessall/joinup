@@ -3,7 +3,6 @@ description: 'An asset distribution RDF entity'
 type: module
 package: Joinup
 core_version_requirement: ">= 9.4"
-php: 7.1
 
 dependencies:
   - 'digital_size_formatter:digital_size_formatter'

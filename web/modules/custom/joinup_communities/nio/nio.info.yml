@@ -2,7 +2,6 @@ name: Slovenian Interoperability Portal - NIO
 type: module
 description: Specificities for the NIO community.
 core_version_requirement: ">= 9.4"
-php: 7.1
 package: Joinup communities
 
 dependencies:
