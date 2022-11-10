@@ -1,10 +1,6 @@
 # Settings and commands only available inside Digit QA Pipeline.
 
 .before: &before
-  # Checks for extensions metadata deprecations. Note that we run this as
-  # part of PHPUnit testing as we need a bootstrapped Drupal.
-  - task: exec
-    command: ${drush.bin} joinup:check-extension-metadata-deprecation
   # Ensure writable public file directory.
   - task: chgrp
     file: ${joinup.files_public_dir}
