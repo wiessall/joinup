@@ -31,7 +31,6 @@
 /.env
 /.env.pipeline
 /behat.yml
-/grumphp.yml
 /phpcs.xml
 /runner.yml
 /web/sites/default/services.yml

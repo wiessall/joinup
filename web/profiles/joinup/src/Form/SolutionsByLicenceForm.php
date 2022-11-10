@@ -212,7 +212,7 @@ WHERE {
 }
 QUERY;
 
-    $extra_condition = $licence_id ? 'VALUES ?licence { ' . SparqlArg::uri($licence_id) . ' } ' : NULL;
+    $extra_condition = $licence_id ? 'VALUES ?licence { ' . SparqlArg::uri($licence_id) . ' } ' : '';
     $query = str_replace('@extra_condition', $extra_condition, $query);
     return $query;
   }

@@ -11,6 +11,7 @@
   # Ref. https://github.com/Behat/Behat/issues/62
   # Ref. https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-6060
   - Drupal\joinup\Context\TallinnContext
+  - Drupal\joinup\Context\AccordionContext
   - Drupal\joinup\Context\AdmsValidatorContext
   - Drupal\joinup\Context\AssetDistributionContext
   - Drupal\joinup\Context\AssetReleaseContext
@@ -90,7 +91,7 @@ default:
       base_url: ${env.DRUPAL_BASE_URL}
       ajax_timeout: 10
       files_path: ${joinup.dir}/tests/fixtures/files
-      goutte: ~
+      browserkit_http: ~
       javascript_session: selenium2
       browser_name: ${behat.browser_name}
       selenium2:
@@ -149,7 +150,7 @@ default:
         Explore block: '.block-joinup-front-page-explore-block'
         Featured: '.region-featured'
         Footer: '.section--footer, footer'
-        Hamburger menu: 'nav.joinup-navbar ul.navbar-nav ul.dropdown-list'
+        Hamburger menu: '.joinup-navbar ul.navbar-nav ul.dropdown-list'
         Header: '.section--featured, .section-header'
         Highlighted content: '.block-entityqueue--highlighted-content'
         Highlighted event: '.block-entityqueue--highlighted-event'
@@ -164,7 +165,7 @@ default:
         Modal content: '#drupal-modal'
         Modal title: '.ui-dialog-title'
         My unpublished content area: '.block-user-unpublished'
-        Navigation bar: 'nav.joinup-navbar'
+        Navigation bar: '.joinup-navbar'
         Navigation menu block: '#block-navigation'
         Navigation menu: 'div.navigation-menu ul'
         Page title: 'div.page__title-wrapper'

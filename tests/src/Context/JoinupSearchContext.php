@@ -127,7 +127,7 @@ class JoinupSearchContext extends RawDrupalContext {
    * @Then the :bundle content checkbox item should be selected
    */
   public function assertContentFacetCheckboxSelected(string $bundle): void {
-    if ($this->browserSupportsJavascript()) {
+    if ($this->hasJavascriptSupport()) {
       // The following xpath searches for
       // * Any div
       // ** that has a class named facets-widget-checkbox
@@ -275,12 +275,12 @@ class JoinupSearchContext extends RawDrupalContext {
     // list of links by the Facets module which is ultimately converted into a
     // select list using JavaScript.
     // @see https://www.drupal.org/project/facets/issues/2937191
-    $html_tag = $this->browserSupportsJavaScript() ? 'select' : 'ul';
+    $html_tag = $this->hasJavascriptSupport() ? 'select' : 'ul';
     $element = $this->findFacetByAlias($select, NULL, $html_tag);
     if (!$element) {
       throw new \Exception(sprintf('The select "%s" was not found in the page %s', $select, $this->getSession()->getCurrentUrl()));
     }
-    if ($this->browserSupportsJavaScript()) {
+    if ($this->hasJavascriptSupport()) {
       $this->assertSelectedOption($element, $option);
     }
     else {
@@ -314,7 +314,7 @@ class JoinupSearchContext extends RawDrupalContext {
     if (!$element) {
       throw new \Exception(sprintf('The select "%s" was not found in the page %s', $select, $this->getSession()->getCurrentUrl()));
     }
-    if ($this->browserSupportsJavaScript()) {
+    if ($this->hasJavascriptSupport()) {
       $this->assertSelectedOption($element, $option);
     }
     else {
@@ -538,7 +538,7 @@ class JoinupSearchContext extends RawDrupalContext {
    */
   protected function openFacetDropdown(NodeElement $facet): void {
     // Only needed when running in a JS enabled browser.
-    if ($this->browserSupportsJavaScript()) {
+    if ($this->hasJavascriptSupport()) {
       // Only open the dropdown if it is not already open.
       if (!$this->isFacetDropdownVisible($facet)) {
         // Click the arrow down button and wait for the animation to finish.
@@ -638,7 +638,7 @@ class JoinupSearchContext extends RawDrupalContext {
   public function assertCheckboxFacetItems(string $facet, string $values): void {
     $element = $this->findFacetByAlias($facet);
 
-    $css = $this->browserSupportsJavaScript() ? 'li.facet-item label' : 'li.facet-item';
+    $css = $this->hasJavascriptSupport() ? 'li.facet-item label' : 'li.facet-item';
     $found = array_map(function (NodeElement $item) {
       $text = $item->getText();
       // If a value is selected, it is prefixed with a '(-) ' in the text. Clean
@@ -680,7 +680,7 @@ class JoinupSearchContext extends RawDrupalContext {
    * @When I enter :keywords in the search bar and press enter
    */
   public function launchSearchFromHeader(string $keywords): void {
-    if ($this->browserSupportsJavaScript()) {
+    if ($this->hasJavascriptSupport()) {
       $element = $this->getSearchBarElement();
       $element->setValue($keywords);
       $this->submitSearch();
@@ -892,7 +892,7 @@ class JoinupSearchContext extends RawDrupalContext {
    * @Then I should see search bar in navbar
    */
   public function assertSearchExposedFilterNavbar(): void {
-    $getAllInput = $this->getSession()->getPage()->findAll('css', 'nav.joinup-navbar .navbar-search input#edit-keys');
+    $getAllInput = $this->getSession()->getPage()->findAll('css', '.joinup-navbar .navbar-search input#edit-keys');
 
     if (count($getAllInput) < 1) {
       throw new \Exception('Search bar not found in navbar.');
@@ -908,7 +908,7 @@ class JoinupSearchContext extends RawDrupalContext {
    * @Then I should not see search bar in navbar
    */
   public function failSearchExposedFilterNavbar(): void {
-    $getAllInput = $this->getSession()->getPage()->findAll('css', 'nav.joinup-navbar .navbar-search input#edit-keys');
+    $getAllInput = $this->getSession()->getPage()->findAll('css', '.joinup-navbar .navbar-search input#edit-keys');
 
     if (count($getAllInput) > 0) {
       throw new \Exception('Search bar found in navbar.');
@@ -924,7 +924,7 @@ class JoinupSearchContext extends RawDrupalContext {
    * @Then I should see search bar icon in navbar
    */
   public function assertSearchIconNavbar(): void {
-    $getAllInput = $this->getSession()->getPage()->findAll('css', 'nav.joinup-navbar button#search.dropdown-toggle');
+    $getAllInput = $this->getSession()->getPage()->findAll('css', '.joinup-navbar button#search.dropdown-toggle');
 
     if (count($getAllInput) < 1) {
       throw new \Exception('Search bar icon not found in navbar.');
@@ -940,7 +940,7 @@ class JoinupSearchContext extends RawDrupalContext {
    * @Then I should not see search bar icon in navbar
    */
   public function failSearchIconNavbar(): void {
-    $getAllInput = $this->getSession()->getPage()->findAll('css', 'nav.joinup-navbar span#heading-search button.accordion-button');
+    $getAllInput = $this->getSession()->getPage()->findAll('css', '.joinup-navbar span#heading-search button.accordion-button');
 
     if (count($getAllInput) > 0) {
       throw new \Exception('Search bar icon found in navbar.');
@@ -974,7 +974,7 @@ class JoinupSearchContext extends RawDrupalContext {
   public function assertSearchToggleIconNavbar(): void {
     // Non-JS browsers are directly interacting with the HTML, so we consider
     // the account menu to be already open.
-    if (!$this->browserSupportsJavaScript()) {
+    if (!$this->hasJavascriptSupport()) {
       return;
     }
 

@@ -8,7 +8,6 @@ use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Tests\joinup_test\ExistingSite\JoinupExistingSiteTestBase;
-use Drupal\Tests\rdf_entity\Traits\DrupalTestTraits\RdfEntityCreationTrait;
 use weitzman\DrupalTestTraits\Entity\UserCreationTrait;
 
 /**
@@ -18,7 +17,6 @@ abstract class JoinupWorkflowExistingSiteTestBase extends JoinupExistingSiteTest
 
   use StringTranslationTrait;
   use UserCreationTrait;
-  use RdfEntityCreationTrait;
 
   /**
    * The OG membership access manager service.

@@ -5,8 +5,7 @@ declare(strict_types = 1);
 namespace Drupal\joinup\Context;
 
 use Drupal\DrupalExtension\Context\RawDrupalContext;
-use Drupal\joinup\Traits\BrowserCapabilityDetectionTrait;
-use Drupal\joinup\Traits\BrowserWindowTrait;
+use Drupal\joinup\Traits\JavascriptTrait;
 use Drupal\joinup\Traits\UtilityTrait;
 use Drupal\joinup\Traits\WysiwygTrait;
 use PHPUnit\Framework\Assert;
@@ -16,8 +15,7 @@ use PHPUnit\Framework\Assert;
  */
 class WysiwygContext extends RawDrupalContext {
 
-  use BrowserCapabilityDetectionTrait;
-  use BrowserWindowTrait;
+  use JavascriptTrait;
   use UtilityTrait;
   use WysiwygTrait;
 
@@ -28,7 +26,7 @@ class WysiwygContext extends RawDrupalContext {
    * 'Source' button so the text can be entered as normal HTML.
    *
    * @param string $text
-   *   The text to enter in the WYSIWYG editor.
+   *   The text to be entered in the WYSIWYG editor.
    * @param string $label
    *   The label of the field containing the WYSIWYG editor.
    *
@@ -38,7 +36,7 @@ class WysiwygContext extends RawDrupalContext {
     // If we are running in a JavaScript enabled browser, first click the
     // 'Source' button so we can enter the text as HTML and get the same result
     // as in a non-JS browser.
-    if ($this->browserSupportsJavaScript()) {
+    if ($this->hasJavascriptSupport()) {
       // Scroll to the top because the button might be obscured by the floating
       // header.
       $page = $this->getSession()->getPage();
@@ -81,7 +79,6 @@ class WysiwygContext extends RawDrupalContext {
    */
   public function pressButtonInWysiwyg(string $button, string $label): void {
     self::assertJavaScriptEnabledBrowser();
-
     $this->pressWysiwygButton($label, $button);
   }
 
@@ -127,7 +124,7 @@ class WysiwygContext extends RawDrupalContext {
    * @Then the paragraph formats in the :field field should not contain the :format_tags format(s)
    */
   public function assertNotFormatInCkeditorExists(string $label, string $format_tags): void {
-    if (!$this->browserSupportsJavaScript()) {
+    if (!$this->hasJavascriptSupport()) {
       throw new \Exception('This step requires javascript to run.');
     }
 
