@@ -1,53 +1,41 @@
-uuid: b5b557e1-2858-4759-920f-36679c6e0282
+uuid: 583015b7-dd19-45eb-8b40-58eb4a610e8f
 langcode: en
 status: true
 dependencies:
   config:
     - filter.format.basic_html
   module:
-    - ckeditor
-_core:
-  default_config_hash: ITcPM1V9LiLznqMKrh0tbJyUGoOO9Z7bebEe5KDHKLc
+    - ckeditor5
 format: basic_html
-editor: ckeditor
+editor: ckeditor5
 settings:
   toolbar:
-    rows:
-      -
-        -
-          name: Formatting
-          items:
-            - Format
-            - '-'
-            - Bold
-            - Italic
-            - '-'
-            - RemoveFormat
-        -
-          name: Links
-          items:
-            - DrupalLink
-            - DrupalUnlink
-        -
-          name: Lists
-          items:
-            - BulletedList
-            - NumberedList
-            - '-'
-            - Outdent
-            - Indent
-        -
-          name: Media
-          items:
-            - Blockquote
-        -
-          name: Tools
-          items:
-            - Source
+    items:
+      - bold
+      - italic
+      - removeFormat
+      - '|'
+      - link
+      - '|'
+      - bulletedList
+      - numberedList
+      - outdent
+      - indent
+      - '|'
+      - blockQuote
+      - '|'
+      - sourceEditing
   plugins:
-    drupallink:
+    ckeditor5_sourceEditing:
+      allowed_tags:
+        - '<i>'
+        - '<b>'
+        - '<a hreflang>'
+    ckeditor5_list:
+      reversed: false
+      startIndex: false
+    linkit_extension:
       linkit_enabled: false
-      linkit_profile: ''
 image_upload:
   status: false
   scheme: public

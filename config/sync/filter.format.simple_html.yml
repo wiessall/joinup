@@ -32,7 +32,7 @@ filters:
     status: true
     weight: -49
     settings:
-      allowed_html: '<a href hreflang> <em> <i> <strong> <b> <br> <p> <ul> <li> <ol> <blockquote> <q> <img src alt data-entity-type data-entity-uuid data-image-style>'
+      allowed_html: '<br> <p> <i> <b> <q> <a hreflang href> <img data-image-style src alt data-entity-uuid data-entity-type height width> <strong> <em> <blockquote> <ul> <ol> <li>'
       filter_html_help: false
       filter_html_nofollow: true
   filter_htmlcorrector:
@@ -106,14 +106,15 @@ filters:
     weight: -38
     settings:
       allowed_providers:
-        internal_path: 0
-        slideshare: 0
-        prezi: 0
         joinup_ec_video: 0
+        internal_path: 0
         google_docs: 0
-        youtube_playlist: 0
-        youtube: 0
+        joinup_ec_webcast_video: 0
+        prezi: 0
+        slideshare: 0
         vimeo: 0
+        youtube: 0
+        youtube_playlist: 0
       autoplay: false
       responsive: true
   linkit:

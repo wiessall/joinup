@@ -1,0 +1,13 @@
+uuid: dce85887-e3ba-484d-8b42-db926c26f498
+langcode: en
+status: true
+dependencies: {  }
+id: file
+label: File
+description: 'Inline file used in WYSIWYG'
+source: file
+queue_thumbnail_downloads: false
+new_revision: false
+source_configuration:
+  source_field: field_media_file
+field_map: {  }
