@@ -59,7 +59,6 @@ Feature: Embed of videos into the page.
       | Short title | Some test video |
     And I select "Supplier exchange" from "Topic"
     And I press the button "Insert Media" in the "Content" wysiwyg editor
-    Then I wait for AJAX to finish
     And a modal should open
     And I should see the following lines of text:
       | File  |
