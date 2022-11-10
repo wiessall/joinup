@@ -5,38 +5,21 @@
  */
 #}
 
-{% if is_standalone %}
-<div class="timeline__release mdl-grid">
-  <div class="timeline__release-progression mdl-cell mdl-cell--3-col">
-    <div class="timeline__release-info">
-      <div class="release__info-element bold">{{ 'Standalone distribution'|t }}</div>
+<article class="my-2 d-md-flex justify-content-between align-items-center p-3 border rounded">
+  <div>
+    <h1 class="h6 mb-2"><a href="{{ url }}" rel="bookmark">{{ label }}</a></h1>
+    {% if content.field_ad_file_size|render %}
+    <div class="d-flex flex-wrap fs-sm">
+      <span class="text-muted me-1">{{ 'File size:'|t }}</span>
+      <span class="text-dark">{{ content.field_ad_file_size }}</span>
     </div>
-    <div class="timeline__release-bar"></div>
-  </div>
-  <div class="timeline__release-content mdl-cell mdl-cell--9-col">
-{% endif %}
-    <div class="timeline__listing-item listing-item__compact">
-      <div class="timeline__listing-content">
-        <div class="timeline__listing-title">
-          <a href="{{ url }}" rel="bookmark">{{ label }}</a>
-        </div>
-        <div class="timeline__listing-details details">
-          {% if content.field_ad_file_size|render %}
-            <div class="details__element">
-              <div class="value gray">{{ content.field_ad_file_size }}</div>
-            </div>
-          {% endif %}
-          <div class="details__element hide--phone">
-            <div class="label gray">{{ 'licence:'|t }}</div>
-            <div class="value bold underline">{{ content.field_ad_licence }}</div>
-          </div>
-        </div>
+    {% endif %}
+    {% if content.field_ad_licence|render %}
+      <div class="d-flex flex-wrap fs-sm">
+        <span class="text-muted me-1">{{ 'Licence:'|t }}</span>
+        {{ content.field_ad_licence }}
       </div>
-      <div class="timeline__action-links action-link__wrapper">
-        {{ content.field_ad_access_url }}
-      </div>
-    </div>
-{% if is_standalone %}
+    {% endif %}
   </div>
-</div>
-{% endif %}
+  {{ content.field_ad_access_url }}
+</article>

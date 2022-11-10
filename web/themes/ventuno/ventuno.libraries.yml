@@ -222,6 +222,11 @@ pager:
     theme:
       assets/css/pager.min.css: { minified: true }
 
+releases:
+  css:
+    theme:
+      assets/css/releases.min.css: { minified: true }
+
 share-content-form:
   css:
     theme:
@@ -251,6 +256,11 @@ three-dots-menu:
   css:
     theme:
       assets/css/three-dots-menu.css: {}
+
+timeline:
+  css:
+    theme:
+      assets/css/timeline.min.css: {}
 
 tour-first-balloon:
   js:
