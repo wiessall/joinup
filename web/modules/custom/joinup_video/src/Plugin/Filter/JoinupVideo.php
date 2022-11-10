@@ -27,7 +27,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *   id = "joinup_video",
  *   title = @Translation("Joinup Video Embed"),
  *   description = @Translation("Enables the use of iframe video embed."),
- *   type = Drupal\filter\Plugin\FilterInterface::TYPE_MARKUP_LANGUAGE,
+ *   type = Drupal\filter\Plugin\FilterInterface::TYPE_TRANSFORM_IRREVERSIBLE,
  *   settings = {
  *     "allowed_providers" = { },
  *     "autoplay" = FALSE,

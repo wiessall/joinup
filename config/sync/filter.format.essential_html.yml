@@ -3,8 +3,8 @@ langcode: en
 status: true
 dependencies:
   module:
+    - collection
     - joinup_video
-    - media
 _core:
   default_config_hash: _EOmoFGHhTjV4rORLrzpQZv9C6rnPb8LVLDoNMqBz7Us
 name: 'Essential HTML'
@@ -24,7 +24,7 @@ filters:
     status: true
     weight: -48
     settings:
-      allowed_html: '<a href hreflang> <em> <i> <strong> <b> <br> <p>'
+      allowed_html: '<br> <p> <h2> <h3> <h4> <h5> <h6> <i> <b> <a hreflang href> <strong> <em> <code class="language-*"> <pre>'
       filter_html_help: false
       filter_html_nofollow: true
   filter_htmlcorrector:
@@ -43,6 +43,7 @@ filters:
         joinup_ec_video: 0
         internal_path: 0
         google_docs: 0
+        joinup_ec_webcast_video: 0
         prezi: 0
         slideshare: 0
         vimeo: 0

@@ -127,15 +127,24 @@ class WysiwygContext extends RawDrupalContext {
     if (!$this->hasJavascriptSupport()) {
       throw new \Exception('This step requires javascript to run.');
     }
-    $element = $this->getSession()->getPage()->findField($label);
-    $element_id = $element->getAttribute('id');
+
+    $headings = [
+      'h1' => 'heading1',
+      'h2' => 'heading2',
+      'h3' => 'heading3',
+      'h4' => 'heading4',
+      'h5' => 'heading5',
+      'h6' => 'heading6',
+    ];
     $format_tags = $this->explodeCommaSeparatedStepArgument($format_tags);
-    $has_tags_condition = <<<JS
-      return CKEDITOR.instances["$element_id"].config.format_tags;
-JS;
-    $found_tags = $this->getSession()->getDriver()->evaluateScript($has_tags_condition);
-    $found_tags_array = explode(';', $found_tags);
-    $invalid_tags = array_intersect($format_tags, $found_tags_array);
+
+    $editor = $this->getWysiwygEditorEntity($label);
+    $settings = $editor->getSettings();
+    $enabled_headings = $settings['plugins']['ckeditor5_heading']['enabled_headings'];
+    $found_tags_array = array_diff($headings, $enabled_headings);
+    $found_tags = array_keys($found_tags_array);
+
+    $invalid_tags = array_diff_key($format_tags, $found_tags);
     if (!empty($invalid_tags)) {
       throw new \Exception(sprintf('The following elements were found in the format list but should not: %s.', implode(', ', $invalid_tags)));
     }
@@ -156,7 +165,7 @@ JS;
    *
    * @Then the :label wysiwyg editor should have the buttons :buttons
    */
-  public function assertWysiwygButtons(string $label, string $buttons) {
+  public function assertWysiwygButtons(string $label, string $buttons): void {
     $actual_buttons = $this->getWysiwygButtons($label);
     $expected_buttons = array_map('trim', explode(',', $buttons));
     Assert::assertEquals(array_values($expected_buttons), array_values($actual_buttons));

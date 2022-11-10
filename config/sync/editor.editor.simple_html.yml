@@ -1,63 +1,49 @@
-uuid: a7b79aaa-90ce-487c-8daa-7a6cb5ea7683
+uuid: c291f218-f722-4652-9bd0-f4892f581931
 langcode: en
 status: true
 dependencies:
   config:
     - filter.format.simple_html
   module:
-    - ckeditor
-    - editor_file
-third_party_settings:
-  editor_file:
-    status: true
-    scheme: public
-    directory: inline-files
-    extensions: txt
-    max_size: ''
-_core:
-  default_config_hash: kytQpqFX48z3aotbDfyWqPy14XaWjxv1cC5RuxCoG58
+    - ckeditor5
 format: simple_html
-editor: ckeditor
+editor: ckeditor5
 settings:
   toolbar:
-    rows:
-      -
-        -
-          name: Formatting
-          items:
-            - Bold
-            - Italic
-        -
-          name: Links
-          items:
-            - DrupalLink
-            - DrupalUnlink
-        -
-          name: List
-          items:
-            - BulletedList
-            - NumberedList
-        -
-          name: Quote
-          items:
-            - Blockquote
-        -
-          name: Image
-          items:
-            - DrupalImage
-        -
-          name: Tools
-          items:
-            - Source
+    items:
+      - bold
+      - italic
+      - '|'
+      - link
+      - '|'
+      - bulletedList
+      - numberedList
+      - '|'
+      - blockQuote
+      - '|'
+      - drupalInsertImage
+      - '|'
+      - sourceEditing
   plugins:
-    drupallink:
+    ckeditor5_sourceEditing:
+      allowed_tags:
+        - '<i>'
+        - '<b>'
+        - '<q>'
+        - '<a hreflang>'
+        - '<img data-image-style>'
+    ckeditor5_list:
+      reversed: false
+      startIndex: false
+    ckeditor5_imageResize:
+      allow_resize: false
+    linkit_extension:
       linkit_enabled: false
-      linkit_profile: ''
 image_upload:
   status: true
   scheme: public
   directory: comment-inline-images
   max_size: 10M
   max_dimensions:
-    width: null
-    height: null
+    width: 0
+    height: 0

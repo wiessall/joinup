@@ -34,7 +34,7 @@ trait WysiwygTrait {
    */
   public function pressWysiwygButton(string $label, string $button, ?TraversableElement $region = NULL): void {
     $wysiwyg = $this->getWysiwyg($label, $region);
-    $button_elements = $wysiwyg->findAll('xpath', '//a[@title="' . $button . '"]');
+    $button_elements = $wysiwyg->findAll('css', 'button[data-cke-tooltip-text*="' . $button . '"]');
     if (empty($button_elements)) {
       throw new \Exception("Could not find the '$button' button.");
     }
@@ -62,20 +62,37 @@ trait WysiwygTrait {
    *   Defaults to the entire page.
    *
    * @throws \Exception
-   *   Thrown when the textarea could not be found or if there are multiple
-   *   textareas.
+   *   Thrown when the textarea could not be found.
    */
   public function setWysiwygText(string $label, string $text, ?TraversableElement $region = NULL): void {
     $wysiwyg = $this->getWysiwyg($label, $region);
-    $textarea_elements = $wysiwyg->findAll('xpath', '//textarea');
-    if (empty($textarea_elements)) {
-      throw new \Exception("Could not find the textarea for the '$label' field.");
+
+    $wrapper_id = $wysiwyg->getAttribute('id');
+    $ckeditor5_drupal_editable_element = "div#$wrapper_id .ck-editor__editable";
+    $function = <<<JS
+  (
+      function(){
+        const domEditableElement = document.querySelector("$ckeditor5_drupal_editable_element");
+        if (domEditableElement.ckeditorInstance) {
+          const editorInstance = domEditableElement.ckeditorInstance;
+          if (editorInstance) {
+            editorInstance.setData("$text");
+          } else {
+            throw new Exception('Could not get the editor instance!');
+          }
+        } else {
+          throw new Exception('Could not find the element!');
+        }
+      }
+  )()
+  JS;
+    try {
+      $this->getSession()->executeScript($function);
+      sleep(1);
     }
-    if (count($textarea_elements) > 1) {
-      throw new \Exception("Multiple textareas found for '$label'.");
+    catch (\Exception $e) {
+      throw new \Exception("Could not fill the textarea for the '$label' field.");
     }
-    $textarea = reset($textarea_elements);
-    $textarea->setValue($text);
   }
 
   /**
@@ -137,9 +154,8 @@ trait WysiwygTrait {
     }
 
     $label_element = reset($label_elements);
-    $wysiwyg_id = 'cke_' . $label_element->getAttribute('for');
 
-    $wysiwyg_elements = $region->findAll('xpath', '//div[@id="' . $wysiwyg_id . '"]');
+    $wysiwyg_elements = $label_element->findAll('xpath', '/ancestor::*[contains(concat(" ", normalize-space(@class), " "), " form-wrapper ")][position() = 1]');
     if (empty($wysiwyg_elements)) {
       throw new WysiwygEditorNotFoundException("Could not find the '$label' wysiwyg editor.");
     }
@@ -214,27 +230,29 @@ trait WysiwygTrait {
 
     if ($this->hasJavascriptSupport()) {
       $editor = $this->getWysiwyg($label, $region);
-      $button_elements = $editor->findAll('xpath', '//a[contains(concat(" ", normalize-space(@class), " "), " cke_button ")]/span[contains(@id, "_label")]');
+      $button_elements = $editor->findAll('xpath', '//button[contains(concat(" ", normalize-space(@class), " "), " ck-button ")]');
 
       $buttons = array_map(function (NodeElement $element): string {
-        return trim($element->getHtml());
+        return trim($element->getAttribute('data-cke-tooltip-text'));
       }, $button_elements);
     }
     else {
       // When no JS is available the editor is not loaded in the page. Retrieve
       // the buttons from the editor config.
-      /** @var \Drupal\ckeditor\CKEditorPluginManager $ckeditor_plugin_manager */
-      $ckeditor_plugin_manager = \Drupal::service('plugin.manager.ckeditor.plugin');
+      /** @var \Drupal\ckeditor5\Plugin\CKEditor5PluginManager $cke5_plugin_manager */
+      $cke5_plugin_manager = \Drupal::service('plugin.manager.ckeditor5.plugin');
       $editor = $this->getWysiwygEditorEntity($label);
+
+      $settings = $editor->getSettings();
 
       // Retrieve the buttons that are available for this editor instance, but
       // filter out the separators. We are only concerned with the buttons.
-      $buttons = array_filter($ckeditor_plugin_manager->getEnabledButtons($editor), function (string $id): bool {
-        return $id !== '-';
+      $buttons = array_filter($settings['toolbar']['items'], function (string $id): bool {
+        return $id !== '|';
       });
 
       // Replace the button IDs with human readable labels.
-      $button_data = array_reduce($ckeditor_plugin_manager->getButtons(), 'array_merge', []);
+      $button_data = $cke5_plugin_manager->getToolbarItems();
       $buttons = array_map(function (string $id) use ($button_data) {
         return (string) $button_data[$id]['label'];
       }, $buttons);

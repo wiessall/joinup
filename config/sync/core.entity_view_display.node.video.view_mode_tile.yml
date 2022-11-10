@@ -10,6 +10,7 @@ dependencies:
     - field.field.node.video.field_video
     - field.field.node.video.field_video_spatial_coverage
     - field.field.node.video.og_audience
+    - field.field.node.video.video
     - node.type.video
   module:
     - smart_trim
@@ -53,3 +54,4 @@ hidden:
   published_at: true
   report: true
   search_api_excerpt: true
+  video: true

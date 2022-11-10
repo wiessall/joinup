@@ -53,7 +53,7 @@
         "drupal/jquery_ui_accordion": "^1.1",
         "drupal/json_field": "^1.0",
         "drupal/layout_builder_component_attributes": "^1.2",
-        "drupal/linkit": "^5.0-beta11",
+        "drupal/linkit": "^6.0@beta",
         "drupal/menu_admin_per_menu": "^1.3",
         "drupal/menu_link_destination": "^1.0",
         "drupal/message": "^1.1",
@@ -270,7 +270,8 @@
                 "The old storage handler is still defined for RDF entities.": "resources/patch/core-fix-sparql-storage-hack.patch",
                 "Add option to show only start or end date in the DateTime Range custom formatter @see https://www.drupal.org/project/drupal/issues/2827055": "https://www.drupal.org/files/issues/2022-06-16/2827055-69.patch",
                 "file_requirements() can trigger a PHP 8.1 deprecation notice when called without a SERVER_SOFTWARE server env variable @see https://www.drupal.org/project/drupal/issues/3279289": "https://git.drupalcode.org/project/drupal/-/merge_requests/2247.diff",
-                "If you don't set the \"version\" of a profile, the report/status displays an empty dash @see https://www.drupal.org/project/drupal/issues/3270892": "https://git.drupalcode.org/project/drupal/-/merge_requests/2003.diff"
+                "If you don't set the \"version\" of a profile, the report/status displays an empty dash @see https://www.drupal.org/project/drupal/issues/3270892": "https://git.drupalcode.org/project/drupal/-/merge_requests/2003.diff",
+                "Rename CKE5 button tooltip 'Insert Drupal Media' to 'Insert Media' @see https://www.drupal.org/i/3319735": "resources/patch/3319735-D9.patch"
             },
             "drupal/email_confirmer": {
                 "Support for HTML mails @see https://www.drupal.org/i/3047124": "https://git.drupalcode.org/project/email_confirmer/-/merge_requests/3.diff"
@@ -281,6 +282,9 @@
             "drupal/editor_file": {
                 "Wrong file upload size when max upload left empty. @see https://www.drupal.org/i/3300142": "https://www.drupal.org/files/issues/2022-07-27/editor_file-fix_max_file_upload_empty-3300142-2.patch",
                 "Uploaded files are not permanent @see https://www.drupal.org/i/3057895": "https://www.drupal.org/files/issues/2019-05-29/file-upload-marked-permanent-3057895-2.patch"
+            },
+            "drupal/embed_block": {
+                "Add support for Ckeditor 5. @see https://www.drupal.org/i/3316336": "https://git.drupalcode.org/project/embed_block/-/merge_requests/5.diff"
             },
             "drupal/email_contact": {
                 "Configurable modal title @see https://www.drupal.org/i/3310269": "https://git.drupalcode.org/project/email_contact/-/merge_requests/2.diff"
@@ -300,7 +304,8 @@
                 "Autocomplete field doesn't allow to reference entities with long titles @see https://www.drupal.org/node/2895663": "https://www.drupal.org/files/issues/2895663-2.patch"
             },
             "drupal/linkit": {
-                "Link shown after the autocomplete selection is the bare node/xxx link, not the alias @see https://www.drupal.org/node/2877535": "https://www.drupal.org/files/issues/2022-06-07/2877535-39.patch"
+                "Link shown after the autocomplete selection is the bare node/xxx link, not the alias @see https://www.drupal.org/node/2877535": "https://www.drupal.org/files/issues/2022-08-16/linkit-2877535-link-shown-after-autocomplete-is-bare-41.patch",
+                "CKEditor 5 readiness. @see https://www.drupal.org/i/3232190": "https://www.drupal.org/files/issues/2022-10-11/linkit-cke5-3232190-82.patch"
             },
             "drupal/matomo_reporting_api": {
                 "Ensure backward compatibility with Piwik @see https://www.drupal.org/project/matomo_reporting_api/issues/3080854": "https://www.drupal.org/files/issues/2019-09-18/3080854-7.patch"
@@ -363,7 +368,8 @@
             },
             "drupal/video_embed_field": {
                 "Extend support for embed URLs. Option to force privacy @see https://www.drupal.org/project/video_embed_field/issues/3060201 (originally on https://www.drupal.org/node/2899093)": "https://www.drupal.org/files/issues/2019-06-11/privacy_mode-3060201-D8-6.patch",
-                "WYSIWYG Video URL max length limited to 128 characters @see https://www.drupal.org/project/video_embed_field/issues/2908562": "https://www.drupal.org/files/issues/video_url_maxlength-2908562-4.patch"
+                "WYSIWYG Video URL max length limited to 128 characters @see https://www.drupal.org/project/video_embed_field/issues/2908562": "https://www.drupal.org/files/issues/video_url_maxlength-2908562-4.patch",
+                "Add support for Ckeditor 5. @see https://www.drupal.org/project/video_embed_field/issues/3311063": "https://git.drupalcode.org/project/video_embed_field/-/merge_requests/6.diff"
             },
             "drupal/views_autosubmit": {
                 "Stop auto submitting first character entered in an Autocomplete Filter field. @see https://www.drupal.org/project/views_autosubmit/issues/3160600" : "https://www.drupal.org/files/issues/2021-09-06/3160600_views_autosubmit_16.patch"
