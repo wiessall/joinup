@@ -269,7 +269,7 @@ class AssetDistributionContext extends RawDrupalContext {
     }
     $file = FileUrlHandler::urlToFile($distribution->field_ad_access_url->target_id);
     $link = FileUrlHandler::isRemote($file) ? $distribution->field_ad_access_url->target_id : \Drupal::service('file_url_generator')->generateAbsoluteString($file->getFileUri());
-    $result = $this->getSession()->getPage()->find('xpath', "//a[contains(., '{$distribution->label()}')]/ancestor::div[contains(concat(' ', @class, ' '), ' timeline__listing-item ')]//a[@href='{$link}' and contains(text(), '{$link_type}')]");
+    $result = $this->getSession()->getPage()->find('xpath', "//a[contains(., '{$distribution->label()}')]/ancestor::div[contains(concat(' ', @class, ' '), ' releases__item ')]//a[@href='{$link}' and contains(text(), '{$link_type}')]");
     if (empty($result)) {
       throw new \Exception(sprintf('No link was found in the "%s" distribution on the page %s', $distribution->label(), $this->getSession()->getCurrentUrl()));
     }
