@@ -7,7 +7,6 @@
 
 declare(strict_types = 1);
 
-
 /**
  * Implements hook_theme_suggestions_HOOK_alter() for the asset_release_releases_download hook.
  */

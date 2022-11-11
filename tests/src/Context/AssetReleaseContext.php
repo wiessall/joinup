@@ -292,7 +292,7 @@ class AssetReleaseContext extends RawDrupalContext {
       $releases[] = $title['release'];
     }
 
-    $release_titles = $this->getSession()->getPage()->findAll('css', '.timeline__release > .timeline__release-content > .timeline__meta > h2.timeline__release-title');
+    $release_titles = $this->getSession()->getPage()->findAll('css', '.releases__item >  > h2.releases__item-title > a');
     if (count($release_titles) != count($releases)) {
       throw new \Exception("Wrong number of releases found.");
     }
