@@ -68,6 +68,7 @@ Feature: Document moderation
     And I open the header local tasks menu
     And I click "Edit" in the "Entity actions" region
     And I press "Additional fields"
+    And I wait until the page contains the text "Only members can create content."
     And I select the radio button "Only members can create content."
     And I press "Publish"
     # I should now have the possibility to add documents.

@@ -135,11 +135,15 @@ Feature:
     Given I am not logged in
     And I go to the "Paragraphs accordion page" custom page
 
-    When I press "Duper"
+    And I press "Duper"
+    # Wait for the animation to finish.
+    And I wait for 2 second
     Then I should see the text "Crunchy text"
     But I should not see the text "Clumsy text"
 
-    When I press "Super"
+    And I press "Super"
+    # Wait for the animation to finish.
+    And I wait for 2 second
     Then I should see the text "Clumsy text"
     But I should not see the text "Crunchy text"
 
