@@ -7,11 +7,11 @@ a {
   &.external {
     &::after {
       margin: 0 0 0 $spacer * .375; // 0 0 0 6px
-      @include get-bootstrap-icon('box-arrow-up-right', $link-color);
+      @include get-bootstrap-icon('box-arrow-up-right');
     }
     &:hover {
       &::after {
-        @include get-bootstrap-icon('box-arrow-up-right', $link-hover-color);
+        @include get-bootstrap-icon('box-arrow-up-right');
       }
     }
   }
