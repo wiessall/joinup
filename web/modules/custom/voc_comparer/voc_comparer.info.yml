@@ -2,4 +2,4 @@ name: Managed vocabulary version comparer
 type: module
 description: Provides a form to compare a new version of a managed vocabulary with an existing one - from the database.
 package: Custom
-core_version_requirement: ^9 || ^10
+core_version_requirement: ">= 9.4"

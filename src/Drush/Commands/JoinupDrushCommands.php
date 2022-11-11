@@ -6,6 +6,7 @@ namespace Joinup\Drush\Commands;
 
 use Drupal\Core\Database\Database;
 use Drupal\Core\Extension\ExtensionDiscovery;
+use Drupal\upgrade_status\ProjectCollector;
 use Drush\Commands\DrushCommands;
 
 /**
@@ -129,6 +130,53 @@ class JoinupDrushCommands extends DrushCommands {
   protected function scanFileSystemModules(): array {
     $discovery = new ExtensionDiscovery(DRUPAL_ROOT, FALSE, ['profiles/joinup']);
     return array_keys($discovery->scan('module', FALSE));
+  }
+
+  /**
+   * Checks for extensions metadata deprecations.
+   *
+   * Uses the Upgrade Status API to check only the extensions metadata
+   * deprecations, such as outdated 'core_version_requirement' *.info.yml
+   * property.
+   *
+   * @command joinup:check-extension-metadata-deprecation
+   *
+   * @option custom Scan custom extensions.
+   * @option contrib Scan contrib extensions.
+   * @option uninstalled Scan uninstalled extensions.
+   *
+   * @bootstrap full
+   * @validate-module-enabled upgrade_status
+   */
+  public function checkExtensionMetadataDeprecation($options = [
+    'custom' => TRUE,
+    'contrib' => FALSE,
+    'uninstalled' => TRUE,
+  ]): void {
+    /** @var \Drupal\upgrade_status\ExtensionMetadataDeprecationAnalyzer $analizer */
+    $analizer = \Drupal::service('upgrade_status.extension_metadata_deprecation_analyzer');
+    /** @var \Drupal\upgrade_status\ProjectCollector $project_collector */
+    $project_collector = \Drupal::service('upgrade_status.project_collector');
+    $projects = $project_collector->collectProjects();
+    $deprecations = [];
+    foreach ($projects as $project) {
+      if (!$options['uninstalled'] && !$project->status) {
+        continue;
+      }
+      if (!$options['contrib'] && $project->info['upgrade_status_type'] === ProjectCollector::TYPE_CONTRIB) {
+        continue;
+      }
+      if (!$options['custom'] && $project->info['upgrade_status_type'] === ProjectCollector::TYPE_CUSTOM) {
+        continue;
+      }
+
+      foreach ($analizer->analyze($project) as $deprecation) {
+        $deprecations[] = "{$deprecation->getFile()}: {$deprecation->getLine()}\n{$deprecation->getMessage()}";
+      }
+    }
+    if ($deprecations) {
+      throw new \Exception(implode("\n", $deprecations));
+    }
   }
 
 }
