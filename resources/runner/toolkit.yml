@@ -101,6 +101,10 @@ commands:
       command: drupal:settings
       arguments:
         - site-clean
+    # Checks for extensions metadata deprecations. Note that we run this after
+    # site install as we need a bootstrapped Drupal.
+    - task: exec
+      command: ${drush.bin} joinup:check-extension-metadata-deprecation
     - task: exec
       command: ${drush.bin}
       arguments:
