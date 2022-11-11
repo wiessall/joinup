@@ -289,6 +289,9 @@
                 "Wrong file upload size when max upload left empty. @see https://www.drupal.org/i/3300142": "https://www.drupal.org/files/issues/2022-07-27/editor_file-fix_max_file_upload_empty-3300142-2.patch",
                 "Uploaded files are not permanent @see https://www.drupal.org/i/3057895": "https://www.drupal.org/files/issues/2019-05-29/file-upload-marked-permanent-3057895-2.patch"
             },
+            "drupal/email_contact": {
+                "Allow modules to alter or replace the Ajax command @see https://www.drupal.org/i/3320796": "https://git.drupalcode.org/project/email_contact/-/merge_requests/4.diff"
+            },
             "drupal/entity_legal": {
                 "Custom agree validation error message and submit button label @see https://www.drupal.org/project/entity_legal/issues/3293017": "https://git.drupalcode.org/project/entity_legal/-/merge_requests/8.diff"
             },
