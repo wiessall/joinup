@@ -3,7 +3,7 @@ langcode: en
 status: true
 dependencies:
   config:
-    - field.field.media.file.field_media_file
+    - field.field.media.file.file
     - media.type.file
   module:
     - file
@@ -19,7 +19,7 @@ content:
     region: content
     settings: {  }
     third_party_settings: {  }
-  field_media_file:
+  file:
     type: file_generic
     weight: 0
     region: content
