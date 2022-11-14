@@ -289,7 +289,7 @@ class AssetDistributionContext extends RawDrupalContext {
    * @Then the :distribution( asset) distribution should not have any download urls
    */
   public function assertLinkNotPresentInCompactDistributionTile(string $distribution): void {
-    $link = $this->getSession()->getPage()->find('xpath', "//a[contains(text(), '$distribution')]/ancestor::div[contains(concat(' ', @class, ' '), ' timeline__listing-item ')]//a[contains(text(), 'External') or contains(text(), 'Download')]");
+    $link = $this->getSession()->getPage()->find('xpath', "//a[contains(text(), '$distribution')]/ancestor::div[contains(concat(' ', @class, ' '), ' releases__item ')]//a[contains(text(), 'External') or contains(text(), 'Download')]");
     if (!empty($link)) {
       throw new \Exception(sprintf('Asset distribution "%s" contains download link(s).', $distribution));
     }
@@ -502,9 +502,9 @@ class AssetDistributionContext extends RawDrupalContext {
    */
   protected function getCompactDistributionByHeading(string $heading): ?NodeElement {
     // Locate all the elements.
-    $xpath = '//*[@class and contains(concat(" ", normalize-space(@class), " "), " timeline__listing-item ")]';
+    $xpath = '//*[@class and contains(concat(" ", normalize-space(@class), " "), " releases__item ")]';
     // That have a heading with the specified text.
-    $xpath .= '[.//*[@class and contains(concat(" ", normalize-space(@class), " "), " timeline__listing-title ")][normalize-space()="' . $heading . '"]]';
+    $xpath .= '[.//*[@class and contains(concat(" ", normalize-space(@class), " "), " releases__item-title ")][normalize-space()="' . $heading . '"]]';
 
     return $this->getSession()->getPage()->find('xpath', $xpath);
   }
