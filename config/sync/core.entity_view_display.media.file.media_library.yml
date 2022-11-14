@@ -4,7 +4,7 @@ status: true
 dependencies:
   config:
     - core.entity_view_mode.media.media_library
-    - field.field.media.file.field_media_file
+    - field.field.media.file.file
     - image.style.medium
     - media.type.file
   module:
@@ -27,7 +27,7 @@ content:
     region: content
 hidden:
   created: true
-  field_media_file: true
+  file: true
   langcode: true
   name: true
   search_api_excerpt: true

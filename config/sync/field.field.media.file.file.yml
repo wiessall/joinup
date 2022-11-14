@@ -3,12 +3,12 @@ langcode: en
 status: true
 dependencies:
   config:
-    - field.storage.media.field_media_file
+    - field.storage.media.file
     - media.type.file
   module:
     - file
-id: media.file.field_media_file
-field_name: field_media_file
+id: media.file.file
+field_name: file
 entity_type: media
 bundle: file
 label: File

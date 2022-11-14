@@ -207,14 +207,12 @@ function _joinup_core_deploy_get_media_markup(string $url, string $owner_id): st
   $media_storage = \Drupal::entityTypeManager()->getStorage('media');
   $result = $media_storage->getQuery()->accessCheck(FALSE)
     ->condition('bundle', 'video')
-    ->condition('field_media_video_embed_field', $url)
+    ->condition('video', $url)
     ->execute();
   if (empty($result)) {
     $video_media = $media_storage->create([
       'bundle' => 'video',
-      'field_media_video_embed_field' => [
-        'value' => $url,
-      ],
+      'video' => $url,
     ]);
     $video_media->setOwnerId($owner_id);
     $video_media->save();
