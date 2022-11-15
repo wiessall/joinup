@@ -5,27 +5,14 @@ declare(strict_types = 1);
 namespace Drupal\Tests\joinup_document\ExistingSite;
 
 use Drupal\Tests\joinup_core\Traits\TestFileTrait;
-use Drupal\Tests\rdf_entity\Traits\DrupalTestTraits\RdfEntityCreationTrait;
-use Drupal\Tests\sparql_entity_storage\Traits\SparqlConnectionTrait;
-use Drupal\file\FileInterface;
-use Drupal\joinup_document\Entity\DocumentInterface;
-use weitzman\DrupalTestTraits\ExistingSiteBase;
+use Drupal\Tests\joinup_test\ExistingSite\JoinupExistingSiteTestBase;
 
 /**
  * Various tests related to document theming.
  */
-class DocumentThemeTest extends ExistingSiteBase {
+class DocumentThemeTest extends JoinupExistingSiteTestBase {
 
-  use RdfEntityCreationTrait;
-  use SparqlConnectionTrait;
   use TestFileTrait;
-
-  /**
-   * A test file.
-   *
-   * @var \Drupal\file\FileInterface
-   */
-  protected $file;
 
   /**
    * Tests that the logo affects relative fields in the listing tile.
@@ -44,35 +31,30 @@ class DocumentThemeTest extends ExistingSiteBase {
       'body' => 'Hello document body',
       'field_keywords' => ['keyword_sample'],
       'field_short_title' => 'DocTitle',
+      'field_state' => 'validated',
     ]);
 
-    $this->assertTrue($document instanceof DocumentInterface);
-    $this->assertNotEmpty($document->id());
+    /** @var \Drupal\Core\DestructableInterface $post_request_indexing */
+    $post_request_indexing = \Drupal::service('search_api.post_request_indexing');
+    $assert = $this->assertSession();
 
-    $view_builder = \Drupal::entityTypeManager()->getViewBuilder('node');
-    $renderer = \Drupal::getContainer()->get('renderer');
-    $view_array = $view_builder->view($document, 'view_mode_tile');
-    $html = (string) $renderer->renderPlain($view_array);
+    $post_request_indexing->destruct();
+    $this->drupalGet($collection->toUrl());
+    $assert->pageTextContains('Document title');
+    $assert->pageTextContains('Hello document body');
+    $assert->pageTextContains('keyword_sample');
 
-    $this->assertNotEmpty($html);
-    $this->assertStringContainsString('Document title', $html);
-    $this->assertStringContainsString('<p>Hello document body</p>', $html);
-    $this->assertStringContainsString('keyword_sample', $html);
+    $file = $this->getTestFile('text');
+    $file->save();
+    $document->set('field_document_logo', $file)->save();
 
-    $this->file = $this->getTestFile('text');
-    $this->file->save();
-    $this->assertTrue($this->file instanceof FileInterface);
-    $document->set('field_document_logo', $this->file);
-    $document->save();
+    $post_request_indexing->destruct();
+    $this->getSession()->reload();
 
-    $view_array = $view_builder->view($document, 'view_mode_tile');
-    $html = (string) $renderer->renderPlain($view_array);
-
-    $this->assertNotEmpty($html);
-    $this->assertStringContainsString('<div class="listing__image">', $html);
-    $this->assertStringContainsString('Document title', $html);
-    $this->assertStringNotContainsString('<p>Hello document body</p>', $html);
-    $this->assertStringNotContainsString('keyword_sample', $html);
+    $assert->responseContains('<div class="listing__image">');
+    $assert->pageTextContains('Document title');
+    $assert->pageTextNotContains('Hello document body');
+    $assert->pageTextNotContains('keyword_sample');
   }
 
 }

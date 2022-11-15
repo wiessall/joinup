@@ -158,9 +158,9 @@
       white-space: normal;
     }
   }
-  &.js-is--sticky {
-    position: fixed;
+  &--sticky {
+    position: sticky;
     top: 0;
-    width: 100%
+    z-index: 50; // Avoid navbar to be overlapped by search page offcanvas
   }
 }

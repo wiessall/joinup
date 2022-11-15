@@ -536,7 +536,7 @@ display:
         menu_name: main
         parent: ''
         context: '0'
-      always_use_admin_theme: true
+      use_admin_theme: true
     cache_metadata:
       max-age: 0
       contexts:

@@ -101,6 +101,10 @@ commands:
       command: drupal:settings
       arguments:
         - site-clean
+    # Checks for extensions metadata deprecations. Note that we run this after
+    # site install as we need a bootstrapped Drupal.
+    - task: exec
+      command: ${drush.bin} joinup:check-extension-metadata-deprecation
     - task: exec
       command: ${drush.bin}
       arguments:
@@ -188,10 +192,10 @@ commands:
     # See: https://citnet.tech.ec.europa.eu/CITnet/jira/browse/DROPSEC-2040.
     - task: run
       command: toolkit:lint-js
-    #- task: run
-    #  command: testing:check-deprecated-code
-    #- task: run
-    #  command: testing:check-deprecated-code-contrib
+    - task: run
+      command: testing:check-deprecated-code
+    # - task: run
+    #   command: testing:check-deprecated-code-contrib
 
   # Lints JS files  using ESLint.
   toolkit:lint-js:

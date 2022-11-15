@@ -4,7 +4,6 @@ declare(strict_types = 1);
 
 namespace Drupal\joinup\Context;
 
-use Behat\Behat\Context\SnippetAcceptingContext;
 use Behat\Behat\Hook\Scope\AfterScenarioScope;
 use Behat\Behat\Hook\Scope\AfterStepScope;
 use Behat\Gherkin\Node\TableNode;
@@ -23,8 +22,6 @@ use Drupal\DrupalExtension\TagTrait;
 use Drupal\image\Plugin\Field\FieldType\ImageItem;
 use Drupal\joinup\HtmlManipulator;
 use Drupal\joinup\Traits\AntibotTrait;
-use Drupal\joinup\Traits\BrowserCapabilityDetectionTrait;
-use Drupal\joinup\Traits\BrowserWindowTrait;
 use Drupal\joinup\Traits\ContextualLinksTrait;
 use Drupal\joinup\Traits\EntityTrait;
 use Drupal\joinup\Traits\JavascriptTrait;
@@ -47,11 +44,9 @@ use WebDriver\Key;
 /**
  * Defines generic step definitions.
  */
-class FeatureContext extends RawDrupalContext implements SnippetAcceptingContext {
+class FeatureContext extends RawDrupalContext {
 
   use AntibotTrait;
-  use BrowserCapabilityDetectionTrait;
-  use BrowserWindowTrait;
   use ContextualLinksTrait;
   use EntityTrait;
   use JavascriptTrait;
@@ -903,32 +898,13 @@ class FeatureContext extends RawDrupalContext implements SnippetAcceptingContext
    */
   public function clickVerticalTabLink(string $tab): void {
     // When this is running in a browser without JavaScript the vertical tabs
-    // are rendered as a details element.
-    if (!$this->browserSupportsJavaScript()) {
+    // are rendered as detail elements.
+    if (!$this->hasJavascriptSupport()) {
       return;
     }
 
     $this->scrollToTop();
     $this->findVerticalTab($tab)->clickLink($tab);
-  }
-
-  /**
-   * Asserts that an accordion item is active.
-   *
-   * @param string $item
-   *   The accordion item title.
-   *
-   * @throws \Exception
-   *   When the accordion item is not found on the page or it's not active.
-   *
-   * @Then the :item accordion item should be active
-   */
-  public function assertAccordionItemActive(string $item): void {
-    $element = $this->findAccordionItem($item);
-
-    if ($element->hasClass('collapsed')) {
-      throw new \Exception("The accordion item '$item' is not active.");
-    }
   }
 
   /**
@@ -942,21 +918,26 @@ class FeatureContext extends RawDrupalContext implements SnippetAcceptingContext
     $fixture = file_get_contents(__DIR__ . '/../../fixtures/testing_terms.yml');
     $hierarchy = Yaml::decode($fixture);
     foreach ($hierarchy as $vid => $terms) {
-      foreach ($terms as $key => $data) {
-        $has_children = is_array($terms);
-        $name = $has_children ? $key : $data;
+      foreach ($terms as $parent_index => $data) {
+        $weight = $parent_index - 1;
+        $has_children = array_key_exists('children', $data);
         $term = (object) [
           'vocabulary_machine_name' => $vid,
-          'name' => $name,
+          'name' => $data['name'],
+          'weight' => $weight,
         ];
+        $children = $data['children'];
         $this->termCreate($term);
         $parent_tid = $term->tid;
         if ($has_children) {
-          foreach ($data as $name) {
+          foreach ($children as $child_index => $child) {
+            $weight = $child_index - 1;
             $term = (object) [
               'vocabulary_machine_name' => $vid,
-              'name' => $name,
+              'name' => $child['name'],
               'parent' => $parent_tid,
+              'weight' => $weight,
+              'description' => $child['description'] ?? '',
             ];
             $this->termCreate($term);
           }

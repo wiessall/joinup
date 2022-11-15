@@ -5,7 +5,6 @@ declare(strict_types = 1);
 namespace Drupal\Tests\joinup_user\ExistingSite;
 
 use Drupal\Tests\joinup_test\ExistingSite\JoinupExistingSiteTestBase;
-use Drupal\Tests\rdf_entity\Traits\DrupalTestTraits\RdfEntityCreationTrait;
 use weitzman\LoginTrait\LoginTrait;
 
 /**
@@ -16,7 +15,6 @@ use weitzman\LoginTrait\LoginTrait;
 class ProfileOverviewTest extends JoinupExistingSiteTestBase {
 
   use LoginTrait;
-  use RdfEntityCreationTrait;
 
   /**
    * The owner of the groups.

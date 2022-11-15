@@ -66,7 +66,7 @@ class MinkContext extends DrupalExtensionMinkContext {
   public function assertPageNotContainsText($text) {
     // When running in a JS enabled browser, check that the text is not visually
     // visible.
-    if ($this->browserSupportsJavaScript()) {
+    if ($this->hasJavascriptSupport()) {
       $xpath = '//*[text()[contains(.,"' . $text . '")]]';
       foreach ($this->getSession()->getPage()->findAll('xpath', $xpath) as $element) {
         if ($element->isVisible()) {
