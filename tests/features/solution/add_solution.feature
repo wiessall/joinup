@@ -298,8 +298,7 @@ Feature: "Add solution" visibility options.
 
     Given I am logged in as a moderator
     When I go to the edit form of the "Cleaning solution" solution
-    And I press "Main fields"
-    When I press "Additional fields"
+    When I expand the "Additional fields" accordion section
     And  I remove the first file from "Logo"
     And I wait for AJAX to finish
     Then  I remove the first file from "Banner"

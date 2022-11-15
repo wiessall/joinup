@@ -5,7 +5,6 @@ declare(strict_types = 1);
 namespace Drupal\Tests\asset_release\ExistingSite;
 
 use Drupal\Tests\joinup_test\ExistingSite\JoinupExistingSiteTestBase;
-use Drupal\Tests\rdf_entity\Traits\DrupalTestTraits\RdfEntityCreationTrait;
 use Drupal\rdf_entity\Entity\Rdf;
 use Drupal\taxonomy\Entity\Vocabulary;
 
@@ -15,8 +14,6 @@ use Drupal\taxonomy\Entity\Vocabulary;
  * @group asset_release
  */
 class SyncFieldsFromParentSolutionTest extends JoinupExistingSiteTestBase {
-
-  use RdfEntityCreationTrait;
 
   /**
    * {@inheritdoc}

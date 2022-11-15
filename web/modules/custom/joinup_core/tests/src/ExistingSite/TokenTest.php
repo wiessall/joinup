@@ -6,7 +6,6 @@ namespace Drupal\Tests\joinup_core\ExistingSite;
 
 use Drupal\Tests\joinup_test\ExistingSite\JoinupExistingSiteTestBase;
 use Drupal\Tests\node\Traits\NodeCreationTrait;
-use Drupal\Tests\rdf_entity\Traits\DrupalTestTraits\RdfEntityCreationTrait;
 use Drupal\Tests\token\Functional\TokenTestTrait;
 use Drupal\rdf_entity\Entity\Rdf;
 
@@ -16,7 +15,6 @@ use Drupal\rdf_entity\Entity\Rdf;
 class TokenTest extends JoinupExistingSiteTestBase {
 
   use NodeCreationTrait;
-  use RdfEntityCreationTrait;
   use TokenTestTrait;
 
   /**

@@ -147,7 +147,7 @@ function joinup_user_mail_alter(&$message) {
   }
 
   $message['body'] = array_map(function ($text) use ($moderation_text) {
-    $text = str_replace('@joinup_user:moderation_text', $moderation_text, $text);
+    $text = str_replace('@joinup_user:moderation_text', $moderation_text, (string) $text);
     return Markup::create($text);
   }, $message['body']);
 }

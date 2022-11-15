@@ -1010,7 +1010,6 @@ display:
           empty_zero: false
           hide_alter_empty: true
           text: view
-          bypass_access_check: false
           output_url_as_text: true
           absolute: false
           use_highlighting: false
@@ -1066,7 +1065,6 @@ display:
           empty_zero: false
           hide_alter_empty: true
           text: view
-          bypass_access_check: false
           output_url_as_text: true
           absolute: false
           use_highlighting: false

@@ -4,7 +4,7 @@
     "type": "project",
     "license": "EUPL-1.2",
     "require": {
-        "php": ">=7.4",
+        "php": ">=8.1.3",
         "ext-dom": "*",
         "ext-json": "*",
         "ext-pdo": "*",
@@ -35,7 +35,7 @@
         "drupal/embed_block": "^1.0",
         "drupal/entity_legal": "^3.0.0",
         "drupal/entityqueue": "^1.2",
-        "drupal/error_page": "^1.0 || ^2.0",
+        "drupal/error_page": "^2.0",
         "drupal/facets": "2.0.1",
         "drupal/facets_block": "^1.4",
         "drupal/facets_date_range": "^1.0@beta",
@@ -45,7 +45,7 @@
         "drupal/field_permissions": "^1.1",
         "drupal/file_url": "~2.0",
         "drupal/flag": "^4.0",
-        "drupal/geocoder": "^3.0",
+        "drupal/geocoder": "^4.4",
         "drupal/geofield": "~1.6",
         "drupal/honeypot": "~2",
         "drupal/iframe": "2.11.0",
@@ -59,10 +59,10 @@
         "drupal/menu_link_destination": "^1.0",
         "drupal/message": "^1.1",
         "drupal/message_digest": "^1.0.0",
-        "drupal/message_notify": "~1.2",
+        "drupal/message_notify": "~1.3",
         "drupal/meta_entity": "^1.2",
         "drupal/monolog": "^2.0",
-        "drupal/og": "^1.0-alpha7",
+        "drupal/og": "^1.0-alpha8",
         "drupal/og_menu": "^2.0",
         "drupal/page_manager": "^4.0@beta",
         "drupal/paragraphs": "^1.12",
@@ -98,7 +98,7 @@
         "drupal/views_bulk_operations": "^4",
         "drupal/views_data_export": "^1.0",
         "drupal/views_multiple_permissions": "^1.0",
-        "drush/drush": "^11.0",
+        "drush/drush": "^11.3",
         "ec-europa/joinup-tallinn-dashboard": "1.0.0-alpha2",
         "ec-europa/material-design-lite": "1.3.1",
         "ec-europa/spdx": "^1.0",
@@ -107,9 +107,10 @@
         "openeuropa/composer-artifacts": "^1.0",
         "openeuropa/oe_bootstrap_theme": "^1.0",
         "openeuropa/oe_dashboard_agent": "^0.3.0",
-        "openeuropa/oe_webtools": "^1.14",
+        "openeuropa/oe_webtools": "^1.19",
         "openeuropa/webtools-geocoding-provider": "~0.1",
-        "semiceu/adms-ap_validator": "1.0.0-alpha1"
+        "semiceu/adms-ap_validator": "1.0.0-alpha1",
+        "sweetrdf/easyrdf": "^1.7.1"
     },
     "require-dev": {
         "ext-fileinfo": "*",
@@ -120,15 +121,14 @@
         "drupal/coder": "^8.3.11",
         "drupal/composer_deploy": "^1.6",
         "drupal/config_update": "^1.7",
-        "drupal/devel": "^4.0",
-        "drupal/drupal-driver": "^2.1.0",
-        "drupal/drupal-extension": "^4.1",
+        "drupal/devel": "^5.0",
+        "drupal/drupal-extension": "dev-use-guzzle as 4.2.999",
         "drupal/filecache": "^1",
         "drupal/renderviz": "^1.0",
-        "drupal/upgrade_status": "^3.12",
-        "drupaltest/behat-one-time-login": "^1.0",
-        "ec-europa/toolkit": "^8.6.12",
-        "lovers-of-behat/table-extension": "^1.2.0",
+        "drupal/upgrade_status": "^3.14",
+        "drupaltest/behat-one-time-login": "dev-drupal-extension as 1.0.999",
+        "ec-europa/toolkit": "~9.0.0",
+        "lovers-of-behat/table-extension": "dev-drop-behat-mink-extension",
         "mikey179/vfsstream": "~1.6",
         "palantirnet/drupal-rector": "^0.12.2",
         "pear/http_request2": "~2.4",
@@ -143,7 +143,7 @@
         "symfony/dom-crawler": "^4.4",
         "symfony/phpunit-bridge": "^5.4",
         "vlucas/phpdotenv": "~5",
-        "weitzman/drupal-test-traits": "^1.5",
+        "weitzman/drupal-test-traits": "2.x-dev",
         "weitzman/logintrait": "^1.1"
     },
     "replace": {
@@ -158,17 +158,15 @@
     "config": {
         "sort-packages": true,
         "platform": {
-            "php": "7.4.0"
+            "php": "8.1.3"
         },
         "allow-plugins": {
             "dealerdirect/phpcodesniffer-composer-installer": true,
             "cweagans/composer-patches": true,
             "composer/installers": true,
-            "phpro/grumphp": true,
             "drupal/core-composer-scaffold": true,
-            "foxy/foxy": true,
             "openeuropa/composer-artifacts": true,
-            "zaporylie/composer-drupal-optimizations": false
+            "phpstan/extension-installer": true
         }
     },
     "autoload": {
@@ -251,27 +249,30 @@
                 "Use READ COMMITTED by default for MySQL transactions @see https://www.drupal.org/project/drupal/issues/1650930": "https://git.drupalcode.org/project/drupal/-/merge_requests/2394.diff",
                 "Allow image style to be selected in text editor @see https://www.drupal.org/node/2061377": "https://git.drupalcode.org/project/drupal/-/merge_requests/2344.diff",
                 "Allow making the file description a required field @see https://www.drupal.org/node/2320877": "https://git.drupalcode.org/project/drupal/-/merge_requests/975.diff",
-                "Delete should not be the default action on /admin/content @see https://www.drupal.org/project/drupal/issues/2381293": "https://git.drupalcode.org/project/drupal/-/merge_requests/1670.diff",
+                "Delete should not be the default action on /admin/content @see https://www.drupal.org/project/drupal/issues/2381293": "resources/patch/drupal/core/2381293.diff",
                 "Regression: Do not bypass route access with 'link to any page' permissions for menu links @see https://www.drupal.org/project/drupal/issues/2463753": "https://www.drupal.org/files/issues/2021-09-15/2463753-87_0.patch",
                 "Upcast named arguments/named parameters in views @see https://www.drupal.org/project/drupal/issues/2528166": "https://git.drupalcode.org/project/drupal/-/merge_requests/1323.diff",
                 "Confirmation cancel links are incorrect if installed in a subdirectory @see https://www.drupal.org/project/drupal/issues/2582295": "https://www.drupal.org/files/issues/2021-08-23/2582295-52.patch",
                 "Allow plurals on bundle labels @see https://www.drupal.org/node/2765065": "https://git.drupalcode.org/project/drupal/-/merge_requests/1652.diff",
-                "Enlarge file_usage entity ID length. @see https://www.drupal.org/node/2675600": "https://www.drupal.org/files/issues/2675600-30.patch",
+                "Enlarge file_usage entity ID length. @see https://www.drupal.org/node/2675600": "resources/patch/drupal/core/2675600.diff",
                 "Menu link plugins should provide a way for the link to be conditionally hidden @see https://www.drupal.org/project/drupal/issues/2719609": "https://www.drupal.org/files/issues/2719609-2.patch",
-                "New option for Views page displays to use the admin theme @see https://www.drupal.org/node/2719797": "https://www.drupal.org/files/issues/2719797-65.patch",
+                "New option for Views page displays to use the admin theme @see https://www.drupal.org/node/2719797": "https://www.drupal.org/files/issues/2022-09-20/2719797-144.patch",
                 "Make the tab active when the fragment is present in URL @see https://www.drupal.org/project/drupal/issues/2752511": "https://www.drupal.org/files/issues/2022-06-17/2752511-109-9.5.x.patch",
                 "Add thread depth configuration to comments. Includes patch for parent issue #2879087. @see https://www.drupal.org/project/drupal/issues/2786587 @see https://www.drupal.org/project/drupal/issues/2879087": "https://www.drupal.org/files/issues/2022-01-17/2786587-58-9.3.x.patch",
                 "Set fixed depth for comment threads.": "resources/patch/2786587-thread-depth-fixed-limit.patch",
                 "Add option to show only start or end date in the DateTime Range custom formatter @see https://www.drupal.org/project/drupal/issues/2827055": "https://www.drupal.org/files/issues/2022-06-16/2827055-69.patch",
                 "Views with a different query plugin created via the UI do not have the correct query plugin ID in the view config @see https://www.drupal.org/project/drupal/issues/2836237": "https://www.drupal.org/files/issues/2022-01-17/2836237-49-9.3.x.patch",
                 "Disable tableselect element options @see https://www.drupal.org/project/drupal/issues/2895352": "https://www.drupal.org/files/issues/2021-12-04/2895352-53.patch",
-                "Pass current route parameters to the confirmation form route @see https://www.drupal.org/project/drupal/issues/2901412": "https://git.drupalcode.org/project/drupal/-/merge_requests/1666.diff",
+                "Pass current route parameters to the confirmation form route @see https://www.drupal.org/project/drupal/issues/2901412": "resources/patch/2901412-25.diff",
                 "Lazy services: support PHP7 return types in generate-proxy-class @see https://www.drupal.org/node/2919243": "https://www.drupal.org/files/issues/2919243-2.patch",
                 "Cache tags are not invalidated on revision delete @see https://www.drupal.org/project/drupal/issues/2945928": "https://www.drupal.org/files/issues/entity-cache_revision_deletion-2945928-2.patch",
-                "Users w/o access to content should still have configurable access to the content URL @see https://www.drupal.org/project/drupal/issues/3008254": "https://www.drupal.org/files/issues/2022-01-17/3008254-26-9.3.x.patch",
                 "Make it easier to trigger a tour @see https://www.drupal.org/project/drupal/issues/3012027": "https://www.drupal.org/files/issues/2022-01-17/3012027-52-9.3.x.patch",
                 "EntityConstraintValidationList::findByCode is inconsistent @see https://www.drupal.org/project/drupal/issues/3126654": "https://www.drupal.org/files/issues/2020-04-10/find_by_code_override-3126654-D8-4.patch",
                 "Cannot implement a custom user cancellation method @see https://www.drupal.org/project/drupal/issues/3135592": "https://git.drupalcode.org/project/drupal/-/merge_requests/1675.diff",
+                "The old storage handler is still defined for RDF entities.": "resources/patch/core-fix-sparql-storage-hack.patch",
+                "Add option to show only start or end date in the DateTime Range custom formatter @see https://www.drupal.org/project/drupal/issues/2827055": "https://www.drupal.org/files/issues/2022-06-16/2827055-69.patch",
+                "file_requirements() can trigger a PHP 8.1 deprecation notice when called without a SERVER_SOFTWARE server env variable @see https://www.drupal.org/project/drupal/issues/3279289": "https://git.drupalcode.org/project/drupal/-/merge_requests/2247.diff",
+                "If you don't set the \"version\" of a profile, the report/status displays an empty dash @see https://www.drupal.org/project/drupal/issues/3270892": "https://git.drupalcode.org/project/drupal/-/merge_requests/2003.diff"
                 "Page variant plugin is not correctlly instantiated @see https://www.drupal.org/project/drupal/issues/3294833": "https://git.drupalcode.org/project/drupal/-/merge_requests/2484.diff"
             },
             "drupal/default_content": {
@@ -314,7 +315,7 @@
                 "Ensure backward compatibility with Piwik @see https://www.drupal.org/project/matomo_reporting_api/issues/3080854": "https://www.drupal.org/files/issues/2019-09-18/3080854-7.patch"
             },
             "drupal/message_notify": {
-                "Allow 3rd-party to act before delivery @see https://www.drupal.org/project/message_notify/issues/3314370": "resources/patch/message_notify-diff-8.x-1.2-3314370.diff"
+                "Allow 3rd-party to act before delivery @see https://www.drupal.org/project/message_notify/issues/3314370": "resources/patch/drupal/message_notify/3314370.diff"
             },
             "drupal/meta_entity": {
                 "Make the field configurable in the view @see https://www.drupal.org/project/meta_entity/issues/3279161": "https://git.drupalcode.org/project/meta_entity/-/merge_requests/4.diff",
@@ -372,6 +373,9 @@
             "drupal/ui_patterns": {
                 "Detect all theme patterns @see https://www.drupal.org/project/ui_patterns/issues/3311471": "https://www.drupal.org/files/issues/2022-09-26/3311471-10-detect-all-theme-patterns.patch"
             },
+            "drupal/upgrade_status": {
+                "Issue #3274645: Deprecated function: Return type of GuzzleHttp Cookie CookieJar when running Upgrade Status on PHP 8.1 @see https://www.drupal.org/project/upgrade_status/issues/3274645": "https://www.drupal.org/files/issues/2022-10-07/3274645-22.patch"
+            },
             "drupal/video_embed_field": {
                 "Extend support for embed URLs. Option to force privacy @see https://www.drupal.org/project/video_embed_field/issues/3060201 (originally on https://www.drupal.org/node/2899093)": "https://www.drupal.org/files/issues/2019-06-11/privacy_mode-3060201-D8-6.patch",
                 "WYSIWYG Video URL max length limited to 128 characters @see https://www.drupal.org/project/video_embed_field/issues/2908562": "https://www.drupal.org/files/issues/video_url_maxlength-2908562-4.patch"
@@ -382,16 +386,18 @@
             "drupal/views_block_area": {
                 "Views block area missing schema @see https://www.drupal.org/project/views_block_area/issues/3157188": "https://www.drupal.org/files/issues/2020-07-06/views_block_area-missing_schema-3157188-2.patch"
             },
-            "ec-europa/toolkit": {
-                "Add --strict option, it should treat Undefined and Pending steps as failures @see https://github.com/ec-europa/toolkit/pull/559": "https://patch-diff.githubusercontent.com/raw/ec-europa/toolkit/pull/559.diff"
-            },
             "openeuropa/oe_webtools": {
                 "Allow to pass an optional referer. @see https://github.com/openeuropa/oe_webtools/pull/96": "https://patch-diff.githubusercontent.com/raw/openeuropa/oe_webtools/pull/96.diff",
                 "Place the webtools loader on the head. @see https://github.com/openeuropa/oe_webtools/pull/102": "https://patch-diff.githubusercontent.com/raw/openeuropa/oe_webtools/pull/102.diff",
-                "Add the possibility to display a marker on the map. @see https://github.com/openeuropa/oe_webtools/pull/111": "https://patch-diff.githubusercontent.com/raw/openeuropa/oe_webtools/pull/111.diff"
-            },
-            "openeuropa/task-runner": {
-                "Command config cannot be overridden @see https://github.com/openeuropa/task-runner/pull/135": "https://patch-diff.githubusercontent.com/raw/openeuropa/task-runner/pull/135.diff"
+                "Add the possibility to display a marker on the map. @see https://github.com/openeuropa/oe_webtools/pull/111": "https://patch-diff.githubusercontent.com/raw/openeuropa/oe_webtools/pull/111.diff",
+                "PHP 8.1 notices @see https://github.com/openeuropa/oe_webtools/pull/182": "https://patch-diff.githubusercontent.com/raw/openeuropa/oe_webtools/pull/182.diff"
+            }
+        },
+        "patches-ignore": {
+            "openeuropa/oe_bootstrap_theme": {
+                "drupal/ui_patterns": {
+                    "Fix unable to detect a pattern from default theme having same id as the pattern in the base theme @see https://github.com/nuvoleweb/ui_patterns/issues/304": "https://patch-diff.githubusercontent.com/raw/nuvoleweb/ui_patterns/pull/318.diff"
+                }
             }
         },
         "artifacts": {
@@ -415,6 +421,10 @@
                     "reference": "master"
                 }
             }
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/claudiu-cristea/drupalextension.git"
         },
         {
             "type": "vcs",

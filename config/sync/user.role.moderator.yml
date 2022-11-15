@@ -13,6 +13,7 @@ dependencies:
     - node.type.discussion
     - node.type.document
     - node.type.glossary
+    - taxonomy.vocabulary.legal_type
   module:
     - asset_distribution
     - comment
@@ -47,6 +48,7 @@ dependencies:
     - solution
     - state_machine_permissions
     - tallinn
+    - taxonomy
     - toolbar
     - view_unpublished
 id: moderator
@@ -65,6 +67,7 @@ permissions:
   - 'access messages overview'
   - 'access pipeline report'
   - 'access pipeline selector'
+  - 'access taxonomy overview'
   - 'access toolbar'
   - 'access uri converter'
   - 'add site alerts'
@@ -163,6 +166,7 @@ permissions:
   - 'edit own field_is_eif_recommendation'
   - 'edit owner rdf entity'
   - 'edit short id after publication'
+  - 'edit terms in legal_type'
   - 'execute developers_italia pipeline'
   - 'execute dpsi pipeline'
   - 'execute eu_sic pipeline'

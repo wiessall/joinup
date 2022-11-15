@@ -7,6 +7,8 @@
 
 declare(strict_types = 1);
 
+use Drupal\Core\StringTranslation\TranslatableMarkup;
+use Drupal\asset_release\Entity\AssetReleaseInterface;
 use Drupal\joinup_bundle_class\DescriptionInterface;
 use Drupal\joinup_bundle_class\LogoInterface;
 use Drupal\smart_trim\Truncate\TruncateHTML;
@@ -71,6 +73,13 @@ function _ventuno_preprocess_search_result(array &$variables, string $entity_typ
     $variables['changed'] = t('@label: @changed', [
       '@label' => t('Updated Date'),
       '@changed' => \Drupal::service('date.formatter')->format($changed_time, 'date_only'),
+    ]);
+  }
+
+  if ($entity instanceof AssetReleaseInterface) {
+    $variables['label'] = new TranslatableMarkup('@label | @version', [
+      '@label' => $entity->label(),
+      '@version' => $entity->getVersion(),
     ]);
   }
 

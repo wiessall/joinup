@@ -54,12 +54,11 @@
     } %}
     {{ page.header }}
 
-    {% if page.header_bottom %}
-      <div class="region-header-bottom container">
-        {{ page.header_bottom }}
-      </div>
-    {% endif %}
-  </div>
+  {% if page.header_bottom %}
+    <div class="region-header-bottom container">
+      {{ page.header_bottom }}
+    </div>
+  {% endif %}
 
   {% if page.featured %}
     <div class="region-featured py-5">

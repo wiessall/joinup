@@ -15,11 +15,6 @@ if ($argc !== 2 || !in_array($argv[1], ['install', 'update'], TRUE)) {
   exit($exitCode++);
 }
 
-// Mute GrumPHP.
-if (file_exists("$projectRoot/vendor/bin/grumphp")) {
-  print execCmd("$projectRoot/vendor/bin/grumphp git:deinit") . "\n";
-}
-
 // Store the Joinup version.
 print "Detecting the Joinup version... ";
 if (execCmd('git rev-parse --is-shallow-repository') !== 'false') {
@@ -45,8 +40,8 @@ if (!getenv('COMPOSER_DISABLE_NODE_DEPENDENCIES')) {
   print 'Node ' . execCmd("node --version") . "\n";
   print 'NPM ' . execCmd("npm --version") . "\n";
 
-  // Bring Ventuno theme dependencies.
-  $command = "cd $projectRoot/web/themes/ventuno && npm ci";
+  // Theme dependencies.
+  $command = "npm ci --prefix web/themes/ventuno";
   print "Running: $command\n";
   execCmd($command);
 
@@ -57,7 +52,6 @@ if (!getenv('COMPOSER_DISABLE_NODE_DEPENDENCIES')) {
 
   // Project dependencies.
   $command = $argv[1] === 'install' ? 'npm ci' : 'npm install';
-  $command = "cd $projectRoot && $command";
   print "Running: $command\n";
   execCmd($command);
 }

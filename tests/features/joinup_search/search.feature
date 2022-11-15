@@ -189,7 +189,7 @@ Feature: Global search
       | SEARCH RESULTS (5) |
       | Sort by:           |
     Then I should see the text "SEARCH RESULTS (5)"
-    And the page should show the tiles "Collection alpha, Solution alpha, Release Alpha, Licence Alpha, Video alpha"
+    And the page should show the tiles "Collection alpha, Solution alpha, Release Alpha | 1, Licence Alpha, Video alpha"
 
     # "Omega" is used in all the node entities titles. Since the content of
     # custom pages is added to their collection, we also match the collection.
@@ -200,7 +200,7 @@ Feature: Global search
     # "Beta" is used in all the rdf entities body fields.
     When I enter "beta" in the search bar and press enter
     Then I should see the text "SEARCH RESULTS (4)"
-    And the page should show the tiles "Collection alpha, Solution alpha, Release Alpha, Licence Alpha"
+    And the page should show the tiles "Collection alpha, Solution alpha, Release Alpha | 1, Licence Alpha"
 
     # "Epsilon" is used in all the node entities body fields.
     When I enter "epsilon" in the search bar and press enter
@@ -208,7 +208,7 @@ Feature: Global search
 
     # "Alphabet" is used in all the keywords fields.
     When I enter "Alphabet" in the search bar and press enter
-    Then the page should show the tiles "Solution alpha, Release Alpha, News headline delta, Event Omega, Document omega"
+    Then the page should show the tiles "Solution alpha, Release Alpha | 1, News headline delta, Event Omega, Document omega"
 
     # "Gamma" is used in the collection abstract.
     When I enter "gamma" in the search bar and press enter
@@ -232,11 +232,11 @@ Feature: Global search
 
     # The owner and contact information names should be indexed inside the solutions/releases they are linked to.
     When I enter "responsible" in the search bar and press enter
-    Then the page should show the tiles "Solution alpha, Release Alpha"
+    Then the page should show the tiles "Solution alpha, Release Alpha | 1"
     # Visit the homepage to be sure that the test fetches the correct updated page.
     When I go to the homepage
     And I enter "contact" in the search bar and press enter
-    Then the page should show the tiles "Solution alpha, Release Alpha"
+    Then the page should show the tiles "Solution alpha, Release Alpha | 1"
 
     # Users should be found by first name, family name and organisation.
     When I enter "Jenessa" in the search bar and press enter
@@ -402,9 +402,10 @@ Feature: Global search
 
     # Add a new distribution, child of a release.
     Given the following release:
-      | title         | Releazz   |
-      | state         | validated |
-      | is version of | Zzolution |
+      | title           | Releazz   |
+      | release number  | 1         |
+      | state           | validated |
+      | is version of   | Zzolution |
 
     When I enter "ReleazzDistro" in the search bar and press enter
     Then I should see "No content found for your search."
@@ -419,18 +420,18 @@ Feature: Global search
       | representation technique | Datalog                           |
 
     When I enter "releazzDistro" in the search bar and press enter
-    Then the page should show only the tiles "Releazz"
+    Then the page should show only the tiles "Releazz | 1"
     When I enter "dracula" in the search bar and press enter
-    Then the page should show only the tiles "Releazz"
+    Then the page should show only the tiles "Releazz | 1"
     When I enter "releazz-distro" in the search bar and press enter
-    Then the page should show only the tiles "Releazz"
+    Then the page should show only the tiles "Releazz | 1"
     When I enter "apache" in the search bar and press enter
     # Also the licence itself is retrieved.
-    Then the page should show only the tiles "Apache-2.0,Releazz"
+    Then the page should show only the tiles "Apache-2.0,Releazz | 1"
     When I enter "HTML" in the search bar and press enter
-    Then the page should show only the tiles "Releazz"
+    Then the page should show only the tiles "Releazz | 1"
     When I enter "Datalog" in the search bar and press enter
-    Then the page should show only the tiles "Releazz"
+    Then the page should show only the tiles "Releazz | 1"
 
     Given I am logged in as a moderator
     When I go to the edit form of the "ReleazzDistro" distribution
@@ -461,18 +462,18 @@ Feature: Global search
 
     # Search now with the new keywords.
     When I enter "dIstrOreleazz" in the search bar and press enter
-    Then the page should show only the tiles "Releazz"
+    Then the page should show only the tiles "Releazz | 1"
     When I enter "zoRRo" in the search bar and press enter
-    Then the page should show only the tiles "Releazz"
+    Then the page should show only the tiles "Releazz | 1"
     When I enter "mishMash" in the search bar and press enter
-    Then the page should show only the tiles "Releazz"
+    Then the page should show only the tiles "Releazz | 1"
     When I enter "LGpl" in the search bar and press enter
     # Also the licence itself is retrieved.
-    Then the page should show only the tiles "LGPL,Releazz"
+    Then the page should show only the tiles "LGPL,Releazz | 1"
     When I enter "CSV" in the search bar and press enter
-    Then the page should show only the tiles "Releazz"
+    Then the page should show only the tiles "Releazz | 1"
     When I enter "Human Language" in the search bar and press enter
-    Then the page should show only the tiles "Releazz"
+    Then the page should show only the tiles "Releazz | 1"
 
     Given I delete the "DistroReleazz" asset distribution
 
@@ -779,11 +780,11 @@ Feature: Global search
 
     When I go to "/search?f[0]=type%3Aasset_release"
     And I should see the text "SEARCH RESULTS (8)"
-    Then I should see the text "New 1.0" in the "Delta1" card
-    And I should see the text "New 2.0" in the "Delta2" card
-    And I should see the text "New 3.0" in the "Delta3" card
-    And I should see the text "New 4.0" in the "Delta4" card
-    And I should see the text "New 5.0" in the "Delta5" card
-    And I should see the text "New 6.0" in the "Delta6" card
-    And I should see the text "New 7.0" in the "Delta7" card
-    And I should see the text "New 8.0" in the "Delta8" card
+    Then I should see the text "New 1.0" in the "Delta1 | 1.0.0" card
+    And I should see the text "New 2.0" in the "Delta2 | 2.0.0" card
+    And I should see the text "New 3.0" in the "Delta3 | 3.0.0" card
+    And I should see the text "New 4.0" in the "Delta4 | 4.0.0" card
+    And I should see the text "New 5.0" in the "Delta5 | 5.0.0" card
+    And I should see the text "New 6.0" in the "Delta6 | 6.0.0" card
+    And I should see the text "New 7.0" in the "Delta7 | 7.0.0" card
+    And I should see the text "New 8.0" in the "Delta8 | 8.0.0" card
