@@ -4,7 +4,7 @@ status: true
 dependencies: {  }
 id: file
 label: File
-description: 'Inline file used in WYSIWYG'
+description: 'Inline file used in editor'
 source: file
 queue_thumbnail_downloads: false
 new_revision: false
