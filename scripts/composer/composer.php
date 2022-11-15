@@ -46,7 +46,7 @@ if (!getenv('COMPOSER_DISABLE_NODE_DEPENDENCIES')) {
   execCmd($command);
 
   // Bring IOP subtheme dependencies.
-  $command = "cd $projectRoot/web/themes/iop && npm ci";
+  $command = "npm ci --prefix web/themes/iop";
   print "Running: $command\n";
   execCmd($command);
 
