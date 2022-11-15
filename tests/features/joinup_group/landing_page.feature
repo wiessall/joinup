@@ -11,9 +11,9 @@ Feature: Tests the group landing page customization.
   - As a moderator, when I visit a group, I can set a landing page.
 
     Given the following <group>s:
-      | title               | state     | description                     |
-      | <group> group       | validated | The <group> group description   |
-      | other <group> group | validated | Other <group> group description |
+      | title               | state     | description                         |
+      | <group> group       | validated | The <group> arbitrary description   |
+      | other <group> group | validated | Other <group> arbitrary description |
     And "custom_page" content:
       | title         | <group>       | body                      |
       | Custom Page 1 | <group> group | The custom page 1 content |
@@ -42,7 +42,7 @@ Feature: Tests the group landing page customization.
     # Given I am logged in as a facilitator of the "<group> group" <group>
     # When I go to the homepage of the "<group> group" <group>
     # Then I should see the heading "<group> group"
-    # And I should see "The <group> group description"
+    # And I should see "The <group> arbitrary description"
     # Then I should see the link "Settings"
     # When I click "Settings"
     # Then the following fields should be present "Landing page"
@@ -55,7 +55,7 @@ Feature: Tests the group landing page customization.
     # And I press "Save"
     # Then I should see the heading "<group> group"
     # And I should see "The custom page 2 content"
-    # But I should not see "The <group> group description"
+    # But I should not see "The <group> arbitrary description"
 
     Given I am logged in as a moderator
     When I go to the homepage of the "<group> group" <group>
@@ -72,14 +72,14 @@ Feature: Tests the group landing page customization.
     And I press "Save"
     Then I should see the heading "<group> group"
     And I should see "The custom page 3 content"
-    But I should not see "The <group> group description"
+    But I should not see "The <group> arbitrary description" in the Content region
     And I should not see "The custom page 2 content"
 
     When I click "Settings"
     When I select "- Standard landing page -" from "Landing page"
     And I press "Save"
     Then I should see the heading "<group> group"
-    And I should see "The <group> group description"
+    And I should see "The <group> arbitrary description"
     And I should not see "The custom page 2 content"
     And I should not see "The custom page 3 content"
 
@@ -92,11 +92,11 @@ Feature: Tests the group landing page customization.
   # See https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7223
   Scenario: As a group facilitator I cannot set the landing page.
     Given the following collections:
-      | title            | state     | description                      |
-      | collection group | validated | The collection group description |
+      | title            | state     | description                          |
+      | collection group | validated | The collection arbitrary description |
     And the following solutions:
-      | title          | state     | description                    |
-      | solution group | validated | The solution group description |
+      | title          | state     | description                        |
+      | solution group | validated | The solution arbitrary description |
 
     Given I am logged in as a facilitator of the "collection group" collection
     When I go to the homepage of the "collection group" collection
