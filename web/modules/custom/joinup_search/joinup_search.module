@@ -423,22 +423,17 @@ function joinup_search_views_plugins_row_alter(array &$plugins): void {
  */
 function joinup_search_form_alter(&$form, FormStateInterface $form_state, $form_id) {
   if ($form_id == 'views_exposed_form') {
-
     $route_name = \Drupal::routeMatch()->getRouteName();
     $view = $form_state->getStorage('view');
-
     if ($view['view']->id() == 'search' && $view['view']->current_display == 'page_1' && $route_name == 'view.search.page_1') {
-
       $form['results_count'] = [
         '#type' => 'item',
         '#weight' => 0,
         '#markup' => '',
       ];
-
     }
 
     if ($view['view']->id() == 'search' && $view['view']->current_display == 'page_1' && $route_name != 'view.search.page_1') {
-
       $group = \Drupal::service('og.context')->getGroup();
       if ($group) {
         /** @var \Drupal\Core\Entity\ContentEntityInterface $group */
