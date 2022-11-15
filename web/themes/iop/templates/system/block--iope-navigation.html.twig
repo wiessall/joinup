@@ -39,7 +39,7 @@
   'navbar',
   'navbar-expand-md',
   'iop-navbar',
-  directory is same as 'themes/iop' ? 'stickynav',
+  directory is same as 'themes/iop' ? 'navbar--sticky',
 ] %}
 {% set attributes = attributes.addClass(classes) %}
 <nav role="navigation" aria-labelledby="{{ heading_id }}"{{ attributes|without('role', 'aria-labelledby') }}>
