@@ -18,3 +18,4 @@ conditions:
       - joinup_group.leave_confirm_form
       - joinup_community_content.share_content_form
       - solution.share_form
+      - asset_distribution.track_download

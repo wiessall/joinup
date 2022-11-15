@@ -14,6 +14,7 @@ use Drupal\file_url\FileUrlHandler;
 use Drupal\joinup\Traits\EntityReferenceTrait;
 use Drupal\joinup\Traits\EntityTrait;
 use Drupal\joinup\Traits\FileTrait;
+use Drupal\joinup\Traits\JavascriptTrait;
 use Drupal\joinup\Traits\RdfEntityTrait;
 use Drupal\joinup\Traits\TestingEntitiesTrait;
 use Drupal\meta_entity\Entity\MetaEntity;
@@ -29,6 +30,7 @@ class AssetDistributionContext extends RawDrupalContext {
   use FileTrait;
   use RdfEntityTrait;
   use TestingEntitiesTrait;
+  use JavascriptTrait;
 
   /**
    * Navigates to the canonical page display of an asset distribution.
@@ -269,7 +271,7 @@ class AssetDistributionContext extends RawDrupalContext {
     }
     $file = FileUrlHandler::urlToFile($distribution->field_ad_access_url->target_id);
     $link = FileUrlHandler::isRemote($file) ? $distribution->field_ad_access_url->target_id : \Drupal::service('file_url_generator')->generateAbsoluteString($file->getFileUri());
-    $result = $this->getSession()->getPage()->find('xpath', "//a[contains(., '{$distribution->label()}')]/ancestor::div[contains(concat(' ', @class, ' '), ' releases__item ')]//a[@href='{$link}' and contains(text(), '{$link_type}')]");
+    $result = $this->getSession()->getPage()->find('xpath', "//a[contains(., '{$distribution->label()}')]/ancestor::li[contains(concat(' ', @class, ' '), ' releases__item ')]//a[@href='{$link}' and contains(concat(' ', @class, ' '), ' btn ') and normalize-space(text()) = '{$link_type}']");
     if (empty($result)) {
       throw new \Exception(sprintf('No link was found in the "%s" distribution on the page %s', $distribution->label(), $this->getSession()->getCurrentUrl()));
     }
@@ -405,6 +407,7 @@ class AssetDistributionContext extends RawDrupalContext {
       throw new \Exception("The tile '$heading' was not found on the page.");
     }
 
+    $this->scrollElementIntoView($element);
     $element->clickLink($link);
   }
 
@@ -504,7 +507,7 @@ class AssetDistributionContext extends RawDrupalContext {
     // Locate all the elements.
     $xpath = '//*[@class and contains(concat(" ", normalize-space(@class), " "), " releases__item ")]';
     // That have a heading with the specified text.
-    $xpath .= '[.//*[@class and contains(concat(" ", normalize-space(@class), " "), " releases__item-title ")][normalize-space()="' . $heading . '"]]';
+    $xpath .= '[.//article[@class and contains(concat(" ", normalize-space(@class), " "), " tile ")]//h1//a[normalize-space()="' . $heading . '"]]';
 
     return $this->getSession()->getPage()->find('xpath', $xpath);
   }
