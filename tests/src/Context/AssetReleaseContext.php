@@ -292,7 +292,7 @@ class AssetReleaseContext extends RawDrupalContext {
       $releases[] = $title['release'];
     }
 
-    $release_titles = $this->getSession()->getPage()->findAll('css', '.releases__item >  > h2.releases__item-title > a');
+    $release_titles = $this->getSession()->getPage()->findAll('css', '.releases__item h2.releases__item-title > a');
     if (count($release_titles) != count($releases)) {
       throw new \Exception("Wrong number of releases found.");
     }
@@ -333,7 +333,7 @@ class AssetReleaseContext extends RawDrupalContext {
     $name_with_version = $release->label() . " " . $release_version;
 
     $latest_release = reset($latest_releases);
-    if ($latest_release->find('css', '.timeline__release-title')->getText() !== $name_with_version) {
+    if ($latest_release->find('css', '.releases__item-title')->getText() !== $name_with_version) {
       throw new \Exception("{$release->label()} is not marked as the latest release.");
     }
   }
