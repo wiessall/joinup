@@ -25,6 +25,7 @@ use Drupal\Core\Test\Exception\MissingGroupException;
 use Drupal\Core\Url;
 use Drupal\file\Entity\File;
 use Drupal\joinup_group\Entity\Announcement;
+use Drupal\joinup_group\Entity\AnnouncementInterface;
 use Drupal\joinup_group\Entity\GroupContentInterface;
 use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_group\Entity\PinnableGroupContentInterface;
@@ -33,6 +34,7 @@ use Drupal\joinup_group\Form\RdfDeleteForm;
 use Drupal\joinup_group\Form\UserCancelForm;
 use Drupal\joinup_group\JoinupGroupHelper;
 use Drupal\joinup_workflow\EntityWorkflowStateInterface;
+use Drupal\media\MediaInterface;
 use Drupal\meta_entity\Entity\MetaEntity;
 use Drupal\meta_entity\Entity\MetaEntityInterface;
 use Drupal\node\NodeInterface;
@@ -482,30 +484,45 @@ function joinup_group_form_views_exposed_form_alter(array &$form, FormStateInter
   $view_id = $view->id();
   $display = $view->current_display;
 
+  // Replaces a group text exposed filter with a dropdown.
+  $replace_group_filter = static function (array &$form, array $groups): void {
+    $options = ['' => t('- Any -')];
+    /** @var \Drupal\joinup_group\Entity\GroupInterface $group */
+    foreach ($groups as $group) {
+      $options[$group->id()] = t('@title (@type)', [
+        '@type' => $group->get('rid')->entity->label(),
+        '@title' => $group->label(),
+      ]);
+    }
+    asort($options);
+    $form['group'] = [
+      '#type' => 'select',
+      '#title' => t('Group'),
+      '#options' => $options,
+      '#default_value' => $form['group']['#default_value'],
+    ];
+  };
+
   if ($view_id === 'announcements' && $display === 'all') {
     $announcement_storage = \Drupal::entityTypeManager()->getStorage('message');
     $mids = $announcement_storage->getQuery()->accessCheck(FALSE)
       ->condition('template', 'announcement')
       ->execute();
-    $groups = ['' => t('- Any -')];
-    /** @var \Drupal\joinup_group\Entity\AnnouncementInterface $announcement */
-    foreach ($announcement_storage->loadMultiple($mids) as $announcement) {
-      $group_id = $announcement->getGroupId();
-      if (!isset($groups[$group_id])) {
-        $group = $announcement->getGroup();
-        $groups[$group_id] = t('@title (@type)', [
-          '@type' => $group->get('rid')->entity->label(),
-          '@title' => $group->label(),
-        ]);
-      }
-    }
-    asort($groups);
-    $form['group'] = [
-      '#type' => 'select',
-      '#title' => t('Group'),
-      '#options' => $groups,
-      '#default_value' => $form['group']['#default_value'],
-    ];
+    $groups = array_map(function (AnnouncementInterface $announcement): GroupInterface {
+      return $announcement->getGroup();
+    }, $announcement_storage->loadMultiple($mids));
+    $replace_group_filter($form, $groups);
+  }
+  elseif ($view_id === 'media' && $display === 'media_page_list') {
+    $media_storage = \Drupal::entityTypeManager()->getStorage('media');
+    $mids = $media_storage->getQuery()->accessCheck(FALSE)
+      ->condition('bundle', ['file', 'video'], 'IN')
+      ->exists('og_audience')
+      ->execute();
+    $groups = array_map(function (MediaInterface $media): GroupInterface {
+      return $media->get('og_audience')->entity;
+    }, $media_storage->loadMultiple($mids));
+    $replace_group_filter($form, $groups);
   }
 
   // Adds result counts to the role options on the membership overview for
