@@ -7,6 +7,7 @@
 
 declare(strict_types = 1);
 
+use Drupal\Component\Render\MarkupInterface;
 use Drupal\Component\Utility\Html;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Datetime\DrupalDateTime;
@@ -422,17 +423,22 @@ function joinup_search_views_plugins_row_alter(array &$plugins): void {
  */
 function joinup_search_form_alter(&$form, FormStateInterface $form_state, $form_id) {
   if ($form_id == 'views_exposed_form') {
+
     $route_name = \Drupal::routeMatch()->getRouteName();
     $view = $form_state->getStorage('view');
+
     if ($view['view']->id() == 'search' && $view['view']->current_display == 'page_1' && $route_name == 'view.search.page_1') {
+
       $form['results_count'] = [
         '#type' => 'item',
         '#weight' => 0,
         '#markup' => '',
       ];
+
     }
 
     if ($view['view']->id() == 'search' && $view['view']->current_display == 'page_1' && $route_name != 'view.search.page_1') {
+
       $group = \Drupal::service('og.context')->getGroup();
       if ($group) {
         /** @var \Drupal\Core\Entity\ContentEntityInterface $group */
@@ -454,6 +460,28 @@ function joinup_search_form_alter(&$form, FormStateInterface $form_state, $form_
             '#bcl_icon_path' => base_path() . \Drupal::service('extension.path.resolver')->getPath('theme', 'ventuno') . '/assets/icons/icons.svg',
             '#weight' => -5,
           ];
+        }
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_views_pre_render().
+ */
+function joinup_search_views_pre_render(ViewExecutable $view): void {
+
+  if ($view->id() === 'search' && $view->current_display === 'page_1') {
+    if (!empty($view->result)) {
+      /** @var \Drupal\Core\Messenger\Messenger $message */
+      $message = \Drupal::messenger();
+      $errors = $message->messagesByType('error');
+      foreach ($errors as $error) {
+        if ($error instanceof MarkupInterface) {
+          if ((string) $error === (string) t("You must include at least one positive keyword with 3 characters or more.")) {
+            // Remove an error message.
+            $message->deleteByType('error');
+          }
         }
       }
     }
