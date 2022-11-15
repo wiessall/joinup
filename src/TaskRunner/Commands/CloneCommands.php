@@ -7,6 +7,7 @@ namespace Joinup\TaskRunner\Commands;
 use OpenEuropa\TaskRunner\Commands\AbstractCommands;
 use Robo\Collection\CollectionBuilder;
 use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Console\Style\SymfonyStyle;
 
 /**
  * Replaces the Toolkit download command.
@@ -81,7 +82,8 @@ class CloneCommands extends AbstractCommands {
         $dumpDate['year']
       );
       $dumpHrdate = 'ASDA DATE: ' . $dumpDate['day'] . ' ' . date('M', $dumpTimestamp) . ' ' . $dumpDate['year'] . ' at ' . $dumpDate['hour'] . ':' . $dumpDate['minute'];
-      $this->io()->title($dumpHrdate);
+      $io = new SymfonyStyle($this->input(), $this->output());
+      $io->title($dumpHrdate);
     }
 
     $tasks[] = $this->taskExec('wget')

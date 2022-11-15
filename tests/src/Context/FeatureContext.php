@@ -4,7 +4,6 @@ declare(strict_types = 1);
 
 namespace Drupal\joinup\Context;
 
-use Behat\Behat\Context\SnippetAcceptingContext;
 use Behat\Behat\Hook\Scope\AfterScenarioScope;
 use Behat\Behat\Hook\Scope\AfterStepScope;
 use Behat\Gherkin\Node\TableNode;
@@ -44,7 +43,7 @@ use WebDriver\Key;
 /**
  * Defines generic step definitions.
  */
-class FeatureContext extends RawDrupalContext implements SnippetAcceptingContext {
+class FeatureContext extends RawDrupalContext {
 
   use AntibotTrait;
   use ContextualLinksTrait;
