@@ -6,7 +6,7 @@ dependencies:
     - video_embed_media
 id: video
 label: Video
-description: ''
+description: 'Inline embedded video used in editor'
 source: video_embed_field
 queue_thumbnail_downloads: false
 new_revision: false

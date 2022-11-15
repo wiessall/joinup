@@ -13,8 +13,8 @@ id: media.file.og_audience
 field_name: og_audience
 entity_type: media
 bundle: file
-label: 'Groups audience'
-description: 'OG group audience reference field.'
+label: Group
+description: 'Collection/Solution where this media file belongs.'
 required: true
 translatable: false
 default_value: {  }
