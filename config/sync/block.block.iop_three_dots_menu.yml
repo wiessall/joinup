@@ -1,0 +1,27 @@
+uuid: dc42762f-ce76-43eb-a154-0085be9d4263
+langcode: en
+status: true
+dependencies:
+  module:
+    - joinup_core
+    - system
+  theme:
+    - iop
+id: iop_three_dots_menu
+theme: iop
+region: featured
+weight: -17
+provider: null
+plugin: joinup_local_tasks_block
+settings:
+  id: joinup_local_tasks_block
+  label: Tabs
+  label_display: '0'
+  provider: joinup_core
+  primary: true
+  secondary: false
+visibility:
+  request_path:
+    id: request_path
+    negate: true
+    pages: /collection/interoperable-europe/latest-news

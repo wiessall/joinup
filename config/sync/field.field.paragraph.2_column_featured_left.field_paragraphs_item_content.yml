@@ -1,0 +1,90 @@
+uuid: f5435fdb-89cf-4296-8310-91f62d87d570
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_paragraphs_item_content
+    - paragraphs.paragraphs_type.2_column_featured_left
+    - paragraphs.paragraphs_type.call_to_action
+    - paragraphs.paragraphs_type.image
+    - paragraphs.paragraphs_type.simple_paragraph
+    - paragraphs.paragraphs_type.testimony
+    - paragraphs.paragraphs_type.video
+  module:
+    - entity_reference_revisions
+id: paragraph.2_column_featured_left.field_paragraphs_item_content
+field_name: field_paragraphs_item_content
+entity_type: paragraph
+bundle: 2_column_featured_left
+label: 'Content items'
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:paragraph'
+  handler_settings:
+    target_bundles:
+      simple_paragraph: simple_paragraph
+      call_to_action: call_to_action
+      image: image
+      testimony: testimony
+      video: video
+    negate: 0
+    target_bundles_drag_drop:
+      1_column_layout:
+        weight: -37
+        enabled: false
+      2_column_featured_left:
+        weight: -36
+        enabled: false
+      2_column_featured_right:
+        weight: -35
+        enabled: false
+      2_column_layout:
+        weight: -34
+        enabled: false
+      3_column_layout:
+        weight: -33
+        enabled: false
+      accordion:
+        weight: -32
+        enabled: false
+      accordion_item:
+        weight: -31
+        enabled: false
+      call_to_action:
+        weight: -25
+        enabled: true
+      carousel:
+        weight: -30
+        enabled: false
+      content_listing:
+        weight: -29
+        enabled: false
+      entity_reference:
+        weight: -28
+        enabled: false
+      iframe:
+        weight: -27
+        enabled: false
+      image:
+        weight: -24
+        enabled: true
+      json_map:
+        weight: -23
+        enabled: false
+      row:
+        weight: -22
+        enabled: false
+      simple_paragraph:
+        weight: -26
+        enabled: true
+      testimony:
+        weight: -21
+        enabled: true
+      video:
+        weight: -20
+        enabled: true
+field_type: entity_reference_revisions

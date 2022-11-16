@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c2a525467b331b15ab6ad88dc37607db",
+    "content-hash": "a64d37fe9f33472a698be2616163d8f4",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -2375,6 +2375,83 @@
             }
         },
         {
+            "name": "drupal/default_content",
+            "version": "2.0.0-alpha1",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/default_content.git",
+                "reference": "2.0.0-alpha1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/default_content-2.0.0-alpha1.zip",
+                "reference": "2.0.0-alpha1",
+                "shasum": "0d534ab8e44786a352e24c7cec3dc06bef155f66"
+            },
+            "require": {
+                "drupal/core": "^8.7.7 || ^9",
+                "drupal/hal": "*"
+            },
+            "require-dev": {
+                "drupal/paragraphs": "^1"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "2.0.0-alpha1",
+                    "datestamp": "1595072288",
+                    "security-coverage": {
+                        "status": "not-covered",
+                        "message": "Alpha releases are not covered by Drupal security advisories."
+                    }
+                },
+                "drush": {
+                    "services": {
+                        "drush.services.yml": "^9"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0+"
+            ],
+            "authors": [
+                {
+                    "name": "andypost",
+                    "homepage": "https://www.drupal.org/user/118908"
+                },
+                {
+                    "name": "benjy",
+                    "homepage": "https://www.drupal.org/user/1852732"
+                },
+                {
+                    "name": "Berdir",
+                    "homepage": "https://www.drupal.org/user/214652"
+                },
+                {
+                    "name": "dawehner",
+                    "homepage": "https://www.drupal.org/user/99340"
+                },
+                {
+                    "name": "jibran",
+                    "homepage": "https://www.drupal.org/user/1198144"
+                },
+                {
+                    "name": "larowlan",
+                    "homepage": "https://www.drupal.org/user/395439"
+                },
+                {
+                    "name": "Sam152",
+                    "homepage": "https://www.drupal.org/user/1485048"
+                }
+            ],
+            "description": "Imports default content when a module is enabled",
+            "homepage": "https://www.drupal.org/project/default_content",
+            "support": {
+                "source": "https://git.drupalcode.org/project/default_content"
+            }
+        },
+        {
             "name": "drupal/diff",
             "version": "1.1.0",
             "source": {
@@ -3891,6 +3968,54 @@
             }
         },
         {
+            "name": "drupal/hal",
+            "version": "1.0.2",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/hal.git",
+                "reference": "1.0.2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/hal-1.0.2.zip",
+                "reference": "1.0.2",
+                "shasum": "4e29b3c0873a0d46d653d0ac5d732706a9165511"
+            },
+            "require": {
+                "drupal/core": "^9"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "1.0.2",
+                    "datestamp": "1660689853",
+                    "security-coverage": {
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "bbrala",
+                    "homepage": "https://www.drupal.org/user/3366066"
+                },
+                {
+                    "name": "larowlan",
+                    "homepage": "https://www.drupal.org/user/395439"
+                }
+            ],
+            "description": "Hypermedia Application Language (HAL)",
+            "homepage": "https://www.drupal.org/project/hal",
+            "support": {
+                "source": "https://git.drupalcode.org/project/hal"
+            }
+        },
+        {
             "name": "drupal/honeypot",
             "version": "2.1.2",
             "source": {
@@ -4181,10 +4306,6 @@
             ],
             "authors": [
                 {
-                    "name": "RobLoach",
-                    "homepage": "https://www.drupal.org/user/61114"
-                },
-                {
                     "name": "bnjmnm",
                     "homepage": "https://www.drupal.org/user/2369194"
                 },
@@ -4213,12 +4334,28 @@
                     "homepage": "https://www.drupal.org/user/2972409"
                 },
                 {
+                    "name": "nod_",
+                    "homepage": "https://www.drupal.org/user/598310"
+                },
+                {
+                    "name": "phenaproxima",
+                    "homepage": "https://www.drupal.org/user/205645"
+                },
+                {
+                    "name": "RobLoach",
+                    "homepage": "https://www.drupal.org/user/61114"
+                },
+                {
                     "name": "sun",
                     "homepage": "https://www.drupal.org/user/54136"
                 },
                 {
                     "name": "webchick",
                     "homepage": "https://www.drupal.org/user/24967"
+                },
+                {
+                    "name": "Wim Leers",
+                    "homepage": "https://www.drupal.org/user/99777"
                 },
                 {
                     "name": "zrpnr",
@@ -10053,16 +10190,16 @@
         },
         {
             "name": "openeuropa/oe_bootstrap_theme",
-            "version": "1.0.0-beta7",
+            "version": "1.0.0-beta6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/openeuropa/oe_bootstrap_theme.git",
-                "reference": "29f864ea80333c312ba99e2ca7340e27429e3a70"
+                "reference": "6e808add8962b59e6b54b9c6a6a266d90049d95b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/openeuropa/oe_bootstrap_theme/zipball/29f864ea80333c312ba99e2ca7340e27429e3a70",
-                "reference": "29f864ea80333c312ba99e2ca7340e27429e3a70",
+                "url": "https://api.github.com/repos/openeuropa/oe_bootstrap_theme/zipball/6e808add8962b59e6b54b9c6a6a266d90049d95b",
+                "reference": "6e808add8962b59e6b54b9c6a6a266d90049d95b",
                 "shasum": ""
             },
             "require": {
@@ -10129,9 +10266,9 @@
             "description": "OpenEuropa Bootstrap base theme.",
             "support": {
                 "issues": "https://github.com/openeuropa/oe_bootstrap_theme/issues",
-                "source": "https://github.com/openeuropa/oe_bootstrap_theme/tree/1.0.0-beta7"
+                "source": "https://github.com/openeuropa/oe_bootstrap_theme/tree/1.0.0-beta6"
             },
-            "time": "2022-11-03T12:37:41+00:00"
+            "time": "2022-09-29T14:44:59+00:00"
         },
         {
             "name": "openeuropa/oe_dashboard_agent",
@@ -16593,12 +16730,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/claudiu-cristea/drupalextension.git",
-                "reference": "2763d4d5afa90073cde93cb23cf1c6175bbe7b74"
+                "reference": "f799bbfc5976ef6f253c4756f73dc2f62c2bb20a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/claudiu-cristea/drupalextension/zipball/2763d4d5afa90073cde93cb23cf1c6175bbe7b74",
-                "reference": "2763d4d5afa90073cde93cb23cf1c6175bbe7b74",
+                "url": "https://api.github.com/repos/claudiu-cristea/drupalextension/zipball/f799bbfc5976ef6f253c4756f73dc2f62c2bb20a",
+                "reference": "f799bbfc5976ef6f253c4756f73dc2f62c2bb20a",
                 "shasum": ""
             },
             "require": {
@@ -16685,7 +16822,7 @@
                     "url": "https://github.com/jhedstrom"
                 }
             ],
-            "time": "2022-11-07T21:54:13+00:00"
+            "time": "2022-11-16T09:27:53+00:00"
         },
         {
             "name": "drupal/filecache",
@@ -21794,5 +21931,5 @@
     "platform-overrides": {
         "php": "8.1.3"
     },
-    "plugin-api-version": "2.2.0"
+    "plugin-api-version": "2.3.0"
 }

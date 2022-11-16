@@ -1,0 +1,20 @@
+uuid: 54732228-53ca-4131-b1de-224556e94208
+langcode: en
+status: true
+dependencies:
+  module:
+    - help
+  theme:
+    - iop
+id: iop_help
+theme: iop
+region: content
+weight: -20
+provider: null
+plugin: help_block
+settings:
+  id: help_block
+  label: Help
+  label_display: '0'
+  provider: help
+visibility: {  }
