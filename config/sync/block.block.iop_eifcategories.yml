@@ -1,0 +1,26 @@
+uuid: 7d099b3f-9763-4315-9fc8-616fcd6e9dc2
+langcode: en
+status: true
+dependencies:
+  module:
+    - eif
+  theme:
+    - iop
+id: iop_eifcategories
+theme: iop
+region: content
+weight: -13
+provider: null
+plugin: eif_categories
+settings:
+  id: eif_categories
+  label: 'EIF categories'
+  label_display: '0'
+  provider: eif
+  context_mapping: {  }
+visibility:
+  eif_solutions_page:
+    id: eif_solutions_page
+    negate: false
+    context_mapping: {  }
+    eif_solutions: true

@@ -1,0 +1,23 @@
+uuid: 41d7a367-2b10-40ff-a93f-58dea0ad74c2
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.row_theme
+    - paragraphs.paragraphs_type.row
+  module:
+    - options
+id: paragraph.row.row_theme
+field_name: row_theme
+entity_type: paragraph
+bundle: row
+label: Theme
+description: ''
+required: true
+translatable: false
+default_value:
+  -
+    value: light
+default_value_callback: ''
+settings: {  }
+field_type: list_string

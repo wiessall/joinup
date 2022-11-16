@@ -1,0 +1,19 @@
+uuid: 93cf321d-b57a-478d-83cb-6ccb54321268
+langcode: en
+status: true
+dependencies:
+  module:
+    - joinup_group
+  theme:
+    - iop
+id: interoperable_europe
+label: 'Interoperable Europe'
+theme: iop
+weight: -10
+conditions:
+  group_context:
+    id: group_context
+    negate: false
+    group_context: true
+    limit_to_groups:
+      - 'http://data.europa.eu/w21/8e30f798-ff2b-478b-9c09-5ed5a63b4c8c'

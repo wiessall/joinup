@@ -980,6 +980,18 @@ function joinup_group_entity_view(array &$build, EntityInterface $entity, Entity
 }
 
 /**
+ * Implements hook_form_BASE_FORM_ID_alter().
+ */
+function joinup_group_form_meta_entity_form_alter(array &$form, FormStateInterface $form_state, string $form_id): void {
+  /** @var \Drupal\meta_entity\Entity\MetaEntityInterface $meta_entity */
+  $meta_entity = $form_state->getFormObject()->getEntity();
+  if ($meta_entity->hasField('landing_page')) {
+    // Use a meaningful option for group standard landing page.
+    $form['landing_page']['widget']['#options']['_none'] = t('- Standard landing page -');
+  }
+}
+
+/**
  * Implements hook_entity_field_access().
  */
 function joinup_group_entity_field_access(string $operation, FieldDefinitionInterface $field_definition, AccountInterface $account, ?FieldItemListInterface $items = NULL): AccessResultInterface {

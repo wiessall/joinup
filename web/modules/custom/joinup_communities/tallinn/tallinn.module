@@ -14,6 +14,7 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\node\Entity\Node;
 use Drupal\node\NodeInterface;
+use Drupal\paragraphs\ParagraphInterface;
 use Drupal\search_api\Query\QueryInterface;
 use Drupal\tallinn\Entity\TallinnReport;
 use Drupal\tallinn\Tallinn;
@@ -182,9 +183,14 @@ function tallinn_paragraph_view_alter(array &$build, EntityInterface $entity, En
     return;
   }
 
-  /** @var \Drupal\custom_page\Entity\CustomPageInterface $parent */
-  $parent = $entity->getParentEntity();
-  if (empty($parent) || $parent->getGroup()->id() !== Tallinn::TALLINN_COMMUNITY_ID) {
+  $parent_entity = $entity->getParentEntity();
+  // Support nested paragraphs.
+  while ($parent_entity instanceof ParagraphInterface) {
+    $parent_entity = $parent_entity->getParentEntity();
+  }
+
+  // The parent_entity should now point to a group content entity.
+  if (empty($parent_entity) || $parent_entity->getGroup()->id() !== Tallinn::TALLINN_COMMUNITY_ID) {
     return;
   }
 

@@ -22,6 +22,8 @@
     <exclude-pattern>/web/themes/joinup/node_modules/*</exclude-pattern>
     <exclude-pattern>/web/themes/ventuno/assets/*</exclude-pattern>
     <exclude-pattern>/web/themes/ventuno/node_modules/*</exclude-pattern>
+    <exclude-pattern>/web/themes/iop/assets/*</exclude-pattern>
+    <exclude-pattern>/web/themes/iop/node_modules/*</exclude-pattern>
 
     <rule ref="./vendor/drupal/coder/coder_sniffer/Drupal">
         <exclude name="Drupal.Semantics.FunctionTriggerError.TriggerErrorTextLayoutStrict" />

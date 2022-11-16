@@ -47,7 +47,12 @@
 {% set _list_id = list_id|default('') %}
 {% set _items = items|default([{}]) %}
 
-{% set _nav_classes = ['joinup-navbar', 'navbar', 'navbar-expand', 'joinup-navbar--sticky'] %}
+{% set _nav_classes = [
+  'joinup-navbar',
+  'navbar',
+  'navbar-expand',
+  directory is same as 'themes/ventuno'? 'navbar--sticky',
+] %}
 {% set _navbar_toggler_classes = ['navbar-toggler'] %}
 {% set _list_id = list_id|default('list-1') %}
 {% set _list_classes = ['navbar-nav'] %}
@@ -68,7 +73,7 @@
   {% set list_item_attributes = create_attribute() %}
 {% endif %}
 
-{% set nav_attributes = nav_attributes.addClass(_nav_classes).setAttribute('id', 'joinup-navbar') %}
+{% set nav_attributes = nav_attributes.addClass(_nav_classes) %}
 {% set navbar_toggler_attributes = navbar_toggler_attributes.addClass(_navbar_toggler_classes) %}
 {% set navbar_toggler_attributes = navbar_toggler_attributes.setAttribute('type', 'button') %}
 {% set navbar_toggler_attributes = navbar_toggler_attributes.setAttribute('data-bs-toggle', 'collapse') %}
@@ -184,5 +189,4 @@
     </nav>
   </div>
 </header>
-
 {% endapply %}

@@ -6,9 +6,10 @@ dependencies:
     - field.storage.node.field_paragraphs_body
     - node.type.custom_page
     - paragraphs.paragraphs_type.accordion
-    - paragraphs.paragraphs_type.iframe
     - paragraphs.paragraphs_type.content_listing
+    - paragraphs.paragraphs_type.iframe
     - paragraphs.paragraphs_type.json_map
+    - paragraphs.paragraphs_type.row
     - paragraphs.paragraphs_type.simple_paragraph
   module:
     - entity_reference_revisions
@@ -31,8 +32,20 @@ settings:
       accordion: accordion
       content_listing: content_listing
       iframe: iframe
+      row: row
+      bp_columns_three_uneven: bp_columns_three_uneven
+      bp_simple: bp_simple
     negate: 0
     target_bundles_drag_drop:
+      1_column_layout:
+        weight: 14
+        enabled: false
+      2_column_layout:
+        weight: 15
+        enabled: false
+      3_column_layout:
+        weight: 16
+        enabled: false
       accordion:
         weight: 5
         enabled: true
@@ -42,13 +55,22 @@ settings:
       content_listing:
         weight: 8
         enabled: true
+      entity_reference:
+        weight: 21
+        enabled: false
       iframe:
         weight: 8
         enabled: true
       json_map:
         weight: 4
         enabled: true
+      row:
+        weight: 24
+        enabled: true
       simple_paragraph:
         weight: 2
         enabled: true
+      testimony:
+        weight: 26
+        enabled: false
 field_type: entity_reference_revisions

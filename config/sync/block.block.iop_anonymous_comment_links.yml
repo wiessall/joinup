@@ -1,0 +1,42 @@
+uuid: 10b5b900-520e-4c47-ad18-0b978ae405a9
+langcode: en
+status: true
+dependencies:
+  config:
+    - simple_block.simple_block.anonymous_comment_links
+  module:
+    - node
+    - simple_block
+    - user
+  theme:
+    - iop
+id: iop_anonymous_comment_links
+theme: iop
+region: content
+weight: -18
+provider: null
+plugin: 'simple_block:anonymous_comment_links'
+settings:
+  id: 'simple_block:anonymous_comment_links'
+  label: 'Anonymous comment links'
+  label_display: '0'
+  provider: simple_block
+visibility:
+  user_role:
+    id: user_role
+    negate: false
+    context_mapping:
+      user: '@user.current_user_context:current_user'
+    roles:
+      anonymous: anonymous
+  'entity_bundle:node':
+    id: 'entity_bundle:node'
+    negate: false
+    context_mapping:
+      node: '@node.node_route_context:node'
+    bundles:
+      discussion: discussion
+      document: document
+      event: event
+      news: news
+      video: video

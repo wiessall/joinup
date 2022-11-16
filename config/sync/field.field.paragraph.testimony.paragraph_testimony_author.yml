@@ -1,0 +1,19 @@
+uuid: acb6f661-496c-4230-a1ff-ceac0da9f67c
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.paragraph_testimony_author
+    - paragraphs.paragraphs_type.testimony
+id: paragraph.testimony.paragraph_testimony_author
+field_name: paragraph_testimony_author
+entity_type: paragraph
+bundle: testimony
+label: 'Author name'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

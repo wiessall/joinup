@@ -1,0 +1,113 @@
+uuid: 8d8e96ae-26d5-4c45-ab9a-c50461cd0497
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.row.paragraph_column_layout
+    - field.field.paragraph.row.paragraph_row_background
+    - field.field.paragraph.row.paragraph_heading
+    - field.field.paragraph.row.paragraph_row_subheading
+    - field.field.paragraph.row.row_theme
+    - paragraphs.paragraphs_type.row
+  module:
+    - field_group
+    - paragraphs
+third_party_settings:
+  field_group:
+    group_paragraph_row_accordion:
+      children:
+        - group_paragraph_row_settings
+        - group_paragraph_row_items
+      label: 'Row accordion'
+      region: content
+      parent_name: ''
+      weight: 0
+      format_type: accordion
+      format_settings:
+        classes: ''
+        show_empty_fields: false
+        id: ''
+        effect: none
+    group_paragraph_row_settings:
+      children:
+        - row_theme
+      label: Settings
+      region: content
+      parent_name: group_paragraph_row_accordion
+      weight: 9
+      format_type: accordion_item
+      format_settings:
+        classes: ''
+        show_empty_fields: false
+        id: ''
+        formatter: closed
+        description: ''
+        required_fields: true
+    group_paragraph_row_items:
+      children:
+        - paragraph_heading
+        - paragraph_row_subheading
+        - paragraph_column_layout
+      label: 'Row items'
+      region: content
+      parent_name: group_paragraph_row_accordion
+      weight: 10
+      format_type: accordion_item
+      format_settings:
+        classes: ''
+        show_empty_fields: false
+        id: ''
+        formatter: open
+        description: ''
+        required_fields: true
+id: paragraph.row.default
+targetEntityType: paragraph
+bundle: row
+mode: default
+content:
+  paragraph_column_layout:
+    type: paragraphs
+    weight: 12
+    region: content
+    settings:
+      title: Paragraph
+      title_plural: Paragraphs
+      edit_mode: closed_expand_nested
+      closed_mode: summary
+      autocollapse: none
+      closed_mode_threshold: 0
+      add_mode: dropdown
+      form_display_mode: default
+      default_paragraph_type: _none
+      features:
+        add_above: '0'
+        collapse_edit_all: '0'
+        duplicate: '0'
+    third_party_settings: {  }
+  paragraph_heading:
+    type: string_textfield
+    weight: 10
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  paragraph_row_subheading:
+    type: string_textfield
+    weight: 11
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  row_theme:
+    type: options_select
+    weight: 9
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+hidden:
+  created: true
+  paragraph_row_background: true
+  paragraph_row_heading: true
+  status: true

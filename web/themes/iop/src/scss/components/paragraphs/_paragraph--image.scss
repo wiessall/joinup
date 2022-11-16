@@ -1,0 +1,21 @@
+.paragraph--image {
+  margin-bottom: $spacer; // 16px
+  @include media-breakpoint-up(md) {
+    margin-bottom: $spacer * 2; // 32px
+  }
+  &--hide-on-sm {
+    @include media-breakpoint-between(xs, md) {
+      display: none;
+    }
+  }
+  &--hide-on-md {
+    @include media-breakpoint-between(md, xl) {
+      display: none;
+    }
+  }
+  &--hide-on-lg {
+    @include media-breakpoint-between(xl, xxl) {
+      display: none;
+    }
+  }
+}

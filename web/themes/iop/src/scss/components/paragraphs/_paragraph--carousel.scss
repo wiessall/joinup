@@ -1,0 +1,219 @@
+.paragraph--carousel {
+  position: relative;
+  .paragraph__heading {
+    display: block;
+    color: $primary;
+    &::after {
+      content: url("data:image/svg+xml;charset=utf-8,%3csvg preserveAspectRatio='none' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 30' style='enable-background:new 0 0 100 30' xml:space='preserve'%3e%3clinearGradient id='a' gradientUnits='userSpaceOnUse' x1='0' y1='15.5' x2='100' y2='15.5'%3e%3cstop offset='.106' style='stop-color:%23268dc2'/%3e%3cstop offset='.129' style='stop-color:%232c94c1'/%3e%3cstop offset='.216' style='stop-color:%233ea9bc'/%3e%3cstop offset='.302' style='stop-color:%2348b6ba'/%3e%3cstop offset='.382' style='stop-color:%234cbab9'/%3e%3cstop offset='.682' style='stop-color:%23ced955'/%3e%3cstop offset='.734' style='stop-color:%23d1d44f'/%3e%3cstop offset='.805' style='stop-color:%23d9c43d'/%3e%3cstop offset='.887' style='stop-color:%23e6ac20'/%3e%3cstop offset='.956' style='stop-color:%23f39202'/%3e%3c/linearGradient%3e%3cpath d='M1 17.6s11.27-6.1 24.01-6.1 34.3 8 49 8 24.99-4 24.99-4' style='fill:none;stroke:url(%23a);stroke-width:4;stroke-linecap:round;stroke-miterlimit:10'/%3e%3c/svg%3e");
+      display: block;
+      position: relative;;
+      width: 70px;
+      height: 15px;
+      top: -15px;
+      margin: 0 auto;
+      @include media-breakpoint-up(md) {
+        width: 100px;
+        height: 20px;
+        top: -20px;
+      }
+    }
+  }
+  &__action {
+    position: absolute;
+    font-size: .75rem;
+    line-height: 1;
+    // Crap properties to get the link rendered at requested place
+    top: $spacer * 1.5;
+    left: 67%;
+    @include media-breakpoint-up(sm) {
+      font-size: .875rem;
+      left: 65%;
+    }
+    @include media-breakpoint-up(md) {
+      top: $spacer * 2;
+      font-size: 1rem;
+    }
+    @include media-breakpoint-up(lg) {
+      left: 62%;
+    }
+    @include media-breakpoint-up(xl) {
+      left: 60%;
+    }
+    a {
+      color: $primary;
+      &:hover:visited {
+        text-decoration-color: $primary!important; // Prevent purple underline
+      }
+    }
+  }
+}
+.glide {
+  &__outer {
+    // On small devices, slides adjacent to the active must be visible
+    @include media-breakpoint-between(xs, md) {
+      overflow: hidden;
+      margin: 0 $spacer * -.75;
+    }
+  }
+  &__arrows {
+    position: absolute;
+    display: flex;
+    justify-content: space-between;
+    width: 94%;
+    top: 16vw;
+    left: 3%;
+    @include media-breakpoint-up(sm) {
+      top: $spacer * 7.5;
+    }
+    @include media-breakpoint-up(md) {
+      width: 106%;
+      top: $spacer * 4.25;
+      left: -3%;
+    }
+    @include media-breakpoint-up(lg) {
+      width: 104%;
+      top: $spacer * 5.25;
+      left: -2%;
+    }
+    @include media-breakpoint-up(xl) {
+      top: $spacer * 6.25;
+    }
+    @include media-breakpoint-up(xxl) {
+      top: $spacer * 7.25;
+    }
+  }
+  &__arrow {
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: $spacer * 2.5;
+    height: $spacer * 2.5;
+    background-color: rgba($white, .5);
+    padding: $spacer * .5;
+    color: $primary;
+    border: 1px solid $primary;
+  }
+  &__track {
+    @include media-breakpoint-between(xs, sm) {
+      width: 80%;
+      margin-left: 10%;
+    }
+    // On small devices, slides adjacent to the active must be visible
+    @include media-breakpoint-between(xs, md) {
+      overflow: visible!important;
+    }
+  }
+  &__slides {
+    align-items: stretch;
+    // We need space for the active slide to be scaled up and not cut
+    @include media-breakpoint-up(md) {
+      padding: $spacer * 2 0!important; // 32px 0
+    }
+  }
+  &__slide {
+    .slide {
+      transition: transform .1s ease;
+      &__figure {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        aspect-ratio: 2 / 1;
+        border-radius: $spacer; // 16px
+        border: 2px solid transparent;
+        overflow: hidden;
+        background: linear-gradient($gray-300, $gray-300) padding-box, $gradient border-box;
+        @include media-breakpoint-up(md) {
+          margin-bottom: $spacer * 2; // 32px
+        }
+      }
+      &__svg {
+        color: $gray-500;
+        width: 30%;
+        height: 60%;
+      }
+      &__title {
+        opacity: 0;
+        a:hover:visited {
+          text-decoration-color: $primary!important; // Prevent purple underline
+        }
+      }
+      &__title-link {
+        color: $primary;
+        font-weight: $font-weight-normal;
+      }
+      &__body {
+        opacity: 0;
+        @include media-breakpoint-up(md) {
+          // Properties below ensure the text width matches the scaled-up active image
+          margin-right: $spacer * -1.25; // -20px
+          margin-left: $spacer * -1.25; // -20px
+        }
+        @include media-breakpoint-up(lg) {
+          margin-right: $spacer * -1.75; // -28px
+          margin-left: $spacer * -1.75; // -28px
+        }
+        @include media-breakpoint-up(xl) {
+          margin-right: $spacer * -2.25; // -36px
+          margin-left: $spacer * -2.25; // -36px
+        }
+        @include media-breakpoint-up(xxl) {
+          margin-right: $spacer * -2.5; // -40px
+          margin-left: $spacer * -2.5; // -40px
+        }
+      }
+      &__text {
+        margin-top: $spacer * .75; // 12px
+        @include media-breakpoint-up(md) {
+          margin-top: $spacer; // 16px
+        }
+      }
+      // Slide's Call To Action will be enabled later
+      // &__cta {
+      //   display: inline-block;
+      //   margin-top: $spacer;
+      //   font-size: $font-size-lg;
+      //   color: $darkblue;
+      //   background-repeat: no-repeat;
+      //   background-image: url("data:image/svg+xml;charset=utf-8,%3csvg preserveAspectRatio='none' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 30' style='enable-background:new 0 0 100 30' xml:space='preserve'%3e%3clinearGradient id='a' gradientUnits='userSpaceOnUse' x1='0' y1='15.5' x2='100' y2='15.5'%3e%3cstop offset='.106' style='stop-color:%23268dc2'/%3e%3cstop offset='.129' style='stop-color:%232c94c1'/%3e%3cstop offset='.216' style='stop-color:%233ea9bc'/%3e%3cstop offset='.302' style='stop-color:%2348b6ba'/%3e%3cstop offset='.382' style='stop-color:%234cbab9'/%3e%3cstop offset='.682' style='stop-color:%23ced955'/%3e%3cstop offset='.734' style='stop-color:%23d1d44f'/%3e%3cstop offset='.805' style='stop-color:%23d9c43d'/%3e%3cstop offset='.887' style='stop-color:%23e6ac20'/%3e%3cstop offset='.956' style='stop-color:%23f39202'/%3e%3c/linearGradient%3e%3cpath d='M1 17.6s11.27-6.1 24.01-6.1 34.3 8 49 8 24.99-4 24.99-4' style='fill:none;stroke:url(%23a);stroke-width:4;stroke-linecap:round;stroke-miterlimit:10'/%3e%3c/svg%3e");
+      //   background-position: center 1em;
+      //   background-size: 100% 1em;
+      //   height: 2em;
+      //   &:hover {
+      //     text-decoration: none;
+      //     background-image: url("data:image/svg+xml;charset=utf-8,%3csvg preserveAspectRatio='none' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 30' style='enable-background:new 0 0 100 30' xml:space='preserve'%3e%3cpath d='M1 17.6s11.27-6.1 24.01-6.1 34.3 8 49 8 24.99-4 24.99-4' style='fill:none;stroke:%23082330;stroke-width:4;stroke-linecap:round;stroke-miterlimit:10'/%3e%3c/svg%3e");
+      //   }
+      // }
+    }
+    // Active state modifiers
+    &--active {
+      .slide {
+        &__figure {
+          @include media-breakpoint-up(md) {
+            transform: scale(1.2);
+          }
+        }
+        &__title {
+          color: $primary;
+          opacity: 1;
+          @include media-breakpoint-up(md) {
+            font-size: 1rem;
+            margin-top: $spacer; // Avoid scaled-up image to step over the title
+          }
+        }
+        &__body {
+          opacity: 1;
+          .paragraph {
+            color: $gray-700;
+          }
+        }
+      }
+    }
+    &:not(.glide__slide--active) {
+      opacity: .5;
+    }
+  }
+}
+.paragraph--carousel + .paragraph--carousel {
+  margin-top: $spacer * 4; // 64px
+}
