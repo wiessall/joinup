@@ -20,8 +20,6 @@ class GroupSettingsController extends ControllerBase {
 
   /**
    * The OG access service.
-   *
-   * @var \Drupal\og\OgAccessInterface
    */
   protected OgAccessInterface $ogAccess;
 
@@ -106,7 +104,7 @@ class GroupSettingsController extends ControllerBase {
    * @return string
    *   The meta entity bundle ID.
    */
-  private function getMetaEntityBundle(GroupInterface $rdf_entity): string {
+  protected function getMetaEntityBundle(GroupInterface $rdf_entity): string {
     return "{$rdf_entity->bundle()}_settings";
   }
 

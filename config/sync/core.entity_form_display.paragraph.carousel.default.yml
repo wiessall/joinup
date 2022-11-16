@@ -1,0 +1,43 @@
+uuid: ea63d735-3a6c-419c-9e5a-fe8461d6707e
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.carousel.content_listing
+    - field.field.paragraph.carousel.paragraph_carousel_action
+    - field.field.paragraph.carousel.paragraph_heading
+    - paragraphs.paragraphs_type.carousel
+  module:
+    - custom_page
+    - link
+id: paragraph.carousel.default
+targetEntityType: paragraph
+bundle: carousel
+mode: default
+content:
+  content_listing:
+    type: search_api_field_custom_page
+    weight: 2
+    region: content
+    settings:
+      query_builder: false
+    third_party_settings: {  }
+  paragraph_carousel_action:
+    type: link_default
+    weight: 1
+    region: content
+    settings:
+      placeholder_url: ''
+      placeholder_title: ''
+    third_party_settings: {  }
+  paragraph_heading:
+    type: string_textfield
+    weight: 0
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+hidden:
+  created: true
+  status: true

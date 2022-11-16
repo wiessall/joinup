@@ -1,0 +1,64 @@
+uuid: 01998585-58e2-4b77-bb9b-557ec8903196
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.testimony.paragraph_testimony_author
+    - field.field.paragraph.testimony.paragraph_testimony_bio
+    - field.field.paragraph.testimony.paragraph_testimony_image
+    - field.field.paragraph.testimony.paragraph_testimony_source
+    - field.field.paragraph.testimony.paragraph_testimony_text
+    - image.style.large
+    - paragraphs.paragraphs_type.testimony
+  module:
+    - image
+    - template_suggestion
+id: paragraph.testimony.default
+targetEntityType: paragraph
+bundle: testimony
+mode: default
+content:
+  paragraph_testimony_author:
+    type: string
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 2
+    region: content
+  paragraph_testimony_bio:
+    type: basic_string
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 3
+    region: content
+  paragraph_testimony_image:
+    type: image
+    label: hidden
+    settings:
+      image_link: ''
+      image_style: large
+      image_loading:
+        attribute: lazy
+    third_party_settings:
+      template_suggestion:
+        template_suggestion: ''
+    weight: 1
+    region: content
+  paragraph_testimony_source:
+    type: basic_string
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 5
+    region: content
+  paragraph_testimony_text:
+    type: basic_string
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: content
+hidden:
+  search_api_excerpt: true

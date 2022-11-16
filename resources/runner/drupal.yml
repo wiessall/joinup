@@ -195,6 +195,7 @@ drupal:
           'config_update',
           'config_update_ui',
           'dblog',
+          'default_content',
           'devel',
           'filecache',
           'joinup_cas_mock_server',
