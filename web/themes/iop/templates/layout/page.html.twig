@@ -51,23 +51,19 @@
   faq ? 'page--faq',
 ] %}
 <div{{ node_attributes.addClass(node_classes)}}>
-  <div class="section-header">
-    {% include '@ventuno/parts/header.html.twig' with {
-      user_name: user_name,
-      landing_page_links: landing_page_links,
-      profile_links: profile_links,
-      anonymous_links: anonymous_links,
-      hide_searchbar: hide_searchbar,
-      searchbar: page.search_bar,
-    } %}
-    {{ page.header }}
+  {% include '@ventuno/parts/header.html.twig' with {
+    user_name: user_name,
+    landing_page_links: landing_page_links,
+    profile_links: profile_links,
+    anonymous_links: anonymous_links,
+    hide_searchbar: hide_searchbar,
+    searchbar: page.search_bar,
+  } %}
+  {{ page.header }}
 
-    {% if page.header_bottom %}
-      <div class="region-header-bottom">
-        {{ page.header_bottom }}
-      </div>
-    {% endif %}
-  </div>
+  {% if page.header_bottom %}
+    {{ page.header_bottom }}
+  {% endif %}
 
   {% if page.featured|render|striptags|trim is not empty %}
     <div class="region-featured">

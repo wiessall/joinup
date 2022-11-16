@@ -59,7 +59,7 @@
     display: inline;
     color: $white;
     border: 2px solid transparent;
-    padding: $spacer * .25; // 4px
+    padding: $spacer * .25 $spacer * .75; // 4px 12px
     border-radius: $border-radius-pill;
     &:hover {
       background:
@@ -67,9 +67,9 @@
         $gradient border-box;
     }
   }
-  &.js-is--sticky {
-    position: fixed;
+  &.navbar--sticky {
+    position: sticky;
     top: 0;
-    width: 100%
+    z-index: 49; // Avoid navbar to be overlapped by search page offcanvas AND to overlap joinup navbar's search bar
   }
 }
