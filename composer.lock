@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "0072b2a79ee479c6378927be62021213",
+    "content-hash": "a64d37fe9f33472a698be2616163d8f4",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -16730,12 +16730,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/claudiu-cristea/drupalextension.git",
-                "reference": "2763d4d5afa90073cde93cb23cf1c6175bbe7b74"
+                "reference": "f799bbfc5976ef6f253c4756f73dc2f62c2bb20a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/claudiu-cristea/drupalextension/zipball/2763d4d5afa90073cde93cb23cf1c6175bbe7b74",
-                "reference": "2763d4d5afa90073cde93cb23cf1c6175bbe7b74",
+                "url": "https://api.github.com/repos/claudiu-cristea/drupalextension/zipball/f799bbfc5976ef6f253c4756f73dc2f62c2bb20a",
+                "reference": "f799bbfc5976ef6f253c4756f73dc2f62c2bb20a",
                 "shasum": ""
             },
             "require": {
@@ -16822,7 +16822,7 @@
                     "url": "https://github.com/jhedstrom"
                 }
             ],
-            "time": "2022-11-07T21:54:13+00:00"
+            "time": "2022-11-16T09:27:53+00:00"
         },
         {
             "name": "drupal/filecache",

@@ -72,7 +72,7 @@ Feature: Tests the group landing page customization.
     And I press "Save"
     Then I should see the heading "<group> group"
     And I should see "The custom page 3 content"
-    But I should not see "The <group> arbitrary description" in the Content region
+    But I should not see "The <group> arbitrary description"
     And I should not see "The custom page 2 content"
 
     When I click "Settings"
