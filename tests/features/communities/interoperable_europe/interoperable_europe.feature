@@ -8,7 +8,7 @@ Feature:
     Given I am not logged in
     And I am on the homepage
     # A dedicated link in the header should lead to the landing page.
-    When I click "Interoperable Europe" in the Header region
+    When I click "Interoperable Europe" in the "Navigation bar"
     # The title should not be visible.
     Then I should not see "IOP landing page"
     # Check that we are on the expected URL for the landing page.
@@ -40,7 +40,7 @@ Feature:
     Then I should see the link "Interoperable Europe"
 
     # A dedicated link in the header should lead to the landing page.
-    When I click "Interoperable Europe" in the Header region
+    When I click "Interoperable Europe" in the "Navigation bar"
     Then I should not see "IOP landing page"
     # Check that we are on the expected URL for the landing page.
     And I should be on "/interoperable-europe"

@@ -19,7 +19,7 @@ Feature:
     Then I should not see the button "Add Row"
 
     When I am on the homepage
-    And I click "Interoperable Europe" in the Header region
+    And I click "Interoperable Europe" in the "Navigation bar"
     And I click "Add custom page"
     # Fill in the title to avoid the CSS validation kicking in when clicking
     # buttons.
@@ -57,7 +57,7 @@ Feature:
 
     Given I am logged in as a facilitator of the "Interoperable Europe" collection
     And I am on the homepage
-    And I click "Interoperable Europe" in the Header region
+    And I click "Interoperable Europe" in the "Navigation bar"
     And I click "Add custom page"
     Then I should not see the button "Add Row"
     But I should not see the button "Add 1 column layout"
@@ -75,7 +75,7 @@ Feature:
 
     When I am logged in as a moderator
     And I go to the homepage
-    And I click "Interoperable Europe" in the Header region
+    And I click "Interoperable Europe" in the "Navigation bar"
     And I click "Add custom page"
 
     When I fill in the following:

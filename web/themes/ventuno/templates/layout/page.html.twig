@@ -43,21 +43,18 @@
  */
 #}
 <div class="layout-container">
-  <div class="section-header">
-    {% include '@ventuno/parts/header.html.twig' with {
-      user_name: user_name,
-      landing_page_links: landing_page_links,
-      profile_links: profile_links,
-      anonymous_links: anonymous_links,
-      hide_searchbar: hide_searchbar,
-      searchbar: page.search_bar,
-    } %}
-    {{ page.header }}
+  {% include '@ventuno/parts/header.html.twig' with {
+    user_name: user_name,
+    landing_page_links: landing_page_links,
+    profile_links: profile_links,
+    anonymous_links: anonymous_links,
+    hide_searchbar: hide_searchbar,
+    searchbar: page.search_bar,
+  } %}
+  {{ page.header }}
 
   {% if page.header_bottom %}
-    <div class="region-header-bottom container">
-      {{ page.header_bottom }}
-    </div>
+    {{ page.header_bottom }}
   {% endif %}
 
   {% if page.featured %}
