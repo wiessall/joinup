@@ -1,0 +1,25 @@
+uuid: 1cb1a82e-c06f-471d-ad3e-eda01fa020bc
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.meta_entity.landing_page
+    - meta_entity.type.solution_settings
+id: meta_entity.solution_settings.landing_page
+field_name: landing_page
+entity_type: meta_entity
+bundle: solution_settings
+label: 'Landing page'
+description: 'If no custom page is selected, the standard solution overview page is used.'
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: views
+  handler_settings:
+    view:
+      view_name: custom_pages
+      display_name: entity_reference_1
+      arguments: {  }
+field_type: entity_reference

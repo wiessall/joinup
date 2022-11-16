@@ -1,5 +1,5 @@
 name: Ventuno
-description: Custom theme for Joinup.
+description: Custom theme for Joinup, sub-theme of OpenEuropa Bootstrap Theme.
 package: Custom
 type: theme
 core_version_requirement: '>=9.3'
@@ -38,15 +38,16 @@ libraries-override:
       misc/checkbox.js: assets/js/checkbox.min.js
 
 regions:
-  header: Header
+  search_bar: 'Search bar'
+  header: 'Header'
   header_bottom: 'Header bottom'
-  featured: Featured
-  messages: Messages
-  sidebar: Sidebar
+  featured: 'Featured'
+  messages: 'Messages'
+  sidebar: 'Sidebar'
   content_top: 'Content top'
-  content: Content
+  content: 'Content'
   content_bottom: 'Content bottom'
-  footer: Footer
+  footer: 'Footer'
 
 openeuropa:
   bootstrap_component_library:

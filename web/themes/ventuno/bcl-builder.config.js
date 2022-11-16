@@ -659,6 +659,7 @@ module.exports = {
           "chevron-right.svg",
           "clipboard-check.svg",
           "download.svg",
+          "envelope-fill.svg",
           "exclamation-circle-fill.svg",
           "exclamation-lg.svg",
           "eye.svg",

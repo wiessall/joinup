@@ -18,7 +18,6 @@ use Drupal\custom_page\Entity\CustomPageInterface;
 use Drupal\joinup_group\Exception\MissingGroupException;
 use Drupal\menu_link_content\MenuLinkContentInterface;
 use Drupal\node\NodeInterface;
-use Drupal\search_api\Query\QueryInterface;
 
 /**
  * Implements hook_entity_type_alter().
@@ -205,43 +204,6 @@ function custom_page_menu_local_actions_alter(&$local_actions) {
       break;
     }
   }
-}
-
-/**
- * Implements hook_search_api_query_TAG_alter().
- *
- * Alters the Search API query in custom pages for the content listing field.
- */
-function custom_page_search_api_query_search_api_field_field_content_listing_alter(QueryInterface &$query) {
-  $entity = $query->getOption('search_api_field entity');
-  $parent_entity = \Drupal::entityTypeManager()->getStorage($entity->get('parent_type')->value)->load($entity->get('parent_id')->value);
-  $group = $parent_entity->getGroup();
-  if (!$group) {
-    return;
-  }
-
-  $field_value = $query->getOption('search_api_field item')->value;
-  /** @var \Drupal\search_api\Query\Query $query */
-  if ($field_value['global_search']) {
-    $query->addCondition('entity_groups', NULL, '<>');
-  }
-  elseif (!empty($field_value['show_shared'])) {
-    $or = $query
-      ->createConditionGroup('or')
-      ->addCondition('shared_in', [$group->id()], 'IN')
-      ->addCondition('entity_groups', [$group->id()], 'IN');
-    $query->addConditionGroup($or);
-  }
-  else {
-    // Show only content belonging to the same group.
-    $query->addCondition('entity_groups', [$group->id()], 'IN');
-  }
-  // Remove all results if no presets or content filter.
-  if (empty($field_value['query_presets']) && !array_key_exists('query_builder', $field_value)) {
-    $query->addCondition($parent_entity->getEntityType()->getKey('id'), $parent_entity->id());
-  }
-  // Remove the page itself from the results.
-  $query->addCondition($parent_entity->getEntityType()->getKey('id'), $parent_entity->id(), '<>');
 }
 
 /**

@@ -1,0 +1,28 @@
+uuid: 63355b0e-8609-4fe6-aacf-7d0b54d48814
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.call_to_action.paragraph_action_link
+    - paragraphs.paragraphs_type.call_to_action
+  module:
+    - link
+id: paragraph.call_to_action.default
+targetEntityType: paragraph
+bundle: call_to_action
+mode: default
+content:
+  paragraph_action_link:
+    type: link
+    label: above
+    settings:
+      trim_length: 80
+      url_only: false
+      url_plain: false
+      rel: ''
+      target: ''
+    third_party_settings: {  }
+    weight: 0
+    region: content
+hidden:
+  search_api_excerpt: true

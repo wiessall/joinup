@@ -9,11 +9,14 @@ declare(strict_types = 1);
 
 use Drupal\Component\Utility\Unicode;
 use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Field\BaseFieldDefinition;
+use Drupal\Core\Field\FieldDefinitionInterface;
+use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\Element;
 use Drupal\Core\Session\AccountInterface;
@@ -503,4 +506,20 @@ function collection_preprocess_search_api_field__rdf_entity__field_collection_co
     ]);
     $variables['newsletter_form'] = \Drupal::formBuilder()->getForm(NewsletterSubscribeForm::class, $newsletter_field_item->getUniverse(), $newsletter_field_item->getServiceId());
   }
+}
+
+/**
+ * Implements hook_entity_field_access().
+ */
+function collection_entity_field_access(string $operation, FieldDefinitionInterface $field_definition, AccountInterface $account, ?FieldItemListInterface $items = NULL): AccessResultInterface {
+  // Until ISAICP-7223 only moderators are able to set a landing page.
+  // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7223
+  if (
+    $field_definition->getTargetEntityTypeId() === 'meta_entity'
+    && $field_definition->getTargetBundle() === 'collection_settings'
+    && $field_definition->getName() === 'landing_page'
+  ) {
+    return AccessResult::forbiddenIf(!$account->hasPermission('update collection_settings meta-entity'));
+  }
+  return AccessResult::neutral();
 }

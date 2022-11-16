@@ -1,0 +1,89 @@
+uuid: b4df0470-1ee2-45d5-b0ff-e38e9eccf626
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.paragraph_column_center
+    - paragraphs.paragraphs_type.1_column_layout
+    - paragraphs.paragraphs_type.accordion
+    - paragraphs.paragraphs_type.call_to_action
+    - paragraphs.paragraphs_type.carousel
+    - paragraphs.paragraphs_type.content_listing
+    - paragraphs.paragraphs_type.iframe
+    - paragraphs.paragraphs_type.image
+    - paragraphs.paragraphs_type.json_map
+    - paragraphs.paragraphs_type.simple_paragraph
+    - paragraphs.paragraphs_type.testimony
+  module:
+    - entity_reference_revisions
+id: paragraph.1_column_layout.paragraph_column_center
+field_name: paragraph_column_center
+entity_type: paragraph
+bundle: 1_column_layout
+label: '1 column Items'
+description: ''
+required: true
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:paragraph'
+  handler_settings:
+    target_bundles:
+      simple_paragraph: simple_paragraph
+      image: image
+      content_listing: content_listing
+      carousel: carousel
+      accordion: accordion
+      iframe: iframe
+      testimony: testimony
+      json_map: json_map
+      call_to_action: call_to_action
+    negate: 0
+    target_bundles_drag_drop:
+      1_column_layout:
+        weight: -31
+        enabled: false
+      2_column_layout:
+        weight: -20
+        enabled: false
+      3_column_layout:
+        weight: -30
+        enabled: false
+      accordion:
+        weight: -25
+        enabled: true
+      accordion_item:
+        weight: -19
+        enabled: false
+      call_to_action:
+        weight: -21
+        enabled: true
+      carousel:
+        weight: -26
+        enabled: true
+      content_listing:
+        weight: -27
+        enabled: true
+      entity_reference:
+        weight: -17
+        enabled: false
+      iframe:
+        weight: -24
+        enabled: true
+      image:
+        weight: -28
+        enabled: true
+      json_map:
+        weight: -22
+        enabled: true
+      row:
+        weight: -18
+        enabled: false
+      simple_paragraph:
+        weight: -29
+        enabled: true
+      testimony:
+        weight: -23
+        enabled: true
+field_type: entity_reference_revisions
