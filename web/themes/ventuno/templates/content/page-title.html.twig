@@ -8,6 +8,7 @@
 {{ title_prefix }}
 {% if title %}
   <h1{{ title_attributes.addClass('page-title') }}>
+    {{ title }}
     {% if permalink %}
       <a class="permalink" href="{{ permalink }}" title="{{ 'Permalink'|t }}">
         {{ pattern('icon', {
@@ -16,7 +17,6 @@
         }) }}
       </a>
     {% endif %}
-    {{ title }}
   </h1>
 {% endif %}
 {{ title_suffix }}
