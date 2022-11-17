@@ -1173,6 +1173,12 @@ class JoinupContext extends RawDrupalContext {
       if ($result->getText() === $heading) {
         return;
       }
+      // Custom page cards in carousels have a different structure. In order to
+      // identify the tile, we need to check the title of the first "a" element.
+      // First, retrieve the parent element so that the "a" element is present.
+      if ($result->getParent()->find('xpath', "/a[contains(@title, '{$heading}')]")) {
+        return;
+      }
     }
 
     throw new \Exception("The tile '$heading' was not found on the page");
@@ -3070,6 +3076,8 @@ class JoinupContext extends RawDrupalContext {
       '.glide__slides .slide span',
       // Carousel for javascript test.
       '.glide__slides .slide h1',
+      // Carousel for custom pages.
+      '.glide__slides .slide a',
     ];
 
     return $this->getSession()->getPage()->findAll('css', implode(', ', $locators));

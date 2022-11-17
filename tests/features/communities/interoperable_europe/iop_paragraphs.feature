@@ -93,3 +93,50 @@ Feature:
     # Ensure that listings are restricted only for group content by default.
     Then I should see the "Some news 1" tile
     But I should not see the "Some news 2" tile
+
+  Scenario: Test that carousels with specific content is working correctly.
+    Given the following collections:
+      | title       | state     |
+      | Carousel c1 | validated |
+    And custom_page content:
+      | title       | collection           | content       | state     |
+      | Some page 1 | Interoperable Europe | Some content. | validated |
+      | Some page 2 | Carousel c1          | Some content. | validated |
+      | Some page 3 | Carousel c1          | Some content. | validated |
+
+    When I am logged in as a moderator
+    And I go to the homepage
+    And I click "Interoperable Europe" in the "Navigation bar"
+    And I click "Add custom page"
+
+    When I fill in the following:
+      | Title | Pages carousel        |
+      | Body  | A carousel with custom pages |
+    And I press "Add Row"
+    And I press "Add 1 column layout"
+    And I press "Add Carousel"
+
+    And I select "Custom page" from "Available filters"
+    And I press "Add and configure filter"
+    And I fill in "Custom page" with "Some page 1"
+    When I press "Save"
+
+    Then I should see the "Some page 1" tile
+    But I should not see the "Some page 2" tile
+    And I should not see the "Some page 3" tile
+
+    When I go to the edit form of the "Pages carousel" "custom page"
+    And I fill in "Custom page" with "Some page 3"
+    And I press "Save"
+
+    # Global search is not checked. No tiles should be shown.
+    Then I should not see the "Some page 1" tile
+    And I should not see the "Some page 2" tile
+    And I should not see the "Some page 3" tile
+
+    When I go to the edit form of the "Pages carousel" "custom page"
+    And I check "Global search"
+    And I press "Save"
+    Then I should see the "Some page 3" tile
+    But I should not see the "Some page 1" tile
+    And I should not see the "Some page 2" tile
