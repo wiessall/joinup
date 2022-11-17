@@ -1,0 +1,30 @@
+{#
+/**
+ * @file
+ * Template for the page title.
+ */
+#}
+{{ attach_library('ventuno/page-title') }}
+{{ title_prefix }}
+{% if title %}
+  <h1{{ title_attributes.addClass('page-title') }}>
+    {{ title }}
+    {% if permalink %}
+      <a class="permalink" href="{{ permalink }}" title="{{ 'Permalink'|t }}">
+        {{ pattern('icon', {
+          name: 'link-45deg',
+          size: 'fluid'
+        }) }}
+      </a>
+    {% endif %}
+  </h1>
+{% endif %}
+{{ title_suffix }}
+<div class="fs-sm mb-3 d-flex">
+  {{ additional_content.field_ad_file_size }}
+  {% if additional_content.field_ad_file_size and additional_content.field_ad_licence %}
+    <span class="mx-1">|</span>
+  {% endif %}
+  {{ additional_content.field_ad_licence }}
+</div>
+
