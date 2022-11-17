@@ -48,7 +48,7 @@ Feature:
     And I should see the button "Add Call to action"
     And I should see the button "Add Carousel"
     When I press "Add Carousel"
-    Then the following fields should be present "URL, Link text"
+    Then the following fields should be present "URL, Link text, Available filters"
 
     Given I am logged in as a facilitator of the "Joinup" collection
     And I go to the "Joinup" collection
