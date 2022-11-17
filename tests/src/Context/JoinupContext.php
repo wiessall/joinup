@@ -1176,7 +1176,7 @@ class JoinupContext extends RawDrupalContext {
       // Custom page cards in carousels have a different structure. In order to
       // identify the tile, we need to check the title of the first "a" element.
       // First, retrieve the parent element so that the "a" element is present.
-      if ($result->getParent()->find('xpath', "/a[contains(@title, '{$heading}')]")) {
+      if ($result->getParent()->find('xpath', "/a[contains(@title, \"{$heading}\")]")) {
         return;
       }
     }
