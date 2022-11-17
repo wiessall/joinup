@@ -1,8 +1,8 @@
 .page-title {
-  display: inline-block;
   margin-top: $spacer * 1.5; // 24px
   position: relative;
   .permalink {
+    position: absolute;
     display: none;
   }
   &:hover {
