@@ -42,7 +42,7 @@
  * @see html.html.twig
  */
 #}
-<div class="layout-container">
+<div{{ attributes.addClass('layout-container') }}>
   {% include '@ventuno/parts/header.html.twig' with {
     user_name: user_name,
     landing_page_links: landing_page_links,
