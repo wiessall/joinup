@@ -1,0 +1,12 @@
+uuid: f2733ca0-91cf-4b19-9099-e562ec1a3a1e
+langcode: en
+status: true
+dependencies:
+  content:
+    - 'file:file:e5355076-e27c-4c82-b142-c9d46957cc86'
+id: carousel
+label: Carousel
+icon_uuid: e5355076-e27c-4c82-b142-c9d46957cc86
+icon_default: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNiIgaGVpZ2h0PSIxNiIgZmlsbD0iY3VycmVudENvbG9yIiBjbGFzcz0iYmkgYmktY29sbGVjdGlvbiIgdmlld0JveD0iMCAwIDE2IDE2Ij4KICA8cGF0aCBkPSJNMi41IDMuNWEuNS41IDAgMCAxIDAtMWgxMWEuNS41IDAgMCAxIDAgMWgtMTF6bTItMmEuNS41IDAgMCAxIDAtMWg3YS41LjUgMCAwIDEgMCAxaC03ek0wIDEzYTEuNSAxLjUgMCAwIDAgMS41IDEuNWgxM0ExLjUgMS41IDAgMCAwIDE2IDEzVjZhMS41IDEuNSAwIDAgMC0xLjUtMS41aC0xM0ExLjUgMS41IDAgMCAwIDAgNnY3em0xLjUuNUEuNS41IDAgMCAxIDEgMTNWNmEuNS41IDAgMCAxIC41LS41aDEzYS41LjUgMCAwIDEgLjUuNXY3YS41LjUgMCAwIDEtLjUuNWgtMTN6Ii8+Cjwvc3ZnPg=='
+description: ''
+behavior_plugins: {  }

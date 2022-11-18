@@ -1,0 +1,86 @@
+.paragraph {
+  color: $primary;
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    color: $primary;
+  }
+  &__heading {
+    display: block;
+    text-align: center;
+    margin: 0;
+    font-size: 1.75rem;
+    font-weight: $font-weight-normal;
+    @include media-breakpoint-up(md) {
+      font-size: 3rem;
+    }
+  }
+  &__subheading {
+    display: block;
+    font-weight: $font-weight-normal;
+    margin-bottom: $spacer * 2; // 32px
+    font-size: 1rem;
+    @include media-breakpoint-up(lg) {
+      font-size: 2rem;
+    }
+  }
+  // Lightgray wave background
+  &--light-wave {
+    position: relative;
+    &::before,
+    &::after {
+      position: absolute;
+      left: 0;
+      z-index: -1;
+      display: block;
+      width: 100vw;
+      height: 100%;
+      content: "";
+      background-repeat: no-repeat;
+      @include media-breakpoint-up(sm) {
+        left: calc(-50vw + 270px);
+      }
+      @include media-breakpoint-up(md) {
+        left: calc(-50vw + 360px);
+      }
+      @include media-breakpoint-up(lg) {
+        left: calc(-50vw + 480px);
+      }
+      @include media-breakpoint-up(xl) {
+        left: calc(-50vw + 570px);
+      }
+      @include media-breakpoint-up(xxl) {
+        left: calc(-50vw + 660px);
+      }
+    }
+    // Before pseudo-element contains top and bottom waves.
+    &::before {
+      top: 0;
+      background-image:
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 2578 281'%3E%3Cpath d='M2578 84.05S1784.18-82.21 1277 55.74C819.69 180.13 0 84.05 0 84.05V282.4h2578Z' fill='%23f5f6f7'/%3E%3C/svg%3E"),
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 2578 281'%3E%3Cpath d='M0 198.35s793.82 166.26 1301 28.31c457.31-124.39 1277-28.31 1277-28.31V0H0Z' fill='%23f5f6f7'/%3E%3C/svg%3E");
+      background-position: top, bottom;
+    }
+    // After pseudo-element fills the space between the two waves.
+    &::after {
+      background-color: $gray-200;
+      top: $spacer * 2;
+      height: calc(100% - $spacer * 4);
+      @include media-breakpoint-up(sm) {
+        top: $spacer * 3;
+        height: calc(100% - $spacer * 6);
+      }
+      @include media-breakpoint-up(md) {
+        top: $spacer * 4;
+        height: calc(100% - $spacer * 8);
+      }
+      @include media-breakpoint-up(lg) {
+        top: $spacer * 6;
+        height: calc(100% - $spacer * 12);
+      }
+    }
+  }
+}

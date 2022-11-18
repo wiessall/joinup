@@ -1,0 +1,62 @@
+uuid: 5e3b08c5-4d26-46ca-8640-0815519d3059
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.testimony.paragraph_testimony_author
+    - field.field.paragraph.testimony.paragraph_testimony_bio
+    - field.field.paragraph.testimony.paragraph_testimony_image
+    - field.field.paragraph.testimony.paragraph_testimony_source
+    - field.field.paragraph.testimony.paragraph_testimony_text
+    - image.style.thumbnail
+    - paragraphs.paragraphs_type.testimony
+  module:
+    - image
+id: paragraph.testimony.default
+targetEntityType: paragraph
+bundle: testimony
+mode: default
+content:
+  paragraph_testimony_author:
+    type: string_textfield
+    weight: 2
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  paragraph_testimony_bio:
+    type: string_textarea
+    weight: 3
+    region: content
+    settings:
+      rows: 3
+      placeholder: ''
+    third_party_settings: {  }
+  paragraph_testimony_image:
+    type: image_image
+    weight: 1
+    region: content
+    settings:
+      progress_indicator: throbber
+      preview_image_style: thumbnail
+    third_party_settings: {  }
+  paragraph_testimony_source:
+    type: string_textarea
+    weight: 5
+    region: content
+    settings:
+      rows: 5
+      placeholder: ''
+    third_party_settings: {  }
+  paragraph_testimony_text:
+    type: string_textarea
+    weight: 0
+    region: content
+    settings:
+      rows: 3
+      placeholder: ''
+    third_party_settings: {  }
+hidden:
+  created: true
+  status: true

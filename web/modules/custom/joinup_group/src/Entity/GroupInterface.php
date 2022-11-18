@@ -5,6 +5,7 @@ declare(strict_types = 1);
 namespace Drupal\joinup_group\Entity;
 
 use Drupal\Core\Access\AccessResultInterface;
+use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\joinup_bundle_class\LogoInterface;
@@ -276,6 +277,20 @@ interface GroupInterface extends RdfInterface, LogoInterface, ShortIdInterface, 
    *   The number of members.
    */
   public function getMemberCount(array $states = [OgMembershipInterface::STATE_ACTIVE]): int;
+
+  /**
+   * Returns specific group setting.
+   *
+   * @param string $field_name
+   *   The field name.
+   *
+   * @return \Drupal\Core\Field\FieldItemListInterface
+   *   The setting field item list.
+   *
+   * @throws \InvalidArgumentException
+   *   When $field_name is not a valid field.
+   */
+  public function getSetting(string $field_name): FieldItemListInterface;
 
   /**
    * Returns a list of group members, optionally filtered by role and state.

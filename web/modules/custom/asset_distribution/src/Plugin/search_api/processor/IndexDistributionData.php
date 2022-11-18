@@ -4,9 +4,11 @@ declare(strict_types = 1);
 
 namespace Drupal\asset_distribution\Plugin\search_api\processor;
 
+use Drupal\Core\File\FileUrlGeneratorInterface;
 use Drupal\search_api\IndexInterface;
 use Drupal\search_api\Item\ItemInterface;
 use Drupal\search_api\Processor\ProcessorPluginBase;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Indexes the distribution data into the parent solution or release fields.
@@ -26,6 +28,34 @@ use Drupal\search_api\Processor\ProcessorPluginBase;
  * )
  */
 class IndexDistributionData extends ProcessorPluginBase {
+
+  /**
+   * Constructs a new plugin instance.
+   *
+   * @param array $configuration
+   *   A configuration array containing information about the plugin instance.
+   * @param string $pluginId
+   *   The plugin_id for the plugin instance.
+   * @param mixed $pluginDefinition
+   *   The plugin implementation definition.
+   * @param \Drupal\Core\File\FileUrlGeneratorInterface $fileUrlGenerator
+   *   The file URL generator service.
+   */
+  public function __construct(array $configuration, $pluginId, $pluginDefinition, protected FileUrlGeneratorInterface $fileUrlGenerator) {
+    parent::__construct($configuration, $pluginId, $pluginDefinition);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container, array $configuration, $pluginId, $pluginDefinition): self {
+    return new static(
+      $configuration,
+      $pluginId,
+      $pluginDefinition,
+      $container->get('file_url_generator')
+    );
+  }
 
   /**
    * {@inheritdoc}
@@ -69,60 +99,59 @@ class IndexDistributionData extends ProcessorPluginBase {
       return;
     }
 
-    $distribution_field_name = $entity->bundle() === 'asset_release' ? 'field_isr_distribution' : 'field_is_distribution';
-    /** @var \Drupal\Core\Field\EntityReferenceFieldItemListInterface $distribution_reference */
-    $distribution_reference = $entity->get($distribution_field_name);
-
-    if ($distribution_reference->isEmpty()) {
+    $distributionFieldName = $entity->bundle() === 'asset_release' ? 'field_isr_distribution' : 'field_is_distribution';
+    /** @var \Drupal\Core\Field\EntityReferenceFieldItemListInterface $distributionReference */
+    $distributionReference = $entity->get($distributionFieldName);
+    if ($distributionReference->isEmpty()) {
       return;
     }
 
     // Get the parent Search API field.
-    $sapi_field_name = $entity->bundle() === 'asset_release' ? 'field_isr_description' : 'field_is_description';
-    $sapi_field = $item->getField($sapi_field_name);
+    $sapiFieldName = $entity->bundle() === 'asset_release' ? 'field_isr_description' : 'field_is_description';
+    $sapiField = $item->getField($sapiFieldName);
 
     // Iterate over all distributions and append their data to Search API field.
     /** @var \Drupal\rdf_entity\RdfInterface $distribution */
-    foreach ($distribution_reference->referencedEntities() as $distribution) {
+    foreach ($distributionReference->referencedEntities() as $distribution) {
       // Add the distribution title.
-      $sapi_field->addValue($distribution->label());
+      $sapiField->addValue($distribution->label());
 
       // Add the distribution description.
-      $distribution_field_item_list = $distribution->get('field_ad_description');
-      if (!$distribution_field_item_list->isEmpty()) {
-        $sapi_field->addValue(check_markup($distribution_field_item_list->value, $distribution_field_item_list->format));
+      $distributionFieldItemList = $distribution->get('field_ad_description');
+      if (!$distributionFieldItemList->isEmpty()) {
+        $sapiField->addValue(check_markup($distributionFieldItemList->value, $distributionFieldItemList->format));
       }
 
       // Add the distribution URL.
-      /** @var \Drupal\file_url\Plugin\Field\FieldType\FileUrlFieldItemList $distribution_field_item_list */
-      $distribution_field_item_list = $distribution->get('field_ad_access_url');
-      if (!$distribution_field_item_list->isEmpty()) {
-        foreach ($distribution_field_item_list->referencedEntities() as $file) {
-          $sapi_field->addValue(file_create_url($file->getFileUri()));
+      /** @var \Drupal\file_url\Plugin\Field\FieldType\FileUrlFieldItemList $distributionFieldItemList */
+      $distributionFieldItemList = $distribution->get('field_ad_access_url');
+      if (!$distributionFieldItemList->isEmpty()) {
+        foreach ($distributionFieldItemList->referencedEntities() as $file) {
+          $sapiField->addValue($this->fileUrlGenerator->generateAbsoluteString($file->getFileUri()));
         }
       }
 
       // Add the distribution licence.
-      $distribution_field_item_list = $distribution->get('field_ad_licence');
-      if (!$distribution_field_item_list->isEmpty()) {
-        foreach ($distribution_field_item_list->referencedEntities() as $licence) {
-          $sapi_field->addValue($licence->label());
+      $distributionFieldItemList = $distribution->get('field_ad_licence');
+      if (!$distributionFieldItemList->isEmpty()) {
+        foreach ($distributionFieldItemList->referencedEntities() as $licence) {
+          $sapiField->addValue($licence->label());
         }
       }
 
       // Add the distribution format.
-      $distribution_field_item_list = $distribution->get('field_ad_format');
-      if (!$distribution_field_item_list->isEmpty()) {
-        foreach ($distribution_field_item_list->referencedEntities() as $format) {
-          $sapi_field->addValue($format->label());
+      $distributionFieldItemList = $distribution->get('field_ad_format');
+      if (!$distributionFieldItemList->isEmpty()) {
+        foreach ($distributionFieldItemList->referencedEntities() as $format) {
+          $sapiField->addValue($format->label());
         }
       }
 
       // Add the distribution representation technique.
-      $distribution_field_item_list = $distribution->get('field_ad_repr_technique');
-      if (!$distribution_field_item_list->isEmpty()) {
-        foreach ($distribution_field_item_list->referencedEntities() as $technique) {
-          $sapi_field->addValue($technique->label());
+      $distributionFieldItemList = $distribution->get('field_ad_repr_technique');
+      if (!$distributionFieldItemList->isEmpty()) {
+        foreach ($distributionFieldItemList->referencedEntities() as $technique) {
+          $sapiField->addValue($technique->label());
         }
       }
     }
