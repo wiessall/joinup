@@ -1,3 +1,6 @@
+.section-header {
+  z-index: 100;
+}
 .bcl-header {
   .navbar-brand {
     img {
@@ -155,7 +158,7 @@
       white-space: normal;
     }
   }
-  &--sticky {
+  &.navbar--sticky {
     position: sticky;
     top: 0;
     z-index: 50; // Avoid navbar to be overlapped by search page offcanvas

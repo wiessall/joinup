@@ -1,0 +1,63 @@
+.listing {
+  .page-header {
+    margin-bottom: $spacer * -1; // -16px
+    @include media-breakpoint-up(md) {
+      margin-bottom: $spacer * -2; // -32px
+    }
+  }
+  .cards-wrapper {
+    & > .col {
+      margin-top: unset;
+    }
+  }
+  .card {
+    margin-bottom: $spacer * 2; // 32px
+    @include media-breakpoint-up(md) {
+      margin-bottom: 0;
+    }
+    &__img {
+      width: 100%;
+      overflow-y: hidden;
+      border: 2px solid $white;
+      border-radius: $spacer * 1.5; // 24px
+      background: $white;
+      aspect-ratio: 2 / 1;
+      img {
+        border-radius: $spacer * 1.5; // 24px
+        width: 100%;
+        height: auto;
+      }
+    }
+  }
+}
+.page--news {
+  .cards-wrapper {
+    @include media-breakpoint-between(sm, lg) {
+      & > .col:nth-child(even) {
+        margin-top: $spacer * 3;
+      }
+    }
+    @include media-breakpoint-up(lg) {
+      & > .col:nth-child(3n+2) {
+        margin-top: $spacer * 4;
+      }
+    }
+  }
+}
+.page--events {
+  .cards-wrapper {
+    @include media-breakpoint-between(sm, lg) {
+      & > .col:nth-child(even) {
+        margin-top: $spacer * 3;
+      }
+    }
+    @include media-breakpoint-up(lg) {
+      & > .col:nth-child(3n - 1) {
+        margin-top: $spacer * 4;
+      }
+      & > .col:nth-child(3n) {
+        margin-top: $spacer * 8;
+      }
+    }
+  }
+}

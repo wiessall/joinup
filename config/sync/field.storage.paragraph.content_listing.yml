@@ -1,0 +1,49 @@
+uuid: 1c2eeedf-ec1b-4ee4-ac30-842a2327b045
+langcode: en
+status: true
+dependencies:
+  module:
+    - field_permissions
+    - paragraphs
+    - search_api_field
+third_party_settings:
+  field_permissions:
+    permission_type: public
+id: paragraph.content_listing
+field_name: content_listing
+entity_type: paragraph
+type: search_api_field
+settings:
+  index: published
+  facet_regions: {  }
+  view_modes:
+    'entity:node':
+      custom_page: carousel
+      discussion: carousel
+      document: carousel
+      event: carousel
+      news: carousel
+      tallinn_report: carousel
+      video: carousel
+    'entity:rdf_entity':
+      asset_distribution: carousel
+      asset_release: carousel
+      collection: carousel
+      licence: eif_perspective
+      solution: eif_perspective
+      spdx_licence: eif_perspective
+    'entity:taxonomy_term':
+      eif_conceptual_model: default
+      eif_interoperability_layer: default
+      eif_principle: default
+      eif_recommendation: default
+      topic: default
+    'entity:user':
+      user: default
+module: search_api_field
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

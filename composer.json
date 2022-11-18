@@ -24,6 +24,7 @@
         "drupal/core": "^9.4",
         "drupal/core-composer-scaffold": "^9.4",
         "drupal/custom_markup_block": "^1.1",
+        "drupal/default_content": "^2.0",
         "drupal/diff": "~1.0",
         "drupal/digital_size_formatter": "~2.0",
         "drupal/dropsolid_purge": "^1.0@beta",
@@ -104,7 +105,7 @@
         "ec-europa/virtuoso": "^2.1",
         "jacklmoore/autosize": "5.0.2",
         "openeuropa/composer-artifacts": "^1.0",
-        "openeuropa/oe_bootstrap_theme": "^1.0",
+        "openeuropa/oe_bootstrap_theme": "1.0.0-beta6",
         "openeuropa/oe_dashboard_agent": "^0.3.0",
         "openeuropa/oe_webtools": "^1.19",
         "openeuropa/webtools-geocoding-provider": "~0.1",
@@ -259,6 +260,7 @@
                 "Make the tab active when the fragment is present in URL @see https://www.drupal.org/project/drupal/issues/2752511": "https://www.drupal.org/files/issues/2022-06-17/2752511-109-9.5.x.patch",
                 "Add thread depth configuration to comments. Includes patch for parent issue #2879087. @see https://www.drupal.org/project/drupal/issues/2786587 @see https://www.drupal.org/project/drupal/issues/2879087": "https://www.drupal.org/files/issues/2022-01-17/2786587-58-9.3.x.patch",
                 "Set fixed depth for comment threads.": "resources/patch/2786587-thread-depth-fixed-limit.patch",
+                "Add option to show only start or end date in the DateTime Range custom formatter @see https://www.drupal.org/project/drupal/issues/2827055": "https://www.drupal.org/files/issues/2022-06-16/2827055-69.patch",
                 "Views with a different query plugin created via the UI do not have the correct query plugin ID in the view config @see https://www.drupal.org/project/drupal/issues/2836237": "https://www.drupal.org/files/issues/2022-01-17/2836237-49-9.3.x.patch",
                 "Disable tableselect element options @see https://www.drupal.org/project/drupal/issues/2895352": "https://www.drupal.org/files/issues/2021-12-04/2895352-53.patch",
                 "Pass current route parameters to the confirmation form route @see https://www.drupal.org/project/drupal/issues/2901412": "resources/patch/2901412-25.diff",
@@ -267,10 +269,15 @@
                 "Make it easier to trigger a tour @see https://www.drupal.org/project/drupal/issues/3012027": "https://www.drupal.org/files/issues/2022-01-17/3012027-52-9.3.x.patch",
                 "EntityConstraintValidationList::findByCode is inconsistent @see https://www.drupal.org/project/drupal/issues/3126654": "https://www.drupal.org/files/issues/2020-04-10/find_by_code_override-3126654-D8-4.patch",
                 "Cannot implement a custom user cancellation method @see https://www.drupal.org/project/drupal/issues/3135592": "https://git.drupalcode.org/project/drupal/-/merge_requests/1675.diff",
-                "The old storage handler is still defined for RDF entities.": "resources/patch/core-fix-sparql-storage-hack.patch",
-                "Add option to show only start or end date in the DateTime Range custom formatter @see https://www.drupal.org/project/drupal/issues/2827055": "https://www.drupal.org/files/issues/2022-06-16/2827055-69.patch",
                 "file_requirements() can trigger a PHP 8.1 deprecation notice when called without a SERVER_SOFTWARE server env variable @see https://www.drupal.org/project/drupal/issues/3279289": "https://git.drupalcode.org/project/drupal/-/merge_requests/2247.diff",
-                "If you don't set the \"version\" of a profile, the report/status displays an empty dash @see https://www.drupal.org/project/drupal/issues/3270892": "https://git.drupalcode.org/project/drupal/-/merge_requests/2003.diff"
+                "If you don't set the \"version\" of a profile, the report/status displays an empty dash @see https://www.drupal.org/project/drupal/issues/3270892": "https://git.drupalcode.org/project/drupal/-/merge_requests/2003.diff",
+                "Page variant plugin is not correctlly instantiated @see https://www.drupal.org/project/drupal/issues/3294833": "https://git.drupalcode.org/project/drupal/-/merge_requests/2484.diff"
+            },
+            "drupal/default_content": {
+                "Combined https://www.drupal.org/i/3164451 and https://www.drupal.org/i/2640734": "resources/patch/default_content-combined-3164451-and-2640734.diff"
+            },
+            "drupal/drupal-extension": {
+                "Port https://www.drupal.org/project/drupal/issues/3175718 @see https://github.com/jhedstrom/drupalextension/pull/629": "resources/patch/drupal/drupal-extension/port-ddo-3175718.patch"
             },
             "drupal/email_confirmer": {
                 "Support for HTML mails @see https://www.drupal.org/i/3047124": "https://git.drupalcode.org/project/email_confirmer/-/merge_requests/3.diff"
@@ -344,6 +351,9 @@
             "drupal/site_alert": {
                 "Add drush commands @see https://www.drupal.org/project/site_alert/issues/3118800": "https://www.drupal.org/files/issues/2020-10-26/3118800-44.patch"
             },
+            "drupal/smart_trim": {
+                "Avoid max nesting level during development @see https://www.drupal.org/project/smart_trim/issues/3013628": "https://www.drupal.org/files/issues/2020-05-28/maximum_function_nesting-3013628-D8-7.patch"
+            },
             "drupal/social_media_links": {
                 "Missing config schema for field, widget and formatter @see https://www.drupal.org/node/2898680": "https://git.drupalcode.org/project/social_media_links/-/merge_requests/4.diff"
             },
@@ -361,6 +371,9 @@
             "drupal/ui_patterns": {
                 "Detect all theme patterns @see https://www.drupal.org/project/ui_patterns/issues/3311471": "https://www.drupal.org/files/issues/2022-09-26/3311471-10-detect-all-theme-patterns.patch"
             },
+            "drupal/upgrade_status": {
+                "Issue #3274645: Deprecated function: Return type of GuzzleHttp Cookie CookieJar when running Upgrade Status on PHP 8.1 @see https://www.drupal.org/project/upgrade_status/issues/3274645": "https://www.drupal.org/files/issues/2022-10-07/3274645-22.patch"
+            },
             "drupal/video_embed_field": {
                 "Extend support for embed URLs. Option to force privacy @see https://www.drupal.org/project/video_embed_field/issues/3060201 (originally on https://www.drupal.org/node/2899093)": "https://www.drupal.org/files/issues/2019-06-11/privacy_mode-3060201-D8-6.patch",
                 "WYSIWYG Video URL max length limited to 128 characters @see https://www.drupal.org/project/video_embed_field/issues/2908562": "https://www.drupal.org/files/issues/video_url_maxlength-2908562-4.patch"
@@ -370,6 +383,9 @@
             },
             "drupal/views_block_area": {
                 "Views block area missing schema @see https://www.drupal.org/project/views_block_area/issues/3157188": "https://www.drupal.org/files/issues/2020-07-06/views_block_area-missing_schema-3157188-2.patch"
+            },
+            "openeuropa/oe_bootstrap_theme": {
+                "Allow drupal alters in menu links @see https://github.com/openeuropa/oe_bootstrap_theme/pull/241": "resources/patch/openeuropa/oe_bootstrap_theme/241.diff"
             },
             "openeuropa/oe_webtools": {
                 "Allow to pass an optional referer. @see https://github.com/openeuropa/oe_webtools/pull/96": "https://patch-diff.githubusercontent.com/raw/openeuropa/oe_webtools/pull/96.diff",

@@ -106,8 +106,11 @@ class FileUrlFieldTest extends JoinupExistingSiteTestBase {
     $initial_uri = $rdf_entity_file->getFileUri();
     $this->assertFileExists($initial_uri);
 
+    /** @var \Drupal\Core\File\FileUrlGeneratorInterface $file_url_generator */
+    $file_url_generator = \Drupal::service('file_url_generator');
+
     // Ensure the file can be downloaded.
-    $this->drupalGet(file_create_url($initial_uri));
+    $this->drupalGet($file_url_generator->generateAbsoluteString($initial_uri));
     $this->assertSession()->statusCodeEquals(200);
 
     $this->drupalGet($distribution->toUrl());
@@ -130,7 +133,7 @@ class FileUrlFieldTest extends JoinupExistingSiteTestBase {
     $this->assertFileExists($second_uri);
 
     // Ensure the file can be downloaded.
-    $this->drupalGet(file_create_url($second_uri));
+    $this->drupalGet($file_url_generator->generateAbsoluteString($second_uri));
     $this->assertSession()->statusCodeEquals(200);
 
     // Check that the same file is uploaded to different locations.

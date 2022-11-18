@@ -1,0 +1,30 @@
+uuid: d7c569bb-641c-45dc-85a7-f0410c0f48ef
+langcode: en
+status: true
+dependencies:
+  config:
+    - views.view.eif_solutions
+  module:
+    - system
+    - views
+  theme:
+    - iop
+id: iop_views_block__eif_solutions_all
+theme: iop
+region: content
+weight: -12
+provider: null
+plugin: 'views_block:eif_solutions-all'
+settings:
+  id: 'views_block:eif_solutions-all'
+  label: ''
+  label_display: '0'
+  provider: views
+  views_label: ''
+  items_per_page: none
+visibility:
+  request_path:
+    id: request_path
+    negate: false
+    context_mapping: {  }
+    pages: /node/703013

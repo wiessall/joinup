@@ -8,8 +8,7 @@
 declare(strict_types = 1);
 
 use Drupal\interoperable_europe\InteroperableEuropeCollectionInterface;
-use Drupal\node\Entity\Node;
-use Drupal\node\NodeInterface;
+use Drupal\rdf_entity\RdfInterface;
 
 /**
  * Implements hook_preprocess_page().
@@ -23,16 +22,11 @@ function ventuno_preprocess_page(array &$variables): void {
   $variables['version_url'] = $joinup_version->getUrl();
 
   // Export the URL of the Interoperable Europe landing page.
-  $landing_page = Node::load(InteroperableEuropeCollectionInterface::LANDING_PAGE_ENTITY_ID);
-  if ($landing_page instanceof NodeInterface) {
+  $landing_page = \Drupal::entityTypeManager()->getStorage('rdf_entity')->load(InteroperableEuropeCollectionInterface::COLLECTION_ENTITY_ID);
+  if ($landing_page instanceof RdfInterface) {
     $variables['interoperable_europe_url'] = $landing_page->toUrl()->toString();
   }
-}
 
-/**
- * Implements template_preprocess_region().
- */
-function ventuno_preprocess_region__header(array &$variables): void {
   // Export the username to display in the header.
   $variables['user_name'] = \Drupal::currentUser()->getDisplayName();
 
