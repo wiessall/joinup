@@ -192,8 +192,8 @@ commands:
     # See: https://citnet.tech.ec.europa.eu/CITnet/jira/browse/DROPSEC-2040.
     - task: run
       command: toolkit:lint-js
-    # - task: run
-    #  command: testing:check-deprecated-code
+    - task: run
+      command: testing:check-deprecated-code
     # - task: run
     #   command: testing:check-deprecated-code-contrib
 
