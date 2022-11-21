@@ -4,7 +4,24 @@
  * Template for the page title.
  */
 #}
-{% extends '@ventuno/content/page-title.html.twig' %}
+{{ attach_library('ventuno/page-title') }}
+{{ title_prefix }}
+{% if title %}
+  <h1{{ title_attributes.addClass('page-title') }}>
+    {{ additional_content.full_label }}
+    {% block badges %}{% endblock %}
+    {% if permalink %}
+      <a class="permalink" href="{{ permalink }}" title="{{ 'Permalink'|t }}">
+        {{ pattern('icon', {
+          name: 'link-45deg',
+          size: 'fluid'
+        }) }}
+      </a>
+    {% endif %}
+  </h1>
+{% endif %}
+{{ title_suffix }}
+{% block metadata %}{% endblock %}
 
 {% block badges %}
   {{ attach_library('ventuno/badge') }}
