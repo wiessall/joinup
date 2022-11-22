@@ -46,18 +46,17 @@ class VocabularyManager {
   /**
    * Renames a topic term.
    *
-   * @param string $oldName
-   *   The old name of the term.
+   * @param string $id
+   *   The ID of the topic to rename.
    * @param string $newName
    *   The new name of the term.
    */
-  public function renameTopic(string $oldName, string $newName): void {
-    $terms = $this->entityTypeManager
+  public function renameTopic(string $id, string $newName): void {
+    $this->entityTypeManager
       ->getStorage('taxonomy_term')
-      ->loadByProperties(['name' => $oldName, 'vid' => 'topic']);
-    $term = reset($terms);
-    $term->setName($newName);
-    $term->save();
+      ->load($id)
+      ->setName($newName)
+      ->save();
   }
 
   /**

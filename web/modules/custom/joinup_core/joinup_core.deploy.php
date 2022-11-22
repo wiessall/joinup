@@ -100,6 +100,14 @@ function joinup_core_deploy_108807(array &$sandbox): string {
           'Smart cities',
           'http://joinup.eu/ontology/category#digital-government',
         ],
+        [
+          'Industry and production',
+          'http://joinup.eu/ontology/topic/category#economics',
+        ],
+        [
+          'eJustice and law',
+          'http://joinup.eu/ontology/topic/category#economics',
+        ]
       ],
       'moveTopicChildrenToNewParent' => [
         [
@@ -144,8 +152,18 @@ function joinup_core_deploy_108807(array &$sandbox): string {
           'http://joinup.eu/ontology/topic#ict-standardisation-in-egovernment',
           'ICT standardisation',
         ],
+        [
+          'http://joinup.eu/ontology/topic#statistics',
+          'Statistics and information',
+        ],
+        [
+          'http://joinup.eu/ontology/topic#culture',
+          'Culture and education',
+        ],
       ],
       'changeTopicId' => [
+        // All couples that have their topic IDs changed, also appear in the
+        // updateDbReference below.
         [
           'http://joinup.eu/ontology/topic#free-and-open-source-software-in-public-administrations',
           'http://joinup.eu/ontology/topic#free-and-open-source-software',
@@ -153,6 +171,14 @@ function joinup_core_deploy_108807(array &$sandbox): string {
         [
           'http://joinup.eu/ontology/topic#ict-standardisation-in-egovernment',
           'http://joinup.eu/ontology/topic#ict-standardisation',
+        ],
+        [
+          'http://joinup.eu/ontology/topic#statistics',
+          'http://joinup.eu/ontology/topic#statistics-and-informatino',
+        ],
+        [
+          'http://joinup.eu/ontology/topic#culture',
+          'http://joinup.eu/ontology/topic#culture-and-education',
         ],
       ],
       'changeTopicParent' => [
@@ -177,20 +203,16 @@ function joinup_core_deploy_108807(array &$sandbox): string {
           'http://joinup.eu/ontology/topic/category#ict',
         ],
         [
-          'http://joinup.eu/ontology/topic#ejustice',
-          'http://joinup.eu/ontology/topic/category#digital-government',
-        ],
-        [
           'http://joinup.eu/ontology/topic#european-policies',
           'http://joinup.eu/ontology/topic/category#digital-government',
         ],
         [
-          'http://joinup.eu/ontology/topic#law',
+          'http://joinup.eu/ontology/topic#eparticipation-and-evoting',
           'http://joinup.eu/ontology/topic/category#digital-government',
         ],
         [
-          'http://joinup.eu/ontology/topic#eparticipation-and-evoting',
-          'http://joinup.eu/ontology/topic/category#education',
+          'http://joinup.eu/ontology/topic#ict-standardisation',
+          'http://joinup.eu/ontology/topic/category#ict',
         ],
         [
           'http://joinup.eu/ontology/topic#science-and-technology',
@@ -207,6 +229,10 @@ function joinup_core_deploy_108807(array &$sandbox): string {
         [
           'http://joinup.eu/ontology/topic#social',
           'http://joinup.eu/ontology/topic/category#digital-government',
+        ],
+        [
+          'http://joinup.eu/ontology/topic#geospatial',
+          'http://joinup.eu/ontology/topic/category#transport',
         ],
       ],
       'updateDbReference' => [
@@ -257,6 +283,22 @@ function joinup_core_deploy_108807(array &$sandbox): string {
         [
           'source' => 'http://joinup.eu/ontology/topic#politics',
           'destination' => 'http://joinup.eu/ontology/topic#european-policies',
+        ],
+        [
+          'source' => 'http://joinup.eu/ontology/topic#statistics',
+          'destination' => 'http://joinup.eu/ontology/topic#statistics-and-informatino',
+        ],
+        [
+          'source' => 'http://joinup.eu/ontology/topic#education',
+          'destination' => 'http://joinup.eu/ontology/topic#culture-and-education',
+        ],
+        [
+          'source' => 'http://joinup.eu/ontology/topic#law',
+          'destination' => 'http://joinup.eu/ontology/topic#ejustice-and-law',
+        ],
+        [
+          'source' => 'http://joinup.eu/ontology/topic#ejustice',
+          'destination' => 'http://joinup.eu/ontology/topic#ejustice-and-law',
         ],
       ],
       'createRedirect' => [
@@ -340,35 +382,71 @@ function joinup_core_deploy_108807(array &$sandbox): string {
           'source' => 'http://joinup.eu/ontology/topic#politics',
           'destination' => 'http://joinup.eu/ontology/topic#european-policies',
         ],
+        [
+          'source' => 'http://joinup.eu/ontology/topic#statistics',
+          'destination' => 'http://joinup.eu/ontology/topic#statistics-and-informatino',
+        ],
+        [
+          'source' => 'http://joinup.eu/ontology/topic#education',
+          'destination' => 'http://joinup.eu/ontology/topic#culture-and-education',
+        ],
+        [
+          'source' => 'http://joinup.eu/ontology/topic/category#geospatial',
+          'destination' => 'http://joinup.eu/ontology/topic/category#transport',
+        ],
+        [
+          'source' => 'http://joinup.eu/ontology/topic#law',
+          'destination' => 'http://joinup.eu/ontology/topic#ejustice-and-law',
+        ],
+        [
+          'source' => 'http://joinup.eu/ontology/topic#ejustice',
+          'destination' => 'http://joinup.eu/ontology/topic#ejustice-and-law',
+        ],
       ],
       // All terms should be empty in references/children after the migration.
       'deleteTopicTerm' => [
+        'http://joinup.eu/ontology/topic#authorisation-and-authentication',
+        'http://joinup.eu/ontology/topic#defence',
+        'http://joinup.eu/ontology/topic#economic-analysis',
+        'http://joinup.eu/ontology/topic#education',
+        'http://joinup.eu/ontology/topic#ejustice',
+        'http://joinup.eu/ontology/topic#energy',
+        'http://joinup.eu/ontology/topic#environment',
+        'http://joinup.eu/ontology/topic#eu-finance',
+        'http://joinup.eu/ontology/topic#information',
+        'http://joinup.eu/ontology/topic#law',
+        'http://joinup.eu/ontology/topic#open-government',
+        'http://joinup.eu/ontology/topic#politics',
+        'http://joinup.eu/ontology/topic#security',
+        'http://joinup.eu/ontology/topic/category#business-and-competition',
+        'http://joinup.eu/ontology/topic/category#defence',
         'http://joinup.eu/ontology/topic/category#egovernment',
         'http://joinup.eu/ontology/topic/category#energy',
         'http://joinup.eu/ontology/topic/category#environment',
+        'http://joinup.eu/ontology/topic/category#geospatial',
         'http://joinup.eu/ontology/topic/category#industry-and-production',
         'http://joinup.eu/ontology/topic/category#information',
         'http://joinup.eu/ontology/topic/category#law',
+        'http://joinup.eu/ontology/topic/category#politics',
         'http://joinup.eu/ontology/topic/category#science-and-technology',
         'http://joinup.eu/ontology/topic/category#social',
-        'http://joinup.eu/ontology/topic#defence',
-        'http://joinup.eu/ontology/topic#economic-analysis',
-        'http://joinup.eu/ontology/topic#eu-finance',
-        'http://joinup.eu/ontology/topic#open-government',
-        'http://joinup.eu/ontology/topic#energy',
-        'http://joinup.eu/ontology/topic#environment',
-        'http://joinup.eu/ontology/topic#authorisation-and-authentication',
-        'http://joinup.eu/ontology/topic#information',
-        'http://joinup.eu/ontology/topic#security',
-        'http://joinup.eu/ontology/topic#politics',
       ],
     ];
+
+    $sandbox['current'] = 0;
+    $sandbox['max'] = 0;
+    foreach ($sandbox['tasks'] as $data) {
+      $sandbox['max'] += count($data);
+    }
   }
 
   $vocab_manager = \Drupal::getContainer()->get('topic.vocabulary_manager');
   $operation = array_key_first($sandbox['tasks']);
-  $tasks = $sandbox['tasks'][$operation];
-  unset($sandbox['tasks'][$operation]);
+  $tasks = array_splice($sandbox['tasks'][$operation], 0, 5);
+  if (empty($sandbox['tasks'][$operation])) {
+    unset($sandbox['tasks'][$operation]);
+  }
+
   foreach ($tasks as $task) {
     switch ($operation) {
       case 'createTopicTerm':
@@ -391,8 +469,9 @@ function joinup_core_deploy_108807(array &$sandbox): string {
       default:
         break;
     }
+    $sandbox['current']++;
   }
 
-  $sandbox['#finished'] = empty($sandbox['tasks']) ? 1 : 0;
-  return "Topic refactoring: $operation, " . count($tasks) . " tasks have been completed.";
+  $sandbox['#finished'] = empty($sandbox['tasks']) ? 1 : ($sandbox['current'] / $sandbox['max']);
+  return "Topic refactoring: $operation, " . count($tasks) . " tasks have been completed. Total progress: {$sandbox['current']} / {$sandbox['max']}";
 }
