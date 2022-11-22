@@ -30,6 +30,14 @@ module.exports = {
       },
     },
     {
+      entry: path.resolve(outputFolder, "src/js/sticky-menu-logged-in.js"),
+      dest: path.resolve(outputFolder, "assets/js/sticky-menu-logged-in.js"),
+      options: {
+        minify: true,
+        sourceMap: true,
+      },
+    },
+    {
       entry: path.resolve(outputFolder, "src/js/searchbox-focus.js"),
       dest: path.resolve(outputFolder, "assets/js/searchbox-focus.js"),
       options: {
