@@ -15,29 +15,33 @@
       ) {
         return;
       }
-      const toolbarBar = toolbar.querySelector(".toolbar-bar");
-      function calculateTranslation() {
+      const bar = toolbar.querySelector(".toolbar-bar");
+      function positionNavbarTop() {
+        // Use setTimeout to push this code to callback queue, ensuring it is
+        // executed after toolbar is done with its changes.
         setTimeout(() => {
-          const toolbarTrayActive = toolbar.querySelector(
+          const activeTray = toolbar.querySelector(
             ".toolbar-tray.is-active.toolbar-tray-horizontal"
           );
-          let translation;
-          if (toolbarTrayActive === null || toolbarTrayActive === undefined) {
-            translation = toolbarBar.offsetHeight;
-          } else {
-            translation =
-              toolbarBar.offsetHeight + toolbarTrayActive.offsetHeight;
-          }
           if (document.body.classList.contains("toolbar-fixed")) {
-            navbar.style.top = `${translation}px`;
+            let top;
+            if (activeTray === null || activeTray === undefined) {
+              top = bar.offsetHeight;
+            } else {
+              top = bar.offsetHeight + activeTray.offsetHeight;
+            }
+            navbar.style.top = `${top}px`;
           } else {
             navbar.style.top = "0px";
           }
         }, 0);
       }
-      calculateTranslation();
-      toolbar.addEventListener("click", calculateTranslation);
-      window.addEventListener("resize", calculateTranslation, false);
+      // Execute first on page load.
+      positionNavbarTop();
+      // Execute again if user clicks on any toolbar item.
+      toolbar.addEventListener("click", positionNavbarTop);
+      // Execute again if user resizes the window.
+      window.addEventListener("resize", positionNavbarTop, false);
     },
   };
 })();
