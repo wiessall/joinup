@@ -28,14 +28,16 @@ function joinup_core_deploy_108800(): void {
   // Import new content.
   $module_installer->install(['default_content']);
   /** @var \Drupal\default_content\ImporterInterface $importer */
-  \Drupal::service('default_content.importer')->importContent('interoperable_europe', TRUE);
+  \Drupal::service('default_content.importer')
+    ->importContent('interoperable_europe', TRUE);
   $module_installer->uninstall(['default_content']);
 
   // Disable auto-created left-side menu link.
   $landing_page = $entity_repository->loadEntityByUuid('node', '61e83391-9f96-4c9e-995d-9b22705b9f9f');
-  $link_plugins = \Drupal::service('plugin.manager.menu.link')->loadLinksByRoute('entity.node.canonical', [
-    'node' => $landing_page->id(),
-  ], 'ogmenu-3600');
+  $link_plugins = \Drupal::service('plugin.manager.menu.link')
+    ->loadLinksByRoute('entity.node.canonical', [
+      'node' => $landing_page->id(),
+    ], 'ogmenu-3600');
   /** @var \Drupal\menu_link_content\Plugin\Menu\MenuLinkContent $link_plugin */
   $link_plugin = reset($link_plugins);
   $entity_repository
@@ -77,14 +79,27 @@ function joinup_core_deploy_108801(): void {
 /**
  * Update the topic vocabulary terms.
  */
-function joinup_core_deploy_108802(array &$sandbox): string {
+function joinup_core_deploy_108807(array &$sandbox): string {
+  $messenger = \Drupal::messenger();
   if (empty($sandbox['tasks'])) {
     $sandbox['tasks'] = [
       'createTopicTerm' => [
-        ['Digital government', NULL],
-        ['Energy and environment', NULL],
-        ['Energy and environment', 'http://joinup.eu/ontology/topic/category#energy-and-environment'],
-        ['Smart cities', 'http://joinup.eu/ontology/category#digital-government'],
+        [
+          'Digital government',
+          NULL,
+        ],
+        [
+          'Energy and environment',
+          NULL,
+        ],
+        [
+          'Energy and environment',
+          'http://joinup.eu/ontology/topic/category#energy-and-environment',
+        ],
+        [
+          'Smart cities',
+          'http://joinup.eu/ontology/category#digital-government',
+        ],
       ],
       'moveTopicChildrenToNewParent' => [
         [
@@ -132,65 +147,67 @@ function joinup_core_deploy_108802(array &$sandbox): string {
       ],
       'changeTopicId' => [
         [
-          'http://joinup.eu/ontology/topic#free-and-open-source-software-in-public-administrations' => 'http://joinup.eu/ontology/topic#free-and-open-source-software',
-          'http://joinup.eu/ontology/topic#ict-standardisation-in-egovernment' => 'http://joinup.eu/ontology/topic#ict-standardisation',
+          'http://joinup.eu/ontology/topic#free-and-open-source-software-in-public-administrations',
+          'http://joinup.eu/ontology/topic#free-and-open-source-software',
+        ],
+        [
+          'http://joinup.eu/ontology/topic#ict-standardisation-in-egovernment',
+          'http://joinup.eu/ontology/topic#ict-standardisation',
         ],
       ],
       'changeTopicParent' => [
         [
-          [
-            'http://joinup.eu/ontology/topic#business-and-competition',
-            'http://joinup.eu/ontology/topic/category#digital-government',
-          ],
-          [
-            'http://joinup.eu/ontology/topic#free-and-open-source-software',
-            'http://joinup.eu/ontology/topic/category#ict',
-          ],
-          [
-            'http://joinup.eu/ontology/topic#industry-and-production',
-            'http://joinup.eu/ontology/category#economics'
-          ],
-          [
-            'http://joinup.eu/ontology/topic#content-and-knowledge-management',
-            'http://joinup.eu/ontology/topic/category#ict',
-          ],
-          [
-            'http://joinup.eu/ontology/topic#statistics',
-            'http://joinup.eu/ontology/topic/category#ict',
-          ],
-          [
-            'http://joinup.eu/ontology/topic#ejustice',
-            'http://joinup.eu/ontology/topic/category#digital-government',
-          ],
-          [
-            'http://joinup.eu/ontology/topic#european-policies',
-            'http://joinup.eu/ontology/topic/category#digital-government',
-          ],
-          [
-            'http://joinup.eu/ontology/topic#law',
-            'http://joinup.eu/ontology/topic/category#digital-government',
-          ],
-          [
-            'http://joinup.eu/ontology/topic#eparticipation-and-evoting',
-            'http://joinup.eu/ontology/topic/category#education',
-          ],
-          [
-            'http://joinup.eu/ontology/topic#science-and-technology',
-            'http://joinup.eu/ontology/topic/category#education',
-          ],
-          [
-            'http://joinup.eu/ontology/topic#demography-and-population',
-            'http://joinup.eu/ontology/topic/category#digital-government',
-          ],
-          [
-            'http://joinup.eu/ontology/topic#einclusion',
-            'http://joinup.eu/ontology/topic/category#digital-government',
-          ],
-          [
-            'http://joinup.eu/ontology/topic#social',
-            'http://joinup.eu/ontology/topic/category#digital-government',
-          ],
-        ]
+          'http://joinup.eu/ontology/topic#business-and-competition',
+          'http://joinup.eu/ontology/topic/category#digital-government',
+        ],
+        [
+          'http://joinup.eu/ontology/topic#free-and-open-source-software',
+          'http://joinup.eu/ontology/topic/category#ict',
+        ],
+        [
+          'http://joinup.eu/ontology/topic#industry-and-production',
+          'http://joinup.eu/ontology/category#economics',
+        ],
+        [
+          'http://joinup.eu/ontology/topic#content-and-knowledge-management',
+          'http://joinup.eu/ontology/topic/category#ict',
+        ],
+        [
+          'http://joinup.eu/ontology/topic#statistics',
+          'http://joinup.eu/ontology/topic/category#ict',
+        ],
+        [
+          'http://joinup.eu/ontology/topic#ejustice',
+          'http://joinup.eu/ontology/topic/category#digital-government',
+        ],
+        [
+          'http://joinup.eu/ontology/topic#european-policies',
+          'http://joinup.eu/ontology/topic/category#digital-government',
+        ],
+        [
+          'http://joinup.eu/ontology/topic#law',
+          'http://joinup.eu/ontology/topic/category#digital-government',
+        ],
+        [
+          'http://joinup.eu/ontology/topic#eparticipation-and-evoting',
+          'http://joinup.eu/ontology/topic/category#education',
+        ],
+        [
+          'http://joinup.eu/ontology/topic#science-and-technology',
+          'http://joinup.eu/ontology/topic/category#education',
+        ],
+        [
+          'http://joinup.eu/ontology/topic#demography-and-population',
+          'http://joinup.eu/ontology/topic/category#digital-government',
+        ],
+        [
+          'http://joinup.eu/ontology/topic#einclusion',
+          'http://joinup.eu/ontology/topic/category#digital-government',
+        ],
+        [
+          'http://joinup.eu/ontology/topic#social',
+          'http://joinup.eu/ontology/topic/category#digital-government',
+        ],
       ],
       'updateDbReference' => [
         [
@@ -350,7 +367,8 @@ function joinup_core_deploy_108802(array &$sandbox): string {
 
   $vocab_manager = \Drupal::getContainer()->get('topic.vocabulary_manager');
   $operation = array_key_first($sandbox['tasks']);
-  $tasks = array_splice($sandbox['tasks'], 0, 1);
+  $tasks = $sandbox['tasks'][$operation];
+  unset($sandbox['tasks'][$operation]);
   foreach ($tasks as $task) {
     switch ($operation) {
       case 'createTopicTerm':
@@ -370,12 +388,11 @@ function joinup_core_deploy_108802(array &$sandbox): string {
         $vocab_manager->{$operation}($task);
         break;
 
+      default:
+        break;
     }
   }
 
-  if (empty($sandbox['tasks'])) {
-    $sandbox['#finished'] = 1;
-  }
-
-  return "All topics have been updated";
+  $sandbox['#finished'] = empty($sandbox['tasks']) ? 1 : 0;
+  return "Topic refactoring: $operation, " . count($tasks) . " tasks have been completed.";
 }
