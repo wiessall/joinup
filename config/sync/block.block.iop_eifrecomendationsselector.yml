@@ -1,0 +1,25 @@
+uuid: 4abaab74-39c2-456d-a68c-98681ec69a8b
+langcode: en
+status: true
+dependencies:
+  module:
+    - eif
+  theme:
+    - iop
+id: iop_eifrecomendationsselector
+theme: iop
+region: content
+weight: -8
+provider: null
+plugin: eif_recommendation_selector
+settings:
+  id: eif_recommendation_selector
+  label: 'EIF recomendations selector'
+  label_display: '0'
+  provider: eif
+visibility:
+  eif_solutions_page:
+    id: eif_solutions_page
+    negate: false
+    context_mapping: {  }
+    eif_solutions: true
