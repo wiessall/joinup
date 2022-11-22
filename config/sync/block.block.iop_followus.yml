@@ -1,0 +1,25 @@
+uuid: 2f5c4743-e31f-459b-ab63-776dc2341fc7
+langcode: en
+status: true
+dependencies:
+  config:
+    - system.menu.footer-follow-us
+  module:
+    - system
+  theme:
+    - iop
+id: iop_followus
+theme: iop
+region: footer
+weight: -22
+provider: null
+plugin: 'system_menu_block:footer-follow-us'
+settings:
+  id: 'system_menu_block:footer-follow-us'
+  label: 'Follow us'
+  label_display: visible
+  provider: system
+  level: 1
+  depth: 0
+  expand_all_items: false
+visibility: {  }

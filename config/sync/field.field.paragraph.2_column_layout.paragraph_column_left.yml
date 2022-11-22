@@ -1,0 +1,79 @@
+uuid: e3dc69c2-4a7c-4ec0-a2ad-6d5cf7ec74dd
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.paragraph_column_left
+    - paragraphs.paragraphs_type.2_column_layout
+    - paragraphs.paragraphs_type.call_to_action
+    - paragraphs.paragraphs_type.image
+    - paragraphs.paragraphs_type.simple_paragraph
+    - paragraphs.paragraphs_type.testimony
+  module:
+    - entity_reference_revisions
+id: paragraph.2_column_layout.paragraph_column_left
+field_name: paragraph_column_left
+entity_type: paragraph
+bundle: 2_column_layout
+label: 'Left side content'
+description: ''
+required: true
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:paragraph'
+  handler_settings:
+    target_bundles:
+      simple_paragraph: simple_paragraph
+      image: image
+      call_to_action: call_to_action
+      testimony: testimony
+    negate: 0
+    target_bundles_drag_drop:
+      1_column_layout:
+        weight: -31
+        enabled: false
+      2_column_layout:
+        weight: -30
+        enabled: false
+      3_column_layout:
+        weight: -29
+        enabled: false
+      accordion:
+        weight: -28
+        enabled: false
+      accordion_item:
+        weight: -27
+        enabled: false
+      call_to_action:
+        weight: -18
+        enabled: true
+      carousel:
+        weight: -22
+        enabled: false
+      content_listing:
+        weight: -26
+        enabled: false
+      entity_reference:
+        weight: -24
+        enabled: false
+      iframe:
+        weight: -25
+        enabled: false
+      image:
+        weight: -19
+        enabled: true
+      json_map:
+        weight: -23
+        enabled: false
+      row:
+        weight: -21
+        enabled: false
+      simple_paragraph:
+        weight: -20
+        enabled: true
+      testimony:
+        weight: -17
+        enabled: true
+field_type: entity_reference_revisions

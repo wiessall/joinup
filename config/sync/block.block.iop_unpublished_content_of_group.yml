@@ -1,0 +1,45 @@
+uuid: 0eec947b-4ef2-4c13-b3a5-b6c690233d18
+langcode: en
+status: true
+dependencies:
+  module:
+    - joinup_core
+    - joinup_group
+    - rdf_entity
+    - system
+  theme:
+    - iop
+_core:
+  default_config_hash: Bmiwhi5TTvDZfWGHU6zaNElRYYnYbbxocXAlqvvIWk8
+id: iop_unpublished_content_of_group
+theme: iop
+region: content_bottom
+weight: -23
+provider: null
+plugin: entity_unpublished
+settings:
+  id: entity_unpublished
+  label: 'Unpublished content'
+  label_display: visible
+  provider: joinup_group
+  context_mapping:
+    og: '@rdf_entity.rdf_entity_route_context:rdf_entity'
+visibility:
+  request_route:
+    id: request_route
+    negate: false
+    context_mapping: {  }
+    routes:
+      - entity.rdf_entity.canonical
+  'entity_bundle:rdf_entity':
+    id: 'entity_bundle:rdf_entity'
+    negate: false
+    context_mapping:
+      rdf_entity: '@rdf_entity.rdf_entity_route_context:rdf_entity'
+    bundles:
+      collection: collection
+      solution: solution
+  request_path:
+    id: request_path
+    negate: true
+    pages: /interoperable-europe

@@ -373,3 +373,12 @@ function joinup_core_menu_local_tasks_alter(&$data, $route_name, RefinableCachea
     $data['tabs'][0][$route_name]['#access'] = FALSE;
   }
 }
+
+/**
+ * Implements hook_page_attachments().
+ */
+function joinup_core_page_attachments(array &$attachments) {
+  // As Joinup uses multiple themes, we pass the active theme to the page to be
+  // used in various contexts.
+  $attachments['#attached']['drupalSettings']['theme'] = \Drupal::theme()->getActiveTheme()->getName();
+}

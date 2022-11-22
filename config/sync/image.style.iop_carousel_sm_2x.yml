@@ -1,0 +1,21 @@
+uuid: 2e215841-7886-4e3c-8f38-b02c19d257cb
+langcode: en
+status: true
+dependencies: {  }
+name: iop_carousel_sm_2x
+label: 'IOP carousel SM 2x'
+effects:
+  878497af-b318-46fc-9eb4-757c3ba569d3:
+    uuid: 878497af-b318-46fc-9eb4-757c3ba569d3
+    id: image_scale_and_crop
+    weight: 1
+    data:
+      width: 1024
+      height: 535
+      anchor: center-center
+  d5b4e663-870d-4517-86f5-91c490cb4e43:
+    uuid: d5b4e663-870d-4517-86f5-91c490cb4e43
+    id: image_convert
+    weight: 2
+    data:
+      extension: webp

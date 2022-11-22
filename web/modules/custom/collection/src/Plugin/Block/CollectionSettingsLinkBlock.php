@@ -70,7 +70,7 @@ class CollectionSettingsLinkBlock extends BlockBase implements ContainerFactoryP
     ]);
 
     $collection = $this->ogContext->getGroup();
-    if ($collection && $collection instanceof CollectionInterface) {
+    if ($collection instanceof CollectionInterface) {
       $cache_metadata->addCacheableDependency($collection);
       $url = Url::fromRoute('joinup_group.settings_form', [
         'rdf_entity' => $collection->id(),

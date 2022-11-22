@@ -44,7 +44,9 @@
  *   comment/reply/12345).
  *
  * Regions:
+ * - page.search_bar: Items for the search_bar region (very custom region).
  * - page.header: Items for the header region.
+ * - page.header_bottom: Items for the header_bottom region.
  * - page.featured: Items for the featured content region.
  * - page.content_top: Items for the region displayed above the main content.
  * - page.content: The main content of the current page.
@@ -60,12 +62,18 @@
 {{ attach_library('ventuno/homepage') }}
 
 <div class="layout-container">
+  {% include '@ventuno/parts/header.html.twig' with {
+    user_name: user_name,
+    landing_page_links: landing_page_links,
+    profile_links: profile_links,
+    anonymous_links: anonymous_links,
+    hide_searchbar: hide_searchbar,
+    searchbar: page.search_bar,
+  } %}
   {{ page.header }}
 
   {% if page.header_bottom %}
-    <div class="region-header-bottom">
-      {{ page.header_bottom }}
-    </div>
+    {{ page.header_bottom }}
   {% endif %}
 
   {% if page.featured %}
@@ -76,7 +84,7 @@
             {{ page.featured }}
           </div>
           <div class="col-12 col-md-6 my-5 my-md-0 d-flex align-content-between flex-wrap">
-            <img src="{{ directory }}/assets/images/iop-eu-logo.svg" class="px-2 ms-md-5 img-fluid w-100" alt="Interoperable Europe logo" width="516" height="118">
+            <img src="{{ file_url('themes/ventuno/assets/images/iop-eu-logo.svg') }}" class="px-2 ms-md-5 img-fluid w-100" alt="Interoperable Europe logo" width="516" height="118">
             {% if interoperable_europe_url %}
               <p class="w-100 px-2 mt-4 mb-0 d-block text-center text-md-end">
                 <a href="{{ interoperable_europe_url }}" class="text-light fw-bold fs-5">{{ 'Discover more'|trans }} <span class="iop-gradient">...</span></a>
@@ -112,7 +120,7 @@
   {{ page.content_bottom }}
 
   {% if page.footer %}
-    {% include directory ~ '/templates/parts/footer.html.twig' %}
+    {% include '@ventuno/parts/footer.html.twig' %}
   {% endif %}
 
 </div>{# /.layout-container #}

@@ -5,6 +5,7 @@ dependencies:
   config:
     - field.field.meta_entity.collection_settings.announcements_enabled
     - field.field.meta_entity.collection_settings.glossary_link_only_first
+    - field.field.meta_entity.collection_settings.landing_page
     - meta_entity.type.collection_settings
   module:
     - field_group
@@ -42,6 +43,12 @@ content:
     region: content
     settings:
       display_label: true
+    third_party_settings: {  }
+  landing_page:
+    type: options_select
+    weight: 2
+    region: content
+    settings: {  }
     third_party_settings: {  }
 hidden:
   label: true

@@ -26,7 +26,6 @@ third_party_settings:
       weight: 4
       format_type: html_element
       format_settings:
-        label: Attachments
         classes: ''
         id: ''
         element: div
