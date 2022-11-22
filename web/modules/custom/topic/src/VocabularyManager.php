@@ -153,6 +153,19 @@ QUERY;
   }
 
   /**
+   * Updates references to a topic in the databases to a new topic.
+   *
+   * @param string $oldId
+   *   The old reference ID.
+   * @param string $newId
+   *   The new reference ID.
+   */
+  public function updateDbReference(string $oldId, string $newId): void {
+    $this->updateMysqlEntityReferences($oldId, $newId);
+    $this->updateSparqlEntityReferences($oldId, $newId);
+  }
+
+  /**
    * Updates references to a topic in the SPARQL database to a new topic.
    *
    * @param string $oldId
@@ -160,7 +173,7 @@ QUERY;
    * @param string $newId
    *   The new reference ID.
    */
-  public function updateSparqlEntityReferences(string $oldId, string $newId): void {
+  protected function updateSparqlEntityReferences(string $oldId, string $newId): void {
     $graphs = [
       'http://joinup.eu/collection/published',
       'http://joinup.eu/collection/draft',
@@ -195,7 +208,7 @@ QUERY;
    * @param string $newId
    *   The new reference ID.
    */
-  public function updateMysqlEntityReferences(string $oldId, string $newId): void {
+  protected function updateMysqlEntityReferences(string $oldId, string $newId): void {
     $this->database->update('node__field_topic')
       ->fields(['field_topic_target_id' => $newId])
       ->condition('field_topic_target_id', $oldId)
