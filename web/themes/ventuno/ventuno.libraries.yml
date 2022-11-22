@@ -144,6 +144,9 @@ tabledrag:
       assets/css/tabledrag.css: {}
 
 toolbar:
+  css:
+    theme:
+      assets/css/toolbar.min.css: {}
   js:
     assets/js/sticky-menu-logged-in.min.js: { minified: true }
 
