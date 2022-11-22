@@ -18,7 +18,7 @@ class VocabularyManager {
   /**
    * Constructs a VocabularyManager object.
    *
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
    *   The entity type manager.
    * @param \Drupal\Core\Database\Connection $database
    *   The database connection.
@@ -26,7 +26,7 @@ class VocabularyManager {
    *   The sparql.endpoint service.
    */
   public function __construct(
-    public EntityTypeManagerInterface $entity_type_manager,
+    public EntityTypeManagerInterface $entityTypeManager,
     public Connection $database,
     public ConnectionInterface $sparqlEndpoint
   ) {
@@ -117,7 +117,7 @@ QUERY;
    *   The new path of the term.
    */
   public function createRedirect(string $oldPath, string $newPath): void {
-    $redirect = $this->entity_type_manager
+    $redirect = $this->entityTypeManager
       ->getStorage('redirect')
       ->create([
         'redirect_source' => ['path' => $oldPath],
@@ -230,7 +230,7 @@ QUERY;
    *   (optional) The parent of the term.
    */
   public function createTopicTerm(string $name, $parent = NULL): void {
-    $term = $this->entity_type_manager
+    $term = $this->entityTypeManager
       ->getStorage('taxonomy_term')
       ->create([
         'vid' => 'topic',
@@ -249,7 +249,7 @@ QUERY;
    *   The term URI.
    */
   public function deleteTopicTerm(string $uri): void {
-    $this->entity_type_manager
+    $this->entityTypeManager
       ->getStorage('taxonomy_term')
       ->load($uri)
       ->delete();
