@@ -143,6 +143,10 @@ tabledrag:
     theme:
       assets/css/tabledrag.css: {}
 
+toolbar:
+  js:
+    assets/js/sticky-menu-logged-in.min.js: { minified: true }
+
 tour-first-balloon:
   js:
     assets/js/tour-first-balloon.js: { minified: true, attributes: { defer: true } }
