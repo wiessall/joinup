@@ -80,13 +80,13 @@ function joinup_core_deploy_108801(): void {
 function joinup_core_deploy_108802(array &$sandbox): string {
   if (empty($sandbox['tasks'])) {
     $sandbox['tasks'] = [
-      'create' => [
+      'createTopicTerm' => [
         ['Digital government', NULL],
         ['Energy and environment', NULL],
         ['Energy and environment', 'http://joinup.eu/ontology/topic/category#energy-and-environment'],
         ['Smart cities', 'http://joinup.eu/ontology/category#digital-government'],
       ],
-      'move_children' => [
+      'moveTopicChildrenToNewParent' => [
         [
           'source' => 'http://joinup.eu/ontology/topic/category#egovernment',
           'destination' => 'http://joinup.eu/ontology/topic/category#digital-government',
@@ -120,7 +120,7 @@ function joinup_core_deploy_108802(array &$sandbox): string {
           'destination' => 'http://joinup.eu/ontology/topic/category#digital-government',
         ],
       ],
-      'rename_topic' => [
+      'renameTopic' => [
         [
           'http://joinup.eu/ontology/topic#free-and-open-source-software-in-public-administrations',
           'Free and open source software',
@@ -130,13 +130,13 @@ function joinup_core_deploy_108802(array &$sandbox): string {
           'ICT standardisation',
         ],
       ],
-      'change_topic_id' => [
+      'changeTopicId' => [
         [
           'http://joinup.eu/ontology/topic#free-and-open-source-software-in-public-administrations' => 'http://joinup.eu/ontology/topic#free-and-open-source-software',
           'http://joinup.eu/ontology/topic#ict-standardisation-in-egovernment' => 'http://joinup.eu/ontology/topic#ict-standardisation',
         ],
       ],
-      'change_topic_parent' => [
+      'changeTopicParent' => [
         [
           [
             'http://joinup.eu/ontology/topic#business-and-competition',
@@ -192,7 +192,7 @@ function joinup_core_deploy_108802(array &$sandbox): string {
           ],
         ]
       ],
-      'update_db_references' => [
+      'updateDbReference' => [
         [
           'source' => 'http://joinup.eu/ontology/topic#defence',
           'destination' => 'http://joinup.eu/ontology/topic#ict-security',
@@ -242,7 +242,7 @@ function joinup_core_deploy_108802(array &$sandbox): string {
           'destination' => 'http://joinup.eu/ontology/topic#european-policies',
         ],
       ],
-      'create_redirect' => [
+      'createRedirect' => [
         [
           'source' => 'http://joinup.eu/ontology/topic/category#egovernment',
           'destination' => 'http://joinup.eu/ontology/topic/category#digital-government',
@@ -325,7 +325,7 @@ function joinup_core_deploy_108802(array &$sandbox): string {
         ],
       ],
       // All terms should be empty in references/children after the migration.
-      'delete' => [
+      'deleteTopicTerm' => [
         'http://joinup.eu/ontology/topic/category#egovernment',
         'http://joinup.eu/ontology/topic/category#energy',
         'http://joinup.eu/ontology/topic/category#environment',
@@ -348,179 +348,27 @@ function joinup_core_deploy_108802(array &$sandbox): string {
     ];
   }
 
-  // Helper function to get the internal path of a topic term.
-  $get_path = function (string $id): string {
-    return \Drupal::entityTypeManager()
-      ->getStorage('taxonomy_term')
-      ->load($id)
-      ->toUrl()
-      ->toString();
-  };
-
-  // Helper function to rename a topic.
-  $rename_topic = function (string $old_name, string $new_name): void {
-    $terms = \Drupal::entityTypeManager()
-      ->getStorage('taxonomy_term')
-      ->loadByProperties(['name' => $old_name, 'vid' => 'topic']);
-    $term = reset($terms);
-    /** @var \Drupal\taxonomy\Entity\Term $term */
-    $term->setName($new_name);
-    $term->save();
-  };
-
-  // Helper function to change the topic URI ID.
-  $change_topic_id = function (string $old_id, string $new_id): void {
-    $sparql = \Drupal::getContainer()->get('sparql.endpoint');
-    $query = <<<QUERY
-WITH <http://topic>
-DELETE {
-  <$old_id> ?p ?o .
-}
-INSERT {
-  <$new_id> ?p ?o .
-}
-WHERE {
-  <$old_id> ?p ?o .
-}
-QUERY;
-    $sparql->query($query);
-  };
-
-  // Helper function to change the parent of a topic.
-  $change_topic_parent = function (string $id, string $new_parent_id): void {
-    $sparql = \Drupal::getContainer()->get('sparql.endpoint');
-    $query = <<<QUERY
-WITH <http://topic>
-DELETE {
-  <$id> <http://www.w3.org/2004/02/skos/core#broaderTransitive> ?parent .
-}
-INSERT {
-  <$id> <http://www.w3.org/2004/02/skos/core#broaderTransitive> <{$new_parent_id}> .
-}
-WHERE {
-  <$id> <http://www.w3.org/2004/02/skos/core#broaderTransitive> ?parent .
-}
-QUERY;
-    $sparql->query($query);
-  };
-
-  // Helper function to create a redirect between two topics.
-  $create_redirect = function (string $old_id, string $new_id): void {
-    $redirect = \Drupal::entityTypeManager()
-      ->getStorage('redirect')
-      ->create([
-        'redirect_source' => ['path' => '/taxonomy/term/' . $old_id],
-        'redirect_redirect' => ['uri' => 'internal:/taxonomy/term/' . $new_id],
-        'language' => 'und',
-        'status_code' => 301,
-      ]);
-    $redirect->save();
-  };
-
-  // Helper function to move all topics of a parent to another parent.
-  $move_topic_children_to_new_parent = function (string $old_parent_id, string $new_parent_id): void {
-    $query = <<<QUERY
-WITH <http://topic>
-DELETE {
-  ?child <http://www.w3.org/2004/02/skos/core#broaderTransitive> <{$old_parent_id}> .
-}
-INSERT {
-  ?child <http://www.w3.org/2004/02/skos/core#broaderTransitive> <{$new_parent_id}> .
-}
-WHERE {
-  ?child <http://www.w3.org/2004/02/skos/core#broaderTransitive> <{$old_parent_id}> .
-}
-QUERY;
-    \Drupal::getContainer()->get('sparql.endpoint')->query($query);
-  };
-
-  // Helper function to have all references in SPARQL point from an old to a new
-  // topic.
-  $update_sparql_entity_references = function (string $old_id, string $new_id): void {
-    $graphs = [
-      'http://joinup.eu/collection/published',
-      'http://joinup.eu/collection/draft',
-      'http://joinup.eu/solution/published',
-      'http://joinup.eu/solution/draft',
-      'http://joinup.eu/asset_release/published',
-      'http://joinup.eu/asset_release/draft',
-    ];
-
-    $sparql = \Drupal::getContainer()->get('sparql.endpoint');
-    foreach ($graphs as $graph) {
-      $query = <<<QUERY
-WITH <{$graph}>
-DELETE {
-  ?entity <http://joinup.eu/vocabulary/topic> <{$old_id}> .
-}
-INSERT {
-  ?entity <http://joinup.eu/vocabulary/topic> <{$new_id}> .
-}
-WHERE {
-  ?entity <http://joinup.eu/vocabulary/topic> <{$old_id}> .
-}
-QUERY;
-      $sparql->query($query);
-    }
-  };
-
-  // Helper function for a direct update of topic references in the SQL
-  // database.
-  $update_mysql_entity_references = function (string $old_id, string $new_id): void {
-    $database = \Drupal::database();
-
-    // Execute the query.
-    $database->update('node__field_topic')
-      ->fields(['field_topic_target_id' => $new_id])
-      ->condition('field_topic_target_id', $old_id)
-      ->execute();
-
-    // Do the query also for the revisions table.
-    $database->update('node_revision__field_topic')
-      ->fields(['field_topic_target_id' => $new_id])
-      ->condition('field_topic_target_id', $old_id)
-      ->execute();
-  };
-
-  // Helper function to create a topic term.
-  $create_topic_term = function (string $name, $parent = NULL): void {
-    $term = \Drupal::entityTypeManager()
-      ->getStorage('taxonomy_term')
-      ->create([
-        'vid' => 'topic',
-        'name' => $name,
-        'parent' => $parent,
-      ]);
-    // The ID of the topic will be assigned automatically according to the name.
-    // @see \Drupal\joinup_core\Plugin\sparql_entity_storage\Id\TopicVocabulary::generate()
-    $term->save();
-  };
-
-  // Helper function to delete a topic term.
-  $delete_topic_term = function (string $uri): void {
-    \Drupal::entityTypeManager()
-      ->getStorage('taxonomy_term')
-      ->load($uri)
-      ->delete();
-  };
-
+  $vocab_manager = \Drupal::getContainer()->get('topic.vocabulary_manager');
   $operation = array_key_first($sandbox['tasks']);
   $tasks = array_splice($sandbox['tasks'], 0, 1);
   foreach ($tasks as $task) {
     switch ($operation) {
-      case 'create':
-        $create_topic_term($task[0], $task[1]);
+      case 'createTopicTerm':
+      case 'renameTopic':
+      case 'changeTopicId':
+      case 'changeTopicParent':
+        $vocab_manager->{$operation}($task[0], $task[1]);
         break;
 
-      case 'move_children':
-        $move_topic_children_to_new_parent($task['source'], $task['destination']);
+      case 'moveTopicChildrenToNewParent':
+      case 'updateDbReference':
+      case 'createRedirect':
+        $vocab_manager->{$operation}($task['source'], $task['destination']);
         break;
 
-      case 'rename_topic':
-        $rename_topic($task[0], $task[1]);
+      case 'deleteTopicTerm':
+        $vocab_manager->{$operation}($task);
         break;
-
-      case 'change_topic_id':
 
     }
   }
