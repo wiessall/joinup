@@ -553,8 +553,8 @@ function joinup_search_views_pre_render(ViewExecutable $view): void {
               // Removes all errors from messenger.
               $messenger->deleteByType('error');
               // Filter some errors.
-              $filtered_errors = array_filter($errors_messages, function ($value) use ($error_value) {
-                return ($value != $error_value);
+              $filtered_errors = array_filter($errors_messages, function ($value) use ($error_value): bool {
+                return $value != $error_value;
               });
               // Add filtered errors again to flashBag.
               foreach ($filtered_errors as $filtered_error) {
