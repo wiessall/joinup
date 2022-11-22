@@ -7,6 +7,7 @@
 
 declare(strict_types = 1);
 
+use Drupal\Component\Render\MarkupInterface;
 use Drupal\Component\Utility\Html;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Datetime\DrupalDateTime;
@@ -526,6 +527,40 @@ function joinup_search_form_alter(&$form, FormStateInterface $form_state, $form_
             '#bcl_icon_path' => base_path() . \Drupal::service('extension.path.resolver')->getPath('theme', 'ventuno') . '/assets/icons/icons.svg',
             '#weight' => -5,
           ];
+        }
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_views_pre_render().
+ */
+function joinup_search_views_pre_render(ViewExecutable $view): void {
+  if ($view->id() === 'search' && $view->current_display === 'page_1') {
+    if (!empty($view->result)) {
+      /** @var \Drupal\Core\Messenger\Messenger $messenger */
+      $messenger = \Drupal::messenger();
+      $errors = $messenger->messagesByType('error');
+      $error_value = 'You must include at least one positive keyword with 3 characters or more.';
+      foreach ($errors as $error) {
+        if ($error instanceof MarkupInterface) {
+          if ($error == $error_value) {
+            // Save the errors from flashBag.
+            $errors_messages = $messenger->messagesByType('error');
+            if (count($errors_messages) > 0) {
+              // Removes all errors from messenger.
+              $messenger->deleteByType('error');
+              // Filter some errors.
+              $filtered_errors = array_filter($errors_messages, function ($value) use ($error_value): bool {
+                return $value != $error_value;
+              });
+              // Add filtered errors again to flashBag.
+              foreach ($filtered_errors as $filtered_error) {
+                $messenger->addError($filtered_error);
+              }
+            }
+          }
         }
       }
     }
