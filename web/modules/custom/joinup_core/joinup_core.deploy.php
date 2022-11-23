@@ -80,7 +80,6 @@ function joinup_core_deploy_108801(): void {
  * Update the topic vocabulary terms.
  */
 function joinup_core_deploy_108807(array &$sandbox): string {
-  $messenger = \Drupal::messenger();
   if (empty($sandbox['tasks'])) {
     $sandbox['tasks'] = [
       'createTopicTerm' => [
@@ -107,7 +106,7 @@ function joinup_core_deploy_108807(array &$sandbox): string {
         [
           'eJustice and law',
           'http://joinup.eu/ontology/topic/category#economics',
-        ]
+        ],
       ],
       'moveTopicChildrenToNewParent' => [
         [
