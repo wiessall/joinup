@@ -69,7 +69,7 @@
         "drupal/paragraphs_jquery_ui_accordion": "^1.4",
         "drupal/pathauto": "~1.8",
         "drupal/pipeline": "^1.0",
-        "drupal/publication_date": "2.0-beta5",
+        "drupal/publication_date": "^2.0@beta",
         "drupal/rdf_entity": "^2.0",
         "drupal/rdf_meta_entity": "^1.0",
         "drupal/redirect": "^1.6",
