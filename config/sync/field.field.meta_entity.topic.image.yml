@@ -1,0 +1,38 @@
+uuid: 802b7adb-0d21-4fbc-843f-27e8bb8b20a7
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.meta_entity.image
+    - meta_entity.type.topic
+  module:
+    - image
+id: meta_entity.topic.image
+field_name: image
+entity_type: meta_entity
+bundle: topic
+label: Image
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:file'
+  handler_settings: {  }
+  file_directory: 'topics/[date:custom:Y]-[date:custom:m]'
+  file_extensions: 'png gif jpg jpeg'
+  max_filesize: 2MB
+  max_resolution: ''
+  min_resolution: ''
+  alt_field: false
+  alt_field_required: true
+  title_field: false
+  title_field_required: false
+  default_image:
+    uuid: ''
+    alt: ''
+    title: ''
+    width: null
+    height: null
+field_type: image
