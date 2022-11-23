@@ -77,7 +77,7 @@ commands:
   # Scans the code base for deprecated code.
   testing:check-deprecated-code:
     - task: exec
-      command: ${phpstan.bin} --memory-limit=2G --no-progress analyse src tests/src web/modules/custom web/profiles web/themes/ventuno web/themes/joinup
+      command: ${phpstan.bin} --memory-limit=1G --debug -vvv --no-progress analyse src tests/src web/modules/custom web/profiles web/themes/ventuno web/themes/joinup
 
   testing:check-deprecated-code-contrib:
     - task: exec
