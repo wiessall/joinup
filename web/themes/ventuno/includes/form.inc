@@ -89,18 +89,18 @@ function ventuno_preprocess_form_element_label(array &$variables): void {
 function ventuno_form_alter(array &$form, FormStateInterface $form_state, string $form_id): void {
   // Add classes to the delete action in any kind of form.
   if (isset($form['actions']['delete'])) {
-    $form['actions']['delete']['#attributes']['class'] = [
-      'btn',
-      'btn-md',
-      'btn-outline-danger',
-    ];
+    $classes = $form['actions']['delete']['#attributes']['class'] ?? [];
+    $form['actions']['delete']['#attributes']['class'] = array_merge(
+      $classes,
+      ['btn', 'btn-md', 'btn-outline-danger'],
+    );
   }
   // Add classes to the cancel action in any kind of form.
   if (isset($form['actions']['cancel'])) {
-    $form['actions']['cancel']['#attributes']['class'] = [
-      'btn',
-      'btn-md',
-      'btn-outline-warning',
-    ];
+    $classes = $form['actions']['cancel']['#attributes']['class'] ?? [];
+    $form['actions']['cancel']['#attributes']['class'] = array_merge(
+      $classes,
+      ['btn', 'btn-md', 'btn-outline-warning'],
+    );
   }
 }

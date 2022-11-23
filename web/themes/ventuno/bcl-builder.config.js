@@ -442,6 +442,15 @@ module.exports = {
       },
     },
     {
+      entry: path.resolve(outputFolder, "src/scss/releases.scss"),
+      dest: path.resolve(outputFolder, "assets/css/releases.min.css"),
+      options: {
+        includePaths,
+        minify: true,
+        sourceMap: "file",
+      },
+    },
+    {
       entry: path.resolve(outputFolder, "src/scss/share-content-form.scss"),
       dest: path.resolve(outputFolder, "assets/css/share-content-form.min.css"),
       options: {
@@ -503,6 +512,15 @@ module.exports = {
       dest: path.resolve(outputFolder, "assets/css/three-dots-menu.css"),
       options: {
         includePaths,
+        sourceMap: "file",
+      },
+    },
+    {
+      entry: path.resolve(outputFolder, "src/scss/timeline.scss"),
+      dest: path.resolve(outputFolder, "assets/css/timeline.min.css"),
+      options: {
+        includePaths,
+        minify: true,
         sourceMap: "file",
       },
     },

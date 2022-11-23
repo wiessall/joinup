@@ -3,7 +3,7 @@
  * Attaches the behaviours to show visual cues on shared community content.
  */
 
-((Drupal) => {
+((Drupal, once) => {
   /**
    * Theme function that renders a visual cue for shared content.
    *
@@ -77,4 +77,4 @@
       );
     },
   };
-})(Drupal);
+})(Drupal, once);
