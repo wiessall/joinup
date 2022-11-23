@@ -56,6 +56,10 @@ class DashboardController extends ControllerBase {
         'title' => $this->t('Curated content listings'),
         'url' => Url::fromRoute('view.curated_content_listings.page'),
       ],
+      'topics' => [
+        'title' => $this->t('Topics'),
+        'url' => Url::fromRoute('view.topic_meta_entity.page'),
+      ],
     ];
 
     $links = array_map(function (array $link): array {
