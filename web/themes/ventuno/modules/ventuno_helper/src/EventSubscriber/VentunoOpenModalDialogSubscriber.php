@@ -7,11 +7,12 @@ namespace Drupal\ventuno_helper\EventSubscriber;
 use Drupal\Core\Theme\ThemeManagerInterface;
 use Drupal\bootstrap4_modal\Ajax\CloseBootstrap4ModalDialogCommand;
 use Drupal\bootstrap4_modal\Ajax\OpenBootstrap4ModalDialogCommand;
+use Drupal\email_contact\Event\AjaxEmailContactCommandEvent;
 use Drupal\joinup_core\Event\AjaxCommandEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
- * Listens to \Drupal\joinup_core\Event\AjaxCommandEvent event.
+ * Listens to AjaxCommandEvent|AjaxEmailContactCommandEvent event.
  */
 class VentunoOpenModalDialogSubscriber implements EventSubscriberInterface {
 
@@ -38,18 +39,27 @@ class VentunoOpenModalDialogSubscriber implements EventSubscriberInterface {
   public static function getSubscribedEvents(): array {
     return [
       AjaxCommandEvent::class => 'onModalDialog',
+      AjaxEmailContactCommandEvent::class => 'onModalDialog',
     ];
   }
 
   /**
    * Uses the Bootstrap 4 Modal dialog opener on Ventuno.
    *
-   * @param \Drupal\joinup_core\Event\AjaxCommandEvent $event
+   * @param \Drupal\joinup_core\Event\AjaxCommandEvent|\Drupal\email_contact\Event\AjaxEmailContactCommandEvent $event
    *   The Ajax command event.
    */
-  public function onModalDialog(AjaxCommandEvent $event): void {
+  public function onModalDialog(AjaxCommandEvent|AjaxEmailContactCommandEvent $event): void {
     $context = $event->getContext();
-    if ($context['instance'] === 'join_collection.subscribe_dialog.open' && $this->isVentuno()) {
+    $instance_open = [
+      'join_collection.subscribe_dialog.open',
+      'email_contact.modal.open',
+    ];
+    $instance_close = [
+      'join_collection.subscribe_dialog.close',
+      'email_contact.modal.close',
+    ];
+    if (in_array($context['instance'], $instance_open) && $this->isVentuno()) {
       $event->setCommand(new OpenBootstrap4ModalDialogCommand($context['title'], $context['content'], [
         'dialogClasses' => 'modal-dialog-centered',
         'dialogShowHeader' => TRUE,
@@ -57,7 +67,7 @@ class VentunoOpenModalDialogSubscriber implements EventSubscriberInterface {
       ]));
       $event->addAttachments(['library' => ['ventuno/modals']]);
     }
-    if ($context['instance'] === 'join_collection.subscribe_dialog.close' && $this->isVentuno()) {
+    if (in_array($context['instance'], $instance_close) && $this->isVentuno()) {
       $event->setCommand(new CloseBootstrap4ModalDialogCommand());
     }
 

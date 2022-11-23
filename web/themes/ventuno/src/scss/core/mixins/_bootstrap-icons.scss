@@ -1,7 +1,7 @@
 /**
 * Mixin to generate bootstrap icon
 */
-@mixin get-bootstrap-icon($icon-name, $icon-color: $primary) {
+@mixin get-bootstrap-icon($icon-name, $icon-color: currentColor) {
   display: inline-block;
   content: "";
   width: 1em;
