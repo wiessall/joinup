@@ -92,7 +92,6 @@ Feature:
     When I go to the edit form of the "Don't Mess with the Zohan" "custom page"
     And I press "Add IFrame"
     And I fill in "Iframe URL" with "http://example.com"
-    And I fill in "Iframe Height" with "100%"
     And I press "Save"
     # We only test that the <iframe .../> element is in page. Unfortunately, we
     # cannot do precision RegExp search in page source, so we only check for the
