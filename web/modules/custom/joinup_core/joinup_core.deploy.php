@@ -14,8 +14,8 @@
 
 declare(strict_types = 1);
 
-use Drupal\meta_entity\Entity\MetaEntity;
 use Drupal\taxonomy\Entity\Term;
+use Drupal\topic\Entity\MetaEntityTopic;
 use Drupal\topic\Entity\TopicInterface;
 
 /**
@@ -30,7 +30,7 @@ function joinup_core_deploy_108802(): void {
   foreach ($taxonomy_tree as $term) {
     $term = Term::load($term->tid);
     if ($term instanceof TopicInterface) {
-      $topic = MetaEntity::create([
+      $topic = MetaEntityTopic::create([
         'type' => 'topic',
         'target' => $term,
         'label' => $term->getName(),
