@@ -35,15 +35,11 @@ function joinup_core_deploy_108900(array &$sandbox): string {
         ],
         [
           'Smart cities',
-          'http://joinup.eu/ontology/category#digital-government',
-        ],
-        [
-          'Industry and production',
-          'http://joinup.eu/ontology/topic/category#economics',
+          'http://joinup.eu/ontology/topic/category#digital-government',
         ],
         [
           'eJustice and law',
-          'http://joinup.eu/ontology/topic/category#economics',
+          'http://joinup.eu/ontology/topic/category#digital-government',
         ],
       ],
       'moveTopicChildrenToNewParent' => [
@@ -126,10 +122,6 @@ function joinup_core_deploy_108900(array &$sandbox): string {
         [
           'http://joinup.eu/ontology/topic#free-and-open-source-software',
           'http://joinup.eu/ontology/topic/category#ict',
-        ],
-        [
-          'http://joinup.eu/ontology/topic#industry-and-production',
-          'http://joinup.eu/ontology/category#economics',
         ],
         [
           'http://joinup.eu/ontology/topic#content-and-knowledge-management',
