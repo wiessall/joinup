@@ -44,6 +44,30 @@ class VocabularyManager {
   }
 
   /**
+   * Creates a topic term.
+   *
+   * @param string $name
+   *   The name of the term.
+   * @param string|null $parent
+   *   (optional) The parent of the term.
+   */
+  public function createTopicTerm(string $name, string $parent = NULL): void {
+    $term_storage = $this->entityTypeManager->getStorage('taxonomy_term');
+
+    if (!empty($parent)) {
+      $parent = $term_storage->load($parent);
+    }
+
+    // The ID of the topic will be assigned automatically according to the name.
+    // @see \Drupal\joinup_core\Plugin\sparql_entity_storage\Id\TopicVocabulary::generate()
+    $term_storage->create([
+      'vid' => 'topic',
+      'name' => $name,
+      'parent' => $parent,
+    ])->save();
+  }
+
+  /**
    * Renames a topic term.
    *
    * @param string $id
@@ -218,27 +242,6 @@ QUERY;
       ->fields(['field_topic_target_id' => $newId])
       ->condition('field_topic_target_id', $oldId)
       ->execute();
-  }
-
-  /**
-   * Creates a topic term.
-   *
-   * @param string $name
-   *   The name of the term.
-   * @param string|null $parent
-   *   (optional) The parent of the term.
-   */
-  public function createTopicTerm(string $name, $parent = NULL): void {
-    $term = $this->entityTypeManager
-      ->getStorage('taxonomy_term')
-      ->create([
-        'vid' => 'topic',
-        'name' => $name,
-        'parent' => $parent,
-      ]);
-    // The ID of the topic will be assigned automatically according to the name.
-    // @see \Drupal\joinup_core\Plugin\sparql_entity_storage\Id\TopicVocabulary::generate()
-    $term->save();
   }
 
   /**
