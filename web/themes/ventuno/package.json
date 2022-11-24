@@ -8,8 +8,10 @@
   "scripts": {
     "watch": "watch 'npm run build' src",
     "clean:assets": "del-cli assets/*",
+    "clean:scripts": "del-cli assets/js",
+    "clean:styles": "del-cli assets/css",
     "eslint": "eslint src/js/",
-    "build": "npm-run-all clean:assets build:*",
+    "build": "npm-run-all clean:scripts clean:styles build:scripts build:styles build:copy",
     "build:scripts": "cross-env bcl-builder scripts",
     "build:styles": "cross-env bcl-builder styles",
     "build:copy": "cross-env bcl-builder copy",
