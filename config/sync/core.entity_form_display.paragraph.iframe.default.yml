@@ -24,7 +24,7 @@ content:
       allowfullscreen: '0'
       tokensupport: '0'
       width: ''
-      height: ''
+      height: 100%
       expose_class: false
     third_party_settings: {  }
 hidden:
