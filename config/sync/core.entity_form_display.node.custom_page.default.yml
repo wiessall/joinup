@@ -13,6 +13,7 @@ dependencies:
     - file
     - image
     - paragraphs
+    - path
 id: node.custom_page.default
 targetEntityType: node
 bundle: custom_page
@@ -59,6 +60,12 @@ content:
     settings:
       include_locked: true
     third_party_settings: {  }
+  path:
+    type: path
+    weight: 7
+    region: content
+    settings: {  }
+    third_party_settings: {  }
   status:
     type: boolean_checkbox
     weight: 6
@@ -83,7 +90,6 @@ hidden:
   created: true
   current_workflow_state: true
   og_audience: true
-  path: true
   promote: true
   published_at: true
   sticky: true
