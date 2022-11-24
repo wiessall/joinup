@@ -51,7 +51,7 @@ class VocabularyManager {
    * @param string|null $parent
    *   (optional) The parent of the term.
    */
-  public function createTopicTerm(string $name, string $parent = NULL): void {
+  public function createTopicTerm(string $name, ?string $parent = NULL): void {
     $term_storage = $this->entityTypeManager->getStorage('taxonomy_term');
 
     if (!empty($parent)) {
