@@ -7,11 +7,13 @@
 {% set view_mode_featured = view_mode is same as 'view_mode_featured' %}
 {% set text %}
   {% if content.field_ad_file_size|render %}
-    <p class="mb-0">{{ 'Weight'|t }}: {{ content.field_ad_file_size|render|striptags|trim }}</p>
+    <div>{{ 'Weight'|t }}: <span class="fw-bold">{{ content.field_ad_file_size|render|striptags|trim }}</span></div>
   {% endif %}
-  {% if content.field_ad_file_size|render|striptags|trim %}
-    <p class="mb-0">{{ 'Licence'|t }}: {{ content.field_ad_licence|render|striptags|trim }}</p>
+  {% if content.field_ad_licence|render|striptags|trim %}
+    <div>{{ 'Licence'|t }}: {{ content.field_ad_licence }}</div>
   {% endif %}
+{% endset %}
+{% set footer %}
   {{ content.field_ad_access_url }}
 {% endset %}
 {{ pattern('tile', {
@@ -22,6 +24,7 @@
   title: label,
   title_suffix: title_suffix,
   text: text,
+  footer: footer,
   metadata: [{
     label: 'distribution',
     icon: 'file-earmark-post'
