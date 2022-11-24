@@ -248,6 +248,7 @@ Feature: Homepage
       | New material                | Colossal material                                                                                                                                                                                                                                                                                                                                                   | Nature area     | Shiny Shan            | proposed  | 2021-02-29T10:18:00Z | 2021-02-29T10:18:00Z | 2021-02-29T10:18:00Z | 2021-03-02T10:18:00Z   | 2021-03-29T10:18:00Z  |
 
     When I am on the homepage
+    Then I break
     Then the explore section should contain the following content:
       | type       | title                       | date                 | description                                                                                                                                                                                                                     |
       | collection | Clash of vettel             | 2020-10-18 08:00     | The point is that we do have the rights to one of our films. So we could be dealing with a film that we'd normally have to show only for three or four weeks and see what happens. But it's more like a TV show. It's bigger…   |
