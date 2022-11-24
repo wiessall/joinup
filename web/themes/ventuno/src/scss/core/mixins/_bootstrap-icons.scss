@@ -10,5 +10,5 @@
   background-color: $icon-color;
   mask-image: url("#{$bootstrap-icons-path}/#{$icon-name}.svg");
   mask-repeat: no-repeat;
-  background-size: 1em 1em;
+  mask-size: contain;
 }
