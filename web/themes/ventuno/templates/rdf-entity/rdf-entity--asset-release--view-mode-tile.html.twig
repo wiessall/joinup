@@ -6,8 +6,8 @@
 #}
 {% set view_mode_featured = view_mode is same as 'view_mode_featured' %}
 {% set text %}
-  <p class="mb-0">{{ 'Release number'|t }}: {{ content.field_isr_release_number }}</p>
-  <p class="mb-0">{{ 'Status'|t }}: {{ content.field_status }}</p>
+  <p class="mb-0">{{ 'Release number'|t }}: <span class="fw-bold">{{ content.field_isr_release_number }}</span></p>
+  <p class="mb-0">{{ 'Status'|t }}: <span class="fw-bold">{{ content.field_status }}</span></p>
 {% endset %}
 {{ pattern('tile', {
   attributes: attributes,
