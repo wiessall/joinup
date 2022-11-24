@@ -631,6 +631,7 @@ module.exports = {
           "envelope-fill.svg",
           "exclamation-circle-fill.svg",
           "exclamation-lg.svg",
+          "exclamation-triangle-fill.svg",
           "eye.svg",
           "facebook.svg",
           "file-earmark-medical.svg",
