@@ -193,4 +193,19 @@ class MinkContext extends DrupalExtensionMinkContext {
     $region_node->pressButton($button);
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  public function assertRegionLinkFollow($link, $region): void {
+    $region_obj = $this->getRegion($region);
+
+    // Find the link within the region.
+    $link_obj = $region_obj->findLink($link);
+    if (empty($link_obj)) {
+      throw new \Exception(sprintf('The link "%s" was not found in the region "%s" on the page %s', $link, $region, $this->getSession()->getCurrentUrl()));
+    }
+    $this->scrollElementIntoView($link_obj);
+    $link_obj->click();
+  }
+
 }
