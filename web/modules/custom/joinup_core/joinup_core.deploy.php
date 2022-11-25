@@ -14,10 +14,26 @@
 
 declare(strict_types = 1);
 
+use Drupal\pathauto\PathautoState;
+
+/**
+ * Fix Interoperable Europe news creation link.
+ */
+function joinup_core_deploy_108900(): void {
+  $entityTypeManager = \Drupal::entityTypeManager();
+  $entityTypeManager->getStorage('node')->load(704825)->set('path', [
+    'pathauto' => PathautoState::SKIP,
+    'alias' => '/interoperable-europe/latest-news',
+  ])->save();
+  if ($alias = $entityTypeManager->getStorage('path_alias')->load(84170)) {
+    $alias->delete();
+  }
+}
+
 /**
  * Update the topic vocabulary terms.
  */
-function joinup_core_deploy_108900(array &$sandbox): string {
+function joinup_core_deploy_108901(array &$sandbox): string {
   if (empty($sandbox['tasks'])) {
     $sandbox['tasks'] = [
       'createTopicTerm' => [
