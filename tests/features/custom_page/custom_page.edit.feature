@@ -31,12 +31,29 @@ Feature: "Custom page" editing.
     # A moderator can edit all custom pages.
     When I am logged in as a user with the moderator role
     And I go to the "Buena Vista Distribution Company" custom page
-    # Moderators have the 'administer nodes' permission.
     Then I should see the link "Edit"
+    When I click "Edit"
+    Then I should see the heading "Edit Custom page Buena Vista Distribution Company"
+    And the following fields should be present "Title, Body, Published"
+    And the following fields should not be present "Groups audience, Other groups, Generate automatic URL alias, URL alias"
+    And I should not see the following lines of text:
+      | Authored on                                  |
+      | Create new revision                          |
+      | URL alias (Automatic alias)                  |
+      | Generate automatic URL alias                 |
+      | Uncheck this to create a custom alias below. |
+      | Groups audience                              |
+      | Other groups                                 |
+      | Promoted to front page                       |
+      | Revision information                         |
+      | Revision log message                         |
+      | Sticky at top of lists                       |
+
     # A normal logged in user should not be able to edit the custom page.
     When I am logged in as a user with the authenticated role
     And I go to the "Buena Vista Distribution Company" custom page
     Then I should not see the link "Edit"
+
     # An anonymous user cannot edit the custom page.
     When I am logged in as a user with the authenticated role
     And I go to the "Buena Vista Distribution Company" custom page
@@ -48,7 +65,21 @@ Feature: "Custom page" editing.
     And I click "Edit"
     Then I should see the heading "Edit Custom page Buena Vista Distribution Company"
     And the following fields should be present "Title, Body, Published"
-    And the following fields should not be present "Groups audience, Other groups"
+    And the following fields should not be present "Groups audience, Other groups, URL alias"
+    And the following fields should not be present "Groups audience, Other groups, Generate automatic URL alias, URL alias"
+    And I should not see the following lines of text:
+      | Authored on                                  |
+      | Create new revision                          |
+      | URL alias (Automatic alias)                  |
+      | Generate automatic URL alias                 |
+      | Uncheck this to create a custom alias below. |
+      | Groups audience                              |
+      | Other groups                                 |
+      | Promoted to front page                       |
+      | Revision information                         |
+      | Revision log message                         |
+      | Sticky at top of lists                       |
+
     When I fill in "Title" with "Walt Disney Studios Motion Pictures"
     And I press "Save"
     Then I should have a "Custom page" content page titled "Walt Disney Studios Motion Pictures"
