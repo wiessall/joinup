@@ -1,4 +1,4 @@
-@api @clone
+@group-clone @api
 Feature: Test the migration of the topics.
 
   Scenario: Test a created topic.
