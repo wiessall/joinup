@@ -14,8 +14,8 @@
 
 declare(strict_types = 1);
 
-use Drupal\pathauto\PathautoState;
 use Drupal\media\Entity\MediaType;
+use Drupal\pathauto\PathautoState;
 
 /**
  * Fix Interoperable Europe news creation link.
@@ -34,7 +34,7 @@ function joinup_core_deploy_108900(): void {
 /**
  * Migrate Video content into new Media field.
  */
-function joinup_core_deploy_108800(array &$sandbox): string {
+function joinup_core_deploy_108901(array &$sandbox): string {
   if (empty($sandbox['ids'])) {
     $sandbox['ids'] = \Drupal::entityQuery('node')->condition('type', 'video')->execute();
     $sandbox['count'] = 0;
