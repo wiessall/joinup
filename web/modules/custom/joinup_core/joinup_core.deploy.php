@@ -14,10 +14,10 @@
 
 declare(strict_types = 1);
 
+use Drupal\pathauto\PathautoState;
 use Drupal\taxonomy\Entity\Term;
 use Drupal\topic\Entity\MetaEntityTopic;
 use Drupal\topic\Entity\TopicInterface;
-use Drupal\pathauto\PathautoState;
 
 /**
  * Fix Interoperable Europe news creation link.
