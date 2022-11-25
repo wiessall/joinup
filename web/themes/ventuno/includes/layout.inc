@@ -92,6 +92,10 @@ function ventuno_preprocess_html(array &$variables): void {
   if (\Drupal::routeMatch()->getRouteName() === 'joinup_licence.comparer') {
     $variables['#attached']['library'][] = 'ventuno/licence-comparer';
   }
+  // Toolbar library for logged-in users.
+  if ($variables['user']->isAuthenticated()) {
+    $variables['#attached']['library'][] = 'ventuno/toolbar';
+  }
 }
 
 /**
