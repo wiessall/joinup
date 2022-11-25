@@ -391,7 +391,7 @@ function joinup_core_menu_local_tasks_alter(&$data, $route_name, RefinableCachea
     'entity.user.canonical',
   ];
   if (in_array($route_name, $routes) && isset($data['tabs'][0][$route_name])) {
-    $data['tabs'][0][$route_name]['#access'] = FALSE;
+    $data['tabs'][0][$route_name]['#access'] = AccessResult::forbidden();
   }
 }
 
