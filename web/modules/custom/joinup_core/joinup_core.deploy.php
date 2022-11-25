@@ -14,7 +14,22 @@
 
 declare(strict_types = 1);
 
+use Drupal\pathauto\PathautoState;
 use Drupal\media\Entity\MediaType;
+
+/**
+ * Fix Interoperable Europe news creation link.
+ */
+function joinup_core_deploy_108900(): void {
+  $entityTypeManager = \Drupal::entityTypeManager();
+  $entityTypeManager->getStorage('node')->load(704825)->set('path', [
+    'pathauto' => PathautoState::SKIP,
+    'alias' => '/interoperable-europe/latest-news',
+  ])->save();
+  if ($alias = $entityTypeManager->getStorage('path_alias')->load(84170)) {
+    $alias->delete();
+  }
+}
 
 /**
  * Migrate Video content into new Media field.

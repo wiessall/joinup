@@ -2,6 +2,7 @@
  * @file
  * Listen to DOM readiness, look for navbar element and if present, listen to
  * user scroll to toggle sticky classes.
+ * @todo ISAICP-7138 delete file when switch to Ventuno theme is complete
  */
 (() => {
   Drupal.behaviors.stickyMenu = {
