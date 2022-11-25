@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "3ed7cce7995d95edb270fe2cfd07c819",
+    "content-hash": "b99522cd1777115c3394fcbacb2744f5",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -4038,26 +4038,35 @@
         },
         {
             "name": "drupal/iframe",
-            "version": "2.11.0",
+            "version": "2.20.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/iframe.git",
-                "reference": "8.x-2.11"
+                "reference": "8.x-2.20"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/iframe-8.x-2.11.zip",
-                "reference": "8.x-2.11",
-                "shasum": "9ba01bebbeb7e3ed1d8d4ad3cc5ce1d1bd6831aa"
+                "url": "https://ftp.drupal.org/files/projects/iframe-8.x-2.20.zip",
+                "reference": "8.x-2.20",
+                "shasum": "17766ce83486317de52d4f38c50856920c52fae1"
             },
             "require": {
-                "drupal/core": "^8 || ^9"
+                "drupal/core": "^8.8 || ^9 || ^10"
+            },
+            "require-dev": {
+                "drupal/token": "^1.0",
+                "mglaman/phpstan-drupal": "^1.1",
+                "palantirnet/drupal-rector": "^0.12",
+                "phpspec/prophecy-phpunit": "^2.0",
+                "phpstan/phpstan": "^1.3",
+                "phpunit/phpunit": "^9.5",
+                "symfony/phpunit-bridge": "^6.0"
             },
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "8.x-2.11",
-                    "datestamp": "1624093905",
+                    "version": "8.x-2.20",
+                    "datestamp": "1665265940",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -4070,12 +4079,14 @@
             ],
             "authors": [
                 {
-                    "name": "neffets",
-                    "homepage": "https://www.drupal.org/user/340152"
+                    "name": "Steffen Schuessler",
+                    "homepage": "https://www.drupal.org/user/340152",
+                    "email": "drupal@neffets.de",
+                    "role": "Developer"
                 }
             ],
             "description": "Defines a simple iframe field type.",
-            "homepage": "https://www.drupal.org/project/iframe",
+            "homepage": "http://drupal.org/project/iframe",
             "support": {
                 "source": "https://git.drupalcode.org/project/iframe"
             }
