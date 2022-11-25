@@ -27,8 +27,10 @@ function joinup_publication_date_preprocess_node(&$variables) {
   }
 }
 
-
-function joinup_publication_date_published_at_info_alter(array &$info): void {
+/**
+ * Implements hook_field_info_alter().
+ */
+function joinup_publication_date_field_info_alter(array &$info): void {
   if (isset($info['published_at'])) {
     $info['published_at']['class'] = PublicationDateItem::class;
   }

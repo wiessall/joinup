@@ -4,10 +4,13 @@ declare(strict_types = 1);
 
 namespace Drupal\joinup_publication_date\Plugin\Field\FieldType;
 
-use Drupal\Core\TypedData\DataDefinition;
 use Drupal\Core\Field\FieldStorageDefinitionInterface;
+use Drupal\Core\TypedData\DataDefinition;
 use Drupal\publication_date\Plugin\Field\FieldType\PublicationDateItem as OriginalPublicationDateItem;
 
+/**
+ * Overrides the publication date item class.
+ */
 class PublicationDateItem extends OriginalPublicationDateItem {
 
   /**
@@ -43,7 +46,7 @@ class PublicationDateItem extends OriginalPublicationDateItem {
       ->setClass('\Drupal\joinup_publication_date\PublishedAtOrUpdatedComputed')
       ->setSetting('source', 'value');
 
-     return $properties;
+    return $properties;
   }
 
 }
