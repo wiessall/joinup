@@ -3,17 +3,21 @@ Feature: Test the migration of the topics.
 
   Scenario: Test a created topic.
     Given I go to the "Smart cities" term page
-    Then I should see the heading "Smart cities"
+    # The fact that we are on the search page and not a 404 page is enough to
+    # ensure that the topic has been migrated.
+    Then I should see the heading "Advanced search"
 
     Given I go to the "eJustice and law" term page
-    Then I should see the heading "eJustice and law"
+    Then I should see the heading "Advanced search"
 
   Scenario: Test renamed topic.
     Given I go to the "Free and open source software" term page
-    Then I should see the heading "Free and open source software"
+    # The fact that we are on the search page and not a 404 page is enough to
+    # ensure that the topic has been renamed (loaded by name).
+    Then I should see the heading "Advanced search"
 
     Given I go to the "Culture and education" term page
-    Then I should see the heading "Culture and education"
+    Then I should see the heading "Advanced search"
 
    Scenario: Test entities moved to a new topic.
      Given I go to the "PDF-Over" solution

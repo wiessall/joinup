@@ -65,11 +65,11 @@ function joinup_core_deploy_108901(array &$sandbox): string {
         ],
         [
           'source' => 'http://joinup.eu/ontology/topic/category#energy',
-          'destination' => 'http://joinup.eu/ontology/topic/category#energy_and_environment',
+          'destination' => 'http://joinup.eu/ontology/topic/category#energy-and-environment',
         ],
         [
           'source' => 'http://joinup.eu/ontology/topic/category#environment',
-          'destination' => 'http://joinup.eu/ontology/topic/category#energy_and_environment',
+          'destination' => 'http://joinup.eu/ontology/topic/category#energy-and-environment',
         ],
         [
           'source' => 'http://joinup.eu/ontology/topic/category#industry-and-production',
@@ -207,11 +207,11 @@ function joinup_core_deploy_108901(array &$sandbox): string {
         ],
         [
           'source' => 'http://joinup.eu/ontology/topic#energy',
-          'destination' => 'http://joinup.eu/ontology/topic#energy_and_environment',
+          'destination' => 'http://joinup.eu/ontology/topic#energy-and-environment',
         ],
         [
           'source' => 'http://joinup.eu/ontology/topic#environment',
-          'destination' => 'http://joinup.eu/ontology/topic#energy_and_environment',
+          'destination' => 'http://joinup.eu/ontology/topic#energy-and-environment',
         ],
         [
           'source' => 'http://joinup.eu/ontology/topic#authorisation-and-authentication',
@@ -253,11 +253,11 @@ function joinup_core_deploy_108901(array &$sandbox): string {
         ],
         [
           'source' => 'http://joinup.eu/ontology/topic/category#energy',
-          'destination' => 'http://joinup.eu/ontology/topic/category#energy_and_environment',
+          'destination' => 'http://joinup.eu/ontology/topic/category#energy-and-environment',
         ],
         [
           'source' => 'http://joinup.eu/ontology/topic/category#environment',
-          'destination' => 'http://joinup.eu/ontology/topic/category#energy_and_environment',
+          'destination' => 'http://joinup.eu/ontology/topic/category#energy-and-environment',
         ],
         [
           'source' => 'http://joinup.eu/ontology/topic/category#industry-and-production',
@@ -305,11 +305,11 @@ function joinup_core_deploy_108901(array &$sandbox): string {
         ],
         [
           'source' => 'http://joinup.eu/ontology/topic#energy',
-          'destination' => 'http://joinup.eu/ontology/topic#energy_and_environment',
+          'destination' => 'http://joinup.eu/ontology/topic#energy-and-environment',
         ],
         [
           'source' => 'http://joinup.eu/ontology/topic#environment',
-          'destination' => 'http://joinup.eu/ontology/topic#energy_and_environment',
+          'destination' => 'http://joinup.eu/ontology/topic#energy-and-environment',
         ],
         [
           'source' => 'http://joinup.eu/ontology/topic#authorisation-and-authentication',
@@ -387,7 +387,8 @@ function joinup_core_deploy_108901(array &$sandbox): string {
 
   $vocab_manager = \Drupal::getContainer()->get('topic.vocabulary_manager');
   $operation = array_key_first($sandbox['tasks']);
-  $tasks = array_splice($sandbox['tasks'][$operation], 0, 5);
+  $operations_per_batch = in_array($operation, ['createRedirect', 'deleteTopicTerm']) ? 1 : 10;
+  $tasks = array_splice($sandbox['tasks'][$operation], 0, $operations_per_batch);
   if (empty($sandbox['tasks'][$operation])) {
     unset($sandbox['tasks'][$operation]);
   }
