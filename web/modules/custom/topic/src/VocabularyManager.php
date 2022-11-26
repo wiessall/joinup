@@ -92,6 +92,7 @@ class VocabularyManager {
    *   The new ID of the term.
    */
   public function changeTopicId(string $oldId, string $newId): void {
+    $oldPath = $this->getPath($oldId);
     $query = <<<QUERY
 WITH <http://topic>
 DELETE {
@@ -105,6 +106,9 @@ WHERE {
 }
 QUERY;
     $this->sparqlEndpoint->query($query);
+
+    $newPath = $this->getPath($newId);
+    $this->createRedirect($oldPath, $newPath);
   }
 
   /**
@@ -134,15 +138,12 @@ QUERY;
   /**
    * Creates a redirect between 2 taxonomy terms.
    *
-   * @param string $oldId
+   * @param string $oldPath
    *   The old path of the term.
-   * @param string $newId
+   * @param string $newPath
    *   The new path of the term.
    */
-  public function createRedirect(string $oldId, string $newId): void {
-    $oldPath = $this->getPath($oldId);
-    $newPath = $this->getPath($newId);
-
+  public function createRedirect(string $oldPath, string $newPath): void {
     $redirect = $this->entityTypeManager
       ->getStorage('redirect')
       ->create([
