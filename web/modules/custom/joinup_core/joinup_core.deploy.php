@@ -292,14 +292,6 @@ function joinup_core_deploy_108901(array &$sandbox): string {
           'destination' => 'http://joinup.eu/ontology/topic#banking-and-financial-services',
         ],
         [
-          'source' => 'http://joinup.eu/ontology/topic#free-and-open-source-software-in-public-administrations',
-          'destination' => 'http://joinup.eu/ontology/topic#free-and-open-source-software',
-        ],
-        [
-          'source' => 'http://joinup.eu/ontology/topic#ict-standardisation-in-egovernment',
-          'destination' => 'http://joinup.eu/ontology/topic#ict-standardisation',
-        ],
-        [
           'source' => 'http://joinup.eu/ontology/topic#open-government',
           'destination' => 'http://joinup.eu/ontology/topic#egovernment',
         ],
@@ -326,14 +318,6 @@ function joinup_core_deploy_108901(array &$sandbox): string {
         [
           'source' => 'http://joinup.eu/ontology/topic#politics',
           'destination' => 'http://joinup.eu/ontology/topic#european-policies',
-        ],
-        [
-          'source' => 'http://joinup.eu/ontology/topic#statistics',
-          'destination' => 'http://joinup.eu/ontology/topic#statistics-and-informatino',
-        ],
-        [
-          'source' => 'http://joinup.eu/ontology/topic#education',
-          'destination' => 'http://joinup.eu/ontology/topic#culture-and-education',
         ],
         [
           'source' => 'http://joinup.eu/ontology/topic/category#geospatial',
