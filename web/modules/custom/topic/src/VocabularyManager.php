@@ -134,12 +134,15 @@ QUERY;
   /**
    * Creates a redirect between 2 taxonomy terms.
    *
-   * @param string $oldPath
+   * @param string $oldId
    *   The old path of the term.
-   * @param string $newPath
+   * @param string $newId
    *   The new path of the term.
    */
-  public function createRedirect(string $oldPath, string $newPath): void {
+  public function createRedirect(string $oldId, string $newId): void {
+    $oldPath = $this->getPath($oldId);
+    $newPath = $this->getPath($newId);
+
     $redirect = $this->entityTypeManager
       ->getStorage('redirect')
       ->create([
