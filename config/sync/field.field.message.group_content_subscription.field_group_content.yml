@@ -301,4 +301,10 @@ settings:
   email_confirmer_message:
     handler: 'default:email_confirmer_message'
     handler_settings: {  }
+  simple_sitemap_type:
+    handler: 'default:simple_sitemap_type'
+    handler_settings: {  }
+  simple_sitemap:
+    handler: 'default:simple_sitemap'
+    handler_settings: {  }
 field_type: dynamic_entity_reference
