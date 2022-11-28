@@ -9,5 +9,5 @@ use Drupal\meta_entity\Entity\MetaEntity;
 /**
  * Bundle class for meta entity topic.
  */
-class MetaEntityTopic extends MetaEntity implements MetaEntityTopicInterface {
+class TopicMetaEntity extends MetaEntity implements TopicMetaEntityInterface {
 }

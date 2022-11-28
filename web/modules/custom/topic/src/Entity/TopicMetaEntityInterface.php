@@ -9,5 +9,5 @@ use Drupal\meta_entity\Entity\MetaEntityInterface;
 /**
  * Interface for meta entity topic in Joinup.
  */
-interface MetaEntityTopicInterface extends MetaEntityInterface {
+interface TopicMetaEntityInterface extends MetaEntityInterface {
 }

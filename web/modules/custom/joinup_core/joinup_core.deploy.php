@@ -14,9 +14,8 @@
 
 declare(strict_types = 1);
 
-use Drupal\taxonomy\Entity\Term;
-use Drupal\topic\Entity\MetaEntityTopic;
 use Drupal\topic\Entity\TopicInterface;
+use Drupal\topic\Entity\TopicMetaEntity;
 
 /**
  * Synchronize Topic meta entity with Topic terms.
@@ -25,18 +24,15 @@ function joinup_core_deploy_108802(): void {
   // Load the whole taxonomy tree using values.
   $manager = \Drupal::entityTypeManager()
     ->getStorage('taxonomy_term');
-  $taxonomy_tree = $manager->loadTree('topic');
-
+  $taxonomy_tree = $manager->loadTree('topic', 0, NULL, TRUE);
   foreach ($taxonomy_tree as $term) {
-    $term = Term::load($term->tid);
     if ($term instanceof TopicInterface) {
-      $topic = MetaEntityTopic::create([
+      TopicMetaEntity::create([
         'type' => 'topic',
         'target' => $term,
         'label' => $term->getName(),
-        'published' => TRUE,
-      ]);
-      $topic->save();
+        'published' => FALSE,
+      ])->save();
     }
   }
 }
