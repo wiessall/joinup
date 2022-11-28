@@ -701,6 +701,7 @@ module.exports = {
           "facebook.svg",
           "file-earmark-medical.svg",
           "file-earmark-play.svg",
+          "file-earmark-plus.svg",
           "file-earmark-post.svg",
           "file-earmark-richtext.svg",
           "file-earmark-text.svg",
