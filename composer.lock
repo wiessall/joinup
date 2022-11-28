@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "026757c7a4bbca26cfc09457852d5c64",
+    "content-hash": "011d2401203699f331a45557d3e81394",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -9538,6 +9538,10 @@
                 "source": "https://github.com/maennchen/ZipStream-PHP/tree/2.2.1"
             },
             "funding": [
+                {
+                    "url": "https://github.com/maennchen",
+                    "type": "github"
+                },
                 {
                     "url": "https://opencollective.com/zipstream",
                     "type": "open_collective"
