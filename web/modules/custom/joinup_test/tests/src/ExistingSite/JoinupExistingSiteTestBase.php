@@ -5,7 +5,6 @@ declare(strict_types = 1);
 namespace Drupal\Tests\joinup_test\ExistingSite;
 
 use Drupal\Core\Entity\EntityInterface;
-use Drupal\Core\State\StateInterface;
 use Drupal\Tests\joinup_test\Traits\RdfEntityCreationTrait;
 use Drupal\joinup\Traits\AntibotTrait;
 use weitzman\DrupalTestTraits\ExistingSiteBase;
@@ -33,29 +32,10 @@ abstract class JoinupExistingSiteTestBase extends ExistingSiteBase {
   protected bool $disableSpamProtection = TRUE;
 
   /**
-   * The state service.
-   *
-   * @var \Drupal\Core\State\StateInterface
-   */
-  protected StateInterface $state;
-
-  /**
    * {@inheritdoc}
    */
   protected function setUp(): void {
     parent::setUp();
-
-    // A user whose account in not yet linked with an EU Login account has
-    // limited access to the website features. They can login only by using the
-    // one-time-login mechanism, but one-time-login is meant only to allow
-    // password recovery. On the other hand, in testing, we use the
-    // one-time-login mechanism to perform the authentication, instead of
-    // following the CAS login process, thus we disable limited access. Tests
-    // that are specifically testing limited access are able to use this
-    // kill-switch by temporary re-enabling the functionality during testing.
-    // @see \Drupal\Tests\joinup_eulogin\ExistingSite\JoinupEuLoginTest::testLimitedAccess()
-    $this->state = $this->container->get('state');
-    $this->state->set('joinup_eulogin.disable_limited_access', TRUE);
 
     if ($this->disableSpamProtection) {
       // As ExistingSiteBase tests are running without javascript, we disable
@@ -92,9 +72,6 @@ abstract class JoinupExistingSiteTestBase extends ExistingSiteBase {
     foreach ($this->cleanupEntities as $entity) {
       $entity->skip_notification = TRUE;
     }
-
-    // Re-enable limited access functionality.
-    $this->state->delete('joinup_eulogin.disable_limited_access');
 
     /** @var \Drupal\Component\Plugin\PluginManagerInterface $delete_orphans_manager */
     $delete_orphans_manager = $this->container->get('plugin.manager.og.delete_orphans');

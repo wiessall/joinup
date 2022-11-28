@@ -884,8 +884,8 @@ function joinup_group_entity_update(EntityInterface $group): void {
       $bundle_info = \Drupal::getContainer()->get('entity_type.bundle.info')->getBundleInfo($group->getEntityTypeId())[$group->bundle()];
       $arguments = [
         '@bundle' => $bundle_info['label_singular'],
-        '%original' => $group_original_entity->getShortId(),
-        '%actual' => $group->getShortId(),
+        '%original' => $group_original_entity->getShortId() ?? '',
+        '%actual' => $group->getShortId() ?? '',
       ];
       if ($group_original_entity->getShortId() && $group->getShortId()) {
         \Drupal::messenger()->addStatus(t("You've changed the @bundle's short ID from %original to %actual. It will take some time until the @bundle content URLs will be updated.", $arguments));
