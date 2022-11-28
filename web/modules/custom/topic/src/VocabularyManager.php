@@ -29,7 +29,8 @@ class VocabularyManager {
     protected EntityTypeManagerInterface $entityTypeManager,
     protected Connection $database,
     protected ConnectionInterface $sparqlEndpoint
-  ) { }
+  ) {
+  }
 
   /**
    * Retrieves the internal path of the taxonomy term.
