@@ -15,6 +15,8 @@
 declare(strict_types = 1);
 
 use Drupal\pathauto\PathautoState;
+use Drupal\topic\Entity\TopicInterface;
+use Drupal\topic\Entity\TopicMetaEntity;
 
 /**
  * Fix Interoperable Europe news creation link.
@@ -29,3 +31,25 @@ function joinup_core_deploy_108900(): void {
     $alias->delete();
   }
 }
+
+/**
+ * Synchronize Topic meta entity with Topic terms.
+ */
+function joinup_core_deploy_108901(): void
+{
+  // Load the whole taxonomy tree using values.
+  $manager = \Drupal::entityTypeManager()
+    ->getStorage('taxonomy_term');
+  $taxonomy_tree = $manager->loadTree('topic', 0, NULL, TRUE);
+  foreach ($taxonomy_tree as $term) {
+    if ($term instanceof TopicInterface) {
+      TopicMetaEntity::create([
+        'type' => 'topic',
+        'target' => $term,
+        'label' => $term->getName(),
+        'published' => FALSE,
+      ])->save();
+    }
+  }
+}
+
