@@ -35,8 +35,7 @@ function joinup_core_deploy_108900(): void {
 /**
  * Synchronize Topic meta entity with Topic terms.
  */
-function joinup_core_deploy_108901(): void
-{
+function joinup_core_deploy_108901(): void {
   // Load the whole taxonomy tree using values.
   $manager = \Drupal::entityTypeManager()
     ->getStorage('taxonomy_term');
@@ -52,4 +51,3 @@ function joinup_core_deploy_108901(): void
     }
   }
 }
-
