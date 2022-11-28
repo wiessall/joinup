@@ -14,25 +14,18 @@
 
 declare(strict_types = 1);
 
-use Drupal\topic\Entity\TopicInterface;
-use Drupal\topic\Entity\TopicMetaEntity;
+use Drupal\pathauto\PathautoState;
 
 /**
- * Synchronize Topic meta entity with Topic terms.
+ * Fix Interoperable Europe news creation link.
  */
-function joinup_core_deploy_108802(): void {
-  // Load the whole taxonomy tree using values.
-  $manager = \Drupal::entityTypeManager()
-    ->getStorage('taxonomy_term');
-  $taxonomy_tree = $manager->loadTree('topic', 0, NULL, TRUE);
-  foreach ($taxonomy_tree as $term) {
-    if ($term instanceof TopicInterface) {
-      TopicMetaEntity::create([
-        'type' => 'topic',
-        'target' => $term,
-        'label' => $term->getName(),
-        'published' => FALSE,
-      ])->save();
-    }
+function joinup_core_deploy_108900(): void {
+  $entityTypeManager = \Drupal::entityTypeManager();
+  $entityTypeManager->getStorage('node')->load(704825)->set('path', [
+    'pathauto' => PathautoState::SKIP,
+    'alias' => '/interoperable-europe/latest-news',
+  ])->save();
+  if ($alias = $entityTypeManager->getStorage('path_alias')->load(84170)) {
+    $alias->delete();
   }
 }

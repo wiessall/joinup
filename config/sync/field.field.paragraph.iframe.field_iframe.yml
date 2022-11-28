@@ -19,6 +19,7 @@ default_value: {  }
 default_value_callback: ''
 settings:
   title: null
+  headerlevel: null
   class: ''
   frameborder: '0'
   scrolling: auto
