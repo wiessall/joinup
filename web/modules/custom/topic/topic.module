@@ -7,14 +7,12 @@
 
 declare(strict_types = 1);
 
-use Drupal\meta_entity\Entity\MetaEntity;
 use Drupal\meta_entity\Entity\MetaEntityInterface;
-use Drupal\taxonomy\Entity\Term;
 use Drupal\taxonomy\TermInterface;
-use Drupal\topic\Entity\MetaEntityTopic;
-use Drupal\topic\Entity\MetaEntityTopicInterface;
 use Drupal\topic\Entity\Topic;
 use Drupal\topic\Entity\TopicInterface;
+use Drupal\topic\Entity\TopicMetaEntity;
+use Drupal\topic\Entity\TopicMetaEntityInterface;
 
 /**
  * Implements hook_entity_bundle_info_alter().
@@ -24,7 +22,7 @@ function topic_entity_bundle_info_alter(&$bundles) {
     $bundles['taxonomy_term']['topic']['class'] = Topic::class;
   }
   if (!empty($bundles['meta_entity']['topic'])) {
-    $bundles['meta_entity']['topic']['class'] = MetaEntityTopic::class;
+    $bundles['meta_entity']['topic']['class'] = TopicMetaEntity::class;
   }
 }
 
@@ -32,47 +30,22 @@ function topic_entity_bundle_info_alter(&$bundles) {
  * Implements hook_ENTITY_TYPE_update().
  */
 function topic_taxonomy_term_update(TermInterface $term): void {
-  if (!$term instanceof TopicInterface) {
-    return;
-  }
-  if ($term->topic->entity instanceof MetaEntityInterface) {
-    drupal_register_shutdown_function('_topic_taxonomy_term_after_update', $term);
+  if ($term instanceof TopicInterface) {
+    /** @var \Drupal\topic\Entity\TopicInterface $original */
+    if (($original = $term->original) && $term->label() != $original->label()) {
+      /** @var \Drupal\topic\Entity\TopicMetaEntity $meta_entity */
+      if ($meta_entity = $term->topic->entity) {
+        $meta_entity->set('label', $term->label())->save();
+      }
+    }
   }
 }
 
 /**
- * Updates topic meta entity.
+ * Implements hook_ENTITY_TYPE_presave().
  */
-function _topic_taxonomy_term_after_update(TermInterface $term): void {
-  $meta_entity_id = $term->topic->entity->id();
-  $meta_entity = MetaEntityTopic::load($meta_entity_id);
-  $meta_entity->label = $term->label();
-  $meta_entity->save();
-}
-
-/**
- * Implements hook_ENTITY_TYPE_insert().
- */
-function topic_taxonomy_term_insert(TermInterface $term): void {
-  if (!$term instanceof TopicInterface) {
-    return;
+function topic_meta_entity_presave(MetaEntityInterface $meta_entity): void {
+  if ($meta_entity instanceof TopicMetaEntityInterface && $term = $meta_entity->getTargetEntity()) {
+    $meta_entity->set('label', $term->label());
   }
-  $topic = MetaEntity::create([
-    'type' => 'topic',
-    'target' => $term,
-    'label' => $term->label(),
-  ]);
-  $topic->save();
-}
-
-/**
- * Implements hook_ENTITY_TYPE_update().
- */
-function topic_meta_entity_update(MetaEntityInterface $meta_entity): void {
-  if (!$meta_entity instanceof MetaEntityTopicInterface) {
-    return;
-  }
-  $term = Term::load($meta_entity->getTargetEntity()->id());
-  $term->setName($meta_entity->label->value);
-  $term->save();
 }
