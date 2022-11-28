@@ -26,11 +26,10 @@ class VocabularyManager {
    *   The sparql.endpoint service.
    */
   public function __construct(
-    public EntityTypeManagerInterface $entityTypeManager,
-    public Connection $database,
-    public ConnectionInterface $sparqlEndpoint
-  ) {
-  }
+    protected EntityTypeManagerInterface $entityTypeManager,
+    protected Connection $database,
+    protected ConnectionInterface $sparqlEndpoint
+  ) { }
 
   /**
    * Retrieves the internal path of the taxonomy term.
@@ -94,17 +93,11 @@ class VocabularyManager {
   public function changeTopicId(string $oldId, string $newId): void {
     $oldPath = $this->getPath($oldId);
     $query = <<<QUERY
-WITH <http://topic>
-DELETE {
-  <$oldId> ?p ?o .
-}
-INSERT {
-  <$newId> ?p ?o .
-}
-WHERE {
-  <$oldId> ?p ?o .
-}
-QUERY;
+    WITH <http://topic>
+    DELETE { <$oldId> ?p ?o }
+    INSERT { <$newId> ?p ?o }
+    WHERE { <$oldId> ?p ?o }
+    QUERY;
     $this->sparqlEndpoint->query($query);
 
     $newPath = $this->getPath($newId);
@@ -121,17 +114,11 @@ QUERY;
    */
   public function changeTopicParent(string $id, string $newParentId): void {
     $query = <<<QUERY
-WITH <http://topic>
-DELETE {
-  <$id> <http://www.w3.org/2004/02/skos/core#broaderTransitive> ?parent .
-}
-INSERT {
-  <$id> <http://www.w3.org/2004/02/skos/core#broaderTransitive> <{$newParentId}> .
-}
-WHERE {
-  <$id> <http://www.w3.org/2004/02/skos/core#broaderTransitive> ?parent .
-}
-QUERY;
+    WITH <http://topic>
+    DELETE { <$id> <http://www.w3.org/2004/02/skos/core#broaderTransitive> ?parent }
+    INSERT { <$id> <http://www.w3.org/2004/02/skos/core#broaderTransitive> <{$newParentId}> }
+    WHERE { <$id> <http://www.w3.org/2004/02/skos/core#broaderTransitive> ?parent }
+    QUERY;
     $this->sparqlEndpoint->query($query);
   }
 
@@ -165,17 +152,11 @@ QUERY;
    */
   public function moveTopicChildrenToNewParent(string $oldParentId, string $newParentId): void {
     $query = <<<QUERY
-WITH <http://topic>
-DELETE {
-  ?child <http://www.w3.org/2004/02/skos/core#broaderTransitive> <{$oldParentId}> .
-}
-INSERT {
-  ?child <http://www.w3.org/2004/02/skos/core#broaderTransitive> <{$newParentId}> .
-}
-WHERE {
-  ?child <http://www.w3.org/2004/02/skos/core#broaderTransitive> <{$oldParentId}> .
-}
-QUERY;
+    WITH <http://topic>
+    DELETE { ?child <http://www.w3.org/2004/02/skos/core#broaderTransitive> <{$oldParentId}> }
+    INSERT { ?child <http://www.w3.org/2004/02/skos/core#broaderTransitive> <{$newParentId}> }
+    WHERE { ?child <http://www.w3.org/2004/02/skos/core#broaderTransitive> <{$oldParentId}> }
+    QUERY;
     $this->sparqlEndpoint->query($query);
   }
 
@@ -212,17 +193,11 @@ QUERY;
 
     foreach ($graphs as $graph) {
       $query = <<<QUERY
-WITH <{$graph}>
-DELETE {
-  ?entity <http://joinup.eu/vocabulary/topic> <{$oldId}> .
-}
-INSERT {
-  ?entity <http://joinup.eu/vocabulary/topic> <{$newId}> .
-}
-WHERE {
-  ?entity <http://joinup.eu/vocabulary/topic> <{$oldId}> .
-}
-QUERY;
+      WITH <{$graph}>
+      DELETE { ?entity <http://joinup.eu/vocabulary/topic> <{$oldId}> }
+      INSERT { ?entity <http://joinup.eu/vocabulary/topic> <{$newId}> }
+      WHERE { ?entity <http://joinup.eu/vocabulary/topic> <{$oldId}> }
+      QUERY;
       $this->sparqlEndpoint->query($query);
     }
   }
