@@ -19,7 +19,7 @@ class PublicationDateItem extends OriginalPublicationDateItem {
   public function applyDefaultValue($notify = TRUE) {
     $this->setValue(
       [
-        'value' => \Drupal::time()->getRequestTime(),
+        'value' => NULL,
         'published_at_or_now' => \Drupal::time()->getRequestTime(),
         'published_at_or_created' => \Drupal::time()->getRequestTime(),
         'published_at_or_updated' => \Drupal::time()->getRequestTime(),
