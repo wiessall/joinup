@@ -8,10 +8,14 @@
 
 {% block metadata %}
   <div class="fs-sm mb-3 d-flex">
-    {{ additional_content.field_ad_file_size }}
-    {% if additional_content.field_ad_file_size and additional_content.field_ad_licence %}
+    {% if additional_content.field_ad_file_size|render|striptags|trim %}
+      {{ additional_content.field_ad_file_size }}
+    {% endif %}
+    {% if additional_content.field_ad_file_size|render|striptags|trim and additional_content.field_ad_licence|render|striptags|trim %}
       <span class="mx-1">|</span>
     {% endif %}
-    {{ additional_content.field_ad_licence }}
+    {% if additional_content.field_ad_licence|render|striptags|trim %}
+      <span class="me-1">Licence:</span> {{ additional_content.field_ad_licence }}
+    {% endif %}
   </div>
 {% endblock %}
