@@ -371,7 +371,8 @@ function joinup_core_deploy_108901(array &$sandbox): string {
 
   $vocab_manager = \Drupal::getContainer()->get('topic.vocabulary_manager');
   $operation = array_key_first($sandbox['tasks']);
-  $operations_per_batch = in_array($operation, ['createRedirect', 'deleteTopicTerm']) ? 1 : 10;
+  $slow_tasks = ['createRedirect', 'deleteTopicTerm'];
+  $operations_per_batch = in_array($operation, $slow_tasks) ? 1 : 10;
   $tasks = array_splice($sandbox['tasks'][$operation], 0, $operations_per_batch);
   if (empty($sandbox['tasks'][$operation])) {
     unset($sandbox['tasks'][$operation]);
