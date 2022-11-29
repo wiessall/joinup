@@ -6,7 +6,6 @@ namespace Drupal\joinup_seo\Plugin\simple_sitemap\UrlGenerator;
 
 use Drupal\Core\Entity\Query\QueryInterface;
 use Drupal\joinup_group\JoinupGroupHelper;
-
 use Drupal\simple_sitemap\Exception\SkipElementException;
 use Drupal\simple_sitemap\Plugin\simple_sitemap\UrlGenerator\EntityUrlGenerator;
 
