@@ -9,4 +9,4 @@ Feature:
     And I go to "/dashboard"
     Then I should see the link Topics
     When I click Topics
-    Then I should see the heading "Topic Meta Entity"
+    Then I should see the heading "Topics"

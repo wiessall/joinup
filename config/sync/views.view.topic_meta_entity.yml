@@ -7,6 +7,7 @@ dependencies:
     - meta_entity.type.topic
   module:
     - meta_entity
+    - topic
     - user
 id: topic_meta_entity
 label: 'Topic Meta Entity'
@@ -22,7 +23,7 @@ display:
     display_plugin: default
     position: 0
     display_options:
-      title: 'Topic Meta Entity'
+      title: Topics
       fields:
         label:
           id: label
@@ -78,7 +79,7 @@ display:
           click_sort_column: value
           type: string
           settings:
-            link_to_entity: false
+            link_to_entity: true
           group_column: value
           group_columns: {  }
           group_rows: true
@@ -89,6 +90,59 @@ display:
           multi_type: separator
           separator: ', '
           field_api_classes: false
+        parent:
+          id: parent
+          table: meta_entity
+          field: parent
+          relationship: none
+          group_type: group
+          admin_label: ''
+          entity_type: meta_entity
+          plugin_id: topic_meta_entity_parent_link
+          label: 'Parent topic'
+          exclude: false
+          alter:
+            alter_text: false
+            text: ''
+            make_link: false
+            path: ''
+            absolute: false
+            external: false
+            replace_spaces: false
+            path_case: none
+            trim_whitespace: false
+            alt: ''
+            rel: ''
+            link_class: ''
+            prefix: ''
+            suffix: ''
+            target: ''
+            nl2br: false
+            max_length: 0
+            word_boundary: true
+            ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
+            strip_tags: false
+            trim: false
+            preserve_tags: ''
+            html: false
+          element_type: ''
+          element_class: ''
+          element_label_type: ''
+          element_label_class: ''
+          element_label_colon: true
+          element_wrapper_type: ''
+          element_wrapper_class: ''
+          element_default_classes: true
+          empty: ''
+          hide_empty: false
+          empty_zero: false
+          hide_alter_empty: true
+          text: view
+          output_url_as_text: 0
+          absolute: 0
         published:
           id: published
           table: meta_entity__published
@@ -310,8 +364,9 @@ display:
           default_row_class: true
           columns:
             label: label
-            operations: operations
+            parent: parent
             published: published
+            operations: operations
           default: '-1'
           info:
             label:
@@ -321,7 +376,9 @@ display:
               separator: ''
               empty_column: false
               responsive: ''
-            operations:
+            parent:
+              sortable: true
+              default_sort_order: asc
               align: ''
               separator: ''
               empty_column: false
@@ -329,6 +386,11 @@ display:
             published:
               sortable: true
               default_sort_order: asc
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
+            operations:
               align: ''
               separator: ''
               empty_column: false
@@ -373,7 +435,7 @@ display:
         metatag_display_extender:
           metatags: {  }
           tokenize: false
-      path: admin/topic-meta-entity
+      path: admin/topics
     cache_metadata:
       max-age: -1
       contexts:
