@@ -113,7 +113,7 @@ function ventuno_preprocess_container(array &$variables): void {
     $facet_id = $variables['attributes']['data-drupal-facet-id'];
     $valid_facet_ids = [
       'collection_type',
-      'solution_content_bundle'
+      'solution_content_bundle',
     ];
     if (in_array($facet_id, $valid_facet_ids)) {
       $classes = [
@@ -125,7 +125,7 @@ function ventuno_preprocess_container(array &$variables): void {
         'row-cols-2',
         'row-cols-md-4',
         'row-cols-xl-6',
-        'row-cols-xxl-8'
+        'row-cols-xxl-8',
       ];
       $variables['attributes']['class'] = $classes;
     }
