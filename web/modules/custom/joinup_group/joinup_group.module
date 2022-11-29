@@ -525,6 +525,9 @@ function joinup_group_form_views_exposed_form_alter(array &$form, FormStateInter
     ],
     '#access' => $url->access(),
     '#attached' => ['library' => ['core/drupal.dialog.ajax']],
+    '#weight' => 100,
+    '#prefix' => '<div>',
+    '#suffix' => '</div>',
   ];
 }
 

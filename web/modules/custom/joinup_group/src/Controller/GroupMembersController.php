@@ -6,6 +6,7 @@ namespace Drupal\joinup_group\Controller;
 
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
+use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\joinup_group\Entity\GroupInterface;
@@ -73,9 +74,21 @@ class GroupMembersController extends ControllerBase {
     $route_object = $route_match->getRouteObject();
     $route_object->setOption('_admin_route', $show_admin_view);
 
-    $view = $show_admin_view ? 'og_members_overview' : 'members_overview';
+    $view_id = $show_admin_view ? 'og_members_overview' : 'members_overview';
     $arguments = [$group->getEntityTypeId(), $group->id()];
-    return Views::getView($view)->executeDisplay('default', $arguments);
+    $view = Views::getView($view_id)
+      ->addCacheContext('group_membership_manager')
+      ->addCacheContext('theme');
+    $build = $view->executeDisplay('default', $arguments);
+
+//    CacheableMetadata::createFromRenderArray($build)->addCacheContexts([
+//      // Group membership managers are seeing a different page.
+//      'group_membership_manager',
+//      // This page might be displayed using different themes.
+//      'theme',
+//    ])->applyTo($build);
+
+    return $build;
   }
 
   /**

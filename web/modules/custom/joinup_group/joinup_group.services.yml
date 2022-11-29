@@ -73,3 +73,8 @@ services:
       - [setJoinupGroupManager, ['@joinup_group.group_manager']]
     tags:
       - { name: access_check, applies_to: _joinup_group_announcements }
+  cache_context.group_membership_manager:
+    class: 'Drupal\joinup_group\Cache\Context\GroupMembershipManagerContext'
+    arguments: ['@current_user', '@joinup_group.group_manager', ]
+    tags:
+      - { name: 'cache.context'}
