@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "0fc9f2a4d9b55a344d5bf2294c57d16d",
+    "content-hash": "bb68d4e89b5984fdfd19b34bbf6f6b37",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -6738,27 +6738,27 @@
         },
         {
             "name": "drupal/simple_sitemap",
-            "version": "3.11.0",
+            "version": "4.1.3",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/simple_sitemap.git",
-                "reference": "8.x-3.11"
+                "reference": "4.1.3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/simple_sitemap-8.x-3.11.zip",
-                "reference": "8.x-3.11",
-                "shasum": "5fdd4ed5af5e37e3c707e401d094a179f52e7711"
+                "url": "https://ftp.drupal.org/files/projects/simple_sitemap-4.1.3.zip",
+                "reference": "4.1.3",
+                "shasum": "18eda442709f32102416a0112abc33649658f8e9"
             },
             "require": {
-                "drupal/core": "^8 || ^9",
+                "drupal/core": "^9.3 || ^10",
                 "ext-xmlwriter": "*"
             },
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "8.x-3.11",
-                    "datestamp": "1658781789",
+                    "version": "4.1.3",
+                    "datestamp": "1665573795",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -6766,7 +6766,7 @@
                 },
                 "drush": {
                     "services": {
-                        "drush.services.yml": "^9 || ^10"
+                        "drush.services.yml": ">=9"
                     }
                 }
             },
@@ -6790,8 +6790,7 @@
             "homepage": "https://drupal.org/project/simple_sitemap",
             "support": {
                 "source": "https://cgit.drupalcode.org/simple_sitemap",
-                "issues": "https://drupal.org/project/issues/simple_sitemap",
-                "irc": "irc://irc.freenode.org/drupal-contribute"
+                "issues": "https://drupal.org/project/issues/simple_sitemap"
             }
         },
         {
@@ -9538,6 +9537,10 @@
                 "source": "https://github.com/maennchen/ZipStream-PHP/tree/2.2.1"
             },
             "funding": [
+                {
+                    "url": "https://github.com/maennchen",
+                    "type": "github"
+                },
                 {
                     "url": "https://opencollective.com/zipstream",
                     "type": "open_collective"
@@ -16628,25 +16631,48 @@
                 "shasum": ""
             },
             "require": {
-                "drupal/core-utility": "^8.4 || ^9 || ^10.0.0-alpha1",
+                "drupal/core-utility": "^8.4 || ^9 || ^10@beta",
                 "php": ">=7.4",
                 "symfony/dependency-injection": "~2.6|~3.0|~4.4|^6",
                 "symfony/process": "~2.5|~3.0|~4.4|^6"
             },
+            "conflict": {
+                "drupal/core": ">=8.0 <9.3"
+            },
             "require-dev": {
+                "composer/installers": "^2.1",
                 "dms/phpunit-arraysubset-asserts": "^0.4.0",
                 "drupal/coder": "~8.3.0",
+                "drupal/core-composer-scaffold": "^8.4 || ^9 || ^10@beta",
+                "drupal/core-recommended": "^8.4 || ^9 || ^10@beta",
+                "drupal/mailsystem": "^4.4",
                 "drush-ops/behat-drush-endpoint": "*",
-                "mockery/mockery": "^0.9.4",
+                "mglaman/drupal-check": "^1",
+                "mockery/mockery": "^1.5",
+                "palantirnet/drupal-rector": "^0.13",
                 "php-parallel-lint/php-parallel-lint": "^1.0",
                 "phpspec/phpspec": "~2.0 || ~4.0 || ~6.1 || dev-main",
-                "phpunit/phpunit": "~6.0 || ~7.0 || ^9"
+                "phpunit/phpunit": "~6.0 || ~7.0 || ^9",
+                "symfony/phpunit-bridge": "^6.1"
             },
             "default-branch": true,
             "type": "library",
             "extra": {
                 "branch-alias": {
                     "dev-master": "2.3.x-dev"
+                },
+                "installer-paths": {
+                    "drupal/core": [
+                        "type:drupal-core"
+                    ],
+                    "drupal/modules/{$name}": [
+                        "type:drupal-module"
+                    ]
+                },
+                "drupal-scaffold": {
+                    "locations": {
+                        "web-root": "drupal/"
+                    }
                 }
             },
             "autoload": {
