@@ -4,76 +4,15 @@ declare(strict_types = 1);
 
 namespace Drupal\joinup_seo\Plugin\simple_sitemap\UrlGenerator;
 
-use Drupal\Core\Cache\MemoryCache\MemoryCacheInterface;
-use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Entity\Query\QueryInterface;
-use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\joinup_group\JoinupGroupHelper;
-use Drupal\simple_sitemap\EntityHelper;
-use Drupal\simple_sitemap\Logger;
+use Drupal\simple_sitemap\Exception\SkipElementException;
 use Drupal\simple_sitemap\Plugin\simple_sitemap\UrlGenerator\EntityUrlGenerator;
-use Drupal\simple_sitemap\Plugin\simple_sitemap\UrlGenerator\UrlGeneratorManager;
-use Drupal\simple_sitemap\Simplesitemap;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Base class for Joinup Url Generators.
  */
 abstract class JoinupUrlGeneratorBase extends EntityUrlGenerator {
-
-  /**
-   * The url generator manager service.
-   *
-   * @var \Drupal\simple_sitemap\Plugin\simple_sitemap\UrlGenerator\UrlGeneratorManager
-   */
-  protected $urlGeneratorManager;
-
-  /**
-   * Constructs a JoinupUrlGeneratorBase object.
-   *
-   * @param array $configuration
-   *   The configuration array.
-   * @param string $plugin_id
-   *   The plugin id.
-   * @param array $plugin_definition
-   *   The plugin definition array.
-   * @param \Drupal\simple_sitemap\Simplesitemap $generator
-   *   The sitemap generator service.
-   * @param \Drupal\simple_sitemap\Logger $logger
-   *   The logger service.
-   * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
-   *   The language manager service.
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
-   *   The entity type manager service.
-   * @param \Drupal\simple_sitemap\EntityHelper $entityHelper
-   *   The sitemap entity helper service.
-   * @param \Drupal\simple_sitemap\Plugin\simple_sitemap\UrlGenerator\UrlGeneratorManager $url_generator_manager
-   *   The url generator manager service.
-   * @param \Drupal\Core\Cache\MemoryCache\MemoryCacheInterface $memory_cache
-   *   The memory cache.
-   */
-  public function __construct(array $configuration, string $plugin_id, array $plugin_definition, Simplesitemap $generator, Logger $logger, LanguageManagerInterface $language_manager, EntityTypeManagerInterface $entity_type_manager, EntityHelper $entityHelper, UrlGeneratorManager $url_generator_manager, MemoryCacheInterface $memory_cache) {
-    parent::__construct($configuration, $plugin_id, $plugin_definition, $generator, $logger, $language_manager, $entity_type_manager, $entityHelper, $url_generator_manager, $memory_cache);
-    $this->urlGeneratorManager = $url_generator_manager;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
-    return new static(
-      $configuration,
-      $plugin_id,
-      $plugin_definition,
-      $container->get('simple_sitemap.generator'),
-      $container->get('simple_sitemap.logger'),
-      $container->get('language_manager'),
-      $container->get('entity_type.manager'),
-      $container->get('simple_sitemap.entity_helper'),
-      $container->get('plugin.manager.simple_sitemap.url_generator'),
-      $container->get('entity.memory_cache')
-    );
-  }
 
   /**
    * Returns an array of datasets to be processed.
@@ -84,45 +23,60 @@ abstract class JoinupUrlGeneratorBase extends EntityUrlGenerator {
   public function getDataSets(): array {
     $data_sets = [];
     $sitemap_entity_types = $this->entityHelper->getSupportedEntityTypes();
-
-    foreach ($this->generator->setVariants($this->sitemapVariant)->getBundleSettings() as $entity_type_id => $bundles) {
-      if (isset($sitemap_entity_types[$entity_type_id])) {
-
-        // Skip this entity type if another plugin is written to override its
-        // generation.
-        foreach ($this->urlGeneratorManager->getDefinitions() as $plugin) {
-          if (isset($plugin['settings']['overrides_entity_type'])
-            && $plugin['settings']['overrides_entity_type'] === $entity_type_id) {
-            continue 2;
-          }
+    $all_bundle_settings = $this->entitiesManager->setVariants($this->sitemap->id())->getAllBundleSettings();
+    if (isset($all_bundle_settings[$this->sitemap->id()])) {
+      foreach ($all_bundle_settings[$this->sitemap->id()] as $entity_type_name => $bundles) {
+        if (!isset($sitemap_entity_types[$entity_type_name])) {
+          continue;
         }
 
-        $entityTypeStorage = $this->entityTypeManager->getStorage($entity_type_id);
-        $keys = $sitemap_entity_types[$entity_type_id]->getKeys();
+        if ($this->isOverwrittenForEntityType($entity_type_name)) {
+          continue;
+        }
+
+        $entityTypeStorage = $this->entityTypeManager->getStorage($entity_type_name);
+        $keys = $sitemap_entity_types[$entity_type_name]->getKeys();
 
         foreach ($bundles as $bundle_name => $bundle_settings) {
-          if (!empty($bundle_settings['index'])) {
+          if ($bundle_settings['index']) {
             $query = $entityTypeStorage->getQuery();
 
-            if (empty($keys['id'])) {
+            if (!empty($keys['id'])) {
               $query->sort($keys['id'], 'ASC');
             }
             if (!empty($keys['bundle'])) {
               $query->condition($keys['bundle'], $bundle_name);
             }
-            if (!empty($keys['status'])) {
+            if (!empty($keys['published'])) {
+              $query->condition($keys['published'], 1);
+            }
+            elseif (!empty($keys['status'])) {
               $query->condition($keys['status'], 1);
             }
 
+            // Shift access check to EntityUrlGeneratorBase for language
+            // specific access.
+            // See https://www.drupal.org/project/simple_sitemap/issues/3102450.
+            $query->accessCheck(FALSE);
+
             // Mainly this is the only line we need but we need to override the
             // whole method.
-            $this->alterQuery($query, $entity_type_id, $bundle_name, $bundle_settings);
+            $this->alterQuery($query, $entity_type_name, $bundle_name, $bundle_settings);
 
+            $data_set = [
+              'entity_type' => $entity_type_name,
+              'id' => [],
+            ];
             foreach ($query->execute() as $entity_id) {
-              $data_sets[] = [
-                'entity_type' => $entity_type_id,
-                'id' => $entity_id,
-              ];
+              $data_set['id'][] = $entity_id;
+              if (count($data_set['id']) >= $this->entitiesPerDataset) {
+                $data_sets[] = $data_set;
+                $data_set['id'] = [];
+              }
+            }
+            // Add the last data set if there are some IDs gathered.
+            if (!empty($data_set['id'])) {
+              $data_sets[] = $data_set;
             }
           }
         }
@@ -135,24 +89,25 @@ abstract class JoinupUrlGeneratorBase extends EntityUrlGenerator {
   /**
    * {@inheritdoc}
    */
-  protected function processDataSet($data_set) {
-    if (empty($entity = $this->entityTypeManager->getStorage($data_set['entity_type'])->load($data_set['id']))) {
-      return FALSE;
-    }
-
-    // In case the entity type is a node, we also need to also take into account
-    // the status of the parent.
-    if ($entity->getEntityTypeId() === 'node') {
-      $parent = JoinupGroupHelper::getGroup($entity);
-      if (empty($parent) || !$parent->isPublished()) {
-        return FALSE;
+  protected function processDataSet($data_set): array {
+    foreach ($this->entityTypeManager->getStorage($data_set['entity_type'])->loadMultiple((array) $data_set['id']) as $entity) {
+      // In case the entity type is a node, we also need to also take into
+      // account the status of the parent.
+      if ($entity->getEntityTypeId() === 'node') {
+        $parent = JoinupGroupHelper::getGroup($entity);
+        if (empty($parent) || !$parent->isPublished()) {
+          continue;
+        }
+      }
+      try {
+        $paths[] = $this->processEntity($entity);
+      }
+      catch (SkipElementException $e) {
+        continue;
       }
     }
 
-    // Not overriding the rest of the method will cause the entity to again be
-    // loaded but at this point, it is stored in the static cache so there
-    // should be minimal performance impact with better code readability.
-    return parent::processDataSet($data_set);
+    return $paths ?? [];
   }
 
   /**
