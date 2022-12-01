@@ -66,7 +66,6 @@ class DashboardController extends ControllerBase {
       return [
         'title' => $link['title'],
         'url' => $link['url'],
-        'attributes' => ['class' => ['button', 'button--small']],
       ];
     }, $links);
 
