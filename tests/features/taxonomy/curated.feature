@@ -1,6 +1,6 @@
 @api @group-d @terms
 Feature:
-  Ensure currated list of topics on the homepage behave properly.
+  Ensure curated list of topics on the homepage behave properly.
 
   Scenario: Show list of topics meta entity type and check a given parent and published field.
     Given I am logged in as a moderator
@@ -55,10 +55,10 @@ Feature:
     And I press "Add item"
     Then I should see "Edit" in the "Finance in EU" row
 
-    And the "form table" table should contain:
-      | | E-justice     |
-      | | Finance in EU |
+    And the "form table" table should contain the following column:
+      | E-justice     |
+      | Finance in EU |
     When I drag the table row at position 2 up
-    Then the "form table" table should contain:
-      | | Finance in EU |
-      | | E-justice     |
+    Then the "form table" table should contain the following column:
+      | Finance in EU |
+      | E-justice     |
