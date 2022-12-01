@@ -55,16 +55,28 @@ function topic_meta_entity_presave(MetaEntityInterface $meta_entity): void {
 /**
  * Implements hook_form_BASE_FORM_ID_alter().
  */
-function topic_form_entity_subqueue_homepage_topics_edit_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+function topic_form_entity_subqueue_homepage_topics_edit_form_alter(array &$form, FormStateInterface $form_state, string $form_id): void {
   foreach (Element::children($form['actions']) as $action) {
     $form['actions'][$action]['#submit'][] = 'topic_form_entity_subqueue_homepage_topics_edit_form_alter_submit';
   }
+
+  $output = t('In this page you can add/remove/rearrange the topics that are displayed on the homepage.') . "<br />";
+  $output .= t('Add topics by name from the autocomplete field below.') . "<br />";
+  $output .= "<strong>" . t('Only published topics can be added in the list.') . "</strong><br />";
+  $output .= "<strong>" . t('In order to publish the topic, go to "Dashboard" > "Topics" and click on the "Edit" button of the topic you want to publish.') . "</strong><br />";
+  $output .= t('Once you are done, come back here to add it to the list.') . "<br />";
+  $output .= t('A maximum of 8 topics are allowed in the list.') . "<br />";
+  $form['help'] = [
+    '#type' => 'html_tag',
+    '#tag' => 'p',
+    '#value' => $output,
+  ];
 }
 
 /**
  * Redirect to the same page after saving the form.
  */
-function topic_form_entity_subqueue_homepage_topics_edit_form_alter_submit(array &$form, FormStateInterface $form_state) {
+function topic_form_entity_subqueue_homepage_topics_edit_form_alter_submit(array &$form, FormStateInterface $form_state): void {
   // The default redirect of the form is to the admin page of the entity
   // subqueue. Moderators do not have access to the page so the redirect leads
   // to a 403. We redirect to the same page in order to also allow further
