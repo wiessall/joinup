@@ -50,10 +50,28 @@ Feature:
 
     And I fill in "edit-items-add-more-new-item-target-id" with "E-justice"
     And I press "Add item"
-    Then I should see "Edit" in the "E-justice" row
+    # 'E-justice' is unpublished so it cannot be found.
+    Then I should see the error message 'There are no meta entity entities matching "E-justice".'
+
+    # Publish 2 terms.
+    When I click "Dashboard"
+    And I click Topics
+    And I click "Edit" in the "E-justice" row
+    And I check "Published"
+    And I press "Save"
+    And I click "Edit" in the "Finance in EU" row
+    And I check "Published"
+    And I press "Save"
+
+    # Add the 2 terms to the curated list.
+    When I click "Dashboard"
+    And I click "Curated content listings"
+    And I click "Homepage topics"
+    And I fill in "edit-items-add-more-new-item-target-id" with "E-justice"
+    And I press "Add item"
     And I fill in "edit-items-add-more-new-item-target-id" with "Finance in EU"
     And I press "Add item"
-    Then I should see "Edit" in the "Finance in EU" row
+    And I press "Save"
 
     And the "form table" table should contain a column with the following data:
       # The 'Edit' keyword is because there is an edit link in the table cell.
