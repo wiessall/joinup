@@ -1,11 +1,11 @@
-uuid: 52320cb9-2205-4dc2-9700-2006b4c20fc8
+uuid: 644a5009-d99e-4fa3-9d6c-586c05ec19bf
 langcode: en
 status: true
 dependencies:
   module:
     - meta_entity
-id: homeapge_topics
-label: 'Homeapge topics'
+id: homepage_topics
+label: 'Homepage topics'
 handler: simple
 handler_configuration: {  }
 entity_settings:
