@@ -15,13 +15,28 @@ Feature:
     And I should see "E-health Dpt." in the "E-health" row
     And I should see "HR Dpt." in the "Employment and Support Allowance" row
     And I should see "HR Dpt." in the "HR" row
+    # The meta entity is unpublished by default.
+    And I should see "No" in the "E-justice" row
     # Sorting by parent not allowed.
     And I should not see the link "Parent topic"
 
     When I click "Edit" in the "E-justice" row
     Then I should see the heading "Edit E-justice"
     And the checkbox "Published" should not be checked
-
     When I check "Published"
     And I press "Save"
+
+    # The meta entity is now marked as published.
+    And I should see "Yes" in the "E-justice" row
     And I should see the heading "Topics"
+
+    # The following is not reproducible in the UI but is a backend test for
+    # future changes in the topic vocabulary.
+    Given "topic" terms:
+      | tid                          | name        | description  |
+      | http://some.topic/BlueParent | Blue parent | Hello there. |
+    When I reload the page
+    Then I should see the link "Blue parent"
+    When the name of the "Blue parent" term is changed to "Red parent"
+    And I reload the page
+    Then I should see the link "Red parent"
