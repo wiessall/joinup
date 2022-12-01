@@ -6,8 +6,6 @@ id: field_content_listing_type
 name: 'Content type'
 weight: 0
 min_count: 1
-missing: false
-missing_label: others
 url_alias: field_content_listing_type
 facet_source_id: 'search_api_field:paragraph.field_content_listing'
 field_identifier: entity_bundle
