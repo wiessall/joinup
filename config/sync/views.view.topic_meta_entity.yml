@@ -344,18 +344,26 @@ display:
               moderator: '0'
               administrator: '0'
               rdf_graph_manager: '0'
-          is_grouped: false
+          is_grouped: true
           group_info:
-            label: ''
+            label: 'Published (published)'
             description: ''
-            identifier: ''
+            identifier: published_value
             optional: true
             widget: select
             multiple: false
             remember: false
             default_group: All
             default_group_multiple: {  }
-            group_items: {  }
+            group_items:
+              1:
+                title: 'Yes'
+                operator: '='
+                value: '1'
+              2:
+                title: 'No'
+                operator: '='
+                value: '0'
       style:
         type: table
         options:
@@ -367,7 +375,7 @@ display:
             parent: parent
             published: published
             operations: operations
-          default: '-1'
+          default: label
           info:
             label:
               sortable: true
@@ -414,6 +422,23 @@ display:
       relationships: {  }
       header: {  }
       footer: {  }
+      display_extenders: {  }
+    cache_metadata:
+      max-age: -1
+      contexts:
+        - 'languages:language_content'
+        - 'languages:language_interface'
+        - url
+        - url.query_args
+        - user.permissions
+      tags:
+        - 'config:field.storage.meta_entity.published'
+  attachment_1:
+    id: attachment_1
+    display_title: Attachment
+    display_plugin: attachment
+    position: 2
+    display_options:
       display_extenders: {  }
     cache_metadata:
       max-age: -1
