@@ -1,8 +1,7 @@
-@api @group-d
+@api @group-d @terms
 Feature:
   Ensure currated list of topics on the homepage behave properly.
 
-  @terms
   Scenario: Show list of topics meta entity type and check a given parent and published field.
     Given I am logged in as a moderator
     When I click "Dashboard"
@@ -40,3 +39,26 @@ Feature:
     When the name of the "Blue parent" term is changed to "Red parent"
     And I reload the page
     Then I should see the link "Red parent"
+
+  Scenario: Moderators can access and manage the topics currated queue.
+    Given I am logged in as a moderator
+    And I click "Dashboard"
+    And I click "Curated content listings"
+    And I click "Homepage topics"
+    Then I should see the heading "Update curated content listing Homepage topics"
+    And I should see the button "Add item"
+
+    And I fill in "edit-items-add-more-new-item-target-id" with "E-justice"
+    And I press "Add item"
+    Then I should see "Edit" in the "E-justice" row
+    And I fill in "edit-items-add-more-new-item-target-id" with "Finance in EU"
+    And I press "Add item"
+    Then I should see "Edit" in the "Finance in EU" row
+
+    And the "form table" table should contain:
+      | | E-justice     |
+      | | Finance in EU |
+    When I drag the table row at position 2 up
+    Then the "form table" table should contain:
+      | | Finance in EU |
+      | | E-justice     |
