@@ -55,10 +55,7 @@ Feature:
     And I press "Add item"
     Then I should see "Edit" in the "Finance in EU" row
 
-    And the "form table" table should contain the following column:
-      | E-justice     |
-      | Finance in EU |
-    When I drag the table row at position 2 up
-    Then the "form table" table should contain the following column:
-      | Finance in EU |
-      | E-justice     |
+    And the "form table" table should contain a column with the following data:
+      # The 'Edit' keyword is because there is an edit link in the table cell.
+      | E-justice Edit     |
+      | Finance in EU Edit |
