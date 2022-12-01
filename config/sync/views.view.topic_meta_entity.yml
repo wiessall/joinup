@@ -435,7 +435,7 @@ display:
         metatag_display_extender:
           metatags: {  }
           tokenize: false
-      path: admin/topics
+      path: admin/homepage-topics
     cache_metadata:
       max-age: -1
       contexts:
