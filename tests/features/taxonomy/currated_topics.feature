@@ -15,6 +15,8 @@ Feature:
     And I should see "E-health Dpt." in the "E-health" row
     And I should see "HR Dpt." in the "Employment and Support Allowance" row
     And I should see "HR Dpt." in the "HR" row
+    # Sorting by parent not allowed.
+    And I should not see the link "Parent topic"
 
     When I click "Edit" in the "E-justice" row
     Then I should see the heading "Edit E-justice"

@@ -80,4 +80,12 @@ class TopicMetaEntityParent extends EntityLink {
     return $this->cache[$meta_entity_id];
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  public function clickSort($order) {
+    // Throw an exception to prevent the sort from being added in the page.
+    throw new \RuntimeException('Feature not supported due to the target entity being stored outside SQL, making it impossible to join tables.');
+  }
+
 }
