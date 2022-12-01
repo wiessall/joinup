@@ -377,7 +377,7 @@ display:
               empty_column: false
               responsive: ''
             parent:
-              sortable: true
+              sortable: false
               default_sort_order: asc
               align: ''
               separator: ''
