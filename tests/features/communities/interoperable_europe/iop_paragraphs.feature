@@ -63,6 +63,8 @@ Feature:
     When I press "Add Row"
     Then I should see the button "Add 1 column layout"
     And I should see the button "Add 2 column layout"
+    And I should see the button "Add 2 column with featured media on the left"
+    And I should see the button "Add 2 column with featured media on the right"
     And I should see the button "Add 3 column layout"
 
   Scenario: Test that carousels content listing options are working correctly.
