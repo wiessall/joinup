@@ -7,6 +7,8 @@
 
 declare(strict_types = 1);
 
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Render\Element;
 use Drupal\meta_entity\Entity\MetaEntityInterface;
 use Drupal\taxonomy\TermInterface;
 use Drupal\topic\Entity\Topic;
@@ -48,4 +50,25 @@ function topic_meta_entity_presave(MetaEntityInterface $meta_entity): void {
   if ($meta_entity instanceof TopicMetaEntityInterface && $term = $meta_entity->getTargetEntity()) {
     $meta_entity->set('label', $term->label());
   }
+}
+
+/**
+ * Implements hook_form_BASE_FORM_ID_alter().
+ */
+function topic_form_entity_subqueue_homepage_topics_edit_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  foreach (Element::children($form['actions']) as $action) {
+    $form['actions'][$action]['#submit'][] = 'topic_form_entity_subqueue_homepage_topics_edit_form_alter_submit';
+  }
+}
+
+/**
+ * Redirect to the same page after saving the form.
+ */
+function topic_form_entity_subqueue_homepage_topics_edit_form_alter_submit(array &$form, FormStateInterface $form_state) {
+  // The default redirect of the form is to the admin page of the entity
+  // subqueue. Moderators do not have access to the page so the redirect leads
+  // to a 403. We redirect to the same page in order to also allow further
+  // actions.
+  $route_match = \Drupal::getContainer()->get('current_route_match');
+  $form_state->setRedirect($route_match->getRouteName(), $route_match->getRawParameters()->all());
 }
