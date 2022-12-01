@@ -26,9 +26,9 @@
     <div class="dropdown-menu dropdown-menu-end px-3" aria-labelledby="local-tasks-primary">
       <h2 class="visually-hidden">{{ 'Primary tabs'|t }}</h2>
       {{ pattern('navigation', {
-    'variant': 'tabs',
-    'items': primary,
-  }) }}
+        'variant': 'pills',
+        'items': primary,
+      }) }}
     </div>
   </div>
 {% endif %}
@@ -42,9 +42,9 @@
     <div class="dropdown-menu dropdown-menu-end px-3" aria-labelledby="local-tasks-secondary">
       <h2 class="visually-hidden">{{ 'Secondary tabs'|t }}</h2>
       {{ pattern('navigation', {
-    'variant': 'tabs',
-    'items': secondary,
-  }) }}
+        'variant': 'pills',
+        'items': secondary,
+      }) }}
     </div>
   </div>
 {% endif %}
