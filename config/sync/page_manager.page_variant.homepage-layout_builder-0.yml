@@ -3,7 +3,19 @@ langcode: en
 status: true
 dependencies:
   config:
+    - entityqueue.entity_queue.highlighted_content
+    - entityqueue.entity_queue.highlighted_event
+    - entityqueue.entity_queue.homepage_topics
     - page_manager.page.homepage
+    - views.view.in_the_spotlight
+    - views.view.latest_news
+  module:
+    - custom_markup_block
+    - entityqueue_block
+    - joinup_front_page
+    - joinup_layout
+    - layout_discovery
+    - views
 id: homepage-layout_builder-0
 label: 'Layout Builder'
 weight: 0
@@ -14,130 +26,25 @@ variant_settings:
   weight: 0
   uuid: c6b4a07e-d959-4562-a8a9-96a8c2a46ae9
   sections:
-    - layout_id: joinup_layout_twocolfooter_onecol_67_33
+    -
+      layout_id: layout_onecol
       layout_settings:
-        label: About
+        label: 'Homepage topics'
+        context_mapping: {  }
       components:
-        b0ffc367-218e-4407-bb94-bd9682a9552e:
-          uuid: b0ffc367-218e-4407-bb94-bd9682a9552e
-          region: first
+        81319b60-c297-40f9-8d7f-3017360e7aab:
+          uuid: 81319b60-c297-40f9-8d7f-3017360e7aab
+          region: content
           configuration:
-            id: custom_markup
-            label: 'What''s Joinup about?'
+            id: 'entityqueue_block:homepage_topics'
+            label: 'Homepage topics'
             label_display: '0'
-            provider: custom_markup_block
-            markup:
-              value: "<p class=\"about-what__title\">What's Joinup</p>\r\n<p>The Joinup platform is the European Commission's one-stop shop for interoperable, open, and free digital government ICT solutions and an online space for e-Government professionals and enthusiasts to share and learn about digital public services and initiatives.</p>\r\n<p><strong>Joinup covers the hands-on aspects of interoperability.</strong></p>\r\n"
-              format: full_html
+            provider: entityqueue_block
+            view_mode: teaser
+            context_mapping: {  }
           weight: 0
-          additional:
-            component_attributes:
-              block_attributes:
-                id: ''
-                class: about-what
-                style: ''
-                data: ''
-              block_title_attributes:
-                id: ''
-                class: ''
-                style: ''
-                data: ''
-              block_content_attributes:
-                id: ''
-                class: ''
-                style: ''
-                data: ''
-        e1eeef2d-dde1-4aa3-af7b-a6709184d497:
-          uuid: e1eeef2d-dde1-4aa3-af7b-a6709184d497
-          region: second
-          configuration:
-            id: custom_markup
-            label: 'What''s Interoperable Europe'
-            label_display: visible
-            provider: custom_markup_block
-            context_mapping: { }
-            markup:
-              value: '<p>It’s the European Commission’s initiative for a reinforced interoperability policy showcasing news and events about government-related interoperability, along with initiatives and best practices that support the digitalisation of EU public administrations.</p><p><strong>Interoperable Europe covers the policy angle of interoperability.</strong></p>'
-              format: content_editor
-          weight: 0
-          additional:
-            component_attributes:
-              block_attributes:
-                id: ''
-                class: about-who
-                style: ''
-                data: ''
-              block_title_attributes:
-                id: ''
-                class: ''
-                style: ''
-                data: ''
-              block_content_attributes:
-                id: ''
-                class: ''
-                style: ''
-                data: ''
-        e82de3d1-2e2f-4244-8ba8-c147ba44d577:
-          uuid: e82de3d1-2e2f-4244-8ba8-c147ba44d577
-          region: two_col_footer
-          configuration:
-            id: custom_markup
-            label: 'For fresh start on creating content'
-            label_display: '0'
-            provider: custom_markup_block
-            context_mapping: { }
-            markup:
-              value: "<p><a class=\"btn btn-secondary\" href=\"/collection/joinup/help-videos\">How to video</a>&nbsp;<button class=\"btn btn-secondary js-tour-start-button\" type=\"button\" data-drupal-tour-link=\"\">Guided tour</button>&nbsp;<a class=\"btn btn-secondary\" href=\"/collection/joinup/faq\">FAQ</a></p>\r\n"
-              format: full_html
-          weight: 0
-          additional:
-            component_attributes:
-              block_attributes:
-                id: ''
-                class: 'about-how mt-4'
-                style: ''
-                data: ''
-              block_title_attributes:
-                id: ''
-                class: ''
-                style: ''
-                data: ''
-              block_content_attributes:
-                id: ''
-                class: ''
-                style: ''
-                data: ''
-        6ab0ceea-4541-4153-8b64-227e02369d30:
-          uuid: 6ab0ceea-4541-4153-8b64-227e02369d30
-          region: third
-          configuration:
-            id: custom_markup
-            label: 'New Joinup video'
-            label_display: '0'
-            provider: custom_markup_block
-            context_mapping: { }
-            markup:
-              value: "<p>{\"preview_thumbnail\":\"/sites/default/files/styles/video_embed_wysiwyg_preview/public/video_thumbnails/3_dx-K0P9JI.jpg?itok=LryC_a1d\",\"video_url\":\"https://youtu.be/3_dx-K0P9JI\",\"settings\":{\"responsive\":true,\"width\":\"854\",\"height\":\"480\",\"autoplay\":false},\"settings_summary\":[\"Embedded Video (Responsive).\"]}</p>\r\n"
-              format: content_editor
-          weight: 0
-          additional:
-            component_attributes:
-              block_attributes:
-                id: ''
-                class: about-video
-                style: ''
-                data: ''
-              block_title_attributes:
-                id: ''
-                class: ''
-                style: ''
-                data: ''
-              block_content_attributes:
-                id: ''
-                class: ''
-                style: ''
-                data: ''
-      third_party_settings: { }
+          additional: {  }
+      third_party_settings: {  }
     -
       layout_id: joinup_layout_twocol_60_40
       layout_settings:
@@ -216,6 +123,131 @@ variant_settings:
             context_mapping: {  }
           weight: 0
           additional: {  }
+      third_party_settings: {  }
+    -
+      layout_id: joinup_layout_twocolfooter_onecol_67_33
+      layout_settings:
+        label: About
+      components:
+        b0ffc367-218e-4407-bb94-bd9682a9552e:
+          uuid: b0ffc367-218e-4407-bb94-bd9682a9552e
+          region: first
+          configuration:
+            id: custom_markup
+            label: 'What''s Joinup about?'
+            label_display: '0'
+            provider: custom_markup_block
+            markup:
+              value: "<p class=\"about-what__title\">What's Joinup</p>\r\n<p>The Joinup platform is the European Commission's one-stop shop for interoperable, open, and free digital government ICT solutions and an online space for e-Government professionals and enthusiasts to share and learn about digital public services and initiatives.</p>\r\n<p><strong>Joinup covers the hands-on aspects of interoperability.</strong></p>\r\n"
+              format: full_html
+          weight: 0
+          additional:
+            component_attributes:
+              block_attributes:
+                id: ''
+                class: about-what
+                style: ''
+                data: ''
+              block_title_attributes:
+                id: ''
+                class: ''
+                style: ''
+                data: ''
+              block_content_attributes:
+                id: ''
+                class: ''
+                style: ''
+                data: ''
+        e1eeef2d-dde1-4aa3-af7b-a6709184d497:
+          uuid: e1eeef2d-dde1-4aa3-af7b-a6709184d497
+          region: second
+          configuration:
+            id: custom_markup
+            label: 'What''s Interoperable Europe'
+            label_display: visible
+            provider: custom_markup_block
+            context_mapping: {  }
+            markup:
+              value: '<p>It’s the European Commission’s initiative for a reinforced interoperability policy showcasing news and events about government-related interoperability, along with initiatives and best practices that support the digitalisation of EU public administrations.</p><p><strong>Interoperable Europe covers the policy angle of interoperability.</strong></p>'
+              format: content_editor
+          weight: 0
+          additional:
+            component_attributes:
+              block_attributes:
+                id: ''
+                class: about-who
+                style: ''
+                data: ''
+              block_title_attributes:
+                id: ''
+                class: ''
+                style: ''
+                data: ''
+              block_content_attributes:
+                id: ''
+                class: ''
+                style: ''
+                data: ''
+        e82de3d1-2e2f-4244-8ba8-c147ba44d577:
+          uuid: e82de3d1-2e2f-4244-8ba8-c147ba44d577
+          region: two_col_footer
+          configuration:
+            id: custom_markup
+            label: 'For fresh start on creating content'
+            label_display: '0'
+            provider: custom_markup_block
+            context_mapping: {  }
+            markup:
+              value: "<p><a class=\"btn btn-secondary\" href=\"/collection/joinup/help-videos\">How to video</a>&nbsp;<button class=\"btn btn-secondary js-tour-start-button\" type=\"button\" data-drupal-tour-link=\"\">Guided tour</button>&nbsp;<a class=\"btn btn-secondary\" href=\"/collection/joinup/faq\">FAQ</a></p>\r\n"
+              format: full_html
+          weight: 0
+          additional:
+            component_attributes:
+              block_attributes:
+                id: ''
+                class: 'about-how mt-4'
+                style: ''
+                data: ''
+              block_title_attributes:
+                id: ''
+                class: ''
+                style: ''
+                data: ''
+              block_content_attributes:
+                id: ''
+                class: ''
+                style: ''
+                data: ''
+        6ab0ceea-4541-4153-8b64-227e02369d30:
+          uuid: 6ab0ceea-4541-4153-8b64-227e02369d30
+          region: third
+          configuration:
+            id: custom_markup
+            label: 'New Joinup video'
+            label_display: '0'
+            provider: custom_markup_block
+            context_mapping: {  }
+            markup:
+              value: "<p>{\"preview_thumbnail\":\"/sites/default/files/styles/video_embed_wysiwyg_preview/public/video_thumbnails/3_dx-K0P9JI.jpg?itok=LryC_a1d\",\"video_url\":\"https://youtu.be/3_dx-K0P9JI\",\"settings\":{\"responsive\":true,\"width\":\"854\",\"height\":\"480\",\"autoplay\":false},\"settings_summary\":[\"Embedded Video (Responsive).\"]}</p>\r\n"
+              format: content_editor
+          weight: 0
+          additional:
+            component_attributes:
+              block_attributes:
+                id: ''
+                class: about-video
+                style: ''
+                data: ''
+              block_title_attributes:
+                id: ''
+                class: ''
+                style: ''
+                data: ''
+              block_content_attributes:
+                id: ''
+                class: ''
+                style: ''
+                data: ''
       third_party_settings: {  }
 page: homepage
 selection_criteria: {  }
