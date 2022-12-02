@@ -40,7 +40,7 @@ Feature:
     And I reload the page
     Then I should see the link "Red parent"
 
-  Scenario: Moderators can access and manage the topics currated queue.
+  Scenario: Moderators can access and manage the topics curated queue.
     Given I am logged in as a moderator
     And I click "Dashboard"
     And I click "Curated content listings"
