@@ -327,18 +327,23 @@ display:
           exposed: true
           expose:
             operator_id: ''
-            label: 'Published (published)'
-            description: null
+            label: Published
+            description: ''
             use_operator: false
             operator: published_value_op
             operator_limit_selection: false
             operator_list: {  }
             identifier: published_value
-            required: true
+            required: false
             remember: false
             multiple: false
             remember_roles:
               authenticated: authenticated
+              licence_manager: '0'
+              anonymous: '0'
+              moderator: '0'
+              administrator: '0'
+              rdf_graph_manager: '0'
           is_grouped: true
           group_info:
             label: 'Published (published)'
@@ -698,7 +703,13 @@ display:
           plugin_id: text
           empty: true
           content:
-            value: "<ul>\n<li>In this page, you can publish/unpublish the meta entities of the topics shown in the homepage as well as edit the description and the image.</li>\n<li>Unpublishing a topic meta entity, will remove it from the curated list that is responsible for displaying it in the homepage.</li>\n<li>Publishing a topic here will <strong>not</strong> make it appear in the homepage. You need to add it to the curated list manually.</li>\n<li>To edit the curated list, go to <a href=\"[site:url]dashboard\">Dashboard</a> > <a href=\"[site:url]admin/curated-content-listings\">Curated content listings</a> > <a href=\"[site:url]admin/structure/entityqueue/homepage_topics/homepage_topics\">Homepage topics</a>.</li>\n</ul>"
+            value: |-
+              <ul>
+              <li>In this page, you can publish/unpublish the meta entities of the topics shown in the homepage as well as edit the description and the image.</li>
+              <li>Unpublishing a topic meta entity, will remove it from the curated list that is responsible for displaying it in the homepage.</li>
+              <li>Publishing a topic here will <strong>not</strong> make it appear in the homepage. You need to add it to the curated list manually.</li>
+              <li>To edit the curated list, go to <a href="[site:url]dashboard">Dashboard</a> > <a href="[site:url]admin/curated-content-listings">Curated content listings</a> > <a href="[site:url]admin/structure/entityqueue/homepage_topics/homepage_topics">Homepage topics</a>.</li>
+              </ul>
             format: content_editor
           tokenize: false
       display_extenders:
