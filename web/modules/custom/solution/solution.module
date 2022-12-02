@@ -352,7 +352,11 @@ function solution_rdf_entity_view(array &$build, RdfInterface $solution, EntityV
   // Read more link to the about page.
   if ($display->getComponent('read_more')) {
     try {
-      $link = $solution->toLink(t('Read more'), 'about-page', [
+      $text = [
+        '#type' => 'markup',
+        '#markup' => t('Read more') . '<span class="visually hidden"> ' . t('about') . ' ' . $solution->getName() . '</span>',
+      ];
+      $link = $solution->toLink($text, 'about-page', [
         'attributes' => [
           'class' => [
             'about-page',
@@ -361,7 +365,6 @@ function solution_rdf_entity_view(array &$build, RdfInterface $solution, EntityV
             'btn',
             'btn-secondary',
           ],
-          'aria-label' => 'Read more about \'' . $solution->getName() . '\'.',
         ],
       ]);
       $build['read_more'] = $link->toRenderable();
