@@ -8,6 +8,7 @@
 declare(strict_types = 1);
 
 use Drupal\joinup_publication_date\Entity\EntityPublicationTimeInterface;
+use Drupal\joinup_publication_date\Plugin\Field\FieldType\PublicationDateFieldItemList;
 use Drupal\joinup_publication_date\Plugin\Field\FieldType\PublicationDateItem;
 
 /**
@@ -33,5 +34,6 @@ function joinup_publication_date_preprocess_node(&$variables) {
 function joinup_publication_date_field_info_alter(array &$info): void {
   if (isset($info['published_at'])) {
     $info['published_at']['class'] = PublicationDateItem::class;
+    $info['published_at']['list_class'] = PublicationDateFieldItemList::class;
   }
 }
