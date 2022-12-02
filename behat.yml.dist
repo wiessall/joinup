@@ -151,6 +151,7 @@ default:
         Footer: '.section--footer, footer'
         Hamburger menu: '.joinup-navbar ul.navbar-nav ul.dropdown-list'
         Header: '.section--featured, .section-header'
+        Homepage topics: '.block-entityqueue--homepage-topics'
         Highlighted content: '.block-entityqueue--highlighted-content'
         Highlighted event: '.block-entityqueue--highlighted-event'
         In the spotlight: '.block-views-blockin-the-spotlight-block'
