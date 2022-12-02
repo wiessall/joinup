@@ -6,8 +6,6 @@ id: collection_type
 name: Type
 weight: -1
 min_count: 1
-missing: false
-missing_label: others
 url_alias: collection_type
 facet_source_id: 'search_api_field:rdf_entity.field_collection_content'
 field_identifier: entity_bundle
