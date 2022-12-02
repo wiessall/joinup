@@ -77,3 +77,16 @@ Feature:
       # The 'Edit' keyword is because there is an edit link in the table cell.
       | E-justice Edit     |
       | Finance in EU Edit |
+
+    # Unpublish a term and check it is removed from the curated list.
+    When I click "Dashboard"
+    And I click Topics
+    And I click "Edit" in the "E-justice" row
+    And I uncheck "Published"
+    And I press "Save"
+    Then I should see the success message "The topic has been removed from the homepage topics curated list since it was unpublished."
+    When I click "Dashboard"
+    And I click "Curated content listings"
+    And I click "Homepage topics"
+    And the "form table" table should contain a column with the following data:
+      | Finance in EU Edit |
