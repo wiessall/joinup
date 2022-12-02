@@ -78,6 +78,10 @@ Feature:
       | E-justice Edit     |
       | Finance in EU Edit |
 
+    When I go to the homepage
+    Then I should see the text "E-justice" in the "Homepage topics" region
+    And I should see the text "Finance in EU" in the "Homepage topics" region
+
     # Unpublish a term and check it is removed from the curated list.
     When I click "Dashboard"
     And I click Topics
@@ -90,3 +94,7 @@ Feature:
     And I click "Homepage topics"
     And the "form table" table should contain a column with the following data:
       | Finance in EU Edit |
+
+    When I go to the homepage
+    Then I should not see the text "E-justice" in the "Homepage topics" region
+    But I should see the text "Finance in EU" in the "Homepage topics" region
