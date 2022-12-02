@@ -10,6 +10,7 @@ declare(strict_types = 1);
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\Element;
+use Drupal\Core\Url;
 use Drupal\meta_entity\Entity\MetaEntityInterface;
 use Drupal\taxonomy\TermInterface;
 use Drupal\topic\Entity\Topic;
@@ -83,16 +84,24 @@ function topic_form_entity_subqueue_homepage_topics_edit_form_alter(array &$form
     $form['actions'][$action]['#submit'][] = 'topic_form_entity_subqueue_homepage_topics_edit_form_alter_submit';
   }
 
-  $output = t('In this page you can add/remove/rearrange the topics that are displayed on the homepage.') . "<br />";
-  $output .= t('Add topics by name from the autocomplete field below.') . "<br />";
-  $output .= "<strong>" . t('Only published topics can be added in the list.') . "</strong><br />";
-  $output .= "<strong>" . t('In order to publish the topic, go to "Dashboard" > "Topics" and click on the "Edit" button of the topic you want to publish.') . "</strong><br />";
-  $output .= t('Once you are done, come back here to add it to the list.') . "<br />";
-  $output .= t('A maximum of 8 topics are allowed in the list.') . "<br />";
+  $help = [
+    '#theme' => 'item_list',
+    '#items' => [
+      t('In this page you can add/remove/rearrange the topics that are displayed on the homepage.'),
+      t('Add topics by name from the autocomplete field below.'),
+      t('Only published topics can be added in the list.'),
+      t('In order to publish the topic, go to <a href=":dashboard">Dashboard</a> > <a href=":topics">Topics</a> and click on the "Edit" button of the topic you want to publish.', [
+        ':dashboard' => Url::fromRoute('dashboard.page')->toString(),
+        ':topics' => Url::fromRoute('view.topic_meta_entity.page')->toString(),
+      ]),
+      t('Once you are done, come back here to add it to the list.'),
+      t('A maximum of 8 topics are allowed in the list.'),
+    ],
+  ];
   $form['help'] = [
     '#type' => 'html_tag',
     '#tag' => 'p',
-    '#value' => $output,
+    '#value' => \Drupal::service('renderer')->renderPlain($help),
   ];
 }
 
