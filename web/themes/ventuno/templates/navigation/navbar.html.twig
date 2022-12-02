@@ -150,6 +150,7 @@
               type="button"
               data-bs-auto-close="outside"
             >
+              <span class="visually-hidden">{{ item.label }}</span>
               {% if item.icon is not empty %}
                 <svg class="bi icon--s">
                   <use xlink:href="{{ bcl_icon_path }}#{{ item.icon.name }}"></use>
