@@ -5,8 +5,8 @@ dependencies:
   config:
     - entityqueue.entity_queue.highlighted_content
     - entityqueue.entity_queue.highlighted_event
-    - entityqueue.entity_queue.homepage_topics
     - page_manager.page.homepage
+    - views.view.homepage_topics
     - views.view.in_the_spotlight
     - views.view.latest_news
   module:
@@ -32,16 +32,17 @@ variant_settings:
         label: 'Homepage topics'
         context_mapping: {  }
       components:
-        81319b60-c297-40f9-8d7f-3017360e7aab:
-          uuid: 81319b60-c297-40f9-8d7f-3017360e7aab
+        8ab13f0a-cdb6-40f5-bf83-8eba98dc696f:
+          uuid: 8ab13f0a-cdb6-40f5-bf83-8eba98dc696f
           region: content
           configuration:
-            id: 'entityqueue_block:homepage_topics'
-            label: 'Homepage topics'
+            id: 'views_block:homepage_topics-block_1'
+            label: ''
             label_display: '0'
-            provider: entityqueue_block
-            view_mode: teaser
+            provider: views
             context_mapping: {  }
+            views_label: ''
+            items_per_page: none
           weight: 0
           additional: {  }
       third_party_settings: {  }

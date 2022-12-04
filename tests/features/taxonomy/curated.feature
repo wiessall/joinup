@@ -57,9 +57,11 @@ Feature:
     When I click "Dashboard"
     And I click Topics
     And I click "Edit" in the "E-justice" row
+    And I fill in "Description" with "E-justice description"
     And I check "Published"
     And I press "Save"
     And I click "Edit" in the "Finance in EU" row
+    And I fill in "Description" with "Finance in EU description"
     And I check "Published"
     And I press "Save"
 
@@ -67,6 +69,7 @@ Feature:
     When I click "Dashboard"
     And I click "Curated content listings"
     And I click "Homepage topics"
+    # The field does not have a title of a label element.
     And I fill in "edit-items-add-more-new-item-target-id" with "E-justice"
     And I press "Add item"
     And I fill in "edit-items-add-more-new-item-target-id" with "Finance in EU"
@@ -80,7 +83,9 @@ Feature:
 
     When I go to the homepage
     Then I should see the text "E-justice" in the "Homepage topics" region
+    And I should see the text "E-justice description" in the "Homepage topics" region
     And I should see the text "Finance in EU" in the "Homepage topics" region
+    And I should see the text "Finance in EU description" in the "Homepage topics" region
 
     # Unpublish a term and check it is removed from the curated list.
     When I click "Dashboard"
