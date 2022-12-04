@@ -132,9 +132,9 @@ Feature: Log in through EU Login
     And I should see the following lines of text:
       | Account information                                                                                                                                                                                                       |
       | Your name and E-mail are inherited from EU Login. To update this information, you can visit your EU Login account page. Synchronisation will take a few minutes and it will be visible the next time you login on Joinup. |
-      | Your e-mail address is not made public. We will only send you necessary system notifications and you can opt in later if you wish to receive additional notifications about content you are subscribed to.                         |
-      | Your first name is publicly visible.                                                                                                                                                                                               |
-      | Your last name is publicly visible.                                                                                                                                                                                                |
+      | Your e-mail address is not made public. We will only send you necessary system notifications and you can opt in later if you wish to receive additional notifications about content you are subscribed to.                |
+      | Your first name is publicly visible.                                                                                                                                                                                      |
+      | Your last name is publicly visible.                                                                                                                                                                                       |
 
     When I press "Save"
     Then I should see the success message "The changes have been saved."
@@ -295,7 +295,7 @@ Feature: Log in through EU Login
     Then I should see the success message "You have been logged in."
     # The email ends up getting the upstream email so that correct character casing is applied.
     And the user joe should have the following data in their user profile:
-      | E-mail      | Joe_Case_Insensitive@example.com |
+      | E-mail | Joe_Case_Insensitive@example.com |
 
   Scenario: Anonymous user is asked to log in when accessing a protected page
     Given users:
@@ -328,3 +328,42 @@ Feature: Log in through EU Login
     Given I am logged in as an "authenticated user"
     When I go to "/user/password"
     Then the response status code should be 404
+
+  Scenario: As a moderator I can temporary disable the site registration.
+    Given CAS users:
+      | Username | E-mail          | Password |
+      | joe_doe  | joe@example.com | 123      |
+    And users:
+      | Username | Roles     |
+      | mod      | moderator |
+
+    Given I am logged in as mod
+    And I visit "Dashboard"
+    When I click "Disable registration"
+    And I check "Disable new accounts registration"
+    And I press "Submit"
+    Then I should see the warning message "Registering new users to Joinup is disabled"
+
+    Given I am an anonymous user
+    And I am on the homepage
+    When I click "Sign in"
+    When I fill in "E-mail address" with "joe@example.com"
+    When I fill in "Password" with "123"
+    And I press "Log in"
+    Then I should see the error message "Registering new accounts to Joinup is temporary disabled. Please come back later."
+    # Check that the user is not logged in.
+    And I should see the link "Sign in"
+
+    Given I am logged in as mod
+    And I visit "/dashboard/disable-registration"
+    And I uncheck "Disable new accounts registration"
+    And I press "Submit"
+    Then I should see the success message "Registering new users to Joinup is enabled"
+
+    Given I am an anonymous user
+    And I am on the homepage
+    When I click "Sign in"
+    When I fill in "E-mail address" with "joe@example.com"
+    When I fill in "Password" with "123"
+    And I press "Log in"
+    Then I should see the success message "Fill in the fields below to let the Joinup community learn more about you!"
