@@ -143,7 +143,7 @@ class JoinupEuLoginCasEventsSubscriber implements EventSubscriberInterface {
   public function disableRegistration(CasPreRegisterEvent $event): void {
     if ($this->state->get('joinup_eulogin.registration_disabled', FALSE)) {
       $event
-        ->cancelAutomaticRegistration($this->t('Registering new accounts to Joinup is temporary disabled. Please come back later.'))
+        ->cancelAutomaticRegistration($this->t('Registering new accounts to Joinup is temporarily disabled. Please come back later.'))
         ->stopPropagation();
     }
   }

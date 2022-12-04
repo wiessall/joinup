@@ -350,7 +350,7 @@ Feature: Log in through EU Login
     When I fill in "E-mail address" with "joe@example.com"
     When I fill in "Password" with "123"
     And I press "Log in"
-    Then I should see the error message "Registering new accounts to Joinup is temporary disabled. Please come back later."
+    Then I should see the error message "Registering new accounts to Joinup is temporarily disabled. Please come back later."
     # Check that the user is not logged in.
     And I should see the link "Sign in"
 
