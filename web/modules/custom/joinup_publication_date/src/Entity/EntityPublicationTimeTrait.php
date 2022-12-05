@@ -25,7 +25,7 @@ trait EntityPublicationTimeTrait {
     // Return NULL if no value is set, or if the default publication date is set
     // which is some bogus future value.
     // @see https://www.drupal.org/project/publication_date/issues/3066446
-    if ($this->get('published_at')->isEmpty() || empty($this->get('published_at')->value) || $this->get('published_at')->value == PUBLICATION_DATE_DEFAULT) {
+    if ($this->get('published_at')->isEmpty() || empty($this->get('published_at')->value) || is_null($this->get('published_at')->value)) {
       return NULL;
     }
 
