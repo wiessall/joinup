@@ -56,6 +56,10 @@ class DashboardController extends ControllerBase {
         'title' => $this->t('Curated content listings'),
         'url' => Url::fromRoute('view.curated_content_listings.page'),
       ],
+      'disable_registration' => [
+        'title' => $this->t('Disable registration'),
+        'url' => Url::fromRoute('dashboard.disable_registration'),
+      ],
     ];
 
     $links = array_map(function (array $link): array {
