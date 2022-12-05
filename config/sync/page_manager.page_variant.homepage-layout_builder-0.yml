@@ -15,9 +15,10 @@ dependencies:
     - joinup_front_page
     - joinup_layout
     - layout_discovery
+    - user
     - views
 id: homepage-layout_builder-0
-label: 'Layout Builder'
+label: Anonymous
 weight: 0
 variant: layout_builder
 variant_settings:
@@ -251,6 +252,13 @@ variant_settings:
                 data: ''
       third_party_settings: {  }
 page: homepage
-selection_criteria: {  }
+selection_criteria:
+  -
+    id: user_role
+    negate: false
+    context_mapping:
+      user: '@user.current_user_context:current_user'
+    roles:
+      anonymous: anonymous
 selection_logic: and
 static_context: {  }
