@@ -43,7 +43,6 @@ Feature: User authentication
       | admin/structure/media                               |
       | announcements                                       |
       | dashboard                                           |
-      | dashboard/disable-registration                      |
       | licence                                             |
       | licence/add                                         |
       | media/add                                           |
@@ -126,7 +125,6 @@ Feature: User authentication
       | admin/structure/media                               |
       | announcements                                       |
       | dashboard                                           |
-      | dashboard/disable-registration                      |
       | licence                                             |
       | licence/add                                         |
       | media/add                                           |
@@ -189,7 +187,6 @@ Feature: User authentication
       | admin/structure/compatibility-document      |
       | announcements                               |
       | dashboard                                   |
-      | dashboard/disable-registration              |
       | licence                                     |
       | licence/add                                 |
       | media/add                                   |
