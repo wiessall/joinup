@@ -27,3 +27,41 @@ function joinup_core_deploy_108900(): void {
   ])->save();
   $entityTypeManager->getStorage('path_alias')->load(84170)->delete();
 }
+
+/**
+ * Cleanup the spam files from the last 7 days.
+ */
+function joinup_core_deploy_108901(array &$sandbox = []): string {
+  if (empty($sandbox['file_ids'])) {
+    // Get files of blocked users from past week.
+    $query = \Drupal::database()->select('file_managed', 'f');
+    $query->join('users_field_data', 'u', 'f.uid = u.uid');
+    $query->fields('f', ['fid']);
+    $query->condition('u.status', 0);
+    $query->condition('u.created', strtotime('-7 days'), '>=');
+    $sandbox['file_ids'] = $query->execute()->fetchCol();
+
+    $sandbox['max'] = count($sandbox['file_ids']);
+    $sandbox['current'] = 0;
+  }
+
+  $batch_size = 50;
+  $file_ids = array_splice($sandbox['file_ids'], 0, $batch_size);
+  $file_storage = \Drupal::entityTypeManager()->getStorage('file');
+  $file_url_generator = \Drupal::getContainer()->get('file_url_generator');
+  foreach ($file_storage->loadMultiple($file_ids) as $file) {
+    $file->delete();
+
+    // Ensure that the actual file does not exist.
+    $file_uri = $file->getFileUri();
+    $file_url_generator->generateAbsoluteString($file_uri);
+    if (file_exists($file_uri)) {
+      unlink($file_uri);
+    }
+  }
+
+  $sandbox['current'] += count($file_ids);
+  $sandbox['#finished'] = $sandbox['current'] / $sandbox['max'];
+
+  return "Removed {$sandbox['current']} of {$sandbox['max']} files.";
+}
