@@ -47,8 +47,8 @@
     &:hover {
       color: $primary;
       background:
-      linear-gradient($white, $white) padding-box,
-      $primary border-box;
+        linear-gradient($white, $white) padding-box,
+        $primary border-box!important;
       svg {
         fill: $primary;;
       }
