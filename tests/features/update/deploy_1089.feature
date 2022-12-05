@@ -1,7 +1,7 @@
 @api @group-clone
-Feature: Covers \joinup_core_deploy_108900().
+Feature: Covers Release 1.89.
 
-  Scenario: Test that news creation works.
+  Scenario: Test that news creation works (108900).
 
     Given I am logged in as a moderator
     And I am on the homepage
@@ -13,3 +13,7 @@ Feature: Covers \joinup_core_deploy_108900().
     Then the response status code should be 200
     And the url should match "/interoperable-europe/news/add"
     And I should see the heading "Add news"
+
+  Scenario: Test that spam files are deleted (108901).
+    Given I go to "/sites/default/files/document/2022-12/free-cash-app-legitG2.pdf"
+    Then the response status code should be 404
