@@ -2,3 +2,5 @@ access dashboard:
   title: 'Access the dashboard'
 disable site auto-registration:
   title: 'Disable site auto-registration'
+cas debug mode:
+  title: 'CAS debug mode'
