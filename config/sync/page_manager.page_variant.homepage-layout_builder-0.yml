@@ -38,11 +38,11 @@ variant_settings:
           region: content
           configuration:
             id: 'views_block:homepage_topics-block_1'
-            label: ''
-            label_display: '0'
+            label: 'Main topics'
+            label_display: visible
             provider: views
             context_mapping: {  }
-            views_label: ''
+            views_label: 'Main topics'
             items_per_page: none
           weight: 0
           additional: {  }
@@ -255,10 +255,10 @@ page: homepage
 selection_criteria:
   -
     id: user_role
-    negate: false
+    negate: true
     context_mapping:
-      user: '@user.current_user_context:current_user'
+      user: current_user
     roles:
-      anonymous: anonymous
+      authenticated: authenticated
 selection_logic: and
 static_context: {  }
