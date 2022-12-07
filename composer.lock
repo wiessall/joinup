@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "bb68d4e89b5984fdfd19b34bbf6f6b37",
+    "content-hash": "39028ca5af736c92eef9529740358cc5",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -1537,6 +1537,72 @@
             "homepage": "https://www.drupal.org/project/antibot",
             "support": {
                 "source": "https://git.drupalcode.org/project/antibot"
+            }
+        },
+        {
+            "name": "drupal/auditfiles",
+            "version": "dev-4.x",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/auditfiles.git",
+                "reference": "6aee83fd7f713c5836acd05378077b480e17f86c"
+            },
+            "require": {
+                "drupal/core": "^9",
+                "php": ">=8.0"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "branch-alias": {
+                    "dev-4.x": "4.x-dev"
+                },
+                "drupal": {
+                    "version": "4.x-dev",
+                    "datestamp": "1665135085",
+                    "security-coverage": {
+                        "status": "not-covered",
+                        "message": "Dev releases are not covered by Drupal security advisories."
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "andyceo",
+                    "homepage": "https://www.drupal.org/user/152512"
+                },
+                {
+                    "name": "dpi",
+                    "homepage": "https://www.drupal.org/user/81431"
+                },
+                {
+                    "name": "keshav.k",
+                    "homepage": "https://www.drupal.org/user/3254066"
+                },
+                {
+                    "name": "lhridley",
+                    "homepage": "https://www.drupal.org/user/1223730"
+                },
+                {
+                    "name": "mikeryan",
+                    "homepage": "https://www.drupal.org/user/4420"
+                },
+                {
+                    "name": "oadaeh",
+                    "homepage": "https://www.drupal.org/user/4649"
+                },
+                {
+                    "name": "Stuart Greenfield",
+                    "homepage": "https://www.drupal.org/user/54866"
+                }
+            ],
+            "description": "Allows for comparing and correcting files and file references in the files directory, in the database, and in content.",
+            "homepage": "https://www.drupal.org/project/auditfiles",
+            "support": {
+                "source": "https://git.drupalcode.org/project/auditfiles"
             }
         },
         {
@@ -4116,7 +4182,7 @@
                     "datestamp": "1579698183",
                     "security-coverage": {
                         "status": "not-covered",
-                        "message": "Project has not opted into security advisory coverage!"
+                        "message": "Alpha releases are not covered by Drupal security advisories."
                     }
                 }
             },
@@ -16536,12 +16602,12 @@
             ],
             "authors": [
                 {
-                    "name": "Pasqualle",
-                    "homepage": "https://www.drupal.org/user/80733"
-                },
-                {
                     "name": "codebymikey",
                     "homepage": "https://www.drupal.org/user/3573206"
+                },
+                {
+                    "name": "Pasqualle",
+                    "homepage": "https://www.drupal.org/user/80733"
                 }
             ],
             "description": "Provides basic revert and update functionality for other modules",
@@ -17024,7 +17090,7 @@
                 "shasum": ""
             },
             "require": {
-                "drupal/drupal-extension": "^4.1",
+                "drupal/drupal-extension": "^4.1 || ^5.0",
                 "friends-of-behat/service-container-extension": "~1.0"
             },
             "require-dev": {
