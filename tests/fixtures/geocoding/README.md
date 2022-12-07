@@ -10,7 +10,7 @@ and ensuring the following lines in settings.php:
 
 ```
 $settings['cache']['bins']['geocoder'] = 'cache.backend.file_system';
-$settings['filecache']['directory']['bins']['geocoder'] = '../tests/fixtures/webtools_geocoding/cache';
+$settings['filecache']['directory']['bins']['geocoder'] = '../tests/fixtures/geocoding/cache';
 $settings['filecache']['strategy']['bins']['geocoder'] = 'persist';
 ```
 
@@ -32,7 +32,7 @@ They should not be committed unless they are actually part of a Behat test. In
 order to clean up any stray cache files, please execute this command:
 
 ```
-$ git clean -fd ./tests/fixtures/webtools_geocoding/cache
+$ git clean -fd ./tests/fixtures/geocoding/cache
 ```
 
 Please note that in order to query the Webtools Geocoding service from outside
