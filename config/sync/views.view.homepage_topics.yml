@@ -98,7 +98,21 @@ display:
         type: tag
         options: {  }
       empty: {  }
-      sorts: {  }
+      sorts:
+        entityqueue_relationship:
+          id: entityqueue_relationship
+          table: meta_entity
+          field: entityqueue_relationship
+          relationship: none
+          group_type: group
+          admin_label: ''
+          entity_type: meta_entity
+          plugin_id: entity_queue_position
+          order: ASC
+          expose:
+            label: ''
+            field_identifier: ''
+          exposed: false
       arguments: {  }
       filters:
         type:
