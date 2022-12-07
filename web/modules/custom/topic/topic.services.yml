@@ -7,3 +7,7 @@ services:
     class: Drupal\topic\RouteProcessor\TopicRouteProcessor
     tags:
       - { name: route_processor_outbound, priority: 0 }
+
+  topic.vocabulary_manager:
+    class: Drupal\topic\VocabularyManager
+    arguments: ['@entity_type.manager', '@database', '@sparql.endpoint']
