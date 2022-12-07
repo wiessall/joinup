@@ -15,7 +15,7 @@ class PublishedAtOrUpdatedComputed extends TypedData {
   /**
    * {@inheritdoc}
    */
-  public function getValue() {
+  public function getValue(): int {
     /** @var \Drupal\Core\Field\FieldItemInterface $item */
     $item = $this->getParent();
     $value = $item->get($this->definition->getSetting('source'))->getValue();
