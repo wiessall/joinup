@@ -7,7 +7,10 @@ namespace Drupal\joinup_publication_date\Plugin\Field\FieldType;
 use Drupal\publication_date\Plugin\Field\FieldType\PublicationDateFieldItemList as OriginalPublicationDateFieldItemList;
 
 /**
- * Overrides a item list class for publication date fields.
+ * Overrides an item list class for publication date fields.
+ *
+ * Drupal Timestamps are expected to never be empty, so we have to return
+ * the never-empty computed value for the benefit of display formatters.
  */
 class PublicationDateFieldItemList extends OriginalPublicationDateFieldItemList {
 
