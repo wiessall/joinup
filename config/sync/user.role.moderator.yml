@@ -332,6 +332,7 @@ permissions:
   - 'update site alerts'
   - 'update solution_settings meta-entity'
   - 'update spotlight entityqueue'
+  - 'update topic meta-entity'
   - 'view any unpublished content'
   - 'view eif wrapper entity'
   - 'view field_is_eif_category'
@@ -341,4 +342,5 @@ permissions:
   - 'view own field_is_eif_recommendation'
   - 'view rdf entity overview'
   - 'view rdf_entity draft graph'
+  - 'view topic meta-entity'
   - 'view unpublished rdf entity'
