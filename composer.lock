@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "9c765941f33f15fa8764448dea627d49",
+    "content-hash": "b3f678730fc4b3528ab1a862333b8bdb",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -21955,7 +21955,6 @@
         "drupal/dropsolid_purge": 10,
         "drupal/facets_date_range": 10,
         "drupal/page_manager": 10,
-        "drupal/publication_date": 10,
         "drupal/views_block_area": 10,
         "drupal/drupal-extension": 20,
         "drupaltest/behat-one-time-login": 20,
