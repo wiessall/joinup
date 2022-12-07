@@ -25,7 +25,7 @@ class PublishedAtOrUpdatedComputed extends TypedData {
 
     $entity = $item->getEntity();
     if ($entity instanceof EntityChangedInterface) {
-      return $entity->getChangedTime();
+      return (int) $entity->getChangedTime();
     }
 
     // Fall back to the current time if the entity is somehow not a node.
