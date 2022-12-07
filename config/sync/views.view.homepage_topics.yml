@@ -23,7 +23,7 @@ display:
     display_plugin: default
     position: 0
     display_options:
-      title: 'Homepage topics'
+      title: 'Main topics'
       fields:
         rendered_entity:
           id: rendered_entity
@@ -168,9 +168,9 @@ display:
       style:
         type: default
         options:
-          grouping: {  }
           row_class: ''
-          default_row_class: true
+          default_row_class: false
+          uses_fields: false
       row:
         type: 'entity:meta_entity'
         options:
@@ -220,6 +220,7 @@ display:
         metatag_display_extender:
           metatags: {  }
           tokenize: false
+      block_description: 'Main topics'
     cache_metadata:
       max-age: -1
       contexts:
