@@ -5,3 +5,11 @@ dashboard.page:
     _title: 'Dashboard'
   requirements:
     _permission: 'access dashboard'
+
+dashboard.disable_registration:
+  path: '/dashboard/disable-registration'
+  defaults:
+    _form: Drupal\dashboard\Form\DisableRegistrationForm
+    _title: Disable site registration
+  requirements:
+    _permission: 'disable site auto-registration'
