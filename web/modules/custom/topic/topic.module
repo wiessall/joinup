@@ -7,7 +7,12 @@
 
 declare(strict_types = 1);
 
+use Drupal\meta_entity\Entity\MetaEntityInterface;
+use Drupal\taxonomy\TermInterface;
 use Drupal\topic\Entity\Topic;
+use Drupal\topic\Entity\TopicInterface;
+use Drupal\topic\Entity\TopicMetaEntity;
+use Drupal\topic\Entity\TopicMetaEntityInterface;
 
 /**
  * Implements hook_entity_bundle_info_alter().
@@ -15,5 +20,32 @@ use Drupal\topic\Entity\Topic;
 function topic_entity_bundle_info_alter(&$bundles) {
   if (!empty($bundles['taxonomy_term']['topic'])) {
     $bundles['taxonomy_term']['topic']['class'] = Topic::class;
+  }
+  if (!empty($bundles['meta_entity']['topic'])) {
+    $bundles['meta_entity']['topic']['class'] = TopicMetaEntity::class;
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_update().
+ */
+function topic_taxonomy_term_update(TermInterface $term): void {
+  if ($term instanceof TopicInterface) {
+    /** @var \Drupal\topic\Entity\TopicInterface $original */
+    if (($original = $term->original) && $term->label() != $original->label()) {
+      /** @var \Drupal\topic\Entity\TopicMetaEntity $meta_entity */
+      if ($meta_entity = $term->topic->entity) {
+        $meta_entity->set('label', $term->label())->save();
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_presave().
+ */
+function topic_meta_entity_presave(MetaEntityInterface $meta_entity): void {
+  if ($meta_entity instanceof TopicMetaEntityInterface && $term = $meta_entity->getTargetEntity()) {
+    $meta_entity->set('label', $term->label());
   }
 }

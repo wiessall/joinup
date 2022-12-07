@@ -15,6 +15,8 @@
 declare(strict_types = 1);
 
 use Drupal\pathauto\PathautoState;
+use Drupal\topic\Entity\TopicInterface;
+use Drupal\topic\Entity\TopicMetaEntity;
 
 /**
  * Fix Interoperable Europe news creation link.
@@ -443,4 +445,24 @@ function joinup_core_deploy_108902(array &$sandbox): string {
 
   $sandbox['#finished'] = empty($sandbox['tasks']) ? 1 : ($sandbox['current'] / $sandbox['max']);
   return "Topic refactoring: $operation, " . count($tasks) . " tasks have been completed. Total progress: {$sandbox['current']} / {$sandbox['max']}";
+}
+
+/**
+ * Synchronize Topic meta entity with Topic terms.
+ */
+function joinup_core_deploy_108903(): void {
+  // Load the whole taxonomy tree using values.
+  $manager = \Drupal::entityTypeManager()
+    ->getStorage('taxonomy_term');
+  $taxonomy_tree = $manager->loadTree('topic', 0, NULL, TRUE);
+  foreach ($taxonomy_tree as $term) {
+    if ($term instanceof TopicInterface) {
+      TopicMetaEntity::create([
+        'type' => 'topic',
+        'target' => $term,
+        'label' => $term->getName(),
+        'published' => FALSE,
+      ])->save();
+    }
+  }
 }

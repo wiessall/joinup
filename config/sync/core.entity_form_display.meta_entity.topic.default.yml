@@ -1,0 +1,43 @@
+uuid: 02270e23-5d7e-4e1d-b7e4-a464c89168b3
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.meta_entity.topic.description
+    - field.field.meta_entity.topic.image
+    - field.field.meta_entity.topic.published
+    - image.style.thumbnail
+    - meta_entity.type.topic
+  module:
+    - image
+id: meta_entity.topic.default
+targetEntityType: meta_entity
+bundle: topic
+mode: default
+content:
+  description:
+    type: string_textfield
+    weight: 0
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  image:
+    type: image_image
+    weight: 1
+    region: content
+    settings:
+      progress_indicator: throbber
+      preview_image_style: thumbnail
+    third_party_settings: {  }
+  published:
+    type: boolean_checkbox
+    weight: 2
+    region: content
+    settings:
+      display_label: true
+    third_party_settings: {  }
+hidden:
+  label: true
+  target: true
