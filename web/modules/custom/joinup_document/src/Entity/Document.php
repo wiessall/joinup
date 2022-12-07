@@ -33,7 +33,7 @@ class Document extends CommunityContentBase implements DocumentInterface {
       return \DateTimeImmutable::createFromFormat('Y-m-d\TH:i:s', $value, new \DateTimeZone('UTC'))->getTimestamp();
     }
 
-    if ($this->get('published_at')->isEmpty() || empty($this->get('published_at')->value) || $this->get('published_at')->value == PUBLICATION_DATE_DEFAULT) {
+    if ($this->get('published_at')->isEmpty() || empty($this->get('published_at')->value) || is_null($this->get('published_at')->value)) {
       return NULL;
     }
 

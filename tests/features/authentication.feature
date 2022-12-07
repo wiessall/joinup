@@ -185,7 +185,7 @@ Feature: User authentication
       | admin/reporting/solutions-by-type           |
       | admin/reporting/subscribers-report          |
       | admin/structure/compatibility-document      |
-      | announcements                                       |
+      | announcements                               |
       | dashboard                                   |
       | licence                                     |
       | licence/add                                 |
