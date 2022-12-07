@@ -25,7 +25,7 @@ class PublishedAtOrCreatedComputed extends TypedData {
 
     $entity = $item->getEntity();
     if ($entity instanceof NodeInterface) {
-      return $entity->getCreatedTime();
+      return (int) $entity->getCreatedTime();
     }
 
     return \Drupal::time()->getRequestTime();
