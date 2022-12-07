@@ -339,7 +339,6 @@ Feature: Log in through EU Login
 
     Given I am logged in as mod
     And I visit "Dashboard"
-    When I click "Disable registration"
     And I check "Disable new accounts registration"
     And I press "Submit"
     Then I should see the warning message "Registering new users to Joinup is disabled"
@@ -355,7 +354,7 @@ Feature: Log in through EU Login
     And I should see the link "Sign in"
 
     Given I am logged in as mod
-    And I visit "/dashboard/disable-registration"
+    And I visit "Dashboard"
     And I uncheck "Disable new accounts registration"
     And I press "Submit"
     Then I should see the success message "Registering new users to Joinup is enabled"
