@@ -20,7 +20,7 @@ class PublishedAtOrUpdatedComputed extends TypedData {
     $item = $this->getParent();
     $value = $item->get($this->definition->getSetting('source'))->getValue();
     if ($value) {
-      return $value;
+      return (int) $value;
     }
 
     $entity = $item->getEntity();
