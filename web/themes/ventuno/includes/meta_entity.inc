@@ -2,7 +2,7 @@
 
 /**
  * @file
- * EIF specific procedural functions.
+ * Meta Entity specific procedural functions.
  */
 
 declare(strict_types = 1);
@@ -21,5 +21,5 @@ function ventuno_preprocess_meta_entity__topic__teaser(array &$variables): void 
   /** @var \Drupal\meta_entity\Entity\MetaEntityInterface $meta_entity */
   $meta_entity = $variables['meta_entity'];
   $topic = $meta_entity->getTargetEntity();
-  $variables['target_entity_url'] = $topic->toUrl('canonical', ['absolute' => TRUE])->toString();
+  $variables['target_entity_url'] = $topic->toUrl()->setAbsolute()->toString();
 }
