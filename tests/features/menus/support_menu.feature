@@ -43,7 +43,7 @@ Feature:
     Given I am <role>
 
     When I am on the homepage
-    Then I should see the link "Take a tour" in the "Footer"
+    Then I should <homepage expectation> the link "Take a tour" in the "Footer"
     And I should see the link "Contact Joinup Support"
     Then I click "Contact Joinup Support"
     And I fill in the following:
@@ -98,13 +98,13 @@ Feature:
     And I should see the link "Contact Joinup Support"
 
     When I go to "/user"
-    Then I should <expectation> the link "Take a tour"
+    Then I should <user page expectation> the link "Take a tour"
     And I should see the link "Contact Joinup Support"
 
     Examples:
-      | role                                 | expectation |
-      | an anonymous user                    | not see     |
-      | logged in as an "authenticated user" | see         |
+      | role                                 | user page expectation | homepage expectation |
+      | an anonymous user                    | not see               | see                  |
+      | logged in as an "authenticated user" | see                   | not see              |
 
   @wip
   # Todo: Find out why this fails on the test bot, and enable the test again.
