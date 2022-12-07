@@ -16,7 +16,6 @@ function ventuno_theme_suggestions_views_view_alter(array &$suggestions, array $
   $suggestions[] = 'views_view__' . $id;
 }
 
-
 /**
  * Implements hook_theme_suggestions_HOOK_alter() for the views_view_unformatted hook.
  */
