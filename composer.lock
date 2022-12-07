@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "39028ca5af736c92eef9529740358cc5",
+    "content-hash": "a5cf8b490e1c1b809eb547b92ca770df",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -1541,27 +1541,30 @@
         },
         {
             "name": "drupal/auditfiles",
-            "version": "dev-4.x",
+            "version": "4.0.0-beta1",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/auditfiles.git",
-                "reference": "6aee83fd7f713c5836acd05378077b480e17f86c"
+                "reference": "4.0.0-beta1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/auditfiles-4.0.0-beta1.zip",
+                "reference": "4.0.0-beta1",
+                "shasum": "e3879395d52c502c53e2ee2142854cd80b82aa1c"
             },
             "require": {
-                "drupal/core": "^9",
+                "drupal/core": "^9.4",
                 "php": ">=8.0"
             },
             "type": "drupal-module",
             "extra": {
-                "branch-alias": {
-                    "dev-4.x": "4.x-dev"
-                },
                 "drupal": {
-                    "version": "4.x-dev",
-                    "datestamp": "1665135085",
+                    "version": "4.0.0-beta1",
+                    "datestamp": "1669300091",
                     "security-coverage": {
                         "status": "not-covered",
-                        "message": "Dev releases are not covered by Drupal security advisories."
+                        "message": "Beta releases are not covered by Drupal security advisories."
                     }
                 }
             },
