@@ -17,12 +17,13 @@ class PublicationDateItem extends OriginalPublicationDateItem {
    * {@inheritdoc}
    */
   public function applyDefaultValue($notify = TRUE) {
+    $date = \Drupal::time()->getRequestTime();
     $this->setValue(
       [
         'value' => NULL,
-        'published_at_or_now' => \Drupal::time()->getRequestTime(),
-        'published_at_or_created' => \Drupal::time()->getRequestTime(),
-        'published_at_or_updated' => \Drupal::time()->getRequestTime(),
+        'published_at_or_now' => $date,
+        'published_at_or_created' => $date,
+        'published_at_or_updated' => $date,
       ], $notify
     );
     return $this;
