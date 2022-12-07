@@ -30,6 +30,28 @@ function ventuno_theme_suggestions_block_alter(array &$suggestions, array $varia
 /**
  * Implements hook_preprocess_block().
  */
+function ventuno_preprocess_block(array &$variables): void {
+  // List of the "layout-blocks" (mainly in the Home page) that share common styles.
+  $layout_blocks = [
+    'homepage_topics-block_1',
+    'in_the_spotlight-block',
+    'highlighted_content',
+    'latest_news-block',
+    'highlighted_event',
+  ];
+  $derivative_plugin_id = $variables['elements']['#derivative_plugin_id'];
+  if (in_array($derivative_plugin_id, $layout_blocks)) {
+    // Add library and according selectors
+    $variables['#attached']['library'][] = 'ventuno/layout-block';
+    $variables['attributes']['class'][] = 'layout-block';
+    $variables['title_attributes']['class'][] = 'layout-block__title';
+    $variables['title_attributes']['class'][] = 'layout-block__title--' . $derivative_plugin_id;
+  }
+}
+
+/**
+ * Implements hook_preprocess_block().
+ */
 function ventuno_preprocess_block__facetsblock_searchpage(array &$variables): void {
   $block_manager = \Drupal::getContainer()->get('plugin.manager.block');
   $plugin_block = $block_manager->createInstance('joinup_search_clear_filters');
