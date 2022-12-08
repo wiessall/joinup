@@ -4,7 +4,7 @@
  * Template for a menu.
  *
  * Available variables:
- * - pattern_items:  A nested list of menu items. Each menu item contains:
+ * - items:  A nested list of menu items. Each menu item contains:
  *   - label: The menu link label.
  *   - path: The path corresponding to the menu item.
  *   - attributes: HTML attributes for the menu item.
@@ -14,7 +14,7 @@
 {% set menu = pattern('navigation', {
     'variant': 'pills',
     'orientation': 'vertical',
-    'items': pattern_items,
+    'items': items,
   })
 %}
 <div class="dropdown menu--og--navigation">
