@@ -23,8 +23,8 @@ settings:
   file_directory: 'topics/[date:custom:Y]-[date:custom:m]'
   file_extensions: 'png gif jpg jpeg'
   max_filesize: 2MB
-  max_resolution: ''
-  min_resolution: ''
+  max_resolution: 535x232
+  min_resolution: 535x232
   alt_field: false
   alt_field_required: true
   title_field: false
