@@ -57,9 +57,20 @@ Feature:
     When I click "Dashboard"
     And I click Topics
     And I click "Edit" in the "E-justice" row
+    And I attach the file "ada.png" to "Image"
+    And I press "Upload"
+    Then I should see the success message "The image was resized to fit within the maximum allowed dimensions of 535x232 pixels. The new dimensions of the resized image are 148x232 pixels."
+    And I should see the following error messages:
+      | error messages                                                                                                                       |
+      | The specified file ada.png could not be uploaded.                                                                                    |
+      | The resized image is too small. The minimum dimensions are 535x232 pixels and after resizing, the image size will be 148x232 pixels. |
+    And I attach the file "topic.png" to "Image"
+    And I press "Upload"
+    When I fill in "Description" with "E-justice description"
     And I check "Published"
     And I press "Save"
     And I click "Edit" in the "Finance in EU" row
+    And I fill in "Description" with "Finance in EU description"
     And I check "Published"
     And I press "Save"
 
@@ -67,6 +78,7 @@ Feature:
     When I click "Dashboard"
     And I click "Curated content listings"
     And I click "Homepage topics"
+    # The field does not have a title of a label element.
     And I fill in "edit-items-add-more-new-item-target-id" with "E-justice"
     And I press "Add item"
     And I fill in "edit-items-add-more-new-item-target-id" with "Finance in EU"
@@ -77,6 +89,12 @@ Feature:
       # The 'Edit' keyword is because there is an edit link in the table cell.
       | E-justice Edit     |
       | Finance in EU Edit |
+
+    When I go to the homepage
+    Then I should see the text "E-justice" in the "Homepage topics" region
+    And I should see the text "E-justice description" in the "Homepage topics" region
+    And I should see the text "Finance in EU" in the "Homepage topics" region
+    And I should see the text "Finance in EU description" in the "Homepage topics" region
 
     # Unpublish a term and check it is removed from the curated list.
     When I click "Dashboard"
@@ -90,3 +108,7 @@ Feature:
     And I click "Homepage topics"
     And the "form table" table should contain a column with the following data:
       | Finance in EU Edit |
+
+    When I go to the homepage
+    Then I should not see the text "E-justice" in the "Homepage topics" region
+    But I should see the text "Finance in EU" in the "Homepage topics" region

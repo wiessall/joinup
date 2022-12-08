@@ -1,0 +1,16 @@
+.layout-block {
+  &__title {
+    color: $primary;
+    font-weight: $font-weight-bold;
+    text-transform: uppercase;
+    font-size: 1.25rem; // 20px
+    padding-top: $spacer * .75;
+    padding-bottom: $spacer;
+    margin-bottom: $spacer;
+    line-height: 1.2;
+    &--homepage_topics-block_1 {
+      border-bottom: 1px solid rgba($primary, .1);
+      @include font-icon-before("\E804", 1.2rem, $warning);
+    }
+  }
+}
