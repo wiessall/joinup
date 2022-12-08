@@ -112,6 +112,11 @@ ief-entity-table:
     theme:
       assets/css/ief-entity-table.css: {}
 
+layout-block:
+  css:
+    theme:
+      assets/css/layout-block.min.css: { minified: true }
+
 navbar:
   css:
     theme:
