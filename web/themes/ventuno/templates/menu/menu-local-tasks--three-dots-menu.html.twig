@@ -25,7 +25,11 @@
     </button>
     <div class="dropdown-menu dropdown-menu-end px-3" aria-labelledby="local-tasks-primary">
       <h2 class="visually-hidden">{{ 'Primary tabs'|t }}</h2>
-      <ul for="local-tasks-primary" class="list-unstyled ps-0 mb-0">{{ primary }}</ul>
+      {{ pattern('navigation', {
+        'variant': 'pills',
+        'orientation': 'vertical',
+        'items': primary,
+      }) }}
     </div>
   </div>
 {% endif %}
@@ -38,7 +42,11 @@
     </button>
     <div class="dropdown-menu dropdown-menu-end px-3" aria-labelledby="local-tasks-secondary">
       <h2 class="visually-hidden">{{ 'Secondary tabs'|t }}</h2>
-      <ul for="local-tasks-secondary" class="list-unstyled ps-0 mb-0">{{ secondary }}</ul>
+      {{ pattern('navigation', {
+        'variant': 'pills',
+        'orientation': 'vertical',
+        'items': secondary,
+      }) }}
     </div>
   </div>
 {% endif %}
