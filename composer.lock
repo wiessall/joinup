@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "92e3f6e4af64a1156ca8506f2bf499fb",
+    "content-hash": "7b9b2b3bd589185c74649680121ccf8b",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -5718,26 +5718,26 @@
         },
         {
             "name": "drupal/publication_date",
-            "version": "2.0.0-beta5",
+            "version": "2.0.0-beta6",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/publication_date.git",
-                "reference": "8.x-2.0-beta5"
+                "reference": "8.x-2.0-beta6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/publication_date-8.x-2.0-beta5.zip",
-                "reference": "8.x-2.0-beta5",
-                "shasum": "0add730f353d15fa13a13a9a463b431e6f5a663e"
+                "url": "https://ftp.drupal.org/files/projects/publication_date-8.x-2.0-beta6.zip",
+                "reference": "8.x-2.0-beta6",
+                "shasum": "16038d7f204f4ab999c68740a5db596aca142fa1"
             },
             "require": {
-                "drupal/core": "^8 || ^9"
+                "drupal/core": "^9.1 || ^10"
             },
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "8.x-2.0-beta5",
-                    "datestamp": "1661984596",
+                    "version": "8.x-2.0-beta6",
+                    "datestamp": "1669064172",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Beta releases are not covered by Drupal security advisories."
