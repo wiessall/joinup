@@ -19,7 +19,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class UnpublishedContentPageController extends ControllerBase {
 
   /**
-   * Constructs a new OgAdminMembersController object.
+   * Constructs a new UnpublishedContentPageController object.
    *
    * @param \Drupal\Core\Block\BlockManagerInterface $block_plugin_manager
    *   The block plugin manager service.
@@ -39,7 +39,7 @@ class UnpublishedContentPageController extends ControllerBase {
   }
 
   /**
-   * Renders the "unpublishedContent" view mode of a rdf entity.
+   * Renders the "unpublishedContent" of a rdf entity.
    *
    * @param \Drupal\rdf_entity\RdfInterface $rdf_entity
    *   The rdf entity to be rendered.
@@ -82,7 +82,7 @@ class UnpublishedContentPageController extends ControllerBase {
    * Access check for the upublished content page.
    *
    * @param \Drupal\joinup_group\Entity\GroupInterface $rdf_entity
-   *   The group for which the access to the members page is being determined.
+   *   RdfEntity.
    *
    * @return \Drupal\Core\Access\AccessResultInterface
    *   The access result object.
