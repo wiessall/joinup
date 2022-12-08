@@ -1,4 +1,13 @@
 .three-dots-menu {
+  position: fixed;
+  bottom: $spacer;
+  right: $spacer;
+  z-index: 501; // Ensure opened dropdown-menu is on top of contextual links
+  @include media-breakpoint-up(lg) {
+    position: relative;
+    bottom: 0;
+    right: $spacer * -5.5;
+  }
   // Modifier
   &--primary {
     position: absolute;
@@ -7,9 +16,16 @@
     right: $spacer;
   }
   // Block
-  &__button {
-    width: 2rem;
-    height: 2rem;
+  &__btn,
+  &__btn:focus:not(:focus-visible) {
+    width: 3.5rem; // 56px
+    height: 3.5rem; // 56px
+    margin-top: -1.75rem; // -28px
+    // border: $spacer * .25 solid $white;
+    &:hover,
+    &:active {
+      // border-color: $white;
+    }
   }
   .dropdown-menu > ul > li > a {
     display: block;

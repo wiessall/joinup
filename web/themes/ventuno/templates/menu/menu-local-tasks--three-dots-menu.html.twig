@@ -17,9 +17,9 @@
 #}
 {{ attach_library('ventuno/three-dots-menu') }}
 {% if primary %}
-  <button type="button" id="local-tasks-primary" data-bs-toggle="dropdown" aria-expanded="false" class="dropdown-toggle btn btn-primary btn-lg rounded-circle p-0 add-content__btn" title="{{ 'Show primary options'|t }}">
-    <svg class="bi icon--xl">
-      <use xlink:href="{{ bcl_icon_path }}#three-dots-vertical"></use>
+  <button type="button" id="local-tasks-primary" data-bs-toggle="dropdown" aria-expanded="false" class="dropdown-toggle btn btn-outline-warning btn-lg rounded-circle p-0 three-dots-menu__btn" title="{{ 'Show primary options'|t }}">
+    <svg class="bi icon--m">
+      <use xlink:href="{{ bcl_icon_path }}#three-dots"></use>
     </svg>
   </button>
   <div class="dropdown-menu dropdown-menu-end">
@@ -34,9 +34,9 @@
   </div>
 {% endif %}
 {% if secondary %}
-  <button type="button" id="local-tasks-secondary" data-bs-toggle="dropdown" aria-expanded="false" class="dropdown-toggle btn btn-primary btn-lg rounded-circle p-0 add-content__btn" title="{{ 'Show secondary options'|t }}">
-    <svg class="bi icon--xl">
-      <use xlink:href="{{ bcl_icon_path }}#three-dots-vertical"></use>
+  <button type="button" id="local-tasks-secondary" data-bs-toggle="dropdown" aria-expanded="false" class="dropdown-toggle btn btn-outline-warning btn-lg rounded-circle p-0 three-dots-menu__btn" title="{{ 'Show secondary options'|t }}">
+    <svg class="bi icon--m">
+      <use xlink:href="{{ bcl_icon_path }}#three-dots"></use>
     </svg>
   </button>
   <div class="dropdown-menu dropdown-menu-end">
