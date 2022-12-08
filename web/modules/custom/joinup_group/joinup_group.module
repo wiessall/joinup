@@ -54,6 +54,12 @@ function joinup_group_theme($existing, $type, $theme, $path) {
         'confirm' => '',
       ],
     ],
+    'group_unpublished_content_page' => [
+      'variables' => [
+        'draft_block' => NULL,
+        'proposed_block' => NULL,
+      ],
+    ],
   ];
 }
 
