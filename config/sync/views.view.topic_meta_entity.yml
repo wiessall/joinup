@@ -706,6 +706,7 @@ display:
             value: |-
               <ul>
               <li>In this page, you can publish/unpublish the meta entities of the topics shown in the homepage as well as edit the description and the image.</li>
+              <li>The image must be <strong>535px wide and 232px high</strong> to ensure a good display across all devices.</li>
               <li>Unpublishing a topic meta entity, will remove it from the curated list that is responsible for displaying it in the homepage.</li>
               <li>Publishing a topic here will <strong>not</strong> make it appear in the homepage. You need to add it to the curated list manually.</li>
               <li>To edit the curated list, go to <a href="[site:url]dashboard">Dashboard</a> > <a href="[site:url]admin/curated-content-listings">Curated content listings</a> > <a href="[site:url]admin/structure/entityqueue/homepage_topics/homepage_topics">Homepage topics</a>.</li>
