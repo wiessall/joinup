@@ -1,22 +1,23 @@
 .add-content {
   position: fixed;
   bottom: $spacer;
-  right: $spacer;
+  right: $spacer * 5.5;
   z-index: 501; // Ensure opened dropdown-menu is on top of contextual links
   @include media-breakpoint-up(lg) {
     position: relative;
     bottom: 0;
-    right: 0;
+    right: $spacer * -3.5;
   }
   &__btn,
   &__btn:focus:not(:focus-visible) {
-    width: 3.5rem; // 56px
-    height: 3.5rem; // 56px
+    width: $spacer * 3.5; // 56px
+    height: $spacer * 3.5; // 56px
     margin-top: -1.75rem; // -28px
-    border: $spacer * .5 solid $white;
+    // border: $spacer * .25 solid $white;
+    // color: $white;
     &:hover,
     &:active {
-      border-color: $white;
+      // border-color: $white;
     }
   }
 }
