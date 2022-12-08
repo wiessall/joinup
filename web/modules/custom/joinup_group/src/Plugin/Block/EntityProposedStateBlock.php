@@ -7,7 +7,7 @@ namespace Drupal\joinup_group\Plugin\Block;
 use Drupal\rdf_entity\RdfInterface;
 
 /**
- * Provides a block with the unpublished community content of the entity.
+ * Provides a block with the unpublished content of the entity for proposed state.
  *
  * @Block(
  *   id = "entity_proposed_state",
