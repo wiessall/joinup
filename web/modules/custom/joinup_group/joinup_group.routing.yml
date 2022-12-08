@@ -196,3 +196,18 @@ entity.rdf_entity.announcement_view:
         bundle:
           - announcement
     _og_entity_type_id: rdf_entity
+
+entity.rdf_entity.unpublished_content:
+  path: 'rdf_entity/{rdf_entity}/unpublished'
+  defaults:
+    _controller: '\Drupal\joinup_group\Controller\UnpublishedContentPageController::unpublishedContent'
+    _title: 'Unpublished Content'
+  requirements:
+    _custom_access: Drupal\joinup_group\Controller\UnpublishedContentPageController::access
+  options:
+    parameters:
+      rdf_entity:
+        type: entity:rdf_entity
+        bundle:
+          - collection
+          - solution
