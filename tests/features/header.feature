@@ -49,6 +49,7 @@ Feature: Header
     And I visit the <page>
 
     # The popup is not shown initially.
+    And I take a screenshot
     Then I should not see the text "Create an account"
     And I should not see the text "As a signed-in user you can create content, become a member of a community, receive notifications on your favourite solutions and topics, and access all other features available on the platform."
 
