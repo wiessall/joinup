@@ -1,23 +1,30 @@
 .add-content {
-  position: fixed;
-  bottom: $spacer;
-  right: $spacer * 5.5;
-  z-index: 501; // Ensure opened dropdown-menu is on top of contextual links
-  @include media-breakpoint-up(lg) {
+  z-index: 49; // Avoid button to overlap navbar
+  @include media-breakpoint-up(sm) {
     position: relative;
-    bottom: 0;
-    right: $spacer * -3.5;
+    right: 0;
   }
-  &__btn,
-  &__btn:focus:not(:focus-visible) {
-    width: $spacer * 3.5; // 56px
-    height: $spacer * 3.5; // 56px
-    margin-top: -1.75rem; // -28px
-    // border: $spacer * .25 solid $white;
-    // color: $white;
-    &:hover,
-    &:active {
-      // border-color: $white;
+  &__btn {
+    position: fixed;
+    bottom: $spacer;
+    right: $spacer * 5; // 80px
+    width: $spacer * 3; // 48px
+    height: $spacer * 3; // 48px
+    @include media-breakpoint-up(sm) {
+      position: absolute;
+      right: $spacer * 6; // 96px
+      bottom: $spacer * -1.5; // -24px
+      &:before {
+        content: " ";
+        position: absolute;
+        z-index: -1;
+        top: $spacer * -.5; //-8px
+        left: $spacer * -.5; //-8px
+        right: $spacer * -.5; //-8px
+        bottom: $spacer * -.5; //-8px
+        border-radius: 50%;
+        border: $spacer * .5 solid $white;
+      }
     }
   }
 }

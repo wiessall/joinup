@@ -27,13 +27,9 @@
 #}
 {%
   set classes = [
-    'block',
-    'block-' ~ configuration.provider|clean_class,
-    'block-' ~ plugin_id|clean_class,
-    'd-flex',
-    'justify-content-end',
     'container',
     'three-dots-menu',
+    'mb-3',
   ]
 %}
 <div{{ attributes.addClass(classes) }}>
