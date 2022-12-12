@@ -81,11 +81,20 @@ Feature:
     # The field does not have a title of a label element.
     And I fill in "edit-items-add-more-new-item-target-id" with "E-justice"
     And I press "Add item"
-    And I fill in "edit-items-add-more-new-item-target-id" with "Finance in EU"
+    And I fill in "edit-items-add-more-new-item-target-id" with "E-justice"
     And I press "Add item"
+
+    When I press "Save"
+    Then I should see the error message "The E-justice topic is already in the list."
+
+    When I fill in "edit-items-add-more-new-item-target-id" with "Finance in EU"
+    And I press "Add item"
+    # With Javascript disabled this field is filled with the latest value, so we
+    # need to explicitly clear the value.
+    And I fill in "edit-items-add-more-new-item-target-id" with ""
     And I press "Save"
 
-    And the "form table" table should contain a column with the following data:
+    Then the "form table" table should contain a column with the following data:
       # The 'Edit' keyword is because there is an edit link in the table cell.
       | E-justice Edit     |
       | Finance in EU Edit |
