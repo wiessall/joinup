@@ -13,6 +13,7 @@ dependencies:
     - filter
     - joinup_licence
     - media
+    - meta_entity
     - paragraphs_type_permissions
     - rdf_entity
     - rdf_export
@@ -59,5 +60,5 @@ permissions:
   - 'view paragraph content simple_paragraph'
   - 'view paragraph content testimony'
   - 'view paragraph content video'
-  - 'view topic meta-entity'
   - 'view rdf entity'
+  - 'view topic meta-entity'
