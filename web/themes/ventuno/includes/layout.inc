@@ -114,6 +114,7 @@ function ventuno_preprocess_container(array &$variables): void {
     $valid_facet_ids = [
       'collection_type',
       'solution_content_bundle',
+      'field_content_listing_type',
     ];
     if (in_array($facet_id, $valid_facet_ids)) {
       $classes = [
