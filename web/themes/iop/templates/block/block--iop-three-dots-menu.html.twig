@@ -1,4 +1,3 @@
-{# @todo ISAICP-7138 delete this file when switch to Ventuno theme is complete #}
 {#
 /**
  * @file
@@ -26,36 +25,4 @@
  * @see template_preprocess_block()
  */
 #}
-{{ attach_library('iop/add-content') }}
-{%
-  set classes = [
-    'block',
-    'block-' ~ configuration.provider|clean_class,
-    'block-' ~ plugin_id|clean_class,
-    'add-content',
-    'dropdown',
-    'd-flex',
-    'justify-content-end',
-    'my-1',
-  ]
-%}
-<div{{ attributes.addClass(classes) }}>
-  {{ title_prefix }}
-  {% if label %}
-    <h2{{ title_attributes }}>{{ label }}</h2>
-  {% endif %}
-  {# Disable contextual links because they interfere with the dropdown trigger #}
-  {# {{ title_suffix }} #}
-  {% block content %}
-    <button type="button" id="dropdown-add-content" data-bs-toggle="dropdown" aria-expanded="false" class="btn btn-primary btn-lg rounded-circle p-0 add-content__btn" title="{{ 'Add content'|t }}">
-      <svg class="bi icon--xl">
-        <use xlink:href="{{ bcl_icon_path }}#plus"></use>
-      </svg>
-    </button>
-    <div class="dropdown-menu dropdown-menu-end p-0">
-      <nav class="nav nav-pills flex-column px-3 py-2" aria-labelledby="dropdown-add-content" class="dropdown-menu">
-        {{ content }}
-      </nav>
-    </div>
-  {% endblock %}
-</div>
+{% include '@ventuno/templates/block/block--ventuno-three-dots-menu.html.twig' %}
