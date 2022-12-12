@@ -26,7 +26,7 @@
       right: $spacer; // 16px
       bottom: $spacer * -1.5; // -24px
       &:before {
-        content: " ";
+        content: "";
         position: absolute;
         z-index: -1;
         top: $spacer * -.5; //-8px
