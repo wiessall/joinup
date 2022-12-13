@@ -1,0 +1,52 @@
+.actions-menu {
+  position: fixed;
+  bottom: $spacer;
+  display: inline-block;
+  z-index: 48; // Avoid button to overlap joinup and IOP navbar
+  @include media-breakpoint-up(sm) {
+    position: relative;
+    bottom: $spacer * 1.5; // 24px
+  }
+  &__btn {
+    position: relative;
+    width: $spacer * 3; // 48px
+    height: $spacer * 3; // 48px
+    @include media-breakpoint-up(sm) {
+      &:before {
+        content: "";
+        position: absolute;
+        z-index: -1;
+        top: $spacer * -.5; //-8px
+        left: $spacer * -.5; //-8px
+        right: $spacer * -.5; //-8px
+        bottom: $spacer * -.5; //-8px
+        border-radius: 50%;
+        border: $spacer * .5 solid $white;
+      }
+    }
+  }
+  &--three-dots {
+    right: $spacer;
+    @include media-breakpoint-up(sm) {
+      left: calc(100% - $spacer * 6); // 100% - 96px
+    }
+    .actions-menu__btn {
+      background-color: $white;
+      &:hover,
+      &:focus,
+      &:active {
+        color: $white !important;
+        background-color: $warning;
+      }
+      svg {
+        vertical-align: text-top; // Without this, the three dots are not perfectly centered
+      }
+    }
+  }
+  &--add-content {
+    right: $spacer * 5; // 80px
+    @include media-breakpoint-up(sm) {
+      left: calc(100% - $spacer * 7.5); // 100% - 120px
+    }
+  }
+}

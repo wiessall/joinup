@@ -97,10 +97,10 @@ abstract:
     theme:
       assets/css/abstract.css: {}
 
-add-content:
+actions-menu:
   css:
     theme:
-      assets/css/add-content.min.css: { minified: true }
+      assets/css/actions-menu.min.css: { minified: true }
 
 ajax-throbber:
   js:
@@ -251,11 +251,6 @@ tabledrag:
   css:
     theme:
       assets/css/tabledrag.min.css: { minified: true }
-
-three-dots-menu:
-  css:
-    theme:
-      assets/css/three-dots-menu.css: {}
 
 timeline:
   css:
