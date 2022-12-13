@@ -26,6 +26,15 @@ module.exports = {
   styles: [
     // Components
     {
+      entry: path.resolve(outputFolder, "src/scss/actions-menu.scss"),
+      dest: path.resolve(outputFolder, "assets/css/actions-menu.min.css"),
+      options: {
+        minify: true,
+        includePaths,
+        sourceMap: "file",
+      },
+    },
+    {
       entry: path.resolve(outputFolder, "src/scss/accordion-faq.scss"),
       dest: path.resolve(outputFolder, "assets/css/accordion-faq.min.css"),
       options: {
@@ -191,16 +200,6 @@ module.exports = {
     {
       entry: path.resolve(outputFolder, "src/scss/pager.scss"),
       dest: path.resolve(outputFolder, "assets/css/pager.min.css"),
-      options: {
-        minify: true,
-        includePaths,
-        sourceMap: "file",
-      },
-    },
-    // @todo ISAICP-7138 delete this library when switch to Ventuno theme is complete
-    {
-      entry: path.resolve(outputFolder, "src/scss/add-content.scss"),
-      dest: path.resolve(outputFolder, "assets/css/add-content.min.css"),
       options: {
         minify: true,
         includePaths,
