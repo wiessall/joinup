@@ -8,8 +8,8 @@ dependencies:
     - ventuno
 id: ventuno_three_dots_menu
 theme: ventuno
-region: header_bottom
-weight: -21
+region: featured
+weight: -22
 provider: null
 plugin: joinup_local_tasks_block
 settings:
