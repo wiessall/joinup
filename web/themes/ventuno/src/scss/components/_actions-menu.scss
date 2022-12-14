@@ -1,36 +1,35 @@
 .actions-menu {
-  position: fixed;
-  bottom: $spacer;
-  display: inline-block;
-  z-index: 48; // Avoid button to overlap joinup and IOP navbar
-  @include media-breakpoint-up(sm) {
-    position: relative;
-    bottom: $spacer * 1.5; // 24px
-  }
+  display: inline;
   &__btn {
-    position: relative;
+    position: fixed;
+    bottom: $spacer;
+    display: inline-block;
+    z-index: 48; // Avoid button to overlap joinup and IOP navbar
     width: $spacer * 3; // 48px
     height: $spacer * 3; // 48px
     @include media-breakpoint-up(sm) {
+      position: relative;
+      z-index: unset;
+      bottom: $spacer * 1.5; // 24px
       &:before {
         content: "";
         position: absolute;
-        z-index: -1;
         top: $spacer * -.5; //-8px
         left: $spacer * -.5; //-8px
         right: $spacer * -.5; //-8px
         bottom: $spacer * -.5; //-8px
         border-radius: 50%;
-        border: $spacer * .5 solid $white;
+        border: $spacer * .45 solid $white; // 7.2px
       }
     }
   }
   &--three-dots {
-    right: $spacer;
-    @include media-breakpoint-up(sm) {
-      left: calc(100% - $spacer * 6); // 100% - 96px
-    }
     .actions-menu__btn {
+      right: $spacer;
+      @include media-breakpoint-up(sm) {
+        right: unset;
+        left: calc(100% - $spacer * 6); // 100% - 96px
+      }
       background-color: $white;
       &:hover,
       &:focus,
@@ -44,9 +43,15 @@
     }
   }
   &--add-content {
-    right: $spacer * 5; // 80px
-    @include media-breakpoint-up(sm) {
-      left: calc(100% - $spacer * 7.5); // 100% - 120px
+    .actions-menu__btn {
+      right: $spacer * 5; // 80px
+      @include media-breakpoint-up(sm) {
+        right: unset;
+        left: calc(100% - $spacer * 7.5); // 100% - 120px
+      }
     }
+  }
+  .dropdown-menu {
+    z-index: 50;
   }
 }
