@@ -1,16 +1,17 @@
 .actions-menu {
-  display: inline;
+  display: inline-block;
+  position: fixed;
+  bottom: $spacer;
+  z-index: 50; // Avoid dropdown-menu to be overlapped by navbar
+    @include media-breakpoint-up(sm) {
+      position: relative;
+      z-index: unset; // Avoid buttons to overlap navbar
+      bottom: $spacer * 1.5; // 24px
+    }
   &__btn {
-    position: fixed;
-    bottom: $spacer;
-    display: inline-block;
-    z-index: 48; // Avoid button to overlap joinup and IOP navbar
     width: $spacer * 3; // 48px
     height: $spacer * 3; // 48px
     @include media-breakpoint-up(sm) {
-      position: relative;
-      z-index: unset;
-      bottom: $spacer * 1.5; // 24px
       &:before {
         content: "";
         position: absolute;
@@ -19,17 +20,17 @@
         right: $spacer * -.5; //-8px
         bottom: $spacer * -.5; //-8px
         border-radius: 50%;
-        border: $spacer * .45 solid $white; // 7.2px
+        border: $spacer * .5 solid $white; // 8px
       }
     }
   }
   &--three-dots {
-    .actions-menu__btn {
-      right: $spacer;
+    right: $spacer;
       @include media-breakpoint-up(sm) {
         right: unset;
         left: calc(100% - $spacer * 6); // 100% - 96px
       }
+    .actions-menu__btn {
       background-color: $white;
       &:hover,
       &:focus,
@@ -43,15 +44,13 @@
     }
   }
   &--add-content {
-    .actions-menu__btn {
       right: $spacer * 5; // 80px
       @include media-breakpoint-up(sm) {
         right: unset;
         left: calc(100% - $spacer * 7.5); // 100% - 120px
       }
-    }
   }
   .dropdown-menu {
-    z-index: 50;
+    z-index: 50; // Avoid dropdown-menu to be overlapped by navbar (default z-index is 40)
   }
 }
