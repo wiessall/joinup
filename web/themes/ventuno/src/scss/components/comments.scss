@@ -1,0 +1,27 @@
+.comments {
+  .comment {
+    &:not(:last-of-type) {
+      position: relative;
+      &::before {
+        content: "";
+        position: absolute;
+        width: $spacer * 2.5;
+        height: calc(100% + 2.5rem);
+        left: $spacer * 2.5;
+        border-left: $spacer * .125 solid $gray-300;
+      }
+    }
+    &__profile-pic {
+      border-radius: $border-radius-pill;
+    }
+    &__details {
+      font-size: $font-size-sm;
+      color: $gray-700;
+    }
+  }
+  .indented {
+    margin-left: 2.5rem;
+    padding-left: 2.5rem;
+    border-left: $spacer * .125 solid $gray-300;
+  }
+}

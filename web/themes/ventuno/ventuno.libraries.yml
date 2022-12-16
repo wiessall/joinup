@@ -109,6 +109,11 @@ ajax-throbber:
     - core/drupal
     - ventuno/spinners
 
+comments:
+  css:
+    theme:
+      assets/css/comments.min.css: { minified: true }
+
 fieldset-show-more:
   css:
     theme:

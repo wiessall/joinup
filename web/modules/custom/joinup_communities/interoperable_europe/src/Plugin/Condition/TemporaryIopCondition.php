@@ -34,7 +34,8 @@ class TemporaryIopCondition extends GroupContextCondition {
     if ($result && $config['group_context'] && $config['limit_to_groups'] === [InteroperableEuropeCollectionInterface::COLLECTION_ENTITY_ID]) {
       $route_match = \Drupal::routeMatch();
       // Except news item and event canonical pages.
-      if ($route_match->getRouteName() === 'entity.node.canonical' && ($node = $route_match->getParameter('node')) && ($node instanceof EventInterface || $node instanceof NewsInterface)) {
+      // @todo ISAICP-7491 Ensure news in Interoperable Europe collection are displayed under the Ventuno theme (not IOP since mockups are not ready yet)
+      if ($route_match->getRouteName() === 'entity.node.canonical' && ($node = $route_match->getParameter('node')) && ($node instanceof EventInterface)) {
         return FALSE;
       }
     }

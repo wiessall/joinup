@@ -33,6 +33,16 @@ function ventuno_theme_suggestions_page_title_alter(array &$suggestions, array &
   $route_match = \Drupal::routeMatch();
   $route_name = $route_match->getRouteName();
 
+  //  @todo ISAICP-7491 Make the bundle and label available so the type can be shown Pasted from joinup_theme.theme
+  // if ($entity instanceof ContentEntityInterface) {
+  //   /** @var \Drupal\Core\Entity\EntityTypeBundleInfoInterface $bundle_info */
+  //   $bundle_info = \Drupal::service('entity_type.bundle.info');
+  //   $info = $bundle_info->getBundleInfo($entity->getEntityTypeId());
+  //   $bundle = $entity->bundle();
+  //   $variables['bundle'] = $bundle;
+  //   $variables['bundle_label'] = $info[$bundle]['label'] ?? $bundle;
+  // }
+
   $entity_types = ['rdf_entity', 'node'];
   foreach ($entity_types as $entity_type) {
     if ($route_name === "entity.{$entity_type}.canonical") {
@@ -42,6 +52,29 @@ function ventuno_theme_suggestions_page_title_alter(array &$suggestions, array &
       $variables['entity'] = $entity;
     }
   }
+}
+
+/**
+ * Implements hook_preprocess_page_title__node__news().
+ */
+function ventuno_preprocess_page_title__node__news(&$variables) {
+  /** @var \Drupal\node\NodeInterface $node */
+  $node = $variables['entity'];
+
+  /** @var \Drupal\Core\Entity\EntityViewBuilderInterface $view_builder */
+  $view_builder = \Drupal::entityTypeManager()->getViewBuilder('node');
+  $field_news_headline = $view_builder->viewField($node->field_news_headline, 'default');
+  $variables['additional_content']['field_news_headline'] = $field_news_headline;
+
+  $published = \Drupal::service('date.formatter')->format($node->published_at->published_at_or_created, 'date_only');
+  $variables['additional_content']['published'] = $published;
+
+  $update_date = \Drupal::service('date.formatter')->format($node->getChangedTime(), 'custom', 'd/m/Y');
+  $variables['additional_content']['updated'] = $update_date;
+
+  // @todo ISAICP-7491 Pass the author to the template
+  // $author_inline = _ventuno_get_author($node);
+  // $variables['additional_content']['author'] = $author_inline;
 }
 
 /**
