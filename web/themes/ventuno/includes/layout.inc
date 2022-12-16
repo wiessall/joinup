@@ -104,3 +104,13 @@ function ventuno_preprocess_html(array &$variables): void {
 function ventuno_preprocess_container__text_format_filter_help(array &$variables): void {
   $variables['attributes']['class'] = ['text-end', 'fs-sm'];
 }
+
+/**
+ * Implements hook_theme_suggestions_HOOK_alter() for page.html.twig.
+ */
+function ventuno_theme_suggestions_page_alter(array &$suggestions, array $variables) {
+  if ($node = \Drupal::routeMatch()->getParameter('node')) {
+    $content_type = $node->bundle();
+    $suggestions[] = 'page__'.$content_type;
+  }
+}

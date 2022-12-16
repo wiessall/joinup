@@ -199,3 +199,23 @@ function _ventuno_theme_suggestions_alter(array &$suggestions, array $variables)
   $bundle = $variables['elements']["#{$entity_type_id}"]->bundle();
   $suggestions[] = $original_theme_hook . '__' . str_replace('-', '_', $bundle) . '__' . str_replace('-', '_', $view_mode);
 }
+
+// @todo ISAICP-7491 enable author. Pasted from joinup_theme.theme
+/**
+ * Get an inline autor.
+ *
+ * @param \Drupal\node\NodeInterface $node
+ *   The node, where we get the author.
+ *
+ * @return array
+ *   Renderable array contains the author.
+ */
+// @todo ISAICP-7491 Allow ventuno_preprocess_page_title__node__news to get the author
+function _ventuno_get_author(NodeInterface $node) {
+  /** @var \Drupal\Core\Entity\EntityViewBuilderInterface $view_builder */
+  $view_builder = \Drupal::entityTypeManager()->getViewBuilder('user');
+  $author = $node->get('uid')->entity;
+  $author_inline = $view_builder->view($author, 'inline');
+
+  return $author_inline;
+}
