@@ -33,7 +33,8 @@ function ventuno_theme_suggestions_page_title_alter(array &$suggestions, array &
   $route_match = \Drupal::routeMatch();
   $route_name = $route_match->getRouteName();
 
-  //  @todo ISAICP-7491 Make the bundle and label available so the type can be shown Pasted from joinup_theme.theme
+  // @todo ISAICP-7491 Make the bundle and label available so type is shown.
+  // Pasted from joinup_theme.theme.
   // if ($entity instanceof ContentEntityInterface) {
   //   /** @var \Drupal\Core\Entity\EntityTypeBundleInfoInterface $bundle_info */
   //   $bundle_info = \Drupal::service('entity_type.bundle.info');
