@@ -139,11 +139,10 @@ function joinup_core_deploy_108903(array &$sandbox = []): string {
   $groups = [];
   foreach ($items as $item) {
     [$entity_type_id, $id] = $item;
-    $groups[$entity_type_id][] = $id;
-  }
-  foreach ($groups as $entity_type_id => $ids) {
     $storage = \Drupal::entityTypeManager()->getStorage($entity_type_id);
-    $storage->delete($storage->loadMultiple($ids));
+    $entity = $storage->load($id);
+    $entity->skip_notification = TRUE;
+    $entity->delete();
   }
   $sandbox['processed'] += count($items);
 
