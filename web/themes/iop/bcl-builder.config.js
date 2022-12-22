@@ -227,47 +227,6 @@ module.exports = {
       to: path.resolve(outputFolder, "assets/css/fonts/files"),
       options: { up: true },
     },
-    // Theme images
-    {
-      from: [path.resolve(__dirname, "src/images/hamburger-menu-icon.svg")],
-      to: path.resolve(outputFolder, "assets/images"),
-      options: { up: true },
-    },
-    {
-      from: [path.resolve(__dirname, "src/images/iop-eu-logo.svg")],
-      to: path.resolve(outputFolder, "assets/images"),
-      options: { up: true },
-    },
-    {
-      from: [path.resolve(__dirname, "src/images/banners/ACT.webp")],
-      to: path.resolve(outputFolder, "assets/images/banners/"),
-      options: { up: true },
-    },
-    {
-      from: [path.resolve(__dirname, "src/images/banners/events.webp")],
-      to: path.resolve(outputFolder, "assets/images/banners/"),
-      options: { up: true },
-    },
-    {
-      from: [path.resolve(__dirname, "src/images/banners/FAQ.webp")],
-      to: path.resolve(outputFolder, "assets/images/banners/"),
-      options: { up: true },
-    },
-    {
-      from: [path.resolve(__dirname, "src/images/banners/news.webp")],
-      to: path.resolve(outputFolder, "assets/images/banners/"),
-      options: { up: true },
-    },
-    {
-      from: [path.resolve(__dirname, "src/images/banners/policy.webp")],
-      to: path.resolve(outputFolder, "assets/images/banners/"),
-      options: { up: true },
-    },
-    {
-      from: [path.resolve(__dirname, "src/images/join-bg.png")],
-      to: path.resolve(outputFolder, "assets/images"),
-      options: { up: true },
-    },
     // Third party files
     {
       from: [
@@ -277,5 +236,4 @@ module.exports = {
       options: { up: true },
     },
   ],
-  sprite: [],
 };

@@ -603,72 +603,6 @@ module.exports = {
       to: path.resolve(outputFolder, "assets/js"),
       options: { up: true },
     },
-    // Theme images
-    {
-      from: [path.resolve(__dirname, "src/images/favicon/*")],
-      to: path.resolve(outputFolder, "assets/images/favicon"),
-      options: { up: true },
-    },
-    {
-      from: [path.resolve(__dirname, "src/images/featured-bg.jpg")],
-      to: path.resolve(outputFolder, "assets/images"),
-      options: { up: true },
-    },
-    {
-      from: [
-        path.resolve(__dirname, "src/images/homepage-banner/background.svg"),
-      ],
-      to: path.resolve(outputFolder, "assets/images"),
-      options: { up: true },
-    },
-    {
-      from: [
-        path.resolve(__dirname, "src/images/homepage-banner/banner-md.svg"),
-      ],
-      to: path.resolve(outputFolder, "assets/images"),
-      options: { up: true },
-    },
-    {
-      from: [path.resolve(__dirname, "src/images/homepage-banner/wave.svg")],
-      to: path.resolve(outputFolder, "assets/images"),
-      options: { up: true },
-    },
-    {
-      from: [path.resolve(__dirname, "src/images/highlighted-event.jpg")],
-      to: path.resolve(outputFolder, "assets/images"),
-      options: { up: true },
-    },
-    {
-      from: [path.resolve(__dirname, "src/images/iop-eu-logo.svg")],
-      to: path.resolve(outputFolder, "assets/images"),
-      options: { up: true },
-    },
-    {
-      from: [path.resolve(__dirname, "src/images/iop-eu-header.svg")],
-      to: path.resolve(outputFolder, "assets/images"),
-      options: { up: true },
-    },
-    {
-      from: [path.resolve(__dirname, "src/images/logo.png")],
-      to: path.resolve(outputFolder, "assets/images"),
-      options: { up: true },
-    },
-    {
-      from: [path.resolve(__dirname, "src/images/logo.svg")],
-      to: path.resolve(outputFolder, "assets/images"),
-      options: { up: true },
-    },
-    {
-      from: [path.resolve(__dirname, "src/images/logo-ec--en.svg")],
-      to: path.resolve(outputFolder, "assets/images"),
-      options: { up: true },
-    },
-    // Fontello icons
-    {
-      from: [path.resolve(__dirname, "src/fonts/joinup-icons/*.woff*")],
-      to: path.resolve(outputFolder, "assets/fonts/joinup-icons"),
-      options: { up: true },
-    },
     // Third party files
     {
       from: [
@@ -706,6 +640,7 @@ module.exports = {
           "envelope-fill.svg",
           "exclamation-circle-fill.svg",
           "exclamation-lg.svg",
+          "exclamation-triangle-fill.svg",
           "eye.svg",
           "facebook.svg",
           "file-earmark-medical.svg",
