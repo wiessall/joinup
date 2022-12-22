@@ -1,0 +1,2 @@
+.comments .comment:not(:last-of-type){position:relative}.comments .comment:not(:last-of-type):before{border-left:.125rem solid #dadee0;content:"";height:calc(100% + 2.5rem);left:2.5rem;position:absolute;width:2.5rem}.comments .comment__profile-pic{border-radius:50rem}.comments .comment__details{color:#555859;font-size:.875rem}.comments .indented{border-left:.125rem solid #dadee0;margin-left:2.5rem;padding-left:2.5rem}
+/*# sourceMappingURL=comments.min.css.map */
