@@ -65,3 +65,88 @@ function joinup_core_deploy_108901(array &$sandbox = []): string {
 
   return "Removed {$sandbox['current']} of {$sandbox['max']} files.";
 }
+
+/**
+ * Remove files without database representation.
+ */
+function joinup_core_deploy_108902(): string {
+  /** @var \Drupal\Core\File\FileSystemInterface $file_system */
+  $file_system = \Drupal::service('file_system');
+  $count = 0;
+  // These files entries in {file_managed} table were already deleted.
+  for ($i = 1; $i <= 452; $i++) {
+    $file = "public://document/2022-12/free-doawnlaod-$i.pdf";
+    if (file_exists($file)) {
+      $file_system->delete($file);
+      $count++;
+    }
+  }
+  return "$count unmanaged files deleted";
+}
+
+/**
+ * Delete content created by spammers.
+ */
+function joinup_core_deploy_108903(array &$sandbox = []): string {
+  if (!isset($sandbox['items'])) {
+    $sandbox['items'] = [];
+    $db = \Drupal::database();
+
+    // Blocked users whose accounts are created after 2nd of December 2022.
+    $uids = $db->query("SELECT u.uid FROM {users_field_data} u WHERE u.status = 0 AND u.uid > 1 AND u.created > 1669327200")
+      ->fetchCol();
+
+    $sql_args = [':uids[]' => $uids];
+    $sparql_args = implode(' ', array_map(function ($uid): string {
+      return '"' . $uid . '"^^xsd:integer';
+    }, $uids));
+
+    // Add all nodes owned by spam users to sandbox.
+    $nids = $db->query("SELECT nid FROM {node_field_data} WHERE uid IN(:uids[])", $sql_args)->fetchCol();
+    foreach ($nids as $nid) {
+      $sandbox['items'][] = ['node', $nid];
+    }
+
+    // Add all RDF entities owned by spam users to sandbox.
+    $rows = \Drupal::service('sparql.endpoint')->query("SELECT DISTINCT(?id)
+      FROM <http://joinup.eu/collection/published>
+      FROM <http://joinup.eu/collection/draft>
+      FROM <http://joinup.eu/solution/published>
+      FROM <http://joinup.eu/solution/draft>
+      FROM <http://joinup.eu/asset_release/published>
+      FROM <http://joinup.eu/asset_release/draft>
+      WHERE {
+        GRAPH ?g {
+          ?id ?p ?o .
+          ?id <http://joinup.eu/owner/uid> ?o .
+          VALUES ?id {{$sparql_args}} .
+        }
+      }");
+    foreach ($rows as $row) {
+      $sandbox['items'][] = ['rdf_entity', (string) $row->id];
+    }
+
+    // Add all files owned by spam users to sandbox.
+    $fids = $db->query("SELECT fid FROM {file_managed} WHERE uid IN(:uids[])", $sql_args)->fetchCol();
+    foreach ($fids as $fid) {
+      $sandbox['items'][] = ['file', $fid];
+    }
+    $sandbox['processed'] = 0;
+    $sandbox['total'] = count($sandbox['items']);
+  }
+
+  $items = array_splice($sandbox['items'], 0, 50);
+  $groups = [];
+  foreach ($items as $item) {
+    [$entity_type_id, $id] = $item;
+    $groups[$entity_type_id][] = $id;
+  }
+  foreach ($groups as $entity_type_id => $ids) {
+    $storage = \Drupal::entityTypeManager()->getStorage($entity_type_id);
+    $storage->delete($storage->loadMultiple($ids));
+  }
+  $sandbox['processed'] += count($items);
+
+  $sandbox['#finished'] = (int) empty($sandbox['items']);
+  return "Deleted {$sandbox['processed']} content entries out of {$sandbox['total']}";
+}

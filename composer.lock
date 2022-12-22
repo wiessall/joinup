@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e5ef3147d32c0e871d7ce2687814215d",
+    "content-hash": "c4fcc5ca08387a8edfc7b653358a24d4",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -2022,16 +2022,16 @@
         },
         {
             "name": "drupal/core",
-            "version": "9.4.8",
+            "version": "9.4.9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/drupal/core.git",
-                "reference": "a627d1b2a00f2cef0572e37b94dea298800541f4"
+                "reference": "5fa639a3ddf0241db08b270f429f9da91d06fdfc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/drupal/core/zipball/a627d1b2a00f2cef0572e37b94dea298800541f4",
-                "reference": "a627d1b2a00f2cef0572e37b94dea298800541f4",
+                "url": "https://api.github.com/repos/drupal/core/zipball/5fa639a3ddf0241db08b270f429f9da91d06fdfc",
+                "reference": "5fa639a3ddf0241db08b270f429f9da91d06fdfc",
                 "shasum": ""
             },
             "require": {
@@ -2183,13 +2183,13 @@
             ],
             "description": "Drupal is an open source content management platform powering millions of websites and applications.",
             "support": {
-                "source": "https://github.com/drupal/core/tree/9.4.8"
+                "source": "https://github.com/drupal/core/tree/9.4.9"
             },
-            "time": "2022-10-06T15:57:08+00:00"
+            "time": "2022-12-07T13:36:57+00:00"
         },
         {
             "name": "drupal/core-composer-scaffold",
-            "version": "9.4.8",
+            "version": "9.4.9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/drupal/core-composer-scaffold.git",
@@ -2233,7 +2233,7 @@
                 "drupal"
             ],
             "support": {
-                "source": "https://github.com/drupal/core-composer-scaffold/tree/9.4.8"
+                "source": "https://github.com/drupal/core-composer-scaffold/tree/9.4.9"
             },
             "time": "2022-06-19T16:14:23+00:00"
         },
@@ -3705,26 +3705,26 @@
         },
         {
             "name": "drupal/file_url",
-            "version": "2.0.0-alpha1",
+            "version": "2.0.0-alpha2",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/file_url.git",
-                "reference": "2.0.0-alpha1"
+                "reference": "2.0.0-alpha2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/file_url-2.0.0-alpha1.zip",
-                "reference": "2.0.0-alpha1",
-                "shasum": "42fa606d28050dd0626b7cceec6734914d135931"
+                "url": "https://ftp.drupal.org/files/projects/file_url-2.0.0-alpha2.zip",
+                "reference": "2.0.0-alpha2",
+                "shasum": "bde8cdae4c453dc5e3dc0afe871a2d1bd827893c"
             },
             "require": {
-                "drupal/core": "^8 || ^9"
+                "drupal/core": "^8 || ^9 || ^10"
             },
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "2.0.0-alpha1",
-                    "datestamp": "1591462211",
+                    "version": "2.0.0-alpha2",
+                    "datestamp": "1668872182",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Project has not opted into security advisory coverage!"
@@ -3763,9 +3763,8 @@
             "description": "Reference both local and remote files by URI.",
             "homepage": "http://drupal.org/project/file_uri",
             "support": {
-                "source": "http://cgit.drupalcode.org/file_uri",
-                "issues": "http://drupal.org/project/file_uri",
-                "irc": "irc://irc.freenode.org/drupal-contribute"
+                "source": "https://git.drupalcode.org/project/file_url",
+                "issues": "https://www.drupal.org/project/issues/file_url"
             }
         },
         {
