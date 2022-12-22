@@ -7,7 +7,6 @@ namespace Drupal\interoperable_europe\Plugin\Condition;
 use Drupal\interoperable_europe\InteroperableEuropeCollectionInterface;
 use Drupal\joinup_event\Entity\EventInterface;
 use Drupal\joinup_group\Plugin\Condition\GroupContextCondition;
-use Drupal\joinup_news\Entity\NewsInterface;
 
 /**
  * Temporary replacements of 'group_context' condition plugin class.

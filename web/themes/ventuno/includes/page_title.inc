@@ -43,7 +43,6 @@ function ventuno_theme_suggestions_page_title_alter(array &$suggestions, array &
   //   $variables['bundle'] = $bundle;
   //   $variables['bundle_label'] = $info[$bundle]['label'] ?? $bundle;
   // }
-
   $entity_types = ['rdf_entity', 'node'];
   foreach ($entity_types as $entity_type) {
     if ($route_name === "entity.{$entity_type}.canonical") {
