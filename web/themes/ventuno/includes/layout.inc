@@ -104,3 +104,31 @@ function ventuno_preprocess_html(array &$variables): void {
 function ventuno_preprocess_container__text_format_filter_help(array &$variables): void {
   $variables['attributes']['class'] = ['text-end', 'fs-sm'];
 }
+
+/**
+ * Implements hook_preprocess_container().
+ */
+function ventuno_preprocess_container(array &$variables): void {
+  if (isset($variables['attributes']['data-drupal-facet-id'])) {
+    $facet_id = $variables['attributes']['data-drupal-facet-id'];
+    $valid_facet_ids = [
+      'collection_type',
+      'solution_content_bundle',
+      'field_content_listing_type',
+    ];
+    if (in_array($facet_id, $valid_facet_ids)) {
+      $classes = [
+        'tabs--content-type',
+        'g-2',
+        'my-4',
+        'justify-content-center',
+        'row',
+        'row-cols-2',
+        'row-cols-md-4',
+        'row-cols-xl-6',
+        'row-cols-xxl-8',
+      ];
+      $variables['attributes']['class'] = $classes;
+    }
+  }
+}

@@ -2,9 +2,9 @@
 .joinup-search-filters {
   .offcanvas {
     box-shadow: none;
+    z-index: 503; // Avoid offcanvas to be overlapped by sticky navbar
     @include media-breakpoint-up(lg) {
       // Avoid sidebar to overlap toolbar tray when logged in.
-      // 99 is 1 below the Cookie Consent banner's z-index.
       z-index: 49;
       visibility: visible;
       position: relative;
