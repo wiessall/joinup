@@ -22,8 +22,8 @@
         "drupal/changed_fields": "^3.2",
         "drupal/config_ignore": "^3.0",
         "drupal/config_readonly": "^1.0",
-        "drupal/core": "^9.4",
-        "drupal/core-composer-scaffold": "^9.4",
+        "drupal/core": "~9.4.9",
+        "drupal/core-composer-scaffold": "~9.4.9",
         "drupal/custom_markup_block": "^1.1",
         "drupal/default_content": "^2.0",
         "drupal/diff": "~1.0",
@@ -275,7 +275,8 @@
                 "Cannot implement a custom user cancellation method @see https://www.drupal.org/project/drupal/issues/3135592": "https://git.drupalcode.org/project/drupal/-/merge_requests/1675.diff",
                 "file_requirements() can trigger a PHP 8.1 deprecation notice when called without a SERVER_SOFTWARE server env variable @see https://www.drupal.org/project/drupal/issues/3279289": "https://git.drupalcode.org/project/drupal/-/merge_requests/2247.diff",
                 "If you don't set the \"version\" of a profile, the report/status displays an empty dash @see https://www.drupal.org/project/drupal/issues/3270892": "https://git.drupalcode.org/project/drupal/-/merge_requests/2003.diff",
-                "Page variant plugin is not correctlly instantiated @see https://www.drupal.org/project/drupal/issues/3294833": "https://git.drupalcode.org/project/drupal/-/merge_requests/2484.diff"
+                "Page variant plugin is not correctlly instantiated @see https://www.drupal.org/project/drupal/issues/3294833": "https://git.drupalcode.org/project/drupal/-/merge_requests/2484.diff",
+                "PHP 8.1 deprecation @see https://www.drupal.org/project/drupal/issues/3313342": "https://git.drupalcode.org/project/drupal/-/merge_requests/3143.diff"
             },
             "drupal/default_content": {
                 "Combined https://www.drupal.org/i/3164451 and https://www.drupal.org/i/2640734": "resources/patch/default_content-combined-3164451-and-2640734.diff"
@@ -302,6 +303,9 @@
             "drupal/facets": {
                 "Facet Summary for Facet Items with a set dependency. @see https://www.drupal.org/node/2873480": "https://www.drupal.org/files/issues/2020-07-30/2873480-33-8.x-1.5.patch",
                 "Add 0 option in 'Soft limit' and apply soft limit to facet root li tags and add. @see https://www.drupal.org/i/3208580 and https://www.drupal.org/i/3307082": "resources/patch/facets-3208580-and-3307082.patch"
+            },
+            "drupal/file_url": {
+                "Handle deleted files": "resources/patch/file_url.diff"
             },
             "drupal/honeypot": {
                 "Behat integration. @see https://www.drupal.org/project/honeypot/issues/3059040": "https://www.drupal.org/files/issues/2020-09-09/3059040-31.patch",
