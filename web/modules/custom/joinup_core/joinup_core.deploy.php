@@ -136,7 +136,6 @@ function joinup_core_deploy_108903(array &$sandbox = []): string {
   }
 
   $items = array_splice($sandbox['items'], 0, 50);
-  $groups = [];
   foreach ($items as $item) {
     [$entity_type_id, $id] = $item;
     $storage = \Drupal::entityTypeManager()->getStorage($entity_type_id);
