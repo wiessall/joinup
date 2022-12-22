@@ -110,7 +110,11 @@
         }
       }
       .btn-search {
-        @include font-icon-before("\E805", 1.2rem, $primary, inherit, 0);
+        &::before {
+          @include get-bootstrap-icon('search', $primary);
+          font-size: 1.2rem;
+          margin: $spacer * .25 0; // 4px 0
+        }
         border-top-right-radius: $border-radius-pill;
         border-bottom-right-radius: $border-radius-pill;
         color: $dark;
@@ -147,7 +151,10 @@
   height: 100%;
   border-bottom: 1px solid rgba($primary, .1);
   > h2 {
-    @include font-icon-before("\E800", 1.2rem, $warning);
+    &::before {
+      @include get-bootstrap-icon('star', $warning);
+      margin-right: $spacer * .5; // 8px
+    }
   }
   .field--name-field-topic {
     a {
@@ -207,7 +214,10 @@
   position: relative;
   height: 100%;
   > h2 {
-    @include font-icon-before("\E803", 1.2rem, $warning);
+    &::before {
+      @include get-bootstrap-icon('award', $warning);
+      margin-right: $spacer * .5; // 8px
+    }
   }
   .more-link {
     position: absolute;
@@ -216,7 +226,10 @@
       right: 0;
       top: 12px;
     }
-    @include font-icon-after("\E801", 1rem);
+    &::after {
+      @include get-bootstrap-icon('arrow-right');
+      margin-left: $spacer * .5; // 8px
+    }
   }
   article {
     .logo {
@@ -240,7 +253,10 @@
   position: relative;
   margin-bottom: $spacer * 3; // 48px
   > h2 {
-    @include font-icon-before("\E804", 1.2rem, $warning);
+    &::before {
+      @include get-bootstrap-icon('lightning-charge', $warning);
+      margin-right: $spacer * .5; // 8px
+    }
   }
   .more-link {
     position: absolute;
@@ -249,7 +265,10 @@
       right: 0;
       top: 12px;
     }
-    @include font-icon-after("\E801", 1rem);
+    &::after {
+      @include get-bootstrap-icon('arrow-right');
+      margin-left: $spacer * .5; // 8px
+    }
   }
   .view-latest-news  {
     article {
@@ -301,7 +320,10 @@
   margin-bottom: $spacer * 3; // 48px
   height: 100%;
   > h2 {
-    @include font-icon-before("\F133", 1.2rem, $warning);
+    &::before {
+      @include get-bootstrap-icon('calendar', $warning);
+      margin-right: $spacer * .5; // 8px
+    }
   }
   .more-link {
     position: absolute;
@@ -310,7 +332,10 @@
       right: 0;
       top: 12px;
     }
-    @include font-icon-after("\E801", 1rem);
+    &::after {
+      @include get-bootstrap-icon('arrow-right');
+      margin-left: $spacer * .5; // 8px
+    }
   }
   article {
     background: $gray-300 url(../images/highlighted-event.jpg) no-repeat center center;
@@ -371,8 +396,11 @@
     font-size: 1.25rem; // 20px
     padding-bottom: $spacer * 1.5; // 24px
     margin-bottom: $spacer * 1.5; // 24px
-    @include font-icon-before("\E802", 1.42rem, $warning);
     border-bottom: 1px solid rgba($primary, .1);
+    &::before {
+      @include get-bootstrap-icon('eye', $warning);
+      margin-right: $spacer * .5; // 8px
+    }
   }
   .nav-tabs {
     border: none;
@@ -496,12 +524,16 @@
   &--left {
     margin-right: 1rem;
     span.icon {
-      @include font-icon-before("\F104", 1.2rem, $primary, inherit, 0);
+      &::before {
+        @include get-bootstrap-icon('chevron-left', $primary);
+      }
     }
   }
   &--right {
     span.icon {
-      @include font-icon-before("\F105", 1.2rem, $primary, inherit, 0 0 0 6px);
+      &::before {
+        @include get-bootstrap-icon('chevron-right', $primary);
+      }
     }
   }
 }
