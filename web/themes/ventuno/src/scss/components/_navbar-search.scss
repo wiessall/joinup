@@ -56,7 +56,10 @@
     display: none;
   }
   .btn.btn-search {
-    @include font-icon-before("\E805", 1.2rem, $primary, inherit, 0);
+    &::before {
+      @include get-bootstrap-icon('search', $primary);
+      font-size: 1rem;
+    }
     width: 2.5rem;
     border-style: none;
     padding: $spacer * .25 $spacer * .5;
