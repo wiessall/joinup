@@ -201,6 +201,7 @@ function _ventuno_theme_suggestions_alter(array &$suggestions, array $variables)
 }
 
 // @todo ISAICP-7491 enable author. Pasted from joinup_theme.theme
+
 /**
  * Get an inline autor.
  *
