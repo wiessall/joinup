@@ -96,37 +96,8 @@ function joinup_core_deploy_108903(array &$sandbox = []): string {
     $uids = $db->query("SELECT u.uid FROM {users_field_data} u WHERE u.status = 0 AND u.uid > 1 AND u.created > 1669327200")
       ->fetchCol();
 
-    $sql_args = [':uids[]' => $uids];
-    $sparql_args = implode(' ', array_map(function ($uid): string {
-      return '"' . $uid . '"^^xsd:integer';
-    }, $uids));
-
-    // Add all nodes owned by spam users to sandbox.
-    $nids = $db->query("SELECT nid FROM {node_field_data} WHERE uid IN(:uids[])", $sql_args)->fetchCol();
-    foreach ($nids as $nid) {
-      $sandbox['items'][] = ['node', $nid];
-    }
-
-    // Add all RDF entities owned by spam users to sandbox.
-    $rows = \Drupal::service('sparql.endpoint')->query("SELECT DISTINCT(?id)
-      FROM <http://joinup.eu/collection/published>
-      FROM <http://joinup.eu/collection/draft>
-      FROM <http://joinup.eu/solution/published>
-      FROM <http://joinup.eu/solution/draft>
-      FROM <http://joinup.eu/asset_release/published>
-      FROM <http://joinup.eu/asset_release/draft>
-      WHERE {
-        GRAPH ?g {
-          ?id ?p ?o .
-          ?id <http://joinup.eu/owner/uid> ?o .
-          VALUES ?id {{$sparql_args}} .
-        }
-      }");
-    foreach ($rows as $row) {
-      $sandbox['items'][] = ['rdf_entity', (string) $row->id];
-    }
-
     // Add all files owned by spam users to sandbox.
+    $sql_args = [':uids[]' => $uids];
     $fids = $db->query("SELECT fid FROM {file_managed} WHERE uid IN(:uids[])", $sql_args)->fetchCol();
     foreach ($fids as $fid) {
       $sandbox['items'][] = ['file', $fid];
