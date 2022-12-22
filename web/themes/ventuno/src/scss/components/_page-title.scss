@@ -1,16 +1,17 @@
 .page-title {
-  display: inline-block;
   margin-top: $spacer * 1.5; // 24px
   position: relative;
   .permalink {
+    position: absolute;
     display: none;
   }
   &:hover {
     .permalink {
       display: inline;
-      position: absolute;
-      top: -0.05em;
-      right: -1em;
     }
+  }
+  .badge {
+    position: relative;
+    top: -.5em; // Vertically align badge to heading
   }
 }
