@@ -236,5 +236,4 @@ module.exports = {
       options: { up: true },
     },
   ],
-  sprite: [],
 };
