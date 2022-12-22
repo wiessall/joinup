@@ -19,11 +19,10 @@
 
     <div class="ms-3 w-100">
       <div class="comment__details">
-        {# @todo ISAICP-7491 Split author name and date from "submitted" variable #}
-        <span>{{ submitted }}</span>
+        <span>{{ author }} | {{ created }}</span>
         {% if permalink %}
           |
-          <a class="permalink" href="{{ permalink }}" title="{{ 'Permalink'|t }}">
+          <a class="permalink" href="{{ permalink_raw }}" title="{{ 'Permalink'|t }}">
             {{ pattern('icon', {
               name: 'link-45deg',
               size: 's'

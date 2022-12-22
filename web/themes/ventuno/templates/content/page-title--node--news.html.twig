@@ -30,10 +30,7 @@
   </h1>
   <div class="page-title__details">
     <div class="page-title__detail">
-      {# @todo ISAICP-7491 enable author
-      {{ additional_content.author }} #}
-      <img class="rounded-pill me-2" src="https://picsum.photos/25">
-      <a href="#">John Doe</a>
+      {{ additional_content.author }}
     </div>
     <div class="page-title__detail">
       {{ 'Published on'|t }}: {{ additional_content.published }}
@@ -45,9 +42,7 @@
     {% endif %}
     <div class="page-title__detail">
       <span class="me-2">
-      News
-      {# @todo ISAICP-7491 enable bundle label
-      {{ bundle_label }} #}
+        {{ bundle_label }}
       </span>
       {{ pattern('icon', {
           name: 'newspaper',

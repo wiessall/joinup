@@ -11,6 +11,7 @@ use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\asset_release\Entity\AssetReleaseInterface;
 use Drupal\joinup_bundle_class\DescriptionInterface;
 use Drupal\joinup_bundle_class\LogoInterface;
+use Drupal\joinup_community_content\Entity\CommunityContentInterface;
 use Drupal\joinup_core\Controller\IdRedirect;
 use Drupal\smart_trim\Truncate\TruncateHTML;
 use Drupal\topic\Entity\TopicReferencingEntityInterface;
@@ -200,23 +201,18 @@ function _ventuno_theme_suggestions_alter(array &$suggestions, array $variables)
   $suggestions[] = $original_theme_hook . '__' . str_replace('-', '_', $bundle) . '__' . str_replace('-', '_', $view_mode);
 }
 
-// @todo ISAICP-7491 enable author. Pasted from joinup_theme.theme
-
 /**
  * Get an inline autor.
  *
- * @param \Drupal\node\NodeInterface $node
+ * @param \Drupal\joinup_community_content\Entity\CommunityContentInterface $node
  *   The node, where we get the author.
  *
  * @return array
  *   Renderable array contains the author.
  */
-function _ventuno_get_author(NodeInterface $node) {
+function _ventuno_get_author(CommunityContentInterface $node): array {
   /** @var \Drupal\Core\Entity\EntityViewBuilderInterface $view_builder */
-  // @todo ISAICP-7491 Allow ventuno_preprocess_page_title__node__news to get the author
   $view_builder = \Drupal::entityTypeManager()->getViewBuilder('user');
   $author = $node->get('uid')->entity;
-  $author_inline = $view_builder->view($author, 'inline');
-
-  return $author_inline;
+  return $view_builder->view($author, 'inline');
 }

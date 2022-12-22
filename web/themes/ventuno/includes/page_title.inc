@@ -7,6 +7,8 @@
 
 declare(strict_types = 1);
 
+use Drupal\joinup_community_content\Entity\CommunityContentInterface;
+
 /**
  * Implements hook_preprocess_page_title().
  */
@@ -16,6 +18,21 @@ function ventuno_preprocess_page_title(array &$variables): void {
   if ($permalink = _ventuno_build_permalink()) {
     $variables['permalink'] = $permalink;
   }
+
+  $entity = $variables['entity'] ?? NULL;
+  if ($entity instanceof CommunityContentInterface) {
+    // Make the bundle and label available so the type can be shown in bylines.
+    /** @var \Drupal\Core\Entity\EntityTypeBundleInfoInterface $bundle_info */
+    $bundle_info = \Drupal::service('entity_type.bundle.info');
+    $info = $bundle_info->getBundleInfo($entity->getEntityTypeId());
+    $bundle = $entity->bundle();
+    $variables['bundle'] = $bundle;
+    $variables['bundle_label'] = $info[$bundle]['label'] ?? $bundle;
+
+    $author_inline = _ventuno_get_author($entity);
+    $variables['additional_content']['author'] = $author_inline;
+  }
+
   if (\Drupal::routeMatch()->getRouteName() === 'entity.rdf_entity.eif_perspective') {
     /** @var \Drupal\solution\Entity\SolutionInterface $solution */
     $solution = \Drupal::routeMatch()->getParameter('rdf_entity');
@@ -33,16 +50,6 @@ function ventuno_theme_suggestions_page_title_alter(array &$suggestions, array &
   $route_match = \Drupal::routeMatch();
   $route_name = $route_match->getRouteName();
 
-  // @todo ISAICP-7491 Make the bundle and label available so type is shown.
-  // Pasted from joinup_theme.theme.
-  // if ($entity instanceof ContentEntityInterface) {
-  //   /** @var \Drupal\Core\Entity\EntityTypeBundleInfoInterface $bundle_info */
-  //   $bundle_info = \Drupal::service('entity_type.bundle.info');
-  //   $info = $bundle_info->getBundleInfo($entity->getEntityTypeId());
-  //   $bundle = $entity->bundle();
-  //   $variables['bundle'] = $bundle;
-  //   $variables['bundle_label'] = $info[$bundle]['label'] ?? $bundle;
-  // }
   $entity_types = ['rdf_entity', 'node'];
   foreach ($entity_types as $entity_type) {
     if ($route_name === "entity.{$entity_type}.canonical") {
@@ -71,10 +78,6 @@ function ventuno_preprocess_page_title__node__news(&$variables) {
 
   $update_date = \Drupal::service('date.formatter')->format($node->getChangedTime(), 'custom', 'd/m/Y');
   $variables['additional_content']['updated'] = $update_date;
-
-  // @todo ISAICP-7491 Pass the author to the template
-  // $author_inline = _ventuno_get_author($node);
-  // $variables['additional_content']['author'] = $author_inline;
 }
 
 /**
