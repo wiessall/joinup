@@ -1,0 +1,41 @@
+Index: src/Plugin/Field/FieldType/FileUrlFieldItemList.php
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/Plugin/Field/FieldType/FileUrlFieldItemList.php b/src/Plugin/Field/FieldType/FileUrlFieldItemList.php
+--- a/src/Plugin/Field/FieldType/FileUrlFieldItemList.php	
++++ b/src/Plugin/Field/FieldType/FileUrlFieldItemList.php	(date 1671629583516)
+@@ -145,7 +145,7 @@
+     // default translation is deleted remove all file usages within this entity.
+     $count = $entity->isDefaultTranslation() ? 0 : 1;
+     foreach ($this->referencedEntities() as $file) {
+-      if (!FileUrlHandler::isRemote($file)) {
++      if ($file && !FileUrlHandler::isRemote($file)) {
+         \Drupal::service('file.usage')->delete($file, 'file', $entity->getEntityTypeId(), $entity->id(), $count);
+       }
+     }
+Index: src/FileUrlHandler.php
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/FileUrlHandler.php b/src/FileUrlHandler.php
+--- a/src/FileUrlHandler.php	
++++ b/src/FileUrlHandler.php	(date 1671629327082)
+@@ -63,13 +63,13 @@
+   /**
+    * Checks if a file entity is s remote file.
+    *
+-   * @param \Drupal\file\FileInterface $file
++   * @param \Drupal\file\FileInterface|null $file
+    *   The file being checked.
+    *
+    * @return bool
+    *   TRUE if it's a remote file.
+    */
+-  public static function isRemote(FileInterface $file) {
++  public static function isRemote(?FileInterface $file) {
+     return $file instanceof RemoteFile;
+   }
+ 
