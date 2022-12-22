@@ -204,10 +204,14 @@
     "scripts": {
         "post-install-cmd": [
             "composer validate --no-check-all --no-check-publish",
-            "./scripts/composer/composer.php install"
+            "test \"`git rev-parse --is-shallow-repository`\" = \"false\" || git fetch --unshallow",
+            "git describe --tags 2>/dev/null | tr -d '\\n' > web/VERSION.txt",
+            "test ! -f vendor/bin/run || vendor/bin/run toolkit:build-dev",
+            "./scripts/composer/bypass_npm.php || npm ci --no-progress"
         ],
         "post-update-cmd": [
-            "./scripts/composer/composer.php update"
+            "test ! -f vendor/bin/run || vendor/bin/run toolkit:build-dev",
+            "./scripts/composer/bypass_npm.php || npm install --no-progress"
         ]
     },
     "extra": {

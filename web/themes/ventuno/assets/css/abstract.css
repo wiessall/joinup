@@ -1,0 +1,52 @@
+/**
+ * @file
+ * Common base.
+ *
+ * Functions, variables, utilities and mixins required for the build.
+ * When compiled, this file should not output anything.
+ */
+/**
+* Mixin to generate bootstrap icon
+*/
+.abstract div,
+.abstract p {
+  display: inline;
+}
+.abstract div:last-of-type,
+.abstract p:last-of-type {
+  margin-right: 0.5rem;
+}
+.abstract .read-more {
+  display: inline-block;
+}
+.abstract .read-more::after {
+  margin: 0 0 0 0.25rem;
+  display: inline-block;
+  content: "";
+  width: 1em;
+  height: 1em;
+  vertical-align: -0.125em;
+  background-color: #1073de;
+  -webkit-mask-image: url("../../node_modules/@openeuropa/bcl-bootstrap/icons/arrow-right.svg");
+          mask-image: url("../../node_modules/@openeuropa/bcl-bootstrap/icons/arrow-right.svg");
+  -webkit-mask-repeat: no-repeat;
+          mask-repeat: no-repeat;
+  -webkit-mask-size: contain;
+          mask-size: contain;
+}
+.abstract .read-more:hover::after {
+  margin: 0 0 0 0.25rem;
+  display: inline-block;
+  content: "";
+  width: 1em;
+  height: 1em;
+  vertical-align: -0.125em;
+  background-color: #102f5e;
+  -webkit-mask-image: url("../../node_modules/@openeuropa/bcl-bootstrap/icons/arrow-right.svg");
+          mask-image: url("../../node_modules/@openeuropa/bcl-bootstrap/icons/arrow-right.svg");
+  -webkit-mask-repeat: no-repeat;
+          mask-repeat: no-repeat;
+  -webkit-mask-size: contain;
+          mask-size: contain;
+}
+/*# sourceMappingURL=abstract.css.map */

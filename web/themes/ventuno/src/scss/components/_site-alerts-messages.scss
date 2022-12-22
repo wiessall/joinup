@@ -8,19 +8,28 @@
   .severity-low {
     background-color: $brand;
     .text {
-      @include font-icon-before("\E81A", 2rem, $white);
+      &::before {
+        @include get-bootstrap-icon('info-circle-fill', $white);
+        font-size: 2rem;
+      }
     }
   }
   .severity-medium {
     background-color: $warning;
     .text {
-      @include font-icon-before("\E807", 2rem, $white);
+      &::before {
+        @include get-bootstrap-icon('exclamation-circle-fill', $white);
+        font-size: 2rem;
+      }
     }
   }
   .severity-high {
     background-color: $danger;
     .text {
-      @include font-icon-before("\E810", 2rem, $white);
+      &::before {
+        @include get-bootstrap-icon('exclamation-triangle-fill', $white);
+        font-size: 2rem;
+      }
     }
   }
 }
@@ -37,19 +46,28 @@
   &.messages--status {
     background-color: $success;
     .text {
-      @include font-icon-before("\E81A", 2rem, $white);
+      &::before {
+        @include get-bootstrap-icon('info-circle-fill', $white);
+        font-size: 2rem;
+      }
     }
   }
   &.messages--warning {
     background-color: $warning;
     .text {
-      @include font-icon-before("\E807", 2rem, $white);
+      &::before {
+        @include get-bootstrap-icon('exclamation-circle-fill', $white);
+        font-size: 2rem;
+      }
     }
   }
   &.messages--error {
     background-color: $danger;
     .text {
-      @include font-icon-before("\E810", 2rem, $white);
+      &::before {
+        @include get-bootstrap-icon('exclamation-triangle-fill', $white);
+        font-size: 2rem;
+      }
     }
   }
 }
@@ -62,9 +80,11 @@
     padding-left: $spacer * 2.5;
     a {
       text-decoration: underline;
+      text-decoration-color: $white;
       &:link,
       &:visited {
         color: $white;
+        text-decoration-color: $white;
       }
       &:hover {
         text-decoration: unset;

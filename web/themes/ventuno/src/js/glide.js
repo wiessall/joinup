@@ -6,6 +6,7 @@ import Glide, {
   Controls,
   Breakpoints,
   Swipe,
+  // eslint-disable-next-line import/no-unresolved
 } from "@glidejs/glide/dist/glide.modular.esm";
 
 (() => {
