@@ -8,19 +8,10 @@
 /**
 * Mixin to generate bootstrap icon
 */
-.abstract div,
-.abstract p {
-  display: inline;
-}
-.abstract div:last-of-type,
-.abstract p:last-of-type {
-  margin-right: 0.5rem;
-}
 .abstract .read-more {
   display: inline-block;
 }
 .abstract .read-more::after {
-  margin: 0 0 0 0.25rem;
   display: inline-block;
   content: "";
   width: 1em;
@@ -35,7 +26,6 @@
           mask-size: contain;
 }
 .abstract .read-more:hover::after {
-  margin: 0 0 0 0.25rem;
   display: inline-block;
   content: "";
   width: 1em;
