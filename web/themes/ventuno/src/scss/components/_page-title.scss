@@ -1,5 +1,15 @@
 .page-title {
   margin-top: $spacer * 1.5; // 24px
+  position: relative;
+  .permalink {
+    position: absolute;
+    display: none;
+  }
+  &:hover {
+    .permalink {
+      display: inline;
+    }
+  }
   &__title {
     display: inline-block;
     position: relative;
@@ -37,5 +47,9 @@
       padding-right: 0;
       border-right: 0;
     }
+  }
+  .badge {
+    position: relative;
+    top: -.5em; // Vertically align badge to heading
   }
 }
