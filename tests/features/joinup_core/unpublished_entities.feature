@@ -179,7 +179,7 @@ Feature: Unpublished content of the website
     And I fill in "Release number" with "1.0"
     And I fill in "Release notes" with "Changed release."
     And I press "Save as draft"
-    Then I should see the heading "Chasing shadows 1.0"
+    Then I should see the text "Chasing shadows 1.0" in the "Page title" region
 
     When I go to the "Invisible Boyfriend" solution
     And I should see the following tiles in the "Unpublished content area" region:

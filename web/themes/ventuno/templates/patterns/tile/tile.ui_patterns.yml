@@ -45,6 +45,11 @@ tile:
       label: 'Subext'
       description: 'Card subtext.'
       preview: 'Text, card, with, longer text, supported'
+    footer:
+      type: text
+      label: 'Footer'
+      description: 'Card footer.'
+      preview: 'Text, card, with, longer text, supported'
     metadata:
       type: array
       label: 'Metadata'

@@ -253,7 +253,8 @@ Feature: As a site moderator I am able to import RDF files.
 
     # Ensure that the og relation is set between the distribution and the solution.
     When I go to the "Windows" asset distribution
-    Then I should see the heading "Solution 1"
+    Then I see the text "Solution 1" in the "Header" region
+    And I should see the heading "Windows"
 
     # And the SPDX licence IDs were converted to Joinup licence IDs.
     And I should see "Licence same as Apache 2"
