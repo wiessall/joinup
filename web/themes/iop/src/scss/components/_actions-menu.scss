@@ -1,9 +1,7 @@
 .actions-menu {
-  &__btn {
-    // In IOP subtheme, there is no banner to overlap with actions-menu buttons.
-    @include media-breakpoint-up(sm) {
-      bottom: 0!important;
-      margin: $spacer * .5 0; // 8px 0
-    }
+  // In IOP subtheme, there is no banner to overlap with actions-menu buttons.
+  @include media-breakpoint-up(sm) {
+    bottom: 0!important;
+    margin: $spacer * .5 0; // 8px 0
   }
 }
