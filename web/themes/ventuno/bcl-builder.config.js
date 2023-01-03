@@ -670,7 +670,7 @@ module.exports = {
           "question-lg.svg",
           "search.svg",
           "star.svg",
-          "three-dots-vertical.svg",
+          "three-dots.svg",
           "type.svg",
           "twitter.svg",
           "vimeo.svg",
