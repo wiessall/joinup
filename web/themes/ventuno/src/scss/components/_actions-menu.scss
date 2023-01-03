@@ -1,13 +1,23 @@
 .actions-menu {
   display: inline-block;
   position: fixed;
+  right: $spacer;
   bottom: $spacer;
   z-index: 50; // Avoid dropdown-menu to be overlapped by navbar
+  @include media-breakpoint-up(sm) {
+    right: unset;
+    left: calc(100% - $spacer * 3); // 100% - 46px
+    position: relative;
+    z-index: unset; // Avoid buttons to overlap navbar
+    bottom: $spacer * 1.5; // 24px
+  }
+  & + & {
+    right: $spacer * 5; // 80px
     @include media-breakpoint-up(sm) {
-      position: relative;
-      z-index: unset; // Avoid buttons to overlap navbar
-      bottom: $spacer * 1.5; // 24px
+      right: unset;
+      left: calc(100% - $spacer * 11); // 100% - 176px
     }
+  }
   &__btn {
     width: $spacer * 3; // 48px
     height: $spacer * 3; // 48px
@@ -25,11 +35,6 @@
     }
   }
   &--three-dots {
-    right: $spacer;
-      @include media-breakpoint-up(sm) {
-        right: unset;
-        left: calc(100% - $spacer * 6); // 100% - 96px
-      }
     .actions-menu__btn {
       background-color: $white;
       &:hover,
@@ -42,13 +47,6 @@
         vertical-align: text-top; // Without this, the three dots are not perfectly centered
       }
     }
-  }
-  &--add-content {
-      right: $spacer * 5; // 80px
-      @include media-breakpoint-up(sm) {
-        right: unset;
-        left: calc(100% - $spacer * 7.5); // 100% - 120px
-      }
   }
   .dropdown-menu {
     z-index: 50; // Avoid dropdown-menu to be overlapped by navbar (default z-index is 40)
