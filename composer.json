@@ -321,7 +321,8 @@
                 "Allow 3rd-party to act before delivery @see https://www.drupal.org/project/message_notify/issues/3314370": "resources/patch/drupal/message_notify/3314370.diff"
             },
             "drupal/meta_entity": {
-                "Improve ::getMetaEntitiesForEntity() performance @see https://www.drupal.org/project/meta_entity/issues/3299712": "https://git.drupalcode.org/project/meta_entity/-/merge_requests/6.diff"
+                "Improve ::getMetaEntitiesForEntity() performance @see https://www.drupal.org/project/meta_entity/issues/3299712": "https://git.drupalcode.org/project/meta_entity/-/merge_requests/6.diff",
+                "Add basic theming to the meta entity @see https://www.drupal.org/project/meta_entity/issues/3325653": "https://git.drupalcode.org/project/meta_entity/-/merge_requests/8.diff"
             },
             "drupal/paragraphs_jquery_ui_accordion": {
                 "Formatter settings are missing schema @see https://www.drupal.org/i/3194916": "https://git.drupalcode.org/project/paragraphs_jquery_ui_accordion/-/merge_requests/1.diff"
@@ -380,6 +381,9 @@
             },
             "drupal/views_block_area": {
                 "Views block area missing schema @see https://www.drupal.org/project/views_block_area/issues/3157188": "https://www.drupal.org/files/issues/2020-07-06/views_block_area-missing_schema-3157188-2.patch"
+            },
+            "lovers-of-behat/table-extension": {
+                "Allow to check an arbitrary column of a table @see https://github.com/LoversOfBehat/TableExtension/pull/13": "https://patch-diff.githubusercontent.com/raw/LoversOfBehat/TableExtension/pull/13.diff"
             },
             "openeuropa/oe_webtools": {
                 "Allow to pass an optional referer. @see https://github.com/openeuropa/oe_webtools/pull/96": "https://patch-diff.githubusercontent.com/raw/openeuropa/oe_webtools/pull/96.diff",

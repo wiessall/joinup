@@ -1,0 +1,25 @@
+{#
+/**
+ * @file
+ * Themeing override for the teaser view mode of the topic meta entity.
+ */
+#}
+{% set classes = [
+  'rounded',
+  'h-100',
+  'overflow-hidden',
+  'shadow-sm',
+] %}
+<div class="col">
+  <article{{ attributes.addClass(classes) }}>
+    <a href="{{ target_entity_url }}" {{ title_attributes.addClass('text-decoration-none') }}>
+      {{ title_prefix }}
+      {{ content.image }}
+      <div class="p-3">
+        <div class="h5 text-primary">{{ content.label }}</div>
+        <div class="text-dark fs-sm">{{ content.description }}</div>
+      </div>
+      {{ title_suffix }}
+    </a>
+  </article>
+</div>
