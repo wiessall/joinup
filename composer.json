@@ -106,10 +106,10 @@
         "ec-europa/virtuoso": "^2.1",
         "jacklmoore/autosize": "5.0.2",
         "openeuropa/composer-artifacts": "^1.0",
+        "openeuropa/gisco-geocoding-provider": "dev-ISAICP-7452 as 1.0.0",
         "openeuropa/oe_bootstrap_theme": "^1.0",
         "openeuropa/oe_dashboard_agent": "^0.3.0",
         "openeuropa/oe_webtools": "^1.19",
-        "openeuropa/webtools-geocoding-provider": "~0.1",
         "semiceu/adms-ap_validator": "1.0.0-alpha1",
         "sweetrdf/easyrdf": "^1.7.1"
     },
@@ -420,6 +420,10 @@
                     "reference": "master"
                 }
             }
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/openeuropa/gisco-geocoding-provider.git"
         },
         {
             "type": "vcs",
