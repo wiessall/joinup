@@ -594,6 +594,14 @@ module.exports = {
       to: path.resolve(outputFolder, "assets/js"),
       options: { up: true },
     },
+    // Bootstrap: icons
+    {
+      from: [
+        path.resolve(nodeModules, "@openeuropa/bcl-bootstrap/icons/*.svg"),
+      ],
+      to: path.resolve(outputFolder, "assets/icons"),
+      options: { up: true },
+    },
     // Third party files
     {
       from: [
@@ -662,7 +670,7 @@ module.exports = {
           "question-lg.svg",
           "search.svg",
           "star.svg",
-          "three-dots-vertical.svg",
+          "three-dots.svg",
           "type.svg",
           "twitter.svg",
           "vimeo.svg",
