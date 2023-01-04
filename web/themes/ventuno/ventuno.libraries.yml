@@ -24,7 +24,6 @@ components.js:
     assets/js/oe-bcl-joinup.bundle.min.js: { minified: true }
   dependencies:
     - core/drupal
-    - ventuno/site-alerts-messages
 
 theme:
   version: VERSION
@@ -112,6 +111,11 @@ ief-entity-table:
     theme:
       assets/css/ief-entity-table.css: {}
 
+layout-block:
+  css:
+    theme:
+      assets/css/layout-block.min.css: { minified: true }
+
 navbar:
   css:
     theme:
@@ -129,10 +133,10 @@ pager:
     theme:
       assets/css/pager.css: {}
 
-site-alerts-messages:
+alert:
   css:
     theme:
-      assets/css/site-alerts-messages.css: {}
+      assets/css/alert.css: {}
 
 show-accordion-invalid-fields:
   js:

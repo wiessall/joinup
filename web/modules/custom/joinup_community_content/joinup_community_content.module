@@ -49,14 +49,17 @@ function joinup_community_content_entity_extra_field_info() {
 function joinup_community_content_node_view(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, $view_mode) {
   // Read more link to the canonical page.
   if ($display->getComponent('read_more')) {
-    $build['read_more'] = $entity->toLink(t('Read more'), 'canonical', [
+    $text = [
+      '#type' => 'markup',
+      '#markup' => t('Read more') . '<span class="visually hidden"> ' . t('about') . ' ' . $entity->label() . '</span>',
+    ];
+    $build['read_more'] = $entity->toLink($text, 'canonical', [
       'attributes' => [
         'class' => [
           'read-more',
           'btn',
           'btn-secondary',
         ],
-        'aria-label' => 'Read more about \'' . $entity->label() . '\'.',
       ],
     ])->toRenderable();
   }
