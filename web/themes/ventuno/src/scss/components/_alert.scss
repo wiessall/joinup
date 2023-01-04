@@ -1,0 +1,8 @@
+.alert {
+  p:last-of-type {
+    margin-bottom: 0;
+  }
+  a {
+    color: darken($link-color, 4%); // Make sure we comply with WCAG 2.0 level AA contrast ratio
+  }
+}
