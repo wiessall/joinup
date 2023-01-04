@@ -264,7 +264,7 @@ module.exports = {
       options: { up: true },
     },
     {
-      from: [path.resolve(__dirname, "src/images/join-bg.png")],
+      from: [path.resolve(__dirname, "src/images/join-bg.webp")],
       to: path.resolve(outputFolder, "assets/images"),
       options: { up: true },
     },
