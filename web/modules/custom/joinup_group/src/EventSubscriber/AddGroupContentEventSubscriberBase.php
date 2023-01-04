@@ -63,13 +63,6 @@ abstract class AddGroupContentEventSubscriberBase implements EventSubscriberInte
         $route_parameters = $this->getRouteParameters($event, $entity_type_id, $bundle_id);
         $this->addOneLink($bundle->getSingularLabel(), $route_parameters, $event);
       }
-      $url = Url::fromRoute('entity.rdf_entity.unpublished_content', ['rdf_entity' => $event->getGroup()->id()]);
-      $event->addItem([
-        '#type' => 'link',
-        '#title' => $this->t('Unpublished Content'),
-        '#url' => $url,
-        '#attributes' => ['class' => ['circle-menu__link']],
-      ]);
     }
   }
 
