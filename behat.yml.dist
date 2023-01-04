@@ -128,6 +128,7 @@ default:
         'announcement list': '.announcement-list table'
         'group menu edit table': '#menu-overview'
         'eif recommendations': '.eif-recommendations table'
+        'form table': '.form-table'
         'member administration': '.og-members-overview table'
         'member permissions': 'table.form-table__member-permissions'
         'licence comparer': 'table[data-drupal-selector="licence-comparer"]'
@@ -150,6 +151,7 @@ default:
         Footer: '.section--footer, footer'
         Hamburger menu: '.joinup-navbar ul.navbar-nav ul.dropdown-list'
         Header: '.section--featured, .section-header'
+        Homepage topics: '.view-homepage-topics'
         Highlighted content: '.block-entityqueue--highlighted-content'
         Highlighted event: '.block-entityqueue--highlighted-event'
         In the spotlight: '.block-views-blockin-the-spotlight-block'
@@ -181,9 +183,9 @@ default:
         drupal_root: ${joinup.site_dir}
       selectors:
         message_selector: '.alert, .messages'
-        error_message_selector: '.alert.alert--error, .messages.messages--error'
-        success_message_selector: '.alert.alert--status, .messages.messages--status'
-        warning_message_selector: '.alert.alert--warning, .messages.messages--warning'
+        error_message_selector: '.alert.alert--error, .messages.messages--error, .alert.alert-danger'
+        success_message_selector: '.alert.alert--status, .messages.messages--status, .alert.alert-success'
+        warning_message_selector: '.alert.alert--warning, .messages.messages--warning, .alert.alert-warning'
         login_form_selector: '#user-login-form'
       subcontexts:
         autoload: false

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "7b9b2b3bd589185c74649680121ccf8b",
+    "content-hash": "18b55218ef1c46643bc8e092a97b5367",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -2025,16 +2025,16 @@
         },
         {
             "name": "drupal/core",
-            "version": "9.4.8",
+            "version": "9.4.9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/drupal/core.git",
-                "reference": "a627d1b2a00f2cef0572e37b94dea298800541f4"
+                "reference": "5fa639a3ddf0241db08b270f429f9da91d06fdfc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/drupal/core/zipball/a627d1b2a00f2cef0572e37b94dea298800541f4",
-                "reference": "a627d1b2a00f2cef0572e37b94dea298800541f4",
+                "url": "https://api.github.com/repos/drupal/core/zipball/5fa639a3ddf0241db08b270f429f9da91d06fdfc",
+                "reference": "5fa639a3ddf0241db08b270f429f9da91d06fdfc",
                 "shasum": ""
             },
             "require": {
@@ -2186,13 +2186,13 @@
             ],
             "description": "Drupal is an open source content management platform powering millions of websites and applications.",
             "support": {
-                "source": "https://github.com/drupal/core/tree/9.4.8"
+                "source": "https://github.com/drupal/core/tree/9.4.9"
             },
-            "time": "2022-10-06T15:57:08+00:00"
+            "time": "2022-12-07T13:36:57+00:00"
         },
         {
             "name": "drupal/core-composer-scaffold",
-            "version": "9.4.8",
+            "version": "9.4.9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/drupal/core-composer-scaffold.git",
@@ -2236,7 +2236,7 @@
                 "drupal"
             ],
             "support": {
-                "source": "https://github.com/drupal/core-composer-scaffold/tree/9.4.8"
+                "source": "https://github.com/drupal/core-composer-scaffold/tree/9.4.9"
             },
             "time": "2022-06-19T16:14:23+00:00"
         },
@@ -7630,6 +7630,10 @@
             ],
             "authors": [
                 {
+                    "name": "abhinesh",
+                    "homepage": "https://www.drupal.org/user/3645979"
+                },
+                {
                     "name": "jec006",
                     "homepage": "https://www.drupal.org/user/855980"
                 },
@@ -10221,6 +10225,59 @@
             "time": "2021-09-30T11:52:11+00:00"
         },
         {
+            "name": "openeuropa/gisco-geocoding-provider",
+            "version": "dev-ISAICP-7452",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/openeuropa/gisco-geocoding-provider.git",
+                "reference": "235c8cb9ca73a05ba55723d6ac67197e98ab59d9"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/openeuropa/gisco-geocoding-provider/zipball/235c8cb9ca73a05ba55723d6ac67197e98ab59d9",
+                "reference": "235c8cb9ca73a05ba55723d6ac67197e98ab59d9",
+                "shasum": ""
+            },
+            "require": {
+                "geocoder-php/common-http": "^4.3",
+                "php": ">=8.0"
+            },
+            "provide": {
+                "geocoder-php/provider-implementation": "1.0"
+            },
+            "require-dev": {
+                "geocoder-php/provider-integration-tests": "^1.5",
+                "php-http/curl-client": "^2.2",
+                "phpunit/phpunit": "^9",
+                "squizlabs/php_codesniffer": "^3.7"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "OpenEuropa\\Provider\\GiscoGeocoding\\": "src/"
+                }
+            },
+            "autoload-dev": {
+                "psr-4": {
+                    "OpenEuropa\\Provider\\GiscoGeocoding\\Tests\\": "test/"
+                }
+            },
+            "license": [
+                "EUPL-1.2"
+            ],
+            "description": "GISCO Geocoding Provider for Geocoder PHP.",
+            "homepage": "https://github.com/openeuropa/gisco-geocoding-provider",
+            "keywords": [
+                "geocoding",
+                "gisco"
+            ],
+            "support": {
+                "source": "https://github.com/openeuropa/gisco-geocoding-provider/tree/ISAICP-7452",
+                "issues": "https://github.com/openeuropa/gisco-geocoding-provider/issues"
+            },
+            "time": "2022-12-05T17:57:13+00:00"
+        },
+        {
             "name": "openeuropa/oe_bootstrap_theme",
             "version": "1.0.0-beta7",
             "source": {
@@ -10476,52 +10533,6 @@
                 "source": "https://github.com/openeuropa/oe_webtools/tree/1.19.0"
             },
             "time": "2022-08-02T07:50:45+00:00"
-        },
-        {
-            "name": "openeuropa/webtools-geocoding-provider",
-            "version": "0.2.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/openeuropa/webtools-geocoding-provider.git",
-                "reference": "d0f141937b66760971d5866af3e1d618d6ba902c"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/openeuropa/webtools-geocoding-provider/zipball/d0f141937b66760971d5866af3e1d618d6ba902c",
-                "reference": "d0f141937b66760971d5866af3e1d618d6ba902c",
-                "shasum": ""
-            },
-            "require": {
-                "geocoder-php/common-http": "^4.3",
-                "php": ">=7.4",
-                "willdurand/geocoder": "^4.0"
-            },
-            "provide": {
-                "geocoder-php/provider-implementation": "1.0"
-            },
-            "require-dev": {
-                "geocoder-php/provider-integration-tests": "~1.5.0",
-                "openeuropa/code-review": "^2.0",
-                "php-http/curl-client": "^2.2",
-                "phpunit/phpunit": "^7.5.15|~8|~9"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "OpenEuropa\\Provider\\WebtoolsGeocoding\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "EUPL-1.2"
-            ],
-            "description": "Webtools Geocoding provider for Geocoder PHP.",
-            "homepage": "https://github.com/openeuropa/webtools-geocoding-provider",
-            "support": {
-                "issues": "https://github.com/openeuropa/webtools-geocoding-provider/issues",
-                "source": "https://github.com/openeuropa/webtools-geocoding-provider/tree/0.2.0"
-            },
-            "time": "2022-02-07T15:44:17+00:00"
         },
         {
             "name": "pear/archive_tar",
@@ -21951,6 +21962,12 @@
             "version": "dev-drupal-extension",
             "alias": "1.0.999",
             "alias_normalized": "1.0.999.0"
+        },
+        {
+            "package": "openeuropa/gisco-geocoding-provider",
+            "version": "dev-ISAICP-7452",
+            "alias": "1.0.0",
+            "alias_normalized": "1.0.0.0"
         }
     ],
     "minimum-stability": "dev",
@@ -21959,6 +21976,7 @@
         "drupal/facets_date_range": 10,
         "drupal/page_manager": 10,
         "drupal/views_block_area": 10,
+        "openeuropa/gisco-geocoding-provider": 20,
         "drupal/drupal-extension": 20,
         "drupaltest/behat-one-time-login": 20,
         "lovers-of-behat/table-extension": 20,

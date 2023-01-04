@@ -1,0 +1,30 @@
+uuid: 5226d8b3-9287-4dd9-93f7-525a42b27be4
+langcode: en
+status: true
+dependencies:
+  config:
+    - entityqueue.entity_queue.homepage_topics
+id: entity_subqueue.homepage_topics.default
+targetEntityType: entity_subqueue
+bundle: homepage_topics
+mode: default
+content:
+  items:
+    type: entity_reference_label
+    label: hidden
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  title:
+    type: string
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: -10
+    region: content
+hidden:
+  langcode: true
+  search_api_excerpt: true
