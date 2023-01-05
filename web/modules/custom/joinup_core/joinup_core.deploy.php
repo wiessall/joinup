@@ -445,6 +445,7 @@ function joinup_core_deploy_108904(array &$sandbox): string {
       // All terms should be empty in references/children after the migration.
       'deleteTopicTerm' => [
         'http://joinup.eu/ontology/topic#authorisation-and-authentication',
+        'http://joinup.eu/ontology/topic#culture',
         'http://joinup.eu/ontology/topic#defence',
         'http://joinup.eu/ontology/topic#economic-analysis',
         'http://joinup.eu/ontology/topic#education',
