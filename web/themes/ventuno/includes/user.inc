@@ -60,3 +60,16 @@ function ventuno_preprocess_search_api_field__user__field_user_content(array &$v
     '#markup' => $markup,
   ];
 }
+
+/**
+ * Implements hook_preprocess_user__inline().
+ */
+function ventuno_preprocess_user__inline(array &$variables): void {
+  $variables['full_name'] = [
+    '#theme' => 'username',
+    '#account' => $variables['user'],
+    '#attributes' => [
+      'class' => [],
+    ],
+  ];
+}
