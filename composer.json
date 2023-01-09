@@ -416,7 +416,7 @@
                 "source": {
                     "url": "https://github.com/spdx/license-list-data",
                     "type": "git",
-                    "reference": "master"
+                    "reference": "main"
                 }
             }
         },
