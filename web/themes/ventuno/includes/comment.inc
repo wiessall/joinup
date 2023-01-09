@@ -39,9 +39,10 @@ function ventuno_preprocess_comment(array &$variables): void {
         ->applyTo($variables['profile_icon']);
     }
   }
-  // @todo Move the permalink computing outside the theme layer, in ISAICP-4724.
-  // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-4724
-  if ($permalink = _ventuno_build_permalink()) {
-    $variables['permalink_raw'] = $permalink;
+
+  /** @var \Drupal\comment\CommentInterface $comment */
+  $comment = $variables['comment'];
+  if (!$comment->in_preview) {
+    $variables['permalink_raw'] = $comment->permalink();
   }
 }

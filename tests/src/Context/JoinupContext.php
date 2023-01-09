@@ -1849,7 +1849,7 @@ class JoinupContext extends RawDrupalContext {
    * @Then I should see a banner on the header
    */
   public function assertExistingBanner(): void {
-    $xpath = '//article[contains(concat(" ", normalize-space(@class), " "), " group-banner ")]';
+    $xpath = '//*[contains(concat(" ", normalize-space(@class), " "), " group-banner ")]';
     if (!$this->getSession()->getPage()->find('xpath', $xpath)) {
       throw new \Exception("No banner");
     }

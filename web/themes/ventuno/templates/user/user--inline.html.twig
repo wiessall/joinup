@@ -19,6 +19,8 @@
  */
 #}
 <div class="details__element">
-  {{ content.field_user_photo }}
-  {{ full_name }}
+  <a href="{{ path('entity.user.canonical', {'user': user.id}) }}">
+    {{ content.field_user_photo }}
+    {{ full_name }}
+  </a>
 </div>

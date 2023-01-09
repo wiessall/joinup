@@ -31,7 +31,7 @@ Feature:
     When I visit "/interoperable-europe/event/save-date-semic-coming-back-8-december-2021"
     Then the page should be rendered using the "Joinup Theme" theme
     When I visit "/interoperable-europe/news/vocbench-semantic-technologies-data-management"
-    Then the page should be rendered using the "Joinup Theme" theme
+    Then the page should be rendered using the "Ventuno" theme
 
   Scenario: Authenticated user visiting the landing page.
     Given I am logged in as a user with the authenticated role
