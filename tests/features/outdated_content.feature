@@ -70,7 +70,7 @@ Feature:
 
     # News item is prone to be outdated.
     When I go to the "Recent published news" news
-    Then I should see the heading "Top 79533 interoperability tips. You will never believe what is on number 6!"
+    Then I should see the heading "Recent published news"
     But I should not see "This news is more than"
 
     When I go to the "Outdated published news" news
