@@ -139,7 +139,7 @@ default:
       region_map:
         Additional fields accordion: '#additional-fields'
         Administration toolbar: '#toolbar-administration'
-        Comment: '.comments-section'
+        Comment: '.comments-section, section.comments'
         Contact information inline form: '#edit-field-ar-contact-information-wrapper'
         Content listing field filter form: '.field--name-field-content-listing'
         Content: '.section--content-middle, main .layout-content'
