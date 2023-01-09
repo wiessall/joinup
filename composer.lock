@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "7b9b2b3bd589185c74649680121ccf8b",
+    "content-hash": "6385619f20556a8fcc018b2821d0b784",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -11694,7 +11694,7 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/spdx/license-list-data",
-                "reference": "master"
+                "reference": "main"
             },
             "type": "library"
         },
