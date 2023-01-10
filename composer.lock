@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "973b6b0b7a3bef42356f3c4d5afd7982",
+    "content-hash": "7ce4a8550e977d2a1d041ce0bce945da",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -10225,6 +10225,59 @@
             "time": "2021-09-30T11:52:11+00:00"
         },
         {
+            "name": "openeuropa/gisco-geocoding-provider",
+            "version": "dev-ISAICP-7452",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/openeuropa/gisco-geocoding-provider.git",
+                "reference": "235c8cb9ca73a05ba55723d6ac67197e98ab59d9"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/openeuropa/gisco-geocoding-provider/zipball/235c8cb9ca73a05ba55723d6ac67197e98ab59d9",
+                "reference": "235c8cb9ca73a05ba55723d6ac67197e98ab59d9",
+                "shasum": ""
+            },
+            "require": {
+                "geocoder-php/common-http": "^4.3",
+                "php": ">=8.0"
+            },
+            "provide": {
+                "geocoder-php/provider-implementation": "1.0"
+            },
+            "require-dev": {
+                "geocoder-php/provider-integration-tests": "^1.5",
+                "php-http/curl-client": "^2.2",
+                "phpunit/phpunit": "^9",
+                "squizlabs/php_codesniffer": "^3.7"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "OpenEuropa\\Provider\\GiscoGeocoding\\": "src/"
+                }
+            },
+            "autoload-dev": {
+                "psr-4": {
+                    "OpenEuropa\\Provider\\GiscoGeocoding\\Tests\\": "test/"
+                }
+            },
+            "license": [
+                "EUPL-1.2"
+            ],
+            "description": "GISCO Geocoding Provider for Geocoder PHP.",
+            "homepage": "https://github.com/openeuropa/gisco-geocoding-provider",
+            "keywords": [
+                "geocoding",
+                "gisco"
+            ],
+            "support": {
+                "source": "https://github.com/openeuropa/gisco-geocoding-provider/tree/ISAICP-7452",
+                "issues": "https://github.com/openeuropa/gisco-geocoding-provider/issues"
+            },
+            "time": "2022-12-05T17:57:13+00:00"
+        },
+        {
             "name": "openeuropa/oe_bootstrap_theme",
             "version": "1.0.0-beta7",
             "source": {
@@ -10480,52 +10533,6 @@
                 "source": "https://github.com/openeuropa/oe_webtools/tree/1.19.0"
             },
             "time": "2022-08-02T07:50:45+00:00"
-        },
-        {
-            "name": "openeuropa/webtools-geocoding-provider",
-            "version": "0.2.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/openeuropa/webtools-geocoding-provider.git",
-                "reference": "d0f141937b66760971d5866af3e1d618d6ba902c"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/openeuropa/webtools-geocoding-provider/zipball/d0f141937b66760971d5866af3e1d618d6ba902c",
-                "reference": "d0f141937b66760971d5866af3e1d618d6ba902c",
-                "shasum": ""
-            },
-            "require": {
-                "geocoder-php/common-http": "^4.3",
-                "php": ">=7.4",
-                "willdurand/geocoder": "^4.0"
-            },
-            "provide": {
-                "geocoder-php/provider-implementation": "1.0"
-            },
-            "require-dev": {
-                "geocoder-php/provider-integration-tests": "~1.5.0",
-                "openeuropa/code-review": "^2.0",
-                "php-http/curl-client": "^2.2",
-                "phpunit/phpunit": "^7.5.15|~8|~9"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "OpenEuropa\\Provider\\WebtoolsGeocoding\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "EUPL-1.2"
-            ],
-            "description": "Webtools Geocoding provider for Geocoder PHP.",
-            "homepage": "https://github.com/openeuropa/webtools-geocoding-provider",
-            "support": {
-                "issues": "https://github.com/openeuropa/webtools-geocoding-provider/issues",
-                "source": "https://github.com/openeuropa/webtools-geocoding-provider/tree/0.2.0"
-            },
-            "time": "2022-02-07T15:44:17+00:00"
         },
         {
             "name": "pear/archive_tar",
@@ -21955,6 +21962,12 @@
             "version": "dev-drupal-extension",
             "alias": "1.0.999",
             "alias_normalized": "1.0.999.0"
+        },
+        {
+            "package": "openeuropa/gisco-geocoding-provider",
+            "version": "dev-ISAICP-7452",
+            "alias": "1.0.0",
+            "alias_normalized": "1.0.0.0"
         }
     ],
     "minimum-stability": "dev",
@@ -21963,6 +21976,7 @@
         "drupal/facets_date_range": 10,
         "drupal/page_manager": 10,
         "drupal/views_block_area": 10,
+        "openeuropa/gisco-geocoding-provider": 20,
         "drupal/drupal-extension": 20,
         "drupaltest/behat-one-time-login": 20,
         "lovers-of-behat/table-extension": 20,
