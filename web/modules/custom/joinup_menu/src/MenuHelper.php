@@ -154,6 +154,7 @@ class MenuHelper implements MenuHelperInterface {
       'description' => $this->t('As a signed-in user you can create content, become a member of a community, receive notifications on your favourite solutions and topics, and access all other features available on the platform.'),
     ];
     $anonymous_links[] = [
+      'id' => 'get-started',
       'label' => $this->t('Get started'),
       'popover' => $popover,
     ];

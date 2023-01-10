@@ -1,0 +1,7 @@
+type: module
+name: OpenEuropa GISCO Geocoder
+description: Allows to use the GISCO Geocoder service in sites built on the OpenEuropa platform.
+package: OpenEuropa
+core_version_requirement: ^9.4 || ^10
+dependencies:
+  - geocoder:geocoder
