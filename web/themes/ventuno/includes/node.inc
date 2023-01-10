@@ -8,6 +8,7 @@
 declare(strict_types = 1);
 
 use Drupal\joinup_bundle_class\LogoInterface;
+use Drupal\joinup_group\JoinupGroupHelper;
 
 /**
  * Implements hook_preprocess_HOOK().
@@ -81,5 +82,72 @@ function ventuno_preprocess_node__tallinn_report__view_mode_tile(&$variables) {
   if (!$node->get('created')->equals($node->get('changed'))) {
     $date = \Drupal::service('date.formatter')->format($node->getChangedTime(), 'custom', 'd/m/Y');
     $variables['last_update'] = $date;
+  }
+}
+
+/**
+ * Implements hook_preprocess_node().
+ *
+ * - Adds the site URL to use in nodes.
+ * - Adds the group ID and label as data attributes in tiles.
+ * - Adds bundle class in listing templates for bundle specific theming.
+ * - Adds the created date to news articles.
+ * - Adds a variable indicating the attachment file type on documents.
+ */
+function ventuno_preprocess_node(array &$variables): void {
+  /** @var \Drupal\node\NodeInterface $node */
+  $node = $variables['node'];
+
+  // Add the site URL to use in nodes.
+  $variables['site_url'] = \Drupal::request()->getSchemeAndHttpHost();
+
+  // Add the group ID and label as data attributes in tiles.
+  if ($variables['view_mode'] === 'view_mode_tile') {
+    /** @var \Drupal\rdf_entity\RdfInterface|null $parent */
+    $parent = JoinupGroupHelper::getGroup($node);
+    if ($parent) {
+      $variables['attributes']['data-joinup-parent-id'] = $parent->id();
+      $variables['attributes']['data-joinup-parent-label'] = $parent->label();
+    }
+
+    // If the node is shared somewhere, attach the related library.
+    if ($node->hasField('field_shared_in') && !$node->get('field_shared_in')->isEmpty()) {
+      $variables['#attached']['library'][] = 'ventuno/shared-entity';
+    }
+  }
+
+  // Add bundle class in listing templates.
+  if ($variables['view_mode'] === 'view_mode_tile' || $variables['view_mode'] === 'view_mode_featured') {
+    $bundle_class = 'listing__card--' . str_replace('_', '-', $node->bundle());
+    $variables['attributes']['class'][] = $bundle_class;
+  }
+
+  // Add the created date to news articles.
+  if ($node->bundle() === 'news') {
+    $variables['created'] = \Drupal::service('date.formatter')->format($node->getCreatedTime(), 'date_only');
+  }
+
+  // Add a variable indicating the attachment file type on documents.
+  if ($node->bundle() === 'document' && !$node->get('field_file')->isEmpty()) {
+    /** @var \Drupal\file\FileInterface $file */
+    $file = $node->get('field_file')->first()->entity;
+
+    // The document could reference an orphaned file entity, so only proceed if
+    // we actually have a file.
+    if (!empty($file)) {
+      $is_remote = \Drupal::service('file_url.handler')->isRemote($file);
+
+      if (!$is_remote) {
+        $variables['extension'] = pathinfo($file->getFilename(), PATHINFO_EXTENSION);
+      }
+      else {
+        $variables['extension'] = t('External');
+      }
+    }
+  }
+
+  // Hide the white area (main content block) from the EIF Toolbox.
+  if ((int) $node->id() === 705372) {
+    unset($variables['content']);
   }
 }
