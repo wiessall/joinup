@@ -15,7 +15,7 @@
 {{ attach_library('ventuno/page-title') }}
 {{ title_prefix }}
 {% if title %}
-<div class="page-title">
+<div class="page-title page__title-wrapper">
   <h3 class="page-title__headline">{{ title }}</h3>
   <h1 class="page-title__title">
     {{ additional_content.field_news_headline }}
@@ -28,7 +28,7 @@
       </a>
     {% endif %}
   </h1>
-  <div class="page-title__details">
+  <div class="page-title__details details after-title">
     <div class="page-title__detail">
       {{ additional_content.author }}
     </div>
