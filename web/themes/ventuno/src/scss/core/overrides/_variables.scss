@@ -17,12 +17,13 @@ $spacers: (
 $gutters: $spacers;
 
 // Path for icons
-$bootstrap-icons-path: '../../node_modules/@openeuropa/bcl-bootstrap/icons';
+$bootstrap-icons-path: '../icons';
 
 // Theme path
 $ventuno-path: '../..';
 
 // Colors variables
+$ec-blue: #004494;
 $iop-darkblue: #001e2f;
 // Joinup color set
 $joinup--green: $green;

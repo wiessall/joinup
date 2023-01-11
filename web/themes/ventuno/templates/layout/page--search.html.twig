@@ -91,7 +91,9 @@
     <div class="row align-items-stretch">
       <div class="layout-content col-12 col-lg-8 offset-lg-1 order-1 mb-5">
           {% if page.messages %}
-            {{ page.messages }}
+            <div class="mt-3">
+              {{ page.messages }}
+            </div>
           {% endif %}
         {{ page.content }}
       </div>{# /.layout-content #}
