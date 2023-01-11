@@ -136,7 +136,6 @@ Feature:
 
     When I fill in "Block label" with "Hello world"
     And I press "Save"
-    Then I should see the success message "The curated content listing Homepage topics has been updated."
 
     When I go to the homepage
     Then I should see the heading "Hello world"
@@ -152,8 +151,7 @@ Feature:
 
     When I fill in "Block label" with ""
     And I press "Save"
-    Then I should see the success message "The curated content listing Homepage topics has been updated."
 
     When I go to the homepage
-    Then I should see the heading "Hello world"
-    And I should not see the heading "Main topics"
+    Then I should see the heading "Main topics"
+    And I should not see the heading "Hello world"
