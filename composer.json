@@ -22,8 +22,8 @@
         "drupal/changed_fields": "^3.2",
         "drupal/config_ignore": "^3.0",
         "drupal/config_readonly": "^1.0",
-        "drupal/core": "^9.4",
-        "drupal/core-composer-scaffold": "^9.4",
+        "drupal/core": "9.4.8",
+        "drupal/core-composer-scaffold": "9.4.8",
         "drupal/custom_markup_block": "^1.1",
         "drupal/default_content": "^2.0",
         "drupal/diff": "~1.0",
@@ -106,10 +106,10 @@
         "ec-europa/virtuoso": "^2.1",
         "jacklmoore/autosize": "5.0.2",
         "openeuropa/composer-artifacts": "^1.0",
+        "openeuropa/gisco-geocoding-provider": "^1.0",
         "openeuropa/oe_bootstrap_theme": "^1.0",
         "openeuropa/oe_dashboard_agent": "^0.3.0",
         "openeuropa/oe_webtools": "^1.19",
-        "openeuropa/webtools-geocoding-provider": "~0.1",
         "semiceu/adms-ap_validator": "1.0.0-alpha1",
         "sweetrdf/easyrdf": "^1.7.1"
     },
@@ -122,14 +122,14 @@
         "drupal/coder": "^8.3.11",
         "drupal/composer_deploy": "^1.6",
         "drupal/config_update": "^1.7",
-        "drupal/devel": "^5.0",
-        "drupal/drupal-extension": "dev-use-guzzle as 4.2.999",
+        "drupal/devel": "5.0.2",
+        "drupal/drupal-extension": "^5.0",
         "drupal/filecache": "^1",
         "drupal/renderviz": "^1.0",
         "drupal/upgrade_status": "^3.14",
-        "drupaltest/behat-one-time-login": "dev-drupal-extension as 1.0.999",
+        "drupaltest/behat-one-time-login": "^1.0",
         "ec-europa/toolkit": "~9.0.0",
-        "lovers-of-behat/table-extension": "dev-drop-behat-mink-extension",
+        "lovers-of-behat/table-extension": "^1.3",
         "mikey179/vfsstream": "~1.6",
         "palantirnet/drupal-rector": "^0.12.2",
         "pear/http_request2": "~2.4",
@@ -253,7 +253,7 @@
                 "Use READ COMMITTED by default for MySQL transactions @see https://www.drupal.org/project/drupal/issues/1650930": "https://git.drupalcode.org/project/drupal/-/merge_requests/2394.diff",
                 "Allow image style to be selected in text editor @see https://www.drupal.org/node/2061377": "https://git.drupalcode.org/project/drupal/-/merge_requests/2344.diff",
                 "Allow making the file description a required field @see https://www.drupal.org/node/2320877": "https://git.drupalcode.org/project/drupal/-/merge_requests/975.diff",
-                "Delete should not be the default action on /admin/content @see https://www.drupal.org/project/drupal/issues/2381293": "resources/patch/drupal/core/2381293.diff",
+                "Delete should not be the default action on /admin/content @see https://www.drupal.org/project/drupal/issues/2381293": "https://git.drupalcode.org/project/drupal/-/merge_requests/1670.diff",
                 "Regression: Do not bypass route access with 'link to any page' permissions for menu links @see https://www.drupal.org/project/drupal/issues/2463753": "https://www.drupal.org/files/issues/2021-09-15/2463753-87_0.patch",
                 "Upcast named arguments/named parameters in views @see https://www.drupal.org/project/drupal/issues/2528166": "https://git.drupalcode.org/project/drupal/-/merge_requests/1323.diff",
                 "Confirmation cancel links are incorrect if installed in a subdirectory @see https://www.drupal.org/project/drupal/issues/2582295": "https://www.drupal.org/files/issues/2021-08-23/2582295-52.patch",
@@ -275,7 +275,8 @@
                 "Cannot implement a custom user cancellation method @see https://www.drupal.org/project/drupal/issues/3135592": "https://git.drupalcode.org/project/drupal/-/merge_requests/1675.diff",
                 "file_requirements() can trigger a PHP 8.1 deprecation notice when called without a SERVER_SOFTWARE server env variable @see https://www.drupal.org/project/drupal/issues/3279289": "https://git.drupalcode.org/project/drupal/-/merge_requests/2247.diff",
                 "If you don't set the \"version\" of a profile, the report/status displays an empty dash @see https://www.drupal.org/project/drupal/issues/3270892": "https://git.drupalcode.org/project/drupal/-/merge_requests/2003.diff",
-                "Page variant plugin is not correctlly instantiated @see https://www.drupal.org/project/drupal/issues/3294833": "https://git.drupalcode.org/project/drupal/-/merge_requests/2484.diff"
+                "Page variant plugin is not correctlly instantiated @see https://www.drupal.org/project/drupal/issues/3294833": "https://git.drupalcode.org/project/drupal/-/merge_requests/2484.diff",
+                "PHP 8.1 deprecation @see https://www.drupal.org/project/drupal/issues/3313342": "https://git.drupalcode.org/project/drupal/-/merge_requests/3143.diff"
             },
             "drupal/default_content": {
                 "Allow manual imports @see https://www.drupal.org/i/2640734": "https://git.drupalcode.org/project/default_content/-/merge_requests/20.diff"
@@ -287,7 +288,7 @@
                 "Support for HTML mails @see https://www.drupal.org/i/3047124": "https://git.drupalcode.org/project/email_confirmer/-/merge_requests/3.diff"
             },
             "drupal/drupal-driver": {
-                "Allow multi-property references. @see https://github.com/jhedstrom/DrupalDriver/pull/252": "resources/patch/drupal/drupal-driver/252.diff"
+                "Allow multi-property references. @see https://github.com/jhedstrom/DrupalDriver/pull/252": "https://patch-diff.githubusercontent.com/raw/jhedstrom/DrupalDriver/pull/252.diff"
             },
             "drupal/editor_file": {
                 "Wrong file upload size when max upload left empty. @see https://www.drupal.org/i/3300142": "https://www.drupal.org/files/issues/2022-07-27/editor_file-fix_max_file_upload_empty-3300142-2.patch",
@@ -299,6 +300,9 @@
             "drupal/facets": {
                 "Facet Summary for Facet Items with a set dependency. @see https://www.drupal.org/node/2873480": "https://www.drupal.org/files/issues/2020-07-30/2873480-33-8.x-1.5.patch",
                 "Add 0 option in 'Soft limit' and apply soft limit to facet root li tags and add. @see https://www.drupal.org/i/3208580 and https://www.drupal.org/i/3307082": "resources/patch/facets-3208580-and-3307082.patch"
+            },
+            "drupal/file_url": {
+                "Handle deleted files": "resources/patch/file_url.diff"
             },
             "drupal/honeypot": {
                 "Behat integration. @see https://www.drupal.org/project/honeypot/issues/3059040": "https://www.drupal.org/files/issues/2020-09-09/3059040-31.patch",
@@ -378,9 +382,6 @@
             "drupal/views_block_area": {
                 "Views block area missing schema @see https://www.drupal.org/project/views_block_area/issues/3157188": "https://www.drupal.org/files/issues/2020-07-06/views_block_area-missing_schema-3157188-2.patch"
             },
-            "lovers-of-behat/table-extension": {
-                "Allow to check an arbitrary column of a table @see https://github.com/LoversOfBehat/TableExtension/pull/13": "https://patch-diff.githubusercontent.com/raw/LoversOfBehat/TableExtension/pull/13.diff"
-            },
             "openeuropa/oe_webtools": {
                 "Allow to pass an optional referer. @see https://github.com/openeuropa/oe_webtools/pull/96": "https://patch-diff.githubusercontent.com/raw/openeuropa/oe_webtools/pull/96.diff",
                 "Place the webtools loader on the head. @see https://github.com/openeuropa/oe_webtools/pull/102": "https://patch-diff.githubusercontent.com/raw/openeuropa/oe_webtools/pull/102.diff",
@@ -413,13 +414,9 @@
                 "source": {
                     "url": "https://github.com/spdx/license-list-data",
                     "type": "git",
-                    "reference": "master"
+                    "reference": "main"
                 }
             }
-        },
-        {
-            "type": "vcs",
-            "url": "https://github.com/claudiu-cristea/drupalextension.git"
         },
         {
             "type": "vcs",

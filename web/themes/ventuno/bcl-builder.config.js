@@ -248,8 +248,8 @@ module.exports = {
       },
     },
     {
-      entry: path.resolve(outputFolder, "src/scss/site-alerts-messages.scss"),
-      dest: path.resolve(outputFolder, "assets/css/site-alerts-messages.css"),
+      entry: path.resolve(outputFolder, "src/scss/alert.scss"),
+      dest: path.resolve(outputFolder, "assets/css/alert.css"),
       options: {
         includePaths,
         sourceMap: "file",
@@ -409,6 +409,7 @@ module.exports = {
           "clipboard-check.svg",
           "envelope-fill.svg",
           "exclamation-circle-fill.svg",
+          "exclamation-triangle-fill.svg",
           "exclamation-lg.svg",
           "eye.svg",
           "file-earmark-medical.svg",
