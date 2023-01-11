@@ -183,9 +183,9 @@ default:
         drupal_root: ${joinup.site_dir}
       selectors:
         message_selector: '.alert, .messages'
-        error_message_selector: '.alert.alert--error, .messages.messages--error'
-        success_message_selector: '.alert.alert--status, .messages.messages--status'
-        warning_message_selector: '.alert.alert--warning, .messages.messages--warning'
+        error_message_selector: '.alert.alert--error, .messages.messages--error, .alert.alert-danger'
+        success_message_selector: '.alert.alert--status, .messages.messages--status, .alert.alert-success'
+        warning_message_selector: '.alert.alert--warning, .messages.messages--warning, .alert.alert-warning'
         login_form_selector: '#user-login-form'
       subcontexts:
         autoload: false
