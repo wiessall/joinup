@@ -230,6 +230,9 @@ drupal:
           'port' => getenv('DRUPAL_DATABASE_PORT'),
           'namespace' => 'Drupal\\mysql\\Driver\\Database\\mysql',
           'driver' => 'mysql',
+          'init_commands' => [
+            'isolation_level' => 'SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED',
+          ],
         ];
         $databases['sparql_default']['default'] = [
           'host' => getenv('DRUPAL_SPARQL_HOSTNAME'),
