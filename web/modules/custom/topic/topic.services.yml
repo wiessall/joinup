@@ -11,3 +11,9 @@ services:
   topic.vocabulary_manager:
     class: Drupal\topic\VocabularyManager
     arguments: ['@entity_type.manager', '@database', '@sparql.endpoint']
+
+  topic.event_subscriber:
+    class: Drupal\topic\EventSubscriber\HomepageTopicsSectionSubscriber
+    arguments: ['@entity_type.manager']
+    tags:
+      - { name: event_subscriber }
