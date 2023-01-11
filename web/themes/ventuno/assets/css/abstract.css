@@ -12,12 +12,13 @@
   display: inline-block;
 }
 .abstract .read-more::after {
+  margin-left: 0.5rem;
   display: inline-block;
   content: "";
   width: 1em;
   height: 1em;
   vertical-align: -0.125em;
-  background-color: #1073de;
+  background-color: currentColor;
   -webkit-mask-image: url("../icons/arrow-right.svg");
           mask-image: url("../icons/arrow-right.svg");
   -webkit-mask-repeat: no-repeat;
@@ -31,7 +32,7 @@
   width: 1em;
   height: 1em;
   vertical-align: -0.125em;
-  background-color: #102f5e;
+  background-color: currentColor;
   -webkit-mask-image: url("../icons/arrow-right.svg");
           mask-image: url("../icons/arrow-right.svg");
   -webkit-mask-repeat: no-repeat;
