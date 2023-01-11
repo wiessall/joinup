@@ -106,7 +106,7 @@
         "ec-europa/virtuoso": "^2.1",
         "jacklmoore/autosize": "5.0.2",
         "openeuropa/composer-artifacts": "^1.0",
-        "openeuropa/gisco-geocoding-provider": "dev-ISAICP-7452 as 1.0.0",
+        "openeuropa/gisco-geocoding-provider": "^1.0",
         "openeuropa/oe_bootstrap_theme": "^1.0",
         "openeuropa/oe_dashboard_agent": "^0.3.0",
         "openeuropa/oe_webtools": "^1.19",
@@ -123,13 +123,13 @@
         "drupal/composer_deploy": "^1.6",
         "drupal/config_update": "^1.7",
         "drupal/devel": "5.0.2",
-        "drupal/drupal-extension": "dev-use-guzzle as 4.2.999",
+        "drupal/drupal-extension": "^5.0",
         "drupal/filecache": "^1",
         "drupal/renderviz": "^1.0",
         "drupal/upgrade_status": "^3.14",
-        "drupaltest/behat-one-time-login": "dev-drupal-extension as 1.0.999",
+        "drupaltest/behat-one-time-login": "^1.0",
         "ec-europa/toolkit": "~9.0.0",
-        "lovers-of-behat/table-extension": "dev-drop-behat-mink-extension",
+        "lovers-of-behat/table-extension": "^1.3",
         "mikey179/vfsstream": "~1.6",
         "palantirnet/drupal-rector": "^0.12.2",
         "pear/http_request2": "~2.4",
@@ -288,7 +288,7 @@
                 "Support for HTML mails @see https://www.drupal.org/i/3047124": "https://git.drupalcode.org/project/email_confirmer/-/merge_requests/3.diff"
             },
             "drupal/drupal-driver": {
-                "Allow multi-property references. @see https://github.com/jhedstrom/DrupalDriver/pull/252": "resources/patch/drupal/drupal-driver/252.diff"
+                "Allow multi-property references. @see https://github.com/jhedstrom/DrupalDriver/pull/252": "https://patch-diff.githubusercontent.com/raw/jhedstrom/DrupalDriver/pull/252.diff"
             },
             "drupal/editor_file": {
                 "Wrong file upload size when max upload left empty. @see https://www.drupal.org/i/3300142": "https://www.drupal.org/files/issues/2022-07-27/editor_file-fix_max_file_upload_empty-3300142-2.patch",
@@ -420,14 +420,6 @@
                     "reference": "main"
                 }
             }
-        },
-        {
-            "type": "vcs",
-            "url": "https://github.com/openeuropa/gisco-geocoding-provider.git"
-        },
-        {
-            "type": "vcs",
-            "url": "https://github.com/claudiu-cristea/drupalextension.git"
         },
         {
             "type": "vcs",
