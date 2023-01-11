@@ -2,11 +2,12 @@
   .read-more {
     display: inline-block;
     &::after {
-      @include get-bootstrap-icon('arrow-right', $link-color);
+      margin-left: $spacer * .5;
+      @include get-bootstrap-icon('arrow-right', currentColor);
     }
     &:hover {
       &::after {
-        @include get-bootstrap-icon('arrow-right', $link-hover-color);
+        @include get-bootstrap-icon('arrow-right', currentColor);
       }
     }
   }
