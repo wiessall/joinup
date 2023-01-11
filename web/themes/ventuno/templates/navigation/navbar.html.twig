@@ -108,7 +108,7 @@
                     {{ link(link.label, link.link, attributes.addClass('nav-link')) }}
                   {% elseif link.popover %}
                     <button
-                      id="{{ item.id }}"
+                      id="{{ link.id }}"
                       class="btn btn-light get-started__trigger"
                       data-bs-toggle="dropdown"
                       aria-expanded="false"
@@ -119,7 +119,7 @@
                     </button>
                     <div
                       class="dropdown-menu get-started__menu"
-                      aria-labelledby="{{ item.id }}"
+                      aria-labelledby="{{ link.id }}"
                       data-popper-placement="right"
                     >
                       <a class="get-started__cta" href="{{ link.popover.cta.link }}" {{ link.popover.cta.attributes }}>
@@ -151,6 +151,7 @@
               data-bs-auto-close="outside"
               aria-label="{{ item.label }}"
             >
+              <span class="visually-hidden">{{ item.label }}</span>
               {% if item.icon is not empty %}
                 <svg class="bi icon--s">
                   <use xlink:href="{{ bcl_icon_path }}#{{ item.icon.name }}"></use>
