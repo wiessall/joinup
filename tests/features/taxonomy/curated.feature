@@ -121,3 +121,39 @@ Feature:
     When I go to the homepage
     Then I should not see the text "E-justice" in the "Homepage topics" region
     But I should see the text "Finance in EU" in the "Homepage topics" region
+
+  Scenario: Moderators can alter the title of the homepage topics block.
+    Given I am not logged in
+    And I am on the homepage
+    Then I should see the heading "Main topics"
+
+    When I am logged in as a moderator
+    And I click "Dashboard"
+    And I click "Curated content listings"
+    And I click "Homepage topics"
+    Then I should see the heading "Update curated content listing Homepage topics"
+    And I should see the button "Add item"
+
+    When I fill in "Block label" with "Hello world"
+    And I press "Save"
+    Then I should see the success message "The curated content listing Homepage topics has been updated."
+
+    When I go to the homepage
+    Then I should see the heading "Hello world"
+    And I should not see the heading "Main topics"
+
+    # Unset the value and check again.
+    When I am logged in as a moderator
+    And I click "Dashboard"
+    And I click "Curated content listings"
+    And I click "Homepage topics"
+    Then I should see the heading "Update curated content listing Homepage topics"
+    And I should see the button "Add item"
+
+    When I fill in "Block label" with ""
+    And I press "Save"
+    Then I should see the success message "The curated content listing Homepage topics has been updated."
+
+    When I go to the homepage
+    Then I should see the heading "Hello world"
+    And I should not see the heading "Main topics"
