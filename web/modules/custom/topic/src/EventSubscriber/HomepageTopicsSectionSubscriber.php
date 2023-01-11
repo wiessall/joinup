@@ -5,20 +5,14 @@ declare(strict_types = 1);
 namespace Drupal\topic\EventSubscriber;
 
 use Drupal\Core\Entity\EntityTypeManagerInterface;
-use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\layout_builder\Event\SectionComponentBuildRenderArrayEvent;
 use Drupal\layout_builder\LayoutBuilderEvents;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\HttpKernel\Event\RequestEvent;
-use Symfony\Component\HttpKernel\Event\ResponseEvent;
-use Symfony\Component\HttpKernel\KernelEvents;
 
 /**
  * Topic module event subscriber.
  */
 class HomepageTopicsSectionSubscriber implements EventSubscriberInterface {
-
-  use StringTranslationTrait;
 
   /**
    * The entity type manager.
@@ -62,7 +56,7 @@ class HomepageTopicsSectionSubscriber implements EventSubscriberInterface {
     }
     $entity_queue = $this->entityTypeManager->getStorage('entity_subqueue')->load('homepage_topics');
     if (!empty($entity_queue->block_label->value)) {
-      $build['#configuration']['label'] = $this->t($entity_queue->block_label->value);
+      $build['#configuration']['label'] = $entity_queue->block_label->value;
     }
     $event->setBuild($build);
   }
