@@ -195,6 +195,7 @@
   }
 
   .page__footer{
+    background-color: $ec-blue;
     h3 {
       font-size: 14px;
       font-weight: 700 !important;
@@ -204,6 +205,9 @@
       &:hover {
         color: $gray-200;
       }
+    }
+    span {
+      color: $white;
     }
   }
   .badge {
