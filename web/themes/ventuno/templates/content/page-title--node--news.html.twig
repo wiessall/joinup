@@ -16,7 +16,7 @@
 {{ title_prefix }}
 {% if title %}
 <div class="page-title page__title-wrapper">
-  <h3 class="page-title__headline">{{ title }}</h3>
+  <p class="page-title__headline">{{ title }}</p>
   <h1 class="page-title__title">
     {{ additional_content.field_news_headline }}
     {% if permalink %}
@@ -29,18 +29,12 @@
     {% endif %}
   </h1>
   <div class="page-title__details details after-title">
-    <div class="page-title__detail">
-      {{ additional_content.author }}
-    </div>
-    <div class="page-title__detail">
-      {{ 'Published on'|t }}: {{ additional_content.published }}
-    </div>
+    <span class="page-title__detail">{{ additional_content.author }}</span>
+    <span class="page-title__detail">{{ 'Published on'|t }}: {{ additional_content.published }}</span>
     {% if additional_content.published != additional_content.updated %}
-      <div class="page-title__detail">
-        {{ 'Last update'|t }}: {{ additional_content.updated }}
-      </div>
+      <span class="page-title__detail">{{ 'Last update'|t }}: {{ additional_content.updated }}</span>
     {% endif %}
-    <div class="page-title__detail">
+    <span class="page-title__detail">
       <span class="me-2">
         {{ bundle_label }}
       </span>
@@ -48,7 +42,7 @@
           name: 'newspaper',
           size: 's'
         }) }}
-    </div>
+    </span>
   </div>
 </div>
 {% endif %}

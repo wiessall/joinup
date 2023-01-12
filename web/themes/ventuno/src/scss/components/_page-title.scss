@@ -1,15 +1,6 @@
 .page-title {
   margin-top: $spacer * 1.5; // 24px
   position: relative;
-  .permalink {
-    position: absolute;
-    display: none;
-  }
-  &:hover {
-    .permalink {
-      display: inline;
-    }
-  }
   &__title {
     display: inline-block;
     position: relative;
@@ -29,6 +20,7 @@
     margin: $spacer 0 $spacer * .5;
     color: $gray-700;
     font-size: 1.25rem;
+    font-weight: $font-weight-normal;
   }
   &__details {
     display: flex;
@@ -38,14 +30,13 @@
     align-items: center;
     color: $gray-700;
     padding: 0 $spacer * .5;
-    border-right: 1px solid $gray-700;
-    // font-size: .825rem;
+    border-right: 1px solid $gray-300;
     &:first-of-type {
       padding-left: 0;
     }
     &:last-of-type {
       padding-right: 0;
-      border-right: 0;
+      border-right: none;
     }
   }
   .badge {
