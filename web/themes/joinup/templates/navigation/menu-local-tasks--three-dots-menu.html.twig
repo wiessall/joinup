@@ -12,26 +12,11 @@
  */
 #}
 {% if primary %}
-  {# Menu visible on desktop and tablet #}
-  <div class="circle-menu circle-menu--tablet">
-    <button href="#" id="local-tasks-primary--tablet" title="{{ 'Primary tabs'|t }}"  class="circle-menu__button mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect">
-      <span class="icon icon--dots"></span>
-    </button>
-
-    <ul class="circle-menu__dropdown mdl-menu mdl-menu--bottom-right mdl-js-menu" for="local-tasks-primary--tablet">
-      {{ primary }}
-    </ul>
-  </div>
-  {# Menu visible on mobile #}
-  <div class="circle-menu circle-menu--mobile">
-    <button href="#" id="local-tasks-primary--mobile" class="circle-menu__button mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect">
-      <span class="icon icon--dots"></span>
-    </button>
-
-    <ul class="circle-menu__dropdown mdl-menu mdl-menu--top-right mdl-js-menu" for="local-tasks-primary--mobile">
-      {{ primary }}
-    </ul>
-  </div>
+  <button id="local-tasks-primary" class="mdl-button mdl-js-button mdl-button--icon">
+    <span class="icon icon--dots"></span>
+  </button>
+  <h2 class="visually-hidden">{{ 'Primary tabs'|t }}</h2>
+  <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="local-tasks-primary">{{ primary }}</ul>
 {% endif %}
 {% if secondary %}
   <button id="local-tasks-secondary" class="mdl-button mdl-js-button mdl-button--icon">
