@@ -15,9 +15,8 @@
 {{ attach_library('ventuno/page-title') }}
 {{ title_prefix }}
 {% if title %}
-<div class="page-title page__title-wrapper">
-  <p class="page-title__headline">{{ title }}</p>
-  <h1 class="page-title__title">
+<div class="page-title page__title-wrapper d-flex flex-column">
+  <h1 class="page-title__title order-1">
     {{ additional_content.field_news_headline }}
     {% if permalink %}
       <a class="permalink" href="{{ permalink }}" title="{{ 'Permalink'|t }}">
@@ -28,7 +27,8 @@
       </a>
     {% endif %}
   </h1>
-  <div class="page-title__details details after-title">
+  <h2 class="page-title__headline order-0">{{ title }}</h2>
+  <div class="page-title__details details after-title order-1">
     <span class="page-title__detail">{{ additional_content.author }}</span>
     <span class="page-title__detail">{{ 'Published on'|t }}: {{ additional_content.published }}</span>
     {% if additional_content.published != additional_content.updated %}
