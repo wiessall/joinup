@@ -1,0 +1,50 @@
+uuid: febc5d92-c393-42da-b140-b21af6bc57c3
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.configurable_listing.content_listing
+    - field.field.paragraph.configurable_listing.list_style
+    - field.field.paragraph.configurable_listing.paragraph_action_link
+    - field.field.paragraph.configurable_listing.paragraph_heading
+    - paragraphs.paragraphs_type.configurable_listing
+  module:
+    - link
+    - search_api_field
+id: paragraph.configurable_listing.default
+targetEntityType: paragraph
+bundle: configurable_listing
+mode: default
+content:
+  content_listing:
+    type: search_api_field_default
+    weight: 3
+    region: content
+    settings:
+      query_builder: false
+    third_party_settings: {  }
+  list_style:
+    type: options_select
+    weight: 2
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  paragraph_action_link:
+    type: link_default
+    weight: 1
+    region: content
+    settings:
+      placeholder_url: ''
+      placeholder_title: ''
+    third_party_settings: {  }
+  paragraph_heading:
+    type: string_textfield
+    weight: 0
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+hidden:
+  created: true
+  status: true
