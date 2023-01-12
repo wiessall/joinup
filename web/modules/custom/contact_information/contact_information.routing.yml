@@ -1,0 +1,13 @@
+contact_information.email_confirm:
+  path: '/contact-information/confirm/{contact_information}'
+  defaults:
+    _controller: '\Drupal\contact_information\Controller\EmailConfirmController::confirm'
+    _title: 'Contact Information'
+  requirements:
+    _custom_access: Drupal\contact_information\Controller\EmailConfirmController::access
+  options:
+    parameters:
+      contact_information:
+        type: entity:rdf_entity
+        bundle:
+          - contact_information
