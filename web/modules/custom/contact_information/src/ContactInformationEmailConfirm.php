@@ -112,6 +112,19 @@ class ContactInformationEmailConfirm implements ContactInformationEmailConfirmIn
   /**
    * {@inheritdoc}
    */
+  public function resendEmail(string $email): bool {
+    if ($this->emailConfirmer->getConfirmation($email, FALSE, static::REALM)) {
+      // Ignore if the contact information is not attached to any group.
+      if ($gids = $this->getGroupsUsingContactInfoWithEmail($email)) {
+        return (bool) $this->emailConfirmer->confirm($email, ['groups' => $gids], static::REALM);
+      }
+    }
+    return FALSE;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function getGroupsUsingContactInfoWithEmail(string $email): array {
     $storage = $this->entityTypeManager->getStorage('rdf_entity');
     $contact_ids = $storage->getQuery()
