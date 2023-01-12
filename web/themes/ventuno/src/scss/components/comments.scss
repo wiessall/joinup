@@ -1,27 +1,67 @@
 .comments {
   .comment {
-    &:not(:last-of-type) {
-      position: relative;
-      &::before {
-        content: "";
-        position: absolute;
-        width: $spacer * 2.5;
-        height: calc(100% + 2.5rem);
-        left: $spacer * 2.5;
-        border-left: $spacer * .125 solid $gray-300;
-      }
+    position: relative;
+    &::after {
+      position: absolute;
+      top: 66px;
+      border-left: $spacer * .125 solid $gray-300;
+      display: block;
+      content: "";
+      height: calc(100% - 82px);
     }
     &__profile-pic {
-      border-radius: $border-radius-pill;
+      .user__photo a {
+        border-radius: $border-radius-pill;
+        display: inline-block;
+        width: 50px;
+        height: 50px;
+        background-color: $gray-300;
+        img[src*="user_icon.png"] {
+          width: 80%;
+          margin-left: 10%;
+          margin-top: 12px;
+        }
+      }
     }
     &__details {
+      display: flex;
+      align-items: center;
+      height: 50px;
       font-size: $font-size-sm;
       color: $gray-700;
     }
+    &__detail {
+      padding: 0 $spacer * .5;
+      &:first-of-type {
+        padding-left: 0;
+      }
+      &:last-of-type {
+        padding-right: 0;
+      }
+      &:not(:last-of-type) {
+        border-right: 1px solid $gray-300;
+      }
+    }
+    &::after {
+      border-left: $spacer * .125 solid $gray-300;
+      display: block;
+      content: "";
+      height: calc(100% - 50px);
+      margin-left: calc(25px - $spacer * .0625)
+    }
   }
   .indented {
-    margin-left: 2.5rem;
-    padding-left: 2.5rem;
-    border-left: $spacer * .125 solid $gray-300;
+    position: relative;
+    margin-left: 25px;
+    padding-left: 25px;
+    padding-bottom: 25px;
+    &::before {
+      position: absolute;
+      left: -1px;
+      border-left: $spacer * .125 solid $gray-300;
+      display: block;
+      content: "";
+      height: 100%;
+    }
   }
 }
