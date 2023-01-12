@@ -6,10 +6,12 @@ dependencies:
     - field.field.meta_entity.topic.description
     - field.field.meta_entity.topic.image
     - field.field.meta_entity.topic.published
+    - field.field.meta_entity.topic.topics_paragraph
     - image.style.thumbnail
     - meta_entity.type.topic
   module:
     - image
+    - paragraphs
 id: meta_entity.topic.default
 targetEntityType: meta_entity
 bundle: topic
@@ -37,6 +39,24 @@ content:
     region: content
     settings:
       display_label: true
+    third_party_settings: {  }
+  topics_paragraph:
+    type: paragraphs
+    weight: 3
+    region: content
+    settings:
+      title: Paragraph
+      title_plural: Paragraphs
+      edit_mode: open
+      closed_mode: summary
+      autocollapse: none
+      closed_mode_threshold: 0
+      add_mode: dropdown
+      form_display_mode: default
+      default_paragraph_type: ''
+      features:
+        collapse_edit_all: collapse_edit_all
+        duplicate: duplicate
     third_party_settings: {  }
 hidden:
   label: true
