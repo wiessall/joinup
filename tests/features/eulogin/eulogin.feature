@@ -201,7 +201,7 @@ Feature: Log in through EU Login
     And the following fields should not be disabled "First name,Family name"
     And I should see "Username"
     And I should see "without_cas"
-    And I should see "A valid email address. All emails from the system will be sent to this address. The email address is not made public and will only be used if you wish to receive a new password or wish to receive certain news or notifications by email."
+    And I should see "The email address is not made public. It will only be used if you need to be contacted about your account or for opted-in notifications."
 
     When I press "Save"
     Then I should see the error message "First name field is required."
