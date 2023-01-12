@@ -477,11 +477,8 @@ module.exports = {
       },
     },
     {
-      entry: path.resolve(outputFolder, "src/scss/site-alerts-messages.scss"),
-      dest: path.resolve(
-        outputFolder,
-        "assets/css/site-alerts-messages.min.css"
-      ),
+      entry: path.resolve(outputFolder, "src/scss/alert.scss"),
+      dest: path.resolve(outputFolder, "assets/css/alert.min.css"),
       options: {
         includePaths,
         minify: true,
@@ -603,6 +600,14 @@ module.exports = {
       to: path.resolve(outputFolder, "assets/js"),
       options: { up: true },
     },
+    // Bootstrap: icons
+    {
+      from: [
+        path.resolve(nodeModules, "@openeuropa/bcl-bootstrap/icons/*.svg"),
+      ],
+      to: path.resolve(outputFolder, "assets/icons"),
+      options: { up: true },
+    },
     // Third party files
     {
       from: [
@@ -639,6 +644,7 @@ module.exports = {
           "download.svg",
           "envelope-fill.svg",
           "exclamation-circle-fill.svg",
+          "exclamation-triangle-fill.svg",
           "exclamation-lg.svg",
           "exclamation-triangle-fill.svg",
           "eye.svg",
@@ -673,7 +679,7 @@ module.exports = {
           "reply.svg",
           "search.svg",
           "star.svg",
-          "three-dots-vertical.svg",
+          "three-dots.svg",
           "trash.svg",
           "type.svg",
           "twitter.svg",
