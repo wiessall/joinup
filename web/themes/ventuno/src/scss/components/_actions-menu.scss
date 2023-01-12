@@ -49,6 +49,6 @@
     }
   }
   .dropdown-menu {
-    z-index: 50; // Avoid dropdown-menu to be overlapped by navbar (default z-index is 40)
+    z-index: 502; // Avoid dropdown-menu to be overlapped by navbar (default z-index is 40)
   }
 }
