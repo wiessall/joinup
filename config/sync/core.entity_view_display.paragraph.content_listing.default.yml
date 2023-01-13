@@ -14,7 +14,7 @@ mode: default
 content:
   content_listing:
     type: search_api_field
-    label: above
+    label: hidden
     settings: {  }
     third_party_settings: {  }
     weight: 2
