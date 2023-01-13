@@ -24,7 +24,6 @@ components.js:
     assets/js/oe-bcl-joinup.bundle.min.js: { minified: true }
   dependencies:
     - core/drupal
-    - ventuno/site-alerts-messages
 
 theme:
   version: VERSION
@@ -129,10 +128,10 @@ pager:
     theme:
       assets/css/pager.css: {}
 
-site-alerts-messages:
+alert:
   css:
     theme:
-      assets/css/site-alerts-messages.css: {}
+      assets/css/alert.css: {}
 
 show-accordion-invalid-fields:
   js:
