@@ -11,7 +11,7 @@ use Drupal\Component\Utility\Html;
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\FieldableEntityInterface;
-use Drupal\field\Entity\FieldStorageConfig;
+use Drupal\field\Entity\FieldConfig;
 use Drupal\search_api\Query\QueryInterface;
 
 /**
@@ -23,29 +23,25 @@ function search_api_field_entity_extra_field_info() {
   $map = \Drupal::service('entity_field.manager')->getFieldMapByFieldType('search_api_field');
   $extra = [];
   $ids = [];
-  $bundles_lookup = [];
   foreach ($map as $type => $info) {
     foreach ($info as $name => $data) {
-      $ids[] = "$type.$name";
       foreach ($data['bundles'] as $bundle_name) {
-        $bundles_lookup["$type.$name"][] = $bundle_name;
+        $ids[] = "$type.$bundle_name.$name";
       }
     }
   }
 
-  $fs = FieldStorageConfig::loadMultiple($ids);
+  $fs = FieldConfig::loadMultiple($ids);
   /** @var \Drupal\field\Entity\FieldStorageConfig $field_config */
   foreach ($fs as $id => $field_config) {
     $facet_regions = $field_config->getSetting('facet_regions');
     foreach ($facet_regions as $region_id => $region_label) {
-      foreach ($bundles_lookup[$id] as $bundle) {
-        $name = str_replace('.', '_', "$id.$region_id");
-        $extra[$field_config->getTargetEntityTypeId()][$bundle]['display'][$name] = [
-          'label' => t('Facet region: @region', ['@region' => $region_label]),
-          'weight' => 0,
-          'visible' => FALSE,
-        ];
-      }
+      $name = str_replace('.', '_', "$id.$region_id");
+      $extra[$field_config->getTargetEntityTypeId()][$field_config->bundle()]['display'][$name] = [
+        'label' => t('Facet region: @region', ['@region' => $region_label]),
+        'weight' => 0,
+        'visible' => FALSE,
+      ];
     }
   }
 
