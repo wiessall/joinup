@@ -7,7 +7,7 @@ name: 'Content type'
 weight: 0
 min_count: 1
 url_alias: field_content_listing_type
-facet_source_id: 'search_api_field:paragraph.field_content_listing'
+facet_source_id: 'search_api_field:paragraph.content_listing'
 field_identifier: entity_bundle
 query_operator: or
 hard_limit: 0
