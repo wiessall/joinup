@@ -375,7 +375,7 @@ class SearchItem extends FieldItemBase implements SearchItemInterface {
   /**
    * {@inheritdoc}
    */
-  public static function storageSettingsToConfigData(array $settings) {
+  public static function fieldSettingsToConfigData(array $settings) {
     // Remove the extra 'wrapper' element that was added to allow ajax rendering
     // of the view modes fieldset.
     // @see self::storageSettingsForm()
