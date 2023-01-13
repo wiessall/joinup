@@ -206,8 +206,6 @@ Feature: Search inside groups
     And the page should be cached
 
   @javascript
-  # This is disabled because the search bar is currently not shown in the header
-  # but this functionality will probably be restored in the future.
   Scenario: Group filters remain active in the search bar when viewing search results
     When I go to the homepage of the "Chalet construction" collection
     And I should toggle search bar in navbar

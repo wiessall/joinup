@@ -146,13 +146,11 @@ Feature:
     And I select "Legal issue" from "Category"
     And I fill in "Subject" with "All the lonely people where do they all come from?"
     And I fill in "Message" with "Father McKenzie, wiping the dirt / From his hands as he walks from the grave / No one was saved"
-    Then I wait for the honeypot time limit to pass
 
     When I press "Submit"
     Then I should see the error message "You must accept the Legal notice in order to use our platform."
 
     But I check "I have read and accept the Legal notice"
-    Then I wait for the honeypot time limit to pass
     When I press "Submit"
     Then I should see the success message "Your message has been submitted. Thank you for your feedback."
 
