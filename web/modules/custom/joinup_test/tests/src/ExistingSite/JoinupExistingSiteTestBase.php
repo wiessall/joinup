@@ -5,9 +5,9 @@ declare(strict_types = 1);
 namespace Drupal\Tests\joinup_test\ExistingSite;
 
 use Drupal\Core\Entity\EntityInterface;
-use Drupal\joinup\Traits\ConfigReadOnlyTrait;
 use Drupal\Tests\joinup_test\Traits\RdfEntityCreationTrait;
 use Drupal\joinup\Traits\AntispamTrait;
+use Drupal\joinup\Traits\ConfigReadOnlyTrait;
 use weitzman\DrupalTestTraits\ExistingSiteBase;
 
 /**
