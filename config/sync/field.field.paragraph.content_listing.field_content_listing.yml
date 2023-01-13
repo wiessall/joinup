@@ -28,5 +28,31 @@ default_value:
       global_search: false
       show_shared: false
 default_value_callback: ''
-settings: {  }
+settings:
+  index: published
+  facet_regions:
+    top: Top
+  view_modes:
+    'entity:node':
+      custom_page: view_mode_tile
+      discussion: view_mode_tile
+      document: view_mode_tile
+      event: view_mode_tile
+      news: view_mode_tile
+      tallinn_report: view_mode_tile
+      video: view_mode_tile
+    'entity:rdf_entity':
+      asset_distribution: view_mode_tile
+      asset_release: view_mode_tile
+      collection: view_mode_tile
+      licence: view_mode_tile
+      solution: view_mode_tile
+      spdx_licence: view_mode_tile
+    'entity:taxonomy_term':
+      eif_conceptual_model: default
+      eif_interoperability_layer: default
+      eif_principle: default
+      eif_recommendation: default
+    'entity:user':
+      user: view_mode_tile
 field_type: search_api_field
