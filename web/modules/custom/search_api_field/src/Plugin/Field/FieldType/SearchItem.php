@@ -27,7 +27,7 @@ class SearchItem extends FieldItemBase implements SearchItemInterface {
   /**
    * {@inheritdoc}
    */
-  public static function defaultStorageSettings() {
+  public static function defaultFieldSettings() {
     return [
       'index' => NULL,
       'facet_regions' => [],
@@ -73,7 +73,7 @@ class SearchItem extends FieldItemBase implements SearchItemInterface {
   /**
    * {@inheritdoc}
    */
-  public function storageSettingsForm(array &$form, FormStateInterface $form_state, $has_data) {
+  public function fieldSettingsForm(array $form, FormStateInterface $form_state): array {
     $search_api_indexes = \Drupal::entityTypeManager()->getStorage('search_api_index')->loadMultiple();
     $index_options = [];
     /** @var  \Drupal\search_api\IndexInterface $search_api_index */
@@ -104,7 +104,6 @@ class SearchItem extends FieldItemBase implements SearchItemInterface {
       '#rows' => 10,
       '#access' => empty($facet_regions_function),
       '#element_validate' => [[get_class($this), 'validateAllowedValues']],
-      '#field_has_data' => $has_data,
       '#field_name' => $this->getFieldDefinition()->getName(),
       '#entity_type' => $this->getEntity()->getEntityTypeId(),
       '#facet_regions' => $facet_regions,
