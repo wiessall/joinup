@@ -1,12 +1,11 @@
-uuid: 260d6dc2-4ac4-4797-87b2-d1be773519ed
 langcode: en
 status: true
 dependencies: {  }
-id: field_content_listing_type
+id: content_listing_type
 name: 'Content type'
 weight: 0
 min_count: 1
-url_alias: field_content_listing_type
+url_alias: content_listing_type
 facet_source_id: 'search_api_field:paragraph.content_listing'
 field_identifier: entity_bundle
 query_operator: or
