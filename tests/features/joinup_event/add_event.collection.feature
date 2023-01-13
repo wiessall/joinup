@@ -91,12 +91,12 @@ Feature: "Add event" visibility options.
     But I should see the success message 'Event An amazing event has been created as draft. You can find it in the section "My unpublished content" located in your My account page, or in the aforementioned section under the Collection it was created in.'
     And I should see the text "Event date:"
     And I should see the text "29 to 30/08/2018"
-    And I should see a map centered on latitude 4.370375 and longitude 50.842156
+    And I should see a map centered on latitude 4.370476 and longitude 50.842291
     And I should see the following marker on the map:
       | name        | An amazing event                   |
       | description | Rue Belliard 28, Brussels, Belgium |
-      | latitude    | 50.842156                          |
-      | longitude   | 4.370375                           |
+      | latitude    | 50.842291                          |
+      | longitude   | 4.370476                           |
     And I should see the link "Joinup homepage"
     And I should see the link "https://drupal.org"
     And the "Stream of Dreams" collection has a event titled "An amazing event"
