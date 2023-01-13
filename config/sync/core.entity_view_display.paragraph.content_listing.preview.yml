@@ -19,5 +19,5 @@ mode: preview
 content: {  }
 hidden:
   content_listing: true
-  paragraph_field_content_listing_top: true
+  paragraph_content_listing_top: true
   search_api_excerpt: true
