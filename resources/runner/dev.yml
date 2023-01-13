@@ -11,6 +11,11 @@ dev:
     - page_manager_ui
     - views_ui
 
+antispam:
+  modules:
+    - antibot
+    - honeypot
+
 rector:
   bin: ${joinup.dir}/vendor/bin/rector
 
@@ -253,3 +258,25 @@ commands:
       # Show what wasn't fixed automatically.
     - task: exec
       command: ${phpcs.file.bin}
+
+  dev:install-antispam-modules:
+    - task: run
+      command: config-readonly:disable
+    - task: run
+      command: drush:module-install
+      arguments: ${antispam.modules}
+    - task: exec
+      command: ${drush.bin}
+      arguments:
+        - config:import
+    - task: run
+      command: config-readonly:enable
+
+  dev:uninstall-antispam-modules:
+    - task: run
+      command: config-readonly:disable
+    - task: run
+      command: drush:module-uninstall
+      arguments: ${antispam.modules}
+    - task: run
+      command: config-readonly:enable
