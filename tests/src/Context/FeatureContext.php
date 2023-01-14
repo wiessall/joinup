@@ -1766,7 +1766,7 @@ class FeatureContext extends RawDrupalContext {
    * @BeforeScenario @errorPage&&@api
    */
   public function beforeErrorPageTesting(): void {
-    static::toggleModule('install', 'error_page_test');
+    static::toggleModule('install', ['error_page_test']);
 
     // Pipe error log entries to a file rather than to standard PHP log.
     static::runCommand('drupal:settings error_page_test --root=' . static::getPath('web') . ' --sites-subdir=default');
@@ -1782,7 +1782,7 @@ class FeatureContext extends RawDrupalContext {
    * @AfterScenario @errorPage&&@api
    */
   public function afterErrorPageTesting(): void {
-    static::toggleModule('uninstall', 'error_page_test');
+    static::toggleModule('uninstall', ['error_page_test']);
 
     // Restore piping error log entries to the standard PHP log.
     $settings = Settings::getAll();

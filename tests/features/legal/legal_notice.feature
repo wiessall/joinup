@@ -136,6 +136,7 @@ Feature:
 
   Scenario: Anonymous using the support contact form.
     Given I am on "/contact"
+    Then the cache has been cleared
     Then I should see "I have read and accept the Legal notice"
     And I should see "Before you submit your request check our FAQ section in case it covers your query/issue."
 
