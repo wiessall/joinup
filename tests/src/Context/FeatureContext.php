@@ -1895,7 +1895,7 @@ class FeatureContext extends RawDrupalContext {
     else {
       $projectPath = DRUPAL_ROOT . '/../';
     }
-    exec("{$projectPath}/vendor/bin/run dev:uninstall-antispam-modules");
+    exec("{$projectPath}/vendor/bin/run testing:uninstall-antispam-modules");
   }
 
   /**
@@ -1910,7 +1910,7 @@ class FeatureContext extends RawDrupalContext {
     else {
       $projectPath = DRUPAL_ROOT . '/../';
     }
-    exec("{$projectPath}/vendor/bin/run dev:install-antispam-modules");
+    exec("{$projectPath}/vendor/bin/run testing:install-antispam-modules");
   }
 
   /**
