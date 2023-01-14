@@ -18,6 +18,7 @@ form_settings:
   node_discussion_form: true
   node_document_form: true
   node_event_form: true
+  node_glossary_form: true
   node_news_form: true
   node_newsletter_form: true
   node_tallinn_report_form: false
