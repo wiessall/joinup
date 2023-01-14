@@ -5,13 +5,22 @@ Feature: Search inside groups
   I want to be able to launch a search limited to my current collection or solution
 
   Background:
-    Given collection:
-      | title            | Chalet construction |
-      | logo             | logo.png            |
-      | moderation       | no                  |
-      | topic            | Demography          |
-      | spatial coverage | Switzerland         |
-      | state            | validated           |
+    Given the following contact:
+      | email | charalambos.katsumi@example.com |
+      | name  | Charalambos Katsumi             |
+    And the following owner:
+      | name              |
+      | Antonios Katsumi |
+    And collection:
+      | title               | Chalet construction |
+      | description         | Lorem Ipsum ipsum   |
+      | logo                | logo.png            |
+      | moderation          | no                  |
+      | topic               | Demography          |
+      | spatial coverage    | Switzerland         |
+      | state               | validated           |
+      | owner               | Antonios Katsumi    |
+      | contact information | Charalambos Katsumi |
     And solution:
       | title       | Inclined foundations                                  |
       | description | Ways to construct foundations on hills and mountains. |
@@ -180,8 +189,6 @@ Feature: Search inside groups
     Then the page should show the following chip:
       | Inclined foundations |
 
-  # This is disabled because the search bar is currently not shown in the header
-  # but this functionality will probably be restored in the future.
   Scenario: Group search caching
     # Initially the cache is cold.
     When I go to the homepage of the "Chalet construction" collection
@@ -208,7 +215,10 @@ Feature: Search inside groups
   @javascript
   Scenario: Group filters remain active in the search bar when viewing search results
     When I go to the homepage of the "Chalet construction" collection
-    And I should toggle search bar in navbar
+    And the cache has been cleared
+    Then I reload the page
+    And I should see the heading "Chalet construction" in the "Header" region
+    Then I should toggle search bar in navbar
     Then the page should show the following chip:
       | Chalet construction |
     When I enter "ground" in the search bar and press enter
