@@ -299,7 +299,8 @@
             },
             "drupal/facets": {
                 "Facet Summary for Facet Items with a set dependency. @see https://www.drupal.org/node/2873480": "https://www.drupal.org/files/issues/2020-07-30/2873480-33-8.x-1.5.patch",
-                "Add 0 option in 'Soft limit' and apply soft limit to facet root li tags and add. @see https://www.drupal.org/i/3208580 and https://www.drupal.org/i/3307082": "resources/patch/facets-3208580-and-3307082.patch"
+                "Add 0 option in 'Soft limit' and apply soft limit to facet root li tags and add. @see https://www.drupal.org/i/3208580 and https://www.drupal.org/i/3307082": "resources/patch/facets-3208580-and-3307082.patch",
+                "setHierarchy method causing the fatal error on facets settings form submission @see https://www.drupal.org/project/facets/issues/3262863": "https://git.drupalcode.org/project/facets/-/merge_requests/47.diff"
             },
             "drupal/file_url": {
                 "Handle deleted files": "resources/patch/file_url.diff"
