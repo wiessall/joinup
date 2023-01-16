@@ -348,8 +348,7 @@ class SearchWidget extends WidgetBase implements ContainerFactoryPluginInterface
    *   List of facet regions.
    */
   protected function getRegions() {
-    $storage = $this->fieldDefinition->getFieldStorageDefinition();
-    $facet_regions = $storage->getSetting('facet_regions');
+    $facet_regions = $this->fieldDefinition->getSetting('facet_regions');
     $regions = [];
     foreach ($facet_regions as $id => $label) {
       $regions[$id] = [
@@ -448,9 +447,10 @@ class SearchWidget extends WidgetBase implements ContainerFactoryPluginInterface
    *   List of facets.
    */
   protected function getFacets() {
-    $storage = $this->fieldDefinition->getFieldStorageDefinition();
     $facet_storage = $this->entityTypeManager->getStorage('facets_facet');
-    $facets = $facet_storage->loadByProperties(['facet_source_id' => 'search_api_field:' . $storage->id()]);
+    $facets = $facet_storage->loadByProperties([
+      'facet_source_id' => 'search_api_field:' . $this->fieldDefinition->id(),
+    ]);
     return $facets;
   }
 

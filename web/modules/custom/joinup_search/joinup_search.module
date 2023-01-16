@@ -174,7 +174,7 @@ function joinup_search_search_api_query_search_api_field_alter(QueryInterface $q
  *   Thrown when the Search API server instance could not be loaded.
  */
 function joinup_search_search_api_query_alter(QueryInterface $query) {
-  if ($query->getSearchId() === 'rdf_entity.field_collection_content') {
+  if ($query->getSearchId() === 'rdf_entity.collection.field_collection_content') {
     // In case the user has filtered by event, first sort by the event date.
     // @todo This will be generic when event calendar will be implemented for
     // the rdf_entity.field_is_content and the paragraph.content_listing
