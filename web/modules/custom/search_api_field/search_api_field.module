@@ -34,14 +34,15 @@ function search_api_field_entity_extra_field_info() {
   $fs = FieldConfig::loadMultiple($ids);
   /** @var \Drupal\field\Entity\FieldStorageConfig $field_config */
   foreach ($fs as $id => $field_config) {
-    $facet_regions = $field_config->getSetting('facet_regions');
-    foreach ($facet_regions as $region_id => $region_label) {
-      $name = str_replace('.', '_', "$id.$region_id");
-      $extra[$field_config->getTargetEntityTypeId()][$field_config->bundle()]['display'][$name] = [
-        'label' => t('Facet region: @region', ['@region' => $region_label]),
-        'weight' => 0,
-        'visible' => FALSE,
-      ];
+    if ($facet_regions = $field_config->getSetting('facet_regions')) {
+      foreach ($facet_regions as $region_id => $region_label) {
+        $name = str_replace('.', '_', "$id.$region_id");
+        $extra[$field_config->getTargetEntityTypeId()][$field_config->bundle()]['display'][$name] = [
+          'label' => t('Facet region: @region', ['@region' => $region_label]),
+          'weight' => 0,
+          'visible' => FALSE,
+        ];
+      }
     }
   }
 
@@ -69,8 +70,9 @@ function search_api_field_entity_view(array &$build, EntityInterface $entity, En
 
     // Load all the facets associated to this field that is acting as facet
     // source.
-    $id = $definition->getTargetEntityTypeId() . '.' . $field_name;
-    $facets = $facet_storage->loadByProperties(['facet_source_id' => 'search_api_field:' . $id]);
+    $facets = $facet_storage->loadByProperties([
+      'facet_source_id' => 'search_api_field:' . $definition->id(),
+    ]);
 
     // At the moment we support only single-value fields.
     $settings_item = $entity->get($field_name)->first();
@@ -96,7 +98,7 @@ function search_api_field_entity_view(array &$build, EntityInterface $entity, En
         if (!isset($facets[$facet_name])) {
           continue;
         }
-        $name = str_replace('.', '_', $id . '.' . $facet_data['region']);
+        $name = str_replace('.', '_', $definition->id() . '.' . $facet_data['region']);
         // Render the facet only if the pseudo field is enabled for this view
         // mode.
         if ($display->getComponent($name)) {
