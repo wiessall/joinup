@@ -7,7 +7,7 @@ name: 'Event date'
 weight: 0
 min_count: 1
 url_alias: event_type
-facet_source_id: 'search_api_field:rdf_entity.field_collection_content'
+facet_source_id: 'search_api_field:rdf_entity.collection.field_collection_content'
 field_identifier: field_event_date
 query_operator: or
 hard_limit: 0
