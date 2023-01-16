@@ -1,3 +1,4 @@
+uuid: 5bf71b37-7003-46f2-9db2-b06e26938e79
 langcode: en
 status: true
 dependencies: {  }
@@ -6,7 +7,7 @@ name: 'Content type'
 weight: 0
 min_count: 1
 url_alias: content_listing_type
-facet_source_id: 'search_api_field:paragraph.content_listing'
+facet_source_id: 'search_api_field:paragraph.content_listing.content_listing'
 field_identifier: entity_bundle
 query_operator: or
 hard_limit: 0
