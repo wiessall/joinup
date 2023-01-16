@@ -163,10 +163,12 @@ Feature: About this solution
 
     When I go to the about page of "Six exclusion advantages"
     Then I should not see the link "Contact us" in the "Content" region
-
+    And I should see the text "Please confirm your contact information to enable users to contact you"
     When I click the validate contact info email from the last email sent to "invisible.cat@xpto.com"
     And I press "Send"
     Then I should see the success message "Email confirmation confirmed."
+    When I go to the about page of "Six exclusion advantages"
+    Then I should not see the text "Please confirm your contact information to enable users to contact you"
 
     Given I am not logged in
     When I go to the about page of "Six exclusion advantages"
