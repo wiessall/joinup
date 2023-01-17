@@ -1,0 +1,37 @@
+{{ attach_library('ventuno/alert') }}
+{# To be potentially implemented with dismissible site alerts #}
+{% set dismissible = false %}
+{% if alert.severity is same as 'low' %}
+  {% set variant = 'brand' %}
+  {% set icon = 'info-circle-fill' %}
+{% elseif alert.severity is same as 'medium' %}
+  {% set variant = 'warning' %}
+  {% set icon = 'exclamation-circle-fill' %}
+{% elseif alert.severity is same as 'high' %}
+  {% set variant = 'danger' %}
+  {% set icon = 'exclamation-triangle-fill' %}
+{% endif %}
+{%
+  set classes = [
+    'alert',
+    'alert-' ~ variant,
+    'd-flex',
+    'align-items-center',
+    'text-dark',
+    dismissible ? 'alert-dismissible',
+    dismissible ? 'fade',
+    dismissible ? 'show',
+  ]
+%}
+<div{{ attributes.addClass(classes) }} role="{{ alert.severity == 'high' ? 'alert' : 'contentinfo' }}">
+  <svg class="flex-shrink-0 me-3 mt-1 align-self-start text-{{ variant }} bi icon--s">
+    <use xlink:href="{{ bcl_icon_path }}#{{ icon }}"></use>
+  </svg>
+  <div class="alert-content flex-grow-1">
+    {{ alert.message }}
+  </div>
+  {% if dismissible %}
+    {{ attach_library('ventuno/close') }}
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  {% endif %}
+</div>
