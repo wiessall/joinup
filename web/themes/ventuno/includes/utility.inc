@@ -15,6 +15,7 @@ use Drupal\joinup_community_content\Entity\CommunityContentInterface;
 use Drupal\joinup_core\Controller\IdRedirect;
 use Drupal\smart_trim\Truncate\TruncateHTML;
 use Drupal\topic\Entity\TopicReferencingEntityInterface;
+use Drupal\file\Entity\File;
 
 /**
  * Performs smart trimming on the provided string.
@@ -215,4 +216,18 @@ function _ventuno_get_author(CommunityContentInterface $node): array {
   $view_builder = \Drupal::entityTypeManager()->getViewBuilder('user');
   $author = $node->get('uid')->entity;
   return $view_builder->view($author, 'inline');
+}
+
+/**
+ * Get a file extension.
+ *
+ * @param \Drupal\file\Entity\File $file
+ *   The file, where we get an extension.
+ *
+ * @return string
+ *   Extension of the file.
+ */
+function _ventuno_get_file_extension(File $file) {
+  $file_icon = pathinfo($file->getFilename(), PATHINFO_EXTENSION);
+  return $file_icon;
 }

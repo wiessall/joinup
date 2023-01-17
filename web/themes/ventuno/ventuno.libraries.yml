@@ -128,6 +128,13 @@ menu--og--navigation:
     theme:
       assets/css/menu--og--navigation.min.css: { minified: true }
 
+table-files:
+  css:
+    theme:
+      assets/css/table-files.min.css: { minified: true }
+  dependencies:
+    - ventuno/tables
+
 tabs:
   css:
     theme:
