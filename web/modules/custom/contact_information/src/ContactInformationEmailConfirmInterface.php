@@ -53,16 +53,12 @@ interface ContactInformationEmailConfirmInterface {
   /**
    * Resend an email regardless of which contact information they belong.
    *
-   * The method collects all contact information having a given email and
-   * creates an email confirmation.
-   *
    * @param string $email
    *   A contact information email.
    *
    * @return bool
-   *   TRUE if a confirmation has been resended. FALSE if a confirmation already
-   *   exists or this email is not attached to any contact information entity or
-   *   the contact information is not attached to any group.
+   *   TRUE if a confirmation has been resended. FALSE if a confirmation is not
+   *   exists.
    */
   public function resendEmail(string $email): bool;
 
