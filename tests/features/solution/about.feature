@@ -314,6 +314,51 @@ Feature: About this solution
     And I press "Publish"
     Then I should not see the success message "A new confirmation message has been sent to elise@nova.com."
 
+    When I go to "/collection/antibody-development/solution/six-exclusion-advantages/contact"
+    Then I should see the heading "Contact us"
+
+    When I go to the about page of "Six exclusion advantages"
+    Then I open the plus button menu
+    And I click "Add news"
+    When I fill in the following:
+      | Headline    | Some contact test |
+      | Short title | Some contact test |
+    And I select "Supplier exchange" from "Topic"
+    And I press the button "Contact us" in the "Content" wysiwyg editor
+    Then I press "Publish"
+
+    When I go to the "Some contact test" news
+    Then I should see the heading "Some contact test"
+    When I click "Contact us"
+    Then I should see the heading "Contact us"
+    Then I fill in "Your name" with "Lina Example"
+    And I fill in "Your e-mail address" with "linak@example.pt"
+    And I fill in "Subject" with "New reclamation about Owner"
+    And I fill in "Message" with "This is reclamation test."
+    And I wait for the honeypot time limit to pass
+    When I press "Send e-mail"
+    And I should see the success message "Your message has been sent."
+    Then I should see the heading "Some contact test"
+    And I should be on "/collection/antibody-development/solution/six-exclusion-advantages/news/some-contact-test"
+
+    When I am an anonymous user
+    Then I go to the "Some contact test" news
+    And I click "Contact us"
+    And I should see the heading "Sign in to continue"
+
+    When I fill in "E-mail address" with "iodine@ankh.am"
+    And I fill in "Password" with "10d1ne"
+    And I press "Log in"
+    And I should see the heading "Contact us"
+    Then I fill in "Your name" with "V Example"
+    And I fill in "Your e-mail address" with "vnak@example.pt"
+    And I fill in "Subject" with "v2 New reclamation about Owner"
+    And I fill in "Message" with "This is v2 reclamation test."
+    And I wait for the honeypot time limit to pass
+    When I press "Send e-mail"
+    Then I should see the success message "Your message has been sent."
+    And I should see the heading "Some contact test"
+
     # These contact information have been created via UI.
     But I delete the "Invisible Cat" contact information
     And I delete the "Elise Anna Lucile" contact information
