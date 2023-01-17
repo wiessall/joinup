@@ -31,8 +31,6 @@ Feature: Submit the contact form
       | E-mail address | balourdos@example.rg                                                           |
       | Subject        | This content has invalid location                                              |
       | Message        | The location described as "Somewhere" could not be found by my map application |
-    # We need to wait 5 seconds for the spam protection time limit to pass.
-    Then I wait for the spam protection time limit to pass
     And I press "Submit"
 
     # The moderator, the collection owner and the owner should receive the notifications.
@@ -63,8 +61,7 @@ Feature: Submit the contact form
       | Message        | I don't want to live in a world where someone else is making the world a better place better than we are. |
     And I check the box "Send yourself a copy"
 
-    Given I wait for the spam protection time limit to pass
-    And I press "Submit"
+    Given I press "Submit"
     Then the following email should have been sent:
       | recipient_mail | gbelson@hooli.com                                                                                         |
       | subject        | Joinup: Contact form notification                                                                         |
