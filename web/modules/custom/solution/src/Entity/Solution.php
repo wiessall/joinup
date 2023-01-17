@@ -11,6 +11,7 @@ use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\asset_release\Entity\AssetReleaseInterface;
 use Drupal\collection\Entity\CollectionInterface;
 use Drupal\collection\Exception\MissingCollectionException;
+use Drupal\email_confirmer\EmailConfirmationInterface;
 use Drupal\joinup_bundle_class\DescriptionTrait;
 use Drupal\joinup_bundle_class\JoinupBundleClassFieldAccessTrait;
 use Drupal\joinup_bundle_class\JoinupBundleClassMetaEntityTrait;
@@ -250,6 +251,25 @@ class Solution extends Rdf implements SolutionInterface {
    */
   public function getContactInformationFieldName(): string {
     return 'field_is_contact_information';
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getValidatedContactInformation(): array {
+    $ids = $this->getReferencedEntityIds($this->getContactInformationFieldName())['rdf_entity'] ?? [];
+    if (empty($ids)) {
+      return $ids;
+    }
+    $contacts = $this->entityTypeManager()->getStorage('rdf_entity')->loadMultiple($ids);
+    $emails = [];
+    foreach ($contacts as $contact) {
+      $confirmation = \Drupal::service('email_confirmer')->getConfirmation($contact->get('field_ci_email')->value);
+      if ($confirmation && $confirmation->get('confirmed')->value == EmailConfirmationInterface::CONFIRMED) {
+        $emails[] = $contact->get('field_ci_email')->value;
+      }
+    }
+    return $emails;
   }
 
 }

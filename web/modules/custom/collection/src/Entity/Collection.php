@@ -7,6 +7,7 @@ namespace Drupal\collection\Entity;
 use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
+use Drupal\email_confirmer\EmailConfirmationInterface;
 use Drupal\joinup_bundle_class\DescriptionTrait;
 use Drupal\joinup_bundle_class\JoinupBundleClassFieldAccessTrait;
 use Drupal\joinup_bundle_class\JoinupBundleClassMetaEntityTrait;
@@ -206,6 +207,25 @@ class Collection extends Rdf implements CollectionInterface {
    */
   public function getContactInformationFieldName(): string {
     return 'field_ar_contact_information';
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getValidatedContactInformation(): array {
+    $ids = $this->getReferencedEntityIds($this->getContactInformationFieldName())['rdf_entity'] ?? [];
+    if (empty($ids)) {
+      return $ids;
+    }
+    $contacts = $this->entityTypeManager()->getStorage('rdf_entity')->loadMultiple($ids);
+    $emails = [];
+    foreach ($contacts as $contact) {
+      $confirmation = \Drupal::service('email_confirmer')->getConfirmation($contact->get('field_ci_email')->value);
+      if ($confirmation && $confirmation->get('confirmed')->value == EmailConfirmationInterface::CONFIRMED) {
+        $emails[] = $contact->get('field_ci_email')->value;
+      }
+    }
+    return $emails;
   }
 
 }
