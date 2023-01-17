@@ -70,9 +70,27 @@ function joinup_core_deploy_108901(array &$sandbox = []): string {
 }
 
 /**
+ * Remove files without database representation.
+ */
+function joinup_core_deploy_108902(): string {
+  /** @var \Drupal\Core\File\FileSystemInterface $file_system */
+  $file_system = \Drupal::service('file_system');
+  $count = 0;
+  // These files entries in {file_managed} table were already deleted.
+  for ($i = 1; $i <= 452; $i++) {
+    $file = "public://document/2022-12/free-doawnlaod-$i.pdf";
+    if (file_exists($file)) {
+      $file_system->delete($file);
+      $count++;
+    }
+  }
+  return "$count unmanaged files deleted";
+}
+
+/**
  * Migrate Video content into new Media field.
  */
-function joinup_core_deploy_108902(array &$sandbox): string {
+function joinup_core_deploy_108903(array &$sandbox): string {
   if (empty($sandbox['ids'])) {
     $sandbox['ids'] = \Drupal::entityQuery('node')->condition('type', 'video')->execute();
     $sandbox['count'] = 0;
@@ -146,27 +164,9 @@ function _joinup_core_deploy_migrate_field(MediaType $media_type, string $ref_fi
 }
 
 /**
- * Remove files without database representation.
- */
-function joinup_core_deploy_108902(): string {
-  /** @var \Drupal\Core\File\FileSystemInterface $file_system */
-  $file_system = \Drupal::service('file_system');
-  $count = 0;
-  // These files entries in {file_managed} table were already deleted.
-  for ($i = 1; $i <= 452; $i++) {
-    $file = "public://document/2022-12/free-doawnlaod-$i.pdf";
-    if (file_exists($file)) {
-      $file_system->delete($file);
-      $count++;
-    }
-  }
-  return "$count unmanaged files deleted";
-}
-
-/**
  * Delete content created by spammers.
  */
-function joinup_core_deploy_108903(array &$sandbox = []): string {
+function joinup_core_deploy_108904(array &$sandbox = []): string {
   if (!isset($sandbox['items'])) {
     $sandbox['items'] = [];
     $db = \Drupal::database();
