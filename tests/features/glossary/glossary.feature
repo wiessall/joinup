@@ -114,7 +114,7 @@ Feature: As a moderator or group facilitator I want to be able to add, edit and
     And I should not see the link "Smells"
     And I should not see the link "XFiles"
     And I should not see the link "XRatings"
-    And I should see the glossary navigator "A C S X (all)"
+    And I should see the glossary navigator "A C S X all"
 
     # Test multi-synonyms display.
     When I click "Alphabet"

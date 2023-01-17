@@ -1,0 +1,18 @@
+.menu--og--navigation {
+  margin-top: $spacer; // 16px
+  @include media-breakpoint-up(lg) {
+    margin-top: $spacer * 1.5;  // 24px
+  }
+  &__menu.dropdown-menu {
+    @include media-breakpoint-up(lg) {
+      // Override dropdown properties
+      display: block;
+      z-index: 0;
+      border: none;
+      box-shadow: none;
+      // Following is needed in case user opened dropdown in xs-sm-md and then made window bigger
+      position: relative!important;
+      transform: revert!important;
+    }
+  }
+}

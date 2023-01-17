@@ -13,13 +13,13 @@ _core:
 id: ventuno_joinup_add_content
 theme: ventuno
 region: header_bottom
-weight: -22
+weight: -21
 provider: null
 plugin: add_content_block
 settings:
   id: add_content_block
   label: 'Add content'
-  label_display: visible
+  label_display: '0'
   provider: joinup_group
   context_mapping:
     og: '@og.context:og'

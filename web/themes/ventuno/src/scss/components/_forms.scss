@@ -11,6 +11,11 @@
   }
 }
 
+.form-text {
+  display: inline-block;
+  line-height: normal;
+}
+
 // Make CKEditor textareas emulate @openeuropa invalid state
 .form-control.required.is-invalid + .cke {
   border: 1px solid $danger;

@@ -93,7 +93,7 @@ Feature: Collection homepage
     Then I should see the success message "Unblock the selected user(s) was applied to 1 item."
     When I am not logged in
     When I go to the homepage of the "Under the mountain" collection
-    Then I should see the text "4 Members" in the "Header" region
+    Then I should see the text "4 members" in the "Header" region
     And I click "Members" in the "Left sidebar"
     Then the "Roles" field should contain the "- Any - (4)" option
 
@@ -113,7 +113,7 @@ Feature: Collection homepage
     Then I should see the success message "Block the selected user(s) was applied to 1 item."
     When I am not logged in
     When I go to the homepage of the "Under the mountain" collection
-    Then I should see the text "3 Members" in the "Header" region
+    Then I should see the text "3 members" in the "Header" region
     And I click "Members" in the "Left sidebar"
     Then the "Roles" field should contain the "- Any - (3)" option
 

@@ -3,16 +3,16 @@ langcode: en
 status: true
 dependencies:
   module:
-    - ctools
     - joinup_core
     - joinup_group
+    - rdf_entity
   theme:
     - ventuno
 _core:
   default_config_hash: Bmiwhi5TTvDZfWGHU6zaNElRYYnYbbxocXAlqvvIWk8
 id: ventuno_unpublished_content_of_group
 theme: ventuno
-region: content_bottom
+region: content
 weight: -7
 provider: null
 plugin: entity_unpublished
@@ -20,7 +20,7 @@ settings:
   id: entity_unpublished
   label: 'Unpublished content'
   label_display: visible
-  provider: joinup_core
+  provider: joinup_group
   context_mapping:
     og: '@rdf_entity.rdf_entity_route_context:rdf_entity'
 visibility:

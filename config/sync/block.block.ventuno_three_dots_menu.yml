@@ -9,14 +9,14 @@ dependencies:
 id: ventuno_three_dots_menu
 theme: ventuno
 region: header_bottom
-weight: -21
+weight: -24
 provider: null
-plugin: local_tasks_block
+plugin: joinup_local_tasks_block
 settings:
-  id: local_tasks_block
+  id: joinup_local_tasks_block
   label: Tabs
   label_display: '0'
-  provider: core
+  provider: joinup_core
   primary: true
   secondary: false
 visibility:

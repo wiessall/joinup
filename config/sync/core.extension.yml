@@ -118,7 +118,6 @@ module:
   joinup_video: 0
   joinup_workflow: 0
   jquery_ui: 0
-  jquery_ui_accordion: 0
   json_field: 0
   language: 0
   layout_builder: 0
@@ -144,12 +143,12 @@ module:
   node: 0
   oe_bootstrap_theme_helper: 0
   oe_dashboard_agent: 0
+  oe_gisco_geocoding: 0
   oe_newsroom_newsletter: 0
   oe_webtools: 0
   oe_webtools_analytics: 0
   oe_webtools_cookie_consent: 0
   oe_webtools_etrans: 0
-  oe_webtools_geocoding: 0
   oe_webtools_globan: 0
   oe_webtools_maps: 0
   og: 0
@@ -158,7 +157,6 @@ module:
   owner: 0
   page_cache: 0
   page_manager: 0
-  paragraphs_jquery_ui_accordion: 0
   paragraphs_type_permissions: 0
   path: 0
   path_alias: 0

@@ -178,16 +178,16 @@ Feature: About this solution
     When I click "Contact us" in the "Content" region
     Then a modal should open
     And I should see the text "Contact us" in the "Modal title" region
-    And I should see "Only signed in users can send a message. Please sign in or register an account on EU Login." in the "Modal content" region
+    And I should see the text "Only signed in users can send a message. Please sign in or register an account on EU Login."
 
     When I press "Cancel" in the "Modal buttons" region
     Then the modal should be closed
-    And I should not see "Only signed in users can send a message. Please sign in or register an account on EU Login."
+    And I should not see "Only signed in users can send a message. Please sign in or register an account on EU Login." in the "Content" region
 
     When I click "Contact us" in the "Content" region
     Then a modal should open
     And I should see the text "Contact us" in the "Modal title" region
-    And I should see "Only signed in users can send a message. Please sign in or register an account on EU Login." in the "Modal content" region
+    And I should see the text "Only signed in users can send a message. Please sign in or register an account on EU Login."
 
     When I press "Sign in / Register" in the "Modal buttons" region
     Then the modal should be closed

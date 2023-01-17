@@ -60,3 +60,26 @@ function ventuno_preprocess_node__search_result_featured(array &$variables): voi
 function ventuno_preprocess_node__search_result(array &$variables): void {
   _ventuno_preprocess_search_result($variables, 'node');
 }
+
+/**
+ * Implements hook_preprocess_HOOK() for node--discussion--view-mode-tile.html.twig.
+ *
+ * Provides the comment count as a variable.
+ */
+function ventuno_preprocess_node__discussion__view_mode_tile(array &$variables): void {
+  $node = $variables['elements']['#node'];
+  $variables['comment_count'] = $node->get('field_replies')->comment_count;
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for node--tallinn-report--view-mode-tile.html.twig.
+ */
+function ventuno_preprocess_node__tallinn_report__view_mode_tile(&$variables) {
+  /** @var \Drupal\node\NodeInterface $node */
+  $node = $variables['node'];
+  $variables['last_update'] = '-';
+  if (!$node->get('created')->equals($node->get('changed'))) {
+    $date = \Drupal::service('date.formatter')->format($node->getChangedTime(), 'custom', 'd/m/Y');
+    $variables['last_update'] = $date;
+  }
+}

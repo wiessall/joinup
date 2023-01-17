@@ -29,6 +29,29 @@ function ventuno_theme_suggestions_form_element_alter(array &$suggestions, array
 /**
  * Implements hook_form_FORM_ID_alter().
  */
+function ventuno_form_join_group_form_alter(array &$form, FormStateInterface $form_state, string $form_id): void {
+  // Make the 'Join' modal link for anonymous users appear as a button.
+  if (isset($form['authenticate'])) {
+    $form['authenticate']['#attributes']['class'][] = 'btn';
+    $form['authenticate']['#attributes']['class'][] = 'btn-secondary';
+  }
+
+  if (isset($form['pending'])) {
+    // Add classes for pending membership link.
+    $form['pending']['#attributes']['class'][] = 'btn';
+    $form['pending']['#attributes']['class'][] = 'btn-primary';
+  }
+
+  if (isset($form['leave'])) {
+    // Add classes for leave membership link.
+    $form['leave']['#confirm']['#attributes']['class'][] = 'btn';
+    $form['leave']['#confirm']['#attributes']['class'][] = 'btn-warning';
+  }
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
 function ventuno_form_views_exposed_form_alter(array &$form, FormStateInterface $form_state, string $form_id): void {
   $route_name = \Drupal::routeMatch()->getRouteName();
   $view = $form_state->get('view');
@@ -66,18 +89,18 @@ function ventuno_preprocess_form_element_label(array &$variables): void {
 function ventuno_form_alter(array &$form, FormStateInterface $form_state, string $form_id): void {
   // Add classes to the delete action in any kind of form.
   if (isset($form['actions']['delete'])) {
-    $form['actions']['delete']['#attributes']['class'] = [
-      'btn',
-      'btn-md',
-      'btn-outline-danger',
-    ];
+    $classes = $form['actions']['delete']['#attributes']['class'] ?? [];
+    $form['actions']['delete']['#attributes']['class'] = array_merge(
+      $classes,
+      ['btn', 'btn-md', 'btn-outline-danger'],
+    );
   }
   // Add classes to the cancel action in any kind of form.
   if (isset($form['actions']['cancel'])) {
-    $form['actions']['cancel']['#attributes']['class'] = [
-      'btn',
-      'btn-md',
-      'btn-outline-warning',
-    ];
+    $classes = $form['actions']['cancel']['#attributes']['class'] ?? [];
+    $form['actions']['cancel']['#attributes']['class'] = array_merge(
+      $classes,
+      ['btn', 'btn-md', 'btn-outline-warning'],
+    );
   }
 }

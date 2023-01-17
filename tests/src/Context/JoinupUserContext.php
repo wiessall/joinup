@@ -120,7 +120,7 @@ class JoinupUserContext extends RawDrupalContext {
     // itself is long enough to ensure the extension part.
     $host = $this->getMinkParameter('base_url');
     $filename = trim($filename, DIRECTORY_SEPARATOR);
-    $xpath = "//div[contains(concat(' ', normalize-space(@class), ' '), ' featured__logo ') and contains(@style, 'background-image: url({$host}/sites/default/files/{$filename}')]";
+    $xpath = "//img[contains(concat(' ', normalize-space(@class), ' '), ' rounded-pill ') and contains(@src, '{$host}/sites/default/files/{$filename}')]";
     $this->assertSession()->elementExists('xpath', $xpath);
   }
 

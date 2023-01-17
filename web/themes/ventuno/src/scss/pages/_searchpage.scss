@@ -2,9 +2,9 @@
 .joinup-search-filters {
   .offcanvas {
     box-shadow: none;
+    z-index: 503; // Avoid offcanvas to be overlapped by sticky navbar
     @include media-breakpoint-up(lg) {
       // Avoid sidebar to overlap toolbar tray when logged in.
-      // 99 is 1 below the Cookie Consent banner's z-index.
       z-index: 49;
       visibility: visible;
       position: relative;
@@ -182,7 +182,10 @@
     background-position: calc(100% - 10px) center;
   }
   .btn-search {
-    @include font-icon-before("\E805", 1.2rem, $white, inherit, 0);
+    &::before {
+      @include get-bootstrap-icon('search', $white);
+      font-size: 1rem;
+    }
     background-color: $primary;
     padding-left: 1.2rem;
     padding-right: 1.2rem;

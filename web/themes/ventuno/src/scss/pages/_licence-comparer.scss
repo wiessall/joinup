@@ -1,67 +1,59 @@
 .licence-comparer {
   text-align: center;
-  margin-bottom: $spacer * .5;
   @include media-breakpoint-up(md) {
     table-layout: fixed;
   }
-  &__wrapper {
-    overflow-x: auto;
-    margin-bottom: $spacer;
+  &__empty {
+    display: none;
   }
   &__sidebar-header,
   &__header > .btn {
     font-weight: $font-weight-bold;
   }
-  &__sidebar-header,
-  &__sidebar-cell,
-  &__header,
-  &__cell {
-    border: 1px solid $gray-300;
-  }
   &__sidebar-header {
     &.licence-filter--can {
-      background-color: $green !important;
+      background-color: $joinup--green !important;
       color: $white;
     }
     &.licence-filter--must {
-      background-color: $gray-700 !important;
+      background-color: $joinup--gray !important;
       color: $white;
     }
     &.licence-filter--cannot {
-      background-color: $red !important;
+      background-color: $joinup--red !important;
       color: $white;
     }
     &.licence-filter--compatible {
-      background-color: $indigo !important;
+      background-color: $joinup--indigo !important;
       color: $white;
     }
     &.licence-filter--law {
-      background-color: $orange !important;
+      background-color: $joinup--dark-orange !important; // Increase contrast to pass a11y tests
       color: $white;
     }
     &.licence-filter--support {
-      background-color: $brand-darker !important;
+      background-color: $joinup--brand-darker !important;
       color: $white;
     }
   }
   &__sidebar-cell {
     &.licence-filter--can {
-      background-color: rgba($green, .1);
+      background-color: rgba($joinup--green, .1);
     }
     &.licence-filter--must {
-      background-color: rgba($gray-700, .1);
+      background-color: rgba($joinup--gray, .1);
     }
     &.licence-filter--cannot {
-      background-color: rgba($red, .1);
+      background-color: rgba($joinup--red, .1);
     }
     &.licence-filter--compatible {
-      background-color: rgba($indigo, .1);
+      background-color: rgba($joinup--indigo, .1);
     }
     &.licence-filter--law {
-      background-color: rgba($orange, .1);
+      background-color: rgba($joinup--dark-orange, .1);
     }
     &.licence-filter--support {
-      background-color: rgba($brand-darker, .1);
+      background-color: rgba($joinup--brand-darker, .1);
     }
   }
   &__header {
