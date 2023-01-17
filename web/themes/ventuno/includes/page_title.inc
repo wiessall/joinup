@@ -81,6 +81,27 @@ function ventuno_preprocess_page_title__node__news(&$variables) {
 }
 
 /**
+ * Implements hook_preprocess_page_title__node__event().
+ */
+function ventuno_preprocess_page_title__node__event(&$variables) {
+  /** @var \Drupal\node\NodeInterface $node */
+  $node = $variables['entity'];
+
+  /** @var \Drupal\Core\Entity\EntityViewBuilderInterface $view_builder */
+  $view_builder = \Drupal::entityTypeManager()->getViewBuilder('node');
+
+  // Get dates and location fields.
+  $field_event_date = $view_builder->viewField($node->get('field_event_date'), 'default');
+  $variables['additional_content']['field_event_date'] = $field_event_date;
+
+  $field_event_location = $view_builder->viewField($node->get('field_location'), 'default');
+  $variables['additional_content']['field_event_location'] = $field_event_location;
+
+  $published = \Drupal::service('date.formatter')->format($node->published_at->published_at_or_created, 'date_only');
+  $variables['additional_content']['published'] = $published;
+}
+
+/**
  * Implements hook_preprocess_HOOK() for page-title--node--glossary.html.twig.
  */
 function ventuno_preprocess_page_title__node__glossary(array &$variables): void {
