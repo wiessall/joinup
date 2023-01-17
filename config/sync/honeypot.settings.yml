@@ -14,12 +14,13 @@ form_settings:
   comment_comment_form: true
   comment_reply_form: true
   message_contact_form_submission_form: true
-  node_custom_page_form: false
-  node_discussion_form: false
-  node_document_form: false
-  node_event_form: false
-  node_news_form: false
-  node_newsletter_form: false
+  node_custom_page_form: true
+  node_discussion_form: true
+  node_document_form: true
+  node_event_form: true
+  node_glossary_form: true
+  node_news_form: true
+  node_newsletter_form: true
   node_tallinn_report_form: false
   node_video_form: false
   user_pass: false
