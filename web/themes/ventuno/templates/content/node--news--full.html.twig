@@ -70,15 +70,13 @@
  *   in different view modes.
  */
 #}
-{# <article{{ attributes.addClass('page__content') }}> #}
-  {{ content.body }}
-  {{ content.group_references }}
-  {{ content.field_attachment }}
-  <div class="d-flex justify-content-end">
-    {{ content.report }}
-    {{ content.share_link }}
-  </div>
-{# </article> #}
+{{ content.body }}
+{{ content.group_references }}
+{{ content.field_attachment }}
+<div class="d-flex justify-content-end">
+  {{ content.report }}
+  {{ content.share_link }}
+</div>
 {{ content.field_shared_in }}
 {{ content.field_news_referenced_solution }}
 {{ content.field_comments }}
