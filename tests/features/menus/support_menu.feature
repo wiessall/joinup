@@ -54,8 +54,6 @@ Feature:
       | Category       | other                       |
       | Subject        | Mobile reader accessibility |
       | Message        | Dear sir, madam, ...        |
-    # We need to wait 5 seconds for the spam protection time limit to pass.
-    And I wait for the spam protection time limit to pass
     And I press "Submit"
     Then I should be on the homepage
 
@@ -71,8 +69,6 @@ Feature:
       | Category       | other                       |
       | Subject        | Screen reader accessibility |
       | Message        | Dear sir, madam, ...        |
-    # We need to wait 5 seconds for the spam protection time limit to pass.
-    And I wait for the spam protection time limit to pass
     And I press "Submit"
     Then I should be on "collections"
 
@@ -88,8 +84,6 @@ Feature:
       | Category       | other                       |
       | Subject        | Screen reader disponibility |
       | Message        | Dear sir, madam, ...        |
-    # We need to wait 5 seconds for the spam protection time limit to pass.
-    And I wait for the spam protection time limit to pass
     And I press "Submit"
     Then I should be on "keep-up-to-date"
 
