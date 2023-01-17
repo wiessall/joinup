@@ -82,12 +82,12 @@
 .region-featured {
   background-size: 100% auto;
   background-position: 0 55%, 0 55%;
-  background-image: url(../images/wave.svg), url(../images/background.svg), linear-gradient($primary 0%, $primary 50%, #082330 50%, #082330 100%);
+  background-image: url(../images/wave.svg), url(../images/background.svg), linear-gradient($ec-blue 0%, $ec-blue 50%, #082330 50%, #082330 100%);
   background-repeat: no-repeat;
   @include media-breakpoint-up(md) {
     background-size: auto 100%;
     background-position: center;
-    background-image: url(../images/banner-md.svg), linear-gradient(to right, $primary 0%, $primary 30%, #082330 30%, #082330 100%);
+    background-image: url(../images/banner-md.svg), linear-gradient(to right, $ec-blue 0%, $ec-blue 30%, #082330 30%, #082330 100%);
   }
   .block-views-exposed-filter-blocksearch-page-1 {
     padding-bottom: $spacer * .5; // 8px
@@ -192,7 +192,7 @@
       display: inline-block;
       font-size: $h3-font-size;
       font-weight: 700;
-      color: rgba($primary, .6);
+      color: rgba($primary, .7);
       padding-right: $spacer; // 16px
       margin-bottom: $spacer * .5; // 8px
       line-height: 1;
@@ -256,7 +256,7 @@
       display: flex;
       flex-direction: row;
       .dated-listing--date {
-        color: rgba($primary, .6);
+        color: rgba($primary, .7);
         text-align: center;
         display: flex;
         flex-flow: column;
