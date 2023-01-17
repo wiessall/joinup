@@ -27,7 +27,7 @@
   <p>{{ description|striptags }}</p>
 {% endset %}
 {% set _footer %}
-  <a class="btn btn-outline-primary btn-md" href="{{ url }}" target="_blank" rel="noopener nofollow" role="button">{{ 'Licence text'|t }}</a>
+  <a class="external" href="{{ url }}" target="_blank" rel="noopener nofollow" role="button">{{ 'Licence text'|t }}</a>
 {% endset %}
 {% if first_header %}
   {{ pattern('modal', {

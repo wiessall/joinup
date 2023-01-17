@@ -1,4 +1,5 @@
 $enable-negative-margins: false;
+$enable-caret: false;
 
 // Override default spacers, removing almost all "extended spacers"
 // to avoid creating a gigantic utilities file
@@ -14,3 +15,20 @@ $spacers: (
 );
 
 $gutters: $spacers;
+
+// Path for icons
+$bootstrap-icons-path: '../icons';
+
+// Theme path
+$ventuno-path: '../..';
+
+// Colors variables
+$ec-blue: #004494;
+$iop-darkblue: #001e2f;
+// Joinup color set
+$joinup--green: $green;
+$joinup--gray: $gray-700;
+$joinup--red: $red;
+$joinup--indigo: $indigo;
+$joinup--dark-orange: darken($orange, 17%); // Increase contrast to pass a11y tests
+$joinup--brand-darker: $brand-darker;

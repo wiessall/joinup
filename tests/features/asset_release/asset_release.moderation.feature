@@ -39,7 +39,7 @@ Feature: Asset release moderation
       | Release number | 1                        |
       | Release notes  | We go live.              |
     And I press "Save as draft"
-    Then I should see the heading "Release of the dark ship 1"
+    Then I should see the text "Release of the dark ship 1" in the "Page title" region
     But I should not see the following warning messages:
       | warning messages                                                                     |
       | You are viewing the published version. To view the latest draft version, click here. |
@@ -48,7 +48,7 @@ Feature: Asset release moderation
     And I should see the workflow buttons "Save as draft, Publish"
     When I fill in "Release number" with "v1"
     And I press "Publish"
-    Then I should see the heading "Release of the dark ship v1"
+    Then I should see the text "Release of the dark ship v1" in the "Page title" region
     And I should not see the following warning messages:
       | warning messages                                                                     |
       | You are viewing the published version. To view the latest draft version, click here. |
@@ -58,7 +58,7 @@ Feature: Asset release moderation
     And I should see the workflow buttons "Update, Save as draft"
     When I fill in "Release notes" with "We go live soon."
     And I press "Update"
-    Then I should see the heading "Release of the dark ship v1"
+    Then I should see the text "Release of the dark ship v1" in the "Page title" region
     And the following email should have been sent:
       | recipient | Felix Russell                                                                   |
       | subject   | Joinup: A release has been updated                                              |
@@ -101,7 +101,7 @@ Feature: Asset release moderation
     And I fill in "Authored on" with the time "23:59:00"
     And I press "Request changes"
     # The published version does not change.
-    Then I should see the heading "Release of the dark ship v1"
+    Then I should see the text "Release of the dark ship v1" in the "Page title" region
     And I should see the following warning messages:
       | warning messages                                                                     |
       | You are viewing the published version. To view the latest draft version, click here. |
@@ -121,7 +121,7 @@ Feature: Asset release moderation
     # Implement changes as a facilitator.
     When I am logged in as "Bonnie Holloway"
     And I go to the "Release of the dark ship" release
-    Then I should see the heading "Release of the dark ship v1"
+    Then I should see the text "Release of the dark ship v1" in the "Page title" region
     When I click "Edit" in the "Entity actions" region
     Then I should see the heading "Edit Release Release"
     And the current workflow state should be "Needs update"
@@ -129,7 +129,7 @@ Feature: Asset release moderation
     When I fill in "Name" with "Release fix"
     And I press "Update"
     # The updated version is still not published.
-    Then I should see the heading "Release of the dark ship v1"
+    Then I should see the text "Release of the dark ship v1" in the "Page title" region
 
     # Approve changes as a moderator.
     When I am logged in as a moderator
@@ -138,7 +138,7 @@ Feature: Asset release moderation
     And I should see the workflow buttons "Update, Publish"
     And I press "Publish"
     # The published is updated.
-    Then I should see the heading "Release fix v1"
+    Then I should see the text "Release fix v1" in the "Page title" region
     And I should not see the following warning messages:
       | warning messages                                                                     |
       | You are viewing the published version. To view the latest draft version, click here. |

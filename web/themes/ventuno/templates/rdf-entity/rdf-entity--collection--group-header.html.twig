@@ -1,0 +1,39 @@
+{#
+/**
+ * @file
+ * Themeing for RDF entities.
+ */
+#}
+<article {{ attributes.addClass(['py-4', 'py-md-5', 'group-banner']) }} style="background: linear-gradient(117deg, rgba(20,59,118,.7), rgba(20,59,118,.4)), url('{{ content.field_ar_banner }}') no-repeat, rgba(20,59,118,.4); background-size: cover;">
+  <div class="container d-flex flex-column align-items-center">
+    <span data-drupal-group-logo>{{ content.field_ar_logo }}</span>
+    {{ title_prefix }}
+    <a class="mt-3 px-2 fs-2 fw-bold text-light text-center bg-primary rounded" href="{{ path('entity.rdf_entity.canonical',{'rdf_entity': rdf_entity.id()}) }}">
+      {{ label }}
+    </a>
+    {{ title_suffix }}
+    <ul class="list-unstyled mt-3 mb-0 p-3 bg-secondary rounded text-dark">
+      <li class="mb-2 d-flex align-items-center">
+        <svg class="bi icon--s me-2">
+          <use xlink:href="{{ bcl_icon_path }}#calendar3"></use>
+        </svg>
+        <span>{{ 'Last update'|t }}</span>&nbsp;<span class="fw-bold">{{ content.last_update }}</span>
+      </li>
+      <li class="mb-2 d-flex align-items-center">
+        <svg class="bi icon--s me-2">
+          <use xlink:href="{{ bcl_icon_path }}#person-circle"></use>
+        </svg>
+        {{ content.members }}
+      </li>
+      <li class="d-flex align-items-center">
+        <svg class="bi icon--s me-2">
+          <use xlink:href="{{ bcl_icon_path }}#clipboard-check"></use>
+        </svg>
+        {{ content.solutions }}
+      </li>
+    </ul>
+    <div class="mt-4 d-flex flex-wrap justify-content-center text-light">
+      {{ content.join_collection }}
+    </div>
+  </div>
+</article>

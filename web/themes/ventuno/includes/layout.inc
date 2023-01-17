@@ -77,14 +77,17 @@ function ventuno_theme_suggestions_container_alter(array &$suggestions, array $v
       $suggestions[] = 'container__edit_actions';
     }
   }
+  // Add extra suggestion for grid elements.
+  $has_extra_suggestions = isset($variables['element']['#extra_suggestion']);
+  if ($has_extra_suggestions) {
+    $suggestions[] = $variables['element']['#extra_suggestion'];
+  }
 }
 
 /**
  * Implements hook_preprocess_HOOK() for html.html.twig.
  */
 function ventuno_preprocess_html(array &$variables): void {
-  // Expose the base path so we can use it to generate favicon URIs.
-  $variables['base_path'] = base_path();
   // Licence comparer specific styling.
   if (\Drupal::routeMatch()->getRouteName() === 'joinup_licence.comparer') {
     $variables['#attached']['library'][] = 'ventuno/licence-comparer';
@@ -103,12 +106,29 @@ function ventuno_preprocess_container__text_format_filter_help(array &$variables
 }
 
 /**
- * Implements hook_preprocess_page_title().
+ * Implements hook_preprocess_container().
  */
-function ventuno_preprocess_page_title(array &$variables): void {
-  if (\Drupal::routeMatch()->getRouteName() === 'entity.rdf_entity.eif_perspective') {
-    /** @var \Drupal\solution\Entity\SolutionInterface $solution */
-    $solution = \Drupal::routeMatch()->getParameter('rdf_entity');
-    $variables['title'] = t('EIF Perspective attributes of @title', ['@title' => $solution->label()]);
+function ventuno_preprocess_container(array &$variables): void {
+  if (isset($variables['attributes']['data-drupal-facet-id'])) {
+    $facet_id = $variables['attributes']['data-drupal-facet-id'];
+    $valid_facet_ids = [
+      'collection_type',
+      'solution_content_bundle',
+      'field_content_listing_type',
+    ];
+    if (in_array($facet_id, $valid_facet_ids)) {
+      $classes = [
+        'tabs--content-type',
+        'g-2',
+        'my-4',
+        'justify-content-center',
+        'row',
+        'row-cols-2',
+        'row-cols-md-4',
+        'row-cols-xl-6',
+        'row-cols-xxl-8',
+      ];
+      $variables['attributes']['class'] = $classes;
+    }
   }
 }

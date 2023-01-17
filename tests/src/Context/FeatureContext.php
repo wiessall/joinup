@@ -858,6 +858,7 @@ class FeatureContext extends RawDrupalContext {
   public function assertElementNotVisibleInRegion(string $locator, string $element, string $region): void {
     $region = $this->getRegion($region);
     $element = $this->findNamedElementInRegion($locator, $element, $region);
+    $this->scrollElementIntoView($element);
     $this->assertNotVisuallyVisible($element);
   }
 
@@ -882,6 +883,9 @@ class FeatureContext extends RawDrupalContext {
   public function assertElementVisibleInRegion(string $locator, string $element, string $region): void {
     $region = $this->getRegion($region);
     $element = $this->findNamedElementInRegion($locator, $element, $region);
+    if (!$element->getParent()->getParent()->hasClass('contextual-links')) {
+      $this->scrollElementIntoView($element);
+    }
     $this->assertVisuallyVisible($element);
   }
 

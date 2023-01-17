@@ -11,6 +11,7 @@ use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\asset_release\Entity\AssetReleaseInterface;
 use Drupal\joinup_bundle_class\DescriptionInterface;
 use Drupal\joinup_bundle_class\LogoInterface;
+use Drupal\joinup_core\Controller\IdRedirect;
 use Drupal\smart_trim\Truncate\TruncateHTML;
 use Drupal\topic\Entity\TopicReferencingEntityInterface;
 
@@ -127,6 +128,55 @@ function _ventuno_get_default_icon_render_array(string $entity_type_id, string $
       'icon' => $class,
     ],
   ];
+}
+
+/**
+ * Builds the permalink for the given route.
+ *
+ * @return string|null
+ *   The permalink URI.
+ */
+function _ventuno_build_permalink(): ?string {
+  $route_match = \Drupal::routeMatch();
+  $route_name = $route_match->getRouteName();
+
+  $routes = [
+    'entity.node.canonical',
+    'entity.rdf_entity.canonical',
+    'entity.rdf_entity.about_page',
+  ];
+
+  if (!in_array($route_name, $routes)) {
+    return NULL;
+  }
+
+  if (!($parameters = $route_match->getRouteObject()->getOption('parameters')) || empty($parameters)) {
+    return NULL;
+  }
+
+  foreach ($parameters as $key => $info) {
+    if (!empty($info['type']) && $info['type'] == "entity:$key") {
+      $type = $key;
+      break;
+    }
+  }
+
+  if (!isset($type) || !($entity = $route_match->getParameter($type))) {
+    return NULL;
+  }
+
+  // Entity ID is pointing to the publication office redirect.
+  $namespaces = implode('|', array_keys(
+    IdRedirect::getEntityTypeFromPersistentUriNamespace()));
+  if (preg_match('{^http://data.europa.eu/(?:' . $namespaces . ')/}', $entity->id())) {
+    return $entity->id();
+  }
+
+  // Don't process the path to avoid pathauto aliasing.
+  return $entity->toUrl('canonical', [
+    'path_processing' => FALSE,
+    'absolute' => TRUE,
+  ])->toString();
 }
 
 /**

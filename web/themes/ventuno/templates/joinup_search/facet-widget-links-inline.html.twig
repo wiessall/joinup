@@ -1,0 +1,30 @@
+{% set button_attributes = create_attribute()
+  .addClass(['dropdown-toggle', 'btn', 'btn-link', 'rounded-pill', 'p-0'])
+  .setAttribute('id', 'collapseTerms')
+  .setAttribute('type', 'button')
+  .setAttribute('data-bs-toggle', 'dropdown')
+  .setAttribute('autocomplete', 'off')
+  .setAttribute('aria-expanded', 'false')
+%}
+
+{% if items or active %}
+  <div{{ attributes.addClass('my-3 dropdown') }}>
+    {%- if prefix_text -%}
+      <span>{{ prefix_text }}</span>
+    {% endif -%}
+    {{ suffix_text }}
+    <div class="filter__term d-inline">
+    {{ active|safe_join(', ') }}
+    </div>
+    <button{{ button_attributes }}>
+      <span class="visually-hidden">{{ 'See more topics'|t }}</span>
+    </button>
+    {%- if items -%}
+    <ul class="dropdown-menu px-3 py-2">
+      {%- for item in items -%}
+        <li class="facet-item py-2">{{ item }}</li>
+      {%- endfor -%}
+    </ul>
+    {%- endif -%}
+  </div>
+{%- endif %}

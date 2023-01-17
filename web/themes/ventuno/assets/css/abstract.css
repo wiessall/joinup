@@ -1,0 +1,43 @@
+/**
+ * @file
+ * Common base.
+ *
+ * Functions, variables, utilities and mixins required for the build.
+ * When compiled, this file should not output anything.
+ */
+/**
+* Mixin to generate bootstrap icon
+*/
+.abstract .read-more {
+  display: inline-block;
+}
+.abstract .read-more::after {
+  margin-left: 0.5rem;
+  display: inline-block;
+  content: "";
+  width: 1em;
+  height: 1em;
+  vertical-align: -0.125em;
+  background-color: currentColor;
+  -webkit-mask-image: url("../icons/arrow-right.svg");
+          mask-image: url("../icons/arrow-right.svg");
+  -webkit-mask-repeat: no-repeat;
+          mask-repeat: no-repeat;
+  -webkit-mask-size: contain;
+          mask-size: contain;
+}
+.abstract .read-more:hover::after {
+  display: inline-block;
+  content: "";
+  width: 1em;
+  height: 1em;
+  vertical-align: -0.125em;
+  background-color: currentColor;
+  -webkit-mask-image: url("../icons/arrow-right.svg");
+          mask-image: url("../icons/arrow-right.svg");
+  -webkit-mask-repeat: no-repeat;
+          mask-repeat: no-repeat;
+  -webkit-mask-size: contain;
+          mask-size: contain;
+}
+/*# sourceMappingURL=abstract.css.map */
