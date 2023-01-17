@@ -21,6 +21,11 @@
     color: $gray-700;
     font-size: 1.25rem;
     font-weight: $font-weight-normal;
+    &--one-line {
+      display: inline-block;
+      max-height: 1.8rem;
+      overflow: hidden;
+    }
   }
   &__details {
     display: flex;
