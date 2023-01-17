@@ -332,7 +332,6 @@ Feature: About this solution
     And I fill in "Your e-mail address" with "linak@example.pt"
     And I fill in "Subject" with "New reclamation about Owner"
     And I fill in "Message" with "This is reclamation test."
-    And I wait for the honeypot time limit to pass
     When I press "Send e-mail"
     And I should see the success message "Your message has been sent."
     Then I should see the heading "Some contact test"
@@ -351,7 +350,6 @@ Feature: About this solution
     And I fill in "Your e-mail address" with "vnak@example.pt"
     And I fill in "Subject" with "v2 New reclamation about Owner"
     And I fill in "Message" with "This is v2 reclamation test."
-    And I wait for the honeypot time limit to pass
     When I press "Send e-mail"
     Then I should see the success message "Your message has been sent."
     And I should see the heading "Some contact test"
