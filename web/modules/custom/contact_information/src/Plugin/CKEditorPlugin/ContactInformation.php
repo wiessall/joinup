@@ -6,9 +6,11 @@ namespace Drupal\contact_information\Plugin\CKEditorPlugin;
 
 use Drupal\Core\Url;
 use Drupal\ckeditor\CKEditorPluginBase;
+use Drupal\collection\Entity\CollectionInterface;
 use Drupal\editor\Entity\Editor;
 use Drupal\joinup_community_content\Entity\CommunityContentInterface;
-use Drupal\joinup_group\Entity\GroupContentInterface;
+use Drupal\joinup_licence\Entity\LicenceInterface;
+use Drupal\solution\Entity\SolutionInterface;
 
 /**
  * Defines the "Contact us" plugin.
@@ -73,11 +75,12 @@ class ContactInformation extends CKEditorPluginBase {
       }
     }
 
-    if ($group instanceof GroupContentInterface) {
-      $group = $group->hasGroup() ? $group->getCollection() : NULL;
+    $login = $url = NULL;
+    $disable = FALSE;
+    if ($group && !$group instanceof CollectionInterface && !$group instanceof SolutionInterface) {
+      $group = !$group instanceof LicenceInterface && $group->hasGroup() ? $group->getCollection() : NULL;
     }
 
-    $login = $url = NULL;
     if ($group) {
       $url = Url::fromRoute('entity.rdf_entity.contact', ['rdf_entity' => $group->id()])->setOption('query', [
         'destination' => '',
@@ -85,10 +88,11 @@ class ContactInformation extends CKEditorPluginBase {
       $login = Url::fromRoute('cas.login')->setOption('query', [
         'destination' => Url::fromRoute('entity.rdf_entity.contact', ['rdf_entity' => $group->id()])->toString(),
       ])->setAbsolute()->toString();
+      $disable = !empty($group->getValidatedContactInformation());
     }
 
     return [
-      'contactInformation_disable' => $group && !empty($group->getValidatedContactInformation()),
+      'contactInformation_disable' => $disable,
       'contactInformation_url' => $url,
       'contactInformation_login' => $login,
     ];
