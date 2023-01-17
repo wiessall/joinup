@@ -16,7 +16,7 @@ use Drupal\og\OgRoleInterface;
 class ContactInformationConfirmAccess implements ContactInformationConfirmAccessInterface {
 
   /**
-   * Constructs a new event subscriber.
+   * Constructs a new contact information confirm access service.
    *
    * @param \Drupal\Core\Session\AccountInterface $current_user
    *   The current user service.
