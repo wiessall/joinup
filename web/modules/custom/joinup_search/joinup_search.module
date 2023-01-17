@@ -192,7 +192,7 @@ function joinup_search_search_api_query_alter(QueryInterface $query) {
   $search_ids = [
     'rdf_entity.field_collection_content',
     'rdf_entity.field_is_content',
-    'paragraph.content_listing',
+    'paragraph.content_listing.content_listing',
   ];
 
   if (in_array($query->getSearchId(), $search_ids)) {
