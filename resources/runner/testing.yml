@@ -9,6 +9,11 @@ testing:
     - joinup_cas_mock_server
     - upgrade_status
 
+antispam:
+  modules:
+    - antibot
+    - honeypot
+
 behat:
   screenshots:
     local:
@@ -88,3 +93,25 @@ commands:
     - task: run
       command: drush:module-install
       arguments: ${testing.modules}
+
+  testing:install-antispam-modules:
+    - task: run
+      command: config-readonly:disable
+    - task: run
+      command: drush:module-install
+      arguments: ${antispam.modules}
+    - task: exec
+      command: ${drush.bin}
+      arguments:
+        - config:import
+    - task: run
+      command: config-readonly:enable
+
+  testing:uninstall-antispam-modules:
+    - task: run
+      command: config-readonly:disable
+    - task: run
+      command: drush:module-uninstall
+      arguments: ${antispam.modules}
+    - task: run
+      command: config-readonly:enable
