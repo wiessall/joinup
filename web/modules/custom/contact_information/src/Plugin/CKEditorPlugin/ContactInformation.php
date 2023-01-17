@@ -8,7 +8,7 @@ use Drupal\Core\Url;
 use Drupal\ckeditor\CKEditorPluginBase;
 use Drupal\editor\Entity\Editor;
 use Drupal\joinup_community_content\Entity\CommunityContentInterface;
-use Drupal\joinup_group\Entity\GroupInterface;
+use Drupal\joinup_group\Entity\GroupContentInterface;
 
 /**
  * Defines the "Contact us" plugin.
@@ -73,8 +73,8 @@ class ContactInformation extends CKEditorPluginBase {
       }
     }
 
-    if (!$group instanceof GroupInterface) {
-      $group = $group->getCollection();
+    if ($group instanceof GroupContentInterface) {
+      $group = $group->hasGroup() ? $group->getCollection() : NULL;
     }
 
     $login = $url = NULL;
