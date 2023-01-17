@@ -64,7 +64,8 @@ function joinup_core_requirements($phase): array {
       }
     }
 
-    $requirements_helper = \Drupal::getContainer()->get('joinup_core.requirements_helper');
+    $requirements_helper = \Drupal::getContainer()
+      ->get('joinup_core.requirements_helper');
 
     // Ensure that a cache state inconsistency will not cause also
     // inconsistencies with the published revisions of the entities.
@@ -106,13 +107,31 @@ function joinup_core_update_108900(): void {
   // the `paragraphs__content_listing` table using a direct query.
   $connection = \Drupal::database();
   $connection->insert('paragraph__content_listing')
-    ->fields(['bundle', 'deleted', 'entity_id', 'revision_id', 'langcode', 'delta', 'content_listing_value'])
-    ->from($connection->select('paragraph__field_content_listing', 'pcl')->fields('pcl'))
+    ->fields([
+      'bundle',
+      'deleted',
+      'entity_id',
+      'revision_id',
+      'langcode',
+      'delta',
+      'content_listing_value',
+    ])
+    ->from($connection->select('paragraph__field_content_listing', 'pcl')
+      ->fields('pcl'))
     ->execute();
 
   // Do the same for the `paragraphs_revision__field_content_listing` table.
   $connection->insert('paragraph_revision__content_listing')
-    ->fields(['bundle', 'deleted', 'entity_id', 'revision_id', 'langcode', 'delta', 'content_listing_value'])
-    ->from($connection->select('paragraph_revision__field_content_listing', 'pcl')->fields('pcl'))
+    ->fields([
+      'bundle',
+      'deleted',
+      'entity_id',
+      'revision_id',
+      'langcode',
+      'delta',
+      'content_listing_value',
+    ])
+    ->from($connection->select('paragraph_revision__field_content_listing', 'pcl')
+      ->fields('pcl'))
     ->execute();
 }
