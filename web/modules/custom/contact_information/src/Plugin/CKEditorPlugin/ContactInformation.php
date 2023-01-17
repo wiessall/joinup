@@ -7,6 +7,8 @@ namespace Drupal\contact_information\Plugin\CKEditorPlugin;
 use Drupal\Core\Url;
 use Drupal\ckeditor\CKEditorPluginBase;
 use Drupal\editor\Entity\Editor;
+use Drupal\joinup_community_content\Entity\CommunityContentInterface;
+use Drupal\joinup_group\Entity\GroupInterface;
 
 /**
  * Defines the "Contact us" plugin.
@@ -66,16 +68,29 @@ class ContactInformation extends CKEditorPluginBase {
     $group = \Drupal::routeMatch()->getParameter('rdf_entity');
     if (!$group) {
       $node = \Drupal::routeMatch()->getParameter('node');
-      if ($node) {
+      if ($node instanceof CommunityContentInterface) {
         $group = $node->getGroup();
       }
     }
 
+    if (!$group instanceof GroupInterface) {
+      $group = $group->getCollection();
+    }
+
+    $login = $url = NULL;
+    if ($group) {
+      $url = Url::fromRoute('entity.rdf_entity.contact', ['rdf_entity' => $group->id()])->setOption('query', [
+        'destination' => '',
+      ])->toString();
+      $login = Url::fromRoute('cas.login')->setOption('query', [
+        'destination' => Url::fromRoute('entity.rdf_entity.contact', ['rdf_entity' => $group->id()])->toString(),
+      ])->setAbsolute()->toString();
+    }
+
     return [
       'contactInformation_disable' => $group && !empty($group->getValidatedContactInformation()),
-      'contactInformation_url' => !$group ? NULL : Url::fromRoute('entity.rdf_entity.contact', ['rdf_entity' => $group->id()])->setOption('query', [
-        'destination' => '',
-      ])->toString(),
+      'contactInformation_url' => $url,
+      'contactInformation_login' => $login,
     ];
   }
 
