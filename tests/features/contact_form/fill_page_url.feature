@@ -16,8 +16,6 @@ Feature: Fill Page URL field in Technical problem / bug report on contact form
     And I fill in "Page URL" with "/interoperable-europe/interoperable-europe"
     And I fill in "Subject" with "Friendly reminder"
     And I enter "I will be back..." in the "Message" wysiwyg editor
-    # We need to wait 5 seconds for the spam protection time limit to pass.
-    And I wait for the spam protection time limit to pass
     Then I press "Submit"
     And I should see the following success messages:
       | success messages                                              |
@@ -32,8 +30,6 @@ Feature: Fill Page URL field in Technical problem / bug report on contact form
     And I fill "Page URL" with the absolute url "/interoperable-europe/interoperable-europe"
     And I fill in "Subject" with "Mistery reminder"
     And I enter "I will be back soon..." in the "Message" wysiwyg editor
-    # We need to wait 5 seconds for the spam protection time limit to pass.
-    And I wait for the spam protection time limit to pass
     Then I press "Submit"
     And I should see the following success messages:
       | success messages                                              |
