@@ -12,8 +12,8 @@ _core:
   default_config_hash: lNcx1eTcO-2duy3JjKHExr2AxeKuGkf60Vc6V35A_dI
 id: ventuno_joinup_add_content
 theme: ventuno
-region: header_bottom
-weight: -21
+region: featured
+weight: -22
 provider: null
 plugin: add_content_block
 settings:

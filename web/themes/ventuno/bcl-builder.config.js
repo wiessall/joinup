@@ -299,8 +299,8 @@ module.exports = {
       },
     },
     {
-      entry: path.resolve(outputFolder, "src/scss/add-content.scss"),
-      dest: path.resolve(outputFolder, "assets/css/add-content.min.css"),
+      entry: path.resolve(outputFolder, "src/scss/actions-menu.scss"),
+      dest: path.resolve(outputFolder, "assets/css/actions-menu.min.css"),
       options: {
         includePaths,
         minify: true,
@@ -518,14 +518,6 @@ module.exports = {
       options: {
         includePaths,
         minify: true,
-        sourceMap: "file",
-      },
-    },
-    {
-      entry: path.resolve(outputFolder, "src/scss/three-dots-menu.scss"),
-      dest: path.resolve(outputFolder, "assets/css/three-dots-menu.css"),
-      options: {
-        includePaths,
         sourceMap: "file",
       },
     },
