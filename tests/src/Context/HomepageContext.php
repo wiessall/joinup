@@ -82,20 +82,4 @@ class HomepageContext extends RawDrupalContext {
     }
   }
 
-  /**
-   * Enables the given topic meta entities on the homepage.
-   *
-   * @Given /^the following topics are enabled in the homepage:$/
-   */
-  public function theFollowingTopicsAreEnabledInTheHomepage(TableNode $table) {
-    $topics = $table->getColumn(0);
-    $repository = \Drupal::getContainer()->get('meta_entity.repository');
-    foreach ($topics as $topic) {
-      $topic = $this->getEntityByLabel('taxonomy_term', $topic);
-      $meta_entity = $repository->getMetaEntityForEntity($topic, 'topic');
-      $meta_entity->set('status', TRUE);
-      $meta_entity->save();
-    }
-  }
-
 }

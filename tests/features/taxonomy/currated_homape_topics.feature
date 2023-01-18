@@ -115,15 +115,16 @@ Feature:
 
   Scenario: Configurable listings are available for the topic meta entities.
     Given the following topics are enabled in the homepage:
-      | topic name |
       | E-justice  |
     And I am logged in as a moderator
-    And I go to the homepage
+    And I go to the "topic" meta entity of the "E-justice"
     And I click "E-justice"
     And I click "Edit"
     Then I should see the heading "Edit E-justice"
     And I should not see the button "Add configurable listing"
     When I press "Add 1 column layout"
+
+    Given I reload the page
     And I press "Add 2 column layout"
     Then I should see the button "Add configurable listing"
 
