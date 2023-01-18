@@ -19,28 +19,30 @@ default_value:
   -
     value:
       enabled: 1
-      query_presets: ''
+      query_presets:
       limit: 10
+      show_shared: 0
+      global_search: 0
 default_value_callback: ''
 settings:
   index: published
   facet_regions: {  }
   view_modes:
     'entity:node':
-      custom_page: carousel
-      discussion: carousel
-      document: carousel
-      event: carousel
-      news: carousel
-      tallinn_report: carousel
-      video: carousel
+      custom_page: view_mode_tile
+      discussion: view_mode_tile
+      document: view_mode_tile
+      event: view_mode_tile
+      news: view_mode_tile
+      tallinn_report: view_mode_tile
+      video: view_mode_tile
     'entity:rdf_entity':
-      asset_distribution: carousel
-      asset_release: carousel
-      collection: carousel
-      licence: eif_perspective
-      solution: eif_perspective
-      spdx_licence: eif_perspective
+      asset_distribution: view_mode_tile
+      asset_release: view_mode_tile
+      collection: view_mode_tile
+      licence: view_mode_tile
+      solution: view_mode_tile
+      spdx_licence: view_mode_tile
     'entity:taxonomy_term':
       eif_conceptual_model: default
       eif_interoperability_layer: default
