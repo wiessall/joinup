@@ -343,5 +343,4 @@ permissions:
   - 'view own field_is_eif_recommendation'
   - 'view rdf entity overview'
   - 'view rdf_entity draft graph'
-  - 'view topic meta-entity'
   - 'view unpublished rdf entity'
