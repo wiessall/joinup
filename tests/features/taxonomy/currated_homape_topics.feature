@@ -112,3 +112,67 @@ Feature:
     When I go to the homepage
     Then I should not see the text "E-justice" in the "Homepage topics" region
     But I should see the text "Finance in EU" in the "Homepage topics" region
+
+  Scenario: Configurable listings are available for the topic meta entities.
+    Given the following topics are enabled in the homepage:
+      | topic name |
+      | E-justice  |
+    And I am logged in as a moderator
+    And I go to the homepage
+    And I click "E-justice"
+    And I click "Edit"
+    Then I should see the heading "Edit E-justice"
+    And I should not see the button "Add configurable listing"
+    When I press "Add 1 column layout"
+    And I press "Add 2 column layout"
+    Then I should see the button "Add configurable listing"
+
+  Scenario: Configurable listings are not available for custom pages.
+    Given the following collection:
+      | title | Currated  |
+      | state | validated |
+    And I am logged in as a moderator
+    And I go to the "Currated" collection
+    And I click "Add custom page"
+    Then I should not see the button "Add configurable listing"
+    When I press "Add 1 column layout"
+    And I press "Add 2 column layout"
+    Then I should not see the button "Add configurable listing"
+
+  Scenario: Lists of configurable content can be added in the page of the topic meta entity.
+    Given news content:
+      | title  | state     |
+      | News 1 | validated |
+    Given the following topics are enabled in the homepage:
+      | topic name |
+      | E-justice  |
+    And I am logged in as a moderator
+    And I go to the homepage
+    And I click "E-justice"
+    And I click "Edit"
+    Then I should see the heading "Edit E-justice"
+
+    Given I press "Add 1 column layout"
+    And I press "Add Configurable listing"
+    Then the following fields should be present "Heading, Action link, List style, Query presets"
+
+    When I fill in "Heading" with "E-justice heading"
+    And I fill in "URL" with "http://example.com"
+    And I fill in "Link text" with "E-justice link text"
+    And I select "List" from "List style"
+    And I fill in "Query presets" with "entity_bundle|news"
+
+    And I press "Save"
+    Then I should see the success message "The meta entity has been updated."
+    And I should see the heading "E-justice"
+    And I should see the text "E-Justice heading"
+    And I should see the link "E-justice link text"
+    # @todo: A separate step with the list items should be asserted here.
+    # @see ISAICP-
+    And I should see the "News 1" tile
+
+    When I click "Edit"
+    And I select "Grid" from "List style"
+    And I press "Save"
+    Then I should see the success message "The meta entity has been updated."
+    And I should see the "News 1" tile
