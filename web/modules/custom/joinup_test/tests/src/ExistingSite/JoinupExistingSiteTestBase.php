@@ -6,7 +6,8 @@ namespace Drupal\Tests\joinup_test\ExistingSite;
 
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Tests\joinup_test\Traits\RdfEntityCreationTrait;
-use Drupal\joinup\Traits\AntibotTrait;
+use Drupal\joinup\Traits\AntispamTrait;
+use Drupal\joinup\Traits\ConfigReadOnlyTrait;
 use weitzman\DrupalTestTraits\ExistingSiteBase;
 
 /**
@@ -14,7 +15,8 @@ use weitzman\DrupalTestTraits\ExistingSiteBase;
  */
 abstract class JoinupExistingSiteTestBase extends ExistingSiteBase {
 
-  use AntibotTrait;
+  use AntispamTrait;
+  use ConfigReadOnlyTrait;
   use RdfEntityCreationTrait;
 
   /**
@@ -40,8 +42,7 @@ abstract class JoinupExistingSiteTestBase extends ExistingSiteBase {
     if ($this->disableSpamProtection) {
       // As ExistingSiteBase tests are running without javascript, we disable
       // Antibot & Honeypot during the tests run, if it has been requested.
-      $this->disableAntibot();
-      $this->disableHoneypot();
+      $this->removeAntispamConfigs();
     }
   }
 
@@ -51,8 +52,7 @@ abstract class JoinupExistingSiteTestBase extends ExistingSiteBase {
   public function tearDown(): void {
     // Restores the spam protection functionality, if case.
     if ($this->disableSpamProtection) {
-      $this->restoreAntibot();
-      $this->restoreHoneypot();
+      $this->restoreAntispamConfigs();
     }
 
     // Avoid sending notifications during test entities cleanup. First, sort the
@@ -86,22 +86,6 @@ abstract class JoinupExistingSiteTestBase extends ExistingSiteBase {
     // Delete the OG group content orphans now because parent::tearDown() is
     // destroying the container and the registered shutdown callback will fail.
     $delete_orphans_plugin->process();
-  }
-
-  /**
-   * Disables Honeypot settings during the test run.
-   */
-  protected function disableHoneypot(): void {
-    static::bypassReadOnlyConfig();
-    $config_factory = $this->container->get('config.factory');
-    $config = $config_factory->getEditable('honeypot.settings');
-    if (!isset($this->honeypotForms)) {
-      $this->honeypotForms = $config->get('form_settings') ?? [];
-    }
-    $config
-      ->set('form_settings', array_fill_keys(array_keys($this->honeypotForms), FALSE))
-      ->save();
-    static::restoreReadOnlyConfig();
   }
 
   /**
