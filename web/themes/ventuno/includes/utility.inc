@@ -9,13 +9,13 @@ declare(strict_types = 1);
 
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\asset_release\Entity\AssetReleaseInterface;
+use Drupal\file\Entity\File;
 use Drupal\joinup_bundle_class\DescriptionInterface;
 use Drupal\joinup_bundle_class\LogoInterface;
 use Drupal\joinup_community_content\Entity\CommunityContentInterface;
 use Drupal\joinup_core\Controller\IdRedirect;
 use Drupal\smart_trim\Truncate\TruncateHTML;
 use Drupal\topic\Entity\TopicReferencingEntityInterface;
-use Drupal\file\Entity\File;
 
 /**
  * Performs smart trimming on the provided string.
