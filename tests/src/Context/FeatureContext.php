@@ -21,7 +21,7 @@ use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\DrupalExtension\TagTrait;
 use Drupal\image\Plugin\Field\FieldType\ImageItem;
 use Drupal\joinup\HtmlManipulator;
-use Drupal\joinup\Traits\AntibotTrait;
+use Drupal\joinup\Traits\AntispamTrait;
 use Drupal\joinup\Traits\ContextualLinksTrait;
 use Drupal\joinup\Traits\EntityTrait;
 use Drupal\joinup\Traits\JavascriptTrait;
@@ -34,6 +34,7 @@ use Drupal\joinup\Traits\UtilityTrait;
 use Drupal\joinup_core\JoinupVersionInterface;
 use Drupal\media\Entity\Media;
 use Joinup\TaskRunner\Traits\TaskRunnerTrait;
+use Joinup\Traits\DigitQaPipelineAwareTrait;
 use LoversOfBehat\TableExtension\Hook\Scope\AfterTableFetchScope;
 use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\ExpectationFailedException;
@@ -46,7 +47,8 @@ use WebDriver\Key;
  */
 class FeatureContext extends RawDrupalContext {
 
-  use AntibotTrait;
+  use DigitQaPipelineAwareTrait;
+  use AntispamTrait;
   use ContextualLinksTrait;
   use EntityTrait;
   use JavascriptTrait;
@@ -1768,7 +1770,7 @@ class FeatureContext extends RawDrupalContext {
    * @BeforeScenario @errorPage&&@api
    */
   public function beforeErrorPageTesting(): void {
-    static::toggleModule('install', 'error_page_test');
+    static::toggleModule('install', ['error_page_test']);
 
     // Pipe error log entries to a file rather than to standard PHP log.
     static::runCommand('drupal:settings error_page_test --root=' . static::getPath('web') . ' --sites-subdir=default');
@@ -1784,7 +1786,7 @@ class FeatureContext extends RawDrupalContext {
    * @AfterScenario @errorPage&&@api
    */
   public function afterErrorPageTesting(): void {
-    static::toggleModule('uninstall', 'error_page_test');
+    static::toggleModule('uninstall', ['error_page_test']);
 
     // Restore piping error log entries to the standard PHP log.
     $settings = Settings::getAll();
@@ -1886,49 +1888,54 @@ class FeatureContext extends RawDrupalContext {
   }
 
   /**
-   * Disables the Antibot functionality during tests run.
+   * Disables the Antibot & Honeypot functionalities before tests run.
    *
-   * Antibot module blocks all form submissions for browsers without JavaScript
-   * support or when there's no keyboard or mouse interaction before the form is
-   * submitted. This would make most of Behat tests to fail. We disable Antibot
-   * functionality during Behat tests run.
-   *
-   * If a scenario wants to have Antibot functionality enabled, it should be
-   * tagged with @antibot.
-   *
-   * @BeforeScenario ~@antibot&&@api
+   * @BeforeSuite
    */
-  public static function disableAntibotBeforeScenarioStarts(): void {
-    static::disableAntibot();
+  public static function disableAntispamBeforeSuiteStarts(): void {
+    if (static::isDigitQaPipeline()) {
+      $projectPath = rtrim(getenv('CI_PROJECT_DIR'), DIRECTORY_SEPARATOR);
+    }
+    else {
+      $projectPath = DRUPAL_ROOT . '/../';
+    }
+    exec("{$projectPath}/vendor/bin/run testing:uninstall-antispam-modules");
   }
 
   /**
-   * Restores the Antibot functionality after tests run.
+   * Restores the Antibot & Honeypot functionalities after tests run.
    *
-   * @AfterScenario ~@antibot&&@api
-   *
-   * @see self::disableAntibot()
+   * @AfterSuite
    */
-  public static function restoreAntibotAfterScenarioEnds(): void {
-    static::restoreAntibot();
+  public static function restoreAntispamAfterSuiteEnds(): void {
+    if (static::isDigitQaPipeline()) {
+      $projectPath = rtrim(getenv('CI_PROJECT_DIR'), DIRECTORY_SEPARATOR);
+    }
+    else {
+      $projectPath = DRUPAL_ROOT . '/../';
+    }
+    exec("{$projectPath}/vendor/bin/run testing:install-antispam-modules");
   }
 
   /**
-   * Installs/uninstalls a module in tests.
+   * Enable the Antibot & Honeypot functionalities during tests run.
    *
-   * @param string $method
-   *   Either 'install' or 'uninstall'.
-   * @param string $module_name
-   *   The module to be installed/uninstalled.
+   * If a scenario wants to have Antibot & Honeypot functionalities enabled,
+   * it should be tagged with @antispam.
+   *
+   * @BeforeScenario @antispam&&@api
    */
-  protected static function toggleModule(string $method, string $module_name): void {
-    // Ensure that test modules are also discoverable.
-    $settings = ['extension_discovery_scan_tests' => TRUE] + Settings::getAll();
-    new Settings($settings);
+  public static function enableAntispamBeforeScenarioStarts(): void {
+    static::restoreAntispam();
+  }
 
-    static::bypassReadOnlyConfig();
-    \Drupal::service('module_installer')->$method([$module_name]);
-    static::restoreReadOnlyConfig();
+  /**
+   * Restores the Antibot & Honeypot functionalities after tests run.
+   *
+   * @AfterScenario @antispam&&@api
+   */
+  public static function restoreAntispamAfterScenarioEnds(): void {
+    static::disableAntispam();
   }
 
   /**
@@ -1948,6 +1955,23 @@ class FeatureContext extends RawDrupalContext {
     $has_js_assigned_value = (bool) $session->getPage()->find('xpath', '//form[@data-action]//input[@data-drupal-selector="edit-antibot-key" and @name="antibot_key" and string(@value)]');
     if (!$has_js_assigned_value) {
       throw new \Exception("Not an Antibot protected form.");
+    }
+  }
+
+  /**
+   * Checks if the current form is protected by Honeypot.
+   *
+   * @throws \Exception
+   *   When the expectancy is not met.
+   *
+   * @Then the form is protected by Honeypot
+   */
+  public function assertFormIsProtectedByHoneypot(): void {
+    $session = $this->getSession();
+
+    $has_js_assigned_value = (bool) $session->getPage()->find('xpath', '//form//input[@data-drupal-selector="edit-user-homepage" and @name="user_homepage"]');
+    if (!$has_js_assigned_value) {
+      throw new \Exception("Not an Honeypot protected form.");
     }
   }
 
