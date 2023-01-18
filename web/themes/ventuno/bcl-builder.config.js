@@ -495,6 +495,15 @@ module.exports = {
       },
     },
     {
+      entry: path.resolve(outputFolder, "src/scss/table-files.scss"),
+      dest: path.resolve(outputFolder, "assets/css/table-files.min.css"),
+      options: {
+        includePaths,
+        minify: true,
+        sourceMap: "file",
+      },
+    },
+    {
       entry: path.resolve(outputFolder, "src/scss/tabs.scss"),
       dest: path.resolve(outputFolder, "assets/css/tabs.min.css"),
       options: {
@@ -649,6 +658,7 @@ module.exports = {
           "exclamation-triangle-fill.svg",
           "eye.svg",
           "facebook.svg",
+          "file-earmark.svg",
           "file-earmark-medical.svg",
           "file-earmark-play.svg",
           "file-earmark-plus.svg",

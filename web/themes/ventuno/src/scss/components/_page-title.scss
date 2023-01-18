@@ -29,6 +29,7 @@
   }
   &__details {
     display: flex;
+    flex-wrap: wrap;
   }
   &__detail {
     display: flex;

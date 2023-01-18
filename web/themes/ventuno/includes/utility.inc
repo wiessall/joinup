@@ -9,6 +9,7 @@ declare(strict_types = 1);
 
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\asset_release\Entity\AssetReleaseInterface;
+use Drupal\file\Entity\File;
 use Drupal\joinup_bundle_class\DescriptionInterface;
 use Drupal\joinup_bundle_class\LogoInterface;
 use Drupal\joinup_community_content\Entity\CommunityContentInterface;
@@ -215,4 +216,18 @@ function _ventuno_get_author(CommunityContentInterface $node): array {
   $view_builder = \Drupal::entityTypeManager()->getViewBuilder('user');
   $author = $node->get('uid')->entity;
   return $view_builder->view($author, 'inline');
+}
+
+/**
+ * Get a file extension.
+ *
+ * @param \Drupal\file\Entity\File $file
+ *   The file, where we get an extension.
+ *
+ * @return string
+ *   Extension of the file.
+ */
+function _ventuno_get_file_extension(File $file) {
+  $file_icon = pathinfo($file->getFilename(), PATHINFO_EXTENSION);
+  return $file_icon;
 }
