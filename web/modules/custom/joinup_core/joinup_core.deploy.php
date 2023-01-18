@@ -308,6 +308,10 @@ function joinup_core_deploy_108904(array &$sandbox): string {
           'destination' => 'http://joinup.eu/ontology/topic#open-source-software',
         ],
         [
+          'source' => 'http://joinup.eu/ontology/topic#free-and-open-source-software',
+          'destination' => 'http://joinup.eu/ontology/topic#open-source-software',
+        ],
+        [
           'source' => 'http://joinup.eu/ontology/topic#ict-standardisation-in-egovernment',
           'destination' => 'http://joinup.eu/ontology/topic#standardisation',
         ],
@@ -453,6 +457,7 @@ function joinup_core_deploy_108904(array &$sandbox): string {
         'http://joinup.eu/ontology/topic#energy',
         'http://joinup.eu/ontology/topic#environment',
         'http://joinup.eu/ontology/topic#eu-finance',
+        'http://joinup.eu/ontology/topic#free-and-open-source-software',
         'http://joinup.eu/ontology/topic#information',
         'http://joinup.eu/ontology/topic#law',
         'http://joinup.eu/ontology/topic#open-government',
