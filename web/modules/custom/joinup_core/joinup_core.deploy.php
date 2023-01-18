@@ -458,11 +458,14 @@ function joinup_core_deploy_108904(array &$sandbox): string {
         'http://joinup.eu/ontology/topic#environment',
         'http://joinup.eu/ontology/topic#eu-finance',
         'http://joinup.eu/ontology/topic#free-and-open-source-software',
+        'http://joinup.eu/ontology/topic#free-and-open-source-software-in-public-administrations',
+        'http://joinup.eu/ontology/topic#ict-standardisation-in-egovernment',
         'http://joinup.eu/ontology/topic#information',
         'http://joinup.eu/ontology/topic#law',
         'http://joinup.eu/ontology/topic#open-government',
         'http://joinup.eu/ontology/topic#politics',
         'http://joinup.eu/ontology/topic#security',
+        'http://joinup.eu/ontology/topic#statistics',
         'http://joinup.eu/ontology/topic/category#business-and-competition',
         'http://joinup.eu/ontology/topic/category#defence',
         'http://joinup.eu/ontology/topic/category#egovernment',
@@ -533,6 +536,7 @@ function joinup_core_deploy_108905(): void {
   $taxonomy_tree = $manager->loadTree('topic', 0, NULL, TRUE);
   foreach ($taxonomy_tree as $term) {
     if ($term instanceof TopicInterface) {
+      \Drupal::service('search_api.entity_datasource.tracking_manager')->trackEntityChange($term);
       TopicMetaEntity::create([
         'type' => 'topic',
         'target' => $term,

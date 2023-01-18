@@ -6,6 +6,7 @@ namespace Drupal\topic;
 
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\search_api\Plugin\search_api\datasource\ContentEntityTrackingManager;
 use Drupal\sparql_entity_storage\Driver\Database\sparql\ConnectionInterface;
 
 /**
@@ -24,11 +25,14 @@ class VocabularyManager {
    *   The database connection.
    * @param \Drupal\sparql_entity_storage\Driver\Database\sparql\ConnectionInterface $sparqlEndpoint
    *   The sparql.endpoint service.
+   * @param \Drupal\search_api\Plugin\search_api\datasource\ContentEntityTrackingManager $contentTrackingManager
+   *   The search_api.entity_datasource.tracking_manager service.
    */
   public function __construct(
     protected EntityTypeManagerInterface $entityTypeManager,
     protected Connection $database,
-    protected ConnectionInterface $sparqlEndpoint
+    protected ConnectionInterface $sparqlEndpoint,
+    protected ContentEntityTrackingManager $contentTrackingManager
   ) {
   }
 
@@ -231,10 +235,10 @@ class VocabularyManager {
    *   The term URI.
    */
   public function deleteTopicTerm(string $uri): void {
-    $this->entityTypeManager
-      ->getStorage('taxonomy_term')
-      ->load($uri)
-      ->delete();
+    $term_storage = $this->entityTypeManager->getStorage('taxonomy_term');
+    $term = $term_storage->load($uri);
+    $this->contentTrackingManager->entityDelete($term);
+    $term->delete();
   }
 
 }
