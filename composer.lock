@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c4fcc5ca08387a8edfc7b653358a24d4",
+    "content-hash": "2a9385d70f9e6ea330aeabe429962918",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -2022,16 +2022,16 @@
         },
         {
             "name": "drupal/core",
-            "version": "9.4.9",
+            "version": "9.5.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/drupal/core.git",
-                "reference": "5fa639a3ddf0241db08b270f429f9da91d06fdfc"
+                "reference": "2ce2d9dbc3d248d7fd6bf9c9a50cce7e8dc799a6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/drupal/core/zipball/5fa639a3ddf0241db08b270f429f9da91d06fdfc",
-                "reference": "5fa639a3ddf0241db08b270f429f9da91d06fdfc",
+                "url": "https://api.github.com/repos/drupal/core/zipball/2ce2d9dbc3d248d7fd6bf9c9a50cce7e8dc799a6",
+                "reference": "2ce2d9dbc3d248d7fd6bf9c9a50cce7e8dc799a6",
                 "shasum": ""
             },
             "require": {
@@ -2054,7 +2054,7 @@
                 "ext-tokenizer": "*",
                 "ext-xml": "*",
                 "guzzlehttp/guzzle": "^6.5.8 || ^7.4.5",
-                "laminas/laminas-diactoros": "^2.11",
+                "laminas/laminas-diactoros": "^2.14",
                 "laminas/laminas-feed": "^2.17",
                 "masterminds/html5": "^2.7",
                 "pear/archive_tar": "^1.4.14",
@@ -2068,8 +2068,8 @@
                 "symfony/http-foundation": "^4.4.7",
                 "symfony/http-kernel": "^4.4",
                 "symfony/mime": "^5.4",
-                "symfony/polyfill-iconv": "^1.25",
-                "symfony/polyfill-php80": "^1.25",
+                "symfony/polyfill-iconv": "^1.26",
+                "symfony/polyfill-php80": "^1.26",
                 "symfony/process": "^4.4",
                 "symfony/psr-http-message-bridge": "^2.1",
                 "symfony/routing": "^4.4",
@@ -2183,22 +2183,22 @@
             ],
             "description": "Drupal is an open source content management platform powering millions of websites and applications.",
             "support": {
-                "source": "https://github.com/drupal/core/tree/9.4.9"
+                "source": "https://github.com/drupal/core/tree/9.5.2"
             },
-            "time": "2022-12-07T13:36:57+00:00"
+            "time": "2023-01-18T12:48:20+00:00"
         },
         {
             "name": "drupal/core-composer-scaffold",
-            "version": "9.4.9",
+            "version": "9.5.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/drupal/core-composer-scaffold.git",
-                "reference": "5f37a9e4008b34e3e4f6bb34ce0b3f7e5ec8984f"
+                "reference": "df1f779d3f94500f6cc791427aa729e0ba4b2464"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/drupal/core-composer-scaffold/zipball/5f37a9e4008b34e3e4f6bb34ce0b3f7e5ec8984f",
-                "reference": "5f37a9e4008b34e3e4f6bb34ce0b3f7e5ec8984f",
+                "url": "https://api.github.com/repos/drupal/core-composer-scaffold/zipball/df1f779d3f94500f6cc791427aa729e0ba4b2464",
+                "reference": "df1f779d3f94500f6cc791427aa729e0ba4b2464",
                 "shasum": ""
             },
             "require": {
@@ -2233,9 +2233,9 @@
                 "drupal"
             ],
             "support": {
-                "source": "https://github.com/drupal/core-composer-scaffold/tree/9.4.9"
+                "source": "https://github.com/drupal/core-composer-scaffold/tree/9.5.2"
             },
-            "time": "2022-06-19T16:14:23+00:00"
+            "time": "2022-06-19T16:14:18+00:00"
         },
         {
             "name": "drupal/csv_serialization",
@@ -6056,21 +6056,21 @@
         },
         {
             "name": "drupal/rdf_entity",
-            "version": "2.0.0-alpha2",
+            "version": "2.0.0-alpha4",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/rdf_entity.git",
-                "reference": "2.0.0-alpha2"
+                "reference": "2.0.0-alpha4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/rdf_entity-2.0.0-alpha2.zip",
-                "reference": "2.0.0-alpha2",
-                "shasum": "fccd1ce57086b30b9be43dc958766ac8a93bdb25"
+                "url": "https://ftp.drupal.org/files/projects/rdf_entity-2.0.0-alpha4.zip",
+                "reference": "2.0.0-alpha4",
+                "shasum": "b9b17904c194d77af4e4f3093cb4cc360455fe8e"
             },
             "require": {
                 "drupal/core": "^9.2 || ^10",
-                "drupal/sparql_entity_storage": "^2.0"
+                "drupal/sparql_entity_storage": "^2.0.0-alpha12"
             },
             "require-dev": {
                 "drupal/pathauto": "^1.10"
@@ -6078,11 +6078,16 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "2.0.0-alpha2",
-                    "datestamp": "1653897868",
+                    "version": "2.0.0-alpha4",
+                    "datestamp": "1674491348",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Alpha releases are not covered by Drupal security advisories."
+                    }
+                },
+                "patches": {
+                    "drupal/core": {
+                        "Contrib module broken after #2898903 @see https://www.drupal.org/project/drupal/issues/3332877": "https://git.drupalcode.org/project/drupal/-/merge_requests/3232.diff"
                     }
                 }
             },
@@ -7057,32 +7062,28 @@
         },
         {
             "name": "drupal/sparql_entity_storage",
-            "version": "2.0.0-alpha6",
+            "version": "2.0.0-alpha12",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/sparql_entity_storage.git",
-                "reference": "2.0.0-alpha6"
+                "reference": "2.0.0-alpha12"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/sparql_entity_storage-2.0.0-alpha6.zip",
-                "reference": "2.0.0-alpha6",
-                "shasum": "271bcb4453a07ba029dc0497faefd16efa04e9b4"
+                "url": "https://ftp.drupal.org/files/projects/sparql_entity_storage-2.0.0-alpha12.zip",
+                "reference": "2.0.0-alpha12",
+                "shasum": "6ba9f6a1a2ca23d629bad8455664b1c9aa9ef90c"
             },
             "require": {
                 "drupal/core": "^9.3 || ^10",
-                "easyrdf/easyrdf": "^1.0",
-                "ml/json-ld": "^1.0"
-            },
-            "require-dev": {
-                "drupal/coder": "^8.3",
-                "slevomat/coding-standard": "^7.0"
+                "ml/json-ld": "^1.0",
+                "sweetrdf/easyrdf": "^1.8"
             },
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "2.0.0-alpha6",
-                    "datestamp": "1664444547",
+                    "version": "2.0.0-alpha12",
+                    "datestamp": "1674148827",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Project has not opted into security advisory coverage!"
@@ -11727,7 +11728,7 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/spdx/license-list-data",
-                "reference": "master"
+                "reference": "main"
             },
             "type": "library"
         },
@@ -11787,16 +11788,16 @@
         },
         {
             "name": "sweetrdf/easyrdf",
-            "version": "1.7.1",
+            "version": "1.8.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sweetrdf/easyrdf.git",
-                "reference": "19ba21288e0aa344227267cab7f8f9c565eee426"
+                "reference": "2c57de7380ed16f5017e95810bcd08c0dffae640"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sweetrdf/easyrdf/zipball/19ba21288e0aa344227267cab7f8f9c565eee426",
-                "reference": "19ba21288e0aa344227267cab7f8f9c565eee426",
+                "url": "https://api.github.com/repos/sweetrdf/easyrdf/zipball/2c57de7380ed16f5017e95810bcd08c0dffae640",
+                "reference": "2c57de7380ed16f5017e95810bcd08c0dffae640",
                 "shasum": ""
             },
             "require": {
@@ -11812,12 +11813,13 @@
             },
             "require-dev": {
                 "friendsofphp/php-cs-fixer": "^3.0",
+                "laminas/laminas-http": "^2",
                 "ml/json-ld": "^1.0",
                 "phpstan/phpstan": "^1.0",
                 "phpstan/phpstan-phpunit": "^1.0",
                 "phpunit/phpunit": "^7.5|^8.5|^9.5",
                 "semsol/arc2": "^2.4",
-                "zendframework/zend-http": "^2.3"
+                "zendframework/zend-http": "^2"
             },
             "type": "library",
             "autoload": {
@@ -11860,9 +11862,9 @@
             ],
             "support": {
                 "issues": "https://github.com/sweetrdf/easyrdf/issues",
-                "source": "https://github.com/sweetrdf/easyrdf/tree/1.7.1"
+                "source": "https://github.com/sweetrdf/easyrdf/tree/1.8.0"
             },
-            "time": "2022-11-08T08:13:50+00:00"
+            "time": "2023-01-16T11:43:21+00:00"
         },
         {
             "name": "swiftmailer/swiftmailer",
@@ -16724,34 +16726,57 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/jhedstrom/DrupalDriver.git",
-                "reference": "d60daee40c26ff7473c7fea4f9734722da033489"
+                "reference": "781b607139982e03ec980bc9c6744c496f4be17d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/jhedstrom/DrupalDriver/zipball/d60daee40c26ff7473c7fea4f9734722da033489",
-                "reference": "d60daee40c26ff7473c7fea4f9734722da033489",
+                "url": "https://api.github.com/repos/jhedstrom/DrupalDriver/zipball/781b607139982e03ec980bc9c6744c496f4be17d",
+                "reference": "781b607139982e03ec980bc9c6744c496f4be17d",
                 "shasum": ""
             },
             "require": {
-                "drupal/core-utility": "^8.4 || ^9 || ^10.0.0-alpha1",
+                "drupal/core-utility": "^8.4 || ^9 || ^10@beta",
                 "php": ">=7.4",
                 "symfony/dependency-injection": "~2.6|~3.0|~4.4|^6",
                 "symfony/process": "~2.5|~3.0|~4.4|^6"
             },
+            "conflict": {
+                "drupal/core": ">=8.0 <9.3"
+            },
             "require-dev": {
+                "composer/installers": "^2.1",
                 "dms/phpunit-arraysubset-asserts": "^0.4.0",
                 "drupal/coder": "~8.3.0",
+                "drupal/core-composer-scaffold": "^8.4 || ^9 || ^10@beta",
+                "drupal/core-recommended": "^8.4 || ^9 || ^10@beta",
+                "drupal/mailsystem": "^4.4",
                 "drush-ops/behat-drush-endpoint": "*",
-                "mockery/mockery": "^0.9.4",
+                "mglaman/drupal-check": "^1",
+                "mockery/mockery": "^1.5",
+                "palantirnet/drupal-rector": "^0.13",
                 "php-parallel-lint/php-parallel-lint": "^1.0",
                 "phpspec/phpspec": "~2.0 || ~4.0 || ~6.1 || dev-main",
-                "phpunit/phpunit": "~6.0 || ~7.0 || ^9"
+                "phpunit/phpunit": "~6.0 || ~7.0 || ^9",
+                "symfony/phpunit-bridge": "^6.1"
             },
             "default-branch": true,
             "type": "library",
             "extra": {
                 "branch-alias": {
                     "dev-master": "2.3.x-dev"
+                },
+                "installer-paths": {
+                    "drupal/core": [
+                        "type:drupal-core"
+                    ],
+                    "drupal/modules/{$name}": [
+                        "type:drupal-module"
+                    ]
+                },
+                "drupal-scaffold": {
+                    "locations": {
+                        "web-root": "drupal/"
+                    }
                 }
             },
             "autoload": {
@@ -16787,7 +16812,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2022-11-07T18:23:51+00:00"
+            "time": "2023-01-06T17:21:32+00:00"
         },
         {
             "name": "drupal/drupal-extension",
