@@ -54,6 +54,14 @@ module.exports = {
       },
     },
     {
+      entry: path.resolve(outputFolder, "src/js/outdated-content-notice.js"),
+      dest: path.resolve(outputFolder, "assets/js/outdated-content-notice.js"),
+      options: {
+        minify: true,
+        sourceMap: true,
+      },
+    },
+    {
       entry: path.resolve(outputFolder, "src/js/sticky-menu.js"),
       dest: path.resolve(outputFolder, "assets/js/sticky-menu.js"),
       options: {

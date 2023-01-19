@@ -1,16 +1,17 @@
 /**
  * @file
- * Display an 'outdated content' notice if case.
+ * Exposes an 'outdated content' notice if case.
  */
 
 ((Drupal, drupalSettings) => {
   /**
-   * Shows a notice if the page displays an entity whose content is outdated.
+   * Makes a notice available in the window object if the page displays an
+   * entity whose content is outdated so that the theme layer can render it.
    *
    * @type {Drupal~behavior}
    *
    * @prop {Drupal~behaviorAttach} attach
-   *   Shows a notice if the page displays an entity whose content is outdated.
+   *   Attaches outdated content behaviors.
    */
   Drupal.behaviors.outdatedContent = {
     attach() {
@@ -23,8 +24,6 @@
             (currentTime - drupalSettings.outdatedContent.publicationTime) /
               31536000
           );
-          const notice = document.createElement("span");
-          notice.classList.add("page-title__detail");
           const text = Drupal.formatPlural(
             yearsOld,
             "This @bundle is more than 1 year old",
@@ -33,14 +32,7 @@
               "@bundle": drupalSettings.outdatedContent.bundle,
             }
           );
-          notice.innerText = text;
-          const titleDetails = document.querySelector(".page-title__details");
-          if (titleDetails === null || titleDetails === undefined) {
-            return;
-          }
-          if (titleDetails) {
-            titleDetails.appendChild(notice);
-          }
+          drupalSettings.outdatedContent.notice = text;
         }
       }
     },
