@@ -19,7 +19,7 @@ default_value:
   -
     value:
       enabled: 1
-      query_presets:
+      query_presets: null
       limit: 10
       show_shared: 0
       global_search: 0
