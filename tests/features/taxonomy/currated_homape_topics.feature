@@ -81,11 +81,20 @@ Feature:
     # The field does not have a title of a label element.
     And I fill in "edit-items-add-more-new-item-target-id" with "E-justice"
     And I press "Add item"
-    And I fill in "edit-items-add-more-new-item-target-id" with "Finance in EU"
+    And I fill in "edit-items-add-more-new-item-target-id" with "E-justice"
     And I press "Add item"
+
+    When I press "Save"
+    Then I should see the error message "The E-justice topic is already in the list."
+
+    When I fill in "edit-items-add-more-new-item-target-id" with "Finance in EU"
+    And I press "Add item"
+    # With Javascript disabled this field is filled with the latest value, so we
+    # need to explicitly clear the value.
+    And I fill in "edit-items-add-more-new-item-target-id" with ""
     And I press "Save"
 
-    And the "form table" table should contain a column with the following data:
+    Then the "form table" table should contain a column with the following data:
       # The 'Edit' keyword is because there is an edit link in the table cell.
       | E-justice Edit     |
       | Finance in EU Edit |
@@ -112,6 +121,40 @@ Feature:
     When I go to the homepage
     Then I should not see the text "E-justice" in the "Homepage topics" region
     But I should see the text "Finance in EU" in the "Homepage topics" region
+
+  Scenario: Moderators can alter the title of the homepage topics block.
+    Given I am not logged in
+    And I am on the homepage
+    Then I should see the heading "Main topics"
+
+    When I am logged in as a moderator
+    And I click "Dashboard"
+    And I click "Curated content listings"
+    And I click "Homepage topics"
+    Then I should see the heading "Update curated content listing Homepage topics"
+    And I should see the button "Add item"
+
+    When I fill in "Block label" with "Hello world"
+    And I press "Save"
+
+    When I go to the homepage
+    Then I should see the heading "Hello world"
+    And I should not see the heading "Main topics"
+
+    # Unset the value and check again.
+    When I am logged in as a moderator
+    And I click "Dashboard"
+    And I click "Curated content listings"
+    And I click "Homepage topics"
+    Then I should see the heading "Update curated content listing Homepage topics"
+    And I should see the button "Add item"
+
+    When I fill in "Block label" with ""
+    And I press "Save"
+
+    When I go to the homepage
+    Then I should see the heading "Main topics"
+    And I should not see the heading "Hello world"
 
   Scenario: Configurable listings are available for the topic meta entities.
     Given the following topics are enabled in the homepage:

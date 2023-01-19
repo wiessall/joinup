@@ -204,12 +204,10 @@ Feature: About this solution
     And I fill in "Your e-mail address" with "jonnyk"
     And I fill in "Subject" with "New reclamation about Owner"
     And I fill in "Message" with "This is reclamation test."
-    And I wait for the honeypot time limit to pass
     And I press "Send e-mail" in the "Modal buttons" region
     Then I should see the error message "You must enter a valid e-mail address."
 
     When I fill in "Your e-mail address" with "example@test.test"
-    And I wait for the honeypot time limit to pass
     When I press "Send e-mail" in the "Modal buttons" region
     Then the modal should be closed
     And I should see the success message "Your message has been sent."
@@ -231,7 +229,6 @@ Feature: About this solution
 
     When I fill in "Subject" with "New reclamation about solution"
     And I fill in "Message" with "This is solution reclamation test."
-    And I wait for the honeypot time limit to pass
 
     When I press "Send e-mail" in the "Modal buttons" region
     Then the modal should be closed
