@@ -223,6 +223,10 @@ navbar-search:
   js:
     assets/js/searchbox-focus.min.js: { minified: true, attributes: { defer: true } }
 
+outdated-content-notice:
+  js:
+    assets/js/outdated-content-notice.min.js: { minified: true, attributes: { defer: true } }
+
 page-title:
   css:
     theme:
