@@ -1,0 +1,92 @@
+uuid: a292e5f2-5e60-40f1-a47a-0c51a48c319a
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_form_mode.paragraph.simple_form
+    - field.field.paragraph.row.paragraph_column_layout
+    - field.field.paragraph.row.paragraph_heading
+    - field.field.paragraph.row.paragraph_row_background
+    - field.field.paragraph.row.paragraph_row_subheading
+    - field.field.paragraph.row.row_theme
+    - paragraphs.paragraphs_type.row
+  module:
+    - field_group
+    - inline_entity_form
+third_party_settings:
+  field_group:
+    group_paragraph_row_accordion:
+      children:
+        - group_paragraph_row_settings
+        - group_paragraph_row_items
+      label: 'Row accordion'
+      region: hidden
+      parent_name: ''
+      weight: 4
+      format_type: accordion
+      format_settings:
+        classes: ''
+        show_empty_fields: false
+        id: ''
+        effect: none
+    group_paragraph_row_settings:
+      children:
+        - row_theme
+      label: Settings
+      region: hidden
+      parent_name: group_paragraph_row_accordion
+      weight: 9
+      format_type: accordion_item
+      format_settings:
+        classes: ''
+        show_empty_fields: false
+        id: ''
+        formatter: closed
+        description: ''
+        required_fields: true
+    group_paragraph_row_items:
+      children:
+        - paragraph_column_layout
+        - paragraph_heading
+        - paragraph_row_subheading
+      label: Content
+      region: hidden
+      parent_name: group_paragraph_row_accordion
+      weight: 10
+      format_type: accordion_item
+      format_settings:
+        classes: ''
+        show_empty_fields: false
+        id: ''
+        formatter: open
+        required_fields: true
+id: paragraph.row.simple_form
+targetEntityType: paragraph
+bundle: row
+mode: simple_form
+content:
+  paragraph_column_layout:
+    type: inline_entity_form_complex
+    weight: 0
+    region: content
+    settings:
+      form_mode: default
+      override_labels: false
+      label_singular: ''
+      label_plural: ''
+      allow_new: true
+      allow_existing: false
+      match_operator: CONTAINS
+      allow_duplicate: false
+      collapsible: false
+      collapsed: false
+      revision: false
+    third_party_settings: {  }
+hidden:
+  created: true
+  paragraph_heading: true
+  paragraph_row_background: true
+  paragraph_row_heading: true
+  paragraph_row_subheading: true
+  row_theme: true
+  status: true
