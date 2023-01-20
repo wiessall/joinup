@@ -21,7 +21,7 @@ content:
     weight: 3
     region: content
     settings:
-      query_builder: false
+      query_builder: true
     third_party_settings: {  }
   list_style:
     type: options_select
