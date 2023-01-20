@@ -45,25 +45,17 @@ class MetaEntityContext extends RawDrupalContext {
    * @When I go to the :bundle meta entity of the :related_entity :related_bundle :related_entity_type
    */
   public function visitMetaEntityCanonicalPath(string $bundle, string $related_entity, string $related_entity_type): void {
-    $meta_entity = $this->getMetaEntityForEntity($related_entity_type, $related_entity, $bundle);
-    $this->visitPath($meta_entity->toUrl()->toString());
-  }
+    $entity_type_mapping = [
+      'content' => 'node',
+      'RDF entity' => 'rdf_entity',
+      'taxonomy term' => 'taxonomy_term',
+    ];
+    if (!in_array($related_entity_type, array_keys($entity_type_mapping))) {
+      throw new \InvalidArgumentException("The related entity type '$related_entity_type' is not supported. One of 'content' or 'RDF entity' is expected.");
+    }
 
-  /**
-   * Navigates to the edit page of a meta entity.
-   *
-   * @param string $bundle
-   *   The bundle of the meta entity.
-   * @param string $related_entity
-   *   The title of the related entity.
-   * @param string $related_entity_type
-   *   The type of the related entity.
-   *
-   * @When I go to the :bundle meta entity of the :related_entity :related_bundle :related_entity_type
-   */
-  public function visitMetaEntityEditPage(string $bundle, string $related_entity, string $related_entity_type): void {
-    $meta_entity = $this->getMetaEntityForEntity($related_entity_type, $related_entity, $bundle);
-    $this->visitPath($meta_entity->toUrl('edit-form')->toString());
+    $meta_entity = $this->getMetaEntityForEntity($entity_type_mapping[$related_entity_type], $related_entity, $bundle);
+    $this->visitPath($meta_entity->toUrl()->toString());
   }
 
   /**
