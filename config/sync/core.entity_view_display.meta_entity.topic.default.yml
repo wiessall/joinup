@@ -10,50 +10,18 @@ dependencies:
     - meta_entity.type.topic
   module:
     - entity_reference_revisions
-    - image
 id: meta_entity.topic.default
 targetEntityType: meta_entity
 bundle: topic
 mode: default
 content:
-  changed:
-    type: timestamp
-    label: inline
-    settings:
-      date_format: medium
-      custom_date_format: ''
-      timezone: ''
-    third_party_settings: {  }
-    weight: 22
-    region: content
-  created:
-    type: timestamp
-    label: inline
-    settings:
-      date_format: medium
-      custom_date_format: ''
-      timezone: ''
-    third_party_settings: {  }
-    weight: 20
-    region: content
   description:
     type: string
     label: above
     settings:
       link_to_entity: false
     third_party_settings: {  }
-    weight: 24
-    region: content
-  image:
-    type: image
-    label: above
-    settings:
-      image_link: ''
-      image_style: ''
-      image_loading:
-        attribute: lazy
-    third_party_settings: {  }
-    weight: 25
+    weight: 1
     region: content
   label:
     type: string
@@ -61,17 +29,7 @@ content:
     settings:
       link_to_entity: false
     third_party_settings: {  }
-    weight: -5
-    region: content
-  published:
-    type: boolean
-    label: above
-    settings:
-      format: default
-      format_custom_false: ''
-      format_custom_true: ''
-    third_party_settings: {  }
-    weight: 23
+    weight: 0
     region: content
   topics_paragraph:
     type: entity_reference_revisions_entity_view
@@ -80,8 +38,12 @@ content:
       view_mode: default
       link: ''
     third_party_settings: {  }
-    weight: 26
+    weight: 2
     region: content
 hidden:
+  changed: true
+  created: true
+  image: true
+  published: true
   search_api_excerpt: true
   target: true
