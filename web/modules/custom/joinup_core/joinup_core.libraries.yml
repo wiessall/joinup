@@ -17,4 +17,5 @@ outdated_content:
   js:
     js/outdated_content.js: {  }
   dependencies:
+    - core/drupal
     - core/drupalSettings
