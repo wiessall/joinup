@@ -160,35 +160,24 @@ Feature:
     Given the following topics are enabled in the homepage:
       | E-justice  |
     And I am logged in as a moderator
-    And I go to the "topic" meta entity of the "E-justice"
-    And I click "E-justice"
+    And I go to the "topic" meta entity of the "E-justice" topic "taxonomy term"
     And I click "Edit"
     Then I should see the heading "Edit E-justice"
     And I should not see the button "Add configurable listing"
-    When I press "Add 1 column layout"
+    When I press "Add Row"
+    And I press "Add 1 column layout"
+    Then I should see the button "Add Configurable listing"
 
     Given I reload the page
+    And I press "Add Row"
     And I press "Add 2 column layout"
-    Then I should see the button "Add configurable listing"
-
-  Scenario: Configurable listings are not available for custom pages.
-    Given the following collection:
-      | title | Currated  |
-      | state | validated |
-    And I am logged in as a moderator
-    And I go to the "Currated" collection
-    And I click "Add custom page"
-    Then I should not see the button "Add configurable listing"
-    When I press "Add 1 column layout"
-    And I press "Add 2 column layout"
-    Then I should not see the button "Add configurable listing"
+    Then I should see the button "Add Configurable listing"
 
   Scenario: Lists of configurable content can be added in the page of the topic meta entity.
     Given news content:
       | title  | state     |
       | News 1 | validated |
     Given the following topics are enabled in the homepage:
-      | topic name |
       | E-justice  |
     And I am logged in as a moderator
     And I go to the homepage
