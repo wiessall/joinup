@@ -183,3 +183,18 @@ function topic_paragraph_create_access(AccountInterface $account, array $context
   $meta_entity = \Drupal::routeMatch()->getParameter('meta_entity')->bundle();
   return AccessResult::allowedIf($meta_entity !== 'topic');
 }
+
+/**
+ * Implements hook_entity_form_mode_alter().
+ */
+function topic_entity_form_mode_alter(&$form_mode, \Drupal\Core\Entity\EntityInterface $entity) {
+  $route = \Drupal::routeMatch()->getRouteName();
+  if ($route !== 'entity.meta_entity.edit_form') {
+    return;
+  }
+
+  $meta_entity = \Drupal::routeMatch()->getParameter('meta_entity')->bundle();
+  if ($meta_entity === 'topic' && $entity->getEntityTypeId() === 'paragraph' && $entity->bundle() === 'row') {
+    $form_mode = 'simple_form';
+  }
+}
