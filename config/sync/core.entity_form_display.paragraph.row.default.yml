@@ -4,8 +4,8 @@ status: true
 dependencies:
   config:
     - field.field.paragraph.row.paragraph_column_layout
-    - field.field.paragraph.row.paragraph_row_background
     - field.field.paragraph.row.paragraph_heading
+    - field.field.paragraph.row.paragraph_row_background
     - field.field.paragraph.row.paragraph_row_subheading
     - field.field.paragraph.row.row_theme
     - paragraphs.paragraphs_type.row
