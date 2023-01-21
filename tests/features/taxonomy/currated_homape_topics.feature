@@ -175,9 +175,9 @@ Feature:
 
   Scenario: Lists of configurable content can be added in the page of the topic meta entity.
     Given news content:
-      | title  | state     |
-      | News 1 | validated |
-    Given the following topics are enabled in the homepage:
+      | title  | headline | state     |
+      | News 1 | News 1   | validated |
+    And the following topics are enabled in the homepage:
       | E-justice  |
     And I am logged in as a moderator
     And I go to the homepage
@@ -185,7 +185,13 @@ Feature:
     And I click "Edit"
     Then I should see the heading "Edit E-justice"
 
-    Given I press "Add 1 column layout"
+    When I press "Add Row"
+    And I press "Add 2 column layout"
+    And I press "Add Configurable listing"
+
+    When I reload the page
+    And I press "Add Row"
+    And I press "Add 1 column layout"
     And I press "Add Configurable listing"
     Then the following fields should be present "Heading, Action link, List style, Query presets"
 
@@ -196,16 +202,15 @@ Feature:
     And I fill in "Query presets" with "entity_bundle|news"
 
     And I press "Save"
-    Then I should see the success message "The meta entity has been updated."
-    And I should see the heading "E-justice"
-    And I should see the text "E-Justice heading"
-    And I should see the link "E-justice link text"
-    # @todo: A separate step with the list items should be asserted here.
-    # @see ISAICP-
-    And I should see the "News 1" tile
+    # @todo We should automatically redirect to the canonical path.
+    # @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7526
+    And I go to the "topic" meta entity of the "E-justice" topic "taxonomy term"
+    Then I should see the heading "News 1"
 
     When I click "Edit"
     And I select "Grid" from "List style"
     And I press "Save"
-    Then I should see the success message "The meta entity has been updated."
-    And I should see the "News 1" tile
+    # @todo We should automatically redirect to the canonical path.
+    # @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7526
+    And I go to the "topic" meta entity of the "E-justice" topic "taxonomy term"
+    And I should see the heading "News 1"
