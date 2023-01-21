@@ -1,5 +1,5 @@
-# Extend the default search_api_field schema to add the "show_shared" key.
-field.field.paragraph.content_listing.content_listing:
+# Extension for the custom page search api widget.
+custom_page_search_api_widget:
   type: field_config_base
   label: 'Field'
   mapping:
@@ -50,6 +50,13 @@ field.field.paragraph.content_listing.content_listing:
                     label: 'Filters'
                     sequence:
                       type: search_api_field.plugin.filter.[plugin]
+
+# Extend the default search_api_field schema to add the "show_shared" key.
+field.field.paragraph.content_listing.content_listing:
+  type: custom_page_search_api_widget
+
+field.field.paragraph.configurable_listing.content_listing:
+  type: custom_page_search_api_widget
 
 field.widget.settings.search_api_field_custom_page:
   type: field.widget.settings.search_api_field_default

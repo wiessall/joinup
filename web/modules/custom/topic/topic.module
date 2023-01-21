@@ -187,7 +187,7 @@ function topic_paragraph_create_access(AccountInterface $account, array $context
 /**
  * Implements hook_entity_form_mode_alter().
  */
-function topic_entity_form_mode_alter(&$form_mode, \Drupal\Core\Entity\EntityInterface $entity) {
+function topic_entity_form_mode_alter(string &$form_mode, EntityInterface $entity): void {
   $route = \Drupal::routeMatch()->getRouteName();
   if ($route !== 'entity.meta_entity.edit_form') {
     return;
