@@ -19,10 +19,10 @@ default_value:
   -
     value:
       enabled: 1
-      query_presets: null
+      query_presets: ''
       limit: 10
-      show_shared: 0
-      global_search: 0
+      global_search: false
+      show_shared: false
 default_value_callback: ''
 settings:
   index: published

@@ -21,7 +21,7 @@ class MetaEntityContext extends RawDrupalContext {
    *
    * @Given /^the following topics are enabled in the homepage:$/
    */
-  public function theFollowingTopicsAreEnabledInTheHomepage(TableNode $table) {
+  public function theFollowingTopicsAreEnabledInTheHomepage(TableNode $table): void {
     $topics = $table->getColumn(0);
     $repository = \Drupal::getContainer()->get('meta_entity.repository');
     foreach ($topics as $topic) {
@@ -31,7 +31,7 @@ class MetaEntityContext extends RawDrupalContext {
       $meta_entity->save();
     }
 
-    // Load the homepage_topics entityqueue.
+    // Load the homepage_topics entity subqueue.
     $entity_queue = \Drupal::entityTypeManager()->getStorage('entity_subqueue')->load('homepage_topics');
     $entity_queue->addItem($meta_entity)->save();
   }
@@ -73,6 +73,7 @@ class MetaEntityContext extends RawDrupalContext {
    *   The bundle of the meta entity.
    *
    * @return \Drupal\meta_entity\Entity\MetaEntityInterface
+   *   The meta entity.
    */
   protected function getMetaEntityForEntity(string $related_entity_type, string $related_entity, string $bundle): MetaEntityInterface {
     $allowed_types = ['taxonomy_term', 'rdf_entity', 'node'];
