@@ -30,6 +30,10 @@ class MetaEntityContext extends RawDrupalContext {
       $meta_entity->set('published', TRUE);
       $meta_entity->save();
     }
+
+    // Load the homepage_topics entityqueue.
+    $entity_queue = \Drupal::entityTypeManager()->getStorage('entity_subqueue')->load('homepage_topics');
+    $entity_queue->addItem($meta_entity)->save();
   }
 
   /**
