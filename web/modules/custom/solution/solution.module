@@ -710,14 +710,12 @@ function solution_search_api_query_search_api_field_field_is_content_alter(Query
 function solution_preprocess_rdf_entity(&$variables): void {
   $rdf_entity = $variables['rdf_entity'];
   if ($rdf_entity instanceof SolutionInterface && $variables['view_mode'] === 'group_header') {
-    $variables['meta_banner_disabled'] = FALSE;
     if ($rdf_entity->related_solution->entity instanceof MetaEntity) {
       $variables['meta_banner_disabled'] = filter_var(
         $rdf_entity->related_solution->entity->get('metadata_banner_disabled')->value,
         FILTER_VALIDATE_BOOLEAN
       );
     }
-
   }
   // Apply the visual cue only on the tile view mode.
   if ($variables['view_mode'] !== 'view_mode_tile') {

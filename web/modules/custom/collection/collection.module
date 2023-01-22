@@ -313,9 +313,8 @@ function collection_entity_extra_field_info() {
  */
 function collection_preprocess_rdf_entity(array &$variables): void {
   $collection = $variables['rdf_entity'];
-  if ($collection instanceof Collection && $variables['view_mode'] === 'group_header') {
-    $variables['meta_banner_disabled'] = FALSE;
-    if ($collection->settings->entity instanceof MetaEntity) {
+  if ($collection instanceof Collection) {
+    if ($collection->settings->entity instanceof MetaEntity && $variables['view_mode'] === 'group_header') {
       $variables['meta_banner_disabled'] = filter_var(
         $collection->settings->entity->get('metadata_banner_disabled')->value,
         FILTER_VALIDATE_BOOLEAN
@@ -393,6 +392,7 @@ function collection_rdf_entity_view(array &$build, EntityInterface $entity, Enti
       ],
     ])->toRenderable();
   }
+  $build['#cache']['tags'] = Cache::mergeTags($build['#cache']['tags'], ['meta_entity_list']);
 }
 
 /**
