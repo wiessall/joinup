@@ -392,7 +392,10 @@ function collection_rdf_entity_view(array &$build, EntityInterface $entity, Enti
       ],
     ])->toRenderable();
   }
-  $build['#cache']['tags'] = Cache::mergeTags($build['#cache']['tags'], ['meta_entity_list']);
+  if ($view_mode === 'group_header') {
+    $build['#cache']['tags'] = Cache::mergeTags($build['#cache']['tags'], ['meta_entity_list']);
+  }
+
 }
 
 /**
