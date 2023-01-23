@@ -15,7 +15,9 @@ label: 'List style'
 description: ''
 required: true
 translatable: false
-default_value: list
+default_value:
+  -
+    value: list
 default_value_callback: ''
 settings: {  }
 field_type: list_string
