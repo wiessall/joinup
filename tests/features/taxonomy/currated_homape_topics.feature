@@ -165,6 +165,9 @@ Feature:
     Then I should see the heading "Edit E-justice"
     And I should not see the button "Add configurable listing"
     When I press "Add Row"
+    Then I should not see the button "Add 2 column with featured media on the left"
+    Then I should not see the button "Add 2 column with featured media on the right"
+    Then I should not see the button "Add 3 columns"
     And I press "Add 1 column layout"
     Then I should see the button "Add Configurable listing"
 
