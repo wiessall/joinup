@@ -15,7 +15,7 @@ services:
   joinup_user.route_subscriber:
     class: Drupal\joinup_user\Routing\RouteSubscriber
     tags:
-     - { name: event_subscriber }
+      - { name: event_subscriber }
   joinup_user.user_cancelled.access_checker:
     class: Drupal\joinup_user\Access\UserStatusAccessCheck
     tags:

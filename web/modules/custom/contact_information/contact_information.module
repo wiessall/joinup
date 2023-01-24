@@ -373,8 +373,16 @@ function contact_information_form_email_contact_mail_form_alter(array &$form, Fo
   else {
     // Move 'submit' under 'actions'.
     $form['actions']['submit'] = $form['submit'];
-    // We only protect the authenticated user version of the form.
-    \Drupal::service('honeypot')->addFormProtection($form, $form_state);
+    /** @var \Drupal\Core\Extension\ModuleHandlerInterface $module_handler */
+    $module_handler = \Drupal::service('module_handler');
+    if ($module_handler->moduleExists('honeypot')) {
+      // We only protect the authenticated user version of the form.
+      \Drupal::service('honeypot')->addFormProtection(
+        $form,
+        $form_state,
+        ['honeypot', 'user_homepage'],
+      );
+    }
   }
   unset($form['submit']);
 
