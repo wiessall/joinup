@@ -23,4 +23,4 @@ Feature: Covers Release 1.89.
     Then I should see the heading "The data.europa academy is live"
 
     Given I go to "/collection/joinup"
-    Then I should see the "Joinup User Group Meeting" tile
+    Then I should see 12 tiles
