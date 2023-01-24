@@ -125,9 +125,24 @@ function joinup_core_deploy_108903(array &$sandbox = []): string {
 }
 
 /**
+ * Fix About the Commission's link.
+ */
+function joinup_core_deploy_108904(): void {
+  $menu_links = \Drupal::entityTypeManager()->getStorage('menu_link_content')
+    ->loadByProperties(['menu_name' => 'footer-european-commission']);
+  foreach ($menu_links as $menu_link) {
+
+    if ($menu_link->id() == '16014') {
+      $menu_link->set('link', [['uri' => 'https://commission.europa.eu/about-european-commissions-web-presence_en']]);
+      $menu_link->save();
+    }
+  }
+}
+
+/**
  * Update the topic vocabulary terms.
  */
-function joinup_core_deploy_108904(array &$sandbox): string {
+function joinup_core_deploy_108905(array &$sandbox): string {
   if (empty($sandbox['tasks'])) {
     $sandbox['tasks'] = [
       'createTopicTerm' => [
@@ -504,7 +519,7 @@ function joinup_core_deploy_108904(array &$sandbox): string {
 /**
  * Synchronize Topic meta entity with Topic terms.
  */
-function joinup_core_deploy_108905(): void {
+function joinup_core_deploy_108906(): void {
   // Load the whole taxonomy tree using values.
   $manager = \Drupal::entityTypeManager()
     ->getStorage('taxonomy_term');
@@ -519,40 +534,4 @@ function joinup_core_deploy_108905(): void {
       ])->save();
     }
   }
-}
-
-/**
- * Delete content created by spammers.
- */
-function joinup_core_deploy_108906(array &$sandbox = []): string {
-  if (!isset($sandbox['items'])) {
-    $sandbox['items'] = [];
-    $db = \Drupal::database();
-
-    // Blocked users whose accounts are created after 2nd of December 2022.
-    $uids = $db->query("SELECT u.uid FROM {users_field_data} u WHERE u.status = 0 AND u.uid > 1 AND u.created > 1669327200")
-      ->fetchCol();
-
-    // Add all files owned by spam users to sandbox.
-    $sql_args = [':uids[]' => $uids];
-    $fids = $db->query("SELECT fid FROM {file_managed} WHERE uid IN(:uids[])", $sql_args)->fetchCol();
-    foreach ($fids as $fid) {
-      $sandbox['items'][] = ['file', $fid];
-    }
-    $sandbox['processed'] = 0;
-    $sandbox['total'] = count($sandbox['items']);
-  }
-
-  $items = array_splice($sandbox['items'], 0, 50);
-  foreach ($items as $item) {
-    [$entity_type_id, $id] = $item;
-    $storage = \Drupal::entityTypeManager()->getStorage($entity_type_id);
-    $entity = $storage->load($id);
-    $entity->skip_notification = TRUE;
-    $entity->delete();
-  }
-  $sandbox['processed'] += count($items);
-
-  $sandbox['#finished'] = (int) empty($sandbox['items']);
-  return "Deleted {$sandbox['processed']} content entries out of {$sandbox['total']}";
 }
