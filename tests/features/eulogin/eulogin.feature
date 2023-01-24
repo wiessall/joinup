@@ -387,6 +387,7 @@ Feature: Log in through EU Login
     When I fill in "Password" with "123"
     And I press "Log in"
     Then I should see the success message "Thank you for applying for an account. Your account is currently pending approval by the site administrator. In the meantime, a welcome message with further instructions has been sent to your email address."
+    But I should not see the error message "Your account is blocked or has not been activated. Please contact a site administrator."
     # Check that the user is not logged in.
     And I should see the link "Sign in"
     And the email sent to "ricky@example.com" with subject "Your Joinup account is pending approval." contains the text:
