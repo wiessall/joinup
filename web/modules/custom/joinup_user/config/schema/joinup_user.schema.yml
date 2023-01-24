@@ -1,14 +1,14 @@
 # Schema for the configuration files of the Joinup user module.
 joinup_user.mail:
- type: config_object
- label: 'Email settings'
- mapping:
-  email_admin_update:
-    type: mail
-    label: 'Account updated by administrator confirmation'
-  password_reset_confirm:
-    type: mail
-    label: 'Password reset confirmation'
+  type: config_object
+  label: 'Email settings'
+  mapping:
+    email_admin_update:
+      type: mail
+      label: 'Account updated by administrator confirmation'
+    password_reset_confirm:
+      type: mail
+      label: 'Password reset confirmation'
 
 views.filter.user_tristate_status:
   type: views.filter.in_operator
