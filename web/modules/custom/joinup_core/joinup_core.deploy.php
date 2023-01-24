@@ -198,3 +198,18 @@ function joinup_core_deploy_108904(array &$sandbox = []): string {
   $sandbox['#finished'] = (int) empty($sandbox['items']);
   return "Deleted {$sandbox['processed']} content entries out of {$sandbox['total']}";
 }
+
+/**
+ * Fix About the Commission's link.
+ */
+function joinup_core_deploy_108904(): void {
+  $menu_links = \Drupal::entityTypeManager()->getStorage('menu_link_content')
+    ->loadByProperties(['menu_name' => 'footer-european-commission']);
+  foreach ($menu_links as $menu_link) {
+
+    if ($menu_link->id() == '16014') {
+      $menu_link->set('link', [['uri' => 'https://commission.europa.eu/about-european-commissions-web-presence_en']]);
+      $menu_link->save();
+    }
+  }
+}
