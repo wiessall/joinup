@@ -47,6 +47,11 @@ class JoinupEuLoginCasEventsSubscriber implements EventSubscriberInterface {
   protected Request $currentRequest;
 
   /**
+   * The user register settings.
+   */
+  protected ImmutableConfig $registerSettings;
+
+  /**
    * Constructs a new event subscriber instance.
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $configFactory
@@ -73,6 +78,7 @@ class JoinupEuLoginCasEventsSubscriber implements EventSubscriberInterface {
     $this->settings = $configFactory->get('joinup_eulogin.settings');
     $this->casSettings = $configFactory->get('cas.settings');
     $this->currentRequest = $requestStack->getCurrentRequest();
+    $this->registerSettings = $configFactory->get('user.settings');
   }
 
   /**
@@ -87,10 +93,13 @@ class JoinupEuLoginCasEventsSubscriber implements EventSubscriberInterface {
         ['markAsNewAccountRegistration'],
         ['handleDrupalUsernameCollision'],
         ['preventRegisterEmailCollision'],
+        ['accountsApprovalRequired', -10],
       ],
       // This runs just before CasAttributesSubscriber::onPreLogin().
       // @see \Drupal\cas_attributes\Subscriber\CasAttributesSubscriber::onPreLogin()
-      CasHelper::EVENT_PRE_LOGIN => ['handlePotentialMailCollision', 21],
+      CasHelper::EVENT_PRE_LOGIN => [
+        ['handlePotentialMailCollision', 21],
+      ],
       CasHelper::EVENT_POST_LOGIN => [
         ['storeAttributes'],
         ['setRedirectAndStatusOnNewAccount', -20],
@@ -285,6 +294,21 @@ class JoinupEuLoginCasEventsSubscriber implements EventSubscriberInterface {
       $name = substr($name, 0, UserInterface::USERNAME_MAX_LENGTH - 7);
     }
     return $name . '_' . (new Random())->name(6, TRUE);
+  }
+
+  /**
+   * Set status blocked of a CAS user when their account is created.
+   *
+   * @param \Drupal\cas\Event\CasPreRegisterEvent $event
+   *   The CAS pre-register event.
+   */
+  public function accountsApprovalRequired(CasPreRegisterEvent $event): void {
+    if (
+      $this->state->get('joinup_eulogin.accounts_approve', FALSE) &&
+      $this->registerSettings->get('register') === UserInterface::REGISTER_VISITORS_ADMINISTRATIVE_APPROVAL
+    ) {
+      $event->setPropertyValue('status', 0);
+    }
   }
 
 }

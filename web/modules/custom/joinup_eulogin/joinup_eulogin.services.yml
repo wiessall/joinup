@@ -23,3 +23,6 @@ services:
     arguments: ['@state']
     tags:
       - { name: config.factory.override }
+  cas.user_manager:
+    class: Drupal\joinup_eulogin\CasUserManager
+    arguments: ['@externalauth.externalauth', '@externalauth.authmap', '@config.factory', '@session', '@database', '@event_dispatcher', '@cas.helper', '@cas.proxy_helper', '@password_generator', '@messenger', '@state']
