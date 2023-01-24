@@ -135,7 +135,17 @@ Feature:
     And I delete the version "v2.0" of document "Legal notice"
 
   Scenario: Anonymous using the support contact form.
-    Given I am on "/contact"
+    Given I am logged in as a moderator
+    When I click "Legal"
+    Then I should see the heading "Legal notice versions"
+    And I should see the link "New version"
+    And the row "1.1" is selected
+
+    When I press "Set published version"
+    Then I should see the success message "No changes have been made."
+
+    Given I am an anonymous user
+    When I am on "/contact"
     Then I should see "I have read and accept the Legal notice"
     And I should see "Before you submit your request check our FAQ section in case it covers your query/issue."
 
@@ -146,13 +156,11 @@ Feature:
     And I select "Legal issue" from "Category"
     And I fill in "Subject" with "All the lonely people where do they all come from?"
     And I fill in "Message" with "Father McKenzie, wiping the dirt / From his hands as he walks from the grave / No one was saved"
-    Then I wait for the honeypot time limit to pass
 
     When I press "Submit"
     Then I should see the error message "You must accept the Legal notice in order to use our platform."
 
     But I check "I have read and accept the Legal notice"
-    Then I wait for the honeypot time limit to pass
     When I press "Submit"
     Then I should see the success message "Your message has been submitted. Thank you for your feedback."
 

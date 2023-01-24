@@ -26,8 +26,6 @@ Feature: Submit the contact form
       | EU Login question              |
       | Interoperable Europe question  |
       | Other                          |
-    # The honeypot field that needs to be empty on submission.
-    Then the following fields should be present "user_homepage"
     And I should see the text "Submissions of this form are processed by a contractor of the European Commission."
     And I fill in the following:
       | First name     | Wolverine                   |
@@ -38,8 +36,6 @@ Feature: Submit the contact form
       | Subject        | Screen reader accessibility |
       | Message        | Dear sir, madam, ...        |
     And I attach the file "logo.png" to "Attachment"
-    # We need to wait 5 seconds for the spam protection time limit to pass.
-    And I wait for the spam protection time limit to pass
     And I press "Submit"
     Then I should be on "collections"
 
@@ -54,8 +50,6 @@ Feature: Submit the contact form
       | Subject        | Screen reader accessibility |
       | Message        | Dear sir, madam, ...        |
     And I attach the file "logo.png" to "Attachment"
-    # We need to wait 5 seconds for the spam protection time limit to pass.
-    And I wait for the spam protection time limit to pass
     And I press "Submit"
 
     # Both moderators should have received the notification e-mail.
@@ -84,7 +78,6 @@ Feature: Submit the contact form
 
   Scenario: Check required fields
     When I am on the contact form
-    And I wait for the spam protection time limit to pass
     And I press "Submit"
     Then I should see the following error messages:
       | error messages                    |
@@ -122,8 +115,6 @@ Feature: Submit the contact form
     And I select "Question on usage" from "Category"
     And I fill in "Subject" with "Reminder me please"
     And I enter "I will be back..." in the "Message" wysiwyg editor
-    # We need to wait 5 seconds for the spam protection time limit to pass.
-    And I wait for the spam protection time limit to pass
     Then I press "Submit"
     And I should see the following success messages:
       | success messages                                              |
