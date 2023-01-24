@@ -37,6 +37,8 @@
           // TODO: Remove .page__title-wrapper .details.after-title in
           // ISAICP-7138. See
           // https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7138
+          // Ideally the presentational layer (containing the CSS selectors)
+          // should be split and kept in the Theme.
           const titleDetailsJoinup = document.querySelector(
             ".page__title-wrapper .details.after-title"
           );
