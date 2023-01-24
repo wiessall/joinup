@@ -1,0 +1,23 @@
+{#
+/**
+ * @file
+ * Themeing for rdf entities.
+ */
+#}
+{% block content %}
+  {% set image %}
+    <a href="{{ url }}" class="d-block">
+      <svg class="bi img-fluid text-secondary"><use xlink:href="{{ bcl_icon_path }}#file-earmark-post"></use></svg>
+    </a>
+  {% endset %}
+  {{ pattern('tiletwo', {
+    attributes: attributes,
+    content_attributes: content_attributes,
+    image: image,
+    title_prefix: title_prefix,
+    title: label,
+    title_suffix: title_suffix,
+    url: url,
+    text: elements.field_ad_description,
+  }) }}
+{% endblock %}

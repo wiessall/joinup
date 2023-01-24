@@ -1,0 +1,44 @@
+{#
+/**
+ * @file
+ * Themeing for rdf entities.
+ */
+#}
+{% block content %}
+  {% set image %}
+    <a href="{{ url }}" class="d-block">
+      <svg class="bi img-fluid text-secondary"><use xlink:href="{{ bcl_icon_path }}#clipboard-check"></use></svg>
+    </a>
+  {% endset %}
+  {% set text = elements.field_is_description|render|striptags|length > 200 ? elements.field_is_description|render|striptags|trim|slice(0, 200) ~ '...' : elements.body|render|striptags %}
+  {% set badges = [] %}
+  {% for topic in topics %}
+    {% if loop.index == 4 %}
+      {% set badges = badges|merge([{
+        label: topic.name.value,
+        background: 'light',
+        rounded_pill: true,
+        attributes: create_attribute().addClass(['text-muted', 'me-2', 'mb-2', 'fs-sm'])
+      }]) %}
+    {% else %}
+      {% set badges = badges|merge([{
+        label: topic.name.value,
+        background: 'secondary',
+        rounded_pill: true,
+        attributes: create_attribute().addClass(['text-primary', 'me-2', 'mb-2', 'text-underline-hover', 'fs-sm']),
+        url: path('view.search.page_1', {}, {'query': {'f': { 0: 'topic:' ~ topic.tid.value }}}),
+      }]) %}
+    {% endif %}
+  {% endfor %}
+  {{ pattern('tiletwo', {
+    attributes: attributes,
+    content_attributes: content_attributes,
+    image: image,
+    title_prefix: title_prefix,
+    title: label,
+    title_suffix: title_suffix,
+    url: url,
+    text: text,
+    badges: badges,
+  }) }}
+{% endblock %}
