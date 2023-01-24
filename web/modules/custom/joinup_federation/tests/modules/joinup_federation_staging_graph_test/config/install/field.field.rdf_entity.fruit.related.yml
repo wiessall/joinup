@@ -2,8 +2,8 @@ langcode: en
 status: true
 dependencies:
   config:
-  - field.storage.rdf_entity.related
-  - rdf_entity.rdfentity.fruit
+    - field.storage.rdf_entity.related
+    - rdf_entity.rdfentity.fruit
 id: rdf_entity.fruit.related
 field_name: related
 entity_type: rdf_entity

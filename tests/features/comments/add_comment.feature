@@ -38,13 +38,10 @@ Feature: Add comments
       | <title> | How could this ever happen? Moral panic on its way! | <parent title> | <state> | Salma Coster |
     Given I am logged in as "Miss tell tales"
     When I go to the content page of the type "<content type>" with the title "<title>"
-    # The honeypot field that needs to be empty on submission.
-    Then the following fields should be present "user_homepage"
     # Authenticated users can use a rich text editor to enter comments.
     And I should see the "Create comment" wysiwyg editor
     And the "Insert image" button should be available in the "Create comment" wysiwyg editor
     When I enter "Mr scandal was doing something weird the other day." in the "Create comment" wysiwyg editor
-    And I wait for the spam protection time limit to pass
     And I press "Post comment"
     Then I should not see the following success messages:
       | success messages                                                                                     |
@@ -82,7 +79,6 @@ Feature: Add comments
     And I click "Reply"
     And I should see the "Create comment" wysiwyg editor
     When I enter "I am replying in user's comment." in the "Create comment" wysiwyg editor
-    And I wait for the spam protection time limit to pass
     And I press "Post comment"
     # Parent comment owner receives an email.
     And the email sent to "Miss tell tales" with subject "Joinup: A new comment has been created." contains the following lines of text:
@@ -112,7 +108,6 @@ Feature: Add comments
     When I go to the content page of the type "<content type>" with the title "<title>"
     # Authenticated users can insert <p> and <br> tags in the comment body.
     And I fill in "Create comment" with "<p>Mr scandal was doing something<br />weird the other day.<p/>"
-    And I wait for the spam protection time limit to pass
     Then I press "Post comment"
     Then I should not see the following success messages:
       | success messages                                                                                     |
@@ -122,14 +117,12 @@ Feature: Add comments
 
     When I click "Reply" in comment #1
     And I fill in "Create comment" with "Comment indent 1"
-    And I wait for the spam protection time limit to pass
     When I press "Post comment"
     Then comment #2 should contain the markup "Comment indent 1"
     And comment #2 indent is 1
 
     When I click "Reply" in comment #2
     And I fill in "Create comment" with "Comment indent 2"
-    And I wait for the spam protection time limit to pass
     When I press "Post comment"
     # This comment hit the maximum deep.
     Then comment #3 should contain the markup "Comment indent 2"
@@ -138,7 +131,6 @@ Feature: Add comments
     # Reply to the deepest comment.
     When I click "Reply" in comment #3
     And I fill in "Create comment" with "Reply to #3"
-    And I wait for the spam protection time limit to pass
     When I press "Post comment"
     Then comment #4 should contain the markup "Reply to #3"
     # The reply has the same indent as the parent comment.
@@ -147,7 +139,6 @@ Feature: Add comments
     # Reply to reply.
     When I click "Reply" in comment #4
     And I fill in "Create comment" with "Reply to reply"
-    And I wait for the spam protection time limit to pass
     When I press "Post comment"
     Then comment #5 should contain the markup "Reply to reply"
     # The reply to reply has the same indent as the deepest comment.
