@@ -1,0 +1,24 @@
+{#
+/**
+ * @file
+ * Themeing for rdf entities.
+ */
+#}
+{% block content %}
+  {% set image %}
+    <a href="{{ url }}" class="d-block">
+      <svg class="bi img-fluid text-secondary"><use xlink:href="{{ bcl_icon_path }}#file-earmark-zip"></use></svg>
+    </a>
+  {% endset %}
+  {% set text = content.field_isr_documentation|render|striptags|length > 200 ? content.field_isr_documentation|render|striptags|trim|slice(0, 200) ~ '...' : content.field_isr_documentation|render|striptags %}
+  {{ pattern('tiletwo', {
+    attributes: attributes,
+    content_attributes: content_attributes,
+    image: image,
+    title_prefix: title_prefix,
+    title: label,
+    title_suffix: title_suffix,
+    url: url,
+    text: text,
+  }) }}
+{% endblock %}

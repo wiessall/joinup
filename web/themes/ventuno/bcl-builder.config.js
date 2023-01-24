@@ -423,6 +423,7 @@ module.exports = {
           "eye.svg",
           "file-earmark-medical.svg",
           "file-earmark-play.svg",
+          "file-earmark-post.svg",
           "file-earmark-richtext.svg",
           "file-earmark-text.svg",
           "file-earmark-zip.svg",
