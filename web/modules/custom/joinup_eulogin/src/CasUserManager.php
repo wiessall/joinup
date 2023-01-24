@@ -27,16 +27,6 @@ class CasUserManager extends OriginalCasUserManager {
   use StringTranslationTrait;
 
   /**
-   * The messenger service.
-   */
-  protected MessengerInterface $messenger;
-
-  /**
-   * The state service.
-   */
-  protected StateInterface $state;
-
-  /**
    * Constructs a CasUserManager object.
    *
    * @param \Drupal\externalauth\ExternalAuthInterface $external_auth
@@ -62,10 +52,8 @@ class CasUserManager extends OriginalCasUserManager {
    * @param \Drupal\Core\State\StateInterface $state
    *   The state service.
    */
-  public function __construct(ExternalAuthInterface $external_auth, AuthmapInterface $authmap, ConfigFactoryInterface $settings, SessionInterface $session, Connection $database_connection, EventDispatcherInterface $event_dispatcher, CasHelper $cas_helper, CasProxyHelper $cas_proxy_helper, PasswordGeneratorInterface $password_generator, MessengerInterface $messenger, StateInterface $state) {
+  public function __construct(ExternalAuthInterface $external_auth, AuthmapInterface $authmap, ConfigFactoryInterface $settings, SessionInterface $session, Connection $database_connection, EventDispatcherInterface $event_dispatcher, CasHelper $cas_helper, CasProxyHelper $cas_proxy_helper, PasswordGeneratorInterface $password_generator, protected MessengerInterface $messenger, protected StateInterface $state) {
     parent::__construct($external_auth, $authmap, $settings, $session, $database_connection, $event_dispatcher, $cas_helper, $cas_proxy_helper, $password_generator);
-    $this->messenger = $messenger;
-    $this->state = $state;
   }
 
   /**
