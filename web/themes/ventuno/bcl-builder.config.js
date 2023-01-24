@@ -183,6 +183,15 @@ module.exports = {
     },
     // Custom and hybrid (BCL + custom) components
     {
+      entry: path.resolve(outputFolder, "src/scss/header-topic.scss"),
+      dest: path.resolve(outputFolder, "assets/css/header-topic.min.css"),
+      options: {
+        includePaths,
+        sourceMap: "file",
+        minify: true,
+      },
+    },
+    {
       entry: path.resolve(outputFolder, "src/scss/footer.scss"),
       dest: path.resolve(outputFolder, "assets/css/footer.css"),
       options: {

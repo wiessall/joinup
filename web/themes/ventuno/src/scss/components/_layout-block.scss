@@ -1,5 +1,6 @@
 .layout-block {
   &__title {
+    display: inline-block;
     color: $primary;
     font-weight: $font-weight-bold;
     text-transform: uppercase;
@@ -9,8 +10,21 @@
     margin-bottom: $spacer;
     line-height: 1.2;
     &--homepage_topics-block_1 {
+      display: block;
       border-bottom: 1px solid rgba($primary, .1);
       @include font-icon-before("\E804", 1.2rem, $warning);
+    }
+    &--listing-grid {
+      @include font-icon-before("\E804", 1.2rem, $warning);
+    }
+  }
+  &__link-wrapper {
+    display: inline;
+    padding-top: $spacer * .75;
+    padding-bottom: $spacer;
+    margin-bottom: $spacer;
+    a {
+      @include font-icon-after("\E801", 1rem, currentColor);
     }
   }
 }
