@@ -88,6 +88,17 @@ function contact_form_form_message_contact_form_submission_form_alter(&$form, Fo
   $form['#attached']['library'][] = 'contact_form/empty-url';
 
   $form['actions']['#suffix'] = '<span class="d-block mt-2">' . (string) t('Submissions of this form are processed by a contractor of the European Commission.') . '</span>';
+
+  /** @var \Drupal\Core\Extension\ModuleHandlerInterface $module_handler */
+  $module_handler = \Drupal::service('module_handler');
+  if ($module_handler->moduleExists('honeypot')) {
+    \Drupal::service('honeypot')->addFormProtection(
+      $form,
+      $form_state,
+      ['honeypot', 'user_homepage']
+    );
+  }
+
 }
 
 /**
