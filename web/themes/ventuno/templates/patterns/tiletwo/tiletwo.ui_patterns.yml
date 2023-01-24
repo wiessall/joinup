@@ -1,0 +1,48 @@
+tiletwo:
+  label: 'Search item'
+  description: 'Custom version of <a href="https://oelibrary.netlify.app/default/?path=/story/components-card--default" target="_blank">BCL''s card</a> to fit the needs of Joinup search page.'
+  variants:
+    default:
+      label: 'Default'
+      description: 'Standard result item.'
+  fields:
+    image:
+      type: object
+      label: 'Image'
+      description: 'Card image with path and alt.'
+      preview:
+        path: 'https://placeimg.com/1000/500/people'
+        alt: 'Alternative text for card image'
+    title_prefix:
+      type: array
+      label: 'Title prefix'
+      description: 'Variable coming from Drupal that may content important stuff.'
+      preview: ''
+    title:
+      type: text
+      label: 'Title'
+      description: 'Card title.'
+      preview: 'Title card'
+    title_suffix:
+      type: array
+      label: 'Title suffix'
+      description: 'Variable coming from Drupal that may content important stuff such as contextual links.'
+      preview: ''
+    url:
+      type: string
+      label: 'Url'
+      description: 'The url.'
+      preview: 'https://joinup.ec.europa.eu'
+    text:
+      type: text
+      label: 'Text'
+      description: 'Card text.'
+      preview: 'Text card with longer text which is supported'
+    badges:
+      type: array
+      label: 'Badges'
+      description: 'List of badges for the card.'
+      preview:
+        - label: 'Primary badge'
+        - label: 'Secondary badge'
+          rounded_pill: true
