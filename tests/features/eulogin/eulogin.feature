@@ -367,7 +367,7 @@ Feature: Log in through EU Login
     And I press "Log in"
     Then I should see the success message "Fill in the fields below to let the Joinup community learn more about you!"
 
-  @javascript @email
+  @email
   Scenario: As a moderator I can activate the approval of new accounts.
     Given CAS users:
       | Username      | E-mail            | Password |
@@ -386,9 +386,7 @@ Feature: Log in through EU Login
     When I fill in "E-mail address" with "ricky@example.com"
     When I fill in "Password" with "123"
     And I press "Log in"
-    Then I should see the following success messages:
-      | success messages                                                                                                                                                                                                    |
-      | Thank you for applying for an account. Your account is currently pending approval by the site administrator. In the meantime, a welcome message with further instructions has been sent to your email address. |
+    Then I should see the success message "Thank you for applying for an account. Your account is currently pending approval by the site administrator. In the meantime, a welcome message with further instructions has been sent to your email address."
     # Check that the user is not logged in.
     And I should see the link "Sign in"
     And the email sent to "ricky@example.com" with subject "Your Joinup account is pending approval." contains the text:
@@ -407,10 +405,8 @@ Feature: Log in through EU Login
     And I select "Unblock the selected user(s)" from "Action"
     And I press "Apply to selected items"
     Then I should see the success message "Unblock the selected user(s) was applied to 1 item."
-    And the following email should have been sent:
-      | recipient | ricky_martin                                                                                                    |
-      | subject   | Your account at Joinup has been activated.                                                                      |
-      | body      | You may now log in with EU Login credentials by clicking this link or copying and pasting it into your browser  |
+    And the email sent to "ricky@example.com" with subject "Your Joinup account has been activated." contains the text:
+      | You may now log in with EU Login credentials by clicking this link or copying and pasting it into your browser  |
 
     Given I am an anonymous user
     And I am on the homepage
@@ -420,12 +416,12 @@ Feature: Log in through EU Login
     And I press "Log in"
     And I should see the success message "You have been logged in."
 
-  # Restore open registration.
+    # Restore open registration.
     Given I am logged in as a user with the "moderator" role
     And I visit "Dashboard"
     And I uncheck "New accounts needs approval"
     And I press "Submit"
-    Then I should see the warning message "Registering new users to Joinup requires approval is disabled"
+    Then I should see the success message "Registering new users to Joinup requires approval is disabled"
 
     Given I am an anonymous user
     And I am on the homepage
