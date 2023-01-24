@@ -14,7 +14,7 @@ use Symfony\Component\DependencyInjection\Reference;
  * @todo Remove CasUserManager service override ISAICP-7530
  * @see https://www.drupal.org/project/cas/issues/3038279
  */
-class JoinupCasServiceProvider implements ServiceModifierInterface {
+class JoinupEuloginServiceProvider implements ServiceModifierInterface {
 
   /**
    * {@inheritdoc}
