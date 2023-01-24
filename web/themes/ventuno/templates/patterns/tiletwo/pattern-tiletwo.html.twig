@@ -1,0 +1,58 @@
+{#
+/**
+ * @file
+ * Tile two pattern.
+ */
+#}
+{% apply spaceless %}
+
+  {# Parameters:
+    - image (object) (default: {})
+    - badges (array of badge object) (default: [])
+    - attributes (object) (default: {})
+    - content_attributes (object) (default: {})
+    - title_prefix (string) (default: '')
+    - title (string) (default: '')
+    - title_suffix (string) (default: '')
+    - url (string) (default: '')
+    - text (string) (default: '')
+  #}
+
+  {% set _attributes = attributes|default('') %}
+  {% set _content_attributes = content_attributes|default('') %}
+  {% set _image = image|default({}) %}
+  {% set _title_prefix = title_prefix|default('') %}
+  {% set _title = title|default('') %}
+  {% set _title_suffix = title_suffix|default('') %}
+  {% set _url = url|default('') %}
+  {% set _text = text|default('') %}
+  {% set _badges = badges|default([]) %}
+
+  <article{{ _attributes.addClass(['tile', 'h-sm-100']) }}>
+    <div class="row g-1 h-sm-100">
+      <div class="col-12 col-sm-4 p-0">
+        {{ _image }}
+      </div>
+      <div class="col-12 col-sm-8 d-flex flex-column justify-content-between mt-3 mt-sm-0 p-0 ps-sm-3">
+        <div>
+          {{ _title_prefix }}
+          <h3{{ title_attributes.addClass('h4') }}>
+            <a class="text-primary" href="{{ _url }}" rel="bookmark">{{ _title }}</a>
+          </h3>
+          {{ _title_suffix }}
+          <div{{ _content_attributes }}>
+            {{ _text }}
+          </div>
+        </div>
+        {%- if _badges is not empty and _badges is iterable -%}
+          {{ attach_library('ventuno/badge') }}
+          <div class="mt-3">
+            {% for badge in _badges %}
+              {% include '@oe-bcl/badge' with badge only %}
+            {% endfor %}
+          </div>
+        {%- endif -%}
+      </div>
+    </div>
+  </article>
+{% endapply %}
