@@ -81,7 +81,7 @@
     {% endset %}
   {% endif %}
   {% set text = content.body|render|striptags|length > 200 ? content.body|render|striptags|trim|slice(0, 200) ~ '...' : content.body|render|striptags %}
-  {{ pattern('tiletwo', {
+  {{ pattern('tile_two', {
     attributes: attributes,
     content_attributes: content_attributes,
     image: image,
