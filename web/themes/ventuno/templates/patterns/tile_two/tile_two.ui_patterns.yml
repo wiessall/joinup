@@ -1,10 +1,13 @@
-tiletwo:
-  label: 'Search item'
+tile_two:
+  label: 'Tile two'
   description: 'Custom version of <a href="https://oelibrary.netlify.app/default/?path=/story/components-card--default" target="_blank">BCL''s card</a> to fit the needs of Joinup search page.'
   variants:
     default:
       label: 'Default'
       description: 'Standard result item.'
+    dated:
+      label: 'Dated'
+      description: 'Result item with date standing out.'
   fields:
     image:
       type: object
@@ -13,6 +16,16 @@ tiletwo:
       preview:
         path: 'https://placeimg.com/1000/500/people'
         alt: 'Alternative text for card image'
+    day:
+      type: number
+      label: 'Day'
+      description: 'Day of the event.'
+      preview: '17'
+    month:
+      type: text
+      label: 'Month'
+      description: 'Month of the event.'
+      preview: 'Juliember'
     title_prefix:
       type: array
       label: 'Title prefix'

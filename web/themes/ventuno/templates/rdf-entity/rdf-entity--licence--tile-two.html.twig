@@ -11,7 +11,7 @@
     </a>
   {% endset %}
   {% set text = content.field_licence_description|render|striptags|length > 200 ? content.field_licence_description|render|striptags|trim|slice(0, 200) ~ '...' : content.field_licence_description|render|striptags %}
-  {{ pattern('tiletwo', {
+  {{ pattern('tile_two', {
     attributes: attributes,
     content_attributes: content_attributes,
     image: image,
