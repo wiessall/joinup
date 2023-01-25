@@ -1835,7 +1835,7 @@ class JoinupContext extends RawDrupalContext {
   }
 
   /**
-   * Asserts that a featured Stats exist in the header.
+   * Asserts that a featured stats exist in the header.
    *
    * @Then I should see a featured stats on the header
    */
@@ -1845,7 +1845,7 @@ class JoinupContext extends RawDrupalContext {
   }
 
   /**
-   * Asserts that a featured Stats not exist in the header.
+   * Asserts that a featured stats not exist in the header.
    *
    * @Then I should not see a featured stats on the header
    */

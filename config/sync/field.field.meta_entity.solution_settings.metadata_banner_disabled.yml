@@ -9,7 +9,7 @@ id: meta_entity.solution_settings.metadata_banner_disabled
 field_name: metadata_banner_disabled
 entity_type: meta_entity
 bundle: solution_settings
-label: 'MetaData Banner disabled'
+label: 'Metadata banner disabled'
 description: ''
 required: false
 translatable: true
