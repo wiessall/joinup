@@ -1,0 +1,20 @@
+.tile-two {
+  &--dated {
+    .date {
+      color: rgba($primary, .7);
+      font-weight: $font-weight-bold;
+      margin-right: $spacer;
+      &__day {
+        margin-bottom: 0;
+        line-height: 1;
+        font-size: $h3-font-size;
+      }
+      &__month {
+        margin-bottom: 0;
+        line-height: 2;
+        font-size: $h5-font-size;
+        text-transform: uppercase;
+      }
+    }
+  }
+}

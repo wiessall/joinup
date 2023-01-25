@@ -152,6 +152,11 @@ tabledrag:
     theme:
       assets/css/tabledrag.css: {}
 
+tile-two:
+  css:
+    theme:
+      assets/css/tile-two.min.css: {}
+
 toolbar:
   css:
     theme:
