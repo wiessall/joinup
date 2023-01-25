@@ -30,6 +30,6 @@ Feature: Block users
     And I press "Apply to selected items"
     Then I should see the success message "Unblock the selected user(s) was applied to 1 item."
     And the following email should have been sent:
-      | recipient | Liam Lego                                                                                                                       |
-      | subject   | Your Joinup account has been activated.                                                                                         |
-      | body      | Your account at Joinup has been activated. You may now log in by clicking this link or copying and pasting it into your browser |
+      | recipient | Liam Lego                                                                                                      |
+      | subject   | Your Joinup account has been activated.                                                                        |
+      | body      | You may now log in with EU Login credentials by clicking this link or copying and pasting it into your browser |
