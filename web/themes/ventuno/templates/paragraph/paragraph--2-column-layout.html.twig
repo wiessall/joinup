@@ -46,12 +46,11 @@
 {% block paragraph %}
   <div{{ attributes.addClass(classes) }}>
     {% block content %}
-    {# {{ dump(content|keys) }} #}
       <div class="row">
-        <div class="col-12 col-md-6">
+        <div class="col-12 col-lg-6">
           {{ content.paragraph_column_left }}
         </div>
-        <div class="col-12 col-md-6">
+        <div class="col-12 col-lg-6">
           {{ content.paragraph_column_right }}
         </div>
       </div>
