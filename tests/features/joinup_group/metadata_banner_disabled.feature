@@ -45,9 +45,9 @@ Feature: Collections/Solutions settings Metadata Banner disabled
     Then I should see a featured stats on the header
     And I should see the link "Settings" in the "Entity actions" region
     When I click "Settings" in the "Entity actions" region
-    Then I should see the text "MetaData Banner disabled"
-    And the "MetaData Banner disabled" checkbox should not be checked
-    When I check the box "MetaData Banner disabled"
+    Then I should see the text "Metadata banner disabled"
+    And the "Metadata banner disabled" checkbox should not be checked
+    When I check the box "Metadata banner disabled"
     And I press "Save"
     And I go to the "Rally fanatics" collection
     Then I should not see a featured stats on the header
@@ -56,9 +56,9 @@ Feature: Collections/Solutions settings Metadata Banner disabled
 
     When I go to the "Rally fanatics" collection
     And I click "Settings" in the "Entity actions" region
-    Then I should see the text "MetaData Banner disabled"
-    And the "MetaData Banner disabled" checkbox should be checked
-    When I uncheck the box "MetaData Banner disabled"
+    Then I should see the text "Metadata banner disabled"
+    And the "Metadata banner disabled" checkbox should be checked
+    When I uncheck the box "Metadata banner disabled"
     And I press "Save"
     And I go to the "Rally fanatics" collection
     Then I should see a featured stats on the header
@@ -68,9 +68,9 @@ Feature: Collections/Solutions settings Metadata Banner disabled
     When I go to the "Legion of Doom" collection
     Then I should see a featured stats on the header
     And I click "Settings" in the "Entity actions" region
-    And I should see the text "MetaData Banner disabled"
-    Then the "MetaData Banner disabled" checkbox should not be checked
-    And I check the box "MetaData Banner disabled"
+    And I should see the text "Metadata banner disabled"
+    Then the "Metadata banner disabled" checkbox should not be checked
+    And I check the box "Metadata banner disabled"
     And I press "Save"
     And I go to the "Legion of Doom" collection
     Then I should not see a featured stats on the header
@@ -85,9 +85,9 @@ Feature: Collections/Solutions settings Metadata Banner disabled
     Then I should see a featured stats on the header
     And I should see the link "Settings" in the "Entity actions" region
     When I click "Settings" in the "Entity actions" region
-    Then I should see the text "MetaData Banner disabled"
-    And the "MetaData Banner disabled" checkbox should not be checked
-    When I check the box "MetaData Banner disabled"
+    Then I should see the text "Metadata banner disabled"
+    And the "Metadata banner disabled" checkbox should not be checked
+    When I check the box "Metadata banner disabled"
     And I press "Save"
     And I go to the "Klop mirubes" solution
     Then I should not see a featured stats on the header
