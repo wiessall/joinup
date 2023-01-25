@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f555166772d4c3b39f83b98c51ece2ab",
+    "content-hash": "34a4c75e5476b0d6efcbf662ac6370c8",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -1996,12 +1996,12 @@
             ],
             "authors": [
                 {
-                    "name": "beejeebus",
-                    "homepage": "https://www.drupal.org/user/38580"
-                },
-                {
                     "name": "effulgentsia",
                     "homepage": "https://www.drupal.org/user/78040"
+                },
+                {
+                    "name": "japerry",
+                    "homepage": "https://www.drupal.org/user/45640"
                 },
                 {
                     "name": "moshe weitzman",
@@ -2028,16 +2028,16 @@
         },
         {
             "name": "drupal/core",
-            "version": "9.4.8",
+            "version": "9.5.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/drupal/core.git",
-                "reference": "a627d1b2a00f2cef0572e37b94dea298800541f4"
+                "reference": "2ce2d9dbc3d248d7fd6bf9c9a50cce7e8dc799a6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/drupal/core/zipball/a627d1b2a00f2cef0572e37b94dea298800541f4",
-                "reference": "a627d1b2a00f2cef0572e37b94dea298800541f4",
+                "url": "https://api.github.com/repos/drupal/core/zipball/2ce2d9dbc3d248d7fd6bf9c9a50cce7e8dc799a6",
+                "reference": "2ce2d9dbc3d248d7fd6bf9c9a50cce7e8dc799a6",
                 "shasum": ""
             },
             "require": {
@@ -2060,7 +2060,7 @@
                 "ext-tokenizer": "*",
                 "ext-xml": "*",
                 "guzzlehttp/guzzle": "^6.5.8 || ^7.4.5",
-                "laminas/laminas-diactoros": "^2.11",
+                "laminas/laminas-diactoros": "^2.14",
                 "laminas/laminas-feed": "^2.17",
                 "masterminds/html5": "^2.7",
                 "pear/archive_tar": "^1.4.14",
@@ -2074,8 +2074,8 @@
                 "symfony/http-foundation": "^4.4.7",
                 "symfony/http-kernel": "^4.4",
                 "symfony/mime": "^5.4",
-                "symfony/polyfill-iconv": "^1.25",
-                "symfony/polyfill-php80": "^1.25",
+                "symfony/polyfill-iconv": "^1.26",
+                "symfony/polyfill-php80": "^1.26",
                 "symfony/process": "^4.4",
                 "symfony/psr-http-message-bridge": "^2.1",
                 "symfony/routing": "^4.4",
@@ -2189,22 +2189,22 @@
             ],
             "description": "Drupal is an open source content management platform powering millions of websites and applications.",
             "support": {
-                "source": "https://github.com/drupal/core/tree/9.4.8"
+                "source": "https://github.com/drupal/core/tree/9.5.2"
             },
-            "time": "2022-10-06T15:57:08+00:00"
+            "time": "2023-01-18T12:48:20+00:00"
         },
         {
             "name": "drupal/core-composer-scaffold",
-            "version": "9.4.8",
+            "version": "9.5.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/drupal/core-composer-scaffold.git",
-                "reference": "5f37a9e4008b34e3e4f6bb34ce0b3f7e5ec8984f"
+                "reference": "df1f779d3f94500f6cc791427aa729e0ba4b2464"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/drupal/core-composer-scaffold/zipball/5f37a9e4008b34e3e4f6bb34ce0b3f7e5ec8984f",
-                "reference": "5f37a9e4008b34e3e4f6bb34ce0b3f7e5ec8984f",
+                "url": "https://api.github.com/repos/drupal/core-composer-scaffold/zipball/df1f779d3f94500f6cc791427aa729e0ba4b2464",
+                "reference": "df1f779d3f94500f6cc791427aa729e0ba4b2464",
                 "shasum": ""
             },
             "require": {
@@ -2239,9 +2239,9 @@
                 "drupal"
             ],
             "support": {
-                "source": "https://github.com/drupal/core-composer-scaffold/tree/9.4.8"
+                "source": "https://github.com/drupal/core-composer-scaffold/tree/9.5.2"
             },
-            "time": "2022-06-19T16:14:23+00:00"
+            "time": "2022-06-19T16:14:18+00:00"
         },
         {
             "name": "drupal/csv_serialization",
@@ -6028,21 +6028,21 @@
         },
         {
             "name": "drupal/rdf_entity",
-            "version": "2.0.0-alpha2",
+            "version": "2.0.0-alpha4",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/rdf_entity.git",
-                "reference": "2.0.0-alpha2"
+                "reference": "2.0.0-alpha4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/rdf_entity-2.0.0-alpha2.zip",
-                "reference": "2.0.0-alpha2",
-                "shasum": "fccd1ce57086b30b9be43dc958766ac8a93bdb25"
+                "url": "https://ftp.drupal.org/files/projects/rdf_entity-2.0.0-alpha4.zip",
+                "reference": "2.0.0-alpha4",
+                "shasum": "b9b17904c194d77af4e4f3093cb4cc360455fe8e"
             },
             "require": {
                 "drupal/core": "^9.2 || ^10",
-                "drupal/sparql_entity_storage": "^2.0"
+                "drupal/sparql_entity_storage": "^2.0.0-alpha12"
             },
             "require-dev": {
                 "drupal/pathauto": "^1.10"
@@ -6050,11 +6050,16 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "2.0.0-alpha2",
-                    "datestamp": "1653897868",
+                    "version": "2.0.0-alpha4",
+                    "datestamp": "1674491348",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Alpha releases are not covered by Drupal security advisories."
+                    }
+                },
+                "patches": {
+                    "drupal/core": {
+                        "Contrib module broken after #2898903 @see https://www.drupal.org/project/drupal/issues/3332877": "https://git.drupalcode.org/project/drupal/-/merge_requests/3232.diff"
                     }
                 }
             },
@@ -6830,7 +6835,7 @@
             "extra": {
                 "drupal": {
                     "version": "4.1.3",
-                    "datestamp": "1665573795",
+                    "datestamp": "1674225949",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -7028,28 +7033,28 @@
         },
         {
             "name": "drupal/sparql_entity_storage",
-            "version": "2.0.0-alpha8",
+            "version": "2.0.0-alpha12",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/sparql_entity_storage.git",
-                "reference": "2.0.0-alpha8"
+                "reference": "2.0.0-alpha12"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/sparql_entity_storage-2.0.0-alpha8.zip",
-                "reference": "2.0.0-alpha8",
-                "shasum": "bbfe83bbc0990655c15da871db21fd7ec90ec097"
+                "url": "https://ftp.drupal.org/files/projects/sparql_entity_storage-2.0.0-alpha12.zip",
+                "reference": "2.0.0-alpha12",
+                "shasum": "6ba9f6a1a2ca23d629bad8455664b1c9aa9ef90c"
             },
             "require": {
                 "drupal/core": "^9.3 || ^10",
                 "ml/json-ld": "^1.0",
-                "sweetrdf/easyrdf": "^1.0"
+                "sweetrdf/easyrdf": "^1.8"
             },
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "2.0.0-alpha8",
-                    "datestamp": "1669023890",
+                    "version": "2.0.0-alpha12",
+                    "datestamp": "1674148827",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Project has not opted into security advisory coverage!"
@@ -7804,12 +7809,12 @@
             ],
             "authors": [
                 {
-                    "name": "Leon Kessler",
-                    "homepage": "https://www.drupal.org/user/595374"
-                },
-                {
                     "name": "cafuego",
                     "homepage": "https://www.drupal.org/user/218525"
+                },
+                {
+                    "name": "Leon Kessler",
+                    "homepage": "https://www.drupal.org/user/595374"
                 },
                 {
                     "name": "nils.destoop",
@@ -11763,16 +11768,16 @@
         },
         {
             "name": "sweetrdf/easyrdf",
-            "version": "1.7.1",
+            "version": "1.8.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sweetrdf/easyrdf.git",
-                "reference": "19ba21288e0aa344227267cab7f8f9c565eee426"
+                "reference": "2c57de7380ed16f5017e95810bcd08c0dffae640"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sweetrdf/easyrdf/zipball/19ba21288e0aa344227267cab7f8f9c565eee426",
-                "reference": "19ba21288e0aa344227267cab7f8f9c565eee426",
+                "url": "https://api.github.com/repos/sweetrdf/easyrdf/zipball/2c57de7380ed16f5017e95810bcd08c0dffae640",
+                "reference": "2c57de7380ed16f5017e95810bcd08c0dffae640",
                 "shasum": ""
             },
             "require": {
@@ -11788,12 +11793,13 @@
             },
             "require-dev": {
                 "friendsofphp/php-cs-fixer": "^3.0",
+                "laminas/laminas-http": "^2",
                 "ml/json-ld": "^1.0",
                 "phpstan/phpstan": "^1.0",
                 "phpstan/phpstan-phpunit": "^1.0",
                 "phpunit/phpunit": "^7.5|^8.5|^9.5",
                 "semsol/arc2": "^2.4",
-                "zendframework/zend-http": "^2.3"
+                "zendframework/zend-http": "^2"
             },
             "type": "library",
             "autoload": {
@@ -11836,9 +11842,9 @@
             ],
             "support": {
                 "issues": "https://github.com/sweetrdf/easyrdf/issues",
-                "source": "https://github.com/sweetrdf/easyrdf/tree/1.7.1"
+                "source": "https://github.com/sweetrdf/easyrdf/tree/1.8.0"
             },
-            "time": "2022-11-08T08:13:50+00:00"
+            "time": "2023-01-16T11:43:21+00:00"
         },
         {
             "name": "swiftmailer/swiftmailer",
@@ -16702,12 +16708,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/jhedstrom/DrupalDriver.git",
-                "reference": "632712db66681b76651518bf5ab1e60fddc70a39"
+                "reference": "781b607139982e03ec980bc9c6744c496f4be17d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/jhedstrom/DrupalDriver/zipball/632712db66681b76651518bf5ab1e60fddc70a39",
-                "reference": "632712db66681b76651518bf5ab1e60fddc70a39",
+                "url": "https://api.github.com/repos/jhedstrom/DrupalDriver/zipball/781b607139982e03ec980bc9c6744c496f4be17d",
+                "reference": "781b607139982e03ec980bc9c6744c496f4be17d",
                 "shasum": ""
             },
             "require": {
@@ -16784,7 +16790,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2023-01-06T17:22:24+00:00"
+            "time": "2023-01-06T17:21:32+00:00"
         },
         {
             "name": "drupal/drupal-extension",

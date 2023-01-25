@@ -421,7 +421,7 @@ class JoinupCommunityContentContext extends RawDrupalContext {
     // Try, first, to get an existing topic term.
     if (!empty($this->entities['taxonomy_term'])) {
       foreach ($this->entities['taxonomy_term'] as $candidate_term) {
-        if ($candidate_term->bundle() === 'topic' && !$candidate_term->get('parent')->isEmpty()) {
+        if ($candidate_term->bundle() === 'topic' && $candidate_term->get('parent')->target_id !== '0') {
           $term = $candidate_term;
           break;
         }
