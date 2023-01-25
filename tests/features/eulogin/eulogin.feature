@@ -401,6 +401,7 @@ Feature: Log in through EU Login
     When I click "People"
     And I fill in "Name or email contains" with "ricky_martin"
     And I press "Filter"
+    Then I should see "Blocked" in the "ricky_martin" row
 
     # Unblock the user
     Then I check "ricky_martin"
