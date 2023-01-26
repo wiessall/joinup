@@ -21,14 +21,6 @@ targetEntityType: meta_entity
 bundle: topic
 mode: teaser
 content:
-  description:
-    type: string
-    label: hidden
-    settings:
-      link_to_entity: false
-    third_party_settings: {  }
-    weight: 1
-    region: content
   image:
     type: image
     label: hidden
@@ -51,6 +43,7 @@ content:
 hidden:
   changed: true
   created: true
+  description: true
   published: true
   search_api_excerpt: true
   target: true
