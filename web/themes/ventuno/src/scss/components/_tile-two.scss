@@ -18,3 +18,25 @@
     }
   }
 }
+
+.paragraph--type--grid {
+  .tile-two {
+    &__title {
+      font-size: $h4-font-size;
+      &-link {
+        color: $primary;
+      }
+    }
+  }
+}
+
+.paragraph--type--list {
+  .tile-two {
+    &__title {
+      font-size: $h5-font-size;
+      &-link {
+        color: $dark;
+      }
+    }
+  }
+}
