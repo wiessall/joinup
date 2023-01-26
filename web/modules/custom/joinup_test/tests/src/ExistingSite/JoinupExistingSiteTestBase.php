@@ -24,11 +24,8 @@ abstract class JoinupExistingSiteTestBase extends ExistingSiteBase {
     parent::setUp();
 
     // Disable the spam protection functionality.
-    \Drupal::state()->set('joinup_core.antispam.enabled', FALSE);
-    // Clear the cache bin storing cached markup.
-    foreach (['page', 'dynamic_page_cache', 'render'] as $bin) {
-      \Drupal::cache($bin)->deleteAll();
-    }
+    \Drupal::state()->delete('joinup_test.antispam.enabled');
+    $this->clearCache();
   }
 
   /**
@@ -36,11 +33,8 @@ abstract class JoinupExistingSiteTestBase extends ExistingSiteBase {
    */
   public function tearDown(): void {
     // Restores the spam protection functionality.
-    \Drupal::state()->delete('joinup_core.antispam.enabled');
-    // Clear the cache bin storing cached markup.
-    foreach (['page', 'dynamic_page_cache', 'render'] as $bin) {
-      \Drupal::cache($bin)->deleteAll();
-    }
+    \Drupal::state()->set('joinup_test.antispam.enabled', TRUE);
+    $this->clearCache();
 
     // Avoid sending notifications during test entities cleanup. First, sort the
     // entities by moving the 'user' entities at the end, as deleting a user
@@ -73,6 +67,15 @@ abstract class JoinupExistingSiteTestBase extends ExistingSiteBase {
     // Delete the OG group content orphans now because parent::tearDown() is
     // destroying the container and the registered shutdown callback will fail.
     $delete_orphans_plugin->process();
+  }
+
+  /**
+   * Clear the cache bins storing cached markup.
+   */
+  protected function clearCache(): void {
+    foreach (['page', 'dynamic_page_cache', 'render'] as $bin) {
+      \Drupal::cache($bin)->deleteAll();
+    }
   }
 
 }

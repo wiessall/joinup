@@ -2,7 +2,7 @@
 
 declare(strict_types = 1);
 
-namespace Drupal\joinup_core\Config;
+namespace Drupal\joinup_test\Config;
 
 use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Config\ConfigFactoryInterface;
@@ -14,7 +14,7 @@ use Drupal\Core\State\StateInterface;
 /**
  * Config overrider use to disable anti-spam guard.
  */
-class JoinupConfigOverrider implements ConfigFactoryOverrideInterface {
+class JoinupTestConfigOverrider implements ConfigFactoryOverrideInterface {
 
   /**
    * Constructs a new config overrider service instance.
@@ -34,7 +34,7 @@ class JoinupConfigOverrider implements ConfigFactoryOverrideInterface {
    * {@inheritdoc}
    */
   public function loadOverrides($names): array {
-    if (in_array('antibot.settings', $names, TRUE) && !$this->state->get('joinup_core.antispam.enabled', TRUE)) {
+    if (in_array('antibot.settings', $names, TRUE) && !$this->state->get('joinup_test.antispam.enabled', FALSE)) {
       return [
         'antibot.settings' => [
           // We cannot set an empty array as the indexed arrays are merged, and
