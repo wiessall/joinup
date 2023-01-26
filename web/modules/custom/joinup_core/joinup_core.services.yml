@@ -14,7 +14,8 @@ services:
   joinup_core.local_task_links_helper:
     class: Drupal\joinup_core\LocalTaskLinksHelper
     arguments: ['@entity_type.manager']
-  joinup_core.outdated_content.config.sunscriber:
+
+  joinup_core.outdated_content.config.subscriber:
     class: Drupal\joinup_core\EventSubscriber\OutdatedContentConfigSubscriber
     arguments: ['@entity_field.manager']
     tags:
@@ -24,3 +25,9 @@ services:
     class: Drupal\joinup_core\PathProcessor\IdRedirectUuidProcessor
     tags:
       - { name: path_processor_inbound, priority: 200 }
+
+  joinup_core.config_overrider:
+    class: Drupal\joinup_core\Config\JoinupConfigOverrider
+    arguments: ['@state', '@config.factory']
+    tags:
+      - { name: config.factory.override }

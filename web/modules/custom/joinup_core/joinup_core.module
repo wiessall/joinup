@@ -403,3 +403,13 @@ function joinup_core_page_attachments(array &$attachments) {
   // used in various contexts.
   $attachments['#attached']['drupalSettings']['theme'] = \Drupal::theme()->getActiveTheme()->getName();
 }
+
+/**
+ * Implements hook_honeypot_form_protections_alter().
+ */
+function joinup_core_honeypot_form_protections_alter(array &$options, array $form): void {
+  // Allow to disable anti-spam tools.
+  if (!\Drupal::state()->get('joinup_core.antispam.enabled', TRUE)) {
+    $options = [];
+  }
+}
