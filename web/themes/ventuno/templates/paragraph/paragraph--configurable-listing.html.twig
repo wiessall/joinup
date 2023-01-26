@@ -42,7 +42,7 @@
 {%
   set classes = [
     'paragraph',
-    'paragraph--listing-grid',
+    'paragraph--type--' ~ style|clean_class,
     'layout-block',
     'layout-block--listing-grid',
     'mt-3',
@@ -58,13 +58,19 @@
         </div>
       </div>
       {% set results = content.content_listing['#results'] %}
-      <div class="row">
+      {% if style is same as('grid') %}
+        <div class="row">
+          {% for result in results %}
+            <div class="col-12 col-lg-6 col-xl-4 mb-5">
+              {{ result }}
+            </div>
+          {% endfor %}
+        </div>
+      {% elseif style is same as('list') %}
         {% for result in results %}
-          <div class="col-12 col-lg-6 col-xl-4 mb-5">
-            {{ result }}
-          </div>
+          {{ result }}
         {% endfor %}
-      </div>
+      {% endif %}
     {% endblock %}
   </div>
 {% endblock paragraph %}
