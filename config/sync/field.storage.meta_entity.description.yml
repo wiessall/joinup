@@ -1,4 +1,4 @@
-uuid: 2029de11-98f9-42cb-a560-0cbb46bcfca1
+uuid: 190570b5-079a-4229-a234-210ef450650e
 langcode: en
 status: true
 dependencies:
@@ -11,11 +11,9 @@ third_party_settings:
 id: meta_entity.description
 field_name: description
 entity_type: meta_entity
-type: string
+type: string_long
 settings:
-  max_length: 255
   case_sensitive: false
-  is_ascii: false
 module: core
 locked: false
 cardinality: 1

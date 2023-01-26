@@ -10,18 +10,20 @@ dependencies:
     - meta_entity.type.topic
   module:
     - entity_reference_revisions
+    - template_suggestion
 id: meta_entity.topic.default
 targetEntityType: meta_entity
 bundle: topic
 mode: default
 content:
   description:
-    type: string
+    type: basic_string
     label: hidden
-    settings:
-      link_to_entity: false
-    third_party_settings: {  }
-    weight: 1
+    settings: {  }
+    third_party_settings:
+      template_suggestion:
+        template_suggestion: bare
+    weight: 3
     region: content
   label:
     type: string

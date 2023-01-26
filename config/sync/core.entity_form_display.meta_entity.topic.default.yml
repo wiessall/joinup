@@ -18,11 +18,11 @@ bundle: topic
 mode: default
 content:
   description:
-    type: string_textfield
-    weight: 0
+    type: string_textarea
+    weight: 4
     region: content
     settings:
-      size: 60
+      rows: 5
       placeholder: ''
     third_party_settings: {  }
   image:
