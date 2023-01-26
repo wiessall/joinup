@@ -390,7 +390,14 @@ function collection_rdf_entity_view(array &$build, EntityInterface $entity, Enti
     ])->toRenderable();
   }
   if ($view_mode === 'group_header') {
-    $build['#cache']['tags'] = Cache::mergeTags($build['#cache']['tags'], ['meta_entity_list:collection_settings']);
+    // The group header featured stats visibility is controlled by the group
+    // settings. Add the relevant cache tags.
+    if ($entity->get('settings')->entity instanceof MetaEntityInterface) {
+      $build['#cache']['tags'] = Cache::mergeTags($build['#cache']['tags'], $entity->get('settings')->entity->getCacheTags());
+    }
+    else {
+      $build['#cache']['tags'] = Cache::mergeTags($build['#cache']['tags'], ['meta_entity_list:collection_settings']);
+    }
   }
 
 }
