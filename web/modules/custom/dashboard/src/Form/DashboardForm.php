@@ -55,7 +55,7 @@ class DashboardForm extends FormBase {
       ],
       'accounts_approve' => [
         '#type' => 'checkbox',
-        '#title' => $this->t('New accounts needs approval'),
+        '#title' => $this->t('New accounts need approval'),
         '#default_value' => $this->state->get('joinup_eulogin.accounts_approve', FALSE),
         '#access' => $this->currentUser()->hasPermission('manage site auto-registration'),
       ],
