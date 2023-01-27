@@ -279,7 +279,7 @@
                 "Cannot implement a custom user cancellation method @see https://www.drupal.org/project/drupal/issues/3135592": "https://git.drupalcode.org/project/drupal/-/merge_requests/1675.diff",
                 "If you don't set the \"version\" of a profile, the report/status displays an empty dash @see https://www.drupal.org/project/drupal/issues/3270892": "https://git.drupalcode.org/project/drupal/-/merge_requests/2003.diff",
                 "PHP 8.1 deprecation @see https://www.drupal.org/project/drupal/issues/3313342": "https://git.drupalcode.org/project/drupal/-/merge_requests/3143.diff",
-                "CKEditor 5 isn't respecting field widgets row settings @see https://www.drupal.org/i/3241295": "https://www.drupal.org/files/issues/2023-01-01/3241295-ckeditor-height-9.5.x.patch"
+                "CKEditor 5 isn't respecting field widgets row settings @see https://www.drupal.org/i/3273755 https://www.drupal.org/i/3241295 https://www.drupal.org/i/3326193": "resources/patch/drupal/core/3273755_3241295_3326193.patch"
             },
             "drupal/default_content": {
                 "Allow manual imports @see https://www.drupal.org/i/2640734": "https://git.drupalcode.org/project/default_content/-/merge_requests/20.diff"
