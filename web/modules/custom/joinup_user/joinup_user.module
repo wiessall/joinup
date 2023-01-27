@@ -44,7 +44,10 @@ function joinup_user_notify_on_account_change(array $form, FormStateInterface $f
 
   // If the status of the user changed, do not send an e-mail as it is already
   // handled. We are sending messages for account activation and blocking.
-  if ($account->isActive() !== (bool) $form_state->getValue('status')) {
+  /** @var \Drupal\joinup_user\Entity\JoinupUserInterface $original_account */
+  $original_account = \Drupal::entityTypeManager()->getStorage('user')
+    ->loadUnchanged($account->id());
+  if ($original_account->isActive() !== (bool) $form_state->getValue('status')) {
     return;
   }
 
