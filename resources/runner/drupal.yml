@@ -199,6 +199,7 @@ drupal:
           'devel',
           'filecache',
           'joinup_cas_mock_server',
+          'joinup_test',
           'og_ui',
           'page_manager_ui',
           'update',
