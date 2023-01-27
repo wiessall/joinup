@@ -401,10 +401,10 @@ function solution_rdf_entity_view(array &$build, RdfInterface $solution, EntityV
   // The group header featured stats visibility is controlled by the group
   // settings. Add the relevant cache tags.
   if ($solution->get('related_solution')->entity instanceof MetaEntityInterface) {
-    $build['#cache']['tags'] = Cache::mergeTags($build['#cache']['tags'], $solution->get('related_solution')->entity->getCacheTags());
+    $build['#cache']['tags'] = Cache::mergeTags($build['#cache']['tags'] ?? [], $solution->get('related_solution')->entity->getCacheTags());
   }
   else {
-    $build['#cache']['tags'] = Cache::mergeTags($build['#cache']['tags'], ['meta_entity_list:solution_settings']);
+    $build['#cache']['tags'] = Cache::mergeTags($build['#cache']['tags'] ?? [], ['meta_entity_list:solution_settings']);
   }
 }
 
