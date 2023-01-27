@@ -76,7 +76,7 @@ class TopicMetaEntityParent extends EntityLink {
       $term = $meta_entity->getTargetEntity();
       $term_parent = $term->get('parent');
       // The term will have a reference to root as '0' if it is a root term.
-      $this->cache[$meta_entity_id] = $term_parent->isEmpty() || $term_parent->target_id === '0' ? NULL : $term_parent->entity->topic->entity;
+      $this->cache[$meta_entity_id] = $term_parent->target_id === '0' ? NULL : $term_parent->entity->topic->entity;
     }
     return $this->cache[$meta_entity_id];
   }
