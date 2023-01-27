@@ -12,7 +12,7 @@ dependencies:
 id: ventuno_mycontentcollection
 theme: ventuno
 region: sidebar
-weight: -16
+weight: -17
 provider: null
 plugin: 'facet_block:collection_my_content'
 settings:
