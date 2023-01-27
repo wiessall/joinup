@@ -208,7 +208,7 @@ Feature:
     # @todo We should automatically redirect to the canonical path.
     # @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7526
     And I go to the "topic" meta entity of the "E-justice" topic "taxonomy term"
-    Then I should see the heading "News 1"
+    Then I should see the "News 1" tile
 
     When I click "Edit"
     And I select "Grid" from "List style"
@@ -216,4 +216,4 @@ Feature:
     # @todo We should automatically redirect to the canonical path.
     # @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7526
     And I go to the "topic" meta entity of the "E-justice" topic "taxonomy term"
-    And I should see the heading "News 1"
+    And I should see the "News 1" tile
