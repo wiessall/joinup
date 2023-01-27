@@ -43,7 +43,7 @@ function _ventuno_smart_trim(string $string, int $length, bool $ellipsis = TRUE)
 function _ventuno_preprocess_search_result(array &$variables, string $entity_type_id): void {
   $entity = $variables[$entity_type_id];
   $bundle_key = \Drupal::entityTypeManager()->getDefinition($entity_type_id)->getKey('bundle');
-  $variables['text'] = $entity instanceof DescriptionInterface ? $variables['content'][$entity->getDescriptionField()] : NULL;
+  $variables['text'] = $entity instanceof DescriptionInterface && isset($variables['content'][$entity->getDescriptionField()]) ? $variables['content'][$entity->getDescriptionField()] : NULL;
   $variables['topics'] = ($entity instanceof TopicReferencingEntityInterface) ? $entity->getTopics() : NULL;
   if ($variables['topics']) {
     $num_of_items = count($variables['topics']);
