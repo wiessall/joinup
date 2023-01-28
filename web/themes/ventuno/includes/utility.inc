@@ -62,7 +62,8 @@ function _ventuno_preprocess_search_result(array &$variables, string $entity_typ
     }
   }
 
-  $variables['type'] = strtoupper($entity->get($bundle_key)->entity->getSingularLabel());
+  $bundle_type = $entity->get($bundle_key)->entity;
+  $variables['type'] = strtoupper($bundle_type->getSingularLabel() ?? $bundle_type->label());
   if ($created_time = $entity->getCreatedTime()) {
     $variables['creation'] = t('@label: @created', [
       '@label' => t('Created'),
