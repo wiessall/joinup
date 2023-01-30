@@ -1884,94 +1884,6 @@ class FeatureContext extends RawDrupalContext {
   }
 
   /**
-   * Disables the Antibot & Honeypot functionalities before tests run.
-   *
-   * @BeforeSuite
-   */
-  public static function disableAntispamBeforeSuiteStarts(): void {
-    if (static::isDigitQaPipeline()) {
-      $projectPath = rtrim(getenv('CI_PROJECT_DIR'), DIRECTORY_SEPARATOR);
-    }
-    else {
-      $projectPath = DRUPAL_ROOT . '/../';
-    }
-    exec("{$projectPath}/vendor/bin/run testing:uninstall-antispam-modules");
-  }
-
-  /**
-   * Restores the Antibot & Honeypot functionalities after tests run.
-   *
-   * @AfterSuite
-   */
-  public static function restoreAntispamAfterSuiteEnds(): void {
-    if (static::isDigitQaPipeline()) {
-      $projectPath = rtrim(getenv('CI_PROJECT_DIR'), DIRECTORY_SEPARATOR);
-    }
-    else {
-      $projectPath = DRUPAL_ROOT . '/../';
-    }
-    exec("{$projectPath}/vendor/bin/run testing:install-antispam-modules");
-  }
-
-  /**
-   * Enable the Antibot & Honeypot functionalities during tests run.
-   *
-   * If a scenario wants to have Antibot & Honeypot functionalities enabled,
-   * it should be tagged with @antispam.
-   *
-   * @BeforeScenario @antispam&&@api
-   */
-  public static function enableAntispamBeforeScenarioStarts(): void {
-    static::restoreAntispam();
-  }
-
-  /**
-   * Restores the Antibot & Honeypot functionalities after tests run.
-   *
-   * @AfterScenario @antispam&&@api
-   */
-  public static function restoreAntispamAfterScenarioEnds(): void {
-    static::disableAntispam();
-  }
-
-  /**
-   * Checks if the current form is protected by Antibot.
-   *
-   * @throws \Exception
-   *   When the expectancy is not met.
-   *
-   * @Then the form is protected by Antibot
-   */
-  public function assertFormIsProtectedByAntibot(): void {
-    $session = $this->getSession();
-
-    // Unlock the form by using the Antibot javascript API.
-    $session->executeScript('Drupal.antibot.unlockForms();');
-
-    $has_js_assigned_value = (bool) $session->getPage()->find('xpath', '//form[@data-action]//input[@data-drupal-selector="edit-antibot-key" and @name="antibot_key" and string(@value)]');
-    if (!$has_js_assigned_value) {
-      throw new \Exception("Not an Antibot protected form.");
-    }
-  }
-
-  /**
-   * Checks if the current form is protected by Honeypot.
-   *
-   * @throws \Exception
-   *   When the expectancy is not met.
-   *
-   * @Then the form is protected by Honeypot
-   */
-  public function assertFormIsProtectedByHoneypot(): void {
-    $session = $this->getSession();
-
-    $has_js_assigned_value = (bool) $session->getPage()->find('xpath', '//form//input[@data-drupal-selector="edit-user-homepage" and @name="user_homepage"]');
-    if (!$has_js_assigned_value) {
-      throw new \Exception("Not an Honeypot protected form.");
-    }
-  }
-
-  /**
    * Creates a backup of the `VERSION.txt` file.
    *
    * Tests that interact with the version file should be tagged with `@version`.
@@ -2552,6 +2464,24 @@ class FeatureContext extends RawDrupalContext {
     $actual_theme = Json::decode($drupal_settings->getText())['theme'];
 
     Assert::assertSame($expected_theme, $actual_theme);
+  }
+
+  /**
+   * Installs/uninstalls a module in tests.
+   *
+   * @param string $method
+   *   Either 'install' or 'uninstall'.
+   * @param array $module_name
+   *   The modules to be installed/uninstalled.
+   */
+  protected static function toggleModule(string $method, array $module_name): void {
+    // Ensure that test modules are also discoverable.
+    $settings = ['extension_discovery_scan_tests' => TRUE] + Settings::getAll();
+    new Settings($settings);
+
+    static::bypassReadOnlyConfig();
+    \Drupal::service('module_installer')->$method($module_name);
+    static::restoreReadOnlyConfig();
   }
 
 }
