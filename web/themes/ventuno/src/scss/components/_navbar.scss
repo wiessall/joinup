@@ -161,6 +161,6 @@
   &.navbar--sticky {
     position: sticky;
     top: 0;
-    z-index: 502; // Avoid navbar to be overlapped by "add content" button
+    z-index: 501; // Avoid navbar to overlap toolbar-tray
   }
 }

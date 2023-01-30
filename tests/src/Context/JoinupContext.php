@@ -284,15 +284,6 @@ class JoinupContext extends RawDrupalContext {
       }
     }
 
-    /** @var \Drupal\Core\Extension\ModuleHandlerInterface $module_handler */
-    $module_handler = \Drupal::service('module_handler');
-    if ($module_handler->moduleExists('honeypot')) {
-      // Submit form, waiting for Honeypot protection delay to pass.
-      /** @var \Drupal\Tests\honeypot\Behat\HoneypotContext $honeypot */
-      $honeypot = $this->getContext('\Drupal\Tests\honeypot\Behat\HoneypotContext');
-      $honeypot->waitForTimeLimit();
-    }
-
     $this->getSession()->getPage()->pressButton("Create new account");
 
     // Get the last registered user.

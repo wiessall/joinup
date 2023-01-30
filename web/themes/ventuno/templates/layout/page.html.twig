@@ -58,7 +58,7 @@
   {% endif %}
 
   {% if page.featured %}
-    <div class="region-featured py-5">
+    <div class="region-featured">
       <div class="container">
         {{ page.featured }}
       </div>
@@ -79,7 +79,7 @@
 
   <div class="content container mb-5">
     <div class="row">
-      <main role="main" class="col-12 col-lg-10 col-xl-9 col-xxl-8{% if page.sidebar %} col-lg-9 order-1{% endif %}">
+      <main role="main" class="col-12 col-lg-10 col-xl-9 col-xxl-8{% if page.sidebar %} col-lg-9 col-xxl-9 order-1{% endif %}">
         <div id="main-content" tabindex="-1"></div>{# link is in html.html.twig #}
         <div class="layout-content">
           {{ page.content }}
