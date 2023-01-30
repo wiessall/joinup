@@ -189,6 +189,8 @@ class WysiwygContext extends RawDrupalContext {
   }
 
   /**
+   * Checks if the WYSIWYG editor height is correct.
+   *
    * @param string $label
    *   The label of the field containing the WYSIWYG editor to inspect.
    *
