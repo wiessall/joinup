@@ -61,7 +61,7 @@ function joinup_rdf_form_rdf_entity_form_alter(array &$form, FormStateInterface 
       \Drupal::service('honeypot')->addFormProtection(
         $form,
         $form_state,
-        ['honeypot', 'user_homepage']
+        ['honeypot', 'time_restriction']
       );
     }
   }

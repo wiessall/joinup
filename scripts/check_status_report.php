@@ -15,7 +15,7 @@ if (PHP_SAPI !== 'cli') {
 
 $autoloader = require __DIR__ . '/../vendor/autoload.php';
 
-$ignored_requirements = getenv('DRUPAL_STATUS_REPORT_IGNORE') ?: 'update status,joinup_core_root_user_blocked,search_api_solr_schema_joinup_modifications,deprecated_modules,metatag_maintenance_mode';
+$ignored_requirements = getenv('DRUPAL_STATUS_REPORT_IGNORE') ?: 'update status,joinup_core_root_user_blocked,search_api_solr_schema_joinup_modifications,deprecated_modules,deprecated_themes,metatag_maintenance_mode,search_api_pending_tasks';
 $ignored_option = "--ignore='$ignored_requirements'";
 
 function run_status_report(bool $title_only): ?string {
