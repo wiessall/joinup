@@ -188,4 +188,24 @@ class WysiwygContext extends RawDrupalContext {
     }
   }
 
+  /**
+   * @param string $label
+   *   The label of the field containing the WYSIWYG editor to inspect.
+   *
+   * @Then I check :label wysiwyg height
+   */
+  public function checkWysiwygHeight(string $label): void {
+    $wysiwyg = $this->getWysiwyg($label);
+    $ck_content = $wysiwyg->find('css', '.ck-content')->getXpath();
+    $wysiwyg_height = $this->getSession()->evaluateScript('return document.evaluate(`' . $ck_content . '`, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue.offsetHeight;');
+    $body_height = $this->getSession()->evaluateScript('return Math.max(
+            document.body.scrollHeight,
+            document.body.offsetHeight,
+            document.documentElement.offsetHeight
+        );');
+    if ($wysiwyg_height > $body_height) {
+      throw new \Exception("'$label' editor is displayed with wrong height.");
+    }
+  }
+
 }
