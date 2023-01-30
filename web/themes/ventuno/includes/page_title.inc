@@ -22,7 +22,7 @@ function ventuno_preprocess_page_title(array &$variables): void {
   $entity = $variables['entity'] ?? NULL;
   if ($entity instanceof CommunityContentInterface) {
     $variables['bundle'] = $entity->get('type')->entity->bundle();
-    $variables['bundle_label'] = $entity->get('type')->entity->getSingularLabel();
+    $variables['bundle_label'] = ucfirst($entity->get('type')->entity->getSingularLabel());
 
     $author_inline = _ventuno_get_author($entity);
     $variables['additional_content']['author'] = $author_inline;
