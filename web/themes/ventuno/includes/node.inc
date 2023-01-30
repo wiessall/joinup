@@ -7,6 +7,7 @@
 
 declare(strict_types = 1);
 
+use Drupal\eif\EifInterface;
 use Drupal\joinup_bundle_class\LogoInterface;
 use Drupal\joinup_group\JoinupGroupHelper;
 
@@ -147,7 +148,7 @@ function ventuno_preprocess_node(array &$variables): void {
   }
 
   // Hide the white area (main content block) from the EIF Toolbox.
-  if ((int) $node->id() === 705372) {
+  if ((int) $node->id() === EifInterface::EIF_ONLINE_ASSISTANT) {
     unset($variables['content']);
   }
 }
