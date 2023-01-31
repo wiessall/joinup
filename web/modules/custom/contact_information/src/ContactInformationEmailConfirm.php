@@ -4,8 +4,11 @@ declare(strict_types = 1);
 
 namespace Drupal\contact_information;
 
+use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Render\RendererInterface;
+use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\contact_information\Entity\ContactInformationInterface;
 use Drupal\email_confirmer\EmailConfirmerManagerInterface;
 use Drupal\joinup_group\Entity\GroupInterface;
@@ -43,11 +46,13 @@ class ContactInformationEmailConfirm implements ContactInformationEmailConfirmIn
    *   The email confirmer service. The $email_confirmer argument is set as
    *   nullable to avoid the non-existent service "email_confirmer" error during
    *   the deployment. This should be reverted after deploying this change.
+   * @param \Drupal\Core\Session\AccountProxyInterface $current_user
+   *   The account proxy service.
    *
    * @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7300
    * @todo Make $email_confirmer non-nullable in ISAICP-7300.
    */
-  public function __construct(EntityTypeManagerInterface $entity_type_manager, RendererInterface $renderer, ?EmailConfirmerManagerInterface $email_confirmer) {
+  public function __construct(EntityTypeManagerInterface $entity_type_manager, RendererInterface $renderer, ?EmailConfirmerManagerInterface $email_confirmer, protected AccountProxyInterface $current_user) {
     $this->entityTypeManager = $entity_type_manager;
     $this->renderer = $renderer;
     // @todo Remove this in ISAICP-7300.
@@ -112,19 +117,6 @@ class ContactInformationEmailConfirm implements ContactInformationEmailConfirmIn
   /**
    * {@inheritdoc}
    */
-  public function resendEmail(string $email): bool {
-    if ($this->emailConfirmer->getConfirmation($email, FALSE, static::REALM)) {
-      // Ignore if the contact information is not attached to any group.
-      if ($gids = $this->getGroupsUsingContactInfoWithEmail($email)) {
-        return (bool) $this->emailConfirmer->confirm($email, ['groups' => $gids], static::REALM);
-      }
-    }
-    return FALSE;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
   public function getGroupsUsingContactInfoWithEmail(string $email): array {
     $storage = $this->entityTypeManager->getStorage('rdf_entity');
     $contact_ids = $storage->getQuery()
@@ -176,6 +168,21 @@ class ContactInformationEmailConfirm implements ContactInformationEmailConfirmIn
         }
       }
     }
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function emailConfirmationAccess(ContactInformationInterface $contact_information): AccessResultInterface {
+    // Check if the user has the global permission to access
+    // resend email confirmation request of all groups (e.g. moderators).
+    if ($this->current_user->hasPermission('resend email confirmation request')) {
+      return AccessResult::allowed();
+    }
+
+    // Check if the user has permission to access the group resend
+    // email confirmation request of this particular group (e.g. facilitators).
+    return $contact_information->getRelatedGroup()->getGroupAccess('resend email confirmation request', $this->current_user);
   }
 
 }
