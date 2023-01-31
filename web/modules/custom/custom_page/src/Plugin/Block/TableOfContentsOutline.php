@@ -12,7 +12,6 @@ use Drupal\Core\Menu\MenuLinkInterface;
 use Drupal\Core\Menu\MenuLinkTreeInterface;
 use Drupal\Core\Menu\MenuTreeParameters;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
-use Drupal\Core\Render\Markup;
 use Drupal\custom_page\CustomPageOgMenuLinksManagerInterface;
 use Drupal\og_menu\OgMenuInstanceInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -126,7 +125,7 @@ class TableOfContentsOutline extends BlockBase implements ContainerFactoryPlugin
     if ($prev = $this->getPrevElement()) {
       $links['prev'] = [
         'url' => $prev->getUrlObject(),
-        'title' => Markup::create('<span class="icon icon--previous"></span>' . $prev->getTitle()),
+        'title' => $prev->getTitle(),
       ];
     }
     if ($up = $this->getParentElement()) {
@@ -138,13 +137,16 @@ class TableOfContentsOutline extends BlockBase implements ContainerFactoryPlugin
     if ($next = $this->getNextElement()) {
       $links['next'] = [
         'url' => $next->getUrlObject(),
-        'title' => Markup::create($next->getTitle() . '<span class="icon icon--next"></span>'),
+        'title' => $next->getTitle(),
       ];
     }
 
     $build = [
       '#theme' => 'links',
       '#links' => $links,
+      '#attributes' => [
+        'data-joinup-block-id' => $this->getPluginId(),
+      ],
     ];
 
     $og_menu_id = $this->getOgMenuName();

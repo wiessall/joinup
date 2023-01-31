@@ -85,7 +85,9 @@
           {{ page.content }}
         </div>
         {% if page.content_bottom %}
-          {{ page.content_bottom }}
+          <div class="content-bottom">
+            {{ page.content_bottom }}
+          </div>
         {% endif %}
       </main>
       {% if page.sidebar %}
