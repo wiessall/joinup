@@ -16,16 +16,16 @@ use Drupal\topic\Entity\TopicReferencingEntityInterface;
  */
 function ventuno_preprocess_block(&$variables) {
   $block_id = $variables['elements']['#id'] ?? NULL;
-  switch ($block_id) {
 
+  switch ($block_id) {
     // Add class to navigation bottom links on custom pages.
     case 'ventuno_toc_outline':
+      if (isset($variables['attributes']['data-joinup-block-id'])) {
+        // Transfer the block plugin ID to the links template.
+        $variables['content']['#attributes']['data-joinup-block-id'] = $variables['attributes']['data-joinup-block-id'];
+      }
       $variables['#attached']['library'][] = 'ventuno/navigation-bottom';
       $variables['attributes']['class'][] = 'navigation-bottom';
-      $variables['content']['#attributes']['class'][] = 'navigation-bottom__links';
-      if (isset($variables['content']['#links']) && count($variables['content']['#links']) === 1) {
-        $variables['content']['#attributes']['class'][] = 'navigation-bottom__links--only-next';
-      }
       break;
 
     case 'ventuno_webtools_etrans':
