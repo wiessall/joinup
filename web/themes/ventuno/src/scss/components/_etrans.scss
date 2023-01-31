@@ -1,0 +1,47 @@
+/*
+ * Override OpenEuropa's Webtools eTrans button to make it look consistent with
+ * the rest of the website
+*/
+// Allow absolute positioning of the button
+.block-oe-webtools-etrans {
+  float: right;
+}
+.etrans.wt-etrans {
+  button#eTransButton.wt-btn {
+    // Override webtools eTrans button styles
+    // Make it look like "btn btn-sm btn-secondary"
+    display: inline-block;
+    padding: $btn-padding-y-sm $btn-padding-x-sm;
+    font-family: $btn-font-family;
+    font-size: $btn-font-size-sm;
+    font-weight: $font-weight-bold;
+    line-height: $btn-line-height;
+    color: $primary;
+    text-align: center;
+    vertical-align: middle;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+    border: $btn-border-width solid $secondary;
+    border-radius: $btn-border-radius-sm;
+    background-color: $secondary;
+    box-shadow: $btn-box-shadow;
+    transition: $btn-transition;
+    &:hover {
+      color: $dark;
+      text-decoration: none;
+      box-shadow: $box-shadow;
+    }
+    &::before {
+      margin-right: $spacer * .5;
+      @include get-bootstrap-icon('translate', currentColor);
+    }
+    // From medium devices up, button is medium size like "btn-md"
+    @include media-breakpoint-up(md) {
+      padding: $btn-padding-y $btn-padding-x;
+      font-size: $btn-font-size;
+      border-radius: $btn-border-radius;
+    }
+  }
+}

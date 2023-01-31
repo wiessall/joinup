@@ -522,6 +522,15 @@ module.exports = {
       },
     },
     {
+      entry: path.resolve(outputFolder, "src/scss/etrans.scss"),
+      dest: path.resolve(outputFolder, "assets/css/etrans.min.css"),
+      options: {
+        includePaths,
+        minify: true,
+        sourceMap: "file",
+      },
+    },
+    {
       entry: path.resolve(outputFolder, "src/scss/timeline.scss"),
       dest: path.resolve(outputFolder, "assets/css/timeline.min.css"),
       options: {
