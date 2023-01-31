@@ -6,7 +6,6 @@ namespace Drupal\topic;
 
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
-use Drupal\search_api\Plugin\search_api\datasource\ContentEntityTrackingManager;
 use Drupal\sparql_entity_storage\Driver\Database\sparql\ConnectionInterface;
 
 /**
