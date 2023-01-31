@@ -551,7 +551,6 @@ function joinup_core_deploy_108906(): void {
   $taxonomy_tree = $manager->loadTree('topic', 0, NULL, TRUE);
   foreach ($taxonomy_tree as $term) {
     if ($term instanceof TopicInterface) {
-      \Drupal::service('search_api.entity_datasource.tracking_manager')->trackEntityChange($term);
       TopicMetaEntity::create([
         'type' => 'topic',
         'target' => $term,
