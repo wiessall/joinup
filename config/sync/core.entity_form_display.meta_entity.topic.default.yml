@@ -19,7 +19,7 @@ mode: default
 content:
   description:
     type: string_textarea
-    weight: 4
+    weight: 1
     region: content
     settings:
       rows: 5
@@ -27,7 +27,7 @@ content:
     third_party_settings: {  }
   image:
     type: image_image
-    weight: 1
+    weight: 0
     region: content
     settings:
       progress_indicator: throbber
@@ -35,14 +35,14 @@ content:
     third_party_settings: {  }
   published:
     type: boolean_checkbox
-    weight: 2
+    weight: 3
     region: content
     settings:
       display_label: true
     third_party_settings: {  }
   topics_paragraph:
     type: paragraphs
-    weight: 3
+    weight: 2
     region: content
     settings:
       title: Paragraph
