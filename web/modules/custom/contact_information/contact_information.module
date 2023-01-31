@@ -33,19 +33,6 @@ use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\rdf_entity\RdfInterface;
 
 /**
- * Implements hook_theme().
- */
-function contact_information_theme($existing, $type, $theme, $path) {
-  return [
-    'contact_information_confirm' => [
-      'variables' => [
-        'link' => NULL,
-      ],
-    ],
-  ];
-}
-
-/**
  * Implements hook_entity_bundle_info_alter().
  */
 function contact_information_entity_bundle_info_alter(&$bundles) {
@@ -462,20 +449,24 @@ function contact_information_rdf_entity_view(array &$build, RdfInterface $contac
       $build['#attached'] = ['library' => ['contact_information/contact-us']];
       $build += ['#attributes' => []];
       $build['#attributes']['data-joinup-contact-info-id'] = $contact_information->id();
+      /** @var \Drupal\email_confirmer\EmailConfirmationInterface $confirmation */
       $confirmation = \Drupal::service('email_confirmer')->getConfirmation($contact_information->get('field_ci_email')->value);
       // If confirmation is unconfirmed yet.
-      if ($confirmation && $confirmation->get('confirmed')->value == EmailConfirmationInterface::UNCONFIRMED) {
-        /** @var \Drupal\contact_information\ContactInformationConfirmAccessInterface $email_confirm_access */
-        $email_confirm_access = \Drupal::service('contact_information.email_confirm_access');
+      if ($confirmation && $confirmation->isPending()) {
+        /** @var \Drupal\contact_information\ContactInformationEmailConfirmInterface $email_confirm */
+        $email_confirm = \Drupal::service('contact_information.email_confirm');
+        $confirmation_url = Url::fromRoute('entity.email_confirmer_confirmation.resend', ['confirmation' => $confirmation->id()], ['query' => \Drupal::destination()->getAsArray()])->toString();
+
         $build['email_confirm'] = [
-          '#theme' => 'contact_information_confirm',
-          '#link' => [
-            '#type' => 'link',
-            '#title' => t('confirm'),
-            '#url' => Url::fromRoute('contact_information.email_confirm', ['contact_information' => $contact_information->id()]),
-          ],
-          '#access' => $email_confirm_access->access($contact_information),
+          '#type' => 'markup',
+          '#markup' => t('Please <a href=":resend_url">confirm</a> your contact information to enable users to contact you.',
+          [
+            ':resend_url' => $confirmation_url,
+          ]),
+          '#access' => $email_confirm->emailConfirmationAccess($contact_information),
         ];
+        $build['#cache']['contexts'] = Cache::mergeContexts($build['#cache']['contexts'], ['og_role']);
+
       }
 
     }
