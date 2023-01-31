@@ -1,0 +1,37 @@
+.navigation-bottom {
+  &__links {
+    padding: 0;
+    display: flex;
+    margin: $spacer * 2 0;
+    list-style-type: none;
+    li {
+      &.prev,
+      &.next {
+        width: 46%;
+      }
+      &.up {
+        width: 8%;
+        min-width: 30px;
+        text-align: center;
+      }
+      &.next {
+        text-align: right;
+      }
+    }
+    &--only-next {
+      li.next {
+        width: 100%;
+      }
+    }
+    .icon {
+      &.icon--previous {
+        margin-right: $spacer * .5;
+        @include get-bootstrap-icon('chevron-left', currentColor);
+      }
+      &.icon--next {
+        margin-left: $spacer * .5;
+        @include get-bootstrap-icon('chevron-right', currentColor);
+      }
+    }
+  }
+}

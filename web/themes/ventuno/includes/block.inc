@@ -18,6 +18,16 @@ function ventuno_preprocess_block(&$variables) {
   $block_id = $variables['elements']['#id'] ?? NULL;
   switch ($block_id) {
 
+    // Add class to navigation bottom links on custom pages.
+    case 'ventuno_toc_outline':
+      $variables['#attached']['library'][] = 'ventuno/navigation-bottom';
+      $variables['attributes']['class'][] = 'navigation-bottom';
+      $variables['content']['#attributes']['class'][] = 'navigation-bottom__links';
+      if (isset($variables['content']['#links']) && count($variables['content']['#links']) === 1) {
+        $variables['content']['#attributes']['class'][] = 'navigation-bottom__links--only-next';
+      }
+      break;
+
     case 'ventuno_webtools_etrans':
       $variables['#attached']['library'][] = 'ventuno/etrans';
       break;
