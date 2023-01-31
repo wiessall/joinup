@@ -11,6 +11,10 @@
           display: flex;
           align-items: center;
           justify-content: start;
+          &::before {
+            margin-right: $spacer * .5;
+            @include get-bootstrap-icon('chevron-left', currentColor);
+          }
         }
       }
       &.next {
@@ -20,6 +24,10 @@
           display: flex;
           align-items: center;
           justify-content: end;
+          &::after {
+            margin-left: $spacer * .5;
+            @include get-bootstrap-icon('chevron-right', currentColor);
+          }
         }
       }
       &.up {
@@ -31,16 +39,6 @@
     &--only-next {
       li.next {
         width: 100%;
-      }
-    }
-    .icon {
-      &.icon--previous {
-        margin-right: $spacer * .5;
-        @include get-bootstrap-icon('chevron-left', currentColor);
-      }
-      &.icon--next {
-        margin-left: $spacer * .5;
-        @include get-bootstrap-icon('chevron-right', currentColor);
       }
     }
   }
