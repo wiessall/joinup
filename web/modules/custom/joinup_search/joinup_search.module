@@ -576,7 +576,7 @@ function joinup_search_views_pre_render(ViewExecutable $view): void {
  * @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7540
  */
 function joinup_search_facets_block_facets_alter(array &$facets): void {
-  if (\Drupal::routeMatch()->getRouteName() === 'view.search.page_1') {
+  if (\Drupal::routeMatch()->getRouteName() === 'view.search.page_1' && isset($facets[0]['content'][0]['#items']) && is_array($facets[0]['content'][0]['#items'])) {
     $facets[0]['content'][0]['#items'] = array_values(array_filter(
       $facets[0]['content'][0]['#items'],
       fn(array $item): bool => !UrlHelper::isValid($item['#title']['#value'], TRUE),
