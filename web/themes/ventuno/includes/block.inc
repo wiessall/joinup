@@ -12,6 +12,19 @@ use Drupal\topic\Entity\TopicInterface;
 use Drupal\topic\Entity\TopicReferencingEntityInterface;
 
 /**
+ * Implements hook_preprocess_block().
+ */
+function ventuno_preprocess_block(&$variables) {
+  $block_id = $variables['elements']['#id'] ?? NULL;
+  switch ($block_id) {
+
+    case 'ventuno_webtools_etrans':
+      $variables['#attached']['library'][] = 'ventuno/etrans';
+      break;
+  }
+}
+
+/**
  * Implements hook_theme_suggestions_HOOK_alter() for the block hook.
  */
 function ventuno_theme_suggestions_block_alter(array &$suggestions, array $variables): void {
