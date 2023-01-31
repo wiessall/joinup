@@ -5,17 +5,27 @@
     margin: $spacer * 2 0;
     list-style-type: none;
     li {
-      &.prev,
+      &.prev {
+        width: 46%;
+        a {
+          display: flex;
+          align-items: center;
+          justify-content: start;
+        }
+      }
       &.next {
         width: 46%;
+        text-align: right;
+        a {
+          display: flex;
+          align-items: center;
+          justify-content: end;
+        }
       }
       &.up {
         width: 8%;
         min-width: 30px;
         text-align: center;
-      }
-      &.next {
-        text-align: right;
       }
     }
     &--only-next {
