@@ -56,8 +56,8 @@ Feature: Resend validation email from collection/solution about page
     Then I should not see the text "Please confirm your contact information to enable users to contact you"
     When I go to the edit form of the "Rally fanatics" collection
     And I fill in the following:
-      | E-mail | invisible.man@example.com |
-      | Name   | Invisible Man             |
+      | E-mail | confirmation_email.man@example.com     |
+      | Name   | Confirmation Invisible Man             |
     And I press "Create contact information"
     And I press "Publish"
     When I go to the homepage of the "Rally fanatics" collection
@@ -68,7 +68,7 @@ Feature: Resend validation email from collection/solution about page
     And I click "About"
     Then I should see the text "Please confirm your contact information to enable users to contact you"
     When I click "confirm"
-    Then I should see the text "A new confirmation message has been sent to invisible.man@example.com"
+    Then I should see the text "A new confirmation message has been sent to confirmation_email.man@example.com"
 
     # Check scenario for Member role
     Given I am logged in as "Group user"
@@ -86,8 +86,8 @@ Feature: Resend validation email from collection/solution about page
     Then I should not see the text "Please confirm your contact information to enable users to contact you"
     When I go to the edit form of the "Klop mirubes" solution
     And I fill in the following:
-      | E-mail | invisible.man2@example.com |
-      | Name   | Invisible2 Man             |
+      | E-mail | confirmation_email2.man@example.com     |
+      | Name   | Confirmation Invisible Man 2            |
     And I press "Create contact information"
     And I press "Publish"
     When I go to the homepage of the "Klop mirubes" solution
@@ -98,7 +98,7 @@ Feature: Resend validation email from collection/solution about page
     And I click "About"
     Then I should see the text "Please confirm your contact information to enable users to contact you"
     When I click "confirm"
-    Then I should see the text "A new confirmation message has been sent to invisible.man2@example.com"
+    Then I should see the text "A new confirmation message has been sent to confirmation_email2.man@example.com"
 
     # Check scenario for Member role
     Given I am logged in as "Group user"
