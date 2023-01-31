@@ -9,7 +9,7 @@ dependencies:
 id: ventuno_eifrecomendationsselector
 theme: ventuno
 region: content
-weight: -8
+weight: -7
 provider: null
 plugin: eif_recommendation_selector
 settings:
