@@ -34,14 +34,16 @@
           } else {
             navbar.style.top = "0px";
           }
+          // Recompute the viewport offsets.
+          Drupal.displace(true);
         }, 0);
       }
       // Execute first on page load.
       positionNavbarTop();
-      // Execute again if user clicks on any toolbar item.
+      // Execute when the user clicks on toolbar, resizes or scrolls the window.
       toolbar.addEventListener("click", positionNavbarTop);
-      // Execute again if user resizes the window.
       window.addEventListener("resize", positionNavbarTop, false);
+      window.addEventListener("scroll", positionNavbarTop, false);
     },
   };
 })();
