@@ -376,7 +376,7 @@ Feature: Log in through EU Login
 
     Given I am logged in as a user with the "moderator" role
     And I visit "Dashboard"
-    And I check "New accounts needs approval"
+    And I check "New accounts need approval"
     And I press "Submit"
     Then I should see the warning message "Registering new users to Joinup requires approval is enabled"
 
@@ -401,6 +401,7 @@ Feature: Log in through EU Login
     When I click "People"
     And I fill in "Name or email contains" with "ricky_martin"
     And I press "Filter"
+    Then I should see "Blocked" in the "ricky_martin" row
 
     # Unblock the user
     Then I check "ricky_martin"
@@ -421,7 +422,7 @@ Feature: Log in through EU Login
     # Restore open registration.
     Given I am logged in as a user with the "moderator" role
     And I visit "Dashboard"
-    And I uncheck "New accounts needs approval"
+    And I uncheck "New accounts need approval"
     And I press "Submit"
     Then I should see the success message "Registering new users to Joinup requires approval is disabled"
 
