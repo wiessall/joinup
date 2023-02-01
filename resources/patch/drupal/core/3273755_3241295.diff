@@ -1,0 +1,140 @@
+Index: core/modules/ckeditor5/js/ckeditor5.js
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/core/modules/ckeditor5/js/ckeditor5.js b/core/modules/ckeditor5/js/ckeditor5.js
+--- a/core/modules/ckeditor5/js/ckeditor5.js
++++ b/core/modules/ckeditor5/js/ckeditor5.js	(date 1675262803892)
+@@ -172,7 +172,22 @@
+       var id = setElementId(element);
+       var ClassicEditor = editorClassic.ClassicEditor;
+       ClassicEditor.create(element, editorConfig).then(function (editor) {
++        function calculateLineHeight(rows) {
++          var element = document.createElement('p');
++          element.setAttribute('style', 'visibility: hidden;');
++          element.innerHTML = '&nbsp;';
++          editor.ui.view.editable.element.append(element);
++          var styles = window.getComputedStyle(element);
++          var height = element.clientHeight;
++          var marginTop = parseInt(styles.marginTop, 10);
++          var marginBottom = parseInt(styles.marginBottom, 10);
++          var mostMargin = marginTop >= marginBottom ? marginTop : marginBottom;
++          element.remove();
++          return (height + mostMargin) * (rows - 1) + marginTop + height + marginBottom;
++        }
+         Drupal.CKEditor5Instances.set(id, editor);
++        var rows = editor.sourceElement.getAttribute('rows');
++        editor.ui.view.editable.element.closest('.ck-editor').style.setProperty('--ck-min-height', "".concat(calculateLineHeight(rows), "px"));
+         if (element.hasAttribute('required')) {
+           required.add(id);
+           element.removeAttribute('required');
+@@ -311,4 +326,4 @@
+       Drupal.ckeditor5.saveCallback = null;
+     }
+   });
+-})(Drupal, Drupal.debounce, CKEditor5, jQuery, once);
+\ No newline at end of file
++})(Drupal, Drupal.debounce, CKEditor5, jQuery, once);
+Index: core/modules/ckeditor5/js/ckeditor5.es6.js
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/core/modules/ckeditor5/js/ckeditor5.es6.js b/core/modules/ckeditor5/js/ckeditor5.es6.js
+--- a/core/modules/ckeditor5/js/ckeditor5.es6.js
++++ b/core/modules/ckeditor5/js/ckeditor5.es6.js	(date 1675262748816)
+@@ -420,9 +420,55 @@
+
+       ClassicEditor.create(element, editorConfig)
+         .then((editor) => {
++          /**
++           * Injects a temporary <p> into CKEditor and then calculates the entire
++           * height of the amount of the <p> tags from the passed in rows value.
++           *
++           * This takes into account collapsing margins, and line-height of the
++           * current theme.
++           *
++           * @param {number} - the number of rows.
++           *
++           * @returns {number} - the height of a div in pixels.
++           */
++          function calculateLineHeight(rows) {
++            const element = document.createElement('p');
++            element.setAttribute('style', 'visibility: hidden;');
++            element.innerHTML = '&nbsp;';
++            editor.ui.view.editable.element.append(element);
++
++            const styles = window.getComputedStyle(element);
++            const height = element.clientHeight;
++            const marginTop = parseInt(styles.marginTop, 10);
++            const marginBottom = parseInt(styles.marginBottom, 10);
++            const mostMargin =
++              marginTop >= marginBottom ? marginTop : marginBottom;
++
++            element.remove();
++            return (
++              (height + mostMargin) * (rows - 1) +
++              marginTop +
++              height +
++              marginBottom
++            );
++          }
++
+           // Save a reference to the initialized instance.
+           Drupal.CKEditor5Instances.set(id, editor);
+
++          // Set the minimum height of the editable area to correspond with the
++          // value of the number of rows. We attach this custom property to
++          // the `.ck-editor` element, as that doesn't get its inline styles
++          // cleared on focus. The editable element is then set to use this
++          // property within the stylesheet.
++          const rows = editor.sourceElement.getAttribute('rows');
++          editor.ui.view.editable.element
++            .closest('.ck-editor')
++            .style.setProperty(
++              '--ck-min-height',
++              `${calculateLineHeight(rows)}px`,
++            );
++
+           // CKEditor 4 had a feature to remove the required attribute
+           // see: https://www.drupal.org/project/drupal/issues/1954968
+           if (element.hasAttribute('required')) {
+Index: core/modules/ckeditor5/css/editor.css
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/core/modules/ckeditor5/css/editor.css b/core/modules/ckeditor5/css/editor.css
+--- a/core/modules/ckeditor5/css/editor.css
++++ b/core/modules/ckeditor5/css/editor.css	(date 1675262613002)
+@@ -8,3 +8,29 @@
+   opacity: 1 !important;
+   fill-opacity: 1 !important;
+ }
++
++/**
++ * Set the min-height equal to configuration value for the number of rows.
++ *
++ * The `--ck-min-height` value is set on the parent `.ck-editor` element by
++ * JavaScript. We add that there because the `.ck-editor__editable` element's
++ * inline styles are cleared on focus.
++ */
++.ck-editor__main > :is(.ck-editor__editable, .ck-source-editing-area) {
++  min-height: var(--ck-min-height);
++}
++
++/**
++ * Set the max-height equal to the browser height.
++ */
++.ck-editor__main > :is(.ck-editor__editable, .ck-source-editing-area) {
++  max-height: calc(100vh - var(--drupal-displace-offset-top, 0px) - 20px);
++}
++
++/**
++ * Overflow for the textarea needs to be added for the same results when using
++ * source view.
++ */
++.ck-editor__main > :is(.ck-source-editing-area) > textarea {
++  overflow: auto;
++}
