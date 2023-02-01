@@ -367,7 +367,7 @@ function contact_information_form_email_contact_mail_form_alter(array &$form, Fo
       \Drupal::service('honeypot')->addFormProtection(
         $form,
         $form_state,
-        ['honeypot', 'user_homepage'],
+        ['honeypot', 'time_restriction'],
       );
     }
   }
