@@ -1,0 +1,18 @@
+<?php
+
+/**
+ * @file
+ * Hook implementations for Joinup Test module.
+ */
+
+declare(strict_types = 1);
+
+/**
+ * Implements hook_honeypot_form_protections_alter().
+ */
+function joinup_test_honeypot_form_protections_alter(array &$options, array $form): void {
+  // Allow to disable anti-spam tools.
+  if (!\Drupal::state()->get('joinup_test.antispam.enabled', FALSE)) {
+    $options = [];
+  }
+}
