@@ -78,8 +78,18 @@
       font-weight: $font-weight-normal;
       box-shadow: 0 4px 0 0 transparent;
       white-space: nowrap;
+      &.show,
       &:hover {
         box-shadow: 0 4px 0 0 $primary!important;
+      }
+    }
+    .nav-link {
+      color: $primary;
+      border-radius: 0;
+      &.active.is-active,
+      &:hover {
+        color: $primary!important;
+        background-color: $secondary;
       }
     }
   }
