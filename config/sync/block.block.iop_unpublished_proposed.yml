@@ -1,0 +1,31 @@
+uuid: 0e42bca4-1736-4a87-a31a-ba13e6c44724
+langcode: en
+status: true
+dependencies:
+  module:
+    - joinup_core
+    - joinup_group
+  theme:
+    - iop
+id: iop_unpublished_proposed
+theme: iop
+region: content_bottom
+weight: 0
+provider: null
+plugin: entity_unpublished
+settings:
+  id: entity_unpublished
+  label: 'Proposed content'
+  label_display: visible
+  provider: joinup_group
+  context_mapping:
+    og: '@rdf_entity.rdf_entity_route_context:rdf_entity'
+  states_filter:
+    - proposed
+  negate_states_filter: 0
+visibility:
+  request_route:
+    id: request_route
+    negate: false
+    routes:
+      - entity.rdf_entity.unpublished_content

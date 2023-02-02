@@ -1,0 +1,30 @@
+uuid: 3855f51f-c6d2-423b-81cd-4806cc5579c9
+langcode: en
+status: true
+dependencies:
+  module:
+    - joinup_core
+    - joinup_group
+  theme:
+    - iop
+id: iop_unpublished_other
+theme: iop
+region: content_bottom
+weight: 0
+provider: null
+plugin: entity_unpublished
+settings:
+  id: entity_unpublished
+  label: 'Other unpublished content'
+  label_display: visible
+  provider: joinup_group
+  context_mapping:
+    og: '@rdf_entity.rdf_entity_route_context:rdf_entity'
+  states_filter: {  }
+  negate_states_filter: 0
+visibility:
+  request_route:
+    id: request_route
+    negate: false
+    routes:
+      - entity.rdf_entity.unpublished_content
