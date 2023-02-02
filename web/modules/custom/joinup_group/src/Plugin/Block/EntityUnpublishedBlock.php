@@ -227,8 +227,8 @@ class EntityUnpublishedBlock extends BlockBase implements ContainerFactoryPlugin
       ->addCondition('entity_groups', $group->id())
       ->sort('entity_created', 'DESC');
 
-    $states_filter = array_filter(array_map('trim', explode(PHP_EOL, $this->configuration['states_filter'])));
-    if (!empty($states_filter)) {
+    if (!empty($this->configuration['states_filter'])) {
+      $states_filter = array_filter(array_map('trim', explode(PHP_EOL, $this->configuration['states_filter'])));
       $query->addCondition('entity_state', $states_filter, $this->configuration['negate_states_filter'] ? 'NOT IN' : 'IN');
     }
     return $query;

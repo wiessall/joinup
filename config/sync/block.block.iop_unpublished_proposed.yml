@@ -10,7 +10,7 @@ dependencies:
 id: iop_unpublished_proposed
 theme: iop
 region: content_bottom
-weight: 0
+weight: -15
 provider: null
 plugin: entity_unpublished
 settings:
