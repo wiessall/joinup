@@ -50,12 +50,7 @@ content:
     region: content
     settings: {  }
     third_party_settings: {  }
-  path:
-    type: path
-    weight: 30
-    region: content
-    settings: {  }
-    third_party_settings: {  }
 hidden:
   label: true
+  path: true
   target: true

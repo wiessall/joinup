@@ -33,12 +33,6 @@ content:
       progress_indicator: throbber
       preview_image_style: thumbnail
     third_party_settings: {  }
-  path:
-    type: path
-    weight: 30
-    region: content
-    settings: {  }
-    third_party_settings: {  }
   published:
     type: boolean_checkbox
     weight: 2
@@ -67,4 +61,5 @@ content:
     third_party_settings: {  }
 hidden:
   label: true
+  path: true
   target: true
