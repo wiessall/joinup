@@ -16,7 +16,7 @@
       color: $white;
     }
     &.licence-filter--must {
-      background-color: $joinup--gray !important;
+      background-color: $joinup--brown !important;
       color: $white;
     }
     &.licence-filter--cannot {
@@ -24,15 +24,15 @@
       color: $white;
     }
     &.licence-filter--compatible {
-      background-color: $joinup--indigo !important;
+      background-color: $joinup--softblue !important;
       color: $white;
     }
     &.licence-filter--law {
-      background-color: $joinup--dark-orange !important; // Increase contrast to pass a11y tests
+      background-color: $joinup--gray !important; // Increase contrast to pass a11y tests
       color: $white;
     }
     &.licence-filter--support {
-      background-color: $joinup--brand-darker !important;
+      background-color: $joinup--orange !important;
       color: $white;
     }
   }
@@ -41,19 +41,19 @@
       background-color: rgba($joinup--green, .1);
     }
     &.licence-filter--must {
-      background-color: rgba($joinup--gray, .1);
+      background-color: rgba($joinup--brown, .1);
     }
     &.licence-filter--cannot {
       background-color: rgba($joinup--red, .1);
     }
     &.licence-filter--compatible {
-      background-color: rgba($joinup--indigo, .1);
+      background-color: rgba($joinup--softblue, .1);
     }
     &.licence-filter--law {
-      background-color: rgba($joinup--dark-orange, .1);
+      background-color: rgba($joinup--gray, .1);
     }
     &.licence-filter--support {
-      background-color: rgba($joinup--brand-darker, .1);
+      background-color: rgba($joinup--orange, .1);
     }
   }
   &__header {
