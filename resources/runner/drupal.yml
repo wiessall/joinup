@@ -199,6 +199,7 @@ drupal:
           'devel',
           'filecache',
           'joinup_cas_mock_server',
+          'joinup_test',
           'og_ui',
           'page_manager_ui',
           'update',
@@ -230,6 +231,9 @@ drupal:
           'port' => getenv('DRUPAL_DATABASE_PORT'),
           'namespace' => 'Drupal\\mysql\\Driver\\Database\\mysql',
           'driver' => 'mysql',
+          'init_commands' => [
+            'isolation_level' => 'SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED',
+          ],
         ];
         $databases['sparql_default']['default'] = [
           'host' => getenv('DRUPAL_SPARQL_HOSTNAME'),
@@ -297,7 +301,7 @@ drupal:
         $settings['oe_newsroom_universe_keys'] = getenv('OE_NEWSROOM_UNIVERSE_KEYS');
       OpenEuropa Webtools Geocoding Cache: |
         $settings['cache']['bins']['geocoder'] = 'cache.backend.file_system';
-        $settings['filecache']['directory']['bins']['geocoder'] = '../tests/fixtures/webtools_geocoding/cache';
+        $settings['filecache']['directory']['bins']['geocoder'] = '../tests/fixtures/geocoding/cache';
         $settings['filecache']['strategy']['bins']['geocoder'] = 'persist';
       Development: |
         $settings['extension_discovery_scan_tests'] = TRUE;

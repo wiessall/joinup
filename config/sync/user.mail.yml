@@ -54,7 +54,7 @@ register_no_approval_required:
 
     Please confirm your email address by clicking <a href="[user:one-time-login-url]">[user:one-time-login-url]</a> to complete the creation of your new Joinup account.
 
-    If you think that this email was erroneously sent to you, please disregard this message. 
+    If you think that this email was erroneously sent to you, please disregard this message.
 
     Kind regards,
 
@@ -64,7 +64,7 @@ register_pending_approval:
   body: |-
     Dear [user:field_user_first_name],
 
-    Thank you for registering at [site:name]. Your application for an account is currently pending approval. Once it has been approved, you will receive another email containing information about how to sign in, set your password, and other details.
+    Thank you for registering at [site:name]. Your application for an account is currently pending approval. Once it has been approved, you will receive another email containing information about how to sign in, and other details.
 
     Kind regards,
 
@@ -82,16 +82,9 @@ status_activated:
 
     Your account at [site:name] has been activated.
 
-    You may now log in by clicking this link or copying and pasting it into your browser:
+    You may now log in with EU Login credentials by clicking this link or copying and pasting it into your browser:
 
-    <a href="[user:one-time-login-url]">[user:one-time-login-url]</a>
-
-    This link can only be used once to log in and will lead you to a page where you can set your password.
-
-    After setting your password, you will be able to log in at <a href="[site:login-url]">[site:login-url]</a> in the future using:
-
-    username: [user:account-name]
-    password: Your password
+    <a href="[site:url]">[site:url]</a>
 
     Kind regards,
 
@@ -101,7 +94,7 @@ status_blocked:
   body: |-
     Dear [user:field_user_first_name],
 
-    Your Joinup account was recently blocked by our moderators. 
+    Your Joinup account was recently blocked by our moderators.
     For more information about blocked accounts, please visit our FAQ section.
 
     Kind regards,

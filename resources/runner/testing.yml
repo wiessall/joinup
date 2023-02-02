@@ -7,6 +7,7 @@ testing:
     - dblog
     - filecache
     - joinup_cas_mock_server
+    - joinup_test
     - upgrade_status
 
 behat:
