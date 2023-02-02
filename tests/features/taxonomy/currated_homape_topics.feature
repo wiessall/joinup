@@ -41,6 +41,11 @@ Feature:
     Then I should see the link "Red parent"
 
   Scenario: Moderators can access and manage the topics curated queue.
+    Given I am an anonymous user
+    And I go to the homepage
+    # No homepage topic, no block title.
+    Then I should not see the heading "Main topics"
+
     Given I am logged in as a moderator
     And I click "Dashboard"
     And I click "Curated content listings"
@@ -104,6 +109,8 @@ Feature:
     And I should see the text "E-justice description" in the "Homepage topics" region
     And I should see the text "Finance in EU" in the "Homepage topics" region
     And I should see the text "Finance in EU description" in the "Homepage topics" region
+    # The block title is shown now.
+    And I should see the heading "Main topics"
 
     # Unpublish a term and check it is removed from the curated list.
     When I click "Dashboard"
@@ -123,11 +130,7 @@ Feature:
     But I should see the text "Finance in EU" in the "Homepage topics" region
 
   Scenario: Moderators can alter the title of the homepage topics block.
-    Given I am not logged in
-    And I am on the homepage
-    Then I should see the heading "Main topics"
-
-    When I am logged in as a moderator
+    Given I am logged in as a moderator
     And I click "Dashboard"
     And I click "Curated content listings"
     And I click "Homepage topics"
