@@ -21,7 +21,7 @@ use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\DrupalExtension\TagTrait;
 use Drupal\image\Plugin\Field\FieldType\ImageItem;
 use Drupal\joinup\HtmlManipulator;
-use Drupal\joinup\Traits\AntibotTrait;
+use Drupal\joinup\Traits\AntispamTrait;
 use Drupal\joinup\Traits\ContextualLinksTrait;
 use Drupal\joinup\Traits\EntityTrait;
 use Drupal\joinup\Traits\JavascriptTrait;
@@ -34,6 +34,7 @@ use Drupal\joinup\Traits\UtilityTrait;
 use Drupal\joinup_core\JoinupVersionInterface;
 use Drupal\media\Entity\Media;
 use Joinup\TaskRunner\Traits\TaskRunnerTrait;
+use Joinup\Traits\DigitQaPipelineAwareTrait;
 use LoversOfBehat\TableExtension\Hook\Scope\AfterTableFetchScope;
 use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\ExpectationFailedException;
@@ -46,7 +47,8 @@ use WebDriver\Key;
  */
 class FeatureContext extends RawDrupalContext {
 
-  use AntibotTrait;
+  use DigitQaPipelineAwareTrait;
+  use AntispamTrait;
   use ContextualLinksTrait;
   use EntityTrait;
   use JavascriptTrait;
@@ -1764,7 +1766,7 @@ class FeatureContext extends RawDrupalContext {
    * @BeforeScenario @errorPage&&@api
    */
   public function beforeErrorPageTesting(): void {
-    static::toggleModule('install', 'error_page_test');
+    static::toggleModule('install', ['error_page_test']);
 
     // Pipe error log entries to a file rather than to standard PHP log.
     static::runCommand('drupal:settings error_page_test --root=' . static::getPath('web') . ' --sites-subdir=default');
@@ -1780,7 +1782,7 @@ class FeatureContext extends RawDrupalContext {
    * @AfterScenario @errorPage&&@api
    */
   public function afterErrorPageTesting(): void {
-    static::toggleModule('uninstall', 'error_page_test');
+    static::toggleModule('uninstall', ['error_page_test']);
 
     // Restore piping error log entries to the standard PHP log.
     $settings = Settings::getAll();
@@ -1879,72 +1881,6 @@ class FeatureContext extends RawDrupalContext {
       unset($this->entities['media']);
     }
     \Drupal::state()->delete('image_library_widget.clicks');
-  }
-
-  /**
-   * Disables the Antibot functionality during tests run.
-   *
-   * Antibot module blocks all form submissions for browsers without JavaScript
-   * support or when there's no keyboard or mouse interaction before the form is
-   * submitted. This would make most of Behat tests to fail. We disable Antibot
-   * functionality during Behat tests run.
-   *
-   * If a scenario wants to have Antibot functionality enabled, it should be
-   * tagged with @antibot.
-   *
-   * @BeforeScenario ~@antibot&&@api
-   */
-  public static function disableAntibotBeforeScenarioStarts(): void {
-    static::disableAntibot();
-  }
-
-  /**
-   * Restores the Antibot functionality after tests run.
-   *
-   * @AfterScenario ~@antibot&&@api
-   *
-   * @see self::disableAntibot()
-   */
-  public static function restoreAntibotAfterScenarioEnds(): void {
-    static::restoreAntibot();
-  }
-
-  /**
-   * Installs/uninstalls a module in tests.
-   *
-   * @param string $method
-   *   Either 'install' or 'uninstall'.
-   * @param string $module_name
-   *   The module to be installed/uninstalled.
-   */
-  protected static function toggleModule(string $method, string $module_name): void {
-    // Ensure that test modules are also discoverable.
-    $settings = ['extension_discovery_scan_tests' => TRUE] + Settings::getAll();
-    new Settings($settings);
-
-    static::bypassReadOnlyConfig();
-    \Drupal::service('module_installer')->$method([$module_name]);
-    static::restoreReadOnlyConfig();
-  }
-
-  /**
-   * Checks if the current form is protected by Antibot.
-   *
-   * @throws \Exception
-   *   When the expectancy is not met.
-   *
-   * @Then the form is protected by Antibot
-   */
-  public function assertFormIsProtectedByAntibot(): void {
-    $session = $this->getSession();
-
-    // Unlock the form by using the Antibot javascript API.
-    $session->executeScript('Drupal.antibot.unlockForms();');
-
-    $has_js_assigned_value = (bool) $session->getPage()->find('xpath', '//form[@data-action]//input[@data-drupal-selector="edit-antibot-key" and @name="antibot_key" and string(@value)]');
-    if (!$has_js_assigned_value) {
-      throw new \Exception("Not an Antibot protected form.");
-    }
   }
 
   /**
@@ -2528,6 +2464,24 @@ class FeatureContext extends RawDrupalContext {
     $actual_theme = Json::decode($drupal_settings->getText())['theme'];
 
     Assert::assertSame($expected_theme, $actual_theme);
+  }
+
+  /**
+   * Installs/uninstalls a module in tests.
+   *
+   * @param string $method
+   *   Either 'install' or 'uninstall'.
+   * @param array $module_name
+   *   The modules to be installed/uninstalled.
+   */
+  protected static function toggleModule(string $method, array $module_name): void {
+    // Ensure that test modules are also discoverable.
+    $settings = ['extension_discovery_scan_tests' => TRUE] + Settings::getAll();
+    new Settings($settings);
+
+    static::bypassReadOnlyConfig();
+    \Drupal::service('module_installer')->$method($module_name);
+    static::restoreReadOnlyConfig();
   }
 
 }
