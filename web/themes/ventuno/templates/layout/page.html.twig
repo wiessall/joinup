@@ -54,7 +54,9 @@
   {{ page.header }}
 
   {% if page.header_bottom %}
-    {{ page.header_bottom }}
+    <div class="region-header-bottom">
+      {{ page.header_bottom }}
+    </div>
   {% endif %}
 
   {% if page.featured %}
