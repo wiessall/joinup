@@ -21,7 +21,7 @@ Feature: Navigation menu for custom pages
       | Members  |
       | About    |
     # Check that the 'Edit menu' local action is present.
-    And I should see the contextual link "Edit menu" in the "Left sidebar" region
+    And I should see the contextual link "Edit menu" in the "Header bottom" region
     # The 'Add link' local action that is present in the default implementation
     # of OG Menu should not be visible. We are managing the menu links behind
     # the scenes. The end user should not be able to interact with these.
@@ -308,7 +308,7 @@ Feature: Navigation menu for custom pages
       | About              | Bodypack           | 7      |
     When I am logged in as a facilitator of the "Ergonomic backpacks" <group>
     And I go to the "Ergonomic backpacks" <group>
-    And I click the contextual link "Edit menu" in the "Left sidebar" region
+    And I click the contextual link "Edit menu" in the "Header bottom" region
     # The "About" page has been moved back to first level.
     Then the draggable menu table should be:
       | title              | parent             |
@@ -529,7 +529,7 @@ Feature: Navigation menu for custom pages
 
     When I am logged in as a facilitator of the "Table of contents outline cached" <group>
     And I go to the "Table of contents outline cached" <group>
-    And I click the contextual link "Edit menu" in the "Left sidebar" region
+    And I click the contextual link "Edit menu" in the "Header bottom" region
     When I drag the "TOCO cached 1-1" table row to the left
     Then the draggable menu table should be:
       | title           | parent |
@@ -555,7 +555,7 @@ Feature: Navigation menu for custom pages
 
     When I am logged in as a moderator
     And I go to the "About edit link" <group>
-    And I click the contextual link "Edit menu" in the "Left sidebar" region
+    And I click the contextual link "Edit menu" in the "Header bottom" region
 
     Then the "group menu edit table" table should contain the following columns:
       | Page     | Enabled | Operations |

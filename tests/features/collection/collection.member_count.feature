@@ -94,7 +94,7 @@ Feature: Collection homepage
     When I am not logged in
     When I go to the homepage of the "Under the mountain" collection
     Then I should see the text "4 members" in the "Header" region
-    And I click "Members" in the "Left sidebar"
+    And I click "Members" in the "Header bottom"
     Then the "Roles" field should contain the "- Any - (4)" option
 
     # Ensure that cache is invalidated properly for tiles in search api views.

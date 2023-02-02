@@ -198,7 +198,7 @@ Feature: Collection membership administration
     # Dr Cuddy promotes Dr House to facilitator.
     When I am logged in as "Lisa Cuddy"
     And I go to the "Medical diagnosis" collection
-    Then I click "Members" in the "Left sidebar"
+    Then I click "Members" in the "Header bottom"
     # Assert that the user does not see the default OG tab.
     Then I should not see the link "Group"
     Then I check the box "Update the member Gregory House"
@@ -225,7 +225,7 @@ Feature: Collection membership administration
 
     When I am not logged in
     And I go to the "Medical diagnosis" collection
-    And I click "Members" in the "Left sidebar"
+    And I click "Members" in the "Header bottom"
     Then I should not see the link "Add members"
 
     When I am logged in as an authenticated
@@ -325,7 +325,7 @@ Feature: Collection membership administration
       | Medical diagnosis | xyzzy123 | active |
     When I am logged in as "Lisa Cuddy"
     And I go to the "Medical diagnosis" collection
-    When I click "Members" in the "Left sidebar"
+    When I click "Members" in the "Header bottom"
     Then I should see a table with 5 columns
     # By default the table should be sorted alphabetically.
     And the "member administration" table should contain the following column:
@@ -355,7 +355,7 @@ Feature: Collection membership administration
 
     When I am not logged in
     And I go to the "Medical diagnosis" collection
-    And I click "Members" in the "Left sidebar"
+    And I click "Members" in the "Header bottom"
     Then I should not see the link "Invite members"
 
     When I am logged in as an authenticated
@@ -431,7 +431,7 @@ Feature: Collection membership administration
 
     When I am logged in as "Lisa Cuddy"
     And I go to the "Medical diagnosis" collection
-    And I click "Members" in the "Left sidebar"
+    And I click "Members" in the "Header bottom"
     When I click "Invite members"
 
     When I fill in "E-mail" with "pending_member@example.com"
@@ -446,7 +446,7 @@ Feature: Collection membership administration
   Scenario: Autocomplete creates chips in both the add and the invite forms.
     Given I am logged in as "Lisa Cuddy"
     And I go to the "Medical diagnosis" collection
-    And I click "Members" in the "Left sidebar"
+    And I click "Members" in the "Header bottom"
     When I click "Invite members"
     And I type "Donald" in the "E-mail" autocomplete field
     And I wait until the page contains the text "Donald Duck (Donald Duck)"

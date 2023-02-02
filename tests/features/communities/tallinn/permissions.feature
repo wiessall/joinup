@@ -87,7 +87,7 @@ Feature:
 
     Given I am logged in as dominique
     When I go to the "Tallinn Ministerial Declaration" collection
-    And I click "Implementation monitoring" in the "Left sidebar" region
+    And I click "Implementation monitoring" in the "Header bottom" region
     Then I should see the following tiles in the correct order:
       | France Report  |
       | Romania Report |
@@ -165,7 +165,7 @@ Feature:
     # The tallinn facet should not be shown.
     Given I am an anonymous user
     When I go to the "Tallinn Ministerial Declaration" collection
-    And I click "Implementation monitoring" in the "Left sidebar" region
+    And I click "Implementation monitoring" in the "Header bottom" region
     Then I should not see the following facet items "Tallinn reports"
 
     Given I am logged in as watson

@@ -21,7 +21,7 @@ Feature: "Add custom page" visibility options.
     When I am logged in as a member of the "<title>" <group>
     And I go to the homepage of the "<title>" <group>
     Then I should not see the link "Add custom page"
-    And I should not see the link "Add a new page" in the "Left sidebar"
+    And I should not see the link "Add a new page" in the "Header bottom"
     And I should not see the text "There are no pages yet. Why don't you start by creating an About page?"
     # If the normal member is promoted to facilitator, the links and help text
     # should become visible.
@@ -64,8 +64,8 @@ Feature: "Add custom page" visibility options.
     # that it is possible to add custom pages.
     When I go to the homepage of the "<second title>" <group>
     Then the "<second title>" <group> should have 0 custom pages
-    And I should see the contextual link "Add new page" in the "Left sidebar" region
-    When I click the contextual link "Add new page" in the "Left sidebar" region
+    And I should see the contextual link "Add new page" in the "Header bottom" region
+    When I click the contextual link "Add new page" in the "Header bottom" region
     Then I should see the heading "Add custom page"
     And the following fields should be present "Title, Body, Published"
 
@@ -177,7 +177,7 @@ Feature: "Add custom page" visibility options.
     # It should not be possible to create a custom page with a duplicate title.
     Given I am logged in as a facilitator of the "<first title>" <group>
     When I go to the homepage of the "<first title>" <group>
-    And I click the contextual link "Add new page" in the "Left sidebar" region
+    And I click the contextual link "Add new page" in the "Header bottom" region
     Then I should see the heading "Add custom page"
 
     When I fill in the following:
