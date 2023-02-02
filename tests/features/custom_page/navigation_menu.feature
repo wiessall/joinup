@@ -25,10 +25,10 @@ Feature: Navigation menu for custom pages
     # The 'Add link' local action that is present in the default implementation
     # of OG Menu should not be visible. We are managing the menu links behind
     # the scenes. The end user should not be able to interact with these.
-    But I should not see the contextual link "Add link" in the "Left sidebar" region
+    But I should not see the contextual link "Add link" in the "Header bottom" region
 
     # When we create a custom page it should automatically show up in the menu.
-    When I click the contextual link "Add new page" in the "Left sidebar" region
+    When I click the contextual link "Add new page" in the "Header bottom" region
     Then I should see the heading "Add custom page"
     When I fill in the following:
       | Title | About us |
@@ -37,7 +37,7 @@ Feature: Navigation menu for custom pages
     Then I should see the success message "Custom page About us has been created."
     And the navigation menu of the "Rainbow tables" <group> should have <visible items 2> visible items
 
-    When I click the contextual link "Edit menu" in the "Left sidebar" region
+    When I click the contextual link "Edit menu" in the "Header bottom" region
     Then the navigation menu of the "Rainbow tables" <group> should have 5 items
 
     # It should be possible to hide an item from the menu by disabling it.
@@ -51,10 +51,10 @@ Feature: Navigation menu for custom pages
     And I disable "About" in the navigation menu of the "Rainbow tables" <group>
     And I go to the homepage of the "Rainbow tables" <group>
     Then I should see the text "All the pages have been disabled for this <group>. You can edit the menu configuration or add a new page."
-    And I should see the contextual link "Edit menu" in the "Left sidebar" region
+    And I should see the contextual link "Edit menu" in the "Header bottom" region
 
     # The contextual menu can be used to navigate to the menu edit page.
-    When I click the contextual link "Edit menu" in the "Left sidebar" region
+    When I click the contextual link "Edit menu" in the "Header bottom" region
     Then I should see the heading "Edit navigation menu of the Rainbow tables <group>"
 
     # The form to add a new menu link should not be accessible by anyone. This
