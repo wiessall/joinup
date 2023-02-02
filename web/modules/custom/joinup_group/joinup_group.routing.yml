@@ -201,7 +201,7 @@ entity.rdf_entity.unpublished_content:
   path: 'rdf_entity/{rdf_entity}/unpublished'
   defaults:
     _controller: '\Drupal\joinup_group\Controller\UnpublishedContentPageController::unpublishedContent'
-    _title: 'Unpublished Content'
+    _title: 'Unpublished content'
   requirements:
     _custom_access: Drupal\joinup_group\Controller\UnpublishedContentPageController::access
   options:
