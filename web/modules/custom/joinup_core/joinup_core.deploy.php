@@ -14,9 +14,8 @@
 
 declare(strict_types = 1);
 
+use Drupal\meta_entity\Entity\MetaEntity;
 use Drupal\pathauto\PathautoState;
-use Drupal\topic\Entity\TopicInterface;
-use Drupal\topic\Entity\TopicMetaEntity;
 
 /**
  * Fix Interoperable Europe news creation link.
@@ -131,10 +130,10 @@ function joinup_core_deploy_108904(): void {
   $menu_links = \Drupal::entityTypeManager()->getStorage('menu_link_content')
     ->loadByProperties(['menu_name' => 'footer-european-commission']);
   foreach ($menu_links as $menu_link) {
-
     if ($menu_link->id() == '16014') {
       $menu_link->set('link', [['uri' => 'https://commission.europa.eu/about-european-commissions-web-presence_en']]);
       $menu_link->save();
+      return;
     }
   }
 }
@@ -520,18 +519,12 @@ function joinup_core_deploy_108905(array &$sandbox): string {
  * Synchronize Topic meta entity with Topic terms.
  */
 function joinup_core_deploy_108906(): void {
-  // Load the whole taxonomy tree using values.
-  $manager = \Drupal::entityTypeManager()
-    ->getStorage('taxonomy_term');
-  $taxonomy_tree = $manager->loadTree('topic', 0, NULL, TRUE);
-  foreach ($taxonomy_tree as $term) {
-    if ($term instanceof TopicInterface) {
-      TopicMetaEntity::create([
-        'type' => 'topic',
-        'target' => $term,
-        'label' => $term->getName(),
-        'published' => FALSE,
-      ])->save();
+  $storage = \Drupal::entityTypeManager()->getStorage('taxonomy_term');
+  /** @var \Drupal\taxonomy\TermInterface $term */
+  foreach ($storage->loadByProperties(['vid' => 'topic']) as $term) {
+    $meta_entity = MetaEntity::loadOrCreate('topic', $term);
+    if ($meta_entity->isNew()) {
+      $meta_entity->save();
     }
   }
 }
