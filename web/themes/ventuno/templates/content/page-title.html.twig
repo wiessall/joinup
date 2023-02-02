@@ -8,7 +8,7 @@
 {{ title_prefix }}
 {% if title %}
   <h1{{ title_attributes.addClass('page-title') }}>
-    {{ title|render|striptags|trim }}
+    {{ title }}
     {% block badges %}{% endblock %}
     {% if permalink %}
       <a class="permalink" href="{{ permalink }}" title="{{ 'Permalink'|t }}">
