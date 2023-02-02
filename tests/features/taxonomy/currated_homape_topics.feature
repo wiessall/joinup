@@ -181,7 +181,10 @@ Feature:
       | title  | headline | state     |
       | News 1 | News 1   | validated |
     And the following topics are enabled in the homepage:
-      | E-justice  |
+      | Economy and Welfare     |
+      | Info                    |
+      | Statistics and Analysis |
+      | E-justice               |
     And I am logged in as a moderator
     And I go to the homepage
     And I click "E-justice"
@@ -209,6 +212,7 @@ Feature:
     # @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7526
     And I go to the "topic" meta entity of the "E-justice" topic "taxonomy term"
     Then I should see the heading "News 1"
+    And the url should match "/topic/law-and-justice/e-justice"
 
     When I click "Edit"
     And I select "Grid" from "List style"
@@ -217,3 +221,13 @@ Feature:
     # @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7526
     And I go to the "topic" meta entity of the "E-justice" topic "taxonomy term"
     And I should see the heading "News 1"
+    And the url should match "/topic/law-and-justice/e-justice"
+
+    When I go to the "topic" meta entity of the "Economy and Welfare" topic "taxonomy term"
+    And the url should match "/topic/economy-and-welfare"
+
+    When I go to the "topic" meta entity of the "Info" topic "taxonomy term"
+    And the url should match "/topic/info"
+
+    When I go to the "topic" meta entity of the "Statistics and Analysis" topic "taxonomy term"
+    And the url should match "/topic/info/statistics-and-analysis"
