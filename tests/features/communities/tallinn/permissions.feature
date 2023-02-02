@@ -35,7 +35,7 @@ Feature:
       | Romania Report |
 
     # Moderators can see all reports in the Implementation monitoring page.
-    When I click "Implementation monitoring" in the "Left sidebar" region
+    When I click "Implementation monitoring" in the "Header bottom" region
     Then I should see the following tiles in the correct order:
       | France Report  |
       | Romania Report |
@@ -43,7 +43,7 @@ Feature:
     # Facilitators can see all reports in the Implementation monitoring page.
     Given I am logged in as "sherlock"
     When I go to the "Tallinn Ministerial Declaration" collection
-    And I click "Implementation monitoring" in the "Left sidebar" region
+    And I click "Implementation monitoring" in the "Header bottom" region
     Then I should see the following tiles in the correct order:
       | France Report  |
       | Romania Report |
@@ -51,27 +51,27 @@ Feature:
     # Each user can only see his report.
     Given I am logged in as "gheorghe"
     When I go to the "Tallinn Ministerial Declaration" collection
-    And I click "Implementation monitoring" in the "Left sidebar" region
+    And I click "Implementation monitoring" in the "Header bottom" region
     Then I should see the following tiles in the correct order:
       | Romania Report |
     But I should not see the text "France Report"
 
     Given I am logged in as "dominique"
     When I go to the "Tallinn Ministerial Declaration" collection
-    And I click "Implementation monitoring" in the "Left sidebar" region
+    And I click "Implementation monitoring" in the "Header bottom" region
     Then I should see the following tiles in the correct order:
       | France Report |
     But I should not see the text "Romania Report"
 
     Given I am logged in as "watson"
     When I go to the "Tallinn Ministerial Declaration" collection
-    And I click "Implementation monitoring" in the "Left sidebar" region
+    And I click "Implementation monitoring" in the "Header bottom" region
     Then I should not see the text "Romania Report"
     And I should not see the text "France Report"
 
     Given I am an anonymous user
     When I go to the "Tallinn Ministerial Declaration" collection
-    And I click "Implementation monitoring" in the "Left sidebar" region
+    And I click "Implementation monitoring" in the "Header bottom" region
     Then I should not see the text "Romania Report"
     And I should not see the text "France Report"
 
@@ -94,7 +94,7 @@ Feature:
 
     Given I am logged in as vasile
     When I go to the "Tallinn Ministerial Declaration" collection
-    And I click "Implementation monitoring" in the "Left sidebar" region
+    And I click "Implementation monitoring" in the "Header bottom" region
     Then I should see the following tiles in the correct order:
       | France Report  |
       | Romania Report |
@@ -102,20 +102,20 @@ Feature:
     # The report owner sees only his report as he's not a collection member.
     Given I am logged in as gheorghe
     When I go to the "Tallinn Ministerial Declaration" collection
-    And I click "Implementation monitoring" in the "Left sidebar" region
+    And I click "Implementation monitoring" in the "Header bottom" region
     Then I should see the following tiles in the correct order:
       | Romania Report |
     But I should not see the text "France Report"
 
     Given I am logged in as watson
     When I go to the "Tallinn Ministerial Declaration" collection
-    And I click "Implementation monitoring" in the "Left sidebar" region
+    And I click "Implementation monitoring" in the "Header bottom" region
     Then I should not see the text "Romania Report"
     And I should not see the text "France Report"
 
     Given I am an anonymous user
     When I go to the "Tallinn Ministerial Declaration" collection
-    And I click "Implementation monitoring" in the "Left sidebar" region
+    And I click "Implementation monitoring" in the "Header bottom" region
     Then I should not see the text "Romania Report"
     And I should not see the text "France Report"
 
@@ -128,14 +128,14 @@ Feature:
 
     Given I am logged in as dominique
     When I go to the "Tallinn Ministerial Declaration" collection
-    And I click "Implementation monitoring" in the "Left sidebar" region
+    And I click "Implementation monitoring" in the "Header bottom" region
     Then I should see the following tiles in the correct order:
       | France Report  |
       | Romania Report |
 
     Given I am logged in as vasile
     When I go to the "Tallinn Ministerial Declaration" collection
-    And I click "Implementation monitoring" in the "Left sidebar" region
+    And I click "Implementation monitoring" in the "Header bottom" region
     Then I should see the following tiles in the correct order:
       | France Report  |
       | Romania Report |
@@ -143,20 +143,20 @@ Feature:
     # The report owner sees only his report as he's not a collection member.
     Given I am logged in as gheorghe
     When I go to the "Tallinn Ministerial Declaration" collection
-    And I click "Implementation monitoring" in the "Left sidebar" region
+    And I click "Implementation monitoring" in the "Header bottom" region
     Then I should see the following tiles in the correct order:
       | Romania Report |
     But I should not see the text "France Report"
 
     Given I am logged in as watson
     When I go to the "Tallinn Ministerial Declaration" collection
-    And I click "Implementation monitoring" in the "Left sidebar" region
+    And I click "Implementation monitoring" in the "Header bottom" region
     Then I should not see the text "Romania Report"
     And I should not see the text "France Report"
 
     Given I am an anonymous user
     When I go to the "Tallinn Ministerial Declaration" collection
-    And I click "Implementation monitoring" in the "Left sidebar" region
+    And I click "Implementation monitoring" in the "Header bottom" region
     Then I should not see the text "Romania Report"
     And I should not see the text "France Report"
 
@@ -170,13 +170,13 @@ Feature:
 
     Given I am logged in as watson
     When I go to the "Tallinn Ministerial Declaration" collection
-    And I click "Implementation monitoring" in the "Left sidebar" region
+    And I click "Implementation monitoring" in the "Header bottom" region
     Then I should not see the following facet items "Tallinn reports"
 
     # Verify that editing a report, does not put it in the last position.
     Given I am logged in as chef
     When I go to the "Tallinn Ministerial Declaration" collection
-    And I click "Implementation monitoring" in the "Left sidebar" region
+    And I click "Implementation monitoring" in the "Header bottom" region
     Then I should see the following tiles in the correct order:
       | France Report  |
       | Romania Report |
@@ -184,7 +184,7 @@ Feature:
     When I go to the edit form of the "Romania Report" "tallinn report"
     And I press "Save"
     And I go to the "Tallinn Ministerial Declaration" collection
-    And I click "Implementation monitoring" in the "Left sidebar" region
+    And I click "Implementation monitoring" in the "Header bottom" region
     Then I should see the following tiles in the correct order:
       | France Report  |
       | Romania Report |
