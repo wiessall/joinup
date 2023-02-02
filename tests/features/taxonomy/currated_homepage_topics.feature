@@ -131,13 +131,22 @@ Feature:
 
   Scenario: Moderators can alter the title of the homepage topics block.
     Given I am logged in as a moderator
-    And I click "Dashboard"
-    And I click "Curated content listings"
-    And I click "Homepage topics"
-    Then I should see the heading "Update curated content listing Homepage topics"
-    And I should see the button "Add item"
+    When I click "Dashboard"
+    And I click "Topics"
+    And I click "Edit" in the "E-justice" row
+    And I check "Published"
+    And I press "Save"
 
-    When I fill in "Block label" with "Hello world"
+    When I visit "/admin/structure/entityqueue/homepage_topics/homepage_topics"
+    Then I should see the heading "Update curated content listing Homepage topics"
+    When I fill in "edit-items-add-more-new-item-target-id" with "E-justice"
+    And I press "Add item"
+    # With Javascript disabled this field is filled with the latest value, so we
+    # need to explicitly clear the value.
+    And I fill in "edit-items-add-more-new-item-target-id" with ""
+    And I press "Save"
+    And I should see the button "Add item"
+    And I fill in "Block label" with "Hello world"
     And I press "Save"
 
     When I go to the homepage
