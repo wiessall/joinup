@@ -1,0 +1,30 @@
+uuid: c8559e4c-aecc-40a3-bc6e-be56fa40e778
+langcode: en
+status: true
+dependencies:
+  module:
+    - joinup_core
+    - joinup_group
+  theme:
+    - joinup_theme
+id: joinup_theme_unpublished_other
+theme: joinup_theme
+region: content_bottom
+weight: 0
+provider: null
+plugin: entity_unpublished
+settings:
+  id: entity_unpublished
+  label: 'Other unpublished content'
+  label_display: visible
+  provider: joinup_group
+  context_mapping:
+    og: '@rdf_entity.rdf_entity_route_context:rdf_entity'
+  states_filter: {  }
+  negate_states_filter: 0
+visibility:
+  request_route:
+    id: request_route
+    negate: false
+    routes:
+      - entity.rdf_entity.unpublished_content
