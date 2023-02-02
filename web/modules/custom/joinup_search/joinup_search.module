@@ -275,12 +275,19 @@ function joinup_search_search_api_index_items_alter(IndexInterface $index, array
  * Set the "sticky" property on all documents that are missing it. The property
  * is prefixed with "bs_" because "b" stands for boolean and "s" for single
  * value, as they are used for sorting.
+ *
+ * Set the "state" property on all documents that are missing it and are stored
+ * in the unpublished index. The property is prefixed with "ss_" because the
+ * first "s" stands for 'string' and the second one stands for single value.
  */
 function joinup_search_search_api_solr_documents_alter(&$documents, IndexInterface $index, array $items) {
   /** @var \Solarium\QueryType\Update\Query\Document\Document[] $documents */
   foreach ($documents as $document) {
     if (empty($document->getFields()['bs_sticky'])) {
       $document->setField('bs_sticky', FALSE);
+    }
+    if (empty($document->getFields()['ss_state']) && $index->id() === 'unpublished') {
+      $document->setField('ss_state', 'unpublished');
     }
   }
 }
