@@ -10,6 +10,7 @@ use Drupal\Core\Block\BlockManagerInterface;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Render\RendererInterface;
 use Drupal\joinup_group\Entity\GroupInterface;
+use Drupal\joinup_group\JoinupGroupManagerInterface;
 use Drupal\rdf_entity\RdfInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -25,8 +26,10 @@ class UnpublishedContentPageController extends ControllerBase {
    *   The block plugin manager service.
    * @param \Drupal\Core\Render\RendererInterface $renderer
    *   The renderer.
+   * @param \Drupal\joinup_group\JoinupGroupManagerInterface $group_manager
+   *   The Joinup group manager service.
    */
-  public function __construct(public BlockManagerInterface $block_plugin_manager, public RendererInterface $renderer) {}
+  public function __construct(protected BlockManagerInterface $block_plugin_manager, protected RendererInterface $renderer, protected JoinupGroupManagerInterface $group_manager) {}
 
   /**
    * {@inheritdoc}
@@ -34,52 +37,29 @@ class UnpublishedContentPageController extends ControllerBase {
   public static function create(ContainerInterface $container) {
     return new static(
       $container->get('plugin.manager.block'),
-      $container->get('renderer')
+      $container->get('renderer'),
+      $container->get('joinup_group.group_manager')
     );
   }
 
   /**
-   * Renders the "unpublishedContent" of a rdf entity.
+   * Renders a placeholder page for group unpublished content.
    *
-   * @param \Drupal\rdf_entity\RdfInterface $rdf_entity
-   *   The rdf entity to be rendered.
+   * @param \Drupal\joinup_group\Entity\GroupInterface $rdf_entity
+   *   The group entity from the URL.
    *
    * @return array
-   *   The "unpublished" view mode render array.
+   *   The render array.
    */
-  public function unpublishedContent(RdfInterface $rdf_entity): array {
-    $draft_block = $this->getBlock('entity_draft_state', $rdf_entity);
-    $proposed_block = $this->getBlock('entity_proposed_state', $rdf_entity);
-
+  public function unpublishedContent(GroupInterface $rdf_entity): array {
     return [
-      '#theme' => 'group_unpublished_content_page',
-      '#draft_block' => $draft_block,
-      '#proposed_block' => $proposed_block,
+      '#type' => 'markup',
+      '#markup' => $this->t('Below you can find the content that is currently unpublished. Note that all content without the state field will be in the "Other unpublished content" section.'),
     ];
   }
 
   /**
-   * Get Block from plugin manager block.
-   *
-   * @param string $block_id
-   *   Block Id.
-   * @param \Drupal\rdf_entity\RdfInterface $rdf_entity
-   *   Rdf Entity.
-   *
-   * @return array
-   *   The block render array.
-   */
-  protected function getBlock(string $block_id, RdfInterface $rdf_entity): array {
-    $plugin_block = $this->block_plugin_manager->createInstance($block_id, []);
-    $plugin_block->setContextValue('og', $rdf_entity);
-    $render = $plugin_block->build();
-    // Add the cache tags/contexts.
-    $this->renderer->addCacheableDependency($render, $plugin_block);
-    return $render;
-  }
-
-  /**
-   * Access check for the upublished content page.
+   * Access check for the unpublished content page.
    *
    * @param \Drupal\joinup_group\Entity\GroupInterface $rdf_entity
    *   RdfEntity.
@@ -88,13 +68,7 @@ class UnpublishedContentPageController extends ControllerBase {
    *   The access result object.
    */
   public function access(GroupInterface $rdf_entity): AccessResultInterface {
-
-    $roles = $this->currentUser()->getRoles();
-    if (!empty(array_intersect(['administrator', 'moderator', 'authenticated'], $roles))) {
-      return AccessResult::allowed();
-    }
-    return AccessResult::forbidden();
-
+    return $this->group_manager->access($rdf_entity, 'view any unpublished content', 'view any unpublished content');
   }
 
 }
