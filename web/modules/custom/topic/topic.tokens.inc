@@ -44,7 +44,10 @@ function topic_tokens(string $type, array $tokens, array $data, array $options, 
         if ($meta_entity instanceof TopicMetaEntityInterface && $term = $meta_entity->getTargetEntity()) {
           $term_parent = $term->get('parent');
           // The term will have a reference to root as '0' if it is a root term.
-          if (!$term_parent->isEmpty() && !in_array($term_parent->target_id, ['0', 0])) {
+          if (
+            !$term_parent->isEmpty() &&
+            !in_array($term_parent->target_id, ['0', 0])
+          ) {
             $parent_topic = $term_parent->entity;
             if ($parent_topic instanceof TopicInterface) {
               $bubbleable_metadata->addCacheableDependency($meta_entity);
