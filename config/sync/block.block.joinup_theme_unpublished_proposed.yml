@@ -10,7 +10,7 @@ dependencies:
 id: joinup_theme_unpublished_proposed
 theme: joinup_theme
 region: content_bottom
-weight: 0
+weight: -21
 provider: null
 plugin: entity_unpublished
 settings:
