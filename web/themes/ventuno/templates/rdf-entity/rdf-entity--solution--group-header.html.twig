@@ -21,7 +21,7 @@
         </ul>
       </div>
     </div>
-    {% if content.solution_subscribe|render|striptags or content.releases_overview|render|striptags %}
+    {% if content.solution_subscribe or content.releases_overview %}
       <div class="mt-4 mt-lg-2 d-flex flex-column flex-lg-row flex-wrap align-content-center align-content-lg-start text-light">
         {{ content.solution_subscribe }}
         {{ content.releases_overview }}
