@@ -16,7 +16,7 @@
         {{ title_suffix }}
         <ul class="list-unstyled d-none d-lg-flex mb-0">
           <li class="me-3 text-muted">{{ content.collections }}</li>
-          <li class="me-3 text-muted">{{ content.downloads }}</li>
+          <li class="me-3 text-muted">{{ 'Downloads'|t }}: {{ content.downloads|render|striptags }}</li>
           <li class="text-muted">{{ content.field_topic }}</li>
         </ul>
       </div>
