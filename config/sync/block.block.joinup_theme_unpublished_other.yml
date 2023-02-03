@@ -20,8 +20,10 @@ settings:
   provider: joinup_group
   context_mapping:
     og: '@rdf_entity.rdf_entity_route_context:rdf_entity'
-  states_filter: {  }
-  negate_states_filter: 0
+  states_filter:
+    - draft
+    - proposed
+  negate_states_filter: true
 visibility:
   request_route:
     id: request_route
