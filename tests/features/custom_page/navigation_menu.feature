@@ -132,6 +132,32 @@ Feature: Navigation menu for custom pages
       | solution   | 3               | 4               | 3               |
 
   @javascript
+  Scenario: For menus with more than 6 items, the 6th and beyond should be wrapped in a dropdown
+    Given collection:
+      | title | Plaster molds |
+      | state | validated     |
+    And custom_page content:
+      | title             | body                   | <group>      |
+      | Molds for walls   | This is a sample body. | Plaster molds |
+      | Molds for crafts  | This is a sample body. | Plaster molds |
+      | Molds for pottery | This is a sample body. | Plaster molds |
+    # A menu with 6 items is displayed normally
+    When I visit the collection overview
+    Then I should see the link "Molds for pottery" in the "Navigation menu"
+    But I should not see the text "See more" in the "Navigation menu"
+    # A menu with more than 6 items has the first 5 displayed normally
+    # Then the rest of items is wrapped in a dropdown
+    Given custom_page content:
+      | title           | body                   | <group>      |
+      | Vintage molds   | This is a sample body. | Plaster molds |
+      | Plaster casting | This is a sample body. | Plaster molds |
+    When I visit the collection overview
+    Then I should see the link "See more" in the "Navigation menu"
+    But I should not see the text "Plaster casting" in the "Navigation menu"
+    And I press "See more"
+    Then I should see the text "Plaster casting" in the "Navigation menu"
+
+  @javascript
   Scenario Outline: The contextual links button in the navigation menu should be always visible
     # In order to easily discover that I can manage the items in the navigation menu
     # As a group facilitator
