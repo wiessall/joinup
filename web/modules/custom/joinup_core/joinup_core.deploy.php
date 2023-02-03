@@ -330,6 +330,10 @@ function joinup_core_deploy_108905(array &$sandbox): string {
           'destination' => 'http://joinup.eu/ontology/topic#standardisation',
         ],
         [
+          'source' => 'http://joinup.eu/ontology/topic#ict-standardisation',
+          'destination' => 'http://joinup.eu/ontology/topic#standardisation',
+        ],
+        [
           'source' => 'http://joinup.eu/ontology/topic#open-government',
           'destination' => 'http://joinup.eu/ontology/topic#egovernment',
         ],
@@ -459,6 +463,10 @@ function joinup_core_deploy_108905(array &$sandbox): string {
           'source' => 'http://joinup.eu/ontology/topic#ejustice',
           'destination' => 'http://joinup.eu/ontology/topic#legal',
         ],
+        [
+          'source' => 'http://joinup.eu/ontology/topic#ict-standardisation',
+          'destination' => 'http://joinup.eu/ontology/topic#standardisation',
+        ],
       ],
       // All terms should be empty in references/children after the migration.
       'deleteTopicTerm' => [
@@ -473,7 +481,7 @@ function joinup_core_deploy_108905(array &$sandbox): string {
         'http://joinup.eu/ontology/topic#eu-finance',
         'http://joinup.eu/ontology/topic#free-and-open-source-software',
         'http://joinup.eu/ontology/topic#free-and-open-source-software-in-public-administrations',
-        'http://joinup.eu/ontology/topic#ict-standardisation-in-egovernment',
+        'http://joinup.eu/ontology/topic#ict-standardisation',
         'http://joinup.eu/ontology/topic#information',
         'http://joinup.eu/ontology/topic#law',
         'http://joinup.eu/ontology/topic#open-government',
