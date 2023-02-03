@@ -60,7 +60,7 @@ class UnpublishedContentPageController extends ControllerBase {
    * Access check for the unpublished content page.
    *
    * @param \Drupal\joinup_group\Entity\GroupInterface $rdf_entity
-   *   RdfEntity.
+   *   The group entity from the URL.
    *
    * @return \Drupal\Core\Access\AccessResultInterface
    *   The access result object.
