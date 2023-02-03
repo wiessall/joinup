@@ -137,7 +137,7 @@ Feature: Navigation menu for custom pages
       | title | Plaster molds |
       | state | validated     |
     And custom_page content:
-      | title             | body                   | <group>      |
+      | title             | body                   | collection    |
       | Molds for walls   | This is a sample body. | Plaster molds |
       | Molds for crafts  | This is a sample body. | Plaster molds |
       | Molds for pottery | This is a sample body. | Plaster molds |
@@ -148,7 +148,7 @@ Feature: Navigation menu for custom pages
     # A menu with more than 6 items has the first 5 displayed normally
     # Then the rest of items is wrapped in a dropdown
     Given custom_page content:
-      | title           | body                   | <group>      |
+      | title           | body                   | collection    |
       | Vintage molds   | This is a sample body. | Plaster molds |
       | Plaster casting | This is a sample body. | Plaster molds |
     When I visit the collection overview
