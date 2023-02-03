@@ -22,7 +22,7 @@ settings:
     og: '@rdf_entity.rdf_entity_route_context:rdf_entity'
   states_filter:
     - proposed
-  negate_states_filter: 0
+  negate_states_filter: false
 visibility:
   request_route:
     id: request_route
