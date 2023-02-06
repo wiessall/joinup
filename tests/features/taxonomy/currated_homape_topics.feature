@@ -198,6 +198,27 @@ Feature:
     And I click "Edit"
     Then I should see the heading "Edit E-justice"
 
+    When I fill in "Description" with "This now has to be shown both in the inner page and in the homepage."
+    And I press "Save"
+
+    When I go to the homepage
+    Then I should see the text "This now has to be shown both in the inner page and in the homepage."
+
+    When I click "E-justice"
+    Then I should see the text "This now has to be shown both in the inner page and in the homepage."
+
+    When I click "Edit"
+    And I fill in "Summary" with "This will be shown in the homepage."
+    And I fill in "Description" with "This will be shown in the inner page."
+    And I press "Save"
+
+    When I go to the homepage
+    Then I should see the text "This will be shown in the homepage."
+
+    When I click "E-justice"
+    Then I should see the text "This will be shown in the inner page."
+
+    When I click "Edit"
     When I press "Add Row"
     And I press "Add 2 column layout"
     And I press "Add Configurable listing"
