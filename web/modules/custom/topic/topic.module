@@ -187,9 +187,17 @@ function topic_paragraph_create_access(AccountInterface $account, array $context
   }
 
   $denied_paragraphs = [
-    '2_column_featured_right',
     '2_column_featured_left',
+    '2_column_featured_right',
     '3_column',
+    'accordion',
+    'call_to_action',
+    'carousel',
+    'content_listing',
+    'iframe',
+    'image',
+    'json_map',
+    'testimony',
   ];
 
   if ($entity_bundle === 'configurable_listing') {
