@@ -170,6 +170,13 @@ Feature:
     Then I should not see the button "Add 3 columns"
     And I press "Add 1 column layout"
     Then I should see the button "Add Configurable listing"
+    And I should not see the button "Add Accordion"
+    And I should not see the button "Add Iframe"
+    And I should not see the button "Add Carousel"
+    And I should not see the button "Add Content listing"
+    And I should not see the button "Add Image"
+    And I should not see the button "Add Map"
+    And I should not see the button "Add Testimony"
 
     Given I reload the page
     And I press "Add Row"
