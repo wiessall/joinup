@@ -1,4 +1,13 @@
 .tile-two {
+  word-break: break-word;
+  &__title {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
+    -webkit-box-orient: vertical;
+  }
   &--dated {
     .date {
       color: rgba($primary, .7);
