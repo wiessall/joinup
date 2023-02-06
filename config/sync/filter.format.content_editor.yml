@@ -31,7 +31,7 @@ filters:
     status: true
     weight: -49
     settings:
-      allowed_html: '<br> <p> <h2 id> <h3 id> <h4 id> <cite> <q> <dl> <dt> <dd> <map name> <area alt coords href hreflang rel shape> <blockquote cite> <ul type> <ol type start> <h1> <h5 id> <h6 id> <img data-image-style usemap src alt height width data-entity-uuid data-entity-type data-caption data-align> <a hreflang accesskey id rel target title href data-entity-type data-entity-uuid data-entity-substitution> <iframe src allowfullscreen mozallowfullscreen webkitallowfullscreen width height frameborder> <strong> <em> <code class="language-*"> <pre> <li> <table> <tr> <td rowspan colspan> <th rowspan colspan> <thead> <tbody> <tfoot> <caption> <drupal-media data-entity-type data-entity-uuid alt data-caption data-align>'
+      allowed_html: '<br> <p> <h2 id> <h3 id> <h4 id> <cite> <q> <dl> <dt> <dd> <map name> <area alt coords href hreflang rel shape> <blockquote cite> <ul type> <ol type start> <h1> <h5 id> <h6 id> <img data-image-style usemap src alt height width data-entity-uuid data-entity-type data-caption data-align> <a hreflang accesskey id rel target title href data-entity-type data-entity-uuid data-joinup-contact-information data-joinup-contact-information-href data-joinup-contact-information-login !href> <iframe src allowfullscreen mozallowfullscreen webkitallowfullscreen width height frameborder> <strong> <em> <code class="language-*"> <pre> <li> <table> <tr> <td rowspan colspan> <th rowspan colspan> <thead> <tbody> <tfoot> <caption> <drupal-media data-entity-type data-entity-uuid alt data-caption data-align>'
       filter_html_help: true
       filter_html_nofollow: false
   filter_htmlcorrector:
