@@ -71,11 +71,15 @@
  */
 #}
 {% block content %}
-  {% set image %}
-    <a href="{{ url }}" class="d-block">
-      <svg class="bi img-fluid text-secondary"><use xlink:href="{{ bcl_icon_path }}#file-earmark-text"></use></svg>
-    </a>
-  {% endset %}
+  {% if elements.field_document_logo|render is not empty %}
+    {% set image = elements.field_document_logo %}
+  {% else %}
+    {% set image %}
+      <a href="{{ url }}" class="d-block">
+        <svg class="bi img-fluid text-secondary"><use xlink:href="{{ bcl_icon_path }}#file-earmark-text"></use></svg>
+      </a>
+    {% endset %}
+  {% endif %}
   {% set text = content.body|render|striptags|length > 200 ? content.body|render|striptags|trim|slice(0, 200) ~ '...' : content.body|render|striptags %}
   {% set badges = [] %}
   {% for topic in topics %}
