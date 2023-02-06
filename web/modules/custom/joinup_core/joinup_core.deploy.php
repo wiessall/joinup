@@ -522,9 +522,8 @@ function joinup_core_deploy_108906(): void {
   $storage = \Drupal::entityTypeManager()->getStorage('taxonomy_term');
   /** @var \Drupal\taxonomy\TermInterface $term */
   foreach ($storage->loadByProperties(['vid' => 'topic']) as $term) {
-    $meta_entity = MetaEntity::loadOrCreate('topic', $term);
-    if ($meta_entity->isNew()) {
-      $meta_entity->save();
-    }
+    // Re-save existing meta entities as well to get the correct path alias as
+    // that might have been wrongly computed in the previous function.
+    MetaEntity::loadOrCreate('topic', $term)->save();
   }
 }
