@@ -73,7 +73,7 @@
 {% block content %}
   {% set image %}
     <a href="{{ url }}" class="d-block">
-      <svg class="bi img-fluid text-secondary"><use xlink:href="{{ bcl_icon_path }}#file-earmark-richtext"></use></svg>
+      <svg class="bi img-fluid text-secondary w-100"><use xlink:href="{{ bcl_icon_path }}#file-earmark-richtext"></use></svg>
     </a>
   {% endset %}
   {% set text = content.field_paragraphs_body|render|striptags|length > 200 ? content.field_paragraphs_body|render|striptags|trim|slice(0, 200) ~ '...' : content.field_paragraphs_body|render|striptags %}
