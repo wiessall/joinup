@@ -11,6 +11,7 @@ use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\asset_release\Entity\AssetReleaseInterface;
 use Drupal\collection\Entity\CollectionInterface;
 use Drupal\collection\Exception\MissingCollectionException;
+use Drupal\contact_information\Traits\ContactInformationTrait;
 use Drupal\joinup_bundle_class\DescriptionTrait;
 use Drupal\joinup_bundle_class\JoinupBundleClassFieldAccessTrait;
 use Drupal\joinup_bundle_class\JoinupBundleClassMetaEntityTrait;
@@ -46,6 +47,7 @@ class Solution extends Rdf implements SolutionInterface {
   use StringTranslationTrait;
   use TopicReferencingEntityTrait;
   use DescriptionTrait;
+  use ContactInformationTrait;
 
   /**
    * {@inheritdoc}
