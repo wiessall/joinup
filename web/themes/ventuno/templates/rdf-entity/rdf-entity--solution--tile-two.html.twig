@@ -14,7 +14,7 @@
       </a>
     {% endset %}
   {% endif %}
-  {% set text = elements.field_is_description|render|striptags|length > 200 ? elements.field_is_description|render|striptags|trim|slice(0, 200) ~ '...' : elements.body|render|striptags %}
+  {% set text = elements.field_is_description|render|striptags|length > 200 ? elements.field_is_description|render|striptags|trim|slice(0, 200) ~ '...' : elements.field_is_description|render|striptags %}
   {% set badges = [] %}
   {% for topic in topics %}
     {% if loop.index == 4 %}
