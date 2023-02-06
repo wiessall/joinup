@@ -200,25 +200,24 @@ Feature:
 
     When I fill in "Description" with "This now has to be shown both in the inner page and in the homepage."
     And I press "Save"
+    Then I should see the heading "E-justice"
+    And I should see the text "This now has to be shown both in the inner page and in the homepage."
 
     When I go to the homepage
     Then I should see the text "This now has to be shown both in the inner page and in the homepage."
 
     When I click "E-justice"
-    Then I should see the text "This now has to be shown both in the inner page and in the homepage."
-
-    When I click "Edit"
+    And I click "Edit"
     And I fill in "Summary" with "This will be shown in the homepage."
     And I fill in "Description" with "This will be shown in the inner page."
     And I press "Save"
+    Then I should see the text "This will be shown in the inner page."
 
     When I go to the homepage
     Then I should see the text "This will be shown in the homepage."
 
     When I click "E-justice"
-    Then I should see the text "This will be shown in the inner page."
-
-    When I click "Edit"
+    And I click "Edit"
     When I press "Add Row"
     And I press "Add 2 column layout"
     And I press "Add Configurable listing"
@@ -236,18 +235,12 @@ Feature:
     And I fill in "Query presets" with "entity_bundle|news"
 
     And I press "Save"
-    # @todo We should automatically redirect to the canonical path.
-    # @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7526
-    And I go to the "topic" meta entity of the "E-justice" topic "taxonomy term"
     Then I should see the heading "News 1"
     And the url should match "/topic/law-and-justice/e-justice"
 
     When I click "Edit"
     And I select "Grid" from "List style"
     And I press "Save"
-    # @todo We should automatically redirect to the canonical path.
-    # @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7526
-    And I go to the "topic" meta entity of the "E-justice" topic "taxonomy term"
     And I should see the heading "News 1"
     And the url should match "/topic/law-and-justice/e-justice"
 
