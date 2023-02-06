@@ -12,6 +12,8 @@ dependencies:
   module:
     - image
     - layout_builder
+    - template_suggestion
+    - text
 third_party_settings:
   layout_builder:
     enabled: false
@@ -22,11 +24,13 @@ bundle: topic
 mode: teaser
 content:
   description:
-    type: string
+    type: text_summary_or_trimmed
     label: hidden
     settings:
-      link_to_entity: false
-    third_party_settings: {  }
+      trim_length: 100
+    third_party_settings:
+      template_suggestion:
+        template_suggestion: ''
     weight: 1
     region: content
   image:
