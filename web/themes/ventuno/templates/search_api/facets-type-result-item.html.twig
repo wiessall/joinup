@@ -15,15 +15,15 @@
 {% if type is same as 'custom_page' %}
   {% set icon = 'file-earmark-richtext' %}
 {% elseif type is same as 'discussion' %}
-  {% set icon = 'chat-left-text' %}
+  {% set icon = 'chat-square' %}
 {% elseif type is same as 'document' %}
   {% set icon = 'file-earmark-text' %}
 {% elseif type is same as 'event' %}
-  {% set icon = 'calendar3' %}
+  {% set icon = 'calendar4-event' %}
 {% elseif type is same as 'news' %}
   {% set icon = 'newspaper' %}
 {% elseif type is same as 'video' %}
-  {% set icon = 'file-earmark-play' %}
+  {% set icon = 'play-btn' %}
 {% elseif type is same as 'collection' %}
   {% set icon = 'folder2-open' %}
 {% elseif type is same as 'licence' %}
@@ -33,13 +33,9 @@
 {% elseif type is same as 'asset_distribution' %}
   {% set icon = 'file-earmark-post' %}
 {% elseif type is same as 'solution' %}
-  {% set icon = 'clipboard-check' %}
+  {% set icon = 'clipboard2-check' %}
 {% endif %}
-<div class="d-flex flex-column text-center">
-  <svg class="bi icon--l m-auto">
+  <svg class="bi icon--s">
     <use xlink:href="{{ bcl_icon_path }}#{{ icon }}"></use>
   </svg>
-  <span class="mt-2 fs-6 fw-bold text-nowrap">
-    {% if show_count %}<span class="tab__text--amount">{{ count }}</span>{% endif %} <span class="tab__text--type">{{ value }}</span>
-  </span>
-</div>
+  {% if show_count %}<span>{{ count }}</span>{% endif %} <span>{{ value }}</span>
