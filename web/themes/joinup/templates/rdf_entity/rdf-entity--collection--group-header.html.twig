@@ -12,26 +12,28 @@
       <div class="featured__logo">{{ content.field_ar_logo }}</div>
       <h1 class="featured__text">{{ label }}</h1>
     </a>
-    <div class="featured__stats">
-      <div class="stats__column stats__column--border stats__column--wide">
-        <div class="stats__wrapper stats__wrapper--centered">
-          <span class="stats__text">{{ 'Last update'|t }}</span>
+    {% if not meta_banner_disabled %}
+      <div class="featured__stats">
+        <div class="stats__column stats__column--border stats__column--wide">
+          <div class="stats__wrapper stats__wrapper--centered">
+            <span class="stats__text">{{ 'Last update'|t }}</span>
+          </div>
+          <div class="stats__wrapper stats__wrapper--centered">
+            <span class="stats__text bold">{{ content.last_update }}</span>
+          </div>
         </div>
-        <div class="stats__wrapper stats__wrapper--centered">
-          <span class="stats__text bold">{{ content.last_update }}</span>
+        <div class="stats__column stats__column--wide stats__column--icons">
+          <div class="stats__wrapper">
+            <span class="stats__icon icon icon--user"></span>
+            <span class="stats__text">{{ content.members }}</span>
+          </div>
+          <div class="stats__wrapper">
+            <span class="stats__icon icon icon--solutions"></span>
+            <span class="stats__text">{{ content.solutions }}</span>
+          </div>
         </div>
       </div>
-      <div class="stats__column stats__column--wide stats__column--icons">
-        <div class="stats__wrapper">
-          <span class="stats__icon icon icon--user"></span>
-          <span class="stats__text">{{ content.members }}</span>
-        </div>
-        <div class="stats__wrapper">
-          <span class="stats__icon icon icon--solutions"></span>
-          <span class="stats__text">{{ content.solutions }}</span>
-        </div>
-      </div>
-    </div>
+    {% endif %}
     {{ content.join_collection }}
   </div>
 </div>
