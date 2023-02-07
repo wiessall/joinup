@@ -453,20 +453,25 @@ function contact_information_rdf_entity_view(array &$build, RdfInterface $contac
       $confirmation = \Drupal::service('email_confirmer')->getConfirmation($contact_information->get('field_ci_email')->value);
       // If confirmation is unconfirmed yet.
       if (!$confirmation || !$confirmation->isConfirmed()) {
-        /** @var \Drupal\contact_information\ContactInformationEmailConfirmInterface $email_confirm */
-        $email_confirm = \Drupal::service('contact_information.email_confirm');
-        $confirmation_url = Url::fromRoute('entity.email_confirmer_confirmation.resend', ['confirmation' => $confirmation->id()], ['query' => \Drupal::destination()->getAsArray()])->toString();
+        $confirmation_url = Url::fromRoute('entity.email_confirmer_confirmation.resend', [
+          'confirmation' => $confirmation->id(),
+        ], [
+          'query' => \Drupal::destination()->getAsArray(),
+        ])->toString();
 
+        $access = \Drupal::getContainer()->get('joinup_group.group_manager')->access($contact_information->getRelatedGroup(), 'resend email confirmation request');
         $build['email_confirm'] = [
           '#type' => 'markup',
-          '#markup' => t('Please <a href=":resend_url">confirm</a> your contact information to enable users to contact you.',
-          [
+          '#markup' => t('Please <a href=":resend_url">confirm</a> your contact information to enable users to contact you.', [
             ':resend_url' => $confirmation_url,
           ]),
-          '#access' => $email_confirm->emailConfirmationAccess($contact_information),
+          '#access' => $access,
         ];
-        $build['#cache']['contexts'] = Cache::mergeContexts($build['#cache']['contexts'], ['og_role']);
-
+        $cacheable_metadata = new CacheableMetadata();
+        $cacheable_metadata
+          ->addCacheContexts(['og_role'])
+          ->addCacheableDependency($contact_information)
+          ->applyTo($build);
       }
 
     }

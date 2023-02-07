@@ -4,7 +4,6 @@ declare(strict_types = 1);
 
 namespace Drupal\joinup\Context;
 
-use Behat\Behat\Tester\Exception\PendingException;
 use Behat\Gherkin\Node\TableNode;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\joinup\Traits\AliasTranslatorTrait;
@@ -243,7 +242,7 @@ class ContactInformationContext extends RawDrupalContext {
    * Asserts that a confirmation request for an email is not expired.
    *
    * @param string $email
-   *  The email to check.
+   *   The email to check.
    *
    * @Given the confirmation request for :email should not be expired
    */

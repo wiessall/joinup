@@ -4,11 +4,8 @@ declare(strict_types = 1);
 
 namespace Drupal\contact_information;
 
-use Drupal\Core\Access\AccessResult;
-use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Render\RendererInterface;
-use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\contact_information\Entity\ContactInformationInterface;
 use Drupal\email_confirmer\EmailConfirmerManagerInterface;
 use Drupal\joinup_group\Entity\GroupInterface;
@@ -21,48 +18,28 @@ use Drupal\sparql_entity_storage\SparqlGraphInterface;
 class ContactInformationEmailConfirm implements ContactInformationEmailConfirmInterface {
 
   /**
-   * The entity type manager service.
-   */
-  protected EntityTypeManagerInterface $entityTypeManager;
-
-  /**
-   * The renderer service.
-   */
-  protected RendererInterface $renderer;
-
-  /**
-   * The email confirmer service.
-   */
-  protected EmailConfirmerManagerInterface $emailConfirmer;
-
-  /**
    * Constructs a new service instance.
    *
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
    *   The entity type manager service.
    * @param \Drupal\Core\Render\RendererInterface $renderer
    *   The renderer service.
-   * @param \Drupal\email_confirmer\EmailConfirmerManagerInterface|null $email_confirmer
+   * @param \Drupal\email_confirmer\EmailConfirmerManagerInterface|null $emailConfirmer
    *   The email confirmer service. The $email_confirmer argument is set as
    *   nullable to avoid the non-existent service "email_confirmer" error during
    *   the deployment. This should be reverted after deploying this change.
-   * @param \Drupal\Core\Session\AccountProxyInterface $current_user
-   *   The account proxy service.
    *
    * @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7300
    * @todo Make $email_confirmer non-nullable in ISAICP-7300.
    */
-  public function __construct(EntityTypeManagerInterface $entity_type_manager, RendererInterface $renderer, ?EmailConfirmerManagerInterface $email_confirmer, protected AccountProxyInterface $current_user) {
-    $this->entityTypeManager = $entity_type_manager;
-    $this->renderer = $renderer;
+  public function __construct(protected EntityTypeManagerInterface $entityTypeManager, protected RendererInterface $renderer, ?EmailConfirmerManagerInterface $emailConfirmer) {
     // @todo Remove this in ISAICP-7300.
     // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7300
     // @codingStandardsIgnoreStart
-    if (!$email_confirmer) {
-      $email_confirmer = \Drupal::service('email_confirmer');
+    if (empty($this->emailConfirmer)) {
+      $this->emailConfirmer = \Drupal::service('email_confirmer');
     }
     // @codingStandardsIgnoreEnd
-    $this->emailConfirmer = $email_confirmer;
   }
 
   /**
@@ -168,21 +145,6 @@ class ContactInformationEmailConfirm implements ContactInformationEmailConfirmIn
         }
       }
     }
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function emailConfirmationAccess(ContactInformationInterface $contact_information): AccessResultInterface {
-    // Check if the user has the global permission to access
-    // resend email confirmation request of all groups (e.g. moderators).
-    if ($this->current_user->hasPermission('resend email confirmation request')) {
-      return AccessResult::allowed();
-    }
-
-    // Check if the user has permission to access the group resend
-    // email confirmation request of this particular group (e.g. facilitators).
-    return $contact_information->getRelatedGroup()->getGroupAccess('resend email confirmation request', $this->current_user);
   }
 
 }

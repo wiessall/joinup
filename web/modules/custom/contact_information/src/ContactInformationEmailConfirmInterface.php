@@ -4,8 +4,6 @@ declare(strict_types = 1);
 
 namespace Drupal\contact_information;
 
-use Drupal\Core\Access\AccessResultInterface;
-use Drupal\contact_information\Entity\ContactInformation;
 use Drupal\contact_information\Entity\ContactInformationInterface;
 use Drupal\joinup_group\Entity\GroupInterface;
 
@@ -72,16 +70,5 @@ interface ContactInformationEmailConfirmInterface {
    *   The contact information for which to delete unused confirmations.
    */
   public function deleteContactInfoConfirmation(ContactInformationInterface $contact_information): void;
-
-  /**
-   * Access check for the confirmation page.
-   *
-   * @param \Drupal\contact_information\Entity\ContactInformation $contact_information
-   *   Contact Information entity.
-   *
-   * @return \Drupal\Core\Access\AccessResultInterface
-   *   The access result object.
-   */
-  public function emailConfirmationAccess(ContactInformation $contact_information): AccessResultInterface;
 
 }
