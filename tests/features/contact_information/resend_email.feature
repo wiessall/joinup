@@ -41,14 +41,14 @@ Feature: Resend validation email from collection/solution about page
       | Klop mirubes | Lope Facilitator   | facilitator |
       | Klop mirubes | Lope Facilitator   | owner       |
       | Klop mirubes | Group user         | member      |
-    # Check scenario for anonymous user
+
     When I am not logged in
     And I go to the homepage of the "Rally fanatics" collection
     Then I should see the link "About"
     When I click "About"
     Then I should not see the text "Please confirm your contact information to enable users to contact you"
 
-    # Check scenario for Facilitator role
+    # Check as a moderator for a collection.
     When I am logged in as a moderator
     And I go to the homepage of the "Rally fanatics" collection
     Then I should see the link "About"
@@ -70,15 +70,19 @@ Feature: Resend validation email from collection/solution about page
     When I click "confirm"
     Then I should see the text "A new confirmation message has been sent to confirmation_email.man@example.com"
 
-    # Check scenario for Member role
+    Given that the confirmation for "confirmation_email.man@example.com" has expired
+    When I go to the homepage of the "Rally fanatics" collection
+    And I click "About"
+    Then I should see the text "Please confirm your contact information to enable users to contact you"
+    When I click "confirm"
+    Then I should see the text "A new confirmation message has been sent to confirmation_email.man@example.com"
+
     Given I am logged in as "Group user"
     When I go to the homepage of the "Rally fanatics" collection
     And I click "About"
     Then I should not see the text "Please confirm your contact information to enable users to contact you"
 
-
-    # Scenario for solution
-    # Check scenario for Facilitator role
+    # Check also for a solution and a facilitator.
     When I am logged in as a moderator
     And I go to the homepage of the "Klop mirubes" solution
     Then I should see the link "About"
