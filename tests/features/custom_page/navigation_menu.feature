@@ -142,7 +142,7 @@ Feature: Navigation menu for custom pages
       | Molds for crafts  | This is a sample body. | Plaster molds |
       | Molds for pottery | This is a sample body. | Plaster molds |
     # A menu with 6 items is displayed normally
-    When I visit the collection overview
+    When I go to the "Plaster molds" collection
     Then I should see the link "Molds for pottery" in the "Navigation menu"
     But I should not see the text "See more" in the "Navigation menu"
     # A menu with more than 6 items has the first 5 displayed normally
@@ -151,7 +151,7 @@ Feature: Navigation menu for custom pages
       | title           | body                   | collection    |
       | Vintage molds   | This is a sample body. | Plaster molds |
       | Plaster casting | This is a sample body. | Plaster molds |
-    When I visit the collection overview
+    When I go to the "Plaster molds" collection
     Then I should see the link "See more" in the "Navigation menu"
     But I should not see the text "Plaster casting" in the "Navigation menu"
     And I press "See more"
