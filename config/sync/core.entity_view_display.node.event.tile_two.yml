@@ -32,7 +32,6 @@ dependencies:
   module:
     - comment
     - file
-    - image
     - joinup_core
     - layout_builder
     - link
@@ -126,8 +125,6 @@ content:
     settings:
       responsive_image_style: spotlight
       image_link: content
-      image_loading:
-        attribute: lazy
     third_party_settings:
       template_suggestion:
         template_suggestion: ''

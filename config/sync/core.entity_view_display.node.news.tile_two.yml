@@ -25,7 +25,6 @@ dependencies:
     - comment
     - field_group
     - file
-    - image
     - layout_builder
     - link
     - responsive_image
@@ -101,8 +100,6 @@ content:
     settings:
       responsive_image_style: spotlight
       image_link: content
-      image_loading:
-        attribute: lazy
     third_party_settings:
       template_suggestion:
         template_suggestion: ''
