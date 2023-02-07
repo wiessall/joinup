@@ -452,7 +452,7 @@ function contact_information_rdf_entity_view(array &$build, RdfInterface $contac
       /** @var \Drupal\email_confirmer\EmailConfirmationInterface $confirmation */
       $confirmation = \Drupal::service('email_confirmer')->getConfirmation($contact_information->get('field_ci_email')->value);
       // If confirmation is unconfirmed yet.
-      if ($confirmation && $confirmation->isPending()) {
+      if (!$confirmation || !$confirmation->isConfirmed()) {
         /** @var \Drupal\contact_information\ContactInformationEmailConfirmInterface $email_confirm */
         $email_confirm = \Drupal::service('contact_information.email_confirm');
         $confirmation_url = Url::fromRoute('entity.email_confirmer_confirmation.resend', ['confirmation' => $confirmation->id()], ['query' => \Drupal::destination()->getAsArray()])->toString();
