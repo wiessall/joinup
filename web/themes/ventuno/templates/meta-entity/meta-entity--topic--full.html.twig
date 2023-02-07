@@ -9,7 +9,7 @@
   <header class="header-topic mb-3">
     {{ title_prefix }}
     <h1 class="header-topic__title">{{ content.label }}</h1>
-    <div class="header-topic__description">{{ content.description }}</div>
+    {{ content.description }}
     {{ title_suffix }}
   </header>
   {{ content|without('label', 'description') }}
