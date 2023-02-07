@@ -12,6 +12,7 @@
       <div class="featured__logo">{{ content.field_is_logo }}</div>
       <h1 class="featured__text">{{ label }}</h1>
     </a>
+    {% if not meta_banner_disabled %}
       <div class="featured__stats">
         <div class="stats__row">
           {{ content.collections }}
@@ -23,6 +24,7 @@
           {{ content.field_topic }}
         </div>
       </div>
+    {% endif %}
       {{ content.solution_subscribe }}
       {{ content.releases_overview }}
   </div>

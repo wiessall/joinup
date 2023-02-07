@@ -182,6 +182,13 @@ Feature:
     Then I should not see the button "Add 3 columns"
     And I press "Add 1 column layout"
     Then I should see the button "Add Configurable listing"
+    And I should not see the button "Add Accordion"
+    And I should not see the button "Add Iframe"
+    And I should not see the button "Add Carousel"
+    And I should not see the button "Add Content listing"
+    And I should not see the button "Add Image"
+    And I should not see the button "Add Map"
+    And I should not see the button "Add Testimony"
 
     Given I reload the page
     And I press "Add Row"
@@ -193,13 +200,36 @@ Feature:
       | title  | headline | state     |
       | News 1 | News 1   | validated |
     And the following topics are enabled in the homepage:
-      | E-justice  |
+      | Economy and Welfare     |
+      | Info                    |
+      | Statistics and Analysis |
+      | E-justice               |
     And I am logged in as a moderator
     And I go to the homepage
     And I click "E-justice"
     And I click "Edit"
     Then I should see the heading "Edit E-justice"
 
+    When I fill in "Description" with "This now has to be shown both in the inner page and in the homepage."
+    And I press "Save"
+    Then I should see the heading "E-justice"
+    And I should see the text "This now has to be shown both in the inner page and in the homepage."
+
+    When I go to the homepage
+    Then I should see the text "This now has to be shown both in the inner page and in the homepage."
+
+    When I click "E-justice"
+    And I click "Edit"
+    And I fill in "Summary" with "This will be shown in the homepage."
+    And I fill in "Description" with "This will be shown in the inner page."
+    And I press "Save"
+    Then I should see the text "This will be shown in the inner page."
+
+    When I go to the homepage
+    Then I should see the text "This will be shown in the homepage."
+
+    When I click "E-justice"
+    And I click "Edit"
     When I press "Add Row"
     And I press "Add 2 column layout"
     And I press "Add Configurable listing"
@@ -217,15 +247,29 @@ Feature:
     And I fill in "Query presets" with "entity_bundle|news"
 
     And I press "Save"
-    # @todo We should automatically redirect to the canonical path.
-    # @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7526
-    And I go to the "topic" meta entity of the "E-justice" topic "taxonomy term"
     Then I should see the "News 1" tile
+    And the url should match "/topic/law-and-justice/e-justice"
 
     When I click "Edit"
     And I select "Grid" from "List style"
     And I press "Save"
-    # @todo We should automatically redirect to the canonical path.
-    # @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7526
-    And I go to the "topic" meta entity of the "E-justice" topic "taxonomy term"
     And I should see the "News 1" tile
+    And the url should match "/topic/law-and-justice/e-justice"
+
+    When I go to the "topic" meta entity of the "Economy and Welfare" topic "taxonomy term"
+    And the url should match "/topic/economy-and-welfare"
+
+    When I go to the "topic" meta entity of the "Info" topic "taxonomy term"
+    And the url should match "/topic/info"
+
+    When I go to the "topic" meta entity of the "Statistics and Analysis" topic "taxonomy term"
+    And the url should match "/topic/info/statistics-and-analysis"
+
+  Scenario: Editing from the administration page, redirect back to the administration page.
+    When I am logged in as a moderator
+    And I click "Dashboard"
+    And I click "Topics"
+    And I click "Edit" in the "E-justice" row
+    Then I should see the heading "Edit E-justice"
+    And I press "Save"
+    Then the url should match "/admin/homepage-topics"

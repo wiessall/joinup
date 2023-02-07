@@ -1,19 +1,28 @@
-uuid: a51053e0-e533-4894-bd03-b3e1ddd0307c
+uuid: f2b66628-5a70-4af0-96e0-e7e6ef84dc3e
 langcode: en
 status: true
 dependencies:
   config:
     - field.storage.meta_entity.description
     - meta_entity.type.topic
+  module:
+    - allowed_formats
+    - text
+third_party_settings:
+  allowed_formats:
+    allowed_formats:
+      - basic_html
 id: meta_entity.topic.description
 field_name: description
 entity_type: meta_entity
 bundle: topic
 label: Description
-description: ''
+description: "The description field appears both in the header and the homepage. <strong>If you would like to have different text in the homepage, please set the text as a summary and it will automatically replace the full description.</strong>\r\nIf the summary is not filled, <strong>only the first 100 characters will be printed in the homepage</strong>."
 required: false
 translatable: false
 default_value: {  }
 default_value_callback: ''
-settings: {  }
-field_type: string_long
+settings:
+  display_summary: true
+  required_summary: false
+field_type: text_with_summary

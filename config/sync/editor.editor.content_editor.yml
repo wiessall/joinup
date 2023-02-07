@@ -36,6 +36,7 @@ settings:
           items:
             - DrupalLink
             - DrupalUnlink
+            - contactus
         -
           name: Lists
           items:

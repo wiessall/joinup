@@ -17,6 +17,7 @@ components:
       assets/css/components.css: {}
   dependencies:
     - ventuno/components.js
+    - contact_information/contact-wysiwyg
 
 components.js:
   version: VERSION
