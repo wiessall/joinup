@@ -165,6 +165,14 @@ function joinup_core_deploy_108905(array &$sandbox): string {
           'eJustice and law',
           'http://joinup.eu/ontology/topic/category#digital-government',
         ],
+        [
+          'Digital ready policymaking',
+          'http://joinup.eu/ontology/topic/category#digital-government',
+        ],
+        [
+          'Tools',
+          'http://joinup.eu/ontology/topic/category#digital-government',
+        ],
       ],
       'moveTopicChildrenToNewParent' => [
         [
