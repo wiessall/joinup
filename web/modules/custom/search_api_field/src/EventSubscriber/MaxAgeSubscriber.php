@@ -25,7 +25,7 @@ class MaxAgeSubscriber implements EventSubscriberInterface {
   /**
    * Set the max age for search api field facets.
    *
-   * By default, facet sources are uncacheable. However, since the search api
+   * By default, facet sources are uncacheable. However, since the search API
    * field facet source is a field facet source, it is cacheable.
    *
    * @param \Drupal\facets\Event\GetFacetCacheMaxAge $event
