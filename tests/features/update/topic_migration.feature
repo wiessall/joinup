@@ -6,8 +6,11 @@ Feature: Test the migration of the topics.
     # The fact that we are on the search page and not a 404 page is enough to
     # ensure that the topic has been migrated.
     Then I should see the heading "Advanced search"
-
     Given I go to the "eJustice and law" term page
+    Then I should see the heading "Advanced search"
+    Given I go to the "Digital ready policymaking" term page
+    Then I should see the heading "Advanced search"
+    Given I go to the "Tools" term page
     Then I should see the heading "Advanced search"
 
   Scenario: Test renamed topic.
