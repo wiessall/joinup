@@ -70,12 +70,14 @@ Feature: Resend validation email from collection/solution about page
     When I click "confirm"
     Then I should see the text "A new confirmation message has been sent to confirmation_email.man@example.com"
 
-    Given that the confirmation for "confirmation_email.man@example.com" has expired
+    Given that the confirmation request for "confirmation_email.man@example.com" has expired
     When I go to the homepage of the "Rally fanatics" collection
     And I click "About"
     Then I should see the text "Please confirm your contact information to enable users to contact you"
     When I click "confirm"
     Then I should see the text "A new confirmation message has been sent to confirmation_email.man@example.com"
+    # The hash expiration for the confirmation request has been renewed.
+    And the confirmation request for "confirmation_email.man@example.com" should not be expired
 
     Given I am logged in as "Group user"
     When I go to the homepage of the "Rally fanatics" collection

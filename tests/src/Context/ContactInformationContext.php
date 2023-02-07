@@ -15,6 +15,7 @@ use Drupal\joinup\Traits\SearchTrait;
 use Drupal\joinup\Traits\TestingEntitiesTrait;
 use Drupal\joinup\Traits\UserTrait;
 use Drupal\rdf_entity\RdfInterface;
+use PHPUnit\Framework\Assert;
 
 /**
  * Behat step definitions for testing contact information entities.
@@ -218,16 +219,42 @@ class ContactInformationContext extends RawDrupalContext {
   }
 
   /**
-   * @Given /^that the confirmation for :email has expired$/
+   * Expires a confirmation request for an email.
+   *
+   * @param string $email
+   *   The email to expire.
+   *
+   * @Given that the confirmation request for :email has expired
    */
-  public function thatTheConfirmationForHasExpired(string $email): void {
+  public function givenConfirmationRequestExpired(string $email): void {
     /** @var \Drupal\email_confirmer\EmailConfirmerManagerInterface $email_confirmer */
     $email_confirmer = \Drupal::service('email_confirmer');
     $confirmation = $email_confirmer->createConfirmation($email);
+    if (empty($confirmation)) {
+      throw new \RuntimeException("No confirmation request found for $email");
+    }
 
     $expiration_interval = \Drupal::configFactory()->get('email_confirmer.settings')->get('hash_expiration');
     $confirmation->setCreatedTime($confirmation->getCreatedTime() - $expiration_interval);
     $confirmation->save();
+  }
+
+  /**
+   * Asserts that a confirmation request for an email is not expired.
+   *
+   * @param string $email
+   *  The email to check.
+   *
+   * @Given the confirmation request for :email should not be expired
+   */
+  public function givenConfirmationNotExpired(string $email): void {
+    /** @var \Drupal\email_confirmer\EmailConfirmerManagerInterface $email_confirmer */
+    $email_confirmer = \Drupal::service('email_confirmer');
+    $confirmation = $email_confirmer->createConfirmation($email);
+    if (empty($confirmation)) {
+      throw new \RuntimeException("No confirmation request found for $email");
+    }
+    Assert::assertFalse($confirmation->isExpired(), 'Confirmation request is not expired.');
   }
 
 }
