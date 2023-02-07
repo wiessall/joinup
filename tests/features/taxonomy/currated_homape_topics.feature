@@ -252,3 +252,12 @@ Feature:
 
     When I go to the "topic" meta entity of the "Statistics and Analysis" topic "taxonomy term"
     And the url should match "/topic/info/statistics-and-analysis"
+
+  Scenario: Editing from the administration page, redirect back to the administration page.
+    When I am logged in as a moderator
+    And I click "Dashboard"
+    And I click "Topics"
+    And I click "Edit" in the "E-justice" row
+    Then I should see the heading "Edit E-justice"
+    And I press "Save"
+    Then the url should match "/admin/homepage-topics"

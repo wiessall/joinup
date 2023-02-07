@@ -246,5 +246,8 @@ function topic_form_meta_entity_topic_edit_form_alter(array &$form, FormStateInt
  *   The form state.
  */
 function topic_form_meta_entity_topic_edit_form_alter_submit(array &$form, FormStateInterface $form_state): void {
-  $form_state->setRedirectUrl($form_state->getFormObject()->getEntity()->toUrl());
+  // Redirect only if there is no destination query parameter.
+  if (empty(\Drupal::request()->query->get('destination'))) {
+    $form_state->setRedirectUrl($form_state->getFormObject()->getEntity()->toUrl());
+  }
 }
