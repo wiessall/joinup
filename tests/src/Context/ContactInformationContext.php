@@ -4,6 +4,7 @@ declare(strict_types = 1);
 
 namespace Drupal\joinup\Context;
 
+use Behat\Behat\Tester\Exception\PendingException;
 use Behat\Gherkin\Node\TableNode;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\joinup\Traits\AliasTranslatorTrait;
@@ -214,6 +215,19 @@ class ContactInformationContext extends RawDrupalContext {
         $confirmation->save();
       }
     }
+  }
+
+  /**
+   * @Given /^that the confirmation for :email has expired$/
+   */
+  public function thatTheConfirmationForHasExpired(string $email): void {
+    /** @var \Drupal\email_confirmer\EmailConfirmerManagerInterface $email_confirmer */
+    $email_confirmer = \Drupal::service('email_confirmer');
+    $confirmation = $email_confirmer->createConfirmation($email);
+
+    $expiration_interval = \Drupal::configFactory()->get('email_confirmer.settings')->get('hash_expiration');
+    $confirmation->setCreatedTime($confirmation->getCreatedTime() - $expiration_interval);
+    $confirmation->save();
   }
 
 }
