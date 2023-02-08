@@ -295,6 +295,11 @@ Feature: Proposing a collection
       | signature_required | no                                                                                                                            |
       | html               | no                                                                                                                            |
 
+    # Contact us page should return access denied,
+    # because contact info emails are not validated.
+    When I go to "/collection/some-email-validation/contact"
+    Then I should get an access denied error
+
     # As some entities were created via UI, we should explicitly delete them.
     And I delete the "Contact person" contact information
     And I delete the "Contact Rapazoglou" contact information
