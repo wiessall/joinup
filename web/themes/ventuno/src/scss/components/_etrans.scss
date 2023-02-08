@@ -6,6 +6,7 @@
 .block-oe-webtools-etrans {
   @include media-breakpoint-up(md) {
     float: right;
+    z-index: 1;
   }
 }
 .etrans.wt-etrans {
