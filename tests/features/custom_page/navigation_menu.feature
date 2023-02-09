@@ -152,7 +152,7 @@ Feature: Navigation menu for custom pages
       | Vintage molds   | This is a sample body. | Plaster molds |
       | Plaster casting | This is a sample body. | Plaster molds |
     When I go to the "Plaster molds" collection
-    Then I should see the link "See more" in the "Navigation menu"
+    Then I should see the text "See more" in the "Navigation menu"
     But I should not see the text "Plaster casting" in the "Navigation menu"
     And I press "See more"
     Then I should see the text "Plaster casting" in the "Navigation menu"
