@@ -52,7 +52,7 @@
   {{ attach_library('ventuno/card') }}
   <div class="col">
     <article{{ _attributes.addClass(_classes) }}>
-      {% if _text is empty %}
+      {% if _text|trim is empty %}
         <div class="card-header border-0 bg-transparent p-0">
           <figure class="mb-0">
             {{ _image }}
