@@ -8,10 +8,10 @@ dependencies:
     - field.field.node.custom_page.field_custom_page_logo
     - field.field.node.custom_page.field_paragraphs_body
     - field.field.node.custom_page.og_audience
-    - image.style.horizontal_medium_image
     - node.type.custom_page
+    - responsive_image.styles.spotlight
   module:
-    - image
+    - responsive_image
     - template_suggestion
     - user
 _core:
@@ -22,13 +22,11 @@ bundle: custom_page
 mode: view_mode_tile
 content:
   field_custom_page_logo:
-    type: image
+    type: responsive_image
     label: hidden
     settings:
+      responsive_image_style: spotlight
       image_link: ''
-      image_style: horizontal_medium_image
-      image_loading:
-        attribute: lazy
     third_party_settings:
       template_suggestion:
         template_suggestion: ''
