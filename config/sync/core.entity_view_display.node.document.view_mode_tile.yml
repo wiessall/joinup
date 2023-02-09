@@ -19,12 +19,12 @@ dependencies:
     - field.field.node.document.field_topic
     - field.field.node.document.field_type
     - field.field.node.document.og_audience
-    - image.style.horizontal_medium_image
     - node.type.document
+    - responsive_image.styles.spotlight
   module:
     - file_url
-    - image
     - options
+    - responsive_image
     - smart_trim
     - template_suggestion
     - user
@@ -57,13 +57,11 @@ content:
     weight: 0
     region: content
   field_document_logo:
-    type: image
+    type: responsive_image
     label: hidden
     settings:
+      responsive_image_style: spotlight
       image_link: content
-      image_style: horizontal_medium_image
-      image_loading:
-        attribute: lazy
     third_party_settings:
       template_suggestion:
         template_suggestion: ''
