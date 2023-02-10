@@ -1856,7 +1856,7 @@ class JoinupContext extends RawDrupalContext {
    * @Then I should see a featured stats on the header
    */
   public function assertExistingFeaturedStats() {
-    $xpath = '//div[contains(concat(" ", normalize-space(@class), " "), "featured__stats")]/@class';
+    $xpath = '//div[contains(concat(" ", normalize-space(@class), " "), "featured__stats")]/@class | //ul[contains(concat(" ", normalize-space(@class), " "), "featured--stats")]/@class';
     $this->assertSession()->elementsCount('xpath', $xpath, 1);
   }
 
@@ -1866,7 +1866,7 @@ class JoinupContext extends RawDrupalContext {
    * @Then I should not see a featured stats on the header
    */
   public function assertNotExistingFeaturedStats() {
-    $xpath = '//div[contains(concat(" ", normalize-space(@class), " "), "featured__stats")]/@class';
+    $xpath = '//div[contains(concat(" ", normalize-space(@class), " "), "featured__stats")]/@class | //ul[contains(concat(" ", normalize-space(@class), " "), "featured--stats")]/@class';
     $this->assertSession()->elementsCount('xpath', $xpath, 0);
   }
 
