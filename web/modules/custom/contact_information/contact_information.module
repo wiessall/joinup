@@ -437,7 +437,8 @@ function contact_information_require_login(array $form, FormStateInterface $form
  */
 function contact_information_rdf_entity_view(array &$build, RdfInterface $contact_information, EntityViewDisplayInterface $display, string $view_mode): void {
   if ($contact_information instanceof ContactInformationInterface && $view_mode === 'about') {
-    if (\Drupal::currentUser()->isAuthenticated()) {
+    $access = \Drupal::getContainer()->get('joinup_group.group_manager')->access($contact_information->getRelatedGroup(), 'resend email confirmation request');
+    if ($access->isAllowed()) {
       // If an anonymous user clicks on the contact information 'Contact us'
       // link, they are redirected to login or register with the EU Login
       // service. After successfully completing the authentication, they are
@@ -449,35 +450,40 @@ function contact_information_rdf_entity_view(array &$build, RdfInterface $contac
       $build['#attached'] = ['library' => ['contact_information/contact-us']];
       $build += ['#attributes' => []];
       $build['#attributes']['data-joinup-contact-info-id'] = $contact_information->id();
+
       /** @var \Drupal\email_confirmer\EmailConfirmationInterface $confirmation */
-      $confirmation = \Drupal::service('email_confirmer')->getConfirmation($contact_information->get('field_ci_email')->value);
-      // If confirmation is unconfirmed yet.
-      if (!$confirmation || !$confirmation->isConfirmed()) {
+      $confirmation = \Drupal::getContainer()->get('email_confirmer')->getConfirmation($contact_information->get('field_ci_email')->value);
+      // If no confirmation is created yet, create one before adding the link
+      // to the form. Normally, we would have a controller to create the
+      // confirmation instead of sending the existing one but the confirmation
+      // is a standard procedure that all contact information entities should
+      // follow, so it is ok to have it created here by default since the user
+      // is already has access.
+      if (!$confirmation) {
+        $confirmation = \Drupal::getContainer()->get('email_confirmer')->createConfirmation($contact_information->get('field_ci_email')->value);
+        $confirmation->save();
+      }
+
+      if (!$confirmation->isConfirmed()) {
         $confirmation_url = Url::fromRoute('entity.email_confirmer_confirmation.resend', [
           'confirmation' => $confirmation->id(),
         ], [
           'query' => \Drupal::destination()->getAsArray(),
         ])->toString();
 
-        $access = \Drupal::getContainer()->get('joinup_group.group_manager')->access($contact_information->getRelatedGroup(), 'resend email confirmation request');
         $build['email_confirm'] = [
           '#type' => 'markup',
           '#markup' => t('Please <a href=":resend_url">confirm</a> your contact information to enable users to contact you.', [
             ':resend_url' => $confirmation_url,
           ]),
-          '#access' => $access,
         ];
-        $cacheable_metadata = new CacheableMetadata();
-        $cacheable_metadata
-          ->addCacheContexts(['og_role'])
-          ->addCacheableDependency($contact_information)
-          ->applyTo($build);
       }
-
     }
-    // Vary the field's cache by whether the user is logged in or not.
-    (new CacheableMetadata())
-      ->setCacheContexts(['user.roles:authenticated'])
+
+    $cacheable_metadata = CacheableMetadata::createFromRenderArray($build);
+    $cacheable_metadata
+      ->addCacheContexts(['og_role'])
+      ->addCacheableDependency($contact_information)
       ->applyTo($build);
   }
 }

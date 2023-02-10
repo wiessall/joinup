@@ -1,7 +1,7 @@
 @api @group-e
 Feature: Resend validation email from collection/solution about page
-    If the email address of a Collection/Solution has not been validated yet,
-    then a message must be displayed under the about page
+  If the email address of a Collection/Solution has not been validated yet,
+  then a message must be displayed under the about page
 
   @terms
   Scenario: Scenario for Collection and Solution
@@ -9,26 +9,26 @@ Feature: Resend validation email from collection/solution about page
       | name      | type               |
       | Rotterdam | National authority |
     And the following collection:
-      | title           | Rally fanatics           |
-      | state           | validated                |
-      | description     | Rally fanatics desc      |
-      | topic           | Demography, E-inclusion  |
-      | owner           | Rotterdam                |
+      | title       | Rally fanatics          |
+      | state       | validated               |
+      | description | Rally fanatics desc     |
+      | topic       | Demography, E-inclusion |
+      | owner       | Rotterdam               |
     And the following solution:
-      | title               | Klop mirubes                                      |
-      | state               | validated                                         |
-      | description         | Klop mirubes desc                                 |
-      | topic               | Demography, E-inclusion                           |
-      | owner               | Rotterdam                                         |
-      | solution type       | Non-binding Instrument, Service Discovery Service |
-      | spatial coverage    | Italy, Egypt                                      |
-      | collection          | Rally fanatics                                    |
+      | title            | Klop mirubes                                      |
+      | state            | validated                                         |
+      | description      | Klop mirubes desc                                 |
+      | topic            | Demography, E-inclusion                           |
+      | owner            | Rotterdam                                         |
+      | solution type    | Non-binding Instrument, Service Discovery Service |
+      | spatial coverage | Italy, Egypt                                      |
+      | collection       | Rally fanatics                                    |
     And users:
-      | Username         | E-mail                     | First name  | Family name |
-      | Ferners Lee      | ferners-lee@example.com    | Ferners     | Lee         |
-      | Plot user        | plot.user@example.com      | Plot        | user        |
-      | Lope Facilitator | lopfacilitator@example.com | Lope        | Facilitator |
-      | Group user       | group.user@example.com     | Group       | User        |
+      | Username         | E-mail                     | First name | Family name |
+      | Ferners Lee      | ferners-lee@example.com    | Ferners    | Lee         |
+      | Plot user        | plot.user@example.com      | Plot       | user        |
+      | Lope Facilitator | lopfacilitator@example.com | Lope       | Facilitator |
+      | Group user       | group.user@example.com     | Group      | User        |
     And the following collection user memberships:
       | collection     | user             | roles       |
       | Rally fanatics | Lope Facilitator | facilitator |
@@ -36,11 +36,11 @@ Feature: Resend validation email from collection/solution about page
       | Rally fanatics | Plot user        | owner       |
       | Rally fanatics | Group user       | member      |
     And the following solution user memberships:
-      | solution     | user               | roles       |
-      | Klop mirubes | Plot user          | owner       |
-      | Klop mirubes | Lope Facilitator   | facilitator |
-      | Klop mirubes | Lope Facilitator   | owner       |
-      | Klop mirubes | Group user         | member      |
+      | solution     | user             | roles       |
+      | Klop mirubes | Plot user        | owner       |
+      | Klop mirubes | Lope Facilitator | facilitator |
+      | Klop mirubes | Lope Facilitator | owner       |
+      | Klop mirubes | Group user       | member      |
 
     When I am not logged in
     And I go to the homepage of the "Rally fanatics" collection
@@ -56,8 +56,8 @@ Feature: Resend validation email from collection/solution about page
     Then I should not see the text "Please confirm your contact information to enable users to contact you"
     When I go to the edit form of the "Rally fanatics" collection
     And I fill in the following:
-      | E-mail | confirmation_email.man@example.com     |
-      | Name   | Confirmation Invisible Man             |
+      | E-mail | confirmation_email.man@example.com |
+      | Name   | Confirmation Invisible Man         |
     And I press "Create contact information"
     And I press "Publish"
     When I go to the homepage of the "Rally fanatics" collection
@@ -92,8 +92,8 @@ Feature: Resend validation email from collection/solution about page
     Then I should not see the text "Please confirm your contact information to enable users to contact you"
     When I go to the edit form of the "Klop mirubes" solution
     And I fill in the following:
-      | E-mail | confirmation_email2.man@example.com     |
-      | Name   | Confirmation Invisible Man 2            |
+      | E-mail | confirmation_email2.man@example.com |
+      | Name   | Confirmation Invisible Man 2        |
     And I press "Create contact information"
     And I press "Publish"
     When I go to the homepage of the "Klop mirubes" solution
@@ -112,4 +112,43 @@ Feature: Resend validation email from collection/solution about page
     And I click "About"
     Then I should not see the text "Please confirm your contact information to enable users to contact you"
 
+  Scenario: Test the resend functionality for a contact created through API.
+    Given the following contact:
+      | email | existing@resend.com |
+      | name  | Existing to resend  |
+    And solutions:
+      | title                       | description          | state     | contact information |
+      | Existing to resend solution | Default description. | validated | Existing to resend  |
 
+    When I am logged in as a user with the authenticated role
+    And I go to the homepage of the "Existing to resend solution" solution
+    And I click "About"
+    Then I should not see the text "Please confirm your contact information to enable users to contact you"
+
+    When I am logged in as a moderator
+    And I go to the homepage of the "Existing to resend solution" solution
+    And I click "About"
+    Then I should see the text "Please confirm your contact information to enable users to contact you"
+    When I click "confirm"
+    Then I should see the text "A new confirmation message has been sent to existing@resend.com"
+
+    # Check permissions again to ensure that the link is cached properly.
+    Given I am not logged in
+    When I go to the homepage of the "Existing to resend solution" solution
+    And I click "About"
+    Then I should not see the text "Please confirm your contact information to enable users to contact you"
+
+    Given I am logged in as a moderator
+    And I go to the homepage of the "Existing to resend solution" solution
+    And I click "About"
+    Then I should see the text "Please confirm your contact information to enable users to contact you"
+
+    Given I am logged in as a facilitator of the "Existing to resend solution" solution
+    And I go to the homepage of the "Existing to resend solution" solution
+    And I click "About"
+    Then I should see the text "Please confirm your contact information to enable users to contact you"
+
+    Given I am logged in as a user with the authenticated role
+    And I go to the homepage of the "Existing to resend solution" solution
+    And I click "About"
+    Then I should not see the text "Please confirm your contact information to enable users to contact you"
