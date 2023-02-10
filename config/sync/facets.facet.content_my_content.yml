@@ -13,6 +13,8 @@ id: content_my_content
 name: 'My content'
 weight: 0
 min_count: 1
+missing: false
+missing_label: others
 url_alias: content_my_content
 facet_source_id: 'search_api:views_page__content_overview__page_1'
 field_identifier: nid
