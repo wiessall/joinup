@@ -26,7 +26,7 @@ widget:
   config:
     show_numbers: true
     arbitrary_facet_plugin: _none
-    tabs: 3
+    tabs: 0
 empty_behavior:
   behavior: none
 only_visible_when_facet_source_is_visible: true
