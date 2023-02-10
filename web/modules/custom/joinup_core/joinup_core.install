@@ -97,7 +97,7 @@ function joinup_core_requirements($phase): array {
 /**
  * Replace the field_content_listing with the content_listing field.
  */
-function joinup_core_update_108900(): void {
+function joinup_core_update_109000(): void {
   $config_file = 'field.field.paragraph.content_listing.content_listing';
   $config_storage = \Drupal::service('config.storage.sync');
   $config = $config_storage->read($config_file);

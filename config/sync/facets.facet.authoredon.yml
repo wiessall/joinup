@@ -11,6 +11,8 @@ id: authoredon
 name: 'Authored on'
 weight: 0
 min_count: 1
+missing: false
+missing_label: others
 url_alias: authoredon
 facet_source_id: 'search_api:views_page__moderator_solutions_by_type__page_1'
 field_identifier: entity_created
