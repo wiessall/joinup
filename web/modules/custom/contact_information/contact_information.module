@@ -452,7 +452,7 @@ function contact_information_rdf_entity_view(array &$build, RdfInterface $contac
       $build['#attributes']['data-joinup-contact-info-id'] = $contact_information->id();
 
       /** @var \Drupal\email_confirmer\EmailConfirmationInterface $confirmation */
-      $confirmation = \Drupal::getContainer()->get('email_confirmer')->getConfirmation($contact_information->get('field_ci_email')->value);
+      $confirmation = \Drupal::getContainer()->get('email_confirmer')->getConfirmation($contact_information->get('field_ci_email')->value, FALSE, ContactInformationEmailConfirmInterface::REALM);
       // If no confirmation is created yet, create one before adding the link
       // to the form. Normally, we would have a controller to create the
       // confirmation instead of sending the existing one but the confirmation
@@ -461,7 +461,9 @@ function contact_information_rdf_entity_view(array &$build, RdfInterface $contac
       // is already has access.
       if (!$confirmation) {
         $confirmation = \Drupal::getContainer()->get('email_confirmer')->createConfirmation($contact_information->get('field_ci_email')->value);
-        $confirmation->save();
+        $confirmation
+          ->setRealm(ContactInformationEmailConfirmInterface::REALM)
+          ->save();
       }
 
       if (!$confirmation->isConfirmed()) {
