@@ -37,7 +37,7 @@
         "drupal/entity_legal": "^3.0.0",
         "drupal/entityqueue": "^1.2",
         "drupal/error_page": "^2.0",
-        "drupal/facets": "2.0.1",
+        "drupal/facets": "^2",
         "drupal/facets_block": "^1.4",
         "drupal/facets_date_range": "^1.0@beta",
         "drupal/field_delimiter": "^1.1",
@@ -110,8 +110,10 @@
         "openeuropa/oe_bootstrap_theme": "^1.0",
         "openeuropa/oe_dashboard_agent": "^0.3.0",
         "openeuropa/oe_webtools": "^1.19",
+        "psr/http-factory-implementation": "*",
         "semiceu/adms-ap_validator": "1.0.0-alpha1",
-        "sweetrdf/easyrdf": "^1.7.1"
+        "sweetrdf/easyrdf": "^1.7.1",
+        "symfony/http-client": "*"
     },
     "require-dev": {
         "ext-fileinfo": "*",
@@ -167,7 +169,8 @@
             "composer/installers": true,
             "drupal/core-composer-scaffold": true,
             "openeuropa/composer-artifacts": true,
-            "phpstan/extension-installer": true
+            "phpstan/extension-installer": true,
+            "php-http/discovery": false
         }
     },
     "autoload": {
@@ -293,17 +296,13 @@
                 "Allow multi-property references. @see https://github.com/jhedstrom/DrupalDriver/pull/252": "https://patch-diff.githubusercontent.com/raw/jhedstrom/DrupalDriver/pull/252.diff"
             },
             "drupal/editor_file": {
-                "Wrong file upload size when max upload left empty. @see https://www.drupal.org/i/3300142": "https://www.drupal.org/files/issues/2022-07-27/editor_file-fix_max_file_upload_empty-3300142-2.patch",
-                "Uploaded files are not permanent @see https://www.drupal.org/i/3057895": "https://www.drupal.org/files/issues/2019-05-29/file-upload-marked-permanent-3057895-2.patch"
-            },
-            "drupal/email_contact": {
-                "Allow modules to alter or replace the Ajax command @see https://www.drupal.org/i/3320796": "https://git.drupalcode.org/project/email_contact/-/merge_requests/4.diff"
+                "Uploaded files are not permanent @see https://www.drupal.org/i/3057895": "https://git.drupalcode.org/project/editor_file/-/merge_requests/1.diff"
             },
             "drupal/entity_legal": {
                 "Custom agree validation error message and submit button label @see https://www.drupal.org/project/entity_legal/issues/3293017": "https://git.drupalcode.org/project/entity_legal/-/merge_requests/8.diff"
             },
             "drupal/facets": {
-                "Facet Summary for Facet Items with a set dependency. @see https://www.drupal.org/node/2873480": "https://www.drupal.org/files/issues/2020-07-30/2873480-33-8.x-1.5.patch",
+                "Facet Summary for Facet Items with a set dependency. @see https://www.drupal.org/node/2873480": "https://git.drupalcode.org/project/facets/-/merge_requests/95.diff",
                 "Add 0 option in 'Soft limit' and apply soft limit to facet root li tags and add. @see https://www.drupal.org/i/3208580 and https://www.drupal.org/i/3307082": "resources/patch/facets-3208580-and-3307082.patch"
             },
             "drupal/file_url": {
@@ -363,18 +362,10 @@
                 "Subpaths with redirect not resolved @see https://www.drupal.org/project/subpathauto/issues/3175637": "https://git.drupalcode.org/project/subpathauto/-/merge_requests/1.diff"
             },
             "drupal/swiftmailer": {
-                "Add spooling for increased performance @see https://www.drupal.org/project/swiftmailer/issues/3000553": "https://git.drupalcode.org/project/swiftmailer/-/merge_requests/2.diff",
-                "Allow Cc and Bcc headers @see https://www.drupal.org/project/swiftmailer/issues/2892104": "https://www.drupal.org/files/issues/2021-10-11/2892104-38.patch",
-                "Improve spool error message": "resources/patch/swiftmailer.drush.patch"
+                "Add spooling for increased performance @see https://www.drupal.org/project/swiftmailer/issues/3000553": "https://git.drupalcode.org/project/swiftmailer/-/merge_requests/8.diff"
             },
             "drupal/token": {
                 "token-devel link templates don't work when canonical template has multiple parameters @see https://www.drupal.org/project/token/issues/3254619": "https://www.drupal.org/files/issues/2021-12-15/3254619-2.patch"
-            },
-            "drupal/ui_patterns": {
-                "Detect all theme patterns @see https://www.drupal.org/project/ui_patterns/issues/3311471": "https://www.drupal.org/files/issues/2022-09-26/3311471-10-detect-all-theme-patterns.patch"
-            },
-            "drupal/upgrade_status": {
-                "Issue #3274645: Deprecated function: Return type of GuzzleHttp Cookie CookieJar when running Upgrade Status on PHP 8.1 @see https://www.drupal.org/project/upgrade_status/issues/3274645": "https://www.drupal.org/files/issues/2022-10-07/3274645-22.patch"
             },
             "drupal/video_embed_field": {
                 "Extend support for embed URLs. Option to force privacy @see https://www.drupal.org/project/video_embed_field/issues/3060201 (originally on https://www.drupal.org/node/2899093)": "https://www.drupal.org/files/issues/2019-06-11/privacy_mode-3060201-D8-6.patch",
@@ -389,8 +380,7 @@
             "openeuropa/oe_webtools": {
                 "Allow to pass an optional referer. @see https://github.com/openeuropa/oe_webtools/pull/96": "https://patch-diff.githubusercontent.com/raw/openeuropa/oe_webtools/pull/96.diff",
                 "Place the webtools loader on the head. @see https://github.com/openeuropa/oe_webtools/pull/102": "https://patch-diff.githubusercontent.com/raw/openeuropa/oe_webtools/pull/102.diff",
-                "Add the possibility to display a marker on the map. @see https://github.com/openeuropa/oe_webtools/pull/111": "https://patch-diff.githubusercontent.com/raw/openeuropa/oe_webtools/pull/111.diff",
-                "PHP 8.1 notices @see https://github.com/openeuropa/oe_webtools/pull/182": "https://patch-diff.githubusercontent.com/raw/openeuropa/oe_webtools/pull/182.diff"
+                "Add the possibility to display a marker on the map. @see https://github.com/openeuropa/oe_webtools/pull/111": "https://patch-diff.githubusercontent.com/raw/openeuropa/oe_webtools/pull/111.diff"
             }
         },
         "patches-ignore": {
