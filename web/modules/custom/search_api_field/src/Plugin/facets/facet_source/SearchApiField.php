@@ -4,6 +4,7 @@ declare(strict_types = 1);
 
 namespace Drupal\search_api_field\Plugin\facets\facet_source;
 
+use Drupal\Core\Cache\Cache;
 use Drupal\Core\Path\CurrentPathStack;
 use Drupal\facets\FacetSource\SearchApiFacetSourceInterface;
 use Drupal\facets\Plugin\facets\facet_source\SearchApiBaseFacetSource;
@@ -207,6 +208,14 @@ class SearchApiField extends SearchApiBaseFacetSource implements SearchApiFacetS
       return $field->getDataDefinition();
     }
     throw new Exception("Field with name {$field_name} does not have a definition");
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getCacheMaxAge(): int {
+    // Override the default cache max age of 0 to allow caching of the facets.
+    return Cache::PERMANENT;
   }
 
 }
