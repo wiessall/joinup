@@ -15,133 +15,11 @@
 declare(strict_types = 1);
 
 use Drupal\meta_entity\Entity\MetaEntity;
-use Drupal\pathauto\PathautoState;
-
-/**
- * Fix Interoperable Europe news creation link.
- */
-function joinup_core_deploy_108900(): void {
-  $entityTypeManager = \Drupal::entityTypeManager();
-  $entityTypeManager->getStorage('node')->load(704825)->set('path', [
-    'pathauto' => PathautoState::SKIP,
-    'alias' => '/interoperable-europe/latest-news',
-  ])->save();
-  if ($alias = $entityTypeManager->getStorage('path_alias')->load(84170)) {
-    $alias->delete();
-  }
-}
-
-/**
- * Cleanup the spam files from the last 7 days.
- */
-function joinup_core_deploy_108901(array &$sandbox = []): string {
-  if (empty($sandbox['file_ids'])) {
-    // Get files of blocked users from past week.
-    $query = \Drupal::database()->select('file_managed', 'f');
-    $query->join('users_field_data', 'u', 'f.uid = u.uid');
-    $query->fields('f', ['fid']);
-    $query->condition('u.status', 0);
-    $query->condition('u.created', strtotime('-7 days'), '>=');
-    $sandbox['file_ids'] = $query->execute()->fetchCol();
-
-    $sandbox['max'] = count($sandbox['file_ids']);
-    $sandbox['current'] = 0;
-  }
-
-  $batch_size = 50;
-  $file_ids = array_splice($sandbox['file_ids'], 0, $batch_size);
-  $file_storage = \Drupal::entityTypeManager()->getStorage('file');
-  $file_url_generator = \Drupal::getContainer()->get('file_url_generator');
-  foreach ($file_storage->loadMultiple($file_ids) as $file) {
-    $file->delete();
-
-    // Ensure that the actual file does not exist.
-    $file_uri = $file->getFileUri();
-    $file_url_generator->generateAbsoluteString($file_uri);
-    if (file_exists($file_uri)) {
-      unlink($file_uri);
-    }
-  }
-
-  $sandbox['current'] += count($file_ids);
-  $sandbox['#finished'] = $sandbox['current'] / $sandbox['max'];
-
-  return "Removed {$sandbox['current']} of {$sandbox['max']} files.";
-}
-
-/**
- * Remove files without database representation.
- */
-function joinup_core_deploy_108902(): string {
-  /** @var \Drupal\Core\File\FileSystemInterface $file_system */
-  $file_system = \Drupal::service('file_system');
-  $count = 0;
-  // These files entries in {file_managed} table were already deleted.
-  for ($i = 1; $i <= 452; $i++) {
-    $file = "public://document/2022-12/free-doawnlaod-$i.pdf";
-    if (file_exists($file)) {
-      $file_system->delete($file);
-      $count++;
-    }
-  }
-  return "$count unmanaged files deleted";
-}
-
-/**
- * Delete content created by spammers.
- */
-function joinup_core_deploy_108903(array &$sandbox = []): string {
-  if (!isset($sandbox['items'])) {
-    $sandbox['items'] = [];
-    $db = \Drupal::database();
-
-    // Blocked users whose accounts are created after 2nd of December 2022.
-    $uids = $db->query("SELECT u.uid FROM {users_field_data} u WHERE u.status = 0 AND u.uid > 1 AND u.created > 1669327200")
-      ->fetchCol();
-
-    // Add all files owned by spam users to sandbox.
-    $sql_args = [':uids[]' => $uids];
-    $fids = $db->query("SELECT fid FROM {file_managed} WHERE uid IN(:uids[])", $sql_args)->fetchCol();
-    foreach ($fids as $fid) {
-      $sandbox['items'][] = ['file', $fid];
-    }
-    $sandbox['processed'] = 0;
-    $sandbox['total'] = count($sandbox['items']);
-  }
-
-  $items = array_splice($sandbox['items'], 0, 50);
-  foreach ($items as $item) {
-    [$entity_type_id, $id] = $item;
-    $storage = \Drupal::entityTypeManager()->getStorage($entity_type_id);
-    $entity = $storage->load($id);
-    $entity->skip_notification = TRUE;
-    $entity->delete();
-  }
-  $sandbox['processed'] += count($items);
-
-  $sandbox['#finished'] = (int) empty($sandbox['items']);
-  return "Deleted {$sandbox['processed']} content entries out of {$sandbox['total']}";
-}
-
-/**
- * Fix About the Commission's link.
- */
-function joinup_core_deploy_108904(): void {
-  $menu_links = \Drupal::entityTypeManager()->getStorage('menu_link_content')
-    ->loadByProperties(['menu_name' => 'footer-european-commission']);
-  foreach ($menu_links as $menu_link) {
-    if ($menu_link->id() == '16014') {
-      $menu_link->set('link', [['uri' => 'https://commission.europa.eu/about-european-commissions-web-presence_en']]);
-      $menu_link->save();
-      return;
-    }
-  }
-}
 
 /**
  * Update the topic vocabulary terms.
  */
-function joinup_core_deploy_108905(array &$sandbox): string {
+function joinup_core_deploy_109000(array &$sandbox): string {
   if (empty($sandbox['tasks'])) {
     $sandbox['tasks'] = [
       'createTopicTerm' => [
@@ -518,7 +396,7 @@ function joinup_core_deploy_108905(array &$sandbox): string {
 /**
  * Synchronize Topic meta entity with Topic terms.
  */
-function joinup_core_deploy_108906(): void {
+function joinup_core_deploy_109001(): void {
   $storage = \Drupal::entityTypeManager()->getStorage('taxonomy_term');
   /** @var \Drupal\taxonomy\TermInterface $term */
   foreach ($storage->loadByProperties(['vid' => 'topic']) as $term) {

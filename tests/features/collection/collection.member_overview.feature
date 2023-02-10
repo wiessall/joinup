@@ -58,12 +58,12 @@ Feature: Collection membership overview
      # The membership overview should not be accessible for anonymous users for draft collection.
     When I am not logged in
     And I go to the members page of "Jubilant Rabits"
-    Then I should not see the link "Members" in the "Left sidebar"
+    Then I should not see the "Left sidebar" region
 
     # The membership overview should not be accessible for non members users for draft collection.
     When I am logged in as "Janna Miller"
     And I go to the members page of "Jubilant Rabits"
-    Then I should not see the link "Members" in the "Left sidebar"
+    Then I should not see the "Left sidebar" region
 
     # The membership overview should be accessible for owner users for draft collection.
     When I am logged in as "Ruby Valenta"
