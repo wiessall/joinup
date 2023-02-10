@@ -7,6 +7,7 @@ namespace Drupal\collection\Entity;
 use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
+use Drupal\contact_information\Traits\ContactInformationTrait;
 use Drupal\joinup_bundle_class\DescriptionTrait;
 use Drupal\joinup_bundle_class\JoinupBundleClassFieldAccessTrait;
 use Drupal\joinup_bundle_class\JoinupBundleClassMetaEntityTrait;
@@ -41,6 +42,7 @@ class Collection extends Rdf implements CollectionInterface {
   use StringTranslationTrait;
   use TopicReferencingEntityTrait;
   use DescriptionTrait;
+  use ContactInformationTrait;
 
   /**
    * {@inheritdoc}
