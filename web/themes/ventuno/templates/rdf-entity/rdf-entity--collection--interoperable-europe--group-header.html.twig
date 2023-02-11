@@ -17,7 +17,8 @@
   </div>
   <div class="iop-header__separator"></div>
   <div class="container d-flex flex-column align-items-center">
-    <ul class="list-unstyled mt-3 mb-0 p-3 bg-secondary rounded text-dark">
+    {% if not meta_banner_disabled %}
+    <ul class="list-unstyled mt-3 mb-0 p-3 bg-secondary rounded text-dark group-stats">
       <li class="mb-2 d-flex align-items-center">
         <svg class="bi icon--s me-2">
           <use xlink:href="{{ bcl_icon_path }}#calendar3"></use>
@@ -37,6 +38,7 @@
         {{ content.solutions }}
       </li>
     </ul>
+    {% endif %}
     <div class="mt-4 d-flex text-light">
       {{ content.join_collection }}
     </div>
