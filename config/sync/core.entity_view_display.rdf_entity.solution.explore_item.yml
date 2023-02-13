@@ -271,9 +271,9 @@ hidden:
   pinned_in: true
   rdf_entity_field_is_content_inline_facets: true
   rdf_entity_field_is_content_top: true
-  related_solution: true
   related_solutions: true
   releases_overview: true
   search_api_excerpt: true
+  settings: true
   share_link: true
   solution_subscribe: true

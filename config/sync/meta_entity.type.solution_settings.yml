@@ -20,5 +20,5 @@ description: ''
 mapping:
   rdf_entity:
     solution:
-      field_name: related_solution
+      field_name: settings
       auto_create: false
