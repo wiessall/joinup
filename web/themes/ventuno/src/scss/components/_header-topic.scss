@@ -34,7 +34,8 @@
   }
   &__see-more-btn {
     color: $white;
-    &:hover {
+    &:hover,
+    &:focus-visible {
       color: $white!important;
       text-decoration: underline!important;
     }
