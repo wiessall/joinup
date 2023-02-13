@@ -1855,8 +1855,11 @@ class JoinupContext extends RawDrupalContext {
    *
    * @Then I should see a featured stats on the header
    */
-  public function assertExistingFeaturedStats() {
-    $xpath = '//div[contains(concat(" ", normalize-space(@class), " "), "featured__stats")]/@class';
+  public function assertExistingFeaturedStats(): void {
+    $xpath = '//ul[contains(concat(" ", normalize-space(@class), " "), "group-stats")]/@class';
+    // @todo Remove the following line in ISAICP-7138.
+    // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7138
+    $xpath .= ' | //div[contains(concat(" ", normalize-space(@class), " "), "featured__stats")]/@class';
     $this->assertSession()->elementsCount('xpath', $xpath, 1);
   }
 
@@ -1865,8 +1868,11 @@ class JoinupContext extends RawDrupalContext {
    *
    * @Then I should not see a featured stats on the header
    */
-  public function assertNotExistingFeaturedStats() {
-    $xpath = '//div[contains(concat(" ", normalize-space(@class), " "), "featured__stats")]/@class';
+  public function assertNotExistingFeaturedStats(): void {
+    $xpath = '//ul[contains(concat(" ", normalize-space(@class), " "), "group-stats")]/@class';
+    // @todo Remove the following line in ISAICP-7138.
+    // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7138
+    $xpath .= ' | //div[contains(concat(" ", normalize-space(@class), " "), "featured__stats")]/@class';
     $this->assertSession()->elementsCount('xpath', $xpath, 0);
   }
 
