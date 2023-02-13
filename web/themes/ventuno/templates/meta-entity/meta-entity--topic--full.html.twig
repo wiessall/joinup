@@ -5,12 +5,37 @@
  */
 #}
 {{ attach_library('ventuno/header-topic') }}
+{% set description = content.description|render|striptags('<p><strong><em><a><ul><ol><li><blockquote>')|trim|split(' ') %}
 <article{{ attributes }}>
   <header class="header-topic mb-3">
     {{ title_prefix }}
     <h1 class="header-topic__title">{{ content.label }}</h1>
-    {{ content.description }}
     {{ title_suffix }}
+    {% if description|length < 50 %}
+      <div class="header-topic__description">
+        {{ content.description }}
+      </div>
+    {% else %}
+      <div class="header-topic__description header-topic__description--long collapse" id="collapseExample">
+        {{ content.description }}
+      </div>
+      <div class="d-flex justify-content-end mt-3">
+        <button
+          class="btn btn-link p-0 header-topic__see-more-btn"
+          id="seeMoreBtn"
+          type="button"
+          data-joinup-seemore-collapsed="true"
+          data-bs-toggle="collapse"
+          data-bs-target="#collapseExample"
+          aria-expanded="false"
+          aria-controls="collapseExample">
+          {{ 'See more'|t }}
+          <svg class="bi icon--s">
+            <use xlink:href="{{ bcl_icon_path }}#chevron-down"></use>
+          </svg>
+        </button>
+      </div>
+    {% endif %}
   </header>
   {{ content|without('label', 'description') }}
 </article>

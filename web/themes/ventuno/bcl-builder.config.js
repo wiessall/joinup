@@ -14,6 +14,14 @@ module.exports = {
   scripts: [
     // Custom
     {
+      entry: path.resolve(outputFolder, "src/js/toggle-text-seemore-btn.js"),
+      dest: path.resolve(outputFolder, "assets/js/toggle-text-seemore-btn.js"),
+      options: {
+        minify: true,
+        sourceMap: true,
+      },
+    },
+    {
       entry: path.resolve(outputFolder, "src/js/highlight-invalid-fields.js"),
       dest: path.resolve(outputFolder, "assets/js/highlight-invalid-fields.js"),
       options: {
@@ -422,8 +430,10 @@ module.exports = {
           "check-circle-fill.svg",
           "chevron-bar-left.svg",
           "chevron-bar-right.svg",
+          "chevron-down.svg",
           "chevron-left.svg",
           "chevron-right.svg",
+          "chevron-up.svg",
           "clipboard-check.svg",
           "envelope-fill.svg",
           "exclamation-circle-fill.svg",
