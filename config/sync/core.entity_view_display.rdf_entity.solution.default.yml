@@ -184,8 +184,8 @@ hidden:
   langcode: true
   og_group: true
   pinned_in: true
-  related_solution: true
   releases_overview: true
   search_api_excerpt: true
+  settings: true
   share_link: true
   solution_subscribe: true
