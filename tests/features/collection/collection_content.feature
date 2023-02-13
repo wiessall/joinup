@@ -38,7 +38,7 @@ Feature: Collection content
     And I go to the homepage of the "Turin Egyptian Collection" collection
 
     # The solution counters do not include the unpublished solutions.
-    Then I should see the link "Solution (1)"
+    Then I should see the link "1 Solution" in the "Content" region
     And I see the text "1 Solution" in the "Header" region
 
     When I click "Add solution" in the plus button menu
@@ -84,9 +84,9 @@ Feature: Collection content
     Then the "Discussion" content tab is displayed
     And the "Document" content tab is displayed
     And the "Event" content tab is displayed
-    And I should see the link "News (1)"
-    And I should see the link "Solution (1)"
-    And I should see the link "Video (1)"
+    And I should see the link "1 News"
+    And I should see the link "1 Solution"
+    And I should see the link "1 Video"
 
     Given the following solution:
       | title      | Protecting Artifacts      |
@@ -112,9 +112,9 @@ Feature: Collection content
     Then the "Discussions" content tab is displayed
     And the "Documents" content tab is displayed
     And the "Events" content tab is displayed
-    And I should see the link "News (2)"
-    And I should see the link "Solutions (2)"
-    And I should see the link "Videos (2)"
+    And I should see the link "2 News"
+    And I should see the link "2 Solutions"
+    And I should see the link "2 Videos"
 
   Scenario: Links and markup should be stripped from tiles summary.
     Given I go to the homepage of the "Turin Egyptian Collection" collection
