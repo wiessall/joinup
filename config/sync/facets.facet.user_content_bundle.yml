@@ -6,6 +6,8 @@ id: user_content_bundle
 name: Type
 weight: 0
 min_count: 1
+missing: false
+missing_label: others
 url_alias: user_content_bundle
 facet_source_id: 'search_api_field:user.field_user_content'
 field_identifier: entity_bundle
