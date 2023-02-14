@@ -1,0 +1,903 @@
+diff --git a/.gitignore b/.gitignore
+new file mode 100644
+index 0000000..4fbb073
+--- /dev/null
++++ b/.gitignore
+@@ -0,0 +1,2 @@
++/vendor/
++/composer.lock
+diff --git a/composer.json b/composer.json
+new file mode 100644
+index 0000000..ab19561
+--- /dev/null
++++ b/composer.json
+@@ -0,0 +1,14 @@
++{
++    "name": "drupal/subpathauto",
++    "description": "Provides support for extending sub-paths of URL aliases.",
++    "type": "drupal-module",
++    "license": "GPL-2.0-or-later",
++    "homepage": "https://www.drupal.org/project/subpathauto",
++    "support": {
++        "issues": "https://www.drupal.org/project/issues/subpathauto",
++        "source": "https://cgit.drupalcode.org/subpathauto"
++    },
++    "require-dev": {
++        "drupal/redirect": "*"
++    }
++}
+diff --git a/config/install/subpathauto.settings.yml b/config/install/subpathauto.settings.yml
+index 4839a64..427bb23 100644
+--- a/config/install/subpathauto.settings.yml
++++ b/config/install/subpathauto.settings.yml
+@@ -1 +1,2 @@
+ depth: 0
++redirect_support: true
+diff --git a/config/schema/subpathauto.schema.yml b/config/schema/subpathauto.schema.yml
+index 583a731..1cbc9e8 100644
+--- a/config/schema/subpathauto.schema.yml
++++ b/config/schema/subpathauto.schema.yml
+@@ -5,3 +5,6 @@ subpathauto.settings:
+     depth:
+       type: integer
+       label: 'Maximum depth of sub-paths to alias'
++    redirect_support:
++      type: boolean
++      label: 'If set to TRUE, redirects will be taken into account when resolving sub aliases.'
+diff --git a/src/Form/SettingsForm.php b/src/Form/SettingsForm.php
+index 314d27a..ec57808 100644
+--- a/src/Form/SettingsForm.php
++++ b/src/Form/SettingsForm.php
+@@ -2,15 +2,48 @@
+ 
+ namespace Drupal\subpathauto\Form;
+ 
++use Drupal\Core\Config\ConfigFactoryInterface;
++use Drupal\Core\Extension\ModuleHandlerInterface;
+ use Drupal\Core\Form\ConfigFormBase;
+ use Drupal\Core\Form\FormStateInterface;
+ use Drupal\Core\Menu\MenuTreeStorage;
++use Symfony\Component\DependencyInjection\ContainerInterface;
+ 
+ /**
+  * Defines a form that configures Subpathauto.
+  */
+ class SettingsForm extends ConfigFormBase {
+ 
++  /**
++   * The module handler service.
++   *
++   * @var \Drupal\Core\Extension\ModuleHandlerInterface
++   */
++  protected $moduleHandler;
++
++  /**
++   * Constructs a \Drupal\system\ConfigFormBase object.
++   *
++   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
++   *   The factory for configuration objects.
++   * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
++   *   The module handler service.
++   */
++  public function __construct(ConfigFactoryInterface $config_factory, ModuleHandlerInterface $module_handler) {
++    parent::__construct($config_factory);
++    $this->moduleHandler = $module_handler;
++  }
++
++  /**
++   * {@inheritdoc}
++   */
++  public static function create(ContainerInterface $container) {
++    return new static(
++      $container->get('config.factory'),
++      $container->get('module_handler')
++    );
++  }
++
+   /**
+    * {@inheritdoc}
+    */
+@@ -25,6 +58,17 @@ class SettingsForm extends ConfigFormBase {
+       '#description' => $this->t('Increasing this value may decrease performance.'),
+     ];
+ 
++    $is_redirect_installed = $this->moduleHandler->moduleExists('redirect');
++    $form['redirect_support'] = [
++      '#type' => 'checkbox',
++      '#title' => $this->t('Support for redirects'),
++      '#default_value' => $is_redirect_installed ? $config->get('redirect_support') : FALSE,
++      '#disabled' => !$is_redirect_installed,
++      '#description' => $is_redirect_installed ?
++        $this->t('If checked, redirects will be taken into account when resolving sub aliases.'):
++        $this->t('If checked, redirects will be taken into account when resolving sub aliases. The redirect module should be installed for this setting.'),
++    ];
++
+     return parent::buildForm($form, $form_state);
+   }
+ 
+@@ -35,6 +79,7 @@ class SettingsForm extends ConfigFormBase {
+     $values = $form_state->getValues();
+     $this->config('subpathauto.settings')
+       ->set('depth', $values['depth'])
++      ->set('redirect_support', $values['redirect_support'])
+       ->save();
+ 
+     parent::submitForm($form, $form_state);
+diff --git a/src/PathProcessor.php b/src/PathProcessor.php
+index f71e011..2451110 100644
+--- a/src/PathProcessor.php
++++ b/src/PathProcessor.php
+@@ -3,12 +3,14 @@
+ namespace Drupal\subpathauto;
+ 
+ use Drupal\Core\Config\ConfigFactoryInterface;
++use Drupal\Core\Extension\ModuleHandlerInterface;
+ use Drupal\Core\Language\LanguageInterface;
+ use Drupal\Core\Language\LanguageManagerInterface;
+ use Drupal\Core\Path\PathValidatorInterface;
+ use Drupal\Core\PathProcessor\InboundPathProcessorInterface;
+ use Drupal\Core\PathProcessor\OutboundPathProcessorInterface;
+ use Drupal\Core\Render\BubbleableMetadata;
++use Drupal\Core\Url;
+ use Symfony\Component\HttpFoundation\Request;
+ 
+ /**
+@@ -44,6 +46,13 @@ class PathProcessor implements InboundPathProcessorInterface, OutboundPathProces
+    */
+   protected $pathValidator;
+ 
++  /**
++   * The module handler service.
++   *
++   * @var \Drupal\Core\Extension\ModuleHandlerInterface
++   */
++  protected $moduleHandler;
++
+   /**
+    * Whether it is recursive call or not.
+    *
+@@ -51,6 +60,13 @@ class PathProcessor implements InboundPathProcessorInterface, OutboundPathProces
+    */
+   protected $recursiveCall;
+ 
++  /**
++   * A boolean to hold whether the redirect module is installed.
++   *
++   * @var bool
++   */
++  protected $hasRedirectModuleSupport;
++
+   /**
+    * Builds PathProcessor object.
+    *
+@@ -60,11 +76,18 @@ class PathProcessor implements InboundPathProcessorInterface, OutboundPathProces
+    *   The language manager.
+    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
+    *   The config factory.
++   * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
++   *   The module handler service.
+    */
+-  public function __construct(InboundPathProcessorInterface $path_processor, LanguageManagerInterface $language_manager, ConfigFactoryInterface $config_factory) {
++  public function __construct(InboundPathProcessorInterface $path_processor, LanguageManagerInterface $language_manager, ConfigFactoryInterface $config_factory, ModuleHandlerInterface $module_handler = NULL) {
+     $this->pathProcessor = $path_processor;
+     $this->languageManager = $language_manager;
+     $this->configFactory = $config_factory;
++    $this->moduleHandler = $module_handler;
++    if (empty($this->moduleHandler)) {
++      @trigger_error('Calling PathProcessor::__construct() without the $module_handler argument is deprecated in subpathauto:8.x-1.2 and the $module_handler argument will be required in subpathauto:2.0. See https://www.drupal.org/project/subpathauto/issues/3175637', E_USER_DEPRECATED);
++      $this->moduleHandler = \Drupal::service('module_handler');
++    }
+   }
+ 
+   /**
+@@ -72,6 +95,7 @@ class PathProcessor implements InboundPathProcessorInterface, OutboundPathProces
+    */
+   public function processInbound($path, Request $request) {
+     $request_path = $this->getPath($request->getPathInfo());
++
+     // The path won't be processed if the path has been already modified by
+     // a path processor (including this one), or if this is a recursive call
+     // caused by ::isValidPath.
+@@ -79,6 +103,8 @@ class PathProcessor implements InboundPathProcessorInterface, OutboundPathProces
+       return $path;
+     }
+ 
++    // Verify that the full path is not a redirect before checking its parts.
++    $path = $this->checkRedirectedPath($request_path);
+     $original_path = $path;
+     $max_depth = $this->getMaxDepth();
+     $subpath = [];
+@@ -91,6 +117,17 @@ class PathProcessor implements InboundPathProcessorInterface, OutboundPathProces
+       }
+       $path = '/' . implode('/', $path_array);
+       $processed_path = $this->pathProcessor->processInbound($path, $request);
++
++      // If the path did not change, it might be that the alias is outdated.
++      // Check if a redirect has been created in the meantime and if.
++      if ($processed_path === $path) {
++        $processed_path = $this->checkRedirectedPath($path);
++        if ($path !== $processed_path) {
++          // Path $path is a redirect.
++          $processed_path = $this->pathProcessor->processInbound($processed_path, $request);
++        }
++      }
++
+       if ($processed_path !== $path) {
+         $path = $processed_path . '/' . implode('/', array_reverse($subpath));
+ 
+@@ -130,8 +167,7 @@ class PathProcessor implements InboundPathProcessorInterface, OutboundPathProces
+       $path = '/' . implode('/', $path_array);
+       $processed_path = $this->pathProcessor->processOutbound($path, $options, $request);
+       if ($processed_path !== $path) {
+-        $path = $processed_path . '/' . implode('/', array_reverse($subpath));
+-        return $path;
++        return $processed_path . '/' . implode('/', array_reverse($subpath));
+       }
+     }
+ 
+@@ -157,6 +193,41 @@ class PathProcessor implements InboundPathProcessorInterface, OutboundPathProces
+     return rtrim(urldecode($path_info), '/');
+   }
+ 
++  /**
++   * Checks if there is a redirect for the path and if so, returns the new path.
++   *
++   * @param string $path
++   *   The path to check.
++   *
++   * @return string
++   *   The new path.
++   */
++  protected function checkRedirectedPath(string $path) {
++    if (!isset($this->hasRedirectModuleSupport)) {
++      $this->hasRedirectModuleSupport = $this->moduleHandler->moduleExists('redirect') && $this->configFactory->get('subpathauto.settings')->get('redirect_support');
++    }
++    if ($this->hasRedirectModuleSupport) {
++      // Loads and check if the current path has a redirect.
++      $redirects = \Drupal::service('redirect.repository')->findBySourcePath(ltrim($path, '/'));
++
++      if (!empty($redirects)) {
++        $redirect = reset($redirects)->getRedirect();
++        $url = Url::fromUri($redirect['uri']);
++        // If there is a redirect towards an external or unrouted source, don't
++        // do anything as it's not relevant for constructing or deconstructing
++        // an alias.
++        if ($url->isExternal() || !$url->isRouted()) {
++          return $path;
++        }
++
++        // Return the internal path, the unaliased path of the URL.
++        return '/' . $url->getInternalPath();
++      }
++    }
++
++    return $path;
++  }
++
+   /**
+    * Tests if path is valid.
+    *
+diff --git a/subpathauto.info.yml b/subpathauto.info.yml
+index 16d98fd..15bc015 100644
+--- a/subpathauto.info.yml
++++ b/subpathauto.info.yml
+@@ -1,7 +1,7 @@
+ name: Sub-pathauto
+ type: module
+ description: Provides support for extending sub-paths of URL aliases.
+-core_version_requirement: ^8.8 || ^9
++core_version_requirement: ^8.8 || ^9 || ^10
+ configure: subpathauto.admin_settings
+ dependencies:
+   - drupal:path_alias
+diff --git a/subpathauto.install b/subpathauto.install
+new file mode 100644
+index 0000000..9ac5fe8
+--- /dev/null
++++ b/subpathauto.install
+@@ -0,0 +1,15 @@
++<?php
++
++/**
++ * @file
++ * Install, update, and uninstall functions for Subpathauto.
++ */
++
++/**
++ * Sets a default value for the redirect_support setting.
++ */
++function subpathauto_update_8001() {
++  // Even though the default value is TRUE for this setting, we are setting this
++  // to FALSE in order to preserve the functionality of the existing websites.
++  \Drupal::configFactory()->getEditable('subpathauto.settings')->set('redirect_support', FALSE)->save();
++}
+diff --git a/subpathauto.links.task.yml b/subpathauto.links.menu.yml
+similarity index 55%
+rename from subpathauto.links.task.yml
+rename to subpathauto.links.menu.yml
+index 0818bfe..2ce42c1 100644
+--- a/subpathauto.links.task.yml
++++ b/subpathauto.links.menu.yml
+@@ -1,5 +1,6 @@
+ subpathauto.settings.form:
+-  route_name: subpathauto.admin_settings
+-  base_route: path.admin_overview
+   title: 'Sub-path settings'
++  parent: system.admin_config_search
++  description: 'Configure the subpathauto module.'
++  route_name: subpathauto.admin_settings
+   weight: 25
+diff --git a/subpathauto.routing.yml b/subpathauto.routing.yml
+index 3d9b693..ca63c53 100644
+--- a/subpathauto.routing.yml
++++ b/subpathauto.routing.yml
+@@ -1,5 +1,5 @@
+ subpathauto.admin_settings:
+-  path: '/admin/config/development/subpathauto'
++  path: '/admin/config/search/subpathauto'
+   defaults:
+     _form: '\Drupal\subpathauto\Form\SettingsForm'
+     _title: 'Sub-path settings'
+diff --git a/subpathauto.services.yml b/subpathauto.services.yml
+index 11f27f3..2ef9cd1 100644
+--- a/subpathauto.services.yml
++++ b/subpathauto.services.yml
+@@ -1,7 +1,7 @@
+ services:
+   path_processor_subpathauto:
+     class: Drupal\subpathauto\PathProcessor
+-    arguments: ['@path_alias.path_processor', '@language_manager', '@config.factory']
++    arguments: ['@path_alias.path_processor', '@language_manager', '@config.factory', '@module_handler']
+     tags:
+       - { name: path_processor_inbound, priority: 50 }
+       - { name: path_processor_outbound, priority: 50 }
+diff --git a/tests/src/Functional/SubPathautoFunctionalTest.php b/tests/src/Functional/SubPathautoFunctionalTest.php
+index a291d2a..76ccca8 100644
+--- a/tests/src/Functional/SubPathautoFunctionalTest.php
++++ b/tests/src/Functional/SubPathautoFunctionalTest.php
+@@ -15,7 +15,7 @@ class SubPathautoFunctionalTest extends BrowserTestBase {
+   /**
+    * {@inheritdoc}
+    */
+-  public static $modules = [
++  protected static $modules = [
+     'subpathauto',
+     'node',
+     'user',
+@@ -32,7 +32,7 @@ class SubPathautoFunctionalTest extends BrowserTestBase {
+   /**
+    * {@inheritdoc}
+    */
+-  public function setUp() {
++  public function setUp(): void {
+     parent::setUp();
+ 
+     $this->drupalPlaceBlock('local_tasks_block');
+@@ -67,7 +67,7 @@ class SubPathautoFunctionalTest extends BrowserTestBase {
+   /**
+    * Ensures that inbound and outbound paths are converted correctly.
+    */
+-  public function testBasicIntegration() {
++  public function testBasicIntegration(): void {
+     $this->drupalGet('/kittens');
+     $this->assertSession()->linkByHrefExists('/kittens/edit', 0, 'Local task link path that is subpath for an alias lead to correct URL.');
+ 
+@@ -80,7 +80,7 @@ class SubPathautoFunctionalTest extends BrowserTestBase {
+   /**
+    * Ensures that language prefix is handled correctly.
+    */
+-  public function testWithLanguagePrefix() {
++  public function testWithLanguagePrefix(): void {
+     $this->drupalGet('/fi/kittens');
+     $this->assertSession()->linkByHrefExists('/fi/kittens/edit', 0, 'Local task link path that is subpath for an alias lead to correct URL when language prefix exists.');
+ 
+@@ -93,7 +93,7 @@ class SubPathautoFunctionalTest extends BrowserTestBase {
+   /**
+    * Ensures that non-existing paths are returning 404 page.
+    */
+-  public function testNonExistingPath() {
++  public function testNonExistingPath(): void {
+     $this->drupalGet('/kittens/are-faken');
+     $this->assertSession()->statusCodeEquals(404);
+   }
+diff --git a/tests/src/Functional/SubPathautoSpecialCharacterTest.php b/tests/src/Functional/SubPathautoSpecialCharacterTest.php
+index 688ff84..e8af7d0 100644
+--- a/tests/src/Functional/SubPathautoSpecialCharacterTest.php
++++ b/tests/src/Functional/SubPathautoSpecialCharacterTest.php
+@@ -14,7 +14,7 @@ class SubPathautoSpecialCharacterTest extends BrowserTestBase {
+   /**
+    * {@inheritdoc}
+    */
+-  public static $modules = [
++  protected static $modules = [
+     'subpathauto',
+     'path_alias',
+     'node',
+@@ -31,7 +31,7 @@ class SubPathautoSpecialCharacterTest extends BrowserTestBase {
+   /**
+    * Ensures that special character urls do not return 404 page.
+    */
+-  public function testSpecialCharacterPath() {
++  public function testSpecialCharacterPath(): void {
+     $this->drupalCreateContentType(['type' => 'page', 'name' => 'Basic page']);
+     $this->drupalCreateNode();
+ 
+diff --git a/tests/src/Kernel/SubPathautoKernelTest.php b/tests/src/Kernel/SubPathautoKernelTest.php
+index f6d179a..b350619 100644
+--- a/tests/src/Kernel/SubPathautoKernelTest.php
++++ b/tests/src/Kernel/SubPathautoKernelTest.php
+@@ -3,9 +3,12 @@
+ namespace Drupal\Tests\subpathauto\Kernel;
+ 
+ use Drupal\KernelTests\KernelTestBase;
+-use Drupal\node\Entity\Node;
+-use Drupal\node\Entity\NodeType;
++use Drupal\path_alias\PathAliasInterface;
++use Drupal\redirect\Entity\Redirect;
++use Drupal\Tests\node\Traits\NodeCreationTrait;
++use Drupal\Tests\TestFileCreationTrait;
+ use Drupal\Tests\user\Traits\UserCreationTrait;
++use Drupal\node\Entity\NodeType;
+ use Drupal\user\Entity\User;
+ use Symfony\Component\HttpFoundation\Request;
+ 
+@@ -15,16 +18,21 @@ use Symfony\Component\HttpFoundation\Request;
+  */
+ class SubPathautoKernelTest extends KernelTestBase {
+ 
++  use NodeCreationTrait;
++  use TestFileCreationTrait;
+   use UserCreationTrait;
+ 
+   /**
+    * {@inheritdoc}
+    */
+-  public static $modules = [
+-    'system',
++  protected static $modules = [
++    'filter',
++    'link',
++    'node',
+     'path_alias',
++    'redirect',
+     'subpathauto',
+-    'node',
++    'system',
+     'user',
+   ];
+ 
+@@ -35,95 +43,320 @@ class SubPathautoKernelTest extends KernelTestBase {
+    */
+   protected $pathProcessor;
+ 
++  /**
++   * The path alias storage.
++   *
++   * @var \Drupal\path_alias\PathAliasStorage
++   */
++  protected $pathAliasStorage;
++
++  /**
++   * The redirect storage.
++   *
++   * @var \Drupal\Core\Entity\ContentEntityStorageInterface
++   */
++  protected $redirectStorage;
++
+   /**
+    * {@inheritdoc}
+    */
+-  protected function setUp() {
++  protected function setUp(): void {
+     parent::setUp();
+ 
+     $this->installSchema('system', 'sequences');
+     $this->installEntitySchema('user');
+     $this->installEntitySchema('node');
+     $this->installEntitySchema('path_alias');
+-
++    $this->installEntitySchema('redirect');
+     $this->installConfig('subpathauto');
++    $this->installConfig('filter');
+ 
+-    // Create the node bundles required for testing.
+-    $type = NodeType::create([
+-      'type' => 'page',
+-      'name' => 'page',
+-    ]);
+-    $type->save();
++    // Redirect module can create automatically a redirect when the alias
++    // changes. The old alias redirects back to the internal path and path_alias
++    // modules resolved this to the new alias.
++    \Drupal::configFactory()->getEditable('redirect.settings')->set('auto_redirect', TRUE)->save();
+ 
++    // Create the node bundles required for testing.
++    NodeType::create(['type' => 'page', 'name' => 'page'])->save();
++    $this->pathAliasStorage = \Drupal::entityTypeManager()->getStorage('path_alias');
++    $this->redirectStorage = \Drupal::entityTypeManager()->getStorage('redirect');
+     $this->pathProcessor = $this->container->get('path_processor_subpathauto');
+-    $aliasWhiteList = $this->container->get('path_alias.whitelist');
+-
+-    Node::create(['type' => 'page', 'title' => 'test'])->save();
+-
+-    $aliasStorage = \Drupal::entityTypeManager()
+-      ->getStorage('path_alias');
+-
+-    $path_alias = $aliasStorage->create([
+-      'path' => '/node/1',
+-      'alias' => '/kittens',
+-    ]);
+-    $path_alias->save();
+-
+-    $aliasWhiteList->set('node', TRUE);
++    $this->container->get('path_alias.whitelist')->set('node', TRUE);
+ 
+     User::create(['uid' => 0, 'name' => 'anonymous user'])->save();
+   }
+ 
+   /**
+-   * @covers ::processInbound
++   * Tests inbound URL processing.
+    */
+-  public function testProcessInbound() {
++  public function testProcessInbound(): void {
++    $this->createNode();
++    $path_alias = $this->createAlias('/node/1', '/kittens');
++
+     // Alias should not be converted for aliases that are not valid.
+     $processed = $this->pathProcessor->processInbound('/kittens/are-fake', Request::create('/kittens/are-fake'));
+-    $this->assertEquals('/kittens/are-fake', $processed);
++    $this->assertSame('/kittens/are-fake', $processed);
+ 
+     // Alias should be converted on a request wih language prefix.
+     $processed = $this->pathProcessor->processInbound('/kittens/edit', Request::create('/en/kittens/edit'));
+-    $this->assertEquals('/node/1/edit', $processed);
++    $this->assertSame('/node/1/edit', $processed);
+ 
+     // Alias should be converted even when the user doesn't have permissions to
+     // view the page.
+     $processed = $this->pathProcessor->processInbound('/kittens/edit', Request::create('/kittens/edit'));
+-    $this->assertEquals('/node/1/edit', $processed);
++    $this->assertSame('/node/1/edit', $processed);
+ 
+     // Alias should be converted because of admin user has access to edit the
+     // node.
+     $admin_user = $this->createUser();
+     \Drupal::currentUser()->setAccount($admin_user);
+     $processed = $this->pathProcessor->processInbound('/kittens/edit', Request::create('/kittens/edit'));
+-    $this->assertEquals('/node/1/edit', $processed);
++    $this->assertSame('/node/1/edit', $processed);
++
++    // When the redirect module is enabled, changing the alias creates a
++    // redirect from the old alias to the new one. Change the alias and verify
++    // that the cases above still work.
++    $path_alias->setAlias('/more-kittens')->save();
++
++    // Old alias redirects properly while new ones are working normally.
++    // Note that we do not test the "/more-kittens" here as it is not a sub path
++    // but a simple alias, so the
++    // \Drupal\subpathauto\PathProcessor::processInbound should not be
++    // responsible to resolve this.
++    $processed = $this->pathProcessor->processInbound('/kittens', Request::create('/en/kittens'));
++    $this->assertSame('/node/1', $processed);
++
++    // The 'edit' page is a link template, a subpage for the node 1. The
++    // subpathauto processor should detect the base URL, find the redirect and
++    // then resolve the full path.
++    $processed = $this->pathProcessor->processInbound('/kittens/edit', Request::create('/en/kittens/edit'));
++    $this->assertSame('/node/1/edit', $processed);
++    $processed = $this->pathProcessor->processInbound('/more-kittens/edit', Request::create('/en/more-kittens/edit'));
++    $this->assertSame('/node/1/edit', $processed);
+   }
+ 
+   /**
+-   * @covers ::processOutbound
++   * Tests outbound URL processing.
+    */
+-  public function testProcessOutbound() {
++  public function testProcessOutbound(): void {
++    $this->createNode();
++    $this->createAlias('/node/1', '/kittens');
++
+     // Alias should not be converted for invalid paths.
+     $processed = $this->pathProcessor->processOutbound('/kittens/are-fake');
+-    $this->assertEquals('/kittens/are-fake', $processed);
++    $this->assertSame('/kittens/are-fake', $processed);
+ 
+     // Alias should be converted even when the user doesn't have permissions to
+     // view the page.
+     $processed = $this->pathProcessor->processOutbound('/node/1/edit');
+-    $this->assertEquals('/kittens/edit', $processed);
++    $this->assertSame('/kittens/edit', $processed);
+ 
+     // Alias should be converted also for user that has access to view the page.
+     $admin_user = $this->createUser();
+     \Drupal::currentUser()->setAccount($admin_user);
+     $processed = $this->pathProcessor->processOutbound('/node/1/edit');
+-    $this->assertEquals('/kittens/edit', $processed);
++    $this->assertSame('/kittens/edit', $processed);
+ 
+     // Check that alias is converted for absolute paths. The Redirect module,
+     // for instance, requests an absolute path when it checks if a redirection
+     // is needed.
+     $options = ['absolute' => TRUE];
+     $processed = $this->pathProcessor->processOutbound('/node/1/edit', $options);
+-    $this->assertEquals('/kittens/edit', $processed);
++    $this->assertSame('/kittens/edit', $processed);
++
++    $this->createNode();
++    $this->createAlias('/node/2', '/node/1/foo');
++    $processed = $this->pathProcessor->processOutbound('/node/2/edit', $options);
++    // Ensure that the URL is not converted to '/kittens/foo/edit' being that
++    // '/node/1' has the alias '/kittens'.
++    $this->assertSame('/node/1/foo/edit', $processed);
++  }
++
++  /**
++   * Tests that redirects are taken into account.
++   */
++  public function testAliasesAndRedirects() {
++    $node = $this->createNode();
++    $alias = $this->createAlias('/' . $node->toUrl()->getInternalPath(), '/node/foo');
++
++    // Subpathauto does not process full aliases.
++    $processed = $this->pathProcessor->processInbound('/node/foo', Request::create('/node/foo'));
++    $this->assertSame("/node/foo", $processed);
++
++    // Subpaths such as link templates can be processed.
++    $processed = $this->pathProcessor->processInbound('/node/foo/edit', Request::create('/node/foo/edit'));
++    $this->assertSame("/node/{$node->id()}/edit", $processed);
++
++    $alias->setAlias('/node/foo/bar')->save();
++    // Saving a new alias above, with the redirect set to create a redirect
++    // automatically, both the old and the new alias should resolve properly
++    // by the subpathauto processor.
++    foreach (['/node/foo/edit', '/node/foo/bar/edit'] as $url) {
++      $processed = $this->pathProcessor->processInbound($url, Request::create($url));
++      $this->assertSame("/node/{$node->id()}/edit", $processed);
++    }
++
++    // In order to attempt and complicate things a bit more, create an alias for
++    // the default /node page.
++    $nodes_alias = $this->createAlias('/node', '/articles');
++    // The '/node' to '/articles' alias is not part of the '/node/foo' which is
++    // already a complete alias.
++    $processed = $this->pathProcessor->processInbound('/node/foo/edit', Request::create('/node/foo/edit'));
++    $this->assertSame("/node/{$node->id()}/edit", $processed);
++
++    // Add even more complexity to the test to verify that there are no loose
++    // ends.
++    // Update the base node alias. This will also create a redirect from
++    // '/articles' to '/node' and the alias will now be from '/node' to
++    // '/more-articles'.
++    $nodes_alias->setAlias('/more-articles')->save();
++
++    // This will also create a redirect from '/node/foo' to '/node/<node ID>'
++    // and an alias from the '/node/<node ID>' to '/articles/foo'.
++    // However, the '/articles' is now a redirect to '/node' and from there to
++    // '/more-articles'.
++    $alias->setAlias('/articles/foo')->save();
++
++    foreach (['/articles/foo/edit', '/node/foo/edit'] as $url) {
++      $processed = $this->pathProcessor->processInbound($url, Request::create($url));
++      $this->assertSame("/node/{$node->id()}/edit", $processed);
++    }
++
++    // Finally, add some node that mimics being a sub-node of the first one.
++    $another_node = $this->createNode();
++    $another_alias = $this->createAlias('/' . $another_node->toUrl()->getInternalPath(), '/articles/foo/sub-pages/new-page');
++
++    $processed = $this->pathProcessor->processInbound('/articles/foo/sub-pages/new-page/edit', Request::create('/articles/foo/sub-pages/new-page/edit'));
++    $this->assertSame("/node/{$another_node->id()}/edit", $processed);
++
++    // Change the new alias to something simple.
++    $another_alias->setAlias('/bar')->save();
++    $processed = $this->pathProcessor->processInbound('/articles/foo/sub-pages/new-page/edit', Request::create('/articles/foo/sub-pages/new-page/edit'));
++    $this->assertSame("/node/{$another_node->id()}/edit", $processed);
++    $processed = $this->pathProcessor->processInbound('/bar/edit', Request::create('/bar/edit'));
++    $this->assertSame("/node/{$another_node->id()}/edit", $processed);
++  }
++
++  /**
++   * Tests that redirect support can be disabled in the settings.
++   *
++   * @param bool $redirect_support
++   *   Whether redirects are supported.
++   * @param string $expected_result
++   *   The expected result.
++   *
++   * ::@dataProvider noRedirectSupportDataProvider
++   */
++  public function testNoRedirectSupport(bool $redirect_support, string $expected_result) {
++    $this->createNode();
++    $alias = $this->createAlias('/node/1', '/foo/bar');
++    $alias->save();
++    $alias->setAlias('/xyz')->save();
++
++    \Drupal::configFactory()->getEditable('subpathauto.settings')->set('redirect_support', $redirect_support)->save();
++    $processed = $this->pathProcessor->processInbound('/foo/bar/edit', Request::create('/foo/bar/edit'));
++    $this->assertSame($expected_result, $processed);
++  }
++
++  /**
++   * Returns test cases for the testNoRedirectSupport.
++   *
++   * @return array
++   *   An array of test cases, each of which contains whether redirect is
++   *   supported and the expected string.
++   */
++  public function noRedirectSupportDataProvider(): array {
++    return [
++      'redirect is supported' => [TRUE, '/node/1/edit'],
++      'redirect is not supported' => [FALSE, '/foo/bar/edit'],
++    ];
++  }
++
++  /**
++   * Tests that redirects are not supported if the module is not installed.
++   */
++  public function testNoRedirectInstalled() {
++    $this->createNode();
++    $alias = $this->createAlias('/node/1', '/foo/bar');
++    $alias->save();
++    $alias->setAlias('/xyz')->save();
++
++    \Drupal::configFactory()->getEditable('subpathauto.settings')->set('redirect_support', TRUE)->save();
++    $this->disableModules(['redirect']);
++    $processed = $this->pathProcessor->processInbound('/foo/bar/edit', Request::create('/foo/bar/edit'));
++    $this->assertSame('/foo/bar/edit', $processed);
++  }
++
++  /**
++   * Tests that redirects pointing externally, do not break the aliases.
++   */
++  public function testExternalRedirects() {
++    $this->createNode();
++    // Assume that for some reason, an external URL is used for the landing page
++    // of node 1.
++    $this->createRedirect('/node/1', 'http://example.com');
++    $processed = $this->pathProcessor->processInbound('/node/1/edit', Request::create('/node/1/edit'));
++    $this->assertSame("/node/1/edit", $processed);
++
++    // Ensure that even if the redirect is skipped, the rest of the parts are
++    // processed properly.
++    $this->createAlias('/node', '/content');
++    $processed = $this->pathProcessor->processInbound('/content/1/edit', Request::create('/content/1/edit'));
++    $this->assertSame("/node/1/edit", $processed);
++  }
++
++  /**
++   * Tests the case when a redirect file destination doesn't exist.
++   *
++   * @see https://www.drupal.org/project/subpathauto/issues/3175637#comment-14293730
++   */
++  public function testRedirectToFile(): void {
++    $source = str_replace('public://', '/sites/default/files/', current($this->getTestFiles('html'))->uri);
++    $this->createRedirect($source, '/foo/bar/baz/myfile.pdf');
++    $this->pathProcessor->processInbound($source, Request::create($source));
++  }
++
++  /**
++   * Creates and returns an alias.
++   *
++   * @param string $path
++   *   The source URL.
++   * @param string $alias
++   *   The target URL.
++   *
++   * @return \Drupal\path_alias\PathAliasInterface
++   *   The created alias.
++   */
++  protected function createAlias(string $path, string $alias): PathAliasInterface {
++    /** @var \Drupal\path_alias\PathAliasInterface $alias */
++    $alias = $this->pathAliasStorage->create([
++      'path' => $path,
++      'alias' => $alias,
++    ]);
++    $alias->save();
++    return $alias;
++  }
++
++  /**
++   * Creates and returns a redirect entity.
++   *
++   * @param string $path
++   *   The redirect source path.
++   * @param string $redirect_uri
++   *   The redirect URI.
++   *
++   * @return \Drupal\redirect\Entity\Redirect
++   *   The redirect entity.
++   */
++  protected function createRedirect(string $path, string $redirect_uri): Redirect {
++    /** @var \Drupal\redirect\Entity\Redirect $redirect */
++    $redirect = $this->redirectStorage->create();
++    $redirect->setSource($path);
++    $redirect->setRedirect($redirect_uri);
++    $redirect->setLanguage('en');
++    $redirect->setStatusCode(301);
++    $redirect->save();
++    return $redirect;
+   }
+ 
+ }
+diff --git a/tests/src/Unit/SubPathautoTest.php b/tests/src/Unit/SubPathautoTest.php
+index 4951d5e..c197d39 100644
+--- a/tests/src/Unit/SubPathautoTest.php
++++ b/tests/src/Unit/SubPathautoTest.php
+@@ -71,7 +71,7 @@ class SubPathautoTest extends UnitTestCase {
+   /**
+    * {@inheritdoc}
+    */
+-  public function setUp() {
++  public function setUp(): void {
+     parent::setUp();
+ 
+     $this->aliasProcessor = $this->getMockBuilder('Drupal\path_alias\PathProcessor\AliasPathProcessor')
+@@ -93,14 +93,19 @@ class SubPathautoTest extends UnitTestCase {
+       ->with('subpathauto.settings')
+       ->willReturn($this->subPathautoSettings);
+ 
+-    $this->pathProcessor = new PathProcessor($this->aliasProcessor, $this->languageManager, $this->configFactory);
++    $module_hanlder = $this->getMockBuilder('Drupal\Core\Extension\ModuleHandler')->disableOriginalConstructor()->getMock();
++    $module_hanlder->expects($this->any())
++      ->method('moduleExists')
++      ->willReturn(FALSE);
++
++    $this->pathProcessor = new PathProcessor($this->aliasProcessor, $this->languageManager, $this->configFactory, $module_hanlder);
+     $this->pathProcessor->setPathValidator($this->pathValidator);
+   }
+ 
+   /**
+    * @covers ::processInbound
+    */
+-  public function testInboundSubPath() {
++  public function testInboundSubPath(): void {
+     $this->aliasProcessor->expects($this->any())
+       ->method('processInbound')
+       ->willReturnCallback([$this, 'pathAliasCallback']);
+@@ -141,7 +146,7 @@ class SubPathautoTest extends UnitTestCase {
+   /**
+    * @covers ::processInbound
+    */
+-  public function testInboundPathProcessorMaxDepth() {
++  public function testInboundPathProcessorMaxDepth(): void {
+     $this->pathValidator->expects($this->any())
+       ->method('getUrlIfValidWithoutAccessCheck')
+       ->willReturn(new Url('any_route'));
+@@ -165,7 +170,7 @@ class SubPathautoTest extends UnitTestCase {
+   /**
+    * @covers ::processInbound
+    */
+-  public function testInboundAlreadyProcessed() {
++  public function testInboundAlreadyProcessed(): void {
+     // The subpath processor should ignore this and not pass it on to the
+     // alias processor.
+     $processed = $this->pathProcessor->processInbound('node/1', Request::create('/content/first-node'));
+@@ -175,7 +180,7 @@ class SubPathautoTest extends UnitTestCase {
+   /**
+    * @covers ::processOutbound
+    */
+-  public function testOutboundSubPath() {
++  public function testOutboundSubPath(): void {
+     $this->aliasProcessor->expects($this->any())
+       ->method('processOutbound')
+       ->willReturnCallback([$this, 'aliasByPathCallback']);
+@@ -208,7 +213,7 @@ class SubPathautoTest extends UnitTestCase {
+   /**
+    * @covers ::processOutbound
+    */
+-  public function testOutboundPathProcessorMaxDepth() {
++  public function testOutboundPathProcessorMaxDepth(): void {
+     $this->pathValidator->expects($this->any())
+       ->method('getUrlIfValidWithoutAccessCheck')
+       ->willReturn(new Url('any_route'));
+@@ -232,7 +237,7 @@ class SubPathautoTest extends UnitTestCase {
+   /**
+    * @covers ::processOutbound
+    */
+-  public function testOutboundAbsoluteUrl() {
++  public function testOutboundAbsoluteUrl(): void {
+     // The subpath processor should ignore this and not pass it on to the
+     // alias processor.
+     $options = ['absolute' => TRUE];
