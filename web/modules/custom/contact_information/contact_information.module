@@ -437,8 +437,7 @@ function contact_information_require_login(array $form, FormStateInterface $form
  */
 function contact_information_rdf_entity_view(array &$build, RdfInterface $contact_information, EntityViewDisplayInterface $display, string $view_mode): void {
   if ($contact_information instanceof ContactInformationInterface && $view_mode === 'about') {
-    $access = \Drupal::getContainer()->get('joinup_group.group_manager')->access($contact_information->getRelatedGroup(), 'resend email confirmation request');
-    if ($access->isAllowed()) {
+    if (\Drupal::currentUser()->isAuthenticated()) {
       // If an anonymous user clicks on the contact information 'Contact us'
       // link, they are redirected to login or register with the EU Login
       // service. After successfully completing the authentication, they are
@@ -450,7 +449,10 @@ function contact_information_rdf_entity_view(array &$build, RdfInterface $contac
       $build['#attached'] = ['library' => ['contact_information/contact-us']];
       $build += ['#attributes' => []];
       $build['#attributes']['data-joinup-contact-info-id'] = $contact_information->id();
+    }
 
+    $resend_access = \Drupal::getContainer()->get('joinup_group.group_manager')->access($contact_information->getRelatedGroup(), 'resend email confirmation request');
+    if ($resend_access->isAllowed()) {
       /** @var \Drupal\email_confirmer\EmailConfirmationInterface $confirmation */
       $confirmation = \Drupal::getContainer()->get('email_confirmer')->getConfirmation($contact_information->get('field_ci_email')->value, FALSE, ContactInformationEmailConfirmInterface::REALM);
       // If no confirmation is created yet, create one before adding the link
@@ -483,7 +485,8 @@ function contact_information_rdf_entity_view(array &$build, RdfInterface $contac
     }
 
     $cacheable_metadata = CacheableMetadata::createFromRenderArray($build);
-    $cacheable_metadata
+    // Vary the field's cache by whether the user is logged in or not.
+    $cacheable_metadata->setCacheContexts(['user.roles:authenticated'])
       ->addCacheContexts(['og_role'])
       ->addCacheableDependency($contact_information)
       ->applyTo($build);
