@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "1abb83930424a0e44ab9b90450458edc",
+    "content-hash": "f960f471de91f9fa873f2129697fba23",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -7230,7 +7230,7 @@
             "extra": {
                 "drupal": {
                     "version": "8.x-1.2",
-                    "datestamp": "1637313101",
+                    "datestamp": "1637313293",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -7249,6 +7249,10 @@
                 {
                     "name": "lauriii",
                     "homepage": "https://www.drupal.org/user/1078742"
+                },
+                {
+                    "name": "NickDickinsonWilde",
+                    "homepage": "https://www.drupal.org/user/3094661"
                 }
             ],
             "description": "Provides support for extending sub-paths of URL aliases.",
