@@ -273,3 +273,38 @@ Feature:
     Then I should see the heading "Edit E-justice"
     And I press "Save"
     Then the url should match "/admin/homepage-topics"
+
+@javascript
+Scenario: Long descriptions in topic inner page should be partially hidden.
+    Given news content:
+      | title  | headline | state     |
+      | News 1 | News 1   | validated |
+    And the following topics are enabled in the homepage:
+      | Economy and Welfare     |
+      | Info                    |
+      | Statistics and Analysis |
+      | E-justice               |
+    And I am logged in as a moderator
+    And I go to the homepage
+    And I click "E-justice"
+    And I click "Edit"
+    Then I should see the heading "Edit E-justice"
+
+    When I fill in "Description" with "En un lugar de la Mancha, de cuyo nombre no quiero acordarme, no ha mucho tiempo que vivía un hidalgo de los de lanza en astillero, adarga antigua, rocín flaco y galgo corredor. Una olla de algo más vaca que carnero, salpicón las más noches, duelos y quebrantos los sábados, lantejas los viernes, algún palomino de añadidura los domingos, consumían las tres partes de su hacienda. El resto della concluían sayo de velarte, calzas de velludo para las fiestas, con sus pantuflos de lo mesmo, y los días de entresemana se honraba con su vellorí de lo más fino."
+    And I press "Save"
+    Then I should see the heading "E-justice"
+    And I should see the text "En un lugar de la Mancha,"
+    But I should not see the text "los días de entresemana se honraba con su vellorí de lo más fino."
+    And I should see the text "See more"
+
+    # Open collapse
+    When I press "See more"
+    Then I should see the text "See less"
+    But I should not see the text "See more"
+    And I should see the text "los días de entresemana se honraba con su vellorí de lo más fino."
+
+    # Close collapse again
+    When I press "See less"
+    Then I should see the text "See more"
+    But I should not see the text "See less"
+    And I should not see the text "los días de entresemana se honraba con su vellorí de lo más fino."
