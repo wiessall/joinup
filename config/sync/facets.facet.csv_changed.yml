@@ -10,6 +10,8 @@ id: csv_changed
 name: Changed
 weight: 0
 min_count: 1
+missing: false
+missing_label: others
 url_alias: aggregated_changed
 facet_source_id: 'search_api:views_data_export__moderator_solutions_by_type__csv_export'
 field_identifier: entity_changed

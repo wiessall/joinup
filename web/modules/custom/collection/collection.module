@@ -25,6 +25,7 @@ use Drupal\collection\Entity\CollectionInterface;
 use Drupal\collection\Entity\GlossaryTerm;
 use Drupal\collection\Plugin\Field\FieldType\LastUpdatedFieldItemList;
 use Drupal\joinup_subscription\JoinupSubscriptionsHelper;
+use Drupal\meta_entity\Entity\MetaEntityInterface;
 use Drupal\node\NodeInterface;
 use Drupal\oe_newsroom_newsletter\Form\NewsletterSubscribeForm;
 use Drupal\og\Entity\OgRole;
@@ -318,6 +319,18 @@ function collection_entity_extra_field_info() {
 }
 
 /**
+ * Implements hook_preprocess_HOOK().
+ */
+function collection_preprocess_rdf_entity(array &$variables): void {
+  $collection = $variables['rdf_entity'];
+  if ($collection instanceof CollectionInterface) {
+    if ($collection->settings->entity instanceof MetaEntityInterface && $variables['view_mode'] === 'group_header') {
+      $variables['meta_banner_disabled'] = (bool) $collection->settings->entity->get('metadata_banner_disabled')->value;
+    }
+  }
+}
+
+/**
  * Implements hook_ENTITY_TYPE_view().
  *
  * Shows extra fields for the collection bundle.
@@ -388,6 +401,17 @@ function collection_rdf_entity_view(array &$build, EntityInterface $entity, Enti
       ],
     ])->toRenderable();
   }
+  if ($view_mode === 'group_header') {
+    // The group header featured stats visibility is controlled by the group
+    // settings. Add the relevant cache tags.
+    if ($entity->get('settings')->entity instanceof MetaEntityInterface) {
+      $build['#cache']['tags'] = Cache::mergeTags($build['#cache']['tags'] ?? [], $entity->get('settings')->entity->getCacheTags());
+    }
+    else {
+      $build['#cache']['tags'] = Cache::mergeTags($build['#cache']['tags'] ?? [], ['meta_entity_list:collection_settings']);
+    }
+  }
+
 }
 
 /**
