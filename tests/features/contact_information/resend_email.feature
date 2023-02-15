@@ -43,16 +43,13 @@ Feature: Resend validation email from collection/solution about page
       | Klop mirubes | Group user       | member      |
 
     When I am not logged in
-    And I go to the homepage of the "Rally fanatics" collection
-    Then I should see the link "About"
-    When I click "About"
+    And I go to the about page of "Rally fanatics"
     Then I should not see the text "Please confirm your contact information to enable users to contact you"
 
     # Check as a moderator for a collection.
     When I am logged in as a moderator
-    And I go to the homepage of the "Rally fanatics" collection
-    Then I should see the link "About"
-    When I click "About"
+    And I go to the about page of "Rally fanatics"
+
     Then I should not see the text "Please confirm your contact information to enable users to contact you"
     When I go to the edit form of the "Rally fanatics" collection
     And I fill in the following:
@@ -60,19 +57,16 @@ Feature: Resend validation email from collection/solution about page
       | Name   | Confirmation Invisible Man         |
     And I press "Create contact information"
     And I press "Publish"
-    When I go to the homepage of the "Rally fanatics" collection
-    And I click "About"
+    When I go to the about page of "Rally fanatics"
     Then I should see the text "Please confirm your contact information to enable users to contact you"
     Given I am logged in as "Lope Facilitator"
-    And I go to the homepage of the "Rally fanatics" collection
-    And I click "About"
+    And I go to the about page of "Rally fanatics"
     Then I should see the text "Please confirm your contact information to enable users to contact you"
     When I click "confirm"
     Then I should see the text "A new confirmation message has been sent to confirmation_email.man@example.com"
 
     Given that the confirmation request for "confirmation_email.man@example.com" has expired
-    When I go to the homepage of the "Rally fanatics" collection
-    And I click "About"
+    When I go to the about page of "Rally fanatics"
     Then I should see the text "Please confirm your contact information to enable users to contact you"
     When I click "confirm"
     Then I should see the text "A new confirmation message has been sent to confirmation_email.man@example.com"
@@ -80,15 +74,12 @@ Feature: Resend validation email from collection/solution about page
     And the confirmation request for "confirmation_email.man@example.com" should not be expired
 
     Given I am logged in as "Group user"
-    When I go to the homepage of the "Rally fanatics" collection
-    And I click "About"
+    When I go to the about page of "Rally fanatics"
     Then I should not see the text "Please confirm your contact information to enable users to contact you"
 
     # Check also for a solution and a facilitator.
     When I am logged in as a moderator
-    And I go to the homepage of the "Klop mirubes" solution
-    Then I should see the link "About"
-    When I click "About"
+    And I go to the about page of "Klop mirubes"
     Then I should not see the text "Please confirm your contact information to enable users to contact you"
     When I go to the edit form of the "Klop mirubes" solution
     And I fill in the following:
@@ -96,20 +87,17 @@ Feature: Resend validation email from collection/solution about page
       | Name   | Confirmation Invisible Man 2        |
     And I press "Create contact information"
     And I press "Publish"
-    When I go to the homepage of the "Klop mirubes" solution
-    And I click "About"
+    When I go to the about page of "Klop mirubes"
     Then I should see the text "Please confirm your contact information to enable users to contact you"
     Given I am logged in as "Lope Facilitator"
-    And I go to the homepage of the "Klop mirubes" solution
-    And I click "About"
+    And I go to the about page of "Klop mirubes"
     Then I should see the text "Please confirm your contact information to enable users to contact you"
     When I click "confirm"
     Then I should see the text "A new confirmation message has been sent to confirmation_email2.man@example.com"
 
     # Check scenario for Member role
     Given I am logged in as "Group user"
-    When I go to the homepage of the "Klop mirubes" solution
-    And I click "About"
+    When I go to the about page of "Klop mirubes"
     Then I should not see the text "Please confirm your contact information to enable users to contact you"
 
   Scenario: Test the resend functionality for a contact created through API.
@@ -121,34 +109,28 @@ Feature: Resend validation email from collection/solution about page
       | Existing to resend solution | Default description. | validated | Existing to resend  |
 
     When I am logged in as a user with the authenticated role
-    And I go to the homepage of the "Existing to resend solution" solution
-    And I click "About"
+    And I go to the about page of "Existing to resend solution"
     Then I should not see the text "Please confirm your contact information to enable users to contact you"
 
     When I am logged in as a moderator
-    And I go to the homepage of the "Existing to resend solution" solution
-    And I click "About"
+    And I go to the about page of "Existing to resend solution"
     Then I should see the text "Please confirm your contact information to enable users to contact you"
     When I click "confirm"
     Then I should see the text "A new confirmation message has been sent to existing@resend.com"
 
     # Check permissions again to ensure that the link is cached properly.
     Given I am not logged in
-    When I go to the homepage of the "Existing to resend solution" solution
-    And I click "About"
+    When I go to the about page of "Existing to resend solution"
     Then I should not see the text "Please confirm your contact information to enable users to contact you"
 
     Given I am logged in as a moderator
-    And I go to the homepage of the "Existing to resend solution" solution
-    And I click "About"
+    And I go to the about page of "Existing to resend solution"
     Then I should see the text "Please confirm your contact information to enable users to contact you"
 
     Given I am logged in as a facilitator of the "Existing to resend solution" solution
-    And I go to the homepage of the "Existing to resend solution" solution
-    And I click "About"
+    And I go to the about page of "Existing to resend solution"
     Then I should see the text "Please confirm your contact information to enable users to contact you"
 
     Given I am logged in as a user with the authenticated role
-    And I go to the homepage of the "Existing to resend solution" solution
-    And I click "About"
+    And I go to the about page of "Existing to resend solution"
     Then I should not see the text "Please confirm your contact information to enable users to contact you"
