@@ -120,4 +120,36 @@ class HeaderContext extends RawDrupalContext {
     throw new \RuntimeException("The $icon icon was expected to be present in the main navigation on mobile, but it was not.");
   }
 
+  /**
+   * Checks that the requested description is full or cropped in the header.
+   *
+   * @param string $type
+   *   The type of current description.
+   *
+   * @Then I should see the :type description
+   */
+  public function assertDescriptionHeight(string $type): void {
+    $description = $this->getSession()->getPage()->find('css', '.header-topic .header-topic__description');
+    if (!$description) {
+      throw new \Exception('The topic description was expected to be present in header, but it was not.');
+    }
+    $xpath = $description->getXpath();
+    $function = <<<JS
+  (
+      function(){
+        let elem = document.evaluate("$xpath", document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
+        return elem.scrollHeight > elem.clientHeight;
+      }
+  )()
+  JS;
+    $result = $this->getSession()->evaluateScript($function);
+
+    if ($type === 'cropped' && !$result) {
+      throw new \Exception('The topic description was expected to be only with 2 lines in header, but it was not.');
+    }
+    if ($type === 'full' && $result) {
+      throw new \Exception('The topic description was expected to be open in header, but it was not.');
+    }
+  }
+
 }
