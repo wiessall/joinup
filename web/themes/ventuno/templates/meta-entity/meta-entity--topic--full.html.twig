@@ -4,24 +4,13 @@
  * Themeing override for the teaser view mode of the topic meta entity.
  */
 #}
-{% set classes = [
-  'rounded',
-  'h-100',
-  'overflow-hidden',
-  'shadow-sm',
-] %}
-<article{{ attributes.addClass(classes) }}>
-  {#
-    @todo Move the title and the description to the header of a page template.
-  #}
-  {{ title_prefix }}
-  {{ content.label }}
-  {{ title_suffix }}
-  {{ content.description }}
-
-  {#
-    @todo Remove the label and description from display once they are moved
-    to the header of a page template.
-  #}
+{{ attach_library('ventuno/header-topic') }}
+<article{{ attributes }}>
+  <header class="header-topic mb-3">
+    {{ title_prefix }}
+    <h1 class="header-topic__title">{{ content.label }}</h1>
+    {{ content.description }}
+    {{ title_suffix }}
+  </header>
   {{ content|without('label', 'description') }}
 </article>

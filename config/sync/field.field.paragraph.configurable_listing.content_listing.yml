@@ -29,20 +29,20 @@ settings:
   facet_regions: {  }
   view_modes:
     'entity:node':
-      custom_page: search_result
-      discussion: search_result
-      document: search_result
-      event: search_result
-      news: search_result
-      tallinn_report: search_result
-      video: search_result
+      custom_page: tile_two
+      discussion: tile_two
+      document: tile_two
+      event: tile_two
+      news: tile_two
+      tallinn_report: tile_two
+      video: tile_two
     'entity:rdf_entity':
-      asset_distribution: search_result
-      asset_release: search_result
-      collection: search_result
-      licence: search_result
-      solution: search_result
-      spdx_licence: search_result
+      asset_distribution: tile_two
+      asset_release: tile_two
+      collection: tile_two
+      licence: tile_two
+      solution: tile_two
+      spdx_licence: tile_two
     'entity:taxonomy_term':
       eif_conceptual_model: default
       eif_interoperability_layer: default
