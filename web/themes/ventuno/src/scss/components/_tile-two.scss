@@ -1,0 +1,51 @@
+.tile-two {
+  word-break: break-word;
+  &__title {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
+    -webkit-box-orient: vertical;
+  }
+  &--dated {
+    .date {
+      color: rgba($primary, .7);
+      font-weight: $font-weight-bold;
+      margin-right: $spacer;
+      &__day {
+        margin-bottom: 0;
+        line-height: 1;
+        font-size: $h3-font-size;
+      }
+      &__month {
+        margin-bottom: 0;
+        line-height: 2;
+        font-size: $h5-font-size;
+        text-transform: uppercase;
+      }
+    }
+  }
+}
+
+.paragraph--type--grid {
+  .tile-two {
+    &__title {
+      font-size: $h4-font-size;
+      &-link {
+        color: $primary;
+      }
+    }
+  }
+}
+
+.paragraph--type--list {
+  .tile-two {
+    &__title {
+      font-size: $h5-font-size;
+      &-link {
+        color: $dark;
+      }
+    }
+  }
+}

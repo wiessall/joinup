@@ -3106,6 +3106,7 @@ class JoinupContext extends RawDrupalContext {
       '.card .card-title',
       // Tiles as an article.
       'article.tile h2',
+      'article.tile h3',
       // Carousel for non javascript test.
       '.glide__slides .slide span',
       // Carousel for javascript test.

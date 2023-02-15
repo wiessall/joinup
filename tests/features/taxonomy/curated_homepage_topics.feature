@@ -41,6 +41,11 @@ Feature:
     Then I should see the link "Red parent"
 
   Scenario: Moderators can access and manage the topics curated queue.
+    Given I am an anonymous user
+    And I go to the homepage
+    # No homepage topic, no block title.
+    Then I should not see the heading "Main topics"
+
     Given I am logged in as a moderator
     And I click "Dashboard"
     And I click "Curated content listings"
@@ -104,6 +109,8 @@ Feature:
     And I should see the text "E-justice description" in the "Homepage topics" region
     And I should see the text "Finance in EU" in the "Homepage topics" region
     And I should see the text "Finance in EU description" in the "Homepage topics" region
+    # The block title is shown now.
+    And I should see the heading "Main topics"
 
     # Unpublish a term and check it is removed from the curated list.
     When I click "Dashboard"
@@ -123,18 +130,23 @@ Feature:
     But I should see the text "Finance in EU" in the "Homepage topics" region
 
   Scenario: Moderators can alter the title of the homepage topics block.
-    Given I am not logged in
-    And I am on the homepage
-    Then I should see the heading "Main topics"
+    Given I am logged in as a moderator
+    When I click "Dashboard"
+    And I click "Topics"
+    And I click "Edit" in the "E-justice" row
+    And I check "Published"
+    And I press "Save"
 
-    When I am logged in as a moderator
-    And I click "Dashboard"
-    And I click "Curated content listings"
-    And I click "Homepage topics"
+    When I visit "/admin/structure/entityqueue/homepage_topics/homepage_topics"
     Then I should see the heading "Update curated content listing Homepage topics"
+    When I fill in "edit-items-add-more-new-item-target-id" with "E-justice"
+    And I press "Add item"
+    # With Javascript disabled this field is filled with the latest value, so we
+    # need to explicitly clear the value.
+    And I fill in "edit-items-add-more-new-item-target-id" with ""
+    And I press "Save"
     And I should see the button "Add item"
-
-    When I fill in "Block label" with "Hello world"
+    And I fill in "Block label" with "Hello world"
     And I press "Save"
 
     When I go to the homepage
@@ -235,13 +247,13 @@ Feature:
     And I fill in "Query presets" with "entity_bundle|news"
 
     And I press "Save"
-    Then I should see the heading "News 1"
+    Then I should see the "News 1" tile
     And the url should match "/topic/law-and-justice/e-justice"
 
     When I click "Edit"
     And I select "Grid" from "List style"
     And I press "Save"
-    And I should see the heading "News 1"
+    And I should see the "News 1" tile
     And the url should match "/topic/law-and-justice/e-justice"
 
     When I go to the "topic" meta entity of the "Economy and Welfare" topic "taxonomy term"
