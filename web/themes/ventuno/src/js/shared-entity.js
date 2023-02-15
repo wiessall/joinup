@@ -1,8 +1,8 @@
 /**
  * @file
- * Theme override for Drupal.theme.checkbox.
+ * Theme override for Drupal.theme.sharedContentCue.
  *
- * @see Drupal.theme.checkbox
+ * @see Drupal.theme.sharedContentCue
  */
 ((drupalSettings) => {
   /**
@@ -10,9 +10,6 @@
    *
    * @param {string} groupLabel
    *   The group label.
-   *
-   * @param {string} spritePath
-   *   The path where the sprite is located in theme.
    *
    * @return {string}
    *   The HTML for the shared content visual cue.

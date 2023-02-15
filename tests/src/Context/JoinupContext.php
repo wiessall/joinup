@@ -1851,6 +1851,32 @@ class JoinupContext extends RawDrupalContext {
   }
 
   /**
+   * Asserts that a featured stats exist in the header.
+   *
+   * @Then I should see a featured stats on the header
+   */
+  public function assertExistingFeaturedStats(): void {
+    $xpath = '//ul[contains(concat(" ", normalize-space(@class), " "), "group-stats")]/@class';
+    // @todo Remove the following line in ISAICP-7138.
+    // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7138
+    $xpath .= ' | //div[contains(concat(" ", normalize-space(@class), " "), "featured__stats")]/@class';
+    $this->assertSession()->elementsCount('xpath', $xpath, 1);
+  }
+
+  /**
+   * Asserts that a featured stats not exist in the header.
+   *
+   * @Then I should not see a featured stats on the header
+   */
+  public function assertNotExistingFeaturedStats(): void {
+    $xpath = '//ul[contains(concat(" ", normalize-space(@class), " "), "group-stats")]/@class';
+    // @todo Remove the following line in ISAICP-7138.
+    // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7138
+    $xpath .= ' | //div[contains(concat(" ", normalize-space(@class), " "), "featured__stats")]/@class';
+    $this->assertSession()->elementsCount('xpath', $xpath, 0);
+  }
+
+  /**
    * Asserts that the current user's profile picture is shown in the header.
    *
    * @Then my user profile picture should be shown in the page header
