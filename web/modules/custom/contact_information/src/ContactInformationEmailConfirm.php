@@ -24,23 +24,12 @@ class ContactInformationEmailConfirm implements ContactInformationEmailConfirmIn
    *   The entity type manager service.
    * @param \Drupal\Core\Render\RendererInterface $renderer
    *   The renderer service.
-   * @param \Drupal\email_confirmer\EmailConfirmerManagerInterface|null $emailConfirmer
-   *   The email confirmer service. The $email_confirmer argument is set as
-   *   nullable to avoid the non-existent service "email_confirmer" error during
-   *   the deployment. This should be reverted after deploying this change.
+   * @param \Drupal\email_confirmer\EmailConfirmerManagerInterface $emailConfirmer
+   *   The email confirmer service.
    *
    * @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7300
-   * @todo Make $email_confirmer non-nullable in ISAICP-7300.
    */
-  public function __construct(protected EntityTypeManagerInterface $entityTypeManager, protected RendererInterface $renderer, ?EmailConfirmerManagerInterface $emailConfirmer) {
-    // @todo Remove this in ISAICP-7300.
-    // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7300
-    // @codingStandardsIgnoreStart
-    if (empty($this->emailConfirmer)) {
-      $this->emailConfirmer = \Drupal::service('email_confirmer');
-    }
-    // @codingStandardsIgnoreEnd
-  }
+  public function __construct(protected EntityTypeManagerInterface $entityTypeManager, protected RendererInterface $renderer, protected EmailConfirmerManagerInterface $emailConfirmer) {}
 
   /**
    * {@inheritdoc}
