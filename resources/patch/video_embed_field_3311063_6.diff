@@ -1,0 +1,319 @@
+diff --git a/modules/video_embed_media/src/Form/VideoEmbedFieldForm.php b/modules/video_embed_media/src/Form/VideoEmbedFieldForm.php
+new file mode 100644
+index 0000000..bb32167
+--- /dev/null
++++ b/modules/video_embed_media/src/Form/VideoEmbedFieldForm.php
+@@ -0,0 +1,181 @@
++<?php
++
++namespace Drupal\video_embed_media\Form;
++
++use Drupal\Core\Entity\EntityTypeManagerInterface;
++use Drupal\Core\Form\FormBuilderInterface;
++use Drupal\Core\Form\FormStateInterface;
++use Drupal\Core\Render\RendererInterface;
++use Drupal\Core\Url;
++use Drupal\media_library\Form\AddFormBase;
++use Drupal\media_library\MediaLibraryUiBuilder;
++use Drupal\media_library\OpenerResolverInterface;
++use Drupal\video_embed_field\ProviderManager;
++use Drupal\video_embed_media\Plugin\media\Source\VideoEmbedFieldInterface;
++use Symfony\Component\DependencyInjection\ContainerInterface;
++
++/**
++ * Creates a form to create media entities from Video Embed fields.
++ */
++class VideoEmbedFieldForm extends AddFormBase {
++
++  /**
++   * The video provider manager.
++   *
++   * @var \Drupal\video_embed_field\ProviderManager
++   */
++  protected $providerManager;
++
++  /**
++   * The renderer.
++   *
++   * @var \Drupal\Core\Render\RendererInterface
++   */
++  protected $renderer;
++
++  /**
++   * Constructs a new OEmbedForm.
++   *
++   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
++   *   The entity type manager.
++   * @param \Drupal\media_library\MediaLibraryUiBuilder $library_ui_builder
++   *   The media library UI builder.
++   * @param \Drupal\video_embed_field\ProviderManager $provider_manager
++   *   The video provider plugin manager.
++   * @param \Drupal\Core\Render\RendererInterface $renderer
++   *   The renderer.
++   * @param \Drupal\media_library\OpenerResolverInterface|null $opener_resolver
++   *   The opener resolver.
++   */
++  public function __construct(EntityTypeManagerInterface $entity_type_manager, MediaLibraryUiBuilder $library_ui_builder, ProviderManager $provider_manager, RendererInterface $renderer, OpenerResolverInterface $opener_resolver = NULL) {
++    parent::__construct($entity_type_manager, $library_ui_builder, $opener_resolver);
++    $this->providerManager = $provider_manager;
++    $this->renderer = $renderer;
++  }
++
++  /**
++   * {@inheritdoc}
++   */
++  public static function create(ContainerInterface $container) {
++    return new static(
++      $container->get('entity_type.manager'),
++      $container->get('media_library.ui_builder'),
++      $container->get('video_embed_field.provider_manager'),
++      $container->get('renderer'),
++      $container->get('media_library.opener_resolver')
++    );
++  }
++
++  /**
++   * {@inheritdoc}
++   */
++  public function getFormId(): string {
++    return $this->getBaseFormId() . '_video_embed';
++  }
++
++  /**
++   * {@inheritdoc}
++   */
++  protected function getMediaType(FormStateInterface $form_state) {
++    if ($this->mediaType) {
++      return $this->mediaType;
++    }
++
++    $media_type = parent::getMediaType($form_state);
++    if (!$media_type->getSource() instanceof VideoEmbedFieldInterface) {
++      throw new \InvalidArgumentException('Can only add media types which use an Video Embed source plugin.');
++    }
++    return $media_type;
++  }
++
++  /**
++   * {@inheritdoc}
++   */
++  protected function buildInputElement(array $form, FormStateInterface $form_state) {
++    $media_type = $this->getMediaType($form_state);
++    $data_definition = $media_type->getSource()->getSourceFieldDefinition($media_type)
++      ->getItemDefinition();
++
++    // Add a container to group the input elements for styling purposes.
++    $form['container'] = [
++      '#type' => 'container',
++    ];
++
++    $form['container']['video_url'] = [
++      '#type' => 'textfield',
++      '#title' => $this->t('Add @type URL', [
++        '@type' => $this->getMediaType($form_state)->label(),
++      ]),
++      '#maxlength' => $data_definition->getSetting('max_length'),
++      '#allowed_providers' => $data_definition->getSetting('allowed_providers'),
++      '#theme' => 'input__video',
++      '#required' => TRUE,
++    ];
++
++    $form['container']['submit'] = [
++      '#type' => 'submit',
++      '#value' => $this->t('Add'),
++      '#button_type' => 'primary',
++      '#validate' => ['::validateUrl'],
++      '#submit' => ['::addButtonSubmit'],
++      // @todo Move validation in https://www.drupal.org/node/2988215
++      '#ajax' => [
++        'callback' => '::updateFormCallback',
++        'wrapper' => 'media-library-wrapper',
++        // Add a fixed URL to post the form since AJAX forms are automatically
++        // posted to <current> instead of $form['#action'].
++        // @todo Remove when https://www.drupal.org/project/drupal/issues/2504115
++        //   is fixed.
++        'url' => Url::fromRoute('media_library.ui'),
++        'options' => [
++          'query' => $this->getMediaLibraryState($form_state)->all() + [
++              FormBuilderInterface::AJAX_FORM_REQUEST => TRUE,
++            ],
++        ],
++      ],
++    ];
++    return $form;
++  }
++
++  /**
++   * Validates the oEmbed URL.
++   *
++   * @param array $form
++   *   The complete form.
++   * @param \Drupal\Core\Form\FormStateInterface $form_state
++   *   The current form state.
++   */
++  public function validateUrl(array &$form, FormStateInterface $form_state) {
++    $provider = $this->getProvider($form_state->getValue('video_url'));
++    // Display an error if no provider can be loaded for this video.
++    if (!$provider) {
++      $form_state->setErrorByName('video_url', $this->t('Could not find a video provider to handle the given URL.'));
++    }
++  }
++
++  /**
++   * Submit handler for the add button.
++   *
++   * @param array $form
++   *   The form render array.
++   * @param \Drupal\Core\Form\FormStateInterface $form_state
++   *   The form state.
++   */
++  public function addButtonSubmit(array $form, FormStateInterface $form_state) {
++    $this->processInputValues([$form_state->getValue('video_url')], $form, $form_state);
++  }
++
++  /**
++   * Get a provider from some input.
++   *
++   * @param string $input
++   *   The input string.
++   *
++   * @return bool|\Drupal\video_embed_field\ProviderPluginInterface
++   *   A video provider or FALSE on failure.
++   */
++  protected function getProvider(string $input) {
++    return $this->providerManager->loadProviderFromInput($input);
++  }
++
++}
+diff --git a/modules/video_embed_media/src/Plugin/media/Source/VideoEmbedField.php b/modules/video_embed_media/src/Plugin/media/Source/VideoEmbedField.php
+index 566f0f3..08d71a9 100644
+--- a/modules/video_embed_media/src/Plugin/media/Source/VideoEmbedField.php
++++ b/modules/video_embed_media/src/Plugin/media/Source/VideoEmbedField.php
+@@ -5,6 +5,7 @@ namespace Drupal\video_embed_media\Plugin\media\Source;
+ use Drupal\Core\Config\ConfigFactoryInterface;
+ use Drupal\Core\Entity\EntityFieldManagerInterface;
+ use Drupal\Core\Entity\EntityTypeManagerInterface;
++use Drupal\Core\Field\FieldDefinitionInterface;
+ use Drupal\Core\Field\FieldTypePluginManagerInterface;
+ use Drupal\media\MediaInterface;
+ use Drupal\media\MediaSourceBase;
+@@ -23,7 +24,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
+  *   default_thumbnail_filename = "video.png"
+  * )
+  */
+-class VideoEmbedField extends MediaSourceBase {
++class VideoEmbedField extends MediaSourceBase implements VideoEmbedFieldInterface {
+
+   /**
+    * The video provider manager.
+@@ -84,7 +85,7 @@ class VideoEmbedField extends MediaSourceBase {
+   /**
+    * {@inheritdoc}
+    */
+-  public function defaultConfiguration() {
++  public function defaultConfiguration(): array {
+     return [
+       'source_field' => 'field_media_video_embed_field',
+     ];
+@@ -142,7 +143,7 @@ class VideoEmbedField extends MediaSourceBase {
+   /**
+    * {@inheritdoc}
+    */
+-  public function getMetadataAttributes() {
++  public function getMetadataAttributes(): array {
+     return [
+       'id' => $this->t('Video ID.'),
+       'source' => $this->t('Video source machine name.'),
+@@ -181,7 +182,7 @@ class VideoEmbedField extends MediaSourceBase {
+   /**
+    * {@inheritdoc}
+    */
+-  public function getSourceFieldDefinition(MediaTypeInterface $type) {
++  public function getSourceFieldDefinition(MediaTypeInterface $type): ?FieldDefinitionInterface {
+     // video_embed_media has not historically had a value in
+     // $this->configuration['source_field'], instead just creating
+     // field_media_video_embed_field on install and treating that as the source.
+@@ -191,9 +192,16 @@ class VideoEmbedField extends MediaSourceBase {
+     if ($field) {
+       // Be sure that the suggested source field actually exists.
+       $fields = $this->entityFieldManager->getFieldDefinitions('media', $type->id());
+-      return isset($fields[$field]) ? $fields[$field] : NULL;
++      return $fields[$field] ?? NULL;
+     }
+     return NULL;
+   }
+
++  /**
++   * {@inheritdoc}
++   */
++  public function getSourceFieldConstraints(): array {
++    return [];
++  }
++
+ }
+diff --git a/modules/video_embed_media/src/Plugin/media/Source/VideoEmbedFieldInterface.php b/modules/video_embed_media/src/Plugin/media/Source/VideoEmbedFieldInterface.php
+new file mode 100644
+index 0000000..b8225a6
+--- /dev/null
++++ b/modules/video_embed_media/src/Plugin/media/Source/VideoEmbedFieldInterface.php
+@@ -0,0 +1,11 @@
++<?php
++
++namespace Drupal\video_embed_media\Plugin\media\Source;
++
++use Drupal\media\MediaSourceFieldConstraintsInterface;
++
++/**
++ * Defines additional functionality for source plugins that use Video Embed field.
++ */
++interface VideoEmbedFieldInterface extends MediaSourceFieldConstraintsInterface {
++}
+diff --git a/modules/video_embed_media/video_embed_media.module b/modules/video_embed_media/video_embed_media.module
+new file mode 100644
+index 0000000..4142712
+--- /dev/null
++++ b/modules/video_embed_media/video_embed_media.module
+@@ -0,0 +1,17 @@
++<?php
++
++/**
++ * @file
++ * Contains hook implementations for the media_library module.
++ */
++
++use Drupal\video_embed_media\Form\VideoEmbedFieldForm;
++
++/**
++* Implements hook_media_source_info_alter().
++*/
++function video_embed_media_media_source_info_alter(array &$sources) {
++  if (empty($sources['video_embed_field']['forms']['media_library_add'])) {
++    $sources['video_embed_field']['forms']['media_library_add'] = VideoEmbedFieldForm::class;
++  }
++}
+diff --git a/modules/video_embed_wysiwyg/src/Plugin/Filter/VideoEmbedWysiwyg.php b/modules/video_embed_wysiwyg/src/Plugin/Filter/VideoEmbedWysiwyg.php
+index f0c50e7..4486bc0 100644
+--- a/modules/video_embed_wysiwyg/src/Plugin/Filter/VideoEmbedWysiwyg.php
++++ b/modules/video_embed_wysiwyg/src/Plugin/Filter/VideoEmbedWysiwyg.php
+@@ -19,7 +19,7 @@ use Drupal\Core\Render\RendererInterface;
+  *   title = @Translation("Video Embed WYSIWYG"),
+  *   id = "video_embed_wysiwyg",
+  *   description = @Translation("Enables the use of video_embed_wysiwyg."),
+- *   type = Drupal\filter\Plugin\FilterInterface::TYPE_MARKUP_LANGUAGE
++ *   type = Drupal\filter\Plugin\FilterInterface::TYPE_TRANSFORM_IRREVERSIBLE
+  * )
+  */
+ class VideoEmbedWysiwyg extends FilterBase implements ContainerFactoryPluginInterface {
+diff --git a/modules/video_embed_wysiwyg/video_embed_wysiwyg.module b/modules/video_embed_wysiwyg/video_embed_wysiwyg.module
+index bd05974..2ebffe4 100644
+--- a/modules/video_embed_wysiwyg/video_embed_wysiwyg.module
++++ b/modules/video_embed_wysiwyg/video_embed_wysiwyg.module
+@@ -47,7 +47,7 @@ function video_embed_wysiwyg_toolbar_filter_validate($form, FormStateInterface $
+     }
+   }
+   // The button and filter can either both be enabled or disabled.
+-  if ($filter_enabled !== $button_enabled) {
++  if ($filter_enabled !== $button_enabled && $form_state->getValue('editor')['editor'] === 'ckeditor') {
+     $form_state->setError($form['filters']['status']['video_embed_wysiwyg'], t('To embed videos, make sure you have enabled the "Video Embed WYSIWYG" filter and dragged the video icon into the WYSIWYG toolbar. For more information <a href="@url">read the documentation</a>.', ['@url' => VIDEO_EMBED_WYSIWYG_DOCUMENTATION_URL]));
+   }
+ }
