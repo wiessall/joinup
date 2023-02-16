@@ -29,7 +29,7 @@ class ContactInformationEmailConfirm implements ContactInformationEmailConfirmIn
    *
    * @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7300
    */
-  public function __construct(protected EntityTypeManagerInterface $entityTypeManager, protected RendererInterface $renderer, protected EmailConfirmerManagerInterface $emailConfirmer) { }
+  public function __construct(protected EntityTypeManagerInterface $entityTypeManager, protected RendererInterface $renderer, protected EmailConfirmerManagerInterface $emailConfirmer) {}
 
   /**
    * {@inheritdoc}
