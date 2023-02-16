@@ -396,4 +396,28 @@ class JoinupParagraphsContext extends RawDrupalContext {
     }
   }
 
+  /**
+   * Asserts that there are results in the carousel paragraph.
+   *
+   * @param string $heading
+   *   The heading of the carousel paragraph.
+   *
+   * @Then I should see results in the :heading carousel
+   */
+  public function iShouldResultsInTheCarousel(string $heading): void {
+    $xpath = "//div[contains(concat(' ', @class, ' '), ' paragraph--carousel ')]";
+    $xpath .= "//h2[contains(concat(' ', @class, ' '), ' paragraph__heading ')]";
+    $xpath .= "[contains(text(), '$heading')]";
+    $element = $this->getSession()->getPage()->find('xpath', $xpath);
+    if (empty($element)) {
+      throw new ElementNotFoundException($this->getSession()->getDriver(), 'paragraph', 'paragraph--carousel', $heading);
+    }
+
+    $xpath = "//article[contains(concat(' ', @class, ' '), ' glide__slide ')]";
+    $elements = $element->getParent()->findAll('xpath', $xpath);
+    if (empty($elements)) {
+      throw new ElementNotFoundException($this->getSession()->getDriver(), 'paragraph', 'glide__slide', $heading);
+    }
+  }
+
 }
