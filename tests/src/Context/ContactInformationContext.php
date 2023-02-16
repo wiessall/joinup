@@ -301,6 +301,24 @@ class ContactInformationContext extends RawDrupalContext {
   }
 
   /**
+   * Confirms a confirmation request for an email.
+   *
+   * @param string $email
+   *   The email to confirm.
+   *
+   * @Given that the pending confirmation request for :email has been confirmed
+   */
+  public function confirmConfirmationRequest(string $email): void {
+    $email_confirmer = \Drupal::getContainer()->get('email_confirmer');
+    $confirmation = $email_confirmer->getConfirmation($email, 'pending', ContactInformationEmailConfirmInterface::REALM);
+    if (empty($confirmation)) {
+      throw new \RuntimeException("No pending confirmation request found for $email");
+    }
+    $confirmation->confirm($confirmation->getHash());
+    $confirmation->save();
+  }
+
+  /**
    * Cleans up confirmation requests for example.com emails.
    *
    * @param \Behat\Behat\Hook\Scope\AfterScenarioScope $scope

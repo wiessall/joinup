@@ -77,10 +77,19 @@ Feature: Resend validation email from collection/solution about page
     And an expired confirmation request for "confirmation_email.man@example.com" should exist
     # A new pending confirmation request has been created.
     And a pending confirmation request for "confirmation_email.man@example.com" should exist
+
+    # The pending expiration is already in the page.
     When I click "confirm"
     Then I should see the text "A new confirmation message has been sent to confirmation_email.man@example.com"
     # The hash expiration for the confirmation request has been renewed.
     And the confirmation request for "confirmation_email.man@example.com" should not be expired
+
+    # Confirm the confirmation request and re-check the markup.
+    Given that the pending confirmation request for "confirmation_email.man@example.com" has been confirmed
+    Then an accepted confirmation request for "confirmation_email.man@example.com" should exist
+    And an expired confirmation request for "confirmation_email.man@example.com" should exist
+    When I go to the about page of "Rally fanatics"
+    Then I should not see the text "Please confirm your contact information to enable users to contact you"
 
     Given I am logged in as "Group user"
     When I go to the about page of "Rally fanatics"
