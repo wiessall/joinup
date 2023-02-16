@@ -17,7 +17,7 @@ bundle: configurable_listing
 mode: default
 content:
   content_listing:
-    type: search_api_field_custom_page
+    type: search_api_field_default
     weight: 3
     region: content
     settings:
