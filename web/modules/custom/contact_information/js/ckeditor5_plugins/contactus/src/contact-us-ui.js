@@ -13,7 +13,7 @@ export class ContactUsUi extends Plugin {
 
         button.set({
           label: t("Contact us"),
-          tooltip: false,
+          tooltip: true,
           withText: false,
           icon,
         });
