@@ -284,15 +284,6 @@ class JoinupContext extends RawDrupalContext {
       }
     }
 
-    /** @var \Drupal\Core\Extension\ModuleHandlerInterface $module_handler */
-    $module_handler = \Drupal::service('module_handler');
-    if ($module_handler->moduleExists('honeypot')) {
-      // Submit form, waiting for Honeypot protection delay to pass.
-      /** @var \Drupal\Tests\honeypot\Behat\HoneypotContext $honeypot */
-      $honeypot = $this->getContext('\Drupal\Tests\honeypot\Behat\HoneypotContext');
-      $honeypot->waitForTimeLimit();
-    }
-
     $this->getSession()->getPage()->pressButton("Create new account");
 
     // Get the last registered user.
@@ -1857,6 +1848,32 @@ class JoinupContext extends RawDrupalContext {
     if (!$this->getSession()->getPage()->find('xpath', $xpath)) {
       throw new \Exception("No banner");
     }
+  }
+
+  /**
+   * Asserts that a featured stats exist in the header.
+   *
+   * @Then I should see a featured stats on the header
+   */
+  public function assertExistingFeaturedStats(): void {
+    $xpath = '//ul[contains(concat(" ", normalize-space(@class), " "), "group-stats")]/@class';
+    // @todo Remove the following line in ISAICP-7138.
+    // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7138
+    $xpath .= ' | //div[contains(concat(" ", normalize-space(@class), " "), "featured__stats")]/@class';
+    $this->assertSession()->elementsCount('xpath', $xpath, 1);
+  }
+
+  /**
+   * Asserts that a featured stats not exist in the header.
+   *
+   * @Then I should not see a featured stats on the header
+   */
+  public function assertNotExistingFeaturedStats(): void {
+    $xpath = '//ul[contains(concat(" ", normalize-space(@class), " "), "group-stats")]/@class';
+    // @todo Remove the following line in ISAICP-7138.
+    // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7138
+    $xpath .= ' | //div[contains(concat(" ", normalize-space(@class), " "), "featured__stats")]/@class';
+    $this->assertSession()->elementsCount('xpath', $xpath, 0);
   }
 
   /**

@@ -14,6 +14,7 @@ global-components:
     js/script.js: {}
   dependencies:
     - core/jquery
+    - contact_information/contact-wysiwyg
 
 global-search:
   version: 1.x
