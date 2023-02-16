@@ -51,7 +51,13 @@ class DashboardForm extends FormBase {
         '#type' => 'checkbox',
         '#title' => $this->t('Disable new accounts registration'),
         '#default_value' => $this->state->get('joinup_eulogin.registration_disabled', FALSE),
-        '#access' => $this->currentUser()->hasPermission('disable site auto-registration'),
+        '#access' => $this->currentUser()->hasPermission('manage site auto-registration'),
+      ],
+      'accounts_approve' => [
+        '#type' => 'checkbox',
+        '#title' => $this->t('New accounts need approval'),
+        '#default_value' => $this->state->get('joinup_eulogin.accounts_approve', FALSE),
+        '#access' => $this->currentUser()->hasPermission('manage site auto-registration'),
       ],
       'debug' => [
         '#type' => 'checkbox',
@@ -86,6 +92,17 @@ class DashboardForm extends FormBase {
       else {
         $this->state->delete('joinup_eulogin.registration_disabled');
         $this->messenger()->addStatus($this->t('Registering new users to Joinup is enabled'));
+      }
+    }
+    $accounts_approve = (bool) $form_state->getValue(['accounts_approve']);
+    if ($accounts_approve !== $form['cas']['accounts_approve']['#default_value']) {
+      if ($accounts_approve) {
+        $this->state->set('joinup_eulogin.accounts_approve', TRUE);
+        $this->messenger()->addWarning($this->t('Registering new users to Joinup requires approval is enabled'));
+      }
+      else {
+        $this->state->delete('joinup_eulogin.accounts_approve');
+        $this->messenger()->addStatus($this->t('Registering new users to Joinup requires approval is disabled'));
       }
     }
     $cas_debug = (bool) $form_state->getValue(['debug']);
