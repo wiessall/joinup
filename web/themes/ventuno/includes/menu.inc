@@ -25,3 +25,15 @@ function ventuno_theme_suggestions_menu_alter(array &$suggestions, array $variab
     $suggestions[] = 'menu__region_footer__' . str_replace('-', '_', $variables['menu_name']);
   }
 }
+
+/**
+ * Implements hook_preprocess_menu_local_action().
+ */
+function ventuno_preprocess_menu_local_action(array &$variables): void {
+  $btn_classes = [
+    'btn',
+    'btn-md',
+    'btn-secondary',
+  ];
+  $variables['link']['#options']['attributes']['class'] = $btn_classes;
+}
