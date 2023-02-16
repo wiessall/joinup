@@ -6,8 +6,8 @@ namespace Drupal\joinup\Context;
 
 use Behat\Behat\Hook\Scope\AfterScenarioScope;
 use Behat\Gherkin\Node\TableNode;
-use Drupal\contact_information\ContactInformationEmailConfirmInterface;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
+use Drupal\contact_information\ContactInformationEmailConfirmInterface;
 use Drupal\joinup\Traits\AliasTranslatorTrait;
 use Drupal\joinup\Traits\EntityTrait;
 use Drupal\joinup\Traits\MailCollectorTrait;
