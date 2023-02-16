@@ -64,10 +64,19 @@ Feature: Resend validation email from collection/solution about page
     Then I should see the text "Please confirm your contact information to enable users to contact you"
     When I click "confirm"
     Then I should see the text "A new confirmation message has been sent to confirmation_email.man@example.com"
+    And a pending confirmation request for "confirmation_email.man@example.com" should exist
+    But no expired confirmation request for "confirmation_email.man@example.com" should exist
 
-    Given that the confirmation request for "confirmation_email.man@example.com" has expired
+    Given that the pending confirmation request for "confirmation_email.man@example.com" has expired
+    Then the confirmation request for "confirmation_email.man@example.com" should be expired
+    And an expired confirmation request for "confirmation_email.man@example.com" should exist
+    But no pending confirmation request for "confirmation_email.man@example.com" should exist
+
     When I go to the about page of "Rally fanatics"
     Then I should see the text "Please confirm your contact information to enable users to contact you"
+    And an expired confirmation request for "confirmation_email.man@example.com" should exist
+    # A new pending confirmation request has been created.
+    And a pending confirmation request for "confirmation_email.man@example.com" should exist
     When I click "confirm"
     Then I should see the text "A new confirmation message has been sent to confirmation_email.man@example.com"
     # The hash expiration for the confirmation request has been renewed.
