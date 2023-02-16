@@ -157,35 +157,39 @@ class SearchWidget extends WidgetBase implements ContainerFactoryPluginInterface
       '#extra' => array_keys($facets),
     ];
 
-    $table = [
-      '#type' => 'field_ui_table',
-      '#header' => $this->getTableHeader(),
-      '#regions' => $this->getRegions(),
-      '#attributes' => [
-        'class' => ['field-ui-overview'],
-        'id' => 'field-display-overview',
-      ],
-      '#tabledrag' => [
-        [
-          'action' => 'order',
-          'relationship' => 'sibling',
-          'group' => 'field-weight',
-        ],
-        [
-          'action' => 'match',
-          'relationship' => 'parent',
-          'group' => 'field-parent',
-          'subgroup' => 'field-parent',
-          'source' => 'field-name',
-        ],
-      ],
-    ];
+    if (!empty($facets)) {
 
-    $form['#attached']['library'][] = 'search_api_field/drupal.search_api_field';
-    foreach ($facets as $facet_id => $facet) {
-      $table[$facet_id] = $this->buildFacetRow($facet, $item);
+      $table = [
+        '#type' => 'field_ui_table',
+        '#header' => $this->getTableHeader(),
+        '#regions' => $this->getRegions(),
+        '#attributes' => [
+          'class' => ['field-ui-overview'],
+          'id' => 'field-display-overview',
+        ],
+        '#tabledrag' => [
+          [
+            'action' => 'order',
+            'relationship' => 'sibling',
+            'group' => 'field-weight',
+          ],
+          [
+            'action' => 'match',
+            'relationship' => 'parent',
+            'group' => 'field-parent',
+            'subgroup' => 'field-parent',
+            'source' => 'field-name',
+          ],
+        ],
+      ];
+
+      $form['#attached']['library'][] = 'search_api_field/drupal.search_api_field';
+      foreach ($facets as $facet_id => $facet) {
+        $table[$facet_id] = $this->buildFacetRow($facet, $item);
+      }
+      $element['wrapper']['fields'] = $table;
     }
-    $element['wrapper']['fields'] = $table;
+
     $element['wrapper']['refresh_rows'] = ['#type' => 'hidden'];
     $element['wrapper']['refresh'] = [
       '#type' => 'submit',
