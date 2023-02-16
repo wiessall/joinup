@@ -183,6 +183,15 @@ module.exports = {
     },
     // Custom and hybrid (BCL + custom) components
     {
+      entry: path.resolve(outputFolder, "src/scss/header-topic.scss"),
+      dest: path.resolve(outputFolder, "assets/css/header-topic.min.css"),
+      options: {
+        includePaths,
+        sourceMap: "file",
+        minify: true,
+      },
+    },
+    {
       entry: path.resolve(outputFolder, "src/scss/footer.scss"),
       dest: path.resolve(outputFolder, "assets/css/footer.css"),
       options: {
@@ -276,6 +285,15 @@ module.exports = {
       entry: path.resolve(outputFolder, "src/scss/tabledrag.scss"),
       dest: path.resolve(outputFolder, "assets/css/tabledrag.css"),
       options: {
+        includePaths,
+        sourceMap: "file",
+      },
+    },
+    {
+      entry: path.resolve(outputFolder, "src/scss/tile-two.scss"),
+      dest: path.resolve(outputFolder, "assets/css/tile-two.min.css"),
+      options: {
+        minify: true,
         includePaths,
         sourceMap: "file",
       },
@@ -414,6 +432,7 @@ module.exports = {
           "eye.svg",
           "file-earmark-medical.svg",
           "file-earmark-play.svg",
+          "file-earmark-post.svg",
           "file-earmark-richtext.svg",
           "file-earmark-text.svg",
           "file-earmark-zip.svg",
