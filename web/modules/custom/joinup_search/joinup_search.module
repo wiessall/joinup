@@ -9,6 +9,7 @@ declare(strict_types = 1);
 
 use Drupal\Component\Render\MarkupInterface;
 use Drupal\Component\Utility\Html;
+use Drupal\Component\Utility\UrlHelper;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Datetime\DrupalDateTime;
 use Drupal\Core\Field\FieldDefinitionInterface;
@@ -565,5 +566,20 @@ function joinup_search_views_pre_render(ViewExecutable $view): void {
         }
       }
     }
+  }
+}
+
+/**
+ * Implements hook_facets_block_facets_alter().
+ *
+ * @todo Drop this implementation in ISAICP-7540.
+ * @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7540
+ */
+function joinup_search_facets_block_facets_alter(array &$facets): void {
+  if (\Drupal::routeMatch()->getRouteName() === 'view.search.page_1' && isset($facets[0]['content'][0]['#items']) && is_array($facets[0]['content'][0]['#items'])) {
+    $facets[0]['content'][0]['#items'] = array_values(array_filter(
+      $facets[0]['content'][0]['#items'],
+      fn(array $item): bool => !UrlHelper::isValid($item['#title']['#value'], TRUE),
+    ));
   }
 }
