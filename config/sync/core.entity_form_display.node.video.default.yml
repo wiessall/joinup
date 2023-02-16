@@ -112,4 +112,5 @@ hidden:
   og_audience: true
   path: true
   promote: true
+  simple_sitemap: true
   sticky: true

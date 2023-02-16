@@ -17,6 +17,7 @@ settings:
       - removeFormat
       - '|'
       - link
+      - contactus
       - '|'
       - bulletedList
       - numberedList

@@ -14,3 +14,14 @@ contact-wysiwyg:
     - core/drupal
     - core/drupalSettings
     - core/once
+
+contactus:
+  js:
+    js/build/contactus.js: { preprocess: false, minified: true }
+  dependencies:
+    - core/ckeditor5
+
+admin.contactus:
+  css:
+    theme:
+      css/contactus.admin.css: { }
