@@ -293,17 +293,17 @@ Scenario: Long descriptions in topic inner page should be partially hidden.
     When I enter "En un lugar de la Mancha, de cuyo nombre no quiero acordarme, no ha mucho tiempo que vivía un hidalgo de los de lanza en astillero, adarga antigua, rocín flaco y galgo corredor. Una olla de algo más vaca que carnero, salpicón las más noches, duelos y quebrantos los sábados, lantejas los viernes, algún palomino de añadidura los domingos, consumían las tres partes de su hacienda. El resto della concluían sayo de velarte, calzas de velludo para las fiestas, con sus pantuflos de lo mesmo, y los días de entresemana se honraba con su vellorí de lo más fino." in the "Description" wysiwyg editor
     And I press "Save"
     Then I should see the heading "E-justice"
-    And I should see the cropped description
+    Then the "See more" collapse is collapsed
     And I should see the text "See more"
 
     # Open collapse
     When I press "See more"
     Then I should see the text "See less"
     And I should not see the text "See more"
-    Then I should see the full description
+    Then the "See less" collapse is expanded
 
     # Close collapse again
     When I press "See less"
     Then I should see the text "See more"
     And I should not see the text "See less"
-    Then I should see the cropped description
+    Then the "See more" collapse is collapsed
