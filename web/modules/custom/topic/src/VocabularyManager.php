@@ -28,7 +28,7 @@ class VocabularyManager {
   public function __construct(
     protected EntityTypeManagerInterface $entityTypeManager,
     protected Connection $database,
-    protected ConnectionInterface $sparqlEndpoint
+    protected ConnectionInterface $sparqlEndpoint,
   ) {
   }
 
@@ -231,10 +231,9 @@ class VocabularyManager {
    *   The term URI.
    */
   public function deleteTopicTerm(string $uri): void {
-    $this->entityTypeManager
-      ->getStorage('taxonomy_term')
-      ->load($uri)
-      ->delete();
+    $term_storage = $this->entityTypeManager->getStorage('taxonomy_term');
+    $term = $term_storage->load($uri);
+    $term->delete();
   }
 
 }
