@@ -4,6 +4,7 @@ declare(strict_types = 1);
 
 namespace Drupal\joinup\Context;
 
+use Behat\Behat\Hook\Scope\AfterScenarioScope;
 use Behat\Gherkin\Node\TableNode;
 use Drupal\contact_information\ContactInformationEmailConfirmInterface;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
@@ -291,13 +292,32 @@ class ContactInformationContext extends RawDrupalContext {
    * @Given the confirmation request for :email should not be expired
    */
   public function givenConfirmationNotExpired(string $email): void {
-    /** @var \Drupal\email_confirmer\EmailConfirmerManagerInterface $email_confirmer */
-    $email_confirmer = \Drupal::service('email_confirmer');
-    $confirmation = $email_confirmer->createConfirmation($email);
+    $email_confirmer = \Drupal::getContainer()->get('email_confirmer');
+    $confirmation = $email_confirmer->getConfirmation($email, FALSE, ContactInformationEmailConfirmInterface::REALM);
     if (empty($confirmation)) {
       throw new \RuntimeException("No confirmation request found for $email");
     }
     Assert::assertFalse($confirmation->isExpired(), 'Confirmation request is not expired.');
+  }
+
+  /**
+   * Cleans up confirmation requests for example.com emails.
+   *
+   * @param \Behat\Behat\Hook\Scope\AfterScenarioScope $scope
+   *   The after scenario scope.
+   *
+   * @AfterScenario
+   */
+  public function afterScenarioConfirmationCleanup(AfterScenarioScope $scope): void {
+    $query = \Drupal::entityQuery('email_confirmer_confirmation');
+    $query->condition('email', '%example.com', 'LIKE');
+    $ids = $query->execute();
+
+    if (empty($ids)) {
+      return;
+    }
+    $storage = \Drupal::entityTypeManager()->getStorage('email_confirmer_confirmation');
+    $storage->delete($storage->loadMultiple($ids));
   }
 
 }
