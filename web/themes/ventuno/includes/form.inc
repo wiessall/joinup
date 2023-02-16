@@ -70,6 +70,14 @@ function ventuno_form_views_exposed_form_alter(array &$form, FormStateInterface 
 }
 
 /**
+ * Implements hook_theme_suggestions_HOOK_alter().
+ */
+function ventuno_theme_suggestions_form_alter(array &$suggestions, array $variables): void {
+  $id = $variables['element']['#id'];
+  $suggestions[] = $id;
+}
+
+/**
  * Implements hook_preprocess_form_element().
  */
 function ventuno_preprocess_form_element(array &$variables): void {

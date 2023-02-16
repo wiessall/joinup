@@ -30,6 +30,16 @@ function ventuno_theme_suggestions_block_alter(array &$suggestions, array $varia
 /**
  * Implements hook_preprocess_block().
  */
+function ventuno_preprocess_block(array &$variables): void {
+  $id = $variables['elements']['#plugin_id'];
+  if ($id === 'local_actions_block') {
+    $variables['attributes']['class'][] = 'my-3';
+  }
+}
+
+/**
+ * Implements hook_preprocess_block().
+ */
 function ventuno_preprocess_block__facetsblock_searchpage(array &$variables): void {
   $block_manager = \Drupal::getContainer()->get('plugin.manager.block');
   $plugin_block = $block_manager->createInstance('joinup_search_clear_filters');
