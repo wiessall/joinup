@@ -20,7 +20,7 @@ Feature: Covers Release 1.89.
 
   Scenario: Smoke test for the replacement of field_content_listing (108900).
     Given I go to "/interoperable-europe"
-    Then I should see the heading "The data.europa academy is live"
+    Then I should see results in the "news" carousel
 
     Given I go to "/collection/joinup"
     Then I should see 12 tiles
