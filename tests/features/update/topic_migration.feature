@@ -1,17 +1,20 @@
 @group-clone @api
 Feature: Test the migration of the topics.
 
-  Scenario: Test a created topic.
-    Given I go to the "Smart cities" term page
+  Scenario Outline: Test a created topic.
+    Given I go to the "<term name>" term page
     # The fact that we are on the search page and not a 404 page is enough to
     # ensure that the topic has been migrated.
     Then I should see the heading "Advanced search"
-
-    Given I go to the "eJustice and law" term page
-    Then I should see the heading "Advanced search"
+    Examples:
+      | term name                    |
+      | Smart cities                 |
+      | Observatories                |
+      | Reusable Software Components |
+      | Innovation                   |
 
   Scenario: Test renamed topic.
-    Given I go to the "Free and open source software" term page
+    Given I go to the "Open Source Software" term page
     # The fact that we are on the search page and not a 404 page is enough to
     # ensure that the topic has been renamed (loaded by name).
     Then I should see the heading "Advanced search"
