@@ -135,6 +135,9 @@ function ventuno_preprocess_container(array &$variables): void {
     $variables['attributes']['class'] = 'row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-xl-4 g-3 align-items-end';
   }
   if (isset($variables['attributes']['data-drupal-selector']) && $variables['attributes']['data-drupal-selector'] === 'edit-actions') {
-    $variables['attributes']['class'] = 'd-flex flex-column d-md-block my-3';
+    // Target only the submit input of the collections members overview page.
+    if (isset($variables['element']['submit']['#id']) && $variables['element']['submit']['#id'] === 'edit-submit-og-members-overview') {
+      $variables['attributes']['class'] = 'd-flex flex-column d-md-block my-3';
+    }
   }
 }
