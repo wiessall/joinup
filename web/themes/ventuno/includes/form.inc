@@ -103,12 +103,4 @@ function ventuno_form_alter(array &$form, FormStateInterface $form_state, string
       ['btn', 'btn-md', 'btn-outline-danger'],
     );
   }
-  // Add classes to the cancel action in any kind of form.
-  if (isset($form['actions']['cancel'])) {
-    $classes = $form['actions']['cancel']['#attributes']['class'] ?? [];
-    $form['actions']['cancel']['#attributes']['class'] = array_merge(
-      $classes,
-      ['btn', 'btn-md', 'btn-outline-warning'],
-    );
-  }
 }
