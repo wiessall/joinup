@@ -8,12 +8,13 @@ Feature: Test the migration of the topics.
     Then I should see the heading "Advanced search"
     Examples:
       | term name                    |
-      | Smart cities                 |
+      | Digital ready policymaking   |
+      | Innovation                   |
+      | Legal                        |
       | Observatories                |
       | Reusable Software Components |
-      | Innovation                   |
-      | eJustice and law             |
-      | Digital ready policymaking   |
+      | Semantics                    |
+      | Smart cities                 |
       | Tools                        |
 
   Scenario: Test renamed topic.
