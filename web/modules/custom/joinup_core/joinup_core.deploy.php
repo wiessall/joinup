@@ -48,7 +48,7 @@ function joinup_core_deploy_109000(array &$sandbox): string {
           'http://joinup.eu/ontology/topic/category#digital-government',
         ],
         [
-          'Semantic',
+          'Semantics',
           'http://joinup.eu/ontology/topic/category#ict',
         ],
         [
