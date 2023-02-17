@@ -175,7 +175,11 @@ function joinup_search_search_api_query_search_api_field_alter(QueryInterface $q
  *   Thrown when the Search API server instance could not be loaded.
  */
 function joinup_search_search_api_query_alter(QueryInterface $query) {
-  if ($query->getSearchId() === 'rdf_entity.collection.field_collection_content') {
+  $event_condition_listings = [
+    'rdf_entity.collection.field_collection_content',
+    'paragraph.configurable_listing.content_listing',
+  ];
+  if (in_array($query->getSearchId(), $event_condition_listings)) {
     // In case the user has filtered by event, first sort by the event date.
     // @todo This will be generic when event calendar will be implemented for
     // the rdf_entity.field_is_content and the paragraph.content_listing
@@ -194,6 +198,7 @@ function joinup_search_search_api_query_alter(QueryInterface $query) {
     'rdf_entity.field_collection_content',
     'rdf_entity.field_is_content',
     'paragraph.content_listing.content_listing',
+    'paragraph.configurable_listing.content_listing',
   ];
 
   if (in_array($query->getSearchId(), $search_ids)) {
@@ -203,14 +208,10 @@ function joinup_search_search_api_query_alter(QueryInterface $query) {
   // Because we allow listing of custom pages, if the listing is of a custom
   // page, ensure that the current page is excluded from the results to avoid
   // infinite recursion.
-  if ($query->getSearchId() === 'paragraph.content_listing') {
+  if ($query->getSearchId() === 'paragraph.content_listing.content_listing') {
     $parent_entity = $query->getOption('search_api_field entity');
     while (!$parent_entity instanceof CustomPageInterface) {
       $parent_entity = $parent_entity->getParentEntity();
-      // Ignore topic entities.
-      if ($parent_entity instanceof TopicMetaEntity) {
-        return;
-      }
     }
     $query->addCondition('id', $parent_entity->id(), '<>');
   }

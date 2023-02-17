@@ -170,7 +170,7 @@ Feature:
 
   Scenario: Configurable listings are available for the topic meta entities.
     Given the following topics are enabled in the homepage:
-      | E-justice  |
+      | E-justice |
     And I am logged in as a moderator
     And I go to the "topic" meta entity of the "E-justice" topic "taxonomy term"
     And I click "Edit"
@@ -274,8 +274,8 @@ Feature:
     And I press "Save"
     Then the url should match "/admin/homepage-topics"
 
-@javascript
-Scenario: Long descriptions in topic inner page should be partially hidden.
+  @javascript
+  Scenario: Long descriptions in topic inner page should be partially hidden.
     Given news content:
       | title  | headline | state     |
       | News 1 | News 1   | validated |
@@ -307,3 +307,67 @@ Scenario: Long descriptions in topic inner page should be partially hidden.
     Then I should see the text "See more"
     And I should not see the text "See less"
     Then the "See more" collapse is collapsed
+
+  Scenario: Regression test to ensure order of entities.
+    Given news content:
+      | title  | headline | body | state     | created    | changed    |
+      | News 1 | News 1   | Test | validated | 01-01-2023 | 03-02-2023 |
+      | News 2 | News 2   | Test | validated | 02-01-2023 | 02-02-2023 |
+      | News 3 | News 3   | Test | validated | 03-01-2023 | 01-02-2023 |
+    And event content:
+      | title   | body | start date   | end date    | created    | state     |
+      | Event 1 | Test | now -8 days  | now -9 days | now -4 day | validated |
+      | Event 2 | Test | now -9 days  | now -8 days | now -3 day | validated |
+      | Event 3 | Test | now -10 days | now -7 days | now -5 day | validated |
+    And the following topics are enabled in the homepage:
+      | Economy and Welfare |
+      | E-justice           |
+
+    When I am logged in as a moderator
+    And I go to the homepage
+    And I click "E-justice"
+    And I click "Edit"
+    When I press "Add Row"
+    And I press "Add 1 column layout"
+    And I press "Add Configurable listing"
+    When I fill in "Heading" with "E-justice heading"
+    And I fill in "URL" with "http://example.com"
+    And I fill in "Link text" with "E-justice link text"
+    And I select "List" from "List style"
+    And I fill in "Query presets" with "entity_bundle|news"
+    And I press "Save"
+
+    Then I should see the following tiles in the correct order:
+      | News 3 |
+      | News 2 |
+      | News 1 |
+
+    When I go to the edit form of the "News 2" news
+    And I press "Save"
+    And I go to the homepage
+    And I click "E-justice"
+    # The change should not affect the order as the news publication date is the same.
+    Then I should see the following tiles in the correct order:
+      | News 3 |
+      | News 2 |
+      | News 1 |
+
+    When I click "Edit"
+    And I fill in "Query presets" with "entity_bundle|event"
+    And I press "Save"
+
+    # Events are shown by the event date sorted by the most recent first.
+    Then I should see the following tiles in the correct order:
+      | Event 1 |
+      | Event 2 |
+      | Event 3 |
+
+    When I go to the edit form of the "Event 3" event
+    And I press "Save"
+    And I go to the homepage
+    # The change should not affect the order as the event start date is the same.
+    And I click "E-justice"
+    Then I should see the following tiles in the correct order:
+      | Event 1 |
+      | Event 2 |
+      | Event 3 |
