@@ -72,14 +72,14 @@
 #}
 {{ content.body }}
 {% if content.field_event_web_url|render or content.field_event_contact_email|render %}
-  <div class="border rounded p-3 mb-3">
+  <div class="bg-light p-3 mb-3">
     <h3 class="h4">{{ 'References'|t }}</h3>
     {{ content.field_event_web_url }}
     {{ content.field_event_contact_email }}
   </div>
 {% endif %}
 {% if content.field_event_agenda|render %}
-    <div class="border rounded p-3">
+    <div class="bg-light p-3">
         <h3 class="h4">{{ 'Details'|t }}</h3>
         {{ content.field_event_agenda }}
     </div>
@@ -89,7 +89,7 @@
   {{ content.share_link }}
 </div>
 {% if content.field_location|render %}
-  <div id="event-location--{{ node.id }}" class="border rounded p-3 mt-3">
+  <div id="event-location--{{ node.id }}" class="bg-light p-3">
     {% if content.field_event_coordinates|render %}
       {{ content.field_event_coordinates }}
     {% endif %}
@@ -99,7 +99,7 @@
   </div>
 {% endif %}
 {% if content.field_event_online_location|render %}
-  <div id="event-online-location--{{ node.id }}" class="border rounded p-3 mt-3">
+  <div id="event-online-location--{{ node.id }}" class="bg-light p-3">
     <h3 class="h4">
       {{ 'Virtual location'|t }}
     </h3>
