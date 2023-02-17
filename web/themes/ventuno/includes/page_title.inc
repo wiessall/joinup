@@ -21,13 +21,8 @@ function ventuno_preprocess_page_title(array &$variables): void {
 
   $entity = $variables['entity'] ?? NULL;
   if ($entity instanceof CommunityContentInterface) {
-    // Make the bundle and label available so the type can be shown in bylines.
-    /** @var \Drupal\Core\Entity\EntityTypeBundleInfoInterface $bundle_info */
-    $bundle_info = \Drupal::service('entity_type.bundle.info');
-    $info = $bundle_info->getBundleInfo($entity->getEntityTypeId());
-    $bundle = $entity->bundle();
-    $variables['bundle'] = $bundle;
-    $variables['bundle_label'] = $info[$bundle]['label'] ?? $bundle;
+    $variables['bundle'] = $entity->get('type')->entity->bundle();
+    $variables['bundle_label'] = ucfirst($entity->get('type')->entity->getSingularLabel());
 
     $author_inline = _ventuno_get_author($entity);
     $variables['additional_content']['author'] = $author_inline;
@@ -73,10 +68,12 @@ function ventuno_preprocess_page_title__node__news(&$variables) {
   $field_news_headline = $view_builder->viewField($node->field_news_headline, 'default');
   $variables['additional_content']['field_news_headline'] = $field_news_headline;
 
-  $published = \Drupal::service('date.formatter')->format($node->published_at->published_at_or_created, 'date_only');
+  /** @var \Drupal\Core\Datetime\DateFormatterInterface $date_formatter */
+  $date_formatter = \Drupal::service('date.formatter');
+  $published = $date_formatter->format($node->published_at->published_at_or_created, 'date_only');
   $variables['additional_content']['published'] = $published;
 
-  $update_date = \Drupal::service('date.formatter')->format($node->getChangedTime(), 'custom', 'd/m/Y');
+  $update_date = $date_formatter->format($node->getChangedTime(), 'date_only');
   $variables['additional_content']['updated'] = $update_date;
 }
 

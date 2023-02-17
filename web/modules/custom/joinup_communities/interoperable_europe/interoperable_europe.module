@@ -16,21 +16,6 @@ use Drupal\interoperable_europe\Plugin\Condition\TemporaryIopCondition;
 use Drupal\joinup_group\Form\JoinGroupFormInterface;
 
 /**
- * Implements hook_theme().
- */
-function interoperable_europe_theme(): array {
-  return [
-    // Normally theme suggestion templates are only picked up when they are in
-    // themes. We explicitly define a theme suggestion here so that our custom
-    // template will be included.
-    'rdf_entity__collection__interoperable_europe__group_header' => [
-      'render element' => 'elements',
-      'base hook' => 'rdf_entity',
-    ],
-  ];
-}
-
-/**
  * Implements hook_form_FORM_ID_alter().
  *
  * Customizes the button label of the join group form, both for authenticated
