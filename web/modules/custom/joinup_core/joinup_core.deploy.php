@@ -40,7 +40,11 @@ function joinup_core_deploy_109000(array &$sandbox): string {
           'http://joinup.eu/ontology/topic/category#digital-government',
         ],
         [
-          'eJustice and law',
+          'Legal',
+          'http://joinup.eu/ontology/topic/category#digital-government',
+        ],
+        [
+          'Observatories',
           'http://joinup.eu/ontology/topic/category#digital-government',
         ],
         [
@@ -50,6 +54,18 @@ function joinup_core_deploy_109000(array &$sandbox): string {
         [
           'Tools',
           'http://joinup.eu/ontology/topic/category#digital-government',
+        ],
+        [
+          'Semantic',
+          'http://joinup.eu/ontology/topic/category#ict',
+        ],
+        [
+          'Reusable Software Components',
+          'http://joinup.eu/ontology/topic/category#ict',
+        ],
+        [
+          'Innovation',
+          'http://joinup.eu/ontology/topic/category#ict',
         ],
       ],
       'moveTopicChildrenToNewParent' => [
@@ -89,11 +105,11 @@ function joinup_core_deploy_109000(array &$sandbox): string {
       'renameTopic' => [
         [
           'http://joinup.eu/ontology/topic#free-and-open-source-software-in-public-administrations',
-          'Free and open source software',
+          'Open Source Software',
         ],
         [
           'http://joinup.eu/ontology/topic#ict-standardisation-in-egovernment',
-          'ICT standardisation',
+          'Standardisation',
         ],
         [
           'http://joinup.eu/ontology/topic#statistics',
@@ -109,11 +125,11 @@ function joinup_core_deploy_109000(array &$sandbox): string {
         // updateDbReference below.
         [
           'http://joinup.eu/ontology/topic#free-and-open-source-software-in-public-administrations',
-          'http://joinup.eu/ontology/topic#free-and-open-source-software',
+          'http://joinup.eu/ontology/topic#open-source-software',
         ],
         [
           'http://joinup.eu/ontology/topic#ict-standardisation-in-egovernment',
-          'http://joinup.eu/ontology/topic#ict-standardisation',
+          'http://joinup.eu/ontology/topic#standardisation',
         ],
         [
           'http://joinup.eu/ontology/topic#statistics',
@@ -130,7 +146,7 @@ function joinup_core_deploy_109000(array &$sandbox): string {
           'http://joinup.eu/ontology/topic/category#digital-government',
         ],
         [
-          'http://joinup.eu/ontology/topic#free-and-open-source-software',
+          'http://joinup.eu/ontology/topic#open-source-software',
           'http://joinup.eu/ontology/topic/category#ict',
         ],
         [
@@ -150,7 +166,7 @@ function joinup_core_deploy_109000(array &$sandbox): string {
           'http://joinup.eu/ontology/topic/category#digital-government',
         ],
         [
-          'http://joinup.eu/ontology/topic#ict-standardisation',
+          'http://joinup.eu/ontology/topic#standardisation',
           'http://joinup.eu/ontology/topic/category#ict',
         ],
         [
@@ -189,11 +205,19 @@ function joinup_core_deploy_109000(array &$sandbox): string {
         ],
         [
           'source' => 'http://joinup.eu/ontology/topic#free-and-open-source-software-in-public-administrations',
-          'destination' => 'http://joinup.eu/ontology/topic#free-and-open-source-software',
+          'destination' => 'http://joinup.eu/ontology/topic#open-source-software',
+        ],
+        [
+          'source' => 'http://joinup.eu/ontology/topic#free-and-open-source-software',
+          'destination' => 'http://joinup.eu/ontology/topic#open-source-software',
         ],
         [
           'source' => 'http://joinup.eu/ontology/topic#ict-standardisation-in-egovernment',
-          'destination' => 'http://joinup.eu/ontology/topic#ict-standardisation',
+          'destination' => 'http://joinup.eu/ontology/topic#standardisation',
+        ],
+        [
+          'source' => 'http://joinup.eu/ontology/topic#ict-standardisation',
+          'destination' => 'http://joinup.eu/ontology/topic#standardisation',
         ],
         [
           'source' => 'http://joinup.eu/ontology/topic#open-government',
@@ -233,11 +257,11 @@ function joinup_core_deploy_109000(array &$sandbox): string {
         ],
         [
           'source' => 'http://joinup.eu/ontology/topic#law',
-          'destination' => 'http://joinup.eu/ontology/topic#ejustice-and-law',
+          'destination' => 'http://joinup.eu/ontology/topic#legal',
         ],
         [
           'source' => 'http://joinup.eu/ontology/topic#ejustice',
-          'destination' => 'http://joinup.eu/ontology/topic#ejustice-and-law',
+          'destination' => 'http://joinup.eu/ontology/topic#legal',
         ],
       ],
       'createRedirect' => [
@@ -319,16 +343,21 @@ function joinup_core_deploy_109000(array &$sandbox): string {
         ],
         [
           'source' => 'http://joinup.eu/ontology/topic#law',
-          'destination' => 'http://joinup.eu/ontology/topic#ejustice-and-law',
+          'destination' => 'http://joinup.eu/ontology/topic#legal',
         ],
         [
           'source' => 'http://joinup.eu/ontology/topic#ejustice',
-          'destination' => 'http://joinup.eu/ontology/topic#ejustice-and-law',
+          'destination' => 'http://joinup.eu/ontology/topic#legal',
+        ],
+        [
+          'source' => 'http://joinup.eu/ontology/topic#ict-standardisation',
+          'destination' => 'http://joinup.eu/ontology/topic#standardisation',
         ],
       ],
       // All terms should be empty in references/children after the migration.
       'deleteTopicTerm' => [
         'http://joinup.eu/ontology/topic#authorisation-and-authentication',
+        'http://joinup.eu/ontology/topic#culture',
         'http://joinup.eu/ontology/topic#defence',
         'http://joinup.eu/ontology/topic#economic-analysis',
         'http://joinup.eu/ontology/topic#education',
@@ -336,11 +365,15 @@ function joinup_core_deploy_109000(array &$sandbox): string {
         'http://joinup.eu/ontology/topic#energy',
         'http://joinup.eu/ontology/topic#environment',
         'http://joinup.eu/ontology/topic#eu-finance',
+        'http://joinup.eu/ontology/topic#free-and-open-source-software',
+        'http://joinup.eu/ontology/topic#free-and-open-source-software-in-public-administrations',
+        'http://joinup.eu/ontology/topic#ict-standardisation',
         'http://joinup.eu/ontology/topic#information',
         'http://joinup.eu/ontology/topic#law',
         'http://joinup.eu/ontology/topic#open-government',
         'http://joinup.eu/ontology/topic#politics',
         'http://joinup.eu/ontology/topic#security',
+        'http://joinup.eu/ontology/topic#statistics',
         'http://joinup.eu/ontology/topic/category#business-and-competition',
         'http://joinup.eu/ontology/topic/category#defence',
         'http://joinup.eu/ontology/topic/category#egovernment',
