@@ -7,9 +7,12 @@
 
 declare(strict_types = 1);
 
+use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\Element;
+use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Url;
 use Drupal\meta_entity\Entity\MetaEntityInterface;
 use Drupal\taxonomy\TermInterface;
@@ -144,4 +147,106 @@ function topic_form_entity_subqueue_homepage_topics_edit_form_alter_submit(array
   // actions.
   $route_match = \Drupal::getContainer()->get('current_route_match');
   $form_state->setRedirect($route_match->getRouteName(), $route_match->getRawParameters()->all());
+}
+
+/**
+ * Implements hook_theme().
+ */
+function topic_theme(): array {
+  return [
+    // Normally theme suggestion templates are only picked up when they are in
+    // themes. We explicitly define a theme suggestion here so that our custom
+    // template will be included.
+    'meta_entity__homepage_topics__configurable_listing__list' => [
+      'render element' => 'elements',
+      'base hook' => 'rdf_entity',
+    ],
+    'meta_entity__homepage_topics__configurable_listing__grid' => [
+      'render element' => 'elements',
+      'base hook' => 'rdf_entity',
+    ],
+  ];
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_create_access().
+ *
+ * Allows access to the creation of the configurable listing paragraph only for
+ * the topic meta entity.
+ * Also, for the topic meta entity, dissallow the creation of the 2 column
+ * layouts with featured sections and the 3 column layout.
+ */
+function topic_paragraph_create_access(AccountInterface $account, array $context, string $entity_bundle): AccessResultInterface {
+  if (\Drupal::routeMatch()->getRouteName() !== 'entity.meta_entity.edit_form') {
+    return AccessResult::neutral();
+  }
+
+  $meta_entity = \Drupal::routeMatch()->getParameter('meta_entity')->bundle();
+  if ($meta_entity === 'topic') {
+    if ($entity_bundle === 'configurable_listing') {
+      return AccessResult::allowed();
+    }
+
+    $denied_paragraphs = [
+      '2_column_featured_left',
+      '2_column_featured_right',
+      '3_column',
+      'accordion',
+      'call_to_action',
+      'carousel',
+      'content_listing',
+      'iframe',
+      'image',
+      'json_map',
+      'testimony',
+    ];
+
+    if (in_array($entity_bundle, $denied_paragraphs, TRUE)) {
+      return AccessResult::forbidden();
+    }
+  }
+
+  return AccessResult::neutral();
+}
+
+/**
+ * Implements hook_entity_form_mode_alter().
+ */
+function topic_entity_form_mode_alter(string &$form_mode, EntityInterface $entity): void {
+  $route = \Drupal::routeMatch()->getRouteName();
+  if ($route !== 'entity.meta_entity.edit_form') {
+    return;
+  }
+
+  $meta_entity = \Drupal::routeMatch()->getParameter('meta_entity')->bundle();
+  if ($meta_entity === 'topic' && $entity->getEntityTypeId() === 'paragraph' && $entity->bundle() === 'row') {
+    $form_mode = 'simple_form';
+  }
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function topic_form_meta_entity_topic_edit_form_alter(array &$form, FormStateInterface $form_state, string $form_id): void {
+  $meta_entity = $form_state->getFormObject()->getEntity();
+  if ($meta_entity->bundle() !== 'topic') {
+    return;
+  }
+
+  $form['actions']['submit']['#submit'][] = 'topic_form_meta_entity_topic_edit_form_alter_submit';
+}
+
+/**
+ * Redirects to the canonical page after saving the form.
+ *
+ * @param array $form
+ *   The form render array.
+ * @param \Drupal\Core\Form\FormStateInterface $form_state
+ *   The form state.
+ */
+function topic_form_meta_entity_topic_edit_form_alter_submit(array &$form, FormStateInterface $form_state): void {
+  // Redirect only if there is no destination query parameter.
+  if (empty(\Drupal::request()->query->get('destination'))) {
+    $form_state->setRedirectUrl($form_state->getFormObject()->getEntity()->toUrl());
+  }
 }

@@ -4,6 +4,7 @@ declare(strict_types = 1);
 
 namespace Drupal\topic\EventSubscriber;
 
+use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\layout_builder\Event\SectionComponentBuildRenderArrayEvent;
 use Drupal\layout_builder\LayoutBuilderEvents;
@@ -15,20 +16,12 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 class HomepageTopicsSectionSubscriber implements EventSubscriberInterface {
 
   /**
-   * The entity type manager.
+   * Constructs a new event subscriber instance.
    *
-   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
-   */
-  protected $entityTypeManager;
-
-  /**
-   * Constructs a HomepageTopicsSectionSubscriber object.
-   *
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
    *   The entity type manager.
    */
-  public function __construct(EntityTypeManagerInterface $entity_type_manager) {
-    $this->entityTypeManager = $entity_type_manager;
+  public function __construct(protected EntityTypeManagerInterface $entityTypeManager) {
   }
 
   /**
@@ -54,10 +47,21 @@ class HomepageTopicsSectionSubscriber implements EventSubscriberInterface {
     if (empty($build['#plugin_id']) || $build['#plugin_id'] !== 'views_block:homepage_topics-block_1') {
       return;
     }
+
+    /** @var \Drupal\entityqueue\Entity\EntitySubqueue $entity_queue */
     $entity_queue = $this->entityTypeManager->getStorage('entity_subqueue')->load('homepage_topics');
-    if (!empty($entity_queue->block_label->value)) {
+    // If there are no topics, don't show any labels.
+    if ($entity_queue->get('items')->isEmpty()) {
+      $build['#configuration']['label_display'] = FALSE;
+    }
+    elseif (!empty($entity_queue->block_label->value)) {
       $build['#configuration']['label'] = $entity_queue->block_label->value;
     }
+
+    CacheableMetadata::createFromObject($entity_queue)
+      ->addCacheableDependency($entity_queue->getQueue())
+      ->applyTo($build['content']);
+
     $event->setBuild($build);
   }
 
