@@ -7,3 +7,8 @@ services:
     class: Drupal\search_api_field\EventSubscriber\MaxAgeSubscriber
     tags:
       - { name: event_subscriber }
+
+  search_api_field.event_subscriber:
+    class: Drupal\search_api_field\EventSubscriber\QueryPresetSubscriber
+    tags:
+      - { name: event_subscriber }

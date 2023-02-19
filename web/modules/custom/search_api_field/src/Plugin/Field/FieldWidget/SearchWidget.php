@@ -14,9 +14,11 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Form\SubformState;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\facets\Entity\Facet;
+use Drupal\search_api_field\Event\AlterQueryPresetsDescriptionEvent;
 use Drupal\search_api_field\Plugin\Field\FieldType\SearchItem;
 use Drupal\search_api_field\Plugin\FilterPluginManagerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Plugin implementation of the 'search_api_field_default' widget.
@@ -46,6 +48,13 @@ class SearchWidget extends WidgetBase implements ContainerFactoryPluginInterface
   protected $filterPluginManager;
 
   /**
+   * The event dispatcher service.
+   *
+   * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
+   */
+  protected $eventDispatcher;
+
+  /**
    * Constructs a SearchWidget object.
    *
    * @param string $plugin_id
@@ -62,12 +71,15 @@ class SearchWidget extends WidgetBase implements ContainerFactoryPluginInterface
    *   The entity type manager service.
    * @param \Drupal\search_api_field\Plugin\FilterPluginManagerInterface $filter_plugin_manager
    *   The filter plugin manager service.
+   * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $event_dispatcher
+   *   The event dispatcher service.
    */
-  public function __construct($plugin_id, $plugin_definition, FieldDefinitionInterface $field_definition, array $settings, array $third_party_settings, EntityTypeManagerInterface $entity_type_manager, FilterPluginManagerInterface $filter_plugin_manager) {
+  public function __construct($plugin_id, $plugin_definition, FieldDefinitionInterface $field_definition, array $settings, array $third_party_settings, EntityTypeManagerInterface $entity_type_manager, FilterPluginManagerInterface $filter_plugin_manager, EventDispatcherInterface $event_dispatcher) {
     parent::__construct($plugin_id, $plugin_definition, $field_definition, $settings, $third_party_settings);
 
     $this->entityTypeManager = $entity_type_manager;
     $this->filterPluginManager = $filter_plugin_manager;
+    $this->eventDispatcher = $event_dispatcher;
   }
 
   /**
@@ -81,7 +93,8 @@ class SearchWidget extends WidgetBase implements ContainerFactoryPluginInterface
       $configuration['settings'],
       $configuration['third_party_settings'],
       $container->get('entity_type.manager'),
-      $container->get('plugin.manager.search_api_field.filter')
+      $container->get('plugin.manager.search_api_field.filter'),
+      $container->get('event_dispatcher')
     );
   }
 
@@ -219,11 +232,7 @@ class SearchWidget extends WidgetBase implements ContainerFactoryPluginInterface
     $element['wrapper']['query_presets'] = [
       '#type' => 'textarea',
       '#title' => $this->t('Query presets'),
-      '#description' => $this->t('Presets to apply to the query when it is executed. Syntax is %syntax1 or %syntax2, where %field is the field name as configured in the index.', [
-        '%syntax1' => 'field|value',
-        '%syntax2' => 'field|value|operator',
-        '%field' => 'field',
-      ]),
+      '#description' => $this->getQueryPresetsDescription(),
       '#default_value' => $default_values['query_presets'] ?? '',
       '#element_validate' => [[$this, 'validateQueryPresets']],
     ];
@@ -777,6 +786,34 @@ class SearchWidget extends WidgetBase implements ContainerFactoryPluginInterface
     }
 
     return $cleaned_values;
+  }
+
+  protected function getQueryPresetsDescription(): array {
+    $description = [
+      '#type' => 'details',
+      '#title' => $this->t('Help'),
+      '#open' => FALSE,
+      'help' => [
+        '#theme' => 'item_list',
+        '#items' => [
+          $this->t('Presets to apply to the query when it is executed. Syntax is %syntax1 or %syntax2, where %field is the field name as configured in the index.', [
+            '%syntax1' => 'field|value',
+            '%syntax2' => 'field|value|operator',
+            '%field' => 'field',
+          ]),
+        ],
+      ],
+    ];
+
+    // The description for the presets can vary a lot depending on where the
+    // widget is shown. Allow other modules to interact with the description.
+    // Dispatch an event to allow other modules to alter the description.
+    $event = new AlterQueryPresetsDescriptionEvent($description, $this->getSearchApiIndex());
+    $this->eventDispatcher->dispatch($event, AlterQueryPresetsDescriptionEvent::class);
+
+    // Get the updated description from the event.
+    $description = $event->getDescription();
+    return $description;
   }
 
 }
