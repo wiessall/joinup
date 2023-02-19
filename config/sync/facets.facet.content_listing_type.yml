@@ -1,15 +1,15 @@
-uuid: 260d6dc2-4ac4-4797-87b2-d1be773519ed
+uuid: 5bf71b37-7003-46f2-9db2-b06e26938e79
 langcode: en
 status: true
 dependencies: {  }
-id: field_content_listing_type
+id: content_listing_type
 name: 'Content type'
 weight: 0
 min_count: 1
 missing: false
 missing_label: others
-url_alias: field_content_listing_type
-facet_source_id: 'search_api_field:paragraph.field_content_listing'
+url_alias: content_listing_type
+facet_source_id: 'search_api_field:paragraph.content_listing.content_listing'
 field_identifier: entity_bundle
 query_operator: or
 hard_limit: 0
