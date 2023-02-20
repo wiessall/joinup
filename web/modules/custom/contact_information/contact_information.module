@@ -477,10 +477,12 @@ function contact_information_rdf_entity_view(array &$build, RdfInterface $contac
         ])->toString();
 
         $build['email_confirm'] = [
-          '#type' => 'markup',
           '#markup' => t('Please <a href=":resend_url">confirm</a> your contact information to enable users to contact you.', [
             ':resend_url' => $confirmation_url,
           ]),
+          // Pretend that it's a normal field to ensure the same spacing.
+          '#prefix' => '<div class="fieldset__field">',
+          '#suffix' => '</div>',
         ];
       }
       $cacheable_metadata->addCacheableDependency($confirmation);
