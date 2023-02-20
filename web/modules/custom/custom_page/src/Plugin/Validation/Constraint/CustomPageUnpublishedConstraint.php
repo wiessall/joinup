@@ -5,8 +5,9 @@ declare(strict_types = 1);
 namespace Drupal\custom_page\Plugin\Validation\Constraint;
 
 use Symfony\Component\Validator\Constraint;
+
 /**
- * Checks that custom page belong to group and is assign as landing page.
+ * Provides a validator for the CustomPageUnpublished constraint.
  *
  * @Constraint(
  *   id = "CustomPageUnpublishedConstraint",
@@ -14,11 +15,4 @@ use Symfony\Component\Validator\Constraint;
  *   type = "string"
  * )
  */
-class CustomPageUnpublishedConstraint extends Constraint {
-  /**
-   * Constraint message.
-   *
-   * @var string
-   */
-  public $message = 'This page acts as landing page for the group %s. In order to delete/unpublish it should be first unset as landing page.';
-}
+class CustomPageUnpublishedConstraint extends Constraint {}
