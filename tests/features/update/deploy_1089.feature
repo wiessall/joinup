@@ -17,3 +17,10 @@ Feature: Covers Release 1.89.
   Scenario: Test that spam files are deleted (108901).
     Given I go to "/sites/default/files/document/2022-12/free-cash-app-legitG2.pdf"
     Then the response status code should be 404
+
+  Scenario: Smoke test for the replacement of field_content_listing (108900).
+    Given I go to "/interoperable-europe"
+    Then I should see results in the "news" carousel
+
+    Given I go to "/collection/joinup"
+    Then I should see 12 tiles

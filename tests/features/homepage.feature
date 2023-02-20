@@ -19,6 +19,21 @@ Feature: Homepage
       | FAQ          |
     And I should see the button "Guided tour"
 
+  Scenario: The homepage about section is not visible to authenticated users.
+    Given I am not logged in
+    # Visit once to cache the page.
+    And I am on the homepage
+    Then I should see the text "The Joinup platform is the European Commission's one-stop shop for interoperable"
+
+    Given I am logged in as a user with the "authenticated" role
+    And I am on the homepage
+    Then I should not see the text "The Joinup platform is the European Commission's one-stop shop for interoperable"
+
+    # Re check for anonymous users.
+    Given I am not logged in
+    And I am on the homepage
+    Then I should see the text "The Joinup platform is the European Commission's one-stop shop for interoperable"
+
   @terms
   Scenario: Latest news is shown on the homepage
     Given collection:
