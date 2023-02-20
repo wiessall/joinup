@@ -60,4 +60,5 @@ content:
     third_party_settings: {  }
 hidden:
   label: true
+  path: true
   target: true
