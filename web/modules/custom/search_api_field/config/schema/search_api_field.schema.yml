@@ -1,6 +1,6 @@
 # Schema for the configuration files of the search_api_field module.
 
-field.storage_settings.search_api_field:
+field.field_settings.search_api_field:
   type: mapping
   label: 'Community content listing field settings'
   mapping:
