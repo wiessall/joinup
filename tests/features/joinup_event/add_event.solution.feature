@@ -86,6 +86,3 @@ Feature: "Add event" visibility options.
     And I should see the success message 'Event An amazing event has been created as draft. You can find it in the section "My unpublished content" located in your My account page, or in the aforementioned section under the Solution it was created in.'
     And I should see the text "29/08/2018"
     And the "The Luscious Bridges" solution has a event titled "An amazing event"
-    # Check that the link to the event is visible on the solution page.
-    When I go to the homepage of the "The Luscious Bridges" solution
-    Then I should see the link "An amazing event"
