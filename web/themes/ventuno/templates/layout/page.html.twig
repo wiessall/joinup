@@ -66,7 +66,7 @@
   {% endif %}
 
   {% if page.messages %}
-    <div class="container mt-3">
+    <div class="container{% if page.messages|render|striptags|trim %} mt-3{% endif %}">
       {{ page.messages }}
     </div>
   {% endif %}
@@ -90,7 +90,7 @@
           {{ page.sidebar }}
         </aside>
       {% else %}
-        <main role="main" class="col-12 col-lg-10 col-xl-9 col-xxl-8">
+        <main role="main" class="col-12">
           <div id="main-content" tabindex="-1"></div>{# link is in html.html.twig #}
           <div class="layout-content">
             {{ page.content }}

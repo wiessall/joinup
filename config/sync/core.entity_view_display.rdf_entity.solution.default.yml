@@ -115,12 +115,12 @@ content:
         template_suggestion: entity_reference__listing_tile
     weight: 5
     region: content
-  rdf_entity_field_is_content_inline_facets:
+  rdf_entity_solution_field_is_content_inline_facets:
     settings: {  }
     third_party_settings: {  }
     weight: 2
     region: content
-  rdf_entity_field_is_content_top:
+  rdf_entity_solution_field_is_content_top:
     settings: {  }
     third_party_settings: {  }
     weight: 1
