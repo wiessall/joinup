@@ -1,0 +1,24 @@
+uuid: 791778dd-6c0a-4b0b-b28a-ae1e5e5db6e2
+langcode: en
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.topic
+  module:
+    - joinup_stats
+    - taxonomy
+third_party_settings:
+  joinup_stats:
+    matomo_method: ''
+    parameter_name: ''
+    parameter_method: ''
+    period: 7
+    type: null
+id: topic
+label: Topic
+description: ''
+mapping:
+  taxonomy_term:
+    topic:
+      field_name: topic
+      auto_create: true
