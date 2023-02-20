@@ -16,3 +16,4 @@ conditions:
     negate: false
     routes:
       - page_manager.page_view_homepage_homepage-layout_builder-0
+      - page_manager.page_view_homepage_homepage-layout_builder-1

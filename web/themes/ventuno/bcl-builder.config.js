@@ -46,6 +46,14 @@ module.exports = {
       },
     },
     {
+      entry: path.resolve(outputFolder, "src/js/toggle-text-seemore-btn.js"),
+      dest: path.resolve(outputFolder, "assets/js/toggle-text-seemore-btn.js"),
+      options: {
+        minify: true,
+        sourceMap: true,
+      },
+    },
+    {
       entry: path.resolve(outputFolder, "src/js/highlight-invalid-fields.js"),
       dest: path.resolve(outputFolder, "assets/js/highlight-invalid-fields.js"),
       options: {
@@ -317,6 +325,15 @@ module.exports = {
       },
     },
     {
+      entry: path.resolve(outputFolder, "src/scss/header-topic.scss"),
+      dest: path.resolve(outputFolder, "assets/css/header-topic.min.css"),
+      options: {
+        includePaths,
+        sourceMap: "file",
+        minify: true,
+      },
+    },
+    {
       entry: path.resolve(outputFolder, "src/scss/footer.scss"),
       dest: path.resolve(outputFolder, "assets/css/footer.min.css"),
       options: {
@@ -410,6 +427,15 @@ module.exports = {
       options: {
         includePaths,
         minify: true,
+        sourceMap: "file",
+      },
+    },
+    {
+      entry: path.resolve(outputFolder, "src/scss/layout-block.scss"),
+      dest: path.resolve(outputFolder, "assets/css/layout-block.min.css"),
+      options: {
+        minify: true,
+        includePaths,
         sourceMap: "file",
       },
     },
@@ -539,6 +565,15 @@ module.exports = {
         sourceMap: "file",
       },
     },
+    {
+      entry: path.resolve(outputFolder, "src/scss/tile-two.scss"),
+      dest: path.resolve(outputFolder, "assets/css/tile-two.min.css"),
+      options: {
+        minify: true,
+        includePaths,
+        sourceMap: "file",
+      },
+    },
     // @todo ISAICP-7138 remove when switch to Ventuno theme is complete
     {
       entry: path.resolve(
@@ -623,6 +658,7 @@ module.exports = {
           "chevron-down.svg",
           "chevron-left.svg",
           "chevron-right.svg",
+          "chevron-up.svg",
           "clipboard-check.svg",
           "download.svg",
           "envelope-fill.svg",
