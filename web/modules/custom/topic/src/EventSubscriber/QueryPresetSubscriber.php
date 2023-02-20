@@ -1,14 +1,13 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace Drupal\topic\EventSubscriber;
 
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\search_api_field\Event\AlterQueryPresetsDescriptionEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\HttpKernel\Event\RequestEvent;
-use Symfony\Component\HttpKernel\Event\ResponseEvent;
-use Symfony\Component\HttpKernel\KernelEvents;
 
 /**
  * Joinup Topic event subscriber.
@@ -37,7 +36,7 @@ class QueryPresetSubscriber implements EventSubscriberInterface {
   /**
    * Alters the description for the query preset.
    *
-   * @param \Symfony\Component\HttpKernel\Event\RequestEvent $event
+   * @param \Drupal\search_api_field\Event\AlterQueryPresetsDescriptionEvent $event
    *   Response event.
    */
   public function onDescriptionAlter(AlterQueryPresetsDescriptionEvent $event): void {

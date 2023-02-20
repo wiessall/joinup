@@ -18,7 +18,7 @@ class QueryPresetSubscriber implements EventSubscriberInterface {
   /**
    * Alters the description for the query preset.
    *
-   * @param \Symfony\Component\HttpKernel\Event\RequestEvent $event
+   * @param \Drupal\search_api_field\Event\AlterQueryPresetsDescriptionEvent $event
    *   Response event.
    */
   public function onDescriptionAlter(AlterQueryPresetsDescriptionEvent $event): void {

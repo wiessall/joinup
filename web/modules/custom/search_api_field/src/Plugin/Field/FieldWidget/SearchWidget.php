@@ -788,6 +788,9 @@ class SearchWidget extends WidgetBase implements ContainerFactoryPluginInterface
     return $cleaned_values;
   }
 
+  /**
+   * Gets the default query presets description.
+   */
   protected function getQueryPresetsDescription(): array {
     $description = [
       '#type' => 'details',
@@ -810,10 +813,7 @@ class SearchWidget extends WidgetBase implements ContainerFactoryPluginInterface
     // Dispatch an event to allow other modules to alter the description.
     $event = new AlterQueryPresetsDescriptionEvent($description, $this->getSearchApiIndex());
     $this->eventDispatcher->dispatch($event, AlterQueryPresetsDescriptionEvent::class);
-
-    // Get the updated description from the event.
-    $description = $event->getDescription();
-    return $description;
+    return $event->getDescription();
   }
 
 }
