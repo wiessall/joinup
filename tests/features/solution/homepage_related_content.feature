@@ -41,15 +41,15 @@ Feature: Solution homepage
     # And the distribution directly associated.
     Then I should see the following tiles in the correct order:
       # Created in 8:08am.
-      | IS protocol draft 2  |
+      | IS protocol draft 2    |
       # Created in 8:02am.
-      | IS protocol meet-up  |
+      | IS protocol meet-up    |
       # Created in 8:01am.
-      | IS protocol paper    |
+      | IS protocol paper \| 1 |
       # Created in 7:59am.
-      | Protocol draft       |
+      | Protocol draft         |
       # The related solutions is shown in a block later in the page.
-      | Security audit tools |
+      | Security audit tools   |
 
     # Distribution associated to a release should not be shown.
     But I should not see the "PDF version" tile

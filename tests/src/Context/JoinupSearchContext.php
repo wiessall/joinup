@@ -92,15 +92,14 @@ class JoinupSearchContext extends RawDrupalContext {
    *   The link as node element or NULL.
    */
   protected function findContentTab(string $type): ?NodeElement {
-    $xpath = "//div[contains(concat(' ', normalize-space(@class), ' '), ' tabs--content-type ')]//span[@class='tab__text--type'][normalize-space(string(.)) = '$type']";
+    $xpath = "//div[@data-drupal-facet-id='content_listing_type']//span[@class='tab__text--type' and text() = '$type']/ancestor-or-self::a[@data-drupal-facet-item-id]";
 
     // @todo Remove the if(..) block in ISAICP-7138.
     // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7138
     if ($this->usesMaterialDesignLite()) {
-      $xpath = $xpath = "//div[contains(concat(' ', normalize-space(@class), ' '), ' tab__container ')]//span[@class='tab__text--lower'][normalize-space(string(.)) = '$type']";
+      $xpath = "//div[contains(concat(' ', normalize-space(@class), ' '), ' tab__container ')]//span[@class='tab__text--lower'][normalize-space(string(.)) = '$type']/ancestor-or-self::a[@class and contains(concat(' ', normalize-space(@class), ' '), ' tab--content-type ')]";
     }
 
-    $xpath .= "/ancestor-or-self::a[@class and contains(concat(' ', normalize-space(@class), ' '), ' tab--content-type ')]";
     return $this->getSession()->getPage()->find('xpath', $xpath);
   }
 
