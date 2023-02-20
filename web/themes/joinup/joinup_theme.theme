@@ -636,6 +636,7 @@ function joinup_theme_preprocess_block(&$variables) {
       case 'entity.rdf_entity.member_overview':
       case 'entity.user.canonical':
       case 'joinup_subscription.my_subscriptions':
+      case 'entity.rdf_entity.unpublished_content':
       case 'joinup_licence.comparer':
         $is_listing = TRUE;
         break;
