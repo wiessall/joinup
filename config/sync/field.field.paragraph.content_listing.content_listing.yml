@@ -1,18 +1,33 @@
-uuid: 8ed1a591-60ba-4daa-956b-27ca3cc9221d
+uuid: 1ced339b-493b-4767-a93b-8d3f9d2fdc1f
 langcode: en
 status: true
 dependencies:
+  config:
+    - field.storage.paragraph.content_listing
+    - paragraphs.paragraphs_type.content_listing
   module:
-    - field_permissions
-    - paragraphs
     - search_api_field
-third_party_settings:
-  field_permissions:
-    permission_type: public
-id: paragraph.field_content_listing
-field_name: field_content_listing
+id: paragraph.content_listing.content_listing
+field_name: content_listing
 entity_type: paragraph
-type: search_api_field
+bundle: content_listing
+label: 'Content listing'
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    value:
+      fields:
+        content_listing_type:
+          weight: 0
+          region: top
+      enabled: 1
+      query_presets: ''
+      limit: 10
+      global_search: false
+      show_shared: false
+default_value_callback: ''
 settings:
   index: published
   facet_regions:
@@ -40,10 +55,4 @@ settings:
       eif_recommendation: default
     'entity:user':
       user: view_mode_tile
-module: search_api_field
-locked: false
-cardinality: 1
-translatable: true
-indexes: {  }
-persist_with_no_fields: false
-custom_storage: false
+field_type: search_api_field

@@ -50,13 +50,6 @@ function ventuno_preprocess_node__explore_item(array &$variables): void {
 /**
  * Implements hook_preprocess_HOOK().
  */
-function ventuno_preprocess_node__search_result_featured(array &$variables): void {
-  _ventuno_preprocess_search_result($variables, 'node');
-}
-
-/**
- * Implements hook_preprocess_HOOK().
- */
-function ventuno_preprocess_node__search_result(array &$variables): void {
+function ventuno_preprocess_node(array &$variables): void {
   _ventuno_preprocess_search_result($variables, 'node');
 }

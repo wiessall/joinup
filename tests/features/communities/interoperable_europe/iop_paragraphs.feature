@@ -33,6 +33,7 @@ Feature:
     And I should not see the button "Add Image"
     And I should not see the button "Add Call to action"
     And I should not see the button "Add Carousel"
+    And I should not see the button "Add Configurable listing"
 
     When I press "Add Row"
     Then I should see the button "Add 1 column layout"
@@ -43,8 +44,11 @@ Feature:
     But I should not see the button "Add Image"
     And I should not see the button "Add Call to action"
     And the following fields should not be present "URL, Link text"
+    And I should not see the button "Add Configurable listing"
+
     When I press "Add 1 column layout"
-    And I should see the button "Add Image"
+    Then I should not see the button "Add Configurable listing"
+    But I should see the button "Add Image"
     And I should see the button "Add Call to action"
     And I should see the button "Add Carousel"
     When I press "Add Carousel"

@@ -9,6 +9,7 @@ declare(strict_types = 1);
 
 use Drupal\Component\Render\MarkupInterface;
 use Drupal\Component\Utility\Html;
+use Drupal\Component\Utility\UrlHelper;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Datetime\DrupalDateTime;
 use Drupal\Core\Field\FieldDefinitionInterface;
@@ -86,9 +87,7 @@ function joinup_search_entity_field_access($operation, FieldDefinitionInterface 
   }
 
   // Leave open access to the custom page search field.
-  // @todo Remove the content_listing field in ISAICP-7335.
-  $fields = ['content_listing', 'field_content_listing'];
-  if ($field_definition->getTargetEntityTypeId() === 'paragraph' && in_array($field_definition->getName(), $fields)) {
+  if ($field_definition->getTargetEntityTypeId() === 'paragraph') {
     return AccessResult::neutral();
   }
 
@@ -175,10 +174,14 @@ function joinup_search_search_api_query_search_api_field_alter(QueryInterface $q
  *   Thrown when the Search API server instance could not be loaded.
  */
 function joinup_search_search_api_query_alter(QueryInterface $query) {
-  if ($query->getSearchId() === 'rdf_entity.field_collection_content') {
+  $event_condition_listings = [
+    'rdf_entity.collection.field_collection_content',
+    'paragraph.configurable_listing.content_listing',
+  ];
+  if (in_array($query->getSearchId(), $event_condition_listings)) {
     // In case the user has filtered by event, first sort by the event date.
     // @todo This will be generic when event calendar will be implemented for
-    // the rdf_entity.field_is_content and the paragraph.field_content_listing
+    // the rdf_entity.field_is_content and the paragraph.content_listing
     // instances of the search api field listing.
     if (_joinup_search_search_api_has_condition($query->getConditionGroup(), 'entity_bundle', 'event')) {
       // If the upcoming events are selected, set the order to 'ASC'.
@@ -193,11 +196,8 @@ function joinup_search_search_api_query_alter(QueryInterface $query) {
   $search_ids = [
     'rdf_entity.field_collection_content',
     'rdf_entity.field_is_content',
-    'paragraph.field_content_listing',
-    // This is the content listing for the carousels. We have a separate similar
-    // field because the storage saves the view modes in the field.
-    // @todo Remove this when this is united in ISAICP-7335.
-    'paragraph.content_listing',
+    'paragraph.content_listing.content_listing',
+    'paragraph.configurable_listing.content_listing',
   ];
 
   if (in_array($query->getSearchId(), $search_ids)) {
@@ -207,12 +207,9 @@ function joinup_search_search_api_query_alter(QueryInterface $query) {
   // Because we allow listing of custom pages, if the listing is of a custom
   // page, ensure that the current page is excluded from the results to avoid
   // infinite recursion.
-  if (in_array($query->getSearchId(), [
-    'paragraph.field_content_listing',
-    'paragraph.content_listing',
-  ])) {
+  if ($query->getSearchId() === 'paragraph.content_listing.content_listing') {
     $parent_entity = $query->getOption('search_api_field entity');
-    while (!($parent_entity instanceof CustomPageInterface)) {
+    while (!$parent_entity instanceof CustomPageInterface) {
       $parent_entity = $parent_entity->getParentEntity();
     }
     $query->addCondition('id', $parent_entity->id(), '<>');
@@ -572,5 +569,20 @@ function joinup_search_views_pre_render(ViewExecutable $view): void {
         }
       }
     }
+  }
+}
+
+/**
+ * Implements hook_facets_block_facets_alter().
+ *
+ * @todo Drop this implementation in ISAICP-7540.
+ * @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7540
+ */
+function joinup_search_facets_block_facets_alter(array &$facets): void {
+  if (\Drupal::routeMatch()->getRouteName() === 'view.search.page_1' && isset($facets[0]['content'][0]['#items']) && is_array($facets[0]['content'][0]['#items'])) {
+    $facets[0]['content'][0]['#items'] = array_values(array_filter(
+      $facets[0]['content'][0]['#items'],
+      fn(array $item): bool => !UrlHelper::isValid($item['#title']['#value'], TRUE),
+    ));
   }
 }
