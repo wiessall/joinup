@@ -25,6 +25,7 @@ dependencies:
     - joinup_community_content
     - joinup_licence
     - media
+    - meta_entity
     - node
     - paragraphs_type_permissions
     - rdf_entity
@@ -171,3 +172,4 @@ permissions:
   - 'view paragraph content testimony'
   - 'view paragraph content video'
   - 'view rdf entity'
+  - 'view topic meta-entity'
