@@ -1,0 +1,10 @@
+uuid: 8be3441c-00bb-47b8-8642-7d1ef75f81ee
+langcode: en
+status: true
+dependencies:
+  module:
+    - rdf_entity
+id: rdf_entity.tile_two
+label: 'Tile two'
+targetEntityType: rdf_entity
+cache: true
