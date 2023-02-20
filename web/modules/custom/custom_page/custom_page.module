@@ -12,9 +12,11 @@ use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Field\FieldItemListInterface;
+use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\custom_page\Entity\CustomPage;
 use Drupal\custom_page\Entity\CustomPageInterface;
+use Drupal\custom_page\Plugin\Validation\Constraint\CustomPageUnpublishedConstraint;
 use Drupal\joinup_group\Exception\MissingGroupException;
 use Drupal\menu_link_content\MenuLinkContentInterface;
 use Drupal\node\NodeInterface;
@@ -50,6 +52,9 @@ function custom_page_entity_bundle_field_info_alter(&$fields, EntityTypeInterfac
       $fields['title']->addConstraint('UniqueFieldValueInGroupAndBundle', [
         'groupAudienceField' => 'og_audience',
       ]);
+    }
+    if (!empty($fields['status'])) {
+      $fields['status']->addConstraint('CustomPageUnpublishedConstraint');
     }
   }
 }
@@ -247,3 +252,66 @@ function custom_page_entity_field_access($operation, FieldDefinitionInterface $f
     && $field_definition->getTargetEntityTypeId() === 'node'
     && $field_definition->getTargetBundle() === 'custom_page');
 }
+
+/**
+ * Implements hook_entity_presave().
+ */
+function custom_page_node_presave(NodeInterface $entity) {
+  if (!$entity instanceof CustomPage) {
+    return FALSE;
+  }
+  if (!$entity->isPublished()) {
+    if (custom_page_validate_landing_page($entity)) {
+      throw new Exception(sprintf((new CustomPageUnpublishedConstraint())->message, $entity->getGroup()->label()));
+    }
+  }
+}
+/**
+ * Implements hook_entity_predelete().
+ */
+function custom_page_node_predelete(NodeInterface $entity) {
+  if (!$entity instanceof CustomPage) {
+    return FALSE;
+  }
+  if (!custom_page_validate_landing_page($entity)) {
+    throw new Exception(sprintf((new CustomPageUnpublishedConstraint())->message, $entity->getGroup()->label()));
+  }
+}
+
+/**
+ * Implements hook_form_alter().
+ */
+function custom_page_form_alter(&$form, FormStateInterface $form_state, $form_id): void {
+  if ($form_id === 'node_custom_page_delete_form') {
+    $entity = $form_state->getFormObject()->getEntity();
+    if (!custom_page_validate_landing_page($entity)) {
+      $form['#title'] = t('You can not delete it!');
+      $form['description'] = [
+        '#markup' => t((new CustomPageUnpublishedConstraint())->message, ['%s' => $entity->getGroup()->label()])
+      ];
+      $form['actions']['submit']['#access'] = FALSE;
+    }
+  }
+
+}
+
+/**
+ * Validate form.
+ * @param \Drupal\Node\NodeInterface $entity
+ *
+ * @return bool
+ */
+function custom_page_validate_landing_page(NodeInterface $entity): bool {
+  if ($entity->hasGroup()) {
+    $group = $entity->getGroup();
+    $landing_page = $group->getSetting('landing_page')->entity;
+    if (!is_null($landing_page)) {
+      if ($landing_page->id() === $entity->id()) {
+        return FALSE;
+      }
+    }
+  }
+  return TRUE;
+}
+
+
