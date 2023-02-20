@@ -171,15 +171,17 @@ class JoinupCoreContext extends RawDrupalContext {
    *
    * @param string $name
    *   The taxonomy term name.
+   * @param string|null $bundle
+   *   (optional) Filter by bundle.
    *
-   * @Given I go to the :name (taxonomy )term( page)
+   * @Given I go to the :name :bundle term page
    *
    * @throws \Drupal\Core\Entity\EntityMalformedException
    *   Thrown when the taxonomy term does not have a URL to go to.
    */
-  public function visitTaxonomyTermPage(string $name): void {
+  public function visitTaxonomyTermPage(string $name, ?string $bundle = NULL): void {
     /** @var \Drupal\taxonomy\TermInterface $term */
-    $term = static::getEntityByLabel('taxonomy_term', $name);
+    $term = static::getEntityByLabel('taxonomy_term', $name, $bundle);
     $this->visitPath($term->toUrl()->toString());
   }
 

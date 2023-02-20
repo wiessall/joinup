@@ -14,6 +14,14 @@ module.exports = {
   scripts: [
     // Custom
     {
+      entry: path.resolve(outputFolder, "src/js/toggle-text-seemore-btn.js"),
+      dest: path.resolve(outputFolder, "assets/js/toggle-text-seemore-btn.js"),
+      options: {
+        minify: true,
+        sourceMap: true,
+      },
+    },
+    {
       entry: path.resolve(outputFolder, "src/js/highlight-invalid-fields.js"),
       dest: path.resolve(outputFolder, "assets/js/highlight-invalid-fields.js"),
       options: {
@@ -183,6 +191,15 @@ module.exports = {
     },
     // Custom and hybrid (BCL + custom) components
     {
+      entry: path.resolve(outputFolder, "src/scss/header-topic.scss"),
+      dest: path.resolve(outputFolder, "assets/css/header-topic.min.css"),
+      options: {
+        includePaths,
+        sourceMap: "file",
+        minify: true,
+      },
+    },
+    {
       entry: path.resolve(outputFolder, "src/scss/footer.scss"),
       dest: path.resolve(outputFolder, "assets/css/footer.css"),
       options: {
@@ -210,6 +227,15 @@ module.exports = {
       entry: path.resolve(outputFolder, "src/scss/ief-entity-table.scss"),
       dest: path.resolve(outputFolder, "assets/css/ief-entity-table.css"),
       options: {
+        includePaths,
+        sourceMap: "file",
+      },
+    },
+    {
+      entry: path.resolve(outputFolder, "src/scss/layout-block.scss"),
+      dest: path.resolve(outputFolder, "assets/css/layout-block.min.css"),
+      options: {
+        minify: true,
         includePaths,
         sourceMap: "file",
       },
@@ -267,6 +293,15 @@ module.exports = {
       entry: path.resolve(outputFolder, "src/scss/tabledrag.scss"),
       dest: path.resolve(outputFolder, "assets/css/tabledrag.css"),
       options: {
+        includePaths,
+        sourceMap: "file",
+      },
+    },
+    {
+      entry: path.resolve(outputFolder, "src/scss/tile-two.scss"),
+      dest: path.resolve(outputFolder, "assets/css/tile-two.min.css"),
+      options: {
+        minify: true,
         includePaths,
         sourceMap: "file",
       },
@@ -395,8 +430,10 @@ module.exports = {
           "check-circle-fill.svg",
           "chevron-bar-left.svg",
           "chevron-bar-right.svg",
+          "chevron-down.svg",
           "chevron-left.svg",
           "chevron-right.svg",
+          "chevron-up.svg",
           "clipboard-check.svg",
           "envelope-fill.svg",
           "exclamation-circle-fill.svg",
@@ -405,6 +442,7 @@ module.exports = {
           "eye.svg",
           "file-earmark-medical.svg",
           "file-earmark-play.svg",
+          "file-earmark-post.svg",
           "file-earmark-richtext.svg",
           "file-earmark-text.svg",
           "file-earmark-zip.svg",

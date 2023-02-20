@@ -6,7 +6,7 @@ Feature:
 
   Scenario: Show related terms on the overview page.
     Given I am an anonymous user
-    When I go to the "Public Service Provider" term page
+    When I go to the "Public Service Provider" eira term page
     Then I should see the heading "Public Service Provider"
     And I should see the following links:
       | Citizen                              |

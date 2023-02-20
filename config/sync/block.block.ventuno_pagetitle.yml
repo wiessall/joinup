@@ -26,6 +26,7 @@ visibility:
     routes:
       - entity.user.canonical
       - entity.user.edit_form
+      - entity.meta_entity.canonical
   request_path:
     id: request_path
     negate: true
