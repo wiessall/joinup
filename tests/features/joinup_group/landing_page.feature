@@ -19,7 +19,6 @@ Feature: Tests the group landing page customization.
       | Custom Page 1 | <group> group | The custom page 1 content |
       | Custom Page 2 | <group> group | The custom page 2 content |
       | Custom Page 3 | <group> group | The custom page 3 content |
-
     Given I am not logged in
     When I go to the homepage of the "<group> group" <group>
     Then I should not see the link "Settings"
@@ -106,3 +105,41 @@ Feature: Tests the group landing page customization.
     Given I am logged in as a facilitator of the "solution group" solution
     When I go to the homepage of the "solution group" solution
     Then I should not see the link "Settings"
+
+  Scenario: Do not allow to unpublish or delete a custom page set as landing page
+    Given collections:
+      | title          | state     |
+      | Rally fanatics | validated |
+      | Legion of Doom | validated |
+    And collections:
+      | title            | state         |
+      | My own book      | validated     |
+      | Second journey   | validated     |
+    And "custom_page" content:
+      | title         | group          | body                      |
+      | Custom Page 1 | Rally fanatics | The custom page 1 content |
+      | Custom Page 2 | My own book    | The custom page 2 content |
+    Given I am logged in as a moderator
+    When I go to the homepage of the "Rally fanatics" collection
+    Then I should see the heading "Rally fanatics"
+    Then I should see the link "Settings" in the "Entity actions" region
+    When I click "Settings"
+    Then the following fields should be present "Landing page"
+    When I select "Custom Page 1" from "Landing page"
+    And I press "Save"
+    Then I should see the heading "Rally fanatics"
+    When I go to the "Custom Page 1" custom page
+    Then I should see the link "Delete" in the "Entity actions" region
+    When I click "Delete" in the "Entity actions" region
+    Then I should see "You can not delete this landing page!"
+    And I should not see the button "DELETE"
+    When I go to the "Custom Page 2" custom page
+    Then I should see the link "Delete" in the "Entity actions" region
+    When I click "Delete" in the "Entity actions" region
+    Then I should see "Are you sure you want to delete the content item Custom Page 2?"
+    When I go to the "Custom Page 1" custom page
+    And I click "Edit" in the "Entity actions" region
+    And I uncheck "Published"
+    And I press "Save"
+    Then I should see the error message "This page acts as landing page for the group Rally fanatics. In order to delete/unpublish it should be first unset as landing page."
+

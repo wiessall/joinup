@@ -14,9 +14,9 @@ use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Session\AccountInterface;
+use Drupal\custom_page\CustomPageProviderInterface;
 use Drupal\custom_page\Entity\CustomPage;
 use Drupal\custom_page\Entity\CustomPageInterface;
-use Drupal\custom_page\Plugin\Validation\Constraint\CustomPageUnpublishedConstraint;
 use Drupal\joinup_group\Exception\MissingGroupException;
 use Drupal\menu_link_content\MenuLinkContentInterface;
 use Drupal\node\NodeInterface;
@@ -261,11 +261,14 @@ function custom_page_node_presave(NodeInterface $entity) {
     return FALSE;
   }
   if (!$entity->isPublished()) {
-    if (custom_page_validate_landing_page($entity)) {
-      throw new Exception(sprintf((new CustomPageUnpublishedConstraint())->message, $entity->getGroup()->label()));
+    /** @var \Drupal\custom_page\CustomPageProviderInterface $custom_page_provider */
+    $custom_page_provider = Drupal::service('custom_page.provider');
+    if (!$custom_page_provider->validateLandingPage($entity)) {
+      throw new Exception(sprintf(CustomPageProviderInterface::ERROR_MESSAGE, $entity->getGroup()->label()));
     }
   }
 }
+
 /**
  * Implements hook_entity_predelete().
  */
@@ -273,8 +276,10 @@ function custom_page_node_predelete(NodeInterface $entity) {
   if (!$entity instanceof CustomPage) {
     return FALSE;
   }
-  if (!custom_page_validate_landing_page($entity)) {
-    throw new Exception(sprintf((new CustomPageUnpublishedConstraint())->message, $entity->getGroup()->label()));
+  /** @var \Drupal\custom_page\CustomPageProviderInterface $custom_page_provider */
+  $custom_page_provider = Drupal::service('custom_page.provider');
+  if (!$custom_page_provider->validateLandingPage($entity)) {
+    throw new Exception(sprintf(CustomPageProviderInterface::ERROR_MESSAGE, $entity->getGroup()->label()));
   }
 }
 
@@ -284,34 +289,15 @@ function custom_page_node_predelete(NodeInterface $entity) {
 function custom_page_form_alter(&$form, FormStateInterface $form_state, $form_id): void {
   if ($form_id === 'node_custom_page_delete_form') {
     $entity = $form_state->getFormObject()->getEntity();
-    if (!custom_page_validate_landing_page($entity)) {
-      $form['#title'] = t('You can not delete it!');
+    /** @var \Drupal\custom_page\CustomPageProviderInterface $custom_page_provider */
+    $custom_page_provider = Drupal::service('custom_page.provider');
+    if (!$custom_page_provider->validateLandingPage($entity)) {
+      $form['#title'] = t('You can not delete this landing page!');
       $form['description'] = [
-        '#markup' => t((new CustomPageUnpublishedConstraint())->message, ['%s' => $entity->getGroup()->label()])
+        '#markup' => t('This page acts as landing page for the group %s. In order to delete it should be first unset as landing page.', ['%s' => $entity->getGroup()->label()]),
       ];
       $form['actions']['submit']['#access'] = FALSE;
     }
   }
 
 }
-
-/**
- * Validate form.
- * @param \Drupal\Node\NodeInterface $entity
- *
- * @return bool
- */
-function custom_page_validate_landing_page(NodeInterface $entity): bool {
-  if ($entity->hasGroup()) {
-    $group = $entity->getGroup();
-    $landing_page = $group->getSetting('landing_page')->entity;
-    if (!is_null($landing_page)) {
-      if ($landing_page->id() === $entity->id()) {
-        return FALSE;
-      }
-    }
-  }
-  return TRUE;
-}
-
-
