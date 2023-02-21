@@ -13,3 +13,12 @@
  */
 
 declare(strict_types = 1);
+
+use Drupal\joinup_user\JoinupUserDefaultAvatarImageHelper;
+
+/**
+ * Update the default user avatar image.
+ */
+function joinup_core_deploy_109000(): void {
+  \Drupal::classResolver(JoinupUserDefaultAvatarImageHelper::class)->createOrUpdate();
+}
