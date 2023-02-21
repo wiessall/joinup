@@ -18,10 +18,7 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Template\Attribute;
 use Drupal\custom_page\Entity\CustomPageInterface;
-use Drupal\joinup_group\Entity\GroupContentInterface;
-use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_search\Plugin\views\row\JoinupSearchApiRow;
-use Drupal\paragraphs\ParagraphInterface;
 use Drupal\search_api\IndexInterface;
 use Drupal\search_api\Query\ConditionGroupInterface;
 use Drupal\search_api\Query\QueryInterface;
@@ -113,55 +110,6 @@ function joinup_search_module_implements_alter(&$implementations, $hook) {
     unset($implementations['joinup_search']);
     $implementations['joinup_search'] = $group;
   }
-}
-
-/**
- * Implements hook_search_api_query_TAG_alter().
- */
-function joinup_search_search_api_query_search_api_field_alter(QueryInterface $query): void {
-  $entity = $query->getOption('search_api_field entity');
-  $parent_entity = $entity;
-  if ($parent_entity instanceof GroupInterface) {
-    return;
-  }
-
-  // Support nested paragraphs.
-  while ($parent_entity instanceof ParagraphInterface) {
-    $parent_entity = $parent_entity->getParentEntity();
-  }
-
-  $group = $entity;
-  if ($parent_entity instanceof GroupContentInterface) {
-    $group = $parent_entity->getGroup();
-  }
-
-  if (!($group instanceof GroupInterface)) {
-    return;
-  }
-
-  $field_value = $query->getOption('search_api_field item')->value;
-  /** @var \Drupal\search_api\Query\Query $query */
-  if (!empty($field_value['global_search'])) {
-    $query->addCondition('entity_groups', NULL, '<>');
-  }
-  elseif (!empty($field_value['show_shared'])) {
-    $or = $query
-      ->createConditionGroup('or')
-      ->addCondition('shared_in', [$group->id()], 'IN')
-      ->addCondition('entity_groups', [$group->id()], 'IN');
-    $query->addConditionGroup($or);
-  }
-  else {
-    // Show only content belonging to the same group.
-    $query->addCondition('entity_groups', [$group->id()], 'IN');
-  }
-  // Remove all results if no presets or content filter.
-  if (empty($field_value['query_presets']) && !array_key_exists('query_builder', $field_value)) {
-    $query->addCondition($parent_entity->getEntityType()->getKey('id'), $parent_entity->id());
-  }
-
-  $query->addCondition($parent_entity->getEntityType()->getKey('id'), $parent_entity->id(), '<>');
-
 }
 
 /**
