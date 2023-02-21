@@ -247,17 +247,18 @@ trait TraversingTrait {
       $regionObj = $this->getRegion($region);
     }
 
+    $title_selector = implode(', ', [
+      '.card-title',
+      '.card-title > h1 a',
+      'h2 a',
+      'h3.tile-two__title',
+      // @todo Legacy selectors to be removed in ISAICP-7138.
+      // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7138
+      '.listing__title',
+    ]);
+
     $result = [];
     foreach ($regionObj->findAll('css', $this->getTileCssSelector()) as $element) {
-      $title_selector = implode(', ', [
-        '.card-title',
-        '.card-title > h1 a',
-        'h2 a',
-        'h3.tile-two__title',
-        // @todo Legacy selectors to be removed in ISAICP-7138.
-        // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7138
-        '.listing__title',
-      ]);
       $title_element = $element->find('css', $title_selector);
       // Some tiles don't have a title, like the one to create a new collection
       // in the collections page.
@@ -714,6 +715,7 @@ trait TraversingTrait {
     return implode(', ', [
       '.card .card-title',
       'article.card--tile h2',
+      'article.tile.tile-two',
       // @todo Legacy selectors to be removed in ISAICP-7138.
       // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7138
       '.listing__item--tile .listing__title',
