@@ -14,6 +14,7 @@
 
 declare(strict_types = 1);
 
+use Drupal\Component\Utility\Html;
 use Drupal\media\Entity\MediaType;
 use Drupal\meta_entity\Entity\MetaEntity;
 
@@ -522,4 +523,128 @@ function _joinup_core_deploy_migrate_field(MediaType $media_type, string $ref_fi
     $target_entity->set($ref_field_name, $field_values);
     $target_entity->save();
   }
+}
+
+/**
+ * Migrate video embed markup into media.
+ */
+function joinup_core_deploy_109003(array &$sandbox): string {
+  if (empty($sandbox['tasks'])) {
+    $sandbox['tasks']['node'] = \Drupal::entityQuery('node')
+      ->condition('body', 'preview_thumbnail', 'CONTAINS')
+      ->execute();
+    $sandbox['tasks']['paragraph'] = \Drupal::entityQuery('paragraph')
+      ->condition('field_body', 'preview_thumbnail', 'CONTAINS')
+      ->execute();
+    $rdf_query = \Drupal::entityQuery('rdf_entity');
+    $group = $rdf_query->orConditionGroup()
+      ->condition('field_ad_description', 'preview_thumbnail', 'CONTAINS')
+      ->condition('field_isr_release_notes', 'preview_thumbnail', 'CONTAINS')
+      ->condition('field_ar_description', 'preview_thumbnail', 'CONTAINS')
+      ->condition('field_licence_description', 'preview_thumbnail', 'CONTAINS')
+      ->condition('field_is_description', 'preview_thumbnail', 'CONTAINS');
+    $sandbox['tasks']['rdf_entity'] = $rdf_query->condition($group)->execute();
+
+    $sandbox['count'] = 0;
+    $sandbox['max'] = count($sandbox['tasks']['node']) + count($sandbox['tasks']['paragraph']) + count($sandbox['tasks']['rdf_entity']);
+  }
+
+  $entity_type_manager = \Drupal::entityTypeManager();
+  $type = array_key_first($sandbox['tasks']);
+  $tasks = array_splice($sandbox['tasks'][$type], 0, 25);
+  if (empty($sandbox['tasks'][$type])) {
+    unset($sandbox['tasks'][$type]);
+  }
+
+  foreach ($tasks as $entity_id) {
+    $entity = $entity_type_manager->getStorage($type)->load($entity_id);
+    if ($type === 'rdf_entity') {
+      $query = "SELECT ?description WHERE { <{$entity_id}> <http://purl.org/dc/terms/description> ?description . }";
+      $sparl = \Drupal::service('sparql.endpoint');
+      $results = $sparl->query($query);
+      /** @var \EasyRdf\Sparql\Result $results */
+      foreach ($results as $result) {
+        $old_description = Html::escape((string) $result->description);
+        preg_match_all('/{&quot;preview_thumbnail&quot;:[^\]]+\]}/', $old_description, $videos_embed);
+        foreach ($videos_embed as $video_embed) {
+          preg_match('/&quot;video_url&quot;:&quot;(.*?)&quot;/', $video_embed[0], $video_url);
+          $media_uuid = _joinup_core_deploy_replace_media($video_url[1], $entity->getOwner()->id());
+          $new_video = '<drupal-media data-entity-type="media" data-entity-uuid="' . $media_uuid . '">&nbsp;</drupal-media>';
+          $new_description = preg_replace('/{&quot;preview_thumbnail&quot;:[^\]]+\]}/', $new_video, $old_description);
+          $new_description = Html::decodeEntities($new_description);
+          $graph = "<http://joinup.eu/{$entity->bundle()}/published>";
+          $update_query = <<<QUERY
+          WITH $graph
+          DELETE { <$entity_id> <http://purl.org/dc/terms/description> ?description }
+          INSERT { <$entity_id> <http://purl.org/dc/terms/description> $new_description }
+          WHERE { <$entity_id> <http://purl.org/dc/terms/description> ?description }
+          QUERY;
+          $sparl->query($update_query);
+        }
+      }
+    }
+    if ($type === 'node' || $type === 'paragraph') {
+      $table = $type === 'node' ? 'node__body' : 'paragraph__field_body';
+      $field = $type === 'node' ? 'body_value' : 'field_body_value';
+      $database = \Drupal::database();
+      $results = $database->query("SELECT revision_id, " . $field . " FROM " . $table . " WHERE entity_id = " . $entity_id)->fetchAll();
+      foreach ($results as $result) {
+        $old_description = Html::escape($result->{$field});
+        preg_match_all('/{&quot;preview_thumbnail&quot;:[^\]]+\]}/', $old_description, $videos_embed);
+        foreach ($videos_embed as $video_embed) {
+          preg_match('/&quot;video_url&quot;:&quot;(.*?)&quot;/', $video_embed[0], $video_url);
+          $media_uuid = _joinup_core_deploy_replace_media($video_url[1], $entity->getOwner()->id());
+          $new_video = '<drupal-media data-entity-type="media" data-entity-uuid="' . $media_uuid . '">&nbsp;</drupal-media>';
+          $new_description = preg_replace('/{&quot;preview_thumbnail&quot;:[^\]]+\]}/', $new_video, $old_description);
+          $database->update($table)
+            ->fields([
+              $field => Html::decodeEntities($new_description),
+            ])
+            ->condition('revision_id', $result->revision_id)
+            ->execute();
+        }
+      }
+    }
+    $sandbox['count']++;
+  }
+
+  $sandbox['#finished'] = $sandbox['count'] === $sandbox['max'];
+  return "Migrate {$sandbox['count']} out of {$sandbox['max']} video embed markup into media.";
+}
+
+/**
+ * Migrate Video Embed WYSIWYG to Media.
+ *
+ * @param string $url
+ *   Video URL.
+ * @param string $owner_id
+ *   Owner ID.
+ *
+ * @return string
+ *   Return the media uuid.
+ *
+ * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
+ * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
+ * @throws \Drupal\Core\Entity\EntityStorageException
+ */
+function _joinup_core_deploy_replace_media(string $url, string $owner_id): string {
+  $media_storage = \Drupal::entityTypeManager()->getStorage('media');
+  $result = $media_storage->getQuery()
+    ->condition('bundle', 'video')
+    ->condition('field_media_video_embed_field', $url)
+    ->execute();
+  if (empty($result)) {
+    $video_media = $media_storage->create([
+      'bundle' => 'video',
+      'field_media_video_embed_field' => [
+        'value' => $url,
+      ],
+    ]);
+    $video_media->setOwnerId($owner_id);
+    $video_media->save();
+  }
+  else {
+    $video_media = $media_storage->load(reset($result));
+  }
+  return $video_media->uuid();
 }
