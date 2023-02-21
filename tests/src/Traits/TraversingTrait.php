@@ -296,7 +296,7 @@ trait TraversingTrait {
       }
 
       if ($element) {
-        return $element->getParent();
+        return $element;
       }
     }
   }
