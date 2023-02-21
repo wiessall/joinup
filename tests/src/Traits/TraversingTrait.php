@@ -279,8 +279,8 @@ trait TraversingTrait {
   protected function getTileByHeading(string $heading): NodeElement {
     $selectors = [
       // @todo The `.listing__item--tile` selector is part of the original
-      //    Joinup theme and can be removed once we have fully migrated to the
-      //    new theme.
+      //   Joinup theme and can be removed once we have fully migrated to the
+      //   new theme.
       'listing__item--tile',
       'tile',
       'tile-two',
