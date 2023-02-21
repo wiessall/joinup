@@ -287,6 +287,7 @@ Feature:
     And I am logged in as a moderator
     And I go to the homepage
     And I click "E-justice"
+    And I open the header local tasks menu
     And I click "Edit"
     Then I should see the heading "Edit E-justice"
 
