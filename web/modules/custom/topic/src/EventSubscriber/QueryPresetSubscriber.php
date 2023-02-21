@@ -17,21 +17,12 @@ class QueryPresetSubscriber implements EventSubscriberInterface {
   use StringTranslationTrait;
 
   /**
-   * The current route match.
-   *
-   * @var \Drupal\Core\Routing\RouteMatchInterface
-   */
-  protected $routeMatch;
-
-  /**
    * Constructs a QueryPresetSubscriber object.
    *
-   * @param \Drupal\Core\Routing\RouteMatchInterface $route_match
+   * @param \Drupal\Core\Routing\RouteMatchInterface $routeMatch
    *   The current route match.
    */
-  public function __construct(RouteMatchInterface $route_match) {
-    $this->routeMatch = $route_match;
-  }
+  public function __construct(protected RouteMatchInterface $routeMatch) {}
 
   /**
    * Alters the description for the query preset.
@@ -43,9 +34,9 @@ class QueryPresetSubscriber implements EventSubscriberInterface {
     if ($this->routeMatch->getRouteName() !== 'entity.meta_entity.edit_form') {
       return;
     }
-    /** @var \Drupal\meta_entity\Entity\MetaEntityInterface $meta_entity */
-    $meta_entity = $this->routeMatch->getParameter('meta_entity');
-    $topic = $meta_entity->getTargetEntity();
+    /** @var \Drupal\meta_entity\Entity\MetaEntityInterface $metaEntity */
+    $metaEntity = $this->routeMatch->getParameter('meta_entity');
+    $topic = $metaEntity->getTargetEntity();
     $description = $event->getDescription();
 
     $description['topic_help'] = [

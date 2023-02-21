@@ -812,7 +812,7 @@ class SearchWidget extends WidgetBase implements ContainerFactoryPluginInterface
     // widget is shown. Allow other modules to interact with the description.
     // Dispatch an event to allow other modules to alter the description.
     $event = new AlterQueryPresetsDescriptionEvent($description, $this->getSearchApiIndex());
-    $this->eventDispatcher->dispatch($event, AlterQueryPresetsDescriptionEvent::class);
+    $this->eventDispatcher->dispatch($event);
     return $event->getDescription();
   }
 

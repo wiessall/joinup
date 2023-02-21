@@ -37,9 +37,13 @@ class AlterQueryPresetsDescriptionEvent extends Event {
    *
    * @param array $description
    *   The description of the query presets.
+   *
+   * @return \Drupal\search_api_field\Event\AlterQueryPresetsDescriptionEvent
+   *   The event object for chaining.
    */
-  public function setDescription(array $description): void {
+  public function setDescription(array $description): self {
     $this->description = $description;
+    return $this;
   }
 
   /**
