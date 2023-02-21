@@ -99,12 +99,16 @@ content:
     weight: 12
     region: content
   field_event_date:
-    type: daterange_condensed
+    type: addtocall_daterange_condensed
     label: hidden
     settings:
       timezone_override: ''
+      date_format: d/m/Y
+      event_title: '[node:title]'
+      location: '[node:field_location]'
+      description: '[node:field_event_agenda]'
+      past_events: false
       separator: to
-      default_format: d/m/Y
       day_diff_format: d
       month_diff_format: d/m
       year_diff_format: d/m/Y
