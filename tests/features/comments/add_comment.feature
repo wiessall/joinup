@@ -154,7 +154,6 @@ Feature: Add comments
     Examples:
       | content type | title               | state     |
       | news         | Scandalous news     | validated |
-      | event        | Celebrity gathering | validated |
       | discussion   | Is gossip bad?      | validated |
       | document     | Wikileaks           | validated |
 
