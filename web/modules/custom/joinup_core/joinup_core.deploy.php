@@ -559,27 +559,39 @@ function joinup_core_deploy_109003(array &$sandbox): string {
   foreach ($tasks as $entity_id) {
     $entity = $entity_type_manager->getStorage($type)->load($entity_id);
     if ($type === 'rdf_entity') {
-      $query = "SELECT ?description WHERE { <{$entity_id}> <http://purl.org/dc/terms/description> ?description . }";
-      $sparl = \Drupal::service('sparql.endpoint');
-      $results = $sparl->query($query);
-      /** @var \EasyRdf\Sparql\Result $results */
-      foreach ($results as $result) {
-        $old_description = Html::escape((string) $result->description);
-        preg_match_all('/{&quot;preview_thumbnail&quot;:[^\]]+\]}/', $old_description, $videos_embed);
-        foreach ($videos_embed as $video_embed) {
-          preg_match('/&quot;video_url&quot;:&quot;(.*?)&quot;/', $video_embed[0], $video_url);
-          $media_uuid = _joinup_core_deploy_replace_media($video_url[1], $entity->getOwner()->id());
-          $new_video = '<drupal-media data-entity-type="media" data-entity-uuid="' . $media_uuid . '">&nbsp;</drupal-media>';
-          $new_description = preg_replace('/{&quot;preview_thumbnail&quot;:[^\]]+\]}/', $new_video, $old_description);
-          $new_description = Html::decodeEntities($new_description);
-          $graph = "<http://joinup.eu/{$entity->bundle()}/published>";
-          $update_query = <<<QUERY
+      $predicates = [
+        'http://purl.org/dc/terms/description',
+        'http://www.w3.org/ns/adms#versionNotes',
+      ];
+      foreach ($predicates as $predicate) {
+        $query = "SELECT ?description WHERE { <{$entity_id}> <{$predicate}> ?description . }";
+        $sparl = \Drupal::getContainer()->get('sparql.endpoint');
+        $results = $sparl->query($query);
+        /** @var \EasyRdf\Sparql\Result $results */
+        foreach ($results as $result) {
+          $old_description = Html::escape((string) $result->description);
+          preg_match_all('/{&quot;preview_thumbnail&quot;:[^\]]+\]}/', $old_description, $videos_embed);
+          if (empty($videos_embed[0])) {
+            continue;
+          }
+
+          foreach ($videos_embed as $video_embed) {
+            preg_match('/&quot;video_url&quot;:&quot;(.*?)&quot;/', $video_embed[0], $video_url);
+            $media_uuid = _joinup_core_deploy_replace_media($video_url[1], $entity->getOwner() ? $entity->getOwner()->id() : '1');
+            $new_video = '<drupal-media data-entity-type="media" data-entity-uuid="' . $media_uuid . '">&nbsp;</drupal-media>';
+            $new_description = preg_replace('/{&quot;preview_thumbnail&quot;:[^\]]+\]}/', $new_video, $old_description);
+            $new_description = Html::decodeEntities($new_description);
+            $graph = "<http://joinup.eu/{$entity->bundle()}/published>";
+            $update_query = <<<QUERY
           WITH $graph
-          DELETE { <$entity_id> <http://purl.org/dc/terms/description> ?description }
-          INSERT { <$entity_id> <http://purl.org/dc/terms/description> "$new_description"@en }
-          WHERE { <$entity_id> <http://purl.org/dc/terms/description> ?description }
+          DELETE { <$entity_id> <{$predicate}> ?description }
+          INSERT { <$entity_id> <{$predicate}> ":new_description"@en }
+          WHERE { <$entity_id> <{$predicate}> ?description }
           QUERY;
-          $sparl->query($update_query);
+            $sparl->query($update_query, [
+              ':new_description' => $new_description,
+            ]);
+          }
         }
       }
     }
