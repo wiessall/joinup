@@ -101,8 +101,7 @@ Feature: Solution homepage
 
     # Verify that the other solution is showing its related content.
     When I go to the homepage of the "Security audit tools" solution
-    Then I should see the "Fireproof" tile
-    #Then I should see the text "Fireproof 0.1"
+    Then I should see the "Fireproof | 0.1" tile
     And I should see the "Code of conduct" tile
     But I should not see the "IS protocol paper 1" tile
     And I should not see the "Protocol draft" tile
