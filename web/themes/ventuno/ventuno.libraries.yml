@@ -274,11 +274,6 @@ tile-two:
     theme:
       assets/css/tile-two.min.css: {}
 
-tile-two:
-  css:
-    theme:
-      assets/css/tile-two.min.css: {}
-
 toolbar:
   css:
     theme:
