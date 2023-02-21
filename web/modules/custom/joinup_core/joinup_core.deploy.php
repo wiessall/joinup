@@ -576,7 +576,7 @@ function joinup_core_deploy_109003(array &$sandbox): string {
           $update_query = <<<QUERY
           WITH $graph
           DELETE { <$entity_id> <http://purl.org/dc/terms/description> ?description }
-          INSERT { <$entity_id> <http://purl.org/dc/terms/description> $new_description }
+          INSERT { <$entity_id> <http://purl.org/dc/terms/description> "$new_description"@en }
           WHERE { <$entity_id> <http://purl.org/dc/terms/description> ?description }
           QUERY;
           $sparl->query($update_query);
