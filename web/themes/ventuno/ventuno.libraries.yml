@@ -210,6 +210,11 @@ layout-block:
     theme:
       assets/css/layout-block.min.css: { minified: true }
 
+layout-block:
+  css:
+    theme:
+      assets/css/layout-block.min.css: { minified: true }
+
 navbar:
   css:
     theme:
@@ -268,6 +273,11 @@ timeline:
   css:
     theme:
       assets/css/timeline.min.css: {}
+
+tile-two:
+  css:
+    theme:
+      assets/css/tile-two.min.css: {}
 
 tile-two:
   css:
