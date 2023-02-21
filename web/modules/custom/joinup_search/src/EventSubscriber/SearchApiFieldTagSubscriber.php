@@ -1,15 +1,15 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace Drupal\joinup_search\EventSubscriber;
 
+use Drupal\joinup_group\Entity\GroupContentInterface;
+use Drupal\joinup_group\Entity\GroupInterface;
+use Drupal\paragraphs\ParagraphInterface;
 use Drupal\search_api\Event\QueryPreExecuteEvent;
 use Drupal\search_api\Event\SearchApiEvents;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Drupal\joinup_group\Entity\GroupInterface;
-use Drupal\paragraphs\ParagraphInterface;
-use Drupal\joinup_group\Entity\GroupContentInterface;
 
 /**
  * Alter a search query with a 'search_api_field' tag before it gets executed.
