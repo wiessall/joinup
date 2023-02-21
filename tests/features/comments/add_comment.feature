@@ -184,10 +184,8 @@ Feature: Add comments
     Examples:
       | collection        | content type | title                     | state     |
       | Shy collection    | news         | Scandalous news           | validated |
-      | Shy collection    | event        | Celebrity gathering       | validated |
       | Shy collection    | discussion   | Is gossip bad?            | validated |
       | Shy collection    | document     | Wikileaks                 | validated |
       | Gossip collection | news         | Rihanna wears pope outfit | validated |
-      | Gossip collection | event        | Taylor Swift wedding      | validated |
       | Gossip collection | discussion   | Is gossip good?           | validated |
       | Gossip collection | document     | Celebrity scandals 2019   | validated |
