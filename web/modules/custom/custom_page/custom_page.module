@@ -264,7 +264,7 @@ function custom_page_node_presave(NodeInterface $entity) {
     /** @var \Drupal\custom_page\CustomPageProviderInterface $custom_page_provider */
     $custom_page_provider = Drupal::service('custom_page.provider');
     if (!$custom_page_provider->validateLandingPage($entity)) {
-      throw new Exception(sprintf(CustomPageProviderInterface::ERROR_MESSAGE, $entity->getGroup()->label()));
+      throw new Exception("This page acts as landing page for the group {$entity->getGroup()->get('rid')->entity->getSingularLabel()}. In order to unpublished it should be first unset as landing page.");
     }
   }
 }
@@ -279,7 +279,7 @@ function custom_page_node_predelete(NodeInterface $entity) {
   /** @var \Drupal\custom_page\CustomPageProviderInterface $custom_page_provider */
   $custom_page_provider = Drupal::service('custom_page.provider');
   if (!$custom_page_provider->validateLandingPage($entity)) {
-    throw new Exception(sprintf(CustomPageProviderInterface::ERROR_MESSAGE, $entity->getGroup()->label()));
+    throw new Exception("This page acts as landing page for the group {$entity->getGroup()->get('rid')->entity->getSingularLabel()}. In order to delete it should be first unset as landing page.");
   }
 }
 
@@ -294,7 +294,7 @@ function custom_page_form_alter(&$form, FormStateInterface $form_state, $form_id
     if (!$custom_page_provider->validateLandingPage($entity)) {
       $form['#title'] = t('You can not delete this landing page!');
       $form['description'] = [
-        '#markup' => t('This page acts as landing page for the group %s. In order to delete it should be first unset as landing page.', ['%s' => $entity->getGroup()->label()]),
+        '#markup' => t('This page acts as landing page for the group @group. In order to delete it should be first unset as landing page.', ['@group' => $entity->getGroup()->get('rid')->entity->getSingularLabel()]),
       ];
       $form['actions']['submit']['#access'] = FALSE;
     }

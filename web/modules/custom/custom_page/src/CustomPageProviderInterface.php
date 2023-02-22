@@ -9,8 +9,6 @@ namespace Drupal\custom_page;
  */
 interface CustomPageProviderInterface {
 
-  const ERROR_MESSAGE = 'This page acts as landing page for the group %s. In order to delete/unpublish it should be first unset as landing page.';
-
   /**
    * Returns the custom pages that belong to the given group.
    *

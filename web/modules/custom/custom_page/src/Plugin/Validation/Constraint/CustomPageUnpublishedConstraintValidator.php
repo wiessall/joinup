@@ -4,7 +4,6 @@ declare(strict_types = 1);
 
 namespace Drupal\custom_page\Plugin\Validation\Constraint;
 
-use Drupal\custom_page\CustomPageProviderInterface;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 
@@ -21,7 +20,7 @@ class CustomPageUnpublishedConstraintValidator extends ConstraintValidator {
     $entity = $value->getEntity();
     if (!$entity->isPublished()) {
       if (!$entity->isGroupLandingPage()) {
-        $this->context->addViolation(CustomPageProviderInterface::ERROR_MESSAGE, ['%s' => $entity->getGroup()->label()]);
+        $this->context->addViolation($constraint->message, ['@group' => $entity->getGroup()->get('rid')->entity->getSingularLabel()]);
       }
     }
   }
