@@ -249,9 +249,11 @@ trait TraversingTrait {
     $result = [];
     // @todo The `.listing__item--tile` selector is part of the original Joinup
     //   theme and can be removed once we have fully migrated to the new theme.
+    // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7138
     foreach ($regionObj->findAll('css', '.listing__item--tile, .card, article.tile') as $element) {
       // @todo The `.listing__title` selector is part of the original Joinup
       //   theme and can be removed once we migrated to the new theme.
+      // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7138
       $title_element = $element->find('css', ' .listing__title, h3.tile-two__title, .card-title, h2 a');
       // Some tiles don't have a title, like the one to create a new collection
       // in the collections page.
@@ -281,6 +283,7 @@ trait TraversingTrait {
       // @todo The `.listing__item--tile` selector is part of the original
       //   Joinup theme and can be removed once we have fully migrated to the
       //   new theme.
+      // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7138
       'listing__item--tile',
       'tile',
       'tile-two',
