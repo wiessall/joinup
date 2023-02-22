@@ -15,4 +15,12 @@ use Symfony\Component\Validator\Constraint;
  *   type = "string"
  * )
  */
-class CustomPageUnpublishedConstraint extends Constraint {}
+class CustomPageUnpublishedConstraint extends Constraint {
+
+  /**
+   * The violation message.
+   *
+   * @var string
+   */
+  public $message = "This page acts as landing page for the group @group. In order to unpublish it should be first unset as landing page.";
+}
