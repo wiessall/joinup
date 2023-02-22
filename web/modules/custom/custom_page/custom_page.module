@@ -282,15 +282,12 @@ function custom_page_node_predelete(NodeInterface $entity): void {
  * Implements hook_form_FORM_ID_alter().
  */
 function custom_page_form_node_custom_page_delete_form_alter(&$form, FormStateInterface $form_state, $form_id): void {
-  if ($form_id === 'node_custom_page_delete_form') {
-    $entity = $form_state->getFormObject()->getEntity();
-    if (!$entity->isGroupLandingPage()) {
-      $form['#title'] = t('You can not delete this landing page!');
-      $form['description'] = [
-        '#markup' => t('This page acts as landing page for the group @group. In order to delete it should be first unset as landing page.', ['@group' => $entity->getGroup()->get('rid')->entity->getSingularLabel()]),
-      ];
-      $form['actions']['submit']['#access'] = FALSE;
-    }
+  $entity = $form_state->getFormObject()->getEntity();
+  if (!$entity->isGroupLandingPage()) {
+    $form['#title'] = t('You can not delete this landing page!');
+    $form['description'] = [
+      '#markup' => t('This page acts as landing page for the group @group. In order to delete it should be first unset as landing page.', ['@group' => $entity->getGroup()->get('rid')->entity->getSingularLabel()]),
+    ];
+    $form['actions']['submit']['#access'] = FALSE;
   }
-
 }
