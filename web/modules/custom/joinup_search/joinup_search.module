@@ -278,8 +278,8 @@ function _joinup_search_apply_listing_content_query_settings(SolariumQueryInterf
 
   // This alter is aware only about group content searches except when the
   // filter 'event' is applied. When the 'event' filter is applied, the event
-  // date is used to sort, in joinup_search_search_api_query_alter().
-  // @see joinup_search_search_api_query_alter()
+  // date is used to sort, in joinup_search.search_api_subscriber service.
+  // @see \Drupal\joinup_search\EventSubscriber\SearchApiSubscriber::queryAlter
   if (_joinup_search_search_api_has_condition($query->getConditionGroup(), 'entity_bundle', 'event')) {
     return;
   }
