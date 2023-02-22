@@ -23,4 +23,5 @@ interface CustomPageInterface extends NodeInterface, GroupContentInterface, Coll
    *   Return true if landing page is set as a landing page of the group.
    */
   public function isGroupLandingPage(): bool;
+
 }
