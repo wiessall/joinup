@@ -122,7 +122,7 @@ Feature: Tests the group landing page customization.
     And I go to the "Custom Page 1" custom page
     And I click "Delete" in the "Entity actions" region
     Then I should see "You can not delete this landing page!"
-    And I should see "This page acts as landing page for the group Rally fanatics. In order to delete it should be first unset as landing page."
+    And I should see "This page acts as landing page for the group collection. In order to delete it should be first unset as landing page."
     When I go to the "Custom Page 2" custom page
     Then I should see the link "Delete" in the "Entity actions" region
     When I click "Delete" in the "Entity actions" region
@@ -131,7 +131,7 @@ Feature: Tests the group landing page customization.
     And I click "Edit" in the "Entity actions" region
     And I uncheck "Published"
     And I press "Save"
-    Then I should see the error message "This page acts as landing page for the group Rally fanatics. In order to unpublish it should be first unset as landing page."
+    Then I should see the error message "This page acts as landing page for the group collection. In order to unpublish it should be first unset as landing page."
     When I go to the homepage of the "Rally fanatics" collection
     And I click "Settings"
     And I select "- Standard landing page -" from "Landing page"
@@ -139,4 +139,4 @@ Feature: Tests the group landing page customization.
     And I go to the "Custom Page 1" custom page
     And I click "Delete" in the "Entity actions" region
     Then I should not see "You can not delete this landing page!"
-    And I should not see "This page acts as landing page for the group Rally fanatics. In order to delete it should be first unset as landing page."
+    And I should not see "This page acts as landing page for the group collection. In order to delete it should be first unset as landing page."
