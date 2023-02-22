@@ -257,7 +257,7 @@ function custom_page_entity_field_access($operation, FieldDefinitionInterface $f
  * Implements hook_entity_presave().
  */
 function custom_page_node_presave(NodeInterface $entity) {
-  if (!$entity instanceof CustomPage) {
+  if (!$entity instanceof CustomPageInterface) {
     return FALSE;
   }
   if (!$entity->isPublished()) {
@@ -273,7 +273,7 @@ function custom_page_node_presave(NodeInterface $entity) {
  * Implements hook_entity_predelete().
  */
 function custom_page_node_predelete(NodeInterface $entity) {
-  if (!$entity instanceof CustomPage) {
+  if (!$entity instanceof CustomPageInterface) {
     return FALSE;
   }
   /** @var \Drupal\custom_page\CustomPageProviderInterface $custom_page_provider */
