@@ -13,6 +13,9 @@ commands:
       command: drupal:settings
       arguments:
         - install
+     # Uncomment the following for local development.
+#    - task: run
+#      command: toolkit:install-clone
     - task: run
       command: toolkit:run-deploy
     - task: run
