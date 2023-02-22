@@ -21,7 +21,7 @@ class SearchApiFieldTagSubscriber implements EventSubscriberInterface {
    */
   public static function getSubscribedEvents() {
     return [
-      SearchApiEvents::QUERY_PRE_EXECUTE => 'queryAlter',
+      SearchApiEvents::QUERY_PRE_EXECUTE . '.search_api_field' => 'queryAlter',
     ];
   }
 
@@ -35,10 +35,6 @@ class SearchApiFieldTagSubscriber implements EventSubscriberInterface {
    */
   public function queryAlter(QueryPreExecuteEvent $event): void {
     $query = $event->getQuery();
-    if (!$query->hasTag('search_api_field')) {
-      return;
-    }
-
     $entity = $query->getOption('search_api_field entity');
     $parent_entity = $entity;
     if ($parent_entity instanceof GroupInterface) {
