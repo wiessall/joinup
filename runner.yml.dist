@@ -1,5 +1,59 @@
-# Any task runner configuration, regardless if it's a default configuration,
-# declared in `./resources/runner/` or in this file, can be overridden. In order
-# to do so, create a `runner.yml` file in the project's top directory an
-# override there any configuration that needs to be adapted for the local
-# environment. Note that the `runner.yml` file is not under VCS control.
+# Copy this file in the project root directory, as runner.yml, in order to
+# override the default commands and use the following aliases for the
+# local-install and local-deploy.
+commands:
+  # This should be run AFTER MySQL reports ready for connections.
+  local-deploy:
+    # Overrides the toolkit:install-clone command.
+    - task: run
+      command: joinup:environment
+    - task: run
+      command: redis:flush-all
+    - task: run
+      command: drupal:settings
+      arguments:
+        - install
+    - task: run
+      command: toolkit:run-deploy
+    - task: run
+      command: config-readonly:disable
+    - task: run
+      command: dev:demo-users
+    - task: run
+      command: dev:install-modules
+    - task: run
+      command: config-readonly:disable
+    - task: exec
+      command: ${drush.bin}
+      arguments:
+        - cas-mock-server:start
+    - task: exec
+      command: ${drush.bin}
+      options:
+        yes: null
+      arguments:
+        - pm:uninstall
+        - joinup_eulogin
+    - task: exec
+      command: ${drush.bin}
+      arguments:
+        - pm:enable
+        - filecache
+    - task: exec
+      command: ${drush.bin}
+      arguments:
+        # This will update the obfuscated name and surname of User 1.
+        - php:eval
+        - \Drupal\user\Entity\User::load(1)->set('field_user_first_name', 'John')->set('field_user_family_name', 'Smith')->save();
+    - task: run
+      command: drupal:settings
+      arguments:
+        - site-clone
+
+  local-install:
+    - task: run
+      command: toolkit:install-clean
+    - task: run
+      command: dev:demo-users
+    - task: run
+      command: dev:install-modules

@@ -2,8 +2,6 @@
 
 This is the source code for https://joinup.ec.europa.eu/
 
-[![Build Status](https://status.continuousphp.com/git-hub/ec-europa/joinup-dev?token=77aa9de5-7fef-40bc-8c48-d6ff70fba9ff)](https://continuousphp.com/git-hub/ec-europa/joinup-dev)
-
 Joinup is a collaborative platform created by the European Commission and
 funded by the European Union via the [Interoperability Solutions for European
 Public Administrations (ISA)](http://ec.europa.eu/isa/) Programme.
@@ -30,6 +28,7 @@ There are two ways to run Joinup. With `docker` and `docker-compose` and buildin
 ### Docker
 
 To start with docker, please, check the separated [README file](docs/docker/README.md).
+**This is the preferred way of running Joinup.**
 
 ### Local installation
 
