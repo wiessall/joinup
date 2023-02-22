@@ -1,9 +1,13 @@
-FROM fpfis/httpd-php-dev:8.1
+FROM fpfis/httpd-php-dev:8.1 as joinup-httpd-php-dev
 
 # USER_ID and GROUP_ID should not be used at the same time with DAEMON_USER and DAEMON_GROUP respectively.
 ARG USER_ID
 ARG GROUP_ID
 
+# Check if there is a user with the given ID. If not, change the UID of the
+# www-data user to the given ID. If there is a user with the given ID, show an
+# error that prints this user's name and that the DAEMON_USER environment
+# variable should be used instead.
 RUN if [ ! -z "${USER_ID}" ] && [ -z "$(grep -E \"[^:]*:x:${USER_ID}:\" /etc/passwd)" ] ; then \
       usermod -u ${USER_ID} www-data; \
     elif [ ! -z "${USER_ID}" ] ; then \
@@ -11,9 +15,15 @@ RUN if [ ! -z "${USER_ID}" ] && [ -z "$(grep -E \"[^:]*:x:${USER_ID}:\" /etc/pas
       exit 2; \
   fi;
 
+# Check if there is a group with the given ID. If not, change the GID of the
+# www-data group to the given ID. If there is a group with the given ID, show an
+# error that prints this group's name and that the DAEMON_GROUP environment
+# variable should be used instead.
 RUN if [ ! -z "${GROUP_ID}" ] && [ -z "$(grep -E \"[^:]*:x:${GROUP_ID}:\" /etc/group)" ] ; then \
       groupmod -g ${GROUP_ID} www-data; \
     elif [ ! -z "${GROUP_ID}" ] ; then \
       echo "Group with ID ${GROUP_ID} already exists. Assign '$(grep -E "[^:]*:x:${GROUP_ID}:" /etc/group | awk -F: '{ print $1 }')' to the environment variable DAEMON_GROUP instead."; \
       exit 2; \
   fi;
+
+RUN mkdir -p /cache/composer && chown ${DAEMON_USER}:${DAEMON_GROUP} /cache/composer
