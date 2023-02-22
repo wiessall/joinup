@@ -6,7 +6,6 @@ namespace Drupal\custom_page;
 
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Menu\MenuLinkManagerInterface;
-use Drupal\custom_page\Entity\CustomPage;
 use Drupal\menu_link_content\MenuLinkContentInterface;
 use Drupal\menu_link_content\Plugin\Menu\MenuLinkContent;
 use Drupal\og\OgGroupAudienceHelperInterface;
@@ -110,22 +109,6 @@ class CustomPageProvider implements CustomPageProviderInterface {
       ->condition('type', 'custom_page')
       ->condition('status', 1)
       ->execute();
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function validateLandingPage(CustomPage $custom_page): bool {
-    if ($custom_page->hasGroup()) {
-      $group = $custom_page->getGroup();
-      $landing_page = $group->getSetting('landing_page')->entity;
-      if (!is_null($landing_page)) {
-        if ($landing_page->id() === $custom_page->id()) {
-          return FALSE;
-        }
-      }
-    }
-    return TRUE;
   }
 
 }
