@@ -256,9 +256,9 @@ function custom_page_entity_field_access($operation, FieldDefinitionInterface $f
 /**
  * Implements hook_entity_presave().
  */
-function custom_page_node_presave(NodeInterface $entity) {
+function custom_page_node_presave(NodeInterface $entity): void {
   if (!$entity instanceof CustomPageInterface) {
-    return FALSE;
+    return;
   }
   if (!$entity->isPublished()) {
     if (!$entity->isGroupLandingPage()) {
@@ -270,9 +270,9 @@ function custom_page_node_presave(NodeInterface $entity) {
 /**
  * Implements hook_entity_predelete().
  */
-function custom_page_node_predelete(NodeInterface $entity) {
+function custom_page_node_predelete(NodeInterface $entity): void {
   if (!$entity instanceof CustomPageInterface) {
-    return FALSE;
+    return;
   }
   if (!$entity->isGroupLandingPage()) {
     throw new Exception("This page acts as landing page for the group {$entity->getGroup()->get('rid')->entity->getSingularLabel()}. In order to delete it should be first unset as landing page.");
