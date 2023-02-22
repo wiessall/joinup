@@ -11,13 +11,11 @@ use Drupal\Component\Render\MarkupInterface;
 use Drupal\Component\Utility\Html;
 use Drupal\Component\Utility\UrlHelper;
 use Drupal\Core\Access\AccessResult;
-use Drupal\Core\Datetime\DrupalDateTime;
 use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Template\Attribute;
-use Drupal\custom_page\Entity\CustomPageInterface;
 use Drupal\joinup_search\Plugin\views\row\JoinupSearchApiRow;
 use Drupal\search_api\IndexInterface;
 use Drupal\search_api\Query\ConditionGroupInterface;
@@ -92,76 +90,6 @@ function joinup_search_entity_field_access($operation, FieldDefinitionInterface 
   // permission.
   return AccessResult::forbiddenIf(!$account->hasPermission('administer search fields'))
     ->addCacheContexts(['user.permissions']);
-}
-
-/**
- * Implements hook_module_implements_alter().
- */
-function joinup_search_module_implements_alter(&$implementations, $hook) {
-  if ($hook === 'search_api_query_alter') {
-    // The search_api_field_search_api_query_alter is always executed last and
-    // is responsible for converting the facets into condition groups. We need
-    // to add a sort parameter based on the content bundle on the collection
-    // content search api field. Thus, the hook invoked by the collection module
-    // should be called last.
-    // @see search_api_field_search_api_query_alter
-    // @see joinup_search_search_api_query_alter
-    $group = $implementations['joinup_search'];
-    unset($implementations['joinup_search']);
-    $implementations['joinup_search'] = $group;
-  }
-}
-
-/**
- * Implements hook_search_api_query_alter().
- *
- * Sets a default search ordering for the content displayed in the collections'
- * and solutions' overview page as well as the custom pages.
- *
- * @throws \Drupal\search_api\SearchApiException
- *   Thrown when the Search API server instance could not be loaded.
- */
-function joinup_search_search_api_query_alter(QueryInterface $query) {
-  $event_condition_listings = [
-    'rdf_entity.collection.field_collection_content',
-    'paragraph.configurable_listing.content_listing',
-  ];
-  if (in_array($query->getSearchId(), $event_condition_listings)) {
-    // In case the user has filtered by event, first sort by the event date.
-    // @todo This will be generic when event calendar will be implemented for
-    // the rdf_entity.field_is_content and the paragraph.content_listing
-    // instances of the search api field listing.
-    if (_joinup_search_search_api_has_condition($query->getConditionGroup(), 'entity_bundle', 'event')) {
-      // If the upcoming events are selected, set the order to 'ASC'.
-      // @see \Drupal\joinup\Plugin\ArbitraryFacet\EventsArbitraryFacet::getFacetDefinition
-      $value = \Drupal::service('facets.utility.date_handler')->isoDate((new DrupalDateTime('today'))->getTimestamp());
-      $order = _joinup_search_search_api_has_condition($query->getConditionGroup(), 'field_event_date', $value, '>=') ? QueryInterface::SORT_ASC : QueryInterface::SORT_DESC;
-      $query->sort('field_event_date', $order);
-    }
-  }
-
-  // Sort collection content by creation date, newest first.
-  $search_ids = [
-    'rdf_entity.field_collection_content',
-    'rdf_entity.field_is_content',
-    'paragraph.content_listing.content_listing',
-    'paragraph.configurable_listing.content_listing',
-  ];
-
-  if (in_array($query->getSearchId(), $search_ids)) {
-    $query->sort('entity_created', 'DESC');
-  }
-
-  // Because we allow listing of custom pages, if the listing is of a custom
-  // page, ensure that the current page is excluded from the results to avoid
-  // infinite recursion.
-  if ($query->getSearchId() === 'paragraph.content_listing.content_listing') {
-    $parent_entity = $query->getOption('search_api_field entity');
-    while (!$parent_entity instanceof CustomPageInterface) {
-      $parent_entity = $parent_entity->getParentEntity();
-    }
-    $query->addCondition('id', $parent_entity->id(), '<>');
-  }
 }
 
 /**

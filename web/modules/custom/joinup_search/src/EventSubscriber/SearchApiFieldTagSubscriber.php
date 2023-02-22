@@ -19,9 +19,10 @@ class SearchApiFieldTagSubscriber implements EventSubscriberInterface {
   /**
    * {@inheritdoc}
    */
-  public static function getSubscribedEvents() {
+  public static function getSubscribedEvents(): array {
     return [
-      SearchApiEvents::QUERY_PRE_EXECUTE . '.search_api_field' => 'queryAlter',
+      SearchApiEvents::QUERY_PRE_EXECUTE . '.search_api_field' =>
+        ['queryAlter', -100],
     ];
   }
 
