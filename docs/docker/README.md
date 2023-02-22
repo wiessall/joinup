@@ -45,6 +45,16 @@ to _macOS_ users and fix the lines in `docker-compose.override.yml` file.
 @todo This is probably not needed anymore.
 @see https://github.com/docker/for-mac/issues/5402 for gRPC-FUSE performance.
 
+### 1.3 Set up your local runner.yml.
+
+Copy the `runner.yml.dist` file over to `runner.yml` file in the root directory.
+The file already contains 2 shortened commands for installing the codebase and
+installing a clean website. You can add more commands in this file. The
+`runner.yml` file is not committed in VCS and due to its nature should be
+manually set.
+
+See below section `Using the runner` for more information.
+
 ### 2.1 Personal directories
 
 In order to persist the data between container restarts, the `volumes` entry in
@@ -90,6 +100,11 @@ only stop the machine and will not destroy the volume that was created with it.
 To clean the volume as well, use the `-v` parameter as `docker-compose down -v`.
 
 ### 3.3 Handling XDEBUG
+
+@todo Verify the bug that prevents XDEBUG from working properly when the
+containers are started with the `DISABLE_XDEBUG` environment variable set to
+`True`.
+
 During development XDEBUG can be enabled or disabled by running the following:
 
 ```bash
