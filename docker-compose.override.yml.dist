@@ -3,8 +3,13 @@
 version: '3.8'
 services:
   web:
+    image: joinup/web:latest
     build:
+      context: ./resources/docker/web
       args:
+        # Change these to your personal UID and GID. You can use the following
+        # command to find out your UID and GID:
+        # $ whoami && id -u && id -g
         USER_ID: ${USER_ID:-1000}
         GROUP_ID: ${GROUP_ID:-1000}
     volumes:
@@ -14,10 +19,9 @@ services:
       # user by default and all the files created by the container are owned by root.
       # Ensure you have these directories locally and that they are writable by the
       # host user.
-      - ~/.composer:/www/html/.composer
-      - ~/.ssh:/www/html/.ssh
-      - ~/.npm:/www/html/.npm
-      - ~/.config:/www/html/.config
+      - ~/.composer:/var/www/.composer
+      - ~/.ssh:/var/www/.ssh
+      - ~/.npm:/var/www/.npm
     ports:
       - '8080:8080'
 

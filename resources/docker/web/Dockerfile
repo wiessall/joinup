@@ -1,4 +1,4 @@
-FROM fpfis/httpd-php-dev:8.1 as joinup-httpd-php-dev
+FROM fpfis/httpd-php-dev:8.1 as web
 
 # USER_ID and GROUP_ID should not be used at the same time with DAEMON_USER and DAEMON_GROUP respectively.
 ARG USER_ID
@@ -25,5 +25,3 @@ RUN if [ ! -z "${GROUP_ID}" ] && [ -z "$(grep -E \"[^:]*:x:${GROUP_ID}:\" /etc/g
       echo "Group with ID ${GROUP_ID} already exists. Assign '$(grep -E "[^:]*:x:${GROUP_ID}:" /etc/group | awk -F: '{ print $1 }')' to the environment variable DAEMON_GROUP instead."; \
       exit 2; \
   fi;
-
-RUN mkdir -p /cache/composer && chown ${DAEMON_USER}:${DAEMON_GROUP} /cache/composer
