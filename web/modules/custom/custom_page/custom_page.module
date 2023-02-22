@@ -284,9 +284,9 @@ function custom_page_node_predelete(NodeInterface $entity) {
 }
 
 /**
- * Implements hook_form_alter().
+ * Implements hook_form_FORM_ID_alter().
  */
-function custom_page_form_alter(&$form, FormStateInterface $form_state, $form_id): void {
+function custom_page_form_node_custom_page_delete_form_alter(&$form, FormStateInterface $form_state, $form_id): void {
   if ($form_id === 'node_custom_page_delete_form') {
     $entity = $form_state->getFormObject()->getEntity();
     /** @var \Drupal\custom_page\CustomPageProviderInterface $custom_page_provider */
