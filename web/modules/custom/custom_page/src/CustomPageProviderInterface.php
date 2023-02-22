@@ -4,8 +4,6 @@ declare(strict_types = 1);
 
 namespace Drupal\custom_page;
 
-use Drupal\custom_page\Entity\CustomPage;
-
 /**
  * Provides custom pages to whoever desires them.
  */
@@ -26,16 +24,5 @@ interface CustomPageProviderInterface {
    *   The custom page entities.
    */
   public function getCustomPagesByGroupId(string $group_id, bool $exclude_disabled = TRUE): array;
-
-  /**
-   * Validate if custom page is set as a landing page.
-   *
-   * @param \Drupal\custom_page\Entity\CustomPage $custom_page
-   *   Custom page entity.
-   *
-   * @return bool
-   *   Return true if
-   */
-  public function validateLandingPage(CustomPage $custom_page): bool;
 
 }

@@ -15,4 +15,12 @@ use Drupal\node\NodeInterface;
  * Interface for content page node entities.
  */
 interface CustomPageInterface extends NodeInterface, GroupContentInterface, CollectionContentInterface, EntityPublicationTimeInterface, LogoInterface, DescriptionInterface {
+
+  /**
+   * Validate if custom page is set as a landing page of the group.
+   *
+   * @return bool
+   *   Return true if landing page is set as a landing page of the group.
+   */
+  public function isGroupLandingPage(): bool;
 }

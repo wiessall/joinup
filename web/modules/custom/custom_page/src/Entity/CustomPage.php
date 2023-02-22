@@ -34,4 +34,20 @@ class CustomPage extends Node implements CustomPageInterface {
     return 'field_paragraphs_body';
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  public function isGroupLandingPage(): bool {
+    if ($this->hasGroup()) {
+      $group = $this->getGroup();
+      $landing_page = $group->getSetting('landing_page')->entity;
+      if (!is_null($landing_page)) {
+        if ($landing_page->id() === $this->id()) {
+          return FALSE;
+        }
+      }
+    }
+    return TRUE;
+  }
+
 }
