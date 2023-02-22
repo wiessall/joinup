@@ -3,7 +3,7 @@
 version: '3.8'
 services:
   web:
-    image: joinup/httpd-php:8.1
+    image: joinup/web:latest
     build:
       context: './resources/docker/web'
     working_dir: /var/www/html
@@ -13,6 +13,8 @@ services:
       - .env.dist
       - .env
     environment:
+      COMPOSER_HOME: /var/www/.composer
+      COMPOSER_CACHE_DIR: /var/www/.composer/cache
       DOCUMENT_ROOT: "/var/www/html"
       SMTP_SERVER: mail
       SMTP_PORT: 1025

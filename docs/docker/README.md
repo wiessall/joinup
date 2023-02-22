@@ -55,10 +55,9 @@ The following directories are needed to properly develop on docker:
 * The `~/.ssh` directory is used to store the SSH keys for GitHub
 authentication. If you want to manage the repositories with SSH, you need to
 add your SSH keys in this directory.
-* The `~/.composer` directory is used to store the Composer cache.
+* The `~/.composer` directory is the global configuration directory for
+Composer. It is used to store the Composer cache and the authentication tokens.
 * The `~/.npm` directory is used to store the NPM cache.
-* The `~/.config` directory is used to store the configuration of the project
-like the composer auth.json file.
 
 ### 2.2 Hosts file
 
