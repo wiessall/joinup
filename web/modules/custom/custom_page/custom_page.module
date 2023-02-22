@@ -14,7 +14,6 @@ use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Session\AccountInterface;
-use Drupal\custom_page\CustomPageProviderInterface;
 use Drupal\custom_page\Entity\CustomPage;
 use Drupal\custom_page\Entity\CustomPageInterface;
 use Drupal\joinup_group\Exception\MissingGroupException;
