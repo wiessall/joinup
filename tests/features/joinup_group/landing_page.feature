@@ -124,7 +124,6 @@ Feature: Tests the group landing page customization.
     Then I should see "You can not delete this landing page!"
     And I should see "This page acts as landing page for the group collection. In order to delete it should be first unset as landing page."
     When I go to the "Custom Page 2" custom page
-    Then I should see the link "Delete" in the "Entity actions" region
     When I click "Delete" in the "Entity actions" region
     Then I should see "Are you sure you want to delete the content item Custom Page 2?"
     When I go to the "Custom Page 1" custom page
