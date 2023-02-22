@@ -49,7 +49,7 @@ class SearchApiSubscriber implements EventSubscriberInterface {
    * @param \Drupal\search_api\Event\QueryPreExecuteEvent $event
    *   The query alter event.
    */
-  public function queryAlter(QueryPreExecuteEvent $event) {
+  public function queryAlter(QueryPreExecuteEvent $event): void {
     $query = $event->getQuery();
     $event_condition_listings = [
       'rdf_entity.collection.field_collection_content',
