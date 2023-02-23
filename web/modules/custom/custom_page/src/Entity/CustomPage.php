@@ -41,13 +41,9 @@ class CustomPage extends Node implements CustomPageInterface {
     if ($this->hasGroup()) {
       $group = $this->getGroup();
       $landing_page = $group->getSetting('landing_page')->entity;
-      if (!is_null($landing_page)) {
-        if ($landing_page->id() === $this->id()) {
-          return FALSE;
-        }
-      }
+      return $landing_page && ($landing_page->id() === $this->id());
     }
-    return TRUE;
+    return FALSE;
   }
 
 }

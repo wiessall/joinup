@@ -259,10 +259,8 @@ function custom_page_node_presave(NodeInterface $entity): void {
   if (!$entity instanceof CustomPageInterface) {
     return;
   }
-  if (!$entity->isPublished()) {
-    if (!$entity->isGroupLandingPage()) {
-      throw new Exception("This page acts as landing page for the group {$entity->getGroup()->get('rid')->entity->getSingularLabel()}. In order to unpublished it should be first unset as landing page.");
-    }
+  if (!$entity->isPublished() && $entity->isGroupLandingPage()) {
+    throw new Exception("This page acts as landing page for the {$entity->getGroup()->get('rid')->entity->getSingularLabel()}. In order to unpublished it should be first unset as landing page.");
   }
 }
 
@@ -273,20 +271,20 @@ function custom_page_node_predelete(NodeInterface $entity): void {
   if (!$entity instanceof CustomPageInterface) {
     return;
   }
-  if (!$entity->isGroupLandingPage()) {
-    throw new Exception("This page acts as landing page for the group {$entity->getGroup()->get('rid')->entity->getSingularLabel()}. In order to delete it should be first unset as landing page.");
+  if ($entity->isGroupLandingPage()) {
+    throw new Exception("This page acts as landing page for the {$entity->getGroup()->get('rid')->entity->getSingularLabel()}. In order to delete it should be first unset as landing page.");
   }
 }
 
 /**
  * Implements hook_form_FORM_ID_alter().
  */
-function custom_page_form_node_custom_page_delete_form_alter(&$form, FormStateInterface $form_state, $form_id): void {
+function custom_page_form_node_custom_page_delete_form_alter(array &$form, FormStateInterface $form_state, string $form_id): void {
   $entity = $form_state->getFormObject()->getEntity();
-  if (!$entity->isGroupLandingPage()) {
+  if ($entity->isGroupLandingPage()) {
     $form['#title'] = t('You can not delete this landing page!');
     $form['description'] = [
-      '#markup' => t('This page acts as landing page for the group @group. In order to delete it should be first unset as landing page.', ['@group' => $entity->getGroup()->get('rid')->entity->getSingularLabel()]),
+      '#markup' => t('This page acts as landing page for the @group. In order to delete it should be first unset as landing page.', ['@group' => $entity->getGroup()->get('rid')->entity->getSingularLabel()]),
     ];
     $form['actions']['submit']['#access'] = FALSE;
   }
