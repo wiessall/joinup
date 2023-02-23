@@ -51,59 +51,56 @@
     hide_searchbar: hide_searchbar,
     searchbar: page.search_bar,
   } %}
-  {{ page.header }}
+  {% block page_header %}
+    {{ page.header }}
+  {% endblock %}
 
   {% if page.header_bottom %}
-    {{ page.header_bottom }}
+    {% block page_header_bottom %}
+      {{ page.header_bottom }}
+    {% endblock %}
   {% endif %}
 
   {% if page.featured %}
-    <div class="region-featured">
-      <div class="container">
-        {{ page.featured }}
+    {% block page_featured %}
+      <div class="region-featured">
+        <div class="container">
+          {{ page.featured }}
+        </div>
       </div>
-    </div>
+    {% endblock %}
   {% endif %}
 
   {% if page.messages %}
-    <div class="container{% if page.messages|render|striptags|trim %} mt-3{% endif %}">
-      {{ page.messages }}
-    </div>
+    {% block page_messages %}
+      <div class="container{% if page.messages|render|striptags|trim %} mt-3{% endif %}">
+        {{ page.messages }}
+      </div>
+    {% endblock %}
   {% endif %}
 
   {% if page.content_top %}
-    <div class="container">
-      {{ page.content_top }}
-    </div>
+    {% block page_content_top %}
+      <div class="container">
+        {{ page.content_top }}
+      </div>
+    {% endblock %}
   {% endif %}
 
   <div class="content container mb-5">
-    <div class="row">
-      {% if page.sidebar %}
-        <main role="main" class="col-12 col-lg-9 order-1">
-          <div id="main-content" tabindex="-1"></div>{# link is in html.html.twig #}
-          <div class="layout-content">
-            {{ page.content }}
-          </div>
-          {% if page.content_bottom %}
-            {{ page.content_bottom }}
-          {% endif %}
-        </main>
-        <aside class="layout-sidebar col-12 col-lg-3">
-          {{ page.sidebar }}
-        </aside>
-      {% else %}
-        <main role="main" class="col-12">
-          <div id="main-content" tabindex="-1"></div>{# link is in html.html.twig #}
-          <div class="layout-content">
-            {{ page.content }}
-          </div>
-          {% if page.content_bottom %}
-            {{ page.content_bottom }}
-          {% endif %}
-        </main>
+    <main role="main">
+      <div id="main-content" tabindex="-1"></div>{# link is in html.html.twig #}
+      {% block page_content %}
+        <div class="layout-content">
+          {{ page.content }}
+        </div>
+      {% endblock %}
+      {% if page.content_bottom %}
+        {% block page_content_bottom %}
+          {{ page.content_bottom }}
+        {% endblock %}
       {% endif %}
-    </div>
+    </main>
   </div>
 
   {% if page.footer %}
