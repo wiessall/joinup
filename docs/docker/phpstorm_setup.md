@@ -18,6 +18,10 @@ You will be prompted to select a server configuration. Select the
 `docker-compose.override.yml` as your configuration files and select `web` as
 your server. Set the `PHP executable` to `/usr/bin/php`.
 
+Lower below, in the `Configuration options`, add the variable
+`xdebug.client_host` with the value `host.docker.internal`. This will allow
+PhpStorm to connect to the Xdebug server.fi
+
 Click `OK` and you should see the `PHP` interpreter configuration page and the
 path mapping should be set up automatically.
 
