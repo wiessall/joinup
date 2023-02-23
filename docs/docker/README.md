@@ -381,6 +381,20 @@ $ docker-compose exec --user www-data web ./vendor/bin/phpunit path/to/your/test
 ```
 The `phpunit.xml` is consumed automatically.
 
+### Step debugging
+
+To use XDEBUG for step debugging, first, make sure that XDEBUG is enabled in
+the container and start listening for connections in your IDE. Set a breakpoint
+to a related line and run the following command:
+
+```bash
+docker-compose exec --env XDEBUG_SESSION=1 --user www-data web ./vendor/bin/behat --profile=clean --config=behat.yml ./tests/features/homepage.feature
+```
+The `XDEBUG_SESSION` environment variable is used to trigger the XDEBUG
+session.
+
+PHPUnit can be debugged in the same way.
+
 ## Next steps
 
 Please, check the [PhpStorm configuration](./phpstorm_setup.md) for

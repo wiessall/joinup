@@ -18,10 +18,6 @@ You will be prompted to select a server configuration. Select the
 `docker-compose.override.yml` as your configuration files and select `web` as
 your server. Set the `PHP executable` to `/usr/bin/php`.
 
-Lower below, in the `Configuration options`, add the variable
-`xdebug.client_host` with the value `host.docker.internal`. This will allow
-PhpStorm to connect to the Xdebug server.fi
-
 Click `OK` and you should see the `PHP` interpreter configuration page and the
 path mapping should be set up automatically.
 
@@ -84,3 +80,24 @@ e.g. `tests/features/dashboard.feature`. Right click on the test and select
 `Run 'dashboard.feature'`. You should see the test run in the console.
 
 Congratulations! You have successfully setup PhpStorm to run behat tests.
+
+## Debug a behat test
+
+To debug a behat test, you will need to setup a breakpoint in the test. Head to
+the test and click on the line number where you want to set the breakpoint. A
+red dot should appear on the left side of the line number. Right click on the
+test and select `Debug 'dashboard.feature'` or whatever the name of the test
+is. You should see the test run in the console and the breakpoint should be
+hit.
+
+** Warning **: PHPStorm currently has no way of running the tests as the
+`${DAEMON_USER}` (we cannot set the `${DAEMON_USER}` as the docker user as
+there are multiple scripts ran as root after the docker image is built). If the
+first time you run a test though PHPStorm, it might cause permission issues
+when running the tests through the command line. If this happens, you will need
+to run
+```bash
+$ docker-compose exec web chown -R ${DAEMON_USER}:${DAEMON_USER} /tmp
+```
+to fix the permissions. Note, that in the above command, you will need to
+change the variables with the actual name of the user and group.
