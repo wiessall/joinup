@@ -41,15 +41,19 @@ content:
       image_style: ''
       image_loading:
         attribute: lazy
-    third_party_settings: {  }
+    third_party_settings:
+      template_suggestion:
+        template_suggestion: bare
     weight: 1
     region: content
   label:
     type: string
     label: hidden
     settings:
-      link_to_entity: true
-    third_party_settings: {  }
+      link_to_entity: false
+    third_party_settings:
+      template_suggestion:
+        template_suggestion: bare
     weight: 0
     region: content
 hidden:
