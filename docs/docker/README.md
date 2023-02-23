@@ -329,3 +329,60 @@ not available. In that case, `/bin/sh` and `sh` are good substitutes.
 Depending on the user you want to use, you might need to add `--user {username}`
 option before the container name, for instance to access the `web` container as
 user `www-data`, add `--user www-data`.
+
+## Setup your test files
+
+Run the following command to setup the test files:
+
+```bash
+$ docker-compose exec --user www-data web ./vendor/bin/run toolkit:build-dev
+```
+Your `behat.yml` file should now be in the root folder as well as your
+`phpcs.xml`.
+
+## Running the tests
+
+### Behat tests
+
+In order to run a behat test, you have to distinguish between the two types of
+behat tests we have. The ones running in the clean environment and the ones
+running in the cloned environment.
+Almost all tests are meant to run in a clean environment. You can run them in
+the cloned environment, but results are not guaranteed and also basing your
+results on a cloned environment is not guaranting that the tests will pass in
+the clean environment.
+
+#### Running the tests in the clean environment
+
+The clean environment is the one that is installed by the
+`toolkit:install-clean` or the `local-install` command. In order to run the
+tests in this environment, you have to run the following command:
+
+```bash
+$ docker-compose exec --user www-data web ./vendor/bin/behat --profile=clean --config=behat.yml /tests/features/path/to/feature.feature
+```
+
+#### Running the tests in the cloned environment
+
+The difference in the command is that you should not include the
+`--profile=clean` option. The command should look like this:
+
+```bash
+$ docker-compose exec --user www-data web ./vendor/bin/behat --config=behat.yml /tests/features/path/to/feature.feature
+```
+
+### PHPUnit tests
+
+The PHPUnit tests are run in the same environment as the Behat tests. The
+command is the following:
+
+```bash
+$ docker-compose exec --user www-data web ./vendor/bin/phpunit path/to/your/test/Class.php
+```
+The `phpunit.xml` is consumed automatically.
+
+## Next steps
+
+Please, check the [PhpStorm configuration](./phpstorm_setup.md) for
+more information on how to setup your IDE to work with the project. Currently,
+the setup is only available for PhpStorm.
