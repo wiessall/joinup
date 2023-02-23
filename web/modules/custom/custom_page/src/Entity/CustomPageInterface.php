@@ -17,7 +17,7 @@ use Drupal\node\NodeInterface;
 interface CustomPageInterface extends NodeInterface, GroupContentInterface, CollectionContentInterface, EntityPublicationTimeInterface, LogoInterface, DescriptionInterface {
 
   /**
-   * Validate if custom page is set as a landing page of the group.
+   * Checks if this custom page is set as a landing page of the group.
    *
    * @return bool
    *   Return true if landing page is set as a landing page of the group.
