@@ -14,7 +14,6 @@
 
 declare(strict_types = 1);
 
-use Drupal\Component\Utility\Html;
 use Drupal\media\Entity\MediaType;
 use Drupal\meta_entity\Entity\MetaEntity;
 
@@ -569,18 +568,14 @@ function joinup_core_deploy_109003(array &$sandbox): string {
         $results = $sparl->query($query);
         /** @var \EasyRdf\Sparql\Result $results */
         foreach ($results as $result) {
-          $old_description = Html::escape((string) $result->description);
-          preg_match_all('/{&quot;preview_thumbnail&quot;:[^\]]+\]}/', $old_description, $videos_embed);
-          if (empty($videos_embed[0])) {
+          if (!preg_match_all('/(<p>)?(?<json>{(?=.*preview_thumbnail\b)(?=.*settings\b)(?=.*video_url\b)(?=.*settings_summary)(.*)})(<\/p>)?/', (string) $result->description, $videos_embed)) {
             continue;
           }
-
-          foreach ($videos_embed as $video_embed) {
-            preg_match('/&quot;video_url&quot;:&quot;(.*?)&quot;/', $video_embed[0], $video_url);
-            $media_uuid = _joinup_core_deploy_replace_media($video_url[1], $entity->getOwner() ? $entity->getOwner()->id() : '1');
-            $new_video = '<drupal-media data-entity-type="media" data-entity-uuid="' . $media_uuid . '">&nbsp;</drupal-media>';
-            $new_description = preg_replace('/{&quot;preview_thumbnail&quot;:[^\]]+\]}/', $new_video, $old_description);
-            $new_description = Html::decodeEntities($new_description);
+          foreach ($videos_embed['json'] as $delta => $json) {
+            // Ensure the JSON string is valid.
+            $embed_data = json_decode($json, TRUE);
+            $replace = _joinup_core_deploy_get_media_markup($embed_data['video_url'], $entity->getOwner() ? $entity->getOwner()->id() : '1');
+            $description = str_replace($videos_embed[0][$delta], $replace, (string) $result->description);
             $graph = "<http://joinup.eu/{$entity->bundle()}/published>";
             $update_query = <<<QUERY
           WITH $graph
@@ -589,7 +584,7 @@ function joinup_core_deploy_109003(array &$sandbox): string {
           WHERE { <$entity_id> <{$predicate}> ?description }
           QUERY;
             $sparl->query($update_query, [
-              ':new_description' => $new_description,
+              ':new_description' => $description,
             ]);
           }
         }
@@ -601,16 +596,17 @@ function joinup_core_deploy_109003(array &$sandbox): string {
       $database = \Drupal::database();
       $results = $database->query("SELECT revision_id, " . $field . " FROM " . $table . " WHERE entity_id = " . $entity_id)->fetchAll();
       foreach ($results as $result) {
-        $old_description = Html::escape($result->{$field});
-        preg_match_all('/{&quot;preview_thumbnail&quot;:[^\]]+\]}/', $old_description, $videos_embed);
-        foreach ($videos_embed as $video_embed) {
-          preg_match('/&quot;video_url&quot;:&quot;(.*?)&quot;/', $video_embed[0], $video_url);
-          $media_uuid = _joinup_core_deploy_replace_media($video_url[1], $entity->getOwner()->id());
-          $new_video = '<drupal-media data-entity-type="media" data-entity-uuid="' . $media_uuid . '">&nbsp;</drupal-media>';
-          $new_description = preg_replace('/{&quot;preview_thumbnail&quot;:[^\]]+\]}/', $new_video, $old_description);
+        if (!preg_match_all('/(<p>)?(?<json>{(?=.*preview_thumbnail\b)(?=.*settings\b)(?=.*video_url\b)(?=.*settings_summary)(.*)})(<\/p>)?/', $result->{$field}, $videos_embed)) {
+          continue;
+        }
+        foreach ($videos_embed['json'] as $delta => $json) {
+          // Ensure the JSON string is valid.
+          $embed_data = json_decode($json, TRUE);
+          $replace = _joinup_core_deploy_get_media_markup($embed_data['video_url'], $entity->getOwner() ? $entity->getOwner()->id() : '1');
+          $description = str_replace($videos_embed[0][$delta], $replace, $result->{$field});
           $database->update($table)
             ->fields([
-              $field => Html::decodeEntities($new_description),
+              $field => $description,
             ])
             ->condition('revision_id', $result->revision_id)
             ->execute();
@@ -639,7 +635,7 @@ function joinup_core_deploy_109003(array &$sandbox): string {
  * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
  * @throws \Drupal\Core\Entity\EntityStorageException
  */
-function _joinup_core_deploy_replace_media(string $url, string $owner_id): string {
+function _joinup_core_deploy_get_media_markup(string $url, string $owner_id): string {
   $media_storage = \Drupal::entityTypeManager()->getStorage('media');
   $result = $media_storage->getQuery()
     ->condition('bundle', 'video')
@@ -658,5 +654,6 @@ function _joinup_core_deploy_replace_media(string $url, string $owner_id): strin
   else {
     $video_media = $media_storage->load(reset($result));
   }
-  return $video_media->uuid();
+
+  return '<drupal-media data-entity-type="media" data-entity-uuid="' . $video_media->uuid() . '"/>';
 }
