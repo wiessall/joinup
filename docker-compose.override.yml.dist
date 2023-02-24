@@ -22,30 +22,14 @@ services:
       - '8080:8080'
 
   mysql:
-    # macOS users should override this value by uncommenting the following
-    # 'volumes:' block.
-    #    volumes:
-    #      - ./resources/docker/mysql/config:/etc/mysql/conf.d:cached
-    #      - ./db/mysql/dump/mysql.sql:/db/mysql/dump/mysql.sql:delegated
-    #      - ./scripts/docker/mysql:/docker-entrypoint-initdb.d:cached
     ports:
       - '3306:3306'
 
   sparql:
-    # macOS users should override this value by uncommenting the following
-    # 'volumes:' block.
-    #    volumes:
-    #      - ./db/virtuoso/snapshot:/data/backups:delegated
     ports:
       - '8890:8890'
 
   solr:
-    # macOS users should override this value by uncommenting the following
-    # 'volumes:' block.
-    #    volumes:
-    #      - ./db/solr:/solr/snapshot:delegated
-    #      - ./resources/solr/conf:/solr/conf:cached
-    #      - ./scripts/solr/restore_solr.sh:/opt/solr/bin/restore_solr.sh:cached
     ports:
       - '8983:8983'
 
@@ -57,12 +41,3 @@ services:
   selenium:
     ports:
       - '5900:5900'
-
-# macOS users should uncomment the following block:
-# volumes:
-#  nfsmount:
-#    driver: local
-#    driver_opts:
-#      type: nfs
-#      o: addr=host.docker.internal,rw,nolock,hard,nointr,nfsvers=3
-#      device: ":${PWD}/"
