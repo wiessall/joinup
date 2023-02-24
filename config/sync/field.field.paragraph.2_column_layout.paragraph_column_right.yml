@@ -6,6 +6,7 @@ dependencies:
     - field.storage.paragraph.paragraph_column_right
     - paragraphs.paragraphs_type.2_column_layout
     - paragraphs.paragraphs_type.call_to_action
+    - paragraphs.paragraphs_type.configurable_listing
     - paragraphs.paragraphs_type.image
     - paragraphs.paragraphs_type.simple_paragraph
     - paragraphs.paragraphs_type.testimony
@@ -29,10 +30,17 @@ settings:
       image: image
       call_to_action: call_to_action
       testimony: testimony
+      configurable_listing: configurable_listing
     negate: 0
     target_bundles_drag_drop:
       1_column_layout:
         weight: -31
+        enabled: false
+      2_column_featured_left:
+        weight: 21
+        enabled: false
+      2_column_featured_right:
+        weight: 22
         enabled: false
       2_column_layout:
         weight: -30
@@ -52,6 +60,9 @@ settings:
       carousel:
         weight: -18
         enabled: false
+      configurable_listing:
+        weight: 29
+        enabled: true
       content_listing:
         weight: -26
         enabled: false
@@ -76,4 +87,7 @@ settings:
       testimony:
         weight: -17
         enabled: true
+      video:
+        weight: 38
+        enabled: false
 field_type: entity_reference_revisions
