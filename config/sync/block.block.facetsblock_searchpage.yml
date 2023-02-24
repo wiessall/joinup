@@ -37,7 +37,7 @@ settings:
     'facet_block:solution_my_content': '0'
     'facet_block:solution_content_bundle': '0'
     'facet_block:event_date': '0'
-    'facet_block:field_content_listing_type': '0'
+    'facet_block:content_listing_type': '0'
     'facet_block:authoredon': '0'
     'facet_block:csv_solution_type': '0'
     'facet_block:csv_changed': '0'

@@ -52,20 +52,6 @@ function ventuno_preprocess_page(array &$variables): void {
 }
 
 /**
- * Implements hook_preprocess_HOOK().
- *
- * Exposes the About section which is defined as a variant of the homepage in
- * Page Manager as a variable. This section is using a Layout but needs to be
- * rendered outside the main content region which is controlled by Page Manager.
- */
-function ventuno_preprocess_page__home(array &$variables): void {
-  /** @var \Drupal\page_manager\Entity\PageVariant $about_section_variant */
-  $about_section_variant = \Drupal::entityTypeManager()->getStorage('page_variant')->load('homepage-layout_builder-1');
-  $view_builder = \Drupal::entityTypeManager()->getViewBuilder('page_variant');
-  $variables['about'] = $view_builder->view($about_section_variant);
-}
-
-/**
  * Implements hook_theme_suggestions_HOOK_alter() for container.html.twig.
  */
 function ventuno_theme_suggestions_container_alter(array &$suggestions, array $variables): void {
