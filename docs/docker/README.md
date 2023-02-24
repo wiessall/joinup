@@ -38,12 +38,72 @@ file. Copy `docker-compose.override.yml.dist` over to
 `docker-compose.yml` file because this is developer custom setting, so you'll
 need to set up yours in the override file.
 
-**macOS users**: As Docker has performance issues when the host machine is a
-_macOS_ system, the setup needs more attention. Please read carefully all the
-suggestions documented in the `docker-compose.override.yml.dist` file, specific
-to _macOS_ users and fix the lines in `docker-compose.override.yml` file.
-@todo This is probably not needed anymore.
-@see https://github.com/docker/for-mac/issues/5402 for gRPC-FUSE performance.
+#### 1.2.1 Permissions
+
+In order to be able to handle permissions properly, the correct arguments and/or
+environment variables need to be passed to the containers. The
+`docker-compose.override.yml` file contains the following settings:
+
+```yaml
+  web:
+    image: joinup/web:latest
+    build:
+      context: ./resources/docker/web
+#      args:
+#        USER_ID: 501
+#    environment:
+#      DAEMON_GROUP: dialout
+```
+Out of the top, you will only need to keep 1 couple of settings from the
+`USER_ID`, `GROUP_IS`, `DAEMON_USER` and `DAEMON_GROUP` variables. The idea is
+that the host user will have to match the ID and GID of the DAEMON_USER and
+DAEMON_GROUP that runs the web server. This is needed in order to be able to
+write to the files and directories that are mounted in the container.
+
+By default, `www-data` user is set with ID `1000` and `www-data` group is set
+with GID `1000`. If you are using a Linux machine, and you are using the default
+user, you can keep the default settings. If you are using a Mac, the default
+user ID and group ID are `501` and `20` respectively. If you are using a Mac,
+you will need to uncomment the corresponding lines in the
+`docker-compose.override.yml`
+
+```yaml
+  web:
+    image: joinup/web:latest
+    build:
+      context: ./resources/docker/web
+      args:
+        USER_ID: 501
+    environment:
+      DAEMON_GROUP: dialout
+```
+
+For any other case, please, use the corresponding `USER_ID` and `GROUP_ID`
+and/or the `DAEMON_USER` and `DAEMON_GROUP` variables.
+
+```yaml
+  web:
+    image: joinup/web:latest
+    build:
+      context: ./resources/docker/web
+      args:
+        USER_ID: 1004
+        GROUP_ID: 1004
+```
+or
+
+```yaml
+  web:
+    image: joinup/web:latest
+    build:
+      context: ./resources/docker/web
+    environment:
+      DAEMON_USER: some_existing_user
+      DAEMON_GROUP: some_existing_group
+```
+
+The variables can be used together but only one of `USER_ID` and `DAEMON_USER`
+and only one of `GROUP_ID` and `DAEMON_GROUP` can be used at the same time.
 
 ### 1.3 Set up your local runner.yml.
 
