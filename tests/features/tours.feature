@@ -28,12 +28,13 @@ Feature: Tours
 
     Examples:
       | path             | expectation   |
-      | /                | should be     |
+      # No button exists in the homepage.
+      | /                | should not be |
       | /keep-up-to-date | should be     |
       | /collections     | should not be |
       | /solutions       | should not be |
       # Recheck some URLs to ensure that cache contexts are working.
-      | /                | should be     |
+      | /                | should not be |
       | /solutions       | should not be |
       | /keep-up-to-date | should be     |
 
