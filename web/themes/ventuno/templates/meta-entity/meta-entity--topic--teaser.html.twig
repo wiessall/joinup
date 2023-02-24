@@ -11,10 +11,11 @@
   'overflow-hidden',
   'shadow-sm',
 ] %}
+{% set read_more = 'Read more about @title'|t({'@title': content.label|render|striptags|trim}) %}
 <div class="col">
   <article{{ attributes.addClass(classes) }}>
-    <a href="{{ url }}" class="position-absolute top-0 end-0 bottom-0 start-0" title="{{ 'Read more about'|t ~ ' ' ~ content.label|render|striptags|trim }}">
-      <span class="visually-hidden">{{ 'Read more about'|t ~ ' ' ~ content.label|render|striptags|trim }}</span>
+    <a href="{{ url }}" class="position-absolute top-0 end-0 bottom-0 start-0" title="{{ read_more }}">
+      <span class="visually-hidden">{{ read_more }}</span>
     </a>
     {{ title_prefix }}
     {{ content.image }}
