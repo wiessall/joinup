@@ -67,7 +67,7 @@ third_party_settings:
         - created
         - field_is_content
         - field_is_logo
-        - rdf_entity_field_is_content_top
+        - rdf_entity_solution_field_is_content_top
         - read_more
       label: 'Abstract wrapper'
       parent_name: ''
@@ -206,8 +206,8 @@ hidden:
   langcode: true
   og_group: true
   pinned_in: true
-  rdf_entity_field_is_content_inline_facets: true
-  rdf_entity_field_is_content_top: true
+  rdf_entity_solution_field_is_content_inline_facets: true
+  rdf_entity_solution_field_is_content_top: true
   read_more: true
   related_solution: true
   related_solutions: true

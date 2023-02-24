@@ -11,6 +11,8 @@ id: spatial_coverage
 name: 'Geographic coverage'
 weight: -1
 min_count: 1
+missing: false
+missing_label: others
 url_alias: spatial_coverage
 facet_source_id: 'search_api:views_page__search__page_1'
 field_identifier: spatial_coverage

@@ -18,6 +18,7 @@ components:
       assets/css/components.css: {}
   dependencies:
     - ventuno/components.js
+    - contact_information/contact-wysiwyg
 
 components.js:
   version: VERSION
@@ -187,6 +188,13 @@ nav:
     theme:
       assets/css/nav.min.css: { minified: true }
 
+header-topic:
+  js:
+    assets/js/toggle-text-seemore-btn.min.js: { minified: true }
+  css:
+    theme:
+      assets/css/header-topic.min.css: {}
+
 ief-entity-table:
   css:
     theme:
@@ -196,6 +204,11 @@ iop-header:
   css:
     theme:
       assets/css/iop-header.min.css: { minified: true }
+
+layout-block:
+  css:
+    theme:
+      assets/css/layout-block.min.css: { minified: true }
 
 navbar:
   css:
@@ -242,7 +255,7 @@ share-content-form:
 
 shared-entity:
   js:
-    assets/js/shared-entity.js: { minified: true, attributes: { defer: true } }
+    assets/js/shared-entity.min.js: { minified: true, attributes: { defer: true } }
   dependencies:
     - core/drupalSettings
 
@@ -264,6 +277,11 @@ timeline:
   css:
     theme:
       assets/css/timeline.min.css: {}
+
+tile-two:
+  css:
+    theme:
+      assets/css/tile-two.min.css: {}
 
 toolbar:
   css:
