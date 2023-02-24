@@ -16,6 +16,7 @@ function ventuno_preprocess_rdf_entity(array &$variables): void {
   // Workaround for incorrect rendering of RDF entity label.
   // @see https://www.drupal.org/project/rdf_entity/issues/3209500
   $variables['label'] = $variables['rdf_entity']->label();
+  _ventuno_preprocess_search_result($variables, 'rdf_entity');
 }
 
 /**

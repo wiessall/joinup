@@ -1,0 +1,18 @@
+uuid: c20c1e24-eee7-47de-b9b5-34e3a4d6031a
+langcode: en
+status: true
+dependencies:
+  module:
+    - joinup_core
+  theme:
+    - ventuno
+id: topic_page
+label: 'Topic page'
+theme: ventuno
+weight: 0
+conditions:
+  request_route:
+    id: request_route
+    negate: false
+    routes:
+      - entity.meta_entity.canonical

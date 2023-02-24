@@ -61,3 +61,11 @@ function ventuno_preprocess_paragraphs_jquery_ui_accordion_formatter(array &$var
 
   $variables['parent_id'] = $parent->id();
 }
+
+/**
+ * Implements hook_preprocess_HOOK().
+ */
+function ventuno_preprocess_paragraph__configurable_listing(&$variables) {
+  $paragraph = $variables['paragraph'];
+  $variables['style'] = $paragraph->get('list_style')->value;
+}

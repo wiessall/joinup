@@ -1851,6 +1851,32 @@ class JoinupContext extends RawDrupalContext {
   }
 
   /**
+   * Asserts that a featured stats exist in the header.
+   *
+   * @Then I should see a featured stats on the header
+   */
+  public function assertExistingFeaturedStats(): void {
+    $xpath = '//ul[contains(concat(" ", normalize-space(@class), " "), "group-stats")]/@class';
+    // @todo Remove the following line in ISAICP-7138.
+    // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7138
+    $xpath .= ' | //div[contains(concat(" ", normalize-space(@class), " "), "featured__stats")]/@class';
+    $this->assertSession()->elementsCount('xpath', $xpath, 1);
+  }
+
+  /**
+   * Asserts that a featured stats not exist in the header.
+   *
+   * @Then I should not see a featured stats on the header
+   */
+  public function assertNotExistingFeaturedStats(): void {
+    $xpath = '//ul[contains(concat(" ", normalize-space(@class), " "), "group-stats")]/@class';
+    // @todo Remove the following line in ISAICP-7138.
+    // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7138
+    $xpath .= ' | //div[contains(concat(" ", normalize-space(@class), " "), "featured__stats")]/@class';
+    $this->assertSession()->elementsCount('xpath', $xpath, 0);
+  }
+
+  /**
    * Asserts that the current user's profile picture is shown in the header.
    *
    * @Then my user profile picture should be shown in the page header
@@ -3088,6 +3114,25 @@ class JoinupContext extends RawDrupalContext {
   }
 
   /**
+   * Changes the name of a term.
+   *
+   * @param string $old_name
+   *   The current name of the term.
+   * @param string $new_name
+   *   The new name for the term.
+   *
+   * @Given the name of the :old_name term is changed to :new_name
+   */
+  public function givenTermNameChanges(string $old_name, string $new_name): void {
+    $terms = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->loadByProperties([
+      'name' => $old_name,
+    ]);
+    $term = reset($terms);
+    $term->setName($new_name);
+    $term->save();
+  }
+
+  /**
    * Returns the listing tiles/cards in the page.
    *
    * @return \Behat\Mink\Element\NodeElement[]
@@ -3101,6 +3146,7 @@ class JoinupContext extends RawDrupalContext {
       '.card .card-title',
       // Tiles as an article.
       'article.tile h2',
+      'article.tile h3',
       // Carousel for non javascript test.
       '.glide__slides .slide span',
       // Carousel for javascript test.
