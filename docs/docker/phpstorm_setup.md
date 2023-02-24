@@ -1,5 +1,10 @@
 # Welcome to the PhpStorm Docker setup guide!
 
+## Code style
+
+To setup the code style, head to File > Settings > Editor > Code Style and
+select PHP. Click on the `Set from...` button and select `Drupal`. Click Apply.
+
 ## Interpreter setup
 
 After you launch your project and copy the necessary files as described in the
