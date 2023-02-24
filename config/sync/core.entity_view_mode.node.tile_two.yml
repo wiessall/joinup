@@ -1,0 +1,10 @@
+uuid: f84018ff-5c24-4347-babf-51e43a229432
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+id: node.tile_two
+label: 'Tile two'
+targetEntityType: node
+cache: true
