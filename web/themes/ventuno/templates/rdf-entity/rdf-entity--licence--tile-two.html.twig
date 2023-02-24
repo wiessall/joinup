@@ -1,0 +1,24 @@
+{#
+/**
+ * @file
+ * Themeing for rdf entities.
+ */
+#}
+{% block content %}
+  {% set image %}
+    <a href="{{ url }}" class="d-block">
+      <svg class="bi img-fluid text-secondary"><use xlink:href="{{ bcl_icon_path }}#file-earmark-medical"></use></svg>
+    </a>
+  {% endset %}
+  {% set text = content.field_licence_description|render|striptags|length > 200 ? content.field_licence_description|render|striptags|trim|slice(0, 200) ~ '...' : content.field_licence_description|render|striptags %}
+  {{ pattern('tile_two', {
+    attributes: attributes,
+    content_attributes: content_attributes,
+    image: image,
+    title_prefix: title_prefix,
+    title: label,
+    title_suffix: title_suffix,
+    url: url,
+    text: text,
+  }) }}
+{% endblock %}
