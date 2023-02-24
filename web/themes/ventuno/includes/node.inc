@@ -50,13 +50,6 @@ function ventuno_preprocess_node__explore_item(array &$variables): void {
 }
 
 /**
- * Implements hook_preprocess_HOOK().
- */
-function ventuno_preprocess_node(array &$variables): void {
-  _ventuno_preprocess_search_result($variables, 'node');
-}
-
-/**
  * Implements hook_preprocess_HOOK() for node--discussion--view-mode-tile.html.twig.
  *
  * Provides the comment count as a variable.
@@ -89,6 +82,7 @@ function ventuno_preprocess_node__tallinn_report__view_mode_tile(&$variables) {
  * - Adds a variable indicating the attachment file type on documents.
  */
 function ventuno_preprocess_node(array &$variables): void {
+  _ventuno_preprocess_search_result($variables, 'node');
   /** @var \Drupal\node\NodeInterface $node */
   $node = $variables['node'];
 
