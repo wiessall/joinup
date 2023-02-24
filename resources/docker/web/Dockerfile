@@ -15,7 +15,6 @@ RUN if [ ! -z "${USER_ID}" ] && [ -z $(grep -E "[^:]*:x:${USER_ID}:" /etc/passwd
       exit 2; \
   fi;
 
-
 # Check if there is a group with the ID ${GROUP_ID}. If there is no group,
 # run groupmod to the group www-data to the given ID. If there is a group with
 # the given ID, show an error that prints this group's name and that the
