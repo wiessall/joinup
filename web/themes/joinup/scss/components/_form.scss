@@ -334,6 +334,11 @@
 
 // Paragraphs
 // --------------------------------------------------
+#edit-topics-paragraph-wrapper {
+  .form-table .form-table__row .dropbutton {
+    flex-wrap: wrap;
+  }
+}
 #edit-field-paragraphs-body-wrapper {
   .field-multiple-drag {
     width: 30px;

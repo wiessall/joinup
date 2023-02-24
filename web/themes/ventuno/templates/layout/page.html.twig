@@ -68,7 +68,7 @@
   {% endif %}
 
   {% if page.messages %}
-    <div class="container mt-3">
+    <div class="container{% if page.messages|render|striptags|trim %} mt-3{% endif %}">
       {{ page.messages }}
     </div>
   {% endif %}
@@ -82,7 +82,7 @@
   <div class="content container mb-5">
     {% if page.sidebar %}
       <div class="row">
-        <main role="main" class="col-12 col-lg-9 col-xxl-9 order-1">
+        <main role="main" class="col-12 col-lg-9 order-1">
           <div id="main-content" tabindex="-1"></div>{# link is in html.html.twig #}
           <div class="layout-content">
             {{ page.content }}
@@ -94,6 +94,7 @@
         <aside class="layout-sidebar col-12 col-lg-3">
           {{ page.sidebar }}
         </aside>
+      </div>
     {% else %}
       <main role="main">
         <div id="main-content" tabindex="-1"></div>{# link is in html.html.twig #}
