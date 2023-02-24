@@ -157,35 +157,39 @@ class SearchWidget extends WidgetBase implements ContainerFactoryPluginInterface
       '#extra' => array_keys($facets),
     ];
 
-    $table = [
-      '#type' => 'field_ui_table',
-      '#header' => $this->getTableHeader(),
-      '#regions' => $this->getRegions(),
-      '#attributes' => [
-        'class' => ['field-ui-overview'],
-        'id' => 'field-display-overview',
-      ],
-      '#tabledrag' => [
-        [
-          'action' => 'order',
-          'relationship' => 'sibling',
-          'group' => 'field-weight',
-        ],
-        [
-          'action' => 'match',
-          'relationship' => 'parent',
-          'group' => 'field-parent',
-          'subgroup' => 'field-parent',
-          'source' => 'field-name',
-        ],
-      ],
-    ];
+    if (!empty($facets)) {
 
-    $form['#attached']['library'][] = 'search_api_field/drupal.search_api_field';
-    foreach ($facets as $facet_id => $facet) {
-      $table[$facet_id] = $this->buildFacetRow($facet, $item);
+      $table = [
+        '#type' => 'field_ui_table',
+        '#header' => $this->getTableHeader(),
+        '#regions' => $this->getRegions(),
+        '#attributes' => [
+          'class' => ['field-ui-overview'],
+          'id' => 'field-display-overview',
+        ],
+        '#tabledrag' => [
+          [
+            'action' => 'order',
+            'relationship' => 'sibling',
+            'group' => 'field-weight',
+          ],
+          [
+            'action' => 'match',
+            'relationship' => 'parent',
+            'group' => 'field-parent',
+            'subgroup' => 'field-parent',
+            'source' => 'field-name',
+          ],
+        ],
+      ];
+
+      $form['#attached']['library'][] = 'search_api_field/drupal.search_api_field';
+      foreach ($facets as $facet_id => $facet) {
+        $table[$facet_id] = $this->buildFacetRow($facet, $item);
+      }
+      $element['wrapper']['fields'] = $table;
     }
-    $element['wrapper']['fields'] = $table;
+
     $element['wrapper']['refresh_rows'] = ['#type' => 'hidden'];
     $element['wrapper']['refresh'] = [
       '#type' => 'submit',
@@ -348,8 +352,7 @@ class SearchWidget extends WidgetBase implements ContainerFactoryPluginInterface
    *   List of facet regions.
    */
   protected function getRegions() {
-    $storage = $this->fieldDefinition->getFieldStorageDefinition();
-    $facet_regions = $storage->getSetting('facet_regions');
+    $facet_regions = $this->fieldDefinition->getSetting('facet_regions');
     $regions = [];
     foreach ($facet_regions as $id => $label) {
       $regions[$id] = [
@@ -448,9 +451,10 @@ class SearchWidget extends WidgetBase implements ContainerFactoryPluginInterface
    *   List of facets.
    */
   protected function getFacets() {
-    $storage = $this->fieldDefinition->getFieldStorageDefinition();
     $facet_storage = $this->entityTypeManager->getStorage('facets_facet');
-    $facets = $facet_storage->loadByProperties(['facet_source_id' => 'search_api_field:' . $storage->id()]);
+    $facets = $facet_storage->loadByProperties([
+      'facet_source_id' => 'search_api_field:' . $this->fieldDefinition->id(),
+    ]);
     return $facets;
   }
 

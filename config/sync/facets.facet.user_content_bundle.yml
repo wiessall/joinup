@@ -9,7 +9,7 @@ min_count: 1
 missing: false
 missing_label: others
 url_alias: user_content_bundle
-facet_source_id: 'search_api_field:user.field_user_content'
+facet_source_id: 'search_api_field:user.user.field_user_content'
 field_identifier: entity_bundle
 query_operator: or
 hard_limit: 0
