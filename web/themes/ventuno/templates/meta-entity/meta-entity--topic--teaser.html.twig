@@ -21,7 +21,7 @@
     {{ content.image }}
     <div class="p-3">
       <h1{{ title_attributes.addClass(['h5', 'text-primary']) }}>{{ content.label }}</h1>
-      <div class="text-dark fs-sm">{{ content.description }}</div>
+      <p class="mb-0 text-dark fs-sm">{{ content.description|render|striptags }}</p>
     </div>
     {{ title_suffix }}
   </article>
