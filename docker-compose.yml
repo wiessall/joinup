@@ -21,7 +21,7 @@ services:
       SMTP_FROM: contact@example.com
       DRUPAL_PRIVATE_FILE_SYSTEM: /var/www/html/private
       DRUPAL_FILE_TEMP_PATH: /var/www/html/tmp
-      XDEBUG_CONFIG: "remote_host=host.docker.internal start_with_request=yes"
+      XDEBUG_CONFIG: "client_host=host.docker.internal start_with_request=yes"
       XDEBUG_MODE: "develop, debug"
       PHP_IDE_CONFIG: "serverName=Docker"
     depends_on:
