@@ -1,0 +1,85 @@
+uuid: 1f9bd00c-e035-4785-a93d-6bc6fe305cae
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.meta_entity.topics_paragraph
+    - meta_entity.type.topic
+    - paragraphs.paragraphs_type.row
+  module:
+    - entity_reference_revisions
+id: meta_entity.topic.topics_paragraph
+field_name: topics_paragraph
+entity_type: meta_entity
+bundle: topic
+label: Body
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:paragraph'
+  handler_settings:
+    target_bundles:
+      row: row
+    negate: 0
+    target_bundles_drag_drop:
+      1_column_layout:
+        weight: 20
+        enabled: false
+      2_column_featured_left:
+        weight: 21
+        enabled: false
+      2_column_featured_right:
+        weight: 22
+        enabled: false
+      2_column_layout:
+        weight: 23
+        enabled: false
+      3_column_layout:
+        weight: 24
+        enabled: false
+      accordion:
+        weight: 25
+        enabled: false
+      accordion_item:
+        weight: 26
+        enabled: false
+      call_to_action:
+        weight: 27
+        enabled: false
+      carousel:
+        weight: 28
+        enabled: false
+      configurable_listing:
+        weight: 29
+        enabled: false
+      content_listing:
+        weight: 30
+        enabled: false
+      entity_reference:
+        weight: 31
+        enabled: false
+      iframe:
+        weight: 32
+        enabled: false
+      image:
+        weight: 33
+        enabled: false
+      json_map:
+        weight: 34
+        enabled: false
+      row:
+        weight: 35
+        enabled: true
+      simple_paragraph:
+        weight: 36
+        enabled: false
+      testimony:
+        weight: 37
+        enabled: false
+      video:
+        weight: 38
+        enabled: false
+field_type: entity_reference_revisions
