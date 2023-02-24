@@ -1,0 +1,61 @@
+uuid: b53cb44d-c3cf-46d5-8baa-e5be53f1c522
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.meta_entity.teaser
+    - field.field.meta_entity.topic.description
+    - field.field.meta_entity.topic.image
+    - field.field.meta_entity.topic.published
+    - field.field.meta_entity.topic.topics_paragraph
+    - meta_entity.type.topic
+  module:
+    - image
+    - layout_builder
+    - template_suggestion
+    - text
+third_party_settings:
+  layout_builder:
+    enabled: false
+    allow_custom: false
+id: meta_entity.topic.teaser
+targetEntityType: meta_entity
+bundle: topic
+mode: teaser
+content:
+  description:
+    type: text_summary_or_trimmed
+    label: hidden
+    settings:
+      trim_length: 100
+    third_party_settings:
+      template_suggestion:
+        template_suggestion: ''
+    weight: 1
+    region: content
+  image:
+    type: image
+    label: hidden
+    settings:
+      image_link: ''
+      image_style: ''
+      image_loading:
+        attribute: lazy
+    third_party_settings: {  }
+    weight: 1
+    region: content
+  label:
+    type: string
+    label: hidden
+    settings:
+      link_to_entity: true
+    third_party_settings: {  }
+    weight: 0
+    region: content
+hidden:
+  changed: true
+  created: true
+  published: true
+  search_api_excerpt: true
+  target: true
+  topics_paragraph: true

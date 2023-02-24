@@ -1,0 +1,44 @@
+.header-topic {
+  position: relative;
+  padding: $spacer * 1.5 0;
+  &::before {
+    content: "";
+    position: absolute;
+    background-color: $ec-blue;
+    width: 100vw;
+    margin-left: calc(50% - 50vw);
+    top: 0;
+    bottom: 0;
+    z-index: -1;
+  }
+  &__title {
+    color: $white;
+  }
+  &__description {
+    color: $white;
+    margin-bottom: 0;
+    &--long {
+      display: -webkit-box!important;
+      min-height: 48px;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      &.show {
+        -webkit-line-clamp: unset;
+      }
+    }
+    a {
+      color: $white;
+      text-decoration: underline;
+      text-decoration-color: $white!important;
+    }
+  }
+  &__see-more-btn {
+    color: $white;
+    &:hover,
+    &:focus-visible {
+      color: $white!important;
+      text-decoration: underline!important;
+    }
+  }
+}

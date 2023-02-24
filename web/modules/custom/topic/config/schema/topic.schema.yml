@@ -1,0 +1,3 @@
+views.field.topic_meta_entity_parent_link:
+  type: views.field.entity_link
+  label: Parent topic meta entity link
