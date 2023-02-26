@@ -97,8 +97,8 @@ content:
     type: oe_webtools_maps_map
     label: hidden
     settings:
-      zoom_level: 16
       show_marker: true
+      zoom_level: 16
     third_party_settings:
       template_suggestion:
         template_suggestion: ''
