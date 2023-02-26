@@ -8,6 +8,7 @@ use Behat\Behat\Hook\Scope\AfterScenarioScope;
 use Behat\Gherkin\Node\TableNode;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\contact_information\ContactInformationEmailConfirmInterface;
+use Drupal\email_confirmer\EmailConfirmationInterface;
 use Drupal\joinup\Traits\AliasTranslatorTrait;
 use Drupal\joinup\Traits\EntityTrait;
 use Drupal\joinup\Traits\MailCollectorTrait;
@@ -292,11 +293,7 @@ class ContactInformationContext extends RawDrupalContext {
    * @Given the confirmation request for :email should not be expired
    */
   public function givenConfirmationNotExpired(string $email): void {
-    $email_confirmer = \Drupal::getContainer()->get('email_confirmer');
-    $confirmation = $email_confirmer->getConfirmation($email, FALSE, ContactInformationEmailConfirmInterface::REALM);
-    if (empty($confirmation)) {
-      throw new \RuntimeException("No confirmation request found for $email");
-    }
+    $confirmation = $this->getEmailConfirmation($email, NULL);
     Assert::assertFalse($confirmation->isExpired(), 'Confirmation request is not expired.');
   }
 
@@ -309,13 +306,41 @@ class ContactInformationContext extends RawDrupalContext {
    * @Given that the pending confirmation request for :email has been confirmed
    */
   public function confirmConfirmationRequest(string $email): void {
+    $confirmation = $this->getEmailConfirmation($email, 'pending');
+    $confirmation->confirm($confirmation->getHash());
+    $confirmation->save();
+  }
+
+  /**
+   * Cancels a confirmation request for an email.
+   *
+   * @param string $email
+   *   The email to confirm.
+   *
+   * @Given that the pending confirmation request for :email has been cancelled
+   */
+  public function cancelConfirmationRequest(string $email): void {
+    $this->getEmailConfirmation($email, 'pending')->cancel()->save();
+  }
+
+  /**
+   * Returns a confirmation email request.
+   *
+   * @param string $email
+   *   The mail that the confirmation request refers to.
+   * @param string|null $status
+   *   (optional) The status of the confirmation request. Defaults to 'pending'.
+   *
+   * @return \Drupal\email_confirmer\EmailConfirmationInterface
+   *   The confirmation request.
+   */
+  protected function getEmailConfirmation(string $email, ?string $status): EmailConfirmationInterface {
     $email_confirmer = \Drupal::getContainer()->get('email_confirmer');
-    $confirmation = $email_confirmer->getConfirmation($email, 'pending', ContactInformationEmailConfirmInterface::REALM);
+    $confirmation = $email_confirmer->getConfirmation($email, $status ?? FALSE, ContactInformationEmailConfirmInterface::REALM);
     if (empty($confirmation)) {
       throw new \RuntimeException("No pending confirmation request found for $email");
     }
-    $confirmation->confirm($confirmation->getHash());
-    $confirmation->save();
+    return $confirmation;
   }
 
   /**
