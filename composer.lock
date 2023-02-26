@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "3de615547068d3e4ae8a126640846f13",
+    "content-hash": "36a2295372d7113d4d88ec98c07c4fc7",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -10445,16 +10445,16 @@
         },
         {
             "name": "openeuropa/oe_webtools",
-            "version": "1.20.0",
+            "version": "1.21.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/openeuropa/oe_webtools.git",
-                "reference": "28abd2076cb42d0c823f49f9d44ce0166d3ebb41"
+                "reference": "eedab13fba0141397704e710eac50a1ab72c200e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/openeuropa/oe_webtools/zipball/28abd2076cb42d0c823f49f9d44ce0166d3ebb41",
-                "reference": "28abd2076cb42d0c823f49f9d44ce0166d3ebb41",
+                "url": "https://api.github.com/repos/openeuropa/oe_webtools/zipball/eedab13fba0141397704e710eac50a1ab72c200e",
+                "reference": "eedab13fba0141397704e710eac50a1ab72c200e",
                 "shasum": ""
             },
             "require": {
@@ -10547,9 +10547,9 @@
             "description": "OpenEuropa Webtools integration.",
             "support": {
                 "issues": "https://github.com/openeuropa/oe_webtools/issues",
-                "source": "https://github.com/openeuropa/oe_webtools/tree/1.20.0"
+                "source": "https://github.com/openeuropa/oe_webtools/tree/1.21.1"
             },
-            "time": "2023-01-04T08:49:08+00:00"
+            "time": "2023-02-16T11:26:42+00:00"
         },
         {
             "name": "pear/archive_tar",
