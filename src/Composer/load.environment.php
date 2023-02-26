@@ -16,7 +16,7 @@ use Dotenv\Dotenv;
 // and '.env.pipeline', if they exist.
 $path = dirname(__DIR__, 2);
 $candidates = array_filter(
-  ['.env.dist', '.env'],
+  ['.env.dist', '.env', '.env.pipeline'],
   function (string $file) use ($path): bool {
     return file_exists("{$path}/{$file}");
   }
