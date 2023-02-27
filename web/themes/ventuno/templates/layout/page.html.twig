@@ -88,8 +88,11 @@
   {% endif %}
 
   <div class="content container mb-5">
+    {% if page.sidebar %}
+      <div class="row">
+    {% endif %}
     <main role="main">
-      <div id="main-content" tabindex="-1"></div>{# link is in html.html.twig #}
+      <div id="main-content" tabindex="-1"{% if page.sidebar %} class="col-12 col-lg-9 order-1"{% endif %}></div>
       {% block page_content %}
         <div class="layout-content">
           {{ page.content }}
@@ -101,6 +104,12 @@
         {% endblock %}
       {% endif %}
     </main>
+    {% if page.sidebar %}
+        <aside class="layout-sidebar col-12 col-lg-3">
+          {{ page.sidebar }}
+        </aside>
+      </div>
+    {% endif %}
   </div>
 
   {% if page.footer %}
