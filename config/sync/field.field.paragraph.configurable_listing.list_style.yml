@@ -1,0 +1,23 @@
+uuid: 5978ec57-0048-4cc2-af54-d26e22f80f54
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.list_style
+    - paragraphs.paragraphs_type.configurable_listing
+  module:
+    - options
+id: paragraph.configurable_listing.list_style
+field_name: list_style
+entity_type: paragraph
+bundle: configurable_listing
+label: 'List style'
+description: ''
+required: true
+translatable: false
+default_value:
+  -
+    value: list
+default_value_callback: ''
+settings: {  }
+field_type: list_string

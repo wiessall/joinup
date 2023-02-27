@@ -107,10 +107,22 @@ glide:
     theme:
       assets/css/glide.core.min.css: { minified: true }
 
+header-topic:
+  js:
+    assets/js/toggle-text-seemore-btn.min.js: { minified: true }
+  css:
+    theme:
+      assets/css/header-topic.min.css: {}
+
 ief-entity-table:
   css:
     theme:
       assets/css/ief-entity-table.css: {}
+
+layout-block:
+  css:
+    theme:
+      assets/css/layout-block.min.css: { minified: true }
 
 navbar:
   css:
@@ -142,6 +154,11 @@ tabledrag:
   css:
     theme:
       assets/css/tabledrag.css: {}
+
+tile-two:
+  css:
+    theme:
+      assets/css/tile-two.min.css: {}
 
 toolbar:
   css:

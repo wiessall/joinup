@@ -27,12 +27,12 @@ class SearchItem extends FieldItemBase implements SearchItemInterface {
   /**
    * {@inheritdoc}
    */
-  public static function defaultStorageSettings() {
+  public static function defaultFieldSettings() {
     return [
       'index' => NULL,
       'facet_regions' => [],
       'view_modes' => [],
-    ] + parent::defaultStorageSettings();
+    ] + parent::defaultFieldSettings();
   }
 
   /**
@@ -73,7 +73,7 @@ class SearchItem extends FieldItemBase implements SearchItemInterface {
   /**
    * {@inheritdoc}
    */
-  public function storageSettingsForm(array &$form, FormStateInterface $form_state, $has_data) {
+  public function fieldSettingsForm(array $form, FormStateInterface $form_state): array {
     $search_api_indexes = \Drupal::entityTypeManager()->getStorage('search_api_index')->loadMultiple();
     $index_options = [];
     /** @var  \Drupal\search_api\IndexInterface $search_api_index */
@@ -104,7 +104,6 @@ class SearchItem extends FieldItemBase implements SearchItemInterface {
       '#rows' => 10,
       '#access' => empty($facet_regions_function),
       '#element_validate' => [[get_class($this), 'validateAllowedValues']],
-      '#field_has_data' => $has_data,
       '#field_name' => $this->getFieldDefinition()->getName(),
       '#entity_type' => $this->getEntity()->getEntityTypeId(),
       '#facet_regions' => $facet_regions,
@@ -229,7 +228,7 @@ class SearchItem extends FieldItemBase implements SearchItemInterface {
    * @see \Drupal\Core\Render\Element\FormElement::processPattern()
    */
   public static function validateAllowedValues(array $element, FormStateInterface $form_state) {
-    $values = static::extractAllowedValues($element['#value'], $element['#field_has_data']);
+    $values = static::extractAllowedValues($element['#value']);
 
     if (!is_array($values)) {
       $form_state->setError($element, t('Allowed values list: invalid input.'));
@@ -243,14 +242,6 @@ class SearchItem extends FieldItemBase implements SearchItemInterface {
         }
       }
 
-      // Prevent removing values currently in use.
-      if ($element['#field_has_data']) {
-        $lost_keys = array_keys(array_diff_key($element['#allowed_values'], $values));
-        if (_options_values_in_use($element['#entity_type'], $element['#field_name'], $lost_keys)) {
-          $form_state->setError($element, t('Allowed values list: some values are being removed while currently in use.'));
-        }
-      }
-
       $form_state->setValueForElement($element, $values);
     }
   }
@@ -260,8 +251,6 @@ class SearchItem extends FieldItemBase implements SearchItemInterface {
    *
    * @param string $string
    *   The raw string to extract values from.
-   * @param bool $has_data
-   *   The current field already has data inserted or not.
    *
    * @return array|null
    *   The array of extracted key/value pairs, or NULL if the string is invalid.
@@ -269,7 +258,7 @@ class SearchItem extends FieldItemBase implements SearchItemInterface {
    * @see \Drupal\options\Plugin\Field\FieldType\ListItemBase::extractAllowedValues()
    * @see \Drupal\options\Plugin\Field\FieldType\ListTextItem::allowedValuesString()
    */
-  protected static function extractAllowedValues($string, $has_data) {
+  protected static function extractAllowedValues($string) {
     $values = [];
 
     $list = explode("\n", $string);
@@ -292,7 +281,7 @@ class SearchItem extends FieldItemBase implements SearchItemInterface {
         $explicit_keys = TRUE;
       }
       // Otherwise see if we can generate a key from the position.
-      elseif (!$has_data) {
+      elseif (!empty($position)) {
         $key = (string) $position;
         $value = $text;
         $generated_keys = TRUE;
@@ -376,7 +365,7 @@ class SearchItem extends FieldItemBase implements SearchItemInterface {
   /**
    * {@inheritdoc}
    */
-  public static function storageSettingsToConfigData(array $settings) {
+  public static function fieldSettingsToConfigData(array $settings) {
     // Remove the extra 'wrapper' element that was added to allow ajax rendering
     // of the view modes fieldset.
     // @see self::storageSettingsForm()

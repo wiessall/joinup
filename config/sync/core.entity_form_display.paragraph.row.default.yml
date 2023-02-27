@@ -4,8 +4,8 @@ status: true
 dependencies:
   config:
     - field.field.paragraph.row.paragraph_column_layout
-    - field.field.paragraph.row.paragraph_row_background
     - field.field.paragraph.row.paragraph_heading
+    - field.field.paragraph.row.paragraph_row_background
     - field.field.paragraph.row.paragraph_row_subheading
     - field.field.paragraph.row.row_theme
     - paragraphs.paragraphs_type.row
@@ -48,7 +48,7 @@ third_party_settings:
         - paragraph_heading
         - paragraph_row_subheading
         - paragraph_column_layout
-      label: 'Row items'
+      label: Content
       region: content
       parent_name: group_paragraph_row_accordion
       weight: 10
@@ -58,7 +58,6 @@ third_party_settings:
         show_empty_fields: false
         id: ''
         formatter: open
-        description: ''
         required_fields: true
 id: paragraph.row.default
 targetEntityType: paragraph

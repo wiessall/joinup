@@ -29,6 +29,8 @@ Feature:
     And I should not see the "About means" tile
 
     When I go to the homepage of the "Drafty things" <group>
+    Then I should not see the "About means" tile
+    And I click "Unpublished content" in the "Entity actions" region
     Then I should see the "About means" tile
     And the logo should be shown in the "About means" custom page tile
 
