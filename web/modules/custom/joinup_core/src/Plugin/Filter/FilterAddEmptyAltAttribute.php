@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace Drupal\joinup_core\Plugin\Filter;
 
 use Drupal\Component\Utility\Html;
@@ -34,7 +36,7 @@ class FilterAddEmptyAltAttribute extends FilterBase {
     // Process each image element found without alt attribute.
     /** @var \DOMElement $dom_element */
     foreach ($xpath->query('//img[not(@alt)]') as $dom_element) {
-      $dom_element->setAttribute('alt', "");
+      $dom_element->setAttribute('alt', '');
     }
 
     return new FilterProcessResult(Html::serialize($dom));
