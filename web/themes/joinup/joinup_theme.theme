@@ -636,6 +636,7 @@ function joinup_theme_preprocess_block(&$variables) {
       case 'entity.rdf_entity.member_overview':
       case 'entity.user.canonical':
       case 'joinup_subscription.my_subscriptions':
+      case 'entity.rdf_entity.unpublished_content':
       case 'joinup_licence.comparer':
         $is_listing = TRUE;
         break;
@@ -978,9 +979,9 @@ function joinup_theme_preprocess_form_element(&$variables) {
 
     // Additional margin for custom elements.
     $additional_wrappers = [
-      'field_content_listing[0][enabled]',
-      'field_content_listing[0][wrapper][show_shared]',
-      'field_content_listing[0][wrapper][query_presets]',
+      'content_listing[0][enabled]',
+      'content_listing[0][wrapper][show_shared]',
+      'content_listing[0][wrapper][query_presets]',
     ];
 
     if (isset($variables['name']) && in_array($variables['name'], $additional_wrappers)) {

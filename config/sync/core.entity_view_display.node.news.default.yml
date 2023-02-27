@@ -91,7 +91,7 @@ content:
     region: content
   field_news_logo:
     type: image
-    label: above
+    label: hidden
     settings:
       image_link: content
       image_style: logo
