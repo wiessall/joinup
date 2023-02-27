@@ -1,0 +1,62 @@
+{#
+/**
+ * @file
+ * Tile two pattern.
+ */
+#}
+{% apply spaceless %}
+
+  {# Parameters:
+    - image (object) (default: {})
+    - badges (array of badge object) (default: [])
+    - attributes (object) (default: {})
+    - content_attributes (object) (default: {})
+    - title_prefix (string) (default: '')
+    - title (string) (default: '')
+    - title_suffix (string) (default: '')
+    - url (string) (default: '')
+    - text (string) (default: '')
+  #}
+
+  {{ attach_library('ventuno/tile-two') }}
+
+  {% set _attributes = attributes|default('') %}
+  {% set _content_attributes = content_attributes|default('') %}
+  {% set _day = day|default({}) %}
+  {% set _month = month|default({}) %}
+  {% set _title_prefix = title_prefix|default('') %}
+  {% set _title = title|default('') %}
+  {% set _title_suffix = title_suffix|default('') %}
+  {% set _url = url|default('') %}
+  {% set _text = text|default('') %}
+  {% set _badges = badges|default([]) %}
+
+  <article{{ _attributes.addClass(['tile', 'tile-two--dated', 'h-sm-100', 'mb-4']) }}>
+    <div class="h-sm-100 d-flex">
+      <div class="date">
+        <p class="date__day">{{ _day }}</p>
+        <p class="date__month">{{ _month }}</p>
+      </div>
+      <div class="d-flex flex-column justify-content-between">
+        <div>
+          {{ _title_prefix }}
+          <h3{{ title_attributes.addClass('tile-two__title') }}>
+            <a class="tile-two__title-link" href="{{ _url }}" rel="bookmark" title="{{ _title|render|striptags|trim }}">{{ _title }}</a>
+          </h3>
+          {{ _title_suffix }}
+          <div{{ _content_attributes }}>
+            {{ _text }}
+          </div>
+        </div>
+        {%- if _badges is not empty and _badges is iterable -%}
+          {{ attach_library('ventuno/badge') }}
+          <div class="mt-2">
+            {% for badge in _badges %}
+              {% include '@oe-bcl/badge' with badge only %}
+            {% endfor %}
+          </div>
+        {%- endif -%}
+      </div>
+    </div>
+  </article>
+{% endapply %}
