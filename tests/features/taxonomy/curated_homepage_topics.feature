@@ -265,6 +265,11 @@ Feature:
     When I go to the "topic" meta entity of the "Statistics and Analysis" topic "taxonomy term"
     And the url should match "/topic/info/statistics-and-analysis"
 
+    # Regression test: 3-dots is hidden for anonymous as only contains 'View'.
+    Given I am an anonymous user
+    And I visit "/topic/info/statistics-and-analysis"
+    Then I should not see the button "Show primary options"
+
   Scenario: Editing from the administration page, redirect back to the administration page.
     When I am logged in as a moderator
     And I click "Dashboard"
