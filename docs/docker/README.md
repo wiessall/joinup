@@ -8,7 +8,7 @@
 ## Getting started
 
 The setup takes place in 3 steps.
-1. Copy the files needed for the installation to work. This include building up
+1. Copy the files needed for the installation to work. This includes building up
 your `.env` and `docker-compose.override.yml` files.
 2. Setup your prefered settings. The docker is supposed to work out of the box,
 but for development purposes, you might want to change some settings. The `.env`
@@ -19,24 +19,23 @@ the way you want to run Joinup.
 
 ### 1.1 Environment variables
 
-Copy the `.env.example` file over to `.env` file in the root directory where
-you should assign values for environment variables containing sensitive data,
-such as passwords, tokens, hashes or even custom preferences. These variables
-are not committed in VCS and due to their nature should be manually set.
+Copy the `.env.example` file as `.env` file in the root directory where you
+should assign values for environment variables containing sensitive data, such
+as passwords, tokens, hashes or even custom preferences. These variables are not
+committed in VCS and due to their nature should be manually set.
 
 More information about these environment variables can be found in the
 `.env.dist` file.
 
 ### 1.2 Set up the docker-compose.override.yml file
 
-Copy the `docker-compose.override.yml.dist` file over to
+Copy the `docker-compose.override.yml.dist` file as
 `docker-compose.override.yml` file in the root directory. This file is not
 committed in VCS and due to its nature should be manually set. Configuration
 from `docker-compose.yml` can be overwritten in `docker-compose.override.yml`
-file. Copy `docker-compose.override.yml.dist` over to
-`docker-compose.override.yml`. Port mappings are not declared in the main
-`docker-compose.yml` file because this is developer custom setting, so you'll
-need to set up yours in the override file.
+file. Port mappings are not declared in the main `docker-compose.yml` file
+because this is developer custom setting, so you'll need to set up yours in the
+override file.
 
 #### 1.2.1 Permissions
 
@@ -107,8 +106,8 @@ and only one of `GROUP_ID` and `DAEMON_GROUP` can be used at the same time.
 
 ### 1.3 Set up your local runner.yml.
 
-Copy the `runner.yml.dist` file over to `runner.yml` file in the root directory.
-The file already contains 2 shortened commands for installing the codebase and
+Copy the `runner.yml.dist` file as `runner.yml` file in the root directory. The
+file already contains 2 shortened commands for installing the codebase and
 installing a clean website. You can add more commands in this file. The
 `runner.yml` file is not committed in VCS and due to its nature should be
 manually set.
@@ -138,6 +137,10 @@ In order to access the website, you need to add the following line to your
 127.0.0.1 web
 ```
 This will allow you to access the website at http://web:8080/web.
+
+The website can be accessible also at http://localhost:8080/web, but this will
+not work for the Behat tests out of the box, neither for the commands ran by
+drush by default.
 
 ### 3.1 Starting the containers
 
@@ -202,9 +205,9 @@ From the project root, run:
 ```bash
 $ docker-compose exec --user www-data web ./vendor/bin/run toolkit:install-clean
 ```
-
 This will install a clean website with the default configuration. The website is
-available at http://web:8080/web.
+available at http://web:8080/web (Please, ensure you have added the `web` entry
+in your `hosts` file as described in section 2.2).
 
 ### 3.7 Install a cloned site
 
@@ -230,8 +233,10 @@ set the following environment variable in the `.env` file:
 ```
 DOCKER_RESTORE_PRODUCTION=yes
 ```
-After that, you will need to reset/restart the environment, as described in the
-previous section.
+After that, you will need to reset the environment, as described in the previous
+section. **You will need to reset the environment every time you need to
+reinstall the databases**. This is because the database is restored on container
+start and the container is not restarted when you run the deploy commands.
 
 **Important**: The SQL database is restored from a dump file, which is not that
 fast. The database container will take some time to complete the restoration and
@@ -244,16 +249,32 @@ proceeding to the deploy commands.
 
 #### 3.7.3 Install the cloned site
 
-After containers are up and got the chance to import from dump/snapshots, run
-this sequence of commands:
-
+After containers are up wait until the database is restored. In order to check
+the status of the database, run the following command:
+```bash
+$ docker-compose logs -f mysql
+```
+You will see the following message when the database is ready:
+```
+mysql_1  |  /docker-entrypoint.sh: running /docker-entrypoint-initdb.d/restore.sh
+.
+.
+mysql_1  |  .........: /usr/sbin/mysqld: Shutdown complete .........
+```
+and after some time
+```
+mysql_1  |  .........: /usr/sbin/mysqld: ready for connections. Version .......
+```
+Then, you can proceed with the deploy commands.
 ```bash
 # Sets up the settings for deployment.
 $ docker-compose exec --user www-data web ./vendor/bin/run drupal:settings install
-
 # Runs the deployment.
 $ docker-compose exec --user www-data web ./vendor/bin/run toolkit:run-deploy
 ```
+
+**Reminder**: If you want to switch between the cloned site and the empty site,
+you will need to reset the environment, as described in the previous section.
 
 #### 3.7.4 Install additional modules and users
 
