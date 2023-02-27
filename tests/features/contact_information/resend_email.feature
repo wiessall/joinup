@@ -114,7 +114,7 @@ Feature: Resend validation email from collection/solution about page
     Then I should see the text "A new confirmation message has been sent to confirmation_email2.man@example.com"
 
     # A new email can be sent in case the previous one was rejected.
-    Given that the pending confirmation request for "confirmation_email2@example.com" has been cancelled
+    Given that the pending confirmation request for "confirmation_email2.man@example.com" has been cancelled
     When I go to the about page of "Klop mirubes"
     Then I should see the text "Please confirm your contact information to enable users to contact you"
     When I click "confirm"
