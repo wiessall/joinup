@@ -320,7 +320,9 @@ class ContactInformationContext extends RawDrupalContext {
    * @Given that the pending confirmation request for :email has been cancelled
    */
   public function cancelConfirmationRequest(string $email): void {
-    $this->getEmailConfirmation($email, 'pending')->cancel()->save();
+    $confirmation = $this->getEmailConfirmation($email, 'pending');
+    $confirmation->cancel();
+    $confirmation->save();
   }
 
   /**
