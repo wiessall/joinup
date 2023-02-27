@@ -2,18 +2,21 @@
 
 ## Requirements
 
-* Docker
-* docker-compose
+* Docker. Please, note that `docker-compose` is needed too and is included in
+the Docker Desktop installation. Docker Desktop is available for
+[Mac](https://docs.docker.com/desktop/install/mac-install/),
+[Windows](https://docs.docker.com/desktop/install/windows-install/) and
+[Linux](https://docs.docker.com/desktop/install/linux-install/).
 
 ## Getting started
 
 The setup takes place in 3 steps.
 1. Copy the files needed for the installation to work. This includes building up
-your `.env` and `docker-compose.override.yml` files.
+your `.env` and `docker compose.override.yml` files.
 2. Setup your prefered settings. The docker is supposed to work out of the box,
 but for development purposes, you might want to change some settings. The `.env`
 includes settings for downloading/restoring the databases, running tests etc.
-The `docker-compose.override.yml` includes settings for the ports, volumes etc.
+The `docker compose.override.yml` includes settings for the ports, volumes etc.
 3. Start the containers and run the appropriate commands from below depending on
 the way you want to run Joinup.
 
@@ -27,13 +30,13 @@ committed in VCS and due to their nature should be manually set.
 More information about these environment variables can be found in the
 `.env.dist` file.
 
-### 1.2 Set up the docker-compose.override.yml file
+### 1.2 Set up the docker compose.override.yml file
 
-Copy the `docker-compose.override.yml.dist` file as
-`docker-compose.override.yml` file in the root directory. This file is not
+Copy the `docker compose.override.yml.dist` file as
+`docker compose.override.yml` file in the root directory. This file is not
 committed in VCS and due to its nature should be manually set. Configuration
-from `docker-compose.yml` can be overwritten in `docker-compose.override.yml`
-file. Port mappings are not declared in the main `docker-compose.yml` file
+from `docker compose.yml` can be overwritten in `docker compose.override.yml`
+file. Port mappings are not declared in the main `docker compose.yml` file
 because this is developer custom setting, so you'll need to set up yours in the
 override file.
 
@@ -41,7 +44,7 @@ override file.
 
 In order to be able to handle permissions properly, the correct arguments and/or
 environment variables need to be passed to the containers. The
-`docker-compose.override.yml` file contains the following settings:
+`docker compose.override.yml` file contains the following settings:
 
 ```yaml
   web:
@@ -64,7 +67,7 @@ with GID `1000`. If you are using a Linux machine, and you are using the default
 user, you can keep the default settings. If you are using a Mac, the default
 user ID and group ID are `501` and `20` respectively. If you are using a Mac,
 you will need to uncomment the corresponding lines in the
-`docker-compose.override.yml`
+`docker compose.override.yml`
 
 ```yaml
   web:
@@ -117,7 +120,7 @@ See below section `Using the runner` for more information.
 ### 2.1 Personal directories
 
 In order to persist the data between container restarts, the `volumes` entry in
-the `docker-compose.override.yml` file is used. This entry is commented out by
+the `docker compose.override.yml` file is used. This entry is commented out by
 default.
 
 The following directories are needed to properly develop on docker:
@@ -148,19 +151,19 @@ To start the containers, you can execute the following command from the project
 root directory:
 
 ```bash
-$ docker-compose up --build --force-recreate -d
+$ docker compose up --build --force-recreate -d
 ```
 
-This will automatically read the `docker-compose.yml` file as a source. The `-d`
+This will automatically read the `docker compose.yml` file as a source. The `-d`
 options will start the containers in the background. If you omit the `-d`
-option, `docker-compose` will run in the foreground.
+option, `docker compose` will run in the foreground.
 
 ### 3.2 Stopping the containers
 
-To stop the containers, you can use the command `docker-compose down` from the
-same directory as the `docker-compose.yml`. Using this command, however, will
+To stop the containers, you can use the command `docker compose down` from the
+same directory as the `docker compose.yml`. Using this command, however, will
 only stop the machine and will not destroy the volume that was created with it.
-To clean the volume as well, use the `-v` parameter as `docker-compose down -v`.
+To clean the volume as well, use the `-v` parameter as `docker compose down -v`.
 
 ### 3.3 Handling XDEBUG
 
@@ -172,9 +175,9 @@ During development XDEBUG can be enabled or disabled by running the following:
 
 ```bash
 # Enable
-$ docker-compose exec web phpenmod xdebug
+$ docker compose exec web phpenmod xdebug
 # Disable
-$ docker-compose exec web phpdismod xdebug
+$ docker compose exec web phpdismod xdebug
 ```
 The restart is needed in order to apply the settings in the PHP-fpm pool.
 
@@ -183,7 +186,7 @@ The restart is needed in order to apply the settings in the PHP-fpm pool.
 Run the following command to install all packages in the vendor folder:
 
 ```bash
-$ docker-compose exec --user www-data web composer install
+$ docker compose exec --user www-data web composer install
 ```
 
 ### 3.5 Reset the environment
@@ -192,7 +195,7 @@ In order to restart the containers and reset the environment, you can run the
 following command from the project root directory:
 
 ```bash
-$ docker-compose down -v && docker-compose up -d --build --force-recreate
+$ docker compose down -v && docker compose up -d --build --force-recreate
 ```
 
 This will stop the containers, remove the volumes and start the containers
@@ -203,7 +206,7 @@ again.
 From the project root, run:
 
 ```bash
-$ docker-compose exec --user www-data web ./vendor/bin/run toolkit:install-clean
+$ docker compose exec --user www-data web ./vendor/bin/run toolkit:install-clean
 ```
 This will install a clean website with the default configuration. The website is
 available at http://web:8080/web (Please, ensure you have added the `web` entry
@@ -221,7 +224,7 @@ in `.env` file. The values should be provided by the team.
 
 Then, run the following command to download the databases:
 ```bash
-$ docker-compose exec --user www-data web ./vendor/bin/run dev:download-databases
+$ docker compose exec --user www-data web ./vendor/bin/run dev:download-databases
 ```
 Please, note that this requires the containers to be fired up. The databases
 will be stored in the `./db/` directory.
@@ -242,7 +245,7 @@ start and the container is not restarted when you run the deploy commands.
 fast. The database container will take some time to complete the restoration and
 you can monitor this process by running the following command:
 ```bash
-$ docker-compose logs -f mysql
+$ docker compose logs -f mysql
 ```
 Please, wait until the container reports that it is ready for connections before
 proceeding to the deploy commands.
@@ -252,7 +255,7 @@ proceeding to the deploy commands.
 After containers are up wait until the database is restored. In order to check
 the status of the database, run the following command:
 ```bash
-$ docker-compose logs -f mysql
+$ docker compose logs -f mysql
 ```
 You will see the following message when the database is ready:
 ```
@@ -268,9 +271,9 @@ mysql_1  |  .........: /usr/sbin/mysqld: ready for connections. Version .......
 Then, you can proceed with the deploy commands.
 ```bash
 # Sets up the settings for deployment.
-$ docker-compose exec --user www-data web ./vendor/bin/run drupal:settings install
+$ docker compose exec --user www-data web ./vendor/bin/run drupal:settings install
 # Runs the deployment.
-$ docker-compose exec --user www-data web ./vendor/bin/run toolkit:run-deploy
+$ docker compose exec --user www-data web ./vendor/bin/run toolkit:run-deploy
 ```
 
 **Reminder**: If you want to switch between the cloned site and the empty site,
@@ -282,13 +285,13 @@ Further modules are available to help with development. To install them, run:
 
 ```bash
 # Disable the config-readonly.
-$ docker-compose exec --user www-data web ./vendor/bin/run config-readonly:disable
+$ docker compose exec --user www-data web ./vendor/bin/run config-readonly:disable
 
 # Install the demo users.
-$ docker-compose exec --user www-data web ./vendor/bin/run dev:demo-users
+$ docker compose exec --user www-data web ./vendor/bin/run dev:demo-users
 
 # Install the additional modules.
-$ docker-compose exec --user www-data web ./vendor/bin/run dev:install-modules
+$ docker compose exec --user www-data web ./vendor/bin/run dev:install-modules
 ```
 
 A list of demo users will be installed in the website. The users are:
@@ -310,7 +313,7 @@ A Task Runner is available to help with the development. It is based on the
 `web` and can be executed with the following command:
 
 ```bash
-$ docker-compose exec --user www-data web ./vendor/bin/run
+$ docker compose exec --user www-data web ./vendor/bin/run
 ```
 You can generate your own commands by adding them to the `runner.yml` file in
 the root directory. You can override and create your own commands there.
@@ -374,7 +377,7 @@ After the MySQL container is ready for connections, you can run the following
 command to install the site:
 
 ```bash
-$ docker-compose exec --user www-data web ./vendor/bin/run local-deploy
+$ docker compose exec --user www-data web ./vendor/bin/run local-deploy
 ```
 Another useful override is also for the clean install process.
 
@@ -401,7 +404,7 @@ they really do.
 All containers are accessible through the command
 
 ```bash
-$ docker-compose exec my_container_name "/bin/bash"
+$ docker compose exec my_container_name "/bin/bash"
 ```
 
 Depending on the container (and its base image), it might be that `/bin/bash` is
@@ -416,7 +419,7 @@ user `www-data`, add `--user www-data`.
 Run the following command to setup the test files:
 
 ```bash
-$ docker-compose exec --user www-data web ./vendor/bin/run toolkit:build-dev
+$ docker compose exec --user www-data web ./vendor/bin/run toolkit:build-dev
 ```
 Your `behat.yml` file should now be in the root folder as well as your
 `phpcs.xml`.
@@ -440,7 +443,7 @@ The clean environment is the one that is installed by the
 tests in this environment, you have to run the following command:
 
 ```bash
-$ docker-compose exec --user www-data web ./vendor/bin/behat --profile=clean --config=behat.yml /tests/features/path/to/feature.feature
+$ docker compose exec --user www-data web ./vendor/bin/behat --profile=clean --config=behat.yml /tests/features/path/to/feature.feature
 ```
 
 #### Running the tests in the cloned environment
@@ -449,7 +452,7 @@ The difference in the command is that you should not include the
 `--profile=clean` option. The command should look like this:
 
 ```bash
-$ docker-compose exec --user www-data web ./vendor/bin/behat --config=behat.yml /tests/features/path/to/feature.feature
+$ docker compose exec --user www-data web ./vendor/bin/behat --config=behat.yml /tests/features/path/to/feature.feature
 ```
 
 ### PHPUnit tests
@@ -458,7 +461,7 @@ The PHPUnit tests are run in the same environment as the Behat tests. The
 command is the following:
 
 ```bash
-$ docker-compose exec --user www-data web ./vendor/bin/phpunit path/to/your/test/Class.php
+$ docker compose exec --user www-data web ./vendor/bin/phpunit path/to/your/test/Class.php
 ```
 The `phpunit.xml` is consumed automatically.
 
@@ -469,7 +472,7 @@ the container and start listening for connections in your IDE. Set a breakpoint
 to a related line and run the following command:
 
 ```bash
-docker-compose exec --env XDEBUG_SESSION=1 --user www-data web ./vendor/bin/behat --profile=clean --config=behat.yml ./tests/features/homepage.feature
+docker compose exec --env XDEBUG_SESSION=1 --user www-data web ./vendor/bin/behat --profile=clean --config=behat.yml ./tests/features/homepage.feature
 ```
 The `XDEBUG_SESSION` environment variable is used to trigger the XDEBUG
 session.
@@ -482,7 +485,7 @@ The code sniffing is done with the `phpcs` tool. The configuration file is
 `phpcs.xml`. The command to run the code sniffing is the following:
 
 ```bash
-$ docker-compose exec --user www-data web ./vendor/bin/phpcs --parallel=50
+$ docker compose exec --user www-data web ./vendor/bin/phpcs --parallel=50
 ```
 The default `phpcs.xml` will be generated by the `toolkit:build-dev` command
 described in a previous section.
