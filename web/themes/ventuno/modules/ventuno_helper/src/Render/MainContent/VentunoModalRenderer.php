@@ -57,7 +57,7 @@ class VentunoModalRenderer extends ModalRenderer {
     $theme = $this->themeManager->getActiveTheme();
     if ($theme->getName() === 'ventuno') {
       $request->request->set('dialogOptions', [
-        'dialogClasses' => ['modal-dialog-centered', 'modal-lg'],
+        'dialogClasses' => ['modal-dialog-centered', 'modal-xl'],
         'dialogShowHeader' => TRUE,
         'dialogShowHeaderTitle' => TRUE,
       ]);
