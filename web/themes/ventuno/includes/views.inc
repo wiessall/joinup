@@ -74,17 +74,8 @@ function ventuno_preprocess_views_view__media_library(array &$variables): void {
 
   foreach ($variables['header'] as $key => $link) {
     $variables['header'][$key]['#options']['attributes']['class'][] = 'nav-link';
-    if (in_array($variables['header'][$key]['#options']['attributes']['class'], ['is-active'])) {
+    if (in_array('is-active', $variables['header'][$key]['#options']['attributes']['class'])) {
       $variables['header'][$key]['#options']['attributes']['class'][] = 'active';
     }
   }
-  // Wrap the header in a container for the nav-pills component.
-  $wrapper = array(
-    '#type' => 'container',
-    '#attributes' => array(
-      'class' => ['nav', 'nav-pills'],
-    ),
-  );
-  $wrapper['header'] = $variables['header'];
-  $variables['header'] = $wrapper;
 }
