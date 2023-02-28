@@ -9,6 +9,7 @@ declare(strict_types = 1);
 
 use Drupal\interoperable_europe\InteroperableEuropeCollectionInterface;
 use Drupal\rdf_entity\RdfInterface;
+use Drupal\topic\Entity\TopicMetaEntityInterface;
 
 /**
  * Implements hook_preprocess_page().
@@ -48,6 +49,12 @@ function ventuno_preprocess_page(array &$variables): void {
   $route_name = \Drupal::routeMatch()->getRouteName();
   if ($route_name == 'view.search.page_1') {
     $variables['hide_searchbar'] = TRUE;
+  }
+
+  $meta_entity = \Drupal::routeMatch()->getParameter('meta_entity');
+  if ($route_name == 'entity.meta_entity.canonical' && isset($meta_entity) && $meta_entity instanceof TopicMetaEntityInterface) {
+    $variables['meta_title'] = $meta_entity->label();
+    $variables['meta_description']['#markup'] = $meta_entity->get('description')->value;
   }
 }
 
