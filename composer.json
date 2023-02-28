@@ -277,6 +277,7 @@
                 "Pass current route parameters to the confirmation form route @see https://www.drupal.org/project/drupal/issues/2901412": "resources/patch/drupal/core/2901412-25.diff",
                 "Lazy services: support PHP7 return types in generate-proxy-class @see https://www.drupal.org/node/2919243": "https://www.drupal.org/files/issues/2919243-2.patch",
                 "Cache tags are not invalidated on revision delete @see https://www.drupal.org/project/drupal/issues/2945928": "https://www.drupal.org/files/issues/entity-cache_revision_deletion-2945928-2.patch",
+                "There is no way to delete file entities of other users @see https://www.drupal.org/project/drupal/issues/2949017": "https://www.drupal.org/files/issues/2023-02-01/2949017-9.5.x-153.patch",
                 "Make it easier to trigger a tour @see https://www.drupal.org/project/drupal/issues/3012027": "https://www.drupal.org/files/issues/2022-01-17/3012027-52-9.3.x.patch",
                 "EntityConstraintValidationList::findByCode is inconsistent @see https://www.drupal.org/project/drupal/issues/3126654": "https://www.drupal.org/files/issues/2020-04-10/find_by_code_override-3126654-D8-4.patch",
                 "Cannot implement a custom user cancellation method @see https://www.drupal.org/project/drupal/issues/3135592": "https://git.drupalcode.org/project/drupal/-/merge_requests/1675.diff",
@@ -325,7 +326,8 @@
                 "Allow 3rd-party to act before delivery @see https://www.drupal.org/project/message_notify/issues/3314370": "resources/patch/drupal/message_notify/3314370.diff"
             },
             "drupal/meta_entity": {
-                "Improve ::getMetaEntitiesForEntity() performance @see https://www.drupal.org/project/meta_entity/issues/3299712": "https://git.drupalcode.org/project/meta_entity/-/merge_requests/6.diff"
+                "Improve ::getMetaEntitiesForEntity() performance @see https://www.drupal.org/project/meta_entity/issues/3299712": "https://git.drupalcode.org/project/meta_entity/-/merge_requests/6.diff",
+                "Add basic theming to the meta entity @see https://www.drupal.org/project/meta_entity/issues/3325653": "https://git.drupalcode.org/project/meta_entity/-/merge_requests/8.diff"
             },
             "drupal/paragraphs_jquery_ui_accordion": {
                 "Formatter settings are missing schema @see https://www.drupal.org/i/3194916": "https://git.drupalcode.org/project/paragraphs_jquery_ui_accordion/-/merge_requests/1.diff"

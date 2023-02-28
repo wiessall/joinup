@@ -36,4 +36,5 @@ content:
 hidden:
   field_ss_related_solutions: true
   label: true
+  path: true
   target: true
