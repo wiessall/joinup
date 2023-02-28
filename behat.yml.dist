@@ -144,7 +144,7 @@ default:
         Content listing field filter form: '.field--name-content-listing'
         Content: '.section--content-middle, main .layout-content'
         Cookie consent banner: '#cookie-consent-banner'
-        Entity actions: '.block-joinup-local-tasks-block'
+        Entity actions: '.block-joinup-local-tasks-block,#block-ventuno-three-dots-menu'
         Explore block: '.block-joinup-front-page-explore-block'
         Featured: '.region-featured'
         Footer: '.section--footer, footer'
