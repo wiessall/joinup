@@ -232,7 +232,7 @@ class JoinupGroupContext extends RawDrupalContext {
    * @param string $group_type
    *   The group bundle.
    *
-   * @When I go the :subject announcement of :group_label :group_type
+   * @When I go to the :subject announcement of :group_label :group_type
    */
   public function visitAnnouncementEditForm(string $subject, string $group_label, string $group_type): void {
     assert(in_array($group_type, ['collection', 'solution']));
