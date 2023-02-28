@@ -7,6 +7,8 @@
 
 declare(strict_types = 1);
 
+use Drupal\Component\Utility\Html;
+
 /**
  * Implements hook_theme_suggestions_HOOK_alter().
  */
@@ -50,4 +52,14 @@ function ventuno_preprocess_field(array &$variables): void {
       $variables['items'][$key]['content']['#title'] = $title;
     }
   }
+}
+
+/**
+ * Implements hook_preprocess_field_group_accordion_item().
+ */
+function ventuno_preprocess_field_group_accordion_item(array &$variables): void {
+  $element =& $variables['element'];
+  $id = 'heading_' . substr($element['#group_name'], 6);
+  // Provide unique ID for the accordion item.
+  $variables['accordion_item_id'] = Html::getUniqueId($id);
 }
