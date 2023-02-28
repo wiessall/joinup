@@ -7,6 +7,8 @@
 
 declare(strict_types = 1);
 
+use Drupal\Core\Form\FormStateInterface;
+
 /**
  * Implements hook_simple_sitemap_sitemap_types_alter().
  */
@@ -96,4 +98,12 @@ function joinup_seo_page_attachments(array &$attachments) {
     ],
     'rdf_entity_ld_json',
   ];
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function joinup_seo_form_editor_image_dialog_alter(array &$form, FormStateInterface $form_state, string $form_id): void {
+  // @see: https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7587
+  $form['attributes']['alt']['#description'] = t('The text alternative should convey the meaning or content that is displayed visually, which typically isn’t a literal description of the image. See examples at WAI. If the image don’t add information to the content, leave empty.');
 }
