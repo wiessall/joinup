@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Paragraphs specific procedural functions.
+ * Paragraph specific procedural functions.
  */
 
 declare(strict_types = 1);
@@ -17,16 +17,9 @@ function ventuno_preprocess_paragraph(array &$variables): void {
 /**
  * Implements hook_preprocess_HOOK().
  */
-function ventuno_preprocess_paragraph__accordion_item(array &$variables): void {
-  $entity = $variables['paragraph'];
-  if ($entity->bundle() !== 'accordion_item') {
-    return;
-  }
-  $parent = $entity->getParentEntity();
-  if ($parent->bundle() !== 'accordion') {
-    return;
-  }
-  $variables['parent_id'] = $parent->id();
+function ventuno_preprocess_paragraph__configurable_listing(&$variables) {
+  $paragraph = $variables['paragraph'];
+  $variables['style'] = $paragraph->get('list_style')->value;
 }
 
 /**
@@ -49,7 +42,22 @@ function ventuno_preprocess_paragraph__accordion(array &$variables): void {
 /**
  * Implements hook_preprocess_HOOK().
  */
-function ventuno_preprocess_paragraphs_jquery_ui_accordion_formatter(array &$variables): void {
+function ventuno_preprocess_paragraph__accordion_item(array &$variables): void {
+  $entity = $variables['paragraph'];
+  if ($entity->bundle() !== 'accordion_item') {
+    return;
+  }
+  $parent = $entity->getParentEntity();
+  if ($parent->bundle() !== 'accordion') {
+    return;
+  }
+  $variables['parent_id'] = $parent->id();
+}
+
+/**
+ * Implements hook_preprocess_HOOK().
+ */
+function ventuno_preprocess_paragraphs_jquery_ui_accordion_formatter(&$variables) {
   $entity = $variables['content']['#object'];
   if ($entity->bundle() !== 'accordion_item') {
     return;
@@ -60,12 +68,4 @@ function ventuno_preprocess_paragraphs_jquery_ui_accordion_formatter(array &$var
   }
 
   $variables['parent_id'] = $parent->id();
-}
-
-/**
- * Implements hook_preprocess_HOOK().
- */
-function ventuno_preprocess_paragraph__configurable_listing(&$variables) {
-  $paragraph = $variables['paragraph'];
-  $variables['style'] = $paragraph->get('list_style')->value;
 }
