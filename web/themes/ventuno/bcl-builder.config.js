@@ -440,6 +440,15 @@ module.exports = {
       },
     },
     {
+      entry: path.resolve(outputFolder, "src/scss/layout-block.scss"),
+      dest: path.resolve(outputFolder, "assets/css/layout-block.min.css"),
+      options: {
+        minify: true,
+        includePaths,
+        sourceMap: "file",
+      },
+    },
+    {
       entry: path.resolve(outputFolder, "src/scss/navbar.scss"),
       dest: path.resolve(outputFolder, "assets/css/navbar.min.css"),
       options: {
@@ -562,6 +571,15 @@ module.exports = {
       options: {
         includePaths,
         minify: true,
+        sourceMap: "file",
+      },
+    },
+    {
+      entry: path.resolve(outputFolder, "src/scss/tile-two.scss"),
+      dest: path.resolve(outputFolder, "assets/css/tile-two.min.css"),
+      options: {
+        minify: true,
+        includePaths,
         sourceMap: "file",
       },
     },
