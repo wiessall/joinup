@@ -50,7 +50,6 @@ Feature: Collections/Solutions settings Metadata Banner disabled
     When I check the box "Metadata banner disabled"
     And I press "Save"
     And I go to the "Rally fanatics" collection
-    And I break
     Then I should not see a featured stats on the header
     When I go to the "Creating Justice League" news
     Then I should not see a featured stats on the header
