@@ -30,6 +30,7 @@
 # Ignore environment specific settings
 /.docker
 /.env
+/.env.pipeline
 /behat.yml
 /phpcs.xml
 /runner.yml
