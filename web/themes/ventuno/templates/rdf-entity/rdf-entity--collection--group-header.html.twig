@@ -8,17 +8,19 @@
   <div class="container d-flex flex-column flex-lg-row justify-content-between">
     <div class="d-flex flex-column flex-lg-row align-items-center align items-lg-start justify-content-center">
       <span data-drupal-group-logo class="my-2 me-lg-3 my-lg-0">{{ content.field_ar_logo }}</span>
-      <div>
+      <div{% if meta_banner_disabled %} class="mt-2"{% endif %}>
         {{ title_prefix }}
         <a class="h2 mb-0" href="{{ path('entity.rdf_entity.canonical',{'rdf_entity': rdf_entity.id()}) }}">
           {{ label }}
         </a>
         {{ title_suffix }}
-        <ul class="list-unstyled d-none d-lg-flex mb-0">
-          <li class="me-3 text-muted">{{ 'Last update'|t }}:&nbsp;{{ content.last_update }}</li>
-          <li class="me-3 text-muted">{{ content.members }}</li>
-          <li class="text-muted">{{ content.solutions }}</li>
-        </ul>
+        {% if not meta_banner_disabled %}
+          <ul class="list-unstyled d-none d-lg-flex mb-0 group-stats">
+            <li class="me-3 text-muted">{{ 'Last update'|t }}:&nbsp;{{ content.last_update }}</li>
+            <li class="me-3 text-muted">{{ content.members }}</li>
+            <li class="text-muted">{{ content.solutions }}</li>
+          </ul>
+        {% endif %}
       </div>
     </div>
     {% if content.join_collection %}
