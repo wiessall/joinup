@@ -38,7 +38,7 @@
         "drupal/entityqueue": "^1.2",
         "drupal/error_page": "^2.0",
         "drupal/facets": "^3.0",
-        "drupal/facets_block": "dev-facets3",
+        "drupal/facets_block": "^2.0@beta",
         "drupal/facets_date_range": "^1.0@beta",
         "drupal/field_delimiter": "^1.1",
         "drupal/field_formatter_range": "^1.1",
@@ -395,10 +395,6 @@
         }
     },
     "repositories": [
-        {
-            "type": "vcs",
-            "url": "https://git.drupalcode.org/issue/facets_block-3328412.git"
-        },
         {
             "type": "package",
             "package": {
