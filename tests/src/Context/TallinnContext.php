@@ -87,11 +87,11 @@ class TallinnContext extends RawDrupalContext {
         ]),
         Paragraph::create([
           'type' => 'content_listing',
-          'field_content_listing' => [
+          'content_listing' => [
             [
               'value' => [
                 'fields' => [
-                  'field_content_listing_type' => [
+                  'content_listing_type' => [
                     'weight' => 0,
                     'region' => 'top',
                   ],

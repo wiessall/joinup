@@ -9,6 +9,7 @@ declare(strict_types = 1);
 
 use Drupal\interoperable_europe\InteroperableEuropeCollectionInterface;
 use Drupal\rdf_entity\RdfInterface;
+use Drupal\topic\Entity\TopicMetaEntityInterface;
 
 /**
  * Implements hook_preprocess_page().
@@ -49,20 +50,12 @@ function ventuno_preprocess_page(array &$variables): void {
   if ($route_name == 'view.search.page_1') {
     $variables['hide_searchbar'] = TRUE;
   }
-}
 
-/**
- * Implements hook_preprocess_HOOK().
- *
- * Exposes the About section which is defined as a variant of the homepage in
- * Page Manager as a variable. This section is using a Layout but needs to be
- * rendered outside the main content region which is controlled by Page Manager.
- */
-function ventuno_preprocess_page__home(array &$variables): void {
-  /** @var \Drupal\page_manager\Entity\PageVariant $about_section_variant */
-  $about_section_variant = \Drupal::entityTypeManager()->getStorage('page_variant')->load('homepage-layout_builder-1');
-  $view_builder = \Drupal::entityTypeManager()->getViewBuilder('page_variant');
-  $variables['about'] = $view_builder->view($about_section_variant);
+  $meta_entity = \Drupal::routeMatch()->getParameter('meta_entity');
+  if ($route_name == 'entity.meta_entity.canonical' && isset($meta_entity) && $meta_entity instanceof TopicMetaEntityInterface) {
+    $variables['meta_title'] = $meta_entity->label();
+    $variables['meta_description']['#markup'] = $meta_entity->get('description')->value;
+  }
 }
 
 /**
