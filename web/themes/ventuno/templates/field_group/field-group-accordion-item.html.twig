@@ -18,12 +18,12 @@
 #}
 {{ attach_library('ventuno/show-accordion-invalid-fields') }}
 <div class="accordion-item">
-  <h2 class="accordion-header" id="{{ accordion_item_id }}">
-    <button class="accordion-button fw-bold text-primary{{ open ? '' : ' collapsed'}}" type="button" data-bs-toggle="collapse" data-bs-target="#{{ collapse_id }}"{{ open ? ' aria-expanded="true"'}} aria-controls="{{ collapse_id }}">
+  <h2 class="accordion-header" id="heading-{{ accordion_item_id }}">
+    <button class="accordion-button fw-bold text-primary{{ open ? '' : ' collapsed'}}" type="button" data-bs-toggle="collapse" data-bs-target="#{{ accordion_item_id }}"{{ open ? ' aria-expanded="true"'}} aria-controls="{{ accordion_item_id }}">
       {{ title }}
     </button>
   </h2>
-  <div id="{{ collapse_id }}" class="accordion-collapse collapse{{ open ? ' show'}}" aria-labelledby="heading-{{ collapse_id }}">
+  <div id="{{ accordion_item_id }}" class="accordion-collapse collapse{{ open ? ' show'}}" aria-labelledby="heading-{{ accordion_item_id }}">
     <div class="accordion-body">
       <p>{{ description }}</p>
       {{ children }}
