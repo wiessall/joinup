@@ -59,7 +59,9 @@ function ventuno_preprocess_field(array &$variables): void {
  */
 function ventuno_preprocess_field_group_accordion_item(array &$variables): void {
   $element =& $variables['element'];
-  $id = substr($element['#group_name'], 6);
+  // Remove numbers to ensure getting a valid id.
+  $group_name = preg_replace('/[0-9]+/', '', $element['#group_name']);
+  $id = substr($group_name, 6);
   // Provide unique ID for the accordion item.
   $variables['accordion_item_id'] = Html::getUniqueId($id);
 }
