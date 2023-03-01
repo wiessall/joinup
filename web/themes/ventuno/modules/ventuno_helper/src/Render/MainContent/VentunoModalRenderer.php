@@ -55,7 +55,7 @@ class VentunoModalRenderer extends ModalRenderer {
    */
   public function renderResponse(array $main_content, Request $request, RouteMatchInterface $route_match): Response {
     $theme = $this->themeManager->getActiveTheme();
-    if ($theme->getName() === 'ventuno') {
+    if ($theme->getName() === 'ventuno' || $theme->getName() === 'iop') {
       $request->request->set('dialogOptions', [
         'dialogClasses' => ['modal-dialog-centered', 'modal-xl'],
         'dialogShowHeader' => TRUE,
