@@ -13,7 +13,7 @@ use Drupal\bootstrap4_modal\Ajax\CloseBootstrap4ModalDialogCommand;
  * Implements hook_ajax_render_alter().
  */
 function ventuno_helper_ajax_render_alter(array &$data): void {
-  if (\Drupal::theme()->getActiveTheme()->getName() === 'ventuno') {
+  if (\Drupal::theme()->getActiveTheme()->getName() === 'ventuno' || \Drupal::theme()->getActiveTheme()->getName() === 'iop') {
     foreach ($data as $key => $command) {
       if ($command['command'] === 'closeDialog') {
         unset($data[$key]);
