@@ -8,15 +8,21 @@ the Docker Desktop installation. Docker Desktop is available for
 [Windows](https://docs.docker.com/desktop/install/windows-install/) and
 [Linux](https://docs.docker.com/desktop/install/linux-install/).
 
+Note that you do not necessarily need to install Docker Desktop. You can also
+install [Docker Engine](https://docs.docker.com/engine/install/) and
+[docker-compose](https://docs.docker.com/compose/install/). In that case,
+please use `docker-compose` instead of `docker compose` in all commands below.
+
 ## Getting started
 
 The setup takes place in 3 steps.
 1. Copy the files needed for the installation to work. This includes building up
-your `.env` and `docker compose.override.yml` files.
-2. Setup your prefered settings. The docker is supposed to work out of the box,
-but for development purposes, you might want to change some settings. The `.env`
-includes settings for downloading/restoring the databases, running tests etc.
-The `docker compose.override.yml` includes settings for the ports, volumes etc.
+your `.env` and `docker-compose.override.yml` files.
+2. Se tup your preferred settings. The docker is supposed to work out of the
+box, but for development purposes, you might want to change some settings. The
+`.env` includes settings for downloading/restoring the databases, running tests
+etc. The `docker-compose.override.yml` includes settings for the ports, volumes
+etc.
 3. Start the containers and run the appropriate commands from below depending on
 the way you want to run Joinup.
 
@@ -30,13 +36,13 @@ committed in VCS and due to their nature should be manually set.
 More information about these environment variables can be found in the
 `.env.dist` file.
 
-### 1.2 Set up the docker compose.override.yml file
+### 1.2 Set up the docker-compose.override.yml file
 
-Copy the `docker compose.override.yml.dist` file as
-`docker compose.override.yml` file in the root directory. This file is not
+Copy the `docker-compose.override.yml.dist` file as
+`docker-compose.override.yml` file in the root directory. This file is not
 committed in VCS and due to its nature should be manually set. Configuration
-from `docker compose.yml` can be overwritten in `docker compose.override.yml`
-file. Port mappings are not declared in the main `docker compose.yml` file
+from `docker-compose.yml` can be overwritten in `docker-compose.override.yml`
+file. Port mappings are not declared in the main `docker-compose.yml` file
 because this is developer custom setting, so you'll need to set up yours in the
 override file.
 
@@ -44,7 +50,7 @@ override file.
 
 In order to be able to handle permissions properly, the correct arguments and/or
 environment variables need to be passed to the containers. The
-`docker compose.override.yml` file contains the following settings:
+`docker-compose.override.yml` file contains the following settings:
 
 ```yaml
   web:
@@ -67,7 +73,7 @@ with GID `1000`. If you are using a Linux machine, and you are using the default
 user, you can keep the default settings. If you are using a Mac, the default
 user ID and group ID are `501` and `20` respectively. If you are using a Mac,
 you will need to uncomment the corresponding lines in the
-`docker compose.override.yml`
+`docker-compose.override.yml`
 
 ```yaml
   web:
@@ -120,7 +126,7 @@ See below section `Using the runner` for more information.
 ### 2.1 Personal directories
 
 In order to persist the data between container restarts, the `volumes` entry in
-the `docker compose.override.yml` file is used. This entry is commented out by
+the `docker-compose.override.yml` file is used. This entry is commented out by
 default.
 
 The following directories are needed to properly develop on docker:
@@ -154,14 +160,14 @@ root directory:
 $ docker compose up --build --force-recreate -d
 ```
 
-This will automatically read the `docker compose.yml` file as a source. The `-d`
+This will automatically read the `docker-compose.yml` file as a source. The `-d`
 options will start the containers in the background. If you omit the `-d`
 option, `docker compose` will run in the foreground.
 
 ### 3.2 Stopping the containers
 
 To stop the containers, you can use the command `docker compose down` from the
-same directory as the `docker compose.yml`. Using this command, however, will
+same directory as the `docker-compose.yml`. Using this command, however, will
 only stop the machine and will not destroy the volume that was created with it.
 To clean the volume as well, use the `-v` parameter as `docker compose down -v`.
 
@@ -241,6 +247,14 @@ section. **You will need to reset the environment every time you need to
 reinstall the databases**. This is because the database is restored on container
 start and the container is not restarted when you run the deploy commands.
 
+Remember that in order to reset the environment, you need to run the following
+command from the project root directory:
+```bash
+$ docker compose down -v && docker compose up -d --build --force-recreate
+```
+In order to stop the containers, remove the volumes and start the containers
+again.
+
 **Important**: The SQL database is restored from a dump file, which is not that
 fast. The database container will take some time to complete the restoration and
 you can monitor this process by running the following command:
@@ -315,10 +329,15 @@ A Task Runner is available to help with the development. It is based on the
 ```bash
 $ docker compose exec --user www-data web ./vendor/bin/run
 ```
+The above command will also list all the available commands.
+
 You can generate your own commands by adding them to the `runner.yml` file in
 the root directory. You can override and create your own commands there.
 
-For example, the whole deployment command can be executed with the following:
+For example, the whole deployment command can be executed with the following
+(note that this is supposed to replace the whole deploy procedure, including
+the `drupal:settings` and `toolkit:run-deploy` commands - run this as the first
+command after the environment is reset):
 
 ```yaml
 commands:
@@ -379,7 +398,7 @@ command to install the site:
 ```bash
 $ docker compose exec --user www-data web ./vendor/bin/run local-deploy
 ```
-Another useful override is also for the clean install process.
+Another useful override is also for the clean-install process.
 
 ```yaml
   local-install:
@@ -392,7 +411,7 @@ Another useful override is also for the clean install process.
 ```
 
 The project offers a `runner.yml.dist` file that can be used as a template and
-contains these two commands as a starting point. Copy the file to `runner.yml`
+contains these two commands as a starting point. Copy the file as `runner.yml`
 and you will be able to use the commands.
 
 After having the `runner.yml` you will only need the commands `local-install`
