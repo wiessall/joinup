@@ -25,14 +25,16 @@ widget:
   type: links_inline
   config:
     show_numbers: true
+    arbitrary_facet_plugin: _none
     all_text: everywhere
     prefix_text: 'Located in:'
     suffix_text: ''
+    cache_contexts: {  }
 empty_behavior:
   behavior: none
 only_visible_when_facet_source_is_visible: true
 show_only_one_result: true
-show_title: null
+show_title: false
 processor_configs:
   active_widget_order:
     processor_id: active_widget_order
@@ -64,6 +66,11 @@ processor_configs:
       sort: 0
     settings:
       sort: ASC
+  hierarchy_processor:
+    processor_id: hierarchy_processor
+    weights:
+      build: 100
+    settings: {  }
   url_processor_handler:
     processor_id: url_processor_handler
     weights:

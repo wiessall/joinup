@@ -1,6 +1,6 @@
 // Filters
 .joinup-search-filters {
-  .offcanvas {
+  .bcl-offcanvas {
     box-shadow: none;
     @include media-breakpoint-up(lg) {
       // Avoid sidebar to overlap toolbar tray when logged in.
