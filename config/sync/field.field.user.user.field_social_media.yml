@@ -38,18 +38,34 @@ default_value_callback: ''
 settings:
   iconset: 'joinup:default'
   platforms:
+    goodreads:
+      enabled: false
+      description: ''
+      weight: -10
     behance:
       enabled: false
       description: ''
       weight: -10
+    googleplay:
+      enabled: false
+      description: ''
+      weight: -9
     bitbucket:
       enabled: false
       description: ''
       weight: -9
+    telegram:
+      enabled: false
+      description: ''
+      weight: -8
     contact:
       enabled: false
       description: ''
       weight: -8
+    meetup:
+      enabled: false
+      description: ''
+      weight: -7
     drupal:
       enabled: false
       description: ''
@@ -58,6 +74,14 @@ settings:
       enabled: false
       description: ''
       weight: -6
+    website:
+      enabled: false
+      description: ''
+      weight: -6
+    mastodon:
+      enabled: true
+      description: ''
+      weight: -5
     facebook:
       enabled: true
       description: ''
@@ -66,14 +90,34 @@ settings:
       enabled: true
       description: ''
       weight: -4
+    gitlab:
+      enabled: false
+      description: ''
+      weight: -4
+    flickr:
+      enabled: false
+      description: ''
+      weight: -3
     instagram:
       enabled: false
       description: ''
       weight: -2
+    tiktok:
+      enabled: false
+      description: ''
+      weight: -2
+    glassdoor:
+      enabled: false
+      description: ''
+      weight: -1
     linkedin:
       enabled: true
       description: ''
       weight: -1
+    patreon:
+      enabled: false
+      description: ''
+      weight: 0
     pinterest:
       enabled: false
       description: ''
@@ -82,6 +126,14 @@ settings:
       enabled: false
       description: ''
       weight: 1
+    xing:
+      enabled: false
+      description: ''
+      weight: 1
+    whatsapp:
+      enabled: false
+      description: ''
+      weight: 2
     slideshare:
       enabled: true
       description: ''
@@ -90,12 +142,24 @@ settings:
       enabled: false
       description: ''
       weight: 3
+    vkontakte:
+      enabled: false
+      description: ''
+      weight: 3
     twitter:
       enabled: true
       description: ''
       weight: 4
+    amazon:
+      enabled: false
+      description: ''
+      weight: 4
     vimeo:
       enabled: true
+      description: ''
+      weight: 5
+    googleplus:
+      enabled: false
       description: ''
       weight: 5
     youtube:
