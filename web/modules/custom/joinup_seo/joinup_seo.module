@@ -106,13 +106,13 @@ function joinup_seo_page_attachments(array &$attachments) {
  */
 function joinup_seo_form_editor_image_dialog_alter(array &$form, FormStateInterface $form_state, string $form_id): void {
   // @see: https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7587
-  $form['attributes']['alt']['#description'] = t('The text alternative should convey the meaning or content that is displayed visually, which typically isn’t a literal description of the image. See examples at <a target="_blank" href="@wai_url">WAI</a>. If the image don’t add information to the content, leave empty.', ['@wai_url' => 'https://www.w3.org/WAI/tutorials/images/informative']);
+  $form['attributes']['alt']['#description'] = t('The text alternative should convey the meaning or content that is displayed visually, which typically isn’t a literal description of the image. See examples at <a target="_blank" href="@wai_url">WAI</a>.', ['@wai_url' => 'https://www.w3.org/WAI/tutorials/images/informative']);
 }
 
 /**
  * Implements hook_field_widget_form_alter().
  */
-function joinup_seo_field_widget_form_alter(&$element, FormStateInterface $form_state, $context) {
+function joinup_seo_field_widget_form_alter(array &$element, FormStateInterface $form_state, array $context): void {
   // @see: https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7587
   if ($context['widget'] instanceof ImageWidget) {
     $element['#process'][] = 'joinup_seo_image_field_widget_process';
@@ -135,7 +135,7 @@ function joinup_seo_field_widget_form_alter(&$element, FormStateInterface $form_
 function joinup_seo_image_field_widget_process(array $element, FormStateInterface &$form_state, array $form): array {
   // @see: https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7587
   if (isset($element['alt'])) {
-    $element['alt']['#description'] = t('The text alternative should convey the meaning or content that is displayed visually, which typically isn’t a literal description of the image. See examples at <a target="_blank" href="@wai_url">WAI</a>. If the image don’t add information to the content, leave empty.', ['@wai_url' => 'https://www.w3.org/WAI/tutorials/images/informative']);
+    $element['alt']['#description'] = t('The text alternative should convey the meaning or content that is displayed visually, which typically isn’t a literal description of the image. See examples at <a target="_blank" href="@wai_url">WAI</a>.', ['@wai_url' => 'https://www.w3.org/WAI/tutorials/images/informative']);
   }
   return $element;
 }
