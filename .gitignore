@@ -28,6 +28,7 @@
 /web/sites/simpletest/
 
 # Ignore environment specific settings
+/.docker
 /.env
 /.env.pipeline
 /behat.yml
@@ -54,7 +55,7 @@
 /tmp/
 /web/VERSION.txt
 
-# Ignore local docker compose file.
+# Ignore local docker-compose file.
 /docker-compose.override.yml
 
 # Ignore project specific temporary generated files.
