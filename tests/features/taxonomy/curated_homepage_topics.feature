@@ -371,3 +371,38 @@ Feature:
       | Event 1 |
       | Event 2 |
       | Event 3 |
+
+  Scenario Outline: Images should be shown for tile-two view modes.
+    Given <type> content:
+      | title       | headline    | short title | state     | logo       | published |
+      | Custom tile | Custom tile | Custom tile | validated | linus.jpeg | yes       |
+    And the following topics are enabled in the homepage:
+      | E-justice |
+    And I am logged in as a moderator
+    And I go to the homepage
+    And I click "E-justice"
+    And I click "Edit"
+    When I press "Add Row"
+    And I press "Add 1 column layout"
+    And I press "Add Configurable listing"
+    And I select "<list style>" from "List style"
+    When I fill in "Heading" with "E-justice heading"
+    And I fill in "URL" with "http://example.com"
+    And I fill in "Link text" with "E-justice link text"
+    And I fill in "Query presets" with "entity_bundle|<type>"
+    And I press "Save"
+    Then I <should> see the image "linus.jpeg" in the "Custom tile" tile
+
+    Examples:
+      | type        | should     | list style |
+      | custom_page | should     | list       |
+      | custom_page | should     | grid       |
+      | news        | should     | list       |
+      | news        | should     | grid       |
+      | event       | should     | list       |
+      | event       | should     | grid       |
+      | document    | should     | list       |
+      | document    | should     | grid       |
+      # Discussions don't have logos.
+      | discussion  | should not | list       |
+      | discussion  | should not | grid       |
