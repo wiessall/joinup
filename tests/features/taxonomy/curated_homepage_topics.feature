@@ -310,15 +310,16 @@ Feature:
 
   Scenario: Regression test to ensure order of entities.
     Given news content:
-      | title  | headline | body | state     | created    | changed    |
-      | News 1 | News 1   | Test | validated | 01-01-2023 | 03-02-2023 |
-      | News 2 | News 2   | Test | validated | 02-01-2023 | 02-02-2023 |
-      | News 3 | News 3   | Test | validated | 03-01-2023 | 01-02-2023 |
+      | title  | headline | body              | state     | created    | changed    | topic     |
+      | News 1 | News 1   | Test              | validated | 01-01-2023 | 03-02-2023 | E-justice |
+      | News 2 | News 2   | Test              | validated | 02-01-2023 | 02-02-2023 | E-justice |
+      | News 3 | News 3   | Test              | validated | 03-01-2023 | 01-02-2023 | E-justice |
+      | News 4 | News 4   | Should not appear | validated | 04-01-2023 | 01-01-2023 | E-health  |
     And event content:
-      | title   | body | start date   | end date    | created    | state     |
-      | Event 1 | Test | now -8 days  | now -9 days | now -4 day | validated |
-      | Event 2 | Test | now -9 days  | now -8 days | now -3 day | validated |
-      | Event 3 | Test | now -10 days | now -7 days | now -5 day | validated |
+      | title   | body | start date   | end date    | created    | state     | topic     |
+      | Event 1 | Test | now -8 days  | now -9 days | now -4 day | validated | E-justice |
+      | Event 2 | Test | now -9 days  | now -8 days | now -3 day | validated | E-justice |
+      | Event 3 | Test | now -10 days | now -7 days | now -5 day | validated | E-justice |
     And the following topics are enabled in the homepage:
       | Economy and Welfare |
       | E-justice           |
@@ -336,7 +337,34 @@ Feature:
     And I select "List" from "List style"
     And I fill in "Query presets" with "entity_bundle|news"
     And I press "Save"
+    Then I should see the following tiles in the correct order:
+      | News 4 |
+      | News 3 |
+      | News 2 |
+      | News 1 |
 
+    When I click "Edit"
+
+    # Test having 2 topics in the query preset with an 'IN' operator.
+    And I fill in "Query presets" with:
+      """
+      entity_bundle|news
+      topic|http://joinup.eu/ontology/topic#e-justice, http://joinup.eu/ontology/topic#e-health|IN
+      """
+    And I press "Save"
+    Then I should see the following tiles in the correct order:
+      | News 4 |
+      | News 3 |
+      | News 2 |
+      | News 1 |
+
+    When I click "Edit"
+    And I fill in "Query presets" with:
+      """
+      entity_bundle|news
+      topic|http://joinup.eu/ontology/topic#e-justice
+      """
+    And I press "Save"
     Then I should see the following tiles in the correct order:
       | News 3 |
       | News 2 |
