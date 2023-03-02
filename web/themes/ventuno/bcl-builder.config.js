@@ -705,6 +705,7 @@ module.exports = {
           "lightning-charge.svg",
           "link-45deg.svg",
           "linkedin.svg",
+          "mastodon.svg",
           "newspaper.svg",
           "people.svg",
           "person-circle.svg",

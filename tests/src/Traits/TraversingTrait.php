@@ -100,7 +100,8 @@ trait TraversingTrait {
     $expected = preg_replace("/\s{2,}/", " ", $expected);
 
     if (trim($actual) !== $expected) {
-      throw new \Exception(sprintf('The option "%s" was not selected in the page %s, %s was selected', $expected, $this->getSession()->getCurrentUrl(), $option_element->getHtml()));
+      throw new \Exception(sprintf('The option "%s" was not selected in the page %s, %s was selected', $expected, $this->getSession()
+        ->getCurrentUrl(), $option_element->getHtml()));
     }
   }
 
@@ -282,19 +283,29 @@ trait TraversingTrait {
    * @throws \Behat\Mink\Exception\ElementNotFoundException
    *   Thrown when the element is not found.
    */
-  protected function getTileByHeading(string $heading): NodeElement {
-    $class = 'card--tile';
-    // @todo Remove the if (...) block in ISAICP-7138.
-    // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7138
-    if ($this->usesMaterialDesignLite()) {
-      $class = 'listing__item--tile';
+  protected function getTileByHeading(string $heading): ?NodeElement {
+    $selectors = [
+      // @todo The `.listing__item--tile` selector is part of the original
+      //   Joinup theme and can be removed once we have fully migrated to the
+      //   new theme.
+      // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7138
+      'listing__item--tile',
+      'card--tile',
+      // @todo Need this?
+      'tile',
+      'tile-two',
+    ];
+
+    foreach ($selectors as $selector) {
+      try {
+        return $this->getListingByHeading($selector, $heading);
+      }
+      catch (\Exception $e) {
+        // The selector is not present on the page.
+        continue;
+      }
     }
-    try {
-      return $this->getListingByHeading($class, $heading);
-    }
-    catch (ElementNotFoundException $e) {
-      return $this->getListingByHeading('tile', $heading);
-    }
+    return NULL;
   }
 
   /**
@@ -319,24 +330,16 @@ trait TraversingTrait {
     // That have a heading with the specified text.
     $xpath .= '[.//*[@class and contains(concat(" ", normalize-space(@class), " "), " listing__title ") or contains(concat(" ", normalize-space(@class), " "), " card-title ")][normalize-space()="' . $heading . '"]]';
 
-    $item = $this->getSession()->getPage()->find('xpath', $xpath);
-
-    if (!$item) {
-      // Locate all the items.
-      $xpath = '//*[@class and contains(concat(" ", normalize-space(@class), " "), " ' . $type . ' ")]';
-      // That have a heading with the specified text.
-      $xpath .= '[.//h2/a[normalize-space()="' . $heading . '"]]';
-
-      $item = $this->getSession()->getPage()->find('xpath', $xpath);
+    foreach ($selectors as $selector) {
+      $item = $this->getSession()->getPage()->find('xpath', $selector);
+      if ($item) {
+        return $item;
+      }
     }
 
-    if (!$item) {
-      // Throw a specific exception, so it can be catched by steps that need to
-      // assert that a tile is not present.
-      throw new ElementNotFoundException($this->getSession()->getDriver(), "'$heading' $type item.");
-    }
-
-    return $item;
+    // Throw a specific exception, so it can be caught by steps that need to
+    // assert that a tile is not present.
+    throw new ElementNotFoundException($this->getSession()->getDriver(), "'$heading' $type item.");
   }
 
   /**
@@ -619,7 +622,9 @@ trait TraversingTrait {
 
     foreach ($this->getSelectorsMatchingElementAlias($alias) as $selector_tuple) {
       [$selector, $locator] = $selector_tuple;
-      $elements = array_merge($elements, $this->getSession()->getPage()->findAll($selector, $locator));
+      $elements = array_merge($elements, $this->getSession()
+        ->getPage()
+        ->findAll($selector, $locator));
     }
 
     // Do not include hidden elements (e.g. elements that exist in the page but
@@ -659,7 +664,9 @@ trait TraversingTrait {
     $image_elements = $element->findAll('xpath', "//img");
     foreach ($image_elements as $image_element) {
       $html = $image_element->getOuterHtml();
-      if (preg_match($expression, $html)) {
+      // The styles directory contains responsive images which are printed using
+      // a random string in the name.
+      if (preg_match($expression, $html) || preg_match('/.*\/sites\/default\/files\/styles.*/', $html)) {
         return TRUE;
       }
     }
