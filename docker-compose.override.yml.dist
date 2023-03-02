@@ -18,29 +18,60 @@ services:
       - ~/.composer:/var/www/.composer
       - ~/.ssh:/var/www/.ssh
       - ~/.npm:/var/www/.npm
+    # In order to expose this service to the host machine, a port needs to be
+    # mapped. This is the port that the web server will be listening on. If you
+    # need a different port, change the first number. The second number is the
+    # port in the container and should not be changed.
     ports:
       - '8080:8080'
+
   mysql:
+    # In order to expose this service to the host machine, a port needs to be
+    # mapped. This is the port that the database server will be listening on. If
+    # you need a different port, change the first number. The second number is
+    # the port in the container and should not be changed.
     ports:
       - '3306:3306'
 
   sparql:
+    # In order to expose this service to the host machine, a port needs to be
+    # mapped. This is the port that the database server will be listening on. If
+    # you need a different port, change the first number. The second number is
+    # the port in the container and should not be changed.
     ports:
       - '8890:8890'
 
   solr:
+    # In order to expose this service to the host machine, a port needs to be
+    # mapped. This is the port that the SOLR instance UI is reachable and the
+    # port that the SOLR instance will be listening on. If you need a different
+    # port, change the first number. The second number is the port in the
+    # container and should not be changed.
     ports:
       - '8983:8983'
 
   redis:
+    # In order to expose this service to the host machine, a port needs to be
+    # mapped. This is the port that the Redis server will be listening on. If
+    # you need a different port, change the first number. The second number is
+    # the port in the container and should not be changed.
     ports:
       - '6379:6379'
 
   mail:
+    # In order to expose this service to the host machine, a port needs to be
+    # mapped. 1025 is the port that the SMTP server will be listening on and
+    # 8025 is the port that the web UI will be reachable. If you need a
+    # different port, change the first number. The second number is the port in
+    # the container and should not be changed.
     ports:
       - '1025:1025'
       - '8025:8025'
 
   selenium:
+    # In order to expose this service to the host machine, a port needs to be
+    # mapped. 5900 is the port that the VNC server will be listening on. If you
+    # need a different port, change the first number. The second number is the
+    # port in the container and should not be changed.
     ports:
       - '5900:5900'
