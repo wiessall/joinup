@@ -24,6 +24,8 @@ services:
       XDEBUG_CONFIG: "client_host=host.docker.internal start_with_request=yes"
       XDEBUG_MODE: "develop, debug"
       PHP_IDE_CONFIG: "serverName=Docker"
+    extra_hosts:
+      - 'host.docker.internal:host-gateway'
     depends_on:
       - mysql
       - sparql
