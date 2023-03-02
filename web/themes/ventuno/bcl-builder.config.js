@@ -631,7 +631,7 @@ module.exports = {
           "award.svg",
           "box-arrow-up-right.svg",
           "calendar.svg",
-          "calendar3.svg",
+          "calendar-event.svg",
           "card-list.svg",
           "chat.svg",
           "chat-left-text.svg",
