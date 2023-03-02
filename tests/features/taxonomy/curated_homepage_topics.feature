@@ -326,7 +326,7 @@ Feature:
 
     When I am logged in as a moderator
     And I go to the homepage
-    And I click "E-justice"
+    And I click "E-justice" in the "Homepage topics" region
     And I click "Edit"
     When I press "Add Row"
     And I press "Add 1 column layout"
@@ -373,7 +373,7 @@ Feature:
     When I go to the edit form of the "News 2" news
     And I press "Save"
     And I go to the homepage
-    And I click "E-justice"
+    And I click "E-justice" in the "Homepage topics" region
     # The change should not affect the order as the news publication date is the same.
     Then I should see the following tiles in the correct order:
       | News 3 |
@@ -394,7 +394,7 @@ Feature:
     And I press "Save"
     And I go to the homepage
     # The change should not affect the order as the event start date is the same.
-    And I click "E-justice"
+    And I click "E-justice" in the "Homepage topics" region
     Then I should see the following tiles in the correct order:
       | Event 1 |
       | Event 2 |
