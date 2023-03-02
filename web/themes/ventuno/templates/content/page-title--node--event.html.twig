@@ -27,21 +27,28 @@
       </a>
     {% endif %}
   </h1>
-  <p class="page-title__headline mt-0">{{ 'Event date'|t }}: {{ additional_content.field_event_date }}</p>
-  <a class="page-title__headline page-title__headline--one-line mt-0" href="#event-location--{{ entity.id }}">{{ additional_content.field_event_location.0 }}</a>
 
   <div class="page-title__details">
-    <span class="page-title__detail">{{ additional_content.author }}</span>
     <span class="page-title__detail">{{ 'Published on'|t }}: {{ additional_content.published }}</span>
-    <span class="page-title__detail">
-      <span class="me-2">
-        {{ bundle_label }}
-      </span>
-      {{ pattern('icon', {
-          name: 'calendar3',
-          size: 's'
-        }) }}
-    </span>
+    {# To-do ISAICP-7506 add the "Last update" variable (additional_content.updated) #}
+    <span class="page-title__detail">{{ 'Last update'|t }}: {{ additional_content.updated }}</span>
+  </div>
+
+  <div class="bg-light p-3 rounded">
+    <div class="page-title__headline d-flex align-items-center">
+      <svg class="bi icon--m text-brand me-2">
+        <use xlink:href="{{ bcl_icon_path }}#calendar-event"></use>
+      </svg>
+      <span class="text-primary">{{ additional_content.field_event_date }}</span>
+    </div>
+    {% if additional_content.field_event_location|render|striptags %}
+      <div class="page-title__headline d-flex align-items-center mt-2">
+        <svg class="bi icon--m text-brand me-2">
+          <use xlink:href="{{ bcl_icon_path }}#geo-alt"></use>
+        </svg>
+        <span class="text-primary">{{ additional_content.field_event_location }}</span>
+      </div>
+    {% endif %}
   </div>
 </div>
 {% endif %}

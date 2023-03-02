@@ -1,0 +1,47 @@
+{#
+/**
+ * @file
+ * Default theme implementation for addtocal_links.
+ *
+ * Available variables:
+ * - attributes: An associative array of element attributes.
+ * - button_text: The addtocal button text.
+ * - button_attributes: An associative array of button attributes.
+ * - menu_attributes: An associative array of menu attributes.
+ * - items: List of add to cal links.
+ *
+ * @see template_preprocess_addtocal_links()
+ *
+ * @ingroup themeable
+ */
+#}
+{% set button_classes = [
+  'btn',
+  'btn-link',
+  'bg-transparent',
+  'text-brand',
+  'dropdown-toggle',
+] %}
+{% set button_attributes = button_attributes.addClass(button_classes).setAttribute('id', 'dropdown-addtocal').setAttribute('aria-expanded', 'false').setAttribute('data-bs-toggle', 'dropdown').setAttribute('type', 'button') %}
+<div{{ attributes.addClass(['ms-5', 'mb-0', 'dropdown']) }}>
+  <button{{ button_attributes }}>
+    {{ pattern('icon', {
+        name: 'calendar-event',
+        size: 's'
+    }) }}
+    {{ button_text }}
+    {{ pattern('icon', {
+        name: 'chevron-down',
+        size: 's'
+    }) }}
+  </button>
+  {# <div{{ menu_attributes }}> #}
+    <ul class="dropdown-menu" aria-labelledby="dropdown-addtocal">
+      {% for type, item in items %}
+        <li data-addtocal-type="{{ type }}">
+          <a class="dropdown-item" href="{{ item.url }}" target="_blank" rel="noopener" aria-label="{{ item['aria-label'] }}">{{ item.title }}</a>
+        </li>
+      {% endfor %}
+    </ul>
+  {# </div> #}
+</div>

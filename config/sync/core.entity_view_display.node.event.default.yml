@@ -114,7 +114,7 @@ content:
       year_diff_format: d/m/Y
     third_party_settings:
       template_suggestion:
-        template_suggestion: ''
+        template_suggestion: bare
     weight: 10
     region: content
   field_event_logo:
@@ -156,7 +156,7 @@ content:
     region: content
   field_location:
     type: basic_string
-    label: above
+    label: hidden
     settings: {  }
     third_party_settings:
       template_suggestion:

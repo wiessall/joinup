@@ -662,6 +662,7 @@ module.exports = {
           "filter.svg",
           "folder2-open.svg",
           "gear-fill.svg",
+          "geo-alt.svg",
           "github.svg",
           "info-circle-fill.svg",
           "info-circle.svg",
