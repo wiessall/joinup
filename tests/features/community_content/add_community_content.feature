@@ -191,3 +191,13 @@ Feature: Add community content
       | document     | Document   |
       | event        | Event      |
       | news         | News       |
+
+  Scenario: Event content type is not indicated on the byline
+    Given the following collection:
+      | title | The night batch |
+      | state | validated       |
+    And event content:
+      | title                   | collection      | state     |
+      | The glorious revolution | The night batch | validated |
+    When I go to the content page of the type "event" with the title "The glorious revolution"
+    Then I should not see the text Event in the "Page title" region

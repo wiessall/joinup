@@ -88,14 +88,21 @@ function ventuno_preprocess_page_title__node__event(&$variables) {
   $view_builder = \Drupal::entityTypeManager()->getViewBuilder('node');
 
   // Get dates and location fields.
-  $field_event_date = $view_builder->viewField($node->get('field_event_date'), 'default');
-  $variables['additional_content']['field_event_date'] = $field_event_date;
+  $event_date = $field_event_date = $view_builder->viewField($node->get('field_event_date'), 'default');
+  unset($event_date[0]['addtocal']);
+  $variables['additional_content']['field_event_date'] = $event_date;
+  $variables['additional_content']['field_add_to_cal'] = $field_event_date[0]['addtocal'];
 
   $field_event_location = $view_builder->viewField($node->get('field_location'), 'default');
   $variables['additional_content']['field_event_location'] = $field_event_location;
 
-  $published = \Drupal::service('date.formatter')->format($node->published_at->published_at_or_created, 'date_only');
+  /** @var \Drupal\Core\Datetime\DateFormatterInterface $date_formatter */
+  $date_formatter = \Drupal::service('date.formatter');
+  $published = $date_formatter->format($node->published_at->published_at_or_created, 'date_only');
   $variables['additional_content']['published'] = $published;
+
+  $update_date = $date_formatter->format($node->getChangedTime(), 'date_only');
+  $variables['additional_content']['updated'] = $update_date;
 }
 
 /**
