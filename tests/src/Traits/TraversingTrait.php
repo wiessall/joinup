@@ -323,12 +323,14 @@ trait TraversingTrait {
    *   Thrown when the element is not found.
    */
   protected function getListingByHeading(string $type, string $heading): NodeElement {
-    // Locate all the items in the old theme.
-    // @todo This can be removed once we are fully migrated to the new theme.
-    // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7138
-    $xpath = '//*[@class and contains(concat(" ", normalize-space(@class), " "), " ' . $type . ' ")]';
-    // That have a heading with the specified text.
-    $xpath .= '[.//*[@class and contains(concat(" ", normalize-space(@class), " "), " listing__title ") or contains(concat(" ", normalize-space(@class), " "), " card-title ")][normalize-space()="' . $heading . '"]]';
+    $selectors = [
+      // Locate all the items in the old theme.
+      // @todo This can be removed once we are fully migrated to the new theme.
+      // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7138
+      '//*[@class and contains(concat(" ", normalize-space(@class), " "), " ' . $type . ' ")]',
+      // That have a heading with the specified text.
+      '[.//*[@class and contains(concat(" ", normalize-space(@class), " "), " listing__title ") or contains(concat(" ", normalize-space(@class), " "), " card-title ")][normalize-space()="' . $heading . '"]]',
+    ];
 
     foreach ($selectors as $selector) {
       $item = $this->getSession()->getPage()->find('xpath', $selector);
