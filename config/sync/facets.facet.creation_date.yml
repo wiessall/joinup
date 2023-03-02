@@ -31,6 +31,8 @@ widget:
   config:
     show_numbers: false
     arbitrary_facet_plugin: _none
+    min_label: 'Date from'
+    max_label: 'Date to'
 empty_behavior:
   behavior: none
 only_visible_when_facet_source_is_visible: true
@@ -54,13 +56,19 @@ processor_configs:
     weights:
       pre_query: 60
       build: 20
-    settings: {  }
+    settings:
+      max_inclusive: false
   display_value_widget_order:
     processor_id: display_value_widget_order
     weights:
       sort: 40
     settings:
       sort: ASC
+  hierarchy_processor:
+    processor_id: hierarchy_processor
+    weights:
+      build: 100
+    settings: {  }
   url_processor_handler:
     processor_id: url_processor_handler
     weights:
