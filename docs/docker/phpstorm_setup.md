@@ -2,8 +2,11 @@
 
 ## Code style
 
-To setup the code style, head to File > Settings > Editor > Code Style and
+To set up the code style, head to File > Settings > Editor > Code Style and
 select PHP. Click on the `Set from...` button and select `Drupal`. Click Apply.
+
+Next, repeat the above steps but in the Javascript section. Select
+`Drupal JavaScript Style` and click Apply.
 
 ## Interpreter setup
 
@@ -17,6 +20,15 @@ Note that some builds of PhpStorm have the `PHP` option directly in the
 
 From there, click on the `+` button and select `From Docker, Vagrant, VM,
 Remote...`. Name your server `Docker`.
+
+**Important**: Make sure that you name the server `Docker` as this will be
+mapped to the variable set in the `docker-compose.yml` file:
+```yaml
+PHP_IDE_CONFIG: "serverName=Docker"
+```
+With this, the correct file mappings will be used. If you name the server
+anything else, you will need to override the `PHP_IDE_CONFIG` variable in the
+`docker-compose.override.yml` file.
 
 You will be prompted to select a server configuration. Select the
 `Docker compose` option. Select the `docker-compose.yml` as well as your
@@ -77,6 +89,27 @@ interpreter.
 `http://web:8080/web`. This is the correct URL.
 
 Click `OK` twice to close the windows.
+
+## Launch a session for the website
+
+By default, XDEBUG is not triggered in the website. A session needs to be
+started for XDEBUG to be triggered. To do so, head to Run > Edit Configurations
+and click the + button. Select `PHP Web Page` and name it `Launch website` or
+anything you prefer. Then click `OK`.
+
+To start listening for connections, head to Run > `Start Listening for PHP
+Debug Connections`. Then, head to Run > Debug... > `Launch website`. You should
+see the that the website is launched with a suffix of
+`?XDEBUG_SESSION_START=#####`. This means that the session has been started
+successfully.
+
+You can now set a breakpoint and wait for the breakpoint to be hit.
+
+### Troubleshooting
+
+If you want to test that the debugger is working, you can click `Run > Break at
+the first line in PHP scripts`. Then, head to Run > Debug... > `Launch website`.
+You should see the debugger stop at the first line of code.
 
 ## Run a behat test
 
