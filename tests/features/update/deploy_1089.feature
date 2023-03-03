@@ -24,3 +24,6 @@ Feature: Covers Release 1.89.
 
     Given I go to "/collection/joinup"
     Then I should see 12 tiles
+
+    Given I go to "/collection/semic-support-centre/overview"
+    Then I click "News" in the "Content types" inline facet
