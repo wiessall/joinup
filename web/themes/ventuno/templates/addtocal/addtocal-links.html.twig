@@ -23,7 +23,7 @@
   'dropdown-toggle',
 ] %}
 {% set button_attributes = button_attributes.addClass(button_classes).setAttribute('id', 'dropdown-addtocal').setAttribute('aria-expanded', 'false').setAttribute('data-bs-toggle', 'dropdown').setAttribute('type', 'button') %}
-<div{{ attributes.addClass(['ms-5', 'mb-0', 'dropdown']) }}>
+<div{{ attributes.addClass(['dropdown', 'ms-5', 'mb-0']) }}>
   <button{{ button_attributes }}>
     {{ pattern('icon', {
         name: 'calendar-event',

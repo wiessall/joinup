@@ -33,21 +33,23 @@
       <span class="page-title__detail">{{ 'Last update'|t }}: {{ additional_content.updated }}</span>
     </div>
 
-    <div class="bg-light p-3 rounded">
-      <div class="page-title__headline d-flex align-items-center">
-        <svg class="bi icon--m text-brand me-2">
-          <use xlink:href="{{ bcl_icon_path }}#calendar-event"></use>
-        </svg>
-        <span class="text-primary">{{ additional_content.field_event_date }}</span>
-      </div>
-      {% if additional_content.field_event_location|render|striptags %}
-        <div class="page-title__headline d-flex align-items-center mt-2">
+    <div class="bg-light p-3 rounded d-inline-flex">
+      <div class="d-flex flex-column">
+        <div class="page-title__headline d-inline-flex align-items-center">
           <svg class="bi icon--m text-brand me-2">
-            <use xlink:href="{{ bcl_icon_path }}#geo-alt"></use>
+            <use xlink:href="{{ bcl_icon_path }}#calendar-event"></use>
           </svg>
-          <span class="text-primary">{{ additional_content.field_event_location }}</span>
+          <span class="text-primary">{{ additional_content.field_event_date }}</span>
         </div>
-      {% endif %}
+        {% if additional_content.field_event_location|render|striptags %}
+          <div class="page-title__headline d-flex align-items-center mt-2">
+            <svg class="bi icon--m text-brand me-2">
+              <use xlink:href="{{ bcl_icon_path }}#geo-alt"></use>
+            </svg>
+            <span class="text-primary">{{ additional_content.field_event_location }}</span>
+          </div>
+        {% endif %}
+      </div>
       {{ additional_content.field_add_to_cal }}
     </div>
   </div>
