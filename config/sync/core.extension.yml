@@ -7,7 +7,6 @@ module:
   antibot: 0
   asset_distribution: 0
   asset_release: 0
-  auditfiles: 0
   block: 0
   bootstrap4_modal: 0
   breakpoint: 0

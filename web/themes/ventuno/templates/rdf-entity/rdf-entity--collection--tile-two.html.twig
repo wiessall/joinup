@@ -1,0 +1,43 @@
+{#
+/**
+ * @file
+ * Themeing for rdf entities.
+ */
+#}
+{% block content %}
+  {% set image %}
+    <a href="{{ url }}" class="d-block">
+      <svg class="bi img-fluid text-secondary"><use xlink:href="{{ bcl_icon_path }}#folder2-open"></use></svg>
+    </a>
+  {% endset %}
+  {% set badges = [] %}
+  {% for topic in topics %}
+    {% if loop.index == 4 %}
+      {% set badges = badges|merge([{
+        label: topic.name.value,
+        background: 'light',
+        rounded_pill: true,
+        attributes: create_attribute().addClass(['text-muted', 'me-2', 'mb-2', 'fs-sm'])
+      }]) %}
+    {% else %}
+      {% set badges = badges|merge([{
+        label: topic.name.value,
+        background: 'secondary',
+        rounded_pill: true,
+        attributes: create_attribute().addClass(['text-primary', 'me-2', 'mb-2', 'text-underline-hover', 'fs-sm']),
+        url: path('view.search.page_1', {}, {'query': {'f': { 0: 'topic:' ~ topic.tid.value }}}),
+      }]) %}
+    {% endif %}
+  {% endfor %}
+  {{ pattern('tile_two', {
+    attributes: attributes,
+    content_attributes: content_attributes,
+    image: image,
+    title_prefix: title_prefix,
+    title: label,
+    title_suffix: title_suffix,
+    url: url,
+    text: elements.group_abstract_wrapper.field_ar_description,
+    badges: badges,
+  }) }}
+{% endblock %}

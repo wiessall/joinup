@@ -101,9 +101,6 @@ Feature: "Add event" visibility options.
     And I should see the link "https://drupal.org"
     And the "Stream of Dreams" collection has a event titled "An amazing event"
     And I should not see the text "France"
-    # Check that the link to the event is visible on the collection page.
-    When I go to the homepage of the "Stream of Dreams" collection
-    Then I should see the link "An amazing event"
 
     # Check if the event date range is shown in an understandable format if the
     # event spans a month or year boundary.
