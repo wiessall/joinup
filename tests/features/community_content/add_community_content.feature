@@ -189,7 +189,6 @@ Feature: Add community content
       | content type | label      |
       | discussion   | Discussion |
       | document     | Document   |
-      | event        | Event      |
       | news         | News       |
 
   Scenario: Event content type is not indicated on the byline
@@ -198,6 +197,6 @@ Feature: Add community content
       | state | validated       |
     And event content:
       | title                   | collection      | state     |
-      | The glorious revolution | The night batch | validated |
-    When I go to the content page of the type "event" with the title "The glorious revolution"
+      | Red glorious revolution | The night batch | validated |
+    When I go to the content page of the type "event" with the title "Red glorious revolution"
     Then I should not see the text Event in the "Page title" region
