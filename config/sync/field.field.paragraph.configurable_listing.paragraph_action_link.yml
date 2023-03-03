@@ -1,0 +1,23 @@
+uuid: 4e7bd1cc-e2d6-42db-b415-d01dc57861f8
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.paragraph_action_link
+    - paragraphs.paragraphs_type.configurable_listing
+  module:
+    - link
+id: paragraph.configurable_listing.paragraph_action_link
+field_name: paragraph_action_link
+entity_type: paragraph
+bundle: configurable_listing
+label: 'Action link'
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  title: 1
+  link_type: 17
+field_type: link

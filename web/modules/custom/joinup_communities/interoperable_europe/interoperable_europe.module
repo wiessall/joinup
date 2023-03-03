@@ -55,7 +55,10 @@ function interoperable_europe_paragraph_create_access(AccountInterface $account,
 
   // Only allow rows for interoperable europe for now.
   $group = \Drupal::getContainer()->get('og.context')->getGroup();
-  if (!empty($group) && $group->id() === InteroperableEuropeCollectionInterface::COLLECTION_ENTITY_ID) {
+  // Only allow to add rows for the Interoperable Europe group. Allow though,
+  // to create the paragraph when the context does not exist, ie. outside of a
+  // group.
+  if (empty($group) || !empty($group) && $group->id() === InteroperableEuropeCollectionInterface::COLLECTION_ENTITY_ID) {
     return AccessResult::allowed();
   }
 

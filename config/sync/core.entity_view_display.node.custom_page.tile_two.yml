@@ -1,0 +1,102 @@
+uuid: 737a9f86-39d9-4f1d-b8c6-c42adc1b3e7e
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.tile_two
+    - field.field.node.custom_page.field_attachment
+    - field.field.node.custom_page.field_custom_page_logo
+    - field.field.node.custom_page.field_paragraphs_body
+    - field.field.node.custom_page.og_audience
+    - node.type.custom_page
+    - responsive_image.styles.spotlight
+  module:
+    - entity_reference_revisions
+    - field_group
+    - file
+    - layout_builder
+    - link
+    - responsive_image
+    - template_suggestion
+    - user
+third_party_settings:
+  field_group:
+    group_attachment:
+      children:
+        - field_attachment
+      label: Attachments
+      parent_name: ''
+      region: content
+      weight: 3
+      format_type: html_element
+      format_settings:
+        classes: ''
+        id: ''
+        element: div
+        show_label: true
+        label_element: h3
+        attributes: ''
+        effect: none
+        speed: fast
+  layout_builder:
+    enabled: false
+    allow_custom: false
+_core:
+  default_config_hash: ZZ0APhON-5FpA-vKXTwx_A1Bz6FHZzw2XG7t7MvvXO8
+id: node.custom_page.tile_two
+targetEntityType: node
+bundle: custom_page
+mode: tile_two
+content:
+  field_attachment:
+    type: file_default
+    label: hidden
+    settings:
+      use_description_as_link_text: true
+    third_party_settings:
+      template_suggestion:
+        template_suggestion: fieldset__show_more
+    weight: 51
+    region: content
+  field_custom_page_logo:
+    type: responsive_image
+    label: hidden
+    settings:
+      responsive_image_style: spotlight
+      image_link: ''
+    third_party_settings:
+      template_suggestion:
+        template_suggestion: ''
+    weight: 0
+    region: content
+  field_paragraphs_body:
+    type: entity_reference_revisions_entity_view
+    label: hidden
+    settings:
+      view_mode: default
+      link: ''
+    third_party_settings: {  }
+    weight: 2
+    region: content
+  links:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 1
+    region: content
+  report:
+    type: link
+    label: hidden
+    settings:
+      trim_length: 80
+      url_only: false
+      url_plain: false
+      rel: ''
+      target: ''
+    third_party_settings: {  }
+    weight: 4
+    region: content
+hidden:
+  langcode: true
+  og_audience: true
+  published_at: true
+  search_api_excerpt: true
