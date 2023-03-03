@@ -1,0 +1,46 @@
+uuid: fd9690ec-2ecb-4641-b254-c15d2642fd3e
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_form_mode.paragraph.simple_form
+    - field.field.paragraph.row.paragraph_column_layout
+    - field.field.paragraph.row.paragraph_heading
+    - field.field.paragraph.row.paragraph_row_background
+    - field.field.paragraph.row.paragraph_row_subheading
+    - field.field.paragraph.row.row_theme
+    - paragraphs.paragraphs_type.row
+  module:
+    - paragraphs
+id: paragraph.row.simple_form
+targetEntityType: paragraph
+bundle: row
+mode: simple_form
+content:
+  paragraph_column_layout:
+    type: paragraphs
+    weight: 0
+    region: content
+    settings:
+      title: Paragraph
+      title_plural: Paragraphs
+      edit_mode: closed_expand_nested
+      closed_mode: summary
+      autocollapse: none
+      closed_mode_threshold: 0
+      add_mode: dropdown
+      form_display_mode: default
+      default_paragraph_type: _none
+      features:
+        add_above: '0'
+        collapse_edit_all: '0'
+        duplicate: '0'
+    third_party_settings: {  }
+hidden:
+  created: true
+  paragraph_heading: true
+  paragraph_row_background: true
+  paragraph_row_heading: true
+  paragraph_row_subheading: true
+  row_theme: true
+  status: true

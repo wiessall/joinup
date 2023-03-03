@@ -70,7 +70,7 @@ Feature:
   @javascript
   Scenario: Report link and eTranslate button are not available in IOP custom pages.
     Given custom_page content:
-      | title      | collection           | state     |
+      | title    | collection           | state     |
       | IOP page | Interoperable Europe | validated |
 
     When I am logged in as a user with the authenticated role
@@ -90,8 +90,8 @@ Feature:
     And I should not see the button "Translate"
 
     Examples:
-      | type        |
-      | news        |
-      | event       |
-      | discussion  |
-      | document    |
+      | type       |
+      | news       |
+      | event      |
+      | discussion |
+      | document   |

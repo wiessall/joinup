@@ -1,145 +1,129 @@
-uuid: deca77fb-0b9d-4b7b-b2ed-4d9ca1d8e1e2
+uuid: 26fa967a-df9e-43a4-be94-c35c6efcd6c0
 langcode: en
 status: true
 dependencies:
   config:
     - page_manager.page.homepage
+  module:
+    - joinup_layout
+    - user
 id: homepage-layout_builder-1
-label: 'About section'
-weight: 1
+label: Authenticated
+weight: 0
 variant: layout_builder
 variant_settings:
   id: layout_builder
   label: null
   weight: 0
-  uuid: f0c44272-87cd-42b8-8b5b-604857acaeb0
+  uuid: ed4c9549-4a3f-4017-abc1-f60cc2ed2968
   sections:
     -
-      layout_id: joinup_layout_twocolfooter_onecol_67_33
+      layout_id: layout_onecol
       layout_settings:
-        label: About
+        label: 'Homepage topics'
+        context_mapping: {  }
       components:
-        b0ffc367-218e-4407-bb94-bd9682a9552e:
-          uuid: b0ffc367-218e-4407-bb94-bd9682a9552e
+        8ab13f0a-cdb6-40f5-bf83-8eba98dc696f:
+          uuid: 8ab13f0a-cdb6-40f5-bf83-8eba98dc696f
+          region: content
+          configuration:
+            id: 'views_block:homepage_topics-block_1'
+            label: 'Main topics'
+            label_display: visible
+            provider: views
+            context_mapping: {  }
+            views_label: 'Main topics'
+            items_per_page: none
+          weight: 0
+          additional: {  }
+      third_party_settings: {  }
+    -
+      layout_id: joinup_layout_twocol_60_40
+      layout_settings:
+        label: 'Spotlight and highlighted solution'
+      components:
+        26488b6d-5ac8-4c62-a3dc-137f6dced5c5:
+          uuid: 26488b6d-5ac8-4c62-a3dc-137f6dced5c5
           region: first
           configuration:
-            id: custom_markup
-            label: 'What''s Joinup about?'
-            label_display: '0'
-            provider: custom_markup_block
-            markup:
-              value: "<p class=\"about-what__title\">What's Joinup</p>\r\n<p>The Joinup platform is the European Commission's one-stop shop for interoperable, open, and free digital government ICT solutions and an online space for e-Government professionals and enthusiasts to share and learn about digital public services and initiatives.</p>\r\n<p><strong>Joinup covers the hands-on aspects of interoperability.</strong></p>\r\n"
-              format: full_html
+            id: 'views_block:in_the_spotlight-block'
+            label: ''
+            label_display: visible
+            provider: views
+            context_mapping: {  }
+            views_label: ''
+            items_per_page: none
           weight: 0
-          additional:
-            component_attributes:
-              block_attributes:
-                id: ''
-                class: about-what
-                style: ''
-                data: ''
-              block_title_attributes:
-                id: ''
-                class: ''
-                style: ''
-                data: ''
-              block_content_attributes:
-                id: ''
-                class: ''
-                style: ''
-                data: ''
-        e1eeef2d-dde1-4aa3-af7b-a6709184d497:
-          uuid: e1eeef2d-dde1-4aa3-af7b-a6709184d497
+          additional: {  }
+        7807ee72-f98e-46bb-80d9-fe1d2b6cd8de:
+          uuid: 7807ee72-f98e-46bb-80d9-fe1d2b6cd8de
           region: second
           configuration:
-            id: custom_markup
-            label: 'What''s Interoperable Europe'
+            id: 'entityqueue_block:highlighted_content'
+            label: 'Highlighted content'
             label_display: visible
-            provider: custom_markup_block
+            provider: entityqueue_block
+            view_mode: highlighted
             context_mapping: {  }
-            markup:
-              value: '<p>It’s the European Commission’s initiative for a reinforced interoperability policy showcasing news and events about government-related interoperability, along with initiatives and best practices that support the digitalisation of EU public administrations.</p><p><strong>Interoperable Europe covers the policy angle of interoperability.</strong></p>'
-              format: content_editor
-          weight: 0
-          additional:
-            component_attributes:
-              block_attributes:
-                id: ''
-                class: about-who
-                style: ''
-                data: ''
-              block_title_attributes:
-                id: ''
-                class: ''
-                style: ''
-                data: ''
-              block_content_attributes:
-                id: ''
-                class: ''
-                style: ''
-                data: ''
-        e82de3d1-2e2f-4244-8ba8-c147ba44d577:
-          uuid: e82de3d1-2e2f-4244-8ba8-c147ba44d577
-          region: two_col_footer
+          weight: 1
+          additional: {  }
+      third_party_settings: {  }
+    -
+      layout_id: joinup_layout_twocol_60_40
+      layout_settings:
+        label: 'News and events'
+      components:
+        52bba3fe-70ac-478a-9bda-2bbb24a9a8a1:
+          uuid: 52bba3fe-70ac-478a-9bda-2bbb24a9a8a1
+          region: first
           configuration:
-            id: custom_markup
-            label: 'For fresh start on creating content'
-            label_display: '0'
-            provider: custom_markup_block
+            id: 'views_block:latest_news-block'
+            label: ''
+            label_display: visible
+            provider: views
             context_mapping: {  }
-            markup:
-              value: "<p><a class=\"btn btn-secondary\" href=\"/collection/joinup/help-videos\">How to video</a>&nbsp;<button class=\"btn btn-secondary js-tour-start-button\" type=\"button\" data-drupal-tour-link=\"\">Guided tour</button>&nbsp;<a class=\"btn btn-secondary\" href=\"/collection/joinup/faq\">FAQ</a></p>\r\n"
-              format: full_html
+            views_label: ''
+            items_per_page: none
           weight: 0
-          additional:
-            component_attributes:
-              block_attributes:
-                id: ''
-                class: 'about-how mt-4'
-                style: ''
-                data: ''
-              block_title_attributes:
-                id: ''
-                class: ''
-                style: ''
-                data: ''
-              block_content_attributes:
-                id: ''
-                class: ''
-                style: ''
-                data: ''
-        6ab0ceea-4541-4153-8b64-227e02369d30:
-          uuid: 6ab0ceea-4541-4153-8b64-227e02369d30
-          region: third
+          additional: {  }
+        7cc83b30-0be3-4f89-940b-3e7f72d7b16d:
+          uuid: 7cc83b30-0be3-4f89-940b-3e7f72d7b16d
+          region: second
           configuration:
-            id: custom_markup
-            label: 'New Joinup video'
-            label_display: '0'
-            provider: custom_markup_block
+            id: 'entityqueue_block:highlighted_event'
+            label: 'Highlighted event'
+            label_display: visible
+            provider: entityqueue_block
+            view_mode: highlighted_event
             context_mapping: {  }
-            markup:
-              value: "<p>{\"preview_thumbnail\":\"/sites/default/files/styles/video_embed_wysiwyg_preview/public/video_thumbnails/3_dx-K0P9JI.jpg?itok=LryC_a1d\",\"video_url\":\"https://youtu.be/3_dx-K0P9JI\",\"settings\":{\"responsive\":true,\"width\":\"854\",\"height\":\"480\",\"autoplay\":false},\"settings_summary\":[\"Embedded Video (Responsive).\"]}</p>\r\n"
-              format: content_editor
           weight: 0
-          additional:
-            component_attributes:
-              block_attributes:
-                id: ''
-                class: about-video
-                style: ''
-                data: ''
-              block_title_attributes:
-                id: ''
-                class: ''
-                style: ''
-                data: ''
-              block_content_attributes:
-                id: ''
-                class: ''
-                style: ''
-                data: ''
+          additional: {  }
+      third_party_settings: {  }
+    -
+      layout_id: layout_onecol
+      layout_settings:
+        label: Explore
+      components:
+        1fed7729-7ac7-48e1-82a3-d915f3545d9c:
+          uuid: 1fed7729-7ac7-48e1-82a3-d915f3545d9c
+          region: content
+          configuration:
+            id: joinup_front_page_explore_block
+            label: Explore
+            label_display: visible
+            provider: joinup_front_page
+            context_mapping: {  }
+          weight: 0
+          additional: {  }
       third_party_settings: {  }
 page: homepage
-selection_criteria: {  }
+selection_criteria:
+  -
+    id: user_role
+    negate: false
+    context_mapping:
+      user: current_user
+    roles:
+      authenticated: authenticated
 selection_logic: and
 static_context: {  }

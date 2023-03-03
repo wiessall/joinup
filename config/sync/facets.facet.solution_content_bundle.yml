@@ -9,7 +9,7 @@ min_count: 1
 missing: false
 missing_label: others
 url_alias: solution_content_bundle
-facet_source_id: 'search_api_field:rdf_entity.field_is_content'
+facet_source_id: 'search_api_field:rdf_entity.solution.field_is_content'
 field_identifier: entity_bundle
 query_operator: or
 hard_limit: 0
