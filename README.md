@@ -2,8 +2,6 @@
 
 This is the source code for https://joinup.ec.europa.eu/
 
-[![Build Status](https://status.continuousphp.com/git-hub/ec-europa/joinup-dev?token=77aa9de5-7fef-40bc-8c48-d6ff70fba9ff)](https://continuousphp.com/git-hub/ec-europa/joinup-dev)
-
 Joinup is a collaborative platform created by the European Commission and
 funded by the European Union via the [Interoperability Solutions for European
 Public Administrations (ISA)](http://ec.europa.eu/isa/) Programme.
@@ -30,6 +28,7 @@ There are two ways to run Joinup. With `docker` and `docker-compose` and buildin
 ### Docker
 
 To start with docker, please, check the separated [README file](docs/docker/README.md).
+**This is the preferred way of running Joinup.**
 
 ### Local installation
 
@@ -100,26 +99,10 @@ used tool.
 
 * Point the document root of your webserver to the 'web/' directory.
 
-#### Create a local build properties file
-Create a new file in the root of the project named `build.properties.local
-using your favourite text editor:
+#### Create your .env file
 
-```
-$ vim build.properties.local
-```
-
-This file will contain the configuration which is unique to your development
-machine. This is mainly useful for specifying your database credentials and the
-username and password of the Drupal admin user, so they can be used during the
-installation.
-
-Because these settings are personal they should not be shared with the rest of
-the team. Make sure you never commit this file!
-
-All options you can use can be found in the `build.properties` file. Just copy
-the lines you want to override and change their values. Do not copy the entire
-`build.properties` file, since this would override all options.
-
+Copy the `.env.example` file to `.env` and fill in the values for your local
+environment.
 
 #### Create a local task runner configuration file
 
@@ -128,6 +111,8 @@ create a `runner.yml` file in the project's top directory. You can override
 there any default runner configuration, or any other declared in
 `./resources/runner` files or in `runner.yml.dist`. Note that the `runner.yml`
 file is not under VCS control.
+Uncomment the lines for the local development to take full advantage of the
+shortened commands.
 
 #### Setup environment variables
 

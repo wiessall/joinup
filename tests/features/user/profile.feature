@@ -35,6 +35,7 @@ Feature: User profile
     And I fill in "Twitter" with "therealdavinci"
     And I fill in "LinkedIn" with "leonardo.davinci"
     And I fill in "GitHub" with "davinci"
+    And I fill in "Mastodon" with "myaccount.pl"
 
     # Verify that the business title is a field limited to 255 characters.
     When I fill in "Business title" with "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent sagittis justo ornare justo porta tristique vitae eu ligula. Mauris iaculis eros id nulla posuere, id luctus orci ultricies. Aenean at leo diam. Aliquam dapibus nibh et est pharetra, quis interdum"
@@ -52,6 +53,7 @@ Feature: User profile
     And the link "Twitter" in the "Header" region should point to "https://www.twitter.com/therealdavinci"
     And the link "LinkedIn" in the "Header" region should point to "https://www.linkedin.com/leonardo.davinci"
     And the link "GitHub" in the "Header" region should point to "https://github.com/davinci"
+    And the link "Mastodon" in the "Header" region should point to "https://myaccount.pl"
     And I should not see the link "SlideShare" in the "Header" region
     And I should not see the link "Youtube" in the "Header" region
     And I should not see the link "Vimeo" in the "Header" region
