@@ -59,6 +59,11 @@ processor_configs:
     settings:
       minimum_items: 1
       maximum_items: null
+  hierarchy_processor:
+    processor_id: hierarchy_processor
+    weights:
+      build: 100
+    settings: {  }
   joinup_search_content_type_fixed_order:
     processor_id: joinup_search_content_type_fixed_order
     weights:

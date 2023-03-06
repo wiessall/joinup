@@ -162,4 +162,5 @@ permissions:
   - 'view rdf entity'
   - 'view rdf_entity draft graph'
   - 'view unpublished rdf entity'
+  - 'resend email confirmation request'
 role_type: null
