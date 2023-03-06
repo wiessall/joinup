@@ -26,4 +26,4 @@ Feature: Covers Release 1.89.
     Then I should see 12 tiles
 
     Given I go to "/collection/semic-support-centre/overview"
-    Then I click "News" in the "Content types" inline facet
+    Then I click "News" in the "Content listing types" inline facet
