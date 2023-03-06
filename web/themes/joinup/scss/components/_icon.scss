@@ -401,3 +401,18 @@ $waat-icons-font-path: "../fonts/waat-icons/waat-icons";
 .icon--footer-newsletter:before {
   content: "";
 }
+
+.icon--mastodon:before {
+  display: inline-block;
+  content: "";
+  width: 1em;
+  height: 1em;
+  vertical-align: -.125em;
+  background-color: currentColor;
+  mask-image: url("../assets/icons/mastodon.svg");
+  mask-repeat: no-repeat;
+  mask-size: contain;
+  -webkit-mask-image: url("../assets/icons/mastodon.svg");
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-size: contain;
+}
