@@ -8,7 +8,6 @@
 declare(strict_types = 1);
 
 use Drupal\Core\Site\Settings;
-use Drupal\field\Entity\FieldConfig;
 use Drupal\user\Entity\User;
 
 /**
@@ -92,46 +91,4 @@ function joinup_core_requirements($phase): array {
   }
 
   return $requirements;
-}
-
-/**
- * Replace the field_content_listing with the content_listing field.
- */
-function joinup_core_update_109000(): void {
-  $config_file = 'field.field.paragraph.content_listing.content_listing';
-  $config_storage = \Drupal::service('config.storage.sync');
-  $config = $config_storage->read($config_file);
-  FieldConfig::create($config)->save();
-
-  // Insert all records from the `paragraphs__field_content_listing` table into
-  // the `paragraphs__content_listing` table using a direct query.
-  $connection = \Drupal::database();
-  $connection->insert('paragraph__content_listing')
-    ->fields([
-      'bundle',
-      'deleted',
-      'entity_id',
-      'revision_id',
-      'langcode',
-      'delta',
-      'content_listing_value',
-    ])
-    ->from($connection->select('paragraph__field_content_listing', 'pcl')
-      ->fields('pcl'))
-    ->execute();
-
-  // Do the same for the `paragraphs_revision__field_content_listing` table.
-  $connection->insert('paragraph_revision__content_listing')
-    ->fields([
-      'bundle',
-      'deleted',
-      'entity_id',
-      'revision_id',
-      'langcode',
-      'delta',
-      'content_listing_value',
-    ])
-    ->from($connection->select('paragraph_revision__field_content_listing', 'pcl')
-      ->fields('pcl'))
-    ->execute();
 }
