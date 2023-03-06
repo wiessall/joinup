@@ -5,24 +5,18 @@
  * Functions, variables, utilities and mixins required for the build.
  * When compiled, this file should not output anything.
  */
-.paragraph--2-column-featured-right:first-of-type {
-  order: 2;
-}
-@media (min-width: 768px) {
-  .paragraph--2-column-featured-right:first-of-type {
-    order: 0;
-  }
-}
 @media (min-width: 768px) {
   .paragraph--2-column-featured-right:first-of-type > * {
     margin-right: 5rem;
   }
 }
-.paragraph--2-column-featured-right:last-of-type {
+.paragraph--2-column-featured-right:nth-of-type(2) {
+  order: -1;
   margin-bottom: 2rem;
 }
 @media (min-width: 768px) {
-  .paragraph--2-column-featured-right:last-of-type {
+  .paragraph--2-column-featured-right:nth-of-type(2) {
+    order: 0;
     margin-bottom: 0;
   }
 }

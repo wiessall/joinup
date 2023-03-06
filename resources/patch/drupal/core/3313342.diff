@@ -1,0 +1,28 @@
+diff --git a/core/modules/layout_builder/src/Cache/LayoutBuilderUiCacheContext.php b/core/modules/layout_builder/src/Cache/LayoutBuilderUiCacheContext.php
+--- a/core/modules/layout_builder/src/Cache/LayoutBuilderUiCacheContext.php
++++ b/core/modules/layout_builder/src/Cache/LayoutBuilderUiCacheContext.php	(date 1678119618229)
+@@ -25,7 +25,11 @@
+    * {@inheritdoc}
+    */
+   public function getContext() {
+-    return 'is_layout_builder_ui.' . (int) (strpos($this->routeMatch->getRouteName(), 'layout_builder.') !== 0);
++    $route_name = $this->routeMatch->getRouteName();
++    if ($route_name && str_starts_with($route_name, 'layout_builder.')) {
++      return 'is_layout_builder_ui.0';
++    }
++    return 'is_layout_builder_ui.1';
+   }
+
+ }
+diff --git a/core/modules/layout_builder/layout_builder.module b/core/modules/layout_builder/layout_builder.module
+--- a/core/modules/layout_builder/layout_builder.module
++++ b/core/modules/layout_builder/layout_builder.module	(date 1678119618223)
+@@ -158,7 +158,7 @@
+   // If the entity is displayed within a Layout Builder block and the current
+   // route is in the Layout Builder UI, then remove all contextual link
+   // placeholders.
+-  if ($display instanceof LayoutBuilderEntityViewDisplay && strpos($route_name, 'layout_builder.') === 0) {
++  if ($route_name && $display instanceof LayoutBuilderEntityViewDisplay && strpos($route_name, 'layout_builder.') === 0) {
+     unset($build['#contextual_links']);
+   }
+ }
