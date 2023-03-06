@@ -207,6 +207,28 @@ function joinup_core_editor_js_settings_alter(array &$settings) {
 }
 
 /**
+ * Implements hook_preprocess_HOOK().
+ *
+ * @see template_preprocess_image_formatter()
+ */
+function joinup_core_preprocess_image_formatter(&$variables): void {
+  if ($variables['image']['#alt'] === NULL) {
+    $variables['image']['#alt'] = '';
+  }
+}
+
+/**
+ * Implements hook_preprocess_HOOK().
+ *
+ * @see template_preprocess_responsive_image_formatter()
+ */
+function joinup_core_preprocess_responsive_image_formatter(&$variables): void {
+  if ($variables['responsive_image']['#attributes']['alt'] === NULL) {
+    $variables['responsive_image']['#attributes']['alt'] = '';
+  }
+}
+
+/**
  * Implements hook_config_readonly_whitelist_patterns().
  */
 function joinup_core_config_readonly_whitelist_patterns() {
