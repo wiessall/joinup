@@ -1,52 +1,31 @@
-# Any value can be overridden in docker-compose.override.yml, a file that is not
-# under VCS control. See docker-compose.override.yml.dist for more details.
-
-# CLEAN vs. CLONE install
-# Docker compose knows to fire up the containers with databases having data
-# imported from the production dumps/snapshots. Read the documentation for the
-# DOCKER_RESTORE_PRODUCTION environment variable from .env.dist.
-
-# Accessing services from the host machine
-# See docker-compose.override.yml.dist on each service, for more details on how
-# to access services from the host machine and how to avoid port collision with
-# potential host machine instances. The ports were not exposed by default, in
-# the main `docker-compose.yml` file, because they cannot be easily overridden.
-# See https://stackoverflow.com/questions/48851190/docker-compose-override-a-ports-property-instead-of-merging-it
+# Base docker-compose file for Joinup.
 
 version: '3.8'
 services:
   web:
-    image: fpfis/httpd-php-dev:8.1
+    image: joinup/web:latest
     build:
       context: './resources/docker/web'
     working_dir: /var/www/html
-    # macOS users should override 'volumes:' in docker-compose.override.yml.
-    # See docker-compose.override.yml.dist.
     volumes:
       - .:/var/www/html
     env_file:
       - .env.dist
+      - .env
     environment:
+      COMPOSER_HOME: /var/www/.composer
+      COMPOSER_CACHE_DIR: /var/www/.composer/cache
       DOCUMENT_ROOT: "/var/www/html"
       SMTP_SERVER: mail
       SMTP_PORT: 1025
       SMTP_FROM: contact@example.com
       DRUPAL_PRIVATE_FILE_SYSTEM: /var/www/html/private
       DRUPAL_FILE_TEMP_PATH: /var/www/html/tmp
-      # Environment variables without a value will receive the values from the
-      # host machine, if they are set. Sensitive information such as
-      # user credentials should be placed in .env file.
-      # See https://docs.docker.com/compose/environment-variables/#pass-environment-variables-to-containers
-      DRUPAL_HASH_SALT:
-      ASDA_URL:
-      ASDA_USER:
-      ASDA_PASSWORD:
-      DISABLE_XDEBUG:
-      DISABLE_BLACKFIRE:
-      # For non-macOS hosts. For macOS, see docker-compose.override.yml.dist.
-      XDEBUG_CONFIG: "client_host=172.17.0.1"
+      XDEBUG_CONFIG: "client_host=host.docker.internal start_with_request=yes"
       XDEBUG_MODE: "develop, debug"
       PHP_IDE_CONFIG: "serverName=Docker"
+    extra_hosts:
+      - 'host.docker.internal:host-gateway'
     depends_on:
       - mysql
       - sparql
@@ -57,20 +36,16 @@ services:
 
   mysql:
     image: percona:8.0
-    # macOS users should override 'volumes:' in docker-compose.override.yml.
-    # See docker-compose.override.yml.dist.
     volumes:
       - ./resources/docker/mysql/config:/etc/mysql/conf.d
-      # MySQL dump.
       - ./db/mysql:/db/mysql/dump
-      # Contains a script to run when waking up.
       - ./scripts/docker/mysql:/docker-entrypoint-initdb.d
     env_file:
       - .env.dist
+      - .env
     environment:
       MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
       MYSQL_DATABASE: 'joinup'
-      DOCKER_RESTORE_PRODUCTION:
     command:
       - '--max_allowed_packet=1G'
       - '--innodb-buffer-pool-size=512M'
@@ -80,8 +55,6 @@ services:
 
   sparql:
     image: tenforce/virtuoso
-    # macOS users should override 'volumes:' in docker-compose.override.yml.
-    # See docker-compose.override.yml.dist.
     volumes:
       - ./db/virtuoso/snapshot:/data/backups
       - ./scripts/docker/virtuoso/entrypoint.sh:/entrypoint.sh
@@ -103,8 +76,6 @@ services:
 
   solr:
     image: solr:8
-    # macOS users should override 'volumes:' in docker-compose.override.yml.
-    # See docker-compose.override.yml.dist.
     volumes:
       - ./db/solr:/solr/snapshot
       - ./resources/solr/conf:/solr/conf
@@ -122,8 +93,6 @@ services:
   mail:
     image: mailhog/mailhog
 
-  # Includes a Selenium server accessible at port 5900.
-  # See docker-compose.override.yml.dist
   selenium:
     image: selenium/standalone-chrome:4.5.0
     environment:
