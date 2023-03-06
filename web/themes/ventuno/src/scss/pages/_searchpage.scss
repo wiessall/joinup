@@ -1,6 +1,6 @@
 // Filters
 .joinup-search-filters {
-  .offcanvas {
+  .bcl-offcanvas {
     box-shadow: none;
     z-index: 503; // Avoid offcanvas to be overlapped by sticky navbar
     @include media-breakpoint-up(lg) {

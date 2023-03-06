@@ -12,6 +12,7 @@ use Drupal\Core\Session\AccountInterface;
 use Drupal\search_api_field\Plugin\Field\FieldWidget\SearchWidget as DefaultSearchWidget;
 use Drupal\search_api_field\Plugin\FilterPluginManagerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Plugin implementation of the 'search_api_field_custom_page' widget.
@@ -53,12 +54,13 @@ class SearchWidget extends DefaultSearchWidget {
    *   The entity type manager service.
    * @param \Drupal\search_api_field\Plugin\FilterPluginManagerInterface $filter_plugin_manager
    *   The filter plugin manager service.
+   * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $event_dispatcher
+   *   The event dispatcher service.
    * @param \Drupal\Core\Session\AccountInterface $current_user
    *   The current user.
    */
-  public function __construct($plugin_id, $plugin_definition, FieldDefinitionInterface $field_definition, array $settings, array $third_party_settings, EntityTypeManagerInterface $entity_type_manager, FilterPluginManagerInterface $filter_plugin_manager, AccountInterface $current_user) {
-    parent::__construct($plugin_id, $plugin_definition, $field_definition, $settings, $third_party_settings, $entity_type_manager, $filter_plugin_manager);
-
+  public function __construct($plugin_id, $plugin_definition, FieldDefinitionInterface $field_definition, array $settings, array $third_party_settings, EntityTypeManagerInterface $entity_type_manager, FilterPluginManagerInterface $filter_plugin_manager, EventDispatcherInterface $event_dispatcher, AccountInterface $current_user) {
+    parent::__construct($plugin_id, $plugin_definition, $field_definition, $settings, $third_party_settings, $entity_type_manager, $filter_plugin_manager, $event_dispatcher);
     $this->currentUser = $current_user;
   }
 
@@ -74,6 +76,7 @@ class SearchWidget extends DefaultSearchWidget {
       $configuration['third_party_settings'],
       $container->get('entity_type.manager'),
       $container->get('plugin.manager.search_api_field.filter'),
+      $container->get('event_dispatcher'),
       $container->get('current_user')
     );
   }

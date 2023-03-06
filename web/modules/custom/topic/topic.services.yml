@@ -17,3 +17,9 @@ services:
     arguments: ['@entity_type.manager']
     tags:
       - { name: event_subscriber }
+
+  topic.query_preset_subscriber:
+    class: Drupal\topic\EventSubscriber\QueryPresetSubscriber
+    arguments: ['@current_route_match']
+    tags:
+      - { name: event_subscriber }
