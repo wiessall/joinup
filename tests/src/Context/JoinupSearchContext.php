@@ -133,29 +133,15 @@ class JoinupSearchContext extends RawDrupalContext {
    * @Then the :bundle content checkbox item should be selected
    */
   public function assertContentFacetCheckboxSelected(string $bundle): void {
-    if ($this->hasJavascriptSupport()) {
-      // The following xpath searches for
-      // * Any div
-      // ** that has a class named facets-widget-checkbox
-      // ** and contains a li element
-      // *** that contains an input element
-      // **** that has an attribute named 'type' with value 'checkbox'
-      // **** and has an attribute named 'checked' with value 'checked'
-      // *** and contains a span element
-      // **** with the text has the value $bundle.
-      $xpath = "//div[contains(concat(' ', normalize-space(@class), ' '), ' facets-widget-checkbox ')][.//li[.//input[@type='checkbox'][@checked='checked']][.//span[text()='$bundle']]]";
-    }
-    else {
-      // The following xpath searches for
-      // * Any div
-      // ** that has a class named facets-widget-checkbox
-      // ** and contains an a element
-      // *** that has a class named 'is-active'
-      // *** and contains a span element
-      // **** that has a class named 'facet-item__value'
-      // **** and the text has the value $bundle.
-      $xpath = "//div[contains(concat(' ', normalize-space(@class), ' '), ' facets-widget-checkbox ')][.//a[contains(concat(' ', normalize-space(@class), ' '), ' is-active ')][.//span[text()='$bundle']]]";
-    }
+    // The following xpath searches for
+    // * Any div
+    // ** that has a class named facets-widget-checkbox
+    // ** and contains an a element
+    // *** that has a class named 'is-active'
+    // *** and contains a span element
+    // **** that has a class named 'facet-item__value'
+    // **** and the text has the value $bundle.
+    $xpath = "//div[contains(concat(' ', normalize-space(@class), ' '), ' facets-widget-checkbox ')][.//a[contains(concat(' ', normalize-space(@class), ' '), ' is-active ')][.//span[text()='$bundle']]]";
     $element = $this->getSession()->getPage()->find('xpath', $xpath);
     Assert::assertNotEmpty($element);
   }
@@ -1016,6 +1002,7 @@ class JoinupSearchContext extends RawDrupalContext {
    */
   public function showMoreFacet(string $facet_type): void {
     $facet = $this->findFacetByAlias($facet_type);
+    $this->scrollElementIntoView($facet);
     $parent_facet = $facet->getParent();
     if (!$link = $parent_facet->findLink('Show more')) {
       throw new ElementNotFoundException($this->getSession()->getDriver(), 'Link', 'label', 'Show more');

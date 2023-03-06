@@ -137,7 +137,7 @@ default:
       api_driver: 'drupal'
       blackbox: ~
       region_map:
-        Additional fields accordion: '#additional-fields'
+        Additional fields accordion: '.accordion .accordion-item #management'
         Administration toolbar: '#toolbar-administration'
         Comment: '.comments-section'
         Contact information inline form: '#edit-field-ar-contact-information-wrapper'
@@ -160,7 +160,8 @@ default:
         # TODO: Remove .section--sidebar-left in ISAICP-7138.
         # See https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7138
         Left sidebar: 'aside.layout-sidebar,.section--sidebar-left'
-        Main fields accordion: '#main-fields'
+        Main fields accordion: '#main-fields,.accordion .accordion-item #main'
+        Main solution vertical tab: '#edit-group-main'
         Management solution vertical tab: '#edit-group-management'
         Members admin form actions: '#edit-action'
         Members admin form header: '#edit-header'
