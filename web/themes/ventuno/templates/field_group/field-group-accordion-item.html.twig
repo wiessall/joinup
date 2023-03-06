@@ -8,21 +8,22 @@
  * - children: The children of the group.
  * - label_attributes: A list of HTML attributes for the label.
  * - attributes: A list of HTML attributes for the group wrapper.
+ * - accordion_item_id: Unique HTML ID for the accordion item.
  *
  * @see template_preprocess_field_group_accordion()
+ * @see ventuno_preprocess_field_group_accordion_item()
  *
  * @ingroup themeable
  */
 #}
 {{ attach_library('ventuno/show-accordion-invalid-fields') }}
-{% set collapse_id = title|lower|replace({' ': '-'}) %}
 <div class="accordion-item">
-  <h2 class="accordion-header" id="heading-{{ collapse_id }}">
-    <button class="accordion-button fw-bold text-primary{{ open ? '' : ' collapsed'}}" type="button" data-bs-toggle="collapse" data-bs-target="#{{ collapse_id }}"{{ open ? ' aria-expanded="true"'}} aria-controls="{{ collapse_id }}">
+  <h2 class="accordion-header" id="heading-{{ accordion_item_id }}">
+    <button class="accordion-button fw-bold text-primary{{ open ? '' : ' collapsed'}}" type="button" data-bs-toggle="collapse" data-bs-target="#{{ accordion_item_id }}"{{ open ? ' aria-expanded="true"'}} aria-controls="{{ accordion_item_id }}">
       {{ title }}
     </button>
   </h2>
-  <div id="{{ collapse_id }}" class="accordion-collapse collapse{{ open ? ' show'}}" aria-labelledby="heading-{{ collapse_id }}">
+  <div id="{{ accordion_item_id }}" class="accordion-collapse collapse{{ open ? ' show'}}" aria-labelledby="heading-{{ accordion_item_id }}">
     <div class="accordion-body">
       <p>{{ description }}</p>
       {{ children }}
