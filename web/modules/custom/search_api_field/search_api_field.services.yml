@@ -7,3 +7,9 @@ services:
     class: Drupal\search_api_field\EventSubscriber\MaxAgeSubscriber
     tags:
       - { name: event_subscriber }
+
+  search_api_field.search_api_subscriber:
+    class: Drupal\search_api_field\EventSubscriber\SearchApiSubscriber
+    arguments: [ '@facets.manager' ]
+    tags:
+      - { name: event_subscriber }

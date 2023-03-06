@@ -6,12 +6,7 @@ services:
       - { name: state_machine.guard, group: contact_information }
   contact_information.email_confirm:
     class: Drupal\contact_information\ContactInformationEmailConfirm
-    # The 'email_confirmer' is set as nullable to avoid the non-existent service
-    # "email_confirmer" error during the deployment. This should be reverted
-    # after deploying this change.
-    # TODO: Make @email_confirmer non-nullable in ISAICP-7300.
-    # See https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7300.
-    arguments: ['@entity_type.manager', '@renderer', '@?email_confirmer']
+    arguments: ['@entity_type.manager', '@renderer', '@email_confirmer']
   contact_information.redirected_eu_login.subscriber:
     class: Drupal\contact_information\EventSubscriber\ContactInformationRedirectedEuLoginSubscriber
     arguments: ['@datetime.time', '@request_stack', '@entity_type.manager']
