@@ -409,6 +409,7 @@ trait TraversingTrait {
       'EIF recommendations' => 'category',
       'Collection event date' => 'collection_event_type',
       'Content types' => 'type',
+      'Content listing types' => 'content_listing_type',
       'eif principle' => 'principle',
       'eif interoperability layer' => 'interoperability_layer',
       'eif conceptual model' => 'conceptual_model',
