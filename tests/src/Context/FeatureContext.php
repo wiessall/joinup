@@ -2389,6 +2389,38 @@ class FeatureContext extends RawDrupalContext {
   }
 
   /**
+   * Asserts that an element has an empty attribute in the specific region.
+   *
+   * @param string $tag
+   *   Tag name.
+   * @param string $atr
+   *   Attribute name.
+   * @param string $region
+   *   Region name.
+   *
+   * @Then I( should) see the :tag element with empty :atr attribute in the :region( region)
+   */
+  public function assertRegionElementEmptyAttribute(string $tag, string $atr, string $region): void {
+    $region_container = $this->getRegion($region);
+    $elements = $region_container->findAll('css', $tag);
+    if (empty($elements)) {
+      throw new \Exception(sprintf('The element "%s" was not found in the "%s" region on the page %s', $tag, $region, $this->getSession()
+        ->getCurrentUrl()));
+    }
+    $found = FALSE;
+    foreach ($elements as $element) {
+      if ($element->hasAttribute($atr) && empty($element->getAttribute($atr))) {
+        $found = TRUE;
+        break;
+      }
+    }
+    if (!$found) {
+      throw new \Exception(sprintf('The "%s" attribute is not present on the element "%s" in the "%s" region on the page %s', $atr, $tag, $region, $this->getSession()
+        ->getCurrentUrl()));
+    }
+  }
+
+  /**
    * Disables cookie consent banner for all tests.
    *
    * @BeforeSuite
