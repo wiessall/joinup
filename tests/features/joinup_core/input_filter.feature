@@ -21,6 +21,8 @@ Feature: Input filter
       | Quoted texts            | Quoted texts                       | <q>This is a famous quote.</q> ~ Joinup developer.                                                                                                                                                                                                                                                                                                                                                                                             | Netflix group | validated |
       # Since area coordinates contains commas and we don't want this to be interpreted as multiple values we need to enclose the value with double quotes and escape the quotes in the HTML.
       | Image map               | A map encompasses 1 or more areas  | "<map name=""imagemap""><area shape=""circle"" coords=""50,50,25"" href=""/"" alt=""Homepage""/></map><img usemap=""imagemap"" src=""/images/my-image.png"" alt=""Imagemap example"" />"                                                                                                                                                                                                                                                       | Netflix group | validated |
+      | Accessibility planning  | Image without alt attribute        | Accessibility planning is framed in the context of social exclusion within transport planning <img src="/web/sites/default/files/logo.png" />                                                                                                                                                                                                                                                                                                  | Netflix group | validated |
+      | Accessibility rating    | Image with alt attribute           | The Accessibility Rating Matrix (ARM) <img src="/web/sites/default/files/logo.png" alt="Logo" />                                                                                                                                                                                                                                                                                                                                               | Netflix group | validated |
     And discussion content:
       | title      | body             | collection    | state     |
       | Discussion | Start discussion | Netflix group | validated |
@@ -46,6 +48,10 @@ Feature: Input filter
     Then I see the "map" element with the "name" attribute set to "imagemap" in the "Content" region
     And I see the "img" element with the "usemap" attribute set to "imagemap" in the "Content" region
     And the response should contain "<area shape=\"circle\" coords=\"50,50,25\" href=\"/\" alt=\"Homepage\" />"
+    When I go to the "Accessibility planning" news
+    Then I see the "img" element with empty "alt" attribute in the "Content" region
+    When I go to the "Accessibility rating" news
+    Then I see the "img" element with the "alt" attribute set to "Logo" in the "Content" region
 
     Given I am logged in as an authenticated
     When I go to the "Discussion" discussion

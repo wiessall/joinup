@@ -251,9 +251,6 @@
             "drupal/core": "-p2"
         },
         "patches": {
-            "drupal/coder": {
-                "PHPCS hangs indefinetly with standard Drupal @see https://www.drupal.org/project/coder/issues/3306999": "https://git.drupalcode.org/project/coder/-/commit/446dea2.diff"
-            },
             "drupal/cas": {
                 "Should CAS respect Drupal registration configuration @see https://www.drupal.org/project/cas/issues/3038279": "https://git.drupalcode.org/project/cas/-/merge_requests/23.diff",
                 "More details when registration is denied by a subscriber @see https://www.drupal.org/project/cas/issues/3325353": "https://git.drupalcode.org/project/cas/-/merge_requests/20.diff"
@@ -282,7 +279,7 @@
                 "EntityConstraintValidationList::findByCode is inconsistent @see https://www.drupal.org/project/drupal/issues/3126654": "https://www.drupal.org/files/issues/2020-04-10/find_by_code_override-3126654-D8-4.patch",
                 "Cannot implement a custom user cancellation method @see https://www.drupal.org/project/drupal/issues/3135592": "https://git.drupalcode.org/project/drupal/-/merge_requests/1675.diff",
                 "If you don't set the \"version\" of a profile, the report/status displays an empty dash @see https://www.drupal.org/project/drupal/issues/3270892": "https://git.drupalcode.org/project/drupal/-/merge_requests/2003.diff",
-                "PHP 8.1 deprecation @see https://www.drupal.org/project/drupal/issues/3313342": "https://git.drupalcode.org/project/drupal/-/merge_requests/3143.diff"
+                "PHP 8.1 deprecation @see https://www.drupal.org/project/drupal/issues/3313342": "resources/patch/drupal/core/3313342.diff"
             },
             "drupal/default_content": {
                 "Allow manual imports @see https://www.drupal.org/i/2640734": "https://git.drupalcode.org/project/default_content/-/merge_requests/20.diff"
