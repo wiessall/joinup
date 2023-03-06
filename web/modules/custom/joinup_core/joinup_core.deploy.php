@@ -448,3 +448,37 @@ function joinup_core_deploy_109001(): void {
     MetaEntity::loadOrCreate('topic', $term)->save();
   }
 }
+
+/**
+ * Updates the content listing paragraph type with the new field.
+ */
+function joinup_core_deploy_109004(array &$sandbox): string {
+  if (!isset($sandbox['total'])) {
+    // Load all content listing paragraph types.
+    $sandbox['paragraph_ids'] = \Drupal::entityQuery('paragraph')
+      ->condition('type', 'content_listing', 'IN')
+      ->condition('content_listing', 'field_content_listing_type', 'CONTAINS')
+      ->execute();
+    $sandbox['total'] = count($sandbox['paragraph_ids']);
+    $sandbox['current'] = 0;
+  }
+
+  $paragraph_storage = \Drupal::entityTypeManager()->getStorage('paragraph');
+  $paragraph_ids = array_splice($sandbox['paragraph_ids'], 0, 50);
+  foreach ($paragraph_storage->loadMultiple($paragraph_ids) as $paragraph) {
+    $value = $paragraph->get('content_listing')->value;
+    if (!isset($value['fields']['field_content_listing_type'])) {
+      continue;
+    }
+    // Rename to 'content_listing_type'.
+    $value['fields']['content_listing_type'] = $value['fields']['field_content_listing_type'];
+    unset($value['fields']['field_content_listing_type']);
+
+    $paragraph->set('content_listing', ['value' => $value]);
+    $paragraph->save();
+  }
+
+  $sandbox['current'] += count($paragraph_ids);
+  $sandbox['#finished'] = empty($sandbox['paragraph_ids']) ? 1 : ($sandbox['current'] / $sandbox['total']);
+  return "Content listing paragraph type field migration: {$sandbox['current']} / {$sandbox['total']}";
+}
