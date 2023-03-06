@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f43af05d009e4d6eb29823c120c62761",
+    "content-hash": "489125f062af169993e39ef41f75abf3",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -3318,17 +3318,17 @@
         },
         {
             "name": "drupal/facets",
-            "version": "2.0.6",
+            "version": "3.0.0-beta1",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/facets.git",
-                "reference": "2.0.6"
+                "reference": "3.0.0-beta1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/facets-2.0.6.zip",
-                "reference": "2.0.6",
-                "shasum": "e984e6ce69026c20d2049d4ec53748e67c5e70de"
+                "url": "https://ftp.drupal.org/files/projects/facets-3.0.0-beta1.zip",
+                "reference": "3.0.0-beta1",
+                "shasum": "788ab7515e2e6aabd0e34c1ce54c29648c738b45"
             },
             "require": {
                 "drupal/core": "^9.3 || ^10.0"
@@ -3342,17 +3342,18 @@
                 "drupal/search_api": "^1.28||1.x-dev"
             },
             "suggest": {
+                "drupal/better_exposed_filters": "Required for AJAX support for facets rendered as views exposed filters",
                 "drupal/jquery_ui_slider": "Required for the 'Facets Range Widget' module to work",
                 "drupal/jquery_ui_touch_punch": "Required for the 'Facets Range Widget' module to work"
             },
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "2.0.6",
-                    "datestamp": "1671207897",
+                    "version": "3.0.0-beta1",
+                    "datestamp": "1671208547",
                     "security-coverage": {
-                        "status": "covered",
-                        "message": "Covered by Drupal's security advisory policy"
+                        "status": "not-covered",
+                        "message": "Beta releases are not covered by Drupal security advisories."
                     }
                 }
             },
@@ -3392,30 +3393,30 @@
         },
         {
             "name": "drupal/facets_block",
-            "version": "1.5.0",
+            "version": "2.0.0-beta2",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/facets_block.git",
-                "reference": "8.x-1.05"
+                "reference": "2.0.0-beta2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/facets_block-8.x-1.05.zip",
-                "reference": "8.x-1.05",
-                "shasum": "9e44b35f965fa5de04934cef7734389d3c914495"
+                "url": "https://ftp.drupal.org/files/projects/facets_block-2.0.0-beta2.zip",
+                "reference": "2.0.0-beta2",
+                "shasum": "3eb470aa0f5dc91ad2c1eba7367fcceed2d8339d"
             },
             "require": {
-                "drupal/core": "^8 || ^9",
-                "drupal/facets": "^1.0 || ^2.0"
+                "drupal/core": "^9 || ^10",
+                "drupal/facets": "^2.0 || ^3.0"
             },
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "8.x-1.05",
-                    "datestamp": "1674735548",
+                    "version": "2.0.0-beta2",
+                    "datestamp": "1677608985",
                     "security-coverage": {
-                        "status": "covered",
-                        "message": "Covered by Drupal's security advisory policy"
+                        "status": "not-covered",
+                        "message": "Beta releases are not covered by Drupal security advisories."
                     }
                 }
             },
@@ -3441,28 +3442,31 @@
         },
         {
             "name": "drupal/facets_date_range",
-            "version": "1.0.0-beta1",
+            "version": "1.0.0-beta2",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/facets_date_range.git",
-                "reference": "1.0.0-beta1"
+                "reference": "1.0.0-beta2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/facets_date_range-1.0.0-beta1.zip",
-                "reference": "1.0.0-beta1",
-                "shasum": "77e41acb312616da409ca20a15a4447e989fedc5"
+                "url": "https://ftp.drupal.org/files/projects/facets_date_range-1.0.0-beta2.zip",
+                "reference": "1.0.0-beta2",
+                "shasum": "5bf800b69efa18ec1c11662297e3f7f51956ca4e"
             },
             "require": {
                 "drupal/core": "^8.9 || ^9.2 || ^10",
-                "drupal/facets": "^1.6 || ^2",
+                "drupal/facets": "^1.6 || ^2.0 || ^3.0",
                 "php": "^7.4 || ^8"
+            },
+            "require-dev": {
+                "drupal/search_api": "^1.24"
             },
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "1.0.0-beta1",
-                    "datestamp": "1641988086",
+                    "version": "1.0.0-beta2",
+                    "datestamp": "1677597400",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Project has not opted into security advisory coverage!"
@@ -3489,6 +3493,10 @@
                 {
                     "name": "Pieter Frenssen",
                     "homepage": "https://www.drupal.org/u/pfrenssen"
+                },
+                {
+                    "name": "saidatom",
+                    "homepage": "https://www.drupal.org/user/1846674"
                 }
             ],
             "description": "Provides a Date Range widget in facets.",
@@ -22004,6 +22012,7 @@
     "minimum-stability": "dev",
     "stability-flags": {
         "drupal/dropsolid_purge": 10,
+        "drupal/facets_block": 10,
         "drupal/facets_date_range": 10,
         "drupal/page_manager": 10,
         "drupal/views_block_area": 10,
