@@ -4,3 +4,12 @@ services:
     arguments: ['@state']
     tags:
       - { name: event_subscriber }
+  joinup_search.search_api_field_tag_subscriber:
+    class: Drupal\joinup_search\EventSubscriber\SearchApiFieldTagSubscriber
+    tags:
+      - { name: event_subscriber }
+  joinup_search.search_api_subscriber:
+    class: Drupal\joinup_search\EventSubscriber\SearchApiSubscriber
+    arguments: ['@facets.utility.date_handler']
+    tags:
+      - { name: event_subscriber }
