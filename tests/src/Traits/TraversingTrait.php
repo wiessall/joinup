@@ -283,29 +283,31 @@ trait TraversingTrait {
    * @throws \Behat\Mink\Exception\ElementNotFoundException
    *   Thrown when the element is not found.
    */
-  protected function getTileByHeading(string $heading): ?NodeElement {
+  protected function getTileByHeading(string $heading): NodeElement {
     $selectors = [
       // @todo The `.listing__item--tile` selector is part of the original
       //   Joinup theme and can be removed once we have fully migrated to the
       //   new theme.
       // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7138
-      'listing__item--tile',
       'card--tile',
-      // @todo Need this?
+      'listing__item--tile',
       'tile',
       'tile-two',
     ];
 
     foreach ($selectors as $selector) {
       try {
-        return $this->getListingByHeading($selector, $heading);
+        $element = $this->getListingByHeading($selector, $heading);
       }
       catch (\Exception $e) {
         // The selector is not present on the page.
         continue;
       }
+
+      if ($element) {
+        return $element;
+      }
     }
-    return NULL;
   }
 
   /**
@@ -324,12 +326,11 @@ trait TraversingTrait {
    */
   protected function getListingByHeading(string $type, string $heading): NodeElement {
     $selectors = [
-      // Locate all the items in the old theme.
+      // Selector for the old theme.
       // @todo This can be removed once we are fully migrated to the new theme.
-      // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7138
-      '//*[@class and contains(concat(" ", normalize-space(@class), " "), " ' . $type . ' ")]',
-      // That have a heading with the specified text.
-      '[.//*[@class and contains(concat(" ", normalize-space(@class), " "), " listing__title ") or contains(concat(" ", normalize-space(@class), " "), " card-title ")][normalize-space()="' . $heading . '"]]',
+      '//*[@class and contains(concat(" ", normalize-space(@class), " "), " ' . $type . ' ")][.//*[@class and contains(concat(" ", normalize-space(@class), " "), " listing__title ") or contains(concat(" ", normalize-space(@class), " "), " card-title ")][normalize-space()="' . $heading . '"]]',
+      // Selector for generic tiles.
+      '//*[@class and contains(concat(" ", normalize-space(@class), " "), " ' . $type . ' ")][.//h2[normalize-space()="' . $heading . '"] or .//h3[normalize-space()="' . $heading . '"]]',
     ];
 
     foreach ($selectors as $selector) {
