@@ -43,14 +43,14 @@ filters:
     id: filter_url
     provider: filter
     status: true
-    weight: -45
+    weight: -44
     settings:
       filter_url_length: 72
   filter_html_image_secure:
     id: filter_html_image_secure
     provider: filter
     status: true
-    weight: -44
+    weight: -45
     settings: {  }
   joinup_video:
     id: joinup_video
