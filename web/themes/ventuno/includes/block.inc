@@ -31,6 +31,11 @@ function ventuno_theme_suggestions_block_alter(array &$suggestions, array $varia
  * Implements hook_preprocess_block().
  */
 function ventuno_preprocess_block(array &$variables): void {
+  $plugin_id = $variables['elements']['#plugin_id'];
+  if ($plugin_id === 'local_actions_block') {
+    $variables['attributes']['class'][] = 'my-3';
+  }
+
   // List of the "layout-blocks" (mainly in the Home page) that share common
   // styles.
   $layout_blocks = [

@@ -190,11 +190,6 @@ listing-grid:
     theme:
       assets/css/listing-grid.min.css: { minified: true }
 
-members-overview-exposed-form:
-  css:
-    theme:
-      assets/css/members-overview-exposed-form.min.css: { minified: true }
-
 nav:
   css:
     theme:
