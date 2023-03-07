@@ -151,7 +151,7 @@ function joinup_core_deploy_109101(array &$sandbox): string {
           INSERT { <$entity_id> <{$predicate}> """{$description}"""@en }
           WHERE { <$entity_id> <{$predicate}> ?description }
           QUERY;
-            $sparl->query($update_query);
+            $sparl->update($update_query);
           }
         }
       }
