@@ -4,7 +4,7 @@ Feature: Collections/Solutions settings Metadata Banner disabled
   As a collection/solution owner or moderator
   Moderator need to be able to disabled and enabled metadata from banner in collections/solutions
 
-  Scenario: Moderator or collection/solution owner is able to disabled or enabled metadata from banner in collections/solutions
+  Scenario: Moderator or collection/solution owner is able to disable or enable metadata from banner in collections/solutions
     Given collections:
       | title          | state     |
       | Rally fanatics | validated |
