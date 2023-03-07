@@ -479,6 +479,15 @@ module.exports = {
       },
     },
     {
+      entry: path.resolve(outputFolder, "src/scss/paragraph.scss"),
+      dest: path.resolve(outputFolder, "assets/css/paragraph.min.css"),
+      options: {
+        includePaths,
+        minify: true,
+        sourceMap: "file",
+      },
+    },
+    {
       entry: path.resolve(outputFolder, "src/scss/releases.scss"),
       dest: path.resolve(outputFolder, "assets/css/releases.min.css"),
       options: {

@@ -11,7 +11,7 @@ declare(strict_types = 1);
  * Implements hook_preprocess_paragraph().
  */
 function ventuno_preprocess_paragraph(array &$variables): void {
-  $variables['#attached']['library'][] = 'ventuno/content-tables';
+  $variables['#attached']['library'][] = 'ventuno/paragraph';
 }
 
 /**
