@@ -99,6 +99,16 @@ function ventuno_preprocess_container__text_format_filter_help(array &$variables
 }
 
 /**
+ * Implements hook_theme_suggestions_HOOK_alter() for page.html.twig.
+ */
+function ventuno_theme_suggestions_page_alter(array &$suggestions, array $variables): void {
+  if ($node = \Drupal::routeMatch()->getParameter('node')) {
+    $content_type = $node->bundle();
+    $suggestions[] = 'page__' . $content_type;
+  }
+}
+
+/**
  * Implements hook_preprocess_container().
  */
 function ventuno_preprocess_container(array &$variables): void {

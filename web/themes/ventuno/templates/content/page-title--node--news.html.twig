@@ -1,0 +1,49 @@
+{#
+/**
+ * @file
+ * Theme override for page titles.
+ *
+ * Available variables:
+ * - title_attributes: HTML attributes for the page title element.
+ * - title_prefix: Additional output populated by modules, intended to be
+ *   displayed in front of the main title tag that appears in the template.
+ * - title: The page title, for use in the actual content.
+ * - title_suffix: Additional output populated by modules, intended to be
+ *   displayed after the main title tag that appears in the template.
+ */
+#}
+{{ attach_library('ventuno/page-title') }}
+{{ title_prefix }}
+{% if title %}
+<div class="page-title page__title-wrapper d-flex flex-column">
+  <h1 class="page-title__title order-1">
+    {{ additional_content.field_news_headline }}
+    {% if permalink %}
+      <a class="permalink" href="{{ permalink }}" title="{{ 'Permalink'|t }}">
+        {{ pattern('icon', {
+          name: 'link-45deg',
+          size: 'fluid'
+        }) }}
+      </a>
+    {% endif %}
+  </h1>
+  <h2 class="page-title__headline order-0">{{ title }}</h2>
+  <div class="page-title__details order-1">
+    <span class="page-title__detail">{{ additional_content.author }}</span>
+    <span class="page-title__detail">{{ 'Published on'|t }}: {{ additional_content.published }}</span>
+    {% if additional_content.published != additional_content.updated %}
+      <span class="page-title__detail">{{ 'Last update'|t }}: {{ additional_content.updated }}</span>
+    {% endif %}
+    <span class="page-title__detail">
+      <span class="me-2">
+        {{ bundle_label }}
+      </span>
+      {{ pattern('icon', {
+          name: 'newspaper',
+          size: 's'
+        }) }}
+    </span>
+  </div>
+</div>
+{% endif %}
+{{ title_suffix }}

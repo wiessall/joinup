@@ -316,6 +316,15 @@ module.exports = {
       },
     },
     {
+      entry: path.resolve(outputFolder, "src/scss/comments.scss"),
+      dest: path.resolve(outputFolder, "assets/css/comments.min.css"),
+      options: {
+        includePaths,
+        minify: true,
+        sourceMap: "file",
+      },
+    },
+    {
       entry: path.resolve(outputFolder, "src/scss/fieldset-show-more.scss"),
       dest: path.resolve(outputFolder, "assets/css/fieldset-show-more.min.css"),
       options: {
@@ -521,6 +530,15 @@ module.exports = {
       },
     },
     {
+      entry: path.resolve(outputFolder, "src/scss/table-files.scss"),
+      dest: path.resolve(outputFolder, "assets/css/table-files.min.css"),
+      options: {
+        includePaths,
+        minify: true,
+        sourceMap: "file",
+      },
+    },
+    {
       entry: path.resolve(outputFolder, "src/scss/tabs.scss"),
       dest: path.resolve(outputFolder, "assets/css/tabs.min.css"),
       options: {
@@ -686,6 +704,7 @@ module.exports = {
           "exclamation-triangle-fill.svg",
           "eye.svg",
           "facebook.svg",
+          "file-earmark.svg",
           "file-earmark-medical.svg",
           "file-earmark-play.svg",
           "file-earmark-plus.svg",
@@ -707,15 +726,18 @@ module.exports = {
           "linkedin.svg",
           "mastodon.svg",
           "newspaper.svg",
+          "pencil-square.svg",
           "people.svg",
           "person-circle.svg",
           "person-workspace.svg",
           "pin-angle-fill.svg",
           "plus.svg",
           "question-lg.svg",
+          "reply.svg",
           "search.svg",
           "star.svg",
           "three-dots.svg",
+          "trash.svg",
           "type.svg",
           "twitter.svg",
           "vimeo.svg",

@@ -4,7 +4,7 @@
  * Themeing for group header.
  */
 #}
-<article {{ attributes.addClass(['py-4', 'py-md-5', 'group-banner']) }} style="background: linear-gradient(117deg, rgba(20,59,118,.7), rgba(20,59,118,.4)), url('{{ content.field_is_banner }}') no-repeat, rgba(20,59,118,.4); background-size: cover;">
+<header{{ attributes.addClass(['py-4', 'py-md-5', 'group-banner']) }} style="background: linear-gradient(117deg, rgba(20,59,118,.7), rgba(20,59,118,.4)), url('{{ content.field_is_banner }}') no-repeat, rgba(20,59,118,.4); background-size: cover;">
   <div class="container d-flex flex-column align-items-center">
     <span data-drupal-group-logo>{{ content.field_is_logo }}</span>
     {{ title_prefix }}
@@ -42,4 +42,4 @@
       {{ content.releases_overview }}
     </div>
   </div>
-</article>
+</header>
