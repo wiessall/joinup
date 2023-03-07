@@ -48,7 +48,7 @@ content:
     label: hidden
     settings: {  }
     third_party_settings: {  }
-    weight: 1
+    weight: 0
     region: content
   field_attachment:
     type: file_table
@@ -58,7 +58,7 @@ content:
     third_party_settings:
       template_suggestion:
         template_suggestion: with_label
-    weight: 13
+    weight: 11
     region: content
   field_comments:
     type: comment_default
@@ -67,7 +67,7 @@ content:
       view_mode: default
       pager_id: 0
     third_party_settings: {  }
-    weight: 9
+    weight: 7
     region: content
   field_event_agenda:
     type: text_default
@@ -76,7 +76,7 @@ content:
     third_party_settings:
       template_suggestion:
         template_suggestion: fieldset
-    weight: 2
+    weight: 1
     region: content
   field_event_contact_email:
     type: basic_string
@@ -85,7 +85,7 @@ content:
     third_party_settings:
       template_suggestion:
         template_suggestion: fieldset
-    weight: 5
+    weight: 3
     region: content
   field_event_coordinates:
     type: oe_webtools_maps_map
@@ -96,7 +96,7 @@ content:
     third_party_settings:
       template_suggestion:
         template_suggestion: ''
-    weight: 14
+    weight: 12
     region: content
   field_event_date:
     type: daterange_condensed
@@ -111,7 +111,7 @@ content:
     third_party_settings:
       template_suggestion:
         template_suggestion: ''
-    weight: 12
+    weight: 10
     region: content
   field_event_logo:
     type: image
@@ -122,7 +122,7 @@ content:
       image_loading:
         attribute: lazy
     third_party_settings: {  }
-    weight: 3
+    weight: 2
     region: content
   field_event_online_location:
     type: link
@@ -134,7 +134,7 @@ content:
       rel: ''
       target: ''
     third_party_settings: {  }
-    weight: 15
+    weight: 13
     region: content
   field_event_web_url:
     type: link
@@ -148,7 +148,7 @@ content:
     third_party_settings:
       template_suggestion:
         template_suggestion: fieldset
-    weight: 6
+    weight: 4
     region: content
   field_location:
     type: basic_string
@@ -157,7 +157,7 @@ content:
     third_party_settings:
       template_suggestion:
         template_suggestion: fieldset
-    weight: 7
+    weight: 5
     region: content
   field_shared_in:
     type: entity_reference_entity_view
@@ -168,12 +168,7 @@ content:
     third_party_settings:
       template_suggestion:
         template_suggestion: entity_reference__listing_tile
-    weight: 8
-    region: content
-  links:
-    settings: {  }
-    third_party_settings: {  }
-    weight: 0
+    weight: 6
     region: content
   report:
     type: link
@@ -187,12 +182,12 @@ content:
     third_party_settings:
       template_suggestion:
         template_suggestion: no_wrappers
-    weight: 11
+    weight: 9
     region: content
   share_link:
     settings: {  }
     third_party_settings: {  }
-    weight: 10
+    weight: 8
     region: content
 hidden:
   featured: true
@@ -206,6 +201,7 @@ hidden:
   field_state: true
   field_topic: true
   langcode: true
+  links: true
   og_audience: true
   pinned_in: true
   published_at: true

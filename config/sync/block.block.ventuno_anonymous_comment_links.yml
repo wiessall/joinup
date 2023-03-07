@@ -37,6 +37,5 @@ visibility:
     bundles:
       discussion: discussion
       document: document
-      event: event
       news: news
       video: video

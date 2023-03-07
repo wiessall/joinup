@@ -5,8 +5,7 @@
  *
  * Available variables:
  * - attributes: An array of attributes to apply to the link.
- * - icon: The name of the icon. This should be one of the icons listed in the
- *   `_icon.scss` file.
+ * - icon: The name of the icon.
  * - title: The link title.
  * - url: The link URL.
  *
@@ -16,17 +15,15 @@
 {%
   set classes = [
     'btn',
-    'btn-md',
-    'btn-outline-brand'
+    'btn-link',
+    'px-3',
   ]
 %}
 {% spaceless %}
-<div class="d-flex justify-content-end">
-  <a href="{{ url }}"{{ attributes.addClass(classes) }}>
-    {{ title }}
-    <svg class="ms-2 bi icon--fluid">
-      <use xlink:href="{{ bcl_icon_path }}#{{ icon }}"></use>
-    </svg>
-  </a>
-</div>
+<a href="{{ url }}"{{ attributes.addClass(classes) }}>
+  {{ title }}
+  <svg class="ms-1 bi icon--fluid">
+    <use xlink:href="{{ bcl_icon_path }}#arrow-right"></use>
+  </svg>
+</a>
 {% endspaceless %}

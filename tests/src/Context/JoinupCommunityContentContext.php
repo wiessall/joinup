@@ -383,7 +383,7 @@ class JoinupCommunityContentContext extends RawDrupalContext {
    */
   protected function getNumberedComment(int $index): NodeElement {
     $session = $this->getSession();
-    $comments = $session->getPage()->findAll('css', '.comment-item');
+    $comments = $session->getPage()->findAll('css', '.comment-item, article.comment');
     if (!isset($comments[$index])) {
       throw new ElementNotFoundException($session, 'Comment #' . ($index + 1));
     }

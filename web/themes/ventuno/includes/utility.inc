@@ -11,6 +11,7 @@ use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\asset_release\Entity\AssetReleaseInterface;
 use Drupal\joinup_bundle_class\DescriptionInterface;
 use Drupal\joinup_bundle_class\LogoInterface;
+use Drupal\joinup_community_content\Entity\CommunityContentInterface;
 use Drupal\joinup_core\Controller\IdRedirect;
 use Drupal\smart_trim\Truncate\TruncateHTML;
 use Drupal\topic\Entity\TopicReferencingEntityInterface;
@@ -199,4 +200,20 @@ function _ventuno_theme_suggestions_alter(array &$suggestions, array $variables)
   $entity_type_id = $variables['elements']['#entity_type'];
   $bundle = $variables['elements']["#{$entity_type_id}"]->bundle();
   $suggestions[] = $original_theme_hook . '__' . str_replace('-', '_', $bundle) . '__' . str_replace('-', '_', $view_mode);
+}
+
+/**
+ * Gets author inline view mode as a render array.
+ *
+ * @param \Drupal\joinup_community_content\Entity\CommunityContentInterface $node
+ *   The node, where we get the author.
+ *
+ * @return array
+ *   Renderable array that contains the author.
+ */
+function _ventuno_get_author(CommunityContentInterface $node): array {
+  /** @var \Drupal\Core\Entity\EntityViewBuilderInterface $view_builder */
+  $view_builder = \Drupal::entityTypeManager()->getViewBuilder('user');
+  $author = $node->get('uid')->entity;
+  return $view_builder->view($author, 'inline');
 }
