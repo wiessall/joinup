@@ -12,22 +12,6 @@ use Drupal\topic\Entity\TopicInterface;
 use Drupal\topic\Entity\TopicReferencingEntityInterface;
 
 /**
- * Implements hook_theme_suggestions_HOOK_alter() for the block hook.
- */
-function ventuno_theme_suggestions_block_alter(array &$suggestions, array $variables): void {
-  $elements = &$variables['elements'];
-  // Adds a dedicated suggestion for a template rendering the "Read more" extra
-  // field block for the 4 different entity bundles shown in the "Explore" block
-  // on the homepage.
-  if (
-    $elements['#base_plugin_id'] === 'extra_field_block'
-    && preg_match('/extra_field_block:.*:read_more/', $elements['#plugin_id'])
-  ) {
-    $suggestions[] = 'block__extra_field_block__read_more';
-  }
-}
-
-/**
  * Implements hook_preprocess_block().
  */
 function ventuno_preprocess_block(array &$variables): void {
@@ -52,6 +36,39 @@ function ventuno_preprocess_block(array &$variables): void {
     $variables['attributes']['class'][] = 'layout-block';
     $variables['title_attributes']['class'][] = 'layout-block__title';
     $variables['title_attributes']['class'][] = 'layout-block__title--' . $derivative_plugin_id;
+  }
+
+  $block_id = $variables['elements']['#id'] ?? NULL;
+  switch ($block_id) {
+    // Add class to navigation bottom links on custom pages.
+    case 'ventuno_toc_outline':
+      if (isset($variables['attributes']['data-joinup-block-id'])) {
+        // Transfer the block plugin ID to the links template.
+        $variables['content']['#attributes']['data-joinup-block-id'] = $variables['attributes']['data-joinup-block-id'];
+      }
+      $variables['#attached']['library'][] = 'ventuno/navigation-bottom';
+      $variables['attributes']['class'][] = 'navigation-bottom';
+      break;
+
+    case 'ventuno_webtools_etrans':
+      $variables['#attached']['library'][] = 'ventuno/etrans';
+      break;
+  }
+}
+
+/**
+ * Implements hook_theme_suggestions_HOOK_alter() for the block hook.
+ */
+function ventuno_theme_suggestions_block_alter(array &$suggestions, array $variables): void {
+  $elements = &$variables['elements'];
+  // Adds a dedicated suggestion for a template rendering the "Read more" extra
+  // field block for the 4 different entity bundles shown in the "Explore" block
+  // on the homepage.
+  if (
+    $elements['#base_plugin_id'] === 'extra_field_block'
+    && preg_match('/extra_field_block:.*:read_more/', $elements['#plugin_id'])
+  ) {
+    $suggestions[] = 'block__extra_field_block__read_more';
   }
 }
 

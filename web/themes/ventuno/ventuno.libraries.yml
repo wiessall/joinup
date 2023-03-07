@@ -275,6 +275,11 @@ alert:
     theme:
       assets/css/alert.min.css: { minified: true }
 
+etrans:
+  css:
+    theme:
+      assets/css/etrans.min.css: { minified: true }
+
 show-accordion-invalid-fields:
   js:
     assets/js/show-accordion-invalid-fields.min.js: { minified: true, attributes: { defer: true } }
@@ -283,6 +288,11 @@ tabledrag:
   css:
     theme:
       assets/css/tabledrag.min.css: { minified: true }
+
+navigation-bottom:
+  css:
+    theme:
+      assets/css/navigation-bottom.min.css: { minified: true }
 
 timeline:
   css:

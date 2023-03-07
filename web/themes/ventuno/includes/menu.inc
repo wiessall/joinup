@@ -37,3 +37,28 @@ function ventuno_preprocess_menu_local_action(array &$variables): void {
   ];
   $variables['link']['#options']['attributes']['class'] = $btn_classes;
 }
+
+/**
+ * Implements hook_preprocess_links().
+ */
+function ventuno_preprocess_links(array &$variables): void {
+  $variables['attributes']['class'][] = 'navigation-bottom__links';
+  if (isset($variables['links'])) {
+    // Mark this list item as having only the 'next' link.
+    if (count($variables['links']) === 1) {
+      $variables['attributes']['class'][] = 'navigation-bottom__links--only-next';
+    }
+    // Add 'next', 'prev', 'up' classes to bottom navigation list items.
+    if (isset($variables['attributes']['data-joinup-block-id']) && $variables['attributes']['data-joinup-block-id'] === 'toc_outline') {
+      foreach ($variables['links'] as $key => $link) {
+        if (in_array($key, ['next', 'prev', 'up'], TRUE)) {
+          /** @var \Drupal\Core\Template\Attribute $attributes */
+          $attributes = $link['attributes'];
+          $attributes->addClass([$key]);
+        }
+      }
+      // It makes no sense to keep this attribute.
+      unset($variables['attributes']['data-joinup-block-id']);
+    }
+  }
+}
