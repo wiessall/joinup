@@ -44,30 +44,30 @@
     }
   }
   &--interoperability-layer {
-    border: 1px solid $joinup--brand-darker;
+    border: 1px solid $joinup--orange;
     .eif-filter__header {
-      background-color: $joinup--brand-darker;
+      background-color: $joinup--orange;
     }
     .eif-filter__content {
-      color: $joinup--brand-darker;
+      color: $joinup--orange;
     }
   }
   &--conceptual-model {
-    border: 1px solid $joinup--indigo;
+    border: 1px solid $joinup--softblue;
     .eif-filter__header {
-      background-color: $joinup--indigo;
+      background-color: $joinup--softblue;
     }
     .eif-filter__content {
-      color: $joinup--indigo;
+      color: $joinup--softblue;
     }
   }
   &--solution-category {
-    border: 1px solid $joinup--gray;
+    border: 1px solid $joinup--brown;
     .eif-filter__header {
-      background-color: $joinup--gray;
+      background-color: $joinup--brown;
     }
     .eif-filter__content {
-      color: $joinup--gray;
+      color: $joinup--brown;
     }
   }
 }
@@ -103,26 +103,26 @@
     }
     &--interoperability-layer {
       .eif-tile__label {
-        background-color: $joinup--brand-darker;
+        background-color: $joinup--orange;
       }
       .eif-tile__values {
-        color: $joinup--brand-darker;
+        color: $joinup--orange;
       }
     }
     &--conceptual-model {
       .eif-tile__label {
-        background-color: $joinup--indigo;
+        background-color: $joinup--softblue;
       }
       .eif-tile__values {
-        color: $joinup--indigo;
+        color: $joinup--softblue;
       }
     }
     &--solution-category {
       .eif-tile__label {
-        background-color: $joinup--gray;
+        background-color: $joinup--brown;
       }
       .eif-tile__values {
-        color: $joinup--gray;
+        color: $joinup--brown;
       }
     }
   }

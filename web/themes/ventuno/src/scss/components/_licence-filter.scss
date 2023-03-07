@@ -40,12 +40,12 @@
     }
   }
   &--must {
-    border: 1px solid $joinup--gray;
+    border: 1px solid $joinup--brown;
     .licence-filter__header {
-      background-color: $joinup--gray;
+      background-color: $joinup--brown;
     }
     .licence-filter__content {
-      color: $joinup--gray;
+      color: $joinup--brown;
     }
   }
   &--cannot {
@@ -58,30 +58,30 @@
     }
   }
   &--compatible {
-    border: 1px solid $joinup--indigo;
+    border: 1px solid $joinup--softblue;
     .licence-filter__header {
-      background-color: $joinup--indigo;
+      background-color: $joinup--softblue;
     }
     .licence-filter__content {
-      color: $joinup--indigo;
+      color: $joinup--softblue;
     }
   }
   &--law {
-    border: 1px solid $joinup--dark-orange;
+    border: 1px solid $joinup--gray;
     .licence-filter__header {
-      background-color: $joinup--dark-orange;
+      background-color: $joinup--gray;
     }
     .licence-filter__content {
-      color: $joinup--dark-orange;
+      color: $joinup--gray;
     }
   }
   &--support {
-    border: 1px solid $joinup--brand-darker;
+    border: 1px solid $joinup--orange;
     .licence-filter__header {
-      background-color: $joinup--brand-darker;
+      background-color: $joinup--orange;
     }
     .licence-filter__content {
-      color: $joinup--brand-darker;
+      color: $joinup--orange;
     }
   }
 }
@@ -118,10 +118,10 @@
       }
       &--must {
         .licence-tile__label {
-          background-color: $joinup--gray;
+          background-color: $joinup--brown;
         }
         .licence-tile__values {
-          color: $joinup--gray;
+          color: $joinup--brown;
         }
       }
       &--cannot {
@@ -134,26 +134,26 @@
       }
       &--compatible {
         .licence-tile__label {
-          background-color: $joinup--indigo;
+          background-color: $joinup--softblue;
         }
         .licence-tile__values {
-          color: $joinup--indigo;
+          color: $joinup--softblue;
         }
       }
       &--law {
         .licence-tile__label {
-          background-color: $joinup--dark-orange;
+          background-color: $joinup--gray;
         }
         .licence-tile__values {
-          color: $joinup--dark-orange;
+          color: $joinup--gray;
         }
       }
       &--support {
         .licence-tile__label {
-          background-color: $joinup--brand-darker;
+          background-color: $joinup--orange;
         }
         .licence-tile__values {
-          color: $joinup--brand-darker;
+          color: $joinup--orange;
         }
       }
     }

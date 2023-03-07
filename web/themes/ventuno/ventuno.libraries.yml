@@ -245,6 +245,15 @@ pager:
     theme:
       assets/css/pager.min.css: { minified: true }
 
+paragraph:
+  css:
+    theme:
+      assets/css/paragraph.min.css: { minified: true }
+  js:
+    assets/js/content-tables.min.js: { minified: true, attributes: { defer: true } }
+  dependencies:
+    - ventuno/tables
+
 releases:
   css:
     theme:
@@ -295,12 +304,6 @@ toolbar:
 tour-first-balloon:
   js:
     assets/js/tour-first-balloon.min.js: { minified: true, attributes: { defer: true } }
-
-content-tables:
-  js:
-    assets/js/content-tables.min.js: { minified: true, attributes: { defer: true } }
-  dependencies:
-    - ventuno/tables
 
 user--group-header:
   css:
