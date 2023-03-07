@@ -44,7 +44,7 @@
   {% if _image is empty %}
     {% set _image %}
       <a href="{{ _url }}" class="d-block">
-        <svg class="bi img-fluid{{ _featured ? ' text-primary' : ' text-secondary' }}"><use xlink:href="{{ bcl_icon_path }}#{{ _metadata|last.icon }}"></use></svg>
+        <svg class="bi py-2 img-fluid{{ _featured ? ' text-primary' : ' text-secondary' }}"><use xlink:href="{{ bcl_icon_path }}#{{ _metadata|last.icon }}"></use></svg>
       </a>
     {% endset %}
   {% endif %}
@@ -52,8 +52,8 @@
   {{ attach_library('ventuno/card') }}
   <div class="col">
     <article{{ _attributes.addClass(_classes) }}>
-      {% if _text is empty %}
-        <div class="card-header border-0 bg-transparent d-flex align-items-center justify-content-center">
+      {% if _text|trim is empty %}
+        <div class="card-header border-0 bg-transparent p-0">
           <figure class="mb-0">
             {{ _image }}
           </figure>

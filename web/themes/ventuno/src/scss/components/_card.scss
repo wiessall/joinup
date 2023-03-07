@@ -5,11 +5,14 @@
     border-radius: 0;
     box-shadow: $box-shadow;
     .card-header {
-      height: 150px;
+      height: 115px;
+      overflow: hidden;
       figure,
-      img,
       svg {
-        max-height: 150px;
+        max-height: 115px;
+      }
+      &:first-child {
+        border-radius: 0;
       }
     }
     .card-body {

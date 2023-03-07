@@ -14,7 +14,7 @@ _core:
 id: ventuno_mycontentsolution
 theme: ventuno
 region: sidebar
-weight: -15
+weight: -16
 provider: null
 plugin: 'facet_block:solution_my_content'
 settings:
