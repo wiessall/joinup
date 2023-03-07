@@ -56,9 +56,11 @@
   {% endblock %}
 
   {% if page.header_bottom %}
-    {% block page_header_bottom %}
-      {{ page.header_bottom }}
-    {% endblock %}
+    <div class="region-header-bottom">
+      {% block page_header_bottom %}
+        {{ page.header_bottom }}
+      {% endblock %}
+    </div>
   {% endif %}
 
   {% if page.featured %}

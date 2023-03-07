@@ -4,7 +4,7 @@
   right: $spacer;
   bottom: $spacer;
   z-index: 50; // Avoid dropdown-menu to be overlapped by navbar
-  @include media-breakpoint-up(sm) {
+  @include media-breakpoint-up(md) {
     right: unset;
     left: calc(100% - $spacer * 3); // 100% - 46px
     position: relative;
@@ -13,26 +13,14 @@
   }
   & + & {
     right: $spacer * 5; // 80px
-    @include media-breakpoint-up(sm) {
+    @include media-breakpoint-up(md) {
       right: unset;
-      left: calc(100% - $spacer * 11); // 100% - 176px
+      left: calc(100% - $spacer * 10); // 100% - 176px
     }
   }
   &__btn {
     width: $spacer * 3; // 48px
     height: $spacer * 3; // 48px
-    @include media-breakpoint-up(sm) {
-      &:before {
-        content: "";
-        position: absolute;
-        top: $spacer * -.5; //-8px
-        left: $spacer * -.5; //-8px
-        right: $spacer * -.5; //-8px
-        bottom: $spacer * -.5; //-8px
-        border-radius: 50%;
-        border: $spacer * .5 solid $white; // 8px
-      }
-    }
   }
   &--three-dots {
     .actions-menu__btn {
