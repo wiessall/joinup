@@ -352,21 +352,6 @@ module.exports = {
       },
     },
     {
-      entry: path.resolve(
-        outputFolder,
-        "src/scss/members-overview-exposed-form.scss"
-      ),
-      dest: path.resolve(
-        outputFolder,
-        "assets/css/members-overview-exposed-form.min.css"
-      ),
-      options: {
-        includePaths,
-        minify: true,
-        sourceMap: "file",
-      },
-    },
-    {
       entry: path.resolve(outputFolder, "src/scss/menu--og--navigation.scss"),
       dest: path.resolve(
         outputFolder,
