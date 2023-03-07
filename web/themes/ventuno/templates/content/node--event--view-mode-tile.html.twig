@@ -81,7 +81,7 @@
   title_suffix: title_suffix,
   text: view_mode_featured ? content.body|render|striptags|raw,
   metadata: [{
-    label: content.field_event_date,
+    label: content.field_event_date.0.start_date,
   },{
     label: 'event',
     icon: 'calendar3',

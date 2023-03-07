@@ -118,19 +118,10 @@ function ventuno_preprocess_container(array &$variables): void {
       'collection_type',
       'solution_content_bundle',
       'field_content_listing_type',
+      'user_content_bundle',
     ];
     if (in_array($facet_id, $valid_facet_ids)) {
-      $classes = [
-        'tabs--content-type',
-        'g-2',
-        'my-4',
-        'justify-content-center',
-        'row',
-        'row-cols-2',
-        'row-cols-md-4',
-        'row-cols-xl-6',
-        'row-cols-xxl-8',
-      ];
+      $classes = ['tabs--content-type'];
       $variables['attributes']['class'] = $classes;
     }
   }
