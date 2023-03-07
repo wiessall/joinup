@@ -95,7 +95,7 @@ function _joinup_core_deploy_migrate_field(MediaType $media_type, string $ref_fi
 /**
  * Migrate video embed markup into media.
  */
-function joinup_core_deploy_109003(array &$sandbox): string {
+function joinup_core_deploy_109007(array &$sandbox): string {
   if (empty($sandbox['tasks'])) {
     $sandbox['tasks']['node'] = \Drupal::entityQuery('node')
       ->condition('body', 'preview_thumbnail', 'CONTAINS')
@@ -148,12 +148,10 @@ function joinup_core_deploy_109003(array &$sandbox): string {
             $update_query = <<<QUERY
           WITH $graph
           DELETE { <$entity_id> <{$predicate}> ?description }
-          INSERT { <$entity_id> <{$predicate}> ":new_description"@en }
+          INSERT { <$entity_id> <{$predicate}> """{$description}"""@en }
           WHERE { <$entity_id> <{$predicate}> ?description }
           QUERY;
-            $sparl->query($update_query, [
-              ':new_description' => $description,
-            ]);
+            $sparl->query($update_query);
           }
         }
       }
