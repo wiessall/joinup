@@ -1,6 +1,9 @@
 .card {
   // Modifier
   &--tile {
+    border: 0;
+    border-radius: 0;
+    box-shadow: $box-shadow;
     .card-header {
       height: 150px;
       figure,
