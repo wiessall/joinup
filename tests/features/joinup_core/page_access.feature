@@ -1,4 +1,4 @@
-@api @group-d
+@group-d
 Feature:
   As an owner of a website
   When I visit non existing pages
@@ -18,6 +18,7 @@ Feature:
     And I should see the link "search function"
     And I should see the link "home page"
 
+  @api
   Scenario: Accessing the external URL as path should raise a 404.
     When I go to "/https://joinup.ec.europa.eu/security.txt"
     Then I should see the heading "Not Found"
