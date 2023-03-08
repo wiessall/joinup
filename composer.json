@@ -300,7 +300,8 @@
                 "Add 0 option in 'Soft limit' and apply soft limit to facet root li tags and add. @see https://www.drupal.org/i/3208580 and https://www.drupal.org/i/3307082": "resources/patch/facets-3208580-and-3307082-3x.patch"
             },
             "drupal/file_url": {
-                "Handle deleted files": "resources/patch/file_url.diff"
+                "Handle deleted files": "resources/patch/file_url.diff",
+                "No link template 'canonical' found @see https://www.drupal.org/project/file_url/issues/3346487": "resources/patch/file_url-3346487.diff"
             },
             "drupal/honeypot": {
                 "Behat integration. @see https://www.drupal.org/project/honeypot/issues/3059040": "https://www.drupal.org/files/issues/2020-09-09/3059040-31.patch",
