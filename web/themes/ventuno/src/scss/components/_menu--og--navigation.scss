@@ -25,12 +25,12 @@
         border: none;
         border-radius: 0%;
         box-shadow: 0 4px 0 0 transparent;
-        margin: $spacer * .25 $spacer * .5;
+        margin: $spacer * .25;
         &:not(:first-of-type) {
-          margin-left: $spacer * .5;
+          margin-left: $spacer * .75;
         }
         &:not(:last-of-type) {
-          margin-right: $spacer * .5;
+          margin-right: $spacer * .75;
         }
         &:hover {
           box-shadow: 0 4px 0 0 $primary;
