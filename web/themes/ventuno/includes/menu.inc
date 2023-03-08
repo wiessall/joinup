@@ -7,6 +7,8 @@
 
 declare(strict_types = 1);
 
+use Drupal\block\Entity\Block;
+
 /**
  * Implements hook_theme_suggestions_HOOK_alter().
  */
@@ -23,6 +25,12 @@ function ventuno_theme_suggestions_menu_alter(array &$suggestions, array $variab
   ], TRUE)) {
     $suggestions[] = 'menu__region_footer';
     $suggestions[] = 'menu__region_footer__' . str_replace('-', '_', $variables['menu_name']);
+  }
+  // Provide a separate suggestion for menus depending on their region.
+  if (isset($variables['attributes']['_block_id']) && ($block = Block::load($variables['attributes']['_block_id']))) {
+    $region = $block->getRegion();
+    $suggestions[] = $variables['theme_hook_original'] . '__region_' . $region;
+    unset($variables['attributes']['_block_id']);
   }
 }
 
