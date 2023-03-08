@@ -5,11 +5,10 @@
     border-radius: 0;
     box-shadow: $box-shadow;
     .card-header {
-      height: 115px;
-      overflow: hidden;
       figure,
       svg {
-        max-height: 115px;
+        overflow: hidden;
+        aspect-ratio: 16 / 9;
       }
       &:first-child {
         border-radius: 0;
