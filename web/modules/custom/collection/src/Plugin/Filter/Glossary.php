@@ -9,6 +9,7 @@ use Drupal\Core\Cache\Cache;
 use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\collection\Entity\CollectionContentInterface;
 use Drupal\collection\Entity\CollectionInterface;
 use Drupal\collection\Exception\MissingCollectionException;
@@ -36,21 +37,28 @@ class Glossary extends FilterBase implements ContainerFactoryPluginInterface {
    *
    * @var \Drupal\og\OgContextInterface
    */
-  protected $ogContext;
+  protected OgContextInterface $ogContext;
 
   /**
    * The entity type manager service.
    *
    * @var \Drupal\Core\Entity\EntityTypeManagerInterface
    */
-  protected $entityTypeManager;
+  protected EntityTypeManagerInterface $entityTypeManager;
 
   /**
    * The logger.
    *
    * @var \Psr\Log\LoggerInterface
    */
-  protected $logger;
+  protected LoggerInterface $logger;
+
+  /**
+   * The route match service.
+   *
+   * @var \Drupal\Core\Routing\RouteMatchInterface
+   */
+  protected RouteMatchInterface $routeMatch;
 
   /**
    * Constructs a new filter plugin instance.
@@ -67,12 +75,15 @@ class Glossary extends FilterBase implements ContainerFactoryPluginInterface {
    *   The entity type manager service.
    * @param \Psr\Log\LoggerInterface $logger
    *   The logger.
+   * @param \Drupal\Core\Routing\RouteMatchInterface $route_match
+   *   The route match service.
    */
-  public function __construct(array $configuration, string $plugin_id, $plugin_definition, OgContextInterface $og_context, EntityTypeManagerInterface $entity_type_manager, LoggerInterface $logger) {
+  public function __construct(array $configuration, string $plugin_id, $plugin_definition, OgContextInterface $og_context, EntityTypeManagerInterface $entity_type_manager, LoggerInterface $logger, RouteMatchInterface $route_match) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->ogContext = $og_context;
     $this->entityTypeManager = $entity_type_manager;
     $this->logger = $logger;
+    $this->routeMatch = $route_match;
   }
 
   /**
@@ -85,7 +96,8 @@ class Glossary extends FilterBase implements ContainerFactoryPluginInterface {
       $plugin_definition,
       $container->get('og.context'),
       $container->get('entity_type.manager'),
-      $container->get('logger.channel.collection')
+      $container->get('logger.channel.collection'),
+      $container->get('current_route_match')
     );
   }
 
@@ -94,7 +106,6 @@ class Glossary extends FilterBase implements ContainerFactoryPluginInterface {
    */
   public function process($text, $langcode): FilterProcessResult {
     $result = new FilterProcessResult($text);
-
     $collection = $this->getCollection();
     // A collection context cannot be detected.
     if (!isset($collection)) {
@@ -274,6 +285,21 @@ class Glossary extends FilterBase implements ContainerFactoryPluginInterface {
           $this->logger->error('Collection could not be retrieved from entity of type %type and ID %id', [
             '%type' => $group->getEntityTypeId(),
             '%id' => $group->id(),
+          ]);
+        }
+      }
+    }
+    if ($this->routeMatch->getRouteName() === 'entity.rdf_entity.eif_perspective' && $rdf_entity = $this->routeMatch->getParameter('rdf_entity')) {
+      if ($rdf_entity instanceof CollectionContentInterface) {
+        try {
+          $group = $rdf_entity->getGroup();
+        }
+        catch (MissingCollectionException $e) {
+          // The content is orphaned. Log an error but allow the request to
+          // continue, this is not fatal.
+          $this->logger->error('Collection could not be retrieved from entity of type %type and ID %id', [
+            '%type' => $rdf_entity->getEntityTypeId(),
+            '%id' => $rdf_entity->id(),
           ]);
         }
       }
