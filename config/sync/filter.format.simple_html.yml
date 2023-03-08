@@ -11,6 +11,7 @@ dependencies:
     - editor
     - embed_block
     - image
+    - joinup_core
     - joinup_video
     - linkit
     - media
@@ -137,4 +138,10 @@ filters:
     provider: video_embed_wysiwyg
     status: false
     weight: -36
+    settings: {  }
+  filter_add_empty_alt_attribute:
+    id: filter_add_empty_alt_attribute
+    provider: joinup_core
+    status: true
+    weight: 9
     settings: {  }
