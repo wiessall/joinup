@@ -1,0 +1,15 @@
+uuid: e3404932-6fa3-4ff9-a7a6-5d91d1cee6f6
+langcode: en
+status: true
+dependencies: {  }
+name: tile_xxl_1x
+label: 'Tile XXL 1x'
+effects:
+  9eeeccbb-7e04-4735-b718-ffaea6a360ce:
+    uuid: 9eeeccbb-7e04-4735-b718-ffaea6a360ce
+    id: image_scale_and_crop
+    weight: 1
+    data:
+      width: 312
+      height: 176
+      anchor: center-center

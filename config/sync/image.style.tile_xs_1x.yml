@@ -1,0 +1,15 @@
+uuid: 520a4102-b700-4f84-b317-2bd488093367
+langcode: en
+status: true
+dependencies: {  }
+name: tile_xs_1x
+label: 'Tile XS 1x'
+effects:
+  e982a4ad-b8a1-4cd4-b14a-ebae5cbdf4b7:
+    uuid: e982a4ad-b8a1-4cd4-b14a-ebae5cbdf4b7
+    id: image_scale_and_crop
+    weight: 1
+    data:
+      width: 552
+      height: 310
+      anchor: center-center

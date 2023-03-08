@@ -1,0 +1,15 @@
+uuid: 559c8dc6-b247-4bdf-a340-e5af7db6a07f
+langcode: en
+status: true
+dependencies: {  }
+name: tile_sm_1x
+label: 'Tile SM 1x'
+effects:
+  b9150f9d-4c68-4d8d-97b1-dc9319f8196b:
+    uuid: b9150f9d-4c68-4d8d-97b1-dc9319f8196b
+    id: image_scale_and_crop
+    weight: 1
+    data:
+      width: 250
+      height: 141
+      anchor: center-center
