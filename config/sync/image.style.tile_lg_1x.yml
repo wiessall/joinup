@@ -1,0 +1,15 @@
+uuid: e2e2a93d-6e88-46d0-839b-7a47d98a1cd3
+langcode: en
+status: true
+dependencies: {  }
+name: tile_lg_1x
+label: 'Tile LG 1x'
+effects:
+  bb666ae8-a292-41e7-ad7e-f6f81c451583:
+    uuid: bb666ae8-a292-41e7-ad7e-f6f81c451583
+    id: image_scale_and_crop
+    weight: 1
+    data:
+      width: 302
+      height: 170
+      anchor: center-center

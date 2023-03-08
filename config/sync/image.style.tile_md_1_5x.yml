@@ -1,0 +1,15 @@
+uuid: c3151539-3532-44ce-a6a6-8f22fb2b2f01
+langcode: en
+status: true
+dependencies: {  }
+name: tile_md_1_5x
+label: 'Tile MD 1.5x'
+effects:
+  d36d7291-7be5-428a-b925-c383a39452bb:
+    uuid: d36d7291-7be5-428a-b925-c383a39452bb
+    id: image_scale_and_crop
+    weight: 1
+    data:
+      width: 333
+      height: 188
+      anchor: center-center
