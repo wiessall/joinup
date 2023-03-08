@@ -188,10 +188,11 @@ class UserUnpublishedBlock extends BlockBase implements ContainerFactoryPluginIn
    *   The loaded RDF entity.
    */
   protected function getDraftRdf(string $entityId): ?RdfInterface {
-    /** @var \Drupal\sparql_entity_storage\SparqlEntityStorageInterface $sparql_storage */
-    $sparql_storage = $this->entityTypeManager->getStorage('rdf_entity');
-
-    return $sparql_storage->load($entityId, ['draft']);
+    /** @var \Drupal\sparql_entity_storage\SparqlEntityStorageInterface $sparqlStorage */
+    $sparqlStorage = $this->entityTypeManager->getStorage('rdf_entity');
+    /** @var \Drupal\rdf_entity\RdfInterface|null $entity */
+    $entity = $sparqlStorage->load($entityId, ['draft']);
+    return $entity;
   }
 
   /**
@@ -206,12 +207,12 @@ class UserUnpublishedBlock extends BlockBase implements ContainerFactoryPluginIn
    * {@inheritdoc}
    */
   public function getCacheTags(): array {
-    $cache_tags = parent::getCacheTags();
+    $cacheTags = parent::getCacheTags();
     foreach (['node', 'rdf_entity'] as $type) {
-      $entity_type = $this->entityTypeManager->getStorage($type)->getEntityType();
-      $cache_tags = Cache::mergeTags($cache_tags, $entity_type->getListCacheTags());
+      $entityType = $this->entityTypeManager->getStorage($type)->getEntityType();
+      $cacheTags = Cache::mergeTags($cacheTags, $entityType->getListCacheTags());
     }
-    return $cache_tags;
+    return $cacheTags;
   }
 
   /**
