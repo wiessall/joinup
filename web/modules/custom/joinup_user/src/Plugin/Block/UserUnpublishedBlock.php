@@ -5,13 +5,13 @@ declare(strict_types = 1);
 namespace Drupal\joinup_user\Plugin\Block;
 
 use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
-use Drupal\Core\Routing\CurrentRouteMatch;
+use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Session\AccountInterface;
-use Drupal\Core\Session\AccountProxy;
 use Drupal\node\NodeInterface;
 use Drupal\rdf_entity\RdfInterface;
 use Drupal\search_api\Query\ResultSetInterface;
@@ -34,63 +34,38 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class UserUnpublishedBlock extends BlockBase implements ContainerFactoryPluginInterface {
 
   /**
-   * The current user.
-   *
-   * @var \Drupal\Core\Session\AccountProxy
-   */
-  protected $currentUser;
-
-  /**
-   * The current route match service.
-   *
-   * @var \Drupal\Core\Routing\CurrentRouteMatch
-   */
-  protected $currentRouteMatch;
-
-  /**
-   * The entity type manager service.
-   *
-   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
-   */
-  protected $entityTypeManager;
-
-  /**
-   * The revision manager service.
-   *
-   * @var \Drupal\state_machine_revisions\RevisionManagerInterface
-   */
-  protected $revisionManager;
-
-  /**
    * Constructs a new UserUnpublishedBlock object.
    *
    * @param array $configuration
    *   A configuration array containing information about the plugin instance.
-   * @param string $plugin_id
+   * @param string $pluginId
    *   The plugin_id for the plugin instance.
-   * @param string $plugin_definition
+   * @param mixed $pluginDefinition
    *   The plugin implementation definition.
-   * @param \Drupal\Core\Session\AccountProxy $current_user
+   * @param \Drupal\Core\Session\AccountInterface $currentUser
    *   The current user proxy.
-   * @param \Drupal\Core\Routing\CurrentRouteMatch $current_route_match
+   * @param \Drupal\Core\Routing\RouteMatchInterface $currentRouteMatch
    *   The current route match service.
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
    *   The entity type manager service.
-   * @param \Drupal\state_machine_revisions\RevisionManagerInterface $revision_manager
+   * @param \Drupal\state_machine_revisions\RevisionManagerInterface $revisionManager
    *   The revision manager service.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, AccountProxy $current_user, CurrentRouteMatch $current_route_match, EntityTypeManagerInterface $entity_type_manager, RevisionManagerInterface $revision_manager) {
-    parent::__construct($configuration, $plugin_id, $plugin_definition);
-    $this->currentUser = $current_user;
-    $this->currentRouteMatch = $current_route_match;
-    $this->entityTypeManager = $entity_type_manager;
-    $this->revisionManager = $revision_manager;
+  public function __construct(
+    array $configuration,
+    $pluginId,
+    $pluginDefinition,
+    protected AccountInterface $currentUser,
+    protected RouteMatchInterface $currentRouteMatch,
+    protected EntityTypeManagerInterface $entityTypeManager,
+    protected RevisionManagerInterface $revisionManager) {
+    parent::__construct($configuration, $pluginId, $pluginDefinition);
   }
 
   /**
    * {@inheritdoc}
    */
-  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
+  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition): self {
     return new static(
       $configuration,
       $plugin_id,
@@ -105,7 +80,7 @@ class UserUnpublishedBlock extends BlockBase implements ContainerFactoryPluginIn
   /**
    * {@inheritdoc}
    */
-  public function build() {
+  public function build(): array {
     $rows = $this->getRows();
     if (empty($rows)) {
       return [];
@@ -206,16 +181,17 @@ class UserUnpublishedBlock extends BlockBase implements ContainerFactoryPluginIn
   /**
    * Loads the latest revision on an rdf entity.
    *
-   * @param int $entity_id
+   * @param string $entityId
    *   The content id.
    *
-   * @return \Drupal\rdf_entity\RdfInterface
+   * @return \Drupal\rdf_entity\RdfInterface|null
    *   The loaded RDF entity.
    */
-  protected function getDraftRdf($entity_id): RdfInterface {
+  protected function getDraftRdf(string $entityId): ?RdfInterface {
     /** @var \Drupal\sparql_entity_storage\SparqlEntityStorageInterface $sparql_storage */
     $sparql_storage = $this->entityTypeManager->getStorage('rdf_entity');
-    return $sparql_storage->load($entity_id, ['draft']);
+
+    return $sparql_storage->load($entityId, ['draft']);
   }
 
   /**
@@ -241,10 +217,10 @@ class UserUnpublishedBlock extends BlockBase implements ContainerFactoryPluginIn
   /**
    * {@inheritdoc}
    */
-  protected function blockAccess(AccountInterface $account): AccessResult {
+  protected function blockAccess(AccountInterface $account): AccessResultInterface {
     // Only allow access if the user is viewing their own profile.
     if ($user = $this->currentRouteMatch->getParameter('user')) {
-      if ($user && ($user instanceof UserInterface) && $user->id() === $this->currentUser->id()) {
+      if ($user instanceof UserInterface && $user->id() === $this->currentUser->id()) {
         return parent::blockAccess($account);
       }
     }
