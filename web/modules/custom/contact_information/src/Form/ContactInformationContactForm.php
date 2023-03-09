@@ -65,7 +65,7 @@ class ContactInformationContactForm extends ContactForm {
     if ($this->currentUser()->isAnonymous()) {
       // Remove standard form elements from Drupal\email_contact\Form\ContactForm.
       // @see \Drupal\email_contact\Form\ContactForm::buildForm()
-      unset($form['name'], $form['mail'], $form['subject'], $form['message'], $form['organization']);
+      unset($form['name'], $form['mail'], $form['subject'], $form['message'], $form['organization'], $form['type'], $form['attachment']);
 
       $form['description'] = [
         '#type' => 'html_tag',
