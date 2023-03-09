@@ -22,7 +22,7 @@ class InputFilterContext extends RawDrupalContext {
   protected string $pcreBacktrackLimit;
 
   /**
-   * Set long body for news page
+   * Set long body for news page.
    *
    * @param string $title
    *   The name of the news page.
