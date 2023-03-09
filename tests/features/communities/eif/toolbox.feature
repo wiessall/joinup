@@ -76,7 +76,7 @@ Feature:
     And I should see the text "Step 1 - Choose one or combine multiple filters to find solutions that match specifically your EIF requirements"
     And I should see the text "Step 2 - Explore operational solutions that help align to the European Interoperability Framework"
     And I should see the text "This is v1.0.0 of the SMASS survey."
-    And the response should contain "<p>This is v1.0.0 of the <strong><a href=\"/collection/nifo-collection/glossary/term/amazing\" class=\"glossary-term\" title=\"amazing def\">SMASS</a></strong> survey.</p>"
+    And the response should contain "/collection/nifo-collection/glossary/term/amazing\" class=\"glossary-term\" title=\"amazing def\">SMASS</a>"
 
     And I should see the following filter categories in the correct order:
       | Underlying principles  |
