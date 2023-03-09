@@ -184,3 +184,4 @@ Feature: Resend validation email from collection/solution about page
       | some.resend@example.com | cancelled |
     When I go to the about page of "Existing to resend solution"
     Then I should see the text "Contact us"
+    But I should not see the text "Please confirm your contact information to enable users to contact you"
