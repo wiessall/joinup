@@ -196,7 +196,7 @@ function contact_information_rdf_entity_access(EntityInterface $entity, $operati
  */
 function contact_information_entity_field_access(string $operation, FieldDefinitionInterface $field_definition, AccountInterface $account, ?FieldItemListInterface $items = NULL): AccessResultInterface {
   if ($operation === 'view' && $field_definition->getName() === 'field_ci_email') {
-    $confirmation = \Drupal::service('email_confirmer')->getConfirmation($items->value);
+    $confirmation = \Drupal::getContainer()->get('email_confirmer')->getConfirmation($items->value, 'confirmed', ContactInformationEmailConfirmInterface::REALM);
     $access = $confirmation && $confirmation->get('confirmed')->value == EmailConfirmationInterface::CONFIRMED ? AccessResult::allowed() : AccessResult::forbidden();
     /** @var \Drupal\contact_information\Entity\ContactInformationInterface $contact_info */
     $contact_info = $items->getEntity();
@@ -439,7 +439,7 @@ function contact_information_rdf_entity_view(array &$build, RdfInterface $contac
   if ($contact_information instanceof ContactInformationInterface && $view_mode === 'about') {
     if (\Drupal::currentUser()->isAuthenticated()) {
       // If an anonymous user clicks on the contact information 'Contact us'
-      // link, they are redirected to login or register with the EU Login
+      // link, they are redirected to log in or register with the EU Login
       // service. After successfully completing the authentication, they are
       // redirected back to the group about-page where the link is placed. We
       // attach a Javascript snippet that automatically opens the 'Contact us'
