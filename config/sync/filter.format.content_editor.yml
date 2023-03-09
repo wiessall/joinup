@@ -136,7 +136,7 @@ filters:
     provider: joinup_core
     status: true
     weight: 9
-    settings: {  }
+    settings: { }
   media_embed:
     id: media_embed
     provider: media
