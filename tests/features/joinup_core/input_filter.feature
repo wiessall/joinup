@@ -21,6 +21,7 @@ Feature: Input filter
       | Quoted texts            | Quoted texts                       | <q>This is a famous quote.</q> ~ Joinup developer.                                                                                                                                                                                                                                                                                                                                                                                             | Netflix group | validated |
       # Since area coordinates contains commas and we don't want this to be interpreted as multiple values we need to enclose the value with double quotes and escape the quotes in the HTML.
       | Image map               | A map encompasses 1 or more areas  | "<map name=""imagemap""><area shape=""circle"" coords=""50,50,25"" href=""/"" alt=""Homepage""/></map><img usemap=""imagemap"" src=""/images/my-image.png"" alt=""Imagemap example"" />"                                                                                                                                                                                                                                                       | Netflix group | validated |
+      | Famous actors           | Famous peoples                     | Article about famous actors                                                                                                                                                                                                                                                                                                                                                                                                                    | Netflix group | validated |
     And discussion content:
       | title      | body             | collection    | state     |
       | Discussion | Start discussion | Netflix group | validated |
@@ -68,3 +69,9 @@ Feature: Input filter
     And I open the header local tasks menu
     And I click "Edit" in the "Entity actions" region
     Then the paragraph formats in the "Content" field should not contain the "h1, h5, h6" formats
+
+  @backtrackLimit
+  Scenario: Ensure really long HTML tag (e.g. < img > with src:data/image...) does not generate a fatal error.
+    When I set long body of "Famous actors" news
+    When I go to the "Famous actors" news
+    Then I see the "img" element with the "alt" attribute set to "Image removed." in the "Content" region
