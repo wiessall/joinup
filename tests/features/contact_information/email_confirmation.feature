@@ -159,3 +159,28 @@ Feature: Resend validation email from collection/solution about page
     Given I am logged in as a user with the authenticated role
     And I go to the about page of "Existing to resend solution"
     Then I should not see the text "Please confirm your contact information to enable users to contact you"
+
+  Scenario: Regression test to verify permissions into multiple edge cases.
+    Given the following contact:
+      | email | some.resend@example.com |
+      | name  | Some Resend             |
+    And solutions:
+      | title                       | description          | state     | contact information |
+      | Existing to resend solution | Default description. | validated | Some Resend         |
+    And the following email confirmation requests:
+      | email                   | status    |
+      | some.resend@example.com | pending   |
+
+    When I am logged in as a moderator
+    When I go to the about page of "Existing to resend solution"
+    Then I should not see the text "Contact us"
+    But I should see the text "Please confirm your contact information to enable users to contact you"
+
+    Given the following email confirmation request:
+      | email                   | status    |
+      | some.resend@example.com | confirmed |
+      # Create a second confirmation request right after, to ensure that in the
+      # database, the confirmed one is never the first or the last.
+      | some.resend@example.com | cancelled |
+    When I go to the about page of "Existing to resend solution"
+    Then I should see the text "Contact us"
