@@ -11,6 +11,7 @@ dependencies:
     - editor
     - embed_block
     - image
+    - joinup_core
     - joinup_video
     - linkit
     - media
@@ -44,14 +45,14 @@ filters:
     id: filter_url
     provider: filter
     status: true
-    weight: -45
+    weight: -44
     settings:
       filter_url_length: 72
   filter_html_image_secure:
     id: filter_html_image_secure
     provider: filter
     status: true
-    weight: -44
+    weight: -45
     settings: {  }
   joinup_video:
     id: joinup_video
@@ -141,3 +142,9 @@ filters:
       allowed_media_types:
         file: file
         video: video
+  filter_add_empty_alt_attribute:
+    id: filter_add_empty_alt_attribute
+    provider: joinup_core
+    status: true
+    weight: 9
+    settings: {  }
