@@ -589,6 +589,17 @@ abstract class CommunityContentWorkflowTestBase extends JoinupWorkflowExistingSi
             'userOgFacilitator',
           ],
         ],
+        'archived' => [
+          'own' => TRUE,
+          'any' => [
+            'userAnonymous',
+            'userAuthenticated',
+            'userModerator',
+            'userOgMember',
+            'userOgFacilitator',
+            'userOgAdministrator',
+          ],
+        ],
       ],
       'solution' => [
         'draft' => [
@@ -628,6 +639,17 @@ abstract class CommunityContentWorkflowTestBase extends JoinupWorkflowExistingSi
           'any' => [
             'userModerator',
             'userOgFacilitator',
+          ],
+        ],
+        'archived' => [
+          'own' => TRUE,
+          'any' => [
+            'userAnonymous',
+            'userAuthenticated',
+            'userModerator',
+            'userOgMember',
+            'userOgFacilitator',
+            'userOgAdministrator',
           ],
         ],
       ],
@@ -680,11 +702,13 @@ abstract class CommunityContentWorkflowTestBase extends JoinupWorkflowExistingSi
               'draft',
               'proposed',
               'validated',
+              'archived',
             ],
             'userOgFacilitator' => [
               'draft',
               'proposed',
               'validated',
+              'archived',
             ],
           ],
         ],
@@ -696,10 +720,12 @@ abstract class CommunityContentWorkflowTestBase extends JoinupWorkflowExistingSi
             'userModerator' => [
               'proposed',
               'validated',
+              'archived',
             ],
             'userOgFacilitator' => [
               'proposed',
               'validated',
+              'archived',
             ],
           ],
         ],
@@ -715,12 +741,14 @@ abstract class CommunityContentWorkflowTestBase extends JoinupWorkflowExistingSi
               'proposed',
               'needs_update',
               'validated',
+              'archived',
             ],
             'userOgFacilitator' => [
               'draft',
               'proposed',
               'needs_update',
               'validated',
+              'archived',
             ],
           ],
         ],
@@ -731,9 +759,11 @@ abstract class CommunityContentWorkflowTestBase extends JoinupWorkflowExistingSi
           'any' => [
             'userModerator' => [
               'proposed',
+              'archived',
             ],
             'userOgFacilitator' => [
               'proposed',
+              'archived',
             ],
           ],
         ],
@@ -741,9 +771,11 @@ abstract class CommunityContentWorkflowTestBase extends JoinupWorkflowExistingSi
           'any' => [
             'userModerator' => [
               'validated',
+              'archived',
             ],
             'userOgFacilitator' => [
               'validated',
+              'archived',
             ],
           ],
         ],
@@ -758,10 +790,12 @@ abstract class CommunityContentWorkflowTestBase extends JoinupWorkflowExistingSi
             'userModerator' => [
               'draft',
               'validated',
+              'archived',
             ],
             'userOgFacilitator' => [
               'draft',
               'validated',
+              'archived',
             ],
           ],
         ],
@@ -773,10 +807,12 @@ abstract class CommunityContentWorkflowTestBase extends JoinupWorkflowExistingSi
             'userModerator' => [
               'proposed',
               'validated',
+              'archived',
             ],
             'userOgFacilitator' => [
               'proposed',
               'validated',
+              'archived',
             ],
           ],
         ],
@@ -791,12 +827,14 @@ abstract class CommunityContentWorkflowTestBase extends JoinupWorkflowExistingSi
               'proposed',
               'needs_update',
               'validated',
+              'archived',
             ],
             'userOgFacilitator' => [
               'draft',
               'proposed',
               'needs_update',
               'validated',
+              'archived',
             ],
           ],
         ],
@@ -807,9 +845,11 @@ abstract class CommunityContentWorkflowTestBase extends JoinupWorkflowExistingSi
           'any' => [
             'userModerator' => [
               'proposed',
+              'archived',
             ],
             'userOgFacilitator' => [
               'proposed',
+              'archived',
             ],
           ],
         ],
@@ -914,6 +954,17 @@ abstract class CommunityContentWorkflowTestBase extends JoinupWorkflowExistingSi
               'userOgFacilitator',
             ],
           ],
+          'archived' => [
+            'own' => [
+              'member' => TRUE,
+              'blocked' => FALSE,
+              'non-member' => FALSE,
+            ],
+            'any' => [
+              'userModerator',
+              'userOgFacilitator',
+            ],
+          ],
         ],
         GroupInterface::POST_MODERATION => [
           'draft' => [
@@ -950,6 +1001,17 @@ abstract class CommunityContentWorkflowTestBase extends JoinupWorkflowExistingSi
             ],
           ],
           'needs_update' => [
+            'own' => [
+              'member' => TRUE,
+              'blocked' => FALSE,
+              'non-member' => FALSE,
+            ],
+            'any' => [
+              'userModerator',
+              'userOgFacilitator',
+            ],
+          ],
+          'archived' => [
             'own' => [
               'member' => TRUE,
               'blocked' => FALSE,
@@ -1018,6 +1080,17 @@ abstract class CommunityContentWorkflowTestBase extends JoinupWorkflowExistingSi
               'userOgFacilitator',
             ],
           ],
+          'archived' => [
+            'own' => [
+              'member' => TRUE,
+              'blocked' => FALSE,
+              'non-member' => FALSE,
+            ],
+            'any' => [
+              'userModerator',
+              'userOgFacilitator',
+            ],
+          ],
         ],
         GroupInterface::POST_MODERATION => [
           'draft' => [
@@ -1054,6 +1127,17 @@ abstract class CommunityContentWorkflowTestBase extends JoinupWorkflowExistingSi
             ],
           ],
           'needs_update' => [
+            'own' => [
+              'member' => TRUE,
+              'blocked' => FALSE,
+              'non-member' => FALSE,
+            ],
+            'any' => [
+              'userModerator',
+              'userOgFacilitator',
+            ],
+          ],
+          'archived' => [
             'own' => [
               'member' => TRUE,
               'blocked' => FALSE,
