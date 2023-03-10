@@ -13,6 +13,21 @@
     &::-webkit-scrollbar {
       display: none;
     }
+    // Create a visual hint to let user know menu is scrollable to the right
+    &::after {
+      content: "";
+      pointer-events: none; // Allow clickthrough
+      position: absolute;
+      width: $spacer * 5;
+      top: 0;
+      right: 0;
+      left: calc(100% - 5rem);
+      height: 100%;
+      background-image: linear-gradient(90deg, transparent 50%, $light 100%);
+      @include media-breakpoint-up(lg) {
+        display: none;
+      }
+    }
     .nav-tabs {
       display: inline-flex;
       flex-wrap: nowrap;
@@ -45,27 +60,9 @@
         }
       }
     }
-    &--overflowing {
-      // Create a visual hint to let user know menu is scrollable to the right
-      &::after {
-        content: "";
-        pointer-events: none; // Allow clickthrough
-        position: absolute;
-        width: $spacer * 5;
-        top: 0;
-        right: 0;
-        left: calc(100% - 5rem);
-        height: 100%;
-        background-image: linear-gradient(90deg, transparent 50%, $light 100%);
-        @include media-breakpoint-up(lg) {
-          display: none;
-        }
-      }
-    }
   }
   &__show-more {
     display: inline-block;
-    padding-right: $spacer * 2; // Placeholder to
     &-btn {
       display: inline;
       height: 28px;
