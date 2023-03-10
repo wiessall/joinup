@@ -8,6 +8,7 @@ use Drupal\eif\EifInterface;
 use Drupal\og\OgResolvedGroupCollectionInterface;
 use Drupal\og\Plugin\OgGroupResolver\RouteGroupResolver;
 use Drupal\rdf_taxonomy\Entity\RdfTerm;
+use Drupal\solution\Entity\SolutionInterface;
 
 /**
  * Resolves the group from the route.
@@ -51,6 +52,12 @@ class EifGroupResolver extends RouteGroupResolver {
           $collection->addGroup($solution, ['route']);
           $this->stopPropagation();
         }
+      }
+
+      // The 'EIF perspective' page.
+      if ($this->routeMatch->getRouteName() === 'entity.rdf_entity.eif_perspective' && $entity instanceof SolutionInterface) {
+        $collection->addGroup($entity, ['route']);
+        $this->stopPropagation();
       }
     }
 

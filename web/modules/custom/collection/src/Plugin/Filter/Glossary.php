@@ -94,6 +94,7 @@ class Glossary extends FilterBase implements ContainerFactoryPluginInterface {
    */
   public function process($text, $langcode): FilterProcessResult {
     $result = new FilterProcessResult($text);
+
     $collection = $this->getCollection();
     // A collection context cannot be detected.
     if (!isset($collection)) {
