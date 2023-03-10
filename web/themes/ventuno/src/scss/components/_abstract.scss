@@ -1,9 +1,6 @@
 .abstract {
-  position: relative;
   .read-more {
-    position: absolute;
-    right: $spacer * 1.5;
-    bottom: $spacer; // Override button properties
+    margin-top: $spacer;
     color: $brand; // Override button properties
     padding: 0; // Override button properties
     background-color: transparent; // Override button properties
