@@ -45,7 +45,7 @@ function ventuno_form_join_group_form_alter(array &$form, FormStateInterface $fo
   if (isset($form['leave'])) {
     // Add classes for leave membership link.
     $form['leave']['#confirm']['#attributes']['class'][] = 'btn';
-    $form['leave']['#confirm']['#attributes']['class'][] = 'btn-warning';
+    $form['leave']['#confirm']['#attributes']['class'][] = 'btn-secondary';
   }
 }
 
