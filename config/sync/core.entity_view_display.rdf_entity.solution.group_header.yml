@@ -73,6 +73,8 @@ content:
     label: hidden
     settings:
       image_style: banner
+      image_loading:
+        attribute: eager
     third_party_settings: {  }
     weight: 0
     region: content
@@ -83,7 +85,7 @@ content:
       image_link: ''
       image_style: logo
       image_loading:
-        attribute: lazy
+        attribute: eager
     third_party_settings:
       template_suggestion:
         template_suggestion: ''
@@ -91,7 +93,7 @@ content:
     region: content
   field_topic:
     type: entity_reference_custom_link
-    label: inline
+    label: hidden
     settings:
       path: 'internal:/search'
       label: '[term:name]'

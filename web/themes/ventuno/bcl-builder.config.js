@@ -398,6 +398,15 @@ module.exports = {
       },
     },
     {
+      entry: path.resolve(outputFolder, "src/scss/group-banner.scss"),
+      dest: path.resolve(outputFolder, "assets/css/group-banner.min.css"),
+      options: {
+        includePaths,
+        minify: true,
+        sourceMap: "file",
+      },
+    },
+    {
       entry: path.resolve(outputFolder, "src/scss/nav.scss"),
       dest: path.resolve(outputFolder, "assets/css/nav.min.css"),
       options: {

@@ -4,17 +4,8 @@
  * Default template for a field.
  */
 #}
-{%
-  set classes = [
-    'field--name-' ~ field_name|clean_class,
-    bundle|clean_class ~ '__' ~ field_name_clean|clean_class,
-  ]
-%}
-<div{{ attributes.addClass(classes) }}>
-  <span{{ title_attributes }}>
-    {{ label }}{% if label_display == 'inline' %}<span class="me-1">:</span>{% endif %}
-  </span>
-  {% for key, item in items %}
+<div class="d-flex topics-wrapper pe-4 flex-lg-wrap">
+  {% for item in items %}
     {{ item.content }}
   {% endfor %}
 </div>

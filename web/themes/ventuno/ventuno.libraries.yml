@@ -164,6 +164,11 @@ glossary:
     theme:
       assets/css/glossary.min.css: { minified: true }
 
+group-banner:
+  css:
+    theme:
+      assets/css/group-banner.min.css: { minified: true }
+
 glide:
   js:
     assets/js/glide.min.js: { minified: true, attributes: { defer: true } }

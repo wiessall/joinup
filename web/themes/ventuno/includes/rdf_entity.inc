@@ -53,9 +53,6 @@ function ventuno_preprocess_rdf_entity__solution__group_header(array &$variables
       'class' => [
         'btn',
         'btn-secondary',
-        'mt-3',
-        'mt-lg-0',
-        'ms-lg-3',
       ],
     ];
   }
