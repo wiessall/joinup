@@ -453,7 +453,12 @@ function contact_information_rdf_entity_view(array &$build, RdfInterface $contac
 
     $resend_access = \Drupal::getContainer()->get('joinup_group.group_manager')->access($contact_information->getRelatedGroup(), 'resend email confirmation request');
     $cacheable_metadata = CacheableMetadata::createFromRenderArray($build);
-    if ($resend_access->isAllowed()) {
+    $email_confirmer = \Drupal::getContainer()->get('email_confirmer');
+    $confirmation = \Drupal::getContainer()->get('email_confirmer')->getConfirmation($contact_information->get('field_ci_email')->value, 'confirmed', ContactInformationEmailConfirmInterface::REALM);
+    if ($confirmation) {
+      $cacheable_metadata->addCacheableDependency($confirmation);
+    }
+    elseif ($resend_access->isAllowed()) {
       /** @var \Drupal\email_confirmer\EmailConfirmationInterface $confirmation */
       $confirmation = \Drupal::getContainer()->get('email_confirmer')->getConfirmation($contact_information->get('field_ci_email')->value, FALSE, ContactInformationEmailConfirmInterface::REALM);
       // If no confirmation is created yet, create one before adding the link
