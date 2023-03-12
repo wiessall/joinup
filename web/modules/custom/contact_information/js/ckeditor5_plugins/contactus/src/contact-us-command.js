@@ -1,9 +1,16 @@
+/**
+ * @file defines ContactUsCommand, which is executed when the contactUs
+ * toolbar button is pressed.
+ */
+
 import { Command } from "ckeditor5/src/core";
 
-export class ContactUsCommand extends Command {
+export default class ContactUsCommand extends Command {
   execute() {
     const { editor } = this;
     const { selection } = editor.model.document;
+    const documentSelection = document.getSelection();
+    const selectedText = documentSelection.toString();
 
     editor.model.change((writer) => {
       const contactUsWidget = writer.createElement("contactUs", {
@@ -14,6 +21,9 @@ export class ContactUsCommand extends Command {
           editor.config.get("contactus").contactInformation_url,
         "data-joinup-contact-information-login":
           editor.config.get("contactus").contactInformation_login,
+        "data-joinup-contact-information-label": !selectedText
+          ? "Contact us"
+          : selectedText,
       });
 
       editor.model.insertContent(contactUsWidget);

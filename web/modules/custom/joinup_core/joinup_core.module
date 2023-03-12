@@ -186,27 +186,6 @@ function joinup_core_file_delete(EntityInterface $entity) {
 }
 
 /**
- * Implements hook_editor_js_settings_alter().
- *
- * Strip off the h1, h5, h6 tag format options from the 'Format' dropdown.
- * This does not remove the ability of the user to enter or render these tags.
- *
- * @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-3682
- */
-function joinup_core_editor_js_settings_alter(array &$settings) {
-  if (isset($settings['editor']['formats']['content_editor']) && $settings['editor']['formats']['content_editor']['format'] === 'content_editor') {
-    $options = explode(';', $settings['editor']['formats']['content_editor']['editorSettings']['format_tags']);
-    $options = array_diff($options, ['h1', 'h5', 'h6']);
-    $settings['editor']['formats']['content_editor']['editorSettings']['format_tags'] = implode(';', $options);
-    // Hide image resizer through js settings.
-    // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-3921
-    foreach ($settings['editor']['formats'] as &$format_settings) {
-      $format_settings['editorSettings']['image2_disableResizer'] = TRUE;
-    }
-  }
-}
-
-/**
  * Implements hook_preprocess_HOOK().
  *
  * @see template_preprocess_image_formatter()
