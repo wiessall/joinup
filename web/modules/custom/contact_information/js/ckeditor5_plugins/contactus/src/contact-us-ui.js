@@ -2,7 +2,9 @@
  * @file registers the contactUs toolbar button and binds functionality to it.
  */
 
+// eslint-disable-next-line import/prefer-default-export
 import { Plugin } from "ckeditor5/src/core";
+// eslint-disable-next-line import/prefer-default-export
 import { ButtonView } from "ckeditor5/src/ui";
 import icon from "../../../../icons/contact.svg";
 
