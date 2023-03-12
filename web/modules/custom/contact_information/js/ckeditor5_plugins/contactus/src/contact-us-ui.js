@@ -1,8 +1,12 @@
+/**
+ * @file registers the contactUs toolbar button and binds functionality to it.
+ */
+
 import { Plugin } from "ckeditor5/src/core";
 import { ButtonView } from "ckeditor5/src/ui";
 import icon from "../../../../icons/contact.svg";
 
-export class ContactUsUi extends Plugin {
+export default class ContactUsUi extends Plugin {
   init() {
     if (this.editor.config.get("contactus").contactInformation_disable) {
       const { editor } = this;

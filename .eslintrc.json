@@ -24,8 +24,7 @@
     "jsdoc"
   ],
   "ignorePatterns": [
-    "**/js/build/*.js",
-    "**/ckeditor5_plugins/**",
+    "**/contact_information/js/build/*.js",
     "**/contact_information/webpack.config.js"
   ],
   "rules": {

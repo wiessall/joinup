@@ -1,8 +1,18 @@
+/**
+ * @file CKEditor 5 plugins do not work directly with the DOM. They are defined as
+ * plugin-specific data models that are then converted to markup that
+ * is inserted in the DOM.
+ *
+ * This file has the logic for defining the contactUs model, and for how it is
+ * converted to standard DOM markup.
+ */
+// cSpell:ignore contact-us-command
+
 import { Plugin } from "ckeditor5/src/core";
 import { toWidget, Widget } from "ckeditor5/src/widget";
-import { ContactUsCommand } from "./contact-us-command";
+import ContactUsCommand from "./contact-us-command";
 
-export class ContactUsEditing extends Plugin {
+export default class ContactUsEditing extends Plugin {
   static get requires() {
     return [Widget];
   }
@@ -12,6 +22,7 @@ export class ContactUsEditing extends Plugin {
       "data-joinup-contact-information",
       "data-joinup-contact-information-href",
       "data-joinup-contact-information-login",
+      "data-joinup-contact-information-label",
     ];
     this._defineSchema();
     this._defineConverters();
@@ -29,12 +40,10 @@ export class ContactUsEditing extends Plugin {
 
   _defineConverters() {
     const { editor } = this;
-
     editor.conversion.for("upcast").elementToElement({
       view: {
         name: "a",
         attributes: this.attrs,
-        label: "Contact us",
       },
       model: (viewElement, { writer }) => {
         const contactInformation = viewElement.getAttribute(
@@ -46,11 +55,15 @@ export class ContactUsEditing extends Plugin {
         const contactInformationLogin = viewElement.getAttribute(
           "data-joinup-contact-information-login"
         );
+        const contactInformationLabel = viewElement.getAttribute(
+          "data-joinup-contact-information-label"
+        );
 
         return writer.createElement("contactUs", {
           "data-joinup-contact-information": contactInformation,
           "data-joinup-contact-information-href": contactInformationHref,
           "data-joinup-contact-information-login": contactInformationLogin,
+          "data-joinup-contact-information-label": contactInformationLabel,
         });
       },
     });
@@ -58,6 +71,10 @@ export class ContactUsEditing extends Plugin {
     editor.conversion.for("dataDowncast").elementToElement({
       model: "contactUs",
       view: (modelElement, { writer }) => {
+        const dataLabel = modelElement.getAttribute(
+          "data-joinup-contact-information-label"
+        );
+
         return writer.createRawElement(
           "a",
           {
@@ -71,8 +88,9 @@ export class ContactUsEditing extends Plugin {
               "data-joinup-contact-information-login"
             ),
           },
+          // eslint-disable-next-line func-names
           function (domElement) {
-            domElement.textContent = "Contact us";
+            domElement.textContent = dataLabel;
           }
         );
       },
@@ -81,11 +99,16 @@ export class ContactUsEditing extends Plugin {
     editor.conversion.for("editingDowncast").elementToElement({
       model: "contactUs",
       view: (modelElement, { writer }) => {
+        const dataLabel = modelElement.getAttribute(
+          "data-joinup-contact-information-label"
+        );
+
         const contactUsDataPreviewElement = writer.createRawElement(
           "a",
           null,
+          // eslint-disable-next-line func-names
           function (domElement) {
-            domElement.textContent = "Contact us";
+            domElement.textContent = dataLabel;
           }
         );
 
@@ -96,7 +119,7 @@ export class ContactUsEditing extends Plugin {
         );
 
         return toWidget(contactUsWidgetContainer, writer, {
-          label: "Contact us",
+          label: dataLabel,
         });
       },
     });
