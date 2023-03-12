@@ -2,7 +2,7 @@
  * @file defines ContactUsCommand, which is executed when the contactUs
  * toolbar button is pressed.
  */
-
+// eslint-disable-next-line import/prefer-default-export
 import { Command } from "ckeditor5/src/core";
 
 export default class ContactUsCommand extends Command {

@@ -8,7 +8,9 @@
  */
 // cSpell:ignore contact-us-command
 
+// eslint-disable-next-line import/prefer-default-export
 import { Plugin } from "ckeditor5/src/core";
+// eslint-disable-next-line import/prefer-default-export
 import { toWidget, Widget } from "ckeditor5/src/widget";
 import ContactUsCommand from "./contact-us-command";
 
