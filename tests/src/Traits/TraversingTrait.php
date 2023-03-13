@@ -15,6 +15,8 @@ use PHPUnit\Framework\Assert;
  */
 trait TraversingTrait {
 
+  use MaterialDesignTrait;
+
   /**
    * Searches for any kind of field in a form by label.
    *
@@ -246,15 +248,19 @@ trait TraversingTrait {
       $regionObj = $this->getRegion($region);
     }
 
-    $result = [];
-    // @todo The `.listing__item--tile` selector is part of the original Joinup
-    //   theme and can be removed once we have fully migrated to the new theme.
-    // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7138
-    foreach ($regionObj->findAll('css', '.listing__item--tile, .card, article.tile') as $element) {
-      // @todo The `.listing__title` selector is part of the original Joinup
-      //   theme and can be removed once we migrated to the new theme.
+    $title_selector = implode(', ', [
+      '.card-title',
+      '.card-title > h1 a',
+      'h2 a',
+      'h3.tile-two__title',
+      // @todo Legacy selectors to be removed in ISAICP-7138.
       // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7138
-      $title_element = $element->find('css', ' .listing__title, h3.tile-two__title, .card-title, h2 a');
+      '.listing__title',
+    ]);
+
+    $result = [];
+    foreach ($regionObj->findAll('css', $this->getTileCssSelector()) as $element) {
+      $title_element = $element->find('css', $title_selector);
       // Some tiles don't have a title, like the one to create a new collection
       // in the collections page.
       if ($title_element) {
@@ -262,7 +268,6 @@ trait TraversingTrait {
         $result[$title] = $element;
       }
     }
-
     return $result;
   }
 
@@ -284,6 +289,7 @@ trait TraversingTrait {
       //   Joinup theme and can be removed once we have fully migrated to the
       //   new theme.
       // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7138
+      'card--tile',
       'listing__item--tile',
       'tile',
       'tile-two',
@@ -708,6 +714,43 @@ trait TraversingTrait {
     $query_string = utf8_decode((string) parse_url(urldecode($url), PHP_URL_QUERY));
     parse_str($query_string, $query_array);
     return $query_array;
+  }
+
+  /**
+   * Returns the tile CSS selector.
+   *
+   * @return string
+   *   The tile CSS selector.
+   */
+  protected function getTileCssSelector(): string {
+    return implode(', ', [
+      '.card .card-title',
+      'article.card--tile h2',
+      'article.tile.tile-two',
+      // @todo Legacy selectors to be removed in ISAICP-7138.
+      // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7138
+      '.listing__item--tile .listing__title',
+    ]);
+  }
+
+  /**
+   * Returns a region CSS selector given its label defined in behat.yml.
+   *
+   * @param string $label
+   *   The region label.
+   *
+   * @return string
+   *   The region's CSS selector.
+   *
+   * @throws \Exception
+   *   When the region with passed label doesn't exist.
+   */
+  protected function getRegionSelector(string $label): string {
+    $region_map = $this->getDrupalParameter('region_map');
+    if (!isset($region_map[$label])) {
+      throw new \Exception("No such region configured: $label");
+    }
+    return $region_map[$label];
   }
 
 }

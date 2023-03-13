@@ -1,0 +1,25 @@
+.card {
+  // Modifier
+  &--tile {
+    border: 0;
+    border-radius: 0;
+    box-shadow: $box-shadow;
+    .card-header {
+      height: 115px;
+      overflow: hidden;
+      figure,
+      svg {
+        max-height: 115px;
+      }
+      &:first-child {
+        border-radius: 0;
+      }
+    }
+    .card-body {
+      .card-text {
+        font-size: $font-size-sm;
+        line-height: normal;
+      }
+    }
+  }
+}

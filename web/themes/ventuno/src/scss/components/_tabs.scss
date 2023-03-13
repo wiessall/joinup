@@ -1,0 +1,49 @@
+.tabs--content-type {
+  position: relative;
+  width: 100%;
+  padding: 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+  border-bottom: 1px solid $gray-300;
+  margin-bottom: $spacer;
+  -ms-overflow-style: none;  // Hide scrollbar for IE and Edge
+  scrollbar-width: none;  // Hide scrollbar for Firefox
+  // Hide scrollbar for Chrome, Safari and Opera
+  &::-webkit-scrollbar {
+    display: none;
+  }
+  .nav-tabs {
+    display: inline-flex;
+    flex-wrap: nowrap;
+    border: none;
+    .tab--content-type {
+      height: 28px;
+      white-space: nowrap;
+      color: $brand;
+      padding: 0 $spacer * .25;
+      border: none;
+      border-radius: 0%;
+      box-shadow: 0 4px 0 0 transparent;
+      margin-top: $spacer * .25;
+      margin-bottom: $spacer * .25;
+      &:not(:first-of-type) {
+        margin-left: $spacer * .5;
+      }
+      &:not(:last-of-type) {
+        margin-right: $spacer * .5;
+      }
+      &:hover {
+        box-shadow: 0 4px 0 0 $brand;
+        text-decoration: none;
+      }
+      &.active,
+      &.is-active,
+      &.active.is-active {
+        color: $brand;
+        font-weight: $font-weight-bold;
+        background-color: unset;
+        box-shadow: 0 4px 0 0 $brand;
+      }
+    }
+  }
+}

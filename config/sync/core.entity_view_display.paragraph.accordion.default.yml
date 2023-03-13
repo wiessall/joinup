@@ -6,30 +6,20 @@ dependencies:
     - field.field.paragraph.accordion.field_accordion_item
     - paragraphs.paragraphs_type.accordion
   module:
-    - paragraphs_jquery_ui_accordion
-    - template_suggestion
+    - entity_reference_revisions
 id: paragraph.accordion.default
 targetEntityType: paragraph
 bundle: accordion
 mode: default
 content:
   field_accordion_item:
-    type: paragraphs_jquery_ui_accordion_formatter
-    label: hidden
+    type: entity_reference_revisions_entity_view
+    label: above
     settings:
-      bundle: accordion
-      title: field_paragraphs_item_label
-      content: field_paragraphs_item_content
-      active: 0
-      autoscroll: false
-      autoscroll_offset: ''
-      autoscroll_offset_toolbar: false
       view_mode: default
-      simple_id: false
-    third_party_settings:
-      template_suggestion:
-        template_suggestion: ''
-    weight: 0
+      link: ''
+    third_party_settings: {  }
+    weight: 1
     region: content
 hidden:
   search_api_excerpt: true

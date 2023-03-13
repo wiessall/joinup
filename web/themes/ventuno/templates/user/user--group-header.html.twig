@@ -1,0 +1,76 @@
+{#
+/**
+ * @file
+ * Theme override to present all user data.
+ *
+ * This template is used when viewing a registered user's page,
+ * e.g., example.com/user/123. 123 being the user's ID.
+ *
+ * Available variables:
+ * - content: A list of content items. Use 'content' to print all content, or
+ *   print a subset such as 'content.field_example'. Fields attached to a user
+ *   such as 'user_picture' are available as 'content.user_picture'.
+ * - attributes: HTML attributes for the container element.
+ * - user: A Drupal User entity.
+ * - member_for: A custom variable, which contains a 'member for' timespan.
+ *
+ * @see template_preprocess_user()
+ */
+#}
+{{ attach_library('ventuno/user--group-header') }}
+<section class="user--group-header text-light py-5">
+  <div class="container">
+    <div class="row">
+      <div class="col-12 col-md-3">
+        <div class="d-flex justify-content-center">
+          <a href="{{ path('entity.user.canonical',{'user': user.id()}) }}">
+            <img class="rounded-pill" alt="{{ 'Profile picture of'|t }} {{ full_name }}" src="{{ field_user_photo_url }}" width="170px" height="170px"/>
+          </a>
+        </div>
+        {% if content.field_social_media|render %}
+          <div class="mt-3">
+           {{ content.field_social_media }}
+          </div>
+        {% endif %}
+        {% if member_for|render %}
+          <div class="mt-3 text-center text-sm">
+            <span class="fw-bold">{{ 'Member for'|t }}:</span>
+            <span>{{ member_for }}</span>
+          </div>
+        {% endif %}
+      </div>
+      <div class="col-12 col-md-9">
+        <h1 class="mt-3 mt-md-0 fw-normal text-light text-center text-md-start">
+          {{ full_name }}
+        </h1>
+        {% if content.field_user_business_title|render %}
+          <p class="mb-0 text-center text-md-start">
+            {{ content.field_user_business_title }}
+          </p>
+        {% endif %}
+        {% if content.field_user_nationality|render %}
+          <div class="mt-3 text-center text-md-start">
+            <span class="mb-0 fw-bold">{{ 'Country of origin'|t }}:</span>
+            <span class="mb-0">{{ content.field_user_nationality }}</span>
+          </div>
+        {% endif %}
+        <div class="row">
+          {% if content.field_user_organisation|render %}
+            <div class="col-12 col-md-5 col-lg-4 mt-3">
+              <p class="mb-0 fw-bold">{{ 'Organisation'|t }}:</p>
+              <p class="mb-0">
+                {{ content.field_user_organisation }}
+              </p>
+            </div>
+          {% endif %}
+          {% if content.field_user_professional_domain|render %}
+            <div class="col-12 col-md-7 col-lg-8 mt-3">
+              <p class="mb-0 fw-bold">{{ 'Domains'|t }}:</p>
+              {{ content.field_user_professional_domain }}
+            </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

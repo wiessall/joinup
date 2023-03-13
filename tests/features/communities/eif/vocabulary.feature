@@ -42,7 +42,7 @@ Feature:
 
     When I go to the "Some EIF solution" solution
     Then I should not see the text "EIF reference"
-    When I click "About" in the "Left sidebar" region
+    When I click "About" in the "Header bottom" region
     Then I should not see the text "EIF reference"
 
     When I go to "/solutions"

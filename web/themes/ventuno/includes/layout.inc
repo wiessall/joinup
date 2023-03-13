@@ -9,6 +9,7 @@ declare(strict_types = 1);
 
 use Drupal\interoperable_europe\InteroperableEuropeCollectionInterface;
 use Drupal\rdf_entity\RdfInterface;
+use Drupal\topic\Entity\TopicMetaEntityInterface;
 
 /**
  * Implements hook_preprocess_page().
@@ -49,6 +50,12 @@ function ventuno_preprocess_page(array &$variables): void {
   if ($route_name == 'view.search.page_1') {
     $variables['hide_searchbar'] = TRUE;
   }
+
+  $meta_entity = \Drupal::routeMatch()->getParameter('meta_entity');
+  if ($route_name == 'entity.meta_entity.canonical' && isset($meta_entity) && $meta_entity instanceof TopicMetaEntityInterface) {
+    $variables['meta_title'] = $meta_entity->label();
+    $variables['meta_description']['#markup'] = $meta_entity->get('description')->value;
+  }
 }
 
 /**
@@ -63,14 +70,17 @@ function ventuno_theme_suggestions_container_alter(array &$suggestions, array $v
       $suggestions[] = 'container__edit_actions';
     }
   }
+  // Add extra suggestion for grid elements.
+  $has_extra_suggestions = isset($variables['element']['#extra_suggestion']);
+  if ($has_extra_suggestions) {
+    $suggestions[] = $variables['element']['#extra_suggestion'];
+  }
 }
 
 /**
  * Implements hook_preprocess_HOOK() for html.html.twig.
  */
 function ventuno_preprocess_html(array &$variables): void {
-  // Expose the base path so we can use it to generate favicon URIs.
-  $variables['base_path'] = base_path();
   // Licence comparer specific styling.
   if (\Drupal::routeMatch()->getRouteName() === 'joinup_licence.comparer') {
     $variables['#attached']['library'][] = 'ventuno/licence-comparer';
@@ -89,12 +99,39 @@ function ventuno_preprocess_container__text_format_filter_help(array &$variables
 }
 
 /**
- * Implements hook_preprocess_page_title().
+ * Implements hook_theme_suggestions_HOOK_alter() for page.html.twig.
  */
-function ventuno_preprocess_page_title(array &$variables): void {
-  if (\Drupal::routeMatch()->getRouteName() === 'entity.rdf_entity.eif_perspective') {
-    /** @var \Drupal\solution\Entity\SolutionInterface $solution */
-    $solution = \Drupal::routeMatch()->getParameter('rdf_entity');
-    $variables['title'] = t('EIF Perspective attributes of @title', ['@title' => $solution->label()]);
+function ventuno_theme_suggestions_page_alter(array &$suggestions, array $variables): void {
+  if ($node = \Drupal::routeMatch()->getParameter('node')) {
+    $content_type = $node->bundle();
+    $suggestions[] = 'page__' . $content_type;
+  }
+}
+
+/**
+ * Implements hook_preprocess_container().
+ */
+function ventuno_preprocess_container(array &$variables): void {
+  if (isset($variables['attributes']['data-drupal-facet-id'])) {
+    $facet_id = $variables['attributes']['data-drupal-facet-id'];
+    $valid_facet_ids = [
+      'collection_type',
+      'solution_content_bundle',
+      'field_content_listing_type',
+      'user_content_bundle',
+    ];
+    if (in_array($facet_id, $valid_facet_ids)) {
+      $classes = ['tabs--content-type'];
+      $variables['attributes']['class'] = $classes;
+    }
+  }
+  if (isset($variables['attributes']['data-drupal-selector']) && $variables['attributes']['data-drupal-selector'] === 'edit-og-membership-bulk-form') {
+    $variables['attributes']['class'] = 'row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-xl-4 g-3 align-items-end';
+  }
+  if (isset($variables['attributes']['data-drupal-selector']) && $variables['attributes']['data-drupal-selector'] === 'edit-actions') {
+    // Target only the submit input of the collections members overview page.
+    if (isset($variables['element']['submit']['#id']) && $variables['element']['submit']['#id'] === 'edit-submit-og-members-overview') {
+      $variables['attributes']['class'] = 'd-flex flex-column d-md-block my-3';
+    }
   }
 }

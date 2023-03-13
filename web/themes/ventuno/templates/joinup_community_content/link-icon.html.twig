@@ -1,0 +1,29 @@
+{#
+/**
+ * @file
+ * Default theme implementation of link that are accompanied with an icon.
+ *
+ * Available variables:
+ * - attributes: An array of attributes to apply to the link.
+ * - icon: The name of the icon.
+ * - title: The link title.
+ * - url: The link URL.
+ *
+ * @ingroup themeable
+ */
+#}
+{%
+  set classes = [
+    'btn',
+    'btn-link',
+    'px-3',
+  ]
+%}
+{% spaceless %}
+<a href="{{ url }}"{{ attributes.addClass(classes) }}>
+  {{ title }}
+  <svg class="ms-1 bi icon--fluid">
+    <use xlink:href="{{ bcl_icon_path }}#arrow-right"></use>
+  </svg>
+</a>
+{% endspaceless %}

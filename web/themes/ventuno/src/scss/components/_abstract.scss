@@ -1,0 +1,18 @@
+.abstract {
+  position: relative;
+  .read-more {
+    position: absolute;
+    right: $spacer * 1.5;
+    bottom: $spacer; // Override button properties
+    color: $brand; // Override button properties
+    padding: 0; // Override button properties
+    background-color: transparent; // Override button properties
+    border: none; // Override button properties
+    box-shadow: none; // Override button properties
+    border-radius: 0; // Override button properties
+    &:hover {
+      box-shadow: none; // Override button properties
+      background-color: transparent; // Override button properties
+    }
+  }
+}

@@ -1,6 +1,4 @@
-// stylelint-disable indentation
 $utilities: () !default;
-// stylelint-disable-next-line scss/dollar-variable-default
 $utilities: map-merge(
   $utilities,
   (
@@ -19,6 +17,19 @@ $utilities: map-merge(
     "border-end": null,
     "border-start": null,
     "border-color": null,
+    "border-opacity": null,
+    "width": (
+      responsive: true,
+      property: width,
+      class: w,
+      values: (
+        25: 25%,
+        50: 50%,
+        75: 75%,
+        100: 100%,
+        auto: auto
+      )
+    ),
     "border-width": null,
     "viewport-width": null,
     "min-viewport-width": null,
@@ -62,5 +73,5 @@ $utilities: map-merge(
     "gradient": null,
     "user-select": null,
     "pointer-events": null,
-  ),
+  )
 );

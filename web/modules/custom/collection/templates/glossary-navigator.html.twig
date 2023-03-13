@@ -12,20 +12,12 @@
 #}
 
 {% if letters|length > 1 %}
-  <div class="glossary-navigator">
+  <nav class="glossary-navigator">
     {% for letter in letters %}
-    <span class="glossary-navigator-item">
-      {% if letter|upper == current|upper %}
-        <span class="current">{{ letter|upper }}</span>
-      {% else %}
-        <a href="{{ url }}/{{ letter|lower }}">{{ letter|upper }}</a>
-      {% endif %}
-    </span>
+      <a class="glossary-navigator-item{{ (letter|upper == current|upper) ? ' current' }}" href="{{ url }}/{{ letter|lower }}">{{ letter|upper }}</a>
     {% endfor %}
     {% if current != null %}
-      <span class="glossary-navigator-item glossary-navigator-item-all">
-        (<a href="{{ url }}">{{ 'all'|trans }}</a>)
-      </span>
+      <a class="glossary-navigator-item glossary-navigator-item-all" href="{{ url }}">{{ 'all'|trans }}</a>
     {% endif %}
-  </div>
+  </nav>
 {% endif %}

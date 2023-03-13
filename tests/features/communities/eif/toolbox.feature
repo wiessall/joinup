@@ -93,7 +93,7 @@ Feature:
       | Jordan 5 |
 
     # Test the principles.
-    When I click "Transparency" in the "Content" region
+    When I press "Transparency" in the "Content" region
     Then I should see the following headings:
       | Jordan 1 |
       | Jordan 2 |
@@ -106,7 +106,7 @@ Feature:
 
     # Test multiple options. Both "Transparency" and "Security and privacy" are
     # selected.
-    When I click "Security and privacy" in the "Content" region
+    When I press "Security and privacy" in the "Content" region
     Then I should see the following headings:
       | Jordan 1 |
     And I should see the text "1 matching solutions found"
@@ -118,8 +118,8 @@ Feature:
       | Jordan 6 |
 
     # Reset the options.
-    When I click "Transparency" in the "Content" region
-    When I click "Security and privacy" in the "Content" region
+    When I press "Transparency" in the "Content" region
+    When I press "Security and privacy" in the "Content" region
     Then I should see the following headings:
       | Jordan 1 |
       | Jordan 2 |
@@ -131,7 +131,7 @@ Feature:
       | Jordan 5 |
 
     # Test the interoperability layer.
-    When I click "Legal interoperability" in the "Content" region
+    When I press "Legal interoperability" in the "Content" region
     Then I should see the following headings:
       | Jordan 1 |
       | Jordan 2 |
@@ -142,7 +142,7 @@ Feature:
       | Jordan 6 |
 
     # Test selecting terms from more than one vocabularies.
-    When I click "Openness" in the "Content" region
+    When I press "Openness" in the "Content" region
     Then I should see the following headings:
       | Jordan 1 |
     But I should not see the following headings:
@@ -153,8 +153,8 @@ Feature:
       | Jordan 6 |
 
     # Reset the options.
-    When I click "Openness" in the "Content" region
-    When I click "Legal interoperability" in the "Content" region
+    When I press "Openness" in the "Content" region
+    When I press "Legal interoperability" in the "Content" region
     Then I should see the following headings:
       | Jordan 1 |
       | Jordan 2 |
@@ -165,7 +165,7 @@ Feature:
       | Jordan 5 |
 
     # Test the conceptual model.
-    When I click "Open data" in the "Content" region
+    When I press "Open data" in the "Content" region
     Then I should see the following headings:
       | Jordan 4 |
       | Jordan 6 |
@@ -176,7 +176,7 @@ Feature:
       | Jordan 5 |
 
     # Reset the options.
-    When I click "Open data" in the "Content" region
+    When I press "Open data" in the "Content" region
     Then I should see the following headings:
       | Jordan 1 |
       | Jordan 2 |
@@ -187,7 +187,7 @@ Feature:
       | Jordan 5 |
 
     # Test the solution category.
-    When I click "Assessment tools" in the "Content" region
+    When I press "Assessment tools" in the "Content" region
     Then I should see the following headings:
       | Jordan 1 |
       | Jordan 2 |
@@ -198,7 +198,7 @@ Feature:
       | Jordan 6 |
 
     # Reset the options.
-    When I click "Assessment tools" in the "Content" region
+    When I press "Assessment tools" in the "Content" region
     Then I should see the following headings:
       | Jordan 1 |
       | Jordan 2 |
