@@ -17,32 +17,20 @@
     }
   }
   &__headline {
-    margin: $spacer 0 $spacer * .5;
-    color: $gray-700;
     font-size: 1.25rem;
     font-weight: $font-weight-normal;
-    &--one-line {
-      display: inline-block;
-      max-height: 1.8rem;
-      overflow: hidden;
-    }
   }
   &__details {
     display: flex;
     flex-wrap: wrap;
+    margin-bottom: $spacer;
   }
   &__detail {
     display: flex;
     align-items: center;
     color: $gray-700;
-    padding: 0 $spacer * .5;
-    border-right: 1px solid $gray-300;
-    &:first-of-type {
-      padding-left: 0;
-    }
-    &:last-of-type {
-      padding-right: 0;
-      border-right: none;
+    &:not(:first-of-type) {
+      margin-left: $spacer * 1.5;
     }
   }
   .badge {

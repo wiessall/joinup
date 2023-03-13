@@ -99,18 +99,22 @@ content:
     weight: 12
     region: content
   field_event_date:
-    type: daterange_condensed
+    type: addtocall_daterange_condensed
     label: hidden
     settings:
       timezone_override: ''
+      date_format: d/m/Y
+      event_title: '[node:title]'
+      location: '[node:field_location]'
+      description: '[node:field_event_agenda]'
+      past_events: false
       separator: to
-      default_format: d/m/Y
       day_diff_format: d
       month_diff_format: d/m
       year_diff_format: d/m/Y
     third_party_settings:
       template_suggestion:
-        template_suggestion: ''
+        template_suggestion: bare
     weight: 10
     region: content
   field_event_logo:
@@ -152,7 +156,7 @@ content:
     region: content
   field_location:
     type: basic_string
-    label: above
+    label: hidden
     settings: {  }
     third_party_settings:
       template_suggestion:

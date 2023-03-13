@@ -52,6 +52,20 @@ field.formatter.settings.daterange_condensed:
       type: date_format
       label: 'Different years format'
 
+field.formatter.settings.addtocall_daterange_condensed:
+  type: field.formatter.settings.addtocal_view
+  label: 'Add to Call condensed date range formatter settings'
+  mapping:
+    day_diff_format:
+      type: date_format
+      label: 'Different days format'
+    month_diff_format:
+      type: date_format
+      label: 'Different months format'
+    year_diff_format:
+      type: date_format
+      label: 'Different years format'
+
 field.widget.settings.email_legacy_multicardinality:
   type: field.widget.settings.email_default
 
