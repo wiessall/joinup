@@ -110,7 +110,7 @@ function _ventuno_get_default_icon_render_array(string $entity_type_id, string $
       'custom_page' => 'file-earmark-richtext',
       'discussion' => 'chat-left-text',
       'document' => 'file-earmark-text',
-      'event' => 'calendar3',
+      'event' => 'calendar-event',
       'news' => 'newspaper',
       'video' => 'file-earmark-play',
     ],

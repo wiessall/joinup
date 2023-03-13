@@ -189,5 +189,29 @@ Feature: Add community content
       | content type | label      |
       | discussion   | Discussion |
       | document     | Document   |
-      | event        | Event      |
       | news         | News       |
+
+  Scenario: Event content type is not indicated on the byline
+    Given the following collection:
+      | title | The night batch |
+      | state | validated       |
+    And event content:
+      | title                    | collection      | state     | start date   | end date            | state     |
+      | Red glorious revolution  | The night batch | validated | now +1 years | now +1 years +1 day | validated |
+      | Blue glorious revolution | The night batch | validated | now -1 years | now -1 years +1 day | validated |
+    When I go to the content page of the type "event" with the title "Red glorious revolution"
+    Then I should not see the text Event in the "Page title" region
+    And I should see the button "Add to Calendar"
+    And I should see the link "Google"
+    And I should see the link "Yahoo!"
+    And I should see the link "Outlook.com"
+    And I should see the link "Office.com"
+    And I should see the link "iCal / MS Outlook"
+
+    When I go to the content page of the type "event" with the title "Blue glorious revolution"
+    And I should not see the button "Add to Calendar"
+    And I should not see the link "Google"
+    And I should not see the link "Yahoo!"
+    And I should not see the link "Outlook.com"
+    And I should not see the link "Office.com"
+    And I should not see the link "iCal / MS Outlook"
