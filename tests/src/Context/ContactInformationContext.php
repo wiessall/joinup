@@ -401,4 +401,28 @@ class ContactInformationContext extends RawDrupalContext {
     }
   }
 
+  /**
+   * Asserts no multiple confirmed requests of the same email exist.
+   *
+   * @todo Remove this in the next release cleanup.
+   *
+   * @Given no multiple confirmed confirmations exist for the same email
+   */
+  public function noMultipleConfirmedConfirmationsExistForTheSameEmail(): void {
+    $query = <<<MYSQL
+SELECT ec.email AS email
+FROM {email_confirmer_confirmation} ec WHERE
+    (ec.confirmed = 1)
+    AND (ec.status = 1)
+    AND (ec.realm = 'contact_information_email')
+GROUP BY email
+HAVING (COUNT(email) > 1)
+MYSQL;
+
+    $result = \Drupal::database()->query($query)->fetchAll();
+    if (!empty($result)) {
+      throw new \RuntimeException('Multiple confirmed confirmations exist for the same email.');
+    }
+  }
+
 }
