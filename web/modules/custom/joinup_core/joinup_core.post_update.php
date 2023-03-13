@@ -32,8 +32,8 @@ function joinup_core_post_update_0109100(array &$sandbox): string {
       ->condition('ec.status', 1)
       ->condition('ec.confirmed', 1)
       ->condition('ec.realm', ContactInformationEmailConfirmInterface::REALM)
-      ->groupBy('ec.email');
-    $query->having('COUNT(ec.email) > 1');
+      ->groupBy('ec.email')
+      ->having('COUNT(ec.email) > 1');
 
     $sandbox['emails'] = $query->execute()->fetchCol();
     $sandbox['current'] = 0;
@@ -42,7 +42,7 @@ function joinup_core_post_update_0109100(array &$sandbox): string {
 
   $limit = 50;
   $emails = array_slice($sandbox['emails'], $sandbox['current'], $limit);
-  $sandbox['current'] += $limit;
+  $sandbox['current'] += count($emails);
   $email_confirmer = \Drupal::getContainer()->get('email_confirmer');
 
   foreach ($emails as $email) {
@@ -52,8 +52,8 @@ function joinup_core_post_update_0109100(array &$sandbox): string {
       throw new \Exception('Attempt to run this on a single confirmation.');
     }
 
-    // Keep only the confirmations with IP set to '127.0.0.1'.
-    $email_confirmations_to_delete = array_filter($email_confirmations, function (EmailConfirmationInterface $email_confirmation) {
+    // Prepare for deletion only the confirmations with IP set to '127.0.0.1'.
+    $email_confirmations_to_delete = array_filter($email_confirmations, function (EmailConfirmationInterface $email_confirmation): bool {
       return $email_confirmation->getIp() === '127.0.0.1';
     });
 
@@ -73,5 +73,5 @@ function joinup_core_post_update_0109100(array &$sandbox): string {
   }
 
   $sandbox['#finished'] = empty($sandbox['emails']) ? 1 : ($sandbox['current'] / $sandbox['total']);
-  return (string) t('Cleaned up @count email confirmations.', ['@count' => $sandbox['current']]);
+  return "Cleaned up {$sandbox['current']} email confirmations.";
 }
