@@ -50,17 +50,15 @@
         {% endif %}
         {% if content.field_user_nationality|render %}
           <div class="mt-3 text-center text-md-start">
-            <span class="mb-0 fw-bold">{{ 'Country of origin'|t }}:</span>
-            <span class="mb-0">{{ content.field_user_nationality }}</span>
+            <p class="mb-0 fw-bold">{{ 'Country of origin'|t }}:</p>
+            {{ content.field_user_nationality }}
           </div>
         {% endif %}
         <div class="row">
           {% if content.field_user_organisation|render %}
             <div class="col-12 col-md-5 col-lg-4 mt-3">
               <p class="mb-0 fw-bold">{{ 'Organisation'|t }}:</p>
-              <p class="mb-0">
-                {{ content.field_user_organisation }}
-              </p>
+              {{ content.field_user_organisation }}
             </div>
           {% endif %}
           {% if content.field_user_professional_domain|render %}
