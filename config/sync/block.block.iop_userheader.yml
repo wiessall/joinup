@@ -11,7 +11,7 @@ _core:
 id: iop_userheader
 theme: iop
 region: featured
-weight: -20
+weight: -16
 provider: null
 plugin: user_header_block
 settings:

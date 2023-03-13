@@ -1,0 +1,18 @@
+uuid: 0843bbb1-a810-4f9e-a5f7-b212a4556ce7
+langcode: en
+status: true
+dependencies:
+  module:
+    - joinup_core
+  theme:
+    - ventuno
+id: glossary
+label: Glossary
+theme: ventuno
+weight: 0
+conditions:
+  request_route:
+    id: request_route
+    negate: false
+    routes:
+      - entity.rdf_entity.glossary

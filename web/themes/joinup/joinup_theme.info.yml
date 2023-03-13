@@ -37,3 +37,7 @@ regions:
   content: Content  # the content region is required
   content_bottom: 'Content bottom'
   footer: Footer
+
+joinup:
+  menu_local_tasks:
+    horizontal_tabs_block: horizontal_tabs

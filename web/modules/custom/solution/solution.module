@@ -20,7 +20,6 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Url;
 use Drupal\meta_entity\Entity\MetaEntity;
-use Drupal\meta_entity\Entity\MetaEntityInterface;
 use Drupal\og\Entity\OgRole;
 use Drupal\og\Og;
 use Drupal\og\OgRoleInterface;
@@ -359,6 +358,7 @@ function solution_rdf_entity_view(array &$build, RdfInterface $solution, EntityV
       ];
       $link = $solution->toLink($text, 'about-page', [
         'attributes' => [
+          'data-drupal-group-view-mode' => $view_mode,
           'class' => [
             'about-page',
             'read-more',
@@ -366,6 +366,7 @@ function solution_rdf_entity_view(array &$build, RdfInterface $solution, EntityV
             'btn',
             'btn-secondary',
           ],
+          'aria-label' => t('Read more about @name.', ['@name' => $solution->getName()]),
         ],
       ]);
       $build['read_more'] = $link->toRenderable();
@@ -396,15 +397,6 @@ function solution_rdf_entity_view(array &$build, RdfInterface $solution, EntityV
       // applicable cache context.
       '#cache' => ['contexts' => ['og_role']],
     ];
-  }
-
-  // The group header featured stats visibility is controlled by the group
-  // settings. Add the relevant cache tags.
-  if ($solution->get('related_solution')->entity instanceof MetaEntityInterface) {
-    $build['#cache']['tags'] = Cache::mergeTags($build['#cache']['tags'] ?? [], $solution->get('related_solution')->entity->getCacheTags());
-  }
-  else {
-    $build['#cache']['tags'] = Cache::mergeTags($build['#cache']['tags'] ?? [], ['meta_entity_list:solution_settings']);
   }
 }
 
@@ -715,28 +707,6 @@ function solution_search_api_query_search_api_field_field_is_content_alter(Query
 }
 
 /**
- * Implements hook_preprocess_HOOK().
- */
-function solution_preprocess_rdf_entity(&$variables): void {
-  $rdf_entity = $variables['rdf_entity'];
-  if ($rdf_entity instanceof SolutionInterface) {
-    if ($rdf_entity->related_solution->entity instanceof MetaEntityInterface && $variables['view_mode'] === 'group_header') {
-      $variables['meta_banner_disabled'] = (bool) $rdf_entity->related_solution->entity->get('metadata_banner_disabled')->value;
-    }
-  }
-
-  // Apply the visual cue only on the tile view mode.
-  if ($variables['view_mode'] !== 'view_mode_tile') {
-    return;
-  }
-
-  // If the solution is shared somewhere, attach the related library.
-  if ($rdf_entity->hasField('field_is_shared_in') && !$rdf_entity->get('field_is_shared_in')->isEmpty()) {
-    $variables['#attached']['library'][] = 'joinup_theme/shared_entity';
-  }
-}
-
-/**
  * Sync the solution settings with the corresponding entity.
  *
  * Stores the values of the related solutions of a solution to a meta entity in
@@ -746,7 +716,7 @@ function solution_preprocess_rdf_entity(&$variables): void {
  * store weights in multivalue fields. We work around this by storing them in a
  * meta entity (which is not subject to this problem since it uses SQL storage).
  * Once RDF entities can store deltas / weights reliably we will not need this
- * workaround any more.
+ * workaround anymore.
  *
  * @param \Drupal\solution\Entity\SolutionInterface $entity
  *   The solution entity.

@@ -40,9 +40,11 @@
           <p class="card-text">
             {{ text }}
           </p>
-          <p>
-            {{ metadata }}
-          </p>
+          {% if metadata is not empty %}
+            <p>
+              {{ metadata }}
+            </p>
+          {% endif %}
         </div>
       </div>
     </div>

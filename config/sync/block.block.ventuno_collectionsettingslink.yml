@@ -10,7 +10,7 @@ dependencies:
 id: ventuno_collectionsettingslink
 theme: ventuno
 region: content
-weight: -21
+weight: -20
 provider: null
 plugin: collection_settings_link
 settings:
@@ -24,4 +24,4 @@ visibility:
     negate: false
     context_mapping: {  }
     routes:
-      - collection.glossary_page
+      - entity.rdf_entity.glossary

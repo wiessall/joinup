@@ -69,7 +69,8 @@ Feature: Tests the group landing page customization.
       | Custom Page 3             |
     When I select "Custom Page 3" from "Landing page"
     And I press "Save"
-    Then I should see the heading "<group> group"
+    Then I should see the heading "Custom Page 3"
+    Then I see the text "<group> group" in the "Header" region
     And I should see "The custom page 3 content"
     But I should not see "The <group> arbitrary description"
     And I should not see "The custom page 2 content"

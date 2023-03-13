@@ -1,0 +1,40 @@
+.page-title {
+  margin-top: $spacer * 1.5; // 24px
+  .permalink {
+    display: none;
+  }
+  &:hover {
+    .permalink {
+      display: none;
+    }
+    &:hover {
+      .permalink {
+        display: inline;
+        position: absolute;
+        top: -0.05em;
+        right: -1em;
+      }
+    }
+  }
+  &__headline {
+    font-size: 1.25rem;
+    font-weight: $font-weight-normal;
+  }
+  &__details {
+    display: flex;
+    flex-wrap: wrap;
+    margin-bottom: $spacer;
+  }
+  &__detail {
+    display: flex;
+    align-items: center;
+    color: $gray-700;
+    &:not(:first-of-type) {
+      margin-left: $spacer * 1.5;
+    }
+  }
+  .badge {
+    position: relative;
+    top: -.5em; // Vertically align badge to heading
+  }
+}
