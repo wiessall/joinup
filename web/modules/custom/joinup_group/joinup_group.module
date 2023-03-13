@@ -32,6 +32,7 @@ use Drupal\joinup_group\Form\RdfDeleteForm;
 use Drupal\joinup_group\Form\UserCancelForm;
 use Drupal\joinup_group\JoinupGroupHelper;
 use Drupal\joinup_workflow\EntityWorkflowStateInterface;
+use Drupal\meta_entity\Entity\MetaEntity;
 use Drupal\meta_entity\Entity\MetaEntityInterface;
 use Drupal\node\NodeInterface;
 use Drupal\og\OgAccess;
@@ -965,16 +966,28 @@ function joinup_group_rdf_entity_view_alter(array &$build, EntityInterface $enti
  * Implements hook_entity_view().
  */
 function joinup_group_entity_view(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, string $view_mode): void {
-  if (!$entity instanceof PinnableGroupContentInterface || $view_mode !== 'view_mode_tile') {
-    return;
+  if ($entity instanceof PinnableGroupContentInterface && $view_mode === 'view_mode_tile') {
+    $group = \Drupal::service('joinup_group.group_manager')
+      ->getGroupFromContext();
+    if ($entity->isPinned($group)) {
+      $build['#attributes']['class'][] = 'is-pinned';
+      $build['#attributes']['data-joinup-pinned-in'] = implode(',', $entity->getPinnedGroupIds());
+      $build['#attached']['library'][] = 'joinup_group/pinned_entities';
+    }
   }
-
-  $group = \Drupal::service('joinup_group.group_manager')
-    ->getGroupFromContext();
-  if ($entity->isPinned($group)) {
-    $build['#attributes']['class'][] = 'is-pinned';
-    $build['#attributes']['data-joinup-pinned-in'] = implode(',', $entity->getPinnedGroupIds());
-    $build['#attached']['library'][] = 'joinup_group/pinned_entities';
+  elseif ($entity instanceof GroupInterface && $view_mode === 'group_header') {
+    // The group header featured stats visibility is controlled by the group
+    // settings. Add the relevant cache tags.
+    $bundle = "{$entity->bundle()}_settings";
+    $meta_entity = MetaEntity::loadOrCreate($bundle, $entity);
+    $cache_metadata = CacheableMetadata::createFromRenderArray($build);
+    if (!$meta_entity->isNew()) {
+      $cache_metadata->addCacheableDependency($meta_entity);
+    }
+    else {
+      $cache_metadata->addCacheTags(["meta_entity_list:{$entity->bundle()}_settings"]);
+    }
+    $cache_metadata->applyTo($build);
   }
 }
 
@@ -1065,5 +1078,19 @@ function joinup_group_mail_alter(array &$message): void {
     $message += array_combine(array_map(function (string $key): string {
       return ltrim($key, '@');
     }, array_keys($arguments)), $arguments);
+  }
+}
+
+/**
+ * Implements hook_preprocess_HOOK().
+ */
+function joinup_group_preprocess_rdf_entity(array &$variables): void {
+  if ($variables['view_mode'] === 'group_header') {
+    $group = $variables['rdf_entity'];
+    if ($group instanceof GroupInterface) {
+      $bundle = "{$group->bundle()}_settings";
+      $meta_entity = MetaEntity::loadOrCreate($bundle, $group);
+      $variables['meta_banner_disabled'] = (bool) $meta_entity->get('metadata_banner_disabled')->value;
+    }
   }
 }

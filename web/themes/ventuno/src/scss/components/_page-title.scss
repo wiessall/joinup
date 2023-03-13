@@ -1,9 +1,9 @@
 .page-title {
   margin-top: $spacer * 1.5; // 24px
-  position: relative;
-  &__title {
-    display: inline-block;
-    position: relative;
+  .permalink {
+    display: none;
+  }
+  &:hover {
     .permalink {
       display: none;
     }

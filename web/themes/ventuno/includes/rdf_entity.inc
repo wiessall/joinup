@@ -52,8 +52,10 @@ function ventuno_preprocess_rdf_entity__solution__group_header(array &$variables
     $variables['content']['releases_overview']['#attributes'] = [
       'class' => [
         'btn',
-        'btn-outline-secondary',
-        'ms-sm-3',
+        'btn-secondary',
+        'mt-3',
+        'mt-lg-0',
+        'ms-lg-3',
       ],
     ];
   }

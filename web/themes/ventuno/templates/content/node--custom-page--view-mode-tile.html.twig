@@ -71,10 +71,11 @@
  */
 #}
 {% set view_mode_featured = view_mode is same as 'view_mode_featured' %}
+{% set rendered_logo = content.field_custom_page_logo|render %}
 {{ pattern('tile', {
   attributes: attributes,
   featured: view_mode_featured,
-  image: content.field_custom_page_logo,
+  image: rendered_logo ? content.field_custom_page_logo : '',
   url: url,
   title_prefix: title_prefix,
   title: label,
