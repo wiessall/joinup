@@ -156,7 +156,7 @@ content:
     region: content
   field_location:
     type: basic_string
-    label: hidden
+    label: above
     settings: {  }
     third_party_settings:
       template_suggestion:

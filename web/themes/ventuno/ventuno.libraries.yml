@@ -90,6 +90,8 @@ tables:
   css:
     theme:
       assets/css/tables.min.css: { minified: true }
+  js:
+    assets/js/content-tables.min.js: { minified: true, attributes: { defer: true } }
 
 # Custom components
 abstract:
@@ -254,8 +256,6 @@ paragraph:
   css:
     theme:
       assets/css/paragraph.min.css: { minified: true }
-  js:
-    assets/js/content-tables.min.js: { minified: true, attributes: { defer: true } }
   dependencies:
     - ventuno/tables
 
