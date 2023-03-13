@@ -86,7 +86,7 @@
 {{ pattern('tile', {
   attributes: attributes,
   featured: view_mode_featured,
-  image: rendered_logo ? rendered_logo,
+  image: rendered_logo ? content.field_document_logo : '',
   url: url,
   title_prefix: title_prefix,
   title: label,

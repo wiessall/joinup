@@ -8,8 +8,8 @@ dependencies:
     - iop
 id: iop_site_alerts
 theme: iop
-region: content_top
-weight: -21
+region: messages
+weight: -19
 provider: null
 plugin: site_alert_block
 settings:

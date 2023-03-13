@@ -352,21 +352,6 @@ module.exports = {
       },
     },
     {
-      entry: path.resolve(
-        outputFolder,
-        "src/scss/members-overview-exposed-form.scss"
-      ),
-      dest: path.resolve(
-        outputFolder,
-        "assets/css/members-overview-exposed-form.min.css"
-      ),
-      options: {
-        includePaths,
-        minify: true,
-        sourceMap: "file",
-      },
-    },
-    {
       entry: path.resolve(outputFolder, "src/scss/menu--og--navigation.scss"),
       dest: path.resolve(
         outputFolder,
@@ -494,6 +479,15 @@ module.exports = {
       },
     },
     {
+      entry: path.resolve(outputFolder, "src/scss/paragraph.scss"),
+      dest: path.resolve(outputFolder, "assets/css/paragraph.min.css"),
+      options: {
+        includePaths,
+        minify: true,
+        sourceMap: "file",
+      },
+    },
+    {
       entry: path.resolve(outputFolder, "src/scss/releases.scss"),
       dest: path.resolve(outputFolder, "assets/css/releases.min.css"),
       options: {
@@ -568,6 +562,24 @@ module.exports = {
     {
       entry: path.resolve(outputFolder, "src/scss/tabledrag.scss"),
       dest: path.resolve(outputFolder, "assets/css/tabledrag.min.css"),
+      options: {
+        includePaths,
+        minify: true,
+        sourceMap: "file",
+      },
+    },
+    {
+      entry: path.resolve(outputFolder, "src/scss/etrans.scss"),
+      dest: path.resolve(outputFolder, "assets/css/etrans.min.css"),
+      options: {
+        includePaths,
+        minify: true,
+        sourceMap: "file",
+      },
+    },
+    {
+      entry: path.resolve(outputFolder, "src/scss/navigation-bottom.scss"),
+      dest: path.resolve(outputFolder, "assets/css/navigation-bottom.min.css"),
       options: {
         includePaths,
         minify: true,
@@ -688,6 +700,7 @@ module.exports = {
           "card-list.svg",
           "chat.svg",
           "chat-left-text.svg",
+          "chat-square.svg",
           "check-circle-fill.svg",
           "chevron-bar-left.svg",
           "chevron-bar-right.svg",
@@ -696,6 +709,7 @@ module.exports = {
           "chevron-right.svg",
           "chevron-up.svg",
           "clipboard-check.svg",
+          "clipboard2-check.svg",
           "download.svg",
           "envelope-fill.svg",
           "exclamation-circle-fill.svg",
@@ -732,6 +746,7 @@ module.exports = {
           "person-circle.svg",
           "person-workspace.svg",
           "pin-angle-fill.svg",
+          "play-btn.svg",
           "plus.svg",
           "question-lg.svg",
           "reply.svg",

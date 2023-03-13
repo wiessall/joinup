@@ -56,9 +56,11 @@
   {% endblock %}
 
   {% if page.header_bottom %}
-    {% block page_header_bottom %}
-      {{ page.header_bottom }}
-    {% endblock %}
+    <div class="region-header-bottom">
+      {% block page_header_bottom %}
+        {{ page.header_bottom }}
+      {% endblock %}
+    </div>
   {% endif %}
 
   {% if page.featured %}
@@ -91,8 +93,8 @@
     {% if page.sidebar %}
       <div class="row">
     {% endif %}
-    <main role="main">
-      <div id="main-content" tabindex="-1"{% if page.sidebar %} class="col-12 col-lg-9 order-1"{% endif %}></div>
+    <main role="main"{% if page.sidebar %} class="col-12 col-lg-9 order-1"{% endif %}>
+      <div id="main-content" tabindex="-1"></div>
       {% block page_content %}
         <div class="layout-content">
           {{ page.content }}

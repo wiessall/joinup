@@ -1,0 +1,11 @@
+.paragraph--type--simple-paragraph {
+  overflow: hidden;
+  table {
+    table-layout: fixed;
+  }
+  figure {
+    figcaption {
+      font-size: $font-size-sm;
+    }
+  }
+}
