@@ -196,7 +196,7 @@ function contact_information_rdf_entity_access(EntityInterface $entity, $operati
  */
 function contact_information_entity_field_access(string $operation, FieldDefinitionInterface $field_definition, AccountInterface $account, ?FieldItemListInterface $items = NULL): AccessResultInterface {
   if ($operation === 'view' && $field_definition->getName() === 'field_ci_email') {
-    $confirmation = \Drupal::service('email_confirmer')->getConfirmation($items->value);
+    $confirmation = \Drupal::getContainer()->get('email_confirmer')->getConfirmation($items->value, 'confirmed', ContactInformationEmailConfirmInterface::REALM);
     $access = $confirmation && $confirmation->get('confirmed')->value == EmailConfirmationInterface::CONFIRMED ? AccessResult::allowed() : AccessResult::forbidden();
     /** @var \Drupal\contact_information\Entity\ContactInformationInterface $contact_info */
     $contact_info = $items->getEntity();
@@ -439,7 +439,7 @@ function contact_information_rdf_entity_view(array &$build, RdfInterface $contac
   if ($contact_information instanceof ContactInformationInterface && $view_mode === 'about') {
     if (\Drupal::currentUser()->isAuthenticated()) {
       // If an anonymous user clicks on the contact information 'Contact us'
-      // link, they are redirected to login or register with the EU Login
+      // link, they are redirected to log in or register with the EU Login
       // service. After successfully completing the authentication, they are
       // redirected back to the group about-page where the link is placed. We
       // attach a Javascript snippet that automatically opens the 'Contact us'
@@ -453,17 +453,21 @@ function contact_information_rdf_entity_view(array &$build, RdfInterface $contac
 
     $resend_access = \Drupal::getContainer()->get('joinup_group.group_manager')->access($contact_information->getRelatedGroup(), 'resend email confirmation request');
     $cacheable_metadata = CacheableMetadata::createFromRenderArray($build);
-    if ($resend_access->isAllowed()) {
-      /** @var \Drupal\email_confirmer\EmailConfirmationInterface $confirmation */
-      $confirmation = \Drupal::getContainer()->get('email_confirmer')->getConfirmation($contact_information->get('field_ci_email')->value, FALSE, ContactInformationEmailConfirmInterface::REALM);
+    $email_confirmer = \Drupal::getContainer()->get('email_confirmer');
+    $confirmation = $email_confirmer->getConfirmation($contact_information->get('field_ci_email')->value, 'confirmed', ContactInformationEmailConfirmInterface::REALM);
+    if ($confirmation) {
+      $cacheable_metadata->addCacheableDependency($confirmation);
+    }
+    elseif ($resend_access->isAllowed()) {
+      $confirmation = $email_confirmer->getConfirmation($contact_information->get('field_ci_email')->value, 'pending', ContactInformationEmailConfirmInterface::REALM);
       // If no confirmation is created yet, create one before adding the link
       // to the form. Normally, we would have a controller to create the
       // confirmation instead of sending the existing one but the confirmation
       // is a standard procedure that all contact information entities should
       // follow, so it is ok to have it created here by default since the user
       // is already has access.
-      if (!$confirmation || $confirmation->isExpired() || $confirmation->isCancelled()) {
-        $confirmation = \Drupal::getContainer()->get('email_confirmer')->createConfirmation($contact_information->get('field_ci_email')->value);
+      if (!$confirmation) {
+        $confirmation = $email_confirmer->createConfirmation($contact_information->get('field_ci_email')->value);
         $confirmation
           ->setRealm(ContactInformationEmailConfirmInterface::REALM)
           ->save();
@@ -489,8 +493,8 @@ function contact_information_rdf_entity_view(array &$build, RdfInterface $contac
     }
 
     // Vary the field's cache by whether the user is logged in or not.
-    $cacheable_metadata->setCacheContexts(['user.roles:authenticated'])
-      ->addCacheContexts(['og_role'])
+    $cacheable_metadata
+      ->addCacheContexts(['og_role', 'user.roles:authenticated'])
       ->addCacheableDependency($contact_information)
       ->applyTo($build);
   }

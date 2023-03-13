@@ -9,16 +9,19 @@ Feature: As a visitor or logged-in user, when I want to post content, the form
     And the form is protected by Honeypot
 
     Examples:
-      | path           |
-      | /contact       |
+      | path     |
+      | /contact |
 
   Scenario: Authenticated users.
     Given users:
       | Username |
       | Günther  |
     And the following contact:
-      | name            | ACME Inc.            |
-      | email           | acme.inc@example.com |
+      | name  | ACME Inc.            |
+      | email | acme.inc@example.com |
+    And the following email confirmation request:
+      | email                | status    |
+      | acme.inc@example.com | confirmed |
     And the following collection:
       | title               | Family photos |
       | state               | validated     |
@@ -81,13 +84,13 @@ Feature: As a visitor or logged-in user, when I want to post content, the form
       | Username   |
       | Ransomware |
     And the following contact:
-      | name            | Anti Inc.            |
-      | email           | anti.inc@example.com |
+      | name  | Anti Inc.            |
+      | email | anti.inc@example.com |
     And the following collection:
-      | title               | Ware cat    |
-      | state               | draft       |
-      | contact information | Anti Inc.   |
-      | author              | Ransomware  |
+      | title               | Ware cat   |
+      | state               | draft      |
+      | contact information | Anti Inc.  |
+      | author              | Ransomware |
     And the following solution:
       | title      | Ware cat   |
       | collection | Ware cat   |
