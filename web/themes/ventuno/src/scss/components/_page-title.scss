@@ -19,19 +19,19 @@
   &__headline {
     font-size: 1.25rem;
     font-weight: $font-weight-normal;
+    &-icon {
+      flex-shrink: 0;
+    }
   }
   &__details {
     display: flex;
     flex-wrap: wrap;
-    margin-bottom: $spacer;
+    column-gap: $spacer * 1.5;
   }
   &__detail {
     display: flex;
     align-items: center;
     color: $gray-700;
-    &:not(:first-of-type) {
-      margin-left: $spacer * 1.5;
-    }
   }
   .badge {
     position: relative;
