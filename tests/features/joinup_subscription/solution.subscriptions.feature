@@ -170,7 +170,7 @@ Feature: Subscribing to a solution
       | Some solution to subscribe | Document, Event, News, Announcements |
 
     When I go to the "Some solution to subscribe" solution
-    And I click "Unsubscribe from this solution"
+    And I click "Unsubscribe"
     Then a modal should open
 
     Then I should see the following lines of text:
@@ -188,7 +188,7 @@ Feature: Subscribing to a solution
     And I click "<label>"
 
     Examples:
-      | role        | label                          |
-      |             | Unsubscribe from this solution |
-      | author      | Leave this solution            |
-      | facilitator | Leave this solution            |
+      | role        | label               |
+      |             | Unsubscribe         |
+      | author      | Leave this solution |
+      | facilitator | Leave this solution |
