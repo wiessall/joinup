@@ -161,6 +161,13 @@ drupal:
       Main settings: |
         if (!$hash_salt = getenv('DRUPAL_HASH_SALT')) {
           $hash_salt = \Drupal\Component\Utility\Crypt::randomBytesBase64(55);
+          $env_file = "{$app_root}/../.env";
+          $env = file_get_contents($env_file);
+          $env = preg_replace('/DRUPAL_HASH_SALT=.*/', "DRUPAL_HASH_SALT={$hash_salt}", $env);
+          file_put_contents($env_file, $env);
+
+          # Also include this to the `.env.pipeline` which is used by the
+          # pipelines.
           $env_file = "{$app_root}/../.env.pipeline";
           if (!file_exists($env_file)) {
             file_put_contents($env_file, "DRUPAL_HASH_SALT={$hash_salt}");
