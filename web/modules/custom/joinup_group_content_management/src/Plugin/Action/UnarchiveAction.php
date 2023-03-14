@@ -4,6 +4,7 @@ declare(strict_types = 1);
 
 namespace Drupal\joinup_group_content_management\Plugin\Action;
 
+use Drupal\Component\Render\MarkupInterface;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\node\NodeInterface;
@@ -33,7 +34,8 @@ class UnarchiveAction extends ViewsBulkOperationsActionBase {
   /**
    * {@inheritdoc}
    */
-  public function execute(?NodeInterface $node = NULL): void {
+  public function execute(?NodeInterface $node = NULL): MarkupInterface {
+    return $this->t('Unarchived');
   }
 
 }
