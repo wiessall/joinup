@@ -36,7 +36,7 @@ class ArchiveAction extends ViewsBulkOperationsActionBase implements ContainerFa
    *   The plugin_id for the plugin instance.
    * @param mixed $plugin_definition
    *   The plugin implementation definition.
-   * @param \Drupal\Core\Render\Renderer $renderer
+   * @param \Drupal\Core\Render\RendererInterface $renderer
    *   The renderer service.
    */
   public function __construct(array $configuration, $plugin_id, $plugin_definition, protected RendererInterface $renderer) {
@@ -126,9 +126,8 @@ class ArchiveAction extends ViewsBulkOperationsActionBase implements ContainerFa
   /**
    * {@inheritdoc}
    */
-  public function execute(NodeInterface $node = NULL): ?MarkupInterface {
+  public function execute(?NodeInterface $node = NULL): ?MarkupInterface {
     return $this->t('Archived');
   }
-
 
 }
