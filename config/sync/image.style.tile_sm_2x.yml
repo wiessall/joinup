@@ -5,11 +5,11 @@ dependencies: {  }
 name: tile_sm_2x
 label: 'Tile SM 2x'
 effects:
-  bf2e055f-134d-4f3b-ba8f-26a48914f304:
-    uuid: bf2e055f-134d-4f3b-ba8f-26a48914f304
-    id: image_scale_and_crop
-    weight: 1
+  075aadf7-1fa5-4215-aed7-0f9674632f24:
+    uuid: 075aadf7-1fa5-4215-aed7-0f9674632f24
+    id: image_scale
+    weight: 2
     data:
       width: 500
       height: 281
-      anchor: center-center
+      upscale: true

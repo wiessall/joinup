@@ -5,11 +5,11 @@ dependencies: {  }
 name: tile_xs_1x
 label: 'Tile XS 1x'
 effects:
-  e982a4ad-b8a1-4cd4-b14a-ebae5cbdf4b7:
-    uuid: e982a4ad-b8a1-4cd4-b14a-ebae5cbdf4b7
-    id: image_scale_and_crop
-    weight: 1
+  fb5cea25-2e9b-496c-968e-6a06b89ad3d2:
+    uuid: fb5cea25-2e9b-496c-968e-6a06b89ad3d2
+    id: image_scale
+    weight: 2
     data:
       width: 552
       height: 310
-      anchor: center-center
+      upscale: true

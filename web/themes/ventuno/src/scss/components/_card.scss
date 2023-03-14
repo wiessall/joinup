@@ -10,6 +10,15 @@
         overflow: hidden;
         aspect-ratio: 16 / 9;
       }
+      figure picture {
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      figure picture img {
+        max-height: 100%;
+      }
       &:first-child {
         border-radius: 0;
       }

@@ -5,11 +5,11 @@ dependencies: {  }
 name: tile_lg_2x
 label: 'Tile LG 2x'
 effects:
-  714fbb34-901c-43ec-98db-42637f4ada48:
-    uuid: 714fbb34-901c-43ec-98db-42637f4ada48
-    id: image_scale_and_crop
-    weight: 1
+  108189f6-0aa0-485b-b265-3def6579b05b:
+    uuid: 108189f6-0aa0-485b-b265-3def6579b05b
+    id: image_scale
+    weight: 2
     data:
       width: 604
       height: 338
-      anchor: center-center
+      upscale: true
