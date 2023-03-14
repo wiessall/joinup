@@ -30,7 +30,6 @@ class UnarchiveAction extends ViewsBulkOperationsActionBase {
     return $return_as_object ? AccessResult::allowed() : TRUE;
   }
 
-
   /**
    * {@inheritdoc}
    */
