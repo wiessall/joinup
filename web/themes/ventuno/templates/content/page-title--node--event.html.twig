@@ -28,22 +28,34 @@
       {% endif %}
     </h1>
 
-    <div class="page-title__details">
+    <div class="page-title__details mb-4">
+    <span class="page-title__detail">{{ additional_content.author }}</span>
       <span class="page-title__detail">{{ 'Published on'|t }}: {{ additional_content.published }}</span>
-      <span class="page-title__detail">{{ 'Last update'|t }}: {{ additional_content.updated }}</span>
+      {% if additional_content.published != additional_content.updated %}
+        <span class="page-title__detail">{{ 'Last update'|t }}: {{ additional_content.updated }}</span>
+      {% endif %}
+      <span class="page-title__detail">
+        <span class="me-2">
+          {{ bundle_label }}
+        </span>
+        {{ pattern('icon', {
+            name: 'calendar-event',
+            size: 's'
+          }) }}
+      </span>
     </div>
 
-    <div class="bg-light p-3 rounded d-inline-flex">
+    <div class="bg-light p-3 rounded d-inline-flex flex-column flex-md-row mb-4">
       <div class="d-flex flex-column">
         <div class="page-title__headline d-inline-flex align-items-center">
-          <svg class="bi icon--m text-brand me-2">
+          <svg class="page-title__headline-icon bi icon--m text-brand me-2">
             <use xlink:href="{{ bcl_icon_path }}#calendar-event"></use>
           </svg>
           <span class="text-primary">{{ additional_content.field_event_date }}</span>
         </div>
         {% if additional_content.field_event_location|render|striptags %}
           <div class="page-title__headline d-flex align-items-center mt-2">
-            <svg class="bi icon--m text-brand me-2">
+            <svg class="page-title__headline-icon bi icon--m text-brand me-2">
               <use xlink:href="{{ bcl_icon_path }}#geo-alt"></use>
             </svg>
             <span class="text-primary">{{ additional_content.field_event_location }}</span>

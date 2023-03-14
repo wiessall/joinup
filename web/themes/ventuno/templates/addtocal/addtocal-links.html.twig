@@ -21,9 +21,10 @@
   'bg-transparent',
   'text-brand',
   'dropdown-toggle',
+  'p-0',
 ] %}
 {% set button_attributes = button_attributes.addClass(button_classes).setAttribute('id', 'dropdown-addtocal').setAttribute('aria-expanded', 'false').setAttribute('data-bs-toggle', 'dropdown').setAttribute('type', 'button') %}
-<div{{ attributes.addClass(['dropdown', 'ms-5', 'mb-0']) }}>
+<div{{ attributes.addClass(['dropdown', 'mt-3', 'mt-md-0', 'ms-md-5', 'mb-0', 'd-flex', 'justify-content-end', 'align-items-start']).removeClass('addtocal-container') }}>
   <button{{ button_attributes }}>
     {{ pattern('icon', {
         name: 'calendar-event',
@@ -35,13 +36,11 @@
         size: 's'
     }) }}
   </button>
-  {# <div{{ menu_attributes }}> #}
-    <ul class="dropdown-menu" aria-labelledby="dropdown-addtocal">
-      {% for type, item in items %}
-        <li data-addtocal-type="{{ type }}">
-          <a class="dropdown-item" href="{{ item.url }}" target="_blank" rel="noopener" aria-label="{{ item['aria-label'] }}">{{ item.title }}</a>
-        </li>
-      {% endfor %}
-    </ul>
-  {# </div> #}
+  <ul class="dropdown-menu" aria-labelledby="dropdown-addtocal">
+    {% for type, item in items %}
+      <li data-addtocal-type="{{ type }}">
+        <a class="dropdown-item" href="{{ item.url }}" target="_blank" rel="noopener" aria-label="{{ item['aria-label'] }}">{{ item.title }}</a>
+      </li>
+    {% endfor %}
+  </ul>
 </div>
