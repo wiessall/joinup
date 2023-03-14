@@ -79,7 +79,7 @@ trait EntityWorkflowStateTrait {
     // by a transition. If no transition exists then the update is not allowed.
     if ($from_state !== $to_state) {
       $allowed_transitions = array_filter($this->getWorkflow()->getAllowedTransitions($from_state, $this), function (WorkflowTransition $transition) use ($to_state) {
-        return $transition->getToState() === $to_state;
+        return $transition->getToState()->getId() === $to_state;
       });
       return !empty($allowed_transitions);
     }
