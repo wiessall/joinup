@@ -4,11 +4,11 @@ declare(strict_types = 1);
 
 namespace Drupal\contact_information\Controller;
 
-use Drupal\contact_information\Form\ContactInformationContactForm;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormBuilderInterface;
 use Drupal\Core\Mail\MailManagerInterface;
+use Drupal\contact_information\Form\ContactInformationContactForm;
 use Drupal\email_contact\Controller\ContactController;
 use Drupal\honeypot\HoneypotServiceInterface;
 use Psr\Log\LoggerInterface;
@@ -21,9 +21,10 @@ use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 class ContactInformationContactController extends ContactController {
 
   /**
-   * {@inheritDoc}
+   * {@inheritdoc}
    */
-  public function __construct(LoggerInterface $logger,
+  public function __construct(
+    LoggerInterface $logger,
     EntityTypeManagerInterface $entityTypeManager,
     FormBuilderInterface $formBuilder,
     EventDispatcherInterface $eventDispatcher,
@@ -49,15 +50,15 @@ class ContactInformationContactController extends ContactController {
     );
   }
 
-
   /**
-   * {@inheritDoc}
+   * {@inheritdoc}
    */
   protected function getForm(EntityInterface $entity, string $field_name, array $field_settings): array {
     return $this->formBuilder->getForm(new ContactInformationContactForm(
       $this->honeypotService,
       $this->mailManager,
       $this->moduleHandler(),
+      $this->entityTypeManager,
       $entity->getEntityTypeId(),
       $entity->id(),
       $field_name,
