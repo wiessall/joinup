@@ -70,9 +70,20 @@
  *   in different view modes.
  */
 #}
-{{ content.body }}
-{{ content.group_references }}
-{{ content.field_attachment }}
+<div class="pt-3 pb-5 border-bottom">
+  {{ content.body }}
+</div>
+{% if content.group_references|render|striptags %}
+  <div class="py-5 border-bottom">
+    {{ content.group_references }}
+  </div>
+{% endif %}
+{% if content.field_attachment|render|striptags %}
+  <div class="pt-5 pb-3 border-bottom mb-5">
+    <h3>{{ 'Attachments'|t }}</h3>
+    {{ content.field_attachment }}
+  </div>
+{% endif %}
 <div class="d-flex justify-content-end">
   {{ content.report }}
   {{ content.share_link }}
