@@ -252,7 +252,7 @@ trait TraversingTrait {
       '.card-title',
       '.card-title > h1 a',
       'h2 a',
-      'h3.tile-two__title',
+      'h1.tile-two__title',
       // @todo Legacy selectors to be removed in ISAICP-7138.
       // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7138
       '.listing__title',
