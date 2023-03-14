@@ -5,11 +5,11 @@ dependencies: {  }
 name: tile_xl_2x
 label: 'Tile XL 2x'
 effects:
-  fc1e1de5-bc7b-47e8-a185-2a7d7aad6d90:
-    uuid: fc1e1de5-bc7b-47e8-a185-2a7d7aad6d90
-    id: image_scale_and_crop
-    weight: 1
+  1e184f26-7f2e-4ba7-820b-23a93f053133:
+    uuid: 1e184f26-7f2e-4ba7-820b-23a93f053133
+    id: image_scale
+    weight: 2
     data:
       width: 534
       height: 302
-      anchor: center-center
+      upscale: true

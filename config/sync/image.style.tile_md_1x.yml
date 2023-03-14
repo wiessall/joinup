@@ -5,11 +5,11 @@ dependencies: {  }
 name: tile_md_1x
 label: 'Tile MD 1x'
 effects:
-  9a061530-72de-4073-93a8-2c27abbe610f:
-    uuid: 9a061530-72de-4073-93a8-2c27abbe610f
-    id: image_scale_and_crop
-    weight: 1
+  8ab00fd1-76e0-46e3-b91d-01a0f23fd726:
+    uuid: 8ab00fd1-76e0-46e3-b91d-01a0f23fd726
+    id: image_scale
+    weight: 2
     data:
       width: 222
       height: 125
-      anchor: center-center
+      upscale: true
