@@ -8,6 +8,7 @@ use Drupal\Core\Url;
 use Drupal\ckeditor5\Plugin\CKEditor5PluginDefault;
 use Drupal\collection\Entity\CollectionInterface;
 use Drupal\editor\EditorInterface;
+use Drupal\joinup_community_content\Entity\CommunityContentInterface;
 use Drupal\joinup_licence\Entity\LicenceInterface;
 use Drupal\solution\Entity\SolutionInterface;
 
@@ -23,7 +24,7 @@ class Contactus extends CKEditor5PluginDefault {
     $group = \Drupal::routeMatch()->getParameter('rdf_entity');
     if (!$group) {
       $node = \Drupal::routeMatch()->getParameter('node');
-      if ($node->hasGroup()) {
+      if ($node instanceof CommunityContentInterface) {
         $group = $node->getGroup();
       }
     }
