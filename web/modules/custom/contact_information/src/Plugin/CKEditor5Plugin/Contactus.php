@@ -30,8 +30,8 @@ class Contactus extends CKEditor5PluginDefault {
 
     $login = $url = NULL;
     $disable = FALSE;
-    if ($group && !$group instanceof CollectionInterface && !$group instanceof SolutionInterface) {
-      $group = !$group instanceof LicenceInterface && $group->hasGroup() ? $group->getCollection() : NULL;
+    if ($group && (!$group instanceof CollectionInterface || !$group instanceof SolutionInterface)) {
+      $group = !$group instanceof LicenceInterface && $group->hasGroup() ? $group->getGroup() : NULL;
     }
 
     if ($group) {
