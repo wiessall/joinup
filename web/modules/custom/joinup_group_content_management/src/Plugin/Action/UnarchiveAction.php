@@ -21,7 +21,6 @@ use Drupal\views_bulk_operations\Action\ViewsBulkOperationsActionBase;
  */
 class UnarchiveAction extends ViewsBulkOperationsActionBase {
 
-
   /**
    * {@inheritdoc}
    */
