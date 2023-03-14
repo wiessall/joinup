@@ -15,14 +15,14 @@
 {{ attach_library('ventuno/page-title') }}
 {{ title_prefix }}
 {% if title %}
-  <div class="page-title page__title-wrapper">
+  <div class="page-title page__title-wrapper my-4">
     <h1 class="page-title__title h2">
       {{ title }}
       {% if permalink %}
         <a class="permalink" href="{{ permalink }}" title="{{ 'Permalink'|t }}">
           {{ pattern('icon', {
             name: 'link-45deg',
-            size: 'fluid'
+            size: 'm'
           }) }}
         </a>
       {% endif %}

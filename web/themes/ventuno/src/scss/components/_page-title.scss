@@ -5,16 +5,13 @@
   }
   &:hover {
     .permalink {
-      display: none;
+      display: inline;
+      position: absolute;
+      margin-left: $spacer * .5;
     }
-    &:hover {
-      .permalink {
-        display: inline;
-        position: absolute;
-        top: -0.05em;
-        right: -1em;
-      }
-    }
+  }
+  &__title {
+    display: inline;
   }
   &__headline {
     font-size: 1.25rem;
@@ -35,6 +32,6 @@
   }
   .badge {
     position: relative;
-    top: -.5em; // Vertically align badge to heading
+    top: -.25em; // Vertically align badge to heading
   }
 }
