@@ -2,15 +2,20 @@
  * @file defines ContactUsCommand, which is executed when the contactUs
  * toolbar button is pressed.
  */
-// eslint-disable-next-line import/prefer-default-export
+// eslint-disable-next-line import/no-unresolved
 import { Command } from "ckeditor5/src/core";
 
 export default class ContactUsCommand extends Command {
   execute() {
+    let selectedText;
     const { editor } = this;
     const { selection } = editor.model.document;
-    const documentSelection = document.getSelection();
-    const selectedText = documentSelection.toString();
+    const range = selection.getFirstRange();
+
+    // eslint-disable-next-line no-restricted-syntax
+    for (const item of range.getItems()) {
+      selectedText = item.data;
+    }
 
     editor.model.change((writer) => {
       const contactUsWidget = writer.createElement("contactUs", {
