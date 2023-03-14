@@ -71,9 +71,14 @@ class GroupMembershipPermissionsInformationForm extends FormBase {
     $form['actions'] = [
       '#type' => 'actions',
       'close' => [
-        '#type' => 'link',
-        '#title' => $this->t('Got it'),
-        '#url' => $rdf_entity->toUrl('member-overview'),
+        '#type' => 'button',
+        '#value' => $this->t('Got it'),
+        // This button will be used only to close the modal, so it doesn't have
+        // any submit callback.
+        '#submit' => [],
+        '#attributes' => [
+          'class' => ['dialog-cancel'],
+        ],
       ],
     ];
 
