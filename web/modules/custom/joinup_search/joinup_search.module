@@ -458,7 +458,7 @@ function joinup_search_facets_block_facets_alter(array &$facets): void {
   if (\Drupal::routeMatch()->getRouteName() === 'view.search.page_1' && isset($facets[0]['content'][0]['#items']) && is_array($facets[0]['content'][0]['#items'])) {
     $facets[0]['content'][0]['#items'] = array_values(array_filter(
       $facets[0]['content'][0]['#items'],
-      fn(array $item): bool => !UrlHelper::isValid($item['#title']['#value'], TRUE),
+      fn(array $item): bool => !is_array($item['#title']) || !isset($item['#title']['#value']) || !UrlHelper::isValid($item['#title']['#value'], TRUE),
     ));
   }
 }
