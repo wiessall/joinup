@@ -46,6 +46,7 @@ class ContactInformationContactForm extends ContactForm {
         'option1' => $this->t('Option 1'),
         'option2' => $this->t('Option 2'),
         'option3' => $this->t('Option 3'),
+        'option4' => $this->t('Option 4'),
       ],
       '#required' => TRUE,
     ];
