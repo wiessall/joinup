@@ -1,6 +1,8 @@
 @import "core";
 @import "@openeuropa/bcl-bootstrap/scss/tables";
 
-// table {
-//   table-layout: fixed;
-// }
+.table {
+  > :not(caption) > * > * {
+    border-bottom-width: 0; // Override default tables to avoid border
+  }
+}
