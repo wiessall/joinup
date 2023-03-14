@@ -2,10 +2,23 @@
   overflow: hidden;
   table {
     table-layout: fixed;
+    > tbody > tr:nth-of-type(#{$table-striped-order}) > * {
+      --#{$prefix}table-accent-bg: var(--#{$prefix}table-striped-bg);
+      color: var(--#{$prefix}table-striped-color);
+    }
   }
   figure {
     figcaption {
       font-size: $font-size-sm;
+    }
+  }
+  blockquote {
+    border-left: $spacer * 1.25 solid $brand;
+    padding: $spacer * 1.5 0 $spacer * 1.5 $spacer * 1.5;
+    margin-right: 0;
+    margin-left: 0;
+    @include media-breakpoint-up(md) {
+      margin-left: 100px;
     }
   }
 }
