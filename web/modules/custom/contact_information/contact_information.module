@@ -394,9 +394,48 @@ function contact_information_rdf_entity_view(array &$build, RdfInterface $contac
       $build += ['#attributes' => []];
       $build['#attributes']['data-joinup-contact-info-id'] = $contact_information->id();
     }
+
+    $resend_access = \Drupal::getContainer()->get('joinup_group.group_manager')->access($contact_information->getRelatedGroup(), 'resend email confirmation request');
+    $cacheable_metadata = CacheableMetadata::createFromRenderArray($build);
+    if ($resend_access->isAllowed()) {
+      /** @var \Drupal\email_confirmer\EmailConfirmationInterface $confirmation */
+      $confirmation = \Drupal::getContainer()->get('email_confirmer')->getConfirmation($contact_information->get('field_ci_email')->value, FALSE, ContactInformationEmailConfirmInterface::REALM);
+      // If no confirmation is created yet, create one before adding the link
+      // to the form. Normally, we would have a controller to create the
+      // confirmation instead of sending the existing one but the confirmation
+      // is a standard procedure that all contact information entities should
+      // follow, so it is ok to have it created here by default since the user
+      // is already has access.
+      if (!$confirmation || $confirmation->isExpired() || $confirmation->isCancelled()) {
+        $confirmation = \Drupal::getContainer()->get('email_confirmer')->createConfirmation($contact_information->get('field_ci_email')->value);
+        $confirmation
+          ->setRealm(ContactInformationEmailConfirmInterface::REALM)
+          ->save();
+      }
+
+      if (!$confirmation->isConfirmed()) {
+        $confirmation_url = Url::fromRoute('entity.email_confirmer_confirmation.resend', [
+          'confirmation' => $confirmation->id(),
+        ], [
+          'query' => \Drupal::destination()->getAsArray(),
+        ])->toString();
+
+        $build['email_confirm'] = [
+          '#markup' => t('Please <a href=":resend_url">confirm</a> your contact information to enable users to contact you.', [
+            ':resend_url' => $confirmation_url,
+          ]),
+          // Pretend that it's a normal field to ensure the same spacing.
+          '#prefix' => '<div class="fieldset__field">',
+          '#suffix' => '</div>',
+        ];
+      }
+      $cacheable_metadata->addCacheableDependency($confirmation);
+    }
+
     // Vary the field's cache by whether the user is logged in or not.
-    (new CacheableMetadata())
-      ->setCacheContexts(['user.roles:authenticated'])
+    $cacheable_metadata->setCacheContexts(['user.roles:authenticated'])
+      ->addCacheContexts(['og_role'])
+      ->addCacheableDependency($contact_information)
       ->applyTo($build);
   }
 }
