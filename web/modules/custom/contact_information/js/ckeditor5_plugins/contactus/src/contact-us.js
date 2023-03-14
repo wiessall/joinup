@@ -8,7 +8,7 @@
  */
 // cSpell:ignore contact-us-editing contact-us-ui
 
-// eslint-disable-next-line import/prefer-default-export
+// eslint-disable-next-line import/no-unresolved
 import { Plugin } from "ckeditor5/src/core";
 import ContactUsUi from "./contact-us-ui";
 import ContactUsEditing from "./contact-us-editing";

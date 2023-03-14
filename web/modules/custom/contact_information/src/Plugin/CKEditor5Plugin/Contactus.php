@@ -24,7 +24,7 @@ class Contactus extends CKEditor5PluginDefault {
     $group = \Drupal::routeMatch()->getParameter('rdf_entity');
     if (!$group) {
       $node = \Drupal::routeMatch()->getParameter('node');
-      if ($node instanceof CommunityContentInterface) {
+      if ($node->hasGroup()) {
         $group = $node->getGroup();
       }
     }
