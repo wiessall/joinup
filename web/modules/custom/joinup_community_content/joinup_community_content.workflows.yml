@@ -72,6 +72,10 @@ node:pre_moderated:
       label: Archive
       from: [draft, validated, needs_update, proposed, deletion_request]
       to: archived
+    unarchive:
+      label: Unarchive
+      from: [archived]
+      to: __new__
 # The workflow of the community content for a post moderated parent.
 node:post_moderated:
   id: post_moderated
@@ -125,3 +129,7 @@ node:post_moderated:
       label: Archive
       from: [draft, validated, needs_update, proposed]
       to: archived
+    unarchive:
+      label: Unarchive
+      from: [archived]
+      to: __new__
