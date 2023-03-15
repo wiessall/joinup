@@ -104,7 +104,6 @@ class UnarchiveAction extends StateActionBase {
       throw new ActionException('Entity must be ' . self::ARCHIVE_STATE);
     }
 
-
     $previous = $this->getPreviousRevision($node);
     if (!$previous) {
       throw new ActionException('Previous revision has not been found');
