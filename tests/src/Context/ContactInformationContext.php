@@ -365,4 +365,64 @@ class ContactInformationContext extends RawDrupalContext {
     $storage->delete($storage->loadMultiple($ids));
   }
 
+  /**
+   * Creates confirmation requests for the given emails.
+   *
+   * @Given the following email confirmation request(s):
+   */
+  public function theFollowingEmailConfirmationRequest(TableNode $table) {
+    $email_confirmer = \Drupal::getContainer()->get('email_confirmer');
+
+    foreach ($table->getHash() as $row) {
+      $confirmation = $email_confirmer->createConfirmation($row['email']);
+      $confirmation->setRealm(ContactInformationEmailConfirmInterface::REALM);
+      $confirmation->setCreatedTime(\Drupal::time()->getRequestTime() - 3600);
+
+      switch ($row['status']) {
+        case 'confirmed':
+          $confirmation->confirm($confirmation->getHash());
+          break;
+
+        case 'cancelled':
+          $confirmation->cancel();
+          break;
+
+        case 'expired':
+          $expiration_interval = \Drupal::configFactory()->get('email_confirmer.settings')->get('hash_expiration');
+          // Subtract an additional hour to avoid unnecessary edge cases.
+          $expired_date = $confirmation->getCreatedTime() - $expiration_interval - 3600;
+          $confirmation->setCreatedTime($expired_date);
+          break;
+
+        default:
+          break;
+      }
+      $confirmation->save();
+    }
+  }
+
+  /**
+   * Asserts no multiple confirmed requests of the same email exist.
+   *
+   * @todo Remove this in the next release cleanup.
+   *
+   * @Given no multiple confirmed confirmations exist for the same email
+   */
+  public function noMultipleConfirmedConfirmationsExistForTheSameEmail(): void {
+    $query = <<<MYSQL
+SELECT ec.email AS email
+FROM {email_confirmer_confirmation} ec WHERE
+    (ec.confirmed = 1)
+    AND (ec.status = 1)
+    AND (ec.realm = 'contact_information_email')
+GROUP BY email
+HAVING (COUNT(email) > 1)
+MYSQL;
+
+    $result = \Drupal::database()->query($query)->fetchAll();
+    if (!empty($result)) {
+      throw new \RuntimeException('Multiple confirmed confirmations exist for the same email.');
+    }
+  }
+
 }
