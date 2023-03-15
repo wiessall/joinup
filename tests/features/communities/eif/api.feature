@@ -33,6 +33,7 @@ Feature:
     Then I should see the heading "EIF Perspective attributes of EIF solution"
     And I should see the heading "General information"
 
+    And I should see the text "Description:"
     And I should see the text "This should be in the description field."
     But I should not see the text "Some description not to be shown in the EIF page"
 
@@ -60,6 +61,7 @@ Feature:
     Then I should see the heading "EIF Perspective attributes of EIF only type"
     And I should see the heading "General information"
 
+    And I should see the text "Description:"
     And I should see the text "This should be in the description field."
     But I should not see the text "Some description not to be shown in the EIF page"
 
