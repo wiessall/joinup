@@ -10,6 +10,7 @@ use Drupal\collection\Entity\CollectionInterface;
 use Drupal\editor\EditorInterface;
 use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_group\Exception\MissingGroupException;
+use Drupal\joinup_licence\Entity\LicenceInterface;
 use Drupal\solution\Entity\SolutionInterface;
 
 /**
@@ -35,11 +36,13 @@ class Contactus extends CKEditor5PluginDefault {
       }
     }
     else {
-      try {
-        $group = !$entity instanceof CollectionInterface && !$entity instanceof SolutionInterface ? $entity->getGroup() : $entity;
-        $contact_info = $this->getContactInformation(!empty($group->getValidatedContactInformation()), $group);
-      }
-      catch (MissingGroupException $e) {
+      if (!$entity instanceof LicenceInterface) {
+        try {
+          $group = !$entity instanceof CollectionInterface && !$entity instanceof SolutionInterface ? $entity->getGroup() : $entity;
+          $contact_info = $this->getContactInformation(!empty($group->getValidatedContactInformation()), $group);
+        }
+        catch (MissingGroupException $e) {
+        }
       }
     }
 
