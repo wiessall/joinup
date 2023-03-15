@@ -354,6 +354,19 @@ Feature: About this solution
     Then I should see the success message "Your message has been sent."
     And I should see the heading "Some contact test"
 
+    # Testing add contact us in existing content.
+    Given I am logged in as a moderator
+    When I go to the about page of "Six exclusion advantages"
+    Then I open the plus button menu
+    And I click "Add custom page"
+    And I fill in "Title" with "Some custom contact test"
+    And I press the button "Contact us" in the "Body" wysiwyg editor
+    And I press "Save"
+    And I should see the heading "Some custom contact test"
+
+    When I go to the edit form of the "Some custom contact test" "custom page"
+    Then I should see the button "Contact us"
+
     # These contact information have been created via UI.
     But I delete the "Invisible Cat" contact information
     And I delete the "Elise Anna Lucile" contact information
