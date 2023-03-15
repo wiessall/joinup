@@ -618,7 +618,7 @@ display:
       row:
         type: fields
         options:
-          default_field_elements: true
+          default_field_elements: false
           inline:
             rendered_entity: rendered_entity
           separator: ''
