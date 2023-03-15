@@ -50,12 +50,15 @@ class Contactus extends CKEditor5PluginDefault {
   }
 
   /**
+   * Get contact information data attributes.
+   *
    * @param bool $disable
    *   Check if exists a valid contact email.
    * @param \Drupal\joinup_group\Entity\GroupInterface|null $group
    *   The group for which the contact us page is being determined.
    *
    * @return array
+   *   Array containing the contact information data.
    */
   private function getContactInformation(bool $disable, ?GroupInterface $group): array {
     return [
