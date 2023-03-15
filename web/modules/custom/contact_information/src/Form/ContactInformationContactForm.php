@@ -135,8 +135,6 @@ class ContactInformationContactForm extends ContactForm {
    */
   protected function sendMessage(array &$form, FormStateInterface $form_state): void {
     $emails = unserialize($form_state->getValue('emails'), ['allowed_classes' => FALSE]);
-    // E-mail address of the sender: as the form field is a text field,
-    // all instances of \r and \n have been automatically stripped from it.
     $reply_to = $form_state->getValue('mail');
     $settings = $form_state->get('settings');
     $params['subject'] = $form_state->getValue('subject');
@@ -161,7 +159,8 @@ class ContactInformationContactForm extends ContactForm {
       ];
     }
     if ($settings['include_values']) {
-      $message .= 'Name: ' . $params['name'] . '<br/>' . 'Email: ' . $reply_to . '<br/>' . '<br />Organization: ' . $params['organization'] . '<br />Type: ' . $params['type'];
+      $type_value = $params['type'];
+      $message .= 'Name: ' . $params['name'] . '<br/>' . 'Email: ' . $reply_to . '<br/>' . '<br />Organization: ' . $params['organization'] . '<br />Type: ' . $form['type']['#options'][$type_value];
     }
     $message .= '<br/>Message: ' . $form_state->getValue('message');
     $params['message'] = Markup::create($message);
