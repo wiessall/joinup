@@ -46,7 +46,8 @@ function ventuno_preprocess_page(array &$variables): void {
   $variables['#cache']['tags'][] = 'joinup_collection:exists';
 
   $variables['hide_searchbar'] = FALSE;
-  $route_name = \Drupal::routeMatch()->getRouteName();
+  $route_match = \Drupal::routeMatch();
+  $route_name = $route_match->getRouteName();
   if ($route_name == 'view.search.page_1') {
     $variables['hide_searchbar'] = TRUE;
   }
@@ -55,6 +56,16 @@ function ventuno_preprocess_page(array &$variables): void {
   if ($route_name == 'entity.meta_entity.canonical' && isset($meta_entity) && $meta_entity instanceof TopicMetaEntityInterface) {
     $variables['meta_title'] = $meta_entity->label();
     $variables['meta_description']['#markup'] = $meta_entity->get('description')->value;
+  }
+
+  // Remove title on collection/solution canonical pages.
+  if ($route_name === 'entity.rdf_entity.canonical') {
+    if ($entity = $route_match->getParameter('rdf_entity')) {
+      $rdf_type = $entity->getType();
+    }
+    if (isset($rdf_type) && in_array($rdf_type, ['collection', 'solution'])) {
+      unset($variables['page']['content']['ventuno_pagetitle']);
+    }
   }
 }
 
