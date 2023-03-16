@@ -71,7 +71,6 @@ function ventuno_preprocess_views_view_table(array &$variables): void {
  * Implements hook_preprocess_views_view__media_library().
  */
 function ventuno_preprocess_views_view__media_library(array &$variables): void {
-
   foreach ($variables['header'] as $key => $link) {
     $variables['header'][$key]['#options']['attributes']['class'][] = 'nav-link';
     if (in_array('is-active', $variables['header'][$key]['#options']['attributes']['class'])) {
