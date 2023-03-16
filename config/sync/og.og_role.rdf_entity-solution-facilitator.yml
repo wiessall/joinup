@@ -35,6 +35,7 @@ permissions:
   - 'delete contact_information rdf entity'
   - 'edit any custom_page content'
   - 'edit any discussion content'
+  - 'edit any document content'
   - 'edit any event content'
   - 'edit any glossary content'
   - 'edit any news content'
