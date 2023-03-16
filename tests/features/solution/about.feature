@@ -118,7 +118,7 @@ Feature: About this solution
     # A related solution which is not yet approved should not be visible.
     And I should not see the text "Protein"
 
-  @terms @javascript @email
+  @terms @javascript @email @uploadFiles:logo.png
   Scenario: About page contact form
     Given owner:
       | name      | type               |
@@ -210,6 +210,7 @@ Feature: About this solution
     When I fill in "Your e-mail address" with "example@test.test"
     And I fill in "Organization" with "My organization"
     And I select "Option 1" from "Type"
+    And I attach the file "logo.png" to "Attachment"
     When I press "Send e-mail" in the "Modal buttons" region
     Then the modal should be closed
     And I should see the success message "Your message has been sent."
