@@ -212,6 +212,18 @@ class StateMachineButtons extends OptionsSelectWidget implements ContainerFactor
       unset($form['actions'][$key]['#dropbutton']);
     }
 
+    // Override the unarchive button to simply revert the entity to the previous
+    // state.
+    if (isset($form['actions']['state_machine___new__'])) {
+      $form['actions']['state_machine___new__'] = [
+        '#type' => 'submit',
+        '#value' => t('Unarchive'),
+        '#weight' => -10,
+        // Add a submit-handler to unarchive the entity.
+        '#submit' => [[static::class, 'unarchiveEntity']],
+      ];
+    }
+
     return $element;
   }
 
@@ -290,6 +302,44 @@ class StateMachineButtons extends OptionsSelectWidget implements ContainerFactor
       default:
         return $this->t('Update');
     }
+  }
+
+  /**
+   * Form API submit callback: unarchives the entity.
+   *
+   * @see \Drupal\content_moderation\Plugin\Field\FieldWidget\ModerationStateWidget::unarchiveEntity()
+   */
+  public static function unarchiveEntity(array $form, FormStateInterface $form_state): void {
+    // Revert to the previous revision of the node.
+    $entity = $form_state->getFormObject()->getEntity();
+    $entity_type = $entity->getEntityType();
+    $entity_storage = \Drupal::entityTypeManager()->getStorage($entity_type->id());
+
+    // Load the previous revision IDs.
+    $revision_ids = $entity_storage->getQuery()->allRevisions()
+      ->condition($entity_type->getKey('id'), $entity->id())
+      ->sort($entity->getEntityType()->getKey('revision'), 'DESC')
+      ->range(1, 1)
+      ->execute();
+    $revision_ids = array_keys($revision_ids);
+
+    // Load the previous revision.
+    $previous_revision = $entity_storage->loadRevision(reset($revision_ids));
+    $previous_revision->setNewRevision(TRUE);
+    $previous_revision->isDefaultRevision(TRUE);
+    $previous_revision->setRevisionLogMessage(t('Unarchived by @user', ['@user' => \Drupal::currentUser()->getAccountName()]));
+    $previous_revision->setRevisionCreationTime(\Drupal::time()->getRequestTime());
+    $previous_revision->setRevisionUserId(\Drupal::currentUser()->id());
+    $previous_revision->save();
+
+    // Redirect to the canonical URL of the previous revision.
+    $form_state->setRedirectUrl($previous_revision->toUrl('canonical'));
+
+    // Set a message to inform the user that the entity has been unarchived.
+    \Drupal::messenger()->addMessage(t('@bundle "%label" has been unarchived.', [
+      '@bundle' => ucfirst($entity->{$entity_type->getKey('bundle')}->entity->getSingularLabel()),
+      '%label' => $entity->label(),
+    ]));
   }
 
 }
