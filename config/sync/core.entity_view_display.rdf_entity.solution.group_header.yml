@@ -45,7 +45,6 @@ dependencies:
     - field.field.rdf_entity.solution.field_spatial_coverage
     - field.field.rdf_entity.solution.field_status
     - field.field.rdf_entity.solution.field_topic
-    - image.style.banner
     - image.style.logo
     - rdf_entity.rdfentity.solution
   module:
@@ -61,22 +60,12 @@ content:
   collections:
     settings: {  }
     third_party_settings: {  }
-    weight: 6
+    weight: 5
     region: content
   download_total:
     settings: {  }
     third_party_settings: {  }
-    weight: 3
-    region: content
-  field_is_banner:
-    type: image_url_formatter
-    label: hidden
-    settings:
-      image_style: banner
-      image_loading:
-        attribute: eager
-    third_party_settings: {  }
-    weight: 0
+    weight: 2
     region: content
   field_is_logo:
     type: image
@@ -89,7 +78,7 @@ content:
     third_party_settings:
       template_suggestion:
         template_suggestion: ''
-    weight: 1
+    weight: 0
     region: content
   field_topic:
     type: entity_reference_custom_link
@@ -102,7 +91,7 @@ content:
     third_party_settings:
       template_suggestion:
         template_suggestion: solution_header_topic
-    weight: 4
+    weight: 3
     region: content
   label:
     type: string
@@ -112,17 +101,17 @@ content:
     third_party_settings:
       template_suggestion:
         template_suggestion: ''
-    weight: 2
+    weight: 1
     region: content
   releases_overview:
     settings: {  }
     third_party_settings: {  }
-    weight: 5
+    weight: 4
     region: content
   solution_subscribe:
     settings: {  }
     third_party_settings: {  }
-    weight: 7
+    weight: 6
     region: content
 hidden:
   changed: true
@@ -131,6 +120,7 @@ hidden:
   featured: true
   field_is_actor: true
   field_is_affiliations_requests: true
+  field_is_banner: true
   field_is_business_process: true
   field_is_contact_information: true
   field_is_content: true
