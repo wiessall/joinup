@@ -6,11 +6,7 @@ namespace Drupal\contact_information\Plugin\CKEditorPlugin;
 
 use Drupal\Core\Url;
 use Drupal\ckeditor\CKEditorPluginBase;
-use Drupal\collection\Entity\CollectionInterface;
 use Drupal\editor\Entity\Editor;
-use Drupal\joinup_community_content\Entity\CommunityContentInterface;
-use Drupal\joinup_licence\Entity\LicenceInterface;
-use Drupal\solution\Entity\SolutionInterface;
 
 /**
  * Defines the "Contact us" plugin.
@@ -67,29 +63,20 @@ class ContactInformation extends CKEditorPluginBase {
    * {@inheritdoc}
    */
   public function getConfig(Editor $editor): array {
-    $group = \Drupal::routeMatch()->getParameter('rdf_entity');
+    $group = \Drupal::getContainer()->get('joinup_group.group_manager')->getGroupFromContext();
     if (!$group) {
-      $node = \Drupal::routeMatch()->getParameter('node');
-      if ($node instanceof CommunityContentInterface) {
-        $group = $node->getGroup();
-      }
+      return [
+        'contactInformation_disable' => FALSE,
+      ];
     }
 
-    $login = $url = NULL;
-    $disable = FALSE;
-    if ($group && !$group instanceof CollectionInterface && !$group instanceof SolutionInterface) {
-      $group = !$group instanceof LicenceInterface && $group->hasGroup() ? $group->getCollection() : NULL;
-    }
-
-    if ($group) {
-      $url = Url::fromRoute('entity.rdf_entity.contact', ['rdf_entity' => $group->id()])->setOption('query', [
-        'destination' => '',
-      ])->toString();
-      $login = Url::fromRoute('cas.login')->setOption('query', [
-        'destination' => Url::fromRoute('entity.rdf_entity.contact', ['rdf_entity' => $group->id()])->toString(),
-      ])->setAbsolute()->toString();
-      $disable = !empty($group->getValidatedContactInformation());
-    }
+    $url = Url::fromRoute('entity.rdf_entity.contact', ['rdf_entity' => $group->id()])->setOption('query', [
+      'destination' => '',
+    ])->toString();
+    $login = Url::fromRoute('cas.login')->setOption('query', [
+      'destination' => Url::fromRoute('entity.rdf_entity.contact', ['rdf_entity' => $group->id()])->toString(),
+    ])->setAbsolute()->toString();
+    $disable = !empty($group->getValidatedContactInformation());
 
     return [
       'contactInformation_disable' => $disable,
