@@ -11,8 +11,7 @@ upgrade_commands:
     - ./vendor/bin/drush joinup:node-access-rebuild
     - rm disable-config-readonly
     - ./vendor/bin/drush site-alert:disable
-    # Temporarily disabled.
-    # - ./scripts/check_status_report.php
+    - ./scripts/check_status_report.php
   append:
     acceptance:
       - touch disable-config-readonly
