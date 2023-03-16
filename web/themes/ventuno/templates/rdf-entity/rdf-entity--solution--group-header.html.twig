@@ -13,9 +13,15 @@
     <div class="w-100 d-flex flex-column flex-lg-row flex-wrap">
       <div class="group-banner__title text-center text-lg-start my-2 my-lg-0">
         {{ title_prefix }}
+        {% if is_canonical %}
+          <h1>
+        {% endif %}
         <a class="h1 fw-bold mb-0" href="{{ path('entity.rdf_entity.canonical',{'rdf_entity': rdf_entity.id()}) }}">
           {{ label }}
         </a>
+        {% if is_canonical %}
+          </h1>
+        {% endif %}
         {{ title_suffix }}
       </div>
       {% if content.solution_subscribe or content.releases_overview %}
