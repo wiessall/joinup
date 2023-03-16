@@ -16,7 +16,9 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 /**
- * Controller for the contact_information_contact module.
+ * Controller extends ContactController from email_contact module.
+ *
+ * Controls controller to make our one in order to add new fields in the email.
  */
 class ContactInformationContactController extends ContactController {
 
