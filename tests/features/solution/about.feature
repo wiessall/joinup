@@ -367,6 +367,18 @@ Feature: About this solution
     When I go to the edit form of the "Some custom contact test" "custom page"
     Then I should see the button "Contact us"
 
+    Then I go to the about page of "Six exclusion advantages"
+    Then I open the plus button menu
+    And I click "Add discussion"
+    And I fill in "Title" with "Some discussion contact test"
+    And I press the button "Contact us" in the "Content" wysiwyg editor
+    And I select "Statistics and Analysis" from "Topic"
+    And I press "Publish"
+    And I should see the heading "Some discussion contact test"
+
+    When I go to the edit form of the "Some discussion contact test" discussion
+    Then I should see the button "Contact us"
+
     # These contact information have been created via UI.
     But I delete the "Invisible Cat" contact information
     And I delete the "Elise Anna Lucile" contact information
