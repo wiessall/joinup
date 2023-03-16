@@ -71,8 +71,6 @@ permissions:
   - 'transition any node discussion from proposed to validated using the community_content - node:post_moderated workflow'
   - 'transition any node discussion from proposed to validated using the community_content - node:pre_moderated workflow'
   - 'transition any node discussion from validated to archived using the community_content - node:post_moderated workflow'
-  - 'transition any node discussion from validated to archived using the community_content - node:post_moderated workflow'
-  - 'transition any node discussion from validated to archived using the community_content - node:pre_moderated workflow'
   - 'transition any node discussion from validated to archived using the community_content - node:pre_moderated workflow'
   - 'transition any node discussion from validated to draft using the community_content - node:post_moderated workflow'
   - 'transition any node discussion from validated to draft using the community_content - node:pre_moderated workflow'
