@@ -1834,7 +1834,7 @@ class JoinupContext extends RawDrupalContext {
    * @Then I should see a logo on the header
    */
   public function assertExistingLogo(): void {
-    $xpath = '//span[@data-drupal-group-logo]//img';
+    $xpath = '//div[@data-drupal-group-logo]//img';
     $this->assertSession()->elementsCount('xpath', $xpath, 1);
   }
 
