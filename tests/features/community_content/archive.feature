@@ -58,8 +58,8 @@ Feature: Content archival.
       # Deletion request is not available in a post moderation workflow.
       | moderation | yes        |
     Given <type> content:
-      | title       | state   | <group type>      | body | content | headline    |
-      | Test <type> | <state> | Some collection | Test | Test    | Test <type> |
+      | title       | state   | <group type> | body | content | headline    |
+      | Test <type> | <state> | Some group   | Test | Test    | Test <type> |
     When I am logged in as a facilitator of the "Some group" <group type>
     And I go to the edit form of the "Test <type>" <type>
     Then I should see the button "Archive"
