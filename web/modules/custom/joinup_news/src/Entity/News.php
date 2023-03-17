@@ -6,6 +6,7 @@ namespace Drupal\joinup_news\Entity;
 
 use Drupal\joinup_bundle_class\LogoTrait;
 use Drupal\joinup_community_content\Entity\CommunityContentBase;
+use Drupal\joinup_workflow\ArchivableEntityTrait;
 
 /**
  * Entity subclass for the 'news' bundle.
@@ -13,6 +14,7 @@ use Drupal\joinup_community_content\Entity\CommunityContentBase;
 class News extends CommunityContentBase implements NewsInterface {
 
   use LogoTrait;
+  use ArchivableEntityTrait;
 
   /**
    * {@inheritdoc}
