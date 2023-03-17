@@ -4,6 +4,7 @@ declare(strict_types = 1);
 
 namespace Drupal\asset_distribution\Plugin\search_api\processor;
 
+use Drupal\Component\Utility\UrlHelper;
 use Drupal\Core\File\FileUrlGeneratorInterface;
 use Drupal\search_api\IndexInterface;
 use Drupal\search_api\Item\ItemInterface;
@@ -127,7 +128,14 @@ class IndexDistributionData extends ProcessorPluginBase {
       $distributionFieldItemList = $distribution->get('field_ad_access_url');
       if (!$distributionFieldItemList->isEmpty()) {
         foreach ($distributionFieldItemList->referencedEntities() as $file) {
-          $sapiField->addValue($this->fileUrlGenerator->generateAbsoluteString($file->getFileUri()));
+          $file_url = $file->getFileUri();
+          if (UrlHelper::isExternal($file_url) && !UrlHelper::externalIsLocal($file_url, $GLOBALS['base_url'])) {
+            $url = $file_url;
+          }
+          else {
+            $url = $this->fileUrlGenerator->generateAbsoluteString($file->getFileUri());
+          }
+          $sapiField->addValue($url);
         }
       }
 
