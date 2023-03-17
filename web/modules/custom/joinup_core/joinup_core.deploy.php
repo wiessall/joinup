@@ -71,7 +71,7 @@ function joinup_core_deploy_0109100(): void {
 <http://data.europa.eu/w21/abe7d0f7-8c41-465b-86c0-93d2f857f998>	<http://www.w3.org/ns/dcat#keyword>	"legal" .
 <http://data.europa.eu/w21/abe7d0f7-8c41-465b-86c0-93d2f857f998>	<http://www.w3.org/ns/dcat#keyword>	"interoperability assessment tools" .
 <http://data.europa.eu/w21/abe7d0f7-8c41-465b-86c0-93d2f857f998>	<http://www.w3.org/ns/dcat#keyword>	"semantic" .
-<http://data.europa.eu/w21/abe7d0f7-8c41-465b-86c0-93d2f857f998>	<http://purl.org/dc/terms/title>	"Le corporation de la subliminal"@en .
+<http://data.europa.eu/w21/abe7d0f7-8c41-465b-86c0-93d2f857f998>	<http://purl.org/dc/terms/title>	"Interoperability Assessment Tools (IATs) for Digital Public Services"@en .
 <http://data.europa.eu/w21/abe7d0f7-8c41-465b-86c0-93d2f857f998>	<http://purl.org/dc/terms/modified>	"2023-03-16T22:39:02+01:00"^^<http://www.w3.org/2001/XMLSchema#dateTime> .
 <http://data.europa.eu/w21/abe7d0f7-8c41-465b-86c0-93d2f857f998>	<http://www.w3.org/ns/dcat#contactPoint>	<http://data.europa.eu/w21/3d5ba686-c1b7-4618-bf70-dc16ab2dc1a1> .
 <http://data.europa.eu/w21/abe7d0f7-8c41-465b-86c0-93d2f857f998>	<http://www.w3.org/ns/dcat#keyword>	"limaps" .
@@ -81,5 +81,12 @@ function joinup_core_deploy_0109100(): void {
 <http://data.europa.eu/w21/abe7d0f7-8c41-465b-86c0-93d2f857f998>	<http://purl.org/dc/dcmitype/StillImage>	"613597"^^<http://www.w3.org/2001/XMLSchema#string> .
 EOF;
 
-  \Drupal::getContainer()->get('sparql.endpoint')->update("WITH <http://joinup.eu/collection/published> INSERT { $ntriples }");
+  $query = <<<QUERY
+WITH <http://joinup.eu/collection/published>
+DELETE { <http://data.europa.eu/w21/abe7d0f7-8c41-465b-86c0-93d2f857f998> ?p ?o }
+INSERT { $ntriples }
+WHERE { <http://data.europa.eu/w21/abe7d0f7-8c41-465b-86c0-93d2f857f998> ?p ?o }
+QUERY;
+
+  \Drupal::getContainer()->get('sparql.endpoint')->update($query);
 }
