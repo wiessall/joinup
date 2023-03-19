@@ -39,11 +39,14 @@
       {% endif %}
       {% for item in items %}
         <li{{ item.attributes.removeClass('nav-link') }}>
+          {% if item.trigger.url %}
+            {{ link(item.trigger.title, item.trigger.url) }}
+          {% endif %}
           {% if item.url %}
             {{ link(item.title, item.url) }}
           {% endif %}
-          {% if item.below %}
-            {{ menus.menu_links(item.below, attributes, menu_level + 1) }}
+          {% if item.items %}
+            {{ menus.menu_links(item.items, attributes, menu_level + 1) }}
           {% endif %}
         </li>
       {% endfor %}
