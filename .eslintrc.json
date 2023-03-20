@@ -24,8 +24,7 @@
     "jsdoc"
   ],
   "ignorePatterns": [
-    "**/contact_information/js/build/*.js",
-    "**/contact_information/webpack.config.js"
+    "**/contact_information/js/build/*.js"
   ],
   "rules": {
     "jsdoc/require-file-overview": "error"

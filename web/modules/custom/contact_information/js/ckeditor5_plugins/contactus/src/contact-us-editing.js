@@ -21,7 +21,6 @@ export default class ContactUsEditing extends Plugin {
 
   init() {
     this.attrs = [
-      "data-joinup-contact-information",
       "data-joinup-contact-information-href",
       "data-joinup-contact-information-login",
       "data-joinup-contact-information-label",
@@ -48,9 +47,6 @@ export default class ContactUsEditing extends Plugin {
         attributes: this.attrs,
       },
       model: (viewElement, { writer }) => {
-        const contactInformation = viewElement.getAttribute(
-          "data-joinup-contact-information"
-        );
         const contactInformationHref = viewElement.getAttribute(
           "data-joinup-contact-information-href"
         );
@@ -62,7 +58,6 @@ export default class ContactUsEditing extends Plugin {
         );
 
         return writer.createElement("contactUs", {
-          "data-joinup-contact-information": contactInformation,
           "data-joinup-contact-information-href": contactInformationHref,
           "data-joinup-contact-information-login": contactInformationLogin,
           "data-joinup-contact-information-label": contactInformationLabel,
@@ -80,9 +75,6 @@ export default class ContactUsEditing extends Plugin {
         return writer.createRawElement(
           "a",
           {
-            "data-joinup-contact-information": modelElement.getAttribute(
-              "data-joinup-contact-information"
-            ),
             "data-joinup-contact-information-href": modelElement.getAttribute(
               "data-joinup-contact-information-href"
             ),
