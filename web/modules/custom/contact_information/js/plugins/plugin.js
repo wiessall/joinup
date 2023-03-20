@@ -31,7 +31,7 @@ CKEDITOR.plugins.add("contactus", {
           selectedHtml = "Contact us";
         }
         editor.insertHtml(
-          `<a data-joinup-contact-information-href="${editor.config.contactInformation_url}" data-joinup-contact-information-login="${editor.config.contactInformation_login}" href="">${selectedHtml}</a>`
+          `<a data-joinup-contact-information-href="${editor.config.contactInformation_url}" data-joinup-contact-information-login="${editor.config.contactInformation_login}">${selectedHtml}</a>`
         );
       },
     });
