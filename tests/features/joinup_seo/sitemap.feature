@@ -39,21 +39,25 @@ Feature:
       | Sitemap news draft                       | Sitemap news | Sitemap news body | Sitemap solution validated | draft     |                           |
       | Sitemap news validated and recent        | Sitemap news | Sitemap news body | Sitemap solution validated | validated | 1 day ago                 |
       | Sitemap news validated but old           | Sitemap news | Sitemap news body | Sitemap solution validated | validated | 2 months ago              |
+      | Sitemap news archived                    | Sitemap news | Sitemap news body | Sitemap solution validated | archived  | 2 months ago              |
       | Sitemap news validated but parent is not | Sitemap news | Sitemap news body | Sitemap solution draft     | validated | Sun, 01 Dec 2019 13:00:00 |
     And event content:
       | title                                     | short title             | body                      | agenda        | location   | organisation        | scope         | solution                   | state     |
       | Sitemap event draft                       | Sitemap event draft     | It will include fireworks | Event agenda. | Some place | European Commission | International | Sitemap solution validated | draft     |
       | Sitemap event validated                   | Sitemap event validated | It will include fireworks | Event agenda. | Some place | European Commission | International | Sitemap solution validated | validated |
+      | Sitemap event archived                    | Sitemap event archived  | It will include fireworks | Event agenda. | Some place | European Commission | International | Sitemap solution validated | archived  |
       | Sitemap event validated but parent is not | Sitemap event validated | It will include fireworks | Event agenda. | Some place | European Commission | International | Sitemap solution draft     | validated |
     And document content:
       | title                                        | document type | short title                | body         | solution                   | state     |
       | Sitemap document draft                       | Document      | Sitemap document draft     | Read more... | Sitemap solution validated | draft     |
       | Sitemap document validated                   | Document      | Sitemap document validated | Read more... | Sitemap solution validated | validated |
+      | Sitemap document archived                    | Document      | Sitemap document archived  | Read more... | Sitemap solution validated | archived  |
       | Sitemap document validated but parent is not | Document      | Sitemap document validated | Read more... | Sitemap solution draft     | validated |
     And discussion content:
       | title                                          | body                  | solution                   | state     |
       | Sitemap discussion draft                       | Wanna discuss this??? | Sitemap solution validated | draft     |
       | Sitemap discussion validated                   | Wanna discuss this??? | Sitemap solution validated | validated |
+      | Sitemap discussion archived                    | Wanna discuss this??? | Sitemap solution validated | archived  |
       | Sitemap discussion validated but parent is not | Wanna discuss this??? | Sitemap solution draft     | validated |
 
     Given I run cron
@@ -65,9 +69,13 @@ Feature:
     And I should see the absolute urls of the following content entities:
       | Sitemap custom page of validated |
       | Sitemap discussion validated     |
+      | Sitemap discussion archived      |
       | Sitemap document validated       |
+      | Sitemap document archived        |
       | Sitemap event validated          |
+      | Sitemap event archived           |
       | Sitemap news validated but old   |
+      | Sitemap news archived            |
 
     But I should not see the absolute urls of the following RDF entities:
       | Sitemap collection draft |
@@ -114,15 +122,19 @@ Feature:
       | Sitemap custom page of draft                   |
       | Sitemap discussion draft                       |
       | Sitemap discussion validated                   |
+      | Sitemap discussion archived                    |
       | Sitemap discussion validated but parent is not |
       | Sitemap document draft                         |
       | Sitemap document validated                     |
+      | Sitemap document archived                      |
       | Sitemap document validated but parent is not   |
       | Sitemap event draft                            |
       | Sitemap event validated                        |
+      | Sitemap event archived                         |
       | Sitemap event validated but parent is not      |
       | Sitemap news draft                             |
       | Sitemap news validated but old                 |
+      | Sitemap news archived                          |
       | Sitemap news validated but parent is not       |
 
     # Simulate that 2 days have passed since last time the sitemaps have been created.
@@ -138,10 +150,14 @@ Feature:
     And I should see the absolute urls of the following content entities:
       | Sitemap custom page of validated  |
       | Sitemap discussion validated      |
+      | Sitemap discussion archived       |
       | Sitemap document validated        |
+      | Sitemap document archived         |
       | Sitemap event validated           |
+      | Sitemap event archived            |
       | Sitemap news validated and recent |
       | Sitemap news validated but old    |
+      | Sitemap news archived             |
 
     But I should not see the absolute urls of the following RDF entities:
       | Sitemap collection draft |
