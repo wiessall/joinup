@@ -20,8 +20,6 @@ export default class ContactUsCommand extends Command {
     editor.model.change((writer) => {
       const contactUsWidget = writer.createElement("contactUs", {
         ...Object.fromEntries(selection.getAttributes()),
-        "data-joinup-contact-information":
-          editor.config.get("contactus").contactInformation_disable,
         "data-joinup-contact-information-href":
           editor.config.get("contactus").contactInformation_url,
         "data-joinup-contact-information-login":

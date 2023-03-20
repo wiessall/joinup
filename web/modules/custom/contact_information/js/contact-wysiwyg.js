@@ -8,7 +8,7 @@
     attach(context) {
       once(
         "myContactInformation",
-        "a[data-joinup-contact-information]",
+        "a[data-joinup-contact-information-href]",
         context
       ).forEach((element) => {
         let href;

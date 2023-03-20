@@ -4,11 +4,11 @@ contact_information_contact_us:
       - contactus.ContactUs
   drupal:
     label: Contact us
-    class: \Drupal\contact_information\Plugin\CKEditor5Plugin\Contactus
+    class: \Drupal\contact_information\Plugin\CKEditor5Plugin\ContactUs
     library: contact_information/contactus
     admin_library: contact_information/admin.contactus
     toolbar_items:
       contactus:
         label: Contact us
     elements:
-      - <a data-joinup-contact-information data-joinup-contact-information-href data-joinup-contact-information-login>
+      - <a data-joinup-contact-information-href data-joinup-contact-information-login>

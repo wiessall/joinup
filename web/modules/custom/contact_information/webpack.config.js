@@ -1,7 +1,14 @@
+/**
+ * @file Standard webpack CK5 plugin.
+ */
+
 const path = require("path");
 const fs = require("fs");
+// eslint-disable-next-line import/no-unresolved
 const webpack = require("webpack");
+// eslint-disable-next-line import/no-unresolved,no-unused-vars
 const { styles, builds } = require("@ckeditor/ckeditor5-dev-utils");
+// eslint-disable-next-line import/no-unresolved
 const TerserPlugin = require("terser-webpack-plugin");
 
 function getDirectories(srcpath) {
