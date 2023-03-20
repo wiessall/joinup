@@ -387,7 +387,7 @@ class SolutionContext extends RawDrupalContext {
    * @When I delete the :solution solution
    */
   public function deleteSolution($solution) {
-    $solution = $this->getEntityByLabel('rdf_entity', $solution);
+    $solution = $this->getEntityByLabel('rdf_entity', $solution, NULL, FALSE);
     $solution->skip_notification = TRUE;
     $solution->delete();
   }
