@@ -125,7 +125,8 @@ Feature: Collection content
     And I should not see the link "Link to the museum"
     # Check the document tile.
     And I should see the "Upper Floor Map" tile
-    And the page should contain the html text "A sample map example."
+    # A document tile redesign in switch to Ventuno theme should show only title
+    And I should not see the text "A sample map example."
     And I should not see the link "map"
     # Check the news tile.
     And I should see the "Turin Egyptian Museum Reopened" tile
