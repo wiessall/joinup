@@ -40,7 +40,7 @@ services:
       - { name: event_subscriber }
   joinup_group.transfer_ownership_subscriber:
     class: Drupal\joinup_group\EventSubscriber\TransferGroupOwnershipSubscriber
-    arguments: ['@current_user', '@tempstore.private', '@messenger']
+    arguments: ['@current_user', '@messenger', '@tempstore.private']
     tags:
       - { name: event_subscriber }
   joinup_group.group_aware_queue:
