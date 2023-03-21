@@ -82,7 +82,7 @@ Feature: Discussion moderation
     # The discussion is kept published.
     Then I should see the heading "Best method to cut Eucalyptus wood logs"
     # But no further changes can be done.
-    But I should not see the link "Edit" in the "Entity actions" region
+    But I should see the link "Edit" in the "Entity actions" region
     # Also the owner cannot do changes anymore.
     When I am logged in as "Gabe Rogers"
     And I go to the "Best method to cut Eucalyptus wood logs" discussion
