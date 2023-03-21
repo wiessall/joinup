@@ -4,8 +4,10 @@ declare(strict_types = 1);
 
 namespace Drupal\joinup_group\EventSubscriber;
 
+use Drupal\Component\Utility\UrlHelper;
 use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\Core\Session\AccountInterface;
+use Drupal\Core\TempStore\PrivateTempStore;
 use Drupal\Core\TempStore\PrivateTempStoreFactory;
 use Drupal\Core\Url;
 use Drupal\og\Entity\OgMembership;
@@ -24,40 +26,28 @@ use Symfony\Component\HttpKernel\KernelEvents;
 class TransferGroupOwnershipSubscriber implements EventSubscriberInterface {
 
   /**
-   * The current user service.
+   * The user private temp store.
    *
-   * @var \Drupal\Core\Session\AccountInterface
+   * @var \Drupal\Core\TempStore\PrivateTempStore
    */
-  protected $currentUser;
-
-  /**
-   * The user private tempstore.
-   *
-   * @var \Drupal\Core\TempStore\PrivateTempStoreFactory
-   */
-  protected $tempStore;
-
-  /**
-   * The messenger.
-   *
-   * @var \Drupal\Core\Messenger\MessengerInterface
-   */
-  protected $messenger;
+  protected PrivateTempStore $tempStore;
 
   /**
    * Constructs a new event subscriber.
    *
-   * @param \Drupal\Core\Session\AccountInterface $current_user
+   * @param \Drupal\Core\Session\AccountInterface $currentUser
    *   The current user service.
-   * @param \Drupal\Core\TempStore\PrivateTempStoreFactory $tempstore_factory
-   *   The user private tempstore factory.
    * @param \Drupal\Core\Messenger\MessengerInterface $messenger
    *   The messenger.
+   * @param \Drupal\Core\TempStore\PrivateTempStoreFactory $tempStoreFactory
+   *   The user private temp store factory.
    */
-  public function __construct(AccountInterface $current_user, PrivateTempStoreFactory $tempstore_factory, MessengerInterface $messenger) {
-    $this->currentUser = $current_user;
-    $this->tempStore = $tempstore_factory->get('joinup_transfer_group_ownership');
-    $this->messenger = $messenger;
+  public function __construct(
+    protected AccountInterface $currentUser,
+    protected MessengerInterface $messenger,
+    PrivateTempStoreFactory $tempStoreFactory,
+  ) {
+    $this->tempStore = $tempStoreFactory->get('joinup_transfer_group_ownership');
   }
 
   /**
@@ -74,34 +64,64 @@ class TransferGroupOwnershipSubscriber implements EventSubscriberInterface {
    *   The response event.
    *
    * @throws \Drupal\Core\TempStore\TempStoreException
-   *   If the tempstore couldn't acquire the lock.
+   *   If the temp store couldn't acquire the lock.
    */
   public function alterRedirection(ResponseEvent $event): void {
     $response = $event->getResponse();
-    if ($response->isRedirect() && $response instanceof RedirectResponse && ($path = parse_url($response->getTargetUrl(), PHP_URL_PATH))) {
-      $path = rtrim($path, '/');
-      $path = substr($path, strlen(base_path()));
+    if (!$response->isRedirect() || !$response instanceof RedirectResponse) {
+      return;
+    }
 
-      /** @var \Symfony\Component\HttpFoundation\RedirectResponse $response */
-      $url = Url::fromUri("internal:/$path");
-      if ($url->isRouted() && ($url->getRouteName() === 'joinup_group.transfer_group_ownership_confirm')) {
-        $data = $this->tempStore->get($this->currentUser->id());
-        // If warning or error messages were recorded, we alter the redirect to
-        // reload the view but we want to show the messages to the user.
-        if (!empty($data['messages'])) {
-          foreach ($data['messages'] as $severity => $messages) {
-            foreach ($messages as $message) {
-              $this->messenger->addMessage($message, $severity);
-            }
-          }
-          $membership = OgMembership::load($data['membership']);
-          $view_url = Url::fromRoute('entity.rdf_entity.member_overview', ['rdf_entity' => $membership->getGroupId()]);
-          $response->setTargetUrl($view_url->toString());
-          // We go back to the view, expecting a new user selection, so we clear
-          // the old user input.
-          $this->tempStore->delete($this->currentUser->id());
+    $target_url = $this->getTargetUrl($response);
+    if (!$target_url || !$target_url->isRouted() || $target_url->getRouteName() !== 'joinup_group.transfer_group_ownership_confirm') {
+      return;
+    }
+
+    $data = $this->tempStore->get($this->currentUser->id());
+    // If warning or error messages were recorded, we alter the redirect to
+    // reload the view but we want to show the messages to the user.
+    if (!empty($data['messages'])) {
+      foreach ($data['messages'] as $severity => $messages) {
+        foreach ($messages as $message) {
+          $this->messenger->addMessage($message, $severity);
         }
       }
+      $membership = OgMembership::load($data['membership']);
+      $view_url = Url::fromRoute('entity.rdf_entity.member_overview', ['rdf_entity' => $membership->getGroupId()]);
+      $response->setTargetUrl($view_url->toString());
+      // We go back to the view, expecting a new user selection, so we clear
+      // the old user input.
+      $this->tempStore->delete($this->currentUser->id());
+    }
+  }
+
+  /**
+   * Gets URL from response's target.
+   *
+   * @param \Symfony\Component\HttpFoundation\RedirectResponse $response
+   *   Response.
+   *
+   * @return \Drupal\Core\Url|null
+   *   The URL where the user is redirected.
+   */
+  protected function getTargetUrl(RedirectResponse $response): ?Url {
+    $path = parse_url($response->getTargetUrl(), PHP_URL_PATH);
+    if (!$path) {
+      return NULL;
+    }
+
+    $path = rtrim($path, '/');
+    $path = substr($path, strlen(base_path()));
+
+    if (UrlHelper::isExternal($path)) {
+      return NULL;
+    }
+
+    try {
+      return Url::fromUri("internal:/$path");
+    }
+    catch (\InvalidArgumentException $e) {
+      return NULL;
     }
   }
 
