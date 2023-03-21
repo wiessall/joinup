@@ -69,18 +69,12 @@ class ContactUs extends CKEditor5PluginDefault implements ContainerFactoryPlugin
       ];
     }
 
-    $url = Url::fromRoute('entity.rdf_entity.contact', ['rdf_entity' => $group->id()])->setOption('query', [
-      'destination' => '',
-    ])->toString();
-    $login = Url::fromRoute('cas.login')->setOption('query', [
-      'destination' => Url::fromRoute('entity.rdf_entity.contact', ['rdf_entity' => $group->id()])->toString(),
-    ])->toString();
+    $url = Url::fromRoute('entity.rdf_entity.contact', ['rdf_entity' => $group->id()])->toString();
 
     return [
       'contactus' => [
         'contactInformation_disable' => !empty($group->getValidatedContactInformation()),
         'contactInformation_url' => $url,
-        'contactInformation_login' => $login,
       ],
     ];
   }

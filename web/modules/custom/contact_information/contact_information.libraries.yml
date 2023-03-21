@@ -6,15 +6,6 @@ contact-us:
     - core/drupal
     - core/js-cookie
 
-contact-wysiwyg:
-  version: VERSION
-  js:
-    js/contact-wysiwyg.js: {}
-  dependencies:
-    - core/drupal
-    - core/drupalSettings
-    - core/once
-
 contactus:
   js:
     js/build/contactus.js: { preprocess: false, minified: true }
