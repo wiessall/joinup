@@ -13,7 +13,6 @@ export default class ContactUsUi extends Plugin {
     if (this.editor.config.get("contactus").contactInformation_disable) {
       const { editor } = this;
       const { t } = editor;
-      const contactUsWidgetCommand = editor.commands.get("contactUs");
       editor.ui.componentFactory.add("contactUs", (locale) => {
         const button = new ButtonView(locale);
 
@@ -24,14 +23,22 @@ export default class ContactUsUi extends Plugin {
           icon,
         });
 
-        // Disable the external data widget button when the command is disabled.
-        button.bind("isEnabled").to(contactUsWidgetCommand);
-
         // Execute the command when the button is clicked (executed).
         button.on("execute", () => {
-          editor.execute("contactUs");
-          // Set focus on the editor content
-          editor.editing.view.focus();
+          let selectedText;
+          const range = editor.model.document.selection.getFirstRange();
+
+          // eslint-disable-next-line no-restricted-syntax
+          for (const item of range.getItems()) {
+            selectedText = item.data;
+          }
+
+          const href = editor.config.get("contactus").contactInformation_url;
+          const text = !selectedText ? "Contact us" : selectedText;
+          editor.model.change((writer) => {
+            const link = writer.createText(text, { linkHref: href });
+            editor.model.insertContent(link);
+          });
         });
 
         return button;
