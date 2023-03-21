@@ -9,6 +9,7 @@ use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\state_machine\Plugin\views\filter\State;
 use Drupal\state_machine\WorkflowManagerInterface;
+use Drupal\state_machine_permissions\StateMachinePermissionsHelperInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -35,8 +36,10 @@ class JoinupContentState extends State {
    *   The entity type manager.
    * @param \Drupal\Core\Entity\EntityFieldManagerInterface $entity_field_manager
    *   The entity field manager.
-   * @param \Drupal\state_machine\WorkflowManagerInterface $workflow_manager
+   * @param \Drupal\state_machine\WorkflowManagerInterface $workflowManager
    *   The workflow manager service.
+   * @param \Drupal\state_machine_permissions\StateMachinePermissionsHelperInterface $stateMachinePermissionsHelper
+   *   State machine permissions helper.
    */
   public function __construct(
     array $configuration,
@@ -44,7 +47,8 @@ class JoinupContentState extends State {
     $plugin_definition,
     EntityTypeManagerInterface $entity_type_manager,
     EntityFieldManagerInterface $entity_field_manager,
-    protected WorkflowManagerInterface $workflow_manager
+    protected WorkflowManagerInterface $workflowManager,
+    protected StateMachinePermissionsHelperInterface $stateMachinePermissionsHelper
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $entity_type_manager, $entity_field_manager);
   }
@@ -59,7 +63,8 @@ class JoinupContentState extends State {
       $plugin_definition,
       $container->get('entity_type.manager'),
       $container->get('entity_field.manager'),
-      $container->get('plugin.manager.workflow')
+      $container->get('plugin.manager.workflow'),
+      $container->get('state_machine_permissions.helper')
     );
   }
 
@@ -71,13 +76,9 @@ class JoinupContentState extends State {
       return parent::getWorkflows($entity_type, $field_name);
     }
 
-    $definitions = array_filter($this->workflow_manager->getDefinitions(), function ($value) {
-      return $value['provider'] === 'joinup_community_content';
-    });
-
     $workflows = [];
-    foreach ($definitions as $definition) {
-      $workflows[$definition['id']] = $this->workflow_manager->createInstance($definition['id']);
+    foreach ($this->stateMachinePermissionsHelper->getPossibleWorkflowsForEntityType($entity_type->id()) as $definition) {
+      $workflows[$definition['id']] = $this->workflowManager->createInstance($definition['id']);
     }
 
     return $workflows;
