@@ -89,12 +89,12 @@ DELETE { <http://data.europa.eu/w21/abe7d0f7-8c41-465b-86c0-93d2f857f998> ?p ?o 
 INSERT { $ntriples }
 WHERE { <http://data.europa.eu/w21/abe7d0f7-8c41-465b-86c0-93d2f857f998> ?p ?o }
 QUERY;
+  \Drupal::getContainer()->get('sparql.endpoint')->update($query);
 }
 
 /**
  * Update the default user avatar image.
  */
-function joinup_core_deploy_109100(): void {
+function joinup_core_deploy_109101(): void {
   \Drupal::classResolver(JoinupUserDefaultAvatarImageHelper::class)->createOrUpdate();
-  \Drupal::getContainer()->get('sparql.endpoint')->update($query);
 }
