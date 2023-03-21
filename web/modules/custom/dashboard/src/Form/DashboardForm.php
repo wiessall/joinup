@@ -10,6 +10,8 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\Element;
 use Drupal\Core\State\StateInterface;
 use Drupal\Core\Url;
+use Drupal\joinup_core\Logger\Handler\MailHandler;
+use Drupal\joinup_core\Logger\Handler\TelegramHandler;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -67,6 +69,50 @@ class DashboardForm extends FormBase {
       ],
     ];
 
+    $log_alerts = $this->state->get('joinup.log_alerts', $this->getLogAlertsDefaultSettings());
+
+    // Builds a level form element.
+    $level = function (string $key) use ($log_alerts): array {
+      return [
+        '#type' => 'select',
+        '#title' => $this->t('Minimum level to be logged'),
+        '#options' => [0 => $this->t('- Select -')] + MailHandler::getSeverityLevels(),
+        '#default_value' => $log_alerts[$key]['level'],
+      ];
+    };
+
+    $form['log_alerts'] = [
+      '#type' => 'details',
+      '#title' => $this->t('Log alerts'),
+      '#tree' => TRUE,
+      '#access' => $this->currentUser()->hasPermission('administer log alerts'),
+      'mail' => [
+        '#type' => 'details',
+        '#title' => $this->t('Email'),
+        'recipients' => [
+          '#type' => 'textfield',
+          '#title' => $this->t('Recipients (comma separated)'),
+          '#default_value' => $log_alerts['mail']['recipients'] ?? '',
+        ],
+        'level' => $level('mail'),
+      ],
+      'telegram' => [
+        '#type' => 'details',
+        '#title' => $this->t('Telegram'),
+        'api_key' => [
+          '#type' => 'textfield',
+          '#title' => $this->t('JoinupDevBot API key'),
+          '#default_value' => $log_alerts['telegram']['api_key'] ?? '',
+        ],
+        'chat_id' => [
+          '#type' => 'textfield',
+          '#title' => $this->t('Chat ID'),
+          '#default_value' => $log_alerts['telegram']['chat_id'] ?? '',
+        ],
+        'level' => $level('telegram'),
+      ],
+    ];
+
     $form['actions'] = [
       '#type' => 'actions',
       '#access' => $this->getFormElementsAccess($form),
@@ -116,6 +162,12 @@ class DashboardForm extends FormBase {
         $this->messenger()->addStatus($this->t('CAS debug mode disabled'));
       }
       $this->configFactory()->reset('cas.settings');
+    }
+
+    $log_alerts = $form_state->getValue('log_alerts');
+    if ($log_alerts !== $this->state->get('log_alerts', $this->getLogAlertsDefaultSettings())) {
+      $this->state->set('joinup.log_alerts', $log_alerts);
+      $this->messenger()->addStatus($this->t('Log alerts changes were saved'));
     }
   }
 
@@ -197,6 +249,19 @@ class DashboardForm extends FormBase {
     return array_filter($links, function (array $link): bool {
       return $link['#url']->access();
     });
+  }
+
+  /**
+   * Returns the log alerts default settings.
+   *
+   * @return array
+   *   The log alerts default settings.
+   */
+  protected function getLogAlertsDefaultSettings(): array {
+    return [
+      'mail' => MailHandler::getDefaultSettings(),
+      'telegram' => TelegramHandler::getDefaultSettings(),
+    ];
   }
 
 }
