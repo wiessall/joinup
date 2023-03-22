@@ -51,7 +51,7 @@
   ]
 %}
 <div class="table-responsive mb-3">
-  <table{{ attributes.addClass(classes) }}>
+  <table{{ attributes.addClass(classes).setAttribute('data-once', 'responsive-tables') }}>
     {% if caption %}
       <caption>{{ caption }}</caption>
     {% endif %}
