@@ -4,10 +4,14 @@
  * small screens.
  */
 
-(() => {
+((Drupal, once) => {
   Drupal.behaviors.responsiveTables = {
-    attach() {
-      const tables = document.querySelectorAll("#block-ventuno-content table");
+    attach(context) {
+      const tables = once(
+        "responsive-tables",
+        document.querySelectorAll("#block-ventuno-content table"),
+        context
+      );
       tables.forEach((element) => {
         const wrapper = document.createElement("div");
         wrapper.classList.add("table-responsive", "mb-3");
@@ -17,4 +21,4 @@
       });
     },
   };
-})();
+})(Drupal, once);
