@@ -584,12 +584,9 @@ trait TraversingTrait {
         ],
         'selectors' => [
           // The site-wide search field in the top right corner.
-          ['css', 'input#search-bar__input'],
+          ['css', '.navbar-search input[data-drupal-selector="edit-keys"]'],
           // The search field on the search result pages.
-          [
-            'css',
-            '*[data-drupal-selector="views-exposed-form-search-page-1"] input[data-drupal-selector="edit-keys"]',
-          ],
+          ['css', 'main[role="main"] input[data-drupal-selector="edit-keys"]'],
         ],
       ],
     ];
