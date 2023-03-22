@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "77340fd8a01be02706206a338230cade",
+    "content-hash": "c99d0fcb4b6115d5dfe6c801d4da2df3",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -478,16 +478,16 @@
         },
         {
             "name": "consolidation/annotated-command",
-            "version": "4.5.6",
+            "version": "4.8.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/consolidation/annotated-command.git",
-                "reference": "3968070538761628546270935f0733a0cc408e1f"
+                "reference": "7f5dd1aafb93a10593ed70f3caa6a0cd5a32f0e3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/consolidation/annotated-command/zipball/3968070538761628546270935f0733a0cc408e1f",
-                "reference": "3968070538761628546270935f0733a0cc408e1f",
+                "url": "https://api.github.com/repos/consolidation/annotated-command/zipball/7f5dd1aafb93a10593ed70f3caa6a0cd5a32f0e3",
+                "reference": "7f5dd1aafb93a10593ed70f3caa6a0cd5a32f0e3",
                 "shasum": ""
             },
             "require": {
@@ -528,9 +528,9 @@
             "description": "Initialize Symfony Console commands from annotated command class methods.",
             "support": {
                 "issues": "https://github.com/consolidation/annotated-command/issues",
-                "source": "https://github.com/consolidation/annotated-command/tree/4.5.6"
+                "source": "https://github.com/consolidation/annotated-command/tree/4.8.2"
             },
-            "time": "2022-06-22T20:17:12+00:00"
+            "time": "2023-03-11T19:32:28+00:00"
         },
         {
             "name": "consolidation/config",
@@ -750,16 +750,16 @@
         },
         {
             "name": "consolidation/robo",
-            "version": "3.0.11",
+            "version": "4.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/consolidation/robo.git",
-                "reference": "820fa0f164f77887e268b7dbfb2283416c7334c1"
+                "reference": "ccf80963abf11bdb8e90659aa99a7449b21e9452"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/consolidation/robo/zipball/820fa0f164f77887e268b7dbfb2283416c7334c1",
-                "reference": "820fa0f164f77887e268b7dbfb2283416c7334c1",
+                "url": "https://api.github.com/repos/consolidation/robo/zipball/ccf80963abf11bdb8e90659aa99a7449b21e9452",
+                "reference": "ccf80963abf11bdb8e90659aa99a7449b21e9452",
                 "shasum": ""
             },
             "require": {
@@ -843,9 +843,9 @@
             "description": "Modern task runner",
             "support": {
                 "issues": "https://github.com/consolidation/robo/issues",
-                "source": "https://github.com/consolidation/robo/tree/3.0.11"
+                "source": "https://github.com/consolidation/robo/tree/4.0.2"
             },
-            "time": "2022-12-07T15:18:26+00:00"
+            "time": "2022-04-21T09:29:58+00:00"
         },
         {
             "name": "consolidation/self-update",
@@ -17356,38 +17356,46 @@
         },
         {
             "name": "ec-europa/toolkit",
-            "version": "9.0.1",
+            "version": "9.7.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ec-europa/toolkit.git",
-                "reference": "26ffda19296d357b2b55efe918f7b7ba637fe154"
+                "reference": "aff7c8f4e5e6fd639f2d4ff13120aabec92513fd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ec-europa/toolkit/zipball/26ffda19296d357b2b55efe918f7b7ba637fe154",
-                "reference": "26ffda19296d357b2b55efe918f7b7ba637fe154",
+                "url": "https://api.github.com/repos/ec-europa/toolkit/zipball/aff7c8f4e5e6fd639f2d4ff13120aabec92513fd",
+                "reference": "aff7c8f4e5e6fd639f2d4ff13120aabec92513fd",
                 "shasum": ""
             },
             "require": {
-                "behat/behat": "^3.7 || ^3.8",
+                "behat/behat": "^3.7",
+                "consolidation/annotated-command": "^4.7.0",
+                "consolidation/robo": "^3.0 || ^4.0",
                 "cweagans/composer-patches": "^1.4 || ^1.7",
-                "drush/drush": "^9.7.1 || ^10.0.0 || ^11.0.4",
+                "drush/drush": "^10.0.0 || ^11.0.4",
                 "ec-europa/qa-automation": "^9.0",
                 "ext-curl": "*",
                 "ext-dom": "*",
                 "ext-json": "*",
                 "ext-simplexml": "*",
                 "guzzlehttp/guzzle": "^6.3 || ^7.0",
-                "j13k/yaml-lint": "^1.1",
-                "openeuropa/task-runner": "^2.0@alpha",
+                "jakeasmith/http_build_url": "^1.0",
+                "mglaman/phpstan-drupal": "^1.1",
                 "php": ">=8.1",
                 "php-parallel-lint/php-parallel-lint": "^1.3",
                 "phpmd/phpmd": "^2.12",
-                "phpunit/phpunit": "^7.5 || ^9.5"
+                "phpstan/extension-installer": "^1.2",
+                "phpstan/phpstan-deprecation-rules": "^1.0",
+                "phpunit/phpunit": "^9.5",
+                "squizlabs/php_codesniffer": "^3.7"
             },
             "suggest": {
                 "drupal/console": "The Drupal CLI, tool to generate boilerplate code, interact with and debug Drupal."
             },
+            "bin": [
+                "run"
+            ],
             "type": "library",
             "extra": {
                 "enable-patching": true,
@@ -17408,7 +17416,7 @@
                 "email": "DIGIT-NEXTEUROPA-QA@ec.europa.eu",
                 "source": "https://github.com/ec-europa/toolkit"
             },
-            "time": "2022-11-08T14:43:10+00:00"
+            "time": "2023-03-03T15:18:41+00:00"
         },
         {
             "name": "friends-of-behat/mink-extension",
@@ -17720,64 +17728,6 @@
                 "source": "https://github.com/instaclick/php-webdriver/tree/1.4.16"
             },
             "time": "2022-10-28T13:30:35+00:00"
-        },
-        {
-            "name": "j13k/yaml-lint",
-            "version": "1.1.4",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/j13k/yaml-lint.git",
-                "reference": "e3b6e970e1a341a2e09fc3b47188ce7f648ef8e8"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/j13k/yaml-lint/zipball/e3b6e970e1a341a2e09fc3b47188ce7f648ef8e8",
-                "reference": "e3b6e970e1a341a2e09fc3b47188ce7f648ef8e8",
-                "shasum": ""
-            },
-            "require": {
-                "symfony/yaml": "^2|^3|^4|^5"
-            },
-            "bin": [
-                "bin/yaml-lint"
-            ],
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "1.1.x-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "J13k\\YamlLint\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "John Fitzpatrick",
-                    "homepage": "http://github.com/j13k"
-                }
-            ],
-            "description": "A compact command line utility for checking YAML file syntax",
-            "homepage": "https://github.com/j13k/yaml-lint",
-            "keywords": [
-                "cli",
-                "lint",
-                "symfony",
-                "syntax",
-                "utility",
-                "yaml",
-                "yml"
-            ],
-            "support": {
-                "issues": "https://github.com/j13k/yaml-lint/issues",
-                "source": "https://github.com/j13k/yaml-lint/tree/1.1.4"
-            },
-            "time": "2021-03-11T08:48:25+00:00"
         },
         {
             "name": "jakeasmith/http_build_url",
@@ -18193,25 +18143,25 @@
         },
         {
             "name": "nuvoleweb/robo-config",
-            "version": "2.0.0",
+            "version": "3.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nuvoleweb/robo-config.git",
-                "reference": "ca3a724121c171c60d84ace8051d09e99abb9ed0"
+                "reference": "409378787108d849f23ffc312dedd9e010c5e711"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nuvoleweb/robo-config/zipball/ca3a724121c171c60d84ace8051d09e99abb9ed0",
-                "reference": "ca3a724121c171c60d84ace8051d09e99abb9ed0",
+                "url": "https://api.github.com/repos/nuvoleweb/robo-config/zipball/409378787108d849f23ffc312dedd9e010c5e711",
+                "reference": "409378787108d849f23ffc312dedd9e010c5e711",
                 "shasum": ""
             },
             "require": {
-                "consolidation/robo": "^3.0"
+                "consolidation/robo": "^4.0"
             },
             "require-dev": {
-                "drupal/coder": "^8",
-                "phpro/grumphp": "^1.2",
-                "phpunit/phpunit": "^9.4"
+                "drupal/coder": "^8.3.16",
+                "phpro/grumphp": "^1.14",
+                "phpunit/phpunit": "^9.5.5"
             },
             "type": "robo-tasks",
             "autoload": {
@@ -18233,36 +18183,35 @@
             "description": "CI/developer-friendly configuration processor for Robo.",
             "support": {
                 "issues": "https://github.com/nuvoleweb/robo-config/issues",
-                "source": "https://github.com/nuvoleweb/robo-config/tree/2.0.0"
+                "source": "https://github.com/nuvoleweb/robo-config/tree/3.0.0"
             },
-            "time": "2022-01-12T09:43:01+00:00"
+            "time": "2022-12-08T12:04:29+00:00"
         },
         {
             "name": "openeuropa/task-runner",
-            "version": "2.0.0-alpha3",
+            "version": "2.0.0-alpha4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/openeuropa/task-runner.git",
-                "reference": "35a9b31cfce185289f42a072a0ed67d8c655ffd2"
+                "reference": "226ff3d6e2fda264bad984a113bb9dbc97c74b68"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/openeuropa/task-runner/zipball/35a9b31cfce185289f42a072a0ed67d8c655ffd2",
-                "reference": "35a9b31cfce185289f42a072a0ed67d8c655ffd2",
+                "url": "https://api.github.com/repos/openeuropa/task-runner/zipball/226ff3d6e2fda264bad984a113bb9dbc97c74b68",
+                "reference": "226ff3d6e2fda264bad984a113bb9dbc97c74b68",
                 "shasum": ""
             },
             "require": {
-                "consolidation/annotated-command": "^4.3 <4.5.7",
-                "consolidation/robo": "^3.0",
+                "consolidation/robo": "^4.0",
                 "gitonomy/gitlib": "^1.0",
                 "jakeasmith/http_build_url": "^1.0.1",
-                "nuvoleweb/robo-config": "^2.0",
-                "php": ">=7.4"
+                "nuvoleweb/robo-config": "^3.0.0",
+                "php": ">=8.0"
             },
             "require-dev": {
-                "openeuropa/code-review": "^2.0",
+                "openeuropa/code-review": "2.x-dev",
                 "phpunit/phpunit": "^9.4",
-                "slevomat/coding-standard": "~6.0"
+                "slevomat/coding-standard": "^7.0 || ^8.0"
             },
             "bin": [
                 "bin/run"
@@ -18290,9 +18239,9 @@
             ],
             "support": {
                 "issues": "https://github.com/openeuropa/task-runner/issues",
-                "source": "https://github.com/openeuropa/task-runner/tree/2.0.0-alpha3"
+                "source": "https://github.com/openeuropa/task-runner/tree/2.0.0-alpha4"
             },
-            "time": "2022-10-21T14:06:43+00:00"
+            "time": "2023-03-21T15:13:53+00:00"
         },
         {
             "name": "palantirnet/drupal-rector",
@@ -19493,6 +19442,50 @@
                 "source": "https://github.com/phpspec/prophecy-phpunit/tree/v2.0.1"
             },
             "time": "2020-07-09T08:33:42+00:00"
+        },
+        {
+            "name": "phpstan/extension-installer",
+            "version": "1.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/phpstan/extension-installer.git",
+                "reference": "f06dbb052ddc394e7896fcd1cfcd533f9f6ace40"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/phpstan/extension-installer/zipball/f06dbb052ddc394e7896fcd1cfcd533f9f6ace40",
+                "reference": "f06dbb052ddc394e7896fcd1cfcd533f9f6ace40",
+                "shasum": ""
+            },
+            "require": {
+                "composer-plugin-api": "^2.0",
+                "php": "^7.2 || ^8.0",
+                "phpstan/phpstan": "^1.8.0"
+            },
+            "require-dev": {
+                "composer/composer": "^2.0",
+                "php-parallel-lint/php-parallel-lint": "^1.2.0",
+                "phpstan/phpstan-strict-rules": "^0.11 || ^0.12 || ^1.0"
+            },
+            "type": "composer-plugin",
+            "extra": {
+                "class": "PHPStan\\ExtensionInstaller\\Plugin"
+            },
+            "autoload": {
+                "psr-4": {
+                    "PHPStan\\ExtensionInstaller\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "Composer plugin for automatic installation of PHPStan extensions",
+            "support": {
+                "issues": "https://github.com/phpstan/extension-installer/issues",
+                "source": "https://github.com/phpstan/extension-installer/tree/1.2.0"
+            },
+            "time": "2022-10-17T12:59:16+00:00"
         },
         {
             "name": "phpstan/phpdoc-parser",
