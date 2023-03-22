@@ -31,10 +31,10 @@ Feature: Notifications are muted when entity is archived/unarchived.
     And I mark all emails as read
     When I am logged in as "bisera"
     And I go to the edit form of the "Milky Way <type>" <type>
-    And I fill in "Content" with "Milky Way <type> archived content"
+    And I fill in "<body label>" with "Milky Way <type> archived content"
     And I press "Archive"
     When I go to the edit form of the "Milky Way <type>" <type>
-    And I fill in "Content" with "Milky Way <type> unarchived content"
+    And I fill in "<body label>" with "Milky Way <type> unarchived content"
     And I press "Unarchive"
     Then 0 e-mail should have been sent
     And the daily digest for hristo should not contain any messages
@@ -42,8 +42,8 @@ Feature: Notifications are muted when entity is archived/unarchived.
     And the monthly digest for kalin should not contain any messages
 
     Examples:
-      | type       |
-      | discussion |
-      | document   |
-      | event      |
-      | news       |
+      | type       | body label  |
+      | discussion | Content     |
+      | document   | Description |
+      | event      | Description |
+      | news       | Content     |
