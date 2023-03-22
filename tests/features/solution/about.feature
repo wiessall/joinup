@@ -334,8 +334,8 @@ Feature: About this solution
     And I fill in "Message" with "This is reclamation test."
     When I press "Send e-mail"
     And I should see the success message "Your message has been sent."
-    Then I should see the heading "Some contact test"
-    And I should be on "/collection/antibody-development/solution/six-exclusion-advantages/news/some-contact-test"
+    Then I should see the heading "About Six exclusion advantages"
+    And I should be on "/collection/antibody-development/solution/six-exclusion-advantages/about"
 
     When I am an anonymous user
     Then I go to the "Some contact test" news
@@ -352,7 +352,7 @@ Feature: About this solution
     And I fill in "Message" with "This is v2 reclamation test."
     When I press "Send e-mail"
     Then I should see the success message "Your message has been sent."
-    And I should see the heading "Some contact test"
+    And I should see the heading "About Six exclusion advantages"
 
     # Testing add contact us in existing content.
     Given I am logged in as a moderator
