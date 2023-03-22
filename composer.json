@@ -367,6 +367,9 @@
             },
             "drupal/views_autosubmit": {
                 "Stop auto submitting first character entered in an Autocomplete Filter field. @see https://www.drupal.org/project/views_autosubmit/issues/3160600" : "https://www.drupal.org/files/issues/2021-09-06/3160600_views_autosubmit_16.patch"
+            },
+            "sweetrdf/easyrdf": {
+                "Ntriples performance @see https://github.com/sweetrdf/easyrdf/pull/25": "https://patch-diff.githubusercontent.com/raw/sweetrdf/easyrdf/pull/25.diff"
             }
         },
         "patches-ignore": {
