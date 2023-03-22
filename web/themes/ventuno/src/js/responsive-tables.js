@@ -1,10 +1,11 @@
 /**
  * @file
- * DOM modification for content tables (raw user-inputted tables).
+ * Adds a wrapper around the table to prevent it overflowing to the right on
+ * small screens.
  */
 
 (() => {
-  Drupal.behaviors.contentTables = {
+  Drupal.behaviors.responsiveTables = {
     attach() {
       const tables = document.querySelectorAll("#block-ventuno-content table");
       tables.forEach((element) => {

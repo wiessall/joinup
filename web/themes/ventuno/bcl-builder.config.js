@@ -30,8 +30,8 @@ module.exports = {
       },
     },
     {
-      entry: path.resolve(outputFolder, "src/js/content-tables.js"),
-      dest: path.resolve(outputFolder, "assets/js/content-tables.js"),
+      entry: path.resolve(outputFolder, "src/js/responsive-tables.js"),
+      dest: path.resolve(outputFolder, "assets/js/responsive-tables.js"),
       options: {
         minify: true,
         sourceMap: true,
