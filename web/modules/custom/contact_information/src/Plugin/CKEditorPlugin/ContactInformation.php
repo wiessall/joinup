@@ -113,18 +113,12 @@ class ContactInformation extends CKEditorPluginBase implements ContainerFactoryP
       ];
     }
 
-    $url = Url::fromRoute('entity.rdf_entity.contact', ['rdf_entity' => $group->id()])->setOption('query', [
-      'destination' => '',
-    ])->toString();
-    $login = Url::fromRoute('cas.login')->setOption('query', [
-      'destination' => Url::fromRoute('entity.rdf_entity.contact', ['rdf_entity' => $group->id()])->toString(),
-    ])->toString();
+    $url = Url::fromRoute('entity.rdf_entity.contact', ['rdf_entity' => $group->id()])->toString();
     $disable = !empty($group->getValidatedContactInformation());
 
     return [
       'contactInformation_disable' => $disable,
       'contactInformation_url' => $url,
-      'contactInformation_login' => $login,
     ];
   }
 
