@@ -752,18 +752,6 @@ class JoinupSearchContext extends RawDrupalContext {
   }
 
   /**
-   * Opens the search bar.
-   *
-   * @When I open the search bar by clicking on the search icon
-   */
-  public function openSearchBar() {
-    // One can only open the search bar if JavaScript is enabled.
-    $this->assertJavaScriptEnabledBrowser();
-    $element = $this->getSearchBarElement();
-    $element->focus();
-  }
-
-  /**
    * Returns the search bar as a Mink page element.
    *
    * @return \Behat\Mink\Element\NodeElement
