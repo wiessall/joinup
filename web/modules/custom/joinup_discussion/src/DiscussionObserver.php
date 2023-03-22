@@ -9,6 +9,7 @@ use Drupal\changed_fields\ObserverInterface;
 use Drupal\joinup_discussion\Entity\DiscussionInterface;
 use Drupal\joinup_discussion\Event\DiscussionEvents;
 use Drupal\joinup_discussion\Event\DiscussionUpdateEvent;
+use Drupal\joinup_workflow\ArchivableEntityInterface;
 
 /**
  * Triggers a DiscussionUpdateEvent when fields in a discussion are updated.
@@ -18,20 +19,12 @@ use Drupal\joinup_discussion\Event\DiscussionUpdateEvent;
 class DiscussionObserver implements ObserverInterface {
 
   /**
-   * The event dispatcher service.
-   *
-   * @var \Drupal\Component\EventDispatcher\ContainerAwareEventDispatcher
-   */
-  protected $eventDispatcher;
-
-  /**
    * Builds a new discussion observer.
    *
-   * @param \Drupal\Component\EventDispatcher\ContainerAwareEventDispatcher $event_dispatcher
+   * @param \Drupal\Component\EventDispatcher\ContainerAwareEventDispatcher $eventDispatcher
    *   The event dispatcher service.
    */
-  public function __construct(ContainerAwareEventDispatcher $event_dispatcher) {
-    $this->eventDispatcher = $event_dispatcher;
+  public function __construct(protected ContainerAwareEventDispatcher $eventDispatcher) {
   }
 
   /**
@@ -59,10 +52,18 @@ class DiscussionObserver implements ObserverInterface {
     /** @var \Drupal\changed_fields\EntitySubject $entity_subject */
     /** @var \Drupal\node\NodeInterface $discussion */
     $discussion = $entity_subject->getEntity();
+    if (!$discussion instanceof DiscussionInterface) {
+      return;
+    }
+
     $changed_fields = $entity_subject->getChangedFields();
+    $state = $discussion->get('field_state')->getString();
+    $was_archived = isset($discussion->original) && $discussion->original instanceof ArchivableEntityInterface ?
+      $discussion->original->isArchived() : FALSE;
+
     // Dispatch the update event only if there are changes of relevant fields
-    // and the discussion is in the 'validated' state.
-    if ($discussion instanceof DiscussionInterface && $changed_fields && $discussion->get('field_state')->value === 'validated') {
+    // and the discussion is in the 'validated' state and previous state was not archived.
+    if ($changed_fields && $state === 'validated' && !$was_archived) {
       $event = new DiscussionUpdateEvent($discussion, $changed_fields);
       $this->eventDispatcher->dispatch($event, DiscussionEvents::UPDATE);
     }
