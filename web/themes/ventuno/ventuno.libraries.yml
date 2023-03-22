@@ -91,7 +91,7 @@ tables:
     theme:
       assets/css/tables.min.css: { minified: true }
   js:
-    assets/js/content-tables.min.js: { minified: true, attributes: { defer: true } }
+    assets/js/responsive-tables.min.js: { minified: true, attributes: { defer: true } }
 
 # Custom components
 abstract:
