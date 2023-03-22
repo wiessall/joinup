@@ -33,7 +33,7 @@ function ventuno_form_join_group_form_alter(array &$form, FormStateInterface $fo
   // Make the 'Join' modal link for anonymous users appear as a button.
   if (isset($form['authenticate'])) {
     $form['authenticate']['#attributes']['class'][] = 'btn';
-    $form['authenticate']['#attributes']['class'][] = 'btn-secondary';
+    $form['authenticate']['#attributes']['class'][] = 'btn-brand';
   }
 
   if (isset($form['pending'])) {
@@ -100,7 +100,10 @@ function ventuno_form_alter(array &$form, FormStateInterface $form_state, string
     $classes = $form['actions']['delete']['#attributes']['class'] ?? [];
     $form['actions']['delete']['#attributes']['class'] = array_merge(
       $classes,
-      ['btn', 'btn-md', 'btn-outline-danger'],
+      ['btn', 'btn-outline-danger'],
     );
+  }
+  if ($form_id === 'join_group_form' && isset($form['join'])) {
+    $form['join']['#attributes']['class'] = ['btn', 'btn-brand'];
   }
 }
