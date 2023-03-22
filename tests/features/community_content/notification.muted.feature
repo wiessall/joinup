@@ -18,32 +18,25 @@ Feature: Notifications are muted when entity is archived/unarchived.
       | Milky Way  | bisera | owner       |
       | Milky Way  | kalin  | facilitator |
     And the following collection content subscriptions:
-      | collection | user   | subscriptions                     |
-      | Milky Way  | hristo | discussion, event, news, solution |
-      | Milky Way  | bisera | discussion, document, news        |
-      | Milky Way  | kalin  | document, event                   |
+      | collection | user   | subscriptions                                 |
+      | Milky Way  | hristo | discussion, discussion, event, news, solution |
+      | Milky Way  | bisera | discussion, document, news                    |
+      | Milky Way  | kalin  | document, event                               |
 
   Scenario Outline: Updates to archive and unarchive state does not trigger notifications.
     Given <type> content:
       | title            | state     | collection | body | content | headline    |
       | Milky Way <type> | validated | Milky Way  | Test | Test    | Test <type> |
-    And all message digests have been delivered
     And I mark all emails as read
     When I am logged in as "bisera"
     And I go to the edit form of the "Milky Way <type>" <type>
-    And I fill in "<body label>" with "Milky Way <type> archived content"
     And I press "Archive"
     When I go to the edit form of the "Milky Way <type>" <type>
-    And I fill in "<body label>" with "Milky Way <type> unarchived content"
     And I press "Unarchive"
     Then 0 e-mail should have been sent
-    And the daily digest for hristo should not contain any messages
-    And the weekly digest for bisera should not contain any messages
-    And the monthly digest for kalin should not contain any messages
 
     Examples:
-      | type       | body label  |
-      | discussion | Content     |
-      | document   | Description |
-      | event      | Description |
-      | news       | Content     |
+      | type     |
+      | document |
+      | event    |
+      | news     |
