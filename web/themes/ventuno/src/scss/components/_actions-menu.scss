@@ -3,7 +3,7 @@
   position: fixed;
   right: $spacer;
   bottom: $spacer;
-  z-index: 50; // Avoid dropdown-menu to be overlapped by navbar
+  z-index: 501; // Avoid dropdown-menu to be overlapped by navbar
   @include media-breakpoint-up(lg) {
     right: unset;
     left: calc(100% - $spacer * 3); // 100% - 46px
