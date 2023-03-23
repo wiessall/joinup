@@ -583,16 +583,7 @@ trait TraversingTrait {
           'search fields',
         ],
         'selectors' => [
-          // The site-wide search field in the top right corner.
-          ['css', '.navbar-search input.search-bar__input'],
-          // The search field on the search result pages.
-          ['css', 'main[role="main"] input.search-bar__input'],
-          // The search field on the Homepage header.
-          ['css', '.region-featured .search-bar input.search-bar__input'],
-          // @todo Joinup_theme old navbar searchbox selector.
-          // Remove when we have fully migrated to the new theme.
-          // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7138
-          ['css', '.navbar-search input[data-drupal-selector="edit-keys"]'],
+          ['css', 'input[name="keys"]'],
         ],
       ],
     ];
