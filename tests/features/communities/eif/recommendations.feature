@@ -165,10 +165,8 @@ Feature:
     # Ensure that the identifier field is hidden.
     And I should not see the text "Identifier"
 
-  @javascript
   Scenario: Searching for anything, will not return eif recommendations as results.
     Given I am not logged in
     And I am on the homepage
-    And I press "Toggle search box"
     And I enter "Underlying Principle 4" in the search bar and press enter
     Then I should not see the text "Underlying Principle" in the "Content" region
