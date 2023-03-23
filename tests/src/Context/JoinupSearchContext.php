@@ -752,6 +752,18 @@ class JoinupSearchContext extends RawDrupalContext {
   }
 
   /**
+   * Focuses on the search input.
+   *
+   * @When I focus on the search input
+   */
+  public function focusOnSearchInput() {
+    // One can only open the search bar if JavaScript is enabled.
+    $this->assertJavaScriptEnabledBrowser();
+    $element = $this->getSearchBarElement();
+    $element->focus();
+  }
+
+  /**
    * Returns the search bar as a Mink page element.
    *
    * @return \Behat\Mink\Element\NodeElement
