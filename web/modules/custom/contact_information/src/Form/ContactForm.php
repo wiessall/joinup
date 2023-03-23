@@ -21,17 +21,17 @@ class ContactForm extends OriginalContactForm {
    *
    * @var \Drupal\rdf_entity\RdfInterface
    */
-  protected RdfInterface $rdf_entity;
+  protected RdfInterface $rdfEntity;
 
   /**
    * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state, ?RdfInterface $rdf_entity = NULL): array {
-    $this->rdf_entity = $rdf_entity;
+    $this->rdfEntity = $rdf_entity;
     $user = $this->currentUser();
     $form['emails'] = [
       '#type' => 'value',
-      '#value' => serialize($this->rdf_entity->getValidatedContactInformation()),
+      '#value' => serialize($this->rdfEntity->getValidatedContactInformation()),
     ];
 
     $form['name'] = [
@@ -82,7 +82,7 @@ class ContactForm extends OriginalContactForm {
   public function submitForm(array &$form, FormStateInterface $form_state): void {
     $this->sendMessage($form, $form_state);
     $form_state->setRedirect('entity.rdf_entity.about_page', [
-      'rdf_entity' => $this->rdf_entity->id(),
+      'rdf_entity' => $this->rdfEntity->id(),
     ]);
   }
 
