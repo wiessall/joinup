@@ -135,8 +135,6 @@ table-files:
   css:
     theme:
       assets/css/table-files.min.css: { minified: true }
-  dependencies:
-    - ventuno/tables
 
 tabs:
   css:
@@ -256,8 +254,6 @@ paragraph:
   css:
     theme:
       assets/css/paragraph.min.css: { minified: true }
-  dependencies:
-    - ventuno/tables
 
 releases:
   css:
