@@ -96,7 +96,7 @@ QUERY;
 /**
  * Migrate Video content into new Media field.
  */
-function joinup_core_deploy_109101(array &$sandbox): string {
+function joinup_core_deploy_0109101(array &$sandbox): string {
   if (empty($sandbox['ids'])) {
     $sandbox['ids'] = \Drupal::entityQuery('node')->condition('type', 'video')->execute();
     $sandbox['count'] = 0;
@@ -172,7 +172,7 @@ function _joinup_core_deploy_migrate_field(MediaType $media_type, string $ref_fi
 /**
  * Migrate video embed markup into media.
  */
-function joinup_core_deploy_109101(array &$sandbox): string {
+function joinup_core_deploy_0109102(array &$sandbox): string {
   if (empty($sandbox['tasks'])) {
     $sandbox['tasks']['node'] = \Drupal::entityQuery('node')
       ->condition('body', 'preview_thumbnail', 'CONTAINS')
