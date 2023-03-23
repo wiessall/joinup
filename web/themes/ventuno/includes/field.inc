@@ -43,11 +43,9 @@ function ventuno_preprocess_field_multiple_value_form(array &$variables): void {
  * Implements hook_preprocess_field().
  */
 function ventuno_preprocess_field(array &$variables): void {
-  // Always attach tables library so we make them responsive and styled.
-  $variables['#attached']['library'][] = 'ventuno/tables';
   $element = $variables['element'];
   // Make the topics appear as badges in solution headers.
-  if ($element["#view_mode"] === 'group_header' && $element["#field_name"] === 'field_topic') {
+  if ($element['#view_mode'] === 'group_header' && $element['#field_name'] === 'field_topic') {
     $variables['#attached']['library'][] = 'ventuno/badge';
     $items = $variables['items'];
     foreach ($items as $key => $item) {

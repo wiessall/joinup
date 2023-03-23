@@ -22,11 +22,8 @@ function ventuno_preprocess_rdf_entity(array &$variables): void {
   // of a group, so we can add a <h1> title in the group header.
   $route_match = \Drupal::routeMatch();
   $route_name = $route_match->getRouteName();
-  if ($route_name === 'entity.rdf_entity.canonical') {
-    if ($entity = $route_match->getParameter('rdf_entity')) {
-      $rdf_type = $entity->getType();
-    }
-    if (isset($rdf_type) && in_array($rdf_type, ['collection', 'solution'])) {
+  if ($route_name === 'entity.rdf_entity.canonical' && $entity = $route_match->getParameter('rdf_entity')) {
+    if (in_array($entity->getType(), ['collection', 'solution'])) {
       $variables['is_canonical'] = TRUE;
     }
   }

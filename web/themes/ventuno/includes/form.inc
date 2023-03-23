@@ -47,6 +47,12 @@ function ventuno_form_join_group_form_alter(array &$form, FormStateInterface $fo
     $form['leave']['#confirm']['#attributes']['class'][] = 'btn';
     $form['leave']['#confirm']['#attributes']['class'][] = 'btn-secondary';
   }
+
+  // Make the 'Join' button for logged-in users appear as button brand.
+  if (isset($form['join'])) {
+    $form['join']['#attributes']['class'][] = 'btn';
+    $form['join']['#attributes']['class'][] = 'btn-brand';
+  }
 }
 
 /**
@@ -102,8 +108,5 @@ function ventuno_form_alter(array &$form, FormStateInterface $form_state, string
       $classes,
       ['btn', 'btn-outline-danger'],
     );
-  }
-  if ($form_id === 'join_group_form' && isset($form['join'])) {
-    $form['join']['#attributes']['class'] = ['btn', 'btn-brand'];
   }
 }
