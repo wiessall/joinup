@@ -4,9 +4,13 @@ declare(strict_types = 1);
 
 namespace Drupal\joinup_group_content_management\Plugin\Action;
 
+use Drupal\Component\Datetime\TimeInterface;
+use Drupal\Core\Render\RendererInterface;
+use Drupal\Core\Session\AccountInterface;
 use Drupal\joinup_group_content_management\Exception\ActionException;
 use Drupal\joinup_workflow\EntityWorkflowStateInterface;
 use Drupal\node\NodeInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Provides a VBO action that archive content.
@@ -18,6 +22,40 @@ use Drupal\node\NodeInterface;
  * )
  */
 class ArchiveAction extends StateActionBase {
+
+  /**
+   * Constructs object.
+   *
+   * @param array $configuration
+   *   A configuration array containing information about the plugin instance.
+   * @param string $plugin_id
+   *   The plugin_id for the plugin instance.
+   * @param mixed $plugin_definition
+   *   The plugin implementation definition.
+   * @param \Drupal\Core\Render\RendererInterface $renderer
+   *   The renderer service.
+   * @param \Drupal\Component\Datetime\TimeInterface $time
+   *   The time service.
+   * @param \Drupal\Core\Session\AccountInterface $currentUser
+   *   The current user.
+   */
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, protected RendererInterface $renderer, protected TimeInterface $time, protected AccountInterface $currentUser) {
+    parent::__construct($configuration, $plugin_id, $plugin_definition);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition): self {
+    return new static(
+      $configuration,
+      $plugin_id,
+      $plugin_definition,
+      $container->get('renderer'),
+      $container->get('datetime.time'),
+      $container->get('current_user')
+    );
+  }
 
   /**
    * {@inheritdoc}
