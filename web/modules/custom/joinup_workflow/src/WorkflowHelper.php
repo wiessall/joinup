@@ -4,14 +4,17 @@ declare(strict_types = 1);
 
 namespace Drupal\joinup_workflow;
 
+use Drupal\Component\Datetime\TimeInterface;
 use Drupal\Component\Plugin\PluginInspectionInterface;
 use Drupal\Core\Entity\EntityFieldManagerInterface;
 use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Entity\FieldableEntityInterface;
 use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\Core\Session\AccountSwitcherInterface;
+use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\og\MembershipManagerInterface;
 use Drupal\state_machine\Plugin\Workflow\WorkflowInterface;
 use Drupal\state_machine\Plugin\Workflow\WorkflowTransition;
@@ -22,40 +25,7 @@ use Drupal\workflow_state_permission\WorkflowStatePermissionInterface;
  */
 class WorkflowHelper implements WorkflowHelperInterface {
 
-  /**
-   * The account switcher service.
-   *
-   * @var \Drupal\Core\Session\AccountSwitcherInterface
-   */
-  protected $accountSwitcher;
-
-  /**
-   * The current user proxy.
-   *
-   * @var \Drupal\Core\Session\AccountProxyInterface
-   */
-  protected $currentUser;
-
-  /**
-   * The entity field manager.
-   *
-   * @var \Drupal\Core\Entity\EntityFieldManagerInterface
-   */
-  protected $entityFieldManager;
-
-  /**
-   * The membership manager service.
-   *
-   * @var \Drupal\og\MembershipManagerInterface
-   */
-  protected $membershipManager;
-
-  /**
-   * The workflow state permission service.
-   *
-   * @var \Drupal\workflow_state_permission\WorkflowStatePermissionInterface
-   */
-  protected $workflowStatePermission;
+  use StringTranslationTrait;
 
   /**
    * Constructs a WorkflowHelper.
@@ -70,26 +40,32 @@ class WorkflowHelper implements WorkflowHelperInterface {
    *   The membership manager service.
    * @param \Drupal\workflow_state_permission\WorkflowStatePermissionInterface $workflowStatePermission
    *   The workflow state permission service.
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
+   *   The entity type manager.
+   * @param \Drupal\Component\Datetime\TimeInterface $time
+   *   The time service.
    */
-  public function __construct(AccountProxyInterface $currentUser, AccountSwitcherInterface $accountSwitcher, EntityFieldManagerInterface $entityFieldManager, MembershipManagerInterface $membershipManager, WorkflowStatePermissionInterface $workflowStatePermission) {
-    $this->accountSwitcher = $accountSwitcher;
-    $this->currentUser = $currentUser;
-    $this->entityFieldManager = $entityFieldManager;
-    $this->membershipManager = $membershipManager;
-    $this->workflowStatePermission = $workflowStatePermission;
-  }
+  public function __construct(
+    protected AccountProxyInterface $currentUser,
+    protected AccountSwitcherInterface $accountSwitcher,
+    protected EntityFieldManagerInterface $entityFieldManager,
+    protected MembershipManagerInterface $membershipManager,
+    protected WorkflowStatePermissionInterface $workflowStatePermission,
+    protected EntityTypeManagerInterface $entityTypeManager,
+    protected TimeInterface $time
+  ) {}
 
   /**
    * {@inheritdoc}
    */
   public function getAvailableStatesLabels(FieldableEntityInterface $entity, ?AccountInterface $account = NULL): array {
-    $allowed_transitions = $this->getAvailableTransitions($entity, $account);
+    $allowedTransitions = $this->getAvailableTransitions($entity, $account);
 
-    $allowed_states = array_map(function (WorkflowTransition $transition) {
+    $allowedStates = array_map(function (WorkflowTransition $transition) {
       return (string) $transition->getToState()->getLabel();
-    }, $allowed_transitions);
+    }, $allowedTransitions);
 
-    return $allowed_states;
+    return $allowedStates;
   }
 
   /**
@@ -97,19 +73,19 @@ class WorkflowHelper implements WorkflowHelperInterface {
    */
   public function getAvailableTargetStates(FieldableEntityInterface $entity, ?AccountInterface $account = NULL): array {
     /** @var \Drupal\joinup_workflow\EntityWorkflowStateInterface $entity */
-    $allowed_transitions = $this->getAvailableTransitions($entity, $account);
+    $allowedTransitions = $this->getAvailableTransitions($entity, $account);
 
-    $allowed_states = array_map(function (WorkflowTransition $transition) {
+    $allowedStates = array_map(function (WorkflowTransition $transition) {
       return (string) $transition->getToState()->getId();
-    }, $allowed_transitions);
+    }, $allowedTransitions);
 
-    $current_state = $entity->getWorkflowState();
+    $currentState = $entity->getWorkflowState();
     $workflow = $entity->getWorkflow();
-    if ($this->workflowStatePermission->isStateUpdatePermitted($account, $entity, $workflow, $current_state, $current_state)) {
-      $allowed_states[$current_state] = $current_state;
+    if ($this->workflowStatePermission->isStateUpdatePermitted($account, $entity, $workflow, $currentState, $currentState)) {
+      $allowedStates[$currentState] = $currentState;
     }
 
-    return $allowed_states;
+    return $allowedStates;
   }
 
   /**
@@ -123,15 +99,15 @@ class WorkflowHelper implements WorkflowHelperInterface {
     // field method, to avoid these account switch trickeries.
     // @todo change this once the upstream issue is fixed.
     // @see https://www.drupal.org/node/2776969
-    $account_switched = FALSE;
+    $accountSwitched = FALSE;
     if ($account !== NULL && $account->id() !== $this->currentUser->id()) {
       $this->accountSwitcher->switchTo($account);
-      $account_switched = TRUE;
+      $accountSwitched = TRUE;
     }
 
     $transitions = $entity->getWorkflowStateField()->getTransitions();
 
-    if ($account_switched) {
+    if ($accountSwitched) {
       $this->accountSwitcher->switchBack();
     }
 
@@ -141,9 +117,9 @@ class WorkflowHelper implements WorkflowHelperInterface {
   /**
    * {@inheritdoc}
    */
-  public function getEntityStateFieldDefinition(string $entity_type_id, string $bundle_id): ?FieldDefinitionInterface {
-    if ($field_definitions = $this->getEntityStateFieldDefinitions($entity_type_id, $bundle_id)) {
-      return reset($field_definitions);
+  public function getEntityStateFieldDefinition(string $entityTypeId, string $bundle): ?FieldDefinitionInterface {
+    if ($fieldDefinitions = $this->getEntityStateFieldDefinitions($entityTypeId, $bundle)) {
+      return reset($fieldDefinitions);
     }
 
     return NULL;
@@ -152,8 +128,8 @@ class WorkflowHelper implements WorkflowHelperInterface {
   /**
    * {@inheritdoc}
    */
-  public function getEntityStateFieldDefinitions(string $entity_type_id, string $bundle_id): array {
-    return array_filter($this->entityFieldManager->getFieldDefinitions($entity_type_id, $bundle_id), function (FieldDefinitionInterface $field_definition) {
+  public function getEntityStateFieldDefinitions(string $entityTypeId, string $bundle): array {
+    return array_filter($this->entityFieldManager->getFieldDefinitions($entityTypeId, $bundle), function (FieldDefinitionInterface $field_definition) {
       return $field_definition->getType() == 'state';
     });
   }
@@ -170,7 +146,7 @@ class WorkflowHelper implements WorkflowHelperInterface {
   /**
    * {@inheritdoc}
    */
-  public function isWorkflowStatePublished(string $state_id, WorkflowInterface $workflow): bool {
+  public function isWorkflowStatePublished(string $stateId, WorkflowInterface $workflow): bool {
     // We rely on being able to inspect the plugin definition. Throw an error if
     // this is not the case.
     if (!$workflow instanceof PluginInspectionInterface) {
@@ -180,8 +156,8 @@ class WorkflowHelper implements WorkflowHelperInterface {
 
     // Retrieve the raw plugin definition, as all additional plugin settings
     // are stored there.
-    $raw_workflow_definition = $workflow->getPluginDefinition();
-    return !empty($raw_workflow_definition['states'][$state_id]['published']);
+    $rawWorkflowDefinition = $workflow->getPluginDefinition();
+    return !empty($rawWorkflowDefinition['states'][$stateId]['published']);
   }
 
   /**
@@ -247,13 +223,43 @@ class WorkflowHelper implements WorkflowHelperInterface {
    * {@inheritdoc}
    */
   public function hasOgPermission(string $permission, EntityInterface $group, AccountInterface $user): bool {
-    $actual_permissions = [];
+    $actualPermissions = [];
     if ($membership = $this->membershipManager->getMembership($group, $user->id())) {
       foreach ($membership->getRoles() as $role) {
-        $actual_permissions = array_merge($actual_permissions, $role->getPermissions());
+        $actualPermissions = array_merge($actualPermissions, $role->getPermissions());
       }
     }
-    return in_array($permission, array_unique($actual_permissions));
+    return in_array($permission, array_unique($actualPermissions));
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function unarchiveEntity(EntityInterface $entity): EntityInterface {
+    // Revert to the previous revision of the node.
+    $entityType = $entity->getEntityType();
+    $entityStorage = $this->entityTypeManager->getStorage($entityType->id());
+
+    // Load the previous revision IDs.
+    $revisionIds = $entityStorage->getQuery()->allRevisions()
+      ->condition($entityType->getKey('id'), $entity->id())
+      ->sort($entity->getEntityType()->getKey('revision'), 'DESC')
+      ->range(1, 1)
+      ->execute();
+    $revisionIds = array_keys($revisionIds);
+
+    // Load the previous revision.
+    $previousRevision = $entityStorage->loadRevision(reset($revisionIds));
+    $previousRevision->setNewRevision(TRUE);
+    $previousRevision->isDefaultRevision(TRUE);
+    $previousRevision->setRevisionLogMessage($this->t('Unarchived by @user', [
+      '@user' => $this->currentUser->getAccountName(),
+    ]));
+    $previousRevision->setRevisionCreationTime($this->time->getRequestTime());
+    $previousRevision->setRevisionUserId($this->currentUser->id());
+    $previousRevision->save();
+
+    return $previousRevision;
   }
 
 }
