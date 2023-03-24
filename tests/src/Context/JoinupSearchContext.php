@@ -878,7 +878,7 @@ class JoinupSearchContext extends RawDrupalContext {
    * @Then I should see search bar in navbar
    */
   public function assertSearchExposedFilterNavbar(): void {
-    $getAllInput = $this->getSession()->getPage()->findAll('css', '.joinup-navbar .navbar-search input#edit-keys');
+    $getAllInput = $this->getSession()->getPage()->findAll('css', '.joinup-navbar .navbar-search input#search-box');
 
     if (count($getAllInput) < 1) {
       throw new \Exception('Search bar not found in navbar.');
@@ -894,7 +894,7 @@ class JoinupSearchContext extends RawDrupalContext {
    * @Then I should not see search bar in navbar
    */
   public function failSearchExposedFilterNavbar(): void {
-    $getAllInput = $this->getSession()->getPage()->findAll('css', '.joinup-navbar .navbar-search input#edit-keys');
+    $getAllInput = $this->getSession()->getPage()->findAll('css', '.joinup-navbar .navbar-search input#search-box');
 
     if (count($getAllInput) > 0) {
       throw new \Exception('Search bar found in navbar.');
