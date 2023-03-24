@@ -1007,8 +1007,14 @@ class JoinupSearchContext extends RawDrupalContext {
    * @Then the two search inputs should have different ids
    */
   public function assertDifferentIdsInSearchInputs(): void {
-    $getNavbarInputId = $this->getSession()->getPage()->find('css', '.joinup-navbar .navbar-search .search-bar__input')->getAttribute('id');
-    $getHeaderInputId = $this->getSession()->getPage()->find('css', '.region-featured .search-bar .search-bar__input')->getAttribute('id');
+    $navigation = $this->getRegion('Navigation bar');
+    $featured = $this->getRegion('Featured');
+
+    $getNavbarInputId = $navigation->find('css', '.search-bar__input')
+      ->getAttribute('id');
+    $getHeaderInputId = $featured->find('css', '.search-bar__input')
+      ->getAttribute('id');
+
     Assert::assertNotEquals($getNavbarInputId, $getHeaderInputId, 'The two search inputs have the same id.');
   }
 
