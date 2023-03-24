@@ -38,8 +38,8 @@ function ventuno_form_views_exposed_form_alter(array &$form, FormStateInterface 
     $form['keys']['#title_display'] = 'invisible';
     $form['keys']['#attributes']['placeholder'] = t('Start typing to search…');
     $form['keys']['#joinup_parent'] = $form_id . '_' . $view->id();
-    // Ensure the ID is unique, using "edit-keys" as base.
-    $form['keys']['#id'] = Html::getUniqueId('edit-keys');
+    // Ensure the ID is unique, using "search-box" as base.
+    $form['keys']['#id'] = Html::getUniqueId('search-box');
   }
 
   if ($route_name != 'view.search.page_1' && $view->id() === 'search') {
