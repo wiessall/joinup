@@ -25,8 +25,6 @@ trait EntityTrait {
    *   The label to check.
    * @param string|null $bundle
    *   Optional bundle to check. If omitted, the entity can be of any bundle.
-   * @param bool $require_unique
-   *   Require label to be unique.
    *
    * @return \Drupal\Core\Entity\ContentEntityInterface
    *   The requested entity.
@@ -35,7 +33,7 @@ trait EntityTrait {
    *   Thrown when an entity with the given type, label and bundle does not
    *   exist.
    */
-  protected static function getEntityByLabel(string $entity_type_id, string $label, ?string $bundle = NULL, bool $require_unique = TRUE): EntityInterface {
+  protected static function getEntityByLabel(string $entity_type_id, string $label, ?string $bundle = NULL): EntityInterface {
     $entity_type_manager = \Drupal::entityTypeManager();
     try {
       $storage = $entity_type_manager->getStorage($entity_type_id);
@@ -59,7 +57,7 @@ trait EntityTrait {
       throw new \RuntimeException("The entity with label '$label' was not found.");
     }
 
-    if ($require_unique && count($result) > 1) {
+    if (count($result) > 1) {
       throw new \RuntimeException("Label '$label' is not unique so test can be not accurate.");
     }
 
