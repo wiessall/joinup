@@ -250,15 +250,14 @@ class WorkflowHelper implements WorkflowHelperInterface {
 
     // Load the previous revision.
     $previousRevision = $entityStorage->loadRevision(reset($revisionIds));
-    $previousRevision
-      ->setNewRevision(TRUE)
-      ->isDefaultRevision(TRUE)
-      ->setRevisionLogMessage($this->t('Unarchived by @user', [
-        '@user' => $this->currentUser->getAccountName(),
-      ]))
-      ->setRevisionCreationTime($this->time->getRequestTime())
-      ->setRevisionUserId($this->currentUser->id())
-      ->save();
+    $previousRevision->setNewRevision(TRUE);
+    $previousRevision->isDefaultRevision(TRUE);
+    $previousRevision->setRevisionLogMessage($this->t('Unarchived by @user', [
+      '@user' => $this->currentUser->getAccountName(),
+    ]));
+    $previousRevision->setRevisionCreationTime($this->time->getRequestTime());
+    $previousRevision->setRevisionUserId($this->currentUser->id());
+    $previousRevision->save();;
 
     return $previousRevision;
   }
