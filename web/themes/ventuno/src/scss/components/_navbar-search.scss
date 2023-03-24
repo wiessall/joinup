@@ -23,8 +23,8 @@
     align-items: center;
     border: $border-width solid $border-color;
     border-radius: $border-radius-sm;
-    .badge {
-      .badge__text {
+    .search-badge {
+      .search-badge__text {
         max-width: 5rem;
         @include media-breakpoint-up(sm) {
           max-width: 10rem;
