@@ -45,7 +45,8 @@ trait EntityTrait {
 
     $query = $storage->getQuery()
       ->condition($entity->getKey('label'), $label)
-      ->accessCheck(FALSE);
+      ->accessCheck(FALSE)
+      ->range(0, 1);
 
     // Optionally filter by bundle.
     if ($bundle) {
@@ -53,19 +54,16 @@ trait EntityTrait {
     }
 
     $result = $query->execute();
-    if (!$result) {
-      throw new \RuntimeException("The entity with label '$label' was not found.");
+
+    if ($result) {
+      $result = reset($result);
+      // Make sure we get a fresh entity from the database, to avoid testing
+      // with stale data.
+      $storage->resetCache([$result]);
+      return $storage->load($result);
     }
 
-    if (count($result) > 1) {
-      throw new \RuntimeException("Label '$label' is not unique so test can be not accurate.");
-    }
-
-    $result = reset($result);
-    // Make sure we get a fresh entity from the database, to avoid testing
-    // with stale data.
-    $storage->resetCache([$result]);
-    return $storage->load($result);
+    throw new \RuntimeException("The entity with label '$label' was not found.");
   }
 
   /**
