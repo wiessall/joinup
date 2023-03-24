@@ -191,6 +191,15 @@ class GroupMembershipPermissionsInformationController extends ControllerBase {
           'owner' => TRUE,
         ],
       ],
+      [
+        'description' => $this->t('Archive content'),
+        'permitted' => [
+          'member' => FALSE,
+          'author' => FALSE,
+          'facilitator' => TRUE,
+          'owner' => TRUE,
+        ],
+      ],
     ];
 
     $build['permissions'] = [
