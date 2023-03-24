@@ -48,7 +48,8 @@ abstract class StateActionBase extends ViewsBulkOperationsActionBase implements 
     foreach ($objects as $entity) {
       try {
         $this->canBeExecuted($entity);
-      } catch (ActionException $e) {
+      }
+      catch (ActionException $e) {
         $messages[] = $this->t('@entity can not not be processed: @error',
           [
             '@entity' => $entity->getTitle(),

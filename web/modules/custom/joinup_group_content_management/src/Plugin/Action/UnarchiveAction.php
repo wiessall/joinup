@@ -37,6 +37,8 @@ class UnarchiveAction extends StateActionBase {
    *   The renderer service.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
    *   The entity type manager service.
+   * @param \Drupal\joinup_workflow\WorkflowHelperInterface $workflowHelper
+   *   Workflow helper.
    */
   public function __construct(array $configuration, $plugin_id, $plugin_definition, protected RendererInterface $renderer, protected EntityTypeManagerInterface $entityTypeManager, protected WorkflowHelperInterface $workflowHelper) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
