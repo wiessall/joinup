@@ -68,15 +68,15 @@ interface WorkflowHelperInterface {
   /**
    * Returns the state field definitions of an entity.
    *
-   * @param string $entity_type_id
+   * @param string $entityTypeId
    *   The entity type ID for which to return the state field definitions.
-   * @param string $bundle_id
+   * @param string $bundle
    *   The bundle ID for which to return the state field definitions.
    *
    * @return \Drupal\Core\Field\FieldDefinitionInterface[]
    *   Returns an array of state field definitions.
    */
-  public function getEntityStateFieldDefinitions(string $entity_type_id, string $bundle_id): array;
+  public function getEntityStateFieldDefinitions(string $entityTypeId, string $bundle): array;
 
   /**
    * Returns the state field definition of an entity.
@@ -85,21 +85,21 @@ interface WorkflowHelperInterface {
    * so this method returns the first available field definitions of the
    * entity's field definitions otherwise it returns NULL.
    *
-   * @param string $entity_type_id
+   * @param string $entityTypeId
    *   The entity type ID for which to return the state field definition.
-   * @param string $bundle_id
+   * @param string $bundle
    *   The bundle ID for which to return the state field definition.
    *
    * @return \Drupal\Core\Field\FieldDefinitionInterface|null
    *   Returns the state field definition of the entity or NULL if none is
    *   found.
    */
-  public function getEntityStateFieldDefinition(string $entity_type_id, string $bundle_id): ?FieldDefinitionInterface;
+  public function getEntityStateFieldDefinition(string $entityTypeId, string $bundle): ?FieldDefinitionInterface;
 
   /**
    * Checks if a state is set as published in a certain workflow.
    *
-   * @param string $state_id
+   * @param string $stateId
    *   The ID of the state to check.
    * @param \Drupal\state_machine\Plugin\Workflow\WorkflowInterface $workflow
    *   The workflow the state belongs to.
@@ -111,7 +111,7 @@ interface WorkflowHelperInterface {
    *   Thrown when the workflow is not plugin based, because this is required to
    *   retrieve the publication state from the workflow states.
    */
-  public function isWorkflowStatePublished(string $state_id, WorkflowInterface $workflow): bool;
+  public function isWorkflowStatePublished(string $stateId, WorkflowInterface $workflow): bool;
 
   /**
    * Checks if the user has at least one role with the given OG permission.
@@ -166,5 +166,16 @@ interface WorkflowHelperInterface {
    *   True if the user has at least one of the roles provided.
    */
   public function userHasRoles(EntityInterface $entity, AccountInterface $account, array $roles): bool;
+
+  /**
+   * Unarchives an entity.
+   *
+   * @param \Drupal\Core\Entity\EntityInterface $entity
+   *   The entity to unarchive.
+   *
+   * @return \Drupal\Core\Entity\EntityInterface
+   *   The unarchived entity.
+   */
+  public function unarchiveEntity(EntityInterface $entity): EntityInterface;
 
 }
