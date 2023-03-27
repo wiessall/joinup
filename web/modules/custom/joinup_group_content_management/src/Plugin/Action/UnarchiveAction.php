@@ -29,9 +29,9 @@ class UnarchiveAction extends StateActionBase {
    *
    * @param array $configuration
    *   A configuration array containing information about the plugin instance.
-   * @param string $plugin_id
+   * @param string $pluginId
    *   The plugin_id for the plugin instance.
-   * @param mixed $plugin_definition
+   * @param mixed $pluginDefinition
    *   The plugin implementation definition.
    * @param \Drupal\Core\Render\RendererInterface $renderer
    *   The renderer service.
@@ -40,18 +40,18 @@ class UnarchiveAction extends StateActionBase {
    * @param \Drupal\joinup_workflow\WorkflowHelperInterface $workflowHelper
    *   Workflow helper.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, protected RendererInterface $renderer, protected EntityTypeManagerInterface $entityTypeManager, protected WorkflowHelperInterface $workflowHelper) {
-    parent::__construct($configuration, $plugin_id, $plugin_definition);
+  public function __construct(array $configuration, $pluginId, $pluginDefinition, protected RendererInterface $renderer, protected EntityTypeManagerInterface $entityTypeManager, protected WorkflowHelperInterface $workflowHelper) {
+    parent::__construct($configuration, $pluginId, $pluginDefinition);
   }
 
   /**
    * {@inheritdoc}
    */
-  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition): self {
+  public static function create(ContainerInterface $container, array $configuration, $pluginId, $pluginDefinition): self {
     return new static(
       $configuration,
-      $plugin_id,
-      $plugin_definition,
+      $pluginId,
+      $pluginDefinition,
       $container->get('renderer'),
       $container->get('entity_type.manager'),
       $container->get('joinup_workflow.workflow_helper')
@@ -108,22 +108,22 @@ class UnarchiveAction extends StateActionBase {
    *   Previous revision.
    */
   protected function getPreviousRevisionId(NodeInterface $node): ?int {
-    $entity_type = $node->getEntityTypeId();
+    $entityTypeId = $node->getEntityTypeId();
 
-    if (!$storage = $this->entityTypeManager->getStorage($entity_type)) {
+    if (!$storage = $this->entityTypeManager->getStorage($entityTypeId)) {
       return NULL;
     }
 
-    $revision_ids = $storage->getQuery()
+    $revisionIds = $storage->getQuery()
       ->allRevisions()
-      ->condition($this->entityTypeManager->getDefinition($entity_type)
+      ->condition($this->entityTypeManager->getDefinition($entityTypeId)
         ->getKey('id'), $node->id())
-      ->sort($this->entityTypeManager->getDefinition($entity_type)
+      ->sort($this->entityTypeManager->getDefinition($entityTypeId)
         ->getKey('revision'), 'DESC')
       ->range(1, 1)
       ->execute();
-    if ($revision_ids) {
-      return array_keys($revision_ids)[0];
+    if ($revisionIds) {
+      return array_keys($revisionIds)[0];
     }
 
     return NULL;

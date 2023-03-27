@@ -28,9 +28,9 @@ class ArchiveAction extends StateActionBase {
    *
    * @param array $configuration
    *   A configuration array containing information about the plugin instance.
-   * @param string $plugin_id
+   * @param string $pluginId
    *   The plugin_id for the plugin instance.
-   * @param mixed $plugin_definition
+   * @param mixed $pluginDefinition
    *   The plugin implementation definition.
    * @param \Drupal\Core\Render\RendererInterface $renderer
    *   The renderer service.
@@ -39,18 +39,18 @@ class ArchiveAction extends StateActionBase {
    * @param \Drupal\Core\Session\AccountInterface $currentUser
    *   The current user.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, protected RendererInterface $renderer, protected TimeInterface $time, protected AccountInterface $currentUser) {
-    parent::__construct($configuration, $plugin_id, $plugin_definition);
+  public function __construct(array $configuration, $pluginId, $pluginDefinition, protected RendererInterface $renderer, protected TimeInterface $time, protected AccountInterface $currentUser) {
+    parent::__construct($configuration, $pluginId, $pluginDefinition);
   }
 
   /**
    * {@inheritdoc}
    */
-  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition): self {
+  public static function create(ContainerInterface $container, array $configuration, $pluginId, $pluginDefinition): self {
     return new static(
       $configuration,
-      $plugin_id,
-      $plugin_definition,
+      $pluginId,
+      $pluginDefinition,
       $container->get('renderer'),
       $container->get('datetime.time'),
       $container->get('current_user')
