@@ -44,6 +44,16 @@ function ventuno_preprocess_field_multiple_value_form(array &$variables): void {
  */
 function ventuno_preprocess_field(array &$variables): void {
   $element = $variables['element'];
+  // View modes displayed as full page and field types with user input.
+  if (in_array($element['#view_mode'], ['about', 'full'])
+    && in_array($variables['field_type'], ['text_long', 'text_with_summary'])
+  ) {
+    // Add selectors.
+    $variables['attributes']['class'][] = 'fieldset';
+    $variables['attributes']['class'][] = 'fieldset--textarea';
+    // Attach library.
+    $variables['#attached']['library'][] = 'ventuno/paragraph';
+  }
   // Make the topics appear as badges in solution headers.
   if ($element['#view_mode'] === 'group_header' && $element['#field_name'] === 'field_topic') {
     $variables['#attached']['library'][] = 'ventuno/badge';
