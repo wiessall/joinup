@@ -31,10 +31,10 @@ class ContactInformation extends CKEditorPluginBase implements ContainerFactoryP
    *   The plugin_id for the plugin instance.
    * @param mixed $plugin_definition
    *   The plugin implementation definition.
-   * @param \Drupal\joinup_group\JoinupGroupManagerInterface $group_manager
+   * @param \Drupal\joinup_group\JoinupGroupManagerInterface $groupManager
    *   The Joinup Group manager service.
    */
-  public function __construct(array $configuration, string $plugin_id, mixed $plugin_definition, protected JoinupGroupManagerInterface $group_manager) {
+  public function __construct(array $configuration, string $plugin_id, mixed $plugin_definition, protected JoinupGroupManagerInterface $groupManager) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
   }
 
@@ -106,7 +106,7 @@ class ContactInformation extends CKEditorPluginBase implements ContainerFactoryP
    * {@inheritdoc}
    */
   public function getConfig(Editor $editor): array {
-    $group = $this->group_manager->getGroupFromContext();
+    $group = $this->groupManager->getGroupFromContext();
     if (!$group) {
       return [
         'contactInformation_disable' => FALSE,
