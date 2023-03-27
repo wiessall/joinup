@@ -878,8 +878,17 @@ class JoinupSearchContext extends RawDrupalContext {
    * @Then I should see search bar in navbar
    */
   public function assertSearchExposedFilterNavbar(): void {
-    $getAllInput = $this->getSession()->getPage()->findAll('css', '.joinup-navbar .navbar-search input#search-box');
-
+    // @todo The `#edit-keys` selector is part of the original Joinup
+    //   theme and can be removed once we migrated to the new theme.
+    // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-713
+    $locators = [
+      // Joinup theme.
+      '.joinup-navbar .navbar-search input#edit-keys',
+      // Ventuno theme.
+      '.joinup-navbar .navbar-search input#search-box',
+    ];
+    $getAllInput = $this->getSession()->getPage()->findAll('css', implode(', ', $locators));
+    // dump($getAllInput);
     if (count($getAllInput) < 1) {
       throw new \Exception('Search bar not found in navbar.');
     }
@@ -894,7 +903,16 @@ class JoinupSearchContext extends RawDrupalContext {
    * @Then I should not see search bar in navbar
    */
   public function failSearchExposedFilterNavbar(): void {
-    $getAllInput = $this->getSession()->getPage()->findAll('css', '.joinup-navbar .navbar-search input#search-box');
+    // @todo The `#edit-keys` selector is part of the original Joinup
+    //   theme and can be removed once we migrated to the new theme.
+    // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-713
+    $locators = [
+      // Joinup theme.
+      '.joinup-navbar .navbar-search input#edit-keys',
+      // Ventuno theme.
+      '.joinup-navbar .navbar-search input#search-box',
+    ];
+    $getAllInput = $this->getSession()->getPage()->findAll('css', implode(', ', $locators));
 
     if (count($getAllInput) > 0) {
       throw new \Exception('Search bar found in navbar.');
