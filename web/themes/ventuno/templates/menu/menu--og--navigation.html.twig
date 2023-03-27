@@ -16,11 +16,15 @@
       'variant': 'tabs',
       'orientation': 'horizontal',
       'items': items,
+      attributes: create_attribute()
+        .addClass('pe-4')
     })
   %}
-  <div class="menu--og--navigation__menu">
-    <div class="container">
-      {{ menu }}
+  <div class="menu--og--navigation">
+    <div class="menu--og--navigation__menu">
+      <div class="container">
+        {{ menu }}
+      </div>
     </div>
   </div>
 {% else %}
@@ -52,10 +56,10 @@
     'items': items_to_hide,
   }) %}
   <div class="menu--og--navigation">
-    <div class="menu--og--navigation__menu menu--og--navigation__menu--overflowing">
+    <div class="menu--og--navigation__menu">
       <div class="container d-flex flex-nowrap">
         {{ menu }}
-        <div class="menu--og--navigation__show-more">
+        <div class="menu--og--navigation__show-more pe-4">
           {{ show_more_button }}
           <div class="dropdown-menu" aria-labelledby="dropdownShowMoreMenuButton">
             {{ show_more_menu }}

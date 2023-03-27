@@ -1,2 +1,14 @@
 @import "core";
 @import "@openeuropa/bcl-bootstrap/scss/tables";
+
+.table {
+  > :not(caption) > * > * {
+    border-bottom-width: 0; // Override default tables to avoid border
+  }
+  &:not(.licence-comparer) {
+    > tbody > tr:nth-of-type(#{$table-striped-order}) > * {
+      --#{$prefix}table-accent-bg: var(--#{$prefix}table-striped-bg);
+      color: var(--#{$prefix}table-striped-color);
+    }
+  }
+}

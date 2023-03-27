@@ -55,7 +55,7 @@
     <tbody class="table-files__body">
       {% for row in rows %}
         <tr{{ row.attributes }}>
-          <td class="table-files__file">
+          <td class="table-files__file border-0">
             <div class="d-flex justify-content-center">
               {{ pattern('icon', {
                 name: 'file-earmark',
@@ -64,7 +64,7 @@
               <span class="table-files__file-extension" aria-hidden="true">{{ row['#file_extension'] }}</span>
             </div>
           </td>
-          <td class="table-files__link-content">
+          <td class="table-files__link-content border-0">
             {% for cell in row.cells %}
               <div class="table-files__link-item">
                 {{- cell.content -}}

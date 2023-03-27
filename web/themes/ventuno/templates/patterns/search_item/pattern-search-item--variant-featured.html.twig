@@ -20,7 +20,7 @@
   {% set _text = text|default('') %}
   {% set _metadata = metadata|default('') %}
 
-  <div class="border-0 border-bottom pb-3 mb-3 card">
+  <article class="border-0 border-bottom pb-3 mb-3 card">
     <div class="row g-1">
       <div class="col-12 col-md-2">
         {{ _image }}
@@ -34,9 +34,9 @@
           </div>
         {%- endif -%}
         <div class="card-body p-0 px-md-3">
-          <h2 class="card-title">
+          <h1 class="card-title">
             {{ title }}
-          </h2>
+          </h1>
           <p class="card-text">
             {{ text }}
           </p>
@@ -48,5 +48,5 @@
         </div>
       </div>
     </div>
-  </div>
+  </article>
 {% endapply %}

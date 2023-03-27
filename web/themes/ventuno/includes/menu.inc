@@ -7,6 +7,8 @@
 
 declare(strict_types = 1);
 
+use Drupal\block\Entity\Block;
+
 /**
  * Implements hook_theme_suggestions_HOOK_alter().
  */
@@ -23,6 +25,12 @@ function ventuno_theme_suggestions_menu_alter(array &$suggestions, array $variab
   ], TRUE)) {
     $suggestions[] = 'menu__region_footer';
     $suggestions[] = 'menu__region_footer__' . str_replace('-', '_', $variables['menu_name']);
+  }
+  // Provide a separate suggestion for menus depending on their region.
+  if (isset($variables['attributes']['data-joinup-block-id']) && $block = Block::load($variables['attributes']['data-joinup-block-id'])) {
+    $region = $block->getRegion();
+    $suggestions[] = $variables['theme_hook_original'] . '__region_' . $region;
+    unset($variables['attributes']['data-joinup-block-id']);
   }
 }
 
@@ -49,7 +57,7 @@ function ventuno_preprocess_links(array &$variables): void {
       $variables['attributes']['class'][] = 'navigation-bottom__links--only-next';
     }
     // Add 'next', 'prev', 'up' classes to bottom navigation list items.
-    if (isset($variables['attributes']['data-joinup-block-id']) && $variables['attributes']['data-joinup-block-id'] === 'toc_outline') {
+    if (isset($variables['attributes']['data-joinup-block-id']) && $variables['attributes']['data-joinup-block-id'] === 'ventuno_toc_outline') {
       foreach ($variables['links'] as $key => $link) {
         if (in_array($key, ['next', 'prev', 'up'], TRUE)) {
           /** @var \Drupal\Core\Template\Attribute $attributes */

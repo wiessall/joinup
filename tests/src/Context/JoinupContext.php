@@ -1834,7 +1834,7 @@ class JoinupContext extends RawDrupalContext {
    * @Then I should see a logo on the header
    */
   public function assertExistingLogo(): void {
-    $xpath = '//span[@data-drupal-group-logo]//img';
+    $xpath = '//div[@data-drupal-group-logo]//img';
     $this->assertSession()->elementsCount('xpath', $xpath, 1);
   }
 
@@ -3145,8 +3145,7 @@ class JoinupContext extends RawDrupalContext {
       // Card style of Ventuno theme.
       '.card .card-title',
       // Tiles as an article.
-      'article.tile h2',
-      'article.tile h3',
+      'article.tile h1',
       // Carousel for non javascript test.
       '.glide__slides .slide span',
       // Carousel for javascript test.

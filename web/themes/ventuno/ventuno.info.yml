@@ -10,6 +10,7 @@ libraries:
   - ventuno/components
   - ventuno/layout
   - ventuno/theme
+  - ventuno/tables
 
 libraries-extend:
   core/drupal.ajax:

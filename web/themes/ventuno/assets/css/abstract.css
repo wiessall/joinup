@@ -8,13 +8,8 @@
 /**
 * Mixin to generate bootstrap icon
 */
-.abstract {
-  position: relative;
-}
 .abstract .read-more {
-  position: absolute;
-  right: 1.5rem;
-  bottom: 1rem;
+  margin-top: 1rem;
   color: #1073de;
   padding: 0;
   background-color: transparent;

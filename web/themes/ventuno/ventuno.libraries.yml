@@ -90,6 +90,8 @@ tables:
   css:
     theme:
       assets/css/tables.min.css: { minified: true }
+  js:
+    assets/js/responsive-tables.min.js: { minified: true, attributes: { defer: true } }
 
 # Custom components
 abstract:
@@ -133,8 +135,6 @@ table-files:
   css:
     theme:
       assets/css/table-files.min.css: { minified: true }
-  dependencies:
-    - ventuno/tables
 
 tabs:
   css:
@@ -163,6 +163,11 @@ glossary:
   css:
     theme:
       assets/css/glossary.min.css: { minified: true }
+
+group-banner:
+  css:
+    theme:
+      assets/css/group-banner.min.css: { minified: true }
 
 glide:
   js:
@@ -249,10 +254,6 @@ paragraph:
   css:
     theme:
       assets/css/paragraph.min.css: { minified: true }
-  js:
-    assets/js/content-tables.min.js: { minified: true, attributes: { defer: true } }
-  dependencies:
-    - ventuno/tables
 
 releases:
   css:
