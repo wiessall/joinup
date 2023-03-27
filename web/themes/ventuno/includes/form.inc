@@ -33,7 +33,7 @@ function ventuno_form_join_group_form_alter(array &$form, FormStateInterface $fo
   // Make the 'Join' modal link for anonymous users appear as a button.
   if (isset($form['authenticate'])) {
     $form['authenticate']['#attributes']['class'][] = 'btn';
-    $form['authenticate']['#attributes']['class'][] = 'btn-secondary';
+    $form['authenticate']['#attributes']['class'][] = 'btn-brand';
   }
 
   if (isset($form['pending'])) {
@@ -45,7 +45,13 @@ function ventuno_form_join_group_form_alter(array &$form, FormStateInterface $fo
   if (isset($form['leave'])) {
     // Add classes for leave membership link.
     $form['leave']['#confirm']['#attributes']['class'][] = 'btn';
-    $form['leave']['#confirm']['#attributes']['class'][] = 'btn-warning';
+    $form['leave']['#confirm']['#attributes']['class'][] = 'btn-secondary';
+  }
+
+  // Make the 'Join' button for logged-in users appear as button brand.
+  if (isset($form['join'])) {
+    $form['join']['#attributes']['class'][] = 'btn';
+    $form['join']['#attributes']['class'][] = 'btn-brand';
   }
 }
 
@@ -100,7 +106,7 @@ function ventuno_form_alter(array &$form, FormStateInterface $form_state, string
     $classes = $form['actions']['delete']['#attributes']['class'] ?? [];
     $form['actions']['delete']['#attributes']['class'] = array_merge(
       $classes,
-      ['btn', 'btn-md', 'btn-outline-danger'],
+      ['btn', 'btn-outline-danger'],
     );
   }
 }

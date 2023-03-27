@@ -118,9 +118,10 @@ class JoinupUserContext extends RawDrupalContext {
     // files are uploaded, for example when a test is run more than once.
     // We only check up to the filename and not the extension as the xpath
     // itself is long enough to ensure the extension part.
-    $host = $this->getMinkParameter('base_url');
+    $base_url = $this->getMinkParameter('base_url');
+    $host = parse_url($base_url, PHP_URL_PATH);
     $filename = trim($filename, DIRECTORY_SEPARATOR);
-    $xpath = "//img[contains(concat(' ', normalize-space(@class), ' '), ' rounded-pill ') and contains(@src, '{$host}/sites/default/files/{$filename}')]";
+    $xpath = "//img[contains(concat(' ', normalize-space(@class), ' '), ' img-fluid ') and contains(@src, '{$host}/sites/default/files/styles/profile_icon_big/public/{$filename}')]";
     $this->assertSession()->elementExists('xpath', $xpath);
   }
 

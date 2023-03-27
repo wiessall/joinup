@@ -200,7 +200,6 @@ Feature: Add community content
       | Red glorious revolution  | The night batch | validated | now +1 years | now +1 years +1 day | validated |
       | Blue glorious revolution | The night batch | validated | now -1 years | now -1 years +1 day | validated |
     When I go to the content page of the type "event" with the title "Red glorious revolution"
-    Then I should not see the text Event in the "Page title" region
     And I should see the button "Add to Calendar"
     And I should see the link "Google"
     And I should see the link "Yahoo!"

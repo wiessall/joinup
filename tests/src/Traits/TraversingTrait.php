@@ -252,7 +252,7 @@ trait TraversingTrait {
       '.card-title',
       '.card-title > h1 a',
       'h2 a',
-      'h3.tile-two__title',
+      'h1.tile-two__title',
       // @todo Legacy selectors to be removed in ISAICP-7138.
       // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7138
       '.listing__title',
@@ -330,7 +330,8 @@ trait TraversingTrait {
       // @todo This can be removed once we are fully migrated to the new theme.
       '//*[@class and contains(concat(" ", normalize-space(@class), " "), " ' . $type . ' ")][.//*[@class and contains(concat(" ", normalize-space(@class), " "), " listing__title ") or contains(concat(" ", normalize-space(@class), " "), " card-title ")][normalize-space()="' . $heading . '"]]',
       // Selector for generic tiles.
-      '//*[@class and contains(concat(" ", normalize-space(@class), " "), " ' . $type . ' ")][.//h2[normalize-space()="' . $heading . '"] or .//h3[normalize-space()="' . $heading . '"]]',
+      // @todo Keep only h1 selector when tiles refactor.
+      '//*[@class and contains(concat(" ", normalize-space(@class), " "), " ' . $type . ' ")][.//h1[normalize-space()="' . $heading . '"] or .//h2[normalize-space()="' . $heading . '"] or .//h3[normalize-space()="' . $heading . '"]]',
     ];
 
     foreach ($selectors as $selector) {

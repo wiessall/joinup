@@ -27,7 +27,7 @@
     text-align: left;
     &:hover {
       text-decoration: underline;
-      cursor: help;
+      cursor: pointer;
     }
     &.is-active {
       background: $gray-300;

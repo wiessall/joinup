@@ -74,7 +74,7 @@
 {{ pattern('tile', {
   attributes: attributes,
   featured: view_mode_featured,
-  image: content.field_event_logo,
+  image: content.field_event_logo|render ? content.field_event_logo : '',
   url: url,
   title_prefix: title_prefix,
   title: label,

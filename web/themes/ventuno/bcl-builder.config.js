@@ -30,8 +30,8 @@ module.exports = {
       },
     },
     {
-      entry: path.resolve(outputFolder, "src/js/content-tables.js"),
-      dest: path.resolve(outputFolder, "assets/js/content-tables.js"),
+      entry: path.resolve(outputFolder, "src/js/responsive-tables.js"),
+      dest: path.resolve(outputFolder, "assets/js/responsive-tables.js"),
       options: {
         minify: true,
         sourceMap: true,
@@ -391,6 +391,15 @@ module.exports = {
     {
       entry: path.resolve(outputFolder, "src/scss/glossary.scss"),
       dest: path.resolve(outputFolder, "assets/css/glossary.min.css"),
+      options: {
+        includePaths,
+        minify: true,
+        sourceMap: "file",
+      },
+    },
+    {
+      entry: path.resolve(outputFolder, "src/scss/group-banner.scss"),
+      dest: path.resolve(outputFolder, "assets/css/group-banner.min.css"),
       options: {
         includePaths,
         minify: true,

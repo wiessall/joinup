@@ -5,36 +5,33 @@
   }
   &:hover {
     .permalink {
-      display: none;
+      display: inline;
+      position: absolute;
+      margin-left: $spacer * .5;
     }
-    &:hover {
-      .permalink {
-        display: inline;
-        position: absolute;
-        top: -0.05em;
-        right: -1em;
-      }
-    }
+  }
+  &__title {
+    display: inline;
   }
   &__headline {
     font-size: 1.25rem;
     font-weight: $font-weight-normal;
+    &-icon {
+      flex-shrink: 0;
+    }
   }
   &__details {
     display: flex;
     flex-wrap: wrap;
-    margin-bottom: $spacer;
+    column-gap: $spacer * 1.5;
   }
   &__detail {
     display: flex;
     align-items: center;
     color: $gray-700;
-    &:not(:first-of-type) {
-      margin-left: $spacer * 1.5;
-    }
   }
   .badge {
     position: relative;
-    top: -.5em; // Vertically align badge to heading
+    top: -.25em; // Vertically align badge to heading
   }
 }

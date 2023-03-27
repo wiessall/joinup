@@ -4,9 +4,11 @@
  * Themeing for RDF entities.
  */
 #}
-{{ attach_library('ventuno/content-tables') }}
 <article{{ attributes }}>
     {{ title_prefix }}
     {{ title_suffix }}
-    {{ content }}
+    {{ content|without('share_link') }}
+  <div class="d-flex justify-content-end my-3">
+    {{ content.share_link }}
+  </div>
 </article>

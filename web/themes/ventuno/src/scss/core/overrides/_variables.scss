@@ -36,3 +36,11 @@ $joinup--red: #d05655;
 $joinup--softblue: #3486dc;
 $joinup--gray: #8897aa;
 $joinup--orange: #e5bc7a;
+
+$headings-font-weight: 400;
+$h1-font-size: $font-size-base * 2; // 32px
+$h2-font-size: $font-size-base * 1.5; // 24px
+$h3-font-size: $font-size-base * 1.25; // 20px
+$h4-font-size: $font-size-base; // 16px
+
+$table-striped-order: even;

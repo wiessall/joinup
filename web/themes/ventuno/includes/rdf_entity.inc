@@ -17,6 +17,16 @@ function ventuno_preprocess_rdf_entity(array &$variables): void {
   // @see https://www.drupal.org/project/rdf_entity/issues/3209500
   $variables['label'] = $variables['rdf_entity']->label();
   _ventuno_preprocess_search_result($variables, 'rdf_entity');
+
+  // Provide variable to know whether the page has been set as the landing page
+  // of a group, so we can add a <h1> title in the group header.
+  $route_match = \Drupal::routeMatch();
+  $route_name = $route_match->getRouteName();
+  if ($route_name === 'entity.rdf_entity.canonical' && $entity = $route_match->getParameter('rdf_entity')) {
+    if (in_array($entity->getType(), ['collection', 'solution'])) {
+      $variables['is_canonical'] = TRUE;
+    }
+  }
 }
 
 /**
@@ -53,9 +63,6 @@ function ventuno_preprocess_rdf_entity__solution__group_header(array &$variables
       'class' => [
         'btn',
         'btn-secondary',
-        'mt-3',
-        'mt-lg-0',
-        'ms-lg-3',
       ],
     ];
   }
