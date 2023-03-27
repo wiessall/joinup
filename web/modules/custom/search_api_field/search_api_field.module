@@ -33,15 +33,17 @@ function search_api_field_entity_extra_field_info() {
   $fs = FieldConfig::loadMultiple($ids);
   /** @var \Drupal\field\Entity\FieldStorageConfig $field_config */
   foreach ($fs as $id => $field_config) {
-    if ($facet_regions = $field_config->getSetting('facet_regions')) {
-      foreach ($facet_regions as $region_id => $region_label) {
-        $name = str_replace('.', '_', "$id.$region_id");
-        $extra[$field_config->getTargetEntityTypeId()][$field_config->bundle()]['display'][$name] = [
-          'label' => t('Facet region: @region', ['@region' => $region_label]),
-          'weight' => 0,
-          'visible' => FALSE,
-        ];
-      }
+    $facet_regions = $field_config->getSetting('facet_regions');
+    if (!$facet_regions) {
+      continue;
+    }
+    foreach ($facet_regions as $region_id => $region_label) {
+      $name = str_replace('.', '_', "$id.$region_id");
+      $extra[$field_config->getTargetEntityTypeId()][$field_config->get('bundle')]['display'][$name] = [
+        'label' => t('Facet region: @region', ['@region' => $region_label]),
+        'weight' => 0,
+        'visible' => FALSE,
+      ];
     }
   }
 
