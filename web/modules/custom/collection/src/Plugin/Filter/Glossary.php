@@ -213,7 +213,7 @@ class Glossary extends FilterBase implements ContainerFactoryPluginInterface {
 
     $map = [];
     $node_storage = $this->entityTypeManager->getStorage('node');
-    $nids = $node_storage->getQuery()
+    $nids = $node_storage->getQuery()->accessCheck(FALSE)
       ->condition('type', 'glossary')
       ->condition(OgGroupAudienceHelperInterface::DEFAULT_FIELD, $collection->id())
       ->condition('status', TRUE)
