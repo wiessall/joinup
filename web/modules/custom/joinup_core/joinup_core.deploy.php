@@ -96,6 +96,6 @@ QUERY;
 /**
  * Update the default user avatar image.
  */
-function joinup_core_deploy_0109101(): void {
+function joinup_core_deploy_0109102(): void {
   \Drupal::classResolver(JoinupUserDefaultAvatarImageHelper::class)->createOrUpdate();
 }
