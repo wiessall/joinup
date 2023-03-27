@@ -64,7 +64,7 @@ class SpdxIdsParamConverter implements ParamConverterInterface {
 
     $storage = $this->entityTypeManager->getStorage('rdf_entity');
 
-    $actual_spdx_uris = $storage->getQuery()
+    $actual_spdx_uris = $storage->getQuery()->accessCheck(FALSE)
       ->condition('rid', 'spdx_licence')
       ->condition('field_spdx_licence_id', $spdx_ids, 'IN')
       ->execute();
@@ -74,7 +74,7 @@ class SpdxIdsParamConverter implements ParamConverterInterface {
       return NULL;
     }
 
-    $actual_licence_ids = $storage->getQuery()
+    $actual_licence_ids = $storage->getQuery()->accessCheck(FALSE)
       ->condition('rid', 'licence')
       ->condition('field_licence_spdx_licence', $actual_spdx_uris, 'IN')
       ->execute();
