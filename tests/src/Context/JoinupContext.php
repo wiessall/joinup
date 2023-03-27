@@ -1644,6 +1644,7 @@ class JoinupContext extends RawDrupalContext {
   public function createComments(TableNode $table) {
     foreach ($table->getColumnsHash() as $comment_values) {
       $query = \Drupal::entityQuery('node')
+        ->accessCheck(FALSE)
         ->condition('title', $comment_values['parent'])
         ->range(0, 1);
       $result = $query->execute();
@@ -1666,7 +1667,7 @@ class JoinupContext extends RawDrupalContext {
         $comment_type = 'comment';
       }
 
-      $query = \Drupal::entityQuery('user')
+      $query = \Drupal::entityQuery('user')->accessCheck(FALSE)
         ->condition('name', $comment_values['author'])
         ->range(0, 1);
       $result = $query->execute();

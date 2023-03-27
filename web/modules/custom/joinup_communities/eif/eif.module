@@ -184,7 +184,7 @@ function eif_preprocess_menu__og__navigation(array &$variables): void {
   $instance = reset($instances);
 
   $menu_link_content_storage = \Drupal::entityTypeManager()->getStorage('menu_link_content');
-  $mids = $menu_link_content_storage->getQuery()
+  $mids = $menu_link_content_storage->getQuery()->accessCheck(FALSE)
     ->condition('bundle', 'menu_link_content')
     ->condition('menu_name', "ogmenu-{$instance->id()}")
     ->condition('link.uri', 'entity:node/' . EifInterface::EIF_SOLUTIONS_NID)

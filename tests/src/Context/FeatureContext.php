@@ -2152,6 +2152,7 @@ class FeatureContext extends RawDrupalContext {
     if ($files) {
       $file_storage = \Drupal::entityTypeManager()->getStorage('file');
       $fids = $file_storage->getQuery()
+        ->accessCheck(FALSE)
         ->condition('filename', $files, 'IN')
         ->execute();
       if ($fids) {
