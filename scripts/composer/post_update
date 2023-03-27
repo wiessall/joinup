@@ -4,4 +4,7 @@
 test ! -f vendor/bin/run || vendor/bin/run toolkit:build-dev
 
 # Run NPM install only if it's not bypassed.
-test ! -f .env  || grep -q 'COMPOSER_DISABLE_NODE_DEPENDENCIES=1' .env || npm install --no-progress
+if [ ! -f .env ] || [ "$(grep 'COMPOSER_DISABLE_NODE_DEPENDENCIES=1' .env)" = "" ]
+then
+  npm ci --no-progress
+fi
