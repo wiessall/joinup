@@ -19,7 +19,7 @@ use Drupal\joinup_user\JoinupUserDefaultAvatarImageHelper;
 /**
  * Revert removal of collection that was lost.
  */
-function joinup_core_deploy_0109100(): void {
+function joinup_core_deploy_0109101(): void {
   $ntriples = <<<EOF
 <http://data.europa.eu/w21/abe7d0f7-8c41-465b-86c0-93d2f857f998>	<http://joinup.eu/collection/content_creation>	"only_members" .
 <http://data.europa.eu/w21/abe7d0f7-8c41-465b-86c0-93d2f857f998>	<http://www.w3.org/ns/dcat#keyword>	"IMAPS" .
