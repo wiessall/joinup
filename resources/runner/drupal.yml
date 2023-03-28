@@ -207,6 +207,7 @@ drupal:
           'filecache',
           'joinup_cas_mock_server',
           'joinup_test',
+          'memcache_admin',
           'og_ui',
           'page_manager_ui',
           'update',
