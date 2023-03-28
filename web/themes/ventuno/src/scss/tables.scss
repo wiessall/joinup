@@ -2,6 +2,7 @@
 @import "@openeuropa/bcl-bootstrap/scss/tables";
 
 .table {
+  caption-side: top;
   > :not(caption) > * > * {
     border-bottom-width: 0; // Override default tables to avoid border
   }
