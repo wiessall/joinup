@@ -30,7 +30,6 @@ services:
       - mysql
       - sparql
       - solr
-      - redis
       - mail
       - selenium
 
@@ -85,10 +84,6 @@ services:
       SEARCH_API_SERVER_SS_SOLR_CORE: digit-joinup
       DOCKER_RESTORE_PRODUCTION:
 
-  redis:
-    image: redis
-    # Disable disk persistence
-    command: redis-server --save ""
 
   mail:
     image: mailhog/mailhog
