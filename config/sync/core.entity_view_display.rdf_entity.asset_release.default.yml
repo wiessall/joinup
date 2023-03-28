@@ -20,9 +20,9 @@ dependencies:
     - field.field.rdf_entity.asset_release.field_isr_state
     - field.field.rdf_entity.asset_release.field_isr_translation
     - field.field.rdf_entity.asset_release.field_keywords
-    - field.field.rdf_entity.asset_release.field_topic
     - field.field.rdf_entity.asset_release.field_spatial_coverage
     - field.field.rdf_entity.asset_release.field_status
+    - field.field.rdf_entity.asset_release.field_topic
     - rdf_entity.rdfentity.asset_release
   module:
     - file_url
@@ -86,7 +86,7 @@ content:
     region: content
   field_isr_documentation:
     type: file_url_default
-    label: hidden
+    label: above
     settings:
       mode: link
     third_party_settings:
@@ -172,7 +172,9 @@ content:
   field_isr_state:
     type: state_transition_form
     label: above
-    settings: {  }
+    settings:
+      require_confirmation: false
+      use_modal: false
     third_party_settings: {  }
     weight: 4
     region: content

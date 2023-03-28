@@ -10,7 +10,7 @@ dependencies:
 id: ventuno_eiradeprecatedtermmessage
 theme: ventuno
 region: content_top
-weight: -25
+weight: -24
 provider: null
 plugin: eira_deprecated_term_block
 settings:

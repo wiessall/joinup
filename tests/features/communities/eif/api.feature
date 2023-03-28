@@ -18,14 +18,14 @@ Feature:
       | Description   | This should be in the description field. |
       | Solution type | Common frameworks                        |
 
-    # Verify that solution group menu doesn't contain the EIF Perspective link.
+    # Verify that solution group menu contains correct links.
     When I go to the "EIF solution" solution
     Then I should see the following group menu items in the specified order:
-      | text     |
-      | Overview |
-      | Members  |
-      | About    |
-
+      | text            |
+      | Overview        |
+      | Members         |
+      | About           |
+      | EIF Perspective |
     Then there should be an EIF perspective associated with the "EIF solution" solution
     And there should be an EIF perspective associated with the "EIF only type" solution
 
@@ -33,6 +33,7 @@ Feature:
     Then I should see the heading "EIF Perspective attributes of EIF solution"
     And I should see the heading "General information"
 
+    And I should see the text "Description:"
     And I should see the text "This should be in the description field."
     But I should not see the text "Some description not to be shown in the EIF page"
 
@@ -60,6 +61,7 @@ Feature:
     Then I should see the heading "EIF Perspective attributes of EIF only type"
     And I should see the heading "General information"
 
+    And I should see the text "Description:"
     And I should see the text "This should be in the description field."
     But I should not see the text "Some description not to be shown in the EIF page"
 
@@ -68,12 +70,3 @@ Feature:
     And I should not see the heading "Interoperability layers"
     But I should not see the heading "Conceptual model"
     And I should not see the text "implements the following EIF recommendations as explained below"
-
-    # Verify that solution group menu contains correct links.
-    When I go to the "EIF solution" solution
-    Then I should see the following group menu items in the specified order:
-      | text            |
-      | Overview        |
-      | Members         |
-      | About           |
-      | EIF Perspective |

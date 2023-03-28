@@ -21,14 +21,14 @@ Feature: Navigation menu for custom pages
       | Members  |
       | About    |
     # Check that the 'Edit menu' local action is present.
-    And I should see the contextual link "Edit menu" in the "Left sidebar" region
+    And I should see the contextual link "Edit menu" in the "Header bottom" region
     # The 'Add link' local action that is present in the default implementation
     # of OG Menu should not be visible. We are managing the menu links behind
     # the scenes. The end user should not be able to interact with these.
-    But I should not see the contextual link "Add link" in the "Left sidebar" region
+    But I should not see the contextual link "Add link" in the "Header bottom" region
 
     # When we create a custom page it should automatically show up in the menu.
-    When I click the contextual link "Add new page" in the "Left sidebar" region
+    When I click the contextual link "Add new page" in the "Header bottom" region
     Then I should see the heading "Add custom page"
     When I fill in the following:
       | Title | About us |
@@ -37,7 +37,7 @@ Feature: Navigation menu for custom pages
     Then I should see the success message "Custom page About us has been created."
     And the navigation menu of the "Rainbow tables" <group> should have <visible items 2> visible items
 
-    When I click the contextual link "Edit menu" in the "Left sidebar" region
+    When I click the contextual link "Edit menu" in the "Header bottom" region
     Then the navigation menu of the "Rainbow tables" <group> should have 5 items
 
     # It should be possible to hide an item from the menu by disabling it.
@@ -51,10 +51,10 @@ Feature: Navigation menu for custom pages
     And I disable "About" in the navigation menu of the "Rainbow tables" <group>
     And I go to the homepage of the "Rainbow tables" <group>
     Then I should see the text "All the pages have been disabled for this <group>. You can edit the menu configuration or add a new page."
-    And I should see the contextual link "Edit menu" in the "Left sidebar" region
+    And I should see the contextual link "Edit menu" in the "Header bottom" region
 
     # The contextual menu can be used to navigate to the menu edit page.
-    When I click the contextual link "Edit menu" in the "Left sidebar" region
+    When I click the contextual link "Edit menu" in the "Header bottom" region
     Then I should see the heading "Edit navigation menu of the Rainbow tables <group>"
 
     # The form to add a new menu link should not be accessible by anyone. This
@@ -132,6 +132,32 @@ Feature: Navigation menu for custom pages
       | solution   | 3               | 4               | 3               |
 
   @javascript
+  Scenario: For menus with more than 6 items, the 6th and beyond should be wrapped in a dropdown
+    Given collection:
+      | title | Plaster molds |
+      | state | validated     |
+    And custom_page content:
+      | title             | body                   | collection    |
+      | Molds for walls   | This is a sample body. | Plaster molds |
+      | Molds for crafts  | This is a sample body. | Plaster molds |
+      | Molds for pottery | This is a sample body. | Plaster molds |
+    # A menu with 6 items is displayed normally
+    When I go to the "Plaster molds" collection
+    Then I should see the link "Molds for pottery" in the "Navigation menu"
+    But I should not see the text "See more" in the "Navigation menu"
+    # A menu with more than 6 items has the first 5 displayed normally
+    # Then the rest of items is wrapped in a dropdown
+    Given custom_page content:
+      | title           | body                   | collection    |
+      | Vintage molds   | This is a sample body. | Plaster molds |
+      | Plaster casting | This is a sample body. | Plaster molds |
+    When I go to the "Plaster molds" collection
+    Then I should see the text "See more" in the "Navigation menu"
+    But I should not see the text "Plaster casting" in the "Navigation menu"
+    And I press "See more"
+    Then I should see the text "Plaster casting" in the "Navigation menu"
+
+  @javascript
   Scenario Outline: The contextual links button in the navigation menu should be always visible
     # In order to easily discover that I can manage the items in the navigation menu
     # As a group facilitator
@@ -145,18 +171,18 @@ Feature: Navigation menu for custom pages
       | Mists of dreams | This is a sample body. | Prism Gazers |
     When I am logged in as a facilitator of the "Prism Gazers" <group>
     And I go to the homepage of the "Prism Gazers" <group>
-    Then I should see the contextual links button in the "Navigation menu block"
+    Then I should see the contextual links button in the "Navigation menu"
     # The links to manage the navigation menu should only appear after clicking on the button.
-    And the "Edit menu" link in the "Navigation menu block" should not be visible
-    And the "Add new page" link in the "Navigation menu block" should not be visible
+    And the "Edit menu" link in the "Navigation menu" should not be visible
+    And the "Add new page" link in the "Navigation menu" should not be visible
     # Click the button, now the links appear.
-    When I click the contextual links button in the "Navigation menu block"
-    Then the "Edit menu" link in the "Navigation menu block" should be visible
-    And the "Add new page" link in the "Navigation menu block" should be visible
+    When I click the contextual links button in the "Navigation menu"
+    Then the "Edit menu" link in the "Navigation menu" should be visible
+    And the "Add new page" link in the "Navigation menu" should be visible
     # Click the button a second time to hide the links again.
-    When I click the contextual links button in the "Navigation menu block"
-    Then the "Edit menu" link in the "Navigation menu block" should not be visible
-    And the "Add new page" link in the "Navigation menu block" should not be visible
+    When I click the contextual links button in the "Navigation menu"
+    Then the "Edit menu" link in the "Navigation menu" should not be visible
+    And the "Add new page" link in the "Navigation menu" should not be visible
 
     Examples:
       | group      |
@@ -259,9 +285,9 @@ Feature: Navigation menu for custom pages
     And I should not see the link "Overview" in the "Table of contents"
     And I should not see the link "Members" in the "Table of contents"
     And I should not see the link "About" in the "Table of contents"
-    But I should see the link "Overview" in the "Navigation menu block"
-    And I should see the link "Members" in the "Navigation menu block"
-    And I should see the link "About" in the "Navigation menu block"
+    But I should see the link "Overview" in the "Navigation menu"
+    And I should see the link "Members" in the "Navigation menu"
+    And I should see the link "About" in the "Navigation menu"
 
     # Only the sub-page links of "Page 2" are rendered.
     When I visit the "Page 2" custom page
@@ -308,7 +334,7 @@ Feature: Navigation menu for custom pages
       | About              | Bodypack           | 7      |
     When I am logged in as a facilitator of the "Ergonomic backpacks" <group>
     And I go to the "Ergonomic backpacks" <group>
-    And I click the contextual link "Edit menu" in the "Left sidebar" region
+    And I click the contextual link "Edit menu" in the "Header bottom" region
     # The "About" page has been moved back to first level.
     Then the draggable menu table should be:
       | title              | parent             |
@@ -529,7 +555,7 @@ Feature: Navigation menu for custom pages
 
     When I am logged in as a facilitator of the "Table of contents outline cached" <group>
     And I go to the "Table of contents outline cached" <group>
-    And I click the contextual link "Edit menu" in the "Left sidebar" region
+    And I click the contextual link "Edit menu" in the "Header bottom" region
     When I drag the "TOCO cached 1-1" table row to the left
     Then the draggable menu table should be:
       | title           | parent |
@@ -555,7 +581,7 @@ Feature: Navigation menu for custom pages
 
     When I am logged in as a moderator
     And I go to the "About edit link" <group>
-    And I click the contextual link "Edit menu" in the "Left sidebar" region
+    And I click the contextual link "Edit menu" in the "Header bottom" region
 
     Then the "group menu edit table" table should contain the following columns:
       | Page     | Enabled | Operations |

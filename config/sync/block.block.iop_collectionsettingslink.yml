@@ -24,4 +24,4 @@ visibility:
     negate: false
     context_mapping: {  }
     routes:
-      - collection.glossary_page
+      - entity.rdf_entity.glossary
