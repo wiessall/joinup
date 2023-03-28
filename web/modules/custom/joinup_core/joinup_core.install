@@ -107,7 +107,7 @@ function joinup_core_update_109100(?array &$sandbox = NULL): string {
   ];
 
   if (!isset($sandbox['ids'])) {
-    $query = $menu_link_content_storage->getQuery();
+    $query = $menu_link_content_storage->getQuery()->accessCheck(FALSE);
 
     // The following condition is a safety net in the case when some custom
     // pages are using the standard labels ('Overview', 'About', etc).
