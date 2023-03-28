@@ -216,12 +216,12 @@ Feature: Messaging group announcements
 
     Given I am logged in as "Sons of tweets"
 
-    When I go the "The Big Opening is postponed" announcement of "Fail pension" <group>
+    When I go to the "The Big Opening is postponed" announcement of "Fail pension" <group>
     Then the response status code should be 403
 
     Given I am logged in as "Check edit moderator"
 
-    When I go the "The Big Opening is postponed" announcement of "Fail pension" <group>
+    When I go to the "The Big Opening is postponed" announcement of "Fail pension" <group>
     And  I press "Undo reject"
     Then I should see the success message "The announcement has been restored."
     Then I should see "Announcement state: Pending approval"
@@ -234,7 +234,7 @@ Feature: Messaging group announcements
 
     Given I am logged in as "Sons of tweets"
 
-    When I go the "The Big Opening is postponed" announcement of "Fail pension" <group>
+    When I go to the "The Big Opening is postponed" announcement of "Fail pension" <group>
     Then the response status code should be 403
 
     Given the "Mogul" user unsubscribes from "Fail pension" <group> announcements
@@ -244,7 +244,7 @@ Feature: Messaging group announcements
 
     Given I am logged in as "Check edit moderator"
 
-    When I go the "The Big Opening is postponed" announcement of "Fail pension" <group>
+    When I go to the "The Big Opening is postponed" announcement of "Fail pension" <group>
     And I press "Approve"
     # Even 'Coward' is still subscribed, he didn't accept yet the legal notice.
     Then I should see the error message "Cannot send this announcement to Fail pension <group> because none of its members are subscribed to receive announcements."
@@ -354,7 +354,7 @@ Feature: Messaging group announcements
 
     Given I am logged in as "Sons of tweets"
 
-    When I go the "The Big Opening is postponed" announcement of "Fail pension" <group>
+    When I go to the "The Big Opening is postponed" announcement of "Fail pension" <group>
     Then the response status code should be 403
 
     Given I am logged in as "Check edit moderator"
@@ -368,7 +368,7 @@ Feature: Messaging group announcements
     When I go to the homepage of the "Fail pension" collection
     # Moderators have an "Announcements" link also in the toolbar.
     Then I should not see the link "Announcements" in the "Entity actions" region
-    When I go the "The Big Opening is postponed" announcement of "Fail pension" <group>
+    When I go to the "The Big Opening is postponed" announcement of "Fail pension" <group>
     Then the response status code should be 403
     But I go to the announcements page of "Fail pension" <group>
     Then the response status code should be 403
@@ -377,7 +377,7 @@ Feature: Messaging group announcements
 
     When I go to the homepage of the "Fail pension" collection
     Then I should not see the link "Announcements"
-    When I go the "The Big Opening is postponed" announcement of "Fail pension" <group>
+    When I go to the "The Big Opening is postponed" announcement of "Fail pension" <group>
     Then the response status code should be 403
     But I go to the announcements page of "Fail pension" <group>
     Then the response status code should be 403
@@ -386,7 +386,7 @@ Feature: Messaging group announcements
 
     When I go to the homepage of the "Fail pension" collection
     Then I should not see the link "Announcements"
-    When I go the "The Big Opening is postponed" announcement of "Fail pension" <group>
+    When I go to the "The Big Opening is postponed" announcement of "Fail pension" <group>
     Then the response status code should be 403
     But I go to the announcements page of "Fail pension" <group>
     Then the response status code should be 403
@@ -395,7 +395,7 @@ Feature: Messaging group announcements
 
     When I go to the homepage of the "Fail pension" collection
     Then I should not see the link "Announcements"
-    When I go the "The Big Opening is postponed" announcement of "Fail pension" <group>
+    When I go to the "The Big Opening is postponed" announcement of "Fail pension" <group>
     Then I should see the heading "Sign in to continue"
     When I go to the announcements page of "Fail pension" <group>
     Then I should see the heading "Sign in to continue"
