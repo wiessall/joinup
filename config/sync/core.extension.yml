@@ -127,6 +127,7 @@ module:
   linkit: 0
   mailsystem: 0
   media: 0
+  memcache: 0
   menu_link_destination: 0
   menu_ui: 0
   message: 0
