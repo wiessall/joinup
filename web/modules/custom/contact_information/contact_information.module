@@ -16,7 +16,6 @@ use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
-use Drupal\Core\EventSubscriber\MainContentViewSubscriber;
 use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Field\FieldItemListInterface;
@@ -322,17 +321,6 @@ function _contact_information_hash_expiration_validate(array &$form, FormStateIn
     foreach ($form_errors as $name => $error_message) {
       $form_state->setErrorByName($name, $error_message);
     }
-  }
-}
-
-/**
- * Implements hook_form_FORM_ID_alter().
- */
-function contact_information_form_email_contact_mail_form_alter(array &$form, FormStateInterface $form_state, string $form_id): void {
-  if (\Drupal::currentUser()->isAnonymous()) {
-    // For anonymous users, we change the form to enforce them to login.
-    unset($form['#submit'][array_search('::submitForm', $form['#submit'], TRUE)]);
-    unset($form['#validate'][array_search('::validateForm', $form['#validate'], TRUE)]);
   }
 }
 
