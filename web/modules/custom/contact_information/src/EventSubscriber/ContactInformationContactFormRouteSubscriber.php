@@ -4,6 +4,7 @@ declare(strict_types = 1);
 
 namespace Drupal\contact_information\EventSubscriber;
 
+use Drupal\contact_information\Controller\ContactInformationContactController;
 use Drupal\Core\Routing\RouteSubscriberBase;
 use Symfony\Component\Routing\RouteCollection;
 
@@ -17,7 +18,7 @@ class ContactInformationContactFormRouteSubscriber extends RouteSubscriberBase {
    */
   protected function alterRoutes(RouteCollection $collection) {
     if ($route = $collection->get('email_contact.form')) {
-      $route->setDefault('_controller', '\Drupal\contact_information\Controller\ContactInformationContactController::content');
+      $route->setDefault('_controller', ContactInformationContactController::class . '::content');
     }
   }
 
