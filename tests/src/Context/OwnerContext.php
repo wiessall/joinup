@@ -58,7 +58,7 @@ class OwnerContext extends RawDrupalContext {
       // If no type was specified, fallback to 'Private Individual(s)'.
       $types = isset($row['type']) ? array_map('trim', explode(',', $row['type'])) : ['Private Individual(s)'];
 
-      $query = \Drupal::entityQuery('taxonomy_term');
+      $query = \Drupal::entityQuery('taxonomy_term')->accessCheck(FALSE);
       $tids = $query
         ->condition('vid', 'owner_type')
         ->condition('name', $types, 'IN')

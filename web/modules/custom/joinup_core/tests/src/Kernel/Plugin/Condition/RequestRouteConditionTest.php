@@ -5,8 +5,8 @@ declare(strict_types = 1);
 namespace Drupal\Tests\joinup_core\Kernel\Plugin\Condition;
 
 use Drupal\Core\Routing\CurrentRouteMatch;
+use Drupal\Core\Routing\RouteObjectInterface;
 use Drupal\KernelTests\KernelTestBase;
-use Symfony\Cmf\Component\Routing\RouteObjectInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Routing\Route;

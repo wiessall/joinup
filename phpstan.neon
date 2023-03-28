@@ -3,16 +3,20 @@ parameters:
     reportUnmatchedIgnoredErrors: false
     drupal:
         drupal_root: %currentWorkingDirectory%/web
+        entityMapping:
+            og_membership:
+                class: Drupal\og\Entity\OgMembership
+                storage: Drupal\Core\Entity\Sql\SqlContentEntityStorage
+            rdf_entity:
+                class: Drupal\rdf_entity\Entity\Rdf
+                storage: Drupal\sparql_entity_storage\SparqlEntityStorage
     ignoreErrors:
+        # We're not prepared yet for this.
         - '#\Drupal calls should be avoided in classes, use dependency injection instead#'
-        - '#Plugin definitions cannot be altered.#'
-        - '#Missing cache backend declaration for performance.#'
-        - '#Plugin manager has cache backend specified but does not declare cache tags.#'
-        - '#Call to deprecated method prophesize\(\) of class PHPUnit\\Framework\\TestCase:#'
+        # As an exception, we allow extending these two classes.
+        - '#Class Drupal\\joinup_group\\Form\\UserCancelForm extends @internal class Drupal\\user\\Form\\UserCancelForm.#'
+        - '#Class Drupal\\joinup_group\\Form\\UserMultipleCancelConfirm extends @internal class Drupal\\user\\Form\\UserMultipleCancelConfirm.#'
     excludePaths:
         - src/CodingStandards/Sniffs/NamingConventions/ValidUpdateNameSniff.php
     scanFiles:
         - web/modules/contrib/og/src/OgMembershipInterface.php
-includes:
-    - vendor/mglaman/phpstan-drupal/extension.neon
-    - vendor/phpstan/phpstan-deprecation-rules/rules.neon
