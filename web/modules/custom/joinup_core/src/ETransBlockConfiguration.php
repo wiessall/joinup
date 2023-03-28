@@ -39,8 +39,8 @@ class ETransBlockConfiguration {
   public const CONFIG_MAPPING = [
     'bundles' => [
       CustomPageInterface::class => [
-        'include' => 'h1.page__title,.page__content',
-        'exclude' => '.action-link__wrapper',
+        'include' => 'h1.page-title__title,#block-ventuno-content',
+        'exclude' => '.action-link',
       ],
       DiscussionInterface::class => [
         'include' => '.page__title-wrapper,.page__content,.comments-section',
@@ -51,27 +51,27 @@ class ETransBlockConfiguration {
         'exclude' => '.page__title-wrapper .details__element > a,.fieldset__field--files,.action-link__wrapper',
       ],
       EventInterface::class => [
-        'include' => 'h1.page__title,.page__title-wrapper > .details:nth-of-type(1),.page__title-wrapper > .details:nth-of-type(2) > .details__element:nth-of-type(2),.page__content,.fieldset--separated .page__content',
-        'exclude' => '.action-link__wrapper',
+        'include' => '.page__title-wrapper,#block-ventuno-content',
+        'exclude' => '.action-link,section.comments,.event__field-shared-in',
       ],
       GlossaryTermInterface::class => [
-        'include' => '.field_glossary--synonyms > div div:first-child,.field_glossary--definition',
+        'include' => 'h1.page-title__title,#block-ventuno-content',
       ],
       NewsInterface::class => [
-        'include' => '.page__title-wrapper,.page__content',
-        'exclude' => '.page__title-wrapper .details__element > a,.action-link__wrapper',
+        'include' => '.page__title-wrapper,#block-ventuno-content',
+        'exclude' => '.page-title__details a[title="View user profile."],.action-link,.news__field-shared-in,.news__referenced-solution,section.comments',
       ],
     ],
     'routes' => [
       // The "About" page of a collection or solution.
       'entity.rdf_entity.about_page' => [
-        'include' => 'h1.page__title,.page__content',
+        'include' => 'h1.page-title__title,#block-ventuno-content',
       ],
 
       // The "Glossary" page of a collection.
       'entity.rdf_entity.glossary' => [
         'include' => '.view-glossary',
-        'exclude' => 'h3,.views-field-title-1,.views-field-field-glossary-synonyms',
+        'exclude' => 'h2.h3,.views-field-title-1,.views-field-field-glossary-synonyms',
       ],
     ],
   ];
