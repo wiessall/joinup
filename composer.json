@@ -131,7 +131,8 @@
         "drupal/renderviz": "^1.0",
         "drupal/upgrade_status": "^3.14",
         "drupaltest/behat-one-time-login": "^1.0",
-        "ec-europa/toolkit": "~9.0.0",
+        "ec-europa/toolkit": "^9.7",
+        "openeuropa/task-runner": "^2.0",
         "lovers-of-behat/table-extension": "^1.3",
         "mikey179/vfsstream": "~1.6",
         "palantirnet/drupal-rector": "^0.12.2",
@@ -208,15 +209,10 @@
     },
     "scripts": {
         "post-install-cmd": [
-            "composer validate --no-check-all --no-check-publish",
-            "test \"`git rev-parse --is-shallow-repository`\" = \"false\" || git fetch --unshallow",
-            "git describe --tags 2>/dev/null | tr -d '\\n' > web/VERSION.txt",
-            "test ! -f vendor/bin/run || vendor/bin/run toolkit:build-dev",
-            "./scripts/composer/bypass_npm.php || npm ci --no-progress"
+            "./scripts/composer/post_install"
         ],
         "post-update-cmd": [
-            "test ! -f vendor/bin/run || vendor/bin/run toolkit:build-dev",
-            "./scripts/composer/bypass_npm.php || npm install --no-progress"
+            "./scripts/composer/post_update"
         ]
     },
     "extra": {
@@ -393,6 +389,12 @@
                     "type": "zip"
                 }
             }
+        },
+        "phpstan": {
+            "includes": [
+                "vendor/mglaman/phpstan-drupal/extension.neon",
+                "vendor/phpstan/phpstan-deprecation-rules/rules.neon"
+            ]
         }
     },
     "repositories": [
