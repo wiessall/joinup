@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "adaedf3c2be540b8d1dedfbb5a12d794",
+    "content-hash": "259f37599d021bf09d3dd03b16a3ddea",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -4771,6 +4771,82 @@
             "homepage": "https://www.drupal.org/project/mailsystem",
             "support": {
                 "source": "https://git.drupalcode.org/project/mailsystem"
+            }
+        },
+        {
+            "name": "drupal/memcache",
+            "version": "2.5.0",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/memcache.git",
+                "reference": "8.x-2.5"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/memcache-8.x-2.5.zip",
+                "reference": "8.x-2.5",
+                "shasum": "a01db2a9b7122a397c4f4ad66e0a380d1148a157"
+            },
+            "require": {
+                "drupal/core": "^9.1 || ^10"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "8.x-2.5",
+                    "datestamp": "1661188440",
+                    "security-coverage": {
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
+                    }
+                },
+                "branch-alias": {
+                    "dev-8.x-2.x": "2.x-dev"
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "bdragon",
+                    "homepage": "https://www.drupal.org/user/53081"
+                },
+                {
+                    "name": "catch",
+                    "homepage": "https://www.drupal.org/user/35733"
+                },
+                {
+                    "name": "damiankloip",
+                    "homepage": "https://www.drupal.org/user/1037976"
+                },
+                {
+                    "name": "Fabianx",
+                    "homepage": "https://www.drupal.org/user/693738"
+                },
+                {
+                    "name": "japerry",
+                    "homepage": "https://www.drupal.org/user/45640"
+                },
+                {
+                    "name": "Jeremy",
+                    "homepage": "https://www.drupal.org/user/409"
+                },
+                {
+                    "name": "jvandyk",
+                    "homepage": "https://www.drupal.org/user/2375"
+                },
+                {
+                    "name": "robertDouglass",
+                    "homepage": "https://www.drupal.org/user/5449"
+                }
+            ],
+            "description": "High performance integration with memcache.",
+            "homepage": "http://drupal.org/project/memcache",
+            "support": {
+                "source": "https://git.drupalcode.org/project/memcache",
+                "issues": "https://www.drupal.org/project/issues/memcache"
             }
         },
         {
@@ -18866,59 +18942,6 @@
             "time": "2022-06-02T12:53:00+00:00"
         },
         {
-            "name": "php-task-runner/redis",
-            "version": "1.x-dev",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/php-task-runner/redis.git",
-                "reference": "6f5b423828a45e65be49610fa514a3889a418215"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/php-task-runner/redis/zipball/6f5b423828a45e65be49610fa514a3889a418215",
-                "reference": "6f5b423828a45e65be49610fa514a3889a418215",
-                "shasum": ""
-            },
-            "require": {
-                "openeuropa/task-runner": "^2.0",
-                "php": ">=7.4"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "~7 || ~8 || ~9",
-                "slevomat/coding-standard": "~6",
-                "squizlabs/php_codesniffer": "~3"
-            },
-            "suggest": {
-                "predis/predis": "^1.1.1"
-            },
-            "default-branch": true,
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "TaskRunner\\Redis\\": "./src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "EUPL-1.2"
-            ],
-            "authors": [
-                {
-                    "name": "Claudiu Cristea",
-                    "email": "clau.cristea@gmail.com"
-                }
-            ],
-            "description": "Provides Redis commands for OpenEuropa Task Runner",
-            "keywords": [
-                "task-runner"
-            ],
-            "support": {
-                "issues": "https://github.com/php-task-runner/redis/issues",
-                "source": "https://github.com/php-task-runner/redis/tree/1.x"
-            },
-            "time": "2022-06-02T11:42:28+00:00"
-        },
-        {
             "name": "php-task-runner/scss",
             "version": "1.x-dev",
             "source": {
@@ -22151,7 +22174,6 @@
         "drupal/page_manager": 10,
         "drupal/views_block_area": 10,
         "php-task-runner/composer": 20,
-        "php-task-runner/redis": 20,
         "php-task-runner/scss": 20,
         "php-task-runner/sparql": 20,
         "weitzman/drupal-test-traits": 20
@@ -22163,7 +22185,7 @@
         "ext-dom": "*",
         "ext-json": "*",
         "ext-pdo": "*",
-        "ext-redis": "*",
+        "ext-memcached": "*",
         "ext-simplexml": "*"
     },
     "platform-dev": {
