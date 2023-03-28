@@ -20,7 +20,7 @@ use Drupal\honeypot\HoneypotServiceInterface;
 class ContactInformationContactForm extends ContactForm {
 
   /**
-   * Contact Form constructor.
+   * Constructs a new form instance.
    */
   public function __construct(protected HoneypotServiceInterface $honeypot, protected MailManagerInterface $mailManager, protected ModuleHandler $moduleHandler, protected EntityTypeManagerInterface $entityTypeManager, $entityType = NULL, $entityId = NULL, $fieldName = NULL, $fieldSettings = NULL) {
     parent::__construct($entityType, $entityId, $fieldName, $fieldSettings);
