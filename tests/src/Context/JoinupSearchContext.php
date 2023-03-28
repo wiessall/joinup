@@ -12,6 +12,7 @@ use Drupal\joinup\Traits\BootstrapTrait;
 use Drupal\joinup\Traits\JavascriptTrait;
 use Drupal\joinup\Traits\KeyboardInteractionTrait;
 use Drupal\joinup\Traits\MaterialDesignTrait;
+use Drupal\joinup\Traits\SearchTrait;
 use Drupal\joinup\Traits\TraversingTrait;
 use Drupal\joinup\Traits\UtilityTrait;
 use PHPUnit\Framework\Assert;
@@ -25,6 +26,7 @@ class JoinupSearchContext extends RawDrupalContext {
   use JavascriptTrait;
   use KeyboardInteractionTrait;
   use MaterialDesignTrait;
+  use SearchTrait;
   use TraversingTrait;
   use UtilityTrait;
 
@@ -878,17 +880,7 @@ class JoinupSearchContext extends RawDrupalContext {
    * @Then I should see search bar in navbar
    */
   public function assertSearchExposedFilterNavbar(): void {
-    // @todo The `#edit-keys` selector is part of the original Joinup
-    //   theme and can be removed once we migrated to the new theme.
-    // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-713
-    $locators = [
-      // Joinup theme.
-      '.joinup-navbar .navbar-search input#edit-keys',
-      // Ventuno theme.
-      '.joinup-navbar .navbar-search input#search-box',
-    ];
-    $getAllInput = $this->getSession()->getPage()->findAll('css', implode(', ', $locators));
-    // dump($getAllInput);
+    $getAllInput = $this->findAllSearchBoxes();
     if (count($getAllInput) < 1) {
       throw new \Exception('Search bar not found in navbar.');
     }
@@ -903,17 +895,7 @@ class JoinupSearchContext extends RawDrupalContext {
    * @Then I should not see search bar in navbar
    */
   public function failSearchExposedFilterNavbar(): void {
-    // @todo The `#edit-keys` selector is part of the original Joinup
-    //   theme and can be removed once we migrated to the new theme.
-    // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-713
-    $locators = [
-      // Joinup theme.
-      '.joinup-navbar .navbar-search input#edit-keys',
-      // Ventuno theme.
-      '.joinup-navbar .navbar-search input#search-box',
-    ];
-    $getAllInput = $this->getSession()->getPage()->findAll('css', implode(', ', $locators));
-
+    $getAllInput = $this->findAllSearchBoxes();
     if (count($getAllInput) > 0) {
       throw new \Exception('Search bar found in navbar.');
     }
@@ -929,7 +911,6 @@ class JoinupSearchContext extends RawDrupalContext {
    */
   public function assertSearchIconNavbar(): void {
     $getAllInput = $this->getSession()->getPage()->findAll('css', '.joinup-navbar button#search.dropdown-toggle');
-
     if (count($getAllInput) < 1) {
       throw new \Exception('Search bar icon not found in navbar.');
     }
