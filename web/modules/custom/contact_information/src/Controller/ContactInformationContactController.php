@@ -18,7 +18,7 @@ use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 /**
  * Controller extends ContactController from email_contact module.
  *
- * Controls controller to make our one in order to add new fields in the email.
+ * Allows to use a custom contact form that provides additional fields.
  */
 class ContactInformationContactController extends ContactController {
 
