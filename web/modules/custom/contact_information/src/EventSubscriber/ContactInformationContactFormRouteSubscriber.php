@@ -8,7 +8,7 @@ use Drupal\Core\Routing\RouteSubscriberBase;
 use Symfony\Component\Routing\RouteCollection;
 
 /**
- * Sets as default controller ContactInformationContactController.
+ * Swaps the email_contact.form route controller to provide more features.
  */
 class ContactInformationContactFormRouteSubscriber extends RouteSubscriberBase {
 
