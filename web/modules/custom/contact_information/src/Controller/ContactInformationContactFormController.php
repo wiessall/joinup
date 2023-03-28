@@ -20,10 +20,10 @@ use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
  *
  * Allows to use a custom contact form that provides additional fields.
  */
-class ContactInformationContactController extends ContactController {
+class ContactInformationContactFormController extends ContactController {
 
   /**
-   * Constructs a new contact information controller.
+   * Constructs a new contact information contact form controller.
    *
    * @param \Psr\Log\LoggerInterface $logger
    *   Logger
