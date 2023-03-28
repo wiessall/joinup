@@ -137,23 +137,28 @@ class ContactInformationContactForm extends ContactForm {
    *   The form structure.
    */
   protected function buildFormForAuthenticated(array $form, FormStateInterface $form_state): array {
-    $form['actions'] = [
-      '#type' => 'actions'
-    ];
+    $form['name']['#weight'] = 1;
 
     $form['organization'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Organization'),
       '#maxlength' => 255,
-      '#weight' => -1,
+      '#weight' => 2,
     ];
+
+    $form['mail']['#weight'] = 3;
 
     $form['type'] = [
       '#type' => 'select',
       '#title' => $this->t('Type of support'),
       '#options' => $this->getTypeOfSupportOptions(),
       '#required' => TRUE,
+      '#weight' => 4,
     ];
+
+    $form['subject']['#weight'] = 5;
+
+    $form['message']['#weight'] = 6;
 
     $extensions = 'azw css csv dbf doc docx dtd.sgml dtd.xml e00 eps epub fmx2 fmx3 fmx4 gif gml gzip indd jpeg jpg json kml kmz mdb mobi mop mxd odf ods odt op.datpro owl pdf pdfa1a pdfa1b pdfx png pps ppsx ppt pptx ps psd rdf rdf.turtle rdf.xml rss rtf schema.xml sgml skos.xml sparqlq sparqlqres tar tar.gz tar.xz tiff tsv txt xls xlsx xml xslfo xslt zip';
     // Cap the upload size according to the PHP limit.
@@ -172,9 +177,14 @@ class ContactInformationContactForm extends ContactForm {
         'file_validate_extensions' => [$extensions],
         'file_validate_size' => [$maxFilesize],
       ],
+      '#weight' => 7,
     ];
 
     // Move 'submit' under 'actions'.
+    $form['actions'] = [
+      '#type' => 'actions',
+      '#weight' => 8,
+    ];
     $form['actions']['submit'] = $form['submit'];
 
     $this->honeypot?->addFormProtection(
