@@ -9,6 +9,7 @@
         "ext-json": "*",
         "ext-pdo": "*",
         "ext-redis": "*",
+        "ext-memcached": "*",
         "ext-simplexml": "*",
         "composer/installers": "^2",
         "cweagans/composer-patches": "^1.7",
