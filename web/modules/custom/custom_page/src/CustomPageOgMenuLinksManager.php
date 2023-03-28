@@ -56,7 +56,7 @@ class CustomPageOgMenuLinksManager implements CustomPageOgMenuLinksManagerInterf
     if ($og_menu_instance = $this->getOgMenuInstanceByCustomPage($custom_page)) {
       $menu_name = "ogmenu-{$og_menu_instance->id()}";
       // Collect the IDs of links to the custom page.
-      $mids = $menu_link_content_storage->getQuery()
+      $mids = $menu_link_content_storage->getQuery()->accessCheck(FALSE)
         ->condition('bundle', 'menu_link_content')
         ->condition('menu_name', $menu_name)
         ->condition('link.uri', "entity:node/{$custom_page->id()}")
@@ -68,7 +68,7 @@ class CustomPageOgMenuLinksManager implements CustomPageOgMenuLinksManagerInterf
           $parents[] = $menu_link->getPluginId();
         }
         if ($parents) {
-          $children_ids = $menu_link_content_storage->getQuery()
+          $children_ids = $menu_link_content_storage->getQuery()->accessCheck(FALSE)
             ->condition('bundle', 'menu_link_content')
             ->condition('menu_name', $menu_name)
             ->condition('parent', $parents, 'IN')
@@ -123,7 +123,7 @@ class CustomPageOgMenuLinksManager implements CustomPageOgMenuLinksManagerInterf
       if ($target_og_menu_instance = $this->getOgMenuInstanceByGroupId($group_id)) {
         $source_menu_name = "ogmenu-{$source_og_menu_instance->id()}";
         // Collect the IDs of links to the custom page.
-        $mids = $menu_link_content_storage->getQuery()
+        $mids = $menu_link_content_storage->getQuery()->accessCheck(FALSE)
           ->condition('bundle', 'menu_link_content')
           ->condition('menu_name', $source_menu_name)
           ->condition('link.uri', "entity:node/{$custom_page->id()}")
@@ -160,7 +160,7 @@ class CustomPageOgMenuLinksManager implements CustomPageOgMenuLinksManagerInterf
             if ($instance->getMenuName() === $menu_name && $instance->isDeletable() && strpos($id, 'menu_link_content:') === 0) {
               $instance->deleteLink();
               // Search for children of deleted menu link.
-              $mids = $menu_link_content_storage->getQuery()
+              $mids = $menu_link_content_storage->getQuery()->accessCheck(FALSE)
                 ->condition('parent', "menu_link_content:{$instance->getDerivativeId()}")
                 ->execute();
               if ($mids) {

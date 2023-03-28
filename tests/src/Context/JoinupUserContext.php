@@ -203,7 +203,7 @@ class JoinupUserContext extends RawDrupalContext {
     if (!isset($allowed_statuses[$status])) {
       throw new \Exception("Invalid '$status' status. Allowed values are 'active', 'blocked' or 'cancelled'.");
     }
-    $uids = \Drupal::entityQuery('user')
+    $uids = \Drupal::entityQuery('user')->accessCheck(FALSE)
       ->condition('name', $name)
       ->condition('status', $allowed_statuses[$status])
       ->execute();
@@ -222,7 +222,7 @@ class JoinupUserContext extends RawDrupalContext {
    * @Then the :name user doesn't exist
    */
   public function userNotExists(string $name): void {
-    if (\Drupal::entityQuery('user')->condition('name', $name)->execute()) {
+    if (\Drupal::entityQuery('user')->accessCheck(FALSE)->condition('name', $name)->execute()) {
       throw new ExpectationFailedException("The user $name exists but it should not.");
     }
   }
