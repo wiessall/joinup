@@ -195,7 +195,7 @@ class LinksInlineWidget extends WidgetPluginBase implements ContainerFactoryPlug
    *   The renderable array of the link.
    */
   protected function generateResetLink(FacetInterface $facet) {
-    $request = $this->requestStack->getMasterRequest();
+    $request = $this->requestStack->getMainRequest();
     $get_params = clone $request->query;
     if ($get_params->has('page')) {
       $get_params->remove('page');

@@ -69,7 +69,7 @@ class ProvenanceHelper implements ProvenanceHelperInterface {
    */
   public function loadProvenanceActivities(array $ids): array {
     $provenance_activity = [];
-    $provenance_ids = $this->getRdfStorage()->getQuery()
+    $provenance_ids = $this->getRdfStorage()->getQuery()->accessCheck(FALSE)
       ->condition('rid', 'provenance_activity')
       ->condition('provenance_entity', $ids, 'IN')
       ->execute();

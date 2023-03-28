@@ -75,7 +75,7 @@ trait EntityReferenceTrait {
    */
   protected function getEntityIdByLabel($label, $entity_type, array $entity_bundle = []) {
     $label_key = $this->getEntityLabelKey($entity_type);
-    $query = \Drupal::entityQuery($entity_type)
+    $query = \Drupal::entityQuery($entity_type)->accessCheck(FALSE)
       ->condition($label_key, $label)
       ->range(0, 1);
 

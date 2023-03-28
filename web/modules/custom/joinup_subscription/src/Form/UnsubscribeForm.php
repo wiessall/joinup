@@ -397,7 +397,11 @@ class UnsubscribeForm extends ConfirmFormBase {
    *   An array of membership IDs.
    */
   protected function getUserMembershipIds(UserInterface $user): array {
-    $condition_group = $this->entityTypeManager->getStorage('og_membership')->getQuery()->orConditionGroup();
+    $condition_group = $this->entityTypeManager->getStorage('og_membership')
+      ->getQuery()
+      ->accessCheck(FALSE)
+      ->orConditionGroup();
+
     $condition_group
       ->exists('subscription_bundles')
       ->condition('announcements', 1);
@@ -405,6 +409,7 @@ class UnsubscribeForm extends ConfirmFormBase {
     return $this->entityTypeManager
       ->getStorage('og_membership')
       ->getQuery()
+      ->accessCheck(FALSE)
       ->condition('uid', $user->id())
       ->condition($condition_group)
       ->execute();

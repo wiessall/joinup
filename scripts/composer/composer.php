@@ -56,6 +56,15 @@ if (!getenv('COMPOSER_DISABLE_NODE_DEPENDENCIES')) {
   execCmd("$command --no-progress");
 }
 
+// Task Runner has been moved in Toolkit. However, the Toolkit's runner is
+// simplified and not ready to be used by Joinup because of DQA-5962. Ensure
+// that the standalone Task Runner is used.
+// @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/DQA-5962
+$runFile = __DIR__ . '/../../vendor/bin/run';
+$run = file_get_contents($runFile);
+$run = str_replace('/ec-europa/toolkit/run', '/openeuropa/task-runner/bin/run', $run);
+file_put_contents($runFile, $run);
+
 /**
  * Executes a shell command and exits the script on failure.
  *
