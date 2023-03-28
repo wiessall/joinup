@@ -94,7 +94,9 @@ function tallinn_report_author_uniqueness(array &$form, FormStateInterface $form
 
   if (!$author->isAnonymous()) {
     // Get all reports, other than the current, that are owned by the same user.
-    $query = \Drupal::entityTypeManager()->getStorage('node')->getQuery()
+    $query = \Drupal::entityTypeManager()->getStorage('node')
+      ->getQuery()
+      ->accessCheck(FALSE)
       ->condition('type', 'tallinn_report')
       ->condition('uid', $author->id());
     if (!$report->isNew()) {

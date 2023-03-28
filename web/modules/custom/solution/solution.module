@@ -434,7 +434,7 @@ function solution_get_related_solutions_ids(EntityInterface $entity) {
       $eira[] = $field['target_id'];
     }
     if ($eira) {
-      $query = \Drupal::entityQuery('rdf_entity')
+      $query = \Drupal::entityQuery('rdf_entity')->accessCheck(FALSE)
         ->condition('rid', 'solution')
         ->condition('field_is_solution_type', $eira, 'IN')
         ->range(0, 4);
@@ -590,7 +590,7 @@ function solution_invalidate_collection(EntityInterface $entity) {
  */
 function solution_get_collection_ids(RdfInterface $solution) {
   if (\Drupal::moduleHandler()->moduleExists('collection')) {
-    $result = \Drupal::entityQuery('rdf_entity')
+    $result = \Drupal::entityQuery('rdf_entity')->accessCheck(FALSE)
       ->condition('rid', 'collection')
       ->condition('field_ar_affiliates', $solution->id())
       ->execute();

@@ -105,6 +105,7 @@ class CustomPageProvider implements CustomPageProviderInterface {
     return $this->entityTypeManager
       ->getStorage('node')
       ->getQuery()
+      ->accessCheck(FALSE)
       ->condition(OgGroupAudienceHelperInterface::DEFAULT_FIELD . '.target_id', $group_id)
       ->condition('type', 'custom_page')
       ->condition('status', 1)

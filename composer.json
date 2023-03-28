@@ -130,7 +130,8 @@
         "drupal/renderviz": "^1.0",
         "drupal/upgrade_status": "^3.14",
         "drupaltest/behat-one-time-login": "^1.0",
-        "ec-europa/toolkit": "~9.0.0",
+        "ec-europa/toolkit": "^9.7",
+        "openeuropa/task-runner": "^2.0",
         "lovers-of-behat/table-extension": "^1.3",
         "mikey179/vfsstream": "~1.6",
         "palantirnet/drupal-rector": "^0.12.2",
@@ -370,6 +371,9 @@
             },
             "drupal/views_autosubmit": {
                 "Stop auto submitting first character entered in an Autocomplete Filter field. @see https://www.drupal.org/project/views_autosubmit/issues/3160600" : "https://www.drupal.org/files/issues/2021-09-06/3160600_views_autosubmit_16.patch"
+            },
+            "sweetrdf/easyrdf": {
+                "Ntriples performance @see https://github.com/sweetrdf/easyrdf/pull/25": "https://patch-diff.githubusercontent.com/raw/sweetrdf/easyrdf/pull/25.diff"
             }
         },
         "patches-ignore": {
@@ -386,6 +390,12 @@
                     "type": "zip"
                 }
             }
+        },
+        "phpstan": {
+            "includes": [
+                "vendor/mglaman/phpstan-drupal/extension.neon",
+                "vendor/phpstan/phpstan-deprecation-rules/rules.neon"
+            ]
         }
     },
     "repositories": [

@@ -77,7 +77,9 @@ class WhatsNewHelper implements WhatsNewHelperInterface {
    * {@inheritdoc}
    */
   public function menuHasFeaturedLinks(string $menu_name): bool {
-    $query = $this->entityTypeManager->getStorage('menu_link_content')->getQuery()
+    $query = $this->entityTypeManager->getStorage('menu_link_content')
+      ->getQuery()
+      ->accessCheck(FALSE)
       ->condition('menu_name', $menu_name)
       ->condition('enabled', 1)
       ->condition('live_link', 1);
@@ -89,7 +91,9 @@ class WhatsNewHelper implements WhatsNewHelperInterface {
    * {@inheritdoc}
    */
   public function getFlagEnabledMenuLinks(?EntityInterface $entity = NULL): array {
-    $query = $this->entityTypeManager->getStorage('menu_link_content')->getQuery()
+    $query = $this->entityTypeManager->getStorage('menu_link_content')
+      ->getQuery()
+      ->accessCheck(FALSE)
       ->condition('menu_name', 'support')
       ->condition('enabled', 1)
       ->condition('live_link', 1);
