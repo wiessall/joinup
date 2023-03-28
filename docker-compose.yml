@@ -30,6 +30,7 @@ services:
       - mysql
       - sparql
       - solr
+      - memcache
       - mail
       - selenium
 
@@ -84,6 +85,9 @@ services:
       SEARCH_API_SERVER_SS_SOLR_CORE: digit-joinup
       DOCKER_RESTORE_PRODUCTION:
 
+  memcached:
+    image: memcached:1.6.15
+    command: ["-m", "512m"]
 
   mail:
     image: mailhog/mailhog
