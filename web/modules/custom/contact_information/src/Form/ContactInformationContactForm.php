@@ -70,6 +70,7 @@ class ContactInformationContactForm extends ContactForm {
       '#required' => TRUE,
     ];
 
+    $extensions = 'azw css csv dbf doc docx dtd.sgml dtd.xml e00 eps epub fmx2 fmx3 fmx4 gif gml gzip indd jpeg jpg json kml kmz mdb mobi mop mxd odf ods odt op.datpro owl pdf pdfa1a pdfa1b pdfx png pps ppsx ppt pptx ps psd rdf rdf.turtle rdf.xml rss rtf schema.xml sgml skos.xml sparqlq sparqlqres tar tar.gz tar.xz tiff tsv txt xls xlsx xml xslfo xslt zip';
     // Cap the upload size according to the PHP limit.
     $maxFilesize = min(
       Bytes::toNumber(Environment::getUploadMaxSize()),
@@ -78,11 +79,12 @@ class ContactInformationContactForm extends ContactForm {
     $form['attachment'] = [
       '#type' => 'managed_file',
       '#title' => $this->t('Attachment'),
-      '#description' => $this->t('Attach a file (optional). Max limit: 8MB, allowed types: azw css csv dbf doc docx dtd.sgml dtd.xml e00 eps epub fmx2 fmx3 fmx4 gif gml gzip indd jpeg jpg json kml kmz mdb mobi mop mxd odf ods odt op.datpro owl pdf pdfa1a pdfa1b pdfx png pps ppsx ppt pptx ps psd rdf rdf.turtle rdf.xml rss rtf schema.xml sgml skos.xml sparqlq sparqlqres tar tar.gz tar.xz tiff tsv txt xls xlsx xml xslfo xslt zip'),
+      '#description' => $this->t(
+        'Attach a file (optional). Max limit: @limit, allowed types: @extensions',
+        ['@limit' => format_size($maxFilesize), '@extensions' => $extensions]
+      ),
       '#upload_validators' => [
-        'file_validate_extensions' => [
-          'azw css csv dbf doc docx dtd.sgml dtd.xml e00 eps epub fmx2 fmx3 fmx4 gif gml gzip indd jpeg jpg json kml kmz mdb mobi mop mxd odf ods odt op.datpro owl pdf pdfa1a pdfa1b pdfx png pps ppsx ppt pptx ps psd rdf rdf.turtle rdf.xml rss rtf schema.xml sgml skos.xml sparqlq sparqlqres tar tar.gz tar.xz tiff tsv txt xls xlsx xml xslfo xslt zip',
-        ],
+        'file_validate_extensions' => [$extensions],
         'file_validate_size' => [$maxFilesize],
       ],
     ];
