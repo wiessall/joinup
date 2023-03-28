@@ -44,4 +44,27 @@ trait SearchTrait {
     }
   }
 
+  /**
+  * Find all search boxes.
+  *
+  * @return array
+  *   Search box elements.
+  *
+  */
+ protected function findAllSearchBoxes(): array {
+  // @todo The `#edit-keys` selector is part of the original Joinup
+  //   theme and can be removed once we migrated to the new theme.
+  // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7138
+  $locators = [
+    // Joinup theme.
+    '.joinup-navbar .navbar-search input#edit-keys',
+    // Ventuno theme.
+    '.joinup-navbar .navbar-search input#search-box',
+  ];
+
+  return $this->getSession()
+    ->getPage()
+    ->findAll('css', implode(', ', $locators));
+ }
+
 }
