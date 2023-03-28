@@ -22,7 +22,16 @@ class ContactInformationContactForm extends ContactForm {
   /**
    * Constructs a new form instance.
    */
-  public function __construct(protected HoneypotServiceInterface $honeypot, protected MailManagerInterface $mailManager, protected ModuleHandler $moduleHandler, protected EntityTypeManagerInterface $entityTypeManager, $entityType = NULL, $entityId = NULL, $fieldName = NULL, $fieldSettings = NULL) {
+  public function __construct(
+    protected HoneypotServiceInterface $honeypot,
+    protected MailManagerInterface $mailManager,
+    protected ModuleHandler $moduleHandler,
+    protected EntityTypeManagerInterface $entityTypeManager,
+    string $entityType = NULL,
+    string $entityId = NULL,
+    string $fieldName = NULL,
+    array $fieldSettings = NULL
+  ) {
     parent::__construct($entityType, $entityId, $fieldName, $fieldSettings);
   }
 
@@ -173,7 +182,8 @@ class ContactInformationContactForm extends ContactForm {
 
     $result = $this->mailManager->mail($module, $key, $to, $langcode, $params, $reply_to);
     if ($result['result'] !== TRUE) {
-      $this->messenger()->addError($this->t('There was a problem sending your message and it was not sent.'));
+      $this->messenger()
+        ->addError($this->t('There was a problem sending your message and it was not sent.'));
     }
     else {
       $this->messenger()->addStatus($this->t('Your message has been sent.'));
