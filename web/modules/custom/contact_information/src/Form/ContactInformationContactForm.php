@@ -5,6 +5,7 @@ declare(strict_types = 1);
 namespace Drupal\contact_information\Form;
 
 use Drupal\Core\Cache\CacheableMetadata;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\EventSubscriber\MainContentViewSubscriber;
 use Drupal\Core\Extension\ModuleHandler;
 use Drupal\Core\Form\FormStateInterface;
@@ -21,15 +22,14 @@ class ContactInformationContactForm extends ContactForm {
   /**
    * Contact Form constructor.
    */
-  public function __construct(protected HoneypotServiceInterface $honeypot, protected MailManagerInterface $mailManager, protected ModuleHandler $moduleHandler, $entityType = NULL, $entityId = NULL, $fieldName = NULL, $fieldSettings = NULL) {
+  public function __construct(protected HoneypotServiceInterface $honeypot, protected MailManagerInterface $mailManager, protected ModuleHandler $moduleHandler, protected EntityTypeManagerInterface $entityTypeManager, $entityType = NULL, $entityId = NULL, $fieldName = NULL, $fieldSettings = NULL) {
     parent::__construct($entityType, $entityId, $fieldName, $fieldSettings);
   }
-
 
   /**
    * {@inheritdoc}
    */
-  public function buildForm(array $form, FormStateInterface $form_state) {
+  public function buildForm(array $form, FormStateInterface $form_state): array {
     $form = parent::buildForm($form, $form_state);
     $form['actions'] = ['#type' => 'actions'];
     $form['organization'] = [
@@ -51,9 +51,9 @@ class ContactInformationContactForm extends ContactForm {
     ];
 
     $form['attachment'] = [
-      '#type' => 'file',
+      '#type' => 'managed_file',
       '#title' => $this->t('Attachment'),
-      '#description' => t('Attach a file (optional). Max limit: 8MB, allowed types: azw css csv dbf doc docx dtd.sgml dtd.xml e00 eps epub fmx2 fmx3 fmx4 gif gml gzip indd jpeg jpg json kml kmz mdb mobi mop mxd odf ods odt op.datpro owl pdf pdfa1a pdfa1b pdfx png pps ppsx ppt pptx ps psd rdf rdf.turtle rdf.xml rss rtf schema.xml sgml skos.xml sparqlq sparqlqres tar tar.gz tar.xz tiff tsv txt xls xlsx xml xslfo xslt zip'),
+      '#description' => $this->t('Attach a file (optional). Max limit: 8MB, allowed types: azw css csv dbf doc docx dtd.sgml dtd.xml e00 eps epub fmx2 fmx3 fmx4 gif gml gzip indd jpeg jpg json kml kmz mdb mobi mop mxd odf ods odt op.datpro owl pdf pdfa1a pdfa1b pdfx png pps ppsx ppt pptx ps psd rdf rdf.turtle rdf.xml rss rtf schema.xml sgml skos.xml sparqlq sparqlqres tar tar.gz tar.xz tiff tsv txt xls xlsx xml xslfo xslt zip'),
       '#upload_validators' => [
         'file_validate_extensions' => [
           'azw css csv dbf doc docx dtd.sgml dtd.xml e00 eps epub fmx2 fmx3 fmx4 gif gml gzip indd jpeg jpg json kml kmz mdb mobi mop mxd odf ods odt op.datpro owl pdf pdfa1a pdfa1b pdfx png pps ppsx ppt pptx ps psd rdf rdf.turtle rdf.xml rss rtf schema.xml sgml skos.xml sparqlq sparqlqres tar tar.gz tar.xz tiff tsv txt xls xlsx xml xslfo xslt zip',
@@ -63,20 +63,20 @@ class ContactInformationContactForm extends ContactForm {
     ];
 
     if ($this->currentUser()->isAnonymous()) {
-      // Remove standard form elements from Drupal\email_contact\Form\ContactForm.
-      // @see \Drupal\email_contact\Form\ContactForm::buildForm()
+      // Remove standard form elements.
       unset($form['name'], $form['mail'], $form['subject'], $form['message'], $form['organization'], $form['type'], $form['attachment']);
 
       $form['description'] = [
         '#type' => 'html_tag',
         '#tag' => 'p',
-        '#value' => t('Only signed in users can send a message. Please sign in or register an account on EU Login.'),
+        '#value' => $this->t('Only signed in users can send a message. Please sign in or register an account on EU Login.'),
       ];
+
       $form['actions'] = [
         '#type' => 'actions',
         'submit' => [
           '#type' => 'submit',
-          '#value' => t('Sign in / Register'),
+          '#value' => $this->t('Sign in / Register'),
           '#button_type' => 'primary',
           '#ajax' => [
             'callback' => 'contact_information_require_login',
@@ -84,7 +84,9 @@ class ContactInformationContactForm extends ContactForm {
           ],
         ],
       ];
-    } else {
+
+    }
+    else {
       // Move 'submit' under 'actions'.
       $form['actions']['submit'] = $form['submit'];
 
@@ -103,10 +105,10 @@ class ContactInformationContactForm extends ContactForm {
     if ($this->getRequest()->query->get(MainContentViewSubscriber::WRAPPER_FORMAT) === 'drupal_ajax') {
       $form['actions']['cancel'] = [
         '#type' => 'button',
-        '#value' => t('Cancel'),
+        '#value' => $this->t('Cancel'),
         '#attributes' => ['class' => ['dialog-cancel']],
-        // Put the cancel button to the left of the confirmation button, so it is
-        // consistent with the dialog shown when joining the group.
+        // Put the cancel button to the left of the confirmation button, so it
+        // is consistent with the dialog shown when joining the group.
         '#weight' => -1,
       ];
     }
@@ -119,15 +121,19 @@ class ContactInformationContactForm extends ContactForm {
   }
 
   /**
-   * Prepares and sends the message.
-   *
-   * @param array $form
-   *   The form render array.
-   * @param \Drupal\Core\Form\FormStateInterface $form_state
-   *   The form state object.
+   * {@inheritdoc}
+   */
+  public function validateForm(array &$form, FormStateInterface $form_state): void {
+    if (!$this->currentUser()->isAnonymous()) {
+      parent::validateForm($form, $form_state);
+    }
+  }
+
+  /**
+   * {@inheritdoc}
    */
   protected function sendMessage(array &$form, FormStateInterface $form_state): void {
-    $emails = unserialize($form_state->getValue('emails'));
+    $emails = unserialize($form_state->getValue('emails'), ['allowed_classes' => FALSE]);
     // E-mail address of the sender: as the form field is a text field,
     // all instances of \r and \n have been automatically stripped from it.
     $reply_to = $form_state->getValue('mail');
@@ -140,28 +146,32 @@ class ContactInformationContactForm extends ContactForm {
     $message = '';
 
     if (!empty($form_state->getValue('attachment'))) {
-      $file_content = file_get_contents('public://sample.pdf');
+      $fid = reset($form_state->getValue('attachment'));
+      /** @var \Drupal\file\FileInterface $file */
+      $file = $this->entityTypeManager->getStorage('file')->load($fid);
+      $file_uri = $file->getFileUri();
+      $file_name = $file->getFileName();
+      $file_mime = $file->getMimeType();
+      $file_content = file_get_contents($file_uri);
       $params['attachments'][] = [
         'filecontent' => $file_content,
-        'filename' => 'sample.pdf',
-        'filemime' => 'application/pdf',
+        'filename' => $file_name,
+        'filemime' => $file_mime,
       ];
     }
     if ($settings['include_values']) {
-      $message .= 'Name: ' . $params['name'] . '<br/>' . 'Email: ' . $reply_to . '<br/>' . '<br />Organization: ' .$params['organization']. '<br />Type: ' .$params['type'];
+      $message .= 'Name: ' . $params['name'] . '<br/>' . 'Email: ' . $reply_to . '<br/>' . '<br />Organization: ' . $params['organization'] . '<br />Type: ' . $params['type'];
     }
     $message .= '<br/>Message: ' . $form_state->getValue('message');
     $params['message'] = Markup::create($message);
-
 
     // Send the e-mail to the recipients.
     $to = implode(', ', $emails);
     $module = 'email_contact';
     $key = 'contact';
     $langcode = $this->currentUser()->getPreferredLangcode();
-    $send = TRUE;
 
-    $result = $this->mailManager->mail($module, $key, $to, $langcode, $params, $reply_to, $send);
+    $result = $this->mailManager->mail($module, $key, $to, $langcode, $params, $reply_to);
     if ($result['result'] !== TRUE) {
       $this->messenger()->addError($this->t('There was a problem sending your message and it was not sent.'));
     }
@@ -173,7 +183,7 @@ class ContactInformationContactForm extends ContactForm {
         '@replyto' => $reply_to,
         '@to' => $to,
         '@subject' => $params['subject'],
-        '@message' => $params['message']
+        '@message' => $params['message'],
       ]);
     }
   }
