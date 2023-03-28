@@ -80,7 +80,6 @@ class ContactInformationContactForm extends ContactForm {
       Bytes::toNumber(Environment::getUploadMaxSize()),
       Bytes::toNumber('8MB')
     );
-
     $form['attachment'] = [
       '#type' => 'managed_file',
       '#title' => $this->t('Attachment'),
@@ -140,7 +139,9 @@ class ContactInformationContactForm extends ContactForm {
         '#weight' => -1,
       ];
     }
+
     unset($form['submit']);
+
     // Vary the form's cache by whether the user is logged in or not.
     (new CacheableMetadata())
       ->setCacheContexts(['user.roles:authenticated'])
