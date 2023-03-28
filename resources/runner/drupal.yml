@@ -49,7 +49,7 @@ drupal:
         - OpenEuropa Webtools Geocoding Cache
         - Verbose error logging
         - Development mail collector
-        - Redis
+        - Memcache
         - Custom queue services
         - Monolog
       site-clean:
@@ -66,7 +66,7 @@ drupal:
         - OpenEuropa Webtools Geocoding Cache
         - Verbose error logging
         - Development mail collector
-        - Redis
+        - Memcache
         - Custom queue services
         - Monolog
       behat:
@@ -82,7 +82,7 @@ drupal:
         - OpenEuropa Newsroom Newsletter Mock
         - OpenEuropa Newsroom Newsletter Settings
         - OpenEuropa Webtools Geocoding Cache
-        - Redis
+        - Memcache
         - Custom queue services
         - Test mail collector
         - Monolog
@@ -98,7 +98,7 @@ drupal:
         - OpenEuropa Newsroom Newsletter Mock
         - OpenEuropa Newsroom Newsletter Settings
         - OpenEuropa Webtools Geocoding Cache
-        - Redis
+        - Memcache
         - Pipe errors to a temporary file
         - Custom queue services
         - Test mail collector
@@ -127,7 +127,7 @@ drupal:
         - OpenEuropa Newsroom Newsletter Settings
         - OpenEuropa Webtools Analytics
         - Custom error handler
-        - Redis
+        - Memcache
         - Custom queue services
         - Mail transport
         - Monolog
@@ -286,13 +286,10 @@ drupal:
         $config['oe_webtools_analytics.settings']['siteID'] = getenv('OE_WEBTOOLS_ANALYTICS_SITE_ID');
         $config['oe_webtools_analytics.settings']['sitePath'] = getenv('OE_WEBTOOLS_ANALYTICS_SITE_PATH');
         $config['oe_webtools_analytics.settings']['instance'] = getenv('OE_WEBTOOLS_ANALYTICS_SITE_INSTANCE');
-      Redis: |
-        if (empty(getenv('REDIS_DISABLED'))) {
-          $settings['redis.connection']['interface'] = 'PhpRedis';
-          $settings['redis.connection']['host'] = getenv('REDIS_HOST');
-          $settings['redis.connection']['port'] = getenv('REDIS_PORT');
-          $settings['cache']['default'] = 'cache.backend.redis';
-          $settings['container_yamls'][] = DRUPAL_ROOT . '/modules/contrib/redis/example.services.yml';
+      Memcache: |
+        if ($memcache_hosts = getenv('DRUPAL_MEMCACHE_HOSTS')) {
+          $settings['cache']['default'] = 'cache.backend.memcache';
+          $settings['memcache']['servers'] = array_fill_keys(explode(',', $memcache_hosts), 'default');
         }
       Custom error handler: |
         $settings['error_page']['uuid'] = TRUE;
