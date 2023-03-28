@@ -10,6 +10,11 @@ use Symfony\Component\Routing\RouteCollection;
 
 /**
  * Swaps the email_contact.form route controller to provide more features.
+ *
+ * Its overwrite controller in order to set custom form, otherwise we are not
+ * able to add additional fields to the contact form.
+ *
+ * @see \Drupal\contact_information\Form\ContactInformationContactForm
  */
 class ContactInformationContactFormRouteSubscriber extends RouteSubscriberBase {
 
