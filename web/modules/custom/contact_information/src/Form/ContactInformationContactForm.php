@@ -65,13 +65,8 @@ class ContactInformationContactForm extends ContactForm {
 
     $form['type'] = [
       '#type' => 'select',
-      '#title' => $this->t('Type'),
-      '#options' => [
-        'option1' => $this->t('Option 1'),
-        'option2' => $this->t('Option 2'),
-        'option3' => $this->t('Option 3'),
-        'option4' => $this->t('Option 4'),
-      ],
+      '#title' => $this->t('Type of support'),
+      '#options' => $this->getTypeOfSupportOptions(),
       '#required' => TRUE,
     ];
 
@@ -168,7 +163,7 @@ class ContactInformationContactForm extends ContactForm {
     $params['subject'] = $form_state->getValue('subject');
     $params['name'] = $form_state->getValue('name');
     $params['organization'] = $form_state->getValue('organization');
-    $params['type'] = $form_state->getValue('type');
+    $params['type'] = $this->getTypeOfSupportOptions()[$form_state->getValue('type')]?->render();
     $params['default_message'] = $settings['default_message'];
     $message = '';
 
@@ -215,6 +210,21 @@ class ContactInformationContactForm extends ContactForm {
         '@message' => $params['message'],
       ]);
     }
+  }
+
+  /**
+   * Gets list of option for "Type of Support" field.
+   *
+   * @return \Drupal\Core\StringTranslation\TranslatableMarkup[]
+   *   Option list.
+   */
+  protected function getTypeOfSupportOptions(): array {
+    return [
+      $this->t('Informational'),
+      $this->t('Feedback/Suggestions'),
+      $this->t('Technical'),
+      $this->t('Other'),
+    ];
   }
 
 }
