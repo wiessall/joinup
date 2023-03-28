@@ -4,6 +4,8 @@ declare(strict_types = 1);
 
 namespace Drupal\contact_information\Form;
 
+use Drupal\Component\Utility\Bytes;
+use Drupal\Component\Utility\Environment;
 use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\EventSubscriber\MainContentViewSubscriber;
@@ -73,6 +75,12 @@ class ContactInformationContactForm extends ContactForm {
       '#required' => TRUE,
     ];
 
+    // Cap the upload size according to the PHP limit.
+    $maxFilesize = min(
+      Bytes::toNumber(Environment::getUploadMaxSize()),
+      Bytes::toNumber('8MB')
+    );
+
     $form['attachment'] = [
       '#type' => 'managed_file',
       '#title' => $this->t('Attachment'),
@@ -81,7 +89,7 @@ class ContactInformationContactForm extends ContactForm {
         'file_validate_extensions' => [
           'azw css csv dbf doc docx dtd.sgml dtd.xml e00 eps epub fmx2 fmx3 fmx4 gif gml gzip indd jpeg jpg json kml kmz mdb mobi mop mxd odf ods odt op.datpro owl pdf pdfa1a pdfa1b pdfx png pps ppsx ppt pptx ps psd rdf rdf.turtle rdf.xml rss rtf schema.xml sgml skos.xml sparqlq sparqlqres tar tar.gz tar.xz tiff tsv txt xls xlsx xml xslfo xslt zip',
         ],
-        'file_validate_size' => [8 * 1024 * 1024],
+        'file_validate_size' => [$maxFilesize],
       ],
     ];
 
