@@ -7,7 +7,6 @@ namespace Drupal\contact_information\Form;
 use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\EventSubscriber\MainContentViewSubscriber;
-use Drupal\Core\Extension\ModuleHandler;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Mail\MailManagerInterface;
 use Drupal\Core\Render\Markup;
@@ -20,17 +19,31 @@ use Drupal\honeypot\HoneypotServiceInterface;
 class ContactInformationContactForm extends ContactForm {
 
   /**
-   * Constructs a new form instance.
+   * Constructs a new contact information form.
+   *
+   * @param \Drupal\Core\Mail\MailManagerInterface $mailManager
+   *   Mail manager.
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
+   *   Entity type manager.
+   * @param \Drupal\honeypot\HoneypotServiceInterface|null $honeypot
+   *   Honeypot service.
+   * @param string|NULL $entityType
+   *   Entity type
+   * @param string|NULL $entityId
+   *   Entity id.
+   * @param string|NULL $fieldName
+   *   Field name.
+   * @param array|NULL $fieldSettings
+   *   Field settings.
    */
   public function __construct(
-    protected HoneypotServiceInterface $honeypot,
     protected MailManagerInterface $mailManager,
-    protected ModuleHandler $moduleHandler,
     protected EntityTypeManagerInterface $entityTypeManager,
+    protected ?HoneypotServiceInterface $honeypot,
     string $entityType = NULL,
     string $entityId = NULL,
     string $fieldName = NULL,
-    array $fieldSettings = NULL
+    array $fieldSettings = NULL,
   ) {
     parent::__construct($entityType, $entityId, $fieldName, $fieldSettings);
   }
@@ -100,14 +113,11 @@ class ContactInformationContactForm extends ContactForm {
       // Move 'submit' under 'actions'.
       $form['actions']['submit'] = $form['submit'];
 
-      if ($this->moduleHandler->moduleExists('honeypot')) {
-        // We only protect the authenticated user version of the form.
-        $this->honeypot->addFormProtection(
-          $form,
-          $form_state,
-          ['honeypot', 'time_restriction'],
-        );
-      }
+      $this->honeypot?->addFormProtection(
+        $form,
+        $form_state,
+        ['honeypot', 'time_restriction'],
+      );
     }
 
     // @todo Replace this check with ::isModal() when issue #2661046 is in.

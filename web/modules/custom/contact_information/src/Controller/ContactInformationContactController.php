@@ -23,15 +23,28 @@ use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 class ContactInformationContactController extends ContactController {
 
   /**
-   * {@inheritdoc}
+   * Constructs a new contact information controller.
+   *
+   * @param \Psr\Log\LoggerInterface $logger
+   *   Logger
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
+   *   Entity type manager.
+   * @param \Drupal\Core\Form\FormBuilderInterface $formBuilder
+   *   Form builder
+   * @param \Symfony\Contracts\EventDispatcher\EventDispatcherInterface $eventDispatcher
+   *   Event dispatcher.
+   * @param \Drupal\Core\Mail\MailManagerInterface $mailManager
+   *   Email manager.
+   * @param \Drupal\honeypot\HoneypotServiceInterface|null $honeypot
+   *   Honeypot service.
    */
   public function __construct(
     LoggerInterface $logger,
     EntityTypeManagerInterface $entityTypeManager,
     FormBuilderInterface $formBuilder,
     EventDispatcherInterface $eventDispatcher,
-    protected HoneypotServiceInterface $honeypotService,
-    protected MailManagerInterface $mailManager
+    protected MailManagerInterface $mailManager,
+    protected ?HoneypotServiceInterface $honeypot,
   ) {
     parent::__construct(
       $logger, $entityTypeManager, $formBuilder, $eventDispatcher
@@ -47,8 +60,8 @@ class ContactInformationContactController extends ContactController {
       $container->get('entity_type.manager'),
       $container->get('form_builder'),
       $container->get('event_dispatcher'),
-      $container->get('honeypot'),
-      $container->get('plugin.manager.mail')
+      $container->get('plugin.manager.mail'),
+      $container->has('honeypot') ? $container->get('honeypot') : NULL
     );
   }
 
@@ -56,16 +69,17 @@ class ContactInformationContactController extends ContactController {
    * {@inheritdoc}
    */
   protected function getForm(EntityInterface $entity, string $field_name, array $field_settings): array {
-    return $this->formBuilder->getForm(new ContactInformationContactForm(
-      $this->honeypotService,
-      $this->mailManager,
-      $this->moduleHandler(),
-      $this->entityTypeManager,
-      $entity->getEntityTypeId(),
-      $entity->id(),
-      $field_name,
-      $field_settings,
-    ));
+    return $this->formBuilder->getForm(
+      new ContactInformationContactForm(
+        $this->mailManager,
+        $this->entityTypeManager,
+        $this->honeypot,
+        $entity->getEntityTypeId(),
+        $entity->id(),
+        $field_name,
+        $field_settings,
+      )
+    );
   }
 
 }
