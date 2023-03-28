@@ -19,7 +19,7 @@ use Drupal\media\Entity\MediaType;
 /**
  * Revert removal of collection that was lost.
  */
-function joinup_core_deploy_109101(): void {
+function joinup_core_deploy_0109101(): void {
   $ntriples = <<<EOF
 <http://data.europa.eu/w21/abe7d0f7-8c41-465b-86c0-93d2f857f998>	<http://joinup.eu/collection/content_creation>	"only_members" .
 <http://data.europa.eu/w21/abe7d0f7-8c41-465b-86c0-93d2f857f998>	<http://www.w3.org/ns/dcat#keyword>	"IMAPS" .
@@ -98,7 +98,9 @@ QUERY;
  */
 function joinup_core_deploy_109102(array &$sandbox): string {
   if (empty($sandbox['ids'])) {
-    $sandbox['ids'] = \Drupal::entityQuery('node')->condition('type', 'video')->execute();
+    $sandbox['ids'] = \Drupal::entityQuery('node')
+      ->accessCheck(FALSE)
+      ->condition('type', 'video')->execute();
     $sandbox['count'] = 0;
     $sandbox['max'] = count($sandbox['ids']);
   }
@@ -146,7 +148,7 @@ function _joinup_core_deploy_migrate_field(MediaType $media_type, string $ref_fi
   $target_entity = $storage->load($id);
   $video_url = $target_entity->get($legacy_field)->value;
   if ($video_url) {
-    $result = $media_storage->getQuery()
+    $result = $media_storage->getQuery()->accessCheck(FALSE)
       ->condition('bundle', $media_type->id())
       ->condition($source_field->getName(), $video_url)
       ->execute();
