@@ -55,7 +55,92 @@ class ContactInformationContactForm extends ContactForm {
    */
   public function buildForm(array $form, FormStateInterface $form_state): array {
     $form = parent::buildForm($form, $form_state);
-    $form['actions'] = ['#type' => 'actions'];
+
+    if ($this->currentUser()->isAnonymous()) {
+      $form = $this->buildFormForAnonymous($form);
+    }
+    else {
+      $form = $this->buildFormForAuthenticated($form, $form_state);
+    }
+
+    // @todo Replace this check with ::isModal() when issue #2661046 is in.
+    // @see https://www.drupal.org/node/2661046
+    if ($this->getRequest()->query->get(MainContentViewSubscriber::WRAPPER_FORMAT) === 'drupal_ajax') {
+      $form['actions']['cancel'] = [
+        '#type' => 'button',
+        '#value' => $this->t('Cancel'),
+        '#attributes' => ['class' => ['dialog-cancel']],
+        // Put the cancel button to the left of the confirmation button, so it
+        // is consistent with the dialog shown when joining the group.
+        '#weight' => -1,
+      ];
+    }
+
+    unset($form['submit']);
+
+    // Vary the form's cache by whether the user is logged in or not.
+    (new CacheableMetadata())
+      ->setCacheContexts(['user.roles:authenticated'])
+      ->applyTo($form);
+    return $form;
+  }
+
+  /**
+   * Build form for anonymous user.
+   *
+   * For anonymous users, we change the form to enforce them to login.
+   *
+   * @param array $form
+   *   An associative array containing the structure of the form.
+   *
+   * @return array
+   *   The form structure.
+   */
+  protected function buildFormForAnonymous(array $form): array {
+    // Remove standard form elements from Drupal\email_contact\Form\ContactForm.
+    // @see \Drupal\email_contact\Form\ContactForm::buildForm()
+    unset($form['name'], $form['mail'], $form['subject'], $form['message']);
+
+    $form['description'] = [
+      '#type' => 'html_tag',
+      '#tag' => 'p',
+      '#value' => $this->t('Only signed in users can send a message. Please sign in or register an account on EU Login.'),
+    ];
+
+    $form['actions'] = [
+      '#type' => 'actions',
+      'submit' => [
+        '#type' => 'submit',
+        '#value' => $this->t('Sign in / Register'),
+        '#button_type' => 'primary',
+        '#ajax' => [
+          'callback' => 'contact_information_require_login',
+          'event' => 'click',
+        ],
+      ],
+    ];
+
+    return $form;
+  }
+
+  /**
+   * Build form for authenticated user.
+   *
+   * For anonymous users, we change the form to enforce them to login.
+   *
+   * @param array $form
+   *   An associative array containing the structure of the form.
+   * @param \Drupal\Core\Form\FormStateInterface $form_state
+   *   The current state of the form.
+   *
+   * @return array
+   *   The form structure.
+   */
+  protected function buildFormForAuthenticated(array $form, FormStateInterface $form_state): array {
+    $form['actions'] = [
+      '#type' => 'actions'
+    ];
+
     $form['organization'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Organization'),
@@ -89,61 +174,31 @@ class ContactInformationContactForm extends ContactForm {
       ],
     ];
 
-    if ($this->currentUser()->isAnonymous()) {
-      // Remove standard form elements.
-      unset($form['name'], $form['mail'], $form['subject'], $form['message'], $form['organization'], $form['type'], $form['attachment']);
+    // Move 'submit' under 'actions'.
+    $form['actions']['submit'] = $form['submit'];
 
-      $form['description'] = [
-        '#type' => 'html_tag',
-        '#tag' => 'p',
-        '#value' => $this->t('Only signed in users can send a message. Please sign in or register an account on EU Login.'),
-      ];
+    $this->honeypot?->addFormProtection(
+      $form,
+      $form_state,
+      ['honeypot', 'time_restriction'],
+    );
 
-      $form['actions'] = [
-        '#type' => 'actions',
-        'submit' => [
-          '#type' => 'submit',
-          '#value' => $this->t('Sign in / Register'),
-          '#button_type' => 'primary',
-          '#ajax' => [
-            'callback' => 'contact_information_require_login',
-            'event' => 'click',
-          ],
-        ],
-      ];
-
-    }
-    else {
-      // Move 'submit' under 'actions'.
-      $form['actions']['submit'] = $form['submit'];
-
-      $this->honeypot?->addFormProtection(
-        $form,
-        $form_state,
-        ['honeypot', 'time_restriction'],
-      );
-    }
-
-    // @todo Replace this check with ::isModal() when issue #2661046 is in.
-    // @see https://www.drupal.org/node/2661046
-    if ($this->getRequest()->query->get(MainContentViewSubscriber::WRAPPER_FORMAT) === 'drupal_ajax') {
-      $form['actions']['cancel'] = [
-        '#type' => 'button',
-        '#value' => $this->t('Cancel'),
-        '#attributes' => ['class' => ['dialog-cancel']],
-        // Put the cancel button to the left of the confirmation button, so it
-        // is consistent with the dialog shown when joining the group.
-        '#weight' => -1,
-      ];
-    }
-
-    unset($form['submit']);
-
-    // Vary the form's cache by whether the user is logged in or not.
-    (new CacheableMetadata())
-      ->setCacheContexts(['user.roles:authenticated'])
-      ->applyTo($form);
     return $form;
+  }
+
+  /**
+   * Gets list of option for "Type of Support" field.
+   *
+   * @return \Drupal\Core\StringTranslation\TranslatableMarkup[]
+   *   Option list.
+   */
+  protected function getTypeOfSupportOptions(): array {
+    return [
+      $this->t('Informational'),
+      $this->t('Feedback/Suggestions'),
+      $this->t('Technical'),
+      $this->t('Other'),
+    ];
   }
 
   /**
@@ -212,21 +267,6 @@ class ContactInformationContactForm extends ContactForm {
         '@message' => $params['message'],
       ]);
     }
-  }
-
-  /**
-   * Gets list of option for "Type of Support" field.
-   *
-   * @return \Drupal\Core\StringTranslation\TranslatableMarkup[]
-   *   Option list.
-   */
-  protected function getTypeOfSupportOptions(): array {
-    return [
-      $this->t('Informational'),
-      $this->t('Feedback/Suggestions'),
-      $this->t('Technical'),
-      $this->t('Other'),
-    ];
   }
 
 }
