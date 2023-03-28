@@ -157,6 +157,12 @@ Feature: User profile
       | Cherry blossoms schedule      |
       | SOUND project                 |
       | Botanic E.D.E.N.              |
+    And I should see the following facet items "Collections, Discussion, Document" in this order
+    And the "User content" inline facet should allow selecting the following values:
+      | Event (1)    |
+      | News (1)     |
+      | Solution (1) |
+      | Video (1)    |
 
     # A message should be shown when visiting a profile of a user without
     # content.
