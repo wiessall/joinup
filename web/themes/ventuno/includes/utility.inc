@@ -11,6 +11,8 @@ use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\asset_release\Entity\AssetReleaseInterface;
 use Drupal\joinup_bundle_class\DescriptionInterface;
 use Drupal\joinup_bundle_class\LogoInterface;
+use Drupal\joinup_community_content\Entity\CommunityContentInterface;
+use Drupal\joinup_core\Controller\IdRedirect;
 use Drupal\smart_trim\Truncate\TruncateHTML;
 use Drupal\topic\Entity\TopicReferencingEntityInterface;
 
@@ -108,7 +110,7 @@ function _ventuno_get_default_icon_render_array(string $entity_type_id, string $
       'custom_page' => 'file-earmark-richtext',
       'discussion' => 'chat-left-text',
       'document' => 'file-earmark-text',
-      'event' => 'calendar3',
+      'event' => 'calendar-event',
       'news' => 'newspaper',
       'video' => 'file-earmark-play',
     ],
@@ -131,6 +133,55 @@ function _ventuno_get_default_icon_render_array(string $entity_type_id, string $
 }
 
 /**
+ * Builds the permalink for the given route.
+ *
+ * @return string|null
+ *   The permalink URI.
+ */
+function _ventuno_build_permalink(): ?string {
+  $route_match = \Drupal::routeMatch();
+  $route_name = $route_match->getRouteName();
+
+  $routes = [
+    'entity.node.canonical',
+    'entity.rdf_entity.canonical',
+    'entity.rdf_entity.about_page',
+  ];
+
+  if (!in_array($route_name, $routes)) {
+    return NULL;
+  }
+
+  if (!($parameters = $route_match->getRouteObject()->getOption('parameters')) || empty($parameters)) {
+    return NULL;
+  }
+
+  foreach ($parameters as $key => $info) {
+    if (!empty($info['type']) && $info['type'] == "entity:$key") {
+      $type = $key;
+      break;
+    }
+  }
+
+  if (!isset($type) || !($entity = $route_match->getParameter($type))) {
+    return NULL;
+  }
+
+  // Entity ID is pointing to the publication office redirect.
+  $namespaces = implode('|', array_keys(
+    IdRedirect::getEntityTypeFromPersistentUriNamespace()));
+  if (preg_match('{^http://data.europa.eu/(?:' . $namespaces . ')/}', $entity->id())) {
+    return $entity->id();
+  }
+
+  // Don't process the path to avoid pathauto aliasing.
+  return $entity->toUrl('canonical', [
+    'path_processing' => FALSE,
+    'absolute' => TRUE,
+  ])->toString();
+}
+
+/**
  * Provides a helper to create suggestions per view mode.
  *
  * @param array $suggestions
@@ -149,4 +200,20 @@ function _ventuno_theme_suggestions_alter(array &$suggestions, array $variables)
   $entity_type_id = $variables['elements']['#entity_type'];
   $bundle = $variables['elements']["#{$entity_type_id}"]->bundle();
   $suggestions[] = $original_theme_hook . '__' . str_replace('-', '_', $bundle) . '__' . str_replace('-', '_', $view_mode);
+}
+
+/**
+ * Gets author inline view mode as a render array.
+ *
+ * @param \Drupal\joinup_community_content\Entity\CommunityContentInterface $node
+ *   The node, where we get the author.
+ *
+ * @return array
+ *   Renderable array that contains the author.
+ */
+function _ventuno_get_author(CommunityContentInterface $node): array {
+  /** @var \Drupal\Core\Entity\EntityViewBuilderInterface $view_builder */
+  $view_builder = \Drupal::entityTypeManager()->getViewBuilder('user');
+  $author = $node->get('uid')->entity;
+  return $view_builder->view($author, 'inline');
 }

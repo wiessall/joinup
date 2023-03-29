@@ -1,0 +1,40 @@
+.glossary-settings-link {
+  float: right;
+  margin: $spacer * 1.5 0 $spacer $spacer; // 16px 0 8px 16px
+  &::before {
+    margin: 0 $spacer * .375 0 0; // 0 6px 0 0
+    @include get-bootstrap-icon('gear-fill', $link-color);
+  }
+  &:hover {
+    &::before {
+      @include get-bootstrap-icon('gear-fill', $link-hover-color);
+    }
+  }
+}
+.glossary-navigator {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: start;
+  margin: $spacer * 2 0 $spacer; // 16px 0 8px
+  &-item {
+    display: inline-block;
+    padding: $spacer * .5 $spacer * .75; // 8px 12px
+    border-radius: $border-radius;
+    &:hover {
+      background-color: $gray-300;
+      text-decoration: none;
+    }
+    &.current {
+      padding: $spacer * .5 $spacer * .75; // 8px 12px
+      border-radius: $border-radius;
+      color: $brand;
+      background-color: rgba(16, 115, 222, 0.1);
+    }
+  }
+}
+.view-glossary {
+  .views-field-title-1 {
+    font-size: 1.25rem;
+    font-weight: $font-weight-bold;
+  }
+}
