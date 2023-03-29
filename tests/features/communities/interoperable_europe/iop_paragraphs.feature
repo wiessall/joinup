@@ -117,7 +117,7 @@ Feature:
     And I click "Add custom page"
 
     When I fill in the following:
-      | Title | Pages carousel        |
+      | Title | Pages carousel               |
       | Body  | A carousel with custom pages |
     And I press "Add Row"
     And I press "Add 1 column layout"
@@ -147,3 +147,31 @@ Feature:
     Then I should see the "Some page 3" tile
     But I should not see the "Some page 1" tile
     And I should not see the "Some page 2" tile
+
+  Scenario: Carousels should be ordered by creation date by default.
+    Given news content:
+      | title       | collection           | content       | state     | created    |
+      | Some news 1 | Interoperable Europe | Some content. | validated | 2 day ago  |
+      | Some news 2 | Interoperable Europe | Some content. | validated | 3 days ago |
+      | Some news 3 | Interoperable Europe | Some content. | validated | 1 days ago |
+
+    When I am logged in as a moderator
+    And I go to the homepage
+    And I click "Interoperable Europe" in the "Navigation bar"
+    And I click "Add custom page"
+
+    When I fill in the following:
+      | Title | News carousel        |
+      | Body  | A carousel with news |
+    And I press "Add Row"
+    And I press "Add 1 column layout"
+    And I press "Add Carousel"
+    And I fill in "Query presets" with:
+        """
+        entity_bundle|news
+        """
+    When I press "Save"
+    Then I should see the following tiles in the correct order:
+      | Some news 3 |
+      | Some news 1 |
+      | Some news 2 |
