@@ -12,6 +12,7 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Mail\MailManagerInterface;
 use Drupal\Core\Render\Markup;
 use Drupal\email_contact\Form\ContactForm;
+use Drupal\file\FileInterface;
 use Drupal\honeypot\HoneypotServiceInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -263,19 +264,14 @@ abstract class ContactInformationFormBase extends ContactForm {
     $params['type'] = $this->getTypeOfSupportOptions()[$form_state->getValue('type')]?->render();
     $params['default_message'] = $settings['default_message'];
 
-    if (!empty($form_state->getValue('attachment'))) {
-      $fid = reset($form_state->getValue('attachment'));
-      /** @var \Drupal\file\FileInterface $file */
-      $file = $this->entityTypeManager->getStorage('file')->load($fid);
-      $file_uri = $file->getFileUri();
-      $file_name = $file->getFileName();
-      $file_mime = $file->getMimeType();
-      $file_content = file_get_contents($file_uri);
+    $attachment = $this->getAttachedFile($form_state);
+    if ($attachment) {
       $params['attachments'][] = [
-        'filecontent' => $file_content,
-        'filename' => $file_name,
-        'filemime' => $file_mime,
+        'filecontent' => file_get_contents($attachment->getFileUri()),
+        'filename' => $attachment->getFileName(),
+        'filemime' => $attachment->getMimeType(),
       ];
+      $attachment->delete();
     }
 
     $message = '';
@@ -313,6 +309,24 @@ abstract class ContactInformationFormBase extends ContactForm {
       '@subject' => $params['subject'],
       '@message' => $params['message'],
     ]);
+  }
+
+  /**
+   * Gets the attached file.
+   *
+   * @param \Drupal\Core\Form\FormStateInterface $form_state
+   *   Form state.
+   *
+   * @return \Drupal\file\FileInterface|null
+   *   File entity.
+   */
+  protected function getAttachedFile(FormStateInterface $form_state): ?FileInterface {
+    if (empty($form_state->getValue('attachment'))) {
+      return NULL;
+    }
+
+    $fid = reset($form_state->getValue('attachment'));
+    return $this->entityTypeManager->getStorage('file')->load($fid);;
   }
 
   /**
