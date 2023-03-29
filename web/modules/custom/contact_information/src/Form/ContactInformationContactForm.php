@@ -29,13 +29,13 @@ class ContactInformationContactForm extends ContactForm {
    *   Entity type manager.
    * @param \Drupal\honeypot\HoneypotServiceInterface|null $honeypot
    *   Honeypot service.
-   * @param string|NULL $entityType
-   *   Entity type
-   * @param string|NULL $entityId
+   * @param string|null $entityType
+   *   Entity type.
+   * @param string|null $entityId
    *   Entity id.
-   * @param string|NULL $fieldName
+   * @param string|null $fieldName
    *   Field name.
-   * @param array|NULL $fieldSettings
+   * @param array|null $fieldSettings
    *   Field settings.
    */
   public function __construct(

@@ -26,11 +26,11 @@ class ContactInformationContactFormController extends ContactController {
    * Constructs a new contact information contact form controller.
    *
    * @param \Psr\Log\LoggerInterface $logger
-   *   Logger
+   *   Logger.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
    *   Entity type manager.
    * @param \Drupal\Core\Form\FormBuilderInterface $formBuilder
-   *   Form builder
+   *   Form builder.
    * @param \Symfony\Contracts\EventDispatcher\EventDispatcherInterface $eventDispatcher
    *   Event dispatcher.
    * @param \Drupal\Core\Mail\MailManagerInterface $mailManager
