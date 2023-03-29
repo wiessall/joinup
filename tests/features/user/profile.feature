@@ -157,7 +157,7 @@ Feature: User profile
       | Cherry blossoms schedule      |
       | SOUND project                 |
       | Botanic E.D.E.N.              |
-    And I should see the following facet items "Collections, Discussion, Document" in this order
+    And I should see the following facet items "Collection, Discussion, Document" in this order
     And the "User content" inline facet should allow selecting the following values:
       | Event (1)    |
       | News (1)     |
