@@ -16,7 +16,7 @@ Feature:
       | Tile solution | Meh...      | Some fancy named owner | Some fancy named contact | validated |
     And the following releases:
       | title        | release number | release notes | is version of | owner                  | contact information      | state     |
-      | Tile release | 1              | Meh...        | Tile solution | Some fancy named owner | Some fancy named contact | validated |
+      | Tile release | 0.1            | Meh...        | Tile solution | Some fancy named owner | Some fancy named contact | validated |
     And the following distributions:
       | title       | description | parent       | access url |
       | Tile distro | meh...      | Tile release | test.zip   |
@@ -50,7 +50,7 @@ Feature:
         """
     When I press "Save"
 
-    Then I should see the "Tile release" tile
+    Then I should see the "Tile release | 0.1" tile
     And I should see the "Tile distro" tile
     And I should see the "Tile news" tile
     And I should see the "Tile event" tile
