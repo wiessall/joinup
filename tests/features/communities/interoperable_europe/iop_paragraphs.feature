@@ -1,6 +1,7 @@
 @api
 Feature:
   Access and functionality checks for the IOP related paragraphs.
+
   Background:
     # Mimic the "Interoperable Europe" collection.
     Given collection:
@@ -175,3 +176,31 @@ Feature:
       | Some news 3 |
       | Some news 1 |
       | Some news 2 |
+
+  Scenario: Test also that events, when listed alone, are sorted by event date.
+    Given event content:
+      | title        | collection           | content       | state     | created    | start date | end date |
+      | Some event 1 | Interoperable Europe | Some content. | validated | 2 day ago  | 5 day ago  | 4 day ago |
+      | Some event 2 | Interoperable Europe | Some content. | validated | 3 days ago | 6 days ago | 5 days ago |
+      | Some event 3 | Interoperable Europe | Some content. | validated | 1 days ago | 7 days ago | 6 days ago |
+
+    When I am logged in as a moderator
+    And I go to the homepage
+    And I click "Interoperable Europe" in the "Navigation bar"
+    And I click "Add custom page"
+
+    When I fill in the following:
+      | Title | Events carousel        |
+      | Body  | A carousel with events |
+    And I press "Add Row"
+    And I press "Add 1 column layout"
+    And I press "Add Carousel"
+    And I fill in "Query presets" with:
+        """
+        entity_bundle|event
+        """
+    When I press "Save"
+    Then I should see the following tiles in the correct order:
+      | Some event 1 |
+      | Some event 2 |
+      | Some event 3 |
