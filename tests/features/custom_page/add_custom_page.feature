@@ -21,35 +21,35 @@ Feature: "Add custom page" visibility options.
     When I am logged in as a member of the "<title>" <group>
     And I go to the homepage of the "<title>" <group>
     Then I should not see the link "Add custom page"
-    And I should not see the link "Add a new page" in the "Left sidebar"
+    And I should not see the link "Add a new page" in the "Header bottom"
     And I should not see the text "There are no pages yet. Why don't you start by creating an About page?"
     # If the normal member is promoted to facilitator, the links and help text
     # should become visible.
     Given my role in the "<title>" "<group>" changes to facilitator
     And I reload the page
     Then I should see the link "Add custom page" in the "Plus button menu"
-    And I should see the contextual link "Add new page" in the "Left sidebar" region
+    And I should see the contextual link "Add new page" in the "Header bottom" region
 
     # An authenticated user which is not a member should also not see the links
     # and help text.
     When I am logged in as an "authenticated user"
     And I go to the homepage of the "<title>" <group>
     Then I should not see the plus button menu
-    And I should not see the link "Add a new page" in the "Left sidebar"
+    And I should not see the link "Add a new page" in the "Header bottom"
     And I should not see the text "There are no pages yet. Why don't you start by creating an About page?"
 
     # An anonymous user should also not see the links and help text.
     When I am an anonymous user
     And I go to the homepage of the "<title>" <group>
     Then I should not see the plus button menu
-    And I should not see the link "Add a new page" in the "Left sidebar"
+    And I should not see the link "Add a new page" in the "Header bottom"
     And I should not see the text "There are no pages yet. Why don't you start by creating an About page?"
 
     # A facilitator should see it.
     When I am logged in as a facilitator of the "<title>" <group>
     And I go to the homepage of the "<title>" <group>
     Then I should see the link "Add custom page" in the "Plus button menu"
-    And I should see the contextual link "Add new page" in the "Left sidebar" region
+    And I should see the contextual link "Add new page" in the "Header bottom" region
 
     Examples:
       | title     | group      |
@@ -64,8 +64,8 @@ Feature: "Add custom page" visibility options.
     # that it is possible to add custom pages.
     When I go to the homepage of the "<second title>" <group>
     Then the "<second title>" <group> should have 0 custom pages
-    And I should see the contextual link "Add new page" in the "Left sidebar" region
-    When I click the contextual link "Add new page" in the "Left sidebar" region
+    And I should see the contextual link "Add new page" in the "Header bottom" region
+    When I click the contextual link "Add new page" in the "Header bottom" region
     Then I should see the heading "Add custom page"
     And the following fields should be present "Title, Body, Published"
 
@@ -96,7 +96,7 @@ Feature: "Add custom page" visibility options.
     And the "<second title>" <group> should have a custom page titled "About us"
     # Check that the link to the custom page is visible on the group page.
     When I go to the homepage of the "<second title>" <group>
-    And I click "About us" in the "Left sidebar"
+    And I click "About us" in the "Header bottom"
 
     # I should not be able to add a custom page to a different <group>
     When I go to the homepage of the "<first title>" <group>
@@ -104,7 +104,7 @@ Feature: "Add custom page" visibility options.
 
     When I am an anonymous user
     And I go to the homepage of the "<second title>" <group>
-    Then I should not see the link "About us" in the "Left sidebar"
+    Then I should not see the link "About us" in the "Header bottom"
 
     Examples:
       | first title | second title    | group      |
@@ -144,7 +144,7 @@ Feature: "Add custom page" visibility options.
     And the "invalid_adms.rdf" link in the Content region should be visible
     And the "test.zip" link in the Content region should be visible
     And the "text.pdf" link in the Content region should be visible
-    But I should not see the link "Show more" in the Content region
+    But I should not see the button "Show more" in the Content region
 
     When I go to the "Elastic rubber" custom page
     Then the "ada.png" link in the Content region should be visible
@@ -152,22 +152,22 @@ Feature: "Add custom page" visibility options.
     And the "blaise.jpg" link in the Content region should be visible
     And the "charles.jpg" link in the Content region should be visible
     And the "leonardo.jpg" link in the Content region should be visible
-    And the "Show more" link in the Content region should be visible
+    And the "Show more" button in the Content region should be visible
     # The sixth element should be hidden.
     But the "linus.jpeg" link in the Content region should not be visible
 
     # Expand the list. The sixth element should become visible.
-    When I click "Show more"
+    When I press "Show more"
     Then the "linus.jpeg" link in the Content region should be visible
-    And the "Show less" link in the Content region should be visible
-    But I should not see the link "Show more" in the Content region
+    And the "Show less" button in the Content region should be visible
+    But I should not see the button "Show more" in the Content region
 
     # Collapse again the list.
-    When I click "Show less"
+    When I press "Show less"
     And I wait for animations to finish
     Then the "linus.jpeg" link in the Content region should not be visible
-    And the "Show more" link in the Content region should be visible
-    But I should not see the link "Show less" in the Content region
+    And the "Show more" button in the Content region should be visible
+    But I should not see the button "Show less" in the Content region
 
   Scenario Outline: Creating a custom page with a title that already exists.
     And custom_page content:
@@ -177,7 +177,7 @@ Feature: "Add custom page" visibility options.
     # It should not be possible to create a custom page with a duplicate title.
     Given I am logged in as a facilitator of the "<first title>" <group>
     When I go to the homepage of the "<first title>" <group>
-    And I click the contextual link "Add new page" in the "Left sidebar" region
+    And I click the contextual link "Add new page" in the "Header bottom" region
     Then I should see the heading "Add custom page"
 
     When I fill in the following:
@@ -190,7 +190,7 @@ Feature: "Add custom page" visibility options.
     # title in a different group.
     Given I am logged in as a facilitator of the "<second title>" <group>
     When I go to the homepage of the "<second title>" <group>
-    And I click the contextual link "Add new page" in the "Left sidebar" region
+    And I click the contextual link "Add new page" in the "Header bottom" region
     Then I should see the heading "Add custom page"
 
     When I fill in the following:

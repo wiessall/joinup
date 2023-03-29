@@ -1,0 +1,14 @@
+.table-files {
+  &__file {
+    position: relative;
+    &-extension {
+      position: absolute;
+      top: 50%;
+      right: 50%;
+      font-weight: $font-weight-bold;
+      font-size: $font-size-sm;
+      text-transform: uppercase;
+      background-color: $white;
+    }
+  }
+}

@@ -10,8 +10,10 @@ declare(strict_types = 1);
 use Drupal\Component\Serialization\Json;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
+use Drupal\Core\Block\BlockPluginInterface;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Cache\CacheableMetadata;
+use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Field\FieldDefinitionInterface;
@@ -24,10 +26,13 @@ use Drupal\file\Entity\File;
 use Drupal\joinup_group\Entity\Announcement;
 use Drupal\joinup_group\Entity\GroupContentInterface;
 use Drupal\joinup_group\Entity\GroupInterface;
+use Drupal\joinup_group\Entity\PinnableGroupContentInterface;
 use Drupal\joinup_group\Event\GroupMenuLinksEvent;
 use Drupal\joinup_group\Form\RdfDeleteForm;
+use Drupal\joinup_group\Form\UserCancelForm;
 use Drupal\joinup_group\JoinupGroupHelper;
 use Drupal\joinup_workflow\EntityWorkflowStateInterface;
+use Drupal\meta_entity\Entity\MetaEntity;
 use Drupal\meta_entity\Entity\MetaEntityInterface;
 use Drupal\node\NodeInterface;
 use Drupal\og\OgAccess;
@@ -52,6 +57,13 @@ function joinup_group_theme($existing, $type, $theme, $path) {
     'group_leave_button' => [
       'variables' => [
         'confirm' => '',
+      ],
+    ],
+    'members_overview_permissions_link' => [
+      'variables' => [
+        'text' => '',
+        'url' => '',
+        'dialog' => NULL,
       ],
     ],
   ];
@@ -108,13 +120,12 @@ function joinup_group_preprocess_menu__main(&$variables) {
 
 /**
  * Implements hook_preprocess_page().
- *
- * Adds the current og group context as attribute on the page wrapper.
  */
-function joinup_group_preprocess_page(&$variables) {
+function joinup_group_preprocess_page(array &$variables): void {
   /** @var \Drupal\Core\Plugin\Context\ContextInterface[] $context */
   $context = \Drupal::service('og.context')->getRuntimeContexts(['og']);
 
+  // Adds the current OG group context as attribute on the page wrapper.
   if (!empty($context['og'])) {
     $group = $context['og']->getContextValue();
 
@@ -125,15 +136,42 @@ function joinup_group_preprocess_page(&$variables) {
 }
 
 /**
+ * Implements hook_preprocess().
+ */
+function joinup_group_preprocess(array &$variables, string $hook): void {
+  if (!in_array($hook, ['rdf_entity', 'node'], TRUE)) {
+    return;
+  }
+
+  // Apply the visual cue only on the tile view mode.
+  if (!isset($variables['view_mode']) || $variables['view_mode'] !== 'view_mode_tile') {
+    return;
+  }
+
+  $group_content = $variables[$hook];
+  if (
+    // It's group content (solution, news, discussion, etc)
+    $group_content instanceof GroupContentInterface
+    // And belongs to a group.
+    && ($parent = $group_content->getGroup())
+    // And is shared.
+    && ($group_content->getSharedInField() && !$group_content->getSharedInField()->isEmpty())
+  ) {
+    $variables['#attached']['library'][] = 'joinup_group/shared_entity';
+    $variables['attributes']['data-joinup-parent-id'] = $parent->id();
+    $variables['attributes']['data-joinup-parent-label'] = $parent->label();
+  }
+}
+
+/**
  * Implements hook_entity_type_alter().
  */
-function joinup_group_entity_type_alter(array &$entity_types) {
+function joinup_group_entity_type_alter(array &$entity_types): void {
+  /** @var \Drupal\Core\Entity\EntityTypeInterface[] $entity_types */
   // Swap the default user cancel form implementation with a custom one that
   // prevents deleting users when they are the sole owner of a group.
-  $entity_types['user']->setFormClass('cancel', 'Drupal\joinup_group\Form\UserCancelForm');
+  $entity_types['user']->setFormClass('cancel', UserCancelForm::class);
 
-  // Override the delete form to disallow deletion of groups with children.
-  /** @var \Drupal\Core\Entity\ContentEntityTypeInterface $rdf_entity_type */
   if (array_key_exists('rdf_entity', $entity_types)) {
     $rdf_entity_type = $entity_types['rdf_entity'];
     $rdf_entity_type->setFormClass('delete', RdfDeleteForm::class);
@@ -256,7 +294,7 @@ function joinup_group_rdf_entity_insert(RdfInterface $group): void {
 
   // Allow third-party to add group menu links.
   $event = new GroupMenuLinksEvent($group, $menu_name, \Drupal::entityTypeManager());
-  $event_dispatcher->dispatch($event, $event::ADD_LINKS);
+  $event_dispatcher->dispatch($event);
 }
 
 /**
@@ -512,16 +550,15 @@ function joinup_group_form_views_exposed_form_alter(array &$form, FormStateInter
     'rdf_entity' => $group->id(),
   ]);
   $form['member_permissions_link'] = [
-    '#type' => 'link',
-    '#title' => t('Member permissions'),
+    '#theme' => 'members_overview_permissions_link',
     '#url' => $url,
-    '#attributes' => [
-      'class' => ['use-ajax'],
-      'data-dialog-type' => 'modal',
-      'data-dialog-options' => Json::encode([
+    '#text' => t('Member permissions'),
+    '#dialog' => [
+      'type' => 'modal',
+      'options' => [
         'width' => 'auto',
         'height' => 'auto',
-      ]),
+      ],
     ],
     '#access' => $url->access(),
     '#attached' => ['library' => ['core/drupal.dialog.ajax']],
@@ -747,10 +784,9 @@ function joinup_group_generate_share_link(EntityInterface $entity, string $route
   return [
     '#theme' => 'link_icon',
     '#title' => t('Share'),
-    '#icon' => 'share',
     '#url' => $url,
     '#attributes' => [
-      'class' => ['use-ajax', 'action-link'],
+      'class' => ['use-ajax'],
       'data-dialog-type' => 'modal',
       'data-dialog-options' => Json::encode([
         'width' => 'auto',
@@ -901,6 +937,61 @@ function joinup_group_entity_update(EntityInterface $group): void {
 }
 
 /**
+ * Implements hook_block_view_BASE_BLOCK_ID_alter().
+ */
+function joinup_group_block_view_joinup_local_tasks_block_alter(array &$build, BlockPluginInterface $block): void {
+  // Hide contextual links for three-dots menu block.
+  unset($build['#contextual_links']);
+}
+
+/**
+ * Implements hook_block_view_BASE_BLOCK_ID_alter().
+ */
+function joinup_group_block_view_group_header_block_alter(array &$build, BlockPluginInterface $block): void {
+  // Hide contextual links for the 'ventuno_groupheader' block.
+  unset($build['#contextual_links']);
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_view_alter().
+ */
+function joinup_group_rdf_entity_view_alter(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display): void {
+  if ($entity instanceof GroupInterface && $display->getMode() === 'group_header') {
+    // Hide contextual links for group header block.
+    unset($build['#contextual_links']);
+  }
+}
+
+/**
+ * Implements hook_entity_view().
+ */
+function joinup_group_entity_view(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, string $view_mode): void {
+  if ($entity instanceof PinnableGroupContentInterface && $view_mode === 'view_mode_tile') {
+    $group = \Drupal::service('joinup_group.group_manager')
+      ->getGroupFromContext();
+    if ($entity->isPinned($group)) {
+      $build['#attributes']['class'][] = 'is-pinned';
+      $build['#attributes']['data-joinup-pinned-in'] = implode(',', $entity->getPinnedGroupIds());
+      $build['#attached']['library'][] = 'joinup_group/pinned_entities';
+    }
+  }
+  elseif ($entity instanceof GroupInterface && $view_mode === 'group_header') {
+    // The group header featured stats visibility is controlled by the group
+    // settings. Add the relevant cache tags.
+    $bundle = "{$entity->bundle()}_settings";
+    $meta_entity = MetaEntity::loadOrCreate($bundle, $entity);
+    $cache_metadata = CacheableMetadata::createFromRenderArray($build);
+    if (!$meta_entity->isNew()) {
+      $cache_metadata->addCacheableDependency($meta_entity);
+    }
+    else {
+      $cache_metadata->addCacheTags(["meta_entity_list:{$entity->bundle()}_settings"]);
+    }
+    $cache_metadata->applyTo($build);
+  }
+}
+
+/**
  * Implements hook_form_BASE_FORM_ID_alter().
  */
 function joinup_group_form_meta_entity_form_alter(array &$form, FormStateInterface $form_state, string $form_id): void {
@@ -987,5 +1078,19 @@ function joinup_group_mail_alter(array &$message): void {
     $message += array_combine(array_map(function (string $key): string {
       return ltrim($key, '@');
     }, array_keys($arguments)), $arguments);
+  }
+}
+
+/**
+ * Implements hook_preprocess_HOOK().
+ */
+function joinup_group_preprocess_rdf_entity(array &$variables): void {
+  if ($variables['view_mode'] === 'group_header') {
+    $group = $variables['rdf_entity'];
+    if ($group instanceof GroupInterface) {
+      $bundle = "{$group->bundle()}_settings";
+      $meta_entity = MetaEntity::loadOrCreate($bundle, $group);
+      $variables['meta_banner_disabled'] = (bool) $meta_entity->get('metadata_banner_disabled')->value;
+    }
   }
 }

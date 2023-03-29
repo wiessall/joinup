@@ -4,6 +4,7 @@ declare(strict_types = 1);
 
 namespace Drupal\joinup_community_content\Entity;
 
+use Drupal\Core\Field\EntityReferenceFieldItemList;
 use Drupal\collection\Entity\NodeCollectionContentTrait;
 use Drupal\joinup_bundle_class\DescriptionTrait;
 use Drupal\joinup_bundle_class\JoinupBundleClassMetaEntityTrait;
@@ -82,6 +83,13 @@ abstract class CommunityContentBase extends Node implements CommunityContentInte
    */
   public function getDescriptionField(): string {
     return 'body';
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getSharedInField(): ?EntityReferenceFieldItemList {
+    return $this->get('field_shared_in');
   }
 
 }
