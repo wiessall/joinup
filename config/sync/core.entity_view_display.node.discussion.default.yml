@@ -38,7 +38,7 @@ content:
     region: content
   field_attachment:
     type: file_table
-    label: above
+    label: hidden
     settings:
       use_description_as_link_text: true
     third_party_settings:
