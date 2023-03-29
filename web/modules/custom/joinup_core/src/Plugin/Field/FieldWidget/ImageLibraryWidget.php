@@ -91,6 +91,7 @@ class ImageLibraryWidget extends SvgImageWidget {
     $form = parent::settingsForm($form, $formState);
 
     $mediaTypeIds = $this->getMediaTypeStorage()->getQuery()
+      ->accessCheck(FALSE)
       ->condition('source', 'image')
       ->condition('source_configuration.source_field', 'image_library_widget_image')
       ->execute();
