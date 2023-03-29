@@ -81,9 +81,8 @@ Feature: "Add discussion" visibility options.
     # Check that an anonymous user can see the information.
     Given I am an anonymous user
     When I go to the "Flight of Girlfriend" discussion
-    Then I should see the following headings:
-      | Emerald in the Luck  |
-      | Flight of Girlfriend |
+    Then I should see the link "Emerald in the Luck"
+    And I should see the heading "Flight of Girlfriend"
     And I should see the following lines of text:
       | This is going to be an amazing discussion. |
       | Attachments                                |
