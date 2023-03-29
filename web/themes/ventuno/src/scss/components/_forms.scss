@@ -1,5 +1,5 @@
 .form-wrapper {
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
 }
 
 // Mark required fields
@@ -9,6 +9,11 @@
     color: $danger;
     margin-left: $spacer * .25; // 4px
   }
+}
+
+.form-text {
+  display: inline-block;
+  line-height: normal;
 }
 
 // Make CKEditor textareas emulate @openeuropa invalid state

@@ -9,6 +9,8 @@ use Behat\Mink\Element\TraversableElement;
 
 /**
  * Helper methods for interacting with material design elements.
+ *
+ * @todo Remove in ISAICP-7138.
  */
 trait MaterialDesignTrait {
 

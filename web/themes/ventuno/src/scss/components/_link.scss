@@ -4,4 +4,15 @@ a {
       text-decoration-color: currentColor!important;
     }
   }
+  &.external {
+    &::after {
+      margin: 0 0 0 $spacer * .375; // 0 0 0 6px
+      @include get-bootstrap-icon('box-arrow-up-right');
+    }
+    &:hover {
+      &::after {
+        @include get-bootstrap-icon('box-arrow-up-right');
+      }
+    }
+  }
 }

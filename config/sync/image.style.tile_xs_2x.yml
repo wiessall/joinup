@@ -1,0 +1,15 @@
+uuid: cc7d466f-1b18-48e4-894a-8394ead8d358
+langcode: en
+status: true
+dependencies: {  }
+name: tile_xs_2x
+label: 'Tile XS 2x'
+effects:
+  eafc9432-dec7-4796-b75f-9b9eb057634b:
+    uuid: eafc9432-dec7-4796-b75f-9b9eb057634b
+    id: image_scale
+    weight: 2
+    data:
+      width: 1104
+      height: 620
+      upscale: true

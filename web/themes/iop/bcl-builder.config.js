@@ -26,6 +26,15 @@ module.exports = {
   styles: [
     // Components
     {
+      entry: path.resolve(outputFolder, "src/scss/actions-menu.scss"),
+      dest: path.resolve(outputFolder, "assets/css/actions-menu.min.css"),
+      options: {
+        minify: true,
+        includePaths,
+        sourceMap: "file",
+      },
+    },
+    {
       entry: path.resolve(outputFolder, "src/scss/accordion-faq.scss"),
       dest: path.resolve(outputFolder, "assets/css/accordion-faq.min.css"),
       options: {
@@ -197,16 +206,6 @@ module.exports = {
         sourceMap: "file",
       },
     },
-    // @todo ISAICP-7138 delete this library when switch to Ventuno theme is complete
-    {
-      entry: path.resolve(outputFolder, "src/scss/add-content.scss"),
-      dest: path.resolve(outputFolder, "assets/css/add-content.min.css"),
-      options: {
-        minify: true,
-        includePaths,
-        sourceMap: "file",
-      },
-    },
   ],
   copy: [
     // Bootstrap: fonts
@@ -227,47 +226,6 @@ module.exports = {
       to: path.resolve(outputFolder, "assets/css/fonts/files"),
       options: { up: true },
     },
-    // Theme images
-    {
-      from: [path.resolve(__dirname, "src/images/hamburger-menu-icon.svg")],
-      to: path.resolve(outputFolder, "assets/images"),
-      options: { up: true },
-    },
-    {
-      from: [path.resolve(__dirname, "src/images/iop-eu-logo.svg")],
-      to: path.resolve(outputFolder, "assets/images"),
-      options: { up: true },
-    },
-    {
-      from: [path.resolve(__dirname, "src/images/banners/ACT.webp")],
-      to: path.resolve(outputFolder, "assets/images/banners/"),
-      options: { up: true },
-    },
-    {
-      from: [path.resolve(__dirname, "src/images/banners/events.webp")],
-      to: path.resolve(outputFolder, "assets/images/banners/"),
-      options: { up: true },
-    },
-    {
-      from: [path.resolve(__dirname, "src/images/banners/FAQ.webp")],
-      to: path.resolve(outputFolder, "assets/images/banners/"),
-      options: { up: true },
-    },
-    {
-      from: [path.resolve(__dirname, "src/images/banners/news.webp")],
-      to: path.resolve(outputFolder, "assets/images/banners/"),
-      options: { up: true },
-    },
-    {
-      from: [path.resolve(__dirname, "src/images/banners/policy.webp")],
-      to: path.resolve(outputFolder, "assets/images/banners/"),
-      options: { up: true },
-    },
-    {
-      from: [path.resolve(__dirname, "src/images/join-bg.webp")],
-      to: path.resolve(outputFolder, "assets/images"),
-      options: { up: true },
-    },
     // Third party files
     {
       from: [
@@ -277,5 +235,4 @@ module.exports = {
       options: { up: true },
     },
   ],
-  sprite: [],
 };

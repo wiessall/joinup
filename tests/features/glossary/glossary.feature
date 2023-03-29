@@ -114,7 +114,7 @@ Feature: As a moderator or group facilitator I want to be able to add, edit and
     And I should not see the link "Smells"
     And I should not see the link "XFiles"
     And I should not see the link "XRatings"
-    And I should see the glossary navigator "A C S X (all)"
+    And I should see the glossary navigator "A C S X all"
 
     # Test multi-synonyms display.
     When I click "Alphabet"
@@ -128,7 +128,7 @@ Feature: As a moderator or group facilitator I want to be able to add, edit and
       | About    |
     And I should not see the link "Glossary"
 
-    Given I <link visibility> the contextual link "Edit menu" in the "Left sidebar" region
+    Given I <link visibility> the contextual link "Edit menu" in the "Header bottom" region
     And I enable "Glossary" in the navigation menu of the "Things To Come" solution
     And I go to the "Things To Come" solution
     Then I should see the following group menu items in the specified order:
