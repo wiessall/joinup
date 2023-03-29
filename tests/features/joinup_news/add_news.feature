@@ -71,8 +71,8 @@ Feature: Creation of news through the UI.
     # Verify that the referenced solution is rendered as tile.
     And I should see the "Dig do's and don'ts" tile
     # Check that the full author name is shown instead of the username.
-    And I should see the link "Milana Laninga" in the "Content" region
-    But I should not see the link "isotopedancer" in the "Content" region
+    And I should see the link "Milana Laninga" in the "Page title" region
+    But I should not see the link "isotopedancer" in the "Page title" region
 
     # Edit again and try to share onto the same solution.
     When I click "Edit" in the "Entity actions" region

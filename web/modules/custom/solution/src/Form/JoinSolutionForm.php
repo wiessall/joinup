@@ -40,9 +40,7 @@ class JoinSolutionForm extends JoinGroupFormBase {
       ]);
     }
 
-    return $this->t('Unsubscribe from this :type', [
-      ':type' => $this->group->bundle(),
-    ]);
+    return $this->t('Unsubscribe');
   }
 
   /**

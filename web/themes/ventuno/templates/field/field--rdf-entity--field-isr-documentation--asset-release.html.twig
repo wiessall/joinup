@@ -1,0 +1,44 @@
+{#
+/**
+ * @file
+ * Default template for a field.
+ */
+#}
+{%
+  set classes = [
+    'list-unstyled',
+    'mb-0',
+  ]
+%}
+{%
+  set title_classes = [
+    'h4',
+    label_display == 'visually_hidden' ? 'visually-hidden',
+  ]
+%}
+<div class="bg-light p-3">
+  {% if label_hidden %}
+    <ul{{ attributes.addClass(classes) }}>
+      {% if multiple %}
+        {% for item in items %}
+          <li>{{ item.content }}</li>
+        {% endfor %}
+      {% else %}
+        {% for item in items %}
+          <li{{ attributes.addClass(classes) }}>{{ item.content }}</li>
+        {% endfor %}
+      {% endif %}
+    </ul>
+  {% else %}
+    <h2{{ title_attributes.addClass(title_classes) }}>
+      {{ label }}
+    </h2>
+    <ul{{ attributes.addClass(classes) }}>
+      {% for item in items %}
+        <li class="field__items">
+          {{ item.content }}
+        </li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+</div>

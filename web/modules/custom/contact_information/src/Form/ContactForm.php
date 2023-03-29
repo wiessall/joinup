@@ -73,7 +73,6 @@ class ContactForm extends OriginalContactForm {
       '#type' => 'submit',
       '#value' => $this->t('Send e-mail'),
     ];
-
     return $form;
   }
 

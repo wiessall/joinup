@@ -15,7 +15,7 @@
 {{ attach_library('ventuno/licence-comparer') }}
 {{ attach_library('ventuno/modals') }}
 
-{% set _modal_id = spdx_id|lower|replace({'.': '-'}) %}
+{% set _modal_id = spdx_id|clean_class %}
 <button class="btn btn-link btn-md text-dark p-0" type="button" data-bs-toggle="modal" data-bs-target="#{{ _modal_id }}">
   {{ spdx_id }}
   <svg class="bi icon--fluid">
@@ -27,13 +27,14 @@
   <p>{{ description|striptags }}</p>
 {% endset %}
 {% set _footer %}
-  <a class="btn btn-outline-primary btn-md" href="{{ url }}" target="_blank" rel="noopener nofollow" role="button">{{ 'Licence text'|t }}</a>
+  <a class="external" href="{{ url }}" target="_blank" rel="noopener nofollow" role="button">{{ 'Licence text'|t }}</a>
 {% endset %}
 {% if first_header %}
   {{ pattern('modal', {
     attributes: {
       id: _modal_id,
     },
+    verticaly_centered: true,
     size: 'lg',
     show_close_button: true,
     body: _body,

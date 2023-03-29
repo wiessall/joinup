@@ -1,0 +1,15 @@
+uuid: d8f1f661-01af-44f7-bf20-2cad52607a4c
+langcode: en
+status: true
+dependencies: {  }
+name: tile_md_x
+label: 'Tile MD 2x'
+effects:
+  0b050a1a-3ade-4906-8a6c-c939ac8d5048:
+    uuid: 0b050a1a-3ade-4906-8a6c-c939ac8d5048
+    id: image_scale
+    weight: 2
+    data:
+      width: 444
+      height: 250
+      upscale: true

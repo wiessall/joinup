@@ -1,0 +1,24 @@
+/**
+ * @file
+ * Common base.
+ *
+ * Functions, variables, utilities and mixins required for the build.
+ * When compiled, this file should not output anything.
+ */
+/**
+* Mixin to generate bootstrap icon
+*/
+.abstract .read-more {
+  margin-top: 1rem;
+  color: #1073de;
+  padding: 0;
+  background-color: transparent;
+  border: none;
+  box-shadow: none;
+  border-radius: 0;
+}
+.abstract .read-more:hover {
+  box-shadow: none;
+  background-color: transparent;
+}
+/*# sourceMappingURL=abstract.css.map */

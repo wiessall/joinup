@@ -1,0 +1,26 @@
+uuid: efbf1e7c-912c-4676-a578-5d4129536e90
+langcode: en
+status: true
+dependencies:
+  module:
+    - joinup_core
+    - node
+  theme:
+    - ventuno
+id: news
+label: News
+theme: ventuno
+weight: 0
+conditions:
+  request_route:
+    id: request_route
+    negate: false
+    routes:
+      - entity.node.canonical
+  'entity_bundle:node':
+    id: 'entity_bundle:node'
+    negate: false
+    context_mapping:
+      node: '@node.node_route_context:node'
+    bundles:
+      news: news

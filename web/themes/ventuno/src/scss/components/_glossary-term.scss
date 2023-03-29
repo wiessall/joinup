@@ -1,0 +1,10 @@
+.glossary-term {
+  border-bottom: 1px dotted $dark;
+  color: $dark;
+  text-decoration: none;
+  cursor: help;
+  &:hover {
+    color: $dark;
+    text-decoration: none;
+  }
+}
