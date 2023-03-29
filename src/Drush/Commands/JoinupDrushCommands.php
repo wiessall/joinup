@@ -33,6 +33,11 @@ class JoinupDrushCommands extends DrushCommands {
         [$host, $port] = explode(':', $memcached_host);
         $memcached->addServer($host, (int) $port);
       }
+
+      if ($memcached->getStats() === FALSE) {
+        throw new \RuntimeException('Memcached service is not available');
+      }
+
       $memcached->flush();
       $this->logger()->notice('Memcache backend flushed');
       return;
