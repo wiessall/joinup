@@ -109,7 +109,9 @@ content:
     label: hidden
     settings:
       link_to_entity: false
-    third_party_settings: {  }
+    third_party_settings:
+      template_suggestion:
+        template_suggestion: bare
     weight: 0
     region: content
   rdf_entity_collection_field_collection_content_inline_facets:

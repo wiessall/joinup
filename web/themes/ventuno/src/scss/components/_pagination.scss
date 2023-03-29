@@ -1,4 +1,17 @@
 .pagination {
+  .pager__item {
+    display: none;
+    &.active.is-active,
+    &.pager__item--first,
+    &.pager__item--previous,
+    &.pager__item--next,
+    &.pager__item--last {
+      display: block;
+    }
+    @include media-breakpoint-up(sm) {
+      display: block;
+    }
+  }
   .page-item .page-link,
   .page-item.active .page-link {
     color: $link-color;

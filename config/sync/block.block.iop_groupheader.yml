@@ -13,7 +13,7 @@ _core:
 id: iop_groupheader
 theme: iop
 region: featured
-weight: -21
+weight: -17
 provider: null
 plugin: group_header_block
 settings:

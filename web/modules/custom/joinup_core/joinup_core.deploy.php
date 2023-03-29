@@ -14,6 +14,8 @@
 
 declare(strict_types = 1);
 
+use Drupal\joinup_user\JoinupUserDefaultAvatarImageHelper;
+
 /**
  * Revert removal of collection that was lost.
  */
@@ -89,4 +91,11 @@ WHERE { <http://data.europa.eu/w21/abe7d0f7-8c41-465b-86c0-93d2f857f998> ?p ?o }
 QUERY;
 
   \Drupal::getContainer()->get('sparql.endpoint')->update($query);
+}
+
+/**
+ * Update the default user avatar image.
+ */
+function joinup_core_deploy_0109102(): void {
+  \Drupal::classResolver(JoinupUserDefaultAvatarImageHelper::class)->createOrUpdate();
 }
