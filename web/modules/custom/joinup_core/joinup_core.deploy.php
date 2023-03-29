@@ -14,8 +14,8 @@
 
 declare(strict_types = 1);
 
-use Drupal\media\Entity\MediaType;
 use Drupal\joinup_user\JoinupUserDefaultAvatarImageHelper;
+use Drupal\media\Entity\MediaType;
 
 /**
  * Revert removal of collection that was lost.
@@ -95,7 +95,7 @@ QUERY;
 }
 
 /**
-* Update the default user avatar image.
+ * Update the default user avatar image.
  */
 function joinup_core_deploy_0109102(): void {
   \Drupal::classResolver(JoinupUserDefaultAvatarImageHelper::class)->createOrUpdate();
@@ -182,7 +182,7 @@ function _joinup_core_deploy_migrate_field(MediaType $media_type, string $ref_fi
 /**
  * Migrate video embed markup into media.
  */
-function joinup_core_deploy_0109102(array &$sandbox): string {
+function joinup_core_deploy_109104(array &$sandbox): string {
   if (empty($sandbox['tasks'])) {
     $sandbox['tasks']['node'] = \Drupal::entityQuery('node')
       ->condition('body', 'preview_thumbnail', 'CONTAINS')
