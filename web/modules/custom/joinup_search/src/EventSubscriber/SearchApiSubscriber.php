@@ -70,14 +70,12 @@ class SearchApiSubscriber implements EventSubscriberInterface {
     }
 
     // Sort collection content by creation date, the newest first.
-    $search_ids = [
-      'rdf_entity.field_collection_content',
-      'rdf_entity.field_is_content',
-      'paragraph.content_listing.content_listing',
-      'paragraph.configurable_listing.content_listing',
+    $group_content_search_ids = [
+      'rdf_entity.collection.field_collection_content',
+      'rdf_entity.solution.field_is_content',
     ];
 
-    if (in_array($query->getSearchId(), $search_ids)) {
+    if (in_array($query->getSearchId(), $group_content_search_ids) || preg_match('/^paragraph\..*\.content_listing$/', $query->getSearchId())) {
       $query->sort('entity_created', 'DESC');
     }
 
