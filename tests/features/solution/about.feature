@@ -222,6 +222,7 @@ Feature: About this solution
       | Email: example@test.test           |
       | Type of support: Technical         |
       | Message: This is reclamation test. |
+    And the email sent to "invisible.cat@xpto.com" with subject "New reclamation about Owner" contains "logo.png" attachment
 
     Given I am logged in as "Pally Rapamichael"
     When I go to the about page of "Six exclusion advantages"
