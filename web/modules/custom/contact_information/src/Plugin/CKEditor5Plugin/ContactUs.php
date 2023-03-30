@@ -64,7 +64,7 @@ class ContactUs extends CKEditor5PluginDefault implements ContainerFactoryPlugin
     if (!$group) {
       return [
         'contactus' => [
-          'contactInformation_disable' => FALSE,
+          'contactInformation_enabled' => FALSE,
         ],
       ];
     }
@@ -73,7 +73,7 @@ class ContactUs extends CKEditor5PluginDefault implements ContainerFactoryPlugin
 
     return [
       'contactus' => [
-        'contactInformation_disable' => !empty($group->getValidatedContactInformation()),
+        'contactInformation_enabled' => !empty($group->getValidatedContactInformation()),
         'contactInformation_url' => $url,
       ],
     ];
