@@ -218,6 +218,7 @@ Feature: About this solution
     And I should see the heading "About Six exclusion advantages"
     And the email sent to "invisible.cat@xpto.com" with subject "New reclamation about Owner" contains the text:
       | Name: Jonny Example                |
+      | Organization: My organization      |
       | Email: example@test.test           |
       | Type of support: Technical         |
       | Message: This is reclamation test. |
@@ -337,6 +338,7 @@ Feature: About this solution
     Then I should see the heading "Contact us"
     Then I fill in "Your name" with "Lina Example"
     And I fill in "Your e-mail address" with "linak@example.pt"
+    And I select "Other" from "Type of support"
     And I fill in "Subject" with "New reclamation about Owner"
     And I fill in "Message" with "This is reclamation test."
     When I press "Send e-mail"
@@ -355,6 +357,7 @@ Feature: About this solution
     And I should see the heading "Contact us"
     Then I fill in "Your name" with "V Example"
     And I fill in "Your e-mail address" with "vnak@example.pt"
+    And I select "Informational" from "Type of support"
     And I fill in "Subject" with "v2 New reclamation about Owner"
     And I fill in "Message" with "This is v2 reclamation test."
     When I press "Send e-mail"
