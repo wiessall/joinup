@@ -41,12 +41,15 @@
 {{ attach_library('ventuno/accordion') }}
 {%
   set classes = [
+    'accordion',
     'paragraph',
     'paragraph--' ~ paragraph.bundle|clean_class,
+    'paragraph--type--' ~ paragraph.bundle|clean_class,
+    'mb-4',
   ]
 %}
 {% block paragraph %}
-  <div{{ attributes.addClass(classes) }}>
+  <div{{ attributes.addClass(classes).setAttribute('id', 'accordion' ~ paragraph.id()) }}>
     {% block content %}
       {{ content }}
     {% endblock %}

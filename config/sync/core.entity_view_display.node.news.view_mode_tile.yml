@@ -18,10 +18,10 @@ dependencies:
     - field.field.node.news.field_state
     - field.field.node.news.field_topic
     - field.field.node.news.og_audience
-    - image.style.horizontal_medium_image
     - node.type.news
+    - responsive_image.styles.tile
   module:
-    - image
+    - responsive_image
     - smart_trim
     - template_suggestion
     - user
@@ -62,16 +62,14 @@ content:
     weight: 2
     region: content
   field_news_logo:
-    type: image
+    type: responsive_image
     label: hidden
     settings:
-      image_link: content
-      image_style: horizontal_medium_image
-      image_loading:
-        attribute: lazy
+      responsive_image_style: tile
+      image_link: ''
     third_party_settings:
       template_suggestion:
-        template_suggestion: ''
+        template_suggestion: bare
     weight: 0
     region: content
 hidden:

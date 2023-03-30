@@ -20,6 +20,10 @@ use weitzman\LoginTrait\LoginTrait;
  * Provides methods specifically for testing File module's field handling.
  *
  * @group joinup_core
+ * @group wip
+ *   This test is temporarily disabled until ISAICP-7485 is fixed.
+ *
+ * @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7485
  */
 class FileUrlFieldTest extends JoinupExistingSiteTestBase {
 

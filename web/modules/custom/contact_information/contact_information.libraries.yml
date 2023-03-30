@@ -5,12 +5,3 @@ contact-us:
   dependencies:
     - core/drupal
     - core/js-cookie
-
-contact-wysiwyg:
-  version: VERSION
-  js:
-    js/contact-wysiwyg.js: {}
-  dependencies:
-    - core/drupal
-    - core/drupalSettings
-    - core/once

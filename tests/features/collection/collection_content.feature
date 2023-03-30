@@ -38,7 +38,7 @@ Feature: Collection content
     And I go to the homepage of the "Turin Egyptian Collection" collection
 
     # The solution counters do not include the unpublished solutions.
-    Then I should see the link "Solution (1)"
+    Then I should see the link "1 Solution" in the "Content" region
     And I see the text "1 Solution" in the "Header" region
 
     When I click "Add solution" in the plus button menu
@@ -62,11 +62,11 @@ Feature: Collection content
     # Since there are 2 solutions, the link moved in first since it is the type of content with most items.
     # When the facet tab is displayed, the text is "@count Solutions", while if it is in the "More" dropdown, it shows
     # as "Solutions (@count)".
-    Then I see the text "2 Solution" in the "Header" region
+    Then I see the text "2 Solutions" in the "Header" region
     And I should see the link "2 Solutions"
 
     # Create a draft version of the solution to verify that counters are not affected.
-    # @see: https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-4436
+    # See https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-4436.
     When I go to the homepage of the "Solution from draft to validated" solution
     And I click "Edit" in the "Entity actions" region
     And I fill in "Title" with "Solution from draft to validated but draft"
@@ -84,9 +84,9 @@ Feature: Collection content
     Then the "Discussion" content tab is displayed
     And the "Document" content tab is displayed
     And the "Event" content tab is displayed
-    And I should see the link "News (1)"
-    And I should see the link "Solution (1)"
-    And I should see the link "Video (1)"
+    And I should see the link "1 News"
+    And I should see the link "1 Solution"
+    And I should see the link "1 Video"
 
     Given the following solution:
       | title      | Protecting Artifacts      |
@@ -112,9 +112,9 @@ Feature: Collection content
     Then the "Discussions" content tab is displayed
     And the "Documents" content tab is displayed
     And the "Events" content tab is displayed
-    And I should see the link "News (2)"
-    And I should see the link "Solutions (2)"
-    And I should see the link "Videos (2)"
+    And I should see the link "2 News"
+    And I should see the link "2 Solutions"
+    And I should see the link "2 Videos"
 
   Scenario: Links and markup should be stripped from tiles summary.
     Given I go to the homepage of the "Turin Egyptian Collection" collection
@@ -125,7 +125,8 @@ Feature: Collection content
     And I should not see the link "Link to the museum"
     # Check the document tile.
     And I should see the "Upper Floor Map" tile
-    And the page should contain the html text "A sample map example."
+    # A document tile redesign in switch to Ventuno theme should show only title
+    And I should not see the text "A sample map example."
     And I should not see the link "map"
     # Check the news tile.
     And I should see the "Turin Egyptian Museum Reopened" tile
