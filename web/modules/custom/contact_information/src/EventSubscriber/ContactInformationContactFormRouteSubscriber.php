@@ -4,8 +4,8 @@ declare(strict_types = 1);
 
 namespace Drupal\contact_information\EventSubscriber;
 
-use Drupal\contact_information\Controller\ContactInformationContactFormController;
 use Drupal\Core\Routing\RouteSubscriberBase;
+use Drupal\contact_information\Controller\ContactInformationContactFormController;
 use Symfony\Component\Routing\RouteCollection;
 
 /**
