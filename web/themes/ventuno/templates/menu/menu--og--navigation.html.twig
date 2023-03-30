@@ -10,6 +10,11 @@
  *   - attributes: HTML attributes for the menu item.
  */
 #}
+{% for item in items %}
+  {% set item %}
+    {{ item.attributes.setAttribute('title', item.title) }}
+  {% endset %}
+{% endfor %}
 {{ attach_library('ventuno/menu--og--navigation') }}
 {% if items|length < 7 %}
   {% set menu = pattern('navigation', {
