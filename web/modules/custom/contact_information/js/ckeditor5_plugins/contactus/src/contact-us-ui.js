@@ -10,7 +10,7 @@ import icon from "../../../../icons/contact.svg";
 
 export default class ContactUsUi extends Plugin {
   init() {
-    if (this.editor.config.get("contactus").contactInformation_disable) {
+    if (this.editor.config.get("contactus").contactInformation_enabled) {
       const { editor } = this;
       const { t } = editor;
       editor.ui.componentFactory.add("contactUs", (locale) => {
@@ -34,7 +34,8 @@ export default class ContactUsUi extends Plugin {
           }
 
           const href = editor.config.get("contactus").contactInformation_url;
-          const text = !selectedText ? "Contact us" : selectedText;
+          const contactUsText = Drupal.t("Contact us");
+          const text = !selectedText ? contactUsText : selectedText;
           editor.model.change((writer) => {
             const link = writer.createText(text, { linkHref: href });
             editor.model.insertContent(link);
