@@ -247,9 +247,22 @@ abstract class ContactInformationFormBase extends ContactForm {
    * {@inheritdoc}
    */
   public function validateForm(array &$form, FormStateInterface $form_state): void {
-    if (!$this->currentUser()->isAnonymous()) {
-      parent::validateForm($form, $form_state);
+    if ($this->currentUser()->isAnonymous()) {
+      return;
     }
+
+    parent::validateForm($form, $form_state);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function submitForm(array &$form, FormStateInterface $form_state) {
+    if ($this->currentUser()->isAnonymous()) {
+      return;
+    }
+
+    parent::submitForm($form, $form_state);
   }
 
   /**
