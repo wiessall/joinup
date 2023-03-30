@@ -6,12 +6,13 @@ dependencies:
     - facets.facet.authoredon
   module:
     - facets
+    - system
   theme:
     - ventuno
 id: ventuno_authoredon
 theme: ventuno
 region: sidebar
-weight: -23
+weight: -24
 provider: null
 plugin: 'facet_block:authoredon'
 settings:
@@ -19,5 +20,10 @@ settings:
   label: 'Authored on'
   label_display: visible
   provider: facets
-  block_id: authoredon
-visibility: {  }
+  context_mapping: {  }
+  block_id: ventuno_authoredon
+visibility:
+  request_path:
+    id: request_path
+    negate: false
+    pages: /admin/reporting/solutions-by-type

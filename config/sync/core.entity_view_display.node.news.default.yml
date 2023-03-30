@@ -22,6 +22,8 @@ dependencies:
     - node.type.news
   module:
     - comment
+    - field_delimiter
+    - field_formatter_range
     - field_group
     - file
     - image
@@ -62,10 +64,16 @@ content:
     region: content
   field_attachment:
     type: file_table
-    label: above
+    label: hidden
     settings:
       use_description_as_link_text: true
     third_party_settings:
+      field_delimiter:
+        delimiter: ''
+      field_formatter_range:
+        order: 0
+        limit: 0
+        offset: 0
       template_suggestion:
         template_suggestion: with_label
     weight: 6
@@ -86,7 +94,7 @@ content:
       link_to_entity: false
     third_party_settings:
       template_suggestion:
-        template_suggestion: no_wrappers
+        template_suggestion: bare
     weight: 1
     region: content
   field_news_logo:

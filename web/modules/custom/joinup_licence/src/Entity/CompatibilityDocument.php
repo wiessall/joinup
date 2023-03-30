@@ -139,7 +139,7 @@ class CompatibilityDocument extends ContentEntityBase implements CompatibilityDo
     $plugin_manager = \Drupal::service('plugin.manager.joinup_licence_compatibility_rule');
     $plugin_ids = array_keys($plugin_manager->getDefinitions());
 
-    $entity_ids = $storage->getQuery()->execute();
+    $entity_ids = $storage->getQuery()->accessCheck(FALSE)->execute();
     $missing_entity_ids = array_diff($plugin_ids, $entity_ids);
 
     foreach ($missing_entity_ids as $entity_id) {
