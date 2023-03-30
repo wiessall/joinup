@@ -73,10 +73,6 @@ abstract class ContactInformationFormBase extends ContactForm {
       ];
 
       $form['actions']['submit']['#attributes']['class'][] = 'use-ajax';
-      $form['actions']['submit']['#ajax'] = [
-        'callback' => [$this, 'ajaxSubmit'],
-        'event' => 'click',
-      ];
       $form['actions']['submit']['#attached']['library'][] = 'core/drupal.dialog.ajax';
       $form['#prefix'] = '<div id="email_contact_modal_form">';
       $form['#suffix'] = '</div>';
@@ -215,6 +211,13 @@ abstract class ContactInformationFormBase extends ContactForm {
       '#type' => 'submit',
       '#value' => $this->t('Send e-mail'),
     ];
+
+    if (!empty($this->field_settings['modal'])) {
+      $form['actions']['submit']['#ajax'] = [
+        'callback' => [$this, 'ajaxSubmit'],
+        'event' => 'click',
+      ];
+    }
 
     if (!$form_state->get('settings')) {
       $this->field_settings['default_message'] = '[current-user:name] sent a message using the contact form at [current-page:url].';
