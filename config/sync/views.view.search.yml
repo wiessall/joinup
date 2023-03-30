@@ -120,7 +120,7 @@ display:
       exposed_form:
         type: autosubmit
         options:
-          submit_button: 'Apply search'
+          submit_button: 'Search site-wide'
           reset_button: false
           reset_button_label: Reset
           exposed_sorts_label: 'Sort by: '

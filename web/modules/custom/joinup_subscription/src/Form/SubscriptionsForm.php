@@ -484,6 +484,7 @@ class SubscriptionsForm extends FormBase {
     return (bool) $this->entityTypeManager
       ->getStorage('og_membership')
       ->getQuery()
+      ->accessCheck(FALSE)
       ->condition('uid', $user->id())
       ->exists('subscription_bundles')
       ->count()

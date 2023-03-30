@@ -6,12 +6,13 @@ dependencies:
     - facets.facet.collection_my_content
   module:
     - facets
+    - system
   theme:
     - ventuno
 id: ventuno_mycontentcollection
 theme: ventuno
 region: sidebar
-weight: -16
+weight: -17
 provider: null
 plugin: 'facet_block:collection_my_content'
 settings:
@@ -19,5 +20,10 @@ settings:
   label: 'Collections - My content'
   label_display: '0'
   provider: facets
-  block_id: mycontentcollection
-visibility: {  }
+  context_mapping: {  }
+  block_id: ventuno_mycontentcollection
+visibility:
+  request_path:
+    id: request_path
+    negate: false
+    pages: /collections

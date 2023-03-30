@@ -169,7 +169,7 @@ class ExportUserListForm extends FormBase {
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
     // Retrieve all user IDs, but exclude the anonymous user.
-    $user_ids = $this->getUserStorage()->getQuery()->execute();
+    $user_ids = $this->getUserStorage()->getQuery()->accessCheck(FALSE)->execute();
     unset($user_ids[0]);
 
     // Split up the work in batches of 250 users.

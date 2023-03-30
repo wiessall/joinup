@@ -177,7 +177,7 @@ class ExploreBlock extends BlockBase implements ContainerFactoryPluginInterface 
     $content = [];
     $entity = $this->entityTypeManager->getStorage('node');
     $view_builder = $this->entityTypeManager->getViewBuilder('node');
-    $query = $entity->getQuery();
+    $query = $entity->getQuery()->accessCheck(FALSE);
 
     $ids = $query->condition('status', 1)
       ->condition('type', $type)

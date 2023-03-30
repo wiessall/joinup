@@ -248,7 +248,7 @@ function joinup_theme($existing, $type, $theme, $path) {
  * displayed.
  */
 function joinup_entity_view_alter(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display) {
-  if (in_array($entity->getEntityTypeId(), ['node', 'rdf_entity'])) {
+  if (in_array($entity->getEntityTypeId(), ['node', 'rdf_entity']) && $display->getMode() !== 'group_header') {
     // Add the "entity" contextual links group. Avoid overwriting any existing
     // data that might have been added by other modules. Because of a bug in
     // Drupal core we cannot alter the running order of hook_entity_view_alter()
@@ -353,20 +353,6 @@ function _joinup_preprocess_entity_tiles(array &$variables) {
   if ($entity instanceof FeaturedContentInterface && $entity->isFeatured()) {
     $variables['attributes']['data-joinup-featured'][] = TRUE;
     $variables['#attached']['library'][] = 'joinup/site_wide_featured';
-  }
-
-  $context = \Drupal::service('og.context')->getRuntimeContexts(['og']);
-  $group = NULL;
-  if (!empty($context['og'])) {
-    $group = $context['og']->getContextValue();
-  }
-
-  if ($entity instanceof PinnableGroupContentInterface && $entity->isPinned($group)) {
-    $variables['attributes']['class'][] = 'is-pinned';
-    $variables['#attached']['library'][] = 'joinup/pinned_entities';
-
-    $group_ids = $entity->getPinnedGroupIds();
-    $variables['attributes']['data-joinup-pinned-in'] = implode(',', $group_ids);
   }
 }
 

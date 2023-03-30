@@ -46,9 +46,8 @@ class JoinupCommunityContentContext extends RawDrupalContext {
    * @Then the :heading tile should not be marked as shared
    */
   public function assertTileNotMarkedAsShared(string $heading): void {
-    $element = $this->getTileByHeading($heading);
-
-    if ($element->find('css', '.icon--shared')) {
+    $tile = $this->getTileByHeading($heading);
+    if ($tile->find('css', '[data-joinup-card-stats-shared]')) {
       throw new \Exception("The tile '$heading' is marked as shared, but it shouldn't be.");
     }
   }
@@ -58,32 +57,27 @@ class JoinupCommunityContentContext extends RawDrupalContext {
    *
    * @param string $heading
    *   The heading of the tile.
-   * @param string $collection
+   * @param string $group_label
    *   The collection that the content was shared from.
    *
-   * @throws |Exception
+   * @throws \Exception
    *   Thrown when the tile is not marked as shared, or it's marked as shared
    *   from the wrong collection.
    *
-   * @Then the :heading tile should be marked as shared from :collection
+   * @Then the :heading tile should be marked as shared from :group_label
    */
-  public function assertTileMarkedAsShared(string $heading, string $collection): void {
-    $element = $this->getTileByHeading($heading);
+  public function assertTileMarkedAsShared(string $heading, string $group_label): void {
+    $tile = $this->getTileByHeading($heading);
 
-    $share = $element->find('css', '.icon--shared');
+    $share = $tile->find('css', "[data-joinup-card-stats-shared='$group_label']");
     if (!$share) {
       throw new \Exception("The tile '$heading' is not marked as shared, but it should be.");
     }
 
     /** @var \Behat\Mink\Element\NodeElement $parent */
-    $parent = $share->find('xpath', "/parent::div[@class and contains(concat(' ', normalize-space(@class), ' '), ' listing__stat ')]");
+    $parent = $share->find('xpath', "/ancestor::article[contains(concat(' ', normalize-space(@class), ' '), ' card--tile ')]");
     if (!$parent) {
       throw new \Exception("The tile '$heading' has faulty markup for the shared content visual cue.");
-    }
-
-    $title_attribute = $parent->getAttribute('title');
-    if ($title_attribute !== "Shared from $collection") {
-      throw new \Exception("The tile '$heading' is marked as shared from $title_attribute, but it should be '$collection'.");
     }
   }
 
@@ -389,7 +383,7 @@ class JoinupCommunityContentContext extends RawDrupalContext {
    */
   protected function getNumberedComment(int $index): NodeElement {
     $session = $this->getSession();
-    $comments = $session->getPage()->findAll('css', '.comment-item');
+    $comments = $session->getPage()->findAll('css', '.comment-item, article.comment');
     if (!isset($comments[$index])) {
       throw new ElementNotFoundException($session, 'Comment #' . ($index + 1));
     }
