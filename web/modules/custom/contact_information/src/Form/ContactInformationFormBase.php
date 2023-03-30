@@ -55,17 +55,14 @@ abstract class ContactInformationFormBase extends ContactForm {
    * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state): array {
-    $user = $this->currentUser();
-    $is_modal = !empty($this->field_settings['modal']);
-
-    if ($user->isAnonymous()) {
+    if ($this->currentUser()->isAnonymous()) {
       $form = $this->buildFormForAnonymous($form);
     }
     else {
       $form = $this->buildFormForAuthenticated($form, $form_state);
     }
 
-    if ($is_modal) {
+    if (!empty($this->field_settings['modal'])) {
       $form['actions']['cancel'] = [
         '#type' => 'button',
         '#value' => $this->t('Cancel'),
@@ -76,16 +73,13 @@ abstract class ContactInformationFormBase extends ContactForm {
       ];
 
       $form['actions']['submit']['#attributes']['class'][] = 'use-ajax';
-      $form['actions']['submit']['#attached']['library'][] = 'core/drupal.dialog.ajax';
-      $form['#prefix'] = '<div id="email_contact_modal_form">';
-      $form['#suffix'] = '</div>';
-    }
-
-    if ($is_modal && !$user->isAnonymous()) {
       $form['actions']['submit']['#ajax'] = [
         'callback' => [$this, 'ajaxSubmit'],
         'event' => 'click',
       ];
+      $form['actions']['submit']['#attached']['library'][] = 'core/drupal.dialog.ajax';
+      $form['#prefix'] = '<div id="email_contact_modal_form">';
+      $form['#suffix'] = '</div>';
     }
 
     // Vary the form's cache by whether the user is logged in or not.
@@ -266,7 +260,6 @@ abstract class ContactInformationFormBase extends ContactForm {
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
-    return;
     if ($this->currentUser()->isAnonymous()) {
       return;
     }
@@ -278,8 +271,6 @@ abstract class ContactInformationFormBase extends ContactForm {
    * {@inheritdoc}
    */
   protected function sendMessage(array &$form, FormStateInterface $form_state): void {
-    return;
-
     $reply_to = $form_state->getValue('mail');
     $settings = $form_state->get('settings');
 
