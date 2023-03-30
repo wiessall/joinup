@@ -209,7 +209,7 @@ Feature: About this solution
 
     When I fill in "Your e-mail address" with "example@test.test"
     And I fill in "Organization" with "My organization"
-    And I select "Option 1" from "Type"
+    And I select "Technical" from "Type of support"
     And I attach the file "logo.png" to "Attachment"
     When I press "Send e-mail" in the "Modal buttons" region
     Then the modal should be closed
@@ -219,6 +219,7 @@ Feature: About this solution
     And the email sent to "invisible.cat@xpto.com" with subject "New reclamation about Owner" contains the text:
       | Name: Jonny Example                |
       | Email: example@test.test           |
+      | Type of support: Technical         |
       | Message: This is reclamation test. |
 
     Given I am logged in as "Pally Rapamichael"
@@ -233,7 +234,7 @@ Feature: About this solution
     When I fill in "Subject" with "New reclamation about solution"
     And I fill in "Message" with "This is solution reclamation test."
     And I fill in "Organization" with "This is organization."
-    And I select "Option 1" from "Type"
+    And I select "Feedback/Suggestions" from "Type of support"
     When I press "Send e-mail" in the "Modal buttons" region
     Then the modal should be closed
     And I should see the success message "Your message has been sent."
@@ -243,7 +244,7 @@ Feature: About this solution
       | Name: Pally Rapamichael                     |
       | Email: p.papamichael@pally.de               |
       | Organization: This is organization.         |
-      | Type: Option 1                              |
+      | Type of support: Feedback/Suggestions       |
       | Message: This is solution reclamation test. |
 
     Given I am logged in as a moderator
