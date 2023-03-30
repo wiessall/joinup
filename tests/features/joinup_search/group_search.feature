@@ -217,7 +217,7 @@ Feature: Search inside groups
     When I go to the homepage of the "Chalet construction" collection
     And the cache has been cleared
     Then I reload the page
-    And I should see the heading "Chalet construction" in the "Header" region
+    And I should see the text "Chalet construction" in the "Header" region
     Then I should toggle search bar in navbar
     Then the page should show the following chip:
       | Chalet construction |

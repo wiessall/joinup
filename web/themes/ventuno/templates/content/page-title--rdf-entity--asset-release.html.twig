@@ -1,0 +1,31 @@
+{#
+/**
+ * @file
+ * Template for the page title.
+ */
+#}
+{{ attach_library('ventuno/page-title') }}
+{{ title_prefix }}
+{% if title %}
+  <h1{{ title_attributes.addClass('page-title') }}>
+    {{ additional_content.full_label }}
+    {{ attach_library('ventuno/badge') }}
+    {% if additional_content.is_latest_release %}
+      <span class="badge bg-success">{{ 'Latest release'|t }}</span>
+    {% else %}
+      <a class="badge badge-outline-brand" href="{{ additional_content.latest_release }}">{{ 'Switch to the latest release'|t }}</a>
+    {% endif %}
+    {% if permalink %}
+      <a class="permalink" href="{{ permalink }}" title="{{ 'Permalink'|t }}">
+        {{ pattern('icon', {
+          name: 'link-45deg',
+          size: 'm'
+        }) }}
+      </a>
+    {% endif %}
+  </h1>
+{% endif %}
+{{ title_suffix }}
+<div class="fs-sm mb-3">
+  {{ additional_content.created }}
+</div>

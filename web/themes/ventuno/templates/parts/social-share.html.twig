@@ -1,0 +1,39 @@
+{#
+/**
+ * @file
+ * Default theme implementation of the social share links.
+ *
+ * Available variables:
+ * - entity: the entity being shared.
+ * - url: the absolute url of the entity.
+ * - bcl_icon_path: the path where the theme sprite is located
+ *
+ * @ingroup themeable
+ */
+#}
+<ul class="list-unstyled">
+  <li>
+    <a class="d-flex align-items-center btn btn-link btn-md px-0" href="http://www.facebook.com/sharer/sharer.php?u={{ encoded_url }}" target="_blank">
+      <svg class="me-2 bi icon--xl">
+        <use xlink:href="{{ bcl_icon_path }}#facebook"></use>
+      </svg>
+      {{ 'Facebook'|t }}
+    </a>
+  </li>
+  <li>
+    <a class="d-flex align-items-center btn btn-link btn-md px-0" href="https://twitter.com/intent/tweet?url={{ encoded_url }}" target="_blank">
+      <svg class="me-2 bi icon--xl">
+        <use xlink:href="{{ bcl_icon_path }}#twitter"></use>
+      </svg>
+      {{ 'Twitter'|t }}
+    </a>
+  </li>
+  <li>
+    <a class="d-flex align-items-center btn btn-link btn-md px-0" href="https://www.linkedin.com/shareArticle?mini=true&url={{ encoded_url }}&title={{ encoded_title }}" target="_blank">
+      <svg class="me-2 bi icon--xl">
+        <use xlink:href="{{ bcl_icon_path }}#linkedin"></use>
+      </svg>
+      {{ 'Linkedin'|t }}
+    </a>
+  </li>
+</ul>
