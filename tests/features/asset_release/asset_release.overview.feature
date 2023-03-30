@@ -42,7 +42,7 @@ Feature: Asset distribution overview on solution.
     # Check that clean URLs are being applied to the "releases" subpage.
     And I should be on "/collection/end-past/solution/lovely-butterfly/releases"
 
-    And I should see the heading "Lovely Butterfly" in the Header region
+    And I should see the heading "Releases for Lovely Butterfly solution" in the "Page title" region
     # The general link "Download releases" should not be shown on the releases
     # page itself, since it references the page we are already on.
     But I should not see the link "Download releases"
@@ -69,7 +69,7 @@ Feature: Asset distribution overview on solution.
     And I should see the link "The Child of the Past 1"
     And I should see the link "Thief in the Angels 2"
     When I click "The Child of the Past 1"
-    Then I should see the heading "The Child of the Past 1"
+    Then I should see the text "The Child of the Past 1" in the "Page title" region
     And I should see the text "Latest release"
     And the page should be cacheable
 
@@ -86,7 +86,7 @@ Feature: Asset distribution overview on solution.
     # proper cache invalidation.
     # @see: ISAICP-3128
     And I press "Save as draft"
-    Then I should see the heading "The Deep Doors 4"
+    Then I should see the text "The Deep Doors 4" in the "Page title" region
     When I am an anonymous user
     And I go to the homepage of the "Lovely Butterfly" solution
     And I click "Download releases"
@@ -96,9 +96,9 @@ Feature: Asset distribution overview on solution.
       | Thief in the Angels 2   |
     And the "The Child of the Past" release should be marked as the latest release
     When I click "Thief in the Angels 2"
-    Then I should see the heading "Thief in the Angels 2"
+    Then I should see the text "Thief in the Angels 2" in the "Page title" region
     When I click "Switch to the latest release"
-    Then I should see the heading "The Child of the Past 1"
+    Then I should see the text "The Child of the Past 1" in the "Page title" region
     And I should see the text "Latest release"
 
     # Publish the release as a solution facilitator.
@@ -106,7 +106,7 @@ Feature: Asset distribution overview on solution.
     And I go to the homepage of the "The Deep Doors" release
     When I click "Edit" in the "Entity actions" region
     And I press "Publish"
-    Then I should see the heading "The Deep Doors 4"
+    Then I should see the text "The Deep Doors 4" in the "Page title" region
 
     # We need to logout as unpublished releases are also shown in the list for
     # privileged users.

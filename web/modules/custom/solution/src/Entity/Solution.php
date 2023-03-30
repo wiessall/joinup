@@ -6,6 +6,7 @@ namespace Drupal\solution\Entity;
 
 use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\Cache\Cache;
+use Drupal\Core\Field\EntityReferenceFieldItemList;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\asset_release\Entity\AssetReleaseInterface;
@@ -237,6 +238,13 @@ class Solution extends Rdf implements SolutionInterface {
       default:
         return $this->t('You are already subscribed to %group.', $parameters);
     }
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getSharedInField(): ?EntityReferenceFieldItemList {
+    return $this->get('field_is_shared_in');
   }
 
   /**

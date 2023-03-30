@@ -6,12 +6,13 @@ dependencies:
     - facets.facet.solution_type
   module:
     - facets
+    - system
   theme:
     - ventuno
 id: ventuno_solutiontype
 theme: ventuno
 region: sidebar
-weight: -21
+weight: -22
 provider: null
 plugin: 'facet_block:solution_type'
 settings:
@@ -19,5 +20,10 @@ settings:
   label: 'Solution type'
   label_display: visible
   provider: facets
-  block_id: solutiontype
-visibility: {  }
+  context_mapping: {  }
+  block_id: ventuno_solutiontype
+visibility:
+  request_path:
+    id: request_path
+    negate: false
+    pages: /admin/reporting/solutions-by-type
