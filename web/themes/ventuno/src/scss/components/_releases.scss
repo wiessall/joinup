@@ -1,0 +1,14 @@
+// Overrides to make releases timeline more similar to previous component
+.releases.bcl-timeline {
+  > li {
+    &:first-of-type {
+      &::before {
+        border-width: 11px;
+      }
+      &::after {
+        content: "";
+        background: $primary;
+      }
+    }
+  }
+}

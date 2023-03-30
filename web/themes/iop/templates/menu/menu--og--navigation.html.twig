@@ -1,0 +1,20 @@
+{#
+/**
+ * @file
+ * Template for a menu.
+ *
+ * Available variables:
+ * - items:  A nested list of menu items. Each menu item contains:
+ *   - label: The menu link label.
+ *   - path: The path corresponding to the menu item.
+ *   - attributes: HTML attributes for the menu item.
+ */
+#}
+{{ attach_library('ventuno/menu--og--navigation') }}
+{{ pattern('navigation', {
+    'variant': 'pills',
+    'orientation': 'horizontal',
+    'items': items,
+    'attributes': create_attribute().addClass(['pt-2', 'pt-md-0'])
+  })
+}}

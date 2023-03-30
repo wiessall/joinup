@@ -22,7 +22,7 @@ use Drupal\og\OgMembershipInterface;
 function joinup_invite_user_cancel($edit, $account, $method) {
   $storage = \Drupal::entityTypeManager()->getStorage('invitation');
   /** @var \Drupal\user\UserInterface $account */
-  if ($ids = $storage->getQuery()->condition('uid', $account->id())->execute()) {
+  if ($ids = $storage->getQuery()->accessCheck(FALSE)->condition('uid', $account->id())->execute()) {
     $storage->delete($storage->loadMultiple($ids));
   }
 }
@@ -35,7 +35,7 @@ function joinup_invite_user_cancel($edit, $account, $method) {
 function joinup_invite_entity_delete(EntityInterface $entity) {
   if ($entity instanceof ContentEntityInterface) {
     $storage = \Drupal::entityTypeManager()->getStorage('invitation');
-    $ids = $storage->getQuery()
+    $ids = $storage->getQuery()->accessCheck(FALSE)
       ->condition('entity_type', $entity->getEntityTypeId())
       ->condition('entity_id', $entity->id())
       ->execute();

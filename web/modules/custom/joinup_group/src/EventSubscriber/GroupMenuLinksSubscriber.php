@@ -18,9 +18,9 @@ class GroupMenuLinksSubscriber implements EventSubscriberInterface {
   /**
    * {@inheritdoc}
    */
-  public static function getSubscribedEvents() {
+  public static function getSubscribedEvents(): array {
     return [
-      GroupMenuLinksEvent::ADD_LINKS => 'addLinks',
+      GroupMenuLinksEvent::class => 'addLinks',
     ];
   }
 
@@ -32,15 +32,10 @@ class GroupMenuLinksSubscriber implements EventSubscriberInterface {
    */
   public function addLinks(GroupMenuLinksEvent $event): void {
     $group = $event->getGroup();
-
-    $link = ['uri' => $group->toUrl()->toUriString()];
-    $event->addMenuLink($link, $this->t('Overview'), -10);
-
-    $link = ['uri' => $group->toUrl('member-overview')->toUriString()];
-    $event->addMenuLink($link, $this->t('Members'), -9);
-
-    $link = ['uri' => $group->toUrl('about-page')->toUriString()];
-    $event->addMenuLink($link, $this->t('About'), -8);
+    $event
+      ->addMenuLink($group->toUrl(), 'Overview', -10)
+      ->addMenuLink($group->toUrl('member-overview'), 'Members', -9)
+      ->addMenuLink($group->toUrl('about-page'), 'About', -8);
   }
 
 }

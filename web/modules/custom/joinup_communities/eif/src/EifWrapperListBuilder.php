@@ -57,6 +57,7 @@ class EifWrapperListBuilder extends EntityListBuilder {
 
     $total = $this->getStorage()
       ->getQuery()
+      ->accessCheck(FALSE)
       ->count()
       ->execute();
 

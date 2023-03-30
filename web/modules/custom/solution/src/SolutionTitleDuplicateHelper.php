@@ -104,6 +104,7 @@ class SolutionTitleDuplicateHelper implements SolutionTitleDuplicateHelperInterf
     // child entity but on the parent. This means we cannot use a simple query.
     // Retrieve all solutions with the same title.
     $query = $storage->getQuery()
+      ->accessCheck(FALSE)
       ->condition('label', $solution->label())
       ->condition('rid', 'solution');
     if ($solution->id()) {

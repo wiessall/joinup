@@ -88,7 +88,7 @@ class EiraDeprecatedTermBlock extends BlockBase implements ContainerFactoryPlugi
     }
 
     $taxonomy_storage = $this->entityTypeManager->getStorage('taxonomy_term');
-    $query = $taxonomy_storage->getQuery();
+    $query = $taxonomy_storage->getQuery()->accessCheck(FALSE);
     $results = $query->condition('field_taxonomy_replaces', $term->id())
       ->condition('bundle', 'eira')
       ->execute();
