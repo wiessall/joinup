@@ -1,0 +1,120 @@
+uuid: 2271784b-c4ec-4a15-b98e-2c599bc64a23
+langcode: en
+status: true
+dependencies:
+  config:
+    - image.style.tile_lg_1_5x
+    - image.style.tile_lg_1x
+    - image.style.tile_lg_2x
+    - image.style.tile_md_1_5x
+    - image.style.tile_md_1x
+    - image.style.tile_md_x
+    - image.style.tile_sm_1_5x
+    - image.style.tile_sm_1x
+    - image.style.tile_sm_2x
+    - image.style.tile_xl_1_5x
+    - image.style.tile_xl_1x
+    - image.style.tile_xl_2x
+    - image.style.tile_xs_1_5x
+    - image.style.tile_xs_1x
+    - image.style.tile_xs_2x
+    - image.style.tile_xxl_1_5
+    - image.style.tile_xxl_1x
+    - image.style.tile_xxl_2x
+  theme:
+    - ventuno
+id: tile
+label: Tile
+image_style_mappings:
+  -
+    image_mapping_type: image_style
+    image_mapping: tile_xxl_1_5
+    breakpoint_id: ventuno.xxl
+    multiplier: 1.5x
+  -
+    image_mapping_type: image_style
+    image_mapping: tile_xxl_1x
+    breakpoint_id: ventuno.xxl
+    multiplier: 1x
+  -
+    image_mapping_type: image_style
+    image_mapping: tile_xxl_2x
+    breakpoint_id: ventuno.xxl
+    multiplier: 2x
+  -
+    image_mapping_type: image_style
+    image_mapping: tile_xl_1_5x
+    breakpoint_id: ventuno.xl
+    multiplier: 1.5x
+  -
+    image_mapping_type: image_style
+    image_mapping: tile_xl_1x
+    breakpoint_id: ventuno.xl
+    multiplier: 1x
+  -
+    image_mapping_type: image_style
+    image_mapping: tile_xl_2x
+    breakpoint_id: ventuno.xl
+    multiplier: 2x
+  -
+    image_mapping_type: image_style
+    image_mapping: tile_lg_1_5x
+    breakpoint_id: ventuno.lg
+    multiplier: 1.5x
+  -
+    image_mapping_type: image_style
+    image_mapping: tile_lg_1x
+    breakpoint_id: ventuno.lg
+    multiplier: 1x
+  -
+    image_mapping_type: image_style
+    image_mapping: tile_lg_2x
+    breakpoint_id: ventuno.lg
+    multiplier: 2x
+  -
+    image_mapping_type: image_style
+    image_mapping: tile_md_1_5x
+    breakpoint_id: ventuno.md
+    multiplier: 1.5x
+  -
+    image_mapping_type: image_style
+    image_mapping: tile_md_1x
+    breakpoint_id: ventuno.md
+    multiplier: 1x
+  -
+    image_mapping_type: image_style
+    image_mapping: tile_md_x
+    breakpoint_id: ventuno.md
+    multiplier: 2x
+  -
+    image_mapping_type: image_style
+    image_mapping: tile_sm_1_5x
+    breakpoint_id: ventuno.sm
+    multiplier: 1.5x
+  -
+    image_mapping_type: image_style
+    image_mapping: tile_sm_1x
+    breakpoint_id: ventuno.sm
+    multiplier: 1x
+  -
+    image_mapping_type: image_style
+    image_mapping: tile_sm_2x
+    breakpoint_id: ventuno.sm
+    multiplier: 2x
+  -
+    image_mapping_type: image_style
+    image_mapping: tile_xs_1_5x
+    breakpoint_id: ventuno.xs
+    multiplier: 1.5x
+  -
+    image_mapping_type: image_style
+    image_mapping: tile_xs_1x
+    breakpoint_id: ventuno.xs
+    multiplier: 1x
+  -
+    image_mapping_type: image_style
+    image_mapping: tile_xs_2x
+    breakpoint_id: ventuno.xs
+    multiplier: 2x
+breakpoint_group: ventuno
+fallback_image_style: tile_md_1x

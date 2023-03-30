@@ -1,0 +1,31 @@
+{#
+/**
+ * @file
+ * Template to render the share content form.
+ *
+ * Note that the form tag will be added through a theme wrapper.
+ *
+ * Available variables:
+ * - form: the form build array.
+ *
+ * @ingroup themeable
+ */
+#}
+{{ attach_library('ventuno/share-content-form') }}
+{% if form.groups %}
+  <div class="row">
+    <div class="col-12 col-sm-4">
+      <h3 class="fs-6">{{ 'Social networks'|t }}</h3>
+      {{ form.share }}
+    </div>
+    <div class="col-12 col-sm-8">
+      <h3 class="fs-6">{{ 'Other groups on Joinup'|t }}</h3>
+      {{ form|without('share') }}
+    </div>
+  </div>
+{% else %}
+  <h3 class="fs-6 text-center">{{ 'Social networks'|t }}</h3>
+  <div class="d-flex justify-content-center">
+    {{ form.share }}
+  </div>
+{% endif %}

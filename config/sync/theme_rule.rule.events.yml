@@ -1,0 +1,26 @@
+uuid: 3a09e4b3-1ccd-46cf-9d36-77c7deda147d
+langcode: en
+status: true
+dependencies:
+  module:
+    - joinup_core
+    - node
+  theme:
+    - ventuno
+id: events
+label: Events
+theme: ventuno
+weight: 0
+conditions:
+  request_route:
+    id: request_route
+    negate: false
+    routes:
+      - entity.node.canonical
+  'entity_bundle:node':
+    id: 'entity_bundle:node'
+    negate: false
+    context_mapping:
+      node: '@node.node_route_context:node'
+    bundles:
+      event: event
