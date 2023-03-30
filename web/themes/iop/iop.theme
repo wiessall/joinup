@@ -8,6 +8,8 @@
 declare(strict_types = 1);
 
 use Drupal\custom_page\Entity\CustomPageInterface;
+use Drupal\file\Entity\File;
+use Drupal\image\Entity\ImageStyle;
 use Drupal\interoperable_europe\InteroperableEuropeCollectionInterface;
 use Drupal\node\NodeInterface;
 
@@ -125,4 +127,35 @@ function iop_preprocess_block(array &$variables): void {
   if ($id === 'iop_joinup_add_content' || $id === 'iop_three_dots_menu') {
     $variables['#attached']['library'][] = 'iop/actions-menu';
   }
+}
+
+/**
+ * Implements hook_preprocess_node__news__view_mode_tile().
+ */
+function iop_preprocess_node__news__view_mode_tile(&$variables) {
+  $node = $variables['node'];
+  $image_id = $node->get($node->getLogoFieldName())->target_id;
+  $variables['logo_url'] = _iop_preprocess_get_logo_url_with_img_style($image_id);
+}
+
+/**
+ * Implements hook_preprocess_node__event__view_mode_tile().
+ */
+function iop_preprocess_node__event__view_mode_tile(&$variables) {
+  $node = $variables['node'];
+  $image_id = $node->get($node->getLogoFieldName())->target_id;
+  $variables['logo_url'] = _iop_preprocess_get_logo_url_with_img_style($image_id);
+}
+
+/**
+ * Returns the url of the given image with 'iop_news_events' image style.
+ *
+ * @return string
+ *   The image url.
+ */
+function _iop_preprocess_get_logo_url_with_img_style($image_id) {
+  $style = ImageStyle::load('iop_news_events');
+  $logo_file = File::load($image_id);
+  $logo_url = $style->buildUrl($logo_file->uri->value);
+  return $logo_url;
 }
