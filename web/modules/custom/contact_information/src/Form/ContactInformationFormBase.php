@@ -298,7 +298,7 @@ abstract class ContactInformationFormBase extends ContactForm {
         Organization: {$params['organization']} <br />
         Email: $reply_to <br/> 
         Type of support: {$params['type']} <br />
-        Messsage:  {$form_state->getValue('message')} <br />
+        Message:  {$form_state->getValue('message')} <br />
         MESSAGE;
     $params['message'] = Markup::create($message);
 
