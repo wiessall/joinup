@@ -118,9 +118,10 @@ class JoinupUserContext extends RawDrupalContext {
     // files are uploaded, for example when a test is run more than once.
     // We only check up to the filename and not the extension as the xpath
     // itself is long enough to ensure the extension part.
-    $host = $this->getMinkParameter('base_url');
+    $base_url = $this->getMinkParameter('base_url');
+    $host = parse_url($base_url, PHP_URL_PATH);
     $filename = trim($filename, DIRECTORY_SEPARATOR);
-    $xpath = "//div[contains(concat(' ', normalize-space(@class), ' '), ' featured__logo ') and contains(@style, 'background-image: url({$host}/sites/default/files/{$filename}')]";
+    $xpath = "//img[contains(concat(' ', normalize-space(@class), ' '), ' img-fluid ') and contains(@src, '{$host}/sites/default/files/styles/profile_icon_big/public/{$filename}')]";
     $this->assertSession()->elementExists('xpath', $xpath);
   }
 
@@ -202,7 +203,7 @@ class JoinupUserContext extends RawDrupalContext {
     if (!isset($allowed_statuses[$status])) {
       throw new \Exception("Invalid '$status' status. Allowed values are 'active', 'blocked' or 'cancelled'.");
     }
-    $uids = \Drupal::entityQuery('user')
+    $uids = \Drupal::entityQuery('user')->accessCheck(FALSE)
       ->condition('name', $name)
       ->condition('status', $allowed_statuses[$status])
       ->execute();
@@ -221,7 +222,7 @@ class JoinupUserContext extends RawDrupalContext {
    * @Then the :name user doesn't exist
    */
   public function userNotExists(string $name): void {
-    if (\Drupal::entityQuery('user')->condition('name', $name)->execute()) {
+    if (\Drupal::entityQuery('user')->accessCheck(FALSE)->condition('name', $name)->execute()) {
       throw new ExpectationFailedException("The user $name exists but it should not.");
     }
   }

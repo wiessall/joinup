@@ -7,8 +7,8 @@
   Drupal.behaviors.globalHeaderSearch = {
     attach(context) {
       const closeIcons = once(
-        "myBadge",
-        ".navbar-search .badge .icon--close",
+        "searchBadge",
+        ".navbar-search .search-badge .icon--close",
         context
       );
       closeIcons.forEach((icon) => {

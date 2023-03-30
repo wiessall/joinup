@@ -4,10 +4,3 @@ site_wide_featured:
   dependencies:
     - core/drupal
     - core/once
-
-pinned_entities:
-  js:
-    js/pinned_entities.js: {}
-  dependencies:
-    - core/drupal
-    - core/once

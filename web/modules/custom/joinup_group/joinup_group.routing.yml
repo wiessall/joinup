@@ -55,9 +55,9 @@ joinup_group.membership_permissions_info:
   path: '/rdf_entity/{rdf_entity}/permissions-info'
   defaults:
     _title: 'Member permissions'
-    _controller: '\Drupal\joinup_group\Controller\GroupMembershipPermissionsInformationController::build'
+    _form: Drupal\joinup_group\Form\GroupMembershipPermissionsInformationForm
   requirements:
-    _entity_access: 'rdf_entity.view'
+    _entity_access: rdf_entity.view
   options:
     parameters:
       rdf_entity:

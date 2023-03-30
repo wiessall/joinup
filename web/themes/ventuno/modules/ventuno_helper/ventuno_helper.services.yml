@@ -1,0 +1,7 @@
+services:
+
+  ventuno_helper.open_modal_dialog:
+    class: Drupal\ventuno_helper\EventSubscriber\VentunoOpenModalDialogSubscriber
+    arguments: ['@theme.manager']
+    tags:
+      - { name: event_subscriber }

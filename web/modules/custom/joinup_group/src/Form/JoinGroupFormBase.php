@@ -197,14 +197,6 @@ abstract class JoinGroupFormBase extends FormBase implements JoinGroupFormInterf
           ],
         ];
       }
-      else {
-        $form['leave']['#confirm'] = [
-          '#markup' => $this->t('You cannot leave the %label :type', [
-            '%label' => $this->group->label(),
-            ':type' => $this->group->bundle(),
-          ]),
-        ];
-      }
       $form['#attached']['library'][] = 'core/drupal.ajax';
     }
 
