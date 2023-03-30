@@ -23,7 +23,7 @@ class RdfGraphListBuilder extends EntityListBuilder {
    * {@inheritdoc}
    */
   public function getEntityIds(): array {
-    return $this->getStorage()->getQuery()
+    return $this->getStorage()->getQuery()->accessCheck(FALSE)
       ->condition('rid', 'rdf_graph')
       ->pager($this->limit)
       ->execute();

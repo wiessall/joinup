@@ -1,0 +1,12 @@
+/**
+ * @file
+ * Common base.
+ *
+ * Functions, variables, utilities and mixins required for the build.
+ * When compiled, this file should not output anything.
+ */
+.form-checkboxes .form-switch .form-label,
+.form-checkboxes .form-check .form-label {
+  font-weight: 400;
+}
+/*# sourceMappingURL=form-checkboxes.css.map */

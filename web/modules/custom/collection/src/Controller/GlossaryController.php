@@ -27,7 +27,7 @@ class GlossaryController extends ControllerBase {
   protected $letters;
 
   /**
-   * Provides an access callback for the 'collection.glossary_page' route.
+   * Provides an access callback for the Glossary route.
    *
    * @param \Drupal\collection\Entity\CollectionInterface $rdf_entity
    *   The collection entity.
@@ -42,7 +42,7 @@ class GlossaryController extends ControllerBase {
   }
 
   /**
-   * Provides a controller for the 'collection.glossary_page' route.
+   * Provides a controller for the Glossary route.
    *
    * @param \Drupal\collection\Entity\CollectionInterface $rdf_entity
    *   The collection entity.
@@ -55,7 +55,7 @@ class GlossaryController extends ControllerBase {
   public function glossary(CollectionInterface $rdf_entity, ?string $letter = NULL): array {
     $navigator = [
       '#theme' => 'glossary_navigator',
-      '#url' => Url::fromRoute('collection.glossary_page', [
+      '#url' => Url::fromRoute('entity.rdf_entity.glossary', [
         'rdf_entity' => $rdf_entity->id(),
       ])->toString(),
       '#letters' => $this->getGlossaryTermLetters($rdf_entity),
@@ -125,7 +125,7 @@ class GlossaryController extends ControllerBase {
     if (!isset($this->letters)) {
       $this->letters = [];
       $storage = $this->entityTypeManager()->getStorage('node');
-      $nids = $storage->getQuery()
+      $nids = $storage->getQuery()->accessCheck(FALSE)
         ->condition('type', 'glossary')
         ->condition('og_audience', $rdf_entity->id())
         ->condition('status', TRUE)

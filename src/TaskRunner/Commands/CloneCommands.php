@@ -6,6 +6,7 @@ namespace Joinup\TaskRunner\Commands;
 
 use OpenEuropa\TaskRunner\Commands\AbstractCommands;
 use Robo\Collection\CollectionBuilder;
+use Robo\Symfony\ConsoleIO;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
@@ -168,7 +169,7 @@ class CloneCommands extends AbstractCommands {
    *
    * @hook replace-command toolkit:install-dump
    */
-  public function installDump(array $options = [
+  public function installDump(ConsoleIO $io, array $options = [
     'dumpfile' => InputOption::VALUE_REQUIRED,
   ]): CollectionBuilder {
     $tasks = [];

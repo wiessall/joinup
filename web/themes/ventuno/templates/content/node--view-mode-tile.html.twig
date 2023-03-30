@@ -70,28 +70,13 @@
  *   in different view modes.
  */
 #}
-<article{{ attributes.addClass('tile') }}>
-
-  {{ title_prefix }}
-  {% if not page %}
-    <h2{{ title_attributes }}>
-      <a href="{{ url }}" rel="bookmark">{{ label }}</a>
-    </h2>
+<article{{ attributes }}>
+  <h2 class="h3">{{ label }}</h2>
+  {% if content.field_glossary_synonyms %}
+    {{ content.field_glossary_synonyms }}
   {% endif %}
-  {{ title_suffix }}
-
-  {% if display_submitted %}
-    <footer>
-      {{ author_picture }}
-      <div{{ author_attributes }}>
-        {% trans %}Submitted by {{ author_name }} on {{ date }}{% endtrans %}
-        {{ metadata }}
-      </div>
-    </footer>
+  {% if content.field_glossary_definition %}
+    {{ content.field_glossary_definition }}
   {% endif %}
-
-  <div{{ content_attributes }}>
-    {{ content }}
-  </div>
-
+  {{ content|without('field_glossary_synonyms', 'field_glossary_definition') }}
 </article>
