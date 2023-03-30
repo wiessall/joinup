@@ -351,15 +351,28 @@ function joinup_core_get_etrans_block_config_for_current_page(): array {
 }
 
 /**
- * Implements hook_theme_suggestions_HOOK() for menu_local_task.
+ * Implements hook_theme_suggestions_alter().
  */
-function joinup_core_theme_suggestions_menu_local_task(array $variables): array {
-  /** @var \Drupal\joinup_core\LocalTaskLinksHelperInterface $local_task_links_helper */
-  $local_task_links_helper = \Drupal::service('joinup_core.local_task_links_helper');
-  if ($local_task_links_helper->allowHorizontalTabs()->isAllowed()) {
-    return ['menu_local_task__horizontal_tabs'];
+function joinup_core_theme_suggestions_alter(array &$suggestions, array $variables, string $hook): void {
+  static $horizontal_tabs_access;
+  if (!in_array($hook, ['menu_local_task', 'menu_local_tasks'], TRUE)) {
+    return;
   }
-  return ['menu_local_task__three_dots_menu'];
+
+  if (!isset($horizontal_tabs_access)) {
+    /** @var \Drupal\joinup_core\LocalTaskLinksHelperInterface $local_task_links_helper */
+    $local_task_links_helper = \Drupal::service('joinup_core.local_task_links_helper');
+    $horizontal_tabs_access = $local_task_links_helper->allowHorizontalTabs();
+  }
+
+  if ($horizontal_tabs_access->isNeutral()) {
+    return;
+  }
+  elseif ($horizontal_tabs_access->isAllowed()) {
+    $suggestions[] = "{$hook}__horizontal_tabs";
+    return;
+  }
+  $suggestions[] = "{$hook}__three_dots_menu";
 }
 
 /**

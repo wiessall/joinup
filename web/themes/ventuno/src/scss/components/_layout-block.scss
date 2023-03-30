@@ -12,10 +12,16 @@
     &--homepage_topics-block_1 {
       display: block;
       border-bottom: 1px solid rgba($primary, .1);
-      @include font-icon-before("\E804", 1.2rem, $warning);
+      &::before {
+        margin-right: $spacer * .25;
+        @include get-bootstrap-icon('lightning-charge', $warning);
+      }
     }
     &--listing-grid {
-      @include font-icon-before("\E804", 1.2rem, $warning);
+      &::before {
+        margin-right: $spacer * .25;
+        @include get-bootstrap-icon('lightning-charge', $warning);
+      }
     }
   }
   &__link-wrapper {
@@ -24,7 +30,10 @@
     padding-bottom: $spacer;
     margin-bottom: $spacer;
     a {
-      @include font-icon-after("\E801", 1rem, currentColor);
+      &::after {
+        margin-left: $spacer * .25;
+        @include get-bootstrap-icon('arrow-right', currentColor);
+      }
     }
   }
 }
