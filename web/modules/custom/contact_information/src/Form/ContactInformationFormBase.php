@@ -43,10 +43,10 @@ abstract class ContactInformationFormBase extends ContactForm {
     protected MailManagerInterface $mailManager,
     protected EntityTypeManagerInterface $entityTypeManager,
     protected ?HoneypotServiceInterface $honeypot,
-    string $entityType = NULL,
-    string $entityId = NULL,
-    string $fieldName = NULL,
-    array $fieldSettings = NULL,
+    ?string $entityType = NULL,
+    ?string $entityId = NULL,
+    ?string $fieldName = NULL,
+    ?array $fieldSettings = NULL,
   ) {
     parent::__construct($entityType, $entityId, $fieldName, $fieldSettings);
   }
@@ -276,12 +276,14 @@ abstract class ContactInformationFormBase extends ContactForm {
 
     $message = '';
     if ($settings['include_values']) {
-      $message .= 'Name: ' . $params['name'] . '<br/>' .
-        'Email: ' . $reply_to . '<br/>' .
-        'Organization: ' . $params['organization'] . '<br />' .
-        'Type: ' . $params['type'] . '<br />';
+      $message = <<<MESSAGE
+        Name: {$params['name']} <br/> 
+        Email: {$reply_to} <br/> 
+        Organization: {$params['organization']} <br />
+        Type: {$params['type']} <br />
+        MESSAGE;
     }
-    $message .= 'Message: ' . $form_state->getValue('message');
+    $message .= "Message: {$form_state->getValue('message')}";
     $params['message'] = Markup::create($message);
 
     // Send the e-mail to the recipients.
@@ -326,7 +328,7 @@ abstract class ContactInformationFormBase extends ContactForm {
     }
 
     $fid = reset($form_state->getValue('attachment'));
-    return $this->entityTypeManager->getStorage('file')->load($fid);;
+    return $this->entityTypeManager->getStorage('file')->load($fid);
   }
 
   /**
