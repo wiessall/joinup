@@ -184,13 +184,13 @@ function _joinup_core_deploy_migrate_field(MediaType $media_type, string $ref_fi
  */
 function joinup_core_deploy_109104(array &$sandbox): string {
   if (empty($sandbox['tasks'])) {
-    $sandbox['tasks']['node'] = \Drupal::entityQuery('node')
+    $sandbox['tasks']['node'] = \Drupal::entityQuery('node')->accessCheck(FALSE)
       ->condition('body', 'preview_thumbnail', 'CONTAINS')
       ->execute();
     $sandbox['tasks']['paragraph'] = \Drupal::entityQuery('paragraph')
       ->condition('field_body', 'preview_thumbnail', 'CONTAINS')
       ->execute();
-    $rdf_query = \Drupal::entityQuery('rdf_entity');
+    $rdf_query = \Drupal::entityQuery('rdf_entity')->accessCheck(FALSE);
     $group = $rdf_query->orConditionGroup()
       ->condition('field_ad_description', 'preview_thumbnail', 'CONTAINS')
       ->condition('field_isr_release_notes', 'preview_thumbnail', 'CONTAINS')
@@ -290,7 +290,7 @@ function joinup_core_deploy_109104(array &$sandbox): string {
  */
 function _joinup_core_deploy_get_media_markup(string $url, string $owner_id): string {
   $media_storage = \Drupal::entityTypeManager()->getStorage('media');
-  $result = $media_storage->getQuery()
+  $result = $media_storage->getQuery()->accessCheck(FALSE)
     ->condition('bundle', 'video')
     ->condition('field_media_video_embed_field', $url)
     ->execute();
