@@ -29,3 +29,7 @@ regions:
   content: 'Content'
   content_bottom: 'Content bottom'
   footer: 'Footer'
+
+joinup:
+  menu_local_tasks:
+    horizontal_tabs_block: ventuno_horizontal_tabs

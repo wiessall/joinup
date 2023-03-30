@@ -15,7 +15,7 @@ use Symfony\Component\DomCrawler\Crawler;
 /**
  * Contains the business logic for the ContextualLinksTrait.
  *
- * Depending on whether or not a JS-capable browser is used the way contextual
+ * Depending on whether a JS-capable browser is used the way contextual
  * links are handled is completely different. This class encapsulates the
  * business logic for dealing with this distinction and hides the implementation
  * details from the user. This allows us to only put the "public" methods in the
@@ -208,7 +208,7 @@ class ContextualLinksHelper {
    * @param \Behat\Mink\Element\TraversableElement $element
    *   The element that contains the contextual links to open.
    */
-  protected function openContextualLinksMenu(TraversableElement $element): void {
+  public function openContextualLinksMenu(TraversableElement $element): void {
     if (!$this->hasJavascriptSupport()) {
       throw new \LogicException('Cannot open the contextual link menu on a browser that doesn\'t support JavaScript.');
     }

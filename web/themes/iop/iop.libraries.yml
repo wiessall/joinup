@@ -24,11 +24,10 @@ accordion-faq:
     theme:
       assets/css/accordion-faq.min.css: { minified: true }
 
-# @todo ISAICP-7138 delete this library when switch to Ventuno theme is complete
-add-content:
+actions-menu:
   css:
     theme:
-      assets/css/add-content.min.css: { minified: true }
+      assets/css/actions-menu.min.css: { minified: true }
 
 join:
   css:

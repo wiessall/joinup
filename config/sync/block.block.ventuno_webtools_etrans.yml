@@ -9,7 +9,7 @@ dependencies:
 id: ventuno_webtools_etrans
 theme: ventuno
 region: content
-weight: -25
+weight: -24
 provider: null
 plugin: oe_webtools_etrans
 settings:
@@ -23,4 +23,15 @@ settings:
   include: ''
   render_as: button
   render_to: ''
-visibility: {  }
+visibility:
+  request_route:
+    id: request_route
+    negate: true
+    context_mapping: {  }
+    routes:
+      - entity.node.delete_form
+      - entity.node.edit_form
+      - entity.rdf_entity.delete_form
+      - entity.rdf_entity.edit_form
+      - entity.taxonomy_term.edit_form
+      - entity.taxonomy_term.delete_form

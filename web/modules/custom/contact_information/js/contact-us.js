@@ -21,7 +21,7 @@
       );
       // Does the contact information entity still exist?
       if (contactInfoElement) {
-        const contactInfoLink = contactInfoElement.querySelector("a");
+        const contactInfoLink = contactInfoElement.querySelector("a.use-ajax");
         if (contactInfoLink) {
           cookies.remove("email_contact_info");
           contactInfoLink.click();

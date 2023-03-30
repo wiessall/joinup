@@ -1,0 +1,17 @@
+.fieldset-show-more {
+  .btn-link:focus {
+    text-decoration: none; // Override btn-link
+  }
+  .btn[aria-expanded="false"] {
+    svg {
+      transform: rotate(0deg);
+      transition: transform .25s ease;
+    }
+  }
+  .btn[aria-expanded="true"] {
+    svg {
+      transform: rotate(-180deg);
+      transition: transform .25s ease;
+    }
+  }
+}

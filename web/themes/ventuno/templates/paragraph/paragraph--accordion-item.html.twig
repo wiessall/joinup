@@ -54,7 +54,7 @@
           <span class="accordion-button-text">{{ content.field_paragraphs_item_label }}</span>
         </button>
       </h2>
-      <div id="collapse{{ paragraph.id() }}" class="accordion-collapse collapse" aria-labelledby="heading{{ paragraph.id() }}">
+      <div id="collapse{{ paragraph.id() }}" class="accordion-collapse collapse" aria-labelledby="heading{{ paragraph.id() }}" data-bs-parent="#accordion{{ parent_id }}">
         <div class="accordion-body">
           {{ content.field_paragraphs_item_content }}
         </div>

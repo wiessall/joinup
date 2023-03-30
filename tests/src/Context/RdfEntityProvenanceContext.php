@@ -244,7 +244,7 @@ class RdfEntityProvenanceContext extends RawDrupalContext {
    * @Then I should have :number provenance activities
    */
   public function assertActivitiesCount(int $number): void {
-    $actual = \Drupal::entityQuery('rdf_entity')
+    $actual = \Drupal::entityQuery('rdf_entity')->accessCheck(FALSE)
       ->condition('rid', 'provenance_activity')
       ->count()
       ->execute();
