@@ -1,0 +1,22 @@
+uuid: 7a6da8b0-d8d4-4b79-9092-06f6d85cd85c
+langcode: en
+status: true
+dependencies:
+  module:
+    - joinup_core
+  theme:
+    - ventuno
+id: modals
+label: Modals
+theme: ventuno
+weight: 0
+conditions:
+  request_route:
+    id: request_route
+    negate: false
+    routes:
+      - joinup_group.leave_confirm_form
+      - joinup_community_content.share_content_form
+      - solution.share_form
+      - asset_distribution.track_download
+      - email_contact.form

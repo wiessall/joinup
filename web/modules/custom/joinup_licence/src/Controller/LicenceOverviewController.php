@@ -61,7 +61,7 @@ class LicenceOverviewController extends ControllerBase {
    *   The build render array.
    */
   public function overview() {
-    $query = $this->entityStorage->getQuery()
+    $query = $this->entityStorage->getQuery()->accessCheck(FALSE)
       ->condition('rid', 'licence');
 
     $header = $this->buildHeader();

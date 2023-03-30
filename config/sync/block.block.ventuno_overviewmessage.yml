@@ -10,7 +10,7 @@ dependencies:
 id: ventuno_overviewmessage
 theme: ventuno
 region: sidebar
-weight: -19
+weight: -20
 provider: null
 plugin: overview_message_block
 settings:

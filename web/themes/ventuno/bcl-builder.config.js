@@ -14,6 +14,38 @@ module.exports = {
   scripts: [
     // Custom
     {
+      entry: path.resolve(outputFolder, "src/js/ajax-throbber.js"),
+      dest: path.resolve(outputFolder, "assets/js/ajax-throbber.js"),
+      options: {
+        minify: true,
+        sourceMap: true,
+      },
+    },
+    {
+      entry: path.resolve(outputFolder, "src/js/checkbox.js"),
+      dest: path.resolve(outputFolder, "assets/js/checkbox.js"),
+      options: {
+        minify: true,
+        sourceMap: true,
+      },
+    },
+    {
+      entry: path.resolve(outputFolder, "src/js/responsive-tables.js"),
+      dest: path.resolve(outputFolder, "assets/js/responsive-tables.js"),
+      options: {
+        minify: true,
+        sourceMap: true,
+      },
+    },
+    {
+      entry: path.resolve(outputFolder, "src/js/fieldset-show-more.js"),
+      dest: path.resolve(outputFolder, "assets/js/fieldset-show-more.js"),
+      options: {
+        minify: true,
+        sourceMap: true,
+      },
+    },
+    {
       entry: path.resolve(outputFolder, "src/js/toggle-text-seemore-btn.js"),
       dest: path.resolve(outputFolder, "assets/js/toggle-text-seemore-btn.js"),
       options: {
@@ -48,6 +80,28 @@ module.exports = {
     {
       entry: path.resolve(outputFolder, "src/js/searchbox-focus.js"),
       dest: path.resolve(outputFolder, "assets/js/searchbox-focus.js"),
+      options: {
+        minify: true,
+        sourceMap: true,
+      },
+    },
+    {
+      entry: path.resolve(outputFolder, "src/js/shared-entity.js"),
+      dest: path.resolve(outputFolder, "assets/js/shared-entity.js"),
+      options: {
+        minify: true,
+        sourceMap: true,
+      },
+    },
+    {
+      entry: path.resolve(
+        outputFolder,
+        "src/js/show-accordion-invalid-fields.js"
+      ),
+      dest: path.resolve(
+        outputFolder,
+        "assets/js/show-accordion-invalid-fields.js"
+      ),
       options: {
         minify: true,
         sourceMap: true,
@@ -120,76 +174,165 @@ module.exports = {
       dest: path.resolve(outputFolder, "assets/css/theme.css"),
       options: {
         includePaths,
+        minify: true,
         sourceMap: "file",
       },
     },
     // Pages
     {
       entry: path.resolve(outputFolder, "src/scss/homepage.scss"),
-      dest: path.resolve(outputFolder, "assets/css/homepage.css"),
+      dest: path.resolve(outputFolder, "assets/css/homepage.min.css"),
       options: {
         includePaths,
+        minify: true,
         sourceMap: "file",
       },
     },
     {
       entry: path.resolve(outputFolder, "src/scss/licence-comparer.scss"),
-      dest: path.resolve(outputFolder, "assets/css/licence-comparer.css"),
+      dest: path.resolve(outputFolder, "assets/css/licence-comparer.min.css"),
       options: {
         includePaths,
+        minify: true,
+        sourceMap: "file",
+      },
+    },
+    {
+      entry: path.resolve(outputFolder, "src/scss/eif-filter.scss"),
+      dest: path.resolve(outputFolder, "assets/css/eif-filter.min.css"),
+      options: {
+        includePaths,
+        minify: true,
+        sourceMap: "file",
+      },
+    },
+    {
+      entry: path.resolve(outputFolder, "src/scss/licence-filter.scss"),
+      dest: path.resolve(outputFolder, "assets/css/licence-filter.min.css"),
+      options: {
+        includePaths,
+        minify: true,
+        sourceMap: "file",
+      },
+    },
+    {
+      entry: path.resolve(outputFolder, "src/scss/listing-grid.scss"),
+      dest: path.resolve(outputFolder, "assets/css/listing-grid.min.css"),
+      options: {
+        includePaths,
+        minify: true,
         sourceMap: "file",
       },
     },
     {
       entry: path.resolve(outputFolder, "src/scss/searchpage.scss"),
-      dest: path.resolve(outputFolder, "assets/css/searchpage.css"),
+      dest: path.resolve(outputFolder, "assets/css/searchpage.min.css"),
       options: {
         includePaths,
+        minify: true,
         sourceMap: "file",
       },
     },
     // Pure BCL components
     {
       entry: path.resolve(outputFolder, "src/scss/accordion.scss"),
-      dest: path.resolve(outputFolder, "assets/css/accordion.css"),
+      dest: path.resolve(outputFolder, "assets/css/accordion.min.css"),
       options: {
         includePaths,
+        minify: true,
+        sourceMap: "file",
+      },
+    },
+    {
+      entry: path.resolve(outputFolder, "src/scss/card.scss"),
+      dest: path.resolve(outputFolder, "assets/css/card.min.css"),
+      options: {
+        includePaths,
+        minify: true,
         sourceMap: "file",
       },
     },
     {
       entry: path.resolve(outputFolder, "src/scss/badge.scss"),
-      dest: path.resolve(outputFolder, "assets/css/badge.css"),
+      dest: path.resolve(outputFolder, "assets/css/badge.min.css"),
       options: {
         includePaths,
+        minify: true,
         sourceMap: "file",
       },
     },
     {
       entry: path.resolve(outputFolder, "src/scss/close.scss"),
-      dest: path.resolve(outputFolder, "assets/css/close.css"),
+      dest: path.resolve(outputFolder, "assets/css/close.min.css"),
       options: {
         includePaths,
+        minify: true,
         sourceMap: "file",
       },
     },
     {
       entry: path.resolve(outputFolder, "src/scss/modals.scss"),
-      dest: path.resolve(outputFolder, "assets/css/modals.css"),
+      dest: path.resolve(outputFolder, "assets/css/modals.min.css"),
+      options: {
+        includePaths,
+        minify: true,
+        sourceMap: "file",
+      },
+    },
+    {
+      entry: path.resolve(outputFolder, "src/scss/spinners.scss"),
+      dest: path.resolve(outputFolder, "assets/css/spinners.min.css"),
+      options: {
+        includePaths,
+        minify: true,
+        sourceMap: "file",
+      },
+    },
+    {
+      entry: path.resolve(outputFolder, "src/scss/tables.scss"),
+      dest: path.resolve(outputFolder, "assets/css/tables.min.css"),
+      options: {
+        includePaths,
+        minify: true,
+        sourceMap: "file",
+      },
+    },
+    // Custom and hybrid (BCL + custom) components
+    {
+      entry: path.resolve(outputFolder, "src/scss/abstract.scss"),
+      dest: path.resolve(outputFolder, "assets/css/abstract.css"),
       options: {
         includePaths,
         sourceMap: "file",
       },
     },
     {
-      entry: path.resolve(outputFolder, "src/scss/tables.scss"),
-      dest: path.resolve(outputFolder, "assets/css/tables.css"),
+      entry: path.resolve(outputFolder, "src/scss/actions-menu.scss"),
+      dest: path.resolve(outputFolder, "assets/css/actions-menu.min.css"),
       options: {
         includePaths,
+        minify: true,
         sourceMap: "file",
       },
     },
-    // Custom and hybrid (BCL + custom) components
+    {
+      entry: path.resolve(outputFolder, "src/scss/comments.scss"),
+      dest: path.resolve(outputFolder, "assets/css/comments.min.css"),
+      options: {
+        includePaths,
+        minify: true,
+        sourceMap: "file",
+      },
+    },
+    {
+      entry: path.resolve(outputFolder, "src/scss/fieldset-show-more.scss"),
+      dest: path.resolve(outputFolder, "assets/css/fieldset-show-more.min.css"),
+      options: {
+        includePaths,
+        minify: true,
+        sourceMap: "file",
+      },
+    },
     {
       entry: path.resolve(outputFolder, "src/scss/header-topic.scss"),
       dest: path.resolve(outputFolder, "assets/css/header-topic.min.css"),
@@ -201,7 +344,28 @@ module.exports = {
     },
     {
       entry: path.resolve(outputFolder, "src/scss/footer.scss"),
-      dest: path.resolve(outputFolder, "assets/css/footer.css"),
+      dest: path.resolve(outputFolder, "assets/css/footer.min.css"),
+      options: {
+        includePaths,
+        minify: true,
+        sourceMap: "file",
+      },
+    },
+    {
+      entry: path.resolve(outputFolder, "src/scss/menu--og--navigation.scss"),
+      dest: path.resolve(
+        outputFolder,
+        "assets/css/menu--og--navigation.min.css"
+      ),
+      options: {
+        includePaths,
+        minify: true,
+        sourceMap: "file",
+      },
+    },
+    {
+      entry: path.resolve(outputFolder, "src/scss/form-checkboxes.scss"),
+      dest: path.resolve(outputFolder, "assets/css/form-checkboxes.css"),
       options: {
         includePaths,
         sourceMap: "file",
@@ -217,16 +381,63 @@ module.exports = {
     },
     {
       entry: path.resolve(outputFolder, "src/scss/forms.scss"),
-      dest: path.resolve(outputFolder, "assets/css/forms.css"),
+      dest: path.resolve(outputFolder, "assets/css/forms.min.css"),
       options: {
         includePaths,
+        minify: true,
+        sourceMap: "file",
+      },
+    },
+    {
+      entry: path.resolve(outputFolder, "src/scss/glossary.scss"),
+      dest: path.resolve(outputFolder, "assets/css/glossary.min.css"),
+      options: {
+        includePaths,
+        minify: true,
+        sourceMap: "file",
+      },
+    },
+    {
+      entry: path.resolve(outputFolder, "src/scss/group-banner.scss"),
+      dest: path.resolve(outputFolder, "assets/css/group-banner.min.css"),
+      options: {
+        includePaths,
+        minify: true,
+        sourceMap: "file",
+      },
+    },
+    {
+      entry: path.resolve(outputFolder, "src/scss/nav.scss"),
+      dest: path.resolve(outputFolder, "assets/css/nav.min.css"),
+      options: {
+        includePaths,
+        minify: true,
         sourceMap: "file",
       },
     },
     {
       entry: path.resolve(outputFolder, "src/scss/ief-entity-table.scss"),
-      dest: path.resolve(outputFolder, "assets/css/ief-entity-table.css"),
+      dest: path.resolve(outputFolder, "assets/css/ief-entity-table.min.css"),
       options: {
+        includePaths,
+        minify: true,
+        sourceMap: "file",
+      },
+    },
+    {
+      entry: path.resolve(outputFolder, "src/scss/iop-header.scss"),
+      dest: path.resolve(outputFolder, "assets/css/iop-header.min.css"),
+      options: {
+        includePaths,
+        minify: true,
+        sourceMap: "file",
+      },
+    },
+    {
+      entry: path.resolve(outputFolder, "src/scss/layout-block.scss"),
+      dest: path.resolve(outputFolder, "assets/css/layout-block.min.css"),
+      options: {
+        minify: true,
         includePaths,
         sourceMap: "file",
       },
@@ -242,33 +453,100 @@ module.exports = {
     },
     {
       entry: path.resolve(outputFolder, "src/scss/navbar.scss"),
-      dest: path.resolve(outputFolder, "assets/css/navbar.css"),
+      dest: path.resolve(outputFolder, "assets/css/navbar.min.css"),
       options: {
         includePaths,
+        minify: true,
         sourceMap: "file",
       },
     },
     {
       entry: path.resolve(outputFolder, "src/scss/navbar-search.scss"),
-      dest: path.resolve(outputFolder, "assets/css/navbar-search.css"),
+      dest: path.resolve(outputFolder, "assets/css/navbar-search.min.css"),
       options: {
         includePaths,
+        minify: true,
+        sourceMap: "file",
+      },
+    },
+    {
+      entry: path.resolve(outputFolder, "src/scss/page-title.scss"),
+      dest: path.resolve(outputFolder, "assets/css/page-title.min.css"),
+      options: {
+        includePaths,
+        minify: true,
         sourceMap: "file",
       },
     },
     {
       entry: path.resolve(outputFolder, "src/scss/pager.scss"),
-      dest: path.resolve(outputFolder, "assets/css/pager.css"),
+      dest: path.resolve(outputFolder, "assets/css/pager.min.css"),
       options: {
         includePaths,
+        minify: true,
+        sourceMap: "file",
+      },
+    },
+    {
+      entry: path.resolve(outputFolder, "src/scss/paragraph.scss"),
+      dest: path.resolve(outputFolder, "assets/css/paragraph.min.css"),
+      options: {
+        includePaths,
+        minify: true,
+        sourceMap: "file",
+      },
+    },
+    {
+      entry: path.resolve(outputFolder, "src/scss/releases.scss"),
+      dest: path.resolve(outputFolder, "assets/css/releases.min.css"),
+      options: {
+        includePaths,
+        minify: true,
+        sourceMap: "file",
+      },
+    },
+    {
+      entry: path.resolve(outputFolder, "src/scss/share-content-form.scss"),
+      dest: path.resolve(outputFolder, "assets/css/share-content-form.min.css"),
+      options: {
+        includePaths,
+        minify: true,
         sourceMap: "file",
       },
     },
     {
       entry: path.resolve(outputFolder, "src/scss/alert.scss"),
-      dest: path.resolve(outputFolder, "assets/css/alert.css"),
+      dest: path.resolve(outputFolder, "assets/css/alert.min.css"),
       options: {
         includePaths,
+        minify: true,
+        sourceMap: "file",
+      },
+    },
+    {
+      entry: path.resolve(outputFolder, "src/scss/tables.scss"),
+      dest: path.resolve(outputFolder, "assets/css/tables.min.css"),
+      options: {
+        includePaths,
+        minify: true,
+        sourceMap: "file",
+      },
+    },
+    {
+      entry: path.resolve(outputFolder, "src/scss/table-files.scss"),
+      dest: path.resolve(outputFolder, "assets/css/table-files.min.css"),
+      options: {
+        includePaths,
+        minify: true,
+        sourceMap: "file",
+      },
+    },
+    {
+      entry: path.resolve(outputFolder, "src/scss/tabs.scss"),
+      dest: path.resolve(outputFolder, "assets/css/tabs.min.css"),
+      options: {
+        includePaths,
+        minify: true,
         sourceMap: "file",
       },
     },
@@ -283,16 +561,63 @@ module.exports = {
     },
     {
       entry: path.resolve(outputFolder, "src/scss/tour.scss"),
-      dest: path.resolve(outputFolder, "assets/css/tour.css"),
+      dest: path.resolve(outputFolder, "assets/css/tour.min.css"),
       options: {
         includePaths,
+        minify: true,
         sourceMap: "file",
       },
     },
     {
       entry: path.resolve(outputFolder, "src/scss/tabledrag.scss"),
-      dest: path.resolve(outputFolder, "assets/css/tabledrag.css"),
+      dest: path.resolve(outputFolder, "assets/css/tabledrag.min.css"),
       options: {
+        includePaths,
+        minify: true,
+        sourceMap: "file",
+      },
+    },
+    {
+      entry: path.resolve(outputFolder, "src/scss/etrans.scss"),
+      dest: path.resolve(outputFolder, "assets/css/etrans.min.css"),
+      options: {
+        includePaths,
+        minify: true,
+        sourceMap: "file",
+      },
+    },
+    {
+      entry: path.resolve(outputFolder, "src/scss/navigation-bottom.scss"),
+      dest: path.resolve(outputFolder, "assets/css/navigation-bottom.min.css"),
+      options: {
+        includePaths,
+        minify: true,
+        sourceMap: "file",
+      },
+    },
+    {
+      entry: path.resolve(outputFolder, "src/scss/timeline.scss"),
+      dest: path.resolve(outputFolder, "assets/css/timeline.min.css"),
+      options: {
+        includePaths,
+        minify: true,
+        sourceMap: "file",
+      },
+    },
+    {
+      entry: path.resolve(outputFolder, "src/scss/user--group-header.scss"),
+      dest: path.resolve(outputFolder, "assets/css/user--group-header.min.css"),
+      options: {
+        includePaths,
+        minify: true,
+        sourceMap: "file",
+      },
+    },
+    {
+      entry: path.resolve(outputFolder, "src/scss/tile-two.scss"),
+      dest: path.resolve(outputFolder, "assets/css/tile-two.min.css"),
+      options: {
+        minify: true,
         includePaths,
         sourceMap: "file",
       },
@@ -312,9 +637,10 @@ module.exports = {
         outputFolder,
         "src/scss/core/base/bootstrap-base.scss"
       ),
-      dest: path.resolve(outputFolder, "assets/css/bootstrap-base.css"),
+      dest: path.resolve(outputFolder, "assets/css/bootstrap-base.min.css"),
       options: {
         includePaths,
+        minify: true,
         sourceMap: "file",
       },
     },
@@ -338,7 +664,7 @@ module.exports = {
       to: path.resolve(outputFolder, "assets/css/fonts/files"),
       options: { up: true },
     },
-    // Bootrstrap: scripts
+    // Bootstrap: scripts
     {
       from: [
         path.resolve(
@@ -349,60 +675,12 @@ module.exports = {
       to: path.resolve(outputFolder, "assets/js"),
       options: { up: true },
     },
-    // Theme images
-    {
-      from: [path.resolve(__dirname, "src/images/favicon/*")],
-      to: path.resolve(outputFolder, "assets/images/favicon"),
-      options: { up: true },
-    },
+    // Bootstrap: icons
     {
       from: [
-        path.resolve(__dirname, "src/images/homepage-banner/background.svg"),
+        path.resolve(nodeModules, "@openeuropa/bcl-bootstrap/icons/*.svg"),
       ],
-      to: path.resolve(outputFolder, "assets/images"),
-      options: { up: true },
-    },
-    {
-      from: [
-        path.resolve(__dirname, "src/images/homepage-banner/banner-md.svg"),
-      ],
-      to: path.resolve(outputFolder, "assets/images"),
-      options: { up: true },
-    },
-    {
-      from: [path.resolve(__dirname, "src/images/homepage-banner/wave.svg")],
-      to: path.resolve(outputFolder, "assets/images"),
-      options: { up: true },
-    },
-    {
-      from: [path.resolve(__dirname, "src/images/highlighted-event.jpg")],
-      to: path.resolve(outputFolder, "assets/images"),
-      options: { up: true },
-    },
-    {
-      from: [path.resolve(__dirname, "src/images/iop-eu-logo.svg")],
-      to: path.resolve(outputFolder, "assets/images"),
-      options: { up: true },
-    },
-    {
-      from: [path.resolve(__dirname, "src/images/logo.png")],
-      to: path.resolve(outputFolder, "assets/images"),
-      options: { up: true },
-    },
-    {
-      from: [path.resolve(__dirname, "src/images/logo.svg")],
-      to: path.resolve(outputFolder, "assets/images"),
-      options: { up: true },
-    },
-    {
-      from: [path.resolve(__dirname, "src/images/logo-ec--en.svg")],
-      to: path.resolve(outputFolder, "assets/images"),
-      options: { up: true },
-    },
-    // Fontello icons
-    {
-      from: [path.resolve(__dirname, "src/fonts/joinup-icons/*.woff*")],
-      to: path.resolve(outputFolder, "assets/fonts/joinup-icons"),
+      to: path.resolve(outputFolder, "assets/icons"),
       options: { up: true },
     },
     // Third party files
@@ -422,11 +700,16 @@ module.exports = {
         file: "icons.svg",
         list: [
           "arrow-left.svg",
+          "arrow-repeat.svg",
           "arrow-right.svg",
           "award.svg",
+          "box-arrow-up-right.svg",
           "calendar.svg",
-          "calendar3.svg",
+          "calendar-event.svg",
+          "card-list.svg",
+          "chat.svg",
           "chat-left-text.svg",
+          "chat-square.svg",
           "check-circle-fill.svg",
           "chevron-bar-left.svg",
           "chevron-bar-right.svg",
@@ -435,36 +718,57 @@ module.exports = {
           "chevron-right.svg",
           "chevron-up.svg",
           "clipboard-check.svg",
+          "clipboard2-check.svg",
+          "download.svg",
           "envelope-fill.svg",
           "exclamation-circle-fill.svg",
           "exclamation-triangle-fill.svg",
           "exclamation-lg.svg",
+          "exclamation-triangle-fill.svg",
           "eye.svg",
+          "facebook.svg",
+          "file-earmark.svg",
           "file-earmark-medical.svg",
           "file-earmark-play.svg",
+          "file-earmark-plus.svg",
           "file-earmark-post.svg",
           "file-earmark-richtext.svg",
           "file-earmark-text.svg",
           "file-earmark-zip.svg",
+          "file-font.svg",
           "filter.svg",
           "folder2-open.svg",
-          "info-circle.svg",
+          "gear-fill.svg",
+          "geo-alt.svg",
+          "github.svg",
           "info-circle-fill.svg",
+          "info-circle.svg",
           "journal-text.svg",
           "justify.svg",
           "lightning-charge.svg",
+          "link-45deg.svg",
           "linkedin.svg",
           "mastodon.svg",
           "newspaper.svg",
+          "pencil-square.svg",
+          "people.svg",
           "person-circle.svg",
+          "person-workspace.svg",
+          "pin-angle-fill.svg",
+          "play-btn.svg",
           "plus.svg",
           "question-lg.svg",
+          "reply.svg",
           "search.svg",
           "star.svg",
+          "three-dots.svg",
+          "trash.svg",
+          "type.svg",
           "twitter.svg",
-          "x.svg",
+          "vimeo.svg",
           "x-lg.svg",
           "x-square-fill.svg",
+          "x.svg",
           "youtube.svg",
         ],
       },

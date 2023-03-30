@@ -7,6 +7,7 @@
 
 declare(strict_types = 1);
 
+use Drupal\Component\Utility\Unicode;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Cache\Cache;
@@ -24,8 +25,8 @@ use Drupal\collection\Entity\CollectionInterface;
 use Drupal\collection\Entity\GlossaryTerm;
 use Drupal\collection\Plugin\Field\FieldType\LastUpdatedFieldItemList;
 use Drupal\joinup_subscription\JoinupSubscriptionsHelper;
-use Drupal\meta_entity\Entity\MetaEntityInterface;
 use Drupal\node\NodeInterface;
+use Drupal\oe_newsroom_newsletter\Form\NewsletterSubscribeForm;
 use Drupal\og\Entity\OgRole;
 use Drupal\og\Og;
 use Drupal\og\OgMembershipInterface;
@@ -35,6 +36,14 @@ use Drupal\rdf_entity\Entity\RdfEntityType;
 use Drupal\rdf_entity\RdfInterface;
 use Drupal\search_api\Query\QueryInterface;
 use Drupal\sparql_entity_storage\SparqlGraphInterface;
+
+/**
+ * Implements hook_entity_type_alter().
+ */
+function collection_entity_type_alter(array &$entity_types): void {
+  /** @var \Drupal\Core\Entity\EntityTypeInterface[] $entity_types */
+  $entity_types['rdf_entity']->setLinkTemplate('glossary', '/rdf_entity/{rdf_entity}/glossary/{letter}');
+}
 
 /**
  * Implements hook_theme().
@@ -309,18 +318,6 @@ function collection_entity_extra_field_info() {
 }
 
 /**
- * Implements hook_preprocess_HOOK().
- */
-function collection_preprocess_rdf_entity(array &$variables): void {
-  $collection = $variables['rdf_entity'];
-  if ($collection instanceof CollectionInterface) {
-    if ($collection->settings->entity instanceof MetaEntityInterface && $variables['view_mode'] === 'group_header') {
-      $variables['meta_banner_disabled'] = (bool) $collection->settings->entity->get('metadata_banner_disabled')->value;
-    }
-  }
-}
-
-/**
  * Implements hook_ENTITY_TYPE_view().
  *
  * Shows extra fields for the collection bundle.
@@ -379,6 +376,7 @@ function collection_rdf_entity_view(array &$build, EntityInterface $entity, Enti
     ];
     $build['read_more'] = $entity->toLink($text, 'about-page', [
       'attributes' => [
+        'data-drupal-group-view-mode' => $view_mode,
         'class' => [
           'about-page',
           'read-more',
@@ -386,20 +384,10 @@ function collection_rdf_entity_view(array &$build, EntityInterface $entity, Enti
           'btn',
           'btn-secondary',
         ],
+        'aria-label' => t('Read more about @name.', ['@name' => $entity->getName()]),
       ],
     ])->toRenderable();
   }
-  if ($view_mode === 'group_header') {
-    // The group header featured stats visibility is controlled by the group
-    // settings. Add the relevant cache tags.
-    if ($entity->get('settings')->entity instanceof MetaEntityInterface) {
-      $build['#cache']['tags'] = Cache::mergeTags($build['#cache']['tags'] ?? [], $entity->get('settings')->entity->getCacheTags());
-    }
-    else {
-      $build['#cache']['tags'] = Cache::mergeTags($build['#cache']['tags'] ?? [], ['meta_entity_list:collection_settings']);
-    }
-  }
-
 }
 
 /**
@@ -505,6 +493,29 @@ function collection_node_delete(NodeInterface $node) {
 function collection_form_meta_entity_collection_settings_form_alter(array &$form, FormStateInterface $form_state, string $form_id): void {
   // Remove the delete button from the 'collection_settings' edit form.
   unset($form['actions']['delete']);
+}
+
+/**
+ * Implements hook_preprocess_HOOK().
+ */
+function collection_preprocess_search_api_field__rdf_entity__field_collection_content__collection(array &$variables): void {
+  /** @var \Drupal\collection\Entity\CollectionInterface $collection */
+  $collection = $variables['entity'];
+
+  /** @var \Drupal\oe_newsroom_newsletter\Plugin\Field\FieldType\NewsletterItem $newsletter_field_item */
+  $newsletter_field_item = $collection->get('field_newsletter')->first();
+
+  $variables['newsletter_enabled'] = $newsletter_field_item && !$newsletter_field_item->isEmpty() && $newsletter_field_item->isEnabled();
+
+  // Collections might have a newsletter. Pass the necessary data that can be
+  // used to render the subscription form inside a tile.
+  if ($variables['newsletter_enabled']) {
+    $label = Unicode::truncate($collection->label(), 20, TRUE, TRUE);
+    $variables['newsletter_motivation'] = t('Keep in touch with %collection', [
+      '%collection' => $label,
+    ]);
+    $variables['newsletter_form'] = \Drupal::formBuilder()->getForm(NewsletterSubscribeForm::class, $newsletter_field_item->getUniverse(), $newsletter_field_item->getServiceId());
+  }
 }
 
 /**

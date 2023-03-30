@@ -48,8 +48,8 @@ Feature:
     # Visit one of the pages to warm up the render caches. We can then later
     # check that no stale cached content is being shown.
     When I go to the homepage of the "Vintage Art" collection
-    And I click "HOWTOs" in the "Navigation menu block" region
-    Then I should see the heading "Vintage Art"
+    And I click "HOWTOs" in the "Navigation menu" region
+    Then I should see the link "Vintage Art"
 
     # Start the actual test scenario as a moderator.
     When I go to the homepage of the "Vintage Art" collection
@@ -160,8 +160,8 @@ Feature:
     And I should not see the "Exports Leap Despite Currency Gain" tile
     And I should not see the "The Ultimate Debate" tile
     And I should not see the "Version 2.0 Launch Party" tile
-    And I should not see the link "HOWTOs" in the "Navigation menu block" region
-    And I should not see the link "Looking for Support?" in the "Navigation menu block" region
+    And I should not see the link "HOWTOs" in the "Navigation menu" region
+    And I should not see the link "Looking for Support?" in the "Navigation menu" region
 
     # Visit the destination collection.
     Given I go to the "Decadent Art" collection
@@ -169,11 +169,11 @@ Feature:
     And I should see the "Exports Leap Despite Currency Gain" tile
     And I should see the "The Ultimate Debate" tile
     And I should see the "Version 2.0 Launch Party" tile
-    Then I should see the link "HOWTOs" in the "Navigation menu block" region
-    When I click "HOWTOs" in the "Navigation menu block" region
-    Then I should see the link "HOWTOs" in the "Navigation menu block" region
-    And I should see the heading "Decadent Art"
-    And I should not see the link "Looking for Support?" in the "Navigation menu block" region
+    Then I should see the link "HOWTOs" in the "Navigation menu" region
+    When I click "HOWTOs" in the "Navigation menu" region
+    Then I should see the link "HOWTOs" in the "Navigation menu" region
+    And I should see the link "Decadent Art" in the "Header"
+    And I should not see the link "Looking for Support?" in the "Navigation menu" region
 
     # Try moving a child page without moving the parent page. This should move
     # the child to the root of the menu.
@@ -190,6 +190,6 @@ Feature:
     And the "Vintage Art" collection should have a custom page titled "Looking for Support?"
 
     Given I go to the "Vintage Art" collection
-    Then I should see the link "Looking for Support?" in the "Navigation menu block" region
-    When I click "Looking for Support?" in the "Navigation menu block" region
+    Then I should see the link "Looking for Support?" in the "Navigation menu" region
+    When I click "Looking for Support?" in the "Navigation menu" region
     Then I should not see the "Looking for Support?" tile

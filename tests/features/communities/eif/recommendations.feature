@@ -37,7 +37,7 @@ Feature:
   Scenario: The recommendations categories are properly sorted.
     Given I am not logged in
     And I go to the "EIF Toolbox" solution
-    When I click "Recommendations" in the "Left sidebar" region
+    When I click "Recommendations" in the "Header bottom" region
     Then I should see the link "All"
     And I should see the primary horizontal tabs:
       | link                   | active |
@@ -49,7 +49,7 @@ Feature:
   Scenario: The recommendations page lists the recommendations links.
     Given I am not logged in
     And I go to the "EIF Toolbox" solution
-    When I click "Recommendations" in the "Left sidebar" region
+    When I click "Recommendations" in the "Header bottom" region
     Then I should see the heading "EIF recommendations"
 
     # Assert the full table.
@@ -157,7 +157,7 @@ Feature:
   Scenario: Recommendations overview and each recommendation should show the EIF Toolbox header
     Given I am not logged in
     And I go to the "EIF Toolbox" solution
-    When I click "Recommendations" in the "Left sidebar" region
+    When I click "Recommendations" in the "Header bottom" region
     Then I should see the heading "EIF Toolbox"
 
     When I click "Recommendation 1"

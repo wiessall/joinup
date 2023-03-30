@@ -1,0 +1,58 @@
+.group-banner {
+  &__logo {
+    flex-shrink: 0;
+  }
+  &__title {
+    flex: 10 1 0%;
+  }
+  &__meta {
+    flex: 1 0 100%;
+    column-gap: $spacer;
+    row-gap: $spacer * .25;
+  }
+  &__actions {
+    flex: 0 1 auto;
+    column-gap: $spacer;
+    row-gap: $spacer;
+  }
+  &__li {
+    &--collection a {
+      &::before {
+        margin-right: $spacer * .5;
+        @include get-bootstrap-icon('folder2-open', currentColor);
+      }
+      &:hover {
+        &::before {
+          margin-right: $spacer * .5;
+          @include get-bootstrap-icon('folder2-open', currentColor);
+        }
+      }
+    }
+    &--topics {
+      position: relative;
+      column-gap: $spacer * .25;
+      .topics-wrapper {
+        overflow-x: auto;
+        overflow-y: hidden;
+        scrollbar-width: none;
+        column-gap: $spacer * .25;
+        row-gap: $spacer * .25;
+        // Create a visual hint to let user know menu is scrollable to the right
+        &::after {
+          content: "";
+          pointer-events: none; // Allow clickthrough
+          position: absolute;
+          width: $spacer * 5;
+          top: 0;
+          right: 0;
+          left: calc(100% - 5rem);
+          height: 100%;
+          background-image: linear-gradient(90deg, transparent 50%, $light 100%);
+          @include media-breakpoint-up(lg) {
+            display: none;
+          }
+        }
+      }
+    }
+  }
+}
