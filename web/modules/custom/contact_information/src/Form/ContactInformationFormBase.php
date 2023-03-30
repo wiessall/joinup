@@ -56,11 +56,37 @@ abstract class ContactInformationFormBase extends ContactForm {
    */
   public function buildForm(array $form, FormStateInterface $form_state): array {
     if ($this->currentUser()->isAnonymous()) {
-      return $this->buildFormForAnonymous($form);
+      $form = $this->buildFormForAnonymous($form);
     }
     else {
-      return $this->buildFormForAuthenticated($form, $form_state);
+      $form = $this->buildFormForAuthenticated($form, $form_state);
     }
+
+    if (!empty($this->field_settings['modal'])) {
+      $form['actions']['cancel'] = [
+        '#type' => 'button',
+        '#value' => $this->t('Cancel'),
+        '#attributes' => ['class' => ['dialog-cancel']],
+        // Put the cancel button to the left of the confirmation button, so it
+        // is consistent with the dialog shown when joining the group.
+        '#weight' => -1,
+      ];
+
+      $form['actions']['submit']['#attributes']['class'][] = 'use-ajax';
+      $form['actions']['submit']['#ajax'] = [
+        'callback' => [$this, 'ajaxSubmit'],
+        'event' => 'click',
+      ];
+      $form['actions']['submit']['#attached']['library'][] = 'core/drupal.dialog.ajax';
+      $form['#prefix'] = '<div id="email_contact_modal_form">';
+      $form['#suffix'] = '</div>';
+    }
+
+    // Vary the form's cache by whether the user is logged in or not.
+    (new CacheableMetadata())
+      ->setCacheContexts(['user.roles:authenticated'])
+      ->applyTo($form);
+    return $form;
   }
 
   /**
@@ -190,26 +216,6 @@ abstract class ContactInformationFormBase extends ContactForm {
       '#value' => $this->t('Send e-mail'),
     ];
 
-    if (!empty($this->field_settings['modal'])) {
-      $form['actions']['cancel'] = [
-        '#type' => 'button',
-        '#value' => $this->t('Cancel'),
-        '#attributes' => ['class' => ['dialog-cancel']],
-        // Put the cancel button to the left of the confirmation button, so it
-        // is consistent with the dialog shown when joining the group.
-        '#weight' => -1,
-      ];
-
-      $form['actions']['submit']['#attributes']['class'][] = 'use-ajax';
-      $form['actions']['submit']['#ajax'] = [
-        'callback' => [$this, 'ajaxSubmit'],
-        'event' => 'click',
-      ];
-      $form['actions']['submit']['#attached']['library'][] = 'core/drupal.dialog.ajax';
-      $form['#prefix'] = '<div id="email_contact_modal_form">';
-      $form['#suffix'] = '</div>';
-    }
-
     if (!$form_state->get('settings')) {
       $this->field_settings['default_message'] = '[current-user:name] sent a message using the contact form at [current-page:url].';
       $form_state->set('settings', $this->field_settings);
@@ -221,10 +227,6 @@ abstract class ContactInformationFormBase extends ContactForm {
       ['honeypot', 'time_restriction'],
     );
 
-    // Vary the form's cache by whether the user is logged in or not.
-    (new CacheableMetadata())
-      ->setCacheContexts(['user.roles:authenticated'])
-      ->applyTo($form);
     return $form;
   }
 
