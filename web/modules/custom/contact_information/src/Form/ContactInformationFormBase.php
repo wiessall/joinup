@@ -211,6 +211,7 @@ abstract class ContactInformationFormBase extends ContactForm {
     }
 
     if (!$form_state->get('settings')) {
+      $this->field_settings['default_message'] = '[current-user:name] sent a message using the contact form at [current-page:url].';
       $form_state->set('settings', $this->field_settings);
     }
 
@@ -274,16 +275,13 @@ abstract class ContactInformationFormBase extends ContactForm {
       $attachment->delete();
     }
 
-    $message = '';
-    if ($settings['include_values']) {
-      $message = <<<MESSAGE
+    $message = <<<MESSAGE
         Name: {$params['name']} <br/> 
-        Email: {$reply_to} <br/> 
         Organization: {$params['organization']} <br />
+        Email: $reply_to <br/> 
         Type: {$params['type']} <br />
+        Messsage:  {$form_state->getValue('message')} <br />
         MESSAGE;
-    }
-    $message .= "Message: {$form_state->getValue('message')}";
     $params['message'] = Markup::create($message);
 
     // Send the e-mail to the recipients.
