@@ -1,14 +1,43 @@
-.tabledrag-toggle-weight-wrapper,
-.tabledrag-handle,
-.tabledrag-hide {
-  display: none!important;
+.tabledrag-toggle-weight-wrapper {
+  display: none;
 }
-.table {
-  td.field-multiple-drag {
-  width: 0;
-  padding: 0;
+// @todo Remove this hack as part of ISAICP-3021.
+// @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-3021
+.joinup-nodrag {
+  a.tabledrag-handle,
+  .field-multiple-drag {
+    display: none !important;
   }
-  td.delta-order {
-    min-width: 5rem;
+  .table {
+    td.field-multiple-drag {
+      width: 0;
+      padding: 0;
+    }
+    td.delta-order {
+      min-width: 5rem;
+    }
+  }
+}
+.draggable {
+  a.tabledrag-handle {
+    margin-left: 0;
+    .handle {
+      width: $spacer * 2!important;
+      height: $spacer * 2!important;
+      padding: 0!important;
+      margin: 0!important;
+    }
+  }
+}
+.messages {
+  @extend .alert;
+  &--success {
+    @extend .alert-success;
+  }
+  &--warning {
+    @extend .alert-warning;
+  }
+  &--danger {
+    @extend .alert-danger;
   }
 }
