@@ -6,18 +6,18 @@ _core:
   default_config_hash: R9ftnDkuauHYcQuqGXrT7mZ-Cs1z0q4C9ZVMlwi2XFM
 id: legal_notice
 label: 'Legal notice'
-require_signup: true
-require_existing: true
+require_signup: false
+require_existing: false
 settings:
   new_users:
-    require: true
+    require: false
     require_method: form_link
   existing_users:
-    require: true
+    require: false
     require_method: redirect
   title_pattern: '[entity_legal_document:label]'
   ui:
     acceptance_error_message:
-      value: 'You must accept the <a href="[entity_legal_document:url]">[entity_legal_document:label]</a> in order to use our platform.'
+      value: "<p>You must accept the <a href=\"url]\">[entity_legal_document:label]</a> in order to use our platform.</p>\r\n"
       format: simple_html
     submit_label: ''
