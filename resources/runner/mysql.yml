@@ -1,6 +1,7 @@
 # MySQL configs and commands.
 
 mysql:
+  dump_dir: ${joinup.db_dir}/mysql
   dumpfile: ${joinup.db_dir}/mysql/mysql.sql
 commands:
 
