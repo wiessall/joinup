@@ -33,26 +33,16 @@ commands:
   solr:download-snapshot:
     # Cleanup any stale data.
     - task: remove
-      file: ${solr.snapshot_dir}/solr.tar.gz
-    - task: remove
-      file: ${solr.snapshot_dir}/solr.tar
-    - task: remove
       file: ${solr.snapshot_dir}/snapshot.${env.SEARCH_API_SERVER_SS_SOLR_CORE}
     # Snapshot dir.
     - task: mkdir
       dir: ${solr.snapshot_dir}/snapshot.${env.SEARCH_API_SERVER_SS_SOLR_CORE}
-    # Download and unpack the archive.
-    - task: run
-      command: toolkit:download-dump
-      options:
-        asda-url: ${env.ASDA_URL}/../solr
-        dumpfile: ${solr.snapshot_dir}/solr.tar
     # Unpack and organize.
     - task: exec
-      command: tar -xvf ${solr.snapshot_dir}/solr.tar -C ${solr.snapshot_dir}/snapshot.${env.SEARCH_API_SERVER_SS_SOLR_CORE} --strip-components=1
+      command: tar -xvf ${joinup.db_dir}/solr.gz -C ${solr.snapshot_dir}/snapshot.${env.SEARCH_API_SERVER_SS_SOLR_CORE} --strip-components=1
     # Cleanup.
     - task: remove
-      file: ${solr.snapshot_dir}/solr.tar
+      file: ${joinup.db_dir}/solr.gz
 
   # Downloads and installs the Solr binary.
   solr:download-bin:

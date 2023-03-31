@@ -2,10 +2,12 @@
 
 toolkit:
   project_id: digit-joinup
-  tmp_folder: ${joinup.dir}/tmp
+  tmp_folder: ${joinup.db_dir}
   clone:
-    asda_url: ${env.ASDA_URL}
-    dumpfile: ${mysql.dump_dir}/mysql.sql
+    asda_services:
+      - mysql
+      - solr
+      - virtuoso
 
   build:
     dist:
@@ -36,10 +38,6 @@ toolkit:
 
 command:
   toolkit:
-    download-dump:
-      options:
-        asda-url: https://asda.fpfis.tech.ec.europa.eu/ec-europa/digit-joinup-reference/dumps
-        dumpfile: ${mysql.dump_dir}/mysql.sql
     install-dump:
       options:
         dumpfile: ${mysql.dump_dir}/mysql.sql
