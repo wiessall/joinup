@@ -1,7 +1,7 @@
 # MySQL configs and commands.
 
 mysql:
-  dump_dir: ${joinup.db_dir}/mysql
+  dump_dir: mysql
   dumpfile: ${joinup.db_dir}/mysql/mysql.sql
 commands:
 
@@ -15,10 +15,10 @@ commands:
       command: gunzip -c ${joinup.db_dir}/mysql.gz > ${mysql.dumpfile}
     # Remove the MySQL trigger definer.
     - task: exec
-      command: perl -i -pe 's/DEFINER="[^"]+"@"[^"]+"//g' ${toolkit.clone.dumpfile}
+      command: perl -i -pe 's/DEFINER="[^"]+"@"[^"]+"//g' ${mysql.dumpfile}
     # Support MySQL 8.
     - task: exec
-      command: perl -i -pe 's/,NO_AUTO_CREATE_USER//g' ${toolkit.clone.dumpfile}
+      command: perl -i -pe 's/,NO_AUTO_CREATE_USER//g' ${mysql.dumpfile}
     # Cleanup.
     - task: remove
       file: ${joinup.db_dir}/mysql.gz
