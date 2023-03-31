@@ -241,7 +241,9 @@ class WorkflowHelper implements WorkflowHelperInterface {
     $entityStorage = $this->entityTypeManager->getStorage($entityType->id());
 
     // Load the previous revision IDs.
-    $revisionIds = $entityStorage->getQuery()->allRevisions()
+    $revisionIds = $entityStorage->getQuery()
+      ->accessCheck(FALSE)
+      ->allRevisions()
       ->condition($entityType->getKey('id'), $entity->id())
       ->sort($entity->getEntityType()->getKey('revision'), 'DESC')
       ->range(1, 1)
