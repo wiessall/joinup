@@ -256,6 +256,7 @@ trait TraversingTrait {
       // @todo Legacy selectors to be removed in ISAICP-7138.
       // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7138
       '.listing__title',
+      '.slide__title',
     ]);
 
     $result = [];
@@ -731,6 +732,7 @@ trait TraversingTrait {
       // @todo Legacy selectors to be removed in ISAICP-7138.
       // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7138
       '.listing__item--tile .listing__title',
+      'article.slide',
     ]);
   }
 
