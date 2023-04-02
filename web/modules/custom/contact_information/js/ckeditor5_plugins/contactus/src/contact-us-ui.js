@@ -36,9 +36,12 @@ export default class ContactUsUi extends Plugin {
           const href = editor.config.get("contactus").contactInformation_url;
           const contactUsText = Drupal.t("Contact us");
           const text = !selectedText ? contactUsText : selectedText;
+          // eslint-disable-next-line no-unused-vars
           editor.model.change((writer) => {
-            const link = writer.createText(text, { linkHref: href });
-            editor.model.insertContent(link);
+            const contactLinkHtml = `<a href="${href}" title="${contactUsText}">${text}</a>`;
+            const viewFragment = editor.data.processor.toView(contactLinkHtml);
+            const modelFragment = editor.data.toModel(viewFragment);
+            editor.model.insertContent(modelFragment);
           });
         });
 
