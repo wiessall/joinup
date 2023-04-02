@@ -21,6 +21,8 @@ commands:
     - task: run
       command: toolkit:download-dump
     - task: run
+      command: mysql:unpack-dump
+    - task: run
       command: virtuoso:download-snapshot
     - task: run
       command: solr:download-snapshot
