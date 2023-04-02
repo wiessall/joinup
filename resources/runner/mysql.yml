@@ -1,12 +1,11 @@
 # MySQL configs and commands.
 
 mysql:
-  dump_dir: mysql
   dumpfile: ${joinup.db_dir}/mysql/mysql.sql
 commands:
 
-  # Downloads, unpacks and prepares the MySQL dump.
-  mysql:download-dump:
+  # Unpack and prepare the MySQL dump.
+  mysql:unpack-dump:
     # Cleanup any stale data.
     - task: remove
       file: ${mysql.dumpfile}
@@ -19,6 +18,3 @@ commands:
     # Support MySQL 8.
     - task: exec
       command: perl -i -pe 's/,NO_AUTO_CREATE_USER//g' ${mysql.dumpfile}
-    # Cleanup.
-    - task: remove
-      file: ${joinup.db_dir}/mysql.gz
