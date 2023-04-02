@@ -12,6 +12,7 @@ use Drupal\joinup\Traits\BootstrapTrait;
 use Drupal\joinup\Traits\JavascriptTrait;
 use Drupal\joinup\Traits\KeyboardInteractionTrait;
 use Drupal\joinup\Traits\MaterialDesignTrait;
+use Drupal\joinup\Traits\SearchTrait;
 use Drupal\joinup\Traits\TraversingTrait;
 use Drupal\joinup\Traits\UtilityTrait;
 use PHPUnit\Framework\Assert;
@@ -25,6 +26,7 @@ class JoinupSearchContext extends RawDrupalContext {
   use JavascriptTrait;
   use KeyboardInteractionTrait;
   use MaterialDesignTrait;
+  use SearchTrait;
   use TraversingTrait;
   use UtilityTrait;
 
@@ -765,11 +767,11 @@ class JoinupSearchContext extends RawDrupalContext {
   }
 
   /**
-   * Opens the search bar.
+   * Focuses on the search input.
    *
-   * @When I open the search bar by clicking on the search icon
+   * @When I focus on the search input
    */
-  public function openSearchBar() {
+  public function focusOnSearchInput() {
     // One can only open the search bar if JavaScript is enabled.
     $this->assertJavaScriptEnabledBrowser();
     $element = $this->getSearchBarElement();
@@ -891,8 +893,7 @@ class JoinupSearchContext extends RawDrupalContext {
    * @Then I should see search bar in navbar
    */
   public function assertSearchExposedFilterNavbar(): void {
-    $getAllInput = $this->getSession()->getPage()->findAll('css', '.joinup-navbar .navbar-search input#edit-keys');
-
+    $getAllInput = $this->findAllSearchBoxes();
     if (count($getAllInput) < 1) {
       throw new \Exception('Search bar not found in navbar.');
     }
@@ -907,8 +908,7 @@ class JoinupSearchContext extends RawDrupalContext {
    * @Then I should not see search bar in navbar
    */
   public function failSearchExposedFilterNavbar(): void {
-    $getAllInput = $this->getSession()->getPage()->findAll('css', '.joinup-navbar .navbar-search input#edit-keys');
-
+    $getAllInput = $this->findAllSearchBoxes();
     if (count($getAllInput) > 0) {
       throw new \Exception('Search bar found in navbar.');
     }
@@ -924,7 +924,6 @@ class JoinupSearchContext extends RawDrupalContext {
    */
   public function assertSearchIconNavbar(): void {
     $getAllInput = $this->getSession()->getPage()->findAll('css', '.joinup-navbar button#search.dropdown-toggle');
-
     if (count($getAllInput) < 1) {
       throw new \Exception('Search bar icon not found in navbar.');
     }
@@ -1009,6 +1008,26 @@ class JoinupSearchContext extends RawDrupalContext {
     }
 
     $link->click();
+  }
+
+  /**
+   * Checks if search inputs have different ids.
+   *
+   * @throws \Exception
+   *   Thrown when search inputs have the same id.
+   *
+   * @Then the two search inputs should have different ids
+   */
+  public function assertDifferentIdsInSearchInputs(): void {
+    $navigation = $this->getRegion('Navigation bar');
+    $featured = $this->getRegion('Featured');
+
+    $getNavbarInputId = $navigation->find('css', '.search-bar__input')
+      ->getAttribute('id');
+    $getHeaderInputId = $featured->find('css', '.search-bar__input')
+      ->getAttribute('id');
+
+    Assert::assertNotEquals($getNavbarInputId, $getHeaderInputId, 'The two search inputs have the same id.');
   }
 
 }
