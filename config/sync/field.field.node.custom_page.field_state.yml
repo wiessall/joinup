@@ -1,0 +1,25 @@
+uuid: e38d9c37-a074-4ea6-b24f-7ceb4078cd1f
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_state
+    - node.type.custom_page
+  module:
+    - state_machine
+id: node.custom_page.field_state
+field_name: field_state
+entity_type: node
+bundle: custom_page
+label: State
+description: ''
+required: true
+translatable: false
+default_value:
+  -
+    value: __new__
+default_value_callback: ''
+settings:
+  workflow: custom_page_workflow
+  workflow_callback: ''
+field_type: state
