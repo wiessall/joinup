@@ -9,12 +9,14 @@ use Drupal\joinup_bundle_class\DescriptionInterface;
 use Drupal\joinup_bundle_class\LogoInterface;
 use Drupal\joinup_group\Entity\GroupContentInterface;
 use Drupal\joinup_publication_date\Entity\EntityPublicationTimeInterface;
+use Drupal\joinup_workflow\ArchivableEntityInterface;
+use Drupal\joinup_workflow\EntityWorkflowStateInterface;
 use Drupal\node\NodeInterface;
 
 /**
  * Interface for content page node entities.
  */
-interface CustomPageInterface extends NodeInterface, GroupContentInterface, CollectionContentInterface, EntityPublicationTimeInterface, LogoInterface, DescriptionInterface {
+interface CustomPageInterface extends NodeInterface, GroupContentInterface, CollectionContentInterface, EntityPublicationTimeInterface, LogoInterface, DescriptionInterface, EntityWorkflowStateInterface, ArchivableEntityInterface {
 
   /**
    * Checks if this custom page is set as a landing page of the group.

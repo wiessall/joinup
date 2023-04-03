@@ -1,0 +1,3 @@
+custom_page:
+  label: 'Custom page'
+  entity_type: node
