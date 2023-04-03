@@ -17,7 +17,7 @@ use Drupal\honeypot\HoneypotServiceInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Base class for contact information form.
+ * Base class for the contact information form.
  */
 abstract class ContactInformationFormBase extends ContactForm {
 
