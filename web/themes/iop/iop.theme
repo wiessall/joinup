@@ -8,8 +8,6 @@
 declare(strict_types = 1);
 
 use Drupal\custom_page\Entity\CustomPageInterface;
-use Drupal\file\Entity\File;
-use Drupal\image\Entity\ImageStyle;
 use Drupal\interoperable_europe\InteroperableEuropeCollectionInterface;
 use Drupal\node\NodeInterface;
 
@@ -134,9 +132,8 @@ function iop_preprocess_block(array &$variables): void {
  */
 function iop_preprocess_node__news__view_mode_tile(&$variables): void {
   $node = $variables['node'];
-  $image_id = $node->get($node->getLogoFieldName())->target_id;
   // Override logo so we can control the image style without affecting also the
-  // parent theme Ventuno
+  // parent theme Ventuno.
   $variables['logo'] = $node->getLogoAsRenderArray([
     'label' => 'hidden',
     'type' => 'image',
@@ -152,9 +149,8 @@ function iop_preprocess_node__news__view_mode_tile(&$variables): void {
  */
 function iop_preprocess_node__event__view_mode_tile(&$variables): void {
   $node = $variables['node'];
-  $image_id = $node->get($node->getLogoFieldName())->target_id;
   // Override logo so we can control the image style without affecting also the
-  // parent theme Ventuno
+  // parent theme Ventuno.
   $variables['logo'] = $node->getLogoAsRenderArray([
     'label' => 'hidden',
     'type' => 'image',
