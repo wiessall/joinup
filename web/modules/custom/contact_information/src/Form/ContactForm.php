@@ -8,6 +8,7 @@ use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\email_contact\Plugin\Field\FieldFormatter\EmailContactLinkFormatter;
+use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\rdf_entity\RdfInterface;
 
 /**
@@ -62,7 +63,7 @@ class ContactForm extends ContactInformationFormBase {
   public function access(RdfInterface $rdf_entity): AccessResultInterface {
     return AccessResult::allowedIf(
       $this->currentUser()->isAuthenticated() &&
-      method_exists($rdf_entity, 'getValidatedContactInformation') &&
+      $rdf_entity instanceof GroupInterface &&
       !empty($rdf_entity->getValidatedContactInformation())
     );
   }
@@ -71,7 +72,7 @@ class ContactForm extends ContactInformationFormBase {
    * {@inheritdoc}
    */
   protected function getEmailAddresses(): array {
-    return method_exists($this->rdfEntity, 'getValidatedContactInformation') ?
+    return $this->rdfEntity instanceof GroupInterface ?
       $this->rdfEntity->getValidatedContactInformation() : [];
   }
 
