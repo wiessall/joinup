@@ -115,6 +115,7 @@ class UnarchiveAction extends StateActionBase {
     }
 
     $revisionIds = $storage->getQuery()
+      ->accessCheck(FALSE)
       ->allRevisions()
       ->condition($this->entityTypeManager->getDefinition($entityTypeId)
         ->getKey('id'), $node->id())
