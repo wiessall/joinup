@@ -123,8 +123,6 @@ abstract class ContactInformationFormBase extends ContactForm {
   /**
    * Build form for authenticated user.
    *
-   * For anonymous users, we change the form to enforce them to login.
-   *
    * @param array $form
    *   An associative array containing the structure of the form.
    * @param \Drupal\Core\Form\FormStateInterface $form_state
