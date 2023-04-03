@@ -1,0 +1,33 @@
+custom_page_workflow:
+  id: custom_page_workflow
+  label: 'Custom page workflow'
+  group: custom_page
+  states:
+    __new__:
+      label: '- New -'
+    published:
+      label: Published
+      published: true
+    unpublished:
+      label: Unpublished
+      published: false
+    archived:
+      label: Archived
+      published: true
+  transitions:
+    publish:
+      label: Publish
+      from: [ __new__, unpublished ]
+      to: published
+    unpublish:
+      label: Unpublish
+      from: [ published ]
+      to: unpublished
+    archive:
+      label: Archive
+      from: [ published, unpublished ]
+      to: archived
+    unarchive:
+      label: Unarchive
+      from: [ archived ]
+      to: __new__
