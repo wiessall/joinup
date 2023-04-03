@@ -5,3 +5,14 @@ contact-us:
   dependencies:
     - core/drupal
     - core/js-cookie
+
+contactus:
+  js:
+    js/build/contactus.js: { preprocess: false, minified: true }
+  dependencies:
+    - core/ckeditor5
+
+admin.contactus:
+  css:
+    theme:
+      css/contactus.admin.css: { }

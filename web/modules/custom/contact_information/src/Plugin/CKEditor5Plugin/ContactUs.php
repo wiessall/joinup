@@ -2,25 +2,19 @@
 
 declare(strict_types = 1);
 
-namespace Drupal\contact_information\Plugin\CKEditorPlugin;
+namespace Drupal\contact_information\Plugin\CKEditor5Plugin;
 
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Url;
-use Drupal\ckeditor\CKEditorPluginBase;
-use Drupal\editor\Entity\Editor;
+use Drupal\ckeditor5\Plugin\CKEditor5PluginDefault;
+use Drupal\editor\EditorInterface;
 use Drupal\joinup_group\JoinupGroupManagerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Defines the "Contact us" plugin.
- *
- * @CKEditorPlugin(
- *   id = "contactus",
- *   label = @Translation("Contact us"),
- *   module = "ckeditor_contactus"
- * )
+ * CKEditor 5 Contact us plugin configuration.
  */
-class ContactInformation extends CKEditorPluginBase implements ContainerFactoryPluginInterface {
+class ContactUs extends CKEditor5PluginDefault implements ContainerFactoryPluginInterface {
 
   /**
    * Constructs a new plugin instance.
@@ -34,7 +28,7 @@ class ContactInformation extends CKEditorPluginBase implements ContainerFactoryP
    * @param \Drupal\joinup_group\JoinupGroupManagerInterface $groupManager
    *   The Joinup Group manager service.
    */
-  public function __construct(array $configuration, string $plugin_id, mixed $plugin_definition, protected JoinupGroupManagerInterface $groupManager) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, protected JoinupGroupManagerInterface $groupManager) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
   }
 
@@ -65,60 +59,23 @@ class ContactInformation extends CKEditorPluginBase implements ContainerFactoryP
   /**
    * {@inheritdoc}
    */
-  public function getFile(): string {
-    return $this->getModulePath('contact_information') . '/js/plugins/plugin.js';
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getDependencies(Editor $editor): array {
-    return [];
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getLibraries(Editor $editor): array {
-    return [];
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function isInternal(): bool {
-    return FALSE;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getButtons(): array {
-    return [
-      'contactus' => [
-        'label' => $this->t('Contact us'),
-        'image' => $this->getModulePath('contact_information') . '/js/plugins/contact.png',
-      ],
-    ];
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getConfig(Editor $editor): array {
+  public function getDynamicPluginConfig(array $static_plugin_config, EditorInterface $editor): array {
     $group = $this->groupManager->getGroupFromContext();
     if (!$group) {
       return [
-        'contactInformation_disable' => FALSE,
+        'contactus' => [
+          'contactInformation_enabled' => FALSE,
+        ],
       ];
     }
 
     $url = Url::fromRoute('entity.rdf_entity.contact', ['rdf_entity' => $group->id()])->toString();
-    $disable = !empty($group->getValidatedContactInformation());
 
     return [
-      'contactInformation_disable' => $disable,
-      'contactInformation_url' => $url,
+      'contactus' => [
+        'contactInformation_enabled' => !empty($group->getValidatedContactInformation()),
+        'contactInformation_url' => $url,
+      ],
     ];
   }
 

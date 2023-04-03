@@ -5,6 +5,7 @@ declare(strict_types = 1);
 namespace Drupal\asset_distribution\Entity;
 
 use Drupal\asset_distribution\Exception\MissingDistributionParentException;
+use Drupal\joinup_bundle_class\DescriptionTrait;
 use Drupal\joinup_bundle_class\JoinupBundleClassMetaEntityTrait;
 use Drupal\joinup_group\Entity\GroupContentTrait;
 use Drupal\joinup_stats\Entity\DownloadCountAwareInterface;
@@ -21,6 +22,7 @@ use Drupal\solution\Entity\SolutionInterface;
  */
 class AssetDistribution extends Rdf implements AssetDistributionInterface {
 
+  use DescriptionTrait;
   use DownloadCountAwareTrait;
   use GroupContentTrait;
   use SolutionContentTrait;
@@ -57,6 +59,13 @@ class AssetDistribution extends Rdf implements AssetDistributionInterface {
    */
   public function isStandalone(): bool {
     return $this->getParent() instanceof SolutionInterface;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getDescriptionField(): string {
+    return 'field_ad_description';
   }
 
 }
