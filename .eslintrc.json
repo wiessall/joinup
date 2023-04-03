@@ -23,6 +23,9 @@
   "plugins": [
     "jsdoc"
   ],
+  "ignorePatterns": [
+    "**/contact_information/js/build/*.js"
+  ],
   "rules": {
     "jsdoc/require-file-overview": "error"
   }
