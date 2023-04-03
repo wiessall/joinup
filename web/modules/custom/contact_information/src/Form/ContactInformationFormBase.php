@@ -79,9 +79,10 @@ abstract class ContactInformationFormBase extends ContactForm {
     }
 
     // Vary the form's cache by whether the user is logged in or not.
-    (new CacheableMetadata())
+    CacheableMetadata::createFromRenderArray($form)
       ->setCacheContexts(['user.roles:authenticated'])
       ->applyTo($form);
+
     return $form;
   }
 
