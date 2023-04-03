@@ -11,8 +11,7 @@ use Drupal\joinup_workflow\Event\UnchangedWorkflowStateUpdateEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
- * Event subscribers for the "joinup_workflow.unchanged_workflow_state_update"
- * event.
+ * Event subscribers for the "joinup_workflow.unchanged_workflow_state_update".
  */
 class CustomPageUnchangedWorkflowState implements EventSubscriberInterface {
 
