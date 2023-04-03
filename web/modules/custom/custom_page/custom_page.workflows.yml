@@ -25,7 +25,7 @@ custom_page_workflow:
       to: unpublished
     archive:
       label: Archive
-      from: [ published, unpublished ]
+      from: [ published]
       to: archived
     unarchive:
       label: Unarchive
