@@ -330,3 +330,9 @@ Feature: Homepage
   Scenario: A favicon is shown in the browser tab
     Given I am on the homepage
     Then I should see a favicon
+
+  Scenario: The two search inputs in the homepage have different ids
+    Given I am on the homepage
+    Then I should see search bar in navbar
+    And I should see the search bar in homepage's header
+    And the two search inputs should have different ids
