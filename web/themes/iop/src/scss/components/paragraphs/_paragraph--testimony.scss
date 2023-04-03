@@ -1,8 +1,11 @@
-.paragraph--testimony {
-  border-left: none!important; // Override Ventuno's blockquote style
-  padding: unset!important; // Override Ventuno's blockquote style
-  margin-right: 0!important; // Override Ventuno's blockquote style
-  margin-left: 0!important; // Override Ventuno's blockquote style
+// Override Ventuno's blockquote style
+.paragraph blockquote.paragraph--testimony {
+  border-left: none;
+  padding: unset;
+  margin-right: 0;
+  margin-left: 0;
+}
+blockquote.paragraph--testimony {
   display: flex;
   flex-direction: column;
   margin-bottom: $spacer * 4; //64px

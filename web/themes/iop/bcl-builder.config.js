@@ -166,6 +166,7 @@ module.exports = {
         "assets/css/paragraph--testimony.min.css"
       ),
       options: {
+        minify: true,
         includePaths,
         sourceMap: "file",
       },
