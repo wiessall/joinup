@@ -3,8 +3,6 @@ custom_page_workflow:
   label: "Default"
   group: custom_page
   states:
-    __new__:
-      label: '- New -'
     published:
       label: Published
       published: true
@@ -16,7 +14,7 @@ custom_page_workflow:
   transitions:
     publish:
       label: Publish
-      from: [ __new__, unpublished ]
+      from: [ unpublished ]
       to: published
     unpublish:
       label: Unpublish
@@ -29,4 +27,4 @@ custom_page_workflow:
     unarchive:
       label: Unarchive
       from: [ archived ]
-      to: __new__
+      to: unpublished
