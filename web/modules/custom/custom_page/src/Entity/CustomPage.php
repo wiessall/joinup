@@ -59,4 +59,19 @@ class CustomPage extends Node implements CustomPageInterface {
     return FALSE;
   }
 
+  /**
+   * Returns an array of field names to skip in ::hasTranslationChanges.
+   *
+   * @return array
+   *   An array of field names.
+   */
+  protected function getFieldsToSkipFromTranslationChangesCheck() {
+    $fields = parent::getFieldsToSkipFromTranslationChangesCheck();
+
+    // Prevents auto updates to changed date when we update only state.
+    $fields[] = $this->getWorkflowStateFieldName();
+
+    return $fields;
+  }
+
 }
