@@ -10,7 +10,6 @@ custom_page_workflow:
       published: true
     unpublished:
       label: Unpublished
-      published: false
     archived:
       label: Archived
       published: true
