@@ -208,6 +208,7 @@ module:
   state_machine_permissions: 0
   state_machine_revisions: 0
   subpathauto: 0
+  svg_image: 0
   swiftmailer: 0
   system: 0
   tallinn: 0
