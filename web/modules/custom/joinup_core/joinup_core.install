@@ -188,4 +188,3 @@ function joinup_core_update_109101(?array &$sandbox = NULL): string {
 
   return "Processed {$sandbox['progress']} out of {$sandbox['total']} custom pages";
 }
-
