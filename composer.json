@@ -288,6 +288,9 @@
             "drupal/email_confirmer": {
                 "Support for HTML mails @see https://www.drupal.org/i/3047124": "https://git.drupalcode.org/project/email_confirmer/-/merge_requests/3.diff"
             },
+            "drupal/email_contact": {
+                "Move form creation in a protected method from ContactController::content() to ContactController::getForm(). https://www.drupal.org/project/email_contact/issues/3346470": "https://git.drupalcode.org/project/email_contact/-/merge_requests/12.diff"
+            },
             "drupal/drupal-driver": {
                 "Allow multi-property references. @see https://github.com/jhedstrom/DrupalDriver/pull/252": "https://patch-diff.githubusercontent.com/raw/jhedstrom/DrupalDriver/pull/252.diff"
             },
