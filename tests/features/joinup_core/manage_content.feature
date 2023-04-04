@@ -24,9 +24,9 @@ Feature:
       | title                              | collection  | state     |
       | Exports Leap Despite Currency Gain | Vintage Art | validated |
     And custom_page content:
-      | title                | collection  |
-      | HOWTOs               | Vintage Art |
-      | Looking for Support? | Vintage Art |
+      | title                | collection  | state     |
+      | HOWTOs               | Vintage Art | published |
+      | Looking for Support? | Vintage Art | published |
     And the following custom page menu structure:
       | title                | parent | weight |
       | Looking for Support? | HOWTOs | 1      |

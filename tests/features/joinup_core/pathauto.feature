@@ -45,8 +45,8 @@ Feature:
       | Pathauto news 2 | Pathauto news 2 |                     | Pathauto solution | validated |
     And custom_page content:
       | title                    | body          | collection          | solution          | state     |
-      | Pathauto collection page | Pathauto page | Pathauto collection |                   | validated |
-      | Pathauto solution page   | Pathauto page |                     | Pathauto solution | validated |
+      | Pathauto collection page | Pathauto page | Pathauto collection |                   | published |
+      | Pathauto solution page   | Pathauto page |                     | Pathauto solution | published |
 
     When I go to the "Pathauto collection" collection
     Then the url should match "collection/pathauto-collection"

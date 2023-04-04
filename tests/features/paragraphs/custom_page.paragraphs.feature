@@ -52,8 +52,8 @@ Feature:
       | collection            | user  |
       | Paragraphs collection | Zohan |
     And custom_page content:
-      | title                     | body        | collection            | author |
-      | Don't Mess with the Zohan | Wanna mess? | Paragraphs collection | Zohan  |
+      | title                     | body        | collection            | author | state     |
+      | Don't Mess with the Zohan | Wanna mess? | Paragraphs collection | Zohan  | published |
 
     # Normal members cannot add maps.
     When I am logged in as "Zohan"
