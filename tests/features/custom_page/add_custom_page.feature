@@ -134,9 +134,9 @@ Feature: "Add custom page" visibility options.
     # Create custom pages with 5 and 6 attachments.
     # 5 is the limit before adding the "Show more" functionality.
     And custom_page content:
-      | title          | body                 | collection        | attachments                                                                                                                                                                                                          |
-      | Rubber bands   | The aggressive ones. | Aggressive Rubber | target_id: empty.rdf - display: 1, target_id: empty_pdf.pdf - display: 1, target_id: invalid_adms.rdf - display: 1, target_id: test.zip - display: 1, target_id: text.pdf - display: 1                               |
-      | Elastic rubber | Also aggressive.     | Aggressive Rubber | target_id: ada.png - display: 1, target_id: alan.jpg - display: 1, target_id: blaise.jpg - display: 1, target_id: charles.jpg - display: 1, target_id: leonardo.jpg - display: 1, target_id: linus.jpeg - display: 1 |
+      | title          | body                 | collection        | state     | attachments                                                                                                                                                                                                          |
+      | Rubber bands   | The aggressive ones. | Aggressive Rubber | published | target_id: empty.rdf - display: 1, target_id: empty_pdf.pdf - display: 1, target_id: invalid_adms.rdf - display: 1, target_id: test.zip - display: 1, target_id: text.pdf - display: 1                               |
+      | Elastic rubber | Also aggressive.     | Aggressive Rubber | published | target_id: ada.png - display: 1, target_id: alan.jpg - display: 1, target_id: blaise.jpg - display: 1, target_id: charles.jpg - display: 1, target_id: leonardo.jpg - display: 1, target_id: linus.jpeg - display: 1 |
 
     When I go to the "Rubber bands" custom page
     Then the "empty.rdf" link in the Content region should be visible
@@ -171,8 +171,8 @@ Feature: "Add custom page" visibility options.
 
   Scenario Outline: Creating a custom page with a title that already exists.
     And custom_page content:
-      | title        | body        | <group>       |
-      | Rubber boots | For outside | <first title> |
+      | title        | body        | <group>       | state     |
+      | Rubber boots | For outside | <first title> | published |
 
     # It should not be possible to create a custom page with a duplicate title.
     Given I am logged in as a facilitator of the "<first title>" <group>

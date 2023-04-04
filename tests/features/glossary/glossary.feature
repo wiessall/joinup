@@ -169,8 +169,8 @@ Feature: As a moderator or group facilitator I want to be able to add, edit and
       | Distro1 | Alphabet & CLR       | Under The Bridge | http://example.com |
       | Distro2 | Colors & ABC & colrs | Summer of 69     | http://example.com |
     And custom_page content:
-      | title    | body              | solution         |
-      | Schedule | Colors everywhere | Under The Bridge |
+      | title    | body              | solution         | state     |
+      | Schedule | Colors everywhere | Under The Bridge | published |
     And discussion content:
       | title        | content                   | collection               | state     |
       | The Big Talk | The Alphabet. Call it ABC | Collection With Glossary | validated |
