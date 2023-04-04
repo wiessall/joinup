@@ -128,6 +128,7 @@ function joinup_core_deploy_0109103(?array &$sandbox = []): string {
     }
 
     $node->setChangedTime($node->getCreatedTime());
+    $node->skip_notification = TRUE;
     $node->save();
   }
 
@@ -136,4 +137,3 @@ function joinup_core_deploy_0109103(?array &$sandbox = []): string {
 
   return "Processed {$sandbox['progress']} out of {$sandbox['total']} custom pages";
 }
-
