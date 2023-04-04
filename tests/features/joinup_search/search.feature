@@ -170,8 +170,8 @@ Feature: Global search
       | title            | body                                                              | solution       | state     |
       | Discussion omega | <p>Does anybody has idea why this <em>epsilon</em> is everywhere? | Solution alpha | validated |
     And custom_page content:
-      | title      | body                                     | collection       |
-      | Page omega | This is just an epsilon but should work. | Collection alpha |
+      | title      | body                                     | collection       | state     |
+      | Page omega | This is just an epsilon but should work. | Collection alpha | published |
     And video content:
       | title       | body          | field_video                                 | collection       |
       | Video alpha | Slap like now | https://www.youtube.com/watch?v=JhGf8ZY0tN8 | Collection alpha |
@@ -280,8 +280,8 @@ Feature: Global search
       | description | Exotic wings and where to find them. |
       | state       | validated                            |
     And custom_page content:
-      | title           | body                                  | collection                      |
-      | Disturbed birds | Flocks of trained pigeons flying off. | Ornithology: the study of birds |
+      | title           | body                                  | collection                      | state     |
+      | Disturbed birds | Flocks of trained pigeons flying off. | Ornithology: the study of birds | published |
     And news content:
       | title                               | headline                            | body                            | collection                      | state     |
       | Chickens are small birds            | Chickens are small birds            | Birds domesticated in India.    | Ornithology: the study of birds | validated |

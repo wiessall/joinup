@@ -71,7 +71,7 @@ Feature:
   Scenario: Report link and eTranslate button are not available in IOP custom pages.
     Given custom_page content:
       | title    | collection           | state     |
-      | IOP page | Interoperable Europe | validated |
+      | IOP page | Interoperable Europe | published |
 
     When I am logged in as a user with the authenticated role
     And I go to the "IOP page" custom page
