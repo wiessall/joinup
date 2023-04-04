@@ -108,8 +108,17 @@ function ventuno_preprocess_page_title__node__glossary(array &$variables): void 
  * Implements hook_preprocess_HOOK() for page-title--node--document.html.twig.
  */
 function ventuno_preprocess_page_title__node__document(&$variables) {
+  /** @var \Drupal\joinup_document\Entity\DocumentInterface $node */
+  $entity = $variables['entity'];
+
   /** @var \Drupal\Core\Entity\EntityViewBuilderInterface $view_builder */
   $view_builder = \Drupal::entityTypeManager()->getViewBuilder('node');
+
+  /** @var \Drupal\Core\Datetime\DateFormatterInterface $date_formatter */
+  $date_formatter = \Drupal::service('date.formatter');
+  $field_document_publication_date = $entity->getPublicationTime();
+  $variables['additional_content']['publication_date'] = empty($field_document_publication_date) ? '' : $date_formatter->format($field_document_publication_date, 'custom', 'd/m/Y');
+
   $field_short_title = $view_builder->viewField($variables['entity']->field_short_title, 'default');
   $variables['additional_content']['field_short_title'] = $field_short_title;
 }
