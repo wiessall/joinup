@@ -15,6 +15,7 @@
 declare(strict_types = 1);
 
 use Drupal\joinup_user\JoinupUserDefaultAvatarImageHelper;
+use Drupal\search_api\Entity\Index;
 
 /**
  * Revert removal of collection that was lost.
@@ -117,6 +118,14 @@ function joinup_core_deploy_0109103(?array &$sandbox = []): string {
     $sandbox['progress'] = 0;
   }
 
+  // Load used indexes.
+  $index_published = Index::load('published');
+  $index_unpublished = Index::load('unpublished');
+
+  // Start batch tracking for both used indexes.
+  $index_published->startBatchTracking();
+  $index_unpublished->startBatchTracking();
+
   $ids = array_splice($sandbox['ids'], 0, 50);
   /** @var \Drupal\custom_page\Entity\CustomPageInterface $node */
   foreach ($node_storage->loadMultiple($ids) as $node) {
@@ -135,6 +144,10 @@ function joinup_core_deploy_0109103(?array &$sandbox = []): string {
     $node->skip_notification = TRUE;
     $node->save();
   }
+
+  // Stop batch tracking for both used indexes.
+  $index_published->stopBatchTracking();
+  $index_unpublished->stopBatchTracking();
 
   $sandbox['progress'] += count($ids);
   $sandbox['#finished'] = (int) empty($sandbox['ids']);
