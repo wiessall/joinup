@@ -67,11 +67,11 @@ Feature: "Add custom page" visibility options.
     And I should see the contextual link "Add new page" in the "Header bottom" region
     When I click the contextual link "Add new page" in the "Header bottom" region
     Then I should see the heading "Add custom page"
-    And the following fields should be present "Title, Body, Published"
+    And the following fields should be present "Title, Body"
 
     # The sections about managing revisions and groups should not be visible.
     And I should not see the text "Revision information"
-    And the following fields should not be present "Groups audience, Other groups, Create new revision, Revision log message"
+    And the following fields should not be present "Groups audience, Other groups, Create new revision, Revision log message, Published"
 
     When I fill in the following:
       | Title | About us |
@@ -85,8 +85,7 @@ Feature: "Add custom page" visibility options.
     And I fill in the 2nd "Description" field of the "Attachments" file field with "Alan"
     And I uncheck the 2nd "Display" checkbox of the "Attachments" file field
 
-    And I uncheck "Published"
-    And I press "Save"
+    And I press "Publish"
     Then I should see the heading "About us"
     And I should see the success message "Custom page About us has been created."
     And I should see the text "Attachments"
@@ -183,7 +182,7 @@ Feature: "Add custom page" visibility options.
     When I fill in the following:
       | Title | Rubber boots |
     And I enter "We love mud!" in the "Body" wysiwyg editor
-    And I press "Save"
+    And I press "Publish"
     Then I should see the error message "The Custom page title value (Rubber boots) is already taken by Rubber boots."
 
     # It should still be possible to create a custom page with the existing
@@ -196,7 +195,7 @@ Feature: "Add custom page" visibility options.
     When I fill in the following:
       | Title | Rubber boots |
     And I enter "We love mud!" in the "Body" wysiwyg editor
-    And I press "Save"
+    And I press "Publish"
     Then I should see the heading "Rubber boots"
     And I should see the success message "Custom page Rubber boots has been created."
 
