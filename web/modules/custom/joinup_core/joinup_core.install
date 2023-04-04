@@ -152,3 +152,40 @@ function joinup_core_update_109100(?array &$sandbox = NULL): string {
 
   return "Processed {$sandbox['progress']} out of {$sandbox['total']} menu links";
 }
+
+/**
+ * Add state value to custom page nodes.
+ */
+function joinup_core_update_109101(?array &$sandbox = NULL): string {
+  $node_storage = \Drupal::entityTypeManager()->getStorage('node');
+
+  if (!isset($sandbox['ids'])) {
+    $query = $node_storage->getQuery()->accessCheck(FALSE);
+    $query
+      ->condition('type', 'custom_page')
+      ->notExists('field_state');
+
+    $sandbox['ids'] = $query->execute();
+    $sandbox['total'] = count($sandbox['ids']);
+    $sandbox['progress'] = 0;
+  }
+
+  $ids = array_splice($sandbox['ids'], 0, 50);
+  /** @var \Drupal\custom_page\Entity\CustomPageInterface $node */
+  foreach ($node_storage->loadMultiple($ids) as $node) {
+    if ($node->isPublished()) {
+      $node->set('field_state', 'published');
+    }
+    else {
+      $node->set('field_state', 'unpublished');
+    }
+
+    $node->save();
+  }
+
+  $sandbox['progress'] += count($ids);
+  $sandbox['#finished'] = (int) empty($sandbox['ids']);
+
+  return "Processed {$sandbox['progress']} out of {$sandbox['total']} custom pages";
+}
+
