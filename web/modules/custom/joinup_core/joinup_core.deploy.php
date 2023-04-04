@@ -127,7 +127,11 @@ function joinup_core_deploy_0109103(?array &$sandbox = []): string {
       $node->set('field_state', 'unpublished');
     }
 
-    $node->setChangedTime($node->getCreatedTime());
+    // If update date is equal to creation date it will be set to now.
+    $changed = $node->getChangedTime() === $node->getCreatedTime() ?
+      $node->getChangedTime() + 1 : $node->getChangedTime();
+
+    $node->setChangedTime($changed);
     $node->skip_notification = TRUE;
     $node->save();
   }
