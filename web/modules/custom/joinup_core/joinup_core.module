@@ -444,5 +444,7 @@ function joinup_core_page_attachments(array &$attachments) {
  * Implements hook_field_widget_info_alter().
  */
 function joinup_core_field_widget_info_alter(array &$info): void {
-  $info['image_library_widget']['class'] = ImageLibraryWidget::class;
+  if (isset($info['image_library_widget'])) {
+    $info['image_library_widget']['class'] = ImageLibraryWidget::class;
+  }
 }
