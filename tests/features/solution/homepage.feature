@@ -56,8 +56,8 @@ Feature: Solution homepage
       | title                             | body                             | solution        | topic                   | spatial coverage | state     |
       | Jira will be down for maintenance | As always, during business hours | Jira restarters | Statistics and Analysis | Luxembourg       | validated |
     And custom_page content:
-      | title            | body                                       | solution        |
-      | Maintenance page | Jira is re-indexing. Go and drink a coffee | Jira restarters |
+      | title            | body                                       | solution        | state     |
+      | Maintenance page | Jira is re-indexing. Go and drink a coffee | Jira restarters | published |
     When I go to the homepage of the "Jira restarters" solution
     Then a tour should be available
     And I should see the "Jira will be down for maintenance" tile

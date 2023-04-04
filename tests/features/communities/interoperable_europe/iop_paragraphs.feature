@@ -107,9 +107,9 @@ Feature:
       | Carousel c1 | validated |
     And custom_page content:
       | title       | collection           | content       | state     |
-      | Some page 1 | Interoperable Europe | Some content. | validated |
-      | Some page 2 | Carousel c1          | Some content. | validated |
-      | Some page 3 | Carousel c1          | Some content. | validated |
+      | Some page 1 | Interoperable Europe | Some content. | published |
+      | Some page 2 | Carousel c1          | Some content. | published |
+      | Some page 3 | Carousel c1          | Some content. | published |
 
     When I am logged in as a moderator
     And I go to the homepage
