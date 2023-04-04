@@ -28,7 +28,7 @@ settings:
   handler: 'default:file'
   handler_settings: {  }
   file_directory: library/collection/banner
-  file_extensions: 'png jpg jpeg'
+  file_extensions: 'png jpg jpeg svg'
   max_filesize: ''
   max_resolution: ''
   min_resolution: ''
