@@ -305,3 +305,42 @@ Feature: Proposing a collection
     And I delete the "Contact Rapazoglou" contact information
     And I delete the "Some email validation" collection
     And I delete the "Rolly email validation" solution
+
+  @javascript @terms @uploadFiles:error.svg,simple.svg
+  Scenario: Allowing users to upload SVGs.
+    Given the following owner:
+      | name    | type                  |
+      | Svinish | Private Individual(s) |
+    And I am logged in as an "authenticated user"
+    When I go to the propose collection form
+    Then I should see the heading "Propose collection"
+    When I fill in "Title" with "SVG API example"
+    And I enter "We do not care that much about descriptions." in the "Description" wysiwyg editor
+    And I select "Employment and Support Allowance" from "Topic"
+    And I press "Add existing" at the "Owner" field
+    And I fill in "Owner" with "Svinish"
+    And I press "Add owner"
+    And I fill in the following:
+      | E-mail | basic.svg.api@example.com |
+      | Name   | BasicSvgAPI Contact       |
+    And I press "Create contact information"
+    When I select "Data gathering, data processing" from "Topic"
+
+    When I press "Additional fields"
+    # Shows error when svg is invalid or unsafe and fails to upload.
+    And I attach the file "error.svg" to "Logo"
+    And I wait for AJAX to finish
+    Then I should see the error message "Invalid or unsafe SVG file."
+    And I attach the file "simple.svg" to "Logo"
+    And I wait for AJAX to finish
+    Then I should not see the error message "Invalid or unsafe SVG file."
+    And I attach the file "simple.svg" to "Banner"
+    And I wait for AJAX to finish
+    Then I should not see the error message "Invalid or unsafe SVG file."
+    And I check "Moderated"
+    And I press "Propose"
+    Then I should see the heading "SVG API example"
+    And I should own the "SVG API example" collection
+    # Cleanup step.
+    Then I delete the "SVG API example" collection
+    And I delete the "BasicSvgAPI Contact" contact information
