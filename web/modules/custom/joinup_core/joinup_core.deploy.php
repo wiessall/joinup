@@ -99,3 +99,41 @@ QUERY;
 function joinup_core_deploy_0109102(): void {
   \Drupal::classResolver(JoinupUserDefaultAvatarImageHelper::class)->createOrUpdate();
 }
+
+/**
+ * Add state value to custom page nodes.
+ */
+function joinup_core_deploy_0109103(?array &$sandbox = []): string {
+  $node_storage = \Drupal::entityTypeManager()->getStorage('node');
+
+  if (!isset($sandbox['ids'])) {
+    $query = $node_storage->getQuery()->accessCheck(FALSE);
+    $query
+      ->condition('type', 'custom_page')
+      ->notExists('field_state');
+
+    $sandbox['ids'] = $query->execute();
+    $sandbox['total'] = count($sandbox['ids']);
+    $sandbox['progress'] = 0;
+  }
+
+  $ids = array_splice($sandbox['ids'], 0, 50);
+  /** @var \Drupal\custom_page\Entity\CustomPageInterface $node */
+  foreach ($node_storage->loadMultiple($ids) as $node) {
+    if ($node->isPublished()) {
+      $node->set('field_state', 'published');
+    }
+    else {
+      $node->set('field_state', 'unpublished');
+    }
+
+    $node->setChangedTime($node->getCreatedTime());
+    $node->save();
+  }
+
+  $sandbox['progress'] += count($ids);
+  $sandbox['#finished'] = (int) empty($sandbox['ids']);
+
+  return "Processed {$sandbox['progress']} out of {$sandbox['total']} custom pages";
+}
+
