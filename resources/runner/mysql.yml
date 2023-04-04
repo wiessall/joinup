@@ -11,7 +11,7 @@ commands:
       file: ${mysql.dumpfile}
     # Unpack and organize.
     - task: exec
-      command: gunzip -c ${joinup.db_dir}/mysql.gz > ${mysql.dumpfile}
+      command: gunzip -c ${toolkit.tmp_folder}/mysql.gz > ${mysql.dumpfile}
     # Remove the MySQL trigger definer.
     - task: exec
       command: perl -i -pe 's/DEFINER="[^"]+"@"[^"]+"//g' ${mysql.dumpfile}

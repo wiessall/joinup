@@ -2,7 +2,7 @@
 
 toolkit:
   project_id: digit-joinup
-  tmp_folder: ${joinup.db_dir}
+  tmp_folder: ${joinup.dir}/tmp
   clone:
     asda_services:
       - mysql

@@ -39,10 +39,7 @@ commands:
       dir: ${solr.snapshot_dir}/snapshot.${env.SEARCH_API_SERVER_SS_SOLR_CORE}
     # Unpack and organize.
     - task: exec
-      command: tar -xvf ${joinup.db_dir}/solr.gz -C ${solr.snapshot_dir}/snapshot.${env.SEARCH_API_SERVER_SS_SOLR_CORE} --strip-components=1
-    # Cleanup.
-    - task: remove
-      file: ${joinup.db_dir}/solr.gz
+      command: tar -xvf ${toolkit.tmp_folder}/solr.gz -C ${solr.snapshot_dir}/snapshot.${env.SEARCH_API_SERVER_SS_SOLR_CORE} --strip-components=1
 
   # Downloads and installs the Solr binary.
   solr:download-bin:
