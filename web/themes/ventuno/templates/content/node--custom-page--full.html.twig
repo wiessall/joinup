@@ -1,0 +1,30 @@
+{#
+/**
+ * @file
+ * Template for a Node.
+ */
+#}
+{%
+  set classes = [
+  'node',
+  node.isPromoted() ? 'node--promoted',
+  node.isSticky() ? 'node--sticky',
+  not node.isPublished() ? 'node--unpublished',
+  node.bundle|clean_class,
+  node.bundle|clean_class ~ '--' ~ view_mode|clean_class,
+]
+%}
+<article{{ attributes.addClass(classes) }}>
+  {{ title_prefix }}
+  {{ title_suffix }}
+
+  {% block content %}
+    <div{{ content_attributes.addClass('clearfix') }}>
+      {{ content|without('report', 'share_link') }}
+    </div>
+    <div class="d-flex justify-content-end my-3">
+      {{ content.report }}
+      {{ content.share_link }}
+    </div>
+  {% endblock %}
+</article>
