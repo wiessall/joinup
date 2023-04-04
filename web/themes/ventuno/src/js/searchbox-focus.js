@@ -9,7 +9,9 @@
         ".joinup-navbar .dropdown-toggle#search"
       );
       const box = document.querySelector("#dropdown-menu--search");
-      const input = document.querySelector("#dropdown-menu--search #edit-keys");
+      const input = document.querySelector(
+        "#dropdown-menu--search #search-box"
+      );
       if (
         trigger === null ||
         trigger === undefined ||

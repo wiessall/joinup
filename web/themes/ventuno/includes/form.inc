@@ -7,6 +7,7 @@
 
 declare(strict_types = 1);
 
+use Drupal\Component\Utility\Html;
 use Drupal\Core\Form\FormStateInterface;
 
 /**
@@ -66,6 +67,8 @@ function ventuno_form_views_exposed_form_alter(array &$form, FormStateInterface 
     $form['keys']['#title_display'] = 'invisible';
     $form['keys']['#attributes']['placeholder'] = t('Start typing to search…');
     $form['keys']['#joinup_parent'] = $form_id . '_' . $view->id();
+    // Ensure the ID is unique, using "search-box" as base.
+    $form['keys']['#id'] = Html::getUniqueId('search-box');
   }
 
   if ($route_name != 'view.search.page_1' && $view->id() === 'search') {
