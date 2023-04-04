@@ -31,14 +31,11 @@ commands:
       command: tar
       arguments:
         - xvf
-        - ${joinup.db_dir}/virtuoso.gz
+        - ${toolkit.tmp_folder}/virtuoso.gz
       options:
         directory: ${virtuoso.backup_dir}
     - task: exec
       command: mv $(find ${virtuoso.backup_dir} -type d -name 'digit-joinup-reference_*') ${virtuoso.snapshot_dir}
-    # Cleanup.
-    - task: remove
-      file: ${joinup.db_dir}/virtuoso.gz
 
   # Restores the Virtuoso database from a snapshot.
   virtuoso:restore:
