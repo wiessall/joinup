@@ -103,3 +103,13 @@ function ventuno_preprocess_page_title__node__event(&$variables) {
 function ventuno_preprocess_page_title__node__glossary(array &$variables): void {
   $variables['title'] = t('Glossary');
 }
+
+/**
+ * Implements hook_preprocess_HOOK() for page-title--node--document.html.twig.
+ */
+function ventuno_preprocess_page_title__node__document(&$variables) {
+  /** @var \Drupal\Core\Entity\EntityViewBuilderInterface $view_builder */
+  $view_builder = \Drupal::entityTypeManager()->getViewBuilder('node');
+  $field_short_title = $view_builder->viewField($variables['entity']->field_short_title, 'default');
+  $variables['additional_content']['field_short_title'] = $field_short_title;
+}
