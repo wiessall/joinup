@@ -225,6 +225,20 @@ class SearchWidget extends WidgetBase implements ContainerFactoryPluginInterface
       ],
     ];
 
+    // Show a select that allows users to choose whether to include all content
+    // items, show only unarchived content or show only archived content.
+    $element['wrapper']['show_archived'] = [
+      '#type' => 'select',
+      '#title' => $this->t('Show archived content'),
+      '#options' => [
+        'all' => $this->t('All'),
+        'archived' => $this->t('Archived'),
+        'unarchived' => $this->t('Unarchived'),
+      ],
+      '#default_value' => $default_values['show_archived'] ?? 'all',
+      '#weight' => -12,
+    ];
+
     if (!empty($this->getSetting('query_builder'))) {
       $element['wrapper']['query_builder'] = $this->buildQueryBuilder($item, $delta, $form, $form_state);
     }
@@ -760,6 +774,7 @@ class SearchWidget extends WidgetBase implements ContainerFactoryPluginInterface
 
       $cleaned_values[$delta]['value']['enabled'] = $values[$delta]['enabled'];
       $cleaned_values[$delta]['value']['query_presets'] = $values[$delta]['wrapper']['query_presets'];
+      $cleaned_values[$delta]['value']['show_archived'] = $values[$delta]['wrapper']['show_archived'];
       $cleaned_values[$delta]['value']['limit'] = $values[$delta]['wrapper']['limit'];
 
       if (!empty($values[$delta]['wrapper']['query_builder']['filters'])) {
