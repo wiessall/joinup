@@ -92,7 +92,7 @@ Feature:
       | Title | Latest news                        |
       | Body  | Shows all news for this collection |
     And I fill in "Query presets" with "entity_bundle|news"
-    And I press "Save"
+    And I press "Update"
     Then I should see the heading "Latest news"
     And I should see the "Rare Nintendo64 disk drive discovered" tile
     But I should not see the "20 year anniversary" tile
@@ -102,7 +102,7 @@ Feature:
     And I go to the "Latest news" custom page
     When I click "Edit" in the "Entity actions" region
     And I check "Allow shared content"
-    And I press "Save"
+    And I press "Update"
     # Only news are displayed.
     Then I should see the "Rare Nintendo64 disk drive discovered" tile
     But I should not see the "20 year anniversary" tile
@@ -134,7 +134,7 @@ Feature:
 
     When I click "Edit" in the "Entity actions" region
     And I uncheck "Show related content"
-    And I press "Save"
+    And I press "Update"
     Then I should not see the "Rare Nintendo64 disk drive discovered" tile
     And I should not see the "20 year anniversary" tile
     And I should not see the "NEC VR4300 CPU" tile
@@ -176,7 +176,7 @@ Feature:
     And I click "Edit" in the "Entity actions" region
     And I drag the table row in the "Content listing field filter form" region at position 3 up
     And I drag the table row in the "Content listing field filter form" region at position 2 up
-    And I press "Save"
+    And I press "Update"
     And I should see the following tiles in the correct order:
       | 20 year anniversary                   |
       | Searching for green pad.              |
@@ -190,7 +190,7 @@ Feature:
     And I press "Add and configure filter"
     And I fill in the 2nd "News" with "NEC VR4300 CPU" in the "Custom content listing" field
     And I check "Allow shared content"
-    And I press "Save"
+    And I press "Update"
     Then I should see the following tiles in the correct order:
       | 20 year anniversary                   |
       | Searching for green pad.              |
@@ -215,7 +215,7 @@ Feature:
     When I open the header local tasks menu
     And I click "Edit" in the "Entity actions" region
     And I uncheck "Allow shared content"
-    And I press "Save"
+    And I press "Update"
     Then I should see the following tiles in the correct order:
       | 20 year anniversary                   |
       | Searching for green pad.              |
@@ -241,7 +241,7 @@ Feature:
     And I select "Solution" from "Available filters"
     And I press "Add and configure filter"
     And I fill in "Solution" with "N64 cartridge cleaner"
-    And I press "Save"
+    And I press "Update"
     Then I should see the following tiles in the correct order:
       | Searching for green pad.        |
       | What's your favourite N64 game? |
@@ -253,7 +253,7 @@ Feature:
     And I open the header local tasks menu
     And I click "Edit" in the "Entity actions" region
     And I fill in "Query presets" with "entity_bundle|solution"
-    And I press "Save"
+    And I press "Update"
     Then I should see the following tiles in the correct order:
       | N64 cartridge cleaner |
 
@@ -349,7 +349,7 @@ Feature:
         entity_bundle|document
         keywords|"nintendo64 licences"
         """
-    When I press "Save"
+    When I press "Publish"
 
     Then I should see the "Licence" tile
     But I should not see the "User's Guide" tile
@@ -365,10 +365,10 @@ Feature:
     And I press "Publish"
     Then I should see the error message "Invalid query preset line added: wrongvalue."
     When I fill in "Query presets" with "unknown_field|news"
-    And I press "Save"
+    And I press "Publish"
     Then I should see the error message "Invalid search field specified: unknown_field."
     When I fill in "Query presets" with "entity_bundle|news|equal"
-    And I press "Save"
+    And I press "Publish"
     Then I should see the error message "Invalid operator specified: equal. Allowed operators are '=', '<>', 'IN', 'NOT IN'."
     # Verify that errors are reported when multiline values are added.
     When I fill in "Query presets" with:
@@ -376,7 +376,7 @@ Feature:
         entity_bundle|news
         unknown_field|test
         """
-    And I press "Save"
+    And I press "Publish"
     Then I should see the error message "Invalid search field specified: unknown_field."
 
   Scenario: Empty query presets and query builder field show a validation error.

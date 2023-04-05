@@ -85,7 +85,7 @@ Feature: "Add custom page" visibility options.
     And I fill in the 2nd "Description" field of the "Attachments" file field with "Alan"
     And I uncheck the 2nd "Display" checkbox of the "Attachments" file field
 
-    And I press "Publish"
+    And I press "Unpublish"
     Then I should see the heading "About us"
     And I should see the success message "Custom page About us has been created."
     And I should see the text "Attachments"
