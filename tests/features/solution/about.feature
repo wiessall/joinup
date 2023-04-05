@@ -372,7 +372,7 @@ Feature: About this solution
     And I click "Add custom page"
     And I fill in "Title" with "Some custom contact test"
     And I press the button "Contact us" in the "Body" wysiwyg editor
-    And I press "Save"
+    And I press "Publish"
     And I should see the heading "Some custom contact test"
 
     When I go to the edit form of the "Some custom contact test" "custom page"
