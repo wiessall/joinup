@@ -24,3 +24,8 @@ services:
     class: Drupal\custom_page\EventSubscriber\CustomPageWorkflowTransition
     tags:
       - { name: event_subscriber }
+  custom_page.custom_page_guard:
+    class: Drupal\custom_page\Guard\CustomPageGuard
+    arguments: ['@plugin.manager.workflow']
+    tags:
+      - { name: state_machine.guard, group: custom_page }
