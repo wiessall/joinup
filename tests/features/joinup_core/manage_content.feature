@@ -103,7 +103,7 @@ Feature:
     Then I should see "Proceeded updates to 2 entities"
 
     # Check published state.
-    Given I select "Published" from "State"
+    Given I select "validated" from "State"
     And I press "Apply"
     Then I should see the link "The Panama Papers"
     And I should see the link "The Ultimate Debate"
