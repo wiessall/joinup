@@ -262,6 +262,15 @@ module.exports = {
       },
     },
     {
+      entry: path.resolve(outputFolder, "src/scss/button-group.scss"),
+      dest: path.resolve(outputFolder, "assets/css/button-group.min.css"),
+      options: {
+        includePaths,
+        minify: true,
+        sourceMap: "file",
+      },
+    },
+    {
       entry: path.resolve(outputFolder, "src/scss/close.scss"),
       dest: path.resolve(outputFolder, "assets/css/close.min.css"),
       options: {
@@ -707,6 +716,7 @@ module.exports = {
           "calendar.svg",
           "calendar-event.svg",
           "card-list.svg",
+          "caret-down-fill.svg",
           "chat.svg",
           "chat-left-text.svg",
           "chat-square.svg",
