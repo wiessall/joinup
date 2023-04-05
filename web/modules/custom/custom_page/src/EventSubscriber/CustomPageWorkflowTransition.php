@@ -4,6 +4,7 @@ declare(strict_types = 1);
 
 namespace Drupal\custom_page\EventSubscriber;
 
+use Drupal\custom_page\Entity\CustomPageInterface;
 use Drupal\state_machine\Event\WorkflowTransitionEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
@@ -29,7 +30,7 @@ class CustomPageWorkflowTransition implements EventSubscriberInterface {
    */
   public function handleAction(WorkflowTransitionEvent $event): void {
     $entity = $event->getEntity();
-    if ($entity->bundle() !== 'custom_page') {
+    if (!$entity instanceof CustomPageInterface) {
       return;
     }
 

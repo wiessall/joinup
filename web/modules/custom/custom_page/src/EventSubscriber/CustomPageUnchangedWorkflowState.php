@@ -6,7 +6,7 @@ namespace Drupal\custom_page\EventSubscriber;
 
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
-use Drupal\custom_page\Entity\CustomPage;
+use Drupal\custom_page\Entity\CustomPageInterface;
 use Drupal\joinup_workflow\Event\UnchangedWorkflowStateUpdateEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
@@ -34,7 +34,7 @@ class CustomPageUnchangedWorkflowState implements EventSubscriberInterface {
    */
   public function onUnchangedWorkflowStateUpdate(UnchangedWorkflowStateUpdateEvent $event): void {
     $entity = $event->getEntity();
-    if (!$entity instanceof CustomPage) {
+    if (!$entity instanceof CustomPageInterface) {
       return;
     }
 

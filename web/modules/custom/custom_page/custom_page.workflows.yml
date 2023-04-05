@@ -1,6 +1,6 @@
 custom_page_workflow:
   id: custom_page_workflow
-  label: "Default"
+  label: 'Default'
   group: custom_page
   states:
     __new__:
