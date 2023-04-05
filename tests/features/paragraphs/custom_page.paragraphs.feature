@@ -16,7 +16,7 @@ Feature:
     And I open the plus button menu
     And I click "Add custom page"
     And I fill in "Title" with "Paragraphs page"
-    And I press "Save"
+    And I press "Publish"
     Then I should see the heading "Paragraphs page"
 
     When I open the header local tasks menu
@@ -70,7 +70,7 @@ Feature:
     But I should not see the button "Add IFrame"
 
     When I fill in "Body" with "I'm half Australian, half Mt. Everest"
-    And I press "Save"
+    And I press "Publish"
     Then I should see the success message "Custom page Don't Mess with the Zohan has been updated."
     And I should see "I'm half Australian, half Mt. Everest"
 
@@ -125,7 +125,7 @@ Feature:
     And I fill in the 2nd "Item label" with "Duper" in the "Custom page body" field
     And I enter "Crunchy text" in the 2nd "Body" wysiwyg editor in the "Custom page body" field
 
-    And I press "Save"
+    And I press "Publish"
     Then I should see the heading "Paragraphs accordion page"
     And I should see the text "Super"
     And I should see the text "Duper"
