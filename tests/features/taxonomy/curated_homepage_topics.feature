@@ -408,8 +408,8 @@ Feature:
 
   Scenario Outline: Images should be shown for tile-two view modes.
     Given <type> content:
-      | title       | headline    | short title | state     | logo       | published |
-      | Custom tile | Custom tile | Custom tile | validated | linus.jpeg | yes       |
+      | title       | headline    | short title | state   | logo       | published |
+      | Custom tile | Custom tile | Custom tile | <state> | linus.jpeg | yes       |
     And the following topics are enabled in the homepage:
       | E-justice |
     And I am logged in as a moderator
@@ -428,18 +428,18 @@ Feature:
     Then I <should> see the image "linus.jpeg" in the "Custom tile" tile
 
     Examples:
-      | type        | should     | list style |
-      | custom_page | should     | list       |
-      | custom_page | should     | grid       |
-      | news        | should     | list       |
-      | news        | should     | grid       |
-      | event       | should     | list       |
-      | event       | should     | grid       |
-      | document    | should     | list       |
-      | document    | should     | grid       |
+      | type        | should     | list style | state     |
+      | custom_page | should     | list       | published |
+      | custom_page | should     | grid       | published |
+      | news        | should     | list       | validated |
+      | news        | should     | grid       | validated |
+      | event       | should     | list       | validated |
+      | event       | should     | grid       | validated |
+      | document    | should     | list       | validated |
+      | document    | should     | grid       | validated |
       # Discussions don't have logos.
-      | discussion  | should not | list       |
-      | discussion  | should not | grid       |
+      | discussion  | should not | list       | validated |
+      | discussion  | should not | grid       | validated |
 
   Scenario: A configurable listing with no results should not print its title.
     Given news content:
