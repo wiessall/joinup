@@ -84,7 +84,7 @@ Feature:
     When I press "Add Map"
     # As the Webtools Map a webservice, we only test a fake JSON.
     And I fill in "JSON" with "{\"foo\":\"bar\"}"
-    And I press "Save"
+    And I press "Update"
     Then I should see the success message "Custom page Don't Mess with the Zohan has been updated."
     And I should see "I'm half Australian, half Mt. Everest"
     And the response should contain "{\"foo\":\"bar\"}"
@@ -92,7 +92,7 @@ Feature:
     When I go to the edit form of the "Don't Mess with the Zohan" "custom page"
     And I press "Add IFrame"
     And I fill in "Iframe URL" with "http://example.com"
-    And I press "Save"
+    And I press "Update"
     # We only test that the <iframe .../> element is in page. Unfortunately, we
     # cannot do precision RegExp search in page source, so we only check for the
     # existence of the iframe and its URL.
