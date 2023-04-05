@@ -76,7 +76,7 @@ Feature:
     And I should see the text "Display content shared from other communities."
     And I should see the text "Note: the content shown is dynamic, filtered live each time users will visualise the page. As a result, new content might be shown and old content can be altered or deleted."
 
-    When I press "Save"
+    When I press "Publish"
     Then I should see the heading "Latest content"
     And I should see the "Rare Nintendo64 disk drive discovered" tile
     And I should see the "20 year anniversary" tile
@@ -164,7 +164,7 @@ Feature:
     And I press "Add and configure filter"
     And I fill in "Event" with "20 year anniversary"
     Then I drag the table row in the "Content listing field filter form" region at position 4 up
-    And I press "Save"
+    And I press "Publish"
     Then I should see the heading "Chosen content"
     And I should see the following tiles in the correct order:
       | Searching for green pad.              |
@@ -293,7 +293,7 @@ Feature:
     And I select "News" from "Available filters"
     And I press "Add and configure filter"
     And I fill in "News" with "Rare Nintendo64 disk drive discovered"
-    And I press "Save"
+    And I press "Publish"
     Then I should see the heading "Collection content"
     # Verify that unwanted facets are not shown in the page.
     And I should see the following facet items "Discussion, Event, News" in this order
@@ -332,7 +332,7 @@ Feature:
         entity_bundle|document
         keywords|"nintendo64 manuals"
         """
-    When I press "Save"
+    When I press "Publish"
 
     Then I should see the "User's Guide" tile
     But I should not see the "Licence" tile
@@ -362,7 +362,7 @@ Feature:
     When I fill in "Title" with "Query presets validation"
     And I press "Add Content listing"
     And I fill in "Query presets" with "wrongvalue"
-    And I press "Save"
+    And I press "Publish"
     Then I should see the error message "Invalid query preset line added: wrongvalue."
     When I fill in "Query presets" with "unknown_field|news"
     And I press "Save"
@@ -386,7 +386,7 @@ Feature:
     Then I should see the heading "Add custom page"
     When I fill in "Title" with "Empty queries"
     And I press "Add Content listing"
-    And I press "Save"
+    And I press "Publish"
     Then I should see the error message "You need to add a filter in the Content listing block"
 
   @terms
@@ -404,7 +404,7 @@ Feature:
         entity_bundle|discussion,event,news|IN
         """
     And I check "Global search"
-    And I press "Save"
+    And I press "Publish"
     Then I should see the heading "All content"
     # All tiles are available.
     And I should see the following tiles in the correct order:
@@ -532,7 +532,7 @@ Feature:
 
     And I press latest "Add and configure filter"
     And I fill in the latest "Solution" field with "Fight battery mode"
-    Then I press "Save"
+    Then I press "Update"
     And I should see the heading "Bikes"
 
     When I go to the edit form of the "Bikes" "custom page"
