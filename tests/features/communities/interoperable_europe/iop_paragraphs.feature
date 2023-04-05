@@ -96,7 +96,7 @@ Feature:
         """
         entity_bundle|news
         """
-    When I press "Save"
+    When I press "Publish"
 
     # Ensure that listings are restricted only for group content by default.
     Then I should see the "Some news 1" tile
@@ -127,7 +127,7 @@ Feature:
     And I select "Custom page" from "Available filters"
     And I press "Add and configure filter"
     And I fill in "Custom page" with "Some page 1"
-    When I press "Save"
+    When I press "Publish"
 
     Then I should see the "Some page 1" tile
     But I should not see the "Some page 2" tile
