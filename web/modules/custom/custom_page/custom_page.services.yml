@@ -20,3 +20,7 @@ services:
     arguments: ['@entity_type.manager']
     tags:
       - { name: event_subscriber }
+  custom_page.workflow_transition:
+    class: Drupal\custom_page\EventSubscriber\CustomPageWorkflowTransition
+    tags:
+      - { name: event_subscriber }
