@@ -8,6 +8,7 @@
 declare(strict_types = 1);
 
 use Drupal\Core\Site\Settings;
+use Drupal\field\Entity\FieldStorageConfig;
 use Drupal\sparql_entity_storage\UriEncoder;
 use Drupal\user\Entity\User;
 
@@ -151,4 +152,68 @@ function joinup_core_update_109100(?array &$sandbox = NULL): string {
   }
 
   return "Processed {$sandbox['progress']} out of {$sandbox['total']} menu links";
+}
+
+/**
+ * Update existing field of type field_user_family_name, field_user_first_name.
+ */
+function joinup_core_update_109101(): void {
+  $num_chars = 100;
+  $fields_to_update = ['field_user_family_name', 'field_user_first_name'];
+
+  foreach ($fields_to_update as $field_name) {
+
+    // Resize the columns.
+    $database = \Drupal::database();
+    $database->query("ALTER TABLE user__{$field_name} MODIFY {$field_name}_value VARCHAR($num_chars)");
+
+    // Update storage schema.
+    $storage_key = "user.field_schema_data." . $field_name;
+    $storage_schema = \Drupal::keyValue('entity.storage_schema.sql');
+    $field_schema = $storage_schema->get($storage_key);
+    $field_schema["user__{$field_name}"]['fields']["{$field_name}_value"]['length'] = $num_chars;
+    $storage_schema->set($storage_key, $field_schema);
+
+    // Update field configuration.
+    $config = \Drupal::configFactory()
+      ->getEditable("field.storage.user.{$field_name}");
+    $config->set('settings.max_length', $num_chars);
+    $config->save(TRUE);
+
+    // Update field storage configuration.
+    FieldStorageConfig::loadByName('user', $field_name)->save();
+  }
+}
+
+/**
+ * Trim existing first and family names.
+ */
+function joinup_core_update_109102(?array &$sandbox = NULL): string {
+  if (!isset($sandbox['users'])) {
+    $storage = \Drupal::entityTypeManager()->getStorage('user');
+    $sandbox['users'] = $storage->loadMultiple();
+    $sandbox['count'] = 0;
+    $sandbox['total'] = count($sandbox['users']);
+  }
+
+  $users = array_splice($sandbox['users'], 0, 50);
+  foreach ($users as $user) {
+    $first_name = $user->get('field_user_family_name')->value;
+    if ($first_name && strlen($first_name) > 100) {
+      $user->set('field_user_family_name', substr($first_name, 0, 100));
+    }
+
+    $last_name = $user->get('field_user_first_name')->value;
+    if ($last_name && strlen($last_name) > 100) {
+      $user->set('field_user_first_name', substr($last_name, 0, 100));
+    }
+
+    if ($first_name && strlen($first_name) > 100 || $last_name && strlen($last_name) > 100) {
+      $user->save();
+    }
+    $sandbox['count']++;
+  }
+
+  $sandbox['#finished'] = $sandbox['count'] === $sandbox['total'];
+  return "Processed {$sandbox['count']} out of {$sandbox['total']} users";
 }
