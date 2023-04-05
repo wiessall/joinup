@@ -21,9 +21,9 @@ Feature: Archived content on content listings - groups and paragraphs.
     And I check "Enable the search field"
     And I press "Publish"
     Then I should see the heading "Some collection"
-    # By default, 'Show archived content' is set to 'all'.
-    And I should see the "Archived news" tile
+    # By default, 'Show archived content' is set to 'unarchived'.
     And I should see the "Published news" tile
+    But I should not see the "Archived news" tile
 
     When I go to the edit form of the "Some collection" collection
     And I select "Archived" from "Show archived content"
@@ -33,11 +33,11 @@ Feature: Archived content on content listings - groups and paragraphs.
     But I should not see the "Published news" tile
 
     When I go to the edit form of the "Some collection" collection
-    And I select "Unarchived" from "Show archived content"
+    And I select "All" from "Show archived content"
     And I press "Publish"
     Then I should see the heading "Some collection"
+    And I should see the "Archived news" tile
     And I should see the "Published news" tile
-    But I should not see the "Archived news" tile
 
   Scenario: Content listing paragraph can control visibility of archived items.
     When I am logged in as a moderator
@@ -48,9 +48,9 @@ Feature: Archived content on content listings - groups and paragraphs.
     And I fill in "Query presets" with "entity_bundle|news"
     And I press "Save"
     Then I should see the heading "Some page"
-    # By default, 'Show archived content' is set to 'all'.
-    And I should see the "Archived news" tile
+    # By default, 'Show archived content' is set to 'unarchived'.
     And I should see the "Published news" tile
+    But I should not see the "Archived news" tile
 
     When I go to the "Some page" custom page
     And I click "Edit"
@@ -62,11 +62,11 @@ Feature: Archived content on content listings - groups and paragraphs.
 
     When I go to the "Some page" custom page
     And I click "Edit"
-    And I select "Unarchived" from "Show archived content"
+    And I select "All" from "Show archived content"
     And I press "Save"
     Then I should see the heading "Some page"
+    And I should see the "Archived news" tile
     And I should see the "Published news" tile
-    But I should not see the "Archived news" tile
 
   Scenario: Carousel listings can also control archived items visibility.
     Given collection:
@@ -88,9 +88,9 @@ Feature: Archived content on content listings - groups and paragraphs.
     And I fill in "Query presets" with "entity_bundle|news"
     And I press "Save"
     Then I should see the heading "IOP page"
-    # By default, 'Show archived content' is set to 'all'.
-    And I should see the "IOP archived news" tile
+    # By default, 'Show archived content' is set to 'unarchived'.
     And I should see the "IOP published news" tile
+    But I should not see the "IOP archived news" tile
 
     When I go to the "IOP page" custom page
     And I click "Edit"
@@ -102,8 +102,8 @@ Feature: Archived content on content listings - groups and paragraphs.
 
     When I go to the "IOP page" custom page
     And I click "Edit"
-    And I select "Unarchived" from "Show archived content"
+    And I select "All" from "Show archived content"
     And I press "Save"
     Then I should see the heading "IOP page"
+    And I should see the "IOP archived news" tile
     And I should see the "IOP published news" tile
-    But I should not see the "IOP archived news" tile

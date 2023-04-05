@@ -171,7 +171,6 @@ class SearchWidget extends WidgetBase implements ContainerFactoryPluginInterface
     ];
 
     if (!empty($facets)) {
-
       $table = [
         '#type' => 'field_ui_table',
         '#header' => $this->getTableHeader(),
@@ -235,7 +234,7 @@ class SearchWidget extends WidgetBase implements ContainerFactoryPluginInterface
         'archived' => $this->t('Archived'),
         'unarchived' => $this->t('Unarchived'),
       ],
-      '#default_value' => $default_values['show_archived'] ?? 'all',
+      '#default_value' => $default_values['show_archived'] ?? 'unarchived',
       '#weight' => -12,
     ];
 
