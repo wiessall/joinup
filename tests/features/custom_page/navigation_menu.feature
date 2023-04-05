@@ -204,7 +204,7 @@ Feature: Navigation menu for custom pages
     When I click "Tree eaters"
     And I click "Edit" in the "Entity actions" region
     And I fill in "Title" with "An army of furry little killing machines"
-    And I press "Save"
+    And I press "Update"
     And I go to the homepage of the "Ravenous wood-munching alphabeavers" <group>
     Then I should see the link "An army of furry little killing machines" in the "Navigation menu"
     And I should not see the link "Tree eaters" in the "Navigation menu"

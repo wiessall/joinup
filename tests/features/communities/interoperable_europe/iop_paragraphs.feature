@@ -135,7 +135,7 @@ Feature:
 
     When I go to the edit form of the "Pages carousel" "custom page"
     And I fill in "Custom page" with "Some page 3"
-    And I press "Save"
+    And I press "Update"
 
     # Global search is not checked. No tiles should be shown.
     Then I should not see the "Some page 1" tile
