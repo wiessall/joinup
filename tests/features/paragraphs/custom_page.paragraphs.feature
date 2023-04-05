@@ -38,7 +38,7 @@ Feature:
     And I enter "BBBBBBBBBB" in the "Body" wysiwyg editor in the "Custom page body" field for paragraph 2
 
     And I drag the table row at position 2 up
-    And I press "Save"
+    And I press "Update"
     Then there should be 2 paragraphs in the page
     And I should see the following paragraphs in the given order:
       | BBBBBBBBBB |
@@ -70,7 +70,7 @@ Feature:
     But I should not see the button "Add IFrame"
 
     When I fill in "Body" with "I'm half Australian, half Mt. Everest"
-    And I press "Publish"
+    And I press "Update"
     Then I should see the success message "Custom page Don't Mess with the Zohan has been updated."
     And I should see "I'm half Australian, half Mt. Everest"
 

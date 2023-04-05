@@ -111,9 +111,9 @@ Feature: Tests the group landing page customization.
       | title          | state     |
       | Rally fanatics | validated |
     And "custom_page" content:
-      | title         | group          | body                      |
-      | Custom Page 1 | Rally fanatics | The custom page 1 content |
-      | Custom Page 2 | My own book    | The custom page 2 content |
+      | title         | group          | body                      | state     |
+      | Custom Page 1 | Rally fanatics | The custom page 1 content | published |
+      | Custom Page 2 | My own book    | The custom page 2 content | published |
     Given I am logged in as a moderator
     When I go to the homepage of the "Rally fanatics" collection
     And I click "Settings"
