@@ -788,6 +788,7 @@ class JoinupContext extends RawDrupalContext {
         'attachments' => 'field_attachment',
         'body' => 'field_paragraphs_body',
         'logo' => 'field_custom_page_logo',
+        'state' => 'field_state',
       ],
       'discussion' => [
         'attachments' => 'field_attachment',
