@@ -48,7 +48,7 @@ Feature:
         """
         entity_bundle|asset_distribution,asset_release,discussion,document,event,news|IN
         """
-    When I press "Save"
+    When I press "Publish"
 
     Then I should see the "Tile release | 0.1" tile
     And I should see the "Tile distro" tile
@@ -93,7 +93,7 @@ Feature:
         """
         entity_bundle|discussion,document,event,news|IN
         """
-    When I press "Save"
+    When I press "Publish"
 
     And I should see the "Tile news" tile
     And I should see the "Tile event" tile
