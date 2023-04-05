@@ -114,7 +114,7 @@ Feature:
     And I select "Archive content" from "Action"
     And I press "Apply to selected items"
     And I wait for the batch process to finish
-    Then I should see "HOWTOs can not not be processed: This content does not support workflow."
+    Then I should see "Proceeded updates to 1 entities"
 
     # Select rows.
     Given I select the "The Panama Papers" row
