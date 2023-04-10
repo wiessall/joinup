@@ -860,6 +860,7 @@ class FeatureContext extends RawDrupalContext {
   public function assertElementNotVisibleInRegion(string $locator, string $element, string $region): void {
     $region = $this->getRegion($region);
     $element = $this->findNamedElementInRegion($locator, $element, $region);
+    $this->scrollElementIntoView($element);
     $this->assertNotVisuallyVisible($element);
   }
 
@@ -884,6 +885,9 @@ class FeatureContext extends RawDrupalContext {
   public function assertElementVisibleInRegion(string $locator, string $element, string $region): void {
     $region = $this->getRegion($region);
     $element = $this->findNamedElementInRegion($locator, $element, $region);
+    if (!$element->getParent()->getParent()->hasClass('contextual-links')) {
+      $this->scrollElementIntoView($element);
+    }
     $this->assertVisuallyVisible($element);
   }
 
@@ -2152,6 +2156,7 @@ class FeatureContext extends RawDrupalContext {
     if ($files) {
       $file_storage = \Drupal::entityTypeManager()->getStorage('file');
       $fids = $file_storage->getQuery()
+        ->accessCheck(FALSE)
         ->condition('filename', $files, 'IN')
         ->execute();
       if ($fids) {
@@ -2382,6 +2387,38 @@ class FeatureContext extends RawDrupalContext {
    */
   public function givenLinkHasAttribute(string $link_text, string $attribute_name, string $attribute_value): void {
     Assert::assertNotNull($this->getSession()->getPage()->find('xpath', "//a[@$attribute_name='$attribute_value' and text()='$link_text']"));
+  }
+
+  /**
+   * Asserts that an element has an empty attribute in the specific region.
+   *
+   * @param string $tag
+   *   Tag name.
+   * @param string $atr
+   *   Attribute name.
+   * @param string $region
+   *   Region name.
+   *
+   * @Then I( should) see the :tag element with empty :atr attribute in the :region( region)
+   */
+  public function assertRegionElementEmptyAttribute(string $tag, string $atr, string $region): void {
+    $region_container = $this->getRegion($region);
+    $elements = $region_container->findAll('css', $tag);
+    if (empty($elements)) {
+      throw new \Exception(sprintf('The element "%s" was not found in the "%s" region on the page %s', $tag, $region, $this->getSession()
+        ->getCurrentUrl()));
+    }
+    $found = FALSE;
+    foreach ($elements as $element) {
+      if ($element->hasAttribute($atr) && empty($element->getAttribute($atr))) {
+        $found = TRUE;
+        break;
+      }
+    }
+    if (!$found) {
+      throw new \Exception(sprintf('The "%s" attribute is not present on the element "%s" in the "%s" region on the page %s', $atr, $tag, $region, $this->getSession()
+        ->getCurrentUrl()));
+    }
   }
 
   /**

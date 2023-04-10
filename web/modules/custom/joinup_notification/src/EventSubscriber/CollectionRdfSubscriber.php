@@ -431,6 +431,7 @@ class CollectionRdfSubscriber extends NotificationSubscriberBase {
     // Count collections that are not archived and are affiliated to the
     // solution.
     $collection_count = $this->entityTypeManager->getStorage('rdf_entity')->getQuery()
+      ->accessCheck(FALSE)
       ->condition('rid', 'collection')
       ->condition('field_ar_affiliates', $solution->id())
       ->condition('field_ar_state', 'archived', '!=')

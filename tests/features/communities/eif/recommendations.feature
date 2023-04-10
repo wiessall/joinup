@@ -37,7 +37,7 @@ Feature:
   Scenario: The recommendations categories are properly sorted.
     Given I am not logged in
     And I go to the "EIF Toolbox" solution
-    When I click "Recommendations" in the "Left sidebar" region
+    When I click "Recommendations" in the "Header bottom" region
     Then I should see the link "All"
     And I should see the primary horizontal tabs:
       | link                   | active |
@@ -49,7 +49,7 @@ Feature:
   Scenario: The recommendations page lists the recommendations links.
     Given I am not logged in
     And I go to the "EIF Toolbox" solution
-    When I click "Recommendations" in the "Left sidebar" region
+    When I click "Recommendations" in the "Header bottom" region
     Then I should see the heading "EIF recommendations"
 
     # Assert the full table.
@@ -157,7 +157,7 @@ Feature:
   Scenario: Recommendations overview and each recommendation should show the EIF Toolbox header
     Given I am not logged in
     And I go to the "EIF Toolbox" solution
-    When I click "Recommendations" in the "Left sidebar" region
+    When I click "Recommendations" in the "Header bottom" region
     Then I should see the heading "EIF Toolbox"
 
     When I click "Recommendation 1"
@@ -165,10 +165,8 @@ Feature:
     # Ensure that the identifier field is hidden.
     And I should not see the text "Identifier"
 
-  @javascript
   Scenario: Searching for anything, will not return eif recommendations as results.
     Given I am not logged in
     And I am on the homepage
-    And I open the search bar by clicking on the search icon
     And I enter "Underlying Principle 4" in the search bar and press enter
     Then I should not see the text "Underlying Principle" in the "Content" region

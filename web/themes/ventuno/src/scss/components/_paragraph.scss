@@ -1,0 +1,57 @@
+.paragraph,
+.fieldset--textarea {
+  img {
+    margin-bottom: $spacer;
+    max-width: 100%;
+    height: auto;
+    &.align-left {
+      @include media-breakpoint-up(sm) {
+        float: left;
+        margin-right: $spacer * 1.25;
+      }
+    }
+
+    &.align-right {
+      @include media-breakpoint-up(sm) {
+        float: right;
+        margin-left: $spacer * 1.25;
+      }
+    }
+  }
+
+  table {
+    @include media-breakpoint-up(md) {
+      table-layout: fixed;
+    }
+
+    td {
+      vertical-align: top;
+      min-width: 100px;
+    }
+  }
+
+  figure {
+    figcaption {
+      font-size: $font-size-sm;
+    }
+  }
+
+  blockquote {
+    border-left: $spacer * 1.25 solid $brand;
+    padding: $spacer * 1.5 0 $spacer * 1.5 $spacer * 1.5;
+    margin-right: 0;
+    margin-left: 0;
+    @include media-breakpoint-up(md) {
+      margin-left: 100px;
+    }
+  }
+
+  h1,
+  h2:not(.accordion-header),
+  h3,
+  h4,
+  h5,
+  h6 {
+    margin-top: 1em;
+  }
+}

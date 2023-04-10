@@ -6,6 +6,7 @@ dependencies:
     - facets.facet.solution_my_content
   module:
     - facets
+    - system
   theme:
     - ventuno
 _core:
@@ -13,7 +14,7 @@ _core:
 id: ventuno_mycontentsolution
 theme: ventuno
 region: sidebar
-weight: -15
+weight: -16
 provider: null
 plugin: 'facet_block:solution_my_content'
 settings:
@@ -21,5 +22,10 @@ settings:
   label: 'Solutions - My content'
   label_display: '0'
   provider: facets
-  block_id: mycontentsolution
-visibility: {  }
+  context_mapping: {  }
+  block_id: ventuno_mycontentsolution
+visibility:
+  request_path:
+    id: request_path
+    negate: false
+    pages: /solutions

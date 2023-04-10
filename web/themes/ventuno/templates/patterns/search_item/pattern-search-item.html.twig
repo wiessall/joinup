@@ -18,7 +18,7 @@
   {% set _text = text|default('') %}
   {% set _metadata = metadata|default('') %}
 
-  <div class="border-0 border-bottom pb-3 mb-3 card">
+  <article class="border-0 border-bottom pb-3 mb-3 card">
     {%- if _badges is not empty and _badges is iterable -%}
       <div class="card-header border-0 bg-transparent p-0">
         {% for _badge in _badges %}
@@ -27,9 +27,9 @@
       </div>
     {%- endif -%}
     <div class="card-body p-0">
-      <h2 class="card-title">
+      <h1 class="card-title">
         {{ title }}
-      </h2>
+      </h1>
       <p class="card-text">
         {{ text }}
       </p>
@@ -37,5 +37,5 @@
         {{ metadata }}
       </p>
     </div>
-  </div>
+  </article>
 {% endapply %}

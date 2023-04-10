@@ -347,7 +347,7 @@ Feature:
   # This scenario and the previous are checking the same things, but this one
   # runs with JS so that we can check the frontend implementation.
   @terms @eupl @javascript
-  Scenario: Get information about how a project can be redistributed under another licence
+  Scenario: Get information about how a project can be redistributed under another licence (JS)
     Given SPDX licences:
       | uri                            | title    | ID       |
       | http://joinup.eu/spdx/CECILL-C | CECILL-C | CECILL-C |
@@ -442,6 +442,7 @@ Feature:
     # thin strips which don't have enough room for contextual links.
     Given I am logged in as a moderator
     When I visit the "JLC" custom page
+    And I should not see the link "Report abusive content"
     Then I should not see any contextual links in the "Content" region
 
     # Authenticated users should also be able to see the licence compatibility

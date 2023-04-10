@@ -92,7 +92,7 @@ Feature: Global search
 
     # Launch a text search.
     When I click "Clear filters"
-    Then I open the search bar by clicking on the search icon
+    Then I focus on the search input
     And I enter "Cooking" in the search bar and press enter
     Then I should see the "Molecular cooking collection" tile
     And I should see the "Foam" tile

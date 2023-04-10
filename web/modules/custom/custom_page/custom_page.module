@@ -12,6 +12,7 @@ use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Field\FieldItemListInterface;
+use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\custom_page\Entity\CustomPage;
 use Drupal\custom_page\Entity\CustomPageInterface;
@@ -51,6 +52,9 @@ function custom_page_entity_bundle_field_info_alter(&$fields, EntityTypeInterfac
         'groupAudienceField' => 'og_audience',
       ]);
     }
+    if (!empty($fields['status'])) {
+      $fields['status']->addConstraint('CustomPageUnpublishedConstraint');
+    }
   }
 }
 
@@ -72,6 +76,7 @@ function custom_page_node_insert(EntityInterface $entity) {
   // reindex the parent group so that the new custom page is included.
   // @see \Drupal\custom_page\Plugin\search_api\processor\IncludeCustomPageContent
   // @todo This is mistakenly acting on all content, not just on custom pages.
+  // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7129
   $parent = $entity->og_audience->entity;
   if (!empty($parent)) {
     /** @var \Drupal\search_api\Plugin\search_api\datasource\ContentEntityTrackingManager $content_tracking_manager */
@@ -246,4 +251,42 @@ function custom_page_entity_field_access($operation, FieldDefinitionInterface $f
     && $field_definition->getName() === 'status'
     && $field_definition->getTargetEntityTypeId() === 'node'
     && $field_definition->getTargetBundle() === 'custom_page');
+}
+
+/**
+ * Implements hook_entity_presave().
+ */
+function custom_page_node_presave(NodeInterface $entity): void {
+  if (!$entity instanceof CustomPageInterface) {
+    return;
+  }
+  if (!$entity->isPublished() && $entity->isGroupLandingPage()) {
+    throw new Exception("This page acts as landing page for the {$entity->getGroup()->get('rid')->entity->getSingularLabel()}. In order to unpublished it should be first unset as landing page.");
+  }
+}
+
+/**
+ * Implements hook_entity_predelete().
+ */
+function custom_page_node_predelete(NodeInterface $entity): void {
+  if (!$entity instanceof CustomPageInterface) {
+    return;
+  }
+  if ($entity->isGroupLandingPage()) {
+    throw new Exception("This page acts as landing page for the {$entity->getGroup()->get('rid')->entity->getSingularLabel()}. In order to delete it should be first unset as landing page.");
+  }
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function custom_page_form_node_custom_page_delete_form_alter(array &$form, FormStateInterface $form_state, string $form_id): void {
+  $entity = $form_state->getFormObject()->getEntity();
+  if ($entity->isGroupLandingPage()) {
+    $form['#title'] = t('You can not delete this landing page!');
+    $form['description'] = [
+      '#markup' => t('This page acts as landing page for the @group. In order to delete it should be first unset as landing page.', ['@group' => $entity->getGroup()->get('rid')->entity->getSingularLabel()]),
+    ];
+    $form['actions']['submit']['#access'] = FALSE;
+  }
 }

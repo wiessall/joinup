@@ -4,6 +4,7 @@ declare(strict_types = 1);
 
 namespace Drupal\contact_information\Traits;
 
+use Drupal\contact_information\ContactInformationEmailConfirmInterface;
 use Drupal\joinup_group\Entity\GroupInterface;
 
 /**
@@ -26,8 +27,7 @@ trait ContactInformationTrait {
     /** @var \Drupal\email_confirmer\EmailConfirmerManagerInterface $email_confirmer */
     $email_confirmer = \Drupal::service('email_confirmer');
     foreach ($contacts as $contact) {
-      $confirmation = $email_confirmer->getConfirmation($contact->get('field_ci_email')->value);
-      if ($confirmation && $confirmation->isConfirmed()) {
+      if ($email_confirmer->getConfirmation($contact->get('field_ci_email')->value, 'confirmed', ContactInformationEmailConfirmInterface::REALM)) {
         $emails[] = $contact->get('field_ci_email')->value;
       }
     }

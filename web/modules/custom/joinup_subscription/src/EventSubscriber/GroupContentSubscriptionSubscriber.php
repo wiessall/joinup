@@ -173,6 +173,7 @@ class GroupContentSubscriptionSubscriber implements EventSubscriberInterface {
     $membership_storage = $this->entityTypeManager->getStorage('og_membership');
     $membership_ids = $membership_storage
       ->getQuery()
+      ->accessCheck(FALSE)
       ->condition('entity_type', 'rdf_entity')
       ->condition('entity_id', $entity->getGroupId())
       ->condition('state', OgMembershipInterface::STATE_ACTIVE)
@@ -257,6 +258,7 @@ class GroupContentSubscriptionSubscriber implements EventSubscriberInterface {
     $definition = $this->entityTypeManager->getDefinition($entity_type);
 
     $revision_ids = $storage->getQuery()
+      ->accessCheck(FALSE)
       ->allRevisions()
       ->condition($definition->getKey('id'), $entity->id())
       ->condition($definition->getKey('published'), 1)

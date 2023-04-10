@@ -424,10 +424,10 @@ Feature:
       | Content     | A new movie is coming out. |
     And I select "Statistics and Analysis" from "Topic"
     And I press "Publish"
-    Then I should see the heading "Current wars"
+    Then I should see the text "Current wars"
 
     When I go to the homepage of the "Nintendo64" collection
-    And I click "All content" in the "Left sidebar" region
+    And I click "All content" in the "Header bottom" region
     And I should see the following tiles in the correct order:
       | Current wars                          |
       | Searching for green pad.              |
@@ -439,10 +439,10 @@ Feature:
     When I go to the edit form of the "Current wars" news
     And I fill in "Short title" with "Current wars is over"
     And I press "Update"
-    Then I should see the heading "Current wars is over"
+    Then I should see the text "Current wars is over"
 
     When I go to the homepage of the "Nintendo64" collection
-    And I click "All content" in the "Left sidebar" region
+    And I click "All content" in the "Header bottom" region
     And I should see the following tiles in the correct order:
       | Current wars is over                  |
       | Searching for green pad.              |

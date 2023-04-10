@@ -92,7 +92,7 @@ Feature: Subscribing to collection newsletters
     When I go to the "Volkor X" collection
     And I open the header local tasks menu
     And I click "Edit" in the "Entity actions" region
-    Then I expand the "Additional fields" accordion section
+    Then I press "Additional fields"
     And I check "Enable newsletter subscriptions"
     And I fill in "Universe acronym" with "volkor-x"
     And I fill in "Newsletter service ID" with "123"

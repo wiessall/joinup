@@ -12,6 +12,7 @@
         "ext-simplexml": "*",
         "composer/installers": "^2",
         "cweagans/composer-patches": "^1.7",
+        "drupal/addtocal": "^2.0@beta",
         "drupal/allowed_formats": "^1.3",
         "drupal/antibot": "^1.4",
         "drupal/auditfiles": "^4.0",
@@ -89,6 +90,7 @@
         "drupal/social_media_links": "^2.7",
         "drupal/state_machine": "^1.0",
         "drupal/subpathauto": "^1.2",
+        "drupal/svg_image": "^3.0",
         "drupal/swiftmailer": "^2.2",
         "drupal/theme_rule": "^1.0",
         "drupal/token": "~1.7",
@@ -121,7 +123,7 @@
         "ext-libxml": "*",
         "drupal/admin_toolbar": "~2.4",
         "drupal/cas_mock_server": "^1.3",
-        "drupal/coder": "^8.3.11",
+        "drupal/coder": "*",
         "drupal/composer_deploy": "^1.6",
         "drupal/config_update": "^1.7",
         "drupal/devel": "5.0.2",
@@ -130,7 +132,8 @@
         "drupal/renderviz": "^1.0",
         "drupal/upgrade_status": "^3.14",
         "drupaltest/behat-one-time-login": "^1.0",
-        "ec-europa/toolkit": "~9.0.0",
+        "ec-europa/toolkit": "^9.7",
+        "openeuropa/task-runner": "^2.0",
         "lovers-of-behat/table-extension": "^1.3",
         "mikey179/vfsstream": "~1.6",
         "palantirnet/drupal-rector": "^0.12.2",
@@ -207,11 +210,10 @@
     },
     "scripts": {
         "post-install-cmd": [
-            "composer validate --no-check-all --no-check-publish",
-            "./scripts/composer/composer.php install"
+            "./scripts/composer/post_install"
         ],
         "post-update-cmd": [
-            "./scripts/composer/composer.php update"
+            "./scripts/composer/post_update"
         ]
     },
     "extra": {
@@ -286,6 +288,9 @@
             "drupal/email_confirmer": {
                 "Support for HTML mails @see https://www.drupal.org/i/3047124": "https://git.drupalcode.org/project/email_confirmer/-/merge_requests/3.diff"
             },
+            "drupal/email_contact": {
+                "Move form creation in a protected method from ContactController::content() to ContactController::getForm(). https://www.drupal.org/project/email_contact/issues/3346470": "https://git.drupalcode.org/project/email_contact/-/merge_requests/12.diff"
+            },
             "drupal/drupal-driver": {
                 "Allow multi-property references. @see https://github.com/jhedstrom/DrupalDriver/pull/252": "https://patch-diff.githubusercontent.com/raw/jhedstrom/DrupalDriver/pull/252.diff"
             },
@@ -298,6 +303,11 @@
             "drupal/facets": {
                 "Facet Summary for Facet Items with a set dependency. @see https://www.drupal.org/i/2873480": "https://git.drupalcode.org/project/facets/-/merge_requests/128.diff",
                 "Add 0 option in 'Soft limit' and apply soft limit to facet root li tags and add. @see https://www.drupal.org/i/3208580 and https://www.drupal.org/i/3307082": "resources/patch/facets-3208580-and-3307082-3x.patch"
+            },
+            "drupal/field_delimiter": {
+                "Doesn't work in layout builder. @see https://www.drupal.org/i/3099580": "https://www.drupal.org/files/issues/2020-04-08/field_delimiter-3099580-7.patch",
+                "str_replace(): Passing null to parameter #3 ($subject) of type array|string is deprecated in Drupal\\Component\\Utility\\Xss::filter(). @see https://www.drupal.org/i/3301169": "https://www.drupal.org/files/issues/2022-10-13/field_delimiter-3301169-fix-php-8.1-warning-9.patch",
+                "Automated Drupal 10 compatibility fixes @see https://www.drupal.org/i/3287503": "https://www.drupal.org/files/issues/2022-06-15/field_delimiter.1.x-dev.rector.patch"
             },
             "drupal/file_url": {
                 "Handle deleted files": "resources/patch/file_url.diff",
@@ -345,9 +355,6 @@
                 "Missing plugins config schema @see https://www.drupal.org/project/search_api_spellcheck/issues/3277693": "https://git.drupalcode.org/project/search_api_spellcheck/-/merge_requests/1.diff",
                 "URL don't include the base path @see https://www.drupal.org/project/search_api_spellcheck/issues/3280372" : "https://git.drupalcode.org/project/search_api_spellcheck/-/merge_requests/2.diff"
             },
-            "drupal/site_alert": {
-                "Add drush commands @see https://www.drupal.org/project/site_alert/issues/3118800": "https://www.drupal.org/files/issues/2020-10-26/3118800-44.patch"
-            },
             "drupal/smart_trim": {
                 "Avoid max nesting level during development @see https://www.drupal.org/project/smart_trim/issues/3013628": "https://www.drupal.org/files/issues/2020-05-28/maximum_function_nesting-3013628-D8-7.patch"
             },
@@ -355,8 +362,8 @@
                 "Missing config schema for field, widget and formatter @see https://www.drupal.org/node/2898680": "https://git.drupalcode.org/project/social_media_links/-/merge_requests/4.diff",
                 "Mastodon should not have a fixed URL prefix. @see https://www.drupal.org/project/social_media_links/issues/3319694": "https://git.drupalcode.org/project/social_media_links/-/merge_requests/28.diff"
             },
-            "drupal/subpathauto": {
-                "Subpaths with redirect not resolved @see https://www.drupal.org/project/subpathauto/issues/3175637": "resources/patch/drupal/subpathauto/3175637.diff"
+            "drupal/svg_image": {
+                "SVG is not valid or cannot be sanitized, return an error. @see https://www.drupal.org/i/3350696": "https://git.drupalcode.org/project/svg_image/-/merge_requests/20.patch"
             },
             "drupal/swiftmailer": {
                 "Add spooling for increased performance @see https://www.drupal.org/project/swiftmailer/issues/3000553": "https://git.drupalcode.org/project/swiftmailer/-/merge_requests/8.diff"
@@ -370,10 +377,6 @@
             },
             "drupal/views_autosubmit": {
                 "Stop auto submitting first character entered in an Autocomplete Filter field. @see https://www.drupal.org/project/views_autosubmit/issues/3160600" : "https://www.drupal.org/files/issues/2021-09-06/3160600_views_autosubmit_16.patch"
-            },
-            "openeuropa/oe_webtools": {
-                "Allow to pass an optional referer. @see https://github.com/openeuropa/oe_webtools/pull/96": "https://patch-diff.githubusercontent.com/raw/openeuropa/oe_webtools/pull/96.diff",
-                "Place the webtools loader on the head. @see https://github.com/openeuropa/oe_webtools/pull/102": "https://patch-diff.githubusercontent.com/raw/openeuropa/oe_webtools/pull/102.diff"
             },
             "sweetrdf/easyrdf": {
                 "Ntriples performance @see https://github.com/sweetrdf/easyrdf/pull/25": "https://patch-diff.githubusercontent.com/raw/sweetrdf/easyrdf/pull/25.diff"
@@ -393,6 +396,12 @@
                     "type": "zip"
                 }
             }
+        },
+        "phpstan": {
+            "includes": [
+                "vendor/mglaman/phpstan-drupal/extension.neon",
+                "vendor/phpstan/phpstan-deprecation-rules/rules.neon"
+            ]
         }
     },
     "repositories": [
