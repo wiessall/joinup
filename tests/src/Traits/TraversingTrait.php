@@ -445,6 +445,7 @@ trait TraversingTrait {
    * @throws \Exception
    *   Thrown when the date range field is not found.
    */
+
   protected function findMaterialDesignDateRangeComponent(string $field, string $component, ?string $date = NULL): NodeElement {
     /** @var \Behat\Mink\Element\NodeElement $fieldset */
     $fieldset = $this->getSession()->getPage()->find(
