@@ -954,6 +954,13 @@ class JoinupContext extends RawDrupalContext {
    * @When I fill the :date :component of the :field widget with :value
    */
   public function fillDateRangeField($field, $component, $value, $date = NULL) {
+    // @todo Remove the if (...) block in ISAICP-7138.
+    // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7138
+    if ($this->usesMaterialDesignLite()) {
+      $element = $this->findMaterialDesignDateRangeComponent($field, $component, $date);
+      $element->setValue($value);
+      return;
+    }
     $element = $this->findDateRangeComponent($field, $component, $date);
     $element->setValue($value);
   }
