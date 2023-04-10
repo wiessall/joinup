@@ -6,7 +6,7 @@
 .joinup-nodrag {
   a.tabledrag-handle,
   .field-multiple-drag {
-    display: none !important;
+    display: none;
   }
   .table {
     td.field-multiple-drag {
@@ -19,13 +19,19 @@
   }
 }
 .draggable {
+  .field-multiple-drag {
+    width: 45px;
+    padding-right: 0;
+  }
   a.tabledrag-handle {
     margin-left: 0;
+    width: $spacer * 2;
+    height: $spacer * 2;
     .handle {
-      width: $spacer * 2!important;
-      height: $spacer * 2!important;
-      padding: 0!important;
-      margin: 0!important;
+      width: $spacer * 2;
+      height: $spacer * 2;
+      padding: 0;
+      margin: 0;
     }
   }
 }
