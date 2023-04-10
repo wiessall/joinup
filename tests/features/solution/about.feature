@@ -118,7 +118,7 @@ Feature: About this solution
     # A related solution which is not yet approved should not be visible.
     And I should not see the text "Protein"
 
-  @terms @javascript @email
+  @terms @javascript @email @uploadFiles:logo.png
   Scenario: About page contact form
     Given owner:
       | name      | type               |
@@ -178,16 +178,16 @@ Feature: About this solution
     When I click "Contact us" in the "Content" region
     Then a modal should open
     And I should see the text "Contact us" in the "Modal title" region
-    And I should see "Only signed in users can send a message. Please sign in or register an account on EU Login." in the "Modal content" region
+    And I should see the text "Only signed in users can send a message. Please sign in or register an account on EU Login."
 
     When I press "Cancel" in the "Modal buttons" region
     Then the modal should be closed
-    And I should not see "Only signed in users can send a message. Please sign in or register an account on EU Login."
+    And I should not see "Only signed in users can send a message. Please sign in or register an account on EU Login." in the "Content" region
 
     When I click "Contact us" in the "Content" region
     Then a modal should open
     And I should see the text "Contact us" in the "Modal title" region
-    And I should see "Only signed in users can send a message. Please sign in or register an account on EU Login." in the "Modal content" region
+    And I should see the text "Only signed in users can send a message. Please sign in or register an account on EU Login."
 
     When I press "Sign in / Register" in the "Modal buttons" region
     Then the modal should be closed
@@ -208,6 +208,9 @@ Feature: About this solution
     Then I should see the error message "You must enter a valid e-mail address."
 
     When I fill in "Your e-mail address" with "example@test.test"
+    And I fill in "Organization" with "My organization"
+    And I select "Technical" from "Type of support"
+    And I attach the file "logo.png" to "Attachment"
     When I press "Send e-mail" in the "Modal buttons" region
     Then the modal should be closed
     And I should see the success message "Your message has been sent."
@@ -215,8 +218,11 @@ Feature: About this solution
     And I should see the heading "About Six exclusion advantages"
     And the email sent to "invisible.cat@xpto.com" with subject "New reclamation about Owner" contains the text:
       | Name: Jonny Example                |
+      | Organization: My organization      |
       | Email: example@test.test           |
+      | Type of support: Technical         |
       | Message: This is reclamation test. |
+    And the email sent to "invisible.cat@xpto.com" with subject "New reclamation about Owner" contains "logo.png" attachment
 
     Given I am logged in as "Pally Rapamichael"
     When I go to the about page of "Six exclusion advantages"
@@ -229,7 +235,8 @@ Feature: About this solution
 
     When I fill in "Subject" with "New reclamation about solution"
     And I fill in "Message" with "This is solution reclamation test."
-
+    And I fill in "Organization" with "This is organization."
+    And I select "Feedback/Suggestions" from "Type of support"
     When I press "Send e-mail" in the "Modal buttons" region
     Then the modal should be closed
     And I should see the success message "Your message has been sent."
@@ -238,6 +245,8 @@ Feature: About this solution
     And the email sent to "invisible.cat@xpto.com" with subject "New reclamation about solution" contains the text:
       | Name: Pally Rapamichael                     |
       | Email: p.papamichael@pally.de               |
+      | Organization: This is organization.         |
+      | Type of support: Feedback/Suggestions       |
       | Message: This is solution reclamation test. |
 
     Given I am logged in as a moderator
@@ -330,12 +339,13 @@ Feature: About this solution
     Then I should see the heading "Contact us"
     Then I fill in "Your name" with "Lina Example"
     And I fill in "Your e-mail address" with "linak@example.pt"
+    And I select "Other" from "Type of support"
     And I fill in "Subject" with "New reclamation about Owner"
     And I fill in "Message" with "This is reclamation test."
     When I press "Send e-mail"
     And I should see the success message "Your message has been sent."
-    Then I should see the heading "Some contact test"
-    And I should be on "/collection/antibody-development/solution/six-exclusion-advantages/news/some-contact-test"
+    Then I should see the heading "About Six exclusion advantages"
+    And I should be on "/collection/antibody-development/solution/six-exclusion-advantages/about"
 
     When I am an anonymous user
     Then I go to the "Some contact test" news
@@ -348,11 +358,37 @@ Feature: About this solution
     And I should see the heading "Contact us"
     Then I fill in "Your name" with "V Example"
     And I fill in "Your e-mail address" with "vnak@example.pt"
+    And I select "Informational" from "Type of support"
     And I fill in "Subject" with "v2 New reclamation about Owner"
     And I fill in "Message" with "This is v2 reclamation test."
     When I press "Send e-mail"
     Then I should see the success message "Your message has been sent."
-    And I should see the heading "Some contact test"
+    And I should see the heading "About Six exclusion advantages"
+
+    # Testing add contact us in existing content.
+    Given I am logged in as a moderator
+    When I go to the about page of "Six exclusion advantages"
+    Then I open the plus button menu
+    And I click "Add custom page"
+    And I fill in "Title" with "Some custom contact test"
+    And I press the button "Contact us" in the "Body" wysiwyg editor
+    And I press "Save"
+    And I should see the heading "Some custom contact test"
+
+    When I go to the edit form of the "Some custom contact test" "custom page"
+    Then I should see the button "Contact us"
+
+    Then I go to the about page of "Six exclusion advantages"
+    Then I open the plus button menu
+    And I click "Add discussion"
+    And I fill in "Title" with "Some discussion contact test"
+    And I press the button "Contact us" in the "Content" wysiwyg editor
+    And I select "Statistics and Analysis" from "Topic"
+    And I press "Publish"
+    And I should see the heading "Some discussion contact test"
+
+    When I go to the edit form of the "Some discussion contact test" discussion
+    Then I should see the button "Contact us"
 
     # These contact information have been created via UI.
     But I delete the "Invisible Cat" contact information

@@ -1,0 +1,102 @@
+{#
+/**
+ * @file
+ * Tile pattern.
+ */
+#}
+{% apply spaceless %}
+
+  {# Parameters:
+    - attributes (object) (default: {}})
+    - featured (boolean) (default: false)
+    - image (object) (default: {})
+    - url (string) (default: '')
+    - title_prefix ()
+    - title (string) (default: '')
+    - title_suffix ()
+    - text (string) (default: '')
+    - subtext (string) (default: '')
+    - metadata (array of objects) (default: [])
+  #}
+
+  {% set _attributes = attributes|default({}) %}
+  {% set _featured = featured|default(false) %}
+  {% set _image = image|default({}) %}
+  {% set _url = url|default('') %}
+  {% set _title_prefix = title_prefix|default('') %}
+  {% set _title = title|default('') %}
+  {% set _title_suffix = title_suffix|default('') %}
+  {% set _text = text|default('') %}
+  {% set _footer = footer|default('') %}
+  {% set _subtext = subtext|default('') %}
+  {% set _metadata = metadata|default([]) %}
+
+  {% if _attributes is empty %}
+    {% set _attributes = create_attribute() %}
+  {% endif %}
+  {% set _classes = [
+    'card',
+    'card--tile',
+    'h-100',
+    'mb-3',
+    _featured ? 'bg-secondary',
+  ] %}
+  {% if _image is empty %}
+    {% set _image %}
+      <svg class="bi py-2 img-fluid{{ _featured ? ' text-primary' : ' text-secondary' }}"><use xlink:href="{{ bcl_icon_path }}#{{ _metadata|last.icon }}"></use></svg>
+    {% endset %}
+  {% endif %}
+
+  {{ attach_library('ventuno/card') }}
+  <div class="col">
+    <article{{ _attributes.addClass(_classes) }}>
+      {% if _text|trim is empty %}
+        <div class="card-header border-0 bg-transparent p-0">
+          <figure class="mb-0">
+            {{ _image }}
+          </figure>
+        </div>
+      {% endif %}
+      <div class="card-body">
+        {{ _title_prefix }}
+        <h1 class="card-title fs-6">
+          {% if _url is not empty %}
+            <a class="text-primary" href="{{ _url }}">
+              {{ _title }}
+            </a>
+          {% else %}
+            {{ _title }}
+          {% endif %}
+        </h1>
+        {{ _title_suffix }}
+        {% if _text is not empty %}
+          <div class="card-text">
+            {{ _text }}
+          </div>
+        {% endif %}
+        {% if _subtext is not empty %}
+          <div class="mt-2 fs-sm">
+            {{ _subtext }}
+          </div>
+        {% endif %}
+      </div>
+      <div class="card-footer border-0 bg-transparent">
+        {{ _footer }}
+        <div data-joinup-card-stats class="mt-3 fs-xs text-muted d-flex align-items-center justify-content-end">
+          {% for data in metadata %}
+            <span class="d-flex align-items-center{% if not loop.first %} ms-3{% endif %}">
+              {% if data.label is defined and data.label is not empty %}
+                {{ data.label }}
+              {% endif %}
+              {% if data.icon is defined and data.icon is not empty %}
+                <svg class="bi icon--fluid ms-1">
+                  <use xlink:href="{{ bcl_icon_path }}#{{ data.icon }}"></use>
+                </svg>
+              {% endif %}
+            </span>
+          {% endfor %}
+        </div>
+      </div>
+    </article>
+  </div>
+{% endapply %}

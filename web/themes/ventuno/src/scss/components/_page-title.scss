@@ -1,0 +1,37 @@
+.page-title {
+  margin-top: $spacer * 1.5; // 24px
+  .permalink {
+    display: none;
+  }
+  &:hover {
+    .permalink {
+      display: inline;
+      position: absolute;
+      margin-left: $spacer * .5;
+    }
+  }
+  &__title {
+    display: inline;
+  }
+  &__headline {
+    font-size: 1.25rem;
+    font-weight: $font-weight-normal;
+    &-icon {
+      flex-shrink: 0;
+    }
+  }
+  &__details {
+    display: flex;
+    flex-wrap: wrap;
+    column-gap: $spacer * 1.5;
+  }
+  &__detail {
+    display: flex;
+    align-items: center;
+    color: $gray-700;
+  }
+  .badge {
+    position: relative;
+    top: -.25em; // Vertically align badge to heading
+  }
+}

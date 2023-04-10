@@ -134,3 +134,12 @@ function joinup_discussion_comment_create_access(AccountInterface $account, arra
   }
   return AccessResult::neutral();
 }
+
+/**
+ * Implements hook_preprocess_HOOK().
+ */
+function joinup_discussion_preprocess_node__view_mode_tile(array &$variables): void {
+  if (($discussion = $variables['elements']['#node']) instanceof DiscussionInterface) {
+    $variables['comment_count'] = $discussion->get('field_replies')->comment_count;
+  }
+}

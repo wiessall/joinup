@@ -116,3 +116,47 @@ function iop_preprocess_node__custom_page__full(&$variables) {
 function iop_preprocess_block__iope_navigation(array &$variables): void {
   $variables['base_path'] = base_path();
 }
+
+/**
+ * Implements hook_preprocess_block().
+ */
+function iop_preprocess_block(array &$variables): void {
+  $id = $variables['elements']['#id'];
+  if ($id === 'iop_joinup_add_content' || $id === 'iop_three_dots_menu') {
+    $variables['#attached']['library'][] = 'iop/actions-menu';
+  }
+}
+
+/**
+ * Implements hook_preprocess_node__news__view_mode_tile().
+ */
+function iop_preprocess_node__news__view_mode_tile(&$variables): void {
+  $node = $variables['node'];
+  // Override logo so we can control the image style without affecting also the
+  // parent theme Ventuno.
+  $variables['logo'] = $node->getLogoAsRenderArray([
+    'label' => 'hidden',
+    'type' => 'image',
+    'settings' => [
+      'image_style' => 'iop_news_events',
+      'image_link' => 'content',
+    ],
+  ]);
+}
+
+/**
+ * Implements hook_preprocess_node__event__view_mode_tile().
+ */
+function iop_preprocess_node__event__view_mode_tile(&$variables): void {
+  $node = $variables['node'];
+  // Override logo so we can control the image style without affecting also the
+  // parent theme Ventuno.
+  $variables['logo'] = $node->getLogoAsRenderArray([
+    'label' => 'hidden',
+    'type' => 'image',
+    'settings' => [
+      'image_style' => 'iop_news_events',
+      'image_link' => 'content',
+    ],
+  ]);
+}

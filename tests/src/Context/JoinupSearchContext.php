@@ -12,6 +12,7 @@ use Drupal\joinup\Traits\BootstrapTrait;
 use Drupal\joinup\Traits\JavascriptTrait;
 use Drupal\joinup\Traits\KeyboardInteractionTrait;
 use Drupal\joinup\Traits\MaterialDesignTrait;
+use Drupal\joinup\Traits\SearchTrait;
 use Drupal\joinup\Traits\TraversingTrait;
 use Drupal\joinup\Traits\UtilityTrait;
 use PHPUnit\Framework\Assert;
@@ -25,6 +26,7 @@ class JoinupSearchContext extends RawDrupalContext {
   use JavascriptTrait;
   use KeyboardInteractionTrait;
   use MaterialDesignTrait;
+  use SearchTrait;
   use TraversingTrait;
   use UtilityTrait;
 
@@ -92,8 +94,14 @@ class JoinupSearchContext extends RawDrupalContext {
    *   The link as node element or NULL.
    */
   protected function findContentTab(string $type): ?NodeElement {
-    $xpath = "//div[contains(concat(' ', normalize-space(@class), ' '), ' tab__container ')]//span[@class='tab__text--lower'][normalize-space(string(.)) = '$type']" .
-      "/ancestor-or-self::a[@class and contains(concat(' ', normalize-space(@class), ' '), ' tab--content-type ')]";
+    $xpath = "//div[@data-drupal-facet-id]//span[@class='tab__text--type' and text() = '$type']/ancestor-or-self::a[@data-drupal-facet-item-id]";
+
+    // @todo Remove the if(..) block in ISAICP-7138.
+    // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7138
+    if ($this->usesMaterialDesignLite()) {
+      $xpath = "//div[contains(concat(' ', normalize-space(@class), ' '), ' tab__container ')]//span[@class='tab__text--lower'][normalize-space(string(.)) = '$type']/ancestor-or-self::a[@class and contains(concat(' ', normalize-space(@class), ' '), ' tab--content-type ')]";
+    }
+
     return $this->getSession()->getPage()->find('xpath', $xpath);
   }
 
@@ -153,7 +161,14 @@ class JoinupSearchContext extends RawDrupalContext {
    */
   public function assertContentTypeFacetItemsPresent(string $labels): void {
     $labels = $this->explodeCommaSeparatedStepArgument($labels);
-    $xpath = "//a[contains(concat(' ', normalize-space(@class), ' '), ' tab--content-type ')]//span[contains(concat(' ', normalize-space(@class), ' '), ' tab__text--lower ')]";
+    $xpath = "//a[@data-drupal-facet-item-id]//span[contains(concat(' ', normalize-space(@class), ' '), ' tab__text--type ')]";
+
+    // @todo Remove the if(..) block in ISAICP-7138.
+    // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7138
+    if ($this->usesMaterialDesignLite()) {
+      $xpath = "//a[contains(concat(' ', normalize-space(@class), ' '), ' tab--content-type ')]//span[contains(concat(' ', normalize-space(@class), ' '), ' tab__text--lower ')]";
+    }
+
     $elements = $this->getSession()->getPage()->findAll('xpath', $xpath);
     $present = [];
 
@@ -163,7 +178,7 @@ class JoinupSearchContext extends RawDrupalContext {
     }
 
     $present = array_map('trim', $present);
-    Assert::assertEquals($labels, $present);
+    Assert::assertSame($labels, $present);
   }
 
   /**
@@ -679,7 +694,7 @@ class JoinupSearchContext extends RawDrupalContext {
       $this->visitPath('/');
       $page = $this->getSession()->getPage();
       $page->fillField('keys', $keywords);
-      $page->pressButton("Apply");
+      $page->pressButton("Search site-wide");
       $this->assertCurrentUrl($this->locatePath('search?keys=' . $keywords . '&sort_by=relevance'));
     }
   }
@@ -752,11 +767,11 @@ class JoinupSearchContext extends RawDrupalContext {
   }
 
   /**
-   * Opens the search bar.
+   * Focuses on the search input.
    *
-   * @When I open the search bar by clicking on the search icon
+   * @When I focus on the search input
    */
-  public function openSearchBar() {
+  public function focusOnSearchInput() {
     // One can only open the search bar if JavaScript is enabled.
     $this->assertJavaScriptEnabledBrowser();
     $element = $this->getSearchBarElement();
@@ -878,8 +893,7 @@ class JoinupSearchContext extends RawDrupalContext {
    * @Then I should see search bar in navbar
    */
   public function assertSearchExposedFilterNavbar(): void {
-    $getAllInput = $this->getSession()->getPage()->findAll('css', '.joinup-navbar .navbar-search input#edit-keys');
-
+    $getAllInput = $this->findAllSearchBoxes();
     if (count($getAllInput) < 1) {
       throw new \Exception('Search bar not found in navbar.');
     }
@@ -894,8 +908,7 @@ class JoinupSearchContext extends RawDrupalContext {
    * @Then I should not see search bar in navbar
    */
   public function failSearchExposedFilterNavbar(): void {
-    $getAllInput = $this->getSession()->getPage()->findAll('css', '.joinup-navbar .navbar-search input#edit-keys');
-
+    $getAllInput = $this->findAllSearchBoxes();
     if (count($getAllInput) > 0) {
       throw new \Exception('Search bar found in navbar.');
     }
@@ -911,7 +924,6 @@ class JoinupSearchContext extends RawDrupalContext {
    */
   public function assertSearchIconNavbar(): void {
     $getAllInput = $this->getSession()->getPage()->findAll('css', '.joinup-navbar button#search.dropdown-toggle');
-
     if (count($getAllInput) < 1) {
       throw new \Exception('Search bar icon not found in navbar.');
     }
@@ -926,7 +938,7 @@ class JoinupSearchContext extends RawDrupalContext {
    * @Then I should not see search bar icon in navbar
    */
   public function failSearchIconNavbar(): void {
-    $getAllInput = $this->getSession()->getPage()->findAll('css', '.joinup-navbar span#heading-search button.accordion-button');
+    $getAllInput = $this->getSession()->getPage()->findAll('css', 'nav.joinup-navbar button#search.dropdown-toggle');
 
     if (count($getAllInput) > 0) {
       throw new \Exception('Search bar icon found in navbar.');
@@ -996,6 +1008,26 @@ class JoinupSearchContext extends RawDrupalContext {
     }
 
     $link->click();
+  }
+
+  /**
+   * Checks if search inputs have different ids.
+   *
+   * @throws \Exception
+   *   Thrown when search inputs have the same id.
+   *
+   * @Then the two search inputs should have different ids
+   */
+  public function assertDifferentIdsInSearchInputs(): void {
+    $navigation = $this->getRegion('Navigation bar');
+    $featured = $this->getRegion('Featured');
+
+    $getNavbarInputId = $navigation->find('css', '.search-bar__input')
+      ->getAttribute('id');
+    $getHeaderInputId = $featured->find('css', '.search-bar__input')
+      ->getAttribute('id');
+
+    Assert::assertNotEquals($getNavbarInputId, $getHeaderInputId, 'The two search inputs have the same id.');
   }
 
 }

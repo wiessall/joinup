@@ -1,0 +1,161 @@
+.licence-filter {
+  border-radius: $border-radius-lg;
+  overflow: hidden;
+  &__header {
+    padding: $spacer * .5; // 8px
+    color: $white;
+    font-weight: $font-weight-bold;
+    text-align: center;
+  }
+  &__list {
+    padding: $spacer * .5 0;
+    margin-bottom: 0;
+    list-style: none;
+  }
+  &__button {
+    width: 100%;
+    padding: $spacer * .5; // 8px
+    border: 0; // Resets
+    background: none; // Resets
+    color: inherit; // Resets
+    font-size: .875rem; // 14px
+    word-break: break-word;
+    text-align: left;
+    &:hover {
+      text-decoration: underline;
+      cursor: help;
+    }
+    &.is-active {
+      background: $gray-300;
+      color: $black;
+    }
+  }
+  &--can {
+    border: 1px solid $joinup--green;
+    .licence-filter__header {
+      background-color: $joinup--green;
+    }
+    .licence-filter__content {
+      color: $joinup--green;
+    }
+  }
+  &--must {
+    border: 1px solid $joinup--brown;
+    .licence-filter__header {
+      background-color: $joinup--brown;
+    }
+    .licence-filter__content {
+      color: $joinup--brown;
+    }
+  }
+  &--cannot {
+    border: 1px solid $joinup--red;
+    .licence-filter__header {
+      background-color: $joinup--red;
+    }
+    .licence-filter__content {
+      color: $joinup--red;
+    }
+  }
+  &--compatible {
+    border: 1px solid $joinup--softblue;
+    .licence-filter__header {
+      background-color: $joinup--softblue;
+    }
+    .licence-filter__content {
+      color: $joinup--softblue;
+    }
+  }
+  &--law {
+    border: 1px solid $joinup--gray;
+    .licence-filter__header {
+      background-color: $joinup--gray;
+    }
+    .licence-filter__content {
+      color: $joinup--gray;
+    }
+  }
+  &--support {
+    border: 1px solid $joinup--orange;
+    .licence-filter__header {
+      background-color: $joinup--orange;
+    }
+    .licence-filter__content {
+      color: $joinup--orange;
+    }
+  }
+}
+.licence-counter {
+  margin: $spacer 0; // 16px 0
+  font-weight: $font-weight-bold;
+}
+.listing--licences {
+  .licence-tile {
+    &__label-wrapper {
+      min-width: 100px;
+      text-align: right;
+    }
+    &__label {
+      margin: $spacer * .25; // 4px
+      font-size: $font-size-sm;
+      border-radius: $border-radius-sm;
+    }
+    &__value {
+      font-size: $font-size-sm;
+      &:hover {
+        text-decoration: underline;
+        cursor: help;
+      }
+    }
+    &__line {
+      &--can {
+        .licence-tile__label {
+          background-color: $joinup--green;
+        }
+        .licence-tile__values {
+          color: $joinup--green;
+        }
+      }
+      &--must {
+        .licence-tile__label {
+          background-color: $joinup--brown;
+        }
+        .licence-tile__values {
+          color: $joinup--brown;
+        }
+      }
+      &--cannot {
+        .licence-tile__label {
+          background-color: $joinup--red;
+        }
+        .licence-tile__values {
+          color: $joinup--red;
+        }
+      }
+      &--compatible {
+        .licence-tile__label {
+          background-color: $joinup--softblue;
+        }
+        .licence-tile__values {
+          color: $joinup--softblue;
+        }
+      }
+      &--law {
+        .licence-tile__label {
+          background-color: $joinup--gray;
+        }
+        .licence-tile__values {
+          color: $joinup--gray;
+        }
+      }
+      &--support {
+        .licence-tile__label {
+          background-color: $joinup--orange;
+        }
+        .licence-tile__values {
+          color: $joinup--orange;
+        }
+      }
+    }
+  }
+}

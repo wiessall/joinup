@@ -265,6 +265,11 @@ Feature:
     When I go to the "topic" meta entity of the "Statistics and Analysis" topic "taxonomy term"
     And the url should match "/topic/info/statistics-and-analysis"
 
+    # Regression test: 3-dots is hidden for anonymous as only contains 'View'.
+    Given I am an anonymous user
+    And I visit "/topic/info/statistics-and-analysis"
+    Then I should not see the button "Show primary options"
+
   Scenario: Editing from the administration page, redirect back to the administration page.
     When I am logged in as a moderator
     And I click "Dashboard"
@@ -287,6 +292,7 @@ Feature:
     And I am logged in as a moderator
     And I go to the homepage
     And I click "E-justice"
+    And I open the header local tasks menu
     And I click "Edit"
     Then I should see the heading "Edit E-justice"
 
@@ -434,3 +440,28 @@ Feature:
       # Discussions don't have logos.
       | discussion  | should not | list       |
       | discussion  | should not | grid       |
+
+  Scenario: A configurable listing with no results should not print its title.
+    Given news content:
+      | title  | headline | state     |
+      | News 1 | News 1   | validated |
+    And the following topics are enabled in the homepage:
+      | E-justice               |
+    And I am logged in as a moderator
+    And I go to the homepage
+
+    When I click "E-justice"
+    And I click "Edit"
+    And I press "Add Row"
+    And I press "Add 1 column layout"
+    And I press "Add Configurable listing"
+
+    When I fill in "Heading" with "E-justice heading"
+    And I select "List" from "List style"
+    # Use a nonsense query preset to make sure we have 0 results
+    And I fill in "Query presets" with "entity_bundle|Nebuchadnezzar"
+
+    And I press "Save"
+    And the url should match "/topic/law-and-justice/e-justice"
+    Then I should not see the "News 1" tile
+    And I should not see the heading "E-justice heading"

@@ -21,7 +21,7 @@ use Drupal\email_confirmer\EmailConfirmationInterface;
 /**
  * Clean up the email confirmations.
  */
-function joinup_core_post_update_0109100(array &$sandbox): string {
+function joinup_core_post_update_109100(array &$sandbox): string {
   if (empty($sandbox['emails'])) {
     // Select email confirmations from the email_confirmation table, that has
     // the status to 1, with the same `realm` where there are more than one
