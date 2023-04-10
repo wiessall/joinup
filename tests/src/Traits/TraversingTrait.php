@@ -427,6 +427,7 @@ trait TraversingTrait {
 
   // @todo Remove following protected function in ISAICP-7138.
   // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7138
+
   /**
    * Gets the date or time component of a date sub-field in a date range field.
    *
@@ -445,7 +446,6 @@ trait TraversingTrait {
    * @throws \Exception
    *   Thrown when the date range field is not found.
    */
-
   protected function findMaterialDesignDateRangeComponent(string $field, string $component, ?string $date = NULL): NodeElement {
     /** @var \Behat\Mink\Element\NodeElement $fieldset */
     $fieldset = $this->getSession()->getPage()->find(
