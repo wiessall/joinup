@@ -84,6 +84,8 @@ Feature: "Add custom page" visibility options.
     And I press "Upload"
     And I fill in the 2nd "Description" field of the "Attachments" file field with "Alan"
     And I uncheck the 2nd "Display" checkbox of the "Attachments" file field
+    Then I should not see the button "Archive"
+    And I should not see the button "Delete"
 
     And I press "Unpublish"
     Then I should see the heading "About us"
