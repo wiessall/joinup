@@ -21,13 +21,6 @@ use Symfony\Component\HttpFoundation\Response;
 abstract class ExportBatchedDataFormBase extends FormBase {
 
   /**
-   * The entity type manager.
-   *
-   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
-   */
-  protected $entityTypeManager;
-
-  /**
    * The default cache bin.
    *
    * @var \Drupal\Core\Cache\CacheBackendInterface
@@ -89,8 +82,8 @@ abstract class ExportBatchedDataFormBase extends FormBase {
 
     if ($data = $this->cacheStorage->get($this->getCacheTagName())) {
       $form['help']['#markup'] = $this->t('Last dump was created at :date and will be removed by :expire', [
-        ':date' => $this->dateFormatter->format($data->created),
-        ':expire' => $this->dateFormatter->format($data->expire),
+        ':date' => $this->dateFormatter->format((int) $data->created),
+        ':expire' => $this->dateFormatter->format((int) $data->expire),
       ]);
 
       $form['actions']['download_link'] = [
