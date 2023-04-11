@@ -699,6 +699,7 @@ module.exports = {
       options: {
         file: "icons.svg",
         list: [
+          "archive-fill.svg",
           "arrow-left.svg",
           "arrow-repeat.svg",
           "arrow-right.svg",
