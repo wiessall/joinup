@@ -21,7 +21,7 @@
 #}
 {% if multiple %}
   <div class="js-form-item form-item">
-    {{ table|without('#header') }}
+    {{ table }}
     {% if description.content %}
       <div{{ description.attributes.addClass(['description', 'form-text', 'text-muted']) }} >{{ description.content }}</div>
     {% endif %}

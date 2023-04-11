@@ -53,11 +53,15 @@ function ventuno_preprocess_field_multiple_value_form(array &$variables): void {
       'uri',
     ];
 
-    // Fixes link form element title,.
-    // @see joinup_theme_preprocess_form_element().
+    // Fixes link form element title.
+    // @see ventuno_preprocess_form_element().
     if (isset($variables['element']['0']['uri'])) {
       foreach ($variables['table']['#rows'] as &$value_row) {
         $value_row['data'][1]['data']['uri']['#title'] = $label;
+      }
+      // Remove table header for this very specific case to avoid redundancy.
+      if ($variables['element']['#id'] === 'edit-field-event-online-location') {
+        unset($variables['table']['#header']);
       }
     }
 
