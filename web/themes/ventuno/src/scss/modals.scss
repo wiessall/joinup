@@ -5,3 +5,8 @@ ul.linkit-ui-autocomplete {
   position: absolute;
   z-index: 9999;
 }
+
+// Avoid very long words (file names) to overflow the modal to the right.
+.modal-dialog {
+  overflow-wrap: break-word;
+}
