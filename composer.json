@@ -363,7 +363,8 @@
                 "Mastodon should not have a fixed URL prefix. @see https://www.drupal.org/project/social_media_links/issues/3319694": "https://git.drupalcode.org/project/social_media_links/-/merge_requests/28.diff"
             },
             "drupal/svg_image": {
-                "SVG is not valid or cannot be sanitized, return an error. @see https://www.drupal.org/i/3350696": "https://git.drupalcode.org/project/svg_image/-/merge_requests/20.patch"
+                "SVG is not valid or cannot be sanitized, return an error. @see https://www.drupal.org/i/3350696": "https://git.drupalcode.org/project/svg_image/-/merge_requests/20.patch",
+                "Upload a SVG from CKEditor (image inline). @see https://www.drupal.org/i/3093972": "https://git.drupalcode.org/project/svg_image/-/merge_requests/21.patch"
             },
             "drupal/swiftmailer": {
                 "Add spooling for increased performance @see https://www.drupal.org/project/swiftmailer/issues/3000553": "https://git.drupalcode.org/project/swiftmailer/-/merge_requests/8.diff"
