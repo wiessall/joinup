@@ -84,7 +84,7 @@ Sensitive data will be stored in [environment variables](
 https://en.wikipedia.org/wiki/Environment_variable). See `.env.dist` for
 details.
 
-**Important!** For the ASDA settings please contact your local developer
+**Important!** For the NEXTCLOUD settings please contact your local developer
 
 ## Build the codebase
 
