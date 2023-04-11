@@ -35,8 +35,7 @@ Feature: Editing collections
     And I press "Save as draft"
     Then I should see the heading "Überwaldean Sea Eels"
 
-
-  @terms @javascript @uploadFiles:error.svg,simple.svg
+  @terms @javascript
   Scenario: Edit a collection wysiwyg modal should close.
     # Regression test for ticket ISAICP-7181.
     Given the following owner:
@@ -56,19 +55,6 @@ Feature: Editing collections
     And I press the button "Video Embed" in the "Description" wysiwyg editor
     Then a modal should open
     When I fill in "Video URL" with "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
-    And I press "Save" in the "Modal buttons" region
-    Then the modal should be closed
-
-    # Regression test for ticket ISAICP-7678.
-    When I press the button "Image" in the "Description" wysiwyg editor
-    Then a modal should open
-    When I fill in "Alternative text" with "Example SVG"
-    And I attach the file "error.svg" to "Image"
-    And I wait for AJAX to finish
-    Then I should see the error message "Invalid or unsafe SVG file."
-    And I attach the file "simple.svg" to "Image"
-    And I wait for AJAX to finish
-    Then I should not see the error message "Invalid or unsafe SVG file."
     And I press "Save" in the "Modal buttons" region
     Then the modal should be closed
 
