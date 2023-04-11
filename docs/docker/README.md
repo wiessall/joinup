@@ -225,8 +225,9 @@ is running all update scripts.
 
 #### 3.7.1 Downloading the databases
 
-Before proceeding, make sure you set manually the `ASDA_*` environment variables
-in `.env` file. The values should be provided by the team.
+Before proceeding, make sure you set manually the `NEXTCLOUD_*` environment variables in `.env` file. The values should be provided according to instructions provided [here](https://webgate.ec.europa.eu/fpfis/qa/how-to?nid=22351).
+
+**Note:** After you have accessed Nextcloud, through CAS-Login button, and you have set up your account, you NEED to generate a new App name password/token and use the corresponding username/password credentials as `NEXTCLOUD_USER/NEXTCLOUD_PASS` environment variables.
 
 Then, run the following command to download the databases:
 ```bash
