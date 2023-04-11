@@ -4,8 +4,10 @@ toolkit:
   project_id: digit-joinup
   tmp_folder: ${joinup.dir}/tmp
   clone:
-    asda_url: ${env.ASDA_URL}
-    dumpfile: ${mysql.dump_dir}/mysql.sql
+    asda_services:
+      - mysql
+      - solr
+      - virtuoso
 
   build:
     dist:
@@ -33,16 +35,6 @@ toolkit:
           file: ${toolkit.build.dist.root}/web/themes/ventuno/package.json
         - task: remove
           file: ${toolkit.build.dist.root}/web/themes/ventuno/package-lock.json
-
-command:
-  toolkit:
-    download-dump:
-      options:
-        asda-url: https://asda.fpfis.tech.ec.europa.eu/ec-europa/digit-joinup-reference/dumps
-        dumpfile: ${mysql.dump_dir}/mysql.sql
-    install-dump:
-      options:
-        dumpfile: ${mysql.dump_dir}/mysql.sql
 
 commands:
 
