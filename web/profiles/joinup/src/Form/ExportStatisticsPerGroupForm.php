@@ -225,7 +225,7 @@ QUERY;
       + $group_content['event']['archived']
       + $group_content['news']['archived'],
       'Number of members' => $memberships,
-      'Description word count' => str_word_count(strip_tags($description)),
+      'Description word count' => str_word_count(strip_tags((string) $description)),
     ];
   }
 
