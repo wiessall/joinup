@@ -14,7 +14,7 @@ dependencies:
     - field.field.user.user.field_user_organisation
     - field.field.user.user.field_user_photo
     - field.field.user.user.field_user_professional_domain
-    - image.style.thumbnail
+    - image.style.profile_icon
   module:
     - image
     - template_suggestion
@@ -28,13 +28,13 @@ content:
     type: image
     label: hidden
     settings:
-      image_link: content
-      image_style: thumbnail
+      image_link: ''
+      image_style: profile_icon
       image_loading:
         attribute: lazy
     third_party_settings:
       template_suggestion:
-        template_suggestion: ''
+        template_suggestion: bare
     weight: 0
     region: content
 hidden:
@@ -50,4 +50,4 @@ hidden:
   langcode: true
   member_for: true
   search_api_excerpt: true
-  user_field_user_content_top: true
+  user_user_field_user_content_top: true
