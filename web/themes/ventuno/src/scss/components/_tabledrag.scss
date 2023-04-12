@@ -1,6 +1,14 @@
 .tabledrag-toggle-weight-wrapper {
   display: none;
 }
+.js .field--widget-paragraphs {
+  th .paragraphs-actions {
+    margin-right: 0;
+  }
+  td {
+    padding: $spacer * .5;
+  }
+}
 // @todo Remove this hack as part of ISAICP-3021.
 // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-3021
 .joinup-nodrag {
@@ -19,7 +27,8 @@
   }
 }
 .draggable {
-  .field-multiple-drag {
+  .field-multiple-drag,
+  .tabledrag-handle-cell {
     position: relative;
     width: 45px;
     padding-right: 0;
