@@ -43,6 +43,17 @@
           size: 's'
         }) }}
     </span>
+    {% if additional_content.is_archived %}
+      <span class="page-title__detail">
+        <span class="me-2">
+          {{ 'Archived'|t }}
+        </span>
+        {{ pattern('icon', {
+          name: 'archive-fill',
+          size: 's'
+        }) }}
+      </span>
+    {% endif %}
   </div>
 </div>
 {% endif %}
