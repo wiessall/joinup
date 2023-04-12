@@ -1,0 +1,18 @@
+uuid: 0236c672-bff6-468f-895e-b7c517146f3e
+langcode: en
+status: true
+dependencies:
+  module:
+    - joinup_core
+  theme:
+    - ventuno
+id: dashboard
+label: Dashboard
+theme: ventuno
+weight: 0
+conditions:
+  request_route:
+    id: request_route
+    negate: false
+    routes:
+      - dashboard.page
