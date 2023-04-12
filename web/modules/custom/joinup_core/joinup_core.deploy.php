@@ -99,3 +99,35 @@ QUERY;
 function joinup_core_deploy_0109102(): void {
   \Drupal::classResolver(JoinupUserDefaultAvatarImageHelper::class)->createOrUpdate();
 }
+
+/**
+ * Update
+ */
+function joinup_core_deploy_01009113(array &$sandbox = []): string {
+  if (empty($sandbox['ids'])) {
+    $from_date = new \DateTime("03/12/2022");
+    $sandbox['ids'] = \Drupal::entityQuery('user')
+      ->condition('status', '0')
+      ->condition('uid', 1, '>')
+      ->condition('created', $from_date->getTimestamp(), '<=')
+      ->range(0, 200)
+      ->execute();
+    $sandbox['count'] = 0;
+    $sandbox['max'] = count($sandbox['ids']);
+  }
+  $user_storage = \Drupal::entityTypeManager()->getStorage('user');
+  $ids = array_splice($sandbox['ids'], 0, 50);
+  /** @var $dumper \Drupal\devel\DevelDumperManager  */
+  $dumper = \Drupal::service('devel.dumper');
+  foreach ($user_storage->loadMultiple($ids) as $user) {
+    $date = \Drupal::service('date.formatter')->format($user->getCreatedTime(), 'custom', 'd-m-Y');
+    $blocked = (user_is_blocked($user->name->value))? 'yes':'no';
+    $info = 'Removing user id: '.$user->id().' username: '.$user->name->value.' created_at: '.$date. 'is blocked: '.$blocked;
+
+    $dumper->debug($info, NULL, 'default');
+    $sandbox['count']++;
+  }
+
+  $sandbox['#finished'] = $sandbox['count'] === $sandbox['max'];
+  return "Remove {$sandbox['count']} out of {$sandbox['max']} users.";
+}
