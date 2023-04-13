@@ -27,32 +27,3 @@
       {%- endfor -%}
     </ul>
 </div>
-
-{# <div {{ attributes.removeClass('dropbutton').addClass('dropdown') }}>
-  {% if split %}
-    {{ button }}
-  {% endif %}
-
-  {% if links %}
-    <button type="button" class="btn btn-sm btn-outline-primary dropdown-toggle {{ split ? 'dropdown-toggle-split' }}" data-bs-toggle="dropdown" data-boundary="window">
-      {% if split %}
-        <span class="visually-hidden">{{ 'Toggle Dropdown'|t }}</span>
-      {% else %}
-        {{ button }}
-      {% endif %}
-    </button>
-    <ul class="dropdown-menu dropdown-menu-end">
-      {%- for item in links -%}
-        <li>
-          {%- if item.link -%}
-            {{ item.link }}
-          {%- elseif item.text_attributes -%}
-            <span{{ item.text_attributes }}>{{ item.text }}</span>
-          {%- else -%}
-            {{ item.text }}
-          {%- endif -%}
-        </li>
-      {%- endfor -%}
-    </ul>
-  {% endif %}
-</div> #}
