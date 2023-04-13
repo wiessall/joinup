@@ -166,8 +166,8 @@ class SubscriptionsForm extends FormBase {
             'label' => 'hidden',
             'type' => 'image',
             'settings' => [
-              'image_style' => 'vertical_medium_image',
-              'image_link' => 'content',
+              'image_style' => 'thumbnail',
+              'image_link' => 'none',
             ],
           ]),
           'link' => [
@@ -223,7 +223,7 @@ class SubscriptionsForm extends FormBase {
           ],
         ];
 
-        $form['groups'][$group->id()]['options']['submit'] = [
+        $form['groups'][$group->id()]['submit'] = [
           '#ajax' => [
             'callback' => '::reloadGroup',
           ],
