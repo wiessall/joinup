@@ -70,6 +70,7 @@ Feature: Tests the group landing page customization.
     When I select "Custom Page 3" from "Landing page"
     And I press "Save"
     Then I should see the heading "<group> group"
+    And I should see the heading "Custom Page 3"
     And I should see "The custom page 3 content"
     But I should not see "The <group> arbitrary description"
     And I should not see "The custom page 2 content"
@@ -79,6 +80,7 @@ Feature: Tests the group landing page customization.
     And I press "Save"
     Then I should see the heading "<group> group"
     And I should see "The <group> arbitrary description"
+    And I should not see the heading "Custom Page 3"
     And I should not see "The custom page 2 content"
     And I should not see "The custom page 3 content"
 
