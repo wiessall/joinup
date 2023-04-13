@@ -157,6 +157,7 @@ Feature: User profile
       | Cherry blossoms schedule      |
       | SOUND project                 |
       | Botanic E.D.E.N.              |
+    And I should see the following facet items "Collection, Discussion, Document, Event, News, Solution, Video" in this order
 
     # A message should be shown when visiting a profile of a user without
     # content.
