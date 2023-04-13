@@ -42,7 +42,7 @@ Feature: Messaging group announcements
     Then I should see the heading "Sign in to continue"
     When I go to the members page of "Fail pension"
     Then I should not see the link "Add announcement"
-    When I go to the homepage of the "Fail pension" collection
+    When I go to the homepage of the "Fail pension" <group>
     Then I should not see the link "Announcements"
 
     Given I am logged in as "Nice"
@@ -52,14 +52,14 @@ Feature: Messaging group announcements
     Then the response status code should be 403
     When I go to the members page of "Fail pension"
     Then I should not see the link "Add announcement"
-    When I go to the homepage of the "Fail pension" collection
+    When I go to the homepage of the "Fail pension" <group>
     Then I should not see the link "Announcements"
 
     Given I am logged in as "Sons of tweets"
 
     When I go to the announcements page of "Hidden gems" <group>
     Then the response status code should be 403
-    When I go to the homepage of the "Hidden gems" collection
+    When I go to the homepage of the "Hidden gems" <group>
     Then I should not see the link "Announcements"
 
     # The 'Add announcement' button is also available from the members page.
@@ -365,7 +365,7 @@ Feature: Messaging group announcements
     And I uncheck the box "Announcements enabled"
     And I press "Save"
 
-    When I go to the homepage of the "Fail pension" collection
+    When I go to the homepage of the "Fail pension" <group>
     # Moderators have an "Announcements" link also in the toolbar.
     Then I should not see the link "Announcements" in the "Entity actions" region
     When I go to the "The Big Opening is postponed" announcement of "Fail pension" <group>
@@ -375,7 +375,7 @@ Feature: Messaging group announcements
 
     Given I am logged in as "Sons of tweets"
 
-    When I go to the homepage of the "Fail pension" collection
+    When I go to the homepage of the "Fail pension" <group>
     Then I should not see the link "Announcements"
     When I go to the "The Big Opening is postponed" announcement of "Fail pension" <group>
     Then the response status code should be 403
@@ -384,7 +384,7 @@ Feature: Messaging group announcements
 
     Given I am logged in as "Nice"
 
-    When I go to the homepage of the "Fail pension" collection
+    When I go to the homepage of the "Fail pension" <group>
     Then I should not see the link "Announcements"
     When I go to the "The Big Opening is postponed" announcement of "Fail pension" <group>
     Then the response status code should be 403
@@ -393,7 +393,7 @@ Feature: Messaging group announcements
 
     Given I am an anonymous user
 
-    When I go to the homepage of the "Fail pension" collection
+    When I go to the homepage of the "Fail pension" <group>
     Then I should not see the link "Announcements"
     When I go to the "The Big Opening is postponed" announcement of "Fail pension" <group>
     Then I should see the heading "Sign in to continue"
