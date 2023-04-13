@@ -6,6 +6,11 @@ services:
     image: joinup/web:latest
     build:
       context: ./resources/docker/web
+      # Default UID and GID for Linux users is 1000. If you are on Linux,
+      # uncomment the following lines.
+#      args:
+#        USER_ID: 1000
+#        GROUP_ID: 1000
       # Default UID for Mac users is 501. If you are on Mac, uncomment the
       # following lines.
 #      args:
