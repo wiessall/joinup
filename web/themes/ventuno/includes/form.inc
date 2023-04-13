@@ -113,3 +113,13 @@ function ventuno_form_alter(array &$form, FormStateInterface $form_state, string
     );
   }
 }
+
+/**
+ * Implements hook_theme_suggestions_HOOK_alter().
+ */
+function ventuno_theme_suggestions_input_alter(array &$suggestions, array $variables): void {
+  // Suggestion based on data twig suggestion created in form alter.
+  if (isset($variables['element']['#extra_suggestion'])) {
+    $suggestions[] = 'input__' . $variables['element']['#type'] . '__' . $variables['element']['#extra_suggestion'];
+  }
+}
