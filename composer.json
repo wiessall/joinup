@@ -23,7 +23,7 @@
         "drupal/changed_fields": "^3.2",
         "drupal/config_ignore": "^3.0",
         "drupal/config_readonly": "^1.0",
-        "drupal/core": "^9.5",
+        "drupal/core": "9.5.5",
         "drupal/core-composer-scaffold": "^9.5",
         "drupal/custom_markup_block": "^1.1",
         "drupal/default_content": "^2.0",
@@ -276,8 +276,9 @@
                 "Make it easier to trigger a tour @see https://www.drupal.org/project/drupal/issues/3012027": "https://www.drupal.org/files/issues/2022-01-17/3012027-52-9.3.x.patch",
                 "EntityConstraintValidationList::findByCode is inconsistent @see https://www.drupal.org/project/drupal/issues/3126654": "https://www.drupal.org/files/issues/2020-04-10/find_by_code_override-3126654-D8-4.patch",
                 "Cannot implement a custom user cancellation method @see https://www.drupal.org/project/drupal/issues/3135592": "https://git.drupalcode.org/project/drupal/-/merge_requests/1675.diff",
-                "preg_split in _filter_url breaks for long html tags @see https://www.drupal.org/project/drupal/issues/3239472": "resources/patch/drupal/core/3239472.diff",
-                "If you don't set the \"version\" of a profile, the report/status displays an empty dash @see https://www.drupal.org/project/drupal/issues/3270892": "https://git.drupalcode.org/project/drupal/-/merge_requests/2003.diff"
+                "If you don't set the \"version\" of a profile, the report/status displays an empty dash @see https://www.drupal.org/project/drupal/issues/3270892": "https://git.drupalcode.org/project/drupal/-/merge_requests/2003.diff",
+                "Restrict images to this site\" restricts images that, by definition, *are* on this site @see https://www.drupal.org/project/drupal/issues/2998318": "https://git.drupalcode.org/project/drupal/-/merge_requests/3810.diff",
+                "Have responsive image module ignore svg @see https://www.drupal.org/project/drupal/issues/2957924": "https://www.drupal.org/files/issues/2022-06-23/drupal-responsive_image_svg_support-2957924-11.patch"
             },
             "drupal/default_content": {
                 "Allow manual imports @see https://www.drupal.org/i/2640734": "https://git.drupalcode.org/project/default_content/-/merge_requests/20.diff"
@@ -363,7 +364,8 @@
                 "Mastodon should not have a fixed URL prefix. @see https://www.drupal.org/project/social_media_links/issues/3319694": "https://git.drupalcode.org/project/social_media_links/-/merge_requests/28.diff"
             },
             "drupal/svg_image": {
-                "SVG is not valid or cannot be sanitized, return an error. @see https://www.drupal.org/i/3350696": "https://git.drupalcode.org/project/svg_image/-/merge_requests/20.patch"
+                "SVG is not valid or cannot be sanitized, return an error. @see https://www.drupal.org/i/3350696": "https://git.drupalcode.org/project/svg_image/-/merge_requests/20.patch",
+                "Upload a SVG from CKEditor (image inline). @see https://www.drupal.org/i/3093972": "https://git.drupalcode.org/project/svg_image/-/merge_requests/21.patch"
             },
             "drupal/swiftmailer": {
                 "Add spooling for increased performance @see https://www.drupal.org/project/swiftmailer/issues/3000553": "https://git.drupalcode.org/project/swiftmailer/-/merge_requests/8.diff"
