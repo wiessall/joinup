@@ -16,7 +16,6 @@ use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
-use Drupal\Core\EventSubscriber\MainContentViewSubscriber;
 use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Field\FieldItemListInterface;
@@ -323,73 +322,6 @@ function _contact_information_hash_expiration_validate(array &$form, FormStateIn
       $form_state->setErrorByName($name, $error_message);
     }
   }
-}
-
-/**
- * Implements hook_form_FORM_ID_alter().
- */
-function contact_information_form_email_contact_mail_form_alter(array &$form, FormStateInterface $form_state, string $form_id): void {
-  $form['actions'] = ['#type' => 'actions'];
-  if (\Drupal::currentUser()->isAnonymous()) {
-    // For anonymous users, we change the form to enforce them to login.
-    unset($form['#submit'][array_search('::submitForm', $form['#submit'], TRUE)]);
-    unset($form['#validate'][array_search('::validateForm', $form['#validate'], TRUE)]);
-
-    // Remove standard form elements from Drupal\email_contact\Form\ContactForm.
-    // @see \Drupal\email_contact\Form\ContactForm::buildForm()
-    unset($form['name'], $form['mail'], $form['subject'], $form['message']);
-
-    $form['description'] = [
-      '#type' => 'html_tag',
-      '#tag' => 'p',
-      '#value' => t('Only signed in users can send a message. Please sign in or register an account on EU Login.'),
-    ];
-    $form['actions'] = [
-      '#type' => 'actions',
-      'submit' => [
-        '#type' => 'submit',
-        '#value' => t('Sign in / Register'),
-        '#button_type' => 'primary',
-        '#ajax' => [
-          'callback' => 'contact_information_require_login',
-          'event' => 'click',
-        ],
-      ],
-    ];
-  }
-  else {
-    // Move 'submit' under 'actions'.
-    $form['actions']['submit'] = $form['submit'];
-    /** @var \Drupal\Core\Extension\ModuleHandlerInterface $module_handler */
-    $module_handler = \Drupal::service('module_handler');
-    if ($module_handler->moduleExists('honeypot')) {
-      // We only protect the authenticated user version of the form.
-      \Drupal::service('honeypot')->addFormProtection(
-        $form,
-        $form_state,
-        ['honeypot', 'time_restriction'],
-      );
-    }
-  }
-  unset($form['submit']);
-
-  // @todo Replace this check with ::isModal() when issue #2661046 is in.
-  // @see https://www.drupal.org/node/2661046
-  if (\Drupal::request()->query->get(MainContentViewSubscriber::WRAPPER_FORMAT) === 'drupal_ajax') {
-    $form['actions']['cancel'] = [
-      '#type' => 'button',
-      '#value' => t('Cancel'),
-      '#attributes' => ['class' => ['dialog-cancel']],
-      // Put the cancel button to the left of the confirmation button, so it is
-      // consistent with the dialog shown when joining the group.
-      '#weight' => -1,
-    ];
-  }
-
-  // Vary the form's cache by whether the user is logged in or not.
-  (new CacheableMetadata())
-    ->setCacheContexts(['user.roles:authenticated'])
-    ->applyTo($form);
 }
 
 /**

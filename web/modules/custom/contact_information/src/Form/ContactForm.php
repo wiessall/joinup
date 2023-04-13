@@ -7,14 +7,13 @@ namespace Drupal\contact_information\Form;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\email_contact\Form\ContactForm as OriginalContactForm;
 use Drupal\email_contact\Plugin\Field\FieldFormatter\EmailContactLinkFormatter;
 use Drupal\rdf_entity\RdfInterface;
 
 /**
  * Extend email contact form.
  */
-class ContactForm extends OriginalContactForm {
+class ContactForm extends ContactInformationFormBase {
 
   /**
    * The collection group from the route.
@@ -28,40 +27,8 @@ class ContactForm extends OriginalContactForm {
    */
   public function buildForm(array $form, FormStateInterface $form_state, ?RdfInterface $rdf_entity = NULL): array {
     $this->rdfEntity = $rdf_entity;
-    $user = $this->currentUser();
-    $form['emails'] = [
-      '#type' => 'value',
-      '#value' => serialize($this->rdfEntity->getValidatedContactInformation()),
-    ];
 
-    $form['name'] = [
-      '#type' => 'textfield',
-      '#title' => $this->t('Your name'),
-      '#maxlength' => 255,
-      '#default_value' => $user->id() ? $user->getDisplayName() : '',
-      '#required' => TRUE,
-    ];
-
-    $form['mail'] = [
-      '#type' => 'textfield',
-      '#title' => $this->t('Your e-mail address'),
-      '#maxlength' => 255,
-      '#default_value' => $user->id() ? $user->getEmail() : '',
-      '#required' => TRUE,
-    ];
-
-    $form['subject'] = [
-      '#type' => 'textfield',
-      '#title' => $this->t('Subject'),
-      '#maxlength' => 255,
-      '#required' => TRUE,
-    ];
-
-    $form['message'] = [
-      '#type' => 'textarea',
-      '#title' => $this->t('Message'),
-      '#required' => TRUE,
-    ];
+    $form = parent::buildForm($form, $form_state);
 
     if (!$form_state->get('settings')) {
       $settings = EmailContactLinkFormatter::defaultSettings();
@@ -69,10 +36,6 @@ class ContactForm extends OriginalContactForm {
       $form_state->set('settings', $settings);
     }
 
-    $form['submit'] = [
-      '#type' => 'submit',
-      '#value' => $this->t('Send e-mail'),
-    ];
     return $form;
   }
 
@@ -81,6 +44,7 @@ class ContactForm extends OriginalContactForm {
    */
   public function submitForm(array &$form, FormStateInterface $form_state): void {
     $this->sendMessage($form, $form_state);
+
     $form_state->setRedirect('entity.rdf_entity.about_page', [
       'rdf_entity' => $this->rdfEntity->id(),
     ]);
@@ -96,7 +60,17 @@ class ContactForm extends OriginalContactForm {
    *   The access result.
    */
   public function access(RdfInterface $rdf_entity): AccessResultInterface {
-    return AccessResult::allowedIf($this->currentUser()->isAuthenticated() && !empty($rdf_entity->getValidatedContactInformation()));
+    return AccessResult::allowedIf(
+      $this->currentUser()->isAuthenticated() &&
+      !empty($rdf_entity->getValidatedContactInformation())
+    );
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function getEmailAddresses(): array {
+    return $this->rdfEntity->getValidatedContactInformation();
   }
 
 }

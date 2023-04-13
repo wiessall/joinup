@@ -42,6 +42,9 @@
         box-shadow: 0 4px 0 0 transparent;
         margin: $spacer * .25;
         margin-right: $spacer * .75;
+        &:first-of-type {
+          margin-left: 0;
+        }
         &:not(:first-of-type) {
           margin-left: $spacer * .75;
         }
@@ -55,6 +58,17 @@
           font-weight: $font-weight-bold;
           background-color: unset;
           box-shadow: 0 4px 0 0 $primary;
+        }
+        @include media-breakpoint-up(lg) {
+          max-width: calc((960px - 12px * 8 - 10rem) / 6);
+          overflow-x: hidden;
+          text-overflow: ellipsis;
+        }
+        @include media-breakpoint-up(xl) {
+          max-width: calc((1140px - 12px * 8 - 10rem) / 6);
+        }
+        @include media-breakpoint-up(xxl) {
+          max-width: calc((1320px - 12px * 8 - 10rem) / 6);
         }
       }
     }
