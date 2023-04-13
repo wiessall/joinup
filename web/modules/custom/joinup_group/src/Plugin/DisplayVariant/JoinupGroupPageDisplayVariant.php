@@ -80,12 +80,7 @@ class JoinupGroupPageDisplayVariant extends BlockPageVariant {
   public function setMainContent(array $main_content): PageVariantInterface {
     if ($landing_page = $this->getCustomLandingPage()) {
       $node_builder = $this->entityTypeManager->getViewBuilder('node');
-      $main_content = [];
-      $main_content[] = [
-        '#type' => 'page_title',
-        '#title' => $landing_page->getTitle(),
-      ];
-      $main_content[] = $node_builder->view($landing_page);
+      $main_content = $node_builder->view($landing_page);
     }
 
     // Tag with the meta-entity bundle list tag, so that, when the group
