@@ -18,7 +18,7 @@
   {% endset %}
 {% endfor %}
 
-{% if items|length < 7 %}
+{% if items|length < 6 %}
   {% set menu = pattern('navigation', {
       'variant': 'tabs',
       'orientation': 'horizontal',
@@ -36,7 +36,7 @@
   </div>
 {% else %}
   {% set items_to_show = items|slice(0, 5) %}
-  {% set items_to_hide = items|slice(6) %}
+  {% set items_to_hide = items|slice(5) %}
   {% set show_more_button %}
     {{ pattern('button', {
       label: 'See more'|t,
