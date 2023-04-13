@@ -8,7 +8,6 @@
 declare(strict_types = 1);
 
 use Drupal\Core\Site\Settings;
-use Drupal\sparql_entity_storage\UriEncoder;
 use Drupal\user\Entity\User;
 
 /**
@@ -92,63 +91,4 @@ function joinup_core_requirements($phase): array {
   }
 
   return $requirements;
-}
-
-/**
- * Fix group OG menu links.
- */
-function joinup_core_update_109100(?array &$sandbox = NULL): string {
-  $menu_link_content_storage = \Drupal::entityTypeManager()->getStorage('menu_link_content');
-  $uri = [
-    'Overview' => 'entity:rdf_entity/%s',
-    'About' => 'route:entity.rdf_entity.about_page;rdf_entity=%s',
-    'Members' => 'route:entity.rdf_entity.member_overview;rdf_entity=%s',
-    'Glossary' => 'route:entity.rdf_entity.glossary;letter=&rdf_entity=%s',
-  ];
-
-  if (!isset($sandbox['ids'])) {
-    $query = $menu_link_content_storage->getQuery()->accessCheck(FALSE);
-
-    // The following condition is a safety net in the case when some custom
-    // pages are using the standard labels ('Overview', 'About', etc).
-    $safety_net = ($query->orConditionGroup())
-      ->condition('link.uri', 'route:collection.glossary_page', 'STARTS_WITH')
-      ->condition('link.uri', 'route:entity.rdf_entity.about_page', 'STARTS_WITH')
-      ->condition('link.uri', 'route:entity.rdf_entity.member_overview', 'STARTS_WITH')
-      ->condition('link.uri', 'route:entity.rdf_entity.canonical', 'STARTS_WITH')
-      ->condition('link.uri', 'entity:rdf_entity/', 'STARTS_WITH');
-
-    $sandbox['ids'] = array_values($query
-      ->condition('menu_name', 'ogmenu-', 'STARTS_WITH')
-      ->condition('title', ['Overview', 'About', 'Members', 'Glossary'], 'IN')
-      ->condition($safety_net)
-      ->execute());
-    $sandbox['og_menu'] = \Drupal::database()->query("SELECT entity_id, og_audience_target_id FROM {ogmenu_instance__og_audience}")->fetchAllKeyed();
-    $sandbox['total'] = count($sandbox['ids']);
-    $sandbox['progress'] = 0;
-    $sandbox['links_to_delete'] = [];
-  }
-
-  $ids = array_splice($sandbox['ids'], 0, 50);
-  /** @var \Drupal\menu_link_content\MenuLinkContentInterface $menu_link */
-  foreach ($menu_link_content_storage->loadMultiple($ids) as $menu_link) {
-    $og_menu_instance_id = str_replace('ogmenu-', '', $menu_link->getMenuName());
-    $group_id = $sandbox['og_menu'][$og_menu_instance_id] ?? NULL;
-    if ($group_id) {
-      // Fix the link URI.
-      $menu_link->link->uri = sprintf($uri[$menu_link->getTitle()], UriEncoder::encodeUrl($group_id));
-      $menu_link->save();
-      continue;
-    }
-    // Collect orphan links to be deleted on finish.
-    $sandbox['links_to_delete'][] = $menu_link->id();
-  }
-  $sandbox['progress'] += count($ids);
-
-  $sandbox['#finished'] = (int) empty($sandbox['ids']);
-  if ($sandbox['#finished'] === 1 && $sandbox['links_to_delete']) {
-    $menu_link_content_storage->delete($menu_link_content_storage->loadMultiple($sandbox['links_to_delete']));
-  }
-
-  return "Processed {$sandbox['progress']} out of {$sandbox['total']} menu links";
 }
