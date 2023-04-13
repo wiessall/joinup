@@ -17,7 +17,7 @@ declare(strict_types = 1);
 /**
  * Remove all the blocked users before the spam activity (03/12/2022)
  */
-function joinup_core_deploy_0109201(): string {
+function joinup_core_deploy_0109200(): string {
   $user_storage = \Drupal::entityTypeManager()->getStorage('user');
   $from_date = new \DateTime("2022/12/03");
   $uids = \Drupal::entityQuery('user')
