@@ -67,7 +67,7 @@ function ventuno_theme_suggestions_page_title_alter(array &$suggestions, array &
 /**
  * Implements hook_preprocess_page_title__node__news().
  */
-function ventuno_preprocess_page_title__node__news(&$variables) {
+function ventuno_preprocess_page_title__node__news(&$variables): void {
   /** @var \Drupal\node\NodeInterface $node */
   $node = $variables['entity'];
 
@@ -80,7 +80,7 @@ function ventuno_preprocess_page_title__node__news(&$variables) {
 /**
  * Implements hook_preprocess_page_title__node__event().
  */
-function ventuno_preprocess_page_title__node__event(&$variables) {
+function ventuno_preprocess_page_title__node__event(&$variables): void {
   /** @var \Drupal\node\NodeInterface $node */
   $node = $variables['entity'];
 
@@ -107,7 +107,7 @@ function ventuno_preprocess_page_title__node__glossary(array &$variables): void 
 /**
  * Implements hook_preprocess_HOOK() for page-title--node--document.html.twig.
  */
-function ventuno_preprocess_page_title__node__document(&$variables) {
+function ventuno_preprocess_page_title__node__document(&$variables): void {
   /** @var \Drupal\joinup_document\Entity\DocumentInterface $node */
   $node = $variables['entity'];
 
