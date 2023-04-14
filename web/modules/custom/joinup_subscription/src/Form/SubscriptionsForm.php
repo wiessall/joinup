@@ -223,7 +223,7 @@ class SubscriptionsForm extends FormBase {
           ],
         ];
 
-        $form['groups'][$group->id()]['submit'] = [
+        $form['groups'][$group->id()]['options']['submit'] = [
           '#ajax' => [
             'callback' => '::reloadGroup',
           ],
