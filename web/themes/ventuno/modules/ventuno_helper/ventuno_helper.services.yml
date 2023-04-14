@@ -5,3 +5,7 @@ services:
     arguments: ['@theme.manager']
     tags:
       - { name: event_subscriber }
+  ventuno_helper.twig.htmlSpecialCharsDecodeFilter:
+    class: Drupal\ventuno_helper\HtmlSpecialCharsDecodeFilter
+    tags:
+      - { name: twig.extension }
