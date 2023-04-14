@@ -225,6 +225,23 @@ function joinup_group_form_rdf_entity_form_alter(&$form, FormStateInterface $for
 }
 
 /**
+ * Implements hook_form_alter().
+ */
+function joinup_group_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  $group_forms = [
+    'meta_entity_solution_settings_form',
+    'meta_entity_collection_settings_form',
+  ];
+  if (!in_array($form_id, $group_forms)) {
+    return;
+  }
+
+  /** @var \Drupal\joinup_group\GroupSettingsFormAlterInterface $setting_alter */
+  $setting_alter = \Drupal::service('joinup_group.group_settings_form_alter');
+  $setting_alter->alterForm($form, $form_state);
+}
+
+/**
  * Submit callback for the propose form of a collection or solution.
  *
  * Informs the user that a newly proposed collection or solution needs approval.
