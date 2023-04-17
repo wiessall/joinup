@@ -1,4 +1,11 @@
-.paragraph--testimony {
+// Override Ventuno's blockquote style
+.paragraph blockquote.paragraph--testimony {
+  border-left: none;
+  padding: unset;
+  margin-right: 0;
+  margin-left: 0;
+}
+blockquote.paragraph--testimony {
   display: flex;
   flex-direction: column;
   margin-bottom: $spacer * 4; //64px

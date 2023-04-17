@@ -256,6 +256,7 @@ trait TraversingTrait {
       // @todo Legacy selectors to be removed in ISAICP-7138.
       // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7138
       '.listing__title',
+      '.slide__title',
     ]);
 
     $result = [];
@@ -406,6 +407,7 @@ trait TraversingTrait {
       'My solutions content' => 'solution_my_content',
       'My collections content' => 'collection_my_content',
       'My content' => 'content_my_content',
+      'User content' => 'user_content_bundle',
       'Event date' => 'event_date',
       'EIF recommendations' => 'category',
       'Collection event date' => 'collection_event_type',
@@ -590,13 +592,7 @@ trait TraversingTrait {
           'search fields',
         ],
         'selectors' => [
-          // The site-wide search field in the top right corner.
-          ['css', 'input#search-bar__input'],
-          // The search field on the search result pages.
-          [
-            'css',
-            '*[data-drupal-selector="views-exposed-form-search-page-1"] input[data-drupal-selector="edit-keys"]',
-          ],
+          ['css', 'input[name="keys"]'],
         ],
       ],
     ];
@@ -731,6 +727,7 @@ trait TraversingTrait {
       // @todo Legacy selectors to be removed in ISAICP-7138.
       // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7138
       '.listing__item--tile .listing__title',
+      'article.slide',
     ]);
   }
 
