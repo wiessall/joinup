@@ -30,7 +30,7 @@ services:
       - mysql
       - sparql
       - solr
-      - memcache
+      - memcached
       - mail
       - selenium
 
