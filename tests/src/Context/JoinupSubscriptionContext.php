@@ -289,7 +289,7 @@ class JoinupSubscriptionContext extends RawDrupalContext {
    *   The bundle to check.
    *
    * @throws \Exception
-   *   Thrown when the card is not found or there was an issue with the checkbox.
+   *   Thrown when the card is not found or there is an issue with the checkbox.
    *
    * @Given I uncheck the :bundle checkbox of the :label subscription
    */
