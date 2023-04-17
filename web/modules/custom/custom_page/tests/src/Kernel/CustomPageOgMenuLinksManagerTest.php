@@ -33,6 +33,7 @@ class CustomPageOgMenuLinksManagerTest extends KernelTestBase {
   protected static $modules = [
     'custom_page',
     'field',
+    'joinup_group',
     'language',
     'link',
     'menu_link_content',
