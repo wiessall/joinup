@@ -8,6 +8,7 @@
 declare(strict_types = 1);
 
 use Drupal\Component\Utility\Html;
+use Drupal\Core\Template\Attribute;
 
 /**
  * Implements hook_theme_suggestions_HOOK_alter().
@@ -36,6 +37,43 @@ function ventuno_preprocess_field_ui_table(array &$variables): void {
 function ventuno_preprocess_field_multiple_value_form(array &$variables): void {
   if ($variables['user']->isAuthenticated()) {
     $variables['#attached']['library'][] = 'ventuno/tabledrag';
+  }
+
+  // Provide a 'for' property for field labels in multi-value fields
+  // using id of the first element so that it is semantically clear
+  // to which form element this label belongs.
+  if ($variables['multiple']) {
+    // Set new variable label, which contains title.
+    $label = $variables['element']['#title'];
+    $variables['label']['content'] = $label;
+    // Lists of element types.
+    $elements = [
+      'target_id',
+      'value',
+      'uri',
+    ];
+
+    // Fixes link form element title.
+    // @see ventuno_preprocess_form_element().
+    if (isset($variables['element']['0']['uri'])) {
+      foreach ($variables['table']['#rows'] as &$value_row) {
+        $value_row['data'][1]['data']['uri']['#title'] = $label;
+      }
+      // Remove table header for this very specific case to avoid redundancy.
+      if ($variables['element']['#id'] === 'edit-field-event-online-location') {
+        unset($variables['table']['#header']);
+      }
+    }
+
+    // Set first input 'id' as 'for' attribute for table label.
+    foreach ($elements as $value_element) {
+      if (isset($variables['element']['0'][$value_element]['#id'])) {
+        $variables['label']['attributes'] = new Attribute([
+          'for' => $variables['element']['0'][$value_element]['#id'],
+        ]);
+        break;
+      }
+    }
   }
 }
 

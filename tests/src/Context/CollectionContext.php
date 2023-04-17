@@ -103,7 +103,7 @@ class CollectionContext extends RawDrupalContext {
    */
   public function visitCollection(string $collection): void {
     /** @var \Drupal\rdf_entity\Entity\Rdf $entity */
-    $entity = $this->getEntityByLabel('rdf_entity', $collection);
+    $entity = $this->getEntityByLabel('rdf_entity', $collection, 'collection');
     $this->visitPath($entity->toUrl()->toString());
   }
 
