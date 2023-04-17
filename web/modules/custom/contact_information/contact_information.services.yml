@@ -12,3 +12,7 @@ services:
     arguments: ['@datetime.time', '@request_stack', '@entity_type.manager']
     tags:
       - { name: event_subscriber }
+  contact_information.contact_form.route_subscriber:
+    class: Drupal\contact_information\EventSubscriber\ContactInformationContactFormRouteSubscriber
+    tags:
+      - { name: event_subscriber }

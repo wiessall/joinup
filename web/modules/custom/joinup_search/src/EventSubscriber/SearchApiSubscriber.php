@@ -51,11 +51,7 @@ class SearchApiSubscriber implements EventSubscriberInterface {
    */
   public function queryAlter(QueryPreExecuteEvent $event): void {
     $query = $event->getQuery();
-    $event_condition_listings = [
-      'rdf_entity.collection.field_collection_content',
-      'paragraph.configurable_listing.content_listing',
-    ];
-    if (in_array($query->getSearchId(), $event_condition_listings)) {
+    if ($query->getSearchId() === 'rdf_entity.collection.field_collection_content' || preg_match('/^paragraph\..*\.content_listing$/', $query->getSearchId())) {
       // In case the user has filtered by event, first sort by the event date.
       // @todo This will be generic when event calendar will be implemented for
       // the rdf_entity.field_is_content and the paragraph.content_listing
@@ -70,14 +66,12 @@ class SearchApiSubscriber implements EventSubscriberInterface {
     }
 
     // Sort collection content by creation date, the newest first.
-    $search_ids = [
-      'rdf_entity.field_collection_content',
-      'rdf_entity.field_is_content',
-      'paragraph.content_listing.content_listing',
-      'paragraph.configurable_listing.content_listing',
+    $group_content_search_ids = [
+      'rdf_entity.collection.field_collection_content',
+      'rdf_entity.solution.field_is_content',
     ];
 
-    if (in_array($query->getSearchId(), $search_ids)) {
+    if (in_array($query->getSearchId(), $group_content_search_ids) || preg_match('/^paragraph\..*\.content_listing$/', $query->getSearchId())) {
       $query->sort('entity_created', 'DESC');
     }
 
