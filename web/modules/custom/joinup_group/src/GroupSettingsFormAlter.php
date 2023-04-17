@@ -7,12 +7,11 @@ namespace Drupal\joinup_group;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
-use Drupal\custom_page\CustomPageOgMenuLinksManagerInterface;
 use Drupal\menu_link_content\MenuLinkContentInterface;
 use Drupal\sparql_entity_storage\UriEncoder;
 
 /**
- * Provide implementation of "joinup_group.group_settings_form_alter" service.
+ * Provides implementation of "joinup_group.group_settings_form_alter" service.
  */
 class GroupSettingsFormAlter implements GroupSettingsFormAlterInterface {
 
@@ -23,12 +22,12 @@ class GroupSettingsFormAlter implements GroupSettingsFormAlterInterface {
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
    *   The entity type manager service.
-   * @param \Drupal\custom_page\CustomPageOgMenuLinksManagerInterface $customPageOgMenuLinksManager
-   *   The custom page menu link manager.
+   * @param \Drupal\joinup_group\GroupMenuManagerInterface $groupMenuManager
+   *   Group menu manager.
    */
   public function __construct(
     protected EntityTypeManagerInterface $entityTypeManager,
-    protected CustomPageOgMenuLinksManagerInterface $customPageOgMenuLinksManager) {
+    protected GroupMenuManagerInterface $groupMenuManager) {
   }
 
   /**
@@ -67,7 +66,7 @@ class GroupSettingsFormAlter implements GroupSettingsFormAlterInterface {
       return NULL;
     }
 
-    $menu = $this->customPageOgMenuLinksManager->getOgMenuInstanceByGroupId($rdf->id());
+    $menu = $this->groupMenuManager->getMenuByGroupId($rdf->id());
     if (!$menu) {
       return NULL;
     }
