@@ -9,7 +9,7 @@ dependencies:
 id: ventuno_eifcategories
 theme: ventuno
 region: content
-weight: -12
+weight: -11
 provider: null
 plugin: eif_categories
 settings:
