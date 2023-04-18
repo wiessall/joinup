@@ -1,5 +1,5 @@
 @group-clone @api
-Feature: Ampersand character is not decoded properly.
+Feature: Ampersand character is not decoded properly under a topic page.
 
   Scenario: Visit /topic/digital-government/digital-ready-policymaking and check if ampersand character is decoded properly.
     Given I am an anonymous user

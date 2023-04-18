@@ -466,7 +466,7 @@ Feature:
     Then I should not see the "News 1" tile
     And I should not see the heading "E-justice heading"
 
-  Scenario: Ampersand character is not decoded properly for featured content.
+  Scenario: Ampersand character is not decoded properly under a topic page.
     Given custom_page content:
       | title                    | body                                          | state     |
       | Legislation & Technology | What do we mean by Legislation & Technology?  | validated |
