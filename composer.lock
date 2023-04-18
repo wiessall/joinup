@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b12bddb0bb60db2221835718b09885af",
+    "content-hash": "18cf8c1963b40f35447cee10daa6a447",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -7877,6 +7877,14 @@
                 {
                     "name": "entendu",
                     "homepage": "https://www.drupal.org/user/173461"
+                },
+                {
+                    "name": "fathima.asmat",
+                    "homepage": "https://www.drupal.org/user/3622664"
+                },
+                {
+                    "name": "tobiasb",
+                    "homepage": "https://www.drupal.org/user/183956"
                 }
             ],
             "description": "Select which roles should be able to see unpublished nodes.",
