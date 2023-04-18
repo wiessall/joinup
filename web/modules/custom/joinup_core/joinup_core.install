@@ -95,40 +95,9 @@ function joinup_core_requirements($phase): array {
 }
 
 /**
- * Update existing field of type field_user_family_name, field_user_first_name.
- */
-function joinup_core_update_109200(): void {
-  $num_chars = 100;
-  $fields_to_update = ['field_user_family_name', 'field_user_first_name'];
-
-  foreach ($fields_to_update as $field_name) {
-
-    // Resize the columns.
-    $database = \Drupal::database();
-    $database->query("ALTER TABLE user__{$field_name} MODIFY {$field_name}_value VARCHAR($num_chars)");
-
-    // Update storage schema.
-    $storage_key = "user.field_schema_data." . $field_name;
-    $storage_schema = \Drupal::keyValue('entity.storage_schema.sql');
-    $field_schema = $storage_schema->get($storage_key);
-    $field_schema["user__{$field_name}"]['fields']["{$field_name}_value"]['length'] = $num_chars;
-    $storage_schema->set($storage_key, $field_schema);
-
-    // Update field configuration.
-    $config = \Drupal::configFactory()
-      ->getEditable("field.storage.user.{$field_name}");
-    $config->set('settings.max_length', $num_chars);
-    $config->save(TRUE);
-
-    // Update field storage configuration.
-    FieldStorageConfig::loadByName('user', $field_name)->save();
-  }
-}
-
-/**
  * Trim existing first and family names.
  */
-function joinup_core_update_109201(?array &$sandbox = NULL): string {
+function joinup_core_update_109200(?array &$sandbox = NULL): string {
   if (!isset($sandbox['users'])) {
     $storage = \Drupal::entityTypeManager()->getStorage('user');
     $sandbox['users'] = $storage->loadMultiple();
@@ -156,4 +125,35 @@ function joinup_core_update_109201(?array &$sandbox = NULL): string {
 
   $sandbox['#finished'] = $sandbox['count'] === $sandbox['total'];
   return "Processed {$sandbox['count']} out of {$sandbox['total']} users";
+}
+
+/**
+ * Update existing field of type field_user_family_name, field_user_first_name.
+ */
+function joinup_core_update_109201(): void {
+  $num_chars = 100;
+  $fields_to_update = ['field_user_family_name', 'field_user_first_name'];
+
+  foreach ($fields_to_update as $field_name) {
+
+    // Resize the columns.
+    $database = \Drupal::database();
+    $database->query("ALTER TABLE user__{$field_name} MODIFY {$field_name}_value VARCHAR($num_chars)");
+
+    // Update storage schema.
+    $storage_key = "user.field_schema_data." . $field_name;
+    $storage_schema = \Drupal::keyValue('entity.storage_schema.sql');
+    $field_schema = $storage_schema->get($storage_key);
+    $field_schema["user__{$field_name}"]['fields']["{$field_name}_value"]['length'] = $num_chars;
+    $storage_schema->set($storage_key, $field_schema);
+
+    // Update field configuration.
+    $config = \Drupal::configFactory()
+      ->getEditable("field.storage.user.{$field_name}");
+    $config->set('settings.max_length', $num_chars);
+    $config->save(TRUE);
+
+    // Update field storage configuration.
+    FieldStorageConfig::loadByName('user', $field_name)->save();
+  }
 }
