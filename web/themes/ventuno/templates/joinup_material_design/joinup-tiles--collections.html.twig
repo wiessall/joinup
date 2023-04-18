@@ -1,0 +1,33 @@
+{#
+/**
+ * @file
+ * Default theme implementation to display a view of unformatted rows.
+ *
+ * Available variables:
+ * - title: The title of this group of rows. May be empty.
+ * - rows: A list of the view's row items.
+ *   - attributes: The row's HTML attributes.
+ *   - content: The row's content.
+ * - view: The view object.
+ * - default_row_class: A flag indicating whether default classes should be
+ *   used on rows.
+ *
+ * @see template_preprocess_views_view_unformatted()
+ *
+ * @ingroup themeable
+ */
+#}
+{% extends "joinup-tiles.html.twig" %}
+
+{% block create %}
+  <div class="col">
+    <div class="card card--tile h-100 mb-3 position-relative">
+      <a href="{{ path('joinup.collection_tca_form') }}" class="position-absolute top-0 end-0 bottom-0 start-0 d-flex flex-column align-items-center justify-content-center fs-5">
+        <svg class="bi w-100">
+          <use xlink:href="{{ bcl_icon_path }}#plus"></use>
+        </svg>
+        {{ 'Create collection'|t }}
+      </a>
+    </div>
+  </div>
+{% endblock %}
