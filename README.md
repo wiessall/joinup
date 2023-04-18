@@ -7,7 +7,7 @@ funded by the European Union via the [Interoperability Solutions for European
 Public Administrations (ISA)](http://ec.europa.eu/isa/) Programme.
 
 It offers several services that aim to help e-Government professionals share
-their experience with each other.  We also hope to support them to find,
+their experience with each other. We also hope to support them to find,
 choose, re-use, develop and implement interoperability solutions.
 
 The Joinup platform is developed as a Drupal 8 distribution, and therefore
@@ -19,6 +19,7 @@ Joinup is licensed under the
 compatible with the GPL.
 
 ## Contributing
+
 See our [contributors guide](.github/CONTRIBUTING.md).
 
 ## Running your own instance of Joinup
@@ -35,9 +36,11 @@ To start with docker, please, check the separated [README file](docs/docker/READ
 To run Joinup locally, below is a list of requirements and instructions.
 
 #### On macOS without Docker installation
+
 To start on macOS without Docker, please, check the separated [README file](resources/mac/README.md).
 
 #### Requirements
+
 * A regular LAMP stack running PHP 7.4.0 or higher
 * Virtuoso 7 (Triplestore database)
 * Apache Solr
@@ -79,7 +82,8 @@ used tool.
 
 * Install Virtuoso. For basic instructions, see [setting up
   Virtuoso](https://github.com/ec-europa/rdf_entity/blob/8.x-1.x/README.md).
-  Due to [a bug in Virtuoso 6](https://github.com/openlink/virtuoso-opensource/issues/303) it is recommended to use Virtuoso 7.
+  Due to [a bug in Virtuoso 6](https://github.com/openlink/virtuoso-opensource/issues/303) it is recommended to use
+  Virtuoso 7.
   During installation some RDF based taxonomies will be imported from the `resources/fixtures` folder.
   Make sure Virtuoso can read from this folder by adding it to the `DirsAllowed`
   setting in your `virtuoso.ini`. For example:
@@ -154,7 +158,6 @@ $ composer install
 $ ./vendor/bin/run toolkit:install-clean
 ```
 
-
 #### Run the tests
 
 Run the Behat test suite to validate your installation.
@@ -164,7 +167,8 @@ $ cd tests
 $ ./behat
 ```
 
-During development you can enable Behat test screen-shots by uncomment this line in `tests/features/bootstrap/FeatureContext.php`:
+During development you can enable Behat test screen-shots by uncomment this line
+in `tests/features/bootstrap/FeatureContext.php`:
 
 ```php
   // use \Drupal\joinup\Traits\ScreenShotTrait;
@@ -184,11 +188,9 @@ $ cd web
 $ ../vendor/bin/phpunit
 ```
 
-
 ### Frontend development
 
 See the [readme](web/themes/joinup/README.md) in the theme folder.
-
 
 ### Upgrade process
 
@@ -223,12 +225,15 @@ For the above example:
   `v2.75.x` as the fourth post update of the `mymodule` module (`02` major
   version, `075` minor version, `03` update weight within the module).
 
-
 ### Technical details
 
 * In [Rdf draft module](web/modules/custom/rdf_entity/rdf_draft/README.md)
-there is information on handling draft in CRUD operations for rdf entities.
+  there is information on handling draft in CRUD operations for rdf entities.
 * In [Joinup notification module](web/modules/custom/joinup_notification/README.md)
-there is information on how to handle notifications in Joinup.
+  there is information on how to handle notifications in Joinup.
 * In [Joinup core module](web/modules/custom/joinup_core/README.md) there is
-information on how to handle and create workflows.
+  information on how to handle and create workflows.
+* For some additional details in our SPARQL related functionality, see our
+  [SPARQL developer documentation](./docs/sparql.md).
+* Check the [third party services](./docs/third-party-services.md)
+  documentation for additional information on the services we integrate with.

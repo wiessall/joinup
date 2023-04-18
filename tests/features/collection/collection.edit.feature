@@ -35,7 +35,6 @@ Feature: Editing collections
     And I press "Save as draft"
     Then I should see the heading "Überwaldean Sea Eels"
 
-
   @terms @javascript
   Scenario: Edit a collection wysiwyg modal should close.
     # Regression test for ticket ISAICP-7181.
