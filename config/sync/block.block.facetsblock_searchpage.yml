@@ -10,7 +10,7 @@ dependencies:
 id: facetsblock_searchpage
 theme: ventuno
 region: sidebar
-weight: -15
+weight: -20
 provider: null
 plugin: facets_block
 settings:

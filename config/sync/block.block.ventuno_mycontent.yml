@@ -13,7 +13,7 @@ _core:
   default_config_hash: '-AQZlw29gV0x0t8_q98V7WbwZXUJn_cCHp3lQCLtRQQ'
 id: ventuno_mycontent
 theme: ventuno
-region: sidebar
+region: content
 weight: -18
 provider: null
 plugin: 'facet_block:content_my_content'
@@ -22,7 +22,8 @@ settings:
   label: 'Content overview - My content'
   label_display: '0'
   provider: facets
-  block_id: mycontent
+  context_mapping: {  }
+  block_id: ventuno_mycontent
 visibility:
   request_route:
     id: request_route
