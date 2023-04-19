@@ -42,16 +42,15 @@ phpcs:
     files:
       - ${joinup.dir}/tests/src
       - ${joinup.dir}/src
-      - ${joinup.site_dir}/modules
-      - ${joinup.site_dir}/profiles
-      - ${joinup.site_dir}/themes
+      - ${joinup.site_dir}/modules/custom
+      - ${joinup.site_dir}/profiles/joinup
+      - ${joinup.site_dir}/themes/iop
+      - ${joinup.site_dir}/themes/ventuno
   ignore:
-    - ${joinup.site_dir}/modules/contrib
-    - ${joinup.site_dir}/themes/contrib
-    - ${joinup.site_dir}/themes/joinup/scss
-    - ${joinup.site_dir}/themes/joinup/node_modules
-    - ${joinup.site_dir}/themes/ventuno/css
-    - ${joinup.site_dir}/themes/ventuno/node_modules
+    - '*/iop/assets/*'
+    - '*/iop/iop/node_modules/*'
+    - '*/ventuno/assets/*'
+    - '*/ventuno/iop/node_modules/*'
     - ${joinup.site_dir}/modules/custom/joinup_communities/tallinn/lib
   report: full
   options:
@@ -62,12 +61,9 @@ phpcs:
     # number of available processor cores. If the system has fast storage then
     # this can be increased further.
     parallel: 1
-  # Set this config to `true` in your `runner.yml` in order to enable running
-  # PHP coding standards on Git push. Due to the complexity of the docker
-  # environment, having git run from the host but having the scripts that need
-  # to be run from the container, it is very hard to catch all cases. For this
-  # reason, this is disabled by default.
-  run_on_push: false
+  # Set this config to `false` in your `runner.yml` in order to disable running
+  # PHP coding standards on Git push.
+  run_on_push: true
 
 commands:
 
