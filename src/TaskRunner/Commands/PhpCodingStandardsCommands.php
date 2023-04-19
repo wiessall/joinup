@@ -51,6 +51,10 @@ class PhpCodingStandardsCommands extends AbstractCommands {
     // Add ignore patterns.
     if ($config->has('phpcs.ignore')) {
       foreach ($config->get('phpcs.ignore') as $pattern) {
+        // Treat dirs.
+        if (is_dir($pattern) && !str_ends_with($pattern, '/')) {
+          $pattern .= '/';
+        }
         $element = $document->createElement('exclude-pattern', $pattern);
         $root_element->appendChild($element);
       }
