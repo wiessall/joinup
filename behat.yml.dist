@@ -196,9 +196,9 @@ default:
         # Remove #block-toc-outline in ISAICP-7138.
         # See https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7138
         Table of contents outline: '#block-ventuno-toc-outline,#block-toc-outline'
-        Draft unpublished block: '#block-joinup-theme-unpublished-draft'
-        Proposed unpublished block: '#block-joinup-theme-unpublished-proposed'
-        Other unpublished block: '#block-joinup-theme-unpublished-other'
+        Draft unpublished block: '#block-ventuno-unpublished-draft'
+        Proposed unpublished block: '#block-ventuno-unpublished-proposed'
+        Other unpublished block: '#block-ventuno-unpublished-other'
         # Deprecated regions to be removed in ISAICP-7138.
         # See https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7138
         Navigation menu block: '#block-navigation'
