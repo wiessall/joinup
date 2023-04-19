@@ -138,9 +138,9 @@ Feature: Navigation menu for custom pages
       | state | validated     |
     And custom_page content:
       | title             | body                   | collection    |
-      | Molds for walls   | This is a sample body. | Plaster molds |
       | Molds for crafts  | This is a sample body. | Plaster molds |
       | Molds for pottery | This is a sample body. | Plaster molds |
+      | Molds for walls   | This is a sample body. | Plaster molds |
     # A menu with 6 items is displayed normally
     When I go to the "Plaster molds" collection
     Then I should see the link "Molds for pottery" in the "Navigation menu"
@@ -150,12 +150,13 @@ Feature: Navigation menu for custom pages
     Given custom_page content:
       | title           | body                   | collection    |
       | Vintage molds   | This is a sample body. | Plaster molds |
-      | Plaster casting | This is a sample body. | Plaster molds |
     When I go to the "Plaster molds" collection
     Then I should see the text "See more" in the "Navigation menu"
-    But I should not see the text "Plaster casting" in the "Navigation menu"
-    And I press "See more"
-    Then I should see the text "Plaster casting" in the "Navigation menu"
+    But I should not see the text "Molds for walls" in the "Navigation menu"
+    And I should not see the text "Vintage molds" in the "Navigation menu"
+    Then I press "See more"
+    And I should see the text "Molds for walls" in the "Navigation menu"
+    And I should see the text "Vintage molds" in the "Navigation menu"
 
   @javascript
   Scenario Outline: The contextual links button in the navigation menu should be always visible
