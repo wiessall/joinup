@@ -21,28 +21,28 @@ class JoinupDrushCommands extends DrushCommands {
    * This command is designed to avoid using a bootstrapped Drupal, in order to
    * be used in circumstances when Drupal is not yet installed.
    */
-  #[CLI\Command(name: "memcache:flush-all")]
+  #[CLI\Command(name: 'memcache:flush-all')]
   public function memcacheFlushAll(): void {
-    if ($memcached_hosts = getenv('DRUPAL_MEMCACHE_HOSTS')) {
-      $memcached = new \Memcached();
-      // The expected DRUPAL_MEMCACHE_HOSTS pattern is:
-      // @code
-      // DRUPAL_MEMCACHE_HOSTS=host1:port1,host2:port2,...
-      // @endcode
-      foreach (explode(',', $memcached_hosts) as $memcached_host) {
-        [$host, $port] = explode(':', $memcached_host);
-        $memcached->addServer($host, (int) $port);
-      }
-
-      if ($memcached->getStats() === FALSE) {
-        throw new \RuntimeException('Memcached service is not available');
-      }
-
-      $memcached->flush();
-      $this->logger()->notice('Memcache backend flushed');
+    if (!$memcached_hosts = getenv('DRUPAL_MEMCACHE_HOSTS')) {
+      $this->logger()->warning('The DRUPAL_MEMCACHE_HOSTS environment variable is empty or not set');
       return;
     }
-    $this->logger()->warning('The DRUPAL_MEMCACHE_HOSTS environment variable is empty or not set');
+    $memcached = new \Memcached();
+    // The expected DRUPAL_MEMCACHE_HOSTS pattern is:
+    // @code
+    // DRUPAL_MEMCACHE_HOSTS=host1:port1,host2:port2,...
+    // @endcode
+    foreach (explode(',', $memcached_hosts) as $memcached_host) {
+      [$host, $port] = explode(':', $memcached_host);
+      $memcached->addServer($host, (int) $port);
+    }
+
+    if ($memcached->getStats() === FALSE) {
+      throw new \RuntimeException('Memcached service is not available');
+    }
+
+    $memcached->flush();
+    $this->logger()->notice('Memcache backend flushed');
   }
 
   /**
