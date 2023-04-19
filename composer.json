@@ -23,7 +23,7 @@
         "drupal/changed_fields": "^3.2",
         "drupal/config_ignore": "^3.0",
         "drupal/config_readonly": "^1.0",
-        "drupal/core": "9.5.5",
+        "drupal/core": "^9.5",
         "drupal/core-composer-scaffold": "^9.5",
         "drupal/custom_markup_block": "^1.1",
         "drupal/default_content": "^2.0",
@@ -133,16 +133,17 @@
         "drupal/renderviz": "^1.0",
         "drupal/upgrade_status": "^3.14",
         "drupaltest/behat-one-time-login": "^1.0",
-        "ec-europa/toolkit": "^9.7",
-        "openeuropa/task-runner": "^2.0",
+        "ec-europa/toolkit": "^9.8",
         "lovers-of-behat/table-extension": "^1.3",
         "mikey179/vfsstream": "~1.6",
+        "openeuropa/task-runner": "^2.0",
         "palantirnet/drupal-rector": "^0.12.2",
         "pear/http_request2": "~2.4",
         "php-task-runner/composer": "dev-master",
         "php-task-runner/scss": "1.x-dev",
         "php-task-runner/sparql": "1.x-dev",
         "phpspec/prophecy-phpunit": "^2",
+        "phpstan/extension-installer": "^1.3",
         "phpunit/phpunit": "^9.5",
         "slevomat/coding-standard": "~7",
         "symfony/css-selector": "^4.4",
@@ -282,9 +283,6 @@
             },
             "drupal/default_content": {
                 "Allow manual imports @see https://www.drupal.org/i/2640734": "https://git.drupalcode.org/project/default_content/-/merge_requests/20.diff"
-            },
-            "drupal/drupal-extension": {
-                "Port https://www.drupal.org/project/drupal/issues/3175718 @see https://github.com/jhedstrom/drupalextension/pull/629": "resources/patch/drupal/drupal-extension/port-ddo-3175718.patch"
             },
             "drupal/email_confirmer": {
                 "Support for HTML mails @see https://www.drupal.org/i/3047124": "https://git.drupalcode.org/project/email_confirmer/-/merge_requests/3.diff"
