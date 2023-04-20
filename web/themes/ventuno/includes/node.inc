@@ -139,3 +139,15 @@ function ventuno_preprocess_node(array &$variables): void {
     unset($variables['content']);
   }
 }
+
+/**
+ * Implements hook_preprocess_HOOK() for node--news--view-mode-tile.html.twig.
+ *
+ * Provides the comment count as a variable.
+ */
+function ventuno_preprocess_node__news__view_mode_tile(array &$variables, string $entity_type_id): void {
+  $node = $variables['elements']['#node'];
+  $entity = $variables[$entity_type_id];
+  $variables['created'] = Drupal::service('date.formatter')->format($node->getCreatedTime(), 'date_only');
+  $variables['changed'] = Drupal::service('date.formatter')->format($node->getChangedTime(), 'date_only');
+}
