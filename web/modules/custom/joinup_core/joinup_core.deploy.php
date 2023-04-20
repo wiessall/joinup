@@ -19,7 +19,7 @@ use Drupal\sparql_entity_storage\UriEncoder;
 /**
  * Fix glossary link for solution entities.
  */
-function joinup_core_deploy_0109103(array &$sandbox = []): string {
+function joinup_core_deploy_0109120(array &$sandbox = []): string {
   /** @var \Drupal\sparql_entity_storage\SparqlEntityStorageInterface $solutionStorage */
   $solutionStorage = \Drupal::entityTypeManager()
     ->getStorage('rdf_entity');
