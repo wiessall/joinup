@@ -60,13 +60,13 @@ class GroupSettingsFormAlter implements GroupSettingsFormAlterInterface {
    *   Menu link content.
    */
   protected function getMenuLinkContent(FormStateInterface $form_state): ?MenuLinkContentInterface {
-    /** @var \Drupal\rdf_entity\RdfInterface $rdf */
-    $rdf = $form_state->getFormObject()?->getEntity()?->getTargetEntity();
-    if (!$rdf) {
+    /** @var \Drupal\joinup_group\Entity\GroupInterface|null $group */
+    $group = $form_state->getFormObject()?->getEntity()?->getTargetEntity();
+    if (!$group) {
       return NULL;
     }
 
-    $menu = $this->groupMenuManager->getMenuByGroupId($rdf->id());
+    $menu = $this->groupMenuManager->getMenuByGroupId($group->id());
     if (!$menu) {
       return NULL;
     }
@@ -78,7 +78,7 @@ class GroupSettingsFormAlter implements GroupSettingsFormAlterInterface {
     $ids = $menuLinkContentStorage->getQuery()->accessCheck(FALSE)
       ->condition('bundle', 'menu_link_content')
       ->condition('menu_name', "ogmenu-{$menu->id()}")
-      ->condition('link.uri', 'entity:rdf_entity/' . UriEncoder::encodeUrl($rdf->id()))
+      ->condition('link.uri', 'entity:rdf_entity/' . UriEncoder::encodeUrl($group->id()))
       ->range(0, 1)
       ->execute();
     if (empty($ids)) {
