@@ -7,9 +7,7 @@
 
 declare(strict_types = 1);
 
-use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\Core\Site\Settings;
-use Drupal\field\Entity\FieldConfig;
 use Drupal\field\Entity\FieldStorageConfig;
 use Drupal\user\Entity\User;
 
@@ -101,31 +99,31 @@ function joinup_core_requirements($phase): array {
  */
 function joinup_core_update_109200(): void {
   $database = \Drupal::database();
-  $manager = \Drupal::entityDefinitionUpdateManager();
-  $entity_type_manager = \Drupal::service('entity_type.manager');
-  $user_entity_type = $entity_type_manager->getDefinition('user');
   $num_chars = 100;
   $fields_to_update = ['field_user_family_name', 'field_user_first_name'];
 
   foreach ($fields_to_update as $field_name) {
-    $database->query("UPDATE user__{$field_name} SET {$field_name}_value = SUBSTR({$field_name}_value, 1, 100) WHERE LENGTH({$field_name}_value) > 100");
-
     $table_name = 'user__' . $field_name;
-    $result = $database->query("SELECT * FROM $table_name");
-    // Fetch all the rows and store them in a variable.
-    $data = $result->fetchAll();
-    $database->truncate($table_name)->execute();
+    $database->query("UPDATE {$table_name} SET {$field_name}_value = SUBSTR({$field_name}_value, 1, 100) WHERE LENGTH({$field_name}_value) > 100");
 
-    // Update definitions and schema.
-    $storage_definition = $manager->getFieldStorageDefinition($field_name, 'user');
-    $storage_definition->setSetting('max_length', $num_chars);
-    $manager->updateFieldStorageDefinition($storage_definition);
+    // Resize the columns.
+    $database = \Drupal::database();
+    $database->query("ALTER TABLE {$table_name} MODIFY {$field_name}_value VARCHAR($num_chars)");
 
-    // Restore the values.
-    foreach ($data as $row) {
-      $database->insert($table_name)
-        ->fields((array) $row)
-        ->execute();
-    }
+    // Update storage schema.
+    $storage_key = "user.field_schema_data." . $field_name;
+    $storage_schema = \Drupal::keyValue('entity.storage_schema.sql');
+    $field_schema = $storage_schema->get($storage_key);
+    $field_schema["user__{$field_name}"]['fields']["{$field_name}_value"]['length'] = $num_chars;
+    $storage_schema->set($storage_key, $field_schema);
+
+    // Update field configuration.
+    $config = \Drupal::configFactory()
+      ->getEditable("field.storage.user.{$field_name}");
+    $config->set('settings.max_length', $num_chars);
+    $config->save(TRUE);
+
+    // Update field storage configuration.
+    FieldStorageConfig::loadByName('user', $field_name)->save();
   }
 }
