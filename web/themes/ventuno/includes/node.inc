@@ -50,16 +50,6 @@ function ventuno_preprocess_node__explore_item(array &$variables): void {
 }
 
 /**
- * Implements hook_preprocess_HOOK() for node--discussion--view-mode-tile.html.twig.
- *
- * Provides the comment count as a variable.
- */
-function ventuno_preprocess_node__discussion__view_mode_tile(array &$variables): void {
-  $node = $variables['elements']['#node'];
-  $variables['comment_count'] = $node->get('field_replies')->comment_count;
-}
-
-/**
  * Implements hook_preprocess_HOOK() for node--tallinn-report--view-mode-tile.html.twig.
  */
 function ventuno_preprocess_node__tallinn_report__view_mode_tile(&$variables) {
@@ -142,12 +132,29 @@ function ventuno_preprocess_node(array &$variables): void {
 
 /**
  * Implements hook_preprocess_HOOK() for node--news--view-mode-tile.html.twig.
- *
- * Provides the comment count as a variable.
  */
 function ventuno_preprocess_node__news__view_mode_tile(array &$variables, string $entity_type_id): void {
   $node = $variables['elements']['#node'];
   $entity = $variables[$entity_type_id];
-  $variables['created'] = Drupal::service('date.formatter')->format($node->getCreatedTime(), 'date_only');
   $variables['changed'] = Drupal::service('date.formatter')->format($node->getChangedTime(), 'date_only');
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for node--document--view-mode-tile.html.twig.
+ */
+function ventuno_preprocess_node__document__view_mode_tile(array &$variables, string $entity_type_id): void {
+  $node = $variables['elements']['#node'];
+  $entity = $variables[$entity_type_id];
+  $variables['changed'] = Drupal::service('date.formatter')->format($node->getChangedTime(), 'date_only');
+}
+
+
+/**
+ * Implements hook_preprocess_HOOK() for node--discussion--view-mode-tile.html.twig.
+ */
+function ventuno_preprocess_node__discussion__view_mode_tile(array &$variables, string $entity_type_id): void {
+  $node = $variables['elements']['#node'];
+  $variables['comment_count'] = $node->get('field_replies')->comment_count;
+  $entity = $variables[$entity_type_id];
+  $variables['changed'] = Drupal::service('date.formatter')->format($node->getChangedTime(), 'custom', 'd/m/Y, h:s');
 }
