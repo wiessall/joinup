@@ -1,0 +1,70 @@
+.tile {
+  &__figure {
+    overflow: hidden;
+    aspect-ratio: 16 / 9;
+    & picture {
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      & img {
+        max-height: 100%;
+      }
+    }
+  }
+  &__standout-info {
+    right: $spacer * .5;
+    top: $spacer * -1;
+    font-size: .875rem;
+  }
+  &__standout-info-icon,
+  &__info-icon {
+    font-size: .75rem;
+  }
+  &__info-icon {
+    flex-shrink: 0;
+  }
+  &__info-text {
+    // Limit to 1 lines
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+    overflow: hidden;
+  }
+  &__default-img {
+    &::after {
+      content: "";
+      display: block;
+      position: absolute;
+      width: $spacer * 6;
+      height: $spacer * 6;
+      background-color: $white;
+      border-radius: $border-radius-pill;
+    }
+  }
+  &__default-icon {
+    width: $spacer * 3;
+    height: $spacer * 3;
+    z-index: 1;
+    color: $gray-400;
+  }
+  &__body {
+    flex: 1 1 auto;
+  }
+  &__title {
+    font-size: 1.125rem;
+    // Limit to 2 lines
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+  }
+  &__footer {
+    padding: $spacer * .5;
+  }
+  &__bundle-icon {
+    background-color: lighten($warning, 30%);
+    width: $spacer * 1.5;
+    height: $spacer * 1.5;
+  }
+}
