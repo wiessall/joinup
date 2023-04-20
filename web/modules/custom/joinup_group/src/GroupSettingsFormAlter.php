@@ -104,10 +104,8 @@ class GroupSettingsFormAlter implements GroupSettingsFormAlterInterface {
    */
   public function submitCallback(array $form, FormStateInterface $form_state): void {
     $link = $this->getMenuLinkContent($form_state);
-    if ($link) {
-      $link->set('title', $form_state->getValue('tab_overview'));
-      $link->save();
-    }
+    $link?->set('title', $form_state->getValue('tab_overview'))
+      ->save();
   }
 
 }
