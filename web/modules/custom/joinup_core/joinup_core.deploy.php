@@ -71,7 +71,6 @@ function joinup_core_deploy_109200(array &$sandbox = []): string {
 
   $sandbox['current'] += count($ids);
   $sandbox['#finished'] = (int) empty($sandbox['ids']);
-  $sandbox['#finished'] = $sandbox['current'] / $sandbox['max'];
 
   return "Updated {$sandbox['current']} of {$sandbox['max']} glossary menu links.";
 }
