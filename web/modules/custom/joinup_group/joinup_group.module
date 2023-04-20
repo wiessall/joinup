@@ -1102,7 +1102,7 @@ function joinup_group_mail_alter(array &$message): void {
 /**
  * Implements hook_menu_local_tasks_alter().
  */
-function joinup_group_menu_local_tasks_alter(&$data, $route_name, RefinableCacheableDependencyInterface &$cacheability): void {
+function joinup_group_menu_local_tasks_alter(array &$data, string $route_name, RefinableCacheableDependencyInterface &$cacheability): void {
   if ($route_name != 'entity.rdf_entity.canonical') {
     return;
   }
