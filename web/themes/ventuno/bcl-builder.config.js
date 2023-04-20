@@ -244,8 +244,8 @@ module.exports = {
       },
     },
     {
-      entry: path.resolve(outputFolder, "src/scss/card.scss"),
-      dest: path.resolve(outputFolder, "assets/css/card.min.css"),
+      entry: path.resolve(outputFolder, "src/scss/tile.scss"),
+      dest: path.resolve(outputFolder, "assets/css/tile.min.css"),
       options: {
         includePaths,
         minify: true,
