@@ -82,6 +82,7 @@ function joinup_core_deploy_109201(array &$sandbox = []): string {
   if (empty($sandbox['ids'])) {
     $from_date = new \DateTime("2022/12/03");
     $users_ids = \Drupal::entityQuery('user')
+      ->accessCheck(FALSE)
       ->condition('status', '0')
       ->condition('uid', 1, '>')
       ->condition('created', $from_date->getTimestamp(), '<=')
