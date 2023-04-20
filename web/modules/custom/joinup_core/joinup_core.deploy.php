@@ -79,7 +79,7 @@ function joinup_core_deploy_109200(array &$sandbox = []): string {
 /**
  * Update the 'show archived' for the group content fields.
  */
-function joinup_core_deploy_0109201(): void {
+function joinup_core_deploy_109201(): void {
   $graphs = [
     'http://joinup.eu/collection/published',
     'http://joinup.eu/collection/draft',
@@ -123,7 +123,7 @@ QUERY;
 /**
  * Update the 'show archived' for the paragraph content listing fields.
  */
-function joinup_core_deploy_0109202(): void {
+function joinup_core_deploy_109202(): void {
   $query = \Drupal::entityQuery('paragraph')
     ->condition('type', [
       'content_listing',
