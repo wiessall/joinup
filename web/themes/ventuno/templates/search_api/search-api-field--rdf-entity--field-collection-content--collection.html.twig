@@ -35,16 +35,13 @@
   <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-xl-4 g-3 mb-3">
     {{ results }}
     {% if newsletter_enabled %}
-      {% set text %}
-        {{ newsletter_motivation }}
-        {{ newsletter_form }}
-      {% endset %}
-      {{ pattern('tile', {
-        attributes: attributes,
-        featured: true,
-        title: 'Newsletter'|t,
-        text: text,
-      }) }}
+      <div class="col">
+        <article class="tile bg-secondary shadow h-100 mb-3 p-2">
+          <h1 class="tile__title">Newsletter</h1>
+          {{ newsletter_motivation }}
+          {{ newsletter_form }}
+        </article>
+      </div>
     {% endif %}
   </div>
   {{ pager }}
