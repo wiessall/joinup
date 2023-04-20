@@ -70,20 +70,34 @@
  *   in different view modes.
  */
 #}
-{% set view_mode_featured = view_mode is same as 'view_mode_featured' %}
+{% set physical = content.field_location|render|striptags %}
+{% set virtual = content.field_event_online_location|render %}
+{% if physical and virtual %}
+  {% set location = 'Hybrid event'|t %}
+{% elseif virtual %}
+  {% set location = 'Virtual event'|t %}
+{% elseif physical %}
+  {% set location = physical %}
+{% else %}
+  {% set location = 'Unknown'|t %}
+{% endif %}
 {{ pattern('tile', {
   attributes: attributes,
-  featured: view_mode_featured,
   image: content.field_event_logo|render ? content.field_event_logo : '',
   url: url,
+  highlighted: {
+    icon: 'calendar-event',
+    text: content.field_event_date.0.start_date
+  },
+  info: {
+    icon: 'geo-alt',
+    label: location,
+  },
   title_prefix: title_prefix,
   title: label,
   title_suffix: title_suffix,
-  text: view_mode_featured ? content.body|render|striptags|raw,
-  metadata: [{
-    label: content.field_event_date.0.start_date,
-  },{
-    label: 'event',
+  bundle: {
+    label: 'Event',
     icon: 'calendar-event',
-  }],
+  },
 }) }}
