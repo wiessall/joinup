@@ -53,10 +53,13 @@ class RemoverUsersQueueWorker extends QueueWorkerBase implements ContainerFactor
    * {@inheritdoc}
    */
   public function processItem($data): void {
-    $user = $this->entityTypeManager->getStorage('user')->load($data);
-    if ($user instanceof UserInterface) {
-      $user->delete();
+    $users = $this->entityTypeManager->getStorage('user')->loadMultiple($data);
+    foreach ($users as $user) {
+      if ($user instanceof UserInterface) {
+        $user->delete();
+      }
     }
+
   }
 
 }
