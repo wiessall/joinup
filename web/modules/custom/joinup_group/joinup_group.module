@@ -1107,9 +1107,8 @@ function joinup_group_menu_local_tasks_alter(array &$data, string $route_name, R
     return;
   }
 
-  $route_match = \Drupal::routeMatch();
-  /** @var \Drupal\rdf_entity\RdfInterface $entity */
-  $entity = $route_match->getParameter('rdf_entity');
+  $entity = \Drupal::service('joinup_group.group_manager')
+    ->getGroupFromContext();
   if (!$entity instanceof GroupInterface ||
     $entity->getSetting('landing_page')->count() !== 1) {
     return;
