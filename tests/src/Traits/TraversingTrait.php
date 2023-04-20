@@ -416,6 +416,7 @@ trait TraversingTrait {
       'eif principle' => 'principle',
       'eif interoperability layer' => 'interoperability_layer',
       'eif conceptual model' => 'conceptual_model',
+      'Status' => 'status',
     ];
 
     if (!isset($mappings[$alias])) {
