@@ -85,13 +85,13 @@ class GroupSettingsFormAlter implements GroupSettingsFormAlterInterface {
       return NULL;
     }
 
-    /** @var \Drupal\menu_link_content\MenuLinkContentInterface $entity */
-    $entity = $menuLinkContentStorage->load(reset($ids));
-    if (!$entity) {
+    /** @var \Drupal\menu_link_content\MenuLinkContentInterface $menuLinkContent */
+    $menuLinkContent = $menuLinkContentStorage->load(reset($ids));
+    if (!$menuLinkContent) {
       return NULL;
     }
 
-    return $entity;
+    return $menuLinkContent;
   }
 
   /**
