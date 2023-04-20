@@ -20,7 +20,7 @@ class GroupMenuManager implements GroupMenuManagerInterface {
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
    *   The entity type manager service.
    */
-  public function __construct(public EntityTypeManagerInterface $entityTypeManager) {
+  public function __construct(protected EntityTypeManagerInterface $entityTypeManager) {
   }
 
   /**
