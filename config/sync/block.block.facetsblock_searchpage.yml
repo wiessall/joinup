@@ -22,31 +22,11 @@ settings:
   exclude_empty_facets: true
   hide_empty_block: false
   facets_to_include:
-    'facet_block:topic': 'facet_block:topic'
-    'facet_block:type': 'facet_block:type'
-    'facet_block:spatial_coverage': 'facet_block:spatial_coverage'
-    'facet_block:creation_date': 'facet_block:creation_date'
-    'facets_summary_block:summary': '0'
-    'facet_block:collection_topic': '0'
-    'facet_block:collection_type': '0'
-    'facet_block:aggregated_changed': '0'
-    'facet_block:group': '0'
-    'facet_block:solution_type': '0'
-    'facet_block:solution_topic': '0'
-    'facet_block:solution_spatial_coverage': '0'
-    'facet_block:solution_my_content': '0'
-    'facet_block:solution_content_bundle': '0'
-    'facet_block:event_date': '0'
-    'facet_block:content_listing_type': '0'
-    'facet_block:authoredon': '0'
-    'facet_block:csv_solution_type': '0'
-    'facet_block:csv_changed': '0'
-    'facet_block:csv_authoredon': '0'
-    'facet_block:content_my_content': '0'
-    'facet_block:content_bundle': '0'
-    'facet_block:collection_my_content': '0'
-    'facet_block:collection_event_type': '0'
-    'facet_block:user_content_bundle': '0'
+    - 'facet_block:topic'
+    - 'facet_block:type'
+    - 'facet_block:spatial_coverage'
+    - 'facet_block:creation_date'
+    - 'facet_block:status'
   add_js_classes: true
 visibility:
   request_route:

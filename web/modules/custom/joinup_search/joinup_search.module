@@ -469,3 +469,21 @@ function joinup_search_views_pre_render(ViewExecutable $view): void {
     }
   }
 }
+
+/**
+ * Implements hook_facets_block_facets_alter().
+ */
+function joinup_search_facets_block_facets_alter(array &$facets): void {
+  // Show only archived option in 'Status' facet.
+  if (\Drupal::routeMatch()->getRouteName() === 'view.search.page_1') {
+    foreach ($facets as $key => $facet) {
+      $facet = $facet["content"][0]["#facet"];
+      if ($facet->id() === 'status') {
+        $facets[$key]['content'][0]['#items'] = array_values(array_filter(
+          $facets[$key]['content'][0]['#items'],
+          fn(array $item): bool => $item['#title']['#raw_value'] === 'archived',
+        ));
+      }
+    }
+  }
+}
