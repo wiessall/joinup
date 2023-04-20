@@ -8,6 +8,7 @@ dev:
     - admin_toolbar
     - config_update
     - field_ui
+    - memcache_admin
     - page_manager_ui
     - views_ui
 
