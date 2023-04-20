@@ -73,5 +73,5 @@ function joinup_core_deploy_0109103(array &$sandbox = []): string {
   $sandbox['#finished'] = (int) empty($sandbox['ids']);
   $sandbox['#finished'] = $sandbox['current'] / $sandbox['max'];
 
-  return "Removed {$sandbox['current']} of {$sandbox['max']} solutions.";
+  return "Updated {$sandbox['current']} of {$sandbox['max']} glossary menu links.";
 }
