@@ -19,7 +19,6 @@ class DrupalSettingsHook implements BeforeFirstTestHook, AfterLastTestHook {
    * {@inheritdoc}
    */
   public function executeBeforeFirstTest(): void {
-    $this->runCommand("redis:flush-all");
     $this->runCommand("drupal:settings phpunit --root={$this->getPath('web')} --sites-subdir=default");
   }
 
