@@ -7,7 +7,9 @@
 
 declare(strict_types = 1);
 
+use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\Core\Site\Settings;
+use Drupal\field\Entity\FieldConfig;
 use Drupal\field\Entity\FieldStorageConfig;
 use Drupal\user\Entity\User;
 
@@ -95,65 +97,35 @@ function joinup_core_requirements($phase): array {
 }
 
 /**
- * Trim existing first and family names.
+ * Update and trim existing first and family names.
  */
-function joinup_core_update_109200(?array &$sandbox = NULL): string {
-  if (!isset($sandbox['users'])) {
-    $storage = \Drupal::entityTypeManager()->getStorage('user');
-    $sandbox['users'] = $storage->loadMultiple();
-    $sandbox['count'] = 0;
-    $sandbox['total'] = count($sandbox['users']);
-  }
-
-  $users = array_splice($sandbox['users'], 0, 50);
-  foreach ($users as $user) {
-    $first_name = $user->get('field_user_family_name')->value;
-    if ($first_name && strlen($first_name) > 100) {
-      $user->set('field_user_family_name', substr($first_name, 0, 100));
-    }
-
-    $last_name = $user->get('field_user_first_name')->value;
-    if ($last_name && strlen($last_name) > 100) {
-      $user->set('field_user_first_name', substr($last_name, 0, 100));
-    }
-
-    if ($first_name && strlen($first_name) > 100 || $last_name && strlen($last_name) > 100) {
-      $user->save();
-    }
-    $sandbox['count']++;
-  }
-
-  $sandbox['#finished'] = $sandbox['count'] === $sandbox['total'];
-  return "Processed {$sandbox['count']} out of {$sandbox['total']} users";
-}
-
-/**
- * Update existing field of type field_user_family_name, field_user_first_name.
- */
-function joinup_core_update_109201(): void {
+function joinup_core_update_109200(): void {
+  $database = \Drupal::database();
+  $manager = \Drupal::entityDefinitionUpdateManager();
+  $entity_type_manager = \Drupal::service('entity_type.manager');
+  $user_entity_type = $entity_type_manager->getDefinition('user');
   $num_chars = 100;
   $fields_to_update = ['field_user_family_name', 'field_user_first_name'];
 
   foreach ($fields_to_update as $field_name) {
+    $database->query("UPDATE user__{$field_name} SET {$field_name}_value = SUBSTR({$field_name}_value, 1, 100) WHERE LENGTH({$field_name}_value) > 100");
 
-    // Resize the columns.
-    $database = \Drupal::database();
-    $database->query("ALTER TABLE user__{$field_name} MODIFY {$field_name}_value VARCHAR($num_chars)");
+    $table_name = 'user__' . $field_name;
+    $result = $database->query("SELECT * FROM $table_name");
+    // Fetch all the rows and store them in a variable.
+    $data = $result->fetchAll();
+    $database->truncate($table_name)->execute();
 
-    // Update storage schema.
-    $storage_key = "user.field_schema_data." . $field_name;
-    $storage_schema = \Drupal::keyValue('entity.storage_schema.sql');
-    $field_schema = $storage_schema->get($storage_key);
-    $field_schema["user__{$field_name}"]['fields']["{$field_name}_value"]['length'] = $num_chars;
-    $storage_schema->set($storage_key, $field_schema);
+    // Update definitions and schema.
+    $storage_definition = $manager->getFieldStorageDefinition($field_name, 'user');
+    $storage_definition->setSetting('max_length', $num_chars);
+    $manager->updateFieldStorageDefinition($storage_definition);
 
-    // Update field configuration.
-    $config = \Drupal::configFactory()
-      ->getEditable("field.storage.user.{$field_name}");
-    $config->set('settings.max_length', $num_chars);
-    $config->save(TRUE);
-
-    // Update field storage configuration.
-    FieldStorageConfig::loadByName('user', $field_name)->save();
+    // Restore the values.
+    foreach ($data as $row) {
+      $database->insert($table_name)
+        ->fields((array) $row)
+        ->execute();
+    }
   }
 }
