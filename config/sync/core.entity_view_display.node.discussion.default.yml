@@ -21,7 +21,6 @@ dependencies:
     - file
     - link
     - options
-    - svg_image
     - template_suggestion
     - text
     - user
