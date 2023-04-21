@@ -58,7 +58,7 @@
         {{ _image }}
       </figure>
       <div class="tile__body p-2{% if _highlighted is not empty %} position-relative{% endif %}">
-        {% if _highlighted is not empty %}
+        {% if _highlighted.text is not empty %}
           <div class="tile__standout-info position-absolute d-flex align-items-center bg-brand rounded text-white fw-bold px-2 py-1">
             <svg class="tile__standout-info-icon bi icon--xs me-1">
               <use xlink:href="{{ bcl_icon_path }}#{{ _highlighted.icon }}"></use>
@@ -70,7 +70,7 @@
           <svg class="tile__info-icon bi icon--xs me-1">
             <use xlink:href="{{ bcl_icon_path }}#{{ _info.icon }}"></use>
           </svg>
-          <span class="tile__info-text">{{ _info.label }}</span>
+          {{ _info.label }}
         </div>
         {{ _title_prefix }}
         <h1 class="tile__title">

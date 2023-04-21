@@ -70,16 +70,14 @@
  *   in different view modes.
  */
 #}
-{% set physical = content.field_location|render|striptags %}
+{% set physical = content.field_location|render %}
 {% set virtual = content.field_event_online_location|render %}
 {% if physical and virtual %}
   {% set location = 'Hybrid event'|t %}
 {% elseif virtual %}
   {% set location = 'Virtual event'|t %}
-{% elseif physical %}
-  {% set location = physical %}
 {% else %}
-  {% set location = 'Unknown'|t %}
+  {% set location = 'Physical event'|t %}
 {% endif %}
 {{ pattern('tile', {
   attributes: attributes,
