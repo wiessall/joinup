@@ -6,12 +6,13 @@ dependencies:
     - core.entity_view_mode.node.digest_message
     - field.field.node.discussion.body
     - field.field.node.discussion.field_attachment
+    - field.field.node.discussion.field_discussion_logo
     - field.field.node.discussion.field_keywords
-    - field.field.node.discussion.field_topic
     - field.field.node.discussion.field_replies
     - field.field.node.discussion.field_shared_in
     - field.field.node.discussion.field_site_featured
     - field.field.node.discussion.field_state
+    - field.field.node.discussion.field_topic
     - field.field.node.discussion.og_audience
     - node.type.discussion
   module:
@@ -49,6 +50,7 @@ content:
 hidden:
   featured: true
   field_attachment: true
+  field_discussion_logo: true
   field_keywords: true
   field_replies: true
   field_shared_in: true
