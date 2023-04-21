@@ -78,28 +78,23 @@ function joinup_core_deploy_109200(array &$sandbox = []): string {
 /**
  * Adding blocked users before the spam activity (03/12/2022) to queue.
  */
-function joinup_core_deploy_109201(array &$sandbox = []): string {
-  if (empty($sandbox['ids'])) {
-    $from_date = new \DateTime("2022/12/03");
-    $users_ids = \Drupal::entityQuery('user')
-      ->accessCheck(FALSE)
-      ->condition('status', '0')
-      ->condition('uid', 1, '>')
-      ->condition('created', $from_date->getTimestamp(), '<=')
-      ->execute();
-    $sandbox['ids'] = array_values($users_ids);
-    $sandbox['count'] = 0;
-    $sandbox['max'] = count($sandbox['ids']);
-  }
-  $ids = array_splice($sandbox['ids'], 0, 10);
+function joinup_core_deploy_109201(): string {
+  $from_date = new \DateTime("2022/12/03");
+  $users_ids = \Drupal::entityQuery('user')
+    ->accessCheck(FALSE)
+    ->condition('status', '0')
+    ->condition('uid', 1, '>')
+    ->condition('created', $from_date->getTimestamp(), '<=')
+    ->execute();
+
+  $count = count($users_ids);
   $queue = \Drupal::queue('joinup_removed_users');
   $queue->createQueue();
-  $queue->createItem($ids);
 
-  for ($i = 0; $i < count($ids); $i++) {
-    $sandbox['count']++;
+  while (!empty($users_ids)) {
+    $ids = array_splice($users_ids, 0, 10);
+    $queue->createItem($ids);
   }
 
-  $sandbox['#finished'] = $sandbox['count'] === $sandbox['max'];
-  return "Adding {$sandbox['count']} to queue {$sandbox['max']} users.";
+  return "Add $count users to queue.";
 }
