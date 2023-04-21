@@ -5,10 +5,11 @@ dependencies:
   config:
     - core.entity_view_mode.media.media_library
     - field.field.media.file.file
+    - field.field.media.file.og_audience
     - image.style.medium
     - media.type.file
   module:
-    - image
+    - svg_image
 id: media.file.media_library
 targetEntityType: media
 bundle: file
@@ -30,5 +31,6 @@ hidden:
   file: true
   langcode: true
   name: true
+  og_audience: true
   search_api_excerpt: true
   uid: true

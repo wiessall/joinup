@@ -4,6 +4,7 @@ status: true
 dependencies:
   config:
     - field.field.media.file.file
+    - field.field.media.file.og_audience
     - media.type.file
   module:
     - file

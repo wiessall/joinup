@@ -8,6 +8,7 @@ dependencies:
     - media.type.file
   module:
     - file
+    - og
 id: media.file.default
 targetEntityType: media
 bundle: file
@@ -15,22 +16,32 @@ mode: default
 content:
   file:
     type: file_generic
-    weight: 1
+    weight: 2
     region: content
     settings:
       progress_indicator: throbber
     third_party_settings: {  }
   name:
     type: string_textfield
-    weight: 0
+    weight: 1
     region: content
     settings:
       size: 60
       placeholder: ''
     third_party_settings: {  }
+  og_audience:
+    type: og_autocomplete
+    weight: 0
+    region: content
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
   status:
     type: boolean_checkbox
-    weight: 2
+    weight: 3
     region: content
     settings:
       display_label: true
@@ -38,6 +49,5 @@ content:
 hidden:
   created: true
   langcode: true
-  og_audience: true
   path: true
   uid: true

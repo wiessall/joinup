@@ -7,22 +7,17 @@
 
 declare(strict_types = 1);
 
-use Drupal\Core\Access\AccessResult;
-use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Session\AccountInterface;
 
 /**
- * Implements hook_ENTITY_TYPE_create_access().
+ * Implements hook_field_widget_info_alter().
  */
-function joinup_media_media_create_access(AccountInterface $account, array $context, string $entity_bundle): AccessResultInterface {
-  // Don't allow moderators to add group-aware media.
-  $permission = "add media $entity_bundle";
-  $access = AccessResult::allowedIfHasPermission($account, $permission);
-  if ($access->isAllowed()) {
-    return $access;
+function joinup_media_field_widget_info_alter(array &$info): void {
+  if (isset($info['og_autocomplete'])) {
+    // Use a simple 'OG autocomplete' for setting the group in the group-aware
+    // media standard edit form.
+    $info['og_autocomplete']['field_types'][] = 'og_standard_reference';
   }
-  return AccessResult::forbidden("The '$permission' permission is required.")->addCacheContexts(['user.permissions']);
 }
 
 /**

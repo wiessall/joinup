@@ -5,6 +5,7 @@ dependencies:
   config:
     - core.entity_form_mode.media.media_library
     - field.field.media.file.file
+    - field.field.media.file.og_audience
     - media.type.file
 id: media.file.media_library
 targetEntityType: media
@@ -23,6 +24,7 @@ hidden:
   created: true
   file: true
   langcode: true
+  og_audience: true
   path: true
   status: true
   uid: true

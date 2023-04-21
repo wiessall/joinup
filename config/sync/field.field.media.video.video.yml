@@ -11,7 +11,7 @@ id: media.video.video
 field_name: video
 entity_type: media
 bundle: video
-label: 'Video Url'
+label: 'Video URL'
 description: ''
 required: true
 translatable: true
