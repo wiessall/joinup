@@ -26,6 +26,14 @@ function ventuno_preprocess_page_title(array &$variables): void {
 
     $author_inline = _ventuno_get_author($entity);
     $variables['additional_content']['author'] = $author_inline;
+
+    /** @var \Drupal\Core\Datetime\DateFormatterInterface $date_formatter */
+    $date_formatter = \Drupal::service('date.formatter');
+    $published = $date_formatter->format($entity->published_at->published_at_or_created, 'date_only');
+    $variables['additional_content']['published'] = $published;
+
+    $update_date = $date_formatter->format($entity->getChangedTime(), 'date_only');
+    $variables['additional_content']['updated'] = $update_date;
   }
 
   if (\Drupal::routeMatch()->getRouteName() === 'entity.rdf_entity.eif_perspective') {
@@ -67,14 +75,6 @@ function ventuno_preprocess_page_title__node__news(&$variables) {
   $view_builder = \Drupal::entityTypeManager()->getViewBuilder('node');
   $field_news_headline = $view_builder->viewField($node->field_news_headline, 'default');
   $variables['additional_content']['field_news_headline'] = $field_news_headline;
-
-  /** @var \Drupal\Core\Datetime\DateFormatterInterface $date_formatter */
-  $date_formatter = \Drupal::service('date.formatter');
-  $published = $date_formatter->format($node->published_at->published_at_or_created, 'date_only');
-  $variables['additional_content']['published'] = $published;
-
-  $update_date = $date_formatter->format($node->getChangedTime(), 'date_only');
-  $variables['additional_content']['updated'] = $update_date;
 }
 
 /**
@@ -95,14 +95,6 @@ function ventuno_preprocess_page_title__node__event(&$variables) {
 
   $field_event_location = $view_builder->viewField($node->get('field_location'), 'default');
   $variables['additional_content']['field_event_location'] = $field_event_location;
-
-  /** @var \Drupal\Core\Datetime\DateFormatterInterface $date_formatter */
-  $date_formatter = \Drupal::service('date.formatter');
-  $published = $date_formatter->format($node->published_at->published_at_or_created, 'date_only');
-  $variables['additional_content']['published'] = $published;
-
-  $update_date = $date_formatter->format($node->getChangedTime(), 'date_only');
-  $variables['additional_content']['updated'] = $update_date;
 }
 
 /**

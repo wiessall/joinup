@@ -43,8 +43,8 @@ class ETransBlockConfiguration {
         'exclude' => '.action-link',
       ],
       DiscussionInterface::class => [
-        'include' => '.page__title-wrapper,.page__content,.comments-section',
-        'exclude' => '.page__title-wrapper .details__element > a,.action-link__wrapper,.comment-item__details a',
+        'include' => '.page__title-wrapper,#block-ventuno-content',
+        'exclude' => '.page-title__details a[title="View user profile."],.action-link,section.comments',
       ],
       DocumentInterface::class => [
         'include' => '.page__title-wrapper,.page__content,.fieldset--separated .page__content',
