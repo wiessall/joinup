@@ -153,9 +153,11 @@ Feature: Navigation menu for custom pages
       | Plaster casting | This is a sample body. | Plaster molds | published |
     When I go to the "Plaster molds" collection
     Then I should see the text "See more" in the "Navigation menu"
-    But I should not see the text "Plaster casting" in the "Navigation menu"
-    And I press "See more"
-    Then I should see the text "Plaster casting" in the "Navigation menu"
+    But I should not see the text "Molds for walls" in the "Navigation menu"
+    And I should not see the text "Vintage molds" in the "Navigation menu"
+    Then I press "See more"
+    And I should see the text "Molds for walls" in the "Navigation menu"
+    And I should see the text "Vintage molds" in the "Navigation menu"
 
   @javascript
   Scenario Outline: The contextual links button in the navigation menu should be always visible
