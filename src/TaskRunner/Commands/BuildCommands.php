@@ -4,6 +4,7 @@ declare(strict_types = 1);
 
 namespace Joinup\TaskRunner\Commands;
 
+use EcEuropa\Toolkit\TaskRunner\Commands\ToolCommands;
 use OpenEuropa\TaskRunner\Commands\AbstractCommands;
 use OpenEuropa\TaskRunner\Tasks\CollectionFactory\loadTasks;
 use Robo\Collection\CollectionBuilder;
@@ -78,7 +79,17 @@ class BuildCommands extends AbstractCommands {
 
     // Write version tag in manifest.json and VERSION.txt.
     $tasks[] = $this->taskWriteToFile("{$distDir}/manifest.json")->text(
-      json_encode(['version' => $tag, 'sha' => $sha], JSON_PRETTY_PRINT)
+      json_encode([
+        'drupal_profile' => 'joinup',
+        'project_id' => $config->get('toolkit.project_id'),
+        'drupal_version' => ToolCommands::getPackagePropertyFromComposer('drupal/core'),
+        'php_version' => phpversion(),
+        'toolkit_version' => ToolCommands::getPackagePropertyFromComposer('ec-europa/toolkit'),
+        'environment' => ToolCommands::getDeploymentEnvironment(),
+        'date' => date('Y-m-d H:i:s'),
+        'version' => $tag,
+        'sha' => $sha,
+      ], JSON_PRETTY_PRINT)
     );
     $tasks[] = $this->taskWriteToFile("{$distDir}/web/VERSION.txt")->text($tag);
 
