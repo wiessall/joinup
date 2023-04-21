@@ -70,19 +70,20 @@
  *   in different view modes.
  */
 #}
-{% set view_mode_featured = view_mode is same as 'view_mode_featured' %}
 {% set rendered_logo = content.field_custom_page_logo|render %}
 {{ pattern('tile', {
   attributes: attributes,
-  featured: view_mode_featured,
   image: rendered_logo ? content.field_custom_page_logo : '',
   url: url,
+  info: {
+    icon: 'calendar-event',
+    label: 'Last update'|t ~ ': ' ~ changed,
+  },
   title_prefix: title_prefix,
   title: label,
   title_suffix: title_suffix,
-  text: '',
-  metadata: [{
-    label: 'custom page',
+  bundle: {
+    label: 'Custom page',
     icon: 'file-earmark-richtext',
-  }],
+  },
 }) }}
