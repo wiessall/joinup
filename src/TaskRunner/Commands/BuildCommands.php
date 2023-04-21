@@ -51,6 +51,7 @@ class BuildCommands extends AbstractCommands {
 
     $tasks[] = $this->taskComposerInstall()
       ->env('COMPOSER_MIRROR_PATH_REPOS', 1)
+      ->env('BUILD_DISTRO', 1)
       ->workingDir($options['dist-root'])
       ->optimizeAutoloader()
       ->noDev();
