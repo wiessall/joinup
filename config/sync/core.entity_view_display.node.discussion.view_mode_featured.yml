@@ -18,7 +18,6 @@ dependencies:
     - node.type.discussion
   module:
     - smart_trim
-    - svg_image
     - template_suggestion
     - user
 _core:
