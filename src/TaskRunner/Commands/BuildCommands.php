@@ -8,7 +8,6 @@ use OpenEuropa\TaskRunner\Commands\AbstractCommands;
 use OpenEuropa\TaskRunner\Tasks\CollectionFactory\loadTasks;
 use Robo\Collection\CollectionBuilder;
 use Robo\Robo;
-use Symfony\Component\Console\Input\InputOption;
 
 /**
  * Provides commands to build the site's distribution.
@@ -38,13 +37,7 @@ class BuildCommands extends AbstractCommands {
    *
    * @see \EcEuropa\Toolkit\TaskRunner\Commands\BuildCommands::buildDist()
    */
-  public function buildDist(array $options = [
-    'tag' => InputOption::VALUE_OPTIONAL,
-    'sha' => InputOption::VALUE_OPTIONAL,
-    'root' => InputOption::VALUE_REQUIRED,
-    'dist-root' => InputOption::VALUE_REQUIRED,
-    'keep' => InputOption::VALUE_REQUIRED,
-  ]): CollectionBuilder {
+  public function buildDist(array $options): CollectionBuilder {
     $config = $this->getConfig();
     $distDir = $config->get('joinup.dir') . '/' . $options['dist-root'];
 
