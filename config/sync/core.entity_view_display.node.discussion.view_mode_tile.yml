@@ -15,7 +15,9 @@ dependencies:
     - field.field.node.discussion.field_topic
     - field.field.node.discussion.og_audience
     - node.type.discussion
+    - responsive_image.styles.tile
   module:
+    - responsive_image
     - smart_trim
     - template_suggestion
     - user
@@ -45,6 +47,17 @@ content:
     third_party_settings:
       template_suggestion:
         template_suggestion: ''
+    weight: 2
+    region: content
+  field_discussion_logo:
+    type: responsive_image
+    label: hidden
+    settings:
+      responsive_image_style: tile
+      image_link: ''
+    third_party_settings:
+      template_suggestion:
+        template_suggestion: bare
     weight: 1
     region: content
   field_keywords:
@@ -55,7 +68,7 @@ content:
     third_party_settings:
       template_suggestion:
         template_suggestion: comma_separated
-    weight: 2
+    weight: 3
     region: content
   field_topic:
     type: entity_reference_label
@@ -70,7 +83,6 @@ content:
 hidden:
   featured: true
   field_attachment: true
-  field_discussion_logo: true
   field_replies: true
   field_shared_in: true
   field_site_featured: true
