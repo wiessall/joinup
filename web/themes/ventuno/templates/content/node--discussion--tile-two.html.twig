@@ -71,11 +71,17 @@
  */
 #}
 {% block content %}
-  {% set image %}
-    <a href="{{ url }}" class="d-block">
-      <svg class="bi img-fluid text-secondary w-100"><use xlink:href="{{ bcl_icon_path }}#chat-left-text"></use></svg>
-    </a>
-  {% endset %}
+  {% if content.field_discussion_logo|render is not empty %}
+    {% set image = content.field_discussion_logo|without('label') %}
+  {% else %}
+    {% set image %}
+      <a href="{{ url }}" class="d-block">
+        <svg class="bi img-fluid text-secondary w-100">
+          <use xlink:href="{{ bcl_icon_path }}#chat-left-text"></use>
+        </svg>
+      </a>
+    {% endset %}
+  {% endif %}
   {% set text = content.body|render|striptags|length > 200 ? content.body|render|striptags|trim|slice(0, 200) ~ '...' : content.body|render|striptags %}
   {% set badges = [] %}
   {% for topic in topics %}
