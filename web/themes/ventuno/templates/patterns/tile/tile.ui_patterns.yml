@@ -41,6 +41,13 @@ tile:
       label: 'Title suffix'
       description: 'Variable coming from Drupal that may content important stuff such as contextual links.'
       preview: ''
+    action:
+      type: object
+      label: 'Action'
+      description: 'Call to action in the tile.'
+      preview:
+        label: 'News'
+        icon: 'newspaper'
     metadata:
       type: array
       label: 'Metadata'

@@ -21,6 +21,16 @@
   &__info-icon {
     font-size: .75rem;
   }
+  &__info-icon {
+    flex-shrink: 0;
+  }
+  &__info-text {
+    // Limit to 1 lines
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+    overflow: hidden;
+  }
   &__default-img {
     &::after {
       content: "";

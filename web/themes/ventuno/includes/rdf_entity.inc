@@ -7,6 +7,7 @@
 
 declare(strict_types = 1);
 
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\Core\Url;
 
 /**
@@ -230,4 +231,19 @@ function ventuno_preprocess_page_title__rdf_entity__asset_distribution(array &$v
 
   $variables['additional_content']['field_ad_file_size'] = $field_ad_file_size;
   $variables['additional_content']['field_ad_licence'] = $field_ad_licence;
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for rdf-entity--asset-release--view-mode-tile.html.twig.
+ */
+function ventuno_preprocess_rdf_entity__asset_release__view_mode_tile(array &$variables, string $entity_type_id): void {
+  $entity = $variables[$entity_type_id];
+  $variables['release_label'] = new TranslatableMarkup($entity->label());
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for rdf-entity--asset-distribution--view-mode-tile.html.twig.
+ */
+function ventuno_preprocess_rdf_entity__asset_distribution__view_mode_tile(array &$variables, string $entity_type_id): void {
+  $entity = $variables[$entity_type_id];
 }
