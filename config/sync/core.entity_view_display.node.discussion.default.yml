@@ -14,6 +14,7 @@ dependencies:
     - field.field.node.discussion.field_state
     - field.field.node.discussion.field_topic
     - field.field.node.discussion.og_audience
+    - image.style.logo
     - node.type.discussion
   module:
     - comment
@@ -50,17 +51,19 @@ content:
     region: content
   field_discussion_logo:
     type: image
-    label: above
+    label: hidden
     settings:
-      image_link: ''
-      image_style: ''
+      image_link: content
+      image_style: logo
       image_loading:
         attribute: lazy
       svg_attributes:
         width: null
         height: null
       svg_render_as_image: true
-    third_party_settings: {  }
+    third_party_settings:
+      template_suggestion:
+        template_suggestion: ''
     weight: 11
     region: content
   field_replies:

@@ -17,6 +17,7 @@ dependencies:
     - node.type.discussion
   module:
     - smart_trim
+    - svg_image
     - template_suggestion
     - user
 _core:
@@ -47,10 +48,19 @@ content:
         template_suggestion: no_wrappers
     weight: 0
     region: content
+  field_discussion_logo:
+    type: image_url
+    label: hidden
+    settings:
+      image_style: digest_image
+    third_party_settings:
+      template_suggestion:
+        template_suggestion: ''
+    weight: 1
+    region: content
 hidden:
   featured: true
   field_attachment: true
-  field_discussion_logo: true
   field_keywords: true
   field_replies: true
   field_shared_in: true
