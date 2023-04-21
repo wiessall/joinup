@@ -15,6 +15,7 @@
     - title_prefix ()
     - title (string) (default: '')
     - title_suffix ()
+    - action (object) (default: {})
     - metadata (array of objects) (default: [])
     - bundle (object) (default: {})
   #}
@@ -27,6 +28,7 @@
   {% set _title_prefix = title_prefix|default('') %}
   {% set _title = title|default('') %}
   {% set _title_suffix = title_suffix|default('') %}
+  {% set _action = action|default({}) %}
   {% set _metadata = metadata|default([]) %}
   {% set _bundle = bundle|default({}) %}
 
@@ -54,15 +56,19 @@
   {{ attach_library('ventuno/tile') }}
   <div class="col">
     <article{{ _attributes.addClass(_classes) }}>
+      {{ _title_prefix }}
+      {{ _title_suffix }}
       <figure class="tile__figure mb-0">
         {{ _image }}
       </figure>
       <div class="tile__body p-2{% if _highlighted is not empty %} position-relative{% endif %}">
         {% if _highlighted.text is not empty %}
           <div class="tile__standout-info position-absolute d-flex align-items-center bg-brand rounded text-white fw-bold px-2 py-1">
-            <svg class="tile__standout-info-icon bi icon--xs me-1">
-              <use xlink:href="{{ bcl_icon_path }}#{{ _highlighted.icon }}"></use>
-            </svg>
+            {% if _highlighted.icon is not empty %}
+              <svg class="tile__standout-info-icon bi icon--xs me-1">
+                <use xlink:href="{{ bcl_icon_path }}#{{ _highlighted.icon }}"></use>
+              </svg>
+            {% endif %}
             {{ _highlighted.text }}
           </div>
         {% endif %}
@@ -70,15 +76,14 @@
           <svg class="tile__info-icon bi icon--xs me-1">
             <use xlink:href="{{ bcl_icon_path }}#{{ _info.icon }}"></use>
           </svg>
-          {{ _info.label }}
+          <span class="tile__info-text">{{ _info.label }}</span>
         </div>
-        {{ _title_prefix }}
         <h1 class="tile__title">
           <a class="text-primary" href="{{ _url }}" title="{{ _title|render|striptags|trim }}">
             {{ _title }}
           </a>
         </h1>
-        {{ _title_suffix }}
+        {{ _action }}
       </div>
       <div class="tile__footer p-2">
         <div class="fs-xs text-muted d-flex align-items-center justify-content-between">

@@ -4,29 +4,22 @@
  * Themeing for RDF entities.
  */
 #}
-{% set view_mode_featured = view_mode is same as 'view_mode_featured' %}
-{% set text %}
-  {% if content.field_ad_file_size|render %}
-    <div>{{ 'Weight'|t }}: <span class="fw-bold">{{ content.field_ad_file_size|render|striptags|trim }}</span></div>
-  {% endif %}
-  {% if content.field_ad_licence|render|striptags|trim %}
-    <div>{{ 'Licence'|t }}: {{ content.field_ad_licence }}</div>
-  {% endif %}
-{% endset %}
-{% set footer %}
+{% set action %}
   {{ content.field_ad_access_url }}
 {% endset %}
 {{ pattern('tile', {
   attributes: attributes,
-  featured: view_mode_featured,
   url: url,
+  info: {
+    icon: 'file-earmark-medical',
+    label: content.field_ad_licence,
+  },
   title_prefix: title_prefix,
   title: label,
   title_suffix: title_suffix,
-  text: text,
-  footer: footer,
-  metadata: [{
-    label: 'distribution',
+  action: action,
+  bundle: {
+    label: 'Distribution',
     icon: 'file-earmark-post'
-  }],
+  },
 }) }}
