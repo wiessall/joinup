@@ -22,9 +22,13 @@ toolkit:
             - ${toolkit.build.dist.root}/.editorconfig
             - ${toolkit.build.dist.root}/.gitattributes
             - ${toolkit.build.dist.root}/.gitignore
+            - ${toolkit.build.dist.root}/package.json
+            - ${toolkit.build.dist.root}/package-lock.json
             # Drupal Finder, and consequently Drush, are still needing
             # composer.json to locate the root dir. Remove only composer.lock.
             - ${toolkit.build.dist.root}/composer.lock
+        - task: remove
+          file: ${toolkit.build.dist.root}/node_modules
 
 commands:
 
