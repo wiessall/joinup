@@ -132,7 +132,7 @@ Feature: Proposing a collection
     And I should see the text "Only members can create content."
     And I should see the text "Any user can create content."
 
-  @javascript @generateMedia @terms @uploadFiles:logo.png
+  @javascript @generateMedia @generateMediaTypes:collection_banner,collection_logo @terms @uploadFiles:logo.png
   Scenario: Propose collection form fields should be organized in tabs.
     Given the following owner:
       | name                 | type    |
