@@ -238,12 +238,5 @@ function ventuno_preprocess_page_title__rdf_entity__asset_distribution(array &$v
  */
 function ventuno_preprocess_rdf_entity__asset_release__view_mode_tile(array &$variables, string $entity_type_id): void {
   $entity = $variables[$entity_type_id];
-  $variables['release_label'] = new TranslatableMarkup($entity->label());
-}
-
-/**
- * Implements hook_preprocess_HOOK() for rdf-entity--asset-distribution--view-mode-tile.html.twig.
- */
-function ventuno_preprocess_rdf_entity__asset_distribution__view_mode_tile(array &$variables, string $entity_type_id): void {
-  $entity = $variables[$entity_type_id];
+  $variables['release_label'] = $entity->label();
 }
