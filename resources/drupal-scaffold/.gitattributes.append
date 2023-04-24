@@ -33,8 +33,6 @@ README.md export-ignore
 behat.yml.dist export-ignore
 docker-compose.override.yml.dist export-ignore
 docker-compose.yml export-ignore
-package-lock.json export-ignore
-package.json export-ignore
 phpcs-ruleset.xml.dist export-ignore
 phpstan.neon export-ignore
 phpunit.xml export-ignore
