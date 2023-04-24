@@ -1,0 +1,37 @@
+uuid: b5280df3-e1a4-42ff-8af1-99f48ab0b5a5
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.media.discussion_logo.image_library_widget_image
+    - image.style.large
+    - media.type.discussion_logo
+  module:
+    - svg_image
+id: media.discussion_logo.default
+targetEntityType: media
+bundle: discussion_logo
+mode: default
+content:
+  image_library_widget_image:
+    type: image
+    label: visually_hidden
+    settings:
+      image_link: ''
+      image_style: large
+      image_loading:
+        attribute: lazy
+      svg_attributes:
+        width: null
+        height: null
+      svg_render_as_image: true
+    third_party_settings: {  }
+    weight: 0
+    region: content
+hidden:
+  created: true
+  langcode: true
+  name: true
+  search_api_excerpt: true
+  thumbnail: true
+  uid: true
