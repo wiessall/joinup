@@ -35,10 +35,8 @@ class SearchApiStatusSubscriber implements EventSubscriberInterface {
     $has_status = FALSE;
     $query = $event->getQuery();
 
-    // The archived flag does not matter in the unpublished index blocks. Mainly
-    // the check avoids tampering with the unpublished index search because we
-    // do not index the status field.
-    if ($query->getIndex()->id() !== 'published') {
+    // The facet below is only available on the search page.
+    if ($query->getSearchId() !== 'views_page:search__page_1') {
       return;
     }
 
