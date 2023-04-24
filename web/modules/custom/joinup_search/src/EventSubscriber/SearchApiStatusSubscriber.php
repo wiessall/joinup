@@ -33,6 +33,14 @@ class SearchApiStatusSubscriber implements EventSubscriberInterface {
   public function queryAlter(QueryPreExecuteEvent $event): void {
     $has_status = FALSE;
     $query = $event->getQuery();
+
+    // The archived flag does not matter in the unpublished index blocks. Mainly
+    // the check avoids tampering with the unpublished index search because we
+    // do not index the status field.
+    if ($query->getIndex()->id() !== 'published') {
+      return;
+    }
+
     $conditions = &$query->getConditionGroup()->getConditions();
     foreach ($conditions as $key => $condition) {
       if ($condition->hasTag('facet:entity_status')) {
