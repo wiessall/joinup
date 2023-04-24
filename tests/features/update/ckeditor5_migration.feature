@@ -4,7 +4,7 @@ Feature: Covers EPIC-7409.
   Scenario: CK5 convert old proprietary video embed markup into media (109002).
 
     Given I am logged in as a moderator
-    And I go to the "Interoperability Test Bed" collection
+    And I go to the "Interoperability Test Bed Repository" collection
     When I click "Edit" in the "Entity actions" region
     And I should not see the text "Embedded Video (Responsive, autoplaying)."
     And I should not see the text ":new_description"
