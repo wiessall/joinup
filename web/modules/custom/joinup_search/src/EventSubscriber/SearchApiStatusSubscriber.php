@@ -6,6 +6,7 @@ namespace Drupal\joinup_search\EventSubscriber;
 
 use Drupal\search_api\Event\QueryPreExecuteEvent;
 use Drupal\search_api\Event\SearchApiEvents;
+use Drupal\search_api\Query\ConditionGroupInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
@@ -43,7 +44,7 @@ class SearchApiStatusSubscriber implements EventSubscriberInterface {
 
     $conditions = &$query->getConditionGroup()->getConditions();
     foreach ($conditions as $key => $condition) {
-      if ($condition->hasTag('facet:entity_status')) {
+      if (($condition instanceof ConditionGroupInterface) && $condition->hasTag('facet:entity_status')) {
         unset($conditions[$key]);
         $has_status = TRUE;
       }
