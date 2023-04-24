@@ -1,0 +1,328 @@
+diff --git a/modules/video_embed_media/tests/src/Kernel/DefaultNameTest.php b/modules/video_embed_media/tests/src/Kernel/DefaultNameTest.php
+index 8bd73ce..f8e5996 100644
+--- a/modules/video_embed_media/tests/src/Kernel/DefaultNameTest.php
++++ b/modules/video_embed_media/tests/src/Kernel/DefaultNameTest.php
+@@ -46,11 +46,11 @@ class DefaultNameTest extends MediaKernelTestBase {
+     return [
+       'YouTube' => [
+         'https://www.youtube.com/watch?v=gnERPdAiuSo',
+-        'YouTube Video (gnERPdAiuSo)',
++        'YouTube Video (DrupalCon Austin 2014: Keynote: Dries Buytaert)',
+       ],
+       'Vimeo' => [
+         'https://vimeo.com/21681203',
+-        'Drupal Commerce at DrupalCon Chicago',
++        'Vimeo Video (Drupal Commerce at DrupalCon Chicago)',
+       ],
+     ];
+   }
+diff --git a/modules/video_embed_wysiwyg/tests/src/Kernel/FilterTest.php b/modules/video_embed_wysiwyg/tests/src/Kernel/FilterTest.php
+index 41cdc17..1982c65 100644
+--- a/modules/video_embed_wysiwyg/tests/src/Kernel/FilterTest.php
++++ b/modules/video_embed_wysiwyg/tests/src/Kernel/FilterTest.php
+@@ -47,23 +47,23 @@ class FilterTest extends KernelTestBase {
+     return [
+       'Standard embed code' => [
+         '<p>Content.</p><p>{"preview_thumbnail":"http://example.com/thumbnail.jpg","video_url":"https://www.youtube.com/watch?v=uNRtZDAS0xI","settings":{"responsive":1,"width":"854","height":"480","autoplay":1},"settings_summary":["Embedded Video (854x480, autoplaying)."]}</p><p>More content.</p>',
+-        '<p>Content.</p><div class="video-embed-field-provider-youtube video-embed-field-responsive-video"><iframe width="854" height="480" frameborder="0" allowfullscreen="allowfullscreen" src="https://www.youtube.com/embed/uNRtZDAS0xI?autoplay=1&amp;start=0&amp;rel=0"></iframe></div><p>More content.</p>',
++        '<p>Content.</p><div class="video-embed-field-provider-youtube video-embed-field-responsive-video"><iframe title="YouTube Video (uNRtZDAS0xI)" width="854" height="480" frameborder="0" allowfullscreen="allowfullscreen" src="https://www.youtube.com/embed/uNRtZDAS0xI?autoplay=1&amp;start=0&amp;rel=0"></iframe></div><p>More content.</p>',
+       ],
+       'Embedded vimeo video' => [
+         '<p>Content.</p><p>{"preview_thumbnail":"http://example.com/thumbnail.jpg","video_url":"https://vimeo.com/18352872","settings":{"responsive":1,"width":"854","height":"480","autoplay":1},"settings_summary":["Embedded Video (854x480, autoplaying)."]}</p><p>More content.</p>',
+-        '<p>Content.</p><div class="video-embed-field-provider-vimeo video-embed-field-responsive-video"><iframe width="854" height="480" frameborder="0" allowfullscreen="allowfullscreen" src="https://player.vimeo.com/video/18352872?autoplay=1"></iframe></div><p>More content.</p>',
++        '<p>Content.</p><div class="video-embed-field-provider-vimeo video-embed-field-responsive-video"><iframe title="Vimeo Video (18352872)" width="854" height="480" frameborder="0" allowfullscreen="allowfullscreen" src="https://player.vimeo.com/video/18352872?autoplay=1"></iframe></div><p>More content.</p>',
+       ],
+       'JSON keys in reverse order' => [
+         '<p>Content.</p><p>{"settings_summary":["Embedded Video (854x480, autoplaying)."],"settings":{"responsive":1,"width":"854","height":"480","autoplay":1},"video_url":"https://vimeo.com/18352872","preview_thumbnail":"http://example.com/thumbnail.jpg"}</p><p>More content.</p>',
+-        '<p>Content.</p><div class="video-embed-field-provider-vimeo video-embed-field-responsive-video"><iframe width="854" height="480" frameborder="0" allowfullscreen="allowfullscreen" src="https://player.vimeo.com/video/18352872?autoplay=1"></iframe></div><p>More content.</p>',
++        '<p>Content.</p><div class="video-embed-field-provider-vimeo video-embed-field-responsive-video"><iframe title="Vimeo Video (18352872)" width="854" height="480" frameborder="0" allowfullscreen="allowfullscreen" src="https://player.vimeo.com/video/18352872?autoplay=1"></iframe></div><p>More content.</p>',
+       ],
+       'Relative thumbnail URL' => [
+         '<p>Content.</p><p>{"settings_summary":["Embedded Video (854x480, autoplaying)."],"settings":{"responsive":1,"width":"854","height":"480","autoplay":1},"video_url":"https://vimeo.com/18352872","preview_thumbnail":"/thumbnail.jpg"}</p><p>More content.</p>',
+-        '<p>Content.</p><div class="video-embed-field-provider-vimeo video-embed-field-responsive-video"><iframe width="854" height="480" frameborder="0" allowfullscreen="allowfullscreen" src="https://player.vimeo.com/video/18352872?autoplay=1"></iframe></div><p>More content.</p>',
++        '<p>Content.</p><div class="video-embed-field-provider-vimeo video-embed-field-responsive-video"><iframe title="Vimeo Video (18352872)" width="854" height="480" frameborder="0" allowfullscreen="allowfullscreen" src="https://player.vimeo.com/video/18352872?autoplay=1"></iframe></div><p>More content.</p>',
+       ],
+       'No wrapping paragraphs tags' => [
+         '{"settings_summary":["Embedded Video (854x480, autoplaying)."],"settings":{"responsive":1,"width":"854","height":"480","autoplay":1},"video_url":"https://vimeo.com/18352872","preview_thumbnail":"/thumbnail.jpg"}',
+-        '<div class="video-embed-field-provider-vimeo video-embed-field-responsive-video"><iframe width="854" height="480" frameborder="0" allowfullscreen="allowfullscreen" src="https://player.vimeo.com/video/18352872?autoplay=1"></iframe></div>',
++        '<div class="video-embed-field-provider-vimeo video-embed-field-responsive-video"><iframe title="Vimeo Video (18352872)" width="854" height="480" frameborder="0" allowfullscreen="allowfullscreen" src="https://player.vimeo.com/video/18352872?autoplay=1"></iframe></div>',
+       ],
+       'Invalid URL' => [
+         '<p>Content.</p><p>{"preview_thumbnail":"http://example.com/thumbnail.jpg","video_url":"https://example.com/InvalidUrl","settings":{"responsive":1,"width":"854","height":"480","autoplay":1},"settings_summary":["Embedded Video (854x480, autoplaying)."]}</p><p>More content.</p>',
+@@ -79,7 +79,7 @@ class FilterTest extends KernelTestBase {
+       ],
+       'XSS Width/Height' => [
+         '<p>Content.</p><p>{"preview_thumbnail":"http://example.com/thumbnail.jpg","video_url":"https://www.youtube.com/watch?v=uNRtZDAS0xI","settings":{"responsive":1,"width":"\">test","height":"\">test","autoplay":1},"settings_summary":["Embedded Video (854x480, autoplaying)."]}</p><p>More content.</p>',
+-        '<p>Content.</p><div class="video-embed-field-provider-youtube video-embed-field-responsive-video"><iframe width="&quot;&gt;test" height="&quot;&gt;test" frameborder="0" allowfullscreen="allowfullscreen" src="https://www.youtube.com/embed/uNRtZDAS0xI?autoplay=1&amp;start=0&amp;rel=0"></iframe></div><p>More content.</p>',
++        '<p>Content.</p><div class="video-embed-field-provider-youtube video-embed-field-responsive-video"><iframe title="YouTube Video (uNRtZDAS0xI)" width="&quot;&gt;test" height="&quot;&gt;test" frameborder="0" allowfullscreen="allowfullscreen" src="https://www.youtube.com/embed/uNRtZDAS0xI?autoplay=1&amp;start=0&amp;rel=0"></iframe></div><p>More content.</p>',
+       ],
+       'Empty settings' => [
+         '<p>Content.</p><p>{"preview_thumbnail":"http://example.com/thumbnail.jpg","video_url":"https://www.youtube.com/watch?v=uNRtZDAS0xI","settings":{},"settings_summary":["Embedded Video (854x480, autoplaying)."]}</p><p>More content.</p>',
+diff --git a/src/Plugin/video_embed_field/Provider/Vimeo.php b/src/Plugin/video_embed_field/Provider/Vimeo.php
+index 70c7f6b..543ef45 100644
+--- a/src/Plugin/video_embed_field/Provider/Vimeo.php
++++ b/src/Plugin/video_embed_field/Provider/Vimeo.php
+@@ -26,6 +26,7 @@ class Vimeo extends ProviderPluginBase {
+         'autoplay' => $autoplay,
+       ],
+       '#attributes' => [
++        'title' => $this->getName(),
+         'width' => $width,
+         'height' => $height,
+         'frameborder' => '0',
+@@ -48,11 +49,12 @@ class Vimeo extends ProviderPluginBase {
+   /**
+    * Get the vimeo oembed data.
+    *
+-   * @return array
+-   *   An array of data from the oembed endpoint.
++   * @return object
++   *   An object of data from the oembed endpoint.
+    */
+   protected function oEmbedData() {
+-    return json_decode(file_get_contents('http://vimeo.com/api/oembed.json?url=' . $this->getInput()));
++    $url = sprintf("https://vimeo.com/api/oembed.json?url=%s", $this->getInput());
++    return $this->downloadJsonData($url);
+   }
+ 
+   /**
+@@ -78,7 +80,8 @@ class Vimeo extends ProviderPluginBase {
+    * {@inheritdoc}
+    */
+   public function getName() {
+-    return $this->oEmbedData()->title;
++    $title = $this->oEmbedData()?->title ?? $this->getVideoId();
++    return $this->t('@provider Video (@id)', ['@provider' => $this->getPluginDefinition()['title'], '@id' => $title]);
+   }
+ 
+ }
+diff --git a/src/Plugin/video_embed_field/Provider/YouTube.php b/src/Plugin/video_embed_field/Provider/YouTube.php
+index 224edd2..84077cd 100644
+--- a/src/Plugin/video_embed_field/Provider/YouTube.php
++++ b/src/Plugin/video_embed_field/Provider/YouTube.php
+@@ -28,6 +28,7 @@ class YouTube extends ProviderPluginBase {
+         'rel' => '0',
+       ],
+       '#attributes' => [
++        'title' => $this->getName(),
+         'width' => $width,
+         'height' => $height,
+         'frameborder' => '0',
+@@ -67,6 +68,17 @@ class YouTube extends ProviderPluginBase {
+     return isset($matches['language']) ? $matches['language'] : FALSE;
+   }
+ 
++  /**
++   * Get the Youtube oembed data.
++   *
++   * @return object|null
++   *   An object of data from the oembed endpoint or NULL if download failed.
++   */
++  protected function oEmbedData(): ?object {
++    $url = sprintf("https://www.youtube.com/oembed?url=%s", $this->getInput());
++    return $this->downloadJsonData($url);
++  }
++
+   /**
+    * {@inheritdoc}
+    */
+@@ -91,4 +103,12 @@ class YouTube extends ProviderPluginBase {
+     return isset($matches['id']) ? $matches['id'] : FALSE;
+   }
+ 
++  /**
++   * {@inheritdoc}
++   */
++  public function getName() {
++    $title = $this->oEmbedData()?->title ?? $this->getVideoId();
++    return $this->t('@provider Video (@id)', ['@provider' => $this->getPluginDefinition()['title'], '@id' => $title]);
++  }
++
+ }
+diff --git a/src/Plugin/video_embed_field/Provider/YouTubePlaylist.php b/src/Plugin/video_embed_field/Provider/YouTubePlaylist.php
+index 1043c5a..74e2208 100644
+--- a/src/Plugin/video_embed_field/Provider/YouTubePlaylist.php
++++ b/src/Plugin/video_embed_field/Provider/YouTubePlaylist.php
+@@ -26,6 +26,7 @@ class YouTubePlaylist extends ProviderPluginBase {
+         'list' => $this->getVideoId(),
+       ],
+       '#attributes' => [
++        'title' => $this->getName(),
+         'width' => $width,
+         'height' => $height,
+         'frameborder' => '0',
+@@ -64,4 +65,23 @@ class YouTubePlaylist extends ProviderPluginBase {
+     return isset($matches[$component]) ? $matches[$component] : FALSE;
+   }
+ 
++  /**
++   * Get the youtube oembed data.
++   *
++   * @return object|null
++   *   An object of data from the oembed endpoint or NULL if download failed..
++   */
++  protected function oEmbedData(): ?object {
++    $url = sprintf("https://www.youtube.com/oembed?url=%s", $this->getInput());
++    return $this->downloadJsonData($url);
++  }
++
++  /**
++   * {@inheritdoc}
++   */
++  public function getName() {
++    $title = $this->oEmbedData()?->title ?? $this->getVideoId();
++    return $this->t('@provider Video (@id)', ['@provider' => $this->getPluginDefinition()['title'], '@id' => $title]);
++  }
++
+ }
+diff --git a/src/ProviderPluginBase.php b/src/ProviderPluginBase.php
+index c3c4b0d..dfcba7d 100644
+--- a/src/ProviderPluginBase.php
++++ b/src/ProviderPluginBase.php
+@@ -103,6 +103,42 @@ abstract class ProviderPluginBase extends PluginBase implements ProviderPluginIn
+     return $this->input;
+   }
+ 
++  /**
++   * Download JSON data from the site (e.g., oEmbed data).
++   *
++   * @param string $url
++   *   The URL to fetch the data from.
++   *
++   * @return object|null
++   *   The JSON data as an object or NULL if the JSON could not be decoded.
++   */
++  protected function downloadJsonData($url): ?object {
++    $cid = 'video_embed_field:' . md5($url);
++    if ($cache = \Drupal::cache()->get($cid)) {
++      return $cache->data;
++    }
++
++    $method = 'GET';
++    try {
++      $response = $this->httpClient->request($method, $url);
++      $code = $response->getStatusCode();
++      if ($code == 200) {
++        $body = $response->getBody()->getContents();
++        $data = json_decode($body);
++
++        // Check if the JSON was valid.
++        if (json_last_error() === JSON_ERROR_NONE) {
++          \Drupal::cache()->set($cid, $data);
++          return $data;
++        }
++      }
++    }
++    catch (\Exception $e) {
++      \Drupal::logger('video_embed_field')->error('There was an error downloading metadata. Message: @message.', ['@message' => $e->getMessage()]);
++    }
++    return NULL;
++  }
++
+   /**
+    * {@inheritdoc}
+    */
+diff --git a/tests/src/Kernel/FieldOutputTest.php b/tests/src/Kernel/FieldOutputTest.php
+index e3bf7f2..024b388 100644
+--- a/tests/src/Kernel/FieldOutputTest.php
++++ b/tests/src/Kernel/FieldOutputTest.php
+@@ -78,6 +78,7 @@ class FieldOutputTest extends KernelTestBase {
+               'height' => '100',
+               'frameborder' => '0',
+               'allowfullscreen' => 'allowfullscreen',
++              'title' => 'YouTube Video (fdbFVWupSsw)',
+             ],
+             '#cache' => [
+               'contexts' => [
+@@ -119,6 +120,7 @@ class FieldOutputTest extends KernelTestBase {
+               'height' => '100',
+               'frameborder' => '0',
+               'allowfullscreen' => 'allowfullscreen',
++              'title' => 'YouTube Video (fdbFVWupSsw)',
+             ],
+             '#cache' => [
+               'contexts' => [
+@@ -161,6 +163,7 @@ class FieldOutputTest extends KernelTestBase {
+               'height' => '100',
+               'frameborder' => '0',
+               'allowfullscreen' => 'allowfullscreen',
++              'title' => 'YouTube Video (fdbFVWupSsw)',
+             ],
+             '#cache' => [
+               'contexts' => [
+@@ -211,6 +214,7 @@ class FieldOutputTest extends KernelTestBase {
+               'height' => '100',
+               'frameborder' => '0',
+               'allowfullscreen' => 'allowfullscreen',
++              'title' => 'Vimeo Video (80896303)',
+             ],
+             '#cache' => [
+               'contexts' => [
+@@ -251,6 +255,7 @@ class FieldOutputTest extends KernelTestBase {
+               'height' => '100',
+               'frameborder' => '0',
+               'allowfullscreen' => 'allowfullscreen',
++              'title' => 'Vimeo Video (80896303)',
+             ],
+             '#cache' => [
+               'contexts' => [
+@@ -305,7 +310,7 @@ class FieldOutputTest extends KernelTestBase {
+         [
+           '#type' => 'container',
+           '#attributes' => [
+-            'data-video-embed-field-modal' => '<div class="video-embed-field-provider-vimeo"><iframe width="500" height="500" frameborder="0" allowfullscreen="allowfullscreen" src="https://player.vimeo.com/video/80896303?autoplay=1"></iframe></div>',
++            'data-video-embed-field-modal' => '<div class="video-embed-field-provider-vimeo"><iframe title="Vimeo Video (80896303)" width="500" height="500" frameborder="0" allowfullscreen="allowfullscreen" src="https://player.vimeo.com/video/80896303?autoplay=1"></iframe></div>',
+             'class' => ['video-embed-field-launch-modal'],
+           ],
+           '#attached' => [
+@@ -345,7 +350,7 @@ class FieldOutputTest extends KernelTestBase {
+         [
+           '#type' => 'container',
+           '#attributes' => [
+-            'data-video-embed-field-modal' => '<div class="video-embed-field-provider-vimeo video-embed-field-responsive-video video-embed-field-responsive-modal" style="width:999px;"><iframe width="900" height="450" frameborder="0" allowfullscreen="allowfullscreen" src="https://player.vimeo.com/video/80896303?autoplay=1"></iframe></div>',
++            'data-video-embed-field-modal' => '<div class="video-embed-field-provider-vimeo video-embed-field-responsive-video video-embed-field-responsive-modal" style="width:999px;"><iframe title="Vimeo Video (80896303)" width="900" height="450" frameborder="0" allowfullscreen="allowfullscreen" src="https://player.vimeo.com/video/80896303?autoplay=1"></iframe></div>',
+             'class' => [
+               'video-embed-field-launch-modal',
+             ],
+@@ -387,7 +392,7 @@ class FieldOutputTest extends KernelTestBase {
+         [
+           '#type' => 'container',
+           '#attributes' => [
+-            'data-video-embed-field-lazy' => '<div class="video-embed-field-provider-vimeo video-embed-field-responsive-video"><iframe width="900" height="450" frameborder="0" allowfullscreen="allowfullscreen" src="https://player.vimeo.com/video/80896303?autoplay=1"></iframe></div>',
++            'data-video-embed-field-lazy' => '<div class="video-embed-field-provider-vimeo video-embed-field-responsive-video"><iframe title="Vimeo Video (80896303)" width="900" height="450" frameborder="0" allowfullscreen="allowfullscreen" src="https://player.vimeo.com/video/80896303?autoplay=1"></iframe></div>',
+             'class' => [
+               'video-embed-field-lazy',
+             ],
+@@ -457,6 +462,7 @@ class FieldOutputTest extends KernelTestBase {
+               'height' => '100',
+               'frameborder' => '0',
+               'allowfullscreen' => 'allowfullscreen',
++              'title' => 'Vimeo Video (80896303)',
+             ],
+             '#cache' => [
+               'contexts' => [
+@@ -496,6 +502,7 @@ class FieldOutputTest extends KernelTestBase {
+               'height' => '100',
+               'frameborder' => '0',
+               'allowfullscreen' => 'allowfullscreen',
++              'title' => 'YouTube Playlist Video (PLpeDXSh4nHjQCIZmkxg3VSdpR5e87X5eB)',
+             ],
+             '#cache' => [
+               'contexts' => [
+diff --git a/tests/src/Kernel/VideoEmbedIFrameTest.php b/tests/src/Kernel/VideoEmbedIFrameTest.php
+index 8a28d50..e47912e 100644
+--- a/tests/src/Kernel/VideoEmbedIFrameTest.php
++++ b/tests/src/Kernel/VideoEmbedIFrameTest.php
+@@ -70,10 +70,11 @@ class VideoEmbedIFrameTest extends KernelTestBase {
+         [
+           '#type' => 'video_embed_iframe',
+           '#attributes' => [
++            'title' => 'test',
+             'width' => '100',
+           ],
+         ],
+-        '<iframe width="100"></iframe>',
++        '<iframe title="test" width="100"></iframe>',
+       ],
+       'Fragment' => [
+         [
