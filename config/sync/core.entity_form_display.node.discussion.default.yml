@@ -14,11 +14,13 @@ dependencies:
     - field.field.node.discussion.field_topic
     - field.field.node.discussion.og_audience
     - image.style.thumbnail
+    - media.type.discussion_logo
     - node.type.discussion
   module:
     - allowed_formats
     - comment
     - file
+    - joinup_core
     - joinup_workflow
     - text
 id: node.discussion.default
@@ -56,12 +58,14 @@ content:
       progress_indicator: throbber
     third_party_settings: {  }
   field_discussion_logo:
-    type: image_image
+    type: image_library_widget
     weight: 5
     region: content
     settings:
       progress_indicator: throbber
       preview_image_style: thumbnail
+      media_type_id: discussion_logo
+      library_label: 'Alternatively, choose a pre-uploaded image'
     third_party_settings: {  }
   field_keywords:
     type: string_textfield
