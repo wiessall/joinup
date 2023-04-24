@@ -111,7 +111,7 @@ Feature: Creation of news through the UI.
     When I remove the file from "Logo"
     And I wait for AJAX to finish
 
-    And I select image #6 as discussion logo
+    And I select image #6 as news logo
     And I wait for AJAX to finish
     And I press "Update"
     And the "The Great Opening" news logo is image #6
