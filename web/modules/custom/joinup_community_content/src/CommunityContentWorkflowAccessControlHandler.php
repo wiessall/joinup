@@ -236,10 +236,8 @@ class CommunityContentWorkflowAccessControlHandler {
    *   The access result check.
    */
   protected function entityUpdateAccess(CommunityContentInterface $content, AccountInterface $account): AccessResultInterface {
-    if ($content->getWorkflowState() === 'archived') {
-      // If the content is archived, then the only users who can update it are
-      // the ones who can delete it.
-      $this->entityDeleteAccess($content, $account);
+    if ($content->getWorkflowState() === 'archived' && !in_array('moderator', $account->getRoles())) {
+      return AccessResult::forbidden()->addCacheableDependency($content);
     }
 
     $allowed_states = $this->workflowHelper->getAvailableTargetStates($content, $account);
