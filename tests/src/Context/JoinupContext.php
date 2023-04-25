@@ -2147,8 +2147,12 @@ class JoinupContext extends RawDrupalContext {
     $queue = \Drupal::queue('og_orphaned_group_content');
 
     while ($item = $queue->claimItem()) {
-      $worker->processItem($item->data);
-      $queue->deleteItem($item);
+      try {
+        $worker->processItem($item->data);
+        $queue->deleteItem($item);
+      } catch (\Exception $e) {
+        watchdog_exception('cron', $e);
+      }
     }
   }
 
