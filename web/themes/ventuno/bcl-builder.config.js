@@ -728,7 +728,6 @@ module.exports = {
           "chevron-left.svg",
           "chevron-right.svg",
           "chevron-up.svg",
-          "clipboard-check.svg",
           "clipboard2-check.svg",
           "clock-history.svg",
           "download.svg",
