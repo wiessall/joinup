@@ -52,6 +52,7 @@ function _ventuno_preprocess_tile(array &$variables, string $entity_type_id): vo
     case 'solution':
       $variables['image'] = $variables['content']['field_is_logo'];
       break;
+
     default:
       $variables['image'] = ($entity instanceof LogoInterface) && $entity->getLogoAsFile()
         ? $entity->getLogoAsRenderArray($variables['view_mode'])
@@ -64,6 +65,7 @@ function _ventuno_preprocess_tile(array &$variables, string $entity_type_id): vo
       $variables['highlighted']['icon'] = 'calendar-event';
       $variables['highlighted']['text'] = $variables['content']['field_event_date'];
       break;
+
     case 'asset_release':
       $variables['highlighted']['text'] = 'v' . $entity->getVersion();
       break;
@@ -76,12 +78,15 @@ function _ventuno_preprocess_tile(array &$variables, string $entity_type_id): vo
       $node = $variables['elements']['#node'];
       if (!$node->get('field_location')->isEmpty() && !$node->get('field_event_online_location')->isEmpty()) {
         $variables['info']['label'] = t('Hybrid event');
-      } elseif ($node->get('field_location')->isEmpty()) {
+      }
+      elseif ($node->get('field_location')->isEmpty()) {
         $variables['info']['label'] = t('Virtual event');
-      } else {
+      }
+      else {
         $variables['info']['label'] = t('Physical event');
       };
       break;
+
     case 'discussion':
       $variables['info']['icon'] = 'calendar-event';
       if ($changed_time = $entity->getChangedTime()) {
@@ -91,6 +96,7 @@ function _ventuno_preprocess_tile(array &$variables, string $entity_type_id): vo
         ]);
       }
       break;
+
     case 'asset_release':
       $variables['info']['icon'] = 'calendar-event';
       if ($changed_time = $entity->getChangedTime()) {
@@ -100,10 +106,12 @@ function _ventuno_preprocess_tile(array &$variables, string $entity_type_id): vo
         ]);
       }
       break;
+
     case 'asset_distribution':
       $variables['info']['icon'] = 'file-earmark-medical';
       $variables['info']['label'] = $variables['content']['field_ad_licence'];
       break;
+
     default:
       $variables['info']['icon'] = 'calendar-event';
       if ($changed_time = $entity->getChangedTime()) {
@@ -119,6 +127,7 @@ function _ventuno_preprocess_tile(array &$variables, string $entity_type_id): vo
     case 'asset_distribution':
       $variables['action'] = $variables['content']['field_ad_access_url'];
       break;
+
     default:
       $variables['action'] = NULL;
   }
@@ -146,37 +155,43 @@ function _ventuno_preprocess_tile(array &$variables, string $entity_type_id): vo
       if ($node->get('field_replies')->comment_count > 0) {
         $variables['extra_data'][] = [
           'icon' => 'chat',
-          'label' => $node->get('field_replies')->comment_count
+          'label' => $node->get('field_replies')->comment_count,
         ];
       }
       break;
+
     case 'asset_release':
       $status = $variables['elements']['field_status'][0]['#plain_text'];
       switch ($status) {
         case 'Completed':
           $icon_id = 'check-circle';
           break;
+
         case 'Deprecated':
           $icon_id = 'file-x';
           break;
+
         case 'Under development':
           $icon_id = 'clock-history';
           break;
+
         case 'Withdrawn':
           $icon_id = 'patch-exclamation';
           break;
       }
       $variables['extra_data'][] = [
         'icon' => $icon_id,
-        'label' => $status
+        'label' => $status,
       ];
       break;
+
     case 'collection':
       $variables['extra_data'][] = [
         'icon' => 'people',
-        'label' => $variables['content']['members']['#count']
+        'label' => $variables['content']['members']['#count'],
       ];
       break;
+
     case 'solution':
       // Add attributes that will allow JS to mark this tile as "Shared from...".
       $rdf_entity = $variables['rdf_entity'];
@@ -190,7 +205,7 @@ function _ventuno_preprocess_tile(array &$variables, string $entity_type_id): vo
       if (isset($variables['elements']['downloads']['count']['#access']) && $variables['elements']['downloads']['count']['#access'] === TRUE) {
         $variables['extra_data'][] = [
           'icon' => 'download',
-          'label' => $variables['elements']['downloads']['count']['#access']
+          'label' => $variables['elements']['downloads']['count']['#access'],
         ];
       }
       break;
