@@ -59,9 +59,6 @@
     -webkit-line-clamp: 2;
     overflow: hidden;
   }
-  &__footer {
-    padding: $spacer * .5;
-  }
   &__bundle-icon {
     background-color: lighten($warning, 30%);
     width: $spacer * 1.5;
