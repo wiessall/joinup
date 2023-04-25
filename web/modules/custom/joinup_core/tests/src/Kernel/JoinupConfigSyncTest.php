@@ -28,7 +28,9 @@ class JoinupConfigSyncTest extends KernelTestBase {
     // This module alters the schema of facet.widget.default_config.
     // @see search_api_arbitrary_facet_config_schema_info_alter()
     'search_api_arbitrary_facet',
-    'system',
+    // This module alters the schema of field.formatter.settings.image.
+    // @see svg_image_config_schema_info_alter()
+    'svg_image',
   ];
 
   /**
