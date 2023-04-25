@@ -22,10 +22,12 @@ tile:
         icon: 'calendar-event'
         text: 'DD/MM/YYYY'
     info:
-      type: text
+      type: object
       label: 'Info'
       description: 'Tile info.'
-      preview: 'Important info'
+      preview:
+        icon: 'user'
+        text: 'Jon Doe'
     title_prefix:
       type: array
       label: 'Title prefix'

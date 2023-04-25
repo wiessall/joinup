@@ -70,3 +70,12 @@ function ventuno_preprocess_user__inline(array &$variables): void {
     ],
   ];
 }
+
+/**
+ * Implements hook_preprocess_user().
+ */
+function ventuno_preprocess_user__view_mode_tile(&$variables) {
+  // Truncate business title.
+  $business_title = $variables['user']->get('field_user_business_title')->value;
+  $variables['short_business_title'] = !empty($business_title) ? substr($business_title, 0, 30) : '';
+}
