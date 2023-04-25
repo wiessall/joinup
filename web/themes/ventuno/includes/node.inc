@@ -50,19 +50,6 @@ function ventuno_preprocess_node__explore_item(array &$variables): void {
 }
 
 /**
- * Implements hook_preprocess_HOOK() for node--tallinn-report--view-mode-tile.html.twig.
- */
-function ventuno_preprocess_node__tallinn_report__view_mode_tile(&$variables) {
-  /** @var \Drupal\node\NodeInterface $node */
-  $node = $variables['node'];
-  $variables['last_update'] = '-';
-  if (!$node->get('created')->equals($node->get('changed'))) {
-    $date = \Drupal::service('date.formatter')->format($node->getChangedTime(), 'custom', 'd/m/Y');
-    $variables['last_update'] = $date;
-  }
-}
-
-/**
  * Implements hook_preprocess_node().
  *
  * - Adds the site URL to use in nodes.
