@@ -31,6 +31,13 @@ function ventuno_preprocess_rdf_entity(array &$variables): void {
 }
 
 /**
+ * Implements hook_preprocess_rdf_entity().
+ */
+function ventuno_preprocess_rdf_entity__view_mode_tile(array &$variables): void {
+ _ventuno_preprocess_tile($variables, 'rdf_entity');
+}
+
+/**
  * Implements hook_preprocess_HOOK().
  */
 function ventuno_preprocess_rdf_entity__explore_item(array &$variables): void {
@@ -66,41 +73,6 @@ function ventuno_preprocess_rdf_entity__solution__group_header(array &$variables
         'btn-secondary',
       ],
     ];
-  }
-}
-
-/**
- * Implements hook_preprocess_HOOK() for rdf-entity--solution--view-mode-tile.html.twig.
- *
- * - Add a flag that indicates whether to show the download counter.
- */
-function ventuno_preprocess_rdf_entity__solution__view_mode_tile(array &$variables, string $entity_type_id): void {
-  // Add a flag to indicate if the download counter is visible.
-  if (isset($variables['elements']['downloads']['count']['#access'])) {
-    $variables['show_download_counter'] = $variables['elements']['downloads']['count']['#access'];
-  }
-
-  $rdf_entity = $variables['rdf_entity'];
-  if (!$rdf_entity->get('collection')->isEmpty()) {
-    /** @var \Drupal\rdf_entity\RdfInterface|null $parent */
-    $parent = $rdf_entity->get('collection')->first()->entity;
-    $variables['attributes']['data-joinup-parent-id'] = $parent->id();
-    $variables['attributes']['data-joinup-parent-label'] = $parent->label();
-  }
-
-  $entity = $variables[$entity_type_id];
-  if ($changed_time = $entity->getChangedTime()) {
-    $variables['changed'] = Drupal::service('date.formatter')->format($changed_time, 'date_only');
-  }
-}
-
-/**
- * Implements hook_preprocess_HOOK() for rdf-entity--collection--view-mode-tile.html.twig.
- */
-function ventuno_preprocess_rdf_entity__collection__view_mode_tile(array &$variables, string $entity_type_id): void {
-  $entity = $variables[$entity_type_id];
-  if ($changed_time = $entity->getChangedTime()) {
-    $variables['changed'] = Drupal::service('date.formatter')->format($changed_time, 'date_only');
   }
 }
 
@@ -231,12 +203,4 @@ function ventuno_preprocess_page_title__rdf_entity__asset_distribution(array &$v
 
   $variables['additional_content']['field_ad_file_size'] = $field_ad_file_size;
   $variables['additional_content']['field_ad_licence'] = $field_ad_licence;
-}
-
-/**
- * Implements hook_preprocess_HOOK() for rdf-entity--asset-release--view-mode-tile.html.twig.
- */
-function ventuno_preprocess_rdf_entity__asset_release__view_mode_tile(array &$variables, string $entity_type_id): void {
-  $entity = $variables[$entity_type_id];
-  $variables['release_label'] = $entity->label();
 }
