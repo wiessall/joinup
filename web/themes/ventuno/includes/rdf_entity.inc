@@ -7,7 +7,6 @@
 
 declare(strict_types = 1);
 
-use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\Core\Url;
 
 /**
@@ -34,7 +33,7 @@ function ventuno_preprocess_rdf_entity(array &$variables): void {
  * Implements hook_preprocess_rdf_entity().
  */
 function ventuno_preprocess_rdf_entity__view_mode_tile(array &$variables): void {
- _ventuno_preprocess_tile($variables, 'rdf_entity');
+  _ventuno_preprocess_tile($variables, 'rdf_entity');
 }
 
 /**
