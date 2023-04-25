@@ -131,34 +131,8 @@ function ventuno_preprocess_node(array &$variables): void {
 }
 
 /**
- * Implements hook_preprocess_HOOK() for node--news--view-mode-tile.html.twig.
+ * Implements hook_preprocess_node().
  */
-function ventuno_preprocess_node__news__view_mode_tile(array &$variables): void {
-  $node = $variables['elements']['#node'];
-  $variables['changed'] = Drupal::service('date.formatter')->format($node->getChangedTime(), 'date_only');
-}
-
-/**
- * Implements hook_preprocess_HOOK() for node--document--view-mode-tile.html.twig.
- */
-function ventuno_preprocess_node__document__view_mode_tile(array &$variables): void {
-  $node = $variables['elements']['#node'];
-  $variables['changed'] = Drupal::service('date.formatter')->format($node->getChangedTime(), 'date_only');
-}
-
-/**
- * Implements hook_preprocess_HOOK() for node--discussion--view-mode-tile.html.twig.
- */
-function ventuno_preprocess_node__discussion__view_mode_tile(array &$variables): void {
-  $node = $variables['elements']['#node'];
-  $variables['comment_count'] = $node->get('field_replies')->comment_count;
-  $variables['changed'] = Drupal::service('date.formatter')->format($node->getChangedTime(), 'custom', 'd/m/Y, h:s');
-}
-
-/**
- * Implements hook_preprocess_HOOK() for node--custom-page--view-mode-tile.html.twig.
- */
-function ventuno_preprocess_node__custom_page__view_mode_tile(array &$variables): void {
-  $node = $variables['elements']['#node'];
-  $variables['changed'] = Drupal::service('date.formatter')->format($node->getChangedTime(), 'date_only');
+function ventuno_preprocess_node__view_mode_tile(array &$variables): void {
+  _ventuno_preprocess_tile($variables, 'node');
 }

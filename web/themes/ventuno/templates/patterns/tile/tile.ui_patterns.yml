@@ -31,10 +31,10 @@ tile:
       label: 'Title prefix'
       description: 'Variable coming from Drupal that may content important stuff.'
       preview: ''
-    title:
+    label:
       type: text
-      label: 'Title'
-      description: 'Title of the tile.'
+      label: 'Label'
+      description: 'Label of the tile.'
       preview: 'Heading'
     title_suffix:
       type: array
@@ -48,14 +48,21 @@ tile:
       preview:
         label: 'News'
         icon: 'newspaper'
-    metadata:
+    badges:
       type: array
-      label: 'Metadata'
+      label: 'Badges'
+      description: 'Badges of the tile.'
+      preview:
+        - label: 'Open Source'
+        - label: 'eGovernment'
+    extra_data:
+      type: array
+      label: 'Extra data'
       description: 'Pairs of label/icon describing the type of content the tile refers to. Both are optional.'
       preview:
-        - label: 'solution'
-          icon: 'clipboard-check'
-        - icon: 'clipboard-check'
+        - icon: 'clipboard2-check'
+          label: 'solution'
+        - icon: 'clipboard2-check'
     bundle:
       type: object
       label: 'Bundle'

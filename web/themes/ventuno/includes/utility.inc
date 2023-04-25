@@ -35,6 +35,173 @@ function _ventuno_smart_trim(string $string, int $length, bool $ellipsis = TRUE)
 }
 
 /**
+ * Prepares some variables for tile view mode.
+ *
+ * @param array $variables
+ *   The variables array.
+ * @param string $entity_type_id
+ *   The entity type ID.
+ */
+function _ventuno_preprocess_tile(array &$variables, string $entity_type_id): void {
+  $entity = $variables[$entity_type_id];
+  $bundle_key = \Drupal::entityTypeManager()->getDefinition($entity_type_id)->getKey('bundle');
+  $bundle_type = $entity->get($bundle_key)->entity;
+
+  // Return image if any.
+  switch ($entity->bundle()) {
+    case 'solution':
+      $variables['image'] = $variables['content']['field_is_logo'];
+      break;
+    default:
+      $variables['image'] = ($entity instanceof LogoInterface) && $entity->getLogoAsFile()
+        ? $entity->getLogoAsRenderArray($variables['view_mode'])
+        : '';
+  }
+
+  // Return highlighted info when needed.
+  switch ($entity->bundle()) {
+    case 'event':
+      $variables['highlighted']['icon'] = 'calendar-event';
+      $variables['highlighted']['text'] = $variables['content']['field_event_date'];
+      break;
+    case 'asset_release':
+      $variables['highlighted']['text'] = 'v' . $entity->getVersion();
+      break;
+  }
+
+  // Return info array, which contains the icon and the string to be displayed.
+  switch ($entity->bundle()) {
+    case 'event':
+      $variables['info']['icon'] = 'geo-alt';
+      $node = $variables['elements']['#node'];
+      if (!$node->get('field_location')->isEmpty() && !$node->get('field_event_online_location')->isEmpty()) {
+        $variables['info']['label'] = t('Hybrid event');
+      } elseif ($node->get('field_location')->isEmpty()) {
+        $variables['info']['label'] = t('Virtual event');
+      } else {
+        $variables['info']['label'] = t('Physical event');
+      };
+      break;
+    case 'discussion':
+      $variables['info']['icon'] = 'calendar-event';
+      if ($changed_time = $entity->getChangedTime()) {
+        $variables['info']['label'] = t('@label: @changed', [
+          '@label' => t('Last activity'),
+          '@changed' => \Drupal::service('date.formatter')->format($changed_time, 'custom', 'd/m/Y, h:s'),
+        ]);
+      }
+      break;
+    case 'asset_release':
+      $variables['info']['icon'] = 'calendar-event';
+      if ($changed_time = $entity->getChangedTime()) {
+        $variables['info']['label'] = t('@label: @changed', [
+          '@label' => t('Release date'),
+          '@changed' => \Drupal::service('date.formatter')->format($changed_time, 'date_only'),
+        ]);
+      }
+      break;
+    case 'asset_distribution':
+      $variables['info']['icon'] = 'file-earmark-medical';
+      $variables['info']['label'] = $variables['content']['field_ad_licence'];
+      break;
+    default:
+      $variables['info']['icon'] = 'calendar-event';
+      if ($changed_time = $entity->getChangedTime()) {
+        $variables['info']['label'] = t('@label: @changed', [
+          '@label' => t('Last update'),
+          '@changed' => \Drupal::service('date.formatter')->format($changed_time, 'date_only'),
+        ]);
+      }
+  }
+
+  // Return action if any.
+  switch ($entity->bundle()) {
+    case 'asset_distribution':
+      $variables['action'] = $variables['content']['field_ad_access_url'];
+      break;
+    default:
+      $variables['action'] = NULL;
+  }
+
+  // Return topics.
+  $topics = ($entity instanceof TopicReferencingEntityInterface) ? $entity->getTopics() : NULL;
+  if ($topics) {
+    $num_of_items = count($topics);
+    $variables['badges'] = [];
+    foreach ($topics as $topic) {
+      $variables['badges'][]['label'] = $topic->label();
+    }
+    if ($num_of_items > 2) {
+      $extra_items = $num_of_items - 2;
+      $variables['badges'] = array_splice($variables['badges'], 0, 2);
+      $word = ($extra_items < 2) ? t('topic') : t('topics');
+      $variables['badges'][]['label'] = '+' . $extra_items . ' ' . $word;
+    }
+  }
+
+  // Return extra data.
+  switch ($entity->bundle()) {
+    case 'discussion':
+      $node = $variables['elements']['#node'];
+      if ($node->get('field_replies')->comment_count > 0) {
+        $variables['extra_data'][] = [
+          'icon' => 'chat',
+          'label' => $node->get('field_replies')->comment_count
+        ];
+      }
+      break;
+    case 'asset_release':
+      $status = $variables['elements']['field_status'][0]['#plain_text'];
+      switch ($status) {
+        case 'Completed':
+          $icon_id = 'check-circle';
+          break;
+        case 'Deprecated':
+          $icon_id = 'file-x';
+          break;
+        case 'Under development':
+          $icon_id = 'clock-history';
+          break;
+        case 'Withdrawn':
+          $icon_id = 'patch-exclamation';
+          break;
+      }
+      $variables['extra_data'][] = [
+        'icon' => $icon_id,
+        'label' => $status
+      ];
+      break;
+    case 'collection':
+      $variables['extra_data'][] = [
+        'icon' => 'people',
+        'label' => $variables['content']['members']['#count']
+      ];
+      break;
+    case 'solution':
+      // Add attributes that will allow JS to mark this tile as "Shared from...".
+      $rdf_entity = $variables['rdf_entity'];
+      if (!$rdf_entity->get('collection')->isEmpty()) {
+        /** @var \Drupal\rdf_entity\RdfInterface|null $parent */
+        $parent = $rdf_entity->get('collection')->first()->entity;
+        $variables['attributes']['data-joinup-parent-id'] = $parent->id();
+        $variables['attributes']['data-joinup-parent-label'] = $parent->label();
+      }
+      // Add download counter if set.
+      if (isset($variables['elements']['downloads']['count']['#access']) && $variables['elements']['downloads']['count']['#access'] === TRUE) {
+        $variables['extra_data'][] = [
+          'icon' => 'download',
+          'label' => $variables['elements']['downloads']['count']['#access']
+        ];
+      }
+      break;
+  }
+
+  // Return bundle label and icon.
+  $variables['bundle']['label'] = ucfirst($bundle_type->getSingularLabel() ?? $bundle_type->label());
+  $variables['bundle']['icon'] = _ventuno_get_default_icon_render_array($entity->getEntityTypeId(), $entity->bundle());
+}
+
+/**
  * Prepares some variables for all search result view modes.
  *
  * @param array $variables
@@ -101,10 +268,10 @@ function _ventuno_preprocess_search_result(array &$variables, string $entity_typ
  * @param string $bundle
  *   The bundle.
  *
- * @return array
- *   The icon class render array.
+ * @return string
+ *   The icon id.
  */
-function _ventuno_get_default_icon_render_array(string $entity_type_id, string $bundle): array {
+function _ventuno_get_default_icon_render_array(string $entity_type_id, string $bundle): string {
   $mapping = [
     'node' => [
       'custom_page' => 'file-earmark-richtext',
@@ -112,24 +279,20 @@ function _ventuno_get_default_icon_render_array(string $entity_type_id, string $
       'document' => 'file-earmark-text',
       'event' => 'calendar-event',
       'news' => 'newspaper',
+      'tallin-report' => 'journal-text',
       'video' => 'file-earmark-play',
     ],
     'rdf_entity' => [
       'collection' => 'folder2-open',
       'licence' => 'file-earmark-medical',
+      'asset_distribution' => 'file-earmark-post',
       'asset_release' => 'file-earmark-zip',
-      'solution' => 'clipboard-check',
+      'solution' => 'clipboard2-check',
     ],
   ];
 
-  $class = $mapping[$entity_type_id][$bundle] ?? 'lightning-charge';
-  return [
-    '#type' => 'inline_template',
-    '#template' => '<svg class="bi img-fluid w-100 py-3 p-lg-3 text-white bg-secondary"><use xlink:href="' . base_path() . \Drupal::service('extension.list.theme')->getPath('ventuno') . '/assets/icons/icons.svg#{{ icon }}"></use></svg>',
-    '#context' => [
-      'icon' => $class,
-    ],
-  ];
+  $icon_id = $mapping[$entity_type_id][$bundle] ?? 'lightning-charge';
+  return $icon_id;
 }
 
 /**
