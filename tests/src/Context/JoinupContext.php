@@ -1386,6 +1386,48 @@ class JoinupContext extends RawDrupalContext {
   }
 
   /**
+   * Asserts that a certain extra information is present in a tile.
+   *
+   * @param string $heading
+   *   The heading of the tile.
+   * @param string $text
+   *   The text to search.
+   *
+   * @throws \Exception
+   *   Thrown when the tile is not found or the text is not found in the tile.
+   *
+   * @Then I( should) see the extra info :text in the :heading tile
+   */
+  public function assertTileContainsExtraInfo(string $heading, string $text): void {
+    $element = $this->getTileByHeading($heading);
+
+    if (strpos(trim($element->getText()), $text) === FALSE) {
+      throw new \Exception("The extra info '$text' was not found in the tile '$heading'.");
+    }
+  }
+
+  /**
+   * Asserts that a certain extra information is not present in a tile.
+   *
+   * @param string $heading
+   *   The heading of the tile.
+   * @param string $text
+   *   The text to search.
+   *
+   * @throws \Exception
+   *   Thrown when the tile is not found or the text is not found in the tile.
+   *
+   * @Then I( should) not see the extra info :text in the :heading tile
+   */
+  public function assertTileDoesNotContainExtraInfo(string $heading, string $text): void {
+    $element = $this->getTileByHeading($heading);
+
+    if (strpos(trim($element->getText()), $text) === FALSE) {
+      throw new \Exception("The extra info '$text' was not found in the tile '$heading'.");
+    }
+  }
+
+  /**
    * Asserts the presence of contextual links in a specific tile.
    *
    * @param string $links

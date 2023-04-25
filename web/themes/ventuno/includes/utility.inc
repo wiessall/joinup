@@ -165,12 +165,10 @@ function _ventuno_preprocess_tile(array &$variables, string $entity_type_id): vo
   switch ($entity->bundle()) {
     case 'discussion':
       $node = $variables['elements']['#node'];
-      if ($node->get('field_replies')->comment_count > 0) {
-        $variables['extra_data'][] = [
-          'icon' => 'chat',
-          'label' => $node->get('field_replies')->comment_count,
-        ];
-      }
+      $variables['extra_data'][] = [
+        'icon' => 'chat',
+        'label' => $node->get('field_replies')->comment_count,
+      ];
       break;
 
     case 'asset_release':
