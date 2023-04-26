@@ -47,7 +47,7 @@ Feature: Document moderation
     And I go to the homepage of the "The Naked Ashes" collection
     And I open the header local tasks menu
     And I click "Edit" in the "Entity actions" region
-    And I press "Additional fields"
+    And I expand the "Additional fields" accordion section
     And I check "Moderated"
     Then I press "Publish"
     And I should see the heading "The Naked Ashes"
@@ -67,8 +67,7 @@ Feature: Document moderation
     And I go to the homepage of the "The Naked Ashes" collection
     And I open the header local tasks menu
     And I click "Edit" in the "Entity actions" region
-    And I press "Additional fields"
-    And I wait until the page contains the text "Only members can create content."
+    And I expand the "Additional fields" accordion section
     And I select the radio button "Only members can create content."
     And I press "Publish"
     # I should now have the possibility to add documents.
