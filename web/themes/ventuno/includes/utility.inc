@@ -55,12 +55,13 @@ function _ventuno_preprocess_tile(array &$variables, string $entity_type_id): vo
       break;
 
     case 'asset_release':
+      $variables['label'] = $entity->label();
       $variables['highlighted']['text'] = 'v' . $entity->getVersion();
       $variables['info']['icon'] = 'calendar-event';
-      if ($changed_time = $entity->getChangedTime()) {
-        $variables['info']['label'] = t('@label: @changed', [
+      if ($created_time = $entity->getCreatedTime()) {
+        $variables['info']['label'] = t('@label: @created', [
           '@label' => t('Release date'),
-          '@changed' => \Drupal::service('date.formatter')->format($changed_time, 'date_only'),
+          '@created' => \Drupal::service('date.formatter')->format($created_time, 'date_only'),
         ]);
       }
       $status = $variables['elements']['field_status'][0]['#plain_text'];
