@@ -91,6 +91,13 @@ class MediaContext extends RawDrupalContext {
       }
     }
 
+    // Special treatment for image's 'alt' attribute.
+    if (isset($values['image']) && isset($values['alt'])) {
+      // @see \Drupal\DrupalExtension\Context\RawDrupalContext::parseEntityFields()
+      $values['image'] = "target_id: {$values['image']} - alt: {$values['alt']}";
+      unset($values['alt']);
+    }
+
     // Map human-readable fields to real Drupal entity API fields.
     foreach ($values as $name => $value) {
       if ($name !== 'bundle') {
@@ -157,6 +164,7 @@ class MediaContext extends RawDrupalContext {
       'name' => ['field' => 'name'],
       'owner' => ['field' => 'uid', 'optional' => TRUE],
       'published' => ['field' => 'status', 'optional' => TRUE],
+      'uuid' => ['field' => 'uuid', 'optional' => TRUE],
     ];
     $imageLibraryField = ['image' => ['field' => 'image_library_widget_image']];
     $groupField = ['group' => ['field' => 'og_audience']];
@@ -165,6 +173,11 @@ class MediaContext extends RawDrupalContext {
       'collection_logo' => $imageLibraryField,
       'event_logo' => $imageLibraryField,
       'file' => $groupField + ['file' => ['field' => 'file']],
+      'image' => $groupField + [
+        'image' => ['field' => 'image'],
+        // Column, not field.
+        'alt' => [],
+      ],
       'news_logo' => $imageLibraryField,
       'solution_banner' => $imageLibraryField,
       'solution_logo' => $imageLibraryField,
