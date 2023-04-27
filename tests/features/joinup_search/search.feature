@@ -22,6 +22,10 @@ Feature: Global search
       | Dummy title 2        | Dummy news 2          | Dummy body       | Molecular cooking collection | E-inclusion             | Luxembourg       | validated |
       | Dummy title 3        | Dummy news 3          | Dummy body       | Molecular cooking collection | E-inclusion             | Luxembourg       | validated |
       | Dummy title 4        | Dummy news 4          | Dummy body       | Molecular cooking collection | E-inclusion             | Luxembourg       | validated |
+    When I visit the search page
+    Then the response should not contain "data-drupal-facet-id=\"status\""
+
+    Given news content:
       | Rummy title 5        | Rummy news 5          | Dummy body       | Molecular cooking collection | E-inclusion             | Luxembourg       | archived  |
       | Rummy title 6        | Rummy news 6          | Dummy body       | Molecular cooking collection | E-inclusion             | Luxembourg       | archived  |
 
