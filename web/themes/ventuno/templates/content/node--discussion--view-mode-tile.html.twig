@@ -74,11 +74,11 @@
 {{ pattern('tile', {
   attributes: attributes,
   featured: view_mode_featured,
+  image: content.field_discussion_logo|render ? content.field_discussion_logo : '',
   url: url,
   title_prefix: title_prefix,
   title: label,
   title_suffix: title_suffix,
-  text: content.body|render|striptags,
   subtext: content.field_keywords|render|striptags|trim,
   metadata: [{
     label: comment_count,
