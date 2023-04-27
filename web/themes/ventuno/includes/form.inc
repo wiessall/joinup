@@ -98,6 +98,7 @@ function ventuno_preprocess_form_element(array &$variables): void {
  */
 function ventuno_preprocess_form_element_label(array &$variables): void {
   $variables['#attached']['library'][] = 'ventuno/form-checkboxes';
+  $variables['attributes']['class'][] = 'h4';
 }
 
 /**
@@ -112,4 +113,37 @@ function ventuno_form_alter(array &$form, FormStateInterface $form_state, string
       ['btn', 'btn-outline-danger'],
     );
   }
+
+  switch ($form_id) {
+    case 'joinup_subscription_my_subscriptions':
+      // Add classes for unsubscribe all link.
+      if (isset($form['edit-actions']['unsubscribe_all'])) {
+        $form['edit-actions']['#attributes']['class'] = [
+          'd-flex',
+          'justify-content-end',
+        ];
+        $form['edit-actions']['unsubscribe_all']['#attributes']['class'] = [
+          'btn',
+          'btn-brand',
+        ];
+      }
+      break;
+  }
+}
+
+/**
+ * Implements hook_theme_suggestions_HOOK_alter().
+ */
+function ventuno_theme_suggestions_input_alter(array &$suggestions, array $variables): void {
+  // Suggestion based on data twig suggestion created in form alter.
+  if (isset($variables['element']['#extra_suggestion'])) {
+    $suggestions[] = 'input__' . $variables['element']['#type'] . '__' . $variables['element']['#extra_suggestion'];
+  }
+}
+
+/**
+ * Implements hook_theme_suggestions_HOOK_alter().
+ */
+function ventuno_theme_suggestions_select_alter(array &$suggestions, array $variables): void {
+  $suggestions[] = 'select__' . $variables['element']['#name'];
 }

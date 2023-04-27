@@ -15,6 +15,7 @@
     attach(context) {
       // Create a visual cue to be added on pinned content.
       const pin = document.createElement("div");
+      pin.classList.add("mark");
       pin.classList.add("pin");
       // Check for global collection context.
       const group = context.querySelector("[data-joinup-group-context]");
