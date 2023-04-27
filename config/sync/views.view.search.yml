@@ -371,6 +371,50 @@ display:
             default_group: All
             default_group_multiple: {  }
             group_items: {  }
+        entity_status:
+          id: entity_status
+          table: search_api_index_published
+          field: entity_status
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: search_api_string
+          operator: '!='
+          value:
+            min: ''
+            max: ''
+            value: archived
+          group: 1
+          exposed: false
+          expose:
+            operator_id: ''
+            label: ''
+            description: ''
+            use_operator: false
+            operator: ''
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: ''
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+            min_placeholder: ''
+            max_placeholder: ''
+            placeholder: ''
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
       style:
         type: default
         options:
@@ -469,7 +513,6 @@ display:
         - 'user.node_grants:view'
       tags:
         - 'config:search_api.index.published'
-        - 'search_api_list:published'
   page_1:
     id: page_1
     display_title: Page
@@ -497,4 +540,3 @@ display:
         - 'user.node_grants:view'
       tags:
         - 'config:search_api.index.published'
-        - 'search_api_list:published'
