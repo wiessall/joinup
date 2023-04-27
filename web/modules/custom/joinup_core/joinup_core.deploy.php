@@ -77,9 +77,33 @@ function joinup_core_deploy_109200(array &$sandbox = []): string {
 }
 
 /**
+ * Adding blocked users before the spam activity (03/12/2022) to queue.
+ */
+function joinup_core_deploy_109201(): string {
+  $from_date = new \DateTime("2022/12/03");
+  $users_ids = \Drupal::entityQuery('user')
+    ->accessCheck(FALSE)
+    ->condition('status', '0')
+    ->condition('uid', 1, '>')
+    ->condition('created', $from_date->getTimestamp(), '<=')
+    ->execute();
+
+  $count = count($users_ids);
+  $queue = \Drupal::queue('joinup_removed_users');
+  $queue->createQueue();
+
+  while (!empty($users_ids)) {
+    $ids = array_splice($users_ids, 0, 10);
+    $queue->createItem($ids);
+  }
+
+  return "Add $count users to queue.";
+}
+
+/**
  * Migrate Video content into new Media field.
  */
-function joinup_core_deploy_109201(array &$sandbox): string {
+function joinup_core_deploy_109202(array &$sandbox): string {
   if (empty($sandbox['ids'])) {
     $sandbox['ids'] = \Drupal::entityQuery('node')
       ->accessCheck(FALSE)
@@ -157,7 +181,7 @@ function _joinup_core_deploy_migrate_field(MediaTypeInterface $media_type, strin
 /**
  * Migrate video embed markup into media.
  */
-function joinup_core_deploy_109202(array &$sandbox): string {
+function joinup_core_deploy_109203(array &$sandbox): string {
   if (empty($sandbox['tasks'])) {
     $sandbox['tasks']['node'] = \Drupal::entityQuery('node')->accessCheck(FALSE)
       ->condition('body', 'preview_thumbnail', 'CONTAINS')

@@ -2143,12 +2143,18 @@ class JoinupContext extends RawDrupalContext {
    */
   public function ogCleanup(AfterScenarioScope $event) {
     /** @var \Drupal\Core\Queue\QueueWorkerInterface $worker */
-    $worker = \Drupal::service('plugin.manager.queue_worker')->createInstance('og_orphaned_group_content_cron');
+    $worker = \Drupal::service('plugin.manager.queue_worker')
+      ->createInstance('og_orphaned_group_content_cron');
     $queue = \Drupal::queue('og_orphaned_group_content');
 
     while ($item = $queue->claimItem()) {
-      $worker->processItem($item->data);
-      $queue->deleteItem($item);
+      try {
+        $worker->processItem($item->data);
+        $queue->deleteItem($item);
+      }
+      catch (\Exception $e) {
+        watchdog_exception('cron', $e);
+      }
     }
   }
 
@@ -2454,7 +2460,7 @@ class JoinupContext extends RawDrupalContext {
   public function assertTileMarkedAsFeatured($heading) {
     $element = $this->getTileByHeading($heading);
 
-    if (!$element->find('css', '.listing__card.is-featured')) {
+    if (!$element->find('css', 'div.star')) {
       throw new \Exception("The tile '$heading' is not marked as featured, but it should be.");
     }
   }
