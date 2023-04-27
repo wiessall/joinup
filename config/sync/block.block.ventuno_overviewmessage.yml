@@ -9,7 +9,7 @@ dependencies:
     - ventuno
 id: ventuno_overviewmessage
 theme: ventuno
-region: sidebar
+region: content
 weight: -20
 provider: null
 plugin: overview_message_block
@@ -23,6 +23,4 @@ visibility:
     id: request_path
     negate: false
     context_mapping: {  }
-    pages: |-
-      /collections
-      /solutions
+    pages: "/collections\r\n/solutions"
