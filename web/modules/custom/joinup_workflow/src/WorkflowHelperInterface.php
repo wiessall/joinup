@@ -178,4 +178,18 @@ interface WorkflowHelperInterface {
    */
   public function unarchiveEntity(EntityInterface $entity): EntityInterface;
 
+  /**
+   * Checks whether the user can unarchive content.
+   *
+   * @param \Drupal\Core\Entity\EntityInterface $entity
+   *   The group content entity.
+   * @param \Drupal\Core\Session\AccountInterface $account
+   *   The user account.
+   *
+   * @return bool
+   *   True if the entity is archived
+   *    and user has unarchived community content permission.
+   */
+  public function accountCanUnarchive(EntityInterface $entity, AccountInterface $account): bool;
+
 }
