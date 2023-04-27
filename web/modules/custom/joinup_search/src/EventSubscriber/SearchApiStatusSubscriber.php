@@ -28,11 +28,9 @@ class SearchApiStatusSubscriber implements EventSubscriberInterface {
    *
    * @param \Drupal\search_api\Event\QueryPreExecuteEvent $event
    *   The query alter event.
-   *
-   * @throws \Drupal\joinup_group\Exception\MissingGroupException
    */
   public function queryAlter(QueryPreExecuteEvent $event): void {
-    $has_status = FALSE;
+    $hasStatus = FALSE;
     $query = $event->getQuery();
 
     // The facet below is only available on the search page.
@@ -44,11 +42,11 @@ class SearchApiStatusSubscriber implements EventSubscriberInterface {
     foreach ($conditions as $key => $condition) {
       if (($condition instanceof ConditionGroupInterface) && $condition->hasTag('facet:entity_status')) {
         unset($conditions[$key]);
-        $has_status = TRUE;
+        $hasStatus = TRUE;
       }
-    };
+    }
 
-    if (!$has_status) {
+    if (!$hasStatus) {
       $query->addCondition('entity_status', 'archived', '<>');
     }
   }
