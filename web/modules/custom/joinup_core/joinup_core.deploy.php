@@ -14,8 +14,8 @@
 
 declare(strict_types = 1);
 
-use Drupal\search_api\Entity\Index;
 use Drupal\paragraphs\Entity\Paragraph;
+use Drupal\search_api\Entity\Index;
 use Drupal\sparql_entity_storage\UriEncoder;
 
 /**
