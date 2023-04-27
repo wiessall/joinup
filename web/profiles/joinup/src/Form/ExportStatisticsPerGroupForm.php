@@ -21,27 +21,6 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class ExportStatisticsPerGroupForm extends ExportBatchedDataFormBase {
 
   /**
-   * The entity type manager.
-   *
-   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
-   */
-  protected $entityTypeManager;
-
-  /**
-   * The MySQL database connection.
-   *
-   * @var \Drupal\Core\Database\Database
-   */
-  protected $mysql;
-
-  /**
-   * The SPARQL database connection.
-   *
-   * @var \Drupal\sparql_entity_storage\Driver\Database\sparql\ConnectionInterface
-   */
-  protected $sparql;
-
-  /**
    * Constructs an ExportUserListForm.
    *
    * @param \Drupal\Core\Cache\CacheBackendInterface $cache
@@ -57,11 +36,15 @@ class ExportStatisticsPerGroupForm extends ExportBatchedDataFormBase {
    * @param \Drupal\sparql_entity_storage\Driver\Database\sparql\ConnectionInterface $sparql
    *   The SPARQL connection instance.
    */
-  public function __construct(CacheBackendInterface $cache, DateFormatterInterface $date_formatter, TimeInterface $time, EntityTypeManagerInterface $entityTypeManager, Connection $mysql, ConnectionInterface $sparql) {
+  public function __construct(
+    CacheBackendInterface $cache,
+    DateFormatterInterface $date_formatter,
+    TimeInterface $time,
+    protected EntityTypeManagerInterface $entityTypeManager,
+    protected Connection $mysql,
+    protected ConnectionInterface $sparql
+  ) {
     parent::__construct($cache, $date_formatter, $time);
-    $this->entityTypeManager = $entityTypeManager;
-    $this->mysql = $mysql;
-    $this->sparql = $sparql;
   }
 
   /**
@@ -159,16 +142,20 @@ QUERY;
   public function generateGroupStatistics(string $entity_id, array &$context): void {
     $rdf_storage = $this->entityTypeManager->getStorage('rdf_entity');
     /** @var \Drupal\collection\Entity\CollectionInterface|\Drupal\solution\Entity\SolutionInterface $group */
-    $group = $rdf_storage->load((string) $entity_id);
+    $group = $rdf_storage->load($entity_id);
 
     // Fetch the nodes that belong to the group.
-    $group_content_data = $this->mysql->query($this->getGroupContentQuery($entity_id))->fetchAll();
+    $group_content_data = $this->mysql->query(
+      $this->getGroupContentQuery(), [':parent_entity_id' => $entity_id]
+    )->fetchAll();
     $group_content = [
-      'custom_page' => 0,
-      'discussion' => 0,
-      'document' => 0,
-      'event' => 0,
-      'news' => 0,
+      // Node entities.
+      'custom_page' => ['active' => 0, 'archived' => 0],
+      'discussion' => ['active' => 0, 'archived' => 0],
+      'document' => ['active' => 0, 'archived' => 0],
+      'event' => ['active' => 0, 'archived' => 0],
+      'news' => ['active' => 0, 'archived' => 0],
+      // RDF entities.
       'solution' => 0,
       'asset_release' => 0,
       'asset_distribution' => 0,
@@ -176,14 +163,21 @@ QUERY;
 
     $group_content_keys = array_keys($group_content);
     foreach ($group_content_data as $data) {
-      if (in_array($data->type, $group_content_keys)) {
-        $group_content[$data->type]++;
+      if (!in_array($data->type, $group_content_keys)) {
+        continue;
+      }
+
+      if ($data->state === 'archived') {
+        $group_content[$data->type]['archived'] += $data->entities;
+      }
+      else {
+        $group_content[$data->type]['active'] += $data->entities;
       }
     }
 
     // For solutions, count releases and distributions.
     if ($group instanceof SolutionInterface) {
-      $releases_and_distributions_ids = $this->sparql->query($this->getRelasesAndDistributionsQuery($entity_id));
+      $releases_and_distributions_ids = $this->sparql->query($this->getReleasesAndDistributionsQuery($entity_id));
 
       /** @var \EasyRdf\Sparql\Result $result */
       foreach ($releases_and_distributions_ids as $result_id) {
@@ -208,41 +202,47 @@ QUERY;
       'Last update date' => \Drupal::getContainer()
         ->get('date.formatter')
         ->format($group->getChangedTime(), 'c'),
-      'Custom pages' => $group_content['custom_page'],
-      'Discussions' => $group_content['discussion'],
-      'Documents' => $group_content['document'],
-      'Events' => $group_content['event'],
-      'News' => $group_content['news'],
+      'Custom pages' => $group_content['custom_page']['active'],
+      'Discussions' => $group_content['discussion']['active'],
+      'Documents' => $group_content['document']['active'],
+      'Events' => $group_content['event']['active'],
+      'News' => $group_content['news']['active'],
       'Solutions' => $group_content['solution'],
       'Releases' => $group_content['asset_release'],
       'Distributions' => $group_content['asset_distribution'],
-      'Total number of items' => $group_content['custom_page']
-      + $group_content['discussion']
-      + $group_content['document']
-      + $group_content['event']
-      + $group_content['news']
+      'Total number of items' =>
+      $group_content['custom_page']['active']
+      + $group_content['discussion']['active']
+      + $group_content['document']['active']
+      + $group_content['event']['active']
+      + $group_content['news']['active']
       + $group_content['asset_release']
       + $group_content['asset_distribution'],
+      'Total number of archived items' =>
+      $group_content['custom_page']['archived']
+      + $group_content['discussion']['archived']
+      + $group_content['document']['archived']
+      + $group_content['event']['archived']
+      + $group_content['news']['archived'],
       'Number of members' => $memberships,
-      'Description word count' => str_word_count(strip_tags($description)),
+      'Description word count' => str_word_count(strip_tags((string) $description)),
     ];
   }
 
   /**
    * Helper method to return a query to fetch group content.
    *
-   * @param string $entity_id
-   *   The group entity ID.
-   *
    * @return string
    *   The query.
    */
-  private function getGroupContentQuery(string $entity_id): string {
+  private function getGroupContentQuery(): string {
     return <<<QUERY
-SELECT og.entity_id, n.type
+SELECT count(og.entity_id) as entities, n.type, s.field_state_value as state
 FROM {node__og_audience} og
 LEFT JOIN {node_field_data} n ON og.entity_id = n.nid
-WHERE og.og_audience_target_id = '{$entity_id}'
+LEFT JOIN {node__field_state} s ON n.nid = s.entity_id AND n.vid = s.revision_id
+WHERE og.og_audience_target_id = :parent_entity_id
+group by n.type, s.field_state_value
 QUERY;
   }
 
@@ -255,7 +255,7 @@ QUERY;
    * @return string
    *   The query.
    */
-  private function getRelasesAndDistributionsQuery(string $entity_id): string {
+  private function getReleasesAndDistributionsQuery(string $entity_id): string {
     return <<<QUERY
 SELECT DISTINCT ?entity_id
 FROM <http://joinup.eu/asset_release/published>

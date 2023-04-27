@@ -152,13 +152,22 @@ function joinup_search_search_api_index_items_alter(IndexInterface $index, array
  * first "s" stands for 'string' and the second one stands for single value.
  */
 function joinup_search_search_api_solr_documents_alter(&$documents, IndexInterface $index, array $items) {
-  /** @var \Solarium\QueryType\Update\Query\Document\Document[] $documents */
+  /** @var \Solarium\QueryType\Update\Query\Document[] $documents */
   foreach ($documents as $document) {
     if (empty($document->getFields()['bs_sticky'])) {
       $document->setField('bs_sticky', FALSE);
     }
-    if (empty($document->getFields()['ss_state']) && $index->id() === 'unpublished') {
-      $document->setField('ss_state', 'unpublished');
+    if (empty($document->getFields()['sm_entity_status']) && $index->id() === 'unpublished') {
+      $document->setField('sm_entity_status', 'unpublished');
+    }
+    if (empty($document->getFields()['sm_entity_status']) && $index->id() === 'published') {
+      // Because of the way the search API works, when we
+      // perform a search, it only returns items *with* a value for the
+      // conditions. Thus, when we search for an item that is not archived, if
+      // items do not have a value for the state field, they will not be
+      // included in the results. This is why we set the value to a special
+      // value that will never be used for the state field.
+      $document->setField('sm_entity_status', 'published');
     }
   }
 }
@@ -194,7 +203,7 @@ function joinup_search_search_api_solr_query_alter(SolariumQueryInterface $solar
 }
 
 /**
- * Apply the global settings to all solarium queries on Joinup.
+ * Apply the global settings to all search_api_field solarium queries on Joinup.
  *
  * @param \Solarium\Core\Query\QueryInterface $solarium_query
  *   The solarium query.
@@ -211,8 +220,23 @@ function _joinup_search_apply_global_search_api_solr_settings(SolariumQueryInter
   // @todo remove when document boosting is reimplemented by search_api_solr
   // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-4907
   $solarium_query->addParam('defType', 'edismax');
+  $value = $item->getValue()['value'];
 
-  $value = $item->value;
+  $show_archived = $value['show_archived'] ?? 'all';
+  if ($show_archived === 'archived') {
+    $solarium_query->addFilterQuery([
+      'key' => 'state',
+      'query' => 'sm_entity_status:archived',
+    ]);
+  }
+  elseif ($show_archived === 'unarchived') {
+    // Show all items that are not archived.
+    $solarium_query->addFilterQuery([
+      'key' => 'state',
+      'query' => '-sm_entity_status:archived',
+    ]);
+  }
+
   if (empty($value['query_builder']['filters'])) {
     return;
   }
