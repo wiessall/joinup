@@ -236,7 +236,8 @@ class CommunityContentWorkflowAccessControlHandler {
    *   The access result check.
    */
   protected function entityUpdateAccess(CommunityContentInterface $content, AccountInterface $account): AccessResultInterface {
-    if ($content->getWorkflowState() === 'archived' && !in_array('moderator', $account->getRoles())) {
+
+    if (!$this->workflowHelper->accountCanUnarchive($content, $account)) {
       return AccessResult::forbidden()->addCacheableDependency($content);
     }
 
