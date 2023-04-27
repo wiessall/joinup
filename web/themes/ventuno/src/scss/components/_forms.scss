@@ -3,7 +3,8 @@
 }
 
 // Mark required fields
-.form-required {
+legend.form-required,
+label.form-required {
   &::after {
     content: '*';
     color: $danger;
