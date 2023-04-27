@@ -87,7 +87,7 @@ Feature: "Add custom page" visibility options.
     Then I should not see the button "Archive"
     And I should not see the button "Delete"
 
-    And I press "Unpublish"
+    And I press "Save as draft"
     Then I should see the heading "About us"
     And I should see the success message "Custom page About us has been created."
     And I should see the text "Attachments"
