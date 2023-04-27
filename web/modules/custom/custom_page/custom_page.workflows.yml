@@ -6,6 +6,8 @@ custom_page_workflow:
     __new__:
       label: New
       published: true
+    draft:
+      label: Draft
     published:
       label: Published
       published: true
@@ -15,13 +17,17 @@ custom_page_workflow:
       label: Archived
       published: true
   transitions:
+    save_as_draft:
+      label: 'Save as draft'
+      from: [ __new__ ]
+      to: draft
     publish:
       label: Publish
-      from: [ __new__, unpublished ]
+      from: [ __new__, draft, unpublished ]
       to: published
     unpublish:
       label: Unpublish
-      from: [  __new__, published ]
+      from: [ published ]
       to: unpublished
     archive:
       label: Archive
