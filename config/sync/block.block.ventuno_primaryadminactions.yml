@@ -7,7 +7,7 @@ dependencies:
 id: ventuno_primaryadminactions
 theme: ventuno
 region: content
-weight: -21
+weight: -22
 provider: null
 plugin: local_actions_block
 settings:

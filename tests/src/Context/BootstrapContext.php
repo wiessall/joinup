@@ -89,7 +89,7 @@ class BootstrapContext extends RawDrupalContext {
    * @param string $section
    *   The accordion section title.
    * @param bool $expand
-   *   The action: TRUE when expanding, FALS when collapsing.
+   *   The action: TRUE when expanding, FALSE when collapsing.
    *
    * @throws \Behat\Mink\Exception\ElementNotFoundException
    *   When the accordion section with the given label was not found.

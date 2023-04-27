@@ -21,7 +21,7 @@
         selectElement.addEventListener("change", () => {
           frequencyButton.removeAttribute("disabled");
           frequencyButton.setAttribute("value", Drupal.t("Save changes"));
-          frequencyButton.classList.remove("is-disabled");
+          frequencyButton.classList.remove("disabled");
         });
       });
       once("user_subscriptions", "input.form-checkbox", context).forEach(
@@ -53,11 +53,11 @@
               JSON.stringify(subscriptionStatus) === subscriptionStatusInitial
             ) {
               button.setAttribute("disabled", "disabled");
-              button.classList.add("is-disabled");
+              button.classList.add("disabled");
             } else {
               button.removeAttribute("disabled");
               button.setAttribute("value", Drupal.t("Save changes"));
-              button.classList.remove("is-disabled");
+              button.classList.remove("disabled");
             }
           });
         }

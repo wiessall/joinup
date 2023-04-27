@@ -77,6 +77,7 @@ Feature: Embed of videos into the page.
     Then the modal should be closed
     And I press "Save as draft"
     Then the response should contain "<embed url>"
+    And I see the "iframe" element with the "title" attribute set to "Video player" in the "Content" region
 
     Examples:
       | url                                                                                                                                                   | embed url                                                                                                                                                                                                                                     |
