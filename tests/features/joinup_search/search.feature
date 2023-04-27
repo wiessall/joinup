@@ -26,6 +26,7 @@ Feature: Global search
     Then the response should not contain "data-drupal-facet-id=\"status\""
 
     Given news content:
+      | title                | headline              | body             | collection                   | topic                   | spatial coverage | state     |
       | Rummy title 5        | Rummy news 5          | Dummy body       | Molecular cooking collection | E-inclusion             | Luxembourg       | archived  |
       | Rummy title 6        | Rummy news 6          | Dummy body       | Molecular cooking collection | E-inclusion             | Luxembourg       | archived  |
 
