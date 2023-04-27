@@ -128,6 +128,7 @@ function ventuno_preprocess_container(array &$variables): void {
       'field_content_listing_type',
       'user_content_bundle',
       'content_listing_type',
+      'content_bundle',
     ];
     if (in_array($facet_id, $valid_facet_ids)) {
       $classes = ['tabs--content-type'];

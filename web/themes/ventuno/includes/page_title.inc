@@ -67,7 +67,7 @@ function ventuno_theme_suggestions_page_title_alter(array &$suggestions, array &
 /**
  * Implements hook_preprocess_page_title__node__news().
  */
-function ventuno_preprocess_page_title__node__news(&$variables) {
+function ventuno_preprocess_page_title__node__news(&$variables): void {
   /** @var \Drupal\node\NodeInterface $node */
   $node = $variables['entity'];
 
@@ -80,7 +80,7 @@ function ventuno_preprocess_page_title__node__news(&$variables) {
 /**
  * Implements hook_preprocess_page_title__node__event().
  */
-function ventuno_preprocess_page_title__node__event(&$variables) {
+function ventuno_preprocess_page_title__node__event(&$variables): void {
   /** @var \Drupal\node\NodeInterface $node */
   $node = $variables['entity'];
 
@@ -102,4 +102,25 @@ function ventuno_preprocess_page_title__node__event(&$variables) {
  */
 function ventuno_preprocess_page_title__node__glossary(array &$variables): void {
   $variables['title'] = t('Glossary');
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for page-title--node--document.html.twig.
+ */
+function ventuno_preprocess_page_title__node__document(&$variables): void {
+  /** @var \Drupal\joinup_document\Entity\DocumentInterface $node */
+  $node = $variables['entity'];
+
+  /** @var \Drupal\Core\Entity\EntityViewBuilderInterface $view_builder */
+  $view_builder = \Drupal::entityTypeManager()->getViewBuilder('node');
+  /** @var \Drupal\Core\Datetime\DateFormatterInterface $date_formatter */
+  $date_formatter = \Drupal::service('date.formatter');
+  $field_document_publication_date = $node->getPublicationTime();
+  $variables['additional_content']['publication_date'] = empty($field_document_publication_date) ? '' : $date_formatter->format($field_document_publication_date, 'custom', 'd/m/Y');
+
+  $update_date = $date_formatter->format($node->getChangedTime(), 'custom', 'd/m/Y');
+  $variables['additional_content']['updated'] = $update_date;
+
+  $field_short_title = $view_builder->viewField($node->field_short_title, 'default');
+  $variables['additional_content']['field_short_title'] = $field_short_title;
 }
