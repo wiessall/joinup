@@ -1,0 +1,26 @@
+uuid: 07f04fc0-238b-442a-9405-3c1547a65a66
+langcode: en
+status: true
+dependencies:
+  module:
+    - joinup_core
+    - node
+  theme:
+    - ventuno
+id: documents
+label: Documents
+theme: ventuno
+weight: 0
+conditions:
+  request_route:
+    id: request_route
+    negate: false
+    routes:
+      - entity.node.canonical
+  'entity_bundle:node':
+    id: 'entity_bundle:node'
+    negate: false
+    context_mapping:
+      node: '@node.node_route_context:node'
+    bundles:
+      document: document

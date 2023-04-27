@@ -1,6 +1,7 @@
 .table-files {
   &__file {
     position: relative;
+    width: $spacer * 3.5;
     &-extension {
       position: absolute;
       top: 50%;
