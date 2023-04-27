@@ -1,0 +1,13 @@
+uuid: ff3e76c1-c253-4858-bcb0-b483031501ef
+langcode: en
+status: true
+dependencies: {  }
+id: discussion_logo
+label: 'Discussion logo'
+description: 'Pre-uploaded images to be used as logo for discussion items.'
+source: image
+queue_thumbnail_downloads: false
+new_revision: false
+source_configuration:
+  source_field: image_library_widget_image
+field_map: {  }
