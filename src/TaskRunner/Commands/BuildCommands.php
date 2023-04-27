@@ -4,11 +4,11 @@ declare(strict_types = 1);
 
 namespace Joinup\TaskRunner\Commands;
 
+use EcEuropa\Toolkit\TaskRunner\Commands\ToolCommands;
 use OpenEuropa\TaskRunner\Commands\AbstractCommands;
 use OpenEuropa\TaskRunner\Tasks\CollectionFactory\loadTasks;
 use Robo\Collection\CollectionBuilder;
 use Robo\Robo;
-use Symfony\Component\Console\Input\InputOption;
 
 /**
  * Provides commands to build the site's distribution.
@@ -38,13 +38,7 @@ class BuildCommands extends AbstractCommands {
    *
    * @see \EcEuropa\Toolkit\TaskRunner\Commands\BuildCommands::buildDist()
    */
-  public function buildDist(array $options = [
-    'tag' => InputOption::VALUE_OPTIONAL,
-    'sha' => InputOption::VALUE_OPTIONAL,
-    'root' => InputOption::VALUE_REQUIRED,
-    'dist-root' => InputOption::VALUE_REQUIRED,
-    'keep' => InputOption::VALUE_REQUIRED,
-  ]): CollectionBuilder {
+  public function buildDist(array $options): CollectionBuilder {
     $config = $this->getConfig();
     $distDir = $config->get('joinup.dir') . '/' . $options['dist-root'];
 
@@ -58,6 +52,7 @@ class BuildCommands extends AbstractCommands {
 
     $tasks[] = $this->taskComposerInstall()
       ->env('COMPOSER_MIRROR_PATH_REPOS', 1)
+      ->env('BUILD_DISTRO', 1)
       ->workingDir($options['dist-root'])
       ->optimizeAutoloader()
       ->noDev();
@@ -84,7 +79,17 @@ class BuildCommands extends AbstractCommands {
 
     // Write version tag in manifest.json and VERSION.txt.
     $tasks[] = $this->taskWriteToFile("{$distDir}/manifest.json")->text(
-      json_encode(['version' => $tag, 'sha' => $sha], JSON_PRETTY_PRINT)
+      json_encode([
+        'drupal_profile' => 'joinup',
+        'project_id' => $config->get('toolkit.project_id'),
+        'drupal_version' => ToolCommands::getPackagePropertyFromComposer('drupal/core'),
+        'php_version' => phpversion(),
+        'toolkit_version' => ToolCommands::getPackagePropertyFromComposer('ec-europa/toolkit'),
+        'environment' => ToolCommands::getDeploymentEnvironment(),
+        'date' => date('Y-m-d H:i:s'),
+        'version' => $tag,
+        'sha' => $sha,
+      ], JSON_PRETTY_PRINT)
     );
     $tasks[] = $this->taskWriteToFile("{$distDir}/web/VERSION.txt")->text($tag);
 
