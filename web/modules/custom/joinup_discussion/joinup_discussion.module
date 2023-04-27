@@ -11,6 +11,8 @@ use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Entity\EntityTypeInterface;
+use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Url;
 use Drupal\changed_fields\EntitySubject;
@@ -19,6 +21,7 @@ use Drupal\joinup_discussion\Entity\Discussion;
 use Drupal\joinup_discussion\Entity\DiscussionInterface;
 use Drupal\joinup_discussion\Event\DiscussionDeleteEvent;
 use Drupal\joinup_discussion\Event\DiscussionEvents;
+use Drupal\joinup_discussion\LatestUpdateTimeFieldItemList;
 use Drupal\node\NodeInterface;
 
 /**
@@ -33,6 +36,23 @@ function joinup_discussion_node_presave(NodeInterface $discussion) {
     $node_subject = new EntitySubject($discussion, 'default_field_comparator');
     $node_subject->attach(new DiscussionObserver(\Drupal::service('event_dispatcher')));
     $node_subject->notify();
+  }
+}
+
+/**
+ * Implements hook_entity_bundle_field_info_alter().
+ */
+function joinup_discussion_entity_bundle_field_info(EntityTypeInterface $entity_type, string $bundle) {
+
+  if ($entity_type->id() === 'node' && $bundle === 'discussion') {
+    $fields['latest_update_time'] = BaseFieldDefinition::create('string')
+      ->setName('latest_update_time_field')
+      ->setLabel(t('Latest update time field'))
+      ->setComputed(TRUE)
+      ->setClass(LatestUpdateTimeFieldItemList::class)
+      ->setDisplayConfigurable('view', TRUE);
+
+    return $fields;
   }
 }
 

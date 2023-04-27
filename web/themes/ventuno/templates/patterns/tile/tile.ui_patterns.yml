@@ -45,6 +45,11 @@ tile:
       label: 'Subext'
       description: 'Card subtext.'
       preview: 'Text, card, with, longer text, supported'
+    latest_update_time:
+      type: string
+      label: 'Latest Update time'
+      description: 'Latest Update time.'
+      preview: 'Latest Update time timestring'
     footer:
       type: text
       label: 'Footer'
