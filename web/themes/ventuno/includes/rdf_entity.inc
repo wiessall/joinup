@@ -32,7 +32,77 @@ function ventuno_preprocess_rdf_entity(array &$variables): void {
 /**
  * Implements hook_preprocess_rdf_entity().
  */
-function ventuno_preprocess_rdf_entity__view_mode_tile(array &$variables): void {
+function ventuno_preprocess_rdf_entity__view_mode_tile(array &$variables, string $entity_type_id): void {
+  $entity = $variables[$entity_type_id];
+
+  switch ($entity->bundle()) {
+    case 'asset_distribution':
+      $variables['info']['icon'] = 'file-earmark-medical';
+      $variables['info']['label'] = $variables['content']['field_ad_licence'];
+      $variables['action'] = $variables['content']['field_ad_access_url'];
+      break;
+
+    case 'asset_release':
+      $variables['label'] = $entity->label();
+      $variables['highlighted']['text'] = 'v' . $entity->getVersion();
+      $variables['info']['icon'] = 'calendar-event';
+      if ($created_time = $entity->getCreatedTime()) {
+        $variables['info']['label'] = t('@label: @created', [
+          '@label' => t('Release date'),
+          '@created' => \Drupal::service('date.formatter')->format($created_time, 'date_only'),
+        ]);
+      }
+      $status = $variables['elements']['field_status'][0]['#plain_text'] ?? 'No status';
+      switch ($status) {
+
+        case 'Completed':
+          $icon_id = 'check-circle';
+          break;
+
+        case 'Deprecated':
+          $icon_id = 'file-x';
+          break;
+
+        case 'Under development':
+          $icon_id = 'clock-history';
+          break;
+
+        case 'Withdrawn':
+          $icon_id = 'patch-exclamation';
+          break;
+      }
+      $variables['extra_data'][] = [
+        'icon' => $icon_id ?? 'question-lg',
+        'label' => $status,
+      ];
+      break;
+
+    case 'collection':
+      $variables['extra_data'][] = [
+        'icon' => 'people',
+        'label' => $variables['content']['members']['#count'],
+      ];
+      break;
+
+    case 'solution':
+      $variables['image'] = $variables['content']['field_is_logo'];
+      // Add attributes that will allow JS to mark this tile as "Shared from".
+      $rdf_entity = $variables['rdf_entity'];
+      if (!$rdf_entity->get('collection')->isEmpty()) {
+        /** @var \Drupal\rdf_entity\RdfInterface|null $parent */
+        $parent = $rdf_entity->get('collection')->first()->entity;
+        $variables['attributes']['data-joinup-parent-id'] = $parent->id();
+        $variables['attributes']['data-joinup-parent-label'] = $parent->label();
+      }
+      // Add download counter if set.
+      if (isset($variables['elements']['downloads']['count']['#access']) && $variables['elements']['downloads']['count']['#access'] === TRUE) {
+        $variables['extra_data'][] = [
+          'icon' => 'download',
+          'label' => $variables['elements']['downloads']['count']['#access'],
+        ];
+      }
+      break;
+  }
   _ventuno_preprocess_tile($variables, 'rdf_entity');
 }
 
