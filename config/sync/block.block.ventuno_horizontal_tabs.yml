@@ -9,7 +9,7 @@ dependencies:
 id: ventuno_horizontal_tabs
 theme: ventuno
 region: content
-weight: -22
+weight: -23
 provider: null
 plugin: local_tasks_block
 settings:

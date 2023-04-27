@@ -954,6 +954,13 @@ class JoinupContext extends RawDrupalContext {
    * @When I fill the :date :component of the :field widget with :value
    */
   public function fillDateRangeField($field, $component, $value, $date = NULL) {
+    // @todo Remove the if (...) block in ISAICP-7138.
+    // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7138
+    if ($this->usesMaterialDesignLite()) {
+      $element = $this->findMaterialDesignDateRangeComponent($field, $component, $date);
+      $element->setValue($value);
+      return;
+    }
     $element = $this->findDateRangeComponent($field, $component, $date);
     $element->setValue($value);
   }
@@ -977,6 +984,13 @@ class JoinupContext extends RawDrupalContext {
    * @When I clear the :component of the :field widget
    */
   public function clearDateRangeField($field, $component, $date = NULL) {
+    // @todo Remove the if (...) block in ISAICP-7138.
+    // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7138
+    if ($this->usesMaterialDesignLite()) {
+      $element = $this->findMaterialDesignDateRangeComponent($field, $component, $date);
+      $element->setValue('');
+      return;
+    }
     $element = $this->findDateRangeComponent($field, $component, $date);
     $element->setValue('');
   }
@@ -2143,12 +2157,18 @@ class JoinupContext extends RawDrupalContext {
    */
   public function ogCleanup(AfterScenarioScope $event) {
     /** @var \Drupal\Core\Queue\QueueWorkerInterface $worker */
-    $worker = \Drupal::service('plugin.manager.queue_worker')->createInstance('og_orphaned_group_content_cron');
+    $worker = \Drupal::service('plugin.manager.queue_worker')
+      ->createInstance('og_orphaned_group_content_cron');
     $queue = \Drupal::queue('og_orphaned_group_content');
 
     while ($item = $queue->claimItem()) {
-      $worker->processItem($item->data);
-      $queue->deleteItem($item);
+      try {
+        $worker->processItem($item->data);
+        $queue->deleteItem($item);
+      }
+      catch (\Exception $e) {
+        watchdog_exception('cron', $e);
+      }
     }
   }
 
@@ -2454,7 +2474,7 @@ class JoinupContext extends RawDrupalContext {
   public function assertTileMarkedAsFeatured($heading) {
     $element = $this->getTileByHeading($heading);
 
-    if (!$element->find('css', '.listing__card.is-featured')) {
+    if (!$element->find('css', 'div.star')) {
       throw new \Exception("The tile '$heading' is not marked as featured, but it should be.");
     }
   }

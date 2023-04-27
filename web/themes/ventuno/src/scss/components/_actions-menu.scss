@@ -9,7 +9,8 @@
     left: calc(100% - $spacer * 3); // 100% - 46px
     position: relative;
     z-index: unset; // Avoid buttons to overlap navbar
-    bottom: $spacer * 1.5; // 24px
+    bottom: unset;
+    margin: $spacer * .5 0;
   }
   & + & {
     right: $spacer * 5; // 80px
@@ -39,4 +40,10 @@
   .dropdown-menu {
     z-index: 502; // Avoid dropdown-menu to be overlapped by navbar (default z-index is 40)
   }
+}
+// TO-DO ISAICP-7641 This ruleset probably has a better place to be
+.region-header-bottom + .region-featured .actions-menu {
+  position: relative;
+  bottom: $spacer * 1.5;
+  margin: 0;
 }

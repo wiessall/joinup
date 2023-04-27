@@ -15,8 +15,8 @@
     attach(context) {
       // Create a visual cue to be added on featured content.
       const star = document.createElement("div");
-      star.classList.add("listing__corner");
-      star.innerHTML = "<span class='icon icon--star'></span>";
+      star.classList.add("mark");
+      star.classList.add("star");
       // Check for global collection context.
       const group = context.querySelector("[data-joinup-group-context]");
       // If there is a global group context, bail out. We mark tiles as
@@ -25,11 +25,6 @@
       if (group === null || group === undefined) {
         once("featured", "[data-joinup-featured]", context).forEach(
           (element) => {
-            element.classList.add("listing__card--corner");
-            element.classList.add("is-featured");
-            if (!element.querySelector(".listing__image")) {
-              element.classList.add("listing__card--corner-title");
-            }
             element.prepend(star.cloneNode(true));
           }
         );
