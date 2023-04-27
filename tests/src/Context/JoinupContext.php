@@ -2468,7 +2468,7 @@ class JoinupContext extends RawDrupalContext {
   public function assertTileMarkedAsFeatured($heading) {
     $element = $this->getTileByHeading($heading);
 
-    if (!$element->find('css', '.listing__card.is-featured')) {
+    if (!$element->find('css', 'div.star')) {
       throw new \Exception("The tile '$heading' is not marked as featured, but it should be.");
     }
   }

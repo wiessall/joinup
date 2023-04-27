@@ -68,8 +68,8 @@ commands:
       command: sparql:empty
     - task: run
       command: solr:empty
-    - task: run
-      command: redis:flush-all
+    - task: exec
+      command: ${drush.bin} memcache:flush-all
     - task: run
       command: drupal:settings
       arguments:
@@ -120,8 +120,8 @@ commands:
   toolkit:install-clone:
     - task: run
       command: joinup:environment
-    - task: run
-      command: redis:flush-all
+    - task: exec
+      command: ${drush.bin} memcache:flush-all
     - task: run
       command: drupal:settings
       arguments:

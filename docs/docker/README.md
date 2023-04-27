@@ -357,8 +357,8 @@ commands:
     # databases as they are restored in the container startup.
     - task: run
       command: joinup:environment
-    - task: run
-      command: redis:flush-all
+    - task: exec
+      command: ${drush.bin} memcache:flush-all
     - task: run
       command: drupal:settings
       arguments:

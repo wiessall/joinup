@@ -1,6 +1,6 @@
 # Joinup on macOS without Docker
 
-Here you will find the steps to run the Joinup project on your mac without
+Here you will find the steps to run the Joinup project on your Mac without
 Docker.
 
 ## Prerequisites
@@ -9,8 +9,7 @@ Docker.
 versions](https://getgrav.org/blog/macos-catalina-apache-multiple-php-versions)
 - MySql & Apache Virtual Hosts & DnsMasq: [Install mysql & Apache Virtual Hosts
 & Dnsmasq](https://getgrav.org/blog/macos-catalina-apache-mysql-vhost-apc)
-- Redis: [Install and config
-Redis](https://medium.com/@petehouston/install-and-config-redis-on-mac-os-x-via-homebrew-eb8df9a4f298)
+- Memcache: [Install with Brew](https://formulae.brew.sh/formula/memcached)
 
 ## Installation
 
@@ -20,7 +19,7 @@ Redis](https://medium.com/@petehouston/install-and-config-redis-on-mac-os-x-via-
    LoadModule vhost_alias_module lib/httpd/modules/mod_vhost_alias.so
    Include /usr/local/etc/httpd/extra/httpd-vhosts.conf
    ```
-  
+
 2. Add virtual-host **/usr/local/etc/httpd/extra/http-vhosts.conf**
 
    ```
@@ -121,7 +120,7 @@ $ ./vendor/bin/run toolkit:install-clean
 
 ```bash
 $ ./vendor/bin/run solr:setup
-``` 
+```
 
 [Check Solr](http://localhost:8983/solr/#/)
 
