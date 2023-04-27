@@ -1386,7 +1386,7 @@ class JoinupContext extends RawDrupalContext {
   }
 
   /**
-   * Asserts that a certain extra information is present in a tile.
+   * Asserts that a certain statistics string is present in a tile.
    *
    * @param string $heading
    *   The heading of the tile.
@@ -1396,18 +1396,20 @@ class JoinupContext extends RawDrupalContext {
    * @throws \Exception
    *   Thrown when the tile is not found or the text is not found in the tile.
    *
-   * @Then I( should) see the extra info :text in the :heading tile
+   * @Then I( should) see the statistics :text in the :heading tile
    */
-  public function assertTileContainsExtraInfo(string $heading, string $text): void {
+  public function assertTileContainsStatistic(string $heading, string $text): void {
     $element = $this->getTileByHeading($heading);
 
-    if (strpos(trim($element->getText()), $text) === FALSE) {
-      throw new \Exception("The extra info '$text' was not found in the tile '$heading'.");
+    $stats = $element->find('css', "[data-joinup-card-stats]");
+    $stat = $stats->find('xpath', "//*[contains(text(), $text)]");
+    if (!$stat) {
+      throw new \Exception("The statistics '$text' was not found in the tile '$heading'.");
     }
   }
 
   /**
-   * Asserts that a certain extra information is not present in a tile.
+   * Asserts that a certain statistics string is not present in a tile.
    *
    * @param string $heading
    *   The heading of the tile.
@@ -1415,15 +1417,17 @@ class JoinupContext extends RawDrupalContext {
    *   The text to search.
    *
    * @throws \Exception
-   *   Thrown when the tile is not found or the text is not found in the tile.
+   *   Thrown when the tile is not found or the text is found in the tile.
    *
-   * @Then I( should) not see the extra info :text in the :heading tile
+   * @Then I( should) not see the statistics :text in the :heading tile
    */
-  public function assertTileDoesNotContainExtraInfo(string $heading, string $text): void {
+  public function assertTileDoesNotContainStatistic(string $heading, string $text): void {
     $element = $this->getTileByHeading($heading);
 
-    if (strpos(trim($element->getText()), $text) === FALSE) {
-      throw new \Exception("The extra info '$text' was not found in the tile '$heading'.");
+    $stats = $element->find('css', "[data-joinup-card-stats]");
+    $stat = $stats->find('xpath', "//*[contains(text(), $text)]");
+    if ($stat) {
+      throw new \Exception("The statistics '$text' was found in the tile '$heading'.");
     }
   }
 

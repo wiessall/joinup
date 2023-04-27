@@ -96,7 +96,7 @@ Feature: Discussions added to collections
     Then I should see the link "An amazing discussion"
     And I should not see the text "Kesha Pontecorvo" in the "An amazing discussion" tile
     # Initially there are 0 comments on the discussion.
-    And I should see the extra info "0" in the "An amazing discussion" tile
+    And I should see the statistics "0" in the "An amazing discussion" tile
 
     # Make sure that the page is cached, so that we can ascertain that adding a
     # comment will invalidate the cache.
@@ -110,8 +110,8 @@ Feature: Discussions added to collections
       | Product up and running | kesha1988 | An amazing discussion |
       | Smart contract         | kesha1988 | An amazing discussion |
     When I reload the page
-    Then I should see the extra info "2" in the "An amazing discussion" tile
-    And I should not see the extra info "0" in the "An amazing discussion" tile
+    Then I should see the statistics "2" in the "An amazing discussion" tile
+    And I should not see the statistics "0" in the "An amazing discussion" tile
 
     # Check that the page cache has been correctly invalidated, and a reload
     # will serve again from cache.
