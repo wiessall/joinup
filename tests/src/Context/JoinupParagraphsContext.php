@@ -379,32 +379,6 @@ class JoinupParagraphsContext extends RawDrupalContext {
   }
 
   /**
-   * Expands an accordion section.
-   *
-   * @param string $label
-   *   The accordion sections label.
-   *
-   * @throws \Behat\Mink\Exception\ElementNotFoundException
-   *   When there's no accordion section with the given label.
-   *
-   * @When I expand the :label accordion section
-   */
-  public function iExpandAccordionSection(string $label): void {
-    $session = $this->getSession();
-    $page = $session->getPage();
-    if (!$button = $page->findButton($label)) {
-      throw new ElementNotFoundException($session->getDriver(), 'button', 'label', $label);
-    }
-    $this->scrollElementIntoView($button);
-    $button->press();
-    if ($this->hasJavascriptSupport()) {
-      $this->waitUntil(function () use ($button): bool {
-        return !$button->hasClass('collapsed');
-      });
-    }
-  }
-
-  /**
    * Cleans up the paragraphs entities created when nodes where created.
    *
    * This uses the orphan paragraphs purger queue worker.
