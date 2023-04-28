@@ -1,0 +1,26 @@
+{#
+/**
+ * @file
+ * Template for the page title.
+ */
+#}
+{{ attach_library('ventuno/page-title') }}
+{{ title_prefix }}
+{% if title %}
+  <div class="page-title my-4">
+    <h1{{ title_attributes.addClass('page-title__title') }}>
+      {{ title }}
+      {% block badges %}{% endblock %}
+      {% if permalink %}
+        <a class="permalink" href="{{ permalink }}" title="{{ 'Permalink'|t }}">
+          {{ pattern('icon', {
+            name: 'link-45deg',
+            size: 'm'
+          }) }}
+        </a>
+      {% endif %}
+    </h1>
+  </div>
+{% endif %}
+{{ title_suffix }}
+{% block metadata %}{% endblock %}
