@@ -50,7 +50,8 @@ Feature:
         """
     When I press "Save"
 
-    Then I should see the "Tile release | 0.1" tile
+    Then I should see the "Tile release" tile
+    And I should see the text "v0.1" in the "Tile release" tile
     And I should see the "Tile distro" tile
     And I should see the "Tile news" tile
     And I should see the "Tile event" tile
