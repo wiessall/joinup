@@ -15,6 +15,7 @@
 declare(strict_types = 1);
 
 use Drupal\paragraphs\Entity\Paragraph;
+use Drupal\search_api\Entity\Index;
 use Drupal\sparql_entity_storage\UriEncoder;
 
 /**
@@ -164,4 +165,53 @@ function joinup_core_deploy_109203(): void {
       $paragraph->save();
     }
   }
+}
+
+/**
+ * Add state value to custom page nodes.
+ */
+function joinup_core_deploy_109203(?array &$sandbox = []): string {
+  $node_storage = \Drupal::entityTypeManager()->getStorage('node');
+
+  if (!isset($sandbox['ids'])) {
+    $query = $node_storage->getQuery()->accessCheck(FALSE);
+    $query
+      ->condition('type', 'custom_page')
+      ->notExists('field_state');
+
+    $sandbox['ids'] = $query->execute();
+    $sandbox['total'] = count($sandbox['ids']);
+    $sandbox['progress'] = 0;
+  }
+
+  // Load used indexes.
+  $index_published = Index::load('published');
+  $index_unpublished = Index::load('unpublished');
+
+  // Start batch tracking for both used indexes.
+  $index_published->startBatchTracking();
+  $index_unpublished->startBatchTracking();
+
+  $ids = array_splice($sandbox['ids'], 0, 50);
+  /** @var \Drupal\custom_page\Entity\CustomPageInterface $node */
+  foreach ($node_storage->loadMultiple($ids) as $node) {
+    if ($node->isPublished()) {
+      $node->set('field_state', 'published');
+    }
+    else {
+      $node->set('field_state', 'unpublished');
+    }
+
+    $node->skip_notification = TRUE;
+    $node->save();
+  }
+
+  // Stop batch tracking for both used indexes.
+  $index_published->stopBatchTracking();
+  $index_unpublished->stopBatchTracking();
+
+  $sandbox['progress'] += count($ids);
+  $sandbox['#finished'] = (int) empty($sandbox['ids']);
+
+  return "Processed {$sandbox['progress']} out of {$sandbox['total']} custom pages";
 }
