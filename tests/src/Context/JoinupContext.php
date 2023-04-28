@@ -1399,11 +1399,7 @@ class JoinupContext extends RawDrupalContext {
    * @Then I( should) see the statistics :text in the :heading tile
    */
   public function assertTileContainsStatistic(string $heading, string $text): void {
-    $element = $this->getTileByHeading($heading);
-
-    $stats = $element->find('css', "[data-joinup-card-stats]");
-    $stat = $stats->find('xpath', "//*[contains(text(), $text)]");
-    if (!$stat) {
+    if (!$this->getTileStatisticElement($heading, $text)) {
       throw new \Exception("The statistics '$text' was not found in the tile '$heading'.");
     }
   }
@@ -1422,13 +1418,29 @@ class JoinupContext extends RawDrupalContext {
    * @Then I( should) not see the statistics :text in the :heading tile
    */
   public function assertTileDoesNotContainStatistic(string $heading, string $text): void {
-    $element = $this->getTileByHeading($heading);
-
-    $stats = $element->find('css', "[data-joinup-card-stats]");
-    $stat = $stats->find('xpath', "//*[contains(text(), $text)]");
-    if ($stat) {
+    if ($this->getTileStatisticElement($heading, $text)) {
       throw new \Exception("The statistics '$text' was found in the tile '$heading'.");
     }
+  }
+
+  /**
+   * Gets title statistic element.
+   *
+   * @param string $heading
+   *   The heading of the tile.
+   * @param string $text
+   *   The text to search.
+   *
+   * @return \Behat\Mink\Element\NodeElement|null
+   *   Tile statistic element.
+   *
+   * @throws \Behat\Mink\Exception\ElementNotFoundException
+   */
+  protected function getTileStatisticElement(string $heading, string $text): ?NodeElement {
+    $element = $this->getTileByHeading($heading);
+    $stats = $element->find('css', "[data-joinup-card-stats]");
+
+    return $stats->find('xpath', "//*[contains(text(), $text)]");
   }
 
   /**
