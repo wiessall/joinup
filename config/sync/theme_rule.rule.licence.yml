@@ -21,6 +21,6 @@ conditions:
     id: 'entity_bundle:rdf_entity'
     negate: false
     context_mapping:
-      rdf_entity: '@asset_release.asset_release_route_context:asset_release'
+      rdf_entity: '@rdf_entity.rdf_entity_route_context:rdf_entity'
     bundles:
       licence: licence
