@@ -125,6 +125,15 @@ function ventuno_preprocess_node__view_mode_tile(array &$variables, string $enti
   /** @var \Drupal\Core\Datetime\DateFormatterInterface $date_formatter */
   $date_formatter = Drupal::service('date.formatter');
 
+  // Info (above the title).
+  $variables['info']['icon'] = 'calendar-event';
+  if ($changed_time = $entity->getChangedTime()) {
+    $variables['info']['label'] = t('@label: @changed', [
+      '@label' => t('Last update'),
+      '@changed' => \Drupal::service('date.formatter')->format($changed_time, 'date_only'),
+    ]);
+  }
+
   switch ($entity->bundle()) {
     case 'discussion':
       $variables['info']['icon'] = 'calendar-event';

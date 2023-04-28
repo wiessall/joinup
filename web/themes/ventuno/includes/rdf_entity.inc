@@ -35,6 +35,15 @@ function ventuno_preprocess_rdf_entity(array &$variables): void {
 function ventuno_preprocess_rdf_entity__view_mode_tile(array &$variables, string $entity_type_id): void {
   $entity = $variables[$entity_type_id];
 
+  // Info (above the title).
+  $variables['info']['icon'] = 'calendar-event';
+  if ($changed_time = $entity->getChangedTime()) {
+    $variables['info']['label'] = t('@label: @changed', [
+      '@label' => t('Last update'),
+      '@changed' => \Drupal::service('date.formatter')->format($changed_time, 'date_only'),
+    ]);
+  }
+
   switch ($entity->bundle()) {
     case 'asset_distribution':
       $variables['info']['icon'] = 'file-earmark-medical';
@@ -98,7 +107,7 @@ function ventuno_preprocess_rdf_entity__view_mode_tile(array &$variables, string
       if (isset($variables['elements']['downloads']['count']['#access']) && $variables['elements']['downloads']['count']['#access'] === TRUE) {
         $variables['extra_data'][] = [
           'icon' => 'download',
-          'label' => $variables['elements']['downloads']['count']['#access'],
+          'label' => $variables['elements']['downloads']['count'],
         ];
       }
       break;
