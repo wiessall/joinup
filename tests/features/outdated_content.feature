@@ -78,8 +78,8 @@ Feature:
     Then I should see the heading "Outdated published news"
     And the text "This news is more than 3 years old" should appear 1 time
 
-    When I go to the "Outdated archived published new" news
-    Then I should not see the heading "Outdated published news"
+    When I go to the "Outdated archived published news" news
+    Then I should see the heading "Outdated archived published news"
     And the text "This news is more than 3 years old" should appear 0 time
 
     # Login as moderator to test content that was never published.
