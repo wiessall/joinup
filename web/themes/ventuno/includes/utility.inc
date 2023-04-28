@@ -51,15 +51,6 @@ function _ventuno_preprocess_tile(array &$variables, string $entity_type_id): vo
     ? $entity->getLogoAsRenderArray($variables['view_mode'])
     : [];
 
-  // Info (above the title).
-  $variables['info']['icon'] = 'calendar-event';
-  if ($changed_time = $entity->getChangedTime()) {
-    $variables['info']['label'] = t('@label: @changed', [
-      '@label' => t('Last update'),
-      '@changed' => \Drupal::service('date.formatter')->format($changed_time, 'date_only'),
-    ]);
-  }
-
   // Topics.
   $topics = ($entity instanceof TopicReferencingEntityInterface) ? $entity->getTopics() : NULL;
   if ($topics) {
