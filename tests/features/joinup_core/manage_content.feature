@@ -24,9 +24,9 @@ Feature:
       | title                              | collection  | state     |
       | Exports Leap Despite Currency Gain | Vintage Art | validated |
     And custom_page content:
-      | title                | collection  |
-      | HOWTOs               | Vintage Art |
-      | Looking for Support? | Vintage Art |
+      | title                | collection  | state     |
+      | HOWTOs               | Vintage Art | published |
+      | Looking for Support? | Vintage Art | published |
     And the following custom page menu structure:
       | title                | parent | weight |
       | Looking for Support? | HOWTOs | 1      |
@@ -103,7 +103,7 @@ Feature:
     Then I should see "Proceeded updates to 2 entities"
 
     # Check published state.
-    Given I select "Published" from "State"
+    Given I select "validated" from "State"
     And I press "Apply"
     Then I should see the link "The Panama Papers"
     And I should see the link "The Ultimate Debate"
@@ -114,7 +114,7 @@ Feature:
     And I select "Archive content" from "Action"
     And I press "Apply to selected items"
     And I wait for the batch process to finish
-    Then I should see "HOWTOs can not not be processed: This content does not support workflow."
+    Then I should see "Proceeded updates to 1 entities"
 
     # Select rows.
     Given I select the "The Panama Papers" row
