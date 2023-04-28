@@ -267,8 +267,8 @@ class WorkflowHelper implements WorkflowHelperInterface {
   /**
    * {@inheritdoc}
    */
-  public function accountCanUnarchive(EntityInterface $entity, AccountInterface $account): bool {
-    return ($entity->getWorkflowState() === 'archived' && $account->hasPermission('unarchived community content'));
+  public function accountCanNotUnarchive(EntityInterface $entity, AccountInterface $account): bool {
+    return $entity->getWorkflowState() === 'archived' && !$account->hasPermission('unarchived community content');
   }
 
 }
