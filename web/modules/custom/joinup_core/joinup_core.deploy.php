@@ -14,64 +14,72 @@
 
 declare(strict_types = 1);
 
-use Drupal\joinup_video\Entity\VideoInterface;
+use Drupal\Core\Entity\ContentEntityInterface;
+use Drupal\Core\Entity\EntityStorageInterface;
+use Drupal\joinup_group\Entity\GroupContentInterface;
+use Drupal\paragraphs\ParagraphInterface;
+use Drupal\user\EntityOwnerInterface;
 
 /**
  * Migrate Video content into new Media field.
  */
 function joinup_core_deploy_109400(array &$sandbox): string {
+  $entity_type_manager = \Drupal::entityTypeManager();
+  $node_storage = $entity_type_manager->getStorage('node');
+  $media_storage = $entity_type_manager->getStorage('media');
+
   if (empty($sandbox['ids'])) {
-    $sandbox['ids'] = \Drupal::entityQuery('node')
+    $sandbox['ids'] = $node_storage->getQuery()
       ->accessCheck(FALSE)
-      ->condition('type', 'video')->execute();
+      ->condition('type', 'video')
+      ->execute();
     $sandbox['count'] = 0;
     $sandbox['max'] = count($sandbox['ids']);
   }
-  $storage = \Drupal::entityTypeManager()->getStorage('node');
+
   $nids = array_splice($sandbox['ids'], 0, 50);
   /** @var \Drupal\joinup_video\Entity\VideoInterface $video */
-  foreach ($storage->loadMultiple($nids) as $video) {
-    _joinup_core_deploy_migrate_field($video);
+  foreach ($node_storage->loadMultiple($nids) as $video) {
+    if ($url = $video->get('field_video')->value) {
+      $media = $media_storage->getQuery()->accessCheck(FALSE)
+        ->condition('bundle', 'video')
+        ->condition('video', $url)
+        ->execute();
+      if (!$media) {
+        $media = $media_storage->create(['bundle' => 'video', 'video' => $url])
+          ->setOwnerId($video->getOwnerId())
+          ->set('og_audience', $video->get('og_audience')->target_id);
+      }
+      else {
+        $media = reset($media);
+      }
+      $video->set('video', $media)->save();
+    }
     $sandbox['count']++;
   }
-
   $sandbox['#finished'] = $sandbox['count'] === $sandbox['max'];
-  return "Migrate {$sandbox['count']} out of {$sandbox['max']} video embed fields.";
-}
 
-/**
- * Migrate Video Embed Field to Media.
- *
- * @param \Drupal\joinup_video\Entity\VideoInterface $video
- *   The video node entity.
- */
-function _joinup_core_deploy_migrate_field(VideoInterface $video): void {
-  $media_storage = \Drupal::entityTypeManager()->getStorage('media');
-  $video_url = $video->get('field_video')->value;
-  if ($video_url) {
-    $result = $media_storage->getQuery()->accessCheck(FALSE)
-      ->condition('bundle', 'video')
-      ->condition('video', $video_url)
-      ->execute();
-    if (empty($result)) {
-      $video_media = $media_storage->create([
-        'bundle' => 'video',
-        'video' => $video_url,
-      ])->setOwnerId($video->getOwnerId())
-        ->set('og_audience', $video->get('og_audience')->target_id);
-      $video_media->save();
-    }
-    else {
-      $video_media = reset($result);
-    }
-    $video->set('video', $video_media)->save();
-  }
+  return "Migrate {$sandbox['count']} out of {$sandbox['max']} video embed fields.";
 }
 
 /**
  * Migrate video embed markup into media.
  */
 function joinup_core_deploy_109401(array &$sandbox): string {
+  $sparql = \Drupal::getContainer()->get('sparql.endpoint');
+  $database = \Drupal::database();
+  $entity_type_manager = \Drupal::entityTypeManager();
+  $entity_type_ids = ['node', 'paragraph', 'rdf_entity'];
+  $storage = array_map(
+    fn(string $entity_type_id): EntityStorageInterface => $entity_type_manager->getStorage($entity_type_id),
+    array_combine($entity_type_ids, $entity_type_ids),
+  );
+  $predicates = [
+    'http://purl.org/dc/terms/description',
+    'http://www.w3.org/ns/adms#versionNotes',
+  ];
+  $fields = ['node' => 'body', 'paragraph' => 'field_body'];
+
   if (empty($sandbox['tasks'])) {
     $sandbox['tasks']['node'] = \Drupal::entityQuery('node')->accessCheck(FALSE)
       ->condition('body', 'preview_thumbnail', 'CONTAINS')
@@ -92,7 +100,6 @@ function joinup_core_deploy_109401(array &$sandbox): string {
     $sandbox['max'] = count($sandbox['tasks']['node']) + count($sandbox['tasks']['paragraph']) + count($sandbox['tasks']['rdf_entity']);
   }
 
-  $entity_type_manager = \Drupal::entityTypeManager();
   $type = array_key_first($sandbox['tasks']);
   $tasks = array_splice($sandbox['tasks'][$type], 0, 25);
   if (empty($sandbox['tasks'][$type])) {
@@ -100,58 +107,38 @@ function joinup_core_deploy_109401(array &$sandbox): string {
   }
 
   foreach ($tasks as $entity_id) {
-    $entity = $entity_type_manager->getStorage($type)->load($entity_id);
+    /** @var \Drupal\Core\Entity\ContentEntityInterface&\Drupal\user\EntityOwnerInterface $entity */
+    $entity = $storage[$type]->load($entity_id);
     if ($type === 'rdf_entity') {
-      $predicates = [
-        'http://purl.org/dc/terms/description',
-        'http://www.w3.org/ns/adms#versionNotes',
-      ];
       foreach ($predicates as $predicate) {
-        $query = "SELECT ?description WHERE { <{$entity_id}> <{$predicate}> ?description . }";
-        $sparl = \Drupal::getContainer()->get('sparql.endpoint');
-        $results = $sparl->query($query);
+        $results = $sparql->query("SELECT ?description WHERE { <$entity_id> <$predicate> ?description . }");
         /** @var \EasyRdf\Sparql\Result $results */
         foreach ($results as $result) {
-          if (!preg_match_all('/(<p>)?(?<json>{(?=.*preview_thumbnail\b)(?=.*settings\b)(?=.*video_url\b)(?=.*settings_summary)(.*)})(<\/p>)?/', (string) $result->description, $videos_embed)) {
-            continue;
-          }
-          foreach ($videos_embed['json'] as $delta => $json) {
-            // Ensure the JSON string is valid.
-            $embed_data = json_decode($json, TRUE);
-            $replace = _joinup_core_deploy_get_media_markup($embed_data['video_url'], $entity->getOwner() ? $entity->getOwner()->id() : '1');
-            $description = str_replace($videos_embed[0][$delta], $replace, (string) $result->description);
-            $graph = "<http://joinup.eu/{$entity->bundle()}/published>";
+          $description = (string) $result->description;
+          $processed_text = _joinup_core_deploy_replace_embed_video($entity, $description);
+          if ($processed_text !== $description) {
             $update_query = <<<QUERY
-          WITH $graph
-          DELETE { <$entity_id> <{$predicate}> ?description }
-          INSERT { <$entity_id> <{$predicate}> """{$description}"""@en }
-          WHERE { <$entity_id> <{$predicate}> ?description }
-          QUERY;
-            $sparl->update($update_query);
+              WITH <http://joinup.eu/{$entity->bundle()}/published>
+              DELETE { <$entity_id> <$predicate> ?description }
+              INSERT { <$entity_id> <$predicate> """$processed_text"""@en }
+              WHERE { <$entity_id> <$predicate> ?description }
+              QUERY;
+            $sparql->update($update_query);
           }
         }
       }
     }
-    if ($type === 'node' || $type === 'paragraph') {
-      $table = $type === 'node' ? 'node__body' : 'paragraph__field_body';
-      $field = $type === 'node' ? 'body_value' : 'field_body_value';
-      $database = \Drupal::database();
-      $results = $database->query("SELECT revision_id, " . $field . " FROM " . $table . " WHERE entity_id = " . $entity_id)->fetchAll();
-      foreach ($results as $result) {
-        if (!preg_match_all('/(<p>)?(?<json>{(?=.*preview_thumbnail\b)(?=.*settings\b)(?=.*video_url\b)(?=.*settings_summary)(.*)})(<\/p>)?/', $result->{$field}, $videos_embed)) {
-          continue;
-        }
-        foreach ($videos_embed['json'] as $delta => $json) {
-          // Ensure the JSON string is valid.
-          $embed_data = json_decode($json, TRUE);
-          $replace = _joinup_core_deploy_get_media_markup($embed_data['video_url'], $entity->getOwner() ? $entity->getOwner()->id() : '1');
-          $description = str_replace($videos_embed[0][$delta], $replace, $result->{$field});
-          $database->update($table)
-            ->fields([
-              $field => $description,
-            ])
-            ->condition('revision_id', $result->revision_id)
-            ->execute();
+    elseif ($type === 'node' || $type === 'paragraph') {
+      $field = "$fields[$type]_value";
+      foreach (["{$type}_revision__$fields[$type]", "${type}__$fields[$type]"] as $table) {
+        $results = $database->query("SELECT revision_id, $field FROM $table WHERE entity_id = $entity_id")->fetchAll();
+        foreach ($results as $result) {
+          $processed_text = _joinup_core_deploy_replace_embed_video($entity, $result->{$field});
+          if ($processed_text !== $result->{$field}) {
+            $database->update($table)->fields([$field => $processed_text])
+              ->condition('revision_id', $result->revision_id)
+              ->execute();
+          }
         }
       }
     }
@@ -163,37 +150,60 @@ function joinup_core_deploy_109401(array &$sandbox): string {
 }
 
 /**
- * Migrate Video Embed WYSIWYG to Media.
+ * Replaces embed videos with embed media.
  *
- * @param string $url
- *   Video URL.
- * @param string $owner_id
- *   Owner ID.
+ * @param \Drupal\user\EntityOwnerInterface&\Drupal\Core\Entity\ContentEntityInterface $entity
+ *   The host entity.
+ * @param string $text
+ *   Text to be processed.
  *
  * @return string
- *   Return the media uuid.
- *
- * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
- * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
- * @throws \Drupal\Core\Entity\EntityStorageException
+ *   Text after has been processed.
  */
-function _joinup_core_deploy_get_media_markup(string $url, string $owner_id): string {
-  $media_storage = \Drupal::entityTypeManager()->getStorage('media');
-  $result = $media_storage->getQuery()->accessCheck(FALSE)
-    ->condition('bundle', 'video')
-    ->condition('video', $url)
-    ->execute();
-  if (empty($result)) {
-    $video_media = $media_storage->create([
-      'bundle' => 'video',
-      'video' => $url,
-    ]);
-    $video_media->setOwnerId($owner_id);
-    $video_media->save();
+function _joinup_core_deploy_replace_embed_video(ContentEntityInterface&EntityOwnerInterface $entity, string $text): string {
+  $group_id = NULL;
+  $search = $replace = [];
+
+  // Get the media group ID.
+  if ($entity instanceof GroupContentInterface && $entity->hasGroup()) {
+    $group_id = $entity->getGroupId();
   }
-  else {
-    $video_media = $media_storage->load(reset($result));
+  elseif ($entity instanceof ParagraphInterface) {
+    $parent = $entity->getParentEntity();
+    if ($parent instanceof GroupContentInterface && $parent->hasGroup()) {
+      $group_id = $parent->getGroupId();
+    }
   }
 
-  return '<drupal-media data-entity-type="media" data-entity-uuid="' . $video_media->uuid() . '"/>';
+  if (preg_match_all('/(<p>)?(?<json>{(?=.*preview_thumbnail\b)(?=.*settings\b)(?=.*video_url\b)(?=.*settings_summary)(.*)})(<\/p>)?/', $text, $videos_embed)) {
+    $media_storage = \Drupal::entityTypeManager()->getStorage('media');
+    foreach ($videos_embed['json'] as $delta => $json) {
+      // Ensure the JSON string is valid.
+      if (($embed_data = json_decode($json, TRUE)) !== NULL) {
+        $search[] = $videos_embed[0][$delta];
+        $media_ids = $media_storage->getQuery()->accessCheck(FALSE)
+          ->condition('bundle', 'video')
+          ->condition('video', $embed_data['video_url'])
+          ->execute();
+        if ($media_ids) {
+          $media = $media_storage->load(reset($media_ids));
+        }
+        else {
+          $media = $media_storage->create([
+            'bundle' => 'video',
+            'video' => $embed_data['video_url'],
+          ])->setOwnerId((int) $entity->getOwnerId());
+
+          if ($group_id) {
+            $media->set('og_audience', $group_id);
+          }
+
+          $media->save();
+        }
+        $replace[] = '<drupal-media data-entity-type="media" data-entity-uuid="' . $media->uuid() . '"/>';
+      }
+    }
+  }
+
+  return str_replace($search, $replace, $text);
 }
