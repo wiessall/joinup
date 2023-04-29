@@ -33,10 +33,15 @@ class CustomPageOgMenuLinksManagerTest extends KernelTestBase {
   protected static $modules = [
     'custom_page',
     'field',
+    'joinup_group',
+    'joinup_notification',
+    'joinup_workflow',
     'language',
     'link',
     'menu_link_content',
     'menu_ui',
+    'message',
+    'message_notify',
     'node',
     'og',
     'og_menu',
@@ -46,7 +51,10 @@ class CustomPageOgMenuLinksManagerTest extends KernelTestBase {
     'rdf_schema_field_validation',
     'search_api',
     'sparql_entity_storage',
+    'state_machine',
+    'state_machine_revisions',
     'system',
+    'workflow_state_permission',
     'user',
   ];
 
