@@ -192,7 +192,7 @@ class JoinupParagraphsContext extends RawDrupalContext {
     }
 
     $paragraph_item = $this->getParagraphsElementItem($field, --$delta);
-
+    $this->scrollElementIntoView($paragraph_item);
     if (!$button = $paragraph_item->findButton($label)) {
       throw new ElementNotFoundException($this->getSession()->getDriver(), 'button', 'label');
     }
@@ -218,7 +218,7 @@ class JoinupParagraphsContext extends RawDrupalContext {
    */
   public function assertRowsInParagraphsField(int $expected_rows, string $field): void {
     $field = $this->getParagraphsElement($field);
-    Assert::assertCount($expected_rows, $field->findAll('xpath', "//tr[contains(concat(' ', @class, ' '), 'form-table__row')]"));
+    Assert::assertCount($expected_rows, $field->findAll('xpath', "//tr[contains(concat(' ', @class, ' '), 'draggable')]"));
   }
 
   /**
@@ -307,6 +307,7 @@ class JoinupParagraphsContext extends RawDrupalContext {
     if (!$input) {
       throw new ElementNotFoundException($this->getSession()->getDriver(), "Button contained $filter filter from $paragraph paragraph");
     }
+    $this->scrollElementIntoView($input);
     $input->click();
   }
 
