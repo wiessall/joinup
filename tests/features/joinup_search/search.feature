@@ -22,6 +22,13 @@ Feature: Global search
       | Dummy title 2        | Dummy news 2          | Dummy body       | Molecular cooking collection | E-inclusion             | Luxembourg       | validated |
       | Dummy title 3        | Dummy news 3          | Dummy body       | Molecular cooking collection | E-inclusion             | Luxembourg       | validated |
       | Dummy title 4        | Dummy news 4          | Dummy body       | Molecular cooking collection | E-inclusion             | Luxembourg       | validated |
+    When I visit the search page
+    Then the response should not contain "data-drupal-facet-id=\"status\""
+
+    Given news content:
+      | title                | headline              | body             | collection                   | topic                   | spatial coverage | state     |
+      | Rummy title 5        | Rummy news 5          | Dummy body       | Molecular cooking collection | E-inclusion             | Luxembourg       | archived  |
+      | Rummy title 6        | Rummy news 6          | Dummy body       | Molecular cooking collection | E-inclusion             | Luxembourg       | archived  |
 
     Given I am logged in as a user with the "authenticated" role
     Then I visit the search page
@@ -47,6 +54,8 @@ Feature: Global search
     And I should see the "Dummy news 2" tile
     And I should see the "Dummy news 3" tile
     And I should see the "Dummy news 4" tile
+    And I should not see the "Rummy news 5" tile
+    And I should not see the "Rummy news 6" tile
 
     # Test the topic facet. The space prefixing "Demography" is due to the hierarchy.
     When I check the "Demography (2)" checkbox from the "topic" facet
@@ -98,6 +107,31 @@ Feature: Global search
     And I should see the "Foam" tile
     But I should not see the "Spherification" tile
     And I should not see the "El Celler de Can Roca" tile
+
+    Given I am on the search page
+    When I check the "Include archived items" checkbox from the "Status" facet
+    And I should see the "Molecular cooking collection" tile
+    And I should see the "Spherification" tile
+    And I should see the "Foam" tile
+    And I should see the "El Celler de Can Roca" tile
+    And I should see the "Dummy news 1" tile
+    And I should see the "Dummy news 2" tile
+    And I should see the "Dummy news 3" tile
+    And I should see the "Dummy news 4" tile
+    And I should see the "Rummy news 5" tile
+    And I should see the "Rummy news 6" tile
+
+    Then I check the "Include archived items" checkbox from the "Status" facet
+    And I should see the "Molecular cooking collection" tile
+    And I should see the "Spherification" tile
+    And I should see the "Foam" tile
+    And I should see the "El Celler de Can Roca" tile
+    And I should see the "Dummy news 1" tile
+    And I should see the "Dummy news 2" tile
+    And I should see the "Dummy news 3" tile
+    And I should see the "Dummy news 4" tile
+    And I should not see the "Rummy news 5" tile
+    And I should not see the "Rummy news 6" tile
 
   @javascript
   Scenario: Alphabetical order for the spatial coverage in the search page.
