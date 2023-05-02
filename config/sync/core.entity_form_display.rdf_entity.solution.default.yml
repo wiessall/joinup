@@ -50,13 +50,13 @@ dependencies:
     - rdf_entity.rdfentity.solution
   module:
     - allowed_formats
-    - custom_page
     - field_group
     - file_url
     - inline_entity_form
     - joinup_core
     - joinup_workflow
     - link
+    - search_api_field
     - text
 third_party_settings:
   field_group:
@@ -190,7 +190,7 @@ content:
       removed_reference: optional
     third_party_settings: {  }
   field_is_content:
-    type: search_api_field_custom_page
+    type: search_api_field_default
     weight: 17
     region: content
     settings:
