@@ -279,7 +279,7 @@ Feature: "Add solution" visibility options.
     And I delete the "Climate change tracker" solution
     And I delete the "Angela Crespi" contact information
 
-  @javascript @terms @generateMedia
+  @javascript @terms @generateMedia @generateMediaTypes:solution_banner,solution_logo
   Scenario: Tests the image library widget.
     Given the following owner:
       | name                 | type    |

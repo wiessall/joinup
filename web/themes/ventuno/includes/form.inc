@@ -98,6 +98,7 @@ function ventuno_preprocess_form_element(array &$variables): void {
  */
 function ventuno_preprocess_form_element_label(array &$variables): void {
   $variables['#attached']['library'][] = 'ventuno/form-checkboxes';
+  $variables['attributes']['class'][] = 'h4';
 }
 
 /**

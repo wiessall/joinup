@@ -63,6 +63,11 @@ badge:
     theme:
       assets/css/badge.min.css: { minified: true }
 
+button-group:
+  css:
+    theme:
+      assets/css/button-group.min.css: { minified: true }
+
 card:
   css:
     theme:
