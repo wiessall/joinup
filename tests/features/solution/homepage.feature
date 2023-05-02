@@ -114,10 +114,6 @@ Feature: Solution homepage
     Then I should not see the "Pager" region
     And I should not see the "Distribution 13" tile
 
-    # The pager cache is not invalidated when a 13th item is added.
-    # https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-4235
-    Given the cache has been cleared
-
     Given the following distributions:
       | title           | description    | parent            |
       | Distribution 13 | Description 13 | Chiricahua Server |
