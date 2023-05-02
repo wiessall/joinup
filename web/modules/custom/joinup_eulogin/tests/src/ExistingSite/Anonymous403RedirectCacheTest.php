@@ -35,7 +35,7 @@ class Anonymous403RedirectCacheTest extends JoinupExistingSiteTestBase {
       $this->assertSession()->pageTextContains('Sign in to continue');
 
       // Publish the entity.
-      $value = $entity->bundle() === 'custom_page' ? TRUE : 'validated';
+      $value = $entity->bundle() === 'custom_page' ? 'published' : 'validated';
       $entity->set($field_name, $value)->save();
 
       // Revisit the entity. It should be visible.
@@ -83,12 +83,12 @@ class Anonymous403RedirectCacheTest extends JoinupExistingSiteTestBase {
 
     $custom_page = $this->createNode([
       'type' => 'custom_page',
-      'status' => FALSE,
+      'field_state' => 'unpublished',
       'title' => $this->randomString(),
       'og_audience' => $collection,
     ]);
     $custom_page->save();
-    $entities['status'] = $custom_page;
+    $entities['field_state'] = $custom_page;
 
     $discussion = $this->createNode([
       'type' => 'discussion',

@@ -16,7 +16,7 @@ Feature: Custom pages enhance search results for their collections/solutions
     Then I should see "No content found for your search."
 
     Given custom_page content:
-      | title                          | <group>         | body                         | status      |
+      | title                          | <group>         | body                         | state       |
       | Splitting and coalescing       | Buddy system    | Memory split in blocks       | published   |
       | Reduces memory fragmentation   | Buddy system    | Binary tree                  | unpublished |
       | Memory initialization overhead | Slab allocation | Significant performance drop | unpublished |

@@ -19,7 +19,7 @@ Feature: Prefill contact form fields
     When I fill in the following:
       | Title | Change management                                                                    |
       | Body  | <p>Follow this <a href="../../contact?subject=CAMSS%20Change%20Request">link</a></p> |
-    And I press "Save"
+    And I press "Publish"
     Then I should see the heading "Change management"
 
     When I click "link"
