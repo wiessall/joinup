@@ -32,8 +32,8 @@ Feature: Solution RSS feed.
       | Is the indigo coloration caused by their smile? | I was reading the technical paper and it seems their main food is the indigo cherries. | validated | scorlan | 2019-01-21 13:00 | Deuteron Lonesome |
     And custom_page content:
       | title             | body                                            | state     | author  | created          | solution          |
-      | Indigo variations | The four major tones of indigo are listed here. | validated | scorlan | 2017-10-15 19:30 | Lantern Domestic  |
-      | List of devices   | Available remote electrical devices.            | validated | scorlan | 2019-02-08 10:00 | Deuteron Lonesome |
+      | Indigo variations | The four major tones of indigo are listed here. | published | scorlan | 2017-10-15 19:30 | Lantern Domestic  |
+      | List of devices   | Available remote electrical devices.            | published | scorlan | 2019-02-08 10:00 | Deuteron Lonesome |
 
     When I am an anonymous user
     And I go to the homepage of the "Lantern Domestic" solution
