@@ -17,12 +17,14 @@ Feature: Content archival.
 
     When I press "Archive"
     Then I should see the message "<type label> Test <type> has been updated."
+    And I should see the text "Archive" in the "Page title" region
     When I go to the edit form of the "Test <type>" <type>
     Then I should not see the button "Archive"
     And I should see the button "Unarchive"
 
     When I press "Unarchive"
     Then I should see the message '<type label> "Test <type>" has been unarchived.'
+    And I should not see the text "Archive" in the "Page title" region
     When I go to the edit form of the "Test <type>" <type>
     Then I should see the button "Archive"
     And the current workflow state should be "<state label>"
