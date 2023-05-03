@@ -542,7 +542,8 @@ class JoinupSearchContext extends RawDrupalContext {
    * @Then I should see the :facet facet
    */
   public function iShouldSeeTheFacet(string $facet): void {
-    $this->findFacetByAlias($facet);
+    $facet_element = $this->findFacetByAlias($facet);
+    Assert::assertNotEmpty($facet_element->getText(), "The facet '{$facet}' was not found in the page.");
   }
 
   /**

@@ -22,7 +22,7 @@ class SearchApiStatusSubscriber implements EventSubscriberInterface {
     return [
       SearchApiEvents::QUERY_PRE_EXECUTE => ['searchStatusQueryAlter', -100],
       SearchApiEvents::QUERY_PRE_EXECUTE . '.search_api_field' => [
-        ['groupContentListingQueryAlter', -100],
+        ['groupContentListingQueryAlter'],
       ],
     ];
   }
