@@ -22,18 +22,30 @@ Feature: Tests the group landing page customization.
     Given I am not logged in
     When I go to the homepage of the "<group> group" <group>
     Then I should not see the link "Settings"
+    And I should not see the link "Edit landing page"
+    And I should see the following group menu items in the specified order:
+      | text          |
+      | Overview      |
+      | Members       |
+      | About         |
+      | Custom Page 1 |
+      | Custom Page 2 |
+      | Custom Page 3 |
 
     Given I am logged in as an authenticated
     When I go to the homepage of the "<group> group" <group>
     Then I should not see the link "Settings"
+    And I should not see the link "Edit landing page"
 
     Given I am logged in as a member of the "<group> group" <group>
     When I go to the homepage of the "<group> group" <group>
     Then I should not see the link "Settings"
+    And I should not see the link "Edit landing page"
 
     Given I am logged in as a facilitator of the "other <group> group" <group>
     When I go to the homepage of the "<group> group" <group>
     Then I should not see the link "Settings"
+    And I should not see the link "Edit landing page"
 
     # ToDo: Re-enable this test when facilitators are also allowed to set the
     # landing page of the group, in ISAICP-7223.
@@ -60,27 +72,41 @@ Feature: Tests the group landing page customization.
     When I go to the homepage of the "<group> group" <group>
     Then I should see the heading "<group> group"
     Then I should see the link "Settings"
+    And I should not see the link "Edit landing page"
     When I click "Settings"
-    Then the following fields should be present "Landing page"
+    Then the following fields should be present "Landing page, Overview label"
     And the "Landing page" select should contain the following options:
       | - Standard landing page - |
       | Custom Page 1             |
       | Custom Page 2             |
       | Custom Page 3             |
     When I select "Custom Page 3" from "Landing page"
+    And I fill in "Overview label" with "Welcome"
     And I press "Save"
     Then I should see the heading "<group> group"
+    And I should see the heading "Custom Page 3"
     And I should see "The custom page 3 content"
     But I should not see "The <group> arbitrary description"
     And I should not see "The custom page 2 content"
+    And I should see the link "Edit landing page"
+    And I should see the following group menu items in the specified order:
+      | text          |
+      | Welcome       |
+      | Members       |
+      | About         |
+      | Custom Page 1 |
+      | Custom Page 2 |
+      | Custom Page 3 |
 
     When I click "Settings"
     When I select "- Standard landing page -" from "Landing page"
     And I press "Save"
     Then I should see the heading "<group> group"
     And I should see "The <group> arbitrary description"
+    And I should not see the heading "Custom Page 3"
     And I should not see "The custom page 2 content"
     And I should not see "The custom page 3 content"
+    And I should not see the link "Edit landing page"
 
     Examples:
       | group      |

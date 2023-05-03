@@ -6,6 +6,7 @@ dependencies:
     - core.entity_view_mode.node.search_result_featured
     - field.field.node.discussion.body
     - field.field.node.discussion.field_attachment
+    - field.field.node.discussion.field_discussion_logo
     - field.field.node.discussion.field_keywords
     - field.field.node.discussion.field_replies
     - field.field.node.discussion.field_shared_in
@@ -41,6 +42,17 @@ content:
       template_suggestion:
         template_suggestion: bare
     weight: 1
+    region: content
+  field_discussion_logo:
+    type: responsive_image
+    label: hidden
+    settings:
+      responsive_image_style: teaser
+      image_link: ''
+    third_party_settings:
+      template_suggestion:
+        template_suggestion: ''
+    weight: 3
     region: content
   field_logo:
     type: responsive_image
