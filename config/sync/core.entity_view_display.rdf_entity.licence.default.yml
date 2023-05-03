@@ -85,7 +85,7 @@ content:
       link_to_entity: false
     third_party_settings:
       template_suggestion:
-        template_suggestion: no_wrappers
+        template_suggestion: bare
     weight: 0
     region: content
   spdx_licence_id:

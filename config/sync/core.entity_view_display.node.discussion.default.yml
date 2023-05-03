@@ -6,6 +6,7 @@ dependencies:
     - core.entity_view_display.comment.reply.default
     - field.field.node.discussion.body
     - field.field.node.discussion.field_attachment
+    - field.field.node.discussion.field_discussion_logo
     - field.field.node.discussion.field_keywords
     - field.field.node.discussion.field_replies
     - field.field.node.discussion.field_shared_in
@@ -13,6 +14,7 @@ dependencies:
     - field.field.node.discussion.field_state
     - field.field.node.discussion.field_topic
     - field.field.node.discussion.og_audience
+    - image.style.logo
     - node.type.discussion
   module:
     - comment
@@ -45,6 +47,19 @@ content:
       template_suggestion:
         template_suggestion: with_label
     weight: 9
+    region: content
+  field_discussion_logo:
+    type: image
+    label: hidden
+    settings:
+      image_link: content
+      image_style: logo
+      image_loading:
+        attribute: lazy
+    third_party_settings:
+      template_suggestion:
+        template_suggestion: ''
+    weight: 11
     region: content
   field_replies:
     type: comment_default
