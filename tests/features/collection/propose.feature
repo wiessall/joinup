@@ -94,7 +94,7 @@ Feature: Proposing a collection
     When I fill in the following:
       | Title | About this group                                               |
       | Body  | <p>Some more<em>information</em><br />about the collection.<p> |
-    And I press "Save"
+    And I press "Publish"
     Then I should see the success message "Custom page About this group has been created."
     And the page should contain the html text "<p>Some more<em>information</em><br>about the collection.</p>"
 
@@ -132,7 +132,7 @@ Feature: Proposing a collection
     And I should see the text "Only members can create content."
     And I should see the text "Any user can create content."
 
-  @javascript @generateMedia @terms @uploadFiles:logo.png
+  @javascript @generateMedia @generateMediaTypes:collection_banner,collection_logo @terms @uploadFiles:logo.png
   Scenario: Propose collection form fields should be organized in tabs.
     Given the following owner:
       | name                 | type    |
