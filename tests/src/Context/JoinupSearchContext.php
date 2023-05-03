@@ -554,14 +554,9 @@ class JoinupSearchContext extends RawDrupalContext {
    * @Then I should not see the :facet facet
    */
   public function iShouldNotSeeTheFacet(string $facet): void {
-    try {
-      $this->findFacetByAlias($facet);
-    }
-    catch (\Exception $e) {
-      return;
-    }
-
-    throw new \RuntimeException("The facet '{$facet}' was found in the page.");
+    $element = $this->findFacetByAlias($facet, NULL, '*', FALSE);
+    // The facet might be present but with no options.
+    Assert::assertTrue(empty($element) || empty($element->getText()), "The facet '{$facet}' was found in the page.");
   }
 
   /**
