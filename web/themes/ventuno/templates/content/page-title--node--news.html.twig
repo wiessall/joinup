@@ -15,35 +15,38 @@
 {{ attach_library('ventuno/page-title') }}
 {{ title_prefix }}
 {% if title %}
-<div class="page-title page__title-wrapper d-flex flex-column my-4">
-  <h1 class="page-title__title order-1">
-    {{ additional_content.field_news_headline }}
-    {% if permalink %}
-      <a class="permalink" href="{{ permalink }}" title="{{ 'Permalink'|t }}">
-        {{ pattern('icon', {
-          name: 'link-45deg',
-          size: 'm'
-        }) }}
-      </a>
-    {% endif %}
-  </h1>
-  <h2 class="page-title__headline order-0 mt-3 mb-2">{{ title }}</h2>
-  <div class="page-title__details order-1">
-    <span class="page-title__detail">{{ additional_content.author }}</span>
-    <span class="page-title__detail">{{ 'Published on'|t }}: {{ additional_content.published }}</span>
-    {% if additional_content.published != additional_content.updated %}
-      <span class="page-title__detail">{{ 'Last update'|t }}: {{ additional_content.updated }}</span>
-    {% endif %}
-    <span class="page-title__detail">
+  <div class="page-title page__title-wrapper d-flex flex-column my-4">
+    <h1 class="page-title__title order-1">
+      {{ additional_content.field_news_headline }}
+      {% if permalink %}
+        <a class="permalink" href="{{ permalink }}" title="{{ 'Permalink'|t }}">
+          {{ pattern('icon', {
+            name: 'link-45deg',
+            size: 'm'
+          }) }}
+        </a>
+      {% endif %}
+    </h1>
+    <h2 class="page-title__headline order-0 mt-3 mb-2">{{ title }}</h2>
+    <div class="page-title__details order-1">
+      <span class="page-title__detail">{{ additional_content.author }}</span>
+      <span class="page-title__detail">{{ 'Published on'|t }}: {{ additional_content.published }}</span>
+      {% if additional_content.published != additional_content.updated %}
+        <span class="page-title__detail">{{ 'Last update'|t }}: {{ additional_content.updated }}</span>
+      {% endif %}
+      <span class="page-title__detail">
       <span class="me-2">
         {{ bundle_label }}
       </span>
       {{ pattern('icon', {
-          name: 'newspaper',
-          size: 's'
-        }) }}
+        name: 'newspaper',
+        size: 's'
+      }) }}
     </span>
+      {% if additional_content.is_archived %}
+        {% include '@ventuno/parts/page-title-detail-archive.html.twig' %}
+      {% endif %}
+    </div>
   </div>
-</div>
 {% endif %}
 {{ title_suffix }}

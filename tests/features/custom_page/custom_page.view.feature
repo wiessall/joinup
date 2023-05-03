@@ -10,9 +10,9 @@ Feature:
       | Drafty things   | draft     |
       | Validated tools | validated |
     And custom_page content:
-      | title        | body         | collection      | logo     |
-      | About means  | Sample text. | Drafty things   | logo.png |
-      | About places | Sample text. | Validated tools | logo.png |
+      | title        | body         | collection      | logo     | state     |
+      | About means  | Sample text. | Drafty things   | logo.png | published |
+      | About places | Sample text. | Validated tools | logo.png | published |
 
     # An anonymous user can see only the custom pages of the published
     # groups.

@@ -43,7 +43,8 @@
 }
 // TO-DO ISAICP-7641 This ruleset probably has a better place to be
 .region-header-bottom + .region-featured .actions-menu {
-  position: relative;
-  bottom: $spacer * 1.5;
-  margin: 0;
+  @include media-breakpoint-up(lg) {
+    bottom: $spacer * 1.5;
+    margin: 0;
+  }
 }

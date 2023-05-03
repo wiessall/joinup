@@ -48,14 +48,20 @@ Feature: Global search
     And I should see the "Dummy news 3" tile
     And I should see the "Dummy news 4" tile
 
-    # Test the topic facet. The space prefixing "Demography" is due to the hierarchy.
+    # Test ability to tick many topics.
     When I check the "Demography (2)" checkbox from the "topic" facet
-    Then the "Demography" content checkbox item should be selected
-    # The selected option moves to the last position by default.
-    And the "topic" checkbox facet should allow selecting the following values "Info (1), Statistics and Analysis (1), Social and Political (6), Demography (2), E-inclusion (4)"
-    Then I click show more from the "spatial coverage" facet
-    And the "spatial coverage" checkbox facet should allow selecting the following values "Belgium (1), European Union (1)"
+    Then I should see the text "SEARCH RESULTS (2)"
+    When I check the "E-inclusion (4)" checkbox from the "topic" facet
+    Then I should see the text "SEARCH RESULTS (6)"
+    And the "Demography" content checkbox item should be selected
+    And the "E-inclusion" content checkbox item should be selected
 
+    # The selected option moves to the last position by default.
+    When I click "E-inclusion"
+    Then I should see the text "SEARCH RESULTS (2)"
+    And the "topic" checkbox facet should allow selecting the following values "Info (1), Statistics and Analysis (1), Social and Political (6), Demography (2), E-inclusion (4)"
+    When I click show more from the "spatial coverage" facet
+    Then the "spatial coverage" checkbox facet should allow selecting the following values "Belgium (1), European Union (1)"
     And I should see the "Molecular cooking collection" tile
     And I should see the "Spherification" tile
     But I should not see the "El Celler de Can Roca" tile
@@ -71,6 +77,15 @@ Feature: Global search
     But I should not see the "El Celler de Can Roca" tile
     And I should not see the "Spherification" tile
     And I should not see the "Foam" tile
+
+    # Test ability to tick many geographical areas.
+    Given I am on the search page
+    And I click show more from the "spatial coverage" facet
+    And I check the "Belgium (1)" checkbox from the "spatial coverage" facet
+    Then I should see the text "SEARCH RESULTS (1)"
+    When I click show more from the "spatial coverage" facet
+    And I check the "European Union (1)" checkbox from the "spatial coverage" facet
+    Then I should see the text "SEARCH RESULTS (2)"
 
     Given I am on the search page
     When I check the "News (5)" checkbox from the "Content types" facet
@@ -170,8 +185,8 @@ Feature: Global search
       | title            | body                                                              | solution       | state     |
       | Discussion omega | <p>Does anybody has idea why this <em>epsilon</em> is everywhere? | Solution alpha | validated |
     And custom_page content:
-      | title      | body                                     | collection       |
-      | Page omega | This is just an epsilon but should work. | Collection alpha |
+      | title      | body                                     | collection       | state     |
+      | Page omega | This is just an epsilon but should work. | Collection alpha | published |
     And video content:
       | title       | body          | field_video                                 | collection       |
       | Video alpha | Slap like now | https://www.youtube.com/watch?v=JhGf8ZY0tN8 | Collection alpha |
@@ -280,8 +295,8 @@ Feature: Global search
       | description | Exotic wings and where to find them. |
       | state       | validated                            |
     And custom_page content:
-      | title           | body                                  | collection                      |
-      | Disturbed birds | Flocks of trained pigeons flying off. | Ornithology: the study of birds |
+      | title           | body                                  | collection                      | state     |
+      | Disturbed birds | Flocks of trained pigeons flying off. | Ornithology: the study of birds | published |
     And news content:
       | title                               | headline                            | body                            | collection                      | state     |
       | Chickens are small birds            | Chickens are small birds            | Birds domesticated in India.    | Ornithology: the study of birds | validated |
