@@ -51,7 +51,7 @@ Feature: Discussions added to collections
     When I go to the homepage of the "The World of the Waves" collection
     And I click "Add discussion" in the plus button menu
     Then I should see the heading "Add discussion"
-    And the following fields should be present "Title, Content, Topic, Add a new file"
+    And the following fields should be present "Title, Content, Topic, Logo, Add a new file"
     # The entity is new, so the current workflow state should not be shown.
     And the following fields should not be present "Current workflow state, Motivation"
     And the following fields should not be present "Shared on"
@@ -129,3 +129,28 @@ Feature: Discussions added to collections
       | Attachments                                |
       | 176 bytes                                  |
     And I should see the link "The content of this file is mind blowing"
+
+  @javascript @generateMedia @generateMediaTypes:discussion_logo @uploadFiles:logo.png
+  Scenario: Test the image library widget.
+    Given the following collection:
+      | title | Stream of Dreams |
+      | state | validated        |
+    And discussion content:
+      | title       | collection       | state     | created   | content         |
+      | Yellow Zeus | Stream of Dreams | validated | yesterday | Sample content. |
+
+    Given I am logged in as a moderator
+
+    # Upload works.
+    When I go to the edit form of the "Yellow Zeus" discussion
+    And I attach the file "logo.png" to "Logo"
+    And I wait for AJAX to finish
+
+    # Picking-up pre-uploaded images works.
+    When I remove the file from "Logo"
+    And I wait for AJAX to finish
+
+    And I select image #4 as discussion logo
+    And I wait for AJAX to finish
+    And I press "Update"
+    And the "Yellow Zeus" discussion logo is image #4
