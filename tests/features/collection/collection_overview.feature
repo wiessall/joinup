@@ -94,8 +94,8 @@ Feature: Collections Overview
       | title                             | body                             | collection | topic                   | spatial coverage | state     |
       | Jira will be down for maintenance | As always, during business hours | Jira       | Statistics and Analysis | Luxembourg       | validated |
     And custom_page content:
-      | title            | body                                       | collection |
-      | Maintenance page | Jira is re-indexing. Go and drink a coffee | Jira       |
+      | title            | body                                       | collection | state     |
+      | Maintenance page | Jira is re-indexing. Go and drink a coffee | Jira       | published |
     When I go to the homepage of the "Jira" collection
     Then I should see the "Jira will be down for maintenance" tile
     And I should not see the "Maintenance page" tile
