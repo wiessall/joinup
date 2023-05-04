@@ -1386,6 +1386,64 @@ class JoinupContext extends RawDrupalContext {
   }
 
   /**
+   * Asserts that a certain statistics string is present in a tile.
+   *
+   * @param string $heading
+   *   The heading of the tile.
+   * @param string $text
+   *   The text to search.
+   *
+   * @throws \Exception
+   *   Thrown when the tile is not found or the text is not found in the tile.
+   *
+   * @Then I( should) see the statistics :text in the :heading tile
+   */
+  public function assertTileContainsStatistic(string $heading, string $text): void {
+    if (!$this->getTileStatisticElement($heading, $text)) {
+      throw new \Exception("The statistics '$text' was not found in the tile '$heading'.");
+    }
+  }
+
+  /**
+   * Asserts that a certain statistics string is not present in a tile.
+   *
+   * @param string $heading
+   *   The heading of the tile.
+   * @param string $text
+   *   The text to search.
+   *
+   * @throws \Exception
+   *   Thrown when the tile is not found or the text is found in the tile.
+   *
+   * @Then I( should) not see the statistics :text in the :heading tile
+   */
+  public function assertTileDoesNotContainStatistic(string $heading, string $text): void {
+    if ($this->getTileStatisticElement($heading, $text)) {
+      throw new \Exception("The statistics '$text' was found in the tile '$heading'.");
+    }
+  }
+
+  /**
+   * Gets title statistic element.
+   *
+   * @param string $heading
+   *   The heading of the tile.
+   * @param string $text
+   *   The text to search.
+   *
+   * @return \Behat\Mink\Element\NodeElement|null
+   *   Tile statistic element.
+   *
+   * @throws \Behat\Mink\Exception\ElementNotFoundException
+   */
+  protected function getTileStatisticElement(string $heading, string $text): ?NodeElement {
+    $element = $this->getTileByHeading($heading);
+    $stats = $element->find('css', "[data-joinup-card-stats]");
+
+    return $stats->find('xpath', "//*[contains(text(), $text)]");
+  }
+
+  /**
    * Asserts the presence of contextual links in a specific tile.
    *
    * @param string $links
@@ -3164,7 +3222,7 @@ class JoinupContext extends RawDrupalContext {
       // Legacy tile of Joinup theme.
       '.listing__item--tile .listing__title',
       // Card style of Ventuno theme.
-      '.card .card-title',
+      '.tile .tile__title',
       // Tiles as an article.
       'article.tile h1',
       // Carousel for non javascript test.
