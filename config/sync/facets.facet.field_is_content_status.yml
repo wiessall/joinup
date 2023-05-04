@@ -8,7 +8,7 @@ weight: 0
 min_count: 0
 missing: false
 missing_label: others
-url_alias: field_is_content_status
+url_alias: status
 facet_source_id: 'search_api_field:rdf_entity.solution.field_is_content'
 field_identifier: entity_status
 query_operator: or
