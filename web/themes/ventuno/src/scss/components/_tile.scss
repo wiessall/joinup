@@ -1,4 +1,5 @@
 .tile {
+  position: relative;
   &__figure {
     overflow: hidden;
     aspect-ratio: 16 / 9;
@@ -63,5 +64,24 @@
     background-color: lighten($warning, 30%);
     width: $spacer * 1.5;
     height: $spacer * 1.5;
+  }
+  .mark {
+    position: absolute;
+    z-index: 1;
+    top: $spacer * .5;
+    right: $spacer * .5;
+    width: $spacer * 1.75;
+    height: $spacer * 1.75;
+    border-radius: $border-radius-pill;
+    background-color: $brand;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    &.star::before {
+      @include get-bootstrap-icon('star', $white);
+    }
+    &.pin::before {
+      @include get-bootstrap-icon('pin', $white);
+    }
   }
 }
