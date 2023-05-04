@@ -4,24 +4,23 @@ declare(strict_types = 1);
 
 namespace Drupal\joinup_discussion;
 
-use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Field\FieldItemList;
+use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\TypedData\ComputedItemListTrait;
 
 /**
- * Defines a field item list class for the discussion's latest update time field.
+ * Defines a field item list class for the discussion's latest update time.
  */
 class LatestUpdateTimeFieldItemList extends FieldItemList implements FieldItemListInterface {
 
   use ComputedItemListTrait;
 
   /**
-   * Compute the values.
+   * {@inheritdoc}
    */
-  protected function computeValue(){
-    $some_calculated_values = [1,2,3];
-    foreach($some_calculated_values as $delta => $value){
-      $this->list[$delta] = $this->createItem($delta, $value);
-    }
+  protected function computeValue(): void {
+    $latest_update_time_formatted = (new \DateTime())->setTimestamp($this->getEntity()->getLatestUpdateTime())->setTimezone(new \DateTimeZone('UTC'))->format('Y-m-d\TH:i:s');
+    $this->list[0] = $this->createItem(0, $latest_update_time_formatted);
   }
+
 }

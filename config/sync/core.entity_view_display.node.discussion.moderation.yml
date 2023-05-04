@@ -64,6 +64,7 @@ hidden:
   flag_subscribe_discussions: true
   invite_link: true
   langcode: true
+  latest_update_time: true
   links: true
   og_audience: true
   pinned_in: true

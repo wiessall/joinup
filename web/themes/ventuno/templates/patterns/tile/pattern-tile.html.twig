@@ -59,6 +59,11 @@
       {% endif %}
       <div class="card-body">
         {{ _title_prefix }}
+        {% if (latest_update_time is not empty) %}
+          <div class="mt-2 fs-sm">
+            {{ latest_update_time }}
+          </div>
+        {% endif %}
         <h1 class="card-title fs-6">
           {% if _url is not empty %}
             <a class="text-primary" href="{{ _url }}">
@@ -79,11 +84,7 @@
             {{ _subtext }}
           </div>
         {% endif %}
-        {%  if  (latest_update_time is not empty) %}
-        <div class="mt-2 fs-sm">
-          {{ latest_update_time }}
-        </div>
-        {% endif %}
+
       </div>
       <div class="card-footer border-0 bg-transparent">
         {{ _footer }}

@@ -49,7 +49,7 @@ tile:
       type: string
       label: 'Latest Update time'
       description: 'Latest Update time.'
-      preview: 'Latest Update time timestring'
+      preview: 'The latest update time'
     footer:
       type: text
       label: 'Footer'

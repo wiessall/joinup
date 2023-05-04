@@ -130,6 +130,7 @@ hidden:
   field_keywords: true
   field_site_featured: true
   langcode: true
+  latest_update_time: true
   pinned_in: true
   published_at: true
   read_more: true
