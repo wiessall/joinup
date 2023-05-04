@@ -33,22 +33,20 @@ class SearchApiStatusSubscriber implements EventSubscriberInterface {
     $hasStatus = FALSE;
     $query = $event->getQuery();
 
-    // The facet below is only available on the search page.
-    if ($query->getSearchId() !== 'views_page:search__page_1') {
-      return;
-    }
-
-    $conditions = &$query->getConditionGroup()->getConditions();
-    foreach ($conditions as $key => $condition) {
-      if (($condition instanceof ConditionGroupInterface) && $condition->hasTag('facet:entity_status')) {
-        unset($conditions[$key]);
-        $hasStatus = TRUE;
+    // The facet below is only available on the search page or autocomplete.
+    if ($query->getSearchId() === 'views_page:search__page_1' || $query->getSearchId() === 'search_api_autocomplete:search') {
+      $conditions = &$query->getConditionGroup()->getConditions();
+      foreach ($conditions as $key => $condition) {
+        if (($condition instanceof ConditionGroupInterface) && $condition->hasTag('facet:entity_status')) {
+          unset($conditions[$key]);
+          $hasStatus = TRUE;
+        }
       }
-    }
 
-    if (!$hasStatus) {
-      $query->addCondition('entity_status', 'archived', '<>');
-    }
+      if (!$hasStatus) {
+        $query->addCondition('entity_status', 'archived', '<>');
+      }
+      }
   }
 
 }
