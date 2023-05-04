@@ -52,7 +52,7 @@ Feature: Content archival.
       | news       | News       | needs_update     | Needs update     |
       | news       | News       | deletion_request | Deletion request |
 
-  Scenario Outline: Group facilitators have equal capabilities with moderators
+  Scenario Outline: Group facilitators can not unarchived community content
     Given <group type>:
       | title      | Some group |
       | state      | validated  |
@@ -70,13 +70,7 @@ Feature: Content archival.
     Then I should see the message "<type label> Test <type> has been updated."
     When I go to the edit form of the "Test <type>" <type>
     Then I should not see the button "Archive"
-    And I should see the button "Unarchive"
-
-    When I press "Unarchive"
-    Then I should see the message '<type label> "Test <type>" has been unarchived.'
-    When I go to the edit form of the "Test <type>" <type>
-    Then I should see the button "Archive"
-    And the current workflow state should be "<state label>"
+    And I should not see the button "Unarchive"
 
     Examples:
       | group type | type       | type label | state            | state label      |
