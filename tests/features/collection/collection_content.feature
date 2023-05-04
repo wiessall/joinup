@@ -120,12 +120,12 @@ Feature: Collection content
     Given I go to the homepage of the "Turin Egyptian Collection" collection
     # Check the discussion tile.
     Then I should see the "Bigger than Egyptian Museum of Cairo?" tile
-    # Check into the HTML so that we assert that actually the HTML has been stripped.
+    # As from tiles redesign (ISAICP-7666), do not show the text anymore.
     And I should not see the text "Link to the museum website."
     And I should not see the link "Link to the museum"
     # Check the document tile.
     And I should see the "Upper Floor Map" tile
-    # A document tile redesign in switch to Ventuno theme should show only title
+    # As from tiles redesign (ISAICP-7666), do not show the text anymore.
     And I should not see the text "A sample map example."
     And I should not see the link "map"
     # Check the news tile.
