@@ -1,9 +1,11 @@
 {#
 /**
  * @file
- * Default template for a field.
+ * Override for field--rdf-entity--field-ad-licence--asset-distribution.html.twig.
+ * This field is supposed to return a link where the title attribute is
+ * expected to contain the title of the label.
  */
 #}
 {% for item in items %}
-  {{ item.content }}
+  <a href="{{ item.content['#url'] }}" title="{{ item.content['#title'] }}">{{ item.content['#title'] }}]</a>
 {% endfor %}
