@@ -45,9 +45,9 @@ function joinup_discussion_node_presave(NodeInterface $discussion) {
 function joinup_discussion_entity_bundle_field_info(EntityTypeInterface $entity_type, string $bundle) {
 
   if ($entity_type->id() === 'node' && $bundle === 'discussion') {
-    $fields['latest_update_time'] = BaseFieldDefinition::create('string')
+    $fields['latest_update_time'] = BaseFieldDefinition::create('datetime')
       ->setName('latest_update_time_field')
-      ->setLabel(t('Latest update time field'))
+      ->setLabel(t('Last activity'))
       ->setComputed(TRUE)
       ->setClass(LatestUpdateTimeFieldItemList::class)
       ->setDisplayConfigurable('view', TRUE);

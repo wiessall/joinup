@@ -7,14 +7,15 @@ dependencies:
     - field.field.node.discussion.body
     - field.field.node.discussion.field_attachment
     - field.field.node.discussion.field_keywords
-    - field.field.node.discussion.field_topic
     - field.field.node.discussion.field_replies
     - field.field.node.discussion.field_shared_in
     - field.field.node.discussion.field_site_featured
     - field.field.node.discussion.field_state
+    - field.field.node.discussion.field_topic
     - field.field.node.discussion.og_audience
     - node.type.discussion
   module:
+    - datetime
     - smart_trim
     - template_suggestion
     - user
@@ -65,6 +66,17 @@ content:
       template_suggestion:
         template_suggestion: comma_separated
     weight: 0
+    region: content
+  latest_update_time:
+    type: datetime_default
+    label: inline
+    settings:
+      timezone_override: ''
+      format_type: short
+    third_party_settings:
+      template_suggestion:
+        template_suggestion: ''
+    weight: 3
     region: content
 hidden:
   featured: true

@@ -12,4 +12,12 @@ use Drupal\joinup_workflow\ArchivableEntityInterface;
  */
 interface DiscussionInterface extends CommunityContentInterface, ArchivableEntityInterface {
 
+  /**
+   * Gets the discussion latest update time timestamp.
+   *
+   * @return int
+   *   Latest update timestamp of the discussion.
+   */
+  public function getLatestUpdateTime(): int;
+
 }
