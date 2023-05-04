@@ -13,6 +13,7 @@ use Drupal\joinup_bundle_class\DescriptionInterface;
 use Drupal\joinup_bundle_class\LogoInterface;
 use Drupal\joinup_community_content\Entity\CommunityContentInterface;
 use Drupal\joinup_core\Controller\IdRedirect;
+use Drupal\joinup_workflow\ArchivableEntityInterface;
 use Drupal\smart_trim\Truncate\TruncateHTML;
 use Drupal\topic\Entity\TopicReferencingEntityInterface;
 
@@ -84,6 +85,10 @@ function _ventuno_preprocess_search_result(array &$variables, string $entity_typ
       '@label' => $entity->label(),
       '@version' => $entity->getVersion(),
     ]);
+  }
+
+  if ($entity instanceof ArchivableEntityInterface) {
+    $variables['is_archived'] = $entity->isArchived();
   }
 
   if ($variables['view_mode'] === 'search_result_featured') {
