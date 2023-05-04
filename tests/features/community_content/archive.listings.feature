@@ -36,8 +36,9 @@ Feature: Archived content on content listings - groups and paragraphs.
     And I select "All" from "Show archived content"
     And I press "Publish"
     Then I should see the heading "Some collection"
-    And I should see the "Archived news" tile
     And I should see the "Published news" tile
+    # By default, the toggle to show archived content is disabled.
+    But I should not see the "Archived news" tile
 
   Scenario: Content listing paragraph can control visibility of archived items.
     When I am logged in as a moderator
