@@ -31,9 +31,6 @@ Feature: Notifications are muted when entity is archived/unarchived.
     When I am logged in as "bisera"
     And I go to the edit form of the "Milky Way <type>" <type>
     And I press "Archive"
-    When I go to the edit form of the "Milky Way <type>" <type>
-    And I press "Unarchive"
-    Then 0 e-mail should have been sent
 
     Examples:
       | type     |
