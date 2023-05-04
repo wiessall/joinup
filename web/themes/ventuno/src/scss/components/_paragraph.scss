@@ -1,6 +1,7 @@
 .paragraph,
 .fieldset--textarea {
-  img {
+  img,
+  figure {
     margin-bottom: $spacer;
     max-width: 100%;
     height: auto;
@@ -37,6 +38,7 @@
   }
 
   blockquote {
+    overflow: hidden;
     border-left: $spacer * 1.25 solid $brand;
     padding: $spacer * 1.5 0 $spacer * 1.5 $spacer * 1.5;
     margin-right: 0;

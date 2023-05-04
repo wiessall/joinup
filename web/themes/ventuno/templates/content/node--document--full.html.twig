@@ -1,0 +1,25 @@
+{#
+/**
+ * @file
+ * Template for a Node.
+ */
+#}
+<div class="pt-3 pb-5 border-bottom">
+  {{ content.body }}
+</div>
+{% if content.group_categorisation|render|striptags %}
+  <div class="pb-5 border-bottom my-5">
+    {{ content.group_categorisation }}
+  </div>
+{% endif %}
+{% if content.group_attachment|render|striptags %}
+  <div class="pb-5 border-bottom my-5">
+    {{ content.group_attachment }}
+  </div>
+{% endif %}
+<div class="d-flex justify-content-end">
+  {{ content.report }}
+  {{ content.share_link }}
+</div>
+{{ content.field_shared_in }}
+{{ content.field_comments }}

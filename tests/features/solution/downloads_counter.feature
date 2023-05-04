@@ -17,7 +17,8 @@ Feature:
       | Sample distribution 2 | Sample description 2 | Climate change tracker | 0         |
     # Checks solutions tiles to we have the correct numbers.
     When I visit the solution overview
-    Then the "Climate change tracker" tile should show 10 downloads
+    Then I should see the "Climate change tracker" tile
+    And I should see the statistics "10" in the "Climate change tracker" tile
     When I go to the homepage of the "Climate change tracker" solution
     # Check the same thing on the homepage of the solutions.
     Then I should see the text "Downloads: 10"

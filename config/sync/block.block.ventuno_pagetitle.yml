@@ -10,7 +10,7 @@ dependencies:
 id: ventuno_pagetitle
 theme: ventuno
 region: content
-weight: -23
+weight: -24
 provider: null
 plugin: page_title_block
 settings:
@@ -27,6 +27,7 @@ visibility:
       - entity.user.canonical
       - entity.user.edit_form
       - entity.meta_entity.canonical
+      - view.content_overview.page_1
   request_path:
     id: request_path
     negate: true

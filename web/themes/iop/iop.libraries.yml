@@ -24,11 +24,6 @@ accordion-faq:
     theme:
       assets/css/accordion-faq.min.css: { minified: true }
 
-actions-menu:
-  css:
-    theme:
-      assets/css/actions-menu.min.css: { minified: true }
-
 join:
   css:
     theme:

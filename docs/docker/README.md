@@ -68,12 +68,22 @@ that the host user will have to match the ID and GID of the DAEMON_USER and
 DAEMON_GROUP that runs the web server. This is needed in order to be able to
 write to the files and directories that are mounted in the container.
 
-By default, `www-data` user is set with ID `1000` and `www-data` group is set
-with GID `1000`. If you are using a Linux machine, and you are using the default
-user, you can keep the default settings. If you are using a Mac, the default
-user ID and group ID are `501` and `20` respectively. If you are using a Mac,
-you will need to uncomment the corresponding lines in the
-`docker-compose.override.yml`
+By default, `www-data` user is set with ID `33` and `www-data` group is set with
+GID `33`. If you are using a Linux machine, and you are using the default user,
+you should use the following settings:
+
+```yaml
+  web:
+    image: joinup/web:latest
+    build:
+      context: ./resources/docker/web
+      args:
+        USER_ID: 1000
+        GROUP_ID: 1000
+```
+
+If you are using a Mac, the default user ID and group ID are `501` and `20`
+respectively. In that case, you need to use the following settings:
 
 ```yaml
   web:
@@ -347,8 +357,8 @@ commands:
     # databases as they are restored in the container startup.
     - task: run
       command: joinup:environment
-    - task: run
-      command: redis:flush-all
+    - task: exec
+      command: ${drush.bin} memcache:flush-all
     - task: run
       command: drupal:settings
       arguments:

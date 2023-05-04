@@ -6,6 +6,11 @@ services:
     image: joinup/web:latest
     build:
       context: ./resources/docker/web
+      # Default UID and GID for Linux users is 1000. If you are on Linux,
+      # uncomment the following lines.
+#      args:
+#        USER_ID: 1000
+#        GROUP_ID: 1000
       # Default UID for Mac users is 501. If you are on Mac, uncomment the
       # following lines.
 #      args:
@@ -50,14 +55,6 @@ services:
     ports:
       - '8983:8983'
 
-  redis:
-    # In order to expose this service to the host machine, a port needs to be
-    # mapped. This is the port that the Redis server will be listening on. If
-    # you need a different port, change the first number. The second number is
-    # the port in the container and should not be changed.
-    ports:
-      - '6379:6379'
-
   mail:
     # In order to expose this service to the host machine, a port needs to be
     # mapped. 1025 is the port that the SMTP server will be listening on and
@@ -75,3 +72,11 @@ services:
     # port in the container and should not be changed.
     ports:
       - '5900:5900'
+
+  memcached:
+    # In order to expose this service to the host machine, a port needs to be
+    # mapped. This is the port that the Memcached server will be listening on.
+    # If you need a different port, change the first number. The second number
+    # is the port in the container and should not be changed.
+    ports:
+      - '11211:11211'
