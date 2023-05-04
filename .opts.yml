@@ -50,3 +50,5 @@ dev_install_clone: True
 dev_install_clean: True
 
 selenium_version: '4.5.0'
+
+memcached: True

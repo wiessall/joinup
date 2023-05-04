@@ -766,7 +766,7 @@ class SolutionContext extends RawDrupalContext {
    */
   public function assertTileContainsDownloadCount(string $heading, int $count): void {
     $tile = $this->getTileByHeading($heading);
-    $elements = $tile->findAll('xpath', '//span[contains(concat(" ", normalize-space(@class), " "), " stats__text ") and text() = "' . $count . '"]');
+    $elements = $tile->findAll('xpath', "//span[contains(text(), '$count')]");
     Assert::assertCount(1, $elements);
   }
 

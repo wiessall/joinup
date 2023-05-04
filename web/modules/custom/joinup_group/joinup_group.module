@@ -13,6 +13,7 @@ use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Block\BlockPluginInterface;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Cache\CacheableMetadata;
+use Drupal\Core\Cache\RefinableCacheableDependencyInterface;
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
@@ -221,6 +222,23 @@ function joinup_group_form_rdf_entity_form_alter(&$form, FormStateInterface $for
       $form['field_short_id']['widget'][0]['value']['#attributes']['disabled'] = 'disabled';
     }
   }
+}
+
+/**
+ * Implements hook_form_alter().
+ */
+function joinup_group_form_alter(array &$form, FormStateInterface $form_state, string $form_id): void {
+  $group_forms = [
+    'meta_entity_solution_settings_form',
+    'meta_entity_collection_settings_form',
+  ];
+  if (!in_array($form_id, $group_forms)) {
+    return;
+  }
+
+  /** @var \Drupal\joinup_group\GroupSettingsFormAlterInterface $setting_alter */
+  $setting_alter = \Drupal::service('joinup_group.group_settings_form_alter');
+  $setting_alter->alterForm($form, $form_state);
 }
 
 /**
@@ -1078,6 +1096,37 @@ function joinup_group_mail_alter(array &$message): void {
     $message += array_combine(array_map(function (string $key): string {
       return ltrim($key, '@');
     }, array_keys($arguments)), $arguments);
+  }
+}
+
+/**
+ * Implements hook_menu_local_tasks_alter().
+ */
+function joinup_group_menu_local_tasks_alter(array &$data, string $route_name, RefinableCacheableDependencyInterface &$cacheability): void {
+  if ($route_name != 'entity.rdf_entity.canonical') {
+    return;
+  }
+
+  $entity = \Drupal::service('joinup_group.group_manager')
+    ->getGroupFromContext();
+  if (!$entity instanceof GroupInterface ||
+    $entity->getSetting('landing_page')->count() !== 1) {
+    return;
+  }
+
+  /** @var \Drupal\custom_page\Entity\CustomPageInterface $custom_page */
+  $custom_page = $entity->getSetting('landing_page')->entity;
+  if ($custom_page) {
+    $data['tabs'][0]['joinup_group.landing_page'] = [
+      '#theme' => 'menu_local_task',
+      '#link' => [
+        'title' => t('Edit landing page'),
+        'url' => Url::fromRoute('entity.node.edit_form', ['node' => $custom_page->id()]),
+      ],
+      '#active' => FALSE,
+      '#weight' => 10,
+      '#access' => AccessResult::allowedIf($custom_page->access('update')),
+    ];
   }
 }
 

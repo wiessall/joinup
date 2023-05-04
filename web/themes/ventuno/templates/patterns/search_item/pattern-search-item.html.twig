@@ -18,7 +18,7 @@
   {% set _text = text|default('') %}
   {% set _metadata = metadata|default('') %}
 
-  <article class="border-0 border-bottom pb-3 mb-3 card">
+  <article class="border-0 border-bottom pb-3 mb-3 card tile">
     {%- if _badges is not empty and _badges is iterable -%}
       <div class="card-header border-0 bg-transparent p-0">
         {% for _badge in _badges %}

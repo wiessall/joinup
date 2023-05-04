@@ -166,8 +166,8 @@ class SubscriptionsForm extends FormBase {
             'label' => 'hidden',
             'type' => 'image',
             'settings' => [
-              'image_style' => 'vertical_medium_image',
-              'image_link' => 'content',
+              'image_style' => 'thumbnail',
+              'image_link' => 'none',
             ],
           ]),
           'link' => [
@@ -382,7 +382,7 @@ class SubscriptionsForm extends FormBase {
 
     return (new AjaxResponse())
       ->addCommand(new ReplaceCommand("#{$form['groups'][$submitted_group_id]['#id']}", $form['groups'][$submitted_group_id]))
-      ->addCommand(new ReplaceCommand('.form__subscribe-actions', $form['edit-actions']));
+      ->addCommand(new ReplaceCommand('.joinup-subscription-my-subscriptions #edit-actions', $form['edit-actions']));
   }
 
   /**

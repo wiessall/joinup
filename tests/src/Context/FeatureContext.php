@@ -6,6 +6,7 @@ namespace Drupal\joinup\Context;
 
 use Behat\Behat\Hook\Scope\AfterScenarioScope;
 use Behat\Behat\Hook\Scope\AfterStepScope;
+use Behat\Behat\Hook\Scope\BeforeScenarioScope;
 use Behat\Gherkin\Node\TableNode;
 use Behat\Mink\Driver\Selenium2Driver;
 use Behat\Mink\Element\NodeElement;
@@ -1847,26 +1848,31 @@ class FeatureContext extends RawDrupalContext {
   /**
    * Creates testing media items.
    *
+   * You need to provide media types which you want to create.
+   *
+   * @code
+   * @generateMediaTypes:<mediaType1>,<mediaType2>,...
+   * @endcode
+   *
    * @BeforeScenario @generateMedia
    */
-  public function generateMedia(): void {
-    $media_type_ids = [
-      'collection_banner',
-      'collection_logo',
-      'solution_banner',
-      'solution_logo',
-      'event_logo',
-      'news_logo',
-    ];
-    foreach ($media_type_ids as $media_type_id) {
-      $definition = \Drupal::service('entity_field.manager')->getFieldDefinitions('media', $media_type_id)['image_library_widget_image'];
-      for ($i = 0; $i < 15; $i++) {
+  public function generateMedia(BeforeScenarioScope $scope): void {
+    $mediaTypes = $this->getTagValues($scope, 'generateMediaTypes');
+    if (empty($mediaTypes)) {
+      throw new \Exception('Please provide media types with generateMediaTypes:.. tag');
+    }
+
+    foreach ($mediaTypes as $mediaType) {
+      $definition = \Drupal::service('entity_field.manager')
+        ->getFieldDefinitions('media', $mediaType);
+      for ($i = 0; $i < 10; $i++) {
         $media = Media::create([
-          'bundle' => $media_type_id,
+          'bundle' => $mediaType,
           'name' => $this->getRandom()->string(),
-          'image_library_widget_image' => ImageItem::generateSampleValue($definition),
+          'image_library_widget_image' => ImageItem::generateSampleValue($definition['image_library_widget_image']),
         ]);
         $media->save();
+
         $this->entities['media'][$media->id()] = $media;
       }
     }
@@ -1885,6 +1891,30 @@ class FeatureContext extends RawDrupalContext {
       unset($this->entities['media']);
     }
     \Drupal::state()->delete('image_library_widget.clicks');
+  }
+
+  /**
+   * Get tag values.
+   *
+   * @param \Behat\Behat\Hook\Scope\BeforeScenarioScope|\Behat\Behat\Hook\Scope\AfterScenarioScope $scope
+   *   Scenario scope.
+   * @param string $prefix
+   *   Tag name.
+   *
+   * @return array
+   *   Tag values.
+   */
+  protected function getTagValues(BeforeScenarioScope|AfterScenarioScope $scope, string $prefix): array {
+    return array_reduce(
+      $scope->getScenario()->getTags(),
+      function (array $values, string $tag) use ($prefix) {
+        if (preg_match('/^' . $prefix . ':(.*)$/', $tag, $found)) {
+          $values = explode(',', $found[1]);
+        }
+        return $values;
+      },
+      []
+    );
   }
 
   /**
@@ -2146,13 +2176,7 @@ class FeatureContext extends RawDrupalContext {
    * @AfterScenario
    */
   public function clearFiles(AfterScenarioScope $event): void {
-    $files = array_reduce($event->getScenario()->getTags(), function (array $files, string $tag) {
-      if (preg_match('/^uploadFiles:(.*)$/', $tag, $found)) {
-        $files = explode(',', $found[1]);
-      }
-      return $files;
-    }, []);
-
+    $files = $this->getTagValues($event, 'uploadFiles');
     if ($files) {
       $file_storage = \Drupal::entityTypeManager()->getStorage('file');
       $fids = $file_storage->getQuery()
@@ -2316,6 +2340,12 @@ class FeatureContext extends RawDrupalContext {
         'type' => 'node',
         'fields' => [
           'logo' => 'field_news_logo',
+        ],
+      ],
+      'discussion' => [
+        'type' => 'node',
+        'fields' => [
+          'logo' => 'field_discussion_logo',
         ],
       ],
     ];
