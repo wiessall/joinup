@@ -689,12 +689,20 @@ function joinup_user_form_views_form_user_admin_people_page_alter(array &$form, 
 
 /**
  * Implements hook_preprocess_username().
+ *
+ * Truncates user names longer than 24 characters but also passes full name
+ * so it can be rendered in the title attribute.
+ *
+ * @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7699
+ *
  */
 function joinup_user_preprocess_username(array &$variables): void {
   $account = $variables['account'] ?: new AnonymousUserSession();
   $name = $account->getDisplayName();
   if (mb_strlen($name) > 24) {
+    $name_full = $name;
     $name = Unicode::truncate($name, 24, FALSE, TRUE);
   }
   $variables['name'] = $name;
+  $variables['name_full'] = $name_full;
 }
