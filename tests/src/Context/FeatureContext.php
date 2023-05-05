@@ -1406,20 +1406,6 @@ class FeatureContext extends RawDrupalContext {
   }
 
   /**
-   * Checks a material design checkbox.
-   *
-   * To be used for Javascript based tests.
-   *
-   * @param string $text
-   *   The checkbox text.
-   *
-   * @Given I check the :text material checkbox
-   */
-  public function checkMaterialCheckbox(string $text): void {
-    $this->checkMaterialCheckboxHelper($this->getSession()->getPage(), $text);
-  }
-
-  /**
    * Unchecks a material checkbox in a row that contains a certain text.
    *
    * @param string $text
