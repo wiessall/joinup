@@ -1,65 +1,79 @@
 tile:
   label: 'Tile'
   description: 'Custom version of <a href="https://oelibrary.netlify.app/default/?path=/story/components-card--default" target="_blank">BCL''s card</a> to fit the needs of Joinup tiles display.'
-  settings:
-    featured:
-      type: boolean
-      label: 'Featured'
-      description: 'Enable to mark the item as featured, with secondary background.'
-      preview: false
   fields:
     image:
       type: object
       label: 'Image'
-      description: 'Card image with path and alt.'
+      description: 'Tile image with path and alt.'
       preview:
         path: 'https://placeimg.com/1000/500/people'
-        alt: 'Alternative text for card image'
+        alt: 'Alternative text for tile image'
     url:
       type: text
       label: 'Url'
       description: 'Url leading to the article.'
       preview: 'https://joinup.ec.europa.eu'
+    highlighted:
+      type: object
+      label: 'Highlighted info'
+      description: 'Very relevant information.'
+      preview:
+        icon: 'calendar-event'
+        text: 'DD/MM/YYYY'
+    info:
+      type: object
+      label: 'Info'
+      description: 'Tile info.'
+      preview:
+        icon: 'user'
+        text: 'Jon Doe'
     title_prefix:
       type: array
       label: 'Title prefix'
       description: 'Variable coming from Drupal that may content important stuff.'
       preview: ''
-    title:
+    label:
       type: text
-      label: 'Title'
-      description: 'Card title.'
-      preview: 'Title card'
-    title_suffix:
-      type: array
-      label: 'Title suffix'
-      description: 'Variable coming from Drupal that may content important stuff such as contextual links.'
-      preview: ''
-    text:
-      type: text
-      label: 'Text'
-      description: 'Card text.'
-      preview: 'Text card with longer text which is supported'
-    subtext:
-      type: text
-      label: 'Subext'
-      description: 'Card subtext.'
-      preview: 'Text, card, with, longer text, supported'
+      label: 'Label'
+      description: 'Label of the tile.'
+      preview: 'Heading'
     latest_update_time:
       type: string
       label: 'Latest Update time'
       description: 'Latest Update time.'
       preview: 'The latest update time'
-    footer:
-      type: text
-      label: 'Footer'
-      description: 'Card footer.'
-      preview: 'Text, card, with, longer text, supported'
-    metadata:
+    title_suffix:
       type: array
-      label: 'Metadata'
+      label: 'Title suffix'
+      description: 'Variable coming from Drupal that may content important stuff such as contextual links.'
+      preview: ''
+    action:
+      type: object
+      label: 'Action'
+      description: 'Call to action in the tile.'
+      preview:
+        label: 'News'
+        icon: 'newspaper'
+    badges:
+      type: array
+      label: 'Badges'
+      description: 'Badges of the tile.'
+      preview:
+        - label: 'Open Source'
+        - label: 'eGovernment'
+    extra_data:
+      type: array
+      label: 'Extra data'
       description: 'Pairs of label/icon describing the type of content the tile refers to. Both are optional.'
       preview:
-        - label: 'solution'
-          icon: 'clipboard-check'
-        - icon: 'clipboard-check'
+        - icon: 'clipboard2-check'
+          label: 'solution'
+        - icon: 'clipboard2-check'
+    bundle:
+      type: object
+      label: 'Bundle'
+      description: 'Content type.'
+      preview:
+        label: 'News'
+        icon: 'newspaper'

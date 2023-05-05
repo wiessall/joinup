@@ -63,10 +63,10 @@ badge:
     theme:
       assets/css/badge.min.css: { minified: true }
 
-card:
+button-group:
   css:
     theme:
-      assets/css/card.min.css: { minified: true }
+      assets/css/button-group.min.css: { minified: true }
 
 close:
   css:
@@ -139,6 +139,11 @@ tabs:
   css:
     theme:
       assets/css/tabs.min.css: { minified: true }
+
+tile:
+  css:
+    theme:
+      assets/css/tile.min.css: { minified: true }
 
 # Custom and hybrid (BCL + custom) components
 footer:
