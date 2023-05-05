@@ -122,6 +122,7 @@ function ventuno_preprocess_node(array &$variables): void {
  * Implements hook_preprocess_node().
  */
 function ventuno_preprocess_node__view_mode_tile(array &$variables, string $entity_type_id): void {
+  /** @var \Drupal\Core\Entity\EntityInterface $entity */
   $entity = $variables[$entity_type_id];
   /** @var \Drupal\Core\Datetime\DateFormatterInterface $date_formatter */
   $date_formatter = Drupal::service('date.formatter');
@@ -138,10 +139,10 @@ function ventuno_preprocess_node__view_mode_tile(array &$variables, string $enti
   switch ($entity->bundle()) {
     case 'discussion':
       $variables['info']['icon'] = 'calendar-event';
-      if ($changed_time = $entity->getChangedTime()) {
+      if ($changed_time = $entity->getLatestUpdateTime()) {
         $variables['info']['label'] = t('@label: @changed', [
           '@label' => t('Last activity'),
-          '@changed' => $date_formatter->format($changed_time, 'custom', 'd/m/Y, h:s'),
+          '@changed' => $date_formatter->format($changed_time, 'custom', 'd/m/Y, h:i'),
         ]);
       }
       $node = $variables['elements']['#node'];
