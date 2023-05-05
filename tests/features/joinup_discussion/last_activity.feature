@@ -14,7 +14,6 @@ Feature: Last Activity feature
     And users:
       | Username      | Roles     | E-mail                   | First name | Family name |
       | alicia__1997  |           | AliciaPotter@example.com | Alicia     | Potter      |
-
     When I go to the "Development through bricolage" collection
     And I should see the "Tools cabinet" tile
     And I should see the text "Last activity:" in the "Tools cabinet" tile
