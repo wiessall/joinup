@@ -40,7 +40,7 @@ function joinup_discussion_node_presave(NodeInterface $discussion) {
 }
 
 /**
- * Implements hook_entity_bundle_field_info_alter().
+ * Implements hook_entity_bundle_field_info().
  */
 function joinup_discussion_entity_bundle_field_info(EntityTypeInterface $entity_type, string $bundle) {
 
