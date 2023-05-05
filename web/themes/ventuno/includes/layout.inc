@@ -60,7 +60,7 @@ function ventuno_preprocess_page(array &$variables): void {
 
   // Remove title on collection/solution canonical pages.
   if ($route_name === 'entity.rdf_entity.canonical' && $entity = $route_match->getParameter('rdf_entity')) {
-    if (in_array($entity->getType(), ['collection', 'solution'])) {
+    if (in_array($entity->getType(), ['collection', 'solution']) && $entity->getSetting('landing_page')->count() === 0) {
       unset($variables['page']['content']['ventuno_pagetitle']);
     }
   }

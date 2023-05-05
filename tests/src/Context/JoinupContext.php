@@ -954,6 +954,13 @@ class JoinupContext extends RawDrupalContext {
    * @When I fill the :date :component of the :field widget with :value
    */
   public function fillDateRangeField($field, $component, $value, $date = NULL) {
+    // @todo Remove the if (...) block in ISAICP-7138.
+    // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7138
+    if ($this->usesMaterialDesignLite()) {
+      $element = $this->findMaterialDesignDateRangeComponent($field, $component, $date);
+      $element->setValue($value);
+      return;
+    }
     $element = $this->findDateRangeComponent($field, $component, $date);
     $element->setValue($value);
   }
@@ -977,6 +984,13 @@ class JoinupContext extends RawDrupalContext {
    * @When I clear the :component of the :field widget
    */
   public function clearDateRangeField($field, $component, $date = NULL) {
+    // @todo Remove the if (...) block in ISAICP-7138.
+    // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7138
+    if ($this->usesMaterialDesignLite()) {
+      $element = $this->findMaterialDesignDateRangeComponent($field, $component, $date);
+      $element->setValue('');
+      return;
+    }
     $element = $this->findDateRangeComponent($field, $component, $date);
     $element->setValue('');
   }
@@ -1369,6 +1383,64 @@ class JoinupContext extends RawDrupalContext {
     if (strpos(trim($element->getText()), $text) !== FALSE) {
       throw new \Exception("The text '$text' was found in the tile '$heading'.");
     }
+  }
+
+  /**
+   * Asserts that a certain statistics string is present in a tile.
+   *
+   * @param string $heading
+   *   The heading of the tile.
+   * @param string $text
+   *   The text to search.
+   *
+   * @throws \Exception
+   *   Thrown when the tile is not found or the text is not found in the tile.
+   *
+   * @Then I( should) see the statistics :text in the :heading tile
+   */
+  public function assertTileContainsStatistic(string $heading, string $text): void {
+    if (!$this->getTileStatisticElement($heading, $text)) {
+      throw new \Exception("The statistics '$text' was not found in the tile '$heading'.");
+    }
+  }
+
+  /**
+   * Asserts that a certain statistics string is not present in a tile.
+   *
+   * @param string $heading
+   *   The heading of the tile.
+   * @param string $text
+   *   The text to search.
+   *
+   * @throws \Exception
+   *   Thrown when the tile is not found or the text is found in the tile.
+   *
+   * @Then I( should) not see the statistics :text in the :heading tile
+   */
+  public function assertTileDoesNotContainStatistic(string $heading, string $text): void {
+    if ($this->getTileStatisticElement($heading, $text)) {
+      throw new \Exception("The statistics '$text' was found in the tile '$heading'.");
+    }
+  }
+
+  /**
+   * Gets title statistic element.
+   *
+   * @param string $heading
+   *   The heading of the tile.
+   * @param string $text
+   *   The text to search.
+   *
+   * @return \Behat\Mink\Element\NodeElement|null
+   *   Tile statistic element.
+   *
+   * @throws \Behat\Mink\Exception\ElementNotFoundException
+   */
+  protected function getTileStatisticElement(string $heading, string $text): ?NodeElement {
+    $element = $this->getTileByHeading($heading);
+    $stats = $element->find('css', "[data-joinup-card-stats]");
+
+    return $stats->find('xpath', "//*[contains(text(), $text)]");
   }
 
   /**
@@ -2143,12 +2215,18 @@ class JoinupContext extends RawDrupalContext {
    */
   public function ogCleanup(AfterScenarioScope $event) {
     /** @var \Drupal\Core\Queue\QueueWorkerInterface $worker */
-    $worker = \Drupal::service('plugin.manager.queue_worker')->createInstance('og_orphaned_group_content_cron');
+    $worker = \Drupal::service('plugin.manager.queue_worker')
+      ->createInstance('og_orphaned_group_content_cron');
     $queue = \Drupal::queue('og_orphaned_group_content');
 
     while ($item = $queue->claimItem()) {
-      $worker->processItem($item->data);
-      $queue->deleteItem($item);
+      try {
+        $worker->processItem($item->data);
+        $queue->deleteItem($item);
+      }
+      catch (\Exception $e) {
+        watchdog_exception('cron', $e);
+      }
     }
   }
 
@@ -3144,7 +3222,7 @@ class JoinupContext extends RawDrupalContext {
       // Legacy tile of Joinup theme.
       '.listing__item--tile .listing__title',
       // Card style of Ventuno theme.
-      '.card .card-title',
+      '.tile .tile__title',
       // Tiles as an article.
       'article.tile h1',
       // Carousel for non javascript test.

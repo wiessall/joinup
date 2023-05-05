@@ -252,6 +252,7 @@ trait TraversingTrait {
       '.card-title',
       '.card-title > h1 a',
       'h2 a',
+      'h1.tile__title',
       'h1.tile-two__title',
       // @todo Legacy selectors to be removed in ISAICP-7138.
       // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7138
@@ -290,7 +291,6 @@ trait TraversingTrait {
       //   Joinup theme and can be removed once we have fully migrated to the
       //   new theme.
       // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7138
-      'card--tile',
       'listing__item--tile',
       'tile',
       'tile-two',
@@ -332,7 +332,7 @@ trait TraversingTrait {
       '//*[@class and contains(concat(" ", normalize-space(@class), " "), " ' . $type . ' ")][.//*[@class and contains(concat(" ", normalize-space(@class), " "), " listing__title ") or contains(concat(" ", normalize-space(@class), " "), " card-title ")][normalize-space()="' . $heading . '"]]',
       // Selector for generic tiles.
       // @todo Keep only h1 selector when tiles refactor.
-      '//*[@class and contains(concat(" ", normalize-space(@class), " "), " ' . $type . ' ")][.//h1[normalize-space()="' . $heading . '"] or .//h2[normalize-space()="' . $heading . '"] or .//h3[normalize-space()="' . $heading . '"]]',
+      '//*[@class and contains(concat(" ", normalize-space(@class), " "), " ' . $type . ' ")][.//h1[normalize-space()="' . $heading . '"]]',
     ];
 
     foreach ($selectors as $selector) {
@@ -442,6 +442,58 @@ trait TraversingTrait {
    *
    * @throws \Exception
    *   Thrown when the date range field is not found.
+   *
+   * @todo Remove following protected function in ISAICP-7138.
+   * @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7138
+   */
+  protected function findMaterialDesignDateRangeComponent(string $field, string $component, ?string $date = NULL): NodeElement {
+    /** @var \Behat\Mink\Element\NodeElement $fieldset */
+    $fieldset = $this->getSession()->getPage()->find(
+      'named',
+      ['fieldset', $field]
+    );
+
+    if (!$fieldset) {
+      throw new \Exception("The '$field' field was not found.");
+    }
+
+    if ($date !== NULL) {
+      $date = ucfirst($date) . ' date';
+      /** @var \Behat\Mink\Element\NodeElement $element */
+      $element = $fieldset->find('xpath', '//h4[text()="' . $date . '"]//following-sibling::div[1]');
+      if (!$element) {
+        throw new \Exception("The '$date' sub-field of the '$field' field was not found.");
+      }
+    }
+    else {
+      $element = $fieldset;
+    }
+
+    $component_node = $element->findField(ucfirst($component));
+    if (!$component_node) {
+      throw new \Exception("The '$component' component for the '$field' '$element' was not found.");
+    }
+
+    return $component_node;
+  }
+
+  /**
+   * Gets the date or time component of a date sub-field in a date range field.
+   *
+   * @param string $field
+   *   The date range field name.
+   * @param string $component
+   *   The sub-field component. Either "date" or "time".
+   * @param string|null $date
+   *   (optional) The sub-field name. Either "start" or "end". If left empty, it
+   *   is assumed that the field is a simple datetime field and not a range,
+   *   thus, the date or time components are looked in the whole field.
+   *
+   * @return \Behat\Mink\Element\NodeElement
+   *   The date or time component element.
+   *
+   * @throws \Exception
+   *   Thrown when the date range field is not found.
    */
   protected function findDateRangeComponent(string $field, string $component, ?string $date = NULL): NodeElement {
     /** @var \Behat\Mink\Element\NodeElement $fieldset */
@@ -457,7 +509,7 @@ trait TraversingTrait {
     if ($date !== NULL) {
       $date = ucfirst($date) . ' date';
       /** @var \Behat\Mink\Element\NodeElement $element */
-      $element = $fieldset->find('xpath', '//h4[text()="' . $date . '"]//following-sibling::div[1]');
+      $element = $fieldset->find('xpath', '//label[text()="' . $date . '"]//following-sibling::div[1]');
       if (!$element) {
         throw new \Exception("The '$date' sub-field of the '$field' field was not found.");
       }
@@ -722,7 +774,7 @@ trait TraversingTrait {
   protected function getTileCssSelector(): string {
     return implode(', ', [
       '.card .card-title',
-      'article.card--tile h2',
+      'article.tile h1',
       'article.tile.tile-two',
       // @todo Legacy selectors to be removed in ISAICP-7138.
       // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7138

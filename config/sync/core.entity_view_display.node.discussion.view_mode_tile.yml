@@ -6,6 +6,7 @@ dependencies:
     - core.entity_view_mode.node.view_mode_tile
     - field.field.node.discussion.body
     - field.field.node.discussion.field_attachment
+    - field.field.node.discussion.field_discussion_logo
     - field.field.node.discussion.field_keywords
     - field.field.node.discussion.field_replies
     - field.field.node.discussion.field_shared_in
@@ -14,8 +15,9 @@ dependencies:
     - field.field.node.discussion.field_topic
     - field.field.node.discussion.og_audience
     - node.type.discussion
+    - responsive_image.styles.tile
   module:
-    - datetime
+    - responsive_image
     - smart_trim
     - template_suggestion
     - user
@@ -45,6 +47,17 @@ content:
     third_party_settings:
       template_suggestion:
         template_suggestion: ''
+    weight: 2
+    region: content
+  field_discussion_logo:
+    type: responsive_image
+    label: hidden
+    settings:
+      responsive_image_style: tile
+      image_link: ''
+    third_party_settings:
+      template_suggestion:
+        template_suggestion: bare
     weight: 1
     region: content
   field_keywords:
@@ -55,7 +68,7 @@ content:
     third_party_settings:
       template_suggestion:
         template_suggestion: comma_separated
-    weight: 2
+    weight: 3
     region: content
   field_topic:
     type: entity_reference_label
@@ -66,17 +79,6 @@ content:
       template_suggestion:
         template_suggestion: comma_separated
     weight: 0
-    region: content
-  latest_update_time:
-    type: datetime_default
-    label: inline
-    settings:
-      timezone_override: ''
-      format_type: short
-    third_party_settings:
-      template_suggestion:
-        template_suggestion: ''
-    weight: 3
     region: content
 hidden:
   featured: true
