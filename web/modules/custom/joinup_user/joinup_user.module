@@ -694,7 +694,6 @@ function joinup_user_form_views_form_user_admin_people_page_alter(array &$form, 
  * so it can be rendered in the title attribute.
  *
  * @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7699
- *
  */
 function joinup_user_preprocess_username(array &$variables): void {
   $account = $variables['account'] ?: new AnonymousUserSession();
