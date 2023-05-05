@@ -38,11 +38,6 @@ tile:
       label: 'Label'
       description: 'Label of the tile.'
       preview: 'Heading'
-    latest_update_time:
-      type: string
-      label: 'Latest Update time'
-      description: 'Latest Update time.'
-      preview: 'The latest update time'
     title_suffix:
       type: array
       label: 'Title suffix'
