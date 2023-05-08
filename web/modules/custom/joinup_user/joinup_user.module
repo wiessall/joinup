@@ -697,11 +697,11 @@ function joinup_user_form_views_form_user_admin_people_page_alter(array &$form, 
  */
 function joinup_user_preprocess_username(array &$variables): void {
   $account = $variables['account'] ?: new AnonymousUserSession();
-  $name = $account->getDisplayName();
-  if (mb_strlen($name) > 24) {
-    $name_full = $name;
-    $name = Unicode::truncate($name, 24, FALSE, TRUE);
+
+  $variables['name'] = $account->getDisplayName();
+  $variables['name_full'] = $account->getDisplayName();
+
+  if (mb_strlen($variables['name']) > 24) {
+    $variables['name'] = Unicode::truncate($variables['name'], 24, FALSE, TRUE);
   }
-  $variables['name'] = $name;
-  $variables['name_full'] = $name_full;
 }
