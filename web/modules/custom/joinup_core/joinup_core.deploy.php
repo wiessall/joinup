@@ -14,6 +14,7 @@
 
 declare(strict_types = 1);
 
+use Drupal\Core\Entity\EntityStorageException;
 use Drupal\sparql_entity_storage\UriEncoder;
 
 /**
@@ -97,4 +98,13 @@ function joinup_core_deploy_109201(): string {
   }
 
   return "Add $count users to queue.";
+}
+
+/**
+ * Clears the entity definition cache.
+ */
+function joinup_core_deploy_109202(): string {
+  $entityTypeManager = \Drupal::entityTypeManager();
+  $entityTypeManager->clearCachedDefinitions();
+  return 'Entity definition cache cleared.';
 }
