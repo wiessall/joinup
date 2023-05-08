@@ -11,9 +11,9 @@
   <div class="topics">{{ content.field_topic }}</div>
   {{ title_prefix }}
   {% if not page and not is_label_hidden %}
-    <h2{{ title_attributes }}>
+    <h1{{ title_attributes }}>
       <a href="{{ url }}" rel="bookmark">{{ label }}</a>
-    </h2>
+    </h1>
   {% endif %}
   {{ title_suffix }}
   <div class="description">{{ content.body }}</div>
