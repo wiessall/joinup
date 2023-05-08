@@ -11,7 +11,7 @@ bundles:
   - collection
   - solution
 entity_type: rdf_entity
-global: true
+global: false
 flag_short: Like
 flag_long: ''
 flag_message: ''

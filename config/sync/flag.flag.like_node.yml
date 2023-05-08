@@ -1,4 +1,4 @@
-uuid: 87777f36-3f2a-41e6-ba84-6fbbd73bffad
+uuid: 5d8f2d90-28d6-4063-8b07-0275c2992437
 langcode: en
 status: true
 dependencies:
@@ -14,7 +14,7 @@ bundles:
   - event
   - news
 entity_type: node
-global: true
+global: false
 flag_short: Like
 flag_long: ''
 flag_message: ''
