@@ -8,7 +8,6 @@ dependencies:
 id: like_rdf_entity
 label: 'Like (RDF entity)'
 bundles:
-  - collection
   - solution
 entity_type: rdf_entity
 global: false
