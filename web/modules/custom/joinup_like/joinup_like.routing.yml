@@ -1,0 +1,7 @@
+joinup_like.modal_dialog:
+  path: '/not-logged-in/like'
+  defaults:
+    _controller: '\Drupal\joinup_like\Controller\ModalDialogController::render'
+    _title: 'Not Logged In'
+  requirements:
+    _access: 'TRUE'
