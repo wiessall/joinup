@@ -39,7 +39,7 @@
   -->
 {%- endif %}
 {%- if items -%}
-  <div{{ attributes }}>
+  <div{{ attributes.addClass('flex-shrink-0 mt-2 mb-3 align-self-flex-start') }}>
     {%- for item in items -%}
       <div{{ item.attributes }}>{{ item.value }}</div>
     {%- endfor -%}
