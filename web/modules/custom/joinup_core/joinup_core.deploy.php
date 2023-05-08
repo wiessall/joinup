@@ -98,3 +98,12 @@ function joinup_core_deploy_109201(): string {
 
   return "Add $count users to queue.";
 }
+
+/**
+ * Clears the entity definition cache.
+ */
+function joinup_core_deploy_109202(): string {
+  $entityTypeManager = \Drupal::entityTypeManager();
+  $entityTypeManager->clearCachedDefinitions();
+  return 'Entity definition cache cleared.';
+}
