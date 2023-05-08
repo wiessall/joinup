@@ -74,7 +74,10 @@ class LikeBlock extends BlockBase implements ContainerFactoryPluginInterface {
     }
 
     $build = [];
-    $build['#cache']['contexts'][] = 'user.permissions';
+    $build['#cache']['contexts'] = [
+      'user.permissions',
+      'url',
+    ];
     $build['#cache']['tags'] = $flag->getCacheTags();
     $build['flag_' . $flag->id()] = [
       '#lazy_builder' => [
