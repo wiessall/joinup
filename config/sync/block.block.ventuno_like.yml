@@ -1,0 +1,32 @@
+uuid: 938e5cd9-1cc9-497c-9be9-0999519767d8
+langcode: en
+status: true
+dependencies:
+  module:
+    - joinup_like
+    - node
+  theme:
+    - ventuno
+id: ventuno_like
+theme: ventuno
+region: content
+weight: -26
+provider: null
+plugin: joinup_like_block
+settings:
+  id: joinup_like_block
+  label: Like
+  label_display: '0'
+  provider: joinup_like
+visibility:
+  'entity_bundle:node':
+    id: 'entity_bundle:node'
+    negate: false
+    context_mapping:
+      node: '@node.node_route_context:node'
+    bundles:
+      custom_page: custom_page
+      discussion: discussion
+      document: document
+      event: event
+      news: news
