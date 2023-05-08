@@ -105,5 +105,25 @@ function joinup_core_deploy_109201(): string {
 function joinup_core_deploy_109202(): string {
   $entityTypeManager = \Drupal::entityTypeManager();
   $entityTypeManager->clearCachedDefinitions();
-  return 'Entity definition cache cleared.';
+
+  // Install the field_discussion_logo field to the discussion node bundle.
+  try {
+    $fieldStorage = $entityTypeManager->getStorage('field_storage_config')->load('node.field_discussion_logo');
+    $fieldStorage->setTranslatable(TRUE);
+    $fieldStorage->save();
+  }
+  catch (\Exception $e) {
+    return 'Could not install discussion logo field storage.';
+  }
+
+  try {
+    $field = $entityTypeManager->getStorage('field_config')->load('node.discussion.field_discussion_logo');
+    $field->setTranslatable(TRUE);
+    $field->save();
+  }
+  catch (\Exception $e) {
+    return 'Could not install discussion logo field instance.';
+  }
+
+  return 'Entity definition cache cleared. Discussion logo installed.';
 }
