@@ -150,5 +150,6 @@ function ventuno_preprocess_container(array &$variables): void {
  * Implements hook_preprocess_container__facet_region__top().
  */
 function ventuno_preprocess_container__facet_region__top(array &$variables): void {
-  $variables['attributes']['class'][] = 'd-flex align-items-baseline';
+  $classes = 'd-flex align-items-baseline border-bottom my-5 flex-wrap justify-content-between';
+  $variables['attributes']['class'][] = $classes;
 }

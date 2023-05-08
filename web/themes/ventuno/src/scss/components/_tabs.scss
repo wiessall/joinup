@@ -1,14 +1,9 @@
 .tabs--content-type {
   position: relative;
-  width: 100%;
   padding: 0;
   overflow-x: auto;
   overflow-y: hidden;
-  border-bottom: 1px solid $gray-300;
-  margin-top: $spacer * 3.5;
-  margin-bottom: $spacer * 2;
   .nav-tabs {
-    width: 100%;
     overflow-x: auto;
     display: inline-flex;
     flex-wrap: nowrap;
