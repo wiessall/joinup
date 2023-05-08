@@ -8,6 +8,7 @@ use Drupal\Core\Condition\ConditionPluginBase;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+use Drupal\Core\Routing\RouteMatchInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -37,12 +38,15 @@ class JoinupContent extends ConditionPluginBase implements ContainerFactoryPlugi
    *   The plugin implementation definition.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
    *   Entity type manager.
+   * @param \Drupal\Core\Routing\RouteMatchInterface $routeMatch
+   *   Route match service.
    */
   public function __construct(
     array $configuration,
     $plugin_id,
     $plugin_definition,
-    protected EntityTypeManagerInterface $entityTypeManager
+    protected EntityTypeManagerInterface $entityTypeManager,
+    protected RouteMatchInterface $routeMatch
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
   }
@@ -55,7 +59,8 @@ class JoinupContent extends ConditionPluginBase implements ContainerFactoryPlugi
       $configuration,
       $plugin_id,
       $plugin_definition,
-      $container->get('entity_type.manager')
+      $container->get('entity_type.manager'),
+      $container->get('current_route_match'),
     );
   }
 
@@ -149,7 +154,7 @@ class JoinupContent extends ConditionPluginBase implements ContainerFactoryPlugi
     }
 
     $type = $this->getUniqueContentIdentifier($entity->getEntityTypeId(), $entity->bundle());
-    return !empty($this->configuration['content'][$type]);
+    return str_ends_with($this->routeMatch->getRouteName(), '.canonical') && !empty($this->configuration['content'][$type]);
   }
 
 }
