@@ -14,7 +14,6 @@
 
 declare(strict_types = 1);
 
-use Drupal\Core\Entity\EntityStorageException;
 use Drupal\sparql_entity_storage\UriEncoder;
 
 /**
