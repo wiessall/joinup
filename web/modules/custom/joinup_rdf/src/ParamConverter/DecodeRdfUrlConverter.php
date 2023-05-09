@@ -2,7 +2,7 @@
 
 declare(strict_types = 1);
 
-namespace Drupal\joinup_like\ParamConverter;
+namespace Drupal\joinup_rdf\ParamConverter;
 
 use Drupal\Core\ParamConverter\ParamConverterInterface;
 use Drupal\sparql_entity_storage\UriEncoder;

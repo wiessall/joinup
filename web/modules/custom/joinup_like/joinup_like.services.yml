@@ -1,5 +1,0 @@
-services:
-  joinup_like.decode_rdf_url.param_converter:
-    class: Drupal\joinup_like\ParamConverter\DecodeRdfUrlConverter
-    tags:
-      - { name: paramconverter, priority: 10 }
