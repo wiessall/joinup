@@ -171,8 +171,8 @@ Feature: "Add custom page" visibility options.
 
   Scenario Outline: Creating a custom page with a title that already exists.
     And custom_page content:
-      | title        | body        | <group>       |
-      | Rubber boots | For outside | <first title> |
+      | title        | body        | <group>       | creation date       |
+      | Rubber boots | For outside | <first title> | 2014-08-30 23:59:00 |
 
     # It should not be possible to create a custom page with a duplicate title.
     Given I am logged in as a facilitator of the "<first title>" <group>
@@ -199,6 +199,12 @@ Feature: "Add custom page" visibility options.
     And I press "Save"
     Then I should see the heading "Rubber boots"
     And I should see the success message "Custom page Rubber boots has been created."
+
+    # Assert that the "Custom page" tile is present and contains last update, label and bundle type.
+    When I go to "/user"
+    Then I should see the "Rubber boots" tile
+    And I should see the text "Last update: " in the "Rubber boots" tile
+    And I should see the text "Custom page" in the "Rubber boots" tile
 
     Examples:
       | first title | second title    | group      |
