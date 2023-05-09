@@ -4,9 +4,3 @@ services:
     arguments: ['@database']
     tags:
       - { name: drush.command }
-
-  joinup_core.clean_cache_tables.commands:
-    class: Drupal\joinup_core\Commands\JoinupCleanCacheTablesCommands
-    arguments: ['@database']
-    tags:
-      - { name: drush.command }
