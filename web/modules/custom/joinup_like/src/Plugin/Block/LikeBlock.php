@@ -5,6 +5,7 @@ declare(strict_types = 1);
 namespace Drupal\joinup_like\Plugin\Block;
 
 use Drupal\Core\Block\BlockBase;
+use Drupal\Core\Cache\Cache;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
@@ -78,7 +79,9 @@ class LikeBlock extends BlockBase implements ContainerFactoryPluginInterface {
       'user.permissions',
       'url',
     ];
-    $build['#cache']['tags'] = $flag->getCacheTags();
+    $build['#cache']['tags'] = Cache::mergeTags(
+      $flag->getCacheTags(), $entity->getCacheTags()
+    );
     $build['flag_' . $flag->id()] = [
       '#lazy_builder' => [
         'flag.link_builder:build',
