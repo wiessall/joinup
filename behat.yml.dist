@@ -162,6 +162,7 @@ default:
         # TODO: Remove .section--sidebar-left in ISAICP-7138.
         # See https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7138
         Left sidebar: 'aside.layout-sidebar,.section--sidebar-left'
+        Like block: '.block-joinup-like-block'
         Main fields accordion: '#main-fields,.accordion .accordion-item #main'
         Main solution vertical tab: '#edit-group-main'
         Management solution vertical tab: '#edit-group-management'
