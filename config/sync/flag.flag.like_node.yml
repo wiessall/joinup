@@ -3,7 +3,7 @@ langcode: en
 status: true
 dependencies:
   module:
-    - flag_count
+    - joinup_like
     - node
 id: like_node
 label: 'Like (Content)'
@@ -24,7 +24,7 @@ unflag_message: ''
 unflag_denied_text: ''
 weight: 0
 flag_type: 'entity:node'
-link_type: count_link
+link_type: count_link_node
 flagTypeConfig:
   show_in_links: {  }
   show_as_field: false
