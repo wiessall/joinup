@@ -3,7 +3,7 @@ langcode: en
 status: true
 dependencies:
   module:
-    - flag_count
+    - joinup_like
     - rdf_entity
 id: like_rdf_entity
 label: 'Like (RDF entity)'
@@ -20,7 +20,7 @@ unflag_message: ''
 unflag_denied_text: ''
 weight: 0
 flag_type: 'entity:rdf_entity'
-link_type: count_link
+link_type: count_link_rdf
 flagTypeConfig:
   show_in_links: {  }
   show_as_field: false
