@@ -6,7 +6,7 @@
 upgrade_commands:
   default:
     - touch disable-config-readonly
-    - DRUPAL_MEMCACHE_HOSTS="" ./vendor/bin/drush deploy --yes
+    - ./vendor/bin/drush deploy --yes
     - ./vendor/bin/drush search-api:reset-tracker --yes
     - ./vendor/bin/drush joinup:node-access-rebuild
     - rm disable-config-readonly
