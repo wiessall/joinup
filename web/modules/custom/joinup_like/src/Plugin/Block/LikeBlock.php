@@ -95,10 +95,10 @@ class LikeBlock extends BlockBase implements ContainerFactoryPluginInterface {
   }
 
   /**
-   * Get Entity from route
+   * Get Entity from route.
    *
    * @return \Drupal\Core\Entity\EntityInterface|null
-   *   Entity,
+   *   Entity.
    */
   protected function getEntityFromRoute(): ?EntityInterface {
     foreach ($this->routeMatch->getParameters() as $parameter) {
