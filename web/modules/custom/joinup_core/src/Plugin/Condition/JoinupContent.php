@@ -114,7 +114,7 @@ class JoinupContent extends ConditionPluginBase implements ContainerFactoryPlugi
    * @param string $type
    *   Entity type.
    * @param string $bundle
-   *   bundle type
+   *   Bundle type.
    *
    * @return string
    *   Unique content identifier.
