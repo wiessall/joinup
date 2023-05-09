@@ -313,7 +313,8 @@
                 "No link template 'canonical' found @see https://www.drupal.org/project/file_url/issues/3346487": "resources/patch/file_url-3346487.diff"
             },
             "drupal/flag": {
-                "TypeError: Argument 1 passed to FlagCount::count() must implement interface @see https://www.drupal.org/project/flag/issues/3168014": "resources/patch/drupal/flag/3168014-46.patch"
+                "TypeError: Argument 1 passed to FlagCount::count() must implement interface @see https://www.drupal.org/project/flag/issues/3168014": "resources/patch/drupal/flag/3168014-46.patch",
+                "AJAX link broken if flaggable entity id is string @see https://www.drupal.org/project/flag/issues/3359007": "resources/patch/drupal/flag/3359007-47.patch"
             },
             "drupal/honeypot": {
                 "Behat integration. @see https://www.drupal.org/project/honeypot/issues/3059040": "https://www.drupal.org/files/issues/2020-09-09/3059040-31.patch",
