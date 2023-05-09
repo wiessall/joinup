@@ -50,7 +50,15 @@ $utilities: map-merge(
     "min-viewport-height": null,
     "flex": null,
     "flex-grow": null,
-    "flex-shrink": null,
+    "flex-shrink":  (
+      responsive: false,
+      property: flex-shrink,
+      class: flex,
+      values: (
+        shrink-0: 0,
+        shrink-1: 1,
+      )
+    ),
     "gap": null,
     "align-self": null,
     "negative-margin": null,
