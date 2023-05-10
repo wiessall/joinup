@@ -60,7 +60,6 @@ function ventuno_preprocess_node__explore_item(array &$variables): void {
  * - Adds a variable indicating the attachment file type on documents.
  */
 function ventuno_preprocess_node(array &$variables): void {
-  _ventuno_preprocess_search_result($variables, 'node');
   /** @var \Drupal\node\NodeInterface $node */
   $node = $variables['node'];
 
@@ -193,6 +192,11 @@ function ventuno_preprocess_node__carousel(array &$variables, string $entity_typ
   $entity = $variables[$entity_type_id];
   /** @var \Drupal\Core\Datetime\DateFormatterInterface $date_formatter */
   $date_formatter = Drupal::service('date.formatter');
+  $route_match = \Drupal::routeMatch();
+  $route_name = $route_match->getRouteName();
+  if ($route_name == 'view.search.page_1') {
+    $variables['horizontal'] = TRUE;
+  }
 
   // Info (above the title).
   $variables['info']['icon'] = 'calendar-event';
