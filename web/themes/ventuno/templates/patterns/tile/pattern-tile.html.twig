@@ -77,12 +77,14 @@
           </div>
         {% endif %}
         <div>
-          <div class="fs-sm text-dark d-flex align-items-center justify-content-start my-2">
-            <svg class="tile__info-icon bi icon--xs me-1">
-              <use xlink:href="{{ bcl_icon_path }}#{{ _info.icon }}"></use>
-            </svg>
-            <span class="tile__info-text">{{ _info.label }}</span>
-          </div>
+          {% if _info %}
+            <div class="fs-sm text-dark d-flex align-items-center justify-content-start my-2">
+              <svg class="tile__info-icon bi icon--xs me-1">
+                <use xlink:href="{{ bcl_icon_path }}#{{ _info.icon }}"></use>
+              </svg>
+              <span class="tile__info-text">{{ _info.label }}</span>
+            </div>
+          {% endif %}
           <h1 class="tile__title my-0">
             <a class="text-primary" href="{{ _url }}" title="{{ _label|render|striptags|trim }}">
               {{ _label }}
