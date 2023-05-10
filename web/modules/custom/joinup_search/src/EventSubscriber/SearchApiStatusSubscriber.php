@@ -5,9 +5,11 @@ declare(strict_types = 1);
 namespace Drupal\joinup_search\EventSubscriber;
 
 use Drupal\joinup_group\Entity\GroupInterface;
+use Drupal\joinup_user\Entity\JoinupUserInterface;
 use Drupal\search_api\Event\QueryPreExecuteEvent;
 use Drupal\search_api\Event\SearchApiEvents;
 use Drupal\search_api\Query\ConditionGroupInterface;
+use Drupal\search_api\Query\QueryInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
@@ -23,6 +25,7 @@ class SearchApiStatusSubscriber implements EventSubscriberInterface {
       SearchApiEvents::QUERY_PRE_EXECUTE => ['searchStatusQueryAlter', -100],
       SearchApiEvents::QUERY_PRE_EXECUTE . '.search_api_field' => [
         ['groupContentListingQueryAlter'],
+        ['userContentListingQueryAlter'],
       ],
     ];
   }
@@ -70,6 +73,33 @@ class SearchApiStatusSubscriber implements EventSubscriberInterface {
       return;
     }
 
+    $this->getConditionGroupInterfaces($query);
+  }
+
+  /**
+   * Reacts to the query alter event for user content listings.
+   *
+   * @param \Drupal\search_api\Event\QueryPreExecuteEvent $event
+   *   The query alter event.
+   *
+   * @throws \Drupal\joinup_group\Exception\MissingGroupException
+   */
+  public function userContentListingQueryAlter(QueryPreExecuteEvent $event): void {
+    $query = $event->getQuery();
+    $entity = $query->getOption('search_api_field entity');
+    if (!($entity instanceof JoinupUserInterface)) {
+      return;
+    }
+
+    $this->getConditionGroupInterfaces($query);
+  }
+
+  /**
+   * @param \Drupal\search_api\Query\QueryInterface $query
+   *
+   * @return void
+   */
+  protected function getConditionGroupInterfaces(QueryInterface $query): void {
     // Check the `show_archived` flag on the search API field settings in order
     // to not perform any actions if teh flag is set to either 'archived' or
     // 'unarchived'. The facet is only available when both archived and
@@ -81,7 +111,7 @@ class SearchApiStatusSubscriber implements EventSubscriberInterface {
       return;
     }
 
-    // Ensure that the status
+    // Ensure that the status.
     if (empty($query->getOption('search_api_facets')['entity_status'])) {
       return;
     }
