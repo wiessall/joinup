@@ -117,8 +117,8 @@ function ventuno_preprocess_rdf_entity__view_mode_tile(array &$variables, string
       break;
 
       case 'licence':
-        $variables['info']['icon'] = 'file-earmark-medical';
-        $variables['info']['label'] = '';
+        // Licences do not store creation date.
+        $variables['info'] = NULL;
         break;
   }
   _ventuno_preprocess_tile($variables, 'rdf_entity');
