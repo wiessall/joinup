@@ -1,7 +1,7 @@
 @api @terms @group-f
 Feature: Global search with archive content
 
-  Scenario Outline: <bundle label> content has an 'Show archived' facet.
+  Scenario Outline: Group content has an 'Show archived' facet.
     Given the following owner:
       | name       | type    |
       | Some owner | Company |
@@ -45,10 +45,11 @@ Feature: Global search with archive content
     # When the toggle is active, archived content is shown.
     When I click "Show archived"
     Then I should see the following tiles in the correct order:
-      | Event 1         |
-      | Some document 1 |
       | Event 2         |
       | Some document 2 |
+
+    And I should not see the "Event 1" tile
+    And I should not see the "Some document 1" tile
 
     Examples:
       | bundle label | group type |

@@ -41,7 +41,18 @@ class SearchApiStatusSubscriber implements EventSubscriberInterface {
       return;
     }
 
-    $this->applyDefaultStatusFacetBehaviour($query);
+    $hasStatus = FALSE;
+    $conditions = &$query->getConditionGroup()->getConditions();
+    foreach ($conditions as $key => $condition) {
+      if (($condition instanceof ConditionGroupInterface) && $condition->hasTag('facet:entity_status')) {
+        unset($conditions[$key]);
+        $hasStatus = TRUE;
+      }
+    }
+
+    if (!$hasStatus) {
+      $query->addCondition('entity_status', 'archived', '<>');
+    }
   }
 
   /**
@@ -70,26 +81,25 @@ class SearchApiStatusSubscriber implements EventSubscriberInterface {
       return;
     }
 
-    $this->applyDefaultStatusFacetBehaviour($query);
-  }
+    // Ensure that the status
+    if (empty($query->getOption('search_api_facets')['entity_status'])) {
+      return;
+    }
 
-  /**
-   * Apply default status facet behaviour.
-   *
-   * @param \Drupal\search_api\Query\QueryInterface $query
-   *   The search API query.
-   */
-  protected function applyDefaultStatusFacetBehaviour($query): void {
     $hasStatus = FALSE;
     $conditions = &$query->getConditionGroup()->getConditions();
-    foreach ($conditions as $key => $condition) {
+    foreach ($conditions as $condition) {
       if (($condition instanceof ConditionGroupInterface) && $condition->hasTag('facet:entity_status')) {
-        unset($conditions[$key]);
+        // If the facet is active, it appears in the conditions due to its only
+        // state.
         $hasStatus = TRUE;
       }
     }
 
-    if (!$hasStatus) {
+    if ($hasStatus) {
+      $query->addCondition('entity_status', 'archived');
+    }
+    else {
       $query->addCondition('entity_status', 'archived', '<>');
     }
   }
