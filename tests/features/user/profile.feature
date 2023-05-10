@@ -158,6 +158,36 @@ Feature: User profile
       | SOUND project                 |
       | Botanic E.D.E.N.              |
     And I should see the following facet items "Collection, Discussion, Document, Event, News, Solution, Video" in this order
+    Then I should not see the "Status" facet
+
+    Given news content:
+      | title         | collection       | state     | user          |
+      | Real news     | Botanic E.D.E.N. | validated | Corwin Robert |
+      | Archive news  | Botanic E.D.E.N. | archived  | Corwin Robert |
+
+    And I should see the "Status" facet
+    Then I should see the following tiles in the correct order:
+      | Discovered new flower species |
+      | Spring blossom party          |
+      | Repopulating blue iris        |
+      | Planting a tree howto         |
+      | Cherry blossoms schedule      |
+      | SOUND project                 |
+      | Botanic E.D.E.N.              |
+      | Real news                     |
+    And I should not see the "Archive news" tile
+
+    When I click "Show archived"
+    And I wait for AJAX to finish
+    Then I should see the "Archive news" tile
+    And I should not see the "Discovered new flower species" tile
+    And I should not see the "Spring blossom party" tile
+    And I should not see the "Repopulating blue iris" tile
+    And I should not see the "Planting a tree howto" tile
+    And I should not see the "Cherry blossoms schedule" tile
+    And I should not see the "SOUND project" tile
+    And I should not see the "Botanic E.D.E.N." tile
+    And I should not see the "Real news" tile
 
     # A message should be shown when visiting a profile of a user without
     # content.
