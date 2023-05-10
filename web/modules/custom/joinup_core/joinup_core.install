@@ -95,9 +95,16 @@ function joinup_core_requirements($phase): array {
 }
 
 /**
- * Update and trim existing first and family names.
+ * Enables the `memcache` module.
  */
 function joinup_core_update_109200(): void {
+  \Drupal::service('module_installer')->install(['memcache']);
+}
+
+/**
+ * Update and trim existing first and family names.
+ */
+function joinup_core_update_109201(): void {
   $database = \Drupal::database();
   $num_chars = 100;
   $fields_to_update = ['field_user_family_name', 'field_user_first_name'];
