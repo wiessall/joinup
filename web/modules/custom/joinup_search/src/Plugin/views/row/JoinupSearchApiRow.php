@@ -5,7 +5,6 @@ declare(strict_types = 1);
 namespace Drupal\joinup_search\Plugin\views\row;
 
 use Drupal\search_api\Plugin\views\row\SearchApiRow;
-use Drupal\search_api\SearchApiException;
 
 /**
  * Provides a row plugin for displaying a result as a search result item.
