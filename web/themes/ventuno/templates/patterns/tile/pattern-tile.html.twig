@@ -7,6 +7,7 @@
 {% apply spaceless %}
 
   {# Parameters:
+    - horizontal (boolean) (default: false)
     - attributes (object) (default: {}})
     - image (object) (default: {})
     - url (string) (default: '')
@@ -21,6 +22,7 @@
     - bundle (object) (default: {})
   #}
 
+  {% set _horizontal = horizontal|default(false) %}
   {% set _attributes = attributes|default({}) %}
   {% set _image = image|default({}) %}
   {% set _url = url|default('') %}
@@ -41,10 +43,9 @@
   {% endif %}
   {% set _classes = [
     'tile',
+    _horizontal ? 'tile--horizontal',
     'd-flex',
-    'flex-column',
     'shadow',
-    'h-100',
     'mb-3',
   ] %}
   {% if _image is empty %}
@@ -64,7 +65,7 @@
       <figure class="tile__figure mb-0">
         {{ _image }}
       </figure>
-      <div class="tile__body pt-2 px-2{% if _highlighted is not empty %} position-relative{% endif %}">
+      <div class="tile__body d-flex flex-column justify-content-between{% if _highlighted is not empty %} position-relative{% endif %}">
         {% if _highlighted.text is not empty %}
           <div class="tile__standout-info position-absolute d-flex align-items-center bg-brand rounded text-white fw-bold px-2 py-1">
             {% if _highlighted.icon is not empty %}
@@ -75,20 +76,20 @@
             {{ _highlighted.text }}
           </div>
         {% endif %}
-        <div class="fs-sm text-dark d-flex align-items-center justify-content-start my-2">
-          <svg class="tile__info-icon bi icon--xs me-1">
-            <use xlink:href="{{ bcl_icon_path }}#{{ _info.icon }}"></use>
-          </svg>
-          <span class="tile__info-text">{{ _info.label }}</span>
+        <div>
+          <div class="fs-sm text-dark d-flex align-items-center justify-content-start my-2">
+            <svg class="tile__info-icon bi icon--xs me-1">
+              <use xlink:href="{{ bcl_icon_path }}#{{ _info.icon }}"></use>
+            </svg>
+            <span class="tile__info-text">{{ _info.label }}</span>
+          </div>
+          <h1 class="tile__title my-0">
+            <a class="text-primary" href="{{ _url }}" title="{{ _label|render|striptags|trim }}">
+              {{ _label }}
+            </a>
+          </h1>
+          {{ _action }}
         </div>
-        <h1 class="tile__title my-0">
-          <a class="text-primary" href="{{ _url }}" title="{{ _label|render|striptags|trim }}">
-            {{ _label }}
-          </a>
-        </h1>
-        {{ _action }}
-      </div>
-      <div class="tile__footer p-2">
         {%- if _badges is not empty and _badges is iterable -%}
           <div class="mb-2">
             {{ attach_library('ventuno/badge') }}
@@ -102,6 +103,8 @@
             {% endfor %}
           </div>
         {%- endif -%}
+      </div>
+      <div class="tile__footer">
         <div class="fs-xs text-muted d-flex align-items-center justify-content-between">
           <div data-joinup-card-stats class="d-flex">
             {% for data in _extra_data %}
