@@ -28,16 +28,6 @@ class JoinupSearchApiRow extends SearchApiRow {
 
     if ($this->view->id() == 'search') {
       $datasource_id = $row->search_api_datasource;
-      if ($row->index <= 2 && $this->view->getCurrentPage() <= 0) {
-        $view_mode = 'search_result_featured';
-        try {
-          return $this->index->getDatasource($datasource_id)->viewItem($row->_object, $view_mode);
-        }
-        catch (SearchApiException $e) {
-          $this->logException($e);
-          return '';
-        }
-      }
     }
     return $parent;
   }

@@ -74,66 +74,7 @@ function _ventuno_preprocess_tile(array &$variables, string $entity_type_id): vo
 }
 
 /**
- * Prepares some variables for all search result view modes.
- *
- * @param array $variables
- *   The variables array.
- * @param string $entity_type_id
- *   The entity type ID.
- */
-function _ventuno_preprocess_search_result(array &$variables, string $entity_type_id): void {
-  $entity = $variables[$entity_type_id];
-  $bundle_key = \Drupal::entityTypeManager()->getDefinition($entity_type_id)->getKey('bundle');
-  $variables['text'] = $entity instanceof DescriptionInterface && isset($variables['content'][$entity->getDescriptionField()]) ? $variables['content'][$entity->getDescriptionField()] : NULL;
-  $variables['topics'] = ($entity instanceof TopicReferencingEntityInterface) ? $entity->getTopics() : NULL;
-  if ($variables['topics']) {
-    $num_of_items = count($variables['topics']);
-    if ($num_of_items > 3) {
-      $extra_items = $num_of_items - 3;
-      $variables['topics'] = array_splice($variables['topics'], 0, 3);
-      // The structure name => value mimics the way topics are accessed in the
-      // template.
-      // @see node--search-result.html.twig.
-      // @see node--search-result-featured.html.twig.
-      // @see rdf-entity--search-result.html.twig.
-      // @see rdf-entity--search-result-featured.html.twig.
-      $variables['topics'][]['name']['value'] = t('+:number topics', [
-        ':number' => $extra_items,
-      ]);
-    }
-  }
-
-  $bundle_type = $entity->get($bundle_key)->entity;
-  $variables['type'] = strtoupper($bundle_type->getSingularLabel() ?? $bundle_type->label());
-  if ($created_time = $entity->getCreatedTime()) {
-    $variables['creation'] = t('@label: @created', [
-      '@label' => t('Created'),
-      '@created' => \Drupal::service('date.formatter')->format($created_time, 'date_only'),
-    ]);
-  }
-  if ($changed_time = $entity->getChangedTime()) {
-    $variables['changed'] = t('@label: @changed', [
-      '@label' => t('Updated Date'),
-      '@changed' => \Drupal::service('date.formatter')->format($changed_time, 'date_only'),
-    ]);
-  }
-
-  if ($entity instanceof AssetReleaseInterface) {
-    $variables['label'] = new TranslatableMarkup('@label | @version', [
-      '@label' => $entity->label(),
-      '@version' => $entity->getVersion(),
-    ]);
-  }
-
-  if ($variables['view_mode'] === 'search_result_featured') {
-    $variables['image'] = ($entity instanceof LogoInterface) && $entity->getLogoAsFile()
-      ? $entity->getLogoAsRenderArray($variables['view_mode'])
-      : _ventuno_get_default_icon_render_array($entity->getEntityTypeId(), $entity->bundle());
-  }
-}
-
-/**
- * Returns the default icon id for the given bundle or a generic icon id.
+ * Returns the default icon for the given bundle or the generic entity icon.
  *
  * @param string $entity_type_id
  *   The entity type ID.
