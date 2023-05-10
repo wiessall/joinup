@@ -62,17 +62,6 @@ class BuildCommands extends AbstractCommands {
       ->arg('prod')
       ->option('root', "{$distDir}/web");
 
-    $tasks[] = $this->taskFilesystemStack()
-      ->mkdir("{$distDir}/web/themes/joinup/css");
-
-    // Compile the SCSS to CSS for the old `joinup_theme` theme.
-    $scssMap = [
-      $config->get('themes.joinup_theme.scss.input') => "{$distDir}/web/themes/joinup/css/style.min.css",
-    ];
-    $tasks[] = $this->taskScss($scssMap)
-      ->setFormatter('ScssPhp\\ScssPhp\\Formatter\\' . ucfirst($config->get('themes.joinup_theme.scss.style')))
-      ->addImportPath($config->get('themes.joinup_theme.scss.import_dir'));
-
     // Prepare sha and tag variables.
     $tag = $this->getGitTag();
     $sha = $this->getGitCommitHash();
