@@ -3,9 +3,6 @@
  * Joinup theme scripts.
  */
 (function ($, Drupal, once) {
-  // @todo ISAICP-7138 If this behavior needs to be ported to the new Ventuno theme, then
-  //   this should be split off to a separate .js file, and only included in the
-  //   pages / render arrays that actually need it.
   Drupal.behaviors.deleteButton = {
     attach: function (context, settings) {
       $(once('deleteButton', '#edit-delete', context))
@@ -16,9 +13,6 @@
   };
 
   // Fix vertical tabs on the form pages.
-  // @todo ISAICP-7138 If this behavior needs to be ported to the new Ventuno theme, then
-  //   this should be split off to a separate .js file, and only included in the
-  //   pages / render arrays that actually need it.
   Drupal.behaviors.verticalTabsGrid = {
     attach: function (context, settings) {
       $(once('verticalTabsGrid', '.vertical-tabs', context))
@@ -42,9 +36,6 @@
   };
 
   // Behaviors for tab validation.
-  // @todo ISAICP-7138 If this behavior needs to be ported to the new Ventuno theme, then
-  //   this should be split off to a separate .js file, and only included in the
-  //   pages / render arrays that actually need it.
   Drupal.behaviors.fieldGroupTabsValidation = {
     attach: function (context, settings) {
       // Keep a flag to focus only the first one in case of multiple tabs with
@@ -79,9 +70,6 @@
   };
 
   // Handle vertical tabs on mobile.
-  // @todo ISAICP-7138 If this behavior needs to be ported to the new Ventuno theme, then
-  //   this should be split off to a separate .js file, and only included in the
-  //   pages / render arrays that actually need it.
   Drupal.behaviors.verticalTabsMobile = {
     attach: function (context, settings) {
       $(once('verticalTabsMobile', '.vertical-tabs__menu-item--mobile', context)).each(function () {
@@ -118,9 +106,6 @@
   };
 
   // Autosize textareas.
-  // @todo ISAICP-7138 If this behavior needs to be ported to the new Ventuno theme, then
-  //   this should be split off to a separate .js file, and only included in the
-  //   pages / render arrays that actually need it.
   Drupal.behaviors.autosizeTextarea = {
     attach: function (context, settings) {
       $(once('autosizeTextarea', 'textarea', context)).each(function () {

@@ -26,7 +26,6 @@ use Drupal\joinup\Traits\AntispamTrait;
 use Drupal\joinup\Traits\ContextualLinksTrait;
 use Drupal\joinup\Traits\EntityTrait;
 use Drupal\joinup\Traits\JavascriptTrait;
-use Drupal\joinup\Traits\MaterialDesignTrait;
 use Drupal\joinup\Traits\PageCacheTrait;
 use Drupal\joinup\Traits\SearchTrait;
 use Drupal\joinup\Traits\TraversingTrait;
@@ -52,7 +51,6 @@ class FeatureContext extends RawDrupalContext {
   use ContextualLinksTrait;
   use EntityTrait;
   use JavascriptTrait;
-  use MaterialDesignTrait;
   use PageCacheTrait;
   use SearchTrait;
   use TagTrait;
@@ -1403,90 +1401,6 @@ class FeatureContext extends RawDrupalContext {
   public function clickLinkInRow(string $link_text, string $row_text): void {
     $link = $this->tableRowContainsLink($link_text, $row_text);
     $link->click();
-  }
-
-  /**
-   * Unchecks a material checkbox in a row that contains a certain text.
-   *
-   * @param string $text
-   *   Text in the row.
-   *
-   * @throws \Exception
-   *   If the page contains no rows, no row contains the text or the row
-   *   contains no checkbox or radio button.
-   * @throws \InvalidArgumentException
-   *   If this step definition was used on a radio button.
-   *
-   * @Given I check the material checkbox in the :text table row
-   */
-  public function checkMaterialCheckboxInTableRow(string $text): void {
-    $this->checkMaterialCheckboxHelper($this->getRowByRowText($text));
-  }
-
-  /**
-   * Checks a material design checkbox placed in given context.
-   *
-   * @param \Behat\Mink\Element\TraversableElement $element
-   *   The traversable element to search.
-   * @param string|null $text
-   *   (optional) The checkbox label, if any. Defaults to false.
-   *
-   * @throws \Behat\Mink\Exception\ElementNotFoundException
-   *   When the checkbox cannot be found in $context.
-   * @throws \Exception
-   *   When the checkbox is already checked.
-   */
-  protected function checkMaterialCheckboxHelper(TraversableElement $element, ?string $text = NULL): void {
-    $checkbox = $text ? $element->findField($text) : $element->find('css', 'input[type="checkbox"]');
-    if (!$checkbox) {
-      throw new ElementNotFoundException($this->getSession(), 'checkbox', NULL, $text);
-    }
-    if ($checkbox->isChecked()) {
-      throw new \Exception("Checkbox with text {$text} is already checked.");
-    }
-    $this->toggleMaterialDesignCheckbox($checkbox->getParent());
-  }
-
-  /**
-   * Unchecks a material checkbox in a row that contains a certain text.
-   *
-   * @param string $text
-   *   Text in the row.
-   *
-   * @throws \Exception
-   *   If the page contains no rows, no row contains the text or the row
-   *   contains no checkbox or radio button.
-   * @throws \InvalidArgumentException
-   *   If this step definition was used on a radio button.
-   *
-   * @Given I uncheck the material checkbox in the :text table row
-   */
-  public function uncheckMaterialCheckboxInTableRow(string $text): void {
-    $this->uncheckMaterialCheckboxHelper($this->getRowByRowText($text));
-  }
-
-  /**
-   * Unchecks a material design checkbox placed in given context.
-   *
-   * @param \Behat\Mink\Element\TraversableElement $element
-   *   The node element to search.
-   * @param string|null $text
-   *   The checkbox text.
-   *
-   * @throws \Behat\Mink\Exception\ElementNotFoundException
-   *   When the checkbox cannot be found in $context.
-   * @throws \Exception
-   *   When the checkbox is already unchecked.
-   */
-  protected function uncheckMaterialCheckboxHelper(TraversableElement $element, ?string $text = NULL): void {
-    $checkbox = $text ? $element->findField($text) : $element->find('css', 'input[type="checkbox"]');
-    if (!$checkbox) {
-      throw new ElementNotFoundException($this->getSession(), 'checkbox', NULL, $text);
-    }
-    if (!$checkbox->isChecked()) {
-      throw new \Exception("Checkbox with text {$text} is already unchecked.");
-    }
-    $this->toggleMaterialDesignCheckbox($checkbox->getParent());
   }
 
   /**
