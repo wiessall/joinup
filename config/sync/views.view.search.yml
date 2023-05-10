@@ -374,7 +374,7 @@ display:
       style:
         type: default
         options:
-          row_class: tile
+          row_class: ''
           default_row_class: false
           uses_fields: false
       row:
@@ -382,19 +382,19 @@ display:
         options:
           view_modes:
             'entity:node':
-              custom_page: search_result
-              discussion: search_result
-              document: search_result
-              event: search_result
-              news: search_result
-              tallinn_report: search_result
-              video: search_result
+              custom_page: view_mode_tile
+              discussion: view_mode_tile
+              document: view_mode_tile
+              event: view_mode_tile
+              news: view_mode_tile
+              tallinn_report: view_mode_tile
+              video: view_mode_tile
             'entity:rdf_entity':
-              asset_distribution: search_result
-              asset_release: search_result
-              collection: search_result
-              licence: search_result
-              solution: search_result
+              asset_distribution: view_mode_tile
+              asset_release: view_mode_tile
+              collection: view_mode_tile
+              licence: view_mode_tile
+              solution: view_mode_tile
               spdx_licence: default
             'entity:taxonomy_term':
               eif_conceptual_model: default
@@ -403,7 +403,7 @@ display:
               eif_recommendation: default
               topic: default
             'entity:user':
-              user: search_result
+              user: view_mode_tile
       query:
         type: search_api_query
         options:
@@ -485,6 +485,7 @@ display:
         metatag_display_extender:
           metatags:
             description: 'Search the Joinup platform for digital government information and interoperability solutions with the help of advanced filters.'
+          tokenize: false
       path: search
     cache_metadata:
       max-age: -1
