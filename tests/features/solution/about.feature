@@ -55,7 +55,8 @@ Feature: About this solution
     Then I should see the text "Separating molecules by size."
 
     # The grey area for owner and contact information.
-    And I should see the text "Owner/Contact Information"
+    And I should see the heading "Owner"
+    And I should see the heading "Contact information"
 
     # Multiple owners.
     And I should see the text "Owner"
@@ -170,7 +171,8 @@ Feature: About this solution
 
     Given I am not logged in
     When I go to the about page of "Six exclusion advantages"
-    Then I should see the text "Owner/Contact Information"
+    Then I should see the heading "Owner"
+    Then I should see the heading "Contact information"
     And I should see the link "Contact us" in the "Content" region
     # The field label is hidden.
     But I should not see "E-mail" in the "Content" region
@@ -226,7 +228,8 @@ Feature: About this solution
 
     Given I am logged in as "Pally Rapamichael"
     When I go to the about page of "Six exclusion advantages"
-    Then I should see the text "Owner/Contact Information"
+    Then I should see the heading "Owner"
+    Then I should see the heading "Contact information"
     And I should see the link "Contact us" in the "Content" region
 
     When I click "Contact us" in the "Content" region
