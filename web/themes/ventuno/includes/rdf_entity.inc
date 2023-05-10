@@ -16,7 +16,6 @@ function ventuno_preprocess_rdf_entity(array &$variables): void {
   // Workaround for incorrect rendering of RDF entity label.
   // @see https://www.drupal.org/project/rdf_entity/issues/3209500
   $variables['label'] = $variables['rdf_entity']->label();
-  _ventuno_preprocess_search_result($variables, 'rdf_entity');
 
   // Provide variable to know whether the page has been set as the landing page
   // of a group, so we can add a <h1> title in the group header.
@@ -34,6 +33,11 @@ function ventuno_preprocess_rdf_entity(array &$variables): void {
  */
 function ventuno_preprocess_rdf_entity__view_mode_tile(array &$variables, string $entity_type_id): void {
   $entity = $variables[$entity_type_id];
+  $route_match = \Drupal::routeMatch();
+  $route_name = $route_match->getRouteName();
+  if ($route_name == 'view.search.page_1') {
+    $variables['horizontal'] = TRUE;
+  }
 
   // Info (above the title).
   $variables['info']['icon'] = 'calendar-event';
@@ -111,6 +115,11 @@ function ventuno_preprocess_rdf_entity__view_mode_tile(array &$variables, string
         ];
       }
       break;
+
+      case 'licence':
+        $variables['info']['icon'] = 'file-earmark-medical';
+        $variables['info']['label'] = '';
+        break;
   }
   _ventuno_preprocess_tile($variables, 'rdf_entity');
 }
@@ -124,20 +133,6 @@ function ventuno_preprocess_rdf_entity__explore_item(array &$variables): void {
   // Trim the labels of the items in the Explore block on the homepage down to a
   // manageable size.
   $variables['label'] = _ventuno_smart_trim($entity->label(), 45);
-}
-
-/**
- * Implements hook_preprocess_HOOK().
- */
-function ventuno_preprocess_rdf_entity__search_result_featured(array &$variables): void {
-  _ventuno_preprocess_search_result($variables, 'rdf_entity');
-}
-
-/**
- * Implements hook_preprocess_HOOK().
- */
-function ventuno_preprocess_rdf_entity__search_result(array &$variables): void {
-  _ventuno_preprocess_search_result($variables, 'rdf_entity');
 }
 
 /**

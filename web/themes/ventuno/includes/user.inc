@@ -70,3 +70,14 @@ function ventuno_preprocess_user__inline(array &$variables): void {
     ],
   ];
 }
+
+/**
+ * Implements hook_preprocess_user__view_mode_tile().
+ */
+function ventuno_preprocess_user__view_mode_tile(array &$variables): void {
+  $route_match = \Drupal::routeMatch();
+  $route_name = $route_match->getRouteName();
+  if ($route_name == 'view.search.page_1') {
+    $variables['horizontal'] = TRUE;
+  }
+}
