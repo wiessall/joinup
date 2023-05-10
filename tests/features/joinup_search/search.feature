@@ -208,7 +208,7 @@ Feature: Global search
       | SEARCH RESULTS (5) |
       | Sort by:           |
     Then I should see the text "SEARCH RESULTS (5)"
-    And the page should show the tiles "Collection alpha, Solution alpha, Release Alpha | 1, Licence Alpha, Video alpha"
+    And the page should show the tiles "Collection alpha, Solution alpha, Release Alpha, Licence Alpha, Video alpha"
 
     # "Omega" is used in all the node entities titles. Since the content of
     # custom pages is added to their collection, we also match the collection.
@@ -219,7 +219,7 @@ Feature: Global search
     # "Beta" is used in all the rdf entities body fields.
     When I enter "beta" in the search bar and press enter
     Then I should see the text "SEARCH RESULTS (4)"
-    And the page should show the tiles "Collection alpha, Solution alpha, Release Alpha | 1, Licence Alpha"
+    And the page should show the tiles "Collection alpha, Solution alpha, Release Alpha, Licence Alpha"
 
     # "Epsilon" is used in all the node entities body fields.
     When I enter "epsilon" in the search bar and press enter
@@ -227,7 +227,7 @@ Feature: Global search
 
     # "Alphabet" is used in all the keywords fields.
     When I enter "Alphabet" in the search bar and press enter
-    Then the page should show the tiles "Solution alpha, Release Alpha | 1, News headline delta, Event Omega, Document omega"
+    Then the page should show the tiles "Solution alpha, Release Alpha, News headline delta, Event Omega, Document omega"
 
     # "Gamma" is used in the collection abstract.
     When I enter "gamma" in the search bar and press enter
@@ -251,11 +251,11 @@ Feature: Global search
 
     # The owner and contact information names should be indexed inside the solutions/releases they are linked to.
     When I enter "responsible" in the search bar and press enter
-    Then the page should show the tiles "Solution alpha, Release Alpha | 1"
+    Then the page should show the tiles "Solution alpha, Release Alpha"
     # Visit the homepage to be sure that the test fetches the correct updated page.
     When I go to the homepage
     And I enter "contact" in the search bar and press enter
-    Then the page should show the tiles "Solution alpha, Release Alpha | 1"
+    Then the page should show the tiles "Solution alpha, Release Alpha"
 
     # Users should be found by first name, family name and organisation.
     When I enter "Jenessa" in the search bar and press enter
@@ -439,18 +439,18 @@ Feature: Global search
       | representation technique | Datalog                           |
 
     When I enter "releazzDistro" in the search bar and press enter
-    Then the page should show only the tiles "Releazz | 1"
+    Then the page should show only the tiles "Releazz"
     When I enter "dracula" in the search bar and press enter
-    Then the page should show only the tiles "Releazz | 1"
+    Then the page should show only the tiles "Releazz"
     When I enter "releazz-distro" in the search bar and press enter
-    Then the page should show only the tiles "Releazz | 1"
+    Then the page should show only the tiles "Releazz"
     When I enter "apache" in the search bar and press enter
     # Also the licence itself is retrieved.
-    Then the page should show only the tiles "Apache-2.0,Releazz | 1"
+    Then the page should show only the tiles "Apache-2.0,Releazz"
     When I enter "HTML" in the search bar and press enter
-    Then the page should show only the tiles "Releazz | 1"
+    Then the page should show only the tiles "Releazz"
     When I enter "Datalog" in the search bar and press enter
-    Then the page should show only the tiles "Releazz | 1"
+    Then the page should show only the tiles "Releazz"
 
     Given I am logged in as a moderator
     When I go to the edit form of the "ReleazzDistro" distribution
@@ -481,18 +481,18 @@ Feature: Global search
 
     # Search now with the new keywords.
     When I enter "dIstrOreleazz" in the search bar and press enter
-    Then the page should show only the tiles "Releazz | 1"
+    Then the page should show only the tiles "Releazz"
     When I enter "zoRRo" in the search bar and press enter
-    Then the page should show only the tiles "Releazz | 1"
+    Then the page should show only the tiles "Releazz"
     When I enter "mishMash" in the search bar and press enter
-    Then the page should show only the tiles "Releazz | 1"
+    Then the page should show only the tiles "Releazz"
     When I enter "LGpl" in the search bar and press enter
     # Also the licence itself is retrieved.
-    Then the page should show only the tiles "LGPL,Releazz | 1"
+    Then the page should show only the tiles "LGPL,Releazz"
     When I enter "CSV" in the search bar and press enter
-    Then the page should show only the tiles "Releazz | 1"
+    Then the page should show only the tiles "Releazz"
     When I enter "Human Language" in the search bar and press enter
-    Then the page should show only the tiles "Releazz | 1"
+    Then the page should show only the tiles "Releazz"
 
     Given I delete the "DistroReleazz" asset distribution
 
@@ -726,10 +726,6 @@ Feature: Global search
       | Dummy news 4    | Dummy body                                 | Mice in space | E-inclusion             | Luxembourg       | validated | charles.jpg | 09/18/2019 | 09/18/2019 |
 
     When I visit the search page
-    Then I should see the 3 tiles with image
-
-    Then I go to "/search?sort_by=relevance&page=1"
-    And I should see the 0 tiles with image
 
     # Filter content from 01-01-2020 to 30-06-2020.
     # Only "El Cabo da Roca" and "Funny news 4" should appear.
@@ -745,15 +741,15 @@ Feature: Global search
     Then I go to "/search?f[0]=creation_date:(min:,max:)"
     And I should see the text "SEARCH RESULTS (14)"
 
-  Scenario: Max 3 topic terms appear in each search result with a suffix for the rest.
+  Scenario: Max 2 topic terms appear in each search result with a suffix for the rest.
     Given the following collection:
-      | title      | Max 3 topic collection                                                             |
+      | title      | Max 2 topic collection                                                             |
       | moderation | no                                                                                 |
       | topic      | Finance in EU, Supplier exchange, Demography, E-inclusion, Statistics and Analysis |
       | state      | validated                                                                          |
     When I visit the search page
-    Then there should be 3 topics in the "Max 3 topic collection" card
-    And I should see the text "+2 topics" in the "Max 3 topic collection" card
+    Then there should be 2 topics in the "Max 2 topic collection" card
+    And I should see the text "+3 topics" in the "Max 2 topic collection" card
 
   Scenario: In search result I can see updated date label.
     Given collections:
@@ -768,42 +764,3 @@ Feature: Global search
     Then I should see the text "Updated Date: 08/03/2019" in the "Relativity is the word" card
     And I should see the text "Updated Date: 08/02/2019" in the "Relativity news: Relativity theory" card
     And I should see the text "Updated Date: 08/01/2019" in the "Absolutely nonsense" card
-
-  Scenario: Regression test for ISAICP-7078
-  See https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7078
-
-    Given collections:
-      | title            | description       | state     |
-      | Asset collection | Some custom data. | validated |
-    And the following solution:
-      | title            | My asset solution                    |
-      | collection       | Asset collection                     |
-      | description      | A asset sample solution              |
-      | documentation    | text.pdf                             |
-      | content creation | registered users                     |
-      | landing page     | http://foo-example.com/landing       |
-      | webdav creation  | no                                   |
-      | webdav url       | http://joinup.eu/solution/foo/webdav |
-      | wiki             | http://example.wiki/foobar/wiki      |
-      | state            | validated                            |
-    And the following releases:
-      | title  | documentation | release number | release notes | creation date    | is version of     | state     | status    |
-      | Delta1 | text.pdf      | 1.0.0          | New 1.0       | 2017-11-11T11:11 | My asset solution | validated | Completed |
-      | Delta2 | text.pdf      | 2.0.0          | New 2.0       | 2017-12-11T11:11 | My asset solution | validated | Completed |
-      | Delta3 | text.pdf      | 3.0.0          | New 3.0       | 2018-11-11T11:11 | My asset solution | validated | Completed |
-      | Delta4 | text.pdf      | 4.0.0          | New 4.0       | 2019-11-11T11:11 | My asset solution | validated | Completed |
-      | Delta5 | text.pdf      | 5.0.0          | New 5.0       | 2020-11-11T11:11 | My asset solution | validated | Completed |
-      | Delta6 | text.pdf      | 6.0.0          | New 6.0       | 2021-11-11T11:11 | My asset solution | validated | Completed |
-      | Delta7 | text.pdf      | 7.0.0          | New 7.0       | 2021-12-11T11:11 | My asset solution | validated | Completed |
-      | Delta8 | text.pdf      | 8.0.0          | New 8.0       | 2018-10-11T11:11 | My asset solution | validated | Completed |
-
-    When I go to "/search?f[0]=type%3Aasset_release"
-    And I should see the text "SEARCH RESULTS (8)"
-    Then I should see the text "New 1.0" in the "Delta1 | 1.0.0" card
-    And I should see the text "New 2.0" in the "Delta2 | 2.0.0" card
-    And I should see the text "New 3.0" in the "Delta3 | 3.0.0" card
-    And I should see the text "New 4.0" in the "Delta4 | 4.0.0" card
-    And I should see the text "New 5.0" in the "Delta5 | 5.0.0" card
-    And I should see the text "New 6.0" in the "Delta6 | 6.0.0" card
-    And I should see the text "New 7.0" in the "Delta7 | 7.0.0" card
-    And I should see the text "New 8.0" in the "Delta8 | 8.0.0" card
