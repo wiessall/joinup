@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "dab56832dfbbfea2961506599715c83f",
+    "content-hash": "060e3e3ad93f92a0265d6ed7c5e4cb91",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -18752,56 +18752,6 @@
             "time": "2022-06-02T12:53:00+00:00"
         },
         {
-            "name": "php-task-runner/scss",
-            "version": "1.x-dev",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/php-task-runner/scss.git",
-                "reference": "47e9e6142793408176954a699aaddd27c9aae521"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/php-task-runner/scss/zipball/47e9e6142793408176954a699aaddd27c9aae521",
-                "reference": "47e9e6142793408176954a699aaddd27c9aae521",
-                "shasum": ""
-            },
-            "require": {
-                "openeuropa/task-runner": "^2.0",
-                "php": ">=7.4",
-                "scssphp/scssphp": "^1.10"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "~7 || ~8 || ~9",
-                "slevomat/coding-standard": "~6",
-                "squizlabs/php_codesniffer": "~3"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "TaskRunner\\Scss\\": "./src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "EUPL-1.2"
-            ],
-            "authors": [
-                {
-                    "name": "Pieter Frenssen",
-                    "email": "pieter@frenssen.be"
-                }
-            ],
-            "description": "Provides a task runner command to compile SCSS to CSS.",
-            "keywords": [
-                "task-runner"
-            ],
-            "support": {
-                "issues": "https://github.com/php-task-runner/scss/issues",
-                "source": "https://github.com/php-task-runner/scss/tree/1.x"
-            },
-            "time": "2022-06-02T11:28:41+00:00"
-        },
-        {
             "name": "php-task-runner/sparql",
             "version": "1.x-dev",
             "source": {
@@ -20095,86 +20045,6 @@
                 }
             ],
             "time": "2022-04-18T12:12:41+00:00"
-        },
-        {
-            "name": "scssphp/scssphp",
-            "version": "v1.11.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/scssphp/scssphp.git",
-                "reference": "33749d12c2569bb24071f94e9af828662dabb068"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/scssphp/scssphp/zipball/33749d12c2569bb24071f94e9af828662dabb068",
-                "reference": "33749d12c2569bb24071f94e9af828662dabb068",
-                "shasum": ""
-            },
-            "require": {
-                "ext-ctype": "*",
-                "ext-json": "*",
-                "php": ">=5.6.0"
-            },
-            "require-dev": {
-                "bamarni/composer-bin-plugin": "^1.4",
-                "phpunit/phpunit": "^5.7 || ^6.5 || ^7.5 || ^8.3 || ^9.4",
-                "sass/sass-spec": "*",
-                "squizlabs/php_codesniffer": "~3.5",
-                "symfony/phpunit-bridge": "^5.1",
-                "thoughtbot/bourbon": "^7.0",
-                "twbs/bootstrap": "~5.0",
-                "twbs/bootstrap4": "4.6.1",
-                "zurb/foundation": "~6.5"
-            },
-            "suggest": {
-                "ext-iconv": "Can be used as fallback when ext-mbstring is not available",
-                "ext-mbstring": "For best performance, mbstring should be installed as it is faster than ext-iconv"
-            },
-            "bin": [
-                "bin/pscss"
-            ],
-            "type": "library",
-            "extra": {
-                "bamarni-bin": {
-                    "forward-command": false,
-                    "bin-links": false
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "ScssPhp\\ScssPhp\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Anthon Pang",
-                    "email": "apang@softwaredevelopment.ca",
-                    "homepage": "https://github.com/robocoder"
-                },
-                {
-                    "name": "Cédric Morin",
-                    "email": "cedric@yterium.com",
-                    "homepage": "https://github.com/Cerdic"
-                }
-            ],
-            "description": "scssphp is a compiler for SCSS written in PHP.",
-            "homepage": "http://scssphp.github.io/scssphp/",
-            "keywords": [
-                "css",
-                "less",
-                "sass",
-                "scss",
-                "stylesheet"
-            ],
-            "support": {
-                "issues": "https://github.com/scssphp/scssphp/issues",
-                "source": "https://github.com/scssphp/scssphp/tree/v1.11.0"
-            },
-            "time": "2022-09-02T21:24:55+00:00"
         },
         {
             "name": "sebastian/cli-parser",
@@ -21999,7 +21869,6 @@
         "drupal/page_manager": 10,
         "drupal/views_block_area": 10,
         "php-task-runner/composer": 20,
-        "php-task-runner/scss": 20,
         "php-task-runner/sparql": 20,
         "weitzman/drupal-test-traits": 20
     },
