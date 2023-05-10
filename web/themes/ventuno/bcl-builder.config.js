@@ -62,14 +62,6 @@ module.exports = {
       },
     },
     {
-      entry: path.resolve(outputFolder, "src/js/sticky-menu.js"),
-      dest: path.resolve(outputFolder, "assets/js/sticky-menu.js"),
-      options: {
-        minify: true,
-        sourceMap: true,
-      },
-    },
-    {
       entry: path.resolve(outputFolder, "src/js/sticky-menu-logged-in.js"),
       dest: path.resolve(outputFolder, "assets/js/sticky-menu-logged-in.js"),
       options: {
@@ -637,19 +629,6 @@ module.exports = {
       options: {
         minify: true,
         includePaths,
-        sourceMap: "file",
-      },
-    },
-    // @todo ISAICP-7138 remove when switch to Ventuno theme is complete
-    {
-      entry: path.resolve(
-        outputFolder,
-        "src/scss/core/base/bootstrap-base.scss"
-      ),
-      dest: path.resolve(outputFolder, "assets/css/bootstrap-base.min.css"),
-      options: {
-        includePaths,
-        minify: true,
         sourceMap: "file",
       },
     },

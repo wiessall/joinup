@@ -24,7 +24,6 @@ use Drupal\joinup\Traits\FileTrait;
 use Drupal\joinup\Traits\FormTrait;
 use Drupal\joinup\Traits\JavascriptTrait;
 use Drupal\joinup\Traits\KeyboardInteractionTrait;
-use Drupal\joinup\Traits\MaterialDesignTrait;
 use Drupal\joinup\Traits\OgTrait;
 use Drupal\joinup\Traits\TabledragTrait;
 use Drupal\joinup\Traits\TestingEntitiesTrait;
@@ -60,7 +59,6 @@ class JoinupContext extends RawDrupalContext {
   use FormTrait;
   use JavascriptTrait;
   use KeyboardInteractionTrait;
-  use MaterialDesignTrait;
   use OgTrait;
   use StringTranslationTrait;
   use TabledragTrait;
@@ -954,13 +952,6 @@ class JoinupContext extends RawDrupalContext {
    * @When I fill the :date :component of the :field widget with :value
    */
   public function fillDateRangeField($field, $component, $value, $date = NULL) {
-    // @todo Remove the if (...) block in ISAICP-7138.
-    // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7138
-    if ($this->usesMaterialDesignLite()) {
-      $element = $this->findMaterialDesignDateRangeComponent($field, $component, $date);
-      $element->setValue($value);
-      return;
-    }
     $element = $this->findDateRangeComponent($field, $component, $date);
     $element->setValue($value);
   }
@@ -984,13 +975,6 @@ class JoinupContext extends RawDrupalContext {
    * @When I clear the :component of the :field widget
    */
   public function clearDateRangeField($field, $component, $date = NULL) {
-    // @todo Remove the if (...) block in ISAICP-7138.
-    // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7138
-    if ($this->usesMaterialDesignLite()) {
-      $element = $this->findMaterialDesignDateRangeComponent($field, $component, $date);
-      $element->setValue('');
-      return;
-    }
     $element = $this->findDateRangeComponent($field, $component, $date);
     $element->setValue('');
   }
@@ -1315,7 +1299,7 @@ class JoinupContext extends RawDrupalContext {
    *
    * @Then I( should) see the( following) tiles in the correct order:
    */
-  public function assertOrderedTilesPresent(TableNode $titles_table) {
+  public function assertOrderedTilesPresent(TableNode $titles_table): void {
     $headings_in_page = array_keys($this->getTiles());
     $headings_expected = $titles_table->getColumn(0);
     Assert::assertEquals($headings_expected, $headings_in_page, 'The expected tiles were not found or were not in the proper order.');
@@ -1614,12 +1598,6 @@ class JoinupContext extends RawDrupalContext {
    * @When I open the plus button menu
    */
   public function openPlusButtonMenu(): void {
-    // @todo Remove the if (...) block in ISAICP-7138.
-    // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7138
-    if ($this->usesMaterialDesignLite()) {
-      $this->openMaterialDesignMenu($this->getSession()->getPage()->find('css', '.add-content-menu'));
-      return;
-    }
     if (!$this->hasJavascriptSupport()) {
       // Do nothing, if it's a non-Javascript browser.
       return;
@@ -1636,12 +1614,6 @@ class JoinupContext extends RawDrupalContext {
    * @When I open the group sidebar menu
    */
   public function openGroupMenu(): void {
-    // @todo Remove the if (...) block in ISAICP-7138.
-    // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7138
-    if ($this->usesMaterialDesignLite()) {
-      $this->openMaterialDesignMenu($this->getSession()->getPage()->find('css', '.sidebar-menu'));
-      return;
-    }
     $region = $this->getSession()->getPage()->find('css', $this->getRegionSelector('Left sidebar'));
     $this->getContextualLinksHelper()->openContextualLinksMenu($region);
   }
@@ -1652,13 +1624,6 @@ class JoinupContext extends RawDrupalContext {
    * @When I open the header local tasks menu
    */
   public function iOpenTheEntityTasksMenu(): void {
-    // @todo Remove the if (...) block in ISAICP-7138.
-    // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7138
-    if ($this->usesMaterialDesignLite()) {
-      $element = $this->getSession()->getPage()->find('css', '.block-joinup-local-tasks-block');
-      $this->openMaterialDesignMenu($element);
-      return;
-    }
     if ($this->hasJavascriptSupport()) {
       $entity_tasks_selector = $this->getRegionSelector('Entity actions');
       $this->getSession()->getPage()->find('css', "$entity_tasks_selector button")->press();
@@ -1930,9 +1895,6 @@ class JoinupContext extends RawDrupalContext {
    */
   public function assertExistingFeaturedStats(): void {
     $xpath = '//ul[contains(concat(" ", normalize-space(@class), " "), "group-stats")]/@class';
-    // @todo Remove the following line in ISAICP-7138.
-    // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7138
-    $xpath .= ' | //div[contains(concat(" ", normalize-space(@class), " "), "featured__stats")]/@class';
     $this->assertSession()->elementsCount('xpath', $xpath, 1);
   }
 
@@ -1943,9 +1905,6 @@ class JoinupContext extends RawDrupalContext {
    */
   public function assertNotExistingFeaturedStats(): void {
     $xpath = '//ul[contains(concat(" ", normalize-space(@class), " "), "group-stats")]/@class';
-    // @todo Remove the following line in ISAICP-7138.
-    // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7138
-    $xpath .= ' | //div[contains(concat(" ", normalize-space(@class), " "), "featured__stats")]/@class';
     $this->assertSession()->elementsCount('xpath', $xpath, 0);
   }
 
@@ -2081,15 +2040,8 @@ class JoinupContext extends RawDrupalContext {
     self::assertJavaScriptEnabledBrowser();
 
     $result = $this->getSession()->getPage()->waitFor(5, function (): bool {
-      $css_selector = '.modal-body';
-      // @todo Remove the if (...) block in ISAICP-7138.
-      // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7138
-      if ($this->usesMaterialDesignLite()) {
-        $css_selector = '#drupal-modal';
-      }
       // Retrieve again a fresh copy of the page element at each cycle.
-      $modal = $this->getSession()->getPage()->find('css', $css_selector);
-
+      $modal = $this->getSession()->getPage()->find('css', '.modal-body');
       return $modal && $modal->isVisible();
     });
 
@@ -3172,16 +3124,6 @@ class JoinupContext extends RawDrupalContext {
     $page = $session->getPage();
     if (!$page->findLink($link_label)) {
       throw new ElementNotFoundException($session->getDriver(), 'Link', 'label', $link_label);
-    }
-
-    // @todo Remove this if() block in ISAICP-7138.
-    // @see See https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7138
-    if ($this->usesMaterialDesignLite()) {
-      $xpath = "//ul/li[contains(concat(' ', @class, ' '), ' menu-item--active-trail ')]/descendant::a/descendant-or-self::*[text()='{$link_label}']";
-      if (!$page->find('xpath', $xpath)) {
-        throw new ExpectationFailedException("The '{$link_label}' link is not in the active trail but it should.");
-      }
-      return;
     }
 
     // Remove the leading '#'.
