@@ -2,6 +2,11 @@ tile:
   label: 'Tile'
   description: 'Custom version of <a href="https://oelibrary.netlify.app/default/?path=/story/components-card--default" target="_blank">BCL''s card</a> to fit the needs of Joinup tiles display.'
   fields:
+    horizontal:
+      type: boolean
+      label: 'Horizontal'
+      description: 'Variant of the tile.'
+      preview: false
     image:
       type: object
       label: 'Image'

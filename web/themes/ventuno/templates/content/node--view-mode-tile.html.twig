@@ -62,6 +62,7 @@
  *   current user is a logged-in member.
  * - is_admin: Flag for admin user status. Will be true when the current user
  *   is an administrator.
+ * - horizontal: The variant of the tile.
  * - image: The logo that has been set for the node, if any.
  * - highlighted: Optional array containing an optional icon and a string
  *   containing an very relevant information that will stand out in the tile.
@@ -80,6 +81,7 @@
 #}
 {{ pattern('tile', {
   attributes,
+  horizontal,
   image,
   url,
   highlighted,
