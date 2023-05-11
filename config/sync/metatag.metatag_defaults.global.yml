@@ -10,8 +10,8 @@ tags:
   title: '[current-page:title] | [site:name]'
   canonical_url: '[current-page:url]'
   og_type: website
-  og_image: '[site:url]themes/joinup/images/logo.svg'
-  og_image_secure_url: '[site:url]themes/joinup/images/logo.svg'
+  og_image: '[site:url]themes/ventuno/assets/images/og-image.png'
+  og_image_secure_url: '[site:url]themes/ventuno/assets/images/og-image.png'
   og_url: '[current-page:url]'
   og_site_name: '[site:name]'
   og_image_type: image/svg+xml
