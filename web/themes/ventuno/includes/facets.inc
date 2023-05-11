@@ -31,6 +31,13 @@ function ventuno_preprocess_facets_item_list__checkbox__user_status(array &$vari
 }
 
 /**
+ * Implements hook_preprocess_facets_item_list__checkbox__content_listing_status().
+ */
+function ventuno_preprocess_facets_item_list__checkbox__content_listing_status(array &$variables): void {
+  _ventuno_preprocess_facets_item_list__checkbox__status($variables);
+}
+
+/**
  * Adds the necessary classes to theme the facet checkbox as a switch.
  *
  * @param array $variables
