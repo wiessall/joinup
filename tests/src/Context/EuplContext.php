@@ -13,7 +13,6 @@ use Drupal\joinup\HtmlManipulator;
 use Drupal\joinup\Traits\ConfigReadOnlyTrait;
 use Drupal\joinup\Traits\EntityTrait;
 use Drupal\joinup\Traits\JavascriptTrait;
-use Drupal\joinup\Traits\MaterialDesignTrait;
 use Drupal\joinup_licence\Entity\CompatibilityDocument;
 use Drupal\node\Entity\Node;
 use Drupal\rdf_entity\Entity\Rdf;
@@ -28,7 +27,6 @@ class EuplContext extends RawDrupalContext {
   use ConfigReadOnlyTrait;
   use EntityTrait;
   use JavascriptTrait;
-  use MaterialDesignTrait;
 
   /**
    * Creates the standard 'EUPL' collection and several dependencies.

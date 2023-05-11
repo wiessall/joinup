@@ -197,12 +197,6 @@ class TrackedHostedFileDownloadFormatter extends FileFormatterBase implements Co
           unset($item->_attributes);
         }
       }
-
-      // @todo Remove these classes in ISAICP-7138. Ventuno classes are
-      //   added in ventuno_helper_link_alter().
-      // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7138
-      // @see ventuno_helper_link_alter()
-      $elements[$delta]['#attributes']['class'][] = 'button--icon button button--blue-light mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent';
     }
 
     if (!empty($elements)) {
