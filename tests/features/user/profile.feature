@@ -158,36 +158,6 @@ Feature: User profile
       | SOUND project                 |
       | Botanic E.D.E.N.              |
     And I should see the following facet items "Collection, Discussion, Document, Event, News, Solution, Video" in this order
-    Then I should not see the "Status" facet
-
-    Given news content:
-      | title         | collection       | state     | user          |
-      | Real news     | Botanic E.D.E.N. | validated | Corwin Robert |
-      | Archive news  | Botanic E.D.E.N. | archived  | Corwin Robert |
-
-    And I should see the "Status" facet
-    Then I should see the following tiles in the correct order:
-      | Discovered new flower species |
-      | Spring blossom party          |
-      | Repopulating blue iris        |
-      | Planting a tree howto         |
-      | Cherry blossoms schedule      |
-      | SOUND project                 |
-      | Botanic E.D.E.N.              |
-      | Real news                     |
-    And I should not see the "Archive news" tile
-
-    When I click "Show archived"
-    And I wait for AJAX to finish
-    Then I should see the "Archive news" tile
-    And I should not see the "Discovered new flower species" tile
-    And I should not see the "Spring blossom party" tile
-    And I should not see the "Repopulating blue iris" tile
-    And I should not see the "Planting a tree howto" tile
-    And I should not see the "Cherry blossoms schedule" tile
-    And I should not see the "SOUND project" tile
-    And I should not see the "Botanic E.D.E.N." tile
-    And I should not see the "Real news" tile
 
     # A message should be shown when visiting a profile of a user without
     # content.
@@ -275,3 +245,53 @@ Feature: User profile
     And I click "My account"
     Then I should not see the link "Subscription settings"
     And I should not see the link "Persistent Logins"
+
+  Scenario: See archived content in user profile.
+    Given users:
+      | Username          | E-mail                        |
+      | Janny Robert      | janny.robert@example.com      |
+      | Clarise Edwardson | clarise.edwardson@example.com |
+    And the following collections:
+      | title            | description                           | logo     | banner     | state     | creation date    | author             |
+      | Lake E.D.E.N.    | European Deep Earth Nurturing project | logo.png | banner.jpg | validated | 2017-02-23 10:00 | Janny Robert       |
+      | Rose is red      | Better descriptions ever              | logo.png | banner.jpg | validated | 2017-02-23 10:00 | Clarise Edwardson  |
+      | Lone handling    | Because even flowers have feelings.   | logo.png | banner.jpg | archived  | 2017-02-23 12:00 | Janny Robert       |
+    And discussion content:
+      | title                   | author          | collection    | state     | created         |
+      | Repopulating green iris | Janny Robert   | Lake E.D.E.N. | validated | 2018-06-15 16:00 |
+      | Best plant comfort      | Janny Robert   | Lone handling | validated | 2018-09-01 19:30 |
+    And document content:
+      | title           | author       | collection    | state     | created          |
+      | Cherry schedule | Janny Robert | Lake E.D.E.N. | validated | 2017-05-13 16:00 |
+      | Cherry arch     | Janny Robert | Lake E.D.E.N. | archived  | 2017-05-13 16:00 |
+    And news content:
+      | title             | author       | collection    | state     | created         |
+      | Discovered flower | Janny Robert | Lake E.D.E.N. | validated | 2018-11-15 9:01 |
+      | Purple flower     | Janny Robert | Lake E.D.E.N. | validated | 2018-11-15 9:01 |
+      | Blue flower       | Janny Robert | Lake E.D.E.N. | archived  | 2018-11-15 9:01 |
+
+    When I am an anonymous user
+    And I go to the public profile of "Clarise Edwardson"
+    Then I should see the heading "Clarise Edwardson"
+    And I should see the text "Show archived"
+    When I click "Show archived"
+    And I should see 0 tiles
+
+    When I am an anonymous user
+    And I go to the public profile of "Janny Robert"
+    Then I should see the heading "Janny Robert"
+    And I should see the text "Show archived"
+    Then I should see the following tiles in the correct order:
+      | Discovered flower         |
+      | Purple flower             |
+      | Best plant comfort        |
+      | Repopulating green iris   |
+      | Cherry schedule           |
+      | Lake E.D.E.N.             |
+    And I should not see the "Archive news" tile
+
+    When I click "Show archived"
+    Then I should see the following tiles in the correct order:
+      | Blue flower   |
+      | Cherry arch   |
+      | Lone handling |
