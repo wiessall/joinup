@@ -160,7 +160,13 @@ function joinup_core_deploy_109203(): void {
   foreach ($paragraphs as $paragraph) {
     $data = $paragraph->get('content_listing')->getValue();
     if (!empty($data)) {
-      $data[0]['show_archived'] = 'all';
+      $data[0]['value']['show_archived'] = 'all';
+      if ($paragraph->bundle() === 'content_listing') {
+        $data[0]['value']['fields']['content_listing_status'] = [
+          'weight' => 1,
+          'region' => 'top',
+        ];
+      }
       $paragraph->set('content_listing', $data);
       $paragraph->save();
     }
