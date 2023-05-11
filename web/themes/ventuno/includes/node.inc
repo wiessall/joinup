@@ -135,6 +135,15 @@ function ventuno_preprocess_node__view_mode_tile(array &$variables, string $enti
     ]);
   }
 
+  // For now, only Custom page, Discussion, Document, Event and News items
+  // (all of them are nodes) can be archived.
+  if ($entity->get('field_state')->value === 'archived') {
+    $variables['extra_data'][] = [
+      'icon' => 'trash',
+      'label' => t('Archived'),
+    ];
+  };
+
   switch ($entity->bundle()) {
     case 'discussion':
       $variables['info']['icon'] = 'calendar-event';
