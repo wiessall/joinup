@@ -535,13 +535,13 @@ Feature: Global search
 
     When I am on the homepage
     And I enter "Relativity" in the search bar and press enter
-    Then the option "Relevance" should be selected
+    Then the option "Last Updated Date" should be selected
     And I should see the text "SEARCH RESULTS (3)"
     And I should see the following tiles in the correct order:
-      | Relativity news: Relativity theory |
       | Relativity is the word             |
+      | Relativity news: Relativity theory |
       | Absolutely nonsense                |
-    And I should be on "/search?keys=Relativity&sort_by=relevance"
+    And I should be on "/search?keys=Relativity&sort_by=last-updated-date"
 
     Given I select "Creation Date" from "Sort by"
     Then I should see the following tiles in the correct order:
@@ -550,12 +550,12 @@ Feature: Global search
       | Relativity is the word             |
     And I should be on "/search?keys=Relativity&sort_by=creation-date"
 
-    Given I select "Last Updated Date" from "Sort by"
+    Given I select "Relevance" from "Sort by"
     Then I should see the following tiles in the correct order:
-      | Relativity is the word             |
       | Relativity news: Relativity theory |
+      | Relativity is the word             |
       | Absolutely nonsense                |
-    And I should be on "/search?keys=Relativity&sort_by=last-updated-date"
+    And I should be on "/search?keys=Relativity&sort_by=relevance"
 
   @javascript
   Scenario: Anonymous user can find facets summary
