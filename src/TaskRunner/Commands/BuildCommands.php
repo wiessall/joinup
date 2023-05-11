@@ -25,7 +25,6 @@ class BuildCommands extends AbstractCommands {
    * - Uses the `--worktree-attributes` option of `git archive` to filter out
    *   non-production code.
    * - Uses the `drupal:settings` command to build the `settings.php` file.
-   * - Compiles SCSS to CSS for the old `joinup_theme` theme.
    * - The Git tag and commit hash are computed, if not passed.
    *
    * @param array $options
