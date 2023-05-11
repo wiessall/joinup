@@ -20,7 +20,7 @@ use Drupal\search_api\Entity\Index;
 /**
  * Update the 'show archived' for the group content fields.
  */
-function joinup_core_deploy_109202(): void {
+function joinup_core_deploy_109300(): void {
   $graphs = [
     'http://joinup.eu/collection/published',
     'http://joinup.eu/collection/draft',
@@ -64,7 +64,7 @@ QUERY;
 /**
  * Update the 'show archived' for the paragraph content listing fields.
  */
-function joinup_core_deploy_109203(): void {
+function joinup_core_deploy_109301(): void {
   $query = \Drupal::entityQuery('paragraph')
     ->condition('type', [
       'content_listing',
@@ -86,7 +86,7 @@ function joinup_core_deploy_109203(): void {
 /**
  * Add state value to custom page nodes.
  */
-function joinup_core_deploy_109204(?array &$sandbox = []): string {
+function joinup_core_deploy_109302(?array &$sandbox = []): string {
   $node_storage = \Drupal::entityTypeManager()->getStorage('node');
 
   if (!isset($sandbox['ids'])) {
