@@ -167,7 +167,7 @@ function _ventuno_get_default_icon(string $entity_type_id, string $bundle): stri
 }
 
 /**
- * Returns the default icon as render array for the given bundle or a generic icon render array.
+ * Returns icon as render array for the bundle or a generic icon render array.
  *
  * @todo ISAICP-7709 With tiles redesign, the search items won't need this so
  * we can delete this function.
