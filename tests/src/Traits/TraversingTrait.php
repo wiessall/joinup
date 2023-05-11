@@ -316,22 +316,12 @@ trait TraversingTrait {
    *   Thrown when the element is not found.
    */
   protected function getListingByHeading(string $type, string $heading): NodeElement {
-    $selectors = [
-      // Selector for generic tiles.
-      // @todo Keep only h1 selector when tiles refactor.
-      '//*[@class and contains(concat(" ", normalize-space(@class), " "), " ' . $type . ' ")][.//h1[normalize-space()="' . $heading . '"]]',
-    ];
-
-    foreach ($selectors as $selector) {
-      $item = $this->getSession()->getPage()->find('xpath', $selector);
-      if ($item) {
-        return $item;
-      }
+    // @todo Keep only h1 selector when tiles refactor.
+    $xpath = '//*[@class and contains(concat(" ", normalize-space(@class), " "), " ' . $type . ' ")][.//h1[normalize-space()="' . $heading . '"]]';
+    if (!$element = $this->getSession()->getPage()->find('xpath', $xpath)) {
+      throw new ElementNotFoundException($this->getSession()->getDriver(), "'$heading' $type item.");
     }
-
-    // Throw a specific exception, so it can be caught by steps that need to
-    // assert that a tile is not present.
-    throw new ElementNotFoundException($this->getSession()->getDriver(), "'$heading' $type item.");
+    return $element;
   }
 
   /**
