@@ -317,9 +317,6 @@ trait TraversingTrait {
    */
   protected function getListingByHeading(string $type, string $heading): NodeElement {
     $selectors = [
-      // Selector for the old theme.
-      // @todo This can be removed once we are fully migrated to the new theme.
-      '//*[@class and contains(concat(" ", normalize-space(@class), " "), " ' . $type . ' ")][.//*[@class and contains(concat(" ", normalize-space(@class), " "), " listing__title ") or contains(concat(" ", normalize-space(@class), " "), " card-title ")][normalize-space()="' . $heading . '"]]',
       // Selector for generic tiles.
       // @todo Keep only h1 selector when tiles refactor.
       '//*[@class and contains(concat(" ", normalize-space(@class), " "), " ' . $type . ' ")][.//h1[normalize-space()="' . $heading . '"]]',
