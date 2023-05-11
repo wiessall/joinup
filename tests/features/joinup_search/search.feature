@@ -684,21 +684,12 @@ Feature: Global search
     Then I enter "sp" in the search bar
     And I wait for AJAX to finish
     Then I should see the following search suggestions:
-      | Radio cooking collection |
-      | spheres                  |
-      | spherification           |
-      | sphere                   |
-      | spherif                  |
-
-    Then I enter "sp" in the search bar
-    And I wait for AJAX to finish
-    Then I should see the following search suggestions:
-      | Radio cooking collection |
-      | Spheres                  |
-      | spherification           |
-      | sphere                   |
-      | spherif                  |
-
+      | Spheres        |
+      | Movistar       |
+      | spheres        |
+      | spherification |
+      | sphere         |
+      | spherif        |
 
   @terms
   Scenario: Filter on date
