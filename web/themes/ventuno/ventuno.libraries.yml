@@ -3,19 +3,19 @@ main:
   version: VERSION
   css:
     base:
-      assets/css/base.css: {}
+      assets/css/base.min.css: { minified: true }
 
 layout:
   version: VERSION
   css:
     layout:
-      assets/css/layout.css: {}
+      assets/css/layout.min.css: { minified: true }
 
 components:
   version: VERSION
   css:
     component:
-      assets/css/components.css: {}
+      assets/css/components.min.css: { minified: true }
   dependencies:
     - ventuno/components.js
 
@@ -30,7 +30,7 @@ theme:
   version: VERSION
   css:
     theme:
-      assets/css/theme.css: {}
+      assets/css/theme.min.css: { minified: true }
 
 # Pages
 homepage:
