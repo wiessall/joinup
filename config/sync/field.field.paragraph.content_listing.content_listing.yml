@@ -22,7 +22,11 @@ default_value:
         content_listing_type:
           weight: 0
           region: top
+        content_listing_status:
+          weight: 1
+          region: top
       enabled: 1
+      show_archived: unarchived
       query_presets: ''
       limit: 10
       global_search: false
@@ -53,6 +57,7 @@ settings:
       eif_interoperability_layer: default
       eif_principle: default
       eif_recommendation: default
+      topic: default
     'entity:user':
       user: view_mode_tile
 field_type: search_api_field
