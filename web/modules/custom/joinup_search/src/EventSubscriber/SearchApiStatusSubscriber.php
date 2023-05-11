@@ -4,8 +4,8 @@ declare(strict_types = 1);
 
 namespace Drupal\joinup_search\EventSubscriber;
 
-use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_user\Entity\JoinupUserInterface;
+use Drupal\paragraphs\ParagraphInterface;
 use Drupal\search_api\Event\QueryPreExecuteEvent;
 use Drupal\search_api\Event\SearchApiEvents;
 use Drupal\search_api\Query\ConditionGroupInterface;
@@ -26,6 +26,7 @@ class SearchApiStatusSubscriber implements EventSubscriberInterface {
       SearchApiEvents::QUERY_PRE_EXECUTE . '.search_api_field' => [
         ['groupContentListingQueryAlter'],
         ['userContentListingQueryAlter'],
+        ['paragraphContentListingQueryAlter'],
       ],
     ];
   }
@@ -63,13 +64,26 @@ class SearchApiStatusSubscriber implements EventSubscriberInterface {
    *
    * @param \Drupal\search_api\Event\QueryPreExecuteEvent $event
    *   The query alter event.
-   *
-   * @throws \Drupal\joinup_group\Exception\MissingGroupException
    */
   public function groupContentListingQueryAlter(QueryPreExecuteEvent $event): void {
     $query = $event->getQuery();
+    if (!($query->getSearchId() !== 'paragraph.content_listing.content_listing')) {
+      return;
+    }
+
+    $this->getConditionGroupInterfaces($query);
+  }
+
+  /**
+   * Reacts to the query alter event for paragraph content listings.
+   *
+   * @param \Drupal\search_api\Event\QueryPreExecuteEvent $event
+   *   The query alter event.
+   */
+  public function paragraphContentListingQueryAlter(QueryPreExecuteEvent $event): void {
+    $query = $event->getQuery();
     $entity = $query->getOption('search_api_field entity');
-    if (!($entity instanceof GroupInterface)) {
+    if (!($entity instanceof ParagraphInterface)) {
       return;
     }
 
@@ -81,8 +95,6 @@ class SearchApiStatusSubscriber implements EventSubscriberInterface {
    *
    * @param \Drupal\search_api\Event\QueryPreExecuteEvent $event
    *   The query alter event.
-   *
-   * @throws \Drupal\joinup_group\Exception\MissingGroupException
    */
   public function userContentListingQueryAlter(QueryPreExecuteEvent $event): void {
     $query = $event->getQuery();
@@ -95,9 +107,10 @@ class SearchApiStatusSubscriber implements EventSubscriberInterface {
   }
 
   /**
-   * @param \Drupal\search_api\Query\QueryInterface $query
+   * Add archive condition in query.
    *
-   * @return void
+   * @param \Drupal\search_api\Query\QueryInterface $query
+   *   The query.
    */
   protected function getConditionGroupInterfaces(QueryInterface $query): void {
     // Check the `show_archived` flag on the search API field settings in order
