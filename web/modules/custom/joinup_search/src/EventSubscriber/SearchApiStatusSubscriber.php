@@ -81,7 +81,7 @@ class SearchApiStatusSubscriber implements EventSubscriberInterface {
       return;
     }
 
-    // Ensure that the status
+    // Ensure that the status.
     if (empty($query->getOption('search_api_facets')['entity_status'])) {
       return;
     }
