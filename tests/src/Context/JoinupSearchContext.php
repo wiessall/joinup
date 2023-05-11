@@ -11,7 +11,6 @@ use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\joinup\Traits\BootstrapTrait;
 use Drupal\joinup\Traits\JavascriptTrait;
 use Drupal\joinup\Traits\KeyboardInteractionTrait;
-use Drupal\joinup\Traits\MaterialDesignTrait;
 use Drupal\joinup\Traits\SearchTrait;
 use Drupal\joinup\Traits\TraversingTrait;
 use Drupal\joinup\Traits\UtilityTrait;
@@ -25,7 +24,6 @@ class JoinupSearchContext extends RawDrupalContext {
   use BootstrapTrait;
   use JavascriptTrait;
   use KeyboardInteractionTrait;
-  use MaterialDesignTrait;
   use SearchTrait;
   use TraversingTrait;
   use UtilityTrait;
@@ -95,13 +93,6 @@ class JoinupSearchContext extends RawDrupalContext {
    */
   protected function findContentTab(string $type): ?NodeElement {
     $xpath = "//div[@data-drupal-facet-id]//span[@class='tab__text--type' and text() = '$type']/ancestor-or-self::a[@data-drupal-facet-item-id]";
-
-    // @todo Remove the if(..) block in ISAICP-7138.
-    // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7138
-    if ($this->usesMaterialDesignLite()) {
-      $xpath = "//div[contains(concat(' ', normalize-space(@class), ' '), ' tab__container ')]//span[@class='tab__text--lower'][normalize-space(string(.)) = '$type']/ancestor-or-self::a[@class and contains(concat(' ', normalize-space(@class), ' '), ' tab--content-type ')]";
-    }
-
     return $this->getSession()->getPage()->find('xpath', $xpath);
   }
 
@@ -162,12 +153,6 @@ class JoinupSearchContext extends RawDrupalContext {
   public function assertContentTypeFacetItemsPresent(string $labels): void {
     $labels = $this->explodeCommaSeparatedStepArgument($labels);
     $xpath = "//a[@data-drupal-facet-item-id]//span[contains(concat(' ', normalize-space(@class), ' '), ' tab__text--type ')]";
-
-    // @todo Remove the if(..) block in ISAICP-7138.
-    // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7138
-    if ($this->usesMaterialDesignLite()) {
-      $xpath = "//a[contains(concat(' ', normalize-space(@class), ' '), ' tab--content-type ')]//span[contains(concat(' ', normalize-space(@class), ' '), ' tab__text--lower ')]";
-    }
 
     $elements = $this->getSession()->getPage()->findAll('xpath', $xpath);
     $present = [];

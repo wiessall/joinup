@@ -35,11 +35,11 @@ Feature:
     Given I am logged in as a moderator
     When I click "Outdated content thresholds"
     Then I should see the heading "Outdated content thresholds"
-    When I check the material checkbox in the "Discussion (Content)" table row
+    When I check the "Discussion (Content)" row
     And I fill in "config[node:discussion][threshold]" with "4"
-    And I check the material checkbox in the "Event (Content)" table row
+    And I check the "Event (Content)" row
     And I fill in "config[node:event][threshold]" with "1"
-    And I check the material checkbox in the "News (Content)" table row
+    And I check the "News (Content)" row
     And I fill in "config[node:news][threshold]" with "1"
     When I press "Save configuration"
 
@@ -100,7 +100,7 @@ Feature:
 
     # Cleanup configuration.
     When I click "Outdated content thresholds"
-    And I uncheck the material checkbox in the "Discussion (Content)" table row
-    And I uncheck the material checkbox in the "Event (Content)" table row
-    And I uncheck the material checkbox in the "News (Content)" table row
+    And I uncheck the "Discussion (Content)" row
+    And I uncheck the "Event (Content)" row
+    And I uncheck the "News (Content)" row
     When I press "Save configuration"
