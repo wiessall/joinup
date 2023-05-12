@@ -270,12 +270,13 @@ display:
         - 'config:search_api.index.published'
         - 'config:views.view.discussions'
         - 'search_api_list:published'
-  discussions:
-    id: discussions
+  overview:
+    id: overview
     display_title: Page
     display_plugin: page
     position: 1
     display_options:
+      display_description: ''
       display_extenders:
         metatag_display_extender:
           metatags: {  }
