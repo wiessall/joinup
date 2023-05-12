@@ -35,7 +35,11 @@ function ventuno_preprocess_rdf_entity__view_mode_tile(array &$variables, string
   $entity = $variables[$entity_type_id];
   $route_match = \Drupal::routeMatch();
   $route_name = $route_match->getRouteName();
-  if ($route_name == 'view.search.page_1') {
+  // Routes where tiles must be horizontal.
+  $routes_horizontal_tiles = [
+    'view.search.page_1'
+  ];
+  if (in_array($route_name, $routes_horizontal_tiles)) {
     $variables['horizontal'] = TRUE;
   }
 
