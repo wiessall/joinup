@@ -57,7 +57,12 @@
   }
   &__title {
     font-size: 1.125rem;
-    // Limit to 2 lines
+  }
+  &__text {
+    color: $gray-700;
+  }
+  &__title,
+  &__text {
     display: -webkit-box;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 2;
