@@ -48,6 +48,11 @@ tile:
       label: 'Title suffix'
       description: 'Variable coming from Drupal that may content important stuff such as contextual links.'
       preview: ''
+    text:
+      type: text
+      label: 'Text'
+      description: 'Descritpion of the content.'
+      preview: 'Lorem ipsum dolor sit amet is the standard in typesetting industry.'
     action:
       type: object
       label: 'Action'

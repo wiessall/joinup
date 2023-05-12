@@ -7,6 +7,7 @@
 
 declare(strict_types = 1);
 
+use Drupal\joinup_bundle_class\DescriptionInterface;
 use Drupal\joinup_bundle_class\LogoInterface;
 use Drupal\joinup_community_content\Entity\CommunityContentInterface;
 use Drupal\joinup_core\Controller\IdRedirect;
@@ -47,6 +48,9 @@ function _ventuno_preprocess_tile(array &$variables, string $entity_type_id): vo
   $variables['image'] = ($entity instanceof LogoInterface) && $entity->getLogoAsFile()
     ? $entity->getLogoAsRenderArray($variables['view_mode'])
     : [];
+
+  // Text.
+  $variables['text'] = $entity instanceof DescriptionInterface && isset($variables['content'][$entity->getDescriptionField()]) ? $variables['content'][$entity->getDescriptionField()] : NULL;
 
   // Topics.
   $topics = ($entity instanceof TopicReferencingEntityInterface) ? $entity->getTopics() : NULL;

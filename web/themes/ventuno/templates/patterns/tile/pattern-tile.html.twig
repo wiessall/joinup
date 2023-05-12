@@ -16,6 +16,7 @@
     - title_prefix ()
     - label (string) (default: '')
     - title_suffix ()
+    - text (string) (default: '')
     - action (object) (default: {})
     - badges (array) (default: [])
     - extra_data (array of objects) (default: [])
@@ -31,6 +32,7 @@
   {% set _title_prefix = title_prefix|default('') %}
   {% set _label = label|default('') %}
   {% set _title_suffix = title_suffix|default('') %}
+  {% set _text = text|default({}) %}
   {% set _action = action|default({}) %}
   {% set _badges = badges|default([]) %}
   {% set _extra_data = extra_data|default([]) %}
@@ -90,6 +92,9 @@
               {{ _label }}
             </a>
           </h1>
+          {% if _horizontal and _text is not empty %}
+            <div class="tile__text my-1">{{ _text }}</div>
+          {% endif %}
           {{ _action }}
         </div>
         {%- if _badges is not empty and _badges is iterable -%}
