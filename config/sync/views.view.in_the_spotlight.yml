@@ -3,7 +3,7 @@ langcode: en
 status: true
 dependencies:
   config:
-    - core.entity_view_mode.node.numbered_listing
+    - core.entity_view_mode.node.view_mode_tile
     - entityqueue.entity_queue.spotlight
   module:
     - entityqueue
@@ -75,7 +75,7 @@ display:
           hide_empty: false
           empty_zero: false
           hide_alter_empty: true
-          view_mode: numbered_listing
+          view_mode: view_mode_tile
       pager:
         type: some
         options:
@@ -131,10 +131,14 @@ display:
             operator_list: {  }
       style:
         type: default
+        options:
+          grouping: {  }
+          row_class: ''
+          default_row_class: false
       row:
         type: fields
         options:
-          default_field_elements: true
+          default_field_elements: false
           inline: {  }
           separator: ''
           hide_empty: false
@@ -168,37 +172,49 @@ display:
         - 'user.node_grants:view'
         - user.permissions
       tags:
+        - 'config:core.entity_view_display.node.custom_page.carousel'
         - 'config:core.entity_view_display.node.custom_page.default'
+        - 'config:core.entity_view_display.node.custom_page.tile_two'
         - 'config:core.entity_view_display.node.custom_page.view_mode_featured'
         - 'config:core.entity_view_display.node.custom_page.view_mode_tile'
+        - 'config:core.entity_view_display.node.discussion.carousel'
         - 'config:core.entity_view_display.node.discussion.default'
         - 'config:core.entity_view_display.node.discussion.digest_message'
         - 'config:core.entity_view_display.node.discussion.moderation'
         - 'config:core.entity_view_display.node.discussion.numbered_listing'
         - 'config:core.entity_view_display.node.discussion.view_mode_featured'
         - 'config:core.entity_view_display.node.discussion.view_mode_tile'
+        - 'config:core.entity_view_display.node.document.carousel'
         - 'config:core.entity_view_display.node.document.default'
         - 'config:core.entity_view_display.node.document.digest_message'
+        - 'config:core.entity_view_display.node.document.highlighted'
         - 'config:core.entity_view_display.node.document.moderation'
         - 'config:core.entity_view_display.node.document.numbered_listing'
+        - 'config:core.entity_view_display.node.document.tile_two'
         - 'config:core.entity_view_display.node.document.view_mode_featured'
         - 'config:core.entity_view_display.node.document.view_mode_tile'
+        - 'config:core.entity_view_display.node.event.carousel'
         - 'config:core.entity_view_display.node.event.default'
         - 'config:core.entity_view_display.node.event.digest_message'
         - 'config:core.entity_view_display.node.event.explore_item'
         - 'config:core.entity_view_display.node.event.highlighted'
+        - 'config:core.entity_view_display.node.event.highlighted_event'
         - 'config:core.entity_view_display.node.event.moderation'
         - 'config:core.entity_view_display.node.event.numbered_listing'
+        - 'config:core.entity_view_display.node.event.tile_two'
         - 'config:core.entity_view_display.node.event.view_mode_featured'
         - 'config:core.entity_view_display.node.event.view_mode_tile'
         - 'config:core.entity_view_display.node.glossary.default'
         - 'config:core.entity_view_display.node.glossary.view_mode_tile'
+        - 'config:core.entity_view_display.node.news.carousel'
         - 'config:core.entity_view_display.node.news.dated_listing'
         - 'config:core.entity_view_display.node.news.default'
         - 'config:core.entity_view_display.node.news.digest_message'
         - 'config:core.entity_view_display.node.news.explore_item'
+        - 'config:core.entity_view_display.node.news.highlighted'
         - 'config:core.entity_view_display.node.news.moderation'
         - 'config:core.entity_view_display.node.news.numbered_listing'
+        - 'config:core.entity_view_display.node.news.tile_two'
         - 'config:core.entity_view_display.node.news.view_mode_featured'
         - 'config:core.entity_view_display.node.news.view_mode_tile'
         - 'config:core.entity_view_display.node.tallinn_report.default'
@@ -215,7 +231,10 @@ display:
     display_plugin: block
     position: 1
     display_options:
-      display_extenders: {  }
+      display_extenders:
+        metatag_display_extender:
+          metatags: {  }
+          tokenize: false
     cache_metadata:
       max-age: -1
       contexts:
@@ -223,37 +242,49 @@ display:
         - 'user.node_grants:view'
         - user.permissions
       tags:
+        - 'config:core.entity_view_display.node.custom_page.carousel'
         - 'config:core.entity_view_display.node.custom_page.default'
+        - 'config:core.entity_view_display.node.custom_page.tile_two'
         - 'config:core.entity_view_display.node.custom_page.view_mode_featured'
         - 'config:core.entity_view_display.node.custom_page.view_mode_tile'
+        - 'config:core.entity_view_display.node.discussion.carousel'
         - 'config:core.entity_view_display.node.discussion.default'
         - 'config:core.entity_view_display.node.discussion.digest_message'
         - 'config:core.entity_view_display.node.discussion.moderation'
         - 'config:core.entity_view_display.node.discussion.numbered_listing'
         - 'config:core.entity_view_display.node.discussion.view_mode_featured'
         - 'config:core.entity_view_display.node.discussion.view_mode_tile'
+        - 'config:core.entity_view_display.node.document.carousel'
         - 'config:core.entity_view_display.node.document.default'
         - 'config:core.entity_view_display.node.document.digest_message'
+        - 'config:core.entity_view_display.node.document.highlighted'
         - 'config:core.entity_view_display.node.document.moderation'
         - 'config:core.entity_view_display.node.document.numbered_listing'
+        - 'config:core.entity_view_display.node.document.tile_two'
         - 'config:core.entity_view_display.node.document.view_mode_featured'
         - 'config:core.entity_view_display.node.document.view_mode_tile'
+        - 'config:core.entity_view_display.node.event.carousel'
         - 'config:core.entity_view_display.node.event.default'
         - 'config:core.entity_view_display.node.event.digest_message'
         - 'config:core.entity_view_display.node.event.explore_item'
         - 'config:core.entity_view_display.node.event.highlighted'
+        - 'config:core.entity_view_display.node.event.highlighted_event'
         - 'config:core.entity_view_display.node.event.moderation'
         - 'config:core.entity_view_display.node.event.numbered_listing'
+        - 'config:core.entity_view_display.node.event.tile_two'
         - 'config:core.entity_view_display.node.event.view_mode_featured'
         - 'config:core.entity_view_display.node.event.view_mode_tile'
         - 'config:core.entity_view_display.node.glossary.default'
         - 'config:core.entity_view_display.node.glossary.view_mode_tile'
+        - 'config:core.entity_view_display.node.news.carousel'
         - 'config:core.entity_view_display.node.news.dated_listing'
         - 'config:core.entity_view_display.node.news.default'
         - 'config:core.entity_view_display.node.news.digest_message'
         - 'config:core.entity_view_display.node.news.explore_item'
+        - 'config:core.entity_view_display.node.news.highlighted'
         - 'config:core.entity_view_display.node.news.moderation'
         - 'config:core.entity_view_display.node.news.numbered_listing'
+        - 'config:core.entity_view_display.node.news.tile_two'
         - 'config:core.entity_view_display.node.news.view_mode_featured'
         - 'config:core.entity_view_display.node.news.view_mode_tile'
         - 'config:core.entity_view_display.node.tallinn_report.default'
