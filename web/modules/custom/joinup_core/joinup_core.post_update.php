@@ -23,11 +23,11 @@ use Drupal\sparql_entity_storage\UriEncoder;
  * Create "Discussions" OG menu item.
  */
 function joinup_core_post_update_109300(array &$sandbox): string {
-  $db = \Drupal::database();
+  $db = Drupal::database();
   /** @var \Drupal\Core\Menu\MenuLinkManagerInterface $menu_link_manager */
-  $menu_link_manager = \Drupal::service('plugin.manager.menu.link');
+  $menu_link_manager = Drupal::service('plugin.manager.menu.link');
   /** @var \Drupal\Component\Uuid\UuidInterface $uuid_generator */
-  $uuid_generator = \Drupal::service('uuid');
+  $uuid_generator = Drupal::service('uuid');
 
   if (!isset($sandbox['data'])) {
     $sql = "SELECT 
@@ -44,133 +44,102 @@ function joinup_core_post_update_109300(array &$sandbox): string {
 
     $sandbox['mid'] = (int) $db->query("SELECT MAX(id) FROM {menu_link_content}")
       ->fetchField();
-    $sandbox['created'] = \Drupal::time()->getRequestTime();
+    $sandbox['created'] = Drupal::time()->getRequestTime();
     $sandbox['progress'] = 0;
     $sandbox['count'] = count($sandbox['data']);
   }
 
   $spliced = array_splice($sandbox['data'], 0, 300);
-
-  $base_table = $db->insert('menu_link_content')
-    ->fields(['id', 'revision_id', 'bundle', 'uuid', 'langcode']);
-  $base_revision_table = $db->insert('menu_link_content_revision')
-    ->fields([
-      'id',
-      'revision_id',
-      'langcode',
-      'revision_default',
-      'revision_created',
-    ]);
-  $data_table = $db->insert('menu_link_content_data')
-    ->fields([
-      'id',
-      'revision_id',
-      'bundle',
-      'langcode',
-      'title',
-      'menu_name',
-      'link__uri',
-      'link__options',
-      'external',
-      'rediscover',
-      'weight',
-      'expanded',
-      'enabled',
-      'changed',
-      'default_langcode',
-      'revision_translation_affected',
-    ]);
-  $data_revision_table = $db->insert('menu_link_content_field_revision')
-    ->fields([
-      'id',
-      'revision_id',
-      'langcode',
-      'title',
-      'link__uri',
-      'link__options',
-      'external',
-      'enabled',
-      'changed',
-      'default_langcode',
-      'revision_translation_affected',
-    ]);
-
-
   foreach ($spliced as $data) {
     $sandbox['mid']++;
-
     $uuid = $uuid_generator->generate();
     $group_id = UriEncoder::encodeUrl($data->group_id);
 
-    $values = [
-      'id' => $sandbox['mid'],
-      'revision_id' => $sandbox['mid'],
-      'langcode' => 'en',
-    ];
-    $base_table->values($values + [
-        'bundle' => 'menu_link_content',
-        'uuid' => $uuid,
-      ]);
-    $base_revision_table->values($values + [
-        'revision_default' => 1,
-        'revision_created' => $sandbox['created'],
-      ]);
-    $values += [
-      'title' => 'Discussions',
-      'link__uri' => "route:view.discussions.overview;rdf_entity=$group_id",
-      'link__options' => serialize([]),
-      'external' => 0,
-      'enabled' => 1,
-      'changed' => $sandbox['created'],
-      'default_langcode' => 1,
-      'revision_translation_affected' => 1,
-    ];
-    $data_revision_table->values($values);
-    $values += [
-      'bundle' => 'menu_link_content',
-      'menu_name' => $data->menu_name,
-      'rediscover' => 0,
-      'weight' => $data->weight,
-      'expanded' => 0,
-    ];
-    $data_table->values($values);
+    $transaction = $db->startTransaction();
+    try {
+      // Make a space between Members and the next menu item.
+      $db->update('menu_link_content_data')
+        ->expression('weight', 'weight + 1')
+        ->condition('menu_name', $data->menu_name)
+        ->condition('weight', $data->weight, '>=')
+        ->execute();
+      $db->update('menu_tree')
+        ->expression('weight', 'weight + 1')
+        ->condition('menu_name', $data->menu_name)
+        ->condition('weight', $data->weight, '>=')
+        ->execute();
 
-    $id = "menu_link_content:$uuid";
-    $definition = [
-      'menu_name' => $data->menu_name,
-      'route_name' => 'view.discussions.overview',
-      'route_parameters' => [
-        'rdf_entity' => $group_id,
-      ],
-      'title' => 'Discussions',
-      'class' => MenuLinkContent::class,
-      'provider' => 'menu_link_content',
-      'options' => [],
-      'enabled' => 1,
-      'weight' => $data->weight,
-      'metadata' => [
-        'entity_id' => $sandbox['mid'],
-      ],
-      'form_class' => MenuLinkContentForm::class,
-    ];
-    $menu_link_manager->addDefinition($id, $definition);
+
+      $values = [
+        'id' => $sandbox['mid'],
+        'revision_id' => $sandbox['mid'],
+        'langcode' => 'en',
+      ];
+
+      $db->insert('menu_link_content')
+        ->fields($values + [
+            'bundle' => 'menu_link_content',
+            'uuid' => $uuid,
+          ])
+        ->execute();
+      $db->insert('menu_link_content_revision')->fields($values + [
+          'revision_default' => 1,
+          'revision_created' => $sandbox['created'],
+        ])
+        ->execute();
+
+      $values += [
+        'title' => 'Discussions',
+        'link__uri' => "route:view.discussions.overview;rdf_entity=$group_id",
+        'link__options' => serialize([]),
+        'external' => 0,
+        'enabled' => 1,
+        'changed' => $sandbox['created'],
+        'default_langcode' => 1,
+        'revision_translation_affected' => 1,
+      ];
+
+      $db->insert('menu_link_content_data')
+        ->fields($values + [
+            'bundle' => 'menu_link_content',
+            'menu_name' => $data->menu_name,
+            'rediscover' => 0,
+            'weight' => $data->weight,
+            'expanded' => 0,
+          ])
+        ->execute();
+      $db->insert('menu_link_content_field_revision')->fields($values)
+        ->execute();
+
+
+      $definition = [
+        'menu_name' => $data->menu_name,
+        'route_name' => 'view.discussions.overview',
+        'route_parameters' => [
+          'rdf_entity' => $group_id,
+        ],
+        'title' => 'Discussions',
+        'class' => MenuLinkContent::class,
+        'provider' => 'menu_link_content',
+        'options' => [],
+        'enabled' => 1,
+        'weight' => $data->weight,
+        'metadata' => [
+          'entity_id' => $sandbox['mid'],
+        ],
+        'form_class' => MenuLinkContentForm::class,
+      ];
+      $menu_link_manager->addDefinition("menu_link_content:$uuid", $definition);
+    }
+    catch (\Exception $exception) {
+      $transaction->rollBack();
+
+      throw $exception;
+    }
 
     $sandbox['progress']++;
   }
 
-  $transaction = $db->startTransaction();
-  try {
-    $base_table->execute();
-    $base_revision_table->execute();
-    $data_table->execute();
-    $data_revision_table->execute();
-  }
-  catch (\Exception $exception) {
-    $transaction->rollBack();
-    throw new \Exception($exception->getMessage(), $exception->getCode(), $exception);
-  }
-
   $sandbox['#finished'] = (int) empty($sandbox['data']);
-
   return "Processed {$sandbox['progress']} out of {$sandbox['count']}.";
 }
