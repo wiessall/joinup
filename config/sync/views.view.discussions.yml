@@ -113,7 +113,7 @@ display:
           sort_asc_label: Asc
           sort_desc_label: Desc
       access:
-        type: none
+        type: joinup_group_results_required
         options: {  }
       cache:
         type: search_api_tag
