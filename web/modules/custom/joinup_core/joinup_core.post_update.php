@@ -76,12 +76,14 @@ function joinup_core_post_update_109300(array &$sandbox): string {
       ];
 
       $db->insert('menu_link_content')
-        ->fields($values + [
+        ->fields($values +
+          [
             'bundle' => 'menu_link_content',
             'uuid' => $uuid,
           ])
         ->execute();
-      $db->insert('menu_link_content_revision')->fields($values + [
+      $db->insert('menu_link_content_revision')->fields($values +
+        [
           'revision_default' => 1,
           'revision_created' => $sandbox['created'],
         ])
@@ -99,7 +101,8 @@ function joinup_core_post_update_109300(array &$sandbox): string {
       ];
 
       $db->insert('menu_link_content_data')
-        ->fields($values + [
+        ->fields($values +
+          [
             'bundle' => 'menu_link_content',
             'menu_name' => $data->menu_name,
             'rediscover' => 0,
