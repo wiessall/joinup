@@ -3,19 +3,19 @@ main:
   version: VERSION
   css:
     base:
-      assets/css/base.css: {}
+      assets/css/base.min.css: { minified: true }
 
 layout:
   version: VERSION
   css:
     layout:
-      assets/css/layout.css: {}
+      assets/css/layout.min.css: { minified: true }
 
 components:
   version: VERSION
   css:
     component:
-      assets/css/components.css: {}
+      assets/css/components.min.css: { minified: true }
   dependencies:
     - ventuno/components.js
 
@@ -30,7 +30,7 @@ theme:
   version: VERSION
   css:
     theme:
-      assets/css/theme.css: {}
+      assets/css/theme.min.css: { minified: true }
 
 # Pages
 homepage:
@@ -67,11 +67,6 @@ button-group:
   css:
     theme:
       assets/css/button-group.min.css: { minified: true }
-
-card:
-  css:
-    theme:
-      assets/css/card.min.css: { minified: true }
 
 close:
   css:
@@ -144,6 +139,11 @@ tabs:
   css:
     theme:
       assets/css/tabs.min.css: { minified: true }
+
+tile:
+  css:
+    theme:
+      assets/css/tile.min.css: { minified: true }
 
 # Custom and hybrid (BCL + custom) components
 footer:
@@ -324,16 +324,3 @@ user--group-header:
   css:
     theme:
       assets/css/user--group-header.min.css: {}
-
-# @todo ISAICP-7138 remove following library when switch to Ventuno theme is complete
-bootstrap-base:
-  css:
-    component:
-      assets/css/bootstrap-base.min.css: { minified: true }
-  js:
-    assets/js/oe-bcl-joinup.bundle.min.js: { minified: true, attributes: { defer: true } }
-
-# @todo ISAICP-7138 remove following library when switch to Ventuno theme is complete
-navbar--sticky:
-  js:
-    assets/js/sticky-menu.min.js: { minified: true, attributes: { defer: true } }
