@@ -25,7 +25,6 @@ class BuildCommands extends AbstractCommands {
    * - Uses the `--worktree-attributes` option of `git archive` to filter out
    *   non-production code.
    * - Uses the `drupal:settings` command to build the `settings.php` file.
-   * - Compiles SCSS to CSS for the old `joinup_theme` theme.
    * - The Git tag and commit hash are computed, if not passed.
    *
    * @param array $options
@@ -61,17 +60,6 @@ class BuildCommands extends AbstractCommands {
       ->arg('drupal:settings')
       ->arg('prod')
       ->option('root', "{$distDir}/web");
-
-    $tasks[] = $this->taskFilesystemStack()
-      ->mkdir("{$distDir}/web/themes/joinup/css");
-
-    // Compile the SCSS to CSS for the old `joinup_theme` theme.
-    $scssMap = [
-      $config->get('themes.joinup_theme.scss.input') => "{$distDir}/web/themes/joinup/css/style.min.css",
-    ];
-    $tasks[] = $this->taskScss($scssMap)
-      ->setFormatter('ScssPhp\\ScssPhp\\Formatter\\' . ucfirst($config->get('themes.joinup_theme.scss.style')))
-      ->addImportPath($config->get('themes.joinup_theme.scss.import_dir'));
 
     // Prepare sha and tag variables.
     $tag = $this->getGitTag();

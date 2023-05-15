@@ -75,7 +75,7 @@ class JoinupCommunityContentContext extends RawDrupalContext {
     }
 
     /** @var \Behat\Mink\Element\NodeElement $parent */
-    $parent = $share->find('xpath', "/ancestor::article[contains(concat(' ', normalize-space(@class), ' '), ' card--tile ')]");
+    $parent = $share->find('xpath', "/ancestor::article[contains(concat(' ', normalize-space(@class), ' '), ' tile ')]");
     if (!$parent) {
       throw new \Exception("The tile '$heading' has faulty markup for the shared content visual cue.");
     }
@@ -539,11 +539,11 @@ class JoinupCommunityContentContext extends RawDrupalContext {
     }
 
     // Check title text.
-    $actual_title = $block_element->find('css', 'article h2')->getText();
+    $actual_title = $block_element->find('css', 'article h1')->getText();
     Assert::assertEquals($content->label(), $actual_title, sprintf('Expected the Highlighted content to have the title "%s" but instead found "%s".', $content->label(), $actual_title));
 
     // Check that title links to the canonical page of the content.
-    $xpath = '//h2/a[@href = "' . $this->getEntityUri($content) . '"]';
+    $xpath = '//h1/a[@href = "' . $this->getEntityUri($content) . '"]';
     Assert::assertNotEmpty($block_element->find('xpath', $xpath), sprintf('%s "%s" does not link to the canonical page.', $content->getType(), $actual_title));
 
     // Retrieve the topics from the content, limiting the result to maximum 2

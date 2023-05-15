@@ -15,8 +15,6 @@ use PHPUnit\Framework\Assert;
  */
 trait TraversingTrait {
 
-  use MaterialDesignTrait;
-
   /**
    * Searches for any kind of field in a form by label.
    *
@@ -239,7 +237,7 @@ trait TraversingTrait {
    * @return \Behat\Mink\Element\NodeElement[]
    *   An array of tiles elements, keyed by tile title.
    */
-  protected function getTiles($region = NULL): array {
+  protected function getTiles(?string $region = NULL): array {
     /** @var \Behat\Mink\Element\DocumentElement $regionObj */
     if ($region === NULL) {
       $regionObj = $this->getSession()->getPage();
@@ -252,10 +250,8 @@ trait TraversingTrait {
       '.card-title',
       '.card-title > h1 a',
       'h2 a',
+      'h1.tile__title',
       'h1.tile-two__title',
-      // @todo Legacy selectors to be removed in ISAICP-7138.
-      // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7138
-      '.listing__title',
       '.slide__title',
     ]);
 
@@ -286,12 +282,6 @@ trait TraversingTrait {
    */
   protected function getTileByHeading(string $heading): NodeElement {
     $selectors = [
-      // @todo The `.listing__item--tile` selector is part of the original
-      //   Joinup theme and can be removed once we have fully migrated to the
-      //   new theme.
-      // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7138
-      'card--tile',
-      'listing__item--tile',
       'tile',
       'tile-two',
     ];
@@ -326,25 +316,12 @@ trait TraversingTrait {
    *   Thrown when the element is not found.
    */
   protected function getListingByHeading(string $type, string $heading): NodeElement {
-    $selectors = [
-      // Selector for the old theme.
-      // @todo This can be removed once we are fully migrated to the new theme.
-      '//*[@class and contains(concat(" ", normalize-space(@class), " "), " ' . $type . ' ")][.//*[@class and contains(concat(" ", normalize-space(@class), " "), " listing__title ") or contains(concat(" ", normalize-space(@class), " "), " card-title ")][normalize-space()="' . $heading . '"]]',
-      // Selector for generic tiles.
-      // @todo Keep only h1 selector when tiles refactor.
-      '//*[@class and contains(concat(" ", normalize-space(@class), " "), " ' . $type . ' ")][.//h1[normalize-space()="' . $heading . '"] or .//h2[normalize-space()="' . $heading . '"] or .//h3[normalize-space()="' . $heading . '"]]',
-    ];
-
-    foreach ($selectors as $selector) {
-      $item = $this->getSession()->getPage()->find('xpath', $selector);
-      if ($item) {
-        return $item;
-      }
+    // @todo Keep only h1 selector when tiles refactor.
+    $xpath = '//*[@class and contains(concat(" ", normalize-space(@class), " "), " ' . $type . ' ")][.//h1[normalize-space()="' . $heading . '"]]';
+    if (!$element = $this->getSession()->getPage()->find('xpath', $xpath)) {
+      throw new ElementNotFoundException($this->getSession()->getDriver(), "'$heading' $type item.");
     }
-
-    // Throw a specific exception, so it can be caught by steps that need to
-    // assert that a tile is not present.
-    throw new ElementNotFoundException($this->getSession()->getDriver(), "'$heading' $type item.");
+    return $element;
   }
 
   /**
@@ -423,58 +400,6 @@ trait TraversingTrait {
     }
 
     return $mappings[$alias];
-  }
-
-  /**
-   * Gets the date or time component of a date sub-field in a date range field.
-   *
-   * @param string $field
-   *   The date range field name.
-   * @param string $component
-   *   The sub-field component. Either "date" or "time".
-   * @param string|null $date
-   *   (optional) The sub-field name. Either "start" or "end". If left empty, it
-   *   is assumed that the field is a simple datetime field and not a range,
-   *   thus, the date or time components are looked in the whole field.
-   *
-   * @return \Behat\Mink\Element\NodeElement
-   *   The date or time component element.
-   *
-   * @throws \Exception
-   *   Thrown when the date range field is not found.
-   *
-   * @todo Remove following protected function in ISAICP-7138.
-   * @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7138
-   */
-  protected function findMaterialDesignDateRangeComponent(string $field, string $component, ?string $date = NULL): NodeElement {
-    /** @var \Behat\Mink\Element\NodeElement $fieldset */
-    $fieldset = $this->getSession()->getPage()->find(
-      'named',
-      ['fieldset', $field]
-    );
-
-    if (!$fieldset) {
-      throw new \Exception("The '$field' field was not found.");
-    }
-
-    if ($date !== NULL) {
-      $date = ucfirst($date) . ' date';
-      /** @var \Behat\Mink\Element\NodeElement $element */
-      $element = $fieldset->find('xpath', '//h4[text()="' . $date . '"]//following-sibling::div[1]');
-      if (!$element) {
-        throw new \Exception("The '$date' sub-field of the '$field' field was not found.");
-      }
-    }
-    else {
-      $element = $fieldset;
-    }
-
-    $component_node = $element->findField(ucfirst($component));
-    if (!$component_node) {
-      throw new \Exception("The '$component' component for the '$field' '$element' was not found.");
-    }
-
-    return $component_node;
   }
 
   /**
@@ -662,7 +587,7 @@ trait TraversingTrait {
    * Returns elements that match the given human readable identifier.
    *
    * @param string $alias
-   *   A human readable element identifier.
+   *   A human-readable element identifier.
    *
    * @return \Behat\Mink\Element\NodeElement[]
    *   The elements matching the identifier.
@@ -774,11 +699,8 @@ trait TraversingTrait {
   protected function getTileCssSelector(): string {
     return implode(', ', [
       '.card .card-title',
-      'article.card--tile h2',
+      'article.tile h1',
       'article.tile.tile-two',
-      // @todo Legacy selectors to be removed in ISAICP-7138.
-      // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7138
-      '.listing__item--tile .listing__title',
       'article.slide',
     ]);
   }
