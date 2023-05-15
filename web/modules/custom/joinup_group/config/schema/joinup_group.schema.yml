@@ -73,3 +73,7 @@ views.field.joinup_group_announcement_edit_link:
 views.access.joinup_group_announcements:
   type: mapping
   label: 'Group announcements access'
+
+views.access.joinup_group_results_required:
+  type: mapping
+  label: 'Group results required access'
