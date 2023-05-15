@@ -18,9 +18,31 @@ use Drupal\paragraphs\Entity\Paragraph;
 use Drupal\search_api\Entity\Index;
 
 /**
+ * Clean up problematic graph in the production database.
+ */
+function joinup_core_deploy_109300(): string {
+  $query = <<<QUERY
+DELETE {
+  GRAPH ?g {
+    ?s ?p ?o .
+  }
+}
+WHERE {
+  GRAPH ?g {
+    ?s ?p ?o .
+  }
+  FILTER (STRSTARTS(STR(?g), "no prefix"))
+}
+QUERY;
+
+  \Drupal::getContainer()->get('sparql.endpoint')->query($query);
+  return "Graph has been deleted";
+}
+
+/**
  * Update the 'show archived' for the group content fields.
  */
-function joinup_core_deploy_109300(): void {
+function joinup_core_deploy_109301(): void {
   $graphs = [
     'http://joinup.eu/collection/published',
     'http://joinup.eu/collection/draft',
@@ -64,7 +86,7 @@ QUERY;
 /**
  * Update the 'show archived' for the paragraph content listing fields.
  */
-function joinup_core_deploy_109301(): void {
+function joinup_core_deploy_109302(): void {
   $query = \Drupal::entityQuery('paragraph')
     ->condition('type', [
       'content_listing',
@@ -86,7 +108,7 @@ function joinup_core_deploy_109301(): void {
 /**
  * Add state value to custom page nodes.
  */
-function joinup_core_deploy_109302(?array &$sandbox = []): string {
+function joinup_core_deploy_109303(?array &$sandbox = []): string {
   $node_storage = \Drupal::entityTypeManager()->getStorage('node');
 
   if (!isset($sandbox['ids'])) {
