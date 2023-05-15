@@ -51,9 +51,9 @@ class ResultsRequiredAccessCheck implements AccessInterface {
     $view = Views::getView($viewId);
     $view->execute($displayId);
 
-    return AccessResult::allowedIf($view->total_rows > 0)
+    return AccessResult::allowedIf($group->isPublished() && $view->total_rows > 0)
       ->addCacheTags(Cache::buildTags('og-group-content', $group->getCacheTags()))
-      ->addCacheContexts($group->getCacheContexts());
+      ->addCacheContexts(['og_group_context']);
   }
 
 }

@@ -87,11 +87,7 @@ class GroupResultsRequiredAccess extends AccessPluginBase implements CacheableDe
    * {@inheritdoc}
    */
   public function getCacheContexts(): array {
-    if (!$group = $this->groupManager->getGroupFromContext()) {
-      return [];
-    }
-
-    return $group->getCacheContexts();
+    return ['og_group_context'];
   }
 
   /**
@@ -102,7 +98,7 @@ class GroupResultsRequiredAccess extends AccessPluginBase implements CacheableDe
       return [];
     }
 
-    return $group->getCacheTags();
+    return Cache::buildTags('og-group-content', $group->getCacheTags());
   }
 
 }

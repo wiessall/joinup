@@ -81,6 +81,6 @@ services:
       - { name: access_check, applies_to: _joinup_group_announcements }
   joinup_group.results_required.access_checker:
     class: Drupal\joinup_group\Access\ResultsRequiredAccessCheck
-    arguments: [ '@joinup_group.group_manager' ]
+    arguments: ['@joinup_group.group_manager']
     tags:
       - { name: access_check, applies_to: _joinup_group_results_required }
