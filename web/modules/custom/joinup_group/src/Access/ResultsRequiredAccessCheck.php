@@ -14,8 +14,7 @@ use Drupal\joinup_group\JoinupGroupManagerInterface;
 use Symfony\Component\Routing\Route;
 
 /**
- * Provides a route access checker for _joinup_group_results_required route
- * requirement.
+ * Provides a route access checker for _joinup_group_results_required.
  */
 class ResultsRequiredAccessCheck implements AccessInterface {
 
@@ -24,6 +23,8 @@ class ResultsRequiredAccessCheck implements AccessInterface {
    *
    * @param \Drupal\joinup_group\JoinupGroupManagerInterface $groupManager
    *   Group manager.
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
+   *   Entity type manager.
    */
   public function __construct(
     protected JoinupGroupManagerInterface $groupManager,
