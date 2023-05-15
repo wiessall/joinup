@@ -69,7 +69,6 @@ function joinup_core_post_update_109300(array &$sandbox): string {
         ->condition('weight', $data->weight, '>=')
         ->execute();
 
-
       $values = [
         'id' => $sandbox['mid'],
         'revision_id' => $sandbox['mid'],
@@ -110,7 +109,6 @@ function joinup_core_post_update_109300(array &$sandbox): string {
         ->execute();
       $db->insert('menu_link_content_field_revision')->fields($values)
         ->execute();
-
 
       $definition = [
         'menu_name' => $data->menu_name,
