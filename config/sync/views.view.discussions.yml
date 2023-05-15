@@ -118,7 +118,18 @@ display:
       cache:
         type: search_api_tag
         options: {  }
-      empty: {  }
+      empty:
+        area_text_custom:
+          id: area_text_custom
+          table: views
+          field: area_text_custom
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: text_custom
+          empty: true
+          content: 'No discussions available.'
+          tokenize: false
       sorts:
         entity_created:
           id: entity_created
@@ -263,6 +274,7 @@ display:
       max-age: -1
       contexts:
         - 'languages:language_interface'
+        - og_group_context
         - url
         - url.query_args
         - 'user.node_grants:view'
@@ -286,6 +298,7 @@ display:
       max-age: -1
       contexts:
         - 'languages:language_interface'
+        - og_group_context
         - url
         - url.query_args
         - 'user.node_grants:view'
