@@ -62,7 +62,7 @@ class GroupResultsRequiredAccess extends AccessPluginBase implements CacheableDe
    * {@inheritdoc}
    */
   public function access(AccountInterface $account): bool {
-    if ($this->groupManager->getGroupFromContext()) {
+    if (!$this->groupManager->getGroupFromContext()) {
       throw new \LogicException("The Views 'joinup_group_results_required' can be used only in the context of a Joinup group.");
     }
 
