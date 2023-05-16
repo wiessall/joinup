@@ -43,6 +43,7 @@
   .tile-two {
     &__title {
       font-size: $h4-font-size;
+      font-weight: $font-weight-bold;
       &-link {
         color: $dark;
       }
