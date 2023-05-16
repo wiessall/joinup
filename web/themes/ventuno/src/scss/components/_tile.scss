@@ -28,7 +28,7 @@
     flex-shrink: 0;
   }
   &__info-text {
-    // Limit to 1 lines
+    // Limit to 1 line
     display: -webkit-box;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 1;
@@ -53,13 +53,7 @@
   }
   &__body {
     flex: 1 1 auto;
-    padding: $spacer * .5 $spacer * .5 0;
-  }
-  &__title {
-    font-size: 1.125rem;
-  }
-  &__text {
-    color: $gray-700;
+    padding: $spacer $spacer 0;
   }
   &__title,
   &__text {
@@ -69,7 +63,7 @@
     overflow: hidden;
   }
   &__footer {
-    padding: $spacer * .5;
+    padding: $spacer;
   }
   &__bundle-icon {
     background-color: lighten($warning, 30%);
@@ -97,35 +91,37 @@
   }
   &--horizontal {
     width: 100%;
-    flex-direction: row;
-    flex-wrap: wrap;
-    height: auto;
-    padding: $spacer;
-    .tile__figure {
-      width: 180px;
-      height: 180px;
-      aspect-ratio: 1 / 1;
-      & picture {
-        align-items: start;
+    @include media-breakpoint-up(md) {
+      flex-direction: row;
+      flex-wrap: wrap;
+      height: auto;
+      padding: $spacer;
+      .tile__figure {
+        width: 180px;
+        height: 180px;
+        aspect-ratio: 1 / 1;
+        & picture {
+          align-items: start;
+        }
       }
-    }
-    .tile__body {
-      flex: 1 1 calc(100% - 180px);
-      padding: 0 0 0 $spacer;
-      overflow-wrap: anywhere;
-    }
-    .tile__standout-info {
-      top: unset;
-      transform: translateX(calc(-100% - $spacer * 1.5));
-      bottom: $spacer * .5;
-      right: unset;
-    }
-    .tile__footer {
-      width: 100%;
-      align-self: end;
-      margin-top: $spacer;
-      border-top: $border-width solid $border-color;
-      padding: $spacer 0 0 0;
+      .tile__body {
+        flex: 1 1 calc(100% - 180px);
+        padding: 0 0 0 $spacer;
+        overflow-wrap: anywhere;
+      }
+      .tile__standout-info {
+        top: unset;
+        transform: translateX(calc(-100% - $spacer * 1.5));
+        bottom: $spacer * .5;
+        right: unset;
+      }
+      .tile__footer {
+        width: 100%;
+        align-self: end;
+        margin-top: $spacer;
+        border-top: $border-width solid $border-color;
+        padding: $spacer 0 0 0;
+      }
     }
   }
 }
