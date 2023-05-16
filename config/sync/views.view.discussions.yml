@@ -7,6 +7,7 @@ dependencies:
     - rdf_entity.rdfentity.solution
     - search_api.index.published
   module:
+    - joinup_discussion
     - joinup_group
     - joinup_material_design
     - search_api
@@ -113,7 +114,7 @@ display:
           sort_asc_label: Asc
           sort_desc_label: Desc
       access:
-        type: joinup_group_results_required
+        type: joinup_discussion_overview
         options: {  }
       cache:
         type: search_api_tag

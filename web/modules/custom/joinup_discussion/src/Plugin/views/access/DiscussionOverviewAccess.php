@@ -2,7 +2,7 @@
 
 declare(strict_types = 1);
 
-namespace Drupal\joinup_group\Plugin\views\access;
+namespace Drupal\joinup_discussion\Plugin\views\access;
 
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Cache\CacheableDependencyInterface;
@@ -13,20 +13,19 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Routing\Route;
 
 /**
- * Checks if view has some results.
+ * Discussion overview access.
  *
  * @ingroup views_access_plugins
  *
  * @ViewsAccess(
- *   id = "joinup_group_results_required",
- *   title = @Translation("Group - results required for view"),
- *   help = @Translation("View must contains some results."),
+ *   id = "joinup_discussion_overview",
+ *   title = @Translation("Discussion overview")
  * )
  */
-class GroupResultsRequiredAccess extends AccessPluginBase implements CacheableDependencyInterface {
+class DiscussionOverviewAccess extends AccessPluginBase implements CacheableDependencyInterface {
 
   /**
-   * Constructs a GroupResultsRequiredAccess object.
+   * Constructs a DiscussionOverviewAccess object.
    *
    * @param array $configuration
    *   A configuration array containing information about the plugin instance.
@@ -63,7 +62,7 @@ class GroupResultsRequiredAccess extends AccessPluginBase implements CacheableDe
    */
   public function access(AccountInterface $account): bool {
     if (!$this->groupManager->getGroupFromContext()) {
-      throw new \LogicException("The Views 'joinup_group_results_required' can be used only in the context of a Joinup group.");
+      throw new \LogicException("The Views 'joinup_group_discussion_overview' can be used only in the context of a Joinup group.");
     }
 
     return TRUE;
@@ -73,7 +72,7 @@ class GroupResultsRequiredAccess extends AccessPluginBase implements CacheableDe
    * {@inheritdoc}
    */
   public function alterRouteDefinition(Route $route): void {
-    $route->setRequirement('_joinup_group_results_required', 'TRUE');
+    $route->setRequirement('_joinup_discussion_overview', 'TRUE');
   }
 
   /**
