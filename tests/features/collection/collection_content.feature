@@ -97,7 +97,7 @@ Feature: Collection content
 
   Scenario: Content type facet labels should show the plural form when multiple results are available.
     Given I go to the homepage of the "Turin Egyptian Collection" collection
-    Then the "Discussion" content tab is displayed
+    Then the "Discussion" content tab is not displayed
     And the "Document" content tab is displayed
     And the "Event" content tab is displayed
     And I should see the link "1 News"
@@ -125,7 +125,7 @@ Feature: Collection content
       | Understand the restoration process | validated | Turin Egyptian Collection |
 
     Given I reload the page
-    Then the "Discussions" content tab is displayed
+    Then the "Discussions" content tab is not displayed
     And the "Documents" content tab is displayed
     And the "Events" content tab is displayed
     And I should see the link "2 News"
