@@ -21,27 +21,6 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class ExportStatisticsPerGroupForm extends ExportBatchedDataFormBase {
 
   /**
-   * The entity type manager.
-   *
-   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
-   */
-  protected $entityTypeManager;
-
-  /**
-   * The MySQL database connection.
-   *
-   * @var \Drupal\Core\Database\Database
-   */
-  protected $mysql;
-
-  /**
-   * The SPARQL database connection.
-   *
-   * @var \Drupal\sparql_entity_storage\Driver\Database\sparql\ConnectionInterface
-   */
-  protected $sparql;
-
-  /**
    * Constructs an ExportUserListForm.
    *
    * @param \Drupal\Core\Cache\CacheBackendInterface $cache
@@ -57,11 +36,9 @@ class ExportStatisticsPerGroupForm extends ExportBatchedDataFormBase {
    * @param \Drupal\sparql_entity_storage\Driver\Database\sparql\ConnectionInterface $sparql
    *   The SPARQL connection instance.
    */
-  public function __construct(CacheBackendInterface $cache, DateFormatterInterface $date_formatter, TimeInterface $time, EntityTypeManagerInterface $entityTypeManager, Connection $mysql, ConnectionInterface $sparql) {
+  public function __construct(protected CacheBackendInterface $cache, protected DateFormatterInterface $date_formatter, protected TimeInterface $time, protected EntityTypeManagerInterface $entityTypeManager, protected Connection $mysql, protected ConnectionInterface $sparql) {
     parent::__construct($cache, $date_formatter, $time);
-    $this->entityTypeManager = $entityTypeManager;
-    $this->mysql = $mysql;
-    $this->sparql = $sparql;
+
   }
 
   /**

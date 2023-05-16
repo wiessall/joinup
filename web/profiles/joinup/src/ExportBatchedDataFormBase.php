@@ -21,48 +21,16 @@ use Symfony\Component\HttpFoundation\Response;
 abstract class ExportBatchedDataFormBase extends FormBase {
 
   /**
-   * The entity type manager.
-   *
-   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
-   */
-  protected $entityTypeManager;
-
-  /**
-   * The default cache bin.
-   *
-   * @var \Drupal\Core\Cache\CacheBackendInterface
-   */
-  protected $cacheStorage;
-
-  /**
-   * The date formatter service.
-   *
-   * @var \Drupal\Core\Datetime\DateFormatterInterface
-   */
-  protected $dateFormatter;
-
-  /**
-   * The time service.
-   *
-   * @var \Drupal\Component\Datetime\TimeInterface
-   */
-  protected $time;
-
-  /**
    * Constructs an ExportUserListForm.
    *
-   * @param \Drupal\Core\Cache\CacheBackendInterface $cache
+   * @param \Drupal\Core\Cache\CacheBackendInterface $cacheStorage
    *   The default cache bin.
-   * @param \Drupal\Core\Datetime\DateFormatterInterface $date_formatter
+   * @param \Drupal\Core\Datetime\DateFormatterInterface $dateFormatter
    *   The date formatter service.
    * @param \Drupal\Component\Datetime\TimeInterface $time
    *   The time service.
    */
-  public function __construct(CacheBackendInterface $cache, DateFormatterInterface $date_formatter, TimeInterface $time) {
-    $this->cacheStorage = $cache;
-    $this->dateFormatter = $date_formatter;
-    $this->time = $time;
-  }
+  public function __construct(protected CacheBackendInterface $cacheStorage, protected DateFormatterInterface $dateFormatter, protected TimeInterface $time) {}
 
   /**
    * {@inheritdoc}
