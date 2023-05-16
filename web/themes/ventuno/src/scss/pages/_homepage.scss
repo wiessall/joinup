@@ -119,6 +119,7 @@
     @include media-breakpoint-up(md) {
       right: 0;
       top: 12px;
+      bottom: unset;
     }
     &::after {
       @include get-bootstrap-icon('arrow-right');
@@ -143,6 +144,7 @@
     @include media-breakpoint-up(md) {
       right: 0;
       top: 12px;
+      bottom: unset;
     }
     &::after {
       @include get-bootstrap-icon('arrow-right');
@@ -168,6 +170,7 @@
     @include media-breakpoint-up(md) {
       right: 0;
       top: 12px;
+      bottom: unset;
     }
     &::after {
       @include get-bootstrap-icon('arrow-right');
@@ -175,7 +178,7 @@
     }
   }
   article {
-    background: $gray-300 url(../images/highlighted-event.jpg) no-repeat center center;
+    background: $gray-600 url(../images/highlighted-event.jpg) no-repeat center center;
     background-size: cover;
     // border-radius: $border-radius-lg; // 0.3rem
     display: flex;
