@@ -15,7 +15,6 @@
         "drupal/addtocal": "^2.0@beta",
         "drupal/allowed_formats": "^1.3",
         "drupal/antibot": "^1.4",
-        "drupal/auditfiles": "^4.0",
         "drupal/bootstrap4_modal": "^2.1",
         "drupal/cached_computed_field": "^1.0",
         "drupal/cas": "^2.0",
@@ -53,7 +52,6 @@
         "drupal/iframe": "^2",
         "drupal/image_library_widget": "^1.0",
         "drupal/inline_entity_form": "^1.0",
-        "drupal/jquery_ui_accordion": "^1.1",
         "drupal/json_field": "^1.0",
         "drupal/layout_builder_component_attributes": "^1.2",
         "drupal/linkit": "^5.0-beta11",
@@ -69,7 +67,6 @@
         "drupal/og_menu": "^2.0",
         "drupal/page_manager": "^4.0@beta",
         "drupal/paragraphs": "^1.12",
-        "drupal/paragraphs_jquery_ui_accordion": "^1.4",
         "drupal/pathauto": "~1.8",
         "drupal/pipeline": "^1.0",
         "drupal/publication_date": "^2.0",
@@ -104,10 +101,8 @@
         "drupal/views_multiple_permissions": "^1.0",
         "drush/drush": "^11.3",
         "ec-europa/joinup-tallinn-dashboard": "1.0.0-alpha2",
-        "ec-europa/material-design-lite": "1.3.1",
         "ec-europa/spdx": "^1.0",
         "ec-europa/virtuoso": "^2.1",
-        "jacklmoore/autosize": "5.0.2",
         "openeuropa/composer-artifacts": "^1.0",
         "openeuropa/gisco-geocoding-provider": "^1.0",
         "openeuropa/oe_bootstrap_theme": "^1.0",
@@ -140,7 +135,6 @@
         "palantirnet/drupal-rector": "^0.12.2",
         "pear/http_request2": "~2.4",
         "php-task-runner/composer": "dev-master",
-        "php-task-runner/scss": "1.x-dev",
         "php-task-runner/sparql": "1.x-dev",
         "phpspec/prophecy-phpunit": "^2",
         "phpstan/extension-installer": "^1.3",
@@ -226,8 +220,7 @@
             "web/libraries/{$name}": ["type:drupal-library"],
             "web/modules/contrib/{$name}": ["type:drupal-module"],
             "web/profiles/contrib/{$name}": ["type:drupal-profile"],
-            "web/themes/contrib/{$name}": ["type:drupal-theme"],
-            "web/themes/joinup/vendor/{$name}": ["type:drupal-theme-library"]
+            "web/themes/contrib/{$name}": ["type:drupal-theme"]
         },
         "drupal-scaffold": {
             "locations": {
@@ -279,7 +272,8 @@
                 "Cannot implement a custom user cancellation method @see https://www.drupal.org/project/drupal/issues/3135592": "https://git.drupalcode.org/project/drupal/-/merge_requests/1675.diff",
                 "If you don't set the \"version\" of a profile, the report/status displays an empty dash @see https://www.drupal.org/project/drupal/issues/3270892": "https://git.drupalcode.org/project/drupal/-/merge_requests/2003.diff",
                 "Restrict images to this site\" restricts images that, by definition, *are* on this site @see https://www.drupal.org/project/drupal/issues/2998318": "https://git.drupalcode.org/project/drupal/-/merge_requests/3810.diff",
-                "Have responsive image module ignore svg @see https://www.drupal.org/project/drupal/issues/2957924": "https://www.drupal.org/files/issues/2022-06-23/drupal-responsive_image_svg_support-2957924-11.patch"
+                "Have responsive image module ignore svg @see https://www.drupal.org/project/drupal/issues/2957924": "https://www.drupal.org/files/issues/2022-06-23/drupal-responsive_image_svg_support-2957924-11.patch",
+                "Verify that the existing cache bin exists before calling it @see https://www.drupal.org/project/drupal/issues/2429321": "https://git.drupalcode.org/project/drupal/-/merge_requests/1521.diff"
             },
             "drupal/default_content": {
                 "Allow manual imports @see https://www.drupal.org/i/2640734": "https://git.drupalcode.org/project/default_content/-/merge_requests/20.diff"
@@ -428,45 +422,6 @@
         {
             "type": "composer",
             "url": "https://packages.drupal.org/8"
-        },
-        {
-            "type": "package",
-            "package": {
-                "name": "ec-europa/material-design-lite",
-                "version": "1.3.1",
-                "type": "drupal-theme-library",
-                "source": {
-                    "url": "git@github.com:ec-europa/material-design-lite.git",
-                    "type": "git",
-                    "reference": "joinup"
-                }
-            }
-        },
-        {
-            "type": "package",
-            "package": {
-                "name": "dkarv/mdl-chip-input",
-                "version": "dev-master",
-                "type": "drupal-theme-library",
-                "source": {
-                    "url": "git@github.com:dkarv/mdl-chip-input.git",
-                    "type": "git",
-                    "reference": "master"
-                }
-            }
-        },
-        {
-            "type": "package",
-            "package": {
-                "name": "jacklmoore/autosize",
-                "version": "5.0.2",
-                "type": "drupal-theme-library",
-                "source": {
-                    "url": "git@github.com:jackmoore/autosize.git",
-                    "type": "git",
-                    "reference": "master"
-                }
-            }
         },
         {
             "type": "package",
