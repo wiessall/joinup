@@ -2,7 +2,7 @@
 
 declare(strict_types = 1);
 
-namespace Drupal\joinup_group\Access;
+namespace Drupal\joinup_discussion\Access;
 
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
@@ -14,9 +14,9 @@ use Drupal\joinup_group\JoinupGroupManagerInterface;
 use Symfony\Component\Routing\Route;
 
 /**
- * Provides a route access checker for _joinup_group_results_required.
+ * Provides a route access checker for _joinup_discussion_overview.
  */
-class ResultsRequiredAccessCheck implements AccessInterface {
+class DiscussionOverviewAccessCheck implements AccessInterface {
 
   /**
    * Builds a new access checker instance.
@@ -46,7 +46,7 @@ class ResultsRequiredAccessCheck implements AccessInterface {
   public function access(Route $route, RouteMatchInterface $routeMatch): AccessResultInterface {
     $group = $this->groupManager->getGroupFromContext();
     if (!$group) {
-      return AccessResult::forbidden('Not a view page');
+      return AccessResult::forbidden('Not a group page');
     }
 
     $storage = $this->entityTypeManager->getStorage('node');
