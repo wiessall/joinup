@@ -64,6 +64,7 @@
     <article{{ _attributes.addClass(_classes) }}>
       {{ _title_prefix }}
       {{ _title_suffix }}
+      <a class="tile__link position-absolute top-0 end-0 bottom-0 start-0" href="{{ _url }}" title="{{ _label|render|striptags|trim }}"></a>
       <figure class="tile__figure mb-0">
         {{ _image }}
       </figure>
@@ -88,9 +89,7 @@
             </div>
           {% endif %}
           <h1 class="tile__title h5 text-primary fw-bold my-0">
-            <a class="text-primary" href="{{ _url }}" title="{{ _label|render|striptags|trim }}">
-              {{ _label }}
-            </a>
+            {{ _label }}
           </h1>
           {% if _text is not empty %}
             <div class="tile__text text-dark fs-sm my-1">{{ _text }}</div>
@@ -111,7 +110,7 @@
           </div>
         {%- endif -%}
       </div>
-      <div class="tile__footer">
+      <div class="tile__footer position-relative">
         <div class="fs-xs text-muted d-flex align-items-center justify-content-between">
           <div data-joinup-card-stats class="d-flex">
             {% for data in _extra_data %}

@@ -2,6 +2,9 @@
   position: relative;
   flex-direction: column;
   height: 100%;
+  &__link {
+    z-index: 1;
+  }
   &__figure {
     overflow: hidden;
     aspect-ratio: 16 / 9;
@@ -69,6 +72,7 @@
   }
   &__footer {
     padding: $spacer;
+    z-index: 2;
   }
   &__bundle-icon {
     background-color: lighten($warning, 30%);
