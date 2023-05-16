@@ -10,9 +10,9 @@ declare(strict_types = 1);
 /**
  * Implements hook_theme().
  */
-function joinup_like_theme($existing, $type, $theme, $path) {
+function joinup_like_theme(array $existing, string $type, string $theme, string $path): array {
   return [
-    'modal_dialog' => [
+    'joinup_like_anonymous' => [
       'variables' => [],
     ],
   ];
