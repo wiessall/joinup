@@ -1,0 +1,6 @@
+name: Joinup Theme
+description: Joinup theme based on Material design lite.
+type: theme
+package: Joinup
+core_version_requirement: ">= 9.4"
+base theme: stable
