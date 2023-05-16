@@ -12,7 +12,7 @@
     - image (object) (default: {})
     - url (string) (default: '')
     - date (string) (default: '')
-    - info (string) (default: '')
+    - info (object) (default: {})
     - title_prefix ()
     - label (string) (default: '')
     - title_suffix ()
@@ -87,18 +87,18 @@
               <span class="tile__info-text">{{ _info.label }}</span>
             </div>
           {% endif %}
-          <h1 class="tile__title my-0">
+          <h1 class="tile__title h5 text-primary fw-bold my-0">
             <a class="text-primary" href="{{ _url }}" title="{{ _label|render|striptags|trim }}">
               {{ _label }}
             </a>
           </h1>
-          {% if _horizontal and _text is not empty %}
-            <div class="tile__text my-1">{{ _text }}</div>
+          {% if _text is not empty %}
+            <div class="tile__text text-dark fs-sm my-1">{{ _text }}</div>
           {% endif %}
           {{ _action }}
         </div>
         {%- if _badges is not empty and _badges is iterable -%}
-          <div class="mb-2">
+          <div class="my-2">
             {{ attach_library('ventuno/badge') }}
             {% for _badge in _badges %}
               {% include '@oe-bcl/badge' with {
