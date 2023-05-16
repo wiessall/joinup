@@ -18,13 +18,6 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class ExportGroupAdministratorsForm extends ExportBatchedDataFormBase {
 
   /**
-   * The entity type manager.
-   *
-   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
-   */
-  protected $entityTypeManager;
-
-  /**
    * Constructs an ExportUserListForm.
    *
    * @param \Drupal\Core\Cache\CacheBackendInterface $cache
@@ -36,9 +29,8 @@ class ExportGroupAdministratorsForm extends ExportBatchedDataFormBase {
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
    *   The entity type manager.
    */
-  public function __construct(CacheBackendInterface $cache, DateFormatterInterface $date_formatter, TimeInterface $time, EntityTypeManagerInterface $entityTypeManager) {
+  public function __construct(protected CacheBackendInterface $cache, protected DateFormatterInterface $date_formatter, protected TimeInterface $time, protected EntityTypeManagerInterface $entityTypeManager) {
     parent::__construct($cache, $date_formatter, $time);
-    $this->entityTypeManager = $entityTypeManager;
   }
 
   /**
