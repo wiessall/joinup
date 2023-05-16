@@ -74,8 +74,8 @@ Feature: "Add discussion" visibility options.
     Then I should see the heading "Flight of Girlfriend"
     And I should see the success message "Discussion Flight of Girlfriend has been created."
     And the "Emerald in the Luck" solution has a discussion titled "Flight of Girlfriend"
-    # Check that the link to the discussion is visible on the solution page.
-    When I go to the homepage of the "Emerald in the Luck" solution
+
+    When I go to the discussions page of "Emerald in the Luck"
     Then I should see the link "Flight of Girlfriend"
 
     # Check that an anonymous user can see the information.
