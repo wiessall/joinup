@@ -52,6 +52,7 @@
         "drupal/iframe": "^2",
         "drupal/image_library_widget": "^1.0",
         "drupal/inline_entity_form": "^1.0",
+        "drupal/jquery_ui": "1.6.0",
         "drupal/json_field": "^1.0",
         "drupal/layout_builder_component_attributes": "^1.2",
         "drupal/linkit": "^6.0@beta",
