@@ -42,15 +42,28 @@ function _ventuno_smart_trim(string $string, int $length, bool $ellipsis = TRUE)
  */
 function _ventuno_preprocess_tile(array &$variables, string $entity_type_id): void {
   $entity = $variables[$entity_type_id];
+  /** @var \Drupal\Core\Datetime\DateFormatterInterface $date_formatter */
+  $date_formatter = Drupal::service('date.formatter');
   $bundle_key = \Drupal::entityTypeManager()->getDefinition($entity_type_id)->getKey('bundle');
+  $route_match = \Drupal::routeMatch();
+  $route_name = $route_match->getRouteName();
+  // Routes where tiles must be horizontal.
+  $routes_horizontal_tiles = [
+    'view.search.page_1',
+    'page_manager.page_view_homepage_homepage-layout_builder-0',
+    'page_manager.page_view_homepage_homepage-layout_builder-1',
+  ];
+  if (in_array($route_name, $routes_horizontal_tiles)) {
+    $variables['horizontal'] = TRUE;
+    // Text.
+    // TODO ISAICP-7709: Strip tags.
+    $variables['text'] = $entity instanceof DescriptionInterface && isset($variables['content'][$entity->getDescriptionField()]) ? $variables['content'][$entity->getDescriptionField()] : NULL;
+  }
 
   // Image.
   $variables['image'] = ($entity instanceof LogoInterface) && $entity->getLogoAsFile()
     ? $entity->getLogoAsRenderArray($variables['view_mode'])
     : [];
-
-  // Text.
-  $variables['text'] = $entity instanceof DescriptionInterface && isset($variables['content'][$entity->getDescriptionField()]) ? $variables['content'][$entity->getDescriptionField()] : NULL;
 
   // Topics.
   $topics = ($entity instanceof TopicReferencingEntityInterface) ? $entity->getTopics() : NULL;
@@ -72,6 +85,136 @@ function _ventuno_preprocess_tile(array &$variables, string $entity_type_id): vo
   $bundle_type = $entity->get($bundle_key)->entity;
   $variables['bundle']['label'] = ucfirst($bundle_type->getSingularLabel() ?? $bundle_type->label());
   $variables['bundle']['icon'] = _ventuno_get_default_icon($entity->getEntityTypeId(), $entity->bundle());
+
+  // Info (above the title).
+  $variables['info']['icon'] = 'calendar-event';
+  if ($changed_time = $entity->getChangedTime()) {
+    $variables['info']['label'] = t('@label: @changed', [
+      '@label' => t('Last update'),
+      '@changed' => \Drupal::service('date.formatter')->format($changed_time, 'date_only'),
+    ]);
+  }
+
+  // Iterate over entity bundles for case-specific data.
+  switch ($entity->bundle()) {
+    case 'discussion':
+      $variables['info']['icon'] = 'calendar-event';
+      if ($changed_time = $entity->getChangedTime()) {
+        $variables['info']['label'] = t('@label: @changed', [
+          '@label' => t('Last activity'),
+          '@changed' => $date_formatter->format($changed_time, 'custom', 'd/m/Y, h:s'),
+        ]);
+      }
+      $node = $variables['elements']['#node'];
+      $variables['extra_data'][] = [
+        'icon' => 'chat',
+        'label' => $node->get('field_replies')->comment_count,
+      ];
+      break;
+
+    case 'event':
+      $variables['highlighted']['icon'] = 'calendar-event';
+      $variables['highlighted']['text'] = $variables['content']['field_event_date'];
+      $variables['info']['icon'] = 'geo-alt';
+      $node = $variables['elements']['#node'];
+      if (!$node->get('field_location')->isEmpty() && !$node->get('field_event_online_location')->isEmpty()) {
+        $variables['info']['label'] = t('Hybrid event');
+      }
+      elseif ($node->get('field_location')->isEmpty()) {
+        $variables['info']['label'] = t('Virtual event');
+      }
+      else {
+        $variables['info']['label'] = t('Physical event');
+      }
+      break;
+
+    case 'tallinn_report':
+      $variables['info']['icon'] = 'calendar-event';
+      if ($entity->getCreatedTime() === $entity->getChangedTime()) {
+        $variables['info']['label'] = new TranslatableMarkup('@label: -', [
+          '@label' => 'Last update',
+        ]);
+      }
+      elseif ($changed_time = $entity->getChangedTime()) {
+        $variables['info']['label'] = t('@label: @changed', [
+          '@label' => t('Last update'),
+          '@changed' => $date_formatter->format($changed_time, 'date_only'),
+        ]);
+      }
+      break;
+      case 'asset_distribution':
+        $variables['info']['icon'] = 'file-earmark-medical';
+        $variables['info']['label'] = $variables['content']['field_ad_licence'];
+        $variables['action'] = $variables['content']['field_ad_access_url'];
+        break;
+
+      case 'asset_release':
+        $variables['label'] = $entity->label();
+        $variables['highlighted']['text'] = 'v' . $entity->getVersion();
+        $variables['info']['icon'] = 'calendar-event';
+        if ($created_time = $entity->getCreatedTime()) {
+          $variables['info']['label'] = t('@label: @created', [
+            '@label' => t('Release date'),
+            '@created' => \Drupal::service('date.formatter')->format($created_time, 'date_only'),
+          ]);
+        }
+        $status = $variables['elements']['field_status'][0]['#plain_text'] ?? 'No status';
+        switch ($status) {
+
+          case 'Completed':
+            $icon_id = 'check-circle';
+            break;
+
+          case 'Deprecated':
+            $icon_id = 'file-x';
+            break;
+
+          case 'Under development':
+            $icon_id = 'clock-history';
+            break;
+
+          case 'Withdrawn':
+            $icon_id = 'patch-exclamation';
+            break;
+        }
+        $variables['extra_data'][] = [
+          'icon' => $icon_id ?? 'question-lg',
+          'label' => $status,
+        ];
+        break;
+
+      case 'collection':
+        // TODO ISAICP-7709: Ensure collection tiles show descritpion in search results.
+        $variables['extra_data'][] = [
+          'icon' => 'people',
+          'label' => $variables['content']['members']['#count'],
+        ];
+        break;
+
+      case 'solution':
+        $variables['image'] = $variables['content']['field_is_logo'];
+        // Add attributes that will allow JS to mark this tile as "Shared from".
+        $rdf_entity = $variables['rdf_entity'];
+        if (!$rdf_entity->get('collection')->isEmpty()) {
+          /** @var \Drupal\rdf_entity\RdfInterface|null $parent */
+          $parent = $rdf_entity->get('collection')->first()->entity;
+          $variables['attributes']['data-joinup-parent-id'] = $parent->id();
+          $variables['attributes']['data-joinup-parent-label'] = $parent->label();
+        }
+        // Add download counter if set.
+        if (isset($variables['elements']['downloads']['count']['#access']) && $variables['elements']['downloads']['count']['#access'] === TRUE) {
+          $variables['extra_data'][] = [
+            'icon' => 'download',
+            'label' => $variables['elements']['downloads']['count'],
+          ];
+        }
+        break;
+
+      case 'licence':
+        // Licences do not store creation date.
+        $variables['info'] = NULL;
+        break;
+  }
 }
 
 /**
