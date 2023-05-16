@@ -92,7 +92,7 @@ Feature: Discussions added to collections
     And I should not see the text "Validated" in the "Content" region
 
     # Check that the tile for the discussion is visible on the collection page.
-    When I go to the homepage of the "The World of the Waves" collection
+    When I go to the discussions page of "The World of the Waves"
     Then I should see the link "An amazing discussion"
     And I should not see the text "Kesha Pontecorvo" in the "An amazing discussion" tile
     # Initially there are 0 comments on the discussion.
