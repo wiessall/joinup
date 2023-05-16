@@ -48,8 +48,6 @@ phpcs:
   ignore:
     - ${joinup.site_dir}/modules/contrib
     - ${joinup.site_dir}/themes/contrib
-    - ${joinup.site_dir}/themes/joinup/scss
-    - ${joinup.site_dir}/themes/joinup/node_modules
     - ${joinup.site_dir}/themes/ventuno/css
     - ${joinup.site_dir}/themes/ventuno/node_modules
     - ${joinup.site_dir}/modules/custom/joinup_communities/tallinn/lib
@@ -81,7 +79,7 @@ commands:
   # Scans the code base for deprecated code.
   testing:check-deprecated-code:
     - task: exec
-      command: ${phpstan.bin} --memory-limit=1G --debug -vvv --no-progress analyse src tests/src web/modules/custom web/profiles web/themes/ventuno web/themes/joinup
+      command: ${phpstan.bin} --memory-limit=1G --debug -vvv --no-progress analyse src tests/src web/modules/custom web/profiles web/themes/ventuno web/themes/iop
 
   testing:check-deprecated-code-contrib:
     - task: exec

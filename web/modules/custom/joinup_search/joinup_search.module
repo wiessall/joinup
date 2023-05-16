@@ -198,6 +198,8 @@ function joinup_search_search_api_solr_query_alter(SolariumQueryInterface $solar
     return;
   }
 
+  // Note: the solarium query might affect the facets shown in the page. Refrain
+  // from using these functions for configurable dynamic queries.
   _joinup_search_apply_global_search_api_solr_settings($solarium_query, $query);
   _joinup_search_apply_listing_content_query_settings($solarium_query, $query);
 }
@@ -212,7 +214,7 @@ function joinup_search_search_api_solr_query_alter(SolariumQueryInterface $solar
  */
 function _joinup_search_apply_global_search_api_solr_settings(SolariumQueryInterface $solarium_query, QueryInterface $query): void {
   /** @var \Drupal\search_api_field\Plugin\Field\FieldType\SearchItem $item */
-  if (!$item = $query->getOption('search_api_field item')) {
+  if (!$query->getOption('search_api_field item')) {
     return;
   }
 
@@ -220,23 +222,6 @@ function _joinup_search_apply_global_search_api_solr_settings(SolariumQueryInter
   // @todo remove when document boosting is reimplemented by search_api_solr
   // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-4907
   $solarium_query->addParam('defType', 'edismax');
-  $value = $item->getValue()['value'];
-
-  $show_archived = $value['show_archived'] ?? 'all';
-  if ($show_archived === 'archived') {
-    $solarium_query->addFilterQuery([
-      'key' => 'state',
-      'query' => 'sm_entity_status:archived',
-    ]);
-  }
-  elseif ($show_archived === 'unarchived') {
-    // Show all items that are not archived.
-    $solarium_query->addFilterQuery([
-      'key' => 'state',
-      'query' => '-sm_entity_status:archived',
-    ]);
-  }
-
   if (empty($value['query_builder']['filters'])) {
     return;
   }
