@@ -454,3 +454,41 @@ function joinup_search_views_pre_render(ViewExecutable $view): void {
     }
   }
 }
+
+/**
+ * Implements hook_entity_prepare_view().
+ */
+function joinup_search_entity_prepare_view($entity_type_id, array $entities, array $displays, $view_mode) {
+  if ($entity_type_id !== 'rdf_entity') {
+    return;
+  }
+
+  $entity_fields = [
+    'collection' => [
+      'field' => 'field_collection_content',
+      'facet' => 'field_collection_content_status',
+    ],
+    'solution' => [
+      'field' => 'field_is_content',
+      'facet' => 'field_is_content_status',
+    ],
+  ];
+
+  foreach ($entities as $entity) {
+    $field = $entity_fields[$entity->bundle()]['field'];
+    $facet = $entity_fields[$entity->bundle()]['facet'];
+    if (!isset($entity->{$field}) || $entity->{$field}->value['enabled'] === 0) {
+      continue;
+    }
+
+    // Because we are forcing the facet to show the values even when they are
+    // not narrowing the results, and we are altering the query as well, we need
+    // to also dynamically hide the facet when the 'show_archived' option is set
+    // to anything else than 'all' - because it will not hide automatically.
+    if ($entity->{$field}->value['show_archived'] !== 'all') {
+      $value = $entity->{$field}->value;
+      $value['fields'][$facet] = 'hidden';
+      $entity->{$field}->setValue($value);
+    }
+  }
+}

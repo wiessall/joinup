@@ -336,18 +336,18 @@ trait TraversingTrait {
    *   (optional) Limit to a specific html tag when searching for an element.
    *   This can be useful in cases where the data drupal facet id is placed in
    *   more than one html tag e.g. the dropdown has the id placed in both the
-   *   <li> tag of links as well as the <select> element.
+   *   <li> tag of links and the <select> element.
    * @param bool $throw_exception
    *   (optional) Whether to throw an exception if the facet is not found.
    *   Defaults to TRUE.
    *
-   * @return \Behat\Mink\Element\NodeElement
+   * @return \Behat\Mink\Element\NodeElement|null
    *   The facet node element.
    *
    * @throws \Exception
    *   Thrown when the facet is not found in the designated area.
    */
-  protected function findFacetByAlias(string $alias, ?NodeElement $region = NULL, string $html_tag = '*', bool $throw_exception = TRUE): NodeElement {
+  protected function findFacetByAlias(string $alias, ?NodeElement $region = NULL, string $html_tag = '*', bool $throw_exception = TRUE): ?NodeElement {
     if ($region === NULL) {
       $region = $this->getSession()->getPage();
     }
