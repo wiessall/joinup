@@ -215,3 +215,12 @@ function joinup_core_deploy_109204(?array &$sandbox = []): string {
 
   return "Processed {$sandbox['progress']} out of {$sandbox['total']} custom pages";
 }
+
+/**
+ * Update the user__field_user_content values.
+ */
+function joinup_core_deploy_109205(): void {
+  \Drupal::database()->update('user__field_user_content')
+    ->fields(['field_user_content_value' => 'a:5:{s:6:"fields";a:2:{s:19:"user_content_bundle";a:2:{s:6:"weight";i:0;s:6:"region";s:3:"top";}s:19:"user_content_status";a:2:{s:6:"weight";i:0;s:6:"region";s:3:"top";}}s:7:"enabled";i:1;s:13:"query_presets";s:0:"";s:5:"limit";i:12;s:13:"show_archived";s:3:"all";}'])
+    ->execute();
+}
