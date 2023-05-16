@@ -15,5 +15,6 @@ services:
       - { name: event_subscriber }
   joinup_search.search_api_status_subscriber:
     class: Drupal\joinup_search\EventSubscriber\SearchApiStatusSubscriber
+    arguments: ['@facets.manager']
     tags:
       - { name: event_subscriber }
