@@ -30,6 +30,10 @@ Feature: Administer media.
     And the following "News logo" media:
       | name          | owner | image                 |
       | The News Logo | joe   | library/news-logo.png |
+    And the following "Image" media:
+      | name        | owner | image       | alt            | group |
+      | The Image   | joe   | simple.svg  | A simple image | Mars  |
+      | Other Image | joe   | richard.jpg | Long Live FOSS | Venus |
     And the following "File" media:
       | name       | owner | file     | group |
       | The File   | joe   | text.pdf | Mars  |
@@ -49,6 +53,8 @@ Feature: Administer media.
       | The Solution Logo     | Solution logo     | Published   |       | joe    |
       | The Event Logo        | Event logo        | Published   |       | joe    |
       | The News Logo         | News logo         | Published   |       | joe    |
+      | The Image             | Image             | Published   | Mars  | joe    |
+      | Other Image           | Image             | Published   | Venus | joe    |
       | The File              | File              | Published   | Mars  | joe    |
       | Other File            | File              | Published   | Venus | joe    |
       | The Video             | Video             | Unpublished | Mars  | joe    |
@@ -56,8 +62,9 @@ Feature: Administer media.
     When I select "Venus" from "Group"
     And I press "Filter"
     Then the "media admin" table should contain the following columns:
-      | Media name | Type | Status    | Group | Author |
-      | Other File | File | Published | Venus | joe    |
+      | Media name  | Type  | Status    | Group | Author |
+      | Other Image | Image | Published | Venus | joe    |
+      | Other File  | File  | Published | Venus | joe    |
 
     When I press "Reset"
     Then the "media admin" table should contain the following columns:
@@ -68,6 +75,8 @@ Feature: Administer media.
       | The Solution Logo     | Solution logo     | Published   |       | joe    |
       | The Event Logo        | Event logo        | Published   |       | joe    |
       | The News Logo         | News logo         | Published   |       | joe    |
+      | The Image             | Image             | Published   | Mars  | joe    |
+      | Other Image           | Image             | Published   | Venus | joe    |
       | The File              | File              | Published   | Mars  | joe    |
       | Other File            | File              | Published   | Venus | joe    |
       | The Video             | Video             | Unpublished | Mars  | joe    |
@@ -85,6 +94,7 @@ Feature: Administer media.
     And I should see the link "News logo"
     And I should see the link "Solution banner"
     And I should see the link "Solution logo"
+    But I should see the link "Image"
     But I should see the link "File"
     And I should see the link "Video"
 
@@ -102,6 +112,8 @@ Feature: Administer media.
       | The Solution Logo     | Solution logo     | Published   |       | joe    |
       | The Event Logo        | Event logo        | Published   |       | joe    |
       | The News Logo         | News logo         | Published   |       | joe    |
+      | The Image             | Image             | Published   | Mars  | joe    |
+      | Other Image           | Image             | Published   | Venus | joe    |
       | The File              | File              | Published   | Mars  | joe    |
       | Other File            | File              | Published   | Venus | joe    |
       | The Video             | Video             | Unpublished | Mars  | joe    |
