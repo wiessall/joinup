@@ -45,9 +45,10 @@ function _ventuno_preprocess_tile(array &$variables, string $entity_type_id): vo
   /** @var \Drupal\Core\Datetime\DateFormatterInterface $date_formatter */
   $date_formatter = Drupal::service('date.formatter');
   $bundle_key = \Drupal::entityTypeManager()->getDefinition($entity_type_id)->getKey('bundle');
+
+  // Prepare different data depending on the route.
   $route_match = \Drupal::routeMatch();
   $route_name = $route_match->getRouteName();
-  // Routes where tiles must be horizontal.
   $routes_horizontal_tiles = [
     'view.search.page_1',
     'page_manager.page_view_homepage_homepage-layout_builder-0',
@@ -55,7 +56,7 @@ function _ventuno_preprocess_tile(array &$variables, string $entity_type_id): vo
   ];
   if (in_array($route_name, $routes_horizontal_tiles)) {
     $variables['horizontal'] = TRUE;
-    // Text.
+    // Text only on horizontal tiles.
     // TODO ISAICP-7709: Strip tags.
     $variables['text'] = $entity instanceof DescriptionInterface && isset($variables['content'][$entity->getDescriptionField()]) ? $variables['content'][$entity->getDescriptionField()] : NULL;
   }
@@ -66,6 +67,8 @@ function _ventuno_preprocess_tile(array &$variables, string $entity_type_id): vo
     : [];
 
   // Topics.
+  // Number of topics displayed can vary depending on the route.
+  $max_topics = 2;
   $topics = ($entity instanceof TopicReferencingEntityInterface) ? $entity->getTopics() : NULL;
   if ($topics) {
     $variables['badges'] = [];
@@ -73,10 +76,10 @@ function _ventuno_preprocess_tile(array &$variables, string $entity_type_id): vo
       $variables['badges'][]['label'] = $topic->label();
     }
     $num_of_items = count($topics);
-    if ($num_of_items > 2) {
-      $extra_items = $num_of_items - 2;
-      $variables['badges'] = array_splice($variables['badges'], 0, 2);
-      $word = ($extra_items < 2) ? t('topic') : t('topics');
+    if ($num_of_items > $max_topics) {
+      $extra_items = $num_of_items - $max_topics;
+      $variables['badges'] = array_splice($variables['badges'], 0, $max_topics);
+      $word = ($extra_items < $max_topics) ? t('topic') : t('topics');
       $variables['badges'][]['label'] = '+' . $extra_items . ' ' . $word;
     }
   }
@@ -142,78 +145,79 @@ function _ventuno_preprocess_tile(array &$variables, string $entity_type_id): vo
         ]);
       }
       break;
-      case 'asset_distribution':
-        $variables['info']['icon'] = 'file-earmark-medical';
-        $variables['info']['label'] = $variables['content']['field_ad_licence'];
-        $variables['action'] = $variables['content']['field_ad_access_url'];
-        break;
 
-      case 'asset_release':
-        $variables['label'] = $entity->label();
-        $variables['highlighted']['text'] = 'v' . $entity->getVersion();
-        $variables['info']['icon'] = 'calendar-event';
-        if ($created_time = $entity->getCreatedTime()) {
-          $variables['info']['label'] = t('@label: @created', [
-            '@label' => t('Release date'),
-            '@created' => \Drupal::service('date.formatter')->format($created_time, 'date_only'),
-          ]);
-        }
-        $status = $variables['elements']['field_status'][0]['#plain_text'] ?? 'No status';
-        switch ($status) {
+    case 'asset_distribution':
+      $variables['info']['icon'] = 'file-earmark-medical';
+      $variables['info']['label'] = $variables['content']['field_ad_licence'];
+      $variables['action'] = $variables['content']['field_ad_access_url'];
+      break;
 
-          case 'Completed':
-            $icon_id = 'check-circle';
-            break;
+    case 'asset_release':
+      $variables['label'] = $entity->label();
+      $variables['highlighted']['text'] = 'v' . $entity->getVersion();
+      $variables['info']['icon'] = 'calendar-event';
+      if ($created_time = $entity->getCreatedTime()) {
+        $variables['info']['label'] = t('@label: @created', [
+          '@label' => t('Release date'),
+          '@created' => \Drupal::service('date.formatter')->format($created_time, 'date_only'),
+        ]);
+      }
+      $status = $variables['elements']['field_status'][0]['#plain_text'] ?? 'No status';
+      switch ($status) {
 
-          case 'Deprecated':
-            $icon_id = 'file-x';
-            break;
+        case 'Completed':
+          $icon_id = 'check-circle';
+          break;
 
-          case 'Under development':
-            $icon_id = 'clock-history';
-            break;
+        case 'Deprecated':
+          $icon_id = 'file-x';
+          break;
 
-          case 'Withdrawn':
-            $icon_id = 'patch-exclamation';
-            break;
-        }
+        case 'Under development':
+          $icon_id = 'clock-history';
+          break;
+
+        case 'Withdrawn':
+          $icon_id = 'patch-exclamation';
+          break;
+      }
+      $variables['extra_data'][] = [
+        'icon' => $icon_id ?? 'question-lg',
+        'label' => $status,
+      ];
+      break;
+
+    case 'collection':
+      // TODO ISAICP-7709: Ensure collection tiles show descritpion in search results.
+      $variables['extra_data'][] = [
+        'icon' => 'people',
+        'label' => $variables['content']['members']['#count'],
+      ];
+      break;
+
+    case 'solution':
+      $variables['image'] = $variables['content']['field_is_logo'];
+      // Add attributes that will allow JS to mark this tile as "Shared from".
+      $rdf_entity = $variables['rdf_entity'];
+      if (!$rdf_entity->get('collection')->isEmpty()) {
+        /** @var \Drupal\rdf_entity\RdfInterface|null $parent */
+        $parent = $rdf_entity->get('collection')->first()->entity;
+        $variables['attributes']['data-joinup-parent-id'] = $parent->id();
+        $variables['attributes']['data-joinup-parent-label'] = $parent->label();
+      }
+      // Add download counter if set.
+      if (isset($variables['elements']['downloads']['count']['#access']) && $variables['elements']['downloads']['count']['#access'] === TRUE) {
         $variables['extra_data'][] = [
-          'icon' => $icon_id ?? 'question-lg',
-          'label' => $status,
+          'icon' => 'download',
+          'label' => $variables['elements']['downloads']['count'],
         ];
-        break;
+      }
+      break;
 
-      case 'collection':
-        // TODO ISAICP-7709: Ensure collection tiles show descritpion in search results.
-        $variables['extra_data'][] = [
-          'icon' => 'people',
-          'label' => $variables['content']['members']['#count'],
-        ];
-        break;
-
-      case 'solution':
-        $variables['image'] = $variables['content']['field_is_logo'];
-        // Add attributes that will allow JS to mark this tile as "Shared from".
-        $rdf_entity = $variables['rdf_entity'];
-        if (!$rdf_entity->get('collection')->isEmpty()) {
-          /** @var \Drupal\rdf_entity\RdfInterface|null $parent */
-          $parent = $rdf_entity->get('collection')->first()->entity;
-          $variables['attributes']['data-joinup-parent-id'] = $parent->id();
-          $variables['attributes']['data-joinup-parent-label'] = $parent->label();
-        }
-        // Add download counter if set.
-        if (isset($variables['elements']['downloads']['count']['#access']) && $variables['elements']['downloads']['count']['#access'] === TRUE) {
-          $variables['extra_data'][] = [
-            'icon' => 'download',
-            'label' => $variables['elements']['downloads']['count'],
-          ];
-        }
-        break;
-
-      case 'licence':
-        // Licences do not store creation date.
-        $variables['info'] = NULL;
-        break;
+    case 'licence':
+      // Licences do not store creation date.
+      $variables['info'] = NULL;
+      break;
   }
 }
 
