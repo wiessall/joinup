@@ -122,6 +122,7 @@ module:
   layout_builder: 0
   layout_builder_component_attributes: 0
   layout_discovery: 0
+  layout_paragraphs: 0
   link: 0
   linkit: 0
   mailsystem: 0
