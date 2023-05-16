@@ -85,7 +85,7 @@ display:
         type: full
         options:
           offset: 0
-          items_per_page: 16
+          items_per_page: 8
           total_pages: null
           id: 0
           tags:
@@ -131,10 +131,23 @@ display:
           content: 'No discussions available.'
           tokenize: false
       sorts:
-        entity_created:
-          id: entity_created
+        node_pinned_in:
+          id: node_pinned_in
           table: search_api_index_published
-          field: entity_created
+          field: node_pinned_in
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: search_api
+          order: DESC
+          expose:
+            label: ''
+            field_identifier: ''
+          exposed: false
+        entity_changed:
+          id: entity_changed
+          table: search_api_index_published
+          field: entity_changed
           relationship: none
           group_type: group
           admin_label: ''
