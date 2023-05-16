@@ -62,6 +62,7 @@ function ventuno_preprocess_node__explore_item(array &$variables): void {
 function ventuno_preprocess_node(array &$variables): void {
   /** @var \Drupal\node\NodeInterface $node */
   $node = $variables['node'];
+  $bundle = $node->bundle();
 
   // Add the site URL to use in nodes.
   $variables['site_url'] = \Drupal::request()->getSchemeAndHttpHost();
@@ -81,19 +82,23 @@ function ventuno_preprocess_node(array &$variables): void {
     }
   }
 
+  if ($variables['view_mode'] === 'highlighted') {
+    _ventuno_preprocess_tile($variables, 'node');
+  }
+
   // Add bundle class in listing templates.
   if ($variables['view_mode'] === 'view_mode_tile' || $variables['view_mode'] === 'view_mode_featured') {
-    $bundle_class = 'listing__card--' . str_replace('_', '-', $node->bundle());
+    $bundle_class = 'listing__card--' . str_replace('_', '-', $bundle);
     $variables['attributes']['class'][] = $bundle_class;
   }
 
   // Add the created date to news articles.
-  if ($node->bundle() === 'news') {
+  if ($bundle === 'news') {
     $variables['created'] = \Drupal::service('date.formatter')->format($node->getCreatedTime(), 'date_only');
   }
 
   // Add a variable indicating the attachment file type on documents.
-  if ($node->bundle() === 'document' && !$node->get('field_file')->isEmpty()) {
+  if ($bundle === 'document' && !$node->get('field_file')->isEmpty()) {
     /** @var \Drupal\file\FileInterface $file */
     $file = $node->get('field_file')->first()->entity;
 
