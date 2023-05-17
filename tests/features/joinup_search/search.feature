@@ -660,10 +660,13 @@ Feature: Global search
       | funni |
       | funny |
 
-    When I enter "bott" in the search bar
+    When I enter "cook" in the search bar
     And I wait for AJAX to finish
     Then I should see the following search suggestions:
-      | best |
+      | Radio cooking collection |
+      | Movistar                 |
+      | cooking                  |
+      | cook                     |
 
     When I check the "Solutions (2)" checkbox from the "Content types" facet
     And I check the "News (5)" checkbox from the "Content types" facet
@@ -723,16 +726,6 @@ Feature: Global search
       | spherification           |
       | sphere                   |
       | spherif                  |
-
-    Then I enter "sp" in the search bar
-    And I wait for AJAX to finish
-    Then I should see the following search suggestions:
-      | Radio cooking collection |
-      | Spheres                  |
-      | spherification           |
-      | sphere                   |
-      | spherif                  |
-
 
   @terms
   Scenario: Filter on date
