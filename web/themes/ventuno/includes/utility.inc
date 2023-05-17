@@ -59,16 +59,7 @@ function _ventuno_preprocess_tile(array &$variables, string $entity_type_id): vo
   if (in_array($route_name, $routes_horizontal_tiles)) {
     $variables['horizontal'] = TRUE;
     // Text only on horizontal tiles.
-    // @todo ISAICP-7709: Ensure collection tiles show description in search
-    // results.
     $variables['text'] = $entity instanceof DescriptionInterface && isset($variables['content'][$entity->getDescriptionField()]) ? $variables['content'][$entity->getDescriptionField()] : NULL;
-  }
-
-  // Remove contextual links in search page.
-  if ($route_name === 'view.search.page_1') {
-    // @todo ISAICP-7709: In "tests/features/pin_in_collection.feature:173",
-    // it looks like the pin/unpin contextual links should not be present.
-    // unset($variables['title_suffix']);
   }
 
   // Image.
