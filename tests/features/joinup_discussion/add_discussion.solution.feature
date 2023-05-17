@@ -47,7 +47,9 @@ Feature: "Add discussion" visibility options.
     And I am logged in as a facilitator of the "Emerald in the Luck" solution
 
     When I go to the homepage of the "Emerald in the Luck" solution
-    And I click "Add discussion" in the plus button menu
+    Then I should not see the text "Discussions" in the "Navigation menu"
+
+    When I click "Add discussion" in the plus button menu
     Then I should see the heading "Add discussion"
     And the following fields should be present "Title, Content, Topic, Logo, Add a new file"
     And the following fields should not be present "Motivation"
@@ -76,7 +78,8 @@ Feature: "Add discussion" visibility options.
     And the "Emerald in the Luck" solution has a discussion titled "Flight of Girlfriend"
 
     When I go to the discussions page of "Emerald in the Luck"
-    Then I should see the link "Flight of Girlfriend"
+    Then I should see the text "Discussions" in the "Navigation menu"
+    And I should see the link "Flight of Girlfriend"
 
     # Check that an anonymous user can see the information.
     Given I am an anonymous user
