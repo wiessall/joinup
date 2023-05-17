@@ -477,7 +477,7 @@ function joinup_search_entity_prepare_view($entity_type_id, array $entities, arr
   foreach ($entities as $entity) {
     $field = $entity_fields[$entity->bundle()]['field'];
     $facet = $entity_fields[$entity->bundle()]['facet'];
-    if (!isset($entity->{$field}) || $entity->{$field}->value['enabled'] === 0) {
+    if (!isset($entity->{$field}) || $entity->{$field}->value['enabled'] === 0 || !isset($entity->{$field}->value['fields'][$facet])) {
       continue;
     }
 
@@ -486,8 +486,8 @@ function joinup_search_entity_prepare_view($entity_type_id, array $entities, arr
     // to also dynamically hide the facet when the 'show_archived' option is set
     // to anything else than 'all' - because it will not hide automatically.
     if ($entity->{$field}->value['show_archived'] !== 'all') {
-      $value = $entity->{$field}->value;
-      $value['fields'][$facet] = 'hidden';
+      $value = $entity->{$field}->getValue();
+      $value[0]['value']['fields'][$facet]['region'] = 'hidden';
       $entity->{$field}->setValue($value);
     }
   }
