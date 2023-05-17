@@ -2,6 +2,10 @@
   position: relative;
   flex-direction: column;
   height: 100%;
+  box-shadow: $box-shadow;
+  &:hover {
+    box-shadow: $box-shadow-lg;
+  }
   &__link {
     z-index: 2;
   }
@@ -106,10 +110,10 @@
     width: 100%;
     @include media-breakpoint-up(md) {
       flex-direction: row;
-      padding: $spacer 0 0 $spacer;
       flex-wrap: wrap;
       height: auto;
       .tile__figure {
+        padding: $spacer 0 0 $spacer;
         width: 180px;
         aspect-ratio: 1 / 1;
         & picture {
