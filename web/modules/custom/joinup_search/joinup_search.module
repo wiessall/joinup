@@ -475,6 +475,10 @@ function joinup_search_entity_prepare_view($entity_type_id, array $entities, arr
   ];
 
   foreach ($entities as $entity) {
+    if (!isset($entity_fields[$entity->bundle()])) {
+      continue;
+    }
+
     $field = $entity_fields[$entity->bundle()]['field'];
     $facet = $entity_fields[$entity->bundle()]['facet'];
     if (!isset($entity->{$field}) || $entity->{$field}->value['enabled'] === 0 || !isset($entity->{$field}->value['fields'][$facet])) {
