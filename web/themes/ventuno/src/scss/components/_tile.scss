@@ -2,10 +2,6 @@
   position: relative;
   flex-direction: column;
   height: 100%;
-  box-shadow: $box-shadow;
-  &:hover {
-    box-shadow: $box-shadow-lg;
-  }
   &__link {
     z-index: 2;
   }
