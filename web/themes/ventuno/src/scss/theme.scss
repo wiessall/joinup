@@ -21,3 +21,10 @@
  @import "@openeuropa/bcl-bootstrap/scss/utilities/api";
  @import "components/link"; // Avoid purple underline for visited links
  @import "components/glossary-term"; // Avoid purple underline for visited links
+
+ .shadow-hover {
+  box-shadow: $box-shadow;
+  &:hover {
+    box-shadow: $box-shadow-lg;
+  }
+ }
