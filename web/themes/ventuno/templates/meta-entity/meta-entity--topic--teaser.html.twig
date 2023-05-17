@@ -7,8 +7,9 @@
 {% set classes = [
   'position-relative',
   'h-100',
+  'rounded',
   'overflow-hidden',
-  'shadow',
+  'shadow-hover',
 ] %}
 {% set read_more = 'Read more about @title'|t({'@title': content.label|render|striptags|trim}) %}
 <div class="col">

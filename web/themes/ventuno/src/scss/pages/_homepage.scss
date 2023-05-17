@@ -180,7 +180,7 @@
   article {
     background: $gray-600 url(../images/highlighted-event.jpg) no-repeat center center;
     background-size: cover;
-    // border-radius: $border-radius-lg; // 0.3rem
+    border-radius: $border-radius-lg;
     display: flex;
     flex-flow: column;
     align-items: center;
