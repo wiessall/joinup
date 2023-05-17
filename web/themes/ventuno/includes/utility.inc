@@ -54,11 +54,21 @@ function _ventuno_preprocess_tile(array &$variables, string $entity_type_id): vo
     'page_manager.page_view_homepage_homepage-layout_builder-0',
     'page_manager.page_view_homepage_homepage-layout_builder-1',
   ];
+
+  // Set horizontal tiles in some cases.
   if (in_array($route_name, $routes_horizontal_tiles)) {
     $variables['horizontal'] = TRUE;
     // Text only on horizontal tiles.
-    // TODO ISAICP-7709: Strip tags.
+    // @todo ISAICP-7709: Ensure collection tiles show description in search
+    // results.
     $variables['text'] = $entity instanceof DescriptionInterface && isset($variables['content'][$entity->getDescriptionField()]) ? $variables['content'][$entity->getDescriptionField()] : NULL;
+  }
+
+  // Remove contextual links in search page.
+  if ($route_name === 'view.search.page_1') {
+    // @todo ISAICP-7709: In "tests/features/pin_in_collection.feature:173",
+    // it looks like the pin/unpin contextual links should not be present.
+    // unset($variables['title_suffix']);
   }
 
   // Image.
@@ -131,6 +141,10 @@ function _ventuno_preprocess_tile(array &$variables, string $entity_type_id): vo
       }
       break;
 
+    case 'news':
+      $variables['label'] = $variables['elements']['#node']->get('field_news_headline')->value;
+      break;
+
     case 'tallinn_report':
       $variables['info']['icon'] = 'calendar-event';
       if ($entity->getCreatedTime() === $entity->getChangedTime()) {
@@ -188,7 +202,6 @@ function _ventuno_preprocess_tile(array &$variables, string $entity_type_id): vo
       break;
 
     case 'collection':
-      // TODO ISAICP-7709: Ensure collection tiles show descritpion in search results.
       $variables['extra_data'][] = [
         'icon' => 'people',
         'label' => $variables['content']['members']['#count'],
@@ -253,50 +266,6 @@ function _ventuno_get_default_icon(string $entity_type_id, string $bundle): stri
   ];
 
   return $mapping[$entity_type_id][$bundle] ?? 'lightning-charge';
-}
-
-/**
- * Returns icon as render array for the bundle or a generic icon render array.
- *
- * @todo ISAICP-7709 With tiles redesign, the search items won't need this so
- * we can delete this function.
- *
- * @param string $entity_type_id
- *   The entity type ID.
- * @param string $bundle
- *   The bundle.
- *
- * @return array
- *   The icon class render array.
- */
-function _ventuno_get_default_icon_render_array(string $entity_type_id, string $bundle): array {
-  $mapping = [
-    'node' => [
-      'custom_page' => 'file-earmark-richtext',
-      'discussion' => 'chat-left-text',
-      'document' => 'file-earmark-text',
-      'event' => 'calendar-event',
-      'news' => 'newspaper',
-      'tallinn_report' => 'journal-text',
-      'video' => 'file-earmark-play',
-    ],
-    'rdf_entity' => [
-      'collection' => 'folder2-open',
-      'licence' => 'file-earmark-medical',
-      'asset_distribution' => 'file-earmark-post',
-      'asset_release' => 'file-earmark-zip',
-      'solution' => 'clipboard2-check',
-    ],
-  ];
-
-  $class = $mapping[$entity_type_id][$bundle] ?? 'lightning-charge';
-  return [
-    '#type' => 'inline_template',
-    '#template' => '<svg class="bi img-fluid w-100 py-3 p-lg-3 text-white bg-secondary"><use xlink:href="' . base_path() . \Drupal::service('extension.list.theme')->getPath('ventuno') . '/assets/icons/icons.svg#{{ icon }}"></use></svg>',
-    '#context' => [
-      'icon' => $class,
-    ],
-  ];
 }
 
 /**
