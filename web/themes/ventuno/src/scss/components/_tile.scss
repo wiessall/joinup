@@ -3,7 +3,12 @@
   flex-direction: column;
   height: 100%;
   &__link {
-    z-index: 1;
+    z-index: 2;
+  }
+  // Make some optional elements be interactable over the tile itself.
+  &__action {
+    position: relative;
+    z-index: 3;
   }
   &__figure {
     overflow: hidden;
@@ -73,10 +78,6 @@
     -webkit-line-clamp: 4;
     overflow: hidden;
   }
-  &__footer {
-    padding: $spacer;
-    z-index: 2;
-  }
   &__bundle-icon {
     background-color: lighten($warning, 30%);
     width: $spacer * 1.5;
@@ -105,6 +106,7 @@
     width: 100%;
     @include media-breakpoint-up(md) {
       flex-direction: row;
+      padding: $spacer 0 0 $spacer;
       flex-wrap: wrap;
       height: auto;
       .tile__figure {
