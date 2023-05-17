@@ -19,7 +19,10 @@ class SearchApiStatusSubscriber implements EventSubscriberInterface {
    */
   public static function getSubscribedEvents(): array {
     return [
-      SearchApiEvents::QUERY_PRE_EXECUTE => ['queryAlter', -100],
+      SearchApiEvents::QUERY_PRE_EXECUTE => [
+        ['searchStatusQueryAlter', -100],
+        ['searchAutocompleteQueryAlter', -100],
+      ],
     ];
   }
 
@@ -29,24 +32,47 @@ class SearchApiStatusSubscriber implements EventSubscriberInterface {
    * @param \Drupal\search_api\Event\QueryPreExecuteEvent $event
    *   The query alter event.
    */
-  public function queryAlter(QueryPreExecuteEvent $event): void {
+  public function searchStatusQueryAlter(QueryPreExecuteEvent $event): void {
     $hasStatus = FALSE;
     $query = $event->getQuery();
 
-    // The facet below is only available on the search page or autocomplete.
-    if ($query->getSearchId() === 'views_page:search__page_1' || $query->getSearchId() === 'search_api_autocomplete:search') {
-      $conditions = &$query->getConditionGroup()->getConditions();
-      foreach ($conditions as $key => $condition) {
-        if (($condition instanceof ConditionGroupInterface) && $condition->hasTag('facet:entity_status')) {
-          unset($conditions[$key]);
-          $hasStatus = TRUE;
-        }
-      }
+    if ($query->getSearchId() !== 'views_page:search__page_1') {
+      return;
+    }
 
-      if (!$hasStatus) {
-        $query->addCondition('entity_status', 'archived', '<>');
+    $conditions = &$query->getConditionGroup()->getConditions();
+    foreach ($conditions as $key => $condition) {
+      if (($condition instanceof ConditionGroupInterface) && $condition->hasTag('facet:entity_status')) {
+        unset($conditions[$key]);
+        $hasStatus = TRUE;
       }
     }
+
+    if (!$hasStatus) {
+      $query->addCondition('entity_status', 'archived', '<>');
+    }
+  }
+
+  /**
+   * Reacts to the autocomplete alter event.
+   *
+   * @param \Drupal\search_api\Event\QueryPreExecuteEvent $event
+   *   The query alter event.
+   */
+  public function searchAutocompleteQueryAlter(QueryPreExecuteEvent $event): void {
+    $query = $event->getQuery();
+
+    if ($query->getSearchId() !== 'search_api_autocomplete:search') {
+      return;
+    }
+
+    $conditions = &$query->getConditionGroup()->getConditions();
+    foreach ($conditions as $key => $condition) {
+      if (($condition instanceof ConditionGroupInterface) && $condition->hasTag('facet:entity_status')) {
+        unset($conditions[$key]);
+      }
+    }
+    $query->addCondition('entity_status', 'archived', '<>');
   }
 
 }
