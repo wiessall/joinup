@@ -49,8 +49,10 @@ Feature: Discussions added to collections
     And I am logged in as kesha1988
 
     When I go to the homepage of the "The World of the Waves" collection
-    And I click "Add discussion" in the plus button menu
-    Then I should see the heading "Add discussion"
+    Then I should not see the text "Discussions" in the "Navigation menu"
+
+    When I click "Add discussion" in the plus button menu
+    And I should see the heading "Add discussion"
     And the following fields should be present "Title, Content, Topic, Logo, Add a new file"
     # The entity is new, so the current workflow state should not be shown.
     And the following fields should not be present "Current workflow state, Motivation"
@@ -80,6 +82,7 @@ Feature: Discussions added to collections
     # Verify that the author is visible on the page.
     And I should see the text "Kesha Pontecorvo"
     And I should see the success message "Discussion An amazing discussion has been created."
+    And I should see the text "Discussions" in the "Navigation menu"
     And the "The World of the Waves" collection has a discussion titled "An amazing discussion"
 
     # Attachments should be visible.
@@ -93,7 +96,8 @@ Feature: Discussions added to collections
 
     # Check that the tile for the discussion is visible on the collection page.
     When I go to the discussions page of "The World of the Waves"
-    Then I should see the link "An amazing discussion"
+    Then I should see the text "Discussions" in the "Navigation menu"
+    And I should see the link "An amazing discussion"
     And I should not see the text "Kesha Pontecorvo" in the "An amazing discussion" tile
     # Initially there are 0 comments on the discussion.
     And I should see the statistics "0" in the "An amazing discussion" tile
