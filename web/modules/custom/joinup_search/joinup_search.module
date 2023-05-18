@@ -214,7 +214,7 @@ function joinup_search_search_api_solr_query_alter(SolariumQueryInterface $solar
  */
 function _joinup_search_apply_global_search_api_solr_settings(SolariumQueryInterface $solarium_query, QueryInterface $query): void {
   /** @var \Drupal\search_api_field\Plugin\Field\FieldType\SearchItem $item */
-  if (!$query->getOption('search_api_field item')) {
+  if (!$item = $query->getOption('search_api_field item')) {
     return;
   }
 
