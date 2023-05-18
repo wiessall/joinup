@@ -77,11 +77,6 @@ paragraph--image:
     theme:
       assets/css/paragraph--image.min.css: {}
 
-paragraph--row:
-  css:
-    theme:
-      assets/css/paragraph--row.min.css: {}
-
 paragraph--testimony:
   css:
     theme:
