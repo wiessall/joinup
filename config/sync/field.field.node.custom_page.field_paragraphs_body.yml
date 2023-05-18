@@ -10,7 +10,7 @@ dependencies:
     - paragraphs.paragraphs_type.iframe
     - paragraphs.paragraphs_type.json_map
     - paragraphs.paragraphs_type.layout
-    - paragraphs.paragraphs_type.simple_paragraph
+    - paragraphs.paragraphs_type.text
   module:
     - entity_reference_revisions
 id: node.custom_page.field_paragraphs_body
