@@ -47,7 +47,7 @@ Feature:
     Then I should not see the heading "Main topics"
 
     Given I am logged in as a moderator
-    And I click "Dashboard"
+    And I go to "/dashboard"
     And I click "Curated content listings"
     And I click "Homepage topics"
     Then I should see the heading "Update curated content listing Homepage topics"

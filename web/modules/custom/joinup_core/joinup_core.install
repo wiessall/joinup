@@ -8,7 +8,6 @@
 declare(strict_types = 1);
 
 use Drupal\Core\Site\Settings;
-use Drupal\field\Entity\FieldStorageConfig;
 use Drupal\user\Entity\User;
 
 /**
@@ -92,36 +91,4 @@ function joinup_core_requirements($phase): array {
   }
 
   return $requirements;
-}
-
-/**
- * Update and trim existing first and family names.
- */
-function joinup_core_update_109200(): void {
-  $database = \Drupal::database();
-  $num_chars = 100;
-  $fields_to_update = ['field_user_family_name', 'field_user_first_name'];
-  $storage_schema = \Drupal::keyValue('entity.storage_schema.sql');
-
-  foreach ($fields_to_update as $field_name) {
-    $table_name = 'user__' . $field_name;
-    $database->query("UPDATE {$table_name} SET {$field_name}_value = SUBSTR({$field_name}_value, 1, 100) WHERE LENGTH({$field_name}_value) > 100");
-
-    // Resize the columns.
-    $database->query("ALTER TABLE {$table_name} MODIFY {$field_name}_value VARCHAR($num_chars)");
-
-    // Update storage schema.
-    $storage_key = "user.field_schema_data." . $field_name;
-    $field_schema = $storage_schema->get($storage_key);
-    $field_schema["user__{$field_name}"]['fields']["{$field_name}_value"]['length'] = $num_chars;
-    $storage_schema->set($storage_key, $field_schema);
-
-    // Update field configuration.
-    \Drupal::configFactory()->getEditable("field.storage.user.{$field_name}")
-      ->set('settings.max_length', $num_chars)
-      ->save(TRUE);
-
-    // Update field storage configuration.
-    FieldStorageConfig::loadByName('user', $field_name)->save();
-  }
 }
