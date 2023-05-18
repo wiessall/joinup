@@ -74,7 +74,7 @@ class JoinupNewsContext extends RawDrupalContext {
       // Check the body text. It should not contain any HTML tags.
       $actual_body = $actual_data->find('css', '.tile__body .tile__text')->getHtml();
       Assert::assertEquals(strip_tags($actual_body), $actual_body, sprintf('The body text for the article "%s" in the "Latest news" section should have all HTML tags stripped.', $actual_title));
-      Assert::assertEquals($expected_data['body'], $actual_body, sprintf('The body text for the article "%s" in the "Latest news" section does not contain the expected text.', $actual_title));
+      Assert::assertEquals($expected_data['body'], trim($actual_body), sprintf('The body text for the article "%s" in the "Latest news" section does not contain the expected text.', $actual_title));
 
       foreach ($expected_topic_titles as $j => $expected_topic_title) {
         /** @var \Behat\Mink\Element\NodeElement $topic_element */

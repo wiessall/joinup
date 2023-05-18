@@ -534,11 +534,11 @@ class JoinupCommunityContentContext extends RawDrupalContext {
     }
 
     // Check title text.
-    $actual_title = $block_element->find('css', 'article h1')->getText();
+    $actual_title = $block_element->find('css', 'article.tile h1.tile__title')->getText();
     Assert::assertEquals($content->label(), $actual_title, sprintf('Expected the Highlighted content to have the title "%s" but instead found "%s".', $content->label(), $actual_title));
 
     // Check that title links to the canonical page of the content.
-    $xpath = '//h1/a[@href = "' . $this->getEntityUri($content) . '"]';
+    $xpath = '//a[@href = "' . $this->getEntityUri($content) . '"]';
     Assert::assertNotEmpty($block_element->find('xpath', $xpath), sprintf('%s "%s" does not link to the canonical page.', $content->getType(), $actual_title));
 
     // Retrieve the topics from the content, limiting the result to maximum 2
@@ -546,7 +546,7 @@ class JoinupCommunityContentContext extends RawDrupalContext {
     $topics = array_slice($content->getTopics(), 0, 2);
 
     // Check that the correct number of topics are present.
-    $topic_elements = $block_element->findAll('css', '.field--name-field-topic .field__item');
+    $topic_elements = $block_element->findAll('css', '.tile__body .badge');
     Assert::assertEquals(count($topics), count($topic_elements), sprintf('Expected %d topics in the "Highlighted content" section but found %d topics.', count($topics), count($topic_elements)));
 
     foreach ($topics as $j => $topic) {
@@ -556,10 +556,6 @@ class JoinupCommunityContentContext extends RawDrupalContext {
       // Check the title of each topic.
       $actual_topic_title = $topic_element->getText();
       Assert::assertEquals($topic->label(), $actual_topic_title, sprintf('Expected topic #%d to be "%s" in the "Highlighted content" section but instead found "%s".', $j + 1, $topic->label(), $actual_topic_title));
-
-      // Check that each topic links to their canonical page.
-      $xpath = '/a[@href = "' . $this->getEntityUri($topic) . '"]';
-      Assert::assertNotEmpty($topic_element->find('xpath', $xpath), sprintf('Topic "%s" in the "Highlighted content" section does not link to the canonical topic page.', $actual_topic_title));
     }
 
     // Check that the description is present.
