@@ -34,6 +34,8 @@ Feature: Like/unlike feature.
     When I go to the homepage of the "Very liked solution" solution
     Then I should not see the link "Like" in the "Like block"
     And I should not see the link "Unike" in the "Like block"
+    # Regression test for the extra parenthesis.
+    And I should not see the text "Like (RDF entity)" in the "Like block" region
     And I see the text "1" in the "Like block" region
 
   Scenario Outline: User can like/unlike solution's content
