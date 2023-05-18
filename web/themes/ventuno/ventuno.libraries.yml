@@ -230,8 +230,6 @@ navbar:
   css:
     theme:
       assets/css/navbar.min.css: { minified: true }
-  js:
-    assets/js/sticky-menu.min.js: { minified: true, attributes: { defer: true } }
 
 navbar-search:
   css:
