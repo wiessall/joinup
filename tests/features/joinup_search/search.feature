@@ -761,6 +761,6 @@ Feature: Global search
       | The uneven universe | Relativity news: Relativity theory | I do care about the relativity keyword in the body.               | Custom collection | validated | 02/01/2019 | 02/08/2019 |
       | The earth is square | Absolutely nonsense                | Some news are not worth it but I will add relativity here anyway. | Custom collection | validated | 03/01/2019 | 01/08/2019 |
     When I visit the search page
-    Then I should see the text "Updated Date: 08/03/2019" in the "Relativity is the word" card
-    And I should see the text "Updated Date: 08/02/2019" in the "Relativity news: Relativity theory" card
-    And I should see the text "Updated Date: 08/01/2019" in the "Absolutely nonsense" card
+    Then I should see the text "Last update: 08/03/2019" in the "Relativity is the word" card
+    And I should see the text "Last update: 08/02/2019" in the "Relativity news: Relativity theory" card
+    And I should see the text "Last update: 08/01/2019" in the "Absolutely nonsense" card
