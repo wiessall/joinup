@@ -11,8 +11,8 @@ use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\DrupalExtension\TagTrait;
 use Drupal\joinup\Traits\CacheInvalidationTrait;
 use Drupal\joinup\Traits\EntityTrait;
+use Drupal\joinup\Traits\JavascriptTrait;
 use Drupal\joinup\Traits\MailCollectorTrait;
-use Drupal\joinup\Traits\MaterialDesignTrait;
 use Drupal\joinup\Traits\OgTrait;
 use Drupal\joinup\Traits\TraversingTrait;
 use Drupal\joinup\Traits\UserTrait;
@@ -34,8 +34,8 @@ class JoinupSubscriptionContext extends RawDrupalContext {
 
   use CacheInvalidationTrait;
   use EntityTrait;
+  use JavascriptTrait;
   use MailCollectorTrait;
-  use MaterialDesignTrait;
   use MessageDigestTrait;
   use OgTrait;
   use TagTrait;

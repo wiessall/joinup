@@ -91,9 +91,3 @@ paragraph--video:
   css:
     theme:
       assets/css/paragraph--video.min.css: {}
-
-# @todo ISAICP-7138 delete this library when switch to Ventuno theme is complete
-three-dots-menu:
-  css:
-    theme:
-      assets/css/three-dots-menu.min.css: { minified: true }

@@ -11,6 +11,7 @@ use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\eif\EifInterface;
 use Drupal\joinup_bundle_class\LogoInterface;
 use Drupal\joinup_group\JoinupGroupHelper;
+use Drupal\joinup_workflow\ArchivableEntityInterface;
 
 /**
  * Implements hook_preprocess_HOOK().
@@ -135,6 +136,17 @@ function ventuno_preprocess_node__view_mode_tile(array &$variables, string $enti
     ]);
   }
 
+  // For now, only Custom page, Discussion, Document, Event and News items
+  // (all of them are nodes) can be archived.
+  if ($entity instanceof ArchivableEntityInterface
+    && $entity->get('field_state')->value === 'archived'
+  ) {
+    $variables['extra_data'][] = [
+      'icon' => 'trash',
+      'label' => t('Archived'),
+    ];
+  };
+
   switch ($entity->bundle()) {
     case 'discussion':
       $variables['info']['icon'] = 'calendar-event';
@@ -183,4 +195,16 @@ function ventuno_preprocess_node__view_mode_tile(array &$variables, string $enti
       break;
   }
   _ventuno_preprocess_tile($variables, 'node');
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for node--moderation.html.twig.
+ *
+ * - Removes the contextual links.
+ * - Adds an edit URL.
+ */
+function ventuno_preprocess_node__moderation(&$variables) {
+  /** @var \Drupal\node\NodeInterface $node */
+  $node = $variables['node'];
+  $variables['edit_url'] = $node->toUrl('edit-form')->toString();
 }

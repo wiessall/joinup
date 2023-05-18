@@ -6,6 +6,9 @@ namespace Drupal\joinup_search\EventSubscriber;
 
 use Drupal\joinup_user\Entity\JoinupUserInterface;
 use Drupal\paragraphs\ParagraphInterface;
+use Drupal\facets\FacetInterface;
+use Drupal\facets\FacetManager\DefaultFacetManager;
+use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\search_api\Event\QueryPreExecuteEvent;
 use Drupal\search_api\Event\SearchApiEvents;
 use Drupal\search_api\Query\ConditionGroupInterface;
@@ -18,16 +21,25 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 class SearchApiStatusSubscriber implements EventSubscriberInterface {
 
   /**
+   * Constructs a new SearchApiStatusSubscriber object.
+   *
+   * @param \Drupal\facets\FacetManager\DefaultFacetManager $facetManager
+   *   The facet manager.
+   */
+  public function __construct(protected DefaultFacetManager $facetManager) {}
+
+  /**
    * {@inheritdoc}
    */
   public static function getSubscribedEvents(): array {
     return [
-      SearchApiEvents::QUERY_PRE_EXECUTE => ['searchStatusQueryAlter', -100],
-      SearchApiEvents::QUERY_PRE_EXECUTE . '.search_api_field' => [
-        ['groupContentListingQueryAlter'],
-        ['userContentListingQueryAlter'],
-        ['paragraphContentListingQueryAlter'],
+      SearchApiEvents::QUERY_PRE_EXECUTE => [
+        ['searchStatusQueryAlter', -100],
+        ['groupContentListingQueryAlter', -10],
       ],
+      SearchApiEvents::QUERY_PRE_EXECUTE . '.search_api_field' => [
+        ['paragraphContentListingQueryAlter'],
+      ]
     ];
   }
 
@@ -66,6 +78,8 @@ class SearchApiStatusSubscriber implements EventSubscriberInterface {
    *   The query alter event.
    */
   public function groupContentListingQueryAlter(QueryPreExecuteEvent $event): void {
+    $this->showArchivedStatusSetupQueryAlter($event);
+
     $query = $event->getQuery();
     if (!($query->getSearchId() !== 'paragraph.content_listing.content_listing')) {
       return;
@@ -124,9 +138,14 @@ class SearchApiStatusSubscriber implements EventSubscriberInterface {
       return;
     }
 
-    // Ensure that the status.
-    if (empty($query->getOption('search_api_facets')['entity_status'])) {
+    if (empty($query->getOption('status_facet_name'))) {
+      // That means that the status switch is not set in the page, so ignore
+      // its effect.
       return;
+    }
+
+    if (!$query->getOption('show_archived')) {
+      throw new \Exception('The show_archived option should be set. ::showArchivedStatusSetupQueryAlter should run first.');
     }
 
     $hasStatus = FALSE;
@@ -145,6 +164,63 @@ class SearchApiStatusSubscriber implements EventSubscriberInterface {
     else {
       $query->addCondition('entity_status', 'archived', '<>');
     }
+  }
+
+  /**
+   * Sets up the show_archived flag and its related facets as options.
+   *
+   * @param \Drupal\search_api\Event\QueryPreExecuteEvent $event
+   *   The query alter event.
+   */
+  protected function showArchivedStatusSetupQueryAlter(QueryPreExecuteEvent $event): void {
+    $query = $event->getQuery();
+    /** @var \Drupal\Core\Field\FieldItemInterface $item */
+    /** @var \Drupal\Core\Entity\ContentEntityInterface $entity */
+    if (!($item = $query->getOption('search_api_field item')) || !($entity = $query->getOption('search_api_field entity'))) {
+      return;
+    }
+
+    $value = $item->getValue()['value'];
+    $showArchived = $value['show_archived'] ?? 'all';
+    $query->setOption('show_archived', $showArchived);
+    if ($showArchived !== 'all') {
+      $query->addCondition('entity_status', 'archived', $showArchived === 'archived' ? '=' : '<>');
+    }
+    else {
+      $facets = $this->getEntityStatusFacets($query);
+      if (empty($facets)) {
+        return;
+      }
+
+      if (count($facets) > 1) {
+        throw new \Exception('There should be only one facet for the search_api_field facet source.');
+      }
+      $facet = reset($facets);
+      $value = $item->getValue()['value']['fields'];
+      if (isset($value[$facet->id()]) && $value[$facet->id()]['region'] !== 'hidden') {
+        $query->setOption('status_facet_name', $facet->id());
+      }
+    }
+  }
+
+  /**
+   * Returns facets for the status field given a search_api_field query.
+   *
+   * @param \Drupal\search_api\Query\QueryInterface $query
+   *   The search_api_field query.
+   *
+   * @return \Drupal\facets\FacetInterface[]
+   *   The facets.
+   */
+  protected function getEntityStatusFacets(QueryInterface $query): array {
+    $entity = $query->getOption('search_api_field entity');
+    $item = $query->getOption('search_api_field item');
+    $facetSourceId = 'search_api_field:' . $entity->getEntityTypeId() . '.' . $entity->bundle() . '.' . $item->getParent()->getName();
+
+    $facets = $this->facetManager->getFacetsByFacetSourceId($facetSourceId);
+    return array_filter($facets, function (FacetInterface $facet) {
+      return $facet->getFieldIdentifier() === 'entity_status';
+    });
   }
 
 }

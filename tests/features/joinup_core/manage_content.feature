@@ -55,7 +55,7 @@ Feature:
     When I go to the homepage of the "Vintage Art" collection
     Then I should see the link "Manage content"
     Given I click "Manage content"
-    Then I should see "Manage content" in the Header
+    Then I should see the heading "Manage content"
 
     # Download the list as CSV.
     When I click "Download CSV"
@@ -78,7 +78,7 @@ Feature:
     When I go to the homepage of the "Vintage Art" collection
     Then I should see the link "Manage content"
     Given I click "Manage content"
-    Then I should see "Manage content" in the Header
+    Then I should see the heading "Manage content"
 
     # Archive action.
     Given I select the "The Panama Papers" row

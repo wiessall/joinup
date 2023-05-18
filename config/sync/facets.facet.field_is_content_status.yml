@@ -42,7 +42,7 @@ processor_configs:
   exclude_specified_items:
     processor_id: exclude_specified_items
     weights:
-      build: 50
+      build: -9
     settings:
       exclude: archived
       regex: false
@@ -50,7 +50,7 @@ processor_configs:
   hierarchy_processor:
     processor_id: hierarchy_processor
     weights:
-      build: 100
+      build: -8
     settings: {  }
   replace:
     processor_id: replace
@@ -61,6 +61,6 @@ processor_configs:
   url_processor_handler:
     processor_id: url_processor_handler
     weights:
-      pre_query: 50
-      build: 15
+      pre_query: -10
+      build: -10
     settings: {  }
