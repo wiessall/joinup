@@ -10,6 +10,7 @@ use Drupal\Core\Database\Connection;
 use Drupal\Core\Datetime\DateFormatterInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\flag\FlagCountManagerInterface;
 use Drupal\joinup\ExportBatchedDataFormBase;
 use Drupal\solution\Entity\SolutionInterface;
 use Drupal\sparql_entity_storage\Driver\Database\sparql\ConnectionInterface;
@@ -35,8 +36,10 @@ class ExportStatisticsPerGroupForm extends ExportBatchedDataFormBase {
    *   The MySQL connection instance.
    * @param \Drupal\sparql_entity_storage\Driver\Database\sparql\ConnectionInterface $sparql
    *   The SPARQL connection instance.
+   * @param \Drupal\flag\FlagCountManagerInterface $flagCountManager
+   *   The flag count manager.
    */
-  public function __construct(protected CacheBackendInterface $cache, protected DateFormatterInterface $date_formatter, protected TimeInterface $time, protected EntityTypeManagerInterface $entityTypeManager, protected Connection $mysql, protected ConnectionInterface $sparql) {
+  public function __construct(protected CacheBackendInterface $cache, protected DateFormatterInterface $date_formatter, protected TimeInterface $time, protected EntityTypeManagerInterface $entityTypeManager, protected Connection $mysql, protected ConnectionInterface $sparql, FlagCountManagerInterface $flagCountManager) {
     parent::__construct($cache, $date_formatter, $time);
 
   }
@@ -52,6 +55,7 @@ class ExportStatisticsPerGroupForm extends ExportBatchedDataFormBase {
       $container->get('entity_type.manager'),
       $container->get('database'),
       $container->get('sparql.endpoint'),
+      $container->get('flag.count'),
     );
   }
 
@@ -137,7 +141,7 @@ QUERY;
     $rdf_storage = $this->entityTypeManager->getStorage('rdf_entity');
     /** @var \Drupal\collection\Entity\CollectionInterface|\Drupal\solution\Entity\SolutionInterface $group */
     $group = $rdf_storage->load((string) $entity_id);
-
+    $counts = $this->flagCountManager->getEntityFlagCounts($group);
     // Fetch the nodes that belong to the group.
     $group_content_data = $this->mysql->query($this->getGroupContentQuery($entity_id))->fetchAll();
     $group_content = [
@@ -157,10 +161,11 @@ QUERY;
         $group_content[$data->type]++;
       }
     }
-
+    $count = 0;
     // For solutions, count releases and distributions.
     if ($group instanceof SolutionInterface) {
       $releases_and_distributions_ids = $this->sparql->query($this->getRelasesAndDistributionsQuery($entity_id));
+      $count = empty($counts) || !isset($counts['like_rdf_entity']) ? 0 : $counts['like_rdf_entity'];
 
       /** @var \EasyRdf\Sparql\Result $result */
       foreach ($releases_and_distributions_ids as $result_id) {
@@ -201,6 +206,7 @@ QUERY;
       + $group_content['asset_release']
       + $group_content['asset_distribution'],
       'Number of members' => $memberships,
+      'Total numbers of likes' => $count,
       'Description word count' => str_word_count(strip_tags($description)),
     ];
   }
