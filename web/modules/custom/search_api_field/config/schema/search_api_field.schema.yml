@@ -60,6 +60,9 @@ field.value.search_api_field:
         limit:
           type: integer
           label: 'Limit'
+        show_archived:
+          type: string
+          label: 'Show archived'
         query_builder:
           type: mapping
           label: 'Content filter'

@@ -47,6 +47,8 @@ Feature: Global search with archive content
     Then I should see the following tiles in the correct order:
       | Event 2         |
       | Some document 2 |
+    And I should see the text "Archived" in the "Event 2" tile
+    And I should see the text "Archived" in the "Some document 2" tile
 
     And I should not see the "Event 1" tile
     And I should not see the "Some document 1" tile
