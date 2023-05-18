@@ -222,6 +222,8 @@ function _joinup_search_apply_global_search_api_solr_settings(SolariumQueryInter
   // @todo remove when document boosting is reimplemented by search_api_solr
   // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-4907
   $solarium_query->addParam('defType', 'edismax');
+
+  $value = $item->getValue()['value'];
   if (empty($value['query_builder']['filters'])) {
     return;
   }
