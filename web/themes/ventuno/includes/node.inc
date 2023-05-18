@@ -184,3 +184,15 @@ function ventuno_preprocess_node__view_mode_tile(array &$variables, string $enti
   }
   _ventuno_preprocess_tile($variables, 'node');
 }
+
+/**
+ * Implements hook_preprocess_HOOK() for node--moderation.html.twig.
+ *
+ * - Removes the contextual links.
+ * - Adds an edit URL.
+ */
+function ventuno_preprocess_node__moderation(&$variables) {
+  /** @var \Drupal\node\NodeInterface $node */
+  $node = $variables['node'];
+  $variables['edit_url'] = $node->toUrl('edit-form')->toString();
+}

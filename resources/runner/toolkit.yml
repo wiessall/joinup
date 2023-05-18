@@ -8,6 +8,11 @@ toolkit:
       - mysql
       - solr
       - virtuoso
+  components:
+    # Disable 'toolkit-components' job check for outdated packages. The Joinup
+    # dependencies policy is to update all dependencies after each release.
+    outdated:
+      check: false
 
   build:
     dist:
@@ -51,8 +56,6 @@ commands:
       dir: ${joinup.files_private_dir}
     - task: mkdir
       dir: ${env.DRUPAL_FILE_TEMP_PATH}
-    - task: run
-      command: joinup:build-assets
 
   # Overrides toolkit:install-clean.
   toolkit:install-clean:
