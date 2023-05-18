@@ -1,0 +1,27 @@
+uuid: 7d3c7c1e-2b1c-4aaa-9c31-39dd9433b477
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_background
+    - paragraphs.paragraphs_type.layout
+  module:
+    - cached_computed_field
+id: paragraph.layout.field_background
+field_name: field_background
+entity_type: paragraph
+bundle: layout
+label: Background
+description: 'When enabled, this option will add a full-width background to your layout paragraph.'
+required: false
+translatable: false
+default_value:
+  -
+    expire: null
+    value: false
+default_value_callback: ''
+settings:
+  on_label: 'On'
+  off_label: 'Off'
+  cache-max-age: 3600
+field_type: cached_computed_boolean

@@ -1,0 +1,27 @@
+uuid: a04b50de-bd35-4326-b1ab-9edc872f12d5
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.layout.field_background
+    - paragraphs.paragraphs_type.layout
+id: paragraph.layout.default
+targetEntityType: paragraph
+bundle: layout
+mode: default
+content:
+  field_background:
+    type: boolean_checkbox
+    weight: -199
+    region: content
+    settings:
+      display_label: true
+    third_party_settings: {  }
+  layout_paragraphs_fields:
+    weight: -200
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+hidden:
+  created: true
+  status: true

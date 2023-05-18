@@ -1,0 +1,20 @@
+uuid: 5ec8d789-7599-4bdf-a9d7-95f131df0e69
+langcode: en
+status: true
+dependencies:
+  content:
+    - 'file:file:f93e37cc-c0c4-4ab9-b5a0-0a62a68dd912'
+  module:
+    - layout_paragraphs
+id: layout
+label: Layout
+icon_uuid: f93e37cc-c0c4-4ab9-b5a0-0a62a68dd912
+icon_default: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNiIgaGVpZ2h0PSIxNiIgZmlsbD0iY3VycmVudENvbG9yIiBjbGFzcz0iYmkgYmktZ3JpZC0xeDItZmlsbCIgdmlld0JveD0iMCAwIDE2IDE2Ij4KICA8cGF0aCBkPSJNMCAxYTEgMSAwIDAgMSAxLTFoNWExIDEgMCAwIDEgMSAxdjE0YTEgMSAwIDAgMS0xIDFIMWExIDEgMCAwIDEtMS0xVjF6bTkgMGExIDEgMCAwIDEgMS0xaDVhMSAxIDAgMCAxIDEgMXY1YTEgMSAwIDAgMS0xIDFoLTVhMSAxIDAgMCAxLTEtMVYxem0wIDlhMSAxIDAgMCAxIDEtMWg1YTEgMSAwIDAgMSAxIDF2NWExIDEgMCAwIDEtMSAxaC01YTEgMSAwIDAgMS0xLTF2LTV6Ii8+Cjwvc3ZnPg=='
+description: 'This paragraph type allows to choose between different layouts in which you can then place your paragraphs with simple drag&drop.'
+behavior_plugins:
+  layout_paragraphs:
+    enabled: true
+    available_layouts:
+      layout_twocol_section: 'Two column'
+      layout_threecol_section: 'Three column'
+      layout_fourcol_section: 'Four column'
