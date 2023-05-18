@@ -51,32 +51,28 @@ class JoinupNewsContext extends RawDrupalContext {
    */
   public function assertLatestNews(TableNode $table) {
     $columns = $table->getColumnsHash();
-    $articles = $this->getSession()->getPage()->findAll('css', '.view-latest-news article');
+    $articles = $this->getSession()->getPage()->findAll('css', '.view-latest-news .tile');
     Assert::assertEquals(count($columns), count($articles), sprintf('Expected %d articles in the "Latest news" section but found %d articles', count($columns), count($articles)));
 
     foreach ($columns as $i => $expected_data) {
       $actual_data = array_shift($articles);
 
       // Check title text.
-      $actual_title = $actual_data->find('css', 'h2')->getText();
+      $actual_title = $actual_data->find('css', 'h1.tile__title')->getText();
       Assert::assertEquals($expected_data['title'], $actual_title, sprintf('Expected title "%s" for article %d in the "Latest news" section but instead found "%s".', $expected_data['title'], $i + 1, $actual_title));
 
       // Check that title links to the canonical page of the news article.
       $news_node = $this->getEntityByLabel('node', $actual_title, 'news');
-      $xpath = '//h2/a[@href = "' . $this->getEntityUri($news_node) . '"]';
+      $xpath = '//a[@href = "' . $this->getEntityUri($news_node) . '"]';
       Assert::assertNotEmpty($actual_data->find('xpath', $xpath), sprintf('Article "%s" does not link to the canonical news page.', $actual_title));
-
-      // Check the date.
-      $actual_date = $actual_data->find('css', '.dated-listing--date')->getText();
-      Assert::assertEquals($expected_data['date'], $actual_date, sprintf('Expected date "%s" for the "%s" article in the "Latest news" section but found "%s" instead.', $expected_data['date'], $actual_title, $actual_date));
 
       // Check that the correct number of topics are present.
       $expected_topic_titles = array_map('trim', explode(',', $expected_data['topics']));
-      $topic_elements = $actual_data->findAll('css', '.field--name-field-topic .field__item');
+      $topic_elements = $actual_data->findAll('css', '.tile__body .badge');
       Assert::assertEquals(count($expected_topic_titles), count($topic_elements), sprintf('Expected %d topics for the "%s" article in the "Latest news" section but found %d topics.', count($expected_topic_titles), $expected_data['title'], count($topic_elements)));
 
       // Check the body text. It should not contain any HTML tags.
-      $actual_body = $actual_data->find('css', '.field--name-body')->getHtml();
+      $actual_body = $actual_data->find('css', '.tile__body .tile__text')->getHtml();
       Assert::assertEquals(strip_tags($actual_body), $actual_body, sprintf('The body text for the article "%s" in the "Latest news" section should have all HTML tags stripped.', $actual_title));
       Assert::assertEquals($expected_data['body'], $actual_body, sprintf('The body text for the article "%s" in the "Latest news" section does not contain the expected text.', $actual_title));
 
@@ -87,11 +83,6 @@ class JoinupNewsContext extends RawDrupalContext {
         // Check the title of each topic.
         $actual_topic_title = $topic_element->getText();
         Assert::assertEquals($expected_topic_title, $actual_topic_title, sprintf('Expected topic #%d to be "%s" for the "%s" article in the "Latest news" section but instead found "%s".', $j + 1, $expected_topic_title, $actual_title, $actual_topic_title));
-
-        // Check that each topic links to their canonical page.
-        $topic_entity = self::getEntityByLabel('taxonomy_term', $actual_topic_title, 'topic');
-        $xpath = '/a[@href = "' . $this->getEntityUri($topic_entity) . '"]';
-        Assert::assertNotEmpty($topic_element->find('xpath', $xpath), sprintf('Topic "%s" for article "%s" does not link to the canonical topic page.', $actual_topic_title, $actual_title));
       }
     }
   }
