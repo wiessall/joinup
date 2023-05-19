@@ -1,3 +1,7 @@
+@import "../partials/core";
+@import "@openeuropa/bcl-bootstrap/scss/alert";
+@import "@openeuropa/bcl-theme-default/src/scss/alert";
+
 .alert {
   p:last-of-type {
     margin-bottom: 0;

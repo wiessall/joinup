@@ -96,7 +96,7 @@ tables:
 abstract:
   css:
     theme:
-      assets/css/abstract.css: {}
+      assets/css/abstract.min.css: { minified: true }
 
 actions-menu:
   css:
@@ -154,7 +154,7 @@ footer:
 form-checkboxes:
   css:
     theme:
-      assets/css/form-checkboxes.css: {}
+      assets/css/form-checkboxes.min.css: { minified: true }
 
 forms:
   css:
@@ -209,17 +209,12 @@ header-topic:
     assets/js/toggle-text-seemore-btn.min.js: { minified: true }
   css:
     theme:
-      assets/css/header-topic.min.css: {}
+      assets/css/header-topic.min.css: { minified: true }
 
 ief-entity-table:
   css:
     theme:
       assets/css/ief-entity-table.min.css: { minified: true }
-
-iop-header:
-  css:
-    theme:
-      assets/css/iop-header.min.css: { minified: true }
 
 layout-block:
   css:
@@ -249,10 +244,10 @@ page-title:
     theme:
       assets/css/page-title.min.css: { minified: true }
 
-pager:
+pagination:
   css:
     theme:
-      assets/css/pager.min.css: { minified: true }
+      assets/css/pagination.min.css: { minified: true }
 
 paragraph:
   css:

@@ -22,10 +22,13 @@
 // Override with Joinup variables
 @import "@openeuropa/bcl-theme-joinup/src/scss/base/variables";
 // Override with used variables only to make utilities a lot lighter
-@import "core/overrides/variables";
+@import "overrides/variables";
 
 // Bootstrap default maps
 @import "@openeuropa/bcl-bootstrap/scss/maps";
 
 // Bootstrap mixins
 @import "@openeuropa/bcl-bootstrap/scss/mixins";
+
+@import "mixins/bootstrap-icons";
+@import "mixins/full-width-background-colors";

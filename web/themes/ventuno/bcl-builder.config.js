@@ -135,37 +135,37 @@ module.exports = {
   styles: [
     // Base
     {
-      entry: path.resolve(outputFolder, "src/scss/base.scss"),
+      entry: path.resolve(outputFolder, "src/scss/01-base.scss"),
       dest: path.resolve(outputFolder, "assets/css/base.min.css"),
       options: {
-        minify: true,
         includePaths,
+        minify: true,
         sourceMap: "file",
       },
     },
     // Layout
     {
-      entry: path.resolve(outputFolder, "src/scss/layout.scss"),
+      entry: path.resolve(outputFolder, "src/scss/02-layout.scss"),
       dest: path.resolve(outputFolder, "assets/css/layout.min.css"),
       options: {
-        minify: true,
         includePaths,
+        minify: true,
         sourceMap: "file",
       },
     },
     // Components
     {
-      entry: path.resolve(outputFolder, "src/scss/components.scss"),
+      entry: path.resolve(outputFolder, "src/scss/03-components.scss"),
       dest: path.resolve(outputFolder, "assets/css/components.min.css"),
       options: {
-        minify: true,
         includePaths,
+        minify: true,
         sourceMap: "file",
       },
     },
     // Theme
     {
-      entry: path.resolve(outputFolder, "src/scss/theme.scss"),
+      entry: path.resolve(outputFolder, "src/scss/04-theme.scss"),
       dest: path.resolve(outputFolder, "assets/css/theme.min.css"),
       options: {
         includePaths,
@@ -175,7 +175,7 @@ module.exports = {
     },
     // Pages
     {
-      entry: path.resolve(outputFolder, "src/scss/homepage.scss"),
+      entry: path.resolve(outputFolder, "src/scss/pages/homepage.scss"),
       dest: path.resolve(outputFolder, "assets/css/homepage.min.css"),
       options: {
         includePaths,
@@ -184,7 +184,16 @@ module.exports = {
       },
     },
     {
-      entry: path.resolve(outputFolder, "src/scss/licence-comparer.scss"),
+      entry: path.resolve(outputFolder, "src/scss/pages/searchpage.scss"),
+      dest: path.resolve(outputFolder, "assets/css/searchpage.min.css"),
+      options: {
+        includePaths,
+        minify: true,
+        sourceMap: "file",
+      },
+    },
+    {
+      entry: path.resolve(outputFolder, "src/scss/pages/licence-comparer.scss"),
       dest: path.resolve(outputFolder, "assets/css/licence-comparer.min.css"),
       options: {
         includePaths,
@@ -193,8 +202,18 @@ module.exports = {
       },
     },
     {
-      entry: path.resolve(outputFolder, "src/scss/eif-filter.scss"),
-      dest: path.resolve(outputFolder, "assets/css/eif-filter.min.css"),
+      entry: path.resolve(outputFolder, "src/scss/pages/glossary.scss"),
+      dest: path.resolve(outputFolder, "assets/css/glossary.min.css"),
+      options: {
+        includePaths,
+        minify: true,
+        sourceMap: "file",
+      },
+    },
+    // Components
+    {
+      entry: path.resolve(outputFolder, "src/scss/components/abstract.scss"),
+      dest: path.resolve(outputFolder, "assets/css/abstract.min.css"),
       options: {
         includePaths,
         minify: true,
@@ -202,35 +221,7 @@ module.exports = {
       },
     },
     {
-      entry: path.resolve(outputFolder, "src/scss/licence-filter.scss"),
-      dest: path.resolve(outputFolder, "assets/css/licence-filter.min.css"),
-      options: {
-        includePaths,
-        minify: true,
-        sourceMap: "file",
-      },
-    },
-    {
-      entry: path.resolve(outputFolder, "src/scss/listing-grid.scss"),
-      dest: path.resolve(outputFolder, "assets/css/listing-grid.min.css"),
-      options: {
-        includePaths,
-        minify: true,
-        sourceMap: "file",
-      },
-    },
-    {
-      entry: path.resolve(outputFolder, "src/scss/searchpage.scss"),
-      dest: path.resolve(outputFolder, "assets/css/searchpage.min.css"),
-      options: {
-        includePaths,
-        minify: true,
-        sourceMap: "file",
-      },
-    },
-    // Pure BCL components
-    {
-      entry: path.resolve(outputFolder, "src/scss/accordion.scss"),
+      entry: path.resolve(outputFolder, "src/scss/components/accordion.scss"),
       dest: path.resolve(outputFolder, "assets/css/accordion.min.css"),
       options: {
         includePaths,
@@ -239,79 +230,10 @@ module.exports = {
       },
     },
     {
-      entry: path.resolve(outputFolder, "src/scss/tile.scss"),
-      dest: path.resolve(outputFolder, "assets/css/tile.min.css"),
-      options: {
-        includePaths,
-        minify: true,
-        sourceMap: "file",
-      },
-    },
-    {
-      entry: path.resolve(outputFolder, "src/scss/badge.scss"),
-      dest: path.resolve(outputFolder, "assets/css/badge.min.css"),
-      options: {
-        includePaths,
-        minify: true,
-        sourceMap: "file",
-      },
-    },
-    {
-      entry: path.resolve(outputFolder, "src/scss/button-group.scss"),
-      dest: path.resolve(outputFolder, "assets/css/button-group.min.css"),
-      options: {
-        includePaths,
-        minify: true,
-        sourceMap: "file",
-      },
-    },
-    {
-      entry: path.resolve(outputFolder, "src/scss/close.scss"),
-      dest: path.resolve(outputFolder, "assets/css/close.min.css"),
-      options: {
-        includePaths,
-        minify: true,
-        sourceMap: "file",
-      },
-    },
-    {
-      entry: path.resolve(outputFolder, "src/scss/modals.scss"),
-      dest: path.resolve(outputFolder, "assets/css/modals.min.css"),
-      options: {
-        includePaths,
-        minify: true,
-        sourceMap: "file",
-      },
-    },
-    {
-      entry: path.resolve(outputFolder, "src/scss/spinners.scss"),
-      dest: path.resolve(outputFolder, "assets/css/spinners.min.css"),
-      options: {
-        includePaths,
-        minify: true,
-        sourceMap: "file",
-      },
-    },
-    {
-      entry: path.resolve(outputFolder, "src/scss/tables.scss"),
-      dest: path.resolve(outputFolder, "assets/css/tables.min.css"),
-      options: {
-        includePaths,
-        minify: true,
-        sourceMap: "file",
-      },
-    },
-    // Custom and hybrid (BCL + custom) components
-    {
-      entry: path.resolve(outputFolder, "src/scss/abstract.scss"),
-      dest: path.resolve(outputFolder, "assets/css/abstract.css"),
-      options: {
-        includePaths,
-        sourceMap: "file",
-      },
-    },
-    {
-      entry: path.resolve(outputFolder, "src/scss/actions-menu.scss"),
+      entry: path.resolve(
+        outputFolder,
+        "src/scss/components/actions-menu.scss"
+      ),
       dest: path.resolve(outputFolder, "assets/css/actions-menu.min.css"),
       options: {
         includePaths,
@@ -320,7 +242,46 @@ module.exports = {
       },
     },
     {
-      entry: path.resolve(outputFolder, "src/scss/comments.scss"),
+      entry: path.resolve(outputFolder, "src/scss/components/alert.scss"),
+      dest: path.resolve(outputFolder, "assets/css/alert.min.css"),
+      options: {
+        includePaths,
+        minify: true,
+        sourceMap: "file",
+      },
+    },
+    {
+      entry: path.resolve(outputFolder, "src/scss/components/badge.scss"),
+      dest: path.resolve(outputFolder, "assets/css/badge.min.css"),
+      options: {
+        includePaths,
+        minify: true,
+        sourceMap: "file",
+      },
+    },
+    {
+      entry: path.resolve(
+        outputFolder,
+        "src/scss/components/button-group.scss"
+      ),
+      dest: path.resolve(outputFolder, "assets/css/button-group.min.css"),
+      options: {
+        includePaths,
+        minify: true,
+        sourceMap: "file",
+      },
+    },
+    {
+      entry: path.resolve(outputFolder, "src/scss/components/close.scss"),
+      dest: path.resolve(outputFolder, "assets/css/close.min.css"),
+      options: {
+        includePaths,
+        minify: true,
+        sourceMap: "file",
+      },
+    },
+    {
+      entry: path.resolve(outputFolder, "src/scss/components/comments.scss"),
       dest: path.resolve(outputFolder, "assets/css/comments.min.css"),
       options: {
         includePaths,
@@ -329,7 +290,28 @@ module.exports = {
       },
     },
     {
-      entry: path.resolve(outputFolder, "src/scss/fieldset-show-more.scss"),
+      entry: path.resolve(outputFolder, "src/scss/components/eif-filter.scss"),
+      dest: path.resolve(outputFolder, "assets/css/eif-filter.min.css"),
+      options: {
+        includePaths,
+        minify: true,
+        sourceMap: "file",
+      },
+    },
+    {
+      entry: path.resolve(outputFolder, "src/scss/components/etrans.scss"),
+      dest: path.resolve(outputFolder, "assets/css/etrans.min.css"),
+      options: {
+        includePaths,
+        minify: true,
+        sourceMap: "file",
+      },
+    },
+    {
+      entry: path.resolve(
+        outputFolder,
+        "src/scss/components/fieldset-show-more.scss"
+      ),
       dest: path.resolve(outputFolder, "assets/css/fieldset-show-more.min.css"),
       options: {
         includePaths,
@@ -338,16 +320,7 @@ module.exports = {
       },
     },
     {
-      entry: path.resolve(outputFolder, "src/scss/header-topic.scss"),
-      dest: path.resolve(outputFolder, "assets/css/header-topic.min.css"),
-      options: {
-        includePaths,
-        sourceMap: "file",
-        minify: true,
-      },
-    },
-    {
-      entry: path.resolve(outputFolder, "src/scss/footer.scss"),
+      entry: path.resolve(outputFolder, "src/scss/components/footer.scss"),
       dest: path.resolve(outputFolder, "assets/css/footer.min.css"),
       options: {
         includePaths,
@@ -356,7 +329,103 @@ module.exports = {
       },
     },
     {
-      entry: path.resolve(outputFolder, "src/scss/menu--og--navigation.scss"),
+      entry: path.resolve(
+        outputFolder,
+        "src/scss/components/form-checkboxes.scss"
+      ),
+      dest: path.resolve(outputFolder, "assets/css/form-checkboxes.min.css"),
+      options: {
+        includePaths,
+        minify: true,
+        sourceMap: "file",
+      },
+    },
+    {
+      entry: path.resolve(outputFolder, "src/scss/components/forms.scss"),
+      dest: path.resolve(outputFolder, "assets/css/forms.min.css"),
+      options: {
+        includePaths,
+        minify: true,
+        sourceMap: "file",
+      },
+    },
+    {
+      entry: path.resolve(
+        outputFolder,
+        "src/scss/components/group-banner.scss"
+      ),
+      dest: path.resolve(outputFolder, "assets/css/group-banner.min.css"),
+      options: {
+        includePaths,
+        minify: true,
+        sourceMap: "file",
+      },
+    },
+    {
+      entry: path.resolve(
+        outputFolder,
+        "src/scss/components/header-topic.scss"
+      ),
+      dest: path.resolve(outputFolder, "assets/css/header-topic.min.css"),
+      options: {
+        includePaths,
+        minify: true,
+        sourceMap: "file",
+      },
+    },
+    {
+      entry: path.resolve(
+        outputFolder,
+        "src/scss/components/ief-entity-table.scss"
+      ),
+      dest: path.resolve(outputFolder, "assets/css/ief-entity-table.min.css"),
+      options: {
+        includePaths,
+        minify: true,
+        sourceMap: "file",
+      },
+    },
+    {
+      entry: path.resolve(
+        outputFolder,
+        "src/scss/components/layout-block.scss"
+      ),
+      dest: path.resolve(outputFolder, "assets/css/layout-block.min.css"),
+      options: {
+        includePaths,
+        minify: true,
+        sourceMap: "file",
+      },
+    },
+    {
+      entry: path.resolve(
+        outputFolder,
+        "src/scss/components/licence-filter.scss"
+      ),
+      dest: path.resolve(outputFolder, "assets/css/licence-filter.min.css"),
+      options: {
+        includePaths,
+        minify: true,
+        sourceMap: "file",
+      },
+    },
+    {
+      entry: path.resolve(
+        outputFolder,
+        "src/scss/components/listing-grid.scss"
+      ),
+      dest: path.resolve(outputFolder, "assets/css/listing-grid.min.css"),
+      options: {
+        includePaths,
+        minify: true,
+        sourceMap: "file",
+      },
+    },
+    {
+      entry: path.resolve(
+        outputFolder,
+        "src/scss/components/menu--og--navigation.scss"
+      ),
       dest: path.resolve(
         outputFolder,
         "assets/css/menu--og--navigation.min.css"
@@ -368,24 +437,8 @@ module.exports = {
       },
     },
     {
-      entry: path.resolve(outputFolder, "src/scss/form-checkboxes.scss"),
-      dest: path.resolve(outputFolder, "assets/css/form-checkboxes.css"),
-      options: {
-        includePaths,
-        sourceMap: "file",
-      },
-    },
-    {
-      entry: path.resolve(outputFolder, "src/scss/form-checkboxes.scss"),
-      dest: path.resolve(outputFolder, "assets/css/form-checkboxes.css"),
-      options: {
-        includePaths,
-        sourceMap: "file",
-      },
-    },
-    {
-      entry: path.resolve(outputFolder, "src/scss/forms.scss"),
-      dest: path.resolve(outputFolder, "assets/css/forms.min.css"),
+      entry: path.resolve(outputFolder, "src/scss/components/modals.scss"),
+      dest: path.resolve(outputFolder, "assets/css/modals.min.css"),
       options: {
         includePaths,
         minify: true,
@@ -393,25 +446,7 @@ module.exports = {
       },
     },
     {
-      entry: path.resolve(outputFolder, "src/scss/glossary.scss"),
-      dest: path.resolve(outputFolder, "assets/css/glossary.min.css"),
-      options: {
-        includePaths,
-        minify: true,
-        sourceMap: "file",
-      },
-    },
-    {
-      entry: path.resolve(outputFolder, "src/scss/group-banner.scss"),
-      dest: path.resolve(outputFolder, "assets/css/group-banner.min.css"),
-      options: {
-        includePaths,
-        minify: true,
-        sourceMap: "file",
-      },
-    },
-    {
-      entry: path.resolve(outputFolder, "src/scss/nav.scss"),
+      entry: path.resolve(outputFolder, "src/scss/components/nav.scss"),
       dest: path.resolve(outputFolder, "assets/css/nav.min.css"),
       options: {
         includePaths,
@@ -420,52 +455,10 @@ module.exports = {
       },
     },
     {
-      entry: path.resolve(outputFolder, "src/scss/ief-entity-table.scss"),
-      dest: path.resolve(outputFolder, "assets/css/ief-entity-table.min.css"),
-      options: {
-        includePaths,
-        minify: true,
-        sourceMap: "file",
-      },
-    },
-    {
-      entry: path.resolve(outputFolder, "src/scss/iop-header.scss"),
-      dest: path.resolve(outputFolder, "assets/css/iop-header.min.css"),
-      options: {
-        includePaths,
-        minify: true,
-        sourceMap: "file",
-      },
-    },
-    {
-      entry: path.resolve(outputFolder, "src/scss/layout-block.scss"),
-      dest: path.resolve(outputFolder, "assets/css/layout-block.min.css"),
-      options: {
-        minify: true,
-        includePaths,
-        sourceMap: "file",
-      },
-    },
-    {
-      entry: path.resolve(outputFolder, "src/scss/layout-block.scss"),
-      dest: path.resolve(outputFolder, "assets/css/layout-block.min.css"),
-      options: {
-        minify: true,
-        includePaths,
-        sourceMap: "file",
-      },
-    },
-    {
-      entry: path.resolve(outputFolder, "src/scss/navbar.scss"),
-      dest: path.resolve(outputFolder, "assets/css/navbar.min.css"),
-      options: {
-        includePaths,
-        minify: true,
-        sourceMap: "file",
-      },
-    },
-    {
-      entry: path.resolve(outputFolder, "src/scss/navbar-search.scss"),
+      entry: path.resolve(
+        outputFolder,
+        "src/scss/components/navbar-search.scss"
+      ),
       dest: path.resolve(outputFolder, "assets/css/navbar-search.min.css"),
       options: {
         includePaths,
@@ -474,8 +467,8 @@ module.exports = {
       },
     },
     {
-      entry: path.resolve(outputFolder, "src/scss/page-title.scss"),
-      dest: path.resolve(outputFolder, "assets/css/page-title.min.css"),
+      entry: path.resolve(outputFolder, "src/scss/components/navbar.scss"),
+      dest: path.resolve(outputFolder, "assets/css/navbar.min.css"),
       options: {
         includePaths,
         minify: true,
@@ -483,115 +476,10 @@ module.exports = {
       },
     },
     {
-      entry: path.resolve(outputFolder, "src/scss/pager.scss"),
-      dest: path.resolve(outputFolder, "assets/css/pager.min.css"),
-      options: {
-        includePaths,
-        minify: true,
-        sourceMap: "file",
-      },
-    },
-    {
-      entry: path.resolve(outputFolder, "src/scss/paragraph.scss"),
-      dest: path.resolve(outputFolder, "assets/css/paragraph.min.css"),
-      options: {
-        includePaths,
-        minify: true,
-        sourceMap: "file",
-      },
-    },
-    {
-      entry: path.resolve(outputFolder, "src/scss/releases.scss"),
-      dest: path.resolve(outputFolder, "assets/css/releases.min.css"),
-      options: {
-        includePaths,
-        minify: true,
-        sourceMap: "file",
-      },
-    },
-    {
-      entry: path.resolve(outputFolder, "src/scss/share-content-form.scss"),
-      dest: path.resolve(outputFolder, "assets/css/share-content-form.min.css"),
-      options: {
-        includePaths,
-        minify: true,
-        sourceMap: "file",
-      },
-    },
-    {
-      entry: path.resolve(outputFolder, "src/scss/alert.scss"),
-      dest: path.resolve(outputFolder, "assets/css/alert.min.css"),
-      options: {
-        includePaths,
-        minify: true,
-        sourceMap: "file",
-      },
-    },
-    {
-      entry: path.resolve(outputFolder, "src/scss/tables.scss"),
-      dest: path.resolve(outputFolder, "assets/css/tables.min.css"),
-      options: {
-        includePaths,
-        minify: true,
-        sourceMap: "file",
-      },
-    },
-    {
-      entry: path.resolve(outputFolder, "src/scss/table-files.scss"),
-      dest: path.resolve(outputFolder, "assets/css/table-files.min.css"),
-      options: {
-        includePaths,
-        minify: true,
-        sourceMap: "file",
-      },
-    },
-    {
-      entry: path.resolve(outputFolder, "src/scss/tabs.scss"),
-      dest: path.resolve(outputFolder, "assets/css/tabs.min.css"),
-      options: {
-        includePaths,
-        minify: true,
-        sourceMap: "file",
-      },
-    },
-    {
-      entry: path.resolve(outputFolder, "src/scss/toolbar.scss"),
-      dest: path.resolve(outputFolder, "assets/css/toolbar.min.css"),
-      options: {
-        minify: true,
-        includePaths,
-        sourceMap: "file",
-      },
-    },
-    {
-      entry: path.resolve(outputFolder, "src/scss/tour.scss"),
-      dest: path.resolve(outputFolder, "assets/css/tour.min.css"),
-      options: {
-        includePaths,
-        minify: true,
-        sourceMap: "file",
-      },
-    },
-    {
-      entry: path.resolve(outputFolder, "src/scss/tabledrag.scss"),
-      dest: path.resolve(outputFolder, "assets/css/tabledrag.min.css"),
-      options: {
-        includePaths,
-        minify: true,
-        sourceMap: "file",
-      },
-    },
-    {
-      entry: path.resolve(outputFolder, "src/scss/etrans.scss"),
-      dest: path.resolve(outputFolder, "assets/css/etrans.min.css"),
-      options: {
-        includePaths,
-        minify: true,
-        sourceMap: "file",
-      },
-    },
-    {
-      entry: path.resolve(outputFolder, "src/scss/navigation-bottom.scss"),
+      entry: path.resolve(
+        outputFolder,
+        "src/scss/components/navigation-bottom.scss"
+      ),
       dest: path.resolve(outputFolder, "assets/css/navigation-bottom.min.css"),
       options: {
         includePaths,
@@ -600,7 +488,118 @@ module.exports = {
       },
     },
     {
-      entry: path.resolve(outputFolder, "src/scss/timeline.scss"),
+      entry: path.resolve(outputFolder, "src/scss/components/page-title.scss"),
+      dest: path.resolve(outputFolder, "assets/css/page-title.min.css"),
+      options: {
+        includePaths,
+        minify: true,
+        sourceMap: "file",
+      },
+    },
+    {
+      entry: path.resolve(outputFolder, "src/scss/components/pagination.scss"),
+      dest: path.resolve(outputFolder, "assets/css/pagination.min.css"),
+      options: {
+        includePaths,
+        minify: true,
+        sourceMap: "file",
+      },
+    },
+    {
+      entry: path.resolve(outputFolder, "src/scss/components/paragraph.scss"),
+      dest: path.resolve(outputFolder, "assets/css/paragraph.min.css"),
+      options: {
+        includePaths,
+        minify: true,
+        sourceMap: "file",
+      },
+    },
+    {
+      entry: path.resolve(outputFolder, "src/scss/components/releases.scss"),
+      dest: path.resolve(outputFolder, "assets/css/releases.min.css"),
+      options: {
+        includePaths,
+        minify: true,
+        sourceMap: "file",
+      },
+    },
+    {
+      entry: path.resolve(
+        outputFolder,
+        "src/scss/components/share-content-form.scss"
+      ),
+      dest: path.resolve(outputFolder, "assets/css/share-content-form.min.css"),
+      options: {
+        includePaths,
+        minify: true,
+        sourceMap: "file",
+      },
+    },
+    {
+      entry: path.resolve(outputFolder, "src/scss/components/spinners.scss"),
+      dest: path.resolve(outputFolder, "assets/css/spinners.min.css"),
+      options: {
+        includePaths,
+        minify: true,
+        sourceMap: "file",
+      },
+    },
+    {
+      entry: path.resolve(outputFolder, "src/scss/components/table-files.scss"),
+      dest: path.resolve(outputFolder, "assets/css/table-files.min.css"),
+      options: {
+        includePaths,
+        minify: true,
+        sourceMap: "file",
+      },
+    },
+    {
+      entry: path.resolve(outputFolder, "src/scss/components/tabledrag.scss"),
+      dest: path.resolve(outputFolder, "assets/css/tabledrag.min.css"),
+      options: {
+        includePaths,
+        minify: true,
+        sourceMap: "file",
+      },
+    },
+    {
+      entry: path.resolve(outputFolder, "src/scss/components/tables.scss"),
+      dest: path.resolve(outputFolder, "assets/css/tables.min.css"),
+      options: {
+        includePaths,
+        minify: true,
+        sourceMap: "file",
+      },
+    },
+    {
+      entry: path.resolve(outputFolder, "src/scss/components/tabs.scss"),
+      dest: path.resolve(outputFolder, "assets/css/tabs.min.css"),
+      options: {
+        includePaths,
+        minify: true,
+        sourceMap: "file",
+      },
+    },
+    {
+      entry: path.resolve(outputFolder, "src/scss/components/tile-two.scss"),
+      dest: path.resolve(outputFolder, "assets/css/tile-two.min.css"),
+      options: {
+        includePaths,
+        minify: true,
+        sourceMap: "file",
+      },
+    },
+    {
+      entry: path.resolve(outputFolder, "src/scss/components/tile.scss"),
+      dest: path.resolve(outputFolder, "assets/css/tile.min.css"),
+      options: {
+        includePaths,
+        minify: true,
+        sourceMap: "file",
+      },
+    },
+    {
+      entry: path.resolve(outputFolder, "src/scss/components/timeline.scss"),
       dest: path.resolve(outputFolder, "assets/css/timeline.min.css"),
       options: {
         includePaths,
@@ -609,29 +608,32 @@ module.exports = {
       },
     },
     {
-      entry: path.resolve(outputFolder, "src/scss/user--group-header.scss"),
+      entry: path.resolve(outputFolder, "src/scss/components/toolbar.scss"),
+      dest: path.resolve(outputFolder, "assets/css/toolbar.min.css"),
+      options: {
+        includePaths,
+        minify: true,
+        sourceMap: "file",
+      },
+    },
+    {
+      entry: path.resolve(outputFolder, "src/scss/components/tour.scss"),
+      dest: path.resolve(outputFolder, "assets/css/tour.min.css"),
+      options: {
+        includePaths,
+        minify: true,
+        sourceMap: "file",
+      },
+    },
+    {
+      entry: path.resolve(
+        outputFolder,
+        "src/scss/components/user--group-header.scss"
+      ),
       dest: path.resolve(outputFolder, "assets/css/user--group-header.min.css"),
       options: {
         includePaths,
         minify: true,
-        sourceMap: "file",
-      },
-    },
-    {
-      entry: path.resolve(outputFolder, "src/scss/tile-two.scss"),
-      dest: path.resolve(outputFolder, "assets/css/tile-two.min.css"),
-      options: {
-        minify: true,
-        includePaths,
-        sourceMap: "file",
-      },
-    },
-    {
-      entry: path.resolve(outputFolder, "src/scss/tile-two.scss"),
-      dest: path.resolve(outputFolder, "assets/css/tile-two.min.css"),
-      options: {
-        minify: true,
-        includePaths,
         sourceMap: "file",
       },
     },
