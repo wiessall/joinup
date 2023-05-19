@@ -18,6 +18,9 @@ label.form-required {
 .form-text {
   display: inline-block;
   line-height: normal;
+  a {
+    text-decoration: underline;
+  }
 }
 
 // Make CKEditor textareas emulate @openeuropa invalid state
