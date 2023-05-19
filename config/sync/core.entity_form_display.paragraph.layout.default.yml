@@ -15,7 +15,7 @@ content:
     weight: -199
     region: content
     settings:
-      display_label: true
+      display_label: false
     third_party_settings: {  }
   layout_paragraphs_fields:
     weight: -200
