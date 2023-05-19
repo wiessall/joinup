@@ -30,24 +30,8 @@ module.exports = {
       },
     },
     {
-      entry: path.resolve(outputFolder, "src/js/responsive-tables.js"),
-      dest: path.resolve(outputFolder, "assets/js/responsive-tables.js"),
-      options: {
-        minify: true,
-        sourceMap: true,
-      },
-    },
-    {
       entry: path.resolve(outputFolder, "src/js/fieldset-show-more.js"),
       dest: path.resolve(outputFolder, "assets/js/fieldset-show-more.js"),
-      options: {
-        minify: true,
-        sourceMap: true,
-      },
-    },
-    {
-      entry: path.resolve(outputFolder, "src/js/toggle-text-seemore-btn.js"),
-      dest: path.resolve(outputFolder, "assets/js/toggle-text-seemore-btn.js"),
       options: {
         minify: true,
         sourceMap: true,
@@ -62,8 +46,8 @@ module.exports = {
       },
     },
     {
-      entry: path.resolve(outputFolder, "src/js/sticky-menu-logged-in.js"),
-      dest: path.resolve(outputFolder, "assets/js/sticky-menu-logged-in.js"),
+      entry: path.resolve(outputFolder, "src/js/responsive-tables.js"),
+      dest: path.resolve(outputFolder, "assets/js/responsive-tables.js"),
       options: {
         minify: true,
         sourceMap: true,
@@ -100,14 +84,16 @@ module.exports = {
       },
     },
     {
-      entry: path.resolve(
-        outputFolder,
-        "src/js/show-accordion-invalid-fields.js"
-      ),
-      dest: path.resolve(
-        outputFolder,
-        "assets/js/show-accordion-invalid-fields.js"
-      ),
+      entry: path.resolve(outputFolder, "src/js/sticky-menu-logged-in.js"),
+      dest: path.resolve(outputFolder, "assets/js/sticky-menu-logged-in.js"),
+      options: {
+        minify: true,
+        sourceMap: true,
+      },
+    },
+    {
+      entry: path.resolve(outputFolder, "src/js/toggle-text-seemore-btn.js"),
+      dest: path.resolve(outputFolder, "assets/js/toggle-text-seemore-btn.js"),
       options: {
         minify: true,
         sourceMap: true,
@@ -133,7 +119,7 @@ module.exports = {
     },
   ],
   styles: [
-    // Base
+    // Base (SMACSS)
     {
       entry: path.resolve(outputFolder, "src/scss/01-base.scss"),
       dest: path.resolve(outputFolder, "assets/css/base.min.css"),
@@ -143,7 +129,7 @@ module.exports = {
         sourceMap: "file",
       },
     },
-    // Layout
+    // Layout (SMACSS)
     {
       entry: path.resolve(outputFolder, "src/scss/02-layout.scss"),
       dest: path.resolve(outputFolder, "assets/css/layout.min.css"),
@@ -153,7 +139,7 @@ module.exports = {
         sourceMap: "file",
       },
     },
-    // Components
+    // Components (SMACSS)
     {
       entry: path.resolve(outputFolder, "src/scss/03-components.scss"),
       dest: path.resolve(outputFolder, "assets/css/components.min.css"),
@@ -163,7 +149,7 @@ module.exports = {
         sourceMap: "file",
       },
     },
-    // Theme
+    // Theme (SMACSS)
     {
       entry: path.resolve(outputFolder, "src/scss/04-theme.scss"),
       dest: path.resolve(outputFolder, "assets/css/theme.min.css"),
