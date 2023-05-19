@@ -1,10 +1,12 @@
 uuid: 03451f91-1bc0-4f05-b0a6-95fe6ad5558d
 langcode: en
 status: true
-dependencies: {  }
+dependencies:
+  content:
+    - 'file:file:78166ebf-203d-4d4b-890b-bb149f659a79'
 id: accordion
 label: Accordion
-icon_uuid: null
-icon_default: null
+icon_uuid: 78166ebf-203d-4d4b-890b-bb149f659a79
+icon_default: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNiIgaGVpZ2h0PSIxNiIgZmlsbD0iY3VycmVudENvbG9yIiBjbGFzcz0iYmkgYmktYXJyb3dzLWV4cGFuZCIgdmlld0JveD0iMCAwIDE2IDE2Ij4KICA8cGF0aCBmaWxsLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik0xIDhhLjUuNSAwIDAgMSAuNS0uNWgxM2EuNS41IDAgMCAxIDAgMWgtMTNBLjUuNSAwIDAgMSAxIDhaTTcuNjQ2LjE0NmEuNS41IDAgMCAxIC43MDggMGwyIDJhLjUuNSAwIDAgMS0uNzA4LjcwOEw4LjUgMS43MDdWNS41YS41LjUgMCAwIDEtMSAwVjEuNzA3TDYuMzU0IDIuODU0YS41LjUgMCAxIDEtLjcwOC0uNzA4bDItMlpNOCAxMGEuNS41IDAgMCAxIC41LjV2My43OTNsMS4xNDYtMS4xNDdhLjUuNSAwIDAgMSAuNzA4LjcwOGwtMiAyYS41LjUgMCAwIDEtLjcwOCAwbC0yLTJhLjUuNSAwIDAgMSAuNzA4LS43MDhMNy41IDE0LjI5M1YxMC41QS41LjUgMCAwIDEgOCAxMFoiLz4KPC9zdmc+'
 description: ''
 behavior_plugins: {  }

@@ -21,7 +21,7 @@ default_value:
     value: false
 default_value_callback: ''
 settings:
-  on_label: 'On'
-  off_label: 'Off'
+  on_label: 'Add background'
+  off_label: 'No background'
   cache-max-age: 3600
 field_type: cached_computed_boolean

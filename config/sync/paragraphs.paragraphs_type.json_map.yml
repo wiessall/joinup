@@ -1,10 +1,12 @@
 uuid: 5bc8a16f-e415-436f-873e-ab3569e946e3
 langcode: en
 status: true
-dependencies: {  }
+dependencies:
+  content:
+    - 'file:file:a79e2844-0401-4502-b720-45a7450ca9c1'
 id: json_map
 label: Map
-icon_uuid: null
-icon_default: null
+icon_uuid: a79e2844-0401-4502-b720-45a7450ca9c1
+icon_default: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNiIgaGVpZ2h0PSIxNiIgZmlsbD0iY3VycmVudENvbG9yIiBjbGFzcz0iYmkgYmktZ2VvLWFsdCIgdmlld0JveD0iMCAwIDE2IDE2Ij4KICA8cGF0aCBkPSJNMTIuMTY2IDguOTRjLS41MjQgMS4wNjItMS4yMzQgMi4xMi0xLjk2IDMuMDdBMzEuNDkzIDMxLjQ5MyAwIDAgMSA4IDE0LjU4YTMxLjQ4MSAzMS40ODEgMCAwIDEtMi4yMDYtMi41N2MtLjcyNi0uOTUtMS40MzYtMi4wMDgtMS45Ni0zLjA3QzMuMzA0IDcuODY3IDMgNi44NjIgMyA2YTUgNSAwIDAgMSAxMCAwYzAgLjg2Mi0uMzA1IDEuODY3LS44MzQgMi45NHpNOCAxNnM2LTUuNjg2IDYtMTBBNiA2IDAgMCAwIDIgNmMwIDQuMzE0IDYgMTAgNiAxMHoiLz4KICA8cGF0aCBkPSJNOCA4YTIgMiAwIDEgMSAwLTQgMiAyIDAgMCAxIDAgNHptMCAxYTMgMyAwIDEgMCAwLTYgMyAzIDAgMCAwIDAgNnoiLz4KPC9zdmc+'
 description: 'Displays a Webtools map widget. See https://webgate.ec.europa.eu/fpfis/wikis/display/webtools/Map'
 behavior_plugins: {  }

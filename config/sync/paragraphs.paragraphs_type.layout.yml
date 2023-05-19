@@ -3,18 +3,19 @@ langcode: en
 status: true
 dependencies:
   content:
-    - 'file:file:f93e37cc-c0c4-4ab9-b5a0-0a62a68dd912'
+    - 'file:file:22cccfb4-74ad-45aa-a7d4-a9571f5a2a9f'
   module:
     - layout_paragraphs
 id: layout
 label: Layout
-icon_uuid: f93e37cc-c0c4-4ab9-b5a0-0a62a68dd912
-icon_default: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNiIgaGVpZ2h0PSIxNiIgZmlsbD0iY3VycmVudENvbG9yIiBjbGFzcz0iYmkgYmktZ3JpZC0xeDItZmlsbCIgdmlld0JveD0iMCAwIDE2IDE2Ij4KICA8cGF0aCBkPSJNMCAxYTEgMSAwIDAgMSAxLTFoNWExIDEgMCAwIDEgMSAxdjE0YTEgMSAwIDAgMS0xIDFIMWExIDEgMCAwIDEtMS0xVjF6bTkgMGExIDEgMCAwIDEgMS0xaDVhMSAxIDAgMCAxIDEgMXY1YTEgMSAwIDAgMS0xIDFoLTVhMSAxIDAgMCAxLTEtMVYxem0wIDlhMSAxIDAgMCAxIDEtMWg1YTEgMSAwIDAgMSAxIDF2NWExIDEgMCAwIDEtMSAxaC01YTEgMSAwIDAgMS0xLTF2LTV6Ii8+Cjwvc3ZnPg=='
+icon_uuid: 22cccfb4-74ad-45aa-a7d4-a9571f5a2a9f
+icon_default: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNiIgaGVpZ2h0PSIxNiIgZmlsbD0iY3VycmVudENvbG9yIiBjbGFzcz0iYmkgYmktZ3JpZC0xeDIiIHZpZXdCb3g9IjAgMCAxNiAxNiI+CiAgPHBhdGggZD0iTTYgMUgxdjE0aDVWMXptOSAwaC01djVoNVYxem0wIDl2NWgtNXYtNWg1ek0wIDFhMSAxIDAgMCAxIDEtMWg1YTEgMSAwIDAgMSAxIDF2MTRhMSAxIDAgMCAxLTEgMUgxYTEgMSAwIDAgMS0xLTFWMXptOSAwYTEgMSAwIDAgMSAxLTFoNWExIDEgMCAwIDEgMSAxdjVhMSAxIDAgMCAxLTEgMWgtNWExIDEgMCAwIDEtMS0xVjF6bTEgOGExIDEgMCAwIDAtMSAxdjVhMSAxIDAgMCAwIDEgMWg1YTEgMSAwIDAgMCAxLTF2LTVhMSAxIDAgMCAwLTEtMWgtNXoiLz4KPC9zdmc+'
 description: 'This paragraph type allows to choose between different layouts in which you can then place your paragraphs with simple drag&drop.'
 behavior_plugins:
   layout_paragraphs:
     enabled: true
     available_layouts:
+      layout_onecol: 'One column'
       layout_twocol_section: 'Two column'
       layout_threecol_section: 'Three column'
       layout_fourcol_section: 'Four column'
