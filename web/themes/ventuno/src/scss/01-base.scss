@@ -5,6 +5,6 @@
  * CSS reset/normalize plus HTML element styling.
  */
 
-@import "core"; // Functions, variables, utilities and mixins required
+@import "partials/core"; // Functions, variables, utilities and mixins required
 @import "@openeuropa/bcl-bootstrap/scss/reboot";
 @import "@openeuropa/bcl-theme-default/src/scss/reset";

@@ -2,6 +2,8 @@
  * Override OpenEuropa's Webtools eTrans button to make it look consistent with
  * the rest of the website
 */
+@import "../partials/core";
+
 // Allow absolute positioning of the button
 .block-oe-webtools-etrans {
   margin-top: $spacer * 2;

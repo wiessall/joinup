@@ -1,3 +1,5 @@
+@import "../partials/core";
+
 .user--group-header {
   background: linear-gradient(to bottom, rgba($primary, .6) 0%, rgba($primary, .4) 100%), url("#{$ventuno-path}/assets/images/featured-bg.jpg");
   background-repeat: no-repeat;

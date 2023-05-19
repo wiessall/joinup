@@ -5,7 +5,7 @@
  * Macro arrangement of the website.
  */
 
-@import "core"; // Functions, variables, utilities and mixins required
+@import "partials/core"; // Functions, variables, utilities and mixins required
 @import "@openeuropa/bcl-bootstrap/scss/root";
 @import "@openeuropa/bcl-bootstrap/scss/images";
 @import "@openeuropa/bcl-bootstrap/scss/containers";

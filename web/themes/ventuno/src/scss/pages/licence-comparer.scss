@@ -1,3 +1,5 @@
+@import "../partials/core";
+
 .licence-comparer {
   text-align: center;
   @include media-breakpoint-up(md) {
