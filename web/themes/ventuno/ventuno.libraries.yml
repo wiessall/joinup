@@ -1,5 +1,5 @@
-# Main
-main:
+# SMACSS
+base:
   version: VERSION
   css:
     base:
@@ -16,11 +16,6 @@ components:
   css:
     component:
       assets/css/components.min.css: { minified: true }
-  dependencies:
-    - ventuno/components.js
-
-components.js:
-  version: VERSION
   js:
     assets/js/oe-bcl-joinup.bundle.min.js: { minified: true, attributes: { defer: true } }
   dependencies:
@@ -40,6 +35,11 @@ homepage:
   dependencies:
     - ventuno/tour-first-balloon
 
+glossary:
+  css:
+    theme:
+      assets/css/glossary.min.css: { minified: true }
+
 licence-comparer:
   css:
     theme:
@@ -52,11 +52,33 @@ searchpage:
   dependencies:
     - ventuno/close
 
-# Pure BCL components
+# Components
+abstract:
+  css:
+    theme:
+      assets/css/abstract.min.css: { minified: true }
+
 accordion:
   css:
     theme:
       assets/css/accordion.min.css: { minified: true }
+
+actions-menu:
+  css:
+    theme:
+      assets/css/actions-menu.min.css: { minified: true }
+
+ajax-throbber:
+  js:
+    assets/js/ajax-throbber.min.js: { minified: true, attributes: { defer: true } }
+  dependencies:
+    - core/drupal
+    - ventuno/spinners
+
+alert:
+  css:
+    theme:
+      assets/css/alert.min.css: { minified: true }
 
 badge:
   css:
@@ -73,47 +95,22 @@ close:
     theme:
       assets/css/close.min.css: { minified: true }
 
-modals:
-  css:
-    theme:
-      assets/css/modals.min.css: { minified: true }
-  dependencies:
-    - ventuno/close
-
-spinners:
-  css:
-    theme:
-      assets/css/spinners.min.css: { minified: true }
-
-tables:
-  css:
-    theme:
-      assets/css/tables.min.css: { minified: true }
-  js:
-    assets/js/responsive-tables.min.js: { minified: true, attributes: { defer: true } }
-
-# Custom components
-abstract:
-  css:
-    theme:
-      assets/css/abstract.min.css: { minified: true }
-
-actions-menu:
-  css:
-    theme:
-      assets/css/actions-menu.min.css: { minified: true }
-
-ajax-throbber:
-  js:
-    assets/js/ajax-throbber.min.js: { minified: true, attributes: { defer: true } }
-  dependencies:
-    - core/drupal
-    - ventuno/spinners
-
 comments:
   css:
     theme:
       assets/css/comments.min.css: { minified: true }
+
+eif-filter:
+  css:
+    theme:
+      assets/css/eif-filter.min.css: { minified: true }
+  dependencies:
+    - ventuno/badge
+
+etrans:
+  css:
+    theme:
+      assets/css/etrans.min.css: { minified: true }
 
 fieldset-show-more:
   css:
@@ -125,27 +122,6 @@ fieldset-show-more:
     - core/drupal
     - core/once
 
-menu--og--navigation:
-  css:
-    theme:
-      assets/css/menu--og--navigation.min.css: { minified: true }
-
-table-files:
-  css:
-    theme:
-      assets/css/table-files.min.css: { minified: true }
-
-tabs:
-  css:
-    theme:
-      assets/css/tabs.min.css: { minified: true }
-
-tile:
-  css:
-    theme:
-      assets/css/tile.min.css: { minified: true }
-
-# Custom and hybrid (BCL + custom) components
 footer:
   css:
     theme:
@@ -163,16 +139,6 @@ forms:
   js:
     assets/js/highlight-invalid-fields.min.js: { minified: true, attributes: { defer: true } }
 
-glossary:
-  css:
-    theme:
-      assets/css/glossary.min.css: { minified: true }
-
-group-banner:
-  css:
-    theme:
-      assets/css/group-banner.min.css: { minified: true }
-
 glide:
   js:
     assets/js/glide.min.js: { minified: true, attributes: { defer: true } }
@@ -180,29 +146,10 @@ glide:
     theme:
       assets/css/glide.core.min.css: { minified: true }
 
-eif-filter:
+group-banner:
   css:
     theme:
-      assets/css/eif-filter.min.css: { minified: true }
-  dependencies:
-    - ventuno/badge
-
-licence-filter:
-  css:
-    theme:
-      assets/css/licence-filter.min.css: { minified: true }
-  dependencies:
-    - ventuno/badge
-
-listing-grid:
-  css:
-    theme:
-      assets/css/listing-grid.min.css: { minified: true }
-
-nav:
-  css:
-    theme:
-      assets/css/nav.min.css: { minified: true }
+      assets/css/group-banner.min.css: { minified: true }
 
 header-topic:
   js:
@@ -221,6 +168,35 @@ layout-block:
     theme:
       assets/css/layout-block.min.css: { minified: true }
 
+licence-filter:
+  css:
+    theme:
+      assets/css/licence-filter.min.css: { minified: true }
+  dependencies:
+    - ventuno/badge
+
+listing-grid:
+  css:
+    theme:
+      assets/css/listing-grid.min.css: { minified: true }
+
+menu--og--navigation:
+  css:
+    theme:
+      assets/css/menu--og--navigation.min.css: { minified: true }
+
+modals:
+  css:
+    theme:
+      assets/css/modals.min.css: { minified: true }
+  dependencies:
+    - ventuno/close
+
+nav:
+  css:
+    theme:
+      assets/css/nav.min.css: { minified: true }
+
 navbar:
   css:
     theme:
@@ -234,6 +210,11 @@ navbar-search:
       assets/css/navbar-search.min.css: { minified: true }
   js:
     assets/js/searchbox-focus.min.js: { minified: true, attributes: { defer: true } }
+
+navigation-bottom:
+  css:
+    theme:
+      assets/css/navigation-bottom.min.css: { minified: true }
 
 outdated-content-notice:
   js:
@@ -270,39 +251,51 @@ shared-entity:
   dependencies:
     - core/drupalSettings
 
-alert:
-  css:
-    theme:
-      assets/css/alert.min.css: { minified: true }
-
-etrans:
-  css:
-    theme:
-      assets/css/etrans.min.css: { minified: true }
-
 show-accordion-invalid-fields:
   js:
     assets/js/show-accordion-invalid-fields.min.js: { minified: true, attributes: { defer: true } }
+
+spinners:
+  css:
+    theme:
+      assets/css/spinners.min.css: { minified: true }
+
+table-files:
+  css:
+    theme:
+      assets/css/table-files.min.css: { minified: true }
 
 tabledrag:
   css:
     theme:
       assets/css/tabledrag.min.css: { minified: true }
 
-navigation-bottom:
+tables:
   css:
     theme:
-      assets/css/navigation-bottom.min.css: { minified: true }
+      assets/css/tables.min.css: { minified: true }
+  js:
+    assets/js/responsive-tables.min.js: { minified: true, attributes: { defer: true } }
 
-timeline:
+tabs:
   css:
     theme:
-      assets/css/timeline.min.css: {}
+      assets/css/tabs.min.css: { minified: true }
+
+tile:
+  css:
+    theme:
+      assets/css/tile.min.css: { minified: true }
 
 tile-two:
   css:
     theme:
       assets/css/tile-two.min.css: {}
+
+timeline:
+  css:
+    theme:
+      assets/css/timeline.min.css: {}
 
 toolbar:
   css:
