@@ -56,6 +56,10 @@ class SearchApiFieldListingOrder implements EventSubscriberInterface {
     }
 
     $solariumQuery = $event->getSolariumQuery();
+    // We already have some sorting, for example from "Content filter".
+    if (!empty($solariumQuery->getSorts())) {
+      return;
+    }
 
     // Clear all sorts and order by pinned.
     $this->setPinnedSorting($solariumQuery, $entity);
