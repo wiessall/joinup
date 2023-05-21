@@ -60,6 +60,9 @@ class SearchApiFieldListingOrder implements EventSubscriberInterface {
     // Sort by pinned.
     $this->addPinnedSorting($solariumApiQuery, $entity);
 
+    // Sort by score.
+    $solariumApiQuery->addSort('score', Query::SORT_DESC);
+
     // In case the user has filtered by event, first sort by the event date.
     // @todo This will be generic when event calendar will be implemented for
     // the rdf_entity.field_is_content and the paragraph.content_listing
