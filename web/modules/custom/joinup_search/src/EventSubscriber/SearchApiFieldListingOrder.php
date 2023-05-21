@@ -9,10 +9,10 @@ use Drupal\facets\Utility\FacetsDateHandler;
 use Drupal\joinup_group\Entity\GroupContentInterface;
 use Drupal\paragraphs\ParagraphInterface;
 use Drupal\rdf_entity\RdfInterface;
-use Drupal\search_api\Query\QueryInterface;
 use Drupal\search_api\Query\QueryInterface as SearchApiQueryInterface;
 use Drupal\search_api_solr\Event\PreQueryEvent;
 use Solarium\Core\Query\QueryInterface as SolariumApiQueryInterface;
+use Solarium\QueryType\Select\Query\Query;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
@@ -39,14 +39,16 @@ class SearchApiFieldListingOrder implements EventSubscriberInterface {
   }
 
   /**
-   * Reacts to the query alter event.
+   * Reacts to the pre query event.
    *
    * @param \Drupal\search_api_solr\Event\PreQueryEvent $event
-   *   The query alter event.
+   *   The pre query event.
    */
   public function queryAlter(PreQueryEvent $event): void {
     $searchApiQuery = $event->getSearchApiQuery();
-    if (!$this->performAlteration($searchApiQuery)) {
+    $solariumApiQuery = $event->getSolariumQuery();
+
+    if (!$this->performAlteration($searchApiQuery, $solariumApiQuery)) {
       return;
     }
 
@@ -55,17 +57,11 @@ class SearchApiFieldListingOrder implements EventSubscriberInterface {
       return;
     }
 
-    $solariumQuery = $event->getSolariumQuery();
-    // We already have some sorting, for example from "Content filter".
-    if (!empty($solariumQuery->getSorts())) {
-      return;
-    }
-
-    // Clear all sorts and order by pinned.
-    $this->setPinnedSorting($solariumQuery, $entity);
+    // Sort by pinned.
+    $this->addPinnedSorting($solariumApiQuery, $entity);
 
     // Sort by score.
-    $solariumQuery->addSort('score', 'desc');
+    $solariumApiQuery->addSort('score', Query::SORT_DESC);
 
     // In case the user has filtered by event, first sort by the event date.
     // @todo This will be generic when event calendar will be implemented for
@@ -75,45 +71,55 @@ class SearchApiFieldListingOrder implements EventSubscriberInterface {
       // If the upcoming events are selected, set the order to 'ASC'.
       // @see \Drupal\joinup\Plugin\ArbitraryFacet\EventsArbitraryFacet::getFacetDefinition
       $value = $this->facetDateHandler->isoDate((new DrupalDateTime('today'))->getTimestamp());
-      $order = _joinup_search_search_api_has_condition($searchApiQuery->getConditionGroup(), 'field_event_date', $value, '>=') ? QueryInterface::SORT_ASC : QueryInterface::SORT_DESC;
+      $order = _joinup_search_search_api_has_condition($searchApiQuery->getConditionGroup(), 'field_event_date', $value, '>=') ? Query::SORT_ASC : Query::SORT_DESC;
 
-      $solariumQuery->addSort('ds_field_event_date', $order);
+      $solariumApiQuery->addSort('ds_field_event_date', $order);
     }
     else {
-      $solariumQuery->addSort('ds_entity_created', 'desc');
+      $solariumApiQuery->addSort('ds_entity_created', Query::SORT_DESC);
     }
   }
 
   /**
    * Checks if we want to perform alteration.
    *
-   * @param \Drupal\search_api\Query\QueryInterface $query
-   *   Search query.
+   * @param \Drupal\search_api\Query\QueryInterface $searchApiQuery
+   *   Search api query.
+   * @param \Solarium\Core\Query\QueryInterface $solariumApiQuery
+   *   Solarium api query.
    *
    * @return bool
    *   True if we want to perform alteration.
    */
-  protected function performAlteration(SearchApiQueryInterface $query): bool {
-    if ($query->hasTag('search_api_field_field_collection_content') ||
-      $query->hasTag('search_api_field_field_is_content') ||
-      $query->hasTag('search_api_field_content_listing')) {
-      return TRUE;
+  protected function performAlteration(
+    SearchApiQueryInterface $searchApiQuery,
+    SolariumApiQueryInterface $solariumApiQuery
+  ): bool {
+    if (!($searchApiQuery->hasTag('search_api_field_field_collection_content') ||
+      $searchApiQuery->hasTag('search_api_field_field_is_content') ||
+      $searchApiQuery->hasTag('search_api_field_content_listing'))) {
+      return FALSE;
     }
 
-    return FALSE;
+    // We already have some sorting, for example from "Content filter".
+    if (!empty($solariumApiQuery->getSorts())) {
+      return FALSE;
+    }
+
+    return TRUE;
   }
 
   /**
    * Gets rdf entity from query.
    *
-   * @param \Drupal\search_api\Query\QueryInterface $query
-   *   Search query.
+   * @param \Drupal\search_api\Query\QueryInterface $searchApiQuery
+   *   Search api query.
    *
    * @return \Drupal\rdf_entity\RdfInterface|null
    *   Rdf entity.
    */
-  protected function getEntityFromQuery(SearchApiQueryInterface $query): ?RdfInterface {
-    $entity = $query->getOption('search_api_field entity');
+  protected function getEntityFromQuery(SearchApiQueryInterface $searchApiQuery): ?RdfInterface {
+    $entity = $searchApiQuery->getOption('search_api_field entity');
     if ($entity instanceof RdfInterface) {
       return $entity;
     }
@@ -130,14 +136,14 @@ class SearchApiFieldListingOrder implements EventSubscriberInterface {
   }
 
   /**
-   * Sets pinned sorting.
+   * Adds pinned sorting.
    *
-   * @param \Solarium\Core\Query\QueryInterface $solariumQuery
+   * @param \Solarium\Core\Query\QueryInterface $solariumApiQuery
    *   Solarium query.
    * @param \Drupal\rdf_entity\RdfInterface $entity
    *   Rdf entity.
    */
-  protected function setPinnedSorting(SolariumApiQueryInterface $solariumQuery, RdfInterface $entity): void {
+  protected function addPinnedSorting(SolariumApiQueryInterface $solariumApiQuery, RdfInterface $entity): void {
     // In order to sort by the pinned status of the entity, we need to create a
     // sort function query. The values that are used for sort are evaluated at
     // runtime instead of being retrieved from the index.
@@ -175,11 +181,9 @@ class SearchApiFieldListingOrder implements EventSubscriberInterface {
     // @see http://archive.apache.org/dist/lucene/solr/ref-guide/apache-solr-ref-guide-5.5.pdf
     $computed_sort = sprintf(
       "or(termfreq(sm_node_pinned_in,%1\$s),termfreq(sm_rdf_pinned_in,%1\$s))",
-      $solariumQuery->getHelper()->escapePhrase($entity->id())
+      $solariumApiQuery->getHelper()->escapePhrase($entity->id())
     );
-    $solariumQuery->setSorts([
-      $computed_sort => 'desc',
-    ]);
+    $solariumApiQuery->addSort($computed_sort, Query::SORT_DESC);
   }
 
 }
