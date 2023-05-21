@@ -7,13 +7,13 @@ namespace Drupal\joinup_search\EventSubscriber;
 use Drupal\Core\Datetime\DrupalDateTime;
 use Drupal\facets\Utility\FacetsDateHandler;
 use Drupal\joinup_group\Entity\GroupContentInterface;
+use Drupal\paragraphs\ParagraphInterface;
 use Drupal\rdf_entity\RdfInterface;
 use Drupal\search_api\Query\QueryInterface;
-use Drupal\search_api_solr\Event\PreQueryEvent;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Drupal\search_api\Query\QueryInterface as SearchApiQueryInterface;
-use Drupal\paragraphs\ParagraphInterface;
+use Drupal\search_api_solr\Event\PreQueryEvent;
 use Solarium\Core\Query\QueryInterface as SolariumApiQueryInterface;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
  * Alter the order of results for search api field.
@@ -23,7 +23,7 @@ class SearchApiFieldListingOrder implements EventSubscriberInterface {
   /**
    * Construct subscriber.
    *
-   * @param \Drupal\facets\Utility\FacetsDateHandler $facetDateHandler .
+   * @param \Drupal\facets\Utility\FacetsDateHandler $facetDateHandler
    *   Facets date handler.
    */
   public function __construct(protected FacetsDateHandler $facetDateHandler) {
@@ -106,7 +106,7 @@ class SearchApiFieldListingOrder implements EventSubscriberInterface {
    *   Search query.
    *
    * @return \Drupal\rdf_entity\RdfInterface|null
-   *  Rdf entity.
+   *   Rdf entity.
    */
   protected function getEntityFromQuery(SearchApiQueryInterface $query): ?RdfInterface {
     $entity = $query->getOption('search_api_field entity');
@@ -141,17 +141,17 @@ class SearchApiFieldListingOrder implements EventSubscriberInterface {
     // - for nodes, when they are belong to the current group and the sticky
     //   field is set to true;
     // - for solutions, when they are pinned inside the current collection.
-    // The query() Solr function query is a good candidate for doing custom sorts,
-    // but it will return the score of the subquery. The score can be different
-    // between single results and can range from a small fraction above zero to
-    // infinite.
+    // The query() Solr function query is a good candidate for doing custom
+    // sorts, but it will return the score of the subquery. The score can be
+    // different between single results and can range from a small fraction
+    // above zero to infinite.
     // Example:
     // @codingStandardsIgnoreStart
     // "or(and(bs_sticky, query({!v='sm_entity_groups:<id>'},0)), query({!v='sm_rdf_pinned_in:<id>'},0))"
     // "query({!v='(bs_sticky:true AND sm_entity_groups:<id>) OR (sm_rdf_pinned_in:<id>)'})"
     // @codingStandardsIgnoreEnd
-    // The and() operator will return false when the subquery score is lower than
-    // 1, so both of the above will fail the sorting.
+    // The and() operator will return false when the subquery score is lower
+    // than 1, so both of the above will fail the sorting.
     // Solr 6.x has the gt(x,y) function, that will return true if x is greater
     // than y. By using gt(), any positive score can be transformed to true.
     // Example:
@@ -162,8 +162,8 @@ class SearchApiFieldListingOrder implements EventSubscriberInterface {
     // Unfortunately, Solr 5.x doesn't support the gt() function.
     // Both Solr versions support the termfreq() function, which will return the
     // number of occurrences of a term in a field of the document.
-    // Alternatively, also the exists() function could be used in conjunction with
-    // the query() function, but it looks more expensive.
+    // Alternatively, also the exists() function could be used in conjunction
+    // with the query() function, but it looks more expensive.
     // Example:
     // @codingStandardsIgnoreLine
     // "or(and(bs_sticky,exists(query({!v='sm_entity_groups:<id>'},0))),exists(query({!v='sm_rdf_pinned_in:<id>'},0)))"
