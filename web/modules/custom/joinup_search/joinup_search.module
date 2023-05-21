@@ -261,6 +261,21 @@ function _joinup_search_apply_global_search_api_solr_settings(SolariumQueryInter
 }
 
 /**
+ * Implements hook_views_pre_execute().
+ */
+function joinup_search_views_pre_execute(ViewExecutable $view) {
+  if ($view->id() !== 'search') {
+    return;
+  }
+
+  // Having exposed sort options mean that only one option is passed in the
+  // query. Regardless of the case, add the entity_created as a secondary sort
+  // method to ensure legacy support.
+  // Selecting the entity_created option itself won't affect the query.
+  $view->getQuery()->sort('entity_created', 'DESC');
+}
+
+/**
  * Implements hook_theme_suggestions_HOOK_alter() for the global search block.
  *
  * Includes the template suggestion that can be configured in the block settings
