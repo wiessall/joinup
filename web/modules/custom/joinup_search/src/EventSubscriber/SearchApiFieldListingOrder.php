@@ -124,7 +124,7 @@ class SearchApiFieldListingOrder implements EventSubscriberInterface {
       return $entity;
     }
 
-    if ($entity instanceof ParagraphInterface) {
+    while ($entity instanceof ParagraphInterface) {
       $entity = $entity->getParentEntity();
     }
 
