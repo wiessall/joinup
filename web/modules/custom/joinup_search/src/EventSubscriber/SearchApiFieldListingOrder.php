@@ -53,12 +53,9 @@ class SearchApiFieldListingOrder implements EventSubscriberInterface {
     }
 
     $entity = $this->getEntityFromQuery($searchApiQuery);
-    if (!$entity) {
-      return;
+    if ($entity) {
+      $this->addPinnedSorting($solariumApiQuery, $entity);
     }
-
-    // Sort by pinned.
-    $this->addPinnedSorting($solariumApiQuery, $entity);
 
     // Sort by score.
     $solariumApiQuery->addSort('score', Query::SORT_DESC);
