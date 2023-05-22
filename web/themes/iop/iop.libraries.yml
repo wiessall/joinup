@@ -3,21 +3,23 @@ components:
   version: VERSION
   css:
     component:
-      assets/css/components.min.css: {}
+      assets/css/components.min.css: { minified: true }
+  js:
+    assets/js/oe-bcl-joinup.bundle.min.js: { minified: true, attributes: { defer: true } }
   dependencies:
-    - ventuno/components.js
+    - core/drupal
 
 theme:
   version: VERSION
   css:
     theme:
-      assets/css/theme.min.css: {}
+      assets/css/theme.min.css: { minified: true }
 
 # Pages
 listing:
   css:
     theme:
-      assets/css/listing.min.css: {}
+      assets/css/listing.min.css: { minified: true }
 
 # Components
 accordion-faq:
@@ -28,67 +30,67 @@ accordion-faq:
 join:
   css:
     theme:
-      assets/css/join.min.css: {}
+      assets/css/join.min.css: { minified: true }
 
 navbar:
   css:
     theme:
-      assets/css/navbar.min.css: {}
+      assets/css/navbar.min.css: { minified: true }
 
 page-header:
   css:
     theme:
-      assets/css/page-header.min.css: {}
+      assets/css/page-header.min.css: { minified: true }
 
 pager:
   css:
     theme:
-      assets/css/pager.min.css: {}
+      assets/css/pagination.min.css: { minified: true }
 
 paragraph:
   css:
     theme:
-      assets/css/paragraph.min.css: {}
+      assets/css/paragraph.min.css: { minified: true }
 
 paragraph--2-column-featured-left:
   css:
     theme:
-      assets/css/paragraph--2-column-featured-left.min.css: {}
+      assets/css/paragraph--2-column-featured-left.min.css: { minified: true }
 
 paragraph--2-column-featured-right:
   css:
     theme:
-      assets/css/paragraph--2-column-featured-right.min.css: {}
+      assets/css/paragraph--2-column-featured-right.min.css: { minified: true }
 
 paragraph--call-to-action:
   css:
     theme:
-      assets/css/paragraph--call-to-action.min.css: {}
+      assets/css/paragraph--call-to-action.min.css: { minified: true }
 
 paragraph--carousel:
   css:
     theme:
-      assets/css/paragraph--carousel.min.css: {}
-      assets/css/glide.core.min.css: {}
+      assets/css/paragraph--carousel.min.css: { minified: true }
+      assets/css/glide.core.min.css: { minified: true }
   js:
-    assets/js/glide.min.js: {}
+    assets/js/glide.min.js: { minified: true, attributes: { defer: true }  }
 
 paragraph--image:
   css:
     theme:
-      assets/css/paragraph--image.min.css: {}
+      assets/css/paragraph--image.min.css: { minified: true }
 
 paragraph--row:
   css:
     theme:
-      assets/css/paragraph--row.min.css: {}
+      assets/css/paragraph--row.min.css: { minified: true }
 
 paragraph--testimony:
   css:
     theme:
-      assets/css/paragraph--testimony.min.css: {}
+      assets/css/paragraph--testimony.min.css: { minified: true }
 
 paragraph--video:
   css:
     theme:
-      assets/css/paragraph--video.min.css: {}
+      assets/css/paragraph--video.min.css: { minified: true }
