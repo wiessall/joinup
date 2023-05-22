@@ -1,3 +1,11 @@
+joinup_like.anonymous_dialog:
+  path: '/like/not-logged-in'
+  defaults:
+    _controller: '\Drupal\joinup_like\Controller\JoinupLikeAnonymousController::render'
+    _title: 'You are not logged in'
+  requirements:
+    _access: 'TRUE'
+
 joinup_like.rdf.action_link_flag:
   path: '/joinup-like/flag/{flag}/{entity_id}'
   defaults:
