@@ -150,59 +150,38 @@ default:
         Featured: '.region-featured'
         Footer: '.section--footer, footer'
         Hamburger menu: '.joinup-navbar ul.navbar-nav ul.dropdown-list'
-        # TODO: Remove .section--featured,.section-header in ISAICP-7138.
-        # See https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7138
-        Header: '#block-ventuno-groupheader,#block-ventuno-userheader,.section--featured,.section-header'
+        Header: '#block-ventuno-groupheader,#block-ventuno-userheader'
         Homepage topics: '.view-homepage-topics'
         Highlighted content: '.block-entityqueue--highlighted-content'
         Highlighted event: '.block-entityqueue--highlighted-event'
         In the spotlight: '.block-views-blockin-the-spotlight-block'
         IOPE Menu: '#block-iope-navigation'
         Header bottom: '.region-header-bottom'
-        # TODO: Remove .section--sidebar-left in ISAICP-7138.
-        # See https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7138
-        Left sidebar: 'aside.layout-sidebar,.section--sidebar-left'
+        Left sidebar: 'aside.layout-sidebar'
         Like block: '.block-joinup-like-block'
         Main fields accordion: '#main-fields,.accordion .accordion-item #main'
         Main solution vertical tab: '#edit-group-main'
         Management solution vertical tab: '#edit-group-management'
         Members admin form actions: '#edit-action'
         Members admin form header: '#edit-header'
-        # TODO: Remove .ui-dialog-buttonpane in ISAICP-7138.
-        # See https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7138
-        Modal buttons: '.modal-footer,.ui-dialog-buttonpane'
-        # TODO: Remove #drupal-modal in ISAICP-7138.
-        # See https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7138
-        Modal content: '.modal-body,#drupal-modal'
-        # TODO: Remove .ui-dialog-title in ISAICP-7138.
-        # See https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7138
-        Modal title: '.modal-header,.ui-dialog-title'
+        Modal buttons: '.modal-footer'
+        Modal content: '.modal-body'
+        Modal title: '.modal-header'
         My unpublished content area: '.block-user-unpublished'
         Navigation bar: '.joinup-navbar'
         Navigation menu: '#block-ventuno-navigation'
-        # TODO: Remove div.page__title-wrapper in ISAICP-7138.
-        # See https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7138
-        Page title: 'div.page__title-wrapper, #block-ventuno-pagetitle'
+        Page title: '#block-ventuno-pagetitle'
         Pager: 'nav.pager'
-        # TODO: Remove div.add-content-menu in ISAICP-7138.
-        # See https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7138
-        Plus button menu: '#block-ventuno-joinup-add-content,div.add-content-menu'
+        Plus button menu: '#block-ventuno-joinup-add-content'
         Primary menu: '.region-primary-menu'
         Related solutions: '.field--name-field-is-related-solutions'
         SevenHeader: '.region-header'
         Statistics: '#block-statistics, #block-ventuno-statistics'
-        # Remove #block-table-of-contents in ISAICP-7138.
-        # See https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7138
-        Table of contents: '#block-ventuno-table-of-contents,#block-table-of-contents'
-        # Remove #block-toc-outline in ISAICP-7138.
-        # See https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7138
-        Table of contents outline: '#block-ventuno-toc-outline,#block-toc-outline'
+        Table of contents: '#block-ventuno-table-of-contents'
+        Table of contents outline: '#block-ventuno-toc-outline'
         Draft unpublished block: '#block-ventuno-unpublished-draft'
         Proposed unpublished block: '#block-ventuno-unpublished-proposed'
         Other unpublished block: '#block-ventuno-unpublished-other'
-        # Deprecated regions to be removed in ISAICP-7138.
-        # See https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7138
-        Navigation menu block: '#block-navigation'
       drupal:
         drupal_root: ${joinup.site_dir}
       selectors:
