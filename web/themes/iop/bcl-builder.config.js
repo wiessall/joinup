@@ -246,6 +246,17 @@ module.exports = {
       to: path.resolve(outputFolder, "assets/css/fonts/files"),
       options: { up: true },
     },
+    // Bootstrap: scripts
+    {
+      from: [
+        path.resolve(
+          nodeModules,
+          "@openeuropa/bcl-theme-joinup/js/oe-bcl-joinup.bundle.min.js"
+        ),
+      ],
+      to: path.resolve(outputFolder, "assets/js"),
+      options: { up: true },
+    },
     // Third party files
     {
       from: [
