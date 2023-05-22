@@ -21,4 +21,5 @@ use Drupal\flag_count\Plugin\ActionLink\CountLink;
 class NodeCountLink extends CountLink {
 
   use ActionLinkArchivedTrait;
+
 }
