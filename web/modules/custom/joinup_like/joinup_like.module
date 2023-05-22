@@ -10,8 +10,11 @@ declare(strict_types = 1);
 /**
  * Implements hook_theme().
  */
-function joinup_like_theme(): array {
+function joinup_like_theme(array $existing, string $type, string $theme, string $path): array {
   return [
+    'joinup_like_anonymous' => [
+      'variables' => [],
+    ],
     'flag_count_archived' => [
       'variables' => [
         'flag' => NULL,
