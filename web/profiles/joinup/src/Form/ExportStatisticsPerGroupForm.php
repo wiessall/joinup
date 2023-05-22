@@ -26,7 +26,7 @@ class ExportStatisticsPerGroupForm extends ExportBatchedDataFormBase {
    *
    * @param \Drupal\Core\Cache\CacheBackendInterface $cache
    *   The default cache bin.
-   * @param \Drupal\Core\Datetime\DateFormatterInterface $date_formatter
+   * @param \Drupal\Core\Datetime\DateFormatterInterface $dateFormatter
    *   The date formatter service.
    * @param \Drupal\Component\Datetime\TimeInterface $time
    *   The time service.
@@ -39,8 +39,8 @@ class ExportStatisticsPerGroupForm extends ExportBatchedDataFormBase {
    * @param \Drupal\flag\FlagCountManagerInterface $flagCountManager
    *   The flag count manager.
    */
-  public function __construct(protected CacheBackendInterface $cache, protected DateFormatterInterface $date_formatter, protected TimeInterface $time, protected EntityTypeManagerInterface $entityTypeManager, protected Connection $mysql, protected ConnectionInterface $sparql, FlagCountManagerInterface $flagCountManager) {
-    parent::__construct($cache, $date_formatter, $time);
+  public function __construct(protected CacheBackendInterface $cache, protected DateFormatterInterface $dateFormatter, protected TimeInterface $time, protected EntityTypeManagerInterface $entityTypeManager, protected Connection $mysql, protected ConnectionInterface $sparql, protected FlagCountManagerInterface $flagCountManager) {
+    parent::__construct($cache, $dateFormatter, $time);
 
   }
 
