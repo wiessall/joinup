@@ -1,4 +1,4 @@
-# SMACSS
+# SMACSS (http://smacss.com/)
 base:
   version: VERSION
   css:
