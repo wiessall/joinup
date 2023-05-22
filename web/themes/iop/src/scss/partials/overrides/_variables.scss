@@ -1,0 +1,19 @@
+$enable-negative-margins: false;
+$enable-caret: false;
+
+// Override default spacers, removing almost all "extended spacers"
+// to avoid creating a gigantic utilities file
+// Spacers
+$spacers: (
+  0: 0,
+  1: $spacer * .25,
+  2: $spacer * .5,
+  "2-5": $spacer * 0.75, // We need this "extended-spacer"
+  3: $spacer,
+  4: $spacer * 1.5,
+  5: $spacer * 3,
+);
+
+$gutters: $spacers;
+
+$theme-images-path: '../../../../themes/iop/assets/images';
