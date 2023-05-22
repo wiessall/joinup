@@ -10,6 +10,15 @@ use Symfony\Component\Routing\Route;
 
 /**
  * Provides an {decode_rdf_url} route param converter.
+ *
+ * Some modules expected to get entity id (string, not object) as part of URL,
+ * ex flag module. Rdf entity id can contain special characters,
+ * so it needs to be encoded in order to be used in URL.
+ * Encoded entity id will not be found by module which expected
+ * to get "real" entity id. This param converter resolves this problem.
+ * It decodes earlier encoded RDF id.
+ *
+ * @see joinup_like.routing.yml as example.
  */
 class DecodeRdfUrlConverter implements ParamConverterInterface {
 
