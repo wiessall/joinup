@@ -1,0 +1,19 @@
+<?php
+
+/**
+ * @file
+ * Main functions and hook implementations of the joinup_like module.
+ */
+
+declare(strict_types = 1);
+
+/**
+ * Implements hook_theme().
+ */
+function joinup_like_theme(array $existing, string $type, string $theme, string $path): array {
+  return [
+    'joinup_like_anonymous' => [
+      'variables' => [],
+    ],
+  ];
+}
