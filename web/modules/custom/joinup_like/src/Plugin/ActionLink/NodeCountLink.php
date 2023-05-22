@@ -15,12 +15,10 @@ use Drupal\flag_count\Plugin\ActionLink\CountLink;
  * @ActionLinkType(
  *   id = "count_link_node",
  *   label = @Translation("Joinup Count link node entity"),
- *   description = "An example AJAX action link which displays the count with
- *   the flag."
+ *   description = "An AJAX action link which displays the count with the flag."
  * )
  */
 class NodeCountLink extends CountLink {
 
   use ActionLinkArchivedTrait;
-
 }
