@@ -1,3 +1,7 @@
+@import "../partials/core";
+@import "@openeuropa/bcl-bootstrap/scss/pagination";
+@import "@openeuropa/bcl-theme-joinup/src/scss/pagination";
+
 .pagination {
   .page-item.active .page-link {
     color: $gray-900;

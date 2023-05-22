@@ -24,9 +24,42 @@ module.exports = {
     },
   ],
   styles: [
+    // Components (SMACSS)
+    {
+      entry: path.resolve(outputFolder, "src/scss/03-components.scss"),
+      dest: path.resolve(outputFolder, "assets/css/components.min.css"),
+      options: {
+        minify: true,
+        includePaths,
+        sourceMap: "file",
+      },
+    },
+    // Theme (SMACSS)
+    {
+      entry: path.resolve(outputFolder, "src/scss/04-theme.scss"),
+      dest: path.resolve(outputFolder, "assets/css/theme.min.css"),
+      options: {
+        minify: true,
+        includePaths,
+        sourceMap: "file",
+      },
+    },
+    // Pages
+    {
+      entry: path.resolve(outputFolder, "src/scss/pages/listing.scss"),
+      dest: path.resolve(outputFolder, "assets/css/listing.min.css"),
+      options: {
+        minify: true,
+        includePaths,
+        sourceMap: "file",
+      },
+    },
     // Components
     {
-      entry: path.resolve(outputFolder, "src/scss/accordion-faq.scss"),
+      entry: path.resolve(
+        outputFolder,
+        "src/scss/components/accordion-faq.scss"
+      ),
       dest: path.resolve(outputFolder, "assets/css/accordion-faq.min.css"),
       options: {
         minify: true,
@@ -35,16 +68,7 @@ module.exports = {
       },
     },
     {
-      entry: path.resolve(outputFolder, "src/scss/components.scss"),
-      dest: path.resolve(outputFolder, "assets/css/components.min.css"),
-      options: {
-        minify: true,
-        includePaths,
-        sourceMap: "file",
-      },
-    },
-    {
-      entry: path.resolve(outputFolder, "src/scss/join.scss"),
+      entry: path.resolve(outputFolder, "src/scss/components/join.scss"),
       dest: path.resolve(outputFolder, "assets/css/join.min.css"),
       options: {
         minify: true,
@@ -53,7 +77,7 @@ module.exports = {
       },
     },
     {
-      entry: path.resolve(outputFolder, "src/scss/navbar.scss"),
+      entry: path.resolve(outputFolder, "src/scss/components/navbar.scss"),
       dest: path.resolve(outputFolder, "assets/css/navbar.min.css"),
       options: {
         minify: true,
@@ -62,7 +86,7 @@ module.exports = {
       },
     },
     {
-      entry: path.resolve(outputFolder, "src/scss/page-header.scss"),
+      entry: path.resolve(outputFolder, "src/scss/components/page-header.scss"),
       dest: path.resolve(outputFolder, "assets/css/page-header.min.css"),
       options: {
         includePaths,
@@ -70,7 +94,10 @@ module.exports = {
       },
     },
     {
-      entry: path.resolve(outputFolder, "src/scss/paragraph.scss"),
+      entry: path.resolve(
+        outputFolder,
+        "src/scss/components/paragraphs/paragraph.scss"
+      ),
       dest: path.resolve(outputFolder, "assets/css/paragraph.min.css"),
       options: {
         includePaths,
@@ -80,7 +107,7 @@ module.exports = {
     {
       entry: path.resolve(
         outputFolder,
-        "src/scss/paragraph--2-column-featured-left.scss"
+        "src/scss/components/paragraphs/paragraph--2-column-featured-left.scss"
       ),
       dest: path.resolve(
         outputFolder,
@@ -94,7 +121,7 @@ module.exports = {
     {
       entry: path.resolve(
         outputFolder,
-        "src/scss/paragraph--2-column-featured-right.scss"
+        "src/scss/components/paragraphs/paragraph--2-column-featured-right.scss"
       ),
       dest: path.resolve(
         outputFolder,
@@ -108,7 +135,7 @@ module.exports = {
     {
       entry: path.resolve(
         outputFolder,
-        "src/scss/paragraph--call-to-action.scss"
+        "src/scss/components/paragraphs/paragraph--call-to-action.scss"
       ),
       dest: path.resolve(
         outputFolder,
@@ -121,7 +148,10 @@ module.exports = {
       },
     },
     {
-      entry: path.resolve(outputFolder, "src/scss/paragraph--carousel.scss"),
+      entry: path.resolve(
+        outputFolder,
+        "src/scss/components/paragraphs/paragraph--carousel.scss"
+      ),
       dest: path.resolve(
         outputFolder,
         "assets/css/paragraph--carousel.min.css"
@@ -133,7 +163,10 @@ module.exports = {
       },
     },
     {
-      entry: path.resolve(outputFolder, "src/scss/paragraph--image.scss"),
+      entry: path.resolve(
+        outputFolder,
+        "src/scss/components/paragraphs/paragraph--image.scss"
+      ),
       dest: path.resolve(outputFolder, "assets/css/paragraph--image.min.css"),
       options: {
         minify: true,
@@ -142,7 +175,10 @@ module.exports = {
       },
     },
     {
-      entry: path.resolve(outputFolder, "src/scss/paragraph--row.scss"),
+      entry: path.resolve(
+        outputFolder,
+        "src/scss/components/paragraphs/paragraph--row.scss"
+      ),
       dest: path.resolve(outputFolder, "assets/css/paragraph--row.min.css"),
       options: {
         minify: true,
@@ -151,7 +187,10 @@ module.exports = {
       },
     },
     {
-      entry: path.resolve(outputFolder, "src/scss/paragraph--testimony.scss"),
+      entry: path.resolve(
+        outputFolder,
+        "src/scss/components/paragraphs/paragraph--testimony.scss"
+      ),
       dest: path.resolve(
         outputFolder,
         "assets/css/paragraph--testimony.min.css"
@@ -163,35 +202,19 @@ module.exports = {
       },
     },
     {
-      entry: path.resolve(outputFolder, "src/scss/paragraph--video.scss"),
+      entry: path.resolve(
+        outputFolder,
+        "src/scss/components/paragraphs/paragraph--video.scss"
+      ),
       dest: path.resolve(outputFolder, "assets/css/paragraph--video.min.css"),
       options: {
         includePaths,
         sourceMap: "file",
       },
     },
-    // Theme
     {
-      entry: path.resolve(outputFolder, "src/scss/theme.scss"),
-      dest: path.resolve(outputFolder, "assets/css/theme.min.css"),
-      options: {
-        minify: true,
-        includePaths,
-        sourceMap: "file",
-      },
-    },
-    {
-      entry: path.resolve(outputFolder, "src/scss/listing.scss"),
-      dest: path.resolve(outputFolder, "assets/css/listing.min.css"),
-      options: {
-        minify: true,
-        includePaths,
-        sourceMap: "file",
-      },
-    },
-    {
-      entry: path.resolve(outputFolder, "src/scss/pager.scss"),
-      dest: path.resolve(outputFolder, "assets/css/pager.min.css"),
+      entry: path.resolve(outputFolder, "src/scss/components/pagination.scss"),
+      dest: path.resolve(outputFolder, "assets/css/pagination.min.css"),
       options: {
         minify: true,
         includePaths,
