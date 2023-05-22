@@ -19,8 +19,7 @@ use Drupal\sparql_entity_storage\UriEncoder;
  * @ActionLinkType(
  *   id = "count_link_rdf",
  *   label = @Translation("Joinup Count link Rdf entity"),
- *   description = "An example AJAX action link which displays the count with
- *   the flag."
+ *   description = "An AJAX action link which displays the count with the flag."
  * )
  */
 class RdfCountLink extends CountLink {
