@@ -119,7 +119,6 @@ module:
   joinup_validation: 0
   joinup_video: 0
   joinup_workflow: 0
-  jquery_ui: 0
   json_field: 0
   language: 0
   layout_builder: 0
@@ -247,8 +246,6 @@ module:
   joinup: 1000
   joinup_debug: 1001
 theme:
-  stable: 0
-  joinup_theme: 0
   ventuno: 0
   oe_bootstrap_theme: 0
   claro: 0
