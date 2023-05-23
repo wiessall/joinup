@@ -427,3 +427,24 @@ Feature: As a moderator or group facilitator I want to be able to add, edit and
     And I press "Save"
     Then I should see the success message "Glossary term XRatings has been created."
 
+  Scenario: Allow rich text in Glossary contains bold, italic, underline and list.
+    Given users:
+      | Username | Roles     |
+      | mod      | moderator |
+    And the following collections:
+      | title                    | description                                                                                                             | state     |
+      | Collection With Glossary | The Battle of Evermore of the <strong>batTle</strong> and the BATTLE. Call it everMore or EVERmore. Also, battle again. | validated |
+    And the following collection user membership:
+      | collection               | user | roles       |
+      | Collection With Glossary | mod  | facilitator |
+    Given glossary content:
+      | title        | synonyms | definition                                                        | collection               |
+      | battle       | evermore | Definition <strong>bold</strong> <em>italic</em> <u>underline</u> <ul><li>list 1</li><li>list 2</li></ul> | Collection With Glossary |
+    When I am logged in as a moderator
+    And I go to the edit form of the "battle" glossary
+    Then the "Definition" wysiwyg editor should have the buttons "Link, Unlink, Bold, Italic, Underline, Bullet list, Numbered list, Source code"
+    When I press "Save"
+    When I go to the "Collection With Glossary" collection
+    When I click "Glossary"
+    Then I should see the text "Definition bold italic underline list 1list 2"
+
