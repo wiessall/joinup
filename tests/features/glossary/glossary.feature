@@ -438,7 +438,7 @@ Feature: As a moderator or group facilitator I want to be able to add, edit and
       | collection               | user | roles       |
       | Collection With Glossary | mod  | facilitator |
     Given glossary content:
-      | title        | synonyms | definition                                                        | collection               |
+      | title        | synonyms | definition                                                                                                | collection               |
       | battle       | evermore | Definition <strong>bold</strong> <em>italic</em> <u>underline</u> <ul><li>list 1</li><li>list 2</li></ul> | Collection With Glossary |
     When I am logged in as a moderator
     And I go to the edit form of the "battle" glossary
