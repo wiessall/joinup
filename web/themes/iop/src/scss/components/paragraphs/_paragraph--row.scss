@@ -1,4 +1,14 @@
 .paragraph--row {
+  // Temporary fix to avoid CSS clashes between Layout Paragraphs and custom row paragraph.
+  // This whole file will be useless as from ISAICP-7744 and therefore removed.
+  a.lpb-btn--add {
+    width: 24px;
+    padding: unset;
+  }
+  .lpb-controls {
+    width: auto;
+    padding: unset;
+  }
   padding-top: $spacer * 1.125; // 18px
   padding-bottom: $spacer * 1.125; // 18px
   @include media-breakpoint-up(lg) {
