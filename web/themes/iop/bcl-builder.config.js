@@ -80,6 +80,34 @@ module.exports = {
     {
       entry: path.resolve(
         outputFolder,
+        "src/scss/paragraph--2-column-featured-left.scss"
+      ),
+      dest: path.resolve(
+        outputFolder,
+        "assets/css/paragraph--2-column-featured-left.min.css"
+      ),
+      options: {
+        includePaths,
+        sourceMap: "file",
+      },
+    },
+    {
+      entry: path.resolve(
+        outputFolder,
+        "src/scss/paragraph--2-column-featured-right.scss"
+      ),
+      dest: path.resolve(
+        outputFolder,
+        "assets/css/paragraph--2-column-featured-right.min.css"
+      ),
+      options: {
+        includePaths,
+        sourceMap: "file",
+      },
+    },
+    {
+      entry: path.resolve(
+        outputFolder,
         "src/scss/paragraph--call-to-action.scss"
       ),
       dest: path.resolve(
@@ -107,6 +135,15 @@ module.exports = {
     {
       entry: path.resolve(outputFolder, "src/scss/paragraph--image.scss"),
       dest: path.resolve(outputFolder, "assets/css/paragraph--image.min.css"),
+      options: {
+        minify: true,
+        includePaths,
+        sourceMap: "file",
+      },
+    },
+    {
+      entry: path.resolve(outputFolder, "src/scss/paragraph--row.scss"),
+      dest: path.resolve(outputFolder, "assets/css/paragraph--row.min.css"),
       options: {
         minify: true,
         includePaths,

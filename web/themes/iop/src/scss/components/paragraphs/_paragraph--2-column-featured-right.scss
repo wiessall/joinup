@@ -1,0 +1,17 @@
+.paragraph--2-column-featured-right {
+  &:first-of-type {
+    & > * {
+      @include media-breakpoint-up(md) {
+        margin-right: $spacer * 5; // 80px
+      }
+    }
+  }
+  &:nth-of-type(2) {
+    order: -1;
+    margin-bottom: $spacer * 2; // 32px
+    @include media-breakpoint-up(md) {
+      order: 0;
+      margin-bottom: 0;
+    }
+  }
+}
