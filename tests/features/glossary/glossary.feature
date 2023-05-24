@@ -447,4 +447,5 @@ Feature: As a moderator or group facilitator I want to be able to add, edit and
     When I go to the "Collection With Glossary" collection
     When I click "Glossary"
     Then I should see the text "Definition bold italic underline list 1list 2"
+    And the page should contain the html text "Definition <strong>bold</strong> <em>italic</em> <u>underline</u> <ul><li>list 1</li><li>list 2</li></ul>"
 
