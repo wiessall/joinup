@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "717674ff88fc8c32140c9756d37b1c28",
+    "content-hash": "05e7191b4465eb31e30c160748e912d4",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -2673,20 +2673,20 @@
         },
         {
             "name": "drupal/dropsolid_purge",
-            "version": "1.0.0-beta3",
+            "version": "1.0.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/dropsolid_purge.git",
-                "reference": "8.x-1.0-beta3"
+                "reference": "8.x-1.0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/dropsolid_purge-8.x-1.0-beta3.zip",
-                "reference": "8.x-1.0-beta3",
-                "shasum": "215508f84b857634a32f6e7d1a0de81106bdd3df"
+                "url": "https://ftp.drupal.org/files/projects/dropsolid_purge-8.x-1.0.zip",
+                "reference": "8.x-1.0",
+                "shasum": "52174ad1cea810446c2cf28772bcbd68f6f932fb"
             },
             "require": {
-                "drupal/core": "^8 || ^9",
+                "drupal/core": "^8.8 || ^9 || ^10",
                 "drupal/purge": "^3.0",
                 "drupal/purge_drush": "*",
                 "drupal/purge_processor_cron": "*",
@@ -2696,11 +2696,11 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "8.x-1.0-beta3",
-                    "datestamp": "1594816497",
+                    "version": "8.x-1.0",
+                    "datestamp": "1683811620",
                     "security-coverage": {
-                        "status": "not-covered",
-                        "message": "Beta releases are not covered by Drupal security advisories."
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
                     }
                 }
             },
@@ -2711,8 +2711,16 @@
             "authors": [
                 {
                     "name": "Niels Aers",
-                    "homepage": "https://www.drupal.org/user/3145497",
+                    "homepage": "https://www.drupal.org/user/168629",
                     "role": "Maintainer"
+                },
+                {
+                    "name": "Grayle",
+                    "homepage": "https://www.drupal.org/user/3145497"
+                },
+                {
+                    "name": "nginex",
+                    "homepage": "https://www.drupal.org/user/2822325"
                 },
                 {
                     "name": "Nick_vh",
@@ -4040,14 +4048,6 @@
                     "name": "Pablo López",
                     "homepage": "https://www.drupal.org/u/plopesc",
                     "role": "Drupal 7 Maintainer"
-                },
-                {
-                    "name": "phayes",
-                    "homepage": "https://www.drupal.org/user/47098"
-                },
-                {
-                    "name": "plopesc",
-                    "homepage": "https://www.drupal.org/user/282415"
                 }
             ],
             "description": "Stores geographic and location data (points, lines, and polygons).",
@@ -4296,12 +4296,12 @@
                     "homepage": "https://www.drupal.org/user/972218"
                 },
                 {
-                    "name": "kaythay",
-                    "homepage": "https://www.drupal.org/user/2182186"
-                },
-                {
                     "name": "oknate",
                     "homepage": "https://www.drupal.org/user/471638"
+                },
+                {
+                    "name": "podarok",
+                    "homepage": "https://www.drupal.org/user/116002"
                 },
                 {
                     "name": "ram4nd",
@@ -10546,16 +10546,16 @@
         },
         {
             "name": "openeuropa/oe_webtools",
-            "version": "1.22.0",
+            "version": "1.23.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/openeuropa/oe_webtools.git",
-                "reference": "63937576cfc13a51177b4d08f0b1bbde91738f27"
+                "reference": "dce35c0f3411b059b346c9dd32018761a97635f9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/openeuropa/oe_webtools/zipball/63937576cfc13a51177b4d08f0b1bbde91738f27",
-                "reference": "63937576cfc13a51177b4d08f0b1bbde91738f27",
+                "url": "https://api.github.com/repos/openeuropa/oe_webtools/zipball/dce35c0f3411b059b346c9dd32018761a97635f9",
+                "reference": "dce35c0f3411b059b346c9dd32018761a97635f9",
                 "shasum": ""
             },
             "require": {
@@ -10624,9 +10624,9 @@
             "description": "OpenEuropa Webtools integration.",
             "support": {
                 "issues": "https://github.com/openeuropa/oe_webtools/issues",
-                "source": "https://github.com/openeuropa/oe_webtools/tree/1.22.0"
+                "source": "https://github.com/openeuropa/oe_webtools/tree/1.23.0"
             },
-            "time": "2023-04-11T12:06:26+00:00"
+            "time": "2023-05-11T11:31:57+00:00"
         },
         {
             "name": "pear/archive_tar",
@@ -11184,6 +11184,7 @@
                 "issues": "https://github.com/php-http/message-factory/issues",
                 "source": "https://github.com/php-http/message-factory/tree/1.1.0"
             },
+            "abandoned": "psr/http-factory",
             "time": "2023-04-14T14:16:17+00:00"
         },
         {
@@ -17449,16 +17450,16 @@
         },
         {
             "name": "ec-europa/toolkit",
-            "version": "9.9.2",
+            "version": "9.9.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ec-europa/toolkit.git",
-                "reference": "c6a7c08a4f2e7d18bd2bf71dbcb08765f2aa46c5"
+                "reference": "ad93400c8ccefa0478e5bb1312e287c02929d248"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ec-europa/toolkit/zipball/c6a7c08a4f2e7d18bd2bf71dbcb08765f2aa46c5",
-                "reference": "c6a7c08a4f2e7d18bd2bf71dbcb08765f2aa46c5",
+                "url": "https://api.github.com/repos/ec-europa/toolkit/zipball/ad93400c8ccefa0478e5bb1312e287c02929d248",
+                "reference": "ad93400c8ccefa0478e5bb1312e287c02929d248",
                 "shasum": ""
             },
             "require": {
@@ -17510,7 +17511,7 @@
                 "email": "DIGIT-NEXTEUROPA-QA@ec.europa.eu",
                 "source": "https://github.com/ec-europa/toolkit"
             },
-            "time": "2023-05-04T13:12:37+00:00"
+            "time": "2023-05-17T12:23:08+00:00"
         },
         {
             "name": "friends-of-behat/mink-extension",
