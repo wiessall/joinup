@@ -4,11 +4,10 @@ declare(strict_types = 1);
 
 namespace Drupal\joinup_search\EventSubscriber;
 
-use Drupal\joinup_user\Entity\JoinupUserInterface;
-use Drupal\paragraphs\ParagraphInterface;
 use Drupal\facets\FacetInterface;
 use Drupal\facets\FacetManager\DefaultFacetManager;
-use Drupal\joinup_group\Entity\GroupInterface;
+use Drupal\joinup_user\Entity\JoinupUserInterface;
+use Drupal\paragraphs\ParagraphInterface;
 use Drupal\search_api\Event\QueryPreExecuteEvent;
 use Drupal\search_api\Event\SearchApiEvents;
 use Drupal\search_api\Query\ConditionGroupInterface;
@@ -39,7 +38,7 @@ class SearchApiStatusSubscriber implements EventSubscriberInterface {
       ],
       SearchApiEvents::QUERY_PRE_EXECUTE . '.search_api_field' => [
         ['paragraphContentListingQueryAlter'],
-      ]
+      ],
     ];
   }
 
@@ -133,6 +132,11 @@ class SearchApiStatusSubscriber implements EventSubscriberInterface {
     // unarchived content is available in order to give the user the ability to
     // further filter the results.
     // @see \_joinup_search_apply_global_search_api_solr_settings
+
+    if (empty($query->getOption('search_api_field'))) {
+      return;
+    }
+
     $value = $query->getOption('search_api_field item')->getValue();
     if (!isset($value['value']['show_archived']) || $value['value']['show_archived'] !== 'all') {
       return;
