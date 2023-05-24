@@ -512,12 +512,12 @@ display:
         document_version_name:
           id: document_version_name
           table: entity_legal_document_acceptance
-          field: document_version_name
+          field: vid
           relationship: none
           group_type: group
           admin_label: 'Legal document version'
           entity_type: entity_legal_document_acceptance
-          entity_field: document_version_name
+          entity_field: vid
           plugin_id: standard
           required: true
       header: {  }
