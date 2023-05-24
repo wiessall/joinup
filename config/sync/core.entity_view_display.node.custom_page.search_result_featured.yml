@@ -11,11 +11,11 @@ dependencies:
     - node.type.custom_page
     - responsive_image.styles.teaser
   module:
-    - entity_reference_revisions
     - field_delimiter
     - field_formatter_range
     - field_group
     - layout_builder
+    - layout_paragraphs
     - responsive_image
     - template_suggestion
     - user
@@ -60,7 +60,7 @@ content:
     weight: 2
     region: content
   field_paragraphs_body:
-    type: entity_reference_revisions_entity_view
+    type: layout_paragraphs
     label: hidden
     settings:
       view_mode: preview

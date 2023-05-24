@@ -10,11 +10,11 @@ dependencies:
     - field.field.node.custom_page.og_audience
     - node.type.custom_page
   module:
-    - entity_reference_revisions
     - field_delimiter
     - field_formatter_range
     - field_group
     - layout_builder
+    - layout_paragraphs
     - template_suggestion
     - user
 third_party_settings:
@@ -47,7 +47,7 @@ bundle: custom_page
 mode: search_result
 content:
   field_paragraphs_body:
-    type: entity_reference_revisions_entity_view
+    type: layout_paragraphs
     label: hidden
     settings:
       view_mode: preview
