@@ -107,7 +107,7 @@ class SearchApiFieldListingOrder implements EventSubscriberInterface {
   }
 
   /**
-   * Gets rdf entity from query.
+   * Gets the RDF entity from query.
    *
    * @param \Drupal\search_api\Query\QueryInterface $searchApiQuery
    *   Search api query.
