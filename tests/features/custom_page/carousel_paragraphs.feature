@@ -32,9 +32,9 @@ Feature:
       | title       | state     |
       | Sparta      | validated |
     And news content:
-      | title       | collection  | content       | state     |
-      | Some news 1 | Roman ruins | Some content. | validated |
-      | Some news 2 | Sparta      | Come content. | validated |
+      | title       | headline    | collection  | content       | state     |
+      | Some news 1 | Some news 1 | Roman ruins | Some content. | validated |
+      | Some news 2 | Some news 2 | Sparta      | Come content. | validated |
 
     When I am logged in as a moderator
     And I go to the homepage
@@ -60,10 +60,10 @@ Feature:
       | title       | state     |
       | Sparta      | validated |
     And custom_page content:
-      | title       | collection  | content       | state     |
-      | Some page 1 | Roman ruins | Some content. | validated |
-      | Some page 2 | Sparta      | Some content. | validated |
-      | Some page 3 | Sparta      | Some content. | validated |
+      | title       | headline    | collection  | content       | state     |
+      | Some page 1 | Some page 1 | Roman ruins | Some content. | validated |
+      | Some page 2 | Some page 2 | Sparta      | Some content. | validated |
+      | Some page 3 | Some page 3 | Sparta      | Some content. | validated |
 
     When I am logged in as a moderator
     And I go to the homepage
@@ -102,10 +102,10 @@ Feature:
 
   Scenario: Carousels should be ordered by creation date by default.
     Given news content:
-      | title       | co  | content       | state     | created    |
-      | Some news 1 | Ro  | Some content. | validated | 2 day ago  |
-      | Some news 2 | Ro  | Some content. | validated | 3 days ago |
-      | Some news 3 | Ro  | Some content. | validated | 1 days ago |
+      | title       | headline    | collection   | content       | state     | created    |
+      | Some news 1 | Some news 1 | Roman ruins  | Some content. | validated | 2 day ago  |
+      | Some news 2 | Some news 2 | Roman ruins  | Some content. | validated | 3 days ago |
+      | Some news 3 | Some news 3 | Roman ruins  | Some content. | validated | 1 days ago |
 
     When I am logged in as a moderator
     And I go to the homepage
@@ -128,10 +128,10 @@ Feature:
 
   Scenario: Test also that events, when listed alone, are sorted by event date.
     Given event content:
-      | title        | collection   | content       | state     | created    | start date | end date |
-      | Some event 1 | Roman ruins  | Some content. | validated | 2 day ago  | 5 day ago  | 4 day ago |
-      | Some event 2 | Roman ruins  | Some content. | validated | 3 days ago | 6 days ago | 5 days ago |
-      | Some event 3 | Roman ruins  | Some content. | validated | 1 days ago | 7 days ago | 6 days ago |
+      | title        | headline     | collection   | content       | state     | created    | start date | end date |
+      | Some event 1 | Some event 1 | Roman ruins  | Some content. | validated | 2 day ago  | 5 day ago  | 4 day ago |
+      | Some event 2 | Some event 2 | Roman ruins  | Some content. | validated | 3 days ago | 6 days ago | 5 days ago |
+      | Some event 3 | Some event 3 | Roman ruins  | Some content. | validated | 1 days ago | 7 days ago | 6 days ago |
 
     When I am logged in as a moderator
     And I go to the homepage
