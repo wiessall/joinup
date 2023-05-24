@@ -21,7 +21,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 class SearchApiFieldListingOrder implements EventSubscriberInterface {
 
   /**
-   * Construct subscriber.
+   * Constructs a subscriber instance.
    *
    * @param \Drupal\facets\Utility\FacetsDateHandler $facetDateHandler
    *   Facets date handler.
