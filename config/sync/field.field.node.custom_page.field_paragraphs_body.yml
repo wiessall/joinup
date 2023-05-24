@@ -38,11 +38,6 @@ settings:
       accordion: accordion
       content_listing: content_listing
       iframe: iframe
-      1_column_layout: 1_column_layout
-      2_column_layout: 2_column_layout
-      3_column_layout: 3_column_layout
-      2_column_featured_left: 2_column_featured_left
-      2_column_featured_right: 2_column_featured_right
       row: row
       testimony: testimony
       call_to_action: call_to_action
@@ -54,19 +49,19 @@ settings:
     target_bundles_drag_drop:
       1_column_layout:
         weight: 14
-        enabled: true
+        enabled: false
       2_column_featured_left:
         weight: 22
-        enabled: true
+        enabled: false
       2_column_featured_right:
         weight: 23
-        enabled: true
+        enabled: false
       2_column_layout:
         weight: 15
-        enabled: true
+        enabled: false
       3_column_layout:
         weight: 16
-        enabled: true
+        enabled: false
       accordion:
         weight: 5
         enabled: true
