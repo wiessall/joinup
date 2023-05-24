@@ -34,7 +34,8 @@ class SearchApiFieldListingOrder implements EventSubscriberInterface {
    */
   public static function getSubscribedEvents(): array {
     return [
-      PreQueryEvent::class => ['queryAlter', -200],
+      // Lower priority to make sure it is performed as the last one.
+      PreQueryEvent::class => ['queryAlter', -100],
     ];
   }
 
