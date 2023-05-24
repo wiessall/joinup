@@ -113,7 +113,7 @@ class SearchApiFieldListingOrder implements EventSubscriberInterface {
    *   Search API query.
    *
    * @return \Drupal\rdf_entity\RdfInterface|null
-   *   Rdf entity.
+   *   RDF entity.
    */
   protected function getEntityFromQuery(SearchApiQueryInterface $searchApiQuery): ?RdfInterface {
     $entity = $searchApiQuery->getOption('search_api_field entity');
