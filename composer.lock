@@ -12183,104 +12183,6 @@
             "time": "2023-01-16T11:43:21+00:00"
         },
         {
-            "name": "sweetrdf/rdf-helpers",
-            "version": "1.0.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/sweetrdf/rdfHelpers.git",
-                "reference": "e0ae1d528766aae4c3bfa9e4312f02efbb6830b5"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/sweetrdf/rdfHelpers/zipball/e0ae1d528766aae4c3bfa9e4312f02efbb6830b5",
-                "reference": "e0ae1d528766aae4c3bfa9e4312f02efbb6830b5",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=8.0",
-                "sweetrdf/rdf-interface": "^1.0.0",
-                "zozlak/rdf-constants": "^1.1"
-            },
-            "require-dev": {
-                "phpstan/phpstan": "*",
-                "phpunit/php-code-coverage": "^9.2",
-                "phpunit/phpunit": "^9.5",
-                "squizlabs/php_codesniffer": "*"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "rdfHelpers\\": "src/rdfHelpers"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Mateusz Żółtak",
-                    "email": "zozlak@zozlak.org",
-                    "role": "Developer"
-                }
-            ],
-            "description": "Set of low level helpers for implementing rdfInterface",
-            "homepage": "https://github.com/sweetrdf/rdfHelpers",
-            "support": {
-                "issues": "https://github.com/sweetrdf/rdfHelpers/issues",
-                "source": "https://github.com/sweetrdf/rdfHelpers/tree/1.0.1"
-            },
-            "time": "2023-04-02T08:59:30+00:00"
-        },
-        {
-            "name": "sweetrdf/rdf-interface",
-            "version": "1.0.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/sweetrdf/rdfInterface.git",
-                "reference": "1d7645cc2f138017fe7d1421e3b0b479d6bee4a5"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/sweetrdf/rdfInterface/zipball/1d7645cc2f138017fe7d1421e3b0b479d6bee4a5",
-                "reference": "1d7645cc2f138017fe7d1421e3b0b479d6bee4a5",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=8.0",
-                "psr/http-message": "^1.0",
-                "zozlak/rdf-constants": "*"
-            },
-            "require-dev": {
-                "phpstan/phpstan": "*",
-                "squizlabs/php_codesniffer": "*"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "rdfInterface\\": "src/rdfInterface"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Mateusz Żółtak",
-                    "email": "zozlak@zozlak.org",
-                    "role": "Developer"
-                }
-            ],
-            "description": "A common RDF interface for PHP RDF libraries.",
-            "homepage": "https://github.com/sweetrdf/rdfInterface",
-            "support": {
-                "issues": "https://github.com/sweetrdf/rdfInterface/issues",
-                "source": "https://github.com/sweetrdf/rdfInterface/tree/1.0.0"
-            },
-            "time": "2022-11-01T09:27:45+00:00"
-        },
-        {
             "name": "swiftmailer/swiftmailer",
             "version": "v6.3.0",
             "source": {
@@ -15545,44 +15447,6 @@
                 "source": "https://github.com/geocoder-php/php-common/tree/4.6.0"
             },
             "time": "2022-07-30T11:09:43+00:00"
-        },
-        {
-            "name": "zozlak/rdf-constants",
-            "version": "1.2.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/zozlak/RdfConstants.git",
-                "reference": "a8de0b50d23b213a68784ec2cec22b4ad838012b"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/zozlak/RdfConstants/zipball/a8de0b50d23b213a68784ec2cec22b4ad838012b",
-                "reference": "a8de0b50d23b213a68784ec2cec22b4ad838012b",
-                "shasum": ""
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "zozlak\\": "src/zozlak"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Mateusz Żółtak",
-                    "email": "zozlak@zozlak.org"
-                }
-            ],
-            "description": "A set of commonly used RDF and XSD constants",
-            "homepage": "https://github.com/zozlak/RdfConstants",
-            "support": {
-                "issues": "https://github.com/zozlak/RdfConstants/issues",
-                "source": "https://github.com/zozlak/RdfConstants/tree/1.2.1"
-            },
-            "time": "2022-08-05T12:50:50+00:00"
         }
     ],
     "packages-dev": [
@@ -17768,16 +17632,16 @@
         },
         {
             "name": "ec-europa/toolkit",
-            "version": "9.8.1",
+            "version": "9.9.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ec-europa/toolkit.git",
-                "reference": "ddfde48db5768d2bccf1ba02bc64d982b8539536"
+                "reference": "ad93400c8ccefa0478e5bb1312e287c02929d248"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ec-europa/toolkit/zipball/ddfde48db5768d2bccf1ba02bc64d982b8539536",
-                "reference": "ddfde48db5768d2bccf1ba02bc64d982b8539536",
+                "url": "https://api.github.com/repos/ec-europa/toolkit/zipball/ad93400c8ccefa0478e5bb1312e287c02929d248",
+                "reference": "ad93400c8ccefa0478e5bb1312e287c02929d248",
                 "shasum": ""
             },
             "require": {
@@ -17829,7 +17693,7 @@
                 "email": "DIGIT-NEXTEUROPA-QA@ec.europa.eu",
                 "source": "https://github.com/ec-europa/toolkit"
             },
-            "time": "2023-04-11T13:28:48+00:00"
+            "time": "2023-05-17T12:23:08+00:00"
         },
         {
             "name": "friends-of-behat/mink-extension",
