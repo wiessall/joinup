@@ -17450,16 +17450,16 @@
         },
         {
             "name": "ec-europa/toolkit",
-            "version": "9.9.2",
+            "version": "9.9.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ec-europa/toolkit.git",
-                "reference": "c6a7c08a4f2e7d18bd2bf71dbcb08765f2aa46c5"
+                "reference": "ad93400c8ccefa0478e5bb1312e287c02929d248"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ec-europa/toolkit/zipball/c6a7c08a4f2e7d18bd2bf71dbcb08765f2aa46c5",
-                "reference": "c6a7c08a4f2e7d18bd2bf71dbcb08765f2aa46c5",
+                "url": "https://api.github.com/repos/ec-europa/toolkit/zipball/ad93400c8ccefa0478e5bb1312e287c02929d248",
+                "reference": "ad93400c8ccefa0478e5bb1312e287c02929d248",
                 "shasum": ""
             },
             "require": {
@@ -17511,7 +17511,7 @@
                 "email": "DIGIT-NEXTEUROPA-QA@ec.europa.eu",
                 "source": "https://github.com/ec-europa/toolkit"
             },
-            "time": "2023-05-04T13:12:37+00:00"
+            "time": "2023-05-17T12:23:08+00:00"
         },
         {
             "name": "friends-of-behat/mink-extension",
