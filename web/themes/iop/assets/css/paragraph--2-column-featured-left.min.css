@@ -1,0 +1,77 @@
+/**
+ * @file
+ * Common base.
+ *
+ * Functions, variables, utilities and mixins required for the build.
+ * When compiled, this file should not output anything.
+ */
+@media (min-width: 768px) {
+  .paragraph--2-column-featured-left {
+    margin-top: 50px;
+  }
+}
+.paragraph--2-column-featured-left h2 {
+  font-weight: normal;
+  text-align: center;
+  font-size: 2.5rem;
+}
+@media (min-width: 768px) {
+  .paragraph--2-column-featured-left h2 {
+    text-align: left;
+    font-size: 3rem;
+  }
+}
+.paragraph--2-column-featured-left:first-of-type {
+  position: relative;
+  margin-left: -5rem;
+}
+@media (min-width: 576px) {
+  .paragraph--2-column-featured-left:first-of-type {
+    margin-left: 0;
+  }
+}
+@media (min-width: 768px) {
+  .paragraph--2-column-featured-left:first-of-type {
+    margin-bottom: 0;
+  }
+}
+.paragraph--2-column-featured-left:first-of-type::before {
+  position: absolute;
+  content: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' style='enable-background:new 0 0 100 100' xml:space='preserve'%3E%3ClinearGradient id='a' gradientUnits='userSpaceOnUse' x1='0' y1='50' x2='100' y2='50'%3E%3Cstop offset='.106' style='stop-color:%23268dc2'/%3E%3Cstop offset='.129' style='stop-color:%232c94c1'/%3E%3Cstop offset='.216' style='stop-color:%233ea9bc'/%3E%3Cstop offset='.302' style='stop-color:%2348b6ba'/%3E%3Cstop offset='.382' style='stop-color:%234cbab9'/%3E%3Cstop offset='.682' style='stop-color:%23ced955'/%3E%3Cstop offset='.734' style='stop-color:%23d1d44f'/%3E%3Cstop offset='.805' style='stop-color:%23d9c43d'/%3E%3Cstop offset='.887' style='stop-color:%23e6ac20'/%3E%3Cstop offset='.956' style='stop-color:%23f39202'/%3E%3C/linearGradient%3E%3Ccircle cx='50' cy='50' r='48' style='opacity:.7;fill:none;stroke:url(%23a);stroke-width:4;stroke-miterlimit:10'/%3E%3C/svg%3E");
+  z-index: -1;
+  width: 80px;
+  top: -20px;
+  right: -20px;
+}
+@media (min-width: 768px) {
+  .paragraph--2-column-featured-left:first-of-type::before {
+    width: 100px;
+    top: -50px;
+    right: -35px;
+  }
+}
+.paragraph--2-column-featured-left:first-of-type img {
+  border-radius: 2.5rem;
+  border: 2px solid transparent;
+  overflow: hidden;
+  background: linear-gradient(#082330, #082330) padding-box, linear-gradient(to right, #238dc1 0%, #0047ba 25%, #19d3c5 55%, #cdd854 80%, #f29100 100%) border-box;
+}
+@media (min-width: 768px) {
+  .paragraph--2-column-featured-left:first-of-type img {
+    border-radius: 4rem;
+  }
+}
+.paragraph--2-column-featured-left:last-of-type {
+  order: 2;
+}
+@media (min-width: 768px) {
+  .paragraph--2-column-featured-left:last-of-type {
+    order: 0;
+  }
+}
+@media (min-width: 992px) {
+  .paragraph--2-column-featured-left:last-of-type > * {
+    margin-left: 5rem;
+  }
+}
+/*# sourceMappingURL=paragraph--2-column-featured-left.min.css.map */
