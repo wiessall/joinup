@@ -259,6 +259,13 @@ paragraph:
     theme:
       assets/css/paragraph.min.css: { minified: true }
 
+paragraph--carousel:
+  css:
+    theme:
+      assets/css/paragraph--carousel.min.css: { minified: true }
+  js:
+    assets/js/paragraph--carousel.min.js: { minified: true, attributes: { defer: true } }
+
 releases:
   css:
     theme:

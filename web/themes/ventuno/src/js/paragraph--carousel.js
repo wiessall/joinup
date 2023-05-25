@@ -1,0 +1,44 @@
+/**
+ * @file
+ * Glide slider configuration for carousel paragraphs.
+ */
+import Glide, {
+  Controls,
+  Breakpoints,
+  Swipe,
+} from "@glidejs/glide/dist/glide.modular.esm";
+
+(() => {
+  Drupal.behaviors.glide = {
+    attach() {
+      function mountSlide() {
+        const slides = document.querySelectorAll(".paragraph--carousel .glide");
+        slides.forEach((slide) => {
+          const glide = new Glide(slide, {
+            type: "carousel",
+            gap: 16,
+            perView: 4,
+            breakpoints: {
+              1199: { perView: 3 },
+              767: { perView: 2 },
+              575: { perView: 1 },
+            },
+          });
+
+          glide.mount({ Controls, Breakpoints, Swipe });
+          const forward = slide.querySelector(".glide__arrow--right");
+          const backward = slide.querySelector(".glide__arrow--left");
+
+          forward.addEventListener("click", function () {
+            glide.go(">");
+          });
+
+          backward.addEventListener("click", function () {
+            glide.go("<");
+          });
+        });
+      }
+      mountSlide();
+    },
+  };
+})();
