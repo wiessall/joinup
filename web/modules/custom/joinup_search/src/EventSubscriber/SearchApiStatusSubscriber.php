@@ -133,7 +133,6 @@ class SearchApiStatusSubscriber implements EventSubscriberInterface {
     // unarchived content is available in order to give the user the ability to
     // further filter the results.
     // @see \_joinup_search_apply_global_search_api_solr_settings
-
     if (empty($query->getOption('search_api_field item'))) {
       return;
     }
