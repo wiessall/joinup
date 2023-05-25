@@ -25,7 +25,7 @@ default_value:
           weight: 0
           region: top
         field_collection_content_status:
-          weight: 0
+          weight: 1
           region: top
         collection_event_type:
           weight: 0

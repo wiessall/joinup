@@ -16,6 +16,7 @@ declare(strict_types = 1);
 
 use Drupal\paragraphs\Entity\Paragraph;
 use Drupal\search_api\Entity\Index;
+use Drupal\sparql_entity_storage\Entity\Query\Sparql\SparqlArg;
 
 /**
  * Clean up problematic graph in the production database.
@@ -44,14 +45,14 @@ QUERY;
  */
 function joinup_core_deploy_109301(): void {
   $graphs = [
-    'http://joinup.eu/collection/published',
-    'http://joinup.eu/collection/draft',
-    'http://joinup.eu/solution/published',
-    'http://joinup.eu/solution/draft',
+    'http://joinup.eu/collection/published' => 'field_collection_content_status',
+    'http://joinup.eu/collection/draft' => 'field_collection_content_status',
+    'http://joinup.eu/solution/published' => 'field_is_content_status',
+    'http://joinup.eu/solution/draft' => 'field_is_content_status',
   ];
 
   $sparql = \Drupal::service('sparql.endpoint');
-  foreach ($graphs as $graph) {
+  foreach ($graphs as $graph => $field) {
     $query = <<<QUERY
 WITH <$graph>
 SELECT ?entity_id ?data
@@ -66,23 +67,23 @@ QUERY;
       $data = unserialize($result->data->getValue(), [
         'allowed_classes' => FALSE,
       ]);
-      if (isset($data['collection_content'])) {
-        $data['collection_content']['show_archived'] = 'all';
-        $data['collection_content']['value']['fields']['field_collection_content_status'] = [
-          'weight' => -1,
-          'region' => 'top',
-        ];
-        $update_query = <<<QUERY
+      $data['show_archived'] = 'all';
+      $data['fields'][$field] = [
+        'region' => 'top',
+        'weight' => 10,
+      ];
+
+      $value = SparqlArg::serialize(serialize($data), 'literal');
+      $update_query = <<<QUERY
 WITH <$graph>
 DELETE { ?entity_id <http://joinup.eu/search> ?data }
-INSERT { ?entity_id <http://joinup.eu/search> ?new_data }
+INSERT { ?entity_id <http://joinup.eu/search> {$value} }
 WHERE {
-  ?entity_id a ?type .
-  ?entity_id <http://joinup.eu/search> ?data .
+?entity_id a ?type .
+?entity_id <http://joinup.eu/search> ?data .
 }
 QUERY;
-        $sparql->update($update_query);
-      }
+      $sparql->update($update_query);
     }
   }
 }
