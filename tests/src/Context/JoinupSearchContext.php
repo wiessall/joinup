@@ -1101,4 +1101,30 @@ class JoinupSearchContext extends RawDrupalContext {
     }
   }
 
+  /**
+   * Asserts that a group listing field facet is configured in a given region.
+   *
+   * @param string $label
+   *   The label of the group.
+   * @param string $bundle
+   *   The group bundle.
+   * @param string $facet
+   *   The facet to set.
+   * @param string $region
+   *   The facet region.
+   *
+   * @When the :label :bundle should be configured to show the :facet facet in the :region region
+   */
+  public function assertGroupContentFacet(string $label, string $bundle, string $facet, string $region): void {
+    $facet = strtolower($facet);
+    $facet = self::getFacetIdFromAlias($facet);
+    $entity = $this->getEntityByLabel('rdf_entity', $label, $bundle);
+    $region = strtolower($region);
+    $field_name = $bundle === 'collection' ? 'field_collection_content' : 'field_is_content';
+    $data = $entity->get($field_name)->getValue();
+    if (empty($data) || !isset($data[0]['value']['fields'][$facet]) || ($data[0]['value']['fields'][$facet]['region'] !== $region)) {
+      throw new \RuntimeException(sprintf('The %s facet is not configured in the %s region.', $facet, $region));
+    }
+  }
+
 }
