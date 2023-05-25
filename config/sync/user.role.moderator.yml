@@ -24,6 +24,7 @@ dependencies:
     - entity_legal
     - entityqueue
     - field_permissions
+    - file
     - joinup
     - joinup_community_content
     - joinup_core
@@ -63,6 +64,7 @@ permissions:
   - 'access content moderation overview'
   - 'access dashboard'
   - 'access distribution reports'
+  - 'access files overview'
   - 'access group reports'
   - 'access joinup reports'
   - 'access media overview'
@@ -129,6 +131,7 @@ permissions:
   - 'delete any discussion_logo media'
   - 'delete any document content'
   - 'delete any event_logo media'
+  - 'delete any file'
   - 'delete any news_logo media'
   - 'delete any solution_banner media'
   - 'delete any solution_logo media'
