@@ -46,9 +46,9 @@ class SearchApiStatusSubscriber implements EventSubscriberInterface {
    *   The query alter event.
    */
   public function searchStatusQueryAlter(QueryPreExecuteEvent $event): void {
-    $hasStatus = FALSE;
     $query = $event->getQuery();
 
+    // The facet below is only available on the search page.
     if ($query->getSearchId() !== 'views_page:search__page_1') {
       return;
     }
