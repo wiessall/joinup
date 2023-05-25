@@ -1,0 +1,27 @@
+From ec040397e18c5b508aabe900b0fb0ba54a4ed564 Mon Sep 17 00:00:00 2001
+From: Adrian Lorenc <47258-alorenc@users.noreply.drupalcode.org>
+Date: Thu, 25 May 2023 08:23:42 +0000
+Subject: [PATCH] Alter information about db tables.
+
+---
+ modules/rdf_taxonomy/rdf_taxonomy.module | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/modules/rdf_taxonomy/rdf_taxonomy.module b/modules/rdf_taxonomy/rdf_taxonomy.module
+index c4d1748..d9d232c 100644
+--- a/modules/rdf_taxonomy/rdf_taxonomy.module
++++ b/modules/rdf_taxonomy/rdf_taxonomy.module
+@@ -35,6 +35,10 @@ function rdf_taxonomy_entity_type_alter(array &$entity_types): void {
+     'default' => RdfTermForm::class,
+     'delete' => TermDeleteForm::class,
+   ]);
++  $entity_types['taxonomy_term']->set('base_table', NULL);
++  $entity_types['taxonomy_term']->set('data_table', NULL);
++  $entity_types['taxonomy_term']->set('revision_table', NULL);
++  $entity_types['taxonomy_term']->set('revision_data_table', NULL);
+ }
+ 
+ /**
+-- 
+GitLab
+
