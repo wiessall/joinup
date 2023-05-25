@@ -37,39 +37,42 @@
  */
 #}
 
-{{ attach_library('iop/paragraph--carousel') }}
+{{ attach_library('ventuno/paragraph--carousel') }}
 
 {% set classes = [
   'paragraph',
   'paragraph--' ~ paragraph.bundle|clean_class,
+  'mb-5',
 ] %}
 
 <div{{ attributes.addClass(classes) }}>
-  {% if content.paragraph_heading|render|striptags|trim is not empty %}
-    {{ content.paragraph_heading }}
-  {% endif %}
-
-  {% if content.paragraph_carousel_action|render|striptags|trim is not empty %}
-    <div class="paragraph--carousel__action">
-      {{ content.paragraph_carousel_action }}
-    </div>
-  {% endif %}
-  <div class="glide__outer">
+  <div class="glide__outer overflow-hidden p-2">
     <div class="glide">
-      <div class="glide__arrows" data-glide-el="controls">
-        <button class="glide__arrow glide__arrow--left btn btn-lg rounded-circle" data-glide-dir="<" title="{{ 'Previous item'|t }}">
-          <svg class="icon--m">
-            <use xlink:href="{{ bcl_icon_path }}#chevron-left"></use>
-          </svg>
-        </button>
-        <button class="glide__arrow glide__arrow--right btn btn-lg rounded-circle" data-glide-dir=">" title="{{ 'Next item'|t }}">
-          <svg class="icon--m">
-            <use xlink:href="{{ bcl_icon_path }}#chevron-right"></use>
-          </svg>
-        </button>
+      <div class="d-flex flex-wrap align-items-baseline justify-content-end">
+        {% if content.paragraph_heading|render|striptags|trim is not empty %}
+          <h2 class="paragraph--carousel__title mt-0 mb-3">{{ content.paragraph_heading }}</h2>
+        {% endif %}
+
+        {% if content.paragraph_carousel_action|render|striptags|trim is not empty %}
+          {% set link = content.paragraph_carousel_action[0] %}
+          {% set link = link|merge({'#options': {'attributes': {'class': ['btn', 'btn-secondary', 'mb-3', 'ms-3']}}}) %}
+          {{ link }}
+        {% endif %}
+        <div class="glide__arrows mb-3 ms-3" data-glide-el="controls">
+          <button class="glide__arrow glide__arrow--left btn btn-lg btn-secondary rounded-circle p-0 me-2" data-glide-dir="<" title="{{ 'Previous item'|t }}">
+            <svg class="icon--m">
+              <use xlink:href="{{ bcl_icon_path }}#chevron-left"></use>
+            </svg>
+          </button>
+          <button class="glide__arrow glide__arrow--right btn btn-lg btn-secondary rounded-circle p-0" data-glide-dir=">" title="{{ 'Next item'|t }}">
+            <svg class="icon--m">
+              <use xlink:href="{{ bcl_icon_path }}#chevron-right"></use>
+            </svg>
+          </button>
+        </div>
       </div>
-      <div class="glide__track" data-glide-el="track">
-        <div class="glide__slides">
+      <div class="glide__track overflow-visible" data-glide-el="track">
+        <div class="glide__slides overflow-visible row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-xl-4 g-0 mb-3">
           {{ content.content_listing }}
         </div>
       </div>

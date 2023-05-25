@@ -1,0 +1,17 @@
+@import "core";
+@import "core/mixins/bootstrap-icons";
+
+.paragraph--carousel {
+  &__title {
+    flex: 1 1 auto;
+  }
+  .glide__outer {
+    // Visual workarounds to avoid slides' shadow being cut.
+    width: calc(100% + $spacer);
+    margin-left: $spacer * -.5;
+  }
+  .glide__arrow {
+    width: 40px;
+    height: 40px;
+  }
+}

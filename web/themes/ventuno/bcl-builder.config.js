@@ -30,6 +30,14 @@ module.exports = {
       },
     },
     {
+      entry: path.resolve(outputFolder, "src/js/paragraph--carousel.js"),
+      dest: path.resolve(outputFolder, "assets/js/paragraph--carousel.js"),
+      options: {
+        minify: true,
+        sourceMap: true,
+      },
+    },
+    {
       entry: path.resolve(outputFolder, "src/js/responsive-tables.js"),
       dest: path.resolve(outputFolder, "assets/js/responsive-tables.js"),
       options: {
@@ -494,6 +502,18 @@ module.exports = {
     {
       entry: path.resolve(outputFolder, "src/scss/paragraph.scss"),
       dest: path.resolve(outputFolder, "assets/css/paragraph.min.css"),
+      options: {
+        includePaths,
+        minify: true,
+        sourceMap: "file",
+      },
+    },
+    {
+      entry: path.resolve(outputFolder, "src/scss/paragraph--carousel.scss"),
+      dest: path.resolve(
+        outputFolder,
+        "assets/css/paragraph--carousel.min.css"
+      ),
       options: {
         includePaths,
         minify: true,
