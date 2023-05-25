@@ -38,6 +38,8 @@ class SearchApiStatusSubscriber implements EventSubscriberInterface {
       ],
       SearchApiEvents::QUERY_PRE_EXECUTE . '.search_api_field' => [
         ['paragraphContentListingQueryAlter'],
+        ['searchAutocompleteQueryAlter', -100],
+        ['groupContentListingQueryAlter', -10],
       ],
     ];
   }
@@ -225,6 +227,28 @@ class SearchApiStatusSubscriber implements EventSubscriberInterface {
     return array_filter($facets, function (FacetInterface $facet) {
       return $facet->getFieldIdentifier() === 'entity_status';
     });
+  }
+
+  /**
+   * Reacts to the autocomplete alter event.
+   *
+   * @param \Drupal\search_api\Event\QueryPreExecuteEvent $event
+   *   The query alter event.
+   */
+  public function searchAutocompleteQueryAlter(QueryPreExecuteEvent $event): void {
+    $query = $event->getQuery();
+
+    if ($query->getSearchId() !== 'search_api_autocomplete:search') {
+      return;
+    }
+
+    $conditions = &$query->getConditionGroup()->getConditions();
+    foreach ($conditions as $key => $condition) {
+      if (($condition instanceof ConditionGroupInterface) && $condition->hasTag('facet:entity_status')) {
+        unset($conditions[$key]);
+      }
+    }
+    $query->addCondition('entity_status', 'archived', '<>');
   }
 
 }

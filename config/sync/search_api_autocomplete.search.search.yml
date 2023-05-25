@@ -18,6 +18,7 @@ suggester_settings:
     highlight:
       enabled: false
       field: ''
+    suggest_keys: true
     view_modes:
       'entity:node':
         custom_page: ''
@@ -44,21 +45,12 @@ suggester_settings:
         user: ''
   server:
     fields: {  }
-  search_api_solr_spellcheck: {  }
-  search_api_solr_suggester:
-    search_api_solr/site_hash: 1
-    search_api/index: published
-    drupal/langcode: any
 suggester_weights:
   live_results: 0
   server: 0
-  search_api_solr_spellcheck: 0
-  search_api_solr_suggester: 0
 suggester_limits:
   live_results: 2
   server: 2
-  search_api_solr_spellcheck: 2
-  search_api_solr_suggester: 2
 search_settings:
   'views:search':
     displays:

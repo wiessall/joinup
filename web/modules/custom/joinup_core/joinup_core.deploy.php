@@ -68,6 +68,10 @@ QUERY;
       ]);
       if (isset($data['collection_content'])) {
         $data['collection_content']['show_archived'] = 'all';
+        $data['collection_content']['value']['fields']['field_collection_content_status'] = [
+          'weight' => -1,
+          'region' => 'top',
+        ];
         $update_query = <<<QUERY
 WITH <$graph>
 DELETE { ?entity_id <http://joinup.eu/search> ?data }
