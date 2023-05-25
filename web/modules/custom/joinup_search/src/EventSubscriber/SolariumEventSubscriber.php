@@ -60,7 +60,7 @@ class SolariumEventSubscriber implements EventSubscriberInterface {
 
     // Soft commit and wait for a new searcher to be opened.
     /** @var \Solarium\QueryType\Update\Query\Query $query */
-    $query->addCommit(TRUE, TRUE);
+    //$query->addCommit(TRUE, TRUE);
   }
 
 }
