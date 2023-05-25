@@ -34,12 +34,11 @@ class SearchApiStatusSubscriber implements EventSubscriberInterface {
     return [
       SearchApiEvents::QUERY_PRE_EXECUTE => [
         ['searchStatusQueryAlter', -100],
+        ['searchAutocompleteQueryAlter', -100],
         ['groupContentListingQueryAlter', -10],
       ],
       SearchApiEvents::QUERY_PRE_EXECUTE . '.search_api_field' => [
         ['paragraphContentListingQueryAlter'],
-        ['searchAutocompleteQueryAlter', -100],
-        ['groupContentListingQueryAlter', -10],
       ],
     ];
   }
@@ -135,7 +134,7 @@ class SearchApiStatusSubscriber implements EventSubscriberInterface {
     // further filter the results.
     // @see \_joinup_search_apply_global_search_api_solr_settings
 
-    if (empty($query->getOption('search_api_field'))) {
+    if (empty($query->getOption('search_api_field item'))) {
       return;
     }
 
