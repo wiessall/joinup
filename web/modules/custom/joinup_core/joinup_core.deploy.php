@@ -106,8 +106,8 @@ function joinup_core_deploy_109302(): void {
       $data[0]['value']['show_archived'] = 'all';
       if ($paragraph->bundle() === 'content_listing') {
         $data[0]['value']['fields']['content_listing_status'] = [
-          'weight' => 1,
           'region' => 'top',
+          'weight' => 10,
         ];
       }
       $paragraph->set('content_listing', $data);

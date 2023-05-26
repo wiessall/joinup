@@ -4,7 +4,7 @@ status: true
 dependencies: {  }
 id: content_listing_type
 name: 'Content type'
-weight: 0
+weight: -1
 min_count: 1
 missing: false
 missing_label: others

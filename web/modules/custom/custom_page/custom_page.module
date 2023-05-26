@@ -290,3 +290,15 @@ function custom_page_form_node_custom_page_delete_form_alter(array &$form, FormS
     $form['actions']['submit']['#access'] = FALSE;
   }
 }
+
+/**
+ * Implements hook_preprocess_facets_item_list__checkbox__content_listing_status().
+ */
+function custom_page_preprocess_facets_item_list__checkbox__content_listing_status(array &$variables): void {
+  foreach ($variables['items'] as $key => $item) {
+    if ($item["#attributes"]["data-drupal-facet-item-value"] !== 'all') {
+      $variables['items'][$key]['attributes']['class'][] = 'facet-hidden hidden';
+      $variables["attributes"]['class'][] = 'facet-hidden hidden';
+    }
+  }
+}
