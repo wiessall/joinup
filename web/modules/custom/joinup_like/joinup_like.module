@@ -15,5 +15,11 @@ function joinup_like_theme(array $existing, string $type, string $theme, string 
     'joinup_like_anonymous' => [
       'variables' => [],
     ],
+    'flag_count_archived' => [
+      'variables' => [
+        'flag' => NULL,
+        'flaggable' => NULL,
+      ],
+    ],
   ];
 }

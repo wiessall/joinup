@@ -11,6 +11,7 @@ dependencies:
     - email_confirmer
     - entity_legal
     - filter
+    - flag
     - joinup_licence
     - media
     - meta_entity
@@ -41,6 +42,8 @@ permissions:
   - 'view compatibility documents'
   - 'view eif wrapper entity'
   - 'view eif_perspective rdf-meta-entity'
+  - 'view like_node'
+  - 'view like_rdf_entity'
   - 'view media'
   - 'view paragraph content 1_column_layout'
   - 'view paragraph content 2_column_featured_left'
