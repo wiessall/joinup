@@ -14,10 +14,16 @@
 
 {% for item in items %}
   {% set item %}
+    {%
+      set classes = [
+      item.in_active_trail ? 'is-active',
+    ]
+    %}
+    {{ item.attributes.addClass(classes) }}
     {{ item.attributes.setAttribute('title', item.title) }}
   {% endset %}
 {% endfor %}
-
+{# A menu with 6 items or less is displayed normally #}
 {% if items|length < 7 %}
   {% set menu = pattern('navigation', {
       'variant': 'tabs',
@@ -34,9 +40,11 @@
       </div>
     </div>
   </div>
+{# A menu with more than 6 items has the first 5 displayed normally
+Then the rest of items is wrapped in a dropdown #}
 {% else %}
   {% set items_to_show = items|slice(0, 5) %}
-  {% set items_to_hide = items|slice(6) %}
+  {% set items_to_hide = items|slice(5) %}
   {% set show_more_button %}
     {{ pattern('button', {
       label: 'See more'|t,

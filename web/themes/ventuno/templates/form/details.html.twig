@@ -14,11 +14,11 @@
  * @see template_preprocess_details()
  */
 #}
-<details{{ attributes.addClass(['mb-3 border rounded']) }}>
+<details{{ attributes.addClass(['my-3']) }}>
   {%- if title -%}
-    <summary{{ summary_attributes.addClass(['p-3 fw-bold bg-light']) }}>{{ title }}</summary>
+    <summary{{ summary_attributes.addClass(['mb-2 fw-bold']) }}>{{ title }}</summary>
   {%- endif -%}
-  <div class="details-wrapper px-3 my-3">
+  <div class="details-wrapper px-3 my-2">
     {% if errors %}
       <div class="form-item--error-message invalid-feedback d-block">
         {{ errors }}

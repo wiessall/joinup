@@ -8,6 +8,11 @@ toolkit:
       - mysql
       - solr
       - virtuoso
+  components:
+    # Disable 'toolkit-components' job check for outdated packages. The Joinup
+    # dependencies policy is to update all dependencies after each release.
+    outdated:
+      check: false
 
   build:
     dist:
@@ -22,19 +27,13 @@ toolkit:
             - ${toolkit.build.dist.root}/.editorconfig
             - ${toolkit.build.dist.root}/.gitattributes
             - ${toolkit.build.dist.root}/.gitignore
+            - ${toolkit.build.dist.root}/package.json
+            - ${toolkit.build.dist.root}/package-lock.json
             # Drupal Finder, and consequently Drush, are still needing
             # composer.json to locate the root dir. Remove only composer.lock.
             - ${toolkit.build.dist.root}/composer.lock
-        # Build theme assets.
-        - task: exec
-          command: cd ${toolkit.build.dist.root}/web/themes/ventuno && npm ci
-        # Remove theme development dependencies.
         - task: remove
-          file: ${toolkit.build.dist.root}/web/themes/ventuno/node_modules
-        - task: remove
-          file: ${toolkit.build.dist.root}/web/themes/ventuno/package.json
-        - task: remove
-          file: ${toolkit.build.dist.root}/web/themes/ventuno/package-lock.json
+          file: ${toolkit.build.dist.root}/node_modules
 
 commands:
 
@@ -57,8 +56,6 @@ commands:
       dir: ${joinup.files_private_dir}
     - task: mkdir
       dir: ${env.DRUPAL_FILE_TEMP_PATH}
-    - task: run
-      command: joinup:build-assets
 
   # Overrides toolkit:install-clean.
   toolkit:install-clean:
@@ -68,8 +65,8 @@ commands:
       command: sparql:empty
     - task: run
       command: solr:empty
-    - task: run
-      command: redis:flush-all
+    - task: exec
+      command: ${drush.bin} memcache:flush-all
     - task: run
       command: drupal:settings
       arguments:
@@ -120,8 +117,8 @@ commands:
   toolkit:install-clone:
     - task: run
       command: joinup:environment
-    - task: run
-      command: redis:flush-all
+    - task: exec
+      command: ${drush.bin} memcache:flush-all
     - task: run
       command: drupal:settings
       arguments:

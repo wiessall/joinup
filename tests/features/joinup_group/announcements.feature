@@ -331,9 +331,9 @@ Feature: Messaging group announcements
 
     # Now let's check the links inside email.
     When I click the "Fail pension" link in the email sent to "mogul@example.com" having the subject "The Big Opening is postponed"
-    Then I should see the heading "Fail pension"
+    Then I should see the text "Fail pension"
     When I click the "The <group> landing page URL" link in the email sent to "mogul@example.com" having the subject "The Big Opening is postponed"
-    Then I should see the heading "Fail pension"
+    Then I should see the text "Fail pension"
     When I click the "The <group> about page URL" link in the email sent to "mogul@example.com" having the subject "The Big Opening is postponed"
     Then I should see the heading "About Fail pension"
     When I click the "The <group> members page URL" link in the email sent to "mogul@example.com" having the subject "The Big Opening is postponed"

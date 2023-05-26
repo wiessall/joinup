@@ -118,7 +118,7 @@ Feature: Subscribers report
       | Seagrass meadows      | solution   | 6           | 0        | 4          | 5        | 5     | 1    |
     When I go to the subscribers report for "Marine ecosystems"
     # Check that the collection header is shown.
-    Then I should see the heading "Marine ecosystems" in the "Header" region
+    Then I should see the text "Marine ecosystems" in the "Header" region
     And I should see the heading "Subscribers report" in the "Page title"
     And the "subscribers report" table should contain:
       | Subscribers | 6 |
@@ -128,7 +128,7 @@ Feature: Subscribers report
       | Event       | 3 |
       | News        | 2 |
     When I go to the subscribers report for "Plant science"
-    Then I should see the heading "Plant science" in the "Header" region
+    Then I should see the text "Plant science" in the "Header" region
     And I should see the heading "Subscribers report" in the "Page title"
     And the "subscribers report" table should contain:
       | Subscribers | 6 |
@@ -138,7 +138,7 @@ Feature: Subscribers report
       | Event       | 5 |
       | News        | 2 |
     When I go to the subscribers report for "Seagrass meadows"
-    Then I should see the heading "Seagrass meadows" in the "Header" region
+    Then I should see the text "Seagrass meadows" in the "Header" region
     And I should see the heading "Subscribers report" in the "Page title"
     And the "subscribers report" table should contain:
       | Subscribers | 6 |
@@ -148,7 +148,7 @@ Feature: Subscribers report
       | Event       | 5 |
       | News        | 1 |
     When I go to the subscribers report for "Intertidal seagrasses"
-    Then I should see the heading "Intertidal seagrasses" in the "Header" region
+    Then I should see the text "Intertidal seagrasses" in the "Header" region
     And I should see the heading "Subscribers report" in the "Page title"
     And the "subscribers report" table should contain:
       | Subscribers | 6 |
@@ -162,7 +162,7 @@ Feature: Subscribers report
     When I go to the global subscribers report
     Then I should see the text "Access denied"
     When I go to the subscribers report for "Marine ecosystems"
-    Then I should see the heading "Marine ecosystems" in the "Header" region
+    Then I should see the text "Marine ecosystems" in the "Header" region
     And I should see the heading "Subscribers report" in the "Page title"
     And the "subscribers report" table should contain:
       | Subscribers | 6 |
@@ -200,7 +200,7 @@ Feature: Subscribers report
     When I go to the subscribers report for "Seagrass meadows"
     Then I should see the text "Access denied"
     When I go to the subscribers report for "Intertidal seagrasses"
-    Then I should see the heading "Intertidal seagrasses" in the "Header" region
+    Then I should see the text "Intertidal seagrasses" in the "Header" region
     And I should see the heading "Subscribers report" in the "Page title"
     And the "subscribers report" table should contain:
       | Subscribers | 6 |
@@ -230,7 +230,7 @@ Feature: Subscribers report
     When I go to the subscribers report for "Plant science"
     Then I should see the text "Access denied"
     When I go to the subscribers report for "Seagrass meadows"
-    Then I should see the heading "Seagrass meadows" in the "Header" region
+    Then I should see the text "Seagrass meadows" in the "Header" region
     And I should see the heading "Subscribers report" in the "Page title"
     And the "subscribers report" table should contain:
       | Subscribers | 6 |
@@ -260,7 +260,7 @@ Feature: Subscribers report
     When I go to the subscribers report for "Marine ecosystems"
     Then I should see the text "Access denied"
     When I go to the subscribers report for "Plant science"
-    Then I should see the heading "Plant science" in the "Header" region
+    Then I should see the text "Plant science" in the "Header" region
     And I should see the heading "Subscribers report" in the "Page title"
     And the "subscribers report" table should contain:
       | Subscribers | 6 |

@@ -49,7 +49,7 @@ Feature: "Add discussion" visibility options.
     When I go to the homepage of the "Emerald in the Luck" solution
     And I click "Add discussion" in the plus button menu
     Then I should see the heading "Add discussion"
-    And the following fields should be present "Title, Content, Topic, Add a new file"
+    And the following fields should be present "Title, Content, Topic, Logo, Add a new file"
     And the following fields should not be present "Motivation"
 
     # Check required fields.
@@ -81,9 +81,8 @@ Feature: "Add discussion" visibility options.
     # Check that an anonymous user can see the information.
     Given I am an anonymous user
     When I go to the "Flight of Girlfriend" discussion
-    Then I should see the following headings:
-      | Emerald in the Luck  |
-      | Flight of Girlfriend |
+    Then I see the text "Emerald in the Luck"
+    And I should see the heading "Flight of Girlfriend"
     And I should see the following lines of text:
       | This is going to be an amazing discussion. |
       | Attachments                                |

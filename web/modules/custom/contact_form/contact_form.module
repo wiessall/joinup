@@ -107,8 +107,9 @@ function contact_form_form_message_contact_form_submission_form_alter(&$form, Fo
 function contact_form_form_message_contact_form_submission_submit(&$form, FormStateInterface $form_state) {
   $event = new NotificationEvent('contact', $form_state->getFormObject()->getEntity());
 
+  /** @var \Symfony\Component\EventDispatcher\EventDispatcherInterface $event_dispatcher */
   $event_dispatcher = \Drupal::getContainer()->get('event_dispatcher');
-  $event_dispatcher->dispatch(ContactFormEvents::CONTACT_FORM_EVENT, $event);
+  $event_dispatcher->dispatch($event, ContactFormEvents::CONTACT_FORM_EVENT);
 
   if ($event->isSuccessful()) {
     \Drupal::messenger()->addStatus(t('Your message has been submitted. Thank you for your feedback.'));

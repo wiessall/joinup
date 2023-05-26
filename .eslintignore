@@ -13,9 +13,6 @@
 /web/modules/contrib/
 /web/themes/contrib/
 
-# Ignore legacy theme.
-/web/themes/joinup/
-
 # Ignore user uploaded content.
 /private/
 
