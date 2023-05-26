@@ -62,14 +62,6 @@ module.exports = {
       },
     },
     {
-      entry: path.resolve(outputFolder, "src/js/sticky-menu.js"),
-      dest: path.resolve(outputFolder, "assets/js/sticky-menu.js"),
-      options: {
-        minify: true,
-        sourceMap: true,
-      },
-    },
-    {
       entry: path.resolve(outputFolder, "src/js/sticky-menu-logged-in.js"),
       dest: path.resolve(outputFolder, "assets/js/sticky-menu-logged-in.js"),
       options: {
@@ -144,8 +136,9 @@ module.exports = {
     // Base
     {
       entry: path.resolve(outputFolder, "src/scss/base.scss"),
-      dest: path.resolve(outputFolder, "assets/css/base.css"),
+      dest: path.resolve(outputFolder, "assets/css/base.min.css"),
       options: {
+        minify: true,
         includePaths,
         sourceMap: "file",
       },
@@ -153,8 +146,9 @@ module.exports = {
     // Layout
     {
       entry: path.resolve(outputFolder, "src/scss/layout.scss"),
-      dest: path.resolve(outputFolder, "assets/css/layout.css"),
+      dest: path.resolve(outputFolder, "assets/css/layout.min.css"),
       options: {
+        minify: true,
         includePaths,
         sourceMap: "file",
       },
@@ -162,8 +156,9 @@ module.exports = {
     // Components
     {
       entry: path.resolve(outputFolder, "src/scss/components.scss"),
-      dest: path.resolve(outputFolder, "assets/css/components.css"),
+      dest: path.resolve(outputFolder, "assets/css/components.min.css"),
       options: {
+        minify: true,
         includePaths,
         sourceMap: "file",
       },
@@ -171,7 +166,7 @@ module.exports = {
     // Theme
     {
       entry: path.resolve(outputFolder, "src/scss/theme.scss"),
-      dest: path.resolve(outputFolder, "assets/css/theme.css"),
+      dest: path.resolve(outputFolder, "assets/css/theme.min.css"),
       options: {
         includePaths,
         minify: true,
@@ -244,8 +239,8 @@ module.exports = {
       },
     },
     {
-      entry: path.resolve(outputFolder, "src/scss/card.scss"),
-      dest: path.resolve(outputFolder, "assets/css/card.min.css"),
+      entry: path.resolve(outputFolder, "src/scss/tile.scss"),
+      dest: path.resolve(outputFolder, "assets/css/tile.min.css"),
       options: {
         includePaths,
         minify: true,
@@ -255,6 +250,15 @@ module.exports = {
     {
       entry: path.resolve(outputFolder, "src/scss/badge.scss"),
       dest: path.resolve(outputFolder, "assets/css/badge.min.css"),
+      options: {
+        includePaths,
+        minify: true,
+        sourceMap: "file",
+      },
+    },
+    {
+      entry: path.resolve(outputFolder, "src/scss/button-group.scss"),
+      dest: path.resolve(outputFolder, "assets/css/button-group.min.css"),
       options: {
         includePaths,
         minify: true,
@@ -631,19 +635,6 @@ module.exports = {
         sourceMap: "file",
       },
     },
-    // @todo ISAICP-7138 remove when switch to Ventuno theme is complete
-    {
-      entry: path.resolve(
-        outputFolder,
-        "src/scss/core/base/bootstrap-base.scss"
-      ),
-      dest: path.resolve(outputFolder, "assets/css/bootstrap-base.min.css"),
-      options: {
-        includePaths,
-        minify: true,
-        sourceMap: "file",
-      },
-    },
   ],
   copy: [
     // Bootstrap: fonts
@@ -707,9 +698,11 @@ module.exports = {
           "calendar.svg",
           "calendar-event.svg",
           "card-list.svg",
+          "caret-down-fill.svg",
           "chat.svg",
           "chat-left-text.svg",
           "chat-square.svg",
+          "check-circle.svg",
           "check-circle-fill.svg",
           "chevron-bar-left.svg",
           "chevron-bar-right.svg",
@@ -717,8 +710,8 @@ module.exports = {
           "chevron-left.svg",
           "chevron-right.svg",
           "chevron-up.svg",
-          "clipboard-check.svg",
           "clipboard2-check.svg",
+          "clock-history.svg",
           "download.svg",
           "envelope-fill.svg",
           "exclamation-circle-fill.svg",
@@ -736,6 +729,7 @@ module.exports = {
           "file-earmark-text.svg",
           "file-earmark-zip.svg",
           "file-font.svg",
+          "file-x.svg",
           "filter.svg",
           "folder2-open.svg",
           "gear-fill.svg",
@@ -750,6 +744,7 @@ module.exports = {
           "linkedin.svg",
           "mastodon.svg",
           "newspaper.svg",
+          "patch-exclamation.svg",
           "pencil-square.svg",
           "people.svg",
           "person-circle.svg",

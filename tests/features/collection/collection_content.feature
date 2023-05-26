@@ -9,24 +9,27 @@ Feature: Collection content
       | title                     | state     |
       | Turin Egyptian Collection | validated |
     And the following solution:
-      | title      | Tomb Of Unknown Restoration |
-      | collection | Turin Egyptian Collection   |
-      | state      | validated                   |
+      | title             | Tomb Of Unknown Restoration |
+      | collection        | Turin Egyptian Collection   |
+      | state             | validated                   |
+      | creation date     | 2017-11-11T11:11            |
+      | modification date | 2017-11-30T11:11            |
+      | topic             | HR                          |
     And discussion content:
-      | title                                 | body                                                                    | state     | collection                |
-      | Bigger than Egyptian Museum of Cairo? | <p><a href="#link">Link to the museum</a> web<strong>site</strong>.</p> | validated | Turin Egyptian Collection |
+      | title                                 | body                                                                    | state     | collection                | topic                                      | creation date    | changed |
+      | Bigger than Egyptian Museum of Cairo? | <p><a href="#link">Link to the museum</a> web<strong>site</strong>.</p> | validated | Turin Egyptian Collection | Finance in EU, Supplier exchange, E-health | 2017-11-11T11:11 | Wed, 25 Dec 2019 15:00:00 |
     And document content:
-      | title           | body                                             | state     | collection                |
-      | Upper Floor Map | <p>A sample <a href="#link">map</a> example.</p> | validated | Turin Egyptian Collection |
+      | title             | body                                             | state     | collection                | creation date    | changed          | topic    |
+      | Upper Floor Map   | <p>A sample <a href="#link">map</a> example.</p> | validated | Turin Egyptian Collection | 2017-11-11T11:11 | 2017-11-30T11:11 | E-health |
     And event content:
-      | title                                     | state     | collection                |
-      | Opening of the Hellenistic Period Section | validated | Turin Egyptian Collection |
+      | title                                     | state     | collection                | start date          | end date            | topic             |
+      | Opening of the Hellenistic Period Section | validated | Turin Egyptian Collection | 2016-03-15T11:12:12 | 2016-03-15T11:12:12 | Supplier exchange |
     And news content:
-      | title                          | body                                                           | state     | collection                |
-      | Turin Egyptian Museum Reopened | <p>After <em>more than</em> <a href="#link">two years</a>.</p> | validated | Turin Egyptian Collection |
+      | title                          | body                                                           | state     | collection                | changed    | topic             |
+      | Turin Egyptian Museum Reopened | <p>After <em>more than</em> <a href="#link">two years</a>.</p> | validated | Turin Egyptian Collection | 2019-11-19 | Supplier exchange |
     And video content:
-      | title                                  | state     | collection                |
-      | Watch the mummy conservation technique | validated | Turin Egyptian Collection |
+      | title                                  | state     | collection                | creation date    | changed          |
+      | Watch the mummy conservation technique | validated | Turin Egyptian Collection | 2017-11-29T11:11 | 2017-11-30T17:30 |
 
   Scenario: Publishing new solutions should result in counters being properly updated.
     Given owner:
@@ -79,6 +82,19 @@ Feature: Collection content
     Then I delete the "Solution from draft to validated" solution
     And I delete the "Costas Papazoglou" contact information
 
+  @javascript
+  Scenario: When I subscribe to a collection, the corresponding tile is shown in my profile
+    Given I am logged in as a moderator
+    When I go to the homepage of the "Turin Egyptian Collection" collection
+    And I press "Join this collection"
+    And I press "Subscribe" in the "Modal buttons" region
+    And I wait for AJAX to finish
+    Then I go to "/user"
+    # Assert that the "Collection" tile is present and contains number of members, label and bundle type.
+    Then I should see the "Turin Egyptian Collection" tile
+    And I should see the statistics "1" in the "Turin Egyptian Collection" tile
+    And I should see the text "Collection" in the "Turin Egyptian Collection" tile
+
   Scenario: Content type facet labels should show the plural form when multiple results are available.
     Given I go to the homepage of the "Turin Egyptian Collection" collection
     Then the "Discussion" content tab is displayed
@@ -116,17 +132,49 @@ Feature: Collection content
     And I should see the link "2 Solutions"
     And I should see the link "2 Videos"
 
+  @javascript
   Scenario: Links and markup should be stripped from tiles summary.
     Given I go to the homepage of the "Turin Egyptian Collection" collection
+    # Check the solution tile.
+    Then I should see the "Tomb Of Unknown Restoration" tile
+    And I should see the text "Last update: 30/11/2017" in the "Tomb Of Unknown Restoration" tile
+    But I should not see the text "Last update: 11/11/2017" in the "Tomb Of Unknown Restoration" tile
+    And I should see the link "Tomb Of Unknown Restoration" in the "Tomb Of Unknown Restoration" tile
+    And I should see the text "HR" in the "Tomb Of Unknown Restoration" tile
+    And I should see the text "Solution" in the "Tomb Of Unknown Restoration" tile
     # Check the discussion tile.
     Then I should see the "Bigger than Egyptian Museum of Cairo?" tile
-    # Check into the HTML so that we assert that actually the HTML has been stripped.
-    And the page should contain the html text "Link to the museum website."
-    And I should not see the link "Link to the museum"
+    And I should see the text "Last activity: 25/12/2019, 03:00" in the "Bigger than Egyptian Museum of Cairo?" tile
+    And I should see the link "Bigger than Egyptian Museum of Cairo?" in the "Bigger than Egyptian Museum of Cairo?" tile
+    And I should see the text "Finance in EU" in the "Bigger than Egyptian Museum of Cairo?" tile
+    And I should see the text "Supplier exchange" in the "Bigger than Egyptian Museum of Cairo?" tile
+    And I should see the text "+1 topic" in the "Bigger than Egyptian Museum of Cairo?" tile
+    And I should see the statistics "0" in the "Bigger than Egyptian Museum of Cairo?" tile
+    And I should see the text "Discussion" in the "Bigger than Egyptian Museum of Cairo?" tile
     # Check the document tile.
     And I should see the "Upper Floor Map" tile
-    # A document tile redesign in switch to Ventuno theme should show only title
+    And I should see the text "Last update: 30/11/2017" in the "Upper Floor Map" tile
+    And I should see the link "Upper Floor Map" in the "Upper Floor Map" tile
+    And I should see the text "E-health" in the "Upper Floor Map" tile
+    And I should see the text "Document" in the "Upper Floor Map" tile
+    # As from tiles redesign (ISAICP-7666), do not show the body anymore.
     And I should not see the text "A sample map example."
     And I should not see the link "map"
+    # Check the event tile.
+    And I should see the "Opening of the Hellenistic Period Section" tile
+    And I should see the text "15/03/2016" in the "Opening of the Hellenistic Period Section" tile
+    And I should see the text "Physical event" in the "Opening of the Hellenistic Period Section" tile
+    And I should see the link "Opening of the Hellenistic Period Section" in the "Opening of the Hellenistic Period Section" tile
+    And I should see the text "Supplier exchange" in the "Opening of the Hellenistic Period Section" tile
+    And I should see the text "Event" in the "Opening of the Hellenistic Period Section" tile
     # Check the news tile.
     And I should see the "Turin Egyptian Museum Reopened" tile
+    And I should see the text "Last update: 19/11/2019" in the "Turin Egyptian Museum Reopened" tile
+    And I should see the link "Turin Egyptian Museum Reopened" in the "Turin Egyptian Museum Reopened" tile
+    And I should see the text "Supplier exchange" in the "Turin Egyptian Museum Reopened" tile
+    And I should see the text "News" in the "Turin Egyptian Museum Reopened" tile
+    # Check the video tile.
+    And I should see the "Watch the mummy conservation technique" tile
+    And I should see the text "Last update: 30/11/2017" in the "Watch the mummy conservation technique" tile
+    And I should see the link "Watch the mummy conservation technique" in the "Watch the mummy conservation technique" tile
+    And I should see the text "Video" in the "Watch the mummy conservation technique" tile

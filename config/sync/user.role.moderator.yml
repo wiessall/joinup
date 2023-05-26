@@ -5,6 +5,7 @@ dependencies:
   config:
     - media.type.collection_banner
     - media.type.collection_logo
+    - media.type.discussion_logo
     - media.type.event_logo
     - media.type.news_logo
     - media.type.solution_banner
@@ -23,6 +24,7 @@ dependencies:
     - entity_legal
     - entityqueue
     - field_permissions
+    - file
     - joinup
     - joinup_core
     - joinup_featured
@@ -61,6 +63,7 @@ permissions:
   - 'access content moderation overview'
   - 'access dashboard'
   - 'access distribution reports'
+  - 'access files overview'
   - 'access group reports'
   - 'access joinup reports'
   - 'access media overview'
@@ -95,6 +98,7 @@ permissions:
   - 'create collection_banner media'
   - 'create collection_logo media'
   - 'create discussion content'
+  - 'create discussion_logo media'
   - 'create eif wrapper entity'
   - 'create eif_perspective rdf-meta-entity'
   - 'create event_logo media'
@@ -123,8 +127,10 @@ permissions:
   - 'create solution_logo media'
   - 'delete any collection_banner media'
   - 'delete any collection_logo media'
+  - 'delete any discussion_logo media'
   - 'delete any document content'
   - 'delete any event_logo media'
+  - 'delete any file'
   - 'delete any news_logo media'
   - 'delete any solution_banner media'
   - 'delete any solution_logo media'
@@ -152,6 +158,7 @@ permissions:
   - 'edit any collection_logo media'
   - 'edit any custom_page content'
   - 'edit any discussion content'
+  - 'edit any discussion_logo media'
   - 'edit any event_logo media'
   - 'edit any glossary content'
   - 'edit any news_logo media'

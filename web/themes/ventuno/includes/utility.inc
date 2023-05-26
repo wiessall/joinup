@@ -35,6 +35,45 @@ function _ventuno_smart_trim(string $string, int $length, bool $ellipsis = TRUE)
 }
 
 /**
+ * Prepares some variables for tile view mode.
+ *
+ * @param array $variables
+ *   The variables array.
+ * @param string $entity_type_id
+ *   The entity type ID.
+ */
+function _ventuno_preprocess_tile(array &$variables, string $entity_type_id): void {
+  $entity = $variables[$entity_type_id];
+  $bundle_key = \Drupal::entityTypeManager()->getDefinition($entity_type_id)->getKey('bundle');
+
+  // Image.
+  $variables['image'] = ($entity instanceof LogoInterface) && $entity->getLogoAsFile()
+    ? $entity->getLogoAsRenderArray($variables['view_mode'])
+    : [];
+
+  // Topics.
+  $topics = ($entity instanceof TopicReferencingEntityInterface) ? $entity->getTopics() : NULL;
+  if ($topics) {
+    $variables['badges'] = [];
+    foreach ($topics as $topic) {
+      $variables['badges'][]['label'] = $topic->label();
+    }
+    $num_of_items = count($topics);
+    if ($num_of_items > 2) {
+      $extra_items = $num_of_items - 2;
+      $variables['badges'] = array_splice($variables['badges'], 0, 2);
+      $word = ($extra_items < 2) ? t('topic') : t('topics');
+      $variables['badges'][]['label'] = '+' . $extra_items . ' ' . $word;
+    }
+  }
+
+  // Bundle label and icon.
+  $bundle_type = $entity->get($bundle_key)->entity;
+  $variables['bundle']['label'] = ucfirst($bundle_type->getSingularLabel() ?? $bundle_type->label());
+  $variables['bundle']['icon'] = _ventuno_get_default_icon($entity->getEntityTypeId(), $entity->bundle());
+}
+
+/**
  * Prepares some variables for all search result view modes.
  *
  * @param array $variables
@@ -94,7 +133,44 @@ function _ventuno_preprocess_search_result(array &$variables, string $entity_typ
 }
 
 /**
- * Returns the default icon for the given bundle or the generic entity icon.
+ * Returns the default icon id for the given bundle or a generic icon id.
+ *
+ * @param string $entity_type_id
+ *   The entity type ID.
+ * @param string $bundle
+ *   The bundle.
+ *
+ * @return string
+ *   The icon id.
+ */
+function _ventuno_get_default_icon(string $entity_type_id, string $bundle): string {
+  $mapping = [
+    'node' => [
+      'custom_page' => 'file-earmark-richtext',
+      'discussion' => 'chat-left-text',
+      'document' => 'file-earmark-text',
+      'event' => 'calendar-event',
+      'news' => 'newspaper',
+      'tallinn_report' => 'journal-text',
+      'video' => 'file-earmark-play',
+    ],
+    'rdf_entity' => [
+      'collection' => 'folder2-open',
+      'licence' => 'file-earmark-medical',
+      'asset_distribution' => 'file-earmark-post',
+      'asset_release' => 'file-earmark-zip',
+      'solution' => 'clipboard2-check',
+    ],
+  ];
+
+  return $mapping[$entity_type_id][$bundle] ?? 'lightning-charge';
+}
+
+/**
+ * Returns icon as render array for the bundle or a generic icon render array.
+ *
+ * @todo ISAICP-7709 With tiles redesign, the search items won't need this so
+ * we can delete this function.
  *
  * @param string $entity_type_id
  *   The entity type ID.
@@ -112,13 +188,15 @@ function _ventuno_get_default_icon_render_array(string $entity_type_id, string $
       'document' => 'file-earmark-text',
       'event' => 'calendar-event',
       'news' => 'newspaper',
+      'tallinn_report' => 'journal-text',
       'video' => 'file-earmark-play',
     ],
     'rdf_entity' => [
       'collection' => 'folder2-open',
       'licence' => 'file-earmark-medical',
+      'asset_distribution' => 'file-earmark-post',
       'asset_release' => 'file-earmark-zip',
-      'solution' => 'clipboard-check',
+      'solution' => 'clipboard2-check',
     ],
   ];
 

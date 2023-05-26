@@ -352,4 +352,22 @@ class JoinupCoreContext extends RawDrupalContext {
     date_default_timezone_set('UTC');
   }
 
+  /**
+   * Assert the default cache backend service.
+   *
+   * @param string $expected
+   *   The expected cache backend service.
+   *
+   * @Given /^the default cache backend is set to "([^"]*)"$/
+   */
+  public function theDefaultCacheBackendIsSetTo(string $expected): void {
+    $container = \Drupal::getContainer();
+    $factory = $container->get($expected);
+    Assert::assertNotNull($factory, "The service $expected does not exist. Note, that you need to pass a service ID, not a class name.");
+
+    $actual = get_class(\Drupal::cache());
+    $expected = get_class($factory->get('default'));
+    Assert::assertSame($expected, $actual);
+  }
+
 }

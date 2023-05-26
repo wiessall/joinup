@@ -6,6 +6,7 @@ namespace Drupal\joinup\Context;
 
 use Behat\Behat\Hook\Scope\AfterScenarioScope;
 use Behat\Behat\Hook\Scope\AfterStepScope;
+use Behat\Behat\Hook\Scope\BeforeScenarioScope;
 use Behat\Gherkin\Node\TableNode;
 use Behat\Mink\Driver\Selenium2Driver;
 use Behat\Mink\Element\NodeElement;
@@ -25,7 +26,6 @@ use Drupal\joinup\Traits\AntispamTrait;
 use Drupal\joinup\Traits\ContextualLinksTrait;
 use Drupal\joinup\Traits\EntityTrait;
 use Drupal\joinup\Traits\JavascriptTrait;
-use Drupal\joinup\Traits\MaterialDesignTrait;
 use Drupal\joinup\Traits\PageCacheTrait;
 use Drupal\joinup\Traits\SearchTrait;
 use Drupal\joinup\Traits\TraversingTrait;
@@ -38,7 +38,6 @@ use Joinup\Traits\DigitQaPipelineAwareTrait;
 use LoversOfBehat\TableExtension\Hook\Scope\AfterTableFetchScope;
 use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\ExpectationFailedException;
-use SebastianBergmann\Comparator\ComparisonFailure;
 use WebDriver\Exception;
 use WebDriver\Key;
 
@@ -52,7 +51,6 @@ class FeatureContext extends RawDrupalContext {
   use ContextualLinksTrait;
   use EntityTrait;
   use JavascriptTrait;
-  use MaterialDesignTrait;
   use PageCacheTrait;
   use SearchTrait;
   use TagTrait;
@@ -1406,104 +1404,6 @@ class FeatureContext extends RawDrupalContext {
   }
 
   /**
-   * Checks a material design checkbox.
-   *
-   * To be used for Javascript based tests.
-   *
-   * @param string $text
-   *   The checkbox text.
-   *
-   * @Given I check the :text material checkbox
-   */
-  public function checkMaterialCheckbox(string $text): void {
-    $this->checkMaterialCheckboxHelper($this->getSession()->getPage(), $text);
-  }
-
-  /**
-   * Unchecks a material checkbox in a row that contains a certain text.
-   *
-   * @param string $text
-   *   Text in the row.
-   *
-   * @throws \Exception
-   *   If the page contains no rows, no row contains the text or the row
-   *   contains no checkbox or radio button.
-   * @throws \InvalidArgumentException
-   *   If this step definition was used on a radio button.
-   *
-   * @Given I check the material checkbox in the :text table row
-   */
-  public function checkMaterialCheckboxInTableRow(string $text): void {
-    $this->checkMaterialCheckboxHelper($this->getRowByRowText($text));
-  }
-
-  /**
-   * Checks a material design checkbox placed in given context.
-   *
-   * @param \Behat\Mink\Element\TraversableElement $element
-   *   The traversable element to search.
-   * @param string|null $text
-   *   (optional) The checkbox label, if any. Defaults to false.
-   *
-   * @throws \Behat\Mink\Exception\ElementNotFoundException
-   *   When the checkbox cannot be found in $context.
-   * @throws \Exception
-   *   When the checkbox is already checked.
-   */
-  protected function checkMaterialCheckboxHelper(TraversableElement $element, ?string $text = NULL): void {
-    $checkbox = $text ? $element->findField($text) : $element->find('css', 'input[type="checkbox"]');
-    if (!$checkbox) {
-      throw new ElementNotFoundException($this->getSession(), 'checkbox', NULL, $text);
-    }
-    if ($checkbox->isChecked()) {
-      throw new \Exception("Checkbox with text {$text} is already checked.");
-    }
-    $this->toggleMaterialDesignCheckbox($checkbox->getParent());
-  }
-
-  /**
-   * Unchecks a material checkbox in a row that contains a certain text.
-   *
-   * @param string $text
-   *   Text in the row.
-   *
-   * @throws \Exception
-   *   If the page contains no rows, no row contains the text or the row
-   *   contains no checkbox or radio button.
-   * @throws \InvalidArgumentException
-   *   If this step definition was used on a radio button.
-   *
-   * @Given I uncheck the material checkbox in the :text table row
-   */
-  public function uncheckMaterialCheckboxInTableRow(string $text): void {
-    $this->uncheckMaterialCheckboxHelper($this->getRowByRowText($text));
-  }
-
-  /**
-   * Unchecks a material design checkbox placed in given context.
-   *
-   * @param \Behat\Mink\Element\TraversableElement $element
-   *   The node element to search.
-   * @param string|null $text
-   *   The checkbox text.
-   *
-   * @throws \Behat\Mink\Exception\ElementNotFoundException
-   *   When the checkbox cannot be found in $context.
-   * @throws \Exception
-   *   When the checkbox is already unchecked.
-   */
-  protected function uncheckMaterialCheckboxHelper(TraversableElement $element, ?string $text = NULL): void {
-    $checkbox = $text ? $element->findField($text) : $element->find('css', 'input[type="checkbox"]');
-    if (!$checkbox) {
-      throw new ElementNotFoundException($this->getSession(), 'checkbox', NULL, $text);
-    }
-    if (!$checkbox->isChecked()) {
-      throw new \Exception("Checkbox with text {$text} is already unchecked.");
-    }
-    $this->toggleMaterialDesignCheckbox($checkbox->getParent());
-  }
-
-  /**
    * Searches the page for a row that includes the given text.
    *
    * @param string $text
@@ -1847,26 +1747,31 @@ class FeatureContext extends RawDrupalContext {
   /**
    * Creates testing media items.
    *
+   * You need to provide media types which you want to create.
+   *
+   * @code
+   * @generateMediaTypes:<mediaType1>,<mediaType2>,...
+   * @endcode
+   *
    * @BeforeScenario @generateMedia
    */
-  public function generateMedia(): void {
-    $media_type_ids = [
-      'collection_banner',
-      'collection_logo',
-      'solution_banner',
-      'solution_logo',
-      'event_logo',
-      'news_logo',
-    ];
-    foreach ($media_type_ids as $media_type_id) {
-      $definition = \Drupal::service('entity_field.manager')->getFieldDefinitions('media', $media_type_id)['image_library_widget_image'];
-      for ($i = 0; $i < 15; $i++) {
+  public function generateMedia(BeforeScenarioScope $scope): void {
+    $mediaTypes = $this->getTagValues($scope, 'generateMediaTypes');
+    if (empty($mediaTypes)) {
+      throw new \Exception('Please provide media types with generateMediaTypes:.. tag');
+    }
+
+    foreach ($mediaTypes as $mediaType) {
+      $definition = \Drupal::service('entity_field.manager')
+        ->getFieldDefinitions('media', $mediaType);
+      for ($i = 0; $i < 10; $i++) {
         $media = Media::create([
-          'bundle' => $media_type_id,
+          'bundle' => $mediaType,
           'name' => $this->getRandom()->string(),
-          'image_library_widget_image' => ImageItem::generateSampleValue($definition),
+          'image_library_widget_image' => ImageItem::generateSampleValue($definition['image_library_widget_image']),
         ]);
         $media->save();
+
         $this->entities['media'][$media->id()] = $media;
       }
     }
@@ -1885,6 +1790,30 @@ class FeatureContext extends RawDrupalContext {
       unset($this->entities['media']);
     }
     \Drupal::state()->delete('image_library_widget.clicks');
+  }
+
+  /**
+   * Get tag values.
+   *
+   * @param \Behat\Behat\Hook\Scope\BeforeScenarioScope|\Behat\Behat\Hook\Scope\AfterScenarioScope $scope
+   *   Scenario scope.
+   * @param string $prefix
+   *   Tag name.
+   *
+   * @return array
+   *   Tag values.
+   */
+  protected function getTagValues(BeforeScenarioScope|AfterScenarioScope $scope, string $prefix): array {
+    return array_reduce(
+      $scope->getScenario()->getTags(),
+      function (array $values, string $tag) use ($prefix) {
+        if (preg_match('/^' . $prefix . ':(.*)$/', $tag, $found)) {
+          $values = explode(',', $found[1]);
+        }
+        return $values;
+      },
+      []
+    );
   }
 
   /**
@@ -2030,50 +1959,6 @@ class FeatureContext extends RawDrupalContext {
   }
 
   /**
-   * Asserts that a list of horizontal tabs links exist on the page.
-   *
-   * Provide data in the following format:
-   *   | link  | active |
-   *   | Link1 | yes    |
-   *   | Link2 |        |
-   *   | Link3 |        |
-   *
-   * @param string $type
-   *   The horizontal tabs type, either 'primary' or 'secondary'.
-   * @param \Behat\Gherkin\Node\TableNode $links
-   *   The list of links. The order matters.
-   *
-   * @throws \Behat\Mink\Exception\ElementNotFoundException
-   *   If the horizontal tabs are not found in the page.
-   *
-   * @Then I should see the :type horizontal tabs:
-   */
-  public function assertHorizontalTabs(string $type, TableNode $links): void {
-    if (!in_array($type, ['primary', 'secondary'], TRUE)) {
-      throw new \InvalidArgumentException("The horizontal tabs type should be 'primary' or 'secondary'. Received '$type'.");
-    }
-    $session = $this->getSession();
-    $page = $session->getPage();
-    $tabs = $page->find('xpath', "//ul[contains(concat(' ', @class, ' '), ' tabs ') and contains(concat(' ', @class, ' '), ' {$type} ')]");
-    if (!$tabs) {
-      throw new ElementNotFoundException($session, "{$type} task list");
-    }
-
-    $actual_links = array_map(function (NodeElement $link): string {
-      return $link->getText();
-    }, $tabs->findAll('css', 'a'));
-
-    $expected_links = array_map(function (array $link): string {
-      return $link['active'] === 'yes' ? "{$link['link']}(active tab)" : $link['link'];
-    }, $links->getColumnsHash());
-
-    if ($actual_links !== $expected_links) {
-      $comparison = new ComparisonFailure($expected_links, $actual_links, print_r($expected_links, TRUE), print_r($actual_links, TRUE));
-      throw new ExpectationFailedException("The {$type} task links expectation is not met", $comparison);
-    }
-  }
-
-  /**
    * Stores the ID of the latest file entity created before the scenario.
    *
    * @BeforeScenario @api
@@ -2146,13 +2031,7 @@ class FeatureContext extends RawDrupalContext {
    * @AfterScenario
    */
   public function clearFiles(AfterScenarioScope $event): void {
-    $files = array_reduce($event->getScenario()->getTags(), function (array $files, string $tag) {
-      if (preg_match('/^uploadFiles:(.*)$/', $tag, $found)) {
-        $files = explode(',', $found[1]);
-      }
-      return $files;
-    }, []);
-
+    $files = $this->getTagValues($event, 'uploadFiles');
     if ($files) {
       $file_storage = \Drupal::entityTypeManager()->getStorage('file');
       $fids = $file_storage->getQuery()
@@ -2316,6 +2195,12 @@ class FeatureContext extends RawDrupalContext {
         'type' => 'node',
         'fields' => [
           'logo' => 'field_news_logo',
+        ],
+      ],
+      'discussion' => [
+        'type' => 'node',
+        'fields' => [
+          'logo' => 'field_discussion_logo',
         ],
       ],
     ];
