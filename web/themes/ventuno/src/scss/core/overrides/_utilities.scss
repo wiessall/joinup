@@ -84,5 +84,14 @@ $utilities: map-merge(
       class: row-gap,
       values: $spacers
     ),
+    "z-index": (
+      responsive: false,
+      property: z-index,
+      class: zi,
+      values: (
+        0: 0,
+        1: 1
+      )
+    ),
   )
 );
