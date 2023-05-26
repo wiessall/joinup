@@ -280,7 +280,7 @@ trait GroupTrait {
    *   value is an associative array keyed by entity bundle and having the node
    *   IDs as values.
    */
-  abstract public function doGetGroupContentIds(): array;
+  abstract protected function doGetGroupContentIds(): array;
 
   /**
    * Returns a list of group content node IDs, grouped by node type.
