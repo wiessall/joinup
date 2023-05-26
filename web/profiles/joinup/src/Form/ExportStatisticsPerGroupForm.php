@@ -10,7 +10,6 @@ use Drupal\Core\Database\Connection;
 use Drupal\Core\Datetime\DateFormatterInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\flag\FlagCountManagerInterface;
 use Drupal\joinup\ExportBatchedDataFormBase;
 use Drupal\solution\Entity\SolutionInterface;
 use Drupal\sparql_entity_storage\Driver\Database\sparql\ConnectionInterface;
@@ -36,10 +35,8 @@ class ExportStatisticsPerGroupForm extends ExportBatchedDataFormBase {
    *   The MySQL connection instance.
    * @param \Drupal\sparql_entity_storage\Driver\Database\sparql\ConnectionInterface $sparql
    *   The SPARQL connection instance.
-   * @param \Drupal\flag\FlagCountManagerInterface $flagCountManager
-   *   The flag count manager.
    */
-  public function __construct(protected CacheBackendInterface $cache, protected DateFormatterInterface $dateFormatter, protected TimeInterface $time, protected EntityTypeManagerInterface $entityTypeManager, protected Connection $mysql, protected ConnectionInterface $sparql, protected FlagCountManagerInterface $flagCountManager) {
+  public function __construct(protected CacheBackendInterface $cache, protected DateFormatterInterface $dateFormatter, protected TimeInterface $time, protected EntityTypeManagerInterface $entityTypeManager, protected Connection $mysql, protected ConnectionInterface $sparql) {
     parent::__construct($cache, $dateFormatter, $time);
 
   }
@@ -55,7 +52,6 @@ class ExportStatisticsPerGroupForm extends ExportBatchedDataFormBase {
       $container->get('entity_type.manager'),
       $container->get('database'),
       $container->get('sparql.endpoint'),
-      $container->get('flag.count'),
     );
   }
 
@@ -141,7 +137,6 @@ QUERY;
     $rdf_storage = $this->entityTypeManager->getStorage('rdf_entity');
     /** @var \Drupal\collection\Entity\CollectionInterface|\Drupal\solution\Entity\SolutionInterface $group */
     $group = $rdf_storage->load((string) $entity_id);
-    $counts = $this->flagCountManager->getEntityFlagCounts($group);
     // Fetch the nodes that belong to the group.
     $group_content_data = $this->mysql->query($this->getGroupContentQuery($entity_id))->fetchAll();
     $group_content = [
@@ -161,11 +156,10 @@ QUERY;
         $group_content[$data->type]++;
       }
     }
-    $count = 0;
+
     // For solutions, count releases and distributions.
     if ($group instanceof SolutionInterface) {
       $releases_and_distributions_ids = $this->sparql->query($this->getRelasesAndDistributionsQuery($entity_id));
-      $count = empty($counts) || !isset($counts['like_rdf_entity']) ? 0 : $counts['like_rdf_entity'];
 
       /** @var \EasyRdf\Sparql\Result $result */
       foreach ($releases_and_distributions_ids as $result_id) {
@@ -181,6 +175,14 @@ QUERY;
     // Get the total members count.
     $memberships = $this->mysql->query($this->getMembersCountQuery($group->id()))->fetchField();
     $description = $group->hasField('field_ar_description') ? $group->field_ar_description->value : $group->field_is_description->value;
+
+    // Get the group content ids.
+    $content = $group->doGetGroupContentIds();
+    $content_ids = [];
+
+    array_walk_recursive($content, function ($value) use (&$content_ids) {
+      $content_ids[] = $value;
+    });
 
     // Add data to the final array.
     $context['results']['data'][$group->id()] = [
@@ -206,9 +208,26 @@ QUERY;
       + $group_content['asset_release']
       + $group_content['asset_distribution'],
       'Number of members' => $memberships,
-      'Total numbers of likes' => $count,
       'Description word count' => str_word_count(strip_tags($description)),
+      'Total number of likes' => !empty($content_ids) ? $this->getLikesCount($content_ids) : 0,
     ];
+  }
+
+  /**
+   * Retrieves the sum of likes for the provided group entity IDs.
+   *
+   * @param array $entity_ids
+   *   An array of group entity IDs for calculating the sum of likes.
+   *
+   * @return string
+   *   The sum of likes as a string value.
+   */
+  private function getLikesCount(array $entity_ids): string {
+    $query = $this->mysql->select('flag_counts', 'fc');
+    $query->addExpression('IFNULL(SUM(count), 0)', 'sum');
+    $query->condition('flag_id', ['like_node', 'like_rdf_entity'], 'IN');
+    $query->condition('entity_id', $entity_ids, 'IN');
+    return $query->execute()->fetchField();
   }
 
   /**
