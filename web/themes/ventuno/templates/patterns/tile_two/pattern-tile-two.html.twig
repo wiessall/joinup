@@ -43,7 +43,7 @@
           </h1>
           {{ _title_suffix }}
           <div{{ _content_attributes }}>
-            {{ _text }}
+            {{ _text|raw }}
           </div>
         </div>
         {%- if _badges is not empty and _badges is iterable -%}
