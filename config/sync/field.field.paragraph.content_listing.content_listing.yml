@@ -23,7 +23,7 @@ default_value:
           weight: 0
           region: top
         content_listing_status:
-          weight: 1
+          weight: 10
           region: top
       enabled: 1
       show_archived: unarchived
