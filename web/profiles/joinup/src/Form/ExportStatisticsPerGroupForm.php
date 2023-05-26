@@ -36,7 +36,13 @@ class ExportStatisticsPerGroupForm extends ExportBatchedDataFormBase {
    * @param \Drupal\sparql_entity_storage\Driver\Database\sparql\ConnectionInterface $sparql
    *   The SPARQL connection instance.
    */
-  public function __construct(protected CacheBackendInterface $cache, protected DateFormatterInterface $dateFormatter, protected TimeInterface $time, protected EntityTypeManagerInterface $entityTypeManager, protected Connection $mysql, protected ConnectionInterface $sparql) {
+  public function __construct(
+    protected CacheBackendInterface $cache,
+    protected DateFormatterInterface $dateFormatter,
+    protected TimeInterface $time,
+    protected EntityTypeManagerInterface $entityTypeManager,
+    protected Connection $mysql,
+    protected ConnectionInterface $sparql) {
     parent::__construct($cache, $dateFormatter, $time);
 
   }
@@ -103,8 +109,7 @@ WHERE {
 QUERY;
 
     // Initialize almost everything (some counters are not initialized here).
-    $sparql_connection = \Drupal::getContainer()->get('sparql.endpoint');
-    $query_results = $sparql_connection->query($ids_query);
+    $query_results = $this->sparql->query($ids_query);
 
     $batch_operations = [];
     foreach ($query_results->getArrayCopy() as $query_result) {
@@ -157,6 +162,14 @@ QUERY;
       }
     }
 
+    // Get the group content ids.
+    $content = $group->getGroupContentIds();
+    $content_ids = [];
+
+    array_walk_recursive($content, function ($value) use (&$content_ids) {
+      $content_ids[] = $value;
+    });
+
     // For solutions, count releases and distributions.
     if ($group instanceof SolutionInterface) {
       $releases_and_distributions_ids = $this->sparql->query($this->getRelasesAndDistributionsQuery($entity_id));
@@ -166,6 +179,7 @@ QUERY;
         $entity = $rdf_storage->load((string) $result_id->entity_id);
         $group_content[$entity->bundle()]++;
       }
+      $content_ids[] = $group->id();
     }
     // For collections simply pass the number of solutions (affiliates).
     else {
@@ -175,14 +189,6 @@ QUERY;
     // Get the total members count.
     $memberships = $this->mysql->query($this->getMembersCountQuery($group->id()))->fetchField();
     $description = $group->hasField('field_ar_description') ? $group->field_ar_description->value : $group->field_is_description->value;
-
-    // Get the group content ids.
-    $content = $group->doGetGroupContentIds();
-    $content_ids = [];
-
-    array_walk_recursive($content, function ($value) use (&$content_ids) {
-      $content_ids[] = $value;
-    });
 
     // Add data to the final array.
     $context['results']['data'][$group->id()] = [

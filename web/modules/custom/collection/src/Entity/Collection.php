@@ -189,7 +189,7 @@ class Collection extends Rdf implements CollectionInterface {
   /**
    * {@inheritdoc}
    */
-  public function doGetGroupContentIds(): array {
+  protected function doGetGroupContentIds(): array {
     $ids = ['node' => $this->getNodeGroupContent()];
     $solutions = $this->getSolutions();
     $ids = NestedArray::mergeDeep($ids, [
