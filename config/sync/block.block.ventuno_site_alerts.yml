@@ -9,7 +9,7 @@ dependencies:
 id: ventuno_site_alerts
 theme: ventuno
 region: messages
-weight: -24
+weight: -26
 provider: null
 plugin: site_alert_block
 settings:
