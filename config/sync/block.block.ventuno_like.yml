@@ -1,0 +1,34 @@
+uuid: 938e5cd9-1cc9-497c-9be9-0999519767d8
+langcode: en
+status: true
+dependencies:
+  module:
+    - joinup_core
+    - joinup_like
+  theme:
+    - ventuno
+id: ventuno_like
+theme: ventuno
+region: content
+weight: -26
+provider: null
+plugin: joinup_like_block
+settings:
+  id: joinup_like_block
+  label: Like
+  label_display: '0'
+  provider: joinup_like
+visibility:
+  joinup_content:
+    id: joinup_content
+    negate: false
+    context_mapping:
+      node: '@node.node_route_context:node'
+      rdf: '@rdf_entity.rdf_entity_route_context:rdf_entity'
+    content:
+      node-custom_page: node-custom_page
+      node-discussion: node-discussion
+      node-document: node-document
+      node-event: node-event
+      node-news: node-news
+      rdf_entity-solution: rdf_entity-solution
