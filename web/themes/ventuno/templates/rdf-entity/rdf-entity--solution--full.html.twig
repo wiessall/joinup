@@ -1,0 +1,17 @@
+{#
+/**
+ * @file
+ * Themeing for rdf entities.
+ */
+#}
+<article{{ is_canonical ? attributes.addClass(['mt-5', 'pt-3']) : attributes }}>
+  {{ title_prefix }}
+  {% if not page %}
+    <h2{{ title_attributes }}>
+      <a href="{{ url }}" rel="bookmark">{{ label }}</a>
+    </h2>
+  {% endif %}
+  {{ title_suffix }}
+
+  {{ content }}
+</article>
