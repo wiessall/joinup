@@ -122,7 +122,7 @@ Feature:
     Given I go to the "Vintage Art" collection
     And I should not see the "The Panama Papers" tile
     And I should not see the "Exports Leap Despite Currency Gain" tile
-    And I should not see the "The Ultimate Debate" tile
+    And I should not see the text "Discussions" in the "Navigation menu"
     And I should not see the "Version 2.0 Launch Party" tile
     And I should not see the link "HOWTOs" in the "Navigation menu" region
     And I should not see the link "Looking for Support?" in the "Navigation menu" region
@@ -131,7 +131,7 @@ Feature:
     Given I go to the "Decadent Art" collection
     And I should see the "The Panama Papers" tile
     And I should see the "Exports Leap Despite Currency Gain" tile
-    And I should see the "The Ultimate Debate" tile
+    And I should see the text "Discussions" in the "Navigation menu"
     And I should see the "Version 2.0 Launch Party" tile
     Then I should see the link "HOWTOs" in the "Navigation menu" region
     When I click "HOWTOs" in the "Navigation menu" region
