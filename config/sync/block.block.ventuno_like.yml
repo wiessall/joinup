@@ -9,8 +9,8 @@ dependencies:
     - ventuno
 id: ventuno_like
 theme: ventuno
-region: content
-weight: -25
+region: content_top
+weight: -26
 provider: null
 plugin: joinup_like_block
 settings:
