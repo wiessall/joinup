@@ -24,7 +24,7 @@ default_value:
           region: top
       enabled: 1
       query_presets: ''
-      limit: 10
+      limit: 12
       global_search: false
       show_shared: false
 default_value_callback: ''
