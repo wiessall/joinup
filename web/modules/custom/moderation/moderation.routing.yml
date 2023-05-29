@@ -9,3 +9,6 @@ moderation.content_moderation_overview:
     parameters:
       rdf_entity:
         type: entity:rdf_entity
+        bundle:
+          - collection
+          - solution
