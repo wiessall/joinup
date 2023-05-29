@@ -2,15 +2,6 @@ $utilities: () !default;
 $utilities: map-merge(
   $utilities,
   (
-    "float": (
-      responsive: false,
-      property: float,
-      values: (
-        start: left,
-        end: right,
-        none: none,
-      )
-    ),
     "align": null,
     "opacity": null,
     "translate-middle": null,
