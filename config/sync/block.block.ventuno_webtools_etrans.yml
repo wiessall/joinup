@@ -9,8 +9,8 @@ dependencies:
     - ventuno
 id: ventuno_webtools_etrans
 theme: ventuno
-region: content
-weight: -26
+region: content_top
+weight: -25
 provider: null
 plugin: oe_webtools_etrans
 settings:
