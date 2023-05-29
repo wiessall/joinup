@@ -58,13 +58,11 @@ function ventuno_preprocess_block(array &$variables): void {
 
     case 'ventuno_webtools_etrans':
       $variables['#attached']['library'][] = 'ventuno/etrans';
-      $variables['attributes']['class'][] = 'float-end';
-      $variables['attributes']['class'][] = 'zi-1';
       break;
 
     case 'ventuno_like':
-      $variables['attributes']['class'][] = 'float-end';
-      $variables['attributes']['class'][] = 'me-2';
+      // Add z-index to Like button in order to avoid ajax throbber being
+      // hidden under eTrans button.
       $variables['attributes']['class'][] = 'zi-1';
       break;
   }
