@@ -10,7 +10,7 @@ use Symfony\Component\Routing\RouteCollection;
 /**
  * Alter group content management route.
  */
-class AlterGroupContentManagementRouteSubscriber extends RouteSubscriberBase {
+class AlterGroupContentManagementRoute extends RouteSubscriberBase {
 
   /**
    * {@inheritdoc}
