@@ -21,7 +21,7 @@ Feature: Sharing content between collections
       | title                          | short title                    | <group type> | state     |
       | New D'n'B compilation released | New D'n'B compilation released | Classic Rock | validated |
       | Old-school line-up concert     | Old-school line-up concert     | Hip-Hop      | validated |
-    And discussion content:
+    And document content:
       | title                       | <group type> | state     |
       | Rockabilly is still rocking | Classic Rock | validated |
     And the following <group type> user memberships:
@@ -59,7 +59,7 @@ Feature: Sharing content between collections
 
     # A group member should see the link.
     When I am logged in as "Sara Barber"
-    And I go to the "Rockabilly is still rocking" discussion
+    And I go to the "Rockabilly is still rocking" document
     Then I should see the heading "Rockabilly is still rocking"
     When I click "Share"
     Then a modal should open
@@ -158,8 +158,6 @@ Feature: Sharing content between collections
       | event        | solution   |
       | document     | collection |
       | document     | solution   |
-      | discussion   | collection |
-      | discussion   | solution   |
       | news         | collection |
       | news         | solution   |
 
@@ -276,8 +274,6 @@ Feature: Sharing content between collections
       | event        | solution   |
       | document     | collection |
       | document     | solution   |
-      | discussion   | collection |
-      | discussion   | solution   |
       | news         | collection |
       | news         | solution   |
 
