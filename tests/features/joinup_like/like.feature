@@ -18,23 +18,31 @@ Feature: Like/unlike feature.
     When I go to the homepage of the "Very liked solution" solution
     And I click "Like" in the "Like block" region
     Then I should see the link "Unlike" in the "Like block"
-    And I see the text "[1]" in the "Like block" region
+    And I see the text "Like (1)" in the "Like block" region
 
     Given I am logged in as "Lisa Like"
     When I go to the homepage of the "Very liked solution" solution
     And I click "Like" in the "Like block" region
     Then I should see the link "Unlike" in the "Like block"
-    And I see the text "[2]" in the "Like block" region
+    And I see the text "Like (2)" in the "Like block" region
 
     When I click "Unlike" in the "Like block" region
     Then I should see the link "Like" in the "Like block"
-    And I see the text "[1]" in the "Like block" region
+    And I see the text "Like (1)" in the "Like block" region
 
+  Scenario: Anonymous user is asked to log in if they attempt to Like
     Given I am an anonymous user
     When I go to the homepage of the "Very liked solution" solution
-    Then I should not see the link "Like" in the "Like block"
-    And I should not see the link "Unike" in the "Like block"
-    And I should see the text "Like (RDF entity): 1" in the "Like block" region
+    Then I should see the link "Like" in the "Like block"
+    And I should see the text "Like (1)" in the "Like block" region
+    When I click "Like" in the "Like block" region
+    Then a modal should open
+    And I should see the heading "You are not logged in"
+    And I should see the text "You are not logged in" in the "Modal title"
+    And I should see the heading "Login or register to like this content" in the "Modal content"
+    And I should see the text "Like this content will help other people find reliable information about what they search !" in the "Modal content"
+    When I click "Log in" in the "Modal content"
+    Then I should see the heading "Sign in to continue"
 
   Scenario Outline: User can like/unlike solution's content
     Given <content type> content:
@@ -47,11 +55,11 @@ Feature: Like/unlike feature.
 
     When I click "Like" in the "Like block" region
     Then I should see the link "Unlike" in the "Like block"
-    And I see the text "[1]" in the "Like block" region
+    And I see the text "Like (1)" in the "Like block" region
 
     When I click "Unlike" in the "Like block" region
     Then I should see the link "Like" in the "Like block"
-    And I see the text "[0]" in the "Like block" region
+    And I see the text "Like (0)" in the "Like block" region
 
     Examples:
       | content type |
