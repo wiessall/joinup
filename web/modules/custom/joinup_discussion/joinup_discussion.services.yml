@@ -23,3 +23,8 @@ services:
     class: Drupal\joinup_discussion\EventSubscriber\WorkflowTransitionEventSubscriber
     tags:
       - { name: event_subscriber }
+  joinup_discussion.discussion_overview.access_checker:
+    class: Drupal\joinup_discussion\Access\DiscussionOverviewAccessCheck
+    arguments: [ '@joinup_group.group_manager', '@entity_type.manager' ]
+    tags:
+      - { name: access_check, applies_to: _joinup_discussion_overview }
