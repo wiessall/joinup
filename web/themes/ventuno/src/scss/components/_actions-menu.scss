@@ -41,10 +41,3 @@
     z-index: 502; // Avoid dropdown-menu to be overlapped by navbar (default z-index is 40)
   }
 }
-// TO-DO ISAICP-7641 This ruleset probably has a better place to be
-.region-header-bottom + .region-featured .actions-menu {
-  @include media-breakpoint-up(lg) {
-    bottom: $spacer * 1.5;
-    margin: 0;
-  }
-}
