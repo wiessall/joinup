@@ -19,7 +19,7 @@ Feature: As a user of the website
       | Walking Unofficial Humans | Fairy Tail | now -4 day   | now -2 day          | now        | validated | trustysidekick | no     |
       # The "Spring Freezing" event is associated with the anonymous user.
       | Spring Freezing           | Fairy Tail | now +1 week  | now +1 week         | now -6 day | validated |                | no     |
-    And discussion content:
+    And document content:
       | title       | collection | state     | created   |
       | Yellow Zeus | Fairy Tail | validated | yesterday |
 

@@ -58,7 +58,6 @@ Feature:
     Examples:
       # Events are excluded since they do not show the updated timestamp to the end user.
       | type       | publication field name     |
-      | discussion | publication date           |
       | document   | document publication date  |
       | news       | publication date           |
 
