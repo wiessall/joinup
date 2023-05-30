@@ -7,16 +7,6 @@
 
 <article{{ attributes }}>
   {{ title_prefix }}
-  {% if not page and not is_label_hidden %}
-    <h2{{ title_attributes.addClass(['fs-6']) }}>
-      <a href="{{ url }}" rel="bookmark">{{ label }}</a>
-    </h2>
-  {% endif %}
   {{ title_suffix }}
-  {{ content|without('share_link') }}
-  {% if content.share_link|render %}
-    <div class="action-link__wrapper right">
-      {{ content.share_link }}
-    </div>
-  {% endif %}
+  {{ content }}
 </article>
