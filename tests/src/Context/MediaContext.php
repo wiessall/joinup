@@ -9,6 +9,7 @@ use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\joinup\Traits\EntityReferenceTrait;
 use Drupal\joinup\Traits\FileTrait;
 use Drupal\joinup\Traits\TestingEntitiesTrait;
+use PHPUnit\Framework\Assert;
 
 /**
  * Behat step definitions for testing media.
@@ -185,6 +186,22 @@ class MediaContext extends RawDrupalContext {
     ];
 
     return $commonMap + $bundleMap[$mediaTypeId];
+  }
+
+  /**
+   * Asserts that a remote video media entity exists.
+   *
+   * @param string $url
+   *   The remote video URL.
+   *
+   * @Then a video media with the :url URL exists
+   */
+  public function assertMediaVideoExists(string $url): void {
+    $storage = \Drupal::entityTypeManager()->getStorage('media');
+    Assert::assertNotEmpty($storage->loadByProperties([
+      'bundle' => 'video',
+      'video' => $url,
+    ]));
   }
 
 }
