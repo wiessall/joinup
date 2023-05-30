@@ -11,13 +11,22 @@ editor: ckeditor5
 settings:
   toolbar:
     items:
+      - bold
+      - italic
+      - underline
+      - '|'
       - link
+      - '|'
+      - bulletedList
+      - numberedList
       - '|'
       - sourceEditing
   plugins:
     ckeditor5_sourceEditing:
       allowed_tags:
         - '<a hreflang>'
+        - '<ul>'
+        - '<ol>'
     linkit_extension:
       linkit_enabled: false
 image_upload:
