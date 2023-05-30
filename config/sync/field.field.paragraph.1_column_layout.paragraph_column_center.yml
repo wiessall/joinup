@@ -10,6 +10,7 @@ dependencies:
     - paragraphs.paragraphs_type.carousel
     - paragraphs.paragraphs_type.configurable_listing
     - paragraphs.paragraphs_type.content_listing
+    - paragraphs.paragraphs_type.github_feed
     - paragraphs.paragraphs_type.iframe
     - paragraphs.paragraphs_type.image
     - paragraphs.paragraphs_type.json_map
@@ -41,6 +42,7 @@ settings:
       json_map: json_map
       call_to_action: call_to_action
       configurable_listing: configurable_listing
+      github_feed: github_feed
     negate: 0
     target_bundles_drag_drop:
       1_column_layout:
@@ -79,6 +81,9 @@ settings:
       entity_reference:
         weight: -17
         enabled: false
+      github_feed:
+        weight: 33
+        enabled: true
       iframe:
         weight: -24
         enabled: true

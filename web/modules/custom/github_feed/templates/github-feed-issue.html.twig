@@ -1,0 +1,22 @@
+{#
+/**
+ * @file
+ * Default template for the github_feed_issue element.
+ *
+ * Available variables:
+ * - item: The issue as fetched by the API endpoint.
+ * @todo Explain variables from the item.
+ */
+#}
+
+{% if item %}
+  <div class="github-feed-issue">
+    {# Compact view: Small date above and the title as a link below. #}
+    <div class="github-feed-issue__compact">
+      <small class="github-feed-issue__date">{{ item.created_at}}</small>
+      <div class="github-feed-issue__title">
+        <a href="{{ item.html_url }}" target="_blank">{{ item.title }}</a>
+      </div>
+    </div>
+  </div>
+{% endif %}

@@ -1,0 +1,22 @@
+uuid: f07bf889-3e25-4466-ae02-f0a477efc3f3
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.feed
+    - paragraphs.paragraphs_type.github_feed
+  module:
+    - github_feed_field
+id: paragraph.github_feed.feed
+field_name: feed
+entity_type: paragraph
+bundle: github_feed
+label: Feed
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  cache: -1
+field_type: github_feed

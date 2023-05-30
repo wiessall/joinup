@@ -1,0 +1,87 @@
+<?php
+
+/**
+ * @file
+ * Primary module hooks for Github feed module.
+ */
+
+declare(strict_types = 1);
+
+/**
+ * Implements hook_theme().
+ */
+function github_feed_theme($existing, $type, $theme, $path) {
+  return [
+    'github_feed' => [
+      'variables' => [
+        'url' => NULL,
+        'type' => NULL,
+        'items' => NULL,
+      ],
+    ],
+    'github_feed_issue' => [
+      'variables' => [
+        'item' => NULL,
+      ],
+    ],
+    'github_feed_pull_request' => [
+      'variables' => [
+        'item' => NULL,
+      ],
+    ],
+    'github_feed_comment' => [
+      'variables' => [
+        'item' => NULL,
+      ],
+    ],
+    'github_feed_events' => [
+      'variables' => [
+        'item' => NULL,
+      ],
+    ],
+  ];
+}
+
+/**
+ * Implements template_preprocess_HOOK().
+ */
+function template_preprocess_github_feed(array &$variables) {
+  $variables['type_parsed'] = str_replace('_', ' ', $variables['type']);
+}
+
+/**
+ * Implements template_preprocess_HOOK().
+ */
+function template_preprocess_github_feed_issue(array &$variables): void {
+  $issue = &$variables['item'];
+  $date_formatter = \Drupal::getContainer()->get('date.formatter');
+  $issue['created_at'] = [
+    '#type' => 'markup',
+    '#markup' => $date_formatter->format(strtotime($issue['created_at']), 'custom', 'F j, Y'),
+  ];
+}
+
+/**
+ * Implements template_preprocess_HOOK().
+ */
+function template_preprocess_github_feed_pull_request(array &$variables): void {
+  $pull_request = &$variables['item'];
+  $date_formatter = \Drupal::getContainer()->get('date.formatter');
+  $pull_request['created_at'] = [
+    '#type' => 'markup',
+    '#markup' => $date_formatter->format(strtotime($pull_request['created_at']), 'custom', 'F j, Y'),
+  ];
+}
+
+/**
+ * Implements template_preprocess_HOOK().
+ */
+function template_preprocess_github_feed_events(array &$variables): void {
+  $event = &$variables['item'];
+  $date_formatter = \Drupal::getContainer()->get('date.formatter');
+  $event['created_at'] = [
+    '#type' => 'markup',
+    '#markup' => $date_formatter->format(strtotime($event['created_at']), 'custom', 'F j, Y'),
+  ];
+
+}

@@ -1,0 +1,16 @@
+{#
+/**
+ * @file
+ * Default template for the github_feed_comment element.
+ *
+ * Available variables:
+ * - item: The comment.
+ * @todo: Document available variables.
+ */
+#}
+<div class="github-feed-comment">
+  {# Show only the first 40 characters of the body and a read more link. #}
+  <div class="github-feed-comment-body">
+    {{ item.body|striptags|slice(0,40)|raw }}...
+    <a href="{{ item.html_url }}" target="_blank">{{ 'Read more'|t }}</a>
+</div>

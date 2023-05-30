@@ -1,0 +1,38 @@
+# Field instance.
+field.field_settings.github_feed:
+  type: mapping
+  label: Github feed field settings
+  mapping:
+    cache:
+      type: integer
+      label: The cache lifetime in seconds.
+
+# Default value.
+field.value.github_feed:
+  type: mapping
+  label: Default value
+  mapping:
+    repository:
+      type: uri
+      label: Repository
+    type:
+      type: string
+      label: Type
+    include_comments:
+      type: boolean
+      label: Include comments
+    item_num:
+      type: integer
+      label: Number of items
+    comment_num:
+      type: integer
+      label: Number of comments
+
+# Field formatter.
+field.formatter.settings.github_feed_default:
+  type: mapping
+  label: Formatter settings
+  mapping:
+    foo:
+      type: string
+      label: Foo

@@ -70,6 +70,7 @@ module:
   geocoder_field: 0
   geocoder_geofield: 0
   geofield: 0
+  github_feed: 0
   help: 0
   honeypot: 0
   iframe: 0

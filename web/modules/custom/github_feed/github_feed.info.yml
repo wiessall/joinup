@@ -1,0 +1,7 @@
+name: Github feed
+type: module
+description: Provides integration with github and fetches feeds.
+package: Custom
+core_version_requirement: ^9 || ^10
+
+# @todo Add dependency in composer.json for the knlabs/github-api library.
