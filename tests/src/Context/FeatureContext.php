@@ -2389,4 +2389,70 @@ class FeatureContext extends RawDrupalContext {
     static::restoreReadOnlyConfig();
   }
 
+  /**
+   * Asserts that a specific entity field is matching a given regexp pattern.
+   *
+   * @param string $bundle
+   *   The human-readable type according to self::bundleAliases().
+   * @param string $title
+   *   The entity title.
+   * @param string $field_label
+   *   The human-readable field name.
+   * @param string $pattern
+   *   The regexp pattern.
+   *
+   * @Then the :field_label field of :title :bundle should match :pattern
+   */
+  public function assertEntityFieldMatches(string $bundle, string $title, string $field_label, string $pattern): void {
+    if (!$this->entityFieldMatchHelper($bundle, $title, $field_label, $pattern)) {
+      throw new ExpectationFailedException("The '$field_label' of $title' $bundle doesn't match the given regexp pattern but it should");
+    }
+  }
+
+  /**
+   * Asserts that a specific entity field is doesn't match a regexp pattern.
+   *
+   * @param string $bundle
+   *   The human-readable type according to self::bundleAliases().
+   * @param string $title
+   *   The entity title.
+   * @param string $field_label
+   *   The human-readable field name.
+   * @param string $pattern
+   *   The regexp pattern.
+   *
+   * @Then the :field_label field of :title :bundle should not match :pattern
+   */
+  public function assertEntityFieldNotMatch(string $bundle, string $title, string $field_label, string $pattern): void {
+    if ($this->entityFieldMatchHelper($bundle, $title, $field_label, $pattern)) {
+      throw new ExpectationFailedException("The '$field_label' of $title' $bundle matches the given regexp pattern but it should not");
+    }
+  }
+
+  /**
+   * Provides a helper for entity field content match assertions.
+   *
+   * @param string $bundle
+   *   The human-readable type according to self::entityTypeAliases().
+   * @param string $title
+   *   The entity title.
+   * @param string $field_label
+   *   The human-readable field name.
+   * @param string $pattern
+   *   The regexp pattern.
+   */
+  protected function entityFieldMatchHelper(string $bundle, string $title, string $field_label, string $pattern): bool {
+    $entity_type_id = static::entityTypeAliases()[$bundle];
+    $entity = $this->getEntityByLabel($entity_type_id, $title);
+    foreach ($entity->getFields(FALSE) as $field_name => $field) {
+      $definition = $field->getFieldDefinition();
+      if ($definition->getLabel() === $field_label) {
+        $column = $definition->getFieldStorageDefinition()->getMainPropertyName();
+        $value = (string) $entity->get($field_name)->{$column};
+        return (bool) preg_match($pattern, $value);
+      }
+    }
+    throw new \LogicException("The $bundle entity doesn't have a $field_label field");
+  }
+
 }
