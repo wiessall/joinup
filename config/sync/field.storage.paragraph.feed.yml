@@ -4,7 +4,7 @@ status: true
 dependencies:
   module:
     - field_permissions
-    - github_feed_field
+    - github_feed
     - paragraphs
 third_party_settings:
   field_permissions:
@@ -14,7 +14,7 @@ field_name: feed
 entity_type: paragraph
 type: github_feed
 settings: {  }
-module: github_feed_field
+module: github_feed
 locked: false
 cardinality: -1
 translatable: true
