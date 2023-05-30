@@ -9,7 +9,11 @@ services:
     tags:
       - { name: event_subscriber }
   joinup_search.search_api_subscriber:
-    class: Drupal\joinup_search\EventSubscriber\SearchApiSubscriber
+    class: Drupal\joinup_search\EventSubscriber\SearchApiExcludeCurrentCustomPage
+    tags:
+      - { name: event_subscriber }
+  joinup_search.search_api_field_subscriber:
+    class: Drupal\joinup_search\EventSubscriber\SearchApiFieldListingOrder
     arguments: ['@facets.utility.date_handler']
     tags:
       - { name: event_subscriber }
