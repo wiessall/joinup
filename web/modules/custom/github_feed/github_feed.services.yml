@@ -1,0 +1,4 @@
+services:
+  github_feed.github_feed:
+    class: Drupal\github_feed\GithubFeed
+    arguments: ['@cache.default', '@http_client']

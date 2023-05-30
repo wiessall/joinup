@@ -1,0 +1,19 @@
+{#
+/**
+ * @file
+ * Default template for the github_feed_pull_request element.
+ *
+ * Available variables:
+ * - item: The pull request as fetched by the API endpoint.
+ */
+#}
+
+{% if item %}
+  <div class="github-feed-pull-request">
+    {# Compact view: Small date above and the title as a link below. #}
+    <small class="github-feed-pull-request__date">{{ item.created_at}}</small>
+    <div class="github-feed-pull-request__title">
+      <a href="{{ item.html_url }}" target="_blank">{{ item.title }}</a>
+    </div>
+  </div>
+{% endif %}

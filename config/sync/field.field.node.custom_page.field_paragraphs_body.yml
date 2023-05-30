@@ -7,6 +7,7 @@ dependencies:
     - node.type.custom_page
     - paragraphs.paragraphs_type.accordion
     - paragraphs.paragraphs_type.content_listing
+    - paragraphs.paragraphs_type.github_feed
     - paragraphs.paragraphs_type.iframe
     - paragraphs.paragraphs_type.json_map
     - paragraphs.paragraphs_type.row
@@ -33,12 +34,17 @@ settings:
       content_listing: content_listing
       iframe: iframe
       row: row
-      bp_columns_three_uneven: bp_columns_three_uneven
-      bp_simple: bp_simple
+      github_feed: github_feed
     negate: 0
     target_bundles_drag_drop:
       1_column_layout:
         weight: 14
+        enabled: false
+      2_column_featured_left:
+        weight: 22
+        enabled: false
+      2_column_featured_right:
+        weight: 23
         enabled: false
       2_column_layout:
         weight: 15
@@ -52,15 +58,30 @@ settings:
       accordion_item:
         weight: 7
         enabled: false
+      call_to_action:
+        weight: 28
+        enabled: false
+      carousel:
+        weight: 29
+        enabled: false
+      configurable_listing:
+        weight: 30
+        enabled: false
       content_listing:
         weight: 8
         enabled: true
       entity_reference:
         weight: 21
         enabled: false
+      github_feed:
+        weight: 33
+        enabled: true
       iframe:
         weight: 8
         enabled: true
+      image:
+        weight: 35
+        enabled: false
       json_map:
         weight: 4
         enabled: true
@@ -72,5 +93,8 @@ settings:
         enabled: true
       testimony:
         weight: 26
+        enabled: false
+      video:
+        weight: 40
         enabled: false
 field_type: entity_reference_revisions
