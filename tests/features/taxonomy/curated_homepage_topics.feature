@@ -469,7 +469,7 @@ Feature:
   Scenario: Ampersand character is not decoded properly under a topic page.
     Given custom_page content:
       | title                    | body                                          | state     |
-      | Legislation & Technology | What do we mean by Legislation & Technology?  | validated |
+      | Legislation & Technology | What do we mean by Legislation & Technology?  | published |
     And the following topics are enabled in the homepage:
       | E-justice               |
     And I am logged in as a moderator
