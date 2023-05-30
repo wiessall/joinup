@@ -332,8 +332,7 @@
                 "Formatter settings are missing schema @see https://www.drupal.org/i/3194916": "https://git.drupalcode.org/project/paragraphs_jquery_ui_accordion/-/merge_requests/1.diff"
             },
             "drupal/rdf_entity": {
-                "Allow bundle label plural variants @see https://github.com/ec-europa/rdf_entity/pull/12": "https://github.com/ec-europa/rdf_entity/compare/8.x-1.x...ea8f6af001fca732e89a4be0e29643953f49a88f.diff",
-                "taxonomy_term entity type has information about db tables @see https://www.drupal.org/project/rdf_entity/issues/3362616": "resources/patch/drupal/rdf_entity/remove-db-tables-3362616.patch"
+                "Allow bundle label plural variants @see https://github.com/ec-europa/rdf_entity/pull/12": "https://github.com/ec-europa/rdf_entity/compare/8.x-1.x...ea8f6af001fca732e89a4be0e29643953f49a88f.diff"
             },
             "drupal/rdf_meta_entity": {
                 "Provide a default template file @see https://www.drupal.org/project/rdf_meta_entity/issues/3279162": "https://git.drupalcode.org/project/rdf_meta_entity/-/merge_requests/2.diff",
