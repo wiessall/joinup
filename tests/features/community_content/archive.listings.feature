@@ -108,3 +108,17 @@ Feature: Archived content on content listings - groups and paragraphs.
     Then I should see the heading "IOP page"
     And I should see the "IOP archived news" tile
     And I should see the "IOP published news" tile
+
+  Scenario: "Show archived" facet does not show up when there are no archived items.
+    Given the "Some collection" collection is configured to show "All" community content in the overview
+    When I go to the "Some collection" collection
+    Then I should see the "collection content archived toggle" facet
+
+    When I am logged in as a moderator
+    And I go to the edit form of the "Archived news" news
+    When I press "Unarchive"
+    And I go to the "Some collection" collection
+    Then I should see the heading "Some collection"
+    And I should see the "Published news" tile
+    And I should see the "Archived news" tile
+    But I should not see the "collection content archived toggle" facet
