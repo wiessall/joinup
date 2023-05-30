@@ -81,3 +81,12 @@ function ventuno_preprocess_user__view_mode_tile(array &$variables): void {
     $variables['horizontal'] = TRUE;
   }
 }
+
+/**
+ * Implements hook_preprocess_username().
+ */
+function ventuno_preprocess_username(array &$variables): void {
+  // Variable name_full is set in joinup_user.module to make the full name
+  // visible on hover.
+  $variables['attributes']['title'] = $variables['name_full'];
+}
