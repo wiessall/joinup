@@ -44,7 +44,7 @@ filters:
     status: true
     weight: -49
     settings:
-      allowed_html: '<a href hreflang> <p>'
+      allowed_html: '<a href hreflang> <p> <strong> <em> <u> <ul> <li> <ol>'
       filter_html_help: false
       filter_html_nofollow: false
   filter_autop:
@@ -94,6 +94,7 @@ filters:
         joinup_ec_video: 0
         internal_path: 0
         google_docs: 0
+        joinup_ec_webcast_video: 0
         prezi: 0
         slideshare: 0
         vimeo: 0
