@@ -199,17 +199,12 @@ class JoinupLicenceContext extends RawDrupalContext {
       return;
     }
 
-    // Since we might be cleaning up many licences, temporarily disable the
-    // feature to commit the index after every query.
-    $this->disableCommitOnUpdate();
-
     // Remove any licences that were created through the API during the test.
     foreach ($this->licences as $licence) {
       $licence->skip_notification = TRUE;
       $licence->delete();
     }
     $this->licences = [];
-    $this->enableCommitOnUpdate();
   }
 
   /**

@@ -1,9 +1,4 @@
 services:
-  joinup_search.solarium:
-    class: Drupal\joinup_search\EventSubscriber\SolariumEventSubscriber
-    arguments: ['@state']
-    tags:
-      - { name: event_subscriber }
   joinup_search.search_api_field_tag_subscriber:
     class: Drupal\joinup_search\EventSubscriber\SearchApiFieldTagSubscriber
     tags:

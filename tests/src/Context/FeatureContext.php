@@ -1648,23 +1648,6 @@ class FeatureContext extends RawDrupalContext {
   }
 
   /**
-   * Commits the search index before starting the scenario.
-   *
-   * Use this in scenarios for which it is important that the search index is
-   * committed before any content is created in the scenario.
-   *
-   * Since most scenarios start with creating some test content and this will
-   * automatically commit the search index, this is only needed for tests that
-   * perform asserts before creating any content of their own, since the search
-   * index might still contain stale content from the previous scenario.
-   *
-   * @BeforeScenario @commitSearchIndex&&@api
-   */
-  public function commitSearchIndexBeforeScenario(): void {
-    $this->commitSearchIndex();
-  }
-
-  /**
    * Installs the testing module for scenarios tagged with @errorPage.
    *
    * @BeforeScenario @errorPage&&@api
