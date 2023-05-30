@@ -38,7 +38,7 @@ Feature: Navigation menu for custom pages
     And the navigation menu of the "Rainbow tables" <group> should have <visible items 2> visible items
 
     When I click the contextual link "Edit menu" in the "Header bottom" region
-    Then the navigation menu of the "Rainbow tables" <group> should have 5 items
+    Then the navigation menu of the "Rainbow tables" <group> should have 6 items
 
     # It should be possible to hide an item from the menu by disabling it.
     When I disable "About us" in the navigation menu of the "Rainbow tables" <group>
@@ -128,8 +128,8 @@ Feature: Navigation menu for custom pages
 
     Examples:
       | group      | visible items 1 | visible items 2 | visible items 3 |
-      | collection | 4               | 5               | 4               |
-      | solution   | 3               | 4               | 3               |
+      | collection | 5               | 6               | 5               |
+      | solution   | 4               | 5               | 4               |
 
   @javascript
   Scenario: For menus with more than 6 items, the 6th and beyond should be wrapped in a dropdown
@@ -342,6 +342,7 @@ Feature: Navigation menu for custom pages
       | title              | parent             |
       | Overview           |                    |
       | Members            |                    |
+      | Discussions        |                    |
       | Glossary           |                    |
       | Bodypack           |                    |
       | About              |                    |
@@ -354,6 +355,7 @@ Feature: Navigation menu for custom pages
       | title              | parent             |
       | Overview           |                    |
       | Members            |                    |
+      | Discussions        |                    |
       | Glossary           |                    |
       | Bodypack           |                    |
       | About              |                    |
@@ -366,6 +368,7 @@ Feature: Navigation menu for custom pages
       | title              | parent             |
       | Overview           |                    |
       | Members            |                    |
+      | Discussions        |                    |
       | Glossary           |                    |
       | Bodypack           |                    |
       | About              |                    |
@@ -381,6 +384,7 @@ Feature: Navigation menu for custom pages
       | title              | parent             |
       | Overview           |                    |
       | Members            |                    |
+      | Discussions        |                    |
       | Glossary           |                    |
       | Bodypack           |                    |
       | About              |                    |
@@ -394,6 +398,7 @@ Feature: Navigation menu for custom pages
       | title              | parent             |
       | Overview           |                    |
       | Members            |                    |
+      | Discussions        |                    |
       | Glossary           |                    |
       | Bodypack           |                    |
       | About              |                    |
@@ -408,8 +413,9 @@ Feature: Navigation menu for custom pages
     Then the draggable menu table should be:
       | title              | parent             |
       | Members            |                    |
-      | Glossary           |                    |
       | Overview           |                    |
+      | Glossary           |                    |
+      | Discussions        |                    |
       | About              |                    |
       | Bodypack           |                    |
       | Types of backpacks |                    |
@@ -422,8 +428,9 @@ Feature: Navigation menu for custom pages
     Then the draggable menu table should be:
       | title              | parent             |
       | Members            |                    |
-      | Glossary           |                    |
       | Overview           |                    |
+      | Glossary           |                    |
+      | Discussions        |                    |
       | About              |                    |
       | Types of backpacks |                    |
       | Frameless          | Types of backpacks |
@@ -439,8 +446,9 @@ Feature: Navigation menu for custom pages
     Then the draggable menu table should be:
       | title              | parent             |
       | Members            |                    |
-      | Glossary           |                    |
       | Overview           |                    |
+      | Glossary           |                    |
+      | Discussions        |                    |
       | About              |                    |
       | Types of backpacks |                    |
       | Frameless          | Types of backpacks |
@@ -563,6 +571,7 @@ Feature: Navigation menu for custom pages
       | title           | parent |
       | Overview        |        |
       | Members         |        |
+      | Discussions     |        |
       | About           |        |
       | Glossary        |        |
       | TOCO cached 1   |        |
@@ -586,10 +595,11 @@ Feature: Navigation menu for custom pages
     And I click the contextual link "Edit menu" in the "Header bottom" region
 
     Then the "group menu edit table" table should contain the following columns:
-      | Page     | Enabled | Operations |
-      | Overview |         | Edit       |
-      | Members  |         |            |
-      | About    |         | Edit       |
+      | Page        | Enabled | Operations |
+      | Overview    |         | Edit       |
+      | Members     |         |            |
+      | Discussions |         |            |
+      | About       |         | Edit       |
     When I click "Edit" in the "Content" region
     Then I should see the heading "Edit <label> About edit link"
 
