@@ -41,9 +41,10 @@ dependencies:
     - joinup_search
 third_party_settings:
   search_api_solr:
-    finalize: false
+    finalize: true
     commit_before_finalize: false
-    commit_after_finalize: false
+    commit_after_finalize: true
+    debug_finalize: false
     highlighter:
       maxAnalyzedChars: 51200
       fragmenter: gap
