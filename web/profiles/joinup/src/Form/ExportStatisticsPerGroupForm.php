@@ -21,32 +21,11 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class ExportStatisticsPerGroupForm extends ExportBatchedDataFormBase {
 
   /**
-   * The entity type manager.
-   *
-   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
-   */
-  protected $entityTypeManager;
-
-  /**
-   * The MySQL database connection.
-   *
-   * @var \Drupal\Core\Database\Database
-   */
-  protected $mysql;
-
-  /**
-   * The SPARQL database connection.
-   *
-   * @var \Drupal\sparql_entity_storage\Driver\Database\sparql\ConnectionInterface
-   */
-  protected $sparql;
-
-  /**
    * Constructs an ExportUserListForm.
    *
    * @param \Drupal\Core\Cache\CacheBackendInterface $cache
    *   The default cache bin.
-   * @param \Drupal\Core\Datetime\DateFormatterInterface $date_formatter
+   * @param \Drupal\Core\Datetime\DateFormatterInterface $dateFormatter
    *   The date formatter service.
    * @param \Drupal\Component\Datetime\TimeInterface $time
    *   The time service.
@@ -57,11 +36,15 @@ class ExportStatisticsPerGroupForm extends ExportBatchedDataFormBase {
    * @param \Drupal\sparql_entity_storage\Driver\Database\sparql\ConnectionInterface $sparql
    *   The SPARQL connection instance.
    */
-  public function __construct(CacheBackendInterface $cache, DateFormatterInterface $date_formatter, TimeInterface $time, EntityTypeManagerInterface $entityTypeManager, Connection $mysql, ConnectionInterface $sparql) {
-    parent::__construct($cache, $date_formatter, $time);
-    $this->entityTypeManager = $entityTypeManager;
-    $this->mysql = $mysql;
-    $this->sparql = $sparql;
+  public function __construct(
+    protected CacheBackendInterface $cache,
+    protected DateFormatterInterface $dateFormatter,
+    protected TimeInterface $time,
+    protected EntityTypeManagerInterface $entityTypeManager,
+    protected Connection $mysql,
+    protected ConnectionInterface $sparql) {
+    parent::__construct($cache, $dateFormatter, $time);
+
   }
 
   /**
@@ -126,8 +109,7 @@ WHERE {
 QUERY;
 
     // Initialize almost everything (some counters are not initialized here).
-    $sparql_connection = \Drupal::getContainer()->get('sparql.endpoint');
-    $query_results = $sparql_connection->query($ids_query);
+    $query_results = $this->sparql->query($ids_query);
 
     $batch_operations = [];
     foreach ($query_results->getArrayCopy() as $query_result) {
@@ -160,7 +142,6 @@ QUERY;
     $rdf_storage = $this->entityTypeManager->getStorage('rdf_entity');
     /** @var \Drupal\collection\Entity\CollectionInterface|\Drupal\solution\Entity\SolutionInterface $group */
     $group = $rdf_storage->load((string) $entity_id);
-
     // Fetch the nodes that belong to the group.
     $group_content_data = $this->mysql->query($this->getGroupContentQuery($entity_id))->fetchAll();
     $group_content = [
@@ -181,6 +162,14 @@ QUERY;
       }
     }
 
+    // Get the group content ids.
+    $content = $group->getGroupContentIds();
+    $content_ids = [];
+
+    array_walk_recursive($content, function ($value) use (&$content_ids) {
+      $content_ids[] = $value;
+    });
+
     // For solutions, count releases and distributions.
     if ($group instanceof SolutionInterface) {
       $releases_and_distributions_ids = $this->sparql->query($this->getRelasesAndDistributionsQuery($entity_id));
@@ -190,6 +179,7 @@ QUERY;
         $entity = $rdf_storage->load((string) $result_id->entity_id);
         $group_content[$entity->bundle()]++;
       }
+      $content_ids[] = $group->id();
     }
     // For collections simply pass the number of solutions (affiliates).
     else {
@@ -225,7 +215,25 @@ QUERY;
       + $group_content['asset_distribution'],
       'Number of members' => $memberships,
       'Description word count' => str_word_count(strip_tags($description)),
+      'Total number of likes' => !empty($content_ids) ? $this->getLikesCount($content_ids) : 0,
     ];
+  }
+
+  /**
+   * Retrieves the sum of likes for the provided group entity IDs.
+   *
+   * @param array $entity_ids
+   *   An array of group entity IDs for calculating the sum of likes.
+   *
+   * @return string
+   *   The sum of likes as a string value.
+   */
+  private function getLikesCount(array $entity_ids): string {
+    $query = $this->mysql->select('flag_counts', 'fc');
+    $query->addExpression('IFNULL(SUM(count), 0)', 'sum');
+    $query->condition('flag_id', ['like_node', 'like_rdf_entity'], 'IN');
+    $query->condition('entity_id', $entity_ids, 'IN');
+    return $query->execute()->fetchField();
   }
 
   /**
