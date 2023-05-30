@@ -280,12 +280,8 @@ class RdfEntityProvenanceContext extends RawDrupalContext {
       return;
     }
 
-    // Since we might be cleaning up many activities, temporarily disable the
-    // feature to commit the index after every query.
-    $this->disableCommitOnUpdate();
     \Drupal::entityTypeManager()->getStorage('rdf_entity')->delete($this->provenanceActivities);
     $this->provenanceActivities = [];
-    $this->enableCommitOnUpdate();
   }
 
 }
