@@ -8,11 +8,13 @@
 declare(strict_types = 1);
 
 use Drupal\Component\Render\PlainTextOutput;
+use Drupal\Component\Utility\Unicode;
 use Drupal\Component\Utility\Xss;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\Element;
 use Drupal\Core\Render\Markup;
 use Drupal\Core\Session\AccountInterface;
+use Drupal\Core\Session\AnonymousUserSession;
 use Drupal\joinup_notification\MessageArgumentGenerator;
 use Drupal\joinup_user\Entity\JoinupUser;
 use Drupal\joinup_user\Entity\JoinupUserInterface;
@@ -683,4 +685,16 @@ function joinup_user_form_views_form_user_admin_people_page_alter(array &$form, 
       unset($form['user_bulk_form'][$delta]);
     }
   }
+}
+
+/**
+ * Implements hook_preprocess_username().
+ *
+ * Truncates user names longer than 24 characters but also passes full name
+ * so it can be rendered in the title attribute.
+ */
+function joinup_user_preprocess_username(array &$variables): void {
+  $account = $variables['account'] ?: new AnonymousUserSession();
+  $variables['name_full'] = $account->getDisplayName();
+  $variables['name'] = Unicode::truncate($account->getDisplayName(), 24, FALSE, TRUE);
 }

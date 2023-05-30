@@ -164,9 +164,6 @@ class EifContext extends RawDrupalContext {
    * @AfterScenario @eif_community&&@api
    */
   public function cleanEifData(AfterScenarioScope $scope): void {
-    // Temporarily disable the feature to commit the index after every query.
-    $this->disableCommitOnUpdate();
-
     $rdf_ids = [
       EifInterface::EIF_ID,
       'http://nifo.collection',
@@ -180,7 +177,6 @@ class EifContext extends RawDrupalContext {
     }
 
     Term::load('http://example.com/term/1')->delete();
-    $this->enableCommitOnUpdate();
   }
 
   /**

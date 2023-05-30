@@ -55,9 +55,9 @@ dependencies:
     - joinup_search
 third_party_settings:
   search_api_solr:
-    finalize: false
+    finalize: true
     commit_before_finalize: false
-    commit_after_finalize: false
+    commit_after_finalize: true
     debug_finalize: false
     highlighter:
       maxAnalyzedChars: 51200
@@ -95,7 +95,20 @@ third_party_settings:
     multilingual:
       limit_to_content_language: false
       include_language_independent: true
-      specific_languages: {  }
+      use_language_undefined_as_fallback_language: false
+      specific_languages:
+        cs: '0'
+        da: '0'
+        nl: '0'
+        en: '0'
+        et: '0'
+        fr: '0'
+        de: '0'
+        el: '0'
+        it: '0'
+        sl: '0'
+        es: '0'
+      use_universal_collation: false
 id: published
 name: 'Published entities index'
 description: ''
@@ -955,6 +968,7 @@ processor_settings:
   aggregated_topic_hierarchy:
     weights:
       preprocess_index: -50
+  auto_aggregated_fulltext_field: {  }
   entity_type: {  }
   hierarchy:
     weights:
