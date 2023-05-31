@@ -279,6 +279,7 @@ function _joinup_core_get_media(string $media_type, mixed $value, int $uid, stri
   $media_ids = $media_storage->getQuery()->accessCheck(FALSE)
     ->condition('bundle', $media_type)
     ->condition($media_type, $value)
+    ->condition('og_audience', $group_id)
     ->execute();
   if ($media_ids) {
     $media = $media_storage->load(reset($media_ids));
