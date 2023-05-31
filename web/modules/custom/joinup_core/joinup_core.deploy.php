@@ -75,6 +75,32 @@ function joinup_core_deploy_109401(array &$sandbox): string {
       return [(int) $item[0], $item[1], (bool) $item[2], (int) $item[3]];
     }, $db->query($sql)->fetchAll(\PDO::FETCH_NUM));
 
+    // The most relevant part in this query is getting the topmost node ID as we
+    // need the node's group ID and owner but the paragraphs are nested.
+    // @see https://dba.stackexchange.com/questions/291321/get-the-highest-parent-id-recursively-in-mysql
+    $sql = <<<QUERY
+      WITH RECURSIVE cte AS (
+        SELECT id, type, parent_id, parent_id AS topmost_nid, revision_id
+          FROM {paragraphs_item_field_data}
+          WHERE parent_type = 'node'
+        UNION ALL
+        SELECT t.id, t.type, t.parent_id, cte.topmost_nid, t.revision_id
+          FROM {paragraphs_item_field_data} t
+          INNER JOIN cte ON t.parent_id = cte.id
+      )
+      SELECT r.revision_id, o.og_audience_target_id, IF(cte.revision_id = r.revision_id, 1, 0) AS current_revision, n.uid
+        FROM cte
+        INNER JOIN {node__og_audience} o ON cte.topmost_nid = o.entity_id
+        INNER JOIN {node_field_data} n ON cte.topmost_nid = n.nid
+        LEFT JOIN {paragraphs_item_revision_field_data} r ON cte.id = r.id
+        LEFT JOIN {paragraph_revision__field_body} b ON r.revision_id = b.revision_id
+        WHERE cte.type = 'simple_paragraph'
+        AND (b.field_body_value LIKE '%preview_thumbnail%' OR b.field_body_value LIKE '%<img%data-entity-type="file"%')
+      QUERY;
+    $sandbox['tasks']['paragraph'] = array_map(function (array $item): array {
+      return [(int) $item[0], $item[1], (bool) $item[2], (int) $item[3]];
+    }, $db->query($sql)->fetchAll(\PDO::FETCH_NUM));
+
     $sparql_query = <<<QUERY
       SELECT ?graph ?entityId
       FROM NAMED <http://joinup.eu/collection/published>
@@ -100,7 +126,7 @@ function joinup_core_deploy_109401(array &$sandbox): string {
 
     $sandbox['fids'] = $db->query("SELECT uuid, fid FROM {file_managed}")->fetchAllKeyed();
     $sandbox['count'] = 0;
-    $sandbox['max'] = count($sandbox['tasks']['node']) + count($sandbox['tasks']['rdf_entity']);
+    $sandbox['max'] = count($sandbox['tasks']['node']) + count($sandbox['tasks']['paragraph']) + count($sandbox['tasks']['rdf_entity']);
   }
 
   $type = array_key_first($sandbox['tasks']);
