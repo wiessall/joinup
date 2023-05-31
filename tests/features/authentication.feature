@@ -25,6 +25,7 @@ Feature: User authentication
       | admin/config                                        |
       | admin/config/search/redirect                        |
       | admin/content                                       |
+      | admin/content/files                                 |
       | admin/content/media                                 |
       | admin/content/rdf                                   |
       | admin/legal-notice                                  |
@@ -107,6 +108,7 @@ Feature: User authentication
       | admin                                               |
       | admin/config                                        |
       | admin/content                                       |
+      | admin/content/files                                 |
       | admin/content/media                                 |
       | admin/content/messages                              |
       | admin/content/rdf                                   |
@@ -175,6 +177,7 @@ Feature: User authentication
       | path                                        |
       | admin/content/media                         |
       | admin/content/rdf                           |
+      | admin/content/files                         |
       | admin/legal-notice                          |
       | admin/legal-notice/add                      |
       | admin/people                                |
@@ -258,6 +261,7 @@ Feature: User authentication
       | admin                              |
       | admin/config                       |
       | admin/content                      |
+      | admin/content/files                                 |
       | admin/content/media                |
       | admin/content/rdf                  |
       | admin/legal-notice                 |

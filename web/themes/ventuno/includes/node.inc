@@ -122,6 +122,7 @@ function ventuno_preprocess_node(array &$variables): void {
  * Implements hook_preprocess_node().
  */
 function ventuno_preprocess_node__view_mode_tile(array &$variables, string $entity_type_id): void {
+  /** @var \Drupal\Core\Entity\ContentEntityInterface $entity */
   $entity = $variables[$entity_type_id];
   /** @var \Drupal\Core\Datetime\DateFormatterInterface $date_formatter */
   $date_formatter = Drupal::service('date.formatter');
@@ -144,7 +145,7 @@ function ventuno_preprocess_node__view_mode_tile(array &$variables, string $enti
           '@changed' => $date_formatter->format($changed_time, 'custom', 'd/m/Y, h:s'),
         ]);
       }
-      $node = $variables['elements']['#node'];
+      $node = \Drupal::entityTypeManager()->getStorage('node')->load($entity->id());
       $variables['extra_data'][] = [
         'icon' => 'chat',
         'label' => $node->get('field_replies')->comment_count,
