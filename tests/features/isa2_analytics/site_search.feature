@@ -12,12 +12,12 @@ Feature: Site search
 
   Scenario: Search results should contain a total count when results are available.
     And the following collections:
-      | title                  | description               | abstract               | state     |
-      | Collection total count | No description available. | No abstract available. | validated |
+      | title                  | description               | abstract               | state     | creation date    | modification date |
+      | Collection total count | No description available. | No abstract available. | validated | 03-08-2023 12:05 | 03-04-2022 12:05  |
     And news content:
-      | title                | headline             | body               | collection             | state     |
-      | News total count     | News total count     | No body available. | Collection total count | validated |
-      | News total count new | News total count new | No body available. | Collection total count | draft     |
+      | title                | headline             | body               | collection             | state     | created    | changed    |
+      | News total count     | News total count     | No body available. | Collection total count | validated | 01/01/2019 | 03/03/2022 |
+      | News total count new | News total count new | No body available. | Collection total count | draft     | 01/01/2019 | 03/02/2022 |
     When I am on the homepage
     And I enter "total count" in the search bar and press enter
     Then I should see the following tiles in the correct order:
@@ -38,7 +38,7 @@ Feature: Site search
     And I press "Publish"
     And I enter "total count" in the search bar and press enter
     Then I should see the following tiles in the correct order:
+      | News total count new   |
       | Collection total count |
       | News total count       |
-      | News total count new   |
     And the response should contain "\"search\":{\"keyword\":\"total count\",\"count\":3}"
