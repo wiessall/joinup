@@ -120,7 +120,7 @@ Feature: Archived content on content listings - groups and paragraphs.
 
     When I am logged in as a moderator
     And I go to the edit form of the "Archived news" news
-    When I press "Unarchive"
+    And I press "Unarchive"
     Then I should see the heading "Archived news"
 
     And I go to the "Some collection" collection
@@ -129,3 +129,10 @@ Feature: Archived content on content listings - groups and paragraphs.
     And I should see the "Published news" tile
     And I should see the "Archived news" tile
     But I should not see the "collection content archived toggle" facet
+
+    When I go to the edit form of the "Archived news" news
+    And I press "Archive"
+    And I go to the "Some collection" collection
+    Then I should see the "Published news" tile
+    But I should not see the "Archived news" tile
+    And I should see the "collection content archived toggle" facet
