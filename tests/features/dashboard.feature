@@ -15,3 +15,4 @@ Feature: Dashboard
       | Licences overview        |
       | Curated content listings |
       | Topics                   |
+      | Files                    |

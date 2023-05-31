@@ -97,7 +97,7 @@ Feature: Collection content
 
   Scenario: Content type facet labels should show the plural form when multiple results are available.
     Given I go to the homepage of the "Turin Egyptian Collection" collection
-    Then the "Discussion" content tab is displayed
+    Then the "Discussion" content tab is not displayed
     And the "Document" content tab is displayed
     And the "Event" content tab is displayed
     And I should see the link "1 News"
@@ -125,7 +125,7 @@ Feature: Collection content
       | Understand the restoration process | validated | Turin Egyptian Collection |
 
     Given I reload the page
-    Then the "Discussions" content tab is displayed
+    Then the "Discussions" content tab is not displayed
     And the "Documents" content tab is displayed
     And the "Events" content tab is displayed
     And I should see the link "2 News"
@@ -142,15 +142,6 @@ Feature: Collection content
     And I should see the link "Tomb Of Unknown Restoration" in the "Tomb Of Unknown Restoration" tile
     And I should see the text "HR" in the "Tomb Of Unknown Restoration" tile
     And I should see the text "Solution" in the "Tomb Of Unknown Restoration" tile
-    # Check the discussion tile.
-    Then I should see the "Bigger than Egyptian Museum of Cairo?" tile
-    And I should see the text "Last activity: 25/12/2019, 03:00" in the "Bigger than Egyptian Museum of Cairo?" tile
-    And I should see the link "Bigger than Egyptian Museum of Cairo?" in the "Bigger than Egyptian Museum of Cairo?" tile
-    And I should see the text "Finance in EU" in the "Bigger than Egyptian Museum of Cairo?" tile
-    And I should see the text "Supplier exchange" in the "Bigger than Egyptian Museum of Cairo?" tile
-    And I should see the text "+1 topic" in the "Bigger than Egyptian Museum of Cairo?" tile
-    And I should see the statistics "0" in the "Bigger than Egyptian Museum of Cairo?" tile
-    And I should see the text "Discussion" in the "Bigger than Egyptian Museum of Cairo?" tile
     # Check the document tile.
     And I should see the "Upper Floor Map" tile
     And I should see the text "Last update: 30/11/2017" in the "Upper Floor Map" tile
@@ -178,3 +169,14 @@ Feature: Collection content
     And I should see the text "Last update: 30/11/2017" in the "Watch the mummy conservation technique" tile
     And I should see the link "Watch the mummy conservation technique" in the "Watch the mummy conservation technique" tile
     And I should see the text "Video" in the "Watch the mummy conservation technique" tile
+
+    # Check the discussion tile.
+    When I go to the discussions page of "Turin Egyptian Collection"
+    Then I should see the "Bigger than Egyptian Museum of Cairo?" tile
+    And I should see the text "Last activity: 25/12/2019, 03:00" in the "Bigger than Egyptian Museum of Cairo?" tile
+    And I should see the link "Bigger than Egyptian Museum of Cairo?" in the "Bigger than Egyptian Museum of Cairo?" tile
+    And I should see the text "Finance in EU" in the "Bigger than Egyptian Museum of Cairo?" tile
+    And I should see the text "Supplier exchange" in the "Bigger than Egyptian Museum of Cairo?" tile
+    And I should see the text "+1 topic" in the "Bigger than Egyptian Museum of Cairo?" tile
+    And I should see the statistics "0" in the "Bigger than Egyptian Museum of Cairo?" tile
+    And I should see the text "Discussion" in the "Bigger than Egyptian Museum of Cairo?" tile
