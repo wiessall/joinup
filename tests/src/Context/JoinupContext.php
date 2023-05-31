@@ -40,7 +40,6 @@ use Drupal\node\Entity\Node;
 use Drupal\og\OgGroupAudienceHelperInterface;
 use Drupal\og\OgRoleInterface;
 use Drupal\paragraphs\Entity\Paragraph;
-use Drupal\search_api\Entity\Server;
 use GuzzleHttp\Client;
 use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\ExpectationFailedException;
@@ -448,29 +447,6 @@ class JoinupContext extends RawDrupalContext {
 
     foreach ($options as $option) {
       Assert::assertContains($option, $available_optgroups, "The '{$select}' select doesn't contain the option '{$option}''.", TRUE);
-    }
-  }
-
-  /**
-   * Commit the solr index for testing purposes.
-   *
-   * @Then I commit the solr index
-   */
-  public function iCommitTheSolrIndex() {
-    $search_servers = Server::loadMultiple();
-    /** @var \Drupal\search_api\Entity\Server $search_server */
-    foreach ($search_servers as $search_server) {
-      $backend_id = $search_server->getBackendId();
-      if (!$backend_id == 'search_api_solr') {
-        continue;
-      }
-      /** @var \Drupal\search_api_solr\Plugin\search_api\backend\SearchApiSolrBackend $backend */
-      $backend = $search_server->getBackend();
-      /** @var \Drupal\search_api_solr\SolrConnectorInterface $connector */
-      $connector = $backend->getSolrConnector();
-      $update = $connector->getUpdateQuery();
-      $update->addCommit(TRUE, TRUE);
-      $connector->update($update);
     }
   }
 
