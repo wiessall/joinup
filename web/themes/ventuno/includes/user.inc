@@ -91,7 +91,7 @@ function ventuno_preprocess_user__view_mode_tile(array &$variables): void {
   $user = $variables['elements']['#user'];
 
   // Text.
-  $nationality = $business_title = null;
+  $nationality = $business_title = NULL;
   if (!$user->get('field_user_business_title')->isEmpty()) {
     $business_title = $user->get('field_user_business_title')->value;
   }
