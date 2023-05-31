@@ -135,7 +135,6 @@ class JoinupGroupUserPermissionValidator extends ArgumentValidatorPluginBase {
       '#title' => $this->t('Select group permission'),
       '#options' => $group_options + $site_wide_options,
       '#default_value' => $this->options['group_permission'],
-      '#required' => TRUE,
     ];
     $form['validate_site_permission'] = [
       '#type' => 'checkbox',
