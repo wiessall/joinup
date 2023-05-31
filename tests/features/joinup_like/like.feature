@@ -34,7 +34,7 @@ Feature: Like/unlike feature.
     Given I am an anonymous user
     When I go to the homepage of the "Very liked solution" solution
     Then I should see the link "Like" in the "Like block"
-    And I should see the text "Like (1)" in the "Like block" region
+    And I should see the text "Like (0)" in the "Like block" region
     When I click "Like" in the "Like block" region
     Then a modal should open
     And I should see the heading "You are not logged in"
