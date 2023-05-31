@@ -40,11 +40,11 @@ dependencies:
     - field.field.rdf_entity.solution.field_is_webdav_url
     - field.field.rdf_entity.solution.field_is_wiki
     - field.field.rdf_entity.solution.field_keywords
-    - field.field.rdf_entity.solution.field_topic
     - field.field.rdf_entity.solution.field_short_id
     - field.field.rdf_entity.solution.field_site_featured
     - field.field.rdf_entity.solution.field_spatial_coverage
     - field.field.rdf_entity.solution.field_status
+    - field.field.rdf_entity.solution.field_topic
     - rdf_entity.rdfentity.solution
   module:
     - field_group
@@ -64,7 +64,7 @@ third_party_settings:
       label: Categorisation
       parent_name: ''
       region: content
-      weight: 2
+      weight: 3
       format_type: html_element
       format_settings:
         classes: ''
@@ -82,7 +82,7 @@ third_party_settings:
       label: Moderation
       parent_name: ''
       region: content
-      weight: 5
+      weight: 6
       format_type: html_element
       format_settings:
         classes: ''
@@ -96,18 +96,19 @@ third_party_settings:
     group_owner_contact_information:
       children:
         - field_is_owner
-        - field_is_contact_information
-      label: 'Owner/Contact Information'
+      label: Owner
       parent_name: ''
       region: content
       weight: 1
       format_type: html_element
       format_settings:
         classes: ''
+        show_empty_fields: false
         id: ''
         element: div
         show_label: true
-        label_element: h3
+        label_element: h2
+        label_element_classes: h3
         attributes: ''
         effect: none
         speed: fast
@@ -117,7 +118,7 @@ third_party_settings:
       label: Documentation
       parent_name: ''
       region: content
-      weight: 4
+      weight: 5
       format_type: html_element
       format_settings:
         classes: ''
@@ -138,7 +139,7 @@ third_party_settings:
       label: 'TRR Information'
       parent_name: ''
       region: content
-      weight: 6
+      weight: 7
       format_type: html_element
       format_settings:
         classes: ''
@@ -156,7 +157,7 @@ third_party_settings:
       label: 'Solution external reference information'
       parent_name: ''
       region: content
-      weight: 3
+      weight: 4
       format_type: html_element
       format_settings:
         classes: ''
@@ -164,6 +165,25 @@ third_party_settings:
         element: div
         show_label: true
         label_element: h3
+        attributes: ''
+        effect: none
+        speed: fast
+    group_contact_information:
+      children:
+        - field_is_contact_information
+      label: 'Contact information'
+      parent_name: ''
+      region: content
+      weight: 2
+      format_type: html_element
+      format_settings:
+        classes: ''
+        show_empty_fields: false
+        id: ''
+        element: div
+        show_label: true
+        label_element: h2
+        label_element_classes: h3
         attributes: ''
         effect: none
         speed: fast
@@ -194,7 +214,7 @@ content:
     region: content
   field_is_contact_information:
     type: entity_reference_entity_view
-    label: above
+    label: hidden
     settings:
       view_mode: about
       link: false
@@ -281,7 +301,7 @@ content:
     region: content
   field_is_owner:
     type: entity_reference_entity_view
-    label: above
+    label: hidden
     settings:
       view_mode: about
       link: false
@@ -343,7 +363,7 @@ content:
   share_link:
     settings: {  }
     third_party_settings: {  }
-    weight: 7
+    weight: 8
     region: content
 hidden:
   changed: true
