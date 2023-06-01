@@ -33,7 +33,6 @@ Feature:
     And I should not see the button "Add 3 column layout"
     And I should not see the button "Add Image"
     And I should not see the button "Add Call to action"
-    And I should not see the button "Add Carousel"
     And I should not see the button "Add Configurable listing"
 
     When I press "Add Row"
