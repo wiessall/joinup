@@ -26,9 +26,9 @@ Feature: Global search
     Then the response should not contain "data-drupal-facet-id=\"status\""
 
     Given news content:
-      | title                | headline              | body             | collection                   | topic                   | spatial coverage | state     |
-      | Rummy title 5        | Rummy news 5          | Dummy body       | Molecular cooking collection | E-inclusion             | Luxembourg       | archived  |
-      | Rummy title 6        | Rummy news 6          | Dummy body       | Molecular cooking collection | E-inclusion             | Luxembourg       | archived  |
+      | title         | headline     | body       | collection                   | topic       | spatial coverage | state    |
+      | Rummy title 5 | Rummy news 5 | Dummy body | Molecular cooking collection | E-inclusion | Luxembourg       | archived |
+      | Rummy title 6 | Rummy news 6 | Dummy body | Molecular cooking collection | E-inclusion | Luxembourg       | archived |
 
     Given I am logged in as a user with the "authenticated" role
     Then I visit the search page
@@ -124,19 +124,19 @@ Feature: Global search
     And I should not see the "El Celler de Can Roca" tile
 
     Given I am on the search page
-    When I check the "Include archived items" checkbox from the "Status" facet
-    And I should see the "Molecular cooking collection" tile
-    And I should see the "Spherification" tile
-    And I should see the "Foam" tile
-    And I should see the "El Celler de Can Roca" tile
-    And I should see the "Dummy news 1" tile
-    And I should see the "Dummy news 2" tile
-    And I should see the "Dummy news 3" tile
-    And I should see the "Dummy news 4" tile
+    When I check the "Show Archived items" checkbox from the "Status" facet
+    And I should not see the "Molecular cooking collection" tile
+    And I should not see the "Spherification" tile
+    And I should not see the "Foam" tile
+    And I should not see the "El Celler de Can Roca" tile
+    And I should not see the "Dummy news 1" tile
+    And I should not see the "Dummy news 2" tile
+    And I should not see the "Dummy news 3" tile
+    And I should not see the "Dummy news 4" tile
     And I should see the "Rummy news 5" tile
     And I should see the "Rummy news 6" tile
 
-    Then I check the "Include archived items" checkbox from the "Status" facet
+    Then I check the "Show Archived items" checkbox from the "Status" facet
     And I should see the "Molecular cooking collection" tile
     And I should see the "Spherification" tile
     And I should see the "Foam" tile
@@ -455,10 +455,10 @@ Feature: Global search
 
     # Add a new distribution, child of a release.
     Given the following release:
-      | title           | Releazz   |
-      | release number  | 1         |
-      | state           | validated |
-      | is version of   | Zzolution |
+      | title          | Releazz   |
+      | release number | 1         |
+      | state          | validated |
+      | is version of  | Zzolution |
 
     When I enter "ReleazzDistro" in the search bar and press enter
     Then I should see "No content found for your search."
@@ -654,19 +654,17 @@ Feature: Global search
     Given I am logged in as a user with the "authenticated" role
     When I visit the search page
     And I should not see search bar icon in navbar
-    And I enter "funn" in the search bar
+    And I enter "fu" in the search bar
     And I wait for AJAX to finish
     Then I should see the following search suggestions:
-      | funni |
-      | funny |
+      | Spheres  |
+      | Movistar |
 
     When I enter "cook" in the search bar
     And I wait for AJAX to finish
     Then I should see the following search suggestions:
-      | Radio cooking collection |
       | Movistar                 |
-      | cooking                  |
-      | cook                     |
+      | Radio cooking collection |
 
     When I check the "Solutions (2)" checkbox from the "Content types" facet
     And I check the "News (5)" checkbox from the "Content types" facet
@@ -688,20 +686,20 @@ Feature: Global search
     When I visit the collection overview
     And I should see search bar icon in navbar
     Then I should toggle search bar in navbar
-    And I enter "funn" in the search bar
+    And I enter "fu" in the search bar
     And I wait for AJAX to finish
     Then I should see the following search suggestions:
-      | funni |
-      | funny |
+      | Spheres  |
+      | Movistar |
 
     # Check if search autocomplete works in homepage's header search bar.
     Given I am on the homepage
     Then I should see the search bar in homepage's header
-    And I enter "funn" in the search bar
+    And I enter "fu" in the search bar
     And I wait for AJAX to finish
     Then I should see the following search suggestions:
-      | funni |
-      | funny |
+      | Spheres  |
+      | Movistar |
 
     # Check if search did you mean works.
     Given I visit the search page
@@ -721,12 +719,13 @@ Feature: Global search
     Then I enter "sp" in the search bar
     And I wait for AJAX to finish
     Then I should see the following search suggestions:
-      | Spheres        |
-      | Movistar       |
-      | spheres        |
-      | spherification |
-      | sphere         |
-      | spherif        |
+      | Radio cooking collection |
+      | Spheres                  |
+      | Movistar                 |
+      | spheres                  |
+      | spherification           |
+      | sphere                   |
+      | spherif                  |
 
   @terms
   Scenario: Filter on date
