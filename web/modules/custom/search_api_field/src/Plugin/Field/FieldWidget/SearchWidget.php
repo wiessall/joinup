@@ -152,8 +152,6 @@ class SearchWidget extends WidgetBase implements ContainerFactoryPluginInterface
       '#default_value' => $default_values['enabled'] ?? TRUE,
     ];
 
-    // Construct a string that represents the name of the enabled field.
-    $field_name = $this->fieldDefinition->getName();
     // Wrap all the remaining elements so they can be hidden when the above
     // checkbox is unchecked.
     $element['wrapper'] = [
@@ -248,12 +246,12 @@ class SearchWidget extends WidgetBase implements ContainerFactoryPluginInterface
   }
 
   /**
-   * Gets name of the enabled field
+   * Gets name of the enabled field.
    *
    * @param int $delta
    *   Delta.
    * @param array $element
-   *   Element
+   *   Element.
    *
    * @return string
    *   Name of enabled field
