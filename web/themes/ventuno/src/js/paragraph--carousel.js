@@ -16,7 +16,8 @@ import Glide, {
         const slides = document.querySelectorAll(".paragraph--carousel .glide");
         slides.forEach((slide) => {
           const glide = new Glide(slide, {
-            type: "carousel",
+            rewind: false,
+            bound: true,
             gap: 16,
             perView: 4,
             breakpoints: {
