@@ -131,8 +131,8 @@ module.exports = {
     },
     // Third party
     {
-      entry: path.resolve(outputFolder, "src/js/glide.js"),
-      dest: path.resolve(outputFolder, "assets/js/glide.js"),
+      entry: path.resolve(outputFolder, "src/js/explore-block.js"),
+      dest: path.resolve(outputFolder, "assets/js/explore-block.js"),
       options: {
         name: "glide",
         minify: true,
