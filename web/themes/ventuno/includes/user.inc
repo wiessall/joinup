@@ -87,7 +87,7 @@ function ventuno_preprocess_user__view_mode_tile(array &$variables): void {
     $business_title = $user->get('field_user_business_title')->value;
   }
   if (!$user->get('field_user_nationality')->isEmpty()) {
-    $nationality = t('Country of origin') . ': ' . $user->get('field_user_nationality')->entity->label();
+    $nationality = t('Country of origin: @country', ['@country' => $user->get('field_user_nationality')->entity->label()]);
   }
   if ($business_title && $nationality) {
     $variables['text']['#markup'] = $business_title . '<br>' . $nationality;
