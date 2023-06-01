@@ -1,0 +1,21 @@
+uuid: 725a1e4c-bbb7-4d13-985d-bb654e755398
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.paragraph_heading
+    - paragraphs.paragraphs_type.github_feed
+id: paragraph.github_feed.paragraph_heading
+field_name: paragraph_heading
+entity_type: paragraph
+bundle: github_feed
+label: Heading
+description: ''
+required: true
+translatable: true
+default_value:
+  -
+    value: 'Github feed'
+default_value_callback: ''
+settings: {  }
+field_type: string
