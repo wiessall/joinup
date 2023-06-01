@@ -18,7 +18,8 @@ import Glide, {
         const slides = document.querySelectorAll(".tab-pane.active .glide");
         slides.forEach((slide) => {
           const glide = new Glide(slide, {
-            type: "carousel",
+            rewind: false,
+            bound: true,
             gap: 24,
             perView: 4,
             wrapperWidth: 300,
