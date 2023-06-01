@@ -1,6 +1,6 @@
 /**
  * @file
- * Glide slider configuration.
+ * Glide slider configuration for explore block.
  */
 import Glide, {
   Controls,
