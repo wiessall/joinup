@@ -1,0 +1,23 @@
+uuid: 147579ee-5634-4a25-b4a6-d7c3a655214e
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.paragraph_link_to_repository
+    - paragraphs.paragraphs_type.github_feed
+id: paragraph.github_feed.paragraph_link_to_repository
+field_name: paragraph_link_to_repository
+entity_type: paragraph
+bundle: github_feed
+label: 'Link to repository'
+description: 'If checked, will display a link to the repository under the Github feed.'
+required: false
+translatable: false
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  on_label: 'On'
+  off_label: 'Off'
+field_type: boolean
