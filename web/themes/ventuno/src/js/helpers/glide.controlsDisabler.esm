@@ -1,6 +1,6 @@
 /**
  * @file
- * Highlight the invalid required field(s) adding corresponding class.
+ * Modify GlideJS controls depending on specific cases.
  */
 const classes = {
   controls: "glide__arrows",
