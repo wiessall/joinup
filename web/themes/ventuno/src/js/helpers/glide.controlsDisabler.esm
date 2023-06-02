@@ -1,6 +1,8 @@
 /**
  * @file
- * Modify GlideJS controls depending on specific cases.
+ * Disables GlideJS controls depending on specific cases.
+ *
+ * Strongly based on https://github.com/glidejs/glide/issues/307#issuecomment-502729940
  */
 const classes = {
   controls: "glide__arrows",
@@ -14,6 +16,13 @@ function ControlsDisabler(Glide, Components) {
       // Only in effect when rewinding is disabled
       if (Glide.settings.rewind) {
         return;
+      }
+
+      // Prevent swipe if there are not enough items to fill available space.
+      if (Components.Sizes.length <= Glide.settings.perView) {
+        // Unfortunately `Swipe.disable()` does not work even though it should,
+        // see https://glidejs.com/docs/components/swipe#disable-
+        Glide.disable();
       }
 
       Glide.on(["mount.after", "run"], () => {
@@ -35,8 +44,7 @@ function ControlsDisabler(Glide, Components) {
           const right = controlItem.querySelector(`.${classes.nextArrow}`);
           if (right) {
             // Glide.index is based on the active slide
-            // For bound: true, there will be no empty space & the last slide will never become active
-            // Hence add perView to correctly calculate the last slide
+            // For bound: true, add perView to correctly calculate the last slide
             const lastSlideIndex = Glide.settings.bound
               ? Glide.index + (Glide.settings.perView - 1)
               : Glide.index;
