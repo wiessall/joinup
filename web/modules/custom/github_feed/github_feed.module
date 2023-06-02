@@ -46,7 +46,17 @@ function github_feed_theme($existing, $type, $theme, $path) {
  * Implements template_preprocess_HOOK().
  */
 function template_preprocess_github_feed(array &$variables) {
-  $variables['type_parsed'] = str_replace('_', ' ', $variables['type']);
+  switch ($variables['type']) {
+    case 'issue':
+      $variables['type_parsed'] = t('issues');
+      break;
+    case 'pull_request':
+      $variables['type_parsed'] = t('pull requests');
+      break;
+    case 'events':
+      $variables['type_parsed'] = t('activity stream');
+      break;
+  }
 }
 
 /**

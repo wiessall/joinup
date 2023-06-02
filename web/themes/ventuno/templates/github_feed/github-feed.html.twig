@@ -1,0 +1,16 @@
+{#
+  * Default template for the Github feed.
+  * Variables:
+  * - @todo full_name: The full name of the project.
+  * - items: The feed object.
+  * - url: The url of the feed.
+  * - type: The type of the feed.
+#}
+<div class="github-feed">
+  <h3 class="h4">{{ full_name }} {{ type_parsed }}:</h3>
+  {% for item in items %}
+    <div class="github-feed-item border rounded p-3 mb-3">
+      {{ item }}
+    </div>
+  {% endfor %}
+</div>
