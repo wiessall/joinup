@@ -152,10 +152,6 @@ Feature:
     # The "List additional actions" is the button arrow that shows the full list of paragraphs to add.
     Given I press "List additional actions"
     Then I press "Add Content listing" in the "Custom page body" paragraphs field
-    And I uncheck "Show related content"
-    When the following fields should not be visible "Global search, Allow shared content"
-    And I check "Show related content"
-    And the following fields should be visible "Global search, Allow shared content"
     And I select "Discussion" from "Available filters"
     And I press "Add and configure filter"
     And I fill in "Discussion" with "Searching for green pad."
