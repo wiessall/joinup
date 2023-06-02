@@ -1,0 +1,59 @@
+/**
+ * @file
+ * Highlight the invalid required field(s) adding corresponding class.
+ */
+const classes = {
+  controls: "glide__arrows",
+  backArrow: "glide__arrow--left",
+  nextArrow: "glide__arrow--right",
+};
+
+function ControlsDisabler(Glide, Components) {
+  return {
+    mount() {
+      // Only in effect when rewinding is disabled
+      if (Glide.settings.rewind) {
+        return;
+      }
+
+      Glide.on(["mount.after", "run"], () => {
+        Components.Controls.items.forEach((controlItem) => {
+          // Set left arrow state
+          const left = controlItem.querySelector(`.${classes.backArrow}`);
+          if (left) {
+            if (
+              Glide.index === 0 ||
+              Components.Sizes.length <= Glide.settings.perView
+            ) {
+              left.setAttribute("disabled", ""); // Disable on first slide
+            } else {
+              left.removeAttribute("disabled"); // Enable on other slides
+            }
+          }
+
+          // Set right arrow state
+          const right = controlItem.querySelector(`.${classes.nextArrow}`);
+          if (right) {
+            // Glide.index is based on the active slide
+            // For bound: true, there will be no empty space & the last slide will never become active
+            // Hence add perView to correctly calculate the last slide
+            const lastSlideIndex = Glide.settings.bound
+              ? Glide.index + (Glide.settings.perView - 1)
+              : Glide.index;
+
+            if (
+              lastSlideIndex === Components.Sizes.length - 1 ||
+              Components.Sizes.length <= Glide.settings.perView
+            ) {
+              right.setAttribute("disabled", ""); // Disable on last slide
+            } else {
+              right.removeAttribute("disabled"); // Disable on other slides
+            }
+          }
+        });
+      });
+    },
+  };
+}
+
+export default ControlsDisabler;
