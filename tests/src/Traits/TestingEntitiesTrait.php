@@ -34,10 +34,6 @@ trait TestingEntitiesTrait {
       return;
     }
 
-    // Since we might be cleaning up many entities, temporarily disable the
-    // feature to commit the index after every query.
-    $this->disableCommitOnUpdate();
-
     foreach ($this->entities as $entity_type_id => $entities) {
       if (!empty($entities)) {
         $storage = \Drupal::entityTypeManager()->getStorage($entity_type_id);
@@ -49,7 +45,6 @@ trait TestingEntitiesTrait {
       }
     }
     $this->entities = [];
-    $this->enableCommitOnUpdate();
   }
 
 }
