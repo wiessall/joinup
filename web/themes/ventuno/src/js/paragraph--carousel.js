@@ -8,6 +8,7 @@ import Glide, {
   Swipe,
   // eslint-disable-next-line import/no-unresolved
 } from "@glidejs/glide/dist/glide.modular.esm";
+import ControlsDisabler from "./helpers/glide.controlsDisabler.esm";
 
 (() => {
   Drupal.behaviors.glide = {
@@ -18,6 +19,7 @@ import Glide, {
           const glide = new Glide(slide, {
             rewind: false,
             bound: true,
+            dragThreshold: false,
             gap: 16,
             perView: 4,
             breakpoints: {
@@ -27,7 +29,7 @@ import Glide, {
             },
           });
 
-          glide.mount({ Controls, Breakpoints, Swipe });
+          glide.mount({ Controls, Breakpoints, Swipe, ControlsDisabler });
           const forward = slide.querySelector(".glide__arrow--right");
           const backward = slide.querySelector(".glide__arrow--left");
 
