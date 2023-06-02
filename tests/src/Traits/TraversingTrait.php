@@ -336,22 +336,25 @@ trait TraversingTrait {
    *   (optional) Limit to a specific html tag when searching for an element.
    *   This can be useful in cases where the data drupal facet id is placed in
    *   more than one html tag e.g. the dropdown has the id placed in both the
-   *   <li> tag of links as well as the <select> element.
+   *   <li> tag of links and the <select> element.
+   * @param bool $throw_exception
+   *   (optional) Whether to throw an exception if the facet is not found.
+   *   Defaults to TRUE.
    *
-   * @return \Behat\Mink\Element\NodeElement
+   * @return \Behat\Mink\Element\NodeElement|null
    *   The facet node element.
    *
    * @throws \Exception
    *   Thrown when the facet is not found in the designated area.
    */
-  protected function findFacetByAlias(string $alias, ?NodeElement $region = NULL, string $html_tag = '*'): NodeElement {
+  protected function findFacetByAlias(string $alias, ?NodeElement $region = NULL, string $html_tag = '*', bool $throw_exception = TRUE): ?NodeElement {
     if ($region === NULL) {
       $region = $this->getSession()->getPage();
     }
     $facet_id = self::getFacetIdFromAlias($alias);
     $element = $region->find('xpath', "//{$html_tag}[@data-drupal-facet-id='{$facet_id}']");
 
-    if (!$element) {
+    if (!$element && $throw_exception) {
       throw new \Exception("The facet '$alias' was not found in the page.");
     }
 
@@ -374,26 +377,28 @@ trait TraversingTrait {
    */
   protected static function getFacetIdFromAlias(string $alias): string {
     $mappings = [
-      'collection type' => 'collection_type',
-      'collection topic' => 'collection_topic',
-      'collection/solution' => 'group',
-      'topic' => 'topic',
-      'solution topic' => 'solution_topic',
-      'solution spatial coverage' => 'solution_spatial_coverage',
-      'spatial coverage' => 'spatial_coverage',
-      'My solutions content' => 'solution_my_content',
+      'Collection event date' => 'collection_event_type',
+      'Content listing types' => 'content_listing_type',
+      'Content types' => 'type',
+      'EIF recommendations' => 'category',
+      'Event date' => 'event_date',
       'My collections content' => 'collection_my_content',
       'My content' => 'content_my_content',
-      'User content' => 'user_content_bundle',
-      'Event date' => 'event_date',
-      'EIF recommendations' => 'category',
-      'Collection event date' => 'collection_event_type',
-      'Content types' => 'type',
-      'Content listing types' => 'content_listing_type',
-      'eif principle' => 'principle',
-      'eif interoperability layer' => 'interoperability_layer',
-      'eif conceptual model' => 'conceptual_model',
+      'My solutions content' => 'solution_my_content',
       'Status' => 'status',
+      'User content' => 'user_content_bundle',
+      'collection content archived toggle' => 'field_collection_content_status',
+      'collection topic' => 'collection_topic',
+      'collection type' => 'collection_type',
+      'collection/solution' => 'group',
+      'eif conceptual model' => 'conceptual_model',
+      'eif interoperability layer' => 'interoperability_layer',
+      'eif principle' => 'principle',
+      'solution content archived toggle' => 'field_is_content_status',
+      'solution spatial coverage' => 'solution_spatial_coverage',
+      'solution topic' => 'solution_topic',
+      'spatial coverage' => 'spatial_coverage',
+      'topic' => 'topic',
     ];
 
     if (!isset($mappings[$alias])) {

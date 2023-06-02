@@ -26,9 +26,9 @@ Feature: Global search
     Then the response should not contain "data-drupal-facet-id=\"status\""
 
     Given news content:
-      | title                | headline              | body             | collection                   | topic                   | spatial coverage | state     |
-      | Rummy title 5        | Rummy news 5          | Dummy body       | Molecular cooking collection | E-inclusion             | Luxembourg       | archived  |
-      | Rummy title 6        | Rummy news 6          | Dummy body       | Molecular cooking collection | E-inclusion             | Luxembourg       | archived  |
+      | title         | headline     | body       | collection                   | topic       | spatial coverage | state    |
+      | Rummy title 5 | Rummy news 5 | Dummy body | Molecular cooking collection | E-inclusion | Luxembourg       | archived |
+      | Rummy title 6 | Rummy news 6 | Dummy body | Molecular cooking collection | E-inclusion | Luxembourg       | archived |
 
     Given I am logged in as a user with the "authenticated" role
     Then I visit the search page
@@ -455,10 +455,10 @@ Feature: Global search
 
     # Add a new distribution, child of a release.
     Given the following release:
-      | title           | Releazz   |
-      | release number  | 1         |
-      | state           | validated |
-      | is version of   | Zzolution |
+      | title          | Releazz   |
+      | release number | 1         |
+      | state          | validated |
+      | is version of  | Zzolution |
 
     When I enter "ReleazzDistro" in the search bar and press enter
     Then I should see "No content found for your search."
@@ -719,8 +719,8 @@ Feature: Global search
     Then I enter "sp" in the search bar
     And I wait for AJAX to finish
     Then I should see the following search suggestions:
-      | Spheres  |
-      | Movistar |
+      | Spheres                  |
+      | Movistar                 |
 
   @terms
   Scenario: Filter on date

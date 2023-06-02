@@ -73,38 +73,38 @@ Feature: Content archival.
     And I should not see the button "Unarchive"
 
     Examples:
-      | group type | type       | type label | state            | state label      |
-      | collection | discussion | Discussion | proposed         | Proposed         |
-      | collection | discussion | Discussion | validated        | Published        |
-      | collection | discussion | Discussion | needs_update     | Needs update     |
-      | collection | discussion | Discussion | deletion_request | Deletion request |
-      | collection | document   | Document   | proposed         | Proposed         |
-      | collection | document   | Document   | validated        | Published        |
-      | collection | document   | Document   | needs_update     | Needs update     |
-      | collection | document   | Document   | deletion_request | Deletion request |
-      | collection | event      | Event      | proposed         | Proposed         |
-      | collection | event      | Event      | validated        | Published        |
-      | collection | event      | Event      | needs_update     | Needs update     |
-      | collection | event      | Event      | deletion_request | Deletion request |
-      | collection | news       | News       | proposed         | Proposed         |
-      | collection | news       | News       | validated        | Published        |
-      | collection | news       | News       | needs_update     | Needs update     |
-      | collection | news       | News       | deletion_request | Deletion request |
-      | solution   | discussion | Discussion | proposed         | Proposed         |
-      | solution   | discussion | Discussion | validated        | Published        |
-      | solution   | discussion | Discussion | needs_update     | Needs update     |
-      | solution   | discussion | Discussion | deletion_request | Deletion request |
-      | solution   | document   | Document   | proposed         | Proposed         |
-      | solution   | document   | Document   | validated        | Published        |
-      | solution   | document   | Document   | needs_update     | Needs update     |
-      | solution   | document   | Document   | deletion_request | Deletion request |
-      | solution   | event      | Event      | draft            | Draft            |
-      | solution   | event      | Event      | proposed         | Proposed         |
-      | solution   | event      | Event      | validated        | Published        |
-      | solution   | event      | Event      | needs_update     | Needs update     |
-      | solution   | event      | Event      | deletion_request | Deletion request |
-      | solution   | news       | News       | draft            | Draft            |
-      | solution   | news       | News       | proposed         | Proposed         |
-      | solution   | news       | News       | validated        | Published        |
-      | solution   | news       | News       | needs_update     | Needs update     |
-      | solution   | news       | News       | deletion_request | Deletion request |
+      | group type | type       | type label | state            |
+      | collection | discussion | Discussion | proposed         |
+      | collection | discussion | Discussion | validated        |
+      | collection | discussion | Discussion | needs_update     |
+      | collection | discussion | Discussion | deletion_request |
+      | collection | document   | Document   | proposed         |
+      | collection | document   | Document   | validated        |
+      | collection | document   | Document   | needs_update     |
+      | collection | document   | Document   | deletion_request |
+      | collection | event      | Event      | proposed         |
+      | collection | event      | Event      | validated        |
+      | collection | event      | Event      | needs_update     |
+      | collection | event      | Event      | deletion_request |
+      | collection | news       | News       | proposed         |
+      | collection | news       | News       | validated        |
+      | collection | news       | News       | needs_update     |
+      | collection | news       | News       | deletion_request |
+      | solution   | discussion | Discussion | proposed         |
+      | solution   | discussion | Discussion | validated        |
+      | solution   | discussion | Discussion | needs_update     |
+      | solution   | discussion | Discussion | deletion_request |
+      | solution   | document   | Document   | proposed         |
+      | solution   | document   | Document   | validated        |
+      | solution   | document   | Document   | needs_update     |
+      | solution   | document   | Document   | deletion_request |
+      | solution   | event      | Event      | draft            |
+      | solution   | event      | Event      | proposed         |
+      | solution   | event      | Event      | validated        |
+      | solution   | event      | Event      | needs_update     |
+      | solution   | event      | Event      | deletion_request |
+      | solution   | news       | News       | draft            |
+      | solution   | news       | News       | proposed         |
+      | solution   | news       | News       | validated        |
+      | solution   | news       | News       | needs_update     |
+      | solution   | news       | News       | deletion_request |
