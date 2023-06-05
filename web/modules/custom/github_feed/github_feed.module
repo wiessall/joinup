@@ -48,13 +48,19 @@ function github_feed_theme($existing, $type, $theme, $path) {
 function template_preprocess_github_feed(array &$variables) {
   switch ($variables['type']) {
     case 'issue':
-      $variables['type_parsed'] = t('issues');
+      $variables['type_parsed'] = t('Issues');
+      $variables['icon_id'] = 'info-circle';
+      $variables['icon_color'] = 'danger';
       break;
     case 'pull_request':
-      $variables['type_parsed'] = t('pull requests');
+      $variables['type_parsed'] = t('Pull requests');
+      $variables['icon_id'] = 'code-slash';
+      $variables['icon_color'] = 'warning';
       break;
     case 'events':
-      $variables['type_parsed'] = t('activity stream');
+      $variables['type_parsed'] = t('Activity feed');
+      $variables['icon_id'] = 'rss';
+      $variables['icon_color'] = 'dark';
       break;
   }
 }

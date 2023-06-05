@@ -6,8 +6,15 @@
   * - url: The url of the feed.
   * - type: The type of the feed.
 #}
+{% set full_name = 'Name of the repository' %}
 <div class="github-feed">
-  <h3 class="h4">{{ full_name }} {{ type_parsed }}:</h3>
+  <h3 class="my-3 text-dark">{{ full_name }}</h3>
+  <h4 class="mb-3 fs-sm">
+    <svg class="bi icon--xs text-{{ icon_color }}">
+      <use xlink:href="{{ bcl_icon_path }}#{{ icon_id }}"></use>
+    </svg>
+    <span class="text-dark">{{ type_parsed }}</span>
+  </h4>
   {% for item in items %}
     <div class="github-feed-item border rounded p-3 mb-3">
       {{ item }}
