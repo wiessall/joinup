@@ -105,7 +105,7 @@ function ventuno_preprocess_user__view_mode_tile(array &$variables): void {
     $variables['badges'] = [];
     $max_topics = 2;
     if (is_iterable($domains)) {
-      foreach ($domains as &$domain) {
+      foreach ($domains as $domain) {
         $variables['badges'][]['label'] = $domain->entity ? $domain->entity->label() : NULL;
       }
       $num_of_items = count($domains);
