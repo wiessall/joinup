@@ -7,8 +7,10 @@
 
 declare(strict_types = 1);
 
+use Drupal\Core\Url;
 use Drupal\custom_page\Entity\CustomPageInterface;
 use Drupal\interoperable_europe\InteroperableEuropeCollectionInterface;
+use Drupal\joinup_community_content\Entity\CommunityContentInterface;
 use Drupal\node\NodeInterface;
 
 /**
@@ -149,4 +151,25 @@ function iop_preprocess_node__event__view_mode_tile(&$variables): void {
       'image_link' => 'content',
     ],
   ]);
+}
+
+/**
+ * Implements hook_preprocess_page_title().
+ */
+function iop_preprocess_page_title(array &$variables): void {
+  $entity = $variables['entity'] ?? NULL;
+  if ($entity instanceof CommunityContentInterface) {
+    $node = match ($entity->bundle()) {
+      'news' => Drupal::service('entity.repository')->loadEntityByUuid('node', InteroperableEuropeCollectionInterface::NEWS_LISTING),
+      'event' => Drupal::service('entity.repository')->loadEntityByUuid('node', InteroperableEuropeCollectionInterface::EVENT_LISTING),
+    };
+
+    $url = Url::fromRoute('entity.node.canonical', ['node' => $node->id()]);
+    $link = [
+      '#type' => 'link',
+      '#url' => $url,
+      '#title' => t('More %bundle', ['%bundle' => $entity->bundle()]),
+    ];
+    $variables['url_more'] = $link;
+  }
 }
