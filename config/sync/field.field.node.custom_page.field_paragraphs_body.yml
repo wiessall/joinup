@@ -7,7 +7,6 @@ dependencies:
     - node.type.custom_page
     - paragraphs.paragraphs_type.accordion
     - paragraphs.paragraphs_type.call_to_action
-    - paragraphs.paragraphs_type.carousel
     - paragraphs.paragraphs_type.configurable_listing
     - paragraphs.paragraphs_type.content_listing
     - paragraphs.paragraphs_type.iframe
@@ -41,7 +40,6 @@ settings:
       row: row
       testimony: testimony
       call_to_action: call_to_action
-      carousel: carousel
       configurable_listing: configurable_listing
       layout: layout
       text: text
@@ -49,6 +47,12 @@ settings:
     target_bundles_drag_drop:
       1_column_layout:
         weight: 14
+        enabled: false
+      2_column_featured_left:
+        weight: 21
+        enabled: false
+      2_column_featured_right:
+        weight: 22
         enabled: false
       2_column_featured_left:
         weight: 22
@@ -67,6 +71,15 @@ settings:
         enabled: true
       accordion_item:
         weight: 7
+        enabled: false
+      call_to_action:
+        weight: 27
+        enabled: false
+      carousel:
+        weight: 28
+        enabled: true
+      configurable_listing:
+        weight: 29
         enabled: false
       call_to_action:
         weight: 28
@@ -103,7 +116,7 @@ settings:
         enabled: true
       testimony:
         weight: 26
-        enabled: true
+        enabled: false
       text:
         weight: 41
         enabled: true
