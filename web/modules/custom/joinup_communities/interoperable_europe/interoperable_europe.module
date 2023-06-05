@@ -12,7 +12,6 @@ use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\interoperable_europe\InteroperableEuropeCollectionInterface;
-use Drupal\interoperable_europe\Plugin\Condition\TemporaryIopCondition;
 use Drupal\joinup_group\Form\JoinGroupFormInterface;
 
 /**
@@ -34,15 +33,6 @@ function interoperable_europe_form_join_group_form_alter(&$form, FormStateInterf
       }
     }
   }
-}
-
-/**
- * Implements hook_condition_info_alter().
- */
-function interoperable_europe_condition_info_alter(array &$definitions): void {
-  // Temporary replace the original plugin class to define some exceptions.
-  // @see \Drupal\interoperable_europe\Plugin\Condition\TemporaryIopCondition
-  $definitions['group_context']['class'] = TemporaryIopCondition::class;
 }
 
 /**
