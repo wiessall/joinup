@@ -4,6 +4,7 @@ Feature: Prefill contact form fields
   As a moderator
   I want to be able to prefill some fields of the contact form
 
+  @javascript
   Scenario: The subject field can be prefilled through links.
     Given collection:
       | title | CAMSS test community |
@@ -16,9 +17,12 @@ Feature: Prefill contact form fields
     Then I should see the heading "Add custom page"
 
     # Create a page with a link that points to the contact form with the "subject" parameter containing some text.
-    When I fill in the following:
-      | Title | Change management                                                                    |
-      | Body  | <p>Follow this <a href="../../contact?subject=CAMSS%20Change%20Request">link</a></p> |
+    When I fill in "Title" with "Change management"
+    And I click "Choose component"
+    And I wait for AJAX to finish
+    And I click "Simple paragraph"
+    And I fill in "Body" with "<p>Follow this <a href=\"../../contact?subject=CAMSS%20Change%20Request\">link</a></p>"
+    And I press "Save"
     And I press "Save"
     Then I should see the heading "Change management"
 
