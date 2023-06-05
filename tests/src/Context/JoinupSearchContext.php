@@ -171,7 +171,7 @@ class JoinupSearchContext extends RawDrupalContext {
    */
   public function assertContentTypeFacetItemsPresent(string $labels): void {
     $labels = $this->explodeCommaSeparatedStepArgument($labels);
-    $xpath = "//a[@data-drupal-facet-item-id]//span[contains(concat(' ', normalize-space(@class), ' '), ' tab__text--type ')]";
+    $xpath = "//a[@data-drupal-facet-item-id]//span[contains(concat(' ', normalize-space(@class), ' '), ' tab__text--type ') or contains(concat(' ', normalize-space(@class), ' '), ' facet-item__value ')]";
 
     $elements = $this->getSession()->getPage()->findAll('xpath', $xpath);
     $present = [];
