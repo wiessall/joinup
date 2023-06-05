@@ -70,6 +70,7 @@ Feature: Archived content on content listings - groups and paragraphs.
     And I select "All" from "Show archived content"
     And I press "Save"
     Then I should see the heading "Some page"
+    Then I should see the following facet items "News, Show archived" in this order
     And I should see the text "Show archived"
     And I should not see the "Archived news" tile
     And I should see the "Published news" tile
@@ -77,6 +78,24 @@ Feature: Archived content on content listings - groups and paragraphs.
     When I click "Show archived"
     And I should see the "Archived news" tile
     And I should not see the "Published news" tile
+
+    When I go to the "Some page" custom page
+    And I click "Edit"
+    And I select "Archived" from "Show archived content"
+    And I press "Save"
+    Then I should see the heading "Some page"
+    And I should not see the text "Show archived"
+    And I should see the "Archived news" tile
+    And I should not see the "Published news" tile
+
+    When I go to the "Some page" custom page
+    And I click "Edit"
+    And I select "Unarchived" from "Show archived content"
+    And I press "Save"
+    Then I should see the heading "Some page"
+    And I should not see the text "Show archived"
+    And I should not see the "Archived news" tile
+    And I should see the "Published news" tile
 
   Scenario: Carousel listings can also control archived items visibility.
     Given collection:

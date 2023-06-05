@@ -411,7 +411,6 @@ class SearchWidget extends WidgetBase implements ContainerFactoryPluginInterface
         }
       }
     }
-    $display_options = NULL;
     $regions = array_keys($this->getRegions());
     $extra_field_row = [
       '#attributes' => ['class' => ['draggable', 'tabledrag-leaf']],
@@ -425,7 +424,7 @@ class SearchWidget extends WidgetBase implements ContainerFactoryPluginInterface
         '#type' => 'textfield',
         '#title' => $this->t('Weight for @title', ['@title' => $facet->getName()]),
         '#title_display' => 'invisible',
-        '#default_value' => $display_options ? $display_options['weight'] : 0,
+        '#default_value' => $facet->getWeight(),
         '#size' => 3,
         '#attributes' => ['class' => ['field-weight']],
       ],
