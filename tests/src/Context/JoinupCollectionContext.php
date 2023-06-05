@@ -72,8 +72,6 @@ class JoinupCollectionContext extends RawDrupalContext {
    * @AfterScenario @joinup&&@api
    */
   public function cleanJoinupData() {
-    $this->disableCommitOnUpdate();
-
     // Delete the Joinup collection.
     $collection = Rdf::load(JoinupCollectionHelper::JOINUP_COLLECTION_DEFAULT_ENTITY_ID);
     $collection->skip_notification = TRUE;
@@ -83,8 +81,6 @@ class JoinupCollectionContext extends RawDrupalContext {
     Term::load('http://example.com/term/sna')->delete();
     Rdf::load('http://example.com/owner/isa2')->delete();
     Rdf::load('http://example.com/contact/joinup')->delete();
-
-    $this->enableCommitOnUpdate();
   }
 
 }

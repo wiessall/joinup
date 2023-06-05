@@ -66,7 +66,10 @@ class SearchApiStatusSubscriber implements EventSubscriberInterface {
       }
     }
 
-    if (!$hasStatus) {
+    if ($hasStatus) {
+      $query->addCondition('entity_status', 'archived');
+    }
+    else {
       $query->addCondition('entity_status', 'archived', '<>');
     }
   }

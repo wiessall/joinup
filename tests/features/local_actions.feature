@@ -30,6 +30,8 @@ Feature:
       | state         | validated     |
     When I go to the "Test release" release
     Then I should not see the link "View" in the "Entity actions" region
+    And I should not see the link "Manage content"
+    And I should not see the link "Moderate content"
     When I click "Metadata" in the "Entity actions" region
     Then I should see the link "View" in the "Entity actions" region
 
@@ -38,6 +40,8 @@ Feature:
       | parent | Test release      |
     When I go to the "Test distribution" distribution
     Then I should not see the link "View" in the "Entity actions" region
+    And I should not see the link "Manage content"
+    And I should not see the link "Moderate content"
     When I click "Metadata" in the "Entity actions" region
     Then I should see the link "View" in the "Entity actions" region
 

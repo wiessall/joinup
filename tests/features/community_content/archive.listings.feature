@@ -12,8 +12,12 @@ Feature: Archived content on content listings - groups and paragraphs.
       | Some collection | Test        | Supplier exchange | Some owner | Some contact        | validated |
     And news content:
       | title          | headline       | state     | collection      | body | content |
-      | Archived news  | Archived news  | archived  | Some collection | Test | Test    |
+      | Archived news  | Archived news  | validated | Some collection | Test | Test    |
       | Published news | Published news | validated | Some collection | Test | Test    |
+    # We need the "Archived news" content to be archived by altering its state
+    # because "Unarchiving" it restored the previous revision and thus, needs
+    # to have a previous revision (created as validated).
+    And the workflow state of the "Archived news" content is set to "archived"
 
   Scenario: Collection content listing can control archived content visibility.
     When I am logged in as a moderator
@@ -113,3 +117,27 @@ Feature: Archived content on content listings - groups and paragraphs.
     Then I should see the heading "IOP page"
     And I should see the "IOP archived news" tile
     And I should see the "IOP published news" tile
+
+  Scenario: "Show archived" facet does not show up when there are no archived items.
+    Given the "Some collection" collection is configured to show "All" community content in the overview
+    When I go to the "Some collection" collection
+    Then I should see the "collection content archived toggle" facet
+
+    When I am logged in as a moderator
+    And I go to the edit form of the "Archived news" news
+    And I press "Unarchive"
+    Then I should see the heading "Archived news"
+
+    And I go to the "Some collection" collection
+    # @todo Fix this in ISAICP-7756.
+    # Then I should see the heading "Some collection"
+    And I should see the "Published news" tile
+    And I should see the "Archived news" tile
+    But I should not see the "collection content archived toggle" facet
+
+    When I go to the edit form of the "Archived news" news
+    And I press "Archive"
+    And I go to the "Some collection" collection
+    Then I should see the "Published news" tile
+    But I should not see the "Archived news" tile
+    And I should see the "collection content archived toggle" facet

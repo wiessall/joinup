@@ -480,10 +480,6 @@ class SolutionContext extends RawDrupalContext {
       return;
     }
 
-    // Since we might be cleaning up many solutions, temporarily disable the
-    // feature to commit the index after every query.
-    $this->disableCommitOnUpdate();
-
     // Remove any solutions that were created.
     foreach ($this->rdfEntities as $entity) {
       $name = $entity->label();
@@ -497,7 +493,6 @@ class SolutionContext extends RawDrupalContext {
       }
     }
     $this->rdfEntities = [];
-    $this->enableCommitOnUpdate();
   }
 
   /**

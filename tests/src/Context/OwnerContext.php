@@ -122,17 +122,12 @@ class OwnerContext extends RawDrupalContext {
       return;
     }
 
-    // Since we might be cleaning up many owners, temporarily disable the
-    // feature to commit the index after every query.
-    $this->disableCommitOnUpdate();
-
     // Remove any owners that were created.
     foreach ($this->owners as $owner) {
       $owner->skip_notification = TRUE;
       $owner->delete();
     }
     $this->owners = [];
-    $this->enableCommitOnUpdate();
   }
 
   /**
