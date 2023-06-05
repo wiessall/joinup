@@ -4,12 +4,12 @@ status: true
 dependencies:
   config:
     - field.field.paragraph.github_feed.feed
+    - field.field.paragraph.github_feed.paragraph_action_link
     - field.field.paragraph.github_feed.paragraph_heading
-    - field.field.paragraph.github_feed.paragraph_link_to_repository
     - paragraphs.paragraphs_type.github_feed
   module:
     - github_feed
-    - template_suggestion
+    - link
 id: paragraph.github_feed.default
 targetEntityType: paragraph
 bundle: github_feed
@@ -20,6 +20,18 @@ content:
     label: above
     settings: {  }
     third_party_settings: {  }
+    weight: 2
+    region: content
+  paragraph_action_link:
+    type: link
+    label: hidden
+    settings:
+      trim_length: 80
+      url_only: false
+      url_plain: false
+      rel: ''
+      target: ''
+    third_party_settings: {  }
     weight: 1
     region: content
   paragraph_heading:
@@ -29,18 +41,6 @@ content:
       link_to_entity: false
     third_party_settings: {  }
     weight: 0
-    region: content
-  paragraph_link_to_repository:
-    type: boolean
-    label: hidden
-    settings:
-      format: default
-      format_custom_false: ''
-      format_custom_true: ''
-    third_party_settings:
-      template_suggestion:
-        template_suggestion: ''
-    weight: 2
     region: content
 hidden:
   search_api_excerpt: true
