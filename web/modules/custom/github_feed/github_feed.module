@@ -29,6 +29,11 @@ function github_feed_theme($existing, $type, $theme, $path) {
         'item' => NULL,
       ],
     ],
+    'github_feed_comments' => [
+      'variables' => [
+        'comments' => NULL,
+      ],
+    ],
     'github_feed_comment' => [
       'variables' => [
         'item' => NULL,
