@@ -11,6 +11,5 @@
 <div class="github-feed-comment">
   {# Show only the first 40 characters of the body and a read more link. #}
   <div class="github-feed-comment-body">
-    {{ item.body|striptags }}
-    <a href="{{ item.html_url }}" target="_blank">{{ 'Read more'|t }}</a>
+    {{ item.body|length > 100 ? item.body|striptags|slice(0,100)|raw ~ '...' : item.body }}
 </div>
