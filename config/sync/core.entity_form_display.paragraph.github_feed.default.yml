@@ -17,13 +17,13 @@ mode: default
 content:
   feed:
     type: github_feed
-    weight: 1
+    weight: 2
     region: content
     settings: {  }
     third_party_settings: {  }
   paragraph_action_link:
     type: link_default
-    weight: 2
+    weight: 1
     region: content
     settings:
       placeholder_url: ''
