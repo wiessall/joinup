@@ -109,14 +109,14 @@ class GithubFeedDefaultFormatter extends FormatterBase {
             ];
           }
           $container['comments'] = [
-            '#type' => 'container',
+            '#theme' => 'github_feed_comments',
             '#attributes' => [
               'class' => ['github-feed-comments'],
             ],
             'title' => [
               '#markup' => $this->t('Comments'),
             ],
-            'comments' => [
+            '#comments' => [
               '#theme' => 'item_list',
               '#items' => $comment_items,
             ],
