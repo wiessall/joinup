@@ -113,11 +113,12 @@ class GithubFeedDefaultFormatter extends FormatterBase {
             '#attributes' => [
               'class' => ['github-feed-comments'],
             ],
-            'title' => [
+            '#title' => [
               '#markup' => $this->t('Comments'),
             ],
             '#comments' => [
               '#theme' => 'item_list',
+              '#list_type' => 'ol',
               '#items' => $comment_items,
             ],
           ];
