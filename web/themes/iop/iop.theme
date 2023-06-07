@@ -168,7 +168,7 @@ function iop_preprocess_page_title(array &$variables): void {
     $link = [
       '#type' => 'link',
       '#url' => $url,
-      '#title' => t('More %bundle', ['%bundle' => $entity->bundle()]),
+      '#title' => t('more %bundle', ['%bundle' => $node->label()]),
     ];
     $variables['url_more'] = $link;
   }
