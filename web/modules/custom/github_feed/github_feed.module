@@ -58,11 +58,13 @@ function template_preprocess_github_feed(array &$variables) {
       $variables['icon_id'] = 'info-circle';
       $variables['icon_color'] = 'danger';
       break;
+
     case 'pull_request':
       $variables['type_parsed'] = t('Pull requests');
       $variables['icon_id'] = 'code-slash';
       $variables['icon_color'] = 'warning';
       break;
+
     case 'events':
       $variables['type_parsed'] = t('Activity feed');
       $variables['icon_id'] = 'rss';
