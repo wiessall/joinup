@@ -8,8 +8,7 @@
  * @todo: Document available variables.
  */
 #}
-<div class="github-feed-comment">
-  {# Show only the first 40 characters of the body and a read more link. #}
-  <div class="github-feed-comment-body">
-    {{ item.body|length > 100 ? item.body|striptags|slice(0,100)|raw ~ '...' : item.body }}
+<div{{ attributes.addClass(['fs-sm', 'my-2']) }}>
+  <p class="text-dark-50 mb-0">{{ item.user.login }} - {{ item.updated_at|date("m/d/Y") }}</p>
+  <p class="text-dark mb-0">{{ item.body|length > 100 ? item.body|striptags|slice(0,100)|raw ~ '...' : item.body }}</p>
 </div>
