@@ -52,7 +52,7 @@
       <div class="d-flex align-items-center justify-content-between">
     {% endif %}
     {% if content.paragraph_heading|render|striptags %}
-      <h2 class="my-3 text-dark h3">{{ content.paragraph_heading }}</h2>
+      <h2 class="my-3 text-dark">{{ content.paragraph_heading }}</h2>
     {% endif %}
     {% if content.paragraph_action_link|render|striptags %}
       <a class="flex-shrink-0" href="{{ content.paragraph_action_link[0]['#url'] }}"{% if content.paragraph_action_link[0]['#options']['#external'] %} rel="noopener" target="_blank"{% endif %}>
