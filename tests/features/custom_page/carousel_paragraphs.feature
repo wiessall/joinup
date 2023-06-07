@@ -7,19 +7,20 @@ Feature:
       | title | Roman ruins |
       | state | validated   |
 
+  @javascript
   Scenario: Moderators can access paragraph.
     Given collection:
       | title | Ronup     |
       | state | validated |
 
     Given I am logged in as a moderator
-    Then I am on the homepage
     And I go to the "Roman ruins" collection
-    And I click "Add custom page"
+    And I click "Add custom page" in the plus button menu
     And I fill in "Title" with "Hello life"
-    Then I should see the button "Add Carousel"
+    Then I should see the link "Choose component"
+    And I click "Choose component"
 
-    When I press "Add Carousel"
+    When I click "Carousel"
     Then the following fields should be present "URL, Link text, Available filters"
 
     Given I am logged in as a facilitator of the "Ronup" collection
