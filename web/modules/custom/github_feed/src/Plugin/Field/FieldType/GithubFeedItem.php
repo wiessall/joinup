@@ -8,8 +8,13 @@ use Drupal\Component\Utility\Random;
 use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Field\FieldItemBase;
 use Drupal\Core\Field\FieldStorageDefinitionInterface;
+use Drupal\Core\File\FileSystemInterface;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\StreamWrapper\StreamWrapperInterface;
 use Drupal\Core\TypedData\DataDefinition;
+use Drupal\file\Entity\File;
+use Drupal\file\FileInterface;
+use Drupal\file\Plugin\Field\FieldType\FileItem;
 
 /**
  * Defines the 'github_feed' field type.
@@ -22,14 +27,18 @@ use Drupal\Core\TypedData\DataDefinition;
  *   default_formatter = "github_feed_default"
  * )
  */
-class GithubFeedItem extends FieldItemBase {
+class GithubFeedItem extends FieldItemBase implements GithubFeedItemInterface {
 
   /**
    * {@inheritdoc}
    */
   public static function defaultFieldSettings() {
-    $settings = ['cache' => -1];
-    return $settings + parent::defaultFieldSettings();
+    return [
+      'cache' => 86400,
+      'uri_scheme' => 'private://',
+      'file_directory' => 'keys',
+      'encryption_profile' => '',
+    ] + parent::defaultFieldSettings();
   }
 
   /**
@@ -38,37 +47,118 @@ class GithubFeedItem extends FieldItemBase {
   public function fieldSettingsForm(array $form, FormStateInterface $form_state) {
     $settings = $this->getSettings();
     $element['cache'] = [
-      '#type' => 'select',
-      '#title' => $this->t('Cache'),
-      '#options' => [
-        -1 => $this->t('No cache'),
-        0 => $this->t('Default'),
-        60 => $this->t('1 minute'),
-        300 => $this->t('5 minutes'),
-        900 => $this->t('15 minutes'),
-        1800 => $this->t('30 minutes'),
-        3600 => $this->t('1 hour'),
-        10800 => $this->t('3 hours'),
-        21600 => $this->t('6 hours'),
-        43200 => $this->t('12 hours'),
-        86400 => $this->t('1 day'),
-        172800 => $this->t('2 days'),
-        604800 => $this->t('1 week'),
-        1209600 => $this->t('2 weeks'),
-        2419200 => $this->t('4 weeks'),
-      ],
+      '#type' => 'textfield',
+      '#title' => $this->t('Cache lifetime (in seconds)'),
       '#default_value' => $settings['cache'],
       '#description' => $this->t('The cache lifetime for the feed items. Set to -1 to disable caching.'),
+    ];
+
+    $scheme_options = \Drupal::service('stream_wrapper_manager')->getNames(StreamWrapperInterface::WRITE_VISIBLE);
+    $element['uri_scheme'] = [
+      '#type' => 'radios',
+      '#title' => $this->t('Upload destination'),
+      '#options' => $scheme_options,
+      '#default_value' => $this->getSetting('uri_scheme'),
+      '#description' => $this->t('Select the scheme for the storage of the file. Recommended to be private.'),
+    ];
+
+    $element['file_directory'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('File directory'),
+      '#default_value' => $settings['file_directory'],
+      '#description' => $this->t('Optional subdirectory within the upload destination where files will be stored. Do not include preceding or trailing slashes.'),
+      '#element_validate' => [[FileItem::class, 'validateDirectory']],
+    ];
+
+    $encryption_profiles = \Drupal::getContainer()->get('encrypt.encryption_profile.manager')->getAllEncryptionProfiles();
+    $options = [];
+    foreach ($encryption_profiles as $encryption_profile) {
+      $options[$encryption_profile->id()] = $encryption_profile->label();
+    }
+
+    $element['encryption_profile'] = [
+      '#type' => 'select',
+      '#title' => $this->t('Encryption profile'),
+      '#default_value' => $settings['encryption_profile'],
+      '#options' => $options,
+      '#description' => $this->t('Select the encryption profile to use for encrypting the file.'),
+      '#required' => TRUE,
+      '#weight' => 4,
     ];
 
     return $element;
   }
 
   /**
+   * Returns the decrypted value.
+   *
+   * @return string
+   *   The decrypted value.
+   */
+  public function getAccessToken(): string {
+    $fileId = $this->values['target_id'] ?? NULL;
+    if ($fileId) {
+      $file = File::load($fileId);
+      $fileUri = $file->getFileUri();
+      $realPath = \Drupal::getContainer()->get('file_system')->realpath($fileUri);
+      if (file_exists($realPath)) {
+        $encryptionProfile = $this->getFieldDefinition()->getSetting('encryption_profile');
+        $decryptedValue = \Drupal::getContainer()->get('github_feed.encrypt')->decrypt(file_get_contents($realPath), $encryptionProfile);
+        return $decryptedValue;
+      }
+    }
+    return '';
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function preSave() {
+    parent::preSave();
+    // If the new value is empty, skip.
+    if (!empty($this->values['file_contents'])) {
+      $newValue = $this->values['file_contents'];
+      $encryptionProfile = $this->getFieldDefinition()->getSetting('encryption_profile');
+      $encryptedValue = \Drupal::getContainer()->get('github_feed.encrypt')->encrypt($newValue, $encryptionProfile);
+
+      // Check if there is already a file.
+      $fileId = $this->values['target_id'] ?? NULL;
+      if ($fileId) {
+        $file = File::load($fileId);
+        $fileUri = $file->getFileUri();
+        file_put_contents($fileUri, $encryptedValue);
+      }
+      else {
+        $random = new Random();
+        $directoryWithScheme = $this->getFieldDefinition()->getSetting('uri_scheme') . '://' . trim($this->getFieldDefinition()->getSetting('file_directory'), '/');
+        // Prepare the directory.
+        \Drupal::getContainer()->get('file_system')->prepareDirectory($directoryWithScheme, FileSystemInterface::CREATE_DIRECTORY | FileSystemInterface::MODIFY_PERMISSIONS);
+        $fileUri = $directoryWithScheme . '/' . $random->word(32);
+        file_put_contents($fileUri, $encryptedValue);
+        $file = File::create([
+          'uri' => $fileUri,
+          'uid' => \Drupal::currentUser()->id(),
+          'status' => FileInterface::STATUS_PERMANENT,
+        ]);
+        $file->save();
+      }
+      $this->values['target_id'] = $file->id();
+    }
+    elseif ($this->values['remove_value']) {
+      $fileId = $this->values['target_id'] ?? NULL;
+      if ($fileId) {
+        $file = File::load($fileId);
+        $file->delete();
+      }
+      $this->values['target_id'] = NULL;
+    }
+  }
+
+  /**
    * {@inheritdoc}
    */
   public function isEmpty() {
-    return empty($this->repository) || empty($this->type) || empty($this->item_num);
+    return empty($this->repository) || empty($this->type);
   }
 
   /**
@@ -112,22 +202,33 @@ class GithubFeedItem extends FieldItemBase {
         'type' => 'varchar',
         'length' => 255,
       ],
-      'include_comments' => [
-        'type' => 'int',
-        'size' => 'tiny',
-      ],
       'item_num' => [
         'type' => 'int',
         'size' => 'small',
+      ],
+      'include_comments' => [
+        'type' => 'int',
+        'size' => 'tiny',
       ],
       'comment_num' => [
         'type' => 'int',
         'size' => 'small',
       ],
+      'target_id' => [
+        'description' => 'The ID of the file entity.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+      ],
     ];
 
     $schema = [
       'columns' => $columns,
+      'foreign keys' => [
+        'target_id' => [
+          'table' => 'file_managed',
+          'columns' => ['target_id' => 'fid'],
+        ],
+      ],
     ];
 
     return $schema;
