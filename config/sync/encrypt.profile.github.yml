@@ -1,0 +1,13 @@
+uuid: 47648876-c0a3-4d9e-83c3-70290d70eb80
+langcode: en
+status: true
+dependencies:
+  config:
+    - key.key.github
+  module:
+    - real_aes
+id: github
+label: 'Github encryption profile'
+encryption_method: real_aes
+encryption_method_configuration: {  }
+encryption_key: github
