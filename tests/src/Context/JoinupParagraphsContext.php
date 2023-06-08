@@ -7,12 +7,16 @@ namespace Drupal\joinup\Context;
 use Behat\Gherkin\Node\TableNode;
 use Behat\Mink\Element\TraversableElement;
 use Behat\Mink\Exception\ElementNotFoundException;
+use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\joinup\Exception\WysiwygEditorNotFoundException;
 use Drupal\joinup\Traits\JavascriptTrait;
 use Drupal\joinup\Traits\UtilityTrait;
 use Drupal\joinup\Traits\WysiwygTrait;
+use Drupal\paragraphs\Entity\Paragraph;
+use Drupal\paragraphs\ParagraphInterface;
 use PHPUnit\Framework\Assert;
+use Drupal\joinup\Traits\EntityTrait;
 
 /**
  * Behat step definitions for testing searches.
@@ -22,6 +26,7 @@ class JoinupParagraphsContext extends RawDrupalContext {
   use JavascriptTrait;
   use WysiwygTrait;
   use UtilityTrait;
+  use EntityTrait;
 
   /**
    * A copycat of Behat's internal region mapping.
@@ -37,6 +42,13 @@ class JoinupParagraphsContext extends RawDrupalContext {
     'Custom page body' => 'field-paragraphs-body',
     'Custom content listing' => 'content-listing',
   ];
+
+  /**
+   * Created paragraphs.
+   *
+   * @var \Drupal\paragraphs\ParagraphInterface[].
+   */
+  protected array $paragraphs;
 
   /**
    * Reusable xpath pattern.
@@ -419,6 +431,82 @@ class JoinupParagraphsContext extends RawDrupalContext {
     if (empty($elements)) {
       throw new ElementNotFoundException($this->getSession()->getDriver(), 'paragraph', 'glide__slide', $heading);
     }
+  }
+
+  /**
+   * I append paragraph.
+   *
+   * @param string $paragraph_type
+   *   Paragraph type.
+   * @param string $parent_field
+   *   Parent field name.
+   * @param string $parent_type_id
+   *   Parent type id.
+   * @param string $parent_name
+   *   Parent name.
+   * @param \Behat\Gherkin\Node\TableNode $fields
+   *   Paragraph's fields.
+   *
+   * @Given I append :paragraph_type to :parent_field field in :parent_type_id entity with following :parent_name title:
+   *
+   * @throws \Drupal\Core\Entity\EntityStorageException
+   */
+  public function iAppendParagraphToFieldInEntityWithFollowingTitle(
+    string $paragraph_type,
+    string $parent_field,
+    string $parent_type_id,
+    string $parent_name,
+    TableNode $fields
+  ): void {
+    $entity = $this->getEntityByLabel($parent_type_id, $parent_name);
+
+    $values = [
+      'type' => $paragraph_type,
+    ];
+    foreach ($fields->getRowsHash() as $field => $value) {
+      if (str_contains($field, 'body')) {
+        $values[$field] = [
+          'value' => $value,
+          'format' => 'content_editor',
+        ];
+      }
+      else {
+        $values[$field] = $value;
+      }
+    }
+
+    $paragraph = Paragraph::create($values);
+    $paragraph->save();
+
+    $this->paragraphs[] = $paragraph;
+
+    $this->appendParagraphToEntity($entity, $paragraph, $parent_field);
+  }
+
+  /**
+   * Append paragraph to entity.
+   *
+   * @param \Drupal\Core\Entity\ContentEntityInterface $entity
+   *   Content entity.
+   * @param \Drupal\paragraphs\ParagraphInterface $paragraph
+   *   Paragraph entity.
+   * @param string $field_name
+   *   Field name.
+   *
+   * @throws \Drupal\Core\Entity\EntityStorageException
+   */
+  public function appendParagraphToEntity(ContentEntityInterface $entity, ParagraphInterface $paragraph, string $field_name): void {
+    if (!$entity->hasField($field_name)) {
+      throw new Exception(printf("Field not found: %s", $field_name));
+    }
+
+    $entity->get($field_name)->appendItem(
+      [
+        'target_id' => $paragraph->id(),
+        'target_revision_id' => $paragraph->getRevisionId(),
+      ]
+    );
+    $entity->save();
   }
 
 }
