@@ -18,5 +18,8 @@ translatable: false
 default_value: {  }
 default_value_callback: ''
 settings:
-  cache: -1
+  cache: 86400
+  uri_scheme: private
+  file_directory: github_keys
+  encryption_profile: github
 field_type: github_feed
