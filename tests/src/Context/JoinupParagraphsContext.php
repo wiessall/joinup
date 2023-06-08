@@ -46,7 +46,7 @@ class JoinupParagraphsContext extends RawDrupalContext {
   /**
    * Created paragraphs.
    *
-   * @var \Drupal\paragraphs\ParagraphInterface[].
+   * @var \Drupal\paragraphs\ParagraphInterface[]
    */
   protected array $paragraphs;
 
