@@ -10,13 +10,13 @@ use Behat\Mink\Exception\ElementNotFoundException;
 use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\joinup\Exception\WysiwygEditorNotFoundException;
+use Drupal\joinup\Traits\EntityTrait;
 use Drupal\joinup\Traits\JavascriptTrait;
 use Drupal\joinup\Traits\UtilityTrait;
 use Drupal\joinup\Traits\WysiwygTrait;
 use Drupal\paragraphs\Entity\Paragraph;
 use Drupal\paragraphs\ParagraphInterface;
 use PHPUnit\Framework\Assert;
-use Drupal\joinup\Traits\EntityTrait;
 
 /**
  * Behat step definitions for testing searches.
