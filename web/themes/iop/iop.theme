@@ -116,6 +116,18 @@ function iop_preprocess_node__custom_page__full(&$variables) {
 /**
  * Implements hook_preprocess_block().
  */
+function iop_preprocess_block(array &$variables): void {
+  $block_id = $variables['elements']['#id'] ?? NULL;
+  switch ($block_id) {
+    case 'openeuropawebtoolsetrans':
+      $variables['#attached']['library'][] = 'ventuno/etrans';
+      break;
+  }
+}
+
+/**
+ * Implements hook_preprocess_block().
+ */
 function iop_preprocess_block__iope_navigation(array &$variables): void {
   $variables['base_path'] = base_path();
 }

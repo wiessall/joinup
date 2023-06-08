@@ -58,6 +58,7 @@ function ventuno_preprocess_block(array &$variables): void {
 
     case 'ventuno_webtools_etrans':
       $variables['#attached']['library'][] = 'ventuno/etrans';
+      $variables['attributes']['class'][] = 'block-oe-webtools-etrans--ventuno';
       break;
   }
 
