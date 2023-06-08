@@ -37,6 +37,13 @@ content:
       size: 60
       placeholder: ''
     third_party_settings: {  }
+  paragraph_link_to_repository:
+    type: boolean_checkbox
+    weight: 3
+    region: content
+    settings:
+      display_label: true
+    third_party_settings: {  }
 hidden:
   created: true
   status: true
