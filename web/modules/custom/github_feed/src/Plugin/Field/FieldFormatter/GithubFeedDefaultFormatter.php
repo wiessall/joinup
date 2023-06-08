@@ -73,7 +73,8 @@ class GithubFeedDefaultFormatter extends FormatterBase {
         continue;
       }
 
-      $fetchedItems = $this->githubFeed->fetchItems($item->repository, $item->type, (int) $item->item_num, (bool) $item->include_comments, (int) $item->comment_num);
+      $token = $item->getAccessToken();
+      $fetchedItems = $this->githubFeed->fetchItems($item->repository, $item->type, $token, (int) $item->item_num, (bool) $item->include_comments, (int) $item->comment_num);
       [$owner, $project] = GithubFeed::getOwnerAndProjectFromUri($item->repository);
       $cacheId = $owner . ':' . $project . ':' . $item->type . ':' . $item->item_num . ':' . $item->include_comments . ':' . $item->comment_num;
       $element[$delta] = [
