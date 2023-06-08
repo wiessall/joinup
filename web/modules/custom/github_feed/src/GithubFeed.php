@@ -8,7 +8,7 @@ use Drupal\Core\Cache\CacheBackendInterface;
 use GuzzleHttp\ClientInterface;
 
 /**
- * Fetches feeds from Github.
+ * Fetches feeds from GitHub.
  */
 class GithubFeed implements GithubFeedInterface {
 
@@ -25,12 +25,12 @@ class GithubFeed implements GithubFeedInterface {
   /**
    * {@inheritdoc}
    */
-  public function fetchItems(string $url, string $type, int $numberOfResults = 10, $includeComments = FALSE, int $numberOfComments = 0): array {
+  public function fetchItems(string $url, string $type, string $token, int $numberOfResults = 10, $includeComments = FALSE, int $numberOfComments = 0): array {
     [$owner, $project] = static::getOwnerAndProjectFromUri($url);
     $cacheId = $owner . ':' . $project . ':' . $type . ':' . $numberOfResults . ':' . $includeComments . ':' . $numberOfComments;
     $cache = $this->cache->get($cacheId);
     if (!$cache) {
-      $items = $this->doFetchItems($owner, $project, $type, $numberOfResults, $includeComments, $numberOfComments);
+      $items = $this->doFetchItems($owner, $project, $type, $token, $numberOfResults, $includeComments, $numberOfComments);
       $this->cache->set($cacheId, $items);
       $cache = $this->cache->get($cacheId);
     }
@@ -38,7 +38,7 @@ class GithubFeed implements GithubFeedInterface {
   }
 
   /**
-   * Returns the owner and the project of a Github URI.
+   * Returns the owner and the project of a GitHub URI.
    *
    * @param string $uri
    *   The URI to parse.
@@ -71,6 +71,8 @@ class GithubFeed implements GithubFeedInterface {
    *   The project name.
    * @param string $type
    *   The type of the feed. Either 'issue' or 'pull_request'.
+   * @param string $token
+   *   The GitHub token.
    * @param int $itemNum
    *   The number of items to return.
    * @param bool $includeComments
@@ -81,18 +83,18 @@ class GithubFeed implements GithubFeedInterface {
    * @return array
    *   An array containing the items.
    */
-  protected function doFetchItems(string $owner, string $project, string $type, int $itemNum, bool $includeComments, int $commentNum): array {
+  protected function doFetchItems(string $owner, string $project, string $type, string $token, int $itemNum, bool $includeComments, int $commentNum): array {
     $url = '/repos/' . $owner . '/' . $project . '/' . self::KEYS[$type];
     $url .= '?per_page=' . $itemNum . '&page=1';
 
-    $response = $this->client->get(self::GITHUB_API_URL . $url);
+    $response = $this->client->get(self::GITHUB_API_URL . $url, $this->getRequestOptions($token));
     $data = json_decode($response->getBody()->getContents(), TRUE);
 
     $return = [];
     foreach ($data as $returnItem) {
       $returnItem['comments'] = [];
       if ($includeComments) {
-        $returnItem['comments'] = $this->fetchItemComments($owner, $project, $type, $returnItem['number'], $commentNum);
+        $returnItem['comments'] = $this->fetchItemComments($owner, $project, $type, $token, $returnItem['number'], $commentNum);
       }
       $return[] = $returnItem;
     }
@@ -109,6 +111,8 @@ class GithubFeed implements GithubFeedInterface {
    *   The project name.
    * @param string $type
    *   The type of the feed. Either 'issue' or 'pull_request'.
+   * @param string $token
+   *   The GitHub token.
    * @param int $itemNumber
    *   The issue/pull request number ID.
    * @param int $commentNum
@@ -117,14 +121,30 @@ class GithubFeed implements GithubFeedInterface {
    * @return array
    *   An array containing the items.
    */
-  protected function fetchItemComments(string $owner, string $project, $type, int $itemNumber, int $commentNum): array {
+  protected function fetchItemComments(string $owner, string $project, string $type, string $token, int $itemNumber, int $commentNum): array {
     $url = '/repos/' . $owner . '/' . $project . '/' . self::KEYS[$type] . '/' . $itemNumber . '/comments';
     $url .= '?per_page=' . $commentNum;
     // Default settings.
     $url .= '&sort=created&direction=desc&page=1';
-
-    $response = $this->client->get(self::GITHUB_API_URL . $url);
+    $response = $this->client->get(self::GITHUB_API_URL . $url, $this->getRequestOptions($token));
     return json_decode($response->getBody()->getContents(), TRUE);
+  }
+
+  /**
+   * Returns the request options.
+   *
+   * @param string $token
+   *   The GitHub token.
+   *
+   * @return array
+   *   The request options.
+   */
+  protected function getRequestOptions(string $token = ''): array {
+    return empty($token) ? [] : [
+      'headers' => [
+        'Authorization' => 'Bearer ' . $token,
+      ],
+    ];
   }
 
 }

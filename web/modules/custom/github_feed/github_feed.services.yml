@@ -2,3 +2,7 @@ services:
   github_feed.github_feed:
     class: Drupal\github_feed\GithubFeed
     arguments: ['@cache.default', '@http_client']
+
+  github_feed.encrypt:
+    class: Drupal\github_feed\EncryptionManager
+    arguments: ['@entity_type.manager', '@encrypt.encryption_profile.manager', '@encryption', '@file_system']

@@ -30,6 +30,8 @@ interface GithubFeedInterface {
    *   The URL of the repository.
    * @param string $type
    *   The type of the feed. Either 'issue' or 'pull_request'.
+   * @param string $token
+   *   The GitHub token.
    * @param int $numberOfResults
    *   The number of results to fetch.
    * @param bool $includeComments
@@ -37,6 +39,6 @@ interface GithubFeedInterface {
    * @param int $numberOfComments
    *   The number of comments to fetch.
    */
-  public function fetchItems(string $url, string $type, int $numberOfResults = 10, $includeComments = FALSE, int $numberOfComments = 0): array;
+  public function fetchItems(string $url, string $type, string $token, int $numberOfResults = 10, $includeComments = FALSE, int $numberOfComments = 0): array;
 
 }
