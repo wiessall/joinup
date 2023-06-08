@@ -93,7 +93,7 @@ class GithubFeedWidget extends WidgetBase {
     $element['key_container']['remove_value'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Remove value'),
-      '#description' => $this->t('Remove the value from the field. This will not remove the file.'),
+      '#description' => $this->t('Checking this will delete the token on update. <strong>Warning: This cannot be undone.</strong>'),
       '#default_value' => FALSE,
     ];
 
