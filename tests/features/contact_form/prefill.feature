@@ -10,7 +10,7 @@ Feature: Prefill contact form fields
       | state | validated            |
     And custom_page content:
       | title    | collection           | state     | field_paragraphs_body                                                                |
-      | IOP page | Interoperable Europe | validated | <p>Follow this <a href="../../contact?subject=CAMSS%20Change%20Request">link</a></p> |
+      | IOP page | CAMSS test community | validated | <p>Follow this <a href="../../contact?subject=CAMSS%20Change%20Request">link</a></p> |
 
     When I go to the "IOP page" custom page
     And I click "link"
