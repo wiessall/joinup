@@ -15,7 +15,6 @@ dependencies:
     - paragraphs.paragraphs_type.layout
     - paragraphs.paragraphs_type.row
     - paragraphs.paragraphs_type.simple_paragraph
-    - paragraphs.paragraphs_type.text
   module:
     - entity_reference_revisions
 id: node.custom_page.field_paragraphs_body
@@ -42,7 +41,6 @@ settings:
       carousel: carousel
       configurable_listing: configurable_listing
       layout: layout
-      text: text
     negate: 0
     target_bundles_drag_drop:
       1_column_layout:
