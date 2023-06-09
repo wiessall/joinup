@@ -11,3 +11,4 @@ dependencies:
   - 'joinup:joinup_featured'
   - 'og:og'
   - 'og_menu:og_menu'
+  - 'layout_paragraphs:layout_paragraphs'
