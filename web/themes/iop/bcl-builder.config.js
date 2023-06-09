@@ -65,6 +65,7 @@ module.exports = {
       entry: path.resolve(outputFolder, "src/scss/page-header.scss"),
       dest: path.resolve(outputFolder, "assets/css/page-header.min.css"),
       options: {
+        minify: true,
         includePaths,
         sourceMap: "file",
       },
@@ -73,6 +74,7 @@ module.exports = {
       entry: path.resolve(outputFolder, "src/scss/paragraph.scss"),
       dest: path.resolve(outputFolder, "assets/css/paragraph.min.css"),
       options: {
+        minify: true,
         includePaths,
         sourceMap: "file",
       },
@@ -87,6 +89,7 @@ module.exports = {
         "assets/css/paragraph--2-column-featured-left.min.css"
       ),
       options: {
+        minify: true,
         includePaths,
         sourceMap: "file",
       },
@@ -101,6 +104,7 @@ module.exports = {
         "assets/css/paragraph--2-column-featured-right.min.css"
       ),
       options: {
+        minify: true,
         includePaths,
         sourceMap: "file",
       },
@@ -166,6 +170,7 @@ module.exports = {
       entry: path.resolve(outputFolder, "src/scss/paragraph--video.scss"),
       dest: path.resolve(outputFolder, "assets/css/paragraph--video.min.css"),
       options: {
+        minify: true,
         includePaths,
         sourceMap: "file",
       },
