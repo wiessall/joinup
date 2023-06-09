@@ -55,25 +55,42 @@ function iop_preprocess_paragraph__image(array &$variables): void {
  * Implements hook_preprocess_HOOK().
  */
 function iop_preprocess_page(&$variables) {
+  $route_name = \Drupal::routeMatch()->getRouteName();
   $node = \Drupal::routeMatch()->getParameter('node');
   if ($node instanceof NodeInterface) {
     $uuid = $variables['node']->uuid();
     // News listing page.
     if ($uuid === InteroperableEuropeCollectionInterface::NEWS_LISTING) {
       $variables['#attached']['library'][] = 'iop/listing';
-      $variables['listing'] = TRUE;
-      $variables['news'] = TRUE;
+      $variables['node_classes'] = ['listing', 'page--news'];
+      $variables['page_header']['title'] = 'News';
     }
     // Events listing page.
     elseif ($uuid === InteroperableEuropeCollectionInterface::EVENT_LISTING) {
       $variables['#attached']['library'][] = 'iop/listing';
-      $variables['listing'] = TRUE;
-      $variables['events'] = TRUE;
+      $variables['node_classes'] = ['listing', 'page--events'];
+      $variables['page_header']['title'] = 'Events';
     }
     // FAQ page.
     elseif ($uuid === InteroperableEuropeCollectionInterface::FAQ) {
       $variables['#attached']['library'][] = 'iop/accordion-faq';
-      $variables['faq'] = TRUE;
+      $variables['node_classes'] = ['page--faq'];
+      $variables['page_header']['title'] = 'FAQs';
+    }
+    // POLICY page.
+    elseif ($uuid === InteroperableEuropeCollectionInterface::POLICY) {
+      $variables['node_classes'] = ['listing', 'page--policy'];
+      $variables['page_header']['title'] = 'Policy';
+    }
+    // News item
+    elseif ($route_name === 'entity.node.canonical' && $node->bundle() === 'news') {
+      $variables['node_classes'] = ['page--news'];
+      $variables['page_header']['title'] = 'News';
+    }
+    // Event item
+    elseif ($route_name === 'entity.node.canonical' && $node->bundle() === 'event') {
+      $variables['node_classes'] = ['page--events'];
+      $variables['page_header']['title'] = 'Event';
     }
   }
 }
