@@ -11,7 +11,7 @@ field_name: field_user_family_name
 entity_type: user
 type: string
 settings:
-  max_length: 255
+  max_length: 100
   case_sensitive: false
   is_ascii: false
 module: core

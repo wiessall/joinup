@@ -1,7 +1,23 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # Check that composer.lock hash is in sync.
 composer validate --no-check-all --no-check-publish
+
+# Run NPM install only if it's not bypassed or when building the distribution.
+if [ "$BUILD_DISTRO" = "1" ] || [ ! -f .env ] || [ "$(grep 'COMPOSER_DISABLE_NODE_DEPENDENCIES=1' .env)" = "" ]
+then
+  npm ci --no-progress
+fi
+
+# Done, if we're building the distribution.
+if [ "$BUILD_DISTRO" = "1" ]
+then
+  exit 0;
+fi
+
+# Parse and save the Joinup version.
+test \"`git rev-parse --is-shallow-repository`\" = \"false\" || git fetch --unshallow
+git describe --tags 2>/dev/null | tr -d '\\n' > web/VERSION.txt
 
 # Task Runner has been moved in Toolkit. However, the Toolkit's runner is
 # simplified and not ready to be used by Joinup because of DQA-5962. Ensure that
@@ -9,15 +25,5 @@ composer validate --no-check-all --no-check-publish
 # @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/DQA-5962
 perl -i -pe 's/\/ec\-europa\/toolkit\/run/\/openeuropa\/task\-runner\/bin\/run/g' vendor/bin/run
 
-# Parse and save the Joinup version.
-test \"`git rev-parse --is-shallow-repository`\" = \"false\" || git fetch --unshallow
-git describe --tags 2>/dev/null | tr -d '\\n' > web/VERSION.txt
-
 # Build the codebase.
 test ! -f vendor/bin/run || vendor/bin/run toolkit:build-dev
-
-# Run NPM install only if it's not bypassed.
-if [ ! -f .env ] || [ "$(grep 'COMPOSER_DISABLE_NODE_DEPENDENCIES=1' .env)" = "" ]
-then
-  npm ci --no-progress
-fi

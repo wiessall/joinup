@@ -114,10 +114,6 @@ Feature: Solution homepage
     Then I should not see the "Pager" region
     And I should not see the "Distribution 13" tile
 
-    # The pager cache is not invalidated when a 13th item is added.
-    # https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-4235
-    Given the cache has been cleared
-
     Given the following distributions:
       | title           | description    | parent            |
       | Distribution 13 | Description 13 | Chiricahua Server |
@@ -144,6 +140,71 @@ Feature: Solution homepage
       | Go to last page |
       | Go to page 3    |
     And I should not see the "Distribution 12" tile
+
+    Given the following distributions:
+      | title           | description    | parent            |
+      | Distribution 14 | Description 14 | Chiricahua Server |
+      | Distribution 15 | Description 15 | Chiricahua Server |
+      | Distribution 16 | Description 16 | Chiricahua Server |
+      | Distribution 17 | Description 17 | Chiricahua Server |
+      | Distribution 18 | Description 18 | Chiricahua Server |
+      | Distribution 19 | Description 19 | Chiricahua Server |
+      | Distribution 20 | Description 20 | Chiricahua Server |
+      | Distribution 21 | Description 21 | Chiricahua Server |
+      | Distribution 22 | Description 22 | Chiricahua Server |
+      | Distribution 23 | Description 23 | Chiricahua Server |
+      | Distribution 24 | Description 24 | Chiricahua Server |
+      | Distribution 25 | Description 25 | Chiricahua Server |
+
+    When I go to the homepage of the "Chiricahua Server" solution
+    Then I should see the following links:
+      | Current page    |
+      | Go to page 2    |
+      | Go to page 3    |
+      | Go to next page |
+      | Go to last page |
+    But I should not see the following links:
+      | Go to first page    |
+      | Go to previous page |
+
+    When I click "Go to page 2"
+    Then I should see the following links:
+      | Go to first page    |
+      | Go to previous page |
+      | Go to page 1        |
+      | Current page        |
+      | Go to page 3        |
+      | Go to next page     |
+      | Go to last page     |
+    And I should see the "Distribution 24" tile
+    And I should not see the "Distribution 25" tile
+    When I click "Go to page 3"
+    Then I should see the following links:
+      | Go to first page    |
+      | Go to previous page |
+      | Go to page 1        |
+      | Go to page 2        |
+      | Current page        |
+    But I should not see the following links:
+      | Go to next page     |
+      | Go to last page     |
+
+    When I delete the "Distribution 13" asset distribution
+    And I delete the "Distribution 14" asset distribution
+    And I delete the "Distribution 15" asset distribution
+    And I delete the "Distribution 16" asset distribution
+    And I delete the "Distribution 17" asset distribution
+    And I delete the "Distribution 18" asset distribution
+    And I delete the "Distribution 19" asset distribution
+    And I delete the "Distribution 20" asset distribution
+    And I delete the "Distribution 21" asset distribution
+    And I delete the "Distribution 22" asset distribution
+    And I delete the "Distribution 23" asset distribution
+    And I delete the "Distribution 24" asset distribution
+    And I delete the "Distribution 25" asset distribution
+
+    When I go to the homepage of the "Chiricahua Server" solution
+    Then I should not see the "Pager" region
 
     # The pager being visible in one solution should not affect other solutions.
     Given the following solution:

@@ -91,7 +91,7 @@ Feature: Creation of news through the UI.
     When I visit the content overview
     Then I should see the image "logo.png" in the "Ytterbium metal of the year" tile
 
-  @javascript @generateMedia @uploadFiles:logo.png
+  @javascript @generateMedia @generateMediaTypes:news_logo @uploadFiles:logo.png
   Scenario: Test the image library widget.
     Given the following collection:
       | title | Stream of Dreams |
@@ -110,6 +110,7 @@ Feature: Creation of news through the UI.
     # Picking-up pre-uploaded images works.
     When I remove the file from "Logo"
     And I wait for AJAX to finish
+
     And I select image #6 as news logo
     And I wait for AJAX to finish
     And I press "Update"

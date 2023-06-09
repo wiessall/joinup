@@ -7,7 +7,6 @@ namespace Drupal\joinup\Context;
 use Behat\Gherkin\Node\TableNode;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\joinup\Traits\EntityTrait;
-use Drupal\joinup\Traits\MaterialDesignTrait;
 use Drupal\joinup\Traits\RdfEntityTrait;
 use Drupal\joinup\Traits\SearchTrait;
 use Drupal\joinup\Traits\UserTrait;
@@ -20,7 +19,6 @@ use Drupal\taxonomy\TermInterface;
  */
 class OwnerContext extends RawDrupalContext {
 
-  use MaterialDesignTrait;
   use EntityTrait;
   use RdfEntityTrait;
   use SearchTrait;
@@ -124,56 +122,12 @@ class OwnerContext extends RawDrupalContext {
       return;
     }
 
-    // Since we might be cleaning up many owners, temporarily disable the
-    // feature to commit the index after every query.
-    $this->disableCommitOnUpdate();
-
     // Remove any owners that were created.
     foreach ($this->owners as $owner) {
       $owner->skip_notification = TRUE;
       $owner->delete();
     }
     $this->owners = [];
-    $this->enableCommitOnUpdate();
-  }
-
-  /**
-   * Sets type(s) of the owner field.
-   *
-   * @param string $options
-   *   A comma delimited list of options to be checked.
-   *
-   * @throws \Exception
-   *   Thrown when the owner field appears empty in the page.
-   *
-   * @When I set the Owner type(s) to :option
-   */
-  public function setOwnerType($options) {
-    // Explode into an array.
-    $options = $this->explodeCommaSeparatedStepArgument($options);
-
-    /** @var \Behat\Mink\Element\NodeElement $owner_fieldset */
-    $owner_fieldset = $this->getSession()->getPage()->find('named', [
-      'fieldset',
-      'Type',
-    ]);
-
-    /** @var \Behat\Mink\Element\NodeElement[] $labels */
-    $labels = $owner_fieldset->findAll('xpath', '//label//label');
-
-    if (empty($labels)) {
-      throw new \Exception('No options found in the owner field.');
-    }
-
-    foreach ($labels as $label) {
-      $option = $label->getText();
-      if (in_array($option, $options)) {
-        $this->checkMaterialDesignField($option, $owner_fieldset);
-      }
-      else {
-        $this->uncheckMaterialDesignField($option, $owner_fieldset);
-      }
-    }
   }
 
   /**

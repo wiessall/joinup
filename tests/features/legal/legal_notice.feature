@@ -127,7 +127,7 @@ Feature:
     And the row "v2.0" is selected
     But the row "1.1.1" is not selected
 
-    When I click "Legal notice" in the Footer region
+    When I am on "/joinup/legal-notice"
     Then I should see the heading "Legal notice"
     And I should see "New rules..."
 

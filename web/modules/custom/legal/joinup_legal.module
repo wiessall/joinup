@@ -32,9 +32,6 @@ function joinup_legal_preprocess_html(&$variables) {
 
 /**
  * Implements hook_form_FORM_ID_alter().
- *
- * Adds a checkbox on the contact form for anonymous users so they can accept
- * the legal notice before submitting the form.
  */
 function joinup_legal_form_message_contact_form_submission_form_alter(&$form, FormStateInterface $form_state, $form_id): void {
   // Only anonymous users must agree with the legal notice.
@@ -45,8 +42,11 @@ function joinup_legal_form_message_contact_form_submission_form_alter(&$form, Fo
   /** @var \Drupal\entity_legal\EntityLegalDocumentInterface $legal_notice */
   $legal_notice = EntityLegalDocument::load('legal_notice');
 
-  // Only show if there's a published version.
+  // Adds a checkbox on the contact form for anonymous users, so they can accept
+  // the legal notice before submitting the form. Only show if there's a
+  // published version.
   if ($legal_notice->getPublishedVersion()) {
+
     $form['legal'] = [
       '#type' => 'checkbox',
       '#title' => $legal_notice->getAcceptanceLabel(),
@@ -64,9 +64,6 @@ function joinup_legal_form_message_contact_form_submission_form_alter(&$form, Fo
 
 /**
  * Implements hook_form_FORM_ID_alter().
- *
- * Add the 'Legal notice' acceptance checkbox to the CAS Account Link form, but
- * only when the user selects 'I am a new user (create a new account)'.
  */
 function joinup_legal_form_cas_account_link_form_alter(array &$form, FormStateInterface $form_state, string $form_id): void {
   /** @var \Drupal\entity_legal\EntityLegalDocumentInterface $legal_notice */
@@ -74,6 +71,8 @@ function joinup_legal_form_cas_account_link_form_alter(array &$form, FormStateIn
 
   // Only show if there's a published version.
   if ($legal_notice->getPublishedVersion()) {
+    // Add the 'Legal notice' acceptance checkbox to the CAS Account Link form,
+    // but only when the user selects 'I am a new user (create a new account)'.
     $new_user_selected = [':input[name="account_exist"]' => ['value' => 'no']];
     $form['legal'] = [
       '#type' => 'checkbox',
@@ -134,7 +133,7 @@ function joinup_legal_form_cas_account_link_form_submit(array &$form, FormStateI
     $legal_notice = $form_state->getValue('legal_notice');
     EntityLegalDocumentAcceptance::create([
       'uid' => $account->id(),
-      'document_version_name' => $legal_notice->getPublishedVersion()->id(),
+      'vid' => $legal_notice->getPublishedVersion()->id(),
     ])->save();
   }
 }

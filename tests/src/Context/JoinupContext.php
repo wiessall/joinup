@@ -24,7 +24,6 @@ use Drupal\joinup\Traits\FileTrait;
 use Drupal\joinup\Traits\FormTrait;
 use Drupal\joinup\Traits\JavascriptTrait;
 use Drupal\joinup\Traits\KeyboardInteractionTrait;
-use Drupal\joinup\Traits\MaterialDesignTrait;
 use Drupal\joinup\Traits\OgTrait;
 use Drupal\joinup\Traits\TabledragTrait;
 use Drupal\joinup\Traits\TestingEntitiesTrait;
@@ -41,7 +40,6 @@ use Drupal\node\Entity\Node;
 use Drupal\og\OgGroupAudienceHelperInterface;
 use Drupal\og\OgRoleInterface;
 use Drupal\paragraphs\Entity\Paragraph;
-use Drupal\search_api\Entity\Server;
 use GuzzleHttp\Client;
 use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\ExpectationFailedException;
@@ -60,7 +58,6 @@ class JoinupContext extends RawDrupalContext {
   use FormTrait;
   use JavascriptTrait;
   use KeyboardInteractionTrait;
-  use MaterialDesignTrait;
   use OgTrait;
   use StringTranslationTrait;
   use TabledragTrait;
@@ -450,29 +447,6 @@ class JoinupContext extends RawDrupalContext {
 
     foreach ($options as $option) {
       Assert::assertContains($option, $available_optgroups, "The '{$select}' select doesn't contain the option '{$option}''.", TRUE);
-    }
-  }
-
-  /**
-   * Commit the solr index for testing purposes.
-   *
-   * @Then I commit the solr index
-   */
-  public function iCommitTheSolrIndex() {
-    $search_servers = Server::loadMultiple();
-    /** @var \Drupal\search_api\Entity\Server $search_server */
-    foreach ($search_servers as $search_server) {
-      $backend_id = $search_server->getBackendId();
-      if (!$backend_id == 'search_api_solr') {
-        continue;
-      }
-      /** @var \Drupal\search_api_solr\Plugin\search_api\backend\SearchApiSolrBackend $backend */
-      $backend = $search_server->getBackend();
-      /** @var \Drupal\search_api_solr\SolrConnectorInterface $connector */
-      $connector = $backend->getSolrConnector();
-      $update = $connector->getUpdateQuery();
-      $update->addCommit(TRUE, TRUE);
-      $connector->update($update);
     }
   }
 
@@ -1301,7 +1275,7 @@ class JoinupContext extends RawDrupalContext {
    *
    * @Then I( should) see the( following) tiles in the correct order:
    */
-  public function assertOrderedTilesPresent(TableNode $titles_table) {
+  public function assertOrderedTilesPresent(TableNode $titles_table): void {
     $headings_in_page = array_keys($this->getTiles());
     $headings_expected = $titles_table->getColumn(0);
     Assert::assertEquals($headings_expected, $headings_in_page, 'The expected tiles were not found or were not in the proper order.');
@@ -1369,6 +1343,64 @@ class JoinupContext extends RawDrupalContext {
     if (strpos(trim($element->getText()), $text) !== FALSE) {
       throw new \Exception("The text '$text' was found in the tile '$heading'.");
     }
+  }
+
+  /**
+   * Asserts that a certain statistics string is present in a tile.
+   *
+   * @param string $heading
+   *   The heading of the tile.
+   * @param string $text
+   *   The text to search.
+   *
+   * @throws \Exception
+   *   Thrown when the tile is not found or the text is not found in the tile.
+   *
+   * @Then I( should) see the statistics :text in the :heading tile
+   */
+  public function assertTileContainsStatistic(string $heading, string $text): void {
+    if (!$this->getTileStatisticElement($heading, $text)) {
+      throw new \Exception("The statistics '$text' was not found in the tile '$heading'.");
+    }
+  }
+
+  /**
+   * Asserts that a certain statistics string is not present in a tile.
+   *
+   * @param string $heading
+   *   The heading of the tile.
+   * @param string $text
+   *   The text to search.
+   *
+   * @throws \Exception
+   *   Thrown when the tile is not found or the text is found in the tile.
+   *
+   * @Then I( should) not see the statistics :text in the :heading tile
+   */
+  public function assertTileDoesNotContainStatistic(string $heading, string $text): void {
+    if ($this->getTileStatisticElement($heading, $text)) {
+      throw new \Exception("The statistics '$text' was found in the tile '$heading'.");
+    }
+  }
+
+  /**
+   * Gets title statistic element.
+   *
+   * @param string $heading
+   *   The heading of the tile.
+   * @param string $text
+   *   The text to search.
+   *
+   * @return \Behat\Mink\Element\NodeElement|null
+   *   Tile statistic element.
+   *
+   * @throws \Behat\Mink\Exception\ElementNotFoundException
+   */
+  protected function getTileStatisticElement(string $heading, string $text): ?NodeElement {
+    $element = $this->getTileByHeading($heading);
+    $stats = $element->find('css', "[data-joinup-card-stats]");
+
+    return $stats->find('xpath', "//*[contains(text(), $text)]");
   }
 
   /**
@@ -1542,12 +1574,6 @@ class JoinupContext extends RawDrupalContext {
    * @When I open the plus button menu
    */
   public function openPlusButtonMenu(): void {
-    // @todo Remove the if (...) block in ISAICP-7138.
-    // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7138
-    if ($this->usesMaterialDesignLite()) {
-      $this->openMaterialDesignMenu($this->getSession()->getPage()->find('css', '.add-content-menu'));
-      return;
-    }
     if (!$this->hasJavascriptSupport()) {
       // Do nothing, if it's a non-Javascript browser.
       return;
@@ -1564,12 +1590,6 @@ class JoinupContext extends RawDrupalContext {
    * @When I open the group sidebar menu
    */
   public function openGroupMenu(): void {
-    // @todo Remove the if (...) block in ISAICP-7138.
-    // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7138
-    if ($this->usesMaterialDesignLite()) {
-      $this->openMaterialDesignMenu($this->getSession()->getPage()->find('css', '.sidebar-menu'));
-      return;
-    }
     $region = $this->getSession()->getPage()->find('css', $this->getRegionSelector('Left sidebar'));
     $this->getContextualLinksHelper()->openContextualLinksMenu($region);
   }
@@ -1580,13 +1600,6 @@ class JoinupContext extends RawDrupalContext {
    * @When I open the header local tasks menu
    */
   public function iOpenTheEntityTasksMenu(): void {
-    // @todo Remove the if (...) block in ISAICP-7138.
-    // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7138
-    if ($this->usesMaterialDesignLite()) {
-      $element = $this->getSession()->getPage()->find('css', '.block-joinup-local-tasks-block');
-      $this->openMaterialDesignMenu($element);
-      return;
-    }
     if ($this->hasJavascriptSupport()) {
       $entity_tasks_selector = $this->getRegionSelector('Entity actions');
       $this->getSession()->getPage()->find('css', "$entity_tasks_selector button")->press();
@@ -1858,9 +1871,6 @@ class JoinupContext extends RawDrupalContext {
    */
   public function assertExistingFeaturedStats(): void {
     $xpath = '//ul[contains(concat(" ", normalize-space(@class), " "), "group-stats")]/@class';
-    // @todo Remove the following line in ISAICP-7138.
-    // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7138
-    $xpath .= ' | //div[contains(concat(" ", normalize-space(@class), " "), "featured__stats")]/@class';
     $this->assertSession()->elementsCount('xpath', $xpath, 1);
   }
 
@@ -1871,9 +1881,6 @@ class JoinupContext extends RawDrupalContext {
    */
   public function assertNotExistingFeaturedStats(): void {
     $xpath = '//ul[contains(concat(" ", normalize-space(@class), " "), "group-stats")]/@class';
-    // @todo Remove the following line in ISAICP-7138.
-    // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7138
-    $xpath .= ' | //div[contains(concat(" ", normalize-space(@class), " "), "featured__stats")]/@class';
     $this->assertSession()->elementsCount('xpath', $xpath, 0);
   }
 
@@ -2009,15 +2016,8 @@ class JoinupContext extends RawDrupalContext {
     self::assertJavaScriptEnabledBrowser();
 
     $result = $this->getSession()->getPage()->waitFor(5, function (): bool {
-      $css_selector = '.modal-body';
-      // @todo Remove the if (...) block in ISAICP-7138.
-      // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7138
-      if ($this->usesMaterialDesignLite()) {
-        $css_selector = '#drupal-modal';
-      }
       // Retrieve again a fresh copy of the page element at each cycle.
-      $modal = $this->getSession()->getPage()->find('css', $css_selector);
-
+      $modal = $this->getSession()->getPage()->find('css', '.modal-body');
       return $modal && $modal->isVisible();
     });
 
@@ -2143,12 +2143,18 @@ class JoinupContext extends RawDrupalContext {
    */
   public function ogCleanup(AfterScenarioScope $event) {
     /** @var \Drupal\Core\Queue\QueueWorkerInterface $worker */
-    $worker = \Drupal::service('plugin.manager.queue_worker')->createInstance('og_orphaned_group_content_cron');
+    $worker = \Drupal::service('plugin.manager.queue_worker')
+      ->createInstance('og_orphaned_group_content_cron');
     $queue = \Drupal::queue('og_orphaned_group_content');
 
     while ($item = $queue->claimItem()) {
-      $worker->processItem($item->data);
-      $queue->deleteItem($item);
+      try {
+        $worker->processItem($item->data);
+        $queue->deleteItem($item);
+      }
+      catch (\Exception $e) {
+        watchdog_exception('cron', $e);
+      }
     }
   }
 
@@ -2454,7 +2460,7 @@ class JoinupContext extends RawDrupalContext {
   public function assertTileMarkedAsFeatured($heading) {
     $element = $this->getTileByHeading($heading);
 
-    if (!$element->find('css', '.listing__card.is-featured')) {
+    if (!$element->find('css', 'div.star')) {
       throw new \Exception("The tile '$heading' is not marked as featured, but it should be.");
     }
   }
@@ -3096,16 +3102,6 @@ class JoinupContext extends RawDrupalContext {
       throw new ElementNotFoundException($session->getDriver(), 'Link', 'label', $link_label);
     }
 
-    // @todo Remove this if() block in ISAICP-7138.
-    // @see See https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7138
-    if ($this->usesMaterialDesignLite()) {
-      $xpath = "//ul/li[contains(concat(' ', @class, ' '), ' menu-item--active-trail ')]/descendant::a/descendant-or-self::*[text()='{$link_label}']";
-      if (!$page->find('xpath', $xpath)) {
-        throw new ExpectationFailedException("The '{$link_label}' link is not in the active trail but it should.");
-      }
-      return;
-    }
-
     // Remove the leading '#'.
     $navigation_menu_selector = substr($this->getRegionSelector('Navigation menu'), 1);
     $xpath = "//*[@id='$navigation_menu_selector']//nav//a[text()='$link_label' and contains(concat(' ', normalize-space(@class), ' '), ' is-active ')]";
@@ -3144,7 +3140,7 @@ class JoinupContext extends RawDrupalContext {
       // Legacy tile of Joinup theme.
       '.listing__item--tile .listing__title',
       // Card style of Ventuno theme.
-      '.card .card-title',
+      '.tile .tile__title',
       // Tiles as an article.
       'article.tile h1',
       // Carousel for non javascript test.

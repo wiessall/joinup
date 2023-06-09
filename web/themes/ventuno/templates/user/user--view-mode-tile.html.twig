@@ -17,12 +17,19 @@
  */
 #}
 {{ pattern('tile', {
+  attributes,
   image: content.field_user_photo,
   url: path('entity.user.canonical', {'user': user.id}),
-  title: full_name,
-  text: short_business_title,
-  metadata: [{
-    label: 'user'|t,
+  info: {
+    icon: 'person-circle',
+    label: field_user_business_title,
+  },
+  title_prefix,
+  label: full_name,
+  title_suffix,
+  bundle: {
+    label: 'User'|t,
     icon: 'person-circle'
-    }],
+  },
 }) }}
+

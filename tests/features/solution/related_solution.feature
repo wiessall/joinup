@@ -69,7 +69,7 @@ Feature: Related solution
       | PHP  |
 
     When I go to the edit form of the "Javascript" solution
-    And I press "Additional fields"
+    And I expand the "Additional fields" accordion section
     And I drag the table row in the "Related solutions" region at position 2 up
     And I press "Publish"
     Then I should see the heading "Javascript"

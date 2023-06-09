@@ -7,7 +7,6 @@ namespace Drupal\joinup\Context;
 use Behat\Mink\Selector\Xpath\Escaper;
 use Drupal\DrupalExtension\Context\MinkContext as DrupalExtensionMinkContext;
 use Drupal\joinup\Traits\JavascriptTrait;
-use Drupal\joinup\Traits\MaterialDesignTrait;
 use PHPUnit\Framework\ExpectationFailedException;
 
 /**
@@ -16,19 +15,11 @@ use PHPUnit\Framework\ExpectationFailedException;
 class MinkContext extends DrupalExtensionMinkContext {
 
   use JavascriptTrait;
-  use MaterialDesignTrait;
 
   /**
    * {@inheritdoc}
    */
   public function checkOption($option): void {
-    // @todo Remove this if (...) block in ISAICP-7138.
-    // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7138
-    if ($this->usesMaterialDesignLite()) {
-      $this->checkMaterialDesignField($option, $this->getSession()->getPage());
-      return;
-    }
-
     $this->scrollNamedElementIntoView('checkbox', $option);
     parent::checkOption($option);
   }
@@ -37,13 +28,6 @@ class MinkContext extends DrupalExtensionMinkContext {
    * {@inheritdoc}
    */
   public function uncheckOption($option): void {
-    // @todo Remove this if (...) block in ISAICP-7138.
-    // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7138
-    if ($this->usesMaterialDesignLite()) {
-      $this->uncheckMaterialDesignField($option, $this->getSession()->getPage());
-      return;
-    }
-
     $this->scrollNamedElementIntoView('checkbox', $option);
     parent::uncheckOption($option);
   }

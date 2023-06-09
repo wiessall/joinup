@@ -17,6 +17,7 @@ dependencies:
     - responsive_image.styles.tile
   module:
     - responsive_image
+    - smart_trim
     - template_suggestion
     - user
 id: user.user.view_mode_tile
@@ -25,11 +26,24 @@ bundle: user
 mode: view_mode_tile
 content:
   field_user_business_title:
-    type: string
+    type: smart_trim
     label: hidden
     settings:
-      link_to_entity: false
-    third_party_settings: {  }
+      trim_length: 30
+      trim_type: chars
+      trim_suffix: ''
+      wrap_output: false
+      wrap_class: trimmed
+      more_link: false
+      more_class: more-link
+      more_text: More
+      summary_handler: full
+      trim_options:
+        text: false
+        trim_zero: false
+    third_party_settings:
+      template_suggestion:
+        template_suggestion: ''
     weight: 3
     region: content
   field_user_family_name:

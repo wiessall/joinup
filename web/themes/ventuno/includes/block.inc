@@ -15,9 +15,15 @@ use Drupal\topic\Entity\TopicReferencingEntityInterface;
  * Implements hook_preprocess_block().
  */
 function ventuno_preprocess_block(array &$variables): void {
-  $plugin_id = $variables['elements']['#plugin_id'];
-  if ($plugin_id === 'local_actions_block') {
-    $variables['attributes']['class'][] = 'my-3';
+  $plugin_id = $variables['elements']['#plugin_id'] ?? NULL;
+  switch ($plugin_id) {
+    case 'local_actions_block':
+      $variables['attributes']['class'][] = 'my-3';
+      break;
+
+    case 'entity_unpublished':
+      $variables['attributes']['class'][] = 'my-5';
+      break;
   }
 
   // List of the "layout-blocks" (mainly in the Home page) that share common

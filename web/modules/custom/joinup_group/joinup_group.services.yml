@@ -16,6 +16,12 @@ services:
     class: Drupal\joinup_group\EventSubscriber\GroupMenuLinksSubscriber
     tags:
       - { name: event_subscriber }
+  joinup_group.group_menu_manager:
+    class: Drupal\joinup_group\GroupMenuManager
+    arguments: ['@entity_type.manager']
+  joinup_group.group_settings_form_alter:
+    class: Drupal\joinup_group\GroupSettingsFormAlter
+    arguments: ['@entity_type.manager', '@joinup_group.group_menu_manager']
   joinup_group.join_group_subscriber:
     class: Drupal\joinup_group\EventSubscriber\JoinGroupSubscriber
     arguments: ['@datetime.time', '@request_stack', '@entity_type.manager', '@messenger']

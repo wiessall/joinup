@@ -14,6 +14,12 @@
 
 {% for item in items %}
   {% set item %}
+    {%
+      set classes = [
+      item.in_active_trail ? 'is-active',
+    ]
+    %}
+    {{ item.attributes.addClass(classes) }}
     {{ item.attributes.setAttribute('title', item.title) }}
   {% endset %}
 {% endfor %}

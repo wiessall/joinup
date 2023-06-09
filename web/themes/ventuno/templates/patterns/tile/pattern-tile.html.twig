@@ -8,93 +8,123 @@
 
   {# Parameters:
     - attributes (object) (default: {}})
-    - featured (boolean) (default: false)
     - image (object) (default: {})
     - url (string) (default: '')
+    - date (string) (default: '')
+    - info (string) (default: '')
     - title_prefix ()
-    - title (string) (default: '')
+    - label (string) (default: '')
     - title_suffix ()
-    - text (string) (default: '')
-    - subtext (string) (default: '')
-    - metadata (array of objects) (default: [])
+    - action (object) (default: {})
+    - badges (array) (default: [])
+    - extra_data (array of objects) (default: [])
+    - bundle (object) (default: {})
   #}
 
   {% set _attributes = attributes|default({}) %}
-  {% set _featured = featured|default(false) %}
   {% set _image = image|default({}) %}
   {% set _url = url|default('') %}
+  {% set _highlighted = highlighted|default({}) %}
+  {% set _info = info|default('') %}
   {% set _title_prefix = title_prefix|default('') %}
-  {% set _title = title|default('') %}
+  {% set _label = label|default('') %}
   {% set _title_suffix = title_suffix|default('') %}
-  {% set _text = text|default('') %}
-  {% set _footer = footer|default('') %}
-  {% set _subtext = subtext|default('') %}
-  {% set _metadata = metadata|default([]) %}
+  {% set _action = action|default({}) %}
+  {% set _badges = badges|default([]) %}
+  {% set _extra_data = extra_data|default([]) %}
+  {% set _bundle = bundle|default({}) %}
+
+  {{ attach_library('ventuno/tile') }}
 
   {% if _attributes is empty %}
     {% set _attributes = create_attribute() %}
   {% endif %}
   {% set _classes = [
-    'card',
-    'card--tile',
+    'tile',
+    'd-flex',
+    'flex-column',
+    'shadow',
     'h-100',
     'mb-3',
-    _featured ? 'bg-secondary',
   ] %}
   {% if _image is empty %}
     {% set _image %}
-      <svg class="bi py-2 img-fluid{{ _featured ? ' text-primary' : ' text-secondary' }}"><use xlink:href="{{ bcl_icon_path }}#{{ _metadata|last.icon }}"></use></svg>
+      <div class="tile__default-img h-100 w-100 bg-secondary d-flex flex-column align-items-center justify-content-center position-relative">
+        <svg class="tile__default-icon position-relative bi img-fluid">
+          <use xlink:href="{{ bcl_icon_path }}#{{ _bundle.icon }}"></use>
+        </svg>
+      </div>
     {% endset %}
   {% endif %}
 
-  {{ attach_library('ventuno/card') }}
   <div class="col">
     <article{{ _attributes.addClass(_classes) }}>
-      {% if _text|trim is empty %}
-        <div class="card-header border-0 bg-transparent p-0">
-          <figure class="mb-0">
-            {{ _image }}
-          </figure>
+      {{ _title_prefix }}
+      {{ _title_suffix }}
+      <figure class="tile__figure mb-0">
+        {{ _image }}
+      </figure>
+      <div class="tile__body pt-2 px-2{% if _highlighted is not empty %} position-relative{% endif %}">
+        {% if _highlighted.text is not empty %}
+          <div class="tile__standout-info position-absolute d-flex align-items-center bg-brand rounded text-white fw-bold px-2 py-1">
+            {% if _highlighted.icon is not empty %}
+              <svg class="tile__standout-info-icon bi icon--xs me-1">
+                <use xlink:href="{{ bcl_icon_path }}#{{ _highlighted.icon }}"></use>
+              </svg>
+            {% endif %}
+            {{ _highlighted.text }}
+          </div>
+        {% endif %}
+        <div class="fs-sm text-dark d-flex align-items-center justify-content-start my-2">
+          <svg class="tile__info-icon bi icon--xs me-1">
+            <use xlink:href="{{ bcl_icon_path }}#{{ _info.icon }}"></use>
+          </svg>
+          <span class="tile__info-text">{{ _info.label }}</span>
         </div>
-      {% endif %}
-      <div class="card-body">
-        {{ _title_prefix }}
-        <h1 class="card-title fs-6">
-          {% if _url is not empty %}
-            <a class="text-primary" href="{{ _url }}">
-              {{ _title }}
-            </a>
-          {% else %}
-            {{ _title }}
-          {% endif %}
+        <h1 class="tile__title my-0">
+          <a class="text-primary" href="{{ _url }}" title="{{ _label|render|striptags|trim }}">
+            {{ _label }}
+          </a>
         </h1>
-        {{ _title_suffix }}
-        {% if _text is not empty %}
-          <div class="card-text">
-            {{ _text }}
-          </div>
-        {% endif %}
-        {% if _subtext is not empty %}
-          <div class="mt-2 fs-sm">
-            {{ _subtext }}
-          </div>
-        {% endif %}
+        {{ _action }}
       </div>
-      <div class="card-footer border-0 bg-transparent">
-        {{ _footer }}
-        <div data-joinup-card-stats class="mt-3 fs-xs text-muted d-flex align-items-center justify-content-end">
-          {% for data in metadata %}
-            <span class="d-flex align-items-center{% if not loop.first %} ms-3{% endif %}">
-              {% if data.label is defined and data.label is not empty %}
-                {{ data.label }}
-              {% endif %}
-              {% if data.icon is defined and data.icon is not empty %}
-                <svg class="bi icon--fluid ms-1">
-                  <use xlink:href="{{ bcl_icon_path }}#{{ data.icon }}"></use>
-                </svg>
-              {% endif %}
-            </span>
-          {% endfor %}
+      <div class="tile__footer p-2">
+        {%- if _badges is not empty and _badges is iterable -%}
+          <div class="mb-2">
+            {{ attach_library('ventuno/badge') }}
+            {% for _badge in _badges %}
+              {% include '@oe-bcl/badge' with {
+                label: _badge.label,
+                background: 'light',
+                rounded_pill: true,
+                attributes: create_attribute().addClass(['fs-sm', 'me-1', 'mb-1']),
+              } only %}
+            {% endfor %}
+          </div>
+        {%- endif -%}
+        <div class="fs-xs text-muted d-flex align-items-center justify-content-between">
+          <div data-joinup-card-stats class="d-flex">
+            {% for data in _extra_data %}
+              <span class="d-flex align-items-center me-2">
+                {% if data.icon is defined and data.icon is not empty %}
+                  <svg class="bi icon--xs me-1">
+                    <use xlink:href="{{ bcl_icon_path }}#{{ data.icon }}"></use>
+                  </svg>
+                {% endif %}
+                {% if data.label is defined and data.label is not empty %}
+                  {{ data.label }}
+                {% endif %}
+              </span>
+            {% endfor %}
+          </div>
+          <span class="d-flex align-items-center ms-3">
+            <div class="tile__bundle-icon d-flex align-items-center justify-content-center rounded-pill me-1">
+              <svg class="bi icon--xs text-warning">
+                <use xlink:href="{{ bcl_icon_path }}#{{ bundle.icon }}"></use>
+              </svg>
+            </div>
+            {{ bundle.label }}
+          </span>
         </div>
       </div>
     </article>

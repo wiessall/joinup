@@ -15,10 +15,13 @@ Feature: Add distribution through the UI
       | description | Some reusable random description |
       | state       | validated                        |
     And the following release:
-      | title         | 1.0.0 Authoritarian Alpaca |
-      | description   | First public release.      |
-      | is version of | Solution random x name     |
-      | state         | validated                  |
+      | title          | Authoritarian Alpaca   |
+      | description    | First public release.  |
+      | release number | 1.0.0                  |
+      | creation date  | 2019-11-19 20:45       |
+      | is version of  | Solution random x name |
+      | status         | Completed              |
+      | state          | validated              |
     And the following licences:
       | title              | description                                              | deprecated |
       | WTFPL              | The WTFPL is a rather permissive licence                 | no         |
@@ -72,12 +75,12 @@ Feature: Add distribution through the UI
   # and directly from the solution page.
   Scenario: "Add distribution" button should not be shown to unprivileged users.
     Given I am logged in as a "facilitator" of the "Solution random x name" solution
-    And I go to the homepage of the "1.0.0 Authoritarian Alpaca" release
+    And I go to the homepage of the "Authoritarian Alpaca" release
     When I open the plus button menu
     Then I should see the link "Add distribution"
 
     Given I am logged in as a "member" of the "Asset Distribution Test" collection
-    And I go to the homepage of the "1.0.0 Authoritarian Alpaca" release
+    And I go to the homepage of the "Authoritarian Alpaca" release
     When I open the plus button menu
     Then I should not see the link "Add distribution"
     When I go to the homepage of the "Solution random x name" solution
@@ -85,7 +88,7 @@ Feature: Add distribution through the UI
     Then I should not see the link "Add distribution"
 
     Given I am logged in as an "authenticated user"
-    And I go to the homepage of the "1.0.0 Authoritarian Alpaca" release
+    And I go to the homepage of the "Authoritarian Alpaca" release
     When I open the plus button menu
     Then I should not see the link "Add distribution"
     When I go to the homepage of the "Solution random x name" solution
@@ -93,7 +96,7 @@ Feature: Add distribution through the UI
     Then I should not see the link "Add distribution"
 
     Given I am an anonymous user
-    And I go to the homepage of the "1.0.0 Authoritarian Alpaca" release
+    And I go to the homepage of the "Authoritarian Alpaca" release
     When I open the plus button menu
     Then I should not see the link "Add distribution"
     When I go to the homepage of the "Solution random x name" solution
@@ -103,7 +106,7 @@ Feature: Add distribution through the UI
   @uploadFiles:test.zip
   Scenario: Add a distribution to a release as a facilitator.
     When I am logged in as a "facilitator" of the "Solution random x name" solution
-    When I go to the homepage of the "1.0.0 Authoritarian Alpaca" release
+    When I go to the homepage of the "Authoritarian Alpaca" release
     And I click "Add distribution" in the plus button menu
     Then I should see the heading "Add Distribution"
     And the following fields should be present "Title, Description, Access URL, Licence, Format, Representation technique"
@@ -121,7 +124,7 @@ Feature: Add distribution through the UI
 
     # Check if the asset distribution is accessible as an anonymous user
     When I am an anonymous user
-    When I go to the homepage of the "1.0.0 Authoritarian Alpaca" release
+    When I go to the homepage of the "Authoritarian Alpaca" release
     Then I should see the text "Distribution"
     And I should see the link "Source tarball"
     When I click "Source tarball"
@@ -135,7 +138,7 @@ Feature: Add distribution through the UI
 
   Scenario: The distribution access URL field should accept multiple file extensions.
     Given I am logged in as a "facilitator" of the "Solution random x name" solution
-    When I go to the homepage of the "1.0.0 Authoritarian Alpaca" release
+    When I go to the homepage of the "Authoritarian Alpaca" release
     And I click "Add distribution" in the plus button menu
     Then I should see the heading "Add Distribution"
 
@@ -154,7 +157,7 @@ Feature: Add distribution through the UI
 
     # Distributions should have a unique title within a single release.
     And I am logged in as a facilitator of the "Solution random x name" solution
-    When I go to the homepage of the "1.0.0 Authoritarian Alpaca" release
+    When I go to the homepage of the "Authoritarian Alpaca" release
     And I click "Add distribution" in the plus button menu
     When I fill in "Title" with "MacOSX binary"
     And I select "WTFPL" from "Licence"
@@ -206,3 +209,10 @@ Feature: Add distribution through the UI
     # Distributions are still shown in the solution page and so the License text will be visible in the page.
     Then I should not see the text "WTFPL" in the "Header" region
     And I should not see the text "Boost Software License" in the "Header" region
+    # Assert that the "Distribution" tile is present and contains licence link, label and bundle type.
+    But I should see the "Quality Yard" tile
+    And I should see the "Hot Snake" tile
+    And I should see the link "WTFPL" in the "Hot Snake" tile
+    And I should see the text "Distribution" in the "Hot Snake" tile
+    # Assert that the "Release" tile is present
+    And I should see the "Authoritarian Alpaca" tile

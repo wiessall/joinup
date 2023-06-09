@@ -32,38 +32,14 @@
             }
           );
 
-          let displayedNotice;
-
-          // TODO: Remove .page__title-wrapper .details.after-title in
-          // ISAICP-7138. See
-          // https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7138
-          // Ideally the presentational layer (containing the CSS selectors)
-          // should be split and kept in the Theme.
-          const titleDetailsJoinup = document.querySelector(
-            ".page__title-wrapper .details.after-title"
-          );
-          if (titleDetailsJoinup !== null || titleDetailsJoinup !== undefined) {
-            displayedNotice = document.createElement("div");
-            displayedNotice.classList.add("details__element");
-            displayedNotice.classList.add("outdated-content-notice");
-            displayedNotice.innerText = text;
-          }
-
-          const titleDetailsVentuno = document.querySelector(
-            ".page-title__details"
-          );
-          if (
-            titleDetailsVentuno !== null ||
-            titleDetailsVentuno !== undefined
-          ) {
-            displayedNotice = document.createElement("span");
+          const titleDetails = document.querySelector(".page-title__details");
+          if (titleDetails !== null || titleDetails !== undefined) {
+            const displayedNotice = document.createElement("span");
             displayedNotice.classList.add("page-title__detail");
             displayedNotice.innerText = text;
-          }
-
-          const titleDetails = titleDetailsJoinup || titleDetailsVentuno;
-          if (titleDetails && displayedNotice) {
-            titleDetails.appendChild(displayedNotice);
+            if (displayedNotice) {
+              titleDetails.appendChild(displayedNotice);
+            }
           }
         }
       }

@@ -13,8 +13,8 @@ _core:
   default_config_hash: maOU9192SGD0AVcjVb1fN8OjC-1lemKXWALBgJR0JCk
 id: ventuno_contentbundle
 theme: ventuno
-region: sidebar
-weight: -19
+region: content
+weight: -20
 provider: null
 plugin: 'facet_block:content_bundle'
 settings:
@@ -22,7 +22,8 @@ settings:
   label: 'Content overview - Content bundle'
   label_display: '0'
   provider: facets
-  block_id: contentbundle
+  context_mapping: {  }
+  block_id: ventuno_contentbundle
 visibility:
   request_route:
     id: request_route

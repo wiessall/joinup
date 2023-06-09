@@ -7,10 +7,10 @@ namespace Drupal\custom_page;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Menu\MenuLinkManagerInterface;
 use Drupal\Core\Url;
+use Drupal\joinup_group\GroupMenuManagerInterface;
 use Drupal\node\NodeInterface;
 use Drupal\og\OgGroupAudienceHelperInterface;
 use Drupal\og_menu\OgMenuInstanceInterface;
-use Drupal\rdf_entity\Entity\Rdf;
 
 /**
  * Manages the OG Menu links of custom pages.
@@ -18,30 +18,20 @@ use Drupal\rdf_entity\Entity\Rdf;
 class CustomPageOgMenuLinksManager implements CustomPageOgMenuLinksManagerInterface {
 
   /**
-   * The entity type manager.
-   *
-   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
-   */
-  protected $entityTypeManager;
-
-  /**
-   * The menu link manager service.
-   *
-   * @var \Drupal\Core\Menu\MenuLinkManagerInterface
-   */
-  protected $menuLinkManager;
-
-  /**
    * Builds a new custom page OG menu links updater service.
    *
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
    *   The entity type manager service.
-   * @param \Drupal\Core\Menu\MenuLinkManagerInterface $menu_link_manager
+   * @param \Drupal\Core\Menu\MenuLinkManagerInterface $menuLinkManager
    *   The menu link manager service.
+   * @param \Drupal\joinup_group\GroupMenuManagerInterface $groupMenuManager
+   *   Group menu manger.
    */
-  public function __construct(EntityTypeManagerInterface $entity_type_manager, MenuLinkManagerInterface $menu_link_manager) {
-    $this->entityTypeManager = $entity_type_manager;
-    $this->menuLinkManager = $menu_link_manager;
+  public function __construct(
+    protected EntityTypeManagerInterface $entityTypeManager,
+    protected MenuLinkManagerInterface $menuLinkManager,
+    protected GroupMenuManagerInterface $groupMenuManager
+  ) {
   }
 
   /**
@@ -120,7 +110,7 @@ class CustomPageOgMenuLinksManager implements CustomPageOgMenuLinksManagerInterf
     $menu_link_content_storage = $this->entityTypeManager->getStorage('menu_link_content');
     $this->verifyCustomPage($custom_page);
     if ($source_og_menu_instance = $this->getOgMenuInstanceByCustomPage($custom_page)) {
-      if ($target_og_menu_instance = $this->getOgMenuInstanceByGroupId($group_id)) {
+      if ($target_og_menu_instance = $this->groupMenuManager->getMenuByGroupId($group_id)) {
         $source_menu_name = "ogmenu-{$source_og_menu_instance->id()}";
         // Collect the IDs of links to the custom page.
         $mids = $menu_link_content_storage->getQuery()->accessCheck(FALSE)
@@ -134,7 +124,7 @@ class CustomPageOgMenuLinksManager implements CustomPageOgMenuLinksManagerInterf
           foreach ($menu_link_content_storage->loadMultiple($mids) as $menu_link) {
             // Change the OG menu instance of each link.
             $menu_link->set('menu_name', $target_menu_name)->save();
-          };
+          }
         }
       }
     }
@@ -184,7 +174,7 @@ class CustomPageOgMenuLinksManager implements CustomPageOgMenuLinksManagerInterf
   public function getOgMenuInstanceByCustomPage(NodeInterface $custom_page): ?OgMenuInstanceInterface {
     $this->verifyCustomPage($custom_page);
     if ($group_id = $custom_page->get(OgGroupAudienceHelperInterface::DEFAULT_FIELD)->target_id) {
-      return $this->getOgMenuInstanceByGroupId($group_id);
+      return $this->groupMenuManager->getMenuByGroupId($group_id);
     }
     return NULL;
   }
@@ -200,23 +190,6 @@ class CustomPageOgMenuLinksManager implements CustomPageOgMenuLinksManagerInterf
     if ($bundle !== 'custom_page') {
       throw new \InvalidArgumentException("The node is not a custom page, but a '$bundle'.");
     }
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getOgMenuInstanceByGroupId(string $group_id): ?OgMenuInstanceInterface {
-    if (Rdf::load($group_id)) {
-      $properties = [
-        'type' => 'navigation',
-        OgGroupAudienceHelperInterface::DEFAULT_FIELD => $group_id,
-      ];
-      $storage = $this->entityTypeManager->getStorage('ogmenu_instance');
-      if ($instances = $storage->loadByProperties($properties)) {
-        return reset($instances);
-      }
-    }
-    return NULL;
   }
 
 }

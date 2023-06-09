@@ -125,14 +125,14 @@ Feature: Proposing a collection
   Scenario: Content creation options should not vanish after AJAX request.
     Given I am logged in as a user with the "authenticated" role
     When I go to the propose collection form
-    And I press "Additional fields"
+    And I expand the "Additional fields" accordion section
     And I attach the file "banner.jpg" to "Banner"
     And I wait for AJAX to finish
     Then I should see the link "banner.jpg"
     And I should see the text "Only members can create content."
     And I should see the text "Any user can create content."
 
-  @javascript @generateMedia @terms @uploadFiles:logo.png
+  @javascript @generateMedia @generateMediaTypes:collection_banner,collection_logo @terms @uploadFiles:logo.png
   Scenario: Propose collection form fields should be organized in tabs.
     Given the following owner:
       | name                 | type    |
@@ -159,7 +159,7 @@ Feature: Proposing a collection
     And I press "Create contact information"
 
     # Close "Main fields" to check its fields visibility.
-    When I press "Additional fields"
+    When I expand the "Additional fields" accordion section
     And I collapse the "Main fields" accordion section
     Then the following fields should not be visible "Title, Description, Topic"
     And the following field widgets should not be visible "Owner"
@@ -180,7 +180,7 @@ Feature: Proposing a collection
     And the "Just a proposal" collection banner is image #8
 
     Given I go to the edit form of the "Just a proposal" collection
-    And I press "Additional fields"
+    And I expand the "Additional fields" accordion section
     And I remove the file from the "Logo" field
     But I wait for AJAX to finish
 
@@ -190,7 +190,7 @@ Feature: Proposing a collection
     And I press "Propose"
 
     When I go to the edit form of the "Just a proposal" collection
-    And I press "Additional fields"
+    And I expand the "Additional fields" accordion section
     Then I should see the link "logo.png"
 
     # As some entities were created via UI, we should explicitly delete them.
@@ -209,7 +209,7 @@ Feature: Proposing a collection
     Then the "Main fields" accordion section should be active
     # This form has two elements only that have browser-side validation.
     When I fill in "Title" with "Constraint validation API"
-    And I press "Additional fields"
+    And I expand the "Additional fields" accordion section
     And I press "Propose"
     # Our code should have changed the active accordion item now. A browser message will
     # be shown to the user.
@@ -326,7 +326,7 @@ Feature: Proposing a collection
     And I press "Create contact information"
     When I select "Data gathering, data processing" from "Topic"
 
-    When I press "Additional fields"
+    When I expand the "Additional fields" accordion section
     # Shows error when svg is invalid or unsafe and fails to upload.
     And I attach the file "error.svg" to "Logo"
     And I wait for AJAX to finish

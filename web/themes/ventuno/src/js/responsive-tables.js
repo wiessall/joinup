@@ -14,7 +14,7 @@
       );
       tables.forEach((element) => {
         const wrapper = document.createElement("div");
-        wrapper.classList.add("table-responsive", "mb-3");
+        wrapper.classList.add("table-responsive");
         element.classList.add("table");
         wrapper.appendChild(element.cloneNode(true));
         element.replaceWith(wrapper);

@@ -114,7 +114,7 @@ Feature: "Add event" visibility options.
     And I press "Save as draft"
     Then I should see the text "29/08/2018 to 02/01/2019"
 
-  @javascript @generateMedia @uploadFiles:logo.png
+  @javascript @generateMedia @generateMediaTypes:event_logo @uploadFiles:logo.png
   Scenario: Test the image library widget.
     Given the following collection:
       | title | Stream of Dreams |

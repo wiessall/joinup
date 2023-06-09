@@ -34,18 +34,6 @@ Feature:
     When I go to "/collection/nifo-collection/solution/eif-toolbox/recommendations"
     Then the response status code should be 404
 
-  Scenario: The recommendations categories are properly sorted.
-    Given I am not logged in
-    And I go to the "EIF Toolbox" solution
-    When I click "Recommendations" in the "Header bottom" region
-    Then I should see the link "All"
-    And I should see the primary horizontal tabs:
-      | link                   | active |
-      | All                    | yes    |
-      | Underlying principle   |        |
-      | Interoperability layer |        |
-      | Conceptual model       |        |
-
   Scenario: The recommendations page lists the recommendations links.
     Given I am not logged in
     And I go to the "EIF Toolbox" solution
@@ -153,17 +141,6 @@ Feature:
       | Catalogues                                    | Basic Component 5        | Recommendation 44                 |
       | External information sources and services     | Basic Component 6        | Recommendation 45                 |
       | Security and privacy                          | Basic Component 7        | Recommendation 46, 47             |
-
-  Scenario: Recommendations overview and each recommendation should show the EIF Toolbox header
-    Given I am not logged in
-    And I go to the "EIF Toolbox" solution
-    When I click "Recommendations" in the "Header bottom" region
-    Then I should see the heading "EIF Toolbox"
-
-    When I click "Recommendation 1"
-    Then I should see the heading "EIF Toolbox"
-    # Ensure that the identifier field is hidden.
-    And I should not see the text "Identifier"
 
   Scenario: Searching for anything, will not return eif recommendations as results.
     Given I am not logged in

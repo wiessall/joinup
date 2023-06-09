@@ -17,6 +17,6 @@
   Drupal.theme.sharedContentCue = (groupLabel) => {
     const spritePath = drupalSettings.bcl_icon_path;
     const label = Drupal.t("Shared from @group", { "@group": groupLabel });
-    return `<span title="${label}" class="ms-2"><svg class="bi icon--s"><use xlink:href="${spritePath}#arrow-repeat"></use></svg></span>`;
+    return `<span title="${label}"><svg class="bi icon--xs"><use xlink:href="${spritePath}#arrow-repeat"></use></svg></span>`;
   };
 })(drupalSettings);

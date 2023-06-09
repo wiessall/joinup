@@ -12,7 +12,7 @@ dependencies:
 id: ventuno_changed
 theme: ventuno
 region: sidebar
-weight: -23
+weight: -25
 provider: null
 plugin: 'facet_block:aggregated_changed'
 settings:

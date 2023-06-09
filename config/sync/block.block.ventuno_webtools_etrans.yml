@@ -3,13 +3,14 @@ langcode: en
 status: true
 dependencies:
   module:
+    - joinup_core
     - oe_webtools_etrans
   theme:
     - ventuno
 id: ventuno_webtools_etrans
 theme: ventuno
 region: content
-weight: -24
+weight: -25
 provider: null
 plugin: oe_webtools_etrans
 settings:

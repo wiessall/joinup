@@ -190,7 +190,7 @@ $ ../vendor/bin/phpunit
 
 ### Frontend development
 
-See the [readme](web/themes/joinup/README.md) in the theme folder.
+See the [readme](web/themes/ventuno/README.md) in the theme folder.
 
 ### Upgrade process
 

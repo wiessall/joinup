@@ -26,6 +26,14 @@ function ventuno_preprocess_page_title(array &$variables): void {
 
     $author_inline = _ventuno_get_author($entity);
     $variables['additional_content']['author'] = $author_inline;
+
+    /** @var \Drupal\Core\Datetime\DateFormatterInterface $date_formatter */
+    $date_formatter = \Drupal::service('date.formatter');
+    $published = $date_formatter->format($entity->published_at->published_at_or_created, 'date_only');
+    $variables['additional_content']['published'] = $published;
+
+    $update_date = $date_formatter->format($entity->getChangedTime(), 'date_only');
+    $variables['additional_content']['updated'] = $update_date;
   }
 
   if (\Drupal::routeMatch()->getRouteName() === 'entity.rdf_entity.eif_perspective') {
@@ -59,7 +67,7 @@ function ventuno_theme_suggestions_page_title_alter(array &$suggestions, array &
 /**
  * Implements hook_preprocess_page_title__node__news().
  */
-function ventuno_preprocess_page_title__node__news(&$variables) {
+function ventuno_preprocess_page_title__node__news(&$variables): void {
   /** @var \Drupal\node\NodeInterface $node */
   $node = $variables['entity'];
 
@@ -67,20 +75,12 @@ function ventuno_preprocess_page_title__node__news(&$variables) {
   $view_builder = \Drupal::entityTypeManager()->getViewBuilder('node');
   $field_news_headline = $view_builder->viewField($node->field_news_headline, 'default');
   $variables['additional_content']['field_news_headline'] = $field_news_headline;
-
-  /** @var \Drupal\Core\Datetime\DateFormatterInterface $date_formatter */
-  $date_formatter = \Drupal::service('date.formatter');
-  $published = $date_formatter->format($node->published_at->published_at_or_created, 'date_only');
-  $variables['additional_content']['published'] = $published;
-
-  $update_date = $date_formatter->format($node->getChangedTime(), 'date_only');
-  $variables['additional_content']['updated'] = $update_date;
 }
 
 /**
  * Implements hook_preprocess_page_title__node__event().
  */
-function ventuno_preprocess_page_title__node__event(&$variables) {
+function ventuno_preprocess_page_title__node__event(&$variables): void {
   /** @var \Drupal\node\NodeInterface $node */
   $node = $variables['entity'];
 
@@ -95,14 +95,6 @@ function ventuno_preprocess_page_title__node__event(&$variables) {
 
   $field_event_location = $view_builder->viewField($node->get('field_location'), 'default');
   $variables['additional_content']['field_event_location'] = $field_event_location;
-
-  /** @var \Drupal\Core\Datetime\DateFormatterInterface $date_formatter */
-  $date_formatter = \Drupal::service('date.formatter');
-  $published = $date_formatter->format($node->published_at->published_at_or_created, 'date_only');
-  $variables['additional_content']['published'] = $published;
-
-  $update_date = $date_formatter->format($node->getChangedTime(), 'date_only');
-  $variables['additional_content']['updated'] = $update_date;
 }
 
 /**
@@ -110,4 +102,25 @@ function ventuno_preprocess_page_title__node__event(&$variables) {
  */
 function ventuno_preprocess_page_title__node__glossary(array &$variables): void {
   $variables['title'] = t('Glossary');
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for page-title--node--document.html.twig.
+ */
+function ventuno_preprocess_page_title__node__document(&$variables): void {
+  /** @var \Drupal\joinup_document\Entity\DocumentInterface $node */
+  $node = $variables['entity'];
+
+  /** @var \Drupal\Core\Entity\EntityViewBuilderInterface $view_builder */
+  $view_builder = \Drupal::entityTypeManager()->getViewBuilder('node');
+  /** @var \Drupal\Core\Datetime\DateFormatterInterface $date_formatter */
+  $date_formatter = \Drupal::service('date.formatter');
+  $field_document_publication_date = $node->getPublicationTime();
+  $variables['additional_content']['publication_date'] = empty($field_document_publication_date) ? '' : $date_formatter->format($field_document_publication_date, 'custom', 'd/m/Y');
+
+  $update_date = $date_formatter->format($node->getChangedTime(), 'custom', 'd/m/Y');
+  $variables['additional_content']['updated'] = $update_date;
+
+  $field_short_title = $view_builder->viewField($node->field_short_title, 'default');
+  $variables['additional_content']['field_short_title'] = $field_short_title;
 }
