@@ -6,6 +6,7 @@ namespace Drupal\github_feed;
 
 use Drupal\Core\Cache\CacheBackendInterface;
 use GuzzleHttp\ClientInterface;
+use GuzzleHttp\Exception\RequestException;
 
 /**
  * Fetches feeds from GitHub.
@@ -25,14 +26,17 @@ class GithubFeed implements GithubFeedInterface {
   /**
    * {@inheritdoc}
    */
-  public function fetchItems(string $url, string $type, string $token, int $numberOfResults = 10, $includeComments = FALSE, int $numberOfComments = 0, bool $resetCache = FALSE): array {
+  public function fetchItems(string $url, string $type, string $token, int $numberOfResults = 10, $includeComments = FALSE, int $numberOfComments = 0, bool $resetCache = FALSE): ?array {
     [$owner, $project] = static::getOwnerAndProjectFromUri($url);
-    $cacheId = $owner . ':' . $project . ':' . $type . ':' . $numberOfResults . ':' . $includeComments . ':' . $numberOfComments;
+    $cacheId = static::generateCacheId($owner, $project, $type, (int) !empty($token), $numberOfResults, $includeComments, $numberOfComments);
     $cache = $resetCache && $this->cache->get($cacheId);
     if (!$cache) {
       $items = $this->doFetchItems($owner, $project, $type, $token, $numberOfResults, $includeComments, $numberOfComments);
       $this->cache->set($cacheId, $items);
       $cache = $this->cache->get($cacheId);
+      if ($items === NULL) {
+        return NULL;
+      }
     }
     return $cache->data;
   }
@@ -70,7 +74,11 @@ class GithubFeed implements GithubFeedInterface {
    * @param string $project
    *   The project name.
    * @param string $type
-   *   The type of the feed. Either 'issue' or 'pull_request' or 'events'.
+   *   The type of the feed. One of the items defined in
+   *   \Drupal\github_feed\Plugin\Field\FieldType\GithubFeedItem::allowedTypeValues.
+   * @param int $hasToken
+   *   Whether the user has a token or not. 1 or 0. The $hasToken is important
+   *   when the user tries anew a request by providing a new token.
    * @param int $numberOfResults
    *   The number of results to return.
    * @param bool $includeComments
@@ -81,8 +89,8 @@ class GithubFeed implements GithubFeedInterface {
    * @return string
    *   The cache ID.
    */
-  public static function generateCacheId(string $owner, string $project, string $type, int $numberOfResults = 10, bool $includeComments = FALSE, int $numberOfComments = 0): string {
-    return $owner . ':' . $project . ':' . $type . ':' . $numberOfResults . ':' . $includeComments . ':' . $numberOfComments;
+  public static function generateCacheId(string $owner, string $project, string $type, int $hasToken, int $numberOfResults = 10, bool $includeComments = FALSE, int $numberOfComments = 0): string {
+    return $owner . ':' . $project . ':' . $type . ':' . $hasToken . ':' . $numberOfResults . ':' . $includeComments . ':' . $numberOfComments;
   }
 
   /**
@@ -93,6 +101,9 @@ class GithubFeed implements GithubFeedInterface {
    * @param string $type
    *   The type of the feed. One of the items defined in
    *   \Drupal\github_feed\Plugin\Field\FieldType\GithubFeedItem::allowedTypeValues.
+   * @param int $hasToken
+   *   Whether the user has a token or not. 1 or 0. The $hasToken is important
+   *   when the user tries anew a request by providing a new token.
    * @param int $numberOfResults
    *   The number of results to return.
    * @param bool $includeComments
@@ -103,9 +114,9 @@ class GithubFeed implements GithubFeedInterface {
    * @return string
    *   The cache ID.
    */
-  public static function generateCacheIdFromUrlAndData(string $url, string $type, int $numberOfResults = 10, bool $includeComments = FALSE, int $numberOfComments = 0): string {
+  public static function generateCacheIdFromUrlAndData(string $url, string $type, int $hasToken, int $numberOfResults = 10, bool $includeComments = FALSE, int $numberOfComments = 0): string {
     [$owner, $project] = static::getOwnerAndProjectFromUri($url);
-    return static::generateCacheId($owner, $project, $type, $numberOfResults, $includeComments, $numberOfComments);
+    return static::generateCacheId($owner, $project, $type, $hasToken, $numberOfResults, $includeComments, $numberOfComments);
   }
 
   /**
@@ -126,19 +137,24 @@ class GithubFeed implements GithubFeedInterface {
    * @param int $commentNum
    *   The number of comments to return. Defaults to 0.
    *
-   * @return array
-   *   An array containing the items.
+   * @return array|NULL
+   *   An array containing the items or NULL if an error occurred.
    */
-  protected function doFetchItems(string $owner, string $project, string $type, string $token, int $itemNum, bool $includeComments, int $commentNum): array {
+  protected function doFetchItems(string $owner, string $project, string $type, string $token, int $itemNum, bool $includeComments, int $commentNum): ?array {
     $url = '/repos/' . $owner . '/' . $project . '/' . self::KEYS[$type];
     $url .= '?per_page=' . $itemNum . '&page=1';
 
-    $response = $this->client->get(self::GITHUB_API_URL . $url, $this->getRequestOptions($token));
-    if ($response->getStatusCode() !== 200) {
+    try {
+      $response = $this->client->get(self::GITHUB_API_URL . $url, $this->getRequestOptions($token));
+    }
+    catch (RequestException $e) {
       if (\Drupal::currentUser()->hasPermission('view invalid api key message')) {
-        \Drupal::messenger()->addMessage('An error has occurred while trying to fetch data from GitHub. Error is .', 'error');
+        // Set this as warnings only. The failures can occur mainly due to the
+        // lack/expiration of tokens, thus, we don't need to pollute the logs
+        // with errors.
+        \Drupal::logger('github_feed')->warning($e->getMessage());
       }
-      return [];
+      return NULL;
     }
 
     $data = json_decode($response->getBody()->getContents(), TRUE);

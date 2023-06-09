@@ -38,7 +38,10 @@ interface GithubFeedInterface {
    *   Whether to include comments.
    * @param int $numberOfComments
    *   The number of comments to fetch.
+   *
+   * @return array|NULL
+   *   The list of items or NULL if the request failed.
    */
-  public function fetchItems(string $url, string $type, string $token, int $numberOfResults = 10, $includeComments = FALSE, int $numberOfComments = 0): array;
+  public function fetchItems(string $url, string $type, string $token, int $numberOfResults = 10, $includeComments = FALSE, int $numberOfComments = 0): ?array;
 
 }
