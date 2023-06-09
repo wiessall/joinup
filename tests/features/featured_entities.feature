@@ -86,7 +86,6 @@ Feature: Featuring content site-wide
       | content type | label      |
       | event        | Event      |
       | document     | Document   |
-      | discussion   | Discussion |
       | news         | News       |
 
   Scenario Outline: Moderators can feature and unfeature collections and solutions site-wide.
