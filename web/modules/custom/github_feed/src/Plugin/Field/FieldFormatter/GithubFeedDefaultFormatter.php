@@ -75,14 +75,29 @@ class GithubFeedDefaultFormatter extends FormatterBase {
 
       $token = $item->getAccessToken();
       $fetchedItems = $this->githubFeed->fetchItems($item->repository, $item->type, $token, (int) $item->item_num, (bool) $item->include_comments, (int) $item->comment_num);
-      [$owner, $project] = GithubFeed::getOwnerAndProjectFromUri($item->repository);
-      $cacheId = $owner . ':' . $project . ':' . $item->type . ':' . $item->item_num . ':' . $item->include_comments . ':' . $item->comment_num;
+
+      if ($fetchedItems === NULL) {
+        // Just show a generic failure message.
+        $element[$delta] = [
+          '#type' => 'container',
+          '#attributes' => [
+            'class' => ['github-feed-error'],
+          ],
+          'message' => [
+            '#markup' => $this->t('The feed is temporarily unavailable.'),
+          ],
+        ];
+
+        continue;
+      }
+
+      $cacheId = GithubFeed::generateCacheIdFromUrlAndData($item->repository, $item->type, (int) !empty($token), (int) $item->item_num, (bool) $item->include_comments, (int) $item->comment_num);
       $element[$delta] = [
         '#theme' => 'github_feed',
         '#url' => $item->repository,
         '#type' => $item->type,
         '#cache' => [
-          'tags' => ['github_feed:' . $cacheId],
+          'tags' => [$cacheId],
           'max-age' => $this->getFieldSetting('cache') ?: 86400,
         ],
       ];
@@ -124,7 +139,6 @@ class GithubFeedDefaultFormatter extends FormatterBase {
         }
         $element[$delta]['#items'][] = $container;
       }
-
     }
 
     return $element;

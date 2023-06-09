@@ -117,13 +117,13 @@ class GithubFeedItem extends FieldItemBase implements GithubFeedItemInterface {
    */
   public function preSave() {
     parent::preSave();
-    // If the new value is empty, skip.
-    if (!empty($this->getNewKeyValue())) {
-      // If the token has changed, invalidate the cache because it might have
-      // changed in order to get a new token.
-      $cacheKey = GithubFeed::generateCacheIdFromUrlAndData($this->getRepository(), $this->getType(), $this->getItemNum(), $this->getIncludeComments(), $this->getCommentNum());
-      $this->getCacheBin()->invalidate($cacheKey);
 
+    // Calculate whether the current value has a token in order to clear the
+    // correct cache item.
+    $hasToken = FALSE;
+
+    // If the new key value is not empty, replace the key.
+    if (!empty($this->getNewKeyValue())) {
       $encryptionProfile = $this->getFieldDefinition()->getSetting('encryption_profile');
       $encryptedValue = \Drupal::getContainer()->get('github_feed.encrypt')->encrypt($this->getNewKeyValue(), $encryptionProfile);
 
@@ -134,6 +134,7 @@ class GithubFeedItem extends FieldItemBase implements GithubFeedItemInterface {
         $file = File::load($this->getFileTargetId());
         $fileUri = $file->getFileUri();
         $fileSystem->delete($fileUri);
+        $hasToken = TRUE;
       }
       $random = new Random();
       $directoryWithScheme = $this->getFieldDefinition()->getSetting('uri_scheme') . '://' . trim($this->getFieldDefinition()->getSetting('file_directory'), '/');
@@ -150,6 +151,7 @@ class GithubFeedItem extends FieldItemBase implements GithubFeedItemInterface {
       $this->values['target_id'] = $file->id();
     }
     if ($this->getRemoveValue()) {
+      $hasToken = TRUE;
       $fileId = $this->getFileTargetId();
       if ($fileId) {
         $file = File::load($fileId);
@@ -157,6 +159,11 @@ class GithubFeedItem extends FieldItemBase implements GithubFeedItemInterface {
       }
       $this->values['target_id'] = NULL;
     }
+
+    // If the token has changed, invalidate the cache because it might have
+    // changed in order to get a new token.
+    $cacheKey = GithubFeed::generateCacheIdFromUrlAndData($this->getRepository(), $this->getType(), (int) $hasToken, $this->getItemNum(), $this->getIncludeComments(), $this->getCommentNum());
+    $this->getCacheBin()->invalidate($cacheKey);
   }
 
   /**
@@ -269,7 +276,7 @@ class GithubFeedItem extends FieldItemBase implements GithubFeedItemInterface {
    *   The flag for removal of the key.
    */
   protected function getRemoveValue(): bool {
-    return $this->values['remove_value'] ?? FALSE;
+    return (bool) $this->values['remove_value'] ?? FALSE;
   }
 
   /**
@@ -299,7 +306,7 @@ class GithubFeedItem extends FieldItemBase implements GithubFeedItemInterface {
    *   The number of items to display.
    */
   protected function getItemNum(): int {
-    return $this->values['item_num'] ?? 0;
+    return (int) $this->values['item_num'] ?? 0;
   }
 
   /**
@@ -309,7 +316,7 @@ class GithubFeedItem extends FieldItemBase implements GithubFeedItemInterface {
    *   Whether to include comments.
    */
   protected function getIncludeComments(): bool {
-    return $this->values['include_comments'] ?? FALSE;
+    return (bool) $this->values['include_comments'] ?? FALSE;
   }
 
   /**
@@ -319,7 +326,7 @@ class GithubFeedItem extends FieldItemBase implements GithubFeedItemInterface {
    *   The number of comments to display.
    */
   protected function getCommentNum(): int {
-    return $this->values['comment_num'] ?? 0;
+    return (int) $this->values['comment_num'] ?? 0;
   }
 
   /**
@@ -329,7 +336,7 @@ class GithubFeedItem extends FieldItemBase implements GithubFeedItemInterface {
    *   The file target ID.
    */
   protected function getFileTargetId(): ?int {
-    return $this->values['target_id'] ?? NULL;
+    return (int) $this->values['target_id'] ?? NULL;
   }
 
   /**
@@ -353,7 +360,7 @@ class GithubFeedItem extends FieldItemBase implements GithubFeedItemInterface {
    *   The cache backend.
    */
   protected function getCacheBin(): CacheBackendInterface {
-    return \Drupal::cache('cache.github_feed');
+    return \Drupal::cache('github_feed');
   }
 
 }

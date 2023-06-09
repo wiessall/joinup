@@ -165,7 +165,7 @@ class GithubFeedWidget extends WidgetBase {
       $return[$delta]['repository'] = $value['repository'];
       $return[$delta]['type'] = $value['type'];
       $return[$delta]['item_num'] = $value['item_num'];
-      $return[$delta]['include_comments'] = $value['comments_container']['include_comments'];
+      $return[$delta]['include_comments'] = $return[$delta]['type'] === 'events' ? '0' : $value['comments_container']['include_comments'];
       $return[$delta]['comment_num'] = $value['comments_container']['comment_num'];
       $return[$delta]['target_id'] = $value['target_id'];
     }

@@ -10,6 +10,7 @@ Feature: Github feed paragraph tests.
       | Catalogue of paragraphs | Paragraphs collection | validated |
     When I am logged in as a moderator
     And I go to the "Catalogue of paragraphs" custom page
+
     And I click "Edit"
     And I should see the heading "Edit Custom page Catalogue of paragraphs"
     And I press "Add Github feed"
@@ -36,7 +37,7 @@ Feature: Github feed paragraph tests.
     When I go to the edit form of the "Catalogue of paragraphs" "custom page"
     And I select "Pull requests" from "Type"
     And I press "Save"
-    And I should see the heading "Pull requests (1)"
+    And I should see the heading "Pull requests (2)"
     And I should see the heading "Comments (5)"
 
     When I go to the edit form of the "Catalogue of paragraphs" "custom page"
