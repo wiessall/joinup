@@ -25,10 +25,10 @@ class GithubFeed implements GithubFeedInterface {
   /**
    * {@inheritdoc}
    */
-  public function fetchItems(string $url, string $type, string $token, int $numberOfResults = 10, $includeComments = FALSE, int $numberOfComments = 0): array {
+  public function fetchItems(string $url, string $type, string $token, int $numberOfResults = 10, $includeComments = FALSE, int $numberOfComments = 0, bool $resetCache = FALSE): array {
     [$owner, $project] = static::getOwnerAndProjectFromUri($url);
     $cacheId = $owner . ':' . $project . ':' . $type . ':' . $numberOfResults . ':' . $includeComments . ':' . $numberOfComments;
-    $cache = $this->cache->get($cacheId);
+    $cache = $resetCache && $this->cache->get($cacheId);
     if (!$cache) {
       $items = $this->doFetchItems($owner, $project, $type, $token, $numberOfResults, $includeComments, $numberOfComments);
       $this->cache->set($cacheId, $items);
@@ -63,6 +63,52 @@ class GithubFeed implements GithubFeedInterface {
   }
 
   /**
+   * Generates a cache ID for the given parameters.
+   *
+   * @param string $owner
+   *   The owner of the project.
+   * @param string $project
+   *   The project name.
+   * @param string $type
+   *   The type of the feed. Either 'issue' or 'pull_request' or 'events'.
+   * @param int $numberOfResults
+   *   The number of results to return.
+   * @param bool $includeComments
+   *   Whether to include comments or not.
+   * @param int $numberOfComments
+   *   The number of comments to return.
+   *
+   * @return string
+   *   The cache ID.
+   */
+  public static function generateCacheId(string $owner, string $project, string $type, int $numberOfResults = 10, bool $includeComments = FALSE, int $numberOfComments = 0): string {
+    return $owner . ':' . $project . ':' . $type . ':' . $numberOfResults . ':' . $includeComments . ':' . $numberOfComments;
+  }
+
+  /**
+   * Generates a cache ID for the given URL and parameters.
+   *
+   * @param string $url
+   *   The repository URL.
+   * @param string $type
+   *   The type of the feed. One of the items defined in
+   *   \Drupal\github_feed\Plugin\Field\FieldType\GithubFeedItem::allowedTypeValues.
+   * @param int $numberOfResults
+   *   The number of results to return.
+   * @param bool $includeComments
+   *   Whether to include comments or not.
+   * @param int $numberOfComments
+   *   The number of comments to return.
+   *
+   * @return string
+   *   The cache ID.
+   */
+  public static function generateCacheIdFromUrlAndData(string $url, string $type, int $numberOfResults = 10, bool $includeComments = FALSE, int $numberOfComments = 0): string {
+    [$owner, $project] = static::getOwnerAndProjectFromUri($url);
+    return static::generateCacheId($owner, $project, $type, $numberOfResults, $includeComments, $numberOfComments);
+  }
+
+  /**
    * Fetches the Github issues feed and returns them as an array.
    *
    * @param string $owner
@@ -88,6 +134,13 @@ class GithubFeed implements GithubFeedInterface {
     $url .= '?per_page=' . $itemNum . '&page=1';
 
     $response = $this->client->get(self::GITHUB_API_URL . $url, $this->getRequestOptions($token));
+    if ($response->getStatusCode() !== 200) {
+      if (\Drupal::currentUser()->hasPermission('view invalid api key message')) {
+        \Drupal::messenger()->addMessage('An error has occurred while trying to fetch data from GitHub. Error is .', 'error');
+      }
+      return [];
+    }
+
     $data = json_decode($response->getBody()->getContents(), TRUE);
 
     $return = [];

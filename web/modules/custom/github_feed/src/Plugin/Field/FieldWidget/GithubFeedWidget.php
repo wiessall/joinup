@@ -60,7 +60,7 @@ class GithubFeedWidget extends WidgetBase {
       '#title' => $this->t('API key'),
     ];
 
-    $element['key_container']['file_contents'] = [
+    $element['key_container']['api_key'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Access token'),
       '#description' => $description,
@@ -149,7 +149,7 @@ class GithubFeedWidget extends WidgetBase {
     }
 
     // File contents cannot be filled while remove value is checked.
-    if (!empty($value['key_container']['remove_value']) && !empty($value['key_container']['file_contents'])) {
+    if (!empty($value['key_container']['remove_value']) && !empty($value['key_container']['api_key'])) {
       $form_state->setError($element, t('You cannot fill the new value for the access token while remove value is checked.'));
     }
   }
@@ -160,7 +160,7 @@ class GithubFeedWidget extends WidgetBase {
   public function massageFormValues(array $values, array $form, FormStateInterface $form_state) {
     $return = [];
     foreach ($values as $delta => $value) {
-      $return[$delta]['file_contents'] = $value['key_container']['file_contents'];
+      $return[$delta]['api_key'] = $value['key_container']['api_key'];
       $return[$delta]['remove_value'] = $value['key_container']['remove_value'];
       $return[$delta]['repository'] = $value['repository'];
       $return[$delta]['type'] = $value['type'];
