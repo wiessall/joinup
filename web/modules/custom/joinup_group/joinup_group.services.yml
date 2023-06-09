@@ -79,9 +79,3 @@ services:
       - [setJoinupGroupManager, ['@joinup_group.group_manager']]
     tags:
       - { name: access_check, applies_to: _joinup_group_announcements }
-  joinup_group.layout_paragraphs.builder_access_decorator:
-    class: Drupal\joinup_group\Access\LayoutParagraphsBuilderAccessDecorator
-    decorates: layout_paragraphs.builder_access
-    decoration_priority: 10
-    public: false
-    arguments: ['@joinup_group.layout_paragraphs.builder_access_decorator.inner', '@entity_type.manager', '@og.access']
