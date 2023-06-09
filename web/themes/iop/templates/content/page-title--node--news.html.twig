@@ -23,9 +23,8 @@
   {{ url_more }}
 {% endblock %}
 {% block logo %}
-  <div class="bg-dark rounded-5 my-4">
-    {# @todo ISAICP-7253 load the proper bundle_logo if any #}
-    <img class="img-fluid p-5" src="{{ file_url('themes/iop/assets/images/iop-eu-logo.svg') }}" alt="" />
+  <div class="rounded-5 my-4 overflow-hidden">
+    {{ logo }}
   </div>
 {% endblock %}
 {% block metadata %}
