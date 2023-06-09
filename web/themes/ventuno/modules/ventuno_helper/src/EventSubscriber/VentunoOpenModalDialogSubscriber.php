@@ -61,7 +61,7 @@ class VentunoOpenModalDialogSubscriber implements EventSubscriberInterface {
     ];
     if (in_array($context['instance'], $instance_open) && $this->isVentuno()) {
       $event->setCommand(new OpenBootstrap4ModalDialogCommand($context['title'], $context['content'], [
-        'dialogClasses' => 'modal-dialog-centered',
+        'dialogClasses' => ['modal-dialog-centered', 'modal-lg'],
         'dialogShowHeader' => TRUE,
         'dialogShowHeaderTitle' => TRUE,
       ]));

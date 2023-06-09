@@ -47,7 +47,7 @@ Feature:
     Then I should not see the heading "Main topics"
 
     Given I am logged in as a moderator
-    And I click "Dashboard"
+    And I go to "/dashboard"
     And I click "Curated content listings"
     And I click "Homepage topics"
     Then I should see the heading "Update curated content listing Homepage topics"
@@ -465,3 +465,26 @@ Feature:
     And the url should match "/topic/law-and-justice/e-justice"
     Then I should not see the "News 1" tile
     And I should not see the heading "E-justice heading"
+
+  Scenario: Ampersand character is not decoded properly under a topic page.
+    Given custom_page content:
+      | title                    | body                                          | state     |
+      | Legislation & Technology | What do we mean by Legislation & Technology?  | validated |
+    And the following topics are enabled in the homepage:
+      | E-justice               |
+    And I am logged in as a moderator
+    And I go to the homepage
+    When I click "E-justice"
+    And I click "Edit"
+    And I press "Add Row"
+    And I press "Add 1 column layout"
+    And I press "Add Configurable listing"
+    And I select "Custom page" from "Available filters"
+    And I press "Add and configure filter"
+    And I fill in "Custom page" with "Legislation & Technology"
+    When I fill in "Heading" with "E-justice heading"
+    And I select "Grid" from "List style"
+    And I press "Save"
+    And the url should match "/topic/law-and-justice/e-justice"
+    And I should see the text "What do we mean by Legislation & Technology?" in the "Legislation & Technology" tile
+    And I should not see the text "What do we mean by Legislation &amp; Technology?" in the "Legislation & Technology" tile

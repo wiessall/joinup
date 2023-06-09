@@ -6,6 +6,7 @@ namespace Drupal\custom_page;
 
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Menu\MenuLinkManagerInterface;
+use Drupal\joinup_group\GroupMenuManagerInterface;
 use Drupal\menu_link_content\MenuLinkContentInterface;
 use Drupal\menu_link_content\Plugin\Menu\MenuLinkContent;
 use Drupal\og\OgGroupAudienceHelperInterface;
@@ -16,27 +17,6 @@ use Drupal\og\OgGroupAudienceHelperInterface;
 class CustomPageProvider implements CustomPageProviderInterface {
 
   /**
-   * The entity type manager.
-   *
-   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
-   */
-  protected $entityTypeManager;
-
-  /**
-   * The core menu link manager.
-   *
-   * @var \Drupal\Core\Menu\MenuLinkManagerInterface
-   */
-  protected $menuLinkManager;
-
-  /**
-   * The custom page menu links manager.
-   *
-   * @var \Drupal\custom_page\CustomPageOgMenuLinksManagerInterface
-   */
-  protected $customPageOgMenuLinksManager;
-
-  /**
    * Builds a new custom page OG menu links updater service.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
@@ -45,11 +25,15 @@ class CustomPageProvider implements CustomPageProviderInterface {
    *   The core menu link manager.
    * @param \Drupal\custom_page\CustomPageOgMenuLinksManagerInterface $customPageOgMenuLinksManager
    *   The custom page menu link manager.
+   * @param \Drupal\joinup_group\GroupMenuManagerInterface $groupMenuManager
+   *   Group menu manager.
    */
-  public function __construct(EntityTypeManagerInterface $entityTypeManager, MenuLinkManagerInterface $menuLinkManager, CustomPageOgMenuLinksManagerInterface $customPageOgMenuLinksManager) {
-    $this->entityTypeManager = $entityTypeManager;
-    $this->menuLinkManager = $menuLinkManager;
-    $this->customPageOgMenuLinksManager = $customPageOgMenuLinksManager;
+  public function __construct(
+    protected EntityTypeManagerInterface $entityTypeManager,
+    protected MenuLinkManagerInterface $menuLinkManager,
+    protected CustomPageOgMenuLinksManagerInterface $customPageOgMenuLinksManager,
+    protected GroupMenuManagerInterface $groupMenuManager
+  ) {
   }
 
   /**
@@ -61,7 +45,7 @@ class CustomPageProvider implements CustomPageProviderInterface {
 
     if (!empty($custom_page_ids) && $exclude_disabled) {
       // Filter out all pages that are disabled in the group's menu instance.
-      $ogmenu_instance = $this->customPageOgMenuLinksManager->getOgMenuInstanceByGroupId($group_id);
+      $ogmenu_instance = $this->groupMenuManager->getMenuByGroupId($group_id);
       if (empty($ogmenu_instance)) {
         return [];
       }

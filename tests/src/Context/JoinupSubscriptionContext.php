@@ -11,8 +11,8 @@ use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\DrupalExtension\TagTrait;
 use Drupal\joinup\Traits\CacheInvalidationTrait;
 use Drupal\joinup\Traits\EntityTrait;
+use Drupal\joinup\Traits\JavascriptTrait;
 use Drupal\joinup\Traits\MailCollectorTrait;
-use Drupal\joinup\Traits\MaterialDesignTrait;
 use Drupal\joinup\Traits\OgTrait;
 use Drupal\joinup\Traits\TraversingTrait;
 use Drupal\joinup\Traits\UserTrait;
@@ -34,8 +34,8 @@ class JoinupSubscriptionContext extends RawDrupalContext {
 
   use CacheInvalidationTrait;
   use EntityTrait;
+  use JavascriptTrait;
   use MailCollectorTrait;
-  use MaterialDesignTrait;
   use MessageDigestTrait;
   use OgTrait;
   use TagTrait;
@@ -262,7 +262,7 @@ class JoinupSubscriptionContext extends RawDrupalContext {
   }
 
   /**
-   * Checks a material checkbox that represents a subscription's bundle.
+   * Checks a checkbox that represents a subscription's bundle.
    *
    * @param string $label
    *   The group name.
@@ -274,13 +274,14 @@ class JoinupSubscriptionContext extends RawDrupalContext {
    *
    * @Given I check the :bundle checkbox of the :label subscription
    */
-  public function selectSubscriptionMaterialOptionInMySubscriptions(string $label, string $bundle): void {
-    $label = $this->getGroupSubscriptionCardByHeading($label);
-    $this->checkMaterialDesignField($bundle, $label);
+  public function selectSubscriptionOptionInMySubscriptions(string $label, string $bundle): void {
+    $checkbox = $this->getGroupSubscriptionCardByHeading($label)->findField($bundle);
+    $this->scrollElementIntoView($checkbox);
+    $checkbox->check();
   }
 
   /**
-   * Unhecks a material checkbox that represents a subscription's bundle.
+   * Unchecks a checkbox that represents a subscription's bundle.
    *
    * @param string $label
    *   The group name.
@@ -288,14 +289,14 @@ class JoinupSubscriptionContext extends RawDrupalContext {
    *   The bundle to check.
    *
    * @throws \Exception
-   *   Thrown when the card is not found or there was an issue with the material
-   *   checkbox.
+   *   Thrown when the card is not found or there is an issue with the checkbox.
    *
    * @Given I uncheck the :bundle checkbox of the :label subscription
    */
-  public function deselectSubscriptionMaterialOptionInMySubscriptions(string $label, string $bundle): void {
-    $label = $this->getGroupSubscriptionCardByHeading($label);
-    $this->uncheckMaterialDesignField($bundle, $label);
+  public function deselectSubscriptionOptionInMySubscriptions(string $label, string $bundle): void {
+    $checkbox = $this->getGroupSubscriptionCardByHeading($label)->findField($bundle);
+    $this->scrollElementIntoView($checkbox);
+    $checkbox->uncheck();
   }
 
   /**

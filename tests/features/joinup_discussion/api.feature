@@ -15,7 +15,7 @@ Feature: Discussion API
 
     # Check that the basic fields are visible.
     When I go to the "Fearless concurrency" discussion
-    Then I should see the heading "Parallel programming"
+    Then I should see the text "Parallel programming"
     And I should see the heading "Fearless concurrency"
     And I should see the text "Let us have a discussion"
     # The discussion does not have a file attached to it, so it should not show

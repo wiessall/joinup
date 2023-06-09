@@ -279,7 +279,7 @@ Feature: "Add solution" visibility options.
     And I delete the "Climate change tracker" solution
     And I delete the "Angela Crespi" contact information
 
-  @javascript @terms @generateMedia
+  @javascript @terms @generateMedia @generateMediaTypes:solution_banner,solution_logo
   Scenario: Tests the image library widget.
     Given the following owner:
       | name                 | type    |
@@ -298,7 +298,7 @@ Feature: "Add solution" visibility options.
 
     Given I am logged in as a moderator
     When I go to the edit form of the "Cleaning solution" solution
-    When I press "Additional fields"
+    When I expand the "Additional fields" accordion section
     And  I remove the first file from "Logo"
     And I wait for AJAX to finish
     Then  I remove the first file from "Banner"

@@ -6,13 +6,15 @@ dependencies:
     - core.entity_view_mode.node.view_mode_featured
     - field.field.node.discussion.body
     - field.field.node.discussion.field_attachment
+    - field.field.node.discussion.field_discussion_logo
     - field.field.node.discussion.field_keywords
-    - field.field.node.discussion.field_topic
     - field.field.node.discussion.field_replies
     - field.field.node.discussion.field_shared_in
     - field.field.node.discussion.field_site_featured
     - field.field.node.discussion.field_state
+    - field.field.node.discussion.field_topic
     - field.field.node.discussion.og_audience
+    - image.style.vertical_medium_image
     - node.type.discussion
   module:
     - smart_trim
@@ -43,6 +45,19 @@ content:
     third_party_settings:
       template_suggestion:
         template_suggestion: ''
+    weight: 2
+    region: content
+  field_discussion_logo:
+    type: image
+    label: hidden
+    settings:
+      image_link: content
+      image_style: vertical_medium_image
+      image_loading:
+        attribute: lazy
+    third_party_settings:
+      template_suggestion:
+        template_suggestion: ''
     weight: 1
     region: content
   field_keywords:
@@ -53,7 +68,7 @@ content:
     third_party_settings:
       template_suggestion:
         template_suggestion: comma_separated
-    weight: 2
+    weight: 3
     region: content
   field_topic:
     type: entity_reference_label
