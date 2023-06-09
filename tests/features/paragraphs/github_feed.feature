@@ -26,11 +26,20 @@ Feature: Github feed paragraph tests.
     And I should see the heading "Github feed"
     And I should see the link "Read more"
     And I should see the heading "Issues (2)"
-    And I should not see the text "Comments (5)"
+    And I should not see the heading "Comments (5)"
 
-    When I go to the edit form of the "Catalogue of paragraphs" page
+    When I go to the edit form of the "Catalogue of paragraphs" "custom page"
     And I check "Include comments"
     And I press "Save"
+    And I should see the heading "Comments (5)"
 
-    Then I should see the heading "Catalogue of paragraphs"
-    And I should see the text "Comments (5)"
+    When I go to the edit form of the "Catalogue of paragraphs" "custom page"
+    And I select "Pull requests" from "Type"
+    And I press "Save"
+    And I should see the heading "Pull requests (1)"
+    And I should see the heading "Comments (5)"
+
+    When I go to the edit form of the "Catalogue of paragraphs" "custom page"
+    And I select "Activity stream" from "Type"
+    And I press "Save"
+    And I should see the heading "Activity feed (2)"

@@ -157,6 +157,7 @@ permissions:
   - 'update group'
   - 'update own asset_distribution rdf_entity'
   - 'update own asset_release rdf_entity'
+  - 'view invalid api key message'
   - 'view all revisions'
   - 'view any unpublished content'
   - 'view rdf entity'

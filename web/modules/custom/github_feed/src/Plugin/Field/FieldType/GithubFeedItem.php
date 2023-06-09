@@ -5,6 +5,7 @@ declare(strict_types = 1);
 namespace Drupal\github_feed\Plugin\Field\FieldType;
 
 use Drupal\Component\Utility\Random;
+use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Field\FieldItemBase;
 use Drupal\Core\Field\FieldStorageDefinitionInterface;
@@ -15,6 +16,7 @@ use Drupal\Core\TypedData\DataDefinition;
 use Drupal\file\Entity\File;
 use Drupal\file\FileInterface;
 use Drupal\file\Plugin\Field\FieldType\FileItem;
+use Drupal\github_feed\GithubFeed;
 
 /**
  * Defines the 'github_feed' field type.
@@ -116,15 +118,18 @@ class GithubFeedItem extends FieldItemBase implements GithubFeedItemInterface {
   public function preSave() {
     parent::preSave();
     // If the new value is empty, skip.
-    if (!empty($this->values['file_contents'])) {
-      $newValue = $this->values['file_contents'];
+    if (!empty($this->getNewKeyValue())) {
+      // If the token has changed, invalidate the cache because it might have
+      // changed in order to get a new token.
+      $cacheKey = GithubFeed::generateCacheIdFromUrlAndData($this->getRepository(), $this->getType(), $this->getItemNum(), $this->getIncludeComments(), $this->getCommentNum());
+      $this->getCacheBin()->invalidate($cacheKey);
+
       $encryptionProfile = $this->getFieldDefinition()->getSetting('encryption_profile');
-      $encryptedValue = \Drupal::getContainer()->get('github_feed.encrypt')->encrypt($newValue, $encryptionProfile);
+      $encryptedValue = \Drupal::getContainer()->get('github_feed.encrypt')->encrypt($this->getNewKeyValue(), $encryptionProfile);
 
       // Check if there is already a file.
-      $fileId = $this->values['target_id'] ?? NULL;
-      if ($fileId) {
-        $file = File::load($fileId);
+      if ($this->getFileTargetId()) {
+        $file = File::load($this->getFileTargetId());
         $fileUri = $file->getFileUri();
         file_put_contents($fileUri, $encryptedValue);
       }
@@ -144,8 +149,8 @@ class GithubFeedItem extends FieldItemBase implements GithubFeedItemInterface {
       }
       $this->values['target_id'] = $file->id();
     }
-    elseif ($this->values['remove_value']) {
-      $fileId = $this->values['target_id'] ?? NULL;
+    elseif ($this->getRemoveValue()) {
+      $fileId = $this->getFileTargetId();
       if ($fileId) {
         $file = File::load($fileId);
         $file->delete();
@@ -171,15 +176,15 @@ class GithubFeedItem extends FieldItemBase implements GithubFeedItemInterface {
     $properties['type'] = DataDefinition::create('string')
       ->setLabel(t('Type'))
       ->setRequired(TRUE);
-    $properties['include_comments'] = DataDefinition::create('boolean')
-      ->setLabel(t('Include comments'))
-      ->setRequired(TRUE);
     $properties['item_num'] = DataDefinition::create('integer')
       ->setLabel(t('Number of items'))
       ->setRequired(TRUE)
       ->setSetting('unsigned', TRUE)
       ->setSetting('size', 'small')
       ->addConstraint('Range', ['min' => 1, 'max' => 10]);
+    $properties['include_comments'] = DataDefinition::create('boolean')
+      ->setLabel(t('Include comments'))
+      ->setRequired(TRUE);
     $properties['comment_num'] = DataDefinition::create('integer')
       ->setLabel(t('Number of comments'))
       ->setSetting('unsigned', TRUE)
@@ -248,6 +253,86 @@ class GithubFeedItem extends FieldItemBase implements GithubFeedItemInterface {
   }
 
   /**
+   * Returns the file contents if exists.
+   *
+   * @return string
+   *   The file contents.
+   */
+  protected function getNewKeyValue(): string {
+    return $this->values['api_key'] ?? '';
+  }
+
+  /**
+   * Returns the flag for removal of the key.
+   *
+   * @return bool
+   *   The flag for removal of the key.
+   */
+  protected function getRemoveValue(): bool {
+    return $this->values['remove_value'] ?? FALSE;
+  }
+
+  /**
+   * Returns the repository URL.
+   *
+   * @return string
+   *   The repository URL.
+   */
+  protected function getRepository(): string {
+    return $this->values['repository'] ?? '';
+  }
+
+  /**
+   * Returns the type of feed.
+   *
+   * @return string
+   *   The type of feed.
+   */
+  protected function getType(): string {
+    return $this->values['type'] ?? '';
+  }
+
+  /**
+   * Returns the number of items to display.
+   *
+   * @return int
+   *   The number of items to display.
+   */
+  protected function getItemNum(): int {
+    return $this->values['item_num'] ?? 0;
+  }
+
+  /**
+   * Returns whether to include comments.
+   *
+   * @return bool
+   *   Whether to include comments.
+   */
+  protected function getIncludeComments(): bool {
+    return $this->values['include_comments'] ?? FALSE;
+  }
+
+  /**
+   * Returns the number of comments to display.
+   *
+   * @return int
+   *   The number of comments to display.
+   */
+  protected function getCommentNum(): int {
+    return $this->values['comment_num'] ?? 0;
+  }
+
+  /**
+   * Returns the file target ID.
+   *
+   * @return int|NULL
+   *   The file target ID.
+   */
+  protected function getFileTargetId(): ?int {
+    return $this->values['target_id'] ?? NULL;
+  }
+
+  /**
    * Returns allowed values for 'type' sub-field.
    *
    * @return array
@@ -259,6 +344,16 @@ class GithubFeedItem extends FieldItemBase implements GithubFeedItemInterface {
       'pull_request' => t('Pull requests'),
       'events' => t('Activity stream'),
     ];
+  }
+
+  /**
+   * Returns the cache used for storing the feed.
+   *
+   * @return \Drupal\Core\Cache\CacheBackendInterface
+   *   The cache backend.
+   */
+  protected function getCacheBin(): CacheBackendInterface {
+    return \Drupal::cache('cache.github_feed');
   }
 
 }
