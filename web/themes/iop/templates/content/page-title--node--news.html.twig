@@ -12,29 +12,29 @@
  *   displayed after the main title tag that appears in the template.
  */
 #}
-{{ attach_library('ventuno/page-title') }}
-{{ title_prefix }}
-{% if title %}
-<div class="page-title page__title-wrapper d-flex flex-column my-4">
-  <h1 class="page-title__title order-1">
-    {{ additional_content.field_news_headline }}
-    {% if permalink %}
-      <a class="permalink" href="{{ permalink }}" title="{{ 'Permalink'|t }}">
-        {{ pattern('icon', {
-          name: 'link-45deg',
-          size: 'm'
-        }) }}
-      </a>
-    {% endif %}
-  </h1>
-  <h2 class="page-title__headline order-0 mt-3 mb-2">{{ title }}</h2>
-  <div class="page-title__details order-1">
-    <span class="page-title__detail">{{ 'Published on'|t }}: {{ additional_content.published }}</span>
-    {% if additional_content.published != additional_content.updated %}
-      <span class="page-title__detail">{{ 'Last update'|t }}: {{ additional_content.updated }}</span>
-    {% endif %}
-    <span class="page-title__detail">{{ url_more }}</span>
+{% extends '@iop/content/page-title.html.twig' %}
+{% block url_more %}
+  {% set url_more = url_more|merge({'#attributes': {'class': [
+    'call-to-action',
+    'flex-shrink-0',
+    'h3',
+    'ms-3',
+  ]}}) %}
+  {{ url_more }}
+{% endblock %}
+{% block logo %}
+  <div class="bg-dark rounded-5 my-4">
+    {# @todo ISAICP-7253 load the proper bundle_logo if any #}
+    <img class="img-fluid p-5" src="{{ file_url('themes/iop/assets/images/iop-eu-logo.svg') }}" alt="" />
   </div>
-</div>
-{% endif %}
-{{ title_suffix }}
+{% endblock %}
+{% block metadata %}
+  <div class="d-flex my-4">
+    <div class="page-title__details">
+      <span class="page-title__detail">{{ 'Published on'|t }}: {{ additional_content.published }}</span>
+      {% if additional_content.published != additional_content.updated %}
+        <span class="page-title__detail">{{ 'Last update'|t }}: {{ additional_content.updated }}</span>
+      {% endif %}
+    </div>
+  </div>
+{% endblock %}
