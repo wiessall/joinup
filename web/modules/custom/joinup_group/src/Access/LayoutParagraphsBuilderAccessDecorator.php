@@ -47,11 +47,11 @@ class LayoutParagraphsBuilderAccessDecorator implements AccessInterface {
    *   The account to check access for.
    * @param \Drupal\layout_paragraphs\LayoutParagraphsLayout $layout_paragraphs_layout
    *   The layout paragraphs layout object.
-   * @param string|NULL $operation
+   * @param string|null $operation
    *   The operation being performed (i.e. 'create' or 'delete').
-   * @param string|NULL $component_uuid
+   * @param string|null $component_uuid
    *   The specific component being acted on.
-   * @param \Drupal\paragraphs\ParagraphsTypeInterface|NULL $paragraph_type
+   * @param \Drupal\paragraphs\ParagraphsTypeInterface|null $paragraph_type
    *   The paragraph type.
    *
    * @return \Drupal\Core\Access\AccessResult
@@ -62,9 +62,9 @@ class LayoutParagraphsBuilderAccessDecorator implements AccessInterface {
   public function access(
     AccountInterface $account,
     LayoutParagraphsLayout $layout_paragraphs_layout,
-    string $operation = NULL,
-    string $component_uuid = NULL,
-    ParagraphsTypeInterface $paragraph_type = NULL
+    ?string $operation = NULL,
+    ?string $component_uuid = NULL,
+    ?ParagraphsTypeInterface $paragraph_type = NULL
   ): AccessResult {
     $entity = $layout_paragraphs_layout->getEntity();
 
