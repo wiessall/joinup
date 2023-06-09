@@ -71,7 +71,7 @@ then
   then
     for FILE in $ALL_FILES
     do
-      FILE=$(realpath "$FILE")
+      FILE=$($DOCKER realpath "$FILE")
       for ALLOWED_FILE in $ALLOWED_PATHS
       do
         if [[ $FILE =~ ^${ALLOWED_FILE} ]]
