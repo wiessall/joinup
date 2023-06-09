@@ -83,9 +83,7 @@ class GithubFeedDefaultFormatter extends FormatterBase {
         '#type' => $item->type,
         '#cache' => [
           'tags' => ['github_feed:' . $cacheId],
-          // Cache for at least a day.
-          // @todo Take this from somewhere.
-          'max-age' => 86400,
+          'max-age' => $this->getFieldSetting('cache') ?: 86400,
         ],
       ];
 
