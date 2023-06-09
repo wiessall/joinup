@@ -21,15 +21,21 @@ Feature:
 
     When I open the header local tasks menu
     And I click "Edit"
-    # The first paragraphs item is open by default.
-    Then there should be 1 paragraph in the "Custom page body" field
-    Then I should see the "Remove" button in the "Custom page body" field for paragraph 1
-    Given I press "Remove" in the "Custom page body" field for paragraph 1
+    And I wait for AJAX to finish
 
-    Then the page should contain no paragraphs
+    Given I click "Choose component"
+    When I click "Simple paragraph"
+    And I wait until the page contains the text "Create new Simple paragraph"
+    And I press "Save" in the "Dialog buttons" region
+    And I wait for AJAX to finish
+    And there should be 1 paragraph in the "Custom page body" field
 
-    Given I press "Add Simple paragraph" in the "Custom page body" paragraphs field
-    Then there should be 1 paragraph in the "Custom page body" field
+    Then I click the last "Choose component" link
+    When I click "Simple paragraph"
+    And I wait until the page contains the text "Create new Simple paragraph"
+    And I press "Save" in the "Dialog buttons" region
+    And I wait for AJAX to finish
+    And there should be 2 paragraph in the "Custom page body" field
 
     Given I press "Add Simple paragraph" in the "Custom page body" paragraphs field
     Then there should be 2 paragraphs in the "Custom page body" field
