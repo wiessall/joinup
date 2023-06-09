@@ -26,3 +26,11 @@ Feature: Github feed paragraph tests.
     And I should see the heading "Github feed"
     And I should see the link "Read more"
     And I should see the heading "Issues (2)"
+    And I should not see the text "Comments (5)"
+
+    When I go to the edit form of the "Catalogue of paragraphs" page
+    And I check "Include comments"
+    And I press "Save"
+
+    Then I should see the heading "Catalogue of paragraphs"
+    And I should see the text "Comments (5)"
