@@ -47,6 +47,7 @@ drupal:
         - Custom error handler
         - Permissions
         - OpenEuropa Webtools Geocoding Cache
+        - GitHub Feed Cache
         - Verbose error logging
         - Development mail collector
         - Memcache
@@ -64,6 +65,7 @@ drupal:
         - OpenEuropa Newsroom Newsletter Mock
         - OpenEuropa Newsroom Newsletter Settings
         - OpenEuropa Webtools Geocoding Cache
+        - GitHub Feed Cache
         - Verbose error logging
         - Development mail collector
         - Memcache
@@ -82,6 +84,7 @@ drupal:
         - OpenEuropa Newsroom Newsletter Mock
         - OpenEuropa Newsroom Newsletter Settings
         - OpenEuropa Webtools Geocoding Cache
+        - GitHub Feed Cache
         - Memcache
         - Custom queue services
         - Test mail collector
@@ -98,6 +101,7 @@ drupal:
         - OpenEuropa Newsroom Newsletter Mock
         - OpenEuropa Newsroom Newsletter Settings
         - OpenEuropa Webtools Geocoding Cache
+        - GitHub Feed Cache
         - Memcache
         - Pipe errors to a temporary file
         - Custom queue services
@@ -115,6 +119,7 @@ drupal:
         - OpenEuropa Newsroom Newsletter Mock
         - OpenEuropa Newsroom Newsletter Settings
         - OpenEuropa Webtools Geocoding Cache
+        - GitHub Feed Cache
         - Verbose error logging
         - Custom queue services
         - Test mail collector
@@ -311,6 +316,10 @@ drupal:
         $settings['cache']['bins']['geocoder'] = 'cache.backend.file_system';
         $settings['filecache']['directory']['bins']['geocoder'] = '../tests/fixtures/geocoding/cache';
         $settings['filecache']['strategy']['bins']['geocoder'] = 'persist';
+      GitHub Feed Cache: |
+        $settings['cache']['bins']['github_feed'] = 'cache.backend.file_system';
+        $settings['filecache']['directory']['bins']['github_feed'] = '../tests/fixtures/github/cache';
+        $settings['filecache']['strategy']['bins']['github_feed'] = 'persist';
       Development: |
         $settings['extension_discovery_scan_tests'] = TRUE;
       Verbose error logging: |

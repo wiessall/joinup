@@ -1,8 +1,15 @@
 services:
   github_feed.github_feed:
     class: Drupal\github_feed\GithubFeed
-    arguments: ['@cache.default', '@http_client']
+    arguments: ['@cache.github_feed', '@http_client']
 
   github_feed.encrypt:
     class: Drupal\github_feed\EncryptionManager
     arguments: ['@entity_type.manager', '@encrypt.encryption_profile.manager', '@encryption', '@file_system']
+
+  cache.github_feed:
+    class: Drupal\Core\Cache\CacheBackendInterface
+    tags:
+      - { name: cache.bin }
+    factory: cache_factory:get
+    arguments: [ github_feed ]
