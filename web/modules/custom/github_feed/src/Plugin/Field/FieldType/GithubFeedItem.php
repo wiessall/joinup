@@ -127,29 +127,29 @@ class GithubFeedItem extends FieldItemBase implements GithubFeedItemInterface {
       $encryptionProfile = $this->getFieldDefinition()->getSetting('encryption_profile');
       $encryptedValue = \Drupal::getContainer()->get('github_feed.encrypt')->encrypt($this->getNewKeyValue(), $encryptionProfile);
 
-      // Check if there is already a file.
+      $fileSystem = \Drupal::getContainer()->get('file_system');
+      // If the file exists, delete it and write a new one so that any history
+      // of the file also does not keep the old hash.
       if ($this->getFileTargetId()) {
         $file = File::load($this->getFileTargetId());
         $fileUri = $file->getFileUri();
-        file_put_contents($fileUri, $encryptedValue);
+        $fileSystem->delete($fileUri);
       }
-      else {
-        $random = new Random();
-        $directoryWithScheme = $this->getFieldDefinition()->getSetting('uri_scheme') . '://' . trim($this->getFieldDefinition()->getSetting('file_directory'), '/');
-        // Prepare the directory.
-        \Drupal::getContainer()->get('file_system')->prepareDirectory($directoryWithScheme, FileSystemInterface::CREATE_DIRECTORY | FileSystemInterface::MODIFY_PERMISSIONS);
-        $fileUri = $directoryWithScheme . '/' . $random->word(32);
-        file_put_contents($fileUri, $encryptedValue);
-        $file = File::create([
-          'uri' => $fileUri,
-          'uid' => \Drupal::currentUser()->id(),
-          'status' => FileInterface::STATUS_PERMANENT,
-        ]);
-        $file->save();
-      }
+      $random = new Random();
+      $directoryWithScheme = $this->getFieldDefinition()->getSetting('uri_scheme') . '://' . trim($this->getFieldDefinition()->getSetting('file_directory'), '/');
+      $fileSystem->prepareDirectory($directoryWithScheme, FileSystemInterface::CREATE_DIRECTORY | FileSystemInterface::MODIFY_PERMISSIONS);
+
+      $fileUri = $directoryWithScheme . '/' . $random->word(32);
+      file_put_contents($fileUri, $encryptedValue);
+      $file = File::create([
+        'uri' => $fileUri,
+        'uid' => \Drupal::currentUser()->id(),
+        'status' => FileInterface::STATUS_PERMANENT,
+      ]);
+      $file->save();
       $this->values['target_id'] = $file->id();
     }
-    elseif ($this->getRemoveValue()) {
+    if ($this->getRemoveValue()) {
       $fileId = $this->getFileTargetId();
       if ($fileId) {
         $file = File::load($fileId);
