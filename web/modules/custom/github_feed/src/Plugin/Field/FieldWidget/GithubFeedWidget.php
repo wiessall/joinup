@@ -24,29 +24,6 @@ class GithubFeedWidget extends WidgetBase {
   /**
    * {@inheritdoc}
    */
-  public static function defaultSettings() {
-    return [
-      'keys_directory' => 'private://',
-    ] + parent::defaultSettings();
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function settingsForm(array $form, FormStateInterface $form_state) {
-    $element['keys_directory'] = [
-      '#type' => 'textfield',
-      '#title' => $this->t('Directory'),
-      '#default_value' => $this->getSetting('directory'),
-      '#description' => $this->t('The directory inside the files directory where the file will be uploaded. Should be in the private:// scheme.'),
-      '#required' => TRUE,
-    ];
-    return $element;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
   public function settingsSummary() {
     $summary = [];
     $directory = $this->getSetting('directory');

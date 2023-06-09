@@ -6,33 +6,36 @@ field.field_settings.github_feed:
     cache:
       type: integer
       label: The cache lifetime in seconds.
+    uri_scheme:
+      type: string
+      label: The URI scheme to use for the link.
+    file_directory:
+      type: string
+      label: The directory the API keys are stored in.
+    encryption_profile:
+      type: string
+      label: The encryption profile to use for the API key.
 
 # Default value.
 field.value.github_feed:
   type: mapping
   label: Default value
   mapping:
+    target_id:
+      type: string
+      label: The file holding the API key.
     repository:
       type: uri
       label: Repository
     type:
       type: string
       label: Type
-    include_comments:
-      type: boolean
-      label: Include comments
     item_num:
       type: integer
       label: Number of items
+    include_comments:
+      type: boolean
+      label: Include comments
     comment_num:
       type: integer
       label: Number of comments
-
-# Field formatter.
-field.formatter.settings.github_feed_default:
-  type: mapping
-  label: Formatter settings
-  mapping:
-    foo:
-      type: string
-      label: Foo
