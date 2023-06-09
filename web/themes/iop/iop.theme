@@ -205,6 +205,10 @@ function iop_preprocess_page_title(array &$variables): void {
     ]);
     switch ($entity->bundle()) {
       case 'news':
+        /** @var \Drupal\Core\Entity\EntityViewBuilderInterface $view_builder */
+        $view_builder = \Drupal::entityTypeManager()->getViewBuilder('node');
+        $field_news_headline = $view_builder->viewField($node->field_news_headline, 'default');
+        $variables['title'] = $field_news_headline;
         $link = [
           '#type' => 'link',
           '#url' => $url,
