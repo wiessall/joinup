@@ -82,12 +82,12 @@ function iop_preprocess_page(&$variables) {
       $variables['node_classes'] = ['listing', 'page--policy'];
       $variables['page_header']['title'] = 'Policy';
     }
-    // News item
+    // News item.
     elseif ($route_name === 'entity.node.canonical' && $node->bundle() === 'news') {
       $variables['node_classes'] = ['page--news'];
       $variables['page_header']['title'] = 'News';
     }
-    // Event item
+    // Event item.
     elseif ($route_name === 'entity.node.canonical' && $node->bundle() === 'event') {
       $variables['node_classes'] = ['page--events'];
       $variables['page_header']['title'] = 'Event';
@@ -196,6 +196,7 @@ function iop_preprocess_page_title(array &$variables): void {
     $url = Url::fromRoute('entity.node.canonical', ['node' => $node->id()]);
     switch ($entity->bundle()) {
       case 'news':
+        dump($entity);
         $link = [
           '#type' => 'link',
           '#url' => $url,
