@@ -193,13 +193,28 @@ function iop_preprocess_page_title(array &$variables): void {
       'news' => Drupal::service('entity.repository')->loadEntityByUuid('node', InteroperableEuropeCollectionInterface::NEWS_LISTING),
       'event' => Drupal::service('entity.repository')->loadEntityByUuid('node', InteroperableEuropeCollectionInterface::EVENT_LISTING),
     };
-
     $url = Url::fromRoute('entity.node.canonical', ['node' => $node->id()]);
-    $link = [
-      '#type' => 'link',
-      '#url' => $url,
-      '#title' => t('more %bundle', ['%bundle' => $node->label()]),
-    ];
+    switch ($entity->bundle()) {
+      case 'news':
+        $link = [
+          '#type' => 'link',
+          '#url' => $url,
+          '#title' => t('more news'),
+        ];
+        // @todo ISAICP-7253: get the bundle's logo and render it with "full width" image style
+        // $variables['logo'] = $entity->get('field_news_logo');
+        break;
+
+      case 'event':
+        $link = [
+          '#type' => 'link',
+          '#url' => $url,
+          '#title' => t('more events'),
+        ];
+        // @todo ISAICP-7253: get the bundle's logo and render it with "full width" image style
+        // $variables['logo'] = $entity->get('field_event_logo');
+        break;
+    }
     $variables['url_more'] = $link;
   }
 }
