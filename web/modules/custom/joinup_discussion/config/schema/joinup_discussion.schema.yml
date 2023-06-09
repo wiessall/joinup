@@ -17,3 +17,7 @@ joinup_discussion.settings:
             sequence:
               type: string
               label: 'Roles'
+
+views.access.joinup_discussion_overview:
+  type: mapping
+  label: 'Discussion overview access'
