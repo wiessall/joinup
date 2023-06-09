@@ -26,7 +26,7 @@ Feature:
 
     # Event and News.
     When I visit "/interoperable-europe/event/save-date-semic-coming-back-8-december-2021"
-    And I should see the link "more Events"
+    And I should see the link "more events"
     Then the page should be rendered using the "Interoperable Europe" theme
     When I visit "/interoperable-europe/news/vocbench-semantic-technologies-data-management"
     And I should see the link "more News"
