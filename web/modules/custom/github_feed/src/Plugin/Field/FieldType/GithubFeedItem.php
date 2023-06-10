@@ -159,11 +159,6 @@ class GithubFeedItem extends FieldItemBase implements GithubFeedItemInterface {
       }
       $this->values['target_id'] = NULL;
     }
-
-    // If the token has changed, invalidate the cache because it might have
-    // changed in order to get a new token.
-    $cacheKey = GithubFeed::generateCacheIdFromUrlAndData($this->getRepository(), $this->getType(), (int) $hasToken, $this->getItemNum(), $this->getIncludeComments(), $this->getCommentNum());
-    $this->getCacheBin()->invalidate($cacheKey);
   }
 
   /**
