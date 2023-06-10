@@ -32,6 +32,8 @@ interface GithubFeedInterface {
    *   The type of the feed. Either 'issue' or 'pull_request'.
    * @param string $token
    *   The GitHub token.
+   * @param int $cacheMaxTime
+   *   The cache time for the query. Defaults to a day.
    * @param int $numberOfResults
    *   The number of results to fetch.
    * @param bool $includeComments
@@ -42,6 +44,6 @@ interface GithubFeedInterface {
    * @return array|NULL
    *   The list of items or NULL if the request failed.
    */
-  public function fetchItems(string $url, string $type, string $token, int $numberOfResults = 10, $includeComments = FALSE, int $numberOfComments = 0): ?array;
+  public function fetchItems(string $url, string $type, string $token, int $cacheMaxTime = 86400, int $numberOfResults = 10, $includeComments = FALSE, int $numberOfComments = 0): ?array;
 
 }

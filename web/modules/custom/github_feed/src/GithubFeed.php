@@ -4,6 +4,7 @@ declare(strict_types = 1);
 
 namespace Drupal\github_feed;
 
+use Drupal\Component\Utility\Crypt;
 use Drupal\Core\Cache\CacheBackendInterface;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Exception\RequestException;
@@ -26,13 +27,13 @@ class GithubFeed implements GithubFeedInterface {
   /**
    * {@inheritdoc}
    */
-  public function fetchItems(string $url, string $type, string $token, int $numberOfResults = 10, $includeComments = FALSE, int $numberOfComments = 0, bool $resetCache = FALSE): ?array {
+  public function fetchItems(string $url, string $type, string $token, int $cacheMaxTime = 86400, int $numberOfResults = 10, $includeComments = FALSE, int $numberOfComments = 0, bool $resetCache = FALSE): ?array {
     [$owner, $project] = static::getOwnerAndProjectFromUri($url);
     $cacheId = static::generateCacheId($owner, $project, $type, (int) !empty($token), $numberOfResults, $includeComments, $numberOfComments);
-    $cache = $resetCache && $this->cache->get($cacheId);
+    $cache = $resetCache ? FALSE : $this->cache->get($cacheId);
     if (!$cache) {
       $items = $this->doFetchItems($owner, $project, $type, $token, $numberOfResults, $includeComments, $numberOfComments);
-      $this->cache->set($cacheId, $items);
+      $this->cache->set($cacheId, $items, $cacheMaxTime);
       $cache = $this->cache->get($cacheId);
       if ($items === NULL) {
         return NULL;
@@ -90,7 +91,7 @@ class GithubFeed implements GithubFeedInterface {
    *   The cache ID.
    */
   public static function generateCacheId(string $owner, string $project, string $type, int $hasToken, int $numberOfResults = 10, bool $includeComments = FALSE, int $numberOfComments = 0): string {
-    return $owner . ':' . $project . ':' . $type . ':' . $hasToken . ':' . $numberOfResults . ':' . $includeComments . ':' . $numberOfComments;
+    return $owner . ':' . $project . ':' . $type . ':' . $hasToken . ':' . $numberOfResults . ':' . (int) $includeComments . ':' . $numberOfComments;
   }
 
   /**
@@ -147,7 +148,7 @@ class GithubFeed implements GithubFeedInterface {
     try {
       $response = $this->client->get(self::GITHUB_API_URL . $url, $this->getRequestOptions($token));
     }
-    catch (RequestException $e) {
+    catch (\Exception $e) {
       if (\Drupal::currentUser()->hasPermission('view invalid api key message')) {
         // Set this as warnings only. The failures can occur mainly due to the
         // lack/expiration of tokens, thus, we don't need to pollute the logs

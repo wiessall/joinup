@@ -67,14 +67,13 @@ class GithubFeedDefaultFormatter extends FormatterBase {
    */
   public function viewElements(FieldItemListInterface $items, $langcode) {
     $element = [];
-
     foreach ($items as $delta => $item) {
       if (!filter_var($item->repository, FILTER_VALIDATE_URL)) {
         continue;
       }
 
       $token = $item->getAccessToken();
-      $fetchedItems = $this->githubFeed->fetchItems($item->repository, $item->type, $token, (int) $item->item_num, (bool) $item->include_comments, (int) $item->comment_num);
+      $fetchedItems = $this->githubFeed->fetchItems($item->repository, $item->type, $token, $this->getFieldSetting('cache'),  (int) $item->item_num, (bool) $item->include_comments, (int) $item->comment_num);
 
       if ($fetchedItems === NULL) {
         // Just show a generic failure message.
@@ -86,6 +85,10 @@ class GithubFeedDefaultFormatter extends FormatterBase {
           'message' => [
             '#markup' => $this->t('The feed is temporarily unavailable.'),
           ],
+          // Make this uncacheable as it is probably a result of an error.
+          '#cache' => [
+            'max-age' => 0,
+          ]
         ];
 
         continue;
@@ -98,7 +101,6 @@ class GithubFeedDefaultFormatter extends FormatterBase {
         '#type' => $item->type,
         '#cache' => [
           'tags' => [$cacheId],
-          'max-age' => $this->getFieldSetting('cache') ?: 86400,
         ],
       ];
 
