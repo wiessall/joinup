@@ -145,4 +145,4 @@ echo 'Escaped: ' . substr($some_very_long_string, 0, 100) . PHP_EOL;
 echo 'Escaped old: ' . substr($some_very_long_string_old, 0, 100) . PHP_EOL;
 
 
-```";s:9:"reactions";a:10:{s:3:"url";s:65:"https://api.github.com/repos/sweetrdf/easyrdf/issues/25/reactions";s:11:"total_count";i:1;s:2:"+1";i:1;i:-1;i:0;s:5:"laugh";i:0;s:6:"hooray";i:0;s:8:"confused";i:0;s:5:"heart";i:0;s:6:"rocket";i:0;s:4:"eyes";i:0;}s:12:"timeline_url";s:64:"https://api.github.com/repos/sweetrdf/easyrdf/issues/25/timeline";s:24:"performed_via_github_app";N;s:12:"state_reason";N;}}s:6:"expire";i:-1;s:4:"tags";a:0:{}s:7:"created";d:1686322080.775;s:8:"checksum";i:0;}
+```";s:9:"reactions";a:10:{s:3:"url";s:65:"https://api.github.com/repos/sweetrdf/easyrdf/issues/25/reactions";s:11:"total_count";i:1;s:2:"+1";i:1;i:-1;i:0;s:5:"laugh";i:0;s:6:"hooray";i:0;s:8:"confused";i:0;s:5:"heart";i:0;s:6:"rocket";i:0;s:4:"eyes";i:0;}s:12:"timeline_url";s:64:"https://api.github.com/repos/sweetrdf/easyrdf/issues/25/timeline";s:24:"performed_via_github_app";N;s:12:"state_reason";N;}}s:6:"expire";i:-1;s:4:"tags";a:0:{}s:7:"created";d:1686435610.855;s:8:"checksum";i:0;}
