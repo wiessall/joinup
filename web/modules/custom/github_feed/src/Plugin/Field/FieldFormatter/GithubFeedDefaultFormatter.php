@@ -73,7 +73,7 @@ class GithubFeedDefaultFormatter extends FormatterBase {
       }
 
       $token = $item->getAccessToken();
-      $fetchedItems = $this->githubFeed->fetchItems($item->repository, $item->type, $token, $this->getFieldSetting('cache'),  (int) $item->item_num, (bool) $item->include_comments, (int) $item->comment_num);
+      $fetchedItems = $this->githubFeed->fetchItems($item->repository, $item->type, $token, $this->getFieldSetting('cache'), (int) $item->item_num, (bool) $item->include_comments, (int) $item->comment_num);
 
       if ($fetchedItems === NULL) {
         // Just show a generic failure message.
@@ -88,7 +88,7 @@ class GithubFeedDefaultFormatter extends FormatterBase {
           // Make this uncacheable as it is probably a result of an error.
           '#cache' => [
             'max-age' => 0,
-          ]
+          ],
         ];
 
         continue;

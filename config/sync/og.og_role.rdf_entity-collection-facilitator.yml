@@ -184,7 +184,6 @@ permissions:
   - 'update collection_settings meta-entity'
   - 'update group'
   - 'update paragraph content json_map'
-  - 'view invalid api key message'
   - 'view all revisions'
   - 'view any tallinn_report content'
   - 'view any unpublished content'

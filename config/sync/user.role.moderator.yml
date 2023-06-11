@@ -348,7 +348,6 @@ permissions:
   - 'view eif wrapper entity'
   - 'view field_is_eif_category'
   - 'view field_is_eif_recommendation'
-  - 'view invalid api key message'
   - 'view licence overview page'
   - 'view own field_is_eif_category'
   - 'view own field_is_eif_recommendation'

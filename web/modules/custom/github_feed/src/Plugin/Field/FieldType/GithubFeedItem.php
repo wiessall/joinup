@@ -16,7 +16,6 @@ use Drupal\Core\TypedData\DataDefinition;
 use Drupal\file\Entity\File;
 use Drupal\file\FileInterface;
 use Drupal\file\Plugin\Field\FieldType\FileItem;
-use Drupal\github_feed\GithubFeed;
 
 /**
  * Defines the 'github_feed' field type.
@@ -118,10 +117,6 @@ class GithubFeedItem extends FieldItemBase implements GithubFeedItemInterface {
   public function preSave() {
     parent::preSave();
 
-    // Calculate whether the current value has a token in order to clear the
-    // correct cache item.
-    $hasToken = FALSE;
-
     // If the new key value is not empty, replace the key.
     if (!empty($this->getNewKeyValue())) {
       $encryptionProfile = $this->getFieldDefinition()->getSetting('encryption_profile');
@@ -134,7 +129,6 @@ class GithubFeedItem extends FieldItemBase implements GithubFeedItemInterface {
         $file = File::load($this->getFileTargetId());
         $fileUri = $file->getFileUri();
         $fileSystem->delete($fileUri);
-        $hasToken = TRUE;
       }
       $random = new Random();
       $directoryWithScheme = $this->getFieldDefinition()->getSetting('uri_scheme') . '://' . trim($this->getFieldDefinition()->getSetting('file_directory'), '/');
@@ -151,7 +145,6 @@ class GithubFeedItem extends FieldItemBase implements GithubFeedItemInterface {
       $this->values['target_id'] = $file->id();
     }
     if ($this->getRemoveValue()) {
-      $hasToken = TRUE;
       $fileId = $this->getFileTargetId();
       if ($fileId) {
         $file = File::load($fileId);
@@ -327,7 +320,7 @@ class GithubFeedItem extends FieldItemBase implements GithubFeedItemInterface {
   /**
    * Returns the file target ID.
    *
-   * @return int|NULL
+   * @return int|null
    *   The file target ID.
    */
   protected function getFileTargetId(): ?int {
