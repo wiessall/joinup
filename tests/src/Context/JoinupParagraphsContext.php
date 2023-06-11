@@ -510,7 +510,7 @@ class JoinupParagraphsContext extends RawDrupalContext {
    */
   protected function transformParagraphValue(string $field, string $value): mixed {
     return match ($field) {
-      'content_listing:value' => unserialize($value),
+      'content_listing:value' => unserialize($value, ['allowed_classes' => FALSE]),
       default => $value,
     };
   }
