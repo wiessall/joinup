@@ -85,10 +85,6 @@ class GithubFeedDefaultFormatter extends FormatterBase {
           'message' => [
             '#markup' => $this->t('The feed is temporarily unavailable.'),
           ],
-          // Make this uncacheable as it is probably a result of an error.
-          '#cache' => [
-            'max-age' => 0,
-          ],
         ];
 
         continue;
