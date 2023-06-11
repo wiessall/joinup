@@ -434,7 +434,7 @@ class JoinupParagraphsContext extends RawDrupalContext {
   }
 
   /**
-   * I append paragraph.
+   * I append paragraph to entity.
    *
    * @param string $paragraph_type
    *   Paragraph type.
@@ -444,7 +444,7 @@ class JoinupParagraphsContext extends RawDrupalContext {
    *   Parent type id.
    * @param string $parent_name
    *   Parent name.
-   * @param \Behat\Gherkin\Node\TableNode $fields
+   * @param \Behat\Gherkin\Node\TableNode $table
    *   Paragraph's fields.
    *
    * @Given I append :paragraph_type to :parent_field field in :parent_type_id entity with following :parent_name title:
@@ -456,23 +456,15 @@ class JoinupParagraphsContext extends RawDrupalContext {
     string $parent_field,
     string $parent_type_id,
     string $parent_name,
-    TableNode $fields
+    TableNode $table
   ): void {
     $entity = $this->getEntityByLabel($parent_type_id, $parent_name);
 
     $values = [
       'type' => $paragraph_type,
     ];
-    foreach ($fields->getRowsHash() as $field => $value) {
-      if (str_contains($field, 'body')) {
-        $values[$field] = [
-          'value' => $value,
-          'format' => 'content_editor',
-        ];
-      }
-      else {
-        $values[$field] = $value;
-      }
+    foreach ($table->getRowsHash() as $field => $value) {
+      $values = array_replace_recursive($values, $this->transformParagraphField($field, $value));
     }
 
     $paragraph = Paragraph::create($values);
@@ -481,6 +473,46 @@ class JoinupParagraphsContext extends RawDrupalContext {
     $this->paragraphs[] = $paragraph;
 
     $this->appendParagraphToEntity($entity, $paragraph, $parent_field);
+  }
+
+  /**
+   * Helper method to transform table data into the correct field array.
+   *
+   * @param string $field
+   *   Field name.
+   * @param string $value
+   *   Field value.
+   *
+   * @return array
+   *   Transformed data.
+   */
+  protected function transformParagraphField(string $field, string $value): array {
+    $data = $this->transformParagraphValue($field, $value);
+
+    $keys = explode(':', $field);
+    foreach (array_reverse($keys) as $key) {
+      $data = [$key => $data];
+    }
+
+    return $data;
+  }
+
+  /**
+   * Helper method to transform table field values.
+   *
+   * @param string $field
+   *   Field name.
+   * @param string $value
+   *   Field value.
+   *
+   * @return array
+   *   Transformed value.
+   */
+  protected function transformParagraphValue(string $field, string $value): mixed {
+    return match ($field) {
+      'content_listing:value' => unserialize($value),
+      default => $value,
+    };
   }
 
   /**

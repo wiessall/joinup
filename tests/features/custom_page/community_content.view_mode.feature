@@ -35,20 +35,14 @@ Feature:
     And discussion content:
       | title           | body   | solution      | state     |
       | Tile discussion | Meh... | Tile solution | validated |
+    And custom_page content:
+      | title            | solution      | state     |
+      | Tile custom page | Tile solution | validated |
+    And I append "content_listing" to "field_paragraphs_body" field in "node" entity with following "Tile custom page" title:
+      | content_listing:value | a:3:{s:7:"enabled";i:1;s:13:"query_presets";s:80:"entity_bundle\|asset_distribution,asset_release,discussion,document,event,news\|IN";s:5:"limit";s:2:"10";} |
 
     When I am logged in as a moderator
-    And I go to the homepage of the "Tile solution" solution
-    And I click "Add custom page"
-
-    When I fill in the following:
-      | Title | Tile custom page |
-      | Body  | Meh...           |
-    And I press "Add Content listing"
-    And I fill in "Query presets" with:
-        """
-        entity_bundle|asset_distribution,asset_release,discussion,document,event,news|IN
-        """
-    When I press "Save"
+    And I go to the "Tile custom page" custom page
 
     Then I should see the "Tile release" tile
     And I should see the text "v0.1" in the "Tile release" tile
@@ -81,20 +75,14 @@ Feature:
     And discussion content:
       | title           | body   | collection      | state     |
       | Tile discussion | Meh... | Tile collection | validated |
+    And custom_page content:
+      | title            | collection      | state     |
+      | Tile custom page | Tile collection | validated |
+    And I append "content_listing" to "field_paragraphs_body" field in "node" entity with following "Tile custom page" title:
+      | content_listing:value | a:3:{s:7:"enabled";i:1;s:13:"query_presets";s:47:"entity_bundle\|discussion,document,event,news\|IN";s:5:"limit";s:2:"10";} |
 
     When I am logged in as a moderator
-    And I go to the homepage of the "Tile collection" collection
-    And I click "Add custom page"
-
-    When I fill in the following:
-      | Title | Tile custom page |
-      | Body  | Meh...           |
-    And I press "Add Content listing"
-    And I fill in "Query presets" with:
-        """
-        entity_bundle|discussion,document,event,news|IN
-        """
-    When I press "Save"
+    And I go to the "Tile custom page" custom page
 
     And I should see the "Tile news" tile
     And I should see the "Tile event" tile
