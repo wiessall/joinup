@@ -1,4 +1,0 @@
-view invalid api key message:
-  title: 'View invalid api key message'
-  description: 'When an API key is invalid, a warning message will be presented because no results will be fetched.'
-  restrict access: true

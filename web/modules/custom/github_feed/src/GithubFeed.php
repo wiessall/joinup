@@ -4,10 +4,9 @@ declare(strict_types = 1);
 
 namespace Drupal\github_feed;
 
-use Drupal\Component\Utility\Crypt;
 use Drupal\Core\Cache\CacheBackendInterface;
+use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use GuzzleHttp\ClientInterface;
-use GuzzleHttp\Exception\RequestException;
 
 /**
  * Fetches feeds from GitHub.
@@ -21,8 +20,10 @@ class GithubFeed implements GithubFeedInterface {
    *   The cache backend.
    * @param \GuzzleHttp\ClientInterface $client
    *   The Guzzle client.
+   * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger
+   *   The logger channel factory.
    */
-  public function __construct(protected CacheBackendInterface $cache, protected ClientInterface $client) {}
+  public function __construct(protected CacheBackendInterface $cache, protected ClientInterface $client, protected LoggerChannelFactoryInterface $logger) {}
 
   /**
    * {@inheritdoc}
@@ -138,7 +139,7 @@ class GithubFeed implements GithubFeedInterface {
    * @param int $commentNum
    *   The number of comments to return. Defaults to 0.
    *
-   * @return array|NULL
+   * @return array|null
    *   An array containing the items or NULL if an error occurred.
    */
   protected function doFetchItems(string $owner, string $project, string $type, string $token, int $itemNum, bool $includeComments, int $commentNum): ?array {
@@ -149,17 +150,14 @@ class GithubFeed implements GithubFeedInterface {
       $response = $this->client->get(self::GITHUB_API_URL . $url, $this->getRequestOptions($token));
     }
     catch (\Exception $e) {
-      if (\Drupal::currentUser()->hasPermission('view invalid api key message')) {
-        // Set this as warnings only. The failures can occur mainly due to the
-        // lack/expiration of tokens, thus, we don't need to pollute the logs
-        // with errors.
-        \Drupal::logger('github_feed')->warning($e->getMessage());
-      }
+      // Set this as warnings only. The failures can occur mainly due to the
+      // lack/expiration of tokens, thus, we don't need to pollute the logs
+      // with errors.
+      $this->logger->get('github_feed')->warning($e->getMessage());
       return NULL;
     }
 
     $data = json_decode($response->getBody()->getContents(), TRUE);
-
     $return = [];
     foreach ($data as $returnItem) {
       $returnItem['comments'] = [];

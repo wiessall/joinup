@@ -1,7 +1,7 @@
 services:
   github_feed.github_feed:
     class: Drupal\github_feed\GithubFeed
-    arguments: ['@cache.github_feed', '@http_client']
+    arguments: ['@cache.github_feed', '@http_client', '@logger.factory']
 
   github_feed.encrypt:
     class: Drupal\github_feed\EncryptionManager
