@@ -232,29 +232,14 @@ commands:
         - DELETE { GRAPH <http://eira_skos> { ?subject ?predicate ?object } } INSERT { GRAPH <http://eira_skos_properties> { ?subject ?predicate ?object } } WHERE { GRAPH <http://eira_skos> { ?subject ?predicate ?object . FILTER (regex(str(?subject), "_Properties$")) } };
         - DELETE { GRAPH <http://eira_skos> { ?subject ?predicate ?object } } INSERT { GRAPH <http://eira_skos_properties> { ?subject ?predicate ?object } } WHERE { GRAPH <http://eira_skos> { ?subject ?predicate ?object . FILTER (regex(str(?object), "_Properties$")) } };
         - DELETE { GRAPH <http://eira_skos> { ?subject ?predicate ?object } } WHERE { GRAPH <http://eira_skos> { ?subject ?predicate ?object . FILTER (regex(str(?predicate), "_Properties$")) } };
-        # For some reason, they have selected that their content are in the same
-        # list. However, this does not fit our case because we don't want all
-        # the terms appear in the select lists. Change the topConceptOf of the
-        # eira_skos_properties graph from <http://data.europa.eu/dr8> to
-        # <http://data.europa.eu/dr8/eira_properties>.
-        - WITH <http://eira_skos_properties> DELETE { ?subject skos:topConceptOf <http://data.europa.eu/dr8> } INSERT { ?subject skos:topConceptOf <http://data.europa.eu/dr8/eira_properties> } WHERE { ?subject skos:topConceptOf <http://data.europa.eu/dr8> };
-        # We also need to repeat this replacement of <http://data.europa.eu/dr8>
-        # for triples that have the URI as a subject but for the predicate
-        # skos:hasTopConcept.
-        - WITH <http://eira_skos_properties> DELETE { <http://data.europa.eu/dr8> skos:hasTopConcept ?object } INSERT { <http://data.europa.eu/dr8/eira_properties> skos:hasTopConcept ?object } WHERE { <http://data.europa.eu/dr8> skos:hasTopConcept ?object };
         # See ISAICP-3216. Add the "Concept" type to all collection elements so
         # that they are listed as Parent terms.
         - WITH <http://eira_skos> INSERT { ?subject a skos:Concept } WHERE { ?subject a skos:Collection . };
         # Add the link to all "Concept" type elements so that they are all
         # considered as children of the EIRA vocabulary regardless of the depth.
         - WITH <http://eira_skos> INSERT { ?subject skos:topConceptOf <http://data.europa.eu/dr8> } WHERE { ?subject a skos:Concept .};
-        # Do the same for EIRA properties and the
-        # <http://data.europa.eu/dr8/eira_properties> vocabulary URI.
-        - WITH <http://eira_skos_properties> INSERT { ?subject skos:topConceptOf <http://data.europa.eu/dr8/eira_properties> } WHERE { ?subject a skos:Concept .};
         # Create a backwards connection from the children to the parent.
         - WITH <http://eira_skos> INSERT { ?member skos:broaderTransitive ?collection } WHERE { ?collection a skos:Collection . ?collection skos:member ?member };
-        # Repeat for the properties graph.
-        - WITH <http://eira_skos_properties> INSERT { ?member skos:broaderTransitive ?collection } WHERE { ?collection a skos:Collection . ?collection skos:member ?member };
         # Remove deprecated countries from the country list. See ISAICP-3442.
         - WITH <http://countries-skos> DELETE { ?entity ?field ?value. } WHERE { ?entity ?field ?value . ?entity <http://publications.europa.eu/ontology/authority/end.use> ?date . FILTER ( bound(?date) ) };
         # Languages are required to be of type http://purl.org/dc/terms/Location
