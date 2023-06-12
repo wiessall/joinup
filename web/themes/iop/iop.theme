@@ -82,7 +82,7 @@ function iop_preprocess_page(&$variables) {
     }
     // POLICY page.
     elseif ($uuid === InteroperableEuropeCollectionInterface::POLICY) {
-      $variables['node_classes'] = ['listing', 'page--policy'];
+      $variables['node_classes'] = ['page--policy'];
       $variables['page_header']['title'] = 'Policy';
       $variables['page_header']['has_heading'] = TRUE;
     }
