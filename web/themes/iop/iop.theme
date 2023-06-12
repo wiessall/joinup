@@ -10,7 +10,8 @@ declare(strict_types = 1);
 use Drupal\Core\Url;
 use Drupal\custom_page\Entity\CustomPageInterface;
 use Drupal\interoperable_europe\InteroperableEuropeCollectionInterface;
-use Drupal\joinup_community_content\Entity\CommunityContentInterface;
+use Drupal\joinup_event\Entity\EventInterface;
+use Drupal\joinup_news\Entity\NewsInterface;
 use Drupal\node\NodeInterface;
 
 /**
@@ -158,7 +159,7 @@ function iop_preprocess_node__event__view_mode_tile(&$variables): void {
  */
 function iop_preprocess_page_title(array &$variables): void {
   $entity = $variables['entity'] ?? NULL;
-  if ($entity instanceof CommunityContentInterface) {
+  if ($entity instanceof NewsInterface || $entity instanceof EventInterface) {
     $node = match ($entity->bundle()) {
       'news' => Drupal::service('entity.repository')->loadEntityByUuid('node', InteroperableEuropeCollectionInterface::NEWS_LISTING),
       'event' => Drupal::service('entity.repository')->loadEntityByUuid('node', InteroperableEuropeCollectionInterface::EVENT_LISTING),
