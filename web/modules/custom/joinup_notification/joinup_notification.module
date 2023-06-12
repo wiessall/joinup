@@ -114,7 +114,7 @@ function joinup_notification_rdf_entity_update(EntityInterface $entity): void {
 }
 
 /**
- * Implements hook_ENTITY_TYPE_delete().
+ * Implements hook_ENTITY_TYPE_predelete().
  */
 function joinup_notification_rdf_entity_predelete(EntityInterface $entity): void {
   // Avoid sending notifications e.g. when orphaned entities are deleted.
@@ -253,8 +253,8 @@ function joinup_notification_og_membership_presave(EntityInterface $entity): voi
 }
 
 /**
- * Implements hook_ENTITY_TYPE_predelete().
+ * Implements hook_ENTITY_TYPE_delete().
  */
-function joinup_notification_og_membership_predelete(EntityInterface $entity): void {
+function joinup_notification_og_membership_delete(EntityInterface $entity): void {
   joinup_notification_dispatch_notification('delete', NotificationEvents::OG_MEMBERSHIP_MANAGEMENT, $entity);
 }
