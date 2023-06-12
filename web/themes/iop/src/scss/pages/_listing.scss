@@ -1,10 +1,4 @@
 .listing {
-  .page-header {
-    margin-bottom: $spacer * -1; // -16px
-    @include media-breakpoint-up(md) {
-      margin-bottom: $spacer * -2; // -32px
-    }
-  }
   .cards-wrapper {
     & > .col {
       margin-top: unset;
