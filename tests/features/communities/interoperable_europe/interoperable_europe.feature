@@ -19,12 +19,14 @@ Feature:
     # The title should not be visible when the page is set as landing page.
     Then I should not see "IOP landing page"
     And the page should be rendered using the "Interoperable Europe" theme
+    And I should not see the link "Report abusive content"
 
     # Test other pages.
     When I visit "/interoperable-europe/initiatives"
     Then the page should be rendered using the "Interoperable Europe" theme
     And I should see the heading "Initiatives"
     And I should see the heading "Join our community!"
+    And I should not see the link "Report abusive content"
 
     # Event.
     When I visit "/interoperable-europe/event/save-date-semic-coming-back-8-december-2021"
@@ -32,6 +34,7 @@ Feature:
     And I should see the text "Event"
     And I should not see the heading "Event"
     And I should see the link "more events"
+    And I should see the link "Report abusive content"
     And I should see the text "Published on: 19/11/2021"
     And I should see the heading "Join our community!"
     When I click "more events"
@@ -43,6 +46,7 @@ Feature:
     And I should see the text "News"
     And I should not see the heading "News"
     And I should see the link "more news"
+    And I should see the link "Report abusive content"
     And I should see the text "Published on: 19/11/2021"
     And I should see the heading "Join our community!"
     When I click "more news"
