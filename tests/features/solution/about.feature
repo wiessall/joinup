@@ -381,6 +381,7 @@ Feature: About this solution
     And I should see the heading "Some custom contact test"
 
     When I go to the edit form of the "Some custom contact test" "custom page"
+    And I click "Edit" in the "Custom page body" for paragraph layout 1
     Then I should see the button "Contact us"
 
     Then I go to the about page of "Six exclusion advantages"
