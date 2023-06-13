@@ -39,8 +39,15 @@ class SearchApiExcludeCurrentCustomPage implements EventSubscriberInterface {
       $parent_entity = $query->getOption('search_api_field entity');
       while (!$parent_entity instanceof CustomPageInterface) {
         $parent_entity = $parent_entity->getParentEntity();
+
+        if (is_null($parent_entity)) {
+          break;
+        }
       }
-      $query->addCondition('id', $parent_entity->id(), '<>');
+
+      if ($parent_entity) {
+        $query->addCondition('id', $parent_entity->id(), '<>');
+      }
     }
   }
 
