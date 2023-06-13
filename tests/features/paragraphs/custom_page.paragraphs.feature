@@ -21,29 +21,20 @@ Feature:
 
     When I open the header local tasks menu
     And I click "Edit"
-    And I wait for AJAX to finish
-
-    Given I click "Choose component"
-    When I click "Simple paragraph"
-    And I wait until the page contains the text "Create new Simple paragraph"
+    And I click "Choose component"
+    And I click "Simple paragraph"
+    And I enter "AAAAAAAAAA" in the "Body" wysiwyg editor
     And I press "Save" in the "Dialog buttons" region
-    And I wait for AJAX to finish
-    And there should be 1 paragraph in the "Custom page body" field
 
     Then I click the last "Choose component" link
     When I click "Simple paragraph"
-    And I wait until the page contains the text "Create new Simple paragraph"
+    And I enter "BBBBBBBBBB" in the "Body" wysiwyg editor
     And I press "Save" in the "Dialog buttons" region
-    And I wait for AJAX to finish
-    And there should be 2 paragraph in the "Custom page body" field
+    And I should see the following paragraphs in the given order:
+      | AAAAAAAAAA |
+      | BBBBBBBBBB |
 
-    Given I press "Add Simple paragraph" in the "Custom page body" paragraphs field
-    Then there should be 2 paragraphs in the "Custom page body" field
-
-    When I enter "AAAAAAAAAA" in the "Body" wysiwyg editor in the "Custom page body" field for paragraph 1
-    And I enter "BBBBBBBBBB" in the "Body" wysiwyg editor in the "Custom page body" field for paragraph 2
-
-    And I drag the table row at position 2 up
+    When I click "Move down" in the "Custom page body" for paragraph layout 1
     And I press "Save"
     Then there should be 2 paragraphs in the page
     And I should see the following paragraphs in the given order:
