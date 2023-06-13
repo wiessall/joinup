@@ -371,14 +371,17 @@ Feature: About this solution
     # Testing add contact us in existing content.
     Given I am logged in as a moderator
     When I go to the about page of "Six exclusion advantages"
-    Then I open the plus button menu
-    And I click "Add custom page"
+    And I click "Add custom page" in the plus button menu
     And I fill in "Title" with "Some custom contact test"
+    And I click "Choose component"
+    And I click "Simple paragraph"
     And I press the button "Contact us" in the "Body" wysiwyg editor
+    And I press "Save" in the "Dialog buttons" region
     And I press "Save"
     And I should see the heading "Some custom contact test"
 
     When I go to the edit form of the "Some custom contact test" "custom page"
+    And I click "Edit" in the "Custom page body" for paragraph layout 1
     Then I should see the button "Contact us"
 
     Then I go to the about page of "Six exclusion advantages"
