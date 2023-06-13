@@ -143,6 +143,9 @@ function iop_preprocess_block(array &$variables): void {
     case 'openeuropawebtoolsetrans':
       $variables['#attached']['library'][] = 'ventuno/etrans';
       break;
+    case 'iop_primaryadminactions':
+      $variables['attributes']['class'][] = 'd-inline-block';
+      break;
   }
 }
 
