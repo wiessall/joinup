@@ -7,11 +7,14 @@ namespace Drupal\joinup\Context;
 use Behat\Mink\Element\TraversableElement;
 use Behat\Mink\Exception\ElementNotFoundException;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
+use Drupal\joinup\Traits\JavascriptTrait;
 
 /**
  * Behat step definitions for layout paragraphs.
  */
 class JoinupLayoutParagraphsContext extends RawDrupalContext {
+
+  use JavascriptTrait;
 
   /**
    * Field mapping.
@@ -38,6 +41,7 @@ class JoinupLayoutParagraphsContext extends RawDrupalContext {
    */
   public function iClickInTheFieldForParagraphLayout(string $label, string $field, int $position): void {
     $paragraphItem = $this->getParagraphsElementItem($field, $position);
+    $this->scrollElementIntoView($paragraphItem);
     $paragraphItem->clickLink($label);
   }
 

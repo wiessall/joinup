@@ -4,6 +4,7 @@ declare(strict_types = 1);
 
 namespace Drupal\joinup\Context;
 
+use Behat\Gherkin\Node\PyStringNode;
 use Behat\Gherkin\Node\TableNode;
 use Behat\Mink\Element\TraversableElement;
 use Behat\Mink\Exception\ElementNotFoundException;
@@ -467,6 +468,41 @@ class JoinupParagraphsContext extends RawDrupalContext {
       $values = array_replace_recursive($values, $this->transformParagraphField($field, $value));
     }
 
+    $paragraph = Paragraph::create($values);
+    $paragraph->save();
+
+    $this->paragraphs[] = $paragraph;
+
+    $this->appendParagraphToEntity($entity, $paragraph, $parent_field);
+  }
+
+  /**
+   * Append content listing paragraph.
+   *
+   * @param string $parent_field
+   *   Parent field name.
+   * @param string $parent_type_id
+   *   Parent type id.
+   * @param string $parent_name
+   *   Parent name.
+   * @param \Behat\Gherkin\Node\PyStringNode $value
+   *   Serialized value.
+   *
+   * @Given I append content listing to :parent_field field in :parent_type_id entity with following :parent_name title with:
+   *
+   * @throws \Drupal\Core\Entity\EntityStorageException
+   */
+  public function iAppendContentListingToFieldInEntityWithFollowingTitleWith(
+    string $parent_field,
+    string $parent_type_id,
+    string $parent_name,
+    PyStringNode $value): void {
+    $entity = $this->getEntityByLabel($parent_type_id, $parent_name);
+
+    $values = [
+      'type' => 'content_listing',
+      'content_listing' => ['value' => unserialize($value->getRaw(), ['allowed_classes' => FALSE])],
+    ];
     $paragraph = Paragraph::create($values);
     $paragraph->save();
 
