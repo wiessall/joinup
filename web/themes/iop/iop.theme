@@ -103,9 +103,12 @@ function iop_preprocess_page(&$variables) {
  * Implements hook_preprocess_HOOK().
  */
 function iop_preprocess_node(&$variables) {
-  // Disables the report and translate for the content of IOP.
-  if (isset($variables['content']['report'])) {
-    $variables['content']['report']['#access'] = FALSE;
+  // Disables the "Report" link for IOP except news and events.
+  $node = \Drupal::routeMatch()->getParameter('node');
+  if (!$node instanceof NodeInterface ||
+    !in_array($node->bundle(), ['news', 'event']) &&
+    isset($variables['content']['report'])) {
+      $variables['content']['report']['#access'] = FALSE;
   }
 
   // News listing page.
