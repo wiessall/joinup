@@ -75,7 +75,6 @@ Feature: "Add custom page" visibility options.
 
     When I fill in the following:
       | Title | About us |
-    And I enter "We are open about everything!" in the "Body" wysiwyg editor
     And I attach the file "test.zip" to "Add a new file"
     And I press "Upload"
     # The "Description" field is the description of the file.
@@ -182,7 +181,6 @@ Feature: "Add custom page" visibility options.
 
     When I fill in the following:
       | Title | Rubber boots |
-    And I enter "We love mud!" in the "Body" wysiwyg editor
     And I press "Save"
     Then I should see the error message "The Custom page title value (Rubber boots) is already taken by Rubber boots."
 
@@ -195,7 +193,6 @@ Feature: "Add custom page" visibility options.
 
     When I fill in the following:
       | Title | Rubber boots |
-    And I enter "We love mud!" in the "Body" wysiwyg editor
     And I press "Save"
     Then I should see the heading "Rubber boots"
     And I should see the success message "Custom page Rubber boots has been created."
