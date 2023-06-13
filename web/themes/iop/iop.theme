@@ -108,7 +108,7 @@ function iop_preprocess_node(&$variables) {
   if (!$node instanceof NodeInterface ||
     !in_array($node->bundle(), ['news', 'event']) &&
     isset($variables['content']['report'])) {
-      $variables['content']['report']['#access'] = FALSE;
+    $variables['content']['report']['#access'] = FALSE;
   }
 
   // News listing page.
@@ -146,6 +146,7 @@ function iop_preprocess_block(array &$variables): void {
     case 'openeuropawebtoolsetrans':
       $variables['#attached']['library'][] = 'ventuno/etrans';
       break;
+
     case 'iop_primaryadminactions':
       $variables['attributes']['class'][] = 'd-inline-block';
       break;
