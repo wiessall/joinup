@@ -8,15 +8,15 @@
 SHA1_EMPTY="0000000000000000000000000000000000000000"
 FULL_CHECK="0"
 
-# Get current folder name.
-FOLDER_NAME=$(basename $(git rev-parse --show-toplevel))
-# Check if Joinup composer project is running.
-DOCKER_COMPOSE=$(docker-compose ls --filter name=${FOLDER_NAME} --format json)
-if [ "$DOCKER_COMPOSE" == "[]" ];
+# Get the top-level directory name.
+TOPLEVEL_DIR=$(basename $(git rev-parse --show-toplevel))
+# Check if Joinup is running via Docker Compose.
+RUN_VIA_DOCKER=$(docker-compose ls --filter name=${TOPLEVEL_DIR} --format json 2>/dev/null)
+if [ "$RUN_VIA_DOCKER" == "[]" ] || [ "$RUN_VIA_DOCKER" == "" ];
 then
-        DOCKER=""
+        DOCKER_EXEC_PREFIX=""
 else
-        DOCKER="docker compose exec -T --user www-data web"
+        DOCKER_EXEC_PREFIX="docker compose exec -T --user www-data web"
 fi
 
 # Loop over the commits.
@@ -71,7 +71,7 @@ then
   then
     for FILE in $ALL_FILES
     do
-      FILE=$($DOCKER realpath "$FILE")
+      FILE=$($DOCKER_EXEC_PREFIX realpath "$FILE")
       for ALLOWED_FILE in $ALLOWED_PATHS
       do
         if [[ $FILE =~ ^${ALLOWED_FILE} ]]
@@ -116,19 +116,19 @@ fi
 PHPCS="0"
 if [ "$FULL_CHECK" = "1" ] || [ "$FILES" != "" ]
 then
-  $DOCKER ./vendor/bin/phpcs ${FILES}
+  $DOCKER_EXEC_PREFIX ./vendor/bin/phpcs ${FILES}
   PHPCS=$?
 fi
 
 # Run ESLint and save the exit code.
 echo "Running ESLint on all files...";
-$DOCKER ./node_modules/.bin/eslint --config .eslintrc.json --format compact --ext yml --ext js .
+$DOCKER_EXEC_PREFIX ./node_modules/.bin/eslint --config .eslintrc.json --format compact --ext yml --ext js .
 ESLINT=$?
 
 if [ "$ESLINT" != "0" ]
 then
-  echo "- Run ${DOCKER} ./vendor/bin/run toolkit:fix-js to fix most Javascript issues.";
-  echo "- Run ${DOCKER} ./vendor/bin/run toolkit:fix-yaml to fix most YAML issues.";
+  echo "- Run ${DOCKER_EXEC_PREFIX} ./vendor/bin/run toolkit:fix-js to fix most Javascript issues.";
+  echo "- Run ${DOCKER_EXEC_PREFIX} ./vendor/bin/run toolkit:fix-yaml to fix most YAML issues.";
 fi
 
 let EXIT_CODE=$PHPCS+$ESLINT
