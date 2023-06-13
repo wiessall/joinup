@@ -25,44 +25,38 @@ Feature:
       | What's your favourite N64 game? | Nintendo64 | Post title and reasons. | 2018-11-17 10:17 | validated | no     |
       | Searching for green pad.        | Nintendo64 | Looking for a used one. | 2018-11-17 10:18 | validated | no     |
 
+  @javascript
   Scenario: Community content listing widget should be shown to facilitators and moderators.
     Given I am logged in as a facilitator of the "Nintendo64" collection
     When I go to the homepage of the "Nintendo64" collection
-    And I click "Add custom page"
+    And I click "Add custom page" in the plus button menu
     Then I should see the heading "Add custom page"
     And the following fields should not be present "Show related content, Allow shared content"
-    # The button appears in a non-javascript environment. The dropdown needs to be pressed in a javascript
-    # enabled browser.
-    And I should see the button "Add Content listing"
-    # Fill in title so that CSS will not complain about empty field when pressing a button.
-    When I fill in "Title" with "Hello world"
-    And I press "Add Content listing"
-    And the following fields should be present "Show related content, Allow shared content"
+    When I click "Choose component"
+    And I click "Content listing"
+    Then the following fields should be present "Show related content, Allow shared content"
     And the following fields should not be present "Query presets, Limit"
 
     Given I am logged in as a moderator
     When I go to the homepage of the "Nintendo64" collection
-    And I click "Add custom page"
+    And I click "Add custom page" in the plus button menu
     Then I should see the heading "Add custom page"
     And the following fields should not be present "Show related content, Allow shared content"
-    # The button appears in a non-javascript environment. The dropdown needs to be pressed in a javascript
-    # enabled browser.
-    And I should see the button "Add Content listing"
-    # Fill in title so that CSS will not complain about empty field when pressing a button.
-    When I fill in "Title" with "Hello world"
-    And I press "Add Content listing"
+    When I click "Choose component"
+    And I click "Content listing"
     And the following fields should be present "Show related content, Allow shared content, Query presets, Limit"
     And I should see the button "Add and configure filter"
 
+  @javascript
   Scenario: Configure a custom page to show a community content listing.
     Given I am logged in as a facilitator of the "Nintendo64" collection
     When I go to the homepage of the "Nintendo64" collection
-    And I click "Add custom page"
+    And I click "Add custom page" in the plus button menu
     Then I should see the heading "Add custom page"
     When I fill in the following:
-      | Title | Latest content                        |
-      | Body  | Shows all content for this collection |
-    And I press "Add Content listing"
+      | Title | Latest content |
+    When I click "Choose component"
+    And I click "Content listing"
     And I select "News" from "Available filters"
     And I press "Add and configure filter"
     And I fill in "News" with "Rare Nintendo64 disk drive discovered"
@@ -77,7 +71,8 @@ Feature:
     And I should see the text "Display content shared from other communities."
     And I should see the text "Note: the content shown is dynamic, filtered live each time users will visualise the page. As a result, new content might be shown and old content can be altered or deleted."
 
-    When I press "Save"
+    When I press "Save" in the "Dialog buttons" region
+    And I press "Save"
     Then I should see the heading "Latest content"
     And I should see the "Rare Nintendo64 disk drive discovered" tile
     And I should see the "20 year anniversary" tile
@@ -87,12 +82,12 @@ Feature:
 
     # Change the page to list only news.
     Given I am logged in as a moderator
-    When I go to the "Latest content" custom page
-    And I click "Edit" in the "Entity actions" region
+    And I go to the edit form of the "Latest content" "custom page"
     And I fill in the following:
-      | Title | Latest news                        |
-      | Body  | Shows all news for this collection |
+      | Title | Latest news |
+    And I click "Edit" in the "Custom page body" for paragraph layout 1
     And I fill in "Query presets" with "entity_bundle|news"
+    When I press "Save" in the "Dialog buttons" region
     And I press "Save"
     Then I should see the heading "Latest news"
     And I should see the "Rare Nintendo64 disk drive discovered" tile
@@ -100,9 +95,10 @@ Feature:
     And I should not see the "NEC VR4300 CPU" tile
 
     Given I am logged in as a facilitator of the "Nintendo64" collection
-    And I go to the "Latest news" custom page
-    When I click "Edit" in the "Entity actions" region
+    And I go to the edit form of the "Latest news" "custom page"
+    And I click "Edit" in the "Custom page body" for paragraph layout 1
     And I check "Allow shared content"
+    And I press "Save" in the "Dialog buttons" region
     And I press "Save"
     # Only news are displayed.
     Then I should see the "Rare Nintendo64 disk drive discovered" tile
@@ -113,7 +109,7 @@ Feature:
     When I go to the "NEC VR4300 CPU" news
     And I click "Share"
     And I check "Nintendo64"
-    And I press "Share"
+    And I press "Share" in the "Modal buttons" region
     Then I should see the success message "Item was shared on the following groups: Nintendo64"
 
     When I go to the "Latest news" custom page
@@ -125,7 +121,7 @@ Feature:
     When I go to the homepage of the "Nintendo64" collection
     And I click the contextual link "Unshare" in the "NEC VR4300 CPU" tile
     And I check "Nintendo64"
-    And I press "Submit"
+    And I press "Submit" in the "Modal buttons" region
     Then I should see the success message "Item was unshared from the following groups: Nintendo64"
 
     When I go to the "Latest news" custom page
@@ -133,8 +129,10 @@ Feature:
     But I should not see the "20 year anniversary" tile
     And I should not see the "NEC VR4300 CPU" tile
 
-    When I click "Edit" in the "Entity actions" region
+    When I go to the edit form of the "Latest news" "custom page"
+    And I click "Edit" in the "Custom page body" for paragraph layout 1
     And I uncheck "Show related content"
+    And I press "Save" in the "Dialog buttons" region
     And I press "Save"
     Then I should not see the "Rare Nintendo64 disk drive discovered" tile
     And I should not see the "20 year anniversary" tile
@@ -147,11 +145,8 @@ Feature:
     And I click "Add custom page" in the plus button menu
     Then I should see the heading "Add custom page"
     When I fill in "Title" with "Chosen content"
-    And I enter "Shows a specific set of tiles." in the "Body" wysiwyg editor
-
-    # The "List additional actions" is the button arrow that shows the full list of paragraphs to add.
-    Given I press "List additional actions"
-    Then I press "Add Content listing" in the "Custom page body" paragraphs field
+    And I click "Choose component"
+    And I click "Content listing"
     And I select "Discussion" from "Available filters"
     And I press "Add and configure filter"
     And I fill in "Discussion" with "Searching for green pad."
@@ -165,6 +160,7 @@ Feature:
     And I press "Add and configure filter"
     And I fill in "Event" with "20 year anniversary"
     Then I drag the table row in the "Content listing field filter form" region at position 4 up
+    And I press "Save" in the "Dialog buttons" region
     And I press "Save"
     Then I should see the heading "Chosen content"
     And I should see the following tiles in the correct order:
@@ -175,8 +171,10 @@ Feature:
 
     When I open the header local tasks menu
     And I click "Edit" in the "Entity actions" region
+    And I click "Edit" in the "Custom page body" for paragraph layout 1
     And I drag the table row in the "Content listing field filter form" region at position 3 up
     And I drag the table row in the "Content listing field filter form" region at position 2 up
+    And I press "Save" in the "Dialog buttons" region
     And I press "Save"
     And I should see the following tiles in the correct order:
       | 20 year anniversary                   |
@@ -187,10 +185,12 @@ Feature:
     # Content that doesn't belong to the collection won't show up, even when selected.
     When I open the header local tasks menu
     And I click "Edit" in the "Entity actions" region
+    And I click "Edit" in the "Custom page body" for paragraph layout 1
     And I select "News" from "Available filters"
     And I press "Add and configure filter"
     And I fill in the 2nd "News" with "NEC VR4300 CPU" in the "Custom content listing" field
     And I check "Allow shared content"
+    And I press "Save" in the "Dialog buttons" region
     And I press "Save"
     Then I should see the following tiles in the correct order:
       | 20 year anniversary                   |
@@ -215,7 +215,9 @@ Feature:
     # Disabling inclusion of shared content will remove it from the list, even if still referenced.
     When I open the header local tasks menu
     And I click "Edit" in the "Entity actions" region
+    And I click "Edit" in the "Custom page body" for paragraph layout 1
     And I uncheck "Allow shared content"
+    And I press "Save" in the "Dialog buttons" region
     And I press "Save"
     Then I should see the following tiles in the correct order:
       | 20 year anniversary                   |
@@ -230,6 +232,7 @@ Feature:
       | collection | Nintendo64            |
     When I open the header local tasks menu
     And I click "Edit" in the "Entity actions" region
+    And I click "Edit" in the "Custom page body" for paragraph layout 1
     # Simulate reordering and removal of rows.
     And I drag the table row in the "Content listing field filter form" region at position 4 up
     And I drag the table row in the "Content listing field filter form" region at position 3 up
@@ -242,6 +245,7 @@ Feature:
     And I select "Solution" from "Available filters"
     And I press "Add and configure filter"
     And I fill in "Solution" with "N64 cartridge cleaner"
+    And I press "Save" in the "Dialog buttons" region
     And I press "Save"
     Then I should see the following tiles in the correct order:
       | Searching for green pad.        |
@@ -253,7 +257,9 @@ Feature:
     And I go to the "Chosen content" custom page
     And I open the header local tasks menu
     And I click "Edit" in the "Entity actions" region
+    And I click "Edit" in the "Custom page body" for paragraph layout 1
     And I fill in "Query presets" with "entity_bundle|solution"
+    And I press "Save" in the "Dialog buttons" region
     And I press "Save"
     Then I should see the following tiles in the correct order:
       | N64 cartridge cleaner |
@@ -264,6 +270,7 @@ Feature:
     And I go to the "Chosen content" custom page
     And I open the header local tasks menu
     And I click "Edit" in the "Entity actions" region
+    And I click "Edit" in the "Custom page body" for paragraph layout 1
     Then the following field should not be present "Available filters"
 
     # Moderators should still have access to the query builder.
@@ -271,17 +278,20 @@ Feature:
     And I go to the "Chosen content" custom page
     And I open the header local tasks menu
     And I click "Edit" in the "Entity actions" region
+    And I click "Edit" in the "Custom page body" for paragraph layout 1
     Then the following field should be present "Available filters"
 
+  @javascript
   Scenario: Content type tabs should be mutually exclusive and show only items with results.
     Given I am logged in as a facilitator of the "Nintendo64" collection
     When I go to the homepage of the "Nintendo64" collection
-    And I click "Add custom page"
+    And I click "Add custom page" in the plus button menu
+
     Then I should see the heading "Add custom page"
     When I fill in the following:
-      | Title | Collection content                        |
-      | Body  | Shows all the content for this collection |
-    And I press "Add Content listing"
+      | Title | Collection content |
+    And I click "Choose component"
+    And I click "Content listing"
     And I select "Discussion" from "Available filters"
     And I press "Add and configure filter"
     And I fill in "Discussion" with "Searching for green pad."
@@ -294,6 +304,7 @@ Feature:
     And I select "News" from "Available filters"
     And I press "Add and configure filter"
     And I fill in "News" with "Rare Nintendo64 disk drive discovered"
+    And I press "Save" in the "Dialog buttons" region
     And I press "Save"
     Then I should see the heading "Collection content"
     # Verify that unwanted facets are not shown in the page.
@@ -319,57 +330,49 @@ Feature:
       | title        | keywords            | content     | collection | state     |
       | User's Guide | nintendo64 manuals  | User manual | Nintendo64 | validated |
       | Licence      | nintendo64 licences | Licence     | Nintendo64 | validated |
+    And custom_page content:
+      | title   | collection | state     |
+      | Manuals | Nintendo64 | validated |
+    And I append content listing to "field_paragraphs_body" field in "node" entity with following "Manuals" title with:
+    """
+    a:3:{s:7:"enabled";i:1;s:13:"query_presets";s:60:"entity_bundle|document
+            keywords|"nintendo64 manuals"";s:5:"limit";s:2:"10";}
+    """
+    And custom_page content:
+      | title   | collection | state     |
+      | Licences | Nintendo64 | validated |
+    And I append content listing to "field_paragraphs_body" field in "node" entity with following "Licences" title with:
+    """
+    a:3:{s:7:"enabled";i:1;s:13:"query_presets";s:61:"entity_bundle|document
+            keywords|"nintendo64 licences"";s:5:"limit";s:2:"10";}
+    """
     And I am logged in as a moderator
 
-    When I go to the homepage of the "Nintendo64" collection
-    And I click "Add custom page"
-
-    When I fill in the following:
-      | Title | Manuals        |
-      | Body  | Product guides |
-    And I press "Add Content listing"
-    And I fill in "Query presets" with:
-        """
-        entity_bundle|document
-        keywords|"nintendo64 manuals"
-        """
-    When I press "Save"
-
+    When I go to the "Manuals" custom page
     Then I should see the "User's Guide" tile
     But I should not see the "Licence" tile
 
-    When I go to the homepage of the "Nintendo64" collection
-    And I click "Add custom page"
-
-    When I fill in the following:
-      | Title | Licences          |
-      | Body  | Product licensing |
-    And I press "Add Content listing"
-    And I fill in "Query presets" with:
-        """
-        entity_bundle|document
-        keywords|"nintendo64 licences"
-        """
-    When I press "Save"
-
+    When I go to the "Licences" custom page
     Then I should see the "Licence" tile
     But I should not see the "User's Guide" tile
 
+  @javascript
   Scenario: Invalid entries in the query presets field show a validation error.
     Given I am logged in as a moderator
     When I go to the homepage of the "Nintendo64" collection
-    And I click "Add custom page"
+    And I click "Add custom page" in the plus button menu
     Then I should see the heading "Add custom page"
     When I fill in "Title" with "Query presets validation"
-    And I press "Add Content listing"
+    And I click "Choose component"
+    And I click "Content listing"
     And I fill in "Query presets" with "wrongvalue"
-    And I press "Save"
+    And I press "Save" in the "Dialog buttons" region
     Then I should see the error message "Invalid query preset line added: wrongvalue."
     When I fill in "Query presets" with "unknown_field|news"
-    And I press "Save"
+    And I press "Save" in the "Dialog buttons" region
     Then I should see the error message "Invalid search field specified: unknown_field."
     When I fill in "Query presets" with "entity_bundle|news|equal"
-    And I press "Save"
+    And I press "Save" in the "Dialog buttons" region
     Then I should see the error message "Invalid operator specified: equal. Allowed operators are '=', '<>', 'IN', 'NOT IN'."
     # Verify that errors are reported when multiline values are added.
     When I fill in "Query presets" with:
@@ -377,35 +380,31 @@ Feature:
         entity_bundle|news
         unknown_field|test
         """
-    And I press "Save"
+    And I press "Save" in the "Dialog buttons" region
     Then I should see the error message "Invalid search field specified: unknown_field."
 
+  @javascript
   Scenario: Empty query presets and query builder field show a validation error.
     Given I am logged in as a moderator
     When I go to the homepage of the "Nintendo64" collection
-    And I click "Add custom page"
+    And I click "Add custom page" in the plus button menu
     Then I should see the heading "Add custom page"
     When I fill in "Title" with "Empty queries"
-    And I press "Add Content listing"
-    And I press "Save"
+    When I click "Choose component"
+    And I click "Content listing"
+    And I press "Save" in the "Dialog buttons" region
     Then I should see the error message "You need to add a filter in the Content listing block"
 
   @terms
   Scenario: Global search setting allows for site-wide content in the content listing.
     Given I am logged in as a moderator
-    When I go to the homepage of the "Nintendo64" collection
-    And I click "Add custom page"
-    Then I should see the heading "Add custom page"
-    When I fill in the following:
-      | Title | All content     |
-      | Body  | Show EVERYTHING |
-    And I press "Add Content listing"
-    And I fill in "Query presets" with:
-        """
-        entity_bundle|discussion,event,news|IN
-        """
-    And I check "Global search"
-    And I press "Save"
+    And custom_page content:
+      | title                | collection           | state     |
+      | All content | Nintendo64 | validated |
+    And I append "content_listing" to "field_paragraphs_body" field in "node" entity with following "All content" title:
+      | content_listing:value | a:6:{s:6:"fields";a:1:{s:20:"content_listing_type";a:2:{s:6:"weight";i:0;s:6:"region";s:3:"top";}}s:7:"enabled";i:1;s:13:"query_presets";s:38:"entity_bundle\|discussion,event,news\|IN";s:5:"limit";s:2:"12";s:11:"show_shared";i:0;s:13:"global_search";i:1;} |
+
+    When I go to the "All content" custom page
     Then I should see the heading "All content"
     # All tiles are available.
     And I should see the following tiles in the correct order:
@@ -476,26 +475,27 @@ Feature:
     And I go to the edit form of the "Forests" "custom page"
 
     # Paragraph #1.
-    When I press "List additional actions"
-    And I press "Add Content listing" in the "Custom page body" paragraphs field
+    When I click "Choose component"
+    And I click "Content listing"
 
     And I press "Add and configure filter"
     And I fill in "Solution" with "Save the Planet"
+    And I press "Save" in the "Dialog buttons" region
 
     # Paragraph #2.
-    When I press "List additional actions"
-    And I press "Add Content listing" in the "Custom page body" paragraphs field
+    When I click the last "Choose component" link
+    And I click "Content listing"
 
     And I press latest "Add and configure filter"
     And I fill in the latest "Solution" field with "Fight Global Warming"
 
     And I press latest "Add and configure filter"
     And I fill in the latest "Solution" field with "The Green Alliance"
+    And I press "Save" in the "Dialog buttons" region
 
     # Back to paragraph #1.
-    And I press "Add and configure filter"
+    And I click "Edit" in the "Custom page body" for paragraph layout 1
     Then the 1st filter of the 1st content listing paragraph value is "Save the Planet"
-    And the 2nd filter of the 1st content listing paragraph is empty
 
   @javascript
   Scenario: Regression test for ISAICP-7183
@@ -515,8 +515,8 @@ Feature:
     And I go to the edit form of the "Bikes" "custom page"
 
     # Paragraph #1.
-    When I press "List additional actions"
-    And I press "Add Content listing" in the "Custom page body" paragraphs field
+    When I click "Choose component"
+    And I click "Content listing"
 
     And I press "Add and configure filter"
     And I fill in "Solution" with "Save gasoline"
@@ -526,29 +526,35 @@ Feature:
 
     And I press latest "Add and configure filter"
     And I fill in the latest "Solution" field with "Black Noise"
+    And I press "Save" in the "Dialog buttons" region
 
     # Paragraph #2.
-    When I press "List additional actions"
-    And I press "Add Content listing" in the "Custom page body" paragraphs field
+    When I click the last "Choose component" link
+    And I click "Content listing"
 
     And I press latest "Add and configure filter"
     And I fill in the latest "Solution" field with "Black Noise"
 
     And I press latest "Add and configure filter"
     And I fill in the latest "Solution" field with "Fight battery mode"
+    And I press "Save" in the "Dialog buttons" region
+
     Then I press "Save"
     And I should see the heading "Bikes"
 
     When I go to the edit form of the "Bikes" "custom page"
+    And I click "Edit" in the "Custom page body" for paragraph layout 1
     And I click "Remove filter" at 1st filter of the 1st content listing paragraph
-    And I wait for AJAX to finish
+
     Then the 1st filter of the 1st content listing paragraph value is "Fight battery mode"
     And the 2nd filter of the 1st content listing paragraph value is "Black Noise"
-    And the 1st filter of the 2nd content listing paragraph value is "Black Noise"
-    And the 2nd filter of the 2nd content listing paragraph value is "Fight battery mode"
+
     And I press "Add and configure filter"
     And the 3nd filter of the 1st content listing paragraph is empty
-
-    And I click "Remove filter" at 2nd filter of the 2nd content listing paragraph
+    And I click "Remove filter" at 1st filter of the 1st content listing paragraph
+    And I press "Cancel" in the "Dialog buttons" region
     And I wait for AJAX to finish
-    Then the 1st filter of the 2nd content listing paragraph value is "Black Noise"
+
+    When I click "Edit" in the "Custom page body" for paragraph layout 2
+    And the 1st filter of the 1st content listing paragraph value is "Black Noise"
+    And the 2nd filter of the 1st content listing paragraph value is "Fight battery mode"
