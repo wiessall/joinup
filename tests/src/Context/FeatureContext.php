@@ -2410,7 +2410,7 @@ class FeatureContext extends RawDrupalContext {
   }
 
   /**
-   * Asserts that a specific entity field is doesn't match a regexp pattern.
+   * Asserts that a specific entity field doesn't match a regexp pattern.
    *
    * @param string $bundle
    *   The human-readable type according to self::bundleAliases().
