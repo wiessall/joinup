@@ -7,8 +7,8 @@ namespace Drupal\github_feed\Plugin\Field\FieldFormatter;
 use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Field\FormatterBase;
-use Drupal\github_feed\GithubFeed;
-use Drupal\github_feed\GithubFeedInterface;
+use Drupal\github_feed\GitHubFeed;
+use Drupal\github_feed\GitHubFeedInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -20,10 +20,10 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *   field_types = {"github_feed"}
  * )
  */
-class GithubFeedDefaultFormatter extends FormatterBase {
+class GitHubFeedDefaultFormatter extends FormatterBase {
 
   /**
-   * Constructs a new GithubFeedDefaultFormatter object.
+   * Constructs a new GitHubFeedDefaultFormatter object.
    *
    * @param string $pluginId
    *   The plugin_id for the formatter.
@@ -39,10 +39,10 @@ class GithubFeedDefaultFormatter extends FormatterBase {
    *   The view mode.
    * @param array $thirdPartySettings
    *   Any third party settings.
-   * @param \Drupal\github_feed\GithubFeedInterface $githubFeed
-   *   The Github feed client.
+   * @param \Drupal\github_feed\GitHubFeedInterface $githubFeed
+   *   The GitHub feed client.
    */
-  public function __construct($pluginId, $pluginDefinition, FieldDefinitionInterface $fieldDefinition, array $settings, $label, $view_mode, array $thirdPartySettings, protected GithubFeedInterface $githubFeed) {
+  public function __construct($pluginId, $pluginDefinition, FieldDefinitionInterface $fieldDefinition, array $settings, $label, $view_mode, array $thirdPartySettings, protected GitHubFeedInterface $githubFeed) {
     parent::__construct($pluginId, $pluginDefinition, $fieldDefinition, $settings, $label, $view_mode, $thirdPartySettings);
   }
 
@@ -72,8 +72,7 @@ class GithubFeedDefaultFormatter extends FormatterBase {
         continue;
       }
 
-      $token = $item->getAccessToken();
-      $fetchedItems = $this->githubFeed->fetchItems($item->repository, $item->type, $token, $this->getFieldSetting('cache'), (int) $item->item_num, (bool) $item->include_comments, (int) $item->comment_num);
+      $fetchedItems = $this->githubFeed->fetchItems($item->repository, $item->type, (int) $item->item_num, (bool) $item->include_comments, (int) $item->comment_num);
 
       if ($fetchedItems === NULL) {
         // Just show a generic failure message.
@@ -90,13 +89,14 @@ class GithubFeedDefaultFormatter extends FormatterBase {
         continue;
       }
 
-      $cacheId = GithubFeed::generateCacheIdFromUrlAndData($item->repository, $item->type, (int) !empty($token), (int) $item->item_num, (bool) $item->include_comments, (int) $item->comment_num);
+      $cacheId = GitHubFeed::generateCacheIdFromUrlAndData($item->repository, $item->type, (int) $item->item_num, (bool) $item->include_comments, (int) $item->comment_num);
       $element[$delta] = [
         '#theme' => 'github_feed',
         '#url' => $item->repository,
         '#type' => $item->type,
         '#cache' => [
           'tags' => [$cacheId],
+          'max-age' => $this->getFieldSetting('cache_max_age'),
         ],
       ];
 

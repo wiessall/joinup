@@ -1,7 +1,6 @@
-name: Github feed
+name: GitHub feed
 type: module
 description: Provides integration with github and fetches feeds.
 package: Custom
 core_version_requirement: ^9 || ^10
-dependencies:
-  - encrypt:encrypt
+dependencies: {}

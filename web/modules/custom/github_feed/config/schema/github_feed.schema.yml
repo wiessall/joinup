@@ -1,29 +1,26 @@
+# Token settings.
+github_feed.settings:
+  type: mapping
+  label: GitHub feed settings
+  mapping:
+    token:
+      type: string
+      label: Token
+
 # Field instance.
 field.field_settings.github_feed:
   type: mapping
-  label: Github feed field settings
+  label: GitHub feed field settings
   mapping:
-    cache:
+    cache_max_age:
       type: integer
       label: The cache lifetime in seconds.
-    uri_scheme:
-      type: string
-      label: The URI scheme to use for the link.
-    file_directory:
-      type: string
-      label: The directory the API keys are stored in.
-    encryption_profile:
-      type: string
-      label: The encryption profile to use for the API key.
 
 # Default value.
 field.value.github_feed:
   type: mapping
   label: Default value
   mapping:
-    target_id:
-      type: string
-      label: The file holding the API key.
     repository:
       type: uri
       label: Repository
