@@ -499,7 +499,7 @@ Feature:
 
   @javascript
   Scenario: Regression test for ISAICP-7183
-  See https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7183
+    See https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7183
 
     Given solutions:
       | title              | collection | state     |
