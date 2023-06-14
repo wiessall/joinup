@@ -25,9 +25,21 @@
 {% block metadata %}
   <div class="d-flex my-4">
     <div class="page-title__details">
+      <span class="page-title__detail">{{ additional_content.author }}</span>
       <span class="page-title__detail">{{ 'Published on'|t }}: {{ additional_content.published }}</span>
       {% if additional_content.published != additional_content.updated %}
         <span class="page-title__detail">{{ 'Last update'|t }}: {{ additional_content.updated }}</span>
+      {% endif %}
+      {% if additional_content.is_archived %}
+        <span class="page-title__detail">
+          <span class="me-2">
+            {{ 'Archived'|t }}
+          </span>
+          {{ pattern('icon', {
+            name: 'archive-fill',
+            size: 's'
+          }) }}
+        </span>
       {% endif %}
     </div>
   </div>
