@@ -455,6 +455,46 @@ Feature:
       | Rare Nintendo64 disk drive discovered |
 
   @javascript
+  Scenario: Regression test for ISAICP-7040
+    See https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7040
+
+    Given solutions:
+      | title                | collection | state     |
+      | Save the Planet      | Nintendo64 | validated |
+      | Fight Global Warming | Nintendo64 | validated |
+      | The Green Alliance   | Nintendo64 | validated |
+
+    And custom_page content:
+      | title   | collection |
+      | Forests | Nintendo64 |
+
+    Given I am logged in as a facilitator of the "Nintendo64" collection
+    And I go to the edit form of the "Forests" "custom page"
+
+    # Paragraph #1.
+    When I click "Choose component"
+    And I click "Content listing"
+
+    And I press "Add and configure filter"
+    And I fill in "Solution" with "Save the Planet"
+    And I press "Save" in the "Dialog buttons" region
+
+    # Paragraph #2.
+    When I click the last "Choose component" link
+    And I click "Content listing"
+
+    And I press latest "Add and configure filter"
+    And I fill in the latest "Solution" field with "Fight Global Warming"
+
+    And I press latest "Add and configure filter"
+    And I fill in the latest "Solution" field with "The Green Alliance"
+    And I press "Save" in the "Dialog buttons" region
+
+    # Back to paragraph #1.
+    And I click "Edit" in the "Custom page body" for paragraph layout 1
+    Then the 1st filter of the 1st content listing paragraph value is "Save the Planet"
+
+  @javascript
   Scenario: Regression test for ISAICP-7183
     See https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7183
 
@@ -515,43 +555,3 @@ Feature:
     When I click "Edit" in the "Custom page body" for paragraph layout 2
     And the 1st filter of the 1st content listing paragraph value is "Black Noise"
     And the 2nd filter of the 1st content listing paragraph value is "Fight battery mode"
-
-  @javascript
-  Scenario: Regression test for ISAICP-7040
-    See https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7040
-
-    Given solutions:
-      | title                | collection | state     |
-      | Save the Planet      | Nintendo64 | validated |
-      | Fight Global Warming | Nintendo64 | validated |
-      | The Green Alliance   | Nintendo64 | validated |
-
-    And custom_page content:
-      | title   | collection |
-      | Forests | Nintendo64 |
-
-    Given I am logged in as a facilitator of the "Nintendo64" collection
-    And I go to the edit form of the "Forests" "custom page"
-
-    # Paragraph #1.
-    When I click "Choose component"
-    And I click "Content listing"
-
-    And I press "Add and configure filter"
-    And I fill in "Solution" with "Save the Planet"
-    And I press "Save" in the "Dialog buttons" region
-
-    # Paragraph #2.
-    When I click the last "Choose component" link
-    And I click "Content listing"
-
-    And I press latest "Add and configure filter"
-    And I fill in the latest "Solution" field with "Fight Global Warming"
-
-    And I press latest "Add and configure filter"
-    And I fill in the latest "Solution" field with "The Green Alliance"
-    And I press "Save" in the "Dialog buttons" region
-
-    # Back to paragraph #1.
-    And I click "Edit" in the "Custom page body" for paragraph layout 1
-    Then the 1st filter of the 1st content listing paragraph value is "Save the Planet"
