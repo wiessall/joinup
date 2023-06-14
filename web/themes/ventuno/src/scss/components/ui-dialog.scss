@@ -1,0 +1,46 @@
+.ui-widget,
+.ui-widget button {
+  font-family: $font-family-base;
+}
+.ui-dialog {
+  overflow-wrap: break-word;
+  border: 1px solid $gray-200;
+  border-radius: $border-radius-lg;
+  overflow: hidden;
+  box-shadow: $modal-content-box-shadow-sm-up;
+  padding: 0;
+  .ui-dialog-titlebar {
+    padding: $spacer;
+    background-color: transparent;
+    border: 0;
+    border-bottom: $modal-header-border-width solid $modal-header-border-color;
+  }
+  .ui-dialog-title {
+    font-weight: $font-weight-base;
+    color: $primary;
+    font-size: $h4-font-size;
+  }
+  .ui-dialog-titlebar-close {
+    right: $spacer;
+    top: 1.75rem;
+    background: transparent url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M.293.293a1 1 0 0 1 1.414 0L8 6.586 14.293.293a1 1 0 1 1 1.414 1.414L9.414 8l6.293 6.293a1 1 0 0 1-1.414 1.414L8 9.414l-6.293 6.293a1 1 0 0 1-1.414-1.414L6.586 8 .293 1.707a1 1 0 0 1 0-1.414z'/%3E%3C/svg%3E") 50%/1em auto no-repeat;
+    border: 0;
+    border-radius: .5rem;
+    box-sizing: content-box;
+    color: #000;
+    height: 1em;
+    opacity: .5;
+    padding: .25em;
+    width: 1em;
+  }
+  .ui-dialog-content {
+    padding: $spacer;
+  }
+  .ui-widget-content {
+    background: transparent;
+  }
+  .ui-icon-closethick,
+  .ui-icon-closethick:hover {
+    background-image: none;
+  }
+}
