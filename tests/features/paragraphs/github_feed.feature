@@ -15,9 +15,6 @@ Feature: Github feed paragraph tests.
     And I click "Edit"
     And I press "Add Github feed"
     And I fill in the following:
-      | Heading    | Github feed                             |
-      | URL        | https://github.com/sweetrdf/easyrdf.git |
-      | Link text  | Read more                               |
       | Repository | https://github.com/sweetrdf/easyrdf.git |
 
   Scenario: Show issues without comments.
@@ -28,7 +25,6 @@ Feature: Github feed paragraph tests.
 
     Then I should see the heading "Catalogue of paragraphs"
     And I should see the heading "Github feed"
-    And I should see the link "Read more"
     And I should see the heading "Issues (2)"
     And I should not see the heading "Comments (5)"
 
