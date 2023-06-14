@@ -25,7 +25,8 @@ Feature:
     # Fill in the title to avoid the CSS validation kicking in when clicking
     # buttons.
     And I fill in "Title" with "Hello world"
-    Then I should see the button "Add Row"
+    Then I should see the button "Add Carousel"
+    And I should see the button "Add Row"
     But I should not see the button "Add 1 column layout"
     And I should not see the button "Add 2 column layout"
     And I should not see the button "Add 2 column with featured media on the left"
@@ -33,7 +34,6 @@ Feature:
     And I should not see the button "Add 3 column layout"
     And I should not see the button "Add Image"
     And I should not see the button "Add Call to action"
-    And I should not see the button "Add Carousel"
     And I should not see the button "Add Configurable listing"
 
     When I press "Add Row"
