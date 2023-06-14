@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Primary module hooks for Github feed module.
+ * Primary module hooks for GitHub feed module.
  */
 
 declare(strict_types = 1);
