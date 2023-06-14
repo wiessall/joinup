@@ -15,7 +15,6 @@
 declare(strict_types = 1);
 
 use Drupal\paragraphs\Entity\Paragraph;
-use Drupal\search_api\Entity\Index;
 use Drupal\sparql_entity_storage\Entity\Query\Sparql\SparqlArg;
 
 /**
@@ -114,49 +113,57 @@ function joinup_core_deploy_109302(): void {
  * Add state value to custom page nodes.
  */
 function joinup_core_deploy_109303(?array &$sandbox = []): string {
-  $node_storage = \Drupal::entityTypeManager()->getStorage('node');
+  $columns = [
+    'bundle',
+    'entity_id',
+    'revision_id',
+    'langcode',
+    'delta',
+    'field_state_value',
+  ];
+  $db = \Drupal::database();
 
-  if (!isset($sandbox['ids'])) {
-    $query = $node_storage->getQuery()->accessCheck(FALSE);
-    $query
-      ->condition('type', 'custom_page')
-      ->notExists('field_state');
-
-    $sandbox['ids'] = $query->execute();
-    $sandbox['total'] = count($sandbox['ids']);
+  if (!isset($sandbox['revisions'])) {
+    $query = $db->select('node_field_revision', 'r')
+      ->fields('r', ['nid', 'vid', 'status']);
+    $query->join('node', 'n', 'r.nid = n.nid');
+    $query->addExpression('IF(r.vid = n.vid, 1, 0)', 'current_revision');
+    $sandbox['revisions'] = $query
+      ->condition('n.type', 'custom_page')
+      ->orderBy('r.nid')
+      ->orderBy('r.vid')
+      ->execute()
+      ->fetchAll(\PDO::FETCH_NUM);
+    $sandbox['total'] = count($sandbox['revisions']);
     $sandbox['progress'] = 0;
   }
 
-  // Load used indexes.
-  $index_published = Index::load('published');
-  $index_unpublished = Index::load('unpublished');
+  $revisions = array_splice($sandbox['revisions'], 0, 200);
 
-  // Start batch tracking for both used indexes.
-  $index_published->startBatchTracking();
-  $index_unpublished->startBatchTracking();
-
-  $ids = array_splice($sandbox['ids'], 0, 50);
-  /** @var \Drupal\custom_page\Entity\CustomPageInterface $node */
-  foreach ($node_storage->loadMultiple($ids) as $node) {
-    if ($node->isPublished()) {
-      $node->set('field_state', 'published');
+  $query = $db->insert('node__field_state')->fields($columns);
+  $query_revision = $db->insert('node_revision__field_state')->fields($columns);
+  foreach ($revisions as $revision) {
+    [$nid, $vid, $status, $is_current_revision] = $revision;
+    $value = [
+      'bundle' => 'custom_page',
+      'entity_id' => $nid,
+      'revision_id' => $vid,
+      'langcode' => 'en',
+      'delta' => 0,
+      'field_state_value' => $status ? 'published' : 'unpublished',
+    ];
+    if ($is_current_revision) {
+      $query->values($value);
     }
-    else {
-      $node->set('field_state', 'unpublished');
-    }
-
-    $node->skip_notification = TRUE;
-    $node->save();
+    $query_revision->values($value);
   }
+  $query->execute();
+  $query_revision->execute();
 
-  // Stop batch tracking for both used indexes.
-  $index_published->stopBatchTracking();
-  $index_unpublished->stopBatchTracking();
+  $sandbox['progress'] += count($revisions);
+  $sandbox['#finished'] = (int) empty($sandbox['revisions']);
 
-  $sandbox['progress'] += count($ids);
-  $sandbox['#finished'] = (int) empty($sandbox['ids']);
-
-  return "Processed {$sandbox['progress']} out of {$sandbox['total']} custom pages";
+  return "Processed {$sandbox['progress']} out of {$sandbox['total']} custom page revisions";
 }
 
 /**
