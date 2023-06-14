@@ -458,10 +458,7 @@ Feature:
   Scenario: Regression test for ISAICP-7040
     See https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7040
 
-    Given collections:
-      | title      | state     |
-      | Nintendo64 | validated |
-    And solutions:
+    Given solutions:
       | title                | collection | state     |
       | Save the Planet      | Nintendo64 | validated |
       | Fight Global Warming | Nintendo64 | validated |
