@@ -493,6 +493,8 @@ Feature:
     # Back to paragraph #1.
     And I click "Edit" in the "Custom page body" for paragraph layout 1
     Then the 1st filter of the 1st content listing paragraph value is "Save the Planet"
+    And I press "Save" in the "Dialog buttons" region
+    And I press "Save"
 
   @javascript
   Scenario: Regression test for ISAICP-7183
