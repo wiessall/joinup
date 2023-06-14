@@ -22,11 +22,6 @@
   ]}}) %}
   {{ url_more }}
 {% endblock %}
-{% block logo %}
-  <div class="rounded-5 my-4 overflow-hidden">
-    {{ logo }}
-  </div>
-{% endblock %}
 {% block metadata %}
   <div class="d-flex my-4">
     <div class="page-title__details">
@@ -35,5 +30,10 @@
         <span class="page-title__detail">{{ 'Last update'|t }}: {{ additional_content.updated }}</span>
       {% endif %}
     </div>
+  </div>
+{% endblock %}
+{% block logo %}
+  <div class="rounded-5 my-4 overflow-hidden">
+    {{ logo }}
   </div>
 {% endblock %}
