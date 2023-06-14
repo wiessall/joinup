@@ -24,10 +24,17 @@ Feature:
       | title                           | collection | content                 | created          | state     | pinned |
       | What's your favourite N64 game? | Nintendo64 | Post title and reasons. | 2018-11-17 10:17 | validated | no     |
       | Searching for green pad.        | Nintendo64 | Looking for a used one. | 2018-11-17 10:18 | validated | no     |
+    And users:
+      | Username          | E-mail                        | Roles     |
+      | David facilitator | david.facilitator@example.com |           |
+      | Patric Moderator  | Patric.moderator@example.com  | moderator |
+    And the following collection user memberships:
+      | collection | user              | roles       |
+      | Nintendo64 | David facilitator | facilitator |
 
   @javascript
   Scenario: Community content listing widget should be shown to facilitators and moderators.
-    Given I am logged in as a facilitator of the "Nintendo64" collection
+    Given I am logged in as "David facilitator"
     When I go to the homepage of the "Nintendo64" collection
     And I click "Add custom page" in the plus button menu
     Then I should see the heading "Add custom page"
@@ -37,7 +44,7 @@ Feature:
     Then the following fields should be present "Show related content, Allow shared content"
     And the following fields should not be present "Query presets, Limit"
 
-    Given I am logged in as a moderator
+    Given I am logged in as "Patric Moderator"
     When I go to the homepage of the "Nintendo64" collection
     And I click "Add custom page" in the plus button menu
     Then I should see the heading "Add custom page"
@@ -49,7 +56,7 @@ Feature:
 
   @javascript
   Scenario: Configure a custom page to show a community content listing.
-    Given I am logged in as a facilitator of the "Nintendo64" collection
+    Given I am logged in as "David facilitator"
     When I go to the homepage of the "Nintendo64" collection
     And I click "Add custom page" in the plus button menu
     Then I should see the heading "Add custom page"
@@ -81,7 +88,7 @@ Feature:
     But I should not see the "NEC VR4300 CPU" tile
 
     # Change the page to list only news.
-    Given I am logged in as a moderator
+    Given I am logged in as "Patric Moderator"
     And I go to the edit form of the "Latest content" "custom page"
     And I fill in the following:
       | Title | Latest news |
@@ -94,7 +101,7 @@ Feature:
     But I should not see the "20 year anniversary" tile
     And I should not see the "NEC VR4300 CPU" tile
 
-    Given I am logged in as a facilitator of the "Nintendo64" collection
+    Given I am logged in as "David facilitator"
     And I go to the edit form of the "Latest news" "custom page"
     And I click "Edit" in the "Custom page body" for paragraph layout 1
     And I check "Allow shared content"
@@ -140,7 +147,7 @@ Feature:
 
   @javascript
   Scenario: Configure a custom page to show specific tiles.
-    Given I am logged in as a facilitator of the "Nintendo64" collection
+    Given I am logged in as "David facilitator"
     When I go to the homepage of the "Nintendo64" collection
     And I click "Add custom page" in the plus button menu
     Then I should see the heading "Add custom page"
@@ -253,7 +260,7 @@ Feature:
       | N64 cartridge cleaner           |
 
     # Query presets should still apply when available.
-    When I am logged in as a moderator
+    When I am logged in as "Patric Moderator"
     And I go to the "Chosen content" custom page
     And I open the header local tasks menu
     And I click "Edit" in the "Entity actions" region
@@ -266,7 +273,7 @@ Feature:
 
     # When a query preset is entered, the query builder should not be available
     # anymore to facilitators.
-    Given I am logged in as a facilitator of the "Nintendo64" collection
+    Given I am logged in as "David facilitator"
     And I go to the "Chosen content" custom page
     And I open the header local tasks menu
     And I click "Edit" in the "Entity actions" region
@@ -274,7 +281,7 @@ Feature:
     Then the following field should not be present "Available filters"
 
     # Moderators should still have access to the query builder.
-    When I am logged in as a moderator
+    When I am logged in as "Patric Moderator"
     And I go to the "Chosen content" custom page
     And I open the header local tasks menu
     And I click "Edit" in the "Entity actions" region
@@ -283,7 +290,7 @@ Feature:
 
   @javascript
   Scenario: Content type tabs should be mutually exclusive and show only items with results.
-    Given I am logged in as a facilitator of the "Nintendo64" collection
+    Given I am logged in as "David facilitator"
     When I go to the homepage of the "Nintendo64" collection
     And I click "Add custom page" in the plus button menu
 
@@ -339,14 +346,14 @@ Feature:
             keywords|"nintendo64 manuals"";s:5:"limit";s:2:"10";}
     """
     And custom_page content:
-      | title   | collection | state     |
+      | title    | collection | state     |
       | Licences | Nintendo64 | validated |
     And I append content listing to "field_paragraphs_body" field in "node" entity with following "Licences" title with:
     """
     a:3:{s:7:"enabled";i:1;s:13:"query_presets";s:61:"entity_bundle|document
             keywords|"nintendo64 licences"";s:5:"limit";s:2:"10";}
     """
-    And I am logged in as a moderator
+    And I am logged in as "Patric Moderator"
 
     When I go to the "Manuals" custom page
     Then I should see the "User's Guide" tile
@@ -358,7 +365,7 @@ Feature:
 
   @javascript
   Scenario: Invalid entries in the query presets field show a validation error.
-    Given I am logged in as a moderator
+    Given I am logged in as "Patric Moderator"
     When I go to the homepage of the "Nintendo64" collection
     And I click "Add custom page" in the plus button menu
     Then I should see the heading "Add custom page"
@@ -385,7 +392,7 @@ Feature:
 
   @javascript
   Scenario: Empty query presets and query builder field show a validation error.
-    Given I am logged in as a moderator
+    Given I am logged in as "Patric Moderator"
     When I go to the homepage of the "Nintendo64" collection
     And I click "Add custom page" in the plus button menu
     Then I should see the heading "Add custom page"
@@ -397,9 +404,9 @@ Feature:
 
   @terms
   Scenario: Global search setting allows for site-wide content in the content listing.
-    Given I am logged in as a moderator
+    Given I am logged in as "Patric Moderator"
     And custom_page content:
-      | title                | collection           | state     |
+      | title       | collection | state     |
       | All content | Nintendo64 | validated |
     And I append "content_listing" to "field_paragraphs_body" field in "node" entity with following "All content" title:
       | content_listing:value | a:6:{s:6:"fields";a:1:{s:20:"content_listing_type";a:2:{s:6:"weight";i:0;s:6:"region";s:3:"top";}}s:7:"enabled";i:1;s:13:"query_presets";s:38:"entity_bundle\|discussion,event,news\|IN";s:5:"limit";s:2:"12";s:11:"show_shared";i:0;s:13:"global_search";i:1;} |
@@ -466,12 +473,11 @@ Feature:
       | Save the Planet      | Nintendo64 | validated |
       | Fight Global Warming | Nintendo64 | validated |
       | The Green Alliance   | Nintendo64 | validated |
-
     And custom_page content:
-      | title   | collection |
-      | Forests | Nintendo64 |
+      | title   | collection | state     |
+      | Forests | Nintendo64 | validated |
 
-    Given I am logged in as a facilitator of the "Nintendo64" collection
+    Given I am logged in as "David facilitator"
     And I go to the edit form of the "Forests" "custom page"
 
     # Paragraph #1.
@@ -506,12 +512,11 @@ Feature:
       | Save gasoline      | Nintendo64 | validated |
       | Fight battery mode | Nintendo64 | validated |
       | Black Noise        | Nintendo64 | validated |
-
     And custom_page content:
-      | title | collection |
-      | Bikes | Nintendo64 |
+      | title | collection | state     |
+      | Bikes | Nintendo64 | validated |
 
-    Given I am logged in as a facilitator of the "Nintendo64" collection
+    Given I am logged in as "David facilitator"
     And I go to the edit form of the "Bikes" "custom page"
 
     # Paragraph #1.
