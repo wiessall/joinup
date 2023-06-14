@@ -41,6 +41,7 @@ Feature:
       | BBBBBBBBBB |
       | AAAAAAAAAA |
 
+  @javascript
   Scenario: Privileged users can add a map and/or an iframe and map paragraph.
     Given users:
       | Username |
@@ -55,16 +56,18 @@ Feature:
     # Normal members cannot add maps.
     When I am logged in as "Zohan"
     And I go to the edit form of the "Don't Mess with the Zohan" "custom page"
-    Then I should see the button "Add Simple paragraph"
-    And I should not see the button "Add Map"
-    But I should not see the button "Add IFrame"
+    And I click "Choose component"
+    Then I should see the link "Simple paragraph"
+    And I should not see the link "Map"
+    But I should not see the link "IFrame"
+
 
     # Facilitators can add maps.
     When I am logged in as a facilitator of the "Paragraphs collection" collection
     And I go to the edit form of the "Don't Mess with the Zohan" "custom page"
-    Then I should see the button "Add Simple paragraph"
-    And I should see the button "Add Map"
-    But I should not see the button "Add IFrame"
+    Then I should see the link "Simple paragraph"
+    And I should see the link "Map"
+    But I should not see the link "IFrame"
 
     When I fill in "Body" with "I'm half Australian, half Mt. Everest"
     And I press "Save"
