@@ -1,6 +1,6 @@
 /**
  * @file
- * Glide slider configuration.
+ * Glide slider configuration for explore block.
  */
 import Glide, {
   Controls,
@@ -8,6 +8,7 @@ import Glide, {
   Swipe,
   // eslint-disable-next-line import/no-unresolved
 } from "@glidejs/glide/dist/glide.modular.esm";
+import ControlsDisabler from "./helpers/glide.controlsDisabler.esm";
 
 (() => {
   Drupal.behaviors.glide = {
@@ -18,7 +19,9 @@ import Glide, {
         const slides = document.querySelectorAll(".tab-pane.active .glide");
         slides.forEach((slide) => {
           const glide = new Glide(slide, {
-            type: "carousel",
+            rewind: false,
+            bound: true,
+            dragThreshold: false,
             gap: 24,
             perView: 4,
             wrapperWidth: 300,
@@ -27,7 +30,7 @@ import Glide, {
               991: { perView: 2 },
               767: { perView: 1 },
             },
-          }).mount({ Controls, Breakpoints, Swipe });
+          }).mount({ Controls, Breakpoints, Swipe, ControlsDisabler });
 
           glide.update({ wrapperWidth: 300 });
         });
