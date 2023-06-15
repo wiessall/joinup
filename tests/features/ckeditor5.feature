@@ -1,6 +1,5 @@
 @api @group-a @terms @javascript
 Feature: CKEditor5
-  CKE5 textarea do not respect any configurable sizes.
 
   Background:
     Given the following owner:
@@ -9,11 +8,15 @@ Feature: CKEditor5
     And the following contact:
       | name  | ReachMe              |
       | email | reach.me@example.com |
-    Given collections:
-      | title                 | state     | topic             | owner    | contact information |
-      | Shaping of disruption | validated | Supplier exchange | Landlord | ReachMe             |
+    And collections:
+      | title                 | state     | topic                   | owner    | contact information |
+      | Shaping of disruption | validated | Supplier exchange       | Landlord | ReachMe             |
+      | The Other Collection  | validated | Statistics and Analysis | Landlord | ReachMe             |
+    And solutions:
+      | title       | collection            | state     | topic             | owner    | contact information |
+      | Angry Birds | Shaping of disruption | validated | Supplier exchange | Landlord | ReachMe             |
 
-  Scenario: Latest news is shown on the homepage
+  Scenario: CKE5 textarea do not respect any configurable sizes.
     Given news content:
       | title                | headline             | collection            | topic                                  | state     | publication date     | body                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
       | Spatial construction | Jilly of wildlands   | Shaping of disruption | HR, Statistics and Analysis, E-justice | validated | 2021-02-28T13:15:00Z | Global land use history confirms that empowering the environmental stewardship of Indigenous peoples and local communities will be critical to conserving biodiversity across the planet.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
@@ -32,18 +35,34 @@ Feature: CKEditor5
 
   @uploadFiles:alan.jpg
   Scenario: Media image with CKEditor5.
+    Given the following "Image" media:
+      | name                                | image        | alt            | group                 |
+      | The Image in Shaping of disruption  | simple.svg   | A simple image | Shaping of disruption |
+      | Other Image in The Other Collection | richard.jpg  | Long Live FOSS | The Other Collection  |
+      | Too angry for Angry Birds           | leonardo.jpg | The Genius     | Angry Birds           |
+
     Given I am logged in as a moderator
 
     When I go to the edit form of the "Shaping of disruption" collection
     And I press the button "Insert Media" in the "Description" wysiwyg editor
     Then a modal should open
 
+    Then I should see "The Image in Shaping of disruption"
+    But I should not see "Other Image in The Other Collection"
+    And I should not see "Too angry for Angry Birds"
+
     When I attach the file "alan.jpg" to "Add file"
     And I wait for AJAX to finish
 
-    When I fill in "Alternative text" with "This is Alan portrait"
+    When I fill in "Name" with "This is Alan we love"
+    And I fill in "Alternative text" with "This is Alan portrait"
     And I press "Save" in the "Modal buttons" region
     And I wait for AJAX to finish
+
+    Then I should see "The Image in Shaping of disruption"
+    And I should see "This is Alan we love"
+    But I should not see "Other Image in The Other Collection"
+    And I should not see "Too angry for Angry Birds"
 
     When I press "Insert selected" in the "Modal buttons" region
     Then the modal should be closed
@@ -51,5 +70,31 @@ Feature: CKEditor5
     When I press "Publish"
     And I click "About"
     But the response should contain "media/image/alan.jpg"
+
+    When I go to the edit form of the "The Other Collection" collection
+    And I press the button "Insert Media" in the "Description" wysiwyg editor
+    Then a modal should open
+
+    Then I should see "Other Image in The Other Collection"
+    But I should not see "The Image in Shaping of disruption"
+    And I should not see "This is Alan we love"
+    And I should not see "Too angry for Angry Birds"
+
+    When I check "Other Image in The Other Collection"
+    And I press "Insert selected" in the "Modal buttons" region
+    Then the modal should be closed
+
+    When I press "Publish"
+    And I click "About"
+    But the response should contain "media/image/richard.jpg"
+
+    When I go to the edit form of the "Angry Birds" solution
+    And I press the button "Insert Media" in the "Description" wysiwyg editor
+    Then a modal should open
+
+    Then I should see "Too angry for Angry Birds"
+    But I should not see "The Image in Shaping of disruption"
+    And I should not see "This is Alan we love"
+    And I should not see "Other Image in The Other Collection"
 
   # For 'Media video with CKEditor5' see tests/features/video/embed.feature
