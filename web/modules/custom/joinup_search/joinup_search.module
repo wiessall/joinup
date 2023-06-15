@@ -247,10 +247,15 @@ function _joinup_search_apply_global_search_api_solr_settings(SolariumQueryInter
       continue;
     }
 
+    $sort_value = is_numeric($plugin_config['target_id']) ?
+      $plugin_config['target_id'] :
+      $solarium_query->getHelper()
+        ->escapePhrase((string) $plugin_config['target_id']);
+
     $sort = sprintf(
       'if(eq(%s,%s),%s,%s)',
       $solr_fields[$field],
-      (int) $plugin_config['target_id'],
+      $sort_value,
       $delta,
       $sort
     );
