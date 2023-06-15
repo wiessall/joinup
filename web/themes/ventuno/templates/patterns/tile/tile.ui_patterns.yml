@@ -2,6 +2,11 @@ tile:
   label: 'Tile'
   description: 'Custom version of <a href="https://oelibrary.netlify.app/default/?path=/story/components-card--default" target="_blank">BCL''s card</a> to fit the needs of Joinup tiles display.'
   fields:
+    horizontal:
+      type: boolean
+      label: 'Horizontal'
+      description: 'Variant of the tile.'
+      preview: false
     image:
       type: object
       label: 'Image'
@@ -43,6 +48,11 @@ tile:
       label: 'Title suffix'
       description: 'Variable coming from Drupal that may content important stuff such as contextual links.'
       preview: ''
+    text:
+      type: text
+      label: 'Text'
+      description: 'Descritpion of the content.'
+      preview: 'Lorem ipsum dolor sit amet is the standard in typesetting industry.'
     action:
       type: object
       label: 'Action'

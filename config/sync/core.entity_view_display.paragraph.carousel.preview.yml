@@ -1,0 +1,26 @@
+uuid: 5b05f63e-55e5-429c-8ee5-a38566f3c86a
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.paragraph.preview
+    - field.field.paragraph.carousel.content_listing
+    - field.field.paragraph.carousel.paragraph_carousel_action
+    - field.field.paragraph.carousel.paragraph_heading
+    - paragraphs.paragraphs_type.carousel
+  module:
+    - layout_builder
+third_party_settings:
+  layout_builder:
+    enabled: false
+    allow_custom: false
+id: paragraph.carousel.preview
+targetEntityType: paragraph
+bundle: carousel
+mode: preview
+content: {  }
+hidden:
+  content_listing: true
+  paragraph_carousel_action: true
+  paragraph_heading: true
+  search_api_excerpt: true
