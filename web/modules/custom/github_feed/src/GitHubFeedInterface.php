@@ -5,7 +5,7 @@ declare(strict_types = 1);
 namespace Drupal\github_feed;
 
 /**
- * Interface for the github_feed service.
+ * Interface for the github_feed.github_feed service.
  */
 interface GitHubFeedInterface {
 

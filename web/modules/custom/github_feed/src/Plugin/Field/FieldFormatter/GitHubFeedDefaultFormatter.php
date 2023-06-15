@@ -49,7 +49,7 @@ class GitHubFeedDefaultFormatter extends FormatterBase {
   /**
    * {@inheritdoc}
    */
-  public static function create(ContainerInterface $container, array $configuration, $pluginId, $pluginDefinition) {
+  public static function create(ContainerInterface $container, array $configuration, $pluginId, $pluginDefinition): GitHubFeedDefaultFormatter {
     return new static(
       $pluginId,
       $pluginDefinition,
@@ -65,7 +65,7 @@ class GitHubFeedDefaultFormatter extends FormatterBase {
   /**
    * {@inheritdoc}
    */
-  public function viewElements(FieldItemListInterface $items, $langcode) {
+  public function viewElements(FieldItemListInterface $items, $langcode): array {
     $element = [];
     foreach ($items as $delta => $item) {
       if (!filter_var($item->repository, FILTER_VALIDATE_URL)) {
