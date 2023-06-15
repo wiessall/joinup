@@ -376,7 +376,7 @@ Feature: About this solution
     And I click "Choose component"
     And I click "Simple paragraph"
     And I press the button "Contact us" in the "Body" wysiwyg editor
-    And I press "Save" in the "Dialog buttons" region
+    And I press "Save" in the "Modal buttons" region
     And I press "Save"
     And I should see the heading "Some custom contact test"
 

@@ -116,7 +116,7 @@ Feature:
     And I select "Custom page" from "Available filters"
     And I press "Add and configure filter"
     And I fill in "Custom page" with "Some page 1"
-    And I press "Save" in the "Dialog buttons" region
+    And I press "Save" in the "Modal buttons" region
     And I press "Save"
 
     Then I should see the "Some page 1" tile
@@ -127,7 +127,7 @@ Feature:
     And I click "Edit" in the "Entity actions" region
     And I click "Edit" in the "Custom page body" for paragraph layout 1
     And I fill in "Custom page" with "Some page 3"
-    And I press "Save" in the "Dialog buttons" region
+    And I press "Save" in the "Modal buttons" region
     And I press "Save"
 
     # Global search is not checked. No tiles should be shown.
@@ -139,7 +139,7 @@ Feature:
     And I click "Edit" in the "Entity actions" region
     And I click "Edit" in the "Custom page body" for paragraph layout 1
     And I check "Global search"
-    And I press "Save" in the "Dialog buttons" region
+    And I press "Save" in the "Modal buttons" region
     And I press "Save"
 
     Then I should see the "Some page 3" tile

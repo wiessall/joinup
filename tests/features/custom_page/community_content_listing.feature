@@ -71,7 +71,7 @@ Feature:
     And I should see the text "Display content shared from other communities."
     And I should see the text "Note: the content shown is dynamic, filtered live each time users will visualise the page. As a result, new content might be shown and old content can be altered or deleted."
 
-    When I press "Save" in the "Dialog buttons" region
+    When I press "Save" in the "Modal buttons" region
     And I press "Save"
     Then I should see the heading "Latest content"
     And I should see the "Rare Nintendo64 disk drive discovered" tile
@@ -87,7 +87,7 @@ Feature:
       | Title | Latest news |
     And I click "Edit" in the "Custom page body" for paragraph layout 1
     And I fill in "Query presets" with "entity_bundle|news"
-    When I press "Save" in the "Dialog buttons" region
+    When I press "Save" in the "Modal buttons" region
     And I press "Save"
     Then I should see the heading "Latest news"
     And I should see the "Rare Nintendo64 disk drive discovered" tile
@@ -98,7 +98,7 @@ Feature:
     And I go to the edit form of the "Latest news" "custom page"
     And I click "Edit" in the "Custom page body" for paragraph layout 1
     And I check "Allow shared content"
-    And I press "Save" in the "Dialog buttons" region
+    And I press "Save" in the "Modal buttons" region
     And I press "Save"
     # Only news are displayed.
     Then I should see the "Rare Nintendo64 disk drive discovered" tile
@@ -132,7 +132,7 @@ Feature:
     When I go to the edit form of the "Latest news" "custom page"
     And I click "Edit" in the "Custom page body" for paragraph layout 1
     And I uncheck "Show related content"
-    And I press "Save" in the "Dialog buttons" region
+    And I press "Save" in the "Modal buttons" region
     And I press "Save"
     Then I should not see the "Rare Nintendo64 disk drive discovered" tile
     And I should not see the "20 year anniversary" tile
@@ -160,7 +160,7 @@ Feature:
     And I press "Add and configure filter"
     And I fill in "Event" with "20 year anniversary"
     Then I drag the table row in the "Content listing field filter form" region at position 4 up
-    And I press "Save" in the "Dialog buttons" region
+    And I press "Save" in the "Modal buttons" region
     And I press "Save"
     Then I should see the heading "Chosen content"
     And I should see the following tiles in the correct order:
@@ -174,7 +174,7 @@ Feature:
     And I click "Edit" in the "Custom page body" for paragraph layout 1
     And I drag the table row in the "Content listing field filter form" region at position 3 up
     And I drag the table row in the "Content listing field filter form" region at position 2 up
-    And I press "Save" in the "Dialog buttons" region
+    And I press "Save" in the "Modal buttons" region
     And I press "Save"
     And I should see the following tiles in the correct order:
       | 20 year anniversary                   |
@@ -190,7 +190,7 @@ Feature:
     And I press "Add and configure filter"
     And I fill in the 2nd "News" with "NEC VR4300 CPU" in the "Custom content listing" field
     And I check "Allow shared content"
-    And I press "Save" in the "Dialog buttons" region
+    And I press "Save" in the "Modal buttons" region
     And I press "Save"
     Then I should see the following tiles in the correct order:
       | 20 year anniversary                   |
@@ -217,7 +217,7 @@ Feature:
     And I click "Edit" in the "Entity actions" region
     And I click "Edit" in the "Custom page body" for paragraph layout 1
     And I uncheck "Allow shared content"
-    And I press "Save" in the "Dialog buttons" region
+    And I press "Save" in the "Modal buttons" region
     And I press "Save"
     Then I should see the following tiles in the correct order:
       | 20 year anniversary                   |
@@ -245,7 +245,7 @@ Feature:
     And I select "Solution" from "Available filters"
     And I press "Add and configure filter"
     And I fill in "Solution" with "N64 cartridge cleaner"
-    And I press "Save" in the "Dialog buttons" region
+    And I press "Save" in the "Modal buttons" region
     And I press "Save"
     Then I should see the following tiles in the correct order:
       | Searching for green pad.        |
@@ -259,7 +259,7 @@ Feature:
     And I click "Edit" in the "Entity actions" region
     And I click "Edit" in the "Custom page body" for paragraph layout 1
     And I fill in "Query presets" with "entity_bundle|solution"
-    And I press "Save" in the "Dialog buttons" region
+    And I press "Save" in the "Modal buttons" region
     And I press "Save"
     Then I should see the following tiles in the correct order:
       | N64 cartridge cleaner |
@@ -304,7 +304,7 @@ Feature:
     And I select "News" from "Available filters"
     And I press "Add and configure filter"
     And I fill in "News" with "Rare Nintendo64 disk drive discovered"
-    And I press "Save" in the "Dialog buttons" region
+    And I press "Save" in the "Modal buttons" region
     And I press "Save"
     Then I should see the heading "Collection content"
     # Verify that unwanted facets are not shown in the page.
@@ -366,13 +366,13 @@ Feature:
     And I click "Choose component"
     And I click "Content listing"
     And I fill in "Query presets" with "wrongvalue"
-    And I press "Save" in the "Dialog buttons" region
+    And I press "Save" in the "Modal buttons" region
     Then I should see the error message "Invalid query preset line added: wrongvalue."
     When I fill in "Query presets" with "unknown_field|news"
-    And I press "Save" in the "Dialog buttons" region
+    And I press "Save" in the "Modal buttons" region
     Then I should see the error message "Invalid search field specified: unknown_field."
     When I fill in "Query presets" with "entity_bundle|news|equal"
-    And I press "Save" in the "Dialog buttons" region
+    And I press "Save" in the "Modal buttons" region
     Then I should see the error message "Invalid operator specified: equal. Allowed operators are '=', '<>', 'IN', 'NOT IN'."
     # Verify that errors are reported when multiline values are added.
     When I fill in "Query presets" with:
@@ -380,7 +380,7 @@ Feature:
         entity_bundle|news
         unknown_field|test
         """
-    And I press "Save" in the "Dialog buttons" region
+    And I press "Save" in the "Modal buttons" region
     Then I should see the error message "Invalid search field specified: unknown_field."
 
   @javascript
@@ -392,7 +392,7 @@ Feature:
     When I fill in "Title" with "Empty queries"
     When I click "Choose component"
     And I click "Content listing"
-    And I press "Save" in the "Dialog buttons" region
+    And I press "Save" in the "Modal buttons" region
     Then I should see the error message "You need to add a filter in the Content listing block"
 
   @terms
@@ -477,7 +477,7 @@ Feature:
 
     And I press "Add and configure filter"
     And I fill in "Solution" with "Save the Planet"
-    And I press "Save" in the "Dialog buttons" region
+    And I press "Save" in the "Modal buttons" region
 
     # Paragraph #2.
     When I click the last "Choose component" link
@@ -488,12 +488,12 @@ Feature:
 
     And I press latest "Add and configure filter"
     And I fill in the latest "Solution" field with "The Green Alliance"
-    And I press "Save" in the "Dialog buttons" region
+    And I press "Save" in the "Modal buttons" region
 
     # Back to paragraph #1.
     And I click "Edit" in the "Custom page body" for paragraph layout 1
     Then the 1st filter of the 1st content listing paragraph value is "Save the Planet"
-    And I press "Save" in the "Dialog buttons" region
+    And I press "Save" in the "Modal buttons" region
     And I press "Save"
 
   @javascript
@@ -525,7 +525,7 @@ Feature:
 
     And I press latest "Add and configure filter"
     And I fill in the latest "Solution" field with "Black Noise"
-    And I press "Save" in the "Dialog buttons" region
+    And I press "Save" in the "Modal buttons" region
 
     # Paragraph #2.
     When I click the last "Choose component" link
@@ -536,7 +536,7 @@ Feature:
 
     And I press latest "Add and configure filter"
     And I fill in the latest "Solution" field with "Fight battery mode"
-    And I press "Save" in the "Dialog buttons" region
+    And I press "Save" in the "Modal buttons" region
 
     Then I press "Save"
     And I should see the heading "Bikes"
@@ -551,7 +551,7 @@ Feature:
     And I press "Add and configure filter"
     And the 3nd filter of the 1st content listing paragraph is empty
     And I click "Remove filter" at 1st filter of the 1st content listing paragraph
-    And I press "Cancel" in the "Dialog buttons" region
+    And I press "Cancel" in the "Modal buttons" region
     And I wait for AJAX to finish
 
     When I click "Edit" in the "Custom page body" for paragraph layout 2
