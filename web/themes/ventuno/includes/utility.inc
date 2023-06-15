@@ -69,20 +69,26 @@ function _ventuno_preprocess_tile(array &$variables, string $entity_type_id): vo
     : [];
 
   // Topics.
-  // Number of topics displayed can vary depending on the route.
-  $max_topics = 2;
+  // Number of topics displayed can vary depending on the view mode.
+  $max_topics = $variables['view_mode'] === 'tile_two' ? 3 : 2;
   $topics = ($entity instanceof TopicReferencingEntityInterface) ? $entity->getTopics() : NULL;
   if ($topics) {
     $variables['badges'] = [];
     foreach ($topics as $topic) {
-      $variables['badges'][]['label'] = $topic->label();
+      $variables['badges'][] = [
+        'label' => $topic->label(),
+        'topic_id' => $topic->id(),
+      ];
     }
     $num_of_items = count($topics);
     if ($num_of_items > $max_topics) {
       $extra_items = $num_of_items - $max_topics;
       $variables['badges'] = array_splice($variables['badges'], 0, $max_topics);
       $word = ($extra_items < $max_topics) ? t('topic') : t('topics');
-      $variables['badges'][]['label'] = '+' . $extra_items . ' ' . $word;
+      $variables['badges'][] = [
+        'label' => '+' . $extra_items . ' ' . $word,
+        'overflow' => TRUE,
+      ];
     }
   }
 
