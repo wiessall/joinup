@@ -49,8 +49,14 @@
         {%- if _badges is not empty and _badges is iterable -%}
           {{ attach_library('ventuno/badge') }}
           <div class="mt-2">
-            {% for badge in _badges %}
-              {% include '@oe-bcl/badge' with badge only %}
+            {% for _badge in _badges %}
+              {% include '@oe-bcl/badge' with {
+                label: _badge.label,
+                background: _badge.overflow ? 'light' : 'secondary',
+                rounded_pill: true,
+                attributes: create_attribute().addClass(['fs-sm', 'me-1', 'mb-1']),
+                url: _badge.overflow ? null : path('view.search.page_1', {}, {'query': {'f': { 0: 'topic:' ~ _badge.topic_id }}}),
+              } only %}
             {% endfor %}
           </div>
         {%- endif -%}
