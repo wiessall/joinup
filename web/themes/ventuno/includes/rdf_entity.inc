@@ -26,13 +26,13 @@ function ventuno_preprocess_rdf_entity(array &$variables): void {
       $variables['is_canonical'] = TRUE;
     }
   }
-}
 
-/**
- * Implements hook_preprocess_rdf_entity__view_mode_tile().
- */
-function ventuno_preprocess_rdf_entity__view_mode_tile(array &$variables, string $entity_type_id): void {
-  _ventuno_preprocess_tile($variables, 'rdf_entity');
+  // View modes where tiles are expected.
+  $tile_view_modes = ['view_mode_tile', 'tile_two'];
+  // Prepare data for the tiles.
+  if (in_array($variables['view_mode'], $tile_view_modes)) {
+    _ventuno_preprocess_tile($variables, 'rdf_entity');
+  }
 }
 
 /**
