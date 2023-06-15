@@ -101,9 +101,9 @@ class GitHubFeedWidget extends WidgetBase {
   public static function validateGitHubRepository(&$element, FormStateInterface $form_state, array &$complete_form): void {
     $values = $form_state->getValues();
     $value = NestedArray::getValue($values, $element['#parents']);
-    if (!empty($value['repository'])) {
-      $url = parse_url($value['repository']);
-      $regex = '/^\/[A-Za-z0-9\-]+\/[A-Za-z0-9\-]+(?:\.git)?$/';
+    if (!empty($value)) {
+      $url = parse_url($value);
+      $regex = '/^\/[A-Za-z0-9_\-]+\/[A-Za-z0-9_\-]+(?:\.git)?$/';
       if (!isset($url['host']) || $url['host'] !== 'github.com' || !isset($url['path']) || !preg_match($regex, $url['path'])) {
         $form_state->setError($element, t('The repository must be a valid GitHub repository. The value must be in the format "https://github.com/username/repository" or "https://github.com/username/repository.git".'));
       }
