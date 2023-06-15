@@ -42,6 +42,7 @@ class JoinupParagraphsContext extends RawDrupalContext {
   const FIELD_MAP = [
     'Custom page body' => 'field-paragraphs-body',
     'Custom content listing' => 'content-listing',
+    'Accordion item' => 'field-accordion-item',
   ];
 
   /**

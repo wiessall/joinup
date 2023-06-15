@@ -31,7 +31,7 @@ function ventuno_preprocess_paragraph__accordion_item(array &$variables): void {
     return;
   }
   $parent = $entity->getParentEntity();
-  if ($parent->bundle() !== 'accordion') {
+  if (!$parent || $parent->bundle() !== 'accordion') {
     return;
   }
   $variables['parent_id'] = $parent->id();
