@@ -24,12 +24,12 @@ Feature:
     And I click "Choose component"
     And I click "Simple paragraph"
     And I enter "AAAAAAAAAA" in the "Body" wysiwyg editor
-    And I press "Save" in the "Dialog buttons" region
+    And I press "Save" in the "Modal buttons" region
 
     Then I click the last "Choose component" link
     When I click "Simple paragraph"
     And I enter "BBBBBBBBBB" in the "Body" wysiwyg editor
-    And I press "Save" in the "Dialog buttons" region
+    And I press "Save" in the "Modal buttons" region
     And I should see the following paragraphs in the given order:
       | AAAAAAAAAA |
       | BBBBBBBBBB |
@@ -72,7 +72,7 @@ Feature:
 
     When I click "Simple paragraph"
     And I enter "I'm half Australian, half Mt. Everest" in the "Body" wysiwyg editor
-    And I press "Save" in the "Dialog buttons" region
+    And I press "Save" in the "Modal buttons" region
     And I press "Save"
     Then I should see the success message "Custom page Don't Mess with the Zohan has been updated."
     And I should see "I'm half Australian, half Mt. Everest"
@@ -88,7 +88,7 @@ Feature:
     When I click "Map"
     # As the Webtools Map a webservice, we only test a fake JSON.
     And I fill in "JSON" with "{\"foo\":\"bar\"}"
-    And I press "Save" in the "Dialog buttons" region
+    And I press "Save" in the "Modal buttons" region
     And I press "Save"
     Then I should see the success message "Custom page Don't Mess with the Zohan has been updated."
     And I should see "I'm half Australian, half Mt. Everest"
@@ -98,7 +98,7 @@ Feature:
     And I click the last "Choose component" link
     And I click "IFrame"
     And I fill in "Iframe URL" with "http://example.com"
-    And I press "Save" in the "Dialog buttons" region
+    And I press "Save" in the "Modal buttons" region
     And I press "Save"
     # We only test that the <iframe .../> element is in page. Unfortunately, we
     # cannot do precision RegExp search in page source, so we only check for the
@@ -125,7 +125,7 @@ Feature:
     And I fill in the 2nd "Item label" with "Duper" in the "Accordion item" field
     And I enter "Crunchy text" in the 2nd "Body" wysiwyg editor in the "Accordion item" field
 
-    And I press "Save" in the "Dialog buttons" region
+    And I press "Save" in the "Modal buttons" region
     And I press "Save"
     Then I should see the heading "Paragraphs accordion page"
     And I should see the text "Super"
