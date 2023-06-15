@@ -17,21 +17,27 @@ Feature:
 
     Given I am logged in as a moderator
     And I go to the "Joinup" collection
-    And I click "Add custom page" in the plus button menu
-    Then I should see the link "Choose component"
-    And I click "Choose component"
-    Then I should see the link "Layout"
-    And I should see the link "Simple paragraph"
-    And I should see the link "Map"
-    And I should see the link "Accordion"
-    And I should see the link "Content listing"
-    And I should see the link "IFrame"
-    And I should see the link "Row"
-    And I should see the link "Call to action"
-    And I should see the link "Carousel"
-    And I should see the link "Configurable listing"
+    And I click "Add custom page"
+    Then I should not see the button "Add Row"
 
-    When I click "Row"
+    When I am on the homepage
+    And I click "Interoperable Europe" in the "Navigation bar"
+    And I click "Add custom page"
+    # Fill in the title to avoid the CSS validation kicking in when clicking
+    # buttons.
+    And I fill in "Title" with "Hello world"
+    Then I should see the button "Add Carousel"
+    And I should see the button "Add Row"
+    But I should not see the button "Add 1 column layout"
+    And I should not see the button "Add 2 column layout"
+    And I should not see the button "Add 2 column with featured media on the left"
+    And I should not see the button "Add 2 column with featured media on the right"
+    And I should not see the button "Add 3 column layout"
+    And I should not see the button "Add Image"
+    And I should not see the button "Add Call to action"
+    And I should not see the button "Add Configurable listing"
+
+    When I press "Add Row"
     Then I should see the button "Add 1 column layout"
     And I should see the button "Add 2 column layout"
     And I should see the button "Add 2 column with featured media on the left"
@@ -42,28 +48,30 @@ Feature:
     And the following fields should not be present "URL, Link text"
     And I should not see the button "Add Configurable listing"
 
+    When I press "Add 1 column layout"
+    Then I should not see the button "Add Configurable listing"
+    But I should see the button "Add Image"
+    And I should see the button "Add Call to action"
+    And I should see the button "Add Carousel"
+    When I press "Add Carousel"
+    Then the following fields should be present "URL, Link text, Available filters"
+
     Given I am logged in as a facilitator of the "Joinup" collection
     And I go to the "Joinup" collection
-    And I click "Add custom page" in the plus button menu
-    Then I should see the link "Choose component"
-    And I click "Choose component"
-    Then I should see the link "Row"
+    And I click "Add custom page"
+    Then I should not see the button "Add Row"
 
     Given I am logged in as a facilitator of the "Interoperable Europe" collection
-    And I go to the "Interoperable Europe" collection
-    And I click "Add custom page" in the plus button menu
-    Then I should see the link "Choose component"
-    And I click "Choose component"
-    Then I should see the link "Layout"
-    And I should see the link "Simple paragraph"
-    And I should see the link "Map"
-    And I should see the link "Accordion"
-    And I should see the link "Content listing"
-    And I should see the link "IFrame"
-    And I should see the link "Row"
-    And I should see the link "Call to action"
-    And I should see the link "Carousel"
-    And I should see the link "Configurable listing"
+    And I am on the homepage
+    And I click "Interoperable Europe" in the "Navigation bar"
+    And I click "Add custom page"
+    Then I should see the button "Add Row"
+    When I press "Add Row"
+    Then I should see the button "Add 1 column layout"
+    And I should see the button "Add 2 column layout"
+    And I should see the button "Add 2 column with featured media on the left"
+    And I should see the button "Add 2 column with featured media on the right"
+    And I should see the button "Add 3 column layout"
 
   Scenario: Test that carousels content listing options are working correctly.
     Given the following collections:
