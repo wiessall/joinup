@@ -29,6 +29,7 @@ dependencies:
     - node.type.event
     - responsive_image.styles.iop_carousel
   module:
+    - datetime_range
     - layout_builder
     - responsive_image
     - template_suggestion
@@ -50,6 +51,19 @@ content:
     third_party_settings: {  }
     weight: 0
     region: content
+  field_event_date:
+    type: daterange_default
+    label: hidden
+    settings:
+      timezone_override: ''
+      format_type: date_only
+      fromto: start_date
+      separator: '-'
+    third_party_settings:
+      template_suggestion:
+        template_suggestion: ''
+    weight: 2
+    region: content
   field_event_logo:
     type: responsive_image
     label: hidden
@@ -68,7 +82,6 @@ hidden:
   field_event_agenda: true
   field_event_contact_email: true
   field_event_coordinates: true
-  field_event_date: true
   field_event_online_location: true
   field_event_spatial_coverage: true
   field_event_web_url: true
