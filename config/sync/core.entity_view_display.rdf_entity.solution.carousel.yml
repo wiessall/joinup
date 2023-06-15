@@ -46,10 +46,11 @@ dependencies:
     - field.field.rdf_entity.solution.field_status
     - field.field.rdf_entity.solution.field_topic
     - rdf_entity.rdfentity.solution
+    - responsive_image.styles.iop_carousel
   module:
     - field_group
-    - image
     - layout_builder
+    - responsive_image
     - smart_trim
     - template_suggestion
     - user
@@ -101,11 +102,14 @@ content:
     weight: 2
     region: content
   field_is_logo:
-    type: image_url
+    type: responsive_image
     label: hidden
     settings:
-      image_style: ''
-    third_party_settings: {  }
+      responsive_image_style: iop_carousel
+      image_link: ''
+    third_party_settings:
+      template_suggestion:
+        template_suggestion: ''
     weight: 1
     region: content
   label:
