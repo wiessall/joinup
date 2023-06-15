@@ -61,6 +61,7 @@ Feature: Embed of videos into the page.
     And I press the button "Insert Media" in the "Content" wysiwyg editor
     And a modal should open
     And I should see the following lines of text:
+      | Image |
       | File  |
       | Video |
     And I click "Video"
