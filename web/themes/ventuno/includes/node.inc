@@ -81,7 +81,10 @@ function ventuno_preprocess_node(array &$variables): void {
     }
   }
 
-  if ($variables['view_mode'] === 'highlighted') {
+  // View modes where tiles are expected.
+  $tile_view_modes = ['highlighted', 'view_mode_tile', 'tile_two'];
+  // Prepare data for the tiles.
+  if (in_array($variables['view_mode'], $tile_view_modes)) {
     _ventuno_preprocess_tile($variables, 'node');
   }
 
@@ -119,13 +122,6 @@ function ventuno_preprocess_node(array &$variables): void {
   if ((int) $node->id() === EifInterface::EIF_ONLINE_ASSISTANT) {
     unset($variables['content']);
   }
-}
-
-/**
- * Implements hook_preprocess_node__view_mode_tile().
- */
-function ventuno_preprocess_node__view_mode_tile(array &$variables, string $entity_type_id): void {
-  _ventuno_preprocess_tile($variables, 'node');
 }
 
 /**
