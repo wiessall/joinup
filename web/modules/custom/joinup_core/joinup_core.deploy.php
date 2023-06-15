@@ -69,7 +69,7 @@ function joinup_core_deploy_109401(array &$sandbox): string {
       INNER JOIN {node__og_audience} g ON b.entity_id = g.entity_id
       INNER JOIN {node_field_data} n ON b.entity_id = n.nid
       WHERE b.deleted = 0
-      AND (b.body_value LIKE '%preview_thumbnail%' OR b.body_value LIKE '%<img%')
+      AND (b.body_value LIKE '%preview_thumbnail%' OR b.body_value LIKE '%<img%data-entity-type="file"%')
       QUERY;
     $sandbox['tasks']['node'] = array_map(function (array $item): array {
       return [(int) $item[0], $item[1], (bool) $item[2], (int) $item[3]];
