@@ -39,7 +39,7 @@ settings:
       asset_release: carousel
       collection: carousel
       licence: eif_perspective
-      solution: eif_perspective
+      solution: carousel
       spdx_licence: eif_perspective
     'entity:taxonomy_term':
       eif_conceptual_model: default
