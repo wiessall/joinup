@@ -65,11 +65,14 @@ Feature:
     # Facilitators can add maps.
     When I am logged in as a facilitator of the "Paragraphs collection" collection
     And I go to the edit form of the "Don't Mess with the Zohan" "custom page"
+    And I click "Choose component"
     Then I should see the link "Simple paragraph"
     And I should see the link "Map"
     But I should not see the link "IFrame"
 
-    When I fill in "Body" with "I'm half Australian, half Mt. Everest"
+    When I click "Simple paragraph"
+    And I enter "I'm half Australian, half Mt. Everest" in the "Body" wysiwyg editor
+    And I press "Save" in the "Dialog buttons" region
     And I press "Save"
     Then I should see the success message "Custom page Don't Mess with the Zohan has been updated."
     And I should see "I'm half Australian, half Mt. Everest"
@@ -77,21 +80,25 @@ Feature:
     # Moderators can add maps.
     Given I am logged in as a moderator
     And I go to the edit form of the "Don't Mess with the Zohan" "custom page"
-    Then I should see the button "Add Simple paragraph"
-    And I should see the button "Add Map"
-    And I should see the button "Add IFrame"
+    And I click "Choose component"
+    Then I should see the link "Simple paragraph"
+    And I should see the link "Map"
+    And I should see the link "IFrame"
 
-    When I press "Add Map"
+    When I click "Map"
     # As the Webtools Map a webservice, we only test a fake JSON.
     And I fill in "JSON" with "{\"foo\":\"bar\"}"
+    And I press "Save" in the "Dialog buttons" region
     And I press "Save"
     Then I should see the success message "Custom page Don't Mess with the Zohan has been updated."
     And I should see "I'm half Australian, half Mt. Everest"
     And the response should contain "{\"foo\":\"bar\"}"
 
     When I go to the edit form of the "Don't Mess with the Zohan" "custom page"
-    And I press "Add IFrame"
+    And I click the last "Choose component" link
+    And I click "IFrame"
     And I fill in "Iframe URL" with "http://example.com"
+    And I press "Save" in the "Dialog buttons" region
     And I press "Save"
     # We only test that the <iframe .../> element is in page. Unfortunately, we
     # cannot do precision RegExp search in page source, so we only check for the
