@@ -81,12 +81,12 @@ function _ventuno_preprocess_tile(array &$variables, string $entity_type_id): vo
       ];
     }
     $num_of_items = count($topics);
-    if ($num_of_items > $max_topics) {
+    // Display the actual topic instead of "+ 1 topic".
+    if ($num_of_items > $max_topics + 1) {
       $extra_items = $num_of_items - $max_topics;
       $variables['badges'] = array_splice($variables['badges'], 0, $max_topics);
-      $word = ($extra_items < $max_topics) ? t('topic') : t('topics');
       $variables['badges'][] = [
-        'label' => '+' . $extra_items . ' ' . $word,
+        'label' => '+' . $extra_items . ' ' . t('topics'),
         'overflow' => TRUE,
       ];
     }
