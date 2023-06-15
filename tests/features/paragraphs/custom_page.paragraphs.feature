@@ -113,25 +113,19 @@ Feature:
     And I open the plus button menu
     And I click "Add custom page"
     And I fill in "Title" with "Paragraphs accordion page"
-    Given I press "Remove" in the "Custom page body" field for paragraph 1
     Then the page should contain no paragraphs
 
-    # The "List additional actions" is the button arrow that shows the full list of paragraphs to add.
-    Given I press "List additional actions"
-    Then I press "Add Accordion" in the "Custom page body" paragraphs field
+    Given I click "Choose component"
+    Then I click "Accordion"
+    And press "Add Accordion item"
+    And I wait for AJAX to finish
 
-    # 3 paragraphs are the default number when adding an accordion.
-    # 1. the accordion wrapper, 2. accordion item and 3. the simple paragraph contained in the item.
-    And there should be 3 paragraph in the "Custom page body" field
-    When I press "Add Accordion item"
-    # An accordion item and a simple paragraph have been added.
-    Then there should be 5 paragraphs in the "Custom page body" field
+    Given I fill in the 1st "Item label" with "Super" in the "Accordion item" field
+    And I enter "Clumsy text" in the 1st "Body" wysiwyg editor in the "Accordion item" field
+    And I fill in the 2nd "Item label" with "Duper" in the "Accordion item" field
+    And I enter "Crunchy text" in the 2nd "Body" wysiwyg editor in the "Accordion item" field
 
-    Given I fill in the 1st "Item label" with "Super" in the "Custom page body" field
-    And I enter "Clumsy text" in the 1st "Body" wysiwyg editor in the "Custom page body" field
-    And I fill in the 2nd "Item label" with "Duper" in the "Custom page body" field
-    And I enter "Crunchy text" in the 2nd "Body" wysiwyg editor in the "Custom page body" field
-
+    And I press "Save" in the "Dialog buttons" region
     And I press "Save"
     Then I should see the heading "Paragraphs accordion page"
     And I should see the text "Super"
