@@ -11,6 +11,7 @@ use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\eif\EifInterface;
 use Drupal\joinup_bundle_class\LogoInterface;
 use Drupal\joinup_group\JoinupGroupHelper;
+use Drupal\joinup_workflow\ArchivableEntityInterface;
 
 /**
  * Implements hook_preprocess_HOOK().
@@ -135,6 +136,17 @@ function ventuno_preprocess_node__view_mode_tile(array &$variables, string $enti
       '@changed' => \Drupal::service('date.formatter')->format($changed_time, 'date_only'),
     ]);
   }
+
+  // For now, only Custom page, Discussion, Document, Event and News items
+  // (all of them are nodes) can be archived.
+  if ($entity instanceof ArchivableEntityInterface
+    && $entity->get('field_state')->value === 'archived'
+  ) {
+    $variables['extra_data'][] = [
+      'icon' => 'trash',
+      'label' => t('Archived'),
+    ];
+  };
 
   switch ($entity->bundle()) {
     case 'discussion':
