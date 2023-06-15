@@ -249,8 +249,8 @@ Feature:
     And I press "Save"
     Then I should see the following tiles in the correct order:
       | Searching for green pad.        |
-      | What's your favourite N64 game? |
       | N64 cartridge cleaner           |
+      | What's your favourite N64 game? |
 
     # Query presets should still apply when available.
     When I am logged in as a moderator
