@@ -28,7 +28,7 @@ class GitHubFeedItem extends FieldItemBase {
   /**
    * {@inheritdoc}
    */
-  public static function defaultFieldSettings() {
+  public static function defaultFieldSettings(): array {
     return [
       // This will make the page refresh the feed after a day if left as 86400.
       'cache_max_age' => 86400,
@@ -38,13 +38,14 @@ class GitHubFeedItem extends FieldItemBase {
   /**
    * {@inheritdoc}
    */
-  public function fieldSettingsForm(array $form, FormStateInterface $form_state) {
+  public function fieldSettingsForm(array $form, FormStateInterface $form_state): array {
     $settings = $this->getSettings();
     $element['cache_max_age'] = [
-      '#type' => 'textfield',
+      '#type' => 'number',
       '#title' => $this->t('Cache lifetime (in seconds)'),
       '#default_value' => $settings['cache_max_age'],
-      '#description' => $this->t('The cache lifetime for the feed items. Set to -1 to disable caching.'),
+      '#min' => -1,
+      '#description' => $this->t('The cache lifetime for the feed items. Set to 0 to disable caching.'),
     ];
 
     return $element;
@@ -53,14 +54,14 @@ class GitHubFeedItem extends FieldItemBase {
   /**
    * {@inheritdoc}
    */
-  public function isEmpty() {
+  public function isEmpty(): bool {
     return empty($this->repository) || empty($this->type);
   }
 
   /**
    * {@inheritdoc}
    */
-  public static function propertyDefinitions(FieldStorageDefinitionInterface $field_definition) {
+  public static function propertyDefinitions(FieldStorageDefinitionInterface $field_definition): array {
     $properties['repository'] = DataDefinition::create('uri')
       ->setLabel(t('Repository'))
       ->setRequired(TRUE);
@@ -88,12 +89,12 @@ class GitHubFeedItem extends FieldItemBase {
   /**
    * {@inheritdoc}
    */
-  public static function schema(FieldStorageDefinitionInterface $field_definition) {
+  public static function schema(FieldStorageDefinitionInterface $field_definition): array {
     return [
       'columns' => [
         'repository' => [
           'type' => 'varchar',
-          'length' => 2048,
+          'length' => 256,
         ],
         'type' => [
           'type' => 'varchar',
@@ -112,13 +113,16 @@ class GitHubFeedItem extends FieldItemBase {
           'size' => 'small',
         ],
       ],
+      'indexes' => [
+        'repository' => ['repository'],
+      ],
     ];
   }
 
   /**
    * {@inheritdoc}
    */
-  public static function generateSampleValue(FieldDefinitionInterface $field_definition) {
+  public static function generateSampleValue(FieldDefinitionInterface $field_definition): array {
     $random = new Random();
     $values['repository'] = 'http://github.com/' . $random->word(mt_rand(4, 8)) . '/' . $random->word(mt_rand(4, 8));
     $values['type'] = array_rand(self::allowedTypeValues());
@@ -214,7 +218,7 @@ class GitHubFeedItem extends FieldItemBase {
    * @return array
    *   The list of allowed values.
    */
-  public static function allowedTypeValues() {
+  public static function allowedTypeValues(): array {
     return [
       'issue' => t('Issues'),
       'pull_request' => t('Pull requests'),

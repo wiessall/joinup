@@ -24,7 +24,7 @@ class GitHubFeedWidget extends WidgetBase {
   /**
    * {@inheritdoc}
    */
-  public function formElement(FieldItemListInterface $items, $delta, array $element, array &$form, FormStateInterface $form_state) {
+  public function formElement(FieldItemListInterface $items, $delta, array $element, array &$form, FormStateInterface $form_state): array {
     $element['#type'] = 'container';
     $fieldName = $element['#field_parents'][0] . '[' . implode('][', array_slice($element['#field_parents'], 1)) . '][' . $items->getName() . '][' . $delta . ']';
 
@@ -32,6 +32,8 @@ class GitHubFeedWidget extends WidgetBase {
       '#type' => 'url',
       '#title' => $this->t('Repository'),
       '#default_value' => $items[$delta]->repository ?? '',
+      '#required' => TRUE,
+      '#element_validate' => [[static::class, 'validateGitHubRepository']],
     ];
 
     $element['type'] = [
@@ -87,9 +89,38 @@ class GitHubFeedWidget extends WidgetBase {
   }
 
   /**
-   * Validates that if there is a repository, there is also a type.
+   * Validates that the repository is a valid GitHub repository.
+   *
+   * @param array $element
+   *   The element to validate.
+   * @param \Drupal\Core\Form\FormStateInterface $form_state
+   *   The form state.
+   * @param array $complete_form
+   *   The complete form.
    */
-  public static function validateEmptyValue(&$element, FormStateInterface $form_state, &$complete_form) {
+  public static function validateGitHubRepository(&$element, FormStateInterface $form_state, array &$complete_form): void {
+    $values = $form_state->getValues();
+    $value = NestedArray::getValue($values, $element['#parents']);
+    if (!empty($value['repository'])) {
+      $url = parse_url($value['repository']);
+      $regex = '/^\/[A-Za-z0-9\-]+\/[A-Za-z0-9\-]+(?:\.git)?$/';
+      if (!isset($url['host']) || $url['host'] !== 'github.com' || !isset($url['path']) || !preg_match($regex, $url['path'])) {
+        $form_state->setError($element, t('The repository must be a valid GitHub repository. The value must be in the format "https://github.com/username/repository" or "https://github.com/username/repository.git".'));
+      }
+    }
+  }
+
+  /**
+   * Validates that if there is a repository, there is also a type.
+   *
+   * @param array $element
+   *   The element to validate.
+   * @param \Drupal\Core\Form\FormStateInterface $form_state
+   *   The form state.
+   * @param array $complete_form
+   *   The complete form.
+   */
+  public static function validateEmptyValue(&$element, FormStateInterface $form_state, array &$complete_form): void {
     $values = $form_state->getValues();
     $value = NestedArray::getValue($values, $element['#parents']);
     if (!empty($value['repository']) && empty($value['type'])) {
@@ -100,7 +131,7 @@ class GitHubFeedWidget extends WidgetBase {
   /**
    * {@inheritdoc}
    */
-  public function massageFormValues(array $values, array $form, FormStateInterface $form_state) {
+  public function massageFormValues(array $values, array $form, FormStateInterface $form_state): array {
     $return = [];
     foreach ($values as $delta => $value) {
       $return[$delta]['repository'] = $value['repository'];
