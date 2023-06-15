@@ -17,27 +17,28 @@ Feature:
 
     Given I am logged in as a moderator
     And I go to the "Joinup" collection
-    And I click "Add custom page"
-    Then I should not see the button "Add Row"
+    When I click "Add custom page" in the plus button menu
+    And I click "Choose component"
+    Then I should not see the link "Row"
 
     When I am on the homepage
     And I click "Interoperable Europe" in the "Navigation bar"
-    And I click "Add custom page"
-    # Fill in the title to avoid the CSS validation kicking in when clicking
-    # buttons.
+    And I click "Add custom page" in the plus button menu
     And I fill in "Title" with "Hello world"
-    Then I should see the button "Add Carousel"
-    And I should see the button "Add Row"
-    But I should not see the button "Add 1 column layout"
-    And I should not see the button "Add 2 column layout"
-    And I should not see the button "Add 2 column with featured media on the left"
-    And I should not see the button "Add 2 column with featured media on the right"
-    And I should not see the button "Add 3 column layout"
-    And I should not see the button "Add Image"
-    And I should not see the button "Add Call to action"
-    And I should not see the button "Add Configurable listing"
+    And I click "Choose component"
 
-    When I press "Add Row"
+    Then I should see the link "Carousel"
+    And I should see the link "Row"
+    But I should not see the link "1 column layout"
+    And I should not see the link "2 column layout"
+    And I should not see the link "2 column with featured media on the left"
+    And I should not see the link "2 column with featured media on the right"
+    And I should not see the link "3 column layout"
+    And I should not see the link "Image"
+    And I should see the link "Call to action"
+    And I should not see the link "Configurable listing"
+
+    When I click "Row"
     Then I should see the button "Add 1 column layout"
     And I should see the button "Add 2 column layout"
     And I should see the button "Add 2 column with featured media on the left"
@@ -53,20 +54,20 @@ Feature:
     But I should see the button "Add Image"
     And I should see the button "Add Call to action"
     And I should see the button "Add Carousel"
-    When I press "Add Carousel"
-    Then the following fields should be present "URL, Link text, Available filters"
 
     Given I am logged in as a facilitator of the "Joinup" collection
     And I go to the "Joinup" collection
-    And I click "Add custom page"
-    Then I should not see the button "Add Row"
+    When I click "Add custom page" in the plus button menu
+    And I click "Choose component"
+    Then I should not see the link "Row"
 
     Given I am logged in as a facilitator of the "Interoperable Europe" collection
     And I am on the homepage
     And I click "Interoperable Europe" in the "Navigation bar"
-    And I click "Add custom page"
-    Then I should see the button "Add Row"
-    When I press "Add Row"
+    And I click "Add custom page" in the plus button menu
+    And I click "Choose component"
+    Then I should see the link "Row"
+    When I click "Row"
     Then I should see the button "Add 1 column layout"
     And I should see the button "Add 2 column layout"
     And I should see the button "Add 2 column with featured media on the left"
