@@ -100,9 +100,6 @@ settings:
       testimony:
         weight: 26
         enabled: false
-      text:
-        weight: 41
-        enabled: true
       video:
         weight: 40
         enabled: false
