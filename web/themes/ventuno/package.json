@@ -32,6 +32,6 @@
     "watch": "^0.13.0"
   },
   "dependencies": {
-    "@glidejs/glide": "^3.5.2"
+    "@glidejs/glide": "^3.6.0"
   }
 }

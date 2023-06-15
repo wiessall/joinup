@@ -1,7 +1,7 @@
 {#
 /**
  * @file
- * Template for the carousel view mode of content.
+ * Theme override to display a node.
  *
  * Available variables:
  * - node: The node entity with limited access to object properties and methods.
@@ -62,6 +62,14 @@
  *   current user is a logged-in member.
  * - is_admin: Flag for admin user status. Will be true when the current user
  *   is an administrator.
+ * - image: The logo that has been set for the node, if any.
+ * - highlighted: Optional array containing an optional icon and a string
+ *   containing an very relevant information that will stand out in the tile.
+ * - info: An array containing an icon and a string with relevant information
+ *   to be displayed right above the title.
+ * - topics: Optional array containing the topics that the node is part of.
+ * - extra_data: Optional array containing arrays of icon + string, with some
+ *   relevant data such as number of downloads, of comments, etc...
  *
  * @see template_preprocess_node()
  *
@@ -70,63 +78,17 @@
  *   in different view modes.
  */
 #}
-{%
-  set classes = [
-  node.bundle|clean_class,
-  node.bundle|clean_class ~ '--' ~ view_mode|clean_class,
-  'glide__slide',
-  'slide',
-]
-%}
-{%
-  set title_classes = [
-  'h6',
-  'text-center',
-  'slide__title',
-]
-%}
-{% if node.bundle is same as 'news' %}
-  {% set icon = 'newspaper' %}
-  {% set logo = content.field_news_logo %}
-{% elseif node.bundle is same as 'event' %}
-  {% set icon = 'calendar3' %}
-  {% set logo = content.field_event_logo %}
-{% elseif node.bundle is same as 'custom_page' %}
-  {% set icon = 'file-earmark-richtext' %}
-  {% set logo = content.field_custom_page_logo %}
-{% endif %}
-<article{{ attributes.addClass(classes) }}>
-  {{ title_prefix }}
-  {{ title_suffix }}
-
-  {% block content %}
-    <a href="{{ url }}" rel="bookmark" title="{{ 'Read'|t }}: {{ label|render|striptags|trim }}" tabindex="-1">
-      {% if logo["#items"] is not empty %}
-        <figure class="slide__figure">
-          {{ logo }}
-        </figure>
-      {% else %}
-        <figure class="slide__figure">
-          <svg class="slide__svg">
-            <use xlink:href="{{ bcl_icon_path }}#{{ icon }}"></use>
-          </svg>
-        </figure>
-      {% endif %}
-    </a>
-    {% if node.bundle in ['news', 'event'] %}
-      <h1{{ title_attributes.addClass(title_classes) }}>
-        <a class="slide__title-link" href="{{ url }}" rel="bookmark">{{ label }}</a>
-      </h1>
-    {% elseif node.bundle is same as 'custom_page' %}
-      <div class="slide__body">
-        <div class="slide__text">
-          {{ content.field_paragraphs_body }}
-        </div>
-        {# Slide's Call To Action will be enabled later #}
-        {# <div>
-          <a class="slide__cta" href="{{ url }}">{{ 'Learn more'|t }}</a>
-        </div> #}
-      </div>
-    {% endif %}
-  {% endblock %}
-</article>
+{{ pattern('tile', {
+  attributes,
+  image,
+  url,
+  highlighted,
+  info,
+  title_prefix,
+  label,
+  title_suffix,
+  action,
+  badges,
+  extra_data,
+  bundle,
+}) }}
