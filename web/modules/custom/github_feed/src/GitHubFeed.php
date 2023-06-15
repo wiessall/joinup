@@ -151,7 +151,17 @@ class GitHubFeed implements GitHubFeedInterface {
     $url .= '?per_page=' . $commentNum;
     // Default settings.
     $url .= '&sort=created&direction=desc&page=1';
-    $response = $this->client->get(self::GITHUB_API_URL . $url, $this->getRequestHeaders());
+    try {
+      $response = $this->client->get(self::GITHUB_API_URL . $url, $this->getRequestHeaders());
+    }
+    catch (\Exception $e) {
+      // Set this as warnings only. The failures can occur mainly due to the
+      // lack/expiration of tokens, thus, we don't need to pollute the logs
+      // with errors.
+      $this->logger->get('github_feed')->warning($e->getMessage());
+      return [];
+    }
+
     return json_decode($response->getBody()->getContents(), TRUE);
   }
 
