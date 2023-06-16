@@ -82,7 +82,7 @@ function ventuno_preprocess_node(array &$variables): void {
   }
 
   // View modes where tiles are expected.
-  $tile_view_modes = ['highlighted', 'view_mode_tile', 'tile_two'];
+  $tile_view_modes = ['highlighted', 'view_mode_tile', 'tile_two', 'carousel'];
   // Prepare data for the tiles.
   if (in_array($variables['view_mode'], $tile_view_modes)) {
     _ventuno_preprocess_tile($variables, 'node');
@@ -134,11 +134,4 @@ function ventuno_preprocess_node__moderation(&$variables) {
   /** @var \Drupal\node\NodeInterface $node */
   $node = $variables['node'];
   $variables['edit_url'] = $node->toUrl('edit-form')->toString();
-}
-
-/**
- * Implements hook_preprocess_node().
- */
-function ventuno_preprocess_node__carousel(array &$variables): void {
-  _ventuno_preprocess_tile($variables, 'node');
 }
