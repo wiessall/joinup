@@ -69,6 +69,9 @@ function search_api_field_entity_view(array &$build, EntityInterface $entity, En
       continue;
     }
 
+    // Check number of archived items.
+    $archived_items = $build[$field_name]['#archived_items'];
+
     // Load all the facets associated to this field that is acting as facet
     // source.
     $facets = $facet_storage->loadByProperties([
@@ -103,7 +106,7 @@ function search_api_field_entity_view(array &$build, EntityInterface $entity, En
         // Render the facet only if the pseudo field is enabled for this view
         // mode.
         if ($display->getComponent($name)) {
-          if ($facet_name !== 'content_listing_status' || $settings['show_archived'] === 'all') {
+          if ($facet_name !== 'content_listing_status' || ($settings['show_archived'] === 'all' && $archived_items > 0)) {
             // Let the facet_manager build the facets.
             $build[$name][] = $facet_manager->build($facets[$facet_name]);
             // Keep track of created pseudo-fields so we can add wrappers later

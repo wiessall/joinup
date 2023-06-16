@@ -161,9 +161,14 @@ class SearchFormatter extends FormatterBase implements ContainerFactoryPluginInt
     if (empty($settings['enabled'])) {
       return [];
     }
-
+    $archived_items = 0;
     try {
       $query = $this->getSearchQuery($settings, $item);
+      $original_query = $query->getOriginalQuery()->execute();
+      if ($original_query->hasExtraData('search_api_facets')) {
+        $entity_status = $original_query->getExtraData('search_api_facets')['entity_status'];
+        $archived_items = $entity_status[array_search('archived', array_column($entity_status, 'filter'))]['count'];
+      }
       $result = $query->execute();
       // Extract the limit value from the query as it might have been altered
       // doing execution.
@@ -192,6 +197,7 @@ class SearchFormatter extends FormatterBase implements ContainerFactoryPluginInt
       '#field_name' => $this->fieldDefinition->getName(),
       '#entity' => $entity,
       '#view_mode' => $this->viewMode,
+      '#archived_items' => $archived_items,
     ];
 
     return $render;
