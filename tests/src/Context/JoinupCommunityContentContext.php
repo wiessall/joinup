@@ -559,7 +559,7 @@ class JoinupCommunityContentContext extends RawDrupalContext {
     }
 
     // Check that the description is present.
-    $actual_description = $block_element->find('css', '.field--name-body')->getText();
+    $actual_description = $block_element->find('css', '.tile__text')->getText();
     Assert::assertNotEmpty($actual_description);
   }
 

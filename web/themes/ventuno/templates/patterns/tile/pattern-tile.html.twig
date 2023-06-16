@@ -94,7 +94,7 @@
             {{ _label }}
           </h1>
           {% if _text is not empty %}
-            <div class="tile__text text-dark fs-sm my-1">{{ _text }}</div>
+            <div class="tile__text text-dark fs-sm my-1">{{ _text|render|striptags|trim }}</div>
           {% endif %}
           {% if _action %}
             <div class="tile__action">

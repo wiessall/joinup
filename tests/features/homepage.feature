@@ -50,7 +50,7 @@ Feature: Homepage
       | date   | topics                                      | title                       | body                                                                                                                                                                                                                                                 |
       | 26 Apr | Finance in EU, Supplier exchange, +2 topics | Current biodiversity crisis | Here we combine global maps of human populations and land use over the past 12000 y with current biodiversity data to show that nearly three quarters of nature has long been shaped by histories of human habitation and use by indigenous peoples. |
       | 29 Mar | EU and European Policies                    | Earlier transformations     | Archaeological evidence shows that by 10000 BCE all societies employed ecologically transformative land use practices including burning hunting species propagation domestication cultivation have left long-term legacies across the biosphere.     |
-      | 28 Feb | HR, Statistics and Analysis, +1 topic       | Spatial reconstruction      | Global land use history confirms that empowering the environmental stewardship of Indigenous peoples and local communities will be critical to conserving biodiversity across the planet.                                                            |
+      | 28 Feb | HR, Statistics and Analysis, E-justice      | Spatial reconstruction      | Global land use history confirms that empowering the environmental stewardship of Indigenous peoples and local communities will be critical to conserving biodiversity across the planet.                                                            |
 
     # There is a "More news" link that for the moment leads to the search page
     # pre-filtered on news articles. In the future this will become a dedicated
@@ -89,7 +89,7 @@ Feature: Homepage
       | number | logo        | topics                                      | title           | body                                                                                                                                                                                            |
       | 1      | blaise.jpg  | Finance in EU, Supplier exchange, +2 topics | Muscle atrophy  | Researchers from the University of Tsukuba have sent mice into space to explore effects of spaceflight and reduced gravity on muscle atrophy                                                    |
       | 2      | charles.jpg | EU and European Policies                    | Stay at the ISS | Two groups of mice (six per group) were housed aboard the International Space Station for 35 days. One group was subjected to artificial gravity (1 g) and the other to microgravity.           |
-      | 3      | alan.jpg    | HR, Statistics and Analysis, +1 topic       | Microgravity    | Conventional studies investigating the effects of reduced gravity on muscle mass and function have used a ground control group that is not directly comparable to the space experimental group. |
+      | 3      | alan.jpg    | HR, Statistics and Analysis, E-justice      | Microgravity    | Conventional studies investigating the effects of reduced gravity on muscle mass and function have used a ground control group that is not directly comparable to the space experimental group. |
 
   @terms
   Scenario Outline: Community content be highlighted on the homepage
