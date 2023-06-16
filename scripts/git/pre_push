@@ -108,8 +108,6 @@ then
       fi
     done
   fi
-
-  FILES=$(echo "$FILES" | tr -d ' ')
 fi
 
 # Run PHPCS and save the exit code.
