@@ -135,3 +135,10 @@ function ventuno_preprocess_node__moderation(&$variables) {
   $node = $variables['node'];
   $variables['edit_url'] = $node->toUrl('edit-form')->toString();
 }
+
+/**
+ * Implements hook_preprocess_node().
+ */
+function ventuno_preprocess_node__carousel(array &$variables): void {
+  _ventuno_preprocess_tile($variables, 'node');
+}
