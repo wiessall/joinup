@@ -63,38 +63,38 @@ function iop_preprocess_page(&$variables) {
     if ($uuid === InteroperableEuropeCollectionInterface::NEWS_LISTING) {
       $variables['#attached']['library'][] = 'iop/listing';
       $variables['node_classes'] = ['listing', 'page--news'];
-      $variables['page_header']['title'] = 'News';
+      $variables['page_header']['title'] = t('News');
       $variables['page_header']['has_heading'] = TRUE;
     }
     // Events listing page.
     elseif ($uuid === InteroperableEuropeCollectionInterface::EVENT_LISTING) {
       $variables['#attached']['library'][] = 'iop/listing';
       $variables['node_classes'] = ['listing', 'page--events'];
-      $variables['page_header']['title'] = 'Events';
+      $variables['page_header']['title'] = t('Events');
       $variables['page_header']['has_heading'] = TRUE;
     }
     // FAQ page.
     elseif ($uuid === InteroperableEuropeCollectionInterface::FAQ) {
       $variables['#attached']['library'][] = 'iop/accordion-faq';
       $variables['node_classes'] = ['page--faq'];
-      $variables['page_header']['title'] = 'FAQs';
+      $variables['page_header']['title'] = t('FAQs');
       $variables['page_header']['has_heading'] = TRUE;
     }
     // POLICY page.
     elseif ($uuid === InteroperableEuropeCollectionInterface::POLICY) {
       $variables['node_classes'] = ['page--policy'];
-      $variables['page_header']['title'] = 'Policy';
+      $variables['page_header']['title'] = t('Policy');
       $variables['page_header']['has_heading'] = TRUE;
     }
     // News item.
     elseif ($route_name === 'entity.node.canonical' && $node->bundle() === 'news') {
       $variables['node_classes'] = ['page--news'];
-      $variables['page_header']['title'] = 'News';
+      $variables['page_header']['title'] = t('News');
     }
     // Event item.
     elseif ($route_name === 'entity.node.canonical' && $node->bundle() === 'event') {
       $variables['node_classes'] = ['page--events'];
-      $variables['page_header']['title'] = 'Event';
+      $variables['page_header']['title'] = t('Events');
     }
   }
 }
