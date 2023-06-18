@@ -17,6 +17,7 @@ use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Utility\Error;
 use Drupal\search_api\IndexInterface;
 use Drupal\search_api\ParseMode\ParseModePluginManager;
+use Drupal\search_api\Query\ConditionInterface;
 use Drupal\search_api\Query\QueryInterface;
 use Drupal\search_api\Query\ResultSetInterface;
 use Drupal\search_api\SearchApiException;
@@ -164,11 +165,9 @@ class SearchFormatter extends FormatterBase implements ContainerFactoryPluginInt
     $archived_items = 0;
     try {
       $query = $this->getSearchQuery($settings, $item);
-      $original_query = $query->getOriginalQuery()->execute();
-      if ($original_query->hasExtraData('search_api_facets')) {
-        $entity_status = $original_query->getExtraData('search_api_facets')['entity_status'];
-        $archived_items = $entity_status[array_search('archived', array_column($entity_status, 'filter'))]['count'];
-      }
+      /** @var \Drupal\search_api\Query\QueryInterface $facet_query **/
+      $facet_query = clone $query;
+
       $result = $query->execute();
       // Extract the limit value from the query as it might have been altered
       // doing execution.
@@ -187,6 +186,16 @@ class SearchFormatter extends FormatterBase implements ContainerFactoryPluginInt
     }
 
     $this->mergeQueryCacheMetadata($render, $query);
+
+    $conditions = &$facet_query->getConditionGroup()->getConditions();
+    /** @var \Drupal\search_api\Query\ConditionInterface $condition **/
+    foreach ($conditions as $position => $condition) {
+      if ($condition instanceof ConditionInterface && $condition->getField() === 'entity_status') {
+        unset($conditions[$position]);
+      }
+    }
+    $facet_query->addCondition('entity_status', 'archived');
+    $archived_items = $facet_query->execute()->getResultCount();
 
     // Add some information about the field.
     // @see \Drupal\Core\Field\FormatterBase::view()
