@@ -230,8 +230,8 @@ commands:
         # Move all terms from the <http://eira_skos> graph that their ID ends
         # with _Properties to the <http://eira_skos_properties> graph.
         - DELETE { GRAPH <http://eira_skos> { ?subject ?predicate ?object } } INSERT { GRAPH <http://eira_skos_properties> { ?subject ?predicate ?object } } WHERE { GRAPH <http://eira_skos> { ?subject ?predicate ?object . FILTER (regex(str(?subject), "_Properties$")) } };
-        - DELETE { GRAPH <http://eira_skos> { ?subject ?predicate ?object } } INSERT { GRAPH <http://eira_skos_properties> { ?subject ?predicate ?object } } WHERE { GRAPH <http://eira_skos> { ?subject ?predicate ?object . FILTER (regex(str(?object), "_Properties$")) } };
-        - DELETE { GRAPH <http://eira_skos> { ?subject ?predicate ?object } } WHERE { GRAPH <http://eira_skos> { ?subject ?predicate ?object . FILTER (regex(str(?predicate), "_Properties$")) } };
+        - DELETE {GRAPH <http://eira_skos> { ?subject ?predicate ?object } } INSERT { GRAPH <http://eira_skos_properties> { ?subject ?predicate ?object } } WHERE { GRAPH <http://eira_skos> { ?subject ?predicate ?object . FILTER (regex(str(?object), "_Properties$")) } };
+        - WITH <http://eira_skos_properties> DELETE { ?subject skos:topConceptOf <http://data.europa.eu/dr8> } WHERE { ?subject a skos:Concept . };
         # See ISAICP-3216. Add the "Concept" type to all collection elements so
         # that they are listed as Parent terms.
         - WITH <http://eira_skos> INSERT { ?subject a skos:Concept } WHERE { ?subject a skos:Collection . };
