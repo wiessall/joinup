@@ -1,12 +1,12 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace Drupal\eira\Plugin\Block;
 
-use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Routing\CurrentRouteMatch;
-use Drupal\Core\Session\AccountInterface;
 use Drupal\sparql_entity_storage\Driver\Database\sparql\ConnectionInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -32,6 +32,8 @@ class EiraPropertiesBlock extends BlockBase implements ContainerFactoryPluginInt
    *   The plugin implementation definition.
    * @param \Drupal\sparql_entity_storage\Driver\Database\sparql\ConnectionInterface $sparql
    *   The sparql.endpoint service.
+   * @param \Drupal\Core\Routing\CurrentRouteMatch $currentRouteMatch
+   *   The current_route_match service.
    */
   public function __construct(array $configuration, $plugin_id, $plugin_definition, protected ConnectionInterface $sparql, protected CurrentRouteMatch $currentRouteMatch) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
@@ -40,7 +42,7 @@ class EiraPropertiesBlock extends BlockBase implements ContainerFactoryPluginInt
   /**
    * {@inheritdoc}
    */
-  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
+  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition): EiraPropertiesBlock {
     return new static(
       $configuration,
       $plugin_id,
@@ -53,7 +55,7 @@ class EiraPropertiesBlock extends BlockBase implements ContainerFactoryPluginInt
   /**
    * {@inheritdoc}
    */
-  public function build() {
+  public function build(): array {
     $term = $this->currentRouteMatch->getParameter('taxonomy_term');
     $tid = $term->id();
 
