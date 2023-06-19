@@ -2,7 +2,7 @@
   .permalink {
     display: none;
   }
-  &:hover {
+  &__title:hover {
     .permalink {
       display: inline;
       position: absolute;

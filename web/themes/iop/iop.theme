@@ -55,25 +55,46 @@ function iop_preprocess_paragraph__image(array &$variables): void {
  * Implements hook_preprocess_HOOK().
  */
 function iop_preprocess_page(&$variables) {
+  $route_name = \Drupal::routeMatch()->getRouteName();
   $node = \Drupal::routeMatch()->getParameter('node');
   if ($node instanceof NodeInterface) {
     $uuid = $variables['node']->uuid();
     // News listing page.
     if ($uuid === InteroperableEuropeCollectionInterface::NEWS_LISTING) {
       $variables['#attached']['library'][] = 'iop/listing';
-      $variables['listing'] = TRUE;
-      $variables['news'] = TRUE;
+      $variables['node_classes'] = ['listing', 'page--news'];
+      $variables['page_header']['title'] = t('News');
+      $variables['page_header']['has_heading'] = TRUE;
     }
     // Events listing page.
     elseif ($uuid === InteroperableEuropeCollectionInterface::EVENT_LISTING) {
       $variables['#attached']['library'][] = 'iop/listing';
-      $variables['listing'] = TRUE;
-      $variables['events'] = TRUE;
+      $variables['node_classes'] = ['listing', 'page--events'];
+      $variables['page_header']['title'] = t('Events');
+      $variables['page_header']['has_heading'] = TRUE;
     }
     // FAQ page.
     elseif ($uuid === InteroperableEuropeCollectionInterface::FAQ) {
       $variables['#attached']['library'][] = 'iop/accordion-faq';
-      $variables['faq'] = TRUE;
+      $variables['node_classes'] = ['page--faq'];
+      $variables['page_header']['title'] = t('FAQs');
+      $variables['page_header']['has_heading'] = TRUE;
+    }
+    // POLICY page.
+    elseif ($uuid === InteroperableEuropeCollectionInterface::POLICY) {
+      $variables['node_classes'] = ['page--policy'];
+      $variables['page_header']['title'] = t('Policy');
+      $variables['page_header']['has_heading'] = TRUE;
+    }
+    // News item.
+    elseif ($route_name === 'entity.node.canonical' && $node->bundle() === 'news') {
+      $variables['node_classes'] = ['page--news'];
+      $variables['page_header']['title'] = t('News');
+    }
+    // Event item.
+    elseif ($route_name === 'entity.node.canonical' && $node->bundle() === 'event') {
+      $variables['node_classes'] = ['page--events'];
+      $variables['page_header']['title'] = t('Events');
     }
   }
 }
@@ -82,8 +103,11 @@ function iop_preprocess_page(&$variables) {
  * Implements hook_preprocess_HOOK().
  */
 function iop_preprocess_node(&$variables) {
-  // Disables the report and translate for the content of IOP.
-  if (isset($variables['content']['report'])) {
+  // Disables the "Report" link for IOP except news and events.
+  $node = \Drupal::routeMatch()->getParameter('node');
+  if (!$node instanceof NodeInterface ||
+    !in_array($node->bundle(), ['news', 'event']) &&
+    isset($variables['content']['report'])) {
     $variables['content']['report']['#access'] = FALSE;
   }
 
@@ -110,6 +134,22 @@ function iop_preprocess_node__custom_page__full(&$variables) {
     // For the custom page that is set as landing page, do not display the title
     // or the report link.
     $variables['label']['#access'] = FALSE;
+  }
+}
+
+/**
+ * Implements hook_preprocess_block().
+ */
+function iop_preprocess_block(array &$variables): void {
+  $block_id = $variables['elements']['#id'] ?? NULL;
+  switch ($block_id) {
+    case 'openeuropawebtoolsetrans':
+      $variables['#attached']['library'][] = 'ventuno/etrans';
+      break;
+
+    case 'iop_primaryadminactions':
+      $variables['attributes']['class'][] = 'd-inline-block';
+      break;
   }
 }
 
@@ -160,17 +200,41 @@ function iop_preprocess_node__event__view_mode_tile(&$variables): void {
 function iop_preprocess_page_title(array &$variables): void {
   $entity = $variables['entity'] ?? NULL;
   if ($entity instanceof NewsInterface || $entity instanceof EventInterface) {
-    $node = match ($entity->bundle()) {
+    $listing = match ($entity->bundle()) {
       'news' => Drupal::service('entity.repository')->loadEntityByUuid('node', InteroperableEuropeCollectionInterface::NEWS_LISTING),
       'event' => Drupal::service('entity.repository')->loadEntityByUuid('node', InteroperableEuropeCollectionInterface::EVENT_LISTING),
     };
+    $url = Url::fromRoute('entity.node.canonical', ['node' => $listing->id()]);
+    $node = Drupal::request()->attributes->get('node');
+    $variables['logo'] = $node->getLogoAsRenderArray([
+      'label' => 'hidden',
+      'type' => 'image',
+      'settings' => [
+        'image_style' => 'wysiwyg_full_width',
+        'image_link' => 'none',
+      ],
+    ]);
+    switch ($entity->bundle()) {
+      case 'news':
+        /** @var \Drupal\Core\Entity\EntityViewBuilderInterface $view_builder */
+        $view_builder = \Drupal::entityTypeManager()->getViewBuilder('node');
+        $field_news_headline = $view_builder->viewField($node->field_news_headline, 'default');
+        $variables['title'] = $field_news_headline;
+        $link = [
+          '#type' => 'link',
+          '#url' => $url,
+          '#title' => t('more news'),
+        ];
+        break;
 
-    $url = Url::fromRoute('entity.node.canonical', ['node' => $node->id()]);
-    $link = [
-      '#type' => 'link',
-      '#url' => $url,
-      '#title' => t('more %bundle', ['%bundle' => $node->label()]),
-    ];
+      case 'event':
+        $link = [
+          '#type' => 'link',
+          '#url' => $url,
+          '#title' => t('more events'),
+        ];
+        break;
+    }
     $variables['url_more'] = $link;
   }
 }

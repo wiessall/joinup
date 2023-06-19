@@ -2,6 +2,19 @@
  * Override OpenEuropa's Webtools eTrans button to make it look consistent with
  * the rest of the website
 */
+// Allow absolute positioning of the button
+.block-oe-webtools-etrans {
+  margin-top: $spacer * 2;
+  @include media-breakpoint-up(md) {
+    margin-top: 0;
+  }
+  &--ventuno {
+    @include media-breakpoint-up(md) {
+      float: right;
+      z-index: 1;
+    }
+  }
+}
 .etrans.wt-etrans {
   button#eTransButton.wt-btn {
     // Override webtools eTrans button styles

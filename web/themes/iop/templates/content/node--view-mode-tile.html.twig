@@ -65,25 +65,19 @@
  *
  * @see template_preprocess_node()
 #}
-{% set classes = [
-  'card',
-  'h-100',
-] %}
-{% set title_classes = [
-  'h6',
-  'text-center',
-  'my-3',
-] %}
+{{ attach_library('iop/tile') }}
 <div class="col">
-  <article{{ attributes.addClass(classes) }}>
-    <div class="card__img">
+  <article{{ attributes.addClass('tile') }}>
+    <div class="tile__img">
       {{ logo }}
     </div>
     {{ title_prefix }}
-      <h1{{ title_attributes.addClass(title_classes) }}>
+      <h1{{ title_attributes.addClass('tile__title') }}>
         <a href="{{ url }}" rel="bookmark" class="text-dark">{{ label }}</a>
       </h1>
     {{ title_suffix }}
-    {{ content.body }}
+    <div class="tile__text">
+      {{ content.body }}
+    </div>
   </article>
 </div>
