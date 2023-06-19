@@ -17,7 +17,6 @@ use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Utility\Error;
 use Drupal\search_api\IndexInterface;
 use Drupal\search_api\ParseMode\ParseModePluginManager;
-use Drupal\search_api\Query\ConditionInterface;
 use Drupal\search_api\Query\QueryInterface;
 use Drupal\search_api\Query\ResultSetInterface;
 use Drupal\search_api\SearchApiException;
@@ -165,9 +164,6 @@ class SearchFormatter extends FormatterBase implements ContainerFactoryPluginInt
 
     try {
       $query = $this->getSearchQuery($settings, $item);
-      /** @var \Drupal\search_api\Query\QueryInterface $facet_query **/
-      $facet_query = clone $query;
-
       $result = $query->execute();
       // Extract the limit value from the query as it might have been altered
       // doing execution.
@@ -187,15 +183,6 @@ class SearchFormatter extends FormatterBase implements ContainerFactoryPluginInt
 
     $this->mergeQueryCacheMetadata($render, $query);
 
-    $conditions = &$facet_query->getConditionGroup()->getConditions();
-    /** @var \Drupal\search_api\Query\ConditionInterface $condition **/
-    foreach ($conditions as $position => $condition) {
-      if ($condition instanceof ConditionInterface && $condition->getField() === 'entity_status') {
-        unset($conditions[$position]);
-      }
-    }
-    $archived_items = $facet_query->execute()->getResultCount();
-
     // Add some information about the field.
     // @see \Drupal\Core\Field\FormatterBase::view()
     $entity = $items->getEntity();
@@ -205,7 +192,7 @@ class SearchFormatter extends FormatterBase implements ContainerFactoryPluginInt
       '#field_name' => $this->fieldDefinition->getName(),
       '#entity' => $entity,
       '#view_mode' => $this->viewMode,
-      '#archived_items' => $archived_items,
+      '#archived_items' => $this->getArchivedQuery($settings, $item),
     ];
 
     return $render;
@@ -252,6 +239,46 @@ class SearchFormatter extends FormatterBase implements ContainerFactoryPluginInt
     }
 
     return $query;
+  }
+
+  /**
+   * Generates the search query to get number of archived content.
+   *
+   * @param array $settings
+   *   The settings configured in the field.
+   * @param \Drupal\search_api_field\Plugin\Field\FieldType\SearchItemInterface $item
+   *   The field item.
+   *
+   * @return int|null
+   *   The total number of archived items.
+   */
+  protected function getArchivedQuery(array $settings, SearchItemInterface $item): ?int {
+    $field_definition = $this->fieldDefinition;
+
+    $options = [
+      'search_api_field entity' => $item->getEntity(),
+      'search_api_field item' => $item,
+      'search_api_field archived' => TRUE,
+    ];
+    $query = $this->getSearchApiIndex()->query($options);
+    $query->setSearchId($field_definition->id() . '.archived');
+    $query->setParseMode($this->parseModeManager->createInstance('direct'));
+
+    if (!empty($settings['query_presets'])) {
+      $this->applyPresets($query, $settings['query_presets']);
+    }
+
+    if (!empty($settings['query_builder'])) {
+      $this->applyQueryBuilderConfiguration($query, $settings['query_builder']);
+    }
+    $hooks = [
+      'search_api_field',
+      'search_api_field_' . $field_definition->getName() . '_archived',
+    ];
+    foreach ($hooks as $hook) {
+      $query->addTag($hook);
+    }
+    return $query->execute()->getResultCount();
   }
 
   /**

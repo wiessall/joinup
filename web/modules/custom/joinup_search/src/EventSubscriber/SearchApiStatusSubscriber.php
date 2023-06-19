@@ -165,7 +165,7 @@ class SearchApiStatusSubscriber implements EventSubscriberInterface {
       }
     }
 
-    if (!$hasStatus) {
+    if (!$hasStatus && !$query->getOption('search_api_field archived')) {
       $query->addCondition('entity_status', 'archived', '<>');
     }
   }
@@ -187,7 +187,10 @@ class SearchApiStatusSubscriber implements EventSubscriberInterface {
     $value = $item->getValue()['value'];
     $showArchived = $value['show_archived'] ?? 'all';
     $query->setOption('show_archived', $showArchived);
-    if ($showArchived !== 'all') {
+    if ($archived = $query->getOption('search_api_field archived')) {
+      $query->addCondition('entity_status', 'archived');
+    }
+    if ($showArchived !== 'all' && !$archived) {
       $query->addCondition('entity_status', 'archived', $showArchived === 'archived' ? '=' : '<>');
     }
     else {

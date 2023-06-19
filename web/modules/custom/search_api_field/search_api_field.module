@@ -88,7 +88,7 @@ function search_api_field_entity_view(array &$build, EntityInterface $entity, En
     }
 
     // Check number of archived items.
-    $archived_items = array_key_exists($field_name, $build) ?? $build[$field_name]['#archived_items'];
+    $archived_items = array_key_exists($field_name, $build) ? $build[$field_name]['#archived_items'] : 0;
 
     // The facets available for the facet source offered by this field have been
     // organized into pseudo fields. Loop over the configuration to render them
