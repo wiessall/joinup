@@ -218,6 +218,15 @@ module.exports = {
       },
     },
     {
+      entry: path.resolve(outputFolder, "src/scss/components/tile.scss"),
+      dest: path.resolve(outputFolder, "assets/css/tile.min.css"),
+      options: {
+        minify: true,
+        includePaths,
+        sourceMap: "file",
+      },
+    },
+    {
       entry: path.resolve(outputFolder, "src/scss/components/pagination.scss"),
       dest: path.resolve(outputFolder, "assets/css/pagination.min.css"),
       options: {

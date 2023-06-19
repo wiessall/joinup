@@ -16,7 +16,6 @@ function ventuno_preprocess_rdf_entity(array &$variables): void {
   // Workaround for incorrect rendering of RDF entity label.
   // @see https://www.drupal.org/project/rdf_entity/issues/3209500
   $variables['label'] = $variables['rdf_entity']->label();
-  _ventuno_preprocess_search_result($variables, 'rdf_entity');
 
   // Provide variable to know whether the page has been set as the landing page
   // of a group, so we can add a <h1> title in the group header.
@@ -27,92 +26,13 @@ function ventuno_preprocess_rdf_entity(array &$variables): void {
       $variables['is_canonical'] = TRUE;
     }
   }
-}
 
-/**
- * Implements hook_preprocess_rdf_entity().
- */
-function ventuno_preprocess_rdf_entity__view_mode_tile(array &$variables, string $entity_type_id): void {
-  $entity = $variables[$entity_type_id];
-
-  // Info (above the title).
-  $variables['info']['icon'] = 'calendar-event';
-  if ($changed_time = $entity->getChangedTime()) {
-    $variables['info']['label'] = t('@label: @changed', [
-      '@label' => t('Last update'),
-      '@changed' => \Drupal::service('date.formatter')->format($changed_time, 'date_only'),
-    ]);
+  // View modes where tiles are expected.
+  $tile_view_modes = ['view_mode_tile', 'tile_two', 'carousel'];
+  // Prepare data for the tiles.
+  if (in_array($variables['view_mode'], $tile_view_modes)) {
+    _ventuno_preprocess_tile($variables, 'rdf_entity');
   }
-
-  switch ($entity->bundle()) {
-    case 'asset_distribution':
-      $variables['info']['icon'] = 'file-earmark-medical';
-      $variables['info']['label'] = $variables['content']['field_ad_licence'];
-      $variables['action'] = $variables['content']['field_ad_access_url'];
-      break;
-
-    case 'asset_release':
-      $variables['label'] = $entity->label();
-      $variables['highlighted']['text'] = 'v' . $entity->getVersion();
-      $variables['info']['icon'] = 'calendar-event';
-      if ($created_time = $entity->getCreatedTime()) {
-        $variables['info']['label'] = t('@label: @created', [
-          '@label' => t('Release date'),
-          '@created' => \Drupal::service('date.formatter')->format($created_time, 'date_only'),
-        ]);
-      }
-      $status = $variables['elements']['field_status'][0]['#plain_text'] ?? 'No status';
-      switch ($status) {
-
-        case 'Completed':
-          $icon_id = 'check-circle';
-          break;
-
-        case 'Deprecated':
-          $icon_id = 'file-x';
-          break;
-
-        case 'Under development':
-          $icon_id = 'clock-history';
-          break;
-
-        case 'Withdrawn':
-          $icon_id = 'patch-exclamation';
-          break;
-      }
-      $variables['extra_data'][] = [
-        'icon' => $icon_id ?? 'question-lg',
-        'label' => $status,
-      ];
-      break;
-
-    case 'collection':
-      $variables['extra_data'][] = [
-        'icon' => 'people',
-        'label' => $variables['content']['members']['#count'],
-      ];
-      break;
-
-    case 'solution':
-      $variables['image'] = $variables['content']['field_is_logo'];
-      // Add attributes that will allow JS to mark this tile as "Shared from".
-      $rdf_entity = $variables['rdf_entity'];
-      if (!$rdf_entity->get('collection')->isEmpty()) {
-        /** @var \Drupal\rdf_entity\RdfInterface|null $parent */
-        $parent = $rdf_entity->get('collection')->first()->entity;
-        $variables['attributes']['data-joinup-parent-id'] = $parent->id();
-        $variables['attributes']['data-joinup-parent-label'] = $parent->label();
-      }
-      // Add download counter if set.
-      if (isset($variables['elements']['downloads']['count']['#access']) && $variables['elements']['downloads']['count']['#access'] === TRUE) {
-        $variables['extra_data'][] = [
-          'icon' => 'download',
-          'label' => $variables['elements']['downloads']['count'],
-        ];
-      }
-      break;
-  }
-  _ventuno_preprocess_tile($variables, 'rdf_entity');
 }
 
 /**
@@ -124,20 +44,6 @@ function ventuno_preprocess_rdf_entity__explore_item(array &$variables): void {
   // Trim the labels of the items in the Explore block on the homepage down to a
   // manageable size.
   $variables['label'] = _ventuno_smart_trim($entity->label(), 45);
-}
-
-/**
- * Implements hook_preprocess_HOOK().
- */
-function ventuno_preprocess_rdf_entity__search_result_featured(array &$variables): void {
-  _ventuno_preprocess_search_result($variables, 'rdf_entity');
-}
-
-/**
- * Implements hook_preprocess_HOOK().
- */
-function ventuno_preprocess_rdf_entity__search_result(array &$variables): void {
-  _ventuno_preprocess_search_result($variables, 'rdf_entity');
 }
 
 /**

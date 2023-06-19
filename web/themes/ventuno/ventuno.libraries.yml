@@ -112,6 +112,12 @@ etrans:
     theme:
       assets/css/etrans.min.css: { minified: true }
 
+explore-block:
+  js:
+    assets/js/explore-block.min.js: { minified: true, attributes: { defer: true } }
+  dependencies:
+    - ventuno/glide
+
 fieldset-show-more:
   css:
     theme:
@@ -140,8 +146,6 @@ forms:
     assets/js/highlight-invalid-fields.min.js: { minified: true, attributes: { defer: true } }
 
 glide:
-  js:
-    assets/js/glide.min.js: { minified: true, attributes: { defer: true } }
   css:
     theme:
       assets/css/glide.core.min.css: { minified: true }
@@ -232,6 +236,15 @@ paragraph:
   css:
     theme:
       assets/css/paragraph.min.css: { minified: true }
+
+paragraph--carousel:
+  css:
+    theme:
+      assets/css/paragraph--carousel.min.css: { minified: true }
+  js:
+    assets/js/paragraph--carousel.min.js: { minified: true, attributes: { defer: true } }
+  dependencies:
+    - ventuno/glide
 
 releases:
   css:

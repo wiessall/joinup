@@ -10,19 +10,20 @@ Feature:
       | Nintendo64 | logo.png | banner.jpg | validated |
       | Emulators  | logo.png | banner.jpg | validated |
     And custom_page content:
-      | title               | collection | created           | body                               | state     |
-      | Latest news listing | Nintendo64 | 2019-10-01 4:26am | You can find the latest news here. | validated |
+      | title               | collection | created           | body                               | state     | pinned |
+      | Latest news listing | Nintendo64 | 2019-10-01 4:26am | You can find the latest news here. | validated | no     |
     And news content:
-      | title                                 | collection | created           | content                          | state     |
-      | Rare Nintendo64 disk drive discovered | Nintendo64 | 2018-10-01 4:26am | Magnetic drive called 64DD.      | validated |
-      | NEC VR4300 CPU                        | Emulators  | 2018-10-03 4:27am | Update of the emulation library. | validated |
+      | title                                 | collection | created           | content                          | state     | pinned |
+      | Rare Nintendo64 disk drive discovered | Nintendo64 | 2018-10-01 4:26am | Magnetic drive called 64DD.      | validated | no     |
+      | NEC VR4300 CPU                        | Emulators  | 2018-10-03 4:27am | Update of the emulation library. | validated | no     |
     And event content:
-      | title               | collection | created           | body                                        | state     |
-      | 20 year anniversary | Nintendo64 | 2018-10-01 4:29am | The console was released in September 1996. | validated |
+      | title               | collection | created           | body                                        | state     | pinned |
+      | 20 year anniversary | Nintendo64 | 2018-10-01 4:29am | The console was released in September 1996. | validated | no     |
+      | 30 year anniversary | Nintendo64 | 2017-10-01 4:29am | 30 year anniversary of Nintendo64.          | validated | yes    |
     And discussion content:
-      | title                           | collection | content                 | created          | state     |
-      | What's your favourite N64 game? | Nintendo64 | Post title and reasons. | 2018-11-17 10:17 | validated |
-      | Searching for green pad.        | Nintendo64 | Looking for a used one. | 2018-11-17 10:18 | validated |
+      | title                           | collection | content                 | created          | state     | pinned |
+      | What's your favourite N64 game? | Nintendo64 | Post title and reasons. | 2018-11-17 10:17 | validated | no     |
+      | Searching for green pad.        | Nintendo64 | Looking for a used one. | 2018-11-17 10:18 | validated | no     |
 
   Scenario: Community content listing widget should be shown to facilitators and moderators.
     Given I am logged in as a facilitator of the "Nintendo64" collection
@@ -151,6 +152,10 @@ Feature:
     # The "List additional actions" is the button arrow that shows the full list of paragraphs to add.
     Given I press "List additional actions"
     Then I press "Add Content listing" in the "Custom page body" paragraphs field
+    And I uncheck "Show related content"
+    When the following fields should not be visible "Global search, Allow shared content"
+    And I check "Show related content"
+    And the following fields should be visible "Global search, Allow shared content"
     And I select "Discussion" from "Available filters"
     And I press "Add and configure filter"
     And I fill in "Discussion" with "Searching for green pad."
@@ -241,11 +246,13 @@ Feature:
     And I select "Solution" from "Available filters"
     And I press "Add and configure filter"
     And I fill in "Solution" with "N64 cartridge cleaner"
+    And I drag the table row in the "Content listing field filter form" region at position 4 up
+    And I drag the table row in the "Content listing field filter form" region at position 3 up
     And I press "Save"
     Then I should see the following tiles in the correct order:
       | Searching for green pad.        |
-      | What's your favourite N64 game? |
       | N64 cartridge cleaner           |
+      | What's your favourite N64 game? |
 
     # Query presets should still apply when available.
     When I am logged in as a moderator
@@ -408,6 +415,7 @@ Feature:
     Then I should see the heading "All content"
     # All tiles are available.
     And I should see the following tiles in the correct order:
+      | 30 year anniversary                   |
       | Searching for green pad.              |
       | What's your favourite N64 game?       |
       | NEC VR4300 CPU                        |
@@ -429,6 +437,7 @@ Feature:
     When I go to the homepage of the "Nintendo64" collection
     And I click "All content" in the "Header bottom" region
     And I should see the following tiles in the correct order:
+      | 30 year anniversary                   |
       | Current wars                          |
       | Searching for green pad.              |
       | What's your favourite N64 game?       |
@@ -444,6 +453,7 @@ Feature:
     When I go to the homepage of the "Nintendo64" collection
     And I click "All content" in the "Header bottom" region
     And I should see the following tiles in the correct order:
+      | 30 year anniversary                   |
       | Current wars is over                  |
       | Searching for green pad.              |
       | What's your favourite N64 game?       |

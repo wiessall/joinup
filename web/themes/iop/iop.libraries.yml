@@ -94,3 +94,8 @@ paragraph--video:
   css:
     theme:
       assets/css/paragraph--video.min.css: { minified: true }
+
+tile:
+  css:
+    theme:
+      assets/css/tile.min.css: { minified: true }

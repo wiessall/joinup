@@ -3,7 +3,7 @@ langcode: en
 status: true
 dependencies:
   config:
-    - core.entity_view_mode.node.dated_listing
+    - core.entity_view_mode.node.view_mode_tile
     - node.type.news
   module:
     - node
@@ -172,11 +172,15 @@ display:
             operator_list: {  }
       style:
         type: default
+        options:
+          row_class: ''
+          default_row_class: false
+          uses_fields: false
       row:
         type: 'entity:node'
         options:
           relationship: none
-          view_mode: dated_listing
+          view_mode: view_mode_tile
       query:
         type: views_query
         options:
@@ -203,7 +207,10 @@ display:
     display_plugin: block
     position: 1
     display_options:
-      display_extenders: {  }
+      display_extenders:
+        metatag_display_extender:
+          metatags: {  }
+          tokenize: false
       block_description: 'Latest news'
     cache_metadata:
       max-age: -1

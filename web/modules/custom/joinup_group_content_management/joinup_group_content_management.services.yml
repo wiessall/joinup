@@ -1,0 +1,5 @@
+services:
+  joinup_group_content_management.route_subscriber:
+    class: Drupal\joinup_group_content_management\EventSubscriber\AlterGroupContentManagementRoute
+    tags:
+      - { name: event_subscriber }

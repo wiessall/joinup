@@ -240,6 +240,10 @@ class DashboardForm extends FormBase {
         '#title' => $this->t('Topics'),
         '#url' => Url::fromRoute('view.topic_meta_entity.page'),
       ],
+      [
+        '#title' => $this->t('Files'),
+        '#url' => Url::fromRoute('view.files.page_1'),
+      ],
     ];
 
     $links = array_map(function (array $link): array {
