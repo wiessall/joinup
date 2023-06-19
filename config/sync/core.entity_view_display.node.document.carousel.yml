@@ -20,10 +20,11 @@ dependencies:
     - field.field.node.document.field_type
     - field.field.node.document.og_audience
     - node.type.document
+    - responsive_image.styles.iop_carousel
   module:
     - field_group
-    - image
     - layout_builder
+    - responsive_image
     - template_suggestion
     - text
     - user
@@ -82,13 +83,14 @@ content:
     weight: 2
     region: content
   field_document_logo:
-    type: image_url
+    type: responsive_image
     label: hidden
     settings:
-      image_style: ''
+      responsive_image_style: iop_carousel
+      image_link: ''
     third_party_settings:
       template_suggestion:
-        template_suggestion: ''
+        template_suggestion: bare
     weight: 1
     region: content
   field_short_title:

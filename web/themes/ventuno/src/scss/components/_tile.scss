@@ -1,5 +1,15 @@
 .tile {
   position: relative;
+  flex-direction: column;
+  height: 100%;
+  &__link {
+    z-index: 2;
+  }
+  // Make some optional elements be interactable over the tile itself.
+  &__action {
+    position: relative;
+    z-index: 3;
+  }
   &__figure {
     overflow: hidden;
     aspect-ratio: 16 / 9;
@@ -10,8 +20,12 @@
       align-items: center;
       & img {
         max-height: 100%;
+        margin-bottom: 0;
       }
     }
+  }
+  &__body {
+    padding: $spacer;
   }
   &__standout-info {
     right: $spacer * .5;
@@ -26,7 +40,7 @@
     flex-shrink: 0;
   }
   &__info-text {
-    // Limit to 1 lines
+    // Limit to 1 line
     display: -webkit-box;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 1;
@@ -51,13 +65,18 @@
   }
   &__body {
     flex: 1 1 auto;
+    padding: $spacer $spacer 0;
   }
   &__title {
-    font-size: 1.125rem;
-    // Limit to 2 lines
     display: -webkit-box;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 2;
+    overflow: hidden;
+  }
+  &__text {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 4;
     overflow: hidden;
   }
   &__bundle-icon {
@@ -82,6 +101,40 @@
     }
     &.pin::before {
       @include get-bootstrap-icon('pin', $white);
+    }
+  }
+  &--horizontal {
+    width: 100%;
+    @include media-breakpoint-up(md) {
+      flex-direction: row;
+      flex-wrap: wrap;
+      height: auto;
+      .tile__figure {
+        padding: $spacer 0 0 $spacer;
+        width: 180px;
+        aspect-ratio: 1 / 1;
+        & picture {
+          align-items: start;
+        }
+      }
+      .tile__body {
+        flex: 1 1 calc(100% - 180px);
+        padding: $spacer $spacer 0 $spacer;
+        overflow-wrap: anywhere;
+        max-width: calc(100% - 180px);
+      }
+      .tile__standout-info {
+        top: unset;
+        transform: translateX(calc(-100% - $spacer * 1.5));
+        bottom: $spacer * .5;
+        right: unset;
+      }
+      .tile__footer {
+        width: 100%;
+        align-self: end;
+        margin-top: $spacer;
+        border-top: $border-width solid $border-color;
+      }
     }
   }
 }
