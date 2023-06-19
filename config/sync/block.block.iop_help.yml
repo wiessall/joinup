@@ -9,7 +9,7 @@ dependencies:
 id: iop_help
 theme: iop
 region: content
-weight: -20
+weight: -15
 provider: null
 plugin: help_block
 settings:
