@@ -204,7 +204,7 @@ function joinup_core_deploy_109401(array &$sandbox): string {
  * @return string
  *   Text after has been processed.
  */
-function _joinup_core_deploy_process_text(string $text, string $group_id, int $uid, array &$sandbox): string {
+function _joinup_core_deploy_process_text(string $text, string $group_id, int $uid, array $sandbox): string {
   $search = $replace = [];
 
   // Convert embed videos.
