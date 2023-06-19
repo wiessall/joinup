@@ -43,22 +43,22 @@ class ETransBlockConfiguration {
         'exclude' => '.action-link',
       ],
       DiscussionInterface::class => [
-        'include' => '.page__title-wrapper,#block-ventuno-content',
+        'include' => '.page-title,#block-ventuno-content',
         'exclude' => '.page-title__details a[title="View user profile."],.action-link,section.comments',
       ],
       DocumentInterface::class => [
-        'include' => '.page__title-wrapper,.page__content,.fieldset--separated .page__content',
-        'exclude' => '.page__title-wrapper .details__element > a,.fieldset__field--files,.action-link__wrapper',
+        'include' => '.page-title,.page__content,.fieldset--separated .page__content',
+        'exclude' => '.page-title .details__element > a,.fieldset__field--files,.action-link__wrapper',
       ],
       EventInterface::class => [
-        'include' => '.page__title-wrapper,#block-ventuno-content',
+        'include' => '.page-title,#block-ventuno-content,#block-iop-content',
         'exclude' => '.action-link,section.comments,.event__field-shared-in',
       ],
       GlossaryTermInterface::class => [
         'include' => 'h1.page-title__title,#block-ventuno-content',
       ],
       NewsInterface::class => [
-        'include' => '.page__title-wrapper,#block-ventuno-content',
+        'include' => '.page-title,#block-ventuno-content,#block-iop-content',
         'exclude' => '.page-title__details a[title="View user profile."],.action-link,.news__field-shared-in,.news__referenced-solution,section.comments',
       ],
     ],

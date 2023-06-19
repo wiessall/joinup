@@ -67,6 +67,7 @@ module:
   file_url: 0
   filter: 0
   flag: 0
+  flag_count: 0
   geocoder: 0
   geocoder_field: 0
   geocoder_geofield: 0
@@ -97,6 +98,7 @@ module:
   joinup_layout: 0
   joinup_legal: 0
   joinup_licence: 0
+  joinup_like: 0
   joinup_material_design: 0
   joinup_menu: 0
   joinup_news: 0
