@@ -441,6 +441,45 @@ Feature:
       | discussion  | should not | list       |
       | discussion  | should not | grid       |
 
+  Scenario: Up to 4 topics should be shown for tile-two view modes.
+    Given news content:
+      | title  | headline | body             | state     | created    | changed    | topic     |
+      | News 1 | News 1   | Test             | validated | 01-01-2023 | 03-02-2023 | E-justice, Finance in EU, Supplier exchange, HR, Statistics and Analysis |
+      | News 2 | News 2   | Test longer body | validated | 02-01-2023 | 03-02-2023 | E-justice, Finance in EU, Supplier exchange, Statistics and Analysis |
+    And the following topics are enabled in the homepage:
+      | E-justice |
+
+    When I am logged in as a moderator
+    And I go to the homepage
+    And I click "E-justice" in the "Homepage topics" region
+    And I click "Edit"
+    When I press "Add Row"
+    And I press "Add 1 column layout"
+    And I press "Add Configurable listing"
+    When I fill in "Heading" with "E-justice heading"
+    And I fill in "URL" with "http://example.com"
+    And I fill in "Link text" with "E-justice link text"
+    And I select "List" from "List style"
+    And I fill in "Query presets" with "entity_bundle|news"
+    And I press "Save"
+
+    When I go to the homepage
+    And I click "E-justice" in the "Homepage topics" region
+    # The change should not affect the order as the news publication date is the same.
+    Then I should see the "News 1" tile
+    And I should see the link "E-justice" in the "News 1" tile
+    And I should see the link "Finance in EU" in the "News 1" tile
+    And I should see the link "Supplier exchange" in the "News 1" tile
+    And I should not see the text "HR" in the "News 1" tile
+    And I should see the text "+2 topics" in the "News 1" tile
+
+    And I should see the "News 2" tile
+    And I should see the link "E-justice" in the "News 2" tile
+    And I should see the link "Finance in EU" in the "News 2" tile
+    And I should see the link "Supplier exchange" in the "News 2" tile
+    And I should see the link "Statistics and Analysis" in the "News 2" tile
+    And I should not see the text "+1 topic" in the "News 2" tile
+
   Scenario: A configurable listing with no results should not print its title.
     Given news content:
       | title  | headline | state     |
@@ -465,3 +504,26 @@ Feature:
     And the url should match "/topic/law-and-justice/e-justice"
     Then I should not see the "News 1" tile
     And I should not see the heading "E-justice heading"
+
+  Scenario: Ampersand character is not decoded properly under a topic page.
+    Given custom_page content:
+      | title                    | body                                          | state     |
+      | Legislation & Technology | What do we mean by Legislation & Technology?  | validated |
+    And the following topics are enabled in the homepage:
+      | E-justice               |
+    And I am logged in as a moderator
+    And I go to the homepage
+    When I click "E-justice"
+    And I click "Edit"
+    And I press "Add Row"
+    And I press "Add 1 column layout"
+    And I press "Add Configurable listing"
+    And I select "Custom page" from "Available filters"
+    And I press "Add and configure filter"
+    And I fill in "Custom page" with "Legislation & Technology"
+    When I fill in "Heading" with "E-justice heading"
+    And I select "Grid" from "List style"
+    And I press "Save"
+    And the url should match "/topic/law-and-justice/e-justice"
+    And I should see the text "What do we mean by Legislation & Technology?" in the "Legislation & Technology" tile
+    And I should not see the text "What do we mean by Legislation &amp; Technology?" in the "Legislation & Technology" tile

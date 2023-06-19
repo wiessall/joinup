@@ -66,6 +66,23 @@ class JoinupSearchContext extends RawDrupalContext {
   }
 
   /**
+   * Checks if a specific tab facet is not displayed on the page.
+   *
+   * @param string $type
+   *   The text of the content tab.
+   *
+   * @throws \Exception
+   *   Thrown when the tab is not found in the page.
+   *
+   * @Given the :type content tab is not displayed
+   */
+  public function assertContentTabNotDisplayed(string $type) {
+    if ($this->findContentTab($type)) {
+      throw new \Exception("The tab '$type' was found in the page but it should be displayed.");
+    }
+  }
+
+  /**
    * Checks if a specific tab facet is displayed on the page.
    *
    * @param string $type
@@ -480,21 +497,6 @@ class JoinupSearchContext extends RawDrupalContext {
   }
 
   /**
-   * Check number of search results as featured.
-   *
-   * @param int $number
-   *   Number of tiles with image.
-   *
-   * @Given I should see the :number tiles with image
-   */
-  public function numberOfTilesWithImage(int $number) {
-    $session = $this->getSession()->getPage();
-    $elements = $session->findAll('css', '.card img');
-
-    Assert::assertSame(count($elements), $number);
-  }
-
-  /**
    * Asserts the number of topics in a given card.
    *
    * @param int $number
@@ -680,7 +682,7 @@ class JoinupSearchContext extends RawDrupalContext {
       $page = $this->getSession()->getPage();
       $page->fillField('keys', $keywords);
       $page->pressButton("Search site-wide");
-      $this->assertCurrentUrl($this->locatePath('search?keys=' . $keywords . '&sort_by=relevance'));
+      $this->assertCurrentUrl($this->locatePath('search?keys=' . $keywords . '&sort_by=last-updated-date'));
     }
   }
 

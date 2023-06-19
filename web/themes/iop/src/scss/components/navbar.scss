@@ -63,7 +63,8 @@
     border: 2px solid transparent;
     padding: $spacer * .25 $spacer * .75; // 4px 12px
     border-radius: $border-radius-pill;
-    &:hover {
+    &:hover,
+    &.active {
       background:
         linear-gradient($primary, $primary) padding-box,
         $gradient border-box;

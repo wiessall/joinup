@@ -30,6 +30,14 @@ module.exports = {
       },
     },
     {
+      entry: path.resolve(outputFolder, "src/js/explore-block.js"),
+      dest: path.resolve(outputFolder, "assets/js/explore-block.js"),
+      options: {
+        minify: true,
+        sourceMap: true,
+      },
+    },
+    {
       entry: path.resolve(outputFolder, "src/js/fieldset-show-more.js"),
       dest: path.resolve(outputFolder, "assets/js/fieldset-show-more.js"),
       options: {
@@ -40,6 +48,14 @@ module.exports = {
     {
       entry: path.resolve(outputFolder, "src/js/highlight-invalid-fields.js"),
       dest: path.resolve(outputFolder, "assets/js/highlight-invalid-fields.js"),
+      options: {
+        minify: true,
+        sourceMap: true,
+      },
+    },
+    {
+      entry: path.resolve(outputFolder, "src/js/paragraph--carousel.js"),
+      dest: path.resolve(outputFolder, "assets/js/paragraph--carousel.js"),
       options: {
         minify: true,
         sourceMap: true,
@@ -103,16 +119,6 @@ module.exports = {
       entry: path.resolve(outputFolder, "src/js/tour-first-balloon.js"),
       dest: path.resolve(outputFolder, "assets/js/tour-first-balloon.js"),
       options: {
-        minify: true,
-        sourceMap: true,
-      },
-    },
-    // Third party
-    {
-      entry: path.resolve(outputFolder, "src/js/glide.js"),
-      dest: path.resolve(outputFolder, "assets/js/glide.js"),
-      options: {
-        name: "glide",
         minify: true,
         sourceMap: true,
       },
@@ -474,6 +480,21 @@ module.exports = {
       },
     },
     {
+      entry: path.resolve(
+        outputFolder,
+        "src/scss/components/paragraph--carousel.scss"
+      ),
+      dest: path.resolve(
+        outputFolder,
+        "assets/css/paragraph--carousel.min.css"
+      ),
+      options: {
+        includePaths,
+        minify: true,
+        sourceMap: "file",
+      },
+    },
+    {
       entry: path.resolve(outputFolder, "src/scss/components/page-title.scss"),
       dest: path.resolve(outputFolder, "assets/css/page-title.min.css"),
       options: {
@@ -723,6 +744,8 @@ module.exports = {
           "gear-fill.svg",
           "geo-alt.svg",
           "github.svg",
+          "hand-thumbs-up.svg",
+          "hand-thumbs-up-fill.svg",
           "info-circle-fill.svg",
           "info-circle.svg",
           "journal-text.svg",

@@ -1,11 +1,10 @@
 @import "../partials/core";
 
 .page-title {
-  margin-top: $spacer * 1.5; // 24px
   .permalink {
     display: none;
   }
-  &:hover {
+  &__title:hover {
     .permalink {
       display: inline;
       position: absolute;
