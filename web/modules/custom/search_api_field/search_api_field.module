@@ -106,7 +106,10 @@ function search_api_field_entity_view(array &$build, EntityInterface $entity, En
         // Render the facet only if the pseudo field is enabled for this view
         // mode.
         if ($display->getComponent($name)) {
-          if (!in_array($facet_name, ['content_listing_status', 'field_collection_content_status']) || ($settings['show_archived'] === 'all' && $archived_items > 0)) {
+          if (
+            !in_array($facet_name, ['content_listing_status', 'field_collection_content_status'])
+            || ($settings['show_archived'] === 'all' && $archived_items > 0)
+          ) {
             // Let the facet_manager build the facets.
             $build[$name][] = $facet_manager->build($facets[$facet_name]);
             // Keep track of created pseudo-fields so we can add wrappers later
