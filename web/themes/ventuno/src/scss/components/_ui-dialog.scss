@@ -2,7 +2,11 @@
 .ui-widget button {
   font-family: $font-family-base;
 }
+.ui-widget-overlay {
+  z-index: $zindex-modal-backdrop;
+}
 .ui-dialog {
+  z-index: $zindex-modal;
   overflow-wrap: break-word;
   border: 1px solid $gray-200;
   border-radius: $border-radius-lg;
