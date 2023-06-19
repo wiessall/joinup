@@ -26,6 +26,7 @@ dependencies:
     - rdf_entity.rdfentity.collection
     - responsive_image.styles.tile
   module:
+    - joinup_html_stripper
     - responsive_image
     - smart_trim
     - template_suggestion
@@ -50,6 +51,16 @@ content:
       summary_handler: full
       trim_options:
         text: false
+    third_party_settings:
+      template_suggestion:
+        template_suggestion: ''
+    weight: 4
+    region: content
+  field_ar_description:
+    type: joinup_html_stripper_stripped
+    label: hidden
+    settings:
+      trim_length: 500
     third_party_settings:
       template_suggestion:
         template_suggestion: ''
@@ -89,7 +100,6 @@ hidden:
   field_ar_closed: true
   field_ar_contact_information: true
   field_ar_content_creation: true
-  field_ar_description: true
   field_ar_moderation: true
   field_ar_owner: true
   field_ar_state: true

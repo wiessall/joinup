@@ -117,7 +117,7 @@ display:
         type: joinup_discussion_overview
         options: {  }
       cache:
-        type: search_api_tag
+        type: none
         options: {  }
       empty:
         area_text_custom:
@@ -294,7 +294,6 @@ display:
         - 'user.node_grants:view'
       tags:
         - 'config:search_api.index.published'
-        - 'config:views.view.discussions'
         - 'search_api_list:published'
   overview:
     id: overview
@@ -318,5 +317,4 @@ display:
         - 'user.node_grants:view'
       tags:
         - 'config:search_api.index.published'
-        - 'config:views.view.discussions'
         - 'search_api_list:published'

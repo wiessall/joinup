@@ -11,7 +11,7 @@ dependencies:
     - field.field.rdf_entity.licence.field_licence_type
     - rdf_entity.rdfentity.licence
   module:
-    - smart_trim
+    - joinup_html_stripper
     - template_suggestion
     - user
 _core:
@@ -22,24 +22,13 @@ bundle: licence
 mode: view_mode_tile
 content:
   field_licence_description:
-    type: smart_trim
+    type: joinup_html_stripper_stripped
     label: hidden
     settings:
-      trim_length: 200
-      trim_type: chars
-      trim_suffix: …
-      wrap_output: false
-      wrap_class: trimmed
-      more_link: false
-      more_class: more-link
-      more_text: More
-      summary_handler: full
-      trim_options:
-        text: true
-        trim_zero: false
+      trim_length: 500
     third_party_settings:
       template_suggestion:
-        template_suggestion: ''
+        template_suggestion: bare
     weight: 1
     region: content
   label:
