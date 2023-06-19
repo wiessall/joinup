@@ -40,6 +40,20 @@ Feature: CKEditor5
       | The Image in Shaping of disruption  | simple.svg   | A simple image | Shaping of disruption |
       | Other Image in The Other Collection | richard.jpg  | Long Live FOSS | The Other Collection  |
       | Too angry for Angry Birds           | leonardo.jpg | The Genius     | Angry Birds           |
+      | Pager test 1                        | leonardo.jpg | pager test 1   | Angry Birds           |
+      | Pager test 2                        | leonardo.jpg | pager test 2   | Angry Birds           |
+      | Pager test 3                        | leonardo.jpg | pager test 3   | Angry Birds           |
+      | Pager test 4                        | leonardo.jpg | pager test 4   | Angry Birds           |
+      | Pager test 5                        | leonardo.jpg | pager test 5   | Angry Birds           |
+      | Pager test 6                        | leonardo.jpg | pager test 6   | Angry Birds           |
+      | Pager test 7                        | leonardo.jpg | pager test 7   | Angry Birds           |
+      | Pager test 8                        | leonardo.jpg | pager test 8   | Angry Birds           |
+      | Pager test 9                        | leonardo.jpg | pager test 9   | Angry Birds           |
+      | Pager test ten                      | leonardo.jpg | pager test 10  | Angry Birds           |
+      | Pager test eleven                   | leonardo.jpg | pager test 11  | Angry Birds           |
+      | Pager test twelve                   | leonardo.jpg | pager test 12  | Angry Birds           |
+      | Pager test thirteen                 | leonardo.jpg | pager test 13  | Angry Birds           |
+      | Pager test fourteen                 | leonardo.jpg | pager test 14  | Angry Birds           |
 
     Given I am logged in as a moderator
 
@@ -50,6 +64,20 @@ Feature: CKEditor5
     Then I should see "The Image in Shaping of disruption"
     But I should not see "Other Image in The Other Collection"
     And I should not see "Too angry for Angry Birds"
+    And I should not see "Pager test 1"
+    And I should not see "Pager test 2"
+    And I should not see "Pager test 3"
+    And I should not see "Pager test 4"
+    And I should not see "Pager test 5"
+    And I should not see "Pager test 6"
+    And I should not see "Pager test 7"
+    And I should not see "Pager test 8"
+    And I should not see "Pager test 9"
+    And I should not see "Pager test ten"
+    And I should not see "Pager test eleven"
+    And I should not see "Pager test twelve"
+    And I should not see "Pager test thirteen"
+    And I should not see "Pager test fourteen"
 
     When I attach the file "alan.jpg" to "Add file"
     And I wait for AJAX to finish
@@ -63,6 +91,20 @@ Feature: CKEditor5
     And I should see "This is Alan we love"
     But I should not see "Other Image in The Other Collection"
     And I should not see "Too angry for Angry Birds"
+    And I should not see "Pager test 1"
+    And I should not see "Pager test 2"
+    And I should not see "Pager test 3"
+    And I should not see "Pager test 4"
+    And I should not see "Pager test 5"
+    And I should not see "Pager test 6"
+    And I should not see "Pager test 7"
+    And I should not see "Pager test 8"
+    And I should not see "Pager test 9"
+    And I should not see "Pager test ten"
+    And I should not see "Pager test eleven"
+    And I should not see "Pager test twelve"
+    And I should not see "Pager test thirteen"
+    And I should not see "Pager test fourteen"
 
     When I press "Insert selected" in the "Modal buttons" region
     Then the modal should be closed
@@ -79,6 +121,20 @@ Feature: CKEditor5
     But I should not see "The Image in Shaping of disruption"
     And I should not see "This is Alan we love"
     And I should not see "Too angry for Angry Birds"
+    And I should not see "Pager test 1"
+    And I should not see "Pager test 2"
+    And I should not see "Pager test 3"
+    And I should not see "Pager test 4"
+    And I should not see "Pager test 5"
+    And I should not see "Pager test 6"
+    And I should not see "Pager test 7"
+    And I should not see "Pager test 8"
+    And I should not see "Pager test 9"
+    And I should not see "Pager test ten"
+    And I should not see "Pager test eleven"
+    And I should not see "Pager test twelve"
+    And I should not see "Pager test thirteen"
+    And I should not see "Pager test fourteen"
 
     When I check "Other Image in The Other Collection"
     And I press "Insert selected" in the "Modal buttons" region
@@ -93,8 +149,41 @@ Feature: CKEditor5
     Then a modal should open
 
     Then I should see "Too angry for Angry Birds"
+    And I should see "Pager test 1"
+    And I should see "Pager test 2"
+    And I should see "Pager test 3"
+    And I should see "Pager test 4"
+    And I should see "Pager test 5"
+    And I should see "Pager test 6"
+    And I should see "Pager test 7"
+    And I should see "Pager test 8"
+    And I should see "Pager test 9"
+    And I should see "Pager test ten"
+    And I should see "Pager test eleven"
+    And I should not see "Pager test twelve"
+    And I should not see "Pager test thirteen"
+    And I should not see "Pager test fourteen"
     But I should not see "The Image in Shaping of disruption"
     And I should not see "This is Alan we love"
     And I should not see "Other Image in The Other Collection"
+
+    # Use the pager.
+    When I click "2"
+    And I wait for AJAX to finish
+    But I should not see "Too angry for Angry Birds"
+    And I should not see "Pager test 1"
+    And I should not see "Pager test 2"
+    And I should not see "Pager test 3"
+    And I should not see "Pager test 4"
+    And I should not see "Pager test 5"
+    And I should not see "Pager test 6"
+    And I should not see "Pager test 7"
+    And I should not see "Pager test 8"
+    And I should not see "Pager test 9"
+    And I should not see "Pager test ten"
+    And I should not see "Pager test eleven"
+    But I should see "Pager test twelve"
+    And I should see "Pager test thirteen"
+    And I should see "Pager test fourteen"
 
   # For 'Media video with CKEditor5' see tests/features/video/embed.feature
