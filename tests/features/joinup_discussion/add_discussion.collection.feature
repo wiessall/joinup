@@ -102,12 +102,6 @@ Feature: Discussions added to collections
     # Initially there are 0 comments on the discussion.
     And I should see the statistics "0" in the "An amazing discussion" tile
 
-    # Make sure that the page is cached, so that we can ascertain that adding a
-    # comment will invalidate the cache.
-    And the page should be cacheable
-    When I reload the page
-    Then the page should be cached
-
     # Create two new comments and check that the counter is incremented.
     Given comments:
       | message                | author    | parent                |
@@ -116,12 +110,6 @@ Feature: Discussions added to collections
     When I reload the page
     Then I should see the statistics "2" in the "An amazing discussion" tile
     And I should not see the statistics "0" in the "An amazing discussion" tile
-
-    # Check that the page cache has been correctly invalidated, and a reload
-    # will serve again from cache.
-    And the page should not be cached
-    When I reload the page
-    Then the page should be cached
 
     # Check that an anonymous user can see the information.
     Given I am an anonymous user

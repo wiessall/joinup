@@ -1,6 +1,6 @@
 uuid: 10b5b900-520e-4c47-ad18-0b978ae405a9
 langcode: en
-status: true
+status: false
 dependencies:
   config:
     - simple_block.simple_block.anonymous_comment_links
