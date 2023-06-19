@@ -1,0 +1,24 @@
+{#
+/**
+ * @file
+ * Default theme implementation to display a not logged in modal dialog.
+ */
+
+/**
+ * Template implementation to display the content of the modal dialog for users who are not logged in.
+ *
+ * @see \Drupal\joinup_like\Controller\ModalDialogController::render()
+ *
+ * @ingroup themeable
+ */
+#}
+<div>
+  <h2>{{ 'Login or register to like this content'|t }}</h2>
+  <p>{{ 'Like this content will help other people find reliable information about what they search!'|t }}</p>
+  <div>
+    <p>{{ 'Already have an account ?'|t }}</p>
+    <div><a href="{{  path('user.login') }}">{{ 'Log in'|t }}</a></div>
+    <p>{{ 'New member ?'|t }}</p>
+    <div><a href="{{ path('user.register') }}">{{ 'Register'|t }}</a></div>
+  </div>
+</div>
