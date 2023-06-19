@@ -6,3 +6,12 @@
     flex: 1;
   }
 }
+// Actions menu is pushed to the top, inside the region-header-bottom, but only
+// when that region is present.
+.region-header-bottom + .container .region-featured .actions-menu {
+  @include media-breakpoint-up(lg) {
+    bottom: $spacer * 1.5;
+    margin: 0;
+  }
+}
+
