@@ -158,6 +158,7 @@ default:
         IOPE Menu: '#block-iope-navigation'
         Header bottom: '.region-header-bottom'
         Left sidebar: 'aside.layout-sidebar'
+        Like block: '.block-joinup-like-block'
         Main fields accordion: '#main-fields,.accordion .accordion-item #main'
         Main solution vertical tab: '#edit-group-main'
         Management solution vertical tab: '#edit-group-management'
