@@ -7,7 +7,7 @@
 {{ attach_library('ventuno/page-title') }}
 {{ title_prefix }}
 {% if title %}
-  <h1{{ title_attributes.addClass('page-title') }}>
+  <h1{{ title_attributes.addClass(['page-title', 'my-3']) }}>
     {{ additional_content.full_label }}
     {{ attach_library('ventuno/badge') }}
     {% if additional_content.is_latest_release %}
