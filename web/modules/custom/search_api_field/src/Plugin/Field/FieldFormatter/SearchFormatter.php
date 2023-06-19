@@ -162,7 +162,7 @@ class SearchFormatter extends FormatterBase implements ContainerFactoryPluginInt
     if (empty($settings['enabled'])) {
       return [];
     }
-    $archived_items = 0;
+
     try {
       $query = $this->getSearchQuery($settings, $item);
       /** @var \Drupal\search_api\Query\QueryInterface $facet_query **/
@@ -194,7 +194,6 @@ class SearchFormatter extends FormatterBase implements ContainerFactoryPluginInt
         unset($conditions[$position]);
       }
     }
-    $facet_query->addCondition('entity_status', 'archived');
     $archived_items = $facet_query->execute()->getResultCount();
 
     // Add some information about the field.
