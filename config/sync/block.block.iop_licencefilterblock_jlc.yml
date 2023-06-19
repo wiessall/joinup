@@ -10,7 +10,7 @@ dependencies:
 id: iop_licencefilterblock_jlc
 theme: iop
 region: content
-weight: -16
+weight: -11
 provider: null
 plugin: licence_filter_block
 settings:
