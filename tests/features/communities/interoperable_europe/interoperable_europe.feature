@@ -24,14 +24,13 @@ Feature:
     When I visit "/interoperable-europe/initiatives"
     Then the page should be rendered using the "Interoperable Europe" theme
 
-    # Event and News item canonical pages are still rendered with the legacy
-    # theme until ISAICP-7253 and ISAICP-7255.
-    # See https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7253.
-    # See https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7255.
+    # Event and News.
     When I visit "/interoperable-europe/event/save-date-semic-coming-back-8-december-2021"
-    Then the page should be rendered using the "Ventuno" theme
+    And I should see the link "more Events"
+    Then the page should be rendered using the "Interoperable Europe" theme
     When I visit "/interoperable-europe/news/vocbench-semantic-technologies-data-management"
-    Then the page should be rendered using the "Ventuno" theme
+    And I should see the link "more News"
+    Then the page should be rendered using the "Interoperable Europe" theme
 
   Scenario: Authenticated user visiting the landing page.
     Given I am logged in as a user with the authenticated role
