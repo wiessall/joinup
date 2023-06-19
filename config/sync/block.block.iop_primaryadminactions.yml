@@ -7,7 +7,7 @@ dependencies:
 id: iop_primaryadminactions
 theme: iop
 region: content
-weight: -22
+weight: -17
 provider: null
 plugin: local_actions_block
 settings:
