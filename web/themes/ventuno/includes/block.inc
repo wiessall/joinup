@@ -60,6 +60,12 @@ function ventuno_preprocess_block(array &$variables): void {
       $variables['#attached']['library'][] = 'ventuno/etrans';
       $variables['attributes']['class'][] = 'block-oe-webtools-etrans--ventuno';
       break;
+
+    case 'ventuno_like':
+      // Add z-index to Like button in order to avoid ajax throbber being
+      // hidden under eTrans button.
+      $variables['attributes']['class'][] = 'zi-1';
+      break;
   }
 
   // When rendering some entity within a block, e.g. a menu, in cases such as a

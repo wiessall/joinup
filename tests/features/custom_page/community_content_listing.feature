@@ -152,6 +152,10 @@ Feature:
     # The "List additional actions" is the button arrow that shows the full list of paragraphs to add.
     Given I press "List additional actions"
     Then I press "Add Content listing" in the "Custom page body" paragraphs field
+    And I uncheck "Show related content"
+    When the following fields should not be visible "Global search, Allow shared content"
+    And I check "Show related content"
+    And the following fields should be visible "Global search, Allow shared content"
     And I select "Discussion" from "Available filters"
     And I press "Add and configure filter"
     And I fill in "Discussion" with "Searching for green pad."
@@ -242,11 +246,13 @@ Feature:
     And I select "Solution" from "Available filters"
     And I press "Add and configure filter"
     And I fill in "Solution" with "N64 cartridge cleaner"
+    And I drag the table row in the "Content listing field filter form" region at position 4 up
+    And I drag the table row in the "Content listing field filter form" region at position 3 up
     And I press "Save"
     Then I should see the following tiles in the correct order:
       | Searching for green pad.        |
-      | What's your favourite N64 game? |
       | N64 cartridge cleaner           |
+      | What's your favourite N64 game? |
 
     # Query presets should still apply when available.
     When I am logged in as a moderator
