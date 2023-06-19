@@ -4,10 +4,14 @@ declare(strict_types = 1);
 
 namespace Drupal\joinup_media;
 
+use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Url;
+use Drupal\ckeditor5\Plugin\CKEditor5PluginDefinition;
 use Drupal\ckeditor5\Plugin\CKEditor5Plugin\MediaLibrary;
 use Drupal\editor\EditorInterface;
+use Drupal\joinup_group\JoinupGroupManagerInterface;
 use Drupal\media_library\MediaLibraryState;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Replacement for core's MediaLibrary plugin class.
@@ -21,13 +25,43 @@ use Drupal\media_library\MediaLibraryState;
 class JoinupMediaLibrary extends MediaLibrary {
 
   /**
+   * Constructs a new plugin instance.
+   *
+   * @param array $configuration
+   *   A configuration array containing information about the plugin instance.
+   * @param string $pluginId
+   *   The plugin_id for the plugin instance.
+   * @param \Drupal\ckeditor5\Plugin\CKEditor5PluginDefinition $pluginDefinition
+   *   The plugin implementation definition.
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
+   *   The entity type manager.
+   * @param \Drupal\joinup_group\JoinupGroupManagerInterface $groupManager
+   *   The Joinup group manager service.
+   */
+  public function __construct(array $configuration, string $pluginId, CKEditor5PluginDefinition $pluginDefinition, EntityTypeManagerInterface $entityTypeManager, protected JoinupGroupManagerInterface $groupManager) {
+    parent::__construct($configuration, $pluginId, $pluginDefinition, $entityTypeManager);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container, array $configuration, $pluginId, $pluginDefinition): self {
+    return new static(
+      $configuration,
+      $pluginId,
+      $pluginDefinition,
+      $container->get('entity_type.manager'),
+      $container->get('joinup_group.group_manager')
+    );
+  }
+
+  /**
    * {@inheritdoc}
    */
   public function getDynamicPluginConfig(array $static_plugin_config, EditorInterface $editor): array {
     $dynamic_plugin_config = parent::getDynamicPluginConfig($static_plugin_config, $editor);
 
-    $group = \Drupal::getContainer()->get('joinup_group.group_manager')->getGroupFromContext();
-    if (!$group) {
+    if (!$group = $this->groupManager->getGroupFromContext()) {
       // Only act in the context of a group.
       return $dynamic_plugin_config;
     }
