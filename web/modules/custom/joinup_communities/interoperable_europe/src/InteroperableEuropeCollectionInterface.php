@@ -29,4 +29,9 @@ interface InteroperableEuropeCollectionInterface {
    */
   public const FAQ = '791b9aa0-d417-411a-96af-a96bb546992a';
 
+  /**
+   * The UUID of the Policy page.
+   */
+  public const POLICY = '2c05b457-705f-4c1a-b667-b06c9b612e02';
+
 }

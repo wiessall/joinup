@@ -11,6 +11,7 @@
  *   print a subset such as 'content.field_example'. Fields attached to a user
  *   such as 'user_picture' are available as 'content.user_picture'.
  * - attributes: HTML attributes for the container element.
+ * - horizonta: The variant of the tile.
  * - user: A Drupal User entity.
  *
  * @see template_preprocess_user()
@@ -18,15 +19,19 @@
 #}
 {{ pattern('tile', {
   attributes,
+  horizontal,
   image: content.field_user_photo,
   url: path('entity.user.canonical', {'user': user.id}),
   info: {
-    icon: 'person-circle',
-    label: field_user_business_title,
+    icon: 'calendar-event',
+    label: content.member_for|render|striptags,
   },
   title_prefix,
   label: full_name,
   title_suffix,
+  text,
+  action,
+  badges,
   bundle: {
     label: 'User'|t,
     icon: 'person-circle'
