@@ -116,6 +116,45 @@ function ventuno_preprocess_rdf_entity__view_mode_tile(array &$variables, string
 }
 
 /**
+ * Implements hook_preprocess_rdf_entity().
+ */
+function ventuno_preprocess_rdf_entity__carousel(array &$variables, string $entity_type_id): void {
+  $entity = $variables[$entity_type_id];
+
+  // Info (above the title).
+  $variables['info']['icon'] = 'calendar-event';
+  if ($changed_time = $entity->getChangedTime()) {
+    $variables['info']['label'] = t('@label: @changed', [
+      '@label' => t('Last update'),
+      '@changed' => \Drupal::service('date.formatter')->format($changed_time, 'date_only'),
+    ]);
+  }
+
+  switch ($entity->bundle()) {
+
+    case 'solution':
+      $variables['image'] = $variables['content']['field_is_logo'];
+      // Add attributes that will allow JS to mark this tile as "Shared from".
+      $rdf_entity = $variables['rdf_entity'];
+      if (!$rdf_entity->get('collection')->isEmpty()) {
+        /** @var \Drupal\rdf_entity\RdfInterface|null $parent */
+        $parent = $rdf_entity->get('collection')->first()->entity;
+        $variables['attributes']['data-joinup-parent-id'] = $parent->id();
+        $variables['attributes']['data-joinup-parent-label'] = $parent->label();
+      }
+      // Add download counter if set.
+      if (isset($variables['elements']['downloads']['count']['#access']) && $variables['elements']['downloads']['count']['#access'] === TRUE) {
+        $variables['extra_data'][] = [
+          'icon' => 'download',
+          'label' => $variables['elements']['downloads']['count'],
+        ];
+      }
+      break;
+  }
+  _ventuno_preprocess_tile($variables, 'rdf_entity');
+}
+
+/**
  * Implements hook_preprocess_HOOK().
  */
 function ventuno_preprocess_rdf_entity__explore_item(array &$variables): void {

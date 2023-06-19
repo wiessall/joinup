@@ -9,7 +9,7 @@ dependencies:
 id: iop_horizontal_tabs
 theme: iop
 region: content
-weight: -23
+weight: -18
 provider: null
 plugin: local_tasks_block
 settings:
