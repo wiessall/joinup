@@ -566,7 +566,7 @@ class JoinupParagraphsContext extends RawDrupalContext {
    */
   public function appendParagraphToEntity(ContentEntityInterface $entity, ParagraphInterface $paragraph, string $field_name): void {
     if (!$entity->hasField($field_name)) {
-      throw new Exception(printf("Field not found: %s", $field_name));
+      throw new \Exception(sprintf("Field not found: %s", $field_name));
     }
 
     $entity->get($field_name)->appendItem(
