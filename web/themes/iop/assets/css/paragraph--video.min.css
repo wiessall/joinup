@@ -1,12 +1,2 @@
-/**
- * @file
- * Common base.
- *
- * Functions, variables, utilities and mixins required for the build.
- * When compiled, this file should not output anything.
- */
-.paragraph--video {
-  border-radius: 1rem;
-  overflow: hidden;
-}
+.paragraph--video{border-radius:1rem;overflow:hidden}
 /*# sourceMappingURL=paragraph--video.min.css.map */
