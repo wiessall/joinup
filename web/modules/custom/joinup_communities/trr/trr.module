@@ -29,9 +29,9 @@ function trr_entity_bundle_field_info_alter(&$fields, EntityTypeInterface $entit
         $fields[$field]->addConstraint('RequiredIfOtherFieldHasValue', [
           'field' => 'field_is_solution_type',
           'values' => [
-            'http://data.europa.eu/dr8/ConformanceTestingComponent',
-            'http://data.europa.eu/dr8/ConformanceTestingService',
-            'http://data.europa.eu/dr8/ConformanceTestScenario',
+            'http://data.europa.eu/dr8/ConformanceTestingApplicationComponent',
+            'http://data.europa.eu/dr8/ConformanceTestingApplicationService',
+            'http://data.europa.eu/dr8/ConformanceTestScenarioBusinessObject',
           ],
         ]);
       }
@@ -91,9 +91,9 @@ function trr_rdf_entity_presave(RdfInterface $entity): void {
  */
 function _trr_contains_trr_fields(RdfInterface $entity): bool {
   $solution_types = [
-    'http://data.europa.eu/dr8/ConformanceTestingComponent',
-    'http://data.europa.eu/dr8/ConformanceTestingService',
-    'http://data.europa.eu/dr8/ConformanceTestScenario',
+    'http://data.europa.eu/dr8/ConformanceTestingApplicationComponent',
+    'http://data.europa.eu/dr8/ConformanceTestingApplicationService',
+    'http://data.europa.eu/dr8/ConformanceTestScenarioBusinessObject',
   ];
   $field_is_solution_type = $entity->get('field_is_solution_type')->getValue();
   $target_ids = array_map(function ($value) {
