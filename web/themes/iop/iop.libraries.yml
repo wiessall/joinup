@@ -91,3 +91,8 @@ paragraph--video:
   css:
     theme:
       assets/css/paragraph--video.min.css: {}
+
+tile:
+  css:
+    theme:
+      assets/css/tile.min.css: {}

@@ -48,8 +48,8 @@ dependencies:
     - rdf_entity.rdfentity.solution
     - responsive_image.styles.tile
   module:
+    - joinup_html_stripper
     - responsive_image
-    - smart_trim
     - template_suggestion
     - user
 id: rdf_entity.solution.view_mode_tile
@@ -63,23 +63,13 @@ content:
     weight: 4
     region: content
   field_is_description:
-    type: smart_trim
+    type: joinup_html_stripper_stripped
     label: hidden
     settings:
-      trim_length: 200
-      trim_type: chars
-      trim_suffix: …
-      wrap_output: false
-      wrap_class: trimmed
-      more_link: false
-      more_class: more-link
-      more_text: More
-      summary_handler: full
-      trim_options:
-        text: false
+      trim_length: 500
     third_party_settings:
       template_suggestion:
-        template_suggestion: ''
+        template_suggestion: bare
     weight: 3
     region: content
   field_is_logo:
