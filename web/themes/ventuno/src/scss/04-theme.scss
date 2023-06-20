@@ -6,15 +6,14 @@
  */
 
  @import "partials/core"; // Functions, variables, utilities and mixins required
- @import "@openeuropa/bcl-theme-joinup/src/scss/base/fonts";
- @import "@openeuropa/bcl-theme-joinup/src/scss/base/typography";
+ @import "partials/base/fonts";
+ @import "partials/base/typography";
   // @import "@openeuropa/bcl-bootstrap/scss/reboot";
  @import "partials/overrides/reboot"; // Hack to prevent build break
  @import "@openeuropa/bcl-bootstrap/scss/type";
  @import "@openeuropa/bcl-bootstrap/scss/transitions";
  @import "@openeuropa/bcl-bootstrap/scss/utilities";
  @import "@openeuropa/bcl-theme-default/src/scss/base/utilities";
- @import "@openeuropa/bcl-theme-joinup/src/scss/base/utilities";
  @import "partials/overrides/utilities"; // Override with required utilities only
  @import "@openeuropa/bcl-bootstrap/scss/helpers";
  @import "@openeuropa/bcl-bootstrap/scss/utilities/api";
