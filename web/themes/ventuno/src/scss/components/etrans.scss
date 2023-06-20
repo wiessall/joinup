@@ -4,12 +4,8 @@
 */
 @import "../partials/core";
 
-// Allow absolute positioning of the button
 .block-oe-webtools-etrans {
-  margin-top: $spacer * 2;
-  @include media-breakpoint-up(md) {
-    margin-top: 0;
-  }
+  // Allow absolute positioning of the button
   &--ventuno {
     @include media-breakpoint-up(md) {
       float: right;
