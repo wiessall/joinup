@@ -13,6 +13,7 @@ use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\joinup\Exception\WysiwygEditorNotFoundException;
 use Drupal\joinup\Traits\EntityTrait;
 use Drupal\joinup\Traits\JavascriptTrait;
+use Drupal\joinup\Traits\TestingEntitiesTrait;
 use Drupal\joinup\Traits\UtilityTrait;
 use Drupal\joinup\Traits\WysiwygTrait;
 use Drupal\paragraphs\Entity\Paragraph;
@@ -28,6 +29,7 @@ class JoinupParagraphsContext extends RawDrupalContext {
   use WysiwygTrait;
   use UtilityTrait;
   use EntityTrait;
+  use TestingEntitiesTrait;
 
   /**
    * A copycat of Behat's internal region mapping.
@@ -44,13 +46,6 @@ class JoinupParagraphsContext extends RawDrupalContext {
     'Custom content listing' => 'content-listing',
     'Accordion item' => 'field-accordion-item',
   ];
-
-  /**
-   * Created paragraphs.
-   *
-   * @var \Drupal\paragraphs\ParagraphInterface[]
-   */
-  protected array $paragraphs;
 
   /**
    * Reusable xpath pattern.
@@ -472,8 +467,7 @@ class JoinupParagraphsContext extends RawDrupalContext {
     $paragraph = Paragraph::create($values);
     $paragraph->save();
 
-    $this->paragraphs[] = $paragraph;
-
+    $this->entities['paragraph'][$paragraph->id()] = $paragraph;
     $this->appendParagraphToEntity($entity, $paragraph, $parent_field);
   }
 
@@ -509,8 +503,7 @@ class JoinupParagraphsContext extends RawDrupalContext {
     $paragraph = Paragraph::create($values);
     $paragraph->save();
 
-    $this->paragraphs[] = $paragraph;
-
+    $this->entities['paragraph'][$paragraph->id()] = $paragraph;
     $this->appendParagraphToEntity($entity, $paragraph, $parent_field);
   }
 
