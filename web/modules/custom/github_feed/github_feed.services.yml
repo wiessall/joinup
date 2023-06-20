@@ -2,10 +2,3 @@ services:
   github_feed.github_feed:
     class: Drupal\github_feed\GitHubFeed
     arguments: ['@config.factory', '@http_client', '@logger.factory']
-
-  cache.github_feed:
-    class: Drupal\Core\Cache\CacheBackendInterface
-    tags:
-      - { name: cache.bin }
-    factory: cache_factory:get
-    arguments: [ github_feed ]

@@ -30,9 +30,6 @@ field.value.github_feed:
     item_num:
       type: integer
       label: Number of items
-    include_comments:
-      type: boolean
-      label: Include comments
     comment_num:
       type: integer
-      label: Number of comments
+      label: Number of comments. Set to 0 for no comments.

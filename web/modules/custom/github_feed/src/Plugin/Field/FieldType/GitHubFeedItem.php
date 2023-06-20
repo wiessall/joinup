@@ -5,12 +5,12 @@ declare(strict_types = 1);
 namespace Drupal\github_feed\Plugin\Field\FieldType;
 
 use Drupal\Component\Utility\Random;
-use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Field\FieldItemBase;
 use Drupal\Core\Field\FieldStorageDefinitionInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\TypedData\DataDefinition;
+use Drupal\github_feed\GitHubFeedInterface;
 
 /**
  * Defines the 'github_feed' field type.
@@ -74,14 +74,11 @@ class GitHubFeedItem extends FieldItemBase {
       ->setSetting('unsigned', TRUE)
       ->setSetting('size', 'small')
       ->addConstraint('Range', ['min' => 1, 'max' => 10]);
-    $properties['include_comments'] = DataDefinition::create('boolean')
-      ->setLabel(t('Include comments'))
-      ->setRequired(TRUE);
     $properties['comment_num'] = DataDefinition::create('integer')
       ->setLabel(t('Number of comments'))
       ->setSetting('unsigned', TRUE)
       ->setSetting('size', 'small')
-      ->addConstraint('Range', ['min' => 1, 'max' => 10]);
+      ->addConstraint('Range', ['min' => 0, 'max' => 10]);
 
     return $properties;
   }
@@ -104,10 +101,6 @@ class GitHubFeedItem extends FieldItemBase {
           'type' => 'int',
           'size' => 'small',
         ],
-        'include_comments' => [
-          'type' => 'int',
-          'size' => 'tiny',
-        ],
         'comment_num' => [
           'type' => 'int',
           'size' => 'small',
@@ -125,31 +118,10 @@ class GitHubFeedItem extends FieldItemBase {
   public static function generateSampleValue(FieldDefinitionInterface $field_definition): array {
     $random = new Random();
     $values['repository'] = 'http://github.com/' . $random->word(mt_rand(4, 8)) . '/' . $random->word(mt_rand(4, 8));
-    $values['type'] = array_rand(self::allowedTypeValues());
-    $values['include_comments'] = (bool) mt_rand(0, 1);
+    $values['type'] = array_rand(GitHubFeedInterface::KEYS);
     $values['item_num'] = mt_rand(1, 10);
-    $values['comment_num'] = mt_rand(1, 10);
+    $values['comment_num'] = mt_rand(0, 10);
     return $values;
-  }
-
-  /**
-   * Returns the file contents if exists.
-   *
-   * @return string
-   *   The file contents.
-   */
-  protected function getNewKeyValue(): string {
-    return $this->values['api_key'] ?? '';
-  }
-
-  /**
-   * Returns the flag for removal of the key.
-   *
-   * @return bool
-   *   The flag for removal of the key.
-   */
-  protected function getRemoveValue(): bool {
-    return (bool) $this->values['remove_value'] ?? FALSE;
   }
 
   /**
@@ -170,70 +142,6 @@ class GitHubFeedItem extends FieldItemBase {
    */
   protected function getType(): string {
     return $this->values['type'] ?? '';
-  }
-
-  /**
-   * Returns the number of items to display.
-   *
-   * @return int
-   *   The number of items to display.
-   */
-  protected function getItemNum(): int {
-    return (int) $this->values['item_num'] ?? 0;
-  }
-
-  /**
-   * Returns whether to include comments.
-   *
-   * @return bool
-   *   Whether to include comments.
-   */
-  protected function getIncludeComments(): bool {
-    return (bool) $this->values['include_comments'] ?? FALSE;
-  }
-
-  /**
-   * Returns the number of comments to display.
-   *
-   * @return int
-   *   The number of comments to display.
-   */
-  protected function getCommentNum(): int {
-    return (int) $this->values['comment_num'] ?? 0;
-  }
-
-  /**
-   * Returns the file target ID.
-   *
-   * @return int|null
-   *   The file target ID.
-   */
-  protected function getFileTargetId(): ?int {
-    return (int) $this->values['target_id'] ?? NULL;
-  }
-
-  /**
-   * Returns allowed values for 'type' sub-field.
-   *
-   * @return array
-   *   The list of allowed values.
-   */
-  public static function allowedTypeValues(): array {
-    return [
-      'issue' => t('Issues'),
-      'pull_request' => t('Pull requests'),
-      'events' => t('Activity stream'),
-    ];
-  }
-
-  /**
-   * Returns the cache used for storing the feed.
-   *
-   * @return \Drupal\Core\Cache\CacheBackendInterface
-   *   The cache backend.
-   */
-  protected function getCacheBin(): CacheBackendInterface {
-    return \Drupal::cache('github_feed');
   }
 
 }

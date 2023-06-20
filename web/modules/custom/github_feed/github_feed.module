@@ -10,7 +10,7 @@ declare(strict_types = 1);
 /**
  * Implements hook_theme().
  */
-function github_feed_theme($existing, $type, $theme, $path) {
+function github_feed_theme(array $existing, string $type, string $theme, string $path): array {
   return [
     'github_feed' => [
       'variables' => [
@@ -51,7 +51,7 @@ function github_feed_theme($existing, $type, $theme, $path) {
 /**
  * Implements template_preprocess_HOOK().
  */
-function template_preprocess_github_feed(array &$variables) {
+function template_preprocess_github_feed(array &$variables): void {
   switch ($variables['type']) {
     case 'issue':
       $variables['type_parsed'] = t('Issues');
@@ -77,35 +77,34 @@ function template_preprocess_github_feed(array &$variables) {
  * Implements template_preprocess_HOOK().
  */
 function template_preprocess_github_feed_issue(array &$variables): void {
-  $issue = &$variables['item'];
-  $date_formatter = \Drupal::getContainer()->get('date.formatter');
-  $issue['created_at'] = [
-    '#type' => 'markup',
-    '#markup' => $date_formatter->format(strtotime($issue['created_at']), 'custom', 'F j, Y'),
-  ];
+  _github_feed_preprocess_date($variables);
 }
 
 /**
  * Implements template_preprocess_HOOK().
  */
 function template_preprocess_github_feed_pull_request(array &$variables): void {
-  $pull_request = &$variables['item'];
-  $date_formatter = \Drupal::getContainer()->get('date.formatter');
-  $pull_request['created_at'] = [
-    '#type' => 'markup',
-    '#markup' => $date_formatter->format(strtotime($pull_request['created_at']), 'custom', 'F j, Y'),
-  ];
+  _github_feed_preprocess_date($variables);
 }
 
 /**
  * Implements template_preprocess_HOOK().
  */
 function template_preprocess_github_feed_events(array &$variables): void {
-  $event = &$variables['item'];
-  $date_formatter = \Drupal::getContainer()->get('date.formatter');
-  $event['created_at'] = [
-    '#type' => 'markup',
-    '#markup' => $date_formatter->format(strtotime($event['created_at']), 'custom', 'F j, Y'),
-  ];
+  _github_feed_preprocess_date($variables);
+}
 
+/**
+ * Converts the item created date to a human-readable format.
+ *
+ * @param array $variables
+ *   The variables array.
+ */
+function _github_feed_preprocess_date(array &$variables): void {
+  $item = &$variables['item'];
+  $date_formatter = \Drupal::getContainer()->get('date.formatter');
+  $item['created_at'] = [
+    '#type' => 'markup',
+    '#markup' => $date_formatter->format(strtotime($item['created_at']), 'custom', 'F j, Y'),
+  ];
 }

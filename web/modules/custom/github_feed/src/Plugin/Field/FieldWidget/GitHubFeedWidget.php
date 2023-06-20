@@ -8,7 +8,7 @@ use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Field\WidgetBase;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\github_feed\Plugin\Field\FieldType\GitHubFeedItem;
+use Drupal\github_feed\GitHubFeedInterface;
 
 /**
  * Defines the 'github_feed' field widget.
@@ -33,13 +33,15 @@ class GitHubFeedWidget extends WidgetBase {
       '#title' => $this->t('Repository'),
       '#default_value' => $items[$delta]->repository ?? '',
       '#required' => TRUE,
+      '#maxlength' => 255,
       '#element_validate' => [[static::class, 'validateGitHubRepository']],
     ];
 
     $element['type'] = [
       '#type' => 'select',
       '#title' => $this->t('Type'),
-      '#options' => ['' => $this->t('- Select a value -')] + GitHubFeedItem::allowedTypeValues(),
+      '#options' => ['' => $this->t('- Select a value -')] + GitHubFeedInterface::KEYS,
+      '#required' => TRUE,
       '#default_value' => $items[$delta]->type ?? 'issue',
     ];
 
@@ -95,10 +97,8 @@ class GitHubFeedWidget extends WidgetBase {
    *   The element to validate.
    * @param \Drupal\Core\Form\FormStateInterface $form_state
    *   The form state.
-   * @param array $complete_form
-   *   The complete form.
    */
-  public static function validateGitHubRepository(&$element, FormStateInterface $form_state, array &$complete_form): void {
+  public static function validateGitHubRepository(array &$element, FormStateInterface $form_state): void {
     $values = $form_state->getValues();
     $value = NestedArray::getValue($values, $element['#parents']);
     if (!empty($value)) {
@@ -111,24 +111,6 @@ class GitHubFeedWidget extends WidgetBase {
   }
 
   /**
-   * Validates that if there is a repository, there is also a type.
-   *
-   * @param array $element
-   *   The element to validate.
-   * @param \Drupal\Core\Form\FormStateInterface $form_state
-   *   The form state.
-   * @param array $complete_form
-   *   The complete form.
-   */
-  public static function validateEmptyValue(&$element, FormStateInterface $form_state, array &$complete_form): void {
-    $values = $form_state->getValues();
-    $value = NestedArray::getValue($values, $element['#parents']);
-    if (!empty($value['repository']) && empty($value['type'])) {
-      $form_state->setError($element, t('You must select a type if you have a repository.'));
-    }
-  }
-
-  /**
    * {@inheritdoc}
    */
   public function massageFormValues(array $values, array $form, FormStateInterface $form_state): array {
@@ -137,8 +119,12 @@ class GitHubFeedWidget extends WidgetBase {
       $return[$delta]['repository'] = $value['repository'];
       $return[$delta]['type'] = $value['type'];
       $return[$delta]['item_num'] = $value['item_num'];
-      $return[$delta]['include_comments'] = $return[$delta]['type'] === 'events' ? '0' : $value['comments_container']['include_comments'];
-      $return[$delta]['comment_num'] = $value['comments_container']['comment_num'];
+      if ($value['type'] === 'events' || empty($value['comments_container']['include_comments'])) {
+        $return[$delta]['comment_num'] = 0;
+      }
+      else {
+        $return[$delta]['include_comments'] = $value['comments_container']['include_comments'];
+      }
     }
     return $return;
   }
