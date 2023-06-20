@@ -42,11 +42,12 @@ Feature: Github feed paragraph tests.
 
     When I click "Edit"
     And I fill in the following:
-      | Type            | issue |
-      | Number of items | 5     |
-    And I check "Include comments"
+      | Type               | issue |
+      | Number of items    | 5     |
+      | Number of comments | 5     |
     And I press "Save"
     And I should see the heading "Issues (5)"
+    # Only one comment is available.
     And I should see the heading "Comments (1)"
 
     # Test the error message when the repository is invalid.
