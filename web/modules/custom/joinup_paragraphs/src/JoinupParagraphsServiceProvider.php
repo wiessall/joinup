@@ -6,13 +6,13 @@ namespace Drupal\joinup_group;
 
 use Drupal\Core\DependencyInjection\ContainerBuilder;
 use Drupal\Core\DependencyInjection\ServiceModifierInterface;
-use Drupal\joinup_group\Access\LayoutParagraphsBuilderAccessOverrider;
+use Drupal\joinup_paragraphs\Access\LayoutParagraphsBuilderAccessOverrider;
 use Symfony\Component\DependencyInjection\Reference;
 
 /**
  * Overwrites services.
  */
-class JoinupGroupServiceProvider implements ServiceModifierInterface {
+class JoinupParagraphsServiceProvider implements ServiceModifierInterface {
 
   /**
    * {@inheritdoc}
