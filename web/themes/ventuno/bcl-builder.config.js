@@ -755,6 +755,8 @@ module.exports = {
           "gear-fill.svg",
           "geo-alt.svg",
           "github.svg",
+          "hand-thumbs-up.svg",
+          "hand-thumbs-up-fill.svg",
           "info-circle-fill.svg",
           "info-circle.svg",
           "journal-text.svg",

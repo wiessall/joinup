@@ -43,14 +43,7 @@
  */
 #}
 {% set node_attributes = create_attribute() %}
-{% set node_classes = [
-  'layout-container',
-  listing ? 'listing',
-  news ? 'page--news',
-  events ? 'page--events',
-  faq ? 'page--faq',
-] %}
-<div{{ node_attributes.addClass(node_classes)}}>
+<div{{ node_attributes.addClass(node_classes, 'layout-container')}}>
   {% include '@ventuno/parts/header.html.twig' with {
     user_name: user_name,
     landing_page_links: landing_page_links,
@@ -73,8 +66,17 @@
     </div>
   {% endif %}
 
-  {% if page.messages %}
-    <div class="container">
+  {% if page_header %}
+    {{ attach_library('iop/page-header') }}
+    <div class="page-header py-5 text-center">
+      <{{ page_header.has_heading ? 'h1' : 'span' }} class="page-header__title">
+        {{ page_header.title }}
+      </{{ page_header.has_heading ? 'h1' : 'span' }}>
+    </div>
+  {% endif %}
+
+  {% if page.messages|render|striptags|trim is not empty %}
+    <div class="container mt-5">
       {{ page.messages }}
     </div>
   {% endif %}
