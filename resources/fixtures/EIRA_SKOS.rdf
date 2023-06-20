@@ -244,8 +244,8 @@
     <skos:hasTopConcept rdf:resource="http://data.europa.eu/dr8/SecurityFrameworkBusinessObject_Properties" />
     <skos:hasTopConcept rdf:resource="http://data.europa.eu/dr8/DataPolicyBusinessObject" />
     <skos:hasTopConcept rdf:resource="http://data.europa.eu/dr8/DataPolicyBusinessObject_Properties" />
-    <skos:hasTopConcept rdf:resource="http://data.europa.eu/dr8/ConformanceTestScenarioBusinessObject" />
-    <skos:hasTopConcept rdf:resource="http://data.europa.eu/dr8/ConformanceTestScenarioBusinessObject_Properties" />
+    <skos:hasTopConcept rdf:resource="http://data.europa.eu/dr8/ConformanceTestScenarioBusinessObjectBusinessObject" />
+    <skos:hasTopConcept rdf:resource="http://data.europa.eu/dr8/ConformanceTestScenarioBusinessObjectBusinessObject_Properties" />
     <skos:hasTopConcept rdf:resource="http://data.europa.eu/dr8/DigitalGovernancePlanBusinessObject" />
     <skos:hasTopConcept rdf:resource="http://data.europa.eu/dr8/DigitalGovernancePlanBusinessObject_Properties" />
     <skos:hasTopConcept rdf:resource="http://data.europa.eu/dr8/MasterDataPolicyBusinessObject" />
@@ -4918,9 +4918,9 @@ eira:policy_type: [ Information security policy | Privacy policy | Licensing and
     <eira:viewpoint>Interoperability Governance viewpoint</eira:viewpoint>
     <dcterms:identifier>http://data.europa.eu/dr8/DataPolicyBusinessObject</dcterms:identifier>
   </skos:Concept>
-  <skos:Concept rdf:about="http://data.europa.eu/dr8/ConformanceTestScenarioBusinessObject">
+  <skos:Concept rdf:about="http://data.europa.eu/dr8/ConformanceTestScenarioBusinessObjectBusinessObject">
     <skos:notation><![CDATA[Conformance Test Scenario]]></skos:notation>
-    <dcterms:identifier>http://data.europa.eu/dr8/ConformanceTestScenarioBusinessObject</dcterms:identifier>
+    <dcterms:identifier>http://data.europa.eu/dr8/ConformanceTestScenarioBusinessObjectBusinessObject</dcterms:identifier>
     <skos:prefLabel xml:lang="en"><![CDATA[Conformance Test Scenario]]></skos:prefLabel>
     <skos:topConceptOf rdf:resource="http://data.europa.eu/dr8" />
     <skos:definition xml:lang="en"><![CDATA[Definition: Conformance Test Scenario ABB is a Business Object specifying a sequence of actions for the execution of a test. Also known as a test script or manual test script.
@@ -4937,27 +4937,27 @@ LOST view: Technical view - Infrastructure
 
 Interoperability saliency: The Conformance Testing Scenario ABB  is salient for technical interoperability because it provides a document of a list of activities for the execution of interoperability tests.
 
-Identifier: http://data.europa.eu/dr8/ConformanceTestScenarioBusinessObject
+Identifier: http://data.europa.eu/dr8/ConformanceTestScenarioBusinessObjectBusinessObject
 
 eira:ID: ABB130
 
-ABB name: eira:ConformanceTestScenarioBusinessObject
+ABB name: eira:ConformanceTestScenarioBusinessObjectBusinessObject
 
 EIRA concept: eira:ArchitectureBuildingBlock
 
 Last modification: 2022-18-01
 
 ]]></skos:definition>
-    <eira:ConformanceTestScenarioBusinessObject_Properties />
+    <eira:ConformanceTestScenarioBusinessObjectBusinessObject_Properties />
   </skos:Concept>
-  <skos:Concept rdf:about="http://data.europa.eu/dr8/ConformanceTestScenarioBusinessObject_Properties">
+  <skos:Concept rdf:about="http://data.europa.eu/dr8/ConformanceTestScenarioBusinessObjectBusinessObject_Properties">
     <skos:notation><![CDATA[Properties of Conformance Test Scenario]]></skos:notation>
-    <dcterms:identifier>http://data.europa.eu/dr8/ConformanceTestScenarioBusinessObject_Properties</dcterms:identifier>
+    <dcterms:identifier>http://data.europa.eu/dr8/ConformanceTestScenarioBusinessObjectBusinessObject_Properties</dcterms:identifier>
     <skos:prefLabel xml:lang="en"><![CDATA[Properties of Conformance Test Scenario]]></skos:prefLabel>
     <skos:topConceptOf rdf:resource="http://data.europa.eu/dr8" />
-    <skos:related rdf:resource="http://data.europa.eu/dr8/ConformanceTestScenarioBusinessObject" />
-    <eira:PURI>http://data.europa.eu/dr8/ConformanceTestScenarioBusinessObject</eira:PURI>
-    <dcterms:type>eira:ConformanceTestScenarioBusinessObject</dcterms:type>
+    <skos:related rdf:resource="http://data.europa.eu/dr8/ConformanceTestScenarioBusinessObjectBusinessObject" />
+    <eira:PURI>http://data.europa.eu/dr8/ConformanceTestScenarioBusinessObjectBusinessObject</eira:PURI>
+    <dcterms:type>eira:ConformanceTestScenarioBusinessObjectBusinessObject</dcterms:type>
     <dcterms:modified>2022-01-18</dcterms:modified>
     <eira:synonym></eira:synonym>
     <skos:definition><![CDATA[Conformance Test Scenario ABB is a Business Object specifying a sequence of actions for the execution of a test. Also known as a test script or manual test script.]]></skos:definition>
@@ -4969,7 +4969,7 @@ Last modification: 2022-18-01
     <eira:concept>eira:ArchitectureBuildingBlock</eira:concept>
     <eira:iopDimension>Structural IoP</eira:iopDimension>
     <eira:view>Technical view - application</eira:view>
-    <dcterms:identifier>http://data.europa.eu/dr8/ConformanceTestScenarioBusinessObject</dcterms:identifier>
+    <dcterms:identifier>http://data.europa.eu/dr8/ConformanceTestScenarioBusinessObjectBusinessObject</dcterms:identifier>
   </skos:Concept>
   <skos:Concept rdf:about="http://data.europa.eu/dr8/DigitalGovernancePlanBusinessObject">
     <skos:notation><![CDATA[Digital Governance Plan]]></skos:notation>
@@ -8682,7 +8682,7 @@ EIRA concept: eira:ArchitectureBuildingBlock
 Last modification: 2022-18-01
 
 ]]></skos:definition>
-    <skos:related rdf:resource="http://data.europa.eu/dr8/ConformanceTestScenarioBusinessObject" />
+    <skos:related rdf:resource="http://data.europa.eu/dr8/ConformanceTestScenarioBusinessObjectBusinessObject" />
     <skos:related rdf:resource="http://data.europa.eu/dr8/ConformanceTestingApplicationService" />
     <eira:ConformanceTestingApplicationComponent_Properties />
   </skos:Concept>
@@ -24272,7 +24272,7 @@ ABB name: eira:TestEnablersGrouping
 EIRA concept: eira:ArchitectureBuildingBlock
 
 ]]></skos:definition>
-    <skos:related rdf:resource="http://data.europa.eu/dr8/ConformanceTestScenarioBusinessObject" />
+    <skos:related rdf:resource="http://data.europa.eu/dr8/ConformanceTestScenarioBusinessObjectBusinessObject" />
     <skos:related rdf:resource="http://data.europa.eu/dr8/ConformanceTestingApplicationComponent" />
     <skos:related rdf:resource="http://data.europa.eu/dr8/ConformanceTestingApplicationService" />
     <eira:TestEnablersGrouping_Properties />
@@ -25609,7 +25609,7 @@ EIRA concept: eira:ArchitectureBuildingBlock
   <skos:Collection rdf:about="http://data.europa.eu/dr8/view/TechnicalView-Application">
     <skos:notation><![CDATA[TechnicalView-Application]]></skos:notation>
     <skos:prefLabel xml:lang="en"><![CDATA[Technical View - Application]]></skos:prefLabel>
-    <skos:member rdf:resource="http://data.europa.eu/dr8/ConformanceTestScenarioBusinessObject"/>
+    <skos:member rdf:resource="http://data.europa.eu/dr8/ConformanceTestScenarioBusinessObjectBusinessObject"/>
     <skos:member rdf:resource="http://data.europa.eu/dr8/TechnicalInteroperabilityAgreementContract"/>
     <skos:member rdf:resource="http://data.europa.eu/dr8/ServiceLevelAgreementContract"/>
     <skos:member rdf:resource="http://data.europa.eu/dr8/InteroperabilitySpecificationContract"/>

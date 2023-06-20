@@ -9,9 +9,9 @@
 (() => {
   Drupal.trrSolution = {
     solutionTerms: [
-      "http://data.europa.eu/dr8/ConformanceTestingComponent",
-      "http://data.europa.eu/dr8/ConformanceTestingService",
-      "http://data.europa.eu/dr8/ConformanceTestScenario",
+      "http://data.europa.eu/dr8/ConformanceTestingApplicationComponent",
+      "http://data.europa.eu/dr8/ConformanceTestingApplicationService",
+      "http://data.europa.eu/dr8/ConformanceTestScenarioBusinessObject",
     ],
 
     fieldsSelector:
