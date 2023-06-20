@@ -39,9 +39,6 @@
     "build:styles": "cross-env bcl-builder styles",
     "build:copy": "cross-env bcl-builder copy",
     "build:sprite": "cross-env bcl-builder sprite",
-    "postinstall": "patch-package"
-  },
-  "antiscripts": {
-    "postinstall": "mkdir -p web/libraries/jquery-jsonview/dist && cp node_modules/jquery-jsonview/dist/* web/libraries/jquery-jsonview/dist/"
+    "postinstall": "patch-package && mkdir -p web/libraries/jquery-jsonview/dist && cp node_modules/jquery-jsonview/dist/* web/libraries/jquery-jsonview/dist/"
   }
 }
