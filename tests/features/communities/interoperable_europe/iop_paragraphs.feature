@@ -21,8 +21,7 @@ Feature:
     And I click "Choose component"
     Then I should not see the link "Row"
 
-    When I am on the homepage
-    And I click "Interoperable Europe" in the "Navigation bar"
+    When I go to the "Interoperable Europe" collection
     And I click "Add custom page" in the plus button menu
     And I fill in "Title" with "Hello world"
     And I click "Choose component"
@@ -62,8 +61,7 @@ Feature:
     Then I should not see the link "Row"
 
     Given I am logged in as a facilitator of the "Interoperable Europe" collection
-    And I am on the homepage
-    And I click "Interoperable Europe" in the "Navigation bar"
+    And I go to the "Interoperable Europe" collection
     And I click "Add custom page" in the plus button menu
     And I click "Choose component"
     Then I should see the link "Row"
@@ -105,8 +103,7 @@ Feature:
       | Some page 3 | Carousel c1          | Some content. | validated |
 
     When I am logged in as a moderator
-    And I go to the homepage
-    And I click "Interoperable Europe" in the "Navigation bar"
+    And I go to the "Interoperable Europe" collection
     And I click "Add custom page" in the plus button menu
 
     When I fill in the following:
