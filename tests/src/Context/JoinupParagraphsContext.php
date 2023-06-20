@@ -436,7 +436,7 @@ class JoinupParagraphsContext extends RawDrupalContext {
   }
 
   /**
-   * I append paragraph to entity.
+   * Appends paragraph to entity.
    *
    * @param string $paragraph_type
    *   Paragraph type.

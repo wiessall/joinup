@@ -26,7 +26,7 @@ class JoinupLayoutParagraphsContext extends RawDrupalContext {
   ];
 
   /**
-   * It clicks on link inside paragraph.
+   * Clicks on link inside paragraph.
    *
    * @param string $label
    *   The label of the field.
