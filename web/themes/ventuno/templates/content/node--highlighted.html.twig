@@ -6,15 +6,19 @@
  * This is used in the "Highlighted content" block on the homepage.
  */
 #}
-<article{{ attributes }}>
-  <div class="logo">{{ node.getLogoAsRenderArray('highlighted') }}</div>
-  <div class="topics">{{ content.field_topic }}</div>
-  {{ title_prefix }}
-  {% if not page and not is_label_hidden %}
-    <h1{{ title_attributes }}>
-      <a href="{{ url }}" rel="bookmark">{{ label }}</a>
-    </h1>
-  {% endif %}
-  {{ title_suffix }}
-  <div class="description">{{ content.body }}</div>
-</article>
+{{ pattern('tile', {
+  attributes,
+  horizontal: false,
+  image,
+  url,
+  highlighted,
+  info,
+  title_prefix,
+  label,
+  title_suffix,
+  text,
+  action,
+  badges,
+  extra_data,
+  bundle,
+}) }}
