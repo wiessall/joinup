@@ -1,6 +1,6 @@
 # Token settings.
 github_feed.settings:
-  type: mapping
+  type: config_object
   label: GitHub feed settings
   mapping:
     token:
