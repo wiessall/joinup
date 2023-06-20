@@ -1,6 +1,5 @@
 @import "../partials/core";
 @import "@openeuropa/bcl-bootstrap/scss/pagination";
-@import "@openeuropa/bcl-theme-joinup/src/scss/pagination";
 
 .pagination {
   .pager__item {
@@ -16,21 +15,24 @@
       display: block;
     }
   }
-  .page-item .page-link,
-  .page-item.active .page-link {
-    color: $link-color;
-  }
-  .page-item.disabled .page-link {
-    color: $gray-500;
-  }
-  .page-item.active .page-link {
-    font-weight: $font-weight-normal;
-    background: rgba(16, 115, 222, 0.1);
-  }
-  .page-link {
-    padding: $spacer * .5 $spacer * .875; // 8px 14px
-  }
-  .page-link:hover {
-    background: $gray-300;
+  .page-item {
+    .page-link {
+      padding: $spacer * .5 $spacer * .875; // 8px 14px
+      &:hover {
+        background: $gray-300;
+      }
+    }
+    .page-link,
+    .page-link .bi,
+    &.active .page-link {
+      color: $link-color;
+    }
+    &.active .page-link {
+      font-weight: $font-weight-normal;
+      background: rgba(16, 115, 222, 0.1);
+    }
+    &.disabled .page-link {
+      color: $gray-500;
+    }
   }
 }

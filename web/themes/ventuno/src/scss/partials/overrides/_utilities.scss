@@ -84,5 +84,32 @@ $utilities: map-merge(
         1: 1
       )
     ),
+    "font-weight":
+      map-merge(
+        map-get($utilities, "font-weight"),
+        (
+          values:
+            map-merge(
+              map-get(map-get($utilities, "font-weight"), "values"),
+              (
+                md: $font-weight-medium,
+              )
+            ),
+        )
+      ),
+    "font-size":
+      map-merge(
+        map-get($utilities, "font-size"),
+        (
+          values:
+            map-merge(
+              map-get(map-get($utilities, "font-size"), "values"),
+              (
+                sm: $font-size-sm,
+                xs: $font-size-xs,
+              )
+            ),
+        )
+      ),
   )
 );

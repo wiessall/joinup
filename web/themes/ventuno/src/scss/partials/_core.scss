@@ -10,7 +10,7 @@
 @import "@openeuropa/bcl-theme-default/src/scss/base/colors";
 
 // Custom theme colors
-@import "@openeuropa/bcl-theme-joinup/src/scss/base/colors";
+@import "overrides/colors";
 
 // Bootstrap default functions
 @import "@openeuropa/bcl-bootstrap/scss/functions";
@@ -19,8 +19,6 @@
 @import "@openeuropa/bcl-bootstrap/scss/variables";
 // BCL default theme variables
 @import "@openeuropa/bcl-theme-default/src/scss/base/variables";
-// Override with Joinup variables
-@import "@openeuropa/bcl-theme-joinup/src/scss/base/variables";
 // Override with used variables only to make utilities a lot lighter
 @import "overrides/variables";
 

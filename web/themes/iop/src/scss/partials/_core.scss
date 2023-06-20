@@ -9,9 +9,6 @@
 // Base theme colors
 @import "@openeuropa/bcl-theme-default/src/scss/base/colors";
 
-// Ventuno theme colors
-@import "@openeuropa/bcl-theme-joinup/src/scss/base/colors";
-
 // IOP theme colors
 @import "overrides/colors";
 
@@ -23,8 +20,6 @@
 
 // BCL default theme variables
 @import "@openeuropa/bcl-theme-default/src/scss/base/variables";
-// Override with Joinup variables
-@import "@openeuropa/bcl-theme-joinup/src/scss/base/variables";
 // Override with used variables only to make utilities a lot lighter
 @import "overrides/variables";
 // Bootstrap default maps
