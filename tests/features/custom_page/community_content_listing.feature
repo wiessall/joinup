@@ -248,7 +248,7 @@ Feature:
     And I fill in "Solution" with "N64 cartridge cleaner"
     And I drag the table row in the "Content listing field filter form" region at position 4 up
     And I drag the table row in the "Content listing field filter form" region at position 3 up
-    And I press "Save"
+    And I press "Update"
     Then I should see the following tiles in the correct order:
       | Searching for green pad.        |
       | N64 cartridge cleaner           |
