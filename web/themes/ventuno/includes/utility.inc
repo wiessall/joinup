@@ -8,7 +8,6 @@
 declare(strict_types = 1);
 
 use Drupal\Core\StringTranslation\TranslatableMarkup;
-use Drupal\asset_release\Entity\AssetReleaseInterface;
 use Drupal\joinup_bundle_class\DescriptionInterface;
 use Drupal\joinup_bundle_class\LogoInterface;
 use Drupal\joinup_community_content\Entity\CommunityContentInterface;
@@ -45,7 +44,25 @@ function _ventuno_smart_trim(string $string, int $length, bool $ellipsis = TRUE)
  */
 function _ventuno_preprocess_tile(array &$variables, string $entity_type_id): void {
   $entity = $variables[$entity_type_id];
+  /** @var \Drupal\Core\Datetime\DateFormatterInterface $date_formatter */
+  $date_formatter = Drupal::service('date.formatter');
   $bundle_key = \Drupal::entityTypeManager()->getDefinition($entity_type_id)->getKey('bundle');
+
+  // Prepare different data depending on the route.
+  $route_match = \Drupal::routeMatch();
+  $route_name = $route_match->getRouteName();
+  $routes_horizontal_tiles = [
+    'view.search.page_1',
+    'page_manager.page_view_homepage_homepage-layout_builder-0',
+    'page_manager.page_view_homepage_homepage-layout_builder-1',
+  ];
+
+  // Set horizontal tiles in some cases.
+  if (in_array($route_name, $routes_horizontal_tiles)) {
+    $variables['horizontal'] = TRUE;
+    // Text only on horizontal tiles.
+    $variables['text'] = $entity instanceof DescriptionInterface && isset($variables['content'][$entity->getDescriptionField()]) ? $variables['content'][$entity->getDescriptionField()] : NULL;
+  }
 
   // Image.
   $variables['image'] = ($entity instanceof LogoInterface) && $entity->getLogoAsFile()
@@ -53,18 +70,26 @@ function _ventuno_preprocess_tile(array &$variables, string $entity_type_id): vo
     : [];
 
   // Topics.
+  // Number of topics displayed can vary depending on the view mode.
+  $max_topics = $variables['view_mode'] === 'tile_two' ? 3 : 2;
   $topics = ($entity instanceof TopicReferencingEntityInterface) ? $entity->getTopics() : NULL;
   if ($topics) {
     $variables['badges'] = [];
     foreach ($topics as $topic) {
-      $variables['badges'][]['label'] = $topic->label();
+      $variables['badges'][] = [
+        'label' => $topic->label(),
+        'topic_id' => $topic->id(),
+      ];
     }
     $num_of_items = count($topics);
-    if ($num_of_items > 2) {
-      $extra_items = $num_of_items - 2;
-      $variables['badges'] = array_splice($variables['badges'], 0, 2);
-      $word = ($extra_items < 2) ? t('topic') : t('topics');
-      $variables['badges'][]['label'] = '+' . $extra_items . ' ' . $word;
+    // Display the actual topic instead of "+ 1 topic".
+    if ($num_of_items > $max_topics + 1) {
+      $extra_items = $num_of_items - $max_topics;
+      $variables['badges'] = array_splice($variables['badges'], 0, $max_topics);
+      $variables['badges'][] = [
+        'label' => '+' . $extra_items . ' ' . t('topics'),
+        'overflow' => TRUE,
+      ];
     }
   }
 
@@ -72,73 +97,153 @@ function _ventuno_preprocess_tile(array &$variables, string $entity_type_id): vo
   $bundle_type = $entity->get($bundle_key)->entity;
   $variables['bundle']['label'] = ucfirst($bundle_type->getSingularLabel() ?? $bundle_type->label());
   $variables['bundle']['icon'] = _ventuno_get_default_icon($entity->getEntityTypeId(), $entity->bundle());
-}
 
-/**
- * Prepares some variables for all search result view modes.
- *
- * @param array $variables
- *   The variables array.
- * @param string $entity_type_id
- *   The entity type ID.
- */
-function _ventuno_preprocess_search_result(array &$variables, string $entity_type_id): void {
-  $entity = $variables[$entity_type_id];
-  $bundle_key = \Drupal::entityTypeManager()->getDefinition($entity_type_id)->getKey('bundle');
-  $variables['text'] = $entity instanceof DescriptionInterface && isset($variables['content'][$entity->getDescriptionField()]) ? $variables['content'][$entity->getDescriptionField()] : NULL;
-  $variables['topics'] = ($entity instanceof TopicReferencingEntityInterface) ? $entity->getTopics() : NULL;
-  if ($variables['topics']) {
-    $num_of_items = count($variables['topics']);
-    if ($num_of_items > 3) {
-      $extra_items = $num_of_items - 3;
-      $variables['topics'] = array_splice($variables['topics'], 0, 3);
-      // The structure name => value mimics the way topics are accessed in the
-      // template.
-      // @see node--search-result.html.twig.
-      // @see node--search-result-featured.html.twig.
-      // @see rdf-entity--search-result.html.twig.
-      // @see rdf-entity--search-result-featured.html.twig.
-      $variables['topics'][]['name']['value'] = t('+:number topics', [
-        ':number' => $extra_items,
-      ]);
-    }
-  }
-
-  $bundle_type = $entity->get($bundle_key)->entity;
-  $variables['type'] = strtoupper($bundle_type->getSingularLabel() ?? $bundle_type->label());
-  if ($created_time = $entity->getCreatedTime()) {
-    $variables['creation'] = t('@label: @created', [
-      '@label' => t('Created'),
-      '@created' => \Drupal::service('date.formatter')->format($created_time, 'date_only'),
-    ]);
-  }
+  // Info (above the title).
+  $variables['info']['icon'] = 'calendar-event';
   if ($changed_time = $entity->getChangedTime()) {
-    $variables['changed'] = t('@label: @changed', [
-      '@label' => t('Updated Date'),
+    $variables['info']['label'] = t('@label: @changed', [
+      '@label' => t('Last update'),
       '@changed' => \Drupal::service('date.formatter')->format($changed_time, 'date_only'),
     ]);
   }
 
-  if ($entity instanceof AssetReleaseInterface) {
-    $variables['label'] = new TranslatableMarkup('@label | @version', [
-      '@label' => $entity->label(),
-      '@version' => $entity->getVersion(),
-    ]);
+  // Iterate over entity bundles for case-specific data.
+  switch ($entity->bundle()) {
+    case 'discussion':
+      $variables['info']['icon'] = 'calendar-event';
+      if ($changed_time = $entity->getChangedTime()) {
+        $variables['info']['label'] = t('@label: @changed', [
+          '@label' => t('Last activity'),
+          '@changed' => $date_formatter->format($changed_time, 'custom', 'd/m/Y, h:s'),
+        ]);
+      }
+      $node = $variables['elements']['#node'];
+      $variables['extra_data'][] = [
+        'icon' => 'chat',
+        'label' => $node->get('field_replies')->comment_count,
+      ];
+      break;
+
+    case 'event':
+      $variables['highlighted']['icon'] = 'calendar-event';
+      $variables['highlighted']['text'] = $variables['content']['field_event_date'];
+      $variables['info']['icon'] = 'geo-alt';
+      $node = $variables['elements']['#node'];
+      if (!$node->get('field_location')->isEmpty() && !$node->get('field_event_online_location')->isEmpty()) {
+        $variables['info']['label'] = t('Hybrid event');
+      }
+      elseif ($node->get('field_location')->isEmpty()) {
+        $variables['info']['label'] = t('Virtual event');
+      }
+      else {
+        $variables['info']['label'] = t('Physical event');
+      }
+      break;
+
+    case 'news':
+      if ($route_name === 'view.search.page_1') {
+        $variables['label'] = $variables['elements']['#node']->get('field_news_headline')->value;
+      }
+      break;
+
+    case 'tallinn_report':
+      $variables['info']['icon'] = 'calendar-event';
+      if ($entity->getCreatedTime() === $entity->getChangedTime()) {
+        $variables['info']['label'] = new TranslatableMarkup('@label: -', [
+          '@label' => 'Last update',
+        ]);
+      }
+      elseif ($changed_time = $entity->getChangedTime()) {
+        $variables['info']['label'] = t('@label: @changed', [
+          '@label' => t('Last update'),
+          '@changed' => $date_formatter->format($changed_time, 'date_only'),
+        ]);
+      }
+      break;
+
+    case 'asset_distribution':
+      $variables['info']['icon'] = 'file-earmark-medical';
+      $variables['info']['label'] = $variables['content']['field_ad_licence'];
+      $variables['action'] = $variables['content']['field_ad_access_url'];
+      break;
+
+    case 'asset_release':
+      $variables['label'] = $entity->label();
+      $variables['highlighted']['text'] = 'v' . $entity->getVersion();
+      $variables['info']['icon'] = 'calendar-event';
+      if ($created_time = $entity->getCreatedTime()) {
+        $variables['info']['label'] = t('@label: @created', [
+          '@label' => t('Release date'),
+          '@created' => \Drupal::service('date.formatter')->format($created_time, 'date_only'),
+        ]);
+      }
+      $status = $variables['elements']['field_status'][0]['#plain_text'] ?? 'No status';
+      switch ($status) {
+
+        case 'Completed':
+          $icon_id = 'check-circle';
+          break;
+
+        case 'Deprecated':
+          $icon_id = 'file-x';
+          break;
+
+        case 'Under development':
+          $icon_id = 'clock-history';
+          break;
+
+        case 'Withdrawn':
+          $icon_id = 'patch-exclamation';
+          break;
+      }
+      $variables['extra_data'][] = [
+        'icon' => $icon_id ?? 'question-lg',
+        'label' => $status,
+      ];
+      break;
+
+    case 'collection':
+      $variables['extra_data'][] = [
+        'icon' => 'people',
+        'label' => $variables['content']['members']['#count'],
+      ];
+      break;
+
+    case 'solution':
+      $variables['image'] = $variables['content']['field_is_logo'];
+      // Add attributes that will allow JS to mark this tile as "Shared from".
+      $rdf_entity = $variables['rdf_entity'];
+      if (!$rdf_entity->get('collection')->isEmpty()) {
+        /** @var \Drupal\rdf_entity\RdfInterface|null $parent */
+        $parent = $rdf_entity->get('collection')->first()->entity;
+        $variables['attributes']['data-joinup-parent-id'] = $parent->id();
+        $variables['attributes']['data-joinup-parent-label'] = $parent->label();
+      }
+      // Add download counter if set.
+      if (isset($variables['elements']['downloads']['count']['#access']) && $variables['elements']['downloads']['count']['#access'] === TRUE) {
+        $variables['extra_data'][] = [
+          'icon' => 'download',
+          'label' => $variables['elements']['downloads']['count'],
+        ];
+      }
+      break;
+
+    case 'licence':
+      // Licences do not store creation date.
+      $variables['info'] = NULL;
+      break;
   }
 
-  if ($entity instanceof ArchivableEntityInterface) {
-    $variables['is_archived'] = $entity->isArchived();
-  }
-
-  if ($variables['view_mode'] === 'search_result_featured') {
-    $variables['image'] = ($entity instanceof LogoInterface) && $entity->getLogoAsFile()
-      ? $entity->getLogoAsRenderArray($variables['view_mode'])
-      : _ventuno_get_default_icon_render_array($entity->getEntityTypeId(), $entity->bundle());
+  if ($entity instanceof ArchivableEntityInterface && $entity->isArchived()) {
+    $variables['extra_data'][] = [
+      'icon' => 'archive-fill',
+      'label' => t('Archived'),
+    ];
   }
 }
 
 /**
- * Returns the default icon id for the given bundle or a generic icon id.
+ * Returns the default icon for the given bundle or the generic entity icon.
  *
  * @param string $entity_type_id
  *   The entity type ID.
@@ -169,50 +274,6 @@ function _ventuno_get_default_icon(string $entity_type_id, string $bundle): stri
   ];
 
   return $mapping[$entity_type_id][$bundle] ?? 'lightning-charge';
-}
-
-/**
- * Returns icon as render array for the bundle or a generic icon render array.
- *
- * @todo ISAICP-7709 With tiles redesign, the search items won't need this so
- * we can delete this function.
- *
- * @param string $entity_type_id
- *   The entity type ID.
- * @param string $bundle
- *   The bundle.
- *
- * @return array
- *   The icon class render array.
- */
-function _ventuno_get_default_icon_render_array(string $entity_type_id, string $bundle): array {
-  $mapping = [
-    'node' => [
-      'custom_page' => 'file-earmark-richtext',
-      'discussion' => 'chat-left-text',
-      'document' => 'file-earmark-text',
-      'event' => 'calendar-event',
-      'news' => 'newspaper',
-      'tallinn_report' => 'journal-text',
-      'video' => 'file-earmark-play',
-    ],
-    'rdf_entity' => [
-      'collection' => 'folder2-open',
-      'licence' => 'file-earmark-medical',
-      'asset_distribution' => 'file-earmark-post',
-      'asset_release' => 'file-earmark-zip',
-      'solution' => 'clipboard2-check',
-    ],
-  ];
-
-  $class = $mapping[$entity_type_id][$bundle] ?? 'lightning-charge';
-  return [
-    '#type' => 'inline_template',
-    '#template' => '<svg class="bi img-fluid w-100 py-3 p-lg-3 text-white bg-secondary"><use xlink:href="' . base_path() . \Drupal::service('extension.list.theme')->getPath('ventuno') . '/assets/icons/icons.svg#{{ icon }}"></use></svg>',
-    '#context' => [
-      'icon' => $class,
-    ],
-  ];
 }
 
 /**
