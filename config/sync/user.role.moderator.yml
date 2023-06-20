@@ -120,7 +120,6 @@ permissions:
   - 'create paragraph content json_map'
   - 'create paragraph content layout'
   - 'create paragraph content row'
-  - 'create paragraph content simple_paragraph'
   - 'create paragraph content testimony'
   - 'create paragraph content video'
   - 'create rdf entity news'

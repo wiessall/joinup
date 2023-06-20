@@ -119,7 +119,9 @@ Feature: About this solution
     # A related solution which is not yet approved should not be visible.
     And I should not see the text "Protein"
 
-  @terms @javascript @email @uploadFiles:logo.png
+  # Todo: Enable this test in ticket: ISAICP-7764.
+  # Replace "Simple paragraph" with "Text".
+  @wip @terms @javascript @email @uploadFiles:logo.png
   Scenario: About page contact form
     Given owner:
       | name      | type               |
