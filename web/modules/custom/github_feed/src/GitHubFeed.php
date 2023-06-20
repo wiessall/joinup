@@ -23,13 +23,17 @@ class GitHubFeed implements GitHubFeedInterface {
    * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger
    *   The logger channel factory.
    */
-  public function __construct(protected ConfigFactoryInterface $configFactory, protected ClientInterface $client, protected LoggerChannelFactoryInterface $logger) {}
+  public function __construct(
+    protected ConfigFactoryInterface $configFactory,
+    protected ClientInterface $client,
+    protected LoggerChannelFactoryInterface $logger
+  ) {}
 
   /**
    * {@inheritdoc}
    */
-  public function fetchItems(string $url, string $type, int $numberOfResults = 10, $includeComments = FALSE, int $numberOfComments = 0, bool $resetCache = FALSE): ?array {
-    [$owner, $project] = static::getOwnerAndProjectFromUri($url);
+  public function fetchItems(string $url, string $type, int $numberOfResults = 10, int $numberOfComments = 0, bool $resetCache = FALSE): ?array {
+    [$owner, $project] = $this->getOwnerAndProjectFromUri($url);
     $url = '/repos/' . $owner . '/' . $project . '/' . self::KEYS[$type];
     $url .= '?per_page=' . $numberOfResults . '&page=1';
 
@@ -48,7 +52,7 @@ class GitHubFeed implements GitHubFeedInterface {
     $return = [];
     foreach ($data as $returnItem) {
       $returnItem['comments'] = [];
-      if ($includeComments) {
+      if ($numberOfComments > 0) {
         $returnItem['comments'] = $this->fetchItemComments($owner, $project, $type, $returnItem['number'], $numberOfComments);
       }
       $return[] = $returnItem;
@@ -66,7 +70,7 @@ class GitHubFeed implements GitHubFeedInterface {
    * @return array
    *   An array containing the owner and the project.
    */
-  public static function getOwnerAndProjectFromUri(string $uri): array {
+  protected function getOwnerAndProjectFromUri(string $uri): array {
     $parsedUrl = parse_url($uri);
     $uri = $parsedUrl['path'];
 
@@ -80,53 +84,6 @@ class GitHubFeed implements GitHubFeedInterface {
       $project = str_replace('.git', '', $project);
     }
     return [$owner, $project];
-  }
-
-  /**
-   * Generates a cache ID for the given parameters.
-   *
-   * @param string $owner
-   *   The owner of the project.
-   * @param string $project
-   *   The project name.
-   * @param string $type
-   *   The type of the feed. One of the items defined in
-   *   \Drupal\github_feed\Plugin\Field\FieldType\GitHubFeedItem::allowedTypeValues.
-   * @param int $numberOfResults
-   *   The number of results to return.
-   * @param bool $includeComments
-   *   Whether to include comments or not.
-   * @param int $numberOfComments
-   *   The number of comments to return.
-   *
-   * @return string
-   *   The cache ID.
-   */
-  public static function generateCacheId(string $owner, string $project, string $type, int $numberOfResults = 10, bool $includeComments = FALSE, int $numberOfComments = 0): string {
-    return $owner . ':' . $project . ':' . $type . ':' . $numberOfResults . ':' . (int) $includeComments . ':' . $numberOfComments;
-  }
-
-  /**
-   * Generates a cache ID for the given URL and parameters.
-   *
-   * @param string $url
-   *   The repository URL.
-   * @param string $type
-   *   The type of the feed. One of the items defined in
-   *   \Drupal\github_feed\Plugin\Field\FieldType\GitHubFeedItem::allowedTypeValues.
-   * @param int $numberOfResults
-   *   The number of results to return.
-   * @param bool $includeComments
-   *   Whether to include comments or not.
-   * @param int $numberOfComments
-   *   The number of comments to return.
-   *
-   * @return string
-   *   The cache ID.
-   */
-  public static function generateCacheIdFromUrlAndData(string $url, string $type, int $numberOfResults = 10, bool $includeComments = FALSE, int $numberOfComments = 0): string {
-    [$owner, $project] = static::getOwnerAndProjectFromUri($url);
-    return static::generateCacheId($owner, $project, $type, $numberOfResults, $includeComments, $numberOfComments);
   }
 
   /**
@@ -172,19 +129,12 @@ class GitHubFeed implements GitHubFeedInterface {
    *   The request options.
    */
   protected function getRequestHeaders(): array {
-    $token = $this->getGitHubAccessToken();
+    $token = $this->configFactory->get('github_feed.settings')->get('token');
     return empty($token) ? [] : [
       'headers' => [
         'Authorization' => 'Bearer ' . $token,
       ],
     ];
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getGitHubAccessToken(): string {
-    return $this->configFactory->get('github_feed.settings')->get('token');
   }
 
 }

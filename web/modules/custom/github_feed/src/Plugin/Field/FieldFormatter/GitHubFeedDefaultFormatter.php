@@ -7,7 +7,6 @@ namespace Drupal\github_feed\Plugin\Field\FieldFormatter;
 use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Field\FormatterBase;
-use Drupal\github_feed\GitHubFeed;
 use Drupal\github_feed\GitHubFeedInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -72,7 +71,7 @@ class GitHubFeedDefaultFormatter extends FormatterBase {
         continue;
       }
 
-      $fetchedItems = $this->githubFeed->fetchItems($item->repository, $item->type, (int) $item->item_num, (bool) $item->include_comments, (int) $item->comment_num);
+      $fetchedItems = $this->githubFeed->fetchItems($item->repository, $item->type, (int) $item->item_num, (int) $item->comment_num);
 
       if ($fetchedItems === NULL) {
         // Just show a generic failure message.
@@ -89,57 +88,71 @@ class GitHubFeedDefaultFormatter extends FormatterBase {
         continue;
       }
 
-      $cacheId = GitHubFeed::generateCacheIdFromUrlAndData($item->repository, $item->type, (int) $item->item_num, (bool) $item->include_comments, (int) $item->comment_num);
       $element[$delta] = [
         '#theme' => 'github_feed',
         '#url' => $item->repository,
         '#type' => $item->type,
         '#cache' => [
-          'tags' => [$cacheId],
           'max-age' => $this->getFieldSetting('cache_max_age'),
         ],
       ];
 
       foreach ($fetchedItems as $fetchedItem) {
-        $container = [
-          '#type' => 'container',
-          '#attributes' => [
-            'class' => ['github-feed-item'],
-          ],
-        ];
-
-        $container[$item->type] = [
-          '#theme' => 'github_feed_' . $item->type,
-          '#item' => $fetchedItem,
-        ];
-
-        if (!empty($fetchedItem['comments'])) {
-          foreach ($fetchedItem['comments'] as $comment) {
-            $comment_items[] = [
-              '#theme' => 'github_feed_comment',
-              '#item' => $comment,
-            ];
-          }
-          $container['comments'] = [
-            '#theme' => 'github_feed_comments',
-            '#attributes' => [
-              'class' => ['github-feed-comments'],
-            ],
-            '#title' => [
-              '#markup' => $this->t('Comments'),
-            ],
-            '#comments' => [
-              '#theme' => 'item_list',
-              '#list_type' => 'ol',
-              '#items' => $comment_items,
-            ],
-          ];
-        }
-        $element[$delta]['#items'][] = $container;
+        $element[$delta]['#items'][] = $this->getRenderableItem($item->type, $fetchedItem);
       }
     }
 
     return $element;
+  }
+
+  /**
+   * Returns the render array of a single item.
+   *
+   * @param string $type
+   *   The fetched item type.
+   * @param array $fetchedItem
+   *   The fetched item.
+   *
+   * @return array
+   *   The renderable container.
+   */
+  public function getRenderableItem(string $type, array $fetchedItem): array {
+    $container = [
+      '#type' => 'container',
+      '#attributes' => [
+        'class' => ['github-feed-item'],
+      ],
+    ];
+
+    $container[$type] = [
+      '#theme' => 'github_feed_' . $type,
+      '#item' => $fetchedItem,
+    ];
+
+    if (!empty($fetchedItem['comments'])) {
+      $comment_items = [];
+      foreach ($fetchedItem['comments'] as $comment) {
+        $comment_items[] = [
+          '#theme' => 'github_feed_comment',
+          '#item' => $comment,
+        ];
+      }
+      $container['comments'] = [
+        '#theme' => 'github_feed_comments',
+        '#attributes' => [
+          'class' => ['github-feed-comments'],
+        ],
+        '#title' => [
+          '#markup' => $this->t('Comments'),
+        ],
+        '#comments' => [
+          '#theme' => 'item_list',
+          '#list_type' => 'ol',
+          '#items' => $comment_items,
+        ],
+      ];
+    }
+    return $container;
   }
 
 }

@@ -32,22 +32,12 @@ interface GitHubFeedInterface {
    *   The type of the feed. Either 'issue' or 'pull_request'.
    * @param int $numberOfResults
    *   The number of results to fetch.
-   * @param bool $includeComments
-   *   Whether to include comments.
    * @param int $numberOfComments
    *   The number of comments to fetch.
    *
    * @return array|null
    *   The list of items or NULL if the request failed.
    */
-  public function fetchItems(string $url, string $type, int $numberOfResults = 10, bool $includeComments = FALSE, int $numberOfComments = 0): ?array;
-
-  /**
-   * Retrieves the GitHub token from settings.
-   *
-   * @return string
-   *   The GitHub token.
-   */
-  public function getGitHubAccessToken(): string;
+  public function fetchItems(string $url, string $type, int $numberOfResults = 10, int $numberOfComments = 0): ?array;
 
 }
