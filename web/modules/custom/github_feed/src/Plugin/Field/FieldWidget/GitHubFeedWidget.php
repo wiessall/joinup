@@ -51,12 +51,12 @@ class GitHubFeedWidget extends WidgetBase {
       '#default_value' => $items[$delta]->item_num ?? 5,
     ];
 
-    $element['comments_container'] = [
-      '#type' => 'container',
-      '#attributes' => [
-        'class' => ['comments-container'],
-      ],
-      // 'events' do not have comments.
+    $element['comment_num'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Number of comments'),
+      '#description' => $this->t('The number of comments to show for each item. Set this to 0 to disable comments.'),
+      '#default_value' => $items[$delta]->comment_num ?? 0,
+      // Do not show the field if the type is 'events'.
       '#states' => [
         'invisible' => [
           ':input[name="' . $fieldName . '[type]"]' => [
@@ -66,27 +66,7 @@ class GitHubFeedWidget extends WidgetBase {
       ],
     ];
 
-    $element['comments_container']['include_comments'] = [
-      '#type' => 'checkbox',
-      '#title' => $this->t('Include comments'),
-      '#default_value' => $items[$delta]->include_comments ?? FALSE,
-    ];
-
-    $element['comments_container']['comment_num'] = [
-      '#type' => 'textfield',
-      '#title' => $this->t('Number of comments'),
-      '#default_value' => $items[$delta]->comment_num ?? 5,
-      // Do not show the field if comments are not included or if the type is
-      // 'events'.
-      '#states' => [
-        'visible' => [
-          ':input[name="' . $fieldName . '[comments_container][include_comments]"]' => ['checked' => TRUE],
-        ],
-      ],
-    ];
-
     $element['#theme_wrappers'] = ['container', 'form_element'];
-    $element['#element_validate'] = [[static::class, 'validateEmptyValue']];
     return $element;
   }
 
@@ -119,12 +99,7 @@ class GitHubFeedWidget extends WidgetBase {
       $return[$delta]['repository'] = $value['repository'];
       $return[$delta]['type'] = $value['type'];
       $return[$delta]['item_num'] = $value['item_num'];
-      if ($value['type'] === 'events' || empty($value['comments_container']['include_comments'])) {
-        $return[$delta]['comment_num'] = 0;
-      }
-      else {
-        $return[$delta]['include_comments'] = $value['comments_container']['include_comments'];
-      }
+      $return[$delta]['comment_num'] = $value['type'] === 'events' ? 0 : $value['comment_num'];
     }
     return $return;
   }

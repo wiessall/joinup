@@ -105,6 +105,13 @@ function _github_feed_preprocess_date(array &$variables): void {
   $date_formatter = \Drupal::getContainer()->get('date.formatter');
   $item['created_at'] = [
     '#type' => 'markup',
-    '#markup' => $date_formatter->format(strtotime($item['created_at']), 'custom', 'F j, Y'),
+    '#markup' => $date_formatter->format(strtotime($item['created_at']), 'short'),
   ];
+
+  if (isset($item['updated_at'])) {
+    $item['updated_at'] = [
+      '#type' => 'markup',
+      '#markup' => $date_formatter->format(strtotime($item['updated_at']), 'short'),
+    ];
+  }
 }
