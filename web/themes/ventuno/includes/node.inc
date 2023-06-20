@@ -7,7 +7,6 @@
 
 declare(strict_types = 1);
 
-use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\eif\EifInterface;
 use Drupal\joinup_bundle_class\LogoInterface;
 use Drupal\joinup_group\JoinupGroupHelper;
@@ -61,9 +60,9 @@ function ventuno_preprocess_node__explore_item(array &$variables): void {
  * - Adds a variable indicating the attachment file type on documents.
  */
 function ventuno_preprocess_node(array &$variables): void {
-  _ventuno_preprocess_search_result($variables, 'node');
   /** @var \Drupal\node\NodeInterface $node */
   $node = $variables['node'];
+  $bundle = $node->bundle();
 
   // Add the site URL to use in nodes.
   $variables['site_url'] = \Drupal::request()->getSchemeAndHttpHost();
@@ -83,19 +82,26 @@ function ventuno_preprocess_node(array &$variables): void {
     }
   }
 
+  // View modes where tiles are expected.
+  $tile_view_modes = ['highlighted', 'view_mode_tile', 'tile_two', 'carousel'];
+  // Prepare data for the tiles.
+  if (in_array($variables['view_mode'], $tile_view_modes)) {
+    _ventuno_preprocess_tile($variables, 'node');
+  }
+
   // Add bundle class in listing templates.
   if ($variables['view_mode'] === 'view_mode_tile' || $variables['view_mode'] === 'view_mode_featured') {
-    $bundle_class = 'listing__card--' . str_replace('_', '-', $node->bundle());
+    $bundle_class = 'listing__card--' . str_replace('_', '-', $bundle);
     $variables['attributes']['class'][] = $bundle_class;
   }
 
   // Add the created date to news articles.
-  if ($node->bundle() === 'news') {
+  if ($bundle === 'news') {
     $variables['created'] = \Drupal::service('date.formatter')->format($node->getCreatedTime(), 'date_only');
   }
 
   // Add a variable indicating the attachment file type on documents.
-  if ($node->bundle() === 'document' && !$node->get('field_file')->isEmpty()) {
+  if ($bundle === 'document' && !$node->get('field_file')->isEmpty()) {
     /** @var \Drupal\file\FileInterface $file */
     $file = $node->get('field_file')->first()->entity;
 

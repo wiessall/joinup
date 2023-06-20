@@ -152,16 +152,13 @@ class SearchWidget extends WidgetBase implements ContainerFactoryPluginInterface
       '#default_value' => $default_values['enabled'] ?? TRUE,
     ];
 
-    // Construct a string that represents the name of the enabled field.
-    $field_name = $this->fieldDefinition->getName();
-    $enabled_field_path = "{$field_name}[{$delta}][enabled]";
     // Wrap all the remaining elements so they can be hidden when the above
     // checkbox is unchecked.
     $element['wrapper'] = [
       '#type' => 'container',
       '#states' => [
         'visible' => [
-          ':input[name="' . $enabled_field_path . '"]' => ['checked' => TRUE],
+          ':input[name="' . $this->getNameOfEnabledField($delta, $element) . '"]' => ['checked' => TRUE],
         ],
       ],
     ];
@@ -259,6 +256,27 @@ class SearchWidget extends WidgetBase implements ContainerFactoryPluginInterface
     ];
 
     return $element;
+  }
+
+  /**
+   * Gets name of the enabled field.
+   *
+   * @param int $delta
+   *   Delta.
+   * @param array $element
+   *   Element.
+   *
+   * @return string
+   *   Name of enabled field
+   */
+  protected function getNameOfEnabledField(int $delta, array $element): string {
+    $parents = array_merge($element['#field_parents'], [
+      $this->fieldDefinition->getName(),
+      $delta,
+      'enabled',
+    ]);
+
+    return array_shift($parents) . '[' . implode('][', $parents) . ']';
   }
 
   /**

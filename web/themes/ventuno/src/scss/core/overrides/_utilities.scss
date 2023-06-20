@@ -2,15 +2,6 @@ $utilities: () !default;
 $utilities: map-merge(
   $utilities,
   (
-    "float": (
-      responsive: false,
-      property: float,
-      values: (
-        start: left,
-        end: right,
-        none: none,
-      )
-    ),
     "align": null,
     "opacity": null,
     "translate-middle": null,
@@ -91,6 +82,15 @@ $utilities: map-merge(
       property: row-gap,
       class: row-gap,
       values: $spacers
+    ),
+    "z-index": (
+      responsive: false,
+      property: z-index,
+      class: zi,
+      values: (
+        0: 0,
+        1: 1
+      )
     ),
   )
 );
