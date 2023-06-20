@@ -214,6 +214,7 @@ drupal:
           'default_content',
           'devel',
           'filecache',
+          'http_request_mock',
           'joinup_cas_mock_server',
           'joinup_test',
           'memcache_admin',
