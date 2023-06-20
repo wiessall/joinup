@@ -478,7 +478,7 @@ class JoinupParagraphsContext extends RawDrupalContext {
   }
 
   /**
-   * Append content listing paragraph.
+   * Appends a content listing paragraph.
    *
    * @param string $parent_field
    *   Parent field name.
@@ -502,7 +502,9 @@ class JoinupParagraphsContext extends RawDrupalContext {
 
     $values = [
       'type' => 'content_listing',
-      'content_listing' => ['value' => unserialize($value->getRaw(), ['allowed_classes' => FALSE])],
+      'content_listing' => [
+        'value' => unserialize($value->getRaw(), ['allowed_classes' => FALSE]),
+      ],
     ];
     $paragraph = Paragraph::create($values);
     $paragraph->save();
