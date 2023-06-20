@@ -11,35 +11,34 @@ Feature:
 
   @javascript
   Scenario: Paragraph sections are multivalue and sort-able.
-    Given I am logged in as a facilitator of the "Paragraphs collection" collection
-    And I go to the "Paragraphs collection" collection
-    And I open the plus button menu
-    And I click "Add custom page"
-    And I fill in "Title" with "Paragraphs page"
-    And I press "Save"
-    Then I should see the heading "Paragraphs page"
-
-    When I open the header local tasks menu
-    And I click "Edit"
-    And I click "Choose component"
-    And I click "Simple paragraph"
-    And I enter "AAAAAAAAAA" in the "Body" wysiwyg editor
-    And I press "Save" in the "Modal buttons" region
-
-    Then I click the last "Choose component" link
-    When I click "Simple paragraph"
-    And I enter "BBBBBBBBBB" in the "Body" wysiwyg editor
-    And I press "Save" in the "Modal buttons" region
+    Given custom_page content:
+      | title           | collection           | state     |
+      | Paragraphs page | Paragraphs collection | validated |
+    And I append "simple_paragraph" to "field_paragraphs_body" field in "node" entity with following "Paragraphs page" title:
+      | field_body:value  | AAAAAAAAAA      |
+      | field_body:format | content_editor  |
+    And I append "simple_paragraph" to "field_paragraphs_body" field in "node" entity with following "Paragraphs page" title:
+      | field_body:value  | BBBBBBBBBB      |
+      | field_body:format | content_editor  |
+    Then I am logged in as a facilitator of the "Paragraphs collection" collection
+    And I go to the "Paragraphs page" custom page
     And I should see the following paragraphs in the given order:
       | AAAAAAAAAA |
       | BBBBBBBBBB |
 
-    When I click "Move down" in the "Custom page body" for paragraph layout 1
+    Then I open the header local tasks menu
+    And I click "Edit"
+    And I click "Move down" in the "Custom page body" for paragraph layout 1
     And I press "Save"
     Then there should be 2 paragraphs in the page
     And I should see the following paragraphs in the given order:
       | BBBBBBBBBB |
       | AAAAAAAAAA |
+
+    Then I open the header local tasks menu
+    And I click "Edit"
+    And I click "Choose component"
+    Then I should not see the link "Simple paragraph"
 
   @javascript
   Scenario: Privileged users can add a map and/or an iframe and map paragraph.
@@ -57,7 +56,7 @@ Feature:
     When I am logged in as "Zohan"
     And I go to the edit form of the "Don't Mess with the Zohan" "custom page"
     And I click "Choose component"
-    Then I should see the link "Simple paragraph"
+    Then I should not see the link "Simple paragraph"
     And I should not see the link "Map"
     But I should not see the link "IFrame"
 
@@ -66,22 +65,15 @@ Feature:
     When I am logged in as a facilitator of the "Paragraphs collection" collection
     And I go to the edit form of the "Don't Mess with the Zohan" "custom page"
     And I click "Choose component"
-    Then I should see the link "Simple paragraph"
+    Then I should not see the link "Simple paragraph"
     And I should see the link "Map"
     But I should not see the link "IFrame"
-
-    When I click "Simple paragraph"
-    And I enter "I'm half Australian, half Mt. Everest" in the "Body" wysiwyg editor
-    And I press "Save" in the "Modal buttons" region
-    And I press "Save"
-    Then I should see the success message "Custom page Don't Mess with the Zohan has been updated."
-    And I should see "I'm half Australian, half Mt. Everest"
 
     # Moderators can add maps.
     Given I am logged in as a moderator
     And I go to the edit form of the "Don't Mess with the Zohan" "custom page"
     And I click "Choose component"
-    Then I should see the link "Simple paragraph"
+    Then I should not see the link "Simple paragraph"
     And I should see the link "Map"
     And I should see the link "IFrame"
 
@@ -91,7 +83,6 @@ Feature:
     And I press "Save" in the "Modal buttons" region
     And I press "Save"
     Then I should see the success message "Custom page Don't Mess with the Zohan has been updated."
-    And I should see "I'm half Australian, half Mt. Everest"
     And the response should contain "{\"foo\":\"bar\"}"
 
     When I go to the edit form of the "Don't Mess with the Zohan" "custom page"
