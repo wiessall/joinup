@@ -79,18 +79,7 @@ class LayoutParagraphsBuilderAccessOverrider extends LayoutParagraphsBuilderAcce
     $lp_operation = $entity->isNew() ? 'create' : 'update';
     $access = $access->andIf($this->ogAccess->userAccessGroupContentEntityOperation($lp_operation, $entityGroup, $entity, $account));
 
-    // The rest of code is copy/paste from LayoutParagraphsBuilderAccess.
-    if ($component_uuid) {
-      $paragraph = $layout_paragraphs_layout
-        ->getComponentByUuid($component_uuid)
-        ->getEntity();
-      $access = $access->andIf($paragraph->access($operation, $account, TRUE));
-    }
-
-    if ($paragraph_type) {
-      $access_handler = $this->entityTypeManager->getAccessControlHandler('paragraph');
-      $access = $access->andIf($access_handler->createAccess($paragraph_type->id(), $account, [], TRUE));
-    }
+    $access->andIf(parent::access($account, $layout_paragraphs_layout, $operation, $component_uuid, $paragraph_type));
 
     return $access;
   }
