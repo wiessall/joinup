@@ -4,7 +4,7 @@ declare(strict_types = 1);
 
 namespace Drupal\joinup_group\Access;
 
-use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\joinup_group\Entity\GroupContentInterface;
@@ -51,7 +51,7 @@ class LayoutParagraphsBuilderAccessOverrider extends LayoutParagraphsBuilderAcce
    * @param \Drupal\paragraphs\ParagraphsTypeInterface|null $paragraph_type
    *   The paragraph type.
    *
-   * @return \Drupal\Core\Access\AccessResult
+   * @return \Drupal\Core\Access\AccessResultInterface
    *   The access result.
    *
    * @throws \Drupal\joinup_group\Exception\MissingGroupException
@@ -62,7 +62,7 @@ class LayoutParagraphsBuilderAccessOverrider extends LayoutParagraphsBuilderAcce
     ?string $operation = NULL,
     ?string $component_uuid = NULL,
     ?ParagraphsTypeInterface $paragraph_type = NULL
-  ): AccessResult {
+  ): AccessResultInterface {
     $entity = $layout_paragraphs_layout->getEntity();
 
     // Use default approach in case it is not a group entity.
