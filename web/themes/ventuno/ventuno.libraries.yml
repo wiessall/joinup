@@ -173,9 +173,13 @@ group-banner:
     theme:
       assets/css/group-banner.min.css: { minified: true }
 
-glide:
+explore-block:
   js:
-    assets/js/glide.min.js: { minified: true, attributes: { defer: true } }
+    assets/js/explore-block.min.js: { minified: true, attributes: { defer: true } }
+  dependencies:
+    - ventuno/glide
+
+glide:
   css:
     theme:
       assets/css/glide.core.min.css: { minified: true }
@@ -258,6 +262,15 @@ paragraph:
   css:
     theme:
       assets/css/paragraph.min.css: { minified: true }
+
+paragraph--carousel:
+  css:
+    theme:
+      assets/css/paragraph--carousel.min.css: { minified: true }
+  js:
+    assets/js/paragraph--carousel.min.js: { minified: true, attributes: { defer: true } }
+  dependencies:
+    - ventuno/glide
 
 releases:
   css:
