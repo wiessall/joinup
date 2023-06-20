@@ -64,10 +64,6 @@ function _ventuno_preprocess_tile(array &$variables, string $entity_type_id): vo
     $variables['text'] = $entity instanceof DescriptionInterface && isset($variables['content'][$entity->getDescriptionField()]) ? $variables['content'][$entity->getDescriptionField()] : NULL;
   }
 
-  if ($entity instanceof ArchivableEntityInterface) {
-    $variables['is_archived'] = $entity->isArchived();
-  }
-
   // Image.
   $variables['image'] = ($entity instanceof LogoInterface) && $entity->getLogoAsFile()
     ? $entity->getLogoAsRenderArray($variables['view_mode'])
@@ -236,6 +232,13 @@ function _ventuno_preprocess_tile(array &$variables, string $entity_type_id): vo
       // Licences do not store creation date.
       $variables['info'] = NULL;
       break;
+  }
+
+  if ($entity instanceof ArchivableEntityInterface && $entity->isArchived()) {
+    $variables['extra_data'][] = [
+      'icon' => 'archive-fill',
+      'label' => t('Archived'),
+    ];
   }
 }
 

@@ -10,7 +10,6 @@ declare(strict_types = 1);
 use Drupal\eif\EifInterface;
 use Drupal\joinup_bundle_class\LogoInterface;
 use Drupal\joinup_group\JoinupGroupHelper;
-use Drupal\joinup_workflow\ArchivableEntityInterface;
 
 /**
  * Implements hook_preprocess_HOOK().
@@ -123,85 +122,6 @@ function ventuno_preprocess_node(array &$variables): void {
   if ((int) $node->id() === EifInterface::EIF_ONLINE_ASSISTANT) {
     unset($variables['content']);
   }
-}
-
-/**
- * Implements hook_preprocess_node().
- */
-function ventuno_preprocess_node__view_mode_tile(array &$variables, string $entity_type_id): void {
-  /** @var \Drupal\Core\Entity\ContentEntityInterface $entity */
-  $entity = $variables[$entity_type_id];
-  /** @var \Drupal\Core\Datetime\DateFormatterInterface $date_formatter */
-  $date_formatter = Drupal::service('date.formatter');
-
-  // Info (above the title).
-  $variables['info']['icon'] = 'calendar-event';
-  if ($changed_time = $entity->getChangedTime()) {
-    $variables['info']['label'] = t('@label: @changed', [
-      '@label' => t('Last update'),
-      '@changed' => \Drupal::service('date.formatter')->format($changed_time, 'date_only'),
-    ]);
-  }
-
-  // For now, only Custom page, Discussion, Document, Event and News items
-  // (all of them are nodes) can be archived.
-  if ($entity instanceof ArchivableEntityInterface
-    && $entity->get('field_state')->value === 'archived'
-  ) {
-    $variables['extra_data'][] = [
-      'icon' => 'trash',
-      'label' => t('Archived'),
-    ];
-  };
-
-  switch ($entity->bundle()) {
-    case 'discussion':
-      $variables['info']['icon'] = 'calendar-event';
-      if ($changed_time = $entity->getChangedTime()) {
-        $variables['info']['label'] = t('@label: @changed', [
-          '@label' => t('Last activity'),
-          '@changed' => $date_formatter->format($changed_time, 'custom', 'd/m/Y, h:s'),
-        ]);
-      }
-      $node = \Drupal::entityTypeManager()->getStorage('node')->load($entity->id());
-      $variables['extra_data'][] = [
-        'icon' => 'chat',
-        'label' => $node->get('field_replies')->comment_count,
-      ];
-      break;
-
-    case 'event':
-      $variables['highlighted']['icon'] = 'calendar-event';
-      $variables['highlighted']['text'] = $variables['content']['field_event_date'];
-      $variables['info']['icon'] = 'geo-alt';
-      $node = $variables['elements']['#node'];
-      if (!$node->get('field_location')->isEmpty() && !$node->get('field_event_online_location')->isEmpty()) {
-        $variables['info']['label'] = t('Hybrid event');
-      }
-      elseif ($node->get('field_location')->isEmpty()) {
-        $variables['info']['label'] = t('Virtual event');
-      }
-      else {
-        $variables['info']['label'] = t('Physical event');
-      }
-      break;
-
-    case 'tallinn_report':
-      $variables['info']['icon'] = 'calendar-event';
-      if ($entity->getCreatedTime() === $entity->getChangedTime()) {
-        $variables['info']['label'] = new TranslatableMarkup('@label: -', [
-          '@label' => 'Last update',
-        ]);
-      }
-      elseif ($changed_time = $entity->getChangedTime()) {
-        $variables['info']['label'] = t('@label: @changed', [
-          '@label' => t('Last update'),
-          '@changed' => $date_formatter->format($changed_time, 'date_only'),
-        ]);
-      }
-      break;
-  }
-  _ventuno_preprocess_tile($variables, 'node');
 }
 
 /**
