@@ -72,15 +72,6 @@ function ventuno_preprocess_user__inline(array &$variables): void {
 }
 
 /**
- * Implements hook_preprocess_username().
- */
-function ventuno_preprocess_username(array &$variables): void {
-  // Variable name_full is set in joinup_user.module to make the full name
-  // visible on hover.
-  $variables['attributes']['title'] = $variables['name_full'];
-}
-
-/**
  * Implements hook_preprocess_user__view_mode_tile().
  */
 function ventuno_preprocess_user__view_mode_tile(array &$variables): void {
@@ -126,4 +117,13 @@ function ventuno_preprocess_user__view_mode_tile(array &$variables): void {
       }
     }
   }
+}
+
+/**
+ * Implements hook_preprocess_username().
+ */
+function ventuno_preprocess_username(array &$variables): void {
+  // Variable name_full is set in joinup_user.module to make the full name
+  // visible on hover.
+  $variables['attributes']['title'] = $variables['name_full'];
 }
