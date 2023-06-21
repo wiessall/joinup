@@ -23,4 +23,15 @@ class Discussion extends CommunityContentBase implements DiscussionInterface {
     return 'field_discussion_logo';
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  public function getLatestUpdateTime(): int {
+    return (int) max(
+      $this->getCreatedTime(),
+      $this->getChangedTime(),
+      $this->get('field_replies')->last_comment_timestamp
+    );
+  }
+
 }
