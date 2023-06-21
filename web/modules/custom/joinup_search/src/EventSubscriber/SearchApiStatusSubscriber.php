@@ -6,7 +6,8 @@ namespace Drupal\joinup_search\EventSubscriber;
 
 use Drupal\facets\FacetInterface;
 use Drupal\facets\FacetManager\DefaultFacetManager;
-use Drupal\joinup_group\Entity\GroupInterface;
+use Drupal\joinup_user\Entity\JoinupUserInterface;
+use Drupal\paragraphs\ParagraphInterface;
 use Drupal\search_api\Event\QueryPreExecuteEvent;
 use Drupal\search_api\Event\SearchApiEvents;
 use Drupal\search_api\Query\ConditionGroupInterface;
@@ -35,6 +36,9 @@ class SearchApiStatusSubscriber implements EventSubscriberInterface {
         ['searchStatusQueryAlter', -100],
         ['searchAutocompleteQueryAlter', -100],
         ['groupContentListingQueryAlter', -10],
+      ],
+      SearchApiEvents::QUERY_PRE_EXECUTE . '.search_api_field' => [
+        ['paragraphContentListingQueryAlter'],
       ],
     ];
   }
@@ -75,15 +79,69 @@ class SearchApiStatusSubscriber implements EventSubscriberInterface {
    *
    * @param \Drupal\search_api\Event\QueryPreExecuteEvent $event
    *   The query alter event.
-   *
-   * @throws \Drupal\joinup_group\Exception\MissingGroupException
    */
   public function groupContentListingQueryAlter(QueryPreExecuteEvent $event): void {
     $this->showArchivedStatusSetupQueryAlter($event);
 
     $query = $event->getQuery();
+    if (!($query->getSearchId() !== 'paragraph.content_listing.content_listing')) {
+      return;
+    }
+
+    $this->getConditionGroupInterfaces($query);
+  }
+
+  /**
+   * Reacts to the query alter event for paragraph content listings.
+   *
+   * @param \Drupal\search_api\Event\QueryPreExecuteEvent $event
+   *   The query alter event.
+   */
+  public function paragraphContentListingQueryAlter(QueryPreExecuteEvent $event): void {
+    $query = $event->getQuery();
     $entity = $query->getOption('search_api_field entity');
-    if (!($entity instanceof GroupInterface)) {
+    if (!($entity instanceof ParagraphInterface)) {
+      return;
+    }
+
+    $this->getConditionGroupInterfaces($query);
+  }
+
+  /**
+   * Reacts to the query alter event for user content listings.
+   *
+   * @param \Drupal\search_api\Event\QueryPreExecuteEvent $event
+   *   The query alter event.
+   */
+  public function userContentListingQueryAlter(QueryPreExecuteEvent $event): void {
+    $query = $event->getQuery();
+    $entity = $query->getOption('search_api_field entity');
+    if (!($entity instanceof JoinupUserInterface)) {
+      return;
+    }
+
+    $this->getConditionGroupInterfaces($query);
+  }
+
+  /**
+   * Add archive condition in query.
+   *
+   * @param \Drupal\search_api\Query\QueryInterface $query
+   *   The query.
+   */
+  protected function getConditionGroupInterfaces(QueryInterface $query): void {
+    // Check the `show_archived` flag on the search API field settings in order
+    // to not perform any actions if teh flag is set to either 'archived' or
+    // 'unarchived'. The facet is only available when both archived and
+    // unarchived content is available in order to give the user the ability to
+    // further filter the results.
+    // @see \_joinup_search_apply_global_search_api_solr_settings
+    if (empty($query->getOption('search_api_field item'))) {
+      return;
+    }
+
+    $value = $query->getOption('search_api_field item')->getValue();
+    if (!isset($value['value']['show_archived']) || $value['value']['show_archived'] !== 'all') {
       return;
     }
 
@@ -107,10 +165,7 @@ class SearchApiStatusSubscriber implements EventSubscriberInterface {
       }
     }
 
-    if ($hasStatus) {
-      $query->addCondition('entity_status', 'archived');
-    }
-    else {
+    if (!$hasStatus && !$query->getOption('search_api_field archived')) {
       $query->addCondition('entity_status', 'archived', '<>');
     }
   }
@@ -132,7 +187,10 @@ class SearchApiStatusSubscriber implements EventSubscriberInterface {
     $value = $item->getValue()['value'];
     $showArchived = $value['show_archived'] ?? 'all';
     $query->setOption('show_archived', $showArchived);
-    if ($showArchived !== 'all') {
+    if ($archived = $query->getOption('search_api_field archived')) {
+      $query->addCondition('entity_status', 'archived');
+    }
+    if ($showArchived !== 'all' && !$archived) {
       $query->addCondition('entity_status', 'archived', $showArchived === 'archived' ? '=' : '<>');
     }
     else {
