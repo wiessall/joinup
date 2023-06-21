@@ -124,24 +124,4 @@ class GitHubFeedItem extends FieldItemBase {
     return $values;
   }
 
-  /**
-   * Returns the repository URL.
-   *
-   * @return string
-   *   The repository URL.
-   */
-  protected function getRepository(): string {
-    return $this->values['repository'] ?? '';
-  }
-
-  /**
-   * Returns the type of feed.
-   *
-   * @return string
-   *   The type of feed.
-   */
-  protected function getType(): string {
-    return $this->values['type'] ?? '';
-  }
-
 }
