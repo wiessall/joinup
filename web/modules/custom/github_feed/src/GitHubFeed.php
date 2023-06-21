@@ -32,7 +32,7 @@ class GitHubFeed implements GitHubFeedInterface {
   /**
    * {@inheritdoc}
    */
-  public function fetchItems(string $url, string $type, int $numberOfResults = 10, int $numberOfComments = 0, bool $resetCache = FALSE): ?array {
+  public function fetchItems(string $url, string $type, int $numberOfResults = 10, int $numberOfComments = 0): ?array {
     [$owner, $project] = $this->getOwnerAndProjectFromUri($url);
     $url = '/repos/' . $owner . '/' . $project . '/' . self::KEYS[$type];
     $url .= '?per_page=' . $numberOfResults . '&page=1';
