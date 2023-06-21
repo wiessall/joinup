@@ -10,10 +10,15 @@ Feature: Archived content on content listings - groups and paragraphs.
     And collections:
       | title           | description | topic             | owner      | contact information | state     |
       | Some collection | Test        | Supplier exchange | Some owner | Some contact        | validated |
+      | Poly screens    | Test        | Supplier exchange | Some owner | Some contact        | validated |
     And news content:
       | title          | headline       | state     | collection      | body | content |
       | Archived news  | Archived news  | validated | Some collection | Test | Test    |
       | Published news | Published news | validated | Some collection | Test | Test    |
+      | Poly news 1    | Poly news 1    | validated | Poly screens    | Test | Test    |
+      | Poly news 2    | Poly news 2    | validated | Poly screens    | Test | Test    |
+      | Poly news 3    | Poly news 3    | validated | Poly screens    | Test | Test    |
+      | Poly news 4    | Poly news 4    | validated | Poly screens    | Test | Test    |
     # We need the "Archived news" content to be archived by altering its state
     # because "Unarchiving" it restored the previous revision and thus, needs
     # to have a previous revision (created as validated).
@@ -57,6 +62,14 @@ Feature: Archived content on content listings - groups and paragraphs.
     And I should see the "Published news" tile
     But I should not see the "Archived news" tile
 
+    And I go to the "Poly screens" collection
+    And I click "Add custom page"
+    And I fill in "Title" with "Poly page"
+    And I press "Add Content listing"
+    And I select "All" from "Show archived content"
+    And I fill in "Query presets" with "entity_bundle|news"
+    And I press "Save"
+
     When I go to the "Some page" custom page
     And I click "Edit"
     And I select "Archived" from "Show archived content"
@@ -65,13 +78,53 @@ Feature: Archived content on content listings - groups and paragraphs.
     And I should see the "Archived news" tile
     But I should not see the "Published news" tile
 
+    When I go to the "Poly page" custom page
+    Then I should see the heading "Poly page"
+    And I should not see the text "Show archived"
+
     When I go to the "Some page" custom page
     And I click "Edit"
     And I select "All" from "Show archived content"
     And I press "Save"
     Then I should see the heading "Some page"
-    And I should see the "Archived news" tile
+    Then I should see the following facet items "News, Show archived" in this order
+    And I should see the text "Show archived"
+    And I should not see the "Archived news" tile
     And I should see the "Published news" tile
+
+    When I click "Show archived"
+    And I should see the "Archived news" tile
+    And I should not see the "Published news" tile
+
+    When I go to the "Poly page" custom page
+    Then I should see the heading "Poly page"
+    And I should not see the text "Show archived"
+
+    When I go to the "Some page" custom page
+    And I click "Edit"
+    And I select "Archived" from "Show archived content"
+    And I press "Save"
+    Then I should see the heading "Some page"
+    And I should not see the text "Show archived"
+    And I should see the "Archived news" tile
+    And I should not see the "Published news" tile
+
+    When I go to the "Poly page" custom page
+    Then I should see the heading "Poly page"
+    And I should not see the text "Show archived"
+
+    When I go to the "Some page" custom page
+    And I click "Edit"
+    And I select "Unarchived" from "Show archived content"
+    And I press "Save"
+    Then I should see the heading "Some page"
+    And I should not see the text "Show archived"
+    And I should not see the "Archived news" tile
+    And I should see the "Published news" tile
+
+    When I go to the "Poly page" custom page
+    Then I should see the heading "Poly page"
+    And I should not see the text "Show archived"
 
   Scenario: Carousel listings can also control archived items visibility.
     Given collection:

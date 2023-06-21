@@ -14,6 +14,7 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Form\SubformState;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\facets\Entity\Facet;
+use Drupal\facets\FacetInterface;
 use Drupal\search_api_field\Event\AlterQueryPresetsDescriptionEvent;
 use Drupal\search_api_field\Plugin\Field\FieldType\SearchItem;
 use Drupal\search_api_field\Plugin\FilterPluginManagerInterface;
@@ -193,6 +194,13 @@ class SearchWidget extends WidgetBase implements ContainerFactoryPluginInterface
       ];
 
       $form['#attached']['library'][] = 'search_api_field/drupal.search_api_field';
+
+      // Order facets because ['#access'] = FALSE drops weight values,
+      // does not update correctly.
+      uasort($facets, function (FacetInterface $a, FacetInterface $b) {
+        return $a->getWeight() <=> $b->getWeight();
+      });
+
       foreach ($facets as $facet_id => $facet) {
         $table[$facet_id] = $this->buildFacetRow($facet, $item);
       }
@@ -429,7 +437,6 @@ class SearchWidget extends WidgetBase implements ContainerFactoryPluginInterface
         }
       }
     }
-    $display_options = NULL;
     $regions = array_keys($this->getRegions());
     $extra_field_row = [
       '#attributes' => ['class' => ['draggable', 'tabledrag-leaf']],
@@ -443,7 +450,7 @@ class SearchWidget extends WidgetBase implements ContainerFactoryPluginInterface
         '#type' => 'textfield',
         '#title' => $this->t('Weight for @title', ['@title' => $facet->getName()]),
         '#title_display' => 'invisible',
-        '#default_value' => $display_options ? $display_options['weight'] : 0,
+        '#default_value' => $facet->getWeight(),
         '#size' => 3,
         '#attributes' => ['class' => ['field-weight']],
       ],
