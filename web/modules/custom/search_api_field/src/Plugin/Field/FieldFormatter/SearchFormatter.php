@@ -183,6 +183,8 @@ class SearchFormatter extends FormatterBase implements ContainerFactoryPluginInt
 
     $this->mergeQueryCacheMetadata($render, $query);
 
+    $archived_items = $this->getArchivedQuery($settings, $item);
+
     // Add some information about the field.
     // @see \Drupal\Core\Field\FormatterBase::view()
     $entity = $items->getEntity();
@@ -192,8 +194,10 @@ class SearchFormatter extends FormatterBase implements ContainerFactoryPluginInt
       '#field_name' => $this->fieldDefinition->getName(),
       '#entity' => $entity,
       '#view_mode' => $this->viewMode,
-      '#archived_items' => $this->getArchivedQuery($settings, $item),
+      '#archived_items' => $archived_items->execute()->getResultCount(),
     ];
+
+    $this->mergeQueryCacheMetadata($render, $archived_items);
 
     return $render;
   }
@@ -249,10 +253,10 @@ class SearchFormatter extends FormatterBase implements ContainerFactoryPluginInt
    * @param \Drupal\search_api_field\Plugin\Field\FieldType\SearchItemInterface $item
    *   The field item.
    *
-   * @return int|null
-   *   The total number of archived items.
+   * @return \Drupal\search_api\Query\QueryInterface
+   *   The prepared query.
    */
-  protected function getArchivedQuery(array $settings, SearchItemInterface $item): ?int {
+  protected function getArchivedQuery(array $settings, SearchItemInterface $item): QueryInterface {
     $field_definition = $this->fieldDefinition;
 
     $options = [
@@ -278,7 +282,7 @@ class SearchFormatter extends FormatterBase implements ContainerFactoryPluginInt
     foreach ($hooks as $hook) {
       $query->addTag($hook);
     }
-    return $query->execute()->getResultCount();
+    return $query;
   }
 
   /**
@@ -457,7 +461,8 @@ class SearchFormatter extends FormatterBase implements ContainerFactoryPluginInt
         'tags' => Cache::mergeTags(
           Cache::mergeTags(
             $build['#cache']['tags'],
-            ["search_api_list:{$query->getIndex()->id()}"]
+            ["search_api_list:{$query->getIndex()->id()}"],
+            ["search_api_list:{$query->getSearchId()}"]
           ),
           $query->getCacheTags()
         ),
