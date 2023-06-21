@@ -8,20 +8,13 @@ Feature: Prefill contact form fields
     Given collection:
       | title | CAMSS test community |
       | state | validated            |
-
-    When I am logged in as a facilitator of the "CAMSS test community" collection
-    When I go to the homepage of the "CAMSS test community" collection
-    And I open the plus button menu
-    And I click "Add custom page"
-    Then I should see the heading "Add custom page"
-
-    # Create a page with a link that points to the contact form with the "subject" parameter containing some text.
-    When I fill in the following:
-      | Title | Change management                                                                    |
-      | Body  | <p>Follow this <a href="../../contact?subject=CAMSS%20Change%20Request">link</a></p> |
-    And I press "Save"
-    Then I should see the heading "Change management"
-
-    When I click "link"
+    And custom_page content:
+      | title                | collection           | state     |
+      | IOP page custom page | CAMSS test community | validated |
+    And I append "simple_paragraph" to "field_paragraphs_body" field in "node" entity with following "IOP page custom page" title:
+      | field_body:value  | <p>Follow this <a href="../../contact?subject=CAMSS%20Change%20Request">link</a></p> |
+      | field_body:format | content_editor                                                                       |
+    When I go to the "IOP page custom page" custom page
+    And I click "link"
     Then I should see the heading "Contact"
     And the "Subject" field should contain "CAMSS Change Request"

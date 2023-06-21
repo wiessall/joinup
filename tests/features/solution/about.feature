@@ -119,7 +119,9 @@ Feature: About this solution
     # A related solution which is not yet approved should not be visible.
     And I should not see the text "Protein"
 
-  @terms @javascript @email @uploadFiles:logo.png
+  # Todo: Enable this test in ticket: ISAICP-7764.
+  # Replace "Simple paragraph" with "Text".
+  @wip @terms @javascript @email @uploadFiles:logo.png
   Scenario: About page contact form
     Given owner:
       | name      | type               |
@@ -371,14 +373,17 @@ Feature: About this solution
     # Testing add contact us in existing content.
     Given I am logged in as a moderator
     When I go to the about page of "Six exclusion advantages"
-    Then I open the plus button menu
-    And I click "Add custom page"
+    And I click "Add custom page" in the plus button menu
     And I fill in "Title" with "Some custom contact test"
+    And I click "Choose component"
+    And I click "Simple paragraph"
     And I press the button "Contact us" in the "Body" wysiwyg editor
+    And I press "Save" in the "Modal buttons" region
     And I press "Save"
     And I should see the heading "Some custom contact test"
 
     When I go to the edit form of the "Some custom contact test" "custom page"
+    And I click "Edit" in the "Custom page body" for paragraph layout 1
     Then I should see the button "Contact us"
 
     Then I go to the about page of "Six exclusion advantages"

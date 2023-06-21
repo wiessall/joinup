@@ -110,10 +110,10 @@ function _ventuno_preprocess_tile(array &$variables, string $entity_type_id): vo
   switch ($entity->bundle()) {
     case 'discussion':
       $variables['info']['icon'] = 'calendar-event';
-      if ($changed_time = $entity->getChangedTime()) {
+      if ($changed_time = $entity->getLatestUpdateTime()) {
         $variables['info']['label'] = t('@label: @changed', [
           '@label' => t('Last activity'),
-          '@changed' => $date_formatter->format($changed_time, 'custom', 'd/m/Y, h:s'),
+          '@changed' => $date_formatter->format($changed_time, 'custom', 'd/m/Y, h:i'),
         ]);
       }
       $node = $variables['elements']['#node'];

@@ -11,39 +11,36 @@ Feature:
 
   @javascript
   Scenario: Paragraph sections are multivalue and sort-able.
-    Given I am logged in as a facilitator of the "Paragraphs collection" collection
-    And I go to the "Paragraphs collection" collection
-    And I open the plus button menu
-    And I click "Add custom page"
-    And I fill in "Title" with "Paragraphs page"
-    And I press "Save"
-    Then I should see the heading "Paragraphs page"
+    Given custom_page content:
+      | title           | collection           | state     |
+      | Paragraphs page | Paragraphs collection | validated |
+    And I append "simple_paragraph" to "field_paragraphs_body" field in "node" entity with following "Paragraphs page" title:
+      | field_body:value  | AAAAAAAAAA      |
+      | field_body:format | content_editor  |
+    And I append "simple_paragraph" to "field_paragraphs_body" field in "node" entity with following "Paragraphs page" title:
+      | field_body:value  | BBBBBBBBBB      |
+      | field_body:format | content_editor  |
+    Then I am logged in as a facilitator of the "Paragraphs collection" collection
+    And I go to the "Paragraphs page" custom page
+    And I should see the following paragraphs in the given order:
+      | AAAAAAAAAA |
+      | BBBBBBBBBB |
 
-    When I open the header local tasks menu
+    Then I open the header local tasks menu
     And I click "Edit"
-    # The first paragraphs item is open by default.
-    Then there should be 1 paragraph in the "Custom page body" field
-    Then I should see the "Remove" button in the "Custom page body" field for paragraph 1
-    Given I press "Remove" in the "Custom page body" field for paragraph 1
-
-    Then the page should contain no paragraphs
-
-    Given I press "Add Simple paragraph" in the "Custom page body" paragraphs field
-    Then there should be 1 paragraph in the "Custom page body" field
-
-    Given I press "Add Simple paragraph" in the "Custom page body" paragraphs field
-    Then there should be 2 paragraphs in the "Custom page body" field
-
-    When I enter "AAAAAAAAAA" in the "Body" wysiwyg editor in the "Custom page body" field for paragraph 1
-    And I enter "BBBBBBBBBB" in the "Body" wysiwyg editor in the "Custom page body" field for paragraph 2
-
-    And I drag the table row at position 2 up
+    And I click "Move down" in the "Custom page body" for paragraph layout 1
     And I press "Save"
     Then there should be 2 paragraphs in the page
     And I should see the following paragraphs in the given order:
       | BBBBBBBBBB |
       | AAAAAAAAAA |
 
+    Then I open the header local tasks menu
+    And I click "Edit"
+    And I click "Choose component"
+    Then I should not see the link "Simple paragraph"
+
+  @javascript
   Scenario: Privileged users can add a map and/or an iframe and map paragraph.
     Given users:
       | Username |
@@ -58,40 +55,41 @@ Feature:
     # Normal members cannot add maps.
     When I am logged in as "Zohan"
     And I go to the edit form of the "Don't Mess with the Zohan" "custom page"
-    Then I should see the button "Add Simple paragraph"
-    And I should not see the button "Add Map"
-    But I should not see the button "Add IFrame"
+    And I click "Choose component"
+    Then I should not see the link "Simple paragraph"
+    And I should not see the link "Map"
+    But I should not see the link "IFrame"
+
 
     # Facilitators can add maps.
     When I am logged in as a facilitator of the "Paragraphs collection" collection
     And I go to the edit form of the "Don't Mess with the Zohan" "custom page"
-    Then I should see the button "Add Simple paragraph"
-    And I should see the button "Add Map"
-    But I should not see the button "Add IFrame"
-
-    When I fill in "Body" with "I'm half Australian, half Mt. Everest"
-    And I press "Save"
-    Then I should see the success message "Custom page Don't Mess with the Zohan has been updated."
-    And I should see "I'm half Australian, half Mt. Everest"
+    And I click "Choose component"
+    Then I should not see the link "Simple paragraph"
+    And I should see the link "Map"
+    But I should not see the link "IFrame"
 
     # Moderators can add maps.
     Given I am logged in as a moderator
     And I go to the edit form of the "Don't Mess with the Zohan" "custom page"
-    Then I should see the button "Add Simple paragraph"
-    And I should see the button "Add Map"
-    And I should see the button "Add IFrame"
+    And I click "Choose component"
+    Then I should not see the link "Simple paragraph"
+    And I should see the link "Map"
+    And I should see the link "IFrame"
 
-    When I press "Add Map"
+    When I click "Map"
     # As the Webtools Map a webservice, we only test a fake JSON.
     And I fill in "JSON" with "{\"foo\":\"bar\"}"
+    And I press "Save" in the "Modal buttons" region
     And I press "Save"
     Then I should see the success message "Custom page Don't Mess with the Zohan has been updated."
-    And I should see "I'm half Australian, half Mt. Everest"
     And the response should contain "{\"foo\":\"bar\"}"
 
     When I go to the edit form of the "Don't Mess with the Zohan" "custom page"
-    And I press "Add IFrame"
+    And I click the last "Choose component" link
+    And I click "IFrame"
     And I fill in "Iframe URL" with "http://example.com"
+    And I press "Save" in the "Modal buttons" region
     And I press "Save"
     # We only test that the <iframe .../> element is in page. Unfortunately, we
     # cannot do precision RegExp search in page source, so we only check for the
@@ -106,25 +104,19 @@ Feature:
     And I open the plus button menu
     And I click "Add custom page"
     And I fill in "Title" with "Paragraphs accordion page"
-    Given I press "Remove" in the "Custom page body" field for paragraph 1
     Then the page should contain no paragraphs
 
-    # The "List additional actions" is the button arrow that shows the full list of paragraphs to add.
-    Given I press "List additional actions"
-    Then I press "Add Accordion" in the "Custom page body" paragraphs field
+    Given I click "Choose component"
+    Then I click "Accordion"
+    And press "Add Accordion item"
+    And I wait for AJAX to finish
 
-    # 3 paragraphs are the default number when adding an accordion.
-    # 1. the accordion wrapper, 2. accordion item and 3. the simple paragraph contained in the item.
-    And there should be 3 paragraph in the "Custom page body" field
-    When I press "Add Accordion item"
-    # An accordion item and a simple paragraph have been added.
-    Then there should be 5 paragraphs in the "Custom page body" field
+    Given I fill in the 1st "Item label" with "Super" in the "Accordion item" field
+    And I enter "Clumsy text" in the 1st "Body" wysiwyg editor in the "Accordion item" field
+    And I fill in the 2nd "Item label" with "Duper" in the "Accordion item" field
+    And I enter "Crunchy text" in the 2nd "Body" wysiwyg editor in the "Accordion item" field
 
-    Given I fill in the 1st "Item label" with "Super" in the "Custom page body" field
-    And I enter "Clumsy text" in the 1st "Body" wysiwyg editor in the "Custom page body" field
-    And I fill in the 2nd "Item label" with "Duper" in the "Custom page body" field
-    And I enter "Crunchy text" in the 2nd "Body" wysiwyg editor in the "Custom page body" field
-
+    And I press "Save" in the "Modal buttons" region
     And I press "Save"
     Then I should see the heading "Paragraphs accordion page"
     And I should see the text "Super"

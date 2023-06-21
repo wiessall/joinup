@@ -41,6 +41,7 @@
   - Drupal\joinup\Context\JoinupFeaturedContext
   - Drupal\joinup\Context\JoinupGroupContext
   - Drupal\joinup\Context\JoinupInviteContext
+  - Drupal\joinup\Context\JoinupLayoutParagraphsContext
   - Drupal\joinup\Context\JoinupLegalContext
   - Drupal\joinup\Context\JoinupLicenceContext
   - Drupal\joinup\Context\JoinupNewsContext
@@ -145,6 +146,7 @@ default:
         Content listing field filter form: '.field--name-content-listing'
         Content: '.section--content-middle, main .layout-content'
         Cookie consent banner: '#cookie-consent-banner'
+        Choose component: '.lp-builder lpb-btn--add'
         Entity actions: '.block-joinup-local-tasks-block,#block-ventuno-three-dots-menu'
         Explore block: '.block-joinup-front-page-explore-block'
         Featured: '.region-featured'
