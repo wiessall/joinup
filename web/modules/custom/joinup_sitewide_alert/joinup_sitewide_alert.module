@@ -1,6 +1,13 @@
 <?php
 
 /**
+ * @file
+ * Hook implementations for the Joinup Sitewide Alert module.
+ */
+
+declare(strict_types = 1);
+
+/**
  * Set dynamic allowed values for the icon field.
  *
  * @return array
