@@ -96,7 +96,7 @@ Feature:
         """
         entity_bundle|news
         """
-    When I press "Save"
+    When I press "Publish"
 
     # Ensure that listings are restricted only for group content by default.
     Then I should see the "Some news 1" tile
@@ -108,9 +108,9 @@ Feature:
       | Carousel c1 | validated |
     And custom_page content:
       | title       | collection           | content       | state     |
-      | Some page 1 | Interoperable Europe | Some content. | validated |
-      | Some page 2 | Carousel c1          | Some content. | validated |
-      | Some page 3 | Carousel c1          | Some content. | validated |
+      | Some page 1 | Interoperable Europe | Some content. | published |
+      | Some page 2 | Carousel c1          | Some content. | published |
+      | Some page 3 | Carousel c1          | Some content. | published |
 
     When I am logged in as a moderator
     And I go to the homepage
@@ -127,7 +127,7 @@ Feature:
     And I select "Custom page" from "Available filters"
     And I press "Add and configure filter"
     And I fill in "Custom page" with "Some page 1"
-    When I press "Save"
+    When I press "Publish"
 
     Then I should see the "Some page 1" tile
     But I should not see the "Some page 2" tile
@@ -135,7 +135,7 @@ Feature:
 
     When I go to the edit form of the "Pages carousel" "custom page"
     And I fill in "Custom page" with "Some page 3"
-    And I press "Save"
+    And I press "Update"
 
     # Global search is not checked. No tiles should be shown.
     Then I should not see the "Some page 1" tile
@@ -144,7 +144,7 @@ Feature:
 
     When I go to the edit form of the "Pages carousel" "custom page"
     And I check "Global search"
-    And I press "Save"
+    And I press "Update"
     Then I should see the "Some page 3" tile
     But I should not see the "Some page 1" tile
     And I should not see the "Some page 2" tile
@@ -171,7 +171,7 @@ Feature:
         """
         entity_bundle|news
         """
-    When I press "Save"
+    When I press "Publish"
     Then I should see the following tiles in the correct order:
       | Some news 3 |
       | Some news 1 |
@@ -199,7 +199,7 @@ Feature:
         """
         entity_bundle|event
         """
-    When I press "Save"
+    When I press "Publish"
     Then I should see the following tiles in the correct order:
       | Some event 1 |
       | Some event 2 |

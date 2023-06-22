@@ -1,0 +1,39 @@
+custom_page_workflow:
+  id: custom_page_workflow
+  label: 'Default'
+  group: custom_page
+  states:
+    __new__:
+      label: New
+      published: true
+    draft:
+      label: Draft
+    published:
+      label: Published
+      published: true
+    unpublished:
+      label: Unpublished
+    archived:
+      label: Archived
+      published: true
+  transitions:
+    save_as_draft:
+      label: 'Save as draft'
+      from: [ __new__ ]
+      to: draft
+    publish:
+      label: Publish
+      from: [ __new__, draft, unpublished ]
+      to: published
+    unpublish:
+      label: Unpublish
+      from: [ published ]
+      to: unpublished
+    archive:
+      label: Archive
+      from: [ published ]
+      to: archived
+    unarchive:
+      label: Unarchive
+      from: [ archived ]
+      to: published
