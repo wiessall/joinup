@@ -1,0 +1,24 @@
+diff --git a/email_confirmer.module b/email_confirmer.module
+index 90baf6679f1456037f6a4461069cea435edb1dbd..b2e5a0b9882a929133b31b1eb42985e1cc1d1f4a 100644
+--- a/email_confirmer.module
++++ b/email_confirmer.module
+@@ -36,6 +36,7 @@ function email_confirmer_cron() {
+     ->getStorage('email_confirmer_confirmation');
+   $old_confirmations = $confirmation_storage->getQuery()
+     ->condition('created', \Drupal::time()->getRequestTime() - $lifetime, '<')
++    ->accessCheck(FALSE)
+     ->execute();
+
+   if (!empty($old_confirmations)) {
+diff --git a/src/EmailConfirmerManager.php b/src/EmailConfirmerManager.php
+index 73414ef01a41c9d66447b055bb83169c16b407ba..009fafef74160d091949530c74f76d0d93ac0118 100644
+--- a/src/EmailConfirmerManager.php
++++ b/src/EmailConfirmerManager.php
+@@ -114,6 +114,7 @@ class EmailConfirmerManager implements EmailConfirmerManagerInterface {
+
+     $old_confirmations = $confirmation_query
+       ->condition('email', $email)
++      ->accessCheck()
+       ->sort('created', 'DESC')
+       ->execute();
+
