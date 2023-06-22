@@ -277,6 +277,7 @@ class SearchFormatter extends FormatterBase implements ContainerFactoryPluginInt
     }
     $hooks = [
       'search_api_field',
+      'search_api_field_' . $field_definition->getName(),
       'search_api_field_' . $field_definition->getName() . '_archived',
     ];
     foreach ($hooks as $hook) {
