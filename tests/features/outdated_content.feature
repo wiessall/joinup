@@ -26,10 +26,11 @@ Feature:
       | Outdated published event | Outdated content | -1 year -1 second | -1 year -1 second | validated |
       | Not published event      | Outdated content |                   | -31 years         | draft     |
     And news content:
-      | title                   | collection       | publication date  | created           | state     |
-      | Recent published news   | Outdated content | -7 months         | -7 months         | validated |
-      | Outdated published news | Outdated content | -3 years -1 month | -3 years -1 month | validated |
-      | Not published news      | Outdated content |                   | -40 years         | draft     |
+      | title                            | collection       | publication date  | created           | state     |
+      | Recent published news            | Outdated content | -7 months         | -7 months         | validated |
+      | Outdated published news          | Outdated content | -3 years -1 month | -3 years -1 month | validated |
+      | Outdated archived published news | Outdated content | -3 years -1 month | -3 years -1 month | archived  |
+      | Not published news               | Outdated content |                   | -40 years         | draft     |
 
     Given I am logged in as a moderator
     When I click "Outdated content thresholds"
@@ -76,6 +77,10 @@ Feature:
     When I go to the "Outdated published news" news
     Then I should see the heading "Outdated published news"
     And the text "This news is more than 3 years old" should appear 1 time
+
+    When I go to the "Outdated archived published news" news
+    Then I should see the heading "Outdated archived published news"
+    And the text "This news is more than 3 years old" should appear 0 time
 
     # Login as moderator to test content that was never published.
     Given I am logged in as a moderator

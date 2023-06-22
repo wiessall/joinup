@@ -122,6 +122,17 @@ Feature: Following discussions
     # Check that no other mails have been unexpectedly sent.
     Then 2 e-mails should have been sent
 
+    # Followers should not receive emails when discussion is archived/unarchived.
+    Given I mark all emails as read
+    And I am logged in as a moderator
+    When I go to the edit form of the "Rare Butter" discussion
+    And I fill in "Content" with "This content was archived"
+    And I press "Archive"
+    When I go to the edit form of the "Rare Butter" discussion
+    And I fill in "Content" with "This content was archived"
+    And I press "Unarchive"
+    And 0 e-mail should have been sent
+
     # If the discussion is moved from 'validated' to any other state, no
     # notification will be sent, regardless if a relevant field is changed.
     Given I mark all emails as read

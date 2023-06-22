@@ -21,20 +21,21 @@ class SearchApiFieldTagSubscriber implements EventSubscriberInterface {
    */
   public static function getSubscribedEvents(): array {
     return [
-      SearchApiEvents::QUERY_PRE_EXECUTE . '.search_api_field' =>
-        ['queryAlter', -100],
+      SearchApiEvents::QUERY_PRE_EXECUTE . '.search_api_field' => [
+        ['communityContentParagraphQueryAlter', -100],
+      ],
     ];
   }
 
   /**
-   * Reacts to the query alter event.
+   * Reacts to the query alter event for listings in community content.
    *
    * @param \Drupal\search_api\Event\QueryPreExecuteEvent $event
    *   The query alter event.
    *
    * @throws \Drupal\joinup_group\Exception\MissingGroupException
    */
-  public function queryAlter(QueryPreExecuteEvent $event): void {
+  public function communityContentParagraphQueryAlter(QueryPreExecuteEvent $event): void {
     $query = $event->getQuery();
     $entity = $query->getOption('search_api_field entity');
     $parent_entity = $entity;
