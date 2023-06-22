@@ -11,20 +11,29 @@ Feature: Global search with archive content
     And the following <group type>s:
       | title             | description | state     |
       | Some <group type> | Description | validated |
+      | Rare <group type> | Description | validated |
     And event content:
       | title   | short title | body      | spatial coverage | agenda      | location   | organisation        | scope         | <group type>      | state     |
       | Event 1 | Event 1     | Some body | Greece           | Some agenta | Some place | European Commission | International | Some <group type> | validated |
+      | Event 2 | Event 2     | Some body | Greece           | Some agenta | Some place | European Commission | International | Rare <group type> | validated |
+      | Event 3 | Event 3     | Some body | Greece           | Some agenta | Some place | European Commission | International | Rare <group type> | validated |
+      | Event 4 | Event 4     | Some body | Greece           | Some agenta | Some place | European Commission | International | Rare <group type> | validated |
     And document content:
       | title           | document type | short title     | body      | spatial coverage | <group type>      | state     |
       | Some document 1 | Document      | Some document 1 | Some body | Luxembourg       | Some <group type> | validated |
 
     When the "Some <group type>" <group type> is configured to show "All" community content in the overview
     And the "Some <group type>" <group type> is configured to show the "<bundle label> content archived toggle" facet in the "Top" region
+    When the "Rare <group type>" <group type> is configured to show "All" community content in the overview
+    And the "Rare <group type>" <group type> is configured to show the "<bundle label> content archived toggle" facet in the "Top" region
     When I go to the homepage of the "Some <group type>" <group type>
     Then I should not see the "<group type> content archived toggle" facet
     And I should see the following tiles in the correct order:
       | Event 1         |
       | Some document 1 |
+
+    When I go to the homepage of the "Rare <group type>" <group type>
+    Then I should not see the "<group type> content archived toggle" facet
 
     Given event content:
       | title   | short title | body      | spatial coverage | agenda      | location   | organisation        | scope         | <group type>      | state    |
@@ -52,6 +61,9 @@ Feature: Global search with archive content
 
     And I should not see the "Event 1" tile
     And I should not see the "Some document 1" tile
+
+    When I go to the homepage of the "Rare <group type>" <group type>
+    Then I should not see the "<group type> content archived toggle" facet
 
     Examples:
       | bundle label | group type |

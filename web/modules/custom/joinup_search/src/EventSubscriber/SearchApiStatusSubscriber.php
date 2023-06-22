@@ -6,7 +6,6 @@ namespace Drupal\joinup_search\EventSubscriber;
 
 use Drupal\facets\FacetInterface;
 use Drupal\facets\FacetManager\DefaultFacetManager;
-use Drupal\joinup_user\Entity\JoinupUserInterface;
 use Drupal\paragraphs\ParagraphInterface;
 use Drupal\search_api\Event\QueryPreExecuteEvent;
 use Drupal\search_api\Event\SearchApiEvents;
@@ -101,22 +100,6 @@ class SearchApiStatusSubscriber implements EventSubscriberInterface {
     $query = $event->getQuery();
     $entity = $query->getOption('search_api_field entity');
     if (!($entity instanceof ParagraphInterface)) {
-      return;
-    }
-
-    $this->getConditionGroupInterfaces($query);
-  }
-
-  /**
-   * Reacts to the query alter event for user content listings.
-   *
-   * @param \Drupal\search_api\Event\QueryPreExecuteEvent $event
-   *   The query alter event.
-   */
-  public function userContentListingQueryAlter(QueryPreExecuteEvent $event): void {
-    $query = $event->getQuery();
-    $entity = $query->getOption('search_api_field entity');
-    if (!($entity instanceof JoinupUserInterface)) {
       return;
     }
 
