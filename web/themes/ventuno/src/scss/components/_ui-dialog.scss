@@ -5,6 +5,9 @@
 .ui-widget-overlay {
   z-index: $zindex-modal-backdrop;
 }
+.ui-widget-content a.btn-brand {
+  color: $white;
+}
 .ui-dialog {
   z-index: $zindex-modal;
   overflow-wrap: break-word;
@@ -43,8 +46,11 @@
   .ui-widget-content {
     background: transparent;
   }
-  .ui-icon-closethick,
-  .ui-icon-closethick:hover {
-    background-image: none;
+  .ui-button.ui-dialog-titlebar-close,
+  .ui-button.ui-dialog-titlebar-close:hover {
+    background-color: transparent;
+    .ui-icon-closethick {
+      background-image: none;
+    }
   }
 }
