@@ -24,15 +24,19 @@ default_value:
         solution_content_bundle:
           weight: 0
           region: top
-        solution_topic:
+        field_is_content_status:
           weight: 1
-          region: inline_facets
+          region: top
         solution_spatial_coverage:
           weight: 2
+          region: inline_facets
+        solution_topic:
+          weight: 3
           region: inline_facets
       enabled: 1
       query_presets: ''
       limit: 12
+      show_archived: unarchived
 default_value_callback: ''
 settings:
   index: published
@@ -46,14 +50,21 @@ settings:
       document: view_mode_tile
       event: view_mode_tile
       news: view_mode_tile
-      newsletter: default
+      tallinn_report: default
       video: view_mode_tile
     'entity:rdf_entity':
       asset_distribution: view_mode_tile
       asset_release: view_mode_tile
       collection: view_mode_tile
-      contact_information: default
       licence: default
-      owner: ''
       solution: view_mode_tile
+      spdx_licence: default
+    'entity:taxonomy_term':
+      eif_conceptual_model: default
+      eif_interoperability_layer: default
+      eif_principle: default
+      eif_recommendation: default
+      topic: default
+    'entity:user':
+      user: default
 field_type: search_api_field

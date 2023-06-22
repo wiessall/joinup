@@ -1,0 +1,9 @@
+uuid: ca4371d4-0b20-42c0-ac92-369ca597b0bc
+langcode: en
+status: true
+dependencies: {  }
+id: search_api_field__paragraph.content_listing.content_listing
+name: 'search_api_field:paragraph.content_listing.content_listing'
+filter_key: null
+url_processor: query_string
+breadcrumb: {  }

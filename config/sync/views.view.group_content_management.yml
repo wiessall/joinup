@@ -21,6 +21,7 @@ dependencies:
     - node
     - rest
     - serialization
+    - state_machine
     - user
     - views_bulk_operations
     - views_data_export
@@ -644,6 +645,50 @@ display:
               anonymous: '0'
               moderator: '0'
               administrator: '0'
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+        field_state_value:
+          id: field_state_value
+          table: node__field_state
+          field: field_state_value
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: state_machine_state
+          operator: in
+          value: {  }
+          group: 1
+          exposed: true
+          expose:
+            operator_id: field_state_value_op
+            label: State
+            description: ''
+            use_operator: false
+            operator: field_state_value_op
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: state
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+              licence_manager: '0'
+              anonymous: '0'
+              moderator: '0'
+              administrator: '0'
+              rdf_graph_manager: '0'
+            reduce: false
           is_grouped: false
           group_info:
             label: ''
@@ -1302,6 +1347,14 @@ display:
               action_id: joinup_change_group
               preconfiguration:
                 label_override: ''
+            -
+              action_id: joinup_archive
+              preconfiguration:
+                add_confirmation: false
+            -
+              action_id: joinup_unarchive
+              preconfiguration:
+                add_confirmation: false
         type:
           id: type
           table: node_field_data

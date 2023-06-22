@@ -12,6 +12,7 @@ use Drupal\joinup_bundle_class\DescriptionInterface;
 use Drupal\joinup_bundle_class\LogoInterface;
 use Drupal\joinup_community_content\Entity\CommunityContentInterface;
 use Drupal\joinup_core\Controller\IdRedirect;
+use Drupal\joinup_workflow\ArchivableEntityInterface;
 use Drupal\smart_trim\Truncate\TruncateHTML;
 use Drupal\topic\Entity\TopicReferencingEntityInterface;
 
@@ -231,6 +232,13 @@ function _ventuno_preprocess_tile(array &$variables, string $entity_type_id): vo
       // Licences do not store creation date.
       $variables['info'] = NULL;
       break;
+  }
+
+  if ($entity instanceof ArchivableEntityInterface && $entity->isArchived()) {
+    $variables['extra_data'][] = [
+      'icon' => 'archive-fill',
+      'label' => t('Archived'),
+    ];
   }
 }
 
