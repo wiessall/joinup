@@ -37,18 +37,12 @@ class GitHubFeed implements GitHubFeedInterface {
     $url = '/repos/' . $owner . '/' . $project . '/' . self::KEYS[$type];
     $url .= '?per_page=' . $numberOfResults . '&page=1';
 
-    try {
-      $response = $this->client->get(self::GITHUB_API_URL . $url, $this->getRequestHeaders());
-    }
-    catch (\Exception $e) {
-      // Set this as warnings only. The failures can occur mainly due to the
-      // lack/expiration of tokens, thus, we don't need to pollute the logs
-      // with errors.
-      $this->logger->get('github_feed')->warning($e->getMessage());
+    $data = $this->clientDoGet($url);
+    if ($data === NULL) {
       return NULL;
     }
 
-    $data = json_decode($response->getBody()->getContents(), TRUE);
+    $data = json_decode($data, TRUE);
     $return = [];
     foreach ($data as $returnItem) {
       $returnItem['comments'] = [];
@@ -108,18 +102,9 @@ class GitHubFeed implements GitHubFeedInterface {
     $url .= '?per_page=' . $commentNum;
     // Default settings.
     $url .= '&sort=created&direction=desc&page=1';
-    try {
-      $response = $this->client->get(self::GITHUB_API_URL . $url, $this->getRequestHeaders());
-    }
-    catch (\Exception $e) {
-      // Set this as warnings only. The failures can occur mainly due to the
-      // lack/expiration of tokens, thus, we don't need to pollute the logs
-      // with errors.
-      $this->logger->get('github_feed')->warning($e->getMessage());
-      return [];
-    }
 
-    return json_decode($response->getBody()->getContents(), TRUE);
+    $data = $this->clientDoGet($url);
+    return $data === NULL ? [] : json_decode($data, TRUE);
   }
 
   /**
@@ -135,6 +120,45 @@ class GitHubFeed implements GitHubFeedInterface {
         'Authorization' => 'Bearer ' . $token,
       ],
     ];
+  }
+
+  /**
+   * Performs a GET request to the GitHub API and catches any exceptions.
+   *
+   * @param string $url
+   *   The URL to request. The URL must not contain the base URL.
+   *
+   * @return string|null
+   *   The response body or NULL if the request failed.
+   */
+  protected function clientDoGet(string $url): ?string {
+    try {
+      $response = $this->client->get(
+        self::GITHUB_API_URL . $url,
+        // 'http_errors' => FALSE is needed to prevent the HTTP client from
+        // throwing an exception when the request does not return a 200
+        // response. Exceptions break AJAX requests even if they are caught.
+        $this->getRequestHeaders() + ['http_errors' => FALSE],
+      );
+    }
+    catch (\Exception $e) {
+      // Set this as warnings only. The failures can occur mainly due to the
+      // lack/expiration of tokens, thus, we don't need to pollute the logs
+      // with errors.
+      $this->logger->get('github_feed')->warning($e->getMessage());
+      return NULL;
+    }
+
+    if ($response->getStatusCode() !== 200) {
+      $this->logger->get('github_feed')->warning('The request to %url returned a %code response and "%message" message.', [
+        '%url' => $url,
+        '%code' => $response->getStatusCode(),
+        '%message' => $response->getReasonPhrase() . ' (' . $response->getBody() . ')',
+      ]);
+      return NULL;
+    }
+
+    return $response->getBody()->getContents();
   }
 
 }
