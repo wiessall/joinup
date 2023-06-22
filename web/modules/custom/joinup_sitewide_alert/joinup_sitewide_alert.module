@@ -17,8 +17,9 @@ declare(strict_types = 1);
  */
 function joinup_sitewide_alert_allowed_values(): array {
   $themeHandler = \Drupal::service('theme_handler');
-  $spritePath = $themeHandler->getTheme($themeHandler->getDefault())
-      ->getPath() . '/assets/icons/icons.svg';
+  $spritePath = $themeHandler->getTheme(
+      $themeHandler->getDefault()
+    )->getPath() . '/assets/icons/icons.svg';
   if (!file_exists($spritePath)) {
     return [];
   }
