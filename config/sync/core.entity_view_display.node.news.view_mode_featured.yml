@@ -13,10 +13,10 @@ dependencies:
     - field.field.node.news.field_news_referenced_solution
     - field.field.node.news.field_news_source_url
     - field.field.node.news.field_news_spatial_coverage
-    - field.field.node.news.field_topic
     - field.field.node.news.field_shared_in
     - field.field.node.news.field_site_featured
     - field.field.node.news.field_state
+    - field.field.node.news.field_topic
     - field.field.node.news.og_audience
     - node.type.news
   module:
@@ -39,9 +39,13 @@ content:
       trim_suffix: …
       wrap_output: false
       wrap_class: trimmed
-      more_link: false
-      more_class: more-link
-      more_text: More
+      more:
+        display_link: false
+        target_blank: false
+        link_trim_only: false
+        class: more-link
+        text: More
+        aria_label: 'Read more about [node:title]'
       summary_handler: trim
       trim_options:
         text: false
