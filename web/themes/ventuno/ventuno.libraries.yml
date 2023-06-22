@@ -317,11 +317,6 @@ timeline:
     theme:
       assets/css/timeline.min.css: {}
 
-tile-two:
-  css:
-    theme:
-      assets/css/tile-two.min.css: {}
-
 toolbar:
   css:
     theme:

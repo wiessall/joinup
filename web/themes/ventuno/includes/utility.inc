@@ -70,8 +70,8 @@ function _ventuno_preprocess_tile(array &$variables, string $entity_type_id): vo
     : [];
 
   // Topics.
-  // Number of topics displayed can vary depending on the view mode.
-  $max_topics = $variables['view_mode'] === 'tile_two' ? 3 : 2;
+  // Number of topics displayed can vary depending on the route.
+  $max_topics = $route_name === 'entity.meta_entity.canonical' ? 3 : 2;
   $topics = ($entity instanceof TopicReferencingEntityInterface) ? $entity->getTopics() : NULL;
   if ($topics) {
     $variables['badges'] = [];
