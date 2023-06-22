@@ -14,6 +14,7 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Form\SubformState;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\facets\Entity\Facet;
+use Drupal\facets\FacetInterface;
 use Drupal\search_api_field\Event\AlterQueryPresetsDescriptionEvent;
 use Drupal\search_api_field\Plugin\Field\FieldType\SearchItem;
 use Drupal\search_api_field\Plugin\FilterPluginManagerInterface;
@@ -168,7 +169,6 @@ class SearchWidget extends WidgetBase implements ContainerFactoryPluginInterface
     ];
 
     if (!empty($facets)) {
-
       $table = [
         '#type' => 'field_ui_table',
         '#header' => $this->getTableHeader(),
@@ -194,6 +194,13 @@ class SearchWidget extends WidgetBase implements ContainerFactoryPluginInterface
       ];
 
       $form['#attached']['library'][] = 'search_api_field/drupal.search_api_field';
+
+      // Order facets because ['#access'] = FALSE drops weight values,
+      // does not update correctly.
+      uasort($facets, function (FacetInterface $a, FacetInterface $b) {
+        return $a->getWeight() <=> $b->getWeight();
+      });
+
       foreach ($facets as $facet_id => $facet) {
         $table[$facet_id] = $this->buildFacetRow($facet, $item);
       }
@@ -220,6 +227,20 @@ class SearchWidget extends WidgetBase implements ContainerFactoryPluginInterface
           'row-refresher',
         ],
       ],
+    ];
+
+    // Show a select that allows users to choose whether to include all content
+    // items, show only unarchived content or show only archived content.
+    $element['wrapper']['show_archived'] = [
+      '#type' => 'select',
+      '#title' => $this->t('Show archived content'),
+      '#options' => [
+        'all' => $this->t('All'),
+        'archived' => $this->t('Archived'),
+        'unarchived' => $this->t('Unarchived'),
+      ],
+      '#default_value' => $default_values['show_archived'] ?? 'unarchived',
+      '#weight' => -12,
     ];
 
     if (!empty($this->getSetting('query_builder'))) {
@@ -416,7 +437,6 @@ class SearchWidget extends WidgetBase implements ContainerFactoryPluginInterface
         }
       }
     }
-    $display_options = NULL;
     $regions = array_keys($this->getRegions());
     $extra_field_row = [
       '#attributes' => ['class' => ['draggable', 'tabledrag-leaf']],
@@ -430,7 +450,7 @@ class SearchWidget extends WidgetBase implements ContainerFactoryPluginInterface
         '#type' => 'textfield',
         '#title' => $this->t('Weight for @title', ['@title' => $facet->getName()]),
         '#title_display' => 'invisible',
-        '#default_value' => $display_options ? $display_options['weight'] : 0,
+        '#default_value' => $facet->getWeight(),
         '#size' => 3,
         '#attributes' => ['class' => ['field-weight']],
       ],
@@ -778,6 +798,7 @@ class SearchWidget extends WidgetBase implements ContainerFactoryPluginInterface
 
       $cleaned_values[$delta]['value']['enabled'] = $values[$delta]['enabled'];
       $cleaned_values[$delta]['value']['query_presets'] = $values[$delta]['wrapper']['query_presets'];
+      $cleaned_values[$delta]['value']['show_archived'] = $values[$delta]['wrapper']['show_archived'];
       $cleaned_values[$delta]['value']['limit'] = $values[$delta]['wrapper']['limit'];
 
       if (!empty($values[$delta]['wrapper']['query_builder']['filters'])) {

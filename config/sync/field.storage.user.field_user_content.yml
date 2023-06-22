@@ -3,8 +3,12 @@ langcode: en
 status: true
 dependencies:
   module:
+    - field_permissions
     - search_api_field
     - user
+third_party_settings:
+  field_permissions:
+    permission_type: public
 _core:
   default_config_hash: cCb7Y5IzQUuZBxU3lcCFpsDxC83Tsu4A8tU189Sz5sQ
 id: user.field_user_content
