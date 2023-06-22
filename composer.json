@@ -13,8 +13,8 @@
         "composer/installers": "^2",
         "cweagans/composer-patches": "^1.7",
         "drupal/addtocal": "^2.0@beta",
-        "drupal/allowed_formats": "^1.3",
-        "drupal/antibot": "^1.4",
+        "drupal/allowed_formats": "^2.0",
+        "drupal/antibot": "^2.0",
         "drupal/bootstrap4_modal": "^2.1",
         "drupal/cached_computed_field": "^1.0",
         "drupal/cas": "^2.0",
@@ -29,7 +29,7 @@
         "drupal/diff": "~1.0",
         "drupal/digital_size_formatter": "~2.0",
         "drupal/dropsolid_purge": "^1.0@beta",
-        "drupal/dynamic_entity_reference": "~2.0",
+        "drupal/dynamic_entity_reference": "^4.0",
         "drupal/editor_file": "^1.6",
         "drupal/email_confirmer": "^1.0",
         "drupal/email_contact": "^2.0",
@@ -50,12 +50,11 @@
         "drupal/geofield": "~1.6",
         "drupal/honeypot": "~2",
         "drupal/iframe": "^2",
-        "drupal/image_library_widget": "^1.0",
+        "drupal/image_library_widget": "^2.0",
         "drupal/inline_entity_form": "^1.0",
-        "drupal/jquery_ui": "1.6.0",
         "drupal/json_field": "^1.0",
-        "drupal/layout_builder_component_attributes": "^1.2",
-        "drupal/linkit": "^5.0-beta11",
+        "drupal/layout_builder_component_attributes": "^2.1",
+        "drupal/linkit": "^6.0",
         "drupal/memcache": "^2.5",
         "drupal/menu_admin_per_menu": "^1.3",
         "drupal/menu_link_destination": "^1.0",
@@ -74,7 +73,6 @@
         "drupal/rdf_entity": "^2.0",
         "drupal/rdf_meta_entity": "^1.0",
         "drupal/redirect": "^1.6",
-        "drupal/redis": "^1.4",
         "drupal/schema_digital_document": "^1.0.0",
         "drupal/schema_metatag": "^2",
         "drupal/schema_social_media_posting": "^1.0.0",
@@ -85,7 +83,7 @@
         "drupal/simple_block": "^1.3",
         "drupal/simple_sitemap": "^4.0",
         "drupal/site_alert": "~1.2",
-        "drupal/smart_trim": "~1.3",
+        "drupal/smart_trim": "^2.1",
         "drupal/social_media_links": "^2.7",
         "drupal/state_machine": "^1.0",
         "drupal/subpathauto": "^1.2",
@@ -99,36 +97,37 @@
         "drupal/views_block_area": "^1.0@beta",
         "drupal/views_bulk_operations": "^4",
         "drupal/views_data_export": "^1.0",
-        "drupal/views_multiple_permissions": "^1.0",
+        "drupal/views_multiple_permissions": "^2.0",
         "drush/drush": "^11.3",
         "ec-europa/joinup-tallinn-dashboard": "1.0.0-alpha2",
         "ec-europa/spdx": "^1.0",
         "ec-europa/virtuoso": "^2.1",
+        "mglaman/composer-drupal-lenient": "^1.0",
         "openeuropa/composer-artifacts": "^1.0",
         "openeuropa/gisco-geocoding-provider": "^1.0",
         "openeuropa/oe_bootstrap_theme": "^1.0",
-        "openeuropa/oe_dashboard_agent": "^0.3.0",
+        "openeuropa/oe_dashboard_agent": "^1.0",
         "openeuropa/oe_webtools": "^1.21",
         "psr/http-factory-implementation": "*",
         "semiceu/adms-ap_validator": "1.0.0-alpha1",
-        "sweetrdf/easyrdf": "^1.7.1",
+        "sweetrdf/easyrdf": "^1.9",
         "symfony/http-client": "*"
     },
     "require-dev": {
         "ext-fileinfo": "*",
         "ext-iconv": "*",
         "ext-libxml": "*",
-        "drupal/admin_toolbar": "~2.4",
-        "drupal/cas_mock_server": "^1.3",
+        "drupal/admin_toolbar": "^3.4",
+        "drupal/cas_mock_server": "^2.0",
         "drupal/coder": "*",
         "drupal/composer_deploy": "^1.6",
-        "drupal/config_update": "^1.7",
+        "drupal/config_update": "^2.0",
         "drupal/devel": "5.0.2",
         "drupal/drupal-extension": "^5.0",
-        "drupal/filecache": "^1",
+        "drupal/filecache": "^1.1",
         "drupal/http_request_mock": "^1.1",
         "drupal/renderviz": "^1.0",
-        "drupal/upgrade_status": "^3.14",
+        "drupal/upgrade_status": "^3.14 || ^4.0",
         "drupaltest/behat-one-time-login": "^1.0",
         "ec-europa/toolkit": "^9.8",
         "lovers-of-behat/table-extension": "^1.3",
@@ -170,7 +169,8 @@
             "drupal/core-composer-scaffold": true,
             "openeuropa/composer-artifacts": true,
             "phpstan/extension-installer": true,
-            "php-http/discovery": false
+            "php-http/discovery": false,
+            "mglaman/composer-drupal-lenient": true
         }
     },
     "autoload": {
@@ -245,6 +245,9 @@
             "drupal/core": "-p2"
         },
         "patches": {
+            "drupal/addtocal": {
+                "D10 compatibility @see https://www.drupal.org/project/addtocal/issues/3345479": "https://www.drupal.org/files/issues/2023-04-21/drupal-10-compatibility-v2.patch"
+            },
             "drupal/cas": {
                 "Should CAS respect Drupal registration configuration @see https://www.drupal.org/project/cas/issues/3038279": "https://git.drupalcode.org/project/cas/-/merge_requests/23.diff",
                 "More details when registration is denied by a subscriber @see https://www.drupal.org/project/cas/issues/3325353": "https://git.drupalcode.org/project/cas/-/merge_requests/20.diff"
@@ -277,10 +280,14 @@
                 "Have responsive image module ignore svg @see https://www.drupal.org/project/drupal/issues/2957924": "https://www.drupal.org/files/issues/2022-06-23/drupal-responsive_image_svg_support-2957924-11.patch",
                 "Verify that the existing cache bin exists before calling it @see https://www.drupal.org/project/drupal/issues/2429321": "https://git.drupalcode.org/project/drupal/-/merge_requests/1521.diff"
             },
+            "drupal/custom_markup_block": {
+                "D10 compatibility @see https://www.drupal.org/project/custom_markup_block/issues/3286864": "https://www.drupal.org/files/issues/2022-08-22/custom_markup_block.1.x-dev.rector.patch"
+            },
             "drupal/default_content": {
                 "Allow manual imports @see https://www.drupal.org/i/2640734": "https://git.drupalcode.org/project/default_content/-/merge_requests/20.diff"
             },
             "drupal/email_confirmer": {
+                "D10 compatibility @see https://www.drupal.org/project/email_confirmer/issues/3322626": "resources/patch/drupal/email_confirmer/3322626.diff",
                 "Support for HTML mails @see https://www.drupal.org/i/3047124": "https://git.drupalcode.org/project/email_confirmer/-/merge_requests/3.diff"
             },
             "drupal/email_contact": {
@@ -356,7 +363,8 @@
                 "URL don't include the base path @see https://www.drupal.org/project/search_api_spellcheck/issues/3280372" : "https://git.drupalcode.org/project/search_api_spellcheck/-/merge_requests/2.diff"
             },
             "drupal/smart_trim": {
-                "Avoid max nesting level during development @see https://www.drupal.org/project/smart_trim/issues/3013628": "https://www.drupal.org/files/issues/2020-05-28/maximum_function_nesting-3013628-D8-7.patch"
+                "Avoid space before full stop": "resources/patch/drupal/smart_trim/space.diff",
+                "Avoid max nesting level during development @see https://www.drupal.org/project/smart_trim/issues/3013628": "https://www.drupal.org/files/issues/2022-10-26/max_function_nesting-3013628-13.patch"
             },
             "drupal/social_media_links": {
                 "Missing config schema for field, widget and formatter @see https://www.drupal.org/node/2898680": "https://git.drupalcode.org/project/social_media_links/-/merge_requests/4.diff",
@@ -378,9 +386,6 @@
             },
             "drupal/views_autosubmit": {
                 "Stop auto submitting first character entered in an Autocomplete Filter field. @see https://www.drupal.org/project/views_autosubmit/issues/3160600" : "https://www.drupal.org/files/issues/2021-09-06/3160600_views_autosubmit_16.patch"
-            },
-            "sweetrdf/easyrdf": {
-                "Ntriples performance @see https://github.com/sweetrdf/easyrdf/pull/25": "https://github.com/sweetrdf/easyrdf/compare/master...f894e50e8f2d91b278f0ac33575c8afc8a6b4233.diff"
             }
         },
         "patches-ignore": {
@@ -389,6 +394,14 @@
                     "Fix unable to detect a pattern from default theme having same id as the pattern in the base theme @see https://github.com/nuvoleweb/ui_patterns/issues/304": "https://patch-diff.githubusercontent.com/raw/nuvoleweb/ui_patterns/pull/318.diff"
                 }
             }
+        },
+        "drupal-lenient": {
+            "allowed-list": [
+                "drupal/addtocal",
+                "drupal/custom_markup_block",
+                "drupal/email_confirmer",
+                "drupal/field_delimiter"
+            ]
         },
         "artifacts": {
             "openeuropa/oe_bootstrap_theme": {
