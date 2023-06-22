@@ -637,24 +637,6 @@ module.exports = {
         sourceMap: "file",
       },
     },
-    {
-      entry: path.resolve(outputFolder, "src/scss/tile-two.scss"),
-      dest: path.resolve(outputFolder, "assets/css/tile-two.min.css"),
-      options: {
-        minify: true,
-        includePaths,
-        sourceMap: "file",
-      },
-    },
-    {
-      entry: path.resolve(outputFolder, "src/scss/tile-two.scss"),
-      dest: path.resolve(outputFolder, "assets/css/tile-two.min.css"),
-      options: {
-        minify: true,
-        includePaths,
-        sourceMap: "file",
-      },
-    },
   ],
   copy: [
     // Bootstrap: fonts
