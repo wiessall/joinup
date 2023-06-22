@@ -26,7 +26,7 @@ class GitHubFeedWidget extends WidgetBase {
    */
   public function formElement(FieldItemListInterface $items, $delta, array $element, array &$form, FormStateInterface $form_state): array {
     $element['#type'] = 'container';
-    $fieldName = $items->getName() . '[' . $delta . ']';
+    $fieldNameBase = $element['#field_parents'][0] . '[' . implode('][', array_slice($element['#field_parents'], 1)) . '][' . $items->getName() . '][' . $delta . ']';
 
     $element['repository'] = [
       '#type' => 'url',
@@ -59,7 +59,7 @@ class GitHubFeedWidget extends WidgetBase {
       // Do not show the field if the type is 'events'.
       '#states' => [
         'invisible' => [
-          ':input[name="' . $fieldName . '[type]"]' => [
+          ':input[name="' . $fieldNameBase . '[type]"]' => [
             'value' => 'events',
           ],
         ],
