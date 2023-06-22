@@ -495,6 +495,7 @@ function joinup_group_form_views_exposed_form_alter(array &$form, FormStateInter
       ]);
     }
     asort($options);
+
     $form['group'] = [
       '#type' => 'select',
       '#title' => t('Group'),
@@ -502,6 +503,7 @@ function joinup_group_form_views_exposed_form_alter(array &$form, FormStateInter
       '#default_value' => $form['group']['#default_value'],
     ];
   };
+
 
   if ($view_id === 'announcements' && $display === 'all') {
     $announcement_storage = \Drupal::entityTypeManager()->getStorage('message');
@@ -514,7 +516,13 @@ function joinup_group_form_views_exposed_form_alter(array &$form, FormStateInter
     $replace_group_filter($form, $groups);
   }
   elseif ($view_id === 'media' && $display === 'media_page_list') {
-    $media_storage = \Drupal::entityTypeManager()->getStorage('media');
+    $form['group'] = [
+      '#type' => 'textfield',
+      '#title' => t('Group'),
+      '#autocomplete_route_name' => 'joinup_group.group_autocomplete',
+    ];
+
+   /* $media_storage = \Drupal::entityTypeManager()->getStorage('media');
     $mids = $media_storage->getQuery()->accessCheck(FALSE)
       ->condition('bundle', ['file', 'video'], 'IN')
       ->exists('og_audience')
@@ -522,7 +530,8 @@ function joinup_group_form_views_exposed_form_alter(array &$form, FormStateInter
     $groups = array_map(function (MediaInterface $media): GroupInterface {
       return $media->get('og_audience')->entity;
     }, $media_storage->loadMultiple($mids));
-    $replace_group_filter($form, $groups);
+    $replace_group_filter($form, $groups);*/
+
   }
 
   // Adds result counts to the role options on the membership overview for
