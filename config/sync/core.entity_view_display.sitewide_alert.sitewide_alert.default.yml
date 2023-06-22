@@ -1,0 +1,32 @@
+uuid: 6cce9f95-7788-4652-aee3-5640d50c65bc
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.sitewide_alert.sitewide_alert.icon
+  module:
+    - options
+    - sitewide_alert
+    - text
+id: sitewide_alert.sitewide_alert.default
+targetEntityType: sitewide_alert
+bundle: sitewide_alert
+mode: default
+content:
+  icon:
+    type: list_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 1
+    region: content
+  message:
+    type: text_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: content
+hidden:
+  langcode: true
+  search_api_excerpt: true
