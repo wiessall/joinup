@@ -32,6 +32,7 @@ class GitHubFeedWidget extends WidgetBase {
       '#type' => 'url',
       '#title' => $this->t('Repository'),
       '#default_value' => $items[$delta]->repository ?? '',
+      '#description' => $this->t('The GitHub repository to use e.g. "https://github.com/username/repository" or "https://github.com/username/repository.git".'),
       '#required' => TRUE,
       '#maxlength' => 255,
       '#element_validate' => [[static::class, 'validateGitHubRepository']],
