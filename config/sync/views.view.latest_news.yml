@@ -180,7 +180,7 @@ display:
         type: 'entity:node'
         options:
           relationship: none
-          view_mode: view_mode_tile
+          view_mode: view_mode_tile_horizontal
       query:
         type: views_query
         options:
