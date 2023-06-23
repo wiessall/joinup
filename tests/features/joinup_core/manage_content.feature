@@ -87,8 +87,6 @@ Feature:
     And I press "Apply to selected items"
     And I wait for the batch process to finish
     Then I should see "Proceeded updates to 2 entities"
-
-    # Last update date should not be updated after archiving entities.
     And I should see "19/11/2019 - 20:00"
     And I should see "19/11/2017 - 19:00"
 
@@ -111,6 +109,8 @@ Feature:
     And I press "Apply"
     Then I should see the link "The Panama Papers"
     And I should see the link "The Ultimate Debate"
+    And I should see "19/11/2019 - 20:00"
+    And I should see "19/11/2017 - 19:00"
 
     # Check warning message.
     Given I press "Reset"
@@ -119,8 +119,6 @@ Feature:
     And I press "Apply to selected items"
     And I wait for the batch process to finish
     Then I should see "Proceeded updates to 1 entities"
-
-    # Last update date should not be updated after archiving entities.
     And I should see "19/11/2016 - 20:00"
 
     # Select rows.
