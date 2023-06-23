@@ -382,19 +382,19 @@ display:
         options:
           view_modes:
             'entity:node':
-              custom_page: view_mode_tile
-              discussion: view_mode_tile
-              document: view_mode_tile
-              event: view_mode_tile
-              news: view_mode_tile
-              tallinn_report: view_mode_tile
-              video: view_mode_tile
+              custom_page: view_mode_tile_horizontal
+              discussion: view_mode_tile_horizontal
+              document: view_mode_tile_horizontal
+              event: view_mode_tile_horizontal
+              news: view_mode_tile_horizontal
+              tallinn_report: view_mode_tile_horizontal
+              video: view_mode_tile_horizontal
             'entity:rdf_entity':
-              asset_distribution: view_mode_tile
-              asset_release: view_mode_tile
-              collection: view_mode_tile
-              licence: view_mode_tile
-              solution: view_mode_tile
+              asset_distribution: view_mode_tile_horizontal
+              asset_release: view_mode_tile_horizontal
+              collection: view_mode_tile_horizontal
+              licence: view_mode_tile_horizontal
+              solution: view_mode_tile_horizontal
               spdx_licence: default
             'entity:taxonomy_term':
               eif_conceptual_model: default
@@ -403,7 +403,7 @@ display:
               eif_recommendation: default
               topic: default
             'entity:user':
-              user: view_mode_tile
+              user: view_mode_tile_horizontal
       query:
         type: search_api_query
         options:
