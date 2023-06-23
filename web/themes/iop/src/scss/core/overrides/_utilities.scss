@@ -41,5 +41,11 @@ $utilities: map-merge(
     "gradient": null,
     "user-select": null,
     "pointer-events": null,
+    "column-gap": (
+      responsive: false,
+      property: column-gap,
+      class: col-gap,
+      values: $spacers
+    ),
   ),
 );
