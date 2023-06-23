@@ -11,12 +11,12 @@ Feature:
       | Vintage Art  | validated |
       | Decadent Art | validated |
     And document content:
-      | title             | document type | collection  | state     |
-      | The Panama Papers | Document      | Vintage Art | validated |
-      | The Area 51 File  | Document      | Vintage Art | draft     |
+      | title             | document type | collection  | state     | changed          |
+      | The Panama Papers | Document      | Vintage Art | validated | 2019-11-19 20:00 |
+      | The Area 51 File  | Document      | Vintage Art | draft     | 2018-11-19 21:00 |
     And discussion content:
-      | title               | collection  | state     |
-      | The Ultimate Debate | Vintage Art | validated |
+      | title               | collection  | state     | changed          |
+      | The Ultimate Debate | Vintage Art | validated | 2017-11-19 19:00 |
     And event content:
       | title                    | collection  | state     |
       | Version 2.0 Launch Party | Vintage Art | validated |
@@ -24,9 +24,9 @@ Feature:
       | title                              | collection  | state     |
       | Exports Leap Despite Currency Gain | Vintage Art | validated |
     And custom_page content:
-      | title                | collection  | state     |
-      | HOWTOs               | Vintage Art | published |
-      | Looking for Support? | Vintage Art | published |
+      | title                | collection  | state     | changed          |
+      | HOWTOs               | Vintage Art | published | 2016-11-19 20:00 |
+      | Looking for Support? | Vintage Art | published | 2015-11-19 20:00 |
     And the following custom page menu structure:
       | title                | parent | weight |
       | Looking for Support? | HOWTOs | 1      |
@@ -88,6 +88,10 @@ Feature:
     And I wait for the batch process to finish
     Then I should see "Proceeded updates to 2 entities"
 
+    # Last update date should not be updated after archiving entities.
+    And I should see "19/11/2019 - 20:00"
+    And I should see "19/11/2017 - 19:00"
+
     # Check archived state.
     Given I select "Archived" from "State"
     And I press "Apply"
@@ -115,6 +119,9 @@ Feature:
     And I press "Apply to selected items"
     And I wait for the batch process to finish
     Then I should see "Proceeded updates to 1 entities"
+
+    # Last update date should not be updated after archiving entities.
+    And I should see "19/11/2016 - 20:00"
 
     # Select rows.
     Given I select the "The Panama Papers" row
