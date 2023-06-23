@@ -1,0 +1,53 @@
+uuid: dbeb6efd-ec2b-46b7-a8d0-64b7580c5049
+langcode: en
+status: true
+dependencies:
+  config:
+    - filter.format.text_html
+  module:
+    - ckeditor
+    - editor_file
+third_party_settings:
+  editor_file:
+    status: true
+    scheme: public
+    directory: inline-files
+    extensions: txt
+    max_size: ''
+format: text_html
+editor: ckeditor
+settings:
+  toolbar:
+    rows:
+      -
+        -
+          name: Formatting
+          items:
+            - Bold
+            - Italic
+        -
+          name: Links
+          items:
+            - DrupalLink
+            - DrupalUnlink
+        -
+          name: Lists
+          items:
+            - BulletedList
+            - NumberedList
+        -
+          name: Media
+          items:
+            - contactus
+  plugins:
+    drupallink:
+      linkit_enabled: true
+      linkit_profile: default
+image_upload:
+  status: false
+  scheme: public
+  directory: inline-images
+  max_size: ''
+  max_dimensions:
+    width: null
+    height: null
