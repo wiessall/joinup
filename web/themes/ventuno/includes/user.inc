@@ -75,48 +75,14 @@ function ventuno_preprocess_user__inline(array &$variables): void {
  * Implements hook_preprocess_user__view_mode_tile().
  */
 function ventuno_preprocess_user__view_mode_tile(array &$variables): void {
-  $route_name = \Drupal::routeMatch()->getRouteName();
-  if ($route_name == 'view.search.page_1') {
-    $variables['horizontal'] = TRUE;
-  }
-  $user = $variables['elements']['#user'];
+  _ventuno_preprocess_user_tile($variables);
+}
 
-  // Text.
-  $nationality = $business_title = NULL;
-  if (!$user->get('field_user_business_title')->isEmpty()) {
-    $business_title = $user->get('field_user_business_title')->value;
-  }
-  if (!$user->get('field_user_nationality')->isEmpty()) {
-    $nationality = t('Country of origin: @country', ['@country' => $user->get('field_user_nationality')->entity->label()]);
-  }
-  if ($business_title && $nationality) {
-    $variables['text']['#markup'] = $business_title . '<br>' . $nationality;
-  }
-  elseif ($business_title) {
-    $variables['text'] = $business_title;
-  }
-  elseif ($nationality) {
-    $variables['text'] = $nationality;
-  }
-
-  // Badges.
-  if (!$user->get('field_user_professional_domain')->isEmpty()) {
-    $domains = $user->get('field_user_professional_domain');
-    $variables['badges'] = [];
-    $max_topics = 2;
-    if (is_iterable($domains)) {
-      foreach ($domains as $domain) {
-        $variables['badges'][]['label'] = $domain->entity ? $domain->entity->label() : NULL;
-      }
-      $num_of_items = count($domains);
-      if ($num_of_items > $max_topics) {
-        $extra_items = $num_of_items - $max_topics;
-        $variables['badges'] = array_splice($variables['badges'], 0, $max_topics);
-        $word = ($extra_items < $max_topics) ? t('domain') : t('domains');
-        $variables['badges'][]['label'] = '+' . $extra_items . ' ' . $word;
-      }
-    }
-  }
+/**
+ * Implements hook_preprocess_user__view_mode_tile_horizontal().
+ */
+function ventuno_preprocess_user__view_mode_tile_horizontal(array &$variables): void {
+  _ventuno_preprocess_user_tile($variables);
 }
 
 /**
