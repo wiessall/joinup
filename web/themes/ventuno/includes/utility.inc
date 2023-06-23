@@ -57,12 +57,8 @@ function _ventuno_preprocess_tile(array &$variables, string $entity_type_id): vo
     'page_manager.page_view_homepage_homepage-layout_builder-1',
   ];
 
-  // Set horizontal tiles in some cases.
-  if (in_array($route_name, $routes_horizontal_tiles)) {
-    $variables['horizontal'] = TRUE;
-    // Text only on horizontal tiles.
-    $variables['text'] = $entity instanceof DescriptionInterface && isset($variables['content'][$entity->getDescriptionField()]) ? $variables['content'][$entity->getDescriptionField()] : NULL;
-  }
+  // Text only on horizontal tiles.
+  $variables['text'] = $entity instanceof DescriptionInterface && isset($variables['content'][$entity->getDescriptionField()]) ? $variables['content'][$entity->getDescriptionField()] : NULL;
 
   // Image.
   $variables['image'] = ($entity instanceof LogoInterface) && $entity->getLogoAsFile()
@@ -70,8 +66,8 @@ function _ventuno_preprocess_tile(array &$variables, string $entity_type_id): vo
     : [];
 
   // Topics.
-  // Number of topics displayed can vary depending on the route.
-  $max_topics = $route_name === 'entity.meta_entity.canonical' ? 3 : 2;
+  // Max number of topics displayed.
+  $max_topics = 2;
   $topics = ($entity instanceof TopicReferencingEntityInterface) ? $entity->getTopics() : NULL;
   if ($topics) {
     $variables['badges'] = [];
@@ -360,4 +356,50 @@ function _ventuno_get_author(CommunityContentInterface $node): array {
   $view_builder = \Drupal::entityTypeManager()->getViewBuilder('user');
   $author = $node->get('uid')->entity;
   return $view_builder->view($author, 'inline');
+}
+
+/**
+ * Prepares the data for user in tile view modes.
+ *
+ */
+function _ventuno_preprocess_user_tile(array &$variables): void {
+  $route_name = \Drupal::routeMatch()->getRouteName();
+  $user = $variables['elements']['#user'];
+
+  // Text.
+  $nationality = $business_title = NULL;
+  if (!$user->get('field_user_business_title')->isEmpty()) {
+    $business_title = $user->get('field_user_business_title')->value;
+  }
+  if (!$user->get('field_user_nationality')->isEmpty()) {
+    $nationality = t('Country of origin: @country', ['@country' => $user->get('field_user_nationality')->entity->label()]);
+  }
+  if ($business_title && $nationality) {
+    $variables['text']['#markup'] = $business_title . '. ' . $nationality;
+  }
+  elseif ($business_title) {
+    $variables['text'] = $business_title;
+  }
+  elseif ($nationality) {
+    $variables['text'] = $nationality;
+  }
+
+  // Badges.
+  if (!$user->get('field_user_professional_domain')->isEmpty()) {
+    $domains = $user->get('field_user_professional_domain');
+    $variables['badges'] = [];
+    $max_topics = 2;
+    if (is_iterable($domains)) {
+      foreach ($domains as $domain) {
+        $variables['badges'][]['label'] = $domain->entity ? $domain->entity->label() : NULL;
+      }
+      $num_of_items = count($domains);
+      if ($num_of_items > $max_topics) {
+        $extra_items = $num_of_items - $max_topics;
+        $variables['badges'] = array_splice($variables['badges'], 0, $max_topics);
+        $word = ($extra_items < $max_topics) ? t('domain') : t('domains');
+        $variables['badges'][]['label'] = '+' . $extra_items . ' ' . $word;
+      }
+    }
+  }
 }
