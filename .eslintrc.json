@@ -18,6 +18,7 @@
     }
   ],
   "globals": {
+    "CKEDITOR":true,
     "L": true
   },
   "plugins": [
