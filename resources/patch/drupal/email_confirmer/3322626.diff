@@ -1,3 +1,15 @@
+diff --git a/email_confirmer.info.yml b/email_confirmer.info.yml
+--- a/email_confirmer.info.yml
++++ b/email_confirmer.info.yml	(date 1687715917394)
+@@ -3,7 +3,7 @@
+ description: 'Email confirmation service. Provides a common API for email address confirmation.'
+ package: Mail
+ configure: email_confirmer.settings
+-core_version_requirement: ^8 || ^9
++core_version_requirement: ^8 || ^9 || ^10
+
+ # Information added by Drupal.org packaging script on 2021-02-21
+ version: '8.x-1.0-beta6'
 diff --git a/email_confirmer.module b/email_confirmer.module
 index 90baf6679f1456037f6a4461069cea435edb1dbd..b2e5a0b9882a929133b31b1eb42985e1cc1d1f4a 100644
 --- a/email_confirmer.module
