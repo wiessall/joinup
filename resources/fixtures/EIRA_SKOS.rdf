@@ -8655,7 +8655,7 @@ Last modification: 2022-20-01
   <skos:Concept rdf:about="http://data.europa.eu/dr8/ConformanceTestingApplicationComponent">
     <skos:notation><![CDATA[Conformance Testing]]></skos:notation>
     <dcterms:identifier>http://data.europa.eu/dr8/ConformanceTestingApplicationComponent</dcterms:identifier>
-    <skos:prefLabel xml:lang="en"><![CDATA[Conformance Testing]]></skos:prefLabel>
+    <skos:prefLabel xml:lang="en"><![CDATA[Comformance Testing Application]]></skos:prefLabel>
     <skos:topConceptOf rdf:resource="http://data.europa.eu/dr8" />
     <skos:definition xml:lang="en"><![CDATA[Definition: Conformance Testing ABB is an Application Component that enables a structural and modular approach for implementing the validation of the application or service to meet the requirements of a standard or specification
 
@@ -10571,7 +10571,7 @@ Last modification: 2022-18-01
   <skos:Concept rdf:about="http://data.europa.eu/dr8/ConformanceTestingApplicationService">
     <skos:notation><![CDATA[Conformance Testing]]></skos:notation>
     <dcterms:identifier>http://data.europa.eu/dr8/ConformanceTestingApplicationService</dcterms:identifier>
-    <skos:prefLabel xml:lang="en"><![CDATA[Conformance Testing]]></skos:prefLabel>
+    <skos:prefLabel xml:lang="en"><![CDATA[Conformance Testing Service]]></skos:prefLabel>
     <skos:topConceptOf rdf:resource="http://data.europa.eu/dr8" />
     <skos:definition xml:lang="en"><![CDATA[Definition: Conformance Testing ABB is an Application Service that enables the activities and rules to determine whether a tool, platform or service faithfully meets the requirements of a standard or specification
 
