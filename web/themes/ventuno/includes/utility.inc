@@ -51,11 +51,6 @@ function _ventuno_preprocess_tile(array &$variables, string $entity_type_id): vo
   // Prepare different data depending on the route.
   $route_match = \Drupal::routeMatch();
   $route_name = $route_match->getRouteName();
-  $routes_horizontal_tiles = [
-    'view.search.page_1',
-    'page_manager.page_view_homepage_homepage-layout_builder-0',
-    'page_manager.page_view_homepage_homepage-layout_builder-1',
-  ];
 
   // Text only on horizontal tiles.
   $variables['text'] = $entity instanceof DescriptionInterface && isset($variables['content'][$entity->getDescriptionField()]) ? $variables['content'][$entity->getDescriptionField()] : NULL;
@@ -360,10 +355,8 @@ function _ventuno_get_author(CommunityContentInterface $node): array {
 
 /**
  * Prepares the data for user in tile view modes.
- *
  */
 function _ventuno_preprocess_user_tile(array &$variables): void {
-  $route_name = \Drupal::routeMatch()->getRouteName();
   $user = $variables['elements']['#user'];
 
   // Text.
