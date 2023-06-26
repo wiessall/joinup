@@ -1,0 +1,20 @@
+{#
+  * Default template for the Github feed.
+  * Variables:
+  * - items: The feed object.
+  * - url: The url of the feed.
+  * - type: The type of the feed.
+#}
+<div class="github-feed mb-4">
+  <h4 class="mb-3">
+    <svg class="bi icon--xs text-{{ icon_color }}">
+      <use xlink:href="{{ bcl_icon_path }}#{{ icon_id }}"></use>
+    </svg>
+    <span class="text-dark">{{ type_parsed }} ({{ items|length }})</span>
+  </h4>
+  {% for item in items %}
+    <div class="github-feed-item border rounded p-3 mb-3">
+      {{ item }}
+    </div>
+  {% endfor %}
+</div>
