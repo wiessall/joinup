@@ -45,8 +45,8 @@ Feature: Like/unlike feature.
 
   Scenario Outline: User can like/unlike solution's content
     Given <content type> content:
-      | title                        | solution            | state     |
-      | Liked <content type> content | Very liked solution | validated |
+      | title                        | solution            | state   |
+      | Liked <content type> content | Very liked solution | <state> |
 
     When I am logged in as "Gregory Like"
     And I go to the content page of the type "<content type>" with the title "Liked <content type> content"
@@ -61,9 +61,9 @@ Feature: Like/unlike feature.
     And I see the text "Like (0)" in the "Like block" region
 
     Examples:
-      | content type |
-      | news         |
-      | event        |
-      | discussion   |
-      | document     |
-      | custom_page  |
+      | content type | state     |
+      | news         | validated |
+      | event        | validated |
+      | discussion   | validated |
+      | document     | validated |
+      | custom_page  | published |
