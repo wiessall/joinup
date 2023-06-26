@@ -1,0 +1,46 @@
+[
+  {
+    "url": "https://api.github.com/repos/openeuropa/oe_bootstrap_theme/issues/comments/1538052735",
+    "html_url": "https://github.com/openeuropa/oe_bootstrap_theme/issues/327#issuecomment-1538052735",
+    "issue_url": "https://api.github.com/repos/openeuropa/oe_bootstrap_theme/issues/327",
+    "id": 1538052735,
+    "node_id": "IC_kwDOFlRSi85brNJ_",
+    "user": {
+      "login": "tibi2303",
+      "id": 36895476,
+      "node_id": "MDQ6VXNlcjM2ODk1NDc2",
+      "avatar_url": "https://avatars.githubusercontent.com/u/36895476?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/tibi2303",
+      "html_url": "https://github.com/tibi2303",
+      "followers_url": "https://api.github.com/users/tibi2303/followers",
+      "following_url": "https://api.github.com/users/tibi2303/following{/other_user}",
+      "gists_url": "https://api.github.com/users/tibi2303/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/tibi2303/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/tibi2303/subscriptions",
+      "organizations_url": "https://api.github.com/users/tibi2303/orgs",
+      "repos_url": "https://api.github.com/users/tibi2303/repos",
+      "events_url": "https://api.github.com/users/tibi2303/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/tibi2303/received_events",
+      "type": "User",
+      "site_admin": false
+    },
+    "created_at": "2023-05-08T09:28:37Z",
+    "updated_at": "2023-05-08T09:29:31Z",
+    "author_association": "NONE",
+    "body": "Thank you for this, we will actually fix this in this pr from BCL. https://github.com/openeuropa/bootstrap-component-library/pull/509. Where we will be able to display the captions without any issue on videos\r\n\r\nWe can actually use this issue to display the caption that it's removed after we will have the BCL pr merged and released.",
+    "reactions": {
+      "url": "https://api.github.com/repos/openeuropa/oe_bootstrap_theme/issues/comments/1538052735/reactions",
+      "total_count": 1,
+      "+1": 1,
+      "-1": 0,
+      "laugh": 0,
+      "hooray": 0,
+      "confused": 0,
+      "heart": 0,
+      "rocket": 0,
+      "eyes": 0
+    },
+    "performed_via_github_app": null
+  }
+]
