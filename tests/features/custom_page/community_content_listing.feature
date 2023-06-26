@@ -11,7 +11,7 @@ Feature:
       | Emulators  | logo.png | banner.jpg | validated |
     And custom_page content:
       | title               | collection | created           | body                               | state     | pinned |
-      | Latest news listing | Nintendo64 | 2019-10-01 4:26am | You can find the latest news here. | published | no     |
+      | Latest news listing | Nintendo64 | 2019-10-01 4:26am | You can find the latest news here. | validated | no     |
     And news content:
       | title                                 | collection | created           | content                          | state     | pinned |
       | Rare Nintendo64 disk drive discovered | Nintendo64 | 2018-10-01 4:26am | Magnetic drive called 64DD.      | validated | no     |
@@ -339,7 +339,7 @@ Feature:
             keywords|"nintendo64 manuals"";s:5:"limit";s:2:"10";}
     """
     And custom_page content:
-      | title   | collection | state     |
+      | title    | collection | state     |
       | Licences | Nintendo64 | validated |
     And I append content listing to "field_paragraphs_body" field in "node" entity with following "Licences" title with:
     """
@@ -399,8 +399,8 @@ Feature:
   Scenario: Global search setting allows for site-wide content in the content listing.
     Given I am logged in as a moderator
     And custom_page content:
-      | title                | collection           | state     |
-      | All content | Nintendo64 | validated |
+      | title       | collection   | state     |
+      | All content | Nintendo64   | validated |
     And I append "content_listing" to "field_paragraphs_body" field in "node" entity with following "All content" title:
       | content_listing:value | a:6:{s:6:"fields";a:1:{s:20:"content_listing_type";a:2:{s:6:"weight";i:0;s:6:"region";s:3:"top";}}s:7:"enabled";i:1;s:13:"query_presets";s:38:"entity_bundle\|discussion,event,news\|IN";s:5:"limit";s:2:"12";s:11:"show_shared";i:0;s:13:"global_search";i:1;} |
 
@@ -466,7 +466,7 @@ Feature:
 
     And custom_page content:
       | title   | collection | state     |
-      | Forests | Nintendo64 | published |
+      | Forests | Nintendo64 | validated |
 
     Given I am logged in as a facilitator of the "Nintendo64" collection
     And I go to the edit form of the "Forests" "custom page"
@@ -508,7 +508,7 @@ Feature:
 
     And custom_page content:
       | title | collection | state     |
-      | Bikes | Nintendo64 | published |
+      | Bikes | Nintendo64 | validated |
 
     Given I am logged in as a facilitator of the "Nintendo64" collection
     And I go to the edit form of the "Bikes" "custom page"
