@@ -8,7 +8,7 @@
     right: unset;
     left: calc(100% - $spacer * 3); // 100% - 46px
     position: relative;
-    z-index: 48; // Display below nav but above content
+    z-index: unset; // Avoid buttons to overlap navbar
     bottom: unset;
     margin: $spacer * .5 0;
   }
