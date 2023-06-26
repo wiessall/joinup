@@ -150,6 +150,10 @@ function iop_preprocess_block(array &$variables): void {
     case 'iop_primaryadminactions':
       $variables['attributes']['class'][] = 'd-inline-block';
       break;
+
+    case 'iop_pagetitle':
+      $variables['attributes']['class'][] = 'd-inline-block';
+      break;
   }
 }
 
