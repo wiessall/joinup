@@ -12,7 +12,7 @@ Feature:
   @javascript
   Scenario: Paragraph sections are multivalue and sort-able.
     Given custom_page content:
-      | title           | collection           | state     |
+      | title           | collection            | state     |
       | Paragraphs page | Paragraphs collection | validated |
     And I append "simple_paragraph" to "field_paragraphs_body" field in "node" entity with following "Paragraphs page" title:
       | field_body:value  | AAAAAAAAAA      |
@@ -50,7 +50,7 @@ Feature:
       | Paragraphs collection | Zohan |
     And custom_page content:
       | title                     | body        | collection            | author | state     |
-      | Don't Mess with the Zohan | Wanna mess? | Paragraphs collection | Zohan  | published |
+      | Don't Mess with the Zohan | Wanna mess? | Paragraphs collection | Zohan  | validated |
 
     # Normal members cannot add maps.
     When I am logged in as "Zohan"
