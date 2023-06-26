@@ -78,7 +78,7 @@ Feature: Discussion moderation
     And I go to the "Best method to cut Eucalyptus wood logs" discussion
     And I click "Edit" in the "Entity actions" region
     Then the current workflow state should be "Published"
-    When I press "Disable"
+    When I press "Archive"
     # The discussion is kept published.
     Then I should see the heading "Best method to cut Eucalyptus wood logs"
     # But no further changes can be done.
@@ -123,7 +123,7 @@ Feature: Discussion moderation
     When I am logged in as "Lance Rustici"
     And I go to the "What's the best escape gift?" discussion
     And I click "Edit" in the "Entity actions" region
-    And I press "Disable"
+    And I press "Archive"
     Then I should see the message "Discussion What's the best escape gift? has been updated"
 
     # The comments should still be visible.

@@ -22,7 +22,7 @@ Feature:
       | IOP document 1 | Interoperable Europe | draft    |
       | IOP document 2 | Interoperable Europe | proposed |
     And custom_page content:
-      | title             | collection           | status      |
+      | title             | collection           | state       |
       | IOP custom page 1 | Interoperable Europe | unpublished |
 
     When I am logged in as a moderator
@@ -59,7 +59,7 @@ Feature:
       | Some group document 1 | Some group | draft    |
       | Some group document 2 | Some group | proposed |
     And custom_page content:
-      | title                    | collection | status      |
+      | title                    | collection | state       |
       | Some group custom page 1 | Some group | unpublished |
 
     When I am logged in as a facilitator of the "Some group" collection

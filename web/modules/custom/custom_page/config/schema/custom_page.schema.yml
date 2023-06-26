@@ -29,6 +29,9 @@ custom_page_search_api_widget:
               enabled:
                 type: integer
                 label: 'Enabled'
+              show_archived:
+                type: string
+                label: 'Show archived'
               query_presets:
                 type: string
                 label: 'Query presets'
