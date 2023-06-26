@@ -86,7 +86,7 @@ function ventuno_preprocess_node(array &$variables): void {
     'highlighted',
     'view_mode_tile',
     'view_mode_tile_horizontal',
-    'carousel'
+    'carousel',
   ];
   // Prepare data for the tiles.
   if (in_array($variables['view_mode'], $tile_view_modes)) {
