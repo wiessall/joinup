@@ -151,13 +151,22 @@ function joinup_search_search_api_index_items_alter(IndexInterface $index, array
  * first "s" stands for 'string' and the second one stands for single value.
  */
 function joinup_search_search_api_solr_documents_alter(&$documents, IndexInterface $index, array $items) {
-  /** @var \Solarium\QueryType\Update\Query\Document\Document[] $documents */
+  /** @var \Solarium\QueryType\Update\Query\Document[] $documents */
   foreach ($documents as $document) {
     if (empty($document->getFields()['bs_sticky'])) {
       $document->setField('bs_sticky', FALSE);
     }
-    if (empty($document->getFields()['ss_state']) && $index->id() === 'unpublished') {
-      $document->setField('ss_state', 'unpublished');
+    if (empty($document->getFields()['sm_entity_status']) && $index->id() === 'unpublished') {
+      $document->setField('sm_entity_status', 'unpublished');
+    }
+    if (empty($document->getFields()['sm_entity_status']) && $index->id() === 'published') {
+      // Because of the way the search API works, when we
+      // perform a search, it only returns items *with* a value for the
+      // conditions. Thus, when we search for an item that is not archived, if
+      // items do not have a value for the state field, they will not be
+      // included in the results. This is why we set the value to a special
+      // value that will never be used for the state field.
+      $document->setField('sm_entity_status', 'published');
     }
   }
 }
@@ -188,11 +197,13 @@ function joinup_search_search_api_solr_query_alter(SolariumQueryInterface $solar
     return;
   }
 
+  // Note: the Solarium query might affect the facets shown in the page. Refrain
+  // from using these functions for configurable dynamic queries.
   _joinup_search_apply_global_search_api_solr_settings($solarium_query, $query);
 }
 
 /**
- * Apply the global settings to all solarium queries on Joinup.
+ * Apply the global settings to all search_api_field solarium queries on Joinup.
  *
  * @param \Solarium\Core\Query\QueryInterface $solarium_query
  *   The solarium query.
@@ -210,7 +221,7 @@ function _joinup_search_apply_global_search_api_solr_settings(SolariumQueryInter
   // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-4907
   $solarium_query->addParam('defType', 'edismax');
 
-  $value = $item->value;
+  $value = $item->getValue()['value'];
   if (empty($value['query_builder']['filters'])) {
     return;
   }
@@ -366,6 +377,48 @@ function joinup_search_views_pre_render(ViewExecutable $view): void {
           }
         }
       }
+    }
+  }
+}
+
+/**
+ * Implements hook_entity_prepare_view().
+ */
+function joinup_search_entity_prepare_view(string $entity_type_id, array $entities, array $displays, string $view_mode): void {
+  if ($entity_type_id !== 'rdf_entity') {
+    return;
+  }
+
+  $entity_fields = [
+    'collection' => [
+      'field' => 'field_collection_content',
+      'facet' => 'field_collection_content_status',
+    ],
+    'solution' => [
+      'field' => 'field_is_content',
+      'facet' => 'field_is_content_status',
+    ],
+  ];
+
+  foreach ($entities as $entity) {
+    if (!isset($entity_fields[$entity->bundle()])) {
+      continue;
+    }
+
+    $field = $entity_fields[$entity->bundle()]['field'];
+    $facet = $entity_fields[$entity->bundle()]['facet'];
+    if (!isset($entity->{$field}) || $entity->{$field}->value['enabled'] === 0 || !isset($entity->{$field}->value['fields'][$facet])) {
+      continue;
+    }
+
+    // Because we are forcing the facet to show the values even when they are
+    // not narrowing the results, and we are altering the query as well, we need
+    // to also dynamically hide the facet when the 'show_archived' option is set
+    // to anything else than 'all' - because it will not hide automatically.
+    if ($entity->{$field}->value['show_archived'] !== 'all') {
+      $value = $entity->{$field}->getValue();
+      $value[0]['value']['fields'][$facet]['region'] = 'hidden';
+      $entity->{$field}->setValue($value);
     }
   }
 }

@@ -7,11 +7,12 @@ namespace Drupal\joinup_event\Entity;
 use Drupal\Core\Url;
 use Drupal\joinup_bundle_class\LogoInterface;
 use Drupal\joinup_community_content\Entity\CommunityContentInterface;
+use Drupal\joinup_workflow\ArchivableEntityInterface;
 
 /**
  * Interface for event entities in Joinup.
  */
-interface EventInterface extends CommunityContentInterface, LogoInterface {
+interface EventInterface extends CommunityContentInterface, LogoInterface, ArchivableEntityInterface {
 
   /**
    * Returns the event location.

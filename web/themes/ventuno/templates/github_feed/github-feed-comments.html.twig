@@ -1,0 +1,27 @@
+{#
+/**
+ * @file
+ * Default template for the github_feed_comments element.
+ *
+ * Available variables:
+ * - comments: The rendered comments.
+ * - accordion_item_id: A unique and valid HTML id.
+ *
+ * @ingroup themeable
+ */
+#}
+{{ attach_library('ventuno/accordion') }}
+<div{{ attributes.addClass(['accordion', 'accordion-flush', 'mt-2']) }}>
+  <div class="accordion-item">
+    <h3 class="accordion-header" id="heading{{ accordion_item_id }}">
+      <button class="accordion-button collapsed p-1 fs-sm text-dark bg-white" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ accordion_item_id }}" aria-expanded="true" aria-controls="collapse{{ accordion_item_id }}">
+        {{ title }} ({{ comments['#items']|length }})
+      </button>
+    </h3>
+    <div id="collapse{{ accordion_item_id }}" class="accordion-collapse collapse" aria-labelledby="heading{{ accordion_item_id }}">
+      <div class="accordion-body p-1">
+        {{ comments }}
+      </div>
+    </div>
+  </div>
+</div>

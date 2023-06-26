@@ -30,9 +30,7 @@ function ventuno_preprocess_table__file_formatter_table(array &$variables): void
 function ventuno_preprocess_table(array &$variables): void {
   // Theme the table showing topics in
   // /admin/structure/entityqueue/homepage_topics/homepage_topics.
-  if (
-    isset($variables['attributes']['id']) &&
-    $variables['attributes']['id'] === 'items-values') {
+  if (array_key_exists('id', $variables['attributes']) && $variables['attributes']['id'] === 'items-values') {
     unset($variables['header']);
     $variables['attributes']['class'][] = 'form-table';
   }
