@@ -12,6 +12,7 @@ use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\comment\CommentAccessControlHandler;
 use Drupal\joinup_community_content\Entity\CommunityContentInterface;
+use Drupal\joinup_workflow\ArchivableEntityInterface;
 use Drupal\og\OgAccessInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -58,6 +59,13 @@ class JoinupCommunityContentCommentAccessControlHandler extends CommentAccessCon
     if (!$community_content instanceof CommunityContentInterface) {
       return parent::checkAccess($comment, $operation, $account);
     }
+
+    // If commented entity is archived, comment is in 'View Only' state.
+    if ($operation !== 'view' && $community_content instanceof ArchivableEntityInterface && $community_content->isArchived()) {
+      return AccessResult::forbidden('Commented entity is archived')
+        ->addCacheableDependency($community_content);
+    }
+
     $is_comment_admin = $this->isAllowedIfHasPermission('administer comments', $community_content, $account);
 
     if ($operation == 'approve') {
@@ -124,6 +132,20 @@ class JoinupCommunityContentCommentAccessControlHandler extends CommentAccessCon
     return $account->hasPermission($permission)
       // Or organic groups permission.
       || $this->ogAccess->userAccess($community_content->getGroup(), $permission, $account)->isAllowed();
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function checkCreateAccess(AccountInterface $account, array $context, $entity_bundle = NULL) {
+    $commented_entity = $context['commented_entity'] ?? NULL;
+
+    if ($commented_entity instanceof ArchivableEntityInterface && $commented_entity->isArchived()) {
+      return AccessResult::forbidden('Commented entity is archived')
+        ->addCacheableDependency($commented_entity);
+    }
+
+    return parent::checkCreateAccess($account, $context, $entity_bundle);
   }
 
 }

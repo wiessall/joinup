@@ -61,7 +61,7 @@ Feature:
       | Persistent news | Persistent news | Persistent collection | validated |
     And custom_page content:
       | title           | body            | collection            | state     |
-      | Persistent page | Persistent page | Persistent collection | validated |
+      | Persistent page | Persistent page | Persistent collection | published |
 
     When I go to the "Persistent collection" collection
     And I click "About"
