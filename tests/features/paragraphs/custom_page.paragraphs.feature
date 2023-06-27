@@ -49,8 +49,8 @@ Feature:
       | collection            | user  |
       | Paragraphs collection | Zohan |
     And custom_page content:
-      | title                     | body        | collection            | author |
-      | Don't Mess with the Zohan | Wanna mess? | Paragraphs collection | Zohan  |
+      | title                     | body        | collection            | author | state     |
+      | Don't Mess with the Zohan | Wanna mess? | Paragraphs collection | Zohan  | published |
 
     # Normal members cannot add maps.
     When I am logged in as "Zohan"
@@ -115,7 +115,6 @@ Feature:
     And I enter "Clumsy text" in the 1st "Body" wysiwyg editor in the "Accordion item" field
     And I fill in the 2nd "Item label" with "Duper" in the "Accordion item" field
     And I enter "Crunchy text" in the 2nd "Body" wysiwyg editor in the "Accordion item" field
-
     And I press "Save" in the "Modal buttons" region
     And I press "Save"
     Then I should see the heading "Paragraphs accordion page"

@@ -93,6 +93,7 @@ Feature: Proposing a collection
     Then I should see the heading "Add custom page"
     When I fill in the following:
       | Title | About this group                                               |
+      | Body  | <p>Some more<em>information</em><br />about the collection.<p> |
     And I press "Save"
     Then I should see the success message "Custom page About this group has been created."
 

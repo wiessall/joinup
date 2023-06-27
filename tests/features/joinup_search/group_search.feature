@@ -45,9 +45,9 @@ Feature: Search inside groups
       | Natural materials | Materials natural | Ground feel     | Chalet construction |                      | Statistics and Analysis | Switzerland      | validated |
       | Still frozen      | Frozen still      | Maybe next week |                     | Inclined foundations |                         | Austria          | validated |
     And custom_page content:
-      | title     | body                             | collection          | solution             |
-      | Resources | Here are some interesting links. | Chalet construction |                      |
-      | Geography | A collection of height maps.     |                     | Inclined foundations |
+      | title     | body                             | collection          | solution             | state     |
+      | Resources | Here are some interesting links. | Chalet construction |                      | published |
+      | Geography | A collection of height maps.     |                     | Inclined foundations | published |
     And releases:
       | title     | release number | release notes              | is version of        | state     |
       | Pre-alpha | 0.0-alpha0     | Only works on flat ground. | Inclined foundations | validated |
