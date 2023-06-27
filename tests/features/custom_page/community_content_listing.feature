@@ -72,7 +72,7 @@ Feature:
     And I should see the text "Note: the content shown is dynamic, filtered live each time users will visualise the page. As a result, new content might be shown and old content can be altered or deleted."
 
     When I press "Save" in the "Modal buttons" region
-    And I press "Save"
+    And I press "Publish"
     Then I should see the heading "Latest content"
     And I should see the "Rare Nintendo64 disk drive discovered" tile
     And I should see the "20 year anniversary" tile
@@ -99,7 +99,7 @@ Feature:
     And I click "Edit" in the "Custom page body" for paragraph layout 1
     And I check "Allow shared content"
     And I press "Save" in the "Modal buttons" region
-    And I press "Save"
+    And I press "Update"
     # Only news are displayed.
     Then I should see the "Rare Nintendo64 disk drive discovered" tile
     But I should not see the "20 year anniversary" tile
@@ -133,7 +133,7 @@ Feature:
     And I click "Edit" in the "Custom page body" for paragraph layout 1
     And I uncheck "Show related content"
     And I press "Save" in the "Modal buttons" region
-    And I press "Save"
+    And I press "Update"
     Then I should not see the "Rare Nintendo64 disk drive discovered" tile
     And I should not see the "20 year anniversary" tile
     And I should not see the "NEC VR4300 CPU" tile
@@ -494,7 +494,6 @@ Feature:
     And I click "Edit" in the "Custom page body" for paragraph layout 1
     Then the 1st filter of the 1st content listing paragraph value is "Save the Planet"
     And I press "Save" in the "Modal buttons" region
-    And I press "Save"
 
   @javascript
   Scenario: Regression test for ISAICP-7183
@@ -508,7 +507,7 @@ Feature:
 
     And custom_page content:
       | title | collection | state     |
-      | Bikes | Nintendo64 | validated |
+      | Bikes | Nintendo64 | published |
 
     Given I am logged in as a facilitator of the "Nintendo64" collection
     And I go to the edit form of the "Bikes" "custom page"
@@ -538,7 +537,7 @@ Feature:
     And I fill in the latest "Solution" field with "Fight battery mode"
     And I press "Save" in the "Modal buttons" region
 
-    Then I press "Save"
+    Then I press "Update"
     And I should see the heading "Bikes"
 
     When I go to the edit form of the "Bikes" "custom page"

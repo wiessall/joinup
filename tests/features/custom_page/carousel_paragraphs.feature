@@ -41,7 +41,7 @@ Feature:
 
     And custom_page content:
       | title         | collection  | state     |
-      | News carousel | Roman ruins | validated |
+      | News carousel | Roman ruins | published |
     And I append "content_listing" to "field_paragraphs_body" field in "node" entity with following "News carousel" title:
       | content_listing:value | a:6:{s:6:"fields";a:1:{s:20:"content_listing_type";a:2:{s:6:"weight";i:0;s:6:"region";s:3:"top";}}s:7:"enabled";i:1;s:13:"query_presets";s:18:"entity_bundle\|news";s:5:"limit";s:2:"12";s:11:"show_shared";i:0;s:13:"global_search";i:0;} |
 
@@ -112,7 +112,7 @@ Feature:
       | Some news 3 | Some news 3 | Roman ruins | Some content. | validated | 1 days ago |
     And custom_page content:
       | title         | collection  | state     |
-      | News carousel | Roman ruins | validated |
+      | News carousel | Roman ruins | published |
     And I append "content_listing" to "field_paragraphs_body" field in "node" entity with following "News carousel" title:
       | content_listing:value | a:6:{s:6:"fields";a:1:{s:20:"content_listing_type";a:2:{s:6:"weight";i:0;s:6:"region";s:3:"top";}}s:7:"enabled";i:1;s:13:"query_presets";s:18:"entity_bundle\|news";s:5:"limit";s:2:"12";s:11:"show_shared";i:0;s:13:"global_search";i:0;} |
 
@@ -130,7 +130,7 @@ Feature:
       | Some event 3 | Some event 3 | Roman ruins  | Some content. | validated | 1 days ago | 7 days ago | 6 days ago |
     And custom_page content:
       | title           | collection  | state     |
-      | Events carousel | Roman ruins | validated |
+      | Events carousel | Roman ruins | published |
     And I append "content_listing" to "field_paragraphs_body" field in "node" entity with following "Events carousel" title:
       | content_listing:value | a:6:{s:6:"fields";a:1:{s:20:"content_listing_type";a:2:{s:6:"weight";i:0;s:6:"region";s:3:"top";}}s:7:"enabled";i:1;s:13:"query_presets";s:19:"entity_bundle\|event";s:5:"limit";s:2:"12";s:11:"show_shared";i:0;s:13:"global_search";i:0;} |
 
