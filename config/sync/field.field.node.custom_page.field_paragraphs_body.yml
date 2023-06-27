@@ -8,6 +8,7 @@ dependencies:
     - paragraphs.paragraphs_type.accordion
     - paragraphs.paragraphs_type.carousel
     - paragraphs.paragraphs_type.content_listing
+    - paragraphs.paragraphs_type.github_feed
     - paragraphs.paragraphs_type.iframe
     - paragraphs.paragraphs_type.json_map
     - paragraphs.paragraphs_type.row
@@ -35,6 +36,7 @@ settings:
       iframe: iframe
       row: row
       carousel: carousel
+      github_feed: github_feed
     negate: 0
     target_bundles_drag_drop:
       1_column_layout:
@@ -73,6 +75,9 @@ settings:
       entity_reference:
         weight: 21
         enabled: false
+      github_feed:
+        weight: 33
+        enabled: true
       iframe:
         weight: 8
         enabled: true
