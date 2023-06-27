@@ -42,10 +42,13 @@
           {{ bundle_label }}
         </span>
         {{ pattern('icon', {
-            name: 'file-earmark-text',
-            size: 's'
-          }) }}
+          name: 'file-earmark-text',
+          size: 's'
+        }) }}
       </span>
+      {% if additional_content.is_archived %}
+        {% include '@ventuno/parts/page-title-detail-archive.html.twig' %}
+      {% endif %}
     </div>
   </div>
 {% endif %}

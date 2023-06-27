@@ -17,6 +17,7 @@ use Drupal\Core\Url;
 use Drupal\joinup_community_content\CommunityContentHelper;
 use Drupal\joinup_community_content\Entity\CommunityContentInterface;
 use Drupal\joinup_community_content\JoinupCommunityContentCommentAccessControlHandler;
+use Drupal\joinup_community_content\Plugin\views\filter\JoinupContentState;
 use Drupal\joinup_discussion\Entity\DiscussionInterface;
 use Drupal\joinup_group\Exception\MissingGroupException;
 use Drupal\node\NodeInterface;
@@ -81,7 +82,8 @@ function joinup_community_content_node_access(NodeInterface $entity, string $ope
   if (!$entity instanceof CommunityContentInterface) {
     return AccessResult::neutral();
   }
-  return \Drupal::service('joinup_community_content.community_content_workflow_access')->entityAccess($entity, $operation, $account);
+  return \Drupal::service('joinup_community_content.community_content_workflow_access')
+    ->entityAccess($entity, $operation, $account);
 }
 
 /**
@@ -160,6 +162,15 @@ function joinup_community_content_workflow_selector(EntityInterface $entity): ?s
   }
 
   return 'node:pre_moderated';
+}
+
+/**
+ * Implements hook_views_plugins_filter_alter().
+ */
+function joinup_community_content_views_plugins_filter_alter(array &$plugins): void {
+  if (isset($plugins['state_machine_state'])) {
+    $plugins['state_machine_state']['class'] = JoinupContentState::class;
+  }
 }
 
 /**

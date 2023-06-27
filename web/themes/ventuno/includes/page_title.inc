@@ -8,6 +8,7 @@
 declare(strict_types = 1);
 
 use Drupal\joinup_community_content\Entity\CommunityContentInterface;
+use Drupal\joinup_workflow\ArchivableEntityInterface;
 
 /**
  * Implements hook_preprocess_page_title().
@@ -40,6 +41,10 @@ function ventuno_preprocess_page_title(array &$variables): void {
     /** @var \Drupal\solution\Entity\SolutionInterface $solution */
     $solution = \Drupal::routeMatch()->getParameter('rdf_entity');
     $variables['title'] = t('EIF Perspective attributes of @title', ['@title' => $solution->label()]);
+  }
+
+  if ($entity instanceof ArchivableEntityInterface) {
+    $variables['additional_content']['is_archived'] = $entity->isArchived();
   }
 }
 

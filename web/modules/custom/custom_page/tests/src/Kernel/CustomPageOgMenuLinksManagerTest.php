@@ -127,6 +127,32 @@ class CustomPageOgMenuLinksManagerTest extends KernelTestBase {
     $mocked_custom_page_type->og_target_type = 'rdf_entity';
     $mocked_custom_page_type->og_target_bundles = ['collection'];
     $mocked_custom_page_type->save();
+
+    // The state field plays a big part of the project so we cannot go around
+    // that much without it. We create it here manually.
+    FieldStorageConfig::create([
+      'type' => 'state',
+      'entity_type' => 'node',
+      'field_name' => 'field_state',
+      'settings' => [
+        'workflow' => 'custom_page_workflow',
+      ],
+    ])->save();
+
+    $field = [
+      'field_name' => 'field_state',
+      'entity_type' => 'node',
+      'bundle' => 'custom_page',
+      'label' => 'State',
+      'required' => TRUE,
+      'settings' => [
+        'workflow' => 'custom_page_workflow',
+      ],
+    ];
+    $instance = \Drupal::service('entity_type.manager')
+      ->getStorage('field_config')
+      ->create($field);
+    $instance->save();
   }
 
   /**
