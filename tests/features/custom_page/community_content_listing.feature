@@ -26,68 +26,6 @@ Feature:
       | Searching for green pad.        | Nintendo64 | Looking for a used one. | 2018-11-17 10:18 | validated | no     |
 
   @javascript
-  Scenario: Regression test for ISAICP-7183
-  See https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7183
-
-    Given solutions:
-      | title              | collection | state     |
-      | Save gasoline      | Nintendo64 | validated |
-      | Fight battery mode | Nintendo64 | validated |
-      | Black Noise        | Nintendo64 | validated |
-
-    And custom_page content:
-      | title | collection | state     |
-      | Bikes | Nintendo64 | published |
-
-    Given I am logged in as a facilitator of the "Nintendo64" collection
-    And I go to the edit form of the "Bikes" "custom page"
-
-    # Paragraph #1.
-    When I click "Choose component"
-    And I click "Content listing"
-
-    And I press "Add and configure filter"
-    And I fill in "Solution" with "Save gasoline"
-
-    And I press latest "Add and configure filter"
-    And I fill in the latest "Solution" field with "Fight battery mode"
-
-    And I press latest "Add and configure filter"
-    And I fill in the latest "Solution" field with "Black Noise"
-    And I press "Save" in the "Modal buttons" region
-
-    # Paragraph #2.
-    When I click the last "Choose component" link
-    And I click "Content listing"
-
-    And I press latest "Add and configure filter"
-    And I fill in the latest "Solution" field with "Black Noise"
-
-    And I press latest "Add and configure filter"
-    And I fill in the latest "Solution" field with "Fight battery mode"
-    And I press "Save" in the "Modal buttons" region
-
-    Then I press "Update"
-    And I should see the heading "Bikes"
-
-    When I go to the edit form of the "Bikes" "custom page"
-    And I click "Edit" in the "Custom page body" for paragraph layout 1
-    And I click "Remove filter" at 1st filter of the 1st content listing paragraph
-
-    Then the 1st filter of the 1st content listing paragraph value is "Fight battery mode"
-    And the 2nd filter of the 1st content listing paragraph value is "Black Noise"
-
-    And I press "Add and configure filter"
-    And the 3nd filter of the 1st content listing paragraph is empty
-    And I click "Remove filter" at 1st filter of the 1st content listing paragraph
-    And I press "Cancel" in the "Modal buttons" region
-    And I wait for AJAX to finish
-
-    When I click "Edit" in the "Custom page body" for paragraph layout 2
-    And the 1st filter of the 1st content listing paragraph value is "Black Noise"
-    And the 2nd filter of the 1st content listing paragraph value is "Fight battery mode"
-
-  @javascript
   Scenario: Community content listing widget should be shown to facilitators and moderators.
     Given I am logged in as a facilitator of the "Nintendo64" collection
     When I go to the homepage of the "Nintendo64" collection
@@ -556,3 +494,65 @@ Feature:
     And I click "Edit" in the "Custom page body" for paragraph layout 1
     Then the 1st filter of the 1st content listing paragraph value is "Save the Planet"
     And I press "Save" in the "Modal buttons" region
+
+  @javascript
+  Scenario: Regression test for ISAICP-7183
+  See https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7183
+
+    Given solutions:
+      | title              | collection | state     |
+      | Save gasoline      | Nintendo64 | validated |
+      | Fight battery mode | Nintendo64 | validated |
+      | Black Noise        | Nintendo64 | validated |
+
+    And custom_page content:
+      | title | collection | state     |
+      | Bikes | Nintendo64 | published |
+
+    Given I am logged in as a facilitator of the "Nintendo64" collection
+    And I go to the edit form of the "Bikes" "custom page"
+
+    # Paragraph #1.
+    When I click "Choose component"
+    And I click "Content listing"
+
+    And I press "Add and configure filter"
+    And I fill in "Solution" with "Save gasoline"
+
+    And I press latest "Add and configure filter"
+    And I fill in the latest "Solution" field with "Fight battery mode"
+
+    And I press latest "Add and configure filter"
+    And I fill in the latest "Solution" field with "Black Noise"
+    And I press "Save" in the "Modal buttons" region
+
+    # Paragraph #2.
+    When I click the last "Choose component" link
+    And I click "Content listing"
+
+    And I press latest "Add and configure filter"
+    And I fill in the latest "Solution" field with "Black Noise"
+
+    And I press latest "Add and configure filter"
+    And I fill in the latest "Solution" field with "Fight battery mode"
+    And I press "Save" in the "Modal buttons" region
+
+    Then I press "Update"
+    And I should see the heading "Bikes"
+
+    When I go to the edit form of the "Bikes" "custom page"
+    And I click "Edit" in the "Custom page body" for paragraph layout 1
+    And I click "Remove filter" at 1st filter of the 1st content listing paragraph
+
+    Then the 1st filter of the 1st content listing paragraph value is "Fight battery mode"
+    And the 2nd filter of the 1st content listing paragraph value is "Black Noise"
+
+    And I press "Add and configure filter"
+    And the 3nd filter of the 1st content listing paragraph is empty
+    And I click "Remove filter" at 1st filter of the 1st content listing paragraph
+    And I press "Cancel" in the "Modal buttons" region
+    And I wait for AJAX to finish
+
+    When I click "Edit" in the "Custom page body" for paragraph layout 2
+    And the 1st filter of the 1st content listing paragraph value is "Black Noise"
+    And the 2nd filter of the 1st content listing paragraph value is "Fight battery mode"
