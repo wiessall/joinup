@@ -52,7 +52,7 @@ function _ventuno_preprocess_tile(array &$variables, string $entity_type_id): vo
   $route_match = \Drupal::routeMatch();
   $route_name = $route_match->getRouteName();
 
-  // Text only on horizontal tiles.
+  // Text.
   $variables['text'] = $entity instanceof DescriptionInterface && isset($variables['content'][$entity->getDescriptionField()]) ? $variables['content'][$entity->getDescriptionField()] : NULL;
 
   // Image.
