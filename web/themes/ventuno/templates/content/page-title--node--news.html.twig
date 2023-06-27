@@ -39,11 +39,14 @@
         {{ bundle_label }}
       </span>
       {{ pattern('icon', {
-          name: 'newspaper',
-          size: 's'
-        }) }}
+        name: 'newspaper',
+        size: 's'
+      }) }}
     </span>
+      {% if additional_content.is_archived %}
+        {% include '@ventuno/parts/page-title-detail-archive.html.twig' %}
+      {% endif %}
+    </div>
   </div>
-</div>
 {% endif %}
 {{ title_suffix }}

@@ -17,31 +17,9 @@ declare(strict_types = 1);
 use Drupal\media\MediaTypeInterface;
 
 /**
- * Clean up problematic graph in the production database.
- */
-function joinup_core_deploy_109300(): string {
-  $query = <<<QUERY
-DELETE {
-  GRAPH ?g {
-    ?s ?p ?o .
-  }
-}
-WHERE {
-  GRAPH ?g {
-    ?s ?p ?o .
-  }
-  FILTER (STRSTARTS(STR(?g), "no prefix"))
-}
-QUERY;
-
-  \Drupal::getContainer()->get('sparql.endpoint')->query($query);
-  return "Graph has been deleted";
-}
-
-/**
  * Migrate Video content into new Media field.
  */
-function joinup_core_deploy_109301(array &$sandbox): string {
+function joinup_core_deploy_109400(array &$sandbox): string {
   if (empty($sandbox['ids'])) {
     $sandbox['ids'] = \Drupal::entityQuery('node')
       ->accessCheck(FALSE)
@@ -119,7 +97,7 @@ function _joinup_core_deploy_migrate_field(MediaTypeInterface $media_type, strin
 /**
  * Migrate video embed markup into media.
  */
-function joinup_core_deploy_109302(array &$sandbox): string {
+function joinup_core_deploy_109401(array &$sandbox): string {
   if (empty($sandbox['tasks'])) {
     $sandbox['tasks']['node'] = \Drupal::entityQuery('node')->accessCheck(FALSE)
       ->condition('body', 'preview_thumbnail', 'CONTAINS')

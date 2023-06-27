@@ -57,8 +57,8 @@ abstract class ExportBatchedDataFormBase extends FormBase {
 
     if ($data = $this->cacheStorage->get($this->getCacheTagName())) {
       $form['help']['#markup'] = $this->t('Last dump was created at :date and will be removed by :expire', [
-        ':date' => $this->dateFormatter->format($data->created),
-        ':expire' => $this->dateFormatter->format($data->expire),
+        ':date' => $this->dateFormatter->format((int) $data->created),
+        ':expire' => $this->dateFormatter->format((int) $data->expire),
       ]);
 
       $form['actions']['download_link'] = [
