@@ -81,6 +81,7 @@ class EiraPropertiesBlock extends BlockBase implements ContainerFactoryPluginInt
     RdfNamespace::set('eira', 'http://data.europa.eu/dr8/');
     // Replace the `dc` namespace with `dct` - requested by the client.
     RdfNamespace::delete('dc');
+    RdfNamespace::delete('dcterms');
     RdfNamespace::set('dct', 'http://purl.org/dc/terms/');
 
     $query = <<<SPARQL
