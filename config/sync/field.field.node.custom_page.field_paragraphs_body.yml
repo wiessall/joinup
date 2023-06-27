@@ -16,6 +16,7 @@ dependencies:
     - paragraphs.paragraphs_type.layout
     - paragraphs.paragraphs_type.row
     - paragraphs.paragraphs_type.simple_paragraph
+    - paragraphs.paragraphs_type.text
   module:
     - entity_reference_revisions
 id: node.custom_page.field_paragraphs_body
@@ -42,6 +43,7 @@ settings:
       carousel: carousel
       configurable_listing: configurable_listing
       layout: layout
+      text: text
       github_feed: github_feed
     negate: 0
     target_bundles_drag_drop:
@@ -105,6 +107,9 @@ settings:
       testimony:
         weight: 26
         enabled: false
+      text:
+        weight: 41
+        enabled: true
       video:
         weight: 40
         enabled: false
