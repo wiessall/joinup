@@ -13,25 +13,3 @@
  */
 
 declare(strict_types = 1);
-
-/**
- * Clean up problematic graph in the production database.
- */
-function joinup_core_deploy_109300(): string {
-  $query = <<<QUERY
-DELETE {
-  GRAPH ?g {
-    ?s ?p ?o .
-  }
-}
-WHERE {
-  GRAPH ?g {
-    ?s ?p ?o .
-  }
-  FILTER (STRSTARTS(STR(?g), "no prefix"))
-}
-QUERY;
-
-  \Drupal::getContainer()->get('sparql.endpoint')->query($query);
-  return "Graph has been deleted";
-}

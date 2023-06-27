@@ -47,6 +47,7 @@ drupal:
         - Custom error handler
         - Permissions
         - OpenEuropa Webtools Geocoding Cache
+        - GitHub Token Setup
         - Verbose error logging
         - Development mail collector
         - Memcache
@@ -64,6 +65,7 @@ drupal:
         - OpenEuropa Newsroom Newsletter Mock
         - OpenEuropa Newsroom Newsletter Settings
         - OpenEuropa Webtools Geocoding Cache
+        - GitHub Token Setup
         - Verbose error logging
         - Development mail collector
         - Memcache
@@ -82,6 +84,7 @@ drupal:
         - OpenEuropa Newsroom Newsletter Mock
         - OpenEuropa Newsroom Newsletter Settings
         - OpenEuropa Webtools Geocoding Cache
+        - GitHub Token Setup
         - Memcache
         - Custom queue services
         - Test mail collector
@@ -98,6 +101,7 @@ drupal:
         - OpenEuropa Newsroom Newsletter Mock
         - OpenEuropa Newsroom Newsletter Settings
         - OpenEuropa Webtools Geocoding Cache
+        - GitHub Feed Cache
         - Memcache
         - Pipe errors to a temporary file
         - Custom queue services
@@ -115,6 +119,7 @@ drupal:
         - OpenEuropa Newsroom Newsletter Mock
         - OpenEuropa Newsroom Newsletter Settings
         - OpenEuropa Webtools Geocoding Cache
+        - GitHub Feed Cache
         - Verbose error logging
         - Custom queue services
         - Test mail collector
@@ -126,6 +131,7 @@ drupal:
         - Search API
         - OpenEuropa Newsroom Newsletter Settings
         - OpenEuropa Webtools Analytics
+        - GitHub Token Setup
         - Custom error handler
         - Memcache
         - Custom queue services
@@ -208,6 +214,7 @@ drupal:
           'default_content',
           'devel',
           'filecache',
+          'http_request_mock',
           'joinup_cas_mock_server',
           'joinup_test',
           'memcache_admin',
@@ -311,6 +318,8 @@ drupal:
         $settings['cache']['bins']['geocoder'] = 'cache.backend.file_system';
         $settings['filecache']['directory']['bins']['geocoder'] = '../tests/fixtures/geocoding/cache';
         $settings['filecache']['strategy']['bins']['geocoder'] = 'persist';
+      GitHub Token Setup: |
+        $config['github_feed.settings']['token'] = getenv('JOINUP_GITHUB_TOKEN');
       Development: |
         $settings['extension_discovery_scan_tests'] = TRUE;
       Verbose error logging: |

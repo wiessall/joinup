@@ -127,6 +127,7 @@
         "drupal/devel": "5.0.2",
         "drupal/drupal-extension": "^5.0",
         "drupal/filecache": "^1",
+        "drupal/http_request_mock": "^1.1",
         "drupal/renderviz": "^1.0",
         "drupal/upgrade_status": "^3.14",
         "drupaltest/behat-one-time-login": "^1.0",
@@ -170,7 +171,7 @@
             "drupal/core-composer-scaffold": true,
             "openeuropa/composer-artifacts": true,
             "phpstan/extension-installer": true,
-            "php-http/discovery": false
+            "php-http/discovery": true
         }
     },
     "autoload": {
