@@ -24,7 +24,7 @@ Feature: As an anonymous user, when I visit /data/dr8, I should get the cached
     And I should see the following table rows:
       | Namespace     | URI                                               |
       | rdf:          | http://www.w3.org/1999/02/22-rdf-syntax-ns#       |
-      | dc:           | http://purl.org/dc/terms/                         |
+      | dct:          | http://purl.org/dc/terms/                         |
       | skos:         | http://www.w3.org/2004/02/skos/core#              |
       | eira:         | http://data.europa.eu/dr8/                        |
       | Property      | Value                                             |
