@@ -1,0 +1,4 @@
+services:
+  github_feed.github_feed:
+    class: Drupal\github_feed\GitHubFeed
+    arguments: ['@config.factory', '@http_client', '@logger.factory']

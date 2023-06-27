@@ -9,6 +9,7 @@ dependencies:
     - filter.format.glossary_html
     - filter.format.minimal
     - filter.format.simple_html
+    - filter.format.text_html
     - node.type.document
     - node.type.tallinn_report
   module:
@@ -53,6 +54,7 @@ permissions:
   - 'create paragraph content accordion_item'
   - 'create paragraph content carousel'
   - 'create paragraph content content_listing'
+  - 'create paragraph content text'
   - 'delete own comments'
   - 'delete own document content'
   - 'delete paragraph content accordion'
@@ -60,6 +62,7 @@ permissions:
   - 'delete paragraph content carousel'
   - 'delete paragraph content content_listing'
   - 'delete paragraph content simple_paragraph'
+  - 'delete paragraph content text'
   - 'edit own comments'
   - 'edit own contact_information rdf entity'
   - 'edit own owner rdf entity'
@@ -143,6 +146,7 @@ permissions:
   - 'update paragraph content carousel'
   - 'update paragraph content content_listing'
   - 'update paragraph content simple_paragraph'
+  - 'update paragraph content text'
   - 'use search_api_autocomplete for search'
   - 'use text format basic_html'
   - 'use text format content_editor'
@@ -150,6 +154,7 @@ permissions:
   - 'use text format glossary_html'
   - 'use text format minimal'
   - 'use text format simple_html'
+  - 'use text format text_html'
   - 'view compatibility documents'
   - 'view eif wrapper entity'
   - 'view eif_perspective rdf-meta-entity'
@@ -167,6 +172,7 @@ permissions:
   - 'view paragraph content carousel'
   - 'view paragraph content configurable_listing'
   - 'view paragraph content content_listing'
+  - 'view paragraph content github_feed'
   - 'view paragraph content iframe'
   - 'view paragraph content image'
   - 'view paragraph content json_map'

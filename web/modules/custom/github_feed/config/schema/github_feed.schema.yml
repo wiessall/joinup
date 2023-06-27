@@ -1,0 +1,35 @@
+# Token settings.
+github_feed.settings:
+  type: config_object
+  label: GitHub feed settings
+  mapping:
+    token:
+      type: string
+      label: Token
+
+# Field instance.
+field.field_settings.github_feed:
+  type: mapping
+  label: GitHub feed field settings
+  mapping:
+    cache_max_age:
+      type: integer
+      label: The cache lifetime in seconds.
+
+# Default value.
+field.value.github_feed:
+  type: mapping
+  label: Default value
+  mapping:
+    repository:
+      type: uri
+      label: Repository
+    type:
+      type: string
+      label: Type
+    item_num:
+      type: integer
+      label: Number of items
+    comment_num:
+      type: integer
+      label: Number of comments. Set to 0 for no comments.
