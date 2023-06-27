@@ -18,12 +18,14 @@
     }
   ],
   "globals": {
+    "CKEDITOR": true,
     "L": true
   },
   "plugins": [
     "jsdoc"
   ],
   "rules": {
-    "jsdoc/require-file-overview": "error"
+    "jsdoc/require-file-overview": "error",
+    "import/no-extraneous-dependencies": "off"
   }
 }
