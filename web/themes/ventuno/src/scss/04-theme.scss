@@ -1,0 +1,59 @@
+/**
+ * @file
+ * Theme styles.
+ *
+ * Look & feel of the website.
+ */
+
+ @import "partials/core"; // Functions, variables, utilities and mixins required
+ @import "partials/base/fonts";
+ @import "partials/base/typography";
+  // @import "@openeuropa/bcl-bootstrap/scss/reboot";
+ @import "partials/overrides/reboot"; // Hack to prevent build break
+ @import "@openeuropa/bcl-bootstrap/scss/type";
+ @import "@openeuropa/bcl-bootstrap/scss/transitions";
+ @import "@openeuropa/bcl-bootstrap/scss/utilities";
+ @import "@openeuropa/bcl-theme-default/src/scss/base/utilities";
+ @import "partials/overrides/utilities"; // Override with required utilities only
+ @import "@openeuropa/bcl-bootstrap/scss/helpers";
+ @import "@openeuropa/bcl-bootstrap/scss/utilities/api";
+
+// Link
+a {
+  // Avoid purple underline for visited links.
+  &:hover {
+    &:visited {
+      text-decoration-color: currentColor!important;
+    }
+  }
+  // Add icon to show users the link is external.
+  &.external {
+    &::after {
+      margin: 0 0 0 $spacer * .375; // 0 0 0 6px
+      @include get-bootstrap-icon('box-arrow-up-right');
+    }
+    &:hover {
+      &::after {
+        @include get-bootstrap-icon('box-arrow-up-right');
+      }
+    }
+  }
+}
+
+.glossary-term {
+  border-bottom: 1px dotted $dark;
+  color: $dark;
+  text-decoration: none;
+  cursor: help;
+  &:hover {
+    color: $dark;
+    text-decoration: none;
+  }
+}
+
+.shadow-hover {
+  box-shadow: $box-shadow;
+  &:hover {
+    box-shadow: $box-shadow-lg;
+  }
+}
