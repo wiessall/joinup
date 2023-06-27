@@ -162,6 +162,7 @@ Feature: Collection content
     And I should see the "Turin Egyptian Museum Reopened" tile
     And I should see the text "Last update: 19/11/2019" in the "Turin Egyptian Museum Reopened" tile
     And I should see the link "Turin Egyptian Museum Reopened" in the "Turin Egyptian Museum Reopened" tile
+    And I should not see the text "After more than two years." in the "Turin Egyptian Museum Reopened" tile
     And I should see the text "Supplier exchange" in the "Turin Egyptian Museum Reopened" tile
     And I should see the text "News" in the "Turin Egyptian Museum Reopened" tile
     # Check the video tile.
