@@ -18,6 +18,7 @@
     }
   ],
   "globals": {
+    "CKEDITOR": true,
     "L": true
   },
   "plugins": [
@@ -27,6 +28,7 @@
     "**/contact_information/js/build/*.js"
   ],
   "rules": {
-    "jsdoc/require-file-overview": "error"
+    "jsdoc/require-file-overview": "error",
+    "import/no-extraneous-dependencies": "off"
   }
 }

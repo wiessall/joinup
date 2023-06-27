@@ -183,6 +183,8 @@ class SearchFormatter extends FormatterBase implements ContainerFactoryPluginInt
 
     $this->mergeQueryCacheMetadata($render, $query);
 
+    $archived_items = $this->getArchivedQuery($settings, $item);
+
     // Add some information about the field.
     // @see \Drupal\Core\Field\FormatterBase::view()
     $entity = $items->getEntity();
@@ -192,7 +194,10 @@ class SearchFormatter extends FormatterBase implements ContainerFactoryPluginInt
       '#field_name' => $this->fieldDefinition->getName(),
       '#entity' => $entity,
       '#view_mode' => $this->viewMode,
+      '#archived_items' => $archived_items->execute()->getResultCount(),
     ];
+
+    $this->mergeQueryCacheMetadata($render, $archived_items);
 
     return $render;
   }
@@ -237,6 +242,47 @@ class SearchFormatter extends FormatterBase implements ContainerFactoryPluginInt
       $query->addTag($hook);
     }
 
+    return $query;
+  }
+
+  /**
+   * Generates the search query to get number of archived content.
+   *
+   * @param array $settings
+   *   The settings configured in the field.
+   * @param \Drupal\search_api_field\Plugin\Field\FieldType\SearchItemInterface $item
+   *   The field item.
+   *
+   * @return \Drupal\search_api\Query\QueryInterface
+   *   The prepared query.
+   */
+  protected function getArchivedQuery(array $settings, SearchItemInterface $item): QueryInterface {
+    $field_definition = $this->fieldDefinition;
+
+    $options = [
+      'search_api_field entity' => $item->getEntity(),
+      'search_api_field item' => $item,
+      'search_api_field archived' => TRUE,
+    ];
+    $query = $this->getSearchApiIndex()->query($options);
+    $query->setSearchId($field_definition->id() . '.archived');
+    $query->setParseMode($this->parseModeManager->createInstance('direct'));
+
+    if (!empty($settings['query_presets'])) {
+      $this->applyPresets($query, $settings['query_presets']);
+    }
+
+    if (!empty($settings['query_builder'])) {
+      $this->applyQueryBuilderConfiguration($query, $settings['query_builder']);
+    }
+    $hooks = [
+      'search_api_field',
+      'search_api_field_' . $field_definition->getName(),
+      'search_api_field_' . $field_definition->getName() . '_archived',
+    ];
+    foreach ($hooks as $hook) {
+      $query->addTag($hook);
+    }
     return $query;
   }
 
@@ -416,7 +462,8 @@ class SearchFormatter extends FormatterBase implements ContainerFactoryPluginInt
         'tags' => Cache::mergeTags(
           Cache::mergeTags(
             $build['#cache']['tags'],
-            ["search_api_list:{$query->getIndex()->id()}"]
+            ["search_api_list:{$query->getIndex()->id()}"],
+            ["search_api_list:{$query->getSearchId()}"]
           ),
           $query->getCacheTags()
         ),

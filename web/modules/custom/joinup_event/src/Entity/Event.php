@@ -8,6 +8,7 @@ use Drupal\Core\Url;
 use Drupal\joinup_bundle_class\JoinupBundleClassFieldAccessTrait;
 use Drupal\joinup_bundle_class\LogoTrait;
 use Drupal\joinup_community_content\Entity\CommunityContentBase;
+use Drupal\joinup_workflow\ArchivableEntityTrait;
 
 /**
  * Entity subclass for the 'event' bundle.
@@ -16,6 +17,7 @@ class Event extends CommunityContentBase implements EventInterface {
 
   use JoinupBundleClassFieldAccessTrait;
   use LogoTrait;
+  use ArchivableEntityTrait;
 
   /**
    * {@inheritdoc}

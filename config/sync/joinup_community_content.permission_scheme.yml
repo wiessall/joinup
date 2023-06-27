@@ -322,7 +322,35 @@ update:
           roles:
             - authenticated
     archived:
+      draft:
+        any:
+          roles:
+            - moderator
+          og_roles:
+            - rdf_entity-collection-facilitator
+            - rdf_entity-solution-facilitator
+      proposed:
+        any:
+          roles:
+            - moderator
+          og_roles:
+            - rdf_entity-collection-facilitator
+            - rdf_entity-solution-facilitator
       validated:
+        any:
+          roles:
+            - moderator
+          og_roles:
+            - rdf_entity-collection-facilitator
+            - rdf_entity-solution-facilitator
+      needs_update:
+        any:
+          roles:
+            - moderator
+          og_roles:
+            - rdf_entity-collection-facilitator
+            - rdf_entity-solution-facilitator
+      deletion_request:
         any:
           roles:
             - moderator
@@ -428,7 +456,28 @@ update:
           roles:
             - authenticated
     archived:
+      draft:
+        any:
+          roles:
+            - moderator
+          og_roles:
+            - rdf_entity-collection-facilitator
+            - rdf_entity-solution-facilitator
+      proposed:
+        any:
+          roles:
+            - moderator
+          og_roles:
+            - rdf_entity-collection-facilitator
+            - rdf_entity-solution-facilitator
       validated:
+        any:
+          roles:
+            - moderator
+          og_roles:
+            - rdf_entity-collection-facilitator
+            - rdf_entity-solution-facilitator
+      needs_update:
         any:
           roles:
             - moderator
