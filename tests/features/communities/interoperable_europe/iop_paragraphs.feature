@@ -82,7 +82,7 @@ Feature:
       | Some news 2 | Carousel c1          | Come content. | validated |
     And custom_page content:
       | title         | collection  | state     |
-      | News carousel | Interoperable Europe | validated |
+      | News carousel | Interoperable Europe | published |
     And I append "carousel" to "field_paragraphs_body" field in "node" entity with following "News carousel" title:
       | content_listing:value | a:6:{s:6:"fields";a:1:{s:20:"content_listing_type";a:2:{s:6:"weight";i:0;s:6:"region";s:3:"top";}}s:7:"enabled";i:1;s:13:"query_presets";s:18:"entity_bundle\|news";s:5:"limit";s:2:"12";s:11:"show_shared";i:0;s:13:"global_search";i:0;} |
 
@@ -98,9 +98,9 @@ Feature:
       | Carousel c1 | validated |
     And custom_page content:
       | title       | collection           | content       | state     |
-      | Some page 1 | Interoperable Europe | Some content. | validated |
-      | Some page 2 | Carousel c1          | Some content. | validated |
-      | Some page 3 | Carousel c1          | Some content. | validated |
+      | Some page 1 | Interoperable Europe | Some content. | published |
+      | Some page 2 | Carousel c1          | Some content. | published |
+      | Some page 3 | Carousel c1          | Some content. | published |
 
     When I am logged in as a moderator
     And I go to the "Interoperable Europe" collection
@@ -151,7 +151,7 @@ Feature:
       | Some news 3 | Interoperable Europe | Some content. | validated | 1 days ago |
     And custom_page content:
       | title                | collection           | state     |
-      | A carousel with news | Interoperable Europe | validated |
+      | A carousel with news | Interoperable Europe | published |
     And I append "carousel" to "field_paragraphs_body" field in "node" entity with following "A carousel with news" title:
       | content_listing:value | a:6:{s:6:"fields";a:1:{s:20:"content_listing_type";a:2:{s:6:"weight";i:0;s:6:"region";s:3:"top";}}s:7:"enabled";i:1;s:13:"query_presets";s:18:"entity_bundle\|news";s:5:"limit";s:2:"12";s:11:"show_shared";i:0;s:13:"global_search";i:0;} |
 
@@ -169,7 +169,7 @@ Feature:
       | Some event 3 | Interoperable Europe | Some content. | validated | 1 days ago | 7 days ago | 6 days ago |
     And custom_page content:
       | title           | collection           | state     |
-      | Events carousel | Interoperable Europe | validated |
+      | Events carousel | Interoperable Europe | published |
     And I append "carousel" to "field_paragraphs_body" field in "node" entity with following "Events carousel" title:
       | content_listing:value | a:6:{s:6:"fields";a:1:{s:20:"content_listing_type";a:2:{s:6:"weight";i:0;s:6:"region";s:3:"top";}}s:7:"enabled";i:1;s:13:"query_presets";s:19:"entity_bundle\|event";s:5:"limit";s:2:"12";s:11:"show_shared";i:0;s:13:"global_search";i:0;} |
 
