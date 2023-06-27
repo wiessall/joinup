@@ -4,12 +4,11 @@ declare(strict_types = 1);
 
 namespace Drupal\joinup_group\Controller;
 
+use Drupal\Component\Utility\Xss;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\joinup_group\Entity\GroupInterface;
-use Drupal\media\MediaInterface;
-use Symfony\Component\HttpFoundation\Request;
-use Drupal\Component\Utility\Xss;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Controller for autocomplete group filter.
@@ -17,47 +16,49 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 class GroupAutocompleteController extends ControllerBase {
 
   /**
-   * @return JsonResponse
+   * Handles the autocomplete request and returns a JSON response.
+   *
+   * @param \Symfony\Component\HttpFoundation\Request $request
+   *   The request object.
+   *
+   * @return \Symfony\Component\HttpFoundation\JsonResponse
+   *   The JSON response containing the autocomplete results.
    */
-  public function handleAutocomplete(Request $request)
-  {
-
+  public function handleAutocomplete(Request $request): JsonResponse {
     $results = [];
     $input = $request->query->get('q');
-    if (!$input) {
+
+    if (empty($input)) {
       return new JsonResponse($results);
     }
+
     $input = Xss::filter($input);
 
     $media_storage = $this->entityTypeManager()->getStorage('media');
-    $mids = $media_storage->getQuery()->accessCheck(FALSE)
+    $query = $media_storage->getQuery()
+      ->accessCheck(FALSE)
       ->condition('bundle', ['file', 'video'], 'IN')
-      ->exists('og_audience')
-      ->execute();
-    $groups = array_map(function (MediaInterface $media): GroupInterface {
-      return $media->get('og_audience')->entity;
-    }, $media_storage->loadMultiple($mids));
+      ->exists('og_audience');
+    $media_ids = $query->execute();
 
+    $media_entities = $media_storage->loadMultiple($media_ids);
 
-    /** @var \Drupal\joinup_group\Entity\GroupInterface $group */
-    foreach ($groups as $group) {
-
-      $results[] = [
-        'value' => $group->id(),
-        'label' => t('@title (@type)', [
-          '@type' => $group->get('rid')->entity->label(),
-          '@title' => $group->label(),
-        ])
-      ];
+    foreach ($media_entities as $media) {
+      $group = $media->get('og_audience')->entity;
+      if ($group instanceof GroupInterface) {
+        $results[$group->id()] = [
+          'value' => $group->id(),
+          'label' => $group->label(),
+        ];
+      }
     }
-    $results = array_values(array_column($results, null, 'value'));
 
-    // Filter the array based on the label value
-    $results = array_filter($results, function ($item) use ($input) {
-      return stripos($item['label']->render(), $input) !== false;
+    // Filter the results based on the input value.
+    $filtered_results = array_filter($results, function ($item) use ($input) {
+      return stripos($item['label'], $input) !== FALSE;
     });
-    $results = array_values($results);
 
-    return new JsonResponse($results);
+    return new JsonResponse(array_values($filtered_results));
   }
+
 }

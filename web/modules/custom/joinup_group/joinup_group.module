@@ -34,7 +34,6 @@ use Drupal\joinup_group\Form\RdfDeleteForm;
 use Drupal\joinup_group\Form\UserCancelForm;
 use Drupal\joinup_group\JoinupGroupHelper;
 use Drupal\joinup_workflow\EntityWorkflowStateInterface;
-use Drupal\media\MediaInterface;
 use Drupal\meta_entity\Entity\MetaEntity;
 use Drupal\meta_entity\Entity\MetaEntityInterface;
 use Drupal\node\NodeInterface;
@@ -504,7 +503,6 @@ function joinup_group_form_views_exposed_form_alter(array &$form, FormStateInter
     ];
   };
 
-
   if ($view_id === 'announcements' && $display === 'all') {
     $announcement_storage = \Drupal::entityTypeManager()->getStorage('message');
     $mids = $announcement_storage->getQuery()->accessCheck(FALSE)
@@ -521,16 +519,6 @@ function joinup_group_form_views_exposed_form_alter(array &$form, FormStateInter
       '#title' => t('Group'),
       '#autocomplete_route_name' => 'joinup_group.group_autocomplete',
     ];
-
-   /* $media_storage = \Drupal::entityTypeManager()->getStorage('media');
-    $mids = $media_storage->getQuery()->accessCheck(FALSE)
-      ->condition('bundle', ['file', 'video'], 'IN')
-      ->exists('og_audience')
-      ->execute();
-    $groups = array_map(function (MediaInterface $media): GroupInterface {
-      return $media->get('og_audience')->entity;
-    }, $media_storage->loadMultiple($mids));
-    $replace_group_filter($form, $groups);*/
 
   }
 
