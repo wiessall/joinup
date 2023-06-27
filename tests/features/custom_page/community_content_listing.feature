@@ -11,7 +11,7 @@ Feature:
       | Emulators  | logo.png | banner.jpg | validated |
     And custom_page content:
       | title               | collection | created           | body                               | state     | pinned |
-      | Latest news listing | Nintendo64 | 2019-10-01 4:26am | You can find the latest news here. | validated | no     |
+      | Latest news listing | Nintendo64 | 2019-10-01 4:26am | You can find the latest news here. | published | no     |
     And news content:
       | title                                 | collection | created           | content                          | state     | pinned |
       | Rare Nintendo64 disk drive discovered | Nintendo64 | 2018-10-01 4:26am | Magnetic drive called 64DD.      | validated | no     |
@@ -88,7 +88,7 @@ Feature:
     And I click "Edit" in the "Custom page body" for paragraph layout 1
     And I fill in "Query presets" with "entity_bundle|news"
     When I press "Save" in the "Modal buttons" region
-    And I press "Save"
+    And I press "Update"
     Then I should see the heading "Latest news"
     And I should see the "Rare Nintendo64 disk drive discovered" tile
     But I should not see the "20 year anniversary" tile
