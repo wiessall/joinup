@@ -212,6 +212,18 @@ class StateMachineButtons extends OptionsSelectWidget implements ContainerFactor
       unset($form['actions'][$key]['#dropbutton']);
     }
 
+    // Override the unarchive button to simply revert the entity to the previous
+    // state.
+    if (isset($form['actions']['state_machine___new__'])) {
+      $form['actions']['state_machine___new__'] = [
+        '#type' => 'submit',
+        '#value' => t('Unarchive'),
+        '#weight' => -10,
+        // Add a submit-handler to unarchive the entity.
+        '#submit' => [[static::class, 'unarchiveEntity']],
+      ];
+    }
+
     return $element;
   }
 
@@ -290,6 +302,27 @@ class StateMachineButtons extends OptionsSelectWidget implements ContainerFactor
       default:
         return $this->t('Update');
     }
+  }
+
+  /**
+   * Form API submit callback: unarchives the entity.
+   *
+   * @see \Drupal\content_moderation\Plugin\Field\FieldWidget\ModerationStateWidget::unarchiveEntity()
+   */
+  public static function unarchiveEntity(array $form, FormStateInterface $form_state): void {
+    $entity = $form_state->getFormObject()->getEntity();
+    $entity_type = $entity->getEntityType();
+    $previous_revision = \Drupal::getContainer()->get('joinup_workflow.workflow_helper')->unarchiveEntity($entity);
+
+    // Redirect to the canonical URL of the previous revision.
+    $form_state->setRedirectUrl($previous_revision->toUrl('canonical'));
+
+    // Set a message to inform the user that the entity has been unarchived.
+    \Drupal::messenger()
+      ->addMessage(t('@bundle "%label" has been unarchived.', [
+        '@bundle' => ucfirst($entity->{$entity_type->getKey('bundle')}->entity->getSingularLabel()),
+        '%label' => $entity->label(),
+      ]));
   }
 
 }

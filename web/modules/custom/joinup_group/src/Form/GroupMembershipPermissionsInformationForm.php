@@ -254,6 +254,15 @@ class GroupMembershipPermissionsInformationForm extends FormBase {
           'owner' => TRUE,
         ],
       ],
+      [
+        'description' => $this->t('Archive content'),
+        'permitted' => [
+          'member' => FALSE,
+          'author' => FALSE,
+          'facilitator' => TRUE,
+          'owner' => TRUE,
+        ],
+      ],
     ];
   }
 

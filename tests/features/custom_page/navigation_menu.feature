@@ -70,9 +70,9 @@ Feature: Navigation menu for custom pages
     # Create a few custom pages in the second collection so we can check if the
     # right menu shows up in each collection.
     Given custom_page content:
-      | title           | body                                                                                                                                  | <group>          |
-      | Eights are wild | You cannot Cripple Mr Onion if your running flush contains more wild eights than the Lesser or Great Onion you are trying to cripple. | Cripple Mr Onion |
-      | Eights are null | They can be included in an existing Onion in order to improve its size by one card.                                                   | Cripple Mr Onion |
+      | title           | body                                                                                                                                  | <group>          | state     |
+      | Eights are wild | You cannot Cripple Mr Onion if your running flush contains more wild eights than the Lesser or Great Onion you are trying to cripple. | Cripple Mr Onion | published |
+      | Eights are null | They can be included in an existing Onion in order to improve its size by one card.                                                   | Cripple Mr Onion | published |
 
     # Test as a normal member of the group.
     Given I am logged in as a member of the "Rainbow tables" <group>
@@ -136,10 +136,10 @@ Feature: Navigation menu for custom pages
       | title | Plaster molds |
       | state | validated     |
     And custom_page content:
-      | title             | body                   | collection    |
-      | Molds for crafts  | This is a sample body. | Plaster molds |
-      | Molds for pottery | This is a sample body. | Plaster molds |
-      | Molds for walls   | This is a sample body. | Plaster molds |
+      | title             | body                   | collection    | state     |
+      | Molds for walls   | This is a sample body. | Plaster molds | published |
+      | Molds for crafts  | This is a sample body. | Plaster molds | published |
+      | Molds for pottery | This is a sample body. | Plaster molds | published |
     # A menu with 6 items is displayed normally
     When I go to the "Plaster molds" collection
     Then I should see the link "Molds for pottery" in the "Navigation menu"
@@ -147,8 +147,9 @@ Feature: Navigation menu for custom pages
     # A menu with more than 6 items has the first 5 displayed normally
     # Then the rest of items is wrapped in a dropdown
     Given custom_page content:
-      | title           | body                   | collection    |
-      | Vintage molds   | This is a sample body. | Plaster molds |
+      | title           | body                   | collection    | state     |
+      | Vintage molds   | This is a sample body. | Plaster molds | published |
+      | Plaster casting | This is a sample body. | Plaster molds | published |
     When I go to the "Plaster molds" collection
     Then I should see the text "See more" in the "Navigation menu"
     But I should not see the text "Molds for walls" in the "Navigation menu"
@@ -167,8 +168,8 @@ Feature: Navigation menu for custom pages
       | logo  | logo.png     |
       | state | validated    |
     And custom_page content:
-      | title           | body                   | <group>      |
-      | Mists of dreams | This is a sample body. | Prism Gazers |
+      | title           | body                   | <group>      | state     |
+      | Mists of dreams | This is a sample body. | Prism Gazers | published |
     When I am logged in as a facilitator of the "Prism Gazers" <group>
     And I go to the homepage of the "Prism Gazers" <group>
     Then I should see the contextual links button in the "Navigation menu"
@@ -194,8 +195,8 @@ Feature: Navigation menu for custom pages
       | title | Ravenous wood-munching alphabeavers |
       | state | validated                           |
     And custom_page content:
-      | title       | body                                                                | <group>                             |
-      | Tree eaters | Given time, they will most likely strip the entire region of trees. | Ravenous wood-munching alphabeavers |
+      | title       | body                                                                | <group>                             | state     |
+      | Tree eaters | Given time, they will most likely strip the entire region of trees. | Ravenous wood-munching alphabeavers | published |
     When I am logged in as a facilitator of the "Ravenous wood-munching alphabeavers" "<group>"
     And I go to the homepage of the "Ravenous wood-munching alphabeavers" <group>
     Then I should see the link "Tree eaters" in the "Navigation menu"
@@ -204,7 +205,7 @@ Feature: Navigation menu for custom pages
     When I click "Tree eaters"
     And I click "Edit" in the "Entity actions" region
     And I fill in "Title" with "An army of furry little killing machines"
-    And I press "Save"
+    And I press "Update"
     And I go to the homepage of the "Ravenous wood-munching alphabeavers" <group>
     Then I should see the link "An army of furry little killing machines" in the "Navigation menu"
     And I should not see the link "Tree eaters" in the "Navigation menu"
@@ -219,16 +220,16 @@ Feature: Navigation menu for custom pages
       | title                   | state     |
       | Table of contents group | validated |
     And custom_page content:
-      | title         | <group>                 |
-      | Page 1        | Table of contents group |
-      | Page 2        | Table of contents group |
-      | Page 3        | Table of contents group |
-      | Subpage 1-1   | Table of contents group |
-      | Subpage 1-1-1 | Table of contents group |
-      | Subpage 1-2   | Table of contents group |
-      | Subpage 1-2-1 | Table of contents group |
-      | Subpage 1-2-2 | Table of contents group |
-      | Subpage 2-1   | Table of contents group |
+      | title         | <group>                 | state     |
+      | Page 1        | Table of contents group | published |
+      | Page 2        | Table of contents group | published |
+      | Page 3        | Table of contents group | published |
+      | Subpage 1-1   | Table of contents group | published |
+      | Subpage 1-1-1 | Table of contents group | published |
+      | Subpage 1-2   | Table of contents group | published |
+      | Subpage 1-2-1 | Table of contents group | published |
+      | Subpage 1-2-2 | Table of contents group | published |
+      | Subpage 2-1   | Table of contents group | published |
     And the following custom page menu structure:
       | title         | parent      | weight |
       | Page 1        |             | 1      |
@@ -318,7 +319,7 @@ Feature: Navigation menu for custom pages
       | title | Ergonomic backpacks |
       | state | validated           |
     And custom_page content:
-      | title              | <group>             | status    |
+      | title              | <group>             | state     |
       | Types of backpacks | Ergonomic backpacks | published |
       | Frameless          | Ergonomic backpacks | published |
       | External frame     | Ergonomic backpacks | published |
@@ -464,7 +465,7 @@ Feature: Navigation menu for custom pages
       | title                     | state     |
       | Table of contents outline | validated |
     And custom_page content:
-      | title      | <group>                   | status      |
+      | title      | <group>                   | state       |
       | TOCO 1     | Table of contents outline | published   |
       | TOCO 2     | Table of contents outline | published   |
       | TOCO 1-1   | Table of contents outline | published   |
@@ -551,7 +552,7 @@ Feature: Navigation menu for custom pages
       | title                            | state     |
       | Table of contents outline cached | validated |
     And custom_page content:
-      | title           | <group>                          | status    |
+      | title           | <group>                          | state     |
       | TOCO cached 1   | Table of contents outline cached | published |
       | TOCO cached 1-1 | Table of contents outline cached | published |
     And the following custom page menu structure:

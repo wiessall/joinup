@@ -24,9 +24,9 @@ Feature:
       | title                              | collection  | state     |
       | Exports Leap Despite Currency Gain | Vintage Art | validated |
     And custom_page content:
-      | title                | collection  |
-      | HOWTOs               | Vintage Art |
-      | Looking for Support? | Vintage Art |
+      | title                | collection  | state     |
+      | HOWTOs               | Vintage Art | published |
+      | Looking for Support? | Vintage Art | published |
     And the following custom page menu structure:
       | title                | parent | weight |
       | Looking for Support? | HOWTOs | 1      |
@@ -79,6 +79,42 @@ Feature:
     Then I should see the link "Manage content"
     Given I click "Manage content"
     Then I should see the heading "Manage content"
+
+    # Archive action.
+    Given I select the "The Panama Papers" row
+    And I select the "The Ultimate Debate" row
+    And I select "Archive content" from "Action"
+    And I press "Apply to selected items"
+    And I wait for the batch process to finish
+    Then I should see "Proceeded updates to 2 entities"
+
+    # Check archived state.
+    Given I select "Archived" from "State"
+    And I press "Apply"
+    Then I should see the link "The Panama Papers"
+    And I should see the link "The Ultimate Debate"
+
+    # Unarchive action.
+    Given I select the "The Panama Papers" row
+    And I select the "The Ultimate Debate" row
+    And I select "Unarchive content" from "Action"
+    And I press "Apply to selected items"
+    And I wait for the batch process to finish
+    Then I should see "Proceeded updates to 2 entities"
+
+    # Check published state.
+    Given I select "validated" from "State"
+    And I press "Apply"
+    Then I should see the link "The Panama Papers"
+    And I should see the link "The Ultimate Debate"
+
+    # Check warning message.
+    Given I press "Reset"
+    And I select the "HOWTOs" row
+    And I select "Archive content" from "Action"
+    And I press "Apply to selected items"
+    And I wait for the batch process to finish
+    Then I should see "Proceeded updates to 1 entities"
 
     # Select rows.
     Given I select the "The Panama Papers" row

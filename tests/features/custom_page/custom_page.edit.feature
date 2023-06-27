@@ -17,8 +17,8 @@ Feature: "Custom page" editing.
       | Dumbo Collective | Mickey Mouse | facilitator |
       | Dumbo Collective | Pluto        | member      |
     And "custom_page" content:
-      | title                            | <group>          | body | logo     |
-      | Buena Vista Distribution Company | Dumbo Collective | N/A  | logo.png |
+      | title                            | <group>          | body | logo     | state     |
+      | Buena Vista Distribution Company | Dumbo Collective | N/A  | logo.png | published |
 
     # Group owner should see the button.
     When I am logged in as "Mickey Mouse"
@@ -34,8 +34,8 @@ Feature: "Custom page" editing.
     Then I should see the link "Edit"
     When I click "Edit"
     Then I should see the heading "Edit Custom page Buena Vista Distribution Company"
-    And the following fields should be present "Title, Body, Published"
-    And the following fields should not be present "Groups audience, Other groups, Generate automatic URL alias, URL alias"
+    And the following fields should be present "Title, Body"
+    And the following fields should not be present "Groups audience, Other groups, Generate automatic URL alias, URL alias, Published"
     And I should not see the following lines of text:
       | Authored on                                  |
       | Create new revision                          |
@@ -64,8 +64,8 @@ Feature: "Custom page" editing.
     And I go to the "Buena Vista Distribution Company" custom page
     And I click "Edit"
     Then I should see the heading "Edit Custom page Buena Vista Distribution Company"
-    And the following fields should be present "Title, Body, Published"
-    And the following fields should not be present "Groups audience, Other groups, URL alias"
+    And the following fields should be present "Title, Body"
+    And the following fields should not be present "Groups audience, Other groups, URL alias, Published"
     And the following fields should not be present "Groups audience, Other groups, Generate automatic URL alias, URL alias"
     And I should not see the following lines of text:
       | Authored on                                  |
@@ -81,7 +81,7 @@ Feature: "Custom page" editing.
       | Sticky at top of lists                       |
 
     When I fill in "Title" with "Walt Disney Studios Motion Pictures"
-    And I press "Save"
+    And I press "Update"
     Then I should have a "Custom page" content page titled "Walt Disney Studios Motion Pictures"
 
     Examples:

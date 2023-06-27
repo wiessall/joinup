@@ -9,6 +9,7 @@ use Behat\Mink\Element\NodeElement;
 use Behat\Mink\Exception\ElementNotFoundException;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\joinup\Traits\BootstrapTrait;
+use Drupal\joinup\Traits\EntityTrait;
 use Drupal\joinup\Traits\JavascriptTrait;
 use Drupal\joinup\Traits\KeyboardInteractionTrait;
 use Drupal\joinup\Traits\SearchTrait;
@@ -22,6 +23,7 @@ use PHPUnit\Framework\Assert;
 class JoinupSearchContext extends RawDrupalContext {
 
   use BootstrapTrait;
+  use EntityTrait;
   use JavascriptTrait;
   use KeyboardInteractionTrait;
   use SearchTrait;
@@ -169,7 +171,7 @@ class JoinupSearchContext extends RawDrupalContext {
    */
   public function assertContentTypeFacetItemsPresent(string $labels): void {
     $labels = $this->explodeCommaSeparatedStepArgument($labels);
-    $xpath = "//a[@data-drupal-facet-item-id]//span[contains(concat(' ', normalize-space(@class), ' '), ' tab__text--type ')]";
+    $xpath = "//a[@data-drupal-facet-item-id]//span[contains(concat(' ', normalize-space(@class), ' '), ' tab__text--type ') or contains(concat(' ', normalize-space(@class), ' '), ' facet-item__value ')]";
 
     $elements = $this->getSession()->getPage()->findAll('xpath', $xpath);
     $present = [];
@@ -516,6 +518,33 @@ class JoinupSearchContext extends RawDrupalContext {
       }
     }
     Assert::assertSame(count($topics), $number);
+  }
+
+  /**
+   * Asserts that a facet exists in the page.
+   *
+   * @param string $facet
+   *   The facet name.
+   *
+   * @Then I should see the :facet facet
+   */
+  public function iShouldSeeTheFacet(string $facet): void {
+    $facet_element = $this->findFacetByAlias($facet);
+    Assert::assertNotEmpty($facet_element->getText(), "The facet '{$facet}' was not found in the page.");
+  }
+
+  /**
+   * Asserts that a facet does not exist in the page.
+   *
+   * @param string $facet
+   *   The facet name.
+   *
+   * @Then I should not see the :facet facet
+   */
+  public function iShouldNotSeeTheFacet(string $facet): void {
+    $element = $this->findFacetByAlias($facet, NULL, '*', FALSE);
+    // The facet might be present but with no options.
+    Assert::assertTrue(empty($element) || empty($element->getText()), "The facet '{$facet}' was found in the page.");
   }
 
   /**
@@ -1015,6 +1044,89 @@ class JoinupSearchContext extends RawDrupalContext {
       ->getAttribute('id');
 
     Assert::assertNotEquals($getNavbarInputId, $getHeaderInputId, 'The two search inputs have the same id.');
+  }
+
+  /**
+   * Sets the group content listing archived option.
+   *
+   * @param string $label
+   *   The group label.
+   * @param string $bundle
+   *   The group bundle.
+   * @param string $option
+   *   The option to set.
+   *
+   * @When the :label :bundle is configured to show :option community content( in the overview)
+   */
+  public function setGroupContentArchivedOption(string $label, string $bundle, string $option): void {
+    $option = strtolower($option);
+    $options = ['all', 'archived', 'unarchived'];
+    Assert::assertTrue(in_array($option, $options), sprintf('The option should be one of: %s', implode(', ', $options)));
+    $entity = $this->getEntityByLabel('rdf_entity', $label, $bundle);
+    $field_name = $bundle === 'collection' ? 'field_collection_content' : 'field_is_content';
+    $data = $entity->get($field_name)->getValue();
+    if (!empty($data)) {
+      $data[0]['value']['show_archived'] = 'all';
+      $entity->set($field_name, $data);
+      $entity->save();
+    }
+  }
+
+  /**
+   * Sets a facet for the group content listing.
+   *
+   * @param string $label
+   *   The group label.
+   * @param string $bundle
+   *   The group bundle.
+   * @param string $facet
+   *   The facet to set.
+   * @param string $region
+   *   The facet region.
+   *
+   * @When the :label :bundle is configured to show the :facet facet in the :region region
+   */
+  public function setGroupContentFacet(string $label, string $bundle, string $facet, string $region): void {
+    $facet = strtolower($facet);
+    $facet = self::getFacetIdFromAlias($facet);
+    $entity = $this->getEntityByLabel('rdf_entity', $label, $bundle);
+    $region = strtolower($region);
+    $field_name = $bundle === 'collection' ? 'field_collection_content' : 'field_is_content';
+    $data = $entity->get($field_name)->getValue();
+    if (!empty($data)) {
+      $data[0]['value']['fields'][$facet] = [
+        'region' => $region,
+        'weight' => 0,
+      ];
+      $entity->set($field_name, $data);
+      $entity->save();
+    }
+  }
+
+  /**
+   * Asserts that a group listing field facet is configured in a given region.
+   *
+   * @param string $label
+   *   The label of the group.
+   * @param string $bundle
+   *   The group bundle.
+   * @param string $facet
+   *   The facet to set.
+   * @param string $region
+   *   The facet region.
+   *
+   * @When the :label :bundle should be configured to show the :facet facet in the :region region
+   */
+  public function assertGroupContentFacet(string $label, string $bundle, string $facet, string $region): void {
+    $facet = strtolower($facet);
+    $facet = self::getFacetIdFromAlias($facet);
+    $entity = $this->getEntityByLabel('rdf_entity', $label, $bundle);
+    $region = strtolower($region);
+    $field_name = $bundle === 'collection' ? 'field_collection_content' : 'field_is_content';
+    $data = $entity->get($field_name)->getValue();
+    if (empty($data) || !isset($data[0]['value']['fields'][$facet]) || ($data[0]['value']['fields'][$facet]['region'] !== $region)) {
+      throw new \RuntimeException(sprintf('The %s facet is not configured in the %s region.', $facet, $region));
+    }
   }
 
 }
