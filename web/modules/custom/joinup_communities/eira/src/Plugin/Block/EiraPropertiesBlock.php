@@ -8,6 +8,8 @@ use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Routing\CurrentRouteMatch;
 use Drupal\sparql_entity_storage\Driver\Database\sparql\ConnectionInterface;
+use EasyRdf\RdfNamespace;
+use EasyRdf\Resource;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -26,27 +28,27 @@ class EiraPropertiesBlock extends BlockBase implements ContainerFactoryPluginInt
    *
    * @param array $configuration
    *   The plugin configuration.
-   * @param string $plugin_id
+   * @param string $pluginId
    *   The plugin_id for the plugin instance.
-   * @param mixed $plugin_definition
+   * @param mixed $pluginDefinition
    *   The plugin implementation definition.
    * @param \Drupal\sparql_entity_storage\Driver\Database\sparql\ConnectionInterface $sparql
    *   The sparql.endpoint service.
    * @param \Drupal\Core\Routing\CurrentRouteMatch $currentRouteMatch
    *   The current_route_match service.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, protected ConnectionInterface $sparql, protected CurrentRouteMatch $currentRouteMatch) {
-    parent::__construct($configuration, $plugin_id, $plugin_definition);
+  public function __construct(array $configuration, $pluginId, $pluginDefinition, protected ConnectionInterface $sparql, protected CurrentRouteMatch $currentRouteMatch) {
+    parent::__construct($configuration, $pluginId, $pluginDefinition);
   }
 
   /**
    * {@inheritdoc}
    */
-  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition): EiraPropertiesBlock {
+  public static function create(ContainerInterface $container, array $configuration, $pluginId, $pluginDefinition): EiraPropertiesBlock {
     return new static(
       $configuration,
-      $plugin_id,
-      $plugin_definition,
+      $pluginId,
+      $pluginDefinition,
       $container->get('sparql.endpoint'),
       $container->get('current_route_match')
     );
@@ -58,39 +60,65 @@ class EiraPropertiesBlock extends BlockBase implements ContainerFactoryPluginInt
   public function build(): array {
     $term = $this->currentRouteMatch->getParameter('taxonomy_term');
     $tid = $term->id();
+    $build = [
+      '#type' => 'container',
+      'namespaces_table' => [
+        '#theme' => 'table',
+        '#header' => [
+          'namespace' => $this->t('Namespace'),
+          'uri' => $this->t('URI'),
+        ],
+      ],
+      'properties_table' => [
+        '#theme' => 'table',
+        '#header' => [
+          'property' => $this->t('Property'),
+          'value' => $this->t('Value'),
+        ],
+      ],
+    ];
 
+    RdfNamespace::set('eira', 'http://data.europa.eu/dr8/');
     $query = <<<SPARQL
 PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+PREFIX eira: <http://data.europa.eu/dr8/>
 WITH <http://eira_skos_properties>
-SELECT ?p ?o
+SELECT ?property ?value
 WHERE {
-  ?s ?p ?o .
+  ?s ?property ?value .
   FILTER EXISTS { ?s skos:related <$tid> }
 }
 SPARQL;
 
-    $result = $this->sparql->query($query);
+    $namespaces = [];
+    $results = $this->sparql->query($query);
+    foreach ($results as $result) {
+      $property = $result->property->getUri();
+      // Do not show the skos:related property.
+      if ($property === 'http://www.w3.org/2004/02/skos/core#related') {
+        continue;
+      }
 
-    // Build a table with all the properties and their respective values.
-    $build = [
-      '#type' => 'table',
-      '#header' => [
-        $this->t('Property'),
-        $this->t('Value'),
-      ],
-    ];
+      $value = $result->value instanceof Resource ? $result->value->getUri() : $result->value->getValue();
+      // Do not show empty values.
+      if (empty($value)) {
+        continue;
+      }
 
-    foreach ($result as $row) {
-      $build[] = [
-        'property' => [
-          '#plain_text' => $row->p->getUri(),
-        ],
-        'value' => [
-          '#plain_text' => reset($row->o),
-        ],
+      $shortenedProperty = RdfNamespace::shorten($property);
+      $prefix = RdfNamespace::prefixOfUri($property);
+      $namespaces[$prefix] = [
+        'namespace' => $prefix . ':',
+        'uri' => RdfNamespace::get($prefix),
+      ];
+
+      $build['properties_table']['#rows'][] = [
+        'property' => $shortenedProperty,
+        'value' => $value,
       ];
     }
 
+    $build['namespaces_table']['#rows'] = array_values($namespaces);
     return $build;
   }
 
