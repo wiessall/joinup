@@ -119,9 +119,7 @@ Feature: About this solution
     # A related solution which is not yet approved should not be visible.
     And I should not see the text "Protein"
 
-  # Todo: Enable this test in ticket: ISAICP-7764.
-  # Replace "Simple paragraph" with "Text".
-  @wip @terms @javascript @email @uploadFiles:logo.png
+  @terms @javascript @email @uploadFiles:logo.png
   Scenario: About page contact form
     Given owner:
       | name      | type               |
@@ -376,7 +374,8 @@ Feature: About this solution
     And I click "Add custom page" in the plus button menu
     And I fill in "Title" with "Some custom contact test"
     And I click "Choose component"
-    And I click "Simple paragraph"
+    And I click "Text"
+    And the "Body" wysiwyg editor should have the buttons "Bold, Italic, Link, Unlink, Insert/Remove Bulleted List, Insert/Remove Numbered List, Contact us"
     And I press the button "Contact us" in the "Body" wysiwyg editor
     And I press "Save" in the "Modal buttons" region
     And I press "Save"
