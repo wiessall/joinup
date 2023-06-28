@@ -211,11 +211,3 @@ entity.rdf_entity.unpublished_content:
         bundle:
           - collection
           - solution
-
-joinup_group.group_autocomplete:
-  path: '/group/autocomplete/handle'
-  defaults:
-    _controller: '\Drupal\joinup_group\Controller\GroupAutocompleteController::handleAutocomplete'
-    _format: json
-  requirements:
-    _permission: 'access content'

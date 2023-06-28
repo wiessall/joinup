@@ -484,43 +484,27 @@ function joinup_group_form_views_exposed_form_alter(array &$form, FormStateInter
   $display = $view->current_display;
 
   // Replaces a group text exposed filter with a dropdown.
-  $replace_group_filter = static function (array &$form, array $groups): void {
-    $options = ['' => t('- Any -')];
-    /** @var \Drupal\joinup_group\Entity\GroupInterface $group */
-    foreach ($groups as $group) {
-      $options[$group->id()] = t('@title (@type)', [
-        '@type' => $group->get('rid')->entity->label(),
-        '@title' => $group->label(),
-      ]);
-    }
-    asort($options);
-
+  $replace_group_filter = static function (array &$form): void {
     $form['group'] = [
-      '#type' => 'select',
       '#title' => t('Group'),
-      '#options' => $options,
-      '#default_value' => $form['group']['#default_value'],
+      '#type' => 'entity_autocomplete',
+      '#target_type' => 'rdf_entity',
+      '#selection_handler' => 'default:rdf_entity',
+      '#selection_settings' => [
+        'target_bundles' => ['collection', 'solution'],
+        'match_operator' => 'CONTAINS',
+        'match_limit' => 10,
+      ],
+      '#validate_reference' => FALSE,
+      '#maxlength' => 1024,
+      '#default_value' => \Drupal::entityTypeManager()->getStorage('rdf_entity')->load($form['group']['#default_value']),
     ];
   };
 
-  if ($view_id === 'announcements' && $display === 'all') {
-    $announcement_storage = \Drupal::entityTypeManager()->getStorage('message');
-    $mids = $announcement_storage->getQuery()->accessCheck(FALSE)
-      ->condition('template', 'announcement')
-      ->execute();
-    $groups = array_map(function (AnnouncementInterface $announcement): GroupInterface {
-      return $announcement->getGroup();
-    }, $announcement_storage->loadMultiple($mids));
-    $replace_group_filter($form, $groups);
+  if (($view_id === 'announcements' && $display === 'all') || ($view_id === 'media' && $display === 'media_page_list')) {
+    $replace_group_filter($form);
   }
-  elseif ($view_id === 'media' && $display === 'media_page_list') {
-    $form['group'] = [
-      '#type' => 'textfield',
-      '#title' => t('Group'),
-      '#autocomplete_route_name' => 'joinup_group.group_autocomplete',
-    ];
 
-  }
 
   // Adds result counts to the role options on the membership overview for
   // collections and solutions.
