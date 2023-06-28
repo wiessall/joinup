@@ -60,7 +60,8 @@ function _ventuno_preprocess_tile(array &$variables, string $entity_type_id): vo
     'entity.meta_entity.canonical',
   ];
   if ((in_array($route_name, $routes_with_text) && $variables['view_mode'] === 'view_mode_tile') ||
-    $variables['view_mode'] === 'view_mode_tile_horizontal') {
+    $variables['view_mode'] === 'view_mode_tile_horizontal' ||
+    $variables['view_mode'] === 'highlighted') {
     $variables['text'] = $entity instanceof DescriptionInterface && isset($variables['content'][$entity->getDescriptionField()]) ? $variables['content'][$entity->getDescriptionField()] : NULL;
   }
 
