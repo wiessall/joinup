@@ -54,6 +54,12 @@ function _ventuno_preprocess_tile(array &$variables, string $entity_type_id): vo
 
   // Text.
   $variables['text'] = $entity instanceof DescriptionInterface && isset($variables['content'][$entity->getDescriptionField()]) ? $variables['content'][$entity->getDescriptionField()] : NULL;
+  // Routes where the vertical tiles are supposed to show text.
+  $routes_text = ['page_manager.page_view_homepage_homepage-layout_builder-0', 'entity.meta_entity.canonical'];
+  // Prevent showing the "text" in the vertical (default) tiles on all other routes.
+  if (!in_array($route_name, $routes_text) && $variables['view_mode'] === 'view_mode_tile') {
+    unset($variables['text']);
+  }
 
   // Image.
   $variables['image'] = ($entity instanceof LogoInterface) && $entity->getLogoAsFile()
