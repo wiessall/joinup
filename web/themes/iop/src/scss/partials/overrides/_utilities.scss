@@ -1,0 +1,79 @@
+// stylelint-disable indentation
+$utilities: () !default;
+// stylelint-disable-next-line scss/dollar-variable-default
+$utilities: map-merge(
+  $utilities,
+  (
+    "align": null,
+    "float": null,
+    "opacity": null,
+    "shadow": null,
+    "translate-middle": null,
+    "border-end": null,
+    "border-start": null,
+    "border-color": null,
+    "border-width": null,
+    "viewport-width": null,
+    "min-viewport-width": null,
+    "max-height": null,
+    "viewport-height": null,
+    "min-viewport-height": null,
+    "flex": null,
+    "flex-grow": null,
+    "gap": null,
+    "align-self": null,
+    "negative-margin": null,
+    "negative-margin-x": null,
+    "negative-margin-y": null,
+    "negative-margin-top": null,
+    "negative-margin-end": null,
+    "negative-margin-bottom": null,
+    "negative-margin-start": null,
+    "font-family": null,
+    "font-style": null,
+    "line-height": null,
+    "text-decoration": null,
+    "text-transform": null,
+    "white-space": null,
+    "word-wrap": null,
+    "text-opacity": null,
+    "bg-opacity": null,
+    "gradient": null,
+    "user-select": null,
+    "pointer-events": null,
+    "column-gap": (
+      responsive: false,
+      property: column-gap,
+      class: col-gap,
+      values: $spacers
+    ),
+    "link": null,
+    "font-weight":
+      map-merge(
+        map-get($utilities, "font-weight"),
+        (
+          values:
+            map-merge(
+              map-get(map-get($utilities, "font-weight"), "values"),
+              (
+                md: $font-weight-medium,
+              )
+            ),
+        )
+      ),
+    "font-size":
+      map-merge(
+        map-get($utilities, "font-size"),
+        (
+          values:
+            map-merge(
+              map-get(map-get($utilities, "font-size"), "values"),
+              (
+                sm: $font-size-sm,
+                xs: $font-size-xs,
+              )
+            ),
+        )
+      ),
+  ),
+);

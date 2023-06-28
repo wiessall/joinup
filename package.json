@@ -1,21 +1,61 @@
 {
-    "license": "EUPL-1.2",
-    "devDependencies": {
-        "eslint": "^7.32.0",
-        "eslint-config-airbnb": "^18.2.1",
-        "eslint-config-prettier": "^8.3.0",
-        "eslint-plugin-import": "^2.24.2",
-        "eslint-plugin-jsdoc": "^39.3.24",
-        "eslint-plugin-jsx-a11y": "^6.4.1",
-        "eslint-plugin-prettier": "^4.0.0",
-        "eslint-plugin-react": "^7.25.1",
-        "eslint-plugin-yml": "^0.10.1",
-        "react": "^17.0.2"
+  "author": "European Commission",
+  "license": "EUPL-1.2",
+  "devDependencies": {
+    "@glidejs/glide": "^3.6.0",
+    "@openeuropa/bcl-bootstrap": "1.0.2",
+    "@openeuropa/bcl-builder": "1.0.2",
+    "@openeuropa/bcl-theme-default": "1.0.2",
+    "@openeuropa/bcl-theme-joinup": "1.0.2",
+    "cross-env": "7.0.3",
+    "del-cli": "^4.0.1",
+    "eslint": "^7.32.0",
+    "eslint-config-airbnb": "^18.2.1",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-import": "^2.24.2",
+    "eslint-plugin-jsdoc": "^39.3.24",
+    "eslint-plugin-jsx-a11y": "^6.4.1",
+    "eslint-plugin-prettier": "^4.0.0",
+    "eslint-plugin-react": "^7.25.1",
+    "eslint-plugin-yml": "^0.10.1",
+    "glob": "7.1.7",
+    "npm-run-all": "4.1.5",
+    "npm-watch": "^0.11.0",
+    "patch-package": "^6.5.0",
+    "react": "^17.0.2",
+    "slim-select": "^1.27.1"
+  },
+  "dependencies": {
+    "jquery-jsonview": "^1.2.3"
+  },
+  "scripts": {
+    "watch": "npm-watch",
+    "clean:assets": "del-cli web/themes/ventuno/assets/* web/themes/iop/assets/*",
+    "clean:scripts": "del-cli web/themes/ventuno/assets/js web/themes/iop/assets/js",
+    "clean:styles": "del-cli web/themes/ventuno/assets/css web/themes/iop/assets/css",
+    "build": "npm-run-all clean:scripts clean:styles build:scripts build:styles build:copy build:sprite",
+    "build:scripts": "cross-env bcl-builder scripts",
+    "build:styles": "cross-env bcl-builder styles",
+    "build:copy": "cross-env bcl-builder copy",
+    "build:sprite": "cross-env bcl-builder sprite",
+    "postinstall": "patch-package --patch-dir=resources/patch/node && mkdir -p web/libraries/jquery-jsonview/dist && cp node_modules/jquery-jsonview/dist/* web/libraries/jquery-jsonview/dist/"
+  },
+  "watch": {
+    "build:styles": {
+      "patterns": [
+        "web/themes/ventuno/src/scss/**/*.scss",
+        "web/themes/iop/src/scss/**/*.scss"
+      ],
+      "extensions": "scss",
+      "quiet": false
     },
-    "dependencies": {
-        "jquery-jsonview": "^1.2.3"
-    },
-    "scripts": {
-        "postinstall": "mkdir -p web/libraries/jquery-jsonview/dist && cp node_modules/jquery-jsonview/dist/* web/libraries/jquery-jsonview/dist/"
+    "build:scripts": {
+      "patterns": [
+        "web/themes/ventuno/src/js/**/*.js",
+        "web/themes/iop/src/js/**/*.js"
+      ],
+      "extensions": "js",
+      "quiet": false
     }
+  }
 }
