@@ -1,0 +1,5 @@
+services:
+  joinup_like.like_subscriber:
+    class: Drupal\joinup_like\EventSubscriber\LikeSubscriber
+    tags:
+      - { name: event_subscriber }
