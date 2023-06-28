@@ -53,15 +53,15 @@ function _ventuno_preprocess_tile(array &$variables, string $entity_type_id): vo
   $route_name = $route_match->getRouteName();
 
   // Text.
-  $variables['text'] = $entity instanceof DescriptionInterface && isset($variables['content'][$entity->getDescriptionField()]) ? $variables['content'][$entity->getDescriptionField()] : NULL;
-  // Routes where the vertical tiles are supposed to show text.
+  // Only supposed to be passed to horizontal tiles,
+  // but also vertical tiles on Homepage and Topic pages.
   $routes_with_text = [
     'page_manager.page_view_homepage_homepage-layout_builder-0',
     'entity.meta_entity.canonical',
   ];
-  // Prevent showing text in the vertical (default) tiles on all other routes.
-  if (!in_array($route_name, $routes_with_text) && $variables['view_mode'] === 'view_mode_tile') {
-    unset($variables['text']);
+  if ((in_array($route_name, $routes_with_text) && $variables['view_mode'] === 'view_mode_tile') ||
+    $variables['view_mode'] === 'view_mode_tile_horizontal') {
+    $variables['text'] = $entity instanceof DescriptionInterface && isset($variables['content'][$entity->getDescriptionField()]) ? $variables['content'][$entity->getDescriptionField()] : NULL;
   }
 
   // Image.
