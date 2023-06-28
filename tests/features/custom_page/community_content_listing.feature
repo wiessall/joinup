@@ -5,7 +5,12 @@ Feature:
   I need to be able to configure community content listing
 
   Background:
-    Given the following collections:
+    Given user:
+      | Username    | jimmy7892                       |
+      | First name  | Jimmy                           |
+      | Family name | Nine                            |
+      | E-mail      | jimmy.nine@ec-europa.example.eu |
+    And the following collections:
       | title      | logo     | banner     | state     |
       | Nintendo64 | logo.png | banner.jpg | validated |
       | Emulators  | logo.png | banner.jpg | validated |
@@ -24,6 +29,9 @@ Feature:
       | title                           | collection | content                 | created          | state     | pinned |
       | What's your favourite N64 game? | Nintendo64 | Post title and reasons. | 2018-11-17 10:17 | validated | no     |
       | Searching for green pad.        | Nintendo64 | Looking for a used one. | 2018-11-17 10:18 | validated | no     |
+    And the following collection user membership:
+      | collection | user      | roles       |
+      | Nintendo64 | jimmy7892 | facilitator |
 
   @javascript
   Scenario: Community content listing widget should be shown to facilitators and moderators.
@@ -72,7 +80,7 @@ Feature:
     And I should see the text "Note: the content shown is dynamic, filtered live each time users will visualise the page. As a result, new content might be shown and old content can be altered or deleted."
 
     When I press "Save" in the "Modal buttons" region
-    And I press "Save"
+    And I press "Publish"
     Then I should see the heading "Latest content"
     And I should see the "Rare Nintendo64 disk drive discovered" tile
     And I should see the "20 year anniversary" tile
@@ -88,7 +96,7 @@ Feature:
     And I click "Edit" in the "Custom page body" for paragraph layout 1
     And I fill in "Query presets" with "entity_bundle|news"
     When I press "Save" in the "Modal buttons" region
-    And I press "Save"
+    And I press "Update"
     Then I should see the heading "Latest news"
     And I should see the "Rare Nintendo64 disk drive discovered" tile
     But I should not see the "20 year anniversary" tile
@@ -99,7 +107,7 @@ Feature:
     And I click "Edit" in the "Custom page body" for paragraph layout 1
     And I check "Allow shared content"
     And I press "Save" in the "Modal buttons" region
-    And I press "Save"
+    And I press "Update"
     # Only news are displayed.
     Then I should see the "Rare Nintendo64 disk drive discovered" tile
     But I should not see the "20 year anniversary" tile
@@ -133,7 +141,7 @@ Feature:
     And I click "Edit" in the "Custom page body" for paragraph layout 1
     And I uncheck "Show related content"
     And I press "Save" in the "Modal buttons" region
-    And I press "Save"
+    And I press "Update"
     Then I should not see the "Rare Nintendo64 disk drive discovered" tile
     And I should not see the "20 year anniversary" tile
     And I should not see the "NEC VR4300 CPU" tile
@@ -332,15 +340,15 @@ Feature:
       | Licence      | nintendo64 licences | Licence     | Nintendo64 | validated |
     And custom_page content:
       | title   | collection | state     |
-      | Manuals | Nintendo64 | validated |
+      | Manuals | Nintendo64 | published |
     And I append content listing to "field_paragraphs_body" field in "node" entity with following "Manuals" title with:
     """
     a:3:{s:7:"enabled";i:1;s:13:"query_presets";s:60:"entity_bundle|document
             keywords|"nintendo64 manuals"";s:5:"limit";s:2:"10";}
     """
     And custom_page content:
-      | title   | collection | state     |
-      | Licences | Nintendo64 | validated |
+      | title    | collection | state     |
+      | Licences | Nintendo64 | published |
     And I append content listing to "field_paragraphs_body" field in "node" entity with following "Licences" title with:
     """
     a:3:{s:7:"enabled";i:1;s:13:"query_presets";s:61:"entity_bundle|document
@@ -399,8 +407,8 @@ Feature:
   Scenario: Global search setting allows for site-wide content in the content listing.
     Given I am logged in as a moderator
     And custom_page content:
-      | title                | collection           | state     |
-      | All content | Nintendo64 | validated |
+      | title       | collection   | state     |
+      | All content | Nintendo64   | published |
     And I append "content_listing" to "field_paragraphs_body" field in "node" entity with following "All content" title:
       | content_listing:value | a:6:{s:6:"fields";a:1:{s:20:"content_listing_type";a:2:{s:6:"weight";i:0;s:6:"region";s:3:"top";}}s:7:"enabled";i:1;s:13:"query_presets";s:38:"entity_bundle\|discussion,event,news\|IN";s:5:"limit";s:2:"12";s:11:"show_shared";i:0;s:13:"global_search";i:1;} |
 
@@ -456,7 +464,7 @@ Feature:
 
   @javascript
   Scenario: Regression test for ISAICP-7040
-    See https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7040
+  See https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7040
 
     Given solutions:
       | title                | collection | state     |
@@ -468,7 +476,7 @@ Feature:
       | title   | collection | state     |
       | Forests | Nintendo64 | published |
 
-    Given I am logged in as a facilitator of the "Nintendo64" collection
+    Given I am logged in as jimmy7892
     And I go to the edit form of the "Forests" "custom page"
 
     # Paragraph #1.
@@ -494,11 +502,12 @@ Feature:
     And I click "Edit" in the "Custom page body" for paragraph layout 1
     Then the 1st filter of the 1st content listing paragraph value is "Save the Planet"
     And I press "Save" in the "Modal buttons" region
-    And I press "Save"
+    And I press "Update"
+    Then I should see the text "Forests"
 
   @javascript
   Scenario: Regression test for ISAICP-7183
-    See https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7183
+  See https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7183
 
     Given solutions:
       | title              | collection | state     |
@@ -510,7 +519,7 @@ Feature:
       | title | collection | state     |
       | Bikes | Nintendo64 | published |
 
-    Given I am logged in as a facilitator of the "Nintendo64" collection
+    And I am logged in as jimmy7892
     And I go to the edit form of the "Bikes" "custom page"
 
     # Paragraph #1.
@@ -538,7 +547,7 @@ Feature:
     And I fill in the latest "Solution" field with "Fight battery mode"
     And I press "Save" in the "Modal buttons" region
 
-    Then I press "Save"
+    Then I press "Update"
     And I should see the heading "Bikes"
 
     When I go to the edit form of the "Bikes" "custom page"

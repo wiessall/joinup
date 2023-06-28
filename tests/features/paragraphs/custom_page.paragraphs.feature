@@ -12,8 +12,8 @@ Feature:
   @javascript
   Scenario: Paragraph sections are multivalue and sort-able.
     Given custom_page content:
-      | title           | collection           | state     |
-      | Paragraphs page | Paragraphs collection | validated |
+      | title           | collection            | state     |
+      | Paragraphs page | Paragraphs collection | published |
     And I append "simple_paragraph" to "field_paragraphs_body" field in "node" entity with following "Paragraphs page" title:
       | field_body:value  | AAAAAAAAAA      |
       | field_body:format | content_editor  |
@@ -29,7 +29,7 @@ Feature:
     Then I open the header local tasks menu
     And I click "Edit"
     And I click "Move down" in the "Custom page body" for paragraph layout 1
-    And I press "Save"
+    And I press "Update"
     Then there should be 2 paragraphs in the page
     And I should see the following paragraphs in the given order:
       | BBBBBBBBBB |
@@ -81,7 +81,7 @@ Feature:
     # As the Webtools Map a webservice, we only test a fake JSON.
     And I fill in "JSON" with "{\"foo\":\"bar\"}"
     And I press "Save" in the "Modal buttons" region
-    And I press "Save"
+    And I press "Update"
     Then I should see the success message "Custom page Don't Mess with the Zohan has been updated."
     And the response should contain "{\"foo\":\"bar\"}"
 
@@ -90,7 +90,7 @@ Feature:
     And I click "IFrame"
     And I fill in "Iframe URL" with "http://example.com"
     And I press "Save" in the "Modal buttons" region
-    And I press "Save"
+    And I press "Update"
     # We only test that the <iframe .../> element is in page. Unfortunately, we
     # cannot do precision RegExp search in page source, so we only check for the
     # existence of the iframe and its URL.
@@ -116,7 +116,7 @@ Feature:
     And I fill in the 2nd "Item label" with "Duper" in the "Accordion item" field
     And I enter "Crunchy text" in the 2nd "Body" wysiwyg editor in the "Accordion item" field
     And I press "Save" in the "Modal buttons" region
-    And I press "Save"
+    And I press "Publish"
     Then I should see the heading "Paragraphs accordion page"
     And I should see the text "Super"
     And I should see the text "Duper"
