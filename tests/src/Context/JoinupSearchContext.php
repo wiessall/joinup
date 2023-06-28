@@ -711,7 +711,7 @@ class JoinupSearchContext extends RawDrupalContext {
       $page = $this->getSession()->getPage();
       $page->fillField('keys', $keywords);
       $page->pressButton("Search site-wide");
-      $this->assertCurrentUrl($this->locatePath('search?keys=' . $keywords . '&sort_by=last-updated-date'));
+      $this->assertCurrentUrl($this->locatePath('search?keys=' . $keywords . '&sort_by=relevance'));
     }
   }
 
