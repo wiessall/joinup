@@ -5,7 +5,12 @@ Feature:
   I need to be able to configure community content listing
 
   Background:
-    Given the following collections:
+    Given user:
+      | Username    | jimmy7892                       |
+      | First name  | Jimmy                           |
+      | Family name | Nine                            |
+      | E-mail      | jimmy.nine@ec-europa.example.eu |
+    And the following collections:
       | title      | logo     | banner     | state     |
       | Nintendo64 | logo.png | banner.jpg | validated |
       | Emulators  | logo.png | banner.jpg | validated |
@@ -24,6 +29,9 @@ Feature:
       | title                           | collection | content                 | created          | state     | pinned |
       | What's your favourite N64 game? | Nintendo64 | Post title and reasons. | 2018-11-17 10:17 | validated | no     |
       | Searching for green pad.        | Nintendo64 | Looking for a used one. | 2018-11-17 10:18 | validated | no     |
+    And the following collection user membership:
+      | collection | user      | roles       |
+      | Nintendo64 | jimmy7892 | facilitator |
 
   @javascript
   Scenario: Community content listing widget should be shown to facilitators and moderators.
@@ -456,7 +464,7 @@ Feature:
 
   @javascript
   Scenario: Regression test for ISAICP-7040
-    See https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7040
+  See https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7040
 
     Given solutions:
       | title                | collection | state     |
@@ -468,7 +476,7 @@ Feature:
       | title   | collection | state     |
       | Forests | Nintendo64 | published |
 
-    Given I am logged in as a facilitator of the "Nintendo64" collection
+    Given I am logged in as jimmy7892
     And I go to the edit form of the "Forests" "custom page"
 
     # Paragraph #1.
@@ -494,6 +502,8 @@ Feature:
     And I click "Edit" in the "Custom page body" for paragraph layout 1
     Then the 1st filter of the 1st content listing paragraph value is "Save the Planet"
     And I press "Save" in the "Modal buttons" region
+    And I press "Update"
+    Then I should see the text "Forests"
 
   @javascript
   Scenario: Regression test for ISAICP-7183
@@ -509,7 +519,7 @@ Feature:
       | title | collection | state     |
       | Bikes | Nintendo64 | published |
 
-    Given I am logged in as a facilitator of the "Nintendo64" collection
+    And I am logged in as jimmy7892
     And I go to the edit form of the "Bikes" "custom page"
 
     # Paragraph #1.
