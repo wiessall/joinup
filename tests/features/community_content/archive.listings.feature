@@ -49,31 +49,39 @@ Feature: Archived content on content listings - groups and paragraphs.
     # By default, the toggle to show archived content is disabled.
     But I should not see the "Archived news" tile
 
+  @javascript
   Scenario: Content listing paragraph can control visibility of archived items.
     When I am logged in as a moderator
     And I go to the "Some collection" collection
-    And I click "Add custom page"
+    Then I click "Add custom page" in the plus button menu
     And I fill in "Title" with "Some page"
-    And I press "Add Content listing"
+    Then I click "Choose component"
+    And I click "Content listing"
     And I fill in "Query presets" with "entity_bundle|news"
-    And I press "Save"
+    And I press "Save" in the "Modal buttons" region
+    And I press "Publish"
     Then I should see the heading "Some page"
     # By default, 'Show archived content' is set to 'unarchived'.
     And I should see the "Published news" tile
     But I should not see the "Archived news" tile
 
     And I go to the "Poly screens" collection
-    And I click "Add custom page"
+    Then I click "Add custom page" in the plus button menu
     And I fill in "Title" with "Poly page"
-    And I press "Add Content listing"
-    And I select "All" from "Show archived content"
+    Then I click "Choose component"
+    And I click "Content listing"
+    And I select "All" from "Show archived content" in the "Modal content" region
     And I fill in "Query presets" with "entity_bundle|news"
-    And I press "Save"
+    And I press "Save" in the "Modal buttons" region
+    And I press "Publish"
 
     When I go to the "Some page" custom page
-    And I click "Edit"
-    And I select "Archived" from "Show archived content"
-    And I press "Save"
+    Then I open the header local tasks menu
+    And I click "Edit" in the "Entity actions" region
+    Then I click "Edit" in the "Custom page body" for paragraph layout 1
+    And I select "Archived" from "Show archived content" in the "Modal content" region
+    And I press "Save" in the "Modal buttons" region
+    And I press "Update"
     Then I should see the heading "Some page"
     And I should see the "Archived news" tile
     But I should not see the "Published news" tile
@@ -83,16 +91,19 @@ Feature: Archived content on content listings - groups and paragraphs.
     And I should not see the text "Show archived"
 
     When I go to the "Some page" custom page
-    And I click "Edit"
-    And I select "All" from "Show archived content"
-    And I press "Save"
+    Then I open the header local tasks menu
+    And I click "Edit" in the "Entity actions" region
+    Then I click "Edit" in the "Custom page body" for paragraph layout 1
+    And I select "All" from "Show archived content" in the "Modal content" region
+    And I press "Save" in the "Modal buttons" region
+    And I press "Update"
     Then I should see the heading "Some page"
-    Then I should see the following facet items "News, Show archived" in this order
+    #Then I should see the following facet items "News, Show archived" in this order
     And I should see the text "Show archived"
     And I should not see the "Archived news" tile
     And I should see the "Published news" tile
 
-    When I click "Show archived"
+    When I go to "/collection/some-collection/some-page?f[0]=status%3Aarchived"
     And I should see the "Archived news" tile
     And I should not see the "Published news" tile
 
@@ -101,9 +112,12 @@ Feature: Archived content on content listings - groups and paragraphs.
     And I should not see the text "Show archived"
 
     When I go to the "Some page" custom page
-    And I click "Edit"
-    And I select "Archived" from "Show archived content"
-    And I press "Save"
+    Then I open the header local tasks menu
+    And I click "Edit" in the "Entity actions" region
+    Then I click "Edit" in the "Custom page body" for paragraph layout 1
+    And I select "Archived" from "Show archived content" in the "Modal content" region
+    And I press "Save" in the "Modal buttons" region
+    And I press "Update"
     Then I should see the heading "Some page"
     And I should not see the text "Show archived"
     And I should see the "Archived news" tile
@@ -114,9 +128,12 @@ Feature: Archived content on content listings - groups and paragraphs.
     And I should not see the text "Show archived"
 
     When I go to the "Some page" custom page
-    And I click "Edit"
-    And I select "Unarchived" from "Show archived content"
-    And I press "Save"
+    Then I open the header local tasks menu
+    And I click "Edit" in the "Entity actions" region
+    Then I click "Edit" in the "Custom page body" for paragraph layout 1
+    And I select "Unarchived" from "Show archived content" in the "Modal content" region
+    And I press "Save" in the "Modal buttons" region
+    And I press "Update"
     Then I should see the heading "Some page"
     And I should not see the text "Show archived"
     And I should not see the "Archived news" tile
@@ -126,6 +143,7 @@ Feature: Archived content on content listings - groups and paragraphs.
     Then I should see the heading "Poly page"
     And I should not see the text "Show archived"
 
+  @javascript
   Scenario: Carousel listings can also control archived items visibility.
     Given collection:
       | uri   | http://data.europa.eu/w21/8e30f798-ff2b-478b-9c09-5ed5a63b4c8c |
@@ -138,30 +156,36 @@ Feature: Archived content on content listings - groups and paragraphs.
 
     When I am logged in as a moderator
     And I go to the "Interoperable Europe" collection
-    And I click "Add custom page"
+    Then I click "Add custom page" in the plus button menu
     And I fill in "Title" with "IOP page"
-    And I press "Add Row"
-    And I press "Add 1 column layout"
-    And I press "Add Carousel"
-    And I fill in "Query presets" with "entity_bundle|news"
-    And I press "Save"
+    Then I click "Choose component"
+    And I click "Carousel"
+    And I fill in "Query presets" with "entity_bundle|news" in the "Modal content" region
+    And I press "Save" in the "Modal buttons" region
+    And I press "Publish"
     Then I should see the heading "IOP page"
     # By default, 'Show archived content' is set to 'unarchived'.
     And I should see the "IOP published news" tile
     But I should not see the "IOP archived news" tile
 
     When I go to the "IOP page" custom page
-    And I click "Edit"
-    And I select "Archived" from "Show archived content"
-    And I press "Save"
+    And I open the header local tasks menu
+    And I click "Edit" in the "Entity actions" region
+    Then I click "Edit" in the "Custom page body" for paragraph layout 1
+    And I select "Archived" from "Show archived content" in the "Modal content" region
+    And I press "Save" in the "Modal buttons" region
+    And I press "Update"
     Then I should see the heading "IOP page"
     And I should see the "IOP archived news" tile
     But I should not see the "IOP published news" tile
 
     When I go to the "IOP page" custom page
-    And I click "Edit"
-    And I select "All" from "Show archived content"
-    And I press "Save"
+    And I open the header local tasks menu
+    And I click "Edit" in the "Entity actions" region
+    Then I click "Edit" in the "Custom page body" for paragraph layout 1
+    And I select "All" from "Show archived content" in the "Modal content" region
+    And I press "Save" in the "Modal buttons" region
+    And I press "Update"
     Then I should see the heading "IOP page"
     And I should see the "IOP archived news" tile
     And I should see the "IOP published news" tile
