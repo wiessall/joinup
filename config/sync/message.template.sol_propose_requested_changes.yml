@@ -8,7 +8,7 @@ _core:
   default_config_hash: 2Ih5AMmDjJsX-YY7yoqSu5zqDOebgZCW2WJ1Eusi06w
 template: sol_propose_requested_changes
 label: 'Solution propose cahnges - Owner'
-description: 'Template 16: Propose changes from ''request changes'' state'
+description: "Template 16: Propose changes from 'request changes' state"
 text:
   -
     value: 'Joinup: An update of a solution has been proposed'
