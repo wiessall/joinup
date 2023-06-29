@@ -6,10 +6,10 @@ namespace Drupal\contact_information\EventSubscriber;
 
 use Drupal\Component\Datetime\TimeInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
-use Drupal\Core\Http\RequestStack;
 use Drupal\cas\Event\CasPostLoginEvent;
 use Drupal\contact_information\Entity\ContactInformationInterface;
 use Drupal\joinup_group\EventSubscriber\RedirectedEuLoginAuthenticatedSubscriberBase;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
  * Redirects the user back to the group about page.

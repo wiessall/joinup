@@ -1802,19 +1802,20 @@ class FeatureContext extends RawDrupalContext {
   /**
    * Creates a backup of the `VERSION.txt` file.
    *
-   * Tests that interact with the version file should be tagged with `@version`.
+   * Tests that interact with the version file should be tagged with
+   * `@joinupVersion`.
    *
-   * @BeforeScenario @version&&@api
+   * @BeforeScenario @joinupVersion&&@api
    */
   public function backupJoinupVersion(): void {
     $filename = JoinupVersionInterface::PATH;
-    $this->version = file_exists($filename) ? $this->version = file_get_contents($filename) : FALSE;
+    $this->version = file_exists($filename) ? file_get_contents($filename) : FALSE;
   }
 
   /**
    * Restores the backup of the Joinup `VERSION` file.
    *
-   * @AfterScenario @version&&@api
+   * @AfterScenario @joinupVersion&&@api
    */
   public function restoreJoinupVersion(): void {
     if ($this->version === FALSE) {
@@ -1829,8 +1830,8 @@ class FeatureContext extends RawDrupalContext {
    * Sets the Joinup version.
    *
    * Since this overwrites the `VERSION.txt` file in the webroot directory, any
-   * scenario that includes this step should be tagged with `@version` so that
-   * the original contents of the file will be restored at the end of the
+   * scenario that includes this step should be tagged with `@joinupVersion` so
+   * that the original contents of the file will be restored at the end of the
    * scenario.
    *
    * @param string $version
@@ -1839,11 +1840,11 @@ class FeatureContext extends RawDrupalContext {
    * @When the Joinup version is set to :version
    */
   public function setJoinupVersion(string $version): void {
-    // Alert the user that the `@version` tag is required.
-    Assert::assertTrue($this->hasTag('version'), 'The `@version` tag is required for scenarios that want to change the Joinup version.');
+    // Alert the user that the `@joinupVersion` tag is required.
+    Assert::assertTrue($this->hasTag('joinupVersion'), 'The `@joinupVersion` tag is required for scenarios that want to change the Joinup version.');
 
     // We also require the Drupal API to retrieve the project root folder.
-    Assert::assertTrue($this->hasTag('api'), 'The `@api` tag is required for scenarios that use the `@version` tag.');
+    Assert::assertTrue($this->hasTag('api'), 'The `@api` tag is required for scenarios that use the `@joinupVersion` tag.');
 
     file_put_contents(JoinupVersionInterface::PATH, $version);
 
