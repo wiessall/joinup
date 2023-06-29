@@ -13,3 +13,13 @@
  */
 
 declare(strict_types = 1);
+
+/**
+ * Change 'culture' to 'culture and environment'.
+ */
+function joinup_core_deploy_109400(): string {
+  // Update the references.
+  $vocab_manager = \Drupal::getContainer()->get('topic.vocabulary_manager');
+  $vocab_manager->updateDbReference('http://joinup.eu/ontology/topic#culture', 'http://joinup.eu/ontology/topic#culture-and-education');
+  return 'Updated the topic vocabulary.';
+}
