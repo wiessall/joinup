@@ -300,7 +300,7 @@ function joinup_workflow_entity_presave(EntityInterface $entity) {
     return;
   }
 
-  // Prevent changes to update date in case we archie or unarchive entity.
+  // Prevent changes to update date in case we archive or unarchive entity.
   if ($entity->isArchived() || $entity->original->isArchived()) {
     $entity->set('changed', $entity->original->get('changed')->getValue());
   }
