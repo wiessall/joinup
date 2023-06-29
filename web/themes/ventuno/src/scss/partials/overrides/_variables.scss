@@ -54,7 +54,6 @@ $h5-font-size: $font-size-base; // 16px
 $h6-font-size: $font-size-base; // 16px
 
 // Links
-$link-color: $brand;
 $link-decoration: none;
 $link-hover-decoration: underline;
 
@@ -79,7 +78,6 @@ $pagination-disabled-bg: transparent;
 // Typography
 $font-family-sans-serif: "Roboto", sans-serif;
 $font-family-base: "Roboto", sans-serif;
-$headings-font-weight: 700;
 
 // Paths (from the compiled CSS location)
 $bootstrap-icons-path: '../icons';
