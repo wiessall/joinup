@@ -6,7 +6,7 @@ core_version_requirement: '>=9.3'
 base theme: oe_bootstrap_theme
 
 libraries:
-  - ventuno/main
+  - ventuno/base
   - ventuno/components
   - ventuno/layout
   - ventuno/theme
