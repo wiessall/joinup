@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "98fbc354afe83c87c194f1efcf579134",
+    "content-hash": "77797ab321577bd7065261f6a3547cb7",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -3079,17 +3079,17 @@
         },
         {
             "name": "drupal/entity_legal",
-            "version": "3.0.0-beta5",
+            "version": "4.0.0-alpha1",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/entity_legal.git",
-                "reference": "3.0.0-beta5"
+                "reference": "4.0.0-alpha1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/entity_legal-3.0.0-beta5.zip",
-                "reference": "3.0.0-beta5",
-                "shasum": "d3715807fc57777513a49bc0f36f36f963d9927c"
+                "url": "https://ftp.drupal.org/files/projects/entity_legal-4.0.0-alpha1.zip",
+                "reference": "4.0.0-alpha1",
+                "shasum": "1716a5cea062c8899db310725a86c0f0e72c952f"
             },
             "require": {
                 "drupal/core": "^9 || ^10",
@@ -3098,11 +3098,11 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "3.0.0-beta5",
-                    "datestamp": "1684771149",
+                    "version": "4.0.0-alpha1",
+                    "datestamp": "1684844592",
                     "security-coverage": {
                         "status": "not-covered",
-                        "message": "Beta releases are not covered by Drupal security advisories."
+                        "message": "Alpha releases are not covered by Drupal security advisories."
                     }
                 }
             },
@@ -4478,17 +4478,17 @@
         },
         {
             "name": "drupal/linkit",
-            "version": "6.0.0-rc1",
+            "version": "6.0.0-rc2",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/linkit.git",
-                "reference": "6.0.0-rc1"
+                "reference": "6.0.0-rc2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/linkit-6.0.0-rc1.zip",
-                "reference": "6.0.0-rc1",
-                "shasum": "126069976e2a7d34cc8530c0950c75bd7f1b5d3c"
+                "url": "https://ftp.drupal.org/files/projects/linkit-6.0.0-rc2.zip",
+                "reference": "6.0.0-rc2",
+                "shasum": "69274e63d5312594cb3444656c6a0ec3800d0df4"
             },
             "require": {
                 "drupal/core": "^9.4 || ^10.0.0"
@@ -4503,8 +4503,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "6.0.0-rc1",
-                    "datestamp": "1681070405",
+                    "version": "6.0.0-rc2",
+                    "datestamp": "1688055675",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "RC releases are not covered by Drupal security advisories."
@@ -5980,17 +5980,17 @@
         },
         {
             "name": "drupal/rdf_entity",
-            "version": "2.0.0-alpha6",
+            "version": "2.0.0-alpha7",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/rdf_entity.git",
-                "reference": "2.0.0-alpha6"
+                "reference": "2.0.0-alpha7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/rdf_entity-2.0.0-alpha6.zip",
-                "reference": "2.0.0-alpha6",
-                "shasum": "55449d58ecbdb54c0a19877749af190e41dca841"
+                "url": "https://ftp.drupal.org/files/projects/rdf_entity-2.0.0-alpha7.zip",
+                "reference": "2.0.0-alpha7",
+                "shasum": "07c53765d1166b7e5a3115ec76ce52d4e05e38f8"
             },
             "require": {
                 "drupal/core": "^9.2 || ^10",
@@ -6005,8 +6005,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "2.0.0-alpha6",
-                    "datestamp": "1685429366",
+                    "version": "2.0.0-alpha7",
+                    "datestamp": "1688067392",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Alpha releases are not covered by Drupal security advisories."
@@ -7319,17 +7319,17 @@
         },
         {
             "name": "drupal/token",
-            "version": "1.11.0",
+            "version": "1.12.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/token.git",
-                "reference": "8.x-1.11"
+                "reference": "8.x-1.12"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/token-8.x-1.11.zip",
-                "reference": "8.x-1.11",
-                "shasum": "da264b36d1f88eb0c74bf84e18e8789854f98400"
+                "url": "https://ftp.drupal.org/files/projects/token-8.x-1.12.zip",
+                "reference": "8.x-1.12",
+                "shasum": "cefe1b203b793682f74ea43e18d0a814cf768763"
             },
             "require": {
                 "drupal/core": "^9.2 || ^10"
@@ -7337,8 +7337,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "8.x-1.11",
-                    "datestamp": "1659471813",
+                    "version": "8.x-1.12",
+                    "datestamp": "1688015262",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -7388,17 +7388,17 @@
         },
         {
             "name": "drupal/ui_patterns",
-            "version": "1.6.0",
+            "version": "1.7.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/ui_patterns.git",
-                "reference": "8.x-1.6"
+                "reference": "8.x-1.7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/ui_patterns-8.x-1.6.zip",
-                "reference": "8.x-1.6",
-                "shasum": "14474b4d0b816b90ef9cfea04b35ef0666c43776"
+                "url": "https://ftp.drupal.org/files/projects/ui_patterns-8.x-1.7.zip",
+                "reference": "8.x-1.7",
+                "shasum": "83b477eb5f668846c0f150ef0a1926f3aba59d14"
             },
             "require": {
                 "drupal/core": "^9 || ^10"
@@ -7410,8 +7410,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "8.x-1.6",
-                    "datestamp": "1687451538",
+                    "version": "8.x-1.7",
+                    "datestamp": "1688044506",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -17895,16 +17895,16 @@
         },
         {
             "name": "mglaman/phpstan-drupal",
-            "version": "1.1.35",
+            "version": "1.1.36",
             "source": {
                 "type": "git",
                 "url": "https://github.com/mglaman/phpstan-drupal.git",
-                "reference": "7da46c12bd556dca5855ee76b8621815d85714fe"
+                "reference": "345f7babd0cfd1ef73bb856673a1cee5a0dbd6e5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mglaman/phpstan-drupal/zipball/7da46c12bd556dca5855ee76b8621815d85714fe",
-                "reference": "7da46c12bd556dca5855ee76b8621815d85714fe",
+                "url": "https://api.github.com/repos/mglaman/phpstan-drupal/zipball/345f7babd0cfd1ef73bb856673a1cee5a0dbd6e5",
+                "reference": "345f7babd0cfd1ef73bb856673a1cee5a0dbd6e5",
                 "shasum": ""
             },
             "require": {
@@ -17979,7 +17979,7 @@
             "description": "Drupal extension and rules for PHPStan",
             "support": {
                 "issues": "https://github.com/mglaman/phpstan-drupal/issues",
-                "source": "https://github.com/mglaman/phpstan-drupal/tree/1.1.35"
+                "source": "https://github.com/mglaman/phpstan-drupal/tree/1.1.36"
             },
             "funding": [
                 {
@@ -17995,7 +17995,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-06-14T20:38:19+00:00"
+            "time": "2023-06-28T20:24:39+00:00"
         },
         {
             "name": "mikey179/vfsstream",
