@@ -92,16 +92,4 @@ abstract class CommunityContentBase extends Node implements CommunityContentInte
     return $this->get('field_shared_in');
   }
 
-  /**
-   * {@inheritdoc}
-   */
-  protected function getFieldsToSkipFromTranslationChangesCheck() {
-    $fields = parent::getFieldsToSkipFromTranslationChangesCheck();
-
-    // Prevents auto updates to changed date when we update only state.
-    $fields[] = $this->getWorkflowStateFieldName();
-
-    return $fields;
-  }
-
 }
