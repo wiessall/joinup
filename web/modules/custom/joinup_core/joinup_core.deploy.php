@@ -17,9 +17,19 @@ declare(strict_types = 1);
 use Drupal\media\MediaTypeInterface;
 
 /**
+ * Change 'culture' to 'culture and environment'.
+ */
+function joinup_core_deploy_109400(): string {
+  // Update the references.
+  $vocab_manager = \Drupal::getContainer()->get('topic.vocabulary_manager');
+  $vocab_manager->updateDbReference('http://joinup.eu/ontology/topic#culture', 'http://joinup.eu/ontology/topic#culture-and-education');
+  return 'Updated the topic vocabulary.';
+}
+
+/**
  * Migrate Video content into new Media field.
  */
-function joinup_core_deploy_109400(array &$sandbox): string {
+function joinup_core_deploy_109401(array &$sandbox): string {
   if (empty($sandbox['ids'])) {
     $sandbox['ids'] = \Drupal::entityQuery('node')
       ->accessCheck(FALSE)
@@ -97,7 +107,7 @@ function _joinup_core_deploy_migrate_field(MediaTypeInterface $media_type, strin
 /**
  * Migrate video embed markup into media.
  */
-function joinup_core_deploy_109401(array &$sandbox): string {
+function joinup_core_deploy_109402(array &$sandbox): string {
   if (empty($sandbox['tasks'])) {
     $sandbox['tasks']['node'] = \Drupal::entityQuery('node')->accessCheck(FALSE)
       ->condition('body', 'preview_thumbnail', 'CONTAINS')
