@@ -1,0 +1,8 @@
+@import "../partials/core";
+@import "@openeuropa/bcl-bootstrap/scss/badge";
+@import "@openeuropa/bcl-theme-default/src/scss/badge";
+
+.badge.bg-secondary,
+.badge.bg-secondary a {
+  color: darken($brand, 15);
+}
