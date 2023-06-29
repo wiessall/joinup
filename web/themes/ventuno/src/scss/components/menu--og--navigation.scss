@@ -91,6 +91,7 @@
       white-space: nowrap;
       &.show,
       &:hover {
+        color: $primary;
         box-shadow: 0 4px 0 0 $primary!important;
         text-decoration: none;
       }
