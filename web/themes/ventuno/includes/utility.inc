@@ -240,19 +240,26 @@ function _ventuno_preprocess_tile(array &$variables, string $entity_type_id): vo
       'label' => t('Archived'),
     ];
   }
-  $likeable_bundles = ['custom_page', 'discussion', 'document', 'event',
-    'news', 'solution',
-  ];
-  if (in_array($entity->bundle(), $likeable_bundles)) {
-    /** @var \Drupal\flag\FlagCountManagerInterface $flag_count_manager */
-    $flag_count_manager = Drupal::service('flag.count');
-    $counts = $flag_count_manager->getEntityFlagCounts($entity);
-    $like_entity_type_id = 'like_' . $entity->getEntityTypeId();
+
+  // Add the field in all entity view displays that requires them.
+  if (isset($variables['content']['flag_like_node'])) {
     $variables['extra_data'][] = [
-      'icon' => 'hand-thumbs-up',
-      'label' => empty($counts) || !isset($counts[$like_entity_type_id]) ? '0' : $counts[$like_entity_type_id],
+      'label' => $variables['content']['flag_like_node']
     ];
   }
+//  $likeable_bundles = ['custom_page', 'discussion', 'document', 'event',
+//    'news', 'solution',
+//  ];
+//  if (in_array($entity->bundle(), $likeable_bundles)) {
+//    /** @var \Drupal\flag\FlagCountManagerInterface $flag_count_manager */
+//    $flag_count_manager = Drupal::service('flag.count');
+//    $counts = $flag_count_manager->getEntityFlagCounts($entity);
+//    $like_entity_type_id = 'like_' . $entity->getEntityTypeId();
+//    $variables['extra_data'][] = [
+//      'icon' => 'hand-thumbs-up',
+//      'label' => empty($counts) || !isset($counts[$like_entity_type_id]) ? '0' : $counts[$like_entity_type_id],
+//    ];
+//  }
 
 }
 
