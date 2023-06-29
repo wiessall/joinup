@@ -289,3 +289,18 @@ function joinup_workflow_message_form_submit_draft(array &$form, FormStateInterf
     }
   }
 }
+
+/**
+ * Implements hook_entity_presave().
+ */
+function joinup_workflow_entity_presave(EntityInterface $entity) {
+  if ($entity->isNew() || !$entity instanceof EntityWorkflowStateInterface ||
+    empty($entity->original) || !$entity->original instanceof EntityWorkflowStateInterface) {
+    return;
+  }
+
+  // Prevent changes to update date in case we archie or unarchive entity.
+  if ($entity->getWorkflowState() == 'archived' || $entity->original->getWorkflowState() == 'archived') {
+    $entity->set('changed', $entity->original->get('changed')->getValue());
+  }
+}
