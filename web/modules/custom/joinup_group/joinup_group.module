@@ -25,7 +25,6 @@ use Drupal\Core\Test\Exception\MissingGroupException;
 use Drupal\Core\Url;
 use Drupal\file\Entity\File;
 use Drupal\joinup_group\Entity\Announcement;
-use Drupal\joinup_group\Entity\AnnouncementInterface;
 use Drupal\joinup_group\Entity\GroupContentInterface;
 use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_group\Entity\PinnableGroupContentInterface;
@@ -504,7 +503,6 @@ function joinup_group_form_views_exposed_form_alter(array &$form, FormStateInter
   if (($view_id === 'announcements' && $display === 'all') || ($view_id === 'media' && $display === 'media_page_list')) {
     $replace_group_filter($form);
   }
-
 
   // Adds result counts to the role options on the membership overview for
   // collections and solutions.
