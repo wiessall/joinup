@@ -70,6 +70,9 @@ class JoinupValidReferenceConstraintValidator extends ValidReferenceConstraintVa
       // NULL is allowed if the entity property contains an unsaved entity.
       // @see \Drupal\Core\TypedData\DataReferenceTargetDefinition::getConstraints()
       if (!$item->isEmpty() && $target_id === NULL) {
+        if (empty($item->entity)) {
+          return;
+        }
         if (!$item->entity->isNew()) {
           $this->context->buildViolation($constraint->nullMessage)
             ->atPath((string) $delta)

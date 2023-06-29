@@ -6,6 +6,7 @@ testing:
     - composer_deploy
     - dblog
     - filecache
+    - http_request_mock
     - joinup_cas_mock_server
     - joinup_test
     - upgrade_status
