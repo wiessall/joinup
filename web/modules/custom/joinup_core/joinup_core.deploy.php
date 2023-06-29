@@ -23,3 +23,10 @@ function joinup_core_deploy_109400(): string {
   $vocab_manager->updateDbReference('http://joinup.eu/ontology/topic#culture', 'http://joinup.eu/ontology/topic#culture-and-education');
   return 'Updated the topic vocabulary.';
 }
+
+/**
+ * Clean up cached_computed_field_expired_fields queue.
+ */
+function joinup_core_deploy_109401(): void {
+  \Drupal::queue('cached_computed_field_expired_fields')->deleteQueue();
+}
