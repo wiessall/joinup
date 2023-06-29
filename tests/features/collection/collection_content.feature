@@ -173,7 +173,7 @@ Feature: Collection content
     # Check the discussion tile.
     When I go to the discussions page of "Turin Egyptian Collection"
     Then I should see the "Bigger than Egyptian Museum of Cairo?" tile
-    And I should see the text "Last activity: 25/12/2019, 03:00" in the "Bigger than Egyptian Museum of Cairo?" tile
+    And I should see the text "Last activity: 25/12/2019, 15:00" in the "Bigger than Egyptian Museum of Cairo?" tile
     And I should see the link "Bigger than Egyptian Museum of Cairo?" in the "Bigger than Egyptian Museum of Cairo?" tile
     And I should see the text "Finance in EU" in the "Bigger than Egyptian Museum of Cairo?" tile
     And I should see the text "Supplier exchange" in the "Bigger than Egyptian Museum of Cairo?" tile
