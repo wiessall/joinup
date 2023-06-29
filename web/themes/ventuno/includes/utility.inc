@@ -115,7 +115,7 @@ function _ventuno_preprocess_tile(array &$variables, string $entity_type_id): vo
       if ($changed_time = $entity->getLatestUpdateTime()) {
         $variables['info']['label'] = t('@label: @changed', [
           '@label' => t('Last activity'),
-          '@changed' => $date_formatter->format($changed_time, 'custom', 'd/m/Y, h:i'),
+          '@changed' => $date_formatter->format($changed_time, 'custom', 'd/m/Y, H:i'),
         ]);
       }
       $node = $variables['elements']['#node'];
