@@ -13,3 +13,10 @@
  */
 
 declare(strict_types = 1);
+
+/**
+ * Clean up cached_computed_field_expired_fields queue.
+ */
+function joinup_core_deploy_109400(): void {
+  \Drupal::queue('cached_computed_field_expired_fields')->deleteQueue();
+}
