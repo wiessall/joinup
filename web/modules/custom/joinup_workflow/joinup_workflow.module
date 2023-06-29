@@ -17,6 +17,7 @@ use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\Core\Url;
 use Drupal\collection\Entity\CollectionInterface;
 use Drupal\joinup_community_content\Entity\CommunityContentInterface;
+use Drupal\joinup_workflow\ArchivableEntityInterface;
 use Drupal\joinup_workflow\EntityWorkflowStateInterface;
 use Drupal\solution\Entity\SolutionInterface;
 
@@ -294,13 +295,13 @@ function joinup_workflow_message_form_submit_draft(array &$form, FormStateInterf
  * Implements hook_entity_presave().
  */
 function joinup_workflow_entity_presave(EntityInterface $entity) {
-  if ($entity->isNew() || !$entity instanceof EntityWorkflowStateInterface ||
-    empty($entity->original) || !$entity->original instanceof EntityWorkflowStateInterface) {
+  if ($entity->isNew() || !$entity instanceof ArchivableEntityInterface ||
+    empty($entity->original) || !$entity->original instanceof ArchivableEntityInterface) {
     return;
   }
 
   // Prevent changes to update date in case we archie or unarchive entity.
-  if ($entity->getWorkflowState() == 'archived' || $entity->original->getWorkflowState() == 'archived') {
+  if ($entity->isArchived() || $entity->original->isArchived()) {
     $entity->set('changed', $entity->original->get('changed')->getValue());
   }
 }
