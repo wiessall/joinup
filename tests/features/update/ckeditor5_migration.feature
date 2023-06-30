@@ -25,7 +25,7 @@ Feature: Covers EPIC-7409.
 
     # Node ID: 705219 (node with nested paragraphs: accordion > accordion item > simple paragraph)
     And the "Body" field of "2nd Body, 1st Accordion item, 1st Item content" paragraph of "Starter pack" "custom page" should not match '@\{"preview_thumbnail":"/sites/default/files/styles/video_embed_wysiwyg_preview/public/video_thumbnails/SwQDVxtwmUs.jpg?itok=RTW5TT_s","video_url":"https://www.youtube.com/watch?v=SwQDVxtwmUs","settings":\{"responsive":true,"width":"854","height":"480","autoplay":false\},"settings_summary":\["Embedded Video (Responsive)."\]\}@'
-    But the "Body" field of "2nd Body, 1st Accordion item, 1st Item content" paragraph of "Starter pack" "custom page" should match '@<drupal-media  data-entity-type="media" data-entity-uuid="[^"]*"@'
+    But the "Body" field of "2nd Body, 1st Accordion item, 1st Item content" paragraph of "Starter pack" "custom page" should match '@<drupal-media data-entity-type="media" data-entity-uuid="[^"]*"@'
     And a video media with the "https://www.youtube.com/watch?v=SwQDVxtwmUs" URL exists
 
     # Node ID: 104310 (node with direct paragraph)
