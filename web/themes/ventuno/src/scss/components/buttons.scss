@@ -7,6 +7,12 @@
   }
 }
 
+a.btn-link {
+  &:hover {
+    text-decoration: none;
+  }
+}
+
 .btn-primary {
   &:hover {
     background-color: lighten(desaturate($primary, 23.76), 8.63);
