@@ -26,7 +26,8 @@ weight: 0
 flag_type: 'entity:node'
 link_type: count_link_node
 flagTypeConfig:
-  show_in_links: {  }
+  show_in_links:
+    view_mode_tile: view_mode_tile
   show_as_field: true
   show_on_form: false
   show_contextual_link: false
