@@ -8,7 +8,7 @@
  * - flaggable: The flaggable entity.
  */
 #}
-{% spaceless %}
+{% apply spaceless %}
   {# Set the remaining Flag CSS classes. #}
   {% set classes = [
     'flag',
@@ -26,4 +26,4 @@
     </svg>
     {{ flag.get('flag_short') }} ({{ count }})
   </a>
-{% endspaceless %}
+{% endapply %}
