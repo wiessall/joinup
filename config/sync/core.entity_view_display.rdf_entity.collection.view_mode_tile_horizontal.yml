@@ -37,12 +37,11 @@ third_party_settings:
     group_abstract_wrapper:
       children:
         - field_ar_abstract
-        - field_ar_description
         - read_more
       label: 'Abstract wrapper'
       parent_name: ''
-      region: content
-      weight: 1
+      region: hidden
+      weight: 32
       format_type: html_element
       format_settings:
         classes: ''
@@ -61,27 +60,6 @@ targetEntityType: rdf_entity
 bundle: collection
 mode: view_mode_tile_horizontal
 content:
-  field_ar_abstract:
-    type: smart_trim
-    label: hidden
-    settings:
-      trim_length: 500
-      trim_type: chars
-      trim_suffix: …
-      wrap_output: false
-      wrap_class: trimmed
-      more_link: false
-      more_class: more-link
-      more_text: More
-      summary_handler: full
-      trim_options:
-        text: false
-        trim_zero: false
-    third_party_settings:
-      template_suggestion:
-        template_suggestion: p_wrapper
-    weight: 2
-    region: content
   field_ar_description:
     type: smart_trim
     label: hidden
@@ -101,7 +79,7 @@ content:
     third_party_settings:
       template_suggestion:
         template_suggestion: p_wrapper
-    weight: 3
+    weight: 1
     region: content
   field_ar_logo:
     type: responsive_image
@@ -112,32 +90,18 @@ content:
     third_party_settings:
       template_suggestion:
         template_suggestion: bare
-    weight: 2
-    region: content
-  label:
-    type: string
-    label: hidden
-    settings:
-      link_to_entity: false
-    third_party_settings:
-      template_suggestion:
-        template_suggestion: bare
     weight: 0
     region: content
   members:
     settings: {  }
     third_party_settings: {  }
-    weight: 3
-    region: content
-  read_more:
-    settings: {  }
-    third_party_settings: {  }
-    weight: 4
+    weight: 2
     region: content
 hidden:
   changed: true
   created: true
   featured: true
+  field_ar_abstract: true
   field_ar_access_url: true
   field_ar_affiliates: true
   field_ar_banner: true
@@ -155,11 +119,13 @@ hidden:
   field_spatial_coverage: true
   field_topic: true
   join_collection: true
+  label: true
   langcode: true
   last_update: true
   og_group: true
   rdf_entity_collection_field_collection_content_inline_facets: true
   rdf_entity_collection_field_collection_content_top: true
+  read_more: true
   search_api_excerpt: true
   settings: true
   solutions: true

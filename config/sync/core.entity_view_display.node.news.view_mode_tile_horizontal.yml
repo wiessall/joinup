@@ -35,7 +35,7 @@ third_party_settings:
       label: References
       parent_name: ''
       region: hidden
-      weight: 3
+      weight: 23
       format_type: html_element
       format_settings:
         classes: ''
@@ -61,16 +61,6 @@ content:
     third_party_settings: {  }
     weight: 0
     region: content
-  field_news_headline:
-    type: string
-    label: hidden
-    settings:
-      link_to_entity: false
-    third_party_settings:
-      template_suggestion:
-        template_suggestion: bare
-    weight: 1
-    region: content
   field_news_logo:
     type: responsive_image
     label: hidden
@@ -80,13 +70,14 @@ content:
     third_party_settings:
       template_suggestion:
         template_suggestion: bare
-    weight: 2
+    weight: 1
     region: content
 hidden:
   featured: true
   field_attachment: true
   field_comments: true
   field_keywords: true
+  field_news_headline: true
   field_news_referenced_solution: true
   field_news_source_url: true
   field_news_spatial_coverage: true
