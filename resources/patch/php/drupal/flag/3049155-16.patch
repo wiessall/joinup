@@ -20,28 +20,28 @@ index 8dd6181..4786be1 100644
      ];
 @@ -456,6 +458,7 @@ function flag_entity_view_alter(&$build, EntityInterface $entity, EntityViewDisp
      }
-
+ 
      if (!empty($flag_keys)) {
 +      $build['#contextual_links'][$entity_type]['route_parameters']['view_mode'] = $build['#view_mode'];
        $build['#contextual_links'][$entity_type]['metadata']['flag_keys'] = implode(',', $flag_keys);
      }
    }
 @@ -502,7 +505,7 @@ function flag_contextual_links_alter(array &$links, $group, array $route_paramet
-
+ 
      $flag_link = $flag
        ->getLinkTypePlugin()
 -      ->getAsLink($flag, $entity);
 +      ->getAsLink($flag, $entity, $route_parameters['view_mode']);
-
+ 
      $flag_url = $flag_link->getUrl();
-
+ 
 diff --git a/flag.routing.yml b/flag.routing.yml
 index 87d0281..84f4280 100644
 --- a/flag.routing.yml
 +++ b/flag.routing.yml
 @@ -39,7 +39,7 @@ entity.flag.delete_form:
      _entity_access: 'flag.update'
-
+ 
  flag.action_link_flag:
 -  path: '/flag/flag/{flag}/{entity_id}'
 +  path: '/flag/flag/{flag}/{entity_id}/{view_mode}'
@@ -50,7 +50,7 @@ index 87d0281..84f4280 100644
    methods: [POST]
 @@ -49,7 +49,7 @@ flag.action_link_flag:
      _csrf_token: 'TRUE'
-
+ 
  flag.action_link_flag_nojs:
 -  path: '/flag/flag/{flag}/{entity_id}'
 +  path: '/flag/flag/{flag}/{entity_id}/{view_mode}'
@@ -59,7 +59,7 @@ index 87d0281..84f4280 100644
    methods: [GET]
 @@ -59,7 +59,7 @@ flag.action_link_flag_nojs:
      _csrf_token: 'TRUE'
-
+ 
  flag.action_link_unflag:
 -  path: '/flag/unflag/{flag}/{entity_id}'
 +  path: '/flag/unflag/{flag}/{entity_id}/{view_mode}'
@@ -68,7 +68,7 @@ index 87d0281..84f4280 100644
    methods: [POST]
 @@ -69,7 +69,7 @@ flag.action_link_unflag:
      _csrf_token: 'TRUE'
-
+ 
  flag.action_link_unflag_nojs:
 -  path: '/flag/unflag/{flag}/{entity_id}'
 +  path: '/flag/unflag/{flag}/{entity_id}/{view_mode}'
@@ -76,21 +76,24 @@ index 87d0281..84f4280 100644
      _controller: '\Drupal\flag\Controller\ActionLinkNoJsController::unflag'
    methods: [GET]
 diff --git a/modules/flag_count/src/Plugin/ActionLink/CountLink.php b/modules/flag_count/src/Plugin/ActionLink/CountLink.php
-index ff878d7..8d5b049 100644
+index 01e1c0a..fd71f0a 100644
 --- a/modules/flag_count/src/Plugin/ActionLink/CountLink.php
 +++ b/modules/flag_count/src/Plugin/ActionLink/CountLink.php
-@@ -23,9 +23,9 @@ class CountLink extends AJAXactionLink {
+@@ -83,12 +83,12 @@ class CountLink extends AJAXactionLink {
    /**
     * {@inheritdoc}
     */
--  public function getAsFlagLink(FlagInterface $flag, EntityInterface $entity) {
+-  public function getAsFlagLink(FlagInterface $flag, EntityInterface $entity): array {
 +  public function getAsFlagLink(FlagInterface $flag, EntityInterface $entity, $view_mode) {
-     // Get the render array.
--    $build = parent::getAsFlagLink($flag, $entity);
-+    $build = parent::getAsFlagLink($flag, $entity, $view_mode);
-
-     // Normally, you'd just override flag.html.twig in your site's theme. For
-     // this example module, we do something more advanced: Provide a new
+     $action = $this->getAction($flag, $entity);
+     $access = $flag->actionAccess($action, $this->currentUser, $entity);
+     if ($access->isAllowed()) {
+       // Get the render array.
+-      $build = parent::getAsFlagLink($flag, $entity);
++      $build = parent::getAsFlagLink($flag, $entity, $view_mode);
+ 
+       // Normally, you'd just override flag.html.twig in your site's theme. For
+       // this example module, we do something more advanced: Provide a new
 diff --git a/src/ActionLink/ActionLinkTypeBase.php b/src/ActionLink/ActionLinkTypeBase.php
 index 1e5bb13..d677ce2 100644
 --- a/src/ActionLink/ActionLinkTypeBase.php
@@ -106,7 +109,7 @@ index 1e5bb13..d677ce2 100644
 +    $url->setRouteParameter('view_mode', $view_mode);
      $url->setOption('query', ['destination' => $this->getDestination()]);
      $title = $flag->getShortText($action);
-
+ 
 @@ -94,17 +95,19 @@ abstract class ActionLinkTypeBase extends PluginBase implements ActionLinkTypePl
    /**
     * {@inheritdoc}
@@ -115,7 +118,7 @@ index 1e5bb13..d677ce2 100644
 +  public function getAsFlagLink(FlagInterface $flag, EntityInterface $entity, $view_mode) {
      $action = $this->getAction($flag, $entity);
      $access = $flag->actionAccess($action, $this->currentUser, $entity);
-
+ 
      if ($access->isAllowed()) {
        $url = $this->getUrl($action, $flag, $entity);
        $url->setRouteParameter('destination', $this->getDestination());
@@ -144,7 +147,7 @@ index 2c77aa8..46a1b86 100644
     */
 -  public function getAsFlagLink(FlagInterface $flag, EntityInterface $entity);
 +  public function getAsFlagLink(FlagInterface $flag, EntityInterface $entity, $view_mode);
-
+ 
    /**
     * Get the action link as a Link object.
 @@ -32,10 +34,12 @@ interface ActionLinkTypePluginInterface extends PluginFormInterface, Configurabl
@@ -159,10 +162,10 @@ index 2c77aa8..46a1b86 100644
     */
 -  public function getAsLink(FlagInterface $flag, EntityInterface $entity);
 +  public function getAsLink(FlagInterface $flag, EntityInterface $entity, $view_mode);
-
+ 
  }
 diff --git a/src/Controller/ActionLinkController.php b/src/Controller/ActionLinkController.php
-index d510ed1..397bc60 100644
+index 651dd33..099d7ce 100644
 --- a/src/Controller/ActionLinkController.php
 +++ b/src/Controller/ActionLinkController.php
 @@ -65,13 +65,15 @@ class ActionLinkController implements ContainerInjectionInterface {
@@ -181,15 +184,15 @@ index d510ed1..397bc60 100644
 +  public function flag(FlagInterface $flag, $entity_id, $view_mode) {
      /* @var \Drupal\Core\Entity\EntityInterface $entity */
      $entity = $this->flagService->getFlaggableById($flag, $entity_id);
-
+ 
 @@ -87,7 +89,7 @@ class ActionLinkController implements ContainerInjectionInterface {
        // link for the existing state of the flag.
      }
-
+ 
 -    return $this->generateResponse($flag, $entity, $flag->getMessage('flag'));
 +    return $this->generateResponse($flag, $entity, $flag->getMessage('flag'), $view_mode);
    }
-
+ 
    /**
 @@ -97,13 +99,15 @@ class ActionLinkController implements ContainerInjectionInterface {
     *   The flag entity.
@@ -207,15 +210,15 @@ index d510ed1..397bc60 100644
 +  public function unflag(FlagInterface $flag, $entity_id, $view_mode) {
      /* @var \Drupal\Core\Entity\EntityInterface $entity */
      $entity = $this->flagService->getFlaggableById($flag, $entity_id);
-
+ 
 @@ -119,7 +123,7 @@ class ActionLinkController implements ContainerInjectionInterface {
        // link for the existing state of the flag.
      }
-
+ 
 -    return $this->generateResponse($flag, $entity, $flag->getMessage('unflag'));
 +    return $this->generateResponse($flag, $entity, $flag->getMessage('unflag'), $view_mode);
    }
-
+ 
    /**
 @@ -131,11 +135,13 @@ class ActionLinkController implements ContainerInjectionInterface {
     *   The entity object.
@@ -231,16 +234,16 @@ index d510ed1..397bc60 100644
 +  private function generateResponse(FlagInterface $flag, EntityInterface $entity, $message, string $view_mode) {
      // Create a new AJAX response.
      $response = new AjaxResponse();
-
+ 
 @@ -143,7 +149,7 @@ class ActionLinkController implements ContainerInjectionInterface {
      $link_type = $flag->getLinkTypePlugin();
-
+ 
      // Generate the link render array.
 -    $link = $link_type->getAsFlagLink($flag, $entity);
 +    $link = $link_type->getAsFlagLink($flag, $entity, $view_mode);
-
+ 
      // Generate a CSS selector to use in a JQuery Replace command.
-     $selector = '.js-flag-' . Html::cleanCssIdentifier($flag->id()) . '-' . $entity->id();
+     $selector = '.' . Html::getClass('js-flag-' . $flag->id() . '-' . $entity->id());
 diff --git a/src/Controller/ActionLinkNoJsController.php b/src/Controller/ActionLinkNoJsController.php
 index a1f8b94..7029b4b 100644
 --- a/src/Controller/ActionLinkNoJsController.php
@@ -261,7 +264,7 @@ index a1f8b94..7029b4b 100644
 +  public function flag(FlagInterface $flag, $entity_id, $view_mode) {
      /* @var \Drupal\Core\Entity\EntityInterface $entity */
      $entity = $this->flagService->getFlaggableById($flag, $entity_id);
-
+ 
 @@ -98,13 +100,15 @@ class ActionLinkNoJsController implements ContainerInjectionInterface {
     *   The flag entity.
     * @param int $entity_id
@@ -278,7 +281,7 @@ index a1f8b94..7029b4b 100644
 +  public function unflag(FlagInterface $flag, $entity_id, $view_mode) {
      /* @var \Drupal\Core\Entity\EntityInterface $entity */
      $entity = $this->flagService->getFlaggableById($flag, $entity_id);
-
+ 
 diff --git a/src/FlagLinkBuilder.php b/src/FlagLinkBuilder.php
 index 88b1387..dfca476 100644
 --- a/src/FlagLinkBuilder.php
@@ -291,12 +294,12 @@ index 88b1387..dfca476 100644
 +  public function build($entity_type_id, $entity_id, $flag_id, $view_mode) {
      $entity = $this->entityTypeManager->getStorage($entity_type_id)->load($entity_id);
      $flag = $this->flagService->getFlagById($flag_id);
-
+ 
      $link_type_plugin = $flag->getLinkTypePlugin();
 -    return $link_type_plugin->getAsFlagLink($flag, $entity);
 +    return $link_type_plugin->getAsFlagLink($flag, $entity, $view_mode);
    }
-
+ 
  }
 diff --git a/src/FlagLinkBuilderInterface.php b/src/FlagLinkBuilderInterface.php
 index 43ce76c..5f1fcb2 100644
@@ -315,7 +318,7 @@ index 43ce76c..5f1fcb2 100644
     */
 -  public function build($entity_type_id, $entity_id, $flag_id);
 +  public function build($entity_type_id, $entity_id, $flag_id, $view_mode);
-
+ 
  }
 diff --git a/src/Plugin/ActionLink/AJAXactionLink.php b/src/Plugin/ActionLink/AJAXactionLink.php
 index 58c844d..add0e4b 100644
@@ -353,54 +356,10 @@ index ffa9afd..ba96de3 100644
 +++ b/src/Plugin/views/field/FlagViewsLinkField.php
 @@ -181,7 +181,7 @@ class FlagViewsLinkField extends FieldPluginBase implements ContainerFactoryPlug
      }
-
+ 
      return $this->flagLinkBuilder->build(
 -      $entity->getEntityTypeId(), $entity->id(), $this->getFlag()->id()
 +      $entity->getEntityTypeId(), $entity->id(), $this->getFlag()->id(), 'default'
      );
    }
-
-diff --git a/tests/src/Functional/LinkTypeReloadTest.php b/tests/src/Functional/LinkTypeReloadTest.php
-index efaa311..1e9341f 100644
---- a/tests/src/Functional/LinkTypeReloadTest.php
-+++ b/tests/src/Functional/LinkTypeReloadTest.php
-@@ -65,7 +65,7 @@ class LinkTypeReloadTest extends FlagTestBase {
-     // Attempt to load the reload link URL without the token.
-     // We (probably) can't obtain the URL from the route rather than hardcoding
-     // it, as that would probably give us the token too.
--    $this->drupalGet("flag/flag/$flag_id/$node_id");
-+    $this->drupalGet("flag/flag/$flag_id/$node_id/full");
-     $this->assertSession()->statusCodeEquals(403);
-
-     // Click the flag link.
-@@ -86,7 +86,7 @@ class LinkTypeReloadTest extends FlagTestBase {
-     $this->assertEquals($flag_count_pre + 1, $flag_count_flagged,"The flag count was incremented.");
-
-     // Attempt to load the reload link URL without the token.
--    $this->drupalGet("flag/unflag/$flag_id/$node_id");
-+    $this->drupalGet("flag/unflag/$flag_id/$node_id/full");
-     $this->assertSession()->statusCodeEquals(403);
-
-     // Unflag the node.
-diff --git a/tests/src/FunctionalJavascript/FlagContextualLinksTest.php b/tests/src/FunctionalJavascript/FlagContextualLinksTest.php
-index eccdd8e..c700f7a 100755
---- a/tests/src/FunctionalJavascript/FlagContextualLinksTest.php
-+++ b/tests/src/FunctionalJavascript/FlagContextualLinksTest.php
-@@ -191,7 +191,7 @@ class FlagContextualLinksTest extends WebDriverTestBase {
-
-     // Expect the contextual links identifer for this node to contain flag_keys
-     // metadata related to the flag action.
--    $flag_contextual_links_id = 'node:node=' . $node->id() . ':changed=' . $node->getChangedTime() . '&flag_keys=' . $this->flag->id() . '-flag&langcode=en';
-+    $flag_contextual_links_id = 'node:node=' . $node->id() . '&view_mode=full:changed=' . $node->getChangedTime() . '&flag_keys=' . $this->flag->id() . '-flag&langcode=en';
-
-     // Wait for the article contextual link button to appear.
-     $contextual_edit = $assert_session
-@@ -207,7 +207,7 @@ class FlagContextualLinksTest extends WebDriverTestBase {
-     $flag_link1->click();
-
-     // Verify the contextual links data are updated to contain unflag links.
--    $unflag_contextual_links_id = 'node:node=' . $node->id() . ':changed=' . $node->getChangedTime() . '&flag_keys=' . $this->flag->id() . '-unflag&langcode=en';
-+    $unflag_contextual_links_id = 'node:node=' . $node->id() . '&view_mode=full:changed=' . $node->getChangedTime() . '&flag_keys=' . $this->flag->id() . '-unflag&langcode=en';
-     $contextual_edit2 = $assert_session
-       ->waitForElementVisible('css', 'div[data-contextual-id="' . $unflag_contextual_links_id . '"]  button');
-     $this->assertNotNull($contextual_edit2, new FormattableMarkup('Contextual link placeholder with id @id exists (unflag).', ['@id' => $unflag_contextual_links_id]));
+ 
