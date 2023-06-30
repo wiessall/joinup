@@ -1,10 +1,16 @@
 uuid: cd8b9a89-ac40-4c0d-bd70-211c62fee399
 langcode: en
 status: true
-dependencies: {  }
+dependencies:
+  content:
+    - 'file:file:220fc8ec-d4ee-430e-8c43-dd9567849753'
+  module:
+    - joinup_paragraphs
 id: heading
 label: Heading
-icon_uuid: null
-icon_default: null
+icon_uuid: 220fc8ec-d4ee-430e-8c43-dd9567849753
+icon_default: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNiIgaGVpZ2h0PSIxNiIgZmlsbD0iY3VycmVudENvbG9yIiBjbGFzcz0iYmkgYmktdHlwZS1oMiIgdmlld0JveD0iMCAwIDE2IDE2Ij4KICA8cGF0aCBkPSJNNy42MzggMTNWMy42NjlINi4zOFY3LjYySDEuNzU5VjMuNjdILjVWMTNoMS4yNThWOC43MjhoNC42MlYxM2gxLjI1OXptMy4wMjItNi43MzN2LS4wNDhjMC0uODg5LjYzLTEuNjY4IDEuNzE2LTEuNjY4Ljk1NyAwIDEuNjc1LjYwOCAxLjY3NSAxLjU3MiAwIC44NTUtLjU1NCAxLjUwNC0xLjA2NyAyLjA4NWwtMy41MTMgMy45OTlWMTNIMTUuNXYtMS4wOTRoLTQuMjQ1di0uMDc1bDIuNDgxLTIuODQ0Yy44NzUtLjk5OCAxLjU4Ni0xLjc4NCAxLjU4Ni0yLjk1MyAwLTEuNDYzLTEuMTU1LTIuNTU2LTIuOTE5LTIuNTU2LTEuOTQxIDAtMi45NjYgMS4zMjYtMi45NjYgMi43NHYuMDQ5aDEuMjIzeiIvPgo8L3N2Zz4='
 description: ''
-behavior_plugins: {  }
+behavior_plugins:
+  heading_behavior:
+    enabled: true
