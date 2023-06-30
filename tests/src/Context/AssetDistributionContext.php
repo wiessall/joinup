@@ -325,7 +325,7 @@ class AssetDistributionContext extends RawDrupalContext {
 
     /** @var \Symfony\Component\Mime\MimeTypesInterface $mime_guesser */
     $mime_guesser = \Drupal::service('file.mime_type.guesser');
-    $mime_type = $mime_guesser->guess($path);
+    $mime_type = $mime_guesser->guessMimeType($path);
     $expected_file_type = asset_distribution_get_file_type_term_by_mime($mime_type);
     $expected_file_size = filesize($path);
 
