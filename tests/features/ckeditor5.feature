@@ -168,7 +168,7 @@ Feature: CKEditor5
     And I should not see "Other Image in The Other Collection"
 
     # Use the pager.
-    When I click "2"
+    When I click "Go to page 2"
     And I wait for AJAX to finish
     But I should not see "Too angry for Angry Birds"
     And I should not see "Pager test 1"
