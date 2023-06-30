@@ -108,6 +108,7 @@ content:
     region: content
 hidden:
   field_state: true
+  flag_like_node: true
   langcode: true
   og_audience: true
   published_at: true

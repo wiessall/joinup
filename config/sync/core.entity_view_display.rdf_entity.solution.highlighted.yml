@@ -63,7 +63,7 @@ third_party_settings:
       label: 'Abstract wrapper'
       parent_name: ''
       region: hidden
-      weight: 55
+      weight: 61
       format_type: html_element
       format_settings:
         classes: ''
@@ -90,7 +90,7 @@ content:
     third_party_settings:
       template_suggestion:
         template_suggestion: ''
-    weight: 2
+    weight: 3
     region: content
   field_is_logo:
     type: responsive_image
@@ -187,6 +187,7 @@ hidden:
   field_site_featured: true
   field_spatial_coverage: true
   field_status: true
+  flag_like_rdf_entity: true
   langcode: true
   og_group: true
   pinned_in: true
