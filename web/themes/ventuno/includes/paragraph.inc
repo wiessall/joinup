@@ -56,19 +56,3 @@ function ventuno_preprocess_paragraph__accordion_item(array &$variables): void {
   }
   $variables['parent_id'] = $parent->id();
 }
-
-/**
- * Implements hook_preprocess_HOOK().
- */
-function ventuno_preprocess_paragraphs_jquery_ui_accordion_formatter(&$variables) {
-  $entity = $variables['content']['#object'];
-  if ($entity->bundle() !== 'accordion_item') {
-    return;
-  }
-  $parent = $entity->getParentEntity();
-  if ($parent->bundle() !== 'accordion') {
-    return;
-  }
-
-  $variables['parent_id'] = $parent->id();
-}
