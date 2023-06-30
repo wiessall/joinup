@@ -20,13 +20,8 @@ dependencies:
     - field.field.node.document.field_type
     - field.field.node.document.og_audience
     - node.type.document
-    - responsive_image.styles.tile
   module:
-    - file_url
-    - joinup_html_stripper
-    - options
-    - responsive_image
-    - template_suggestion
+    - svg_image
     - user
 _core:
   default_config_hash: W1EgrmzJHwU_f1cWpd48tTcGdhOt4gLbqLOmi0XtqfU
@@ -35,65 +30,36 @@ targetEntityType: node
 bundle: document
 mode: view_mode_tile
 content:
-  body:
-    type: joinup_html_stripper_stripped
-    label: hidden
+  field_document_logo:
+    type: image
+    label: above
     settings:
-      trim_length: 500
-    third_party_settings:
-      template_suggestion:
-        template_suggestion: bare
+      image_link: ''
+      image_style: ''
+      image_loading:
+        attribute: lazy
+      svg_attributes:
+        width: null
+        height: null
+      svg_render_as_image: true
+    third_party_settings: {  }
     weight: 0
     region: content
-  field_document_logo:
-    type: responsive_image
-    label: hidden
-    settings:
-      responsive_image_style: tile
-      image_link: ''
-    third_party_settings:
-      template_suggestion:
-        template_suggestion: bare
-    weight: 4
-    region: content
-  field_file:
-    type: file_url_default
-    label: hidden
-    settings:
-      mode: link
-    third_party_settings: {  }
-    weight: 2
-    region: content
-  field_keywords:
-    type: string
-    label: hidden
-    settings:
-      link_to_entity: false
-    third_party_settings:
-      template_suggestion:
-        template_suggestion: comma_separated
-    weight: 3
-    region: content
-  field_type:
-    type: list_default
-    label: hidden
-    settings: {  }
-    third_party_settings:
-      template_suggestion:
-        template_suggestion: no_wrappers
-    weight: 1
-    region: content
 hidden:
+  body: true
   featured: true
   field_comments: true
   field_document_publication_date: true
   field_document_spatial_coverage: true
+  field_file: true
+  field_keywords: true
   field_licence: true
   field_shared_in: true
   field_short_title: true
   field_site_featured: true
   field_state: true
   field_topic: true
+  field_type: true
   langcode: true
   links: true
   og_audience: true

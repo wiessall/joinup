@@ -48,7 +48,6 @@ dependencies:
     - rdf_entity.rdfentity.solution
     - responsive_image.styles.tile
   module:
-    - joinup_html_stripper
     - responsive_image
     - template_suggestion
     - user
@@ -60,17 +59,7 @@ content:
   download_total:
     settings: {  }
     third_party_settings: {  }
-    weight: 4
-    region: content
-  field_is_description:
-    type: joinup_html_stripper_stripped
-    label: hidden
-    settings:
-      trim_length: 500
-    third_party_settings:
-      template_suggestion:
-        template_suggestion: bare
-    weight: 3
+    weight: 1
     region: content
   field_is_logo:
     type: responsive_image
@@ -81,15 +70,7 @@ content:
     third_party_settings:
       template_suggestion:
         template_suggestion: bare
-    weight: 2
-    region: content
-  label:
-    type: string
-    label: hidden
-    settings:
-      link_to_entity: true
-    third_party_settings: {  }
-    weight: 1
+    weight: 0
     region: content
 hidden:
   changed: true
@@ -104,6 +85,7 @@ hidden:
   field_is_contact_information: true
   field_is_content: true
   field_is_content_creation: true
+  field_is_description: true
   field_is_distribution: true
   field_is_documentation: true
   field_is_eif_category: true
@@ -136,6 +118,7 @@ hidden:
   field_spatial_coverage: true
   field_status: true
   field_topic: true
+  label: true
   langcode: true
   og_group: true
   pinned_in: true

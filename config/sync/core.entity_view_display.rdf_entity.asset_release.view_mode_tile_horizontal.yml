@@ -41,18 +41,6 @@ targetEntityType: rdf_entity
 bundle: asset_release
 mode: view_mode_tile_horizontal
 content:
-  created:
-    type: timestamp_ago
-    label: hidden
-    settings:
-      future_format: '@interval hence'
-      past_format: '@interval ago'
-      granularity: 1
-    third_party_settings:
-      template_suggestion:
-        template_suggestion: no_wrappers
-    weight: 1
-    region: content
   field_isr_affiliations_requests:
     type: entity_reference_label
     label: above
@@ -76,17 +64,6 @@ content:
       link: true
     third_party_settings: {  }
     weight: 4
-    region: content
-  field_isr_distribution:
-    type: entity_reference_entity_view
-    label: hidden
-    settings:
-      view_mode: view_mode_tile
-      link: false
-    third_party_settings:
-      template_suggestion:
-        template_suggestion: entity_reference__listing_tile
-    weight: 2
     region: content
   field_isr_issue_tracker:
     type: link
@@ -148,8 +125,8 @@ content:
     settings: {  }
     third_party_settings:
       template_suggestion:
-        template_suggestion: ''
-    weight: 3
+        template_suggestion: bare
+    weight: 1
     region: content
   field_isr_source_code_repository:
     type: link
@@ -205,7 +182,7 @@ content:
     third_party_settings:
       template_suggestion:
         template_suggestion: bare
-    weight: 4
+    weight: 2
     region: content
   label:
     type: string
@@ -219,9 +196,11 @@ content:
     region: content
 hidden:
   changed: true
+  created: true
   field_isr_banner: true
   field_isr_contact_information: true
   field_isr_description: true
+  field_isr_distribution: true
   field_isr_documentation: true
   field_isr_included_asset: true
   field_isr_is_version_of: true
