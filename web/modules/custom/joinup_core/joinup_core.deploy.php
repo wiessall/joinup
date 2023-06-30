@@ -27,9 +27,16 @@ function joinup_core_deploy_109400(): string {
 }
 
 /**
+ * Clean up cached_computed_field_expired_fields queue.
+ */
+function joinup_core_deploy_109401(): void {
+  \Drupal::queue('cached_computed_field_expired_fields')->deleteQueue();
+}
+
+/**
  * Migrate Video content into new Media field.
  */
-function joinup_core_deploy_109401(array &$sandbox): string {
+function joinup_core_deploy_109402(array &$sandbox): string {
   if (empty($sandbox['ids'])) {
     $sandbox['ids'] = \Drupal::entityQuery('node')
       ->accessCheck(FALSE)
@@ -107,7 +114,7 @@ function _joinup_core_deploy_migrate_field(MediaTypeInterface $media_type, strin
 /**
  * Migrate video embed markup into media.
  */
-function joinup_core_deploy_109402(array &$sandbox): string {
+function joinup_core_deploy_109403(array &$sandbox): string {
   if (empty($sandbox['tasks'])) {
     $sandbox['tasks']['node'] = \Drupal::entityQuery('node')->accessCheck(FALSE)
       ->condition('body', 'preview_thumbnail', 'CONTAINS')

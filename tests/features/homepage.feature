@@ -165,7 +165,7 @@ Feature: Homepage
     And I should see the following facet summary "Event"
     And I should see the "Florentine steak festival" tile
 
-  @version
+  @joinupVersion
   Scenario Outline: The current version of the Joinup platform is shown in the footer.
     Given the Joinup version is set to "<version>"
     When I am on the homepage

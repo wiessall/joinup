@@ -136,7 +136,7 @@ variant_settings:
           region: first
           configuration:
             id: custom_markup
-            label: 'What''s Joinup about?'
+            label: "What's Joinup about?"
             label_display: '0'
             provider: custom_markup_block
             markup:
@@ -165,7 +165,7 @@ variant_settings:
           region: second
           configuration:
             id: custom_markup
-            label: 'What''s Interoperable Europe'
+            label: "What's Interoperable Europe"
             label_display: visible
             provider: custom_markup_block
             context_mapping: {  }
