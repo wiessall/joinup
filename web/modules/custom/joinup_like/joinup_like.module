@@ -19,6 +19,7 @@ function joinup_like_theme(array $existing, string $type, string $theme, string 
       'variables' => [
         'flag' => NULL,
         'flaggable' => NULL,
+        'view_mode' => NULL,
       ],
     ],
   ];
@@ -31,7 +32,7 @@ function joinup_like_theme(array $existing, string $type, string $theme, string 
  *   modes that need the like (view_mode_tile, and ...), make them show only the
  *   icon and the number (no text, no parenthesis)
  */
-function joinup_like_theme_suggestions_flag_count(array $variables) {
-  return [
-  ];
+function joinup_like_theme_suggestions_flag_count_alter(&$suggestions, array $variables) {
+  $suggestions[] = 'flag_count__' . $variables['view_mode'];
+
 }
