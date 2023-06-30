@@ -64,7 +64,7 @@ Feature:
     Then I should not see the link "Simple paragraph"
 
   @javascript
-  Scenario: Privileged users can add a map and/or an iframe, heading and map paragraph.
+  Scenario: Privileged users can add paragraphs.
     Given users:
       | Username |
       | Zohan    |
@@ -79,27 +79,62 @@ Feature:
     When I am logged in as "Zohan"
     And I go to the edit form of the "Don't Mess with the Zohan" "custom page"
     And I click "Choose component"
-    Then I should not see the link "Simple paragraph"
-    And I should not see the link "Map"
+    Then I should see the link "Accordion"
+#    And I should see the link "Call to action"
+    And I should see the link "Carousel"
+    And I should see the link "Content listing"
+    But I should not see the link "Entity reference"
+    And I should not see the link "Github feed"
+#    And I should see the link "Heading"
     But I should not see the link "IFrame"
+#    And I should see the link "Image"
+#    And I should see the link "Map"
+    But I should not see the link "Row"
+    But I should not see the link "Simple paragraph"
+#    And I should see the link "Testimony"
+    And I should see the link "Text"
+#    And I should see the link "Video"
 
-    # Facilitators can add maps, heading and iframe.
+    # Facilitator's paragraphs.
     When I am logged in as a facilitator of the "Paragraphs collection" collection
     And I go to the edit form of the "Don't Mess with the Zohan" "custom page"
     And I click "Choose component"
-    Then I should not see the link "Simple paragraph"
-    And I should see the link "Map"
+    Then I should see the link "Accordion"
+    And I should see the link "Call to action"
+    And I should see the link "Carousel"
+    And I should see the link "Content listing"
+    But I should not see the link "Entity reference"
+    And I should not see the link "Github feed"
     And I should see the link "Heading"
     But I should not see the link "IFrame"
+    And I should see the link "Image"
+    And I should see the link "Map"
+    But I should not see the link "Row"
+    But I should not see the link "Simple paragraph"
+    And I should see the link "Testimony"
+    And I should see the link "Text"
+    And I should see the link "Video"
 
     # Moderators can add maps, heading and iframe.
     Given I am logged in as a moderator
     And I go to the edit form of the "Don't Mess with the Zohan" "custom page"
     And I click "Choose component"
-    Then I should not see the link "Simple paragraph"
-    And I should see the link "Map"
+    Then I should see the link "Layout"
+    And I should see the link "Accordion"
+    And I should see the link "Call to action"
+    And I should see the link "Carousel"
+    And I should see the link "Content listing"
+    And I should see the link "Entity reference"
+    And I should see the link "Github feed"
     And I should see the link "Heading"
     And I should see the link "IFrame"
+    And I should see the link "Image"
+    And I should see the link "Map"
+    But I should not see the link "Row"
+    But I should not see the link "Simple paragraph"
+    And I should see the link "Testimony"
+    And I should see the link "Text"
+    And I should see the link "Video"
 
     When I click "Map"
     # As the Webtools Map a webservice, we only test a fake JSON.
