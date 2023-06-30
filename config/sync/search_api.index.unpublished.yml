@@ -229,7 +229,7 @@ field_settings:
     datasource_id: 'entity:node'
     property_path: field_news_headline
     type: text
-    boost: !!float 5
+    boost: 5.0
     dependencies:
       config:
         - field.storage.node.field_news_headline
@@ -331,7 +331,7 @@ field_settings:
     datasource_id: 'entity:rdf_entity'
     property_path: label
     type: text
-    boost: !!float 5
+    boost: 5.0
     dependencies:
       module:
         - rdf_entity
@@ -421,7 +421,7 @@ field_settings:
     datasource_id: 'entity:node'
     property_path: title
     type: text
-    boost: !!float 5
+    boost: 5.0
     dependencies:
       module:
         - node
@@ -647,22 +647,22 @@ processor_settings:
       preprocess_index: -42
     boosts:
       'entity:node':
-        datasource_boost: !!float 0
+        datasource_boost: 0.0
         bundle_boosts:
-          custom_page: !!float 8
-          discussion: !!float 2
-          document: !!float 0
-          event: !!float 3
-          news: !!float 5
-          video: !!float 0
+          custom_page: 8.0
+          discussion: 2.0
+          document: 0.0
+          event: 3.0
+          news: 5.0
+          video: 0.0
       'entity:rdf_entity':
-        datasource_boost: !!float 0
+        datasource_boost: 0.0
         bundle_boosts:
-          asset_distribution: !!float 0
-          asset_release: !!float 0
-          collection: !!float 21
-          licence: !!float 0
-          solution: !!float 13
+          asset_distribution: 0.0
+          asset_release: 0.0
+          collection: 21.0
+          licence: 0.0
+          solution: 13.0
 tracker_settings:
   default:
     indexing_order: fifo
