@@ -234,7 +234,7 @@ function _joinup_core_deploy_process_text(string $text, string $group_id, int $u
           'data-entity-type' => 'media',
           'data-entity-uuid' => _joinup_core_get_media('video', $embed_data['video_url'], $uid, $group_id)->uuid(),
         ]);
-        $replace[] = "<drupal-media $attributes />";
+        $replace[] = "<drupal-media$attributes />";
       }
     }
   }
