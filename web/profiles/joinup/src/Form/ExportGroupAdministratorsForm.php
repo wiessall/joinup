@@ -82,12 +82,15 @@ class ExportGroupAdministratorsForm extends ExportBatchedDataFormBase {
    *   The form state object.
    */
   public function generateData(array &$form, FormStateInterface $form_state): void {
-    $membership_query = $this->entityTypeManager->getStorage('og_membership')->getQuery()->accessCheck(FALSE);
+    $membership_query = $this->entityTypeManager->getStorage('og_membership')
+      ->getQuery()
+      ->accessCheck(FALSE);
     $membership_or = $membership_query->orConditionGroup()
       ->condition('roles', 'rdf_entity-collection-facilitator')
       ->condition('roles', 'rdf_entity-solution-facilitator');
     $membership_ids = $this->entityTypeManager->getStorage('og_membership')
       ->getQuery()
+      ->accessCheck(FALSE)
       // We are only exporting facilitators and administrators but all
       // administrators are also facilitators. Adding a condition that the
       // membership must have the facilitator role means that administrators are
