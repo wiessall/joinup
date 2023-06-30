@@ -406,7 +406,7 @@ Feature:
       | Event 2 |
       | Event 3 |
 
-  Scenario Outline: Images should be shown for tile-two view modes.
+  Scenario Outline: Images should be shown for tile view modes.
     Given <type> content:
       | title       | headline    | short title | state   | logo       | published |
       | Custom tile | Custom tile | Custom tile | <state> | linus.jpeg | yes       |
@@ -441,7 +441,7 @@ Feature:
       | discussion  | should not | list       | validated |
       | discussion  | should not | grid       | validated |
 
-  Scenario: Up to 4 topics should be shown for tile-two view modes.
+  Scenario: Up to 4 topics should be shown for tile view modes.
     Given news content:
       | title  | headline | body             | state     | created    | changed    | topic     |
       | News 1 | News 1   | Test             | validated | 01-01-2023 | 03-02-2023 | E-justice, Finance in EU, Supplier exchange, HR, Statistics and Analysis |
