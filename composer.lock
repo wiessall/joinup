@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d9fd5cbd77c24225c4a2efc7461db629",
+    "content-hash": "b1ff4cf924a94ea1ef12914fe30636bb",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -21820,7 +21820,6 @@
         "drupal/dropsolid_purge": 10,
         "drupal/facets_block": 10,
         "drupal/facets_date_range": 10,
-        "drupal/linkit": 10,
         "drupal/page_manager": 10,
         "drupal/views_block_area": 10,
         "php-task-runner/composer": 20,
