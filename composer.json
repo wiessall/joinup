@@ -269,13 +269,13 @@
                 "Pass current route parameters to the confirmation form route @see https://www.drupal.org/project/drupal/issues/2901412": "resources/patch/php/drupal/core/2901412-25.diff",
                 "Cache tags are not invalidated on revision delete @see https://www.drupal.org/project/drupal/issues/2945928": "https://www.drupal.org/files/issues/entity-cache_revision_deletion-2945928-2.patch",
                 "There is no way to delete file entities of other users @see https://www.drupal.org/project/drupal/issues/2949017": "https://www.drupal.org/files/issues/2023-02-01/2949017-9.5.x-153.patch",
-                "CKEditor 5 isn't respecting field widgets row settings @see https://www.drupal.org/i/3273755 https://www.drupal.org/i/3241295 https://www.drupal.org/i/3326193": "resources/patch/php/drupal/core/3273755_3241295_3326193.patch",
                 "Have responsive image module ignore svg @see https://www.drupal.org/project/drupal/issues/2957924": "https://www.drupal.org/files/issues/2022-06-23/drupal-responsive_image_svg_support-2957924-11.patch",
                 "Restrict images to this site\" restricts images that, by definition, *are* on this site @see https://www.drupal.org/project/drupal/issues/2998318": "https://git.drupalcode.org/project/drupal/-/merge_requests/3810.diff",
                 "Make it easier to trigger a tour @see https://www.drupal.org/project/drupal/issues/3012027": "https://www.drupal.org/files/issues/2023-02-08/3012027-63.patch",
                 "EntityConstraintValidationList::findByCode is inconsistent @see https://www.drupal.org/project/drupal/issues/3126654": "https://www.drupal.org/files/issues/2023-03-14/3126654-17.patch",
                 "Cannot implement a custom user cancellation method @see https://www.drupal.org/project/drupal/issues/3135592": "https://git.drupalcode.org/project/drupal/-/merge_requests/1675.diff",
-                "If you don't set the \"version\" of a profile, the report/status displays an empty dash @see https://www.drupal.org/project/drupal/issues/3270892": "https://git.drupalcode.org/project/drupal/-/merge_requests/2003.diff"
+                "If you don't set the \"version\" of a profile, the report/status displays an empty dash @see https://www.drupal.org/project/drupal/issues/3270892": "https://git.drupalcode.org/project/drupal/-/merge_requests/2003.diff",
+                "CKEditor 5 isn't respecting field widgets row settings @see https://www.drupal.org/i/3273755 https://www.drupal.org/i/3241295 https://www.drupal.org/i/3326193": "resources/patch/php/drupal/core/3273755_3241295_3326193.patch"
             },
             "drupal/custom_markup_block": {
                 "D10 compatibility @see https://www.drupal.org/project/custom_markup_block/issues/3286864": "https://www.drupal.org/files/issues/2022-08-22/custom_markup_block.1.x-dev.rector.patch"
@@ -326,8 +326,7 @@
                 "Autocomplete field doesn't allow to reference entities with long titles @see https://www.drupal.org/node/2895663": "https://www.drupal.org/files/issues/2895663-2.patch"
             },
             "drupal/linkit": {
-                "Link shown after the autocomplete selection is the bare node/xxx link, not the alias @see https://www.drupal.org/node/2877535": "https://www.drupal.org/files/issues/2022-08-16/linkit-2877535-link-shown-after-autocomplete-is-bare-41.patch",
-                "CKEditor 5 readiness. @see https://www.drupal.org/i/3232190": "https://www.drupal.org/files/issues/2022-10-11/linkit-cke5-3232190-82.patch"
+                "Link shown after the autocomplete selection is the bare node/xxx link, not the alias @see https://www.drupal.org/node/2877535": "https://www.drupal.org/files/issues/2022-08-16/linkit-2877535-link-shown-after-autocomplete-is-bare-41.patch"
             },
             "drupal/message_notify": {
                 "Allow 3rd-party to act before delivery @see https://www.drupal.org/project/message_notify/issues/3314370": "resources/patch/php/drupal/message_notify/3314370.diff"
