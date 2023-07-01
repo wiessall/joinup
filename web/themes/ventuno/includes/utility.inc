@@ -240,12 +240,11 @@ function _ventuno_preprocess_tile(array &$variables, string $entity_type_id): vo
       'label' => t('Archived'),
     ];
   }
-
   // Add the field in all entity view displays that requires them.
-  if (isset($variables['content']['flag_like_node'])) {
-    $variables['extra_data'][] = [
-      'label' => $variables['content']['flag_like_node']
-    ];
+  $label = $variables['content']['flag_like_node'] ?? $variables['content']['flag_like_rdf_entity'] ?? null;
+
+  if ($label !== null) {
+    $variables['extra_data'][] = ['label' => $label];
   }
 
 
