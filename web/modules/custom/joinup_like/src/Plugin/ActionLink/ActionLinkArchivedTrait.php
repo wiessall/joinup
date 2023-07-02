@@ -21,6 +21,8 @@ trait ActionLinkArchivedTrait {
    *   The flag entity.
    * @param \Drupal\Core\Entity\EntityInterface $entity
    *   The flaggable entity.
+   * @param string $view_mode
+   *   The flaggable entity view mode.
    *
    * @return array
    *   The render array.
