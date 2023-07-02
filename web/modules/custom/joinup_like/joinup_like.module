@@ -26,11 +26,7 @@ function joinup_like_theme(array $existing, string $type, string $theme, string 
 }
 
 /**
- * - Apply https://www.drupal.org/project/flag/issues/3049155
- * - Create suggestions based on view mode
- * - In Ventuno (to be checked if also in IOP) add new templates for the view
- *   modes that need the like (view_mode_tile, and ...), make them show only the
- *   icon and the number (no text, no parenthesis)
+ * Implements hook_theme_suggestions_alter().
  */
 function joinup_like_theme_suggestions_flag_count_alter(&$suggestions, array $variables) {
   $suggestions[] = 'flag_count__' . $variables['view_mode'];

@@ -241,12 +241,11 @@ function _ventuno_preprocess_tile(array &$variables, string $entity_type_id): vo
     ];
   }
   // Add the field in all entity view displays that requires them.
-  $label = $variables['content']['flag_like_node'] ?? $variables['content']['flag_like_rdf_entity'] ?? null;
+  $label = $variables['content']['flag_like_node'] ?? $variables['content']['flag_like_rdf_entity'] ?? NULL;
 
-  if ($label !== null) {
+  if ($label !== NULL) {
     $variables['extra_data'][] = ['label' => $label];
   }
-
 
 }
 
