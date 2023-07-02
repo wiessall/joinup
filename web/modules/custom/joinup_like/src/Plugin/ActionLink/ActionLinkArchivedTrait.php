@@ -35,6 +35,7 @@ trait ActionLinkArchivedTrait {
         '#theme' => 'flag_count_archived',
         '#flag' => $flag,
         '#flaggable' => $entity,
+        '#view_mode' => $view_mode,
         '#cache' => [
           'tags' => $entity->getCacheTags(),
         ],

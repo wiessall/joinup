@@ -32,3 +32,11 @@ function joinup_like_theme_suggestions_flag_count_alter(&$suggestions, array $va
   $suggestions[] = 'flag_count__' . $variables['view_mode'];
 
 }
+
+/**
+ * Implements hook_theme_suggestions_alter().
+ */
+function joinup_like_theme_suggestions_flag_count_archived_alter(&$suggestions, array $variables) {
+  $suggestions[] = 'flag_count_archived__' . $variables['view_mode'];
+
+}
