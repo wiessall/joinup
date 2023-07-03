@@ -9,7 +9,7 @@ id: paragraph.heading.paragraph_heading
 field_name: paragraph_heading
 entity_type: paragraph
 bundle: heading
-label: Heading
+label: 'Heading text'
 description: ''
 required: true
 translatable: true
