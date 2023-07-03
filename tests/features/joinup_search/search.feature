@@ -124,7 +124,7 @@ Feature: Global search
     And I should not see the "El Celler de Can Roca" tile
 
     Given I am on the search page
-    When I check the "Show Archived items" checkbox from the "Status" facet
+    When I check the "Show only Archived items" checkbox from the "Status" facet
     And I should not see the "Molecular cooking collection" tile
     And I should not see the "Spherification" tile
     And I should not see the "Foam" tile
@@ -136,7 +136,7 @@ Feature: Global search
     And I should see the "Rummy news 5" tile
     And I should see the "Rummy news 6" tile
 
-    Then I check the "Show Archived items" checkbox from the "Status" facet
+    Then I check the "Show only Archived items" checkbox from the "Status" facet
     And I should see the "Molecular cooking collection" tile
     And I should see the "Spherification" tile
     And I should see the "Foam" tile
@@ -569,13 +569,13 @@ Feature: Global search
 
     When I am on the homepage
     And I enter "Relativity" in the search bar and press enter
-    Then the option "Last Updated Date" should be selected
+    Then the option "Relevance" should be selected
     And I should see the text "SEARCH RESULTS (3)"
     And I should see the following tiles in the correct order:
-      | Relativity is the word             |
       | Relativity news: Relativity theory |
+      | Relativity is the word             |
       | Absolutely nonsense                |
-    And I should be on "/search?keys=Relativity&sort_by=last-updated-date"
+    And I should be on "/search?keys=Relativity&sort_by=relevance"
 
     Given I select "Creation Date" from "Sort by"
     Then I should see the following tiles in the correct order:
@@ -584,12 +584,12 @@ Feature: Global search
       | Relativity is the word             |
     And I should be on "/search?keys=Relativity&sort_by=creation-date"
 
-    Given I select "Relevance" from "Sort by"
+    Given I select "Last Updated Date" from "Sort by"
     Then I should see the following tiles in the correct order:
-      | Relativity news: Relativity theory |
       | Relativity is the word             |
+      | Relativity news: Relativity theory |
       | Absolutely nonsense                |
-    And I should be on "/search?keys=Relativity&sort_by=relevance"
+    And I should be on "/search?keys=Relativity&sort_by=last-updated-date"
 
   @javascript
   Scenario: Anonymous user can find facets summary
@@ -657,8 +657,8 @@ Feature: Global search
     And I enter "fu" in the search bar
     And I wait for AJAX to finish
     Then I should see the following search suggestions:
-      | Spheres  |
-      | Movistar |
+      | Radio cooking collection |
+      | Spheres                  |
 
     When I enter "cook" in the search bar
     And I wait for AJAX to finish
@@ -689,8 +689,8 @@ Feature: Global search
     And I enter "fu" in the search bar
     And I wait for AJAX to finish
     Then I should see the following search suggestions:
-      | Spheres  |
-      | Movistar |
+      | Radio cooking collection |
+      | Spheres                  |
 
     # Check if search autocomplete works in homepage's header search bar.
     Given I am on the homepage
@@ -698,8 +698,8 @@ Feature: Global search
     And I enter "fu" in the search bar
     And I wait for AJAX to finish
     Then I should see the following search suggestions:
-      | Spheres  |
-      | Movistar |
+      | Radio cooking collection |
+      | Spheres                  |
 
     # Check if search did you mean works.
     Given I visit the search page
@@ -716,11 +716,10 @@ Feature: Global search
     Then I should see the text "SEARCH RESULTS (1)"
     And I should see the "Movistar" tile
 
-    Then I enter "sp" in the search bar
+    Then I enter "spheres" in the search bar
     And I wait for AJAX to finish
     Then I should see the following search suggestions:
       | Spheres                  |
-      | Movistar                 |
 
   @terms
   Scenario: Filter on date

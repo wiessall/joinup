@@ -35,7 +35,7 @@ class JoinupAcceptHeaderMiddleware implements HttpKernelInterface {
   /**
    * {@inheritdoc}
    */
-  public function handle(Request $request, $type = self::MASTER_REQUEST, $catch = TRUE): Response {
+  public function handle(Request $request, $type = self::MAIN_REQUEST, $catch = TRUE): Response {
     if ($format = $this->getFormatFromRequest($request)) {
       $request->setRequestFormat($format);
     }

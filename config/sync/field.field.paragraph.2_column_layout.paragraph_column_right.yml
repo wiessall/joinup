@@ -7,6 +7,7 @@ dependencies:
     - paragraphs.paragraphs_type.2_column_layout
     - paragraphs.paragraphs_type.call_to_action
     - paragraphs.paragraphs_type.configurable_listing
+    - paragraphs.paragraphs_type.github_feed
     - paragraphs.paragraphs_type.image
     - paragraphs.paragraphs_type.simple_paragraph
     - paragraphs.paragraphs_type.testimony
@@ -31,6 +32,7 @@ settings:
       call_to_action: call_to_action
       testimony: testimony
       configurable_listing: configurable_listing
+      github_feed: github_feed
     negate: 0
     target_bundles_drag_drop:
       1_column_layout:
@@ -69,6 +71,9 @@ settings:
       entity_reference:
         weight: -24
         enabled: false
+      github_feed:
+        weight: 33
+        enabled: true
       iframe:
         weight: -25
         enabled: false
