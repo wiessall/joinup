@@ -95,7 +95,7 @@ index 5ab2897..b0b25ed 100644
      ],
    ];
 diff --git a/modules/flag_count/src/Plugin/ActionLink/CountLink.php b/modules/flag_count/src/Plugin/ActionLink/CountLink.php
-index 01e1c0a..fd71f0a 100644
+index 01e1c0a..52494d6 100644
 --- a/modules/flag_count/src/Plugin/ActionLink/CountLink.php
 +++ b/modules/flag_count/src/Plugin/ActionLink/CountLink.php
 @@ -83,12 +83,12 @@ class CountLink extends AJAXactionLink {
@@ -113,6 +113,14 @@ index 01e1c0a..fd71f0a 100644
 
        // Normally, you'd just override flag.html.twig in your site's theme. For
        // this example module, we do something more advanced: Provide a new
+@@ -104,6 +104,7 @@ class CountLink extends AJAXactionLink {
+         '#theme' => 'flag_count_text',
+         '#flag' => $flag,
+         '#flaggable' => $entity,
++        '#view_mode' => $view_mode,
+         '#cache' => [
+           'tags' => ['flagging_list:' . $flag->id()],
+         ],
 diff --git a/src/ActionLink/ActionLinkTypeBase.php b/src/ActionLink/ActionLinkTypeBase.php
 index 1e5bb13..d677ce2 100644
 --- a/src/ActionLink/ActionLinkTypeBase.php
