@@ -5,6 +5,7 @@ dependencies:
   content:
     - 'file:file:22cccfb4-74ad-45aa-a7d4-a9571f5a2a9f'
   module:
+    - joinup_paragraphs
     - layout_paragraphs
 id: layout
 label: Layout
@@ -12,6 +13,10 @@ icon_uuid: 22cccfb4-74ad-45aa-a7d4-a9571f5a2a9f
 icon_default: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNiIgaGVpZ2h0PSIxNiIgZmlsbD0iY3VycmVudENvbG9yIiBjbGFzcz0iYmkgYmktZ3JpZC0xeDIiIHZpZXdCb3g9IjAgMCAxNiAxNiI+CiAgPHBhdGggZD0iTTYgMUgxdjE0aDVWMXptOSAwaC01djVoNVYxem0wIDl2NWgtNXYtNWg1ek0wIDFhMSAxIDAgMCAxIDEtMWg1YTEgMSAwIDAgMSAxIDF2MTRhMSAxIDAgMCAxLTEgMUgxYTEgMSAwIDAgMS0xLTFWMXptOSAwYTEgMSAwIDAgMSAxLTFoNWExIDEgMCAwIDEgMSAxdjVhMSAxIDAgMCAxLTEgMWgtNWExIDEgMCAwIDEtMS0xVjF6bTEgOGExIDEgMCAwIDAtMSAxdjVhMSAxIDAgMCAwIDEgMWg1YTEgMSAwIDAgMCAxLTF2LTVhMSAxIDAgMCAwLTEtMWgtNXoiLz4KPC9zdmc+'
 description: 'This paragraph type allows to choose between different layouts in which you can then place your paragraphs with simple drag&drop.'
 behavior_plugins:
+  background_theme:
+    enabled: true
+  extra_class:
+    enabled: true
   layout_paragraphs:
     enabled: true
     available_layouts:

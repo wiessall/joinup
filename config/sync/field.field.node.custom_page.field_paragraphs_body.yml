@@ -12,11 +12,14 @@ dependencies:
     - paragraphs.paragraphs_type.content_listing
     - paragraphs.paragraphs_type.github_feed
     - paragraphs.paragraphs_type.iframe
+    - paragraphs.paragraphs_type.image
     - paragraphs.paragraphs_type.json_map
     - paragraphs.paragraphs_type.layout
     - paragraphs.paragraphs_type.row
     - paragraphs.paragraphs_type.simple_paragraph
+    - paragraphs.paragraphs_type.testimony
     - paragraphs.paragraphs_type.text
+    - paragraphs.paragraphs_type.video
   module:
     - entity_reference_revisions
 id: node.custom_page.field_paragraphs_body
@@ -39,12 +42,15 @@ settings:
       content_listing: content_listing
       iframe: iframe
       row: row
+      testimony: testimony
       call_to_action: call_to_action
       carousel: carousel
       configurable_listing: configurable_listing
-      layout: layout
-      text: text
       github_feed: github_feed
+      image: image
+      layout: layout
+      video: video
+      text: text
     negate: 0
     target_bundles_drag_drop:
       1_column_layout:
@@ -91,7 +97,7 @@ settings:
         enabled: true
       image:
         weight: 34
-        enabled: false
+        enabled: true
       json_map:
         weight: 4
         enabled: true
@@ -106,11 +112,11 @@ settings:
         enabled: true
       testimony:
         weight: 26
-        enabled: false
+        enabled: true
       text:
         weight: 41
         enabled: true
       video:
         weight: 40
-        enabled: false
+        enabled: true
 field_type: entity_reference_revisions
