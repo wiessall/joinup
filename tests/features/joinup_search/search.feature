@@ -124,7 +124,7 @@ Feature: Global search
     And I should not see the "El Celler de Can Roca" tile
 
     Given I am on the search page
-    When I check the "Show Archived items" checkbox from the "Status" facet
+    When I check the "Show only Archived items" checkbox from the "Status" facet
     And I should not see the "Molecular cooking collection" tile
     And I should not see the "Spherification" tile
     And I should not see the "Foam" tile
@@ -136,7 +136,7 @@ Feature: Global search
     And I should see the "Rummy news 5" tile
     And I should see the "Rummy news 6" tile
 
-    Then I check the "Show Archived items" checkbox from the "Status" facet
+    Then I check the "Show only Archived items" checkbox from the "Status" facet
     And I should see the "Molecular cooking collection" tile
     And I should see the "Spherification" tile
     And I should see the "Foam" tile
