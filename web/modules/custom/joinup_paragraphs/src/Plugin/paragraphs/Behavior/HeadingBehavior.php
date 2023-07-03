@@ -31,7 +31,7 @@ class HeadingBehavior extends ParagraphsBehaviorBase {
    * {@inheritdoc}
    */
   public static function isApplicable(ParagraphsType $paragraphsType): bool {
-    return $paragraphsType->id() == 'heading';
+    return $paragraphsType->id() === 'heading';
   }
 
   /**
