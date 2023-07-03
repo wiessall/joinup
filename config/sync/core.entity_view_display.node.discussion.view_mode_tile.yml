@@ -19,6 +19,7 @@ dependencies:
   module:
     - responsive_image
     - template_suggestion
+    - text
     - user
 _core:
   default_config_hash: SmfpRbn-HQzP1J11ggSWaNej9LobsgmxhSWXz2MODxU
@@ -27,6 +28,15 @@ targetEntityType: node
 bundle: discussion
 mode: view_mode_tile
 content:
+  body:
+    type: text_default
+    label: hidden
+    settings: {  }
+    third_party_settings:
+      template_suggestion:
+        template_suggestion: bare
+    weight: 1
+    region: content
   field_discussion_logo:
     type: responsive_image
     label: hidden
@@ -39,7 +49,6 @@ content:
     weight: 0
     region: content
 hidden:
-  body: true
   featured: true
   field_attachment: true
   field_keywords: true

@@ -35,9 +35,11 @@ mode: view_mode_tile_horizontal
 content:
   body:
     type: text_default
-    label: above
+    label: hidden
     settings: {  }
-    third_party_settings: {  }
+    third_party_settings:
+      template_suggestion:
+        template_suggestion: bare
     weight: 1
     region: content
   field_discussion_logo:

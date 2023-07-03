@@ -28,12 +28,22 @@ dependencies:
   module:
     - responsive_image
     - template_suggestion
+    - text
     - user
 id: rdf_entity.collection.view_mode_tile
 targetEntityType: rdf_entity
 bundle: collection
 mode: view_mode_tile
 content:
+  field_ar_abstract:
+    type: text_default
+    label: hidden
+    settings: {  }
+    third_party_settings:
+      template_suggestion:
+        template_suggestion: bare
+    weight: 2
+    region: content
   field_ar_logo:
     type: responsive_image
     label: hidden
@@ -54,7 +64,6 @@ hidden:
   changed: true
   created: true
   featured: true
-  field_ar_abstract: true
   field_ar_access_url: true
   field_ar_affiliates: true
   field_ar_banner: true
