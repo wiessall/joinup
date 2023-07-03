@@ -26,14 +26,14 @@ settings:
       - '|'
       - sourceEditing
   plugins:
+    ckeditor5_list:
+      reversed: false
+      startIndex: false
     ckeditor5_sourceEditing:
       allowed_tags:
         - '<i>'
         - '<b>'
         - '<a hreflang>'
-    ckeditor5_list:
-      reversed: false
-      startIndex: false
     linkit_extension:
       linkit_enabled: false
 image_upload:

@@ -4,7 +4,7 @@ status: true
 dependencies:
   config:
     - core.entity_form_mode.media.media_library
-    - field.field.media.video.field_media_video_embed_field
+    - field.field.media.video.video
     - media.type.video
 id: media.video.media_library
 targetEntityType: media
@@ -21,8 +21,9 @@ content:
     third_party_settings: {  }
 hidden:
   created: true
-  field_media_video_embed_field: true
   langcode: true
+  og_audience: true
   path: true
   status: true
   uid: true
+  video: true

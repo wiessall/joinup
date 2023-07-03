@@ -1,24 +1,31 @@
-uuid: d33b166d-4418-4182-a823-82e354c82b22
+uuid: 95a7c1c0-4ec2-4644-8025-bffc60baf751
 langcode: en
 status: true
 dependencies:
   module:
     - field_permissions
     - file
+    - image
     - media
 third_party_settings:
   field_permissions:
     permission_type: public
-id: media.field_media_file
-field_name: field_media_file
+id: media.image
+field_name: image
 entity_type: media
-type: file
+type: image
 settings:
   target_type: file
   display_field: false
   display_default: false
   uri_scheme: public
-module: file
+  default_image:
+    uuid: null
+    alt: ''
+    title: ''
+    width: null
+    height: null
+module: image
 locked: false
 cardinality: 1
 translatable: true

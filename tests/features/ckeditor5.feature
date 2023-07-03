@@ -1,15 +1,26 @@
 @api @group-a @terms @javascript
 Feature: CKEditor5
-  CKE5 textarea do not respect any configurable sizes.
 
-  Scenario: Latest news is shown on the homepage
-    Given collection:
-      | title | Shaping of disruption |
-      | state | validated             |
-    And news content:
-      | title                    | headline                 | collection            | topic                                      | state     | publication date     | body                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
-      | Spatial construction     | Jilly of wildlands       | Shaping of disruption | HR, Statistics and Analysis, E-justice     | validated | 2021-02-28T13:15:00Z | Global land use history confirms that empowering the environmental stewardship of Indigenous peoples and local communities will be critical to conserving biodiversity across the planet.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
-      | Earlier transformers     | Recognize management     | Shaping of disruption | EU and European Policies                   | validated | 2021-03-29T10:18:00Z | "<h2>What is Lorem Ipsum? </h2> <p><strong>Lorem Ipsum</strong> is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum. </p> <h2>Why do we use it? </h2> <p>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like). </p> <p><br>&nbsp; </p> <h2>Where does it come from? </h2> <p>Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered the undoubtable source. Lorem Ipsum comes from sections 1.10.32 and 1.10.33 of "de Finibus Bonorum et Malorum" (The Extremes of Good and Evil) by Cicero, written in 45 BC. This book is a treatise on the theory of ethics, very popular during the Renaissance. The first line of Lorem Ipsum, "Lorem ipsum dolor sit amet..", comes from a line in section 1.10.32. </p> <p>The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for those interested. Sections 1.10.32 and 1.10.33 from "de Finibus Bonorum et Malorum" by Cicero are also reproduced in their exact original form, accompanied by English versions from the 1914 translation by H. Rackham. </p> <h2>Where can I get some? </h2> <p>There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing hidden in the middle of text. All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary, making this the first true generator on the Internet. It uses a dictionary of over 200 Latin words, combined with a handful of model sentence structures, to generate Lorem Ipsum which looks reasonable. The generated Lorem Ipsum is therefore always free from repetition, injected humour, or non-characteristic words etc. </p>" |
+  Background:
+    Given the following owner:
+      | name     | type                    |
+      | Landlord | Non-Profit Organisation |
+    And the following contact:
+      | name  | ReachMe              |
+      | email | reach.me@example.com |
+    And collections:
+      | title                 | state     | topic                   | owner    | contact information |
+      | Shaping of disruption | validated | Supplier exchange       | Landlord | ReachMe             |
+      | The Other Collection  | validated | Statistics and Analysis | Landlord | ReachMe             |
+    And solutions:
+      | title       | collection            | state     | topic             | owner    | contact information |
+      | Angry Birds | Shaping of disruption | validated | Supplier exchange | Landlord | ReachMe             |
+
+  Scenario: CKE5 textarea do not respect any configurable sizes.
+    Given news content:
+      | title                | headline             | collection            | topic                                  | state     | publication date     | body                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
+      | Spatial construction | Jilly of wildlands   | Shaping of disruption | HR, Statistics and Analysis, E-justice | validated | 2021-02-28T13:15:00Z | Global land use history confirms that empowering the environmental stewardship of Indigenous peoples and local communities will be critical to conserving biodiversity across the planet.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
+      | Earlier transformers | Recognize management | Shaping of disruption | EU and European Policies               | validated | 2021-03-29T10:18:00Z | "<h2>What is Lorem Ipsum? </h2> <p><strong>Lorem Ipsum</strong> is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum. </p> <h2>Why do we use it? </h2> <p>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like). </p> <p><br>&nbsp; </p> <h2>Where does it come from? </h2> <p>Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered the undoubtable source. Lorem Ipsum comes from sections 1.10.32 and 1.10.33 of "de Finibus Bonorum et Malorum" (The Extremes of Good and Evil) by Cicero, written in 45 BC. This book is a treatise on the theory of ethics, very popular during the Renaissance. The first line of Lorem Ipsum, "Lorem ipsum dolor sit amet..", comes from a line in section 1.10.32. </p> <p>The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for those interested. Sections 1.10.32 and 1.10.33 from "de Finibus Bonorum et Malorum" by Cicero are also reproduced in their exact original form, accompanied by English versions from the 1914 translation by H. Rackham. </p> <h2>Where can I get some? </h2> <p>There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing hidden in the middle of text. All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary, making this the first true generator on the Internet. It uses a dictionary of over 200 Latin words, combined with a handful of model sentence structures, to generate Lorem Ipsum which looks reasonable. The generated Lorem Ipsum is therefore always free from repetition, injected humour, or non-characteristic words etc. </p>" |
 
     Given I am logged in as a moderator
     And I go to the "Earlier transformers" news
@@ -21,3 +32,158 @@ Feature: CKEditor5
     Then I open the header local tasks menu
     And I click "Edit" in the "Entity actions" region
     Then I check "Content" wysiwyg height
+
+  @uploadFiles:alan.jpg
+  Scenario: Media image with CKEditor5.
+    Given the following "Image" media:
+      | name                                | image        | alt            | group                 |
+      | The Image in Shaping of disruption  | simple.svg   | A simple image | Shaping of disruption |
+      | Other Image in The Other Collection | richard.jpg  | Long Live FOSS | The Other Collection  |
+      | Too angry for Angry Birds           | leonardo.jpg | The Genius     | Angry Birds           |
+      | Pager test 1                        | leonardo.jpg | pager test 1   | Angry Birds           |
+      | Pager test 2                        | leonardo.jpg | pager test 2   | Angry Birds           |
+      | Pager test 3                        | leonardo.jpg | pager test 3   | Angry Birds           |
+      | Pager test 4                        | leonardo.jpg | pager test 4   | Angry Birds           |
+      | Pager test 5                        | leonardo.jpg | pager test 5   | Angry Birds           |
+      | Pager test 6                        | leonardo.jpg | pager test 6   | Angry Birds           |
+      | Pager test 7                        | leonardo.jpg | pager test 7   | Angry Birds           |
+      | Pager test 8                        | leonardo.jpg | pager test 8   | Angry Birds           |
+      | Pager test 9                        | leonardo.jpg | pager test 9   | Angry Birds           |
+      | Pager test ten                      | leonardo.jpg | pager test 10  | Angry Birds           |
+      | Pager test eleven                   | leonardo.jpg | pager test 11  | Angry Birds           |
+      | Pager test twelve                   | leonardo.jpg | pager test 12  | Angry Birds           |
+      | Pager test thirteen                 | leonardo.jpg | pager test 13  | Angry Birds           |
+      | Pager test fourteen                 | leonardo.jpg | pager test 14  | Angry Birds           |
+
+    Given I am logged in as a moderator
+
+    When I go to the edit form of the "Shaping of disruption" collection
+    And I press the button "Insert Media" in the "Description" wysiwyg editor
+    Then a modal should open
+
+    Then I should see "The Image in Shaping of disruption"
+    But I should not see "Other Image in The Other Collection"
+    And I should not see "Too angry for Angry Birds"
+    And I should not see "Pager test 1"
+    And I should not see "Pager test 2"
+    And I should not see "Pager test 3"
+    And I should not see "Pager test 4"
+    And I should not see "Pager test 5"
+    And I should not see "Pager test 6"
+    And I should not see "Pager test 7"
+    And I should not see "Pager test 8"
+    And I should not see "Pager test 9"
+    And I should not see "Pager test ten"
+    And I should not see "Pager test eleven"
+    And I should not see "Pager test twelve"
+    And I should not see "Pager test thirteen"
+    And I should not see "Pager test fourteen"
+
+    When I attach the file "alan.jpg" to "Add file"
+    And I wait for AJAX to finish
+
+    When I fill in "Name" with "This is Alan we love"
+    And I fill in "Alternative text" with "This is Alan portrait"
+    And I press "Save" in the "Modal buttons" region
+    And I wait for AJAX to finish
+
+    Then I should see "The Image in Shaping of disruption"
+    And I should see "This is Alan we love"
+    But I should not see "Other Image in The Other Collection"
+    And I should not see "Too angry for Angry Birds"
+    And I should not see "Pager test 1"
+    And I should not see "Pager test 2"
+    And I should not see "Pager test 3"
+    And I should not see "Pager test 4"
+    And I should not see "Pager test 5"
+    And I should not see "Pager test 6"
+    And I should not see "Pager test 7"
+    And I should not see "Pager test 8"
+    And I should not see "Pager test 9"
+    And I should not see "Pager test ten"
+    And I should not see "Pager test eleven"
+    And I should not see "Pager test twelve"
+    And I should not see "Pager test thirteen"
+    And I should not see "Pager test fourteen"
+
+    When I press "Insert selected" in the "Modal buttons" region
+    Then the modal should be closed
+
+    When I press "Publish"
+    And I click "About"
+    But the response should contain "media/image/alan.jpg"
+
+    When I go to the edit form of the "The Other Collection" collection
+    And I press the button "Insert Media" in the "Description" wysiwyg editor
+    Then a modal should open
+
+    Then I should see "Other Image in The Other Collection"
+    But I should not see "The Image in Shaping of disruption"
+    And I should not see "This is Alan we love"
+    And I should not see "Too angry for Angry Birds"
+    And I should not see "Pager test 1"
+    And I should not see "Pager test 2"
+    And I should not see "Pager test 3"
+    And I should not see "Pager test 4"
+    And I should not see "Pager test 5"
+    And I should not see "Pager test 6"
+    And I should not see "Pager test 7"
+    And I should not see "Pager test 8"
+    And I should not see "Pager test 9"
+    And I should not see "Pager test ten"
+    And I should not see "Pager test eleven"
+    And I should not see "Pager test twelve"
+    And I should not see "Pager test thirteen"
+    And I should not see "Pager test fourteen"
+
+    When I check "Other Image in The Other Collection"
+    And I press "Insert selected" in the "Modal buttons" region
+    Then the modal should be closed
+
+    When I press "Publish"
+    And I click "About"
+    But the response should contain "media/image/richard.jpg"
+
+    When I go to the edit form of the "Angry Birds" solution
+    And I press the button "Insert Media" in the "Description" wysiwyg editor
+    Then a modal should open
+
+    Then I should see "Too angry for Angry Birds"
+    And I should see "Pager test 1"
+    And I should see "Pager test 2"
+    And I should see "Pager test 3"
+    And I should see "Pager test 4"
+    And I should see "Pager test 5"
+    And I should see "Pager test 6"
+    And I should see "Pager test 7"
+    And I should see "Pager test 8"
+    And I should see "Pager test 9"
+    And I should see "Pager test ten"
+    And I should see "Pager test eleven"
+    And I should not see "Pager test twelve"
+    And I should not see "Pager test thirteen"
+    And I should not see "Pager test fourteen"
+    But I should not see "The Image in Shaping of disruption"
+    And I should not see "This is Alan we love"
+    And I should not see "Other Image in The Other Collection"
+
+    # Use the pager.
+    When I click "Go to page 2"
+    And I wait for AJAX to finish
+    But I should not see "Too angry for Angry Birds"
+    And I should not see "Pager test 1"
+    And I should not see "Pager test 2"
+    And I should not see "Pager test 3"
+    And I should not see "Pager test 4"
+    And I should not see "Pager test 5"
+    And I should not see "Pager test 6"
+    And I should not see "Pager test 7"
+    And I should not see "Pager test 8"
+    And I should not see "Pager test 9"
+    And I should not see "Pager test ten"
+    And I should not see "Pager test eleven"
+    But I should see "Pager test twelve"
+    And I should see "Pager test thirteen"
+    And I should see "Pager test fourteen"
+
+  # For 'Media video with CKEditor5' see tests/features/video/embed.feature

@@ -1,0 +1,7 @@
+type: module
+name: Joinup Media
+description: Drupal Media adaptation.
+package: Joinup
+core_version_requirement: ">=9.4"
+dependencies:
+  - drupal:media

@@ -25,6 +25,11 @@ settings:
       - '|'
       - sourceEditing
   plugins:
+    ckeditor5_imageResize:
+      allow_resize: false
+    ckeditor5_list:
+      reversed: false
+      startIndex: false
     ckeditor5_sourceEditing:
       allowed_tags:
         - '<i>'
@@ -32,11 +37,6 @@ settings:
         - '<q>'
         - '<a hreflang>'
         - '<img data-image-style>'
-    ckeditor5_list:
-      reversed: false
-      startIndex: false
-    ckeditor5_imageResize:
-      allow_resize: false
     linkit_extension:
       linkit_enabled: false
 image_upload:

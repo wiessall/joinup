@@ -3,12 +3,12 @@ langcode: en
 status: true
 dependencies:
   config:
-    - field.storage.media.field_media_file
+    - field.storage.media.file
     - media.type.file
   module:
     - file
-id: media.file.field_media_file
-field_name: field_media_file
+id: media.file.file
+field_name: file
 entity_type: media
 bundle: file
 label: File
@@ -20,7 +20,7 @@ default_value_callback: ''
 settings:
   handler: 'default:file'
   handler_settings: {  }
-  file_directory: inline-files
+  file_directory: media/file
   file_extensions: 'txt pdf doc docx xls xlsx ods odt ppt pptx vsd zip tar gz png jpg jpeg mp4 avi'
   max_filesize: ''
   description_field: false
