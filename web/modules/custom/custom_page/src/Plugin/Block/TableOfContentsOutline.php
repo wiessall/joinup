@@ -107,7 +107,6 @@ class TableOfContentsOutline extends BlockBase implements ContainerFactoryPlugin
       $container->get('custom_page.og_menu_links_manager'),
       $container->get('menu.link_tree'),
       $container->get('menu.active_trail'),
-      $container->get('menu.tree_storage')
     );
   }
 
