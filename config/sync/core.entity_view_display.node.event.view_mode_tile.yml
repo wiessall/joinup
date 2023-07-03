@@ -32,12 +32,22 @@ dependencies:
     - datetime_range
     - responsive_image
     - template_suggestion
+    - text
     - user
 id: node.event.view_mode_tile
 targetEntityType: node
 bundle: event
 mode: view_mode_tile
 content:
+  body:
+    type: text_default
+    label: hidden
+    settings: {  }
+    third_party_settings:
+      template_suggestion:
+        template_suggestion: bare
+    weight: 2
+    region: content
   field_event_date:
     type: daterange_default
     label: hidden
@@ -63,7 +73,6 @@ content:
     weight: 0
     region: content
 hidden:
-  body: true
   featured: true
   field_attachment: true
   field_comments: true

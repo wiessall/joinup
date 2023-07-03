@@ -58,8 +58,10 @@ content:
     type: text_default
     label: hidden
     settings: {  }
-    third_party_settings: {  }
-    weight: 0
+    third_party_settings:
+      template_suggestion:
+        template_suggestion: bare
+    weight: 1
     region: content
   field_news_logo:
     type: responsive_image
@@ -70,7 +72,7 @@ content:
     third_party_settings:
       template_suggestion:
         template_suggestion: bare
-    weight: 1
+    weight: 0
     region: content
 hidden:
   featured: true

@@ -50,6 +50,7 @@ dependencies:
   module:
     - responsive_image
     - template_suggestion
+    - text
     - user
 id: rdf_entity.solution.view_mode_tile
 targetEntityType: rdf_entity
@@ -59,6 +60,15 @@ content:
   download_total:
     settings: {  }
     third_party_settings: {  }
+    weight: 2
+    region: content
+  field_is_description:
+    type: text_default
+    label: hidden
+    settings: {  }
+    third_party_settings:
+      template_suggestion:
+        template_suggestion: bare
     weight: 1
     region: content
   field_is_logo:
@@ -85,7 +95,6 @@ hidden:
   field_is_contact_information: true
   field_is_content: true
   field_is_content_creation: true
-  field_is_description: true
   field_is_distribution: true
   field_is_documentation: true
   field_is_eif_category: true
