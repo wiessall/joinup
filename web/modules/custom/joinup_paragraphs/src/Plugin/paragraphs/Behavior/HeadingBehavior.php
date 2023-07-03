@@ -40,8 +40,11 @@ class HeadingBehavior extends ParagraphsBehaviorBase {
   public function view(array &$build, Paragraph $paragraph, EntityViewDisplayInterface $display, $view_mode): void {
     $level = $paragraph->getBehaviorSetting($this->getPluginId(), 'level', self::DEFAULT_LEVEL);
 
-    $build['paragraph_heading'][0]['#template'] = "<{{level}}>{{ value|nl2br }}</{{level}}>";
-    $build['paragraph_heading'][0]['#context']['level'] = $level;
+    $build['paragraph_heading'][0] = [
+      '#theme' => 'joinup_paragraphs_heading',
+      '#level' => $level,
+      '#text' => $paragraph->get('paragraph_heading')->getString(),
+    ];
   }
 
   /**
