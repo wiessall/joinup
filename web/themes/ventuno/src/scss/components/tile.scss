@@ -136,6 +136,9 @@
         align-self: end;
         margin-top: $spacer;
         border-top: $border-width solid $border-color;
+        .flag__link:hover {
+          text-decoration: none;
+        }
       }
     }
   }
