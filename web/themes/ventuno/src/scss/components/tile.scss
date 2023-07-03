@@ -136,8 +136,13 @@
         align-self: end;
         margin-top: $spacer;
         border-top: $border-width solid $border-color;
-        .flag__link:hover {
-          text-decoration: none;
+        .flag__link {
+          border-radius: $border-radius-pill;
+          padding: $spacer * .25;
+          &:hover {
+            background-color: $secondary;
+            text-decoration: none;
+          }
         }
       }
     }
