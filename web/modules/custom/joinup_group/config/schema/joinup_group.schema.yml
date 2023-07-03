@@ -62,6 +62,10 @@ views.argument_validator.joinup_group_user_permission:
       nullable: true
       label: Site permission
 
+views.argument_validator.joinup_group:
+  type: views.argument_validator.joinup_group_user_permission
+  label: Joinup group
+
 views.argument_validator.joinup_group_announcements_enabled:
   type: views.argument_validator.joinup_group_user_permission
   label: Access to group announcements

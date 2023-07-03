@@ -3,7 +3,8 @@ langcode: en
 status: true
 dependencies:
   config:
-    - field.field.media.file.field_media_file
+    - field.field.media.file.file
+    - field.field.media.file.og_audience
     - media.type.file
   module:
     - file
@@ -13,7 +14,7 @@ targetEntityType: media
 bundle: file
 mode: default
 content:
-  field_media_file:
+  file:
     type: file_default
     label: visually_hidden
     settings:
@@ -27,6 +28,7 @@ hidden:
   created: true
   langcode: true
   name: true
+  og_audience: true
   search_api_excerpt: true
   thumbnail: true
   uid: true

@@ -3,15 +3,15 @@ langcode: en
 status: true
 dependencies:
   config:
-    - field.storage.media.field_media_video_embed_field
+    - field.storage.media.video
     - media.type.video
   module:
     - video_embed_field
-id: media.video.field_media_video_embed_field
-field_name: field_media_video_embed_field
+id: media.video.video
+field_name: video
 entity_type: media
 bundle: video
-label: 'Video Url'
+label: 'Video URL'
 description: ''
 required: true
 translatable: true
