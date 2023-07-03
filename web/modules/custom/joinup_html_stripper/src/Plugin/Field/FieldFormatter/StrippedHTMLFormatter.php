@@ -97,7 +97,6 @@ class StrippedHTMLFormatter extends FormatterBase {
       $output = str_replace("&amp;#13;", ' ', $output);
       $output = str_replace("\xc2\xa0", ' ', $output);
       $output = trim(preg_replace('/\s\s+/', ' ', $output));
-      $output = trim(preg_replace('/\s\s+/', ' ', $output));
 
       // Trim the text if a maximum length has been set.
       if ($this->getSetting('trim_length') !== 0) {
