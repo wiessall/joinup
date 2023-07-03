@@ -47,19 +47,6 @@ function joinup_core_deploy_109402(): string {
   $node_ids = $group_helper->getGroupContentIds($collection, ['node']);
   $paragraphs_cleanup = [];
 
-  // The mapping of changes is as follows:
-  // - Paragraphs in IOP custom pages start with a 'row' paragraph.
-  // - `Row` paragraphs are converted to `layout` paragraphs.
-  // - `Layout` paragraphs have the following data settings:
-  // -- `layout` = `layout_onecol`, `layout_twocol_section`,
-  // `layout_threecol_section` or `layout_fourcol_section`.
-  // -- `config` = `column_widths` = `50-50`
-  // -- `parent_uuid` = `NULL`
-  // -- `region` = `NULL`
-  // - Columns are inserted in the `layout` paragraphs.
-  // - `row_theme` setting of a `row` paragraph is translated to the
-  // `background_theme` setting of the `layout` paragraph.
-  // @todo Handle the headings.
   foreach (Node::loadMultiple($node_ids['node']) as $node) {
     if ($node->bundle() !== 'custom_page') {
       continue;
@@ -67,6 +54,46 @@ function joinup_core_deploy_109402(): string {
 
     $new_paragraphs = [];
     foreach ($node->field_paragraphs_body as $paragraph_row_item) {
+      if ($heading = $paragraph_row_item->paragraph_heading?->value) {
+        $new_layout_paragraph = _joinup_core_get_new_layout_paragraph($node, 'layout_onecol', NULL, $paragraph_row_item->get('row_theme')->value);
+        $new_paragraphs[] = $new_layout_paragraph;
+        // Create a new paragraph of type 'simple_paragraph' where the
+        // 'field_body' field will contain the heading as h2.
+        $child_paragraph = Paragraph::create([
+          'type' => 'simple_paragraph',
+          'field_body' => [
+            'value' => "<h2>" . $heading . "</h2>",
+            'format' => 'content_editor',
+          ],
+        ]);
+        $child_paragraph->setBehaviorSettings('layout_paragraphs', [
+          'parent_uuid' => $new_layout_paragraph->uuid(),
+          'region' => 'content',
+        ]);
+        $child_paragraph->save();
+        $new_paragraphs[] = $child_paragraph;
+      }
+
+      if ($subheading = $paragraph_row_item->paragraph_row_subheading?->value) {
+        $new_layout_paragraph = _joinup_core_get_new_layout_paragraph($node, 'layout_onecol', NULL, $paragraph_row_item->get('row_theme')->value);
+        $new_paragraphs[] = $new_layout_paragraph;
+        // Create a new paragraph of type 'simple_paragraph' where the
+        // 'field_body' field will contain the subheading as h3.
+        $child_paragraph = Paragraph::create([
+          'type' => 'simple_paragraph',
+          'field_body' => [
+            'value' => "<h3>" . $subheading . "</h3>",
+            'format' => 'content_editor',
+          ],
+        ]);
+        $child_paragraph->setBehaviorSettings('layout_paragraphs', [
+          'parent_uuid' => $new_layout_paragraph->uuid(),
+          'region' => 'content',
+        ]);
+        $child_paragraph->save();
+        $new_paragraphs[] = $child_paragraph;
+      }
+
       // The $paragraph_row_item is a field item that holds a row. If it is not
       // a row paragraph, ignore it.
       $paragraph_row_item = $paragraph_row_item->entity;
