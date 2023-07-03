@@ -54,7 +54,14 @@ function joinup_core_deploy_109402(): string {
 
     $new_paragraphs = [];
     foreach ($node->field_paragraphs_body as $paragraph_row_item) {
-      if ($heading = $paragraph_row_item->paragraph_heading?->value) {
+      // The $paragraph_row_item is a field item that holds a row. If it is not
+      // a row paragraph, ignore it.
+      $paragraph_row_item = $paragraph_row_item->entity;
+      if ($paragraph_row_item->bundle() !== 'row') {
+        continue;
+      }
+
+      if ($heading = $paragraph_row_item->paragraph_heading->value) {
         $new_layout_paragraph = _joinup_core_get_new_layout_paragraph($node, 'layout_onecol', NULL, $paragraph_row_item->get('row_theme')->value);
         $new_paragraphs[] = $new_layout_paragraph;
         // Create a new paragraph of type 'simple_paragraph' where the
@@ -74,7 +81,7 @@ function joinup_core_deploy_109402(): string {
         $new_paragraphs[] = $child_paragraph;
       }
 
-      if ($subheading = $paragraph_row_item->paragraph_row_subheading?->value) {
+      if ($subheading = $paragraph_row_item->paragraph_row_subheading->value) {
         $new_layout_paragraph = _joinup_core_get_new_layout_paragraph($node, 'layout_onecol', NULL, $paragraph_row_item->get('row_theme')->value);
         $new_paragraphs[] = $new_layout_paragraph;
         // Create a new paragraph of type 'simple_paragraph' where the
@@ -92,13 +99,6 @@ function joinup_core_deploy_109402(): string {
         ]);
         $child_paragraph->save();
         $new_paragraphs[] = $child_paragraph;
-      }
-
-      // The $paragraph_row_item is a field item that holds a row. If it is not
-      // a row paragraph, ignore it.
-      $paragraph_row_item = $paragraph_row_item->entity;
-      if ($paragraph_row_item->bundle() !== 'row') {
-        continue;
       }
 
       // Start migrating paragraphs to a new list. Keep the deepest levels of
@@ -171,11 +171,11 @@ function joinup_core_deploy_109402(): string {
               foreach ($column_paragraph->get($field) as $child_paragraph_item) {
                 /** @var \Drupal\paragraphs\ParagraphInterface $child_paragraph */
                 $child_paragraph = $child_paragraph_item->entity;
-                $region = $field === 'paragraph_column_left' ? 'first' : 'second';
+                $non_featured_region = $field === 'paragraph_column_left' ? 'first' : 'second';
                 $child_paragraph->setParentEntity($node, 'field_paragraphs_body');
                 $child_paragraph->setBehaviorSettings('layout_paragraphs', [
                   'parent_uuid' => $new_layout_paragraph->uuid(),
-                  'region' => $region,
+                  'region' => $non_featured_region,
                 ]);
                 $child_paragraph->save();
                 $new_paragraphs[] = $child_paragraph;
@@ -196,17 +196,17 @@ function joinup_core_deploy_109402(): string {
 
             foreach ($fields as $field) {
               if ($field === 'paragraph_column_center') {
-                $region = 'second';
+                $non_featured_region = 'second';
               }
               else {
-                $region = $field === 'paragraph_column_left' ? 'first' : 'third';
+                $non_featured_region = $field === 'paragraph_column_left' ? 'first' : 'third';
               }
               foreach ($column_paragraph->get($field) as $child_paragraph_item) {
                 $child_paragraph = $child_paragraph_item->entity;
                 $child_paragraph->setParentEntity($node, 'field_paragraphs_body');
                 $child_paragraph->setBehaviorSettings('layout_paragraphs', [
                   'parent_uuid' => $new_layout_paragraph->uuid(),
-                  'region' => $region,
+                  'region' => $non_featured_region,
                 ]);
                 $child_paragraph->save();
                 $new_paragraphs[] = $child_paragraph;
@@ -223,9 +223,26 @@ function joinup_core_deploy_109402(): string {
           case '2_column_featured_right':
           case '2_column_featured_left':
             $new_layout_paragraph = _joinup_core_get_new_layout_paragraph($node, 'layout_twocol_section', '50-50', $paragraph_row_item->get('row_theme')->value, 'featured-' . $column_paragraph->bundle());
+            $non_featured_region = $column_paragraph->bundle() === '2_column_featured_right' ? 'first' : 'second';
             $new_paragraphs[] = $new_layout_paragraph;
+            // Featured paragraphs had an explicit heading field for the non
+            // featured column. We need to convert that to a paragraph.
+            if ($heading = $column_paragraph->paragraph_heading->value) {
+              $child_paragraph = Paragraph::create([
+                'type' => 'simple_paragraph',
+                'field_body' => [
+                  'value' => "<h2>" . $heading . "</h2>",
+                  'format' => 'content_editor',
+                ],
+              ]);
+              $child_paragraph->setBehaviorSettings('layout_paragraphs', [
+                'parent_uuid' => $new_layout_paragraph->uuid(),
+                'region' => $non_featured_region,
+              ]);
+              $child_paragraph->save();
+              $new_paragraphs[] = $child_paragraph;
+            }
 
-            $region = $column_paragraph->bundle() === '2_column_featured_right' ? 'first' : 'second';
             // Handle first the normal column. The field is
             // field_paragraphs_item_content.
             foreach ($column_paragraph->get('field_paragraphs_item_content') as $child_paragraph_item) {
@@ -234,7 +251,7 @@ function joinup_core_deploy_109402(): string {
               $child_paragraph->setParentEntity($node, 'field_paragraphs_body');
               $child_paragraph->setBehaviorSettings('layout_paragraphs', [
                 'parent_uuid' => $new_layout_paragraph->uuid(),
-                'region' => $region,
+                'region' => $non_featured_region,
               ]);
               $child_paragraph->save();
               $new_paragraphs[] = $child_paragraph;
@@ -249,7 +266,7 @@ function joinup_core_deploy_109402(): string {
             $featured_paragraph->setParentEntity($node, 'field_paragraphs_body');
             $featured_paragraph->setBehaviorSettings('layout_paragraphs', [
               'parent_uuid' => $new_layout_paragraph->uuid(),
-              'region' => $region === 'first' ? 'second' : 'first',
+              'region' => $non_featured_region === 'first' ? 'second' : 'first',
             ]);
             $featured_paragraph->save();
             $new_paragraphs[] = $featured_paragraph;
