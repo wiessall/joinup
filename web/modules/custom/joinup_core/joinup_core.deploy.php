@@ -68,7 +68,7 @@ function joinup_core_deploy_109402(): string {
       continue;
     }
 
-    $node->get('field_paragraphs_body')->setValue($new_paragraphs);
+    $node->get('field_paragraphs_body')->setValue(array_values($new_paragraphs));
     $node->save();
   }
   return "Migrated all custom pages row paragraphs of IOP collection to layout paragraphs.";
@@ -80,11 +80,12 @@ function joinup_core_deploy_109402(): string {
 function joinup_core_deploy_109403(array &$sandbox): string {
   if (empty($sandbox['meta_ids'])) {
     $sandbox['meta_ids'] = \Drupal::entityQuery('meta_entity')
+      ->accessCheck(FALSE)
       ->condition('type', 'topic')
       ->execute();
   }
   // Only update 1 entity per batch.
-  $meta_entities = MetaEntity::loadMultiple(array_slice($sandbox['meta_ids'], 0, 1));
+  $meta_entities = MetaEntity::loadMultiple(array_splice($sandbox['meta_ids'], 0, 1));
   $meta_entity = reset($meta_entities);
 
   $field = 'topics_paragraph';
@@ -101,7 +102,7 @@ function joinup_core_deploy_109403(array &$sandbox): string {
   }
 
   if (!empty($new_paragraphs)) {
-    $meta_entity->get($field)->setValue($new_paragraphs);
+    $meta_entity->get($field)->setValue(array_values($new_paragraphs));
     $meta_entity->save();
   }
 
@@ -127,14 +128,14 @@ function _joinup_core_row_to_layout(ParagraphInterface $paragraph_row_item, Enti
   $return = [];
   if (!empty($paragraph_row_item->paragraph_heading->value) || !empty($paragraph_row_item->paragraph_row_subheading->value)) {
     $new_layout_paragraph = _joinup_core_get_new_layout_paragraph($parent_entity, $parent_entity_field, 'layout_onecol', NULL, $paragraph_row_item->get('row_theme')->value);
-    $return[] = $new_layout_paragraph;
+    $return[$new_layout_paragraph->id()] = $new_layout_paragraph;
     if ($heading = $paragraph_row_item->paragraph_heading->value) {
       $child_paragraph = _joinup_core_create_heading_paragraph($new_layout_paragraph, $heading, 'h2');
-      $return[] = $child_paragraph;
+      $return[$child_paragraph->id()] = $child_paragraph;
     }
     if ($subheading = $paragraph_row_item->paragraph_row_subheading->value) {
       $child_paragraph = _joinup_core_create_heading_paragraph($new_layout_paragraph, $subheading, 'h3');
-      $return[] = $child_paragraph;
+      $return[$child_paragraph->id()] = $child_paragraph;
     }
   }
 
@@ -178,20 +179,20 @@ function _joinup_core_row_to_layout(ParagraphInterface $paragraph_row_item, Enti
     switch ($column_paragraph->bundle()) {
       case '1_column_layout':
         $new_layout_paragraph = _joinup_core_get_new_layout_paragraph($parent_entity, $parent_entity_field, 'layout_onecol', NULL, $paragraph_row_item->row_theme->value);
-        $return[] = $new_layout_paragraph;
+        $return[$new_layout_paragraph->id()] = $new_layout_paragraph;
         $return += _joinup_core_column_to_layout($column_paragraph, $new_layout_paragraph, $parent_entity, $parent_entity_field, 'paragraph_column_center', 'content');
         break;
 
       case '2_column_layout':
         $new_layout_paragraph = _joinup_core_get_new_layout_paragraph($parent_entity, $parent_entity_field, 'layout_twocol_section', '50-50', $paragraph_row_item->row_theme->value);
-        $return[] = $new_layout_paragraph;
+        $return[$new_layout_paragraph->id()] = $new_layout_paragraph;
         $return += _joinup_core_column_to_layout($column_paragraph, $new_layout_paragraph, $parent_entity, $parent_entity_field, 'paragraph_column_left', 'first');
         $return += _joinup_core_column_to_layout($column_paragraph, $new_layout_paragraph, $parent_entity, $parent_entity_field, 'paragraph_column_right', 'second');
         break;
 
       case '3_column_layout':
         $new_layout_paragraph = _joinup_core_get_new_layout_paragraph($parent_entity, $parent_entity_field, 'layout_threecol_section', '33-33-33', $paragraph_row_item->row_theme->value);
-        $return[] = $new_layout_paragraph;
+        $return[$new_layout_paragraph->id()] = $new_layout_paragraph;
         $return += _joinup_core_column_to_layout($column_paragraph, $new_layout_paragraph, $parent_entity, $parent_entity_field, 'paragraph_column_left', 'first');
         $return += _joinup_core_column_to_layout($column_paragraph, $new_layout_paragraph, $parent_entity, $parent_entity_field, 'paragraph_column_center', 'second');
         $return += _joinup_core_column_to_layout($column_paragraph, $new_layout_paragraph, $parent_entity, $parent_entity_field, 'paragraph_column_right', 'third');
@@ -205,27 +206,27 @@ function _joinup_core_row_to_layout(ParagraphInterface $paragraph_row_item, Enti
       case '2_column_featured_left':
         $new_layout_paragraph = _joinup_core_get_new_layout_paragraph($parent_entity, $parent_entity_field, 'layout_twocol_section', '50-50', $paragraph_row_item->row_theme->value, 'featured-' . $column_paragraph->bundle());
         $non_featured_region = $column_paragraph->bundle() === '2_column_featured_right' ? 'first' : 'second';
-        $return[] = $new_layout_paragraph;
-        // Featured paragraphs had an explicit heading field for the non
-        // featured column. We need to convert that to a paragraph.
+        $return[$new_layout_paragraph->id()] = $new_layout_paragraph;
+        // Featured paragraphs had an explicit heading field for the
+        // non-featured column. We need to convert that to a paragraph.
         if ($heading = $column_paragraph->paragraph_heading->value) {
-          $child_paragraph = _joinup_core_create_heading_paragraph($new_layout_paragraph, $heading, $non_featured_region);
-          $return[] = $child_paragraph;
+          $child_paragraph = _joinup_core_create_heading_paragraph($new_layout_paragraph, $heading, 'h2', $non_featured_region);
+          $return[$child_paragraph->id()] = $child_paragraph;
         }
         $return += _joinup_core_column_to_layout($column_paragraph, $new_layout_paragraph, $parent_entity, $parent_entity_field, 'field_paragraphs_item_content', $non_featured_region);
 
         // The featured column has a single paragraph to it. Get the first
         // paragraph and add it to the new layout on the second column.
-        $featured_paragraph = $column_paragraph->get('paragraph_2cf_media')
-          ->first()->entity;
+        $featured_paragraph = $column_paragraph->get('paragraph_2cf_media')->first()->entity;
         $featured_paragraph->set('parent_field_name', $parent_entity_field);
         $featured_paragraph->setParentEntity($parent_entity, $parent_entity_field);
         $featured_paragraph->setBehaviorSettings('layout_paragraphs', [
           'parent_uuid' => $new_layout_paragraph->uuid(),
+          // Place it in the featured region.
           'region' => $non_featured_region === 'first' ? 'second' : 'first',
         ]);
         $featured_paragraph->save();
-        $return[] = $featured_paragraph;
+        $return[$featured_paragraph->id()] = $featured_paragraph;
         break;
 
       default:
@@ -343,8 +344,10 @@ function _joinup_core_column_to_layout(ParagraphInterface $old_parent_column, Pa
  *   The heading text.
  * @param string $heading_type
  *   The heading type, e.g. h2, h3, etc.
+ * @param string $region
+ *   (optional) The region to add the heading to. Defaults to 'content'.
  */
-function _joinup_core_create_heading_paragraph(ParagraphInterface $new_layout_paragraph, string $heading, string $heading_type): ParagraphInterface {
+function _joinup_core_create_heading_paragraph(ParagraphInterface $new_layout_paragraph, string $heading, string $heading_type, string $region = 'content'): ParagraphInterface {
   $child_paragraph = Paragraph::create([
     'type' => 'simple_paragraph',
     'field_body' => [
@@ -354,7 +357,7 @@ function _joinup_core_create_heading_paragraph(ParagraphInterface $new_layout_pa
   ]);
   $child_paragraph->setBehaviorSettings('layout_paragraphs', [
     'parent_uuid' => $new_layout_paragraph->uuid(),
-    'region' => 'content',
+    'region' => $region,
   ]);
   $child_paragraph->save();
   return $child_paragraph;
