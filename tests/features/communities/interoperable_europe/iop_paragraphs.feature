@@ -15,6 +15,8 @@ Feature:
       | title | Joinup    |
       | state | validated |
 
+    # @todo Remove row/column related tests in ISAICP-7744.
+    # @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7744
     Given I am logged in as a moderator
     And I go to the "Joinup" collection
     When I click "Add custom page" in the plus button menu
@@ -27,50 +29,15 @@ Feature:
     And I click "Choose component"
 
     Then I should see the link "Carousel"
-    And I should see the link "Row"
+    And I should not see the link "Row"
     But I should not see the link "1 column layout"
     And I should not see the link "2 column layout"
     And I should not see the link "2 column with featured media on the left"
     And I should not see the link "2 column with featured media on the right"
     And I should not see the link "3 column layout"
-    And I should not see the link "Image"
+    And I should see the link "Image"
     And I should see the link "Call to action"
     And I should not see the link "Configurable listing"
-
-    When I click "Row"
-    Then I should see the button "Add 1 column layout"
-    And I should see the button "Add 2 column layout"
-    And I should see the button "Add 2 column with featured media on the left"
-    And I should see the button "Add 2 column with featured media on the right"
-    And I should see the button "Add 3 column layout"
-    But I should not see the button "Add Image"
-    And I should not see the button "Add Call to action"
-    And the following fields should not be present "URL, Link text"
-    And I should not see the button "Add Configurable listing"
-
-    When I press "Add 1 column layout"
-    Then I should not see the button "Add Configurable listing"
-    But I should see the button "Add Image"
-    And I should see the button "Add Call to action"
-    And I should see the button "Add Carousel"
-
-    Given I am logged in as a facilitator of the "Joinup" collection
-    And I go to the "Joinup" collection
-    When I click "Add custom page" in the plus button menu
-    And I click "Choose component"
-    Then I should not see the link "Row"
-
-    Given I am logged in as a facilitator of the "Interoperable Europe" collection
-    And I go to the "Interoperable Europe" collection
-    And I click "Add custom page" in the plus button menu
-    And I click "Choose component"
-    Then I should see the link "Row"
-    When I click "Row"
-    Then I should see the button "Add 1 column layout"
-    And I should see the button "Add 2 column layout"
-    And I should see the button "Add 2 column with featured media on the left"
-    And I should see the button "Add 2 column with featured media on the right"
-    And I should see the button "Add 3 column layout"
 
   Scenario: Test that carousels content listing options are working correctly.
     Given the following collections:
