@@ -1303,6 +1303,31 @@ class JoinupContext extends RawDrupalContext {
   }
 
   /**
+   * Clicks a specific link in a tile.
+   *
+   * @param string $link
+   *   The link.
+   * @param string $heading
+   *   The heading of the tile.
+   *
+   * @throws \Exception
+   *   Thrown when the expected link is not found in the tile.
+   *
+   * @Then I click the :link in the :heading tile
+   */
+  public function iClickLinkInTile($link, $heading): void {
+    $element = $this->getTileByHeading($heading);
+    $this->scrollElementIntoView($element);
+
+    $linkElement = $element->findLink($link);
+    if (!$linkElement) {
+      throw new \Exception("The link '$link' was not found in the tile '$heading'.");
+    }
+
+    $linkElement->click();
+  }
+
+  /**
    * Asserts that a certain text is present in a tile.
    *
    * @param string $heading
