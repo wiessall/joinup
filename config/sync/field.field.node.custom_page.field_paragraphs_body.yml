@@ -15,7 +15,6 @@ dependencies:
     - paragraphs.paragraphs_type.image
     - paragraphs.paragraphs_type.json_map
     - paragraphs.paragraphs_type.layout
-    - paragraphs.paragraphs_type.row
     - paragraphs.paragraphs_type.simple_paragraph
     - paragraphs.paragraphs_type.testimony
     - paragraphs.paragraphs_type.text
@@ -41,7 +40,6 @@ settings:
       accordion: accordion
       content_listing: content_listing
       iframe: iframe
-      row: row
       testimony: testimony
       call_to_action: call_to_action
       carousel: carousel
@@ -106,7 +104,7 @@ settings:
         enabled: true
       row:
         weight: 24
-        enabled: true
+        enabled: false
       simple_paragraph:
         weight: 2
         enabled: true
