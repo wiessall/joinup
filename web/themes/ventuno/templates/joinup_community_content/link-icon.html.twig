@@ -20,11 +20,11 @@
     'px-3',
   ]
 %}
-{% spaceless %}
+{% apply spaceless %}
 <a href="{{ url }}"{{ attributes.addClass(classes) }}>
   {{ title }}
   <svg class="ms-1 bi icon--fluid">
     <use xlink:href="{{ bcl_icon_path }}#arrow-right"></use>
   </svg>
 </a>
-{% endspaceless %}
+{% endapply %}

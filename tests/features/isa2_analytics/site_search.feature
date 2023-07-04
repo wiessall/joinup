@@ -38,7 +38,7 @@ Feature: Site search
     And I press "Publish"
     And I enter "total count" in the search bar and press enter
     Then I should see the following tiles in the correct order:
-      | News total count new   |
       | Collection total count |
       | News total count       |
+      | News total count new   |
     And the response should contain "\"search\":{\"keyword\":\"total count\",\"count\":3}"

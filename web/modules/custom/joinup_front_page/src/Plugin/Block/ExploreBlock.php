@@ -100,13 +100,13 @@ class ExploreBlock extends BlockBase implements ContainerFactoryPluginInterface 
       'collections' => [
         'label' => $this->t('Collections'),
         'plural_type' => $this->t('collections'),
-        'data' => $this->getRdfEntities('collection'),
+        'data' => $this->getRdfEntities('collection', 'field_ar_state'),
         'url' => $get_url('collection'),
       ],
       'solutions' => [
         'label' => $this->t('Solutions'),
         'plural_type' => $this->t('solutions'),
-        'data' => $this->getRdfEntities('solution'),
+        'data' => $this->getRdfEntities('solution', 'field_is_state'),
         'url' => $get_url('solution'),
       ],
       'news' => [
@@ -181,6 +181,7 @@ class ExploreBlock extends BlockBase implements ContainerFactoryPluginInterface 
 
     $ids = $query->condition('status', 1)
       ->condition('type', $type)
+      ->condition('field_state', 'archived', '<>')
       ->sort('created', 'DESC')
       ->range(0, 12)
       ->execute();
@@ -198,6 +199,8 @@ class ExploreBlock extends BlockBase implements ContainerFactoryPluginInterface 
    *
    * @param string $type
    *   The RDF entity type to return.
+   * @param string $field_state
+   *   Name of field state in RDF entity.
    *
    * @return array
    *   List of rdf entity with view mode "explore_item".
@@ -205,13 +208,13 @@ class ExploreBlock extends BlockBase implements ContainerFactoryPluginInterface 
    * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    */
-  protected function getRdfEntities(string $type): array {
+  protected function getRdfEntities(string $type, string $field_state): array {
     $rdf = [];
     $entity = $this->entityTypeManager->getStorage('rdf_entity');
     $view_builder = $this->entityTypeManager->getViewBuilder('rdf_entity');
-    $query = $entity->getQuery();
-
+    $query = $entity->getQuery()->accessCheck(FALSE);
     $ids = $query->condition('rid', $type)
+      ->condition($field_state, 'archived', '!=')
       ->graphs(['default'])
       ->sort('created', 'DESC')
       ->range(0, 12)
