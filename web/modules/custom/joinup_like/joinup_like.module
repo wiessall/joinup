@@ -30,7 +30,6 @@ function joinup_like_theme(array $existing, string $type, string $theme, string 
  */
 function joinup_like_theme_suggestions_flag_count_alter(&$suggestions, array $variables): void {
   $suggestions[] = 'flag_count__' . $variables['view_mode'];
-
 }
 
 /**
@@ -38,7 +37,6 @@ function joinup_like_theme_suggestions_flag_count_alter(&$suggestions, array $va
  */
 function joinup_like_theme_suggestions_flag_count_archived_alter(&$suggestions, array $variables): void {
   $suggestions[] = 'flag_count_archived__' . $variables['view_mode'];
-
 }
 
 /**
@@ -46,5 +44,4 @@ function joinup_like_theme_suggestions_flag_count_archived_alter(&$suggestions, 
  */
 function joinup_like_theme_suggestions_flag_count_text_alter(&$suggestions, array $variables): void {
   $suggestions[] = 'flag_count_text__' . $variables['view_mode'];
-
 }
