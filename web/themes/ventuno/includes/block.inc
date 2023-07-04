@@ -62,9 +62,8 @@ function ventuno_preprocess_block(array &$variables): void {
       break;
 
     case 'ventuno_like':
-      // Add z-index to Like button in order to avoid ajax throbber being
-      // hidden under eTrans button.
-      $variables['attributes']['class'][] = 'zi-1';
+      // Avoid ajax throbber being  hidden under eTrans button.
+      $variables['attributes']['class'][] = 'zi-2';
       break;
   }
 
