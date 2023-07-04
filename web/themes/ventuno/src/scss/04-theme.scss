@@ -18,28 +18,6 @@
  @import "@openeuropa/bcl-bootstrap/scss/helpers";
  @import "@openeuropa/bcl-bootstrap/scss/utilities/api";
 
-// Link
-a {
-  // Avoid purple underline for visited links.
-  &:hover {
-    &:visited {
-      text-decoration-color: currentColor!important;
-    }
-  }
-  // Add icon to show users the link is external.
-  &.external {
-    &::after {
-      margin: 0 0 0 $spacer * .375; // 0 0 0 6px
-      @include get-bootstrap-icon('box-arrow-up-right');
-    }
-    &:hover {
-      &::after {
-        @include get-bootstrap-icon('box-arrow-up-right');
-      }
-    }
-  }
-}
-
 .glossary-term {
   border-bottom: 1px dotted $dark;
   color: $dark;
