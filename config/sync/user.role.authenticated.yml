@@ -22,10 +22,12 @@ dependencies:
     - flag
     - joinup
     - joinup_community_content
+    - joinup_core
     - joinup_licence
     - media
     - meta_entity
     - node
+    - paragraphs
     - paragraphs_type_permissions
     - rdf_entity
     - rdf_export
@@ -63,6 +65,7 @@ permissions:
   - 'delete paragraph content content_listing'
   - 'delete paragraph content simple_paragraph'
   - 'delete paragraph content text'
+  - 'edit behavior plugin settings'
   - 'edit own comments'
   - 'edit own contact_information rdf entity'
   - 'edit own owner rdf entity'
@@ -173,6 +176,7 @@ permissions:
   - 'view paragraph content configurable_listing'
   - 'view paragraph content content_listing'
   - 'view paragraph content github_feed'
+  - 'view paragraph content heading'
   - 'view paragraph content iframe'
   - 'view paragraph content image'
   - 'view paragraph content json_map'
