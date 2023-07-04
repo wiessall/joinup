@@ -20,14 +20,12 @@ dependencies:
     - field.field.node.news.field_topic
     - field.field.node.news.og_audience
     - node.type.news
-    - responsive_image.styles.spotlight
   module:
     - comment
     - field_group
     - file
     - layout_builder
     - link
-    - responsive_image
     - template_suggestion
     - text
     - user
@@ -94,17 +92,6 @@ content:
         template_suggestion: no_wrappers
     weight: 1
     region: content
-  field_news_logo:
-    type: responsive_image
-    label: hidden
-    settings:
-      responsive_image_style: spotlight
-      image_link: content
-    third_party_settings:
-      template_suggestion:
-        template_suggestion: ''
-    weight: 2
-    region: content
   field_news_referenced_solution:
     type: entity_reference_entity_view
     label: above
@@ -163,6 +150,7 @@ content:
 hidden:
   featured: true
   field_keywords: true
+  field_news_logo: true
   field_news_spatial_coverage: true
   field_site_featured: true
   field_state: true

@@ -28,7 +28,6 @@ dependencies:
     - field.field.node.event.field_topic
     - field.field.node.event.og_audience
     - node.type.event
-    - responsive_image.styles.spotlight
   module:
     - comment
     - file
@@ -36,7 +35,6 @@ dependencies:
     - layout_builder
     - link
     - oe_webtools_maps
-    - responsive_image
     - template_suggestion
     - text
     - user
@@ -119,17 +117,6 @@ content:
         template_suggestion: ''
     weight: 12
     region: content
-  field_event_logo:
-    type: responsive_image
-    label: hidden
-    settings:
-      responsive_image_style: spotlight
-      image_link: content
-    third_party_settings:
-      template_suggestion:
-        template_suggestion: ''
-    weight: 3
-    region: content
   field_event_online_location:
     type: link
     label: hidden
@@ -202,6 +189,7 @@ content:
     region: content
 hidden:
   featured: true
+  field_event_logo: true
   field_event_spatial_coverage: true
   field_keywords: true
   field_organisation: true

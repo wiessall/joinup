@@ -46,11 +46,9 @@ dependencies:
     - field.field.rdf_entity.solution.field_status
     - field.field.rdf_entity.solution.field_topic
     - rdf_entity.rdfentity.solution
-    - responsive_image.styles.spotlight
   module:
     - field_group
     - layout_builder
-    - responsive_image
     - search_api_field
     - smart_trim
     - template_suggestion
@@ -111,17 +109,6 @@ content:
         template_suggestion: p_wrapper
     weight: 37
     region: content
-  field_is_logo:
-    type: responsive_image
-    label: hidden
-    settings:
-      responsive_image_style: spotlight
-      image_link: content
-    third_party_settings:
-      template_suggestion:
-        template_suggestion: ''
-    weight: 0
-    region: content
   field_is_shared_in:
     type: entity_reference_entity_view
     label: above
@@ -175,6 +162,7 @@ hidden:
   field_is_issue_tracker: true
   field_is_landing_page: true
   field_is_language: true
+  field_is_logo: true
   field_is_metrics_page: true
   field_is_moderation: true
   field_is_owner: true
