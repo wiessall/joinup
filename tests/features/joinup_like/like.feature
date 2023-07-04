@@ -39,7 +39,7 @@ Feature: Like/unlike feature.
     Then a modal should open
     And I should see the text "You are not logged in" in the "Modal title"
     And I should see the heading "Login or register to like this content" in the "Modal content"
-    And I should see the text "Like this content will help other people find reliable information about what they search !" in the "Modal content"
+    And I should see the text "Like this content will help other people find reliable information about what they search!" in the "Modal content"
     When I click "Log in" in the "Modal content"
     Then I should see the heading "Sign in to continue"
 
