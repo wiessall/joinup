@@ -52,7 +52,7 @@ function joinup_community_content_node_view(array &$build, EntityInterface $enti
   if ($display->getComponent('read_more')) {
     $text = [
       '#type' => 'markup',
-      '#markup' => t('Read more') . '<span class="visually hidden"> ' . t('about') . ' ' . $entity->label() . '</span>',
+      '#markup' => t('Read more') . '<span class="visually-hidden"> ' . t('about') . ' ' . $entity->label() . '</span>',
     ];
     $build['read_more'] = $entity->toLink($text, 'canonical', [
       'attributes' => [
