@@ -33,6 +33,24 @@ Feature:
     And I should see an "h5" element with the text "H5 heading paragraph" in the "Content" region
 
   @javascript
+  Scenario: User should be able to edit behaviour settings.
+    Given custom_page content:
+      | title                  | collection            | state     |
+      | Behaviour example page | Paragraphs collection | published |
+
+    When I am logged in as a moderator
+    And I go to the edit form of the "Behaviour example page" "custom page"
+    And I click "Choose component"
+    And I click "Heading"
+    And I should see the text "Settings" in the "Modal content" region
+
+    Then I am logged in as a facilitator of the "Paragraphs collection" collection
+    And I go to the edit form of the "Behaviour example page" "custom page"
+    And I click "Choose component"
+    And I click "Heading"
+    And I should see the text "Settings" in the "Modal content" region
+
+  @javascript
   Scenario: Paragraph sections are multivalue and sort-able.
     Given custom_page content:
       | title           | collection            | state     |
