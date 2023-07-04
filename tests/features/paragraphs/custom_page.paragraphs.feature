@@ -135,6 +135,13 @@ Feature:
     And I should see the link "Testimony"
     And I should see the link "Text"
     And I should see the link "Video"
+    But I should not see the link "Row"
+    And I should not see the link "1 column layout"
+    And I should not see the link "2 column layout"
+    And I should not see the link "2 column with featured media on the left"
+    And I should not see the link "2 column with featured media on the right"
+    And I should not see the link "3 column layout"
+    And I should not see the link "Configurable listing"
 
     When I click "Map"
     # As the Webtools Map a webservice, we only test a fake JSON.
