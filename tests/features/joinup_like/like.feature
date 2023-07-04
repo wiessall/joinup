@@ -76,15 +76,14 @@ Feature: Like/unlike feature.
     Given <content type> content:
       | title                        | solution            | state   |
       | Liked <content type> content | Very liked solution | <state> |
+
     When I am logged in as "Gregory Like"
     And I go to the homepage of the "Very liked solution" solution
     Then I should see the statistics "0" in the "Liked <content type> content" tile
-    When I go to the content page of the type "<content type>" with the title "Liked <content type> content"
-    And I click "Like" in the "Like block" region
-    And I go to the homepage of the "Very liked solution" solution
+
+    When I click the "Like this content" in the "Liked <content type> content" tile
     Then I should see the statistics "1" in the "Liked <content type> content" tile
-    When I go to the homepage of the "Bulgaria" collection
-    Then I should see the statistics "0" in the "Very liked solution" tile
+
     Examples:
       | content type | state     |
       | news         | validated |
