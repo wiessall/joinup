@@ -48,8 +48,8 @@ dependencies:
     - image.style.logo
     - rdf_entity.rdfentity.solution
   module:
-    - image
     - joinup_core
+    - svg_image
     - template_suggestion
     - user
 id: rdf_entity.solution.group_header
@@ -75,9 +75,13 @@ content:
       image_style: logo
       image_loading:
         attribute: eager
+      svg_attributes:
+        width: null
+        height: null
+      svg_render_as_image: true
     third_party_settings:
       template_suggestion:
-        template_suggestion: ''
+        template_suggestion: bare
     weight: 0
     region: content
   field_topic:
