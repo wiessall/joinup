@@ -29,15 +29,17 @@ class RdfCountLink extends CountLink {
   /**
    * {@inheritdoc}
    */
-  public function getUrl($action, FlagInterface $flag, EntityInterface $entity): Url {
+  public function getUrl($action, FlagInterface $flag, EntityInterface $entity, $view_mode = 'default'): Url {
     return match ($action) {
       'flag' => Url::fromRoute('joinup_like.rdf.action_link_flag', [
         'flag' => $flag->id(),
         'entity_id' => UriEncoder::encodeUrl($entity->id()),
+        'view_mode' => $view_mode,
       ]),
       default => Url::fromRoute('joinup_like.rdf.action_link_unflag', [
         'flag' => $flag->id(),
         'entity_id' => UriEncoder::encodeUrl($entity->id()),
+        'view_mode' => $view_mode,
       ]),
     };
   }

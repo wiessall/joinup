@@ -83,6 +83,11 @@ content:
         template_suggestion: no_wrappers
     weight: 1
     region: content
+  flag_like_node:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 10
+    region: content
 hidden:
   featured: true
   field_comments: true

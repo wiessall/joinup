@@ -397,6 +397,7 @@ hidden:
   field_site_featured: true
   field_spatial_coverage: true
   field_topic: true
+  flag_like_rdf_entity: true
   label: true
   langcode: true
   og_group: true

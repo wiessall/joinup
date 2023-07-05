@@ -46,7 +46,7 @@ register_admin_created:
 
     The Joinup Support Team
 register_no_approval_required:
-  subject: 'You''re one step away to create your Joinup account. Please confirm your email address before you can sign in to Joinup.'
+  subject: "You're one step away to create your Joinup account. Please confirm your email address before you can sign in to Joinup."
   body: |-
     Dear [user:field_user_first_name],
 

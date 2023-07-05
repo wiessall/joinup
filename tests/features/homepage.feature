@@ -120,6 +120,18 @@ Feature: Homepage
       | news     |
       | event    |
 
+  Scenario: An event in the highlighted content on the homepage should display the start date.
+    Given event content:
+      | title            | start date       | end date         | state     | body          |
+      | Light and height | 2021-06-04T20:00 | 2021-06-05T22:00 | validated | High and lite |
+    And the "Highlighted content" content listing contains:
+      | type    | label            |
+      | content | Light and height |
+
+    When I am on the homepage
+    Then I should see "Light and height" as the Highlighted content
+    And I should see the text "04-06-2021" in the "Light and height" tile
+
   Scenario: An event can be highlighted on the homepage
     Given event content:
       | title                     | start date       | end date         | state     |
@@ -165,7 +177,7 @@ Feature: Homepage
     And I should see the following facet summary "Event"
     And I should see the "Florentine steak festival" tile
 
-  @version
+  @joinupVersion
   Scenario Outline: The current version of the Joinup platform is shown in the footer.
     Given the Joinup version is set to "<version>"
     When I am on the homepage
@@ -318,6 +330,23 @@ Feature: Homepage
     And I click "See more events"
     Then I should be on the advanced search page
     And I should see the following facet summary "Events"
+
+    # Check archived items.
+    Given collections:
+      | title           | state    | description                                    | creation date    |
+      | Clash of lords  | archived | Supports <a href="#">health-related</a> fields | 2022-12-18 08:00 |
+      | Clash of ruins  | archived | Lorem Ipsum is simply dummy                    | 2022-11-18 08:00 |
+    And news content:
+      | title                       | headline                    | collection      | topic                                      | state            | created              | changed              | published_at        | body                                                                                                                                                                                                                                                                 |
+      | World biodiversity adapt    | World habitats              | Clash of jonnys | Finance in EU, Supplier exchange, E-health | archived        | 2022-04-30T19:09:00Z | 2022-04-30T19:09:00Z | 2022-04-30T19:09:00Z | Here we combine global <a href="#">maps</a> of human populations and land use over the past 12000 y with current biodiversity data to show that nearly three quarters of nature has long been shaped by histories of human habitation and use by indigenous peoples. |
+      | Environmental laws          | Best practices              | Nature area     | Employment and Support Allowance           | archived        | 2022-01-27T16:12:00Z | 2022-01-27T16:12:00Z | 2022-01-27T16:12:00Z | With rare exceptions current biodiversity losses are caused not by human conversion or degradation of untouched ecosystems but rather by the <em>appropriation colonization and intensification of use in lands inhabited and used by prior societies</em>.          |
+
+    When I am on the homepage
+    Then I should not see the following lines of text:
+      | Clash of lords            |
+      | Clash of ruins            |
+      | World biodiversity adapt  |
+      | Environmental laws        |
 
   Scenario: A favicon is shown in the browser tab
     Given I am on the homepage
