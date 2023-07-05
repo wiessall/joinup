@@ -1315,7 +1315,7 @@ class JoinupContext extends RawDrupalContext {
    *
    * @Then I click the :link in the :heading tile
    */
-  public function iClickLinkInTile($link, $heading): void {
+  public function iClickLinkInTile(string $link, string $heading): void {
     $element = $this->getTileByHeading($heading);
     $this->scrollElementIntoView($element);
 
