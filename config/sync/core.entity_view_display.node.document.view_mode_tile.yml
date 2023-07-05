@@ -20,8 +20,9 @@ dependencies:
     - field.field.node.document.field_type
     - field.field.node.document.og_audience
     - node.type.document
+    - responsive_image.styles.tile
   module:
-    - svg_image
+    - responsive_image
     - template_suggestion
     - text
     - user
@@ -42,18 +43,14 @@ content:
     weight: 1
     region: content
   field_document_logo:
-    type: image
+    type: responsive_image
     label: hidden
     settings:
+      responsive_image_style: tile
       image_link: ''
-      image_style: ''
-      image_loading:
-        attribute: lazy
-      svg_attributes:
-        width: null
-        height: null
-      svg_render_as_image: true
-    third_party_settings: {  }
+    third_party_settings:
+      template_suggestion:
+        template_suggestion: ''
     weight: 0
     region: content
 hidden:
