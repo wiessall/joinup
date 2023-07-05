@@ -21,6 +21,7 @@ dependencies:
     - field.field.node.document.field_type
     - field.field.node.document.og_audience
     - node.type.document
+    - responsive_image.styles.teaser
   module:
     - comment
     - datetime
@@ -29,6 +30,7 @@ dependencies:
     - layout_builder
     - link
     - options
+    - responsive_image
     - template_suggestion
     - text
     - user
@@ -94,6 +96,17 @@ content:
       pager_id: 0
     third_party_settings: {  }
     weight: 7
+    region: content
+  field_document_logo:
+    type: responsive_image
+    label: hidden
+    settings:
+      responsive_image_style: teaser
+      image_link: ''
+    third_party_settings:
+      template_suggestion:
+        template_suggestion: bare
+    weight: 9
     region: content
   field_document_publication_date:
     type: datetime_default
@@ -177,7 +190,6 @@ content:
     region: content
 hidden:
   featured: true
-  field_document_logo: true
   field_document_spatial_coverage: true
   field_keywords: true
   field_site_featured: true
