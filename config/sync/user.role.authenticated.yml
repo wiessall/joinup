@@ -184,6 +184,7 @@ permissions:
   - 'view paragraph content row'
   - 'view paragraph content simple_paragraph'
   - 'view paragraph content testimony'
+  - 'view paragraph content text'
   - 'view paragraph content video'
   - 'view rdf entity'
   - 'view topic meta-entity'
