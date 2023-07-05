@@ -95,6 +95,7 @@ function ventuno_preprocess_form(array &$variables): void {
   switch ($form_id) {
     // Theme the form displayed in a modal when adding media through CKE5.
     case 'views-exposed-form-media-library-widget':
+    case 'views-exposed-form-media-library-widget-table':
       $variables['attributes']['class'][] = 'my-0 row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-xl-4 g-3 align-items-end';
       break;
   }
