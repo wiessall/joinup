@@ -21,6 +21,7 @@ dependencies:
     - file
     - link
     - options
+    - svg_image
     - template_suggestion
     - text
     - user
@@ -46,7 +47,7 @@ content:
     third_party_settings:
       template_suggestion:
         template_suggestion: with_label
-    weight: 9
+    weight: 10
     region: content
   field_discussion_logo:
     type: image
@@ -56,10 +57,14 @@ content:
       image_style: logo
       image_loading:
         attribute: lazy
+      svg_attributes:
+        width: null
+        height: null
+      svg_render_as_image: true
     third_party_settings:
       template_suggestion:
         template_suggestion: ''
-    weight: 11
+    weight: 12
     region: content
   field_replies:
     type: comment_default
@@ -101,7 +106,7 @@ content:
   flag_subscribe_discussions:
     settings: {  }
     third_party_settings: {  }
-    weight: 10
+    weight: 11
     region: content
   invite_link:
     settings: {  }
@@ -138,12 +143,13 @@ content:
   share_link:
     settings: {  }
     third_party_settings: {  }
-    weight: 8
+    weight: 9
     region: content
 hidden:
   featured: true
   field_keywords: true
   field_site_featured: true
+  flag_like_node: true
   langcode: true
   latest_update_time: true
   pinned_in: true
