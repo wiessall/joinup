@@ -22,8 +22,9 @@ weight: 0
 flag_type: 'entity:rdf_entity'
 link_type: count_link_rdf
 flagTypeConfig:
-  show_in_links: {  }
-  show_as_field: false
+  show_in_links:
+    view_mode_tile: view_mode_tile
+  show_as_field: true
   show_on_form: false
   show_contextual_link: false
   extra_permissions:

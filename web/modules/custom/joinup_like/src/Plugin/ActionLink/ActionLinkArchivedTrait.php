@@ -21,11 +21,13 @@ trait ActionLinkArchivedTrait {
    *   The flag entity.
    * @param \Drupal\Core\Entity\EntityInterface $entity
    *   The flaggable entity.
+   * @param string $view_mode
+   *   The flaggable entity view mode.
    *
    * @return array
    *   The render array.
    */
-  public function getAsFlagLink(FlagInterface $flag, EntityInterface $entity): array {
+  public function getAsFlagLink(FlagInterface $flag, EntityInterface $entity, $view_mode): array {
     assert(is_subclass_of($this, ActionLinkTypePluginInterface::class), __TRAIT__ . ' is intended to be used in action link plugin.');
 
     if ($entity instanceof ArchivableEntityInterface && $entity->isArchived()) {
@@ -33,13 +35,14 @@ trait ActionLinkArchivedTrait {
         '#theme' => 'flag_count_archived',
         '#flag' => $flag,
         '#flaggable' => $entity,
+        '#view_mode' => $view_mode,
         '#cache' => [
           'tags' => $entity->getCacheTags(),
         ],
       ];
     }
 
-    return parent::getAsFlagLink($flag, $entity);
+    return parent::getAsFlagLink($flag, $entity, $view_mode);
   }
 
 }

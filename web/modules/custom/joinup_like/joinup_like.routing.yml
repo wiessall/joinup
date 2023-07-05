@@ -7,7 +7,7 @@ joinup_like.anonymous_dialog:
     _access: 'TRUE'
 
 joinup_like.rdf.action_link_flag:
-  path: '/joinup-like/flag/{flag}/{entity_id}'
+  path: '/joinup-like/flag/{flag}/{entity_id}/{view_mode}'
   defaults:
     _controller: '\Drupal\flag\Controller\ActionLinkController::flag'
   methods: [ POST ]
@@ -21,7 +21,7 @@ joinup_like.rdf.action_link_flag:
         type: decode_rdf_url
 
 joinup_like.rdf.action_link_unflag:
-  path: '/joinup-like/unflag/{flag}/{entity_id}'
+  path: '/joinup-like/unflag/{flag}/{entity_id}/{view_mode}'
   defaults:
     _controller: '\Drupal\flag\Controller\ActionLinkController::unflag'
   methods: [ POST ]
