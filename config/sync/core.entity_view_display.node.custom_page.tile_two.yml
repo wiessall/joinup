@@ -10,14 +10,15 @@ dependencies:
     - field.field.node.custom_page.field_state
     - field.field.node.custom_page.og_audience
     - node.type.custom_page
+    - responsive_image.styles.teaser
   module:
     - entity_reference_revisions
     - field_delimiter
     - field_formatter_range
     - field_group
-    - file
     - layout_builder
     - link
+    - responsive_image
     - template_suggestion
     - user
 third_party_settings:
@@ -27,8 +28,8 @@ third_party_settings:
         - field_attachment
       label: Attachments
       parent_name: ''
-      region: content
-      weight: 3
+      region: hidden
+      weight: 4
       format_type: html_element
       format_settings:
         classes: ''
@@ -49,15 +50,16 @@ targetEntityType: node
 bundle: custom_page
 mode: tile_two
 content:
-  field_attachment:
-    type: file_default
+  field_custom_page_logo:
+    type: responsive_image
     label: hidden
     settings:
-      use_description_as_link_text: true
+      responsive_image_style: teaser
+      image_link: ''
     third_party_settings:
       template_suggestion:
-        template_suggestion: fieldset__show_more
-    weight: 51
+        template_suggestion: bare
+    weight: 2
     region: content
   field_paragraphs_body:
     type: entity_reference_revisions_entity_view
@@ -74,12 +76,12 @@ content:
         offset: 0
       template_suggestion:
         template_suggestion: ''
-    weight: 2
+    weight: 1
     region: content
   links:
     settings: {  }
     third_party_settings: {  }
-    weight: 1
+    weight: 0
     region: content
   report:
     type: link
@@ -91,10 +93,10 @@ content:
       rel: ''
       target: ''
     third_party_settings: {  }
-    weight: 4
+    weight: 3
     region: content
 hidden:
-  field_custom_page_logo: true
+  field_attachment: true
   field_state: true
   langcode: true
   og_audience: true
