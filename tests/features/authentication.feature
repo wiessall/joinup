@@ -52,6 +52,7 @@ Feature: User authentication
       | media/add/collection_logo                           |
       | media/add/event_logo                                |
       | media/add/file                                     |
+      | media/add/image                                     |
       | media/add/news_logo                                 |
       | media/add/solution_banner                           |
       | media/add/solution_logo                             |
@@ -138,6 +139,7 @@ Feature: User authentication
       | media/add/collection_logo                           |
       | media/add/event_logo                                |
       | media/add/file                                     |
+      | media/add/image                                     |
       | media/add/news_logo                                 |
       | media/add/solution_banner                           |
       | media/add/solution_logo                             |
@@ -204,6 +206,7 @@ Feature: User authentication
       | media/add/collection_logo                   |
       | media/add/event_logo                        |
       | media/add/file                             |
+      | media/add/image                             |
       | media/add/news_logo                         |
       | media/add/solution_banner                   |
       | media/add/solution_logo                     |

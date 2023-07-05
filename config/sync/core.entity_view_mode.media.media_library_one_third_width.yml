@@ -1,0 +1,10 @@
+uuid: 8bf4668e-fc81-4dc4-b253-d3b25bc89304
+langcode: en
+status: true
+dependencies:
+  module:
+    - media
+id: media.media_library_one_third_width
+label: 'One third width'
+targetEntityType: media
+cache: true

@@ -26,10 +26,12 @@ trait EntityReferenceTrait {
    *   Thrown when no entity with the given label has been found.
    */
   public function convertEntityReferencesValues($entity_type, $entity_bundle, array $values) {
+    $bundle_key = \Drupal::entityTypeManager()->getDefinition($entity_type)->getKey('bundle');
     /** @var \Drupal\Core\Field\FieldDefinitionInterface[] $definitions */
     $definitions = \Drupal::service('entity_field.manager')->getFieldDefinitions($entity_type, $entity_bundle);
+    $types = ['entity_reference', 'og_standard_reference'];
     foreach ($definitions as $name => $definition) {
-      if ($definition->getType() != 'entity_reference' || !array_key_exists($name, $values) || empty($values[$name])) {
+      if (!in_array($definition->getType(), $types, TRUE) || !array_key_exists($name, $values) || empty($values[$name]) || $name === $bundle_key) {
         continue;
       }
 
