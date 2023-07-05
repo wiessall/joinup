@@ -81,7 +81,7 @@ content:
       svg_render_as_image: true
     third_party_settings:
       template_suggestion:
-        template_suggestion: ''
+        template_suggestion: bare
     weight: 0
     region: content
   field_topic:

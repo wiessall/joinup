@@ -4,6 +4,11 @@ components:
   css:
     component:
       assets/css/components.min.css: { minified: true }
+  dependencies:
+    - iop/components.js
+
+components.js:
+  header: true
   js:
     assets/js/oe-bcl-joinup.bundle.min.js: { minified: true, attributes: { defer: true } }
   dependencies:
@@ -72,6 +77,11 @@ paragraph--carousel:
     theme:
       assets/css/paragraph--carousel.min.css: { minified: true }
       assets/css/glide.core.min.css: { minified: true }
+  dependencies:
+    - iop/paragraph--carousel.js
+
+paragraph--carousel.js:
+  header: true
   js:
     assets/js/glide.min.js: { minified: true, attributes: { defer: true }  }
 
