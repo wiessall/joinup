@@ -87,6 +87,21 @@ function ventuno_theme_suggestions_form_alter(array &$suggestions, array $variab
 }
 
 /**
+ * Implements hook_preprocess_form().
+ */
+function ventuno_preprocess_form(array &$variables): void {
+  $form_id = $variables['element']['#id'];
+
+  switch ($form_id) {
+    // Theme the form displayed in a modal when adding media through CKE5.
+    case 'views-exposed-form-media-library-widget':
+    case 'views-exposed-form-media-library-widget-table':
+      $variables['attributes']['class'][] = 'my-0 row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-xl-4 g-3 align-items-end';
+      break;
+  }
+}
+
+/**
  * Implements hook_preprocess_form_element().
  */
 function ventuno_preprocess_form_element(array &$variables): void {
