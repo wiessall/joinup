@@ -206,6 +206,11 @@ content:
         template_suggestion: p_wrapper
     weight: 1
     region: content
+  flag_like_rdf_entity:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 10
+    region: content
   label:
     type: string
     label: hidden

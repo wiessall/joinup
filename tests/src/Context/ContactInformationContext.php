@@ -354,9 +354,10 @@ class ContactInformationContext extends RawDrupalContext {
    * @AfterScenario
    */
   public function afterScenarioConfirmationCleanup(AfterScenarioScope $scope): void {
-    $query = \Drupal::entityQuery('email_confirmer_confirmation');
-    $query->condition('email', '%example.com', 'LIKE');
-    $ids = $query->execute();
+    $ids = \Drupal::entityQuery('email_confirmer_confirmation')
+      ->accessCheck(FALSE)
+      ->condition('email', '%example.com', 'LIKE')
+      ->execute();
 
     if (empty($ids)) {
       return;

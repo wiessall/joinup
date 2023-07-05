@@ -37,7 +37,7 @@ third_party_settings:
       label: References
       parent_name: ''
       region: hidden
-      weight: 19
+      weight: 24
       format_type: html_element
       format_settings:
         classes: ''
@@ -105,6 +105,7 @@ hidden:
   field_shared_in: true
   field_site_featured: true
   field_state: true
+  flag_like_node: true
   langcode: true
   links: true
   og_audience: true

@@ -1,0 +1,17 @@
+@import "../partials/core";
+
+.abstract {
+  .read-more {
+    margin-top: $spacer;
+    color: darken($brand, 15); // Override button properties
+    padding: 0; // Override button properties
+    background-color: transparent; // Override button properties
+    border: none; // Override button properties
+    box-shadow: none; // Override button properties
+    border-radius: 0; // Override button properties
+    &:hover {
+      box-shadow: none; // Override button properties
+      background-color: transparent; // Override button properties
+    }
+  }
+}
