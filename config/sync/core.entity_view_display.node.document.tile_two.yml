@@ -21,7 +21,7 @@ dependencies:
     - field.field.node.document.field_type
     - field.field.node.document.og_audience
     - node.type.document
-    - responsive_image.styles.spotlight
+    - responsive_image.styles.teaser
   module:
     - comment
     - datetime
@@ -101,11 +101,11 @@ content:
     type: responsive_image
     label: hidden
     settings:
-      responsive_image_style: spotlight
-      image_link: content
+      responsive_image_style: teaser
+      image_link: ''
     third_party_settings:
       template_suggestion:
-        template_suggestion: ''
+        template_suggestion: bare
     weight: 9
     region: content
   field_document_publication_date:
