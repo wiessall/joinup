@@ -13,3 +13,9 @@ effects:
       width: 624
       height: 352
       upscale: true
+  cc19406c-7635-4318-8217-1f65e8ba74e5:
+    uuid: cc19406c-7635-4318-8217-1f65e8ba74e5
+    id: image_convert
+    weight: 2
+    data:
+      extension: webp
