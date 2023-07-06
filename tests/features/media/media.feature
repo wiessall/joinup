@@ -1,7 +1,7 @@
 @api
 Feature: Administer media.
 
-  @uploadFiles:banner.jpg
+  @uploadFiles:banner.jpg @javascript
   Scenario: Moderators are able to administer media.
 
     Given users:
@@ -59,7 +59,9 @@ Feature: Administer media.
       | Other File            | File              | Published   | Venus | joe    |
       | The Video             | Video             | Unpublished | Mars  | joe    |
 
-    When I select "Venus" from "Group"
+    When I type "Venus" in the "group" autocomplete field
+    Then I wait until the page contains the text "Venus"
+    And I pick "Venus" from the autocomplete suggestions
     And I press "Filter"
     Then the "media admin" table should contain the following columns:
       | Media name  | Type  | Status    | Group | Author |
@@ -117,3 +119,4 @@ Feature: Administer media.
       | The File              | File              | Published   | Mars  | joe    |
       | Other File            | File              | Published   | Venus | joe    |
       | The Video             | Video             | Unpublished | Mars  | joe    |
+
