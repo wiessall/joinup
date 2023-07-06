@@ -42,7 +42,7 @@ class SafeUnflag extends FormEntryTypeBase {
   /**
    * {@inheritdoc}
    */
-  public function getAsFlagLink(FlagInterface $flag, EntityInterface $entity) {
+  public function getAsFlagLink(FlagInterface $flag, EntityInterface $entity, $view_mode) {
     $action = $this->getAction($flag, $entity);
 
     // Store the original form behaviour configuration. Since we need to render
@@ -52,7 +52,7 @@ class SafeUnflag extends FormEntryTypeBase {
     if ($action === 'flag') {
       $this->configuration['form_behavior'] = 'default';
     }
-    $render = parent::getAsFlagLink($flag, $entity);
+    $render = parent::getAsFlagLink($flag, $entity, $view_mode);
     $this->configuration['form_behavior'] = $origin_form_behaviour;
 
     return $render;

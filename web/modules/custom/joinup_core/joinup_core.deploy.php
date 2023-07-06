@@ -38,9 +38,18 @@ function joinup_core_deploy_109401(): void {
 }
 
 /**
+ * Fix the forward revision.
+ */
+function joinup_core_deploy_109402(): void {
+  $revision = \Drupal::entityTypeManager()->getStorage('node')->loadRevision(60588);
+  $revision->isDefaultRevision(TRUE);
+  $revision->save();
+}
+
+/**
  * Migrate Video content into new Media field.
  */
-function joinup_core_deploy_109402(array &$sandbox): string {
+function joinup_core_deploy_109403(array &$sandbox): string {
   $entity_type_manager = \Drupal::entityTypeManager();
   $node_storage = $entity_type_manager->getStorage('node');
 
@@ -70,7 +79,7 @@ function joinup_core_deploy_109402(array &$sandbox): string {
 /**
  * Migrate videos and images embed markup into media.
  */
-function joinup_core_deploy_109403(array &$sandbox): string {
+function joinup_core_deploy_109404(array &$sandbox): string {
   $sparql = \Drupal::getContainer()->get('sparql.endpoint');
   $sparql_field_handler = \Drupal::getContainer()->get('sparql.field_handler');
   $sparql_graph_handler = \Drupal::getContainer()->get('sparql.graph_handler');
