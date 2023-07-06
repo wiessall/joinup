@@ -113,6 +113,11 @@ content:
     third_party_settings: {  }
     weight: 0
     region: content
+  flag_like_node:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 10
+    region: content
 hidden:
   featured: true
   field_attachment: true
