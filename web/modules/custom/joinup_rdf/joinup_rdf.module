@@ -87,6 +87,16 @@ function joinup_rdf_entity_base_field_info(EntityTypeInterface $entity_type) {
 }
 
 /**
+ * Implements hook_entity_base_field_info_alter().
+ */
+function joinup_rdf_entity_base_field_info_alter(array &$fields, EntityTypeInterface $entity_type) {
+  if ($entity_type->id() === 'rdf_entity' &&
+    (isset($fields['id']) && $fields['id'] instanceof BaseFieldDefinition)) {
+    $fields['id']->setSetting('max_length', 697);
+  }
+}
+
+/**
  * Implements hook_ENTITY_TYPE_storage_load().
  *
  * Fill $term->extension and $term->mime_type fields from 'file_type' vocabulary
