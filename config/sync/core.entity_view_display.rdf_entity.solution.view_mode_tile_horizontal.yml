@@ -132,6 +132,7 @@ hidden:
   field_is_issue_tracker: true
   field_is_landing_page: true
   field_is_language: true
+  field_is_logo: true
   field_is_metrics_page: true
   field_is_moderation: true
   field_is_owner: true
@@ -155,6 +156,8 @@ hidden:
   field_spatial_coverage: true
   field_status: true
   field_topic: true
+  flag_like_rdf_entity: true
+  label: true
   langcode: true
   og_group: true
   pinned_in: true

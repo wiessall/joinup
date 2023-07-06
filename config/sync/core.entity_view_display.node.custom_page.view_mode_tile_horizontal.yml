@@ -65,11 +65,12 @@ content:
       view_mode: default
       link: ''
     third_party_settings: {  }
-    weight: 1
+    weight: 0
     region: content
 hidden:
   field_attachment: true
   field_state: true
+  flag_like_node: true
   langcode: true
   links: true
   og_audience: true

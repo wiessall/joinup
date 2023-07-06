@@ -81,6 +81,10 @@ content:
       template_suggestion:
         template_suggestion: bare
     weight: 0
+  flag_like_rdf_entity:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 10
     region: content
 hidden:
   changed: true
