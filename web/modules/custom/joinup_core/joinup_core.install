@@ -97,7 +97,7 @@ function joinup_core_requirements($phase): array {
 /**
  * Update length and set back primary key in search_api_item.
  */
-function joinup_core_update_109500() {
+function joinup_core_update_109400() {
   $schema = Database::getConnection()->schema();
 
   $schema->changeField('search_api_item', 'item_id', 'item_id', [
