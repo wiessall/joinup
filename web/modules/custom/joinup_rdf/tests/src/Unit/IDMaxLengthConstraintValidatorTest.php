@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace Drupal\Tests\joinup_rdf\Unit;
 
 use Drupal\Core\Entity\EntityInterface;
+use Drupal\Tests\UnitTestCase;
 use Drupal\joinup_rdf\Plugin\Validation\Constraint\IDMaxLengthConstraint;
 use Drupal\joinup_rdf\Plugin\Validation\Constraint\IDMaxLengthConstraintValidator;
-use Drupal\Tests\UnitTestCase;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 /**
