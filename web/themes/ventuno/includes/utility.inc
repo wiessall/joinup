@@ -108,6 +108,12 @@ function _ventuno_preprocess_tile(array &$variables, string $entity_type_id): vo
     ]);
   }
 
+  // Like flag. Meant to be the first "extra-data" displayed in tile's footer.
+  $like = $variables['content']['flag_like_node'] ?? $variables['content']['flag_like_rdf_entity'] ?? NULL;
+  if ($like !== NULL) {
+    $variables['extra_data'][] = ['label' => $like];
+  }
+
   // Iterate over entity bundles for case-specific data.
   switch ($entity->bundle()) {
     case 'discussion':
@@ -241,13 +247,6 @@ function _ventuno_preprocess_tile(array &$variables, string $entity_type_id): vo
       'label' => t('Archived'),
     ];
   }
-
-  // Like flag.
-  $like = $variables['content']['flag_like_node'] ?? $variables['content']['flag_like_rdf_entity'] ?? NULL;
-  if ($like !== NULL) {
-    $variables['extra_data'][] = ['label' => $like];
-  }
-
 }
 
 /**
