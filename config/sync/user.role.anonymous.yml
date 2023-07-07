@@ -64,6 +64,7 @@ permissions:
   - 'view paragraph content image'
   - 'view paragraph content json_map'
   - 'view paragraph content layout'
+  - 'view paragraph content quote'
   - 'view paragraph content row'
   - 'view paragraph content simple_paragraph'
   - 'view paragraph content testimony'
