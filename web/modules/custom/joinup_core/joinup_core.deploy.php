@@ -30,3 +30,12 @@ function joinup_core_deploy_109400(): string {
 function joinup_core_deploy_109401(): void {
   \Drupal::queue('cached_computed_field_expired_fields')->deleteQueue();
 }
+
+/**
+ * Fix the forward revision.
+ */
+function joinup_core_deploy_109402(): void {
+  $revision = \Drupal::entityTypeManager()->getStorage('node')->loadRevision(60588);
+  $revision->isDefaultRevision(TRUE);
+  $revision->save();
+}

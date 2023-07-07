@@ -26,8 +26,8 @@ dependencies:
     - field_formatter_range
     - field_group
     - file
-    - image
     - link
+    - svg_image
     - template_suggestion
     - text
     - user
@@ -105,6 +105,10 @@ content:
       image_style: logo
       image_loading:
         attribute: lazy
+      svg_attributes:
+        width: null
+        height: null
+      svg_render_as_image: true
     third_party_settings:
       template_suggestion:
         template_suggestion: ''
@@ -172,6 +176,7 @@ hidden:
   field_site_featured: true
   field_state: true
   field_topic: true
+  flag_like_node: true
   langcode: true
   links: true
   og_audience: true
