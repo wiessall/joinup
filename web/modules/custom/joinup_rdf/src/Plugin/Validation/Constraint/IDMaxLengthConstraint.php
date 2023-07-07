@@ -32,4 +32,3 @@ class IDMaxLengthConstraint extends Constraint {
   public string $errorMessage = 'Entity id "%id" can not be longer than %max characters';
 
 }
-
