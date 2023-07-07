@@ -20,7 +20,7 @@ dependencies:
     - field.field.node.news.field_topic
     - field.field.node.news.og_audience
     - node.type.news
-    - responsive_image.styles.spotlight
+    - responsive_image.styles.teaser
   module:
     - comment
     - field_group
@@ -39,7 +39,7 @@ third_party_settings:
       label: References
       parent_name: ''
       region: content
-      weight: 3
+      weight: 2
       format_type: html_element
       format_settings:
         classes: ''
@@ -73,7 +73,7 @@ content:
     third_party_settings:
       template_suggestion:
         template_suggestion: with_label
-    weight: 6
+    weight: 5
     region: content
   field_comments:
     type: comment_default
@@ -82,7 +82,7 @@ content:
       view_mode: default
       pager_id: 0
     third_party_settings: {  }
-    weight: 7
+    weight: 6
     region: content
   field_news_headline:
     type: string
@@ -96,14 +96,14 @@ content:
     region: content
   field_news_logo:
     type: responsive_image
-    label: hidden
+    label: above
     settings:
-      responsive_image_style: spotlight
-      image_link: content
+      responsive_image_style: teaser
+      image_link: ''
     third_party_settings:
       template_suggestion:
-        template_suggestion: ''
-    weight: 2
+        template_suggestion: bare
+    weight: 9
     region: content
   field_news_referenced_solution:
     type: entity_reference_entity_view
@@ -114,7 +114,7 @@ content:
     third_party_settings:
       template_suggestion:
         template_suggestion: entity_reference__listing_tile
-    weight: 8
+    weight: 7
     region: content
   field_news_source_url:
     type: link
@@ -139,7 +139,7 @@ content:
     third_party_settings:
       template_suggestion:
         template_suggestion: entity_reference__listing_tile
-    weight: 9
+    weight: 8
     region: content
   report:
     type: link
@@ -153,12 +153,12 @@ content:
     third_party_settings:
       template_suggestion:
         template_suggestion: no_wrappers
-    weight: 5
+    weight: 4
     region: content
   share_link:
     settings: {  }
     third_party_settings: {  }
-    weight: 4
+    weight: 3
     region: content
 hidden:
   featured: true
@@ -167,6 +167,7 @@ hidden:
   field_site_featured: true
   field_state: true
   field_topic: true
+  flag_like_node: true
   langcode: true
   links: true
   og_audience: true

@@ -19,12 +19,12 @@ dependencies:
     - field.field.node.event.field_location
     - field.field.node.event.field_organisation
     - field.field.node.event.field_organisation_type
-    - field.field.node.event.field_topic
     - field.field.node.event.field_scope
     - field.field.node.event.field_shared_in
     - field.field.node.event.field_short_title
     - field.field.node.event.field_site_featured
     - field.field.node.event.field_state
+    - field.field.node.event.field_topic
     - field.field.node.event.og_audience
     - node.type.event
   module:
@@ -55,14 +55,14 @@ content:
     third_party_settings:
       template_suggestion:
         template_suggestion: ''
-    weight: 2
+    weight: 1
     region: content
   field_state:
     type: list_default
     label: inline
     settings: {  }
     third_party_settings: {  }
-    weight: 1
+    weight: 0
     region: content
 hidden:
   featured: true
@@ -85,6 +85,7 @@ hidden:
   field_short_title: true
   field_site_featured: true
   field_topic: true
+  flag_like_node: true
   langcode: true
   links: true
   og_audience: true

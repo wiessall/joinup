@@ -9,9 +9,12 @@ Feature: Like/unlike feature.
       | Username     | Roles | E-mail           | First name | Family name |
       | Lisa Like    |       | lisa@like.com    | Lisa       | Like        |
       | Gregory Like |       | gregory@like.com | Gregory    | Like        |
+    Given the following collections:
+      | title    | state     |
+      | Bulgaria | validated |
     Given the following solutions:
-      | title               | state     |
-      | Very liked solution | validated |
+      | title               | state     | collection |
+      | Very liked solution | validated | Bulgaria   |
 
   Scenario: User can like/unlike solution
     Given I am logged in as "Gregory Like"
@@ -39,7 +42,7 @@ Feature: Like/unlike feature.
     Then a modal should open
     And I should see the text "You are not logged in" in the "Modal title"
     And I should see the heading "Login or register to like this content" in the "Modal content"
-    And I should see the text "Like this content will help other people find reliable information about what they search !" in the "Modal content"
+    And I should see the text "Like this content will help other people find reliable information about what they search!" in the "Modal content"
     When I click "Log in" in the "Modal content"
     Then I should see the heading "Sign in to continue"
 
@@ -67,3 +70,22 @@ Feature: Like/unlike feature.
       | discussion   | validated |
       | document     | validated |
       | custom_page  | published |
+
+  Scenario Outline: User can see a like button in tiles
+    Given <content type> content:
+      | title                        | solution            | state   |
+      | Liked <content type> content | Very liked solution | <state> |
+
+    When I am logged in as "Gregory Like"
+    And I go to the homepage of the "Very liked solution" solution
+    Then I should see the statistics "0" in the "Liked <content type> content" tile
+
+    When I click the "Like this content" in the "Liked <content type> content" tile
+    Then I should see the statistics "1" in the "Liked <content type> content" tile
+
+    Examples:
+      | content type | state     |
+      | news         | validated |
+      | event        | validated |
+      | document     | validated |
+
