@@ -3,7 +3,7 @@
 .abstract {
   .read-more {
     margin-top: $spacer;
-    color: $brand; // Override button properties
+    color: darken($brand, 15); // Override button properties
     padding: 0; // Override button properties
     background-color: transparent; // Override button properties
     border: none; // Override button properties
