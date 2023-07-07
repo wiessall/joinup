@@ -13,16 +13,15 @@ dependencies:
     - field.field.node.news.field_news_referenced_solution
     - field.field.node.news.field_news_source_url
     - field.field.node.news.field_news_spatial_coverage
-    - field.field.node.news.field_topic
     - field.field.node.news.field_shared_in
     - field.field.node.news.field_site_featured
     - field.field.node.news.field_state
+    - field.field.node.news.field_topic
     - field.field.node.news.og_audience
-    - image.style.digest_image
     - node.type.news
   module:
-    - image
     - smart_trim
+    - svg_image
     - template_suggestion
     - user
 id: node.news.digest_message
@@ -83,6 +82,7 @@ hidden:
   field_site_featured: true
   field_state: true
   field_topic: true
+  flag_like_node: true
   langcode: true
   links: true
   og_audience: true

@@ -105,6 +105,16 @@
       @include get-bootstrap-icon('pin', $white);
     }
   }
+  &__footer {
+    .flag__link {
+      border-radius: $border-radius-pill;
+      padding: $spacer * .25;
+      &:hover {
+        background-color: $secondary;
+        text-decoration: none;
+      }
+    }
+  }
   &--horizontal {
     width: 100%;
     @include media-breakpoint-up(md) {
