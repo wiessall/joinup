@@ -38,14 +38,6 @@ module.exports = {
       },
     },
     {
-      entry: path.resolve(outputFolder, "src/js/responsive-tables.js"),
-      dest: path.resolve(outputFolder, "assets/js/responsive-tables.js"),
-      options: {
-        minify: true,
-        sourceMap: true,
-      },
-    },
-    {
       entry: path.resolve(outputFolder, "src/js/fieldset-show-more.js"),
       dest: path.resolve(outputFolder, "assets/js/fieldset-show-more.js"),
       options: {
