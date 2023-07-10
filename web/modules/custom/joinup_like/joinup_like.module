@@ -29,19 +29,31 @@ function joinup_like_theme(array $existing, string $type, string $theme, string 
  * Implements hook_theme_suggestions_alter().
  */
 function joinup_like_theme_suggestions_flag_count_alter(&$suggestions, array $variables): void {
-  $suggestions[] = 'flag_count__' . $variables['view_mode'];
+  _joinup_like_flag_suggestions_alter($suggestions, $variables, 'flag_count__');
 }
 
 /**
  * Implements hook_theme_suggestions_alter().
  */
 function joinup_like_theme_suggestions_flag_count_archived_alter(&$suggestions, array $variables): void {
-  $suggestions[] = 'flag_count_archived__' . $variables['view_mode'];
+  _joinup_like_flag_suggestions_alter($suggestions, $variables, 'flag_count_archived__');
 }
 
 /**
  * Implements hook_theme_suggestions_alter().
  */
 function joinup_like_theme_suggestions_flag_count_text_alter(&$suggestions, array $variables): void {
-  $suggestions[] = 'flag_count_text__' . $variables['view_mode'];
+  _joinup_like_flag_suggestions_alter($suggestions, $variables, 'flag_count_text__');
+}
+
+/**
+ * Implements hook_theme_suggestions_alter().
+ */
+function _joinup_like_flag_suggestions_alter(&$suggestions, array $variables, string $original_suggestion): void {
+  $tiles_view_modes = ['view_mode_tile', 'view_mode_tile_horizontal', 'highlighted', 'carousel'];
+  if (in_array($variables['view_mode'], $tiles_view_modes)) {
+    $suggestions[] = $original_suggestion . 'mini';
+  } else {
+    $suggestions[] = $original_suggestion . 'button';
+  }
 }
