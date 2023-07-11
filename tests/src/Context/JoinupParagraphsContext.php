@@ -5,6 +5,7 @@ declare(strict_types = 1);
 namespace Drupal\joinup\Context;
 
 use Behat\Gherkin\Node\TableNode;
+use Behat\Mink\Driver\Selenium2Driver;
 use Behat\Mink\Element\TraversableElement;
 use Behat\Mink\Exception\ElementNotFoundException;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
@@ -168,10 +169,10 @@ class JoinupParagraphsContext extends RawDrupalContext {
   }
 
   /**
-   * Clicks the remove button in the given paragraphs item.
+   * Clicks a link in the given paragraphs item.
    *
    * @param string $label
-   *   The button label.
+   *   The link label.
    * @param string $field
    *   The field identifier. One of the keys in the
    *   \JoinupParagraphsSubContext::fieldMapping array.
@@ -180,30 +181,24 @@ class JoinupParagraphsContext extends RawDrupalContext {
    *   readability. If left empty, the button will be searched in the entire
    *   field.
    *
-   * @Given I press :label in the :field field for paragraph :delta
-   * @Given I press :label in the :field paragraphs field
+   * @Given I click :label in the :field field for paragraph :delta
+   * @Given I click :label in the :field paragraphs field
    */
-  public function clickButtonInParagraphsField(string $label, string $field, ?int $delta = NULL): void {
-    if ($delta === NULL) {
-      // This is a field button, not linked to any paragraph item, such as the
-      // button that adds a new paragraph item.
-      $this->getParagraphsElement($field)->findButton($label)->press();
-      return;
-    }
-
-    $paragraph_item = $this->getParagraphsElementItem($field, --$delta);
+  public function clickLinkInParagraphsField(string $label, string $field, ?int $delta = NULL): void {
+    $paragraph_item = ($delta === NULL) ? $this->getParagraphsElement($field) : $this->getParagraphsElementItem($field, --$delta);
     $this->scrollElementIntoView($paragraph_item);
-    if (!$button = $paragraph_item->findButton($label)) {
+    if (!$link = $paragraph_item->findButton($label)) {
       throw new ElementNotFoundException($this->getSession()->getDriver(), 'button', 'label');
     }
 
-    // It might be a button beneath the three dots dropdown.
-    if (!$button->isVisible()) {
-      $dropdown = $paragraph_item->find('css', 'button.paragraphs-dropdown-toggle');
+    // It might be a button beneath the three dots dropdown. Check for the
+    // driver as well, because only Selenium2Driver supports isVisible().
+    if (($this->getSession()->getDriver() instanceof Selenium2Driver) && !$link->isVisible()) {
+      $dropdown = $paragraph_item->find('css', 'button.dropdown-toggle');
       $dropdown->click();
     }
 
-    $button->click();
+    $link->click();
   }
 
   /**
