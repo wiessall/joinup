@@ -9,9 +9,7 @@
     attach(context) {
       const tables = once(
         "responsive-tables",
-        document.querySelectorAll(
-          "#block-ventuno-content div:not(.table-responsive) > table"
-        ),
+        document.querySelectorAll("#block-ventuno-content table"),
         context
       );
       tables.forEach((element) => {
