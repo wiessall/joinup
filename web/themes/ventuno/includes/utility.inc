@@ -148,9 +148,7 @@ function _ventuno_preprocess_tile(array &$variables, string $entity_type_id): vo
       break;
 
     case 'news':
-      if ($route_name === 'view.search.page_1') {
-        $variables['label'] = $variables['elements']['#node']->get('field_news_headline')->value;
-      }
+      $variables['label'] = $variables['elements']['#node']->get('field_news_headline')->value;
       break;
 
     case 'tallinn_report':
