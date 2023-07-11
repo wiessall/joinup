@@ -82,46 +82,37 @@ Feature:
     Then I should not see the link "Simple paragraph"
 
   @javascript
-  Scenario: Privileged users can add paragraphs.
-    Given users:
+  Scenario Outline: Privileged users can add paragraphs.
+    Given the following <group type>:
+      | title | Paragraphs group type |
+      | state | validated             |
+    And users:
       | Username |
       | Zohan    |
-    And the following collection user membership:
-      | collection            | user  |
-      | Paragraphs collection | Zohan |
+      | Gilfoyle |
+    And the following <group type> user membership:
+      | <group type>          | user     | roles       |
+      | Paragraphs group type | Zohan    | author      |
+      | Paragraphs group type | Gilfoyle | facilitator |
     And custom_page content:
-      | title                     | body        | collection            | author | state     |
-      | Don't Mess with the Zohan | Wanna mess? | Paragraphs collection | Zohan  | published |
+      | title                     | body        | <group type>          | author | state     |
+      | Don't Mess with the Zohan | Wanna mess? | Paragraphs group type | Zohan  | published |
 
-    # Normal members cannot add maps.
+    # Author.
     When I am logged in as "Zohan"
     And I go to the edit form of the "Don't Mess with the Zohan" "custom page"
     And I click "Choose component"
-    Then I should see the link "Accordion"
-    And I should see the link "Carousel"
-    And I should see the link "Content listing"
-    But I should not see the link "Entity reference"
-    And I should not see the link "Github feed"
-    But I should not see the link "IFrame"
-    And I should not see the link "Map"
-    But I should not see the link "Row"
-    But I should not see the link "Simple paragraph"
-    And I should see the link "Text"
-
-    # Facilitator's paragraphs.
-    When I am logged in as a facilitator of the "Paragraphs collection" collection
-    And I go to the edit form of the "Don't Mess with the Zohan" "custom page"
-    And I click "Choose component"
-    Then I should see the link "Accordion"
+    Then I should see the link "Layout"
+    And I should see the link "Accordion"
     And I should see the link "Call to action"
     And I should see the link "Carousel"
     And I should see the link "Content listing"
     But I should not see the link "Entity reference"
-    And I should not see the link "Github feed"
+    And I should see the link "Github feed"
     And I should see the link "Heading"
     But I should not see the link "IFrame"
     And I should see the link "Image"
-    And I should see the link "Map"
+    And I should not see the link "Map"
     And I should see the link "Quote"
     But I should not see the link "Row"
     But I should not see the link "Simple paragraph"
@@ -129,7 +120,29 @@ Feature:
     And I should see the link "Text"
     And I should see the link "Video"
 
-    # Moderators can add maps, heading and iframe.
+    # Facilitator.
+    When I am logged in as "Gilfoyle"
+    And I go to the edit form of the "Don't Mess with the Zohan" "custom page"
+    And I click "Choose component"
+    Then I should see the link "Layout"
+    And I should see the link "Accordion"
+    And I should see the link "Call to action"
+    And I should see the link "Carousel"
+    And I should see the link "Content listing"
+    But I should not see the link "Entity reference"
+    And I should see the link "Github feed"
+    And I should see the link "Heading"
+    But I should not see the link "IFrame"
+    And I should see the link "Image"
+    And I should not see the link "Map"
+    And I should see the link "Quote"
+    But I should not see the link "Row"
+    But I should not see the link "Simple paragraph"
+    And I should see the link "Testimony"
+    And I should see the link "Text"
+    And I should see the link "Video"
+
+    # Moderator.
     Given I am logged in as a moderator
     And I go to the edit form of the "Don't Mess with the Zohan" "custom page"
     And I click "Choose component"
@@ -144,12 +157,13 @@ Feature:
     And I should see the link "IFrame"
     And I should see the link "Image"
     And I should see the link "Map"
+    And I should see the link "Quote"
     But I should not see the link "Row"
     But I should not see the link "Simple paragraph"
     And I should see the link "Testimony"
     And I should see the link "Text"
     And I should see the link "Video"
-    And I should see the link "Quote"
+
     But I should not see the link "Row"
     And I should not see the link "1 column layout"
     And I should not see the link "2 column layout"
@@ -157,6 +171,11 @@ Feature:
     And I should not see the link "2 column with featured media on the right"
     And I should not see the link "3 column layout"
     And I should not see the link "Configurable listing"
+
+    Examples:
+      | group type |
+      | collection |
+      | solution   |
 
   @javascript
   Scenario: Moderator can manage map and iframe paragraph.
