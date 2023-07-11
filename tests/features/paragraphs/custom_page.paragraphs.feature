@@ -158,7 +158,22 @@ Feature:
     And I should not see the link "3 column layout"
     And I should not see the link "Configurable listing"
 
-    When I click "Map"
+  @javascript
+  Scenario: Moderator can manage map and iframe paragraph.
+    Given users:
+      | Username |
+      | Zohan    |
+    And the following collection user membership:
+      | collection            | user  |
+      | Paragraphs collection | Zohan |
+    And custom_page content:
+      | title                     | body        | collection            | author | state     |
+      | Don't Mess with the Zohan | Wanna mess? | Paragraphs collection | Zohan  | published |
+
+    Given I am logged in as a moderator
+    And I go to the edit form of the "Don't Mess with the Zohan" "custom page"
+    And I click "Choose component"
+    And I click "Map"
     # As the Webtools Map a webservice, we only test a fake JSON.
     And I fill in "JSON" with "{\"foo\":\"bar\"}"
     And I press "Save" in the "Modal buttons" region
