@@ -108,7 +108,7 @@ Feature:
     And I should see the link "Carousel"
     And I should see the link "Content listing"
     But I should not see the link "Entity reference"
-    And I should see the link "Github feed"
+    And I should not see the link "Github feed"
     And I should see the link "Heading"
     But I should not see the link "IFrame"
     And I should see the link "Image"
