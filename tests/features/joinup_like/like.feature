@@ -169,3 +169,76 @@ Feature: Like/unlike feature.
     When I click the "Remove like from this content" in the "Likeable custom page" tile
     Then I should see the statistics "0" in the "Likeable custom page" tile
     And I should see the "Lisa Like" tile
+
+  @javascript
+  Scenario: Tiles in the carousel should also give possibility to like content.
+    Given custom_page content:
+      | title                | collection | author    | status    |
+      | Likeable custom page | Bulgaria   | Lisa Like | published |
+    And document content:
+      | title             | collection | state     |
+      | Likeable document | Bulgaria   | validated |
+    And discussion content:
+      | title               | collection | state     |
+      | Likeable discussion | Bulgaria   | validated |
+    And news content:
+      | title         | headline      | collection | state     |
+      | Likeable news | Likeable news | Bulgaria   | validated |
+    And event content:
+      | title          | collection | state     |
+      | Likeable event | Bulgaria   | validated |
+    And the following collection user memberships:
+      | collection | user      | roles                      | state  |
+      | Bulgaria   | Lisa Like | administrator, facilitator | active |
+
+    Given I am logged in as "Lisa Like"
+    And I go to the homepage of the "Bulgaria" collection
+
+    And I open the plus button menu
+    And I click "Add custom page"
+
+    And I fill in "Title" with "Carousel of likes"
+
+    And I press "List additional actions"
+    And I press "Add Carousel"
+
+    Then I select "Solution" from "Available filters"
+    And I press "Add and configure filter"
+    And I fill in "Solution" with "Very liked solution"
+
+    Then I select "Custom page" from "Available filters"
+    And I press "Add and configure filter"
+    And I fill in "Custom page" with "Likeable custom page"
+
+    Then I select "Discussion" from "Available filters"
+    And I press "Add and configure filter"
+    And I fill in "Discussion" with "Likeable discussion"
+
+    Then I select "Document" from "Available filters"
+    And I press "Add and configure filter"
+    And I fill in "Document" with "Likeable document"
+
+    Then I select "Event" from "Available filters"
+    And I press "Add and configure filter"
+    And I fill in "Event" with "Likeable event"
+
+    Then I select "News" from "Available filters"
+    And I press "Add and configure filter"
+    And I fill in "News" with "Likeable news"
+
+    When I press "Publish"
+
+    And I should see the "Very liked solution" tile
+    And I should see the link "Like this content" in the "Very liked solution" tile
+    And I should see the "Likeable custom page" tile
+    And I should see the link "Like this content" in the "Likeable custom page" tile
+    And I should see the "Likeable discussion" tile
+    And I should see the link "Like this content" in the "Likeable discussion" tile
+    And I should see the "Likeable document" tile
+    And I should see the link "Like this content" in the "Likeable document" tile
+    Then I press "Next item"
+    And I press "Next item"
+    And I should see the "Likeable event" tile
+    And I should see the link "Like this content" in the "Likeable event" tile
+    And I should see the "Likeable news" tile
+    And I should see the link "Like this content" in the "Likeable news" tile
