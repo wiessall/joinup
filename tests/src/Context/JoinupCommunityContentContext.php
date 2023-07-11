@@ -480,7 +480,9 @@ class JoinupCommunityContentContext extends RawDrupalContext {
       Assert::assertEquals($expected_data['title'], $actual_title, sprintf('Expected title "%s" for article %d in the "In the spotlight" section but instead found "%s".', $expected_data['title'], $i + 1, $actual_title));
 
       // Check that title links to the canonical page of the article.
-      $node = $this->getEntityByLabel('node', $actual_title);
+      $node = $expected_data['type'] === 'news' ?
+        $this->getEntityByHeadline('node', $actual_title) :
+        $this->getEntityByLabel('node', $actual_title);
       $xpath = '//a[@href = "' . $this->getEntityUri($node) . '"]';
       Assert::assertNotEmpty($actual_data->find('xpath', $xpath), sprintf('Article "%s" does not link to the canonical page.', $actual_title));
 
