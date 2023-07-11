@@ -83,6 +83,20 @@ module.exports = {
       },
     },
     {
+      entry: path.resolve(
+        outputFolder,
+        `${ventuno}src/js/responsive-tables.js`
+      ),
+      dest: path.resolve(
+        outputFolder,
+        `${ventuno}assets/js/responsive-tables.js`
+      ),
+      options: {
+        minify: true,
+        sourceMap: true,
+      },
+    },
+    {
       entry: path.resolve(outputFolder, `${ventuno}src/js/searchbox-focus.js`),
       dest: path.resolve(
         outputFolder,
