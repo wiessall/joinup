@@ -91,6 +91,11 @@ function ventuno_theme_suggestions_form_alter(array &$suggestions, array $variab
  */
 function ventuno_preprocess_form_element(array &$variables): void {
   $variables['#attached']['library'][] = 'ventuno/forms';
+  if ($variables['type'] === 'radio' &&
+    isset($variables['element']['#name']) &&
+    $variables['element']['#name'] === 'layout_paragraphs[layout]') {
+    $variables['attributes']['class'][] = 'm-0 p-0';
+  }
 }
 
 /**
@@ -146,4 +151,13 @@ function ventuno_theme_suggestions_input_alter(array &$suggestions, array $varia
  */
 function ventuno_theme_suggestions_select_alter(array &$suggestions, array $variables): void {
   $suggestions[] = 'select__' . $variables['element']['#name'];
+}
+
+/**
+ * Implements hook_preprocess_radios().
+ */
+function ventuno_preprocess_radios(array &$variables): void {
+  if (isset($variables['element']['#name']) && $variables['element']['#name'] === 'layout_paragraphs[layout]') {
+    $variables['attributes']['class'][] = 'd-flex col-gap-3';
+  }
 }
