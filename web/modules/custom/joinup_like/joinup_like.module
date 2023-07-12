@@ -50,10 +50,16 @@ function joinup_like_theme_suggestions_flag_count_text_alter(&$suggestions, arra
  * Implements hook_theme_suggestions_alter().
  */
 function _joinup_like_flag_suggestions_alter(&$suggestions, array $variables, string $original_suggestion): void {
-  $tiles_view_modes = ['view_mode_tile', 'view_mode_tile_horizontal', 'highlighted', 'carousel'];
+  $tiles_view_modes = [
+    'view_mode_tile',
+    'view_mode_tile_horizontal',
+    'highlighted',
+    'carousel',
+  ];
   if (in_array($variables['view_mode'], $tiles_view_modes)) {
     $suggestions[] = $original_suggestion . 'mini';
-  } else {
+  }
+  else {
     $suggestions[] = $original_suggestion . 'button';
   }
 }
