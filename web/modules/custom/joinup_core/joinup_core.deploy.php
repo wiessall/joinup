@@ -21,35 +21,9 @@ use Drupal\media\MediaInterface;
 use EasyRdf\Graph;
 
 /**
- * Change 'culture' to 'culture and environment'.
- */
-function joinup_core_deploy_109400(): string {
-  // Update the references.
-  $vocab_manager = \Drupal::getContainer()->get('topic.vocabulary_manager');
-  $vocab_manager->updateDbReference('http://joinup.eu/ontology/topic#culture', 'http://joinup.eu/ontology/topic#culture-and-education');
-  return 'Updated the topic vocabulary.';
-}
-
-/**
- * Clean up cached_computed_field_expired_fields queue.
- */
-function joinup_core_deploy_109401(): void {
-  \Drupal::queue('cached_computed_field_expired_fields')->deleteQueue();
-}
-
-/**
- * Fix the forward revision.
- */
-function joinup_core_deploy_109402(): void {
-  $revision = \Drupal::entityTypeManager()->getStorage('node')->loadRevision(60588);
-  $revision->isDefaultRevision(TRUE);
-  $revision->save();
-}
-
-/**
  * Migrate Video content into new Media field.
  */
-function joinup_core_deploy_109403(array &$sandbox): string {
+function joinup_core_deploy_109500(array &$sandbox): string {
   $entity_type_manager = \Drupal::entityTypeManager();
   $node_storage = $entity_type_manager->getStorage('node');
 
@@ -79,7 +53,7 @@ function joinup_core_deploy_109403(array &$sandbox): string {
 /**
  * Migrate videos and images embed markup into media.
  */
-function joinup_core_deploy_109404(array &$sandbox): string {
+function joinup_core_deploy_109501(array &$sandbox): string {
   $sparql = \Drupal::getContainer()->get('sparql.endpoint');
   $sparql_field_handler = \Drupal::getContainer()->get('sparql.field_handler');
   $sparql_graph_handler = \Drupal::getContainer()->get('sparql.graph_handler');
