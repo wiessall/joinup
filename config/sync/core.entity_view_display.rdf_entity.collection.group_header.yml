@@ -26,8 +26,8 @@ dependencies:
     - image.style.logo
     - rdf_entity.rdfentity.collection
   module:
-    - image
     - joinup_core
+    - svg_image
     - template_suggestion
     - user
 id: rdf_entity.collection.group_header
@@ -42,10 +42,14 @@ content:
       image_link: ''
       image_style: logo
       image_loading:
-        attribute: lazy
+        attribute: eager
+      svg_attributes:
+        width: null
+        height: null
+      svg_render_as_image: true
     third_party_settings:
       template_suggestion:
-        template_suggestion: ''
+        template_suggestion: bare
     weight: 0
     region: content
   join_collection:

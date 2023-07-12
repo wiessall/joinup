@@ -9,6 +9,47 @@ Feature:
       | title | Paragraphs collection |
       | state | validated             |
 
+  Scenario: Heading paragraph is displayed as heading element.
+    Given custom_page content:
+      | title                | collection            | state     |
+      | Heading example page | Paragraphs collection | published |
+    And I append "heading" to "field_paragraphs_body" field in "node" entity with following "Heading example page" title:
+      | paragraph_heading | H2 heading paragraph                                      |
+      | behavior_settings | a:1:{s:16:"heading_behavior";a:1:{s:5:"level";s:2:"h2";}} |
+    And I append "heading" to "field_paragraphs_body" field in "node" entity with following "Heading example page" title:
+      | paragraph_heading | H3 heading paragraph                                      |
+      | behavior_settings | a:1:{s:16:"heading_behavior";a:1:{s:5:"level";s:2:"h3";}} |
+    And I append "heading" to "field_paragraphs_body" field in "node" entity with following "Heading example page" title:
+      | paragraph_heading | H4 heading paragraph                                      |
+      | behavior_settings | a:1:{s:16:"heading_behavior";a:1:{s:5:"level";s:2:"h4";}} |
+    And I append "heading" to "field_paragraphs_body" field in "node" entity with following "Heading example page" title:
+      | paragraph_heading | H5 heading paragraph                                      |
+      | behavior_settings | a:1:{s:16:"heading_behavior";a:1:{s:5:"level";s:2:"h5";}} |
+
+    When I go to the "Heading example page" custom page
+    Then I should see an "h2" element with the text "H2 heading paragraph" in the "Content" region
+    And I should see an "h3" element with the text "H3 heading paragraph" in the "Content" region
+    And I should see an "h4" element with the text "H4 heading paragraph" in the "Content" region
+    And I should see an "h5" element with the text "H5 heading paragraph" in the "Content" region
+
+  @javascript
+  Scenario: User should be able to edit behaviour settings.
+    Given custom_page content:
+      | title                  | collection            | state     |
+      | Behaviour example page | Paragraphs collection | published |
+
+    When I am logged in as a moderator
+    And I go to the edit form of the "Behaviour example page" "custom page"
+    And I click "Choose component"
+    And I click "Heading"
+    And I should see the text "Settings" in the "Modal content" region
+
+    Then I am logged in as a facilitator of the "Paragraphs collection" collection
+    And I go to the edit form of the "Behaviour example page" "custom page"
+    And I click "Choose component"
+    And I click "Heading"
+    And I should see the text "Settings" in the "Modal content" region
+
   @javascript
   Scenario: Paragraph sections are multivalue and sort-able.
     Given custom_page content:
@@ -41,7 +82,7 @@ Feature:
     Then I should not see the link "Simple paragraph"
 
   @javascript
-  Scenario: Privileged users can add a map and/or an iframe and map paragraph.
+  Scenario: Privileged users can add a map and/or an iframe, heading and map paragraph.
     Given users:
       | Username |
       | Zohan    |
@@ -60,21 +101,22 @@ Feature:
     And I should not see the link "Map"
     But I should not see the link "IFrame"
 
-
-    # Facilitators can add maps.
+    # Facilitators can add maps, heading and iframe.
     When I am logged in as a facilitator of the "Paragraphs collection" collection
     And I go to the edit form of the "Don't Mess with the Zohan" "custom page"
     And I click "Choose component"
     Then I should not see the link "Simple paragraph"
     And I should see the link "Map"
+    And I should see the link "Heading"
     But I should not see the link "IFrame"
 
-    # Moderators can add maps.
+    # Moderators can add maps, heading and iframe.
     Given I am logged in as a moderator
     And I go to the edit form of the "Don't Mess with the Zohan" "custom page"
     And I click "Choose component"
     Then I should not see the link "Simple paragraph"
     And I should see the link "Map"
+    And I should see the link "Heading"
     And I should see the link "IFrame"
 
     When I click "Map"

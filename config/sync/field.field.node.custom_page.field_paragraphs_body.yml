@@ -11,6 +11,7 @@ dependencies:
     - paragraphs.paragraphs_type.configurable_listing
     - paragraphs.paragraphs_type.content_listing
     - paragraphs.paragraphs_type.github_feed
+    - paragraphs.paragraphs_type.heading
     - paragraphs.paragraphs_type.iframe
     - paragraphs.paragraphs_type.image
     - paragraphs.paragraphs_type.json_map
@@ -48,6 +49,7 @@ settings:
       image: image
       layout: layout
       video: video
+      heading: heading
       text: text
     negate: 0
     target_bundles_drag_drop:
@@ -89,6 +91,9 @@ settings:
         enabled: false
       github_feed:
         weight: 33
+        enabled: true
+      heading:
+        weight: 37
         enabled: true
       iframe:
         weight: 8

@@ -9,8 +9,8 @@ Feature: Content archival.
       # Deletion request is not available in a post moderation workflow.
       | moderation | yes             |
     Given <type> content:
-      | title       | state   | collection      | body | content | headline    |
-      | Test <type> | <state> | Some collection | Test | Test    | Test <type> |
+      | title       | state   | collection      | body | content | headline    | changed   |
+      | Test <type> | <state> | Some collection | Test | Test    | Test <type> | <changed> |
     When I am logged in as a moderator
     And I go to the edit form of the "Test <type>" <type>
     Then I should see the button "Archive"
@@ -18,39 +18,41 @@ Feature: Content archival.
     When I press "Archive"
     Then I should see the message "<type label> Test <type> has been updated."
     And I should see the text "Archive" in the "Page title" region
+    And I should see "Last update: <visible>"
     When I go to the edit form of the "Test <type>" <type>
     Then I should not see the button "Archive"
     And I should see the button "Unarchive"
 
     When I press "Unarchive"
     Then I should see the message '<type label> "Test <type>" has been unarchived.'
+    And I should see "Last update: <visible>"
     And I should not see the text "Archive" in the "Page title" region
     When I go to the edit form of the "Test <type>" <type>
     Then I should see the button "Archive"
     And the current workflow state should be "<state label>"
 
     Examples:
-      | type       | type label | state            | state label      |
-      | discussion | Discussion | draft            | Draft            |
-      | discussion | Discussion | proposed         | Proposed         |
-      | discussion | Discussion | validated        | Published        |
-      | discussion | Discussion | needs_update     | Needs update     |
-      | discussion | Discussion | deletion_request | Deletion request |
-      | document   | Document   | draft            | Draft            |
-      | document   | Document   | proposed         | Proposed         |
-      | document   | Document   | validated        | Published        |
-      | document   | Document   | needs_update     | Needs update     |
-      | document   | Document   | deletion_request | Deletion request |
-      | event      | Event      | draft            | Draft            |
-      | event      | Event      | proposed         | Proposed         |
-      | event      | Event      | validated        | Published        |
-      | event      | Event      | needs_update     | Needs update     |
-      | event      | Event      | deletion_request | Deletion request |
-      | news       | News       | draft            | Draft            |
-      | news       | News       | proposed         | Proposed         |
-      | news       | News       | validated        | Published        |
-      | news       | News       | needs_update     | Needs update     |
-      | news       | News       | deletion_request | Deletion request |
+      | type       | type label | state            | state label      | changed          | visible    |
+      | discussion | Discussion | draft            | Draft            | 2019-11-19 20:00 | 19/11/2019 |
+      | discussion | Discussion | proposed         | Proposed         | 2018-11-18 20:00 | 18/11/2018 |
+      | discussion | Discussion | validated        | Published        | 2017-11-17 20:00 | 17/11/2017 |
+      | discussion | Discussion | needs_update     | Needs update     | 2016-11-16 20:00 | 16/11/2016 |
+      | discussion | Discussion | deletion_request | Deletion request | 2015-11-15 20:00 | 15/11/2015 |
+      | document   | Document   | draft            | Draft            | 2019-11-14 20:00 | 14/11/2019 |
+      | document   | Document   | proposed         | Proposed         | 2019-11-13 20:00 | 13/11/2019 |
+      | document   | Document   | validated        | Published        | 2019-11-12 20:00 | 12/11/2019 |
+      | document   | Document   | needs_update     | Needs update     | 2019-11-11 20:00 | 11/11/2019 |
+      | document   | Document   | deletion_request | Deletion request | 2019-11-10 20:00 | 10/11/2019 |
+      | event      | Event      | draft            | Draft            | 2019-12-19 20:00 | 19/12/2019 |
+      | event      | Event      | proposed         | Proposed         | 2019-11-19 20:00 | 19/11/2019 |
+      | event      | Event      | validated        | Published        | 2019-11-18 20:00 | 18/11/2019 |
+      | event      | Event      | needs_update     | Needs update     | 2019-11-17 20:00 | 17/11/2019 |
+      | event      | Event      | deletion_request | Deletion request | 2019-11-16 20:00 | 16/11/2019 |
+      | news       | News       | draft            | Draft            | 2019-11-15 20:00 | 15/11/2019 |
+      | news       | News       | proposed         | Proposed         | 2019-11-14 20:00 | 14/11/2019 |
+      | news       | News       | validated        | Published        | 2019-11-13 20:00 | 13/11/2019 |
+      | news       | News       | needs_update     | Needs update     | 2019-11-12 20:00 | 12/11/2019 |
+      | news       | News       | deletion_request | Deletion request | 2019-11-11 20:00 | 11/11/2019 |
 
   Scenario Outline: Group facilitators can not unarchived community content
     Given <group type>:
