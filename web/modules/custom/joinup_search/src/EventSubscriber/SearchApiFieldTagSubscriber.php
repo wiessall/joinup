@@ -59,20 +59,20 @@ class SearchApiFieldTagSubscriber implements EventSubscriberInterface {
 
     $field_value = $query->getOption('search_api_field item')->value;
     /** @var \Drupal\search_api\Query\Query $query */
-    if (!empty($field_value['global_search'])) {
-      $query->addCondition('entity_groups', NULL, '<>');
+    if (empty($field_value['global_search'])) {
+      if (!empty($field_value['show_shared'])) {
+        $or = $query
+          ->createConditionGroup('or')
+          ->addCondition('shared_in', [$group->id()], 'IN')
+          ->addCondition('entity_groups', [$group->id()], 'IN');
+        $query->addConditionGroup($or);
+      }
+      else {
+        // Show only content belonging to the same group.
+        $query->addCondition('entity_groups', [$group->id()], 'IN');
+      }
     }
-    elseif (!empty($field_value['show_shared'])) {
-      $or = $query
-        ->createConditionGroup('or')
-        ->addCondition('shared_in', [$group->id()], 'IN')
-        ->addCondition('entity_groups', [$group->id()], 'IN');
-      $query->addConditionGroup($or);
-    }
-    else {
-      // Show only content belonging to the same group.
-      $query->addCondition('entity_groups', [$group->id()], 'IN');
-    }
+
     // Remove all results if no presets or content filter.
     if (empty($field_value['query_presets']) && !array_key_exists('query_builder', $field_value)) {
       $query->addCondition($parent_entity->getEntityType()
