@@ -67,58 +67,6 @@ trait EntityTrait {
   }
 
   /**
-   * Returns the entity with the given type, bundle and headline.
-   *
-   * If multiple entities have the same headline then the first one is returned.
-   *
-   * @param string $entity_type_id
-   *   The entity type to check.
-   * @param string $headline
-   *   The headline to check.
-   * @param string|null $bundle
-   *   Optional bundle to check. If omitted, the entity can be of any bundle.
-   *
-   * @return \Drupal\Core\Entity\ContentEntityInterface
-   *   The requested entity.
-   *
-   * @throws \RuntimeException
-   *   Thrown when an entity with the given type, headline and bundle does not
-   *   exist.
-   */
-  protected static function getEntityByHeadline(string $entity_type_id, string $headline, ?string $bundle = NULL): EntityInterface {
-    $entity_type_manager = \Drupal::entityTypeManager();
-    try {
-      $storage = $entity_type_manager->getStorage($entity_type_id);
-    }
-    catch (InvalidPluginDefinitionException $e) {
-      throw new \RuntimeException('Storage not found', NULL, $e);
-    }
-    $entity = $entity_type_manager->getDefinition($entity_type_id);
-
-    $query = $storage->getQuery()
-      ->condition('field_news_headline', $headline)
-      ->accessCheck(FALSE)
-      ->range(0, 1);
-
-    // Optionally filter by bundle.
-    if ($bundle) {
-      $query->condition($entity->getKey('bundle'), $bundle);
-    }
-
-    $result = $query->execute();
-
-    if ($result) {
-      $result = reset($result);
-      // Make sure we get a fresh entity from the database, to avoid testing
-      // with stale data.
-      $storage->resetCache([$result]);
-      return $storage->load($result);
-    }
-
-    throw new \RuntimeException("The entity with headline '$headline' was not found.");
-  }
-
-  /**
    * Mapping of human readable entity type names to machine names.
    *
    * @return array
