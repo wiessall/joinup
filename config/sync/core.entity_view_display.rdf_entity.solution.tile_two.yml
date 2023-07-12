@@ -46,9 +46,11 @@ dependencies:
     - field.field.rdf_entity.solution.field_status
     - field.field.rdf_entity.solution.field_topic
     - rdf_entity.rdfentity.solution
+    - responsive_image.styles.teaser
   module:
     - field_group
     - layout_builder
+    - responsive_image
     - search_api_field
     - smart_trim
     - template_suggestion
@@ -62,7 +64,7 @@ third_party_settings:
       label: 'Abstract wrapper'
       parent_name: ''
       region: content
-      weight: 2
+      weight: 1
       format_type: html_element
       format_settings:
         classes: ''
@@ -83,10 +85,10 @@ mode: tile_two
 content:
   field_is_content:
     type: search_api_field
-    label: above
+    label: hidden
     settings: {  }
     third_party_settings: {  }
-    weight: 3
+    weight: 2
     region: content
   field_is_description:
     type: smart_trim
@@ -109,26 +111,45 @@ content:
         template_suggestion: p_wrapper
     weight: 37
     region: content
+  field_is_logo:
+    type: responsive_image
+    label: hidden
+    settings:
+      responsive_image_style: teaser
+      image_link: ''
+    third_party_settings:
+      template_suggestion:
+        template_suggestion: bare
+    weight: 6
+    region: content
   field_is_shared_in:
     type: entity_reference_entity_view
-    label: above
+    label: hidden
     settings:
       view_mode: view_mode_tile
       link: false
     third_party_settings:
       template_suggestion:
         template_suggestion: entity_reference__listing_tile
-    weight: 6
+    weight: 5
+    region: content
+  label:
+    type: string
+    label: hidden
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 7
     region: content
   rdf_entity_solution_field_is_content_inline_facets:
     settings: {  }
     third_party_settings: {  }
-    weight: 4
+    weight: 3
     region: content
   rdf_entity_solution_field_is_content_top:
     settings: {  }
     third_party_settings: {  }
-    weight: 1
+    weight: 0
     region: content
   read_more:
     settings: {  }
@@ -138,7 +159,7 @@ content:
   related_solutions:
     settings: {  }
     third_party_settings: {  }
-    weight: 5
+    weight: 4
     region: content
 hidden:
   changed: true
@@ -162,7 +183,6 @@ hidden:
   field_is_issue_tracker: true
   field_is_landing_page: true
   field_is_language: true
-  field_is_logo: true
   field_is_metrics_page: true
   field_is_moderation: true
   field_is_owner: true
@@ -186,7 +206,6 @@ hidden:
   field_status: true
   field_topic: true
   flag_like_rdf_entity: true
-  label: true
   langcode: true
   og_group: true
   pinned_in: true

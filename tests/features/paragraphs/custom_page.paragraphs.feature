@@ -24,14 +24,14 @@ Feature:
     # The first paragraphs item is open by default.
     Then there should be 1 paragraph in the "Custom page body" field
     Then I should see the "Remove" button in the "Custom page body" field for paragraph 1
-    Given I press "Remove" in the "Custom page body" field for paragraph 1
+    Given I click "Remove" in the "Custom page body" field for paragraph 1
 
     Then the page should contain no paragraphs
 
-    Given I press "Add Simple paragraph" in the "Custom page body" paragraphs field
+    Given I click "Add Simple paragraph" in the "Custom page body" paragraphs field
     Then there should be 1 paragraph in the "Custom page body" field
 
-    Given I press "Add Simple paragraph" in the "Custom page body" paragraphs field
+    Given I click "Add Simple paragraph" in the "Custom page body" paragraphs field
     Then there should be 2 paragraphs in the "Custom page body" field
 
     When I enter "AAAAAAAAAA" in the "Body" wysiwyg editor in the "Custom page body" field for paragraph 1
@@ -106,12 +106,12 @@ Feature:
     And I open the plus button menu
     And I click "Add custom page"
     And I fill in "Title" with "Paragraphs accordion page"
-    Given I press "Remove" in the "Custom page body" field for paragraph 1
+    Given I click "Remove" in the "Custom page body" field for paragraph 1
     Then the page should contain no paragraphs
 
     # The "List additional actions" is the button arrow that shows the full list of paragraphs to add.
     Given I press "List additional actions"
-    Then I press "Add Accordion" in the "Custom page body" paragraphs field
+    Then I click "Add Accordion" in the "Custom page body" paragraphs field
 
     # 3 paragraphs are the default number when adding an accordion.
     # 1. the accordion wrapper, 2. accordion item and 3. the simple paragraph contained in the item.
