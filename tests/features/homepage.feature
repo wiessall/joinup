@@ -47,10 +47,10 @@ Feature: Homepage
       | Earlier transformations     | Ecosystem management     | Shaping of nature | EU and European Policies                              | validated | 2021-03-29T10:18:00Z | "<p>{""preview_thumbnail"":""/sites/default/files/styles/video_embed_wysiwyg_preview/public/video_thumbnails/dQw4w9WgXcQ.jpg?itok=s9z0clFM"",""video_url"":""https://www.youtube.com/watch?v=dQw4w9WgXcQ"",""settings"":{""responsive"":true,""width"":""854"",""height"":""480"",""autoplay"":false},""settings_summary"":[""Embedded Video (Responsive).""]}Archaeological evidence shows that by 10000 BCE all societies employed ecologically transformative land use practices including burning hunting species propagation domestication cultivation have left long-term legacies across the biosphere.</p>" |
     When I am on the homepage
     Then the latest news section should contain the following news articles:
-      | date   | topics                                      | title                | body                                                                                                                                                                                                                                                 |
-      | 26 Apr | Finance in EU, Supplier exchange, +2 topics | Preserve habitats    | Here we combine global maps of human populations and land use over the past 12000 y with current biodiversity data to show that nearly three quarters of nature has long been shaped by histories of human habitation and use by indigenous peoples. |
-      | 29 Mar | EU and European Policies                    | Ecosystem management | Archaeological evidence shows that by 10000 BCE all societies employed ecologically transformative land use practices including burning hunting species propagation domestication cultivation have left long-term legacies across the biosphere.     |
-      | 28 Feb | HR, Statistics and Analysis, E-justice      | Loss of wildlands    | Global land use history confirms that empowering the environmental stewardship of Indigenous peoples and local communities will be critical to conserving biodiversity across the planet.                                                            |
+      | date   | topics                                      | title                       | body                                                                                                                                                                                                                                                 |
+      | 26 Apr | Finance in EU, Supplier exchange, +2 topics | Current biodiversity crisis | Here we combine global maps of human populations and land use over the past 12000 y with current biodiversity data to show that nearly three quarters of nature has long been shaped by histories of human habitation and use by indigenous peoples. |
+      | 29 Mar | EU and European Policies                    | Earlier transformations     | Archaeological evidence shows that by 10000 BCE all societies employed ecologically transformative land use practices including burning hunting species propagation domestication cultivation have left long-term legacies across the biosphere.     |
+      | 28 Feb | HR, Statistics and Analysis, E-justice      | Spatial reconstruction      | Global land use history confirms that empowering the environmental stewardship of Indigenous peoples and local communities will be critical to conserving biodiversity across the planet.                                                            |
 
     # There is a "More news" link that for the moment leads to the search page
     # pre-filtered on news articles. In the future this will become a dedicated
@@ -59,7 +59,7 @@ Feature: Homepage
     When I click "More news"
     Then I should be on the advanced search page
     And I should see the following facet summary "News"
-    And the page should show the tiles "Preserve habitats, Transformative practices, Loss of wildlands, Ecosystem management"
+    And the page should show the tiles "Current biodiversity crisis, Environmental stewardship, Spatial reconstruction, Earlier transformations"
 
   @terms
   Scenario: Community content can be placed "In the spotlight" on the homepage
@@ -87,7 +87,7 @@ Feature: Homepage
     When I am on the homepage
     Then the in the spotlight section should contain the following content:
       | number | logo        | topics                                      | title           | type     | body                                                                                                                                                                                            |
-      | 1      | blaise.jpg  | Finance in EU, Supplier exchange, +2 topics | Muscle atrophy  | news     | Researchers from the University of Tsukuba have sent mice into space to explore effects of spaceflight and reduced gravity on muscle atrophy                                                    |
+      | 1      | blaise.jpg  | Finance in EU, Supplier exchange, +2 topics | New muscles     | news     | Researchers from the University of Tsukuba have sent mice into space to explore effects of spaceflight and reduced gravity on muscle atrophy                                                    |
       | 2      | charles.jpg | EU and European Policies                    | Stay at the ISS | event    | Two groups of mice (six per group) were housed aboard the International Space Station for 35 days. One group was subjected to artificial gravity (1 g) and the other to microgravity.           |
       | 3      | alan.jpg    | HR, Statistics and Analysis, E-justice      | Microgravity    | document | Conventional studies investigating the effects of reduced gravity on muscle mass and function have used a ground control group that is not directly comparable to the space experimental group. |
 
