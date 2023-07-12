@@ -194,8 +194,19 @@ class JoinupParagraphsContext extends RawDrupalContext {
     // It might be a button beneath the three dots dropdown. Check for the
     // driver as well, because only Selenium2Driver supports isVisible().
     if (($this->getSession()->getDriver() instanceof Selenium2Driver) && !$link->isVisible()) {
-      $dropdown = $paragraph_item->find('css', 'button.dropdown-toggle');
-      $dropdown->click();
+      // Check first if the button is in the 3-dots dropdown which has the class
+      // "paragraphs-dropdown-actions".
+      $xpath = "//div[contains(concat(' ', @class, ' '), ' paragraphs-dropdown-actions ')]";
+      if ($paragraph_item->find('xpath', $xpath)?->findButton($label)) {
+        // Expand the dropdown.
+        $dropdown = $paragraph_item->find('css', 'button.paragraphs-dropdown-toggle');
+        $dropdown->click();
+      }
+      // Else, expand the 'add paragraph' dropdown in case the button is one of
+      // the 'add paragraph' buttons.
+      elseif ($dropdown = $paragraph_item->find('css', 'button.dropdown-toggle')) {
+        $dropdown->click();
+      }
     }
 
     $link->click();
