@@ -406,7 +406,7 @@ Feature:
       | Event 2 |
       | Event 3 |
 
-  Scenario Outline: Images should be shown for tile-two view modes.
+  Scenario Outline: Images should be shown for tile view modes.
     Given <type> content:
       | title       | headline    | short title | state   | logo       | published |
       | Custom tile | Custom tile | Custom tile | <state> | linus.jpeg | yes       |
@@ -441,7 +441,7 @@ Feature:
       | discussion  | should not | list       | validated |
       | discussion  | should not | grid       | validated |
 
-  Scenario: Up to 4 topics should be shown for tile-two view modes.
+  Scenario: Up to 4 topics should be shown for tile view modes.
     Given news content:
       | title  | headline | body             | state     | created    | changed    | topic     |
       | News 1 | News 1   | Test             | validated | 01-01-2023 | 03-02-2023 | E-justice, Finance in EU, Supplier exchange, HR, Statistics and Analysis |
@@ -467,18 +467,18 @@ Feature:
     And I click "E-justice" in the "Homepage topics" region
     # The change should not affect the order as the news publication date is the same.
     Then I should see the "News 1" tile
-    And I should see the link "E-justice" in the "News 1" tile
-    And I should see the link "Finance in EU" in the "News 1" tile
-    And I should see the link "Supplier exchange" in the "News 1" tile
+    And I should see the text "E-justice" in the "News 1" tile
+    And I should see the text "Finance in EU" in the "News 1" tile
+    But I should not see the text "Supplier exchange" in the "News 1" tile
     And I should not see the text "HR" in the "News 1" tile
-    And I should see the text "+2 topics" in the "News 1" tile
+    And I should see the text "+3 topics" in the "News 1" tile
 
     And I should see the "News 2" tile
-    And I should see the link "E-justice" in the "News 2" tile
-    And I should see the link "Finance in EU" in the "News 2" tile
-    And I should see the link "Supplier exchange" in the "News 2" tile
-    And I should see the link "Statistics and Analysis" in the "News 2" tile
-    And I should not see the text "+1 topic" in the "News 2" tile
+    And I should see the text "E-justice" in the "News 2" tile
+    And I should see the text "Finance in EU" in the "News 2" tile
+    But I should not see the text "Supplier exchange" in the "News 2" tile
+    And I should not see the text "Statistics and Analysis" in the "News 2" tile
+    And I should see the text "+2 topics" in the "News 2" tile
 
   Scenario: A configurable listing with no results should not print its title.
     Given news content:

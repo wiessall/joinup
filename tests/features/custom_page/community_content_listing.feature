@@ -151,7 +151,7 @@ Feature:
 
     # The "List additional actions" is the button arrow that shows the full list of paragraphs to add.
     Given I press "List additional actions"
-    Then I press "Add Content listing" in the "Custom page body" paragraphs field
+    Then I click "Add Content listing" in the "Custom page body" paragraphs field
     And I uncheck "Show related content"
     When the following fields should not be visible "Global search, Allow shared content"
     And I check "Show related content"
@@ -483,14 +483,14 @@ Feature:
 
     # Paragraph #1.
     When I press "List additional actions"
-    And I press "Add Content listing" in the "Custom page body" paragraphs field
+    And I click "Add Content listing" in the "Custom page body" paragraphs field
 
     And I press "Add and configure filter"
     And I fill in "Solution" with "Save the Planet"
 
     # Paragraph #2.
     When I press "List additional actions"
-    And I press "Add Content listing" in the "Custom page body" paragraphs field
+    And I click "Add Content listing" in the "Custom page body" paragraphs field
 
     And I press latest "Add and configure filter"
     And I fill in the latest "Solution" field with "Fight Global Warming"
@@ -522,7 +522,7 @@ Feature:
 
     # Paragraph #1.
     When I press "List additional actions"
-    And I press "Add Content listing" in the "Custom page body" paragraphs field
+    And I click "Add Content listing" in the "Custom page body" paragraphs field
 
     And I press "Add and configure filter"
     And I fill in "Solution" with "Save gasoline"
@@ -535,7 +535,7 @@ Feature:
 
     # Paragraph #2.
     When I press "List additional actions"
-    And I press "Add Content listing" in the "Custom page body" paragraphs field
+    And I click "Add Content listing" in the "Custom page body" paragraphs field
 
     And I press latest "Add and configure filter"
     And I fill in the latest "Solution" field with "Black Noise"
