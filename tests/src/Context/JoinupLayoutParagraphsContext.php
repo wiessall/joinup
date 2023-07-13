@@ -123,7 +123,7 @@ class JoinupLayoutParagraphsContext extends RawDrupalContext {
   }
 
   /**
-   * Removes a layout paragraph in the given field.
+   * Performs an action on a layout paragraph in the given field.
    *
    * @param string $action
    *   The action to perform. Available actions are 'delete', 'edit', 'move up',
@@ -136,12 +136,14 @@ class JoinupLayoutParagraphsContext extends RawDrupalContext {
    *
    * @When I :action from the :field_alias form field the layout paragraph in position :position
    */
-  public function removeTopLevelLayoutParagraph(string $action, string $field_alias, string $position): void {
+  public function actionOnTopLevelLayoutParagraph(string $action, string $field_alias, string $position): void {
     $actions = ['delete', 'edit', 'move up', 'move down', 'duplicate'];
     assertTrue(in_array($action, $actions), "The action '$action' is not defined in the context. Available actions are ", implode(', ', $actions));
 
     $this->assertJavaScriptEnabledBrowser();
-    $this->getFormFieldLayoutParagraphs($field_alias)[$position - 1]->clickLink(ucfirst($action));
+    // The ".is-layout" class is the difference between the actions for layouts
+    // and the actions for paragraphs.
+    $this->getFormFieldLayoutParagraphs($field_alias)[$position - 1]->find('css', '.lpb-controls.is-layout')->clickLink(ucfirst($action));
     if ($action === 'delete') {
       $this->getSession()->wait(5000, "document.querySelector('.lpb-dialog') !== null");
       $this->getSession()->getPage()->find('css', '.ui-dialog-buttonpane')->pressButton('Delete');
