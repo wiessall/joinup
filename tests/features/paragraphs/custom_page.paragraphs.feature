@@ -82,7 +82,103 @@ Feature:
     Then I should not see the link "Simple paragraph"
 
   @javascript
-  Scenario: Privileged users can add a map and/or an iframe, heading and map paragraph.
+  Scenario Outline: Privileged users can add paragraphs.
+    Given the following <group type>:
+      | title | Paragraphs group type |
+      | state | validated             |
+    And users:
+      | Username |
+      | Zohan    |
+      | Gilfoyle |
+    And the following <group type> user membership:
+      | <group type>          | user     | roles       |
+      | Paragraphs group type | Zohan    | author      |
+      | Paragraphs group type | Gilfoyle | facilitator |
+    And custom_page content:
+      | title                     | body        | <group type>          | author | state     |
+      | Don't Mess with the Zohan | Wanna mess? | Paragraphs group type | Zohan  | published |
+
+    # Author.
+    When I am logged in as "Zohan"
+    And I go to the edit form of the "Don't Mess with the Zohan" "custom page"
+    And I click "Choose component"
+    Then I should see the link "Layout"
+    And I should see the link "Accordion"
+    And I should see the link "Call to action"
+    And I should see the link "Carousel"
+    And I should see the link "Content listing"
+    But I should not see the link "Entity reference"
+    And I should not see the link "Github feed"
+    And I should see the link "Heading"
+    But I should not see the link "IFrame"
+    And I should see the link "Image"
+    And I should not see the link "Map"
+    And I should see the link "Quote"
+    But I should not see the link "Row"
+    But I should not see the link "Simple paragraph"
+    And I should see the link "Testimony"
+    And I should see the link "Text"
+    And I should see the link "Video"
+
+    # Facilitator.
+    When I am logged in as "Gilfoyle"
+    And I go to the edit form of the "Don't Mess with the Zohan" "custom page"
+    And I click "Choose component"
+    Then I should see the link "Layout"
+    And I should see the link "Accordion"
+    And I should see the link "Call to action"
+    And I should see the link "Carousel"
+    And I should see the link "Content listing"
+    But I should not see the link "Entity reference"
+    And I should see the link "Github feed"
+    And I should see the link "Heading"
+    But I should not see the link "IFrame"
+    And I should see the link "Image"
+    And I should not see the link "Map"
+    And I should see the link "Quote"
+    But I should not see the link "Row"
+    But I should not see the link "Simple paragraph"
+    And I should see the link "Testimony"
+    And I should see the link "Text"
+    And I should see the link "Video"
+
+    # Moderator.
+    Given I am logged in as a moderator
+    And I go to the edit form of the "Don't Mess with the Zohan" "custom page"
+    And I click "Choose component"
+    Then I should see the link "Layout"
+    And I should see the link "Accordion"
+    And I should see the link "Call to action"
+    And I should see the link "Carousel"
+    And I should see the link "Content listing"
+    And I should see the link "Entity reference"
+    And I should see the link "Github feed"
+    And I should see the link "Heading"
+    And I should see the link "IFrame"
+    And I should see the link "Image"
+    And I should see the link "Map"
+    And I should see the link "Quote"
+    But I should not see the link "Row"
+    But I should not see the link "Simple paragraph"
+    And I should see the link "Testimony"
+    And I should see the link "Text"
+    And I should see the link "Video"
+
+    But I should not see the link "Row"
+    And I should not see the link "1 column layout"
+    And I should not see the link "2 column layout"
+    And I should not see the link "2 column with featured media on the left"
+    And I should not see the link "2 column with featured media on the right"
+    And I should not see the link "3 column layout"
+    And I should not see the link "Configurable listing"
+
+    Examples:
+      | group type |
+      | collection |
+      | solution   |
+
+  @javascript
+  Scenario: Moderator can manage map and iframe paragraph.
     Given users:
       | Username |
       | Zohan    |
@@ -93,33 +189,10 @@ Feature:
       | title                     | body        | collection            | author | state     |
       | Don't Mess with the Zohan | Wanna mess? | Paragraphs collection | Zohan  | published |
 
-    # Normal members cannot add maps.
-    When I am logged in as "Zohan"
-    And I go to the edit form of the "Don't Mess with the Zohan" "custom page"
-    And I click "Choose component"
-    Then I should not see the link "Simple paragraph"
-    And I should not see the link "Map"
-    But I should not see the link "IFrame"
-
-    # Facilitators can add maps, heading and iframe.
-    When I am logged in as a facilitator of the "Paragraphs collection" collection
-    And I go to the edit form of the "Don't Mess with the Zohan" "custom page"
-    And I click "Choose component"
-    Then I should not see the link "Simple paragraph"
-    And I should see the link "Map"
-    And I should see the link "Heading"
-    But I should not see the link "IFrame"
-
-    # Moderators can add maps, heading and iframe.
     Given I am logged in as a moderator
     And I go to the edit form of the "Don't Mess with the Zohan" "custom page"
     And I click "Choose component"
-    Then I should not see the link "Simple paragraph"
-    And I should see the link "Map"
-    And I should see the link "Heading"
-    And I should see the link "IFrame"
-
-    When I click "Map"
+    And I click "Map"
     # As the Webtools Map a webservice, we only test a fake JSON.
     And I fill in "JSON" with "{\"foo\":\"bar\"}"
     And I press "Save" in the "Modal buttons" region
@@ -184,3 +257,14 @@ Feature:
       | role                                                  |
       | moderator                                             |
       | facilitator of the "Paragraphs collection" collection |
+
+  Scenario: View quote paragraph in the custom page.
+    Given custom_page content:
+      | title          | collection            | state     |
+      | Popular quotes | Paragraphs collection | published |
+    And I append "quote" to "field_paragraphs_body" field in "node" entity with following "Popular Quotes" title:
+      | paragraph_quote | That's one small step for a man, a giant leap for mankind. |
+
+    When I am an anonymous user
+    And I visit the "Popular quotes" custom page
+    Then the page should contain the html text "That's one small step for a man, a giant leap for mankind."
