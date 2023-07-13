@@ -59,14 +59,11 @@
           </div>
         </div>
         {% if style is same as('grid') %}
-          <div class="row">
+          <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3 mb-3">
             {% for result in results %}
-              <div class="col-12 col-lg-6 col-xl-4 mb-4 mb-lg-5">
-                {{ result }}
-              </div>
+              {{ result }}
             {% endfor %}
           </div>
-          <div class="border-bottom mb-3 mb-lg-5"></div>
         {% elseif style is same as('list') %}
           {% for result in results %}
             {{ result }}

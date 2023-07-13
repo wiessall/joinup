@@ -37,7 +37,7 @@ Feature: Subscribing to community content in collections and solutions
     Given discussion content:
       | title                  | body                               | collection         | solution       | state     | author   |
       | Active galactic nuclei | A thin relativistic accretion disk | Black hole imaging |                | validated | junfukue |
-      | Light diffusion        | Photons emitted at constant radius |                    | Null geodesics | validated | junfukue |
+      | Light diffusion        | Photons emitted at constant radius |                    | Null geodesics | archived  | junfukue |
     And document content:
       | title             | body                            | collection         | solution              | state     | author   |
       | Doppler effect    | Caused by disk rotation         | Black hole imaging |                       | validated | junfukue |
@@ -49,7 +49,7 @@ Feature: Subscribing to community content in collections and solutions
     And news content:
       | title             | body                       | collection         | solution              | state     | author |
       | The periastron    | Jacobian elliptic integral | Black hole imaging |                       | validated | bisera |
-      | Newtonian context | Projecting ellipses        |                    | Bolometric appearance | validated | hristo |
+      | Newtonian context | Projecting ellipses        |                    | Bolometric appearance | archived  | hristo |
 
     # The group content digest should contain the content posted in the
     # collection and the solution.
@@ -58,10 +58,8 @@ Feature: Subscribing to community content in collections and solutions
       | Doppler effect         |
       | Effective potential    |
       | The periastron         |
-      | Light diffusion        |
       | Distant observers      |
       | Deflected rays         |
-      | Newtonian context      |
 
     # Check that the message is formatted correctly. It should contain the
     # groups in alphabetical order, underneath which the group content is shown,
@@ -76,7 +74,5 @@ Feature: Subscribing to community content in collections and solutions
       | The periastron         |
       | Bolometric appearance  |
       | Distant observers      |
-      | Newtonian context      |
       | Null geodesics         |
       | Deflected rays         |
-      | Light diffusion        |
