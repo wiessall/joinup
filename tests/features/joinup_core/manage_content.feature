@@ -11,12 +11,12 @@ Feature:
       | Vintage Art  | validated |
       | Decadent Art | validated |
     And document content:
-      | title             | document type | collection  | state     |
-      | The Panama Papers | Document      | Vintage Art | validated |
-      | The Area 51 File  | Document      | Vintage Art | draft     |
+      | title             | document type | collection  | state     | changed          |
+      | The Panama Papers | Document      | Vintage Art | validated | 2019-11-19 20:00 |
+      | The Area 51 File  | Document      | Vintage Art | draft     | 2018-11-19 21:00 |
     And discussion content:
-      | title               | collection  | state     |
-      | The Ultimate Debate | Vintage Art | validated |
+      | title               | collection  | state     | changed          |
+      | The Ultimate Debate | Vintage Art | validated | 2017-11-19 19:00 |
     And event content:
       | title                    | collection  | state     |
       | Version 2.0 Launch Party | Vintage Art | validated |
@@ -24,9 +24,9 @@ Feature:
       | title                              | collection  | state     |
       | Exports Leap Despite Currency Gain | Vintage Art | validated |
     And custom_page content:
-      | title                | collection  | state     |
-      | HOWTOs               | Vintage Art | published |
-      | Looking for Support? | Vintage Art | published |
+      | title                | collection  | state     | changed          |
+      | HOWTOs               | Vintage Art | published | 2016-11-19 20:00 |
+      | Looking for Support? | Vintage Art | published | 2015-11-19 20:00 |
     And the following custom page menu structure:
       | title                | parent | weight |
       | Looking for Support? | HOWTOs | 1      |
@@ -87,6 +87,8 @@ Feature:
     And I press "Apply to selected items"
     And I wait for the batch process to finish
     Then I should see "Proceeded updates to 2 entities"
+    And I should see "19/11/2019 - 20:00"
+    And I should see "19/11/2017 - 19:00"
 
     # Check archived state.
     Given I select "Archived" from "State"
@@ -107,6 +109,8 @@ Feature:
     And I press "Apply"
     Then I should see the link "The Panama Papers"
     And I should see the link "The Ultimate Debate"
+    And I should see "19/11/2019 - 20:00"
+    And I should see "19/11/2017 - 19:00"
 
     # Check warning message.
     Given I press "Reset"
@@ -115,6 +119,7 @@ Feature:
     And I press "Apply to selected items"
     And I wait for the batch process to finish
     Then I should see "Proceeded updates to 1 entities"
+    And I should see "19/11/2016 - 20:00"
 
     # Select rows.
     Given I select the "The Panama Papers" row
@@ -193,3 +198,24 @@ Feature:
     Then I should see the link "Looking for Support?" in the "Navigation menu" region
     When I click "Looking for Support?" in the "Navigation menu" region
     Then I should not see the "Looking for Support?" tile
+
+  @javascript
+  Scenario: Able to select all items on the content management UI
+    Given the following collections:
+      | title       | state     |
+      | Vintage Art | validated |
+    And event content:
+      | title                   | collection  | state     |
+      | The Panama Papers Party | Vintage Art | validated |
+      | The Area 51 Party       | Vintage Art | validated |
+
+    When I am logged in as a moderator
+    And I go to the "Vintage Art" collection
+    And I open the header local tasks menu
+    And I click "Manage content" in the "Entity actions" region
+    Then the "The Panama Papers Party" checkbox should not be checked
+    And the "The Area 51 Party" checkbox should not be checked
+
+    When I select the "Title" row
+    Then the "The Panama Papers Party" checkbox should be checked
+    And the "The Area 51 Party" checkbox should be checked

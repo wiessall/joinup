@@ -1197,6 +1197,7 @@ module.exports = {
       options: {
         file: "icons.svg",
         list: [
+          "archive-fill.svg",
           "arrow-left.svg",
           "arrow-repeat.svg",
           "arrow-right.svg",
@@ -1219,6 +1220,7 @@ module.exports = {
           "chevron-up.svg",
           "clipboard2-check.svg",
           "clock-history.svg",
+          "code-slash.svg",
           "download.svg",
           "envelope-fill.svg",
           "exclamation-circle-fill.svg",
@@ -1263,6 +1265,7 @@ module.exports = {
           "plus.svg",
           "question-lg.svg",
           "reply.svg",
+          "rss.svg",
           "search.svg",
           "star.svg",
           "three-dots.svg",

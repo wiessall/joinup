@@ -162,6 +162,7 @@ class TypeWidget extends WidgetPluginBase {
     if (isset($result->asTab)) {
       $items['#attributes']['class'][] = 'tab';
       $items['#attributes']['class'][] = 'tab--content-type';
+      $items['#attributes']['role'][] = 'tab';
     }
 
     return $items;

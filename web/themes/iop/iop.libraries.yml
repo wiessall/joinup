@@ -4,6 +4,11 @@ components:
   css:
     component:
       assets/css/components.min.css: { minified: true }
+  dependencies:
+    - iop/components.js
+
+components.js:
+  header: true
   js:
     assets/js/oe-bcl-joinup.bundle.min.js: { minified: true, attributes: { defer: true } }
   dependencies:
@@ -25,12 +30,12 @@ listing:
 accordion-faq:
   css:
     theme:
-      assets/css/accordion-faq.min.css: { minified: true }
+      assets/css/accordion-faq.min.css: { minified: true, preprocess: false }
 
 join:
   css:
     theme:
-      assets/css/join.min.css: { minified: true }
+      assets/css/join.min.css: { minified: true, preprocess: false }
 
 navbar:
   css:
@@ -65,13 +70,18 @@ paragraph--2-column-featured-right:
 paragraph--call-to-action:
   css:
     theme:
-      assets/css/paragraph--call-to-action.min.css: { minified: true }
+      assets/css/paragraph--call-to-action.min.css: { minified: true, preprocess: false }
 
 paragraph--carousel:
   css:
     theme:
-      assets/css/paragraph--carousel.min.css: { minified: true }
+      assets/css/paragraph--carousel.min.css: { minified: true, preprocess: false }
       assets/css/glide.core.min.css: { minified: true }
+  dependencies:
+    - iop/paragraph--carousel.js
+
+paragraph--carousel.js:
+  header: true
   js:
     assets/js/glide.min.js: { minified: true, attributes: { defer: true }  }
 
