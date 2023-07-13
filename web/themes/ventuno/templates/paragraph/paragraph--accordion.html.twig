@@ -42,6 +42,7 @@
 {%
   set classes = [
     'accordion',
+    'accordion' ~ paragraph.id(),
     'paragraph',
     'paragraph--' ~ paragraph.bundle|clean_class,
     'paragraph--type--' ~ paragraph.bundle|clean_class,
@@ -49,7 +50,7 @@
   ]
 %}
 {% block paragraph %}
-  <div{{ attributes.addClass(classes).setAttribute('id', 'accordion' ~ paragraph.id()) }}>
+  <div{{ attributes.addClass(classes) }}>
     {% block content %}
       {{ content }}
     {% endblock %}
