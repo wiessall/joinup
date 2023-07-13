@@ -75,6 +75,11 @@ content:
         template_suggestion: ''
     weight: 1
     region: content
+  flag_like_node:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 3
+    region: content
 hidden:
   featured: true
   field_attachment: true
@@ -95,7 +100,6 @@ hidden:
   field_site_featured: true
   field_state: true
   field_topic: true
-  flag_like_node: true
   langcode: true
   links: true
   og_audience: true
