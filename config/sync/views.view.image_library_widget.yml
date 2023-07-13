@@ -14,7 +14,7 @@ _core:
 id: image_library_widget
 label: 'Image Library Widget'
 module: views
-description: 'A block used in the ''image_library_widget'' widget.'
+description: "A block used in the 'image_library_widget' widget."
 tag: ''
 base_table: media_field_data
 base_field: mid

@@ -46,7 +46,7 @@ dependencies:
     - field.field.rdf_entity.solution.field_status
     - field.field.rdf_entity.solution.field_topic
     - rdf_entity.rdfentity.solution
-    - responsive_image.styles.spotlight
+    - responsive_image.styles.teaser
   module:
     - field_group
     - layout_builder
@@ -85,7 +85,7 @@ mode: tile_two
 content:
   field_is_content:
     type: search_api_field
-    label: above
+    label: hidden
     settings: {  }
     third_party_settings: {  }
     weight: 2
@@ -115,33 +115,41 @@ content:
     type: responsive_image
     label: hidden
     settings:
-      responsive_image_style: spotlight
-      image_link: content
+      responsive_image_style: teaser
+      image_link: ''
     third_party_settings:
       template_suggestion:
-        template_suggestion: ''
-    weight: 0
+        template_suggestion: bare
+    weight: 6
     region: content
   field_is_shared_in:
     type: entity_reference_entity_view
-    label: above
+    label: hidden
     settings:
       view_mode: view_mode_tile
       link: false
     third_party_settings:
       template_suggestion:
         template_suggestion: entity_reference__listing_tile
-    weight: 4
+    weight: 5
+    region: content
+  label:
+    type: string
+    label: hidden
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 7
     region: content
   rdf_entity_solution_field_is_content_inline_facets:
     settings: {  }
     third_party_settings: {  }
-    weight: 2
+    weight: 3
     region: content
   rdf_entity_solution_field_is_content_top:
     settings: {  }
     third_party_settings: {  }
-    weight: 1
+    weight: 0
     region: content
   read_more:
     settings: {  }
@@ -151,7 +159,7 @@ content:
   related_solutions:
     settings: {  }
     third_party_settings: {  }
-    weight: 3
+    weight: 4
     region: content
 hidden:
   changed: true
@@ -197,7 +205,7 @@ hidden:
   field_spatial_coverage: true
   field_status: true
   field_topic: true
-  label: true
+  flag_like_rdf_entity: true
   langcode: true
   og_group: true
   pinned_in: true

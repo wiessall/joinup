@@ -21,6 +21,8 @@ commands:
   dev:download-databases:
     - task: run
       command: toolkit:download-dump
+      options:
+        yes: null
     - task: run
       command: mysql:unpack-dump
     - task: run

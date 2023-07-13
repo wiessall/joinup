@@ -120,6 +120,18 @@ Feature: Homepage
       | news     |
       | event    |
 
+  Scenario: An event in the highlighted content on the homepage should display the start date.
+    Given event content:
+      | title            | start date       | end date         | state     | body          |
+      | Light and height | 2021-06-04T20:00 | 2021-06-05T22:00 | validated | High and lite |
+    And the "Highlighted content" content listing contains:
+      | type    | label            |
+      | content | Light and height |
+
+    When I am on the homepage
+    Then I should see "Light and height" as the Highlighted content
+    And I should see the text "04-06-2021" in the "Light and height" tile
+
   Scenario: An event can be highlighted on the homepage
     Given event content:
       | title                     | start date       | end date         | state     |
@@ -165,7 +177,7 @@ Feature: Homepage
     And I should see the following facet summary "Event"
     And I should see the "Florentine steak festival" tile
 
-  @version
+  @joinupVersion
   Scenario Outline: The current version of the Joinup platform is shown in the footer.
     Given the Joinup version is set to "<version>"
     When I am on the homepage
