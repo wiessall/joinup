@@ -1,0 +1,10 @@
+uuid: 9476ab2f-4c40-4aeb-8995-b0740806cd4b
+langcode: en
+status: true
+dependencies:
+  module:
+    - user
+id: user.view_mode_tile_horizontal
+label: 'Tile horizontal'
+targetEntityType: user
+cache: true
