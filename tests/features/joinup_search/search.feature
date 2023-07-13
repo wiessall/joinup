@@ -18,23 +18,23 @@ Feature: Global search
     And news content:
       | title                | headline              | body             | collection                   | topic                   | spatial coverage | state     |
       | El Tuba de Los Lobos | El Celler de Can Roca | The best in town | Molecular cooking collection | Statistics and Analysis | Luxembourg       | validated |
-      | Dummy title 1        | Dummy news 1          | Dummy body       | Molecular cooking collection | E-inclusion             | Luxembourg       | validated |
-      | Dummy title 2        | Dummy news 2          | Dummy body       | Molecular cooking collection | E-inclusion             | Luxembourg       | validated |
-      | Dummy title 3        | Dummy news 3          | Dummy body       | Molecular cooking collection | E-inclusion             | Luxembourg       | validated |
-      | Dummy title 4        | Dummy news 4          | Dummy body       | Molecular cooking collection | E-inclusion             | Luxembourg       | validated |
+      | Dummy news 1        | Dummy title 1          | Dummy body       | Molecular cooking collection | E-inclusion             | Luxembourg       | validated |
+      | Dummy news 2        | Dummy title 2          | Dummy body       | Molecular cooking collection | E-inclusion             | Luxembourg       | validated |
+      | Dummy news 3        | Dummy title 3          | Dummy body       | Molecular cooking collection | E-inclusion             | Luxembourg       | validated |
+      | Dummy news 4        | Dummy title 4          | Dummy body       | Molecular cooking collection | E-inclusion             | Luxembourg       | validated |
     When I visit the search page
     Then the response should not contain "data-drupal-facet-id=\"status\""
 
     Given news content:
       | title         | headline     | body       | collection                   | topic       | spatial coverage | state    |
-      | Rummy title 5 | Rummy news 5 | Dummy body | Molecular cooking collection | E-inclusion | Luxembourg       | archived |
-      | Rummy title 6 | Rummy news 6 | Dummy body | Molecular cooking collection | E-inclusion | Luxembourg       | archived |
+      | Rummy news 5 | Rummy title 5 | Dummy body | Molecular cooking collection | E-inclusion | Luxembourg       | archived |
+      | Rummy news 6 | Rummy title 6 | Dummy body | Molecular cooking collection | E-inclusion | Luxembourg       | archived |
 
     Given I am logged in as a user with the "authenticated" role
     Then I visit the search page
     # All content is visible.
     Then I should see the "Molecular cooking collection" tile
-    And I should see the "El Celler de Can Roca" tile
+    And I should see the "El Tuba de Los Lobos" tile
     And I should see the "Spherification" tile
     And I should see the "Foam" tile
     # Terms are sorted alphabetically
@@ -73,7 +73,7 @@ Feature: Global search
     Then the "spatial coverage" checkbox facet should allow selecting the following values "Belgium (1), European Union (1)"
     And I should see the "Molecular cooking collection" tile
     And I should see the "Spherification" tile
-    But I should not see the "El Celler de Can Roca" tile
+    But I should not see the "El Tuba de Los Lobos" tile
     And I should not see the "Foam" tile
 
     # Test the spatial coverage facet.
@@ -83,7 +83,7 @@ Feature: Global search
     And the "spatial coverage" checkbox facet should allow selecting the following values "Belgium (1), European Union (1)"
     And the "topic" checkbox facet should allow selecting the following values "Social and Political (1), Demography (1)"
     And I should see the "Molecular cooking collection" tile
-    But I should not see the "El Celler de Can Roca" tile
+    But I should not see the "El Tuba de Los Lobos" tile
     And I should not see the "Spherification" tile
     And I should not see the "Foam" tile
 
@@ -110,7 +110,7 @@ Feature: Global search
     Then I click show more from the "spatial coverage" facet
     And the "spatial coverage" checkbox facet should allow selecting the following values "European Union (1), Luxembourg (5)"
     And I should not see the "Molecular cooking collection" tile
-    And I should see the "El Celler de Can Roca" tile
+    And I should see the "El Tuba de Los Lobos" tile
     But I should see the "Spherification" tile
     And I should see the "Foam" tile
 
@@ -121,14 +121,14 @@ Feature: Global search
     Then I should see the "Molecular cooking collection" tile
     And I should see the "Foam" tile
     But I should not see the "Spherification" tile
-    And I should not see the "El Celler de Can Roca" tile
+    And I should not see the "El Tuba de Los Lobos" tile
 
     Given I am on the search page
     When I check the "Show only Archived items" checkbox from the "Status" facet
     And I should not see the "Molecular cooking collection" tile
     And I should not see the "Spherification" tile
     And I should not see the "Foam" tile
-    And I should not see the "El Celler de Can Roca" tile
+    And I should not see the "El Tuba de Los Lobos" tile
     And I should not see the "Dummy news 1" tile
     And I should not see the "Dummy news 2" tile
     And I should not see the "Dummy news 3" tile
@@ -140,7 +140,7 @@ Feature: Global search
     And I should see the "Molecular cooking collection" tile
     And I should see the "Spherification" tile
     And I should see the "Foam" tile
-    And I should see the "El Celler de Can Roca" tile
+    And I should see the "El Tuba de Los Lobos" tile
     And I should see the "Dummy news 1" tile
     And I should see the "Dummy news 2" tile
     And I should see the "Dummy news 3" tile
@@ -248,7 +248,7 @@ Feature: Global search
     # custom pages is added to their collection, we also match the collection.
     When I enter "omega" in the search bar and press enter
     Then I should see the text "SEARCH RESULTS (6)"
-    And the page should show the tiles "Collection alpha, News headline delta, Event Omega, Document omega, Discussion omega, Page omega"
+    And the page should show the tiles "Collection alpha, News omega, Event Omega, Document omega, Discussion omega, Page omega"
 
     # "Beta" is used in all the rdf entities body fields.
     When I enter "beta" in the search bar and press enter
@@ -257,11 +257,11 @@ Feature: Global search
 
     # "Epsilon" is used in all the node entities body fields.
     When I enter "epsilon" in the search bar and press enter
-    Then the page should show the tiles "Collection alpha, News headline delta, Event Omega, Document omega, Discussion omega, Page omega"
+    Then the page should show the tiles "Collection alpha, News omega, Event Omega, Document omega, Discussion omega, Page omega"
 
     # "Alphabet" is used in all the keywords fields.
     When I enter "Alphabet" in the search bar and press enter
-    Then the page should show the tiles "Solution alpha, Release Alpha, News headline delta, Event Omega, Document omega"
+    Then the page should show the tiles "Solution alpha, Release Alpha, News omega, Event Omega, Document omega"
 
     # "Gamma" is used in the collection abstract.
     When I enter "gamma" in the search bar and press enter
@@ -269,7 +269,7 @@ Feature: Global search
 
     # "Delta" is used in headline and short titles.
     When I enter "delta" in the search bar and press enter
-    Then the page should show the tiles "News headline delta, Event Omega, Document omega"
+    Then the page should show the tiles "News omega, Event Omega, Document omega"
 
     # Search for the event fields: agenda, location, address, organisation, scope.
     When I enter "agenda" in the search bar and press enter
@@ -572,23 +572,23 @@ Feature: Global search
     Then the option "Relevance" should be selected
     And I should see the text "SEARCH RESULTS (3)"
     And I should see the following tiles in the correct order:
-      | Relativity news: Relativity theory |
-      | Relativity is the word             |
-      | Absolutely nonsense                |
+      | The uneven universe |
+      | Quantum information |
+      | The earth is square |
     And I should be on "/search?keys=Relativity&sort_by=relevance"
 
     Given I select "Creation Date" from "Sort by"
     Then I should see the following tiles in the correct order:
-      | Absolutely nonsense                |
-      | Relativity news: Relativity theory |
-      | Relativity is the word             |
+      | The earth is square |
+      | The uneven universe |
+      | Quantum information |
     And I should be on "/search?keys=Relativity&sort_by=creation-date"
 
     Given I select "Last Updated Date" from "Sort by"
     Then I should see the following tiles in the correct order:
-      | Relativity is the word             |
-      | Relativity news: Relativity theory |
-      | Absolutely nonsense                |
+      | Quantum information |
+      | The uneven universe |
+      | The earth is square |
     And I should be on "/search?keys=Relativity&sort_by=last-updated-date"
 
   @javascript
@@ -782,6 +782,6 @@ Feature: Global search
       | The uneven universe | Relativity news: Relativity theory | I do care about the relativity keyword in the body.               | Custom collection | validated | 02/01/2019 | 02/08/2019 |
       | The earth is square | Absolutely nonsense                | Some news are not worth it but I will add relativity here anyway. | Custom collection | validated | 03/01/2019 | 01/08/2019 |
     When I visit the search page
-    Then I should see the text "Last update: 08/03/2019" in the "Relativity is the word" card
-    And I should see the text "Last update: 08/02/2019" in the "Relativity news: Relativity theory" card
-    And I should see the text "Last update: 08/01/2019" in the "Absolutely nonsense" card
+    Then I should see the text "Last update: 08/03/2019" in the "Quantum information" card
+    And I should see the text "Last update: 08/02/2019" in the "The uneven universe" card
+    And I should see the text "Last update: 08/01/2019" in the "The earth is square" card
