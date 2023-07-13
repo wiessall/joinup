@@ -158,6 +158,11 @@ Feature: Subscribing to community content in collections
       | Ruse |
     And the monthly group content subscription digest for kalin should not contain the following message:
       | Ruse |
+    When the workflow state of the "Ruse" content is changed to "archived"
+    Then the weekly group content subscription digest for bisera should not contain the following message:
+      | Ruse |
+    And the monthly group content subscription digest for kalin should not contain the following message:
+      | Ruse |
 
     # Test publication of a solution.
     When the workflow state of the "Double seaming" solution is changed to "validated"
