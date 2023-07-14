@@ -22,7 +22,7 @@ joinup_core.edit_support_menu:
 
 joinup_core.site_alerts:
   title: 'Site alerts'
-  route_name: entity.site_alert.collection
+  route_name: entity.sitewide_alert.collection
   description: 'Manage site wide alerts.'
   parent: system.admin
   weight: 3
