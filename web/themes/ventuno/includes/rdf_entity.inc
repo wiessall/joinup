@@ -28,7 +28,7 @@ function ventuno_preprocess_rdf_entity(array &$variables): void {
   }
 
   // View modes where tiles are expected.
-  $tile_view_modes = ['view_mode_tile', 'tile_two', 'carousel'];
+  $tile_view_modes = ['view_mode_tile', 'view_mode_tile_horizontal', 'carousel'];
   // Prepare data for the tiles.
   if (in_array($variables['view_mode'], $tile_view_modes)) {
     _ventuno_preprocess_tile($variables, 'rdf_entity');

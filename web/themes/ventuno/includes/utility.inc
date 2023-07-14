@@ -51,16 +51,17 @@ function _ventuno_preprocess_tile(array &$variables, string $entity_type_id): vo
   // Prepare different data depending on the route.
   $route_match = \Drupal::routeMatch();
   $route_name = $route_match->getRouteName();
-  $routes_horizontal_tiles = [
-    'view.search.page_1',
-    'page_manager.page_view_homepage_homepage-layout_builder-0',
-    'page_manager.page_view_homepage_homepage-layout_builder-1',
-  ];
 
-  // Set horizontal tiles in some cases.
-  if (in_array($route_name, $routes_horizontal_tiles)) {
-    $variables['horizontal'] = TRUE;
-    // Text only on horizontal tiles.
+  // Text.
+  // Only supposed to be passed to horizontal tiles,
+  // but also vertical tiles on Homepage and Topic pages.
+  $routes_with_text = [
+    'page_manager.page_view_homepage_homepage-layout_builder-0',
+    'entity.meta_entity.canonical',
+  ];
+  if ((in_array($route_name, $routes_with_text) && $variables['view_mode'] === 'view_mode_tile') ||
+    $variables['view_mode'] === 'view_mode_tile_horizontal' ||
+    $variables['view_mode'] === 'highlighted') {
     $variables['text'] = $entity instanceof DescriptionInterface && isset($variables['content'][$entity->getDescriptionField()]) ? $variables['content'][$entity->getDescriptionField()] : NULL;
   }
 
@@ -70,8 +71,8 @@ function _ventuno_preprocess_tile(array &$variables, string $entity_type_id): vo
     : [];
 
   // Topics.
-  // Number of topics displayed can vary depending on the view mode.
-  $max_topics = $variables['view_mode'] === 'tile_two' ? 3 : 2;
+  // Max number of topics displayed.
+  $max_topics = 2;
   $topics = ($entity instanceof TopicReferencingEntityInterface) ? $entity->getTopics() : NULL;
   if ($topics) {
     $variables['badges'] = [];
@@ -107,6 +108,12 @@ function _ventuno_preprocess_tile(array &$variables, string $entity_type_id): vo
     ]);
   }
 
+  // Like flag. Meant to be the first "extra-data" displayed in tile's footer.
+  $like = $variables['content']['flag_like_node'] ?? $variables['content']['flag_like_rdf_entity'] ?? NULL;
+  if ($like !== NULL) {
+    $variables['extra_data'][] = ['label' => $like];
+  }
+
   // Iterate over entity bundles for case-specific data.
   switch ($entity->bundle()) {
     case 'discussion':
@@ -137,12 +144,6 @@ function _ventuno_preprocess_tile(array &$variables, string $entity_type_id): vo
       }
       else {
         $variables['info']['label'] = t('Physical event');
-      }
-      break;
-
-    case 'news':
-      if ($route_name === 'view.search.page_1') {
-        $variables['label'] = $variables['elements']['#node']->get('field_news_headline')->value;
       }
       break;
 

@@ -799,18 +799,6 @@ module.exports = {
     {
       entry: path.resolve(
         outputFolder,
-        `${ventuno}src/scss/components/tile-two.scss`
-      ),
-      dest: path.resolve(outputFolder, `${ventuno}assets/css/tile-two.min.css`),
-      options: {
-        includePaths,
-        minify: true,
-        sourceMap: "file",
-      },
-    },
-    {
-      entry: path.resolve(
-        outputFolder,
         `${ventuno}src/scss/components/tile.scss`
       ),
       dest: path.resolve(outputFolder, `${ventuno}assets/css/tile.min.css`),
@@ -1220,6 +1208,7 @@ module.exports = {
           "chevron-up.svg",
           "clipboard2-check.svg",
           "clock-history.svg",
+          "code-slash.svg",
           "download.svg",
           "envelope-fill.svg",
           "exclamation-circle-fill.svg",
@@ -1264,6 +1253,7 @@ module.exports = {
           "plus.svg",
           "question-lg.svg",
           "reply.svg",
+          "rss.svg",
           "search.svg",
           "star.svg",
           "three-dots.svg",

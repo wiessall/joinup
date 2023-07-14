@@ -109,7 +109,6 @@ Feature: Discussions added to collections
       | Smart contract         | kesha1988 | An amazing discussion |
     When I reload the page
     Then I should see the statistics "2" in the "An amazing discussion" tile
-    And I should not see the statistics "0" in the "An amazing discussion" tile
 
     # Check that an anonymous user can see the information.
     Given I am an anonymous user

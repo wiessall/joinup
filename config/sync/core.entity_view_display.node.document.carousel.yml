@@ -37,7 +37,7 @@ third_party_settings:
       label: Categorisation
       parent_name: ''
       region: hidden
-      weight: 3
+      weight: 23
       format_type: html_element
       format_settings:
         classes: ''
@@ -54,7 +54,7 @@ third_party_settings:
       label: Attachment
       parent_name: ''
       region: hidden
-      weight: 8
+      weight: 24
       format_type: html_element
       format_settings:
         classes: ''
@@ -102,6 +102,11 @@ content:
       template_suggestion:
         template_suggestion: no_wrappers
     weight: 0
+    region: content
+  flag_like_node:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 3
     region: content
 hidden:
   featured: true

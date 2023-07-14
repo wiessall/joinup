@@ -1303,6 +1303,31 @@ class JoinupContext extends RawDrupalContext {
   }
 
   /**
+   * Clicks a specific link in a tile.
+   *
+   * @param string $link
+   *   The link.
+   * @param string $heading
+   *   The heading of the tile.
+   *
+   * @throws \Exception
+   *   Thrown when the expected link is not found in the tile.
+   *
+   * @Then I click the :link in the :heading tile
+   */
+  public function iClickLinkInTile(string $link, string $heading): void {
+    $element = $this->getTileByHeading($heading);
+    $this->scrollElementIntoView($element);
+
+    $linkElement = $element->findLink($link);
+    if (!$linkElement) {
+      throw new \Exception("The link '$link' was not found in the tile '$heading'.");
+    }
+
+    $linkElement->click();
+  }
+
+  /**
    * Asserts that a certain text is present in a tile.
    *
    * @param string $heading
@@ -3138,12 +3163,8 @@ class JoinupContext extends RawDrupalContext {
    */
   public function getAllCardsInPage(): array {
     $locators = [
-      // Legacy tile of Joinup theme.
-      '.listing__item--tile .listing__title',
       // Card style of Ventuno theme.
       '.tile .tile__title',
-      // Tiles as an article.
-      'article.tile h1',
       // Carousel for non javascript test.
       '.glide__slides .slide span',
       // Carousel for javascript test.

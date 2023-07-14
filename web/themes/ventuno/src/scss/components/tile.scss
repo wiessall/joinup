@@ -22,6 +22,7 @@
       align-items: center;
       & img {
         max-height: 100%;
+        width: auto;
         margin-bottom: 0;
       }
     }
@@ -103,6 +104,30 @@
     }
     &.pin::before {
       @include get-bootstrap-icon('pin', $white);
+    }
+  }
+  &__footer {
+    .flag__link {
+      padding: $spacer * .125;
+      border-radius: $border-radius-pill;
+      &:hover {
+        text-decoration: none;
+      }
+    }
+    .flag__link:not(.flag__link--archived) {
+      &:hover {
+        background-color: $secondary;
+      }
+    }
+    .flag__link--archived {
+      &:hover {
+        cursor: not-allowed;
+      }
+    }
+    [data-joinup-card-stats-shared] {
+      &:hover {
+        cursor: not-allowed;
+      }
     }
   }
   &--horizontal {

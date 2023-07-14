@@ -141,6 +141,11 @@ content:
         template_suggestion: entity_reference__listing_tile
     weight: 9
     region: content
+  flag_like_node:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 10
+    region: content
   report:
     type: link
     label: hidden

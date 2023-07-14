@@ -21,9 +21,9 @@ dependencies:
     - node.type.news
     - responsive_image.styles.tile
   module:
-    - joinup_html_stripper
     - responsive_image
     - template_suggestion
+    - text
     - user
 id: node.news.view_mode_tile
 targetEntityType: node
@@ -31,24 +31,13 @@ bundle: news
 mode: view_mode_tile
 content:
   body:
-    type: joinup_html_stripper_stripped
+    type: text_default
     label: hidden
-    settings:
-      trim_length: 500
+    settings: {  }
     third_party_settings:
       template_suggestion:
         template_suggestion: bare
     weight: 1
-    region: content
-  field_keywords:
-    type: string
-    label: hidden
-    settings:
-      link_to_entity: false
-    third_party_settings:
-      template_suggestion:
-        template_suggestion: comma_separated
-    weight: 2
     region: content
   field_news_logo:
     type: responsive_image
@@ -61,10 +50,16 @@ content:
         template_suggestion: bare
     weight: 0
     region: content
+  flag_like_node:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 10
+    region: content
 hidden:
   featured: true
   field_attachment: true
   field_comments: true
+  field_keywords: true
   field_news_headline: true
   field_news_referenced_solution: true
   field_news_source_url: true
