@@ -360,15 +360,17 @@ function _joinup_core_column_to_layout(ParagraphInterface $old_parent_column, Pa
  */
 function _joinup_core_create_heading_paragraph(ParagraphInterface $new_layout_paragraph, string $heading, string $heading_type, string $region = 'content'): ParagraphInterface {
   $child_paragraph = Paragraph::create([
-    'type' => 'simple_paragraph',
-    'field_body' => [
-      'value' => "<{$heading_type}>" . $heading . "</{$heading_type}>",
-      'format' => 'content_editor',
+    'type' => 'heading',
+    'paragraph_heading' => [
+      'value' => "$heading",
     ],
   ]);
   $child_paragraph->setBehaviorSettings('layout_paragraphs', [
     'parent_uuid' => $new_layout_paragraph->uuid(),
     'region' => $region,
+  ]);
+  $child_paragraph->setBehaviorSettings('paragraph_heading', [
+    'heading_type' => $heading_type,
   ]);
   $child_paragraph->save();
   return $child_paragraph;
