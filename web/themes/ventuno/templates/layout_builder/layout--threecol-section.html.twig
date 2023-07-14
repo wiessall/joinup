@@ -14,23 +14,17 @@
 {% if content %}
   <div{{ attributes.addClass(['row']) }}>
 
-    {% if content.first %}
-      <div {{ region_attributes.first.addClass(['col-md-4']) }}>
-        {{ content.first }}
-      </div>
-    {% endif %}
+    <div {{ region_attributes.first.addClass(['col-md-4']) }}>
+      {{ content.first }}
+    </div>
 
-    {% if content.second %}
-      <div {{ region_attributes.second.addClass(['col-md-4']) }}>
-        {{ content.second }}
-      </div>
-    {% endif %}
+    <div {{ region_attributes.second.addClass(['col-md-4']) }}>
+      {{ content.second }}
+    </div>
 
-    {% if content.third %}
-      <div {{ region_attributes.third.addClass(['col-md-4']) }}>
-        {{ content.third }}
-      </div>
-    {% endif %}
+    <div {{ region_attributes.third.addClass(['col-md-4']) }}>
+      {{ content.third }}
+    </div>
 
   </div>
 {% endif %}
