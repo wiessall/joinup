@@ -270,6 +270,47 @@ class JoinupLayoutParagraphsContext extends RawDrupalContext {
   }
 
   /**
+   * Asserts the structure of a layout paragraph.
+   *
+   * @param string $position
+   *   The position of the layout paragraph to check.
+   * @param string $field_alias
+   *   The field alias as defined in
+   *   \Drupal\joinup\Context\JoinupLayoutParagraphsContext::FIELD_MAP.
+   * @param \Behat\Gherkin\Node\TableNode $structure
+   *   The table of layout paragraphs. An example is below.
+   * @codingStandardsIgnoreStart
+   * | first  | heading |
+   * | first  | text    |
+   * | second | heading |
+   * @codingStandardsIgnoreEnd
+   * The first column is the region of the layout paragraph. The second column
+   * is the machine name of the paragraph.
+   *
+   * @When the layout in position :position from the :field_alias form field should have the following structure:
+   */
+  public function assertLayoutParagraphStructure(string $position, string $field_alias, TableNode $structure): void {
+    $layout_paragraphs = $this->getFormFieldLayoutParagraphs($field_alias);
+    $layout_paragraph = $layout_paragraphs[$position - 1];
+    $actual = [];
+    /** @var \Behat\Mink\Element\NodeElement $layout_paragraph */
+    foreach ($layout_paragraph->findAll('css', '.layout__region') as $region) {
+      $data_region = $region->getAttribute('data-region');
+      $actual[$data_region] = [];
+      foreach ($region->findAll('css', 'div.paragraph') as $paragraph) {
+        $actual[$data_region][] = $paragraph->getAttribute('data-type');
+      }
+    }
+
+    $expected = [];
+    foreach ($structure->getRows() as $row) {
+      $expected[$row[0]][] = $row[1];
+    }
+
+    assertSame($expected, $actual);
+  }
+
+  /**
    * Clicks on link inside paragraph.
    *
    * @param string $label
@@ -432,6 +473,15 @@ class JoinupLayoutParagraphsContext extends RawDrupalContext {
     if (empty($links)) {
       throw new \Exception('No choose component links found.');
     }
+
+    // Filter out invisible links (that have the style 'display: none'). This is
+    // because, when the layout region has at least one paragraph, then the
+    // central button that adds to the region is still in the HTML but hidden.
+    // The buttons available at that point, are the ones before and after each
+    // paragraph.
+    $links = array_filter($links, function (TraversableElement $link) {
+      return $link->getAttribute('style') !== 'display: none;';
+    });
 
     return end($links);
   }
