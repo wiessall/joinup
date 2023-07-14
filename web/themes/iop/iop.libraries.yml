@@ -19,8 +19,15 @@ theme:
   css:
     theme:
       assets/css/theme.min.css: { minified: true }
+  dependencies:
+    - iop/landing
 
 # Pages
+landing:
+  css:
+    theme:
+      assets/css/landing.min.css: { minified: true, preprocess: false }
+
 listing:
   css:
     theme:

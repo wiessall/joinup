@@ -894,6 +894,15 @@ module.exports = {
     },
     // Pages
     {
+      entry: path.resolve(outputFolder, `${iop}src/scss/pages/landing.scss`),
+      dest: path.resolve(outputFolder, `${iop}assets/css/landing.min.css`),
+      options: {
+        minify: true,
+        includePaths,
+        sourceMap: "file",
+      },
+    },
+    {
       entry: path.resolve(outputFolder, `${iop}src/scss/pages/listing.scss`),
       dest: path.resolve(outputFolder, `${iop}assets/css/listing.min.css`),
       options: {
