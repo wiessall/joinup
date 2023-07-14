@@ -59,7 +59,7 @@ Feature: Homepage
     When I click "More news"
     Then I should be on the advanced search page
     And I should see the following facet summary "News"
-    And the page should show the tiles "Preserve habitats, Transformative practices, Loss of wildlands, Ecosystem management"
+    And the page should show the tiles "Current biodiversity crisis, Environmental stewardship, Spatial reconstruction, Earlier transformations"
 
   @terms
   Scenario: Community content can be placed "In the spotlight" on the homepage
@@ -67,8 +67,8 @@ Feature: Homepage
       | title | Mice in space |
       | state | validated     |
     And news content:
-      | title          | collection    | topic                                                 | state     | logo       | body                                                                                                                                                                              |
-      | Muscle atrophy | Mice in space | Finance in EU, Supplier exchange, E-health, E-justice | validated | blaise.jpg | Researchers from the University of Tsukuba have sent mice into space to explore effects of spaceflight and reduced gravity on muscle atrophy, or wasting, at the molecular level. |
+      | title       | headline       | collection    | topic                                                 | state     | logo       | body                                                                                                                                                                              |
+      | New muscles | Muscle atrophy | Mice in space | Finance in EU, Supplier exchange, E-health, E-justice | validated | blaise.jpg | Researchers from the University of Tsukuba have sent mice into space to explore effects of spaceflight and reduced gravity on muscle atrophy, or wasting, at the molecular level. |
     And discussion content:
       | title                | collection    | topic                            | state     | logo    | body                                                                                                                                                                                       |
       | Influence of gravity | Mice in space | Employment and Support Allowance | validated | ada.jpg | Space exploration has brought about many scientific and technological advances, yet manned spaceflights come at a cost to astronauts, including reduced skeletal muscle mass and strength. |
@@ -80,16 +80,16 @@ Feature: Homepage
       | Stay at the ISS | Mice in space | EU and European Policies | validated | charles.jpg | Two groups of mice (six per group) were housed aboard the International Space Station for 35 days. One group was subjected to artificial gravity (1 g) and the other to microgravity. |
     And the "In the spotlight" content listing contains:
       | type    | label           |
-      | content | Muscle atrophy  |
+      | content | New muscles     |
       | content | Stay at the ISS |
       | content | Microgravity    |
 
     When I am on the homepage
     Then the in the spotlight section should contain the following content:
-      | number | logo        | topics                                      | title           | body                                                                                                                                                                                            |
-      | 1      | blaise.jpg  | Finance in EU, Supplier exchange, +2 topics | Muscle atrophy  | Researchers from the University of Tsukuba have sent mice into space to explore effects of spaceflight and reduced gravity on muscle atrophy                                                    |
-      | 2      | charles.jpg | EU and European Policies                    | Stay at the ISS | Two groups of mice (six per group) were housed aboard the International Space Station for 35 days. One group was subjected to artificial gravity (1 g) and the other to microgravity.           |
-      | 3      | alan.jpg    | HR, Statistics and Analysis, E-justice      | Microgravity    | Conventional studies investigating the effects of reduced gravity on muscle mass and function have used a ground control group that is not directly comparable to the space experimental group. |
+      | number | logo        | topics                                      | title           | type     | body                                                                                                                                                                                            |
+      | 1      | blaise.jpg  | Finance in EU, Supplier exchange, +2 topics | New muscles     | news     | Researchers from the University of Tsukuba have sent mice into space to explore effects of spaceflight and reduced gravity on muscle atrophy                                                    |
+      | 2      | charles.jpg | EU and European Policies                    | Stay at the ISS | event    | Two groups of mice (six per group) were housed aboard the International Space Station for 35 days. One group was subjected to artificial gravity (1 g) and the other to microgravity.           |
+      | 3      | alan.jpg    | HR, Statistics and Analysis, E-justice      | Microgravity    | document | Conventional studies investigating the effects of reduced gravity on muscle mass and function have used a ground control group that is not directly comparable to the space experimental group. |
 
   @terms
   Scenario Outline: Community content be highlighted on the homepage
@@ -119,6 +119,24 @@ Feature: Homepage
       | document |
       | news     |
       | event    |
+
+  Scenario: An event in the highlighted content on the homepage should display the start date.
+    Given event content:
+      | title            | start date       | end date         | state     | body          |
+      | Light and height | 2021-06-04T20:00 | 2021-06-05T22:00 | validated | High and lite |
+    And the "Highlighted content" content listing contains:
+      | type    | label            |
+      | content | Light and height |
+
+    When I am on the homepage
+    Then I should see "Light and height" as the Highlighted content
+    And I should see the text "04-06-2021" in the "Light and height" tile
+    And I should see the link "Login or register to like this content" in the "Light and height" tile
+
+    Given I am logged in as a moderator
+    When I am on the homepage
+    Then I should see the "Light and height" tile
+    And I should see the link "Like this content" in the "Light and height" tile
 
   Scenario: An event can be highlighted on the homepage
     Given event content:

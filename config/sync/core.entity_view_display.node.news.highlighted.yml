@@ -37,7 +37,7 @@ third_party_settings:
       label: References
       parent_name: ''
       region: hidden
-      weight: 19
+      weight: 24
       format_type: html_element
       format_settings:
         classes: ''
@@ -92,6 +92,11 @@ content:
       template_suggestion:
         template_suggestion: ''
     weight: 1
+    region: content
+  flag_like_node:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 3
     region: content
 hidden:
   featured: true

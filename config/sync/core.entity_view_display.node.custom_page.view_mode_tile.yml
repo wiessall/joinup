@@ -40,7 +40,7 @@ content:
     type: entity_reference_revisions_entity_view
     label: hidden
     settings:
-      view_mode: preview
+      view_mode: default
       link: ''
     third_party_settings:
       field_delimiter:
@@ -52,6 +52,11 @@ content:
       template_suggestion:
         template_suggestion: bare
     weight: 1
+    region: content
+  flag_like_node:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 10
     region: content
 hidden:
   field_attachment: true

@@ -1,0 +1,50 @@
+{#
+/**
+ * @file
+ * Overriding base flag link template
+ *
+ * Available variables:
+ * - attributes: HTML attributes for the link element.
+ * - title: The flag link title.
+ * - action: 'flag' or 'unflag'
+ * - flag: The flag object.
+ * - flaggable: The flaggable entity.
+ */
+#}
+{% apply spaceless %}
+
+  {# Depending on the flag action, set the appropriate action class. #}
+  {% if action == 'unflag' %}
+    {% set action_class = 'action-unflag' %}
+    {% set link_title = 'Remove like from this content'|t %}
+  {% else %}
+    {% set action_class = 'action-flag' %}
+    {% set link_title = 'Like this content'|t %}
+  {% endif %}
+
+  {%
+    set link_classes = [
+    'flag',
+    'flag-' ~ flag.id()|clean_class,
+    ('js-flag-' ~ flag.id() ~ '-' ~ flaggable.id())|clean_class,
+    action_class,
+    'flag__link',
+    'd-flex',
+    'align-items-center',
+    'text-muted',
+  ]
+  %}
+
+  {# Attach flag count. #}
+  {% set count = flagcount(flag, flaggable) %}
+
+  {# Set nofollow to prevent search bots from crawling anonymous flag links #}
+  {% set attributes = attributes.setAttribute('rel', 'nofollow').setAttribute('title', link_title) %}
+
+  <a{{ attributes.addClass(link_classes) }}>
+    <svg class="bi icon--xs me-1">
+      <use xlink:href="{{ bcl_icon_path }}#{{ action == 'unflag' ? 'hand-thumbs-up-fill' : 'hand-thumbs-up'}}"></use>
+    </svg>
+    {{ count }}
+  </a>
+{% endapply %}

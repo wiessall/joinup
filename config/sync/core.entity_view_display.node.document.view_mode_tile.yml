@@ -22,11 +22,9 @@ dependencies:
     - node.type.document
     - responsive_image.styles.tile
   module:
-    - file_url
-    - joinup_html_stripper
-    - options
     - responsive_image
     - template_suggestion
+    - text
     - user
 _core:
   default_config_hash: W1EgrmzJHwU_f1cWpd48tTcGdhOt4gLbqLOmi0XtqfU
@@ -36,14 +34,13 @@ bundle: document
 mode: view_mode_tile
 content:
   body:
-    type: joinup_html_stripper_stripped
+    type: text_default
     label: hidden
-    settings:
-      trim_length: 500
+    settings: {  }
     third_party_settings:
       template_suggestion:
         template_suggestion: bare
-    weight: 0
+    weight: 1
     region: content
   field_document_logo:
     type: responsive_image
@@ -53,47 +50,28 @@ content:
       image_link: ''
     third_party_settings:
       template_suggestion:
-        template_suggestion: bare
-    weight: 4
+        template_suggestion: ''
+    weight: 0
     region: content
-  field_file:
-    type: file_url_default
-    label: hidden
-    settings:
-      mode: link
-    third_party_settings: {  }
-    weight: 2
-    region: content
-  field_keywords:
-    type: string
-    label: hidden
-    settings:
-      link_to_entity: false
-    third_party_settings:
-      template_suggestion:
-        template_suggestion: comma_separated
-    weight: 3
-    region: content
-  field_type:
-    type: list_default
-    label: hidden
+  flag_like_node:
     settings: {  }
-    third_party_settings:
-      template_suggestion:
-        template_suggestion: no_wrappers
-    weight: 1
+    third_party_settings: {  }
+    weight: 10
     region: content
 hidden:
   featured: true
   field_comments: true
   field_document_publication_date: true
   field_document_spatial_coverage: true
+  field_file: true
+  field_keywords: true
   field_licence: true
   field_shared_in: true
   field_short_title: true
   field_site_featured: true
   field_state: true
   field_topic: true
+  field_type: true
   langcode: true
   links: true
   og_audience: true
