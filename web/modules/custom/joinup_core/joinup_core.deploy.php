@@ -277,15 +277,26 @@ function _joinup_core_get_new_layout_paragraph(EntityInterface $parent_entity, s
     $behavior['config']['column_widths'] = $column_widths;
   }
 
-  if ($background_theme) {
+  if ($background_theme === 'light') {
     $behavior['background_theme'] = [
-      'background_theme' => $background_theme,
+      'background_theme' => '',
     ];
   }
 
-  if ($extra_classes) {
+  elseif ($background_theme === 'light-wave') {
+    $behavior['background_theme'] = [
+      'background_theme' => 'light',
+    ];
+  }
+
+  if ($extra_classes === 'featured-2_column_featured_right') {
     $behavior['extra_class'] = [
-      'extra_class' => $extra_classes,
+      'extra_class' => 'banner',
+    ];
+  }
+  elseif ($extra_classes === 'featured-2_column_featured_left') {
+    $behavior['extra_class'] = [
+      'extra_class' => 'why',
     ];
   }
 
