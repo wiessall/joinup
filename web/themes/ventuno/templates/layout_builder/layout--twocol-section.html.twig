@@ -14,17 +14,13 @@
 {% if content %}
   <div{{ attributes.addClass(['row']).removeClass(['layout', 'layout--twocol-section', 'layout--twocol-section--50-50']) }}>
 
-    {% if content.first %}
-      <div {{ region_attributes.first.addClass(['col-md-6']) }}>
-        {{ content.first }}
-      </div>
-    {% endif %}
+    <div {{ region_attributes.first.addClass(['col-md-6']) }}>
+      {{ content.first }}
+    </div>
 
-    {% if content.second %}
-      <div {{ region_attributes.first.addClass(['col-md-6']) }}>
-        {{ content.second }}
-      </div>
-    {% endif %}
+    <div {{ region_attributes.first.addClass(['col-md-6']) }}>
+      {{ content.second }}
+    </div>
 
   </div>
 {% endif %}
