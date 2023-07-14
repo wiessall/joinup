@@ -285,7 +285,8 @@
                 "Allow multi-property references. @see https://github.com/jhedstrom/DrupalDriver/pull/252": "https://patch-diff.githubusercontent.com/raw/jhedstrom/DrupalDriver/pull/252.diff"
             },
             "drupal/editor_file": {
-                "Uploaded files are not permanent @see https://www.drupal.org/i/3057895": "https://git.drupalcode.org/project/editor_file/-/merge_requests/1.diff"
+                "Uploaded files are not permanent @see https://www.drupal.org/i/3057895": "https://git.drupalcode.org/project/editor_file/-/merge_requests/1.diff",
+                "Drupal 10 & CKEditor 5 readiness @see https://www.drupal.org/i/3232053": "https://git.drupalcode.org/project/editor_file/-/merge_requests/4.patch"
             },
             "drupal/embed_block": {
                 "Add support for Ckeditor 5. @see https://www.drupal.org/i/3316336": "https://git.drupalcode.org/project/embed_block/-/merge_requests/5.diff"
