@@ -90,6 +90,11 @@ paragraph--image:
     theme:
       assets/css/paragraph--image.min.css: { minified: true }
 
+paragraph--layout:
+  css:
+    theme:
+      assets/css/paragraph--layout.min.css: { minified: true }
+
 paragraph--row:
   css:
     theme:

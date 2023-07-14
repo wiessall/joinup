@@ -1041,6 +1041,21 @@ module.exports = {
     {
       entry: path.resolve(
         outputFolder,
+        `${iop}src/scss/components/paragraphs/paragraph--layout.scss`
+      ),
+      dest: path.resolve(
+        outputFolder,
+        `${iop}assets/css/paragraph--layout.min.css`
+      ),
+      options: {
+        minify: true,
+        includePaths,
+        sourceMap: "file",
+      },
+    },
+    {
+      entry: path.resolve(
+        outputFolder,
         `${iop}src/scss/components/paragraphs/paragraph--row.scss`
       ),
       dest: path.resolve(

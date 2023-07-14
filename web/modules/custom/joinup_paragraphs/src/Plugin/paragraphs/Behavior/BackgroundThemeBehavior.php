@@ -26,7 +26,7 @@ class BackgroundThemeBehavior extends ParagraphsBehaviorBase {
    */
   public function view(array &$build, Paragraph $paragraph, EntityViewDisplayInterface $display, $view_mode) {
     $theme = $paragraph->getBehaviorSetting($this->getPluginId(), 'background_theme');
-    $build['#attributes']['class'][] = 'background-theme-' . $theme;
+    $theme ? $build['#attributes']['class'][] = 'paragraph--layout--' . $theme : NULL;
   }
 
   /**
@@ -37,8 +37,9 @@ class BackgroundThemeBehavior extends ParagraphsBehaviorBase {
       '#type' => 'select',
       '#title' => $this->t('Background theme'),
       '#options' => [
-        'light' => $this->t('Light'),
-        'light-wave' => $this->t('Light wave'),
+        '' => $this->t('None'),
+        'light' => $this->t('Light grey'),
+        'secondary' => $this->t('Light blue'),
       ],
       '#default_value' => $paragraph->getBehaviorSetting($this->getPluginId(), 'background_theme'),
     ];
