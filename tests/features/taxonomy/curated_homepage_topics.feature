@@ -168,34 +168,7 @@ Feature:
     Then I should see the heading "Main topics"
     And I should not see the heading "Hello world"
 
-  Scenario: Configurable listings are available for the topic meta entities.
-    Given the following topics are enabled in the homepage:
-      | E-justice |
-    And I am logged in as a moderator
-    And I go to the "topic" meta entity of the "E-justice" topic "taxonomy term"
-    And I click "Edit"
-    Then I should see the heading "Edit E-justice"
-    And I should not see the button "Add configurable listing"
-    When I press "Add Row"
-    Then I should not see the button "Add 2 column with featured media on the left"
-    Then I should not see the button "Add 2 column with featured media on the right"
-    Then I should not see the button "Add 3 columns"
-    And I press "Add 1 column layout"
-    Then I should see the button "Add Configurable listing"
-    And I should not see the button "Add Accordion"
-    And I should not see the button "Add Iframe"
-    And I should not see the button "Add Carousel"
-    And I should not see the button "Add Content listing"
-    And I should not see the button "Add Image"
-    And I should not see the button "Add Map"
-    And I should not see the button "Add Testimony"
-
-    Given I reload the page
-    And I press "Add Row"
-    And I press "Add 2 column layout"
-    Then I should see the button "Add Configurable listing"
-
-  Scenario: Lists of configurable content can be added in the page of the topic meta entity.
+  Scenario: Description and summary are displayed accordingly.
     Given news content:
       | title  | headline | state     |
       | News 1 | News 1   | validated |
@@ -228,30 +201,44 @@ Feature:
     When I go to the homepage
     Then I should see the text "This will be shown in the homepage."
 
-    When I click "E-justice"
-    And I click "Edit"
-    When I press "Add Row"
-    And I press "Add 2 column layout"
-    And I press "Add Configurable listing"
-
-    When I reload the page
-    And I press "Add Row"
-    And I press "Add 1 column layout"
-    And I press "Add Configurable listing"
-    Then the following fields should be present "Heading, Action link, List style, Query presets"
-
-    When I fill in "Heading" with "E-justice heading"
-    And I fill in "URL" with "http://example.com"
-    And I fill in "Link text" with "E-justice link text"
-    And I select "List" from "List style"
-    And I fill in "Query presets" with "entity_bundle|news"
+  @javascript
+  Scenario: Lists of configurable content can be added in the page of the topic meta entity.
+    Given news content:
+      | title  | headline | state     |
+      | News 1 | News 1   | validated |
+    And the following topics are enabled in the homepage:
+      | Economy and Welfare     |
+      | Info                    |
+      | Statistics and Analysis |
+      | E-justice               |
+    When I am logged in as a moderator
+    And I go to the edit form of the topic meta entity of the "E-justice" topic "taxonomy term"
+    And I add a layout paragraph in the "Topic meta entity body" form field with the following properties:
+      | layout           | one column |
+      | Background theme | light      |
+      | Extra classes    | test-class |
+    And I add a "Configurable listing" paragraph in the "Topic meta entity body" form field:
+      | layout position | 1                                       |
+      | region          | content                                 |
+      | Heading         | type: text - value: E-justice heading   |
+      | URL             | type: text - value: http://example.com  |
+      | Link text       | type: text - value: E-justice link text |
+      | List style      | type: select - value: List              |
+      | Query presets   | type: text - value: entity_bundle\|news |
 
     And I press "Save"
     Then I should see the "News 1" tile
     And the url should match "/topic/law-and-justice/e-justice"
 
-    When I click "Edit"
-    And I select "Grid" from "List style"
+    When I go to the edit form of the topic meta entity of the "E-justice" topic "taxonomy term"
+    When I delete from the "Topic meta entity body" form field the layout paragraph in position 1
+    And I add a "Configurable listing" paragraph in the "Topic meta entity body" form field:
+      | Heading       | type: text - value: E-justice heading   |
+      | URL           | type: text - value: http://example.com  |
+      | Link text     | type: text - value: E-justice link text |
+      | List style    | type: select - value: Grid              |
+      | Query presets | type: text - value: entity_bundle\|news |
+
     And I press "Save"
     And I should see the "News 1" tile
     And the url should match "/topic/law-and-justice/e-justice"
@@ -314,6 +301,7 @@ Feature:
     And I should not see the text "See less"
     Then the "See more" collapse is collapsed
 
+  @javascript
   Scenario: Regression test to ensure order of entities.
     Given news content:
       | title  | headline | body              | state     | created    | changed    | topic     |
@@ -331,17 +319,20 @@ Feature:
       | E-justice           |
 
     When I am logged in as a moderator
-    And I go to the homepage
-    And I click "E-justice" in the "Homepage topics" region
-    And I click "Edit"
-    When I press "Add Row"
-    And I press "Add 1 column layout"
-    And I press "Add Configurable listing"
-    When I fill in "Heading" with "E-justice heading"
-    And I fill in "URL" with "http://example.com"
-    And I fill in "Link text" with "E-justice link text"
-    And I select "List" from "List style"
-    And I fill in "Query presets" with "entity_bundle|news"
+
+    And I go to the edit form of the topic meta entity of the "E-justice" topic "taxonomy term"
+    And I add a layout paragraph in the "Topic meta entity body" form field with the following properties:
+      | layout           | one column |
+      | Background theme | light      |
+      | Extra classes    | test-class |
+    And I add a "Configurable listing" paragraph in the "Topic meta entity body" form field:
+      | layout position | 1                                       |
+      | region          | content                                 |
+      | Heading         | type: text - value: E-justice heading   |
+      | URL             | type: text - value: http://example.com  |
+      | Link text       | type: text - value: E-justice link text |
+      | List style      | type: select - value: List              |
+      | Query presets   | type: text - value: entity_bundle\|news |
     And I press "Save"
     Then I should see the following tiles in the correct order:
       | News 4 |
@@ -349,14 +340,20 @@ Feature:
       | News 2 |
       | News 1 |
 
-    When I click "Edit"
-
-    # Test having 2 topics in the query preset with an 'IN' operator.
-    And I fill in "Query presets" with:
-      """
-      entity_bundle|news
-      topic|http://joinup.eu/ontology/topic#e-justice, http://joinup.eu/ontology/topic#e-health|IN
-      """
+    When I go to the edit form of the topic meta entity of the "E-justice" topic "taxonomy term"
+    When I delete from the "Topic meta entity body" form field the layout paragraph in position 1
+    And I add a layout paragraph in the "Topic meta entity body" form field with the following properties:
+      | layout           | one column |
+      | Background theme | light      |
+      | Extra classes    | test-class |
+    And I add a "Configurable listing" paragraph in the "Topic meta entity body" form field:
+      | layout position | 1                                                                                                                                       |
+      | region          | content                                                                                                                                 |
+      | Heading         | type: text - value: E-justice heading                                                                                                   |
+      | URL             | type: text - value: http://example.com                                                                                                  |
+      | Link text       | type: text - value: E-justice link text                                                                                                 |
+      | List style      | type: select - value: List                                                                                                              |
+      | Query presets   | type: text - value: entity_bundle\|news\ntopic\|http://joinup.eu/ontology/topic#e-justice, http://joinup.eu/ontology/topic#e-health\|IN |
     And I press "Save"
     Then I should see the following tiles in the correct order:
       | News 4 |
@@ -364,12 +361,20 @@ Feature:
       | News 2 |
       | News 1 |
 
-    When I click "Edit"
-    And I fill in "Query presets" with:
-      """
-      entity_bundle|news
-      topic|http://joinup.eu/ontology/topic#e-justice
-      """
+    When I go to the edit form of the topic meta entity of the "E-justice" topic "taxonomy term"
+    When I delete from the "Topic meta entity body" form field the layout paragraph in position 1
+    And I add a layout paragraph in the "Topic meta entity body" form field with the following properties:
+      | layout           | one column |
+      | Background theme | light      |
+      | Extra classes    | test-class |
+    And I add a "Configurable listing" paragraph in the "Topic meta entity body" form field:
+      | layout position | 1                                                                                         |
+      | region          | content                                                                                   |
+      | Heading         | type: text - value: E-justice heading                                                     |
+      | URL             | type: text - value: http://example.com                                                    |
+      | Link text       | type: text - value: E-justice link text                                                   |
+      | List style      | type: select - value: List                                                                |
+      | Query presets   | type: text - value: entity_bundle\|news\ntopic\|http://joinup.eu/ontology/topic#e-justice |
     And I press "Save"
     Then I should see the following tiles in the correct order:
       | News 3 |
@@ -386,8 +391,20 @@ Feature:
       | News 2 |
       | News 1 |
 
-    When I click "Edit"
-    And I fill in "Query presets" with "entity_bundle|event"
+    When I go to the edit form of the topic meta entity of the "E-justice" topic "taxonomy term"
+    When I delete from the "Topic meta entity body" form field the layout paragraph in position 1
+    And I add a layout paragraph in the "Topic meta entity body" form field with the following properties:
+      | layout           | one column |
+      | Background theme | light      |
+      | Extra classes    | test-class |
+    And I add a "Configurable listing" paragraph in the "Topic meta entity body" form field:
+      | layout position | 1                                        |
+      | region          | content                                  |
+      | Heading         | type: text - value: E-justice heading    |
+      | URL             | type: text - value: http://example.com   |
+      | Link text       | type: text - value: E-justice link text  |
+      | List style      | type: select - value: List               |
+      | Query presets   | type: text - value: entity_bundle\|event |
     And I press "Save"
 
     # Events are shown by the event date sorted by the most recent first.
@@ -406,6 +423,7 @@ Feature:
       | Event 2 |
       | Event 3 |
 
+  @javascript
   Scenario Outline: Images should be shown for tile-two view modes.
     Given <type> content:
       | title       | headline    | short title | state   | logo       | published |
@@ -413,17 +431,13 @@ Feature:
     And the following topics are enabled in the homepage:
       | E-justice |
     And I am logged in as a moderator
-    And I go to the homepage
-    And I click "E-justice"
-    And I click "Edit"
-    When I press "Add Row"
-    And I press "Add 1 column layout"
-    And I press "Add Configurable listing"
-    And I select "<list style>" from "List style"
-    When I fill in "Heading" with "E-justice heading"
-    And I fill in "URL" with "http://example.com"
-    And I fill in "Link text" with "E-justice link text"
-    And I fill in "Query presets" with "entity_bundle|<type>"
+    And I go to the edit form of the topic meta entity of the "E-justice" topic "taxonomy term"
+    And I add a "Configurable listing" paragraph in the "Topic meta entity body" form field:
+      | Heading       | type: text - value: E-justice heading     |
+      | URL           | type: text - value: http://example.com    |
+      | Link text     | type: text - value: E-justice link text   |
+      | List style    | type: select - value: <list style>        |
+      | Query presets | type: text - value: entity_bundle\|<type> |
     And I press "Save"
     Then I <should> see the image "linus.jpeg" in the "Custom tile" tile
 
@@ -441,26 +455,23 @@ Feature:
       | discussion  | should not | list       | validated |
       | discussion  | should not | grid       | validated |
 
+  @javascript
   Scenario: Up to 4 topics should be shown for tile-two view modes.
     Given news content:
-      | title  | headline | body             | state     | created    | changed    | topic     |
+      | title  | headline | body             | state     | created    | changed    | topic                                                                    |
       | News 1 | News 1   | Test             | validated | 01-01-2023 | 03-02-2023 | E-justice, Finance in EU, Supplier exchange, HR, Statistics and Analysis |
-      | News 2 | News 2   | Test longer body | validated | 02-01-2023 | 03-02-2023 | E-justice, Finance in EU, Supplier exchange, Statistics and Analysis |
+      | News 2 | News 2   | Test longer body | validated | 02-01-2023 | 03-02-2023 | E-justice, Finance in EU, Supplier exchange, Statistics and Analysis     |
     And the following topics are enabled in the homepage:
       | E-justice |
 
     When I am logged in as a moderator
-    And I go to the homepage
-    And I click "E-justice" in the "Homepage topics" region
-    And I click "Edit"
-    When I press "Add Row"
-    And I press "Add 1 column layout"
-    And I press "Add Configurable listing"
-    When I fill in "Heading" with "E-justice heading"
-    And I fill in "URL" with "http://example.com"
-    And I fill in "Link text" with "E-justice link text"
-    And I select "List" from "List style"
-    And I fill in "Query presets" with "entity_bundle|news"
+    And I go to the edit form of the topic meta entity of the "E-justice" topic "taxonomy term"
+    And I add a "Configurable listing" paragraph in the "Topic meta entity body" form field:
+      | Heading       | type: text - value: E-justice heading   |
+      | URL           | type: text - value: http://example.com  |
+      | Link text     | type: text - value: E-justice link text |
+      | List style    | type: select - value: List              |
+      | Query presets | type: text - value: entity_bundle\|news |
     And I press "Save"
 
     When I go to the homepage
@@ -480,49 +491,41 @@ Feature:
     And I should see the link "Statistics and Analysis" in the "News 2" tile
     And I should not see the text "+1 topic" in the "News 2" tile
 
+  @javascript
   Scenario: A configurable listing with no results should not print its title.
     Given news content:
       | title  | headline | state     |
       | News 1 | News 1   | validated |
     And the following topics are enabled in the homepage:
-      | E-justice               |
+      | E-justice |
     And I am logged in as a moderator
-    And I go to the homepage
-
-    When I click "E-justice"
-    And I click "Edit"
-    And I press "Add Row"
-    And I press "Add 1 column layout"
-    And I press "Add Configurable listing"
-
-    When I fill in "Heading" with "E-justice heading"
-    And I select "List" from "List style"
-    # Use a nonsense query preset to make sure we have 0 results
-    And I fill in "Query presets" with "entity_bundle|Nebuchadnezzar"
-
+    And I go to the edit form of the topic meta entity of the "E-justice" topic "taxonomy term"
+    And I add a "Configurable listing" paragraph in the "Topic meta entity body" form field:
+      | Heading       | type: text - value: E-justice heading             |
+      | URL           | type: text - value: http://example.com            |
+      | Link text     | type: text - value: E-justice link text           |
+      | List style    | type: select - value: List                        |
+      | Query presets | type: text - value: entity_bundle\|Nebuchadnezzar |
     And I press "Save"
     And the url should match "/topic/law-and-justice/e-justice"
     Then I should not see the "News 1" tile
     And I should not see the heading "E-justice heading"
 
+  @javascript
   Scenario: Ampersand character is not decoded properly under a topic page.
     Given custom_page content:
-      | title                    | body                                          | state     |
-      | Legislation & Technology | What do we mean by Legislation & Technology?  | published |
+      | title                    | body                                         | state     |
+      | Legislation & Technology | What do we mean by Legislation & Technology? | published |
     And the following topics are enabled in the homepage:
-      | E-justice               |
+      | E-justice |
     And I am logged in as a moderator
-    And I go to the homepage
-    When I click "E-justice"
-    And I click "Edit"
-    And I press "Add Row"
-    And I press "Add 1 column layout"
-    And I press "Add Configurable listing"
-    And I select "Custom page" from "Available filters"
-    And I press "Add and configure filter"
-    And I fill in "Custom page" with "Legislation & Technology"
-    When I fill in "Heading" with "E-justice heading"
-    And I select "Grid" from "List style"
+    And I go to the edit form of the topic meta entity of the "E-justice" topic "taxonomy term"
+    And I add a "Configurable listing" paragraph in the "Topic meta entity body" form field:
+      | Heading       | type: text - value: E-justice heading          |
+      | URL           | type: text - value: http://example.com         |
+      | Link text     | type: text - value: E-justice link text        |
+      | List style    | type: select - value: List                     |
+      | Query presets | type: text - value: entity_bundle\|custom_page |
     And I press "Save"
     And the url should match "/topic/law-and-justice/e-justice"
     And I should see the text "What do we mean by Legislation & Technology?" in the "Legislation & Technology" tile

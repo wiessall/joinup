@@ -20,12 +20,13 @@ class JoinupLayoutParagraphsContext extends RawDrupalContext {
   use JavascriptTrait;
 
   /**
-   * Field mapping.
+   * Field mapping. Is the selector without the 'field--name-' prefix.
    *
    * @var array
    */
   const FIELD_MAP = [
     'Custom page body' => 'field-paragraphs-body',
+    'Topic meta entity body' => 'topics-paragraph',
   ];
 
   /**
@@ -176,12 +177,13 @@ class JoinupLayoutParagraphsContext extends RawDrupalContext {
       // Split the field value into the field type and the field value.
       $field_type = NULL;
       $field_value = NULL;
-      preg_match('/type: ([a-z]+) - value: (.*)/', $value, $matches);
+      preg_match('/type: ([a-z0-9_]+) - value: (.*)/', $value, $matches);
       if (isset($matches[1])) {
         $field_type = $matches[1];
       }
       if (isset($matches[2])) {
         $field_value = $matches[2];
+        $field_value = str_replace('\n', "\n", $field_value);
       }
 
       if ($field_type === 'select') {
