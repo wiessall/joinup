@@ -52,21 +52,6 @@ pager:
     theme:
       assets/css/pagination.min.css: { minified: true }
 
-paragraph:
-  css:
-    theme:
-      assets/css/paragraph.min.css: { minified: true }
-
-paragraph--2-column-featured-left:
-  css:
-    theme:
-      assets/css/paragraph--2-column-featured-left.min.css: { minified: true }
-
-paragraph--2-column-featured-right:
-  css:
-    theme:
-      assets/css/paragraph--2-column-featured-right.min.css: { minified: true }
-
 paragraph--call-to-action:
   css:
     theme:
@@ -94,11 +79,6 @@ paragraph--layout:
   css:
     theme:
       assets/css/paragraph--layout.min.css: { minified: true }
-
-paragraph--row:
-  css:
-    theme:
-      assets/css/paragraph--row.min.css: { minified: true }
 
 paragraph--testimony:
   css:
