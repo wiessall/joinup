@@ -29,7 +29,6 @@ class ClassesBehavior extends ParagraphsBehaviorBase {
     if ($extraClasses === NULL || empty(trim($extraClasses))) {
       return;
     }
-
     $build['#attributes']['class'] = array_merge($build['#attributes']['class'] ?? [], explode(' ', $extraClasses));
   }
 
