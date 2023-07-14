@@ -46,7 +46,9 @@
 
 <div{{ attributes.addClass(classes) }}>
   {% if content.paragraph_heading|render|striptags|trim is not empty %}
-    {{ content.paragraph_heading }}
+    <div class="paragraph__heading">
+      {{ content.paragraph_heading }}
+    </div>
   {% endif %}
 
   {% if content.paragraph_carousel_action|render|striptags|trim is not empty %}
