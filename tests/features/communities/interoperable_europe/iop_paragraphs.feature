@@ -9,36 +9,6 @@ Feature:
       | title | Interoperable Europe                                           |
       | state | validated                                                      |
 
-  @javascript
-  Scenario: Moderators can access the special paragraphs.
-    Given collection:
-      | title | Joinup    |
-      | state | validated |
-
-    # @todo Remove row/column related tests in ISAICP-7744.
-    # @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7744
-    Given I am logged in as a moderator
-    And I go to the "Joinup" collection
-    When I click "Add custom page" in the plus button menu
-    And I click "Choose component"
-    Then I should not see the link "Row"
-
-    When I go to the "Interoperable Europe" collection
-    And I click "Add custom page" in the plus button menu
-    And I fill in "Title" with "Hello world"
-    And I click "Choose component"
-
-    Then I should see the link "Carousel"
-    And I should not see the link "Row"
-    But I should not see the link "1 column layout"
-    And I should not see the link "2 column layout"
-    And I should not see the link "2 column with featured media on the left"
-    And I should not see the link "2 column with featured media on the right"
-    And I should not see the link "3 column layout"
-    And I should see the link "Image"
-    And I should see the link "Call to action"
-    And I should not see the link "Configurable listing"
-
   Scenario: Test that carousels content listing options are working correctly.
     Given the following collections:
       | title       | state     |
