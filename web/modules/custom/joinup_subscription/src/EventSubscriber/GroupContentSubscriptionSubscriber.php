@@ -15,6 +15,7 @@ use Drupal\joinup_notification\JoinupMessageDeliveryInterface;
 use Drupal\joinup_notification\NotificationEvents;
 use Drupal\joinup_subscription\Entity\GroupContentSubscriptionMessage;
 use Drupal\joinup_subscription\JoinupSubscriptionsHelper;
+use Drupal\joinup_workflow\ArchivableEntityInterface;
 use Drupal\og\OgMembershipInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
@@ -86,6 +87,11 @@ class GroupContentSubscriptionSubscriber implements EventSubscriberInterface {
       return;
     }
 
+    // Ignore archived content.
+    if ($entity instanceof ArchivableEntityInterface && $entity->isArchived()) {
+      return;
+    }
+
     $this->sendMessage($entity);
   }
 
@@ -101,6 +107,11 @@ class GroupContentSubscriptionSubscriber implements EventSubscriberInterface {
 
     // Only notify if the content is being published for the first time.
     if (!$entity instanceof CollectionContentInterface || !$entity->isPublished() || empty($entity->original) || $entity->original->isPublished() || !$this->isFirstPublishedRevision($entity)) {
+      return;
+    }
+
+    // Ignore archived content.
+    if ($entity instanceof ArchivableEntityInterface && $entity->isArchived()) {
       return;
     }
 
@@ -129,6 +140,11 @@ class GroupContentSubscriptionSubscriber implements EventSubscriberInterface {
 
     // Ignore unpublished content.
     if (!$entity instanceof EntityPublishedInterface || !$entity->isPublished()) {
+      return;
+    }
+
+    // Ignore archived content.
+    if ($entity instanceof ArchivableEntityInterface && $entity->isArchived()) {
       return;
     }
 

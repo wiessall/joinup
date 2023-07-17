@@ -333,20 +333,15 @@ tile:
     theme:
       assets/css/tile.min.css: { minified: true }
 
-tile-two:
-  css:
-    theme:
-      assets/css/tile-two.min.css: {}
-
 timeline:
   css:
     theme:
-      assets/css/timeline.min.css: {}
+      assets/css/timeline.min.css: { minified: true }
 
 toolbar:
   css:
     theme:
-      assets/css/toolbar.min.css: {}
+      assets/css/toolbar.min.css: { minified: true }
   js:
     assets/js/sticky-menu-logged-in.min.js: { minified: true }
 
@@ -358,4 +353,4 @@ tour-first-balloon:
 user--group-header:
   css:
     theme:
-      assets/css/user--group-header.min.css: {}
+      assets/css/user--group-header.min.css: { minified: true }
