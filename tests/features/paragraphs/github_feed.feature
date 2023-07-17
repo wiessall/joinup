@@ -4,10 +4,6 @@ Feature: Github feed paragraph tests.
   invalidate the file cache and the tests would require connecting to Github.
 
   @javascript
-  Scenario: Test the Github feed paragraph.
-    Given the following collection:
-      | title | Paragraphs collection |
-      | state | validated             |
   Scenario Outline: Test the Github feed paragraph.
     Given the following <group>:
       | title | Paragraphs <group> |
