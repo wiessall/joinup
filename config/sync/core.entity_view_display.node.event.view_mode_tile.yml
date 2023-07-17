@@ -30,12 +30,9 @@ dependencies:
     - responsive_image.styles.tile
   module:
     - datetime_range
-    - field_delimiter
-    - field_formatter_range
-    - joinup_html_stripper
-    - link
     - responsive_image
     - template_suggestion
+    - text
     - user
 id: node.event.view_mode_tile
 targetEntityType: node
@@ -43,10 +40,9 @@ bundle: event
 mode: view_mode_tile
 content:
   body:
-    type: joinup_html_stripper_stripped
+    type: text_default
     label: hidden
-    settings:
-      trim_length: 500
+    settings: {  }
     third_party_settings:
       template_suggestion:
         template_suggestion: bare
@@ -63,7 +59,7 @@ content:
     third_party_settings:
       template_suggestion:
         template_suggestion: ''
-    weight: 3
+    weight: 1
     region: content
   field_event_logo:
     type: responsive_image
@@ -74,43 +70,6 @@ content:
     third_party_settings:
       template_suggestion:
         template_suggestion: bare
-    weight: 1
-    region: content
-  field_event_online_location:
-    type: link
-    label: hidden
-    settings:
-      trim_length: 80
-      url_only: false
-      url_plain: false
-      rel: '0'
-      target: '0'
-    third_party_settings:
-      field_delimiter:
-        delimiter: ''
-      field_formatter_range:
-        order: 0
-        limit: 0
-        offset: 0
-      template_suggestion:
-        template_suggestion: bare
-    weight: 4
-    region: content
-  field_location:
-    type: basic_string
-    label: hidden
-    settings: {  }
-    third_party_settings:
-      template_suggestion:
-        template_suggestion: bare
-    weight: 5
-    region: content
-  field_short_title:
-    type: string
-    label: hidden
-    settings:
-      link_to_entity: false
-    third_party_settings: {  }
     weight: 0
     region: content
   flag_like_node:
@@ -125,13 +84,16 @@ hidden:
   field_event_agenda: true
   field_event_contact_email: true
   field_event_coordinates: true
+  field_event_online_location: true
   field_event_spatial_coverage: true
   field_event_web_url: true
   field_keywords: true
+  field_location: true
   field_organisation: true
   field_organisation_type: true
   field_scope: true
   field_shared_in: true
+  field_short_title: true
   field_site_featured: true
   field_state: true
   field_topic: true

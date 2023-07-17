@@ -251,7 +251,6 @@ trait TraversingTrait {
       '.card-title > h1 a',
       'h2 a',
       'h1.tile__title',
-      'h1.tile-two__title',
       '.slide__title',
     ]);
 
@@ -283,7 +282,6 @@ trait TraversingTrait {
   protected function getTileByHeading(string $heading): NodeElement {
     $selectors = [
       'tile',
-      'tile-two',
     ];
 
     foreach ($selectors as $selector) {
@@ -706,7 +704,6 @@ trait TraversingTrait {
     return implode(', ', [
       '.card .card-title',
       'article.tile h1',
-      'article.tile.tile-two',
       'article.slide',
     ]);
   }

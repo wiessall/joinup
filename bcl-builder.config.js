@@ -799,18 +799,6 @@ module.exports = {
     {
       entry: path.resolve(
         outputFolder,
-        `${ventuno}src/scss/components/tile-two.scss`
-      ),
-      dest: path.resolve(outputFolder, `${ventuno}assets/css/tile-two.min.css`),
-      options: {
-        includePaths,
-        minify: true,
-        sourceMap: "file",
-      },
-    },
-    {
-      entry: path.resolve(
-        outputFolder,
         `${ventuno}src/scss/components/tile.scss`
       ),
       dest: path.resolve(outputFolder, `${ventuno}assets/css/tile.min.css`),
