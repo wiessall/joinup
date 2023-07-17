@@ -59,40 +59,40 @@ pager:
     theme:
       assets/css/pagination.min.css: { minified: true }
 
-paragraph--call-to-action:
+paragraph__call_to_action:
   css:
     theme:
       assets/css/paragraph--call-to-action.min.css: { minified: true, preprocess: false }
 
-paragraph--carousel:
+paragraph__carousel:
   css:
     theme:
       assets/css/paragraph--carousel.min.css: { minified: true, preprocess: false }
       assets/css/glide.core.min.css: { minified: true }
   dependencies:
-    - iop/paragraph--carousel.js
+    - iop/paragraph__carousel.js
 
-paragraph--carousel.js:
+paragraph__carousel.js:
   header: true
   js:
     assets/js/glide.min.js: { minified: true, attributes: { defer: true }  }
 
-paragraph--image:
+paragraph__image:
   css:
     theme:
       assets/css/paragraph--image.min.css: { minified: true }
 
-paragraph--layout:
+paragraph__layout:
   css:
     theme:
       assets/css/paragraph--layout.min.css: { minified: true }
 
-paragraph--testimony:
+paragraph__testimony:
   css:
     theme:
       assets/css/paragraph--testimony.min.css: { minified: true }
 
-paragraph--video:
+paragraph__video:
   css:
     theme:
       assets/css/paragraph--video.min.css: { minified: true }
