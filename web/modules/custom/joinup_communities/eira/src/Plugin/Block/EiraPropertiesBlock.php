@@ -8,6 +8,7 @@ use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Routing\CurrentRouteMatch;
 use Drupal\sparql_entity_storage\Driver\Database\sparql\ConnectionInterface;
+use Drupal\taxonomy\TermInterface;
 use EasyRdf\RdfNamespace;
 use EasyRdf\Resource;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -59,24 +60,11 @@ class EiraPropertiesBlock extends BlockBase implements ContainerFactoryPluginInt
    */
   public function build(): array {
     $term = $this->currentRouteMatch->getParameter('taxonomy_term');
-    $tid = $term->id();
-    $build = [
-      '#type' => 'container',
-      'namespaces_table' => [
-        '#theme' => 'table',
-        '#header' => [
-          'namespace' => $this->t('Namespace'),
-          'uri' => $this->t('URI'),
-        ],
-      ],
-      'properties_table' => [
-        '#theme' => 'table',
-        '#header' => [
-          'property' => $this->t('Property'),
-          'value' => $this->t('Value'),
-        ],
-      ],
-    ];
+    if (!$term instanceof TermInterface) {
+      return [
+        '#markup' => $this->t('Not supported for non Term entities.'),
+      ];
+    }
 
     RdfNamespace::set('eira', 'http://data.europa.eu/dr8/');
     // Replace the `dc` namespace with `dct` - requested by the client.
@@ -84,6 +72,39 @@ class EiraPropertiesBlock extends BlockBase implements ContainerFactoryPluginInt
     RdfNamespace::delete('dcterms');
     RdfNamespace::set('dct', 'http://purl.org/dc/terms/');
 
+    [$rows, $namespaces] = $this->getRows($term->id());
+
+    return [
+      '#type' => 'container',
+      'namespaces_table' => [
+        '#theme' => 'table',
+        '#header' => [
+          'namespace' => $this->t('Namespace'),
+          'uri' => $this->t('URI'),
+        ],
+        '#rows' => $rows,
+      ],
+      'properties_table' => [
+        '#theme' => 'table',
+        '#header' => [
+          'property' => $this->t('Property'),
+          'value' => $this->t('Value'),
+        ],
+        '#rows' => array_values($namespaces),
+      ],
+    ];
+  }
+
+  /**
+   * Generates the row for the term with the provided ID.
+   *
+   * @param string $tid
+   *   The term ID.
+   *
+   * @return array
+   *   The row data.
+   */
+  protected function getRows(string $tid): array {
     $query = <<<SPARQL
 PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
 PREFIX eira: <http://data.europa.eu/dr8/>
@@ -95,8 +116,9 @@ WHERE {
 }
 SPARQL;
 
-    $namespaces = [];
     $results = $this->sparql->query($query);
+    $rows = [];
+    $namespaces = [];
     foreach ($results as $result) {
       $property = $result->property->getUri();
       // Do not show the skos:related property.
@@ -117,14 +139,12 @@ SPARQL;
         'uri' => RdfNamespace::get($prefix),
       ];
 
-      $build['properties_table']['#rows'][] = [
+      $rows[] = [
         'property' => $shortenedProperty,
         'value' => $value,
       ];
     }
-
-    $build['namespaces_table']['#rows'] = array_values($namespaces);
-    return $build;
+    return [$rows, $namespaces];
   }
 
 }
