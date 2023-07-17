@@ -11,22 +11,28 @@
  * @ingroup themeable
  */
 #}
+{%
+  set classes = [
+    'layout',
+    'row',
+  ]
+%}
 {% if content %}
-  <div{{ attributes.addClass(['row']) }}>
+  <div{{ attributes.addClass(classes).removeClass('layout--fourcol-section')  }}>
 
-    <div {{ region_attributes.first.addClass(['col-md-3']) }}>
+    <div {{ region_attributes.first.addClass('layout__region', 'layout__region--first', 'col-md-3') }}>
       {{ content.first }}
     </div>
 
-    <div {{ region_attributes.second.addClass(['col-md-3']) }}>
+    <div {{ region_attributes.second.addClass('layout__region', 'layout__region--second', 'col-md-3') }}>
       {{ content.second }}
     </div>
 
-    <div {{ region_attributes.third.addClass(['col-md-3']) }}>
+    <div {{ region_attributes.third.addClass('layout__region', 'layout__region--third', 'col-md-3') }}>
       {{ content.third }}
     </div>
 
-    <div {{ region_attributes.fourth.addClass(['col-md-3']) }}>
+    <div {{ region_attributes.fourth.addClass('layout__region', 'layout__region--fourth', 'col-md-3') }}>
       {{ content.fourth }}
     </div>
 
