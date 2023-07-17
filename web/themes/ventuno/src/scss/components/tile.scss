@@ -108,11 +108,25 @@
   }
   &__footer {
     .flag__link {
+      padding: $spacer * .125;
       border-radius: $border-radius-pill;
-      padding: $spacer * .25;
+      &:hover {
+        text-decoration: none;
+      }
+    }
+    .flag__link:not(.flag__link--archived) {
       &:hover {
         background-color: $secondary;
-        text-decoration: none;
+      }
+    }
+    .flag__link--archived {
+      &:hover {
+        cursor: not-allowed;
+      }
+    }
+    [data-joinup-card-stats-shared] {
+      &:hover {
+        cursor: not-allowed;
       }
     }
   }
