@@ -62,6 +62,14 @@
  *   current user is a logged-in member.
  * - is_admin: Flag for admin user status. Will be true when the current user
  *   is an administrator.
+ * - image: The logo that has been set for the node, if any.
+ * - highlighted: Optional array containing an optional icon and a string
+ *   containing an very relevant information that will stand out in the tile.
+ * - info: An array containing an icon and a string with relevant information
+ *   to be displayed right above the title.
+ * - topics: Optional array containing the topics that the node is part of.
+ * - extra_data: Optional array containing arrays of icon + string, with some
+ *   relevant data such as number of downloads, of comments, etc...
  *
  * @see template_preprocess_node()
  *
@@ -70,26 +78,19 @@
  *   in different view modes.
  */
 #}
-{% block content %}
-  {% if content.field_event_logo|render is not empty %}
-    {% set image = content.field_event_logo %}
-  {% else %}
-    {% set image %}
-      <a href="{{ url }}" class="d-block">
-        <svg class="bi img-fluid text-secondary w-100"><use xlink:href="{{ bcl_icon_path }}#calendar3"></use></svg>
-      </a>
-    {% endset %}
-  {% endif %}
-  {% set text = content.body|render|striptags|length > 200 ? content.body|render|striptags|trim|slice(0, 200) ~ '...' : content.body|render|striptags %}
-  {{ pattern('tile_two', {
-    attributes: attributes,
-    content_attributes: content_attributes,
-    image: image,
-    title_prefix: title_prefix,
-    title: label,
-    title_suffix: title_suffix,
-    url: url,
-    text: text,
-    badges: badges,
-  }) }}
-{% endblock %}
+{{ pattern('tile', {
+  attributes,
+  horizontal: true,
+  image,
+  url,
+  highlighted,
+  info,
+  title_prefix,
+  label,
+  title_suffix,
+  text,
+  action,
+  badges,
+  extra_data,
+  bundle,
+}) }}
