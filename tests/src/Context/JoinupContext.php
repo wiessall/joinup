@@ -3163,12 +3163,8 @@ class JoinupContext extends RawDrupalContext {
    */
   public function getAllCardsInPage(): array {
     $locators = [
-      // Legacy tile of Joinup theme.
-      '.listing__item--tile .listing__title',
       // Card style of Ventuno theme.
       '.tile .tile__title',
-      // Tiles as an article.
-      'article.tile h1',
       // Carousel for non javascript test.
       '.glide__slides .slide span',
       // Carousel for javascript test.
