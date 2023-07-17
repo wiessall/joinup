@@ -260,14 +260,18 @@ paragraph:
     theme:
       assets/css/paragraph.min.css: { minified: true }
 
-paragraph--carousel:
+paragraph__accordion:
+  dependencies:
+    - ventuno/accordion
+
+paragraph__carousel:
   css:
     theme:
       assets/css/paragraph--carousel.min.css: { minified: true }
   dependencies:
-    - ventuno/paragraph--carousel.js
+    - ventuno/paragraph__carousel.js
 
-paragraph--carousel.js:
+paragraph__carousel.js:
   header: true
   js:
     assets/js/paragraph--carousel.min.js: { minified: true, attributes: { defer: true } }
