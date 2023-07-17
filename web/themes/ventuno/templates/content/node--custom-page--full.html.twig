@@ -15,9 +15,6 @@
 ]
 %}
 <article{{ attributes.addClass(classes) }}>
-  {{ title_prefix }}
-  {{ title_suffix }}
-
   {% block content %}
     <div{{ content_attributes.addClass('clearfix') }}>
       {{ content|without('report', 'share_link') }}

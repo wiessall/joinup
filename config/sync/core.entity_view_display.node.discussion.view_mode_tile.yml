@@ -17,9 +17,9 @@ dependencies:
     - node.type.discussion
     - responsive_image.styles.tile
   module:
-    - joinup_html_stripper
     - responsive_image
     - template_suggestion
+    - text
     - user
 _core:
   default_config_hash: SmfpRbn-HQzP1J11ggSWaNej9LobsgmxhSWXz2MODxU
@@ -29,14 +29,13 @@ bundle: discussion
 mode: view_mode_tile
 content:
   body:
-    type: joinup_html_stripper_stripped
+    type: text_default
     label: hidden
-    settings:
-      trim_length: 500
+    settings: {  }
     third_party_settings:
       template_suggestion:
         template_suggestion: bare
-    weight: 2
+    weight: 1
     region: content
   field_discussion_logo:
     type: responsive_image
@@ -47,26 +46,6 @@ content:
     third_party_settings:
       template_suggestion:
         template_suggestion: bare
-    weight: 1
-    region: content
-  field_keywords:
-    type: string
-    label: hidden
-    settings:
-      link_to_entity: false
-    third_party_settings:
-      template_suggestion:
-        template_suggestion: comma_separated
-    weight: 3
-    region: content
-  field_topic:
-    type: entity_reference_label
-    label: hidden
-    settings:
-      link: false
-    third_party_settings:
-      template_suggestion:
-        template_suggestion: comma_separated
     weight: 0
     region: content
   flag_like_node:
@@ -77,10 +56,12 @@ content:
 hidden:
   featured: true
   field_attachment: true
+  field_keywords: true
   field_replies: true
   field_shared_in: true
   field_site_featured: true
   field_state: true
+  field_topic: true
   flag_subscribe_discussions: true
   invite_link: true
   langcode: true

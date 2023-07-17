@@ -81,7 +81,7 @@ Feature: Search inside groups
     # only show the content of the collection.
     When I submit the search by pressing enter
     And I should see the following facet summary "Chalet construction"
-    And the page should show the tiles "Room sizes, Ground plan, Opening of the winter season, Materials natural, Resources, Inclined foundations"
+    And the page should show the tiles "Room sizes, Ground plan, Opening of the winter season, Natural materials, Resources, Inclined foundations"
 
     # Check that other types of pages in the collection also show the collection
     # as a chip.
@@ -123,7 +123,7 @@ Feature: Search inside groups
     # only show the content of the solution.
     When I submit the search by pressing enter
     And I should see the following facet summary "Inclined foundations"
-    Then the page should show the tiles "Pre-alpha, Presenting DrillMaster X88, Rock types, Frozen still, Geography, Terrace?"
+    Then the page should show the tiles "Pre-alpha, Presenting DrillMaster X88, Rock types, Still frozen, Geography, Terrace?"
 
     # Do a search with a keyword. The chip for the solution should be present
     # so the results are filtered by keyword and solution.
@@ -141,7 +141,7 @@ Feature: Search inside groups
     When I should toggle search bar in navbar
     And I press the remove button on the chip "Inclined foundations"
     And I enter "ground" in the search bar and press enter
-    Then the page should show the tiles "Ground plan, Pre-alpha, Materials natural, Presenting DrillMaster X88"
+    Then the page should show the tiles "Ground plan, Pre-alpha, Natural materials, Presenting DrillMaster X88"
 
     # Do a search with a keyword and removing the chip for the solution after
     # the keywords have been typed in. This should have the same result.
@@ -150,7 +150,7 @@ Feature: Search inside groups
     And I enter "ground" in the search bar
     And I press the remove button on the chip "Inclined foundations"
     And I submit the search by pressing enter
-    Then the page should show the tiles "Ground plan, Pre-alpha, Materials natural, Presenting DrillMaster X88"
+    Then the page should show the tiles "Ground plan, Pre-alpha, Natural materials, Presenting DrillMaster X88"
 
     # Check that other types of pages in the solution also show the collection
     # as a chip.
@@ -223,10 +223,10 @@ Feature: Search inside groups
       | Chalet construction |
     When I enter "ground" in the search bar and press enter
     And I should see the following facet summary "Chalet construction"
-    And the page should show the tiles "Ground plan, Materials natural"
+    And the page should show the tiles "Ground plan, Natural materials"
     When I remove the following facet summary "Chalet construction"
     Then the page should not contain any facet summary
-    And the page should show the tiles "Ground plan, Pre-alpha, Materials natural, Presenting DrillMaster X88"
+    And the page should show the tiles "Ground plan, Pre-alpha, Natural materials, Presenting DrillMaster X88"
 
   @javascript
   Scenario: Group filter chips appear in search bar after selecting them in facets

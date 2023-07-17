@@ -66,7 +66,7 @@
     <article{{ _attributes.addClass(_classes) }}>
       {{ _title_prefix }}
       {{ _title_suffix }}
-      <a class="tile__link position-absolute top-0 end-0 bottom-0 start-0" href="{{ _url }}" title="{{ _label|render|striptags|trim }}"></a>
+      <a class="tile__link position-absolute top-0 end-0 bottom-0 start-0" href="{{ _url }}" title="{{ _label|render|striptags|trim|raw }}"></a>
       <figure class="tile__figure mb-0">
         {{ _image }}
       </figure>
@@ -94,7 +94,7 @@
             {{ _label }}
           </h1>
           {% if _text is not empty %}
-            <div class="tile__text text-dark fs-sm my-1">{{ _text|render|striptags|trim }}</div>
+            <div class="tile__text text-dark fs-sm my-1">{{ _text|render|striptags|trim|raw }}</div>
           {% endif %}
           {% if _action %}
             <div class="tile__action">

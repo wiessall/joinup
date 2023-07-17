@@ -198,3 +198,24 @@ Feature:
     Then I should see the link "Looking for Support?" in the "Navigation menu" region
     When I click "Looking for Support?" in the "Navigation menu" region
     Then I should not see the "Looking for Support?" tile
+
+  @javascript
+  Scenario: Able to select all items on the content management UI
+    Given the following collections:
+      | title       | state     |
+      | Vintage Art | validated |
+    And event content:
+      | title                   | collection  | state     |
+      | The Panama Papers Party | Vintage Art | validated |
+      | The Area 51 Party       | Vintage Art | validated |
+
+    When I am logged in as a moderator
+    And I go to the "Vintage Art" collection
+    And I open the header local tasks menu
+    And I click "Manage content" in the "Entity actions" region
+    Then the "The Panama Papers Party" checkbox should not be checked
+    And the "The Area 51 Party" checkbox should not be checked
+
+    When I select the "Title" row
+    Then the "The Panama Papers Party" checkbox should be checked
+    And the "The Area 51 Party" checkbox should be checked
