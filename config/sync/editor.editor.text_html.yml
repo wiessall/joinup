@@ -39,6 +39,10 @@ settings:
           name: Media
           items:
             - contactus
+        -
+          name: Source
+          items:
+            - Source
   plugins:
     drupallink:
       linkit_enabled: true

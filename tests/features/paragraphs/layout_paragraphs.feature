@@ -57,3 +57,63 @@ Feature:
       | one column    |
       | three columns |
       | three columns |
+
+  Scenario: Add paragraphs to layouts.
+    When I add a layout paragraph in the "Custom page body" form field with the following properties:
+      | layout           | one column |
+      | Background theme | light      |
+      | Extra classes    | test-class |
+    When I add a layout paragraph in the "Custom page body" form field with the following properties:
+      | layout           | two columns |
+      | Column widths    | 50-50       |
+      | Background theme | light-wave  |
+      | Extra classes    | test-class  |
+    When I add a layout paragraph in the "Custom page body" form field with the following properties:
+      | layout           | three columns |
+      | Background theme | light-wave    |
+      | Extra classes    | test-class    |
+    Then the "Custom page body" form field should have the following layout paragraphs:
+      | one column    |
+      | two columns   |
+      | three columns |
+
+    When I add a "Text" paragraph in the "Custom page body" form field:
+      | Body | type: ckeditor - value: This is added in the field without a layout parent |
+    And I add a "Text" paragraph in the "Custom page body" form field:
+      | layout position | 1                                                |
+      | region          | content                                          |
+      | Body            | type: ckeditor - value: This is a text paragraph |
+    Then the layout in position "1" from the "Custom page body" form field should have the following structure:
+      | content | text |
+    And I add a "Heading" paragraph in the "Custom page body" form field:
+      | layout position | 2                                       |
+      | region          | first                                   |
+      | Heading text    | type: text - value: Heading for 2column |
+    And I add a "Text" paragraph in the "Custom page body" form field:
+      | layout position | 2                                                        |
+      | region          | first                                                    |
+      | Body            | type: ckeditor - value: This should go under the heading |
+    And I add a "Heading" paragraph in the "Custom page body" form field:
+      | layout position | 2                                               |
+      | region          | second                                          |
+      | Heading text    | type: text - value: This is a heading paragraph |
+    Then the layout in position "2" from the "Custom page body" form field should have the following structure:
+      | first  | heading |
+      | first  | text    |
+      | second | heading |
+    And I add a "Text" paragraph in the "Custom page body" form field:
+      | layout position | 3                                                      |
+      | region          | second                                                 |
+      | Body            | type: ckeditor - value: This is another text paragraph |
+    And I add a "Heading" paragraph in the "Custom page body" form field:
+      | layout position | 3                                               |
+      | region          | first                                           |
+      | Heading text    | type: text - value: This is a heading paragraph |
+    And I add a "Heading" paragraph in the "Custom page body" form field:
+      | layout position | 3                                                     |
+      | region          | third                                                 |
+      | Heading text    | type: text - value: This is another heading paragraph |
+    Then the layout in position "3" from the "Custom page body" form field should have the following structure:
+      | first  | heading |
+      | second | text    |
+      | third  | heading |

@@ -277,15 +277,26 @@ function _joinup_core_get_new_layout_paragraph(EntityInterface $parent_entity, s
     $behavior['config']['column_widths'] = $column_widths;
   }
 
-  if ($background_theme) {
+  if ($background_theme === 'light') {
     $behavior['background_theme'] = [
-      'background_theme' => $background_theme,
+      'background_theme' => '',
     ];
   }
 
-  if ($extra_classes) {
+  elseif ($background_theme === 'light-wave') {
+    $behavior['background_theme'] = [
+      'background_theme' => 'light',
+    ];
+  }
+
+  if ($extra_classes === 'featured-2_column_featured_right') {
     $behavior['extra_class'] = [
-      'extra_class' => $extra_classes,
+      'extra_class' => 'banner',
+    ];
+  }
+  elseif ($extra_classes === 'featured-2_column_featured_left') {
+    $behavior['extra_class'] = [
+      'extra_class' => 'why',
     ];
   }
 
@@ -349,15 +360,17 @@ function _joinup_core_column_to_layout(ParagraphInterface $old_parent_column, Pa
  */
 function _joinup_core_create_heading_paragraph(ParagraphInterface $new_layout_paragraph, string $heading, string $heading_type, string $region = 'content'): ParagraphInterface {
   $child_paragraph = Paragraph::create([
-    'type' => 'simple_paragraph',
-    'field_body' => [
-      'value' => "<{$heading_type}>" . $heading . "</{$heading_type}>",
-      'format' => 'content_editor',
+    'type' => 'heading',
+    'paragraph_heading' => [
+      'value' => "$heading",
     ],
   ]);
   $child_paragraph->setBehaviorSettings('layout_paragraphs', [
     'parent_uuid' => $new_layout_paragraph->uuid(),
     'region' => $region,
+  ]);
+  $child_paragraph->setBehaviorSettings('paragraph_heading', [
+    'heading_type' => $heading_type,
   ]);
   $child_paragraph->save();
   return $child_paragraph;

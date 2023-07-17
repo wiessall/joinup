@@ -20,12 +20,13 @@ class JoinupLayoutParagraphsContext extends RawDrupalContext {
   use JavascriptTrait;
 
   /**
-   * Field mapping.
+   * Field mapping. Is the selector without the 'field--name-' prefix.
    *
    * @var array
    */
   const FIELD_MAP = [
     'Custom page body' => 'field-paragraphs-body',
+    'Topic meta entity body' => 'topics-paragraph',
   ];
 
   /**
@@ -73,7 +74,7 @@ class JoinupLayoutParagraphsContext extends RawDrupalContext {
     $this->assertJavaScriptEnabledBrowser();
     $this->getChooseComponentLink($field_alias)->click();
 
-    // An overlay has opened and we need to select "Layout".
+    // An overlay has opened, and we need to select "Layout".
     $xpath = '//div[contains(concat(" ", @class, " "), " lpb-component-list__group--layout ")]';
     $this->getSession()->wait(5000, "document.querySelector('div.lpb-component-list__group--layout') !== null");
     $layouts_container = $this->getSession()->getPage()->find('xpath', $xpath);
@@ -123,7 +124,90 @@ class JoinupLayoutParagraphsContext extends RawDrupalContext {
   }
 
   /**
-   * Removes a layout paragraph in the given field.
+   * Adds a layout paragraph in the last position in the given field.
+   *
+   * @param string $paragraph_type
+   *   The label of the paragraph type.
+   * @param string $field_alias
+   *   The field alias as defined in
+   *   \Drupal\joinup\Context\JoinupLayoutParagraphsContext::FIELD_MAP.
+   * @param \Behat\Gherkin\Node\TableNode $layout_properties
+   *   The layout properties. Optionally include a layout position and region.
+   *   If a layout position is not provided, the last position is used and the
+   *   paragraph will be added without a parent layout paragraph. An example is
+   *   below. In the field value, you have to use the format "type: <field type>
+   *   - value: <field value>", where <field type> is the field type e.g. text,
+   *   select, etc. and <field value> is the value of the field.
+   * @codingStandardsIgnoreStart
+   * | layout position | 2                                           |
+   * | region          | left                                        |
+   * | Some text field | type: text - value: This is the field value |
+   * @codingStandardsIgnoreEnd
+   *
+   * @When I add a :paragraph_type paragraph in the :field_alias form field:
+   */
+  public function addtParagraphInFormField(string $paragraph_type, string $field_alias, TableNode $layout_properties): void {
+    $this->assertJavaScriptEnabledBrowser();
+    // Get the layout position and the region, if available.
+    $layout_position = NULL;
+    $region = NULL;
+    $paragraph_fields = [];
+    foreach ($layout_properties->getRowsHash() as $property => $value) {
+      if ($property == 'layout position') {
+        $layout_position = $value;
+      }
+      elseif ($property == 'region') {
+        $region = $value;
+      }
+      else {
+        $paragraph_fields[$property] = $value;
+      }
+    }
+
+    $this->getChooseComponentLink($field_alias, $layout_position, $region)->click();
+
+    // An overlay has opened, and we need to select "Layout".
+    $xpath = '//div[contains(concat(" ", @class, " "), " lpb-component-list__group--content ")]';
+    $this->getSession()->wait(5000, "document.querySelector('div.lpb-component-list__group--content') !== null");
+    $layouts_container = $this->getSession()->getPage()->find('xpath', $xpath);
+    $layouts_container->clickLink($paragraph_type);
+    $this->getSession()->wait(5000, "jQuery.active === 0");
+
+    foreach ($paragraph_fields as $property => $value) {
+      // Split the field value into the field type and the field value.
+      $field_type = NULL;
+      $field_value = NULL;
+      preg_match('/type: ([a-z0-9_]+) - value: (.*)/', $value, $matches);
+      if (isset($matches[1])) {
+        $field_type = $matches[1];
+      }
+      if (isset($matches[2])) {
+        $field_value = $matches[2];
+        $field_value = str_replace('\n', "\n", $field_value);
+      }
+
+      if ($field_type === 'select') {
+        // Wait for the select field to load.
+        $this->getSession()->getPage()->selectFieldOption($property, $field_value);
+      }
+      elseif ($field_type === 'ckeditor') {
+        // Wait for the CKEditor to load.
+        $this->getSession()->wait(5000, "document.querySelector('.lpb-dialog .cke_wysiwyg_frame') !== null");
+        $this->getSession()->executeScript("document.querySelector(\".lpb-dialog .cke_wysiwyg_frame\").contentWindow.document.body.innerHTML = '\"{$field_value}\"';");
+      }
+      else {
+        $this->getSession()->getPage()->fillField($property, $field_value);
+      }
+    }
+
+    // Finally, click the "Save" button to add the paragraph.
+    $this->getSession()->getPage()->find('css', '.ui-dialog-buttonpane')->pressButton('Save');
+    // Wait until the button pane is gone.
+    $this->getSession()->wait(5000, "document.querySelector('.ui-dialog-buttonpane') === null");
+  }
+
+  /**
+   * Performs an action on a layout paragraph in the given field.
    *
    * @param string $action
    *   The action to perform. Available actions are 'delete', 'edit', 'move up',
@@ -136,12 +220,14 @@ class JoinupLayoutParagraphsContext extends RawDrupalContext {
    *
    * @When I :action from the :field_alias form field the layout paragraph in position :position
    */
-  public function removeTopLevelLayoutParagraph(string $action, string $field_alias, string $position): void {
+  public function actionOnTopLevelLayoutParagraph(string $action, string $field_alias, string $position): void {
     $actions = ['delete', 'edit', 'move up', 'move down', 'duplicate'];
     assertTrue(in_array($action, $actions), "The action '$action' is not defined in the context. Available actions are ", implode(', ', $actions));
 
     $this->assertJavaScriptEnabledBrowser();
-    $this->getFormFieldLayoutParagraphs($field_alias)[$position - 1]->clickLink(ucfirst($action));
+    // The ".is-layout" class is the difference between the actions for layouts
+    // and the actions for paragraphs.
+    $this->getFormFieldLayoutParagraphs($field_alias)[$position - 1]->find('css', '.lpb-controls.is-layout')->clickLink(ucfirst($action));
     if ($action === 'delete') {
       $this->getSession()->wait(5000, "document.querySelector('.lpb-dialog') !== null");
       $this->getSession()->getPage()->find('css', '.ui-dialog-buttonpane')->pressButton('Delete');
@@ -181,6 +267,47 @@ class JoinupLayoutParagraphsContext extends RawDrupalContext {
       assertTrue(isset(self::LAYOUTS_MAP[$layout_alias]), "The layout '$layout_alias' is not defined in the context.");
       return self::LAYOUTS_MAP[$layout_alias];
     }, $layout_list->getColumn(0));
+
+    assertSame($expected, $actual);
+  }
+
+  /**
+   * Asserts the structure of a layout paragraph.
+   *
+   * @param string $position
+   *   The position of the layout paragraph to check.
+   * @param string $field_alias
+   *   The field alias as defined in
+   *   \Drupal\joinup\Context\JoinupLayoutParagraphsContext::FIELD_MAP.
+   * @param \Behat\Gherkin\Node\TableNode $structure
+   *   The table of layout paragraphs. An example is below.
+   * @codingStandardsIgnoreStart
+   * | first  | heading |
+   * | first  | text    |
+   * | second | heading |
+   * @codingStandardsIgnoreEnd
+   * The first column is the region of the layout paragraph. The second column
+   * is the machine name of the paragraph.
+   *
+   * @When the layout in position :position from the :field_alias form field should have the following structure:
+   */
+  public function assertLayoutParagraphStructure(string $position, string $field_alias, TableNode $structure): void {
+    $layout_paragraphs = $this->getFormFieldLayoutParagraphs($field_alias);
+    $layout_paragraph = $layout_paragraphs[$position - 1];
+    $actual = [];
+    /** @var \Behat\Mink\Element\NodeElement $layout_paragraph */
+    foreach ($layout_paragraph->findAll('css', '.layout__region') as $region) {
+      $data_region = $region->getAttribute('data-region');
+      $actual[$data_region] = [];
+      foreach ($region->findAll('css', 'div.paragraph') as $paragraph) {
+        $actual[$data_region][] = $paragraph->getAttribute('data-type');
+      }
+    }
+
+    $expected = [];
+    foreach ($structure->getRows() as $row) {
+      $expected[$row[0]][] = $row[1];
+    }
 
     assertSame($expected, $actual);
   }
@@ -270,7 +397,7 @@ class JoinupLayoutParagraphsContext extends RawDrupalContext {
    */
   protected function getFormFieldLayoutParagraphs(string $field_alias): array {
     $field = $this->getParagraphsElement($field_alias);
-    $xpath = '//div[contains(concat(" ", @class, " "), " paragraph ")]';
+    $xpath = '//div[contains(concat(" ", @class, " "), " lpb-layout ") and contains(concat(" ", @class, " "), " paragraph--type--layout ")]';
     $elements = $field->findAll('xpath', $xpath);
     return $elements ?? [];
   }
@@ -322,27 +449,43 @@ class JoinupLayoutParagraphsContext extends RawDrupalContext {
    * @param string $field_alias
    *   The field designator as defined in
    *   \Drupal\joinup\Context\JoinupLayoutParagraphsContext::FIELD_MAP.
-   * @param int $position
-   *   (optional) The position of the paragraph. Defaults to -1, which means the
-   *   last button.
+   * @param string|null $parent_layout_position
+   *   (optional) The position of the parent layout. Defaults to NULL, which
+   *   means the that the button that adds a layout into root will be fetched.
+   * @param string|null $parent_layout_region
+   *   (optional) The region of the parent layout. If a layout position is
+   *   passed, then a region must be passed as well.
    *
    * @return \Behat\Mink\Element\TraversableElement
    *   The add component button.
    */
-  protected function getChooseComponentLink(string $field_alias, int $position = -1): TraversableElement {
-    $links = $this->getSession()->getPage()->findAll('named', [
+  protected function getChooseComponentLink(string $field_alias, ?string $parent_layout_position = NULL, ?string $parent_layout_region = NULL): TraversableElement {
+    if ($parent_layout_position === NULL) {
+      $field = $this->getParagraphsElement($field_alias);
+    }
+    else {
+      $field = $this->getFormFieldLayoutParagraphs($field_alias)[$parent_layout_position - 1];
+      $field = $field->find('css', '.layout__region--' . $parent_layout_region);
+    }
+
+    $links = $field->findAll('named', [
       'link',
       'Choose component',
     ]);
     if (empty($links)) {
-      throw new \Exception('No add component links found.');
+      throw new \Exception('No choose component links found.');
     }
 
-    if (!isset($links[$position]) && $position !== -1) {
-      throw new \Exception("No add component link found at position $position.");
-    }
+    // Filter out invisible links (that have the style 'display: none'). This is
+    // because, when the layout region has at least one paragraph, then the
+    // central button that adds to the region is still in the HTML but hidden.
+    // The buttons available at that point, are the ones before and after each
+    // paragraph.
+    $links = array_filter($links, function (TraversableElement $link) {
+      return $link->getAttribute('style') !== 'display: none;';
+    });
 
-    return $position === -1 ? end($links) : $links[$position];
+    return end($links);
   }
 
 }
