@@ -7,6 +7,8 @@
 
 declare(strict_types = 1);
 
+use \Drupal\Component\Utility\Html;
+
 /**
  * Set dynamic allowed values for the icon field.
  *
@@ -27,9 +29,7 @@ function joinup_sitewide_alert_allowed_values(): array {
   $content = file_get_contents($spritePath);
   $icons = [];
 
-  $dom = new DOMDocument();
-  $dom->loadXML($content);
-
+  $dom = Html::load($content);
   $xp = new DOMXPath($dom);
   $ids = $xp->query("//@id");
   foreach ($ids as $id) {
