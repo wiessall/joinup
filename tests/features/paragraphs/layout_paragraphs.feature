@@ -121,3 +121,4 @@ Feature:
       | first  | heading |
       | second | text    |
       | third  | heading |
+    And I press "Publish"
