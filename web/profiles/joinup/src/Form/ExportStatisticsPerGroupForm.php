@@ -197,7 +197,7 @@ QUERY;
     }
 
     // Get the total members count.
-    $memberships = $this->mysql->query($this->getMembersCountQuery($group->id()))->fetchField();
+    $memberships = collection_member_count($group);
     $description = $group->hasField('field_ar_description') ? $group->field_ar_description->value : $group->field_is_description->value;
 
     // Add data to the final array.
@@ -293,22 +293,6 @@ WHERE {
     ?entity_id <http://joinup.eu/rdf_entity/group> <{$entity_id}>
   }
 }
-QUERY;
-  }
-
-  /**
-   * Helper method to return a query to fetch the number of members in a group.
-   *
-   * @param string $entity_id
-   *   The group ID.
-   *
-   * @return string
-   *   The query.
-   */
-  private function getMembersCountQuery(string $entity_id): string {
-    return <<<QUERY
-SELECT COUNT(og.uid) FROM {og_membership} og
-WHERE entity_id = '{$entity_id}' AND state = 'active'
 QUERY;
   }
 
