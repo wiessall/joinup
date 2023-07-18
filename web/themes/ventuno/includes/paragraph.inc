@@ -22,6 +22,8 @@ function ventuno_preprocess_paragraph(array &$variables): void {
  * Implements hook_preprocess_paragraph().
  */
 function ventuno_preprocess_paragraph__accordion(array &$variables): void {
+  $entity = $variables['paragraph'];
+  $variables['attributes']['id'][] = 'accordion' . $entity->id();
   $variables['attributes']['class'] = ['accordion', 'mb-4'];
 }
 
