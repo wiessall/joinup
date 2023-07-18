@@ -57,6 +57,10 @@ Feature:
       | one column    |
       | three columns |
       | three columns |
+    # Layout paragraphs store that changes have been performed in the UI, so
+    # if we simply try to navigate elsewhere, an alert is raised about unsaved
+    # changes and the next test fails. We need to save the changes.
+    And I press "Publish"
 
   Scenario: Add paragraphs to layouts.
     When I add a layout paragraph in the "Custom page body" form field with the following properties:
