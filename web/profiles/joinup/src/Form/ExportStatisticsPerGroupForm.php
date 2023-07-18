@@ -196,8 +196,6 @@ QUERY;
       $group_content['solution'] = $group->field_ar_affiliates->count();
     }
 
-    // Get the total members count.
-    $memberships = collection_member_count($group);
     $description = $group->hasField('field_ar_description') ? $group->field_ar_description->value : $group->field_is_description->value;
 
     // Add data to the final array.
@@ -230,7 +228,7 @@ QUERY;
       + $group_content['document']['archived']
       + $group_content['event']['archived']
       + $group_content['news']['archived'],
-      'Number of members' => $memberships,
+      'Number of members' => collection_member_count($group),
       'Description word count' => str_word_count(strip_tags($description)),
       'Total number of likes' => !empty($content_ids) ? $this->getLikesCount($content_ids) : 0,
     ];
