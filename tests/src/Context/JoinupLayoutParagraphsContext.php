@@ -397,7 +397,7 @@ class JoinupLayoutParagraphsContext extends RawDrupalContext {
    */
   protected function getFormFieldLayoutParagraphs(string $field_alias): array {
     $field = $this->getParagraphsElement($field_alias);
-    $xpath = '//div[contains(concat(" ", @class, " "), " lpb-layout ") and contains(concat(" ", @class, " "), " paragraph--type--layout ")]';
+    $xpath = '//div[contains(concat(" ", @class, " "), " lpb-layout ") and contains(concat(" ", @class, " "), " paragraph--layout ")]';
     $elements = $field->findAll('xpath', $xpath);
     return $elements ?? [];
   }
