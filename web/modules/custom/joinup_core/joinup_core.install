@@ -113,7 +113,7 @@ function joinup_core_update_109500() {
 }
 
 /**
- * Remove all site_alter entities.
+ * Remove all site alert entities.
  */
 function joinup_core_update_109501() {
   $ids = \Drupal::entityQuery('site_alert')
