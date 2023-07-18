@@ -23,7 +23,7 @@ function ventuno_preprocess_paragraph(array &$variables): void {
  */
 function ventuno_preprocess_paragraph__accordion(array &$variables): void {
   $entity = $variables['paragraph'];
-  $variables['attributes']['id'][] = 'accordion' . $entity->id();
+  $variables['attributes']['id'] = 'accordion' . $entity->id();
   $variables['attributes']['class'] = ['accordion', 'mb-4'];
 }
 
