@@ -15,4 +15,3 @@ dependencies:
   - 'rdf_entity:rdf_entity'
   - 'rdf_entity:rdf_taxonomy'
   - 'redirect:redirect'
-  - 'sitewide_alert:sitewide_alert'
