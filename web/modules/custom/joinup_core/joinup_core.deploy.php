@@ -126,14 +126,18 @@ function joinup_core_deploy_109503(array &$sandbox): string {
 function _joinup_core_row_to_layout(ParagraphInterface $paragraph_row_item, EntityInterface $parent_entity, string $parent_entity_field): array {
   // The returned paragraphs will be assigned to the entity.
   $return = [];
-  if (!empty($paragraph_row_item->paragraph_heading->value) || !empty($paragraph_row_item->paragraph_row_subheading->value)) {
+  $heading = $paragraph_row_item->paragraph_heading?->value;
+  $subheading = $paragraph_row_item->paragraph_row_subheading?->value;
+
+  // Exclude the "Did you know?" paragraph because it needs some special care.
+  if ($heading !== 'Did you know?' && (!empty($paragraph_row_item->paragraph_heading->value) || !empty($paragraph_row_item->paragraph_row_subheading->value))) {
     $new_layout_paragraph = _joinup_core_get_new_layout_paragraph($parent_entity, $parent_entity_field, 'layout_onecol', NULL, $paragraph_row_item->get('row_theme')->value);
     $return[$new_layout_paragraph->id()] = $new_layout_paragraph;
-    if ($heading = $paragraph_row_item->paragraph_heading->value) {
+    if ($heading) {
       $child_paragraph = _joinup_core_create_heading_paragraph($new_layout_paragraph, $heading, 'h2');
       $return[$child_paragraph->id()] = $child_paragraph;
     }
-    if ($subheading = $paragraph_row_item->paragraph_row_subheading->value) {
+    if ($subheading) {
       $child_paragraph = _joinup_core_create_heading_paragraph($new_layout_paragraph, $subheading, 'h3');
       $return[$child_paragraph->id()] = $child_paragraph;
     }
@@ -180,6 +184,15 @@ function _joinup_core_row_to_layout(ParagraphInterface $paragraph_row_item, Enti
       case '1_column_layout':
         $new_layout_paragraph = _joinup_core_get_new_layout_paragraph($parent_entity, $parent_entity_field, 'layout_onecol', NULL, $paragraph_row_item->row_theme->value);
         $return[$new_layout_paragraph->id()] = $new_layout_paragraph;
+        if ($heading === 'Did you know?') {
+          // Handle the special case of the 'Did you know?' row.
+          $child_paragraph = _joinup_core_create_heading_paragraph($new_layout_paragraph, $heading, 'h2');
+          $return[$child_paragraph->id()] = $child_paragraph;
+          $child_paragraph = _joinup_core_create_heading_paragraph($new_layout_paragraph, $subheading, 'h3');
+          $return[$child_paragraph->id()] = $child_paragraph;
+          $new_layout_paragraph->setBehaviorSettings('extra_class', ['extra_class' => 'facts']);
+          $new_layout_paragraph->save();
+        }
         $return += _joinup_core_column_to_layout($column_paragraph, $new_layout_paragraph, $parent_entity, $parent_entity_field, 'paragraph_column_center', 'content');
         break;
 
