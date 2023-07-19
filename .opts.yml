@@ -10,6 +10,7 @@ upgrade_commands:
     - ./vendor/bin/drush search-api:reset-tracker --yes
     - ./vendor/bin/drush joinup:node-access-rebuild
     - rm disable-config-readonly
+    - ./vendor/bin/drush site-alert:disable
     - ./scripts/check_status_report.php
   append:
     acceptance:
