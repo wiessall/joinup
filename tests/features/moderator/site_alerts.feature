@@ -14,6 +14,7 @@ Feature: Site alerts
     When I click "Add new Sitewide Alert"
     And I fill in "Name" with "Site maintenance 18:00-20:00"
     And I select "Medium" from "Alert Style"
+    And I select "Other" from "Category"
     And I enter "Between 18:00 and 20:00 the site will be temporarily unavailable due to scheduled maintenance" in the "Alert Message" wysiwyg editor
     And I press "Save"
 
