@@ -28,10 +28,10 @@ class SitewideAlertCommands extends DrushCommands {
   /**
    * Unpublish Sitewide entity.
    *
-   * @command joinup:unpublish-alert
-   *
    * @param array[] $options
-   *  Command options.
+   *   Command options.
+   *
+   * @command joinup:unpublish-alert
    *
    * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
@@ -50,7 +50,7 @@ class SitewideAlertCommands extends DrushCommands {
     $results = $query->execute();
     if (empty($results)) {
       $this->output()
-        ->writeln('There are no entities which can be unpublished');/**/
+        ->writeln('There are no entities which can be unpublished');
       return;
     }
 
