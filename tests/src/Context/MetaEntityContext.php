@@ -9,7 +9,6 @@ use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\joinup\Traits\EntityTrait;
 use Drupal\meta_entity\Entity\MetaEntityInterface;
 use function PHPUnit\Framework\assertArrayHasKey;
-use function PHPUnit\Framework\assertTrue;
 
 /**
  * Behat step definitions for testing meta entities.
@@ -50,7 +49,8 @@ class MetaEntityContext extends RawDrupalContext {
    * @param string $related_entity_type
    *   The type of the related entity.
    *
-   * @When I go to the :type (path|form) of the :bundle meta entity of the :related_entity :related_bundle :related_entity_type
+   * @When I go to the :type form of the :bundle meta entity of the :related_entity :related_bundle :related_entity_type
+   * @When I go to the :type path of the :bundle meta entity of the :related_entity :related_bundle :related_entity_type
    */
   public function visitMetaEntityCanonicalPath(string $type, string $bundle, string $related_entity, string $related_entity_type): void {
     $path_types = [
