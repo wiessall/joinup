@@ -14,7 +14,7 @@ use EasyRdf\Resource;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Provides an eirapropertiesblock block.
+ * Provides an EIRA properties block.
  *
  * @Block(
  *   id = "eira_properties_block",
@@ -34,7 +34,7 @@ class EiraPropertiesBlock extends BlockBase implements ContainerFactoryPluginInt
    * @param mixed $pluginDefinition
    *   The plugin implementation definition.
    * @param \Drupal\sparql_entity_storage\Driver\Database\sparql\ConnectionInterface $sparql
-   *   The sparql.endpoint service.
+   *   The sparql endpoint service.
    * @param \Drupal\Core\Routing\CurrentRouteMatch $currentRouteMatch
    *   The current_route_match service.
    */
@@ -66,12 +66,7 @@ class EiraPropertiesBlock extends BlockBase implements ContainerFactoryPluginInt
       ];
     }
 
-    RdfNamespace::set('eira', 'http://data.europa.eu/dr8/');
-    // Replace the `dc` namespace with `dct` - requested by the client.
-    RdfNamespace::delete('dc');
-    RdfNamespace::delete('dcterms');
-    RdfNamespace::set('dct', 'http://purl.org/dc/terms/');
-
+    $this->setupNamespaces();
     [$rows, $namespaces] = $this->getRows($term->id());
 
     return [
@@ -145,6 +140,21 @@ SPARQL;
       ];
     }
     return [$rows, $namespaces];
+  }
+
+  /**
+   * Sets up the namespaces.
+   *
+   * According to the requirements, the EIRA team needs some specific changes
+   * in the presented namespaces. Alter the data for this block to match the
+   * requirements.
+   */
+  protected function setupNamespaces(): void {
+    RdfNamespace::set('eira', 'http://data.europa.eu/dr8/');
+    // Replace the `dc` namespace with `dct` - requested by the client.
+    RdfNamespace::delete('dc');
+    RdfNamespace::delete('dcterms');
+    RdfNamespace::set('dct', 'http://purl.org/dc/terms/');
   }
 
 }
