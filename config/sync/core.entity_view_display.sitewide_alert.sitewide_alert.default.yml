@@ -3,6 +3,7 @@ langcode: en
 status: true
 dependencies:
   config:
+    - field.field.sitewide_alert.sitewide_alert.category
     - field.field.sitewide_alert.sitewide_alert.icon
   module:
     - options
@@ -28,5 +29,6 @@ content:
     weight: 1
     region: content
 hidden:
+  category: true
   langcode: true
   search_api_excerpt: true
