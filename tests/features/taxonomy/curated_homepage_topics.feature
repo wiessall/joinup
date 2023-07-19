@@ -243,13 +243,13 @@ Feature:
     And I should see the "News 1" tile
     And the url should match "/topic/law-and-justice/e-justice"
 
-    When I go to the "topic" meta entity of the "Economy and Welfare" topic "taxonomy term"
+    When I go to the canonical path of the "topic" meta entity of the "Economy and Welfare" topic "taxonomy term"
     And the url should match "/topic/economy-and-welfare"
 
-    When I go to the "topic" meta entity of the "Info" topic "taxonomy term"
+    When I go to the canonical path of the "topic" meta entity of the "Info" topic "taxonomy term"
     And the url should match "/topic/info"
 
-    When I go to the "topic" meta entity of the "Statistics and Analysis" topic "taxonomy term"
+    When I go to the canonical path of the "topic" meta entity of the "Statistics and Analysis" topic "taxonomy term"
     And the url should match "/topic/info/statistics-and-analysis"
 
     # Regression test: 3-dots is hidden for anonymous as only contains 'View'.
