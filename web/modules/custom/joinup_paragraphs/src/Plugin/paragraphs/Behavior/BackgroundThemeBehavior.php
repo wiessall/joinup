@@ -24,7 +24,7 @@ class BackgroundThemeBehavior extends ParagraphsBehaviorBase {
   /**
    * {@inheritdoc}
    */
-  public function view(array &$build, Paragraph $paragraph, EntityViewDisplayInterface $display, $view_mode) {
+  public function view(array &$build, Paragraph $paragraph, EntityViewDisplayInterface $display, $view_mode): void {
     $theme = $paragraph->getBehaviorSetting($this->getPluginId(), 'background_theme');
     $theme ? $build['#attributes']['class'][] = 'paragraph--layout--' . $theme : NULL;
   }
@@ -32,7 +32,7 @@ class BackgroundThemeBehavior extends ParagraphsBehaviorBase {
   /**
    * {@inheritdoc}
    */
-  public function buildBehaviorForm(ParagraphInterface $paragraph, array &$form, FormStateInterface $form_state) {
+  public function buildBehaviorForm(ParagraphInterface $paragraph, array &$form, FormStateInterface $form_state): void {
     $form['background_theme'] = [
       '#type' => 'select',
       '#title' => $this->t('Background theme'),

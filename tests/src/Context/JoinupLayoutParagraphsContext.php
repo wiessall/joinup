@@ -20,7 +20,7 @@ class JoinupLayoutParagraphsContext extends RawDrupalContext {
   use JavascriptTrait;
 
   /**
-   * Field mapping. Is the selector without the 'field--name-' prefix.
+   * Field mapping. It is the selector without the 'field--name-' prefix.
    *
    * @var array
    */
@@ -124,7 +124,7 @@ class JoinupLayoutParagraphsContext extends RawDrupalContext {
   }
 
   /**
-   * Adds a layout paragraph in the last position in the given field.
+   * Adds a paragraph in the last position in the given field or layout.
    *
    * @param string $paragraph_type
    *   The label of the paragraph type.
@@ -146,7 +146,7 @@ class JoinupLayoutParagraphsContext extends RawDrupalContext {
    *
    * @When I add a :paragraph_type paragraph in the :field_alias form field:
    */
-  public function addtParagraphInFormField(string $paragraph_type, string $field_alias, TableNode $layout_properties): void {
+  public function addParagraphInFormField(string $paragraph_type, string $field_alias, TableNode $layout_properties): void {
     $this->assertJavaScriptEnabledBrowser();
     // Get the layout position and the region, if available.
     $layout_position = NULL;
@@ -386,7 +386,7 @@ class JoinupLayoutParagraphsContext extends RawDrupalContext {
   }
 
   /**
-   * Returns a list of layout paragraphs elements..
+   * Returns a list of layout paragraphs elements.
    *
    * @param string $field_alias
    *   The field designator as defined in
