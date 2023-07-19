@@ -706,6 +706,36 @@ module.exports = {
     {
       entry: path.resolve(
         outputFolder,
+        `${ventuno}src/scss/components/paragraphs/paragraph--heading.scss`
+      ),
+      dest: path.resolve(
+        outputFolder,
+        `${ventuno}assets/css/paragraph--heading.min.css`
+      ),
+      options: {
+        includePaths,
+        minify: true,
+        sourceMap: "file",
+      },
+    },
+    {
+      entry: path.resolve(
+        outputFolder,
+        `${ventuno}src/scss/components/paragraphs/paragraph--layout.scss`
+      ),
+      dest: path.resolve(
+        outputFolder,
+        `${ventuno}assets/css/paragraph--layout.min.css`
+      ),
+      options: {
+        includePaths,
+        minify: true,
+        sourceMap: "file",
+      },
+    },
+    {
+      entry: path.resolve(
+        outputFolder,
         `${ventuno}src/scss/components/paragraphs/paragraph--quote.scss`
       ),
       dest: path.resolve(
