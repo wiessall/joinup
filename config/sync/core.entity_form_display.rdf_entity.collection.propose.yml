@@ -8,7 +8,6 @@ dependencies:
     - field.field.rdf_entity.collection.field_ar_abstract
     - field.field.rdf_entity.collection.field_ar_access_url
     - field.field.rdf_entity.collection.field_ar_affiliates
-    - field.field.rdf_entity.collection.field_ar_banner
     - field.field.rdf_entity.collection.field_ar_closed
     - field.field.rdf_entity.collection.field_ar_contact_information
     - field.field.rdf_entity.collection.field_ar_content_creation
@@ -30,8 +29,8 @@ dependencies:
   module:
     - allowed_formats
     - field_group
-    - image_library_widget
     - inline_entity_form
+    - joinup_core
     - joinup_workflow
     - link
     - text
@@ -118,16 +117,6 @@ content:
     settings:
       placeholder_url: ''
       placeholder_title: ''
-    third_party_settings: {  }
-  field_ar_banner:
-    type: image_library_widget
-    weight: 12
-    region: content
-    settings:
-      progress_indicator: throbber
-      preview_image_style: thumbnail
-      media_type_id: collection_banner
-      library_label: 'Alternatively, choose a pre-uploaded image'
     third_party_settings: {  }
   field_ar_closed:
     type: boolean_checkbox
@@ -257,6 +246,11 @@ content:
     region: content
     settings:
       include_locked: true
+    third_party_settings: {  }
+  simple_sitemap:
+    weight: 10
+    region: content
+    settings: {  }
     third_party_settings: {  }
   transition_motivation:
     weight: 6
