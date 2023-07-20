@@ -47,6 +47,7 @@ function trr_form_rdf_entity_solution_edit_form_alter(&$form, FormStateInterface
  */
 function trr_form_rdf_entity_solution_form_alter(&$form, FormStateInterface $form_state): void {
   $form['#attached']['library'][] = 'trr/solution-trr';
+  $form['#attached']['drupalSettings']['trrTestValues'] = TrrConstants::getTestValues();
 }
 
 /**

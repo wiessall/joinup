@@ -33,7 +33,7 @@ class SolutionTestResourceTypeConstraintValidator extends ConstraintValidator {
     $solution_types = $this->getFieldItemListMainPropertyValues($solution_type_field);
     $current_values = $this->getFieldItemListMainPropertyValues($items);
 
-    if (in_array(TrrConstants::BUISNESS_OBJECT, $solution_types) && array_diff($current_values, $this->allowedTestScenarioTypes())) {
+    if (in_array(TrrConstants::BUSINESS_OBJECT, $solution_types) && array_diff($current_values, $this->allowedTestScenarioTypes())) {
       $this->context->addViolation($constraint->invalidTestScenarioMessage);
     }
 

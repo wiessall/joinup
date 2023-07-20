@@ -16,7 +16,7 @@ class TrrConstants {
    */
   const APPLICATION_COMPONENT = 'http://data.europa.eu/dr8/ConformanceTestingApplicationComponent';
   const APPLICATION_SERVICE = 'http://data.europa.eu/dr8/ConformanceTestingApplicationService';
-  const BUISNESS_OBJECT = 'http://data.europa.eu/dr8/ConformanceTestScenarioBusinessObject';
+  const BUSINESS_OBJECT = 'http://data.europa.eu/dr8/ConformanceTestScenarioBusinessObject';
 
   /**
    * The TRR test related fields.
@@ -41,7 +41,7 @@ class TrrConstants {
     return [
       self::APPLICATION_COMPONENT,
       self::APPLICATION_SERVICE,
-      self::BUISNESS_OBJECT,
+      self::BUSINESS_OBJECT,
     ];
   }
 
