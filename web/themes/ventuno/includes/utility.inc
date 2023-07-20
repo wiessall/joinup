@@ -9,6 +9,7 @@ declare(strict_types = 1);
 
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\joinup_bundle_class\DescriptionInterface;
+use Drupal\joinup_bundle_class\LogoInterface;
 use Drupal\joinup_community_content\Entity\CommunityContentInterface;
 use Drupal\joinup_core\Controller\IdRedirect;
 use Drupal\joinup_workflow\ArchivableEntityInterface;
@@ -63,6 +64,11 @@ function _ventuno_preprocess_tile(array &$variables, string $entity_type_id): vo
     $variables['view_mode'] === 'highlighted') {
     $variables['text'] = $entity instanceof DescriptionInterface && isset($variables['content'][$entity->getDescriptionField()]) ? $variables['content'][$entity->getDescriptionField()] : NULL;
   }
+
+  // Image.
+  $variables['image'] = ($entity instanceof LogoInterface) && $entity->getLogoAsFile()
+    ? $entity->getLogoAsRenderArray($variables['view_mode'])
+    : [];
 
   // Topics.
   // Max number of topics displayed.
