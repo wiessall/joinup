@@ -20,6 +20,9 @@
  * - dismissible: Boolean indicating if the alert is dismissible or not.
  */
 #}
+
+{{ attach_library('ventuno/alert') }}
+
 <div data-drupal-messages class="mt-4">
   {% block messages %}
     {% for type, messages in message_list %}
