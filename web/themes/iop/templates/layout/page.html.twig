@@ -76,6 +76,7 @@
   {% endif %}
 
   {% if page.messages|render|striptags|trim is not empty %}
+    {{ attach_library('ventuno/alert') }}
     <div class="container mt-5">
       {{ page.messages }}
     </div>
