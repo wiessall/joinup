@@ -11,6 +11,7 @@ dependencies:
     - paragraphs.paragraphs_type.github_feed
     - paragraphs.paragraphs_type.iframe
     - paragraphs.paragraphs_type.json_map
+    - paragraphs.paragraphs_type.poll
     - paragraphs.paragraphs_type.row
     - paragraphs.paragraphs_type.simple_paragraph
   module:
@@ -34,6 +35,7 @@ settings:
       accordion: accordion
       content_listing: content_listing
       iframe: iframe
+      poll: poll
       row: row
       carousel: carousel
       github_feed: github_feed
@@ -86,6 +88,9 @@ settings:
         enabled: false
       json_map:
         weight: 4
+        enabled: true
+      poll:
+        weight: 22
         enabled: true
       row:
         weight: 24

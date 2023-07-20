@@ -1,0 +1,30 @@
+uuid: 24d67137-bf2f-4cee-9081-71ce8eb775fe
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.poll.field_paragraphs_poll
+    - paragraphs.paragraphs_type.poll
+  module:
+    - inline_entity_form
+id: paragraph.poll.default
+targetEntityType: paragraph
+bundle: poll
+mode: default
+content:
+  field_paragraphs_poll:
+    type: inline_entity_form_simple
+    weight: 0
+    region: content
+    settings:
+      form_mode: default
+      override_labels: false
+      label_singular: ''
+      label_plural: ''
+      collapsible: false
+      collapsed: false
+      revision: true
+    third_party_settings: {  }
+hidden:
+  created: true
+  status: true
