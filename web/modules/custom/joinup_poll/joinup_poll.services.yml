@@ -1,0 +1,5 @@
+services:
+  joinup_poll.route_subscriber:
+    class: Drupal\joinup_poll\Routing\PollRouteSubscriber
+    tags:
+      - { name: event_subscriber }
