@@ -21,11 +21,13 @@ dependencies:
     - flag
     - joinup
     - joinup_community_content
+    - joinup_core
     - joinup_licence
     - media
     - meta_entity
     - node
     - paragraphs_type_permissions
+    - poll
     - rdf_entity
     - rdf_export
     - rdf_meta_entity
@@ -43,9 +45,11 @@ permissions:
   - 'access content'
   - 'access contextual links'
   - 'access email confirmation'
+  - 'access polls'
   - 'access tour'
   - 'access user profiles'
   - 'cancel account'
+  - 'cancel own vote'
   - 'create contact_information rdf entity'
   - 'create document content'
   - 'create owner rdf entity'
@@ -53,13 +57,16 @@ permissions:
   - 'create paragraph content accordion_item'
   - 'create paragraph content carousel'
   - 'create paragraph content content_listing'
+  - 'create paragraph content poll'
   - 'create paragraph content simple_paragraph'
+  - 'create polls'
   - 'delete own comments'
   - 'delete own document content'
   - 'delete paragraph content accordion'
   - 'delete paragraph content accordion_item'
   - 'delete paragraph content carousel'
   - 'delete paragraph content content_listing'
+  - 'delete paragraph content poll'
   - 'delete paragraph content simple_paragraph'
   - 'edit own comments'
   - 'edit own contact_information rdf entity'
@@ -143,6 +150,7 @@ permissions:
   - 'update paragraph content accordion_item'
   - 'update paragraph content carousel'
   - 'update paragraph content content_listing'
+  - 'update paragraph content poll'
   - 'update paragraph content simple_paragraph'
   - 'use search_api_autocomplete for search'
   - 'use text format basic_html'
@@ -171,6 +179,7 @@ permissions:
   - 'view paragraph content iframe'
   - 'view paragraph content image'
   - 'view paragraph content json_map'
+  - 'view paragraph content poll'
   - 'view paragraph content row'
   - 'view paragraph content simple_paragraph'
   - 'view paragraph content testimony'
