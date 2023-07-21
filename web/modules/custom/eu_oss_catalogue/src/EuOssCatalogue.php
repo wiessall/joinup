@@ -44,11 +44,14 @@ class EuOssCatalogue {
     $queue = $this->queueFactory->get('eu_oss_catalogue');
     $queue->createQueue();
 
-    foreach ($plugin->fetch() as $fetchedItem) {
-      if (!$fetchedItem instanceof EuOssCatalogueFetchedSolution) {
+    foreach ($plugin->fetch() as $fetchedSolution) {
+      if (!$fetchedSolution instanceof EuOssCatalogueFetchedSolution) {
         throw new \Exception("Invalid data received from '$provider' plugin");
       }
-      $queue->createItem(['provider' => $provider, 'fetched' => $fetchedItem]);
+      $queue->createItem([
+        'provider' => $provider,
+        'solution' => $fetchedSolution,
+      ]);
     }
   }
 

@@ -4,14 +4,12 @@ declare(strict_types = 1);
 
 namespace Drupal\eu_oss_catalogue\Plugin\QueueWorker;
 
+use Drupal\Component\Plugin\PluginManagerInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Queue\QueueWorkerBase;
-use Drupal\Core\Serialization\Yaml;
 use Drupal\eu_oss_catalogue\EuOssCatalogueFetchedSolution;
-use Drupal\eu_oss_catalogue\EuOssCatalogueProviderPluginManager;
-use Drupal\eu_oss_catalogue\EuOssCatalogueResolverPluginManager;
 use Drupal\eu_oss_catalogue\Exception\UnresolvableValueException;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -37,9 +35,9 @@ class EuOssCatalogueUpdateBackend extends QueueWorkerBase implements ContainerFa
    *   The plugin implementation definition.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
    *   The entity type manager service.
-   * @param \Drupal\eu_oss_catalogue\EuOssCatalogueProviderPluginManager $providerManager
+   * @param \Drupal\Component\Plugin\PluginManagerInterface $providerManager
    *   The EU OSS Catalogue provider plugin manager service.
-   * @param \Drupal\eu_oss_catalogue\EuOssCatalogueResolverPluginManager $resolverManager
+   * @param \Drupal\Component\Plugin\PluginManagerInterface $resolverManager
    *   The EU OSS Catalogue resolver plugin manager service.
    * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger
    *   The logger channel factory service.
@@ -49,8 +47,8 @@ class EuOssCatalogueUpdateBackend extends QueueWorkerBase implements ContainerFa
     $pluginId,
     $pluginDefinition,
     protected EntityTypeManagerInterface $entityTypeManager,
-    protected EuOssCatalogueProviderPluginManager $providerManager,
-    protected EuOssCatalogueResolverPluginManager $resolverManager,
+    protected PluginManagerInterface $providerManager,
+    protected PluginManagerInterface $resolverManager,
     protected LoggerChannelFactoryInterface $logger,
   ) {
     parent::__construct($configuration, $pluginId, $pluginDefinition);
@@ -75,8 +73,8 @@ class EuOssCatalogueUpdateBackend extends QueueWorkerBase implements ContainerFa
    * {@inheritdoc}
    */
   public function processItem($data): void {
-    $fetched = $data['fetched'];
-    if (!$fetched instanceof EuOssCatalogueFetchedSolution) {
+    $fetchedSolution = $data['solution'];
+    if (!$fetchedSolution instanceof EuOssCatalogueFetchedSolution) {
       throw new \InvalidArgumentException("Invalid data in 'eu_oss_catalogue' queue");
     }
 
@@ -84,11 +82,11 @@ class EuOssCatalogueUpdateBackend extends QueueWorkerBase implements ContainerFa
     $fieldConfigStorage = $this->entityTypeManager->getStorage('field_config');
     $pluginDefinition = $this->providerManager->getDefinition($data['provider']);
 
-    $solutions = $nodeStorage->loadByProperties(['oss_url' => $fetched->url]);
+    $solutions = $nodeStorage->loadByProperties(['oss_url' => $fetchedSolution->url]);
     /** @var \Drupal\node\NodeInterface $solution */
     $solution = empty($solutions) ? $nodeStorage->create(['type' => 'oss_solution']) : reset($solutions);
 
-    $solution->set('title', $fetched->name);
+    $solution->set('title', $fetchedSolution->name);
     foreach ($solution->getFields(FALSE) as $fieldName => $fieldItemList) {
       if (!str_starts_with($fieldName, 'oss_')) {
         continue;
@@ -103,36 +101,13 @@ class EuOssCatalogueUpdateBackend extends QueueWorkerBase implements ContainerFa
           /** @var \Drupal\eu_oss_catalogue\EuOssCatalogueResolverInterface $resolver */
           $resolver = $this->resolverManager->createInstance($resolverPluginId, $settings);
           try {
-            $resolvedValue = $resolver->resolve($fetched, $fieldName);
+            $resolvedValue = $resolver->resolve($fetchedSolution, $fieldName);
           }
           catch (UnresolvableValueException $exception) {
             if ($fieldItemList->getFieldDefinition()->isRequired()) {
-              // This field is required but the resolver failed to resolve.
-              $message = <<<MESSAGE
-                <p>Possible schema violation:</p>
-                <p>Drupal field: <code>@field</code></p>
-                <p>@provider ID: <code>@provider_id</code></p>
-                <p>Path: <code>@path</code></p>
-                <p>Value:</p>
-                <pre>
-                @value
-                </pre>
-                <p>Full data:</p>
-                <pre>
-                @data
-                </pre>
-                MESSAGE;
-              $arguments = [
-                '@field' => $exception->fieldName,
-                '@provider' => $pluginDefinition['label'],
-                '@provide_id' => $fetched->providerAssignedId ?? '[not defined]',
-                '@path' => $exception->path,
-                '@value' => Yaml::encode($exception->value),
-                '@data' => Yaml::encode($exception->data),
-              ];
-              $this->logger->get('eu_oss_catalogue')->error($message, $arguments);
+              watchdog_exception('eu_oss_catalogue', $exception, $exception->getMessage());
             }
-            // Don't set this field.
+            // Fails softly, don't set this field.
             continue;
           }
 

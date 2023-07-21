@@ -22,9 +22,9 @@ class DefaultResolver extends PluginBase implements EuOssCatalogueResolverInterf
   /**
    * {@inheritdoc}
    */
-  public function resolve(EuOssCatalogueFetchedSolution $fetched, string $fieldName): mixed {
+  public function resolve(EuOssCatalogueFetchedSolution $fetchedSolution, string $fieldName): mixed {
     $path = explode('/', $this->configuration['path']);
-    $data = $fetched->data;
+    $data = $fetchedSolution->data;
     return NestedArray::getValue($data, $path);
   }
 

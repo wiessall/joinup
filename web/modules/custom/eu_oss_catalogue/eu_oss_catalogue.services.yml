@@ -5,9 +5,16 @@ services:
     arguments: ['@plugin.manager.eu_oss_catalogue.provider', '@queue']
 
   plugin.manager.eu_oss_catalogue.provider:
-    class: Drupal\eu_oss_catalogue\EuOssCatalogueProviderPluginManager
+    class: Drupal\eu_oss_catalogue\EuOssCataloguePluginManager
     parent: default_plugin_manager
+    arguments: [provider]
+
+  plugin.manager.eu_oss_catalogue.parser:
+    class: Drupal\eu_oss_catalogue\EuOssCataloguePluginManager
+    parent: default_plugin_manager
+    arguments: [parser]
 
   plugin.manager.eu_oss_catalogue.resolver:
-    class: Drupal\eu_oss_catalogue\EuOssCatalogueResolverPluginManager
+    class: Drupal\eu_oss_catalogue\EuOssCataloguePluginManager
     parent: default_plugin_manager
+    arguments: [resolver]
