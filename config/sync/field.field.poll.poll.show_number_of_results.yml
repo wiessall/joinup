@@ -1,0 +1,24 @@
+uuid: ba9ce673-4cac-46c8-bfb9-bec69fe511e4
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.poll.show_number_of_results
+  module:
+    - poll
+id: poll.poll.show_number_of_results
+field_name: show_number_of_results
+entity_type: poll
+bundle: poll
+label: 'Show number of results'
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  on_label: 'On'
+  off_label: 'Off'
+field_type: boolean
