@@ -18,11 +18,11 @@ class AbsoluteUrlResolver extends DefaultResolver {
   /**
    * {@inheritdoc}
    */
-  public function resolve(EuOssCatalogueFetchedSolution $fetched, string $fieldName): mixed {
-    $paths = (array) parent::resolve($fetched, $fieldName);
+  public function resolve(EuOssCatalogueFetchedSolution $fetchedSolution, string $fieldName): mixed {
+    $paths = (array) parent::resolve($fetchedSolution, $fieldName);
     foreach ($paths as &$path) {
-      if (!preg_match('@^https?://@', $fetched->url)) {
-        $path = $fetched->url . '/' . ltrim($path, '/');
+      if (!preg_match('@^https?://@', $fetchedSolution->url)) {
+        $path = $fetchedSolution->url . '/' . ltrim($path, '/');
       }
     }
     return $paths;

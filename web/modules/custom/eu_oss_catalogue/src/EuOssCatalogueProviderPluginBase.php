@@ -7,7 +7,7 @@ namespace Drupal\eu_oss_catalogue;
 use Drupal\Component\Plugin\PluginBase;
 
 /**
- * Base plugin for EU OSS Catalog provider plugins.
+ * Base plugin for EU OSS Catalogue provider plugins.
  */
 abstract class EuOssCatalogueProviderPluginBase extends PluginBase implements EuOssCatalogueProviderInterface {
 

@@ -56,8 +56,8 @@ class TaxonomyTermResolver extends DefaultResolver implements ContainerFactoryPl
   /**
    * {@inheritdoc}
    */
-  public function resolve(EuOssCatalogueFetchedSolution $fetched, string $fieldName): mixed {
-    $originalValue = parent::resolve($fetched, $fieldName);
+  public function resolve(EuOssCatalogueFetchedSolution $fetchedSolution, string $fieldName): mixed {
+    $originalValue = parent::resolve($fetchedSolution, $fieldName);
     // Convert to array to handle also the multiple terms case.
     $names = (array) $originalValue;
 
@@ -80,7 +80,7 @@ class TaxonomyTermResolver extends DefaultResolver implements ContainerFactoryPl
 
     if ($controlled && !empty($missingTermNames)) {
       // Some terms don't exist in this controlled vocabulary.
-      throw new UnresolvableValueException($fieldName, $this->configuration['path'], $originalValue, $fetched->data);
+      throw new UnresolvableValueException($fieldName, $this->configuration['path'], $originalValue, $fetchedSolution->data);
     }
 
     foreach ($missingTermNames as $name) {
