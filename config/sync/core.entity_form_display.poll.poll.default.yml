@@ -2,6 +2,8 @@ uuid: 9c6c1e03-e40d-426a-93a4-896d74f56738
 langcode: en
 status: true
 dependencies:
+  config:
+    - field.field.poll.poll.show_number_of_results
   module:
     - poll
 id: poll.poll.default
@@ -35,6 +37,13 @@ content:
     weight: 3
     region: content
     settings: {  }
+    third_party_settings: {  }
+  show_number_of_results:
+    type: boolean_checkbox
+    weight: 5
+    region: content
+    settings:
+      display_label: true
     third_party_settings: {  }
   status:
     type: boolean_checkbox

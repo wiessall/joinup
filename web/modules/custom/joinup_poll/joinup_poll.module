@@ -1,0 +1,97 @@
+<?php
+
+/**
+ * @file
+ * Main functions and hook implementations of the Joinup Poll module.
+ */
+
+declare(strict_types = 1);
+
+use Drupal\poll\PollInterface;
+
+/**
+ * Implements hook_preprocess_HOOK().
+ */
+function joinup_poll_preprocess_poll_vote(&$variables): void {
+  /** @var \Drupal\poll\PollInterface $poll */
+  $poll = $variables['form']['#entity'];
+
+  _joinup_poll_add_summary($poll, $variables);
+}
+
+/**
+ * Implements hook_preprocess_HOOK().
+ */
+function joinup_poll_preprocess_poll_results(&$variables): void {
+  _joinup_poll_add_summary($variables['poll'], $variables);
+}
+
+/**
+ * Implements hook_preprocess_HOOK().
+ */
+function joinup_poll_preprocess_poll_meter(&$variables): void {
+  /** @var \Drupal\poll\PollInterface $poll */
+  $poll = $variables['poll'];
+
+  // Don't display number of votes.
+  if ($poll->get('show_number_of_results')->getString() === '0') {
+    $variables['display_value'] = explode(' ', $variables['display_value'])[0];
+  }
+}
+
+/**
+ * It adds the summary element.
+ *
+ * @param \Drupal\poll\PollInterface $poll
+ *   Poll entity.
+ * @param array $variables
+ *   Render array.
+ */
+function _joinup_poll_add_summary(PollInterface $poll, array &$variables): void {
+  $variables['summary'] = [
+    '#theme' => 'joinup_poll_summary',
+    '#poll' => $poll,
+  ];
+}
+
+/**
+ * Implements hook_theme().
+ */
+function joinup_poll_theme(): array {
+  return [
+    'joinup_poll_summary' => [
+      'variables' => [
+        'poll' => NULL,
+      ],
+    ],
+  ];
+}
+
+/**
+ * Prepares variables for joinup_poll_summary templates.
+ *
+ * Default template: joinup-poll-summary.html.twig.
+ *
+ * @param array $variables
+ *   Template variables.
+ */
+function template_preprocess_joinup_poll_summary(array &$variables): void {
+  /** @var \Drupal\poll\PollInterface $poll */
+  $poll = $variables['poll'];
+
+  /** @var \Drupal\poll\PollVoteStorageInterface $pollVoteStorage */
+  $pollVoteStorage = \Drupal::service('poll_vote.storage');
+
+  /** @var \Drupal\Core\Datetime\DateFormatterInterface $dateFormatter */
+  $dateFormatter = \Drupal::service('date.formatter');
+
+  $variables['number_of_votes'] = $pollVoteStorage->getTotalVotes($poll);
+  $variables['show_number_of_votes'] = (bool) $poll->get('show_number_of_results')
+    ->getString();
+  $variables['is_closed'] = $poll->isClosed();
+  if ($poll->getRuntime() != 0) {
+    $variables['time_left'] = $dateFormatter->formatTimeDiffUntil(
+      $poll->getCreated() + $poll->getRuntime()
+    );
+  }
+}
