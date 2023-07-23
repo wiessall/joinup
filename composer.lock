@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "fbaa4317c09565a2d4a68fc463403e31",
+    "content-hash": "8d550f57e8db1bdadff2df2ac777b60e",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -8086,16 +8086,16 @@
         },
         {
             "name": "drush/drush",
-            "version": "12.1.1",
+            "version": "12.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/drush-ops/drush.git",
-                "reference": "586496f191c93d3ca5dc498fe6d1ecbdd7204330"
+                "reference": "185ebd0d15bd8d2647821cc20eee0b82bf00ff4b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/drush-ops/drush/zipball/586496f191c93d3ca5dc498fe6d1ecbdd7204330",
-                "reference": "586496f191c93d3ca5dc498fe6d1ecbdd7204330",
+                "url": "https://api.github.com/repos/drush-ops/drush/zipball/185ebd0d15bd8d2647821cc20eee0b82bf00ff4b",
+                "reference": "185ebd0d15bd8d2647821cc20eee0b82bf00ff4b",
                 "shasum": ""
             },
             "require": {
@@ -8105,6 +8105,7 @@
                 "consolidation/annotated-command": "^4.9.1",
                 "consolidation/config": "^2.1.2",
                 "consolidation/filter-via-dot-access-data": "^2.0.2",
+                "consolidation/output-formatters": "^4.3.2",
                 "consolidation/robo": "^4.0.6",
                 "consolidation/site-alias": "^4",
                 "consolidation/site-process": "^5.2.0",
@@ -8217,7 +8218,7 @@
                 "issues": "https://github.com/drush-ops/drush/issues",
                 "security": "https://github.com/drush-ops/drush/security/advisories",
                 "slack": "https://drupal.slack.com/messages/C62H9CWQM",
-                "source": "https://github.com/drush-ops/drush/tree/12.1.1"
+                "source": "https://github.com/drush-ops/drush/tree/12.1.2"
             },
             "funding": [
                 {
@@ -8225,7 +8226,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2023-06-28T13:56:27+00:00"
+            "time": "2023-07-11T14:22:11+00:00"
         },
         {
             "name": "ec-europa/joinup-tallinn-dashboard",
@@ -15360,71 +15361,6 @@
             "time": "2022-03-30T09:27:43+00:00"
         },
         {
-            "name": "claudiu-cristea/drupal-dependencies",
-            "version": "1.x-dev",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/claudiu-cristea/drupal-dependencies.git",
-                "reference": "5509743e531b547aaad63bafa8efe8e1deb8276b"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/claudiu-cristea/drupal-dependencies/zipball/5509743e531b547aaad63bafa8efe8e1deb8276b",
-                "reference": "5509743e531b547aaad63bafa8efe8e1deb8276b",
-                "shasum": ""
-            },
-            "require": {
-                "drush/drush": "^11.0 || ^12.0"
-            },
-            "require-dev": {
-                "composer/installers": "^2",
-                "drupal/core-composer-scaffold": ">=10.0",
-                "drupal/core-recommended": ">=10.0",
-                "phpunit/phpunit": "^9.6",
-                "squizlabs/php_codesniffer": "^3.7"
-            },
-            "default-branch": true,
-            "type": "library",
-            "extra": {
-                "installer-paths": {
-                    "build/core": [
-                        "type:drupal-core"
-                    ]
-                },
-                "drupal-scaffold": {
-                    "locations": {
-                        "web-root": "build/"
-                    },
-                    "file-mapping": {
-                        "[project-root]/.gitattributes": false,
-                        "[project-root]/.editorconfig": false,
-                        "[project-root]/.gitignore": false
-                    }
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Drupal\\Dependencies\\": "src"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "GPL-2.0-or-later"
-            ],
-            "authors": [
-                {
-                    "name": "Claudiu Cristea",
-                    "email": "clau.cristea@gmail.com"
-                }
-            ],
-            "description": "Drush commands to list Drupal dependencies",
-            "support": {
-                "issues": "https://github.com/claudiu-cristea/drupal-dependencies/issues",
-                "source": "https://github.com/claudiu-cristea/drupal-dependencies/tree/1.x"
-            },
-            "time": "2023-07-17T08:45:30+00:00"
-        },
-        {
             "name": "composer/pcre",
             "version": "3.1.0",
             "source": {
@@ -22043,7 +21979,6 @@
         "drupal/facets_date_range": 10,
         "drupal/page_manager": 10,
         "drupal/views_block_area": 10,
-        "claudiu-cristea/drupal-dependencies": 20,
         "php-task-runner/composer": 20,
         "php-task-runner/sparql": 20,
         "weitzman/drupal-test-traits": 20

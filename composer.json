@@ -120,7 +120,6 @@
         "ext-fileinfo": "*",
         "ext-iconv": "*",
         "ext-libxml": "*",
-        "claudiu-cristea/drupal-dependencies": "1.x-dev",
         "drupal/admin_toolbar": "^3.4",
         "drupal/cas_mock_server": "^2.0",
         "drupal/coder": "*",
@@ -368,6 +367,9 @@
             "drupal/views_autosubmit": {
                 "Diff from 8.1.x.5 with dev version" : "resources/patch/php/drupal/views_autosubmit/views_autosubmit_once.patch",
                 "Stop auto submitting first character entered in an Autocomplete Filter field. @see https://www.drupal.org/project/views_autosubmit/issues/3160600" : "https://git.drupalcode.org/project/views_autosubmit/-/merge_requests/10.patch"
+            },
+            "drush/drush": {
+                "Run batch process when (un)installing modules via config:import @see https://github.com/drush-ops/drush/pull/5714": "resources/patch/php/drush/drush/5714.diff"
             }
         },
         "drupal-lenient": {
@@ -404,10 +406,6 @@
                     "reference": "main"
                 }
             }
-        },
-        {
-            "type": "vcs",
-            "url": "git@git.drupal.org:sandbox/itamair-3372413.git"
         },
         {
             "type": "vcs",
