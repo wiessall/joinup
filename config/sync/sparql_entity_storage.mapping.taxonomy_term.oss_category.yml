@@ -19,5 +19,5 @@ base_fields_mapping:
   name:
     value:
       predicate: 'http://www.w3.org/2004/02/skos/core#prefLabel'
-      format: literal
-entity_id_plugin: null
+      format: t_literal
+entity_id_plugin: default
