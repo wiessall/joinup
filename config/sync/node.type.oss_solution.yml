@@ -14,7 +14,7 @@ label_singular: 'opensource software solution'
 label_plural: 'opensource software solutions'
 label_count:
   - '1 opensource software solution\x03@count opensource software solutions'
-name: 'Open Source Software Solution'
+name: 'OpenSource Software Solution'
 type: oss_solution
 description: 'A federated opensource software business solution'
 help: ''

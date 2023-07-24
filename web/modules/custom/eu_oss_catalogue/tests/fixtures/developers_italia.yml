@@ -1,0 +1,231 @@
+data:
+
+  # Pass schema validation.
+  - id: 5ec4e909-6f95-4211-9db5-1ec4718b731d
+    url: 'https://github.com/RegioneER/al.verificafirme.git'
+    aliases:
+      - 'https://github.com/RegioneER/al.verificafirme'
+    publiccodeYml: |
+      publiccodeYmlVersion: "0.2"
+      name: Verifica firme
+      url: https://github.com/RegioneER/al.verificafirme
+      softwareVersion: 1.0.0.0
+      releaseDate: "2023-07-07"
+      logo: images/the-logo.svg
+      platforms:
+          - web
+      categories:
+          - data-collection
+          - digital-citizenship
+      developmentStatus: stable
+      softwareType: standalone/web
+      description:
+          it:
+              genericName: ' Verifica firme'
+              shortDescription: Applicazione per la verifica della raccolta di firme
+              longDescription: "L'applicativo Verifica firme ha l'obiettivo di fornire gli strumenti per la verifica firme relative a una richiesta di Referendum \no a una Proposta di Legge di Iniziativa Popolare.\nLa verifica delle firme è necessaria sia in fase di presentazione della richiesta per attestarne l'ammissibilità sia in fase \ndi verifica del raggiungimento del quorum per la presentazione del Referendum o della Proposta di Legge di Iniziativa Popolare.\n"
+              features:
+                  - Raccolta dati sul campo e analisi
+              screenshots:
+                  - VerificaFirme.jpg
+      legal:
+          license: AGPL-3.0-or-later
+          mainCopyrightOwner: Regione Emilia-Romagna
+          repoOwner: Regione Emilia-Romagna
+      maintenance:
+          type: contract
+          contractors:
+              - name: Engineering S.p.A.
+                website: https://www.eng.it
+                until: "2023-12-31"
+          contacts:
+              - name: Giovanna Favero
+                email: giovanna.favero@regione.emilia-romagna.it
+                affiliation: Regione Emilia-Romagna
+      localisation:
+          localisationReady: false
+          availableLanguages:
+              - it
+      dependsOn:
+          proprietary:
+              - name: Microsoft .NET
+                versionMin: ""
+                versionMax: ""
+                optional: false
+                version: "4.8"
+      it:
+          countryExtensionVersion: "0.2"
+          conforme:
+              lineeGuidaDesign: true
+              modelloInteroperabilita: false
+              misureMinimeSicurezza: false
+              gdpr: true
+          riuso:
+              codiceIPA: r_emiro
+          piattaforme:
+              spid: false
+              pagopa: false
+              cie: false
+              anpr: false
+              io: false
+    active: true
+    createdAt: '2023-07-17T19:01:50.417665Z'
+    updatedAt: '2023-07-20T23:06:56.580871Z'
+
+  # Pass schema validation.
+  - id: 1df14b7e-15b9-4ae1-a9cd-6ac77b5e7fea
+    url: 'https://github.com/RegioneLombardia/bootstrap-lombardia.git'
+    aliases:
+      - 'https://github.com/RegioneLombardia/bootstrap-lombardia'
+    publiccodeYml: |
+      publiccodeYmlVersion: "0.2"
+      name: Bootstrap Italia
+      url: https://github.com/italia/bootstrap-italia
+      landingURL: https://italia.github.io/bootstrap-italia
+      isBasedOn:
+          - Bootstrap
+      softwareVersion: v2.3.4
+      releaseDate: "2023-02-09"
+      platforms:
+          - web
+      categories:
+          - website-builder
+      roadmap: https://designers.italia.it/piano-attivita/
+      developmentStatus: stable
+      softwareType: library
+      description:
+          it:
+              genericName: Tema Bootstrap
+              shortDescription: |-
+                  La libreria Bootstrap Italia è il modo più semplice e sicuro per costruire
+                  interfacce web moderne, inclusive e semplici da mantenere.
+              longDescription: |
+                  La libreria **Bootstrap Italia** è il modo più semplice e sicuro per
+                  costruire interfacce web **moderne**, **inclusive** e **semplici da
+                  mantenere**.
+
+                  Completamente **open-source**, costruita sulle fondamenta di [Bootstrap
+                  4.6.1](https://getbootstrap.com/docs/4.6/getting-started/introduction/ "Repository GitHub di Bootstrap") per la versione 1
+                  e la versione [Bootstrap
+                  5.2.3](https://getbootstrap.com/docs/5.1/getting-started/introduction/ "Repository GitHub di Bootstrap") per la versione 2 , di cui
+                  eredita tutte le funzionalità, componenti, griglie e classi di utilità,
+                  personalizzandole secondo le indicazioni delle "[{{ site.data.short.rl-guide }} di design per i siti internet e i servizi digitali della
+                  Pubblica
+                  Amministrazione](https://docs.italia.it/italia/design/lg-design-servizi-web/)" e del relativo "[Manuale operativo di design](https://designers.italia.it/linee-guida)" a supporto disponibile sul sito Designers Italia.
+
+                  **Bootstrap Italia** usa
+                  i pattern e i componenti definiti nello [UI Kit di Designers
+                  Italia](https://designers.italia.it/kit/ui-kit/ "User Interface Kit") e li
+                  trasforma in codice già pronto all'uso!
+              documentation: https://italia.github.io/bootstrap-italia/docs/come-iniziare/introduzione/
+              features:
+                  - responsive
+                  - accessibility
+                  - inclusion
+                  - web development
+                  - PNRR
+                  - PNRR/Misura/1.4.1
+                  - PNRR/Beneficiari/Comuni
+                  - PNRR/Beneficiari/Scuole
+      legal:
+          license: BSD-3-Clause
+          mainCopyrightOwner: Presidenza del Consiglio dei Ministri
+          authorsFile: https://raw.githubusercontent.com/italia/bootstrap-italia/1.x/AUTHORS
+      maintenance:
+          type: community
+          contacts:
+              - name: Designers Italia
+      localisation:
+          localisationReady: false
+          availableLanguages:
+              - it
+      it:
+          countryExtensionVersion: "0.2"
+          conforme:
+              modelloInteroperabilita: false
+              misureMinimeSicurezza: false
+              gdpr: false
+          riuso:
+              codiceIPA: pcm
+          piattaforme:
+              spid: false
+              pagopa: false
+              cie: false
+              anpr: false
+              io: false
+    active: true
+    createdAt: '2023-07-03T18:02:09.536128Z'
+    updatedAt: '2023-07-03T22:07:09.288625Z'
+
+  # Missing mandatory values
+  - id: invalid1-0000-0000-0000-000000000000
+    url: 'https://github.com/ComuneBologna/gestionaleTaxi.git'
+    aliases:
+      - 'https://github.com/ComuneBologna/gestionaleTaxi'
+    publiccodeYml: |
+      publiccodeYmlVersion: "0.2"
+      name: ''
+      applicationSuite: Azure
+      url: null
+      releaseDate: "2023-04-21"
+      inputTypes:
+          - application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
+      outputTypes:
+          - application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
+      platforms:
+          - web
+      categories:
+          - business-process-management
+          - digital-citizenship
+      developmentStatus: stable
+      softwareType: standalone/web
+      description:
+          it:
+              genericName: Software Gestionale
+              shortDescription: |-
+                  Il software consente di organizzare l'iter di gestione delle licenze Taxi
+                  ed NCC
+              longDescription: "La piattaforma software applicativa consente la gestione delle licenze e\ndei turni di servizio Taxi e NCC all’interno del proprio territorio\ncomunale, al fine di monitorare la copertura delle esigenze di trasporto\nmanifestate dai cittadini e pianificare in maniera più efficace le azioni\nvolte al miglioramento del servizio stesso. \n\n\n\nLa piattaforma è in grado di organizzare le informazioni circa le licenze.\nIn particolare, organizza la documentazione che nel tempo viene prodotta,\nassicurando conformità rispetto alla tenuta del documento informatico. In\nfase di configurazione è possibile indicare i template dei documenti da\nprodurre, che tramite un editor dei testi l'operatore può modificare,\ninoltre, tramite la gestione dei tag tutte le informazioni recuperate dal\nsistema andranno a precompilare il documento. \n\nIl sistema prevede la gestione di un iter di firma, in questo modo un\noperatore può inviare e notificare al documento i documenti da firmare. Il\ndirigente ha a disposizione una sezione attraverso la quale poter firmare\nla documentazione. \n\n\n\nPer ciascuna licenza, inoltre, vengono gestite le informazioni circa il\nproprietario, le sostituzioni e la tipologia di veicolo utilizzato. Tutte\nle informazioni vengono storicizzate così da garantire una completa\nricostruzione della storia di una licenza.\n\nIl sistema gestisce l'anagrafica dei proprietari, delle associazioni di\ncategoria e degli enti di rilascio.  \n"
+              features:
+                  - Anagrafica dei proprietari
+                  - Gestione Licenze taxi ed NCC
+                  - Gestione documentazione licenze
+                  - Variazioni licenze
+                  - Gestione turnazioni
+      legal:
+          license: EUPL-1.2
+      maintenance:
+          type: contract
+          contractors:
+              - name: Asfweb
+                until: "2023-12-31"
+          contacts:
+              - name: Domenico Pedicini
+                email: domenico.pedicini@asfweb.it
+              - name: Dario Pedicini
+                email: dario.pedicini@asfweb.it
+      localisation:
+          localisationReady: true
+          availableLanguages: [  ]
+      it:
+          countryExtensionVersion: "0.2"
+          conforme:
+              modelloInteroperabilita: false
+              misureMinimeSicurezza: false
+              gdpr: false
+          riuso:
+              codiceIPA: c_a944
+          piattaforme:
+              spid: false
+              pagopa: false
+              cie: false
+              anpr: false
+              io: false
+    active: true
+    createdAt: '2023-06-15T18:04:37.975817Z'
+    updatedAt: '2023-07-20T22:09:23.352593Z'
+
+# Pagination
+links:
+  prev: null
+  next: null

@@ -10,7 +10,9 @@ dependencies:
 third_party_settings:
   eu_oss_catalogue:
     publiccode_yml:
-      path: url
+      resolver: default
+      config:
+        path: url
 id: node.oss_solution.oss_url
 field_name: oss_url
 entity_type: node

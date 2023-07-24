@@ -8,7 +8,9 @@ dependencies:
 third_party_settings:
   eu_oss_catalogue:
     publiccode_yml:
-      path: legal/mainCopyrightOwner
+      resolver: default
+      config:
+        path: legal/mainCopyrightOwner
 id: node.oss_solution.oss_main_copyright_owner
 field_name: oss_main_copyright_owner
 entity_type: node

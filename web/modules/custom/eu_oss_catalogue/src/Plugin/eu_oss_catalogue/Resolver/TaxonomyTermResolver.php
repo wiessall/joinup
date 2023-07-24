@@ -56,6 +56,16 @@ class TaxonomyTermResolver extends DefaultResolver implements ContainerFactoryPl
   /**
    * {@inheritdoc}
    */
+  public function defaultConfiguration(): array {
+    return [
+      'vid' => NULL,
+      'controlled' => FALSE,
+    ] + parent::defaultConfiguration();
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function resolve(EuOssCatalogueFetchedSolution $fetchedSolution, string $fieldName): mixed {
     $originalValue = parent::resolve($fetchedSolution, $fieldName);
     // Convert to array to handle also the multiple terms case.
@@ -63,11 +73,11 @@ class TaxonomyTermResolver extends DefaultResolver implements ContainerFactoryPl
 
     $storage = $this->entityTypeManager->getStorage('taxonomy_term');
     $termIds = array_values($storage->getQuery()->accessCheck(FALSE)
-      ->condition('vid', $this->configuration['vid'])
+      ->condition('vid', $this->getConfiguration()['vid'])
       ->condition('name', $names, 'IN')
       ->execute());
 
-    $controlled = $this->configuration['controlled'] ?? FALSE;
+    $controlled = $this->getConfiguration()['controlled'] ?? FALSE;
 
     $tids = [];
     foreach ($storage->loadMultiple($termIds) as $tid => $term) {
@@ -80,12 +90,12 @@ class TaxonomyTermResolver extends DefaultResolver implements ContainerFactoryPl
 
     if ($controlled && !empty($missingTermNames)) {
       // Some terms don't exist in this controlled vocabulary.
-      throw new UnresolvableValueException($fieldName, $this->configuration['path'], $originalValue, $fetchedSolution->data);
+      throw new UnresolvableValueException($fieldName, $this->getConfiguration()['path'], $originalValue, $fetchedSolution->getData());
     }
 
     foreach ($missingTermNames as $name) {
       $term = $storage->create([
-        'vid' => $this->configuration['vid'],
+        'vid' => $this->getConfiguration()['vid'],
         'name' => $name,
       ]);
       $term->save();

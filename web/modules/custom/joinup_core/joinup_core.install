@@ -10,9 +10,7 @@ declare(strict_types = 1);
 use Drupal\Core\Database\Database;
 use Drupal\Core\Serialization\Yaml;
 use Drupal\Core\Site\Settings;
-use Drupal\joinup_sparql\JoinupSparqlGraphStoreHelper;
 use Drupal\user\Entity\User;
-use EasyRdf\Graph;
 
 /**
  * Implements hook_requirements().

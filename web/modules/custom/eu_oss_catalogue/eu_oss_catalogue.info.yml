@@ -4,4 +4,9 @@ description: EU OSS Solutions Catalogue
 package: EU OSS Catalogue
 core_version_requirement: ">=10.0"
 dependencies:
+  - drupal:datetime
+  - drupal:link
+  - drupal:node
+  - drupal:options
+  - drupal:taxonomy
   - pluginreference:pluginreference

@@ -10,6 +10,7 @@ declare(strict_types = 1);
 use Drupal\Component\Serialization\Json;
 use Drupal\Core\Batch\BatchBuilder;
 use Drupal\Core\Serialization\Yaml;
+use Drupal\eu_oss_catalogue\EuOssCatalogueInstallHelper;
 
 /**
  * Implements hook_install().
@@ -17,7 +18,7 @@ use Drupal\Core\Serialization\Yaml;
 function eu_oss_catalogue_install(): void {
   $terms = [];
 
-  // @todo Add oss_scope whne will be created.
+  // @todo Add oss_scope when will be created.
   foreach (['category'] as $vocab) {
     $names = Yaml::decode(file_get_contents(__DIR__ . "/fixtures/controlled_vocabs/$vocab.yml"))['terms'];
     foreach ($names as $name) {
@@ -37,27 +38,8 @@ function eu_oss_catalogue_install(): void {
     ->setProgressive(FALSE);
 
   foreach (array_chunk($terms, 50) as $chunk) {
-    $batchBuilder->addOperation('_eu_oss_catalogue_create_terms', [$chunk]);
+    $batchBuilder->addOperation(EuOssCatalogueInstallHelper::class . '::createTerms', [$chunk]);
   }
 
   batch_set($batchBuilder->toArray());
-}
-
-/**
- * Creates terms in the controlled vocabularies when installing.
- *
- * @param array $items
- *   Indexed array of terms, each having the pattern "$vid:$name".
- * @param array $context
- *   The batch operation context.
- */
-function _eu_oss_catalogue_create_terms(array $items, array &$context): void {
-  $termStorage = \Drupal::entityTypeManager()->getStorage('taxonomy_term');
-  foreach ($items as $item) {
-    [$vid, $term] = explode(':', $item, 2);
-    $termStorage->create(['vid' => $vid, 'name' => $term])->save();
-  }
-  $context['message'] = t('Imported @count terms in controlled vocabularies', [
-    '@count' => count($items),
-  ]);
 }

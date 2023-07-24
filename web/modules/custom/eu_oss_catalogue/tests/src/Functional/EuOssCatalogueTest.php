@@ -1,0 +1,142 @@
+<?php
+
+declare(strict_types = 1);
+
+namespace Drupal\Tests\eu_oss_catalogue\Functional;
+
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Field\FieldItemListInterface;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
+use Drupal\Tests\BrowserTestBase;
+use Drupal\Tests\node\Traits\NodeCreationTrait;
+use Drush\TestTraits\DrushTestTrait;
+
+/**
+ * EU OSS Catalogue test.
+ *
+ * @group eu_oss_catalogue
+ */
+class EuOssCatalogueTest extends BrowserTestBase {
+
+  use DrushTestTrait;
+  use NodeCreationTrait;
+
+  /**
+   * {@inheritdoc}
+   */
+  protected $defaultTheme = 'stark';
+
+  /**
+   * {@inheritdoc}
+   */
+  protected static $modules = [
+    'dblog',
+    'eu_oss_catalogue_test',
+  ];
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function setUp(): void {
+    parent::setUp();
+    // On install, eu_oss_catalogue is creating the controlled vocabularies. We
+    // create only few testing terms.
+    $this->createTestingTerms();
+  }
+
+  /**
+   * @covers
+   */
+  public function testDevelopersItalia(): void {
+    $service = \Drupal::getContainer()->get('eu_oss_catalogue');
+    $service->fetch('developers_italia');
+
+    // Check how incoming data has been queued. Only one item is active.
+    $queue = \Drupal::queue('eu_oss_catalogue');
+    $this->assertSame(2, $queue->numberOfItems());
+
+    // Check failed imports.
+    $logs = \Drupal::database()->query("SELECT message, variables FROM {watchdog} WHERE type = 'eu_oss_catalogue'")->fetchAll();
+    $this->assertCount(1, $logs);
+    $message = strip_tags($logs[0]->message);
+    $variables = unserialize($logs[0]->variables, [
+      'allowed_classes' => [
+        TranslatableMarkup::class,
+      ],
+    ]);
+    $this->assertEquals('Developers Italia', $variables['@provider']);
+    $this->assertSame('invalid1-0000-0000-0000-000000000000', $variables['@provider_id']);
+    $this->assertStringContainsString('publiccode.yml schema errors:', $message);
+    $this->assertStringContainsString('name: required but empty', $message);
+    $this->assertStringContainsString('url: required but empty', $message);
+    $this->assertStringContainsString('localisation/availableLanguages: required but empty', $message);
+
+    // Check queue processing. Use Drush to run the queue.
+    $this->drush('queue:run', ['eu_oss_catalogue']);
+
+    $node1 = $this->getNodeByTitle('Verifica firme');
+    $this->assertSame('oss_solution', $node1->bundle());
+    $this->assertSame('https://github.com/RegioneER/al.verificafirme', $node1->get('oss_url')->uri);
+    $this->assertSame('0.2', $node1->get('oss_publiccode_yml_version')->value);
+    $this->assertSame('2023-07-07', $node1->get('oss_release_date')->value);
+    $this->assertSame('https://github.com/RegioneER/al.verificafirme/images/the-logo.svg', $node1->get('oss_logo')->uri);
+    $this->assertReferences(['web'], $node1->get('oss_platforms'));
+    $this->assertReferences(['data-collection', 'digital-citizenship'], $node1->get('oss_categories'));
+    $this->assertSame('stable', $node1->get('oss_development_status')->value);
+    $this->assertSame('standalone/web', $node1->get('oss_software_type')->value);
+    // @todo Description here
+    $this->assertReferences(['AGPL-3.0-or-later'], $node1->get('oss_license'));
+    $this->assertSame('Regione Emilia-Romagna', $node1->get('oss_main_copyright_owner')->value);
+    $this->assertTrue($node1->get('oss_landing_url')->isEmpty());
+
+    $node2 = $this->getNodeByTitle('Bootstrap Italia');
+    $this->assertSame('oss_solution', $node2->bundle());
+    $this->assertSame('https://github.com/italia/bootstrap-italia', $node2->get('oss_url')->uri);
+    $this->assertSame('https://italia.github.io/bootstrap-italia', $node2->get('oss_landing_url')->uri);
+    $this->assertSame('0.2', $node2->get('oss_publiccode_yml_version')->value);
+    $this->assertSame('2023-02-09', $node2->get('oss_release_date')->value);
+    $this->assertReferences(['web'], $node2->get('oss_platforms'));
+    $this->assertReferences(['website-builder'], $node2->get('oss_categories'));
+    $this->assertSame('stable', $node2->get('oss_development_status')->value);
+    $this->assertSame('library', $node2->get('oss_software_type')->value);
+    // @todo Description here
+    $this->assertReferences(['BSD-3-Clause'], $node2->get('oss_license'));
+    $this->assertSame('Presidenza del Consiglio dei Ministri', $node2->get('oss_main_copyright_owner')->value);
+    $this->assertTrue($node2->get('oss_logo')->isEmpty());
+  }
+
+  /**
+   * Asserts that a field has a list of expected entity references.
+   *
+   * @param string[] $expectedLabels
+   *   Expected labels.
+   * @param \Drupal\Core\Field\FieldItemListInterface $field
+   *   The entity reference field item list.
+   */
+  protected function assertReferences(array $expectedLabels, FieldItemListInterface $field): void {
+    $actualLabels = array_values(array_map(fn (EntityInterface $entity): string => $entity->label(), $field->referencedEntities()));
+    $this->assertEqualsCanonicalizing($expectedLabels, $actualLabels);
+  }
+
+  /**
+   * Creates testing terms.
+   */
+  protected function createTestingTerms(): void {
+    $storage = \Drupal::entityTypeManager()->getStorage('taxonomy_term');
+    $data = [
+      'oss_licence' => ['AGPL-3.0-or-later', 'BSD-3-Clause', 'EUPL-1.2'],
+      'oss_category' => [
+        'data-collection',
+        'website-builder',
+        'business-process-management',
+        'digital-citizenship',
+      ],
+    ];
+    foreach ($data as $vid => $terms) {
+      foreach ($terms as $term) {
+        $storage->create(['vid' => $vid, 'name' => $term])->save();
+      }
+    }
+  }
+
+}

@@ -5,7 +5,6 @@ declare(strict_types = 1);
 namespace Drupal\eu_oss_catalogue\Controller;
 
 use Drupal\Component\Plugin\PluginManagerInterface;
-use Drupal\Component\Utility\Html;
 use Drupal\Core\Controller\ControllerBase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -50,7 +49,8 @@ class EuOssCatalogueController extends ControllerBase {
         [
           'data' => [
             '#markup' => '<code><pre>' . $provider->getDrushCommandHelp() . '</pre></code>',
-        ]],
+          ],
+        ],
       ];
       $rows[] = $row;
     }

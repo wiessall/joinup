@@ -4,11 +4,15 @@ declare(strict_types = 1);
 
 namespace Drupal\eu_oss_catalogue\Plugin\eu_oss_catalogue\Parser;
 
+use Drupal\Component\Plugin\PluginManagerInterface;
 use Drupal\Core\Config\Schema\SchemaCheckTrait;
 use Drupal\Core\Config\TypedConfigManagerInterface;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Serialization\Yaml;
+use Drupal\eu_oss_catalogue\Entity\OssSolutionInterface;
+use Drupal\eu_oss_catalogue\EuOssCatalogueFetchedSolution;
 use Drupal\eu_oss_catalogue\EuOssCatalogueParserPluginBase;
 use Drupal\eu_oss_catalogue\EuOssCatalogueProviderInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -38,6 +42,10 @@ class PublicCodeYml extends EuOssCatalogueParserPluginBase implements ContainerF
    *   The plugin ID for the plugin instance.
    * @param mixed $pluginDefinition
    *   The plugin implementation definition.
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
+   *   The entity type manager service.
+   * @param \Drupal\Component\Plugin\PluginManagerInterface $resolverManager
+   *   The EU OSS Catalogue resolver plugin manager service.
    * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger
    *   The logger channel factory service.
    * @param \Drupal\Core\Config\TypedConfigManagerInterface $typedConfigManager
@@ -47,10 +55,12 @@ class PublicCodeYml extends EuOssCatalogueParserPluginBase implements ContainerF
     array $configuration,
     $pluginId,
     $pluginDefinition,
+    protected EntityTypeManagerInterface $entityTypeManager,
+    protected PluginManagerInterface $resolverManager,
     protected LoggerChannelFactoryInterface $logger,
     protected TypedConfigManagerInterface $typedConfigManager,
   ) {
-    parent::__construct($configuration, $pluginId, $pluginDefinition, $this->logger);
+    parent::__construct($configuration, $pluginId, $pluginDefinition, $this->entityTypeManager, $this->resolverManager, $this->logger);
   }
 
   /**
@@ -61,6 +71,8 @@ class PublicCodeYml extends EuOssCatalogueParserPluginBase implements ContainerF
       $configuration,
       $pluginId,
       $pluginDefinition,
+      $container->get('entity_type.manager'),
+      $container->get('plugin.manager.eu_oss_catalogue.resolver'),
       $container->get('logger.factory'),
       $container->get('config.typed'),
     );
@@ -69,7 +81,7 @@ class PublicCodeYml extends EuOssCatalogueParserPluginBase implements ContainerF
   /**
    * {@inheritdoc}
    */
-  public function checkSchema(array $data, EuOssCatalogueProviderInterface $provider, ?string $providerAssignedId = NULL): bool {
+  public function checkSchema(array $data, EuOssCatalogueProviderInterface $provider, ?string $providerReference = NULL): bool {
     // Using the config schema checker. And it works!
     $schemaErrors = $this->checkConfigSchema($this->typedConfigManager, 'eu_oss_catalogue.publiccode_yml', $data);
 
@@ -98,12 +110,30 @@ class PublicCodeYml extends EuOssCatalogueParserPluginBase implements ContainerF
       MESSAGE;
     $arguments = [
       '@provider' => $provider->getPluginDefinition()['label'],
-      '@provider_id' => $providerAssignedId ?? '[not defined]',
+      '@provider_id' => $providerReference ?? '[not provided]',
       '@data' => Yaml::encode($data),
     ];
     $this->logger->get('eu_oss_catalogue')->error($message, $arguments);
 
     return FALSE;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function parse(EuOssCatalogueFetchedSolution $fetchedSolution, EuOssCatalogueProviderInterface $provider): OssSolutionInterface {
+    $solution = parent::parse($fetchedSolution, $provider);
+
+    /** @var \Drupal\Core\Config\Entity\ThirdPartySettingsInterface $definition */
+    $definition = $solution->getFieldDefinition('oss_publiccode_yml_version');
+    $settings = $definition->getThirdPartySetting('eu_oss_catalogue', $this->getPluginId());
+    $version = $this->getResolver($settings['resolver'], $settings['config'])
+      ->resolve($fetchedSolution, 'oss_publiccode_yml_version');
+    $solution
+      ->set('oss_publiccode_yml_version', $version)
+      ->set('oss_publiccode_yml_content', Yaml::encode($fetchedSolution->getData()));
+
+    return $solution;
   }
 
   /**

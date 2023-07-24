@@ -10,9 +10,10 @@ third_party_settings:
   eu_oss_catalogue:
     publiccode_yml:
       resolver: taxonomy_term
-      path: categories
-      vid: oss_category
-      controlled: true
+      config:
+        path: categories
+        vid: oss_category
+        controlled: true
 id: node.oss_solution.oss_categories
 field_name: oss_categories
 entity_type: node
