@@ -29,7 +29,7 @@ class PollRouteSubscriber extends RouteSubscriberBase {
       }
     }
 
-    // Allow only ajax request
+    // Allow only ajax request.
     if ($route = $collection->get('entity.poll.canonical')) {
       $route->setRequirement('_ajax_request', 'TRUE');
     }
