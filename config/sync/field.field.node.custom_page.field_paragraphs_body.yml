@@ -18,7 +18,6 @@ dependencies:
     - paragraphs.paragraphs_type.json_map
     - paragraphs.paragraphs_type.layout
     - paragraphs.paragraphs_type.quote
-    - paragraphs.paragraphs_type.row
     - paragraphs.paragraphs_type.simple_paragraph
     - paragraphs.paragraphs_type.testimony
     - paragraphs.paragraphs_type.text
@@ -52,7 +51,6 @@ settings:
       layout: layout
       json_map: json_map
       quote: quote
-      row: row
       simple_paragraph: simple_paragraph
       testimony: testimony
       text: text
@@ -115,9 +113,6 @@ settings:
         enabled: true
       quote:
         weight: -36
-        enabled: true
-      row:
-        weight: -35
         enabled: true
       simple_paragraph:
         weight: -34
