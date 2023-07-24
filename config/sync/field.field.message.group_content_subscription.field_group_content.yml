@@ -33,6 +33,7 @@ settings:
         news: news
       sort:
         field: _none
+        direction: ASC
       auto_create: false
       auto_create_bundle: discussion
   rdf_entity:
@@ -42,6 +43,7 @@ settings:
         solution: solution
       sort:
         field: _none
+        direction: ASC
       auto_create: false
       auto_create_bundle: ''
   download_event:
@@ -154,6 +156,12 @@ settings:
     handler_settings: {  }
   path_alias:
     handler: 'default:path_alias'
+    handler_settings: {  }
+  poll:
+    handler: 'default:poll'
+    handler_settings: {  }
+  poll_choice:
+    handler: 'default:poll_choice'
     handler_settings: {  }
   rdf_type:
     handler: 'default:rdf_type'
