@@ -22,7 +22,7 @@ Feature:
     When I add a layout paragraph in the "Custom page body" form field with the following properties:
       | layout           | two columns |
       | Column widths    | 50-50       |
-      | Background theme | light-wave  |
+      | Background theme | light       |
       | Extra classes    | test-class  |
     Then the "Custom page body" form field should have the following layout paragraphs:
       | one column  |
@@ -30,7 +30,7 @@ Feature:
 
     When I add a layout paragraph in the "Custom page body" form field with the following properties:
       | layout           | three columns |
-      | Background theme | light-wave    |
+      | Background theme | light         |
       | Extra classes    | test-class    |
     Then the "Custom page body" form field should have the following layout paragraphs:
       | one column    |
@@ -70,11 +70,11 @@ Feature:
     When I add a layout paragraph in the "Custom page body" form field with the following properties:
       | layout           | two columns |
       | Column widths    | 50-50       |
-      | Background theme | light-wave  |
+      | Background theme | light       |
       | Extra classes    | test-class  |
     When I add a layout paragraph in the "Custom page body" form field with the following properties:
       | layout           | three columns |
-      | Background theme | light-wave    |
+      | Background theme | light         |
       | Extra classes    | test-class    |
     Then the "Custom page body" form field should have the following layout paragraphs:
       | one column    |
