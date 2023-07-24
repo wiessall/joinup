@@ -20,7 +20,6 @@ class PollRouteSubscriber extends RouteSubscriberBase {
       'poll.poll_add',
       'entity.poll.edit_form',
       'entity.poll.delete_form',
-      'entity.poll.canonical',
     ];
 
     // Disable all canonical poll's routes.
@@ -28,6 +27,11 @@ class PollRouteSubscriber extends RouteSubscriberBase {
       if ($route = $collection->get($pollRoute)) {
         $route->setRequirement('_permission', 'administer polls');
       }
+    }
+
+    // Allow only ajax request
+    if ($route = $collection->get('entity.poll.canonical')) {
+      $route->setRequirement('_ajax_request', 'TRUE');
     }
   }
 
