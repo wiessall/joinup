@@ -370,6 +370,9 @@
             },
             "drush/drush": {
                 "Run batch process when (un)installing modules via config:import @see https://github.com/drush-ops/drush/pull/5714": "resources/patch/php/drush/drush/5714.diff"
+            },
+            "mglaman/phpstan-drupal": {
+                "https://github.com/mglaman/phpstan-drupal/pull/592": "https://patch-diff.githubusercontent.com/raw/mglaman/phpstan-drupal/pull/592.diff"
             }
         },
         "drupal-lenient": {
