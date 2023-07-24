@@ -5,4 +5,5 @@ package: Joinup
 core_version_requirement: ">= 9.4"
 
 dependencies:
+  - joinup_modal:joinup_modal
   - poll:poll
