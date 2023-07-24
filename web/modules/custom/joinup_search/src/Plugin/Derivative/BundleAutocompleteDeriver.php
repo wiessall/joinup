@@ -81,8 +81,8 @@ class BundleAutocompleteDeriver extends DeriverBase implements ContainerDeriverI
       'rdf_entity' => [
         'solr_field_name' => 'id',
         'allowed_bundles' => [
-          'solution',
           'collection',
+          'solution',
         ],
       ],
       'node' => [
