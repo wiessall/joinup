@@ -468,6 +468,8 @@ class JoinupLayoutParagraphsContext extends RawDrupalContext {
       $field = $field->find('css', '.layout__region--' . $parent_layout_region);
     }
 
+    $this->scrollElementIntoView($field);
+
     $links = $field->findAll('named', [
       'link',
       'Choose component',
